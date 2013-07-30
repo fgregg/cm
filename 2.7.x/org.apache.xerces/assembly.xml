@@ -18,13 +18,9 @@
 		<fileSet>
 		<includes>
       <include>about.html</include>
-      <include>build.properties</include>
-      <include>build.xml</include>
       <include>plugin.properties</include>
       <include>plugin.xml</include>
-      <include>xercesImpl.jar</include>
-      <include>xercessrc.zip</include>
-      <include>xmlParserAPIs.jar</include>
+      <include>*.jar</include>
 		</includes>
 		</fileSet>
 	</fileSets>
