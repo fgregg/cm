@@ -11,7 +11,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   </parent>
 -->
   <groupId>com.choicemaker.cm</groupId>
-  <artifactId>org-apache-xerces</artifactId>
+  <artifactId>org.apache.xerces</artifactId>
   <version>4.0.13</version>
   <packaging>pom</packaging>
   <name>Apache Xerces Maintenance</name>
@@ -32,6 +32,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <id>bin-assembly</id>
             <phase>package</phase>
         		<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<finalName>${artifactId}_${version}</finalName>
 							<descriptor>bin-assembly.xml</descriptor>
         		</configuration>
             <goals>
@@ -42,6 +44,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <id>prj-assembly</id>
             <phase>package</phase>
         		<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<finalName>${artifactId}_${version}</finalName>
 							<descriptor>prj-assembly.xml</descriptor>
         		</configuration>
             <goals>
@@ -55,7 +59,15 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 				<artifactId>maven-help-plugin</artifactId>
 				<version>2.2</version>
 			</plugin>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>versions-maven-plugin</artifactId>
+      <version>2.1</version>
+    </plugin>
     </plugins>
   </build>
   <dependencies />
+  <prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
 </project>
