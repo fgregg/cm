@@ -1,0 +1,14 @@
+<assembly>
+	<id>eclipse2src</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+		<includes>
+      <include>about.html</include>
+      <include>xercessrc.zip</include>
+		</includes>
+		</fileSet>
+	</fileSets>
+</assembly>

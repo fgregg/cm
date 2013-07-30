@@ -1,0 +1,16 @@
+<assembly>
+	<id>eclipse2bin</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+		<includes>
+      <include>about.html</include>
+      <include>plugin.properties</include>
+      <include>plugin.xml</include>
+      <include>*.jar</include>
+		</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
