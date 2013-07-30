@@ -32,8 +32,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <id>bin-assembly</id>
             <phase>package</phase>
         		<configuration>
-							<appendAssemblyId>false</appendAssemblyId>
-							<finalName>${artifactId}_${version}</finalName>
 							<descriptor>bin-assembly.xml</descriptor>
         		</configuration>
             <goals>
@@ -44,8 +42,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <id>prj-assembly</id>
             <phase>package</phase>
         		<configuration>
-							<appendAssemblyId>false</appendAssemblyId>
-							<finalName>${artifactId}_${version}</finalName>
 							<descriptor>prj-assembly.xml</descriptor>
         		</configuration>
             <goals>
