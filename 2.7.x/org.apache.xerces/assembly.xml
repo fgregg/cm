@@ -1,0 +1,42 @@
+<assembly>
+	<id>eclipse2</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+<!--
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>WEB-INF/lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+-->
+    <!--
+    <files>
+-->
+	<fileSets>
+		<fileSet>
+		<includes>
+      <include>about.html</include>
+      <include>build.properties</include>
+      <include>build.xml</include>
+      <include>plugin.properties</include>
+      <include>plugin.xml</include>
+      <include>xercesImpl.jar</include>
+      <include>xercessrc.zip</include>
+      <include>xmlParserAPIs.jar</include>
+		</includes>
+		</fileSet>
+	</fileSets>
+    <!--
+      <file>about.html</file>
+      <file>build.properties</file>
+      <file>build.xml</file>
+      <file>plugin.properties</file>
+      <file>plugin.xml</file>
+      <file>xercesImpl.jar</file>
+      <file>xercessrc.zip</file>
+      <file>xmlParserAPIs.jar</file>
+         </files>
+-->
+</assembly>
