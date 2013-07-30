@@ -1,12 +1,16 @@
 <assembly>
-	<id>eclipse2src</id>
+	<id>eclipse2prj</id>
 	<formats>
 		<format>zip</format>
 	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
 		<fileSet>
 		<includes>
       <include>about.html</include>
+      <include>plugin.properties</include>
+      <include>plugin.xml</include>
+      <include>*.jar</include>
       <include>xercessrc.zip</include>
 		</includes>
 		</fileSet>
