@@ -3,27 +3,23 @@
 xmlns="http://maven.apache.org/POM/4.0.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <!--
+
   <parent>
     <artifactId>choicemaker-cm</artifactId>
     <groupId>com.choicemaker.cm</groupId>
     <version>2.7.1-SNAPSHOT</version>
   </parent>
--->
-  <groupId>com.choicemaker.cm</groupId>
+
   <artifactId>org.eclipse.core.boot</artifactId>
   <version>2.1.1</version>
   <packaging>jar</packaging>
   <name>Core Boot</name>
   <url>http://eclipse.org</url>
-  <properties>
-    <project.build.sourceEncoding>
-    UTF-8</project.build.sourceEncoding>
-  </properties>
+
   <build>
 		<sourceDirectory>src</sourceDirectory>
-    <plugins>
 <!--
+    <plugins>
       <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -51,21 +47,10 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           </execution>
         </executions>
       </plugin>
--->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-help-plugin</artifactId>
-				<version>2.2</version>
-			</plugin>
-    <plugin>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>versions-maven-plugin</artifactId>
-      <version>2.1</version>
-    </plugin>
     </plugins>
+-->
   </build>
+
   <dependencies />
-  <prerequisites>
-		<maven>2.2.1</maven>
-	</prerequisites>
+
 </project>
