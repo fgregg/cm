@@ -1,0 +1,18 @@
+<assembly>
+	<id>eclipse2prj</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+		<includes>
+      <include>about.html</include>
+      <include>plugin.properties</include>
+      <include>plugin.xml</include>
+      <include>*.jar</include>
+			<include>download/jakarta-log4j-1.2.8.zip</include>
+		</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
