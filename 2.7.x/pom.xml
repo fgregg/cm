@@ -16,6 +16,15 @@
   </properties>
 
   <build>
+		<sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -65,6 +74,9 @@
     <module>org.apache.ant</module>
     <module>org.apache.log4j</module>
     <module>org.jdom</module>
+<!--
+    <module>com.choicemaker.cm.core</module>
+-->
   </modules>
 
   <distributionManagement>
