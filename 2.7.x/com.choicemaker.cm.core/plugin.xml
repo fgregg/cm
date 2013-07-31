@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.core"
+   name="ChoiceMaker Core Plug-in"
+   version="2.5.0"
+   provider-name="rphall">
+
+   <runtime>
+      <library name="core.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/"/>
+   </runtime>
+   <requires>
+      <import plugin="org.apache.xerces" export="true"/>
+      <import plugin="org.apache.ant"/>
+      <import plugin="org.apache.log4j" export="true"/>
+      <import plugin="org.jdom" export="true"/>
+   </requires>
+
+
+   <extension-point id="mrpsReader" name="%ExtPoint.mrpsReader" schema="schema/mrpsReader.exsd"/>
+   <extension-point id="generatorPlugin" name="%ExtPoint.generatorPlugin" schema="schema/generatorPlugin.exsd"/>
+   <extension-point id="machineLearner" name="%ExtPoint.machineLearner" schema="schema/machineLearner.exsd"/>
+   <extension-point id="rsReader" name="RecordSource Reader" schema="schema/rsReader.exsd"/>
+   <extension-point id="rsSerializer" name="RecordSource Serializer" schema="schema/rsSerializer.exsd"/>
+   <extension-point id="commandLineArgument" name="%ExtPoint.commandLineArgument" schema="schema/commandLineArgument.exsd"/>
+   <extension-point id="namedResource" name="Named Resource" schema="schema/namedResource.exsd"/>
+   <extension-point id="fileMrpsReader" name="%ExtPt.fileMrpsReader" schema="schema/fileMrpsReader.exsd"/>
+   <extension-point id="matchCandidate" name="matchCandidate" schema="schema/matchCandidate.exsd"/>
+   <extension-point id="objectGenerator" name="%ExtPt.objectGenerator" schema="schema/objectGenerator.exsd"/>
+   <extension-point id="reporter" name="reporter" schema="schema/reporter.exsd"/>
+   <extension-point id="accessor" name="accessor" schema="schema/accessor.exsd"/>
+
+   <extension
+         id="none"
+         point="com.choicemaker.cm.core.machineLearner">
+      <config
+            name="None"
+            class="com.choicemaker.cm.core.ml.none.NoneFactory">
+      </config>
+   </extension>
+   <extension
+         id="beanMatchCandidate"
+         name="beanMatchCandidate"
+         point="com.choicemaker.cm.core.matchCandidate">
+      <matchCandidate
+            class="com.choicemaker.cm.core.BeanMatchCandidateFactory">
+      </matchCandidate>
+   </extension>
+   <extension
+         id="matchCandidate"
+         name="matchCandidate"
+         point="com.choicemaker.cm.core.matchCandidate">
+      <matchCandidate
+            class="com.choicemaker.cm.core.MatchCandidateFactory">
+      </matchCandidate>
+   </extension>
+   <extension
+         id="coreAccessor"
+         name="coreAccessor"
+         point="com.choicemaker.cm.core.accessor">
+      <accessor
+            class="com.choicemaker.cm.core.Accessor">
+      </accessor>
+   </extension>
+   <extension
+         id="doNothingRecordSourceSerializer"
+         point="com.choicemaker.cm.core.rsSerializer">
+      <serializer
+            class="com.choicemaker.cm.core.util.DoNothingRecordSourceSerializer"/>
+   </extension>
+
+</plugin>
