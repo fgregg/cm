@@ -61,8 +61,10 @@
   </dependencies>
 
   <modules>
+<!--
     <module>org.apache.xerces</module>
     <module>org.eclipse.core.boot</module>
+-->
   </modules>
 
   <prerequisites>
