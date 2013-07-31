@@ -62,6 +62,9 @@
   <modules>
     <module>org.apache.xerces</module>
     <module>org.eclipse.core.boot</module>
+    <module>org.apache.ant</module>
+    <module>org.apache.log4j</module>
+    <module>org.jdom</module>
   </modules>
 
   <distributionManagement>
