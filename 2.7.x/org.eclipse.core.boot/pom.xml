@@ -18,6 +18,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <properties>
     <eclipse.plugin.runtime.library.name>boot.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.src.zip.name>bootsrc.zip</eclipse.plugin.src.zip.name>
   </properties>
 
   <build>
@@ -48,7 +49,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
               <goal>single</goal>
             </goals>
           </execution>
-<!--
           <execution>
             <id>prj-assembly</id>
             <phase>package</phase>
@@ -59,7 +59,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
               <goal>single</goal>
             </goals>
           </execution>
--->
         </executions>
       </plugin>
     </plugins>
