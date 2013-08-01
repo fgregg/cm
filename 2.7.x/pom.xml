@@ -78,6 +78,7 @@
     <module>org.apache.regexp</module>
     <module>org.jdom</module>
     <module>com.choicemaker.cm.core</module>
+    <module>com.choicemaker.cm.compiler</module>
   </modules>
 
   <distributionManagement>
