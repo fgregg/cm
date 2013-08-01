@@ -1,0 +1,22 @@
+$Id: TODO,v 1.1.1.1 2000/07/23 23:08:28 jon Exp $
+
+o Make Perl5 character classes (e.g., [abcde...]) fully support Unicode
+  input.  Currently character classes only match 8-bit characters.
+
+o Fix any pending bugs listed in BUGS file.
+
+o Update org.apache.oro.text.regex and org.apache.oro.text.perl syntax to 
+  latest version of Perl, currently version 5.6.  This will require
+  a lot of work.
+
+o Pattern cache implementations are probably not very efficient.
+  Should revisit and reimplement. 
+
+o Look for ways to avoid creating unnecessary String instances and
+  potential cases of redundant String/char[] conversions.
+
+o The MatchAction, MatchActionInfo, and MatchActionProcessor classes
+  were just a bad idea because that sort of thing is very inefficient
+  in Java.  The class should probably be removed.
+
+o Reduce the memory overhead of case insensitive matching in Perl5Matcher.

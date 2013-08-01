@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+xmlns="http://maven.apache.org/POM/4.0.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.choicemaker.cm</groupId>
+  <artifactId>jakarta-oro</artifactId>
+  <version>2.0.1</version>
+
+  <packaging>jar</packaging>
+  <name>Jakarta ORO library</name>
+  <url>http://jakarta.apache.org/oro/</url>
+
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <name>releases</name>
+      <url>
+      http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Internal Snapshots</name>
+      <url>
+      http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+</project>
