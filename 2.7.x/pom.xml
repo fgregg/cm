@@ -75,7 +75,6 @@
     <module>org.apache.ant</module>
     <module>org.apache.log4j</module>
     <module>org.apache.oro</module>
-    <module>org.apache.regexp</module>
     <module>org.jdom</module>
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.compiler</module>
