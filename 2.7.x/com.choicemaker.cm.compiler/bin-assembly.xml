@@ -1,0 +1,26 @@
+<assembly>
+  <id>eclipse2bin</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <files>
+    <file>
+      <source>
+      ${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>${eclipse.plugin.runtime.library.name}</destName>
+    </file>
+  </files>
+  <fileSets>
+    <fileSet>
+      <includes>
+        <include>about.html</include>
+        <include>.options</include>
+        <include>plugin.properties</include>
+        <include>plugin.xml</include>
+        <include>lib/*</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>
