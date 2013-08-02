@@ -79,6 +79,7 @@
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.compiler</module>
     <module>com.choicemaker.cm.compiler.tools.jdk142</module>
+    <module>com.choicemaker.cm.compiler.tools.jdk170</module>
   </modules>
 
   <distributionManagement>
