@@ -1,0 +1,18 @@
+<assembly>
+	<id>eclipse2bin</id>
+	<formats>
+		<format>jar</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+		<includes>
+      <include>about.html</include>
+      <include>SUN-J2SDK142-LICENSE.txt</include>
+      <include>SUN-J2SDK142-TOOLS_JAR-VERSION.txt</include>
+      <include>fragment.xml</include>
+      <include>tools.jar</include>
+		</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
