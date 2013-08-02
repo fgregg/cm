@@ -13,7 +13,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <artifactId>org.eclipse.core.runtime</artifactId>
   <version>2.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>Eclipse Core Runtime</name>
+  <name>Eclipse Core Runtime Plug-in</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>runtime.jar</eclipse.plugin.runtime.library.name>
