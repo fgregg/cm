@@ -78,6 +78,7 @@
     <module>org.jdom</module>
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.compiler</module>
+    <module>com.choicemaker.cm.compiler.tools.jdk142</module>
   </modules>
 
   <distributionManagement>
