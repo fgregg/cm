@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment
+  name="Eclipse Core Resources Ant Fragment"
+  id="org.eclipse.core.resources.ant"
+  version="2.1.1"
+  provider-name="%providerName"
+  class="org.eclipse.core.resources.ResourcesPlugin">
+
+  <requires>
+    <import plugin="org.apache.xerces"/>
+  </requires>
+
+  <runtime>
+    <library name="resources-ant.jar">
+      <export name="*"/>
+    </library>
+  </runtime>
+
+</fragment>
