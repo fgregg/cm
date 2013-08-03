@@ -70,11 +70,15 @@
 
   <modules>
     <module>org.apache.xerces</module>
-    <module>org.eclipse.core.boot</module>
-    <module>org.eclipse.core.runtime</module>
     <module>org.apache.ant</module>
     <module>org.apache.log4j</module>
     <module>org.apache.oro</module>
+    <module>org.eclipse.ant.core</module>
+    <module>org.eclipse.ant.internal.core</module>
+    <module>org.eclipse.core.boot</module>
+    <module>org.eclipse.core.resources</module>
+    <module>org.eclipse.core.resources.ant</module>
+    <module>org.eclipse.core.runtime</module>
     <module>org.jdom</module>
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.compiler</module>
