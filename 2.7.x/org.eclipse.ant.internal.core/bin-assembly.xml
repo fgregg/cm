@@ -1,0 +1,16 @@
+<assembly>
+	<id>eclipse2bin</id>
+	<formats>
+		<format>jar</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+		<includes>
+      <include>about.html</include>
+      <include>fragment.xml</include>
+      <include>resources-ant.jar</include>
+		</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
