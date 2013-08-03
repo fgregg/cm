@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fragment
    id="com.choicemaker.cm.compiler.tools.jdk170"
-   name="Jdk 1.7.0 Fragment"
+   name="Oracle JDK 1.7.0 Tools Fragment"
    version="2.5.0"
    provider-name="rphall"
    plugin-id="com.choicemaker.cm.compiler"
@@ -12,6 +12,5 @@
          <export name="*"/>
       </library>
    </runtime>
-
 
 </fragment>
