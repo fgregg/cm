@@ -11,7 +11,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <version>2.7.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.eclipse.core.runtime</artifactId>
+  <artifactId>org.eclipse.ant.core</artifactId>
   <version>2.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Eclipse Ant Core Plug-in</name>
@@ -69,6 +69,11 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 			<groupId>com.choicemaker.cm</groupId>
 			<artifactId>org.apache.xerces</artifactId>
 			<version>4.0.13-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>org.eclipse.core.boot</artifactId>
+			<version>2.1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.choicemaker.cm</groupId>
