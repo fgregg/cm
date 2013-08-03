@@ -2,6 +2,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 xmlns="http://maven.apache.org/POM/4.0.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -14,6 +15,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <version>2.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Eclipse Core Runtime Plug-in</name>
+  <url>http://www.eclipse.org/</url>
 
   <properties>
     <eclipse.plugin.runtime.library.name>runtime.jar</eclipse.plugin.runtime.library.name>
