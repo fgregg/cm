@@ -3,7 +3,7 @@
   name="Eclipse Core Resources Ant Fragment"
   id="org.eclipse.core.resources.ant"
   version="2.1.1"
-  provider-name="%providerName"
+  provider-name="rphall"
   class="org.eclipse.core.resources.ResourcesPlugin">
 
   <requires>
