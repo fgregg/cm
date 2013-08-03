@@ -1,0 +1,9 @@
+bin
+target
+tmp
+temp.folder
+build.xml
+project.t.xml
+antsupport.jar
+org.eclipse.ant.core_2.1.1.jar
+antsupportsrc.zip
