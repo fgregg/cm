@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.urm.base"
+   name="Base Plug-in"
+   version="2.5.0"
+   provider-name="CHOICEMAKER">
+
+   <runtime>
+      <library name="urm-base.jar"/>
+   </runtime>
+
+</plugin>
