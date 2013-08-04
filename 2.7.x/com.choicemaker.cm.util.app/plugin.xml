@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.util.app"
+   name="App Plug-in"
+   version="2.5.3"
+   provider-name="ChoiceMaker Technologies, Inc.">
+
+   <runtime>
+      <library name="util-app.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.compiler"/>
+      <import plugin="com.choicemaker.cm.core"/>
+   </requires>
+
+
+   <extension
+         id="ProductionModelsJarBuilderApp"
+         name="ProductionModelsJarBuilderApp"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.choicemaker.cm.util.app.ProductionModelsJarBuilderApp">
+         </run>
+      </application>
+   </extension>
+
+</plugin>
