@@ -13,7 +13,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <artifactId>com.choicemaker.cm.util.app.eclipse2pkg</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Utility Applications Plug-in</name>
+  <name>ChoiceMaker Utility Applications Assemblies</name>
 
   <properties>
     <eclipse.application.dir>${project.build.directory}/eclipse.application.dir</eclipse.application.dir>
