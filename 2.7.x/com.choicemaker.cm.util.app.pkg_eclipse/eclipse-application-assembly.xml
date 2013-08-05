@@ -1,0 +1,15 @@
+
+<assembly>
+	<id>eclipse2pkg</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+		<includes>
+        <include>${eclipse.application.dir}/**</include>
+		</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
