@@ -4,6 +4,7 @@
 		<format>zip</format>
 	</formats>
 	<includeBaseDirectory>true</includeBaseDirectory>
+	<baseDirectory>${project.artifactId}_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.qualifier}</baseDirectory>
   <files>
     <file>
       <source>
