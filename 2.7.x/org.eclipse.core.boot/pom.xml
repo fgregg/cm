@@ -68,7 +68,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 			<groupId>com.choicemaker.cm</groupId>
 			<artifactId>org.apache.xerces</artifactId>
 			<version>4.0.13-SNAPSHOT</version>
-			<type>pom</type>
 		</dependency>
   </dependencies>
 
