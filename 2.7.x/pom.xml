@@ -87,6 +87,7 @@
     <module>com.choicemaker.cm.ml.me.base</module>
     <module>com.choicemaker.cm.urm.base</module>
     <module>com.choicemaker.cm.util.app</module>
+    <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
   </modules>
 
   <distributionManagement>
