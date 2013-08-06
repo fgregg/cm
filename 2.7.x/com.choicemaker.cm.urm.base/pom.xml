@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-xmlns="http://maven.apache.org/POM/4.0.0"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -23,9 +23,9 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <resources>
       <resource>
         <directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
       </resource>
       <resource>
         <directory>etc</directory>
@@ -33,26 +33,48 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     </resources>
     <plugins>
       <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.4</version>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>bin-assembly</id>
-            <phase>package</phase>
-        		<configuration>
-							<descriptor>bin-assembly.xml</descriptor>
-        		</configuration>
+            <id>parse-version</id>
             <goals>
-              <goal>single</goal>
+              <goal>parse-version</goal>
             </goals>
           </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>echo-params</id>
+            <phase>validate</phase>
+            <configuration>
+              <target>
+                <echo
+                  message="eclipse.plugin.runtime.library.name: ${eclipse.plugin.runtime.library.name}" />
+                <echo
+                  message="eclipse.plugin.src.zip.name: ${eclipse.plugin.src.zip.name}" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
           <execution>
             <id>src-assembly</id>
             <phase>package</phase>
-        		<configuration>
-							<descriptor>src-assembly.xml</descriptor>
-        		</configuration>
+            <configuration>
+              <descriptor>src-assembly.xml</descriptor>
+            </configuration>
             <goals>
               <goal>single</goal>
             </goals>
@@ -60,9 +82,9 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <execution>
             <id>prj-assembly</id>
             <phase>package</phase>
-        		<configuration>
-							<descriptor>prj-assembly.xml</descriptor>
-        		</configuration>
+            <configuration>
+              <descriptor>prj-assembly.xml</descriptor>
+            </configuration>
             <goals>
               <goal>single</goal>
             </goals>
@@ -73,36 +95,36 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   </build>
 
   <dependencies>
-		<dependency>
-			<groupId>com.choicemaker.cm</groupId>
-			<artifactId>org.apache.ant</artifactId>
-			<version>1.5.3-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.choicemaker.cm</groupId>
-			<artifactId>org.apache.log4j</artifactId>
-			<version>1.2.8-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.choicemaker.cm</groupId>
-			<artifactId>org.apache.xerces</artifactId>
-			<version>4.0.13-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.choicemaker.cm</groupId>
-			<artifactId>org.eclipse.core.boot</artifactId>
-			<version>2.1.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.choicemaker.cm</groupId>
-			<artifactId>org.eclipse.core.runtime</artifactId>
-			<version>2.1.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.choicemaker.cm</groupId>
-			<artifactId>org.jdom</artifactId>
-			<version>0.9.0-SNAPSHOT</version>
-		</dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.ant</artifactId>
+      <version>1.5.3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.log4j</artifactId>
+      <version>1.2.8-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.xerces</artifactId>
+      <version>4.0.13-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.eclipse.core.boot</artifactId>
+      <version>2.1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.eclipse.core.runtime</artifactId>
+      <version>2.1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.jdom</artifactId>
+      <version>0.9.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
 </project>
