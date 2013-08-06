@@ -14,12 +14,6 @@
     </file>
     <file>
       <source>
-      ${project.build.directory}/${project.build.finalName}-eclipse2bin.jar</source>
-      <outputDirectory>/</outputDirectory>
-      <destName>${project.build.finalName}.jar</destName>
-    </file>
-    <file>
-      <source>
       ${project.build.directory}/${project.build.finalName}-eclipse2src.zip</source>
       <outputDirectory>/</outputDirectory>
       <destName>${eclipse.plugin.src.zip.name}</destName>
