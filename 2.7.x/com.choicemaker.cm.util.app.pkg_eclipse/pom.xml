@@ -21,7 +21,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   </properties>
 
   <build>
-  <pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -30,9 +29,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <executions>
           <execution>
             <id>app-dir</id>
-<!--
             <phase>package</phase>
--->
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
@@ -63,7 +60,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         </executions>
       </plugin>
     </plugins>
-  </pluginManagement>
   </build>
   <dependencies>
     <dependency>
