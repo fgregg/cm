@@ -12,9 +12,8 @@
       <include>LICENSE.txt</include>
       <include>plugin.properties</include>
       <include>plugin.xml</include>
-      <include>*.jar</include>
-			<include>download/jdom-b9-rc2.zip</include>
-			<include>jdom-src.zip</include>
+      <include>${eclipse.plugin.runtime.library.name}</include>
+      <include>${eclipse.plugin.src.zip.name}</include>
 		</includes>
 		</fileSet>
 	</fileSets>
