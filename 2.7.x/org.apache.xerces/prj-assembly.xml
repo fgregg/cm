@@ -11,8 +11,9 @@
       <include>about.html</include>
       <include>plugin.properties</include>
       <include>plugin.xml</include>
-      <include>*.jar</include>
-      <include>xercessrc.zip</include>
+      <include>${eclipse.plugin.runtime.library.name}</include>
+      <include>${eclipse.plugin.auxiliary.library.name}</include>
+      <include>${eclipse.plugin.src.zip.name}</include>
 		</includes>
 		</fileSet>
 	</fileSets>
