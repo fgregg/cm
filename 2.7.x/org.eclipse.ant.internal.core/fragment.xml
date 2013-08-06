@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fragment
-  name="Eclipse Core Resources Ant Fragment"
-  id="org.eclipse.core.resources.ant"
+  id="org.eclipse.ant.internal"
+  name="Eclipse Ant Build Tool Internals Fragment"
   version="2.1.1"
   provider-name="rphall"
-  class="org.eclipse.core.resources.ResourcesPlugin">
+  plugin-id="org.eclipse.ant.core"
+  plugin-version="2.1.1">
 
-  <requires>
-    <import plugin="org.apache.xerces"/>
-  </requires>
-
-  <runtime>
-    <library name="resources-ant.jar">
-      <export name="*"/>
-    </library>
-  </runtime>
+  <!-- Extra Classpath -->
+  <extension point="org.eclipse.ant.core.extraClasspathEntries">
+    <extraClasspathEntry
+      library="antsupportlib.jar">
+    </extraClasspathEntry>
+  </extension>
 
 </fragment>
