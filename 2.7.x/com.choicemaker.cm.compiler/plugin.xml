@@ -9,13 +9,10 @@
       <library name="compiler.jar">
          <export name="*"/>
       </library>
-      <library name="lib/jakarta-oro-2.0.1.jar"/>
-      <library name="lib/bcel-5.2.jar"/>
    </runtime>
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="org.apache.ant"/>
-      <!-- import plugin="org.apache.bcel"/ -->
    </requires>
 
    <extension
