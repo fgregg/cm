@@ -32,11 +32,4 @@
     </application>
    </extension>
 
-   <!-- Extra Classpath -->
-   <extension point="org.eclipse.ant.core.extraClasspathEntries">
-      <extraClasspathEntry
-         library="lib/antsupportlib.jar">
-      </extraClasspathEntry>
-   </extension>
-
 </plugin>
