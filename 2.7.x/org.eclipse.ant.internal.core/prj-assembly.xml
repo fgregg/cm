@@ -5,13 +5,26 @@
 	</formats>
 	<includeBaseDirectory>true</includeBaseDirectory>
 	<baseDirectory>${project.artifactId}_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.qualifier}</baseDirectory>
+  <files>
+    <file>
+      <source>
+      ${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>${eclipse.plugin.runtime.library.name}</destName>
+    </file>
+    <file>
+      <source>
+      ${project.build.directory}/${project.build.finalName}-eclipse2src.zip</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>${eclipse.plugin.src.zip.name}</destName>
+    </file>
+  </files>
 	<fileSets>
 		<fileSet>
 		<includes>
       <include>about.html</include>
       <include>README</include>
       <include>fragment.xml</include>
-      <include>resources-ant.jar</include>
 		</includes>
 		</fileSet>
 	</fileSets>
