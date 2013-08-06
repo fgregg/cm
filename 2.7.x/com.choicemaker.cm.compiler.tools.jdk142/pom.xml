@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-xmlns="http://maven.apache.org/POM/4.0.0"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -14,34 +13,59 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <artifactId>com.sun.tools</artifactId>
   <version>1.4.2-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>Sun JDK 1.4.2 Tools Eclipse Fragment</name>
+  <name>Sun JDK 1.4.2 Tools Fragment</name>
   <url>http://www.oracle.com/technetwork/java/index.html</url>
 
   <properties>
-    <eclipse.fragment.runtime.library.name>tools.jar</eclipse.fragment.runtime.library.name>
+    <eclipse.plugin.runtime.library.name>tools.jar</eclipse.plugin.runtime.library.name>
   </properties>
 
   <build>
-		<sourceDirectory>${project.projectDirectory}</sourceDirectory>
     <resources>
       <resource>
         <directory>${project.projectDirectory}</directory>
-				<includes>
-					<include>SUN*txt</include>
-				</includes>
+        <includes>
+          <include>SUN*txt</include>
+        </includes>
       </resource>
     </resources>
     <plugins>
       <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.7</version>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
+          <execution>
+            <id>parse-version</id>
+            <goals>
+              <goal>parse-version</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>echo-params</id>
+            <phase>validate</phase>
+            <configuration>
+              <target>
+                <echo
+                  message="eclipse.plugin.runtime.library.name: ${eclipse.plugin.runtime.library.name}" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
           <execution>
             <id>unpack-jar</id>
             <phase>compile</phase>
             <configuration>
               <target>
-								<unzip src="${eclipse.fragment.runtime.library.name}" dest="${project.build.outputDirectory}"/>
+                <unzip src="${eclipse.plugin.runtime.library.name}"
+                  dest="${project.build.outputDirectory}" />
               </target>
             </configuration>
             <goals>
@@ -51,26 +75,15 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         </executions>
       </plugin>
       <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.4</version>
         <executions>
-          <execution>
-            <id>bin-assembly</id>
-            <phase>package</phase>
-        		<configuration>
-							<descriptor>bin-assembly.xml</descriptor>
-        		</configuration>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
           <execution>
             <id>prj-assembly</id>
             <phase>package</phase>
-        		<configuration>
-							<descriptor>prj-assembly.xml</descriptor>
-        		</configuration>
+            <configuration>
+              <descriptor>prj-assembly.xml</descriptor>
+            </configuration>
             <goals>
               <goal>single</goal>
             </goals>
@@ -79,5 +92,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       </plugin>
     </plugins>
   </build>
+
   <dependencies />
+
 </project>
