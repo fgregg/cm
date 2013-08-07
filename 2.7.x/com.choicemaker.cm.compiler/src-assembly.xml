@@ -1,17 +1,17 @@
 <assembly>
-	<id>eclipse2src</id>
-	<formats>
-		<format>zip</format>
-	</formats>
-	<includeBaseDirectory>false</includeBaseDirectory>
-	<fileSets>
-		<fileSet>
-			<directory>src</directory>
-		</fileSet>
-		<fileSet>
-		<includes>
-      <include>about.html</include>
-		</includes>
-		</fileSet>
-	</fileSets>
+  <id>eclipse2src</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>src</directory>
+    </fileSet>
+    <fileSet>
+      <includes>
+        <include>about.html</include>
+      </includes>
+    </fileSet>
+  </fileSets>
 </assembly>
