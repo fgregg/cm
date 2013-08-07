@@ -44,7 +44,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.4</version>
         <executions>
           <execution>
             <id>eclipse-application</id>
