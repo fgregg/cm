@@ -26,6 +26,14 @@
         <include>.options</include>
         <include>plugin.properties</include>
         <include>plugin.xml</include>
+        <include>${project.build.directory}/lib/jakarta-oro-2.0.1.jar</include>
+		</includes>
+		</fileSet>
+		<fileSet>
+		<directory>${project.build.directory}/lib</directory>
+		<outputDirectory>lib</outputDirectory>
+		<includes>
+        <include>jakarta-oro-2.0.1.jar</include>
 		</includes>
 		</fileSet>
 	</fileSets>

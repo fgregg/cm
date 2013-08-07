@@ -9,6 +9,7 @@
       <library name="compiler.jar">
          <export name="*"/>
       </library>
+      <library name="lib/jakarta-oro-2.0.1.jar"/>
    </runtime>
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
