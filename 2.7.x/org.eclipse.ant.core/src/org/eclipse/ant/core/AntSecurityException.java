@@ -19,4 +19,7 @@ package org.eclipse.ant.core;
  */
 public class AntSecurityException extends SecurityException {
 
+	// 2013-08-07 rphall
+	private static final long serialVersionUID = 1L;
+
 }

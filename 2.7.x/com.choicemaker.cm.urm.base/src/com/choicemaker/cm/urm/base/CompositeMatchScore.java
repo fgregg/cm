@@ -21,7 +21,9 @@ package com.choicemaker.cm.urm.base;
  */
 public class CompositeMatchScore implements IMatchScore {
 	
-	
+	// 2013 -08-07 rphall
+	private static final long serialVersionUID = 1L;
+
 	protected MatchScore[] innerScores;
 	
 	public CompositeMatchScore() {
