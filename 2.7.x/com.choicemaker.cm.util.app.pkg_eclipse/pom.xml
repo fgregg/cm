@@ -105,6 +105,13 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.bcel</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.log4j</artifactId>
       <version>1.2.8-SNAPSHOT</version>
       <classifier>eclipse2prj</classifier>
