@@ -1,0 +1,18 @@
+<assembly>
+  <id>eclipse2prj</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>true</includeBaseDirectory>
+  <baseDirectory>${project.artifactId}_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.qualifier}</baseDirectory>
+  <fileSets>
+    <fileSet>
+      <includes>
+        <include>about.html</include>
+        <include>LICENSE-BCEL.txt</include>
+        <include>plugin.xml</include>
+        <include>bcel.jar</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>
