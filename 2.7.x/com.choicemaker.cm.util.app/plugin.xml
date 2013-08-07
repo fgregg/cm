@@ -2,7 +2,7 @@
 <plugin
    id="com.choicemaker.cm.util.app"
    name="App Plug-in"
-   version="2.5.3"
+   version="2.7.1"
    provider-name="ChoiceMaker Technologies, Inc.">
 
    <runtime>
