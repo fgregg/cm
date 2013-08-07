@@ -54,7 +54,8 @@ public class RefreshLocalTask extends Task {
 	 */
 	protected int depth = IResource.DEPTH_INFINITE;
 	
-	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+	// 2013-08-07 rphall
+	// private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 /**
  * Constructs a new <code>RefreshLocal</code> instance.
