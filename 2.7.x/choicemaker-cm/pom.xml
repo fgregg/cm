@@ -31,7 +31,7 @@
         <!-- This plugin's configuration is used to store Eclipse m2e settings 
           only. It has no influence on the Maven build itself. See Eclipse Wiki, "M2E 
           plugin execution not covered," http://links.rph.cx/154RA9f and StackOverflow, 
-          "How to solve plugin execution not covered by lifecycle configuration," http://links.rph.cx/154S1k7 -->
+          "Plugin execution not covered by lifecycle configuration, "http://links.rph.cx/154S1k7 -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
