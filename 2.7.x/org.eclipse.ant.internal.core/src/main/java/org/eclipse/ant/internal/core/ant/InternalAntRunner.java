@@ -332,9 +332,9 @@ public class InternalAntRunner {
 			}
 			info.add(target.getDescription());
 			List dependencies= new ArrayList();
-			Enumeration enum= target.getDependencies();
-			while (enum.hasMoreElements()) {
-				dependencies.add(enum.nextElement());
+			Enumeration e= target.getDependencies();
+			while (e.hasMoreElements()) {
+				dependencies.add(e.nextElement());
 			}
 			String[] dependencyArray= new String[dependencies.size()];
 			dependencies.toArray(dependencyArray);

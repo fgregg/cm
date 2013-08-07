@@ -182,11 +182,11 @@ public int size() {
 public String toString() {
 	StringBuffer sb = new StringBuffer();
 	sb.append("["); //$NON-NLS-1$
-	Enumeration enum = elements();
+	Enumeration e = elements();
 	if (!isEmpty()) {
 	    while (true) {
-			sb.append(enum.nextElement());
-			if (enum.hasMoreElements())
+			sb.append(e.nextElement());
+			if (e.hasMoreElements())
 				sb.append(", "); //$NON-NLS-1$
 			else
 				break;

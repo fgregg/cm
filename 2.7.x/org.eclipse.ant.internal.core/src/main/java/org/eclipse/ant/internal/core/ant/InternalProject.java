@@ -185,14 +185,14 @@ public class InternalProject extends Project {
 			props.load(in);
 			in.close();
 
-			Enumeration enum = props.propertyNames();
-			while (enum.hasMoreElements()) {
-				String typeName = (String) enum.nextElement();
+			Enumeration e = props.propertyNames();
+			while (e.hasMoreElements()) {
+				String typeName = (String) e.nextElement();
 				String className = props.getProperty(typeName);
 				try {
 					Class typeClass= Class.forName(className);
 					typeNameToClass.put(typeName, typeClass);
-				} catch (NoClassDefFoundError e) {
+				} catch (NoClassDefFoundError x) {
 					//ignore
 				} catch (ClassNotFoundException c) {
 					//ignore

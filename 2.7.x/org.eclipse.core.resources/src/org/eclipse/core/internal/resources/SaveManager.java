@@ -397,8 +397,8 @@ protected void removeUnusedSafeTables() {
 	List valuables = new ArrayList(10);
 	IPath location = workspace.getMetaArea().getSafeTableLocationFor(ResourcesPlugin.getPlugin().getDescriptor().getUniqueIdentifier());
 	valuables.add(location.lastSegment()); // add master table
-	for (Enumeration enum = masterTable.keys(); enum.hasMoreElements();) {
-		String key = (String) enum.nextElement();
+	for (Enumeration e = masterTable.keys(); e.hasMoreElements();) {
+		String key = (String) e.nextElement();
 		if (key.startsWith(SAVE_NUMBER_PREFIX)) {
 			String pluginId = key.substring(SAVE_NUMBER_PREFIX.length());
 			valuables.add(workspace.getMetaArea().getSafeTableLocationFor(pluginId).lastSegment());
