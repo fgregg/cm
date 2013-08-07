@@ -69,7 +69,7 @@
             <verbose>true</verbose>
             <fork>true</fork>
             <executable>${JAVA_HOME}/bin/javac</executable>
-            <compilerVersion>1.4</compilerVersion>
+            <compilerVersion>1.7</compilerVersion>
             <source>1.4</source>
             <target>1.4</target>
             <compilerArgument>-g</compilerArgument>
@@ -114,27 +114,27 @@
   </dependencies>
 
   <modules>
-    <module>org.apache.xerces</module>
-    <module>org.apache.ant</module>
-    <module>org.apache.log4j</module>
-    <module>org.apache.oro</module>
-    <module>org.eclipse.ant.core</module>
-    <module>org.eclipse.ant.internal.core</module>
-    <module>org.eclipse.core.boot</module>
-    <module>org.eclipse.core.resources</module>
-    <module>org.eclipse.core.resources.ant</module>
-    <module>org.eclipse.core.runtime</module>
-    <module>org.jdom</module>
-    <module>com.choicemaker.cm.core</module>
-    <module>com.choicemaker.cm.compiler</module>
+    <module>../org.apache.xerces</module>
+    <module>../org.apache.ant</module>
+    <module>../org.apache.log4j</module>
+    <module>../org.apache.oro</module>
+    <module>../org.eclipse.ant.core</module>
+    <module>../org.eclipse.ant.internal.core</module>
+    <module>../org.eclipse.core.boot</module>
+    <module>../org.eclipse.core.resources</module>
+    <module>../org.eclipse.core.resources.ant</module>
+    <module>../org.eclipse.core.runtime</module>
+    <module>../org.jdom</module>
+    <module>../com.choicemaker.cm.core</module>
+    <module>../com.choicemaker.cm.compiler</module>
 <!--
-    <module>com.choicemaker.cm.compiler.tools.jdk142</module>
+    <module>../com.choicemaker.cm.compiler.tools.jdk142</module>
 -->
-    <module>com.choicemaker.cm.compiler.tools.jdk170</module>
-    <module>com.choicemaker.cm.ml.me.base</module>
-    <module>com.choicemaker.cm.urm.base</module>
-    <module>com.choicemaker.cm.util.app</module>
-    <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
+    <module>../com.choicemaker.cm.compiler.tools.jdk170</module>
+    <module>../com.choicemaker.cm.ml.me.base</module>
+    <module>../com.choicemaker.cm.urm.base</module>
+    <module>../com.choicemaker.cm.util.app</module>
+    <module>../com.choicemaker.cm.util.app.pkg_eclipse</module>
   </modules>
 
   <distributionManagement>
