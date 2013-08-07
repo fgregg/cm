@@ -188,8 +188,8 @@ public void registerAdapters(IAdapterFactory factory, Class extensibleType) {
  * @see IAdapterManager#unregisterAdapters
  */
 public void unregisterAdapters(IAdapterFactory factory) {
-	for (Enumeration enum = factories.elements(); enum.hasMoreElements();) {
-		Vector list = (Vector) enum.nextElement();
+	for (Enumeration e = factories.elements(); e.hasMoreElements();) {
+		Vector list = (Vector) e.nextElement();
 		list.removeElement(factory);
 	}
 	flushLookup();
