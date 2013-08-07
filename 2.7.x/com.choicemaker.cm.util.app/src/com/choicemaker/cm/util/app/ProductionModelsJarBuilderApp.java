@@ -30,7 +30,8 @@ import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
  */
 public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
 
-	private static boolean DELETE_TEMP = true;
+	// 2013-08-07 rphall
+	// private static boolean DELETE_TEMP = true;
 
 	/**
 	 * Runs ProductionModelsJarBuilder as an Eclipse command-line application.

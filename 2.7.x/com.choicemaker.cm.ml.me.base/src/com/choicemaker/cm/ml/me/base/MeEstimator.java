@@ -155,7 +155,8 @@ public class MeEstimator {
 		//
 
 		int numTrainingExamples = 0;
-		int numEvents = 0;
+		// 2013-08-07 rphall
+		// int numEvents = 0;
 		numHistories = 0;
 		max_c = 0;
 		
@@ -202,7 +203,8 @@ public class MeEstimator {
 			int future = p.getMarkedDecision().toInt();
 			if (isLegalFuture(future)) {
 				history.addEvent(future);
-				numEvents++;
+				// 2013-08-07 rphall
+				// numEvents++;
 			}
 			numTrainingExamples++;
 			
