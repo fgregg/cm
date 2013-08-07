@@ -2,7 +2,7 @@
 <plugin
    id="com.choicemaker.cm.compiler"
    name="Compiler Plug-in"
-   version="2.5.0"
+   version="2.7.1"
    provider-name="CHOICEMAKER">
 
    <runtime>
@@ -13,6 +13,7 @@
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="org.apache.ant"/>
+      <import plugin="org.apache.bcel"/>
    </requires>
 
    <extension
