@@ -22,9 +22,9 @@ WORKSPACE="/tmp"
 #XBOOTCLASSPATH="-Xbootclasspath:$XCP"
 
 # Java command
-JAVA="/usr/java/j2sdk1.4.2_19/bin/java"
+#JAVA="/usr/java/j2sdk1.4.2_19/bin/java"
 #JAVA="/usr/java/jdk1.7.0_13/bin/java"
-#JAVA=/usr/bin/java
+JAVA=/usr/bin/java
 
 # Recommended memory allocations
 JAVA_OPTS="-Xms384M -Xmx512M"
