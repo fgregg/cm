@@ -75,26 +75,6 @@
         </executions>
       </plugin>
       <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-jar</id>
-            <phase>compile</phase>
-            <configuration>
-              <target>
-                <unzip src="${eclipse.plugin.runtime.library.name}"
-                  dest="${project.build.outputDirectory}" />
-                <unzip src="${eclipse.plugin.auxiliary.library.name}"
-                  dest="${project.build.outputDirectory}" />
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
