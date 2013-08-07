@@ -127,7 +127,10 @@
     <module>org.jdom</module>
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.compiler</module>
+<!--
     <module>com.choicemaker.cm.compiler.tools.jdk142</module>
+-->
+    <module>com.choicemaker.cm.compiler.tools.jdk170</module>
     <module>com.choicemaker.cm.ml.me.base</module>
     <module>com.choicemaker.cm.urm.base</module>
     <module>com.choicemaker.cm.util.app</module>
