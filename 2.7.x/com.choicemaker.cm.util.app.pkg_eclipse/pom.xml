@@ -6,8 +6,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>choicemaker-cm</artifactId>
     <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
   </parent>
 
