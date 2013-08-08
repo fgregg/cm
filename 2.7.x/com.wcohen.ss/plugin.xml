@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.wcohen.ss"
+   name="SecondString Plug-in"
+   version="2.5.0"
+   provider-name="William Cohen, www.cs.cmu.edu/~wcohen">
+
+   <runtime>
+      <library name="secondstring.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+   <extension-point id="stringdistance" name="stringdistance" schema="schema/stringdistance.exsd"/>
+
+</plugin>

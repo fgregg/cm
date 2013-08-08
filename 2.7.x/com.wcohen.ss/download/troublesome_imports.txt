@@ -1,0 +1,15 @@
+The following classes and packages depend on either GUI code or third-party code for which no source is available. These files were moved to the test.wcohen.ss project.
+
+  src/com/wcohen/ss/AdaptiveStringDistanceLearner.java
+  src/com/wcohen/ss/WizardUI.java
+  src/com/wcohen/ss/expt/*
+
+In addition, classes and data related to testing or example code were also moved to the test.wcohen.ss project.
+
+  README.txt
+  build.xml
+  data
+  expt
+  jars
+  script
+  test

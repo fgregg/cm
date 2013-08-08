@@ -1,0 +1,249 @@
+? .DS_Store
+? META-INF
+? build
+? data-group1
+? secondstring-20060615.jar
+? doc/javadoc
+? test/softTFIDF_instance.ser
+? test/com/wcohen/ss/TestSoftTFIDF.java
+Index: build.xml
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/build.xml,v
+retrieving revision 1.7
+diff -a -u -r1.7 build.xml
+--- build.xml	13 Feb 2007 18:45:22 -0000	1.7
++++ build.xml	14 Jun 2007 21:51:14 -0000
+@@ -33,7 +33,9 @@
+         description="compile the source " >
+     <!-- Compile the java code from ${src} into ${build} -->
+   	<mkdir dir="${build.dir}/classes"/>
+-    <javac srcdir="${src}" destdir="${build.dir}/classes" debug="on" classpathref="compile.classpath"/>
++    <javac srcdir="${src}" destdir="${build.dir}/classes" debug="on" classpathref="compile.classpath">
++			<!-- compilerarg value="-Xlint:unchecked"/ -->
++		</javac>
+   </target>
+ 
+   <target name="dist" depends="build"  description="generate the distribution" >
+@@ -67,6 +69,7 @@
+            destdir="${test.dir}/classes"
+            debug="on"
+            classpathref="test.classpath"/>
++    <copy file="test/softTFIDF_instance.ser" todir="${test.dir}/classes"/>
+   </target>
+ 
+   <target name="test" depends="build-tests">
+Index: src/com/wcohen/ss/api/DistanceInstance.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/DistanceInstance.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 DistanceInstance.java
+--- src/com/wcohen/ss/api/DistanceInstance.java	13 Feb 2007 18:45:23 -0000	1.2
++++ src/com/wcohen/ss/api/DistanceInstance.java	14 Jun 2007 21:51:14 -0000
+@@ -1,15 +1,15 @@
+ package com.wcohen.ss.api;
+ 
+ import java.util.*;
++import java.io.Serializable;
+ 
+ /**
+  * An 'instance' for a StringDistance, analogous to an 'instance' for
+  * a classification learner.  Consists of a pair of StringWrappers,
+  * a distance, and some labeling information.
+  */
++public interface DistanceInstance extends Serializable {
+ 
+-public interface DistanceInstance 
+-{
+ 	public StringWrapper getA();
+ 	public StringWrapper getB();
+ 	public boolean isCorrect();
+Index: src/com/wcohen/ss/api/DistanceInstanceIterator.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/DistanceInstanceIterator.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 DistanceInstanceIterator.java
+--- src/com/wcohen/ss/api/DistanceInstanceIterator.java	13 Feb 2007 18:45:23 -0000	1.2
++++ src/com/wcohen/ss/api/DistanceInstanceIterator.java	14 Jun 2007 21:51:14 -0000
+@@ -1,11 +1,11 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * An iterator over DistanceInstance objects.
+  */
+-
+-public interface DistanceInstanceIterator extends java.util.Iterator<DistanceInstance> 
+-{
++public interface DistanceInstanceIterator extends java.util.Iterator<DistanceInstance>, Serializable {
+ 	public boolean hasNext();
+ 	public DistanceInstance next();
+ 	public DistanceInstance nextDistanceInstance();
+Index: src/com/wcohen/ss/api/StringDistance.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringDistance.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 StringDistance.java
+--- src/com/wcohen/ss/api/StringDistance.java	3 Feb 2007 00:51:41 -0000	1.2
++++ src/com/wcohen/ss/api/StringDistance.java	14 Jun 2007 21:51:14 -0000
+@@ -1,5 +1,6 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
+ 
+ /**
+  * Compute the difference between pairs of strings.
+@@ -17,8 +18,8 @@
+  * a subclass of StringWrapper.)
+  *
+  */
+-public interface StringDistance 
+-{
++public interface StringDistance extends Serializable {
++
+ 	/** Find the distance between s and t.  Larger values indicate more
+ 			similar strings.
+ 	*/
+Index: src/com/wcohen/ss/api/StringDistanceLearner.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringDistanceLearner.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 StringDistanceLearner.java
+--- src/com/wcohen/ss/api/StringDistanceLearner.java	27 Sep 2003 14:17:00 -0000	1.3
++++ src/com/wcohen/ss/api/StringDistanceLearner.java	14 Jun 2007 21:51:14 -0000
+@@ -1,11 +1,13 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * Learn a StringDistance.
+  *
+  */
+-public interface StringDistanceLearner
+-{
++public interface StringDistanceLearner extends Serializable {
++
+ 	/** Preprocess  a StringWrapperIterator for unsupervised training. */
+ 	public StringWrapperIterator prepare(StringWrapperIterator i);
+ 
+Index: src/com/wcohen/ss/api/StringDistanceTeacher.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringDistanceTeacher.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 StringDistanceTeacher.java
+--- src/com/wcohen/ss/api/StringDistanceTeacher.java	27 Sep 2003 14:17:00 -0000	1.2
++++ src/com/wcohen/ss/api/StringDistanceTeacher.java	14 Jun 2007 21:51:14 -0000
+@@ -1,15 +1,16 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * Train a StringDistanceLearner and return the learned
+  * StringDistance, using some unspecified source of information to
+  * train the learner.
+  *
+  */
+-public abstract class StringDistanceTeacher
+-{
+-	final public StringDistance train(StringDistanceLearner learner) 
+-	{
++public abstract class StringDistanceTeacher implements Serializable {
++
++	final public StringDistance train(StringDistanceLearner learner) {
+ 		// TFIDF-style 'training' based on observing corpus statistics
+ 		learner.setStringWrapperPool( learner.prepare(stringWrapperIterator()) );
+ 
+Index: src/com/wcohen/ss/api/StringWrapper.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringWrapper.java,v
+retrieving revision 1.1
+diff -a -u -r1.1 StringWrapper.java
+--- src/com/wcohen/ss/api/StringWrapper.java	24 Apr 2003 23:59:33 -0000	1.1
++++ src/com/wcohen/ss/api/StringWrapper.java	14 Jun 2007 21:51:14 -0000
+@@ -1,13 +1,13 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * Something that implements some of the functionality of Java's
+  * string class, but which is a non-final class, and hence can also
+  * cache additional information to facilitate later processing.
+  */
+-
+-public interface StringWrapper 
+-{
++public interface StringWrapper extends Serializable {
+ 	/** Return the string that is wrapped. */
+ 	public String unwrap();
+ 	/** Return the i-th char of the wrapped string */
+Index: src/com/wcohen/ss/api/StringWrapperIterator.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringWrapperIterator.java,v
+retrieving revision 1.1
+diff -a -u -r1.1 StringWrapperIterator.java
+--- src/com/wcohen/ss/api/StringWrapperIterator.java	24 Apr 2003 23:59:33 -0000	1.1
++++ src/com/wcohen/ss/api/StringWrapperIterator.java	14 Jun 2007 21:51:14 -0000
+@@ -1,11 +1,11 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * An iterator over StringWrapper objects.
+  */
+-
+-public interface StringWrapperIterator extends java.util.Iterator 
+-{
++public interface StringWrapperIterator extends java.util.Iterator, Serializable {
+ 	public boolean hasNext();
+ 	public Object next();
+ 	public StringWrapper nextStringWrapper();
+Index: src/com/wcohen/ss/api/Token.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/Token.java,v
+retrieving revision 1.1
+diff -a -u -r1.1 Token.java
+--- src/com/wcohen/ss/api/Token.java	24 Apr 2003 23:59:33 -0000	1.1
++++ src/com/wcohen/ss/api/Token.java	14 Jun 2007 21:51:14 -0000
+@@ -1,13 +1,12 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
+ 
+ /**
+  * An interned version of a string.    
+  *
+  */
+-
+-public interface Token
+-{
++public interface Token extends Serializable {
+ 	public String getValue();
+ 	public int getIndex();
+ }
+Index: src/com/wcohen/ss/api/Tokenizer.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/Tokenizer.java,v
+retrieving revision 1.4
+diff -a -u -r1.4 Tokenizer.java
+--- src/com/wcohen/ss/api/Tokenizer.java	13 Feb 2007 18:45:23 -0000	1.4
++++ src/com/wcohen/ss/api/Tokenizer.java	14 Jun 2007 21:51:14 -0000
+@@ -1,13 +1,13 @@
+ package com.wcohen.ss.api;
+ 
+ import java.util.Iterator;
++import java.io.Serializable;
+ 
+ /**
+  * Split a string into tokens.
+  */
++public interface Tokenizer extends Serializable {
+ 
+-public interface Tokenizer 
+-{
+     /**  Return tokenized version of a string */
+     public Token[] tokenize(String input);
+ 
