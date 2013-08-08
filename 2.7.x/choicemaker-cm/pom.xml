@@ -43,6 +43,7 @@
     <module>../org.eclipse.ant.core</module>
     <module>../org.eclipse.ant.internal.core</module>
     <module>../org.eclipse.core.boot</module>
+    <module>../org.eclipse.core.launcher</module>
     <module>../org.eclipse.core.resources</module>
     <module>../org.eclipse.core.resources.ant</module>
     <module>../org.eclipse.core.runtime</module>
