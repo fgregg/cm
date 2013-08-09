@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.matching.cfg"
+   name="Matching CFG Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="cfg.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.matching.gen"/>
+   </requires>
+
+
+   <extension-point id="parser" name="parser" schema="schema/parser.exsd"/>
+   <extension-point id="cascadedParser" name="cascadedParser" schema="schema/cascadedParser.exsd"/>
+
+</plugin>
