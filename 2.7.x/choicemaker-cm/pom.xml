@@ -61,6 +61,7 @@
     <module>../com.choicemaker.cm.matching.gen</module>
     <module>../com.choicemaker.cm.matching.geo</module>
     <module>../com.choicemaker.cm.matching.intl</module>
+    <module>../com.choicemaker.cm.matching.wfst</module>
     <module>../com.choicemaker.cm.io.xml.base</module>
     <module>../com.choicemaker.cm.ml.me.base</module>
     <module>../com.choicemaker.cm.urm.base</module>

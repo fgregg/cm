@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.matching.wfst"
+   name="WFST Parser Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker Technologies, Inc.">
+
+   <runtime>
+      <library name="wfst.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+   <extension-point id="parser" name="parser" schema="schema/wfst.exsd"/>
+
+</plugin>
