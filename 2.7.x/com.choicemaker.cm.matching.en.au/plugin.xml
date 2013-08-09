@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.matching.en.au"
+   name="Matching En_Au Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker Technologies, Inc.">
+
+   <runtime>
+      <library name="matching-en-au.jar">
+      	<export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.matching.gen"/>
+   </requires>
+
+
+   <extension
+         point="com.choicemaker.cm.matching.gen.relation">
+      <fileRelation
+            name="en.au.nicknames"
+            file="etc/data/en.au.nicknames.txt">
+      </fileRelation>
+   </extension>
+
+</plugin>

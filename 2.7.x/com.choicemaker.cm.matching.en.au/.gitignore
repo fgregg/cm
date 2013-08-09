@@ -1,0 +1,13 @@
+archive
+bin
+build.xml
+.clover
+com.choicemaker.cm.*_*.jar
+com.choicemaker.cm.*_*.zip
+matching-en-au.jar
+matching-en-ausrc.jar
+project.t.xml
+project.xml
+target
+temp.folder
+tmp

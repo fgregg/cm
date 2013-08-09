@@ -55,6 +55,7 @@
     <module>../com.choicemaker.cm.matching.gen</module>
     <module>../com.choicemaker.cm.matching.cfg</module>
     <module>../com.choicemaker.cm.matching.en</module>
+    <module>../com.choicemaker.cm.matching.en.au</module>
     <module>../com.choicemaker.cm.matching.en.us</module>
     <module>../com.choicemaker.cm.io.xml.base</module>
     <module>../com.choicemaker.cm.ml.me.base</module>
