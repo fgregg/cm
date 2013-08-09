@@ -53,7 +53,7 @@
     <!-- <module>../com.choicemaker.cm.compiler.tools.jdk142</module> -->
     <module>../com.choicemaker.cm.compiler.tools.jdk170</module>
     <module>../com.choicemaker.cm.matching.gen</module>
-    <module>../com.choicemaker.cm.matching.us</module>
+    <module>../com.choicemaker.cm.matching.en</module>
     <module>../com.choicemaker.cm.io.xml.base</module>
     <module>../com.choicemaker.cm.ml.me.base</module>
     <module>../com.choicemaker.cm.urm.base</module>

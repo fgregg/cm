@@ -133,7 +133,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.us</artifactId>
+      <artifactId>com.choicemaker.cm.matching.en</artifactId>
       <version>2.7.1-SNAPSHOT</version>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>

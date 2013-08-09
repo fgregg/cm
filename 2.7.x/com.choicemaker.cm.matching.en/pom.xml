@@ -12,7 +12,7 @@
 
   <artifactId>com.choicemaker.cm.matching.en</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Matching Plug-in (US Locale)</name>
+  <name>ChoiceMaker Matching Plug-in (English Locale)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>en.jar</eclipse.plugin.runtime.library.name>
