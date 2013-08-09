@@ -1,0 +1,28 @@
+<parser class="com.choicemaker.cm.matching.cfg.earley.EarleyParser" >
+	<symbolFactory>
+		<tokenType name="TT_WD" class="com.choicemaker.cm.matching.cfg.tokentype.WordTokenType">
+			<property name="defaultProbability" value=".0001" />
+		</tokenType>
+		<!-- NOTE: token types used byV_EC_PROVINCE are populated externally -->
+		<tokenType name="TT_EC_COUNTRY" class="com.choicemaker.cm.matching.cfg.tokentype.SetTokenType">
+			<method name="setMembers" type1="Set" arg1="ec.country" />
+			<method name="setStandards" type1="Map" arg1="ec.standardCountry" />
+			<property name="defaultProbability" value=".5" />
+		</tokenType>
+	</symbolFactory>
+	<tokenizer class="com.choicemaker.cm.matching.cfg.tokenizer.WhitespaceAndPunctuationTokenizer">
+		<property name="legalPunctuation" value="" />
+	</tokenizer>
+	<grammar file="etc/grammars/ec.lastLineGrammar.txt" />
+	<standardizer>
+		<standardizer variable="V_CITY" 
+			class="com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer"
+			type1="String" arg1="${com.choicemaker.cm.matching.en.us.ParsedAddress.CITY}"
+			type2="int" arg2="${com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer.ALL}" />
+		<!-- NOTE: standardizer for V_EC_PROVINCE must be created externally -->
+		<standardizer variable="V_EC_COUNTRY" 
+			class="com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer"
+			type1="String" arg1="${com.choicemaker.cm.matching.en.us.ParsedAddress.COUNTRY}" />
+	</standardizer>
+	<parsedData class="com.choicemaker.cm.matching.en.us.ParsedAddress" />
+</parser>

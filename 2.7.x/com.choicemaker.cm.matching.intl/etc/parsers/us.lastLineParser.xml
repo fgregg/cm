@@ -1,0 +1,42 @@
+<parser class="com.choicemaker.cm.matching.cfg.earley.EarleyParser" >
+	<symbolFactory>
+		<tokenType name="TT_WD" class="com.choicemaker.cm.matching.cfg.tokentype.WordTokenType">
+			<property name="defaultProbability" value=".000001" />
+		</tokenType>
+		<!--
+		<tokenType name="TT_STATE" class="com.choicemaker.cm.matching.cfg.tokentype.SetTokenType">
+			<property name="members" value="us.states" />
+			<property name="defaultProbability" value="1.0" />
+		</tokenType>
+		-->
+		<tokenType name="TT_NUM4" class="com.choicemaker.cm.matching.cfg.tokentype.FixedLengthNumberTokenType">
+			<property name="length" value="4" />
+		</tokenType>
+		<tokenType name="TT_NUM5" class="com.choicemaker.cm.matching.cfg.tokentype.FixedLengthNumberTokenType">
+			<property name="length" value="5" />
+		</tokenType>
+	</symbolFactory>
+	<tokenizer class="com.choicemaker.cm.matching.cfg.tokenizer.WhitespaceAndPunctuationTokenizer">
+		<property name="legalPunctuation" value="-" />
+	</tokenizer>
+	<grammar file="etc/grammars/us.lastLineGrammar.txt" />
+	<standardizer>
+		<standardizer variable="V_CITY" 
+			class="com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer"
+			type1="String" arg1="${com.choicemaker.cm.matching.en.us.ParsedAddress.CITY}"
+			type2="int" arg2="${com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer.ALL}" />
+		<!--
+		<standardizer variable="V_STATE" 
+			class="com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer"
+			type1="String" arg1="${com.choicemaker.cm.matching.en.us.ParsedAddress.STATE}" />
+			type2="int" arg2="${com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer.ALL}" />
+		-->
+		<standardizer variable="TT_NUM5"
+			class="com.choicemaker.cm.matching.cfg.standardizer.TokenTypeStandardizer"
+			type1="String" arg1="${com.choicemaker.cm.matching.en.us.ParsedAddress.ZIP}"/>
+		<standardizer variable="TT_NUM4"
+			class="com.choicemaker.cm.matching.cfg.standardizer.TokenTypeStandardizer"
+			type1="String" arg1="${com.choicemaker.cm.matching.en.us.ParsedAddress.PLUS_FOUR}"/>
+	</standardizer>
+	<parsedData class="com.choicemaker.cm.matching.en.us.ParsedAddress" />
+</parser>

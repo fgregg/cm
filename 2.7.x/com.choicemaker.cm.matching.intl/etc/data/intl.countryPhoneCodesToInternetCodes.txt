@@ -1,0 +1,268 @@
+// http://www.longdistancepost.com/Country_City_Telephone_Codes.htm
+//
+// those 4-digit codes that start with a 1 are US/Canada/Caribbean-style
+// area codes.
+
+93   // Afghanistan
+355  // Albania
+213  // Algeria
+684  // American Samoa
+376  // Andorra
+244  // Angola
+1264 // Anguilla
+// 672, 64 Antarctica
+1268 // Antigua
+54   // Argentina
+374  // Armenia
+297  // Aruba
+// 247 Ascension Islands
+61   // Australia
+43   // Austria
+994  // Azerbaijan
+
+1242 // Bahamas
+973  // Bahrain
+880  // Bangladesh
+1246 // Barbados
+375  // Belarus
+32   // Belgium
+501  // Belize
+229  // Benin
+1441, 809 // Bermuda
+975  // Bhutan
+591  // Bolivia
+387  // Bosnia
+267  // Botswana
+55   // Brazil
+809  // British VI
+673  // Brunei
+359  // Bulgaria
+226  // Burkina Faso
+257  // Burundi
+
+855  // Cambodia
+237  // Cameroon
+//  1  // Canada  (has area codes, like US, etc.)
+238  // Cape Verde Islands
+809  // Cayman Islands
+236  // Central African Republic
+235  // Chad
+64   // Chatham Island
+56   // Chile
+86   // China
+672  // Christmas Island
+672  // Cocos Islands
+57   // Colombia
+269  // Comoros
+242  // Congo
+682  // Cook Islands
+506  // Costa Rica
+385  // Croatia
+53   // Cuba
+357  // Cyprus
+42   // Czech Republic
+
+45   // Denmark
+246  // Diego Garcia
+253  // Djibouti
+767  // Dominica
+809  // Dominican Republic
+
+56   // Easter Island
+593  // Ecuador
+20   // Egypt
+503  // El Salvador
+240  // Equatorial Guinea
+291  // Eritrea
+372  // Estonia
+251  // Ethopia
+
+500  // Falkland Islands
+298  // Faroei Islands
+679  // Fiji Islands
+358  // Finland
+33   // France
+596  // French Antilles
+594  // French Guyana
+689  // French Polynesia
+389  // Fyrom (Macedonia)
+
+241  // Gabon
+220  // Gambia
+995  // Georgia
+49   // Germany
+233  // Ghana
+350  // Gibraltar
+30   // Greece
+299  // Greenland
+809  // Grenada and Carriacuou
+784  // Grenadin Islands: Bequia, Mustique, Palm Island, Union Island
+590  // Guadeloupe
+671  // Guam
+53   // Guantanamo Bay (Same as Cuba)
+502  // Guatemala
+594  // Guiana
+224  // Guinea
+245  // Guinea Bissau
+594  // Guyana
+
+509  // Haiti
+504  // Honduras
+852  // Hong Kong
+36   // Hungary
+
+354  // Iceland
+91   // India
+62   // Indonesia
+// Inmarsat
+98   // Iran
+964  // Iraq
+353  // Ireland
+972  // Israel
+39   // Italy
+225  // Ivory Coast
+
+809  // Jamaica
+81   // Japan
+2    // Jerusalem
+962  // Jordan
+
+7    // Khazakstan
+254  // Kenya
+686  // Kiribati
+7    // Kyrgyzstan
+965  // Kuwait
+
+856  // Laos
+371  // Latvia
+961  // Lebanon
+266  // Lesotho
+231  // Liberia
+218  // Libya
+41   // Lichtenstein
+370  // Lithuania
+352  // Luxembourg
+
+853  // Macao
+389  // Macedonia
+265  // Malawi
+261  // Madagascar
+60   // Malaysia
+960  // Maldives
+223  // Mali
+356  // Malta
+670  // Mariana Island
+692  // Marshall Islands
+596  // Martinique
+222  // Mauritania
+230  // Mauritius
+52   // Mexico
+691  // Federated States of Micronesia
+808  // Midway Islands
+508  // Miquelon
+373  // Maldova
+377  // Monaco
+976  // Mongolia
+664  // Monserrat
+212  // Morocco
+258  // Mozambique
+95   // Myanmar
+
+264  // Namibia
+674  // Nauru
+977  // Nepal
+31   // Netherlands
+599  // Netherlands Antilles
+869  // Nevis
+687  // New Caledonia
+64   // New Zealand
+505  // Nicaragua
+227  // Niger
+234  // Nigeria
+683  // Niue
+672  // Norfolk Islands
+850  // North Korea
+47   // Norway
+
+92   // Pakistan
+680  // Palau
+// Palestinian Territories
+507  // Panama
+675  // Papua New Guinea
+595  // Paraguay
+51   // Peru
+63   // Philippines
+48   // Poland
+351  // Portugal
+239  // Principe
+// 1 Puerto Rico (multiple area codes in US)
+
+968  // Oman
+
+974  // Qatar
+
+262  // Reunion Island
+40   // Romania
+7    // Russia
+250  // Rwanda
+
+239  // Sao Tome
+966  // Saudi Arabia
+221  // Senegal
+381  // Servia
+248  // Seychelles
+232  // Sierra Leone
+65   // Singapore
+421  // Slovakia
+386  // Slovenia
+677  // Solomon Islands
+251  // Somalia
+27   // South Africa
+349  // Spain
+94   // Sri Lanka
+249  // Sudan
+597  // Suriname
+268  // Swaziland
+46   // Sweden
+41   // Switzerland
+963  // Syria
+
+886  // Taiwan
+7    // Tajikstan
+255  // Tanzania
+66   // Thailand
+228  // Togo
+690  // Tokelau
+676  // Tonga
+868  // Trinidad and Tobago
+216  // Runisia
+90   // Turkey
+993  // Turkmenistan
+649  // Turks and Caicos
+688  // Tuvali
+
+256  // Uganda
+380  // Ukraine
+971  // UAE
+// United States (multiple area codes)
+
+44  // United Kingdom (The web site says '441', but it's not...)
+598  // Uruguay
+340  // US VI
+7    // Uzbekistan
+678  // Vanuatu
+// 39   // Vatican City (same as Italy)
+58   // Venezuela
+84   // Vietnam
+
+808  // Wake Island
+681  // Wallis and Futuna Islands
+685  // Western Samoa
+
+967  // Yemen
+381  // Yugoslavia
+
+243  // Zaire
+260  // Zambia
+259  // Zanzibar
+263  // Zimbabwe

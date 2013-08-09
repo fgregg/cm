@@ -182,6 +182,13 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.intl</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
       <version>2.7.1-SNAPSHOT</version>
       <classifier>eclipse2prj</classifier>

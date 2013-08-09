@@ -1,0 +1,45 @@
+<parser class="com.choicemaker.cm.matching.cfg.earley.EarleyParser" >
+	<symbolFactory>
+		<tokenType name="TT_WD" class="com.choicemaker.cm.matching.cfg.tokentype.WordTokenType">
+			<property name="defaultProbability" value=".0001" />
+		</tokenType>
+		<tokenType name="TT_BR_COUNTRY" class="com.choicemaker.cm.matching.cfg.tokentype.SetTokenType">
+			<method name="setMembers" type1="Set" arg1="br.country" />
+			<method name="setStandards" type1="Map" arg1="br.standardCountry" />
+			<property name="defaultProbability" value=".5" />
+		</tokenType>
+		<tokenType name="TT_NUM2" class="com.choicemaker.cm.matching.cfg.tokentype.FixedLengthNumberTokenType">
+			<property name="length" value="2" />
+		</tokenType>
+		<tokenType name="TT_NUM3" class="com.choicemaker.cm.matching.cfg.tokentype.FixedLengthNumberTokenType">
+			<property name="length" value="3" />
+		</tokenType>
+		<tokenType name="TT_NUM5" class="com.choicemaker.cm.matching.cfg.tokentype.FixedLengthNumberTokenType">
+			<property name="length" value="5" />
+		</tokenType>
+	</symbolFactory>
+	<tokenizer class="com.choicemaker.cm.matching.cfg.tokenizer.WhitespaceAndPunctuationTokenizer">
+		<property name="legalPunctuation" value="" />
+	</tokenizer>
+	<grammar file="etc/grammars/br.lastLineGrammar.txt" />
+	<standardizer>
+		<standardizer variable="V_CITY" 
+			class="com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer"
+			type1="String" arg1="${com.choicemaker.cm.matching.en.us.ParsedAddress.CITY}"
+			type2="int" arg2="${com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer.ALL}" />
+		<!-- TODO: copy the standardization of postal code from US parser -->
+		<standardizer variable="V_BR_POSTALCODE_DIGITS"
+			class="com.choicemaker.cm.matching.intl.BaseAndExtStandardizer"
+			type1="String" arg1="${com.choicemaker.cm.matching.en.us.ParsedAddress.ZIP}"
+			type2="String" arg2="${com.choicemaker.cm.matching.en.us.ParsedAddress.PLUS_FOUR}"
+			type3="int" arg3="5">
+			<method name="setSpaceInsertPolicy" 
+				type1="int" 
+				arg1="${com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer.NONE}" />
+		</standardizer>
+		<standardizer variable="V_BR_COUNTRY" 
+			class="com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer"
+			type1="String" arg1="${com.choicemaker.cm.matching.en.us.ParsedAddress.COUNTRY}" />
+	</standardizer>
+	<parsedData class="com.choicemaker.cm.matching.en.us.ParsedAddress" />
+</parser>
