@@ -1,0 +1,262 @@
+//
+// Raw Address: 1055  ESPLANADE AV
+// 2 parse trees
+//
+
+(SADDR (HN (NUM 1055))
+       (FSN (SN (WD ESPLANADE))
+            (SS AV)))
+
+//
+// Raw Address: 18-19 21 AV
+// 1 parse trees
+//
+
+(SADDR (HN (NUM 18)
+           (HYPH -)
+           (NUM 19))
+       (FSN (SN (NUM 21))
+            (SS AV)))
+
+
+//
+// Raw Address: 21-76 46TH STREET
+// 1 parse trees
+//
+
+(SADDR (HN (NUM 21)
+           (HYPH -)
+           (NUM 76))
+       (FSN (SN (NUM 46)
+                (ORDX TH))
+            (SS STREET)))
+
+
+//
+// Raw Address: 100-37202 ST
+// 1 parse trees
+//
+
+(SADDR (HN (NUM 100)
+           (HYPH -)
+           (NUM 37202))
+       (FSN (SN (WD ST))))
+
+
+//
+// Raw Address: 53-24 65 PL
+// 1 parse trees
+//
+
+(SADDR (HN (NUM 53)
+           (HYPH -)
+           (NUM 24))
+       (FSN (SN (NUM 65))
+            (SS PL)))
+
+
+//
+// Raw Address: 1230 ST MARKS AV
+// 2 parse trees
+//
+
+(SADDR (HN (NUM 1230))
+       (FSN (SN (WD ST)
+                (WD MARKS))
+            (SS AV)))
+
+//
+// Raw Address: 65-10 38 AV
+// 1 parse trees
+//
+
+(SADDR (HN (NUM 65)
+           (HYPH -)
+           (NUM 10))
+       (FSN (SN (NUM 38))
+            (SS AV)))
+
+
+//
+// Raw Address: 150-38UNION TP
+// 2 parse trees
+//
+
+(SADDR (HN (NUM 150)
+           (HYPH -)
+           (NUM 38))
+       (FSN (SN (WD UNION))
+            (SS TP)))
+
+//
+// Raw Address: 111 STERLING PL 9
+// 2 parse trees
+//
+
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD STERLING))
+            (SS PL))
+       (FAPT (APT (NUM 9))))
+
+//
+// Raw Address: 118-25202ST
+// 1 parse trees
+//
+
+//(SADDR (HN (NUM 118)
+//           (HYPH -)
+//           (NUM 25202))
+//       (FSN (SN (WD ST))))
+
+
+//
+// Raw Address: 512   EAST   12 ST
+// 3 parse trees
+//
+
+(SADDR (HN (NUM 512))
+       (FSN (DIR EAST)
+            (SN (NUM 12))
+            (SS ST)))
+
+//
+// Raw Address: 87-50 167 ST
+// 2 parse trees
+//
+
+(SADDR (HN (NUM 87)
+           (HYPH -)
+           (NUM 50))
+       (FSN (SN (NUM 167))
+            (SS ST)))
+
+//
+// Raw Address: E 6 ST
+// 2 parse trees
+//
+
+(SADDR (FSN (DIR E)
+            (SN (NUM 6))
+            (SS ST)))
+
+//
+// Raw Address: 160   BENNETT AV
+// 2 parse trees
+//
+
+(SADDR (HN (NUM 160))
+       (FSN (SN (WD BENNETT))
+            (SS AV)))
+
+//
+// Raw Address: PO BOX 311215
+// 0 parse trees
+//
+
+
+//
+// Raw Address: 53-24 65TH PLACE
+// 1 parse trees
+//
+
+(SADDR (HN (NUM 53)
+           (HYPH -)
+           (NUM 24))
+       (FSN (SN (NUM 65)
+                (ORDX TH))
+            (SS PLACE)))
+
+
+//
+// Raw Address: 640 W 139 ST
+// 3 parse trees
+//
+
+(SADDR (HN (NUM 640))
+       (FSN (DIR W)
+            (SN (NUM 139))
+            (SS ST)))
+
+//
+// Raw Address: 41 E. 11th St. 11th Flr
+// 1 parse trees
+//
+
+(SADDR (HN (NUM 41))
+       (FSN (DIR E)
+            (SN (NUM 11)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 11)
+                  (ORDX TH))
+             (AT FLR)))
+
+
+//
+// Raw Address: 118-25   202 ST
+// 2 parse trees
+//
+
+(SADDR (HN (NUM 118)
+           (HYPH -)
+           (NUM 25))
+       (FSN (SN (NUM 202))
+            (SS ST)))
+
+//
+// Raw Address: 30 03 92ND STREET
+// 1 parse trees
+//
+
+(SADDR (HN (NUM 30)
+           (NUM 03))
+       (FSN (SN (NUM 92)
+                (ORDX ND))
+            (SS STREET)))
+
+
+//
+// Raw Address: 150-38 UNION TPKE  1
+// 2 parse trees
+//
+
+(SADDR (HN (NUM 150)
+           (HYPH -)
+           (NUM 38))
+       (FSN (SN (WD UNION))
+            (SS TPKE))
+       (FAPT (APT (NUM 1))))
+
+//
+// Raw Address: 2167 46TH STREET
+// 3 parse trees
+//
+
+(SADDR (HN (NUM 2167))
+       (FSN (SN (NUM 46)
+                (ORDX TH))
+            (SS STREET)))
+
+//
+// Raw Address: 4 Park Ave. #6P
+// 2 parse trees
+//
+
+(SADDR (HN (NUM 4))
+       (FSN (SN (WD PARK))
+            (SS AVE))
+       (FAPT (AT #)
+             (APT (NUM 6)
+                  (LTR P))))
+                  
+//
+// Raw Address: 41 East eleventh Street eleventh floor
+// 5 parse trees
+//
+
+(SADDR (HN (NUM 41))
+       (FSN (DIR EAST)
+            (SN (ORD ELEVENTH))
+            (SS STREET))
+       (FAPT (APT (ORD ELEVENTH))
+             (AT FLOOR)))

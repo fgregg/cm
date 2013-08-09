@@ -1,0 +1,228 @@
+<data>
+<datum>
+<raw>
+<field>P O      BOX 3817</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_POST P)
+                                  (TT_OFC O))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 3817))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P O BOX 100633</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_POST P)
+                                  (TT_OFC O))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 100633))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P O BOX 1093 128 SIXTH AV</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_POST P)
+                                  (TT_OFC O))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 1093))
+                   (MULTIANY (ANY 128)
+                             (ANY SIXTH)
+                             (ANY AV))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P O BOX 279</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_POST P)
+                                  (TT_OFC O))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 279))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P O BOX 538</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_POST P)
+                                  (TT_OFC O))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 538))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P O BOX480</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_POST P)
+                                  (TT_OFC O))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 480))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P.O. BOX 1391</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_POST P)
+                                  (TT_OFC O))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 1391))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P.O. BOX 480</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_POST P)
+                                  (TT_OFC O))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 480))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P.O. BOX 89</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_POST P)
+                                  (TT_OFC O))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 89))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO     BOX 641</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 641))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 02-0339</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 02)
+                             (HYPH -)
+                             (NUM 0339))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 1227</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 1227))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 2432</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 2432))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 2682</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 2682))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 311215</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 311215))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 311276</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 311276))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 38383</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 38383))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 594</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 594))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 804</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BOX))
+                   (V_POBNUM (NUM 804))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BX 89 394 BROADWY</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (V_PO (TT_PO PO))
+                            (TT_BOX BX))
+                   (V_POBNUM (NUM 89))
+                   (MULTIANY (ANY 394)
+                             (ANY BROADWY))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>POBOX110-270</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (TT_POBOX POBOX))
+                   (V_POBNUM (NUM 110)
+                             (HYPH -)
+                             (NUM 270))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>POBX110-270</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (TT_POBOX POBX))
+                   (V_POBNUM (NUM 110)
+                             (HYPH -)
+                             (NUM 270))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>POBX89394BROADWY</field>
+</raw>
+<parseTree>
+(SADDR (POBOX_ADDR (V_POBOX (TT_POBOX POBX))
+                   (V_POBNUM (NUM 89))
+                   (MULTIANY (ANY 394)
+                             (ANY BROADWY))))</parseTree>
+</datum>
+</data>

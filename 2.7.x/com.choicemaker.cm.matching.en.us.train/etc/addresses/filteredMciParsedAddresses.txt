@@ -1,0 +1,1013 @@
+// Raw Address: 100   DREISER LOOP
+100,null,DREISER,LOOP,null,null,null
+
+// Raw Address: 1011  FIRST AV
+1011,null,FIRST,AVE,null,null,null
+
+// Raw Address: 103 ST 3
+null,null,103RD,ST,null,null,3
+
+// Raw Address: 104-4341 AV
+10443,null,41ST,AVE,null,null,null
+
+// Raw Address: 1057 HOE AVE                 8
+1057,null,HOE,AVE,null,null,8
+
+// Raw Address: 107-46  118TH ST
+10746,null,118TH,ST,null,null,null
+
+// Raw Address: 109-12 197 ST
+10912,null,197TH,ST,null,null,null
+
+// Raw Address: 110-12  195TH STREET
+11012,null,195TH,ST,null,null,null
+
+// Raw Address: 1110 WYATT AVE               6
+1110,null,WYATT,AVE,null,null,6
+
+// Raw Address: 1134 COLLEGE AVE
+1134,null,COLLEGE,AVE,null,null,null
+
+// Raw Address: 115-11 N. CONDUIT AVE
+11511,N,CONDUIT,AVE,null,null,null
+
+// Raw Address: 1160 OCEAN AVE 2
+1160,null,OCEAN,AVE,null,null,2
+
+// Raw Address: 118 ST
+null,null,118TH,ST,null,null,null
+
+// Raw Address: 120   DREISER LOOP
+120,null,DREISER,LOOP,null,null,null
+
+// Raw Address: 12205 FLATLANDS AV
+12205,null,FLATLANDS,AVE,null,null,null
+
+// Raw Address: 1248  FULTON ST
+1248,null,FULTON,ST,null,null,null
+
+// Raw Address: 1269  SHERIDAN AV
+1269,null,SHERIDAN,AVE,null,null,null
+
+// Raw Address: 131 ST
+null,null,131ST,ST,null,null,null
+
+// Raw Address: 1335  COLLEGE AV
+1335,null,COLLEGE,AVE,null,null,null
+
+// Raw Address: 1363  FINDLAY AV
+1363,null,FINDLAY,AVE,null,null,null
+
+// Raw Address: 139-0634RD
+13906,null,34TH,RD,null,null,null
+
+// Raw Address: 1408 WEBSTER AVE             1
+1408,null,WEBSTER,AVE,null,null,1
+
+// Raw Address: 143-2541 AV
+14325,null,41ST,AVE,null,null,null
+
+// Raw Address: 145-19 177 PL
+14519,null,177TH,PL,null,null,null
+
+// Raw Address: 147-02111 AV
+14702,null,111TH,AVE,null,null,null
+
+// Raw Address: 157   VERNON AV
+157,null,VERNON,AVE,null,null,null
+
+// Raw Address: 16    ELLIOT
+16,null,ELLIOT,null,null,null,null
+
+// Raw Address: 161ST                        6
+null,null,161ST,ST,null,null,6
+
+// Raw Address: 164 ST                       P
+null,null,164TH,ST,null,null,P
+
+// Raw Address: 1712  57 ST
+1712,null,57TH,ST,null,null,null
+
+// Raw Address: 174 IRVING AVE
+174,null,IRVING,AVE,null,null,null
+
+// Raw Address: 1770  ANDREWS AV
+1770,null,ANDREWS,AVE,null,null,null
+
+// Raw Address: 181  HURON ST
+181,null,HURON,ST,null,null,null
+
+// Raw Address: 186 ST
+null,null,186TH,ST,null,null,null
+
+// Raw Address: 19 BRIGHTON ST #2
+19,null,BRIGHTON,ST,null,null,2
+
+// Raw Address: 1975  LA FONTAINE
+1975,null,LA FONTAINE,null,null,null,null
+
+// Raw Address: 20-24 SEAGIRT BLVD
+2024,null,SEAGIRT,BLVD,null,null,null
+
+// Raw Address: 202 AMBOY STREE
+202,null,AMBOY,ST,null,null,null
+
+// Raw Address: 206 ST
+null,null,206TH,ST,null,null,null
+
+// Raw Address: 208-13 JAMAICA AVENUE
+20813,null,JAMAICA,AVE,null,null,null
+
+// Raw Address: 210   SHERMAN AV
+210,null,SHERMAN,AVE,null,null,null
+
+// Raw Address: 2120  MAPES AV
+2120,null,MAPES,AVE,null,null,null
+
+// Raw Address: 215 WEST 108TH ST APT 11
+215,W,108TH,ST,null,APT,11
+
+// Raw Address: 218TH ST
+null,null,218TH,ST,null,null,null
+
+// Raw Address: 226   W TREMONT AV
+226,W,TREMONT,AVE,null,null,null
+
+// Raw Address: 230 E 23RD ST
+230,E,23RD,ST,null,null,null
+
+// Raw Address: 2338  MORRIS AV
+2338,null,MORRIS,AVE,null,null,null
+
+// Raw Address: 2396  MORRIS AV
+2396,null,MORRIS,AVE,null,null,null
+
+// Raw Address: 241   EAST  111 ST
+241,E,111TH,ST,null,null,null
+
+// Raw Address: 2483  TIEBOUT AV
+2483,null,TIEBOUT,AVE,null,null,null
+
+// Raw Address: 250 WORTMAN AVE 2E
+250,null,WORTMAN,AVE,null,null,2E
+
+// Raw Address: 255 25 ST
+255,null,25TH,ST,null,null,null
+
+// Raw Address: 262   ALEXANDER AV
+262,null,ALEXANDER,AVE,null,null,null
+
+// Raw Address: 2698  8 AV
+2698,null,8TH,AVE,null,null,null
+
+// Raw Address: 2759  BARKER AV
+2759,null,BARKER,AVE,null,null,null
+
+// Raw Address: 2865 OCEAN AVE 1A
+2865,null,OCEAN,AVE,null,null,1A
+
+// Raw Address: 2937  8 AV
+2937,null,8TH,AVE,null,null,null
+
+// Raw Address: 3
+null,null,3RD,null,null,null,null
+
+// Raw Address: 30-36 34 ST
+3036,null,34TH,ST,null,null,null
+
+// Raw Address: 315 EAST 115 TH ST P
+315,E,115TH,ST,null,null,P
+
+// Raw Address: 32-30 93 ST #E1
+3230,null,93RD,ST,null,null,E1
+
+// Raw Address: 324 PALISADE AVE #2A
+324,null,PALISADE,AVE,null,null,2A
+
+// Raw Address: 330 BUSHWICK AVE. #3C
+330,null,BUSHWICK,AVE,null,null,3C
+
+// Raw Address: 34 ST
+null,null,34TH,ST,null,null,null
+
+// Raw Address: 348 ATLANTIC AVE.
+348,null,ATLANTIC,AVE,null,null,null
+
+// Raw Address: 3511  BARNES AV
+3511,null,BARNES,AVE,null,null,null
+
+// Raw Address: 36 KENILWORTH PL
+36,null,KENILWORTH,PL,null,null,null
+
+// Raw Address: 36TH ST 1
+null,null,36TH,ST,null,null,1
+
+// Raw Address: 3711 AVE S
+null,null,3711TH,AVE,null,null,S
+
+// Raw Address: 38-09 112 ST
+3809,null,112TH,ST,null,null,null
+
+// Raw Address: 391 BRINSMADE AVE            P
+391,null,BRINSMADE,AVE,null,null,P
+
+// Raw Address: 40-41 97 STREET 1ST FLR
+4041,null,97TH,ST,null,FLR,1
+
+// Raw Address: 41-12 10TH ST #6C
+4112,null,10TH,ST,null,null,6C
+
+// Raw Address: 42 LINCOLN ST
+42,null,LINCOLN,ST,null,null,null
+
+// Raw Address: 426 W 56 ST #5L
+426,W,56TH,ST,null,null,5L
+
+// Raw Address: 4366 EDSON AVE
+4366,null,EDSON,AVE,null,null,null
+
+// Raw Address: 4463  PARK AV
+4463,null,PARK,AVE,null,null,null
+
+// Raw Address: 4546 HYLAN BLVD
+4546,null,HYLAN,BLVD,null,null,null
+
+// Raw Address: 469   PENNSYLVANIA
+469,null,PENNSYLVANIA,null,null,null,null
+
+// Raw Address: 48
+null,null,48TH,null,null,null,null
+
+// Raw Address: 49-02 21 ST
+4902,null,21ST,ST,null,null,null
+
+// Raw Address: 50 LYLE COURT
+50,null,LYLE,CT,null,null,null
+
+// Raw Address: 51 CHUCK BLVD
+51,null,CHUCK,BLVD,null,null,null
+
+// Raw Address: 518   KOSCIUSKO ST
+518,null,KOSCIUSKO,ST,null,null,null
+
+// Raw Address: 52NDSTREET
+null,null,52ND,ST,null,null,null
+
+// Raw Address: 54    EAST  179 ST
+54,E,179TH,ST,null,null,null
+
+// Raw Address: 550   STONE AV
+550,null,STONE,AVE,null,null,null
+
+// Raw Address: 564   MC DONOUGH ST
+564,null,MC DONOUGH,ST,null,null,null
+
+// Raw Address: 578 FORTHILL  PLACE
+578,null,FORTHILL,PL,null,null,null
+
+// Raw Address: 59 MORNINGSIDE AVE
+59,null,MORNINGSIDE,AVE,null,null,null
+
+// Raw Address: 60 EAST 106TH STREET
+60,E,106TH,ST,null,null,null
+
+// Raw Address: 602 W 157 ST                 2
+602,W,157TH,ST,null,null,2
+
+// Raw Address: 615   W 164 ST
+615,W,164TH,ST,null,null,null
+
+// Raw Address: 630 LEONARD 3RD FLOOR
+630,null,LEONA,RD,null,FL,3
+
+// Raw Address: 645 JEFFERSON
+645,null,JEFFERSON,null,null,null,null
+
+// Raw Address: 66 NO FULTON AVENUE 1ST
+66,N,FULTON,AVE,null,null,1
+
+// Raw Address: 6720 14 AVE 1
+6720,null,14TH,AVE,null,null,1
+
+// Raw Address: 69-77 PARK DRIVE EAST
+6977,null,PARK,DR,E,null,null
+
+// Raw Address: 700 MORRIS AVE.
+700,null,MORRIS,AVE,null,null,null
+
+// Raw Address: 72 RIDGEWOOD AVE #C4
+72,null,RIDGEWOOD,AVE,null,null,C4
+
+// Raw Address: 73-57 198TH ST
+7357,null,198TH,ST,null,null,null
+
+// Raw Address: 76-35 COMMONWEALTH BL
+7635,null,COMMONWEALTH,BLVD,null,null,null
+
+// Raw Address: 795 GARDEN ST #5L
+795,null,GARDEN,ST,null,null,5L
+
+// Raw Address: 800 4 AVE APT 517
+800,null,4TH,AVE,null,APT,517
+
+// Raw Address: 82-34 252 ST
+8234,null,252ND,ST,null,null,null
+
+// Raw Address: 835 WALTON AVE #24
+835,null,WALTON,AVE,null,null,24
+
+// Raw Address: 85-16 95 AV
+8516,null,95TH,AVE,null,null,null
+
+// Raw Address: 8616  24 AV
+8616,null,24TH,AVE,null,null,null
+
+// Raw Address: 88-09 148 ST
+8809,null,148TH,ST,null,null,null
+
+// Raw Address: 90-15 179TH PL
+9015,null,179TH,PL,null,null,null
+
+// Raw Address: 91-31 LAMONT AVE.
+9131,null,LAMONT,AVE,null,null,null
+
+// Raw Address: 927   DEKALB AV
+927,null,DEKALB,AVE,null,null,null
+
+// Raw Address: 944   MARCY AV
+944,null,MARCY,AVE,null,null,null
+
+// Raw Address: 964   MORRIS AV
+964,null,MORRIS,AVE,null,null,null
+
+// Raw Address: 98-25 65 AV
+9825,null,65TH,AVE,null,null,null
+
+// Raw Address: ALABAMA AV
+null,null,ALABAMA,AVE,null,null,null
+
+// Raw Address: ANDREWS AVE
+null,null,ANDREWS,AVE,null,null,null
+
+// Raw Address: BARKER AVE
+null,null,BARKER,AVE,null,null,null
+
+// Raw Address: BIRCH RD
+null,null,BIRCH,RD,null,null,null
+
+// Raw Address: BRIGGS AV
+null,null,BRIGGS,AVE,null,null,null
+
+// Raw Address: BRYANT AVE
+null,null,BRYANT,AVE,null,null,null
+
+// Raw Address: CATHERINEST 1
+null,null,CATHERINE,ST,null,null,1
+
+// Raw Address: CLAY AVE                    3
+null,null,CLAY,AVE,null,null,3
+
+// Raw Address: DUMONT AVE 9
+null,null,DUMONT,AVE,null,null,9
+
+// Raw Address: E 152
+null,E,152ND,null,null,null,null
+
+// Raw Address: E 224 ST
+null,E,224TH,ST,null,null,null
+
+// Raw Address: E 80 ST
+null,E,80TH,ST,null,null,null
+
+// Raw Address: E53ST
+null,E,53RD,ST,null,null,null
+
+// Raw Address: EAST 156 ST                  1
+null,E,156TH,ST,null,null,1
+
+// Raw Address: EAST 34TH ST
+null,E,34TH,ST,null,null,null
+
+// Raw Address: EAST 9TH ST
+null,E,9TH,ST,null,null,null
+
+// Raw Address: EMPIRE BLVD 1
+null,null,EMPIRE,BLVD,null,null,1
+
+// Raw Address: FOREST PY
+null,null,FOREST,PKWY,null,null,null
+
+// Raw Address: GLEANE ST                    D
+null,null,GLEANE,ST,null,null,D
+
+// Raw Address: HYLAN BLVD
+null,null,HYLAN,BLVD,null,null,null
+
+// Raw Address: KENILWORTH PL 5
+null,null,KENILWORTH,PL,null,null,5
+
+// Raw Address: LENOX RD                     9
+null,null,LENOX,RD,null,null,9
+
+// Raw Address: LORING AV 5
+null,null,LORING,AVE,null,null,5
+
+// Raw Address: MARCUS GARVEY BLVD
+null,null,MARCUS GARVEY,BLVD,null,null,null
+
+// Raw Address: MEMORIAL PL
+null,null,MEMORIAL,PL,null,null,null
+
+// Raw Address: MORRIS AVE                   1
+null,null,MORRIS,AVE,null,null,1
+
+// Raw Address: NEW LOTS AV
+null,null,NEW LOTS,AVE,null,null,null
+
+// Raw Address: OCEAN AVE                    1
+null,null,OCEAN,AVE,null,null,1
+
+// Raw Address: PENROD ST
+null,null,PENROD,ST,null,null,null
+
+// Raw Address: PROSPECT AVE 2
+null,null,PROSPECT,AVE,null,null,2
+
+// Raw Address: RICHMAN PLAZA
+null,null,RICHMAN,PLZ,null,null,null
+
+// Raw Address: ROOSEVELT AV                 1
+null,null,ROOSEVELT,AVE,null,null,1
+
+// Raw Address: SARATOGA AVE
+null,null,SARATOGA,AVE,null,null,null
+
+// Raw Address: SHERMAN AV
+null,null,SHERMAN,AVE,null,null,null
+
+// Raw Address: ST JOHNS PL                  1
+null,null,ST JOHNS,PL,null,null,1
+
+// Raw Address: THIERIOT AV C
+null,null,THIERIOT,AVE,null,null,C
+
+// Raw Address: W 152 ST 5
+null,W,152ND,ST,null,null,5
+
+// Raw Address: W 47 ST 2
+null,W,47TH,ST,null,null,2
+
+// Raw Address: WALES AVE 6
+null,null,WALES,AVE,null,null,6
+
+// Raw Address: WEST 115 ST 5
+null,W,115TH,ST,null,null,5
+
+// Raw Address: WEST 184 ST                  P
+null,W,184TH,ST,null,null,P
+
+// Raw Address: WEST128THSTREET
+null,W,128TH,ST,null,null,null
+
+// Raw Address: WILLOUGHBY ST
+null,null,WILLOUGHBY,ST,null,null,null
+
+// Raw Address: 100   W 141 ST
+100,W,141ST,ST,null,null,null
+
+// Raw Address: 1011 SHERIDAN AV
+1011,null,SHERIDAN,AVE,null,null,null
+
+// Raw Address: 103-07MARTENSE AV
+10307,null,MARTENSE,AVE,null,null,null
+
+// Raw Address: 1040  55 ST
+1040,null,55TH,ST,null,null,null
+
+// Raw Address: 106 14 AVE
+106,null,14TH,AVE,null,null,null
+
+// Raw Address: 1071  FRANKLIN AV
+1071,null,FRANKLIN,AVE,null,null,null
+
+// Raw Address: 109-43127 ST
+10943,null,127TH,ST,null,null,null
+
+// Raw Address: 110-45QUEENS BLVD
+11045,null,QUEENS,BLVD,null,null,null
+
+// Raw Address: 1115 BOSTON RD 6
+1115,null,BOSTON,RD,null,null,6
+
+// Raw Address: 115-94223 ST
+11594,null,223RD,ST,null,null,null
+
+// Raw Address: 116ST
+null,null,116TH,ST,null,null,null
+
+// Raw Address: 1188 GRAND CONC.
+1188,null,GRAND,CONCOURSE,null,null,null
+
+// Raw Address: 1200  E 53RD ST
+1200,E,53RD,ST,null,null,null
+
+// Raw Address: 1253 FRANKLIN AVE 1F
+1253,null,FRANKLIN,AVE,null,null,1F
+
+// Raw Address: 127 ST.
+null,null,127TH,ST,null,null,null
+
+// Raw Address: 130 ST
+null,null,130TH,ST,null,null,null
+
+// Raw Address: 132-20 114 ST
+13220,null,114TH,ST,null,null,null
+
+// Raw Address: 1345 E 88TH ST
+1345,E,88TH,ST,null,null,null
+
+// Raw Address: 1375 OCEAN AVE
+1375,null,OCEAN,AVE,null,null,null
+
+// Raw Address: 14-04 31 AVE 3
+1404,null,31ST,AVE,null,null,3
+
+// Raw Address: 1419  35 ST
+1419,null,35TH,ST,null,null,null
+
+// Raw Address: 144-41 WELLER LANE
+14441,null,WELLER,LN,null,null,null
+
+// Raw Address: 146-23 175 ST
+14623,null,175TH,ST,null,null,null
+
+// Raw Address: 148 GEORGE ST
+148,null,GEORGE,ST,null,null,null
+
+// Raw Address: 150   E 182ND ST
+150,E,182ND,ST,null,null,null
+
+// Raw Address: 152-1189 AV
+15211,null,89TH,AVE,null,null,null
+
+// Raw Address: 1550  KIMBALL ST
+1550,null,KIMBALL,ST,null,null,null
+
+// Raw Address: 159 MOHICAN AVE
+159,null,MOHICAN,AVE,null,null,null
+
+// Raw Address: 1630  66 ST
+1630,null,66TH,ST,null,null,null
+
+// Raw Address: 168-40 JAMAICA AVE
+16840,null,JAMAICA,AVE,null,null,null
+
+// Raw Address: 1706  DAVIDSON AV
+1706,null,DAVIDSON,AVE,null,null,null
+
+// Raw Address: 173 ST 6
+null,null,173RD,ST,null,null,6
+
+// Raw Address: 1763 2 AVE
+1763,null,2ND,AVE,null,null,null
+
+// Raw Address: 180   TROY AV
+180,null,TROY,AVE,null,null,null
+
+// Raw Address: 185   PARK HILL AV
+185,null,PARK HILL,AVE,null,null,null
+
+// Raw Address: 189-11114 RD
+18911,null,114TH,RD,null,null,null
+
+// Raw Address: 197 HESTER ST.2
+197,null,HESTER,ST,null,null,2
+
+// Raw Address: 20-09 146 ST
+2009,null,146TH,ST,null,null,null
+
+// Raw Address: 2017  GRAND CO
+2017,null,GRAND,CONCOURSE,null,null,null
+
+// Raw Address: 2059 MCGRAW AVE #3F
+2059,null,MCGRAW,AVE,null,null,3F
+
+// Raw Address: 208   W 140 ST
+208,W,140TH,ST,null,null,null
+
+// Raw Address: 210   EAST   51 ST
+210,E,51ST,ST,null,null,null
+
+// Raw Address: 215 W 147TH ST
+215,W,147TH,ST,null,null,null
+
+// Raw Address: 218TH ST
+null,null,218TH,ST,null,null,null
+
+// Raw Address: 221   LINDEN BLVD
+221,null,LINDEN,BLVD,null,null,null
+
+// Raw Address: 226 MALCOLM X BL #4A
+226,null,MALCOLM X,BLVD,null,null,4A
+
+// Raw Address: 230-1464 AV
+23014,null,64TH,AVE,null,null,null
+
+// Raw Address: 234   RALPH AV
+234,null,RALPH,AVE,null,null,null
+
+// Raw Address: 24    CEDAR ST
+24,null,CEDAR,ST,null,null,null
+
+// Raw Address: 2416  BUCK ST
+2416,null,BUCK,ST,null,null,null
+
+// Raw Address: 249 HOPKINSON AV 18M
+249,null,HOPKINSON,AVE,null,null,18M
+
+// Raw Address: 2567 YOUNG AVE
+2567,null,YOUNG,AVE,null,null,null
+
+// Raw Address: 2645  E 18TH ST
+2645,E,18TH,ST,null,null,null
+
+// Raw Address: 2703 W 33 ST #5B
+2703,W,33RD,ST,null,null,5B
+
+// Raw Address: 2785  SEDGWICK AV
+2785,null,SEDGWICK,AVE,null,null,null
+
+// Raw Address: 282 MANHATTAN AVE 3N
+282,null,MANHATTAN,AVE,null,null,3N
+
+// Raw Address: 28AVE
+null,null,28TH,AVE,null,null,null
+
+// Raw Address: 2950 W 23 ST                 2
+2950,W,23RD,ST,null,null,2
+
+// Raw Address: 30    ELLWOOD ST
+30,null,ELLWOOD,ST,null,null,null
+
+// Raw Address: 300 MORRIS AVE
+300,null,MORRIS,AVE,null,null,null
+
+// Raw Address: 305E153ST.
+305,E,153RD,ST,null,null,null
+
+// Raw Address: 310 LENOX RD  #6X
+310,null,LENOX,RD,null,null,6X
+
+// Raw Address: 319   ELLERY ST
+319,null,ELLERY,ST,null,null,null
+
+// Raw Address: 321   EUCLID AV
+321,null,EUCLID,AVE,null,null,null
+
+// Raw Address: 329   HALSEY ST
+329,null,HALSEY,ST,null,null,null
+
+// Raw Address: 334   EAST   79 ST
+334,E,79TH,ST,null,null,null
+
+// Raw Address: 340 SENATOR ST
+340,null,SENATOR,ST,null,null,null
+
+// Raw Address: 35-25 34 ST
+3525,null,34TH,ST,null,null,null
+
+// Raw Address: 355 E 184 ST APT 523
+355,E,184TH,ST,null,APT,523
+
+// Raw Address: 379   EAST   54 ST
+379,E,54TH,ST,null,null,null
+
+// Raw Address: 39    AUBURN
+39,null,AUBURN,null,null,null,null
+
+// Raw Address: 40    E 80 ST
+40,E,80TH,ST,null,null,null
+
+// Raw Address: 409 WOODWARD AVE 3
+409,null,WOODWARD,AVE,null,null,3
+
+// Raw Address: 4151  BREENER AV
+4151,null,BREENER,AVE,null,null,null
+
+// Raw Address: 422   MARION ST
+422,null,MARION,ST,null,null,null
+
+// Raw Address: 4310  RICHARDSON AV
+4310,null,RICHARDSON,AVE,null,null,null
+
+// Raw Address: 4411  CHURCH AV
+4411,null,CHURCH,AVE,null,null,null
+
+// Raw Address: 45-67 W TREMONT AVE 6
+4567,W,TREMONT,AVE,null,null,6
+
+// Raw Address: 462   58 ST
+462,null,58TH,ST,null,null,null
+
+// Raw Address: 477   EAST   95 ST
+477,E,95TH,ST,null,null,null
+
+// Raw Address: 489 PINE STREET PH
+489,null,PINE,ST,null,PH,null
+
+// Raw Address: 5 VIRGINIA PL
+5,null,VIRGINIA,PL,null,null,null
+
+// Raw Address: 5064PITMANAVE
+5064,null,PITMAN,AVE,null,null,null
+
+// Raw Address: 516   WEST  159 ST
+516,W,159TH,ST,null,null,null
+
+// Raw Address: 529   ELDERT LN
+529,null,ELDERT,LN,null,null,null
+
+// Raw Address: 53RD ST                      1
+null,null,53RD,ST,null,null,1
+
+// Raw Address: 55 PARK PLACE
+55,null,PARK,PL,null,null,null
+
+// Raw Address: 5612  8 AV
+5612,null,8TH,AVE,null,null,null
+
+// Raw Address: 59
+null,null,59TH,null,null,null,null
+
+// Raw Address: 60 EAST 106TH STREET
+60,E,106TH,ST,null,null,null
+
+// Raw Address: 602 W 157 ST 2
+602,W,157TH,ST,null,null,2
+
+// Raw Address: 617BAKERAVE
+617,null,BAKER,AVE,null,null,null
+
+// Raw Address: 633   EAST  236 ST
+633,E,236TH,ST,null,null,null
+
+// Raw Address: 647   W 207TH ST
+647,W,207TH,ST,null,null,null
+
+// Raw Address: 66-14 49 AVE #3F
+6614,null,49TH,AVE,null,null,3F
+
+// Raw Address: 675 WATER ST #9F
+675,null,WATER,ST,null,null,9F
+
+// Raw Address: 691   GERARD AV
+691,null,GERARD,AVE,null,null,null
+
+// Raw Address: 7032  4 AV
+7032,null,4TH,AVE,null,null,null
+
+// Raw Address: 722   55 ST
+722,null,55TH,ST,null,null,null
+
+// Raw Address: 731   KELLY ST
+731,null,KELLY,ST,null,null,null
+
+// Raw Address: 75-17 41 AV
+7517,null,41ST,AVE,null,null,null
+
+// Raw Address: 763 ST JOHNS PL
+763,null,ST JOHNS,PL,null,null,null
+
+// Raw Address: 782   PRESIDENT ST
+782,null,PRESIDENT,ST,null,null,null
+
+// Raw Address: 7W92ST#36
+7,W,92ND,ST,null,null,36
+
+// Raw Address: 806   HENDERSON AV
+806,null,HENDERSON,AVE,null,null,null
+
+// Raw Address: 823 NOSTRAND AVE
+823,null,NOSTRAND,AVE,null,null,null
+
+// Raw Address: 84-09 TALBOT ST
+8409,null,TALBOT,ST,null,null,null
+
+// Raw Address: 855 BRYANT AVE #6B
+855,null,BRYANT,AVE,null,null,6B
+
+// Raw Address: 87-50 167 ST
+8750,null,167TH,ST,null,null,null
+
+// Raw Address: 8887      19TH AVE
+8887,null,19TH,AVE,null,null,null
+
+// Raw Address: 9     MAIDEN LN
+9,null,MAIDEN,LN,null,null,null
+
+// Raw Address: 903   CRANFORD AV
+903,null,CRANFORD,AVE,null,null,null
+
+// Raw Address: 92    HEWES ST
+92,null,HEWES,ST,null,null,null
+
+// Raw Address: 936 STEBBIS AVENUE
+936,null,STEBBIS,AVE,null,null,null
+
+// Raw Address: 952   RENSSELAER AV
+952,null,RENSSELAER,AVE,null,null,null
+
+// Raw Address: 97-19171ST
+9719,null,171ST,ST,null,null,null
+
+// Raw Address: 99-09 95 ST
+9909,null,95TH,ST,null,null,null
+
+// Raw Address: AMSTERDAM AV 1
+null,null,AMSTERDAM,AVE,null,null,1
+
+// Raw Address: ATKIN AVEL
+null,null,ATKIN AVEL,null,null,null,null
+
+// Raw Address: BAYS WATER AV
+null,null,BAYS WATER,AVE,null,null,null
+
+// Raw Address: BELLHAVEN PL
+null,null,BELLHAVEN,PL,null,null,null
+
+// Raw Address: BRONX RIVER AV
+null,null,BRONX RIVER,AVE,null,null,null
+
+// Raw Address: CARPENTER AVE 3
+null,null,CARPENTER,AVE,null,null,3
+
+// Raw Address: CLAREMONT AV 4
+null,null,CLAREMONT,AVE,null,null,4
+
+// Raw Address: COMMUNITY DR
+null,null,COMMUNITY,DR,null,null,null
+
+// Raw Address: CROWN ST
+null,null,CROWN,ST,null,null,null
+
+// Raw Address: DITMAS AV
+null,null,DITMAS,AVE,null,null,null
+
+// Raw Address: E 139 ST                     4
+null,E,139TH,ST,null,null,4
+
+// Raw Address: E 21 ST 4
+null,E,21ST,ST,null,null,4
+
+// Raw Address: E 66 ST
+null,E,66TH,ST,null,null,null
+
+// Raw Address: E229ST
+null,E,229TH,ST,null,null,null
+
+// Raw Address: EAST 149TH ST
+null,E,149TH,ST,null,null,null
+
+// Raw Address: EAST 27 STREET
+null,E,27TH,ST,null,null,null
+
+// Raw Address: EAST 95TH ST
+null,E,95TH,ST,null,null,null
+
+// Raw Address: EDGECOMBE AV
+null,null,EDGECOMBE,AVE,null,null,null
+
+// Raw Address: ELY AV
+null,null,ELY,AVE,null,null,null
+
+// Raw Address: FOREST AV 1
+null,null,FOREST,AVE,null,null,1
+
+// Raw Address: GLEANE ST                    D
+null,null,GLEANE,ST,null,null,D
+
+// Raw Address: HAMPTON AV
+null,null,HAMPTON,AVE,null,null,null
+
+// Raw Address: HICKS ST G
+null,null,HICKS,ST,null,null,G
+
+// Raw Address: INDIGOT DR
+null,null,INDIGOT,DR,null,null,null
+
+// Raw Address: LEXINGTON AV                 3
+null,null,LEXINGTON,AVE,null,null,3
+
+// Raw Address: METROPOLITAN AV
+null,null,METROPOLITAN,AVE,null,null,null
+
+// Raw Address: MOTT ST                      2
+null,null,MOTT,ST,null,null,2
+
+// Raw Address: NEWKIRK AV                   3
+null,null,NEWKIRK,AVE,null,null,3
+
+// Raw Address: OCEAN PKWY 4
+null,null,OCEAN,PKWY,null,null,4
+
+// Raw Address: PALMER AV
+null,null,PALMER,AVE,null,null,null
+
+// Raw Address: PUTNAM AVE
+null,null,PUTNAM,AVE,null,null,null
+
+// Raw Address: RIVAS PARK TOWER
+null,null,RIVAS PARK TOWER,null,null,null,null
+
+// Raw Address: ROWERY
+null,null,ROWERY,null,null,null,null
+
+// Raw Address: SEAGIRT BLVD
+null,null,SEAGIRT,BLVD,null,null,null
+
+// Raw Address: SMART ST
+null,null,SMART,ST,null,null,null
+
+// Raw Address: ST.ANNSAV 3
+null,null,ST ANNS,AVE,null,null,3
+
+// Raw Address: SUTTERAVE 2
+null,null,SUTTER,AVE,null,null,2
+
+// Raw Address: TIMBOX RIDGE DR
+null,null,TIMBOX RIDGE,DR,null,null,null
+
+// Raw Address: UNIVERSITYAVE
+null,null,UNIVERSITY,AVE,null,null,null
+
+// Raw Address: W 12 ST
+null,W,12TH,ST,null,null,null
+
+// Raw Address: W 18 ST
+null,W,18TH,ST,null,null,null
+
+// Raw Address: WASHINGTON AVE 4
+null,null,WASHINGTON,AVE,null,null,4
+
+// Raw Address: WEST 149 ST
+null,W,149TH,ST,null,null,null
+
+// Raw Address: WEST 77TH ST
+null,W,77TH,ST,null,null,null
+
+// Raw Address: WHITE PLAINS RD
+null,null,WHITE PLAINS,RD,null,null,null
+
+// Raw Address: WOODSIDE AV
+null,null,WOODSIDE,AVE,null,null,null
+
+// Raw Address: #3RE 141 W 111 ST
+141,W,111TH,ST,null,REAR,3
+
+// Raw Address: 149THST
+null,null,149TH,ST,null,null,null
+
+// Raw Address: 280FROSTST.
+280,null,FROST,ST,null,null,null
+
+// Raw Address: 303RIDGEWOODAVE
+303,null,RIDGEWOOD,AVE,null,null,null
+
+// Raw Address: 31-0134THST
+3101,null,34TH,ST,null,null,null
+
+// Raw Address: 78 SO WASHINGTON AVE
+78,S,WASHINGTON,AVE,null,null,null
+
+// Raw Address: CORNAGAAVE B
+null,null,CORNAGA,AVE,null,null,B
+
+// Raw Address: DALYAV                       2
+null,null,DALY,AVE,null,null,2
+
+// Raw Address: EDGEWOODAV 2
+null,null,EDGEWOOD,AVE,null,null,2
+
+// Raw Address: HEYWARD
+null,null,HEYWARD,null,null,null,null
+
+// Raw Address: STOBEAVE
+null,null,STOBE,AVE,null,null,null
+
+// Raw Address: UNDERCLIFFAVE
+null,null,UNDERCLIFF,AVE,null,null,null
+
+// Raw Address: VERMONTST
+null,null,VERMONT,ST,null,null,null
+
+// Raw Address: 123 SO ROBERT ST
+123,S,ROBERT,ST,null,null,null
+
+// Raw Address: 363ETNAST                    2
+363,null,ETNA,ST,null,null,2
+
+// Raw Address: KING HY
+null,null,KING,HWY,null,null,null
+
+// Raw Address: LORINGAVE
+null,null,LORING,AVE,null,null,null

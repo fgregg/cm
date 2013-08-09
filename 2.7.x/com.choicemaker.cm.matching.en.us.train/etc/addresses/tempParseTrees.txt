@@ -1,0 +1,950 @@
+// Raw Address: #3RE 141 W 111 ST
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 3))
+             (AT RE))
+       (HN (NUM 141))
+       (FSN (DIR W)
+            (SN (NUM 111))
+            (SS ST)))
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 3))
+             (AT RE))
+       (HN (NUM 141)
+           (LTR W))
+       (FSN (SN (NUM 111)
+                (ORDX ST))))
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 3))
+             (AT RE))
+       (HN (NUM 141))
+       (FSN (DIR W)
+            (SN (NUM 111)
+                (ORDX ST))))
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 3))
+             (AT RE))
+       (HN (NUM 141)
+           (LTR W))
+       (FSN (SN (NUM 111))
+            (SS ST)))
+
+
+// Raw Address: BEACH 59TH ST
+
+
+// Raw Address: 69-18 BEACH CHANNEL
+
+(SADDR (HN (NUM 69)
+           (HYPH -)
+           (NUM 18))
+       (FSN (SN (WD BEACH)
+                (WD CHANNEL))))
+
+
+// Raw Address: B59ST
+
+(SADDR (FAPT (APT (LTR B)))
+       (HN (NUM 59))
+       (FSN (SN (WD ST))))
+
+(SADDR (FSN (SN (WD B)))
+       (FAPT (APT (NUM 59)
+                  (ORDX ST))))
+
+
+// Raw Address: 160A  LEE AV
+
+(SADDR (HN (NUM 160))
+       (FSN (SN (WD A)
+                (WD LEE))
+            (SS AV)))
+
+(SADDR (HN (NUM 160))
+       (FSN (SN (WD A)
+                (WD LEE)
+                (WD AV))))
+
+(SADDR (HN (NUM 160)
+           (LTR A))
+       (FSN (SN (WD LEE)
+                (WD AV))))
+
+(SADDR (HN (NUM 160)
+           (LTR A))
+       (FSN (SN (WD LEE))
+            (SS AV)))
+
+
+// Raw Address: 601OAKTERR
+
+(SADDR (HN (NUM 601))
+       (FSN (SN (WD OAKTERR))))
+
+(SADDR (HN (NUM 601))
+       (FSN (SN (WD OAK))
+            (SS TERR)))
+
+(SADDR (HN (NUM 601))
+       (FSN (SN (WD OAK)
+                (WD TERR))))
+
+
+// Raw Address: PO BOX 311276
+
+(SADDR (FSN (SN (WD PO)
+                (WD BOX)))
+       (FAPT (APT (NUM 311276))))
+
+
+// Raw Address: 129BALTICSTREET
+
+(SADDR (HN (NUM 129))
+       (FSN (SN (WD BALTICSTREET))))
+
+(SADDR (HN (NUM 129))
+       (FSN (SN (WD BALTIC))
+            (SS STREET)))
+
+(SADDR (HN (NUM 129))
+       (FSN (SN (WD BALTIC)
+                (WD STREET))))
+
+
+// Raw Address: 149THST
+
+(SADDR (FSN (SN (NUM 149)
+                (ORDX TH))
+            (SS ST)))
+
+(SADDR (HN (NUM 149))
+       (FSN (SN (WD TH))
+            (SS ST)))
+
+(SADDR (HN (NUM 149))
+       (FSN (SN (WD THST))))
+
+(SADDR (HN (NUM 149))
+       (FSN (SN (WD TH)
+                (WD ST))))
+
+
+// Raw Address: 1505TOWNSENDAVE
+
+(SADDR (HN (NUM 1505))
+       (FSN (SN (WD TOWNSEND))
+            (SS AVE)))
+
+(SADDR (HN (NUM 1505))
+       (FSN (SN (WD TOWNSENDAVE))))
+
+(SADDR (HN (NUM 1505))
+       (FSN (SN (WD TOWNSEND)
+                (WD AVE))))
+
+(SADDR (FAPT (APT (NUM 15)))
+       (HN (NUM 05))
+       (FSN (SN (WD TOWNSEND))
+            (SS AVE)))
+
+(SADDR (FAPT (APT (NUM 15)))
+       (HN (NUM 05))
+       (FSN (SN (WD TOWNSENDAVE))))
+
+(SADDR (FAPT (APT (NUM 15)))
+       (HN (NUM 05))
+       (FSN (SN (WD TOWNSEND)
+                (WD AVE))))
+
+(SADDR (HN (NUM 15)
+           (NUM 05))
+       (FSN (SN (WD TOWNSENDAVE))))
+
+(SADDR (HN (NUM 15)
+           (NUM 05))
+       (FSN (SN (WD TOWNSEND)
+                (WD AVE))))
+
+(SADDR (HN (NUM 15)
+           (NUM 05))
+       (FSN (SN (WD TOWNSEND))
+            (SS AVE)))
+
+
+// Raw Address: 1534ERICSONPL.               5
+
+(SADDR (HN (NUM 1534))
+       (FSN (SN (WD ERICSON))
+            (SS PL))
+       (FAPT (APT (NUM 5))))
+
+(SADDR (HN (NUM 1534))
+       (FSN (SN (WD ERICSONPL)))
+       (FAPT (APT (NUM 5))))
+
+(SADDR (HN (NUM 1534))
+       (FSN (SN (WD ERICSON)
+                (WD PL)))
+       (FAPT (APT (NUM 5))))
+
+(SADDR (HN (NUM 15)
+           (NUM 34))
+       (FSN (SN (WD ERICSONPL)))
+       (FAPT (APT (NUM 5))))
+
+(SADDR (HN (NUM 15)
+           (NUM 34))
+       (FSN (SN (WD ERICSON))
+            (SS PL))
+       (FAPT (APT (NUM 5))))
+
+(SADDR (HN (NUM 15)
+           (NUM 34))
+       (FSN (SN (WD ERICSON)
+                (WD PL)))
+       (FAPT (APT (NUM 5))))
+
+
+// Raw Address: 165AVEU
+
+(SADDR (HN (NUM 165))
+       (FSN (SN (WD AVEU))))
+
+
+// Raw Address: 1690PRESIDENTSTREE
+
+(SADDR (HN (NUM 1690))
+       (FSN (SN (WD PRESIDENTSTREE))))
+
+(SADDR (HN (NUM 1690))
+       (FSN (SN (WD PRESIDENT))
+            (SS STREE)))
+
+(SADDR (FAPT (APT (NUM 16)))
+       (HN (NUM 90))
+       (FSN (SN (WD PRESIDENTSTREE))))
+
+(SADDR (FAPT (APT (NUM 16)))
+       (HN (NUM 90))
+       (FSN (SN (WD PRESIDENT))
+            (SS STREE)))
+
+(SADDR (HN (NUM 1690))
+       (FSN (SN (WD PRESIDENT)
+                (WD STREE))))
+
+(SADDR (FAPT (APT (NUM 16)))
+       (HN (NUM 90))
+       (FSN (SN (WD PRESIDENT)
+                (WD STREE))))
+
+(SADDR (HN (NUM 16)
+           (NUM 90))
+       (FSN (SN (WD PRESIDENT)
+                (WD STREE))))
+
+(SADDR (HN (NUM 16)
+           (NUM 90))
+       (FSN (SN (WD PRESIDENTSTREE))))
+
+(SADDR (HN (NUM 16)
+           (NUM 90))
+       (FSN (SN (WD PRESIDENT))
+            (SS STREE)))
+
+
+// Raw Address: 1935MCGROWAVENUE
+
+(SADDR (HN (NUM 1935))
+       (FSN (SN (WD MCGROWAVENUE))))
+
+(SADDR (HN (NUM 1935))
+       (FSN (SN (WD MCGROW))
+            (SS AVENUE)))
+
+(SADDR (FAPT (APT (NUM 19)))
+       (HN (NUM 35))
+       (FSN (SN (WD MCGROWAVENUE))))
+
+(SADDR (FAPT (APT (NUM 19)))
+       (HN (NUM 35))
+       (FSN (SN (WD MCGROW))
+            (SS AVENUE)))
+
+(SADDR (HN (NUM 1935))
+       (FSN (SN (WD MCGROW)
+                (WD AVENUE))))
+
+(SADDR (FAPT (APT (NUM 19)))
+       (HN (NUM 35))
+       (FSN (SN (WD MCGROW)
+                (WD AVENUE))))
+
+(SADDR (HN (NUM 19)
+           (NUM 35))
+       (FSN (SN (WD MCGROW)
+                (WD AVENUE))))
+
+(SADDR (HN (NUM 19)
+           (NUM 35))
+       (FSN (SN (WD MCGROWAVENUE))))
+
+(SADDR (HN (NUM 19)
+           (NUM 35))
+       (FSN (SN (WD MCGROW))
+            (SS AVENUE)))
+
+
+// Raw Address: 221   BAY   40 ST
+
+(SADDR (HN (NUM 221))
+       (FSN (SN (WD BAY)))
+       (FAPT (APT (NUM 40)
+                  (ORDX ST))))
+
+
+// Raw Address: 280FROSTST.
+
+(SADDR (HN (NUM 280))
+       (FSN (SN (WD FROST))
+            (SS ST)))
+
+(SADDR (HN (NUM 280))
+       (FSN (SN (WD FROSTST))))
+
+(SADDR (HN (NUM 280))
+       (FSN (SN (WD FROST)
+                (WD ST))))
+
+
+// Raw Address: 303RIDGEWOODAVE
+
+(SADDR (HN (NUM 303))
+       (FSN (SN (WD RIDGEWOOD))
+            (SS AVE)))
+
+(SADDR (HN (NUM 303))
+       (FSN (SN (WD RIDGEWOODAVE))))
+
+(SADDR (HN (NUM 303))
+       (FSN (SN (WD RIDGEWOOD)
+                (WD AVE))))
+
+
+// Raw Address: 31-0134THST
+
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 01))
+       (FSN (SN (NUM 34)
+                (ORDX TH))
+            (SS ST)))
+
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 0134))
+       (FSN (SN (WD TH))
+            (SS ST)))
+
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 0134))
+       (FSN (SN (WD THST))))
+
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 0134))
+       (FSN (SN (WD TH)
+                (WD ST))))
+
+
+// Raw Address: 74B HASTINGS AV
+
+(SADDR (HN (NUM 74))
+       (FSN (SN (WD B)
+                (WD HASTINGS))
+            (SS AV)))
+
+(SADDR (HN (NUM 74))
+       (FSN (SN (WD B)
+                (WD HASTINGS)
+                (WD AV))))
+
+(SADDR (HN (NUM 74)
+           (LTR B))
+       (FSN (SN (WD HASTINGS))
+            (SS AV)))
+
+(SADDR (HN (NUM 74)
+           (LTR B))
+       (FSN (SN (WD HASTINGS)
+                (WD AV))))
+
+
+// Raw Address: 78 SO WASHINGTON AVE
+
+(SADDR (HN (NUM 78))
+       (FSN (DIR SO)
+            (SN (WD WASHINGTON))
+            (SS AVE)))
+
+(SADDR (HN (NUM 78))
+       (FSN (SN (WD SO)
+                (WD WASHINGTON))
+            (SS AVE)))
+
+(SADDR (HN (NUM 78))
+       (FSN (SN (WD SO)
+                (WD WASHINGTON)
+                (WD AVE))))
+
+(SADDR (HN (NUM 78))
+       (FSN (DIR SO)
+            (SN (WD WASHINGTON)
+                (WD AVE))))
+
+
+// Raw Address: 89-B VISTATION PLACE
+
+(SADDR (HN (NUM 89)
+           (HYPH -)
+           (LTR B))
+       (FSN (SN (WD VI)
+                (WD STATION)
+                (WD PLACE))))
+
+(SADDR (HN (NUM 89)
+           (HYPH -)
+           (LTR B))
+       (FSN (SN (WD VI)
+                (WD STATION))
+            (SS PLACE)))
+
+(SADDR (HN (NUM 89)
+           (HYPH -)
+           (LTR B))
+       (FSN (SN (WD VISTATION))
+            (SS PLACE)))
+
+(SADDR (HN (NUM 89)
+           (HYPH -)
+           (LTR B))
+       (FSN (SN (WD VISTATION)
+                (WD PLACE))))
+
+
+// Raw Address: AVE I
+
+(SADDR (FSN (SN (WD AVE)))
+       (FAPT (APT (LTR I))))
+
+(SADDR (FSN (SN (WD AVE)
+                (WD I))))
+
+
+// Raw Address: BEACH 59TH ST
+
+
+// Raw Address: CORNAGAAVE B
+
+(SADDR (FSN (SN (WD CORNAGA))
+            (SS AVE))
+       (FAPT (APT (LTR B))))
+
+(SADDR (FSN (SN (WD CORNAGAAVE)))
+       (FAPT (APT (LTR B))))
+
+(SADDR (FSN (SN (WD CORNAGAAVE)
+                (WD B))))
+
+(SADDR (FSN (SN (WD CORNAGA)
+                (WD AVE)))
+       (FAPT (APT (LTR B))))
+
+(SADDR (FSN (SN (WD CORNAGA)
+                (WD AVE)
+                (WD B))))
+
+
+// Raw Address: DALYAV                       2
+
+(SADDR (FSN (SN (WD DALY))
+            (SS AV))
+       (FAPT (APT (NUM 2))))
+
+(SADDR (FSN (SN (WD DALYAV)))
+       (FAPT (APT (NUM 2))))
+
+(SADDR (FSN (SN (WD DALY)
+                (WD AV)))
+       (FAPT (APT (NUM 2))))
+
+
+// Raw Address: EDGEWOODAV 2
+
+(SADDR (FSN (SN (WD EDGEWOOD))
+            (SS AV))
+       (FAPT (APT (NUM 2))))
+
+(SADDR (FSN (SN (WD EDGEWOODAV)))
+       (FAPT (APT (NUM 2))))
+
+(SADDR (FSN (SN (WD EDGEWOOD)
+                (WD AV)))
+       (FAPT (APT (NUM 2))))
+
+
+// Raw Address: HAMILTONMANOR
+
+(SADDR (FSN (SN (WD HAMILTONMANOR))))
+
+(SADDR (FSN (SN (WD HAMILTON))
+            (SS MANOR)))
+
+(SADDR (FSN (SN (WD HAMILTON)
+                (WD MANOR))))
+
+
+// Raw Address: HEYWARD
+
+(SADDR (FSN (SN (WD HEYWARD))))
+
+(SADDR (FSN (SN (WD HEYWA))
+            (SS RD)))
+
+(SADDR (FSN (SN (WD HEYWA)
+                (WD RD))))
+
+
+// Raw Address: P O BOX 1093 128 SIXTH AV
+
+
+// Raw Address: STOBEAVE
+
+(SADDR (FSN (SN (WD STOBE))
+            (SS AVE)))
+
+(SADDR (FSN (SN (WD STOBEAVE))))
+
+(SADDR (FSN (SN (WD STOBE)
+                (WD AVE))))
+
+
+// Raw Address: UNDERCLIFFAVE
+
+(SADDR (FSN (SN (WD UNDERCLIFF))
+            (SS AVE)))
+
+(SADDR (FSN (SN (WD UNDERCLIFFAVE))))
+
+(SADDR (FSN (SN (WD UNDERCLIFF)
+                (WD AVE))))
+
+
+// Raw Address: VERMONTST
+
+(SADDR (FSN (SN (WD VERMONT))
+            (SS ST)))
+
+(SADDR (FSN (SN (WD VERMONTST))))
+
+(SADDR (FSN (SN (WD VERMONT)
+                (WD ST))))
+
+
+// Raw Address: 1137BERGENST#8
+
+(SADDR (HN (NUM 1137))
+       (FSN (SN (WD BERGEN))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 8))))
+
+(SADDR (HN (NUM 1137))
+       (FSN (SN (WD BERGENST)))
+       (FAPT (PND #)
+             (APT (NUM 8))))
+
+(SADDR (HN (NUM 1137))
+       (FSN (SN (WD BERGEN)
+                (WD ST)))
+       (FAPT (PND #)
+             (APT (NUM 8))))
+
+(SADDR (HN (NUM 11)
+           (NUM 37))
+       (FSN (SN (WD BERGEN))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 8))))
+
+(SADDR (HN (NUM 11)
+           (NUM 37))
+       (FSN (SN (WD BERGENST)))
+       (FAPT (PND #)
+             (APT (NUM 8))))
+
+(SADDR (HN (NUM 11)
+           (NUM 37))
+       (FSN (SN (WD BERGEN)
+                (WD ST)))
+       (FAPT (PND #)
+             (APT (NUM 8))))
+
+
+// Raw Address: 123 SO ROBERT ST
+
+(SADDR (HN (NUM 123))
+       (FSN (DIR SO)
+            (SN (WD ROBERT))
+            (SS ST)))
+
+(SADDR (HN (NUM 123))
+       (FSN (SN (WD SO)
+                (WD ROBERT))
+            (SS ST)))
+
+(SADDR (HN (NUM 123))
+       (FSN (SN (WD SO)
+                (WD ROBERT)
+                (WD ST))))
+
+(SADDR (HN (NUM 123))
+       (FSN (DIR SO)
+            (SN (WD ROBERT)
+                (WD ST))))
+
+
+// Raw Address: 1606SHOREBLVD
+
+(SADDR (HN (NUM 1606))
+       (FSN (SN (WD SHOREBLVD))))
+
+(SADDR (HN (NUM 1606))
+       (FSN (SN (WD SHORE))
+            (SS BLVD)))
+
+(SADDR (FAPT (APT (NUM 16)))
+       (HN (NUM 06))
+       (FSN (SN (WD SHOREBLVD))))
+
+(SADDR (FAPT (APT (NUM 16)))
+       (HN (NUM 06))
+       (FSN (SN (WD SHORE))
+            (SS BLVD)))
+
+(SADDR (HN (NUM 1606))
+       (FSN (SN (WD SHORE)
+                (WD BLVD))))
+
+(SADDR (FAPT (APT (NUM 16)))
+       (HN (NUM 06))
+       (FSN (SN (WD SHORE)
+                (WD BLVD))))
+
+(SADDR (HN (NUM 16)
+           (NUM 06))
+       (FSN (SN (WD SHORE)
+                (WD BLVD))))
+
+(SADDR (HN (NUM 16)
+           (NUM 06))
+       (FSN (SN (WD SHORE))
+            (SS BLVD)))
+
+(SADDR (HN (NUM 16)
+           (NUM 06))
+       (FSN (SN (WD SHOREBLVD))))
+
+
+// Raw Address: 165 ST. ANN'S AVE 1B BX
+
+
+// Raw Address: 1926HOBARTAVEE
+
+(SADDR (HN (NUM 1926))
+       (FSN (SN (WD HOBARTAVEE))))
+
+(SADDR (FAPT (APT (NUM 19)))
+       (HN (NUM 26))
+       (FSN (SN (WD HOBARTAVEE))))
+
+(SADDR (HN (NUM 19)
+           (NUM 26))
+       (FSN (SN (WD HOBARTAVEE))))
+
+
+// Raw Address: 212-423-0873
+
+
+// Raw Address: 2503 AVE U
+
+(SADDR (FSN (SN (NUM 2503))
+            (SS AVE))
+       (FAPT (APT (LTR U))))
+
+(SADDR (HN (NUM 2503))
+       (FSN (SN (WD AVE)))
+       (FAPT (APT (LTR U))))
+
+(SADDR (HN (NUM 25))
+       (FSN (SN (NUM 03))
+            (SS AVE))
+       (FAPT (APT (LTR U))))
+
+(SADDR (HN (NUM 2503))
+       (FSN (SN (WD AVE)
+                (WD U))))
+
+(SADDR (FAPT (APT (NUM 25)))
+       (HN (NUM 03))
+       (FSN (SN (WD AVE)
+                (WD U))))
+
+(SADDR (HN (NUM 25)
+           (NUM 03))
+       (FSN (SN (WD AVE)))
+       (FAPT (APT (LTR U))))
+
+(SADDR (HN (NUM 25)
+           (NUM 03))
+       (FSN (SN (WD AVE)
+                (WD U))))
+
+
+// Raw Address: 363ETNAST                    2
+
+(SADDR (HN (NUM 363))
+       (FSN (SN (WD ETNA))
+            (SS ST))
+       (FAPT (APT (NUM 2))))
+
+(SADDR (HN (NUM 363))
+       (FSN (SN (WD ETNAST)))
+       (FAPT (APT (NUM 2))))
+
+(SADDR (HN (NUM 363))
+       (FSN (SN (WD ETNA)
+                (WD ST)))
+       (FAPT (APT (NUM 2))))
+
+
+// Raw Address: 37-31CRESCENTSTREET#52
+
+(SADDR (HN (NUM 37)
+           (HYPH -)
+           (NUM 31))
+       (FSN (SN (WD CRESCENTSTREET)))
+       (FAPT (PND #)
+             (APT (NUM 52))))
+
+(SADDR (HN (NUM 37)
+           (HYPH -)
+           (NUM 31))
+       (FSN (SN (WD CRESCENT))
+            (SS STREET))
+       (FAPT (PND #)
+             (APT (NUM 52))))
+
+(SADDR (HN (NUM 37)
+           (HYPH -)
+           (NUM 31))
+       (FSN (SN (WD CRESCENT)
+                (WD STREET)))
+       (FAPT (PND #)
+             (APT (NUM 52))))
+
+
+// Raw Address: 5064PITMANAVE
+
+(SADDR (HN (NUM 5064))
+       (FSN (SN (WD PITMAN))
+            (SS AVE)))
+
+(SADDR (HN (NUM 5064))
+       (FSN (SN (WD PITMANAVE))))
+
+(SADDR (HN (NUM 5064))
+       (FSN (SN (WD PITMAN)
+                (WD AVE))))
+
+(SADDR (FAPT (APT (NUM 50)))
+       (HN (NUM 64))
+       (FSN (SN (WD PITMAN))
+            (SS AVE)))
+
+(SADDR (FAPT (APT (NUM 50)))
+       (HN (NUM 64))
+       (FSN (SN (WD PITMANAVE))))
+
+(SADDR (FAPT (APT (NUM 50)))
+       (HN (NUM 64))
+       (FSN (SN (WD PITMAN)
+                (WD AVE))))
+
+(SADDR (HN (NUM 50)
+           (NUM 64))
+       (FSN (SN (WD PITMAN))
+            (SS AVE)))
+
+(SADDR (HN (NUM 50)
+           (NUM 64))
+       (FSN (SN (WD PITMANAVE))))
+
+(SADDR (HN (NUM 50)
+           (NUM 64))
+       (FSN (SN (WD PITMAN)
+                (WD AVE))))
+
+
+// Raw Address: 578   EAST   82
+
+(SADDR (HN (NUM 578))
+       (FSN (SN (WD EAST)))
+       (FAPT (APT (NUM 82))))
+
+(SADDR (FSN (SN (NUM 578))
+            (DIR EAST))
+       (FAPT (APT (NUM 82))))
+
+(SADDR (HN (NUM 578))
+       (FSN (DIR EAST)
+            (SN (NUM 82))))
+
+
+// Raw Address: B 19 ST 2
+
+
+// Raw Address: BOX 1783
+
+(SADDR (FSN (SN (WD BOX)))
+       (FAPT (APT (NUM 1783))))
+
+
+// Raw Address: KING HY
+
+(SADDR (FSN (SN (WD KING))
+            (SS HY)))
+
+(SADDR (FSN (SN (WD KING)
+                (WD HY))))
+
+
+// Raw Address: LORINGAVE
+
+(SADDR (FSN (SN (WD LORING))
+            (SS AVE)))
+
+(SADDR (FSN (SN (WD LORINGAVE))))
+
+(SADDR (FSN (SN (WD LORING)
+                (WD AVE))))
+
+
+// Raw Address: MARCYAVENUE
+
+(SADDR (FSN (SN (WD MARCYAVENUE))))
+
+(SADDR (FSN (SN (WD MARCY))
+            (SS AVENUE)))
+
+(SADDR (FSN (SN (WD MARCY)
+                (WD AVENUE))))
+
+
+// Raw Address: PO BOX 2432
+
+(SADDR (FSN (SN (WD PO)
+                (WD BOX)))
+       (FAPT (APT (NUM 2432))))
+
+
+// Raw Address: ST.ANNSAV 3
+
+(SADDR (FSN (SN (WD ST)
+                (WD ANNS))
+            (SS AV))
+       (FAPT (APT (NUM 3))))
+
+(SADDR (FSN (SN (WD ST)
+                (WD ANNSAV)))
+       (FAPT (APT (NUM 3))))
+
+(SADDR (FSN (SN (WD ST)
+                (WD ANNS)
+                (WD AV)))
+       (FAPT (APT (NUM 3))))
+
+
+// Raw Address: UNIVERSITYAVE
+
+(SADDR (FSN (SN (WD UNIVERSITY))
+            (SS AVE)))
+
+(SADDR (FSN (SN (WD UNIVERSITYAVE))))
+
+(SADDR (FSN (SN (WD UNIVERSITY)
+                (WD AVE))))
+
+
+// Raw Address: W MOSHOLEU PKWY ST 3
+
+(SADDR (FSN (DIR W)
+            (SN (WD MOSHOLEU)
+                (WD PKWY))
+            (SS ST))
+       (FAPT (APT (NUM 3))))
+
+(SADDR (FSN (SN (WD W)
+                (WD MOSHOLEU)
+                (WD PKWY))
+            (SS ST))
+       (FAPT (APT (NUM 3))))
+
+(SADDR (FSN (DIR W)
+            (SN (WD MOSHOLEU)
+                (WD PKWY)
+                (WD ST)))
+       (FAPT (APT (NUM 3))))
+
+(SADDR (FSN (SN (WD W)
+                (WD MOSHOLEU)
+                (WD PKWY)
+                (WD ST)))
+       (FAPT (APT (NUM 3))))
+
+
+// Raw Address: 66 NO FULTON AVENUE 1ST
+
+(SADDR (HN (NUM 66))
+       (FSN (DIR NO)
+            (SN (WD FULTON))
+            (SS AVENUE))
+       (FAPT (APT (NUM 1)
+                  (ORDX ST))))
+
+// Raw Address: 601 W 160 ST
+
+(SADDR (HN (NUM 601))
+       (FSN (DIR W)
+            (SN (NUM 160))
+            (SS ST)))
+
+
+// Raw Address: 199 AVENUE B
+
+(SADDR (HN (NUM 199))
+       (FSN (SN (WD AVENUE)
+                (WD B))))
+
+
+// Raw Address: 421 E 168
+
+(SADDR (HN (NUM 421))
+       (FSN (DIR E)
+            (SN (NUM 168))))
+
+

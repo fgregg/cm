@@ -1,0 +1,1559 @@
+<data>
+<datum>
+<raw>
+<field>#3RE 141 W 111 ST</field>
+</raw>
+<parseTree>
+(SADDR (FAPT (PND #)
+             (APT (NUM 3))
+             (AT RE))
+       (HN (NUM 141))
+       (FSN (DIR W)
+            (SN (NUM 111))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>1 B BELLHAVEN PLACE STATEN ISL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>1 FISHER DR APT B-320</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD FISHER))
+            (SS DR))
+       (FAPT (AT APT)
+             (APT (LTR B)
+                  (HYPH -)
+                  (NUM 320))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>10-40 55TH ST APT#C-4</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 10)
+           (HYPH -)
+           (NUM 40))
+       (FSN (SN (NUM 55)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (LTR C)
+                  (HYPH -)
+                  (NUM 4))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>104 E 118TH ST NEW YORK</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>106-02 GLENWOOD RD #</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 106)
+           (HYPH -)
+           (NUM 02))
+       (FSN (SN (WD GLENWOOD))
+            (SS RD))
+       (FAPT (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>1061JEFFERSONAVE#</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 1061))
+       (FSN (SN (WD JEFFERSON))
+            (SS AVE))
+       (FAPT (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>107-36  131 ST RICHMOND HILL P</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>10980 SW 202 DR #30 C/O</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>11-48 30TH RD APT#3</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 11)
+           (HYPH -)
+           (NUM 48))
+       (FSN (SN (NUM 30)
+                (ORDX TH))
+            (SS RD))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (NUM 3))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>1111 BEACH 12TH STREET</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>112-28  39 AVE CORONA</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>1137BERGENST#8</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 1137))
+       (FSN (SN (WD BERGEN))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 8))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>1155 38TH ST. APT#2R</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 1155))
+       (FSN (SN (NUM 38)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (NUM 2)
+                  (LTR R))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>1185 GRAND-CONCOURSE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>1185GRAND-CONCOURSE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>121 NORTH 2OTH STREE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>126 BEACH 59 STREET APT3</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>127 BAY 23RD ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>127 BAY 23RD STREET</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>127 KINGS 1 W #4B</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>13  LINDEN BLVD PH BRONX</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>13-60-PORT-WASHINGTON-BLV</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>133-30  127TH ST SO. OZ PK PH</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>1345 AVE OF AMERICAS     ANDE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>136W 91ST STREET APT# 18F</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 136))
+       (FSN (DIR W)
+            (SN (NUM 91)
+                (ORDX ST))
+            (SS STREET))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (NUM 18)
+                  (LTR F))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>140 W 174TH ST APT#9F</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 140))
+       (FSN (DIR W)
+            (SN (NUM 174)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (NUM 9)
+                  (LTR F))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>144 RAVINE AVEUNE APT#</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>144-33 38 AVE.1ST.FL.</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 144)
+           (HYPH -)
+           (NUM 33))
+       (FSN (SN (NUM 38))
+            (SS AVE))
+       (FAPT (APT (NUM 1)
+                  (ORDX ST))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>146   BCH  59TH  ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>149 LENOX RD 1FL SAM</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>149-65  24 RD. WHITESHORE HSE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>150 W BURNSIDE AVE #</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 150))
+       (FSN (DIR W)
+            (SN (WD BURNSIDE))
+            (SS AVE))
+       (FAPT (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>156-1071STAVENUE#</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 156)
+           (HYPH -)
+           (NUM 10))
+       (FSN (SN (NUM 71)
+                (ORDX ST))
+            (SS AVENUE))
+       (FAPT (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>158 WEST 84TH STREETAPT # 2C</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 158))
+       (FSN (DIR WEST)
+            (SN (NUM 84)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (NUM 2)
+                  (LTR C))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>1630 ST. JOHN'S PL. BKLYN</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>165 ST. ANN'S AVE 1B BX</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>165-06  78 AVE FLUSHING NY PVT</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>165AVEU</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>166-10  89 AVE JAMAICA</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>1660 FULTON ST  #5EE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 1660))
+       (FSN (SN (WD FULTON))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 5)
+                  (WD2 EE))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>171      EASR 59 STR     1 FL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>171EASR59STR</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>171EAST59THSTRE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>177-46   2FL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>18 PAERDEGAT 2ND ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>18 PAERDEGAT 2ND. STREET</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>184  E. 34TH STREET 2L BROOKLY</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>1926HOBARTAVEE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>194-02C 67 AVE. APT</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 194)
+           (HYPH -)
+           (NUM 02)
+           (LTR C))
+       (FSN (SN (NUM 67))
+            (SS AVE))
+       (FAPT (AT APT)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>194-02C 67 AVE. APT    1A</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 194)
+           (HYPH -)
+           (NUM 02)
+           (LTR C))
+       (FSN (SN (NUM 67))
+            (SS AVE))
+       (FAPT (AT APT)
+             (APT (NUM 1)
+                  (LTR A))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>194-02C 67 AVE. APT 1A</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 194)
+           (HYPH -)
+           (NUM 02)
+           (LTR C))
+       (FSN (SN (NUM 67))
+            (SS AVE))
+       (FAPT (AT APT)
+             (APT (NUM 1)
+                  (LTR A))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>194-02C67 AVE APT</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 194)
+           (HYPH -)
+           (NUM 02)
+           (LTR C))
+       (FSN (SN (NUM 67))
+            (SS AVE))
+       (FAPT (AT APT)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>194-02C67AVE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 194)
+           (HYPH -)
+           (NUM 02)
+           (LTR C))
+       (FSN (SN (NUM 67))
+            (SS AVE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>196GRMHAM AVE.19-C 1</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>197-05C 65 CREST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 197)
+           (HYPH -)
+           (NUM 05)
+           (LTR C))
+       (FSN (SN (NUM 65))
+            (SS CREST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>199 AVENUE B</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2-LACEY COURT</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>20-14 HIMROD ST 1FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 20)
+           (HYPH -)
+           (NUM 14))
+       (FSN (SN (WD HIMROD))
+            (SS ST))
+       (FAPT (APT (NUM 1))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>2140246THRD2FL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>217 WEAT 135 STREET #5D</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>220 69B 67 AVENUE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>221   BAY   40 ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>23    BR   10 PATH</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>23-59 92ND ST. 2ND FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 23)
+           (HYPH -)
+           (NUM 59))
+       (FSN (SN (NUM 92)
+                (ORDX ND))
+            (SS ST))
+       (FAPT (APT (NUM 2)
+                  (ORDX ND))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>232 AVE 4 APT 2R</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>25-09 35 AVE  2ND FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 25)
+           (HYPH -)
+           (NUM 09))
+       (FSN (SN (NUM 35))
+            (SS AVE))
+       (FAPT (APT (NUM 2)
+                  (ORDX ND))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>25-14 120 ST 2FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 25)
+           (HYPH -)
+           (NUM 14))
+       (FSN (SN (NUM 120))
+            (SS ST))
+       (FAPT (APT (NUM 2))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>2503 AVE U</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2544  W 135TH ST A OTHER</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2660 8TH AVE.APT 1D TAYLOR,TA</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>267 E 188 ST #GR2</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 267))
+       (FSN (DIR E)
+            (SN (NUM 188))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (WD2 GR)
+                  (NUM 2))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>28 SAINT NICHOLAS AVE NO 1C</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2814 BRIGHTON 7 ST 2</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2814 BRIGHTON 7 ST P</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2910  BRI 8TH ST. BROOKLYN APT</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2918 BRIGHTON 7 ST 4</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2932  BRIGHTON 3 ST BKLYN 2</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2932 BRIGHTON 3 STREET</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>295 WASHINGTON AVE # #5I</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 295))
+       (FSN (SN (WD WASHINGTON))
+            (SS AVE))
+       (FAPT (PND #)
+             (PND #)
+             (APT (NUM 5)
+                  (LTR I))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>2950WEST35THSTRE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2990 BRIGHTON 12 STR</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2999 8TH AVE APT#</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 2999))
+       (FSN (SN (NUM 8)
+                (ORDX TH))
+            (SS AVE))
+       (FAPT (AT APT)
+             (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>3029  BRI 4TH ST BASE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>3093 BROGHTON 9              1</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>31-0134THST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 01))
+       (FSN (SN (NUM 34)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>31-16 101 ST 1FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (NUM 101))
+            (SS ST))
+       (FAPT (APT (NUM 1))
+             (AT FL)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (NUM 101)
+                (ORDX ST)))
+       (FAPT (APT (NUM 1))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>31-21 90 ST. 2FL CJ 5</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>31-70 138 STREET         APT#</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 70))
+       (FSN (SN (NUM 138))
+            (SS STREET))
+       (FAPT (AT APT)
+             (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>312W116THSTREET#</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 312))
+       (FSN (DIR W)
+            (SN (NUM 116)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>315 W 232 ST #BS</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 315))
+       (FSN (DIR W)
+            (SN (NUM 232))
+            (SS ST))
+       (FAPT (PND #)
+             (AT BS)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>315 WINTHROP ST #2FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 315))
+       (FSN (SN (WD WINTHROP))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 2))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>315WINTHROPST#2FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 315))
+       (FSN (SN (WD WINTHROP))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 2))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>32-33A  76TH ST 2</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 32)
+           (HYPH -)
+           (NUM 33)
+           (LTR A))
+       (FSN (SN (NUM 76)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 2))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>32-7 34 ST. BROADWAY 2FL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>3209 82ND ST. BSMT APT.</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>3231 BARKER AVENUE #</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 3231))
+       (FSN (SN (WD BARKER))
+            (SS AVENUE))
+       (FAPT (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>326 BEACH 29 #1</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>34-15 31ST AVENUE-APT #2A</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>344 BEACH 13TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>35-06    NEW KIRK AVE    A-2</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 35)
+           (HYPH -)
+           (NUM 06))
+       (FSN (SN (WD NEW)
+                (WD KIRK))
+            (SS AVE))
+       (FAPT (APT (LTR A)
+                  (HYPH -)
+                  (NUM 2))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>35-06 NEW KIRK AVE A-2</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 35)
+           (HYPH -)
+           (NUM 06))
+       (FSN (SN (WD NEW)
+                (WD KIRK))
+            (SS AVE))
+       (FAPT (APT (LTR A)
+                  (HYPH -)
+                  (NUM 2))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>35-46  102ST  CORONA 2F</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>37  BRIGHTON 4 CT PVT</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>37 BRI 4TH. CT.</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>37 RICHARD LANE          GROUND FL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>37-21 65 ST 2ND FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 37)
+           (HYPH -)
+           (NUM 21))
+       (FSN (SN (NUM 65))
+            (SS ST))
+       (FAPT (APT (NUM 2)
+                  (ORDX ND))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>37-31CRESCENTSTREET#52</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 37)
+           (HYPH -)
+           (NUM 31))
+       (FSN (SN (WD CRESCENT))
+            (SS STREET))
+       (FAPT (PND #)
+             (APT (NUM 52))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>390 SUTTER AVENUE-APT.10A</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>40-23  67TH ST WOODSIDE HOUS</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>404 BEACH 20 ST 3F</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>4200AVEK#5EE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>421 E 168#3RE 141 W 111 ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>434 BEACH 58 ST PO B</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>436 W. 47TH ST      APT.#3B</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 436))
+       (FSN (DIR W)
+            (SN (NUM 47)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (NUM 3)
+                  (LTR B))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>45-62 PARSONS BLVD       2 FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 45)
+           (HYPH -)
+           (NUM 62))
+       (FSN (SN (WD PARSONS))
+            (SS BLVD))
+       (FAPT (APT (NUM 2))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>4742 49TH NO 1</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>50-06  94TH ST ELMHURST 3</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>50-42 44TH ST 3RD FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 50)
+           (HYPH -)
+           (NUM 42))
+       (FSN (SN (NUM 44)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 3)
+                  (ORDX RD))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>51-14 92ND ST. #3FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 51)
+           (HYPH -)
+           (NUM 14))
+       (FSN (SN (NUM 92)
+                (ORDX ND))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 3))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>51-1492NDST.#3FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 51)
+           (HYPH -)
+           (NUM 14))
+       (FSN (SN (NUM 92)
+                (ORDX ND))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 3))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>51-60 48TH STREET BASE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 51)
+           (HYPH -)
+           (NUM 60))
+       (FSN (SN (NUM 48)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (AT BASE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>53-36 188 ST PVT</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 53)
+           (HYPH -)
+           (NUM 36))
+       (FSN (SN (NUM 188))
+            (SS ST))
+       (FAPT (AT PVT)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>531 W. 211TH ST.    APT#4B</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 531))
+       (FSN (DIR W)
+            (SN (NUM 211)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (NUM 4)
+                  (LTR B))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>553 KINGSBOROUGH 5 WALK</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>561 W 163 ST APT #2B</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 561))
+       (FSN (DIR W)
+            (SN (NUM 163))
+            (SS ST))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (NUM 2)
+                  (LTR B))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>57-42 GRANGER ST 3FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 57)
+           (HYPH -)
+           (NUM 42))
+       (FSN (SN (WD GRANGER))
+            (SS ST))
+       (FAPT (APT (NUM 3))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>600  KINGSLAND AVE 6B BROOKLYN</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>618 E 21 ST #F-3</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 618))
+       (FSN (DIR E)
+            (SN (NUM 21))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (LTR F)
+                  (HYPH -)
+                  (NUM 3))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>618E21ST#F-3</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 618))
+       (FSN (DIR E)
+            (SN (NUM 21))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (LTR F)
+                  (HYPH -)
+                  (NUM 3))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>623 ST MARKS AVE         SEAN CAREY</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>633W 171ST ST       ##</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 633))
+       (FSN (DIR W)
+            (SN (NUM 171)
+                (ORDX ST))
+            (SS ST))
+       (FAPT (PND #)
+             (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>641   KINGS    6 WALK</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>65 44 SAUNLEST A6</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>69-18 BEACH CHANNEL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>71-15 BEACH CHANEL DR #3P FAR</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>74 VAN COURTLANDT PK #DD2C/O</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>764-TRINITY AVE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>769 ST MARKS AVE         4-6F</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>795 GARDEN ST #EE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 795))
+       (FSN (SN (WD GARDEN))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (WD2 EE))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>8 E 2ND ST BOTTOM BUZZER</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>8-14WEST111THSTRE#5J</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>80WATERSIDEPLAZA#</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 80))
+       (FSN (SN (WD WATERSIDE))
+            (SS PLAZA))
+       (FAPT (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>8550  FOREST P. WAY QUEENS NY</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>88-41  179 ST JAMAICA</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>89-B VISTATION PLACE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 89)
+           (HYPH -)
+           (LTR B))
+       (FSN (SN (WD VISTATION))
+            (SS PLACE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>9 WEST ST # RR1111 BEACH 12TH STREET</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>90 EAST 18 STREET #     IB</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 90))
+       (FSN (DIR EAST)
+            (SN (NUM 18))
+            (SS STREET))
+       (FAPT (PND #)
+             (APT (WD2 IB))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>AVE I</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>AVENUE V 2FL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>B 19 ST 2</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>B 54 ST 6</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>B59ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BAY 28TH STREET</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BAY 31 ST                    B</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BAY23RDST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BAY40THST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 116 ST                 7</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 116 ST 7</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 134TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 140TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 20TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 29TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 40TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 56TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 59TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 59TH ST 1</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 66TH ST                1</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 68TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH 73RD ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH135THST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH40THST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH59THST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH59THSTREET 1</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH68STREET                1</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BEACH68THST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BOX 1783</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 10 PATH</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 10 TE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 10 TERR</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 3 PL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 4 CT</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 41 CT</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>C/O  LATHAM 4 E 28TH</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>C/O  LATHAM 4 E 28TH ST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>C/O PHILLIPS 550 CAU     1-H</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>C/OLATHAM4E28TH</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>E23OST                       4</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>EAST 162 STREET ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 162))
+            (SS STREET))
+       (FAPT (APT (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>H1723 PUTNAM AVE 3</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>KINGS BOROUGH 4 WALK</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>KINGSBORO 6TH WALK</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>NELSON AVE FAMILY RESIDENCE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>ONE COLUMBUS PLACE #N-12D</field>
+</raw>
+<parseTree>
+(SADDR (HN (CARD ONE))
+       (FSN (SN (WD COLUMBUS))
+            (SS PLACE))
+       (FAPT (PND #)
+             (APT (LTR N)
+                  (HYPH -)
+                  (NUM 12)
+                  (LTR D))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P O BOX 1093 128 SIXTH AV</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 02-0339</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 2432</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>PO BOX 311276</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>PO BX 89 394 BROADWY</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>POBOX110-270</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>POBX110-270</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>POBX89394BROADWY</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>RIVERSIDE DR, C-14</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD RIVERSIDE))
+            (SS DR))
+       (FAPT (APT (LTR C)
+                  (HYPH -)
+                  (NUM 14))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>SCH3 LONGFELLER AVE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>W 17IST                      2</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>W 19M ST                     6</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>W MOSHOLEU PKWY ST 3</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>WEST 139TH STREEAPT # 5C</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 139)
+                (ORDX TH))
+            (SS STREE))
+       (FAPT (AT APT)
+             (PND #)
+             (APT (NUM 5)
+                  (LTR C))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST 186ST.AUDBON            2</field>
+</raw>
+</datum>
+</data>

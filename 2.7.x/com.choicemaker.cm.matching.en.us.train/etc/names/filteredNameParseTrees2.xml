@@ -1,0 +1,434 @@
+<data>
+<datum>
+<raw>
+<field>(Retired) Lt. Col. Gary F. Smith</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFXPAREN (LPAREN [)
+                                        (WDPFX RETIRED)
+                                        (RPAREN ]))
+                            (WDPFX LT)
+                            (WDPFX COL))
+                       (GN1 (WDFN GARY)))
+                   (MN (GN1 (LTR F))))
+             (LN (ONELN (WDLN SMITH))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>(Retired) Capt. Jack Punches</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFXPAREN (LPAREN [)
+                                        (WDPFX RETIRED)
+                                        (RPAREN ]))
+                            (WDPFX CAPT))
+                       (GN1 (WDFN JACK))))
+             (LN (ONELN (WDLN PUNCHES))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>Alison Marie Wildman</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN ALISON)))
+                   (MN (GN1 (WDFN MARIE))))
+             (LN (ONELN (WDLN WILDMAN))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>Lt. Michael Esposito</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX LT))
+                       (GN1 (WDFN MICHAEL))))
+             (LN (ONELN (WDLN ESPOSITO))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>Lt Michael N. Fodor</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX LT))
+                       (GN1 (WDFN MICHAEL)))
+                   (MN (GN1 (LTR N))))
+             (LN (ONELN (WDLN FODOR))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>Sgt Michael Curtin</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX SGT))
+                       (GN1 (WDFN MICHAEL))))
+             (LN (ONELN (WDLN CURTIN))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>Lt. Michael Scott Lamana</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX LT))
+                       (GN1 (WDFN MICHAEL)))
+                   (MN (GN1 (WDFN SCOTT))))
+             (LN (ONELN (WDLN LAMANA))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>Lt Michael Thomas Russo</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX LT))
+                       (GN1 (WDFN MICHAEL)))
+                   (MN (GN1 (WDFN THOMAS))))
+             (LN (ONELN (WDLN RUSSO))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>(Retired) Master Sgr. Max Beilke</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFXPAREN (LPAREN [)
+                                        (WDPFX RETIRED)
+                                        (RPAREN ]))
+                            (WDPFX MASTER)
+                            (WDPFX SGR))
+                       (GN1 (WDFN MAX))))
+             (LN (ONELN (WDLN BEILKE))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>The Rev. Mychal Judge</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (TT_THE THE)
+                            (WDPFX REV))
+                       (GN1 (WDFN MYCHAL))))
+             (LN (ONELN (WDLN JUDGE))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>The Rev. Francis E. Grogan</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (TT_THE THE)
+                            (WDPFX REV))
+                       (GN1 (WDFN FRANCIS)))
+                   (MN (GN1 (LTR E))))
+             (LN (ONELN (WDLN GROGAN))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>TOM</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FNONLY (FN (GN1 (WDFN TOM)))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>GARY</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FNONLY (FN (GN1 (WDFN GARY)))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>REBECCA</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FNONLY (FN (GN1 (WDFN REBECCA)))))
+      (SEP1 #))</parseTree>
+</datum>
+
+<!-- removed to bring the probability down a bit...
+<datum>
+<raw>
+<field>LAUREN</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FNONLY (FN (GN1 (WDFN LAUREN)))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>ERIN</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FNONLY (FN (GN1 (WDFN ERIN)))))
+      (SEP1 #))</parseTree>
+</datum>
+-->
+
+
+<datum>
+<raw>
+<field>MIRCHDANI</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (LN (ONELN (WDLN MIRCHDANI))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>MILLER</field>
+</raw>
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (LN (ONELN (WDLN MILLER))))
+      (SEP1 #))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>YADIRA</field>
+<field>M   ORFILA</field>
+</raw>
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN YADIRA))))
+             (SEP1 #)
+             (MN (GN1 (LTR M)))
+             (LN (ONELN (WDLN ORFILA))))
+      (SEP2 ##))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>MICHEAL</field>
+<field>F BRIER</field>
+</raw>
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN MICHEAL))))
+             (SEP1 #)
+             (MN (GN1 (LTR F)))
+             (LN (ONELN (WDLN BRIER))))
+      (SEP2 ##))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>JOHN</field>
+<field>C   RIGHTS</field>
+</raw>
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN JOHN))))
+             (SEP1 #)
+             (MN (GN1 (LTR C)))
+             (LN (ONELN (WDLN RIGHTS))))
+      (SEP2 ##))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>JOHNNY</field>
+<field>P   SPICKERS</field>
+</raw>
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN JOHNNY))))
+             (SEP1 #)
+             (MN (GN1 (LTR P)))
+             (LN (ONELN (WDLN SPICKERS))))
+      (SEP2 ##))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PATRICK</field>
+<field>J   MAC CURTAIN</field>
+</raw>
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN PATRICK))))
+             (SEP1 #)
+             (MN (GN1 (LTR J)))
+             (LN (COLLN (FRAG MAC)
+                        (WDLN CURTAIN))))
+      (SEP2 ##))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>KELLY</field>
+<field>J   RIVAS BERNERD</field>
+</raw>
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN KELLY))))
+             (SEP1 #)
+             (MN (GN1 (LTR J)))
+             (LN (TWOLN (WDLN RIVAS)
+                        (WDLN BERNERD))))
+      (SEP2 ##))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>MICHAEL</field>
+<field>O SHEA</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>GREGORIO</field>
+<field>ROMERO JR</field>
+</raw>
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN GREGORIO))))
+             (SEP1 #)
+             (LN (ONELN (WDLN ROMERO))
+                 (SFX (WDSFX JR))))
+      (SEP2 ##))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>DOUGLAS</field>
+<field>C</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>D</field>
+<field>F KATHE</field>
+</raw>
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (LTR D))))
+             (SEP1 #)
+             (MN (GN1 (LTR F)))
+             (LN (ONELN (WDLN KATHE))))
+      (SEP2 ##))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>MATTHEW</field>
+<field>C</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>JENNIFER</field>
+<field>I</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>SHALOM</field>
+<field>DOV BER</field>
+<field>PATTERSON</field>
+</raw>
+<parseTree>
+(NAME (SEP3 ###)
+      (NAME3 (FAMN (FN (GN1 (WDFN SHALOM))))
+             (SEP1 #)
+             (MN (GN2 (WDFN DOV)
+                      (WDFN BER)))
+             (SEP1 #)
+             (LN (ONELN (WDLN PATTERSON))))
+      (SEP3 ###))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>JAMES</field>
+<field>P</field>
+<field>O,KEEFE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>(Stephen)</field>
+<field>Michael</field>
+<field>Burchell</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>Michele</field>
+<field>J.</field>
+<field>Le Moal-Gray</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>Jean</field>
+<field>M</field>
+<field>van der Spuy (nee Haggerty)</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>John</field>
+<field>P</field>
+<field>Carr 111</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>rev. johnny</field>
+<field>lee</field>
+<field>johnson</field>
+</raw>
+<parseTree>
+(NAME (SEP3 ###)
+      (NAME3 (FAMN (FN (PFX (WDPFX REV))
+                       (GN1 (WDFN JOHNNY))))
+             (SEP1 #)
+             (MN (GN1 (WDFN LEE)))
+             (SEP1 #)
+             (LN (ONELN (WDLN JOHNSON))))
+      (SEP3 ###))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>ROSCOE</field>
+<field>L</field>
+<field>GLINTON 2ND</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>ALBERT</field>
+<field>S</field>
+<field>PASSARETTI 3RD</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>Diana</field>
+<field>D lorio</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>JOYCE</field>
+<field>ANN</field>
+<field>RIVER-SPOON BAKER</field>
+</raw>
+</datum>
+
+</data>

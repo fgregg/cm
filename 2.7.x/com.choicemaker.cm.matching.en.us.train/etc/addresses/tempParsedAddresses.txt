@@ -1,0 +1,753 @@
+// Raw Address: #3RE 141 W 111 ST
+141,W,111TH,ST,null,REAR,3
+
+// Raw Address: 1 B BELLHAVEN PLACE STATEN ISL
+1B,null,BELLHAVEN PLACE STATEN ISL,null,null,null,null
+
+// Raw Address: 1 FISHER DR APT B-320
+1,null,FISHER DR APT,null,null,null,B-320
+
+// Raw Address: 10-40 55TH ST APT#C-4
+1040,null,55TH,ST,null,APT,null
+
+// Raw Address: 1013 39TH ST. 1FL
+1013,null,39TH,ST,null,null,1FL
+
+// Raw Address: 103 18   34 AVENUE       1FL
+10318,null,34TH,AVE,null,FL,1
+
+// Raw Address: 104 E 118TH ST NEW YORK
+118,null,TH ST NEW YORK,null,null,null,104E
+
+// Raw Address: 106-02 GLENWOOD RD #
+10602,null,GLENWOOD RD,null,null,null,null
+
+// Raw Address: 1061JEFFERSONAVE#
+1061,null,JEFFERSON AVENUE,null,null,null,null
+
+// Raw Address: 107-36  131 ST RICHMOND HILL P
+131,null,ST RICHMOND HILL P,null,null,null,107-36
+
+// Raw Address: 10980 SW 202 DR #30 C/O
+10980,SW,202ND,DR,null,null,null
+
+// Raw Address: 11-48 30TH RD APT#3
+1148,null,30TH,RD,null,APT,3
+
+// Raw Address: 111 E 85TH ST APT 12 CD
+111,E,85TH,ST,null,APT,null
+
+// Raw Address: 1111 BEACH 12TH STREET
+,,,,,,
+
+// Raw Address: 112-28  39 AVE CORONA
+39,null,AVENUE CORONA,null,null,null,112-28
+
+// Raw Address: 1185 GRAND-CONCOURSE
+,,,,,,
+
+// Raw Address: 1185GRAND-CONCOURSE
+,,,,,,
+
+// Raw Address: 1207 DECATUR ST 1FL
+1207,null,DECATUR ST,null,null,null,1FL
+
+// Raw Address: 121 NORTH 2OTH STREE
+2,null,OTH STREE,null,null,null,121N
+
+// Raw Address: 1224 HANCOCK ST 2FL
+1224,null,HANCO CK,ST,null,FL,2
+
+// Raw Address: 1241 BOYNTON AVE 2FL
+1241,null,BOYNTON AVENUE,null,null,null,2FL
+
+// Raw Address: 126 BEACH 59 STREET APT3
+,,,,,,
+
+// Raw Address: 127 32 ST 2FL
+127,null,32ND,null,null,FL,2
+
+// Raw Address: 127 BAY 23RD ST
+,,,,,,
+
+// Raw Address: 127 BAY 23RD STREET
+,,,,,,
+
+// Raw Address: 127 KINGS 1 W #4B
+,,,,,,
+
+// Raw Address: 13  LINDEN BLVD PH BRONX
+13,null,LINDEN BLVD PH BRONX,null,null,null,null
+
+// Raw Address: 13-60-PORT-WASHINGTON-BLV
+,,,,,,
+
+// Raw Address: 133-30  127TH ST SO. OZ PK PH
+,,,,,,
+
+// Raw Address: 1342     38TH ST         2FL
+134238,null,TH,ST,null,null,2FL
+
+// Raw Address: 1345 AVE OF AMERICAS     ANDE
+45,null,AVENUE OF AMERICAS ANDE,null,null,null,13
+
+// Raw Address: 1350 BEDFORD AVENUE APT#
+1350,null,BED FORD AVENUE,null,null,APT,null
+
+// Raw Address: 136W 91ST STREET APT# 18F
+136,W,91ST,ST,null,APT,null
+
+// Raw Address: 140 W 174TH ST APT#9F
+140,W,174TH,ST,null,APT,null
+
+// Raw Address: 1403     EAST 84 ST      1FL
+1403,E,84TH,ST,null,FL,1
+
+// Raw Address: 144 RAVINE AVEUNE APT#
+144,null,RAVINE AVEUNE,null,null,APT,null
+
+// Raw Address: 144-33 38 AVE.1ST.FL.
+14433,null,38TH,AVE,null,FL,1ST
+
+// Raw Address: 146   BCH  59TH  ST
+,,,,,,
+
+// Raw Address: 149 LENOX RD 1FL SAM
+,,,,,,
+
+// Raw Address: 149-65  24 RD. WHITESHORE HSE
+24,null,RD WHITESHORE HSE,null,null,null,149-65
+
+// Raw Address: 150 LAMOKA AVE 2FL
+150,null,LAMOKA AVENUE,null,null,null,2FL
+
+// Raw Address: 150 W BURNSIDE AVE #
+150W,null,BURN SIDE AVENUE,null,null,null,null
+
+// Raw Address: 1546     EAST 49TH STRE
+1546,E,49TH,ST,null,null,null
+
+// Raw Address: 1546 EAST 49TH STRE
+1546,E,49TH,ST,null,null,null
+
+// Raw Address: 156-1071STAVENUE#
+15610,null,71ST,AVE,null,null,null
+
+// Raw Address: 158 E 94 ST 2FL
+158E,null,94TH,null,null,FL,ST2
+
+// Raw Address: 158 WEST 84TH STREETAPT # 2C
+158,W,84TH,ST,null,APT,2C
+
+// Raw Address: 1619 DAHILL RD 2FL
+1619,null,DAHILL RD,null,null,FL,2
+
+// Raw Address: 1630 ST. JOHN'S PL. BKLYN
+30,null,ST JOHNS PL BKLYN,null,null,null,16
+
+// Raw Address: 165 ST. ANN'S AVE 1B BX
+,,,,,,
+
+// Raw Address: 165-06  78 AVE FLUSHING NY PVT
+78,null,AVENUE FLUSHING NY PVT,null,null,null,165-06
+
+// Raw Address: 166-10  89 AVE JAMAICA
+89,null,AVENUE JAMAICA,null,null,null,166-10
+
+// Raw Address: 1660 FULTON ST  #5EE
+1660,null,FULTON ST,null,null,null,5EE
+
+// Raw Address: 1660 FULTON ST #5EE
+1660,null,FULTON ST,null,null,null,5EE
+
+// Raw Address: 1661 WEEKS AVE 2FL
+1661,null,WEEKS,AVE,null,null,2FL
+
+// Raw Address: 1679 MCDONALD AV 2FL
+1679,null,MCDONALD AV,null,null,FL,2
+
+// Raw Address: 171      EASR 59 STR     1 FL
+,,,,,,
+
+// Raw Address: 171EASR59STR
+,,,,,,
+
+// Raw Address: 171EAST59THSTRE
+171,E,59TH,ST,null,REAR,null
+
+// Raw Address: 176 EAST 92ND STR 2ND FL
+176,E,92ND,ST,null,FL,2
+
+// Raw Address: 177-46   2FL
+17746,null,2ND,null,null,FL,null
+
+// Raw Address: 18 PAERDEGAT 2ND ST
+,,,,,,
+
+// Raw Address: 18 PAERDEGAT 2ND. STREET
+,,,,,,
+
+// Raw Address: 184  E. 34TH STREET 2L BROOKLY
+,,,,,,
+
+// Raw Address: 1905 MAYFLOWER AVE APT#
+1905,null,MAYFLOWER,AVE,null,APT,null
+
+// Raw Address: 191 ST. NICHOLAS AV 3FL
+191,null,ST NICHOLAS AV,null,null,FL,3
+
+// Raw Address: 194-02C 67 AVE. APT
+19402C,null,67TH,AVE,null,APT,null
+
+// Raw Address: 194-02C 67 AVE. APT    1A
+19402C,null,67TH,AVE,null,APT,null
+
+// Raw Address: 194-02C 67 AVE. APT 1A
+19402C,null,67TH,AVE,null,APT,null
+
+// Raw Address: 194-02C67 AVE APT
+19402C,null,67TH,AVE,null,APT,null
+
+// Raw Address: 194-02C67AVE
+19402C,null,67TH,AVE,null,null,null
+
+// Raw Address: 196GRMHAM AVE.19-C 1
+,,,,,,
+
+// Raw Address: 197-05C 65 CREST
+19705C,null,65TH,CRST,null,null,null
+
+// Raw Address: 2-LACEY COURT
+,,,,,,
+
+// Raw Address: 20-14 HIMROD ST 1FL
+2014,null,HIMROD,ST,null,null,1FL
+
+// Raw Address: 200 WEST 81TH STREETAPT B1
+200,W,81ST,ST,null,APT,B1
+
+// Raw Address: 2069 E 57 ST 3FL
+2069,E,57TH,null,null,FL,ST3
+
+// Raw Address: 212-222-7783
+,,,,,,
+
+// Raw Address: 212-222-8239
+,,,,,,
+
+// Raw Address: 212-360-7246
+,,,,,,
+
+// Raw Address: 212-423-0873
+,,,,,,
+
+// Raw Address: 2140246THRD2FL
+2140246,null,THRD,null,null,FL,2
+
+// Raw Address: 215      WEST147TH STRE
+215,W,147TH,ST,null,null,null
+
+// Raw Address: 217 WEAT 135 STREET #5D
+,,,,,,
+
+// Raw Address: 220 69B 67 AVENUE
+69B,null,67TH,AVE,null,null,220
+
+// Raw Address: 2211 65 ST 3FL
+2211,null,65TH,ST,null,null,3FL
+
+// Raw Address: 222 MONTAUK AVE 1FL
+222,null,MONTAUK AVENUE,null,null,null,1FL
+
+// Raw Address: 23    BR   10 PATH
+10,null,PATH,null,null,null,23BR
+
+// Raw Address: 23-59 92ND ST. 2ND FL
+2359,null,92ND,ST,null,FL,2ND
+
+// Raw Address: 232 AVE 4 APT 2R
+,,,,,,
+
+// Raw Address: 25-09 35 AVE  2ND FL
+2509,null,35TH,AVE,null,FL,2ND
+
+// Raw Address: 25-14 120 ST 2FL
+2514,null,120TH,null,null,FL,2
+
+// Raw Address: 2544  W 135TH ST A OTHER
+135,null,TH ST A OTHER,null,null,null,2544W
+
+// Raw Address: 2660 8TH AVE.APT 1D TAYLOR,TA
+26608,null,TH,AVE,null,APT,null
+
+// Raw Address: 267 E 188 ST #GR2
+267E,null,188TH,ST,null,null,null
+
+// Raw Address: 27 HUBBARD PL. 1ST FL
+27,null,HUBBA RD PL,null,null,FL,1
+
+// Raw Address: 28 SAINT NICHOLAS AVE NO 1C
+28,null,ST NICHOLAS,AVE,N,null,1C
+
+// Raw Address: 2814 BRIGHTON 7 ST 2
+,,,,,,
+
+// Raw Address: 2814 BRIGHTON 7 ST P
+,,,,,,
+
+// Raw Address: 2910  BRI 8TH ST. BROOKLYN APT
+,,,,,,
+
+// Raw Address: 2918 BRIGHTON 7 ST 4
+,,,,,,
+
+// Raw Address: 2932  BRIGHTON 3 ST BKLYN 2
+,,,,,,
+
+// Raw Address: 2932 BRIGHTON 3 STREET
+,,,,,,
+
+// Raw Address: 295 WASHINGTON AVE # #5I
+295,null,WASHINGTON,AVE,null,null,5I
+
+// Raw Address: 2950WEST35THSTRE
+2950,W,35TH,ST,null,REAR,null
+
+// Raw Address: 2990 BRIGHTON 12 STR
+,,,,,,
+
+// Raw Address: 2999 8TH AVE APT#
+29998,null,TH AVENUE APT,null,null,null,null
+
+// Raw Address: 3017 BRONXWOOD AVENUE 2ND FL
+3017,null,BRONXWOOD,AVE,null,FL,2ND
+
+// Raw Address: 3029  BRI 4TH ST BASE
+,,,,,,
+
+// Raw Address: 3093 BROGHTON 9              1
+,,,,,,
+
+// Raw Address: 31-16 101 ST 1FL
+3116,null,101ST,null,null,FL,1
+
+// Raw Address: 31-21 90 ST. 2FL CJ 5
+,,,,,,
+
+// Raw Address: 31-70 138 STREET         APT#
+3170,null,138TH,ST,null,APT,null
+
+// Raw Address: 312W116THSTREET#
+312,W,116TH,ST,null,null,null
+
+// Raw Address: 315 W 232 ST #BS
+315W,null,232ND,ST,null,null,BS
+
+// Raw Address: 315 WINTHROP ST #2FL
+315,null,WINTHROP,ST,null,FL,2
+
+// Raw Address: 315WINTHROPST#2FL
+315,null,WINTHROP,ST,null,FL,2
+
+// Raw Address: 319 EAST 49TH ST 1FL
+319,E,49TH,null,null,FL,ST1
+
+// Raw Address: 32-33A  76TH ST 2
+3233A,null,76TH,ST,null,null,2
+
+// Raw Address: 32-7 34 ST. BROADWAY 2FL
+,,,,,,
+
+// Raw Address: 322EAST117THSTREE
+322,E,117TH,ST,null,null,null
+
+// Raw Address: 3231 BARKER AVENUE #
+3231,null,BARKER,AVE,null,null,null
+
+// Raw Address: 325      EAST 104 STREE
+325,E,104TH,ST,null,null,null
+
+// Raw Address: 326 BEACH 29 #1
+,,,,,,
+
+// Raw Address: 34-15 31ST AVENUE-APT #2A
+,,,,,,
+
+// Raw Address: 344 BEACH 13TH ST
+,,,,,,
+
+// Raw Address: 35-06    NEW KIRK AVE    A-2
+3506,null,NEW KIRK AVENUE,null,null,null,A-2
+
+// Raw Address: 35-06 NEW KIRK AVE A-2
+3506,null,NEW KIRK AVENUE,null,null,null,A-2
+
+// Raw Address: 35-46  102ST  CORONA 2F
+,,,,,,
+
+// Raw Address: 37  BRIGHTON 4 CT PVT
+37,null,BRIGHTON,null,null,,4CT
+
+// Raw Address: 37 BRI 4TH. CT.
+,,,,,,
+
+// Raw Address: 37 RICHARD LANE          GROUND FL
+37,null,RICHARD LANE GROUND,null,null,FL,null
+
+// Raw Address: 37-21 65 ST 2ND FL
+3721,null,65TH,null,null,FL,2ND
+
+// Raw Address: 390 SUTTER AVENUE-APT.10A
+,,,,,,
+
+// Raw Address: 40-23  67TH ST WOODSIDE HOUS
+67,null,TH ST WOODSIDE HOUS,null,null,null,40-23
+
+// Raw Address: 404 BEACH 20 ST 3F
+,,,,,,
+
+// Raw Address: 409      EAST 21ST STRE
+409,E,21ST,ST,null,null,null
+
+// Raw Address: 4200AVEK#5EE
+4200,null,AVEK,null,null,null,null
+
+// Raw Address: 434 BEACH 58 ST PO B
+,,,,,,
+
+// Raw Address: 436 W. 47TH ST      APT.#3B
+436W,null,47TH,ST,null,APT,null
+
+// Raw Address: 45 62    PARSONS  BLVD   2FL
+4562,null,PARSONS,BLVD,null,null,2FL
+
+// Raw Address: 45-62 PARSONS BLVD       2 FL
+4562,null,PARSONS,BLVD,null,null,2FL
+
+// Raw Address: 50 SECOND AVE 1ST FL
+50,null,2ND,AVE,null,FL,1
+
+// Raw Address: 50-06  94TH ST ELMHURST 3
+,,,,,,
+
+// Raw Address: 50-42 44TH ST 3RD FL
+5042,null,44TH,ST,null,FL,3
+
+// Raw Address: 500EAST77THSTREETAPT1916
+500,E,77TH,ST,null,APT,1916
+
+// Raw Address: 51 STRATFORD ROAD APT#
+51,null,STRATFORD ROAD APT,null,null,null,null
+
+// Raw Address: 51-14 92ND ST. #3FL
+5114,null,92ND,ST,null,FL,3
+
+// Raw Address: 51-1492NDST.#3FL
+511492,null,ND,ST,null,FL,3
+
+// Raw Address: 51-60 48TH STREET BASE
+5160,null,48TH,ST,null,BSMT,null
+
+// Raw Address: 510 WEST 144TH.ST.  APAT.34
+510,W,144TH,ST,null,APT,34
+
+// Raw Address: 53-36 188 ST PVT
+5336,null,188TH,ST,null,,null
+
+// Raw Address: 531 W. 211TH ST.    APT#4B
+531W,null,211TH,ST,null,APT,null
+
+// Raw Address: 553 KINGSBOROUGH 5 WALK
+,,,,,,
+
+// Raw Address: 560W126THSTAPT313
+560,W,126TH,ST,null,APT,313
+
+// Raw Address: 561 W 163 ST APT #2B
+561,W,163RD,ST,null,APT,null
+
+// Raw Address: 57-42 GRANGER ST 3FL
+5742,null,GRANGER,ST,null,FL,3
+
+// Raw Address: 5905 POST RD 1FL
+5905,null,POST RD,null,null,FL,1
+
+// Raw Address: 600  KINGSLAND AVE 6B BROOKLYN
+,,,,,,
+
+// Raw Address: 600 VAN BUREN ST PVT
+600,null,VAN BUREN,ST,null,,null
+
+// Raw Address: 618 E 21 ST #F-3
+618E,null,21ST,ST,null,null,F-3
+
+// Raw Address: 618E21ST#F-3
+618E,null,21ST,ST,null,null,F-3
+
+// Raw Address: 619 WEST 176TH STREEAPT 3C
+619,W,176TH,ST,null,APT,3C
+
+// Raw Address: 623 ST MARKS AVE         SEAN CAREY
+,,,,,,
+
+// Raw Address: 633W 171ST ST       ##
+633,W,171ST,ST,null,null,null
+
+// Raw Address: 641   KINGS    6 WALK
+,,,,,,
+
+// Raw Address: 648 OSBORN ST. 1ST FL.
+648,null,OSBORN,ST,null,FL,1ST
+
+// Raw Address: 683 EVERGREEN AVE APT#
+683,null,EVERGREEN,AVE,null,APT,null
+
+// Raw Address: 683 GREENE AVE 3FL
+683,null,GREENE AVENUE,null,null,null,3FL
+
+// Raw Address: 71-15 BEACH CHANEL DR #3P FAR
+7115,null,BEACH CHANEL,DR,null,null,null
+
+// Raw Address: 718-364-1271
+,,,,,,
+
+// Raw Address: 718-409-0669
+,,,,,,
+
+// Raw Address: 727      VERMONT AVE     1FL
+727,null,VERMONT AVENUE,null,null,FL,1
+
+// Raw Address: 728 GERALD ST 2FL
+728,null,GERALD,null,null,FL,ST2
+
+// Raw Address: 74 VAN COURTLANDT PK #DD2C/O
+74,null,VAN COURTLANDT PK,null,null,null,null
+
+// Raw Address: 740 GRAND CONCOURSE      APT #AG
+740,null,GRAND,CONCOURSE,null,APT,AG
+
+// Raw Address: 764-TRINITY AVE
+,,,,,,
+
+// Raw Address: 769 ST MARKS AVE         4-6F
+,,,,,,
+
+// Raw Address: 795 GARDEN ST #EE
+795,null,GARDEN ST,null,null,null,null
+
+// Raw Address: 8 E 2ND ST BOTTOM BUZZER
+2,null,ND ST BOTTOM BUZZER,null,null,null,8E
+
+// Raw Address: 8-14WEST111THSTRE#5J
+814,W,111TH,ST,null,REAR,null
+
+// Raw Address: 80WATERSIDEPLAZA#
+80,null,WATERSIDE,PLZ,null,null,null
+
+// Raw Address: 852 FULTON ST 2ND FL
+852,null,FULTON ST,null,null,FL,2ND
+
+// Raw Address: 8550  FOREST P. WAY QUEENS NY
+8550,null,FOREST P WAY QUEENS,null,null,null,NY
+
+// Raw Address: 88-41  179 ST JAMAICA
+179,null,ST JAMAICA,null,null,null,88-41
+
+// Raw Address: 89-B VISTATION PLACE
+89B,null,VISTATION,PL,null,null,null
+
+// Raw Address: 90 EAST 18 STREET #     IB
+90,E,18TH,ST,null,null,IB
+
+// Raw Address: 917 58TH ST 1FL
+917,null,58TH,ST,null,FL,1
+
+// Raw Address: 952 4 AVE 1FL
+9524,null,AVENUE,null,null,null,1FL
+
+// Raw Address: AVENUE OF THE AMERICAS
+null,null,AVENUE OF THE AMERICAS,null,null,null,null
+
+// Raw Address: AVENUE V 2FL
+null,null,AVENUE,null,null,FL,V2
+
+// Raw Address: B 19 ST 2
+,,,,,,
+
+// Raw Address: B 54 ST 6
+,,,,,,
+
+// Raw Address: BAY 28TH STREET
+,,,,,,
+
+// Raw Address: BAY 31 ST                    B
+,,,,,,
+
+// Raw Address: BAY23RDST
+,,,,,,
+
+// Raw Address: BAY40THST
+,,,,,,
+
+// Raw Address: BEACH 116 ST                 7
+,,,,,,
+
+// Raw Address: BEACH 116 ST 7
+,,,,,,
+
+// Raw Address: BEACH 134TH ST
+,,,,,,
+
+// Raw Address: BEACH 140TH ST
+,,,,,,
+
+// Raw Address: BEACH 20TH ST
+,,,,,,
+
+// Raw Address: BEACH 29TH ST
+,,,,,,
+
+// Raw Address: BEACH 40TH ST
+,,,,,,
+
+// Raw Address: BEACH 56TH ST
+,,,,,,
+
+// Raw Address: BEACH 59TH ST
+,,,,,,
+
+// Raw Address: BEACH 59TH ST 1
+,,,,,,
+
+// Raw Address: BEACH 66TH ST                1
+,,,,,,
+
+// Raw Address: BEACH 68TH ST
+,,,,,,
+
+// Raw Address: BEACH 73RD ST
+,,,,,,
+
+// Raw Address: BEACH135THST
+,,,,,,
+
+// Raw Address: BEACH40THST
+,,,,,,
+
+// Raw Address: BEACH59THST
+,,,,,,
+
+// Raw Address: BEACH59THSTREET 1
+,,,,,,
+
+// Raw Address: BEACH68STREET                1
+,,,,,,
+
+// Raw Address: BEACH68THST
+,,,,,,
+
+// Raw Address: BRIGHTON 10 PATH
+,,,,,,
+
+// Raw Address: BRIGHTON 10 TE
+null,null,BRIGHTON,null,null,null,10TE
+
+// Raw Address: BRIGHTON 10 TERR
+,,,,,,
+
+// Raw Address: BRIGHTON 3 PL
+null,null,BRIGHTON,null,null,null,3PL
+
+// Raw Address: BRIGHTON 4 CT
+null,null,BRIGHTON,null,null,null,4CT
+
+// Raw Address: BRIGHTON 41 CT
+null,null,BRIGHTON,null,null,null,41CT
+
+// Raw Address: C/O  LATHAM 4 E 28TH
+,,,,,,
+
+// Raw Address: C/O  LATHAM 4 E 28TH ST
+,,,,,,
+
+// Raw Address: C/O PHILLIPS 550 CAU     1-H
+,,,,,,
+
+// Raw Address: C/OLATHAM4E28TH
+,,,,,,
+
+// Raw Address: E23OST                       4
+,,,,,,
+
+// Raw Address: EAST 162 STREET ST
+null,E,162ND,ST,null,null,ST
+
+// Raw Address: EDWARD L GRANT HY 5
+null,null,EDWARD L GRANT,HWY,null,null,5
+
+// Raw Address: H1723 PUTNAM AVE 3
+,,,,,,
+
+// Raw Address: JEWISH CHILD CARE ASSOCIATION
+null,null,JEWISH CHILD CA,null,null,REAR,null
+
+// Raw Address: KINGS BOROUGH 4 WALK
+,,,,,,
+
+// Raw Address: KINGSBORO 6TH WALK
+,,,,,,
+
+// Raw Address: NELSON AVE FAMILY RESIDENCE
+null,null,NELSON AVENUE FAMILY RESIDENCE,null,null,null,null
+
+// Raw Address: ONE COLUMBUS PLACE #N-12D
+1,null,COLUMBUS PLACE,null,null,null,N-12D
+
+// Raw Address: P O BOX 1093 128 SIXTH AV
+,,,,,,
+
+// Raw Address: PO BOX 02-0339
+null,null,PO BOX,null,null,null,02-0339
+
+// Raw Address: PO BX 89 394 BROADWY
+,,,,,,
+
+// Raw Address: POBOX110-270
+null,null,POBOX,null,null,null,110-270
+
+// Raw Address: POBX110-270
+null,null,POBX,null,null,null,110-270
+
+// Raw Address: POBX89394BROADWY
+,,,,,,
+
+// Raw Address: RIVERSIDE DR, C-14
+null,null,RIVERSIDE,DR,null,null,C-14
+
+// Raw Address: SCH3 LONGFELLER AVE
+,,,,,,
+
+// Raw Address: W 17IST                      2
+,,,,,,
+
+// Raw Address: W 19M ST                     6
+,,,,,,
+
+// Raw Address: W126THSTAPT313
+null,W,126TH,ST,null,APT,313
+
+// Raw Address: WEST 139TH STREEAPT # 5C
+null,W,139TH,ST,null,APT,5C
+
+// Raw Address: WEST 186ST.AUDBON            2
+,,,,,,
+
+// Raw Address: WEST183RDSTREE
+null,W,183RD,ST,null,null,null
+
+// Raw Address: 66 NO FULTON AVENUE 1ST
+66,N,FULTON,AVE,null,null,1
+
+// Raw Address: 9 WEST ST # RR
+9,null,WEST ST,null,null,null,null
+

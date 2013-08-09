@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.matching.en.us.train"
+   name="Train Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="train.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.matching.cfg"/>
+      <import plugin="com.choicemaker.cm.matching.en.us"/>
+      <import plugin="com.choicemaker.cm.matching.gen"/>
+      <import plugin="org.eclipse.core.resources"/>
+   </requires>
+
+
+   <extension
+         id="NameGrammarTrainer"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.choicemaker.cm.matching.en.us.train.name.NameGrammarTrainer">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="NameParsedDataCreator"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.choicemaker.cm.matching.en.us.train.name.NameParsedDataCreator">
+         </run>
+      </application>
+   </extension>
+
+</plugin>

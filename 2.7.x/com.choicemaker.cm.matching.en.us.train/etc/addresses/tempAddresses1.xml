@@ -1,0 +1,2909 @@
+<data>
+<datum>
+<raw>
+<field>85W.168THST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 85))
+       (FSN (DIR W)
+            (SN (NUM 168)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BOERUMPL</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BOERUM))
+            (SS PL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>MORRISAV</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD MORRIS))
+            (SS AV)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>UNDERCLIFFAVE</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD UNDERCLIFF))
+            (SS AVE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>769 ST MARKS AVE    4-6F</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>MARCYPL</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD MARCY))
+            (SS PL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>1871FULTONST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 1871))
+       (FSN (SN (WD FULTON))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>29 SR</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>87568THST.</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>9THSTREET</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (NUM 9)
+                (ORDX TH))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>SCH3 LONGFELLER AVE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>216ROXBURYAVE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 216))
+       (FSN (SN (WD ROXBURY))
+            (SS AVE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>17NEWELST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 17))
+       (FSN (SN (WD NEWEL))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>14350BARCLAYAVE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 14350))
+       (FSN (SN (WD BARCLAY))
+            (SS AVE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>95THAV</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (NUM 95)
+                (ORDX TH))
+            (SS AV)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>SECONDAV</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (ORD SECOND))
+            (SS AV)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>SECOND AVE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>3029 BR   4 ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 3029))
+       (FSN (SN (WD BR)
+                (NUM 4))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>3029 BRI 4TH ST BASE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 3029))
+       (FSN (SN (WD BRI)
+                (NUM 4)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT BASE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>35-46 102ST CORONA 2F</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>BAY23RDST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BAY)
+                (NUM 23)
+                (ORDX RD))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>127 BAY 23RD STREET</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 127))
+       (FSN (SN (WD BAY)
+                (NUM 23)
+                (ORDX RD))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>127 BAY 23RD ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 127))
+       (FSN (SN (WD BAY)
+                (NUM 23)
+                (ORDX RD))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>EAST58THST</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>962E58THST.PH</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 962))
+       (FSN (DIR E)
+            (SN (NUM 58)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT PH)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>962E58THSTPH</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 962))
+       (FSN (DIR E)
+            (SN (NUM 58)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT PH)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>2-43  BEACH  134 ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 2)
+           (HYPH -)
+           (NUM 43))
+       (FSN (SN (WD BEACH)
+                (NUM 134))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH 134TH ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 134)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH 134 ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 134))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>272 BCH 135 ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 272))
+       (FSN (SN (WD BCH)
+                (NUM 135))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>600  KINGSLAND AVE 6B BROOKLYN</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>60KINGSLANDAVE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 60))
+       (FSN (SN (WD KINGSLAND))
+            (SS AVE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 10 TERR</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BRIGHTON)
+                (NUM 10))
+            (SS TERR)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST183RDSTREE</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 183)
+                (ORDX RD))
+            (SS STREE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>150PATCHENAVENUE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 150))
+       (FSN (SN (WD PATCHEN))
+            (SS AVENUE)))</parseTree>
+</datum>
+
+<!--
+
+<datum>
+<raw>
+<field>417 QUINCYSTREET</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 417))
+       (FSN (SN (WD QUINCY)
+                (WD STREET))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 417))
+       (FSN (SN (WD QUINCY))
+            (SS STREET)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 417))
+       (FSN (SN (WD QUINCYSTREET))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>EAST137THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 137)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 137)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 137)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 137)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST118THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 118)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 118)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 118)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 118)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST149THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 149)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 149)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 149)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 149)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>500EAST77THSTREETAPT1916</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 500))
+       (FSN (DIR EAST)
+            (SN (NUM 77)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 19)
+                       (ANY 16))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 500)
+                  (DIR EAST)))
+       (HN (NUM 77))
+       (FSN (SN (WD THSTREETAPT)
+                (NUM 1916))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 500))
+       (FSN (SN (WD EAST)
+                (NUM 77)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 19)
+                       (ANY 16))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 500))
+       (FSN (SN (WD EAST)
+                (NUM 77)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (AT APT)
+             (APT (NUM 1916))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 500))
+       (FSN (SN (WD EAST)
+                (NUM 77)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 1916))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 500))
+       (FSN (DIR EAST)
+            (SN (NUM 77)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (AT APT)
+             (APT (NUM 1916))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 500))
+       (FSN (DIR EAST)
+            (SN (NUM 77)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 1916))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>2932 BRIGHTON 3 STREET</field>
+</raw>
+<parseTree>
+(SADDR (FAPT (APT (NUM 29)))
+       (HN (NUM 32))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 3))
+            (SS STREET)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2932))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 3))
+            (SS STREET)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 29)
+           (NUM 32))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 3))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>2932  BRIGHTON 3 ST BKLYN 2</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>WEST15THSTREET</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 15)
+                (ORDX TH))
+            (SS STREET)))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 15)
+                (ORDX TH))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>32-7 34 ST. BROADWAY 2FL</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>18 PAERDEGAT 2ND. STREET</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 18))
+       (FSN (SN (WD PAERDEGAT)
+                (NUM 2)
+                (ORDX ND))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH40THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 40)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 40)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH 40 ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 40)
+                (ORDX ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 40))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)))
+       (FAPT (APT (NUM 40)
+                  (ORDX ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)))
+       (FAPT (APT (NUM 40)
+                  (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 40)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BAY 28TH STREET</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BAY)
+                (NUM 28)
+                (ORDX TH))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>623 ST MARKS AVE         SEAN CAREY</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>50-06  94TH ST ELMHURST 3</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>232 AVE 4 APT 2R</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 232))
+       (FSN (SN (WD AVE)
+                (NUM 4)))
+       (FAPT (AT APT)
+             (APT (NUM 2)
+                  (LTR R))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 232))
+       (FSN (SN (WD AVE)
+                (NUM 4)))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 2)
+                       (ANY R))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>18-16 COLLEGE PT BL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 18)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (WD COLLEGE)
+                (WD PT))
+            (SS BL)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 18)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (WD COLLEGE)
+                (WD PT)
+                (WD BL))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 18)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (WD COLLEGE)
+                (WD PT)))
+       (FAPT (APT (WD2 BL))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 18)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (WD COLLEGE))
+            (SS PT))
+       (FAPT (APT (WD2 BL))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>KINGSBORO 6TH WALK</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD KINGSBORO)
+                (NUM 6)
+                (ORDX TH))
+            (SS WALK)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>641   KINGS    6 WALK</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 641))
+       (FSN (SN (WD KINGS)
+                (NUM 6))
+            (SS WALK)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>171EAST59THSTRE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 171))
+       (FSN (SN (WD EAST)
+                (NUM 59)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 171)
+                  (DIR EAST)))
+       (HN (NUM 59))
+       (FSN (SN (WD THSTRE))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 171))
+       (FSN (SN (WD EAST)
+                (NUM 59)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))
+             (AT RE)))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 171)
+                  (DIR EAST)))
+       (HN (NUM 59))
+       (FSN (SN (WD TH)
+                (WD ST)
+                (WD RE))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 171))
+       (FSN (DIR EAST)
+            (SN (NUM 59)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 171))
+       (FSN (DIR EAST)
+            (SN (NUM 59)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))
+             (AT RE)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>171      EASR 59 STR     1 FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 171))
+       (FSN (SN (WD EASR)
+                (NUM 59))
+            (SS STR))
+       (FAPT (APT (NUM 1))
+             (AT FL)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 171))
+       (FSN (SN (WD EASR)
+                (NUM 59))
+            (SS STR))
+       (FAPT (APT (NUM 1)
+                  (WD2 FL))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>1403NEWYORKAV</field>
+</raw>
+<parseTree>
+(SADDR (FAPT (APT (NUM 14)))
+       (HN (NUM 03))
+       (FSN (SN (WD NEWYORK))
+            (SS AV)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 14)
+           (NUM 03))
+       (FSN (SN (WD NEWYORKAV))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 14)
+           (NUM 03))
+       (FSN (SN (WD NEWYORK)
+                (WD AV))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 1403))
+       (FSN (SN (WD NEWYORKAV))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 1403))
+       (FSN (SN (WD NEWYORK)
+                (WD AV))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 1403))
+       (FSN (SN (WD NEWYORK))
+            (SS AV)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 14)
+           (NUM 03))
+       (FSN (SN (WD NEWYORK)))
+       (FAPT (APT (WD2 AV))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 14)
+           (NUM 03))
+       (FSN (SN (WD NEWYORK))
+            (SS AV)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 1403))
+       (FSN (SN (WD NEWYORK)))
+       (FAPT (APT (WD2 AV))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 14)))
+       (HN (NUM 03))
+       (FSN (SN (WD NEWYORK)
+                (WD AV))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 14)))
+       (HN (NUM 03))
+       (FSN (SN (WD NEWYORKAV))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>W126THSTAPT313</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR W)
+            (SN (NUM 126)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (APT (NUM 313))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD W)
+                (NUM 126)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (APT (NUM 313))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD W)
+                (NUM 126)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 313))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR W)
+            (SN (NUM 126)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 313))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (LTR W)))
+       (HN (NUM 126))
+       (FSN (SN (WD THSTAPT)
+                (NUM 313))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH59ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 59)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)))
+       (FAPT (APT (NUM 59)
+                  (ORDX ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 59)
+                (ORDX ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 59))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)))
+       (FAPT (APT (NUM 59)
+                  (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>146   BCH  59TH  ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 146))
+       (FSN (SN (WD BCH)
+                (NUM 59)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 146))
+       (FSN (SN (WD BCH)
+                (NUM 59)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>404 BEACH 20 ST 3F</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 404))
+       (FSN (SN (WD BEACH)
+                (NUM 20))
+            (SS ST))
+       (FAPT (APT (NUM 3)
+                  (LTR F))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 404))
+       (FSN (SN (WD BEACH)
+                (NUM 20)
+                (ORDX ST)))
+       (FAPT (APT (NUM 3)
+                  (LTR F))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>P.O. BOX 89</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD P)
+                (WD O)
+                (WD BOX)))
+       (FAPT (APT (NUM 89))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>PO BX 89 394 BROADWY</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>POBX110-270</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD POBX)))
+       (FAPT (APT (NUM 110)
+                  (HYPH -)
+                  (NUM 270))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>184  E. 34TH STREET 2L BROOKLY</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>133-30  127TH ST SO. OZ PK PH</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2814 BRIGHTON 7 ST P</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 2814))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7)
+                (ORDX ST)))
+       (FAPT (APT (LTR P))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 28)
+           (NUM 14))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7))
+            (SS ST))
+       (FAPT (APT (LTR P))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 28)
+           (NUM 14))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7)
+                (ORDX ST)))
+       (FAPT (APT (LTR P))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2814))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7))
+            (SS ST))
+       (FAPT (APT (LTR P))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>222E188THST 2</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 222))
+       (FSN (DIR E)
+            (SN (NUM 188)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 222)
+           (LTR E))
+       (FSN (SN (NUM 188)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 222)
+                  (DIR E)))
+       (HN (NUM 188))
+       (FSN (SN (WD TH)
+                (WD ST)
+                (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 222))
+       (FSN (SN (WD E)
+                (NUM 188)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 222)
+                  (LTR E)))
+       (HN (NUM 188))
+       (FSN (SN (WD THST)
+                (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 222))
+       (FSN (DIR E)
+            (SN (NUM 188)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 222)
+                  (DIR E)))
+       (HN (NUM 188))
+       (FSN (SN (WD THST)
+                (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 222)
+                  (LTR E)))
+       (HN (NUM 188))
+       (FSN (SN (WD TH)
+                (WD ST)
+                (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 222)
+           (LTR E))
+       (FSN (SN (NUM 188)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 222))
+       (FSN (SN (WD E)
+                (NUM 188)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 2))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>H1723 PUTNAM AVE 3</field>
+</raw>
+<parseTree>
+(SADDR (FAPT (APT (LTR H)))
+       (HN (NUM 17)
+           (NUM 23))
+       (FSN (SN (WD PUTNAM)
+                (WD AVE)
+                (NUM 3))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (LTR H)
+                  (NUM 17)))
+       (HN (NUM 23))
+       (FSN (SN (WD PUTNAM)
+                (WD AVE)
+                (NUM 3))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (LTR H)))
+       (HN (NUM 1723))
+       (FSN (SN (WD PUTNAM)
+                (WD AVE)
+                (NUM 3))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH59THSTREET 1</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 59)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (APT (NUM 1))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>B 19 ST 2</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD B)
+                (NUM 19)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD B)
+                (NUM 19))
+            (SS ST))
+       (FAPT (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (LTR B)))
+       (HN (NUM 19))
+       (FSN (SN (WD ST)
+                (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD B)
+                (NUM 19)
+                (ORDX ST)))
+       (FAPT (APT (NUM 2))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>B 54 ST 6</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD B)
+                (NUM 54)
+                (ORDX ST)))
+       (FAPT (APT (NUM 6))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (LTR B)))
+       (HN (NUM 54))
+       (FSN (SN (WD ST)
+                (NUM 6))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD B)
+                (NUM 54))
+            (SS ST))
+       (FAPT (APT (NUM 6))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD B)
+                (NUM 54)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 6))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>204NWYOMINGAVE</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 204))
+       (FSN (SN (WD NWYOMINGAVE))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 204))
+       (FSN (SN (WD NWYOMING))
+            (SS AVE)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 204))
+       (FSN (SN (WD NWYOMING)
+                (WD AVE))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH 116 ST 7</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 116))
+            (SS ST))
+       (FAPT (APT (NUM 7))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 116)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 7))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 116)
+                (ORDX ST)))
+       (FAPT (APT (NUM 7))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>MARICKCT</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD MARICK)
+                (WD CT))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD MARICKCT))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD MARICK)))
+       (FAPT (APT (WD2 CT))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD MARICK))
+            (SS CT)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST36THSTREET 1</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 36)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (APT (NUM 1))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 36)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (APT (NUM 1))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>EAST89THST 2</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 89)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 89)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 89)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 89)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 2))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>8-14WEST111THSTRE#5J</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 8)
+           (HYPH -)
+           (NUM 14))
+       (FSN (DIR WEST)
+            (SN (NUM 111)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)
+             (MULTIANY (ANY #)
+                       (ANY 5)
+                       (ANY J))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 8)
+           (HYPH -)
+           (NUM 14))
+       (FSN (SN (WD WEST)
+                (NUM 111)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)
+             (MULTIANY (ANY #)
+                       (ANY 5)
+                       (ANY J))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 8)
+           (HYPH -)
+           (NUM 14))
+       (FSN (DIR WEST)
+            (SN (NUM 111)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)
+             (PND #)
+             (APT (NUM 5)
+                  (LTR J))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 8)
+           (HYPH -)
+           (NUM 14))
+       (FSN (SN (WD WEST)
+                (NUM 111)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)
+             (PND #)
+             (APT (NUM 5)
+                  (LTR J))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>EAST7THST 1</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 7)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 1))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 7)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 1))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 7)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 1))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 7)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 1))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>31-21 90 ST. 2FL CJ 5</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2918 BRIGHTON 7 ST 4</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 29)
+           (NUM 18))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7))
+            (SS ST))
+       (FAPT (APT (NUM 4))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2918))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7))
+            (SS ST))
+       (FAPT (APT (NUM 4))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 29)
+           (NUM 18))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 4))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2918))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7)
+                (ORDX ST)))
+       (FAPT (APT (NUM 4))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2918))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 4))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 29)
+           (NUM 18))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 7)
+                (ORDX ST)))
+       (FAPT (APT (NUM 4))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 7 ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BRIGHTON)))
+       (FAPT (APT (NUM 7)
+                  (ORDX ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BRIGHTON)
+                (NUM 7))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BRIGHTON)))
+       (FAPT (APT (NUM 7)
+                  (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BRIGHTON)
+                (NUM 7)
+                (ORDX ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BRIGHTON)
+                (NUM 7)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>125W.195THST.#6A</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 125))
+       (FSN (SN (WD W)
+                (NUM 195)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 6)
+                  (LTR A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 125)
+           (LTR W))
+       (FSN (SN (NUM 195)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (MULTIANY (ANY 6)
+                       (ANY A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 125))
+       (FSN (SN (WD W)
+                (NUM 195)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (MULTIANY (ANY 6)
+                       (ANY A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 125)
+           (LTR W))
+       (FSN (SN (NUM 195)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 6)
+                  (LTR A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 125))
+       (FSN (DIR W)
+            (SN (NUM 195)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (MULTIANY (ANY 6)
+                       (ANY A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 125))
+       (FSN (DIR W)
+            (SN (NUM 195)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 6)
+                  (LTR A))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>344 BEACH 13TH ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 344))
+       (FSN (SN (WD BEACH)
+                (NUM 13)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 344))
+       (FSN (SN (WD BEACH)
+                (NUM 13)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>326 BEACH 29 #1</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 326))
+       (FSN (SN (WD BEACH)
+                (NUM 29)))
+       (FAPT (PND #)
+             (APT (NUM 1))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 326))
+       (FSN (SN (WD BEACH)
+                (NUM 29)))
+       (FAPT (PND #)
+             (MULTIANY (ANY 1))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>W 19M ST                     6</field>
+</raw>
+<parseTree>
+(SADDR (FAPT (APT (LTR W)))
+       (HN (NUM 19)
+           (LTR M))
+       (FSN (SN (WD ST)
+                (NUM 6))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (LTR W)))
+       (HN (NUM 19))
+       (FSN (SN (WD M)
+                (WD ST)
+                (NUM 6))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BAY 31 ST                    B</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BAY)
+                (NUM 31)
+                (ORDX ST)))
+       (FAPT (APT (LTR B))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BAY)
+                (NUM 31))
+            (SS ST))
+       (FAPT (APT (LTR B))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>312W116THSTREET#</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 312))
+       (FSN (SN (WD W)
+                (NUM 116)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (PND #)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 312))
+       (FSN (DIR W)
+            (SN (NUM 116)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (PND #)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 312)
+           (LTR W))
+       (FSN (SN (NUM 116)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (PND #)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST 186ST.AUDBON            2</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>217 WEAT 135 STREET #5D</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 217))
+       (FSN (SN (WD WEAT)
+                (NUM 135))
+            (SS STREET))
+       (FAPT (PND #)
+             (MULTIANY (ANY 5)
+                       (ANY D))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 217))
+       (FSN (SN (WD WEAT)
+                (NUM 135))
+            (SS STREET))
+       (FAPT (PND #)
+             (APT (NUM 5)
+                  (LTR D))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH 116 ST                 7</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 116))
+            (SS ST))
+       (FAPT (APT (NUM 7))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 116)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 7))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 116)
+                (ORDX ST)))
+       (FAPT (APT (NUM 7))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST36THSTREET               1</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 36)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (APT (NUM 1))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 36)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (APT (NUM 1))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH68THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 68)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 68)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH68STREET                1</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 68))
+            (SS STREET))
+       (FAPT (APT (NUM 1))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>E23OST                       4  (O instead of 0)</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>EAST24THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 24)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 24)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 24)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 24)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>EAST59THST                   2</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 59)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 59)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 59)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 59)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 2))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST188THST                  C</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 188)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (LTR C))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 188)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (LTR C))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>8-14WEST111THSTRE#5J</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 8)
+           (HYPH -)
+           (NUM 14))
+       (FSN (DIR WEST)
+            (SN (NUM 111)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)
+             (MULTIANY (ANY #)
+                       (ANY 5)
+                       (ANY J))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 8)
+           (HYPH -)
+           (NUM 14))
+       (FSN (SN (WD WEST)
+                (NUM 111)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)
+             (MULTIANY (ANY #)
+                       (ANY 5)
+                       (ANY J))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 8)
+           (HYPH -)
+           (NUM 14))
+       (FSN (DIR WEST)
+            (SN (NUM 111)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)
+             (PND #)
+             (APT (NUM 5)
+                  (LTR J))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 8)
+           (HYPH -)
+           (NUM 14))
+       (FSN (SN (WD WEST)
+                (NUM 111)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT RE)
+             (PND #)
+             (APT (NUM 5)
+                  (LTR J))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>370RIVERSIDEDR.APTBSMT</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 370))
+       (FSN (SN (WD RIVERSIDEDR)
+                (WD APTBSMT))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 370))
+       (FSN (SN (WD RIVERSIDE)
+                (WD DR)
+                (WD A))
+            (SS PT))
+       (FAPT (AT BSMT)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 370))
+       (FSN (SN (WD RIVERSIDE)
+                (WD DR)
+                (WD A)
+                (WD PT)))
+       (FAPT (AT BSMT)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 370))
+       (FSN (SN (WD RIVERSIDE)
+                (WD DR)
+                (WD A)))
+       (FAPT (APT (WD2 PT))
+             (AT BSMT)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>4R152W143RDST.</field>
+</raw>
+<parseTree>
+(SADDR (FAPT (APT (NUM 4)
+                  (LTR R)))
+       (HN (NUM 152))
+       (FSN (DIR W)
+            (SN (NUM 143)
+                (ORDX RD))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 4)
+                  (LTR R)))
+       (HN (NUM 152))
+       (FSN (SN (WD W)
+                (NUM 143)
+                (ORDX RD))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 4)
+                  (LTR R)))
+       (HN (NUM 152)
+           (LTR W))
+       (FSN (SN (NUM 143)
+                (ORDX RD))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST8THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 8)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 8)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 8)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 8)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH 66TH ST                1</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 66)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 1))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 66)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 1))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>KINGS BOROUGH 4 WALK</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD KINGS)
+                (WD BOROUGH)
+                (NUM 4))
+            (SS WALK)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O PHILLIPS 550 CAU     1-H</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>WASHINGTONPL</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WASHINGTON)
+                (WD PL))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WASHINGTONPL))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WASHINGTON))
+            (SS PL)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WASHINGTON)))
+       (FAPT (APT (WD2 PL))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WASHINGTON SQ VILLAGE</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WASHINGTON)
+                (WD SQ))
+            (SS VILLAGE)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WASHINGTON)
+                (WD SQ)
+                (WD VILLAGE))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>EAST12THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 12)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 12)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 12)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 12)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BAY40THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BAY)
+                (NUM 40)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BAY)
+                (NUM 40)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST128THSTREET</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 128)
+                (ORDX TH))
+            (SS STREET)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 128)
+                (ORDX TH))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BEACH 73RD ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 73)
+                (ORDX RD)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 73))
+            (SS RD))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD BEACH)
+                (NUM 73)
+                (ORDX RD))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 10 PATH</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BRIGHTON)
+                (NUM 10))
+            (SS PATH)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>2910 BRIGHTON STREET APT 2</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 29)
+           (NUM 10))
+       (FSN (SN (WD BRIGHTON))
+            (SS STREET))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2910))
+       (FSN (SN (WD BRIGHTON)
+                (WD STREET)
+                (WD APT)))
+       (FAPT (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2910))
+       (FSN (SN (WD BRIGHTON))
+            (SS STREET))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 29)
+           (NUM 10))
+       (FSN (SN (WD BRIGHTON)
+                (WD STREET)))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 29)
+           (NUM 10))
+       (FSN (SN (WD BRIGHTON)
+                (WD STREET)
+                (WD APT)))
+       (FAPT (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2910))
+       (FSN (SN (WD BRIGHTON)
+                (WD STREET)))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 29)
+           (NUM 10))
+       (FSN (SN (WD BRIGHTON))
+            (SS STREET))
+       (FAPT (AT APT)
+             (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 29)
+           (NUM 10))
+       (FSN (SN (WD BRIGHTON)
+                (WD STREET)))
+       (FAPT (AT APT)
+             (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2910))
+       (FSN (SN (WD BRIGHTON))
+            (SS STREET))
+       (FAPT (AT APT)
+             (APT (NUM 2))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2910))
+       (FSN (SN (WD BRIGHTON)
+                (WD STREET)))
+       (FAPT (AT APT)
+             (APT (NUM 2))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>EAST66THST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 66)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 66)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 66)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAST)
+                (NUM 66)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>321   BCH 57TH ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 321))
+       (FSN (SN (WD BCH)
+                (NUM 57)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 321))
+       (FSN (SN (WD BCH)
+                (NUM 57)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WESAT 138TH ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WESAT)
+                (NUM 138)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WESAT)
+                (NUM 138)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>40BEACH28THSTREET</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 40))
+       (FSN (SN (WD BEACH)
+                (NUM 28)
+                (ORDX TH))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>40 BEACH 28TH STREET</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 40))
+       (FSN (SN (WD BEACH)
+                (NUM 28)
+                (ORDX TH))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>40    B   28 ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 40))
+       (FSN (SN (WD B)))
+       (FAPT (APT (NUM 28)
+                  (ORDX ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 40)
+           (LTR B))
+       (FSN (SN (NUM 28)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 40)
+           (LTR B))
+       (FSN (SN (NUM 28)
+                (ORDX ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 40))
+       (FSN (SN (WD B)
+                (NUM 28))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 40))
+       (FSN (SN (WD B)))
+       (FAPT (APT (NUM 28)
+                  (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 40)
+                  (LTR B)))
+       (HN (NUM 28))
+       (FSN (SN (WD ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 40)
+           (LTR B))
+       (FSN (SN (NUM 28))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 40))
+       (FSN (SN (WD B)
+                (NUM 28)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 40))
+       (FSN (SN (WD B)
+                (NUM 28)
+                (ORDX ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>111 BAY 31 ST.  3 FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31)
+                (ORDX ST)))
+       (FAPT (APT (NUM 3)
+                  (WD2 FL))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31)
+                (ORDX ST)))
+       (FAPT (APT (NUM 3))
+             (AT FL)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 3))
+             (AT FL)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31))
+            (SS ST))
+       (FAPT (APT (NUM 3)
+                  (WD2 FL))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31))
+            (SS ST))
+       (FAPT (APT (NUM 3))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>111 BAY 31 ST.  3 FL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31)
+                (ORDX ST)))
+       (FAPT (APT (NUM 3)
+                  (WD2 FL))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31)
+                (ORDX ST)))
+       (FAPT (APT (NUM 3))
+             (AT FL)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31)))
+       (FAPT (APT (WD2 ST)
+                  (NUM 3))
+             (AT FL)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31))
+            (SS ST))
+       (FAPT (APT (NUM 3)
+                  (WD2 FL))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 111))
+       (FSN (SN (WD BAY)
+                (NUM 31))
+            (SS ST))
+       (FAPT (APT (NUM 3))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>10-BENCHLEY PLACE</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>LOUISE WISE SERVICES 123 E 94T</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>ST.NICHOLASAV</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD ST)
+                (WD NICHOLAS)
+                (WD AV))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD ST)
+                (WD NICHOLAS)))
+       (FAPT (APT (WD2 AV))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD ST)
+                (WD NICHOLASAV))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD ST)
+                (WD NICHOLAS))
+            (SS AV)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>121 BAY 46 STREET</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 121))
+       (FSN (SN (WD BAY)
+                (NUM 46))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>RR4BOX4516</field>
+</raw>
+<parseTree>
+(SADDR (FAPT (APT (WD2 RR)))
+       (HN (NUM 4))
+       (FSN (SN (WD BOX)
+                (NUM 4516))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>EAT 34TH ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD EAT)
+                (NUM 34)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD EAT)
+                (NUM 34)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>8609 BAY 16TH. ST.</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 8609))
+       (FSN (SN (WD BAY)
+                (NUM 16)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 86)
+           (NUM 09))
+       (FSN (SN (WD BAY)
+                (NUM 16)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 8609))
+       (FSN (SN (WD BAY)
+                (NUM 16)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 86)
+           (NUM 09))
+       (FSN (SN (WD BAY)
+                (NUM 16)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 86)))
+       (HN (NUM 09))
+       (FSN (SN (WD BAY)
+                (NUM 16)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O R BELL 465 WEST 148</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>71ELMWOODAVEAPT-</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 71))
+       (FSN (SN (WD ELMWOOD)
+                (WD AVE)))
+       (FAPT (AT APT)
+             (MULTIANY (ANY -))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 71))
+       (FSN (SN (WD ELMWOOD))
+            (SS AVE))
+       (FAPT (AT APT)
+             (MULTIANY (ANY -))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>72-1541STAVED33</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 72)
+           (HYPH -)
+           (NUM 1541))
+       (FSN (SN (WD STAVED)
+                (NUM 33))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 72)
+           (HYPH -)
+           (NUM 1541))
+       (FSN (SN (WD STAVED)))
+       (FAPT (APT (NUM 33))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 72)
+                  (HYPH -)
+                  (NUM 15)))
+       (HN (NUM 41))
+       (FSN (SN (WD STAVED)
+                (NUM 33))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>#D33</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>2840 WESTG 15TH ST</field>
+</raw>
+<parseTree>
+(SADDR (FAPT (APT (NUM 28)))
+       (HN (NUM 40))
+       (FSN (SN (WD WESTG)
+                (NUM 15)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2840))
+       (FSN (DIR WEST)
+            (SN (WD G)
+                (NUM 15)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 28)))
+       (HN (NUM 40))
+       (FSN (SN (WD WEST)
+                (WD G)
+                (NUM 15)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 28)
+           (NUM 40))
+       (FSN (SN (WD WEST)
+                (WD G)
+                (NUM 15)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 28)
+           (NUM 40))
+       (FSN (SN (WD WESTG)
+                (NUM 15)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 28)))
+       (HN (NUM 40))
+       (FSN (DIR WEST)
+            (SN (WD G)
+                (NUM 15)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2840))
+       (FSN (SN (WD WEST)
+                (WD G)
+                (NUM 15)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 28)
+           (NUM 40))
+       (FSN (DIR WEST)
+            (SN (WD G)
+                (NUM 15)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2840))
+       (FSN (SN (WD WESTG)
+                (NUM 15)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 28)
+           (NUM 40))
+       (FSN (SN (WD WEST)
+                (WD G)
+                (NUM 15)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 28)
+           (NUM 40))
+       (FSN (SN (WD WESTG)
+                (NUM 15)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2840))
+       (FSN (SN (WD WEST)
+                (WD G)
+                (NUM 15)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 28)
+           (NUM 40))
+       (FSN (DIR WEST)
+            (SN (WD G)
+                (NUM 15)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2840))
+       (FSN (DIR WEST)
+            (SN (WD G)
+                (NUM 15)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 2840))
+       (FSN (SN (WD WESTG)
+                (NUM 15)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>BRIGHTON 3RD COURT</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD BRIGHTON)
+                (NUM 3)
+                (ORDX RD))
+            (SS COURT)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>WEST158THSTREET54</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WEST)
+                (NUM 158)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (APT (NUM 54))))</parseTree>
+<parseTree>
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 158)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (APT (NUM 54))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>414-50ST B6 BROOKLYN</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>540 W. 55TH ST. #5Y C/O ADAMICK, A.</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>47-17 39TH ST APTD15</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>511 WEST 151ST      APR.D-3</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>415W33RDSTAPT16E</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 415))
+       (FSN (SN (WD W)
+                (NUM 33)
+                (ORDX RD))
+            (SS ST))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 16)
+                       (ANY E))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 415)
+                  (LTR W)))
+       (HN (NUM 33))
+       (FSN (SN (WD RDSTAPT)
+                (NUM 16))
+            (DIR E)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 415))
+       (FSN (DIR W)
+            (SN (NUM 33)
+                (ORDX RD))
+            (SS ST))
+       (FAPT (AT APT)
+             (APT (NUM 16)
+                  (DIR E))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 415))
+       (FSN (SN (WD W)
+                (NUM 33)
+                (ORDX RD))
+            (SS ST))
+       (FAPT (AT APT)
+             (APT (NUM 16)
+                  (LTR E))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 415)
+           (LTR W))
+       (FSN (SN (NUM 33)
+                (ORDX RD))
+            (SS ST))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 16)
+                       (ANY E))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 415)
+           (LTR W))
+       (FSN (SN (NUM 33)
+                (ORDX RD))
+            (SS ST))
+       (FAPT (AT APT)
+             (APT (NUM 16)
+                  (DIR E))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 415)
+           (LTR W))
+       (FSN (SN (NUM 33)
+                (ORDX RD))
+            (SS ST))
+       (FAPT (AT APT)
+             (APT (NUM 16)
+                  (LTR E))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 415))
+       (FSN (SN (WD W)
+                (NUM 33)
+                (ORDX RD))
+            (SS ST))
+       (FAPT (AT APT)
+             (APT (NUM 16)
+                  (DIR E))))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 415)
+                  (DIR W)))
+       (HN (NUM 33))
+       (FSN (SN (WD RDSTAPT)
+                (NUM 16))
+            (DIR E)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 415))
+       (FSN (DIR W)
+            (SN (NUM 33)
+                (ORDX RD))
+            (SS ST))
+       (FAPT (AT APT)
+             (APT (NUM 16)
+                  (LTR E))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 415))
+       (FSN (DIR W)
+            (SN (NUM 33)
+                (ORDX RD))
+            (SS ST))
+       (FAPT (AT APT)
+             (MULTIANY (ANY 16)
+                       (ANY E))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>3014 BRI 7TH ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 30)
+           (NUM 14))
+       (FSN (SN (WD BRI)
+                (NUM 7)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 30)
+           (NUM 14))
+       (FSN (SN (WD BRI)
+                (NUM 7)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 3014))
+       (FSN (SN (WD BRI)
+                (NUM 7)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 30)))
+       (HN (NUM 14))
+       (FSN (SN (WD BRI)
+                (NUM 7)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 3014))
+       (FSN (SN (WD BRI)
+                (NUM 7)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>82  BRIGHTON 11TH STREET 1</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 82))
+       (FSN (SN (WD BRIGHTON)
+                (NUM 11)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (APT (NUM 1))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O GRF 1330 AVE OF AMERICOS</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>120 BEECH 19TH STREET 2C</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 120))
+       (FSN (SN (WD BEECH)
+                (NUM 19)
+                (ORDX TH))
+            (SS STREET))
+       (FAPT (APT (NUM 2)
+                  (LTR C))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>446 BEACH 59TH ST FAR ROCKAWAY</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>1426 WYTHE PL NO 5A BRONX</field>
+</raw>
+</datum>
+<datum>
+<raw>
+<field>WESAT 138TH ST</field>
+</raw>
+<parseTree>
+(SADDR (FSN (SN (WD WESAT)
+                (NUM 138)
+                (ORDX TH)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (WD WESAT)
+                (NUM 138)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>613-16TH 2FL BROOKLYN</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 613)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (WD TH)
+                (NUM 2)))
+       (FAPT (AT FL)
+             (MULTIANY (ANY BROOKLYN))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>670E.170THST#3A</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 670)
+           (LTR E))
+       (FSN (SN (NUM 170)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (MULTIANY (ANY 3)
+                       (ANY A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 670))
+       (FSN (SN (WD E)
+                (NUM 170)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (MULTIANY (ANY 3)
+                       (ANY A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 670))
+       (FSN (DIR E)
+            (SN (NUM 170)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 3)
+                  (LTR A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 670))
+       (FSN (SN (WD E)
+                (NUM 170)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 3)
+                  (LTR A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 670)
+           (LTR E))
+       (FSN (SN (NUM 170)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 3)
+                  (LTR A))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 670))
+       (FSN (DIR E)
+            (SN (NUM 170)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (MULTIANY (ANY 3)
+                       (ANY A))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>96-26 46 AVE             MOTHERS WORK</field>
+</raw>
+<parseTree>
+(SADDR (FAPT (APT (NUM 96)
+                  (HYPH -)
+                  (NUM 26)))
+       (HN (NUM 46))
+       (FSN (SN (WD AVE)
+                (WD MOTHERS)
+                (WD WORK))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>101-21123 ST</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 101)
+           (HYPH -)
+           (NUM 21))
+       (FSN (SN (NUM 123)))
+       (FAPT (APT (WD2 ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 101)
+           (HYPH -)
+           (NUM 21123))
+       (FSN (SN (WD ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 101)
+           (HYPH -)
+           (NUM 21))
+       (FSN (SN (NUM 123))
+            (SS ST)))</parseTree>
+<parseTree>
+(SADDR (FAPT (APT (NUM 101)
+                  (HYPH -)
+                  (NUM 21)))
+       (HN (NUM 123))
+       (FSN (SN (WD ST))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 101)
+           (HYPH -)
+           (NUM 21))
+       (FSN (SN (NUM 123)
+                (ORDX ST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>55THSTREET</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 55))
+       (FSN (SN (WD TH))
+            (SS STREET)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 55))
+       (FSN (SN (WD TH)
+                (WD STREET))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 55))
+       (FSN (SN (WD THSTREET))))</parseTree>
+<parseTree>
+(SADDR (FSN (SN (NUM 55)
+                (ORDX TH))
+            (SS STREET)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>117-12PARK LA S</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 117)
+           (HYPH -)
+           (NUM 12))
+       (FSN (SN (WD PARK)
+                (WD LA)))
+       (FAPT (APT (LTR S))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 117)
+           (HYPH -)
+           (NUM 12))
+       (FSN (SN (WD PARK))
+            (SS LA)
+            (DIR S)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 117)
+           (HYPH -)
+           (NUM 12))
+       (FSN (SN (WD PARK)
+                (WD LA))
+            (DIR S)))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 117)
+           (HYPH -)
+           (NUM 12))
+       (FSN (SN (WD PARK)
+                (WD LA)
+                (WD S))))</parseTree>
+<parseTree>
+(SADDR (HN (NUM 117)
+           (HYPH -)
+           (NUM 12))
+       (FSN (SN (WD PARK))
+            (SS LA))
+       (FAPT (APT (LTR S))))</parseTree>
+</datum>
+
+-->
+
+</data>
