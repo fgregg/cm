@@ -1,0 +1,125 @@
+// This list taken from 
+// http://www.bennetyee.org/ucsd-pages/area.state.html
+// 
+// The mapping from area code to state is unique except for Canada
+
+// US
+AK : 907
+AL : 205, 251, 256, 334
+AR : 479, 501, 870
+AZ : 480, 623, 928, 602
+CA : 628, 341, 764, 925, 909, 871, 562, 661, 657, 510, 650, 949, 760, 415, 951, 752, 831, 209, 669, 408, 559, 626, 442, 530, 916, 707, 627, 714, 310, 323, 213, 424, 747, 818, 858, 935, 619, 805, 369
+CO : 720, 303, 970, 719
+CT : 203, 959, 475, 860
+DC : 202
+DE : 302
+FL : 689, 407, 239, 826, 727, 321, 754, 954, 352, 863, 904, 386, 561, 772, 786, 305, 861, 941, 813, 850
+GA : 478, 770, 470, 404, 706, 678, 912, 229
+HI : 808
+IA : 515, 319, 563, 641, 712
+ID : 208
+IL : 217, 282, 872, 312, 773, 464, 708, 815, 224, 847, 618, 309, 331, 630
+IN : 765, 574, 260, 219, 317, 812
+KS : 913, 785, 316, 620
+KY : 327, 502, 859, 606, 270
+LA : 504, 985, 225, 318, 337
+MA : 774, 508, 781, 339, 857, 617, 978, 351, 413
+MD : 443, 410, 280, 249, 969, 240, 301
+ME : 207, 383
+MI : 517, 546, 810, 278, 313, 586, 248, 734, 269, 989, 616, 231, 679, 947, 906
+MN : 612, 320, 651, 763, 952, 218, 507
+MO : 636, 660, 975, 816, 314, 557, 573, 417
+MS : 601, 662, 228
+MT : 406
+NC : 336, 252, 984, 919, 980, 910, 828, 704
+ND : 701
+NE : 402, 308
+NH : 603
+NJ : 908, 848, 732, 551, 201, 862, 973, 609, 856
+NM : 505, 957
+NV : 702, 775
+NY : 315, 518, 716, 585, 646, 347, 718, 212, 516, 917, 845, 631, 607, 914
+OH : 216, 330, 234, 567, 419, 380, 440, 740, 614, 283, 513, 937
+OK : 918, 580, 405
+OR : 503, 971, 541
+PA : 814, 717, 570, 358, 878, 835, 484, 610, 445, 267, 215, 724, 412
+RI : 401
+SC : 843, 864, 803
+SD : 605
+TN : 423, 865, 931, 615, 901, 731
+TX : 254, 325, 713, 940, 817, 430, 903, 806, 737, 512, 361, 210, 936, 409, 979, 972, 469, 214, 682, 832, 281, 830, 956, 432, 915
+UT : 435, 801, 385
+VA : 434, 804, 757, 703, 571, 540, 276, 381, 236
+VT : 802
+WA : 509, 360, 564, 206, 425, 253
+WI : 715, 920, 414, 262, 608, 353, 420
+WV : 304
+WY : 307
+
+// Canada
+AB : 403, 780
+BC : 250, 778, 604
+MB : 204
+NB : 506
+NF : 709
+NS : 902 // Also PE
+PE : 902 // Also NS
+ON : 705, 289, 905, 647, 416, 613, 519, 807
+QC : 438, 514, 819, 418, 450
+SK : 306
+YT : 867 // Also Northwest Territories, Nunavut
+NT : 867 // Also Yukon Territory, Nunavut
+NU : 867 // Also Northwest Territories, Nunavut
+
+// US Possessions
+// Note: some are unknown
+AS : 684
+GU : 671
+MP : 670
+PR : 939, 787
+VI : 340
+
+// Other Caribbean
+// Note: Most of the caribbean used to be 809.  
+//       Now only the Dominican republic is 809, and other things have changed.
+
+// Anguilla : 264
+// Antigua and Barbuda : 268
+// Barbados : 246
+// Bermuda : 441
+// British VI : 284
+// Dominica : 767
+// Dominican Republic : 809
+// Frech West Indies : 590
+// Grenada : 473
+// Montserrat : 664
+// St. Kitts & Nevis : 869
+// St. Lucia : 758
+// St. Vincent & Grenadines : 784
+// Trinidad and Tobago : 868
+// Bahamas : 242
+// Cayman Islands : 345
+// Jamaica : 876
+// Turks & Caicos Islands : 649
+
+
+// Others (don't really map to anything)
+
+// 354 Unknown Canadian region
+// 600 Canadian Services
+
+// 456 Inbound International
+// 700 Interexchange Carrier Services
+
+// 311, 411, 611, 811 Reserved for Special applications
+// 211 Local community info
+// 511 Nationwide travel inforation
+// 911 Emergency
+
+// 800, 888, 877, 866 US/Ca toll free
+// 855, 844, 833, 822 prosed toll free (not yet in service)
+
+// 880, 881, 882 Paid Toll-Free Service
+
+// 976 Pay Services
+// 999 (area code unavailable)

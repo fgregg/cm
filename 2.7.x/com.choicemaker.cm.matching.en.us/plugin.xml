@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.matching.en.us"
+   name="Matching locale en.us Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="us.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.matching.gen"/>
+      <import plugin="com.choicemaker.cm.matching.en"/>
+      <import plugin="com.choicemaker.cm.matching.cfg" export="true"/>
+   </requires>
+
+
+   <extension
+         point="com.choicemaker.cm.matching.gen.set">
+      <fileSet
+            name="stateCodes"
+            file="etc/data/stateCodes.txt">
+      </fileSet>
+      <fileSet
+            name="possessionCodes"
+            file="etc/data/possessionCodes.txt">
+      </fileSet>
+      <fileSet
+            name="militaryStateCodes"
+            file="etc/data/militaryStateCodes.txt">
+      </fileSet>
+      <fileSet
+            name="stateWords"
+            file="etc/data/stateWords.txt">
+      </fileSet>
+      <fileSet
+            name="largeCities"
+            file="etc/data/largeCities.txt">
+      </fileSet>
+   </extension>
+   <extension
+         point="com.choicemaker.cm.matching.gen.map">
+      <fileMap
+            name="stateCodesToStates"
+            file="etc/data/stateCodesToStates.txt">
+      </fileMap>
+      <fileMap
+            name="stateNamesToStateCodes"
+            file="etc/data/stateNamesToStateCodes.txt">
+      </fileMap>
+   </extension>
+   <extension
+         point="com.choicemaker.cm.matching.gen.set">
+      <fileSet
+            name="stateWords_1_1"
+            file="etc/data/stateWords_1_1.txt">
+      </fileSet>
+      <fileSet
+            name="stateWords_1_2"
+            file="etc/data/stateWords_1_2.txt">
+      </fileSet>
+      <fileSet
+            name="stateWords_2_2"
+            file="etc/data/stateWords_2_2.txt">
+      </fileSet>
+   </extension>
+   <extension
+         point="com.choicemaker.cm.matching.gen.set">
+      <fileSet
+            name="en.us.lastNameFragments"
+            file="etc/data/en.us.lastNameFragments.txt">
+      </fileSet>
+   </extension>
+   <extension
+         point="com.choicemaker.cm.matching.gen.map">
+      <fileMap
+            singleLine="true"
+            name="en.us.standardNamePrefixes"
+            file="etc/data/en.us.standardNamePrefixes.txt">
+      </fileMap>
+      <fileMap
+            singleLine="true"
+            name="en.us.standardNameSuffixes"
+            file="etc/data/en.us.standardNameSuffixes.txt">
+      </fileMap>
+      <fileMap
+            singleLine="true"
+            name="en.us.namePrefixGenders"
+            file="etc/data/en.us.namePrefixGenders.txt"
+            valueType="String">
+      </fileMap>
+      <fileMap
+            singleLine="true"
+            name="en.us.areaCodesToStates"
+            file="etc/data/en.us.areaCodesToStates.txt">
+      </fileMap>
+      <fileMap
+            singleLine="true"
+            name="en.us.standardFirstNames"
+            file="etc/data/en.us.standardFirstNames.txt">
+      </fileMap>
+      <fileMap
+            name="us.census.firstNameFrequency"
+            file="etc/data/us.census.firstNameFrequency"
+            valueType="int">
+      </fileMap>
+      <fileMap
+            name="us.census.lastNameFrequency"
+            file="etc/data/us.census.lastNameFrequency"
+            valueType="int">
+      </fileMap>
+   </extension>
+   <extension
+         point="com.choicemaker.cm.matching.gen.relation">
+      <fileRelation
+            name="en.us.adjacentStates"
+            file="etc/data/en.us.adjacentStates.txt">
+      </fileRelation>
+      <fileRelation
+            name="en.us.nicknames2"
+            file="etc/data/en.us.nicknames2.txt">
+      </fileRelation>
+   </extension>
+   <extension
+         point="com.choicemaker.cm.matching.cfg.parser">
+      <parser
+            name="en.us.defaultAddressParser"
+            file="etc/parsers/en.us.defaultAddressParser.xml">
+      </parser>
+      <parser
+            name="en.us.defaultNameParser"
+            file="etc/parsers/en.us.defaultNameParser.xml">
+      </parser>
+   </extension>
+
+</plugin>
