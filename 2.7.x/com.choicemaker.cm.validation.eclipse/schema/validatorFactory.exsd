@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<schema targetNamespace="com.choicemaker.cm.custom.mci.nameparser">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="com.choicemaker.cm.validation.eclipse" id="validatorFactory" name="Validator Factory"/>
+      </appInfo>
+      <documentation>
+         Defines a plugin-configurable factory for plugin-configurable instances of IValidator.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+           <element ref="factory"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="factory">
+      <complexType>
+         <attribute name="handledValidatorExtensionPoint" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The validator extensionPoint that is handled by a validator factory class.
+                  See the class attribute.
+
+                  Each factory class should handle extensions of exactly one
+                  validator extension point, and conversely, each validator extension
+                  point should be handled by exactly one type of factory class.
+                  
+                  Note, however, that a validator extension may have multiple configurations,
+									each implemented by a different Java classes. For example, the set-based validator
+									extension might be implemented by StringTokenValidator, StringPatternValidator,
+                  and StringPatternInvalidator classes. All of these classes differ in the
+                  implementation of the isValid method, but they are similar in how they
+                  are constructed. Their factory methods require the same instance data,
+                  which in the case of set-based validators would be an instanced of
+									java.util.Set (and specified for an eclipe-based implementation by a
+									named configuration of the Sets extension point).
+                  
+                  For example, a StringTokenValidator might have a single argument
+                  constructor to specify a Sets instance holding valid string tokens for a
+                  name suffix ("Jr", "Sr", "2nd", etc); a StringPatternValidator might have a
+                  single argument constructor to specify a Sets instance holding valid
+                  SSN patterns ("[0-9]{3,}-[0-9]{2,}-[0-9]{4,}", "[0-9]{9,}", etc); and a
+                  StringPatternInvalidator might have a single argument constructor to
+                  specify a Sets instance holding invalid generic patterns for a child's first
+                  name ("^MALE .*", "^BABY .*", "^TWIN .*", etc.). These various classes
+                  would use three different factory classes, but the factory classes would
+                  be similar in knowing how to find and use the appropriate java.util.Set
+                  required to construct a given set-based validator.
+                  
+                  In other words, validator extension points are distinguished by the signature of
+                  their construction or initialization methods. For this reason, there is a one-to-one mapping
+                  of validator extension points to the classes that implement validator factory extensions.
+                  
+                  It is an error for more than one factory extension class to register to handle the same
+                  validator extension point. Unspecified behavior will result.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The class that implements a validator factory.
+                  See the handledValidatorExtensionPoint attribute.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.validation.IValidatorFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.validation.eclipse"
+   name="Eclipse-based Validation"
+   version="1.0.0"
+   provider-name="Rick Hall">
+
+   <runtime>
+      <library name="validation-eclipse.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.matching.gen"/>
+   </requires>
+
+   <extension-point id="simpleValidator" name="Simple Validator" schema="schema/simpleValidator.exsd"/>
+   <extension-point id="setBasedValidator" name="Set-Based Validator" schema="schema/setBasedValidator.exsd"/>
+   <extension-point id="aggregateValidator" name="Aggregate Validator" schema="schema/aggregateValidator.exsd"/>
+   <extension-point id="validatorFactory" name="Validator Factory" schema="schema/validatorFactory.exsd"/>
+
+   <extension
+         point="com.choicemaker.cm.validation.eclipse.simpleValidator">
+      <simple
+            name="nonEmptyStringValidator"
+            class="com.choicemaker.cm.validation.eclipse.impl.NonEmptyStringValidator">
+      </simple>
+      <simple
+            name="stringContainsLettersValidator"
+            class="com.choicemaker.cm.validation.eclipse.impl.StringContainsLettersValidator">
+      </simple>
+   </extension>
+   <extension
+         point="com.choicemaker.cm.validation.eclipse.validatorFactory">
+      <factory
+            handledValidatorExtensionPoint="com.choicemaker.cm.validation.eclipse.simpleValidator"
+            class="com.choicemaker.cm.validation.eclipse.impl.SimpleValidatorFactory">
+      </factory>
+      <factory
+            handledValidatorExtensionPoint="com.choicemaker.cm.validation.eclipse.setBasedValidator"
+            class="com.choicemaker.cm.validation.eclipse.impl.SetBasedValidatorFactory">
+      </factory>
+      <factory
+            handledValidatorExtensionPoint="com.choicemaker.cm.validation.eclipse.aggregateValidator"
+            class="com.choicemaker.cm.validation.eclipse.impl.AggregateValidatorFactory">
+      </factory>
+   </extension>
+
+</plugin>
