@@ -1,0 +1,6 @@
+FLR
+1
+APT
+1
+APARTMENT
+1

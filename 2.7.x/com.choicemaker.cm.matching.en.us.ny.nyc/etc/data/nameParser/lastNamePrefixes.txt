@@ -1,0 +1,15 @@
+# Last name prefixes
+# # Lines beginning with a hash are comments.
+# Comments and blank lines are discarded.
+# Syntax follows java.util.regex.Pattern specification.
+
+SAINT
+ST
+ST
+DE
+DA
+LE
+LA
+VAN
+DER
+VANDER
