@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-cm</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>choicemaker-cm-server</artifactId>
+  <packaging>pom</packaging>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+  </build>
+
+  <modules>
+  </modules>
+
+</project>
