@@ -97,7 +97,6 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.xerces</artifactId>
-      <version>4.0.13-SNAPSHOT</version>
     </dependency>
   </dependencies>
 

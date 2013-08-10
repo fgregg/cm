@@ -115,12 +115,10 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 

@@ -94,22 +94,18 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<dependency>
 			<groupId>com.choicemaker.cm</groupId>
 			<artifactId>org.apache.xerces</artifactId>
-			<version>4.0.13-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.choicemaker.cm</groupId>
 			<artifactId>org.apache.ant</artifactId>
-			<version>1.5.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.choicemaker.cm</groupId>
 			<artifactId>org.eclipse.ant.core</artifactId>
-			<version>2.1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.choicemaker.cm</groupId>
 			<artifactId>org.eclipse.core.runtime</artifactId>
-			<version>2.1.1-SNAPSHOT</version>
 		</dependency>
   </dependencies>
 
