@@ -8,11 +8,12 @@
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../choicemaker-cm/pom.xml</relativePath>
   </parent>
 
   <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Matching Plug-in (Australian English Locale)</name>
+  <name>ChoiceMaker Matching Plug-in (Australian English)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>matching-en-au.jar</eclipse.plugin.runtime.library.name>
