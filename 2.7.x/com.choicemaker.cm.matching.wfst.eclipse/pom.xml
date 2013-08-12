@@ -8,11 +8,12 @@
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../choicemaker-cm/pom.xml</relativePath>
   </parent>
 
   <artifactId>com.choicemaker.cm.matching.wfst.eclipse</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Matching Plug-in (WFST Eclipse-specific)</name>
+  <name>ChoiceMaker WFST Collection</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>wfst-eclipse.jar</eclipse.plugin.runtime.library.name>
