@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.blocking.exact.base"
+   name="Base Exact Base Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="base.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.io.blocking.base"/>
+   </requires>
+
+
+   <extension
+         id="exactBlockingGenerator"
+         name="exactBlockingGenerator"
+         point="com.choicemaker.cm.core.generatorPlugin">
+      <plugin
+            name="Blocking Exact"
+            class="com.choicemaker.cm.io.blocking.exact.base.gen.BlockingGenerator">
+      </plugin>
+   </extension>
+   <extension
+         id="exactInMemoryAccessor"
+         name="exactInMemoryAccessor"
+         point="com.choicemaker.cm.core.accessor">
+      <accessor
+            class="com.choicemaker.cm.io.blocking.exact.base.ExactInMemoryBlockerAccessor">
+      </accessor>
+   </extension>
+
+</plugin>
