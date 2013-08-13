@@ -472,6 +472,11 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
+        <version>${choicemaker.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
         <version>${choicemaker.version}</version>
       </dependency>

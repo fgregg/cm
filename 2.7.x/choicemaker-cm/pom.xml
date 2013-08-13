@@ -47,6 +47,7 @@
     <module>../com.choicemaker.cm.io.blocking.automated.base</module>
     <module>../com.choicemaker.cm.io.blocking.base</module>
     <module>../com.choicemaker.cm.io.db.base</module>
+    <module>../com.choicemaker.cm.io.flatfile.base</module>
     <module>../com.choicemaker.cm.io.xml.base</module>
     <module>../com.choicemaker.cm.matching.cfg</module>
     <module>../com.choicemaker.cm.matching.en</module>
