@@ -84,7 +84,12 @@ public class ConnectionPoolDataSourceXmlConf {
 					// finally create the pool and we're ready to go!
 					// JdbcConnectionPool pool = new JdbcConnectionPool(name, args);
 					// DataSources.addDataSource(name, new JdbcConnectionPoolDataSource(name));
+					//
+					// FIXME consider Apache DBCP (http://commons.apache.org/proper/commons-dbcp/)
+					// and Steve Waldman's C3P0 (http://www.mchange.com/projects/c3p0/index.html)
+					//
 					throw new RuntimeException("not yet implemented");
+					// END FIXME
 						
 				} catch (Exception ex) {
 					logger.warn("Error creating connection pool.", ex);
