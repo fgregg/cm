@@ -1,0 +1,953 @@
+<HTML>
+<HEAD>
+<TITLE>Protomatter Syslog Configuration Examples</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="stylesheet.css" TITLE="Style">
+</HEAD>
+<BODY>
+
+<TABLE WIDTH="100%" BORDER=0 CELLPADDING=0 CELLSPACING=0>
+    <TR><TD CLASS="whitetd" ALIGN="right">
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0>
+    <TR>
+        <TH><A href="../../../../index.html">Main:</a></TH>
+        <TH><A href="syslog-whitepaper.html">White Paper</a></TH>
+        <TH><A href="syslog-faq.html">FAQ</a></TH>
+        <TH>Examples</TH>
+        <TH><A href="package-summary.html">JavaDoc</a></TH>
+        <TH><A href="classloader-warning.html">Classloader</a></TH>
+        <TH><A href="syslog-performance.html">Performance</a></TH>
+    </TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+
+
+<CENTER>
+<H2>Protomatter Syslog Configuration Examples</H2>
+<I>Nate Sammons - January, 2003</I><BR>
+<I>Covers Release 1.1.8</I>
+</CENTER>
+<P>
+
+<H2>Introduction</H2>
+
+<P>
+By popular demand, here are examples of how to configure
+Syslog via XML files to do various things.  Whenever you
+see text in double-qotes, like this:  "<TT>true</TT>" you
+should leave the quotes off when entering the text
+in the config file.  The quotes are there to offset
+the text from the rest of the paragraph.
+</P>
+
+<P>
+You can sanity-check a configuration file by handing it
+to the <TT>SyslogXML</TT> from a command line, like this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  java com.protomatter.syslog.xml.SyslogXML <I>config-file</I> &nbsp;
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+The file will be parsed, loaded and used to configure Syslog.
+It will then be printed back out to the console after having
+all default values for unspecified parameters filled in.  It's
+also a nice way to re-format an otherwise ugly config file.
+</P>
+
+<P>
+The default Syslog configuration looks like this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;Syslog defaultMask="WARNING"&gt;
+    <FONT COLOR="brown">&lt;Logger name="PrintWriterLog.err"
+      class="com.protomatter.syslog.PrintWriterLog"&gt;  </FONT>
+
+      <FONT color="blue">&lt;Format class="com.protomatter.syslog.SimpleSyslogTextFormatter"&gt; &nbsp;
+        &lt;showChannel&gt;false&lt;/showChannel&gt;
+        &lt;showThreadName&gt;false&lt;/showThreadName&gt;
+        &lt;showHostName&gt;false&lt;/showHostName&gt;
+        &lt;dateFormat&gt;MM/dd/yyyy HH:mm:ss&lt;/dateFormat&gt;
+        &lt;dateFormatCacheTime&gt;1000&lt;/dateFormatCacheTime&gt;
+        &lt;dateFormatTimeZone&gt;America/Denver&lt;/dateFormatTimeZone&gt;
+      &lt;/Format&gt;</FONT>
+
+      <FONT color="green">&lt;Policy class="com.protomatter.syslog.SimpleLogPolicy"&gt;
+        &lt;channels&gt;ALL_CHANNEL&lt;/channels&gt;
+        &lt;logMask&gt;INHERIT_MASK&lt;/logMask&gt;
+      &lt;/Policy&gt;</FONT>
+
+      <FONT color="brown">&lt;stream&gt;System.err&lt;/stream&gt;
+    &lt;/Logger&gt;</FONT>
+  &lt;/Syslog&gt;
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+Configuration files for Syslog are composed of a <TT>&lt;Syslog&gt;</TT>
+tag which contains one or more <TT>&lt;Logger&gt;</TT> tags.  Each
+<TT>&lt;Logger&gt;</TT> tag contains a <TT>&lt;Format&gt;</TT> tag,
+a <TT>&lt;Policy&gt;</TT> tag and logger-specific tags.
+</P>
+
+<P>
+In the above example, the <TT>&lt;Syslog&gt;</TT> tag is colored black,
+the <TT>&lt;Format&gt;</TT> tag is colored
+<B><FONT color="blue">blue</FONT></B>, the <TT>&lt;Policy&gt;</TT>
+tag is colored <B><FONT color="green">green</FONT></B>, and the
+logger-specific tags are colored <B><FONT color="brown">brown</FONT></B>.
+Those conventions will be used throughout this document.
+</P>
+
+<P>
+Throughout this document, I'll give examples of configurations for
+each "chunk" that can be assembled into complete configurations.
+</P>
+
+<H2>&lt;Syslog&gt; tag examples</H2>
+
+<P>
+There's not really a lot of configuration to do with this tag.  You
+can set the <TT>defaultMask</TT> and <TT>hostname</TT> attributes,
+and that's it.
+</P>
+
+<P>
+The <TT>hostname</TT> attribute is required if you are using the
+<TT>DatabaseLog</TT> logger, which is discussed later.  Syslog
+will attempt to set this value to whatever the local host thinks
+its name is, but it should be explicitly set on systems that
+are hosting multiple applications on multiple IP addresses, etc.
+</P>
+
+<P>
+The <TT>defaultMask</TT> attribute sets the "system-wide" log
+mask that log policies can inherit.  Log masks can be one of
+two things:
+</P>
+
+<P>
+<UL>
+<DL>
+<DT>The name of a log level</DT>
+<DD>
+If the mask is set to the name of a log level (<TT>DEBUG</TT>,
+<TT>INFO</TT>, <TT>WARNING</TT>, <TT>ERROR</TT> or <TT>FATAL</TT>)
+then the mask is set to accept messages <I>at or above</I> the
+given level.  A mask set to "<TT>WARNING</TT>" would therefore
+accept messages at the <TT>WARNING</TT>, <TT>ERROR</TT> or <TT>FATAL</TT>
+levels.
+</DD>
+
+<DT>A list of log levels</DT>
+<DD>
+If the mask is set to a list (length 1 or more) of log levels, each
+with an "<TT>=</TT>" sign in front of it, then message at any of the
+named levels will be logged.  A mask set to "<TT>=INFO,=WARNING</TT>"
+would therefore accept messages at the <TT>INFO</TT> and <TT>WARNING</TT>
+levels only and will ignore all other messages.  A mask set
+to "<TT>=INFO</TT>" would therefore accept messages at the
+<TT>INFO</TT> level only and will ignore all other messages.
+</DD><P>
+
+</DL>
+</UL>
+</P>
+
+<P>
+Here is an example of a <TT>&lt;Syslog&gt;</TT> tag with a default mask
+set to accept only <TT>INFO</TT> messages, and the <TT>hostname</TT>
+attribute set:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;Syslog defaultMask="=INFO" hostname="sillysailor.protomatter.com"&gt; &nbsp;
+
+  &lt;/Syslog&gt;
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<H2>&lt;Format&gt; tag examples</H2>
+
+<P>
+Each <TT>&lt;Logger&gt;</TT> tag can have an optional <TT>&lt;Format&gt;</TT>
+tag inside it.  If it is omitted, the default is this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT color="blue">&lt;Format class="com.protomatter.syslog.SimpleSyslogTextFormatter"&gt; &nbsp;
+    &lt;classWidth&gt;20&lt;/classWidth&gt;
+    &lt;channelWidth&gt;15&lt;/channelWidth&gt;
+    &lt;threadWidth&gt;15&lt;/threadWidth&gt;
+    &lt;hostWidth&gt;15&lt;/hostWidth&gt;
+    &lt;showChannel&gt;false&lt;/showChannel&gt;
+    &lt;showThreadName&gt;false&lt;/showThreadName&gt;
+    &lt;showHostName&gt;false&lt;/showHostName&gt;
+    &lt;dateFormat&gt;MM/dd/yyyy HH:mm:ss&lt;/dateFormat&gt;
+    &lt;dateFormatCacheTime&gt;1000&lt;/dateFormatCacheTime&gt;
+    &lt;dateFormatTimeZone&gt;America/Denver&lt;/dateFormatTimeZone&gt;
+  &lt;/Format&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+The default formatting class is
+<TT><A href="SimpleSyslogTextFormatter.html">com.protomatter.syslog.SimpleSyslogTextFormatter</a></TT>
+which is all most people use.</P>
+
+<P>
+The value for the <TT>dateFormatTimeZone</TT> is actually set to whatever
+<TT>TimeZone.getDefault()</TT> returns.
+</P>
+
+<P>
+The value for the <TT>&lt;dateFormat&gt;</TT> element is anything that the
+<TT>java.text.SimpleDateFormat</TT> class will take as a date format string.
+Refer to the JavaDoc for that class to see all the format options.  For instance,
+if you wanted the above format to look basically the same except for using a
+12 hour time format rather than a 24 hour format, you would specify
+"<TT>MM/dd/yyyy hh:mm:ss a</TT>" as the format.
+</P>
+
+<P>
+If you want the message channel name to appear in the output, set the value
+of the <TT>&lt;showChannel&gt;</TT> element to "<TT>true</TT>".  The meaning
+of the other options is fairly obvious -- each of the "width" parameters
+are field width settings, and the "show" parameters toggle the visibility of
+certain fields.
+</P>
+
+<H2>&lt;Policy&gt; tag examples</H2>
+
+<P>
+The <TT>&lt;Policy&gt;</TT> tag for a logger determines what messages will
+be received by the logger.
+</P>
+
+<P>
+The default <TT>&lt;Policy&gt;</TT> tag is as follows:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT color="green">&lt;Policy class="com.protomatter.syslog.SimpleLogPolicy"&gt; &nbsp;
+    &lt;channels&gt;ALL_CHANNEL&lt;/channels&gt;
+    &lt;logMask&gt;INHERIT_MASK&lt;/logMask&gt;
+  &lt;/Policy&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+The default log policy class is the
+<TT><A href="SimpleLogPolicy.html">com.protomatter.syslog.SimpleLogPolicy</A></TT>.
+This configuration specifies that the logger will receive messages on any channel,
+and will inherit its mask from Syslog itself.  This means that whatever
+the <TT>defaultMask</TT> attribute of the <TT>&lt;Syslog&gt;</TT> tag is set to
+will be used as the mask for this logger.
+</P>
+
+<P>
+Let's say that you wanted to have the logger only listen to the channel
+named "<TT>com.yourcompany.admin</TT>" channel.  You would use the following
+configuration (changes in <font color="red">red</font>):
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT color="green">&lt;Policy class="com.protomatter.syslog.SimpleLogPolicy"&gt; &nbsp;
+    &lt;channels&gt;<font color="red">com.yourcompany.admin</font>&lt;/channels&gt; &nbsp;
+    &lt;logMask&gt;INHERIT_MASK&lt;/logMask&gt;
+  &lt;/Policy&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+You can also specify a list of channels (commas and spaces are used as separators,
+so don't use them in channel names), like this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT color="green">&lt;Policy class="com.protomatter.syslog.SimpleLogPolicy"&gt;
+    &lt;channels&gt;<font color="red">com.yourcompany.admin, com.yourcompany.user</font>&lt;/channels&gt; &nbsp;
+    &lt;logMask&gt;INHERIT_MASK&lt;/logMask&gt;
+  &lt;/Policy&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+The other thing the default policy can do is filter messages based on their level (or severity as
+it is sometimes called).  The log severities are (from least to most severe):
+<TT>DEBUG</TT>, <TT>INFO</TT>, <TT>WARNING</TT>, <TT>ERROR</TT>, <TT>FATAL</TT>.
+</P>
+
+<P>
+If you specify the mask as the name of a level (like "<TT>WARNING</TT>"), all messages
+at or above that level will be received by the logger.  If you want to only have the logger
+receive messages at a set of levels (let's say <TT>INFO</TT> and <TT>WARNING</TT>) but
+not any other levels, you can specify a comma-separated list of level names with
+an "<TT>=</TT>" prepended to the name.  Consider this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT color="green">&lt;Policy class="com.protomatter.syslog.SimpleLogPolicy"&gt; &nbsp;
+    &lt;channels&gt;ALL_CHANNEL&lt;/channels&gt;
+    &lt;logMask&gt;<font color="red">=INFO, =WARNING</font>&lt;/logMask&gt;
+  &lt;/Policy&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+That configuration will log messages coming in on any channel at the <TT>INFO</TT> or
+<TT>WARNING</TT> levels.
+</P>
+
+<P>Another policy class that comes with Syslog is the
+<TT><A href="PerClassPolicy.html">com.protomatter.syslog.PerClassPolicy</a></TT>, which allows you
+to specify different channel lists and levels to be logged by messages
+coming from different classes.  Its configuration can be pretty complex.
+The basic look of this policy's configuration is:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT color="green">&lt;Policy class="com.protomatter.syslog.PerClassPolicy"&gt; &nbsp;
+    &lt;channels&gt;ALL_CHANNEL&lt;/channels&gt;
+    &lt;logMask&gt;INHERIT_MASK&lt;/logMask&gt;
+
+    &lt;PolicyGroup&gt;
+      &lt;channels&gt;ALL_CHANNEL&lt;/channels&gt;
+      &lt;logMask&gt;INHERIT_MASK&lt;/logMask&gt;
+
+      &lt;!-- specify explicit class names --&gt;
+      &lt;className&gt;<I>some.class.Name</I>&lt;/className&gt;
+      &lt;className&gt;<I>some.other.class.Name</I>&lt;/className&gt;
+
+      &lt;!-- specify Perl5 regular expressions matches against class names --&gt; &nbsp;
+      &lt;classPattern&gt;<I>some.class.*</I>&lt;/classPattern&gt;
+      &lt;classPattern&gt;<I>some.foo.class.*</I>&lt;/classPattern&gt;
+    &lt;/PolicyGroup&gt;
+
+    &lt;!-- add more PolicyGoup elements as needed --&gt;
+
+  &lt;/Policy&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+The basic way that this works is that the policy asks each policy group in turn
+if a given message should be logged.  If any of those groups says <i>yes</i>,
+the message is sent to the logger.  If none of the groups gives its blessing,
+the policy asks itself (it is a subclass of <TT><A href="SimpleLogPolicy.html">SimpleLogPolicy</a></TT>) if the
+message should be logged.  This means that the channel list and log mask
+for the policy itself is used.
+</P>
+
+<P>
+Each policy group has its own channel list and log mask.  It also has a
+list of class names, and Perl5 regular expressions.  If the message passes
+the channel and mask test, the name of the class making the log request
+is compared against the list of explicit class names and the list of
+Perl5 regular expressions.  You don't have to specify any explict class
+names or regular expressions, but it makes sense to have at least one.
+</P>
+
+<P>
+So, if that still sounds complicated, let's try an example.  The following
+example will:
+</P>
+
+<P>
+<UL>
+    <LI>Log any message coming in on the <TT>com.yourcompany.admin</TT>
+        channel at or above the <TT>WARNING</TT> level.
+    </LI>
+    <LI>Log any message coming from the <TT>com.protomatter.blah.BlahBlah</TT> or
+        <TT>com.protomatter.blah.FooBar</TT> classes which were sent at the
+        <TT>INFO</TT> and <TT>ERROR</TT> levels on the <TT>com.yourcompany.jibber</TT> or
+        <TT>com.yourcompany.jabber</TT> channels.
+    </LI>
+    <LI>Log messages coming in on the <TT>com.yourcompany.user</TT> channel at
+        any level from the <TT>com.protomatter.foo.BazBuz</TT> class and any
+        class whose name matches the "<TT>com.yourcompany.user.*</TT>" pattern.
+    </LI>
+</UL>
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT color="green">&lt;Policy class="com.protomatter.syslog.PerClassPolicy"&gt; &nbsp;
+    &lt;channels&gt;com.yourcompany.admin&lt;/channels&gt;
+    &lt;logMask&gt;WARNING&lt;/logMask&gt;
+
+    &lt;PolicyGroup&gt;
+      &lt;channels&gt;com.yourcompany.jibber, com.yourcompany.jabber&lt;/channels&gt; &nbsp;
+      &lt;logMask&gt;=INFO, =ERROR&lt;/logMask&gt;
+
+      &lt;className&gt;com.protomatter.blah.BlahBlah&lt;/className&gt;
+      &lt;className&gt;com.protomatter.blah.FooBar&lt;/className&gt;
+    &lt;/PolicyGroup&gt;
+
+    &lt;PolicyGroup&gt;
+      &lt;channels&gt;com.yourcompany.user&lt;/channels&gt;
+      &lt;logMask&gt;DEBUG&lt;/logMask&gt;
+
+      &lt;className&gt;com.protomatter.foo.BazBuz&lt;/className&gt;
+      &lt;classPattern&gt;com.yourcompany.user.*&lt;/classPattern&gt;
+    &lt;/PolicyGroup&gt;
+
+    &lt;!-- add more PolicyGoup elements as needed --&gt;
+
+  &lt;/Policy&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+As you can see, this policy can be extremely picky about what it pays attention to.
+This is really only useful if you are having problems with a certain class and
+want to be more verbose about logging messages coming from it.  Be aware that if
+you use the patterns, it's fairly slow because it is using the ORO regular
+expression package to match class names.  It's generally better to use
+the <TT><A href="SimpleLogPolicy.html">SimpleLogPolicy</a></TT> if you can.
+</P>
+
+<P>
+Syslog also offers a the <TT><A href="PerChannelPolicy.html">PerChannelPolicy</A></TT>,
+which is like the <TT><A href="PerClassPolicy.html">PerClassPolicy</A></TT> with
+"class" replaced with "channel" -- it offers a great deal of flexability where channels
+are used extensively.  Please refer to the JavaDoc for
+<TT><A href="PerChannelPolicy.html">PerChannelPolicy</A></TT> and
+<A href="xml/PerChannelPolicy_Helper.html">its XML configuration class</A> for
+configuration information.
+</P>
+
+<H2>&lt;Logger&gt; tag examples</H2>
+
+<DL>
+
+<DT><H3><a href="PrintWriterLog.html">PrintWriterLog</A></H3></DT>
+<DD>
+<P>
+This logger writes to either standard out or standard error.  It's configuration looks like this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT COLOR="brown">&lt;Logger name="<I>loggerName</I>" class="com.protomatter.syslog.PrintWriterLog"&gt;</FONT> &nbsp;
+    <FONT color="blue">&lt;!-- format declaration --&gt;</FONT>
+    <FONT color="green">&lt;!-- policy declaration --&gt;</FONT>
+
+    <FONT color="brown">&lt;stream&gt;System.err&lt;/stream&gt;
+  &lt;/Logger&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+This one will write to standard error.  If you want it to write to standard out,
+replace "<TT>System.err</TT>" with "<TT>System.out</TT>".
+</P>
+
+</DD><P>
+
+<DT><H3><A href="FileLog.html">FileLog</A></H3></DT>
+<DD>
+<P>
+This logger simply writes to a file on the filesystem.  It's configuration looks like this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT COLOR="brown">&lt;Logger name="<I>loggerName</I>" class="com.protomatter.syslog.FileLog"&gt;</FONT> &nbsp;
+    <FONT color="blue">&lt;!-- format declaration --&gt;</FONT>
+    <FONT color="green">&lt;!-- policy declaration --&gt;</FONT>
+
+    <FONT color="brown">&lt;fileName&gt;path/to/file.log&lt;/fileName&gt;
+    &lt;append&gt;true&lt;/append&gt;
+    &lt;autoFlush&gt;true&lt;/autoFlush&gt;
+  &lt;/Logger&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+The path specified can either be a an absolute path like "<TT>/var/log/blah.log</TT>" or a
+relative path like "<TT>logs/blah.log</TT>" in which case the file is relative to
+where the Java VM was started.
+</P>
+
+<P>
+If <TT>&lt;autoFlush&gt;</TT> is set to <TT>true</TT>, then the stream going to the file is
+flushed each time a message is received by the logger.  If it's set to <TT>false</TT> then
+output to the file is buffered.  Buffering output is much faster if there's lots of
+log messages, but it may also appear that the logger isn't writing to the file at times
+because the messages are waiting in the buffer.
+</P>
+
+<P>
+If <TT>&lt;append&gt;</TT> is set to <TT>true</TT>, then any existing file will be
+appended to when the logger starts writing.  If it's set to <TT>false</TT> an existing
+file will be clobbered by the logger when it starts writing.
+</P>
+
+</DD><P>
+
+<DT><H3><A href="TimeRolloverLog.html">TimeRolloverLog</A></H3></DT>
+<DD>
+<P>
+This logger writes to a file, and rotates that file at certain intervals.  It can be set
+to rotate when the minute, hour day or month changes.  It's important to note that this
+doesn't mean that an hour after the application starts it'll roll the log -- it means
+that when 9:59pm turns to 10:00pm it'll rotate.
+</P>
+
+<P>
+Its configuration looks like this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT COLOR="brown">&lt;Logger name="<I>loggerName</I>" class="com.protomatter.syslog.TimeRolloverLog"&gt;</FONT> &nbsp;
+    <FONT color="blue">&lt;!-- format declaration --&gt;</FONT>
+    <FONT color="green">&lt;!-- policy declaration --&gt;</FONT>
+
+    <FONT color="brown">&lt;baseName&gt;path/to/log-&lt;/baseName&gt;
+    &lt;nameFormat&gt;yyyy.MM.dd-HH&lt;/nameFormat&gt;
+    &lt;extension&gt;.txt&lt;/extension&gt;
+    &lt;roll&gt;ROLL_HOURLY&lt;/roll&gt;
+    &lt;append&gt;true&lt;/append&gt;
+    &lt;autoFlush&gt;true&lt;/autoFlush&gt;
+  &lt;/Logger&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+The name of the file that the logger writes to is the basename
+concatenated with the time the log was started (formatted with the
+date format given in <TT>&lt;nameFormat&gt;</TT>) concatenated with
+the extension.  Given the above example, if the log was started
+at 9:00am on October 13, 2001, the log file would be named
+"<TT>path/to/log-2001.10.13.00.txt</TT>"
+</P>
+
+<P>
+The value for <TT>&lt;roll&gt;</TT> is either <TT>ROLL_MINUTELY</TT>,
+<TT>ROLL_HOURLY</TT>, <TT>ROLL_DAILY</TT>, or <TT>ROLL_MONTHLY</TT>.
+It should be obvious what each of these mean.
+</P>
+
+<P>
+The <TT>&lt;append&gt;</TT> and <TT>&lt;autoFlush&gt;</TT> parameters
+behave the same way as they do in the <TT>FileLog</TT> logger.
+</P>
+
+</DD><P>
+
+<DT><H3><A href="LengthRolloverLog.html">LengthRolloverLog</A></H3></DT>
+<DD>
+<P>
+This logger writes to a file, and rotates that file before it gets to a certain size.
+Its configuration looks like this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT COLOR="brown">&lt;Logger name="<I>loggerName</I>" class="com.protomatter.syslog.LengthRolloverLog"&gt;</FONT> &nbsp;
+    <FONT color="blue">&lt;!-- format declaration --&gt;</FONT>
+    <FONT color="green">&lt;!-- policy declaration --&gt;</FONT>
+
+    <FONT color="brown">&lt;baseName&gt;path/to/log-&lt;/baseName&gt;
+    &lt;extension&gt;.txt&lt;/extension&gt;
+    &lt;rollsize&gt;1048576&lt;/rollsize&gt;
+    &lt;autoFlush&gt;true&lt;/autoFlush&gt;
+  &lt;/Logger&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+The name of the file that the logger writes to is the basename
+concatenated with a number concatenated with
+the extension.  Given the above example, the log file would be named
+"<TT>path/to/log-12.txt</TT>" if there were already logs
+number 1 to 11 present in that directory.  When the logger starts
+writing or rolls the log, it looks in that directory to see what
+other files are present and picks the next number.
+</P>
+
+<P>
+The value for <TT>&lt;rollsize&gt;</TT> is the size (in bytes) that
+the log should not be larger than.  The above configuration will
+roll the file before it gets to be 1MB in size.
+</P>
+
+<P>
+The <TT>&lt;autoFlush&gt;</TT> parameter behaves the same way as
+it does in the <TT>FileLog</TT> logger.
+</P>
+
+<P>
+To be honest, most people prefer the <TT>TimeRolloverLog</TT> to this one.
+</P>
+
+
+</DD><P>
+
+<DT><H3><A href="DatabaseLog.html">DatabaseLog</A></H3></DT>
+<DD>
+<P>
+This logger writes messages into a database table.
+Its configuration looks like this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  &lt;Syslog defaultMask="INFO" hostname="sillysailor.protomatter.com"&gt;
+    <FONT COLOR="brown">&lt;Logger name="<I>loggerName</I>" class="com.protomatter.syslog.DatabaseLog"&gt;</FONT> &nbsp;
+      <font color="#888888">&lt;!--
+       The &lt;Format&gt; tag is included here, as it is used
+       to set field truncation sizes.
+      --&gt;</font>
+      <font color="blue">&lt;Format class="com.protomatter.syslog.SimpleSyslogTextFormatter"&gt;
+        &lt;classWidth&gt;128&lt;/classWidth&gt;
+        &lt;channelWidth&gt;32&lt;/channelWidth&gt;
+        &lt;threadWidth&gt;32&lt;/threadWidth&gt;
+        &lt;hostWidth&gt;32&lt;/hostWidth&gt;
+      &lt;/Format&gt;</font>
+      <FONT color="green">&lt;!-- policy declaration --&gt;</FONT>
+
+      <FONT color="brown">&lt;driver&gt;oracle.jdbc.driver.OracleDriver&lt;/driver&gt;
+      &lt;url&gt;jdbc:oracle:thin:@database-server:1521:ORCL&lt;/url&gt;
+
+      &lt;messageWidth&gt;255&lt;/messageWidth&gt;
+      &lt;detailWidth&gt;4000&lt;/detailWidth&gt;
+
+      &lt;statementAdapter&gt;
+        com.protomatter.syslog.StringDatabaseLogStatementAdapter
+      &lt;/statementAdapter&gt;
+
+      &lt;ConnectionProperties&gt;
+        &lt;property&gt;
+          &lt;name&gt;user&lt;/name&gt;
+          &lt;value&gt;some-user-name&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property&gt;
+          &lt;name&gt;password&lt;/name&gt;
+          &lt;value&gt;some-password&lt;/value&gt;
+        &lt;/property&gt;
+      &lt;/ConnectionProperties&gt;
+    &lt;/Logger&gt;</FONT>
+  &lt;/Syslog&gt;
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+That example will connect to an Oracle database on the <TT>database-server</TT> machine
+as the <TT>some-user-name</TT> user using the <TT>some-password</TT> password.
+It will use the Oracle thin driver.  Other connection properties will be
+driver-specific, so you'll need to consult the documentation for that driver
+to see what they are.  The URL is also specific to your database driver.
+</P>
+
+<P>
+By default, this logger will write to a database table called
+<TT>SYSLOG_LOG</TT>.  You may want to have multiple loggers writing to the
+same database, but use different tables.  If this is the case, you can use the
+<TT>&lt;tablePrefix&gt;</TT> parameter, like this:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  &lt;Syslog defaultMask="INFO" hostname="sillysailor.protomatter.com"&gt;
+    <FONT COLOR="brown">&lt;Logger name="<I>loggerName</I>" class="com.protomatter.syslog.DatabaseLog"&gt;</FONT> &nbsp;
+      <font color="#888888">&lt;!--
+       The &lt;Format&gt; tag is included here, as it is used
+       to set field truncation sizes.
+      --&gt;</font>
+      <font color="blue">&lt;Format class="com.protomatter.syslog.SimpleSyslogTextFormatter"&gt;
+        &lt;classWidth&gt;128&lt;/classWidth&gt;
+        &lt;channelWidth&gt;32&lt;/channelWidth&gt;
+        &lt;threadWidth&gt;32&lt;/threadWidth&gt;
+        &lt;hostWidth&gt;32&lt;/hostWidth&gt;
+      &lt;/Format&gt;</font>
+      <FONT color="green">&lt;!-- policy declaration --&gt;</FONT>
+
+      <FONT color="brown">&lt;driver&gt;oracle.jdbc.driver.OracleDriver&lt;/driver&gt;
+      &lt;url&gt;jdbc:oracle:thin:@database-server:1521:ORCL&lt;/url&gt;
+
+      &lt;messageWidth&gt;255&lt;/messageWidth&gt;
+      &lt;detailWidth&gt;4000&lt;/detailWidth&gt;
+
+      &lt;statementAdapter&gt;
+        com.protomatter.syslog.StringDatabaseLogStatementAdapter
+      &lt;/statementAdapter&gt;
+
+      <FONT color="red">&lt;tablePrefix&gt;MY_APP_&lt;/tablePrefix&gt;</FONT> &nbsp;
+
+      &lt;ConnectionProperties&gt;
+        &lt;property&gt;
+          &lt;name&gt;user&lt;/name&gt;
+          &lt;value&gt;some-user-name&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property&gt;
+          &lt;name&gt;password&lt;/name&gt;
+          &lt;value&gt;some-password&lt;/value&gt;
+        &lt;/property&gt;
+      &lt;/ConnectionProperties&gt;
+    &lt;/Logger&gt;</FONT>
+  &lt;/Syslog&gt;
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+Note that the <TT>hostname</TT> attribute on the <TT>&lt;Syslog&gt;</TT> tag
+has been set.  This logger <I>requires</I> that the <TT>hostname</TT> attribute
+be set, so that it can be written into the database.
+</P>
+
+<P>
+This example would write to a table called <TT>MY_APP_SYSLOG_LOG</TT>.  By
+default, the logger will make 5 attempts to write each record to the database.
+If all those attempts fail, the message will be written out to
+<TT>System.err</TT> with an explanation of the JDBC error that prevented
+it from writing the record to the database.  You can change the number of
+retries by setting the <TT>&lt;numRetries&gt;</TT> parameter.
+</P>
+
+<P>
+You may want to experiment with the different implementations of
+<tt><a href="DatabaseLogStatementAdapter.html">DatabaseLogStatementAdapter</A></tt>
+implementations depending on what database you're using and the
+data type you choose for the <TT>DETAIL</TT> column.  Your choices are:
+<tt><a href="StringDatabaseLogStatementAdapter.html">StringDatabaseLogStatementAdapter</A></tt>,
+<tt><a href="AsciiStreamDatabaseLogStatementAdapter.html">AsciiStreamDatabaseLogStatementAdapter</A></tt>,
+<tt><a href="CharacterStreamDatabaseLogStatementAdapter.html">CharacterStreamDatabaseLogStatementAdapter</A></tt>,
+or something you write yourself (if you have to do this, please let me know and
+I can work with you to include it in a later release).
+
+</P>
+
+</DD><P>
+
+<DT><H3><A href="MailLog.html">MailLog</A></H3></DT>
+<DD>
+
+<P>
+This logger writes log messages out as mail messages to
+some SMTP mail server.  It does <I>not</I> work with
+MS Exchange Server if you have authentication turned on.
+It should work with pretty much any UNIX mail server.
+</P>
+
+<P>
+Here's an example configuration:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+    <FONT COLOR="brown">&lt;Logger name="<I>loggerName</I>" class="com.protomatter.syslog.MailLog"&gt;</FONT> &nbsp;
+      <FONT color="blue">
+      &lt;Format class="com.protomatter.syslog.SimpleSyslogTextFormatter"&gt; &nbsp;
+        &lt;showChannel&gt;true&lt;/showChannel&gt;
+        &lt;showThreadName&gt;true&lt;/showThreadName&gt;
+        &lt;showHostName&gt;true&lt;/showHostName&gt;
+      &lt;/Format&gt;
+      </FONT>
+      <FONT color="green">&lt;!-- policy declaration --&gt;</FONT><FONT COLOR="brown">
+
+      &lt;SubjectFormat
+        class="com.protomatter.syslog.SimpleSyslogMailSubjectFormatter"&gt; &nbsp;
+        &lt;showChannel&gt;true&lt;/showChannel&gt;
+        &lt;showThreadName&gt;false&lt;/showThreadName&gt;
+        &lt;showHostName&gt;true&lt;/showHostName&gt;
+      &lt;/Format&gt;
+
+      &lt;workQueue&gt;mailQueue&lt;/workQueue&gt;
+      &lt;server&gt;your-smtp-server-name&lt;/server&gt;
+      &lt;port&gt;25&lt;/port&gt;
+      &lt;html&gt;false&lt;/html&gt;
+      &lt;to&gt;jim@yourcompany.com, george@yourcompany.com&lt;/to&gt;
+      &lt;cc&gt;operations@yourcompany.com&lt;/cc&gt;
+      &lt;bcc&gt;root@yourcompany.com&lt;/bcc&gt;
+      &lt;from&gt;syslog@project-name.yourcompany.com&lt;/from&gt;
+      &lt;fromName&gt;Syslog from some application&lt;/fromName&gt;
+    &lt;/Logger&gt;</FONT>
+  &lt;/Syslog&gt;
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+This will send email to <TT>jim@yourcompany.com</TT>, <TT>george@yourcompany.com</TT>,
+CC it to <TT>operations@yourcompany.com</TT> and BCC it to
+<TT>root@yourcompany.com</TT>.  The mail will appear to be from
+<TT>syslog@project-name.yourcompany.com</TT>, whose name will
+appear as "Syslog from some application" in the email client.
+</P>
+
+<P>
+If you want Syslog to send out email in HTML format, use the
+following configuration:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+  <FONT COLOR="brown">&lt;Logger name="<I>loggerName</I>" class="com.protomatter.syslog.MailLog"&gt;</FONT> &nbsp;
+    <FONT color="blue">
+    &lt;Format class="com.protomatter.syslog.SyslogHTMLMailFormatter"&gt; &nbsp;
+      &lt;showChannel&gt;true&lt;/showChannel&gt;
+      &lt;showThreadName&gt;true&lt;/showThreadName&gt;
+      &lt;showHostName&gt;true&lt;/showHostName&gt;
+    &lt;/Format&gt;
+    </FONT>
+    <FONT color="green">&lt;!-- policy declaration --&gt;</FONT><FONT COLOR="brown"> &nbsp;
+
+    &lt;SubjectFormat
+      class="com.protomatter.syslog.SimpleSyslogMailSubjectFormatter"&gt; &nbsp;
+      &lt;showChannel&gt;true&lt;/showChannel&gt;
+      &lt;showThreadName&gt;false&lt;/showThreadName&gt;
+      &lt;showHostName&gt;true&lt;/showHostName&gt;
+    &lt;/Format&gt;
+
+    &lt;workQueue&gt;mailQueue&lt;/workQueue&gt;
+    &lt;server&gt;your-smtp-server-name&lt;/server&gt;
+    &lt;port&gt;25&lt;/port&gt;
+    &lt;html&gt;false&lt;/html&gt;
+    &lt;to&gt;jim@yourcompany.com, george@yourcompany.com&lt;/to&gt;
+    &lt;cc&gt;operations@yourcompany.com&lt;/cc&gt;
+    &lt;bcc&gt;root@yourcompany.com&lt;/bcc&gt;
+    &lt;from&gt;syslog@project-name.yourcompany.com&lt;/from&gt;
+    &lt;fromName&gt;Syslog from some application&lt;/fromName&gt;
+  &lt;/Logger&gt;</FONT>
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+This will send out fairly well formatted HTML email to each user.
+</P>
+
+</DD><P>
+
+
+<DT><H3><A href="UNIXSyslogLog.html">UNIXSyslogLog</A></H3></DT>
+<DD>
+
+<P>
+This logger sends UDP packets to UNIX syslog servers as specified
+by <a href="http://www.ietf.org/rfc/rfc3164.txt">RFC 3164</A>.
+</P>
+
+<P>
+Here's an example configuration:
+</P>
+
+<P><UL>
+<TABLE BORDER=1 CELLPADDING=4 CELLSPACING=0><TR><TD>
+<PRE>
+
+    <FONT COLOR="brown">&lt;Logger name="<I>loggerName</I>" class="com.protomatter.syslog.UNIXSyslogLog"&gt;</FONT> &nbsp;
+      <FONT color="blue">&lt;!-- you may omit the Format declaration --&gt;</FONT>
+      <FONT color="green">&lt;!-- policy declaration --&gt;</FONT><FONT COLOR="brown">
+
+      &lt;logServer&gt;localhost&lt;/logServer&gt;
+      &lt;tag&gt;YourAppName&lt;/tag&gt;
+    &lt;/Logger&gt;</FONT>
+  &lt;/Syslog&gt;
+
+</PRE>
+</TD></TR></TABLE>
+</UL></P>
+
+<P>
+This will send packets to the machine your JVM is running on.  See the
+<a href="xml/UNIXSyslogLog_Helper.html#configure(java.lang.Object, org.jdom.Element)">JavaDoc</a>
+for the XML configuration class for other configuration options.  The <tt>&lt;Format&gt;</tt>
+declaration can be omitted because it is ignored.
+</P>
+
+</DD><P>
+
+
+
+</DL>
+
+</BODY>
+</HTML>
