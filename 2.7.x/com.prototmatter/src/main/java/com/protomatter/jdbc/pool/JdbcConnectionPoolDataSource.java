@@ -335,4 +335,17 @@ implements DataSource, ConnectionPoolDataSource
       return this.exception;
     }
   }
+
+  public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public Object unwrap(Class c) throws SQLException {
+    throw new SQLException("not implemented");
+  }
+
+  public boolean isWrapperFor(java.lang.Class c) throws SQLException {
+    return false;
+  }
+
 }
