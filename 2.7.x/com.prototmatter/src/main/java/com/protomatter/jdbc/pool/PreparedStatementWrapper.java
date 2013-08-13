@@ -296,4 +296,77 @@ implements PreparedStatement
         callMethod(statement, "setNull", new Class[] { Integer.TYPE, Integer.TYPE, String.class },
                 new Object[] { new Integer(index), new Integer(type), typeName } );
     }
+
+  public void setAsciiStream(int i, InputStream in, long l) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setAsciiStream(int i, InputStream in) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setBinaryStream(int i, InputStream in, long l) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setBinaryStream(int i, InputStream in) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setBlob(int i, InputStream in, long l) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setBlob(int i, InputStream in) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setCharacterStream(int i, Reader r, long l) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setCharacterStream(int i, Reader r) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setClob(int i, Reader r, long l) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setClob(int i, Reader r) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setNCharacterStream(int i, Reader r, long l) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setNCharacterStream(int i, Reader r) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setNClob(int i, Reader r, long l) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setNClob(int i, Reader r) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setNClob(int i, NClob nc) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setNString(int i, String s) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setRowId(int i, RowId rowId) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
+  public void setSQLXML(int i, SQLXML sqlXml) throws SQLException {
+    throw new SQLFeatureNotSupportedException();
+  }
+
 }

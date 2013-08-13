@@ -243,4 +243,25 @@ implements Statement
         checkClosed();
         return (Connection)callMethod(statement, "getConnection", new Class[0], new Object[0]);
     }
+
+  public boolean isClosed() throws SQLException {
+    return ((Boolean) callMethod(statement, "isClosed", new Class[0], new Object[0])).booleanValue();
+  }
+
+  public boolean isCloseOnCompletion() throws SQLException {
+    return ((Boolean) callMethod(statement, "isCloseOnCompletion", new Class[0], new Object[0])).booleanValue();
+  }
+
+  public boolean isPoolable() throws SQLException {
+    return ((Boolean) callMethod(statement, "isPoolable", new Class[0], new Object[0])).booleanValue();
+  }
+
+  public void closeOnCompletion() throws SQLException {
+    callMethod(statement, "closeOnCompletion", new Class[0], new Object[0]);
+  }
+
+  public void setPoolable(boolean b) throws SQLException {
+    callMethod(statement, "setPoolable", new Class[] { Boolean.class }, new Object[] { Boolean.valueOf(b) }); 
+  }
+
 }

@@ -120,4 +120,13 @@ implements PooledConnection
   {
     // not implemented
   }
+
+  public void addStatementEventListener(StatementEventListener sel) {
+    // not implemented
+  }
+
+  public void removeStatementEventListener(StatementEventListener sel) {
+    // not implemented
+  }
+
 }

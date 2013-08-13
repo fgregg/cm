@@ -304,5 +304,9 @@ implements Driver
     {
         return false;
     }
-}
 
+    public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        throw new SQLFeatureNotSupportedException();
+	  }
+
+}
