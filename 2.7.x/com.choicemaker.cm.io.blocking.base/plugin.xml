@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.blocking.base"
+   name="Blocking Base Plug-in"
+   version="2.5.0"
+   provider-name="CHOICEMAKER">
+
+   <runtime>
+      <library name="blocking.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+</plugin>
