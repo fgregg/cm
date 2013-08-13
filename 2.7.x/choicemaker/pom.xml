@@ -10,6 +10,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>../choicemaker-base</module>
     <module>../choicemaker-cm</module>
     <module>../choicemaker-cm-analyzer</module>
     <module>../choicemaker-cm-server</module>
