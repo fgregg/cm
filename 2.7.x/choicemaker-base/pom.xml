@@ -462,6 +462,11 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.base</artifactId>
+        <version>${choicemaker.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
         <version>${choicemaker.version}</version>
       </dependency>
@@ -543,6 +548,17 @@
         <version>${choicemaker.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>javaee</groupId>
+        <artifactId>javaee-api</artifactId>
+        <version>5</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
@@ -569,6 +585,31 @@
       http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
+
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>central</id>
+      <url>http://central</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>maven2-repository.dev.java.net</id>
+      <name>Java.net Repository for Maven</name>
+      <url>http://download.java.net/maven/2/</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
 
   <prerequisites>
     <maven>2.2.1</maven>
