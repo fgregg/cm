@@ -1,0 +1,284 @@
+<body>
+
+A JDBC Driver that maintains a pool of connections.
+
+<dl>
+
+<dt><b>Architecture</b></dt>
+<dd>
+The Protomatter JDBC Connection Pool Driver has three main components:
+the driver, the pool and the connection.  The pool holds many open connections, and the driver simply asks the pool for a connection.
+
+</dd><P>
+
+
+<dt><b>Driver Features</b></dt>
+<dd>
+<ol>
+<li> Dynamically grows based on use.
+<li> Does <i>not</i> automatically shrink, but you can
+     shrink the pool manually.
+<li> Can automatically refresh connections that have become stale
+     as a result of database errors (including database restarts, etc).
+<li> Can be configured to automatically close connections that have
+     been idle for too long, and will log a stack trace of where the
+     connection was first opened (this is useful for debugging).
+<li> Automatically blocks threads until a connection is available.
+<li> Drop-in replacement for "normal" drivers -- just change the
+     driver class and URL that's being used.
+<li> Can be configured to log all method calls and SQL being executed.
+</ol>
+</dd><P>
+
+<dt><b>Loading the Driver</b></dt>
+<dd>
+To load the driver, simply execute this code:<P>
+
+<blockquote><pre>
+Class.forName("com.protomatter.jdbc.pool.JdbcConnectionPoolDriver");
+</pre></blockquote><P>
+
+The driver automatically registers itself with the JDBC DriverManager when
+the class is loaded by the VM.  Because the driver keeps a list of pools
+as a static (class) variable, and because of a bug in JDK 1.1.x's classloader,
+you may need to either keep a reference to an instance of the JdbcConnectionPoolDriver
+class somewhere where it won't be re-claimed by the garbage collector, or you may
+need to give java the <tt>-noclassgc</tt> flag.
+</dd><P>
+
+<dt><b>Creating a new Connection Pool</b></dt>
+<dd>
+To create a new JDBC Connection Pool, you need to give it a name and
+initialization parameters.<P>
+
+One example is:<P>
+<blockquote><pre>
+// initialization params are kept in a Map
+Map args = new HashMap();
+
+// the underlying driver -- in this case, the Oracle thin driver.
+args.put("jdbc.driver", "oracle.jdbc.driver.OracleDriver");
+
+// the URL to connect the underlyng driver with the server
+args.put("jdbc.URL", "jdbc:oracle:thin:@server:1521:ORCL");
+
+// these are properties that get passed
+// to DriverManager.getConnection(...)
+Properties jdbcProperties = new Properties();
+jdbcProperties.put("user", "admin");
+jdbcProperties.put("password", "secret");
+args.put("jdbc.properties", jdbcProperties);
+
+// a statement that is guaranteed to work
+// if the connection is working.
+args.put("jdbc.validityCheckStatement", "SELECT 1 FROM DUAL");
+
+// If this is specified, a low-priority thread will
+// sit in the background and refresh this pool every
+// N seconds.  In this case, it's refreshed every two minutes.
+args.put("pool.refreshThreadCheckInterval", new Integer(120));
+
+// the initial size of the pool.
+args.put("pool.initialSize", new Integer(5));
+
+// the maximum size the pool can grow to.
+args.put("pool.maxSize", new Integer(10));
+
+// each time the pool grows, it grows by this many connections
+args.put("pool.growBlock", new Integer(2));
+
+// between successive connections, wait this many milliseconds.
+// Some database freak out if you try to open connections
+// in succession too quickly.
+args.put("pool.createWaitTime", new Integer(500));
+
+// finally create the pool and we're ready to go!
+JdbcConnectionPool oraclePool
+  = new JdbcConnectionPool("oraclePool", args);
+</pre></blockquote><P>
+
+You can also simply use a properties file to configure
+pools, using the <A href="JdbcConnectionPool.html#JdbcConnectionPool(java.lang.String, java.util.Properties)">JdbcConnectionPool</A>
+object.
+<P>
+
+Once a pool is created, it is automatically registered with the pool
+driver -- you can immediately start opening connections with it.
+And you don't have to keep a reference to the
+pool itself because the driver keeps track of it.
+</dd><P>
+
+<dt><b>Getting a connection from a pool</b></dt>
+<dd>
+Lets say that you have created a connection pool named "myConnectionPool" and
+you now want to get a connection from it.  Simply do the following:
+
+<blockquote><pre>
+String url = "jdbc:protomatter:pool:oraclePool";
+Connection c = DriverManager.getConnection(url);
+</pre></blockquote>
+
+The URL given to the DriverManager is just
+"<tt>jdbc:protomatter:pool:<i>poolName</i></tt>"
+where <i>poolName</i> is the name of the pool you want a connection from.<P>
+
+If there is not a connection available, and the maximum size for the pool has
+been reached, the caller is placed in a FIFO queue of threads waiting for
+connections to become available, and is awakened after a connection is
+checked back in.  If the maximum size for the queue has not been reached
+and there are no available connections, a new connection is created and
+handed out.  Of course, if there is a connection available, it is handed
+out immediately.<P>
+
+You can also use the JDBC 2.x <tt>javax.sql.DataSource</tt> interface to get
+connections from a pool.  Simply do the following:
+
+<blockquote><pre>
+DataSource ds = new JdbcConnectionPoolDataSource("oraclePool");
+Connection c = ds.getConnection();
+</pre></blockquote>
+
+And then use the connection as you would normally.
+
+</dd><P>
+
+<dt><b>Using a connection</b></dt>
+<dd>
+Use a connection from the pool just like you would use a "normal" connection.
+The only difference is that when you call
+<tt>close()</tt> on it, it does not close the
+connection.  Instead, the connection is marked closed and put back into the
+pool.  When a connection is put back into the pool, the following is done
+to the underlying connecton:<P>
+
+<ol>
+<li> If autocommit was set to true, <tt>commit()</tt> is called.
+<li> <tt>clearWarnings()</tt> is called.
+<li> The catalog is set back to it's original value (only if its
+     value was changed).
+<li> The type map is set back to it's original value (only if its
+     value was changed).
+<li> The transaction isolation level is set back to it's original value
+     (only if its value was changed).
+<li> The value for the autocommit flag is set back to it's original value
+     (only if its value was changed).
+<li> The value for the read-only flag is set back to it's original value
+     (only if its value was changed).
+</ol>
+<P>
+
+As you might guess, it's very important to close a connection when you are
+done using it, or the pool will "leak" connections.  We suggest using the
+pool within a try/catch/finally block, like this:<P>
+
+<blockquote><pre>
+Connection c = null;
+PreparedStatement s = null;
+ResultSet r = null;
+try
+{
+  String url = "jdbc:protomatter:pool:myConnectionPool";
+  c = DriverManager.getConnection(url);
+  s = c.prepareStatement("SELECT * FROM MYTABLE");
+  r = s.executeQuery();
+  while (r.next())
+  {
+    // do something with each row
+  }
+}
+catch (SQLException x)
+{
+  // handle the exception
+}
+finally
+{
+  // it's important to enclose the calls to close()
+  // in a try block to make sure all three get called.
+  try { r.close(); } catch (SQLException x) { ; }
+  try { s.close(); } catch (SQLException x) { ; }
+  try { c.close(); } catch (SQLException x) { ; }
+}
+</pre></blockquote>
+
+It's also important to make sure you close all Statement, PreparedStatement
+and ResultSet objects associated with a connection before you close the
+connection itself.
+</dd><P>
+
+<dt><b>Debugging</b></dt>
+<dd>
+Using the <tt><a href="../../util/Debug.html">Debug</a></tt> class, you can
+enable logging of all "set" methods on the connection, and all methods
+on statements.  This includes logging all SQL executed (and all parameters
+on PreparedStatements) and how long it takes to call <tt>prepareStatement()</tt>, etc.<P>
+
+To enable this, turn on the debug flag named "<tt>com.protomatter.jdbc.pool</tt>".
+If this is on, then the pool will return wrapped copies of the
+Statement, PreparedStatement, and CallableStatement classes.  ResultSet objects
+are not wrapped.  Messages will be logged to the <tt>com.protomatter.jdbc.pool</tt>
+channel using Syslog.  See the JavaDoc for <a href="../../syslog/package.html">Syslog</a>
+for more information.  Logging is done on the "<tt>com.protomatter.jdbc.pool</tt>"
+channel in Syslog at the debug level.<P>
+
+Output in Syslog will look something like this:<P>
+
+<blockquote><pre>
+JdbcConnectionPoolDriver        connect(jdbc:protomatter:pool:testPool, {})
+ConnectionWrapper               ConnectionWrapper.createStatement() took 0ms
+StatementWrapper                StatementWrapper.executeQuery("select * from test_table")
+                                 = org.postgresql.jdbc2.ResultSet@40e45a call took 8ms
+StatementWrapper                StatementWrapper.close() call took 0ms
+
+ConnectionWrapper               ConnectionWrapper.prepareStatement()
+                                 SQL="select * from test_table where some_column=?" took 0ms
+PreparedStatementWrapper        PreparedStatementWrapper.setString(1, "foo") call took 0ms
+PreparedStatementWrapper        PreparedStatementWrapper.executeQuery()
+                                 = org.postgresql.jdbc2.ResultSet@4fec48 call took 10ms
+PreparedStatementWrapper        PreparedStatementWrapper.close() call took 0ms
+</pre></blockquote>
+</dd><P>
+
+<dt><b>Internationalization</b></dt>
+<dd>
+Every error message shown by the connection pool can displayed in
+a different language.  Simply add a new resource
+(named <TT>com/protomatter/jdbc/pool/Resources</TT>) to your classpath
+for the new language.  For instance, to add French error
+messages, you would copy the existing file
+<TT><a href="Resources.properties">com/protomatter/jdbc/pool/Resources.properties</A></TT>
+and make a new file called
+<TT>com/protomatter/jdbc/pool/Resources_fr.properties</TT>
+and place it in the <TT>CLASSPATH</TT>.  Please see the
+JavaDoc for the <TT>java.util.ResourceBundle</TT> class
+for more information.
+</dd><P>
+
+<dt><b>Licenseing</b></dt>
+<dd>
+This package (as are all the
+{@link com.protomatter com.protomatter} packages) is
+licensed under the <a href="http://protomatter.sourceforge.net/license.html">Protomatter Software License</a>,
+which is the <A href="http://www.apache.org/LICENSE.txt">Apache Software License</a> with
+appropriate name changes.
+</dd><P>
+
+<dt><b>For More Information</b></dt>
+<dd>
+For more information on the Protomatter JDBC Connection Pool Driver,
+please consult the documentation for the following classes:<P>
+
+<blockquote><pre>
+{@link com.protomatter.jdbc.pool.JdbcConnectionPool com.protomatter.jdbc.pool.JdbcConnectionPool}
+{@link com.protomatter.jdbc.pool.JdbcConnectionPoolDriver com.protomatter.jdbc.pool.JdbcConnectionPoolDriver}
+{@link com.protomatter.jdbc.pool.JdbcConnectionPoolConnection com.protomatter.jdbc.pool.JdbcConnectionPoolConnection}
+{@link com.protomatter.jdbc.pool.PoolSQLException com.protomatter.jdbc.pool.PoolSQLException}
+{@link com.protomatter.pool.GrowingObjectPool com.protomatter.pool.GrowingObjectPool}
+{@link com.protomatter.pool.SimpleObjectPool com.protomatter.pool.SimpleObjectPool}
+{@link com.protomatter.pool.ObjectPool com.protomatter.pool.ObjectPool}
+{@link com.protomatter.pool.ObjectPoolObject com.protomatter.pool.ObjectPoolObject}
+</pre></blockquote>
+</dd>
+
+</dl>
+
+</body>

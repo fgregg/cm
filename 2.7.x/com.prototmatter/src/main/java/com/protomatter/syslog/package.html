@@ -1,0 +1,51 @@
+<BODY>
+
+Syslog is a system-wide logging facility.  It's roughly based on the
+UNIX syslog facility, but has many nice features not found there.
+It provides a clean, uniform interface for sending log messages and
+a modular back-end for writing entries to files, databases, etc.<P>
+
+The main class that other programs interact with is the
+<tt>{@link com.protomatter.syslog.Syslog Syslog}</tt> class.
+Everything on the class is static, making 
+it easy to interact with as a service.  The
+<tt>{@link com.protomatter.syslog.Channel Channel}</tt> class
+is a simplified, "federated namespace" interface for sending
+messages.
+<P>
+
+Messages sent to Syslog are handled by objects implementing the
+<tt>Syslogger</tt> interface.  Syslog provides the concept of
+levels (DEBUG, INFO, WARNING, ERROR and FATAL).  Individual loggers
+can have their own log policies for deciding if they should
+pay attention to given log message.  There is a useful default
+policy that allows loggers to only listen to certain channels or
+messages at certain levels, etc.<P>
+
+Syslog provides startup classes for both the
+<a href="http://www.bea.com">BEA WebLogic Server</a>
+Application Server, and for Protomatter's own PAS Application Server.
+This allows for easy configuration of the <tt>Syslog</tt> package
+when each application server starts.<P>
+
+Please refer to the <a href="syslog-whitepaper.html">Syslog Whitepaper</a>
+the JavaDoc for the {@link com.protomatter.syslog.Syslog Syslog}
+class for more information on usage.<P>
+
+For information on configuring Syslog via an XML file, please refer
+to JavaDoc for the
+<tt>{@link com.protomatter.syslog.xml.SyslogXML SyslogXML}</tt> class.<P>
+
+Every error message can displayed in
+a different language.  Simply add a new resource 
+(named <TT>com/protomatter/syslog/Syslog</TT>) to your classpath
+for the new language.  For instance, to add French error
+messages, you would copy the existing file
+<TT><a href="Syslog.properties">com/protomatter/syslog/Syslog.properties</A></TT>
+and make a new file called
+<TT>com/protomatter/syslog/Syslog_fr.properties</TT>
+and place it in the <TT>CLASSPATH</TT>.  Please see the
+JavaDoc for the <TT>java.util.ResourceBundle</TT> class
+for more information.
+
+</BODY>
