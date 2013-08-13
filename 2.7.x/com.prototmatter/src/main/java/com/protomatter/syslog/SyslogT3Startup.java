@@ -55,7 +55,9 @@ import java.util.*;
 import java.text.*;
 
 import javax.naming.*;
-import weblogic.common.*;
+// REMOVED 2013-08-13 for ChoiceMaker
+// import weblogic.common.*;
+// END REMOVED
 import com.protomatter.syslog.xml.*;
 
 /**
@@ -70,135 +72,139 @@ import com.protomatter.syslog.xml.*;
  *  @see Syslogger
  */
 public class SyslogT3Startup
-implements T3StartupDef, T3ShutdownDef
+// REMOVED 2013-08-13 for ChoiceMaker
+// implements T3StartupDef, T3ShutdownDef
+// END REMOVED
 {
-  private T3ServicesDef services = null;
-  private static boolean configured = false;
-
-  private static String LOG_PREFIX = "Protomatter Syslog: ";
-
-  /**
-   *  Default constructor -- called by WebLogic.
-   */
-  public SyslogT3Startup()
-  {
-    super();
-  }
-
-  /**
-   *  Part of the <tt>weblogic.common.T3StartupDef</tt> interface.
-   *
-   *  @see weblogic.common.T3StartupDef
-   */
-  public void setServices(T3ServicesDef services)
-  {
-    this.services = services;
-  }
-
-  /**
-   *  Start Syslog services.
-   *  <P>
-   *  Syslog is configured from an XML file specified by the
-   *  <tt>Syslog.config.xml</tt> system property.
-   *  Multiple calls to this method are ignored.
-   *
-   *  @see com.protomatter.syslog.xml.SyslogXML#configure(File)
-   */
-  public String startup(String name, Hashtable ht)
-  throws Exception
-  {
-    // setup syslog
-    LogServicesDef log = services.log();
-    try
-    {
-      log.info(LOG_PREFIX + "SyslogT3Startup " + Syslog.getResourceString(MessageConstants.T3_INIT_MESSAGE));
-
-      // make sure someone else didn't already run us.
-      if (configured)
-        return Syslog.getResourceString(MessageConstants.T3_ALREADY_INIT_MESSAGE);
-
-      // get the path to the config file from the
-      // "Syslog.config.xml" system property.
-      String xmlConfigFile = System.getProperty("Syslog.config.xml");
-      if (xmlConfigFile == null)
-      {
-        log.error(LOG_PREFIX + MessageFormat.format(
-          Syslog.getResourceString(MessageConstants.T3_MUST_SPECIFY_1_MESSAGE),
-          new Object[] { "Syslog.config.xml" }));
-        log.error(LOG_PREFIX + Syslog.getResourceString(MessageConstants.T3_MUST_SPECIFY_2_MESSAGE));
-        log.error(LOG_PREFIX + "  -DSyslog.config.xml=" +
-          Syslog.getResourceString(MessageConstants.T3_MUST_SPECIFY_BLAH_MESSAGE));
-        return Syslog.getResourceString(MessageConstants.T3_FAILURE_MESSAGE);
-      }
-      log.info(LOG_PREFIX + MessageFormat.format(
-        Syslog.getResourceString(MessageConstants.CONFIGURING_SYSLOG_FROM_MESSAGE),
-        new Object[] { xmlConfigFile }));
-      SyslogXML.configure(new File(xmlConfigFile));
-      this.configured = true;
-
-      Iterator loggers = Syslog.getLoggers();
-      while (loggers.hasNext())
-      {
-        Syslogger logger = (Syslogger)loggers.next();
-        if (logger.getName() != null)
-        {
-          log.info(LOG_PREFIX + MessageFormat.format(
-            Syslog.getResourceString(MessageConstants.T3_LOGGER_ISA_MESSAGE),
-            new Object[] { logger.getName(), logger.getClass().getName() }));
-        }
-        else
-        {
-          log.info(LOG_PREFIX + MessageFormat.format(
-            Syslog.getResourceString(MessageConstants.T3_LOGGER_NONAME_ISA_MESSAGE),
-            new Object[] { logger.getClass().getName() }));
-        }
-      }
-    }
-    catch (Exception x)
-    {
-      this.configured = false;
-      log.error(LOG_PREFIX + Syslog.getResourceString(MessageConstants.CANNOT_CONFIGURE_MESSAGE), x);
-      return Syslog.getResourceString(MessageConstants.T3_FAILURE_MESSAGE);
-    }
-
-    return Syslog.getResourceString(MessageConstants.T3_SUCCESS_MESSAGE);
-  }
-
-  /**
-   *  Shutdown Syslog services.  This method simply calls
-   *  <TT>Syslog.shutdown()</TT>.
-   */
-  public String shutdown(String name, Hashtable ht)
-  {
-    Syslog.shutdown();
-    return Syslog.getResourceString(MessageConstants.T3_SUCCESS_MESSAGE);
-  }
-
-  /**
-   *  A shortcut to starting syslog services.  This is
-   *  generally used by classes that want to ensure that
-   *  Syslog has been started before they start.  You can
-   *  basically do this:<P>
-   *
-   *  <blockquote><pre>
-   *  (new SyslogT3Startup()).startup(services);
-   *  </pre></blockquote>
-   *
-   *  From inside the <tt>startup(...)</tt> method in
-   *  your startup class to make sure that syslog
-   *  gets started.<P>
-   */
-  public boolean startup(T3ServicesDef services)
-  {
-    try
-    {
-      setServices(services);
-      startup(null, null);
-      return true;
-    }
-    catch (Exception x)
-    {
-      return false;
-    }
-  }
+// REMOVED 2013-08-13 for ChoiceMaker
+//   private T3ServicesDef services = null;
+//   private static boolean configured = false;
+// 
+//   private static String LOG_PREFIX = "Protomatter Syslog: ";
+// 
+//   /**
+//    *  Default constructor -- called by WebLogic.
+//    */
+//   public SyslogT3Startup()
+//   {
+//     super();
+//   }
+// 
+//   /**
+//    *  Part of the <tt>weblogic.common.T3StartupDef</tt> interface.
+//    *
+//    *  @see weblogic.common.T3StartupDef
+//    */
+//   public void setServices(T3ServicesDef services)
+//   {
+//     this.services = services;
+//   }
+// 
+//   /**
+//    *  Start Syslog services.
+//    *  <P>
+//    *  Syslog is configured from an XML file specified by the
+//    *  <tt>Syslog.config.xml</tt> system property.
+//    *  Multiple calls to this method are ignored.
+//    *
+//    *  @see com.protomatter.syslog.xml.SyslogXML#configure(File)
+//    */
+//   public String startup(String name, Hashtable ht)
+//   throws Exception
+//   {
+//     // setup syslog
+//     LogServicesDef log = services.log();
+//     try
+//     {
+//       log.info(LOG_PREFIX + "SyslogT3Startup " + Syslog.getResourceString(MessageConstants.T3_INIT_MESSAGE));
+// 
+//       // make sure someone else didn't already run us.
+//       if (configured)
+//         return Syslog.getResourceString(MessageConstants.T3_ALREADY_INIT_MESSAGE);
+// 
+//       // get the path to the config file from the
+//       // "Syslog.config.xml" system property.
+//       String xmlConfigFile = System.getProperty("Syslog.config.xml");
+//       if (xmlConfigFile == null)
+//       {
+//         log.error(LOG_PREFIX + MessageFormat.format(
+//           Syslog.getResourceString(MessageConstants.T3_MUST_SPECIFY_1_MESSAGE),
+//           new Object[] { "Syslog.config.xml" }));
+//         log.error(LOG_PREFIX + Syslog.getResourceString(MessageConstants.T3_MUST_SPECIFY_2_MESSAGE));
+//         log.error(LOG_PREFIX + "  -DSyslog.config.xml=" +
+//           Syslog.getResourceString(MessageConstants.T3_MUST_SPECIFY_BLAH_MESSAGE));
+//         return Syslog.getResourceString(MessageConstants.T3_FAILURE_MESSAGE);
+//       }
+//       log.info(LOG_PREFIX + MessageFormat.format(
+//         Syslog.getResourceString(MessageConstants.CONFIGURING_SYSLOG_FROM_MESSAGE),
+//         new Object[] { xmlConfigFile }));
+//       SyslogXML.configure(new File(xmlConfigFile));
+//       this.configured = true;
+// 
+//       Iterator loggers = Syslog.getLoggers();
+//       while (loggers.hasNext())
+//       {
+//         Syslogger logger = (Syslogger)loggers.next();
+//         if (logger.getName() != null)
+//         {
+//           log.info(LOG_PREFIX + MessageFormat.format(
+//             Syslog.getResourceString(MessageConstants.T3_LOGGER_ISA_MESSAGE),
+//             new Object[] { logger.getName(), logger.getClass().getName() }));
+//         }
+//         else
+//         {
+//           log.info(LOG_PREFIX + MessageFormat.format(
+//             Syslog.getResourceString(MessageConstants.T3_LOGGER_NONAME_ISA_MESSAGE),
+//             new Object[] { logger.getClass().getName() }));
+//         }
+//       }
+//     }
+//     catch (Exception x)
+//     {
+//       this.configured = false;
+//       log.error(LOG_PREFIX + Syslog.getResourceString(MessageConstants.CANNOT_CONFIGURE_MESSAGE), x);
+//       return Syslog.getResourceString(MessageConstants.T3_FAILURE_MESSAGE);
+//     }
+// 
+//     return Syslog.getResourceString(MessageConstants.T3_SUCCESS_MESSAGE);
+//   }
+// 
+//   /**
+//    *  Shutdown Syslog services.  This method simply calls
+//    *  <TT>Syslog.shutdown()</TT>.
+//    */
+//   public String shutdown(String name, Hashtable ht)
+//   {
+//     Syslog.shutdown();
+//     return Syslog.getResourceString(MessageConstants.T3_SUCCESS_MESSAGE);
+//   }
+// 
+//   /**
+//    *  A shortcut to starting syslog services.  This is
+//    *  generally used by classes that want to ensure that
+//    *  Syslog has been started before they start.  You can
+//    *  basically do this:<P>
+//    *
+//    *  <blockquote><pre>
+//    *  (new SyslogT3Startup()).startup(services);
+//    *  </pre></blockquote>
+//    *
+//    *  From inside the <tt>startup(...)</tt> method in
+//    *  your startup class to make sure that syslog
+//    *  gets started.<P>
+//    */
+//   public boolean startup(T3ServicesDef services)
+//   {
+//     try
+//     {
+//       setServices(services);
+//       startup(null, null);
+//       return true;
+//     }
+//     catch (Exception x)
+//     {
+//       return false;
+//     }
+//   }
+// END REMOVED
 }
