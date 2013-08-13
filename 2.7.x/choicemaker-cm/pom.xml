@@ -44,6 +44,8 @@
     <module>../com.choicemaker.cm.compiler</module>
     <!-- <module>../com.choicemaker.cm.compiler.tools.jdk142</module> -->
     <module>../com.choicemaker.cm.compiler.tools.jdk170</module>
+    <module>../com.choicemaker.cm.io.blocking.base</module>
+    <module>../com.choicemaker.cm.io.xml.base</module>
     <module>../com.choicemaker.cm.matching.cfg</module>
     <module>../com.choicemaker.cm.matching.en</module>
     <module>../com.choicemaker.cm.matching.en.au</module>
@@ -55,7 +57,6 @@
     <module>../com.choicemaker.cm.matching.intl</module>
     <module>../com.choicemaker.cm.matching.wfst</module>
     <module>../com.choicemaker.cm.matching.wfst.eclipse</module>
-    <module>../com.choicemaker.cm.io.xml.base</module>
     <module>../com.choicemaker.cm.ml.me.base</module>
     <module>../com.choicemaker.cm.urm.base</module>
     <module>../com.choicemaker.cm.util.app</module>
