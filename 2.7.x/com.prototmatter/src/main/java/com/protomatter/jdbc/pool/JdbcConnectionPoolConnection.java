@@ -1075,4 +1075,84 @@ implements ObjectPoolObject, Connection, SyslogChannelAware
     this.connection.setTypeMap(typeMap);
     this.setTypeMap = true;
   }
+
+  public java.sql.Clob createClob() throws SQLException {
+    checkValid();
+		return this.connection.createClob();
+  }
+
+  public java.sql.Blob createBlob() throws SQLException {
+    checkValid();
+		return this.connection.createBlob();
+  }
+
+  public java.sql.NClob createNClob() throws SQLException {
+    checkValid();
+		return this.connection.createNClob();
+  }
+
+  public java.sql.SQLXML createSQLXML() throws SQLException {
+    checkValid();
+		return this.connection.createSQLXML();
+  }
+
+  public boolean isValid(int timeout) throws SQLException {
+    checkValid();
+		return this.connection.isValid(timeout);
+  }
+
+  public void setClientInfo(String name, String value) throws java.sql.SQLClientInfoException{
+    checkValid();
+		this.connection.setClientInfo(name,value);
+  }
+
+  public void setClientInfo(java.util.Properties properties) throws java.sql.SQLClientInfoException{
+    checkValid();
+		this.connection.setClientInfo(properties);
+  }
+
+  public String getClientInfo(String name) throws SQLException {
+    checkValid();
+		return this.connection.getClientInfo(name);
+  }
+
+  public java.util.Properties getClientInfo() throws SQLException {
+    checkValid();
+		return this.connection.getClientInfo();
+  }
+
+  public java.sql.Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+    checkValid();
+		return this.connection.createArrayOf(typeName, elements);
+  }
+
+  public java.sql.Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+    checkValid();
+		return this.connection.createStruct(typeName,attributes);
+  }
+
+  public void setSchema(String schema) throws SQLException {
+    checkValid();
+		this.connection.setSchema(schema);
+  }
+
+  public String getSchema() throws SQLException {
+    checkValid();
+		return this.connection.getSchema();
+  }
+
+  public void abort(java.util.concurrent.Executor executor) throws SQLException {
+    checkValid();
+    this.connection.abort(executor);
+  }
+
+  public void setNetworkTimeout(java.util.concurrent.Executor executor, int milliseconds) throws SQLException {
+    checkValid();
+    this.connection.setNetworkTimeout(executor,milliseconds);
+  }
+
+  public int getNetworkTimeout() throws SQLException {
+    checkValid();
+    return this.connection.getNetworkTimeout();
+  }
 }
