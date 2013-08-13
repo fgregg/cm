@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Flatfile Base Plug-in</name>
+  <name>ChoiceMaker IO Plug-in (Flatfile Base)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>base.jar</eclipse.plugin.runtime.library.name>

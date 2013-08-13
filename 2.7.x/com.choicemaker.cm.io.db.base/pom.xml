@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.io.db.base</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker DB Plug-in (Base)</name>
+  <name>ChoiceMaker IO Plug-in (DB Base)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>base.jar</eclipse.plugin.runtime.library.name>
