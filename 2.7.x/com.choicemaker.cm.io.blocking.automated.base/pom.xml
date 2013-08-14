@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Automated Blocking Plug-in (Base)</name>
+  <name>ChoiceMaker Blocking Plug-in (Automated Base)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>blocking.jar</eclipse.plugin.runtime.library.name>
