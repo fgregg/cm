@@ -160,7 +160,7 @@
       <artifactId>com.choicemaker.cm.module</artifactId>
     </dependency>
     <dependency>
-	    <groupId>jfreechart</groupId>
+	    <groupId>jfree</groupId>
 	    <artifactId>jfreechart</artifactId>
     </dependency>
     <dependency>
