@@ -20,11 +20,11 @@ import javax.swing.JSplitPane;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.MessageUtil;
-import com.jrefinery.chart.ChartFactory;
-import com.jrefinery.chart.ChartPanel;
-import com.jrefinery.chart.JFreeChart;
-import com.jrefinery.data.XYSeries;
-import com.jrefinery.data.XYSeriesCollection;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  * Hold percentage versus accuracy using a independent match/differ thresholds.

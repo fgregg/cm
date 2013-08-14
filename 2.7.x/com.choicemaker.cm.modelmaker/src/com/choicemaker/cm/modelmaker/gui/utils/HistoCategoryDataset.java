@@ -14,9 +14,9 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import com.choicemaker.cm.core.Decision;
-import com.jrefinery.data.AbstractDataset;
-import com.jrefinery.data.CategoryDataset;
-import com.jrefinery.data.DefaultKeyedValues2D;
+import org.jfree.data.AbstractDataset;
+import org.jfree.data.CategoryDataset;
+import org.jfree.data.DefaultKeyedValues2D;
 
 /**
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:10 $

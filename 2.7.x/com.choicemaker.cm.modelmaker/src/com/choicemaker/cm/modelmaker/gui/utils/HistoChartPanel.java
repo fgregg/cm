@@ -25,18 +25,18 @@ import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.filter.MarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
-import com.jrefinery.chart.ChartMouseEvent;
-import com.jrefinery.chart.ChartMouseListener;
-import com.jrefinery.chart.ChartPanel;
-import com.jrefinery.chart.JFreeChart;
-import com.jrefinery.chart.axis.Axis;
-import com.jrefinery.chart.axis.CategoryAxis;
-import com.jrefinery.chart.axis.VerticalLogarithmicAxis;
-import com.jrefinery.chart.axis.VerticalNumberAxis;
-import com.jrefinery.chart.entity.CategoryItemEntity;
-import com.jrefinery.chart.entity.ChartEntity;
-import com.jrefinery.chart.event.ChartChangeEvent;
-import com.jrefinery.chart.plot.CategoryPlot;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.Axis;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.VerticalLogarithmicAxis;
+import org.jfree.chart.axis.VerticalNumberAxis;
+import org.jfree.chart.entity.CategoryItemEntity;
+import org.jfree.chart.entity.ChartEntity;
+import org.jfree.chart.event.ChartChangeEvent;
+import org.jfree.chart.plot.CategoryPlot;
 
 /**
  *

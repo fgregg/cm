@@ -29,11 +29,11 @@ import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.utils.HistoCategoryDataset;
 import com.choicemaker.cm.modelmaker.gui.utils.HistoChartPanel;
-import com.jrefinery.chart.ChartFactory;
-import com.jrefinery.chart.JFreeChart;
-import com.jrefinery.chart.axis.HorizontalCategoryAxis;
-import com.jrefinery.chart.plot.CategoryPlot;
-import com.jrefinery.chart.renderer.CategoryItemRenderer;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.HorizontalCategoryAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.CategoryItemRenderer;
 
 /**
  * Panel that contains the histogram showing the ChoiceMaker system accuracy.  This 

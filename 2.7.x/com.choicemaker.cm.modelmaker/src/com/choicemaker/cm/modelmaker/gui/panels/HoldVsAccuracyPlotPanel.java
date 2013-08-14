@@ -32,11 +32,11 @@ import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.tables.AccuracyTable;
 import com.choicemaker.cm.modelmaker.stats.StatPoint;
-import com.jrefinery.chart.ChartFactory;
-import com.jrefinery.chart.ChartPanel;
-import com.jrefinery.chart.JFreeChart;
-import com.jrefinery.data.XYSeries;
-import com.jrefinery.data.XYSeriesCollection;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  * Hold percentage versus accuracy using a symmetric match/differ threshold window.
