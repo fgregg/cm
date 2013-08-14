@@ -353,8 +353,6 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.launcher</artifactId>
-      <classifier>eclipse2prj</classifier>
-      <type>zip</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
