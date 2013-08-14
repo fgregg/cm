@@ -11,7 +11,7 @@
     <relativePath>../choicemaker-cm/pom.xml</relativePath>
   </parent>
 
-  <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
+  <artifactId>com.choicemaker.cm.io.composite.base</artifactId>
   <packaging>jar</packaging>
   <name>ChoiceMaker IO Plug-in (Composite Sources)</name>
 
