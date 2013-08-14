@@ -25,16 +25,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
+
 
 import com.choicemaker.cm.core.Thresholds;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.tables.AccuracyTable;
 import com.choicemaker.cm.modelmaker.stats.StatPoint;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -45,7 +48,10 @@ import org.jfree.data.xy.XYSeriesCollection;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class HoldVsAccuracyPlotPanel extends JPanel {
-	private static Logger logger = Logger.getLogger(HoldVsAccuracyPlotPanel.class);
+
+	private static final long serialVersionUID = -2486951345210387891L;
+
+	//	private static Logger logger = Logger.getLogger(HoldVsAccuracyPlotPanel.class);
 	private TestingControlPanel parent;
 	private XYSeries data;
 	private JFreeChart chart;
@@ -83,13 +89,14 @@ public class HoldVsAccuracyPlotPanel extends JPanel {
 		String title = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.title");
 		data = new XYSeries(title);
 		dataset.addSeries(data);
+		final PlotOrientation orientation = null;
 		chart =
-			ChartFactory.createLineXYChart(
+			ChartFactory.createXYLineChart(
 				title,
 				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.cm.accuracy"),
 				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.holdpercentage"),
 				dataset,
-				true, true, true);
+				orientation, true, true, true);
 		MouseListener tableMouseListener = new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				Point origin = e.getPoint();
@@ -248,8 +255,8 @@ public class HoldVsAccuracyPlotPanel extends JPanel {
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		ChartPanel p = new ChartPanel(chart, false, false, false, true, true);
-		p.setHorizontalZoom(true);
-		p.setVerticalZoom(true);
+//		p.setHorizontalZoom(true);
+//		p.setVerticalZoom(true);
 		add(p, c);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);

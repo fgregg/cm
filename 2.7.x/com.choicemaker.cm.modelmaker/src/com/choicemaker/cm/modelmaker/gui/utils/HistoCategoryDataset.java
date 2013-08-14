@@ -14,14 +14,17 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import com.choicemaker.cm.core.Decision;
-import org.jfree.data.AbstractDataset;
-import org.jfree.data.CategoryDataset;
+import org.jfree.data.general.AbstractDataset;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.DefaultKeyedValues2D;
 
 /**
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:10 $
  */
 public class HistoCategoryDataset extends AbstractDataset implements CategoryDataset {
+
+	private static final long serialVersionUID = -3916992487226578760L;
+
 	/** A storage structure for the data. */
 	private DefaultKeyedValues2D data;
 
@@ -35,7 +38,7 @@ public class HistoCategoryDataset extends AbstractDataset implements CategoryDat
 
 	private boolean hd;
 
-	private static final Integer NULL_INT = new Integer(0);
+//	private static final Integer NULL_INT = new Integer(0);
 	private static final DecimalFormat DF = new DecimalFormat("##0");
 
 	public HistoCategoryDataset(String[] seriesNames, int numCategories) {

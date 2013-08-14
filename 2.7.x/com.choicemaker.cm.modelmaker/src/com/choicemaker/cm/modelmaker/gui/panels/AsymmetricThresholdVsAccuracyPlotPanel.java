@@ -11,18 +11,20 @@
 package com.choicemaker.cm.modelmaker.gui.panels;
 
 import java.awt.BorderLayout;
-import java.text.DecimalFormat;
+//import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.MessageUtil;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -33,7 +35,10 @@ import org.jfree.data.xy.XYSeriesCollection;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
-	private static Logger logger = Logger.getLogger(AsymmetricThresholdVsAccuracyPlotPanel.class);
+
+	private static final long serialVersionUID = -1283403271414404208L;
+
+//	private static Logger logger = Logger.getLogger(AsymmetricThresholdVsAccuracyPlotPanel.class);
 	private static final String PRECISION = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.precision");
 	private static final String RECALL = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.recall");
 	private TestingControlPanel parent;
@@ -43,7 +48,7 @@ public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 	private XYSeries differRecall;
 	private XYSeries matchPrecision;
 	private XYSeries matchRecall;
-	private DecimalFormat df = new DecimalFormat("##0.00");
+//	private DecimalFormat df = new DecimalFormat("##0.00");
 	private boolean dirty;
 
 	public AsymmetricThresholdVsAccuracyPlotPanel(TestingControlPanel g) {
@@ -78,13 +83,19 @@ public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		dataset.addSeries(d);
 		dataset.addSeries(m);
+		final String yAxis = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.cm.accuracy");
+		final PlotOrientation orientation = null;
+		final boolean hasLegend = true;
+		final boolean hasToolTips = true;
+		final boolean hasURLs = true;
 		JFreeChart chart =
-			ChartFactory.createLineXYChart(
-				title,
-				xAxis,
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.cm.accuracy"),
-				dataset,
-				true, true, true);
+//			ChartFactory.createLineXYChart(
+//				title,
+//				xAxis,
+//				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.cm.accuracy"),
+//				dataset,
+//				true, true, true);
+		ChartFactory.createXYLineChart(title, xAxis, yAxis, dataset, orientation, hasLegend, hasToolTips, hasURLs);
 		chart.setBackgroundPaint(getBackground());
 		return chart;
 	}
@@ -151,12 +162,12 @@ public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 		splitPane.setResizeWeight(0.5f);
 		splitPane.setOneTouchExpandable(true);
 		ChartPanel dP = new ChartPanel(dPlot, false, false, false, true, true);
-		dP.setHorizontalZoom(true);
-		dP.setVerticalZoom(true);
+//		dP.setHorizontalZoom(true);
+//		dP.setVerticalZoom(true);
 		splitPane.setTopComponent(dP);
 		ChartPanel mP = new ChartPanel(mPlot, false, false, false, true, true);
-		mP.setHorizontalZoom(true);
-		mP.setVerticalZoom(true);
+//		mP.setHorizontalZoom(true);
+//		mP.setVerticalZoom(true);
 		splitPane.setBottomComponent(mP);
 		add(splitPane, BorderLayout.CENTER);
 	}

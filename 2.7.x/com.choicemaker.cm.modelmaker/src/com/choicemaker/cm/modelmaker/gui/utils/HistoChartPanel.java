@@ -25,18 +25,20 @@ import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.filter.MarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
+
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.VerticalLogarithmicAxis;
-import org.jfree.chart.axis.VerticalNumberAxis;
+import org.jfree.chart.axis.LogarithmicAxis;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.entity.CategoryItemEntity;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.event.ChartChangeEvent;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.ui.RectangleEdge;
 
 /**
  *
@@ -44,6 +46,9 @@ import org.jfree.chart.plot.CategoryPlot;
  * @version   $Revision: 1.2 $ $Date: 2010/03/29 12:53:08 $
  */
 public class HistoChartPanel extends ChartPanel {
+
+	private static final long serialVersionUID = 4584521776926580787L;
+
 	protected int popupX;
 	protected int popupY;
 	protected JMenu select;
@@ -62,8 +67,8 @@ public class HistoChartPanel extends ChartPanel {
 		super(chart, properties, save, print, zoom, tooltips);
 		this.modelMaker = modelMaker;
 		// horizontal zoom doesn't work, by setting false we don't get bogus menu item
-		setHorizontalZoom(false);
-		setVerticalZoom(true);
+//		setHorizontalZoom(false);
+//		setVerticalZoom(true);
 		final JCheckBoxMenuItem logYScale =
 			new JCheckBoxMenuItem(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.logscale.y"));
 		logYScale.addItemListener(new ItemListener() {
@@ -72,11 +77,11 @@ public class HistoChartPanel extends ChartPanel {
 				Axis oldAxis = p.getRangeAxis();
 				if (logYScale.isSelected()) {
 					p.setRangeAxis(
-						new VerticalLogarithmicAxis(
+						new LogarithmicAxis(
 							MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs")));
 				} else {
 					p.setRangeAxis(
-						new VerticalNumberAxis(
+						new NumberAxis(
 							MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs")));
 				}
 				oldAxis.setPlot(null);
@@ -128,7 +133,7 @@ public class HistoChartPanel extends ChartPanel {
 				if (e instanceof CategoryItemEntity) {
 					CategoryItemEntity c = (CategoryItemEntity) e;
 					int cat = c.getCategoryIndex();
-					HistoCategoryDataset data = (HistoCategoryDataset)((CategoryPlot) getChart().getPlot()).getCategoryDataset();
+					HistoCategoryDataset data = (HistoCategoryDataset)((CategoryPlot) getChart().getPlot()).getDataset();
 					int len = data.getColumnCount();
 					float step = 1f / len;
 					rangeFrom = cat * step;
@@ -159,17 +164,18 @@ public class HistoChartPanel extends ChartPanel {
 
 	protected void setContextMenu() {
 		CategoryPlot categoryPlot = (CategoryPlot) getChart().getPlot();
-		HistoCategoryDataset data = (HistoCategoryDataset) categoryPlot.getCategoryDataset();
+		HistoCategoryDataset data = (HistoCategoryDataset) categoryPlot.getDataset();
 		if (data.hasData()) {
 			CategoryAxis axis = (CategoryAxis) categoryPlot.getDomainAxis();
 
 			//axis.set
-			Rectangle2D plotArea = getScaledDataArea();
+			Rectangle2D plotArea = getScreenDataArea();
+			final RectangleEdge edge = null;
 			int cat = 0;
 			int len = data.getColumnCount();
 			for (int i = 0; i < len; ++i) {
-				if (popupX >= axis.getCategoryStart(i, len, plotArea)
-					&& popupX <= axis.getCategoryEnd(i, len, plotArea)) {
+				if (popupX >= axis.getCategoryStart(i, len, plotArea,edge)
+					&& popupX <= axis.getCategoryEnd(i, len, plotArea,edge)) {
 					cat = i;
 					break;
 				}
