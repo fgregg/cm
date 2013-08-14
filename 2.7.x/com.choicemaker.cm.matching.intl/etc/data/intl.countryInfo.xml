@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<!DOCTYPE countries SYSTEM "intl.countryInfo.dtd">
+<countries>
+	<!-- 
+		See ISO 3166-1, -2, and -3
+	-->
+	<country-info display-name="Argentina" >
+		<!-- e.g. phones:
+			0223 4642782
+		-->
+	</country-info>
+	<country-info display-name="Australia" >
+		<!-- e.g phones:
+			07 3341 9401
+			(the 07 is the area code, and the rest is the phone number)
+		-->
+		<!-- 
+			postal code is 4 digits
+		-->
+	</country-info>
+	<country-info display-name="Belgium" >
+		<!--
+			011-32-71-31-02-20  // the 011 is a "get to the international operator, and the 32 is country code
+			
+		-->
+	</country-info>
+	<country-info display-name="Brazil" >
+		<!-- e.g. postal-codes
+			50000-000
+		-->
+		<!--
+			081-453-2437
+			(0194) 51-6538
+			(027) 328-4580
+		-->
+	</country-info>
+	<country-info display-name="Canada" >
+		<!--
+			potal codes are
+			A9A 9A9 or
+			A9A9A9
+			or maybe with a hyphen
+		-->
+		<!--
+			phone numbers are like in the US
+		-->
+	</country-info>
+	<country-info display-name="Chile" >
+		<!-- e.g. phones
+			464970
+			58-217657
+			(09) 2667493
+			(09)2559186
+			963040779
+		-->
+	</country-info>
+	<country-info display-name="Ecuador" >
+		<!-- e.g. phone (593 is country code, and most city/area codes are '2'
+			(011-593-2) 506-735
+			2-203538
+			011-5932-506-735
+			2270 197
+		-->
+	</country-info>
+	<country-info display-name="France" >
+		<!-- e.g. phones
+			02 97 64 52 12
+		-->
+		<!-- postal code is 5 digits -->
+		<!-- often, the postal code and city name are given together: "NICE 06000" or "06000 NICE" -->
+	</country-info>
+	<country-info display-name="Germany" >
+		<!-- e.g. phones
+			(from West Germany): 07431-73736
+		-->
+		<!--
+			zip codes are 5 digits
+			HOWEVER, it looks like there was an old zip code system of 4-digit zips.
+		-->
+	</country-info>
+	<country-info display-name="Jordan" >
+		<!--
+			zip codes are 5 digits
+		-->
+	</country-info>
+	<country-info display-name="Mexico" >
+		<!-- NOTE: Mexico, and some other latin american countries, often set off postal codes with CP or CEP -->
+		<!-- e.g. phones
+			222350757
+			1 15 55
+			(461) 4-29-15
+			83-52-38-82
+			0-443-227-790507
+			2/14/02/47
+			5942934
+			51 80146
+			(21)742.9346
+			2 12 93
+			83-52-38-82
+			2 10 81 61
+			726 45 000 Ext. 1336
+		-->
+	</country-info>
+	<country-info display-name="New Zealand" >
+		<!-- e.g. phones
+			(06) 837 8794
+			09/2368076
+		-->
+		<!-- postal codes are 4 digits.  -->
+	</country-info>
+	<country-info display-name="Netherlands" >
+		<!-- postal codes are four digits, then two letters 
+			optionally sepearted by a space, a hyphen, or nothing..
+		-->
+	</country-info>
+	<country-info display-name="Oman" >
+		<!--
+			zip codes are 3 digits (?)
+		-->
+	</country-info>
+	<country-info display-name="South Africa" >
+		<!--
+			postal codes are 4 digits
+		-->
+	</country-info>
+	<country-info display-name="Spain" >
+		<!--
+			956336700
+			956 33 67 00
+			93 7312164
+			965-910464
+		-->
+	</country-info>
+	<country-info display-name="Sweden" >
+		<!--
+			postal codes are 5 digits 
+		-->
+	</country-info>
+	<country-info display-name="Switzerland" >
+		<!--
+			056/634 53 08
+		-->
+	</country-info>
+	<country-info display-name="United Kingdom" >
+		<!-- e.g. postal codes
+			OL7 9AS
+			S0158PJ
+			HU15 2AL
+		-->
+		<!-- e.g. England phones
+			0161 339 4635
+		-->
+	</country-info>
+	<country-info display-name="Western Samoa" >
+		<!-- e.g. phone
+			011-685-24510 (685 is country code)
+		-->
+	</country-info>
+</countries>

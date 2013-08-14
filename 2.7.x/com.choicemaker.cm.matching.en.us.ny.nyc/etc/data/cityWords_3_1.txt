@@ -1,0 +1,5 @@
+LONG
+S
+SO
+SOUTH
+W

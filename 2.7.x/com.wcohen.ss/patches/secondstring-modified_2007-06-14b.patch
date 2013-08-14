@@ -1,0 +1,2041 @@
+? .DS_Store
+? META-INF
+? build
+? data-group1
+? secondstring-20060615.jar
+? doc/javadoc
+? jars/java_1.5
+? jars/junit-3.8.1.jar
+? test/softTFIDF_instance.ser
+? test/com/wcohen/ss/TestSoftTFIDF.java
+Index: build.xml
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/build.xml,v
+retrieving revision 1.7
+diff -a -u -r1.7 build.xml
+--- build.xml	13 Feb 2007 18:45:22 -0000	1.7
++++ build.xml	15 Jun 2007 03:29:55 -0000
+@@ -33,7 +33,9 @@
+         description="compile the source " >
+     <!-- Compile the java code from ${src} into ${build} -->
+   	<mkdir dir="${build.dir}/classes"/>
+-    <javac srcdir="${src}" destdir="${build.dir}/classes" debug="on" classpathref="compile.classpath"/>
++    <javac srcdir="${src}" destdir="${build.dir}/classes" debug="on" classpathref="compile.classpath">
++			<!-- compilerarg value="-Xlint:unchecked"/ -->
++		</javac>
+   </target>
+ 
+   <target name="dist" depends="build"  description="generate the distribution" >
+@@ -67,6 +69,7 @@
+            destdir="${test.dir}/classes"
+            debug="on"
+            classpathref="test.classpath"/>
++    <copy file="test/softTFIDF_instance.ser" todir="${test.dir}/classes"/>
+   </target>
+ 
+   <target name="test" depends="build-tests">
+Index: src/com/wcohen/ss/AbstractStatisticalTokenDistance.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/AbstractStatisticalTokenDistance.java,v
+retrieving revision 1.5
+diff -a -u -r1.5 AbstractStatisticalTokenDistance.java
+--- src/com/wcohen/ss/AbstractStatisticalTokenDistance.java	13 Feb 2007 18:45:22 -0000	1.5
++++ src/com/wcohen/ss/AbstractStatisticalTokenDistance.java	15 Jun 2007 03:29:55 -0000
+@@ -8,15 +8,14 @@
+  * Abstract token distance metric that uses frequency statistics.
+  */
+ 
+-abstract public class AbstractStatisticalTokenDistance extends AbstractTokenizedStringDistance
+-{
++abstract public class AbstractStatisticalTokenDistance extends AbstractTokenizedStringDistance {
+ 	// to save space, allocate the small numbers only once in the documentFrequency map
+ 	private static final Integer ONE = new Integer(1);
+ 	private static final Integer TWO = new Integer(2);
+ 	private static final Integer THREE = new Integer(3);
+ 
+ 	// maps tokens to document frequency
+-	protected Map<Token,Integer> documentFrequency = new HashMap<Token,Integer>(); 
++	protected Map documentFrequency = new HashMap(); 
+ 	// count number of documents
+ 	protected int collectionSize = 0;
+ 	// count number of tokens
+@@ -32,13 +31,13 @@
+ 	 */
+ 	public void train(StringWrapperIterator i) 
+ 	{
+-		Set<Token> seenTokens = new HashSet<Token>();
++		Set seenTokens = new HashSet();
+ 		while (i.hasNext()) {
+ 			BagOfTokens bag = asBagOfTokens(i.nextStringWrapper());
+ 			seenTokens.clear();
+-			for (Iterator<Token> j=bag.tokenIterator(); j.hasNext(); ) {
++			for (Iterator j=bag.tokenIterator(); j.hasNext(); ) {
+ 				totalTokenCount++;
+-				Token tokj = j.next();
++				Token tokj = (Token) j.next();
+ 				if (!seenTokens.contains(tokj)) {
+ 					seenTokens.add(tokj);
+ 					// increment documentFrequency counts
+Index: src/com/wcohen/ss/AdaptiveStringDistanceLearner.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/AdaptiveStringDistanceLearner.java,v
+retrieving revision 1.4
+diff -a -u -r1.4 AdaptiveStringDistanceLearner.java
+--- src/com/wcohen/ss/AdaptiveStringDistanceLearner.java	13 Feb 2007 18:45:22 -0000	1.4
++++ src/com/wcohen/ss/AdaptiveStringDistanceLearner.java	15 Jun 2007 03:29:55 -0000
+@@ -110,7 +110,7 @@
+ 	
+ 		public String explainCombination(MultiStringWrapper ms,MultiStringWrapper mt) 
+ 		{ 
+-			StringBuilder buf = new StringBuilder();
++			StringBuffer buf = new StringBuffer();
+ 			buf.append("Classifier: "+classifier);
+ 			buf.append("Classifier score: "+classifier.explain(asComboInstance(ms,mt)));
+ 			return buf.toString();
+Index: src/com/wcohen/ss/ApproxMemoMatrix.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/ApproxMemoMatrix.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 ApproxMemoMatrix.java
+--- src/com/wcohen/ss/ApproxMemoMatrix.java	13 Feb 2007 18:45:22 -0000	1.2
++++ src/com/wcohen/ss/ApproxMemoMatrix.java	15 Jun 2007 03:29:55 -0000
+@@ -103,7 +103,7 @@
+     public String toString() 
+     {
+         PrintfFormat fmt = new PrintfFormat(cellFormat);
+-        StringBuilder buf = new StringBuilder();
++        StringBuffer buf = new StringBuffer();
+         // line 1 - a ruler
+         buf.append("   ");  buf.append("   ");
+         for (int i=1; i<=s.length(); i++) buf.append(fmt.sprintf((double)i));
+Index: src/com/wcohen/ss/BagOfTokens.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/BagOfTokens.java,v
+retrieving revision 1.4
+diff -a -u -r1.4 BagOfTokens.java
+--- src/com/wcohen/ss/BagOfTokens.java	13 Feb 2007 18:45:22 -0000	1.4
++++ src/com/wcohen/ss/BagOfTokens.java	15 Jun 2007 03:29:55 -0000
+@@ -11,7 +11,7 @@
+ 
+ class BagOfTokens extends BasicStringWrapper
+ {
+-	private Map<Token,Double> weightMap = new TreeMap<Token,Double>();
++	private Map weightMap = new TreeMap();
+ 	private double totalWeight = 0;
+ 	private Token[] tokens;
+ 	
+@@ -26,12 +26,12 @@
+ 	}
+ 
+ 	
+-	Set<Token> getDistinctTokens() {
++	Set getDistinctTokens() {
+ 		return weightMap.keySet();
+ 	}
+ 	
+ 	/** Iterates over all tokens in the bag. */
+-    Iterator<Token> tokenIterator() {
++    Iterator tokenIterator() {
+ 		return weightMap.keySet().iterator();
+ 	}
+ 	
+@@ -43,13 +43,13 @@
+ 	/** Weight associated with a token: by default, the number of times
+ 	 * the token appears in the bag. */
+     double getWeight(Token tok) {
+-		Double f = weightMap.get(tok);
++		Double f = (Double) weightMap.get(tok);
+ 		return f==null ? 0 : f.doubleValue();
+ 	}
+ 	
+ 	/** Change the weight of a token in the bag */
+ 	void setWeight(Token tok, double d) {
+-		Double oldWeight = weightMap.get(tok);
++		Double oldWeight = (Double) weightMap.get(tok);
+ 		totalWeight += oldWeight==null ? d : (d - oldWeight.doubleValue());
+ 		weightMap.put(tok,new Double(d));
+ 	}
+Index: src/com/wcohen/ss/BasicDistanceInstanceIterator.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/BasicDistanceInstanceIterator.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 BasicDistanceInstanceIterator.java
+--- src/com/wcohen/ss/BasicDistanceInstanceIterator.java	13 Feb 2007 18:45:22 -0000	1.2
++++ src/com/wcohen/ss/BasicDistanceInstanceIterator.java	15 Jun 2007 03:29:55 -0000
+@@ -7,10 +7,10 @@
+  */
+ 
+ public class BasicDistanceInstanceIterator implements DistanceInstanceIterator {
+-	private Iterator<DistanceInstance> myIterator;
+-	public BasicDistanceInstanceIterator(Iterator<DistanceInstance> i) { myIterator=i; }
++	private Iterator myIterator;
++	public BasicDistanceInstanceIterator(Iterator i) { myIterator=i; }
+ 	public boolean hasNext() { return myIterator.hasNext(); }
+-	public DistanceInstance next() { return myIterator.next(); }
++	public Object next() { return myIterator.next(); }
+ 	public DistanceInstance nextDistanceInstance() { return (DistanceInstance)next(); }
+ 	public void remove() { myIterator.remove(); }
+ }
+Index: src/com/wcohen/ss/CombinedStringDistanceLearner.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/CombinedStringDistanceLearner.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 CombinedStringDistanceLearner.java
+--- src/com/wcohen/ss/CombinedStringDistanceLearner.java	13 Feb 2007 18:45:22 -0000	1.3
++++ src/com/wcohen/ss/CombinedStringDistanceLearner.java	15 Jun 2007 03:29:55 -0000
+@@ -73,9 +73,9 @@
+ 	public void setStringWrapperPool(StringWrapperIterator it) 
+ 	{ 
+ 		// train i-th learner on i-th field of string wrapper
+-		List<MultiStringWrapper> buffer = asMultiStringWrapperList(it);
++		List buffer = asMultiStringWrapperList(it);
+ 		if (buffer.size()==0) throw new IllegalStateException("need some unlabeled strings");
+-		MultiStringWrapper prototype = buffer.get(0);
++		MultiStringWrapper prototype = (MultiStringWrapper) buffer.get(0);
+ 		for (int i=0; i<prototype.size(); i++) {
+ 			int j = prototype.getDistanceLearnerIndex(i);
+ 			innerLearners[j].setStringWrapperPool( new JthStringWrapperValueIterator( j, buffer.iterator() ));
+@@ -113,11 +113,11 @@
+ 		// poll sublearners in random order, to be fair
+ 		// indices [0,innerLearners.length-1] are the inner learners,
+ 		// index innerLearners.length is the comboLearner
+-		List<Integer> indices = new ArrayList<Integer>(innerLearners.length+1);
++		List indices = new ArrayList(innerLearners.length+1);
+ 		for (int i=0; i<indices.size(); i++) indices.set(i, new Integer(i) );
+ 		Collections.shuffle(indices);
+ 		for (int i=0; i<indices.size(); i++) {
+-			int k = indices.get(i).intValue();
++			int k = ((Integer)indices.get(i)).intValue();
+ 			if ( k==innerLearners.length && comboHasNextQuery() ) {
+ 				return comboNextQuery();
+ 			} else if (innerLearners[k].hasNextQuery()) {
+@@ -143,9 +143,9 @@
+ 	 */
+ 	public StringWrapperIterator prepare(StringWrapperIterator it) 
+ 	{
+-		List<MultiStringWrapper> multiWrappers = asMultiStringWrapperList(it);
++		List multiWrappers = asMultiStringWrapperList(it);
+ 		if (multiWrappers.size()==0) return new BasicStringWrapperIterator( Collections.EMPTY_SET.iterator() );
+-		MultiStringWrapper prototype = multiWrappers.get(0);
++		MultiStringWrapper prototype = (MultiStringWrapper) multiWrappers.get(0);
+ 		for (int i=0; i<prototype.size(); i++) {
+ 			int j = prototype.getDistanceLearnerIndex(i);
+ 			StringDistanceLearner learner = innerLearners[j];
+@@ -172,8 +172,8 @@
+ 	//
+ 
+ 	/* lazily convert to a List of MultiStringWrapper list */
+-	protected List<MultiStringWrapper> asMultiStringWrapperList(StringWrapperIterator i) {
+-		List<MultiStringWrapper> buffer = new ArrayList<MultiStringWrapper>();
++	protected List asMultiStringWrapperList(StringWrapperIterator i) {
++		List buffer = new ArrayList();
+ 		while (i.hasNext()) {
+ 			StringWrapper w = i.nextStringWrapper();
+ 			MultiStringWrapper mw = asMultiStringWrapper(w);
+@@ -214,8 +214,8 @@
+ 	}
+ 
+ 	/* lazily convert to a List of DistanceInstance's with MultiStringWrapper's in each place */
+-	protected List<MyMultiDistanceInstance> asMultiDistanceInstanceList(DistanceInstanceIterator i) {
+-		List<MyMultiDistanceInstance> buffer = new ArrayList<MyMultiDistanceInstance>();
++	protected List asMultiDistanceInstanceList(DistanceInstanceIterator i) {
++		List buffer = new ArrayList();
+ 		while (i.hasNext()) {
+ 			buffer.add( asMultiDistanceInstance( i.nextDistanceInstance() ) );
+ 		}
+@@ -259,12 +259,12 @@
+ 
+ 	/** Iterate over the j-th field of MultiStringWrapper's in a DistanceInstance of MultiStringWrapper's */
+ 	protected class JthDistanceInstanceIterator implements DistanceInstanceIterator {
+-		private Iterator<DistanceInstance> i;
++		private Iterator i;
+ 		private int j;
+-		public JthDistanceInstanceIterator(int j, Iterator<DistanceInstance> i) { this.j=j; this.i=i; }
++		public JthDistanceInstanceIterator(int j, Iterator i) { this.j=j; this.i=i; }
+ 		public boolean hasNext() { return i.hasNext(); }
+ 		public DistanceInstance nextDistanceInstance() { return (DistanceInstance)next(); }
+-		public DistanceInstance next() { return ((MyMultiDistanceInstance) i.next()).get(j); }
++		public Object next() { return ((MyMultiDistanceInstance) i.next()).get(j); }
+ 		public void remove() { throw new UnsupportedOperationException("can't remove"); }
+ 	}
+ 
+@@ -322,7 +322,7 @@
+ 		}
+ 		
+ 		final public String explainScore(StringWrapper s, StringWrapper t) { 
+-			StringBuilder buf = new StringBuilder();
++			StringBuffer buf = new StringBuffer();
+ 			MultiStringWrapper ms = asMultiStringWrapper(s);
+ 			MultiStringWrapper mt = asMultiStringWrapper(t);
+ 			if (ms.size() != mt.size() || ms.size()!=prototype.size()) {
+@@ -345,7 +345,7 @@
+ 		/** Help class for 'toString()' which produces a description of the distances being combined. */
+ 		protected String innerDistanceString() 
+ 		{
+-			StringBuilder buf = new StringBuilder("");
++			StringBuffer buf = new StringBuffer("");
+ 			for (int i=0; i<innerDistances.length; i++) 
+ 			{
+ 				buf.append(" "+innerDistances[i]);
+Index: src/com/wcohen/ss/DistanceLearnerFactory.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/DistanceLearnerFactory.java,v
+retrieving revision 1.5
+diff -a -u -r1.5 DistanceLearnerFactory.java
+--- src/com/wcohen/ss/DistanceLearnerFactory.java	13 Feb 2007 18:45:22 -0000	1.5
++++ src/com/wcohen/ss/DistanceLearnerFactory.java	15 Jun 2007 03:29:56 -0000
+@@ -78,7 +78,7 @@
+ 			
+ 		} catch (Exception e) {
+ 			//e.printStackTrace();
+-			StringBuilder buf = new StringBuilder(classNames[0]);
++			StringBuffer buf = new StringBuffer(classNames[0]);
+ 			if (lo==0) buf.append("<<<");
+ 			for (int i=1; i<classNames.length; i++) {
+ 				buf.append("/" + classNames[i]);
+@@ -121,7 +121,7 @@
+ 	// 
+ 	static private String[] split(String s) 
+ 	{
+-		List<String> list = new ArrayList<String>();
++		List list = new ArrayList();
+     // begin = start of next class description
+ 		int begin = 0; 
+ 		for (int end=s.indexOf('/'); end>=0; end=s.indexOf('/',end+1)) {
+Index: src/com/wcohen/ss/Jaccard.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/Jaccard.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 Jaccard.java
+--- src/com/wcohen/ss/Jaccard.java	13 Feb 2007 18:45:22 -0000	1.2
++++ src/com/wcohen/ss/Jaccard.java	15 Jun 2007 03:29:56 -0000
+@@ -3,6 +3,8 @@
+ import com.wcohen.ss.api.*;
+ import com.wcohen.ss.tokens.*;
+ 
++import java.util.Iterator;
++
+ /**
+  * Jaccard distance implementation.  The Jaccard distance between two
+  * sets is the ratio of the size of their intersection to the size of
+@@ -20,7 +22,8 @@
+ 		BagOfTokens sBag = asBagOfTokens(s);
+ 		BagOfTokens tBag = asBagOfTokens(t);
+ 		double numCommon = 0.0; 
+-		for (Token tok: sBag.getDistinctTokens()) {
++		for (Iterator i=sBag.getDistinctTokens().iterator(); i.hasNext(); ) {
++		  Token tok = (Token) i.next();
+ 			if (tBag.contains(tok)) numCommon++;
+ 		}
+ 		//System.out.println("common="+numCommon+" |s| = "+sBag.size()+" |t| = "+tBag.size());
+@@ -46,14 +49,16 @@
+ 	{
+ 		BagOfTokens sBag = (BagOfTokens)s;
+ 		BagOfTokens tBag = (BagOfTokens)t;
+-		StringBuilder buf = new StringBuilder("");
++		StringBuffer buf = new StringBuffer("");
+ 		buf.append("S: ");
+-		for (Token tok: sBag.getDistinctTokens()) {
++		for (Iterator i=sBag.getDistinctTokens().iterator(); i.hasNext(); ) {
++			Token tok = (Token) i.next();
+ 			buf.append(" "+tok.getValue());
+ 			if (tBag.contains(tok)) buf.append("*");
+ 		}
+ 		buf.append("\nT: ");
+-		for (Token tok: tBag.getDistinctTokens()) {
++		for (Iterator i=tBag.getDistinctTokens().iterator(); i.hasNext() ; ) {
++			Token tok = (Token) i.next();
+ 			buf.append(" "+tok.getValue());
+ 			if (sBag.contains(tok)) buf.append("*");
+ 		}
+Index: src/com/wcohen/ss/Jaro.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/Jaro.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 Jaro.java
+--- src/com/wcohen/ss/Jaro.java	13 Feb 2007 18:45:22 -0000	1.3
++++ src/com/wcohen/ss/Jaro.java	15 Jun 2007 03:29:56 -0000
+@@ -58,8 +58,8 @@
+ 
+ 	private String commonChars(String s,String t,int halflen) 
+ 	{
+-		StringBuilder common = new StringBuilder(); 
+-		StringBuilder copy = new StringBuilder(t);
++		StringBuffer common = new StringBuffer(); 
++		StringBuffer copy = new StringBuffer(t);
+ 		for (int i=0; i<s.length(); i++) {
+ 			char ch = s.charAt(i);
+ 			boolean foundIt = false;
+Index: src/com/wcohen/ss/JensenShannonDistance.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/JensenShannonDistance.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 JensenShannonDistance.java
+--- src/com/wcohen/ss/JensenShannonDistance.java	13 Feb 2007 18:45:22 -0000	1.3
++++ src/com/wcohen/ss/JensenShannonDistance.java	15 Jun 2007 03:29:56 -0000
+@@ -11,7 +11,7 @@
+ abstract public class JensenShannonDistance extends AbstractTokenizedStringDistance
+ {
+ 	// maps tokens to document frequency
+-	private Map<Token,Integer> backgroundFrequency = new HashMap<Token,Integer>(); 
++	private Map backgroundFrequency = new HashMap(); 
+ 	// count number of tokens
+ 	int totalTokens = 0;
+ 	// to save space, allocate the small numbers only once in the backgroundFrequency map
+@@ -28,7 +28,7 @@
+ 		while (i.hasNext()) {
+ 			StringWrapper s = (StringWrapper)i.next();
+ 			BagOfTokens bag = asBagOfTokens(i.nextStringWrapper());
+-			for (Iterator<Token> j=bag.tokenIterator(); j.hasNext(); ) {
++			for (Iterator j=bag.tokenIterator(); j.hasNext(); ) {
+ 				Token tokj = (Token)j.next();
+ 				totalTokens++;
+ 				// increment backgroundFrequency counts
+@@ -48,7 +48,7 @@
+ 	final public StringWrapper prepare(String s) {
+ 		BagOfTokens bag = new BagOfTokens(s, tokenizer.tokenize(s));
+ 		double totalWeight = bag.getTotalWeight();
+-		for (Iterator<Token> i=bag.tokenIterator(); i.hasNext(); ) {
++		for (Iterator i=bag.tokenIterator(); i.hasNext(); ) {
+ 			Token tok = (Token)i.next();
+ 			double freq = bag.getWeight(tok);
+ 			bag.setWeight( tok, smoothedProbability(tok, freq, totalWeight) );
+@@ -73,7 +73,7 @@
+ 		BagOfTokens sBag = (BagOfTokens)s;
+ 		BagOfTokens tBag = (BagOfTokens)t;
+ 		double sum = 0;
+-		for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
++		for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
+ 	    Token tok = (Token)i.next();
+ 	    if (tBag.contains(tok)) {
+ 				double ps = sBag.getWeight(tok);
+@@ -87,12 +87,12 @@
+ 
+ 	final public String explainScore(StringWrapper s,StringWrapper t) 
+ 	{
+-		StringBuilder buf = new StringBuilder();
++		StringBuffer buf = new StringBuffer();
+ 		PrintfFormat fmt = new PrintfFormat("%.3f");
+ 		BagOfTokens sBag = (BagOfTokens)s;
+ 		BagOfTokens tBag = (BagOfTokens)t;
+ 		buf.append("Common tokens: ");
+-		for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
++		for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
+ 	    Token tok = (Token)i.next();
+ 	    if (tBag.contains(tok)) {
+ 				double ps = sBag.getWeight(tok);
+Index: src/com/wcohen/ss/Level2.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/Level2.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 Level2.java
+--- src/com/wcohen/ss/Level2.java	13 Feb 2007 18:45:22 -0000	1.2
++++ src/com/wcohen/ss/Level2.java	15 Jun 2007 03:29:56 -0000
+@@ -31,11 +31,11 @@
+ 		BagOfTokens sBag = asBagOfTokens(s);
+ 		BagOfTokens tBag = asBagOfTokens(t);
+ 		double sumOverI = 0;
+-		for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
+-			Token tokenI = i.next();
++		for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
++			Token tokenI = (Token) i.next();
+ 			double maxOverJ = -Double.MAX_VALUE;
+-			for (Iterator<Token> j = tBag.tokenIterator(); j.hasNext(); ) {
+-				Token tokenJ = j.next();
++			for (Iterator j = tBag.tokenIterator(); j.hasNext(); ) {
++				Token tokenJ = (Token) j.next();
+ 				double scoreItoJ = tokenDistance.score( tokenI.getValue(), tokenJ.getValue() );
+ 				maxOverJ = Math.max( maxOverJ, scoreItoJ);
+ 			}
+@@ -49,17 +49,17 @@
+ 	 */
+ 	public String explainScore(StringWrapper s, StringWrapper t) 
+ 	{
+-		StringBuilder buf = new StringBuilder();
++		StringBuffer buf = new StringBuffer();
+ 		BagOfTokens sBag = asBagOfTokens(s);
+ 		BagOfTokens tBag = asBagOfTokens(t);
+ 		double sumOverI = 0;
+-		for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
+-			Token tokenI = i.next();
++		for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
++			Token tokenI = (Token) i.next();
+ 			buf.append("token="+tokenI);
+ 			double maxOverJ = -Double.MAX_VALUE;
+ 			Token closestToI = null;
+-			for (Iterator<Token> j = tBag.tokenIterator(); j.hasNext(); ) {
+-				Token tokenJ = j.next();
++			for (Iterator j = tBag.tokenIterator(); j.hasNext(); ) {
++				Token tokenJ = (Token) j.next();
+ 				double scoreItoJ = tokenDistance.score( tokenI.getValue(), tokenJ.getValue() );
+ 				buf.append(" dist("+tokenJ.getValue()+")="+scoreItoJ);
+ 				if (scoreItoJ >= maxOverJ) {
+Index: src/com/wcohen/ss/MemoMatrix.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/MemoMatrix.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 MemoMatrix.java
+--- src/com/wcohen/ss/MemoMatrix.java	13 Feb 2007 18:45:22 -0000	1.3
++++ src/com/wcohen/ss/MemoMatrix.java	15 Jun 2007 03:29:56 -0000
+@@ -64,7 +64,7 @@
+     /** Print the matrix, for debugging and/or explanation. */
+     public String toString() 
+     {
+-        StringBuilder buf = new StringBuilder();
++        StringBuffer buf = new StringBuffer();
+         // line 1
+         buf.append("   ");
+         for (int i=1; i<=s.length(); i++) buf.append(" "+sAt(i)+" ");
+Index: src/com/wcohen/ss/Mixture.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/Mixture.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 Mixture.java
+--- src/com/wcohen/ss/Mixture.java	13 Feb 2007 18:45:22 -0000	1.3
++++ src/com/wcohen/ss/Mixture.java	15 Jun 2007 03:29:56 -0000
+@@ -2,6 +2,8 @@
+ 
+ import com.wcohen.ss.api.*;
+ 
++import java.util.Iterator;
++
+ /**
+  * Mixture-based distance metric.
+  */
+@@ -25,7 +27,8 @@
+ 		while (true) {
+ 			double newLamba = 0.0;
+ 			// E step: compute prob each token is draw from T
+-			for (Token tok: sBag.getDistinctTokens()) {
++			for (Iterator i=sBag.getDistinctTokens().iterator(); i.hasNext(); ) {
++				Token tok = (Token) i.next();
+ 				double sWeight = sBag.getWeight(tok);
+ 				double tWeight = tBag.getWeight(tok);
+ 				double probTokGivenT = tWeight/tBag.getTotalWeight();
+Index: src/com/wcohen/ss/MongeElkan.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/MongeElkan.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 MongeElkan.java
+--- src/com/wcohen/ss/MongeElkan.java	13 Feb 2007 18:45:22 -0000	1.2
++++ src/com/wcohen/ss/MongeElkan.java	15 Jun 2007 03:29:56 -0000
+@@ -31,20 +31,20 @@
+ 	static private Set[] approx;
+ 	static { 
+ 		approx = new Set[7];
+-		approx[0] = new HashSet<Character>(); 
++		approx[0] = new HashSet(); 
+ 		approx[0].add(new Character('d')); approx[0].add(new Character('t'));
+-		approx[1] = new HashSet<Character>();
++		approx[1] = new HashSet();
+ 		approx[1].add(new Character('g')); approx[1].add(new Character('j'));
+-		approx[2] = new HashSet<Character>();
++		approx[2] = new HashSet();
+ 		approx[2].add(new Character('l')); approx[2].add(new Character('r'));
+-		approx[3] = new HashSet<Character>();
++		approx[3] = new HashSet();
+ 		approx[3].add(new Character('m')); approx[3].add(new Character('n'));
+-		approx[4] = new HashSet<Character>();
++		approx[4] = new HashSet();
+ 		approx[4].add(new Character('b')); approx[4].add(new Character('p')); approx[4].add(new Character('v'));
+-		approx[5] = new HashSet<Character>();
++		approx[5] = new HashSet();
+ 		approx[5].add(new Character('a')); approx[5].add(new Character('e')); approx[5].add(new Character('i'));
+ 		approx[5].add(new Character('o')); approx[5].add(new Character('u'));
+-		approx[6] = new HashSet<Character>();
++		approx[6] = new HashSet();
+ 		approx[6].add(new Character(',')); approx[6].add(new Character('.'));
+ 	}
+ 	static private final CharMatchScore MY_CHAR_MATCH_SCORE = new CharMatchScore() {
+Index: src/com/wcohen/ss/MultiStringAvgDistance.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/MultiStringAvgDistance.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 MultiStringAvgDistance.java
+--- src/com/wcohen/ss/MultiStringAvgDistance.java	13 Feb 2007 18:45:22 -0000	1.3
++++ src/com/wcohen/ss/MultiStringAvgDistance.java	15 Jun 2007 03:29:56 -0000
+@@ -28,7 +28,7 @@
+ 	/** Explain how to combine the scores for each primitive distance
+ 	 * function on each field. */
+ 	protected String explainScoreCombination(double[] multiScore) {
+-		StringBuilder buf = new StringBuilder("");
++		StringBuffer buf = new StringBuffer("");
+ 		PrintfFormat fmt = new PrintfFormat(" %.3f");
+ 		buf.append("field-level scores [");
+ 		for (int i=0; i<multiScore.length; i++) {
+Index: src/com/wcohen/ss/MultiStringDistance.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/MultiStringDistance.java,v
+retrieving revision 1.4
+diff -a -u -r1.4 MultiStringDistance.java
+--- src/com/wcohen/ss/MultiStringDistance.java	13 Feb 2007 18:45:22 -0000	1.4
++++ src/com/wcohen/ss/MultiStringDistance.java	15 Jun 2007 03:29:56 -0000
+@@ -60,7 +60,7 @@
+ 			throw new IllegalArgumentException("inputs have different numbers of fields");
+ 		}
+ 		int n = ms.size();
+-		StringBuilder buf = new StringBuilder();
++		StringBuffer buf = new StringBuffer();
+ 		for (int i=0; i<n; i++) {
+ 			buf.append("Field "+(i+1)+": s='"+ms.get(i)+"' t='"+mt.get(i)+"':\n");
+ 			buf.append( getDistance(i).explainScore( ms.get(i), mt.get(i)) );
+Index: src/com/wcohen/ss/MultiStringWrapper.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/MultiStringWrapper.java,v
+retrieving revision 1.7
+diff -a -u -r1.7 MultiStringWrapper.java
+--- src/com/wcohen/ss/MultiStringWrapper.java	13 Feb 2007 18:45:22 -0000	1.7
++++ src/com/wcohen/ss/MultiStringWrapper.java	15 Jun 2007 03:29:56 -0000
+@@ -71,7 +71,7 @@
+ 	}
+ 
+ 	public String toString() { 
+-		StringBuilder buf =  new StringBuilder("[multiwrap '"+s+"':");
++		StringBuffer buf =  new StringBuffer("[multiwrap '"+s+"':");
+ 		for (int i=0; i<size(); i++) {
+ 			buf.append(" '"+get(i)+"'");
+ 		}
+Index: src/com/wcohen/ss/PrintfFormat.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/PrintfFormat.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 PrintfFormat.java
+--- src/com/wcohen/ss/PrintfFormat.java	13 Feb 2007 18:45:22 -0000	1.2
++++ src/com/wcohen/ss/PrintfFormat.java	15 Jun 2007 03:29:58 -0000
+@@ -544,7 +544,7 @@
+     ConversionSpecification cs = null;
+     char c = 0;
+     int i=0;
+-    StringBuilder sb=new StringBuilder();
++    StringBuffer sb=new StringBuffer();
+     while (e.hasMoreElements()) {
+       cs = (ConversionSpecification)
+         e.nextElement();
+@@ -614,7 +614,7 @@
+     Enumeration e = vFmt.elements();
+     ConversionSpecification cs = null;
+     char c = 0;
+-    StringBuilder sb=new StringBuilder();
++    StringBuffer sb=new StringBuffer();
+     while (e.hasMoreElements()) {
+       cs = (ConversionSpecification)
+         e.nextElement();
+@@ -637,7 +637,7 @@
+     Enumeration e = vFmt.elements();
+     ConversionSpecification cs = null;
+     char c = 0;
+-    StringBuilder sb=new StringBuilder();
++    StringBuffer sb=new StringBuffer();
+     while (e.hasMoreElements()) {
+       cs = (ConversionSpecification)
+         e.nextElement();
+@@ -661,7 +661,7 @@
+     Enumeration e = vFmt.elements();
+     ConversionSpecification cs = null;
+     char c = 0;
+-    StringBuilder sb=new StringBuilder();
++    StringBuffer sb=new StringBuffer();
+     while (e.hasMoreElements()) {
+       cs = (ConversionSpecification)
+         e.nextElement();
+@@ -685,7 +685,7 @@
+     Enumeration e = vFmt.elements();
+     ConversionSpecification cs = null;
+     char c = 0;
+-    StringBuilder sb=new StringBuilder();
++    StringBuffer sb=new StringBuffer();
+     while (e.hasMoreElements()) {
+       cs = (ConversionSpecification)
+         e.nextElement();
+@@ -708,7 +708,7 @@
+     Enumeration e = vFmt.elements();
+     ConversionSpecification cs = null;
+     char c = 0;
+-    StringBuilder sb=new StringBuilder();
++    StringBuffer sb=new StringBuffer();
+     while (e.hasMoreElements()) {
+       cs = (ConversionSpecification)
+         e.nextElement();
+@@ -737,7 +737,7 @@
+     Enumeration e = vFmt.elements();
+     ConversionSpecification cs = null;
+     char c = 0;
+-    StringBuilder sb=new StringBuilder();
++    StringBuffer sb=new StringBuffer();
+     while (e.hasMoreElements()) {
+       cs = (ConversionSpecification)
+         e.nextElement();
+@@ -883,7 +883,7 @@
+      * @return s the stored String.
+      */
+     String getLiteral() {
+-      StringBuilder sb=new StringBuilder();
++      StringBuffer sb=new StringBuffer();
+       int i=0;
+       while (i<fmt.length()) {
+         if (fmt.charAt(i)=='\\') {
+Index: src/com/wcohen/ss/SoftTFIDF.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/SoftTFIDF.java,v
+retrieving revision 1.6
+diff -a -u -r1.6 SoftTFIDF.java
+--- src/com/wcohen/ss/SoftTFIDF.java	13 Feb 2007 18:45:22 -0000	1.6
++++ src/com/wcohen/ss/SoftTFIDF.java	15 Jun 2007 03:29:59 -0000
+@@ -44,16 +44,16 @@
+ 		UnitVector sBag = asUnitVector(s);
+ 		UnitVector tBag = asUnitVector(t);
+ 		double sim = 0.0;
+-		for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
+-			Token tok = i.next();
++		for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
++			Token tok = (Token) i.next();
+ 	    if (tBag.contains(tok)) {
+ 				sim += sBag.getWeight(tok) * tBag.getWeight(tok);
+ 			} else {
+ 				// find best matching token
+ 				double matchScore = tokenMatchThreshold;
+ 				Token matchTok = null;
+-				for (Iterator<Token> j=tBag.tokenIterator(); j.hasNext(); ) {
+-					Token tokJ = j.next();
++				for (Iterator j=tBag.tokenIterator(); j.hasNext(); ) {
++					Token tokJ = (Token) j.next();
+ 					double distItoJ = tokenDistance.score( tok.getValue(), tokJ.getValue() );
+ 					if (distItoJ>=matchScore) {
+ 						matchTok = tokJ;
+@@ -77,11 +77,11 @@
+ 	{
+ 		BagOfTokens sBag = (BagOfTokens)s;
+ 		BagOfTokens tBag = (BagOfTokens)t;
+-		StringBuilder buf = new StringBuilder("");
++		StringBuffer buf = new StringBuffer("");
+ 		PrintfFormat fmt = new PrintfFormat("%.3f");
+ 		buf.append("Common tokens: ");
+-		for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
+-			Token tok = i.next();
++		for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
++			Token tok = (Token) i.next();
+ 			if (tBag.contains(tok)) {
+ 				buf.append(" "+tok.getValue()+": ");
+ 				buf.append(fmt.sprintf(sBag.getWeight(tok)));
+@@ -91,8 +91,8 @@
+ 				// find best matching token
+ 				double matchScore = tokenMatchThreshold;
+ 				Token matchTok = null;
+-				for (Iterator<Token> j=tBag.tokenIterator(); j.hasNext(); ) {
+-					Token tokJ = j.next();
++				for (Iterator j=tBag.tokenIterator(); j.hasNext(); ) {
++					Token tokJ = (Token) j.next();
+ 					double distItoJ = tokenDistance.score( tok.getValue(), tokJ.getValue() );
+ 					if (distItoJ>=matchScore) {
+ 						matchTok = tokJ;
+Index: src/com/wcohen/ss/SoftTokenFelligiSunter.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/SoftTokenFelligiSunter.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 SoftTokenFelligiSunter.java
+--- src/com/wcohen/ss/SoftTokenFelligiSunter.java	13 Feb 2007 18:45:22 -0000	1.2
++++ src/com/wcohen/ss/SoftTokenFelligiSunter.java	15 Jun 2007 03:29:59 -0000
+@@ -44,8 +44,8 @@
+ 		BagOfTokens sBag = (BagOfTokens)s;
+ 		BagOfTokens tBag = (BagOfTokens)t;
+ 		double sim = 0.0;
+-		for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
+-			Token tok = i.next();
++		for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
++			Token tok = (Token) i.next();
+ 			double	df = getDocumentFrequency(tok);
+ 			if (tBag.contains(tok)) {
+ 				double w = -Math.log( df/collectionSize );
+@@ -53,8 +53,8 @@
+ 			} else {
+ 				Token matchTok = null;
+ 				double matchScore = tokenMatchThreshold;
+-				for (Iterator<Token> j=tBag.tokenIterator(); j.hasNext(); ) {
+-					Token tokJ = j.next();
++				for (Iterator j=tBag.tokenIterator(); j.hasNext(); ) {
++					Token tokJ = (Token) j.next();
+ 					double distItoJ = tokenDistance.score( tok.getValue(), tokJ.getValue() );
+ 					if (distItoJ>=matchScore) {
+ 						matchTok = tokJ;
+@@ -89,11 +89,11 @@
+ 	{
+ 		BagOfTokens sBag = (BagOfTokens)s;
+ 		BagOfTokens tBag = (BagOfTokens)t;
+-		StringBuilder buf = new StringBuilder("");
++		StringBuffer buf = new StringBuffer("");
+ 		PrintfFormat fmt = new PrintfFormat("%.3f");
+ 		buf.append("Common tokens: ");
+-		for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
+-			Token tok = i.next();
++		for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
++			Token tok = (Token) i.next();
+ 			if (tBag.contains(tok)) {
+ 				buf.append(" "+tok.getValue()+": ");
+ 				buf.append(fmt.sprintf(tBag.getWeight(tok)));
+@@ -108,15 +108,16 @@
+ 	// compute pairwise distance between all tokens
+ 	//
+ 	private boolean tokenDistancesComputed = false;
+-	private Map<String,Set<TokenNeighbor>> neighborMap;
++	private Map neighborMap;
+ 
+ 	private void computeTokenDistances() 
+ 	{
+ 		if (tokenDistancesComputed) return;
+ 		// use blocker to compute pairwise distances between similar tokens
+-		neighborMap = new HashMap<String,Set<TokenNeighbor>>();
++		neighborMap = new HashMap();
+ 		MatchData tokenData = new MatchData();
+-		for (Token tok: documentFrequency.keySet()) {
++		for (Iterator i=documentFrequency.keySet().iterator(); i.hasNext(); ) {
++			Token tok = (Token) i.next();
+ 			tokenData.addInstance("tokens",tok.getValue(),tok.getValue());
+ 		}
+ 		Blocker tokenBlocker = new ClusterNGramBlocker();
+@@ -140,9 +141,9 @@
+ 		tokenDistancesComputed = true;
+ 	}
+ 	private void addNeighbor(String s, String t, double d) {
+-		Set<TokenNeighbor> set = neighborMap.get(s);
++		Set set = (Set) neighborMap.get(s);
+ 		if (set==null) {
+-			set = new TreeSet<TokenNeighbor>();
++			set = new TreeSet();
+ 			neighborMap.put(s, set);
+ 		}
+ 		set.add( new TokenNeighbor(t, d) );
+@@ -152,7 +153,7 @@
+ 	 * neighboring token, and the distance to it. Goal is that an
+ 	 * ordered set of these will let you quickly find the DF of
+ 	 * all tokens closer than a threshold D.  */
+-	private class TokenNeighbor implements Comparable<TokenNeighbor> {
++	private class TokenNeighbor implements Comparable {
+ 		public String tokVal;
+ 		public int freq;
+ 		public double score;
+@@ -162,7 +163,11 @@
+ 			this.freq = getDocumentFrequency(tokenizer.intern(tokVal));
+ 		}
+ 		// sort by score, closest first
+-		public int compareTo(TokenNeighbor other) {
++		public int compareTo(Object obj) {
++			if ( !(obj instanceof TokenNeighbor) ) {
++				throw new ClassCastException("incompatible type");
++			}
++			TokenNeighbor other = (TokenNeighbor) obj;
+ 			if (other.score > score) return +1;
+ 			else if (other.score < score) return -1;
+ 			else return 0;
+@@ -175,9 +180,10 @@
+ 	private int neighborhoodDocumentFrequency(Token tok, double d) {
+ 		int df = getDocumentFrequency(tok);
+ 		String s = tok.getValue();
+-		Set<TokenNeighbor> neighbors = neighborMap.get(s);
++		Set neighbors = (Set) neighborMap.get(s);
+ 		if (neighbors==null) return df;
+-		for (TokenNeighbor neighbor: neighbors) {
++		for (Iterator i=neighbors.iterator(); i.hasNext(); ) {
++			TokenNeighbor neighbor = (TokenNeighbor) i.next();
+ 			if (neighbor.score<d) break;
+ 			df += neighbor.freq;
+ 		}
+Index: src/com/wcohen/ss/TFIDF.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/TFIDF.java,v
+retrieving revision 1.7
+diff -a -u -r1.7 TFIDF.java
+--- src/com/wcohen/ss/TFIDF.java	13 Feb 2007 18:45:22 -0000	1.7
++++ src/com/wcohen/ss/TFIDF.java	15 Jun 2007 03:29:59 -0000
+@@ -19,8 +19,8 @@
+         UnitVector sBag = asUnitVector(s);
+         UnitVector tBag = asUnitVector(t);
+         double sim = 0.0;
+-        for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
+-        	Token tok = i.next();
++        for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
++        	Token tok = (Token) i.next();
+         	if (tBag.contains(tok)) {
+                 sim += sBag.getWeight(tok) * tBag.getWeight(tok);
+             }
+@@ -99,8 +99,8 @@
+         /** convert term frequency weights to unit-length TFIDF weights */
+         private void termFreq2TFIDF() {
+             double normalizer = 0.0;
+-            for (Iterator<Token> i=tokenIterator(); i.hasNext(); ) {
+-                Token tok = i.next();
++            for (Iterator i=tokenIterator(); i.hasNext(); ) {
++                Token tok = (Token) i.next();
+                 if (collectionSize>0) {
+                     Integer dfInteger = (Integer)documentFrequency.get(tok);
+                     // set previously unknown words to df==1, which gives them a high value
+@@ -114,8 +114,8 @@
+                 }
+             }
+             normalizer = Math.sqrt(normalizer);
+-            for (Iterator<Token> i=tokenIterator(); i.hasNext(); ) {
+-                Token tok = i.next();
++            for (Iterator i=tokenIterator(); i.hasNext(); ) {
++                Token tok = (Token) i.next();
+                 setWeight( tok, getWeight(tok)/normalizer );
+             }
+         }
+@@ -129,11 +129,11 @@
+     {
+         BagOfTokens sBag = (BagOfTokens)s;
+         BagOfTokens tBag = (BagOfTokens)t;
+-        StringBuilder buf = new StringBuilder("");
++        StringBuffer buf = new StringBuffer("");
+         PrintfFormat fmt = new PrintfFormat("%.3f");
+         buf.append("Common tokens: ");
+-        for (Iterator<Token> i = sBag.tokenIterator(); i.hasNext(); ) {
+-        	Token tok = i.next();
++        for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
++        	Token tok = (Token) i.next();
+             if (tBag.contains(tok)) {
+                 buf.append(" "+tok.getValue()+": ");
+                 buf.append(fmt.sprintf(sBag.getWeight(tok)));
+Index: src/com/wcohen/ss/TagLink.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/TagLink.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 TagLink.java
+--- src/com/wcohen/ss/TagLink.java	13 Feb 2007 18:45:22 -0000	1.2
++++ src/com/wcohen/ss/TagLink.java	15 Jun 2007 03:29:59 -0000
+@@ -159,8 +159,8 @@
+ 		/** convert term frequency weights to unit-length TFIDF weights */
+ 		private void termFreq2TFIDF() {
+ 			double normalizer = 0.0;
+-			for (Iterator<Token >i=tokenIterator(); i.hasNext(); ) {
+-				Token tok = i.next();
++			for (Iterator i=tokenIterator(); i.hasNext(); ) {
++				Token tok = (Token) i.next();
+ 				if (collectionSize>0) {
+ 					Integer dfInteger = (Integer)documentFrequency.get(tok);
+ 					// set previously unknown words to df==1, which gives them a high value
+@@ -174,8 +174,8 @@
+ 				}
+ 			}
+ 			normalizer = Math.sqrt(normalizer);
+-			for (Iterator<Token> i=tokenIterator(); i.hasNext(); ) {
+-				Token tok = i.next();
++			for (Iterator i=tokenIterator(); i.hasNext(); ) {
++				Token tok = (Token) i.next();
+ 				setWeight( tok, getWeight(tok)/normalizer );
+ 			}
+ 		}
+@@ -190,7 +190,7 @@
+    */
+   private double[] getIDFArray(BagOfTokens bag) {
+     double[] idfArray = new double[bag.size()];
+-    Iterator<Token> it = bag.tokenIterator();
++    Iterator it = bag.tokenIterator();
+     int i = 0;
+     while (it.hasNext()) {
+       Token tok = (Token) it.next();
+@@ -212,13 +212,14 @@
+    */
+   private double algorithm1(String[] tTokens, String[] uTokens,
+                             double[] tIdfArray, double[] uIdfArray) {
+-    List<Candidates> candidateList = obtainCandidateList(tTokens, uTokens, tIdfArray,
++    List candidateList = obtainCandidateList(tTokens, uTokens, tIdfArray,
+                                                   uIdfArray);
+     sortCandidateList(candidateList);
+     double scoreValue = 0.0;
+-    Set<Integer> tMap = new HashSet<Integer>(),
+-        uMap = new HashSet<Integer>();
+-    for (Candidates actualCandidates: candidateList) {
++    Set tMap = new HashSet(),
++        uMap = new HashSet();
++    for (Iterator i=candidateList.iterator(); i.hasNext(); ) {
++    	Candidates actualCandidates = (Candidates) i.next();
+       Integer tPos = new Integer(actualCandidates.getTPos());
+       Integer uPos = new Integer(actualCandidates.getUPos());
+       if ( (!tMap.contains(tPos)) &&
+@@ -234,7 +235,7 @@
+ 
+   private String[] getTokenArray(BagOfTokens bag) {
+     String[] stringArray = new String[bag.size()];
+-    Iterator<Token> it = bag.tokenIterator();
++    Iterator it = bag.tokenIterator();
+     int i = 0;
+     while (it.hasNext()) {
+       Token tok = (Token) it.next();
+@@ -256,7 +257,7 @@
+     BagOfTokens sBag = (BagOfTokens) s;
+     BagOfTokens tBag = (BagOfTokens) t;
+ 
+-    StringBuilder buff = new StringBuilder();
++    StringBuffer buff = new StringBuffer();
+     buff.append("\n\t*****TagLink String Distance*****");
+     if (s.unwrap().equals(t.unwrap())) {
+       buff.append("\nScore(S,T)=1.0\n");
+@@ -293,7 +294,7 @@
+       buff.append("\nScores:\n");
+       buff.append(
+           "Si\tTj\tScore_ij(Si,Tj)\tIDFij(Si,Tj)\tMRij(Si,Tj)\tScore_ij\n");
+-      List<Candidates> candidateList = new ArrayList<Candidates>();
++      List candidateList = new ArrayList();
+       for (int i = 0; i < sTokens.length; i++) {
+         int lastTr = -1;
+         for (int j = 0, flag = 0; j < tTokens.length && flag == 0; j++) {
+@@ -333,9 +334,10 @@
+       buff.append("\nCommon tokens (Algorithm 1):\n");
+       buff.append("Ti\tUj\tSij*Xij\n");
+       double score = 0.0;
+-      Set<Integer> tMap = new HashSet<Integer>(),
+-          uMap = new HashSet<Integer>();
+-      for (Candidates actualCandidates: candidateList) {
++      Set tMap = new HashSet(),
++          uMap = new HashSet();
++      for (Iterator i=candidateList.iterator(); i.hasNext(); ) {
++    		Candidates actualCandidates = (Candidates) i.next();
+     	  Integer tPos = new Integer(actualCandidates.getTPos());
+     	  Integer uPos = new Integer(actualCandidates.getUPos());
+     	  if ( (!tMap.contains(tPos)) && (!uMap.contains(uPos))) {
+@@ -365,9 +367,9 @@
+    * @param uIdfArray double[]
+    * @return ArrayList
+    */
+-  private List<Candidates> obtainCandidateList(String[] tTokens, String[] uTokens,
++  private List obtainCandidateList(String[] tTokens, String[] uTokens,
+                                         double[] tIdfArray, double[] uIdfArray) {
+-    List<Candidates> candidateList = new ArrayList<Candidates>();
++    List candidateList = new ArrayList();
+     double minStringSize = getMinStringSize(tTokens, uTokens);
+     for (int t = 0; t < tTokens.length; t++) {
+       int lastTr = -1;
+@@ -408,9 +410,14 @@
+    * @param tokenArray String[]
+    * @return float[]
+    */
+-  private void sortCandidateList(List<Candidates> list) {
+-    java.util.Collections.sort(list, new java.util.Comparator<Candidates>() {
+-      public int compare(Candidates o1, Candidates o2) {
++  private void sortCandidateList(List list) {
++    java.util.Collections.sort(list, new java.util.Comparator() {
++      public int compare(Object obj1, Object obj2) {
++      	if ( !(obj1 instanceof Candidates) || !(obj2 instanceof Candidates) ) {
++					throw new ClassCastException("incompatible types");
++				}
++      	Candidates o1 = (Candidates) obj1;
++      	Candidates o2 = (Candidates) obj2;
+         // First sort, by score in index
+         double scoreT = o1.getScore(),
+             scoreU = o2.getScore();
+Index: src/com/wcohen/ss/TokenFelligiSunter.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/TokenFelligiSunter.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 TokenFelligiSunter.java
+--- src/com/wcohen/ss/TokenFelligiSunter.java	13 Feb 2007 18:45:23 -0000	1.2
++++ src/com/wcohen/ss/TokenFelligiSunter.java	15 Jun 2007 03:29:59 -0000
+@@ -3,6 +3,8 @@
+ import com.wcohen.ss.api.*;
+ import com.wcohen.ss.tokens.*;
+ 
++import java.util.Iterator;
++
+ /**
+  * Highly simplified model of Felligi-Sunter's method 1,
+  * applied to tokens.
+@@ -29,7 +31,8 @@
+ 		BagOfTokens tBag = (BagOfTokens)t;
+ 		double sim = 0.0;
+ 		//for (Iterator i = sBag.tokenIterator(); i.hasNext(); ) {
+-		for (Token tok: sBag.getDistinctTokens()) {
++		for (Iterator i=sBag.getDistinctTokens().iterator(); i.hasNext(); ) {
++			Token tok = (Token) i.next();
+ 			if (tBag.contains(tok)) {
+ 				if (oversimplified) {
+ 					sim += tBag.getWeight(tok);
+@@ -52,7 +55,8 @@
+ 	public StringWrapper prepare(String s) {
+ 		BagOfTokens bag = new BagOfTokens(s, tokenizer.tokenize(s));
+ 		// reweight by -log( freq/collectionSize )
+-		for (Token tok: bag.getDistinctTokens()) {
++		for (Iterator i=bag.getDistinctTokens().iterator(); i.hasNext(); ) {
++			Token tok = (Token) i.next();
+ 			if (collectionSize>0) {
+ 				Integer dfInteger = (Integer)documentFrequency.get(tok);
+ 				// set previously unknown words to df==1, which gives them a high value
+@@ -74,10 +78,11 @@
+ 	{
+ 		BagOfTokens sBag = (BagOfTokens)s;
+ 		BagOfTokens tBag = (BagOfTokens)t;
+-		StringBuilder buf = new StringBuilder("");
++		StringBuffer buf = new StringBuffer("");
+ 		PrintfFormat fmt = new PrintfFormat("%.3f");
+ 		buf.append("Common tokens: ");
+-		for (Token tok: sBag.getDistinctTokens()) {
++		for (Iterator i=sBag.getDistinctTokens().iterator(); i.hasNext(); ) {
++			Token tok = (Token) i.next();
+ 			if (tBag.contains(tok)) {
+ 				buf.append(" "+tok.getValue()+": ");
+ 				buf.append(fmt.sprintf(tBag.getWeight(tok)));
+Index: src/com/wcohen/ss/WinklerRescorer.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/WinklerRescorer.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 WinklerRescorer.java
+--- src/com/wcohen/ss/WinklerRescorer.java	13 Feb 2007 18:45:23 -0000	1.2
++++ src/com/wcohen/ss/WinklerRescorer.java	15 Jun 2007 03:29:59 -0000
+@@ -37,7 +37,7 @@
+ 		double dist = innerDistance.score(s,t);
+ 		int prefLength = commonPrefixLength(4,s.unwrap(),t.unwrap());
+ 		dist = dist + prefLength*0.1 * (1 - dist);
+-		StringBuilder buf = new StringBuilder("");
++		StringBuffer buf = new StringBuffer("");
+ 		buf.append("original score using "+innerDistance+":\n");
+ 		buf.append(innerDistance.explainScore(s,t)+"\n");
+ 		buf.append("prefLength = max(4,commonPrefixLength) = "+prefLength+"\n");
+Index: src/com/wcohen/ss/WizardUI.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/WizardUI.java,v
+retrieving revision 1.6
+diff -a -u -r1.6 WizardUI.java
+--- src/com/wcohen/ss/WizardUI.java	13 Feb 2007 18:45:23 -0000	1.6
++++ src/com/wcohen/ss/WizardUI.java	15 Jun 2007 03:30:00 -0000
+@@ -61,7 +61,7 @@
+ 	abstract private static class WizardViewer extends ComponentViewer 
+ 	{
+ 		private String myKey;
+-		final protected Map<String,Object> viewerContext;
++		final protected Map viewerContext;
+ 		final private WizardPanel wizardPanel;
+ 		public WizardViewer(String key,Map viewerContext)	
+ 		{	
+@@ -72,7 +72,7 @@
+ 		}
+ 		public WizardViewer(String key)	
+ 		{	
+-			this(key,new HashMap<String,Object>()); 
++			this(key,new HashMap()); 
+ 		}
+ 		public WizardPanel getWizardPanel()	{	return wizardPanel;	}
+ 		public JComponent componentFor(Object o) 	{ return wizardPanel;	}
+Index: src/com/wcohen/ss/api/DistanceInstance.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/DistanceInstance.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 DistanceInstance.java
+--- src/com/wcohen/ss/api/DistanceInstance.java	13 Feb 2007 18:45:23 -0000	1.2
++++ src/com/wcohen/ss/api/DistanceInstance.java	15 Jun 2007 03:30:00 -0000
+@@ -1,26 +1,33 @@
+ package com.wcohen.ss.api;
+ 
+ import java.util.*;
++import java.io.Serializable;
+ 
+ /**
+  * An 'instance' for a StringDistance, analogous to an 'instance' for
+  * a classification learner.  Consists of a pair of StringWrappers,
+  * a distance, and some labeling information.
+  */
++public interface DistanceInstance extends Serializable {
+ 
+-public interface DistanceInstance 
+-{
+ 	public StringWrapper getA();
+ 	public StringWrapper getB();
+ 	public boolean isCorrect();
+ 	public double getDistance();
+ 	public void setDistance(double distance);
+ 
+-	public static final Comparator<DistanceInstance> INCREASING_DISTANCE = new Comparator<DistanceInstance>() {
+-			public int compare(DistanceInstance a, DistanceInstance b) {
+-				if (a.getDistance() > b.getDistance()) return -1;
+-				else if (a.getDistance() < b.getDistance()) return +1;
+-				else return 0;
++	public static final Comparator INCREASING_DISTANCE = new Comparator() {
++			public int compare(Object aObj, Object bObj) {
++				if (aObj instanceof DistanceInstance
++					&& bObj instanceof DistanceInstance) {
++					DistanceInstance a = (DistanceInstance) aObj;
++					DistanceInstance b = (DistanceInstance) bObj;
++					if (a.getDistance() > b.getDistance()) return -1;
++					else if (a.getDistance() < b.getDistance()) return +1;
++					else return 0;
++			} else {
++				throw new ClassCastException("incompatible types");
+ 			}
+-		};
++		}
++	};
+ }
+Index: src/com/wcohen/ss/api/DistanceInstanceIterator.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/DistanceInstanceIterator.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 DistanceInstanceIterator.java
+--- src/com/wcohen/ss/api/DistanceInstanceIterator.java	13 Feb 2007 18:45:23 -0000	1.2
++++ src/com/wcohen/ss/api/DistanceInstanceIterator.java	15 Jun 2007 03:30:00 -0000
+@@ -1,12 +1,12 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * An iterator over DistanceInstance objects.
+  */
+-
+-public interface DistanceInstanceIterator extends java.util.Iterator<DistanceInstance> 
+-{
++public interface DistanceInstanceIterator extends java.util.Iterator, Serializable {
+ 	public boolean hasNext();
+-	public DistanceInstance next();
++	public Object next();
+ 	public DistanceInstance nextDistanceInstance();
+ }
+Index: src/com/wcohen/ss/api/StringDistance.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringDistance.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 StringDistance.java
+--- src/com/wcohen/ss/api/StringDistance.java	3 Feb 2007 00:51:41 -0000	1.2
++++ src/com/wcohen/ss/api/StringDistance.java	15 Jun 2007 03:30:00 -0000
+@@ -1,5 +1,6 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
+ 
+ /**
+  * Compute the difference between pairs of strings.
+@@ -17,8 +18,8 @@
+  * a subclass of StringWrapper.)
+  *
+  */
+-public interface StringDistance 
+-{
++public interface StringDistance extends Serializable {
++
+ 	/** Find the distance between s and t.  Larger values indicate more
+ 			similar strings.
+ 	*/
+Index: src/com/wcohen/ss/api/StringDistanceLearner.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringDistanceLearner.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 StringDistanceLearner.java
+--- src/com/wcohen/ss/api/StringDistanceLearner.java	27 Sep 2003 14:17:00 -0000	1.3
++++ src/com/wcohen/ss/api/StringDistanceLearner.java	15 Jun 2007 03:30:00 -0000
+@@ -1,11 +1,13 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * Learn a StringDistance.
+  *
+  */
+-public interface StringDistanceLearner
+-{
++public interface StringDistanceLearner extends Serializable {
++
+ 	/** Preprocess  a StringWrapperIterator for unsupervised training. */
+ 	public StringWrapperIterator prepare(StringWrapperIterator i);
+ 
+Index: src/com/wcohen/ss/api/StringDistanceTeacher.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringDistanceTeacher.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 StringDistanceTeacher.java
+--- src/com/wcohen/ss/api/StringDistanceTeacher.java	27 Sep 2003 14:17:00 -0000	1.2
++++ src/com/wcohen/ss/api/StringDistanceTeacher.java	15 Jun 2007 03:30:00 -0000
+@@ -1,15 +1,16 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * Train a StringDistanceLearner and return the learned
+  * StringDistance, using some unspecified source of information to
+  * train the learner.
+  *
+  */
+-public abstract class StringDistanceTeacher
+-{
+-	final public StringDistance train(StringDistanceLearner learner) 
+-	{
++public abstract class StringDistanceTeacher implements Serializable {
++
++	final public StringDistance train(StringDistanceLearner learner) {
+ 		// TFIDF-style 'training' based on observing corpus statistics
+ 		learner.setStringWrapperPool( learner.prepare(stringWrapperIterator()) );
+ 
+Index: src/com/wcohen/ss/api/StringWrapper.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringWrapper.java,v
+retrieving revision 1.1
+diff -a -u -r1.1 StringWrapper.java
+--- src/com/wcohen/ss/api/StringWrapper.java	24 Apr 2003 23:59:33 -0000	1.1
++++ src/com/wcohen/ss/api/StringWrapper.java	15 Jun 2007 03:30:00 -0000
+@@ -1,13 +1,13 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * Something that implements some of the functionality of Java's
+  * string class, but which is a non-final class, and hence can also
+  * cache additional information to facilitate later processing.
+  */
+-
+-public interface StringWrapper 
+-{
++public interface StringWrapper extends Serializable {
+ 	/** Return the string that is wrapped. */
+ 	public String unwrap();
+ 	/** Return the i-th char of the wrapped string */
+Index: src/com/wcohen/ss/api/StringWrapperIterator.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/StringWrapperIterator.java,v
+retrieving revision 1.1
+diff -a -u -r1.1 StringWrapperIterator.java
+--- src/com/wcohen/ss/api/StringWrapperIterator.java	24 Apr 2003 23:59:33 -0000	1.1
++++ src/com/wcohen/ss/api/StringWrapperIterator.java	15 Jun 2007 03:30:00 -0000
+@@ -1,11 +1,11 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
++
+ /**
+  * An iterator over StringWrapper objects.
+  */
+-
+-public interface StringWrapperIterator extends java.util.Iterator 
+-{
++public interface StringWrapperIterator extends java.util.Iterator, Serializable {
+ 	public boolean hasNext();
+ 	public Object next();
+ 	public StringWrapper nextStringWrapper();
+Index: src/com/wcohen/ss/api/Token.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/Token.java,v
+retrieving revision 1.1
+diff -a -u -r1.1 Token.java
+--- src/com/wcohen/ss/api/Token.java	24 Apr 2003 23:59:33 -0000	1.1
++++ src/com/wcohen/ss/api/Token.java	15 Jun 2007 03:30:00 -0000
+@@ -1,13 +1,12 @@
+ package com.wcohen.ss.api;
+ 
++import java.io.Serializable;
+ 
+ /**
+  * An interned version of a string.    
+  *
+  */
+-
+-public interface Token
+-{
++public interface Token extends Serializable {
+ 	public String getValue();
+ 	public int getIndex();
+ }
+Index: src/com/wcohen/ss/api/Tokenizer.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/api/Tokenizer.java,v
+retrieving revision 1.4
+diff -a -u -r1.4 Tokenizer.java
+--- src/com/wcohen/ss/api/Tokenizer.java	13 Feb 2007 18:45:23 -0000	1.4
++++ src/com/wcohen/ss/api/Tokenizer.java	15 Jun 2007 03:30:00 -0000
+@@ -1,13 +1,13 @@
+ package com.wcohen.ss.api;
+ 
+ import java.util.Iterator;
++import java.io.Serializable;
+ 
+ /**
+  * Split a string into tokens.
+  */
++public interface Tokenizer extends Serializable {
+ 
+-public interface Tokenizer 
+-{
+     /**  Return tokenized version of a string */
+     public Token[] tokenize(String input);
+ 
+@@ -21,7 +21,7 @@
+     public Token intern(String s);
+ 
+     /** Return an iterator over interned tokens */
+-    public Iterator<Token> tokenIterator();
++    public Iterator tokenIterator();
+ 
+     /** Return the higest index of any interned token */
+     public int maxTokenIndex();
+Index: src/com/wcohen/ss/expt/BasicTeacher.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/expt/BasicTeacher.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 BasicTeacher.java
+--- src/com/wcohen/ss/expt/BasicTeacher.java	13 Feb 2007 18:45:23 -0000	1.2
++++ src/com/wcohen/ss/expt/BasicTeacher.java	15 Jun 2007 03:30:00 -0000
+@@ -25,7 +25,7 @@
+ 			new DistanceInstanceIterator() {
+ 				private int cursor=0;
+ 				public boolean hasNext() { return cursor<blocker.size(); }
+-				public DistanceInstance next() { return blocker.getPair( cursor++ ); }
++				public Object next() { return blocker.getPair( cursor++ ); }
+ 				public void remove() { throw new UnsupportedOperationException(); }
+ 				public DistanceInstance nextDistanceInstance() { return (DistanceInstance)next();}
+ 			};
+Index: src/com/wcohen/ss/expt/Blocker.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/expt/Blocker.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 Blocker.java
+--- src/com/wcohen/ss/expt/Blocker.java	13 Feb 2007 18:45:23 -0000	1.3
++++ src/com/wcohen/ss/expt/Blocker.java	15 Jun 2007 03:30:00 -0000
+@@ -33,7 +33,7 @@
+ 	/**
+ 	 * Holds a pair of instances, with mutable distance between them.
+ 	 */
+-	public static class Pair implements Comparable<Pair>, Serializable, DistanceInstance 
++	public static class Pair implements Comparable, Serializable, DistanceInstance 
+ 	{
+ 		// for serialization control
+ 		private static final long serialVersionUID = 1;
+@@ -52,7 +52,11 @@
+ 		public boolean isCorrect() { return sameIds ; }
+ 		public double getDistance() { return distance; } 
+ 		public void setDistance(double d) { distance=d; } 
+-		public int compareTo(Pair other) {
++		public int compareTo(Object o) {
++			if ( !(o instanceof Pair) ) {
++				throw new ClassCastException("incompatible type");
++			}
++			Pair other = (Pair) o;
+ 			if (other.distance > distance) return +1;
+ 			else if (other.distance < distance) return -1;
+ 			else return 0;
+@@ -66,7 +70,7 @@
+ 	protected int countCorrectPairs(MatchData data) 
+ 	{
+ 		// count the number of times each id appears in each source */
+-		Map<IdKey,Integer> counter = new HashMap<IdKey,Integer>();
++		Map counter = new HashMap();
+ 		for (int i=0; i<data.numSources(); i++) {
+ 			String src = data.getSource(i);
+ 			for (int j=0; j<data.numInstances(src); j++){
+@@ -89,7 +93,7 @@
+ 
+ 		// count the number of correct pairs
+ 		int numCorrectPairs = 0;
+-		Set<String> idsInSrc1 = new HashSet<String>();
++		Set idsInSrc1 = new HashSet();
+ 		for (int i=0; i<data.numSources(); i++) {
+ 			String src1 = data.getSource(i);
+ 			idsInSrc1.clear();
+@@ -108,7 +112,8 @@
+ 			if (clusterMode) {
+ 				// count how often something in src1 can be matched correctly with something
+ 				// else in src1
+-				for (String id: idsInSrc1) {
++				for (Iterator _i=idsInSrc1.iterator(); _i.hasNext(); ) {
++					String id = (String) _i.next();
+ 					Integer cInteger = (Integer) counter.get( new IdKey(id,src1) );
+ 					int c = cInteger.intValue();
+ 					numCorrectPairs += c*(c-1)/2;
+Index: src/com/wcohen/ss/expt/MatchData.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/expt/MatchData.java,v
+retrieving revision 1.6
+diff -a -u -r1.6 MatchData.java
+--- src/com/wcohen/ss/expt/MatchData.java	13 Feb 2007 18:45:23 -0000	1.6
++++ src/com/wcohen/ss/expt/MatchData.java	15 Jun 2007 03:30:00 -0000
+@@ -11,8 +11,8 @@
+ 
+ public class MatchData 
+ {
+-	private Map<String,List<Instance>> sourceLists;
+-	private List<String> sourceNames;
++	private Map sourceLists;
++	private List sourceNames;
+ 	private String filename;
+ 	
+ 	/**
+@@ -23,8 +23,8 @@
+ 	public MatchData(String filename) throws InputFormatException
+ 	{
+ 		this.filename = filename;
+-		sourceNames = new ArrayList<String>();
+-		sourceLists = new HashMap<String,List<Instance>>();
++		sourceNames = new ArrayList();
++		sourceLists = new HashMap();
+ 		try {
+ 			BufferedReader in = new BufferedReader(new FileReader(filename));
+ 			String line;
+@@ -60,17 +60,17 @@
+ 	public MatchData() 
+ 	{
+ 		this.filename = "none";
+-		sourceNames = new ArrayList<String>();
+-		sourceLists = new HashMap<String,List<Instance>>();
++		sourceNames = new ArrayList();
++		sourceLists = new HashMap();
+ 	}
+ 
+ 	/** Add a single instance, with given src and id, to the datafile */
+ 	public void addInstance(String src,String id,String text) 
+ 	{
+ 		Instance inst = new Instance(src,id,text);
+-		List<Instance> list = sourceLists.get(src);
++		List list = (List) sourceLists.get(src);
+ 		if (list==null) {
+-			list = new ArrayList<Instance>();
++			list = new ArrayList();
+ 			sourceLists.put(src,list);
+ 			sourceNames.add(src);
+ 		}
+@@ -84,17 +84,17 @@
+ 
+ 	/** Get string identifier for i-th source */
+ 	public String getSource(int i) { 
+-		return sourceNames.get(i); 
++		return (String) sourceNames.get(i); 
+ 	}
+ 
+ 	/** Number of records for source with given string id */
+ 	public int numInstances(String src) { 
+-		return sourceLists.get(src).size();
++		return ((List)sourceLists.get(src)).size();
+ 	}
+ 
+ 	/** Get the j-th record for the named source. */
+ 	public Instance getInstance(String src, int j) { 
+-		return sourceLists.get(src).get(j); 
++		return (Instance) ((List)sourceLists.get(src)).get(j); 
+ 	}
+ 
+ 	public StringWrapperIterator getIterator() {
+@@ -108,7 +108,7 @@
+ 
+ 	public String toString() 
+ 	{
+-		StringBuilder buf = new StringBuilder();
++		StringBuffer buf = new StringBuffer();
+ 		for (int i=0; i<numSources(); i++) {
+ 			String src = getSource(i);
+ 			for (int j=0; j<numInstances(src); j++) {
+Index: src/com/wcohen/ss/expt/MatchDataTeacher.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/expt/MatchDataTeacher.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 MatchDataTeacher.java
+--- src/com/wcohen/ss/expt/MatchDataTeacher.java	13 Feb 2007 18:45:23 -0000	1.3
++++ src/com/wcohen/ss/expt/MatchDataTeacher.java	15 Jun 2007 03:30:00 -0000
+@@ -34,7 +34,7 @@
+ 		return new DistanceInstanceIterator() {
+ 				private int cursor=0;
+ 				public boolean hasNext() { return cursor<blocker.size(); }
+-				public DistanceInstance next() { return blocker.getPair( cursor++ ); }
++				public Object next() { return blocker.getPair( cursor++ ); }
+ 				public void remove() { throw new UnsupportedOperationException(); }
+ 				public DistanceInstance nextDistanceInstance() { return (DistanceInstance)next();}
+ 			};
+Index: src/com/wcohen/ss/expt/MatchExpt.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/expt/MatchExpt.java,v
+retrieving revision 1.7
+diff -a -u -r1.7 MatchExpt.java
+--- src/com/wcohen/ss/expt/MatchExpt.java	13 Feb 2007 18:45:23 -0000	1.7
++++ src/com/wcohen/ss/expt/MatchExpt.java	15 Jun 2007 03:30:00 -0000
+@@ -87,7 +87,7 @@
+ 		blockingTime = (System.currentTimeMillis()-startTime)/1000.0;
+ 
+ 		// split up blocked data into folds
+-		List<Pair> list = new ArrayList<Pair>(blocker.size());
++		List list = new ArrayList(blocker.size());
+ 		for (int i=0; i<blocker.size(); i++) {
+ 			list.add( blocker.getPair(i) );
+ 		}
+@@ -111,8 +111,8 @@
+ 
+ 			System.out.println("fold "+k+" distance is '"+dist+"'");
+ 			startTime = System.currentTimeMillis();
+-			for (Iterator<Blocker.Pair> j=splitter.getTest(k); j.hasNext(); ) {
+-				Blocker.Pair pair  = j.next();
++			for (Iterator j=splitter.getTest(k); j.hasNext(); ) {
++				Blocker.Pair pair  = (Blocker.Pair) j.next();
+ 				pairs[pairCursor] = pair;
+ 				pairs[pairCursor].setDistance( dist.score( pairs[pairCursor].getA(), pairs[pairCursor].getB() ) ); 
+ 				pairCursor++;
+Index: src/com/wcohen/ss/expt/NullBlocker.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/expt/NullBlocker.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 NullBlocker.java
+--- src/com/wcohen/ss/expt/NullBlocker.java	13 Feb 2007 18:45:23 -0000	1.3
++++ src/com/wcohen/ss/expt/NullBlocker.java	15 Jun 2007 03:30:00 -0000
+@@ -11,7 +11,7 @@
+ 
+ public class NullBlocker extends Blocker {
+ 	
+-	private List<Pair> pairList;
++	private List pairList;
+ 	private int numCorrectPairs;
+ 	
+ 	public NullBlocker() {;}
+@@ -19,7 +19,7 @@
+ 	public void block(MatchData data) 
+ 	{
+ 		numCorrectPairs = countCorrectPairs(data);
+-		pairList = new ArrayList<Pair>();
++		pairList = new ArrayList();
+ 		for (int i=0; i<data.numSources(); i++) {
+ 			int lo1 = clusterMode? i : i+1;
+ 	    for (int j=lo1; j<data.numSources(); j++) {
+Index: src/com/wcohen/ss/expt/TokenBlocker.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/expt/TokenBlocker.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 TokenBlocker.java
+--- src/com/wcohen/ss/expt/TokenBlocker.java	13 Feb 2007 18:45:23 -0000	1.3
++++ src/com/wcohen/ss/expt/TokenBlocker.java	15 Jun 2007 03:30:01 -0000
+@@ -20,9 +20,9 @@
+ 		}
+ 	}
+ 
+-	private static final Set<Integer> STOPWORD_TOKEN_MARKER = new HashSet<Integer>();
++	private static final Set STOPWORD_TOKEN_MARKER = new HashSet();
+ 
+-	private List<Blocker.Pair> pairList;
++	private List pairList;
+ 	protected Tokenizer tokenizer;
+ 	private double maxFraction;
+ 	private int numCorrectPairs;
+@@ -40,7 +40,7 @@
+ 	public void block(MatchData data) 
+ 	{
+ 		numCorrectPairs = countCorrectPairs(data);
+-		pairList = new ArrayList<Blocker.Pair>();
++		pairList = new ArrayList();
+ 		if (!clusterMode && data.numSources()!=2) 
+ 			throw new IllegalArgumentException("need exactly two sources out of clusterMode");
+ 		if (clusterMode && data.numSources()!=1) 
+@@ -54,15 +54,15 @@
+ 		}
+ 		// index the smaller source
+ 		double maxSetSize = data.numInstances(smallSource)*maxFraction;
+-		Map<Token,Set<Integer>> index = new TreeMap<Token,Set<Integer>>();
++		Map index = new TreeMap();
+ 		for (int i=0; i<data.numInstances(smallSource); i++) {
+ 			Token[] tokens = tokenizer.tokenize( data.getInstance(smallSource,i).unwrap() );
+ 			for (int j=0; j<tokens.length; j++) {
+-				Set<Integer> containers = index.get(tokens[j]);
++				Set containers = (Set) index.get(tokens[j]);
+ 				if (containers==STOPWORD_TOKEN_MARKER) {
+ 					/* do nothing */;
+ 				} else if (containers==null) {
+-					containers = new TreeSet<Integer>();
++					containers = new TreeSet();
+ 					index.put(tokens[j], containers);
+ 				} 
+ 				containers.add( new Integer(i) );
+@@ -74,18 +74,19 @@
+ 		}
+ 		//System.out.println("data:\n"+data); showIndex(index);
+ 		// find pairs
+-		Set<Integer> pairedUpInstances = new TreeSet<Integer>();
++		Set pairedUpInstances = new TreeSet();
+ 		for (int i=0; i<data.numInstances(bigSource); i++) {
+ 			MatchData.Instance bigInst = data.getInstance(bigSource,i);
+ 			pairedUpInstances.clear();
+ 			Token[] tokens = tokenizer.tokenize( bigInst.unwrap() );			
+ 			for (int j=0; j<tokens.length; j++) {			
+-				Set<Integer> containers = index.get( tokens[j] );
++				Set containers = (Set) index.get( tokens[j] );
+ 				if (containers!=null && containers!=STOPWORD_TOKEN_MARKER) {
+-					for (Integer smallIndexInteger: containers) {
++					for (Iterator _i=containers.iterator(); _i.hasNext(); ) {
++						Integer smallIndexInteger = (Integer) _i.next();
+ 						int smallIndex = smallIndexInteger.intValue();
+ 						if (!pairedUpInstances.contains(smallIndexInteger) && 
+-								(smallSource!=bigSource || smallIndex>i))
++                (smallSource!=bigSource || smallIndex>i))
+ 						{
+ 							MatchData.Instance smallInst = data.getInstance(smallSource, smallIndex);
+ 							pairList.add( new Blocker.Pair( bigInst, smallInst, smallInst.sameId(bigInst) ));
+@@ -101,7 +102,7 @@
+ 	public int numCorrectPairs() { return numCorrectPairs; }
+ 	
+ 	public String toString() {
+-		StringBuilder buf = new StringBuilder();
++		StringBuffer buf = new StringBuffer();
+ 		
+ 		buf.append("[TokenBlocker:clusterMode=").append(clusterMode);
+ 		buf.append(",maxFraction=").append(maxFraction);
+Index: src/com/wcohen/ss/lookup/LookupResult.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/lookup/LookupResult.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 LookupResult.java
+--- src/com/wcohen/ss/lookup/LookupResult.java	13 Feb 2007 18:45:23 -0000	1.3
++++ src/com/wcohen/ss/lookup/LookupResult.java	15 Jun 2007 03:30:01 -0000
+@@ -5,7 +5,7 @@
+  * 
+  */
+ 
+-/*package-visible*/ class LookupResult implements Comparable<LookupResult>
++/*package-visible*/ class LookupResult implements Comparable
+ {
+     private static final java.text.DecimalFormat fmt = new java.text.DecimalFormat("0.000");
+ 
+@@ -18,8 +18,11 @@
+         this.found=found; this.value=value; this.score=score; 
+     }
+ 
+-    public int compareTo(LookupResult o) 
+-    {
++    public int compareTo(Object obj) {
++			if ( !(obj instanceof LookupResult) ) {
++				throw new ClassCastException("incompatible type");
++			}
++    		LookupResult o = (LookupResult) obj;
+         double diff = o.score - score;
+         return diff<0 ? -1 : (diff>0?+1:0);
+     }
+Index: src/com/wcohen/ss/lookup/RescoringSoftTFIDFDictionary.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/lookup/RescoringSoftTFIDFDictionary.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 RescoringSoftTFIDFDictionary.java
+--- src/com/wcohen/ss/lookup/RescoringSoftTFIDFDictionary.java	13 Feb 2007 18:45:23 -0000	1.3
++++ src/com/wcohen/ss/lookup/RescoringSoftTFIDFDictionary.java	15 Jun 2007 03:30:01 -0000
+@@ -14,7 +14,7 @@
+     private StringDistance rescorer;
+     private FastLookup inner;
+     private double innerMinScore;
+-    private List<LookupResult> result;
++    private List result;
+ 
+     public RescoringSoftTFIDFDictionary(FastLookup inner,double innerMinScore,StringDistance rescorer)
+     {
+@@ -25,7 +25,7 @@
+ 
+     public int lookup(double minScore,String toFind)
+     {
+-        result = new ArrayList<LookupResult>();
++        result = new ArrayList();
+         int n = inner.lookup(innerMinScore,toFind);
+         if (n>0) {
+             StringWrapper w = rescorer.prepare(toFind);
+Index: src/com/wcohen/ss/tokens/BasicToken.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/tokens/BasicToken.java,v
+retrieving revision 1.2
+diff -a -u -r1.2 BasicToken.java
+--- src/com/wcohen/ss/tokens/BasicToken.java	13 Feb 2007 18:45:23 -0000	1.2
++++ src/com/wcohen/ss/tokens/BasicToken.java	15 Jun 2007 03:30:01 -0000
+@@ -8,7 +8,7 @@
+  *
+  */
+ 
+-public class BasicToken implements Token, Comparable<Token>
++public class BasicToken implements Token, Comparable
+ {
+ 	private final int index;
+ 	private final String value;
+@@ -19,7 +19,11 @@
+ 	}
+ 	public String getValue() { return value; }
+ 	public int getIndex() { return index; }
+-	public int compareTo(Token t) {
++	public int compareTo(Object o) {
++		if ( !(o instanceof Token) ) {
++			throw new ClassCastException("incompatible type");
++		}
++		Token t = (Token) o;
+ 		return index - t.getIndex();
+ 	} 
+ 	public int hashCode() { return value.hashCode(); }
+Index: src/com/wcohen/ss/tokens/NGramTokenizer.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/tokens/NGramTokenizer.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 NGramTokenizer.java
+--- src/com/wcohen/ss/tokens/NGramTokenizer.java	13 Feb 2007 18:45:23 -0000	1.3
++++ src/com/wcohen/ss/tokens/NGramTokenizer.java	15 Jun 2007 03:30:01 -0000
+@@ -30,7 +30,7 @@
+     public Token[] tokenize(String input) 
+     {
+         Token[] initialTokens = innerTokenizer.tokenize(input);
+-        List<Token> tokens = new ArrayList<Token>();
++        List tokens = new ArrayList();
+         for (int i=0; i<initialTokens.length; i++) {
+             Token tok = initialTokens[i];
+             String str = "^"+tok.getValue()+"$";
+@@ -47,7 +47,7 @@
+     }
+ 	
+     public Token intern(String s) { return innerTokenizer.intern(s); }
+-    public Iterator<Token> tokenIterator() { return innerTokenizer.tokenIterator(); }
++    public Iterator tokenIterator() { return innerTokenizer.tokenIterator(); }
+     public int maxTokenIndex() { return innerTokenizer.maxTokenIndex(); }
+ 
+     /** Test routine */
+Index: src/com/wcohen/ss/tokens/SimpleTokenizer.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/tokens/SimpleTokenizer.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 SimpleTokenizer.java
+--- src/com/wcohen/ss/tokens/SimpleTokenizer.java	13 Feb 2007 18:45:23 -0000	1.3
++++ src/com/wcohen/ss/tokens/SimpleTokenizer.java	15 Jun 2007 03:30:01 -0000
+@@ -29,21 +29,21 @@
+      * of alphanumerics, or any single punctuation character. */
+     public Token[] tokenize(String input) 
+     {
+-        List<Token> tokens = new ArrayList<Token>();
++        List tokens = new ArrayList();
+         int cursor = 0;
+         while (cursor<input.length()) {
+ 	    char ch = input.charAt(cursor);
+ 	    if (Character.isWhitespace(ch)) {
+                 cursor++;
+ 	    } else if (Character.isLetter(ch)) {
+-                StringBuilder buf = new StringBuilder();
++                StringBuffer buf = new StringBuffer();
+                 while (cursor<input.length() && Character.isLetter(input.charAt(cursor))) {
+                     buf.append(input.charAt(cursor));
+                     cursor++;
+                 }
+                 tokens.add(internSomething(buf.toString()));
+ 	    } else if (Character.isDigit(ch)) {
+-                StringBuilder buf = new StringBuilder();
++                StringBuffer buf = new StringBuffer();
+                 while (cursor<input.length() && Character.isDigit(input.charAt(cursor))) {
+                     buf.append(input.charAt(cursor));
+                     cursor++;
+@@ -51,7 +51,7 @@
+                 tokens.add(internSomething(buf.toString()));
+ 	    } else {
+                 if (!ignorePunctuation) {
+-                    StringBuilder buf = new StringBuilder();
++                    StringBuffer buf = new StringBuffer();
+                     buf.append(ch);
+                     String str = buf.toString();
+                     tokens.add(internSomething(str));
+@@ -70,11 +70,11 @@
+     // 'interning' strings as tokens
+     //
+     private int nextId = 0;
+-    private Map<String,Token> tokMap = new TreeMap<String,Token>();
++    private Map tokMap = new TreeMap();
+ 
+     public Token intern(String s) 
+     {
+-        Token tok = tokMap.get(s);
++        Token tok = (Token) tokMap.get(s);
+         if (tok==null) {
+ 	    tok = new BasicToken(++nextId,s);
+ 	    tokMap.put(s,tok);
+@@ -82,7 +82,7 @@
+         return tok;
+     }
+ 
+-    public Iterator<Token> tokenIterator()
++    public Iterator tokenIterator()
+     {
+         return tokMap.values().iterator();
+     }
+Index: src/com/wcohen/ss/tokens/TagLinkToken.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/src/com/wcohen/ss/tokens/TagLinkToken.java,v
+retrieving revision 1.3
+diff -a -u -r1.3 TagLinkToken.java
+--- src/com/wcohen/ss/tokens/TagLinkToken.java	13 Feb 2007 18:45:23 -0000	1.3
++++ src/com/wcohen/ss/tokens/TagLinkToken.java	15 Jun 2007 03:30:01 -0000
+@@ -81,7 +81,7 @@
+         sSize = tSize;
+         tSize = tmp2;
+       }
+-      List<TagLink.Candidates> candidateList = algorithm1(S, T);
++      List candidateList = algorithm1(S, T);
+       sortList(candidateList);
+       totalScore = getScore(candidateList);
+       totalScore = (totalScore / ( (double) sSize) + totalScore / ( (double) tSize)) / 2.0;
+@@ -100,7 +100,7 @@
+   public String explainScore(StringWrapper s, StringWrapper t) {
+ 	String S = s.unwrap(),
+ 	  T = t.unwrap();
+-    StringBuilder buff = new StringBuilder();
++    StringBuffer buff = new StringBuffer();
+     buff.append("\n****TagLinkToken****\n");
+     buff.append("Si=" + S + ", Tj=" + T + "\n");
+     double totalScore = 0.0;
+@@ -120,14 +120,15 @@
+         sSize = tSize;
+         tSize = tmp2;
+       }
+-      List<TagLink.Candidates> candidateList = algorithm1(S, T);
++      List candidateList = algorithm1(S, T);
+       sortList(candidateList);
+       buff.append("Common characteres:\n");
+       buff.append("Si\tTj\tScore_ij(Si,Tj)\n");
+       matched = 0;
+-      Set<Integer> tMap = new HashSet<Integer>(),
+-          uMap = new HashSet<Integer>();
+-      for (TagLink.Candidates actualCandidates: candidateList) {
++      Set tMap = new HashSet(),
++          uMap = new HashSet();
++			for (Iterator i=candidateList.iterator(); i.hasNext(); ) {
++      	TagLink.Candidates actualCandidates = (TagLink.Candidates) i.next();
+         Integer sPos = new Integer(actualCandidates.getTPos()),
+             tPos = new Integer(actualCandidates.getUPos());
+         if ( (!tMap.contains(sPos)) &&
+@@ -155,13 +156,14 @@
+    * @param candidateList ArrayList
+    * @return double
+    */
+-  private double getScore(List<TagLink.Candidates> candidateList) {
++  private double getScore(List candidateList) {
+     matched = 0;
+     largestIndex = -1;
+     double scoreValue = 0;
+-    Set<Integer> tMap = new HashSet<Integer>(),
+-        uMap = new HashSet<Integer>();
+-    for (TagLink.Candidates actualCandidates: candidateList) {
++    Set tMap = new HashSet(),
++        uMap = new HashSet();
++    for (Iterator i=candidateList.iterator(); i.hasNext(); ) {
++    	TagLink.Candidates actualCandidates = (TagLink.Candidates) i.next();
+       Integer actualTPos = new Integer(actualCandidates.getTPos()),
+           actualUPos = new Integer(actualCandidates.getUPos());
+       if ( (!tMap.contains(actualTPos)) &&
+@@ -187,8 +189,8 @@
+    * @param T String
+    * @return ArrayList
+    */
+-  private List<TagLink.Candidates> algorithm1(String S, String T) {
+-    List<TagLink.Candidates> candidateList = new ArrayList<TagLink.Candidates>();
++  private List algorithm1(String S, String T) {
++    List candidateList = new ArrayList();
+     int bound = (int) (1.0 / tr);
+     for (int t = 0; t < S.length(); t++) {
+       char chT = S.charAt(t);
+@@ -226,9 +228,15 @@
+    *
+    * @param candidateList ArrayList
+    */
+-  private void sortList(List<TagLink.Candidates> candidateList) {
+-    java.util.Collections.sort(candidateList, new java.util.Comparator<TagLink.Candidates>() {
+-      public int compare(TagLink.Candidates o1, TagLink.Candidates o2) {
++  private void sortList(List candidateList) {
++    java.util.Collections.sort(candidateList, new java.util.Comparator() {
++      public int compare(Object obj1, Object obj2) {
++				if ( !(obj1 instanceof TagLink.Candidates)
++					|| (obj2 instanceof TagLink.Candidates) ) {
++					throw new ClassCastException("incompatible types");
++				}
++				TagLink.Candidates o1 = (TagLink.Candidates) obj1;
++				TagLink.Candidates o2 = (TagLink.Candidates) obj2;
+         double scoreT = o1.getScore();
+         double scoreU = o2.getScore();
+         if(scoreU > scoreT){
+Index: test/com/wcohen/ss/TestBasicStringWrapper.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/test/com/wcohen/ss/TestBasicStringWrapper.java,v
+retrieving revision 1.1
+diff -a -u -r1.1 TestBasicStringWrapper.java
+--- test/com/wcohen/ss/TestBasicStringWrapper.java	13 Feb 2007 18:45:23 -0000	1.1
++++ test/com/wcohen/ss/TestBasicStringWrapper.java	15 Jun 2007 03:30:01 -0000
+@@ -1,13 +1,10 @@
+ package com.wcohen.ss;
+ 
+-import static org.junit.Assert.*;
++import junit.framework.TestCase;
+ 
+-import org.junit.Test;
++public class TestBasicStringWrapper extends TestCase {
+ 
+-
+-public class TestBasicStringWrapper {
+-
+-	@Test
++	//@Test
+ 	public void test() {
+ 		BasicStringWrapper bsw = new BasicStringWrapper("abcd1234");
+ 		assertEquals("abcd1234", bsw.unwrap());
+Index: test/com/wcohen/ss/tokens/TestNGramTokenizer.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/test/com/wcohen/ss/tokens/TestNGramTokenizer.java,v
+retrieving revision 1.1
+diff -a -u -r1.1 TestNGramTokenizer.java
+--- test/com/wcohen/ss/tokens/TestNGramTokenizer.java	13 Feb 2007 18:45:24 -0000	1.1
++++ test/com/wcohen/ss/tokens/TestNGramTokenizer.java	15 Jun 2007 03:30:02 -0000
+@@ -1,16 +1,13 @@
+ package com.wcohen.ss.tokens;
+ 
+-import static org.junit.Assert.assertEquals;
+-import static org.junit.Assert.assertNotNull;
+-
+-import org.junit.Test;
++import junit.framework.TestCase;
+ 
+ import com.wcohen.ss.api.Token;
+ 
+ 
+-public class TestNGramTokenizer {
++public class TestNGramTokenizer extends TestCase {
+ 
+-	@Test
++	// @Test
+ 	public void testDefaultNGramTokenizer() {
+ 		NGramTokenizer ngt = new NGramTokenizer(3,5,true,SimpleTokenizer.DEFAULT_TOKENIZER);
+ 		
+Index: test/com/wcohen/ss/tokens/TestSimpleTokenizer.java
+===================================================================
+RCS file: /cvsroot/secondstring/secondstring/test/com/wcohen/ss/tokens/TestSimpleTokenizer.java,v
+retrieving revision 1.1
+diff -a -u -r1.1 TestSimpleTokenizer.java
+--- test/com/wcohen/ss/tokens/TestSimpleTokenizer.java	13 Feb 2007 18:45:24 -0000	1.1
++++ test/com/wcohen/ss/tokens/TestSimpleTokenizer.java	15 Jun 2007 03:30:02 -0000
+@@ -1,18 +1,15 @@
+ package com.wcohen.ss.tokens;
+ 
+-import static org.junit.Assert.assertEquals;
+-import static org.junit.Assert.assertNotNull;
+-
+-import org.junit.Test;
++import junit.framework.TestCase;
+ 
+ import com.wcohen.ss.api.Token;
+ 
+ 
+-public class TestSimpleTokenizer {
++public class TestSimpleTokenizer extends TestCase {
+ 
+ 	private String input = "There once was a man from Nantucket\nWho kept all his cash in a bucket.\nBut his daughter, named Nan,\nRan away with a man\nAnd as for the bucket, Nantucket.";
+ 	
+-	@Test
++	// @Test
+ 	public void testSimpleDefaultTokenizer() {
+ 		SimpleTokenizer st = new SimpleTokenizer(true, true);
+ 		
+@@ -23,7 +20,7 @@
+ 		
+ 	}
+ 	
+-	@Test
++	// @Test
+ 	public void testNoIgnoreCase() {
+ 		SimpleTokenizer st = new SimpleTokenizer(true, false);
+ 		
+@@ -33,7 +30,7 @@
+ 		assertEquals("There", tok[0].getValue());		
+ 	}
+ 	
+-	@Test
++	// @Test
+ 	public void testNoIgnorePunctuation() {
+ 		SimpleTokenizer st = new SimpleTokenizer(false, false);
+ 		
+@@ -43,7 +40,7 @@
+ 		assertEquals(".", tok[15].getValue());
+ 	}
+ 	
+-	@Test
++	// @Test
+ 	public void testAlphanumeric() {
+ 		SimpleTokenizer st = new SimpleTokenizer(false, false);
+ 		

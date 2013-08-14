@@ -1,0 +1,18 @@
+// requires: TT_WD, TT_NUM4, TT_NUM5
+
+TT_HYPH := - [1]
+
+LAST_LINE --> V_CITY V_STATE V_ZIP [.5] | V_CITY V_STATE [.25] | V_STATE V_ZIP [.25]
+
+// a city can have up to 3 tokens (SLC), but most will have one or two
+V_CITY --> TT_WD [.333]
+V_CITY --> TT_WD TT_WD [.333]
+V_CITY --> TT_WD TT_WD TT_WD [.333]
+
+// NOTE: V_STATE must be populated externally.
+//V_STATE --> TT_STATE [.5]
+// TODO: put this in.
+// V_STATE --> TT_STWD_1_2 TT_STWD_2_2 [.5]
+
+V_ZIP --> TT_NUM5 [.5]
+V_ZIP --> TT_NUM5 TT_HYPH TT_NUM4 [.5]

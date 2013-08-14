@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.matching.wfst.eclipse"
+   name="Wfst Eclipse Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker Technologies, Inc.">
+
+   <runtime>
+      <library name="wfst-eclipse.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.matching.wfst"/>
+      <import plugin="com.choicemaker.cm.core"/>
+   </requires>
+
+
+</plugin>

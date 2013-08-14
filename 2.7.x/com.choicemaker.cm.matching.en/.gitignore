@@ -1,0 +1,8 @@
+bin
+archive
+target
+base.jar
+basesrc.jar
+tmp
+build.xml
+project.t.xml

@@ -1,0 +1,19 @@
+// requires TT_WD, TT_NUM5, TT_MX_COUNTRY (V_MX_STATE must be populated externally)
+
+LAST_LINE --> V_CITY V_MX_STATE V_MX_COUNTRY [.9]
+LAST_LINE --> V_CITY V_MX_COUNTRY [.075]
+LAST_LINE --> V_CITY V_MX_STATE [.025]
+
+// these two don't threaten the top three
+LAST_LINE --> V_CITY V_MX_STATE V_MX_POSTALCODE [.0625]
+LAST_LINE --> V_MX_POSTALCODE V_MX_COUNTRY [.0625]
+
+V_CITY --> TT_WD [.75]
+V_CITY --> TT_WD TT_WD [.2]
+V_CITY --> TT_WD TT_WD TT_WD [.05]
+
+// NOTE: V_MX_STATE is populated externally
+
+V_MX_COUNTRY --> TT_MX_COUNTRY [1]
+
+V_MX_POSTALCODE --> TT_NUM5 [1]

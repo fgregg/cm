@@ -1,0 +1,553 @@
+<data>
+
+<datum>
+<raw>
+<field>Lt John R. Fisher</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX LT))
+                       (GN1 (WDFN JOHN)))
+                   (MN (GN1 (LTR R))))
+             (LN (ONELN (WDLN FISHER))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Anna Iris Medina</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN ANNA)))
+                   (MN (GN1 (WDFN IRIS))))
+             (LN (ONELN (WDLN MEDINA))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Charles Lawrence (Chip) Chan</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN CHARLES)))
+                   (MN (GN1 (WDFN LAWRENCE)))
+                   (WDFNPAREN (LPAREN [)
+                              (WDFN CHIP)
+                              (RPAREN ])))
+             (LN (ONELN (WDLN CHAN))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Aaron Horwitz</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN AARON))))
+             (LN (ONELN (WDLN HORWITZ))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Abraham J. Zelmanowitz</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN ABRAHAM)))
+                   (MN (GN1 (LTR J))))
+             (LN (ONELN (WDLN ZELMANOWITZ))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Albert Alfy William Elmarry</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN ALBERT)))
+                   (MN (GN2 (WDFN ALFY)
+                            (WDFN WILLIAM))))
+             (LN (ONELN (WDLN ELMARRY))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Alexander J.R. Napier</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN ALEXANDER)))
+                   (MN (GN2 (LTR J)
+                            (LTR R))))
+             (LN (ONELN (WDLN NAPIER))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Alfred Gilles Padre Joseph Marchand</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN ALFRED)))
+                   (MN (GN2 (WDFN GILLES)
+                            (WDFN PADRE)
+                            (WDFN JOSEPH))))
+             (LN (ONELN (WDLN MARCHAND))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Lt. Andrew Desperito</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX LT))
+                       (GN1 (WDFN ANDREW))))
+             (LN (ONELN (WDLN DESPERITO))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Andrew Jay-Hoon Kim</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN ANDREW)))
+                   (MN (GN1 (WDFN JAY)
+                            (HYPH -)
+                            (WDFN HOON))))
+             (LN (ONELN (WDLN KIM))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Bruce Douglas (Chappy) Boehm</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN BRUCE)))
+                   (MN (GN1 (WDFN DOUGLAS)))
+                   (WDFNPAREN (LPAREN [)
+                              (WDFN CHAPPY)
+                              (RPAREN ])))
+             (LN (ONELN (WDLN BOEHM))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>AnnMarie (Davi) Riccoboni</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN ANNMARIE)))
+                   (WDLNPAREN (LPAREN [)
+                              (WDLN DAVI)
+                              (RPAREN ])))
+             (LN (ONELN (WDLN RICCOBONI))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Azucena de la Torre</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN AZUCENA))))
+             (LN (COLLN (FRAG DE)
+                        (FRAG LA)
+                        (WDLN TORRE))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Lt. Brian G. Ahearn</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX LT))
+                       (GN1 (WDFN BRIAN)))
+                   (MN (GN1 (LTR G))))
+             (LN (ONELN (WDLN AHEARN))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Art</field>
+<field>Storey</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN ART))))
+             (SEP1 #)
+             (LN (ONELN (WDLN STOREY))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Charles G</field>
+<field>Tarr Jr.</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN CHARLES)))
+                   (MN (GN1 (LTR G))))
+             (SEP1 #)
+             (LN (ONELN (WDLN TARR))
+                 (SFX (WDSFX JR))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Billy L</field>
+<field>Sundell</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN BILLY)))
+                   (MN (GN1 (LTR L))))
+             (SEP1 #)
+             (LN (ONELN (WDLN SUNDELL))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Mary Anne</field>
+<field>Strasser</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN MARY)))
+                   (MN (GN1 (WDFN ANNE))))
+             (SEP1 #)
+             (LN (ONELN (WDLN STRASSER))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>L.P.</field>
+<field>Wakefield</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (LTR L)))
+                   (MN (GN1 (LTR P))))
+             (SEP1 #)
+             (LN (ONELN (WDLN WAKEFIELD))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Barbara J</field>
+<field>Van De Water</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN BARBARA)))
+                   (MN (GN1 (LTR J))))
+             (SEP1 #)
+             (LN (COLLN (FRAG VAN)
+                        (FRAG DE)
+                        (WDLN WATER))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Barbara J. Van De Water</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN BARBARA)))
+                   (MN (GN1 (LTR J))))
+             (LN (COLLN (FRAG VAN)
+                        (FRAG DE)
+                        (WDLN WATER))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Stephen M</field>
+<field>Sterline Sr</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN STEPHEN)))
+                   (MN (GN1 (LTR M))))
+             (SEP1 #)
+             (LN (ONELN (WDLN STERLINE))
+                 (SFX (WDSFX SR))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Felix</field>
+<field>Santos Cartagena</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN FELIX))))
+             (SEP1 #)
+             (LN (TWOLN (WDLN SANTOS)
+                        (WDLN CARTAGENA))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Robert F</field>
+<field>Roberts III</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN ROBERT)))
+                   (MN (GN1 (LTR F))))
+             (SEP1 #)
+             (LN (ONELN (WDLN ROBERTS))
+                 (SFX (WDSFX III))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Kelly J</field>
+<field>Rivas Bernerd</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN KELLY)))
+                   (MN (GN1 (LTR J))))
+             (SEP1 #)
+             (LN (TWOLN (WDLN RIVAS)
+                        (WDLN BERNERD))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Virginia M</field>
+<field>Oscar-Marquez</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN VIRGINIA)))
+                   (MN (GN1 (LTR M))))
+             (SEP1 #)
+             (LN (HYPHLN (WDLN OSCAR)
+                         (HYPH -)
+                         (WDLN MARQUEZ))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Richard W.</field>
+<field>Le Count</field>
+</raw>
+
+<parseTree>
+(NAME (SEP2 ##)
+      (NAME2 (FAMN (FN (GN1 (WDFN RICHARD)))
+                   (MN (GN1 (LTR W))))
+             (SEP1 #)
+             (LN (COLLN (FRAG LE)
+                        (WDLN COUNT))))
+      (SEP2 ##))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Lt. Gen. Timothy J. Maude</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX LT)
+                            (WDPFX GEN))
+                       (GN1 (WDFN TIMOTHY)))
+                   (MN (GN1 (LTR J))))
+             (LN (ONELN (WDLN MAUDE))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Frank A De Martini</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN FRANK)))
+                   (MN (GN1 (LTR A))))
+             (LN (COLLN (FRAG DE)
+                        (WDLN MARTINI))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Capt. Victor Saracini</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (PFX (WDPFX CAPT))
+                       (GN1 (WDFN VICTOR))))
+             (LN (ONELN (WDLN SARACINI))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Francis (Frank) Albert De Martini</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN FRANCIS)))
+                   (WDFNPAREN (LPAREN [)
+                              (WDFN FRANK)
+                              (RPAREN ]))
+                   (MN (GN1 (WDFN ALBERT))))
+             (LN (COLLN (FRAG DE)
+                        (WDLN MARTINI))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Joseph Angelini Jr.</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN JOSEPH))))
+             (LN (ONELN (WDLN ANGELINI))
+                 (SFX (WDSFX JR))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Joseph Angelini Jr.</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN JOSEPH))))
+             (LN (ONELN (WDLN ANGELINI))
+                 (SFX (WDSFX JR))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Christopher Peter A Racaniello</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN CHRISTOPHER)))
+                   (MN (GN2 (WDFN PETER)
+                            (LTR A))))
+             (LN (ONELN (WDLN RACANIELLO))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>Lukas (Luke) Rambousek</field>
+</raw>
+
+<parseTree>
+(NAME (SEP1 #)
+      (NAME1 (FAMN (FN (GN1 (WDFN LUKAS)))
+                   (WDFNPAREN (LPAREN [)
+                              (WDFN LUKE)
+                              (RPAREN ])))
+             (LN (ONELN (WDLN RAMBOUSEK))))
+      (SEP1 #))
+</parseTree>
+</datum>
+
+</data>

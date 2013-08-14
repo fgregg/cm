@@ -1,0 +1,10 @@
+archive
+bin
+build.xml
+com.choicemaker.cm.validation.eclipse_*.*.*.jar*
+project.t.xml
+target
+temp.folder
+tmp
+validation-eclipse.jar
+validation-eclipsesrc.jar

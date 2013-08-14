@@ -1,0 +1,125 @@
+// TODO: Utah
+// TODO: Hawaii
+// TODO: US Highway 23, etc.
+// TODO: 234 1/2 Broadway, e.g.
+// TODO: PO Boxes, PMB's, RR Boxes
+
+// Inline token types
+HYPH := -
+PND := #
+
+// The street address.
+SADDR --> FSN | HN FSN | FSN FAPT | HN FSN FAPT | FAPT HN FSN
+
+// Full Street Name
+FSN --> SN | SN SS | DIR SN | SN DIR | DIR SN SS | SN SS DIR
+
+// pre- and post-directions taken out for now...
+// FSN --> DIR SN SS DIR | DIR SN DIR
+
+// House Number
+HN --> NUM | CARD | NUM LTR | NUM HYPH LTR
+HN --> NUM HYPH NUM | NUM NUM | NUM HYPH NUM LTR
+
+// Street Name
+SN --> WD | WD WD | WD WD WD | WD WD WD WD | NUM | NUM ORDX | ORD
+SN --> WD NUM | WD NUM ORDX | WD CARD | WD ORD  // for Beach 59th St, etc.
+SN --> WD WD NUM | WD WD NUM ORDX | WD WD CARD | WD WD ORD  // for Beach 59th St, etc.
+
+// Full apartment specifier (SAT: standalone apartment type)
+//       (see below) ; BSMT ; Apt 6P ; 11th Flr ; #2
+//    # now included in the list of addresses.
+FAPT --> APT | AT | AT APT | APT AT
+FAPT --> PND APT | PND AT | PND AT APT | AT PND APT | PND APT AT | PND PND APT
+FAPT --> PND | PND PND // handle dangling pound signs.  Hopefully this won't screw more stuff up.
+FAPT --> AT PND // dangling apartment identifiers e.g. "APT #" with no number after it...
+FAPT --> PND AT HYPH APT // handle "21 S END AVE # PH-2J"
+FAPT --> PND MULTIANY | AT MULTIANY
+
+// Apartment number.  Examples for each of the varioius types are
+// 6 ; 6P ; E7 ; B ; 11th
+APT --> NUM | LTR | NUM LTR | LTR NUM | LTR NUM LTR
+APT --> NUM ORDX | ORD
+APT --> NUM HYPH LTR | LTR HYPH NUM | LTR HYPH NUM LTR | NUM LTR HYPH LTR
+APT --> NUM HYPH NUM
+APT --> NUM DIR  // hope this doesn't screw anything up...
+APT --> NUM WD2 | WD2 NUM | WD2  // this too.
+APT --> NUM LTR NUM
+
+MULTIANY --> ANY | ANY ANY | ANY ANY ANY | ANY ANY ANY ANY | ANY ANY ANY ANY ANY
+
+//
+// PO Box Addresses
+//
+
+SADDR --> POBOX_ADDR
+
+// NOTE: the following was a copy of poBoxGrammar.txt as of 8/21/03
+TT_POST := P | POST
+TT_OFC := O | OFFICE
+TT_PO := PO
+TT_BOX := BOX | BX | B | BO | BOC | BXO | BOXX
+TT_POBOX := POBOX | POBX | POB
+
+POBOX_ADDR --> V_POBOX V_POBNUM
+POBOX_ADDR --> V_POBOX V_POBNUM MULTIANY // for addresses that come afterward...
+
+V_POBOX --> TT_BOX | TT_POBOX | V_PO TT_BOX
+V_PO --> TT_POST TT_OFC | TT_PO
+
+// TODO: PO DRAWER, FIRM CALLER, LOCK BOX, BIN, and variants of all of them
+
+// NOTE: also LTR, and other funky kinds here
+V_POBNUM --> NUM | NUM HYPH NUM
+
+//
+// Rural Routes
+//
+
+// NOTE: the following is a copy of some other stuff.
+TT_RURAL := R | RUR | RURAL
+TT_ROUTE := R | RT | RTE | ROUTE
+TT_FREE := F | FREE
+TT_DELIVERY := D | DELIVERY
+TT_RR := RR | RD | RFD | RURAL | RT | RTE | ROUTE
+TT_BOXID := BX | BOX
+
+RR_ADDR --> V_RRID V_RRNUM TT_BOXID V_RRBOX
+
+V_RRID --> TT_RR | TT_RURAL TT_ROUTE
+V_RRNUM --> NUM
+
+// NOTE: This gets pretty complicated: 
+// hyphens, repeated letters, etc.
+V_RRBOX --> NUM | LTR NUM | NUM LTR | NUM LTR NUM | LTR NUM LTR
+V_RRBOX --> WD2 NUM | NUM WD2
+V_RRBOX --> NUM HYPH NUM | NUM HYPH LTR | LTR HYPH NUM
+V_RRBOX --> NUM HYPH NUM LTR
+
+//
+// Care/Of stuff
+//
+
+SADDR --> CO_ADDR HN FSN | CO_ADDR HN FSN FAPT
+SADDR --> HN FSN CO_ADDR | HN FSN FAPT CO_ADDR
+
+// NOTE: the following was a copy of careOfGrammar.txt as of 8/21/03
+TT_C := C
+TT_O := O
+TT_SEP := - | /
+TT_ATTN := ATTN
+
+V_CO --> TT_C TT_SEP TT_O | TT_C TT_O | TT_ATTN
+
+CO_ADDR --> V_CO WD | V_CO WD WD
+
+//
+// Hack for NYC, where city sometimes reported in address.
+//
+
+SADDR --> HN FSN V_CITY | HN FSN FAPT V_CITY | HN FSN V_CITY FAPT
+
+V_CITY --> TT_CITY_1_1 | TT_CITY_2_1 TT_CITY_2_2 | TT_CITY_3_1 TT_CITY_3_2 TT_CITY_3_3
+
+TT_NY := NY
+V_CITY --> TT_CITY_1_1 TT_NY

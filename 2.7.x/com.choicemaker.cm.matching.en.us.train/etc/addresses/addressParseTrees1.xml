@@ -1,0 +1,3229 @@
+<data>
+
+<datum>
+<raw>
+<field>#1 55 TIEMANN PL</field>
+</raw>
+<parseTree>
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 1)))
+       (HN (NUM 55))
+       (FSN (SN (WD TIEMANN))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>#2C 1386 OGDEN AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 2)
+                  (LTR C)))
+       (HN (NUM 1386))
+       (FSN (SN (WD OGDEN))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>#2C 973 COLUMBUS AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 2)
+                  (LTR C)))
+       (HN (NUM 973))
+       (FSN (SN (WD COLUMBUS))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>#2C973COLUMBUSAVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 2)
+                  (LTR C)))
+       (HN (NUM 973))
+       (FSN (SN (WD COLUMBUS))
+       		(SS AVE)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>#5C 610 W 139TH ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 5)
+                  (LTR C)))
+       (HN (NUM 610))
+       (FSN (DIR W)
+            (SN (NUM 139)
+                (ORDX TH))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>#501216W100ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 50)))
+       (HN (NUM 1216))
+       (FSN (DIR W)
+            (SN (NUM 100))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>#804 483 WEST END AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 804)))
+       (HN (NUM 483))
+       (FSN (DIR WEST)
+            (SN (WD END))
+            (SS AVE)))
+            
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>66 NO FULTON AVENUE 1ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 66))
+       (FSN (DIR NO)
+            (SN (WD FULTON))
+            (SS AVENUE))
+       (FAPT (APT (NUM 1)
+                  (ORDX ST))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>601 W 160 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 601))
+       (FSN (DIR W)
+            (SN (NUM 160))
+            (SS ST)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>199 AVENUE B</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 199))
+       (FSN (SN (WD AVENUE)
+                (WD B))))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>421 E 168</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 421))
+       (FSN (DIR E)
+            (SN (NUM 168))))
+
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>#9B277W127ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 9)
+                  (LTR B)))
+       (HN (NUM 277))
+       (FSN (DIR W)
+            (SN (NUM 127))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>05 TAYLOR COURT</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 05))
+       (FSN (SN (WD TAYLOR))
+            (SS COURT)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>079 SIGNS RD #D</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 079))
+       (FSN (SN (WD SIGNS))
+            (SS RD))
+       (FAPT (PND #)
+             (APT (LTR D))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1     AUDOBON AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD AUDOBON))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1     AUDUBON AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD AUDUBON))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1     BELLHAVEN PL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD BELLHAVEN))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1     BOGARDUS PL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD BOGARDUS))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1     FORDHAM PLAZA</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD FORDHAM))
+            (SS PLAZA)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1 AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 1))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1 AVE 3</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 1))
+            (SS AVE))
+       (FAPT (APT (NUM 3))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1 AVE 6</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 1))
+            (SS AVE))
+       (FAPT (APT (NUM 6))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1 BRONXVILLE RD          3L</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD BRONXVILLE))
+            (SS RD))
+       (FAPT (APT (NUM 3)
+                  (LTR L))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1 GLENWOOD AVE #25G</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD GLENWOOD))
+            (SS AVE))
+       (FAPT (PND #)
+             (APT (NUM 25)
+                  (LTR G))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1 HARRISON ST #4J</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD HARRISON))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 4)
+                  (LTR J))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1 MARSHA LANE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD MARSHA))
+            (SS LANE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1 PARKVIEW TERR</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1))
+       (FSN (SN (WD PARKVIEW))
+            (SS TERR)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1 ST                         B</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 1))
+            (SS ST))
+       (FAPT (APT (LTR B))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1-05ASTORIABLVD 3</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1)
+           (HYPH -)
+           (NUM 05))
+       (FSN (SN (WD ASTORIA))
+            (SS BLVD))
+       (FAPT (APT (NUM 3))))
+       
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10    BAILEY PL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10))
+       (FSN (SN (WD BAILEY))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10    MIDWOOD ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10))
+       (FSN (SN (WD MIDWOOD))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10    W 182 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10))
+       (FSN (DIR W)
+            (SN (NUM 182))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10 CATHERINE SLIP 1</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10))
+       (FSN (SN (WD CATHERINE)))
+       (FAPT (AT SLIP)
+             (APT (NUM 1))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10 COLUMBIA PL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10))
+       (FSN (SN (WD COLUMBIA))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10 MIDWOOD ST #4J</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10))
+       (FSN (SN (WD MIDWOOD))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 4)
+                  (LTR J))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10 PARK TERR E               1</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10))
+       (FSN (SN (WD PARK))
+            (SS TERR)
+            (DIR E))
+       (FAPT (APT (NUM 1))))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10 SPENCER CT 2</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10))
+       (FSN (SN (WD SPENCER))
+            (SS CT))
+       (FAPT (APT (NUM 2))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10 W 22 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10))
+       (FSN (DIR W)
+            (SN (NUM 22))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10-03 LAFAYETTE AV 2L</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10)
+           (HYPH -)
+           (NUM 03))
+       (FSN (SN (WD LAFAYETTE))
+            (SS AV))
+       (FAPT (APT (NUM 2)
+                  (LTR L))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10-04 47 RD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10)
+           (HYPH -)
+           (NUM 04))
+       (FSN (SN (NUM 47))
+            (SS RD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10-09 48 AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10)
+           (HYPH -)
+           (NUM 09))
+       (FSN (SN (NUM 48))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10-15 166TH ST  2</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10)
+           (HYPH -)
+           (NUM 15))
+       (FSN (SN (NUM 166)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 2))))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10-17 FDR DR #1D</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10)
+           (HYPH -)
+           (NUM 17))
+       (FSN (SN (WD FDR))
+            (SS DR))
+       (FAPT (PND #)
+             (APT (NUM 1)
+                  (LTR D))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10-20 NEILSON ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10)
+           (HYPH -)
+           (NUM 20))
+       (FSN (SN (WD NEILSON))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>10-4  37 RD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 10)
+           (HYPH -)
+           (NUM 4))
+       (FSN (SN (NUM 37))
+            (SS RD)))
+           
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>104-4341 AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 104)
+           (HYPH -)
+           (NUM 43))
+       (FSN (SN (NUM 41))
+            (SS AV)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>107-46  118TH ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 107)
+           (HYPH -)
+           (NUM 46))
+       (FSN (SN (NUM 118)
+                (ORDX TH))
+            (SS ST)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>110-12  195TH STREET</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 110)
+           (HYPH -)
+           (NUM 12))
+       (FSN (SN (NUM 195)
+                (ORDX TH))
+            (SS STREET)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>120   DREISER LOOP</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 120))
+       (FSN (SN (WD DREISER))
+            (SS LOOP)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>129BALTICSTREET</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 129))
+       (FSN (SN (WD BALTIC))
+            (SS STREET)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>139-0634RD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 139)
+           (HYPH -)
+           (NUM 06))
+       (FSN (SN (NUM 34))
+            (SS RD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>143-2541 AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 143)
+           (HYPH -)
+           (NUM 25))
+       (FSN (SN (NUM 41))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>147-02111 AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 147)
+           (HYPH -)
+           (NUM 02))
+       (FSN (SN (NUM 111))
+            (SS AV)))
+
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>157   VERNON AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 157))
+       (FSN (SN (WD VERNON))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>161ST                        6</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 161))
+            (SS ST))
+       (FAPT (APT (NUM 6))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>186 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 186))
+            (SS ST)))
+            
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>20-24 SEAGIRT BLVD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 20)
+           (HYPH -)
+           (NUM 24))
+       (FSN (SN (WD SEAGIRT))
+            (SS BLVD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>206 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 206))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>210   SHERMAN AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 210))
+       (FSN (SN (WD SHERMAN))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>215 WEST 108TH ST APT 11</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 215))
+       (FSN (DIR WEST)
+            (SN (NUM 108)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (AT APT)
+             (APT (NUM 11))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>230 E 23RD ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 230))
+       (FSN (DIR E)
+            (SN (NUM 23)
+                (ORDX RD))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>255 25 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 255))
+       (FSN (SN (NUM 25))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>280FROSTST.</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 280))
+       (FSN (SN (WD FROST))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>30-36 34 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 30)
+           (HYPH -)
+           (NUM 36))
+       (FSN (SN (NUM 34))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>31-0134THST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 01))
+       (FSN (SN (NUM 34)
+                (ORDX TH))
+            (SS ST)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>32-30 93 ST #E1</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 32)
+           (HYPH -)
+           (NUM 30))
+       (FSN (SN (NUM 93))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (LTR E)
+                  (NUM 1))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>330 BUSHWICK AVE. #3C</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 330))
+       (FSN (SN (WD BUSHWICK))
+            (SS AVE))
+       (FAPT (PND #)
+             (APT (NUM 3)
+                  (LTR C))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>348 ATLANTIC AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 348))
+       (FSN (SN (WD ATLANTIC))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>36 KENILWORTH PL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 36))
+       (FSN (SN (WD KENILWORTH))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>391 BRINSMADE AVE            P</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 391))
+       (FSN (SN (WD BRINSMADE))
+            (SS AVE))
+       (FAPT (APT (LTR P))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>41-12 10TH ST #6C</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 41)
+           (HYPH -)
+           (NUM 12))
+       (FSN (SN (NUM 10)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 6)
+                  (LTR C))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>426 W 56 ST #5L</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 426))
+       (FSN (DIR W)
+            (SN (NUM 56))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 5)
+                  (LTR L))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>469   PENNSYLVANIA</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 469))
+       (FSN (SN (WD PENNSYLVANIA))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>49-02 21 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 49)
+           (HYPH -)
+           (NUM 02))
+       (FSN (SN (NUM 21))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>51 CHUCK BLVD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 51))
+       (FSN (SN (WD CHUCK))
+            (SS BLVD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>52NDSTREET</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 52)
+                (ORDX ND))
+            (SS STREET)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>550   STONE AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 550))
+       (FSN (SN (WD STONE))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>578 FORTHILL  PLACE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 578))
+       (FSN (SN (WD FORTHILL))
+            (SS PLACE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>60 EAST 106TH STREET</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 60))
+       (FSN (DIR EAST)
+            (SN (NUM 106)
+                (ORDX TH))
+            (SS STREET)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>615   W 164 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 615))
+       (FSN (DIR W)
+            (SN (NUM 164))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>645 JEFFERSON</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 645))
+       (FSN (SN (WD JEFFERSON))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>700 MORRIS AVE.</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 700))
+       (FSN (SN (WD MORRIS))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>73-57 198TH ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 73)
+           (HYPH -)
+           (NUM 57))
+       (FSN (SN (NUM 198)
+                (ORDX TH))
+            (SS ST)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>76-35 COMMONWEALTH BL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 76)
+           (HYPH -)
+           (NUM 35))
+       (FSN (SN (WD COMMONWEALTH))
+            (SS BL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>795 GARDEN ST #5L</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 795))
+       (FSN (SN (WD GARDEN))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 5)
+                  (LTR L))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>82-34 252 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 82)
+           (HYPH -)
+           (NUM 34))
+       (FSN (SN (NUM 252))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>85-16 95 AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 85)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (NUM 95))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>88-09 148 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 88)
+           (HYPH -)
+           (NUM 09))
+       (FSN (SN (NUM 148))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>90-15 179TH PL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 90)
+           (HYPH -)
+           (NUM 15))
+       (FSN (SN (NUM 179)
+                (ORDX TH))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>927   DEKALB AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 927))
+       (FSN (SN (WD DEKALB))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>964   MORRIS AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 964))
+       (FSN (SN (WD MORRIS))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>ALABAMA AV</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD ALABAMA))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>BRIGGS AV</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD BRIGGS))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>CATHERINEST 1</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD CATHERINE))
+            (SS ST))
+       (FAPT (APT (NUM 1))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>CORNAGAAVE B</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD CORNAGA))
+            (SS AVE))
+       (FAPT (APT (LTR B))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>DUMONT AVE 9</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD DUMONT))
+            (SS AVE))
+       (FAPT (APT (NUM 9))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>E 224 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR E)
+            (SN (NUM 224))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>E53ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR E)
+            (SN (NUM 53))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>EAST 34TH ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 34)
+                (ORDX TH))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>EDGEWOODAV 2</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD EDGEWOOD))
+            (SS AV))
+       (FAPT (APT (NUM 2))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>HYLAN BLVD</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD HYLAN))
+            (SS BLVD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>LENOX RD                     9</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD LENOX))
+            (SS RD))
+       (FAPT (APT (NUM 9))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>MARCUS GARVEY BLVD</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD MARCUS)
+                (WD GARVEY))
+            (SS BLVD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>MORRIS AVE                   1</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD MORRIS))
+            (SS AVE))
+       (FAPT (APT (NUM 1))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>OCEAN AVE                    1</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD OCEAN))
+            (SS AVE))
+       (FAPT (APT (NUM 1))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>PENROD ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD PENROD))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>RICHMAN PLAZA</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD RICHMAN))
+            (SS PLAZA)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>SARATOGA AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD SARATOGA))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>ST JOHNS PL                  1</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD ST)
+                (WD JOHNS))
+            (SS PL))
+       (FAPT (APT (NUM 1))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>THIERIOT AV C</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD THIERIOT))
+            (SS AV))
+       (FAPT (APT (LTR C))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>VERMONTST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD VERMONT))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>W 47 ST 2</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR W)
+            (SN (NUM 47))
+            (SS ST))
+       (FAPT (APT (NUM 2))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>WEST 115 ST 5</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 115))
+            (SS ST))
+       (FAPT (APT (NUM 5))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>WEST128THSTREET</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 128)
+                (ORDX TH))
+            (SS STREET)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>FOREST PY</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD FOREST))
+            (SS PY)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>HAMILTONMANOR</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD HAMILTON))
+			(SS MANOR)))
+            
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1011  1 AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1011))
+       (FSN (SN (NUM 1))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>104-4144 AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 104)
+           (HYPH -)
+           (NUM 41))
+       (FSN (SN (NUM 44))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>107-38LEFFERTS BLVD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 107)
+           (HYPH -)
+           (NUM 38))
+       (FSN (SN (WD LEFFERTS))
+            (SS BLVD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>110 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 110))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1130 ANDERSON AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1130))
+       (FSN (SN (WD ANDERSON))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>116-40 120TH ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 116)
+           (HYPH -)
+           (NUM 40))
+       (FSN (SN (NUM 120)
+                (ORDX TH))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>12 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 12))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>124 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 124))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>129 CARLTON AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 129))
+       (FSN (SN (WD CARLTON))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>133-30 127 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 133)
+           (HYPH -)
+           (NUM 30))
+       (FSN (SN (NUM 127))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1382 E 105 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1382))
+       (FSN (DIR E)
+            (SN (NUM 105))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1421 GRAND CONC #4-C</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1421))
+       (FSN (SN (WD GRAND))
+            (SS CONC))
+       (FAPT (PND #)
+             (APT (NUM 4)
+                  (HYPH -)
+                  (LTR C))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1463 CROTONA PLACE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1463))
+       (FSN (SN (WD CROTONA))
+            (SS PLACE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>150-2071 AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 150)
+           (HYPH -)
+           (NUM 20))
+       (FSN (SN (NUM 71))
+            (SS AV)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>156   TOMPKINS AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 156))
+       (FSN (SN (WD TOMPKINS))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1702  W 6 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1702))
+       (FSN (DIR W)
+            (SN (NUM 6))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>176-16133 AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 176)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (NUM 133))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1840 GRND CONCOURSE      APT</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1840))
+       (FSN (SN (WD GRND))
+            (SS CONCOURSE))
+       (FAPT (AT APT)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1919 71 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1919))
+       (FSN (SN (NUM 71))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>2-10  ASTORIA BLVD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 2)
+           (HYPH -)
+           (NUM 10))
+       (FSN (SN (WD ASTORIA))
+            (SS BLVD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>2045 SOUTHERN BLVD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 2045))
+       (FSN (SN (WD SOUTHERN))
+            (SS BLVD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>20TH AV</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 20)
+                (ORDX TH))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>2136  EAST   63 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 2136))
+       (FSN (DIR EAST)
+            (SN (NUM 63))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>22 MADISON AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 22))
+       (FSN (SN (WD MADISON))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>229 E 43 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 229))
+       (FSN (DIR E)
+            (SN (NUM 43))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>2357 63ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 2357))
+       (FSN (SN (NUM 63))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>2436  MARION AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 2436))
+       (FSN (SN (WD MARION))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>2521  PALISADE AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 2521))
+       (FSN (SN (WD PALISADE))
+            (SS AV)))
+            
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>2657  SEDWICK AVENUE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 2657))
+       (FSN (SN (WD SEDWICK))
+            (SS AVENUE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>27AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 27))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>29    CLAREMONT AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 29))
+       (FSN (SN (WD CLAREMONT))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>30    ELLWOOD ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 30))
+       (FSN (SN (WD ELLWOOD))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>3051 LINDEN PL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 3051))
+       (FSN (SN (WD LINDEN))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>317 OCEANSIDE DR</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 317))
+       (FSN (SN (WD OCEANSIDE))
+            (SS DR)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>326   MAC DONOUGH ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 326))
+       (FSN (SN (WD MAC)
+                (WD DONOUGH))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>34-46 76 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 34)
+           (HYPH -)
+           (NUM 46))
+       (FSN (SN (NUM 76))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>352   W  117 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 352))
+       (FSN (DIR W)
+            (SN (NUM 117))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>37-06 72 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 37)
+           (HYPH -)
+           (NUM 06))
+       (FSN (SN (NUM 72))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>3807  OCEANIC AV</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 3807))
+       (FSN (SN (WD OCEANIC))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>401   BRIGHTON ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 401))
+       (FSN (SN (WD BRIGHTON))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>42-16 80 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 42)
+           (HYPH -)
+           (NUM 16))
+       (FSN (SN (NUM 80))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>439 MILL RD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 439))
+       (FSN (SN (WD MILL))
+            (SS RD)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>4554 PARK AVE 1</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 4554))
+       (FSN (SN (WD PARK))
+            (SS AVE))
+       (FAPT (APT (NUM 1))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>48 EISENHOWER AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 48))
+       (FSN (SN (WD EISENHOWER))
+            (SS AVE)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>50 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 50))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>518   WEST  135 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 518))
+       (FSN (DIR WEST)
+            (SN (NUM 135))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>54    HIGHLAND PL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 54))
+       (FSN (SN (WD HIGHLAND))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>564   MC DONOUGH ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 564))
+       (FSN (SN (WD MC)
+                (WD DONOUGH))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>63-43 BURNECKE CT</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 63)
+           (HYPH -)
+           (NUM 43))
+       (FSN (SN (WD BURNECKE))
+            (SS CT)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>715   WEST  180 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 715))
+       (FSN (DIR WEST)
+            (SN (NUM 180))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>741E.4THSTREET</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 741))
+       (FSN (DIR E)
+            (SN (NUM 4)
+                (ORDX TH))
+            (SS STREET)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>778   PARK PL</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 778))
+       (FSN (SN (WD PARK))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>80 ST                        1</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 80))
+            (SS ST))
+       (FAPT (APT (NUM 1))))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>83-75 118 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 83)
+           (HYPH -)
+           (NUM 75))
+       (FSN (SN (NUM 118))
+            (SS ST)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>86-10 76TH STREET</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 86)
+           (HYPH -)
+           (NUM 10))
+       (FSN (SN (NUM 76)
+                (ORDX TH))
+            (SS STREET)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>89-07 87 ST #2</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 89)
+           (HYPH -)
+           (NUM 07))
+       (FSN (SN (NUM 87))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 2))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>91 ELDRIDGE ST.9</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 91))
+       (FSN (SN (WD ELDRIDGE))
+            (SS ST))
+       (FAPT (APT (NUM 9))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>94-0634RD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 94)
+           (HYPH -)
+           (NUM 06))
+       (FSN (SN (NUM 34))
+            (SS RD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>970 PROSPECT AV 2B</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 970))
+       (FSN (SN (WD PROSPECT))
+            (SS AV))
+       (FAPT (APT (NUM 2)
+                  (LTR B))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>ANADALE RD</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD ANADALE))
+            (SS RD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>BELLHAVEN PL</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD BELLHAVEN))
+            (SS PL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>BRONX PARK AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD BRONX)
+                (WD PARK))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>CHURCH ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD CHURCH))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>CRONSTON AV</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD CRONSTON))
+            (SS AV)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>E 13 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR E)
+            (SN (NUM 13))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>E 5 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR E)
+            (SN (NUM 5))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>EAST 119 ST                  4</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 119))
+            (SS ST))
+       (FAPT (APT (NUM 4))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>EAST 74TH ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR EAST)
+            (SN (NUM 74)
+                (ORDX TH))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>ELGAR PL 6</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD ELGAR))
+            (SS PL))
+       (FAPT (APT (NUM 6))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>FULTON</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD FULTON))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>HARTFORD ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD HARTFORD))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>JAMAICA AV 2</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD JAMAICA))
+            (SS AV))
+       (FAPT (APT (NUM 2))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>LINDEN BL</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD LINDEN))
+            (SS BL)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>MARTENSE ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD MARTENSE))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>MURRAY ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD MURRAY))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>RIVAS PARK TOWER</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD RIVAS)
+                (WD PARK)
+                (WD TOWER))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>SCOTT AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD SCOTT))
+            (SS AVE)))
+            
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>ST RAYMONDS AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD ST)
+                (WD RAYMONDS))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>TIEBOUT</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD TIEBOUT))))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>W 10 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR W)
+            (SN (NUM 10))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>W 8 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR W)
+            (SN (NUM 8))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>WEST 135TH ST 4</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 135)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (APT (NUM 4))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>WEST180ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (DIR WEST)
+            (SN (NUM 180))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>#3RE 141 W 111 ST</field>
+</raw>
+<parseTree>
+
+(SADDR (FAPT (PND #)
+             (APT (NUM 3))
+             (AT RE))
+       (HN (NUM 141))
+       (FSN (DIR W)
+            (SN (NUM 111))
+            (SS ST)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>601OAKTERR</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 601))
+       (FSN (SN (WD OAK))
+            (SS TERR)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>129BALTICSTREET</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 129))
+       (FSN (SN (WD BALTIC))
+            (SS STREET)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>149THST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (NUM 149)
+                (ORDX TH))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1505TOWNSENDAVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1505))
+       (FSN (SN (WD TOWNSEND))
+            (SS AVE)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1534ERICSONPL.               5</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1534))
+       (FSN (SN (WD ERICSON))
+            (SS PL))
+       (FAPT (APT (NUM 5))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1690PRESIDENTSTREE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1690))
+       (FSN (SN (WD PRESIDENT))
+            (SS STREE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1935MCGROWAVENUE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1935))
+       (FSN (SN (WD MCGROW))
+            (SS AVENUE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>280FROSTST.</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 280))
+       (FSN (SN (WD FROST))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>303RIDGEWOODAVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 303))
+       (FSN (SN (WD RIDGEWOOD))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>31-0134THST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 31)
+           (HYPH -)
+           (NUM 01))
+       (FSN (SN (NUM 34)
+                (ORDX TH))
+            (SS ST)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>78 SO WASHINGTON AVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 78))
+       (FSN (DIR SO)
+            (SN (WD WASHINGTON))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>CORNAGAAVE B</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD CORNAGA))
+            (SS AVE))
+       (FAPT (APT (LTR B))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>DALYAV                       2</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD DALY))
+            (SS AV))
+       (FAPT (APT (NUM 2))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>EDGEWOODAV 2</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD EDGEWOOD))
+            (SS AV))
+       (FAPT (APT (NUM 2))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>HAMILTONMANOR</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD HAMILTON))
+            (SS MANOR)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>HEYWARD</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD HEYWARD))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>STOBEAVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD STOBE))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>UNDERCLIFFAVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD UNDERCLIFF))
+            (SS AVE)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>VERMONTST</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD VERMONT))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1137BERGENST#8</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1137))
+       (FSN (SN (WD BERGEN))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 8))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>123 SO ROBERT ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 123))
+       (FSN (DIR SO)
+            (SN (WD ROBERT))
+            (SS ST)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>1606SHOREBLVD</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 1606))
+       (FSN (SN (WD SHORE))
+            (SS BLVD)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>363ETNAST                    2</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 363))
+       (FSN (SN (WD ETNA))
+            (SS ST))
+       (FAPT (APT (NUM 2))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>37-31CRESCENTSTREET#52</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 37)
+           (HYPH -)
+           (NUM 31))
+       (FSN (SN (WD CRESCENT))
+            (SS STREET))
+       (FAPT (PND #)
+             (APT (NUM 52))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>5064PITMANAVE</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 5064))
+       (FSN (SN (WD PITMAN))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>578   EAST   82</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 578))
+       (FSN (DIR EAST)
+            (SN (NUM 82))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>KING HY</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD KING))
+            (SS HY)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>LORINGAVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD LORING))
+            (SS AVE)))
+
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>MARCYAVENUE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD MARCY))
+            (SS AVENUE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>ST.ANNSAV 3</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD ST)
+                (WD ANNS))
+            (SS AV))
+       (FAPT (APT (NUM 3))))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>UNIVERSITYAVE</field>
+</raw>
+<parseTree>
+
+(SADDR (FSN (SN (WD UNIVERSITY))
+            (SS AVE)))
+
+</parseTree>
+</datum>
+
+<datum>
+<raw>
+<field>66 NO FULTON AVENUE 1ST</field>
+</raw>
+<parseTree>
+
+(SADDR (HN (NUM 66))
+       (FSN (DIR NO)
+            (SN (WD FULTON))
+            (SS AVENUE))
+       (FAPT (APT (NUM 1)
+                  (ORDX ST))))
+</parseTree>
+</datum>
+
+</data>

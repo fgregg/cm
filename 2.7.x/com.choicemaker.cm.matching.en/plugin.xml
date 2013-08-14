@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.matching.en"
+   name="Matching locale en Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="en.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+</plugin>

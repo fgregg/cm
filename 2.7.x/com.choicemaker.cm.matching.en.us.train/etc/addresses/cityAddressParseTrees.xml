@@ -1,0 +1,207 @@
+<data>
+<datum>
+<raw>
+<field>1 B BELLHAVEN PLACE STATEN ISL</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 1)
+           (LTR B))
+       (FSN (SN (WD BELL)
+                (WD HAVEN))
+            (SS PLACE))
+       (V_CITY (TT_CITY_2_1 STATEN)
+               (TT_CITY_2_2 ISL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>104 E 118TH ST NEW YORK</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 104))
+       (FSN (DIR E)
+            (SN (NUM 118)
+                (ORDX TH))
+            (SS ST))
+       (V_CITY (TT_CITY_2_1 NEW)
+               (TT_CITY_2_2 YORK)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>107-36  131 ST RICHMOND HILL P</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 107)
+           (HYPH -)
+           (NUM 36))
+       (FSN (SN (NUM 131))
+            (SS ST))
+       (V_CITY (TT_CITY_2_1 RICHMOND)
+               (TT_CITY_2_2 HILL))
+       (FAPT (APT (LTR P))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>112-28  39 AVE CORONA</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 112)
+           (HYPH -)
+           (NUM 28))
+       (FSN (SN (NUM 39))
+            (SS AVE))
+       (V_CITY (TT_CITY_1_1 CORONA)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>35-46  102ST  CORONA 2F</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 35)
+           (HYPH -)
+           (NUM 46))
+       (FSN (SN (NUM 102))
+            (SS ST))
+       (V_CITY (TT_CITY_1_1 CORONA))
+       (FAPT (APT (NUM 2)
+                  (LTR F))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>13  LINDEN BLVD PH BRONX</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 13))
+       (FSN (SN (WD LINDEN))
+            (SS BLVD))
+       (FAPT (AT PH))
+       (V_CITY (TT_CITY_1_1 BRONX)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>1630 ST. JOHN'S PL. BKLYN</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 1630))
+       (FSN (SN (WD ST)
+                (WD JOHNS))
+            (SS PL))
+       (V_CITY (TT_CITY_1_1 BKLYN)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>165 ST. ANN'S AVE 1B BX</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 165))
+       (FSN (SN (WD ST)
+                (WD ANNS))
+            (SS AVE))
+       (FAPT (APT (NUM 1)
+                  (LTR B)))
+       (V_CITY (TT_CITY_1_1 BX)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>165-06  78 AVE FLUSHING NY PVT</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 165)
+           (HYPH -)
+           (NUM 06))
+       (FSN (SN (NUM 78))
+            (SS AVE))
+       (V_CITY (TT_CITY_1_1 FLUSHING)
+               (TT_NY NY))
+       (FAPT (AT PVT)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>166-10  89 AVE JAMAICA</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 166)
+           (HYPH -)
+           (NUM 10))
+       (FSN (SN (NUM 89))
+            (SS AVE))
+       (V_CITY (TT_CITY_1_1 JAMAICA)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>184  E. 34TH STREET 2L BROOKLY</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 184))
+       (FSN (DIR E)
+       		(SN (NUM 34)
+       		    (ORDX TH))
+       		(SS STREET))
+       (FAPT (APT (NUM 2)
+                  (LTR L)))
+       (V_CITY (TT_CITY_1_1 BROOKLY)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>40-23  67TH ST WOODSIDE HOUS</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 40)
+           (HYPH -)
+           (NUM 23))
+       (FSN (SN (NUM 67)
+                (ORDX TH))
+            (SS ST))
+       (V_CITY (TT_CITY_1_1 WOODSIDE))
+       (FAPT (AT HOUS)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>50-06  94TH ST ELMHURST 3</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 50)
+           (HYPH -)
+           (NUM 06))
+       (FSN (SN (NUM 94)
+                (ORDX TH))
+            (SS ST))
+       (V_CITY (TT_CITY_1_1 ELMHURST))
+       (FAPT (APT (NUM 3))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>600  KINGSLAND AVE 6B BROOKLYN</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 600))
+       (FSN (SN (WD KINGSLAND))
+            (SS AVE))
+       (FAPT (APT (NUM 6)
+                  (LTR B)))
+       (V_CITY (TT_CITY_1_1 BROOKLYN)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>8550  FOREST P. WAY QUEENS NY</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 8550))
+       (FSN (SN (WD FOREST)
+                (WD P))
+            (SS WAY))
+       (V_CITY (TT_CITY_1_1 QUEENS)
+               (TT_NY NY)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>88-41  179 ST JAMAICA</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 88)
+           (HYPH -)
+           (NUM 41))
+       (FSN (SN (NUM 179))
+            (SS ST))
+       (V_CITY (TT_CITY_1_1 JAMAICA)))</parseTree>
+</datum>
+</data>

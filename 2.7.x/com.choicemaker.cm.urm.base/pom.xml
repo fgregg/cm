@@ -5,9 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>choicemaker-cm</artifactId>
     <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../choicemaker-cm/pom.xml</relativePath>
   </parent>
 
   <artifactId>com.choicemaker.cm.urm.base</artifactId>
@@ -67,18 +68,21 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
+        <artifactId>maven-source-plugin</artifactId>
         <executions>
           <execution>
-            <id>src-assembly</id>
+            <id>attach-sources</id>
             <phase>package</phase>
-            <configuration>
-              <descriptor>src-assembly.xml</descriptor>
-            </configuration>
             <goals>
-              <goal>single</goal>
+              <goal>jar-no-fork</goal>
             </goals>
           </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
           <execution>
             <id>prj-assembly</id>
             <phase>package</phase>
@@ -91,6 +95,20 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>javadoc</id>
+            <phase>package</phase>
+            <configuration/>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -98,32 +116,26 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.ant</artifactId>
-      <version>1.5.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.log4j</artifactId>
-      <version>1.2.8-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.xerces</artifactId>
-      <version>4.0.13-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.boot</artifactId>
-      <version>2.1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.runtime</artifactId>
-      <version>2.1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.jdom</artifactId>
-      <version>0.9.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 

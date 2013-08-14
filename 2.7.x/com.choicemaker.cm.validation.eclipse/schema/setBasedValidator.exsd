@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<schema targetNamespace="com.choicemaker.cm.custom.mci.nameparser">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="com.choicemaker.cm.validation.eclipse" id="setBasedValidator" name="Set-based Validator"/>
+      </appInfo>
+      <documentation>
+         Defines a plugin-configurable instance of ISetBasedValidator.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+               <element ref="setBased"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="setBased">
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name of a set-based validator configuration. This name is used to reference the
+									validator configuration from application code.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name of the class that implements the set-based validator configuration.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.validation.eclipse.AbstractSetBasedValidator"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="set" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name of the set that holds tokens or patterns used by the validator.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="resource"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

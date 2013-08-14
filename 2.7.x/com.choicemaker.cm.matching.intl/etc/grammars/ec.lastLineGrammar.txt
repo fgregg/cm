@@ -1,0 +1,13 @@
+// requires TT_WD, TT_EC_COUNTRY (V_EC_PROVINCE must be populated externally)
+
+LAST_LINE --> V_CITY V_EC_PROVINCE V_EC_COUNTRY [.9]
+LAST_LINE --> V_EC_PROVINCE V_E_COUNTRY [.040]
+LAST_LINE --> V_CITY V_EC_COUNTRY [.035]
+LAST_LINE --> V_CITY V_EC_PROVINCE [.025]
+
+V_CITY --> TT_WD [.9]
+V_CITY --> TT_WD TT_WD [.095]
+
+// NOTE: V_EC_STATE is populated externally
+
+V_EC_COUNTRY --> TT_EC_COUNTRY [1]

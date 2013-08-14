@@ -6,7 +6,7 @@ and the plugin that it augments (org.eclipse.ant.core).
  (*) The plugin doesn't depend on this fragment during a build, but it
      requires the fragment at runtime.
 
- (*) The fragment requires the plugin during a build and at runtime.
+ (*) The fragment requires the plugin at buildtime and runtime.
 
 Maven is used to build the plugin and fragment, but Eclipse is used to
 run them. The Maven POM of the fragment can reference the plugin POM

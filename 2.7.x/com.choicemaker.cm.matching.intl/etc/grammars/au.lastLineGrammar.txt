@@ -1,0 +1,19 @@
+// requires: TT_WD, TT_NUM4, TT_AU_COUNTRY
+
+LAST_LINE --> V_CITY V_STATE V_PC
+LAST_LINE --> V_CITY V_PC V_STATE
+LAST_LINE --> V_CITY V_STATE
+LAST_LINE --> V_STATE V_PC
+//LAST_LINE --> V_CITY V_PC  NOTE: causes problems with P O BOX 1708, etc.
+LAST_LINE --> V_STATE V_COUNTRY V_PC
+LAST_LINE --> V_STATE V_COUNTRY
+
+V_CITY --> TT_WD [.335]
+V_CITY --> TT_WD TT_WD [.333]
+V_CITY --> TT_WD TT_WD TT_WD [.332]
+
+// NOTE: V_STATE must be initialized externally
+
+V_PC   --> TT_NUM4 [1]
+
+V_COUNTRY --> TT_AU_COUNTRY

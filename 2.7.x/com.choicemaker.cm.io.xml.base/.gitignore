@@ -1,0 +1,12 @@
+archive
+base.jar
+basesrc.jar
+bin
+build.xml
+.clover
+com.choicemaker.cm.io.xml.base_*.jar
+project.t.xml
+project.xml
+target
+temp.folder
+tmp

@@ -1,0 +1,12 @@
+archive
+bin
+build.xml
+cfg.jar
+cfgsrc.jar
+.clover
+com.choicemaker.cm.*_*.jar
+project.t.xml
+project.xml
+target
+temp.folder
+tmp

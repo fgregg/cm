@@ -1,0 +1,278 @@
+//
+// obtained from http://www.handball.gr/codes.htm
+//
+// Adam's notes:
+//	* == previously assigned (no longer in use?)
+//  + == no longer exists
+//
+
+AFG : AF // Afghanistan
+AHO : AN // Netherland Antilles
+ALB : AL // Albania
+ALG : DZ // Algeria
+AND : AD // Andorra
+ANG : AO // Angola
+ANT : AG // Antigua and Barbuda
+ARG : AR // Argentina
+ARM : AM // Armenia
+ARU : AW // Aruba
+ARS : SA // Saudi Arabia (KSA *)
+KSA : SA // *duplicate* for Saudi Arabia
+SAU : SA // *duplicate* for saudi Arabia
+ASA : AS // American Samoa
+AUS : AU // Australia
+AUT : AT // Austria
+AZE : AZ // Azerbaijan
+
+BAH : BS // Bahamas
+BAN : BD // Bangladesh
+BAR : BB // Barbados
+BDI : BI // Burundi
+BEL : BE // Belgium
+BEN : BJ // Benin
+BER : BM // Bermuda
+BHU : BT // Bhutan
+BIH : BA // Bosnia Herzegovina (BOS *)
+BOS : BA // *duplicate* for Bosnia
+BIZ : BZ // Belize
+BLR : BY // Belarus (BLS *)
+BLS : BY // *duplicate* for Belarus
+BOL : BO // Bolivia
+BOT : BW // Botswana
+BRA : BR // Brazil
+BRN : BH // Bahrain
+BRU : BN // Brunei Darussalam
+BUL : BG // Bulgaria
+BUR : BF // Burkina Faso
+BUR : BI // Burundi
+// BWI British West lndies ******* unknown
+
+CAF : CF // Central African Republic
+CAM : KH // Cambodia
+CAN : CA // Canada
+CAY : KY // Cayman Islands
+CGO : CG // Congo
+CHA : TD // Chad
+CHI : CL // Chile (CHL *)
+CHL : CL // duplicate for Chile
+CHN : CN // China / Popular Republic of China (ROC *)
+ROC : CN // *duplicate* for China
+CIV : CI // Cote d' Ivoire / Ivory Coast (IVC *)
+IVC : CI // *duplicate* for Ivory coast
+CMR : CM // Cameroon (CAM *)
+CAM : CM // *duplicate* for Cameroon
+COD : CG // Democratic Republic of the Congo ****** guess on my part
+COK : CK // Cook Islands
+COL : CO // Colombia
+COM : KM // Comoros
+CPV : CV // Cape Verde
+CRC : CR // Costa Rica
+CRO : HR // Croatia
+CUB : CU // Cuba
+CYP : CY // Cyprus
+CZE : CZ // Czech Republic (from 1991)
+
+DEN : DK // Denmark
+DJI : DJ // Djibouti
+DMA : DM // Dominica (DMN *)
+DMN : DM // *duplicate* for Dominica
+DOM : DO // Dominican Republic
+
+ECU : EC // Ecuador
+EGY : EG // Egypt
+ENG : GB // England, (Great Britain)
+// ERI : // Eritrea  ************** unknown
+ESA : SV // El Salvador
+ESP : ES // Spain (SPA *)
+SPA : ES // *duplicate* for spain
+EST : EE // Estonia
+ETH : ET // Ethiopia
+// EUN : // Unified Team of Athletes +
+
+FIJ : FJ // Fiji
+FIN : FI // Finland
+FRA : FR // France
+FRG : DE // Federal Republic of Germany (1948-90) +
+FSM : FM // Federated States of Micronesia
+
+GAB : GA // Gabon
+GAM : GM // Gambia
+GBR : GB // Great Britain
+GBS : GW // Guinea-Bissau
+GDR : DE // German Democratic Republic (1948-90) +
+GEO : GE // Georgia
+GER : DE // Germany (previous to 1948 and from 1991)
+GEQ : GQ // Equatorial Guinea
+GHA : GH // Ghana
+GNB : GW // Guinea-Bissau NOTE: duplicate in the original file.
+GRE : GR // Greece
+GRN : GD // Grenada
+GUA : GT // Guatemala
+GUI : GN // Guinea
+GUM : GU // Guam
+GUY : GY // Guyana
+
+HAI : HT // Haiti
+HKG : HK // Hong Kong, China
+HOL : NL // Holland * (The Netherlands, NED)
+NED : NL // *duplicate* for Holland
+HON : HN // Honduras
+HUN : HU // Hungary
+
+INA : ID // Indonesia
+IND : IN // India
+IRE : IE // Ireland  (Eire) (IRL *)
+IRL : IE // *duplicate* for Ireland
+IRI : IR // Islamic Republic of Iran (IRN *)
+IRN : IR // *duplicate* for Iran
+IRQ : IQ // Iraq
+ISL : IS // Iceland (ICE *)
+ICE : IS // *duplicate* for Iceland
+ISR : IL // Israel
+ISV : VI // US Virgin Islands (UVI *)
+ITA : IT // Italy
+IVB : VG // British Virgin Islands
+// IVC Ivory Coast (CIV) ******** with CIV
+
+JAM : JM // Jamaica
+JOR : JO // Jordan
+JPN : JP // Japan (JAP *)
+JAP : JP // *duplicate* for Japan
+
+KAZ : KZ // Kazakhstan (KZK *)
+KZK : KZ // *duplicate* for Kazakhstan
+KEN : KE // Kenya
+KDR : KR // Korea (South Korea)
+KOR : KR // Korea / South Corea (SKR *)
+SKR : KR // *duplicate* for South Korea
+KGZ : KG // Kyrgyzstan
+// KSA Saudi Arabia Kingdom (ARS *) **** elsewhere
+KUW : KW // Kuwait
+
+LAO : LA // Laos People’s Democratic Republic
+LAT : LV // Latvia / Letonia
+LBA : LY // Libyan Arab Jamahiriya
+LBR : LR // Liberia
+LCA : LC // Saint Lucia
+LES : LS // Lesotho
+LIB : LB // Lebanon
+LIE : LI // Liechtenstein
+LIT : LT // Lithuania (LTU *)
+LTU : LT // *duplicate* for Lithuania
+LUX : LU // Luxembourg
+
+MAD : MG // Madagascar
+MAR : MA // Morocco (MOR *)
+MOR : MA // *duplicate* for Morocco
+MAS : MY // Malaysia
+MAW : MW // Malawi
+MDA : MD // Republic of Moldova (MOL *)
+MOL : MD // *duplicate* for Moldova
+MDV : MV // Maldives
+MEX : MX // Mexico
+MGL : MN // Mongolia
+// MKD Former Yugoslav Republic of Macedonia **** unknown
+MLI : ML // Mali
+MLT : MT // Malta
+MON : MC // Monaco
+MOZ : MZ // Mozambique
+MRI : MU // Mauritius (MAU *)
+MAU : MU // *duplicate* for Mauritius
+MTN : MR // Mauritania
+MYA : MM // Myanmar (formerly Birmania) (BIR *)
+BIR : MM // *duplicate* for Myanmar
+
+NAM : NA // Namibia
+NCA : NI // Nicaragua (NIC *)
+NIC : NI // *duplicate*
+// NED The Netherlands (HOL *) ****** elsewhere 
+NEP : NP // Nepal
+NGR : NG // Nigeria
+NGU : PG // Papua New Guinea (PNG *)
+PNG : PG // *duplicate* for Papua New guinea
+NIG : NE // Niger
+NOR : NO // Norway
+NRU : NR // Nauru
+NZL : NZ // New Zealand
+
+OMA : OM // Oman
+
+PAK : PK // Pakistan
+PAN : PA // Panama
+PAR : PY // Paraguay
+PER : PE // Peru
+PHI : PH // Philippines
+// PLE Palestine ***** no corresponding internet code!
+PLW : PW // Palau
+// PNG Papua New Guinea  ***** elsewhere 
+POL : PL // Poland
+POR : PT // Portugal
+PRK : KP // Democratic People’s Republic of Korea (PDR, NKO *)
+PKE : KP // *duplicate* for North Korea
+NKO : KP // *duplicate* for North Korea
+PUR : PR // Puerto Rico
+
+QAT : QA // Qatar
+
+ROM : RO // Romania
+RSA : ZA // South Africa
+RUS : RU //Russia
+RWA : RW // Rwanda
+
+SAM : WS // Samoa
+// SAU Saudi Arabia ***** elsewhere
+SEN : SN // Senegal
+SEY : CD // Seychelles
+SIN : SG // Singapore
+SKN : KN // Saint Kitts and Nevis
+// SKR Korea / South Corea * ******* elsewhere
+SLE : SL // Sierra Leone
+SLO : SI // Slovenia
+SMR : SM // San Marino
+SOL : SB // Solomon Islands
+SOM : SO // Somalia
+SRI : LK // Sri Lanka
+STP : ST // Sao Tome and Principe
+SUD : SD // Sudan
+SUI : CH // Switzerland (SWZ *) NOTE: SWZ is currently Swaziland.
+SUR : SR // Suriname
+SVK : SK // Slovakia (from 1991)
+SWE : SE // Sweden
+SWZ : SZ // Swaziland
+SYR : SY // Syrian Arab Republic
+
+TAN : TZ // United Republic of Tanzania
+TCH : CZ // Czechoslovakia (previous to 1991) + ****** NOTE: Czechoslovakis is mapped to Czech Republic
+TGA : TO // Tonga
+THA : TH // Thailand
+TJK : TJ // Tajikistan
+TKM : TM // Turkmenistan
+TOG : TG // Togo
+TPE : TW // Chinese Taipei / Taiwan (TAI *)
+TAI : TW // *duplicate* for Taiwan
+TRI : TT // Trinidad and Tobago
+TUN : TN // Tunisia
+TUR : TR // Turkey
+
+UAE : AE // United Arab Emirates
+UCS : CZ // Union of the Czech Republic and Slovakia +
+UGA : UG // Uganda
+UKR : UA // Ukraine
+// UNT Unified Team (USSR in 1992 +*) **** useless
+URS : RU // Soviet Union / U.S.S.R. (previous to 1991) +
+URU : UY // Uruguay
+USA : US // United States of America
+UZB : UZ // Uzbekistan
+
+VAN : VU // Vanuatu
+VEN : VE // Venezuela
+VIE : VN // Vietnam
+VIN : VC // Saint Vincent and the Grenadines
+
+YEM : YE // Yemen
+YMD : YE // Yemen Democratic ****** same as Yemen?
+YUG : YU // Yugoslavia
+
+ZAI : ZR // Zaire
+ZAM : ZM // Zambia
+ZIM : ZW // Zimbabwe

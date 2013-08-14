@@ -1,0 +1,188 @@
+<data>
+<datum>
+<raw>
+<field>C/O  LATHAM 4 E 28TH</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD LATHAM))
+       (HN (NUM 4))
+       (FSN (DIR E)
+            (SN (NUM 28)
+                (ORDX TH))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O  LATHAM 4 E 28TH ST</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD LATHAM))
+       (HN (NUM 4))
+       (FSN (DIR E)
+            (SN (NUM 28)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O PHILLIPS 550 CAU     1-H</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD PHILLIPS))
+       (HN (NUM 550))
+       (FSN (SN (WD CAU)))
+       (FAPT (APT (NUM 1)
+                  (HYPH -)
+                  (LTR H))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>508 W. 139TH ST #65 C/O RODRIGUEZ,R.</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 508))
+       (FSN (DIR W)
+            (SN (NUM 139)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 65)))
+       (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD RODRIGUEZ)
+                (WD R)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O GRF 1330 6TH AVE 6TH FL</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD GRF))
+       (HN (NUM 1330))
+       (FSN (SN (NUM 6)
+                (ORDX TH))
+            (SS AVE))
+       (FAPT (APT (NUM 6)
+                  (ORDX TH))
+             (AT FL)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O GRF 1330 AVE OF AMERICOS</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD GRF))
+       (HN (NUM 1330))
+       (FSN (SN (WD AVE)
+                (WD OF)
+                (WD AMERICOS))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>540 W. 55TH ST. #5Y C/O ADAMICK, A.</field>
+</raw>
+<parseTree>
+(SADDR (HN (NUM 540))
+       (FSN (DIR W)
+            (SN (NUM 55)
+                (ORDX TH))
+            (SS ST))
+       (FAPT (PND #)
+             (APT (NUM 5)
+                  (LTR Y)))
+       (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD ADAMICK)
+                (WD A)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O R BELL 465 WEST 148</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD R)
+                (WD BELL))
+       (HN (NUM 465))
+       (FSN (DIR WEST)
+            (SN (NUM 148))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O R BELL 465 WEST</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD R)
+                (WD BELL))
+       (HN (NUM 465))
+       (FSN (SN (WD WEST))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O PHILLIPS 550 CAU     1-H</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD PHILLIPS))
+       (HN (NUM 550))
+       (FSN (SN (WD CAU)))
+       (FAPT (APT (NUM 1)
+                  (HYPH -)
+                  (LTR H))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O  LATHAM 4 E 28TH</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD LATHAM))
+       (HN (NUM 4))
+       (FSN (DIR E)
+            (SN (NUM 28)
+                (ORDX TH))))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O  LATHAM 4 E 28TH ST</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD LATHAM))
+       (HN (NUM 4))
+       (FSN (DIR E)
+            (SN (NUM 28)
+                (ORDX TH))
+            (SS ST)))</parseTree>
+</datum>
+<datum>
+<raw>
+<field>C/O M MURATOVIC 19-06 GROVE ST</field>
+</raw>
+<parseTree>
+(SADDR (CO_ADDR (V_CO (TT_C C)
+                      (TT_O O))
+                (WD M)
+                (WD MURATOVIC))
+       (HN (NUM 19)
+           (HYPH -)
+           (NUM 06))
+       (FSN (SN (WD GROVE))
+            (SS ST)))</parseTree>
+</datum>
+</data>
