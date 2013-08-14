@@ -27,6 +27,7 @@
   </build>
 
   <modules>
+    <module>../com.choicemaker.cm.module</module>
   </modules>
 
 </project>

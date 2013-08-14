@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+  <head>
+    <!--
+    @(#)$RCSfile: package.html,v $        $Revision: 1.1 $ $Date: 2010/03/27 19:27:56 $
+
+    Copyright (c) 2009 Rick Hall
+	Princeton, NJ 08540
+    All rights reserved.
+    -->
+  </head>
+  <body bgcolor="white">
+   Defines the architecture of ChoiceMaker functional modules.
+  <p>
+  ChoiceMaker operational modules (e.g. ModelTraining, ModelEvaluation, HumanReview)
+  were initially built around a consistent but informal structure, namely <ul>
+  <li/> Each module provided a distinct set of operations
+  <li/> Module operations usually emitted events, and in turn, modules often listened for
+  the events by other modules.
+  <li/> Modules often had an implicit concept of state, in which they changed state in
+  response to events they or other modules emitted
+  <li/> Modules could be configured by changing certain properties
+  <li/> Modules optionally provided status messages to the user as they performed
+  their operations
+  <li/> And finally, and most obviously, modules managed a chunk of screen real estate
+  whereby the user control the module and the module would display results to the user.
+  These chunks of real estate were generally implemented as Swing JPanel classes.
+  </ul>
+  These structural concepts were not enforced in the initial design. One goal of refactoring
+  ChoiceMaker is to enforce this architecture so that the monolithic
+  ModelMaker and XxxPanel classes (such as HumanReviewPanel) can be broken apart
+  into domain classes and UI classes. This should allow the domain classes to be simplified
+  and made useable in other contexts, such as porting applications to Swing or reusing
+  domain objects (such as pair filtering) in Server components. It is also intended to
+  provide a useful template for third-party developers to develop new modules for the
+  ChoiceMaker matching framework</p>
+  </body>
+</html>
