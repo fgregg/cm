@@ -102,6 +102,7 @@
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -147,13 +148,15 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
+      <artifactId>
+      com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.en.us.train</artifactId>
+      <artifactId>
+      com.choicemaker.cm.matching.en.us.train</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
     </dependency>
@@ -183,7 +186,8 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.wfst.eclipse</artifactId>
+      <artifactId>
+      com.choicemaker.cm.matching.wfst.eclipse</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
     </dependency>
@@ -213,9 +217,19 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.sun.tools</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.wcohen.ss</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>jakarta-oro</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -261,7 +275,7 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.resources</artifactId>
+      <artifactId>org.eclipse.core.launcher</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -271,7 +285,7 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.launcher</artifactId>
+      <artifactId>org.eclipse.core.resources</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -285,15 +299,6 @@
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
     </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.sun.tools</artifactId>
-      <classifier>eclipse2prj</classifier>
-      <type>zip</type>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>jakarta-oro</artifactId>
-    </dependency>
   </dependencies>
+
 </project>

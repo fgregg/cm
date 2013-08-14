@@ -102,7 +102,182 @@
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.compiler</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.core</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.docs</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.gui.utils</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.io.blocking.automated.base</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.base</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.io.blocking.exact.base</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.composite.base</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.base</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.en</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.matching.en.us.train</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.gen</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.geo</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.intl</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.matching.wfst.eclipse</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.urm.base</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.util.app</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.sun.tools</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.modelmaker</artifactId>
@@ -111,165 +286,106 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.apache.log4j</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.apache.xerces</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.resources</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.compiler</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.core</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-<!--
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.docs</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
--->
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.gui.utils</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.en</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.module</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
-	    <groupId>jfree</groupId>
-	    <artifactId>jfreechart</artifactId>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.wcohen.ss</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.wcohen.ss.eclipse</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-	    <groupId>javax.help</groupId>
-	    <artifactId>javahelp</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>
-        com.choicemaker.cm.io.blocking.automated.base
-      </artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <artifactId>jakarta-oro</artifactId>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>
-        com.choicemaker.cm.io.blocking.automated.inmemory
-      </artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <artifactId>org.apache.ant</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.base</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <artifactId>org.apache.bcel</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <artifactId>org.apache.log4j</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.composite.base</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.en.us.train</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <artifactId>org.apache.xerces</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.ant.core</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.ant.internal.core</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.boot</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.launcher</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.resources.ant</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.eclipse.core.resources</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.runtime</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.wcohen.ss</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.jdom</artifactId>
-    <classifier>eclipse2prj</classifier><type>zip</type></dependency>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>javax.help</groupId>
+      <artifactId>javahelp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+    </dependency>
   </dependencies>
+
 </project>
