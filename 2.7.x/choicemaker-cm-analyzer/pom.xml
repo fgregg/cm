@@ -29,6 +29,8 @@
   <modules>
     <module>../com.choicemaker.cm.module</module>
     <module>../com.choicemaker.cm.gui.utils</module>
+    <module>../com.choicemaker.cm.modelmaker</module>
+    <module>../com.choicemaker.cm.modelmaker.pkg_eclipse</module>
   </modules>
 
 </project>
