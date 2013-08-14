@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.wcohen.ss.eclipse"
+   name="SecondString Eclipse Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker Technologies, Inc.">
+
+   <runtime>
+      <library name="eclipse.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.wcohen.ss"/>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="org.jdom"/>
+   </requires>
+
+
+</plugin>

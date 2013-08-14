@@ -337,6 +337,18 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.gui.utils</artifactId>
+        <version>${choicemaker.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.gui.utils</artifactId>
+        <version>${choicemaker.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
         <version>${choicemaker.version}</version>
       </dependency>
@@ -643,6 +655,18 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss</artifactId>
+        <version>${choicemaker.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.wcohen.ss.eclipse</artifactId>
+        <version>${choicemaker.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.wcohen.ss.eclipse</artifactId>
         <version>${choicemaker.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
@@ -657,6 +681,16 @@
         <artifactId>javaee-api</artifactId>
         <version>5</version>
         <scope>provided</scope>
+      </dependency>
+      <dependency>
+	      <groupId>javax.help</groupId>
+	      <artifactId>javahelp</artifactId>
+	      <version>2.0.05</version>
+      </dependency>
+      <dependency>
+	      <groupId>jfreechart</groupId>
+	      <artifactId>jfreechart</artifactId>
+	      <version>0.9.3</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
