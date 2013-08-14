@@ -9,7 +9,7 @@
 APP_DIR="`dirname "$0"`"
 LAUNCHER="org.eclipse.core.launcher.Main"
 STARTUP_JAR="$APP_DIR/startup.jar"
-APP="com.choicemaker.cm.modelmaker.ModelMaker
+APP="com.choicemaker.cm.modelmaker.ModelMaker"
 LOG4J="log4j.properties"
 WORKSPACE="/tmp"
 
