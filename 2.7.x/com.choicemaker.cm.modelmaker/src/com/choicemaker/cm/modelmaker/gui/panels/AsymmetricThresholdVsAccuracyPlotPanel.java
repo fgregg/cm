@@ -84,7 +84,7 @@ public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 		dataset.addSeries(d);
 		dataset.addSeries(m);
 		final String yAxis = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.cm.accuracy");
-		final PlotOrientation orientation = null;
+		final PlotOrientation orientation = PlotOrientation.VERTICAL;
 		final boolean hasLegend = true;
 		final boolean hasToolTips = true;
 		final boolean hasURLs = true;

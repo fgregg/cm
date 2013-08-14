@@ -78,7 +78,7 @@ public class StatisticsHistogramPanel extends JPanel {
 	}
 
 	private void buildPanel() {
-		final PlotOrientation orientation = null;
+		final PlotOrientation orientation = PlotOrientation.VERTICAL;
 		data = new HistoCategoryDataset(SERIES, getNumBins());
 		histogram =
 			ChartFactory.createBarChart(

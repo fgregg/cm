@@ -89,7 +89,7 @@ public class HoldVsAccuracyPlotPanel extends JPanel {
 		String title = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.title");
 		data = new XYSeries(title);
 		dataset.addSeries(data);
-		final PlotOrientation orientation = null;
+		final PlotOrientation orientation = PlotOrientation.VERTICAL;
 		chart =
 			ChartFactory.createXYLineChart(
 				title,
