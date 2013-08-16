@@ -178,6 +178,7 @@
       <artifactId>com.choicemaker.cm.io.flatfile.gui</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
