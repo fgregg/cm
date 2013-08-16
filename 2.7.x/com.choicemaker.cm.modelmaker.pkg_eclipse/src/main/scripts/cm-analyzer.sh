@@ -13,14 +13,6 @@ APP="com.choicemaker.cm.modelmaker.ModelMaker"
 LOG4J="log4j.properties"
 WORKSPACE="/tmp"
 
-#XCP="/usr/java/j2sdk1.4.2_19/jre/lib/charsets.jar"
-#XCP="/usr/java/j2sdk1.4.2_19/jre/lib/jce.jar:${XCP}"
-#XCP="/usr/java/j2sdk1.4.2_19/jre/lib/jsse.jar:${XCP}"
-#XCP="/usr/java/j2sdk1.4.2_19/jre/lib/plugin.jar:${XCP}"
-#XCP="/usr/java/j2sdk1.4.2_19/jre/lib/sunrsasign.jar:${XCP}"
-#XCP="/usr/java/j2sdk1.4.2_19/jre/lib/rt.jar:${XCP}"
-#XBOOTCLASSPATH="-Xbootclasspath:$XCP"
-
 # Java command
 #JAVA="/usr/java/j2sdk1.4.2_19/bin/java"
 #JAVA="/usr/java/jdk1.7.0_13/bin/java"
@@ -36,16 +28,17 @@ JAVA_OPTS="-Xms384M -Xmx512M"
 # Parse the command line
 if [[ $# == 0 ]]; then
 	echo
-	echo "Usage: $0 <conf-file> [<output-dir>]" 2>&1
+	echo "Usage: $0 <conf-file>" 2>&1
 	echo
   exit 1
 elif [[ $# == 1 ]]
 then
 	CONF="$1"
-  OUTDIR="`pwd`"
 else
-	CONF="$1"
-  OUTDIR="$2"
+	echo
+	echo "Usage: $0 <conf-file>" 2>&1
+	echo
+  exit 1
 fi
 
 if [ ! -f "$CONF" ]
@@ -55,17 +48,9 @@ then
   echo
   exit 1
 fi
-if [ ! -d "$OUTDIR" ]
-then
-  echo
-  echo "ERROR: '" $OUTDIR "' doesn't exist or isn't a directory" 1>&2
-  echo
-	exit 1
-fi
 
 echo
 echo "Using configuration file: '"$CONF"'"
-echo "Using output directory: '"$OUTDIR"'"
 if [[ $# > 2 ]]; then
 	echo "Ignoring extra arguments"
 fi
@@ -76,8 +61,7 @@ CMD="$JAVA $JAVA_OPTS \\
       -data $WORKSPACE \\
       -noupdate \\
       -application \"$APP\" \\
-      -conf \"$CONF\" \\
-      -outDir \"$OUTDIR\""
+      -conf \"$CONF\""
 
 echo
 echo "$CMD"
