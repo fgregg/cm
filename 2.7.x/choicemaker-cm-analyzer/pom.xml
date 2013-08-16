@@ -27,10 +27,11 @@
   </build>
 
   <modules>
-    <module>../com.choicemaker.cm.module</module>
+    <module>../com.choicemaker.cm.docs</module>
     <module>../com.choicemaker.cm.gui.utils</module>
     <module>../com.choicemaker.cm.modelmaker</module>
     <module>../com.choicemaker.cm.modelmaker.pkg_eclipse</module>
+    <module>../com.choicemaker.cm.module</module>
   </modules>
 
 </project>
