@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
-   id="javax.help"
+   id="javax.help.eclipse2plugin"
    name="JavaHelp Plug-in"
-   version="2.0.0"
+   version="2.0.05"
    provider-name="">
 
    <runtime>
