@@ -747,6 +747,19 @@
 	      <version>2.0.05</version>
       </dependency>
       <dependency>
+	      <groupId>javax.help</groupId>
+	      <artifactId>javahelp</artifactId>
+	      <version>2.0.05</version>
+        <classifier>sources</classifier>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>javax.help.eclipse2plugin</artifactId>
+        <version>${choicemaker.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
 	      <groupId>jfree</groupId>
 	      <artifactId>jfreechart</artifactId>
 	      <version>1.0.0</version>

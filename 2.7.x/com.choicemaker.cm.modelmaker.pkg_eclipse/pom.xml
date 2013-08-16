@@ -381,6 +381,12 @@
       <artifactId>javahelp</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>javax.help.eclipse2plugin</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
       <groupId>jfree</groupId>
       <artifactId>jfreechart</artifactId>
     </dependency>
