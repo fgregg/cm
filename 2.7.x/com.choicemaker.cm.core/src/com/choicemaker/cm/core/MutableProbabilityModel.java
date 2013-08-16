@@ -460,7 +460,14 @@ class MutableProbabilityModel implements IProbabilityModel, ImmutableProbability
 
 				interfaces[i] = Class.forName( clsName,  false, cl1);
 			} catch (ClassNotFoundException e) {
+				// BUG 2013-08-15 rphall
+				// If an interface isn't loaded, then the call to
+				// Proxy.newProxyInstance will fail mysteriously in a few
+				// more lines. Better to log the exception and then
+				// rethrow this exception or throw a new one -- or not
+				// catch it at all
 				e.printStackTrace();
+				// END BUG
 			}
 		}
 		Class accessorClass = accessor.getClass();
