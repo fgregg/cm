@@ -187,6 +187,12 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.xml.gui</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>

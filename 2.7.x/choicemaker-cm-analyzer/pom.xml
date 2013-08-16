@@ -30,6 +30,7 @@
     <module>../com.choicemaker.cm.docs</module>
     <module>../com.choicemaker.cm.gui.utils</module>
     <module>../com.choicemaker.cm.io.flatfile.gui</module>
+    <module>../com.choicemaker.cm.io.xml.gui</module>
     <module>../com.choicemaker.cm.ml.me.gui</module>
     <module>../com.choicemaker.cm.modelmaker</module>
     <module>../com.choicemaker.cm.modelmaker.pkg_eclipse</module>
