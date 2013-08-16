@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>7 Rules</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-055.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-057.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+7	 Rules
+<a name="wp9002111"> </a></h3>
+<p >
+ClueMaker can also be used to write rules. Rules can be used to override the probabilistic decision in special cases. The syntax of a rule is similar to that of a clue. The keyword <em>rule</em> is used in place of <em>clue</em>. In addition to <em>differ</em>, <em>match</em>, and <em>hold</em>, <em>rules</em> can use one of the pseudo decisions <em>nomatch</em>, <em>nodiffer</em>, <em>nohold</em>, and <em>none</em>.
+<a name="wp9002112"> </a></p>
+<p >
+If a rule with decision <em>differ</em>, <em>match</em>, or <em>hold</em> fires on a pair, the ChoiceMaker decision is <em>differ</em>, <em>match</em>, or <em>hold</em>, respectively, independent of the probabilistic decision (the decision based on the match probability and the thresholds). If a rule with pseudo decision <em>nomatch</em> fires on a pair, the ChoiceMaker decision is <em>hold</em> if the probabilistic decision is <em>hold</em> or <em>match</em> and <em>differ</em> otherwise. If a rule with pseudo decision <em>nodiffer</em> fires on a pair, the ChoiceMaker decision is <em>hold</em> if the probabilistic decision is <em>hold</em> or <em>differ</em> and <em>match</em> otherwise. If a rule with pseudo decision <em>nohold</em> fires on a pair, the ChoiceMaker decision is <em>differ</em> if the probabilistic decision is <em>hold</em> or <em>differ</em> and <em>match</em> otherwise.
+<a name="wp9002113"> </a></p>
+<p >
+A rule with pseudo decision <em>none</em> does not affect or reinforce the decision. It is meant to be used in conjunction with one of the modifiers <em>note</em> or <em>report</em> for reporting without affecting the decision or for selection of pairs in ChoiceMaker ModelMaker.
+<a name="wp9002114"> </a></p>
+<p >
+<a href="UsersGuide-1-056.html#wp9002116">Figure 53</a> summarizes what decision is reported by ChoiceMaker based on the probabilistic decision and the rule's decision.
+<a name="wp9002115"> </a></p>
+<p >
+<img src="images/UsersGuide-1-056-62.jpg" height="182" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002116"> </a></p>
+<p >
+If multiple rules with decisions other than <em>none</em> activate on a given record pair, we distinguish two cases. If all rules with decisions other than <em>none</em> produce the same decision, then this consensus decision is the final decision. Otherwise, the final decision is <em>hold</em>.
+<a name="wp9002117"> </a></p>
+<p >
+All rules must have decisions and be of type boolean, regardless of the type of the clue set.
+<a name="wp9002118"> </a></p>
+<p >
+Rules can also be used as (temporary) replacements of decisive clues for which not enough supporting training data is available. For example, we might consider one person having first name `TWIN-A' and the other `TWIN-B' a strong indication that they are not the same person. Yet, our training data might not contain any, or just very few such cases. Thus, it is impossible to train such a clue-at least until more training data becomes available. We can, however, create a <em>nomatch</em> rule with the corresponding predicate.
+<a name="wp9002119"> </a></p>
+<p >
+If the business rules corresponding to the rules have been used to human mark the pairs, it is advisable to add a <em>differ</em> clue with the same expression for each <em>differ</em> rule and vice versa for <em>match</em> clues. Additionally, <em>differ</em> clues may be introduced for <em>nomatch</em> rules and <em>match</em> clues for <em>nodiffer</em> clues. This may produce a more accurate probabilistic model. Alternatively, pairs on which rules fire may be removed from the training source
+<a name="wp9002120"> </a></p>
+<p >
+For example in <a href="UsersGuide-1-056.html#wp9002122">Figure 54</a>, we might not want to automatically call a match between two records if one of them is missing crucial data (is &quot;scanty&quot;). This is illustrated by rule <em>rScanty</em> (lines 2 - 4). Similarly, we might want to report if we have performed second pass matching against a record that has more than 3 stacked addresses, as shown by <em>rHighlyStacked</em> (lines 6 - 9).
+<a name="wp9002121"> </a></p>
+<p >
+<img src="images/UsersGuide-1-056-63.jpg" height="182" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002122"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-055.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-057.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

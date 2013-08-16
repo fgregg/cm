@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>11 Summary of compilation and training process</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-059.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-061.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+11	 Summary of compilation and training process
+<a name="wp9002133"> </a></h3>
+<p >
+<a href="UsersGuide-1-060.html#wp9002144">Figure 55</a> summarizes the generation, compilation, and training process. Shading indicates manual creation or markup. Striped boxes are dependent upon the configured input/output methods (i.e., client interface and database).
+<a name="wp9002134"> </a></p>
+<ol type="1"> <li  value="1">The ChoiceMaker schema is written. It defines the types of the records to match, the way data are exchanged with the client and the database, and the fields to display in the human review tool.<a name="wp9002135"> </a>
+ <li  value="2">The generators generate the base holder classes, translators, and human review tool.<a name="wp9002136"> </a>
+ <li  value="3">The clue set is written. The clue set defines how records are compared.<a name="wp9002137"> </a>
+ <li  value="4">The ClueMaker compiler is used to create the clue holder classes, which are subclasses of the base holder classes, and the clue evaluation class.<a name="wp9002138"> </a>
+ <li  value="5">A set of record pairs that are potential matches are extracted from the customer's database.<a name="wp9002139"> </a>
+ <li  value="6">Each record pair is marked by clerks as `match', `differ', or `hold' using the generated human review tool. Alternatively, a hand-written tool may be used.<a name="wp9002140"> </a>
+ <li  value="7">The ChoiceMaker training application completes the probability model by removing irrelevant clues from the clue set and determining weights for the clues that we will be used in production.<a name="wp9002141"> </a>
+ <li  value="8">The probability model is tested with the ChoiceMaker training application.<a name="wp9002142"> </a>
+</ol><p >
+<img src="images/UsersGuide-1-060-64.jpg" height="398" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002144"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-059.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-061.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>3 Dates</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-071.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-073.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+3	 Dates
+<a name="wp9002276"> </a></h3>
+<p >
+ChoiceMaker provides two classes to handle dates. The class <em>com.choicemaker.cm.core.util.DateHelper</em> provides the following public static methods:
+<a name="wp9002277"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Method</b></font>
+<a name="wp9000712"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9000713"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>Date parseSqlTimestamp(String s)</em>
+<a name="wp9000714"> </a></p>
+</td>
+    <td><p >
+Parse a date that is in the following format <em>(</em><em>java.sql.Timestamp.toString()</em><em>)</em>:
+<a name="wp9000715"> </a></p>
+<p >
+<em>yyyy-mm-dd hh:mm:ss.fffffffff</em>
+<a name="wp9000716"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>Date parseSqlDate(String s)</em>
+<a name="wp9000717"> </a></p>
+</td>
+    <td><p >
+Parse a date that is in the following format <em>(</em><em>java.sql.Date.toString()</em><em>)</em>:
+<a name="wp9000718"> </a></p>
+<p >
+<em>yyyy-mm-dd</em>
+<a name="wp9000719"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>Date parseSqlDateOrTimestamp(String s)</em>
+<a name="wp9000720"> </a></p>
+</td>
+    <td><p >
+Parse a date that is in one of the two above formats.
+<a name="wp9000721"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>String format(Date d)</em>
+<a name="wp9000722"> </a></p>
+</td>
+    <td><p >
+Formats the date according to the current locale's <em>SHORT</em> format (see <em>java.text.DateFormat</em>).
+<a name="wp9000723"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>String formatDb(Date d)</em>
+<a name="wp9000724"> </a></p>
+</td>
+    <td><p >
+Format the date in the following format:
+<a name="wp9000725"> </a></p>
+<p >
+<em>yyyy-MMM-dd, e.g., 2003-JAN-11</em>
+<a name="wp9000726"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>int numbersOnly(Date d)</em>
+<a name="wp9000727"> </a></p>
+</td>
+    <td><p >
+Returns the date as number according to the following formula:
+<a name="wp9000728"> </a></p>
+<p >
+year + 10000 * day + x * month, where x is 100000 if day &lt; 10 and 100000 otherwise
+<a name="wp9000729"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>int numericFormat(Date d)</em>
+<a name="wp9000730"> </a></p>
+</td>
+    <td><p >
+Returns the date as number according to the following formula:
+<a name="wp9000731"> </a></p>
+<p >
+day + 100 * month + 10000 * year
+<a name="wp9000732"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>boolean missingNumber(Date d1,</em>
+<a name="wp9000733"> </a></p>
+<p >
+<em>    Date d2)</em>
+<a name="wp9000734"> </a></p>
+</td>
+    <td><p >
+Returns true if the year of <em>d1</em> and <em>d2</em> are the same and:
+<a name="wp9000735"> </a></p>
+<ul> <li >the months are the same and the day of one is the day of the other with a digit added on the left or right<a name="wp9000736"> </a>
+ <li >the days are the same and the month of one is the month of the other with a digit added on the left or right<a name="wp9000737"> </a>
+</ul><p >
+For example, the function returns true for `1/5/2002' and `1/25/2002'.
+<a name="wp9000738"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>float daysApart(Date date1, Date date2)</em>
+<a name="wp9000739"> </a></p>
+</td>
+    <td><p >
+The difference between <em>d1</em> and <em>d2</em> in days.
+<a name="wp9000740"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>boolean sameMonthAndYear(Date d1,</em>
+<a name="wp9000741"> </a></p>
+<p >
+<em>    Date d2)</em>
+<a name="wp9000742"> </a></p>
+</td>
+    <td><p >
+Returns whether the month and year of <em>d1</em> and <em>d2</em> are the same.
+<a name="wp9000743"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>boolean sameDayAndMonth(Date d1,</em>
+<a name="wp9000744"> </a></p>
+<p >
+<em>   Date d2)</em>
+<a name="wp9000745"> </a></p>
+</td>
+    <td><p >
+Returns whether the day and month of <em>d1</em> and <em>d2</em> are the same.
+<a name="wp9000746"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>boolean swappedDayMonth(Date d1,</em>
+<a name="wp9000747"> </a></p>
+<p >
+<em>    Date d2)</em>
+<a name="wp9000748"> </a></p>
+</td>
+    <td><p >
+Returns whether the year of <em>d1</em> and <em>d2</em> are the same and the day and month are swapped.
+<a name="wp9000749"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002278"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-071.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-073.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

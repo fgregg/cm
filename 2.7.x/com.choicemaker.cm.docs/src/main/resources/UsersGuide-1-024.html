@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>7 Marked record pair source handling</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-023.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-025.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+7	 Marked record pair source handling
+<a name="wp9001728"> </a></h3>
+<p >
+ModelMaker works with a training and a testing source. Exactly one of them is active at a time. The single active source is used for all three panels, Train, Test, and Review. The name of the inactive source appears between parentheses in the title bar. Training (Section <a href="UsersGuide-1-026.html#wp9001749">8</a>) makes the training source active. Testing (Section <a href="UsersGuide-1-027.html#wp9001772">9</a>) switches to the testing source. If there is only a training or only a testing source, this single source is used for all operations.
+<a name="wp9001729"> </a></p>
+<p >
+Two different sources are usually used for training and testing because training and testing on the same source does not give an accurate picture. However, any given source can be used for both training and testing at different times. The two sources can be swapped with <b>Source</b><b>-></b><b>Swap Sources</b>. Both sources can be kept in memory by checking <b>Source</b><b>-></b><b>Training</b>, which is faster if the computer has enough memory, but can have an adverse effect otherwise.
+<a name="wp9001730"> </a></p>
+<p >
+Whenever the source selection is changed, any data associated with the previous source is automatically removed from the ModelMaker displays.
+<a name="wp9001731"> </a></p>
+<p >
+It is the user's responsibility to choose only sources whose data conform to the schema of the selected model.
+<a name="wp9001732"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+7.1	 Defining a new marked record pair source<br>
+<a name="wp9001733"> </a></div>
+<p >
+A new source can be defined with <b>Source</b><b>-></b><b>Training</b><b>-></b><b>New...</b> or <b>Source</b><b>-></b><b>Testing</b><b>-></b><b>New...</b> This brings up the Source-type Selector Dialog (<a href="UsersGuide-1-024.html#wp9001735">Figure 11</a>). This dialog allows the user to specify the type of source that is to be defined. The set of available types depends upon the plugins configured in the configuration file (<a href="UsersGuide-1-084.html#wp9002457">Chapter IX</a>).
+<a name="wp9001734"> </a></p>
+<p >
+<div align="left"><img src="images/UsersGuide-1-024-13.jpg" height="241" width="254" border="0" hspace="0" vspace="0"></div>Based on the user's selection a Source Builder Dialog of the appropriate type will be displayed. Each such dialog allows the user to specify the file name for the new source. In addition the user may be prompted to supply other parameters specific to the source type. 
+<a name="wp9001735"> </a></p>
+<p >
+The description of each source is contained in a separate file. This file contains the name of the source, the type of the source (e.g., XML, flat file, Oracle), and other source type specific parameters. For example, an XML source type descriptor contains the name of the XML file that contains the actual data. Similarly, an Oracle source type descriptor contains the name of the Oracle data source and the SQL query used to retrieve the actual data. The source description only contains a reference to the actual data, but never the actual data.
+<a name="wp9001736"> </a></p>
+<p >
+The source description files are stored in files with extension `.mrps', typically in <em>etc\traindata</em>. The actual pair data may be in this directory or in any other location, including a database.
+<a name="wp9001737"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+7.2	 Source types<br>
+<a name="wp9001738"> </a></div>
+<p >
+Except for Composite, support for all source types, such as XML, flat file, and database, are provided by I/O plugins. See <a href="UsersGuide-1-084.html#wp9002457">Chapter IX</a> for their description.
+<a name="wp9001739"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-023.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-025.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

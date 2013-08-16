@@ -1,0 +1,365 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>2.5.1 XML file reporting</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-066.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-068.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h5 >
+2.5.1	 XML file reporting
+<a name="wp9002194"> </a></h5>
+<p >
+XML file reporting writes the report to a XML file. The <em>fileReporter</em> element configures file-based reporting. Its attributes are listed below.
+<a name="wp9002195"> </a></p>
+<p >
+For ChoiceMaker Server J2EE, simply use the corresponding properties. The extensions are:
+<a name="wp9002196"> </a></p>
+<ul> <li >com.choicemaker.cm.report.file.fileReporter for the non-rolling file reporter.<a name="wp9002197"> </a>
+ <li >com.choicemaker.cm.report.file.periodicRollingFileReporter for the reporter that starts a new report based on a date pattern.<a name="wp9002198"> </a>
+ <li >com.choicemaker.cm.report.file.rollingFileReporter for the reporter that starts a new report once the current one has reached a certain size.<a name="wp9002199"> </a>
+</ul><p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9000291"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9000292"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9000293"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9000294"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>fileName</em>
+<a name="wp9000295"> </a></p>
+</td>
+    <td><p >
+The name of the file to write to.
+<a name="wp9000296"> </a></p>
+</td>
+    <td><p >
+mandatory
+<a name="wp9000297"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9000298"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>type</em>
+<a name="wp9000299"> </a></p>
+</td>
+    <td><p >
+The name of the reporter, if multiple are configured.
+<a name="wp9000300"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9000301"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9000302"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>maxSize</em>
+<a name="wp9000303"> </a></p>
+</td>
+    <td><p >
+The maximum file size for rolling reports. A number in bytes without suffix, in KB with a `K' suffix, in MB with a `M' suffix or in GB with a `G' suffix. The number may be a floating point.
+<a name="wp9000304"> </a></p>
+<p >
+The report file name is a concatenation of the fileName and a number. For example, if fileName is Report.xml and maxSize is 2M, then first a file Report-0.xml is created. Once this is 2M, a new file Report-1.xml is created.
+<a name="wp9000305"> </a></p>
+<p >
+Note that unlike rolling logs in many systems, old report files are never overwritten if append is true.
+<a name="wp9000306"> </a></p>
+<p >
+A report file may be a few bytes larger, so if for example 2GB is a hard limit, you should use 1.9G as parameter value.
+<a name="wp9000307"> </a></p>
+<p >
+This attribute is only available for the rolling file reporter.
+<a name="wp9000308"> </a></p>
+</td>
+    <td><p >
+optional, not to be combined with datePattern
+<a name="wp9000309"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9000310"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>datePattern</em>
+<a name="wp9000311"> </a></p>
+</td>
+    <td><p >
+A date pattern for periodically rolling logs. The rolling schedule is specified by this option. This pattern should follow the SimpleDateFormat conventions. In particular, you must escape literal text within a pair of single quotes. A formatted version of the date pattern is used as the suffix for the rolled file name. 
+<a name="wp9000312"> </a></p>
+<p >
+For example, if the fileName is set to Report.xml and the datePattern set to '.'yyyy-MM-dd, on 2003-02-16 at midnight, a new report file Report.2003-02-16.xml will be created and reporting will continue to this file until it rolls over the next day.
+<a name="wp9000313"> </a></p>
+<p >
+It is possible to specify monthly, weekly, half-daily, daily, hourly, or minutely rollover schedules. See below for details.
+<a name="wp9000314"> </a></p>
+<p >
+Do not use the colon &quot;:&quot; character in anywhere in the datePattern option. It is illegal on some file systems and the text before the colon is interpeted as the protocol specificaion of a URL. 
+<a name="wp9000315"> </a></p>
+<p >
+This attribute is only available for the periodic rolling file reporter.
+<a name="wp9000316"> </a></p>
+</td>
+    <td><p >
+optional, not to be combined with maxSize
+<a name="wp9000317"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9000318"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>append</em>
+<a name="wp9000319"> </a></p>
+</td>
+    <td><p >
+Whether a new file should be created each time ChoiceMaker server is restarted or not.
+<a name="wp9000320"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9000321"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9000322"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>showQueryRecord</em>
+<a name="wp9000323"> </a></p>
+</td>
+    <td><p >
+Whether the actual data of the query record should be logged. The selection of the fields to log is made in the ChoiceMaker schema (<a href="UsersGuide-1-089.html#wp9002504">Chapter IX.3</a>). 
+<a name="wp9000324"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9000325"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9000326"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>showMatchRecord</em>
+<a name="wp9000327"> </a></p>
+</td>
+    <td><p >
+Whether the actual data of the match record should be logged. The selection of the fields to log is made in the ChoiceMaker schema <a href="UsersGuide-1-089.html#wp9002504">Chapter IX.3</a>).
+<a name="wp9000328"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9000329"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9000330"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>showClues</em>
+<a name="wp9000331"> </a></p>
+</td>
+    <td><p >
+Whether the numbers of the firing clues should be logged.
+<a name="wp9000332"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9000333"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9000334"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>showRules</em>
+<a name="wp9000335"> </a></p>
+</td>
+    <td><p >
+Whether the numbers of the firing rules should be logged.
+<a name="wp9000336"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9000337"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9000338"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002201"> </a></p>
+<p >
+The following lists the possible rollover schedules for datePattern:
+<a name="wp9002202"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>datePattern</b></font>
+<a name="wp9000339"> </a></p>
+</td>
+    <td><p >
+<font ><b>Rollover schedule</b></font>
+<a name="wp9000340"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+'.'yyyy-MM
+<a name="wp9000341"> </a></p>
+</td>
+    <td><p >
+Rollover at the beginning of each month.
+<a name="wp9000342"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+'.'yyyy-ww
+<a name="wp9000343"> </a></p>
+</td>
+    <td><p >
+Rollover at the first day of each week. The first day of the week depends on the locale.
+<a name="wp9000344"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+'.'yyyy-MM-dd
+<a name="wp9000345"> </a></p>
+</td>
+    <td><p >
+Rollover at midnight each day.
+<a name="wp9000346"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+'.'yyyy-MM-dd-a
+<a name="wp9000347"> </a></p>
+</td>
+    <td><p >
+Rollover at midnight and midday of each day.
+<a name="wp9000348"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+'.'yyyy-MM-dd-HH
+<a name="wp9000349"> </a></p>
+</td>
+    <td><p >
+Rollover at the top of every hour.
+<a name="wp9000350"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+'.'yyyy-MM-dd-HH-mm
+<a name="wp9000351"> </a></p>
+</td>
+    <td><p >
+Rollover at the beginning of every minute.
+<a name="wp9000352"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002203"> </a></p>
+<p >
+If rollover by size or time is used, the created report file is immediately given the numbered or dated name rather than the base name and then be renamed later.
+<a name="wp9002204"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-066.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-068.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

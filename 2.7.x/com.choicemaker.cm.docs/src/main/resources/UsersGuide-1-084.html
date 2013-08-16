@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>Chapter IX. Input/output plugins</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-083.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-085.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h2 >
+Chapter IX.	 Input/output plugins
+<a name="wp9002457"> </a></h2>
+<h3 >
+1	 Introduction
+<a name="wp9002458"> </a></h3>
+<p >
+Input and output of records, record pairs, and marked record pairs in different formats is supported through input/output plugins in ChoiceMaker. Plugins exist for XML, flat files, and several relational databases. The same plugins handle I/O in the ChoiceMaker server and in ModelMaker.
+<a name="wp9002459"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+1.1	 Record, record pair, and marked record pair sources and sinks<br>
+<a name="wp9002460"> </a></div>
+<p >
+Input and output can occur in three formats:
+<a name="wp9002461"> </a></p>
+<ol type="1"> <li  value="1"><font ><i>Record</i></font>. Individual records are read or written. Blocking is an example of this. Based on a single query record, a blocker returns all records from a database that may denote the same physical entity as the query record.<a name="wp9002462"> </a>
+ <li  value="2"><font ><i>Record pair</i></font>. Pairs of records are read or written.<a name="wp9002463"> </a>
+ <li  value="3"><font ><i>Marked record pair</i></font>. Pairs of records along with a differ/hold/match decision for each pair are read or written. Human-marked training data is an example of this.<a name="wp9002464"> </a>
+</ol><p >
+In ChoiceMaker, an input is called a source and an output is called a sink.
+<a name="wp9002465"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+1.2	 Generated translators<br>
+<a name="wp9002466"> </a></div>
+<p >
+Most I/O plugins generate custom classes based on the ChoiceMaker schema. Hence, a model must be rebuilt in ModelMaker upon adding or removing a plugin from the configuration or after changing the schema.
+<a name="wp9002467"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+1.3	 Configuration in the schema<br>
+<a name="wp9002468"> </a></div>
+<p >
+Configuration information for each plugin can be stored in three places in the ChoiceMaker schema (<a href="UsersGuide-1-084.html#wp9002473">Figure 65</a>):
+<a name="wp9002469"> </a></p>
+<ol type="1"> <li  value="1">Global configuration information is stored under the <em>globalElement</em> element (lines 4-7), which itself is a child of the <em>global</em> element. A plugin with name <font ><i>x</i></font>, where <font ><i>x</i></font> could be <font ><i>xml</i></font>, <font ><i>flatfile</i></font>, etc, may use a <em>xGlobal</em> element as child of the <em>globalExt</em> element. The exact content of <em>xGlobal</em> depends upon the individual plugin. For example, the <em>xmlGlobal</em> has attributes that govern what to do if an XML source contains unknown attributes or elements.<a name="wp9002470"> </a>
+ <li  value="2">Per node type information is stored under the <em>nodeTypeExt</em> element (lines 11-14). A plugin with name <font ><i>x</i></font> may use a <em>xNodeType</em> element as child of the <em>nodeTypeExt</em> element. The exact content of <em>xNodeType</em> depends upon the individual plugin. For example, the <em>dbNodeType</em> has an attribute to define the view from which the data is retrieved.<a name="wp9002471"> </a>
+ <li  value="3">Per field information is stored under the field element (lines 15-18). A plugin with name <font ><i>x</i></font> may use a <em>xField</em> element as child of the <em>field</em> element. The exact content of <em>xField</em> depends upon the individual plugin. For example, the <em>flatfileField</em> has attributes to define the position and width of a field.<a name="wp9002472"> </a>
+<p >
+<img src="images/UsersGuide-1-084-74.jpg" height="350" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002473"> </a></p>
+</ol>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-083.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-085.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

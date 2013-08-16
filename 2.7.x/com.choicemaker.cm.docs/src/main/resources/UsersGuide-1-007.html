@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>2 Blocking</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-006.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-008.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+2	 Blocking
+<a name="wp9001601"> </a></h3>
+<p >
+Blocking is the first pass of record matching. Its goal is to quickly find all the records that match the query record and at the same time not return too many records. Records found in blocking are passed on to scoring; records that are not identified as potential matches in blocking are not looked at in more detail.
+<a name="wp9001602"> </a></p>
+<p >
+ChoiceMaker's automated blocking is easy to configure and supports a variety of database management systems, including Oracle and Microsoft SQL Server.
+<a name="wp9001603"> </a></p>
+<p >
+The configuration of blocking only requires a selection of blocking fields, such as first name or stock ticker symbol, and the creation of indexes on these fields. Everything else is done automatically by ChoiceMaker's automated blocking. In particular, there is no need to worry about frequencies, e.g., there could be 10,000 Jim's in the database so that first name is not always a suitable blocking field by itself because it may return too many records for scoring.
+<a name="wp9001604"> </a></p>
+<p >
+Blocking handles stacked data, that is multiple values for a certain field. For example, a person might be represented in a database by a row in a <font ><i>Person</i></font> table and by any number of rows in an <font ><i>Address</i></font> table. ChoiceMaker's blocking considers all the address rows linked to the same person at once and returns the single <font ><i>Person</i></font> row together with all the <font ><i>Address</i></font> rows.
+<a name="wp9001605"> </a></p>
+<p >
+ChoiceMaker's blocking is described in detail in <a href="UsersGuide-1-102.html#wp9002681">Chapter IX.7</a>.  
+<a name="wp9001606"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-006.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-008.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

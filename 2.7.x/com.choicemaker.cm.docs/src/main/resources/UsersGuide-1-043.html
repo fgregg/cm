@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>9 Holder classes and translators</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-042.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-044.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+9	 Holder classes and translators
+<a name="wp9001963"> </a></h3>
+<p >
+This section deals with the internal representation of data and may be skipped on a first reading.
+<a name="wp9001964"> </a></p>
+<p >
+ChoiceMaker creates custom Java holder and translator classes based upon the schema. For each node type x, ChoiceMaker generates four holder classes and interfaces:
+<a name="wp9001965"> </a></p>
+<ul> <li >Interface XBase is the base interface of all generated classes. It contains methods getF() and isFValid() for each non-derived (JavaBeans source) field F. Furthermore it contains methods getY() and getY(int index) for each nested node type Y.<a name="wp9001966"> </a>
+ <li >Class XHolder implements XBase and also contains setter methods. This class conforms to the JavaBeans specification. It is used to exchange data between ChoiceMaker Server and clients.<a name="wp9001967"> </a>
+ <li >Interface X extends XBase with getter and is valid methods for derived fields. It can be used in methods called from ClueMaker and ChoiceMaker Schema expressions.<a name="wp9001968"> </a>
+ <li >Class XImpl implements X. It is used internally to represent nodes in memory.<a name="wp9001969"> </a>
+</ul><p >
+The first three types, XBase, XHolder, and X, are put into a package p.s, where p is the package declared in the clue set and s is the name of the schema. Class XImpl is put into package p.internal.s.
+<a name="wp9001970"> </a></p>
+<p >
+ChoiceMaker needs to exchange record data in a wide variety of formats, such as databases, XML, flat file, and CORBA. Each exchange requires a translation from or to the internal format described above (data binding). The plugins and customizations that provide support for a specific I/O format are responsible for creating the required translator classes (<a href="UsersGuide-1-084.html#wp9002457">Chapter IX</a>).
+<a name="wp9001971"> </a></p>
+<p >
+These classes are created when the model is built in ModelMaker (<a href="UsersGuide-1-023.html#wp9001709">Chapter II.6</a>). Custom generated holder and translators are considerably faster than generic trees and translators that use reflection. The gain in run-time performance greatly outweighs the cost of generation translators at compile time.
+<a name="wp9001972"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-042.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-044.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,1155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>Appendix C. ClueMaker Grammar</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-135.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-137.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h2 >
+Appendix C.	 ClueMaker Grammar
+<a name="wp9002931"> </a></h2>
+<p >
+The following gives the syntactic grammar of ClueMaker. Section references in comments refer to (Gosling et al. 2000).
+<a name="wp9002932"> </a></p>
+<p >
+// 19.2) The Syntactic Grammar
+<a name="wp9002934"> </a></p>
+<p >
+goal ::=	compilation_unit
+<a name="wp9002935"> </a></p>
+<p >
+	;
+<a name="wp9002936"> </a></p>
+<p >
+// 19.3) Lexical Structure.
+<a name="wp9002938"> </a></p>
+<p >
+literal ::=	INTEGER_LITERAL
+<a name="wp9002939"> </a></p>
+<p >
+	|	FLOATING_POINT_LITERAL
+<a name="wp9002940"> </a></p>
+<p >
+	|	BOOLEAN_LITERAL
+<a name="wp9002941"> </a></p>
+<p >
+	|	CHARACTER_LITERAL
+<a name="wp9002942"> </a></p>
+<p >
+	|	STRING_LITERAL
+<a name="wp9002943"> </a></p>
+<p >
+	|	NULL_LITERAL
+<a name="wp9002944"> </a></p>
+<p >
+	;
+<a name="wp9002945"> </a></p>
+<p >
+// 19.4) Types, Values, and Variables
+<a name="wp9002947"> </a></p>
+<p >
+type	::=	primitive_type
+<a name="wp9002948"> </a></p>
+<p >
+	|	reference_type
+<a name="wp9002949"> </a></p>
+<p >
+	;
+<a name="wp9002950"> </a></p>
+<p >
+primitive_type ::=
+<a name="wp9002951"> </a></p>
+<p >
+		numeric_type
+<a name="wp9002952"> </a></p>
+<p >
+	|	BOOLEAN
+<a name="wp9002953"> </a></p>
+<p >
+	;
+<a name="wp9002954"> </a></p>
+<p >
+numeric_type::=	integral_type
+<a name="wp9002955"> </a></p>
+<p >
+	|	floating_point_type
+<a name="wp9002956"> </a></p>
+<p >
+	;
+<a name="wp9002957"> </a></p>
+<p >
+integral_type ::= 
+<a name="wp9002958"> </a></p>
+<p >
+		BYTE 
+<a name="wp9002959"> </a></p>
+<p >
+	|	SHORT 
+<a name="wp9002960"> </a></p>
+<p >
+	|	INT 
+<a name="wp9002961"> </a></p>
+<p >
+	|	LONG 
+<a name="wp9002962"> </a></p>
+<p >
+	|	CHAR 
+<a name="wp9002963"> </a></p>
+<p >
+	;
+<a name="wp9002964"> </a></p>
+<p >
+floating_point_type ::= 
+<a name="wp9002965"> </a></p>
+<p >
+		FLOAT 
+<a name="wp9002966"> </a></p>
+<p >
+	|	DOUBLE
+<a name="wp9002967"> </a></p>
+<p >
+	;
+<a name="wp9002968"> </a></p>
+<p >
+reference_type ::=
+<a name="wp9002970"> </a></p>
+<p >
+		class_or_interface_type
+<a name="wp9002971"> </a></p>
+<p >
+	|	array_type
+<a name="wp9002972"> </a></p>
+<p >
+	;
+<a name="wp9002973"> </a></p>
+<p >
+class_or_interface_type ::= name;
+<a name="wp9002974"> </a></p>
+<p >
+class_type ::=	class_or_interface_type;
+<a name="wp9002976"> </a></p>
+<p >
+interface_type ::= class_or_interface_type;		
+<a name="wp9002977"> </a></p>
+<p >
+array_type ::=	primitive_type dims
+<a name="wp9002979"> </a></p>
+<p >
+	|	name dims
+<a name="wp9002980"> </a></p>
+<p >
+	;
+<a name="wp9002981"> </a></p>
+<p >
+// 19.5) Names
+<a name="wp9002983"> </a></p>
+<p >
+name	::=	simple_name
+<a name="wp9002984"> </a></p>
+<p >
+	|	qualified_name
+<a name="wp9002985"> </a></p>
+<p >
+	;
+<a name="wp9002986"> </a></p>
+<p >
+simple_name ::=	IDENTIFIER
+<a name="wp9002987"> </a></p>
+<p >
+	;
+<a name="wp9002988"> </a></p>
+<p >
+qualified_name ::=
+<a name="wp9002989"> </a></p>
+<p >
+		name DOT IDENTIFIER
+<a name="wp9002990"> </a></p>
+<p >
+	;
+<a name="wp9002991"> </a></p>
+<p >
+// 19.6) Packages
+<a name="wp9002993"> </a></p>
+<p >
+compilation_unit ::=
+<a name="wp9002994"> </a></p>
+<p >
+		package_declaration_opt 
+<a name="wp9002995"> </a></p>
+<p >
+		import_declarations_opt
+<a name="wp9002996"> </a></p>
+<p >
+		clueset_declaration
+<a name="wp9002997"> </a></p>
+<p >
+		;
+<a name="wp9002998"> </a></p>
+<p >
+package_declaration_opt ::= package_declaration | ;
+<a name="wp9002999"> </a></p>
+<p >
+import_declarations_opt ::= import_declarations | ;
+<a name="wp9003000"> </a></p>
+<p >
+import_declarations ::= 
+<a name="wp9003002"> </a></p>
+<p >
+		import_declaration
+<a name="wp9003003"> </a></p>
+<p >
+	|	import_declarations import_declaration
+<a name="wp9003004"> </a></p>
+<p >
+	;
+<a name="wp9003005"> </a></p>
+<p >
+package_declaration ::= 
+<a name="wp9003006"> </a></p>
+<p >
+		PACKAGE name SEMICOLON
+<a name="wp9003007"> </a></p>
+<p >
+import_declaration ::= 
+<a name="wp9003008"> </a></p>
+<p >
+		single_type_import_declaration
+<a name="wp9003009"> </a></p>
+<p >
+	|	type_import_on_demand_declaration
+<a name="wp9003010"> </a></p>
+<p >
+	;
+<a name="wp9003011"> </a></p>
+<p >
+single_type_import_declaration ::= 
+<a name="wp9003012"> </a></p>
+<p >
+		IMPORT name SEMICOLON
+<a name="wp9003013"> </a></p>
+<p >
+	;
+<a name="wp9003014"> </a></p>
+<p >
+type_import_on_demand_declaration ::=
+<a name="wp9003015"> </a></p>
+<p >
+		IMPORT name DOT MULT SEMICOLON
+<a name="wp9003016"> </a></p>
+<p >
+	;
+<a name="wp9003017"> </a></p>
+<p >
+// No Java modifiers
+<a name="wp9003019"> </a></p>
+<p >
+clue_modifiers_opt::=
+<a name="wp9003020"> </a></p>
+<p >
+	|	clue_modifiers
+<a name="wp9003021"> </a></p>
+<p >
+	;
+<a name="wp9003022"> </a></p>
+<p >
+clue_modifiers ::=
+<a name="wp9003023"> </a></p>
+<p >
+		REPORT
+<a name="wp9003024"> </a></p>
+<p >
+	|	NOTE
+<a name="wp9003025"> </a></p>
+<p >
+	;
+<a name="wp9003026"> </a></p>
+<p >
+// Clue set
+<a name="wp9003027"> </a></p>
+<p >
+clueset_declaration ::=
+<a name="wp9003028"> </a></p>
+<p >
+		CLUESET primitive_type decision_opt IDENTIFIER USES IDENTIFIER clueset_body
+<a name="wp9003029"> </a></p>
+<p >
+	;
+<a name="wp9003030"> </a></p>
+<p >
+decision_opt ::=
+<a name="wp9003031"> </a></p>
+<p >
+	|	DECISION
+<a name="wp9003032"> </a></p>
+<p >
+	;
+<a name="wp9003033"> </a></p>
+<p >
+clueset_body ::=
+<a name="wp9003034"> </a></p>
+<p >
+		LBRACE clueset_body_declarations RBRACE
+<a name="wp9003035"> </a></p>
+<p >
+	;
+<a name="wp9003036"> </a></p>
+<p >
+clueset_body_declarations ::=
+<a name="wp9003037"> </a></p>
+<p >
+		clueset_body_declaration
+<a name="wp9003038"> </a></p>
+<p >
+	|	clueset_body_declarations clueset_body_declaration
+<a name="wp9003039"> </a></p>
+<p >
+	;
+<a name="wp9003040"> </a></p>
+<p >
+clueset_body_declaration ::=
+<a name="wp9003041"> </a></p>
+<p >
+		clue_declaration
+<a name="wp9003042"> </a></p>
+<p >
+	|	rule_declaration
+<a name="wp9003043"> </a></p>
+<p >
+	|	constant_declaration
+<a name="wp9003044"> </a></p>
+<p >
+	|	embedded_java_method_declaration
+<a name="wp9003045"> </a></p>
+<p >
+	;
+<a name="wp9003046"> </a></p>
+<p >
+// Clues &amp; filters
+<a name="wp9003048"> </a></p>
+<p >
+clue_declaration ::=
+<a name="wp9003049"> </a></p>
+<p >
+		clue_modifiers_opt CLUE IDENTIFIER LBRACE decision_opt clue_expression
+<a name="wp9003050"> </a></p>
+<p >
+		SEMICOLON RBRACE 
+<a name="wp9003051"> </a></p>
+<p >
+	;
+<a name="wp9003052"> </a></p>
+<p >
+rule_declaration ::=
+<a name="wp9003053"> </a></p>
+<p >
+		clue_modifiers_opt FILTER IDENTIFIER LBRACE ext_decision clue_expression
+<a name="wp9003054"> </a></p>
+<p >
+		SEMICOLON RBRACE 
+<a name="wp9003055"> </a></p>
+<p >
+	;
+<a name="wp9003056"> </a></p>
+<p >
+constant_declaration ::=
+<a name="wp9003057"> </a></p>
+<p >
+		FINAL type IDENTIFIER EQUALS expression
+<a name="wp9003058"> </a></p>
+<p >
+	;
+<a name="wp9003059"> </a></p>
+<p >
+clue_expression ::=
+<a name="wp9003060"> </a></p>
+<p >
+		FOREACH LPAREN index_list SEMICOLON expression RPAREN
+<a name="wp9003061"> </a></p>
+<p >
+	|	expression
+<a name="wp9003062"> </a></p>
+<p >
+	;
+<a name="wp9003063"> </a></p>
+<p >
+index_list :: =
+<a name="wp9003064"> </a></p>
+<p >
+		index
+<a name="wp9003065"> </a></p>
+<p >
+	|	index_list COMMA index
+<a name="wp9003066"> </a></p>
+<p >
+	;
+<a name="wp9003067"> </a></p>
+<p >
+index ::=
+<a name="wp9003068"> </a></p>
+<p >
+		type IDENTIFIER COLON array_initializer
+<a name="wp9003069"> </a></p>
+<p >
+	;
+<a name="wp9003070"> </a></p>
+<p >
+decision_opt ::=
+<a name="wp9003071"> </a></p>
+<p >
+	|	decision
+<a name="wp9003072"> </a></p>
+<p >
+	;
+<a name="wp9003073"> </a></p>
+<p >
+decision ::=
+<a name="wp9003074"> </a></p>
+<p >
+		DIFFER
+<a name="wp9003075"> </a></p>
+<p >
+	|	MATCH
+<a name="wp9003076"> </a></p>
+<p >
+	|	HOLD
+<a name="wp9003077"> </a></p>
+<p >
+	;
+<a name="wp9003078"> </a></p>
+<p >
+ext_decision ::=
+<a name="wp9003079"> </a></p>
+<p >
+		decision
+<a name="wp9003080"> </a></p>
+<p >
+	|	NODIFFER
+<a name="wp9003081"> </a></p>
+<p >
+	|	NOMATCH
+<a name="wp9003082"> </a></p>
+<p >
+	|	NOHOLD
+<a name="wp9003083"> </a></p>
+<p >
+	|	NONE
+<a name="wp9003084"> </a></p>
+<p >
+	;		    	  	
+<a name="wp9003085"> </a></p>
+<p >
+// No classes
+<a name="wp9003086"> </a></p>
+<p >
+// No fields. Need, however, variable_initializer.
+<a name="wp9003088"> </a></p>
+<p >
+variable_initializer ::=
+<a name="wp9003089"> </a></p>
+<p >
+		expression
+<a name="wp9003090"> </a></p>
+<p >
+	|	array_initializer
+<a name="wp9003091"> </a></p>
+<p >
+	;
+<a name="wp9003092"> </a></p>
+<p >
+// 19.8.3) Method Declarations
+<a name="wp9003094"> </a></p>
+<p >
+embedded_java_method_declaration ::=
+<a name="wp9003095"> </a></p>
+<p >
+		embedded_java_method_header method_body
+<a name="wp9003096"> </a></p>
+<p >
+	;
+<a name="wp9003097"> </a></p>
+<p >
+embedded_method_header ::=
+<a name="wp9003098"> </a></p>
+<p >
+		type method_declarator throws_opt
+<a name="wp9003099"> </a></p>
+<p >
+	|	VOID method_declarator throws_opt
+<a name="wp9003100"> </a></p>
+<p >
+	;
+<a name="wp9003101"> </a></p>
+<p >
+// Rest of method as in Java, removed since we don't actually parse it.
+<a name="wp9003102"> </a></p>
+<p >
+// No static initializers
+<a name="wp9003104"> </a></p>
+<p >
+// No constructor declarations
+<a name="wp9003106"> </a></p>
+<p >
+// No interfaces
+<a name="wp9003108"> </a></p>
+<p >
+// 19.10) Arrays
+<a name="wp9003110"> </a></p>
+<p >
+array_initializer ::=
+<a name="wp9003111"> </a></p>
+<p >
+		LBRACE variable_initializers COMMA RBRACE
+<a name="wp9003112"> </a></p>
+<p >
+	|	LBRACE variable_initializers RBRACE
+<a name="wp9003113"> </a></p>
+<p >
+	|	LBRACE COMMA RBRACE
+<a name="wp9003114"> </a></p>
+<p >
+	|	LBRACE RBRACE
+<a name="wp9003115"> </a></p>
+<p >
+	;
+<a name="wp9003116"> </a></p>
+<p >
+variable_initializers ::=
+<a name="wp9003117"> </a></p>
+<p >
+		variable_initializer
+<a name="wp9003118"> </a></p>
+<p >
+	|	variable_initializers COMMA variable_initializer
+<a name="wp9003119"> </a></p>
+<p >
+	;
+<a name="wp9003120"> </a></p>
+<p >
+// No blocks or statements
+<a name="wp9003122"> </a></p>
+<p >
+// 19.12) Expressions
+<a name="wp9003124"> </a></p>
+<p >
+primary ::=	primary_no_new_array
+<a name="wp9003125"> </a></p>
+<p >
+	|	array_creation_expression
+<a name="wp9003126"> </a></p>
+<p >
+	;
+<a name="wp9003127"> </a></p>
+<p >
+primary_no_new_array ::=
+<a name="wp9003128"> </a></p>
+<p >
+		literal
+<a name="wp9003129"> </a></p>
+<p >
+	|	Q
+<a name="wp9003130"> </a></p>
+<p >
+	|	M
+<a name="wp9003131"> </a></p>
+<p >
+	|	R
+<a name="wp9003132"> </a></p>
+<p >
+	|	LPAREN expression RPAREN
+<a name="wp9003133"> </a></p>
+<p >
+	|	class_instance_creation_expression
+<a name="wp9003134"> </a></p>
+<p >
+	|	field_access
+<a name="wp9003135"> </a></p>
+<p >
+	|	parenthesized_expression
+<a name="wp9003136"> </a></p>
+<p >
+	|	array_access
+<a name="wp9003137"> </a></p>
+<p >
+	|	primitive_type DOT CLASS
+<a name="wp9003138"> </a></p>
+<p >
+	|	VOID DOT CLASS
+<a name="wp9003139"> </a></p>
+<p >
+	|	array_type DOT CLASS
+<a name="wp9003140"> </a></p>
+<p >
+	|	name DOT CLASS
+<a name="wp9003141"> </a></p>
+<p >
+	;
+<a name="wp9003142"> </a></p>
+<p >
+class_instance_creation_expression ::=
+<a name="wp9003143"> </a></p>
+<p >
+		NEW class_type LPAREN argument_list_opt RPAREN
+<a name="wp9003144"> </a></p>
+<p >
+	;
+<a name="wp9003145"> </a></p>
+<p >
+argument_list_opt ::=
+<a name="wp9003146"> </a></p>
+<p >
+	|	argument_list
+<a name="wp9003147"> </a></p>
+<p >
+	;
+<a name="wp9003148"> </a></p>
+<p >
+argument_list ::=
+<a name="wp9003149"> </a></p>
+<p >
+		expression
+<a name="wp9003150"> </a></p>
+<p >
+	|	argument_list COMMA expression
+<a name="wp9003151"> </a></p>
+<p >
+	;
+<a name="wp9003152"> </a></p>
+<p >
+array_creation_expression ::=
+<a name="wp9003153"> </a></p>
+<p >
+		NEW primitive_type dim_exprs dims_opt
+<a name="wp9003154"> </a></p>
+<p >
+	|	NEW class_or_interface_type dim_exprs dims_opt
+<a name="wp9003155"> </a></p>
+<p >
+	|	NEW primitive_type dims array_initializer
+<a name="wp9003156"> </a></p>
+<p >
+	|	NEW class_or_interface_type dims array_initializer
+<a name="wp9003157"> </a></p>
+<p >
+	;
+<a name="wp9003158"> </a></p>
+<p >
+dim_exprs ::=	dim_expr
+<a name="wp9003159"> </a></p>
+<p >
+	|	dim_exprs dim_expr
+<a name="wp9003160"> </a></p>
+<p >
+	;
+<a name="wp9003161"> </a></p>
+<p >
+dim_expr ::=	LBRACK expression RBRACK
+<a name="wp9003162"> </a></p>
+<p >
+	;
+<a name="wp9003163"> </a></p>
+<p >
+dims_opt ::=
+<a name="wp9003164"> </a></p>
+<p >
+	|	dims
+<a name="wp9003165"> </a></p>
+<p >
+	;
+<a name="wp9003166"> </a></p>
+<p >
+dims ::=		LBRACK RBRACK
+<a name="wp9003167"> </a></p>
+<p >
+	|	dims LBRACK RBRACK
+<a name="wp9003168"> </a></p>
+<p >
+	;
+<a name="wp9003169"> </a></p>
+<p >
+field_access ::=
+<a name="wp9003170"> </a></p>
+<p >
+		primary DOT IDENTIFIER
+<a name="wp9003171"> </a></p>
+<p >
+	;
+<a name="wp9003172"> </a></p>
+<p >
+parenthesized_expression ::=
+<a name="wp9003173"> </a></p>
+<p >
+		quantifier LPAREN bvar_list SEMICOLON expression RPAREN
+<a name="wp9003174"> </a></p>
+<p >
+	|	value_quantifier LPAREN bvar_list SEMICOLON expression SEMICOLON expression
+<a name="wp9003175"> </a></p>
+<p >
+		RPAREN
+<a name="wp9003176"> </a></p>
+<p >
+	|	LET LPAREN binder_list SEMICOLON expression RPAREN
+<a name="wp9003177"> </a></p>
+<p >
+	|	shorthand LPAREN field_expression opt_cond RPAREN
+<a name="wp9003178"> </a></p>
+<p >
+	|	simples_shorthand LPAREN expression RPAREN
+<a name="wp9003179"> </a></p>
+<p >
+	|	swap_shorthand LPAREN expression SEMICOLON expression SEMICOLON
+<a name="wp9003180"> </a></p>
+<p >
+		field_expression RPAREN
+<a name="wp9003181"> </a></p>
+<p >
+	|	VALID LPAREN field_access RPAREN
+<a name="wp9003182"> </a></p>
+<p >
+	|	method_invocation
+<a name="wp9003183"> </a></p>
+<p >
+	;		 
+<a name="wp9003184"> </a></p>
+<p >
+quantifier ::=
+<a name="wp9003185"> </a></p>
+<p >
+		EXISTS
+<a name="wp9003186"> </a></p>
+<p >
+	|	ALL
+<a name="wp9003187"> </a></p>
+<p >
+	|	COUNT
+<a name="wp9003188"> </a></p>
+<p >
+	|	COUNTUNIQUE
+<a name="wp9003189"> </a></p>
+<p >
+	;
+<a name="wp9003190"> </a></p>
+<p >
+value_quantifier ::=
+<a name="wp9003191"> </a></p>
+<p >
+		MINIMUM
+<a name="wp9003192"> </a></p>
+<p >
+	|	MAXIMUM
+<a name="wp9003193"> </a></p>
+<p >
+	;
+<a name="wp9003194"> </a></p>
+<p >
+bvar_list ::=
+<a name="wp9003195"> </a></p>
+<p >
+		IDENTIFIER
+<a name="wp9003196"> </a></p>
+<p >
+	|	bvar_list COMMA IDENTIFIER
+<a name="wp9003197"> </a></p>
+<p >
+	;
+<a name="wp9003198"> </a></p>
+<p >
+binder_list ::=
+<a name="wp9003199"> </a></p>
+<p >
+		binder
+<a name="wp9003200"> </a></p>
+<p >
+	|	binder_list COMMA binder
+<a name="wp9003201"> </a></p>
+<p >
+	;
+<a name="wp9003202"> </a></p>
+<p >
+binder ::=
+<a name="wp9003203"> </a></p>
+<p >
+		type IDENTIFIER EQ expression
+<a name="wp9003204"> </a></p>
+<p >
+	;
+<a name="wp9003205"> </a></p>
+<p >
+shorthand ::=
+<a name="wp9003206"> </a></p>
+<p >
+		SAME
+<a name="wp9003207"> </a></p>
+<p >
+	|	DIFFERENT
+<a name="wp9003208"> </a></p>
+<p >
+	|	COMPARE
+<a name="wp9003209"> </a></p>
+<p >
+	;
+<a name="wp9003210"> </a></p>
+<p >
+simple_shorthand ::=
+<a name="wp9003211"> </a></p>
+<p >
+		AND
+<a name="wp9003212"> </a></p>
+<p >
+	|	OR
+<a name="wp9003213"> </a></p>
+<p >
+	|	XOR
+<a name="wp9003214"> </a></p>
+<p >
+	;
+<a name="wp9003215"> </a></p>
+<p >
+swap_shorthand ::=
+<a name="wp9003216"> </a></p>
+<p >
+		SWAPSAME
+<a name="wp9003217"> </a></p>
+<p >
+	;
+<a name="wp9003218"> </a></p>
+<p >
+field_expression ::=
+<a name="wp9003219"> </a></p>
+<p >
+		expression_list
+<a name="wp9003220"> </a></p>
+<p >
+	;
+<a name="wp9003221"> </a></p>
+<p >
+expression_list ::=
+<a name="wp9003222"> </a></p>
+<p >
+		expression
+<a name="wp9003223"> </a></p>
+<p >
+	|	expression_list COMMA expression
+<a name="wp9003224"> </a></p>
+<p >
+	;
+<a name="wp9003225"> </a></p>
+<p >
+opt_cond ::=
+<a name="wp9003226"> </a></p>
+<p >
+	|	SEMI expression
+<a name="wp9003227"> </a></p>
+<p >
+	;
+<a name="wp9003228"> </a></p>
+<p >
+method_invocation ::=
+<a name="wp9003229"> </a></p>
+<p >
+		name LPAREN argument_list_opt RPAREN
+<a name="wp9003230"> </a></p>
+<p >
+	|	primary DOT IDENTIFIER LPAREN argument_list_opt RPAREN
+<a name="wp9003231"> </a></p>
+<p >
+	;
+<a name="wp9003232"> </a></p>
+<p >
+array_access ::=
+<a name="wp9003233"> </a></p>
+<p >
+		name LBRACK array_expression RBRACK
+<a name="wp9003234"> </a></p>
+<p >
+	|	primary_no_new_array LBRACK array_expression RBRACK
+<a name="wp9003235"> </a></p>
+<p >
+	;
+<a name="wp9003236"> </a></p>
+<p >
+array_expression ::=
+<a name="wp9003237"> </a></p>
+<p >
+		expression
+<a name="wp9003238"> </a></p>
+<p >
+	|	expression COMMA expression
+<a name="wp9003239"> </a></p>
+<p >
+	|
+<a name="wp9003240"> </a></p>
+<p >
+	;
+<a name="wp9003241"> </a></p>
+<p >
+postfix_expression ::=
+<a name="wp9003242"> </a></p>
+<p >
+		primary
+<a name="wp9003243"> </a></p>
+<p >
+	|	name
+<a name="wp9003244"> </a></p>
+<p >
+unary_expression ::=
+<a name="wp9003245"> </a></p>
+<p >
+		PLUS unary_expression
+<a name="wp9003246"> </a></p>
+<p >
+	|	MINUS unary_expression
+<a name="wp9003247"> </a></p>
+<p >
+	|	unary_expression_not_plus_minus
+<a name="wp9003248"> </a></p>
+<p >
+	;
+<a name="wp9003249"> </a></p>
+<p >
+unary_expression_not_plus_minus ::=
+<a name="wp9003250"> </a></p>
+<p >
+		postfix_expression
+<a name="wp9003251"> </a></p>
+<p >
+	|	COMP unary_expression
+<a name="wp9003252"> </a></p>
+<p >
+	|	NOT unary_expression
+<a name="wp9003253"> </a></p>
+<p >
+	|	cast_expression
+<a name="wp9003254"> </a></p>
+<p >
+	;
+<a name="wp9003255"> </a></p>
+<p >
+cast_expression ::=
+<a name="wp9003256"> </a></p>
+<p >
+		LPAREN primitive_type dims_opt RPAREN unary_expression
+<a name="wp9003257"> </a></p>
+<p >
+	|	LPAREN expression RPAREN unary_expression_not_plus_minus
+<a name="wp9003258"> </a></p>
+<p >
+	|	LPAREN name dims RPAREN unary_expression_not_plus_minus
+<a name="wp9003259"> </a></p>
+<p >
+	;
+<a name="wp9003260"> </a></p>
+<p >
+multiplicative_expression ::=
+<a name="wp9003261"> </a></p>
+<p >
+		unary_expression
+<a name="wp9003262"> </a></p>
+<p >
+	|	multiplicative_expression MULT unary_expression
+<a name="wp9003263"> </a></p>
+<p >
+	|	multiplicative_expression DIV unary_expression
+<a name="wp9003264"> </a></p>
+<p >
+	|	multiplicative_expression MOD unary_expression
+<a name="wp9003265"> </a></p>
+<p >
+	;
+<a name="wp9003266"> </a></p>
+<p >
+additive_expression ::=
+<a name="wp9003267"> </a></p>
+<p >
+		multiplicative_expression
+<a name="wp9003268"> </a></p>
+<p >
+	|	additive_expression PLUS multiplicative_expression
+<a name="wp9003269"> </a></p>
+<p >
+	|	additive_expression MINUS multiplicative_expression
+<a name="wp9003270"> </a></p>
+<p >
+	;
+<a name="wp9003271"> </a></p>
+<p >
+shift_expression ::=
+<a name="wp9003272"> </a></p>
+<p >
+		additive_expression
+<a name="wp9003273"> </a></p>
+<p >
+	|	shift_expression LSHIFT additive_expression
+<a name="wp9003274"> </a></p>
+<p >
+	|	shift_expression RSHIFT additive_expression
+<a name="wp9003275"> </a></p>
+<p >
+	|	shift_expression URSHIFT additive_expression
+<a name="wp9003276"> </a></p>
+<p >
+	;
+<a name="wp9003277"> </a></p>
+<p >
+relational_expression ::=
+<a name="wp9003278"> </a></p>
+<p >
+		shift_expression
+<a name="wp9003279"> </a></p>
+<p >
+	|	relational_expression LT shift_expression
+<a name="wp9003280"> </a></p>
+<p >
+	|	relational_expression GT shift_expression
+<a name="wp9003281"> </a></p>
+<p >
+	|	relational_expression LTEQ shift_expression
+<a name="wp9003282"> </a></p>
+<p >
+	|	relational_expression GTEQ shift_expression
+<a name="wp9003283"> </a></p>
+<p >
+	|	relational_expression INSTANCEOF reference_type
+<a name="wp9003284"> </a></p>
+<p >
+	;
+<a name="wp9003285"> </a></p>
+<p >
+equality_expression ::=
+<a name="wp9003286"> </a></p>
+<p >
+		relational_expression
+<a name="wp9003287"> </a></p>
+<p >
+	|	equality_expression EQEQ relational_expression
+<a name="wp9003288"> </a></p>
+<p >
+	|	equality_expression NOTEQ relational_expression
+<a name="wp9003289"> </a></p>
+<p >
+	;
+<a name="wp9003290"> </a></p>
+<p >
+and_expression ::=
+<a name="wp9003291"> </a></p>
+<p >
+		equality_expression
+<a name="wp9003292"> </a></p>
+<p >
+	|	and_expression AND equality_expression
+<a name="wp9003293"> </a></p>
+<p >
+	;
+<a name="wp9003294"> </a></p>
+<p >
+exclusive_or_expression ::=
+<a name="wp9003295"> </a></p>
+<p >
+		and_expression
+<a name="wp9003296"> </a></p>
+<p >
+	|	exclusive_or_expression XOR and_expression
+<a name="wp9003297"> </a></p>
+<p >
+	;
+<a name="wp9003298"> </a></p>
+<p >
+inclusive_or_expression ::=
+<a name="wp9003299"> </a></p>
+<p >
+		exclusive_or_expression
+<a name="wp9003300"> </a></p>
+<p >
+	|	inclusive_or_expression OR exclusive_or_expression
+<a name="wp9003301"> </a></p>
+<p >
+	;
+<a name="wp9003302"> </a></p>
+<p >
+conditional_and_expression ::=
+<a name="wp9003303"> </a></p>
+<p >
+		inclusive_or_expression
+<a name="wp9003304"> </a></p>
+<p >
+	|	conditional_and_expression ANDAND inclusive_or_expression
+<a name="wp9003305"> </a></p>
+<p >
+	;
+<a name="wp9003306"> </a></p>
+<p >
+conditional_or_expression ::=
+<a name="wp9003307"> </a></p>
+<p >
+		conditional_and_expression
+<a name="wp9003308"> </a></p>
+<p >
+	|	conditional_or_expression OROR conditional_and_expression
+<a name="wp9003309"> </a></p>
+<p >
+	;
+<a name="wp9003310"> </a></p>
+<p >
+conditional_expression ::=
+<a name="wp9003311"> </a></p>
+<p >
+		conditional_or_expression
+<a name="wp9003312"> </a></p>
+<p >
+	|	conditional_or_expression QUESTION expression 
+<a name="wp9003313"> </a></p>
+<p >
+			COLON conditional_expression
+<a name="wp9003314"> </a></p>
+<p >
+	;
+<a name="wp9003315"> </a></p>
+<p >
+expression ::=	conditional_expression
+<a name="wp9003316"> </a></p>
+<p >
+	;
+<a name="wp9003317"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-135.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-137.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

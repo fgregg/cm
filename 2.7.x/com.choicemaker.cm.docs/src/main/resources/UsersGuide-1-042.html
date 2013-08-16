@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>8 Evaluation order and exception handling</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-041.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-043.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+8	 Evaluation order and exception handling
+<a name="wp9001959"> </a></h3>
+<p >
+Validity predicates as well as preconditions and values of derived fields are guaranteed to be evaluated in the order of declaration of the fields and nested node types in a ChoiceMaker schema file. Hence, in <a href="UsersGuide-1-041.html#wp9001951">Figure 32</a> it would be legal to reference <em>valid(lastName)</em> in the validity predicate of <em>firstName</em>, but not the other way round.
+<a name="wp9001960"> </a></p>
+<p >
+Evaluation in stacked node types is depth first. The evaluation order among sibling nodes is explicitly left undefined and may change in future versions of ChoiceMaker.
+<a name="wp9001961"> </a></p>
+<p >
+Schema expressions may use Java methods that have non-empty throw clauses since all schema expressions are wrapped in a try-catch block.<font ><sup><a href="#wp9001440"><sup>1</sup></a></sup></font> All exceptions may be logged by configuring logging through the configuration file. Only errors, e.g., <em>OutOfMemoryError</em>, cause program termination. 
+<a name="wp9001962"> </a></p>
+
+<p >
+<a href="#wp9001962"><sup>1</sup></a>In a future version, each expression might be wrapped individually.
+<a name="wp9001440"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-041.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-043.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

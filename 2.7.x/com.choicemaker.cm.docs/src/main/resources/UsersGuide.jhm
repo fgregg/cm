@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<map version="1.0">
+ <mapID target="Installation" url="UsersGuide-1-132.html#wp9002890" />  <!-- Appendix B. Installation instructions -->
+ <mapID target="UsersGuide-1-001_html_wp9001449" url="UsersGuide-1-001.html" />  <!-- ChoiceMaker 2.3 User's Guide -->
+ <mapID target="UsersGuide-1-002_html_wp9001536" url="UsersGuide-1-002.html" />  <!-- Contents -->
+ <mapID target="UsersGuide-1-003_html_wp9001539" url="UsersGuide-1-003.html" />  <!-- Preface -->
+ <mapID target="UsersGuide-1-004_html_wp9001541" url="UsersGuide-1-004.html" />  <!-- 1 About this guide -->
+ <mapID target="UsersGuide-1-005_html_wp9001555" url="UsersGuide-1-005.html" />  <!-- 2 Conventions -->
+ <mapID target="UsersGuide-1-006_html_wp9001579" url="UsersGuide-1-006.html" />  <!-- Chapter I. Introduction -->
+ <mapID target="UsersGuide-1-006_html_wp9001580" url="UsersGuide-1-006.html#wp9001580" />  <!-- Chapter I. Introduction -->
+ <mapID target="UsersGuide-1-007_html_wp9001601" url="UsersGuide-1-007.html" />  <!-- 2 Blocking -->
+ <mapID target="UsersGuide-1-008_html_wp9001607" url="UsersGuide-1-008.html" />  <!-- 3 Scoring -->
+ <mapID target="UsersGuide-1-009_html_wp9001618" url="UsersGuide-1-009.html" />  <!-- 3.1.1 Clues -->
+ <mapID target="UsersGuide-1-010_html_wp9001625" url="UsersGuide-1-010.html" />  <!-- 3.1.1.1 Decisions -->
+ <mapID target="UsersGuide-1-011_html_wp9001632" url="UsersGuide-1-011.html" />  <!-- 3.1.2 Machine learning -->
+ <mapID target="UsersGuide-1-012_html_wp9001634" url="UsersGuide-1-012.html" />  <!-- 3.1.2.1 Training -->
+ <mapID target="UsersGuide-1-013_html_wp9001646" url="UsersGuide-1-013.html" />  <!-- 3.1.2.2 Scoring -->
+ <mapID target="UsersGuide-1-014_html_wp9001648" url="UsersGuide-1-014.html" />  <!-- 3.1.2.3 Classification vs. regression -->
+ <mapID target="UsersGuide-1-015_html_wp9001657" url="UsersGuide-1-015.html" />  <!-- 4 ChoiceMaker schema -->
+ <mapID target="UsersGuide-1-016_html_wp9001665" url="UsersGuide-1-016.html" />  <!-- 5 ChoiceMaker software -->
+ <mapID target="UsersGuide-1-017_html_wp9001672" url="UsersGuide-1-017.html" />  <!-- 6 Component architecture -->
+ <mapID target="UsersGuide-1-018_html_wp9001681" url="UsersGuide-1-018.html" />  <!-- Chapter II. ModelMaker -->
+ <mapID target="UsersGuide-1-018_html_wp9001682" url="UsersGuide-1-018.html#wp9001682" />  <!-- Chapter II. ModelMaker -->
+ <mapID target="UsersGuide-1-019_html_wp9001684" url="UsersGuide-1-019.html" />  <!-- 2 Startup -->
+ <mapID target="UsersGuide-1-020_html_wp9001688" url="UsersGuide-1-020.html" />  <!-- 3 Work space -->
+ <mapID target="UsersGuide-1-021_html_wp9001703" url="UsersGuide-1-021.html" />  <!-- 4 Context-Sensitive Help -->
+ <mapID target="UsersGuide-1-022_html_wp9001706" url="UsersGuide-1-022.html" />  <!-- 5 Error Dialog -->
+ <mapID target="UsersGuide-1-023_html_wp9001709" url="UsersGuide-1-023.html" />  <!-- 6 Probability model handling -->
+ <mapID target="UsersGuide-1-024_html_wp9001728" url="UsersGuide-1-024.html" />  <!-- 7 Marked record pair source handling -->
+ <mapID target="UsersGuide-1-025_html_wp9001740" url="UsersGuide-1-025.html" />  <!-- 7.2.1 Composite -->
+ <mapID target="UsersGuide-1-026_html_wp9001749" url="UsersGuide-1-026.html" />  <!-- 8 Training -->
+ <mapID target="UsersGuide-1-027_html_wp9001772" url="UsersGuide-1-027.html" />  <!-- 9 Testing -->
+ <mapID target="UsersGuide-1-028_html_wp9001803" url="UsersGuide-1-028.html" />  <!-- 9.4.1 Probability Histogram -->
+ <mapID target="UsersGuide-1-029_html_wp9001806" url="UsersGuide-1-029.html" />  <!-- 9.4.2 Hold percentage vs. accuracy -->
+ <mapID target="UsersGuide-1-030_html_wp9001812" url="UsersGuide-1-030.html" />  <!-- 9.4.3 Precision and recall vs. thresholds -->
+ <mapID target="UsersGuide-1-031_html_wp9001815" url="UsersGuide-1-031.html" />  <!-- 9.4.4 Calculator -->
+ <mapID target="UsersGuide-1-032_html_wp9001819" url="UsersGuide-1-032.html" />  <!-- 10 Human review -->
+ <mapID target="UsersGuide-1-033_html_wp9001875" url="UsersGuide-1-033.html" />  <!-- 11 Filters -->
+ <mapID target="UsersGuide-1-034_html_wp9001890" url="UsersGuide-1-034.html" />  <!-- 12 Tools -->
+ <mapID target="UsersGuide-1-035_html_wp9001923" url="UsersGuide-1-035.html" />  <!-- Chapter III. ChoiceMaker schemas -->
+ <mapID target="UsersGuide-1-035_html_wp9001924" url="UsersGuide-1-035.html#wp9001924" />  <!-- Chapter III. ChoiceMaker schemas -->
+ <mapID target="UsersGuide-1-036_html_wp9001926" url="UsersGuide-1-036.html" />  <!-- 2 Terminology -->
+ <mapID target="UsersGuide-1-037_html_wp9001928" url="UsersGuide-1-037.html" />  <!-- 3 Name and file name -->
+ <mapID target="UsersGuide-1-038_html_wp9001933" url="UsersGuide-1-038.html" />  <!-- 4 Node types, fields, and types -->
+ <mapID target="UsersGuide-1-039_html_wp9001937" url="UsersGuide-1-039.html" />  <!-- 5 Validity predicates -->
+ <mapID target="UsersGuide-1-040_html_wp9001941" url="UsersGuide-1-040.html" />  <!-- 6 Derived fields -->
+ <mapID target="UsersGuide-1-041_html_wp9001946" url="UsersGuide-1-041.html" />  <!-- 7 Stacked data -->
+ <mapID target="UsersGuide-1-042_html_wp9001959" url="UsersGuide-1-042.html" />  <!-- 8 Evaluation order and exception handling -->
+ <mapID target="UsersGuide-1-043_html_wp9001963" url="UsersGuide-1-043.html" />  <!-- 9 Holder classes and translators -->
+ <mapID target="UsersGuide-1-044_html_wp9001973" url="UsersGuide-1-044.html" />  <!-- 10 XML Schemas to define ChoiceMaker schemas -->
+ <mapID target="UsersGuide-1-045_html_wp9001983" url="UsersGuide-1-045.html" />  <!-- 11 Summary -->
+ <mapID target="UsersGuide-1-046_html_wp9001987" url="UsersGuide-1-046.html" />  <!-- 1 -->
+ <mapID target="UsersGuide-1-047_html_wp9001988" url="UsersGuide-1-047.html" />  <!-- Chapter IV. Clues and ClueMaker -->
+ <mapID target="UsersGuide-1-047_html_wp9001989" url="UsersGuide-1-047.html#wp9001989" />  <!-- Chapter IV. Clues and ClueMaker -->
+ <mapID target="UsersGuide-1-048_html_wp9001993" url="UsersGuide-1-048.html" />  <!-- 2 Clue sets and clues -->
+ <mapID target="UsersGuide-1-049_html_wp9002013" url="UsersGuide-1-049.html" />  <!-- 3 Shorthand forms -->
+ <mapID target="UsersGuide-1-050_html_wp9002046" url="UsersGuide-1-050.html" />  <!-- 3.3.1 Multiple iterators -->
+ <mapID target="UsersGuide-1-051_html_wp9002048" url="UsersGuide-1-051.html" />  <!-- 3.3.2 Non-boolean clue sets -->
+ <mapID target="UsersGuide-1-052_html_wp9002054" url="UsersGuide-1-052.html" />  <!-- 3.3.3 Referencing multi clues -->
+ <mapID target="UsersGuide-1-053_html_wp9002072" url="UsersGuide-1-053.html" />  <!-- 4 Stacked data -->
+ <mapID target="UsersGuide-1-054_html_wp9002104" url="UsersGuide-1-054.html" />  <!-- 5 Java methods -->
+ <mapID target="UsersGuide-1-055_html_wp9002108" url="UsersGuide-1-055.html" />  <!-- 6 Report -->
+ <mapID target="UsersGuide-1-056_html_wp9002111" url="UsersGuide-1-056.html" />  <!-- 7 Rules -->
+ <mapID target="UsersGuide-1-057_html_wp9002123" url="UsersGuide-1-057.html" />  <!-- 8 Scopes -->
+ <mapID target="UsersGuide-1-058_html_wp9002126" url="UsersGuide-1-058.html" />  <!-- 9 Various -->
+ <mapID target="UsersGuide-1-059_html_wp9002131" url="UsersGuide-1-059.html" />  <!-- 10 Compilation -->
+ <mapID target="UsersGuide-1-060_html_wp9002133" url="UsersGuide-1-060.html" />  <!-- 11 Summary of compilation and training process -->
+ <mapID target="UsersGuide-1-061_html_wp9002145" url="UsersGuide-1-061.html" />  <!-- 12 Conclusion -->
+ <mapID target="UsersGuide-1-062_html_wp9002149" url="UsersGuide-1-062.html" />  <!-- 13 Reserved keywords -->
+ <mapID target="UsersGuide-1-063_html_wp9002161" url="UsersGuide-1-063.html" />  <!-- Chapter V. Configuration -->
+ <mapID target="UsersGuide-1-064_html_wp9002165" url="UsersGuide-1-064.html" />  <!-- 1 Basic structure -->
+ <mapID target="UsersGuide-1-065_html_wp9002168" url="UsersGuide-1-065.html" />  <!-- 2 Core configuration -->
+ <mapID target="UsersGuide-1-066_html_wp9002178" url="UsersGuide-1-066.html" />  <!-- 2.2.1 Java class loaders -->
+ <mapID target="UsersGuide-1-067_html_wp9002194" url="UsersGuide-1-067.html" />  <!-- 2.5.1 XML file reporting -->
+ <mapID target="UsersGuide-1-068_html_wp9002205" url="UsersGuide-1-068.html" />  <!-- 2.5.2 Database reporting -->
+ <mapID target="UsersGuide-1-069_html_wp9002223" url="UsersGuide-1-069.html" />  <!-- Chapter VI. Matching support -->
+ <mapID target="UsersGuide-1-070_html_wp9002226" url="UsersGuide-1-070.html" />  <!-- 1 Approximate string matching -->
+ <mapID target="UsersGuide-1-071_html_wp9002273" url="UsersGuide-1-071.html" />  <!-- 2 String manipulation -->
+ <mapID target="UsersGuide-1-072_html_wp9002276" url="UsersGuide-1-072.html" />  <!-- 3 Dates -->
+ <mapID target="UsersGuide-1-073_html_wp9002279" url="UsersGuide-1-073.html" />  <!-- 4 Various -->
+ <mapID target="UsersGuide-1-074_html_wp9002281" url="UsersGuide-1-074.html" />  <!-- 5 Collections -->
+ <mapID target="UsersGuide-1-075_html_wp9002331" url="UsersGuide-1-075.html" />  <!-- 6 Parsers -->
+ <mapID target="UsersGuide-1-076_html_wp9002384" url="UsersGuide-1-076.html" />  <!-- Chapter VII. Plugins -->
+ <mapID target="UsersGuide-1-076_html_wp9002385" url="UsersGuide-1-076.html#wp9002385" />  <!-- Chapter VII. Plugins -->
+ <mapID target="UsersGuide-1-077_html_wp9002397" url="UsersGuide-1-077.html" />  <!-- 2 Directory structure -->
+ <mapID target="UsersGuide-1-078_html_wp9002404" url="UsersGuide-1-078.html" />  <!-- 3 Java package structure -->
+ <mapID target="UsersGuide-1-079_html_wp9002409" url="UsersGuide-1-079.html" />  <!-- 4 Plugging it together -->
+ <mapID target="UsersGuide-1-080_html_wp9002413" url="UsersGuide-1-080.html" />  <!-- Chapter VIII. Machine learning plugins -->
+ <mapID target="UsersGuide-1-081_html_wp9002415" url="UsersGuide-1-081.html" />  <!-- 1 Maximum Entropy -->
+ <mapID target="UsersGuide-1-082_html_wp9002435" url="UsersGuide-1-082.html" />  <!-- 1.3.1 Weights -->
+ <mapID target="UsersGuide-1-083_html_wp9002437" url="UsersGuide-1-083.html" />  <!-- 2 Support Vector Machines -->
+ <mapID target="UsersGuide-1-084_html_wp9002457" url="UsersGuide-1-084.html" />  <!-- Chapter IX. Input/output plugins -->
+ <mapID target="UsersGuide-1-084_html_wp9002458" url="UsersGuide-1-084.html#wp9002458" />  <!-- Chapter IX. Input/output plugins -->
+ <mapID target="UsersGuide-1-085_html_wp9002474" url="UsersGuide-1-085.html" />  <!-- 1.3.1 Multiple configurations -->
+ <mapID target="UsersGuide-1-086_html_wp9002481" url="UsersGuide-1-086.html" />  <!-- 1.3.2 Stacking in the root node type -->
+ <mapID target="UsersGuide-1-087_html_wp9002484" url="UsersGuide-1-087.html" />  <!-- 1.3.3 Common elements -->
+ <mapID target="UsersGuide-1-088_html_wp9002498" url="UsersGuide-1-088.html" />  <!-- 2 Display -->
+ <mapID target="UsersGuide-1-089_html_wp9002504" url="UsersGuide-1-089.html" />  <!-- 3 Report -->
+ <mapID target="UsersGuide-1-090_html_wp9002511" url="UsersGuide-1-090.html" />  <!-- 4 XML -->
+ <mapID target="UsersGuide-1-091_html_wp9002522" url="UsersGuide-1-091.html" />  <!-- 4.1.1 Marked record pair sources -->
+ <mapID target="UsersGuide-1-092_html_wp9002547" url="UsersGuide-1-092.html" />  <!-- 4.1.2 Record sources -->
+ <mapID target="UsersGuide-1-093_html_wp9002561" url="UsersGuide-1-093.html" />  <!-- 4.1.3 Report files -->
+ <mapID target="UsersGuide-1-094_html_wp9002581" url="UsersGuide-1-094.html" />  <!-- 5 Flat files -->
+ <mapID target="UsersGuide-1-095_html_wp9002596" url="UsersGuide-1-095.html" />  <!-- 5.1.1 Examples of marked record pair sources -->
+ <mapID target="UsersGuide-1-095_html_wp9002597" url="UsersGuide-1-095.html#wp9002597" />  <!-- 5.1.1 Examples of marked record pair sources -->
+ <mapID target="UsersGuide-1-096_html_wp9002604" url="UsersGuide-1-096.html" />  <!-- 5.1.1.2 Non-stacked data, single file, pipe delimited, untagged, one line per pair -->
+ <mapID target="UsersGuide-1-097_html_wp9002607" url="UsersGuide-1-097.html" />  <!-- 5.1.1.3 Stacked, single file, fixed width, tagged -->
+ <mapID target="UsersGuide-1-098_html_wp9002614" url="UsersGuide-1-098.html" />  <!-- 5.1.1.4 Stacked, multi file, fixed width, untagged -->
+ <mapID target="UsersGuide-1-099_html_wp9002624" url="UsersGuide-1-099.html" />  <!-- 5.1.2 Examples of record sources -->
+ <mapID target="UsersGuide-1-100_html_wp9002630" url="UsersGuide-1-100.html" />  <!-- 5.1.3 Schema configuration options -->
+ <mapID target="UsersGuide-1-101_html_wp9002660" url="UsersGuide-1-101.html" />  <!-- 6 Database -->
+ <mapID target="UsersGuide-1-102_html_wp9002681" url="UsersGuide-1-102.html" />  <!-- 7 Blocking -->
+ <mapID target="UsersGuide-1-103_html_wp9002696" url="UsersGuide-1-103.html" />  <!-- 7.3.1 Loading the plugin -->
+ <mapID target="UsersGuide-1-104_html_wp9002698" url="UsersGuide-1-104.html" />  <!-- 7.3.2 Selection of blocking fields -->
+ <mapID target="UsersGuide-1-105_html_wp9002700" url="UsersGuide-1-105.html" />  <!-- 7.3.3 Subsets -->
+ <mapID target="UsersGuide-1-106_html_wp9002702" url="UsersGuide-1-106.html" />  <!-- 7.3.4 Standard exclusions -->
+ <mapID target="UsersGuide-1-107_html_wp9002705" url="UsersGuide-1-107.html" />  <!-- 7.3.5 Illegal combinations -->
+ <mapID target="UsersGuide-1-108_html_wp9002707" url="UsersGuide-1-108.html" />  <!-- 7.3.6 Groups -->
+ <mapID target="UsersGuide-1-109_html_wp9002737" url="UsersGuide-1-109.html" />  <!-- 7.5.1 Finding good blocking sets -->
+ <mapID target="UsersGuide-1-110_html_wp9002738" url="UsersGuide-1-110.html" />  <!-- 7.5.2 Adding blocking fields -->
+ <mapID target="UsersGuide-1-111_html_wp9002743" url="UsersGuide-1-111.html" />  <!-- 7.5.3 Removing blocking fields -->
+ <mapID target="UsersGuide-1-112_html_wp9002749" url="UsersGuide-1-112.html" />  <!-- 7.6.1 Finding good blocking sets -->
+ <mapID target="UsersGuide-1-113_html_wp9002750" url="UsersGuide-1-113.html" />  <!-- 7.6.2 Adding and removing blocking fields -->
+ <mapID target="UsersGuide-1-114_html_wp9002757" url="UsersGuide-1-114.html" />  <!-- 8 Oracle -->
+ <mapID target="UsersGuide-1-115_html_wp9002761" url="UsersGuide-1-115.html" />  <!-- 8.1.1 Data sources -->
+ <mapID target="UsersGuide-1-116_html_wp9002773" url="UsersGuide-1-116.html" />  <!-- 9 Microsoft SQL Server 2000 -->
+ <mapID target="UsersGuide-1-117_html_wp9002779" url="UsersGuide-1-117.html" />  <!-- Chapter X. ChoiceMaker Server -->
+ <mapID target="UsersGuide-1-117_html_wp9002780" url="UsersGuide-1-117.html#wp9002780" />  <!-- Chapter X. ChoiceMaker Server -->
+ <mapID target="UsersGuide-1-118_html_wp9002785" url="UsersGuide-1-118.html" />  <!-- 2 ChoiceMaker Server J2EE -->
+ <mapID target="UsersGuide-1-119_html_wp9002803" url="UsersGuide-1-119.html" />  <!-- Chapter XI. ReviewMaker -->
+ <mapID target="UsersGuide-1-119_html_wp9002804" url="UsersGuide-1-119.html#wp9002804" />  <!-- Chapter XI. ReviewMaker -->
+ <mapID target="UsersGuide-1-120_html_wp9002808" url="UsersGuide-1-120.html" />  <!-- 2 Installation -->
+ <mapID target="UsersGuide-1-121_html_wp9002813" url="UsersGuide-1-121.html" />  <!-- 3 Startup -->
+ <mapID target="UsersGuide-1-122_html_wp9002818" url="UsersGuide-1-122.html" />  <!-- 4 The Overview View -->
+ <mapID target="UsersGuide-1-123_html_wp9002828" url="UsersGuide-1-123.html" />  <!-- 5 The Search View -->
+ <mapID target="UsersGuide-1-124_html_wp9002842" url="UsersGuide-1-124.html" />  <!-- 6 The Review View -->
+ <mapID target="UsersGuide-1-125_html_wp9002852" url="UsersGuide-1-125.html" />  <!-- 7 Customization Options -->
+ <mapID target="UsersGuide-1-126_html_wp9002862" url="UsersGuide-1-126.html" />  <!-- 8 Debugging -->
+ <mapID target="UsersGuide-1-127_html_wp9002864" url="UsersGuide-1-127.html" />  <!-- UsersGuide-1-127.html -->
+ <mapID target="UsersGuide-1-128_html_wp9002867" url="UsersGuide-1-128.html" />  <!-- Chapter I. -->
+ <mapID target="UsersGuide-1-129_html_wp9002868" url="UsersGuide-1-129.html" />  <!-- Appendix A. Limitations of the current implementation -->
+ <mapID target="UsersGuide-1-129_html_wp9002869" url="UsersGuide-1-129.html#wp9002869" />  <!-- Appendix A. Limitations of the current implementation -->
+ <mapID target="UsersGuide-1-130_html_wp9002873" url="UsersGuide-1-130.html" />  <!-- 2 ChoiceMaker schemas -->
+ <mapID target="UsersGuide-1-131_html_wp9002879" url="UsersGuide-1-131.html" />  <!-- 3 ClueMaker compiler -->
+ <mapID target="UsersGuide-1-132_html_wp9002889" url="UsersGuide-1-132.html" />  <!-- Appendix B. Installation instructions -->
+ <mapID target="UsersGuide-1-133_html_wp9002891" url="UsersGuide-1-133.html" />  <!-- 1 ModelMaker -->
+ <mapID target="UsersGuide-1-134_html_wp9002920" url="UsersGuide-1-134.html" />  <!-- 2 ReviewMaker -->
+ <mapID target="UsersGuide-1-135_html_wp9002923" url="UsersGuide-1-135.html" />  <!-- 3 ChoiceMaker Server -->
+ <mapID target="UsersGuide-1-136_html_wp9002931" url="UsersGuide-1-136.html" />  <!-- Appendix C. ClueMaker Grammar -->
+ <mapID target="UsersGuide-1-137_html_wp9003321" url="UsersGuide-1-137.html" />  <!-- Appendix D. XML Schemas for ChoiceMaker Schemas -->
+ <mapID target="UsersGuide-1-138_html_wp9003324" url="UsersGuide-1-138.html" />  <!-- Appendix E. ChoiceMaker Error Messages -->
+ <mapID target="UsersGuide-1-138_html_wp9003325" url="UsersGuide-1-138.html#wp9003325" />  <!-- Appendix E. ChoiceMaker Error Messages -->
+ <mapID target="UsersGuide-1-139_html_wp9003327" url="UsersGuide-1-139.html" />  <!-- 2 I/O -->
+ <mapID target="UsersGuide-1-140_html_wp9003329" url="UsersGuide-1-140.html" />  <!-- 3 Human Review Pane -->
+ <mapID target="UsersGuide-1-141_html_wp9003336" url="UsersGuide-1-141.html" />  <!-- 4 Filters -->
+ <mapID target="UsersGuide-1-142_html_wp9003338" url="UsersGuide-1-142.html" />  <!-- 5 Preferences -->
+ <mapID target="UsersGuide-1-143_html_wp9003341" url="UsersGuide-1-143.html" />  <!-- 6 Layouts -->
+ <mapID target="UsersGuide-1-144_html_wp9003344" url="UsersGuide-1-144.html" />  <!-- 7 Matching -->
+ <mapID target="UsersGuide-1-145_html_wp9003348" url="UsersGuide-1-145.html" />  <!-- 8 Model Building -->
+ <mapID target="UsersGuide-1-146_html_wp9003352" url="UsersGuide-1-146.html" />  <!-- 9 Marked Record Pair Sources -->
+ <mapID target="UsersGuide-1-147_html_wp9003356" url="UsersGuide-1-147.html" />  <!-- 10 Clues -->
+ <mapID target="UsersGuide-1-148_html_wp9003359" url="UsersGuide-1-148.html" />  <!-- 11 Compiler -->
+ <mapID target="UsersGuide-1-149_html_wp9003360" url="UsersGuide-1-149.html" />  <!-- 12 Generator -->
+ <mapID target="UsersGuide-1-150_html_wp9003364" url="UsersGuide-1-150.html" />  <!-- Appendix F. Glossary -->
+ <mapID target="UsersGuide-1-151_html_wp9003457" url="UsersGuide-1-151.html" />  <!-- Appendix G. Bibliography -->
+ <mapID target="io.gui.composite.mrps" url="UsersGuide-1-025.html" />  <!-- 7.2.1 Composite -->
+ <mapID target="io.gui.flatfile.mrps" url="UsersGuide-1-100.html#wp9002646" />  <!-- 5.1.3 Schema configuration options -->
+ <mapID target="io.gui.flatfile.rs" url="UsersGuide-1-100.html#wp9002646" />  <!-- 5.1.3 Schema configuration options -->
+ <mapID target="io.gui.oracle.mrps" url="UsersGuide-1-115.html#wp9002766" />  <!-- 8.1.1 Data sources -->
+ <mapID target="io.gui.xml.mrps" url="UsersGuide-1-093.html#wp9002569" />  <!-- 4.1.3 Report files -->
+ <mapID target="io.gui.xml.rs" url="UsersGuide-1-093.html#wp9002569" />  <!-- 4.1.3 Report files -->
+ <mapID target="train.gui.dialog.collections" url="UsersGuide-1-034.html#wp9001908" />  <!-- 12 Tools -->
+ <mapID target="train.gui.dialog.error" url="UsersGuide-1-022.html" />  <!-- 5 Error Dialog -->
+ <mapID target="train.gui.dialog.fieldselector" url="UsersGuide-1-032.html#wp9001827" />  <!-- 10 Human review -->
+ <mapID target="train.gui.dialog.internalframe" url="UsersGuide-1-032.html#wp9001827" />  <!-- 10 Human review -->
+ <mapID target="train.gui.dialog.matcher" url="UsersGuide-1-034.html#wp9001891" />  <!-- 12 Tools -->
+ <mapID target="train.gui.dialog.modelbuilder" url="UsersGuide-1-023.html#wp9001715" />  <!-- 6 Probability model handling -->
+ <mapID target="train.gui.dialog.recordpairfilter" url="UsersGuide-1-033.html" />  <!-- 11 Filters -->
+ <mapID target="train.gui.dialog.recordsourceviewer" url="UsersGuide-1-034.html#wp9001891" />  <!-- 12 Tools -->
+ <mapID target="train.gui.dialog.sourcetypeselector" url="UsersGuide-1-024.html#wp9001733" />  <!-- 7 Marked record pair source handling -->
+ <mapID target="train.gui.dialog.start" url="UsersGuide-1-019.html" />  <!-- 2 Startup -->
+ <mapID target="train.gui.dialog.stringcomparator" url="UsersGuide-1-034.html#wp9001905" />  <!-- 12 Tools -->
+ <mapID target="train.gui.dialog.tabrename" url="UsersGuide-1-032.html#wp9001827" />  <!-- 10 Human review -->
+ <mapID target="train.gui.dialog.train" url="UsersGuide-1-026.html" />  <!-- 8 Training -->
+ <mapID target="train.gui.modelmaker" url="UsersGuide-1-018.html" />  <!-- Chapter II. ModelMaker -->
+</map>

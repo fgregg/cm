@@ -1,0 +1,442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>2.5.2 Database reporting</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-067.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-069.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h5 >
+2.5.2	 Database reporting
+<a name="wp9002205"> </a></h5>
+<p >
+Reporting to the database is currently only available in ChoiceMaker Server J2EE. The extension is com.choicemaker.cm.report.db.dbReporterFactory. The following attributes are supported:
+<a name="wp9002206"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9000353"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9000354"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9000355"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9000356"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >dataSourceName</font>
+<a name="wp9000357"> </a></p>
+</td>
+    <td><p >
+The JNDI name of the data source.
+<a name="wp9000358"> </a></p>
+</td>
+    <td><p >
+mandatory
+<a name="wp9000359"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9000360"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >showDetails</font>
+<a name="wp9000361"> </a></p>
+</td>
+    <td><p >
+Whether an entry for each match should be made in the details table
+<a name="wp9000362"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9000363"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9000364"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >showQueryRecord</font>
+<a name="wp9000365"> </a></p>
+</td>
+    <td><p >
+Whether the actual data of the query record should be logged. The selection of the fields to log is made in the ChoiceMaker schema (<a href="UsersGuide-1-089.html#wp9002504">Chapter IX.3</a>).
+<a name="wp9000366"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9000367"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9000368"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >showMatchRecord</font>
+<a name="wp9000369"> </a></p>
+</td>
+    <td><p >
+Whether the actual data of the match record should be logged. The selection of the fields to log is made in the ChoiceMaker schema <a href="UsersGuide-1-089.html#wp9002504">Chapter IX.3</a>).
+<a name="wp9000370"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9000371"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9000372"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002207"> </a></p>
+<p >
+When reporting to a database, the data is written into tables TB_CMT_REPORT and TB_CMT_REPORT_DETAILS. Data can be deleted from these tables.
+<a name="wp9002208"> </a></p>
+<p >
+The table TB_CMT_REPORT has the following fields:
+<a name="wp9002209"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9000373"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9000374"> </a></p>
+</td>
+    <td><p >
+<font ><b>Format</b></font>
+<a name="wp9000375"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >ID</font>
+<a name="wp9000376"> </a></p>
+</td>
+    <td><p >
+Sequential ID, primary key.
+<a name="wp9000377"> </a></p>
+</td>
+    <td><p >
+NUMBER(10)
+<a name="wp9000378"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >START_TIME</font>
+<a name="wp9000379"> </a></p>
+</td>
+    <td><p >
+Time the query was started
+<a name="wp9000380"> </a></p>
+</td>
+    <td><p >
+TIMESTAMP
+<a name="wp9000381"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >DURATION_MS</font>
+<a name="wp9000382"> </a></p>
+</td>
+    <td><p >
+Total duration of query in milliseconds.
+<a name="wp9000383"> </a></p>
+</td>
+    <td><p >
+NUMBER
+<a name="wp9000384"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >DIFFER_THRESHOLD</font>
+<a name="wp9000385"> </a></p>
+</td>
+    <td><p >
+Differ threshold, e.g., 0.2.
+<a name="wp9000386"> </a></p>
+</td>
+    <td><p >
+NUMBER(3, 2)
+<a name="wp9000387"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >MATCH_THRESHOLD</font>
+<a name="wp9000388"> </a></p>
+</td>
+    <td><p >
+Match threshold, e.g., 0.8.
+<a name="wp9000389"> </a></p>
+</td>
+    <td><p >
+NUMBER(3,2)
+<a name="wp9000390"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >MODEL</font>
+<a name="wp9000391"> </a></p>
+</td>
+    <td><p >
+Name of the probability model.
+<a name="wp9000392"> </a></p>
+</td>
+    <td><p >
+VARCHAR2(32)
+<a name="wp9000393"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >PURPOSE</font>
+<a name="wp9000394"> </a></p>
+</td>
+    <td><p >
+Value of purpose argument, e.g, batch or interactive.
+<a name="wp9000395"> </a></p>
+</td>
+    <td><p >
+VARCHAR2(32)
+<a name="wp9000396"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >RETURNED_FROM_BLOCKING</font>
+<a name="wp9000397"> </a></p>
+</td>
+    <td><p >
+Number of records returned from blocking.
+<a name="wp9000398"> </a></p>
+</td>
+    <td><p >
+NUMBER
+<a name="wp9000399"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >QUERY_RECORD</font>
+<a name="wp9000400"> </a></p>
+</td>
+    <td><p >
+Query record in XML format. Only present if showQueryRecord is true. Only fields set in schema are shown.
+<a name="wp9000401"> </a></p>
+</td>
+    <td><p >
+XMLType, CLOB in databases without XML support.
+<a name="wp9000402"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >PLUGIN_DATA</font>
+<a name="wp9000403"> </a></p>
+</td>
+    <td><p >
+Data from plugins, e.g., blocking sets.
+<a name="wp9000404"> </a></p>
+</td>
+    <td><p >
+XMLType, CLOB in databases without XML support.
+<a name="wp9000405"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002211"> </a></p>
+<p >
+The table TB_CMT_REPORT_DETAILS has the following fields. Entries are only made if showDetails is true.
+<a name="wp9002213"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9000406"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9000407"> </a></p>
+</td>
+    <td><p >
+<font ><b>Format</b></font>
+<a name="wp9000408"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >DETAIL_ID</font>
+<a name="wp9000409"> </a></p>
+</td>
+    <td><p >
+Sequential ID, primary key.
+<a name="wp9000410"> </a></p>
+</td>
+    <td><p >
+NUMBER(10)
+<a name="wp9000411"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >ID</font>
+<a name="wp9000412"> </a></p>
+</td>
+    <td><p >
+Foreign key to TB_CMT_REPORT.ID.
+<a name="wp9000413"> </a></p>
+</td>
+    <td><p >
+NUMBER(10)
+<a name="wp9000414"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >DECISION</font>
+<a name="wp9000415"> </a></p>
+</td>
+    <td><p >
+Match decision, one of D (differ), H (hold), M (match).
+<a name="wp9000416"> </a></p>
+</td>
+    <td><p >
+CHAR(1)
+<a name="wp9000417"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >PROBABILITY</font>
+<a name="wp9000418"> </a></p>
+</td>
+    <td><p >
+Match probability, e.g., 0.98
+<a name="wp9000419"> </a></p>
+</td>
+    <td><p >
+NUMBER(3,2)
+<a name="wp9000420"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<font >MATCH_RECORD</font>
+<a name="wp9000421"> </a></p>
+</td>
+    <td><p >
+Match record in XML format. Only present if showMatchRecord is true. Only fields set in schema are shown.
+<a name="wp9000422"> </a></p>
+</td>
+    <td><p >
+XMLType, CLOB in databases without XML support.
+<a name="wp9000423"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002215"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+2.6	 Generator<br>
+<a name="wp9002216"> </a></div>
+<p >
+The generator element defines the base directory for the code generated by the generators and the ClueMaker compiler.
+<a name="wp9002217"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+2.7	 Production probability models<br>
+<a name="wp9002218"> </a></div>
+<p >
+The <em>productionProbabilityModels</em> section lists the probability models to be used by ChoiceMaker servers. The name attribute defines the name under which the model is made available, the file denotes the .model file containing the model. Elements of type property with attributes name and value can be used to specify parameters for plugins. In the example, the name of the database and blocking configurations are listed.
+<a name="wp9002219"> </a></p>
+<p >
+This section is not relevant to ModelMaker.
+<a name="wp9002220"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-067.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-069.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>5.1.3 Schema configuration options</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-099.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-101.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h5 >
+5.1.3	 Schema configuration options
+<a name="wp9002630"> </a></h5>
+<p >
+Different aspects of a flat file are configured in the schema and in the ModelMaker GUI. The following configuration options are supported through the schema. The flat file plugin supports the ChoiceMaker schema elements <em>flatfileGlobal</em>, <em>flatfileNodeType</em>, and <em>flatfileField</em>. <em>flatfileGlobal</em> has one optional attribute:
+<a name="wp9002631"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001057"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001058"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001059"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001060"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>multiFileName</em>
+<a name="wp9001061"> </a></p>
+</td>
+    <td><p >
+The name(s) of the files are constructed as the concatenation of a prefix, a main part, and a suffix. This parameter defines the main part of the file name of the single flat file respectively the file containing the descriptor of a multi-file flat file.
+<a name="wp9001062"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001063"> </a></p>
+</td>
+    <td><p >
+&quot;&quot;
+<a name="wp9001064"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002632"> </a></p>
+<p >
+Furthermore, it has an optional child element <em>descWidths</em> with the following attributes:
+<a name="wp9002633"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001065"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001066"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001067"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001068"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>tag</em>
+<a name="wp9001069"> </a></p>
+</td>
+    <td><p >
+The width of the tag in the descriptor of fixed-width tagged flat files.
+<a name="wp9001070"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001071"> </a></p>
+</td>
+    <td><p >
+2
+<a name="wp9001072"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>id</em>
+<a name="wp9001073"> </a></p>
+</td>
+    <td><p >
+The width of the id in the descriptor of fixed-width tagged flat files.
+<a name="wp9001074"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001075"> </a></p>
+</td>
+    <td><p >
+10
+<a name="wp9001076"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>decision</em>
+<a name="wp9001077"> </a></p>
+</td>
+    <td><p >
+The width of the decision in the descriptor of fixed-width tagged flat files.
+<a name="wp9001078"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001079"> </a></p>
+</td>
+    <td><p >
+6
+<a name="wp9001080"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>user</em>
+<a name="wp9001081"> </a></p>
+</td>
+    <td><p >
+The width of the user in the descriptor of fixed-width tagged flat files.
+<a name="wp9001082"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001083"> </a></p>
+</td>
+    <td><p >
+32
+<a name="wp9001084"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>src</em>
+<a name="wp9001085"> </a></p>
+</td>
+    <td><p >
+The width of the source in the descriptor of fixed-width tagged flat files.
+<a name="wp9001086"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001087"> </a></p>
+</td>
+    <td><p >
+32
+<a name="wp9001088"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>comment</em>
+<a name="wp9001089"> </a></p>
+</td>
+    <td><p >
+The width of the comment in the descriptor of fixed-width tagged flat files.
+<a name="wp9001090"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001091"> </a></p>
+</td>
+    <td><p >
+32
+<a name="wp9001092"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002634"> </a></p>
+<p >
+The width of the date is fixed to 10.
+<a name="wp9002635"> </a></p>
+<p >
+The <em>flatfileNodeType</em> element has two attributes:
+<a name="wp9002637"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001093"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001094"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001095"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001096"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>multiFileName</em>
+<a name="wp9001097"> </a></p>
+</td>
+    <td><p >
+The name(s) of the files are constructed as the concatenation of a prefix, a main part, and a suffix. This attribute defines the main part of the name of the file containing this node type of a multi-file flat file.
+<a name="wp9001098"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001099"> </a></p>
+</td>
+    <td><p >
+The name of the node type.
+<a name="wp9001100"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>tag</em>
+<a name="wp9001101"> </a></p>
+</td>
+    <td><p >
+The tag used for this node type.
+<a name="wp9001102"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001103"> </a></p>
+</td>
+    <td><p >
+Consecutive number, depth first, starting at 0 of the node types.
+<a name="wp9001104"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002638"> </a></p>
+<p >
+The <em>flatfileField</em> element has the following attributes:
+<a name="wp9002640"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001105"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001106"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001107"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001108"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>use</em>
+<a name="wp9001109"> </a></p>
+</td>
+    <td><p >
+Controls whether the field is used.<br>true: field is used
+<a name="wp9001110"> </a></p>
+<p >
+false: field is not used
+<a name="wp9001111"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001112"> </a></p>
+</td>
+    <td><p >
+true
+<a name="wp9001113"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>start</em>
+<a name="wp9001114"> </a></p>
+</td>
+    <td><p >
+The start position for fixed-width files. Overlapping fields and unused areas are supported.
+<a name="wp9001115"> </a></p>
+<p >
+When outputting overlapping fields, the last field (see pos below) overwrites all previous one. Unused areas are filled with spaces.
+<a name="wp9001116"> </a></p>
+</td>
+    <td><p >
+must be present on all or no used field in a node type
+<a name="wp9001117"> </a></p>
+</td>
+    <td><p >
+end of previous field
+<a name="wp9001118"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>width</em>
+<a name="wp9001119"> </a></p>
+</td>
+    <td><p >
+The width in characters for fixed-width files.
+<a name="wp9001120"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001121"> </a></p>
+</td>
+    <td><p >
+see below
+<a name="wp9001122"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>key</em>
+<a name="wp9001123"> </a></p>
+</td>
+    <td><p >
+Stacked multi-file data is re-assembled by including keys from all outer node types into nested node types. The key attribute designates the key element(s). Records that have nested node types must have at least one key element.
+<a name="wp9001124"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001125"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9001126"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>pos</em>
+<a name="wp9001127"> </a></p>
+</td>
+    <td><p >
+Position in line. The first field is 0, the next 1, etc. If not present, fields are expected to appear in their order of declaration in the schema. Unused fields can be skipped by setting pos.
+<a name="wp9001128"> </a></p>
+<p >
+Key fields from enclosing node types are always first.
+<a name="wp9001129"> </a></p>
+</td>
+    <td></td>
+    <td><p >
+previous plus 1
+<a name="wp9001131"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>trim</em>
+<a name="wp9001132"> </a></p>
+</td>
+    <td><p >
+Remove leading and trailing white space from fixed-width field upon input. E.g., &quot;JIM&quot; is stored as &quot;JIM&nbsp;&nbsp;&nbsp;&nbsp;&quot; in a field of width 8. If trim is true, the spaces are removed upon reading the value, if false, they are not.
+<a name="wp9001133"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001134"> </a></p>
+</td>
+    <td><p >
+true
+<a name="wp9001135"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>nullRepresentation</em>
+<a name="wp9001136"> </a></p>
+</td>
+    <td><p >
+The representation of the `\0' character for fields of type char in fixed width files. The default `\0' may not be acceptable to other programs, especially programs written in C or C++, where `\0' is used as file terminator.
+<a name="wp9001137"> </a></p>
+<p >
+For delimited files, the empty content is used to represent `\0'.
+<a name="wp9001138"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001139"> </a></p>
+</td>
+    <td><p >
+` '
+<a name="wp9001140"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>valueOf</em>
+<a name="wp9001141"> </a></p>
+</td>
+    <td><p >
+Use the static method <em>valueOf(String)</em> rather than <em>new X(String)</em> to create an instance of a reference type. In any case, reference types are stored by calling their <em>toString()</em> method
+<a name="wp9001142"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001143"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9001144"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002641"> </a></p>
+<p >
+The default widths are determined by the field type. All widths are in characters rather than bytes. They are as follows:
+<a name="wp9002643"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Type</b></font>
+<a name="wp9001145"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default width</b></font>
+<a name="wp9001146"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>boolean</em>
+<a name="wp9001147"> </a></p>
+</td>
+    <td><p >
+5
+<a name="wp9001148"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>byte</em>
+<a name="wp9001149"> </a></p>
+</td>
+    <td><p >
+4
+<a name="wp9001150"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>short</em>
+<a name="wp9001151"> </a></p>
+</td>
+    <td><p >
+6
+<a name="wp9001152"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>char</em>
+<a name="wp9001153"> </a></p>
+</td>
+    <td><p >
+1
+<a name="wp9001154"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>int</em>
+<a name="wp9001155"> </a></p>
+</td>
+    <td><p >
+11
+<a name="wp9001156"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>long</em>
+<a name="wp9001157"> </a></p>
+</td>
+    <td><p >
+20
+<a name="wp9001158"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>float</em>
+<a name="wp9001159"> </a></p>
+</td>
+    <td><p >
+16
+<a name="wp9001160"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>double</em>
+<a name="wp9001161"> </a></p>
+</td>
+    <td><p >
+22
+<a name="wp9001162"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>java.util.Date</em>
+<a name="wp9001163"> </a></p>
+</td>
+    <td><p >
+10
+<a name="wp9001164"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+All other reference types
+<a name="wp9001165"> </a></p>
+</td>
+    <td><p >
+32
+<a name="wp9001166"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002644"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+5.2	 ModelMaker GUI<br>
+<a name="wp9002646"> </a></div>
+<p >
+<a href="UsersGuide-1-085.html#wp9002480">Figure 66</a> shows the flat file marked record pair source configuration dialog, which appears when a user wishes to modify or create a flat file marked record pair source. The Source name defines the name of the source as it will appear on the <b>Source</b><b>-></b><b>Source</b> menu. It may only contain letters, numbers, spaces, and underscores.
+<a name="wp9002647"> </a></p>
+<p >
+The Source file denotes the file containing the record data. The <b>Browse...</b> button brings up a file chooser to set the file name.
+<a name="wp9002648"> </a></p>
+<p >
+In case of multi-file data, it must be set to the name without the main part. E.g., if the data is stored in <em>Testdescriptor.txt</em>, <em>Testperson.txt</em>, and <em>Testcontact.txt</em>, <em>Test.txt</em> should be entered.
+<a name="wp9002649"> </a></p>
+<p >
+The <b>Multi file</b> checkbox defines whether the data is contained in a single or multiple files. The <b>Single line</b> checkbox defines whether the data is stored on a single line per record pair or not. The <b>Fixed width</b> checkbox defines whether the data is fixed width or delimited. The <b>Delimiter</b> defines the delimiter for delimited files. It can be chosen from the dropdown list or entered in the field on the right after selecting <b>Other:</b> from the dropdown list.
+<a name="wp9002650"> </a></p>
+<p >
+The <b>Tagged</b> checkbox defines whether each line is tagged by the node type. Single-file stacked data must be tagged. This is not currently enforced by the GUI.
+<a name="wp9002651"> </a></p>
+<p >
+The location of the flat file(s) can be stored either relative to the descriptor file or as an absolute path. If it is stored relative to the descriptor file, copying both the descriptor and the flat files to a different location works seamlessly. Using an absolute path, the descriptor file by itself can be copied around while the flat file(s) stays in the same directory. A relative path is the default. Note that the choice is governed exclusively by the drop down selector. E.g., if <b>Relative to Descriptor</b> is selected, the location is stored as a relative path even if the user enters an absolute path, manually or through the file chooser.
+<a name="wp9002652"> </a></p>
+<p >
+Pressing the <b>OK</b> button creates a new source descriptor or modifies an existing descriptor. If a source descriptor of this name already exists, a warning is displayed and the user can cancel the operation. The <b>Cancel</b> button closes the dialog without enacting any changes.
+<a name="wp9002654"> </a></p>
+<p >
+The flat file plugin supports the generation of flat file source data from other sources, like the XML plugin. All of the above parameters must be filled in and a model must be selected to use the source generation. From the Source list, one or more sources must be selected. Their contents are inserted in the list order into the new source(s).
+<a name="wp9002655"> </a></p>
+<p >
+The <b>Remove delimiter from source data</b> checkbox controls whether the delimiter is removed if it occurs within the source data. E.g., if the delimiter is set to &quot;,&quot; and one record has a name of &quot;Smith, JR&quot;, the comma would be removed from the name field and &quot;Smith JR&quot; would be stored. It is strongly suggested that this option be always used. Otherwise, the field positions might be confused when the file is read again. The option has no effect on fixed-width files.
+<a name="wp9002656"> </a></p>
+<p >
+See Section <a href="UsersGuide-1-093.html#wp9002569">4.3</a> for a description of the round robin and maximum size distribution options.
+<a name="wp9002657"> </a></p>
+<p >
+<img src="images/UsersGuide-1-100-78.jpg" height="470" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002658"> </a></p>
+<p >
+The GUI for flat file record sources is analogous, except that it does not currently allow the generation of source data.
+<a name="wp9002659"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-099.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-101.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

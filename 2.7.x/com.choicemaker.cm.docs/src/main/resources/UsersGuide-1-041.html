@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>7 Stacked data</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-040.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-042.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+7	 Stacked data
+<a name="wp9001946"> </a></h3>
+<p >
+In many applications, multiple values may be stored for some fields. For example, current and old addresses may be stored in a database so that the person can also be located when searching by an old address. Often, it is not even known which address is current.
+<a name="wp9001947"> </a></p>
+<p >
+We use the term stacked data to describe data that stores multiple values for certain fields.
+<a name="wp9001948"> </a></p>
+<p >
+<a href="UsersGuide-1-041.html#wp9001951">Figure 32</a> shows a schema that describes stacked addresses. The differences with respect to the first example are shown in boldface<font ><sup><a href="#wp9001439"><sup>1</sup></a></sup></font>. The stacking is indicated in the schema by the nesting the <em>addr</em> node type inside the <em>person</em> node type.
+<a name="wp9001949"> </a></p>
+<p >
+Stacking is done on the level of nodes rather than individual fields. For example, in <a href="UsersGuide-1-041.html#wp9001951">Figure 32</a> a person can have multiple <em>addr</em>'s. Each <em>addr</em> has an <em>address</em>, <em>streetName</em>, and <em>lastDateReported</em> field. Stacking on the level of nodes rather than individual fields provides grouping information. E.g., we know which value of <em>streetName</em> goes with which value of <em>lastDateReported</em>.
+<a name="wp9001950"> </a></p>
+<p >
+<img src="images/UsersGuide-1-041-41.jpg" height="338" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9001951"> </a></p>
+<p >
+<a href="UsersGuide-1-041.html#wp9001953">Figure 33</a> shows an example of stacked data from the database perspective. The database contains two addresses for Jim Smith and one address for James Smythe. The figure also illustrates our usage of the term &quot;record&quot; as defined in Section <a href="UsersGuide-1-035.html#wp9001924">1</a>: The ChoiceMaker record for Jim Smith consists of data from multiple tables, namely a row from table <em>TB_PERSON</em> and two rows from table <em>TB_ADDRESS</em>.
+<a name="wp9001952"> </a></p>
+<p >
+<img src="images/UsersGuide-1-041-42.jpg" height="194" width="590" border="0" hspace="0" vspace="0">
+<a name="wp9001953"> </a></p>
+<p >
+The number of values of a stacked node in a ChoiceMaker schema implicitly ranges from 0 to infinity. For example, a person can have 0, 1, or more addresses. If, however, the maximum number is strictly limited to 1, the fields of <em>addr</em> should be put into <em>person</em> as shown in <a href="UsersGuide-1-037.html#wp9001930">Figure 31</a> rather than creating a stacked nodeType (regardless of whether the addresses were stored in a separate table in a corresponding database).
+<a name="wp9001954"> </a></p>
+<p >
+Nested node types have a predefined field <em>outer</em>, which references the enclosing node. E.g., in <em>addr</em> there is a field <em>outer</em> that is initialized to the enclosing <em>patient</em>. This may be useful in validity, precondition, and derived value computations.
+<a name="wp9001955"> </a></p>
+<p >
+The class <em>com.choicemaker.cm.matching.gen.StackingUtils</em> provides the static method <em>size</em> to access the stacking-depth of a nested node type. E.g., StackingUtils.size(addr) could be used in a function in person. In the example of <a href="UsersGuide-1-041.html#wp9001953">Figure 33</a> it would return <em>2</em> for the first person (<em>Jim</em>) and <em>1</em> for the second person (<em>James</em>).
+<a name="wp9001956"> </a></p>
+<p >
+Although not shown in Figure 2, ChoiceMaker does support nested stacking. That is, a nested node type can have nested node types itself. For example, for each address we could store the sources by which the address was reported in a node type that is nested inside <em>addr</em>. 
+<a name="wp9001957"> </a></p>
+<p >
+Likewise, a node type can have nested node types of several types. E.g., <em>person</em> could have another nested node type <em>contactPersons</em>.
+<a name="wp9001958"> </a></p>
+
+<p >
+<a href="#wp9001949"><sup>1</sup></a>For the sake of later examples, we also added a personId field to person and the lastDateReported to addr.
+<a name="wp9001439"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-040.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-042.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

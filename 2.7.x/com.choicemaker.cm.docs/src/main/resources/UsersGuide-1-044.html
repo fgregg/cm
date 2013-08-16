@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>10 XML Schemas to define ChoiceMaker schemas</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-043.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-045.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+10	 XML Schemas to define ChoiceMaker schemas
+<a name="wp9001973"> </a></h3>
+<p >
+This section deals with the meta description of ChoiceMaker schemas and may be skipped on a first reading.
+<a name="wp9001974"> </a></p>
+<p >
+ChoiceMaker schemas contain metadata about the data to be matched. ChoiceMaker uses XML Schemas to define the structure of ChoiceMaker schemas. Thus, XML Schemas are used as `meta meta' descriptions.
+<a name="wp9001975"> </a></p>
+<p >
+XML Schemas define the structure, content and semantics of XML documents, such as ChoiceMaker schemas. Standard tools can validate XML documents against XML Schemas.
+<a name="wp9001976"> </a></p>
+<p >
+ChoiceMaker has defined an XML Schema for basic ChoiceMaker schemas. Rather than including the specific tags for certain translator generators, this schema contains extension hooks in the form of abstract elements.
+<a name="wp9001977"> </a></p>
+<p >
+The creator of a translator generator defines an XML Schema with the specific elements needed for the particular generator. These elements are defined as extensions of the abstract elements in the base XML Schema.
+<a name="wp9001978"> </a></p>
+<p >
+To deploy ChoiceMaker, developers create a new XML Schema that includes the base Schema along with the Schemas for the translators needed. The base XML Schema is <em>ChoiceMaker/core/etc/meta/ChoiceMaker.xsd</em>. The plugins and customizations have their XML Schemas in <em>etc/meta</em>. <a href="UsersGuide-1-044.html#wp9001982">Figure 34</a> illustrates this composition of XML Schemas and a ChoiceMaker schema based on the former.
+<a name="wp9001979"> </a></p>
+<p >
+It is suggested to use `/' rather than `\' as separator in paths to guarantee compatibility with the widest range of systems (Windows and Unix).
+<a name="wp9001980"> </a></p>
+<p >
+Thanks to the XML Schemas, many XML editors can provide auto completion and other editing aids for ChoiceMaker schemas.
+<a name="wp9001981"> </a></p>
+<p >
+<img src="images/UsersGuide-1-044-43.jpg" height="326" width="638" border="0" hspace="0" vspace="0">
+<a name="wp9001982"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-043.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-045.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

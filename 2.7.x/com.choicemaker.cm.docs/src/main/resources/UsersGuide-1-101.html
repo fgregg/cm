@@ -1,0 +1,547 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>6 Database</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-100.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-102.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+6	 Database
+<a name="wp9002660"> </a></h3>
+<p >
+The database plugins com.choicemaker.cm.io.db.base and com.choicemaker.cm.io.db.gui provide support for reading records, record pairs, and marked record pairs. It is an auxiliary plugin that must be used together with a plugin for a specific database, e.g., Oracle or MS SQL Server, and possibly the blocking plugin.
+<a name="wp9002661"> </a></p>
+<p >
+The syntax for the ChoiceMaker schema extension is given by <em>etc/meta/Db.xsd</em>.
+<a name="wp9002662"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+6.1	 Format and configuration<br>
+<a name="wp9002663"> </a></div>
+<p >
+Each node type is read from a database view. The database plugin supports multiple configurations. The database plugin supports the ChoiceMaker schema elements <em>dbGlobal</em>, <em>dbNodeType</em>, and <em>dbField</em>. <em>dbGlobal</em> has one attribute:
+<a name="wp9002664"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001167"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001168"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001169"> </a></p>
+</td>
+    <td><p >
+Default
+<a name="wp9001170"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>conf</em>
+<a name="wp9001171"> </a></p>
+</td>
+    <td><p >
+<font ><b>The name of the configuration.</b></font>
+<a name="wp9001172"> </a></p>
+</td>
+    <td><p >
+<font ><b>required</b></font>
+<a name="wp9001173"> </a></p>
+</td>
+    <td><p >
+<font ><b>N/A</b></font>
+<a name="wp9001174"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002665"> </a></p>
+<p >
+Every node type must have a <em>dbNodeType</em>. <em>dbNodeType</em> has the following attributes:
+<a name="wp9002667"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001175"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001176"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001177"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001178"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>conf</em>
+<a name="wp9001179"> </a></p>
+</td>
+    <td><p >
+The name of the configuration.
+<a name="wp9001180"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001181"> </a></p>
+</td>
+    <td><p >
+all
+<a name="wp9001182"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>from</em>
+<a name="wp9001183"> </a></p>
+</td>
+    <td><p >
+The name of the view(s) or table(s) from which the data is to be read. Comma separated list.
+<a name="wp9001184"> </a></p>
+</td>
+    <td><p >
+required, unless there is at least one view child
+<a name="wp9001185"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001186"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>where</em>
+<a name="wp9001187"> </a></p>
+</td>
+    <td><p >
+Condition, to be used for joining tables.
+<a name="wp9001188"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001189"> </a></p>
+</td>
+    <td><p >
+none
+<a name="wp9001190"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>table</em>
+<a name="wp9001191"> </a></p>
+</td>
+    <td><p >
+If from clause contains multiple views or tables, this defines the view/table from which fields are read.
+<a name="wp9001192"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001193"> </a></p>
+</td>
+    <td><p >
+none
+<a name="wp9001194"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>virtual</em>
+<a name="wp9001195"> </a></p>
+</td>
+    <td><p >
+Virtual root node. Currently only supported for databases that use the sequential reader. E.g., Microsoft SQL Server.
+<a name="wp9001196"> </a></p>
+</td>
+    <td><p >
+optional, only applicable to root node type
+<a name="wp9001197"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9001198"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002668"> </a></p>
+<p >
+<em>dbNodeType</em> may have zero or more child elements of type view. The view element is used if the data is the union of two or more views. Using a view that contains a union in <em>dbNodeType.from</em> generally results is bad performance because the union operation is executed before the join with the set of ids to return. Instead the individual views of the union should be listed with view elements. view elements have attributes from, where, and table with the same semantics as in <em>dbNodeType</em>.
+<a name="wp9002670"> </a></p>
+<p >
+In addition, <em>dbNodeType</em> may have zero or more child elements of type key. The key element is used to define the table(s) from which the key fields of the enclosing node type(s) are to be read. It has the following attributes: 
+<a name="wp9002671"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001199"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001200"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001201"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001202"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>name</em>
+<a name="wp9001203"> </a></p>
+</td>
+    <td><p >
+The name of the key field.
+<a name="wp9001204"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001205"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001206"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>table</em>
+<a name="wp9001207"> </a></p>
+</td>
+    <td><p >
+The view/table from which the field is read.
+<a name="wp9001208"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001209"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001210"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002672"> </a></p>
+<p >
+<em>dbField</em> has the following attributes:
+<a name="wp9002674"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001211"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001212"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001213"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001214"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>conf</em>
+<a name="wp9001215"> </a></p>
+</td>
+    <td><p >
+The name of the configuration.
+<a name="wp9001216"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001217"> </a></p>
+</td>
+    <td><p >
+all
+<a name="wp9001218"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>use</em>
+<a name="wp9001219"> </a></p>
+</td>
+    <td><p >
+Controls whether the field is used.
+<a name="wp9001220"> </a></p>
+<p >
+true: field is used
+<a name="wp9001221"> </a></p>
+<p >
+false: field is not used
+<a name="wp9001222"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001223"> </a></p>
+</td>
+    <td><p >
+true
+<a name="wp9001224"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>name</em>
+<a name="wp9001225"> </a></p>
+</td>
+    <td><p >
+Name of the field in the database.
+<a name="wp9001226"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001227"> </a></p>
+</td>
+    <td><p >
+name of schema field
+<a name="wp9001228"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>key</em>
+<a name="wp9001229"> </a></p>
+</td>
+    <td><p >
+Stacked data is re-assembled by including keys from all outer node types into nested node types. The key attribute designates the key element(s). Node types that have nested node types must have at least one key element.
+<a name="wp9001230"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001231"> </a></p>
+</td>
+    <td><p >
+none
+<a name="wp9001232"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>table</em>
+<a name="wp9001233"> </a></p>
+</td>
+    <td><p >
+The view/table from which this field is read.
+<a name="wp9001234"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001235"> </a></p>
+</td>
+    <td><p >
+table in <em>dbHead</em>, if not present from in <em>dbHead</em>
+<a name="wp9001236"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002675"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+6.2	 Views and configurations<br>
+<a name="wp9002676"> </a></div>
+<p >
+The database plugin generates most of the views and configuration table entries from the schema. The class <em>com.choicemaker.cm.io.db.dbom.DbDbObjectMaker</em> generates the corresponding DDL for all production probability models.
+<a name="wp9002677"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+6.3	 Data sources<br>
+<a name="wp9002678"> </a></div>
+<p >
+The database plugin provides connection pooling through a third-party open source library. A connection pool is configured with the <em>ConnectionPool</em> element under the <em>db</em> element, which itself is a child of <em>plugin</em>. <em>ConnectionPool</em> has a mandatory attribute <em>name</em> and the following mandatory children:
+<a name="wp9002679"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001237"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001238"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>driver</em>
+<a name="wp9001239"> </a></p>
+</td>
+    <td><p >
+The class name of the driver. E.g., <em>com.microsoft.jdbc.sqlserver.SQLServerDriver</em>.
+<a name="wp9001240"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>user</em>
+<a name="wp9001241"> </a></p>
+</td>
+    <td><p >
+The database user name, e.g., scott.
+<a name="wp9001242"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>password</em>
+<a name="wp9001243"> </a></p>
+</td>
+    <td><p >
+The database password for the above user, e.g., tiger.
+<a name="wp9001244"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>validityCheckStatement</em>
+<a name="wp9001245"> </a></p>
+</td>
+    <td><p >
+A statement that can be used to check a connection. E.g., select 1 for SQL Server and select 1 from dual for Oracle.
+<a name="wp9001246"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>initialSize</em>
+<a name="wp9001247"> </a></p>
+</td>
+    <td><p >
+The initial size of the connection pool, e.g., 3.
+<a name="wp9001248"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>maxSize</em>
+<a name="wp9001249"> </a></p>
+</td>
+    <td><p >
+The maximum size of the connection pool, e.g., 10.
+<a name="wp9001250"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>growBlock</em>
+<a name="wp9001251"> </a></p>
+</td>
+    <td><p >
+The number of connections by which to grow/shrink the pool at once, e.g., 1.
+<a name="wp9001252"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>createWaitTime</em>
+<a name="wp9001253"> </a></p>
+</td>
+    <td><p >
+The time, in milliseconds, to wait before growing the connection pool, e.g., 100.
+<a name="wp9001254"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002680"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-100.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-102.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

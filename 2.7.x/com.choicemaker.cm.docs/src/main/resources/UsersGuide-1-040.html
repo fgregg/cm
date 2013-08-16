@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>6 Derived fields</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-039.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-041.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+6	 Derived fields
+<a name="wp9001941"> </a></h3>
+<p >
+The field <em>streetName</em> in <a href="UsersGuide-1-037.html#wp9001930">Figure 31</a> is a derived field. This means that the value of the field is computed from the value(s) of one or more other fields. In the example, the value is computed by applying the method <em>AddressParser.getStreet</em> to the <em>address</em> field.
+<a name="wp9001942"> </a></p>
+<p >
+The value is only computed if the precondition, given by the optional <em>pre</em> attribute, is true. If the precondition does not hold, the value is <em>null</em>, respectively <em>0</em>. If the precondition is false, the value of the field is invalid, independent of the validity predicate. If the precondition is omitted, it defaults to <em>true</em>.
+<a name="wp9001943"> </a></p>
+<p >
+A field can be derived or read (non-derived) depending upon the input source. For example, the <em>streetName</em> might be computed for the query record that is input over the call interface, but read if the input source is the database, which may store it for performance improvement, blocking accuracy, or the sake of other applications. The input sources for which the value of the field is to be computed is given by the <em>src</em> attribute. The latter takes a comma separated list of input sources or the special keyword <em>all</em>, as in the example.
+<a name="wp9001944"> </a></p>
+<p >
+Some derived fields are only used for computing other derived fields. For example, a name parser derived field of type ParsedName may be created and used to define the value of standardized first, middle, and last names through the respective getter methods. If the name parser is not used in the clue set, it can be declared to be of local scope (attribute of field scope=&quot;nodeInit&quot;), which makes it a local variable that is visible during the computation of the remaining derived fields of the current node only. This can save memory.
+<a name="wp9001945"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-039.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-041.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

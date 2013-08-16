@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<toc version="1.0">
+ <tocitem target="UsersGuide-1-002_html_wp9001536" text="Contents" />
+ <tocitem target="UsersGuide-1-003_html_wp9001539" text="Preface">
+  <tocitem target="UsersGuide-1-004_html_wp9001541" text="1  About this guide" />
+  <tocitem target="UsersGuide-1-005_html_wp9001555" text="2  Conventions" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-006_html_wp9001579" text="Chapter I.  Introduction">
+  <tocitem target="UsersGuide-1-006_html_wp9001580" text="1  Record matching" />
+  <tocitem target="UsersGuide-1-007_html_wp9001601" text="2  Blocking" />
+  <tocitem target="UsersGuide-1-008_html_wp9001607" text="3  Scoring">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-009_html_wp9001618" text="3.1.1  Clues">
+     <tocitem target="UsersGuide-1-010_html_wp9001625" text="3.1.1.1  Decisions" />
+    </tocitem>
+    <tocitem target="UsersGuide-1-011_html_wp9001632" text="3.1.2  Machine learning">
+     <tocitem target="UsersGuide-1-012_html_wp9001634" text="3.1.2.1  Training" />
+     <tocitem target="UsersGuide-1-013_html_wp9001646" text="3.1.2.2  Scoring" />
+     <tocitem target="UsersGuide-1-014_html_wp9001648" text="3.1.2.3  Classification vs. regression" />
+    </tocitem>
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-015_html_wp9001657" text="4  ChoiceMaker schema" />
+  <tocitem target="UsersGuide-1-016_html_wp9001665" text="5  ChoiceMaker software" />
+  <tocitem target="UsersGuide-1-017_html_wp9001672" text="6  Component architecture" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-018_html_wp9001681" text="Chapter II.  ModelMaker">
+  <tocitem target="UsersGuide-1-018_html_wp9001682" text="1  Introduction" />
+  <tocitem target="UsersGuide-1-019_html_wp9001684" text="2  Startup" />
+  <tocitem target="UsersGuide-1-020_html_wp9001688" text="3  Work space" />
+  <tocitem target="UsersGuide-1-021_html_wp9001703" text="4  Context-Sensitive Help" />
+  <tocitem target="UsersGuide-1-022_html_wp9001706" text="5  Error Dialog" />
+  <tocitem target="UsersGuide-1-023_html_wp9001709" text="6  Probability model handling" />
+  <tocitem target="UsersGuide-1-024_html_wp9001728" text="7  Marked record pair source handling">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-025_html_wp9001740" text="7.2.1  Composite" />
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-026_html_wp9001749" text="8  Training" />
+  <tocitem target="UsersGuide-1-027_html_wp9001772" text="9  Testing">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-028_html_wp9001803" text="9.4.1   Probability Histogram" />
+    <tocitem target="UsersGuide-1-029_html_wp9001806" text="9.4.2   Hold percentage vs. accuracy" />
+    <tocitem target="UsersGuide-1-030_html_wp9001812" text="9.4.3   Precision and recall vs. thresholds" />
+    <tocitem target="UsersGuide-1-031_html_wp9001815" text="9.4.4   Calculator" />
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-032_html_wp9001819" text="10  Human review" />
+  <tocitem target="UsersGuide-1-033_html_wp9001875" text="11  Filters" />
+  <tocitem target="UsersGuide-1-034_html_wp9001890" text="12  Tools" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-035_html_wp9001923" text="Chapter III.  ChoiceMaker schemas">
+  <tocitem target="UsersGuide-1-035_html_wp9001924" text="1  Introduction" />
+  <tocitem target="UsersGuide-1-036_html_wp9001926" text="2  Terminology" />
+  <tocitem target="UsersGuide-1-037_html_wp9001928" text="3  Name and file name" />
+  <tocitem target="UsersGuide-1-038_html_wp9001933" text="4  Node types, fields, and types" />
+  <tocitem target="UsersGuide-1-039_html_wp9001937" text="5  Validity predicates" />
+  <tocitem target="UsersGuide-1-040_html_wp9001941" text="6  Derived fields" />
+  <tocitem target="UsersGuide-1-041_html_wp9001946" text="7  Stacked data" />
+  <tocitem target="UsersGuide-1-042_html_wp9001959" text="8  Evaluation order and exception handling" />
+  <tocitem target="UsersGuide-1-043_html_wp9001963" text="9  Holder classes and translators" />
+  <tocitem target="UsersGuide-1-044_html_wp9001973" text="10  XML Schemas to define ChoiceMaker schemas" />
+  <tocitem target="UsersGuide-1-045_html_wp9001983" text="11  Summary" />
+  <tocitem target="UsersGuide-1-046_html_wp9001987" text="1  " />
+ </tocitem>
+ <tocitem target="UsersGuide-1-047_html_wp9001988" text="Chapter IV.  Clues and ClueMaker">
+  <tocitem target="UsersGuide-1-047_html_wp9001989" text="1  Introduction" />
+  <tocitem target="UsersGuide-1-048_html_wp9001993" text="2  Clue sets and clues" />
+  <tocitem target="UsersGuide-1-049_html_wp9002013" text="3  Shorthand forms">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-050_html_wp9002046" text="3.3.1  Multiple iterators" />
+    <tocitem target="UsersGuide-1-051_html_wp9002048" text="3.3.2  Non-boolean clue sets" />
+    <tocitem target="UsersGuide-1-052_html_wp9002054" text="3.3.3  Referencing multi clues" />
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-053_html_wp9002072" text="4  Stacked data" />
+  <tocitem target="UsersGuide-1-054_html_wp9002104" text="5  Java methods" />
+  <tocitem target="UsersGuide-1-055_html_wp9002108" text="6  Report" />
+  <tocitem target="UsersGuide-1-056_html_wp9002111" text="7  Rules" />
+  <tocitem target="UsersGuide-1-057_html_wp9002123" text="8  Scopes" />
+  <tocitem target="UsersGuide-1-058_html_wp9002126" text="9  Various" />
+  <tocitem target="UsersGuide-1-059_html_wp9002131" text="10  Compilation" />
+  <tocitem target="UsersGuide-1-060_html_wp9002133" text="11  Summary of compilation and training process" />
+  <tocitem target="UsersGuide-1-061_html_wp9002145" text="12  Conclusion" />
+  <tocitem target="UsersGuide-1-062_html_wp9002149" text="13  Reserved keywords" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-063_html_wp9002161" text="Chapter V.  Configuration">
+  <tocitem target="UsersGuide-1-064_html_wp9002165" text="1  Basic structure" />
+  <tocitem target="UsersGuide-1-065_html_wp9002168" text="2  Core configuration">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-066_html_wp9002178" text="2.2.1  Java class loaders" />
+    <tocitem target="UsersGuide-1-067_html_wp9002194" text="2.5.1  XML file reporting" />
+    <tocitem target="UsersGuide-1-068_html_wp9002205" text="2.5.2  Database reporting" />
+   </tocitem>
+  </tocitem>
+ </tocitem>
+ <tocitem target="UsersGuide-1-069_html_wp9002223" text="Chapter VI.  Matching support">
+  <tocitem target="UsersGuide-1-070_html_wp9002226" text="1  Approximate string matching" />
+  <tocitem target="UsersGuide-1-071_html_wp9002273" text="2  String manipulation" />
+  <tocitem target="UsersGuide-1-072_html_wp9002276" text="3  Dates" />
+  <tocitem target="UsersGuide-1-073_html_wp9002279" text="4  Various" />
+  <tocitem target="UsersGuide-1-074_html_wp9002281" text="5  Collections" />
+  <tocitem target="UsersGuide-1-075_html_wp9002331" text="6  Parsers" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-076_html_wp9002384" text="Chapter VII.  Plugins">
+  <tocitem target="UsersGuide-1-076_html_wp9002385" text="1  Introduction" />
+  <tocitem target="UsersGuide-1-077_html_wp9002397" text="2  Directory structure" />
+  <tocitem target="UsersGuide-1-078_html_wp9002404" text="3  Java package structure" />
+  <tocitem target="UsersGuide-1-079_html_wp9002409" text="4  Plugging it together" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-080_html_wp9002413" text="Chapter VIII.  Machine learning plugins">
+  <tocitem target="UsersGuide-1-081_html_wp9002415" text="1  Maximum Entropy">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-082_html_wp9002435" text="1.3.1  Weights" />
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-083_html_wp9002437" text="2  Support Vector Machines" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-084_html_wp9002457" text="Chapter IX.  Input/output plugins">
+  <tocitem target="UsersGuide-1-084_html_wp9002458" text="1  Introduction">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-085_html_wp9002474" text="1.3.1  Multiple configurations" />
+    <tocitem target="UsersGuide-1-086_html_wp9002481" text="1.3.2  Stacking in the root node type" />
+    <tocitem target="UsersGuide-1-087_html_wp9002484" text="1.3.3  Common elements" />
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-088_html_wp9002498" text="2  Display" />
+  <tocitem target="UsersGuide-1-089_html_wp9002504" text="3  Report" />
+  <tocitem target="UsersGuide-1-090_html_wp9002511" text="4  XML">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-091_html_wp9002522" text="4.1.1  Marked record pair sources" />
+    <tocitem target="UsersGuide-1-092_html_wp9002547" text="4.1.2  Record sources" />
+    <tocitem target="UsersGuide-1-093_html_wp9002561" text="4.1.3  Report files" />
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-094_html_wp9002581" text="5  Flat files">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-095_html_wp9002596" text="5.1.1  Examples of marked record pair sources">
+     <tocitem target="UsersGuide-1-095_html_wp9002597" text="5.1.1.1  Non-stacked data, single file, pipe delimited, untagged, one line per record" />
+     <tocitem target="UsersGuide-1-096_html_wp9002604" text="5.1.1.2  Non-stacked data, single file, pipe delimited, untagged, one line per pair" />
+     <tocitem target="UsersGuide-1-097_html_wp9002607" text="5.1.1.3  Stacked, single file, fixed width, tagged" />
+     <tocitem target="UsersGuide-1-098_html_wp9002614" text="5.1.1.4  Stacked, multi file, fixed width, untagged" />
+    </tocitem>
+    <tocitem target="UsersGuide-1-099_html_wp9002624" text="5.1.2  Examples of record sources" />
+    <tocitem target="UsersGuide-1-100_html_wp9002630" text="5.1.3  Schema configuration options" />
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-101_html_wp9002660" text="6  Database" />
+  <tocitem target="UsersGuide-1-102_html_wp9002681" text="7  Blocking">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-103_html_wp9002696" text="7.3.1  Loading the plugin" />
+    <tocitem target="UsersGuide-1-104_html_wp9002698" text="7.3.2  Selection of blocking fields" />
+    <tocitem target="UsersGuide-1-105_html_wp9002700" text="7.3.3  Subsets" />
+    <tocitem target="UsersGuide-1-106_html_wp9002702" text="7.3.4  Standard exclusions" />
+    <tocitem target="UsersGuide-1-107_html_wp9002705" text="7.3.5  Illegal combinations" />
+    <tocitem target="UsersGuide-1-108_html_wp9002707" text="7.3.6  Groups" />
+    <tocitem target="UsersGuide-1-109_html_wp9002737" text="7.5.1  Finding good blocking sets" />
+    <tocitem target="UsersGuide-1-110_html_wp9002738" text="7.5.2  Adding blocking fields" />
+    <tocitem target="UsersGuide-1-111_html_wp9002743" text="7.5.3  Removing blocking fields" />
+    <tocitem target="UsersGuide-1-112_html_wp9002749" text="7.6.1  Finding good blocking sets" />
+    <tocitem target="UsersGuide-1-113_html_wp9002750" text="7.6.2  Adding and removing blocking fields" />
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-114_html_wp9002757" text="8  Oracle">
+   <tocitem target="" text="">
+    <tocitem target="UsersGuide-1-115_html_wp9002761" text="8.1.1  Data sources" />
+   </tocitem>
+  </tocitem>
+  <tocitem target="UsersGuide-1-116_html_wp9002773" text="9  Microsoft SQL Server 2000" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-117_html_wp9002779" text="Chapter X.  ChoiceMaker Server">
+  <tocitem target="UsersGuide-1-117_html_wp9002780" text="1  Introduction" />
+  <tocitem target="UsersGuide-1-118_html_wp9002785" text="2  ChoiceMaker Server J2EE" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-119_html_wp9002803" text="Chapter XI.  ReviewMaker">
+  <tocitem target="UsersGuide-1-119_html_wp9002804" text="1  Introduction" />
+  <tocitem target="UsersGuide-1-120_html_wp9002808" text="2  Installation" />
+  <tocitem target="UsersGuide-1-121_html_wp9002813" text="3  Startup" />
+  <tocitem target="UsersGuide-1-122_html_wp9002818" text="4  The Overview View" />
+  <tocitem target="UsersGuide-1-123_html_wp9002828" text="5  The Search View" />
+  <tocitem target="UsersGuide-1-124_html_wp9002842" text="6  The Review View" />
+  <tocitem target="UsersGuide-1-125_html_wp9002852" text="7  Customization Options" />
+  <tocitem target="UsersGuide-1-126_html_wp9002862" text="8  Debugging" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-128_html_wp9002867" text="Chapter I.  " />
+ <tocitem target="UsersGuide-1-129_html_wp9002868" text="Appendix A.  Limitations of the current implementation">
+  <tocitem target="UsersGuide-1-129_html_wp9002869" text="1  ModelMaker" />
+  <tocitem target="UsersGuide-1-130_html_wp9002873" text="2  ChoiceMaker schemas" />
+  <tocitem target="UsersGuide-1-131_html_wp9002879" text="3  ClueMaker compiler" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-132_html_wp9002889" text="Appendix B.  Installation instructions">
+  <tocitem target="UsersGuide-1-133_html_wp9002891" text="1  ModelMaker" />
+  <tocitem target="UsersGuide-1-134_html_wp9002920" text="2  ReviewMaker" />
+  <tocitem target="UsersGuide-1-135_html_wp9002923" text="3  ChoiceMaker Server" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-136_html_wp9002931" text="Appendix C.  ClueMaker Grammar" />
+ <tocitem target="UsersGuide-1-137_html_wp9003321" text="Appendix D.  XML Schemas for ChoiceMaker Schemas" />
+ <tocitem target="UsersGuide-1-138_html_wp9003324" text="Appendix E.  ChoiceMaker Error Messages">
+  <tocitem target="UsersGuide-1-138_html_wp9003325" text="1  Machine Learning" />
+  <tocitem target="UsersGuide-1-139_html_wp9003327" text="2  I/O" />
+  <tocitem target="UsersGuide-1-140_html_wp9003329" text="3  Human Review Pane" />
+  <tocitem target="UsersGuide-1-141_html_wp9003336" text="4  Filters" />
+  <tocitem target="UsersGuide-1-142_html_wp9003338" text="5  Preferences" />
+  <tocitem target="UsersGuide-1-143_html_wp9003341" text="6  Layouts" />
+  <tocitem target="UsersGuide-1-144_html_wp9003344" text="7  Matching" />
+  <tocitem target="UsersGuide-1-145_html_wp9003348" text="8  Model Building" />
+  <tocitem target="UsersGuide-1-146_html_wp9003352" text="9  Marked Record Pair Sources" />
+  <tocitem target="UsersGuide-1-147_html_wp9003356" text="10  Clues" />
+  <tocitem target="UsersGuide-1-148_html_wp9003359" text="11  Compiler" />
+  <tocitem target="UsersGuide-1-149_html_wp9003360" text="12  Generator" />
+ </tocitem>
+ <tocitem target="UsersGuide-1-150_html_wp9003364" text="Appendix F.  Glossary" />
+ <tocitem target="UsersGuide-1-151_html_wp9003457" text="Appendix G.  Bibliography" />
+</toc>

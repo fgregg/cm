@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>10 Human review</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-031.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-033.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+10	 Human review 
+<a name="wp9001819"> </a></h3>
+<p >
+The human review panel becomes available once the user has selected a probability model, a marked record pair source, and has computed the probabilities in the testing panel. The purpose of the panel is to display the data contained in a specified record pair. If no record pair has been selected, the panel appears devoid of data as shown in <a href="UsersGuide-1-032.html#wp9001821">Figure 20</a>. 
+<a name="wp9001820"> </a></p>
+<p >
+<img src="images/UsersGuide-1-032-27.jpg" height="458" width="575" border="0" hspace="0" vspace="0">
+<a name="wp9001821"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+10.1	 Display<br>
+<a name="wp9001822"> </a></div>
+<p >
+The data is broken up into panels, usually one for each node type (table) of the schema. E.g., <a href="UsersGuide-1-032.html#wp9001826">Figure 21</a> shows panels <em>Patient</em>, <em>mothers</em>, <em>Names</em>, <em>contacts</em>, and <em>address</em>. Each panel is divided into two halves with the upper half (blue) representing data from the first, or query record of the record pair and the lower half (green) representing the corresponding data from the second, or match record in the pair. If the value of a cell is invalid according to the validity definition of the schema, the background is grey. Data in black indicate that the data matches between the records, while data in red indicates that it is unique to one record. Derived fields are in italics.
+<a name="wp9001823"> </a></p>
+<p >
+Panels displaying non-stacked data, e.g., <em>Patient</em>, never have scrollbars. Panels displaying stacked data, e.g., all other panels, always have scroll bars. <a href="UsersGuide-1-032.html#wp9001826">Figure 21</a> shows stacked names for the green record. The panel names and column headers can be defined in the schema (<a href="UsersGuide-1-088.html#wp9002498">Chapter IX.2</a>).
+<a name="wp9001824"> </a></p>
+<p >
+The names of derived fields appear between angular brackets, unless name has been explicitly specified. The displaying of a field can be prevented (<a href="UsersGuide-1-088.html#wp9002498">Chapter IX.2</a>).
+<a name="wp9001825"> </a></p>
+<p >
+<div align="left"><img src="images/UsersGuide-1-032-28.jpg" height="494" width="625" alt="Text Box:  Figure 21: Human Review Panel with Data" border="0" hspace="0" vspace="0"></div><img src="images/UsersGuide-1-032-29.jpg" height="518" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9001826"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+10.2	 Layout<br>
+<a name="wp9001827"> </a></div>
+<p >
+The layout of the data associated with each record-pair consists of one top-level frame.  Each frame can contain tables and child frame, and each frame may contain tabs.  Tables display actual data in row-and-column format.  Tabbed frames are two or more frames occupying the same screen space, only one of which is visible at any given time.  Frames may contain one or more smaller, child frames.
+<a name="wp9001828"> </a></p>
+<p >
+The default layout is automatically configured based on the ChoiceMaker schema. It shows one copy of each node type table with all columns activated. 
+<a name="wp9001829"> </a></p>
+<p >
+The user may alter the tables in a layout in the following ways:
+<a name="wp9001830"> </a></p>
+<ul> <li >Moving an individual table by clicking the title bar and dragging it to the desired location.<a name="wp9001831"> </a>
+ <li >Resizing an individual table by dragging a side to the desired height or width.<a name="wp9001832"> </a>
+ <li >Inserting additional tables. This ability is given in the context menu of the frame in which to display the table. A layout may contain multiple copies of the same table, possibly showing different columns. This is especially useful if some node types contain very many fields. In this case multiple tables of the same node type with different columns shown can be displayed.<a name="wp9001833"> </a>
+ <li >Removing a table by clicking its close button on the top left.<a name="wp9001834"> </a>
+ <li >The width of table columns can be adjusted by clicking the column borders and dragging the mouse.<a name="wp9001835"> </a>
+ <li >Table columns can be reordered by drag and drop.<a name="wp9001836"> </a>
+ <li >Table columns can be hidden through a popup menu, which is displayed by pressing the right mouse button when the mouse pointer is over the table background.<a name="wp9001837"> </a>
+ <li >Dragging the divider between the two records.<a name="wp9001838"> </a>
+</ul><p >
+The user may alter the frames in a layout in the following ways:
+<a name="wp9001839"> </a></p>
+<ul> <li >Moving a child frame by clicking on the title bar and dragging it to the desired location.<a name="wp9001840"> </a>
+ <li >Resizing a child frame by dragging a side to the desired height or width.<a name="wp9001841"> </a>
+ <li >Resizing a frame (including the top-level pane) through its context menu: &quot;Add Space to the Right&quot;, &quot;Add Space to the Bottom&quot;, and &quot;Fit Contents&quot;<a name="wp9001842"> </a>
+ <li >Inserting additional child panes.  This ability is given in the context menu of the parent pane.<a name="wp9001843"> </a>
+ <li >Removing a child frame by clicking its close button on the top-left.<a name="wp9001844"> </a>
+ <li >Renaming a pane (excluding the top-level frame) through its context menu: &quot;Rename Frame...&quot;<a name="wp9001845"> </a>
+ <li >Adding a tab to a frame.  This ability is given in the context menu of the frame.<a name="wp9001846"> </a>
+ <li >Removing a tab from a frame.  This ability is also given in the context menu of the frame.<a name="wp9001847"> </a>
+ <li >Renaming a tab.  This ability is also given in the context menu of the frame.<a name="wp9001848"> </a>
+</ul><p >
+A new layout, which originally is based on the default layout, can be created with <b>Layout</b><b>-></b><b>New</b>. Upon modifying a layout, it can be saved under the current name with <b>Layout</b><b>-></b><b>Save</b> or under a different name with <b>Layout</b><b>-></b><b>Save As...</b>. An existing layout can be opened with <b>Layout</b><b>-></b><b>Open... o</b>r by choosing one of the most recently used layouts from the shortcut list at the end of the <b>Layout</b> menu.
+<a name="wp9001849"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+10.3	 Navigation<br>
+<a name="wp9001850"> </a></div>
+<p >
+There are several ways to select a record for viewing:
+<a name="wp9001851"> </a></p>
+<ul> <li >The user can directly type in the index of a record pair in the <b>Current Record</b> field of the navigation area on the human review panel. The user may access any record in the source by this method.<a name="wp9001852"> </a>
+ <li >The user can click on the slider in the navigation area. The user may access any record in the source by this method.<a name="wp9001853"> </a>
+ <li >By clicking on the forward and reverse buttons of the Next in Category field, the user may step through the record pairs contained in the current record pair list displayed on the right side of the screen.<a name="wp9001854"> </a>
+ <li >By clicking on an index in the record pair list.<a name="wp9001855"> </a>
+</ul><div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+10.4	 Decision and active clues table<br>
+<a name="wp9001856"> </a></div>
+<p >
+As shown in <a href="UsersGuide-1-032.html#wp9001858">Figure 22</a>, the decision area of the human review panel displays the human-marked decision followed by the ChoiceMaker decision and the ChoiceMaker probability. Recall that the ChoiceMaker decision depends on the match and differ thresholds. The ChoiceMaker decision appears in black if it agrees with the human decision and in red otherwise. A `[R]' appears after the ChoiceMaker decision if it is based on a rule.
+<a name="wp9001857"> </a></p>
+<p >
+<img src="images/UsersGuide-1-032-30.jpg" height="230" width="575" border="0" hspace="0" vspace="0">
+<a name="wp9001858"> </a></p>
+<p >
+The <b>More...</b> button brings up a window which displays additional information about the marked record pair (<a href="UsersGuide-1-032.html#wp9001861">Figure 23</a>).
+<a name="wp9001859"> </a></p>
+<p >
+<img src="images/UsersGuide-1-032-31.jpg" height="242" width="242" border="0" hspace="0" vspace="0">
+<a name="wp9001861"> </a></p>
+<p >
+The content of the table to the right of the decision area depends upon the type of the clue set (<a href="UsersGuide-1-047.html#wp9001988">Chapter IV</a>). If the type is boolean, it lists the clues that were active on the shown record pair. For other types, all the enabled clues are shown along with the value of the clue for the displayed record pair.
+<a name="wp9001862"> </a></p>
+<p >
+As with the large clue table shown on the training panel, the data displayed in the active clue table can be sorted on any column by clicking the column header.
+<a name="wp9001863"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+10.5	 Maximizing visible data<br>
+<a name="wp9001864"> </a></div>
+<p >
+When using ModelMaker to review pairs, one may want to see as much data as possible at once. To this aim, it is possible to hide the active clues table, the status panel, the toolbar, and possibly also the pair list through the respective checkbox menu item of <b>View</b>. <a href="UsersGuide-1-032.html#wp9001866">Figure 24</a> shows the same layout as <a href="UsersGuide-1-032.html#wp9001826">Figure 21</a> with all auxiliary panels hidden.
+<a name="wp9001865"> </a></p>
+<p >
+<img src="images/UsersGuide-1-032-32.jpg" height="494" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9001866"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+10.6	 Modifying record data<br>
+<a name="wp9001867"> </a></div>
+<p >
+Modification of record data is very useful to test clues. The user can edit any of the non-derived values displayed in any of the data tables by double clicking on a cell. After editing a cell the user should press enter so that the new data becomes active. In panels showing stacked data, new rows can be inserted and existing rows deleted through the context menu.
+<a name="wp9001868"> </a></p>
+<p >
+The active clues and the match probability are immediately recomputed. On the other hand, the record remains in the pair list even if it no longer satisfies the criteria of the active filter and the statistics of the Train and Test panels are not recomputed. The user must select <b>Model</b><b>-></b><b>Evaluate</b> or <b>Model</b><b>-></b><b>Train</b> to update them.
+<a name="wp9001869"> </a></p>
+<p >
+The user may also change the human-marked decision by selecting a decision from a drop-down list. 
+<a name="wp9001870"> </a></p>
+<p >
+After changing the data, the user may save it by selecting <b>Source</b><b>-></b><b>Save</b>. Saving is possible for many marked record pair source types, including XML and flat file. For other types, it may be necessary to first create an XML or flat file source with the same data.
+<a name="wp9001871"> </a></p>
+<p >
+It is also possible to save a subset of the record pairs, as described below.
+<a name="wp9001872"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+10.7	 Checking pairs<br>
+<a name="wp9001873"> </a></div>
+<p >
+Pairs of interest can be checked by navigating to the pair in question and checking the box. The checked pairs can then be selected or saved with <b>Source</b><b>-></b><b>Save checked as...</b>. All pairs can be checked and unchecked with <b>Source</b><b>-></b><b>Check all</b> and <b>Source</b><b>-></b><b>Uncheck all</b>, respectively. The checked pairs can be selected with <b>Source</b><b>-></b><b>Select checked</b>.
+<a name="wp9001874"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-031.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-033.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>3 Shorthand forms</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-048.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-050.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+3	 Shorthand forms
+<a name="wp9002013"> </a></h3>
+<p >
+Most clues follow one of a few common patterns for which we introduce notational shorthand forms.
+<a name="wp9002014"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+3.1	 Same and different valid values<br>
+<a name="wp9002015"> </a></div>
+<p >
+The two most common forms involve records having the same or different values for a certain field (e.g., <em>mFirstName</em>). Other common forms include the records having the same or different values for a function of a field (e.g., <em>dLastNameSoundex</em>).
+<a name="wp9002016"> </a></p>
+<p >
+Typically, we only want clues to fire if the data that is being compared is valid. For example, we don't want clue <em>dLastNameSoundex</em> of <a href="UsersGuide-1-048.html#wp9001998">Figure 35</a> to fire if the query record does not contain a last name. This motivates the creation of several short hand forms, where <em>fn</em> stands for <em>fieldName</em>, of which the following table lists a few examples:
+<a name="wp9002017"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Shorthand</b></font>
+<a name="wp9000164"> </a></p>
+</td>
+    <td><p >
+<font ><b>Definition</b></font>
+<a name="wp9000165"> </a></p>
+</td>
+    <td><p >
+<font ><b>Type</b></font>
+<a name="wp9000166"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>same(r.fn)</em>
+<a name="wp9000167"> </a></p>
+</td>
+    <td><p >
+<em>valid(q.fn) &amp;&amp; valid(m.fn) &amp;&amp; q.fn == m.fn</em>
+<a name="wp9000168"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000169"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>same(r.fn1, r.fn2)</em>
+<a name="wp9000170"> </a></p>
+</td>
+    <td><p >
+<em>same(r.fn1) &amp;&amp; same(r.fn2)</em>
+<a name="wp9000171"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000172"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>same(f(r.fn))</em>
+<a name="wp9000173"> </a></p>
+</td>
+    <td><p >
+<em>valid(q.fn) &amp;&amp; valid(m.fn) &amp;&amp; f(q.fn) == f(m.fn)</em>
+<a name="wp9000174"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000175"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>same(r.fn1; g(r.fn1))</em>
+<a name="wp9000176"> </a></p>
+</td>
+    <td><p >
+<em>valid(q.fn) &amp;&amp; valid(m.fn) &amp;&amp; g(r.fn1) &amp;&amp; q.fn == m.fn</em>
+<a name="wp9000177"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000178"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>different(r.fn)</em>
+<a name="wp9000179"> </a></p>
+</td>
+    <td><p >
+<em>valid(q.fn) &amp;&amp; valid(m.fn) &amp;&amp; q.fn != m.fn</em>
+<a name="wp9000180"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000181"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>different(r.fn1, r.fn2)</em>
+<a name="wp9000182"> </a></p>
+</td>
+    <td><p >
+<em>valid(q.fn1) &amp;&amp; valid(m.fn1) &amp;&amp; valid(q.fn2) &amp;&amp; valid(m.fn2) &amp;&amp; </em>
+<a name="wp9000183"> </a></p>
+<p >
+<em>(q.fn1 != m.fn1 || q.fn2 != m.fn2) </em>
+<a name="wp9000184"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000185"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>compare(r.fn)</em>
+<a name="wp9000186"> </a></p>
+</td>
+    <td><p >
+<em>same(r.fn) ? 1 : (different(r.fn) ? -1 : 0)</em>
+<a name="wp9000187"> </a></p>
+</td>
+    <td><p >
+<em>byte</em>
+<a name="wp9000188"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002018"> </a></p>
+<p >
+With these shorthand notations we can rewrite the example of <a href="UsersGuide-1-048.html#wp9001998">Figure 35</a> as shown in <a href="UsersGuide-1-049.html#wp9002021">Figure 37</a>.  In shorthand forms, we refer to the record as <em>r.fieldName</em> rather than <em>q.fieldName</em> and <em>m.fieldName</em>.
+<a name="wp9002020"> </a></p>
+<p >
+<img src="images/UsersGuide-1-049-46.jpg" usemap="#UsersGuide-1-049-46_jpg" height="170" width="626" border="0" hspace="0" vspace="0">
+<map name="UsersGuide-1-049-46_jpg">
+<area href="UsersGuide-1-048.html#wp9001998" shape="rect" coords="0,12,624,155" alt="Text Box: 	1		clue mFirstName {	2			match same(r.firstName);	3		}	4	5		clue dLastNameSoundex {	6			differ different(Soundex.soundex(r.lastName));	7		}Figure 37: Clues of Figure 35 rewritten in shorthand notation">
+</map>
+
+<a name="wp9002021"> </a></p>
+<p >
+The shorthand <em>compare</em> is useful for non-boolean clue sets. It can be used to create a clue that gives 3 different values, based on whether the fields are the same, different, or one of them invalid. <a href="UsersGuide-1-049.html#wp9002023">Figure 38</a> gives an example of <font >compare</font>.
+<a name="wp9002022"> </a></p>
+<p >
+<img src="images/UsersGuide-1-049-47.jpg" height="98" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002023"> </a></p>
+<p >
+The shorthand forms have an additional parameter that can be used to strengthen the validity predicate within the shorthand. Clue <em>mFirstNamesNotStartingWithX</em> (<a href="UsersGuide-1-049.html#wp9002025">Figure 39</a>) only fires on matching first names that do not start with `X'. The additional condition is checked after the validity predicate. Hence, the <em>charAt(0)</em> function is guaranteed not to throw an <em>IndexOutOfBoundsException</em> because the validity for <em>firstName</em> requires the latter to be non-<em>null</em> and of length &gt; 0.
+<a name="wp9002024"> </a></p>
+<p >
+<img src="images/UsersGuide-1-049-48.jpg" height="110" width="578" border="0" hspace="0" vspace="0">
+<a name="wp9002025"> </a></p>
+<p >
+All shorthand forms can have more than one expression, as shown for same and different in the table above with two expressions. Note that <font >same(r.fn1, r.fn2)</font> is the same as <font >same(r.fn1) &amp;&amp; same(r.fn2)</font>,<font ><sup><a href="#wp9001442"><sup>1</sup></a></sup></font> but<font > different(r.fn1, r.fn2)</font> is not the same as <font >different(r.fn1) &amp;&amp; different(r.fn2)</font> or as <font >different(r.fn1) || different(r.fn2)</font>.
+<a name="wp9002026"> </a></p>
+<p >
+Furthermore, all expressions in shorthand forms can be functions of zero or more fields rather than just individual fields as shown for same in the table above.
+<a name="wp9002027"> </a></p>
+<p >
+The combination of the shorthand notations and the long notation provides a concise notation for most cases while maintaining the full flexibility for special cases. The long notation also allows us to compare non-valid values, or to use a different definition of validity in some clues. The grammar for all shorthand forms and the precise translation rules for short hand forms are beyond the scope of this document.
+<a name="wp9002028"> </a></p>
+<p >
+The general definition of shorthand forms for non-stacked data is as follows. Feel free to skip this and build an intuition based on the above examples. Let e<font ><sub>0</sub></font>, ..., e<font ><sub>p</sub></font> be ClueMaker expressions of any type and let v be a boolean ClueMaker expression. Let f<font ><sub>0</sub></font>, ..., f<font ><sub>n</sub></font> be the record fields accessed via r in e<font ><sub>0</sub></font>, ..., e<font ><sub>p</sub></font>, v. Furthermore, let e[r/q] be the expression e with all occurrences of r replaced by q.
+<a name="wp9002029"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Shorthand</b></font>
+<a name="wp9000189"> </a></p>
+</td>
+    <td><p >
+<font ><b>Definition</b></font>
+<a name="wp9000190"> </a></p>
+</td>
+    <td><p >
+<font ><b>Type</b></font>
+<a name="wp9000191"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>same(e</em><em>0</em><em>, ..., e</em><em>p</em><em>; v)</em>
+<a name="wp9000192"> </a></p>
+</td>
+    <td><p >
+<em>valid(q.f</em><em>0</em><em>) &amp;&amp; ... &amp;&amp; valid(q.f</em><em>n</em><em>) &amp;&amp;<br>valid(m.f</em><em>0</em><em>) &amp;&amp; ... &amp;&amp; valid(m.f</em><em>n</em><em>) &amp;&amp;<br>v[r/q] &amp;&amp; v[r/m] &amp;&amp;<br>e</em><em>0</em><em>[r/q] == e</em><em>0</em><em>[r/m] &amp;&amp; ... &amp;&amp; e</em><em>p</em><em>[r/q] == e</em><em>p</em><em>[r/m]</em>
+<a name="wp9000193"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000194"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>different(e</em><em>0</em><em>, ..., e</em><em>p</em><em>; v)</em>
+<a name="wp9000195"> </a></p>
+</td>
+    <td><p >
+<em>valid(q.f</em><em>0</em><em>) &amp;&amp; ... &amp;&amp; valid(q.f</em><em>n</em><em>) &amp;&amp;<br>valid(m.f</em><em>0</em><em>) &amp;&amp; ... &amp;&amp; valid(m.f</em><em>n</em><em>) &amp;&amp;<br>v[r/q] &amp;&amp; v[r/m] &amp;&amp;<br>!(e</em><em>0</em><em>[r/q] == e</em><em>0</em><em>[r/m] &amp;&amp; ... &amp;&amp; e</em><em>p</em><em>[r/q] == e</em><em>p</em><em>[r/m])</em>
+<a name="wp9000196"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000197"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>compare(e</em><em>0</em><em>, ..., e</em><em>p</em><em>; v)</em>
+<a name="wp9000198"> </a></p>
+</td>
+    <td><p >
+<em>same(e0, ..., e</em><em>p</em><em>; v) ? 1 : (different(e</em><em>0</em><em>, ..., e</em><em>p</em><em>; v) ? -1 : 0)</em>
+<a name="wp9000199"> </a></p>
+</td>
+    <td><p >
+<em>byte</em>
+<a name="wp9000200"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002030"> </a></p>
+<p >
+In case the additional parameter v is missing, it can be replaced by true in the definitions above.
+<a name="wp9002031"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+3.2	 Swaps<br>
+<a name="wp9002032"> </a></div>
+<p >
+Swaps of certain fields, such as first, middle, and last name or home and work phone number, are common. The shorthand <em>swapsame</em> makes it easier to write clues that look for swapped values. <a href="UsersGuide-1-049.html#wp9002034">Figure 40</a> shows the clue <em>mSwappedNames</em> of <a href="UsersGuide-1-048.html#wp9001998">Figure 35</a> rewritten using the shorthand. 
+<a name="wp9002033"> </a></p>
+<p >
+<img src="images/UsersGuide-1-049-49.jpg" usemap="#UsersGuide-1-049-49_jpg" height="122" width="626" border="0" hspace="0" vspace="0">
+<map name="UsersGuide-1-049-49_jpg">
+<area href="UsersGuide-1-048.html#wp9001998" shape="rect" coords="0,12,624,108" alt="Text Box: 	1	// Predicts match if all names are valid and they are swapped.	2	clue mSwappedNames {	3		match swapsame(2; 2; r.firstName, r.lastName);	4	}Figure 40: Clue mSwappedNames of Figure 35 rewritten using swapsame shorthand">
+</map>
+
+<a name="wp9002034"> </a></p>
+<p >
+The shorthand <em>swapsame</em> has three arguments:
+<a name="wp9002035"> </a></p>
+<ul> <li >The number of values that must match. E.g., <em>swapsame(2; 2; r.firstName, r.lastName)</em> stands for <em>valid(q.firstName) &amp;&amp; valid(q.lastName) &amp;&amp; valid(m.firstName) &amp;&amp; valid(m.lastName) &amp;&amp; q.firstName == m.lastName &amp;&amp; m.firstName == q.lastName</em>, whereas <em>swapsame(1; 1; r.firstName, r.lastName)</em> stands for <em>(valid(q.firstName) &amp;&amp; valid(m.lastName) &amp;&amp; q.firstName == m.lastName) || (valid(m.firstName) &amp;&amp; valid(q.lastName) &amp;&amp; m.firstName == q.lastName)</em>.<a name="wp9002036"> </a>
+ <li >The number of matching values that have to be swapped, i.e., cannot be matches of values from the same field. E.g., (&quot;JIM&quot;, &quot;SMITH&quot;) and (&quot;JIM&quot;, &quot;MILLER&quot;) satisfy <em>swapsame(1; 0; r.firstName, r.lastName)</em>, but not <em>swapsame(1; 1; r.firstName, r.lastName)</em>. This second number must not be bigger than the first.<a name="wp9002037"> </a>
+ <li >A comma separated list of fields to swap. In the example we have only two fields, but it could be any number. All fields must have a common supertype. For object types, all types must have compatible equals(Object) methods.<a name="wp9002038"> </a>
+</ul><div style="color: #000000;  font-size: 12pt; font-style: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none; vertical-align: baseline">
+As shown in the examples above, a field can only count for one match. E.g., (&quot;JIM&quot;, &quot;SMITH&quot;) and (&quot;JIM&quot;, &quot;JIM&quot;) satisfy <em>swapsame(1; 1; r.firstName, r.lastName)</em>, but not <em>swapsame(2; 1; r.firstName, r.lastName)</em><font ><b>.</b></font><br>
+<a name="wp9002039"> </a></div>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+3.3	 Multi clues<br>
+<a name="wp9002040"> </a></div>
+<p >
+Often, multiple clues differ only by a parameter. For example, we would like to create clues that fire if the first names match and they belong to one of 5 name frequency categories. The rationale for this example is that a match of rare first names is likely to be assigned a higher weight than a match on common first names. <a href="UsersGuide-1-049.html#wp9002042">Figure 41</a> illustrates the shorthand <em>foreach</em> that allows us to introduce multiple logical clues with one syntactical clue. A clue is implicitly generated with <em>frequency</em> set to each of the values 1 to 5.
+<a name="wp9002041"> </a></p>
+<p >
+<img src="images/UsersGuide-1-049-50.jpg" height="122" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002042"> </a></p>
+<p >
+We say that frequency is an iterator, <em>int</em> is the type of the iterators, and <em>{1, 2, 3, 4, 5}</em> is the range of the iterator. The iterators can be of any Java type (primitive or reference). The range must be specified by a static array initializer. E.g., we could use <em>String myIterator : {&quot;Test&quot;, System.getProperty(&quot;user.name&quot;)}</em>,<font ><sup><a href="#wp9001443"><sup>2</sup></a></sup></font> but <em>char illegal : &quot;illegal&quot;.toCharArray()</em> would be illegal because the ClueMaker compiler cannot determine the length of the array returned by <em>String.toCharArray()</em>.
+<a name="wp9002043"> </a></p>
+<p >
+The evaluation order of the generated clues follows the declaration of the range. The range really is a list, even though its notation with curly braces, which is based on Java array initializers, may wrongfully suggest that it is a set.
+<a name="wp9002044"> </a></p>
+<p >
+Evaluation of the clues generated by a boolean multi clue stops as soon as the first of the generated clues fires. E.g., if the clue with frequency 2 fires, the clues with frequency 3, 4, and 5 are not even evaluated. In this example, they could not fire, but if we were to replace the `==' by `&lt;=' this point would be important. Hence, the order of the values <em>1, 2, 3, 4, 5</em> would be relevant.
+<a name="wp9002045"> </a></p>
+
+<p >
+<a href="#wp9002026"><sup>1</sup></a>This is not the case for stacked data, as explained in Chapter IV.4.1.
+<a name="wp9001442"> </a></p>
+<p >
+<a href="#wp9002043"><sup>2</sup></a>Methods in iterator ranges are evaluated exactly once upon loading of the Java class generated from the clue set.
+<a name="wp9001443"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-048.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-050.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

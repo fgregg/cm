@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>11 Filters</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-032.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-034.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+11	 Filters
+<a name="wp9001875"> </a></h3>
+<p >
+Filters can be used to select a subset of a marked record pair source for displaying in the human review panel. Filtering can be performed based on the human decision, ChoiceMaker's decision, ChoiceMaker's probability, and the clue firings/values as show in <a href="UsersGuide-1-033.html#wp9001885">Figure 25</a>.
+<a name="wp9001876"> </a></p>
+<p >
+Additionally, the filter allows for undersampling of records in certain probability ranges. This is, for example, useful for selecting a subset from a generated set of record pairs aimed for human markup. Undersampling is defined by the argument of <b>Limited by</b>. For example, `0-1:5:100' only lets records with a match probability between 0 and 1% through the filter with a probability of 5% and limits the maximum number of records in the probability range to 100. In general, the format of the argument is given by the following EBNF:
+<a name="wp9001877"> </a></p>
+<p >
+LIMITED	::=	LIMITATION {`,' LIMITATION }
+<a name="wp9001878"> </a></p>
+<p >
+LIMITATION	::=	FROM-PROBABILITY `-` TO-PROBABILITY `:' PASS-THROUGH-PROBABILITY
+<a name="wp9001879"> </a></p>
+<p >
+			`:' MAX-COUNT
+<a name="wp9001880"> </a></p>
+<p >
+The filter can also be based on the checked indices.
+<a name="wp9001881"> </a></p>
+<p >
+Upon setting the filter, the indices of the matching pairs are displayed in the pair list.
+<a name="wp9001882"> </a></p>
+<p >
+All operations on the Train and Test panel that select a subset of the pairs actually set the filter. E.g., our earlier example of clicking into the misses column of clue 3 creates the filter displayed in <a href="UsersGuide-1-033.html#wp9001885">Figure 25</a>.
+<a name="wp9001883"> </a></p>
+<p >
+<div align="left"><img src="images/UsersGuide-1-033-33.jpg" height="513" width="438" alt="Text Box:  Figure 25: Filter Dialog" border="0" hspace="0" vspace="0"></div><img src="images/UsersGuide-1-033-34.jpg" height="530" width="575" border="0" hspace="0" vspace="0">
+<a name="wp9001885"> </a></p>
+<p >
+Sometimes it is useful to write a ClueMaker rule with decision <em>none</em> to help in selecting a specific subset of pairs.
+<a name="wp9001886"> </a></p>
+<p >
+The pairs that match the current filter's criteria can be saved using <b>Source</b><b>-></b><b>Save Selection As....</b> The user can save data in any format that supports saving, including XML and flat file.
+<a name="wp9001887"> </a></p>
+<p >
+Filtering does not affect the indices of pairs. Pairs that do not match the active filter can still be displayed in the review panel by entering the index or dragging the global slider.
+<a name="wp9001888"> </a></p>
+<p >
+The filter has no effect on the Train and Test panels. To view the values of these panels on a selection, create a new source corresponding to the selection (see above) and then use this source.
+<a name="wp9001889"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-032.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-034.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

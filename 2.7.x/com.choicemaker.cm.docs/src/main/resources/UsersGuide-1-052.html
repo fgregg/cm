@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>3.3.3 Referencing multi clues</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-051.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-053.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h5 >
+3.3.3	 Referencing multi clues
+<a name="wp9002054"> </a></h5>
+<p >
+Boolean multi clues can be referenced in three ways:
+<a name="wp9002055"> </a></p>
+<ul> <li >To disjunction of all the generated clues is referenced as <em>clueName[]</em>. For example, <em>mFirstNameFrequency[]</em> is true if the clue <em>mFirstNameFrequency</em> fired for any iterator value.<a name="wp9002056"> </a>
+ <li >The clue for a specific index is referenced as <em>clueName[index]</em>. For example, <em>mFirstNameFrequency[3]</em> is true if the clue <em>mFirstNameFrequency</em> fired for frequency equals 3.<a name="wp9002057"> </a>
+ <li >A range of clues can be specified as <em>clueName[startIndex, endIndex]</em>. For example, <em>mFirstNameFrequency[1, 3]</em> is true if clue <em>mFirstNameFrequency</em> fired for frequency equals to 1, 2, or 3. Disjoint ranges can be specified with an or, e.g., <em>mFirstNameFrequency[1, 2] || mFirstNameFrequency[4, 5]</em>.<a name="wp9002058"> </a>
+</ul><div style="color: #000000;  font-size: 12pt; font-style: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none; vertical-align: baseline">
+If all the index values are literals, e.g., directly specified primitive type values or Strings, or the constants <em>MIN_VALUE</em> and <em>MAX_VALUE</em> of the numeric holder classes, the actual index values are used as references. On the other hand, if one or more of the range indices is another expression, automatically generated index values starting at 0 have to be used in references.<br>
+<a name="wp9002059"> </a></div>
+<div style="color: #000000;  font-size: 12pt; font-style: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none; vertical-align: baseline">
+The notation extends to multi clues with multiple iterators. For example, <em>multi[][&quot;Test&quot;]</em> reference all clues with the first iterators bound to an arbitrary value and the second to &quot;Test&quot;.<br>
+<a name="wp9002060"> </a></div>
+<div style="color: #000000;  font-size: 12pt; font-style: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none; vertical-align: baseline">
+In non-boolean clue sets, only the specific index notation is allowed. The value is that of the referenced clue.<br>
+<a name="wp9002061"> </a></div>
+<div style="color: #000000;  font-size: 12pt; font-style: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none; vertical-align: baseline">
+For boolean clue sets, only enabled clues are considered. E.g., mFirstNameFrequency[1] is false if mFirstNameFrequency[1], even if it would have fired if it had been enabled. This is differs from references to non-indexed clues which have the value of the clue expression, whether the referenced clue is enabled or not. The rationale for this difference is the evaluate until first fires semantics of multi clues in boolean clue sets.<br>
+<a name="wp9002062"> </a></div>
+<div style="color: #000000;  font-size: 12pt; font-style: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none; vertical-align: baseline">
+In non-boolean clue sets, the reference always denotes the value of the clue expression, whether the referenced clue is enabled or not.<br>
+<a name="wp9002063"> </a></div>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+3.4	 Let construct<br>
+<a name="wp9002064"> </a></div>
+<p >
+ClueMaker has a <em>let</em> construct for introducing &quot;snappy&quot; (one time assigned, similar to final attributes in Java) variable bindings similar to those found in the ML programming language. The <em>let</em> construct in <a href="UsersGuide-1-052.html#wp9002066">Figure 44</a> introduces the two snappy variables <em>qa</em> and <em>ma</em>. They can be used like constants (final variables) inside the body of the let construct.
+<a name="wp9002065"> </a></p>
+<p >
+<img src="images/UsersGuide-1-052-53.jpg" height="158" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002066"> </a></p>
+<p >
+The use of <em>let</em><em>,</em><em> </em>instead of the repetition of the definition of the bound variables, guarantees that the defining expressions are evaluated exactly once. If we were to replace <em>qa</em> and <em>ma</em> by their definitions inside the body of the let construct, the expressions may be evaluated once or twice, depending upon the optimizations performed by the compiler.<font ><sup><a href="#wp9001444"><sup>1</sup></a></sup></font>
+<a name="wp9002067"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+3.5	 Same condition on query and match record<br>
+<a name="wp9002068"> </a></div>
+<p >
+Commonly, a clue has the same condition on both the query and the match record, with the two conditions joined by a <em>and</em>, <em>or</em>, or <em>xor</em>. <a href="UsersGuide-1-052.html#wp9002071">Figure 45</a> shows a clue that uses an and shorthand to avoid repeating the same condition on the query and the match record. Likewise, <em>or</em> and <em>xor</em> can be used in place of <em>and</em>.
+<a name="wp9002069"> </a></p>
+<p >
+Note that unlike <em>same</em> and <em>different</em>, <em>and</em>, <em>or</em>, and <em>xor</em> do not contain an implicit validity check.
+<a name="wp9002070"> </a></p>
+<p >
+<img src="images/UsersGuide-1-052-54.jpg" height="158" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002071"> </a></p>
+
+<p >
+<a href="#wp9002067"><sup>1</sup></a>This common subexpression elimination can legally be performed by ClueMaker because it requires all expressions to be side effect free. The corresponding optimization in Java would, however, not be legal.
+<a name="wp9001444"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-051.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-053.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

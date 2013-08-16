@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>2 ChoiceMaker Server J2EE</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-117.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-119.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+2	 ChoiceMaker Server J2EE
+<a name="wp9002785"> </a></h3>
+<p >
+ChoiceMaker server is provided as a EAR or a zipped exploded EAR. The EAR contains the following components:
+<a name="wp9002786"> </a></p>
+<ul> <li >ChoiceMakerEjbs.jar: The ChoiceMaker EJBs. The exact contents of this file vary. It is created in Eclipse by merging the set of used plugins into a single jar archive. The contents also vary from J2EE server to J2EE server as some servers contain classes included in ChoiceMaker (e.g., log4j and ant) and do not allow duplicate classes.<a name="wp9002787"> </a>
+ <li >models.jar: The ChoiceMaker matching models (shared library). This library is created with ModelMaker (<a href="UsersGuide-1-034.html#wp9001890">Chapter II.12</a>) and includes a set of compiled models along with configuration information. Upon modifications to the model, this library must be regenerated and replaced in the EAR.<a name="wp9002788"> </a>
+ <li >webdemo.war: Demo Web application showing how to use the ChoiceMaker query service. This module should be removed in production.<a name="wp9002789"> </a>
+ <li >ReviewMakerSwing.war: The Java Swing ReviewMaker GUI client WebStart archive. This is an optional component.<a name="wp9002790"> </a>
+ <li >ReviewMakerWeb.war: The Web-based ReviewMaker client. This is an optional component.<a name="wp9002791"> </a>
+</ul><div style="color: #000000;  font-size: 12pt; font-style: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none; vertical-align: baseline">
+It is suggested that customers add all their components (EJB, WAR) to the ChoiceMaker EAR. Alternatively, server-specific functionality may be used to make the class loader of the ChoiceMaker common and model library as well as the EJBs an ancestor of the class loader of the customer's WAR or EAR class loader.<br>
+<a name="wp9002792"> </a></div>
+<div style="color: #000000;  font-size: 12pt; font-style: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none; vertical-align: baseline">
+For Java clients, we also provide the following two jars:<br>
+<a name="wp9002793"> </a></div>
+<ul> <li >ChoiceMakerClientLib.jar: The ChoiceMaker EJB client library containing the remote and home interfaces as well as all referenced types.<a name="wp9002794"> </a>
+ <li >holderClasses.jar: The JavaBeans holder classes for the records of the used models. This library is created with ModelMaker.<a name="wp9002795"> </a>
+<ol type="1">  <li  value="1">EJB <a href="UsersGuide-1-001.html#wp9001449"></a><a href="UsersGuide-1-001.html#wp9001449"></a>API<a name="wp9002796"> </a>
+</ol></ul><p >
+ChoiceMaker contains two stateless session beans query service and admin service and a stateful session bean review service. Consult the JavaDoc API documentation for details.
+<a name="wp9002797"> </a></p>
+<p >
+Client applications should only interact with these three beans. Additional EJBs are for ChoiceMaker usage only.
+<a name="wp9002798"> </a></p>
+<p >
+<a href="UsersGuide-1-001.html#wp9001449"></a><img src="images/UsersGuide-1-118-84.jpg" height="422" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002799"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-117.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-119.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

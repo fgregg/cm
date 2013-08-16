@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>8 Training</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-025.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-027.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+8	 Training 
+<a name="wp9001749"> </a></h3>
+<p >
+Once a probability model is selected, the training panel displays a table showing the clues contained in that model (<a href="UsersGuide-1-026.html#wp9001753">Figure 13</a>). Each clue has an ID, a name, a check-box indicating whether this clue is enabled/disabled, a decision, a type, and possibly a report/note modifier. The clue ID corresponds to the position of the clue in the clue-file (i.e. the ClueMaker source). The decision (e.g. `match', `differ', or `hold') and the type (&quot;clue&quot; or &quot;rule&quot;) are described in <a href="UsersGuide-1-047.html#wp9001988">Chapter IV</a>. Additional columns may be displayed based on the machine learning techniques used for last training the model. E.g., <a href="UsersGuide-1-026.html#wp9001753">Figure 13</a> shows a weight column for maximum entropy (<a href="UsersGuide-1-081.html#wp9002415">Chapter VIII.1</a>).
+<a name="wp9001750"> </a></p>
+<p >
+The report modifier column describes whether the name of this clue/rule should be reported to the caller of ChoiceMaker if it fires (this is indicated by <em>report</em> or <em>note</em> in this column) and whether the firing of a clue/rule should force the match record to be returned to the caller, even if the ChoiceMaker decision is differ (<em>report</em>, but not <em>note</em>, forces this). See <a href="UsersGuide-1-047.html#wp9001988">Chapter IV</a> for more details. 
+<a name="wp9001751"> </a></p>
+<p >
+Disabling a clue/rule means that the clue/rule will not be applied to the record pairs. If clue/rule A is disabled and clue/rule B is enabled and references clue/rule A, then the value of the expression of clue/rule A is still evaluated. But clue/rule A will not be directly used for computing the weight.
+<a name="wp9001752"> </a></p>
+<p >
+<img src="images/UsersGuide-1-026-15.jpg" height="513" width="575" border="0" hspace="0" vspace="0">
+<a name="wp9001753"> </a></p>
+<p >
+Initially the <b>Fires</b>, <b>Hits</b>, <b>Misses</b> and <b>%Fires</b> columns of the clue table are blank. These columns are filled with data only after a marked record pair source is selected and the <b>Train</b>, <b>Test</b>, or  <b>Train and Test</b> command is chosen from the <b>Model</b> menu or the toolbar. <a href="UsersGuide-1-026.html#wp9001753">Figure 13</a> shows an example. The data displayed in the clue table can be sorted by any column by clicking the column header. As in most tables in ModelMaker, columns can also be reordered by dragging them.
+<a name="wp9001754"> </a></p>
+<p >
+The <em>Fires</em> column is only filled in for rules and boolean clues (<a href="UsersGuide-1-047.html#wp9001988">Chapter IV</a>). The <b>Hits</b>, <b>Misses</b> and <b>%Fires</b> columns are only present if the type of the active clue set is boolean (<a href="UsersGuide-1-047.html#wp9001988">Chapter IV</a>).
+<a name="wp9001755"> </a></p>
+<p >
+Clicking in any cell in the <b>Fires</b>, <b>Hits</b>, or <b>Misses</b> columns will display the indices of the corresponding record pairs in the pairs list on the right hand side. In <a href="UsersGuide-1-026.html#wp9001753">Figure 13</a>, the user has clicked in the <b>Misses</b> column of the selected row. The indices of the two pairs on which clue <em>mPatientNamesFirstMiddleLast</em> has misfired are in the pair list. More generally, this sets the marked record pair filter (Section <a href="UsersGuide-1-033.html#wp9001875">11</a>).
+<a name="wp9001756"> </a></p>
+<p >
+By checking <b>View</b><b>-></b><b>Show Summary Table</b>, additional summary information about the clue performance is displayed between the clue table and the message pane as shown in <a href="UsersGuide-1-026.html#wp9001758">Figure 14</a>.
+<a name="wp9001757"> </a></p>
+<p >
+<img src="images/UsersGuide-1-026-16.jpg" height="139" width="575" border="0" hspace="0" vspace="0">
+<a name="wp9001758"> </a></p>
+<p >
+<div align="left"><img src="images/UsersGuide-1-026-17.jpg" height="278" width="297" border="0" hspace="0" vspace="0"></div>Once a model and source have been selected, selecting <b>Model</b><b>-></b><b>Train</b> starts the training process of the probability model on the training source. The train dialog asks for a number of values:
+<a name="wp9001759"> </a></p>
+<ul> <li >The<em> </em><b>firing threshold</b> specifies the minimum number of hits required for a clue to be used in the probability model. If a clue fails to meet this threshold over the marked record pair source, it will automatically be disabled. The default value of 3 is suitable in most cases. The minimum value is 2.<a name="wp9001760"> </a>
+ <li >Checking <b>Recompile if necessary</b> will automatically rebuild the model before training if the clues or schema file has been changed since the last rebuild.<a name="wp9001761"> </a>
+ <li >Checking <b>Enable All Clues</b> will re-enable all clues before starting the training process. If it is not checked, only the enabled clues are used. In both cases, clues that don't meet the firing threshold are automatically disabled. The option <em>Enable All Rules</em> works analogous for rules. However, the firing threshold criteria does not apply to rules.<a name="wp9001762"> </a>
+ <li >The machine learning combo box allows the choice of one of the licensed machine learning techniques. Depending upon this choice, values for different parameters can be set.<a name="wp9001763"> </a>
+ <li >The chosen machine learning technique may require additional parameters to be set. In the example, maximum entropy requires the maximum number of training iterations to be defined. See <a href="UsersGuide-1-080.html#wp9002413">Chapter VIII</a> for details.<a name="wp9001764"> </a>
+</ul><p >
+When training is done the number of <em>Fires</em>, <em>Hits</em>, <em>Misses</em>, and <em>%Fires</em> are displayed for each clue. In addition, data specific to the chosen machine learning technique, e.g., weights for maximum entropy, may be displayed. Unless the model is explicitly saved (see below) no data is stored to disk.
+<a name="wp9001765"> </a></p>
+<p >
+Once a model and source have been selected, selecting <b>Model</b><b>-></b><b>Test</b> causes the clues to be evaluated on all the marked record pairs of the testing source. The model is tested by evaluating the match probability on all the record pairs in the source.
+<a name="wp9001766"> </a></p>
+<p >
+<b>Model</b><b>-></b><b>Train and Test</b> is equivalent to <b>Model</b><b>-></b><b>Train</b> followed by <b>Model</b><b>-></b><b>Test</b>, i.e., training on the training source followed by training on the testing source. 
+<a name="wp9001767"> </a></p>
+<p >
+<b>Model</b><b>-></b><b>Disable All Clues</b> un-checks all the boxes in the <b>Enabled</b> column of the clue table with the result that all clues are disabled.
+<a name="wp9001768"> </a></p>
+<p >
+<b>Model</b><b>-></b><b>Enable All Clues</b> checks all the boxes in the Enabled column of the clue table with the result that all clues are enabled.
+<a name="wp9001769"> </a></p>
+<p >
+<b>Model</b><b>-></b><b>Reset Weights</b> sets all the clue weights to 1.0. 
+<a name="wp9001770"> </a></p>
+<p >
+<b>Model</b><b>-></b><b>Save</b> saves the current probability model to disk. 
+<a name="wp9001771"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-025.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-027.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

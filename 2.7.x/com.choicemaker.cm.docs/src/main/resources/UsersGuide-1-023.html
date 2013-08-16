@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>6 Probability model handling</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-022.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-024.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+6	 Probability model handling
+<a name="wp9001709"> </a></h3>
+<p >
+ModelMaker works with a single model at a time. Upon creating a new model or opening an existing model, that model remains the active model until another model is selected.
+<a name="wp9001710"> </a></p>
+<p >
+An informational message is posted in the message panel indicating that the selected model is now the active model. Additional information about the model's clue file, schema file, and last training run is also posted. This information can also be displayed at any time by choosing <b>Model</b><b>-></b><b>Info</b>.
+<a name="wp9001711"> </a></p>
+<p >
+The name of the active model is displayed on the title bar. The clues that this model contains now appear in the training panel. The training panel will be discussed in detail in a later section. 
+<a name="wp9001712"> </a></p>
+<p >
+The result of selecting a model is shown in <a href="UsersGuide-1-023.html#wp9001714">Figure 9</a>.
+<a name="wp9001713"> </a></p>
+<p >
+<img src="images/UsersGuide-1-023-11.jpg" height="513" width="575" border="0" hspace="0" vspace="0">
+<a name="wp9001714"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+6.1	 Creating a new model<br>
+<a name="wp9001715"> </a></div>
+<p >
+<div align="left"><img src="images/UsersGuide-1-023-12.jpg" height="194" width="494" border="0" hspace="0" vspace="0"></div>A new model can be created by choosing <b>Model</b><b>-></b><b>New...</b>, which opens the Model Builder Dialog (<a href="UsersGuide-1-023.html#wp9001716">Figure 10</a>) that allows the user to specify the model file and the clues file to be used in the model. The location of the clues file can be stored either relative to the model file or as an absolute path. If it is stored relative to the model file, copying both the model and the clues file to a different location works seamlessly. Using an absolute path, the model file by itself can be copied around while the clues file stays in the same directory. A relative path is the default. Note that the choice is governed exclusively by the drop down selector. E.g., if <b>Relative to Model file</b> is selected, the location is stored as a relative path even if the user enters an absolute path, manually or through the file chooser.
+<a name="wp9001716"> </a></p>
+<p >
+Furthermore, the user can choose whether an ant (The Apache Jakarta Project 2002a) target should be called to compile re-loadable Java matching classes (or perform any other operation) upon building the model. The default target, <em>-Dnomain=true compile</em>, compiles the re-loadable Java matching classes.
+<a name="wp9001717"> </a></p>
+<p >
+When the user clicks the <b>Build</b> button, the model is built, added to the list of available models, and stored in the <em>etc\models</em> subdirectory of the ChoiceMaker project.
+<a name="wp9001718"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+6.2	 Opening an existing model<br>
+<a name="wp9001719"> </a></div>
+<p >
+An existing model can be opened with <b>Model</b><b>-></b><b>Open...</b> or by choosing one of the most recently used models from the shortcut list at the end of the <b>Model</b> menu. The properties that were set upon creation of the model can be modified with <b>Model</b><b>-></b><b>Edit...</b>.
+<a name="wp9001720"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+6.3	 Rebuilding a model<br>
+<a name="wp9001721"> </a></div>
+<p >
+The probability model needs to be re-built whenever changes are made to the schema or clues. Such changes can be made at any time by directly editing the schema file or clues file with the user's preferred editor. These changes are propagated to the ModelMaker application by selecting <b>Model</b><b>-></b><b>Rebuild</b> which compiles the schema and clues files into Java source code and then into Java byte code and finally loads the resulting classes into the running ModelMaker application. This feature allows the user to quickly modify a clue without having to exit and restart the ModelMaker application.
+<a name="wp9001722"> </a></p>
+<p >
+To modify Java classes that are used by the schema or clues, two options for getting the modified version are available:
+<a name="wp9001723"> </a></p>
+<ol type="1"> <li  value="1">Exit and then restart ModelMaker.<a name="wp9001724"> </a>
+ <li  value="2">Put the class or jar files in a place that is <font ><i>not</i></font> in the classpath of ModelMaker, but on the <em>reload</em> classpath specified in the configuration file (see <a href="UsersGuide-1-065.html#wp9002173">Chapter V.2.2</a>). In this case, the newly changed Java class and jar files will be used after rebuilding the model. Note that you need to rebuild the model to force loading of the changed Java source code even if you have not modified the schema or clues files. By default, source code in the matching branches gets compiled to <em>classes/matching</em>, which should be on the <em>reload</em> classpath.<a name="wp9001725"> </a>
+</ol><div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+6.4	 Deleting generated files<br>
+<a name="wp9001726"> </a></div>
+<p >
+After removing plugins or upgrading ChoiceMaker, it may become necessary to delete generated files if an existing model can no longer be loaded. All files generated from the schema and clues files are deleted by selecting <b>Model</b><b>-></b><b>Delete generated files</b>.
+<a name="wp9001727"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-022.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-024.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

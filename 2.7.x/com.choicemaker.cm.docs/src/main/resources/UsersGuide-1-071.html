@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>2 String manipulation</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-070.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-072.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+2	 String manipulation
+<a name="wp9002273"> </a></h3>
+<p >
+The class <em>com.choicemaker.cm.core.util.StringUtils</em> offers several public static methods that are useful for matching:
+<a name="wp9002274"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Method</b></font>
+<a name="wp9000685"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9000686"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>boolean nonEmptyString(String s)</em>
+<a name="wp9000687"> </a></p>
+</td>
+    <td><p >
+Returns true if <em>s</em> is non-null and contains any non white space characters.
+<a name="wp9000688"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>char getChar(String s)</em>
+<a name="wp9000689"> </a></p>
+</td>
+    <td><p >
+Returns the first character of <em>s</em> or `<em>\0</em>' if s is null or zero-length.
+<a name="wp9000690"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>int countDigits(String s)</em>
+<a name="wp9000691"> </a></p>
+</td>
+    <td><p >
+Returns the number of digits in <em>s</em>.
+<a name="wp9000692"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>boolean overlap(String s1, String s2)</em>
+<a name="wp9000693"> </a></p>
+</td>
+    <td><p >
+Returns true if one string begins or ends with the other.
+<a name="wp9000694"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>String removePunctuation(String s)</em>
+<a name="wp9000695"> </a></p>
+</td>
+    <td><p >
+Replaces '.', ';' and ',' with spaces and simply removes &quot;'&quot;. Does not create leading spaces. Removes all trailing spaces.
+<a name="wp9000696"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>String removeApostrophies(String s)</em>
+<a name="wp9000697"> </a></p>
+</td>
+    <td><p >
+Removes &quot;'&quot;.
+<a name="wp9000698"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>String removeNonDigits(String s)</em>
+<a name="wp9000699"> </a></p>
+</td>
+    <td><p >
+Removes all characters except for digits.
+<a name="wp9000700"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>String removeNonDigitsLetters(</em>
+<a name="wp9000701"> </a></p>
+<p >
+<em>    StringBuffer s)</em>
+<a name="wp9000702"> </a></p>
+</td>
+    <td><p >
+Removes all characters except for digits and letters.
+<a name="wp9000703"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>String removeNonDigitsLetters(</em>
+<a name="wp9000704"> </a></p>
+<p >
+<em>    String s)</em>
+<a name="wp9000705"> </a></p>
+</td>
+    <td><p >
+Removes all characters except for digits and letters.
+<a name="wp9000706"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>String removeNonLetters(String s)</em>
+<a name="wp9000707"> </a></p>
+</td>
+    <td><p >
+Removes all non-letters.
+<a name="wp9000708"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>int numMatchingCharacters(String a,</em>
+<a name="wp9000709"> </a></p>
+<p >
+<em>    String b)</em>
+<a name="wp9000710"> </a></p>
+</td>
+    <td><p >
+Returns the number of positions at which <em>a</em> and <em>b</em> have the same character.
+<a name="wp9000711"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002275"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-070.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-072.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

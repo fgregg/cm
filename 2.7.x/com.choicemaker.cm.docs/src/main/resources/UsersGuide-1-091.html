@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>4.1.1 Marked record pair sources</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-090.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-092.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h5 >
+4.1.1	 Marked record pair sources
+<a name="wp9002522"> </a></h5>
+<p >
+Marked record pair sources have <em>ChoiceMakerMarkedRecordPairs</em> as root element. Each pair is inside a <em>MarkedRecordPair</em> element. The latter has the following mandatory attributes:
+<a name="wp9002523"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001021"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001022"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001023"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>decision</em>
+<a name="wp9001024"> </a></p>
+</td>
+    <td><p >
+The human decision for this pair. One of:
+<a name="wp9001025"> </a></p>
+<ul> <li >differ<a name="wp9001026"> </a>
+ <li >hold<a name="wp9001027"> </a>
+ <li >match<a name="wp9001028"> </a>
+</ul></td>
+    <td><p >
+required
+<a name="wp9001029"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>date</em>
+<a name="wp9001030"> </a></p>
+</td>
+    <td><p >
+The date on which the human decision was made.
+<a name="wp9001031"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001032"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>user</em>
+<a name="wp9001033"> </a></p>
+</td>
+    <td><p >
+The user who made the decision.
+<a name="wp9001034"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001035"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>src</em>
+<a name="wp9001036"> </a></p>
+</td>
+    <td><p >
+The source of this pair.
+<a name="wp9001037"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001038"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>comment</em>
+<a name="wp9001039"> </a></p>
+</td>
+    <td><p >
+A comment.
+<a name="wp9001040"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001041"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002524"> </a></p>
+<p >
+The following is a legal marked record pair source for the schema StackedSchema.schema (<a href="UsersGuide-1-041.html#wp9001951">Figure 32</a>):
+<a name="wp9002525"> </a></p>
+<p >
+		&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<a name="wp9002526"> </a></p>
+<p >
+		&lt;ChoiceMakerMarkedRecordPairs&gt;
+<a name="wp9002527"> </a></p>
+<p >
+			&lt;MarkedRecordPair decision=&quot;match&quot; date=&quot;2/1/2002&quot; user=&quot;rjohnson&quot; src=&quot;INITIAL1&quot; comment=&quot;&quot;&gt;
+<a name="wp9002528"> </a></p>
+<p >
+				&lt;person personId=&quot;21&quot; firstName=&quot;JIM&quot; lastName=&quot;SMITH&quot;&gt;
+<a name="wp9002529"> </a></p>
+<p >
+					&lt;addr address=&quot;41 E 11th Street&quot; lastDateReported=&quot;01/23/2003&quot;/&gt;
+<a name="wp9002530"> </a></p>
+<p >
+					&lt;addr address=&quot;51 E 11th&quot;/&gt;
+<a name="wp9002531"> </a></p>
+<p >
+				&lt;/person&gt;
+<a name="wp9002532"> </a></p>
+<p >
+				&lt;person personId=&quot;23&quot; firstName=&quot;JAMES&quot; lastName=&quot;SMITH&quot;&gt;
+<a name="wp9002533"> </a></p>
+<p >
+					&lt;addr address=&quot;41 East 11th St&quot;/&gt;
+<a name="wp9002534"> </a></p>
+<p >
+				&lt;/person&gt;
+<a name="wp9002535"> </a></p>
+<p >
+			&lt;/MarkedRecordPair&gt;
+<a name="wp9002536"> </a></p>
+<p >
+			&lt;MarkedRecordPair decision=&quot;differ&quot; date=&quot;2/1/2002&quot; user=&quot;rjohnson&quot; src=&quot;INITIAL1&quot; comment=&quot;&quot;&gt;
+<a name="wp9002537"> </a></p>
+<p >
+				&lt;person personId=&quot;25&quot; firstName=&quot;UNKNOWN&quot; /&gt;
+<a name="wp9002538"> </a></p>
+<p >
+				&lt;person personId=&quot;28&quot; firstName=&quot;JOHN&quot; lastName=&quot;SMITH&quot;&gt;
+<a name="wp9002539"> </a></p>
+<p >
+					&lt;addr address=&quot;41 East 11th St&quot;/&gt;
+<a name="wp9002540"> </a></p>
+<p >
+				&lt;/person&gt;
+<a name="wp9002541"> </a></p>
+<p >
+			&lt;/MarkedRecordPair&gt;
+<a name="wp9002542"> </a></p>
+<p >
+			...
+<a name="wp9002543"> </a></p>
+<p >
+		&lt;/ChoiceMakerMarkedRecordPairs&gt;
+<a name="wp9002544"> </a></p>
+<p >
+			
+<a name="wp9002545"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-090.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-092.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

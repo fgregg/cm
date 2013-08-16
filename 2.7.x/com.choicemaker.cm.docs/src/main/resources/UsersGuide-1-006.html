@@ -1,0 +1,414 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>Chapter I. Introduction</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-005.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-007.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h2 >
+Chapter I.	 Introduction
+<a name="wp9001579"> </a></h2>
+<h3 >
+1	 Record matching
+<a name="wp9001580"> </a></h3>
+<p >
+Record-matching tasks can be broken down into three main categories:
+<a name="wp9001581"> </a></p>
+<ul> <li >Duplicate record removal/linkage: The same person, business, or thing is present more than once in a database. Duplicate records are removed or linked together.<a name="wp9001582"> </a>
+ <li >Database linkage: Two databases are being linked or merged. This might occur, for instance, because of a corporate merger, for purposes of building a data warehouse, or to prevent duplication of effort by storing information common to multiple databases in a single enterprise-wide database.<a name="wp9001583"> </a>
+ <li >Approximate database search: The ChoiceMaker system can search a database for records similar to a record entered online. <a name="wp9001584"> </a>
+</ul><p >
+In every one of these cases, the basic problem is essentially the same. Given an input or query record, we are trying to find a set of records in a target database which denote the same physical entity (e.g., a person or company) as the query record.
+<a name="wp9001585"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+1.1	 Two-pass matching<br>
+<a name="wp9001586"> </a></div>
+<p >
+<a href="UsersGuide-1-006.html#wp9001593">Figure 1</a> illustrates ChoiceMaker's two-pass matching:
+<a name="wp9001587"> </a></p>
+<ol type="1"> <li  value="1"><font ><i>Query record.</i></font> A query record is sent to ChoiceMaker. ChoiceMaker's objective is to find all records which might match the query record. The query record might be hand-entered by the user, it might be a record from another database for which a match is sought on the target database, or it could be a record from the target database for which we are seeking duplicate records.<a name="wp9001588"> </a>
+ <li  value="2"><font ><i>Blocking</i></font>. ChoiceMaker searches the target database for records which are possible matches to the query record. ChoiceMaker incorporates a proprietary blocking technology which dynamically builds sophisticated queries of the target database to gather a list of possible matches to the query record. The objective at this stage is to retrieve all possible matches and not overly many non-matches. Blocking is described in more detail in Section <a href="UsersGuide-1-006.html#wp9001589">2</a> and in <a href="UsersGuide-1-102.html#wp9002681">Chapter IX.7</a>.<a name="wp9001589"> </a>
+ <li  value="3"><font ><i>Many potential matches</i></font>. This is the set of records returned by blocking as potential matches of the query records.<a name="wp9001590"> </a>
+ <li  value="4"><font ><i>Scoring</i></font>. ChoiceMaker's scoring engine determines for each potential match whether it actually denotes or possibly denotes the same physical entity as the query record. Scoring employs a combination of a probabilistic decision computed using a machine learning technique and absolute rules to determine the final decision. Scoring is described in more detail in Section <a href="UsersGuide-1-008.html#wp9001607">3</a> and in <a href="UsersGuide-1-047.html#wp9001988">Chapter IV</a> and <a href="UsersGuide-1-080.html#wp9002413">Chapter VIII</a>.<a name="wp9001591"> </a>
+</ol><p >
+<img src="images/UsersGuide-1-006-03.jpg" height="386" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9001593"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+1.2	 Follow-up action<br>
+<a name="wp9001594"> </a></div>
+<p >
+In the case of an approximate database search, all matches and potential matches are displayed to the user. In duplicate record removal/linkage and database linkage, the action typically depends upon the number of matches and possible matches (holds). The following table lists the normal actions:
+<a name="wp9001595"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Case</b></font>
+<a name="wp9000032"> </a></p>
+</td>
+    <td><p >
+<font ><b># holds</b></font>
+<a name="wp9000033"> </a></p>
+</td>
+    <td><p >
+<font ><b># matches</b></font>
+<a name="wp9000034"> </a></p>
+</td>
+    <td><p >
+<font ><b>Standard action</b></font>
+<a name="wp9000035"> </a></p>
+</td>
+    <td><p >
+<font ><b>Alternative action</b></font>
+<a name="wp9000036"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+1
+<a name="wp9000037"> </a></p>
+</td>
+    <td><p >
+0 
+<a name="wp9000038"> </a></p>
+</td>
+    <td><p >
+0
+<a name="wp9000039"> </a></p>
+</td>
+    <td><p >
+no action
+<a name="wp9000040"> </a></p>
+</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><p >
+2
+<a name="wp9000042"> </a></p>
+</td>
+    <td><p >
+1 or more
+<a name="wp9000043"> </a></p>
+</td>
+    <td><p >
+0
+<a name="wp9000044"> </a></p>
+</td>
+    <td><p >
+human review
+<a name="wp9000045"> </a></p>
+</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><p >
+3
+<a name="wp9000047"> </a></p>
+</td>
+    <td><p >
+0
+<a name="wp9000048"> </a></p>
+</td>
+    <td><p >
+1
+<a name="wp9000049"> </a></p>
+</td>
+    <td><p >
+link/merge
+<a name="wp9000050"> </a></p>
+</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><p >
+4
+<a name="wp9000052"> </a></p>
+</td>
+    <td><p >
+1 or more
+<a name="wp9000053"> </a></p>
+</td>
+    <td><p >
+1
+<a name="wp9000054"> </a></p>
+</td>
+    <td><p >
+link/merge with single match
+<a name="wp9000055"> </a></p>
+</td>
+    <td><p >
+human review (conservative approach)
+<a name="wp9000056"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+5
+<a name="wp9000057"> </a></p>
+</td>
+    <td><p >
+0
+<a name="wp9000058"> </a></p>
+</td>
+    <td><p >
+2 or more
+<a name="wp9000059"> </a></p>
+</td>
+    <td><p >
+human review
+<a name="wp9000060"> </a></p>
+</td>
+    <td><p >
+multi link/merge (aggressive approach)
+<a name="wp9000061"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+6
+<a name="wp9000062"> </a></p>
+</td>
+    <td><p >
+1 or more
+<a name="wp9000063"> </a></p>
+</td>
+    <td><p >
+2 or more
+<a name="wp9000064"> </a></p>
+</td>
+    <td><p >
+human review
+<a name="wp9000065"> </a></p>
+</td>
+    <td><p >
+multi link/merge with matches (aggressive approach)
+<a name="wp9000066"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9001596"> </a></p>
+<p >
+ The follow-up action may be performed by the customer's own software or by ChoiceMaker. In any case, we suggest that all linking and merging be done in a way that supports undo. The table shows a scenario that does not perform automatic n-way linkage/merge.
+<a name="wp9001597"> </a></p>
+<p >
+When adding new records to a database it is common to mark records for human review as temporary records. When matching additional new records against the database, it is common to either match only against non-temporary records or to use a more complex logic along the following lines:
+<a name="wp9001598"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Case</b></font>
+<a name="wp9000067"> </a></p>
+</td>
+    <td><p >
+<font ><b># temporary holds</b></font>
+<a name="wp9000068"> </a></p>
+</td>
+    <td><p >
+<font ><b># temporary matches</b></font>
+<a name="wp9000069"> </a></p>
+</td>
+    <td><p >
+<font ><b># active holds</b></font>
+<a name="wp9000070"> </a></p>
+</td>
+    <td><p >
+<font ><b>#active matches</b></font>
+<a name="wp9000071"> </a></p>
+</td>
+    <td><p >
+<font ><b>Action</b></font>
+<a name="wp9000072"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+0
+<a name="wp9000073"> </a></p>
+</td>
+    <td><p >
+*
+<a name="wp9000074"> </a></p>
+</td>
+    <td><p >
+0, 2 or more
+<a name="wp9000075"> </a></p>
+</td>
+    <td><p >
+0
+<a name="wp9000076"> </a></p>
+</td>
+    <td><p >
+0
+<a name="wp9000077"> </a></p>
+</td>
+    <td><p >
+create new active record
+<a name="wp9000078"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+1
+<a name="wp9000079"> </a></p>
+</td>
+    <td><p >
+*
+<a name="wp9000080"> </a></p>
+</td>
+    <td><p >
+1
+<a name="wp9000081"> </a></p>
+</td>
+    <td><p >
+*
+<a name="wp9000082"> </a></p>
+</td>
+    <td><p >
+0, 2 or more
+<a name="wp9000083"> </a></p>
+</td>
+    <td><p >
+merge with single temporary match record
+<a name="wp9000084"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+2
+<a name="wp9000085"> </a></p>
+</td>
+    <td><p >
+*
+<a name="wp9000086"> </a></p>
+</td>
+    <td><p >
+*
+<a name="wp9000087"> </a></p>
+</td>
+    <td><p >
+*
+<a name="wp9000088"> </a></p>
+</td>
+    <td><p >
+1
+<a name="wp9000089"> </a></p>
+</td>
+    <td><p >
+merge with single active match records
+<a name="wp9000090"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+3
+<a name="wp9000091"> </a></p>
+</td>
+    <td><p >
+*
+<a name="wp9000092"> </a></p>
+</td>
+    <td><p >
+0, 2 or more
+<a name="wp9000093"> </a></p>
+</td>
+    <td><p >
+*
+<a name="wp9000094"> </a></p>
+</td>
+    <td><p >
+2 or more
+<a name="wp9000095"> </a></p>
+</td>
+    <td><p >
+create new temporary record
+<a name="wp9000096"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+4
+<a name="wp9000097"> </a></p>
+</td>
+    <td><p >
+*
+<a name="wp9000098"> </a></p>
+</td>
+    <td><p >
+0, 2 or more
+<a name="wp9000099"> </a></p>
+</td>
+    <td><p >
+1 or more
+<a name="wp9000100"> </a></p>
+</td>
+    <td><p >
+0
+<a name="wp9000101"> </a></p>
+</td>
+    <td><p >
+create new temporary record
+<a name="wp9000102"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9001599"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-005.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-007.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

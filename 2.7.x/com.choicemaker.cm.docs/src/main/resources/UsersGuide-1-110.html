@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>7.5.2 Adding blocking fields</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-109.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-111.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h5 >
+7.5.2	 Adding blocking fields
+<a name="wp9002738"> </a></h5>
+<p >
+To add a blocking field f, perform the following steps:
+<a name="wp9002739"> </a></p>
+<ol type="1"> <li  value="1">Add the field f to the schema (Section <a href="UsersGuide-1-108.html#wp9002715">7.4</a>).<a name="wp9002740"> </a>
+ <li  value="2">Recompile the model (<a href="UsersGuide-1-023.html#wp9001721">Chapter II.6.3</a>).<a name="wp9002741"> </a>
+ <li  value="3">Create one or more indices that have the new field as the first component. Assuming that id denotes the main id of entities, add a composite index on (f, id). Such a covering composite index can answer a blocking query of the form &quot;select id from t where f =  `some value'&quot; without requiring a costly access to the table t. If blocking sets that combine f with another field f2 of the same table in the same group are common, add a composite index on (f, f2, id) instead.<a name="wp9002742"> </a>
+</ol>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-109.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-111.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

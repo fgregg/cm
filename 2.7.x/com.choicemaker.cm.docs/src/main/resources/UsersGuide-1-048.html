@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>2 Clue sets and clues</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-047.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-049.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+2	 Clue sets and clues
+<a name="wp9001993"> </a></h3>
+<p >
+A ClueMaker `clue set' is a set of clues that can be used in a probability model. <a href="UsersGuide-1-048.html#wp9001998">Figure 35</a> illustrates a sample clue set. Line 1 contains the package statement, which has the same syntax and semantics as in Java. If no package statement is present, ClueMaker uses the package <em>gen</em> rather than an unnamed package as Java does.
+<a name="wp9001994"> </a></p>
+<p >
+Java style import statements are found on lines 2 and 3. As in Java the <font >java.lang</font> package is implicitly imported.
+<a name="wp9001995"> </a></p>
+<p >
+Line 4 defines the type of the clues, whether they have decision, names the clue set <em>SampleClues,</em> and identifies the ChoiceMaker schema on which it is based, namely <em>SimpleSchema</em> (see <a href="UsersGuide-1-037.html#wp9001930">Figure 31</a>). The type must be one of the following primitive Java types: <em>boolean</em>, <em>byte</em>, <em>short</em>, <em>int</em>, <em>long</em>, <em>float</em>, or <em>double</em>. The types that the different machine learning techniques support vary. They are documented in <a href="UsersGuide-1-080.html#wp9002413">Chapter VIII</a>. Certain machine learning techniques, such as maximum entropy, require a decision (see below) for each clue. To be able to use one of these techniques, the keyword decision must be placed after the type and all clues must have a decision.
+<a name="wp9001996"> </a></p>
+<p >
+The file that contains this clue set must have the same name as the clue set and use the `<em>.clues</em>' extension, e.g., <em>SampleClues.clues</em>, and reside in the same directory as the schema file.
+<a name="wp9001997"> </a></p>
+<p >
+<img src="images/UsersGuide-1-048-44.jpg" usemap="#UsersGuide-1-048-44_jpg" height="386" width="578" border="0" hspace="0" vspace="0">
+<map name="UsersGuide-1-048-44_jpg">
+<area href="UsersGuide-1-037.html#wp9001930" shape="rect" coords="0,12,576,372" alt="Text Box: 1	package com.choicemaker.custom.demo;2	import java.util.*;  3  import com.choicemaker.cm.matching.gen.*;  4	clueset boolean decision SampleClues uses SimpleSchema { // SimpleSchema Figure 31  5		// Predicts match if both firstName's are valid and are identical.  6		clue mFirstName {  7			match valid(q.firstName) &amp;&amp; valid(m.firstName) &amp;&amp; q.firstName == m.firstName;	8		}	9	10		// Predicts differ if both lastName's are valid and their phoneticizations according to	11		// the soundex function differ.		12		clue dLastNameSoundex {	13			differ valid(q.lastName) &amp;&amp; valid(m.lastName) &amp;&amp;	14					Soundex.soundex(q.lastName) != Soundex.soundex(m.lastName);	15		}	1617		// Predicts match if all names are valid and they are swapped.18		clue mSwappedNames {19			match valid(q.firstName) &amp;&amp; valid(q.lastName) &amp;&amp; valid(m.firstName) &amp;&amp;20					valid(m.lastName) &amp;&amp; q.firstName == m.lastName &amp;&amp; q.lastName == m.firstName;21		}	22		...	23	}Figure 35: SampleClues.clues ">
+</map>
+
+<a name="wp9001998"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+2.1	 Clues<br>
+<a name="wp9001999"> </a></div>
+<p >
+Clue <em>mFirstName</em> (lines 5 - 8) &quot;fires&quot; and predicts that the two records match if both first names are valid (according to the definition in <em>SimpleSchema</em>) and are identical. The name of the clue follows the keyword <em>clue</em>. The decision (prediction) match, is given by the keyword <em>match</em>. The other legal decisions are differ and hold. Some machine learning techniques, such as support vector machines, ignore the decision if present. If the clue set is declared to have decisions, all clues must have decisions.
+<a name="wp9002000"> </a></p>
+<p >
+The decision, if present, is followed by a ClueMaker expression of the type of the clue set, e.g., boolean. The following table lists the allowed types for the expression depending upon the type of the clue set:
+<a name="wp9002001"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Clue set type</b></font>
+<a name="wp9000148"> </a></p>
+</td>
+    <td><p >
+<font ><b>Allowed types for clue expression</b></font>
+<a name="wp9000149"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000150"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>
+<a name="wp9000151"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>byte</em>
+<a name="wp9000152"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>, <em>byte</em>
+<a name="wp9000153"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>short</em>
+<a name="wp9000154"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>, <em>byte</em>, <em>short</em>
+<a name="wp9000155"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>int</em>
+<a name="wp9000156"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>, <em>byte</em>, <em>short</em>, <em>int</em>
+<a name="wp9000157"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>long</em>
+<a name="wp9000158"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>, <em>byte</em>, <em>short</em>, <em>int</em>, <em>long</em>
+<a name="wp9000159"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>float</em>
+<a name="wp9000160"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>, <em>byte</em>, <em>short</em>, <em>int</em>, <em>long</em>, <em>float</em>
+<a name="wp9000161"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>double</em>
+<a name="wp9000162"> </a></p>
+</td>
+    <td><p >
+<em>boolean</em>, <em>byte</em>, <em>short</em>, <em>int</em>, <em>long</em>, <em>float</em>, <em>double</em>
+<a name="wp9000163"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002002"> </a></p>
+<p >
+If the clue expression is of type <em>boolean</em> and the clue set type a numeric type, <em>false</em> is converted to 0 and <em>true</em> to 1.
+<a name="wp9002003"> </a></p>
+<p >
+The pair of records being matched in ClueMaker are referred to as &quot;<em>q</em>&quot; and &quot;<em>m</em>&quot;. The client (the program that calls the ChoiceMaker server) supplies a query record <em>q</em>. Potential matches, returned by the blocking procedure, are the records referenced as <em>m</em>. The fields of the query and match records are referenced as <em>q.fieldName</em> and <em>m.fieldName</em>, respectively. Most clues are symmetric in the two records, as in the example.
+<a name="wp9002004"> </a></p>
+<p >
+The ClueMaker keyword <em>valid</em> takes a single field as argument and references the corresponding validity definition of the schema. It is perfectly legal to omit validity checking of a field in a clue or explicitly provide another check that the field data is valid for a certain clue. In any case, the predicate should contain appropriate guards against dereferencing of <em>null</em> references and method calls that do not satisfy preconditions. Since most clues use the pre-defined validity predicates, we will below introduce short hand forms for this special case.
+<a name="wp9002005"> </a></p>
+<p >
+Note that in ClueMaker `<em>==</em>' and `<em>!=</em>' denote value comparison (corresponding to <em>Object.equals</em> in Java) rather than reference comparison for reference types other than the null type<font ><sup><a href="#wp9001441"><sup>1</sup></a></sup></font>. E.g., <em>q.firstName == m.firstName</em> in ClueMaker corresponds to <em>q.firstName.equals(m.firstName)</em>. This must also be taken into account when guarding equivalence expressions against <em>NullPointerException</em>'s. In the special case of <em>String</em>'s, ChoiceMaker may use interning and reference comparison rather than equals to achieve the same semantics as <em>equals()</em> at higher speed and lower memory usage.
+<a name="wp9002006"> </a></p>
+<p >
+Lines 10 - 15 define a second clue <em>dLastNameSoundex</em>. This clue predicts <em>differ</em> if both last names are valid and the phoneticizations according to the soundex function (defined by the static method <em>Soundex.soundex</em>) are different.
+<a name="wp9002007"> </a></p>
+<p >
+Finally, lines 17 - 21 define a third clue <em>mSwappedNames</em> that predicts match if the first and last names have been swapped.
+<a name="wp9002008"> </a></p>
+<p >
+The syntactic grammar of ClueMaker is identical to that of Java. Hence, both `//' for comments until the end of the line and `/* ... */' for multi-line comments exist. Furthermore, the treatment of white space is the same. The usage of javadoc-style comments `/** ... */' above clues is recommended as they are displayed along with the clue definition of the clue in ModelMaker.
+<a name="wp9002009"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+2.2	 Constants<br>
+<a name="wp9002010"> </a></div>
+<p >
+ClueMaker allows the use of constants of any type that can be used in subsequent clues. <a href="UsersGuide-1-048.html#wp9002012">Figure 36</a> gives an example of introducing the constant <em>bothValid</em>, which is used in the clue <em>mFirstName</em>. Constants are introduced with the keyword final followed by the type, which is arbitrary, the name of the constant and the value.
+<a name="wp9002011"> </a></p>
+<p >
+<img src="images/UsersGuide-1-048-45.jpg" height="122" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002012"> </a></p>
+
+<p >
+<a href="#wp9002006"><sup>1</sup></a>The null type is the one-element type of the literal null.
+<a name="wp9001441"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-047.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-049.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

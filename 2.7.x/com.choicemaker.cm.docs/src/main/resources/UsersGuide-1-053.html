@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>4 Stacked data</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-052.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-054.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h3 >
+4	 Stacked data
+<a name="wp9002072"> </a></h3>
+<p >
+Stacking of data allows us to store multiple values for a given field. In <a href="UsersGuide-1-041.html#wp9001946">Chapter III.7</a> we introduced an example where we stored multiple addresses for a person. Unlike competing products, ChoiceMaker also allows the query record to be stacked and passes all stacked values of the potential matches from blocking to decision making. Hence, we need to be able to write clues for stacked data. <a href="UsersGuide-1-053.html#wp9002076">Figure 46</a> gives a few sample clues on the stacked addresses declared in <em>StackedSchema</em> (<a href="UsersGuide-1-041.html#wp9001951">Figure 32</a>).
+<a name="wp9002073"> </a></p>
+<p >
+Clues on stacked data require existential or universal quantification. The reader who prefers not to use quantification directly may skip forward to Section <a href="UsersGuide-1-053.html#wp9002083">4.1</a> where we introduce shorthand notations for the most common usages of quantification.
+<a name="wp9002074"> </a></p>
+<p >
+Clue <em>mAddress</em> (lines 1 - 5) uses existential quantification to express that there must exist valid identical addresses on the query and match record for the clue to fire. Stacked values are referenced like array values. For example, <em>a.addr[i].address</em> denotes the <em>i</em><font ><sup>th</sup></font> stacked value of address on the query record <em>q</em>.
+<a name="wp9002075"> </a></p>
+<p >
+<img src="images/UsersGuide-1-053-55.jpg" height="506" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002076"> </a></p>
+<p >
+Clue <em>mStreetName</em> illustrates that clues can reference other clues (line 9).
+<a name="wp9002077"> </a></p>
+<p >
+Both existential and universal quantification are employed in clue <em>dAddress</em> (lines 13 - 19). This clue fires if valid addresses exist in both records and all valid addresses are pair wise different.
+<a name="wp9002078"> </a></p>
+<p >
+Clue <em>mStreetNameAndLastReported</em> (lines 21 - 27) illustrates a condition on multiple fields of the same record. As stated in <a href="UsersGuide-1-041.html#wp9001946">Chapter III.7</a>, ChoiceMaker stacks on a per-record basis and, thereby, preserves grouping of related values. Hence, the clue only fires if the <em>address</em> and <em>lastDateReported</em> fields are both identical on the same record (same row, in database terminology).
+<a name="wp9002079"> </a></p>
+<p >
+Finally, clue <em>mPatientIdCounts</em> (lines 29 - 32) illustrates the keyword <em>count</em>. The clue fires when two or more matching <em>patient_id</em>'s are found. If for a given value of an index there exist multiple combinations of values for the other indices such that the predicate holds, all occurrences are counted. On the other hand, <em>countunique</em> counts at most one for any value of any index.
+<a name="wp9002080"> </a></p>
+<p >
+As in ChoiceMaker schema expressions (<a href="UsersGuide-1-041.html#wp9001946">Chapter III.7</a>), the stacking depth can be accessed with <em>StackingUtils.size()</em>.
+<a name="wp9002081"> </a></p>
+<p >
+Comparisons of whole records and arrays of stacked records, e.g., <em>q == m</em> and <em>q.addr == m.addr</em>, respectively, are meaningless in ClueMaker.
+<a name="wp9002082"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+4.1	 Shorthand for same and different stacked values<br>
+<a name="wp9002083"> </a></div>
+<p >
+As for non-stacked data, we introduce shorthand forms for the most common patterns. For brevity we omit the definitions and give directly the rewritten versions of the first four clues (<a href="UsersGuide-1-053.html#wp9002085">Figure 47</a>).
+<a name="wp9002084"> </a></p>
+<p >
+<img src="images/UsersGuide-1-053-56.jpg" usemap="#UsersGuide-1-053-56_jpg" height="290" width="626" border="0" hspace="0" vspace="0">
+<map name="UsersGuide-1-053-56_jpg">
+<area href="UsersGuide-1-053.html#wp9002076" shape="rect" coords="0,12,624,275" alt="Text Box: 	1	clue mAddress {	2		match same(r.addr.address);	3	}	4	5	clue mStreetName {	6		match !mAddress &amp;&amp; same(r.addr.streetName);	7	}	8	9	clue dAddress {	10		differ different(r.addr.address);11	}1213	clue mStreetNameAndLastReported {14		match same(r.addr.streetName, r.addr.lastDateReported);15	}Figure 47: First four clues of Figure 46 rewritten in shorthand notation">
+</map>
+
+<a name="wp9002085"> </a></p>
+<p >
+Note that <em>same(r.addr.streetName, r.addr.lastDateReported)</em> (line 14) is a stronger condition than <em>same(r.addr.streetName) &amp;&amp; same(r.addr.lastDateReported)</em> because it requires the two equalities on the same stacked node (database row).
+<a name="wp9002086"> </a></p>
+<p >
+This principle extends to nested stacking: Assuming that <em>addr</em> would have a nested stacked node type <em>reportedBy</em> with field <em>system</em> (<a href="UsersGuide-1-041.html#wp9001946">Chapter III.7</a>), the expression <em>same(r.addr.streetName, r.addr.reportedBy.system) </em>would require the same <em>streetName</em> to have been reported by the same <em>system</em>.
+<a name="wp9002087"> </a></p>
+<p >
+The type of <em>r</em> in shorthand forms is different from that of <em>q</em> and <em>m</em> in that nested nodes are syntactically accessed as non-array types. The general definition of shorthand forms for stacked data is omitted for brevity.
+<a name="wp9002088"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+4.2	 Swaps<br>
+<a name="wp9002089"> </a></div>
+<p >
+The shorthand <em>swapsame</em> can also be used for stacked values. The list of fields to look for swaps may be from different node types and stacked and non-stacked fields may be combined. <a href="UsersGuide-1-053.html#wp9002091">Figure 48</a> gives an example of <em>swapsame</em> for stacked data.
+<a name="wp9002090"> </a></p>
+<p >
+<img src="images/UsersGuide-1-053-57.jpg" height="182" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002091"> </a></p>
+<p >
+As for non stacked data, a field (all the stacked values for a field) can only count for one match.
+<a name="wp9002092"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+4.3	 Minimum and maximum<br>
+<a name="wp9002093"> </a></div>
+<p >
+The <em>minimum</em> and <em>maximum</em> constructs are used to find the minimum and maximum value, respectively, of an expression over the stacked values for which a certain condition holds. For example, <a href="UsersGuide-1-053.html#wp9002096">Figure 49</a> shows a clue that returns the minimum edit distance (number of character insertions, deletions, and replacements necessary to transform one argument string into the other) between the stacked street names. If one or both records do not have valid <em>steetNames</em>, the maximum value of the type of the expression is returned, e.g., <em>Integer.MAX_VALUE</em>.
+<a name="wp9002094"> </a></p>
+<p >
+<img src="images/UsersGuide-1-053-58.jpg" height="110" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002096"> </a></p>
+<p >
+The <em>maximum</em> construct is dual. The minimum value of the type of the expression is returned if there are no indexes for which the condition holds.
+<a name="wp9002097"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+4.4	 Same condition on query and match record<br>
+<a name="wp9002098"> </a></div>
+<p >
+The shorthands <em>and</em>, <em>or</em>, and <em>xor</em> can also be used on stacked data. Unlike with <em>same</em> and <em>different</em>, explicit quantification is required for <em>and</em>, <em>or</em>, and <em>xor</em>. We distinguish between the quantifier inside and outside the shorthand. If the quantifier is inside the shorthand, then stacked nodes are accessed with a single index as shown in <a href="UsersGuide-1-053.html#wp9002100">Figure 50</a>.
+<a name="wp9002099"> </a></p>
+<p >
+<img src="images/UsersGuide-1-053-59.jpg" height="158" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002100"> </a></p>
+<p >
+On the other hand, if the quantifier is outside separate indexes for both the query and the match record must be given, separated by a comma. In <a href="UsersGuide-1-053.html#wp9002103">Figure 51</a>, the index <em>i</em> ranges over <em>q.addr</em> and <em>j</em> ranges over <em>m.addr</em>.
+<a name="wp9002101"> </a></p>
+<p >
+Note that the comma notation does not reference a multi-dimensional array, as is the case in Pascal.
+<a name="wp9002102"> </a></p>
+<p >
+<img src="images/UsersGuide-1-053-60.jpg" height="170" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002103"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-052.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-054.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

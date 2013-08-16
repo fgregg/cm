@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>1.3.1 Multiple configurations</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-084.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-086.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h5 >
+1.3.1	 Multiple configurations
+<a name="wp9002474"> </a></h5>
+<p >
+Most I/O plugins support multiple configurations in the same schema. This is necessary if, for example, we want to use two flat files with different field layouts. To support this, the <em>xGlobal</em>, <em>xNodeType</em>, and <em>xField</em> elements of most plugins have a conf attribute. The value of the <em>conf</em> attribute is a comma separated list of configurations to which the element applies. If no <em>conf</em> attribute is present or its value is &quot;<em>all</em>&quot;, the element applies to all configurations. If there are multiple <em>xGlobal</em>, <em>xNodeType</em>, or <em>xField</em> elements that apply to a configuration according to this rule, only the first element is considered.
+<a name="wp9002475"> </a></p>
+<p >
+<a href="UsersGuide-1-085.html#wp9002480">Figure 66</a> gives an example. On lines 3-5 we define three flat file configurations <em>A</em>, <em>B</em>, and <em>C</em>. Line 9 defines the position and width of <em>firstName</em> for configuration <em>A</em>. Line 10 gives the same information for configuration <em>B</em>. We don't give any explicit configuration information for <em>C</em>, so the defaults apply.
+<a name="wp9002476"> </a></p>
+<p >
+Line 13 defines the position and width of <em>firstName</em> for configurations <em>A</em> and <em>B</em>. Again the defaults apply for configuration <em>C</em>.
+<a name="wp9002477"> </a></p>
+<p >
+Line 16 states that the <em>maidenName</em> field is not present in any configuration.
+<a name="wp9002478"> </a></p>
+<p >
+<img src="images/UsersGuide-1-085-75.jpg" height="302" width="626" border="0" hspace="0" vspace="0">
+<a name="wp9002480"> </a></p>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-084.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-086.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

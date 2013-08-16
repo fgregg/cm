@@ -1,0 +1,768 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher 2003 for Word 8.0.0.1127">
+    <meta name="TEMPLATEBASE" content="Sun JavaHelp">
+    <meta name="LASTUPDATED" content="12/03/03 09:28:36">
+    <link rel="StyleSheet" href="document.css" type="text/css" media="screen">
+    <title>7.3.6 Groups</title>
+  </head>
+
+  <body link="#3366CC" vlink="#9999CC" text="#000000" alink="#0000CC" bgcolor="#FFFFFF">
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr> 
+        <td>
+          <img src="images/logo.gif" width="174" height="46" alt="ChoiceMaker Technologies Logo">
+        </td>
+        <td align="right" valign="top">
+<a href="UsersGuide-1-107.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-109.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+      </tr>
+    </table>
+
+    <hr align="left">
+
+    <blockquote>
+<h5 >
+7.3.6	 Groups
+<a name="wp9002707"> </a></h5>
+<p >
+Groups can be used to define whether multiple fields must match on the same node of a stacked node type or whether they may be on different nodes.
+<a name="wp9002708"> </a></p>
+<p >
+Consider, for example, a blocking set <font ><i>firstName=&quot;JIM&quot;</i></font> and <font ><i>lastName=&quot;SMITH&quot;</i></font>. If <font ><i>firstName</i></font> and <font ><i>lastName</i></font> are in the same target group, then there must be a node (database row) with <font ><i>JIM SMITH</i></font> to match. If they are in different groups, a record that has stacked names<font ><i> JIM SMYTHE</i></font> and <font ><i>JAMES SMITH</i></font> also gets returned.
+<a name="wp9002709"> </a></p>
+<p >
+The dual, source groups, determine whether values from different nodes of the same type get combined into blocking sets or not. E.g., if the query record has stacked names<font ><i> JIM SMYTHE</i></font> and <font ><i>JAMES SMITH</i></font> then the blocking set <font ><i>firstName=&quot;JIM&quot;</i></font> and <font ><i>lastName=&quot; SMYTHE&quot; </i></font>only gets created if first and last name are in different source groups.
+<a name="wp9002710"> </a></p>
+<p >
+The use of multiple groups in a node type can decrease the number of false negatives as shown in the example. On the other hand, it also slows down blocking because it requires an additional join and may lead to more records being returned from blocking.
+<a name="wp9002711"> </a></p>
+<p >
+Groups can also be used on multiple node types that are in an ancestor-descendant relationship. E.g., if we had stacked addresses and with addresses nested stacked reportedBy nodes with field system (<a href="UsersGuide-1-041.html#wp9001946">Chapter III.7</a>), we could specify whether the system value has to match on a child node of the node that matches the zip code or on any node.
+<a name="wp9002712"> </a></p>
+<p >
+The use of groups has no effect on fields from two node types that are not in a ancestor-descendant relationship. E.g., if there are different names and address tables, then the conjuncts of a condition like <font ><i>firstName=&quot;JIM&quot;</i></font> and <font ><i>zip=&quot;10003&quot;</i></font> can by definition be satisfied on different rows.
+<a name="wp9002713"> </a></p>
+<p >
+Groups must not be used on non-stacked tables.
+<a name="wp9002714"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+7.4	 Format and configuration<br>
+<a name="wp9002715"> </a></div>
+<p >
+The blocking plugin supports multiple configurations. The database plugin supports the ChoiceMaker schema elements <em>blockingGlobal</em>, <em>blockingNodeType</em>, and <em>blockingField</em>. <em>blockingGlobal</em> has three attributes:
+<a name="wp9002716"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001255"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001256"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001257"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001258"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>conf</em>
+<a name="wp9001259"> </a></p>
+</td>
+    <td><p >
+The name of the configuration.
+<a name="wp9001260"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001261"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001262"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>defaultCount</em>
+<a name="wp9001263"> </a></p>
+</td>
+    <td><p >
+Field values with fewer occurrences are classified as rare are not stored. Instead, this value is used.<br>Not applicable for exact blocking.
+<a name="wp9001264"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001265"> </a></p>
+</td>
+    <td><p >
+10
+<a name="wp9001266"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>exact</em>
+<a name="wp9001267"> </a></p>
+</td>
+    <td><p >
+Generate configuration for exact blocking.
+<a name="wp9001268"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001269"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9001270"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>automated</em>
+<a name="wp9001271"> </a></p>
+</td>
+    <td><p >
+Generate configuration for automated blocking.
+<a name="wp9001272"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001273"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9001274"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>dbConf</em>
+<a name="wp9001275"> </a></p>
+</td>
+    <td><p >
+Comma separated list of db configurations for which this blocking configuration should be generated.
+<a name="wp9001276"> </a></p>
+<p >
+Exaples: `batch,online', `all', `none'
+<a name="wp9001277"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001278"> </a></p>
+</td>
+    <td><p >
+none
+<a name="wp9001279"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002717"> </a></p>
+<p >
+In addition, <em>blockingGlobal</em> can have any number of <em>illegalCombination</em> child elements. <em>illegalCombination</em> has two or more children of types <em>sourceFieldRef</em>, <em>targetFieldRef</em>, or <em>blockingFieldRef</em>.  <em>illegalCombination</em> is not applicable for exact blocking.
+<a name="wp9002719"> </a></p>
+<p >
+<em>sourceFieldRef</em> denotes a source field. It has the following attributes:
+<a name="wp9002720"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001280"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001281"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001282"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001283"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>sourceNodeTypeName</em>
+<a name="wp9001284"> </a></p>
+</td>
+    <td><p >
+The name of the node type containing this source field. Nested node types are written in dot notation, e.g., person.contact denotes the node type contact nested in person. 
+<a name="wp9001285"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001286"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001287"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>sourceFieldName</em>
+<a name="wp9001288"> </a></p>
+</td>
+    <td><p >
+The name of the field.
+<a name="wp9001289"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001290"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001291"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002721"> </a></p>
+<p >
+<em>targetFieldRef</em> denotes a target field. It has the following attributes:
+<a name="wp9002723"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001292"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001293"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001294"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001295"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>targetNodeTypeName</em>
+<a name="wp9001296"> </a></p>
+</td>
+    <td><p >
+The name of the node type containing this target field. Nested node types are written in dot notation, e.g., person.contact denotes the node type contact nested in person. 
+<a name="wp9001297"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001298"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001299"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>targetFieldName</em>
+<a name="wp9001300"> </a></p>
+</td>
+    <td><p >
+The name of the field.
+<a name="wp9001301"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001302"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001303"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002724"> </a></p>
+<p >
+<em>blockingFieldRef</em> denotes a blocking field. It has the following attributes:
+<a name="wp9002726"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001304"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001305"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001306"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001307"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>sourceNodeTypeName</em>
+<a name="wp9001308"> </a></p>
+</td>
+    <td><p >
+The name of the node type containing this source field. Nested node types are written in dot notation, e.g., person.contact denotes the node type contact nested in person. 
+<a name="wp9001309"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001310"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001311"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>sourceFieldName</em>
+<a name="wp9001312"> </a></p>
+</td>
+    <td><p >
+The name of the field.
+<a name="wp9001313"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001314"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001315"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>targetNodeTypeName</em>
+<a name="wp9001316"> </a></p>
+</td>
+    <td><p >
+The name of the node type containing this target field. Nested node types are written in dot notation, e.g., person.contact denotes the node type contact nested in person. 
+<a name="wp9001317"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001318"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001319"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>targetFieldName</em>
+<a name="wp9001320"> </a></p>
+</td>
+    <td><p >
+The name of the field.
+<a name="wp9001321"> </a></p>
+</td>
+    <td><p >
+required
+<a name="wp9001322"> </a></p>
+</td>
+    <td><p >
+N/A
+<a name="wp9001323"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002727"> </a></p>
+<p >
+The element <em>blockingNodeType</em>. <em>blockingNodeType</em> has the following attributes:
+<a name="wp9002729"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001324"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001325"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001326"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001327"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>conf</em>
+<a name="wp9001328"> </a></p>
+</td>
+    <td><p >
+The name of the configuration.
+<a name="wp9001329"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001330"> </a></p>
+</td>
+    <td><p >
+all
+<a name="wp9001331"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>defaultCount</em>
+<a name="wp9001332"> </a></p>
+</td>
+    <td><p >
+Field values with fewer occurrences are not stored. Instead, this value is used.
+<a name="wp9001333"> </a></p>
+<p >
+Not applicable for exact blocking.
+<a name="wp9001334"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001335"> </a></p>
+</td>
+    <td><p >
+<em>defaultCount</em> of <em>blockingGlobal</em>
+<a name="wp9001336"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002730"> </a></p>
+<p >
+A schema field can have several <em>blockingField</em> children for the same configuration. E.g., <font ><i>firstName</i></font> can be used to block on <font ><i>firstName</i></font> and <font ><i>lastName</i></font> in the database. <em>blockingField</em> has the following attributes:
+<a name="wp9002732"> </a></p>
+<p >
+
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <caption></caption>
+  <tr>
+    <td><p >
+<font ><b>Name</b></font>
+<a name="wp9001337"> </a></p>
+</td>
+    <td><p >
+<font ><b>Semantics</b></font>
+<a name="wp9001338"> </a></p>
+</td>
+    <td><p >
+<font ><b>Use</b></font>
+<a name="wp9001339"> </a></p>
+</td>
+    <td><p >
+<font ><b>Default</b></font>
+<a name="wp9001340"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>conf</em>
+<a name="wp9001341"> </a></p>
+</td>
+    <td><p >
+The name of the configuration.
+<a name="wp9001342"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001343"> </a></p>
+</td>
+    <td><p >
+all
+<a name="wp9001344"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>use</em>
+<a name="wp9001345"> </a></p>
+</td>
+    <td><p >
+Controls whether the field is used.<br>true: field is used
+<a name="wp9001346"> </a></p>
+<p >
+false: field is not used
+<a name="wp9001347"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001348"> </a></p>
+</td>
+    <td><p >
+true
+<a name="wp9001349"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>key</em>
+<a name="wp9001350"> </a></p>
+</td>
+    <td><p >
+Defines the unique key field required for automated blocking.
+<a name="wp9001351"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001352"> </a></p>
+</td>
+    <td><p >
+false
+<a name="wp9001353"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>targetNodeTypeName</em>
+<a name="wp9001354"> </a></p>
+</td>
+    <td><p >
+The name of the node type containing this target field. Nested node types are written in dot notation, e.g., person.contact denotes the node type contact nested in person.
+<a name="wp9001355"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001356"> </a></p>
+</td>
+    <td><p >
+same as parent
+<a name="wp9001357"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>targetFieldName</em>
+<a name="wp9001358"> </a></p>
+</td>
+    <td><p >
+The name of the field.
+<a name="wp9001359"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001360"> </a></p>
+</td>
+    <td><p >
+same as field name
+<a name="wp9001361"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>sourceGroup</em>
+<a name="wp9001362"> </a></p>
+</td>
+    <td><p >
+The source group for this field. See <a href="UsersGuide-1-108.html#wp9002707">7.3.6</a>.
+<a name="wp9001363"> </a></p>
+<p >
+Do not use on non-stacked node types.
+<a name="wp9001364"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001365"> </a></p>
+</td>
+    <td><p >
+&quot;&quot;
+<a name="wp9001366"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>targetGroup</em>
+<a name="wp9001367"> </a></p>
+</td>
+    <td><p >
+The group for this field. See <a href="UsersGuide-1-108.html#wp9002707">7.3.6</a>.
+<a name="wp9001368"> </a></p>
+<p >
+Do not use on non-stacked node types.
+<a name="wp9001369"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001370"> </a></p>
+</td>
+    <td><p >
+&quot;&quot;
+<a name="wp9001371"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>sourceValid</em>
+<a name="wp9001372"> </a></p>
+</td>
+    <td><p >
+The blocking field is only used if the source field is valid, as defined by the valid attribute of the parent field element, and this predicate holds on the source field.
+<a name="wp9001373"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001374"> </a></p>
+</td>
+    <td><p >
+true
+<a name="wp9001375"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>targetValid</em>
+<a name="wp9001376"> </a></p>
+</td>
+    <td><p >
+The blocking field is only used if the target field is valid, as defined by the valid attribute of the target field, and this predicate holds on the target field.
+<a name="wp9001377"> </a></p>
+<p >
+Not applicable for blocking against a database.
+<a name="wp9001378"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001379"> </a></p>
+</td>
+    <td><p >
+true
+<a name="wp9001380"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>defaultCount</em>
+<a name="wp9001381"> </a></p>
+</td>
+    <td><p >
+Field values with fewer occurrences are not stored. Instead, this value is used.
+<a name="wp9001382"> </a></p>
+<p >
+Not applicable for exact blocking.
+<a name="wp9001383"> </a></p>
+</td>
+    <td><p >
+optional
+<a name="wp9001384"> </a></p>
+</td>
+    <td><p >
+<em>defaultCount</em> in <em>blockingNodeType</em>
+<a name="wp9001385"> </a></p>
+</td>
+  </tr>
+  <tr>
+    <td><p >
+<em>base</em>
+<a name="wp9001386"> </a></p>
+</td>
+    <td><p >
+The base field. E.g., for a derived field soundexFirstName this may be firstName.
+<a name="wp9001387"> </a></p>
+</td>
+    <td><p >
+optional, use only if no base children
+<a name="wp9001388"> </a></p>
+</td>
+    <td><p >
+none
+<a name="wp9001389"> </a></p>
+</td>
+  </tr>
+</table>
+
+
+
+
+<a name="wp9002733"> </a></p>
+<p >
+In addition, <em>blockingField</em> may have any number of <em>base</em> children. If the <em>base</em> attribute is present in <em>blockingField</em>, there must not be any <em>base</em> children. Each <em>base</em> has one or more <em>blockingFieldRef</em> children (see above).
+<a name="wp9002735"> </a></p>
+<div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
+7.5	 Configuring automated blocking<br>
+<a name="wp9002736"> </a></div>
+    </blockquote>
+    <p></p>
+    <hr>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top">
+<a href="UsersGuide-1-107.html"><img src="images/sprev.gif" border="0" alt="Previous"></a><a href="UsersGuide-1-109.html"><img src="images/snext.gif" border="0" alt="Next"></a>
+        </td>
+        <td align="right">
+         <font size="3"><b>
+           ChoiceMaker Technologies<br>
+         </b></font>
+         <font size="3">
+           <a href="http://www.choicemaker.com">http://www.choicemaker.com</a><br>
+           Voice: (212) 905-6030<br>
+           Fax: (212) 331-1106<br>
+           <a href="mailto:info@choicemaker.com">info@choicemaker.com</a><br>
+         </font>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
