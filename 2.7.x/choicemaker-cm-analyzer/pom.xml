@@ -27,6 +27,7 @@
   </build>
 
   <modules>
+    <module>../com.choicemaker.cm.analyzer.tools.gui</module>
     <module>../com.choicemaker.cm.docs</module>
     <module>../com.choicemaker.cm.gui.utils</module>
     <module>../com.choicemaker.cm.io.composite.gui</module>
