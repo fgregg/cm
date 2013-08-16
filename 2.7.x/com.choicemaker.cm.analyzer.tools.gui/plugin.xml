@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
    id="com.choicemaker.cm.analyzer.tools.gui"
-   name="Analyzer Base Plug-in"
+   name="Analyzer Tools"
    version="2.5.0"
    provider-name="ChoiceMaker Technologies, Inc.">
 
@@ -12,7 +12,15 @@
    </runtime>
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.modelmaker"/>
    </requires>
 
+
+   <extension
+         point="com.choicemaker.cm.modelmaker.toolMenuItem">
+      <action
+            class="com.choicemaker.cm.analyzer.tools.action.SearchByIdAction">
+      </action>
+   </extension>
 
 </plugin>
