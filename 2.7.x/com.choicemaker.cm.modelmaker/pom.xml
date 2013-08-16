@@ -158,8 +158,8 @@
       <artifactId>com.choicemaker.cm.module</artifactId>
     </dependency>
     <dependency>
-	    <groupId>jfree</groupId>
-	    <artifactId>jfreechart</artifactId>
+      <groupId>jfree</groupId>
+      <artifactId>jfreechart</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

@@ -33,6 +33,7 @@
     <module>../com.choicemaker.cm.modelmaker.pkg_eclipse</module>
     <module>../com.choicemaker.cm.module</module>
     <module>../javax.help.eclipse2plugin</module>
+    <module>../jfree.jfreechart.eclipse2plugin</module>
   </modules>
 
 </project>
