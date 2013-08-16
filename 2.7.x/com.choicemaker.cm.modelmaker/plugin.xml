@@ -14,9 +14,9 @@
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="com.choicemaker.cm.compiler"/>
       <import plugin="com.choicemaker.cm.core"/>
-      <import plugin="jfree.jfreechart"/>
+      <import plugin="jfree.jfreechart.eclipse2plugin"/>
       <import plugin="org.apache.log4j"/>
-      <import plugin="javax.help"/>
+      <import plugin="javax.help.eclipse2plugin"/>
       <import plugin="com.choicemaker.cm.gui.utils"/>
       <import plugin="com.choicemaker.cm.matching.en"/>
       <import plugin="com.choicemaker.cm.matching.gen"/>
