@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
-   id="com.jrefinery"
-   name="JRefinery JFreeChart Plug-in"
-   version="1.0.0"
+   id="jfree.jfreechart.eclipse2plugin"
+   name="JFreeChart Plug-in"
+   version="1.0.15"
    provider-name="Rick Hall">
 
    <runtime>
