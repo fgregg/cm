@@ -175,6 +175,13 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>
+      com.choicemaker.cm.io.blocking.exact.gui</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.composite.base</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
