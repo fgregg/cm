@@ -11,7 +11,7 @@
     <relativePath>../choicemaker-cm/pom.xml</relativePath>
   </parent>
 
-  <artifactId>choicemaker-cm-server</artifactId>
+  <artifactId>choicemaker-cm-analyzer</artifactId>
   <packaging>pom</packaging>
 
   <build>
