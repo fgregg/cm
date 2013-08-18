@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.server.ejb.base</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Server (EJB Base)</name>
+  <name>ChoiceMaker Realtime Matching (EJB Base)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>base.jar</eclipse.plugin.runtime.library.name>

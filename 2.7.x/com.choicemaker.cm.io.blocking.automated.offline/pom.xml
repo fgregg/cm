@@ -19,7 +19,7 @@
    artifactId>com.choicemaker.cm.io.blocking.automated.offline.api.impl</artifactId -->
   <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Blocking Plug-in (OABA Base Impl)</name>
+  <name>ChoiceMaker Offline Matching (OABA Base Impl)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>offline.jar</eclipse.plugin.runtime.library.name>

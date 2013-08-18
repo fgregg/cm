@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Server (OABA Server)</name>
+  <name>ChoiceMaker Offline Matching (OABA Server)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>oaba-server.jar</eclipse.plugin.runtime.library.name>
