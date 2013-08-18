@@ -27,6 +27,7 @@
   </build>
 
   <modules>
+    <module>../com.choicemaker.autonumber</module>
     <module>../com.choicemaker.cm.io.blocking.automated.offline</module>
     <module>../com.choicemaker.cm.io.blocking.automated.offline.core</module>
     <module>../com.choicemaker.cm.reviewmaker.base</module>

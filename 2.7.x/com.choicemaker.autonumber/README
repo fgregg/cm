@@ -1,0 +1,26 @@
+2007-10-26 rphall
+
+This plugin is based on the org.jboss.varia.autonumber package, which is
+distributed under terms of the GNU Lesser General Public License. This plugin
+is distributed under the same terms.
+
+The purpose of this plugin is to make available AutoNumber functionality in
+a consistent manner independent of whatever Java application server the
+plugin is used within. There are several minor modifications to the orginal package:
+
+ (1) The package name has been changed from "org.jboss.varia.autonumber"
+     to "com.choicemaker.autonumber," in order to avoid name conflicts
+      when used within the JBoss app server.
+
+ (2) log4j is used in place of jboss logging
+ 
+ (3) The JNDI name in the java:comp/env namespace has been changed
+     to java:comp/env/ejb/entity/AutoNumber
+     
+  (4) Get and Set methods were added to the AutoNumber interface for the
+     name attribute, since the Oracle Toplink persistence manager requires
+     a non-read-only accessor for the primary key of a CMP 2.x entity bean.
+
+To use this package, the AutoNumber EJB must be deployed within an application
+server. Please write deployment guides for JBoss, Oracle OC4J, Weblogic and
+other app servers as CM Server is deployed to these platforms.

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.autonumber"
+   name="Autonumber Plug-in"
+   version="2.6.0"
+   provider-name="ChoiceMaker Technologies, Inc.">
+
+   <runtime>
+      <library name="cm-autonumber.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.jboss.j2ee"/>
+   </requires>
+
+
+</plugin>
