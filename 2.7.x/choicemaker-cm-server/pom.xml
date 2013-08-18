@@ -29,6 +29,7 @@
   <modules>
     <module>../com.choicemaker.cm.reviewmaker.base</module>
     <module>../com.choicemaker.cm.server.base</module>
+    <module>../com.choicemaker.cm.server.ejb.base</module>
   </modules>
 
 </project>

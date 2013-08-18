@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.server.ejb.base"
+   name="EJB Base Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="base.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.reviewmaker.base" export="true"/>
+      <import plugin="com.choicemaker.cm.server.base" export="true"/>
+   </requires>
+
+
+</plugin>
