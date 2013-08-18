@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.reviewmaker.base"
+   name="ReviewMaker Base Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="base.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+   </requires>
+
+
+</plugin>

@@ -27,6 +27,7 @@
   </build>
 
   <modules>
+    <module>../com.choicemaker.cm.reviewmaker.base</module>
     <module>../com.choicemaker.cm.server.base</module>
   </modules>
 
