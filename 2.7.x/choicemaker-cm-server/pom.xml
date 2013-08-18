@@ -30,6 +30,7 @@
     <module>../com.choicemaker.cm.reviewmaker.base</module>
     <module>../com.choicemaker.cm.server.base</module>
     <module>../com.choicemaker.cm.server.ejb.base</module>
+    <module>../com.choicemaker.cm.server.ejb.impl</module>
   </modules>
 
 </project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @(#)$RCSfile: orion-ejb-jar.xml,v $  $Revision: 1.1.1.1 $ $Date: 2003/11/18 15:24:51 $ -->
+<orion-ejb-jar>
+	<enterprise-beans>
+		<session-deployment name="com.choicemaker.cm.server.ejb.base.QueryService" location="choicemaker/ejb/session/QueryService">
+			<resource-ref-mapping location="java:/ChoiceMakerBlocking" name="jdbc/blockingSource"/>
+			<resource-ref-mapping location="java:/ChoiceMakerBlocking" name="jdbc/reportingSource"/>
+		</session-deployment>
+		<session-deployment name="com.choicemaker.cm.server.ejb.base.AdminService" location="choicemaker/ejb/session/AdminService">
+			<resource-ref-mapping location="java:/ChoiceMakerBlocking" name="jdbc/blockingSource"/>
+			<resource-ref-mapping location="java:/ChoiceMakerBlocking" name="jdbc/reportingSource"/>
+		</session-deployment>
+	</enterprise-beans>
+</orion-ejb-jar>

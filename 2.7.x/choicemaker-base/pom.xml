@@ -792,6 +792,18 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
+        <version>${choicemaker.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
+        <version>${choicemaker.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.base</artifactId>
         <version>${choicemaker.version}</version>
       </dependency>
