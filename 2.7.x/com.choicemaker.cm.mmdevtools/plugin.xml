@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.mmdevtools"
+   name="Analyzer Development Tools"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="mmdevtools.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.compiler"/>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.gui.utils"/>
+      <import plugin="com.choicemaker.cm.matching.gen"/>
+      <import plugin="com.choicemaker.cm.matching.en.us"/>
+      <import plugin="com.choicemaker.cm.matching.cfg"/>
+      <import plugin="com.choicemaker.cm.modelmaker"/>
+      <import plugin="com.choicemaker.cm.io.composite.base"/>
+      <import plugin="com.choicemaker.cm.io.flatfile.base"/>
+      <import plugin="com.choicemaker.cm.io.xml.base"/>
+   </requires>
+
+
+   <extension
+         point="com.choicemaker.cm.modelmaker.toolMenuItem">
+      <action
+            class="com.choicemaker.cm.mmdevtools.DataProfilerAction">
+      </action>
+      <action
+            class="com.choicemaker.cm.mmdevtools.RsUtilsAction">
+         <action
+               class="com.choicemaker.cm.mmdevtools.RsUtilsAction$OpenRsAsMrpsAction">
+         </action>
+         <action
+               class="com.choicemaker.cm.mmdevtools.RsUtilsAction$RsSplitAction">
+         </action>
+         <action
+               class="com.choicemaker.cm.mmdevtools.RsUtilsAction$RsDerivedFieldComputerAction">
+         </action>
+      </action>
+      <action
+            class="com.choicemaker.cm.mmdevtools.MrpsUtilsAction">
+         <action
+               class="com.choicemaker.cm.mmdevtools.MrpsUtilsAction$MrpsFlattenAction">
+         </action>
+      </action>
+      <action
+            class="com.choicemaker.cm.mmdevtools.ParserUtilsAction">
+         <action
+               class="com.choicemaker.cm.mmdevtools.ParserUtilsAction$ParserTestAction">
+         </action>
+      </action>
+      <action
+            class="com.choicemaker.cm.mmdevtools.MrpsDecisionComparatorAction">
+      </action>
+      <action
+            class="com.choicemaker.cm.mmdevtools.CrossValidatorAction">
+      </action>
+   </extension>
+   <extension
+         id="RsToMrpsAdapter"
+         name="RsToMrps"
+         point="com.choicemaker.cm.core.mrpsReader">
+      <handler
+            name="RsToMrps"
+            class="com.choicemaker.cm.mmdevtools.xmlconf.RsToMrpsAdapterXmlConf"
+            handledClass="com.choicemaker.cm.mmdevtools.io.RsToMrpsAdapter">
+      </handler>
+   </extension>
+   <extension
+         id="MrpsToRsAdapter"
+         name="MrpsToRs"
+         point="com.choicemaker.cm.core.rsReader">
+      <handler
+            name="MrpsToRs"
+            class="com.choicemaker.cm.mmdevtools.xmlconf.MrpsToRsAdapterXmlConf"
+            handledClass="com.choicemaker.cm.mmdevtools.io.MrpsToRsAdapter">
+      </handler>
+   </extension>
+
+</plugin>
