@@ -612,6 +612,18 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
+        <version>${choicemaker.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
+        <version>${choicemaker.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
         <version>${choicemaker.version}</version>
       </dependency>
@@ -949,6 +961,12 @@
         <artifactId>junit</artifactId>
         <version>3.8.1</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.8</version>
+        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
