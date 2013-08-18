@@ -314,6 +314,7 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.autonumber</artifactId>
         <version>${choicemaker.version}</version>
+      </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
