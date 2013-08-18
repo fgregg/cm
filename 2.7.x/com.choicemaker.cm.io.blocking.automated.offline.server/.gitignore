@@ -1,0 +1,15 @@
+archive
+bin
+build.xml
+.clover
+com.choicemaker.cm.*_*.jar
+com.choicemaker.cm.*_*.zip
+oaba-server.jar
+oaba-serversrc.jar
+*.patch
+project.t.xml
+project.xml
+server.jar
+target
+temp.folder
+tmp
