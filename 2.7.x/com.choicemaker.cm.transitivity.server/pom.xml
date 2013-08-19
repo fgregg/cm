@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.transitivity.server</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Offline Matching (OABA Server)</name>
+  <name>ChoiceMaker Offline Matching (Transitivity Server)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>transitivity-server.jar</eclipse.plugin.runtime.library.name>
