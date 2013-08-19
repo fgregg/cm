@@ -42,6 +42,7 @@
     <module>../com.choicemaker.cm.urm.adaptor</module>
     <!-- module>../com.choicemaker.cm.urm.base</module -->
     <module>../com.choicemaker.cm.urm.ejb</module>
+    <module>../com.choicemaker.cm.urm.pkg_eclipse</module>
   </modules>
 
 </project>
