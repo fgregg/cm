@@ -1,0 +1,17 @@
+HTML>
+<BODY>
+Provides session beans necessary to invoke record matching and match result transitivity analysis tasks
+for both online and offline cases; provides also admin session bean.
+<p>
+Online part of the package represents synchronous methods that returns the final result of matching or match analysis.
+They are designed primarely for the search purposes and return relatively small amount of data fit in the memory.
+<p>
+Offline part of the package represents asynchronous methods that starts usually long offline job and returns immideately with job id.
+They are designed for offline processing of a large amnount of records. Packages provide means to check the job status and copy result
+file to the specified location.
+<p>
+Admin class represents administrative tasks such as updating database auxiliary information.
+<p>
+</BODY>
+</HTML>
+
