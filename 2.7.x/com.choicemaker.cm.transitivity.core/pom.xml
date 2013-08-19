@@ -15,7 +15,7 @@
    artifactId>com.choicemaker.cm.io.blocking.automated.offline.base</artifactId -->
   <artifactId>com.choicemaker.cm.transitivity.core</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Blocking Plug-in (OABA Base)</name>
+  <name>ChoiceMaker Offline Matching (Transitivity Base)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>core.jar</eclipse.plugin.runtime.library.name>
