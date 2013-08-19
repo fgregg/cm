@@ -1,0 +1,16 @@
+archive
+bin
+build.xml
+.clover
+com.choicemaker.cm.*_*.jar
+com.choicemaker.cm.*_*.zip
+doc
+*.patch
+project.t.xml
+project.xml
+server.jar
+target
+temp.folder
+tmp
+transitivity-server.jar
+transitivity-serversrc.jar

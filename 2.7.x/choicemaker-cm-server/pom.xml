@@ -37,6 +37,7 @@
     <module>../com.choicemaker.cm.server.ejb.impl</module>
     <module>../com.choicemaker.cm.transitivity</module>
     <module>../com.choicemaker.cm.transitivity.core</module>
+    <module>../com.choicemaker.cm.transitivity.server</module>
   </modules>
 
 </project>
