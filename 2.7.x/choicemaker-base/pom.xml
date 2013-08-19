@@ -917,12 +917,12 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.urm-ejb</artifactId>
+        <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
         <version>${choicemaker.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.urm-ejb</artifactId>
+        <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
         <version>${choicemaker.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
