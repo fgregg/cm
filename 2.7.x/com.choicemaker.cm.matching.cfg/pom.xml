@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Matching Plug-in (Context Free Grammar)</name>
+  <name>ChoiceMaker Matching Plug-in (Context Free Grammr)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>cfg.jar</eclipse.plugin.runtime.library.name>

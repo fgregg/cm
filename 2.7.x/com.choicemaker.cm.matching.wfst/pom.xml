@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker WFST (Weighted Finite State Transducer)</name>
+  <name>ChoiceMaker WFST (Weighted Finite State Transducr)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>wfst.jar</eclipse.plugin.runtime.library.name>

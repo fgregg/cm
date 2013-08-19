@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.transitivity</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Offline Matching (Transitivity Base Impl)</name>
+  <name>ChoiceMaker Offline Matching (Transitivity Impl)</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>transitivity.jar</eclipse.plugin.runtime.library.name>
