@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.urm.adaptor"
+   name="URM/CM-core Adaptor"
+   version="2.5.0"
+   provider-name="Rick Hall">
+
+   <runtime>
+      <library name="adaptor.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.urm.base"/>
+   </requires>
+
+
+</plugin>

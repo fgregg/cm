@@ -38,6 +38,7 @@
     <module>../com.choicemaker.cm.transitivity</module>
     <module>../com.choicemaker.cm.transitivity.core</module>
     <module>../com.choicemaker.cm.transitivity.server</module>
+    <module>../com.choicemaker.cm.urm.adaptor</module>
   </modules>
 
 </project>
