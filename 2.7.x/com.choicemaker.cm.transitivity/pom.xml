@@ -11,8 +11,6 @@
     <relativePath>../choicemaker-cm/pom.xml</relativePath>
   </parent>
 
-  <!-- Is the suffix _base_ is more consistent with other cm modules than _core_ ??
-   artifactId>com.choicemaker.cm.io.blocking.automated.offline.base</artifactId -->
   <artifactId>com.choicemaker.cm.transitivity</artifactId>
   <packaging>jar</packaging>
   <name>ChoiceMaker Offline Matching (Transitivity Base Impl)</name>
