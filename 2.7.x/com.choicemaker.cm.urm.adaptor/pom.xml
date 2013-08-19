@@ -11,7 +11,7 @@
     <relativePath>../choicemaker-cm/pom.xml</relativePath>
   </parent>
 
-  <artifactId>com.choicemaker.cm.urm.base</artifactId>
+  <artifactId>com.choicemaker.cm.urm.adaptor</artifactId>
   <packaging>jar</packaging>
   <name>ChoiceMaker URM Adaptor Plug-in</name>
 
