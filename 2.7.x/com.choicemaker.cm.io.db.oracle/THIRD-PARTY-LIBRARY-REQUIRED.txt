@@ -1,0 +1,10 @@
+2010-01-20 rphall
+
+This plug-in requires the classes12.jar JDBC library from Oracle.
+Please download the library and install it in the lib subdirectory.
+
+Recommended version: 10.2.0.4
+http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/htdocs/jdbc_10201.html
+
+Older version may use the ".zip" extensions. If they are used, the plugin.xml configuration
+file needs to be modified to refer to "lib/classes12.zip" instead of "lib/classes12.jar."

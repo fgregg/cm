@@ -1,0 +1,319 @@
+CREATE OR REPLACE PACKAGE BODY CMTBlocking 
+AS
+--*******************************************************
+-- Created on: 10/06/02
+--      by T.Malyuta
+-- Last Modified: 10/25/02
+--      by T.Malyuta
+--*******************************************************
+-- Changes:
+--*******************************************************
+-- 
+--*******************************************************
+	TYPE tpConfig		IS				-- type for data from TB_CMT_CONFIG
+					RECORD (
+						sConfig 		tb_cmt_config.Config%TYPE,
+						sName			tb_cmt_config.Name%TYPE,
+						sValue		tb_cmt_config.Value%TYPE);
+	TYPE tpConfigs		IS 	TABLE OF tpConfig;
+
+	TYPE tpQuery_Cursor	IS				-- type for queries for cursors for Matching
+					RECORD (
+						sConfig 		tb_cmt_cursors.Config%TYPE,
+						sQueryMulti		VARCHAR2(4000),
+						sQuerySingle	VARCHAR2(4000),
+						sOrderBy		tb_cmt_cursors.OrderBy%TYPE,
+						sApproach		CHAR(1) );
+	TYPE tpQuery_Cursors	IS	TABLE OF tpQuery_Cursor;
+
+
+	tConfig			tpConfigs;
+	CURSOR cConfig IS SELECT * FROM tb_cmt_config WHERE UPPER(Name) = 'MASTERID' ORDER BY Config;
+
+	tQuery_Cursors		tpQuery_Cursors;
+
+	CURSOR cCursors IS SELECT * FROM tb_cmt_cursors ORDER BY Config;
+
+	nNumb_Rows		INTEGER;
+
+
+	PROCEDURE Build_Query_Set (p_sSet VARCHAR2, p_sMasterID VARCHAR2, p_sQuery OUT VARCHAR2);
+
+	PROCEDURE Write_Temp_Table (p_sCriterion1 VARCHAR2, p_sCriterion2 VARCHAR2, p_sQuery_Sets VARCHAR2, p_sMasterID VARCHAR2);
+	
+PROCEDURE Construct(p_sSets 		VARCHAR2,
+					sMasterID		tb_cmt_config.Value%TYPE,
+					sApproach		CHAR,
+					bFirst_Query	IN OUT BOOLEAN,
+					p_sCriterion1	VARCHAR2,
+					p_sCriterion2	VARCHAR2,
+					sQuery			IN OUT VARCHAR2,
+					sQuery_All		IN OUT VARCHAR2,
+					sQuerySingle	IN OUT VARCHAR2,
+					nWrites			IN OUT INTEGER);
+-------------------------------------------------------
+-------------------------------------------------------
+PROCEDURE Blocking (p_sConfig_Bl 		VARCHAR2,
+			p_sSets 		VARCHAR2,
+			p_sCriterion1		VARCHAR2,
+			p_sCriterion2		VARCHAR2,
+			p_sConfig_Rd 		VARCHAR2,
+			p_tpCursor 	IN OUT 	tpCursor)
+AS
+	i				INTEGER;
+	sMasterID			tb_cmt_config.Value%TYPE;
+	sApproach			CHAR(1);
+	sOrderBy			tb_cmt_cursors.OrderBy%TYPE;
+	sQueryMulti			VARCHAR2(24000);
+	sQuerySingle		        VARCHAR2(24000);
+	sQuery			        VARCHAR2(24000);
+	sQuery_All			VARCHAR2(24000);
+	bFirst_Query		        BOOLEAN := TRUE;
+	nWrites			        INTEGER := 0;
+
+
+BEGIN
+	FOR i IN 1 .. tConfig.COUNT LOOP
+		IF tConfig(i).sConfig = p_sConfig_Bl THEN
+			sMasterId := tConfig(i).sValue;
+			EXIT;
+		END IF;
+	END LOOP;
+
+
+	FOR i IN 1 .. tQuery_Cursors.COUNT LOOP
+		IF tQuery_Cursors(i).sConfig = p_sConfig_Rd THEN
+			sQueryMulti := tQuery_Cursors(i).sQueryMulti;
+			sQuerySingle := tQuery_Cursors(i).sQuerySingle;
+			sApproach := tQuery_Cursors(i).sApproach;
+			sOrderBy := tQuery_Cursors(i).sOrderBy;
+			EXIT;
+		END IF;
+	END LOOP;
+
+-- dbms_profiler.start_profiler( 'Step1' );
+	sQuery_All := '';
+	
+--	IF SELECT COUNT(*) FROM tb_cmt_temp_q > 0 THEN
+	FOR q_rec IN (SELECT * FROM tb_cmt_temp_q) LOOP
+		Construct(q_rec.q, sMasterID, sApproach, bFirst_Query, p_sCriterion1, p_sCriterion2, sQuery, sQuery_All, sQuerySingle, nWrites);
+	END LOOP;
+		
+--	END IF;
+	Construct(p_sSets, sMasterID, sApproach, bFirst_Query, p_sCriterion1, p_sCriterion2, sQuery, sQuery_All, sQuerySingle, nWrites);
+
+
+	IF sQuery_All IS NOT NULL AND (sApproach = 'T' OR
+						sApproach = 'D' AND (nWrites > 0 OR LENGTH(sQuery)+ LENGTH(sQuerySingle) > 3800 ) )THEN
+		Write_Temp_Table (p_sCriterion1, p_sCriterion2, sQuery_All, sMasterID);
+		nWrites := nWrites + 1;
+	END IF;
+
+	IF nWrites > 1 THEN
+
+		DELETE  FROM tb_cmt_temp_ids t
+		WHERE EXISTS (
+        	SELECT *
+        	FROM tb_cmt_temp_ids tt
+        	WHERE t.rowid      > tt.rowid 
+        	AND   tt.id = t.id );
+	END IF;
+
+--dbms_profiler.stop_profiler;
+
+--dbms_profiler.start_profiler ( 'Step2' );
+	IF sApproach = 'D' AND nWrites = 0 THEN
+
+		IF p_sCriterion1 IS NOT NULL THEN
+			sQuerySingle := 'SELECT ' || p_sCriterion1 || ' b.' || sMasterId ||' FROM (' || sQuerySingle  ||
+				') b, ' || p_sCriterion2 || ')';
+		END IF;
+
+		IF INSTR(sQuery_All, 'UNION') =0 THEN
+			sQuerySingle := SUBSTR(sQuerySingle, 1, 6) || ' DISTINCT ' || SUBSTR(sQuerySingle, 7, LENGTH(sQuerySingle));
+		END IF;
+
+		IF sOrderBY IS NOT NULL THEN		
+			OPEN p_tpCursor FOR  sQuerySingle || '(' || sQuery_All || ') ORDER BY ' || sOrderBy;
+		ELSE
+			OPEN p_tpCursor FOR  sQuerySingle || '(' || sQuery_All || ')';
+		END IF;
+
+--insert into temp values (sQuerySingle || '(' || sQuery_All || ') ORDER BY ' || sOrderBy );
+
+	ELSE
+--insert into temp values (sQueryMulti);
+		OPEN p_tpCursor FOR sQueryMulti;
+	END IF;
+--dbms_profiler.stop_profiler;
+        
+
+END;
+-------------------------------------------------------
+PROCEDURE Construct(p_sSets 		VARCHAR2,
+					sMasterID		tb_cmt_config.Value%TYPE,
+					sApproach		CHAR,
+					bFirst_Query	IN OUT BOOLEAN,
+					p_sCriterion1	VARCHAR2,
+					p_sCriterion2	VARCHAR2,
+					sQuery			IN OUT VARCHAR2,
+					sQuery_All		IN OUT VARCHAR2,
+					sQuerySingle	IN OUT VARCHAR2,
+					nWrites			IN OUT INTEGER)
+AS
+	i				INTEGER;
+	n				INTEGER;
+	n1				INTEGER;
+	sSet				VARCHAR2(24000);
+	sSets_Right 		VARCHAR2(24000);
+BEGIN
+	sSets_Right := p_sSets;
+	LOOP
+		i := INSTR(sSets_Right, '^');
+		IF i > 0 THEN
+			sSet := SUBSTR(sSets_Right, 1, i - 1);
+			sSets_Right := SUBSTR(sSets_Right, i + 1, LENGTH(sSets_Right));
+		ELSE
+			sSet := sSets_Right;
+			sSets_Right := '';
+
+		END IF;
+
+		Build_Query_Set (sSet, sMasterID, sQuery);
+
+		n := LENGTH(sQuery_All || ' UNION ' || sQuery);
+		IF p_sCriterion1 IS NULL THEN
+			n1 := 0;
+		ELSE 
+			n1 := LENGTH(p_sCriterion1) + LENGTH(p_sCriterion2);
+		END IF;
+		IF 	(sApproach = 'T' AND (n + n1 > 3800)) OR
+			(sApproach = 'D' AND (n + LENGTH(sQuerySingle) + n1 > 3800)) THEN 
+
+			Write_Temp_Table (p_sCriterion1, p_sCriterion2, sQuery_All, sMasterID);
+
+			bFirst_Query := TRUE;
+			nWrites := nWrites + 1;
+			sQuery_All := '';
+		END IF;
+
+		IF bFirst_Query THEN
+			sQuery_All := sQuery;
+			bFirst_Query := FALSE;
+		ELSE
+			sQuery_All := sQuery_All || ' UNION ' || sQuery;
+		END IF;
+
+
+		EXIT WHEN sSets_Right IS NULL;
+	END LOOP;
+END;
+
+-------------------------------------------------------
+PROCEDURE Build_Query_Set (p_sSet 		VARCHAR2, 
+				p_sMasterID 	VARCHAR2, 
+				p_sQuery 	OUT 	VARCHAR2)
+AS
+	sViews		VARCHAR2(4000);
+	sVAlues		VARCHAR2(4000);
+	sWHERE		VARCHAR2(4000);
+	sTemp		VARCHAR2(10);
+	i		INTEGER;
+	nNumb_Views     INTEGER;
+BEGIN
+	i := INSTR(p_sSet, '`');
+	sViews := SUBSTR(p_sSet, 1, i - 1);
+	sValues := SUBSTR(p_sSet, i + 1, LENGTH(p_sSet) );
+
+	nNumb_Views := TO_NUMBER(SUBSTR(sViews, INSTR(sViews, ' ', -1, 1) + 2, LENGTH(sViews)));
+
+	sTemp := '';
+	IF nNumb_Views > 0 THEN
+		FOR i IN 1 .. nNumb_Views LOOP
+			sWHERE := sTemp || 'v0.' || p_sMasterID || '=v' || TO_CHAR(i) || '.' || p_sMasterID;
+			sTemp := ' AND ';
+		END LOOP;
+
+		sWHERE := ' WHERE ' || sWHERE || ' AND ' || sValues;
+	ELSE
+		sWHERE := ' WHERE ' || sValues;
+	END IF;
+
+
+	p_sQuery := 'SELECT ' || sViews || sWHERE;
+END;
+-------------------------------------------------------
+-------------------------------------------------------
+PROCEDURE Write_Temp_Table (
+	p_sCriterion1   VARCHAR2,
+	p_sCriterion2   VARCHAR2,
+	p_sQuery_Sets 	VARCHAR2,
+	p_sMasterID 	VARCHAR2 
+)
+--*******************************************************
+-- Created on: 02/06/02
+--      by T.Malyuta
+-- Last Modified:
+--      by T.Malyuta
+--*******************************************************
+-- Changes:
+--*******************************************************
+-- Parameters:
+--	p_Criterion - Criterion on TB_PATIENT.ID_STAT_CD (in the form of list of values)
+--	p_sQuery_Sets - Generated subquery for blocking sets
+--*******************************************************
+-- Writes selected MCI_IDs into temporary table
+--*******************************************************
+IS
+	sSubquery		VARCHAR2(4000);
+	sMasterId		VARCHAR2(30);
+BEGIN
+
+	sSubquery := p_sQuery_Sets;
+
+	IF p_sCriterion1 IS NOT NULL THEN
+		sSubquery := 'SELECT ' || p_sCriterion1 || ' b.' || p_sMasterId ||' FROM (' || sSubquery ||
+			') b, ' || p_sCriterion2;
+	END IF;        
+
+	IF INSTR(sSubquery, 'UNION') =0 THEN
+		sSubquery := SUBSTR(sSubquery, 1, 6) || ' DISTINCT ' || SUBSTR(sSubquery, 7, LENGTH(sSubquery));
+	END IF;
+-- insert into temp values (sSubquery, '');
+	EXECUTE IMMEDIATE 'INSERT INTO tb_cmt_temp_ids (' || sSubquery ||')';
+END;
+-------------------------------------------------------
+-------------------------------------------------------
+-------------------------------------------------------
+-------------------------------------------------------
+BEGIN
+	EXECUTE IMMEDIATE 'alter session set nls_date_format = ''YYYY-MM-DD''';
+
+	nNumb_Rows := 0;
+	tConfig := tpConfigs();
+
+	FOR cConfig_rec IN cConfig LOOP
+		nNumb_Rows := nNumb_Rows + 1;
+		tConfig.EXTEND;
+		tConfig(nNumb_Rows).sConfig := cConfig_rec.Config;
+		tConfig(nNumb_Rows).sName := cConfig_rec.Name;
+		tConfig(nNumb_Rows).sValue := cConfig_rec.Value;
+	END LOOP;
+
+	nNumb_Rows := 0;
+	tQuery_Cursors := tpQuery_Cursors();
+
+	FOR cCursors_rec IN cCursors LOOP
+		nNumb_Rows := nNumb_Rows + 1;
+		tQuery_Cursors.EXTEND;
+		tQuery_Cursors(nNumb_Rows).sConfig := cCursors_rec.Config;
+		tQuery_Cursors(nNumb_Rows).sQueryMulti := cCursors_rec.Multi;
+		tQuery_Cursors(nNumb_Rows).sQuerySingle := cCursors_rec.Single;
+		tQuery_Cursors(nNumb_Rows).sOrderBy := cCursors_rec.OrderBy;
+		tQuery_Cursors(nNumb_Rows).sApproach := cCursors_rec.Approach;
+
+	END LOOP;
+
+
+END;
+/

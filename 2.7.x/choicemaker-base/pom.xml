@@ -737,6 +737,18 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
+        <version>${choicemaker.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
+        <version>${choicemaker.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
         <version>${choicemaker.version}</version>
       </dependency>
@@ -1010,6 +1022,11 @@
         <version>${choicemaker.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle</groupId>
+        <artifactId>classes12</artifactId>
+        <version>10.2.0.4</version>
       </dependency>
       <dependency>
         <groupId>commons-logging</groupId>

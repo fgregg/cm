@@ -1,0 +1,20 @@
+CREATE OR REPLACE PACKAGE CMTBlocking
+AS
+--*******************************************************
+-- Created on: 10/06/02
+--      by T.Malyuta
+-- Last Modified: 10/25/02
+--      by T.Malyuta
+--*******************************************************
+-- Changes:
+--*******************************************************
+-- Procedure Blocking returns candidates for matching based on configuration of blocking, blocking sets, 
+-- additional criterion, and configuration of reading
+--*******************************************************
+
+	TYPE tpCursor		IS	REF CURSOR;
+
+	PROCEDURE Blocking(p_sConfig_Bl VARCHAR2, p_sSets VARCHAR2, p_sCriterion1 VARCHAR2, p_sCriterion2 VARCHAR2, p_sConfig_Rd VARCHAR2, p_tpCursor IN OUT tpCursor );
+
+END;
+/

@@ -1,0 +1,22 @@
+CREATE OR REPLACE FUNCTION Cmt_removeNonDigitsLetters(p_String VARCHAR2) 
+   RETURN VARCHAR2 
+IS 
+   sString      VARCHAR2(100);
+   i            INTEGER;
+   c            CHAR(1);
+   nAscii       INTEGER;
+BEGIN 
+    
+   sString := '';
+   FOR i IN 1 .. LENGTH(p_String) LOOP
+        c :=  SUBSTR(p_String, i, 1);     
+        nAscii := ASCII(c);
+        IF nAscii BETWEEN 48 AND 57 OR nAscii BETWEEN 65 AND 90 OR nAscii BETWEEN 97 AND 122 THEN
+                sString := sString || c;
+        END IF;
+   END LOOP;                        
+   
+   RETURN (sString);
+END;
+/
+

@@ -1,0 +1,34 @@
+VARIABLE tCurs REFCURSOR
+EXEC CMTBlocking.Blocking('Sample:b:batch','ST_PATIENT_NAMES v0¬v0.last_name=''GUENEVERE''«ST_PATIENT_NAMES v0¬v0.sound_first_name=''G516''«ST_PATIENT_NAMES v0¬v0.sound_last_name=''G516''«ST_PATIENT_NAMES v0,VW_CMT_ADDRESS v1¬v0.dob=''1999-10-17'' AND v1.street_name=''SANFORD  AV''«ST_PATIENT_NAMES v0¬v0.dob=''1999-10-17'' AND v0.sound_first_name=''C500''«VW_CMT_ADDRESS v0,ST_PATIENT_NAMES v1¬v0.street_name=''SANFORD  AV'' AND v1.sound_first_name=''C500''«ST_PATIENT_NAMES v0¬v0.dob=''1999-10-17'' AND v0.sound_last_name=''C500''«VW_CMT_ADDRESS v0,ST_PATIENT_NAMES v1¬v0.street_name=''SANFORD  AV'' AND v1.sound_last_name=''C500''', NULL, 'Sample:r:patient', :tCurs);
+
+VARIABLE tCurs REFCURSOR
+exec CMTBlocking.Blocking('Sample:b:batch','ST_PATIENT_NAMES v0¬v0.first_name=''GUENEVERE''«ST_PATIENT_NAMES v0¬v0.last_name=''GUENEVERE''«ST_PATIENT_NAMES v0¬v0.first_name=''CHIN''«ST_PATIENT_NAMES v0¬v0.sound_first_name=''G516'' AND v0.dob=''1999-10-17''«ST_PATIENT_NAMES v0¬v0.sound_last_name=''G516'' AND v0.dob=''1999-10-17''«ST_PATIENT_NAMES v0,VW_CMT_ADDRESS v1¬v0.sound_first_name=''G516'' AND v1.street_name=''SANFORD  AV''«ST_PATIENT_NAMES v0,VW_CMT_ADDRESS v1¬v0.sound_last_name=''G516'' AND v1.street_name=''SANFORD  AV''«ST_PATIENT_NAMES v0,VW_CMT_ADDRESS v1¬v0.dob=''1999-10-17'' AND v1.street_name=''SANFORD  AV''«ST_PATIENT_NAMES v0¬v0.sound_last_name=''G516'' AND v0.sound_first_name=''C500''«ST_PATIENT_NAMES v0¬v0.dob=''1999-10-17'' AND v0.sound_first_name=''C500''«VW_CMT_ADDRESS v0,ST_PATIENT_NAMES v1¬v0.street_name=''SANFORD  AV'' AND v1.sound_first_name=''C500''«ST_PATIENT_NAMES v0¬v0.sound_first_name=''G516'' AND v0.sound_last_name=''C500''«ST_PATIENT_NAMES v0¬v0.dob=''1999-10-17'' AND v0.sound_last_name=''C500''«VW_CMT_ADDRESS v0,ST_PATIENT_NAMES v1¬v0.street_name=''SANFORD  AV'' AND v1.sound_last_name=''C500''','null','Sample:r:patient', :tCurs)
+
+
+
+VARIABLE tCurs REFCURSOR
+EXEC CMTBlocking.Blocking('Sample:b:batch','ST_PATIENT_NAMES v0¬v0.last_name=''GUENEVERE''«ST_PATIENT_NAMES v0¬v0.sound_first_name=''G516''«ST_PATIENT_NAMES v0¬v0.sound_last_name=''G516''«ST_PATIENT_NAMES v0,VW_CMT_ADDRESS v1¬v0.dob=''1999-10-17'' AND v1.street_name=''SANFORD  AV''«ST_PATIENT_NAMES v0¬v0.dob=''1999-10-17'' AND v0.sound_first_name=''C500''«VW_CMT_ADDRESS v0,ST_PATIENT_NAMES v1¬v0.street_name=''SANFORD  AV'' AND v1.sound_first_name=''C500''«ST_PATIENT_NAMES v0¬v0.dob=''1999-10-17'' AND v0.sound_last_name=''C500''«VW_CMT_ADDRESS v0,ST_PATIENT_NAMES v1¬v0.street_name=''SANFORD  AV'' AND v1.sound_last_name=''C500''', NULL, 'temp', :tCurs);
+
+
+VARIABLE tCurs REFCURSOR
+VARIABLE tCurs1 REFCURSOR
+EXEC CMTTraining.Access_Snapshot ('select mci_id as id, mci_id_matched as id_matched from tb_cmt_pairs', 'Sample:r:patient', :tCurs, :tCurs1);
+
+exec take_snapshot(44600, 46507, 'm','aa','bb');
+-------------------------------
+delete from plsql_profiler_data; 
+delete from plsql_profiler_units; 
+delete from plsql_profiler_runs; 
+
+----------------------------
+@ c:\choicemaker\plugin\oracle\db\support\test_performance.txt
+
+@ c:\choicemaker\plugin\oracle\db\support\Spool_temp.lst
+----------------------------
+
+SELECT b.MCI_ID FROM (SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0 WHERE v0.first_name='GUENEVERE' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0 WHERE v0.last_name='GUENEVERE' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0 WHERE v0.first_name='CHIN' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0 WHERE v0.sound_first_name='G516' AND v0.dob='1999-10-17' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0 WHERE v0.sound_last_name='G516' AND v0.dob='1999-10-17' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0,VW_CMT_ADDRESS v1 WHERE v0.MCI_ID=v1.MCI_ID AND v0.sound_first_name='G516' AND v1.street_name='SANFORD  AV' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0,VW_CMT_ADDRESS v1 WHERE v0.MCI_ID=v1.MCI_ID AND v0.sound_last_name='G516' AND v1.street_name='SANFORD  AV' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0,VW_CMT_ADDRESS v1 WHERE v0.MCI_ID=v1.MCI_ID AND v0.dob='1999-10-17' AND v1.street_name='SANFORD  AV' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0 WHERE v0.sound_last_name='G516' AND v0.sound_first_name='C500' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0 WHERE v0.dob='1999-10-17' AND v0.sound_first_name='C500' UNION SELECT v0.MCI_ID FROM VW_CMT_ADDRESS v0,ST_PATIENT_NAMES v1 WHERE v0.MCI_ID=v1.MCI_ID AND v0.street_name='SANFORD  AV' AND v1.sound_first_name='C500' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0 WHERE v0.sound_first_name='G516' AND v0.sound_last_name='C500' UNION SELECT v0.MCI_ID FROM ST_PATIENT_NAMES v0 WHERE v0.dob='1999-10-17' AND v0.sound_last_name='C500' UNION SELECT v0.MCI_ID FROM VW_CMT_ADDRESS v0,ST_PATIENT_NAMES v1 WHERE v0.MCI_ID=v1.MCI_ID AND v0.street_name='SANFORD  AV' AND v1.sound_last_name='C500') b, null)
+
+--------------------------------
+exp training/tiger FILE=ttt.dmp LOG=tttlog.log OWNER=training
+
+exp prethree/<password> FILE=<filename> LOG=<logfilename> OWNER=pretree

@@ -1,0 +1,42 @@
+CREATE TABLE tb_cmt_count_fields (
+	FieldID	NUMBER PRIMARY KEY,
+	ViewName	VARCHAR2(256),
+	ColumnName	VARCHAR2(256),
+	MasterId	VARCHAR2(256),
+	MinCount	NUMBER,
+	LastUpdate	DATE );
+
+CREATE TABLE tb_cmt_counts (
+	FieldID	NUMBER REFERENCES tb_cmt_count_fields,
+	Value		VARCHAR2(256),
+	Count		NUMBER,
+	PRIMARY KEY (FieldID, Value) );
+
+CREATE TABLE tb_cmt_count_config_fields (
+	Config	VARCHAR2(256),
+	ViewName	VARCHAR2(256),
+	ColumnName	VARCHAR2(256),
+	MasterId	VARCHAR2(256),
+	MinCount	NUMBER );
+
+
+CREATE TABLE tb_cmt_config (
+	Config	VARCHAR2(256),
+	Name		VARCHAR2(256),
+	Value		VARCHAR2(256),
+	PRIMARY KEY (Config, Name) );
+
+CREATE TABLE tb_cmt_cursors (
+	Config	VARCHAR2(256) PRIMARY KEY,
+	Multi		VARCHAR2(4000),
+	Single	VARCHAR2(4000),
+	OrderBy	VARCHAR2(256),
+	Approach	CHAR(1),
+	Numb		NUMBER);
+
+create global temporary table tb_cmt_temp_ids (id NUMBER);
+					-- temporary table for MCI_IDs of blocking	
+create global temporary table tb_cmt_temp_q (q VARCHAR2(4000));
+
+
+	
