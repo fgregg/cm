@@ -10,15 +10,14 @@
  */
 package com.choicemaker.cm.io.db.base.xmlconf;
 
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.db.base.DataSources;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * XML configurator for the connection cache.
@@ -35,68 +34,61 @@ public class ConnectionPoolDataSourceXmlConf {
 			while (i.hasNext()) {
 				try {
 					Element cp = (Element) i.next();
-					String name = cp.getAttributeValue("name");
-
-					// initialization params are kept in a Hashtable
-					Hashtable args = new Hashtable();
+					ComboPooledDataSource cpds = new ComboPooledDataSource();
 
 					// the underlying driver
-					args.put("jdbc.driver", cp.getChildText("driver"));
-
-					args.put("jdbc.driver.classloader", XmlConfigurator.getReloadClassLoader());
+					final String jdbcDriver = cp.getChildText("driver");
+					cpds.setDriverClass(jdbcDriver); // loads the jdbc driver
 
 					// the URL to connect the underlyng driver with the server
-					args.put("jdbc.URL", cp.getChildText("url"));
+					final String jdbcURL = cp.getChildText("url");
+					cpds.setJdbcUrl(jdbcURL);
 
-					// these are properties that get passed
-					// to DriverManager.getConnection(...)
-					Properties jdbcProperties = new Properties();
-					jdbcProperties.put("user", cp.getChildText("user"));
-					jdbcProperties.put("password", cp.getChildText("password"));
-					args.put("jdbc.properties", jdbcProperties);
-
-					// a statement that is guaranteed to work
-					// if the connection is working.
-					args.put("jdbc.validityCheckStatement", cp.getChildText("validityCheckStatement"));
-
-					// If this is specified, a low-priority thread will
-					// sit in the background and refresh this pool every
-					// N seconds.  In this case, it's refreshed every two minutes.
-					Element e = cp.getChild("refreshThreadCheckInterval");
-					if (e != null) {
-						args.put("pool.refreshThreadCheckInterval", new Integer(e.getText()));
-					}
+					// security credentials
+					final String user = cp.getChildText("user");
+					cpds.setUser(user);
+					final String password = cp.getChildText("password");
+					cpds.setPassword(password);
 
 					// the initial size of the pool.
-					args.put("pool.initialSize", new Integer(cp.getChildText("initialSize")));
+					final Integer poolInitialSize =
+						new Integer(cp.getChildText("initialSize"));
+					cpds.setMinPoolSize(poolInitialSize.intValue());
 
 					// the maximum size the pool can grow to.
-					args.put("pool.maxSize", new Integer(cp.getChildText("maxSize")));
+					final Integer poolMaxSize =
+						new Integer(cp.getChildText("maxSize"));
+					cpds.setMaxPoolSize(poolMaxSize.intValue());
 
-					// each time the pool grows, it grows by this many connections
-					args.put("pool.growBlock", new Integer(cp.getChildText("growBlock")));
+					// each time the pool grows, it grows by this many
+					// connections
+					final Integer poolGrowBack =
+						new Integer(cp.getChildText("growBlock"));
+					cpds.setAcquireIncrement(poolGrowBack.intValue());
 
-					// between successive connections, wait this many milliseconds.
-					args.put("pool.createWaitTime", new Integer(cp.getChildText("createWaitTime")));
+					// Currently unused by C3P0
+					// final ClassLoader jdbcDriverClassLoader =
+					// XmlConfigurator.getReloadClassLoader();
+					// final String jdbcValidityCheckStatement =
+					// cp.getChildText("validityCheckStatement");
+					// Integer poolRefreshInterval = null;
+					// Element e = cp.getChild("refreshThreadCheckInterval");
+					// if (e != null) {
+					// poolRefreshInterval = new Integer(e.getText());
+					// }
+					// final Integer poolCreateWaitTime = new
+					// Integer(cp.getChildText("createWaitTime"));
+					// final String syslogClassLoaderWarning = "off";
 
-					args.put("Syslog.classloader.warning", "off");
+					final String name = cp.getAttributeValue("name");
+					DataSources.addDataSource(name, cpds);
 
-					// finally create the pool and we're ready to go!
-					// JdbcConnectionPool pool = new JdbcConnectionPool(name, args);
-					// DataSources.addDataSource(name, new JdbcConnectionPoolDataSource(name));
-					//
-					// FIXME consider Apache DBCP (http://commons.apache.org/proper/commons-dbcp/)
-					// and Steve Waldman's C3P0 (http://www.mchange.com/projects/c3p0/index.html)
-					//
-					throw new RuntimeException("not yet implemented");
-					// END FIXME
-						
 				} catch (Exception ex) {
 					logger.warn("Error creating connection pool.", ex);
 				}
 			}
 		}
-		
+
 		alreadyInited = true;
 	}
 
