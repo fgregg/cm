@@ -117,6 +117,10 @@
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+    </dependency>
   </dependencies>
 
 </project>
