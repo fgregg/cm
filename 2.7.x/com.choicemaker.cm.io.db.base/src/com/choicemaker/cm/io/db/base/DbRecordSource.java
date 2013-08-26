@@ -88,6 +88,27 @@ public class DbRecordSource implements RecordSource {
 			
 			logger.debug (conf + " " + dbr);
 			
+			// Set _debugSql=true for SqlDeveloper debugging
+			//
+			// See Sue Harper, 2006-07-13, http://links.rph.cx/XyfaZ5,
+			// "Remote Debugging with SQL Developer"
+			//
+			// See Sanat Pattanaik, 2011-01-14, http://links.rph.cx/16ER9Dw,
+			// "Debugging PL-SQL calls from Java Session Using Eclipse and SQL Developer"
+			//
+			boolean _debugSql = false;
+			if (_debugSql) {
+				try {
+					CallableStatement _stmt =
+						conn.prepareCall("begin DBMS_DEBUG_JDWP.CONNECT_TCP( '127.0.0.1', 4000 ); end;");
+					_stmt.execute();
+					_stmt.close();
+				} catch (Exception _x) {
+					logger.warn(_x.toString());
+				}
+			}
+			// END SqlDeveloper debugging
+
 			String sql = "call CMTTRAINING.RS_SNAPSHOT (?,?,?)";
 			stmt = conn.prepareCall(sql);
 			
