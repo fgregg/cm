@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.db.oracle;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -187,6 +188,19 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 				logger.error("Replacing connection cache.", ex);
 			}
 		}
+	}
+
+	public java.util.logging.Logger getParentLogger()
+			throws SQLFeatureNotSupportedException {
+				throw new SQLFeatureNotSupportedException("not supported");
+	}
+
+	public Object unwrap(Class iface) throws SQLException {
+		throw new SQLFeatureNotSupportedException("not supported");
+	}
+
+	public boolean isWrapperFor(Class iface) throws SQLException {
+		throw new SQLFeatureNotSupportedException("not supported");
 	}
 
 }
