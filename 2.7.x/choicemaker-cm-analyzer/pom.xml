@@ -41,7 +41,6 @@
     <module>../com.choicemaker.cm.modelmaker</module>
     <module>../com.choicemaker.cm.modelmaker.pkg_eclipse</module>
     <module>../com.choicemaker.cm.module</module>
-    <module>../com.mchange.c3p0</module>
     <module>../javax.help.eclipse2</module>
     <module>../jfree.jfreechart.eclipse2</module>
   </modules>
