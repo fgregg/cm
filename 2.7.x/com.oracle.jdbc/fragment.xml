@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment
+  id="com.oracle.jdbc"
+  name="Oracle JDBC Fragment (classes12.jar)"
+  version="10.2.0.4-SNAPSHOT"
+  provider-name="rphall"
+  plugin-id="com.choicemaker.cm.io.db.oracle"
+  plugin-version="2.5.0">
+
+   <runtime>
+      <library name="classes12.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+</fragment>

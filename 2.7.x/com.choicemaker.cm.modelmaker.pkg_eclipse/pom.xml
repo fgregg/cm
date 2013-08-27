@@ -451,6 +451,12 @@
       <type>zip</type>
     </dependency>
     <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.oracle.jdbc</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
       <groupId>javax.help</groupId>
       <artifactId>javahelp</artifactId>
     </dependency>

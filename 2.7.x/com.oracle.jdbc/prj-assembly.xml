@@ -1,0 +1,23 @@
+<assembly>
+	<id>eclipse2prj</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<baseDirectory>${project.artifactId}_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.qualifier}</baseDirectory>
+  <files>
+    <file>
+      <source>
+      ${project.build.directory}/${eclipse.plugin.runtime.library.name}</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
+  </files>
+	<fileSets>
+		<fileSet>
+		<includes>
+      <include>about.html</include>
+      <include>fragment.xml</include>
+		</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
