@@ -11,7 +11,7 @@ LAUNCHER="org.eclipse.core.launcher.Main"
 STARTUP_JAR="$APP_DIR/startup.jar"
 APP="com.choicemaker.cm.modelmaker.ModelMaker"
 LOG4J="log4j.properties"
-WORKSPACE="/tmp"
+WORKSPACE="/tmp/cm-analyzer_runtime_workspace"
 
 # Java command
 #JAVA="/usr/java/j2sdk1.4.2_19/bin/java"
@@ -62,6 +62,8 @@ CMD="$JAVA $JAVA_OPTS \\
       -noupdate \\
       -application \"$APP\" \\
       -conf \"$CONF\""
+      # -debug -consolelog -nolazyregistrycacheloading \\
+      # -conf \"$CONF\""
 
 echo
 echo "$CMD"
