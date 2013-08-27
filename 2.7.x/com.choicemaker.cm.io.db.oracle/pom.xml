@@ -16,8 +16,8 @@
   <name>ChoiceMaker I/O Plug-in (Oracle Database)</name>
 
   <properties>
-    <eclipse.plugin.runtime.library.name>base.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>basesrc.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.runtime.library.name>oracle.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.src.zip.name>oraclesrc.zip</eclipse.plugin.src.zip.name>
   </properties>
 
   <build>
