@@ -96,7 +96,7 @@ public class DbRecordSource implements RecordSource {
 			// See Sanat Pattanaik, 2011-01-14, http://links.rph.cx/16ER9Dw,
 			// "Debugging PL-SQL calls from Java Session Using Eclipse and SQL Developer"
 			//
-			boolean _debugSql = true;
+			boolean _debugSql = false;
 			if (_debugSql) {
 				try {
 					CallableStatement _stmt =
