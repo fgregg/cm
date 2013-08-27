@@ -70,7 +70,8 @@
     <module>../com.choicemaker.cm.util.app</module>
     <module>../com.choicemaker.cm.util.app.pkg_eclipse</module>
     <module>../com.choicemaker.cm.validation.eclipse</module>
-    <module>../com.mchanged.c3p0</module>
+    <module>../com.mchange.c3p0</module>
+    <module>../com.oracle.jdbc</module>
     <module>../com.wcohen.ss</module>
     <module>../com.wcohen.ss.eclipse</module>
   </modules>
