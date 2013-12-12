@@ -8,7 +8,8 @@
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-base</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>../choicemaker-base/pom.xml</relativePath>
+   <!-- relativePath>../choicemaker-base_pom.xml</relativePath -->
+   <relativePath>../choicemaker-cm_pom.xml</relativePath>
   </parent>
 
   <artifactId>org.eclipse.core.resources.ant</artifactId>
