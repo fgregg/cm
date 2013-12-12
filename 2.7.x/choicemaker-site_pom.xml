@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>choicemaker-base_pom.xml</relativePath>
+  </parent>
+
+  <artifactId>choicemaker-site</artifactId>
+  <packaging>pom</packaging>
+
+  <name>ChoiceMaker Maven website</name>
+  <url>http://rphall.com:10080/choicemaker/dev-doc</url>
+ 
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+
+  <properties>
+    <plugin.maven-site.version>3.3</plugin.maven-site.version>
+    <plugin.maven-wagon-ssh.version>2.5</plugin.maven-wagon-ssh.version>
+  </properties>
+
+  <distributionManagement>
+    <site>
+      <id>oscmt.rphall.com</id>
+      <url>scp://oscmt@rphall.com:10022/home/oscmt/dev-doc</url>
+    </site>
+<!--
+    <repository>
+      <id>releases</id>
+      <name>Releases</name>
+      <url>
+      http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Snapshots</name>
+      <url>
+      http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+-->
+  </distributionManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${plugin.maven-site.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ssh</artifactId>
+            <version>${plugin.maven-wagon-ssh.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <attach>true</attach>
+          <reportPlugins>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>
+              maven-project-info-reports-plugin</artifactId>
+              <configuration>
+                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+              </configuration>
+              <reports>
+                <report>summary</report>
+                <report>project-team</report>
+                <report>dependencies</report>
+                <report>issue-tracking</report>
+<!--
+                <report>scm</report>
+-->
+                <report>modules</report>
+                <report>plugins</report>
+              </reports>
+            </plugin>
+
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>versions-maven-plugin</artifactId>
+              <reportSets>
+                <reportSet>
+                  <reports>
+                    <report>dependency-updates-report</report>
+                    <report>plugin-updates-report</report>
+                  </reports>
+                </reportSet>
+              </reportSets>
+            </plugin>
+
+          </reportPlugins>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-descriptor</id>
+            <goals>
+              <goal>attach-descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <modules>
+<!--
+    <module>org.apache.ant</module>
+    <module>org.apache.bcel</module>
+    <module>org.apache.log4j</module>
+    <module>org.apache.oro</module>
+    <module>org.apache.xerces</module>
+    <module>org.eclipse.ant.core</module>
+    <module>org.eclipse.ant.internal.core</module>
+    <module>org.eclipse.core.boot</module>
+    <module>org.eclipse.core.launcher</module>
+    <module>org.eclipse.core.resources</module>
+    <module>org.eclipse.core.resources.ant</module>
+    <module>org.eclipse.core.runtime</module>
+    <module>org.jdom</module>
+-->
+    <module>com.choicemaker.cm.analyzer.base</module>
+    <module>com.choicemaker.cm.core</module>
+    <module>com.choicemaker.cm.compiler</module>
+    <!-- <module>com.choicemaker.cm.compiler.tools.jdk142</module> -->
+<!--
+    <module>org.apache.ant</module>
+-->
+<!--
+    <module>com.choicemaker.cm.compiler.tools.jdk170</module>
+    <module>com.choicemaker.cm.io.blocking.automated.base</module>
+    <module>com.choicemaker.cm.io.blocking.automated.inmemory</module>
+    <module>com.choicemaker.cm.io.blocking.base</module>
+    <module>com.choicemaker.cm.io.blocking.exact.base</module>
+    <module>com.choicemaker.cm.io.composite.base</module>
+    <module>com.choicemaker.cm.io.db.base</module>
+    <module>com.choicemaker.cm.io.db.oracle</module>
+    <module>com.choicemaker.cm.io.flatfile.base</module>
+    <module>com.choicemaker.cm.io.xml.base</module>
+    <module>com.choicemaker.cm.matching.cfg</module>
+    <module>com.choicemaker.cm.matching.en</module>
+    <module>com.choicemaker.cm.matching.en.au</module>
+    <module>com.choicemaker.cm.matching.en.us</module>
+    <module>com.choicemaker.cm.matching.en.us.ny.nyc</module>
+    <module>com.choicemaker.cm.matching.en.us.train</module>
+    <module>com.choicemaker.cm.matching.gen</module>
+    <module>com.choicemaker.cm.matching.geo</module>
+    <module>com.choicemaker.cm.matching.intl</module>
+    <module>com.choicemaker.cm.matching.wfst</module>
+    <module>com.choicemaker.cm.matching.wfst.eclipse</module>
+    <module>com.choicemaker.cm.ml.me.base</module>
+    <module>com.choicemaker.cm.urm.base</module>
+    <module>com.choicemaker.cm.util.app</module>
+    <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
+    <module>com.choicemaker.cm.validation.eclipse</module>
+    <module>com.mchange.c3p0</module>
+    <module>com.oracle.jdbc</module>
+    <module>com.wcohen.ss</module>
+    <module>com.wcohen.ss.eclipse</module>
+
+    <module>com.choicemaker.cm.analyzer.tools.gui</module>
+    <module>com.choicemaker.cm.docs</module>
+    <module>com.choicemaker.cm.gui.utils</module>
+    <module>com.choicemaker.cm.io.blocking.automated.inmemory.gui</module>
+    <module>com.choicemaker.cm.io.blocking.exact.gui</module>
+    <module>com.choicemaker.cm.io.composite.gui</module>
+    <module>com.choicemaker.cm.io.db.gui</module>
+    <module>com.choicemaker.cm.io.flatfile.gui</module>
+    <module>com.choicemaker.cm.io.xml.gui</module>
+    <module>com.choicemaker.cm.ml.me.gui</module>
+    <module>com.choicemaker.cm.mmdevtools</module>
+    <module>com.choicemaker.cm.modelmaker</module>
+    <module>com.choicemaker.cm.modelmaker.pkg_eclipse</module>
+    <module>com.choicemaker.cm.module</module>
+    <module>javax.help.eclipse2</module>
+    <module>jfree.jfreechart.eclipse2</module>
+
+    <module>com.choicemaker.autonumber</module>
+    <module>com.choicemaker.cm.io.blocking.automated.offline</module>
+    <module>com.choicemaker.cm.io.blocking.automated.offline.core</module>
+    <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>
+    <module>com.choicemaker.cm.reviewmaker.base</module>
+    <module>com.choicemaker.cm.server.base</module>
+    <module>com.choicemaker.cm.server.ejb.base</module>
+    <module>com.choicemaker.cm.server.ejb.impl</module>
+    <module>com.choicemaker.cm.transitivity</module>
+    <module>com.choicemaker.cm.transitivity.core</module>
+    <module>com.choicemaker.cm.transitivity.server</module>
+    <module>com.choicemaker.cm.urm</module>
+    <module>com.choicemaker.cm.urm.adaptor</module>
+-->
+    <!-- <module>com.choicemaker.cm.urm.base</module> -->
+<!--
+    <module>com.choicemaker.cm.urm.ejb</module>
+    <module>com.choicemaker.cm.urm.ear.pkg_eclipse</module>
+-->
+  </modules>
+
+</project>
