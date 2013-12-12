@@ -8,7 +8,7 @@
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>../choicemaker-cm/pom.xml</relativePath>
+    <relativePath>../choicemaker-cm_pom.xml</relativePath>
   </parent>
 
   <artifactId>com.choicemaker.cm.util.app.eclipse2pkg</artifactId>
