@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-cm</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>choicemaker-cm_pom.xml</relativePath>
+  </parent>
+
+  <artifactId>choicemaker-cm-server</artifactId>
+  <packaging>pom</packaging>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+  </build>
+
+  <modules>
+    <module>com.choicemaker.autonumber</module>
+    <module>com.choicemaker.cm.io.blocking.automated.offline</module>
+    <module>com.choicemaker.cm.io.blocking.automated.offline.core</module>
+    <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>
+    <module>com.choicemaker.cm.reviewmaker.base</module>
+    <module>com.choicemaker.cm.server.base</module>
+    <module>com.choicemaker.cm.server.ejb.base</module>
+    <module>com.choicemaker.cm.server.ejb.impl</module>
+    <module>com.choicemaker.cm.transitivity</module>
+    <module>com.choicemaker.cm.transitivity.core</module>
+    <module>com.choicemaker.cm.transitivity.server</module>
+    <module>com.choicemaker.cm.urm</module>
+    <module>com.choicemaker.cm.urm.adaptor</module>
+    <!-- <module>com.choicemaker.cm.urm.base</module> -->
+    <module>com.choicemaker.cm.urm.ejb</module>
+    <module>com.choicemaker.cm.urm.ear.pkg_eclipse</module>
+  </modules>
+
+</project>
