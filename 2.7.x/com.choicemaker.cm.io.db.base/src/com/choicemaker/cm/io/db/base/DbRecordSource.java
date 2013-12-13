@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+ * Copyright (c) 2001, 2013 ChoiceMaker Technologies, Inc. and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
@@ -142,7 +142,7 @@ public class DbRecordSource implements RecordSource {
 
 		} catch (java.sql.SQLException e) {
 			e.printStackTrace();
-			throw new ChainedIOException("", e);
+			throw new ChainedIOException(e.getMessage(), e);
 		}
 	}
 
@@ -164,7 +164,7 @@ public class DbRecordSource implements RecordSource {
 				record = null;
 			}
 		} catch (java.sql.SQLException e) {
-			throw new ChainedIOException("", e);
+			throw new ChainedIOException(e.getMessage(), e);
 		}
 	}
 
@@ -194,7 +194,7 @@ public class DbRecordSource implements RecordSource {
 			ex = e;
 		}
 		if (ex != null) {
-			throw new ChainedIOException("", ex);
+			throw new ChainedIOException(ex.getMessage(), ex);
 		}
 	}
 
