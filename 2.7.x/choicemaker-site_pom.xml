@@ -135,8 +135,8 @@
     <!-- <module>com.choicemaker.cm.compiler.tools.jdk142</module> -->
 <!--
     <module>org.apache.ant</module>
--->
     <module>com.choicemaker.cm.compiler.tools.jdk170</module>
+-->
     <module>com.choicemaker.cm.io.blocking.automated.base</module>
     <module>com.choicemaker.cm.io.blocking.automated.inmemory</module>
     <module>com.choicemaker.cm.io.blocking.base</module>
@@ -160,10 +160,12 @@
     <module>com.choicemaker.cm.ml.me.base</module>
     <module>com.choicemaker.cm.urm.base</module>
     <module>com.choicemaker.cm.util.app</module>
-    <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
+    <!-- module>com.choicemaker.cm.util.app.pkg_eclipse</module -->
     <module>com.choicemaker.cm.validation.eclipse</module>
+<!--
     <module>com.mchange.c3p0</module>
     <module>com.oracle.jdbc</module>
+-->
     <module>com.wcohen.ss</module>
     <module>com.wcohen.ss.eclipse</module>
 
@@ -181,10 +183,12 @@
     <module>com.choicemaker.cm.ml.me.gui</module>
     <module>com.choicemaker.cm.mmdevtools</module>
     <module>com.choicemaker.cm.modelmaker</module>
-    <module>com.choicemaker.cm.modelmaker.pkg_eclipse</module>
+    <!-- module>com.choicemaker.cm.modelmaker.pkg_eclipse</module -->
     <module>com.choicemaker.cm.module</module>
+<!--
     <module>javax.help.eclipse2</module>
     <module>jfree.jfreechart.eclipse2</module>
+-->
 
     <module>com.choicemaker.autonumber</module>
     <module>com.choicemaker.cm.io.blocking.automated.offline</module>
