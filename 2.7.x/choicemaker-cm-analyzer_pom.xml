@@ -17,6 +17,7 @@
   <name>ChoiceMaker Analyzer Modules</name>
   <url>http://oscmt.sourceforge.net</url>
 
+  <!-- REMOVE Moved to choicemaker-cm POM
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -47,5 +48,6 @@
     <module>javax.help.eclipse2</module>
     <module>jfree.jfreechart.eclipse2</module>
   </modules>
+  -->
 
 </project>

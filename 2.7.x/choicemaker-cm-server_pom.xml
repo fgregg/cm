@@ -14,6 +14,10 @@
   <artifactId>choicemaker-cm-server</artifactId>
   <packaging>pom</packaging>
 
+  <name>ChoiceMaker Server Modules</name>
+  <url>http://oscmt.sourceforge.net</url>
+
+  <!-- REMOVE Moved to choicemaker-cm POM
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -40,9 +44,9 @@
     <module>com.choicemaker.cm.transitivity.server</module>
     <module>com.choicemaker.cm.urm</module>
     <module>com.choicemaker.cm.urm.adaptor</module>
-    <!-- <module>com.choicemaker.cm.urm.base</module> -->
     <module>com.choicemaker.cm.urm.ejb</module>
     <module>com.choicemaker.cm.urm.ear.pkg_eclipse</module>
   </modules>
+  -->
 
 </project>
