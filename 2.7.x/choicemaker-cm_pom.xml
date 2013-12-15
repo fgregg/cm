@@ -17,6 +17,25 @@
   <name>ChoiceMaker Record Matching</name>
   <url>http://oscmt.sourceforge.net</url>
 
+  <distributionManagement>
+    <site>
+      <id>oscmt.rphall.com</id>
+      <url>scp://oscmt@rphall.com:10022/home/oscmt/dev-doc</url>
+    </site>
+    <repository>
+      <id>releases</id>
+      <name>releases</name>
+      <url>
+      http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Internal Snapshots</name>
+      <url>
+      http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -44,6 +63,12 @@
     <module>org.eclipse.core.resources.ant</module>
     <module>org.eclipse.core.runtime</module>
     <module>org.jdom</module>
+    <module>javax.help.eclipse2</module>
+    <module>jfree.jfreechart.eclipse2</module>
+    <module>com.oracle.jdbc</module>
+    <module>com.mchange.c3p0</module>
+    <module>com.wcohen.ss</module>
+    <module>com.wcohen.ss.eclipse</module>
     <!-- Common modules -->
     <module>com.choicemaker.cm.compiler</module>
     <module>com.choicemaker.cm.compiler.tools.jdk170</module>
@@ -59,7 +84,6 @@
     <module>com.choicemaker.cm.io.xml.base</module>
     <module>com.choicemaker.cm.ml.me.base</module>
     <module>com.choicemaker.cm.urm.base</module>
-    <module>com.oracle.jdbc</module>
     <!-- Modeling modules -->
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.matching.cfg</module>
@@ -74,9 +98,6 @@
     <module>com.choicemaker.cm.matching.wfst</module>
     <module>com.choicemaker.cm.matching.wfst.eclipse</module>
     <module>com.choicemaker.cm.validation.eclipse</module>
-    <module>com.mchange.c3p0</module>
-    <module>com.wcohen.ss</module>
-    <module>com.wcohen.ss.eclipse</module>
     <!-- Utility applications -->
     <module>com.choicemaker.cm.util.app</module>
     <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
@@ -95,8 +116,6 @@
     <module>com.choicemaker.cm.modelmaker</module>
     <module>com.choicemaker.cm.modelmaker.pkg_eclipse</module>
     <module>com.choicemaker.cm.module</module>
-    <module>javax.help.eclipse2</module>
-    <module>jfree.jfreechart.eclipse2</module>
     <!-- Server application -->
     <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>
     <module>com.choicemaker.cm.reviewmaker.base</module>
