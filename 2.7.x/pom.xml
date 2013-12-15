@@ -70,6 +70,8 @@
     <module>com.wcohen.ss</module>
     <module>com.wcohen.ss.eclipse</module>
     <!-- Common modules -->
+    <module>com.choicemaker.cm.core</module>
+<!--
     <module>com.choicemaker.cm.compiler</module>
     <module>com.choicemaker.cm.compiler.tools.jdk170</module>
     <module>com.choicemaker.cm.analyzer.base</module>
@@ -84,8 +86,9 @@
     <module>com.choicemaker.cm.io.xml.base</module>
     <module>com.choicemaker.cm.ml.me.base</module>
     <module>com.choicemaker.cm.urm.base</module>
+-->
     <!-- Modeling modules -->
-    <module>com.choicemaker.cm.core</module>
+<!--
     <module>com.choicemaker.cm.matching.cfg</module>
     <module>com.choicemaker.cm.matching.en</module>
     <module>com.choicemaker.cm.matching.en.au</module>
@@ -98,10 +101,14 @@
     <module>com.choicemaker.cm.matching.wfst</module>
     <module>com.choicemaker.cm.matching.wfst.eclipse</module>
     <module>com.choicemaker.cm.validation.eclipse</module>
+-->
     <!-- Utility applications -->
+<!--
     <module>com.choicemaker.cm.util.app</module>
     <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
+-->
     <!-- Analyzer application -->
+<!--
     <module>com.choicemaker.cm.analyzer.tools.gui</module>
     <module>com.choicemaker.cm.docs</module>
     <module>com.choicemaker.cm.gui.utils</module>
@@ -116,7 +123,9 @@
     <module>com.choicemaker.cm.modelmaker</module>
     <module>com.choicemaker.cm.modelmaker.pkg_eclipse</module>
     <module>com.choicemaker.cm.module</module>
+-->
     <!-- Server application -->
+<!--
     <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>
     <module>com.choicemaker.cm.reviewmaker.base</module>
     <module>com.choicemaker.cm.server.base</module>
@@ -127,9 +136,9 @@
     <module>com.choicemaker.cm.transitivity.server</module>
     <module>com.choicemaker.cm.urm</module>
     <module>com.choicemaker.cm.urm.adaptor</module>
-    <!-- <module>com.choicemaker.cm.urm.base</module> -->
     <module>com.choicemaker.cm.urm.ejb</module>
     <module>com.choicemaker.cm.urm.ear.pkg_eclipse</module>
+-->
   </modules>
 
 </project>
