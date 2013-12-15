@@ -12,41 +12,4 @@
   <name>Open Source ChoiceMaker Technologies</name>
   <url>http://oscmt.sourceforge.net</url>
 
-  <prerequisites>
-    <maven>2.2.1</maven>
-  </prerequisites>
-
-  <properties>
-    <choicemaker.version>2.7.1-SNAPSHOT</choicemaker.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
-  <distributionManagement>
-    <site>
-      <id>oscmt.rphall.com</id>
-      <url>scp://oscmt@rphall.com:10022/home/oscmt/dev-doc</url>
-    </site>
-    <repository>
-      <id>releases</id>
-      <name>releases</name>
-      <url>
-      http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <name>Internal Snapshots</name>
-      <url>
-      http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
-
-  <!--
-  <modules>
-    <module>../choicemaker-base</module>
-    <module>../choicemaker-cm</module>
-    <module>../choicemaker-cm-analyzer</module>
-    <module>../choicemaker-cm-server</module>
-  </modules>
-  -->
-
 </project>
