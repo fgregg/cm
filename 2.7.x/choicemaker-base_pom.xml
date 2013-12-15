@@ -4,25 +4,18 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
-    <relativePath>choicemaker_pom.xml</relativePath>
-  </parent>
-
+  <groupId>com.choicemaker.cm</groupId>
   <artifactId>choicemaker-base</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Dependencies</name>
   <url>http://oscmt.sourceforge.net</url>
 
-<!--
-  <properties>
-    <choicemaker.version>2.7.1-SNAPSHOT</choicemaker.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
--->
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -94,7 +87,6 @@
       <id>oscmt.rphall.com</id>
       <url>scp://oscmt@rphall.com:10022/home/oscmt/dev-doc</url>
     </site>
-<!--
     <repository>
       <id>releases</id>
       <name>releases</name>
@@ -107,7 +99,6 @@
       <url>
       http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
--->
   </distributionManagement>
 
   <build>
