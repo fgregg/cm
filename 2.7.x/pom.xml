@@ -169,7 +169,6 @@
 -->
     <!-- Third-party modeling modules -->
     <module>com.wcohen.ss</module>
-    <module>com.wcohen.ss2</module>
     <module>com.wcohen.ss.eclipse</module>
     <!-- Desktop applications -->
 <!--
