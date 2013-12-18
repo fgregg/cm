@@ -15,24 +15,33 @@
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Record Matching</name>
-  <url>http://oscmt.sourceforge.net</url>
+  <url>http://oscmt.sourceforge.net/dev-doc</url>
+
+  <scm>
+    <!-- connection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</connection -->
+    <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url>
+    <!-- developerConnection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</developerConnection -->
+  </scm>
+
+  <issueManagement>
+    <url>http://sourceforge.net/projects/oscmt/support</url>
+  </issueManagement>
 
   <distributionManagement>
     <site>
       <id>oscmt.rphall.com</id>
-      <url>scp://oscmt@rphall.com:10022/home/oscmt/dev-doc</url>
+      <!-- url>file:///home/project-web/oscmt/htdocs/dev-doc/</url -->
+      <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
     </site>
     <repository>
       <id>releases</id>
       <name>releases</name>
-      <url>
-      http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
+      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
     </repository>
     <snapshotRepository>
       <id>snapshots</id>
       <name>Internal Snapshots</name>
-      <url>
-      http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
+      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 
@@ -46,10 +55,69 @@
         </excludes>
       </resource>
     </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${plugin.maven-site.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ssh</artifactId>
+            <version>${plugin.maven-wagon-ssh.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <attach>true</attach>
+          <reportPlugins>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>
+              maven-project-info-reports-plugin</artifactId>
+              <configuration>
+                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+              </configuration>
+              <reports>
+                <report>summary</report>
+                <report>project-team</report>
+                <report>dependencies</report>
+                <report>issue-tracking</report>
+                <report>scm</report>
+                <report>modules</report>
+                <report>plugins</report>
+              </reports>
+            </plugin>
+
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>versions-maven-plugin</artifactId>
+              <reportSets>
+                <reportSet>
+                  <reports>
+                    <report>dependency-updates-report</report>
+                    <report>plugin-updates-report</report>
+                  </reports>
+                </reportSet>
+              </reportSets>
+            </plugin>
+
+          </reportPlugins>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-descriptor</id>
+            <goals>
+              <goal>attach-descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <modules>
-    <!-- Third-party -->
+    <!-- Third-party core prerequisites -->
     <module>org.apache.ant</module>
     <module>org.apache.bcel</module>
     <module>org.apache.log4j</module>
@@ -67,13 +135,11 @@
     <module>jfree.jfreechart.eclipse2</module>
     <module>com.oracle.jdbc</module>
     <module>com.mchange.c3p0</module>
-    <module>com.wcohen.ss</module>
-    <module>com.wcohen.ss.eclipse</module>
-    <!-- Common modules -->
+    <!-- Core modules -->
     <module>com.choicemaker.cm.core</module>
+    <module>com.choicemaker.cm.urm.base</module>
+    <!-- Common modules -->
 <!--
-    <module>com.choicemaker.cm.compiler</module>
-    <module>com.choicemaker.cm.compiler.tools.jdk170</module>
     <module>com.choicemaker.cm.analyzer.base</module>
     <module>com.choicemaker.cm.io.blocking.automated.base</module>
     <module>com.choicemaker.cm.io.blocking.automated.inmemory</module>
@@ -85,7 +151,6 @@
     <module>com.choicemaker.cm.io.flatfile.base</module>
     <module>com.choicemaker.cm.io.xml.base</module>
     <module>com.choicemaker.cm.ml.me.base</module>
-    <module>com.choicemaker.cm.urm.base</module>
 -->
     <!-- Modeling modules -->
 <!--
@@ -102,13 +167,16 @@
     <module>com.choicemaker.cm.matching.wfst.eclipse</module>
     <module>com.choicemaker.cm.validation.eclipse</module>
 -->
-    <!-- Utility applications -->
+    <!-- Third-party modeling modules -->
+    <module>com.wcohen.ss</module>
+    <module>com.wcohen.ss2</module>
+    <module>com.wcohen.ss.eclipse</module>
+    <!-- Desktop applications -->
 <!--
+    <module>com.choicemaker.cm.compiler</module>
+    <module>com.choicemaker.cm.compiler.tools.jdk170</module>
     <module>com.choicemaker.cm.util.app</module>
     <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
--->
-    <!-- Analyzer application -->
-<!--
     <module>com.choicemaker.cm.analyzer.tools.gui</module>
     <module>com.choicemaker.cm.docs</module>
     <module>com.choicemaker.cm.gui.utils</module>
@@ -124,7 +192,7 @@
     <module>com.choicemaker.cm.modelmaker.pkg_eclipse</module>
     <module>com.choicemaker.cm.module</module>
 -->
-    <!-- Server application -->
+    <!-- J2EE applications -->
 <!--
     <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>
     <module>com.choicemaker.cm.reviewmaker.base</module>
@@ -140,5 +208,126 @@
     <module>com.choicemaker.cm.urm.ear.pkg_eclipse</module>
 -->
   </modules>
+
+  <developers>
+  	<developer>
+  		<id>rphall</id>
+  		<name>Rick Hall</name>
+		  <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>ChoiceMaker developer</role>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+  	</developer>
+  </developers>
+
+  <contributors>
+  	<contributor>
+  		<!-- id>aborthwick</id -->
+  		<name>Andrew Borthwick</name>
+      <roles>
+        <role>Founder, ChoiceMaker Technologies Inc.</role>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>mbuechi</id -->
+  		<name>Martin Buechi</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>mchen</id -->
+  		<name>Michael Chen</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>pcheung</id -->
+  		<name>Put Cheung</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>jdickinson</id -->
+  		<name>Jim Dickinson</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>arturof</id -->
+  		<name>Arturo Falck</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+      <name>Gaelen Green</name>
+      <roles>
+        <role>Technical writer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>agoldberg</id -->
+  		<name>Arthur Goldberg</name>
+      <roles>
+        <role>Founder, ChoiceMaker Technologies Inc.</role>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<name>Ashley Larive</name>
+      <roles>
+        <role>Customer deployments</role>
+        <role>Technical writer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<name>Gail Mitnik</name>
+      <roles>
+        <role>Customer deployments</role>
+        <role>Technical writer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>emoussikaev</id -->
+  		<name>Elmer Moussikaev</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>christer</id -->
+  		<name>Christer Samuelsson</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+      <name>Maggie Soffer</name>
+      <roles>
+        <role>Customer deployments</role>
+        <role>Technical writer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>ajwinkel</id -->
+  		<name>Adam Winkel</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id></id -->
+  		<name>S. Yoakum-Stover</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  </contributors>
 
 </project>
