@@ -4,7 +4,7 @@
         <!-- src>images/choicemaker_logo.gif</src -->
         <src>http://oscmt.sourceforge.net/dev-doc/images/choicemaker_logo.gif</src>
         <alt>Open Source ChoiceMaker Technology website</alt>
-        <href>http://oscmt.sourceforge.net</href>
+        <href>http://oscmt.sourceforge.net/dev-doc</href>
     </bannerLeft>
     <bannerRight>
         <name>SourceForge</name>
@@ -16,7 +16,7 @@
     <version position="right"/>
     <body>
         <breadcrumbs>
-            <item name="ChoiceMaker" href="http://oscmt.sourceforge.net"/>
+            <item name="ChoiceMaker" href="http://oscmt.sourceforge.net/dev-doc"/>
         </breadcrumbs>
         <menu name="ChoiceMaker Record Matching">
             <!-- item name="Welcome" href="welcome.html"/ -->
