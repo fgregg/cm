@@ -11,7 +11,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Dependencies</name>
-  <url>http://oscmt.sourceforge.net/dev-doc</url>
 
   <prerequisites>
     <maven>2.2.1</maven>
