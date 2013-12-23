@@ -1,0 +1,19 @@
+
+Building Open Source ChoiceMaker Technology
+
+* Some things to note
+
+** Dependence on Eclipse 2.1
+
+** Special packaging
+
+** Dependence on proprietary, third-party libraries
+
+*** Oracle JDBC driver
+
+*** Microsoft JDBC driver
+
+** Installers
+
+* Building the software components from source code
+

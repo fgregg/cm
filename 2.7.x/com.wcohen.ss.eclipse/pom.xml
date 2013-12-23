@@ -8,13 +8,41 @@
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>../choicemaker-cm_pom.xml</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>com.wcohen.ss.eclipse</artifactId>
   <packaging>jar</packaging>
-  <name>Willim Cohen's SecondString Library (Eclipse Ext)</name>
-  <url>http://www.cs.cmu.edu/~wcohen</url>
+  <name>SecondString Library (Eclipse Ext)</name>
+
+  <description><![CDATA[
+  This plugin is based on the open-source Second String Library
+  (http://sourceforge.net/projects/secondstring/) created by
+  William Cohen and colleagues.
+  For this project, the library has been back-ported to Java 1.4
+  and repackaged as a Maven/Eclipse 2.1 plugin.
+  ]]>
+  </description>
+  <licenses>
+    <license>
+      <name>University of Illinois/NCSA Open Source License</name>
+      <comments>Applies to Second String source code.</comments></license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+		  <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>Eclipse/Maven packaging</role></roles></developer></developers>
+
+  <contributors>
+  	<contributor>
+  		<name>SecondString project</name>
+  		<url>http://sourceforge.net/projects/secondstring/</url>
+  	</contributor>
+  </contributors>
 
   <properties>
     <eclipse.plugin.runtime.library.name>secondstring.jar</eclipse.plugin.runtime.library.name>

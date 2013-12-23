@@ -1,1 +1,6 @@
- com.wcohen.ss
+com.wcohen.ss
+
+ This plugin is based on the open-source
+{{{http://sourceforge.net/projects/secondstring/}Second String Library}} by William Cohen and colleagues.
+
+ The library has been back-ported to Java 1.4 and has been repackaged as an Eclipse 2.1 plugin.
