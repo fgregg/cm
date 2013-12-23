@@ -8,7 +8,7 @@
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>../choicemaker-cm_pom.xml</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>org.jdom</artifactId>
@@ -24,6 +24,13 @@
 
   <build>
     <plugins>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${plugin.maven-site.version}</version>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>

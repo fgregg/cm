@@ -1,0 +1,34 @@
+<project name="ChoiceMaker Record Matching">
+    <bannerLeft>
+        <name>ChoiceMaker</name>
+        <!-- src>images/choicemaker_logo.gif</src -->
+        <src>http://oscmt.sourceforge.net/dev-doc/images/choicemaker_logo.gif</src>
+        <alt>Open Source ChoiceMaker Technology website</alt>
+        <href>http://oscmt.sourceforge.net</href>
+    </bannerLeft>
+    <bannerRight>
+        <name>SourceForge</name>
+        <src>http://sflogo.sourceforge.net/sflogo.php?group_id=299878&amp;type=16</src>
+        <alt>Get Open Source ChoiceMaker Technogy at SourceForge.net. Fast, secure and Free Open Source software downloads</alt>
+        <href>https://sourceforge.net/projects/oscmt</href>
+    </bannerRight>
+    <publishDate position="right"/>
+    <version position="right"/>
+    <body>
+        <breadcrumbs>
+            <item name="ChoiceMaker" href="http://oscmt.sourceforge.net"/>
+        </breadcrumbs>
+        <menu name="ChoiceMaker Record Matching">
+            <!-- item name="Welcome" href="welcome.html"/ -->
+            <!-- item name="Overview" href="overview.html"/ -->
+            <!-- item name="Examples" href="examples.html"/ -->
+            <!-- item name="Tutorial" href="cdc-tutorial/index.html"/ -->
+            <!-- item name="Components" href="components.html"/ -->
+            <item name="Building" href="building.html"/>
+            <!-- item name="References" href="references.html"/ -->
+        </menu>
+        <menu ref="reports" name="Developer information" inherit="bottom"/>
+        <menu ref="modules"/>
+    </body>
+</project>
+
