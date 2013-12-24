@@ -6,9 +6,9 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker-base</artifactId>
+    <artifactId>choicemaker-maven-base</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-   <!-- relativePath>../choicemaker-base/pom.xml</relativePath -->
+   <!-- relativePath>../choicemaker-maven-base/pom.xml</relativePath -->
    <relativePath>../pom.xml</relativePath>
   </parent>
 
