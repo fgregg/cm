@@ -1,4 +1,4 @@
 org.apache.bcel
 
-  This module repackages the {{{http://commons.apache.org/bcel/}}open-source Apache BCEL library}
+  This module repackages the {{{http://commons.apache.org/bcel/}open-source Apache BCEL library}}
   as an Eclipse 2.1 plugin.

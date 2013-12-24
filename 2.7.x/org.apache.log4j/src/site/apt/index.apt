@@ -1,4 +1,4 @@
 org.apache.log4j
 
-  This module repackages the {{{http://logging.apache.org/log4j/}}open-source Apache LOG4J library}
+  This module repackages the {{{http://logging.apache.org/log4j/}open-source Apache LOG4J library}}
   as an Eclipse 2.1 plugin.
