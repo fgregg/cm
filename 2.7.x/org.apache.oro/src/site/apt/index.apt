@@ -1,1 +1,4 @@
- org.apache.oro
+org.apache.oro
+
+  This module repackages the {{{http://jakarta.apache.org/oro/}}open-source Apache ORO library}
+  as an Eclipse 2.1 plugin.

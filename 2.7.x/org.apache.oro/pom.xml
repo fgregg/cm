@@ -14,10 +14,20 @@
   <groupId>com.choicemaker.cm</groupId>
   <artifactId>jakarta-oro</artifactId>
   <version>2.0.1-SNAPSHOT</version>
-
   <packaging>jar</packaging>
   <name>Apache Jakarta ORO library</name>
-  <url>http://jakarta.apache.org/oro/</url>
+
+  <description><![CDATA[
+  This module repackages the open-source Apache ORO library (http://jakarta.apache.org/oro/)
+  as an Eclipse 2.1 plugin.
+  ]]>
+  </description>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <comments>Applies to ORO source code.</comments></license>
+  </licenses>
 
   <build>
     <plugins>

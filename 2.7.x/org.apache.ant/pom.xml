@@ -17,8 +17,8 @@
   <name>Apache Ant Plug-in</name>
 
   <description><![CDATA[
-  This plugin is based on the open-source Apache ANT project (http://ant.apache.org/).
-  For this project, the library has been repackaged as a Maven/Eclipse 2.1 plugin.
+  This module repackages the open-source Apache ANT library (http://ant.apache.org/)
+  as an Eclipse 2.1 plugin.
   ]]>
   </description>
   <licenses>

@@ -15,7 +15,18 @@
   <version>4.0.13-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Apache Xerces Maintenance Plug-in</name>
-  <url>http://apache.org</url>
+
+  <description><![CDATA[
+  This module repackages the open-source Apache XERCES library (http://xerces.apache.org/)
+  as an Eclipse 2.1 plugin.
+  ]]>
+  </description>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <comments>Applies to BCEL source code.</comments></license>
+  </licenses>
 
   <properties>
     <eclipse.plugin.runtime.library.name>xercesImpl.jar</eclipse.plugin.runtime.library.name>

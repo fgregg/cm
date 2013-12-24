@@ -17,3 +17,58 @@ Building Open Source ChoiceMaker Technology
 
 * Building the software components from source code
 
+* Building the Maven site
+
+  The top-level project object model file (pom.xml) specifies a
+site distribution URL on the localhost:
+
++--
+  <distributionManagement>
+    <site>
+      <id>oscmt.rphall.com</id>
+      <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
+    </site>
+  </distributionManagement>
++--
+
+  This configuration requires that the build machine hosts an ssdh server. The
+login credentials for the server should be configured in the user's Maven settings
+($HOME/.m2/settings.xml):
+
++--
+<?xml version="1.0" encoding="UTF-8"?>
+<settings
+  xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+    http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <servers>
+    <server>
+      <id>oscmt.rphall.com</id>
+      <username>CHANGEME</username>
+      <privateKey>${user.home}/.ssh/id_dsa</privateKey>
+      <passphrase>CHANGE</passphrase>
+      <filePermissions>664</filePermissions>
+      <directoryPermissions>775</directoryPermissions>
+    </server>
+  </servers>
+  <!-- ... -->
+</settings
++--
+
+  The build configuration also requires that the build machine have a
+directory pathway that starts at the root and continues through to a "dev-doc"
+directory:
+
++--
+  /home/project-web/oscmt/htdocs/dev-docs
++--
+
+  On Linux and Mac OS X, a convenient way to deploy the site to an alternate
+host is to use sshfs to mount a remote directory at the dev-docs directory.
+
++--
+  sshfs <user>@<host>:<path> /home/project-web/oscmt/htdocs/dev-doc
++--
+

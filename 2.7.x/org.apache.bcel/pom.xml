@@ -15,7 +15,18 @@
   <version>5.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Apache BCEL Maintenance Plug-in</name>
-  <url>http://apache.org</url>
+
+  <description><![CDATA[
+  This module repackages the open-source Apache BCEL library (http://commons.apache.org/bcel)
+  as an Eclipse 2.1 plugin.
+  ]]>
+  </description>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <comments>Applies to BCEL source code.</comments></license>
+  </licenses>
 
   <properties>
     <eclipse.plugin.runtime.library.name>bcel.jar</eclipse.plugin.runtime.library.name>
