@@ -16,45 +16,7 @@
 
   <name>ChoiceMaker Prerequisites</name>
 
-<!--
-  <distributionManagement>
-    <site>
-      <id>oscmt.rphall.com</id>
-      <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
-    </site>
-    <repository>
-      <id>releases</id>
-      <name>releases</name>
-      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <name>Internal Snapshots</name>
-      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
-
-  <build>
-    <sourceDirectory>src</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
-    <plugins>
-      <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>${plugin.maven-site.version}</version>
-      </plugin>
-    </plugins>
-  </build>
--->
-
   <modules>
-    <!-- Prerequisites -->
     <module>org.apache.ant</module>
     <module>org.apache.bcel</module>
     <module>org.apache.log4j</module>
@@ -72,80 +34,9 @@
     <module>jfree.jfreechart.eclipse2</module>
     <module>com.oracle.jdbc</module>
     <module>com.mchange.c3p0</module>
-
-    <!-- Base modules -->
-<!--
-    <module>com.choicemaker.cm.core</module>
-    <module>com.choicemaker.cm.urm.base</module>
-    <module>com.choicemaker.cm.analyzer.base</module>
-    <module>com.choicemaker.cm.io.blocking.automated.base</module>
-    <module>com.choicemaker.cm.io.blocking.automated.inmemory</module>
-    <module>com.choicemaker.cm.io.blocking.base</module>
-    <module>com.choicemaker.cm.io.blocking.exact.base</module>
-    <module>com.choicemaker.cm.io.composite.base</module>
-    <module>com.choicemaker.cm.io.db.base</module>
-    <module>com.choicemaker.cm.io.db.oracle</module>
-    <module>com.choicemaker.cm.io.flatfile.base</module>
-    <module>com.choicemaker.cm.io.xml.base</module>
-    <module>com.choicemaker.cm.ml.me.base</module>
--->
-    <!-- Modeling modules -->
-<!--
-    <module>com.choicemaker.cm.matching.cfg</module>
-    <module>com.choicemaker.cm.matching.en</module>
-    <module>com.choicemaker.cm.matching.en.au</module>
-    <module>com.choicemaker.cm.matching.en.us</module>
-    <module>com.choicemaker.cm.matching.en.us.ny.nyc</module>
-    <module>com.choicemaker.cm.matching.en.us.train</module>
-    <module>com.choicemaker.cm.matching.gen</module>
-    <module>com.choicemaker.cm.matching.geo</module>
-    <module>com.choicemaker.cm.matching.intl</module>
-    <module>com.choicemaker.cm.matching.wfst</module>
-    <module>com.choicemaker.cm.matching.wfst.eclipse</module>
-    <module>com.choicemaker.cm.validation.eclipse</module>
-    <module>com.wcohen.ss</module>
-    <module>com.wcohen.ss.eclipse</module>
--->
-
-    <!-- Desktop modules -->
-<!--
-    <module>com.choicemaker.cm.compiler</module>
-    <module>com.choicemaker.cm.compiler.tools.jdk170</module>
-    <module>com.choicemaker.cm.util.app</module>
-    <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
-    <module>com.choicemaker.cm.analyzer.tools.gui</module>
-    <module>com.choicemaker.cm.docs</module>
-    <module>com.choicemaker.cm.gui.utils</module>
-    <module>com.choicemaker.cm.io.blocking.automated.inmemory.gui</module>
-    <module>com.choicemaker.cm.io.blocking.exact.gui</module>
-    <module>com.choicemaker.cm.io.composite.gui</module>
-    <module>com.choicemaker.cm.io.db.gui</module>
-    <module>com.choicemaker.cm.io.flatfile.gui</module>
-    <module>com.choicemaker.cm.io.xml.gui</module>
-    <module>com.choicemaker.cm.ml.me.gui</module>
-    <module>com.choicemaker.cm.mmdevtools</module>
-    <module>com.choicemaker.cm.modelmaker</module>
-    <module>com.choicemaker.cm.modelmaker.pkg_eclipse</module>
-    <module>com.choicemaker.cm.module</module>
-
--->
-    <!-- J2EE modules -->
-<!--
-    <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>
-    <module>com.choicemaker.cm.reviewmaker.base</module>
-    <module>com.choicemaker.cm.server.base</module>
-    <module>com.choicemaker.cm.server.ejb.base</module>
-    <module>com.choicemaker.cm.server.ejb.impl</module>
-    <module>com.choicemaker.cm.transitivity</module>
-    <module>com.choicemaker.cm.transitivity.core</module>
-    <module>com.choicemaker.cm.transitivity.server</module>
-    <module>com.choicemaker.cm.urm</module>
-    <module>com.choicemaker.cm.urm.adaptor</module>
-    <module>com.choicemaker.cm.urm.ejb</module>
-    <module>com.choicemaker.cm.urm.ear.pkg_eclipse</module>
--->
   </modules>
 
+<!--
   <developers>
   	<developer>
   		<id>rphall</id>
@@ -160,7 +51,6 @@
 
   <contributors>
   	<contributor>
-  		<!-- id>aborthwick</id -->
   		<name>Andrew Borthwick</name>
       <roles>
         <role>Founder, ChoiceMaker Technologies Inc.</role>
@@ -168,35 +58,30 @@
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id>mbuechi</id -->
   		<name>Martin Buechi</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id>mchen</id -->
   		<name>Michael Chen</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id>pcheung</id -->
   		<name>Put Cheung</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id>jdickinson</id -->
   		<name>Jim Dickinson</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id>arturof</id -->
   		<name>Arturo Falck</name>
       <roles>
         <role>ChoiceMaker developer</role>
@@ -209,7 +94,6 @@
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id>agoldberg</id -->
   		<name>Arthur Goldberg</name>
       <roles>
         <role>Founder, ChoiceMaker Technologies Inc.</role>
@@ -231,14 +115,12 @@
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id>emoussikaev</id -->
   		<name>Elmer Moussikaev</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id>christer</id -->
   		<name>Christer Samuelsson</name>
       <roles>
         <role>ChoiceMaker developer</role>
@@ -252,19 +134,17 @@
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id>ajwinkel</id -->
   		<name>Adam Winkel</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
   	</contributor>
   	<contributor>
-  		<!-- id></id -->
   		<name>S. Yoakum-Stover</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
   	</contributor>
   </contributors>
-
+-->
 </project>

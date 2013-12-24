@@ -119,26 +119,6 @@
   </build>
 
   <modules>
-    <!-- Prerequisites -->
-    <!--
-    <module>choicemaker-prerequisites/org.apache.ant</module>
-    <module>choicemaker-prerequisites/org.apache.bcel</module>
-    <module>choicemaker-prerequisites/org.apache.log4j</module>
-    <module>choicemaker-prerequisites/org.apache.oro</module>
-    <module>choicemaker-prerequisites/org.apache.xerces</module>
-    <module>choicemaker-prerequisites/org.eclipse.ant.core</module>
-    <module>choicemaker-prerequisites/org.eclipse.ant.internal.core</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.boot</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.launcher</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.resources</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.resources.ant</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.runtime</module>
-    <module>choicemaker-prerequisites/org.jdom</module>
-    <module>choicemaker-prerequisites/javax.help.eclipse2</module>
-    <module>choicemaker-prerequisites/jfree.jfreechart.eclipse2</module>
-    <module>choicemaker-prerequisites/com.oracle.jdbc</module>
-    <module>choicemaker-prerequisites/com.mchange.c3p0</module>
-    -->
     <module>choicemaker-prerequisites</module>
 
     <!-- Base modules -->
@@ -157,6 +137,8 @@
     <module>com.choicemaker.cm.io.xml.base</module>
     <module>com.choicemaker.cm.ml.me.base</module>
 -->
+    <module>choicemaker-common</module>
+
     <!-- Modeling modules -->
 <!--
     <module>com.choicemaker.cm.matching.cfg</module>
