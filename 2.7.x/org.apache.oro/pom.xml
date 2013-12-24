@@ -6,7 +6,7 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker-base</artifactId>
+    <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
    <relativePath>../pom.xml</relativePath>
   </parent>
