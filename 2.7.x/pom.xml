@@ -117,7 +117,7 @@
   </build>
 
   <modules>
-    <!-- Third-party core prerequisites -->
+    <!-- Prerequisites -->
     <module>org.apache.ant</module>
     <module>org.apache.bcel</module>
     <module>org.apache.log4j</module>
@@ -135,11 +135,11 @@
     <module>jfree.jfreechart.eclipse2</module>
     <module>com.oracle.jdbc</module>
     <module>com.mchange.c3p0</module>
-    <!-- Core modules -->
+
+    <!-- Base modules -->
+<!--
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.urm.base</module>
-    <!-- Common modules -->
-<!--
     <module>com.choicemaker.cm.analyzer.base</module>
     <module>com.choicemaker.cm.io.blocking.automated.base</module>
     <module>com.choicemaker.cm.io.blocking.automated.inmemory</module>
@@ -166,11 +166,11 @@
     <module>com.choicemaker.cm.matching.wfst</module>
     <module>com.choicemaker.cm.matching.wfst.eclipse</module>
     <module>com.choicemaker.cm.validation.eclipse</module>
--->
-    <!-- Third-party modeling modules -->
     <module>com.wcohen.ss</module>
     <module>com.wcohen.ss.eclipse</module>
-    <!-- Desktop applications -->
+-->
+
+    <!-- Desktop modules -->
 <!--
     <module>com.choicemaker.cm.compiler</module>
     <module>com.choicemaker.cm.compiler.tools.jdk170</module>
@@ -190,8 +190,9 @@
     <module>com.choicemaker.cm.modelmaker</module>
     <module>com.choicemaker.cm.modelmaker.pkg_eclipse</module>
     <module>com.choicemaker.cm.module</module>
+
 -->
-    <!-- J2EE applications -->
+    <!-- J2EE modules -->
 <!--
     <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>
     <module>com.choicemaker.cm.reviewmaker.base</module>
