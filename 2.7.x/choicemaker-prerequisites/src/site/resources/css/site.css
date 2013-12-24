@@ -1,0 +1,17 @@
+/* Customized styles */
+#leftColumn {
+ width: 290px;
+ float:left;
+ overflow: auto;
+}
+
+#bodyColumn {
+  margin-right: 1.5em;
+  margin-left: 317px;
+}
+
+table.bodyTable th, table.bodyTable td {
+  font-size: 1em;
+  vertical-align: middle;
+}
+
