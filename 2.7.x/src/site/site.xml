@@ -28,7 +28,7 @@
             <!-- item name="References" href="references.html"/ -->
         </menu>
         <menu ref="reports" name="Developer information" inherit="bottom"/>
-        <menu ref="modules"/>
+        <menu ref="modules" inherit="bottom"/>
     </body>
 </project>
 

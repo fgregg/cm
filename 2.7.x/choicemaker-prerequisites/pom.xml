@@ -6,31 +6,20 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker-maven-base</artifactId>
+    <artifactId>choicemaker-cm</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>choicemaker-maven-base/pom.xml</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>choicemaker-cm</artifactId>
+  <artifactId>choicemaker-prerequisites</artifactId>
   <packaging>pom</packaging>
 
-  <name>ChoiceMaker Record Matching</name>
-  <url>http://oscmt.sourceforge.net/dev-doc</url>
+  <name>ChoiceMaker Prerequisites</name>
 
-  <scm>
-    <!-- connection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</connection -->
-    <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url>
-    <!-- developerConnection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</developerConnection -->
-  </scm>
-
-  <issueManagement>
-    <url>http://sourceforge.net/projects/oscmt/support</url>
-  </issueManagement>
-
+<!--
   <distributionManagement>
     <site>
       <id>oscmt.rphall.com</id>
-      <!-- url>file:///home/project-web/oscmt/htdocs/dev-doc/</url -->
       <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
     </site>
     <repository>
@@ -59,87 +48,30 @@
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <version>${plugin.maven-site.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.maven.wagon</groupId>
-            <artifactId>wagon-ssh</artifactId>
-            <version>${plugin.maven-wagon-ssh.version}</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <skip>false</skip>
-          <attach>true</attach>
-          <reportPlugins>
-
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>
-              maven-project-info-reports-plugin</artifactId>
-              <configuration>
-                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-              </configuration>
-              <reports>
-                <report>summary</report>
-                <report>project-team</report>
-                <report>dependencies</report>
-                <report>issue-tracking</report>
-                <report>scm</report>
-                <report>modules</report>
-                <report>plugins</report>
-              </reports>
-            </plugin>
-
-            <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>versions-maven-plugin</artifactId>
-              <reportSets>
-                <reportSet>
-                  <reports>
-                    <report>dependency-updates-report</report>
-                    <report>plugin-updates-report</report>
-                  </reports>
-                </reportSet>
-              </reportSets>
-            </plugin>
-
-          </reportPlugins>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-descriptor</id>
-            <goals>
-              <goal>attach-descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
-
     </plugins>
   </build>
+-->
 
   <modules>
     <!-- Prerequisites -->
-    <!--
-    <module>choicemaker-prerequisites/org.apache.ant</module>
-    <module>choicemaker-prerequisites/org.apache.bcel</module>
-    <module>choicemaker-prerequisites/org.apache.log4j</module>
-    <module>choicemaker-prerequisites/org.apache.oro</module>
-    <module>choicemaker-prerequisites/org.apache.xerces</module>
-    <module>choicemaker-prerequisites/org.eclipse.ant.core</module>
-    <module>choicemaker-prerequisites/org.eclipse.ant.internal.core</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.boot</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.launcher</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.resources</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.resources.ant</module>
-    <module>choicemaker-prerequisites/org.eclipse.core.runtime</module>
-    <module>choicemaker-prerequisites/org.jdom</module>
-    <module>choicemaker-prerequisites/javax.help.eclipse2</module>
-    <module>choicemaker-prerequisites/jfree.jfreechart.eclipse2</module>
-    <module>choicemaker-prerequisites/com.oracle.jdbc</module>
-    <module>choicemaker-prerequisites/com.mchange.c3p0</module>
-    -->
-    <module>choicemaker-prerequisites</module>
+    <module>org.apache.ant</module>
+    <module>org.apache.bcel</module>
+    <module>org.apache.log4j</module>
+    <module>org.apache.oro</module>
+    <module>org.apache.xerces</module>
+    <module>org.eclipse.ant.core</module>
+    <module>org.eclipse.ant.internal.core</module>
+    <module>org.eclipse.core.boot</module>
+    <module>org.eclipse.core.launcher</module>
+    <module>org.eclipse.core.resources</module>
+    <module>org.eclipse.core.resources.ant</module>
+    <module>org.eclipse.core.runtime</module>
+    <module>org.jdom</module>
+    <module>javax.help.eclipse2</module>
+    <module>jfree.jfreechart.eclipse2</module>
+    <module>com.oracle.jdbc</module>
+    <module>com.mchange.c3p0</module>
 
     <!-- Base modules -->
 <!--

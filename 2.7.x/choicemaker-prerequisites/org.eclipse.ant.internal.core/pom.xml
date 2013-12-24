@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-prerequisites</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>org.eclipse.ant.internal.core</artifactId>
+  <version>2.1.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>Eclipse Ant Build Tool Internals</name>
+
+  <description><![CDATA[
+  This module builds the Eclipse 2.1 Ant Core Internals Fragment
+  (http://archive.eclipse.org/eclipse/downloads/drops/R-2.1.3-200403101828/)
+  under Maven.
+  ]]>
+  </description>
+  <licenses>
+    <license>
+      <name>Eclipse Public License 1.0</name>
+    </license>
+  </licenses>
+
+  <properties>
+    <eclipse.plugin.runtime.library.name>antsupportlib.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.src.zip.name>antsupportlibsrc.zip</eclipse.plugin.src.zip.name>
+  </properties>
+
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <plugins>
+<!--
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${plugin.maven-site.version}</version>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
+-->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>parse-version</id>
+            <goals>
+              <goal>parse-version</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>echo-params</id>
+            <phase>validate</phase>
+            <configuration>
+              <target>
+                <echo
+                  message="eclipse.plugin.runtime.library.name: ${eclipse.plugin.runtime.library.name}" />
+                <echo
+                  message="eclipse.plugin.src.zip.name: ${eclipse.plugin.src.zip.name}" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>prj-assembly</id>
+            <phase>package</phase>
+            <configuration>
+              <descriptor>prj-assembly.xml</descriptor>
+            </configuration>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.xerces</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.ant</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.eclipse.ant.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.eclipse.core.runtime</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>

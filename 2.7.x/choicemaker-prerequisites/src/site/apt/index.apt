@@ -1,0 +1,6 @@
+
+ChoiceMaker Prerequisites
+
+ This is a collection of third-party modules used to build ChoiceMaker Record Matching sofware.
+Most of these modules are required, although a few, like JDBC drivers, are optional.
+
