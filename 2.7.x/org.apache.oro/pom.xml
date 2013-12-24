@@ -6,9 +6,9 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker-cm</artifactId>
+    <artifactId>choicemaker-base</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-   <relativePath>../pom.xml</relativePath>
+   <relativePath>../choicemaker-base/pom.xml</relativePath>
   </parent>
 
   <groupId>com.choicemaker.cm</groupId>
