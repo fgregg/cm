@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-cm</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>choicemaker-swing</artifactId>
+  <packaging>pom</packaging>
+
+  <name>ChoiceMaker Swing GUI</name>
+
+  <modules>
+    <module>com.choicemaker.cm.util.app</module>
+    <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
+    <module>com.choicemaker.cm.analyzer.tools.gui</module>
+    <module>com.choicemaker.cm.docs</module>
+    <module>com.choicemaker.cm.gui.utils</module>
+    <module>com.choicemaker.cm.io.blocking.automated.inmemory.gui</module>
+    <module>com.choicemaker.cm.io.blocking.exact.gui</module>
+    <module>com.choicemaker.cm.io.composite.gui</module>
+    <module>com.choicemaker.cm.io.db.gui</module>
+    <module>com.choicemaker.cm.io.flatfile.gui</module>
+    <module>com.choicemaker.cm.io.xml.gui</module>
+    <module>com.choicemaker.cm.ml.me.gui</module>
+    <module>com.choicemaker.cm.mmdevtools</module>
+    <module>com.choicemaker.cm.modelmaker</module>
+    <module>com.choicemaker.cm.modelmaker.pkg_eclipse</module>
+    <module>com.choicemaker.cm.module</module>
+  </modules>
+
+</project>
