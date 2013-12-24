@@ -13,7 +13,7 @@
 
   <artifactId>com.wcohen.ss</artifactId>
   <packaging>jar</packaging>
-  <name>SecondString (Plug-in)</name>
+  <name>SecondString Plugin</name>
 
   <description><![CDATA[
   This plugin is based on the open-source Second String Library

@@ -1,1 +1,4 @@
- org.eclipse.ant.internal.core
+org.eclipse.ant.internal.core
+
+ This module builds the {{{http://archive.eclipse.org/eclipse/downloads/drops/R-2.1.3-200403101828/}
+Eclipse 2.1 Ant Core Internals Fragment}} under Maven.

@@ -14,7 +14,7 @@
   <artifactId>org.apache.ant</artifactId>
   <version>1.5.3-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>Apache Ant Plug-in</name>
+  <name>Apache Ant Plugin</name>
 
   <description><![CDATA[
   This module repackages the open-source Apache ANT library (http://ant.apache.org/)

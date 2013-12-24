@@ -14,7 +14,7 @@
   <artifactId>org.apache.xerces</artifactId>
   <version>4.0.13-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>Apache Xerces Maintenance Plug-in</name>
+  <name>Apache Xerces Plugin</name>
 
   <description><![CDATA[
   This module repackages the open-source Apache XERCES library (http://xerces.apache.org/)
