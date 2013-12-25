@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-maven-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../choicemaker-maven-base/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>choicemaker-cm</artifactId>
+  <packaging>pom</packaging>
+
+  <name>ChoiceMaker Record Matching</name>
+  <url>http://oscmt.sourceforge.net/dev-doc</url>
+
+  <scm>
+    <!-- connection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</connection -->
+    <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url>
+    <!-- developerConnection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</developerConnection -->
+  </scm>
+
+  <issueManagement>
+    <url>http://sourceforge.net/projects/oscmt/support</url>
+  </issueManagement>
+
+  <distributionManagement>
+    <site>
+      <id>oscmt.rphall.com</id>
+      <!-- url>file:///home/project-web/oscmt/htdocs/dev-doc/</url -->
+      <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
+    </site>
+    <repository>
+      <id>releases</id>
+      <name>releases</name>
+      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Internal Snapshots</name>
+      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${plugin.maven-site.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ssh</artifactId>
+            <version>${plugin.maven-wagon-ssh.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <skip>false</skip>
+          <attach>true</attach>
+          <reportPlugins>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>
+              maven-project-info-reports-plugin</artifactId>
+              <configuration>
+                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+              </configuration>
+              <reports>
+                <report>summary</report>
+                <report>project-team</report>
+                <report>dependencies</report>
+                <report>issue-tracking</report>
+                <report>scm</report>
+                <report>modules</report>
+                <report>plugins</report>
+              </reports>
+            </plugin>
+
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>versions-maven-plugin</artifactId>
+              <reportSets>
+                <reportSet>
+                  <reports>
+                    <report>dependency-updates-report</report>
+                    <report>plugin-updates-report</report>
+                  </reports>
+                </reportSet>
+              </reportSets>
+            </plugin>
+
+          </reportPlugins>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-descriptor</id>
+            <goals>
+              <goal>attach-descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <modules>
+    <module>choicemaker-prerequisites</module>
+    <module>choicemaker-common</module>
+    <module>choicemaker-modeling</module>
+    <module>choicemaker-swing</module>
+    <module>choicemaker-j2ee</module>
+  </modules>
+
+  <developers>
+  	<developer>
+  		<id>rphall</id>
+  		<name>Rick Hall</name>
+		  <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>ChoiceMaker developer</role>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+  	</developer>
+  </developers>
+
+  <contributors>
+  	<contributor>
+  		<!-- id>aborthwick</id -->
+  		<name>Andrew Borthwick</name>
+      <roles>
+        <role>Founder, ChoiceMaker Technologies Inc.</role>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>mbuechi</id -->
+  		<name>Martin Buechi</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>mchen</id -->
+  		<name>Michael Chen</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>pcheung</id -->
+  		<name>Put Cheung</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>jdickinson</id -->
+  		<name>Jim Dickinson</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>arturof</id -->
+  		<name>Arturo Falck</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+      <name>Gaelen Green</name>
+      <roles>
+        <role>Technical writer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>agoldberg</id -->
+  		<name>Arthur Goldberg</name>
+      <roles>
+        <role>Founder, ChoiceMaker Technologies Inc.</role>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<name>Ashley Larive</name>
+      <roles>
+        <role>Customer deployments</role>
+        <role>Technical writer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<name>Gail Mitnik</name>
+      <roles>
+        <role>Customer deployments</role>
+        <role>Technical writer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>emoussikaev</id -->
+  		<name>Elmer Moussikaev</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>christer</id -->
+  		<name>Christer Samuelsson</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+      <name>Maggie Soffer</name>
+      <roles>
+        <role>Customer deployments</role>
+        <role>Technical writer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id>ajwinkel</id -->
+  		<name>Adam Winkel</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  	<contributor>
+  		<!-- id></id -->
+  		<name>S. Yoakum-Stover</name>
+      <roles>
+        <role>ChoiceMaker developer</role>
+      </roles>
+  	</contributor>
+  </contributors>
+
+</project>
