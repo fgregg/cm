@@ -1,0 +1,13 @@
+2013-12-25 rphall
+
+This is a placeholder file. It's purpose is to ensure that the
+'dev-doc' directory is created. As archived under source control,
+the directory would otherwise be empty.
+
+The 'dev-doc' directory is populated during Maven site builds.
+See the OSCMT website and source repository for more details:
+
+  http://oscmt.sourceforge.net/dev-doc
+
+  http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/
+

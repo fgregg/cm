@@ -1,0 +1,239 @@
+body, td, li {
+	font-family: Tahoma, Verdana, Arial, Sans-Serif;
+	font-size: 11px;
+	line-height: 1.6em;
+	color: #333333;
+}
+
+h1 {
+	color: #195F9B;
+  font-variant: small-caps;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+h1, h2, h3 {
+	color: #195F9B;
+}
+
+
+a {
+	color:#E41714;
+}
+
+
+a:hover {
+	text-decoration:none;
+}
+
+
+div.homepagecallout {
+	height:250px; 
+	width:202px;
+	text-align:left;
+}
+
+
+
+
+.calloutheader {
+	background-image:  url("/~rphall/oscmt/images/callout_header.gif");
+	background-repeat: no-repeat;
+	height: 28px;
+	font-weight: bold;
+	color: #195F9B;
+	padding-left: 20px;
+	padding-top: 0px;
+	padding-right: 10px;
+	padding-bottom: 0px;
+	line-height: 28px;
+	overflow: hidden;
+}
+
+
+
+.calloutfooter {
+	background-image:  url("/~rphall/oscmt/images/callout_footer.gif");
+	background-repeat: no-repeat;
+	height:  30px;
+	background-color: #FFFFCC;
+	text-align: right;
+	position:relative;
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom:5px;
+	
+}
+
+
+.calloutfooter a {
+	font-weight: bold;
+	text-decoration: none;
+	margin-right: 5px;
+
+}
+
+
+.calloutbody {
+	height: 100%;
+	background-image:  url("/~rphall/oscmt/images/callout_background.gif");
+	background-repeat: repeat-y;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-top: 5px;
+}
+
+
+
+
+
+div.calloutbody a:link { color: #E41714; }
+
+div.homepagecallout a:link { color: #333; }
+
+.calloutbody a:hover, .calloutfooter a:hover, div.homepagecallout a:hover {
+	color:#E41714;
+	text-decoration:none;
+}
+
+.calloutbody td {
+	padding-bottom: 10px;
+}
+.quoteattribution {
+	font-size: 9px;
+	font-style: italic;
+	color: #666666;
+	line-height: 1.4em;
+}
+
+#homepagesplash {
+	background-image:   url("/~rphall/oscmt/images/homepage/homepagesplash.jpg");
+	background-repeat: no-repeat;
+	width: 100%;
+	height: 300px;
+}
+#homepagetext {
+	width: 400px;
+	float: right;
+}
+div#main {
+	width: 720px;
+	margin-left: 20px;
+}
+
+form#quicksearch table {
+	color: #004D91;
+	border: 1px solid #666666;
+}
+
+form#quicksearch table td#search {
+	background-color: #E6E5C9;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+form#quicksearch table td#button {
+	background-color: #E41715;
+}
+
+
+form#quicksearch input {
+	background-color: #E6E5C9;
+	width: 100px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	margin:0px;
+	padding:2px 0px;
+	color: #004D91;
+	border: none;
+}
+
+#header {
+	margin-top: 1px;
+	margin-bottom: 1px;
+	border-bottom: 1px solid #AAAAAA;
+}
+
+#footer {
+	font-size: 11px;
+	color: #666666;
+	text-align: center;
+	border-top: 1px solid #AAAAAA;
+}
+
+/* 
+Note: the line height below provides some slack to eliminate jumpiness in Mozilla 
+*/
+#level1 a, #level2 a {
+	font-size: 12px;
+	line-height:20px;
+	font-weight: bold;
+	color: #666666;
+	text-decoration: none;
+	padding-right: 15px;
+	font-family: "arial narrow", Tahoma, verdana;
+}
+
+
+
+
+
+td.callout {
+	width: 220px;
+	padding-right:20px;
+}
+
+
+
+select.mediumwidth {
+	width: 250px;
+}
+
+th {
+	text-align: left;
+	padding-right: 5px;
+	line-height: 1em;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 5px;
+}
+table.tabular td {
+	padding-right: 5px;
+	border: 1px solid #999999;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
+table.tabular th {
+	color: #E41715;
+	background-color: #E6E5C9;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #c4c3a7;
+}
+table.tabular {
+	border: 1px solid #666666;
+	border-collapse:collapse;
+}
+
+div.hide { display: none; }
+div.show { display: block; }
+
+
+
+
+div#level2 { 
+	border-top: 1px solid #999;
+}
+
+
+#menubar a:hover, .thispage, #level1 a.selected, #level2 a.selected {
+	color:#E41714;
+}
+
+.calloutbody a {
+	color: #333333;
+	text-decoration: none;
+	text-align: right;
+}

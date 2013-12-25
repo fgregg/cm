@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  -  @(#)$RCSfile: Blocking.xsd,v $        $Revision: 1.9 $ $Date: 2003/03/28 14:00:33 $
+  -
+  -  Copyright (c) 2001 ChoiceMaker Technologies, Inc.
+  -  41 East 11th Street, New York, NY 10128
+  -  All rights reserved.
+  -
+  -  This software is the confidential and proprietary information of
+  -  ChoiceMaker Technologies Inc. ("Confidential Information").
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="bField" type="bFieldType" abstract="true"/>
+	<xs:complexType name="bFieldType"/>
+	<xs:element name="blockingFieldRef" type="blockingFieldRefType" substitutionGroup="bField"/>
+	<xs:element name="sourceFieldRef" type="sourceFieldRefType" substitutionGroup="bField"/>
+	<xs:element name="targetFieldRef" type="targetFieldRefType" substitutionGroup="bField"/>
+	<xs:complexType name="blockingFieldRefType">
+		<xs:complexContent>
+			<xs:extension base="bFieldType">
+				<xs:attribute name="sourceNodeTypeName" type="xs:string" use="required"/>
+				<xs:attribute name="sourceFieldName" type="xs:string" use="required"/>
+				<xs:attribute name="targetNodeTypeName" type="xs:string" use="optional"/>
+				<xs:attribute name="targetFieldName" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="sourceFieldRefType">
+		<xs:complexContent>
+			<xs:extension base="bFieldType">
+				<xs:attribute name="sourceNodeTypeName" type="xs:string" use="required"/>
+				<xs:attribute name="sourceFieldName" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="targetFieldRefType">
+		<xs:complexContent>
+			<xs:extension base="bFieldType">
+				<xs:attribute name="targetNodeTypeName" type="xs:string" use="required"/>
+				<xs:attribute name="targetFieldName" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="blockingGlobal" type="blockingGlobalType" substitutionGroup="compGlobal"/>
+	<xs:complexType name="blockingGlobalType">
+		<xs:complexContent>
+			<xs:extension base="compGlobalType">
+				<xs:sequence>
+					<xs:element name="illegalCombination" type="illegalCombinationType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="conf" type="xs:string" use="required"/>
+				<xs:attribute name="exact" type="xs:boolean" default="false"/>
+				<xs:attribute name="automated" type="xs:boolean" default="false"/>
+				<xs:attribute name="dbConf" type="xs:string" default="none" use="optional"/>
+				<xs:attribute name="defaultCount" type="xs:integer" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="illegalCombinationType">
+		<xs:sequence>
+			<xs:element ref="bField" minOccurs="2" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="blockingNodeType" type="blockingNodeTypeType" substitutionGroup="compNodeTypeExt"/>
+	<xs:complexType name="blockingNodeTypeType">
+		<xs:complexContent>
+			<xs:extension base="compNodeTypeExtType">
+				<xs:attribute name="conf" type="xs:string" use="optional"/>
+				<xs:attribute name="defaultCount" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="blockingField" type="blockingFieldType" substitutionGroup="compField"/>
+	<xs:complexType name="blockingFieldType">
+		<xs:complexContent>
+			<xs:extension base="compFieldType">
+				<xs:sequence>
+					<xs:element name="base" type="baseType" minOccurs="0"/>
+				</xs:sequence>
+				<xs:attribute name="use" type="xs:boolean" use="optional" default="true"/>
+				<xs:attribute name="key" type="xs:boolean" use="optional"/>
+				<xs:attribute name="conf" type="xs:string" use="optional"/>
+				<xs:attribute name="targetNodeTypeName" type="xs:string" use="optional"/>
+				<xs:attribute name="targetFieldName" type="xs:string" use="optional"/>
+				<xs:attribute name="sourceGroup" type="xs:string" use="optional"/>
+				<xs:attribute name="targetGroup" type="xs:string" use="optional"/>
+				<xs:attribute name="sourceValid" type="xs:string" use="optional"/>
+				<xs:attribute name="targetValid" type="xs:string" use="optional"/>
+				<xs:attribute name="defaultCount" type="xs:string" use="optional"/>
+				<xs:attribute name="base" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="baseType">
+		<xs:sequence>
+			<xs:element ref="blockingFieldRef" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

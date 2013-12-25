@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  -  @(#)$RCSfile: Mci.xsd,v $        $Revision: 1.2 $ $Date: 2002/10/09 00:03:18 $
+  -
+  -  Copyright (c) 2005 ChoiceMaker Technologies, Inc.
+  -  48 Wall Street, 11th floor, New York, NY 10005
+  -  All rights reserved.
+  -
+  -  This software is the confidential and proprietary information of
+  -  ChoiceMaker Technologies Inc. ("Confidential Information").
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:include schemaLocation="ChoiceMaker.xsd"/>
+	<xs:include schemaLocation="http://oscmt.sourceforge.net/xml_schemas/2.3/Flatfile.xsd"/>
+	<xs:include schemaLocation="http://oscmt.sourceforge.net/xml_schemas/2.3/Xml.xsd"/>
+	<xs:include schemaLocation="http://oscmt.sourceforge.net/xml_schemas/2.3/Blocking.xsd"/>
+	<xs:include schemaLocation="http://oscmt.sourceforge.net/xml_schemas/2.3/Db.xsd"/>
+	<xs:include schemaLocation="http://oscmt.sourceforge.net/xml_schemas/2.3/Report.xsd"/>
+</xs:schema>

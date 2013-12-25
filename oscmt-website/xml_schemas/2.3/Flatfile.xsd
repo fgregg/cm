@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  -  @(#)$RCSfile: Db.xsd,v $        $Revision: 1.9 $ $Date: 2003/03/24 21:45:32 $
+  -
+  -  Copyright (c) 2001 ChoiceMaker Technologies, Inc.
+  -  41 East 11th Street, New York, NY 10128
+  -  All rights reserved.
+  -
+  -  This software is the confidential and proprietary information of
+  -  ChoiceMaker Technologies Inc. ("Confidential Information").
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+		<xs:element name="flatfileGlobal" type="flatfileGlobalType" substitutionGroup="compGlobal"/>
+	<xs:complexType name="flatfileGlobalType">
+		<xs:complexContent>
+			<xs:extension base="compGlobalType">
+				<xs:sequence>
+					<xs:element name="descWidths" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="tag" type="xs:integer" use="optional"/>
+							<xs:attribute name="id" type="xs:integer" use="optional"/>
+							<xs:attribute name="decision" type="xs:integer" use="optional"/>
+							<xs:attribute name="user" type="xs:integer" use="optional"/>
+							<xs:attribute name="src" type="xs:integer" use="optional"/>
+							<xs:attribute name="comment" type="xs:integer" use="optional"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="multiFileName" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="flatfileNodeType" type="flatfileNodeTypeType" substitutionGroup="compNodeTypeExt"/>
+	<xs:complexType name="flatfileNodeTypeType">
+		<xs:complexContent>
+			<xs:extension base="compNodeTypeExtType">
+				<xs:attribute name="multiFileName" type="xs:string" use="optional"/>
+				<xs:attribute name="tag" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="flatfileField" type="flatfileFieldType" substitutionGroup="compField"/>
+	<xs:complexType name="flatfileFieldType">
+		<xs:complexContent>
+			<xs:extension base="compFieldType">
+				<xs:attribute name="use" type="xs:boolean" default="true"/>
+				<xs:attribute name="start" type="xs:integer" use="optional"/>
+				<xs:attribute name="width" type="xs:integer" use="optional"/>
+				<xs:attribute name="key" type="xs:boolean" default="false"/>
+				<xs:attribute name="pos" type="xs:integer" use="optional"/>
+				<xs:attribute name="trim" type="xs:boolean" default="true"/>
+				<xs:attribute name="valueOf" type="xs:boolean" default="false"/>
+				<xs:attribute name="nullRepresentaton" type="xs:string" default=" "/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>
