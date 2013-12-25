@@ -1,10 +1,9 @@
 <project name="ChoiceMaker Record Matching">
     <bannerLeft>
         <name>ChoiceMaker</name>
-        <!-- src>images/choicemaker_logo.gif</src -->
         <src>http://oscmt.sourceforge.net/dev-doc/images/choicemaker_logo.gif</src>
         <alt>Open Source ChoiceMaker Technology website</alt>
-        <href>http://oscmt.sourceforge.net/dev-doc</href>
+        <href>http://oscmt.sourceforge.net/</href>
     </bannerLeft>
     <bannerRight>
         <name>SourceForge</name>
