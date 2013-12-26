@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workingSets>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1387985295545_8" label="choicemaker" name="choicemaker">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/choicemaker-j2ee" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/choicemaker-modeling" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/choicemaker" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/choicemaker-prerequisites" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/choicemaker-maven-base" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/choicemaker-common" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/choicemaker-swing" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/choicemaker-cm" type="4"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1387985835437_11" label="choicemaker-common" name="choicemaker-common">
+<item elementID="=com.choicemaker.cm.urm.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.ml.me.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.blocking.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.xml.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.blocking.automated.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.compiler" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.analyzer.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.composite.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.db.oracle" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.db.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.blocking.exact.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.flatfile.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.sun.tools" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.blocking.automated.inmemory" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1387986588722_13" label="choicemaker-j2ee" name="choicemaker-j2ee">
+<item elementID="=com.choicemaker.cm.urm.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.server.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.transitivity.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.transitivity" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.server.ejb.impl" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.transitivity.server" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.server.ejb.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.analyzer.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.blocking.automated.offline" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.blocking.automated.offline.server" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.blocking.automated.offline.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.reviewmaker.base" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.urm" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1387985447590_9" label="choicemaker-modeling" name="choicemaker-modeling">
+<item elementID="=com.choicemaker.cm.matching.cfg" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.wfst" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.gen" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.en.us.ny.nyc" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.validation.eclipse" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.en.us" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.en.us.train" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.intl" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.en" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.en.au" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.geo" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.matching.wfst.eclipse" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1387984942561_6" label="choicemaker-prerequisites" name="choicemaker-prerequisites">
+<item elementID="=org.eclipse.ant.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.ant.internal.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=jakarta-oro" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.core.resources" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/jfree.jfreechart.eclipse2plugin" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/com.mchange.c3p0" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/javax.help.eclipse2plugin" type="4"/>
+<item elementID="=org.apache.bcel" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.apache.xerces" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.core.runtime" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/com.oracle.jdbc" type="4"/>
+<item elementID="=org.apache.ant" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.jdom" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.apache.log4j" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.core.boot" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.core.launcher" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.core.resources.ant" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1387986259444_12" label="choicemaker-swing" name="choicemaker-swing">
+<item elementID="=com.choicemaker.cm.modelmaker" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.flatfile.gui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.mmdevtools" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.gui.utils" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.blocking.automated.inmemory.gui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.analyzer.tools.gui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.db.gui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.module" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.analyzer.app.eclipse2pkg" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.ml.me.gui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.composite.gui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.util.app.eclipse2pkg" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.blocking.exact.gui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.docs" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.io.xml.gui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=com.choicemaker.cm.util.app" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+</workingSets>
