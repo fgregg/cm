@@ -1,1 +1,43 @@
- com.oracle.jdbc
+com.oracle.jdbc
+
+* Building
+
+  As pulled from the source repository, a build of the com.oracle.jdbc module
+will fail because the build will not be able to resolve an Oracle classes12.jar
+Maven artifact. This artifact is <<NOT>> supplied by Oracle Corporation, and
+this artifact can <<NOT>> be part of the OSCMT code repository, because of
+Oracle licensing restrictions. 
+
+  Instead the artifact must be built from files
+that are kept only <locally> and archived in a <private> repository. 
+
+  0. Download a copy of the 10.2.0.4 classes12.jar from Oracle Corporation.
+
+  1. Install a local copy of the classes12.jar file into a local Maven repository:
+
++---
+mvn install:install-file \
+  -DgroupId=com.oracle \
+  -DartifactId=classes12 \
+  -Dversion=10.2.0.4 \
+  -Dpackaging=jar \
+  -Dfile=<path to the classes12.jar>
++---
+
+  2. Change to the com.oracle.jdbc module directory and use Maven to install
+the artifact to the local Maven repository:
+
++--
+cd  com.oracle.jdbc
+mvn install
++--
+
+  3. <[Optional]> Repeat steps 0 - 2 for the 10.2.0.5 classes12.jar file.
+
+  4. <[Optional]> Resume a failed choicemaker-prerequisites build (from the parent directory):
+
++--
+  cd ..
+  mvn <goals> -rf :<failed module>
++--
+
