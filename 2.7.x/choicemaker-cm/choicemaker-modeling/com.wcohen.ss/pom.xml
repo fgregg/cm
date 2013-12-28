@@ -42,34 +42,6 @@
   		<name>SecondString project</name>
   		<url>http://sourceforge.net/projects/secondstring/</url>
   	</contributor>
-<!-- Too hard to maintain
-  	<contributor>
-  		<name>William Cohen</name>
-  		<url>http://www.cs.cmu.edu/~wcohen</url>
-  		<roles>
-  		  <role>Second String developer</role></roles>
-  	</contributor>
-  	<contributor>
-  	  <name>Kathryn Rivard</name>
-  	  <roles>
-  	    <role>Second String developer</role></roles>
-  	  <url>http://sourceforge.net/users/krivard</url></contributor>
-  	<contributor>
-  	  <name>Matthew Hurst</name>
-  	  <url>http://sourceforge.net/users/matthewfhurst</url>
-  	  <roles>
-  	    <role>Second String developer</role></roles></contributor>
-  	<contributor>
-  	  <name> Paul Dlug</name>
-  	  <url>http://sourceforge.net/users/pdlug</url>
-  	  <roles>
-  	    <role>Second String developer</role></roles></contributor>
-  	<contributor>
-  	  <name>Pradeep Ravikumar</name>
-  	  <url>http://sourceforge.net/users/pradeeprk</url>
-  	  <roles>
-  	    <role>Second String developer</role></roles></contributor>
--->
   </contributors>
 
   <properties>
