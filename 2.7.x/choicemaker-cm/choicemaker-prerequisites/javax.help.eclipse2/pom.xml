@@ -15,6 +15,35 @@
   <packaging>pom</packaging>
   <name>Java Help Plugin</name>
 
+  <description><![CDATA[
+  This module repackages the JavaHelp library (https://javahelp.java.net/)
+  as an Eclipse 2.1 plugin.
+  ]]>
+  </description>
+  <licenses>
+    <license>
+      <name>GNU General Public License - Version 2 with the class path exception</name>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+		  <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <contributors>
+  	<contributor>
+  		<name>JavaHelp Project</name>
+  		<url>https://javahelp.java.net/</url>
+  	</contributor>
+  </contributors>
+
   <properties>
     <eclipse.plugin.runtime.library.name>jhall.jar</eclipse.plugin.runtime.library.name>
     <eclipse.plugin.src.zip.name>jhallsrc.zip</eclipse.plugin.src.zip.name>
@@ -58,7 +87,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.8</version>
         <executions>
           <execution>
             <id>download-dependencies</id>

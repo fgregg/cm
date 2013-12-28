@@ -15,6 +15,35 @@
   <packaging>pom</packaging>
   <name>JFreeChart Plugin</name>
 
+  <description><![CDATA[
+  This module repackages the open-source JFreeChart library
+  (https://sourceforge.net/projects/jfreechart/) as an Eclipse 2.1 plugin.
+  ]]>
+  </description>
+  <licenses>
+    <license>
+      <name>GNU Library or Lesser General Public License, Version 2.0</name>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+		  <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <contributors>
+  	<contributor>
+  		<name>JFreeChart Project</name>
+  		<url>http://sourceforge.net/projects/jfreechart/</url>
+  	</contributor>
+  </contributors>
+
   <properties>
     <eclipse.plugin.runtime.library.name>jfreechart.jar</eclipse.plugin.runtime.library.name>
     <eclipse.plugin.auxiliary.library.name>jcommon.jar</eclipse.plugin.auxiliary.library.name>
@@ -60,7 +89,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.8</version>
         <executions>
           <execution>
             <id>download-dependencies</id>

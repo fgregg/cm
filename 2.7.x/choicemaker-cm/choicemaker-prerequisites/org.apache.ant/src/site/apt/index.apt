@@ -1,4 +1,4 @@
 org.apache.ant
 
   This module repackages the {{{http://ant.apache.org/}open-source Apache ANT library}}
-  as an Eclipse 2.1 plugin.
+as an Eclipse 2.1 plugin.

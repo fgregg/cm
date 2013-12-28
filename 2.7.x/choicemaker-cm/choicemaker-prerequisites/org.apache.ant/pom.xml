@@ -34,7 +34,10 @@
       <name>Rick Hall</name>
 		  <url>http://sourceforge.net/users/rphall</url>
       <roles>
-        <role>Eclipse/Maven packaging</role></roles></developer></developers>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
 
   <contributors>
   	<contributor>

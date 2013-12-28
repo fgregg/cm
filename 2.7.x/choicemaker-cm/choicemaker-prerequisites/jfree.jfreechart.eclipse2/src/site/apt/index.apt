@@ -1,1 +1,4 @@
- jfree.jfreechart.eclipse2
+jfree.jfreechart.eclipse2
+
+  This module repackages the {{{https://sourceforge.net/projects/jfreechart/}open-source JFreeChart library}}
+as an Eclipse 2.1 plugin.

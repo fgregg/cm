@@ -1,1 +1,4 @@
- javax.help.eclipse2
+javax.help.eclipse2
+
+  This module repackages the {{{https://javahelp.java.net/}JavaHelp library}}
+as an Eclipse 2.1 plugin.

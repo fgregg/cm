@@ -28,6 +28,24 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+		  <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <contributors>
+  	<contributor>
+  		<name>Eclipse Project</name>
+  		<url>http://www.eclipse.org/</url>
+  	</contributor>
+  </contributors>
+
   <properties>
     <eclipse.plugin.runtime.library.name>runtime.jar</eclipse.plugin.runtime.library.name>
     <eclipse.plugin.src.zip.name>runtimesrc.zip</eclipse.plugin.src.zip.name>

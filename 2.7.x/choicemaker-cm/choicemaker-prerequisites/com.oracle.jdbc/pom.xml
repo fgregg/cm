@@ -15,7 +15,36 @@
   <version>10.2.0.4-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Oracle JDBC Fragment</name>
-  <url>http://www.oracle.com/</url>
+
+  <description><![CDATA[
+  This module repackages the Oracle JDBC driver (http://www.oracle.com)
+  as an Eclipse 2.1 plugin.
+  ]]>
+  </description>
+  <licenses>
+    <license>
+      <name>Oracle Technology Network Development and Distribution License</name>
+      <url>http://www.oracle.com/technetwork/licenses/distribution-license-152002.html</url>
+      <comments>Applies to Oracle binary code.</comments></license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+		  <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <contributors>
+  	<contributor>
+  		<name>Oracle Corporation</name>
+  		<url>http://www.oracle.com/</url>
+  	</contributor>
+  </contributors>
 
   <properties>
     <eclipse.plugin.runtime.library.name>classes12.jar</eclipse.plugin.runtime.library.name>
@@ -66,7 +95,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.8</version>
         <executions>
           <execution>
             <id>copy jar</id>

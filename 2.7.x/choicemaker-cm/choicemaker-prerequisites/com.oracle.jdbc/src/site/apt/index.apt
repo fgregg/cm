@@ -1,8 +1,11 @@
 com.oracle.jdbc
 
+  This module repackages the {{{http://www.oracle.com/}Oracle JDBC driver}}
+as an Eclipse 2.1 plugin.
+
 * Building
 
-  As pulled from the source repository, a build of the com.oracle.jdbc module
+  As pulled from the source repository, a build of this module (com.oracle.jdbc)
 will fail because the build will not be able to resolve an Oracle classes12.jar
 Maven artifact. This artifact is <<NOT>> supplied by Oracle Corporation, and
 this artifact can <<NOT>> be part of the OSCMT code repository, because of

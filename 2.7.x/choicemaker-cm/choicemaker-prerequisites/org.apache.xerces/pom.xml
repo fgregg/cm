@@ -28,6 +28,24 @@
       <comments>Applies to BCEL source code.</comments></license>
   </licenses>
 
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+		  <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <contributors>
+  	<contributor>
+  		<name>Apache XERCES project</name>
+  		<url>http://xerces.apache.org/</url>
+  	</contributor>
+  </contributors>
+
   <properties>
     <eclipse.plugin.runtime.library.name>xercesImpl.jar</eclipse.plugin.runtime.library.name>
     <eclipse.plugin.auxiliary.library.name>xmlParserAPIs.jar</eclipse.plugin.auxiliary.library.name>

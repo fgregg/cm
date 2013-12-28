@@ -1,1 +1,4 @@
- com.mchange.c3p0
+com.mchange.c3p0
+
+  This module repackages the {{{http://www.mchange.com/projects/c3p0/}open-source c3pO library}}
+as an Eclipse 2.1 plugin.
