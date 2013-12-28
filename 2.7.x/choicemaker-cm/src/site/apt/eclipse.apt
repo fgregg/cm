@@ -1,0 +1,48 @@
+Setting up the Eclipse IDE
+
+  The preferred way to set up the Eclipse IDE work with OSCMT projects is to
+clone the OSCMT git repository, create an empty Eclipse workspace, and then
+import Maven projects from git repository to the Eclipse workspace.
+
++---
+  /home/joe/Documents/git/oscmt-cm
+  /home/joe/Documents/workspaces/workspace.oscmt-cm
++---
+
+  This directory structure keeps the git repository separate from the Eclipse
+workspace, which makes it easier to maintain each separately.
+
+* Basic installation
+
+** Step 1: Clone the OSCMT git repository
+
+** Step 2: Create an empty Eclipse workspace
+
+** Step 3: Import Maven projects into the workspace
+
+* Customize the Eclipse workspace
+
+  After you've imported the OSCMT projects into your workspace, a few
+additional customization steps will make it much easier to work the projects.
+First of all, there are a lot of OSCMT projects. In general, one seldom has to
+work with all the projects simultaneously. Instead, one tends to work with
+certain subsets depending on the kind of task that one is performing.
+
+  * Record-matching modeling:\
+  Generally the com.choicemaker.cm.core, com.choicemaker.cm.matching.*
+  and com.choicemaker.cm.validation projects
+  
+  * Swing application development:\
+  Generally the com.choicemaker.cm.core, com.choicemaker.cm.gui
+  
+  []
+  
+  These working sets generally follow the Maven project hierarchy and the
+directory structure in the git repository. The working sets may be created
+manually through the Eclipse IDE, but they may also be imported from a
+configuration file that is available in the top-level <<<eclipse_config>>>
+directory of the git repository.
+
+
+
+ 

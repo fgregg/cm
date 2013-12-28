@@ -23,6 +23,7 @@
             <!-- item name="Examples" href="examples.html"/ -->
             <!-- item name="Tutorial" href="cdc-tutorial/index.html"/ -->
             <!-- item name="Components" href="components.html"/ -->
+            <item name="Eclipse" href="eclipse.html"/>
             <item name="Building" href="building.html"/>
             <!-- item name="References" href="references.html"/ -->
         </menu>
