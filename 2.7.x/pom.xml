@@ -48,6 +48,7 @@
         <version>${plugin.maven-site.version}</version>
         <configuration>
           <skip>true</skip>
+          <skipDeploy>true</skipDeploy>
         </configuration>
       </plugin>
     </plugins>
