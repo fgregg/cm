@@ -16,36 +16,6 @@
 
   <name>ChoiceMaker Common</name>
 
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-        <configuration>
-          <skip>false</skip>
-          <attach>true</attach>
-          <reportPlugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-javadoc-plugin</artifactId>
-              <configuration>
-                <skip>${javadocs.skip}</skip>
-                <failOnError>false</failOnError>
-              </configuration>
-            </plugin>
-          </reportPlugins>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-descriptor</id>
-            <goals>
-              <goal>attach-descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
   <modules>
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.urm.base</module>
