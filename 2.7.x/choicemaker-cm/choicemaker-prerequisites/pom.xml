@@ -15,6 +15,58 @@
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Prerequisites</name>
+  <description><![CDATA[
+  A collection of third-party modules used to build ChoiceMaker Record Matching sofware.
+  Most of these modules are required, although a few, like JDBC drivers, are optional.
+  ]]>
+  </description>
+
+  <contributors>
+  	<contributor>
+  		<name>Apache ANT project</name>
+  		<url>http://ant.apache.org/</url>
+  	</contributor>
+  	<contributor>
+  		<name>Apache BCEL project</name>
+  		<url>http://commons.apache.org/bcel/</url>
+  	</contributor>
+  	<contributor>
+  		<name>Apache LOG4J project</name>
+  		<url>http://logging.apache.org/log4j/</url>
+  	</contributor>
+  	<contributor>
+  		<name>Apache ORO project</name>
+  		<url>http://jakarta.apache.org/oro/</url>
+  	</contributor>
+  	<contributor>
+  		<name>Apache XERCES project</name>
+  		<url>http://xerces.apache.org/</url>
+  	</contributor>
+  	<contributor>
+  		<name>Eclipse Project</name>
+  		<url>http://www.eclipse.org/</url>
+  	</contributor>
+  	<contributor>
+  		<name>JavaHelp Project</name>
+  		<url>https://javahelp.java.net/</url>
+  	</contributor>
+  	<contributor>
+  		<name>JDOM project</name>
+  		<url>http://www.jdom.org/</url>
+  	</contributor>
+  	<contributor>
+  		<name>JFreeChart Project</name>
+  		<url>http://sourceforge.net/projects/jfreechart/</url>
+  	</contributor>
+  	<contributor>
+  		<name>Machinery For Change, Inc.</name>
+  		<url>http://www.mchange.com/projects/c3p0/</url>
+  	</contributor>
+  	<contributor>
+  		<name>Oracle Corporation</name>
+  		<url>http://www.oracle.com/</url>
+  	</contributor>
+  </contributors>
 
   <modules>
     <module>org.apache.ant</module>
@@ -36,115 +88,18 @@
     <module>com.mchange.c3p0</module>
   </modules>
 
-<!--
-  <developers>
-  	<developer>
-  		<id>rphall</id>
-  		<name>Rick Hall</name>
-		  <url>http://sourceforge.net/users/rphall</url>
-      <roles>
-        <role>ChoiceMaker developer</role>
-        <role>Eclipse/Maven packaging</role>
-      </roles>
-  	</developer>
-  </developers>
+  <build>
+    <plugins>
 
-  <contributors>
-  	<contributor>
-  		<name>Andrew Borthwick</name>
-      <roles>
-        <role>Founder, ChoiceMaker Technologies Inc.</role>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Martin Buechi</name>
-      <roles>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Michael Chen</name>
-      <roles>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Put Cheung</name>
-      <roles>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Jim Dickinson</name>
-      <roles>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Arturo Falck</name>
-      <roles>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-      <name>Gaelen Green</name>
-      <roles>
-        <role>Technical writer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Arthur Goldberg</name>
-      <roles>
-        <role>Founder, ChoiceMaker Technologies Inc.</role>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Ashley Larive</name>
-      <roles>
-        <role>Customer deployments</role>
-        <role>Technical writer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Gail Mitnik</name>
-      <roles>
-        <role>Customer deployments</role>
-        <role>Technical writer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Elmer Moussikaev</name>
-      <roles>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Christer Samuelsson</name>
-      <roles>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-      <name>Maggie Soffer</name>
-      <roles>
-        <role>Customer deployments</role>
-        <role>Technical writer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Adam Winkel</name>
-      <roles>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  	<contributor>
-  		<name>S. Yoakum-Stover</name>
-      <roles>
-        <role>ChoiceMaker developer</role>
-      </roles>
-  	</contributor>
-  </contributors>
--->
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>${javadocs.skip}</skip>
+          <skipDeploy>${javadocs.skip}</skipDeploy>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
 </project>
