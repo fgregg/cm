@@ -16,7 +16,7 @@
   <name>Java Help Plugin</name>
 
   <description><![CDATA[
-  This module repackages the JavaHelp library (https://javahelp.java.net/)
+  Repackages the JavaHelp library (https://javahelp.java.net/)
   as an Eclipse 2.1 plugin.
   ]]>
   </description>

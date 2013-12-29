@@ -14,7 +14,7 @@
   <artifactId>choicemaker-swing</artifactId>
   <packaging>pom</packaging>
 
-  <name>ChoiceMaker Swing GUI</name>
+  <name>ChoiceMaker Swing</name>
 
   <modules>
     <module>com.choicemaker.cm.util.app</module>

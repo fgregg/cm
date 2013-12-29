@@ -17,7 +17,7 @@
   <name>Oracle JDBC Fragment</name>
 
   <description><![CDATA[
-  This module repackages the Oracle JDBC driver (http://www.oracle.com)
+  Repackages the Oracle JDBC driver (http://www.oracle.com)
   as an Eclipse 2.1 plugin.
   ]]>
   </description>

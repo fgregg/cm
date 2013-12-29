@@ -17,7 +17,7 @@
   <name>Apache Xerces Plugin</name>
 
   <description><![CDATA[
-  This module repackages the open-source Apache XERCES library (http://xerces.apache.org/)
+  Repackages the open-source Apache XERCES library (http://xerces.apache.org/)
   as an Eclipse 2.1 plugin.
   ]]>
   </description>

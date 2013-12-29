@@ -17,7 +17,7 @@
   <name>Eclipse Core Resources</name>
 
   <description><![CDATA[
-  This module builds the Eclipse 2.1 Core Resources Plugin
+  Builds the Eclipse 2.1 Core Resources Plugin
   (http://archive.eclipse.org/eclipse/downloads/drops/R-2.1.3-200403101828/)
   under Maven.
   ]]>

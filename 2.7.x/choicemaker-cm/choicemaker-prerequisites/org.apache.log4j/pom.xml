@@ -17,7 +17,7 @@
   <name>Apache Log4j Plugin</name>
 
   <description><![CDATA[
-  This module repackages the open-source Apache LOG4J library (http://logging.apache.org/log4j)
+  Repackages the open-source Apache LOG4J library (http://logging.apache.org/log4j)
   as an Eclipse 2.1 plugin.
   ]]>
   </description>

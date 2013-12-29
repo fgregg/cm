@@ -16,7 +16,7 @@
   <name>JFreeChart Plugin</name>
 
   <description><![CDATA[
-  This module repackages the open-source JFreeChart library
+  Repackages the open-source JFreeChart library
   (https://sourceforge.net/projects/jfreechart/) as an Eclipse 2.1 plugin.
   ]]>
   </description>
