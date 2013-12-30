@@ -15,6 +15,11 @@
   <packaging>pom</packaging>
 
   <name>ChoiceMaker J2EE</name>
+  <description><![CDATA[
+  ChoiceMaker modules that are used in J2EE applications
+  and for system integration.
+  ]]>
+  </description>
 
   <modules>
     <module>com.choicemaker.autonumber</module>
@@ -35,5 +40,35 @@
     <module>com.choicemaker.cm.urm.ear.pkg_eclipse</module>
 -->
   </modules>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>${javadocs.skip}</skip>
+          <skipDeploy>${javadocs.skip}</skipDeploy>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${plugin.maven-javadoc.version}</version>
+        <configuration>
+          <skip>${javadocs.skip}</skip>
+          <failOnError>false</failOnError>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </reporting>
 
 </project>

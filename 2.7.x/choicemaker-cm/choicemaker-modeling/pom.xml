@@ -15,6 +15,10 @@
   <packaging>pom</packaging>
 
   <name>ChoiceMaker Modeling</name>
+  <description><![CDATA[
+  ChoiceMaker modules that are used mainly in modeling.
+  ]]>
+  </description>
 
   <modules>
     <module>com.choicemaker.cm.matching.cfg</module>
@@ -32,5 +36,35 @@
     <module>com.wcohen.ss</module>
     <module>com.wcohen.ss.eclipse</module>
   </modules>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>${javadocs.skip}</skip>
+          <skipDeploy>${javadocs.skip}</skipDeploy>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${plugin.maven-javadoc.version}</version>
+        <configuration>
+          <skip>${javadocs.skip}</skip>
+          <failOnError>false</failOnError>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </reporting>
 
 </project>
