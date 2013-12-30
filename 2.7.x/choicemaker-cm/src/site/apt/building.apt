@@ -19,6 +19,34 @@ Building Open Source ChoiceMaker Technology
 
 * Building the Maven site
 
+  Because of a known bug in the Maven dependency plugin (MDEP 187), the Maven
+site should (must?) be built in conjunction with another goal such as
+<<<package>>>, <<<install>>> or <<<deploy>>>. If the site is built by itself,
+projects like <<<choicemaker-cm/choicemaker-common/com.choicemaker.cm.compiler>>>
+will fail, because they try to copy the result of a (built) dependency into
+the current build directory. For example, the compiler project tries to copy
+the <<<org.apache.oro>>> JAR file (jakarta-oro-2.0.1.jar) into a
+<<<target/lib>>> directory. During a multi-project build, this step will fail
+unless one of the goals is at least <<<package>>>. If not, Maven will try
+to use the classes diretory of the ORO project, which fails the dependency
+pluging requires a file, not a directory. That's the theory, anyway.
+
+  In practice, because some POM-only projects define a <<<javadocs>>> report
+that their subprojects will use, it seems that JAR files for subprojects
+must be installed before the Maven site is built.
+
+  The toughest configuration to get right is an offline build. Here's one
+command sequence that works:
+
++---
+  mvn -o clean install ; mvn -o package site site:stage
++---
+
+  Other command sequences may also work; if any are found, they'll should
+be added to this documentation.
+
+* Deploying the Maven site
+
   The top-level project object model file (pom.xml) specifies a
 site distribution URL on the localhost:
 
