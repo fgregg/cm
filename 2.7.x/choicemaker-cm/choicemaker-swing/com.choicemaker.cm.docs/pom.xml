@@ -6,10 +6,11 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker-swing</artifactId>
-    <!-- artifactId>choicemaker-maven-base</artifactId -->
+    <!--artifactId>choicemaker-swing</artifactId-->
+    <artifactId>choicemaker-maven-base</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <!--relativePath>../pom.xml</relativePath-->
+    <relativePath>../../../choicemaker-maven-base/pom.xml</relativePath>
   </parent>
 
   <artifactId>com.choicemaker.cm.docs</artifactId>
