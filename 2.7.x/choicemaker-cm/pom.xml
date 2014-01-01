@@ -74,6 +74,7 @@
     <module>choicemaker-modeling</module>
     <module>choicemaker-swing</module>
     <module>choicemaker-j2ee</module>
+    <module>model_projects</module>
   </modules>
 
   <developers>

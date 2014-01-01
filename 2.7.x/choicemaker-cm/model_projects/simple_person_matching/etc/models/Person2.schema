@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ChoiceMakerSchema
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://oscmt.sourceforge.net/xml_schemas/2.6/ChoiceMakerAll.xsd"
+	version="2.6.0">
+    <import>java.util.Date</import>
+    <import>com.choicemaker.cm.core.util.StringUtils</import>
+    <import>com.choicemaker.cm.validation.eclipse.impl.Validators</import>
+    <global>
+        <globalExt>
+            <dbGlobal conf="default"/>
+            <blockingGlobal conf="defaultAutomated" dbConf="all" automated="true"/>
+        </globalExt>
+    </global>
+    <nodeType name="person">
+        <nodeTypeExt>
+            <dbNodeType conf="default" from="person"/>
+        </nodeTypeExt>
+		<field name="linkage_role" type="String"
+			valid="Validators.isValid(&quot;linkageRoleValidator&quot;,linkage_role)"/>
+        <field name="entityId" type="int">
+            <dbField type="int" name="entity_id"/>
+        </field>
+        <field name="recordId" key="true" type="int">
+            <dbField key="true" type="int" name="record_id"/>
+            <blockingField key="true"/>
+        </field>
+        <field name="ssn" type="String"
+        	valid="Validators.isValid(&quot;simpleSsnValidator&quot;,ssn)">
+            <blockingField conf="defaultAutomated"/>
+        </field>
+        <field name="firstName" type="String"
+        	valid="Validators.isValid(&quot;simpleFirstNameValidator&quot;,firstName)">
+            <dbField type="String" name="first_name"/>
+            <blockingField conf="defaultAutomated"/>
+        </field>
+        <field name="middleName" type="String"
+        	valid="Validators.isValid(&quot;simpleMiddleNameValidator&quot;,middleName)">
+            <dbField type="String" name="middle_name"/>
+        </field>
+        <field name="lastName" type="String"
+        	valid="Validators.isValid(&quot;simpleLastNameValidator&quot;,lastName)">
+            <dbField type="String" name="last_name"/>
+            <blockingField conf="defaultAutomated"/>
+        </field>
+        <field name="streetNumber" type="String"
+        	valid="StringUtils.nonEmptyString(streetNumber)">
+            <dbField type="String" name="street_number"/>
+        </field>
+        <field name="streetName" type="String"
+        	valid="StringUtils.nonEmptyString(streetName)">
+            <dbField type="String" name="street_name"/>
+            <blockingField conf="defaultAutomated"/>
+        </field>
+        <field name="apartmentNumber" type="String"
+        	valid="StringUtils.nonEmptyString(apartmentNumber)">
+            <dbField type="String" name="apartment_number"/>
+        </field>
+        <field name="city" type="String"
+        	valid="StringUtils.nonEmptyString(city)">
+            <blockingField conf="defaultAutomated"/>
+        </field>
+        <field name="state" type="String"
+        	valid="Validators.isValid(&quot;uspsStateCodeValidator&quot;,state)">
+            <dbField type="String" name="state_code"/>
+            <blockingField conf="defaultAutomated"/>
+        </field>
+        <field name="zip" type="String"
+        	valid="Validators.isValid(&quot;exampleZipValidator&quot;,zip)">
+            <dbField type="String" name="zip_code"/>
+            <blockingField conf="defaultAutomated"/>
+        </field>
+    </nodeType>
+</ChoiceMakerSchema>
