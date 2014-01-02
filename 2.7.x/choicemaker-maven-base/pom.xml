@@ -917,6 +917,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
+<!-- Excluded from the Community Edition due to licensing issues
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
@@ -929,6 +930,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
+-->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
@@ -1217,6 +1219,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
+<!-- Excluded from the Community Edition due to licensing issues
       <dependency>
         <groupId>com.oracle</groupId>
         <artifactId>classes12</artifactId>
@@ -1229,6 +1232,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
+-->
       <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>

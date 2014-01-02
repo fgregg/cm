@@ -31,7 +31,9 @@
     <module>com.choicemaker.cm.io.blocking.exact.base</module>
     <module>com.choicemaker.cm.io.composite.base</module>
     <module>com.choicemaker.cm.io.db.base</module>
+<!-- Excluded from the Community Edition due to licensing issues
     <module>com.choicemaker.cm.io.db.oracle</module>
+-->
     <module>com.choicemaker.cm.io.flatfile.base</module>
     <module>com.choicemaker.cm.io.xml.base</module>
     <module>com.choicemaker.cm.ml.me.base</module>

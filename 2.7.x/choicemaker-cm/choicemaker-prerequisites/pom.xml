@@ -84,7 +84,9 @@
     <module>org.jdom</module>
     <module>javax.help.eclipse2</module>
     <module>jfree.jfreechart.eclipse2</module>
+<!-- Excluded from the Community Edition due to licensing issues
     <module>com.oracle.jdbc</module>
+-->
     <module>com.mchange.c3p0</module>
   </modules>
 
