@@ -14,7 +14,7 @@
   <artifactId>model_projects</artifactId>
   <packaging>pom</packaging>
 
-  <name>Model Projects</name>
+  <name>ChoiceMaker Model Projects</name>
   <description><![CDATA[
   Examples of record-matching projects.
   ]]>
