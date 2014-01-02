@@ -1,5 +1,5 @@
 <assembly>
-	<id>eclipse2pkg</id>
+	<id>distrib</id>
 	<formats>
 		<format>zip</format>
 	</formats>

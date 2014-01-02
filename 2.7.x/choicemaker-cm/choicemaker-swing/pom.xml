@@ -22,7 +22,6 @@
 
   <modules>
     <module>com.choicemaker.cm.util.app</module>
-    <module>com.choicemaker.cm.util.app.pkg_eclipse</module>
     <module>com.choicemaker.cm.analyzer.tools.gui</module>
     <module>com.choicemaker.cm.docs</module>
     <module>com.choicemaker.cm.gui.utils</module>
@@ -35,7 +34,6 @@
     <module>com.choicemaker.cm.ml.me.gui</module>
     <module>com.choicemaker.cm.mmdevtools</module>
     <module>com.choicemaker.cm.modelmaker</module>
-    <module>com.choicemaker.cm.modelmaker.pkg_eclipse</module>
     <module>com.choicemaker.cm.module</module>
   </modules>
 
