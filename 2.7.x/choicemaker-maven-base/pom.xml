@@ -741,14 +741,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>
-        com.choicemaker.cm.io.blocking.automated.base</artifactId>
+        <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
         <version>${choicemaker.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>
-        com.choicemaker.cm.io.blocking.automated.base</artifactId>
+        <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
         <version>${choicemaker.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
@@ -930,7 +928,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
--->
+END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
@@ -1232,7 +1230,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
--->
+END: C-E Exclusion -->
       <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
