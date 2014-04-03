@@ -59,7 +59,7 @@ site distribution URL on the localhost:
   </distributionManagement>
 +--
 
-  This configuration requires that the build machine hosts an ssdh server. The
+  This configuration requires that the build machine hosts an sshd server. The
 login credentials for the server should be configured in the user's Maven settings
 ($HOME/.m2/settings.xml):
 
