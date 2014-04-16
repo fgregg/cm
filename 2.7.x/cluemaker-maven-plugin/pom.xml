@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-maven-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../choicemaker-maven-base/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>cluemaker-maven-plugin</artifactId>
+  <packaging>maven-plugin</packaging>
+
+  <name>ClueMaker Maven plugin</name>
+  <description>Maven plugin for ChoiceMaker ClueMaker 2 models</description>
+  <url>http://oscmt.sourceforge.net/dev-doc</url>
+
+  <scm>
+    <!-- connection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</connection -->
+    <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url>
+    <!-- developerConnection>scm:git:ssh://git.code.sf.net/p/oscmt/cm.git</developerConnection -->
+  </scm>
+
+  <issueManagement>
+    <url>http://sourceforge.net/projects/oscmt/support</url>
+  </issueManagement>
+
+  <distributionManagement>
+    <site>
+      <id>oscmt.rphall.com</id>
+      <!-- url>file:///home/project-web/oscmt/htdocs/dev-doc/</url -->
+      <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
+    </site>
+    <repository>
+      <id>releases</id>
+      <name>releases</name>
+      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Internal Snapshots</name>
+      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>3.0.5</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.2.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-compiler-api</artifactId>
+      <version>2.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonatype.plexus</groupId>
+      <artifactId>plexus-build-api</artifactId>
+      <version>0.0.7</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.compiler</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-plugin-testing-harness</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!--
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>3.2</version>
+      <scope>provided</scope>
+    </dependency>
+    -->
+
+  </dependencies>
+    
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>${javadocs.skip}</skip>
+          <skipDeploy>${javadocs.skip}</skipDeploy>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <modules>
+    <module>choicemaker-prerequisites</module>
+    <module>choicemaker-common</module>
+    <module>choicemaker-modeling</module>
+    <module>choicemaker-swing</module>
+    <module>choicemaker-j2ee</module>
+    <module>model_projects</module>
+    <module>choicemaker-ce</module>
+  </modules>
+
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+      <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>ChoiceMaker developer</role>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
+
+</project>
