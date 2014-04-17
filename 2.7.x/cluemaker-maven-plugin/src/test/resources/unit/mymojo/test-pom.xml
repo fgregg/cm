@@ -3,43 +3,16 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.choicemaker.maven</groupId>
-  <artifactId>cluemaker-maven-plugin</artifactId>
+  <artifactId>cluemaker-maven-plugin-test</artifactId>
   <version>2.7.1-SNAPSHOT</version>
-  <packaging>maven-plugin</packaging>
 
-  <name>cluemaker-maven-plugin Maven Plugin</name>
-
-  <!-- FIXME change it to the project's website -->
-  <url>http://maven.apache.org</url>
+  <name>Test cluemaker-maven-plugin</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <distributionManagement>
-    <site>
-      <id>oscmt.rphall.com</id>
-      <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
-    </site>
-    <repository>
-      <id>releases</id>
-      <name>releases</name>
-      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <name>Internal Snapshots</name>
-      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.plugin-testing</groupId>
-      <artifactId>maven-plugin-testing-harness</artifactId>
-      <version>3.1.0</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
@@ -66,6 +39,11 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>com.choicemaker.maven</groupId>
+        <artifactId>cluemaker-maven-plugin</artifactId>
+        <version>2.7.1-SNAPSHOT</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
