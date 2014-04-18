@@ -2,15 +2,53 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../choicemaker-base/pom.xml</relativePath>
+  </parent>
+
   <groupId>com.choicemaker.maven</groupId>
   <artifactId>cluemaker-maven-plugin</artifactId>
   <version>2.7.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>cluemaker-maven-plugin Maven Plugin</name>
+  <description>Maven plugin for ChoiceMaker ClueMaker 2 models</description>
+  <url>http://oscmt.sourceforge.net/dev-doc</url>
+
+  <scm>
+    <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url>
+  </scm>
+
+  <issueManagement>
+    <url>http://sourceforge.net/projects/oscmt/support</url>
+  </issueManagement>
+
+  <distributionManagement>
+    <site>
+      <id>oscmt.rphall.com</id>
+      <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
+    </site>
+    <repository>
+      <id>releases</id>
+      <name>releases</name>
+      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Internal Snapshots</name>
+      <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Override parent properties -->
+    <plugin.maven-compiler.source>1.7</plugin.maven-compiler.source>
+    <plugin.maven-compiler.target>1.7</plugin.maven-compiler.target>
+    <!-- END Override parent properties -->
   </properties>
 
   <dependencies>
@@ -38,19 +76,21 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.plexus</groupId>
+      <artifactId>plexus-build-api</artifactId>
+      <version>0.0.7</version>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>3.0.15</version>
       <scope>test</scope>
     </dependency>
-<!--
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-archiver</artifactId>
-      <version>2.2</version>
-      <scope>test</scope>
-    </dependency>
--->
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
@@ -114,5 +154,17 @@
       </plugin>
     </plugins>
   </build>
+
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+      <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>ChoiceMaker developer</role>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
 
 </project>
