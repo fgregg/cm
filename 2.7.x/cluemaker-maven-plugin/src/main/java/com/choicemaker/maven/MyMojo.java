@@ -40,13 +40,23 @@ public class MyMojo
     /**
      * Location of the file.
      */
-    @Parameter( defaultValue = "${project.build.directory}", property = "outputDir", required = true )
-    private File outputDirectory;
+    @Parameter(
+//	    property = "project.build.directory",
+	    defaultValue = "${basedir}",
+//	    alias = "outputDir",
+	    required = true )
+    private File outputDir;
 
     public void execute()
         throws MojoExecutionException
     {
-        File f = outputDirectory;
+        File f = outputDir;
+        if (f == null) {
+            String tmpdir = System.getProperty("java.io.tmpdir");
+            f = new File(tmpdir);
+            String msg = "Writing to tmp directory (" + tmpdir + ")";
+            this.getLog().warn(msg);
+        }
 
         if ( !f.exists() )
         {

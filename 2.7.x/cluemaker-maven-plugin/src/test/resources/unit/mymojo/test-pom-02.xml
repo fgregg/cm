@@ -43,7 +43,9 @@
         <groupId>com.choicemaker.maven</groupId>
         <artifactId>cluemaker-maven-plugin</artifactId>
         <version>2.7.1-SNAPSHOT</version>
-        <configuration/>
+        <configuration>
+          <outputDir>/tmp/mymojo/</outputDir>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
