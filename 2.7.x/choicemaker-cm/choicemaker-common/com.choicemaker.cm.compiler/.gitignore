@@ -7,3 +7,4 @@ project.t.xml
 core.jar
 coresrc.zip
 tmp
+/target

@@ -4,3 +4,4 @@ target
 boot.jar
 tmp
 build.xml
+/target
