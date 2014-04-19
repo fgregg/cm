@@ -7,12 +7,12 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-prerequisites</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>org.apache.log4j</artifactId>
-  <version>1.2.8-SNAPSHOT</version>
+  <version>1.2.8</version>
   <packaging>jar</packaging>
   <name>Apache Log4j Plugin</name>
 

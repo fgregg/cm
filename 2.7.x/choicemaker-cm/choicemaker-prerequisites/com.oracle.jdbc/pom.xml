@@ -7,12 +7,12 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-prerequisites</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>com.oracle.jdbc</artifactId>
-  <version>10.2.0.4-SNAPSHOT</version>
+  <version>10.2.0.4</version>
   <packaging>pom</packaging>
   <name>Oracle JDBC Fragment</name>
 

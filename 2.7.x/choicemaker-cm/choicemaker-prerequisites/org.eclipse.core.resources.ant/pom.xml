@@ -7,12 +7,12 @@
   <parent>
     <groupId>com.choicemaker.cm</groupId>
     <artifactId>choicemaker-prerequisites</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>org.eclipse.core.resources.ant</artifactId>
-  <version>2.1.1-SNAPSHOT</version>
+  <version>2.1.1</version>
   <packaging>jar</packaging>
   <name>Eclipse Core Resources Ant</name>
 
