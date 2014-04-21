@@ -1,16 +1,18 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 package com.choicemaker.cm.util.app;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.boot.IPlatformRunnable;
 import org.eclipse.core.runtime.CoreException;
@@ -22,11 +24,10 @@ import org.eclipse.core.runtime.Platform;
 import com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder;
 import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.core.util.ObjectMaker;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 
 /**
  * @author    Adam Winkel
- * @version   
+ * @version
  */
 public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
 
@@ -57,46 +58,46 @@ public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
 	 * This command should be typed on a single line; it is broken across multiple
 	 * lines here for readability.
 	 */
-	public Object run(Object args) throws Exception {		
-		CommandLineArguments cla = new CommandLineArguments(true);
-		cla.addArgument("-conf");
-		cla.addArgument("-outDir", "etc/models/gen/out");
-		cla.enter((String[])args);
+    public Object run(Object args) throws Exception {
 
-		String conf = cla.getArgument("-conf");
-		if (conf == null) {
-			throw new IllegalArgumentException("Must provide a -conf argument");
-		}
+	CommandLineArguments cla = new CommandLineArguments(true);
+	cla.addArgument("-conf");
+	cla.addArgument("-outDir", "etc/models/gen/out");
+	cla.enter((String[]) args);
 
-		XmlConfigurator.init(conf, null, true, false);
-
-		ProductionModelsJarBuilder.refreshProductionProbabilityModels();
-
-		String outDirName = cla.getArgument("-outDir");
-		// this will be relative to the path of the project.xml
-		File outDir = new File(outDirName).getAbsoluteFile();
-		if (!outDir.isDirectory()) {
-			outDir.mkdirs();
-		}
-
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.objectGenerator");
-		IExtension[] extensions = pt.getExtensions();
-		for (int i = 0; i < extensions.length; i++) {
-			IExtension extension = extensions[i];
-			IConfigurationElement[] els = extension.getConfigurationElements();
-			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement element = els[j];
-				try {
-					ObjectMaker maker = (ObjectMaker) element.createExecutableExtension("class");
-					maker.generateObjects(outDir);
-				} catch (CoreException ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-
-		return null;
+	String conf = cla.getArgument("-conf");
+	if (conf == null) {
+	    throw new IllegalArgumentException("Must provide a -conf argument");
 	}
+
+	String outDirName = cla.getArgument("-outDir");
+	// this will be relative to the path of the project.xml
+	File outDir = new File(outDirName).getAbsoluteFile();
+	if (!outDir.isDirectory()) {
+	    outDir.mkdirs();
+	}
+
+	List omList = new LinkedList();
+	IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(
+		"com.choicemaker.cm.core.objectGenerator");
+	IExtension[] extensions = pt.getExtensions();
+	for (int i = 0; i < extensions.length; i++) {
+	    IExtension extension = extensions[i];
+	    IConfigurationElement[] els = extension.getConfigurationElements();
+	    for (int j = 0; j < els.length; j++) {
+		IConfigurationElement element = els[j];
+		ObjectMaker maker = (ObjectMaker) element
+			.createExecutableExtension("class");
+		omList.add(maker);
+	    }
+	}
+	ObjectMaker[] objectMakers = (ObjectMaker[]) omList
+		.toArray(new ObjectMaker[omList.size()]);
+	ProductionModelsJarBuilder pmjb = new ProductionModelsJarBuilder();
+	pmjb.run(conf, outDir, objectMakers);
+
+	return null;
+    }
 
 }
 
