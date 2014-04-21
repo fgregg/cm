@@ -11,7 +11,6 @@
 
   <groupId>com.choicemaker.maven</groupId>
   <artifactId>cluemaker-maven-plugin</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>cluemaker-maven-plugin Maven Plugin</name>
@@ -55,7 +54,6 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -128,7 +126,6 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
