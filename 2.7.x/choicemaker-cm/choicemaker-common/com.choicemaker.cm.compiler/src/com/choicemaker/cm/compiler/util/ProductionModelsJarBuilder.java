@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -21,17 +21,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.tools.ant.util.JavaEnvUtils;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
 
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.cm.core.util.StreamRelayer;
@@ -42,7 +36,7 @@ import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 
 /**
  * @author    Adam Winkel
- * @version   
+ * @version
  */
 public class ProductionModelsJarBuilder {
 
@@ -72,46 +66,35 @@ public class ProductionModelsJarBuilder {
 	 * This command should be typed on a single line; it is broken across multiple
 	 * lines here for readability.
 	 */
-	public Object run(Object args) throws Exception {		
-		CommandLineArguments cla = new CommandLineArguments(true);
-		cla.addArgument("-conf");
-		cla.addArgument("-outDir", "etc/models/gen/out");
-		cla.enter((String[])args);
-
-		String conf = cla.getArgument("-conf");
-		if (conf == null) {
-			throw new IllegalArgumentException("Must provide a -conf argument");
-		}
-
-		XmlConfigurator.init(conf, null, true, false);
-
-		ProductionModelsJarBuilder.refreshProductionProbabilityModels();
-
-		String outDirName = cla.getArgument("-outDir");
-		// this will be relative to the path of the project.xml
-		File outDir = new File(outDirName).getAbsoluteFile();
-		if (!outDir.isDirectory()) {
-			outDir.mkdirs();
-		}
-
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.objectGenerator");
-		IExtension[] extensions = pt.getExtensions();
-		for (int i = 0; i < extensions.length; i++) {
-			IExtension extension = extensions[i];
-			IConfigurationElement[] els = extension.getConfigurationElements();
-			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement element = els[j];
-				try {
-					ObjectMaker maker = (ObjectMaker) element.createExecutableExtension("class");
-					maker.generateObjects(outDir);
-				} catch (CoreException ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-
-		return null;
+    public void run(String conf, File outDir, ObjectMaker[] objectMakers)
+	    throws Exception {
+	if (conf == null) {
+	    throw new IllegalArgumentException("Null conf argument");
 	}
+	if (outDir == null) {
+	    throw new IllegalArgumentException("Null output directory");
+	}
+	if (!outDir.exists() || !outDir.isDirectory() || !outDir.canWrite()) {
+	    String msg = "Output directory (" + outDir.getAbsolutePath()
+		    + ") doesn't exist or isn't a directory or isn't writable";
+	    throw new IllegalArgumentException(msg);
+	}
+
+	XmlConfigurator.init(conf, null, true, false);
+
+	ProductionModelsJarBuilder.refreshProductionProbabilityModels();
+
+	if (objectMakers != null) {
+	    for (int i = 0; i < objectMakers.length; i++) {
+		ObjectMaker maker = objectMakers[i];
+		if (maker == null) {
+		    throw new IllegalArgumentException(
+			    "null object maker at array index " + i);
+		}
+		maker.generateObjects(outDir);
+	    }
+	}
+    }
 
 	//
 	// static stuff below...
@@ -122,7 +105,7 @@ public class ProductionModelsJarBuilder {
 		if (genDir.isDirectory()) {
 			FileUtilities.removeDir(genDir);
 		}
-		
+
 		CompilerFactory factory = CompilerFactory.getInstance ();
 		ICompiler compiler = factory.getDefaultCompiler();
 
@@ -184,7 +167,7 @@ public class ProductionModelsJarBuilder {
 		args.add("-sourcepath");
 		args.add(srcDir.getAbsolutePath());
 
-		// the packages		
+		// the packages
 		String[] packages = findPublicPackages(srcDir);
 		for (int i = 0; i < packages.length; i++) {
 			args.add(packages[i]);
@@ -215,7 +198,7 @@ public class ProductionModelsJarBuilder {
 			proc.destroy();
 		}
 
-		// 
+		//
 		File zipFile = outputFile.getAbsoluteFile();
 		try {
 			zipContents(javadocDir, zipFile);
@@ -353,7 +336,7 @@ public class ProductionModelsJarBuilder {
 	}
 
 	/**
-	 * Recursively copies the contents of fromDir to toDir, unless it encounters a directory 
+	 * Recursively copies the contents of fromDir to toDir, unless it encounters a directory
 	 * named &quot;internal&quot;, meaning the beginning of ChoiceMaker's internal classes
 	 * and the end of the holder classes.
 	 */
@@ -374,7 +357,7 @@ public class ProductionModelsJarBuilder {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private static void copyContents(File fromDir, File toDir) throws IOException {
 		if (!toDir.exists()) {
