@@ -69,7 +69,9 @@
   </build>
 
   <modules>
+    <!--
     <module>choicemaker-prerequisites</module>
+    -->
     <module>choicemaker-common</module>
     <module>choicemaker-modeling</module>
     <module>choicemaker-swing</module>
