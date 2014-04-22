@@ -24,10 +24,6 @@ import com.choicemaker.cm.core.compiler.UnavailableCompilerFeaturesException;
  */
 public class CompilerFactory implements ICompilerFactory {
 
-	public static final String C25 = "25";
-	public static final String C24 = "24";
-	public static final String C25a = "25a";
-	public static final String C25b = "25b";
 	public static final String C26 = "26";
 
 	private static CompilerFactory factory = null;
