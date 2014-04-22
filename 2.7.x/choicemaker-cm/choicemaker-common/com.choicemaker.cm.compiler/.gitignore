@@ -8,3 +8,4 @@ core.jar
 coresrc.zip
 tmp
 /target
+_compiler_effective_pom.xml
