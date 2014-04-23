@@ -12,3 +12,4 @@ temp.folder
 tmp
 transitivity.jar
 transitivitysrc.jar
+/target

@@ -11,3 +11,4 @@ project.xml
 target
 temp.folder
 tmp
+/target

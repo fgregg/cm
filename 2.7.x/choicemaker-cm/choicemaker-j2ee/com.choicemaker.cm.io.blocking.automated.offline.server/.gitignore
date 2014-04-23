@@ -13,3 +13,4 @@ server.jar
 target
 temp.folder
 tmp
+/target

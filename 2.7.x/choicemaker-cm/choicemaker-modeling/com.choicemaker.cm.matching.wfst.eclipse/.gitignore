@@ -11,3 +11,4 @@ temp.folder
 tmp
 wfst-eclipse.jar
 wfst-eclipsesrc.zip
+/target
