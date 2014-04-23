@@ -57,7 +57,9 @@
   <modules>
     <module>choicemaker-base</module>
     <module>choicemaker-cm</module>
+    <!--
     <module>cluemaker-maven-plugin</module>
+    -->
   </modules>
 
 </project>
