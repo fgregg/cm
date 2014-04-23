@@ -29,6 +29,8 @@ import com.choicemaker.cm.core.MutableMarkedRecordPair;
  */
 public class DefaultPairFilter implements Filter {
 
+	private static final long serialVersionUID = 1L;
+
 	/** Default "from" percentage (inclusive) */
 	public static final float DEFAULT_FROM_PERCENTAGE = 0.20f;
 

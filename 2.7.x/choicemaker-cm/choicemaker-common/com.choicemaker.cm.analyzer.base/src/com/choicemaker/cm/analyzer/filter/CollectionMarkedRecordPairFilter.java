@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -21,11 +21,13 @@ import com.choicemaker.cm.core.util.IntArrayList;
  */
 public class CollectionMarkedRecordPairFilter extends MarkedRecordPairFilter {
 
-	private HashSet pairs;
-	private boolean useCollection;
+	private static final long serialVersionUID = 1L;
+	protected HashSet pairs;
+	protected boolean useCollection;
 
 	public CollectionMarkedRecordPairFilter() {
-		useCollection = false;
+		this(null);
+		// assert useCollection == false;
 	}
 
 	public CollectionMarkedRecordPairFilter(Collection pairs) {
@@ -33,13 +35,19 @@ public class CollectionMarkedRecordPairFilter extends MarkedRecordPairFilter {
 	}
 
 	public void setAcceptedPairs(Collection pairs) {
-		this.pairs = new HashSet(pairs);
-		useCollection = true;
+		if (pairs != null) {
+			this.pairs = new HashSet(pairs);
+			useCollection = true;
+		} else {
+			this.pairs = new HashSet();
+			useCollection = false;
+		}
 	}
 
 	public void reset() {
-		useCollection = false;
+		setAcceptedPairs(null);
 		super.reset();
+		// assert useCollection == false;
 	}
 
 	public int[] filterSource(Collection src) {

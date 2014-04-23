@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -14,11 +14,13 @@ import com.choicemaker.cm.core.ActiveClues;
 
 /**
  * Description
- * 
+ *
  * @author  Martin Buechi
- * @version $Revision: 1.3 $ $Date: 2010/03/29 14:36:25 $
+ * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:08 $
  */
 public class RuleFilterCondition implements FilterCondition {
+	private static final long serialVersionUID = 1L;
+
 	private static final int NULL_CLUE_NUM = Integer.MIN_VALUE;
 
 	private static final String NULL_STRING = "-";
@@ -103,12 +105,43 @@ public class RuleFilterCondition implements FilterCondition {
 		return returnValue;
 	}
 
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + clueNum;
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
 	/**
 	 * @return true if we represent a NULL_CONDITION and are being compared against a null, or a NULL_FILTER_CONDITION;
 	 * true if we are compared agains another IntFilterCondition that represents the same condition as us;
 	 * false otherwise.
 	 */
-	public boolean equals(Object other){
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if ( obj == null || obj == FilterCondition.NULL_FILTER_CONDITION){
+			return value == NULL_CONDITION;
+		}
+		if (getClass() != obj.getClass())
+			return false;
+		RuleFilterCondition other = (RuleFilterCondition) obj;
+		if (clueNum != other.clueNum)
+			return false;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
+	}
+
+	/**
+	 * Old implmemtation of {@link #equals(Object)}. Use this method only for
+	 * testing.
+	 */
+	public boolean equals_00(Object other){
 		if ( other == null || other == FilterCondition.NULL_FILTER_CONDITION){
 			return value == NULL_CONDITION;
 		}
@@ -117,7 +150,7 @@ public class RuleFilterCondition implements FilterCondition {
 				RuleFilterCondition otherfilterCondition = (RuleFilterCondition)other;
 				return otherfilterCondition.getClueNum() == getClueNum()
 					&& otherfilterCondition.value == value;
-			} 
+			}
 			else{
 				return false;
 			}

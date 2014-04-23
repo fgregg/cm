@@ -463,7 +463,6 @@ public class InMemoryMatcher {
 	 * @param done The done to set
 	 */
 	public synchronized void setDone(boolean done) {
-		boolean oldValue = this.done;
 		this.done = done;
 	}
 
@@ -472,7 +471,6 @@ public class InMemoryMatcher {
 	 * @param numPairs The numPairs to set
 	 */
 	public void setNumPairs(int numPairs) {
-		int oldValue = this.numPairs;
 		this.numPairs = numPairs;
 	}
 
@@ -481,7 +479,6 @@ public class InMemoryMatcher {
 	 * @param numRecordsFromLarge The numRecordsFromLarge to set
 	 */
 	public void setNumRecordsFromLarge(int numRecordsFromLarge) {
-		int oldValue = this.numRecordsFromLarge;
 		this.numRecordsFromLarge = numRecordsFromLarge;
 	}
 
@@ -490,7 +487,6 @@ public class InMemoryMatcher {
 	 * @param numRecordsFromSmall The numRecordsFromSmall to set
 	 */
 	public void setNumRecordsFromSmall(int numRecordsFromSmall) {
-		int oldValue = this.numRecordsFromSmall;
 		this.numRecordsFromSmall = numRecordsFromSmall;
 	}
 

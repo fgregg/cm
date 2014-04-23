@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -12,9 +12,6 @@ package com.choicemaker.cm.analyzer.filter;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Random;
-
-import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.Decision;
@@ -24,19 +21,20 @@ import com.choicemaker.cm.core.util.ArrayHelper;
 import com.choicemaker.cm.core.util.IntArrayList;
 
 public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
-	private static Logger logger = Logger.getLogger(MarkedRecordPairFilter.class);
+	private static final long serialVersionUID = 1L;
+//	private static Logger logger = Logger.getLogger(MarkedRecordPairFilter.class);
 	//private static IMarkedRecordPairFilter instance = null;
 	private static final FilterCondition[] ZERO_CONDITION = new FilterCondition[0];
 	private static final Limiter[] ZERO_SAMPLER = new Limiter[0];
 
-	private boolean[] humanDecision;
-	private boolean[] choiceMakerDecision;
-	private float fromPercentage;
-	private float toPercentage;
-	private FilterCondition[] conditions;
-	private Limiter[] limiters;
-	private Random random = new Random();
-	private IntArrayList collection;
+	protected boolean[] humanDecision;
+	protected boolean[] choiceMakerDecision;
+	protected float fromPercentage;
+	protected float toPercentage;
+	protected FilterCondition[] conditions;
+	protected Limiter[] limiters;
+//	protected Random random = new Random();
+	protected IntArrayList collection;
 
 	public MarkedRecordPairFilter() {
 		reset();
@@ -149,11 +147,11 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	public Limiter[] getLimiters() {
 		return limiters;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * 0-1:5:100, 1:10:20:100
-	 * 
+	 *
 	 * @param limiters
 	 * @return String
 	 */
@@ -163,9 +161,9 @@ public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 
 	/**
 	 * Sets the limiters.
-	 * 
+	 *
 	 * 0-1:5:100, 1:10:20:100
-	 * 
+	 *
 	 * @param limiters The limiters to set
 	 */
 	public void setLimiters(String samplers) {
