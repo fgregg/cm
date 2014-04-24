@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -40,7 +40,7 @@ import com.choicemaker.cm.core.util.LinkMap;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
-import com.choicemaker.cm.modelmaker.filter.CollectionMarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ModelMakerCollectionMRPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
 /**
@@ -65,30 +65,30 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 	public MrpsDecisionComparatorDialog(ModelMaker modelMaker) {
 		super(modelMaker, "MRPS Decision Comparator", false);
 		this.modelMaker = modelMaker;
-		
+
 		createContent();
 		createListeners();
-		
+
 		pack();
 		setLocationRelativeTo(modelMaker);
 	}
-	
+
 	private void createContent() {
 		GridBagLayout layout = new GridBagLayout();
 		layout.columnWeights = new double[] {0, 1, 0, 0, 0};
 		layout.rowWeights = new double[] {0, 0, 0, 0, 1};
 		getContentPane().setLayout(layout);
-		
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(3, 5, 3, 5);
 		c.fill = GridBagConstraints.BOTH;
-		
+
 		//
-		
+
 		c.gridy = 0;
 		c.gridx = 0;
 		getContentPane().add(new JLabel("MRPS 1:"), c);
-		
+
 		c.gridx++;
 		c.gridwidth = 3;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -96,16 +96,16 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 		getContentPane().add(mrps1, c);
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.BOTH;
-		
+
 		c.gridx = 4;
 		getContentPane().add(new JButton(new MrpsBrowseAction(mrps1)), c);
-		
+
 		//
-		
+
 		c.gridy++;
 		c.gridx = 0;
 		getContentPane().add(new JLabel("MRPS 2:"), c);
-		
+
 		c.gridx++;
 		c.gridwidth = 3;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -113,12 +113,12 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 		getContentPane().add(mrps2, c);
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.BOTH;
-		
+
 		c.gridx = 4;
 		getContentPane().add(new JButton(new MrpsBrowseAction(mrps2)), c);
 
 		//
-		
+
 		c.gridy++;
 		c.gridx = 2;
 		pairByPair = new JRadioButton("Pair by Pair");
@@ -132,18 +132,18 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(pairByPair);
 		bg.add(byIds);
-				
+
 		//
-		
+
 		c.gridy++;
 		c.gridx = 2;
 		getContentPane().add(new JButton(new CancelAction()), c);
-		
+
 		c.gridx++;
 		getContentPane().add(new JButton(new CompareAction()), c);
-		
+
 		//
-		
+
 		c.gridy++;
 		c.gridx = 0;
 		c.gridwidth = 5;
@@ -157,7 +157,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 				int row = confusionMatrix.rowAtPoint(e.getPoint());
 				int col = confusionMatrix.columnAtPoint(e.getPoint());
 				if (row > 0 && col > 0) {
-					modelMaker.setFilter(new CollectionMarkedRecordPairFilter(modelMaker, matrix[row-1][col-1]));
+					modelMaker.setFilter(new ModelMakerCollectionMRPairFilter(modelMaker, matrix[row-1][col-1]));
 				}
 			}
 		});
@@ -165,15 +165,15 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 
 	private void computeMatrix() {
 		modelMaker.setMultiSource(1, null);
-		
+
 		IProbabilityModel model = modelMaker.getProbabilityModel();
 		if (model == null) {
 			return;
 		}
-		
+
 		String mrpsName1 = mrps1.getText().trim();
 		String mrpsName2 = mrps2.getText().trim();
-		
+
 		MarkedRecordPairSource mrps1 = null;
 		try {
 			mrps1 = MarkedRecordPairSourceXmlConf.getMarkedRecordPairSource(mrpsName1);
@@ -181,7 +181,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			ErrorDialog.showErrorDialog(modelMaker, "Unable to open MRPS: " + mrpsName1, ex);
 		}
 		mrps1.setModel(model);
-		
+
 		MarkedRecordPairSource mrps2 = null;
 		try {
 			mrps2 = MarkedRecordPairSourceXmlConf.getMarkedRecordPairSource(mrpsName2);
@@ -189,54 +189,54 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			ErrorDialog.showErrorDialog(modelMaker, "Unable to open MRPS: " + mrpsName2, ex);
 		}
 		mrps2.setModel(model);
-	
+
 		pairs = new ArrayList();
 
 		matrix = new ArrayList[4][4];
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
-				matrix[i][j] = new ArrayList();	
+				matrix[i][j] = new ArrayList();
 			}
 		}
-	
+
 		// actually fill in pairs and matrix.
 		if (pairByPair.isSelected()) {
 			computeMatrixPairByPair(mrps1, mrps2);
 		} else {
 			computeMatrixByIds(mrps1, mrps2);
 		}
-		
+
 		int[][] data = new int[4][4];
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				data[i][j] = matrix[i][j].size();
-			}	
+			}
 		}
-		
+
 		confusionMatrix.setData(data);
 		modelMaker.setMultiSource(1, MarkedRecordPairBinder.getMarkedRecordPairSource(pairs));
 		modelMaker.setMultiIncludeHolds(1, true);
 		modelMaker.evaluateClues();
 	}
-		
+
 	private void computeMatrixPairByPair(MarkedRecordPairSource mrps1, MarkedRecordPairSource mrps2) {
 		try {
 			mrps1.open();
 			mrps2.open();
-			
+
 			while (true) {
 				if (!mrps1.hasNext() && !mrps2.hasNext()) {
 					break;
 				} else if (!mrps1.hasNext() || !mrps2.hasNext()) {
 					ErrorDialog.showErrorDialog(modelMaker, "Warning: MRPS's are of different size!  Will not continue!");
 				}
-				
+
 				MutableMarkedRecordPair mrp1 = mrps1.getNextMarkedRecordPair();
 				ImmutableMarkedRecordPair mrp2 = mrps2.getNextMarkedRecordPair();
-				
+
 				int i = mrp1.getMarkedDecision().toInt();
 				int j = mrp2.getMarkedDecision().toInt();
-				
+
 				matrix[i][j].add(mrp1);
 				pairs.add(mrp1);
 			}
@@ -244,9 +244,9 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			ErrorDialog.showErrorDialog(modelMaker, "Problems reading from MRPS", ex);
 		}
 	}
-		
+
 	private void computeMatrixByIds(MarkedRecordPairSource mrps1, MarkedRecordPairSource mrps2) {
-		LinkMap map1 = null; 
+		LinkMap map1 = null;
 		LinkMap map2 = null;
 		try {
 			map1 = new LinkMap(mrps1);
@@ -254,11 +254,11 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 		} catch (Exception ex) {
 			ErrorDialog.showErrorDialog(modelMaker, "Problems reading from MRPS", ex);
 		}
-						
+
 		List links = map1.getLinks();
 		for (int index = 0; index < links.size(); index++) {
 			MutableMarkedRecordPair mrp = (MutableMarkedRecordPair) links.get(index);
-						
+
 			int i = mrp.getMarkedDecision().toInt();
 			int j = 3; // default not in other.
 
@@ -266,22 +266,22 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 				j = ((ImmutableMarkedRecordPair)map2.getLinks(mrp.getQueryRecord().getId().toString(), mrp.getMatchRecord().getId().toString()).get(0)).getMarkedDecision().toInt();
 			}
 
-			matrix[i][j].add(mrp);			
+			matrix[i][j].add(mrp);
 			pairs.add(mrp);
 		}
-		
+
 		links = map2.getLinks();
 		for (int index = 0; index < links.size(); index++) {
 			MutableMarkedRecordPair mrp = (MutableMarkedRecordPair) links.get(index);
-			
+
 			int i = 3; // default not in other
 			int j = mrp.getMarkedDecision().toInt();
-			
+
 			if (!map1.hasLink(mrp.getQueryRecord(), mrp.getMatchRecord())) {
 				matrix[i][j].add(mrp);
 				pairs.add(mrp);
-			} 
-		}		
+			}
+		}
 	}
 
 	static class ConfusionMatrix extends JTable {
@@ -316,7 +316,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			for (int i = 0; i < 4; i++) {
 				realData[i+1][0] = rowHeaders[i];
 			}
-						
+
 			setModel(new DefaultTableModel(realData, new Object[5]) {
 				public boolean isCellEditable(int row, int col) {
 					return false;
@@ -333,7 +333,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			computeMatrix();
 		}
 	}
-	
+
 	class CancelAction extends AbstractAction {
 		public CancelAction() {
 			super("Cancel");
@@ -342,7 +342,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			dispose();
 		}
 	}
-	
+
 	class MrpsBrowseAction extends AbstractAction {
 		private JTextField tf;
 		public MrpsBrowseAction(JTextField tf) {

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -21,6 +21,8 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.event.SwingPropertyChangeSupport;
 
+import com.choicemaker.cm.analyzer.filter.Filter;
+import com.choicemaker.cm.analyzer.sampler.PairSampler;
 import com.choicemaker.cm.core.ActiveClues;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Decision;
@@ -34,11 +36,10 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordBinder;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
-import com.choicemaker.cm.modelmaker.filter.Filter;
 
 /**
  * Description
- * 
+ *
  * @author  Martin Buechi
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:39:42 $
  */
@@ -212,20 +213,20 @@ public class Matcher {
 				Collections.sort(candidates, sorter);
 			}
 			for (int i = 0; i < size; ++i) {
-				
+
 				if (sampler != null) {
-					sampler.processPair((MutableMarkedRecordPair)candidates.get(i));					
+					sampler.processPair((MutableMarkedRecordPair)candidates.get(i));
 				} else {
 					sink.putMarkedRecordPair((MutableMarkedRecordPair) candidates.get(i));
-				}				
-				
+				}
+
 				if (++np % 100 == 0) {
 					if (sampler != null) {
 						setNumPairs(sampler.getNumRetained());
 					} else {
 						setNumPairs(np);
 					}
-					
+
 					if (Thread.interrupted()) {
 						interrupted = true;
 					}
@@ -234,14 +235,14 @@ public class Matcher {
 			candidates.clear();
 		}
 		largeRecordSource.close();
-		
+
 		if (sampler != null) {
 			List pairs = sampler.getRetainedPairs();
 			for (int i = 0, n = pairs.size(); i < n; i++) {
 				sink.put((MutableMarkedRecordPair)pairs.get(i));
 			}
 		}
-		
+
 		sink.close();
 
 		setNumRecordsFromLarge(nl);
@@ -250,7 +251,7 @@ public class Matcher {
 		} else {
 			setNumPairs(np);
 		}
-		
+
 		setDone(true);
 	}
 

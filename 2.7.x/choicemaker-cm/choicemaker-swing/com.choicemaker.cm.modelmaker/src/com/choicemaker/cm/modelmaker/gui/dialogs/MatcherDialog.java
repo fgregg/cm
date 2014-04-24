@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -37,6 +37,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 import org.jdom.Element;
 
+import com.choicemaker.cm.analyzer.matcher.SimpleRecordSink;
+import com.choicemaker.cm.analyzer.sampler.DefaultPairSampler;
+import com.choicemaker.cm.analyzer.sampler.PairSampler;
 import com.choicemaker.cm.core.DescriptorCollection;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableThresholds;
@@ -56,15 +59,12 @@ import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.gui.utils.viewer.xmlconf.RecordPairViewerXmlConf;
-import com.choicemaker.cm.modelmaker.filter.Filter;
-import com.choicemaker.cm.modelmaker.filter.MarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ModelMakerMRPFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.matcher.BlockerToolkit;
-import com.choicemaker.cm.modelmaker.gui.matcher.DefaultPairSampler;
 import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
 import com.choicemaker.cm.modelmaker.gui.matcher.Matcher;
-import com.choicemaker.cm.modelmaker.gui.matcher.PairSampler;
-import com.choicemaker.cm.modelmaker.gui.matcher.SimpleRecordSink;
 import com.choicemaker.cm.modelmaker.gui.panels.FilterCluePanel;
 import com.choicemaker.cm.modelmaker.gui.panels.RecordPairViewerPanel;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
@@ -72,7 +72,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
  * Description
- * 
+ *
  * @author  Martin Buechi
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:44:29 $
  */
@@ -315,7 +315,7 @@ public class MatcherDialog extends JDialog implements Enable {
 						IProbabilityModel probabilityModel =
 							modelMaker.getProbabilityModel();
 						filterCluePanel.set();
-						Filter filter = filterCluePanel.getFilter();
+						ListeningMarkedRecordPairFilter filter = filterCluePanel.getFilter();
 						PairSampler sampler = getSampler(probabilityModel);
 						Thresholds thresholds = modelMaker.getThresholds();
 						float lowerThreshold = thresholds.getDifferThreshold();
@@ -778,7 +778,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		c.gridy = 1;
 		c.gridx = 0;
 		c.gridwidth = 3;
-		MarkedRecordPairFilter mrpf = new MarkedRecordPairFilter(modelMaker);
+		ListeningMarkedRecordPairFilter mrpf = new ModelMakerMRPFilter(modelMaker);
 		mrpf.setChoiceMakerDecision(new boolean[] { false, true, true });
 		filterCluePanel = new FilterCluePanel(modelMaker, mrpf, false);
 		content.add(filterCluePanel, c);
@@ -821,7 +821,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.WEST;
 
-		// 
+		//
 
 		c.gridy = 0;
 

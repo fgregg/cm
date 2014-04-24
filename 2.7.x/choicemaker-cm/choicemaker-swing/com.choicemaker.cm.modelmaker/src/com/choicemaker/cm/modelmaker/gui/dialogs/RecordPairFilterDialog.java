@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
-import com.choicemaker.cm.modelmaker.filter.MarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.panels.FilterCluePanel;
 
@@ -38,7 +38,7 @@ import com.choicemaker.cm.modelmaker.gui.panels.FilterCluePanel;
 public class RecordPairFilterDialog extends JDialog {
 	private static Logger logger = Logger.getLogger(RecordPairFilterDialog.class);
 	private ModelMaker parent;
-	private MarkedRecordPairFilter filter;
+	private ListeningMarkedRecordPairFilter filter;
 	private JPanel panel;
 	private FilterCluePanel content;
 	private JButton cancel;
@@ -86,7 +86,7 @@ public class RecordPairFilterDialog extends JDialog {
 	public void buildPanel() {
 		panel = new JPanel();
 		content = new FilterCluePanel(parent, parent.getFilter());
-		
+
 		cancel = new JButton(MessageUtil.m.formatMessage("cancel"));
 		reSet = new JButton(MessageUtil.m.formatMessage("reset"));
 		set = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.recordpairfilter.apply"));
@@ -120,7 +120,7 @@ public class RecordPairFilterDialog extends JDialog {
 				dispose();
 			}
 		});
-		
+
 		JavaHelpUtils.enableHelpKey(this, "train.gui.dialog.recordpairfilter");
 	}
 
@@ -143,7 +143,7 @@ public class RecordPairFilterDialog extends JDialog {
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.EAST;
 		panel.add(buttonPanel, c);
-		
+
 
 	}
 

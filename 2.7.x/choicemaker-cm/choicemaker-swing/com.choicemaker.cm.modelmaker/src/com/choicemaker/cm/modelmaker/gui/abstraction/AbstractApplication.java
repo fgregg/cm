@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.core.util.OperationFailedException;
 import com.choicemaker.cm.modelmaker.IRecordPairList;
-import com.choicemaker.cm.modelmaker.filter.MarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
 import com.choicemaker.cm.modelmaker.gui.listeners.EventMultiplexer;
 import com.choicemaker.cm.modelmaker.stats.Statistics;
@@ -72,24 +72,24 @@ public abstract class AbstractApplication extends JFrame
 	public abstract void reloadProbabilityModel();
 	/**
 	 * Gets the model using the model name, then sets the model.
-	 * If a model by the passed name can not be retrieved, an 
-	 * error is posted and the previously set model is kept as 
+	 * If a model by the passed name can not be retrieved, an
+	 * error is posted and the previously set model is kept as
 	 * the active model.
-	 * 
+	 *
 	 * @param modelName
 	 */
 	public abstract void setProbabilityModel(String modelName, boolean reload)
 		throws OperationFailedException;
 	/**
 	 * Sets the probability model.  Nulls out the source list and calls
-	 * resetEvaluationStatistics on the trainingPanel so that the proper clue 
+	 * resetEvaluationStatistics on the trainingPanel so that the proper clue
 	 * set is displayed.  Sends a modelChanged message to any listeners.
-	 * 
+	 *
 	 * @param pm     A reference to a PMManager.
 	 */
 	public abstract void setProbabilityModel(ImmutableProbabilityModel pm);
 	/**
-	 * 
+	 *
 	 * @return A reference to the active PMManager.
 	 */
 	public abstract ImmutableProbabilityModel getProbabilityModel();
@@ -98,7 +98,7 @@ public abstract class AbstractApplication extends JFrame
 		throws OperationFailedException;
 	/**
 	 * Saves the probability model to disk.
-	 * 
+	 *
 	 * @param pm
 	 */
 	public abstract void saveProbabilityModel(ImmutableProbabilityModel pm)
@@ -139,8 +139,8 @@ public abstract class AbstractApplication extends JFrame
 	public abstract java.util.List getSourceList();
 	/**
 	 * Returns true if we have a non-null source list.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 */
 	public abstract boolean haveSourceList();
 	public abstract boolean isSourceDataModified();
@@ -177,7 +177,7 @@ public abstract class AbstractApplication extends JFrame
 	public abstract void postClue(String clueText);
 	public abstract void postClueText(int clueId);
 	/**
-	 * Starts the training.  When training is done, updates 
+	 * Starts the training.  When training is done, updates
 	 * the ProbabilityModelChangeListeners and TrainerChangeListeners
 	 * so that they can update their data.
 	 */
@@ -198,7 +198,7 @@ public abstract class AbstractApplication extends JFrame
 	 * attached to the clue table in the TestingPanel.  It allows
 	 * one to step through the MRPs associated with a given
 	 * clue.
-	 * 
+	 *
 	 * @param clueID
 	 * @param fireType
 	 */
@@ -206,15 +206,15 @@ public abstract class AbstractApplication extends JFrame
 	public abstract void displayRecordPairFilterDialog();
 	public abstract void filterMarkedRecordPairList();
 	public abstract int[] getSelection();
-	public abstract MarkedRecordPairFilter getFilter();
-	public abstract void setFilter(MarkedRecordPairFilter filter);
+	public abstract ListeningMarkedRecordPairFilter getFilter();
+	public abstract void setFilter(ListeningMarkedRecordPairFilter filter);
 	//************************ Data Methods
 	public abstract void dataModified();
 	//*************************
 	public abstract void reviewNextMarkedRecordPair();
 	/**
 	 * Since the DefaultPairReviewPanel and the DefaultTestingControlPanel do
-	 * not communicate directly, this method allows one to click 
+	 * not communicate directly, this method allows one to click
 	 * a button on the review Panel to select the previous MRP to
 	 * be displayed from the list shown on the testing panel.
 	 */

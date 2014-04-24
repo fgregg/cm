@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -45,6 +45,9 @@ import javax.swing.event.EventListenerList;
 import org.apache.log4j.Logger;
 import org.eclipse.core.boot.IPlatformRunnable;
 
+import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
+import com.choicemaker.cm.analyzer.filter.FilterCondition;
+import com.choicemaker.cm.analyzer.filter.RuleFilterCondition;
 import com.choicemaker.cm.compiler.gen.ant.CallAnt;
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.ClueDesc;
@@ -78,10 +81,8 @@ import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.AboutDialog;
 import com.choicemaker.cm.gui.utils.plaf.ChoiceMakerMetalTheme;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
-import com.choicemaker.cm.modelmaker.filter.BooleanFilterCondition;
-import com.choicemaker.cm.modelmaker.filter.FilterCondition;
-import com.choicemaker.cm.modelmaker.filter.MarkedRecordPairFilter;
-import com.choicemaker.cm.modelmaker.filter.RuleFilterCondition;
+import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ModelMakerMRPFilter;
 import com.choicemaker.cm.modelmaker.gui.abstraction.PreferenceDefaults;
 import com.choicemaker.cm.modelmaker.gui.abstraction.PreferenceKeys;
 import com.choicemaker.cm.modelmaker.gui.dialogs.RecordPairFilterDialog;
@@ -110,7 +111,7 @@ import com.choicemaker.cm.module.swing.DefaultModuleMenu;
 
 /**
  *
- * @author Martin Buechi 
+ * @author Martin Buechi
  * @author S. Yoakum-Stover
  * @version $Revision: 1.3 $ $Date: 2010/03/29 12:38:18 $
  */
@@ -122,9 +123,9 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	//XmlConf file name
 	private static String xmlConfFileName;
-	
+
 	// Delegates
-	final private IUserMessages userMessages = 
+	final private IUserMessages userMessages =
 	new IUserMessages() {
 			public Writer getWriter() {
 				return ModelMaker.this.getMessagePanel().getWriter();
@@ -158,7 +159,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	private JPanel myContentPanel;
 
 	//RecordPairFilterDialog
-	private MarkedRecordPairFilter filter;
+	private ListeningMarkedRecordPairFilter filter;
 
 	//Menus
 	private JMenuBar myMenuBar;
@@ -281,7 +282,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		//Create the content panel
 		myContentPanel = new JPanel();
 		getContentPane().add(myContentPanel, BorderLayout.CENTER);
-		filter = new MarkedRecordPairFilter(this);
+		filter = new ModelMakerMRPFilter(this);
 
 		float _dt = getPreferences().getFloat(PreferenceKeys.DIFFER_THRESHOLD,PreferenceDefaults.DIFFER_THRESHOLD);
 		float _mt = getPreferences().getFloat(PreferenceKeys.MATCH_THRESHOLD,PreferenceDefaults.MATCH_THRESHOLD);
@@ -294,7 +295,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	 */
 	private void buildComponents() {
 		JavaHelpUtils.init(ModelMaker.class.getClassLoader());
-		
+
 		// Toolbar
 		toolbar = new ToolBar(this, MessageUtil.m.formatMessage("train.gui.modelmaker.modelmaker"));
 		getContentPane().add(toolbar, BorderLayout.NORTH);
@@ -302,23 +303,23 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		// Menus
 		myMenuBar = new JMenuBar();
 		setJMenuBar(myMenuBar);
-		
+
 		JMenu fileMenu = new JMenu(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.file"));
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		myMenuBar.add(fileMenu);
 		exitItem = new JMenuItem(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.file.exit"));
 		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
 		fileMenu.add(exitItem);
-		
+
 		modelMenu = new ModelMenu(this);
 		myMenuBar.add(modelMenu);
-		
+
 		sourceMenu = new SourceMenu(this);
 		myMenuBar.add(sourceMenu);
-		
+
 		viewMenu = new ViewMenu(this);
 		myMenuBar.add(viewMenu);
-				
+
 		//MessagePanel
 		messagePanel = new MessagePanel(this);
 		log4jAppender = new Log4jAppender(this, messagePanel.getWriter());
@@ -335,8 +336,8 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 		//ReviewPanel
 		reviewPanel = new HumanReviewPanel(this);
-		
-		//TabbedPane 
+
+		//TabbedPane
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.training.tabtext"), trainingPanel);
 		tabbedPane.addTab(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.tabtext"), testingPanel);
@@ -359,13 +360,13 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		recordPairList = new RecordPairList(this);
 		myContentPanel.add(recordPairList, BorderLayout.EAST);
 		toolbar.addThresholds();
-		
+
 		// Other modules, Tools and help menus
 		DefaultModuleMenu dmm = new DefaultModuleMenu(modulePanel.getModule(),this);
 		dmm.setEnabled(false);
 		myMenuBar.add(dmm);
 		myMenuBar.add(new ToolsMenu(this));
-		
+
 		JMenu helpMenu = new JMenu(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.help"));
 		myMenuBar.add(helpMenu);
 		JMenuItem contentsItem = new JMenuItem("Contents");
@@ -373,7 +374,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		helpMenu.add(contentsItem);
 		aboutItem = new JMenuItem(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.help.about"));
 		helpMenu.add(aboutItem);
-	
+
 		JavaHelpUtils.enableHelpKey(this, "train.gui.modelmaker");
 	}
 
@@ -408,8 +409,8 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	}
 
 	/**
-	 * The usual stuff that a JFrame needs in order to be 
-	 * displayed.  
+	 * The usual stuff that a JFrame needs in order to be
+	 * displayed.
 	 */
 	private void display() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -437,7 +438,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		}
 		myContentPanel.validate();
 	}
-	
+
 	public void showStatusMessages(boolean b) {
 		if (b) {
 			splitPane.setBottomComponent(messagePanel);
@@ -455,9 +456,9 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	}
 
 	/**
-	 * Accessor used by the HumanReviewPanel in order to call 
+	 * Accessor used by the HumanReviewPanel in order to call
 	 * methods on the testingPanel.
-	 * 
+	 *
 	 * @return reference to the TestingControlPanel.
 	 */
 	public TestingControlPanel getTestingControlPanel() {
@@ -483,7 +484,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	public DefaultManagedPanel getModulePanel() {
 		return modulePanel;
 	}
-	
+
 	public void showClusterPanel() {
 		tabbedPane.setSelectedComponent(modulePanel);
 	}
@@ -568,10 +569,10 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	/**
 	 * Gets the model using the model name, then sets the model.
-	 * If a model by the passed name can not be retrieved, an 
-	 * error is posted and the previously set model is kept as 
+	 * If a model by the passed name can not be retrieved, an
+	 * error is posted and the previously set model is kept as
 	 * the active model.
-	 * 
+	 *
 	 * @param modelName
 	 */
 	public void setProbabilityModel(String modelName, boolean reload) throws OperationFailedException {
@@ -602,9 +603,9 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	/**
 	 * Sets the probability model.  Nulls out the source list and calls
-	 * resetEvaluationStatistics on the trainingPanel so that the proper clue 
+	 * resetEvaluationStatistics on the trainingPanel so that the proper clue
 	 * set is displayed.  Sends a modelChanged message to any listeners.
-	 * 
+	 *
 	 * @param pm     A reference to a PMManager.
 	 */
 	public void setProbabilityModel(IProbabilityModel pm) {
@@ -630,7 +631,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return A reference to the active PMManager.
 	 */
 	public IProbabilityModel getProbabilityModel() {
@@ -669,7 +670,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			if(ml != null && !(ml instanceof None)) {
 				postInfo(
 					MessageUtil.m.formatMessage(
-						"train.gui.modelmaker.model.last.train.ml", 
+						"train.gui.modelmaker.model.last.train.ml",
 						MlGuiFactories.getGui(probabilityModel.getMachineLearner())));
 				String modelInfo = ml.getModelInfo();
 				if(modelInfo != null) {
@@ -704,7 +705,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	/**
 	 * Saves the probability model to disk.
-	 * 
+	 *
 	 * @param pm
 	 */
 	public void saveProbabilityModel(IProbabilityModel pm) throws OperationFailedException {
@@ -878,10 +879,10 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	}
 
 	/**
-	 * Sets the MRP source.  Nulls out the source list and 
-	 * resets the panels that contain data that needs to be 
+	 * Sets the MRP source.  Nulls out the source list and
+	 * resets the panels that contain data that needs to be
 	 * recomputed whenever the source changes.
-	 * 
+	 *
 	 * @param s      A reference to a MarkedRecordPairSource.
 	 */
 	private void setMarkedRecordPairSource(MarkedRecordPairSource s) {
@@ -937,7 +938,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	/**
 	 * Uses the MarkedRecordPairBinder to load the source into an
-	 * in-memory collection.  This method is called prior to 
+	 * in-memory collection.  This method is called prior to
 	 * training, or prior to saving a source to disk.
 	 */
 	private void loadSourceList() throws OperationFailedException {
@@ -967,8 +968,8 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	/**
 	 * Returns true if we have a non-null source list.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 */
 	public boolean haveSourceList() {
 		return (sourceList != null);
@@ -981,44 +982,44 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	public void setChecked(int mrpIndex, boolean checked) {
 		if (checkedList != null) {
 			if (checked) {
-				checkedList.add(mrpIndex);			
+				checkedList.add(mrpIndex);
 			} else {
 				checkedList.remove(checkedList.indexOf(mrpIndex));
 			}
 		}
 	}
-	
+
 	public void uncheckAll() {
 		IntArrayList old = checkedList;
 		checkedList = new IntArrayList();
 		firePropertyChange(ModelMakerEventNames.CHECKED_INDICES, old, checkedList);
 	}
-	
+
 	public void checkAll() {
 		IntArrayList old = checkedList;
-		
+
 		int size = sourceList.size();
 		IntArrayList newChecked = new IntArrayList(size);
 		for (int i = 0; i < size; i++) {
 			newChecked.add(i);
 		}
-		
+
 		checkedList = newChecked;
 		firePropertyChange(ModelMakerEventNames.CHECKED_INDICES, old, checkedList);
 	}
-	
+
 	public int[] getCheckedIndices() {
 		if (checkedList == null) {
-			return new int[0];	
+			return new int[0];
 		} else {
-			return checkedList.toArray();	
+			return checkedList.toArray();
 		}
 	}
-	
+
 	public void sortChecked() {
 		checkedList.sort();
 	}
-	
+
 	public IntArrayList getChecked() {
 		return checkedList;
 	}
@@ -1044,7 +1045,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	//************************************************************************************************
 
 	/**
-	 * Sets the cluesToEvaluate elements all to true in 
+	 * Sets the cluesToEvaluate elements all to true in
 	 * probabilityModel.
 	 */
 	public void setAllCluesOrRules(int what, boolean value) {
@@ -1141,7 +1142,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	}
 
 	/**
-	 * Starts the training.  When training is done, updates 
+	 * Starts the training.  When training is done, updates
 	 * the ProbabilityModelChangeListeners and TrainerChangeListeners
 	 * so that they can update their data.
 	 */
@@ -1174,7 +1175,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		probabilityModel.setEnableAllRulesBeforeTraining(enableAllRules);
 		setAllCluesOrRules((enableAllClues ? ModelMaker.CLUES : 0) + (enableAllRules ? ModelMaker.RULES : 0), true);
 		probabilityModel.setFiringThreshold(firingThreshold);
-		
+
 		final Thread t = new Thread() {
 			public void run() {
 				try {
@@ -1237,7 +1238,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	public Statistics getStatistics() {
 		return statistics;
 	}
-	
+
 	public Repository getRepository() {
 		return repository;
 	}
@@ -1264,7 +1265,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	 * attached to the clue table in the TestingPanel.  It allows
 	 * one to step through the MRPs associated with a given
 	 * clue.
-	 * 
+	 *
 	 * @param clueID
 	 * @param fireType
 	 */
@@ -1282,7 +1283,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			//			filter.setActiveClues(new int[] { clueID });
 			filter.setConditions(
 				new BooleanFilterCondition[] { new BooleanFilterCondition(clueID, BooleanFilterCondition.ACTIVE)});
-			//                                            this argument represents an ActiveClue -----^ 
+			//                                            this argument represents an ActiveClue -----^
 			if (fireType != ClueTableModel.COL_TOTAL_FIRES) {
 				Decision d = cd.decision;
 				boolean[] b;
@@ -1313,22 +1314,22 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		return selection;
 	}
 
-	public MarkedRecordPairFilter getFilter() {
-		return filter;	
+	public ListeningMarkedRecordPairFilter getFilter() {
+		return filter;
 	}
-	
-	public void setFilter(MarkedRecordPairFilter filter) {
+
+	public void setFilter(ListeningMarkedRecordPairFilter filter) {
 		this.filter = filter;
-		filterMarkedRecordPairList();	
+		filterMarkedRecordPairList();
 	}
 
 	//************************ Data Methods
 
 	/**
-	 * Method called from the HumanReviewPanel when a record's 
+	 * Method called from the HumanReviewPanel when a record's
 	 * data have been modified by hand.  This method recomputes
 	 * the probability on the modified record pair.
-	 * 
+	 *
 	 * @param index Index of the MRP in the source list.
 	 */
 	public void dataModified() {
@@ -1343,7 +1344,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	/**
 	 * Since the HumanReviewPanel and the TestingControlPanel do
-	 * not communicate directly, this method allows one to click 
+	 * not communicate directly, this method allows one to click
 	 * a button on the review Panel to select the next MRP to
 	 * be displayed from the list shown on the testing panel.
 	 */
@@ -1353,7 +1354,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	/**
 	 * Since the HumanReviewPanel and the TestingControlPanel do
-	 * not communicate directly, this method allows one to click 
+	 * not communicate directly, this method allows one to click
 	 * a button on the review Panel to select the previous MRP to
 	 * be displayed from the list shown on the testing panel.
 	 */
@@ -1490,10 +1491,10 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			synchronized(o) {
 				o.wait();
 			}
-		}		
+		}
 		//return new Integer(0);
 	}
-	
+
 	public static void main(String[] args) throws IOException {
 		//defineFrameLookAndFeel();
 		processLicenseFile();

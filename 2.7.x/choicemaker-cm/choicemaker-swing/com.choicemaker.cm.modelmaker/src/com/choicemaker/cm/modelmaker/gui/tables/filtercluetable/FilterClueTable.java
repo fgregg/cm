@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -27,16 +27,16 @@ import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
 
+import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.modelmaker.filter.FilterCondition;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.ClueNameCellListener;
 import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
 
 /**
- * The clueTable in the AbstractModelReviewPanel.  
- * 
+ * The clueTable in the AbstractModelReviewPanel.
+ *
  * @author S. Yoakum-Stover
  * @author Arturo Falck
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:53:36 $
@@ -115,15 +115,15 @@ public class FilterClueTable extends JTable{
 		addMouseListener(new ClueNameCellListener(meTrainer, this));
 
 	}
-	
+
 	protected TableCellEditor createConditionEditor(){
 		return new FilterConditionCellEditor();
 	}
-	
+
 	protected TableCellEditor createParameterEditor(){
 		return new IntFilterParamsCellEditor();
 	}
-	
+
 	protected TableCellRenderer createParameterRenderer(){
 		return new IntFilterParamsCellRenderer();
 	}
@@ -158,14 +158,14 @@ public class FilterClueTable extends JTable{
 	public void select(FilterCondition[] filterCondition) {
 		myModel.select(filterCondition);
 	}
-	
+
 	public FilterCondition[] getFilterConditions(){
 		return myModel.getFilterConditions();
 	}
 
 	/**
 	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
-	 * 
+	 *
 	 * Overridden to provide automatic editing of the COL_PARAMETERS functionality when a COL_CONDITION is edited.
 	 */
 	public void tableChanged(TableModelEvent e) {
@@ -182,7 +182,7 @@ public class FilterClueTable extends JTable{
 	 */
 	public void editingStopped(ChangeEvent e) {
 		super.editingStopped(e);
-		
+
 		if (colConditionChanged != NONE){
 			editCellAt(colConditionChanged, getColumnModel().getColumnIndex(getModel().getColumnName(FilterClueTableModel.COL_PARAMETERS)));
 			colConditionChanged = NONE;

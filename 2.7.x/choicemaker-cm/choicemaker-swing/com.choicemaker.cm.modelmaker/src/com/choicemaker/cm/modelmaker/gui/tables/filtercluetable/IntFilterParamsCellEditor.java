@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -24,8 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+import com.choicemaker.cm.analyzer.filter.IntFilterCondition;
 import com.choicemaker.cm.gui.utils.swing.IntegerField;
-import com.choicemaker.cm.modelmaker.filter.IntFilterCondition;
 
 /**
  * .
@@ -98,7 +98,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 
 		return returnValue;
 	}
-	
+
 	protected IntFilterCondition validateSingleInput() {
 		IntFilterCondition returnValue;
 		// _ -> -
@@ -111,7 +111,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 		}
 		return returnValue;
 	}
-	
+
 	protected IntFilterCondition validateBetweenInput() {
 		IntFilterCondition returnValue;
 		// [_ ... _] -> -
@@ -140,7 +140,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 		}
 		return returnValue;
 	}
-	
+
 	protected IntFilterCondition validateOutsideInput() {
 		IntFilterCondition returnValue;
 		// )_ ... _( -> -
@@ -230,7 +230,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 			this.editor = editor;
 			firstField = new IntegerField(columns);
 			secondField = new IntegerField(columns);
-			
+
 			firstField.addFocusListener(this);
 			secondField.addFocusListener(this);
 
@@ -242,7 +242,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 			GridBagConstraints c2 = new GridBagConstraints();
 			c2.fill = GridBagConstraints.NONE;
 			c2.weightx = 1.0;
-			c2.gridwidth = GridBagConstraints.REMAINDER; //end 
+			c2.gridwidth = GridBagConstraints.REMAINDER; //end
 
 			setLayout(gridbag);
 

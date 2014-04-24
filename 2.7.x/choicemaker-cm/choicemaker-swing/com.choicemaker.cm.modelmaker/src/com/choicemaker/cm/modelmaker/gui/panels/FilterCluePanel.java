@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -32,7 +32,7 @@ import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableThresholds;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.modelmaker.filter.MarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.RecordPairFilterDialog;
 import com.choicemaker.cm.modelmaker.gui.tables.filtercluetable.FilterClueTable;
@@ -49,7 +49,7 @@ public class FilterCluePanel extends JPanel {
 	private static final DecimalFormat DF = new DecimalFormat("##0.00");
 
 	private ModelMaker parent;
-	private MarkedRecordPairFilter filter;
+	private ListeningMarkedRecordPairFilter filter;
 	private FilterClueTable clueTable;
 	private JScrollPane clueTableScrollPane;
 	private JLabel differLabel;
@@ -72,13 +72,13 @@ public class FilterCluePanel extends JPanel {
 	private final float default_probabilityLowerBound = ImmutableThresholds.MIN_VALUE;
 	private final float default_probabilityUpperBound = ImmutableThresholds.MAX_VALUE;
 
-	public FilterCluePanel(ModelMaker parent, MarkedRecordPairFilter filter) {
+	public FilterCluePanel(ModelMaker parent, ListeningMarkedRecordPairFilter filter) {
 		this(parent, filter, true);
 	}
 
 	public FilterCluePanel(
 		ModelMaker parent,
-		MarkedRecordPairFilter filter,
+		ListeningMarkedRecordPairFilter filter,
 		boolean includeHumanDecision) {
 		super();
 		if (parent == null) {
@@ -306,7 +306,7 @@ public class FilterCluePanel extends JPanel {
 	 * Returns the filter.
 	 * @return MarkedRecordPairFilter
 	 */
-	public MarkedRecordPairFilter getFilter() {
+	public ListeningMarkedRecordPairFilter getFilter() {
 		return filter;
 	}
 

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -16,9 +16,9 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
-import com.choicemaker.cm.modelmaker.filter.BooleanFilterCondition;
-import com.choicemaker.cm.modelmaker.filter.IntFilterCondition;
-import com.choicemaker.cm.modelmaker.filter.RuleFilterCondition;
+import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
+import com.choicemaker.cm.analyzer.filter.IntFilterCondition;
+import com.choicemaker.cm.analyzer.filter.RuleFilterCondition;
 
 /**
  * .
@@ -34,7 +34,7 @@ public class FilterConditionCellEditor extends DefaultCellEditor {
 		{
 			new BooleanFilterCondition(BooleanFilterCondition.NULL_CONDITION),
 		};
-	
+
 	/**
 	 * Even though not technically a constant, this variable is used as a constant.
 	 */
@@ -44,15 +44,15 @@ public class FilterConditionCellEditor extends DefaultCellEditor {
 			new BooleanFilterCondition(BooleanFilterCondition.ACTIVE_CONDITION),
 			new BooleanFilterCondition(BooleanFilterCondition.INACTIVE_CONDITION),
 		};
-		
+
 	private static Object[] VALUES_RULE =
 		{
 			new RuleFilterCondition(RuleFilterCondition.NULL_CONDITION),
 			new RuleFilterCondition(RuleFilterCondition.ACTIVE_CONDITION),
 			new RuleFilterCondition(RuleFilterCondition.INACTIVE_CONDITION),
 		};
-	
-		
+
+
 	/**
 	 * Even though not technically a constant, this variable is used as a constant
 	 * (initialized in static{}).
@@ -66,20 +66,20 @@ public class FilterConditionCellEditor extends DefaultCellEditor {
 		populateBoolean();
 		populateInt();
 	}
-	
+
 	private static void populateBoolean(){
 		// NOTE: already done in initializer.
 	}
-	
+
 	private static void populateInt(){
 		VALUES_INT = new Object[IntFilterCondition.MAX - IntFilterCondition.MIN + 1];
 		for (int i = 0; i < VALUES_INT.length; i++) {
-			VALUES_INT[i] = new IntFilterCondition(i); 
+			VALUES_INT[i] = new IntFilterCondition(i);
 		}
 	}
 
 	//***************************** Fields
-	
+
 	private JComboBox options;
 
 
@@ -88,7 +88,7 @@ public class FilterConditionCellEditor extends DefaultCellEditor {
 	public FilterConditionCellEditor() {
 		this(new JComboBox(VALUES_DEFAULT));
 	}
-	
+
 	protected FilterConditionCellEditor(JComboBox options) {
 		super(options);
 		this.options = options;
@@ -101,7 +101,7 @@ public class FilterConditionCellEditor extends DefaultCellEditor {
 		resetItems(value);
 		return super.getTableCellEditorComponent(table, value, isSelected, row, column);
 	}
-	
+
 	/**
 	 * Changes the Options to match the type of the current value.
 	 */
@@ -115,7 +115,7 @@ public class FilterConditionCellEditor extends DefaultCellEditor {
 		} else if (value instanceof RuleFilterCondition) {
 			items = VALUES_RULE;
 		}
-		
+
 		for (int i = 0; i < items.length; i++) {
 			options.addItem(items[i]);
 		}

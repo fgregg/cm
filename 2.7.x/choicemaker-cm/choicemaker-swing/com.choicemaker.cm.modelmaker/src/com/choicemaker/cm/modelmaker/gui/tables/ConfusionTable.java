@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -28,13 +28,13 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.gui.utils.viewer.HeaderRenderer;
-import com.choicemaker.cm.modelmaker.filter.MarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.panels.TestingControlPanel;
 import com.choicemaker.cm.modelmaker.gui.renderers.ColorTableErrorCellRenderer;
 
 /**
- * The TableModel for the confusion matrix in the DefaultTestingControlPanel.  
- * 
+ * The TableModel for the confusion matrix in the DefaultTestingControlPanel.
+ *
  * @author S. Yoakum-Stover
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:42:04 $
  */
@@ -89,7 +89,7 @@ public class ConfusionTable extends JTable {
 				if ((row < 0) || (col < 1) || (row > 3) || (col > 4)) {
 					return;
 				}
-				MarkedRecordPairFilter filter = parent.getModelMaker().getFilter();
+				ListeningMarkedRecordPairFilter filter = parent.getModelMaker().getFilter();
 				filter.reset();
 				if (row < 3) {
 					boolean[] b = new boolean[Decision.NUM_DECISIONS];

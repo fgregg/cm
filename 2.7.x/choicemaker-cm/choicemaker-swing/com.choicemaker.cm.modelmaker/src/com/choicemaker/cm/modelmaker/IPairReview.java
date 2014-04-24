@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 package com.choicemaker.cm.modelmaker;
 
-import com.choicemaker.cm.modelmaker.filter.MarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 
 /**
  * @author rphall
@@ -27,7 +27,7 @@ public interface IPairReview {
 	 * attached to the clue table in the TestingPanel.  It allows
 	 * one to step through the MRPs associated with a given
 	 * clue.
-	 * 
+	 *
 	 * @param clueID
 	 * @param fireType
 	 */
@@ -39,8 +39,8 @@ public interface IPairReview {
 
 	public int[] getSelection();
 
-	public MarkedRecordPairFilter getFilter();
+	public ListeningMarkedRecordPairFilter getFilter();
 
-	public void setFilter(MarkedRecordPairFilter filter);
+	public void setFilter(ListeningMarkedRecordPairFilter filter);
 
 }

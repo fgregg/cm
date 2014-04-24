@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -31,7 +31,7 @@ import javax.swing.event.DocumentListener;
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MutableMarkedRecordPair;
-import com.choicemaker.cm.modelmaker.filter.CollectionMarkedRecordPairFilter;
+import com.choicemaker.cm.modelmaker.filter.ModelMakerCollectionMRPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
 /**
@@ -39,18 +39,18 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  *
  */
 public class SearchByIdDialog extends JDialog {
-	
+
 	private static SearchByIdDialog dialog;
-	
+
 	public synchronized static void showSearchByIdDialog(ModelMaker mm) {
 		if (dialog == null) {
 			dialog = new SearchByIdDialog(mm);
 		}
 		dialog.show();
 	}
-	
+
 	protected ModelMaker modelMaker;
-	
+
 	private JTextField idField;
 
 	private JRadioButton exactMatch;
@@ -58,7 +58,7 @@ public class SearchByIdDialog extends JDialog {
 	private JRadioButton sourceOnly;
 	private JRadioButton targetOnly;
 	private JRadioButton both;
-	
+
 	public SearchByIdDialog(ModelMaker modelMaker) {
 		super(modelMaker, "Search by ID", false);
 		this.modelMaker = modelMaker;
@@ -73,12 +73,12 @@ public class SearchByIdDialog extends JDialog {
 		layout.columnWeights = new double[] {0, 0, 1, 0};
 		layout.rowWeights = new double[] {1, 1, 1, 1, 1};
 		getContentPane().setLayout(layout);
-		
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(3, 5, 3, 5);
 
 		// new row
-		
+
 		c.gridy = 0;
 		c.gridx = 0;
 		getContentPane().add(new JLabel("Record ID: "), c);
@@ -88,11 +88,11 @@ public class SearchByIdDialog extends JDialog {
 		idField = new JTextField(20);
 		getContentPane().add(idField, c);
 		c.gridwidth = 1;
-	
+
 		// new row
-		
+
 		ButtonGroup bg = new ButtonGroup();
-		
+
 		exactMatch = new JRadioButton("Exact match");
 		partialMatch = new JRadioButton("Partial match");
 		bg.add(exactMatch);
@@ -105,14 +105,14 @@ public class SearchByIdDialog extends JDialog {
 		JPanel exactPanel = new JPanel();
 		getContentPane().add(exactPanel, c);
 		c.gridwidth = 1;
-		
+
 		exactPanel.add(exactMatch);
 		exactPanel.add(partialMatch);
-		
+
 		// new row
-		
+
 		bg = new ButtonGroup();
-		
+
 		sourceOnly = new JRadioButton("Q only");
 		targetOnly = new JRadioButton("M only");
 		both = new JRadioButton("Either");
@@ -127,25 +127,25 @@ public class SearchByIdDialog extends JDialog {
 		JPanel whichPanel = new JPanel();
 		getContentPane().add(whichPanel, c);
 		c.gridwidth = 1;
-		
+
 		whichPanel.add(sourceOnly);
 		whichPanel.add(targetOnly);
 		whichPanel.add(both);
-		
+
 		// new row
-		
+
 		c.gridy++;
 		c.gridx = 2;
 		c.anchor = GridBagConstraints.EAST;
 		JButton dedup = new JButton(new SearchByIdAction());
 		getContentPane().add(dedup, c);
 		c.anchor = GridBagConstraints.CENTER;
-		
+
 		c.gridx = 3;
 		JButton cancel = new JButton(new CancelAction());
 		getContentPane().add(cancel, c);
 	}
-		
+
 	private void searchById() {
 		try {
 			ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
@@ -155,12 +155,12 @@ public class SearchByIdDialog extends JDialog {
 			if (id == null) {
 				return;
 			}
-						
+
 			List recordPairs = modelMaker.getSourceList();
 			if (recordPairs == null) {
 				return;
 			}
-			
+
 			boolean isExactMatch = exactMatch.isSelected();
 
 			int mask = 0;
@@ -180,17 +180,17 @@ public class SearchByIdDialog extends JDialog {
 					resultSet.add(mrp);
 				}
 			}
-			
-			modelMaker.setFilter(new CollectionMarkedRecordPairFilter(modelMaker, resultSet));
-			
+
+			modelMaker.setFilter(new ModelMakerCollectionMRPairFilter(modelMaker, resultSet));
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	private boolean isMatch(String id, Comparable recordId,boolean isExactMatch) {
-		
-		boolean retVal = false;		
+
+		boolean retVal = false;
 		if (id != null && recordId != null) {
 			String sid = id.trim();
 			String sval = recordId.toString().trim();
@@ -202,7 +202,7 @@ public class SearchByIdDialog extends JDialog {
 		}
 		return retVal;
 	}
-	
+
 	private class SearchByIdAction extends AbstractAction implements DocumentListener {
 		public SearchByIdAction() {
 			super("Search");
@@ -220,15 +220,15 @@ public class SearchByIdDialog extends JDialog {
 		public void insertUpdate(DocumentEvent e) { updateEnabled(); }
 		public void removeUpdate(DocumentEvent e) { updateEnabled(); }
 	}
-	
+
 	private class CancelAction extends AbstractAction {
 		public CancelAction() {
-			super("Close");	
+			super("Close");
 		}
 		public void actionPerformed(ActionEvent e) {
 			dispose();
 		}
 	}
-	
-	
+
+
 }

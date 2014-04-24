@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -18,18 +18,18 @@ import javax.swing.event.TableModelEvent;
 
 import org.apache.log4j.Logger;
 
+import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.modelmaker.filter.FilterCondition;
 import com.choicemaker.cm.modelmaker.gui.tables.SortableTableModel;
 import com.choicemaker.cm.modelmaker.gui.utils.ClueDataComparator;
 
 /**
- * The TableModel for the ClueTable in the AbstractModelReviewPanel.  
- * 
+ * The TableModel for the ClueTable in the AbstractModelReviewPanel.
+ *
  * @author S. Yoakum-Stover
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:53:36 $
  */
@@ -169,9 +169,9 @@ public class FilterClueTableModel extends SortableTableModel {
 
 	/**
 	 * Returns the value for the cell at <code>columnIndex</code> and
-	 * <code>rowIndex</code>. This method behaves correctly even if 
+	 * <code>rowIndex</code>. This method behaves correctly even if
 	 * we don't have any data.
-	 * 
+	 *
 	 * @param rowIndex the row whose value is to be queried
 	 * @param columnIndex
 	 *                 the column whose value is to be queried
