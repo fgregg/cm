@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -153,7 +153,7 @@ public class EnterClues extends DefaultVisitor implements Tags {
 			// DEBUG ClassCastException (mid-refactoring)
 			Symbol _dbg_baseClass = unit.getBaseClass();
 			ClassSymbol _dbg_classSymbol = (ClassSymbol) _dbg_baseClass;
-			unit.setExistsBaseClass(unit.createExistsBaseClass((ClassSymbol) unit.getBaseClass()));
+			unit.setExistsBaseClass(unit.createExistsBaseClass((ClassSymbol) _dbg_classSymbol));
 			// END DEBUG
 			unit.setDoubleIndexBaseClass(unit.createDoubleIndexBaseClass((ClassSymbol) unit.getBaseClass()));
 			// create a symbol and enter the body in the scope

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -38,26 +38,27 @@ import com.choicemaker.cm.matching.gen.Sets;
  * @see       com.choicemaker.cm.matching.en.us.NameParser
  */
 public class XmlAddressParserInitializer implements XmlModuleInitializer {
-	
+
 	private static Logger logger = Logger.getLogger(XmlAddressParserInitializer.class);
-	
+
 	public final static XmlAddressParserInitializer instance = new XmlAddressParserInitializer();
 
 	private XmlAddressParserInitializer() { }
 
 	public void init(Element e) throws XmlConfException {
-		
+
 		try {
-			
+
 			Class[] argTypes = new Class[1];
 			Object[] args = new Object[1];
 
-			Element nameElement = e.getChild("name");
-			String name = null;
-			if (nameElement != null)
-				name = nameElement.getAttributeValue("value");
-			else
-				name = "DEFAULT";
+			// 2014-04-24 rphall: Commented out unused local variable.
+//			Element nameElement = e.getChild("name");
+//			String name = null;
+//			if (nameElement != null)
+//				name = nameElement.getAttributeValue("value");
+//			else
+//				name = "DEFAULT";
 
 			// Tokenizer(s)
 			List tokenizerElements = e.getChildren("tokenizer");
@@ -78,7 +79,7 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 
 				String suffixes = tokElement.getChildText("streetSuffixes");
 				if (suffixes != null) {
-					Collection suffs = Sets.getCollection(suffixes); 
+					Collection suffs = Sets.getCollection(suffixes);
 					if (suffs != null) {
 						t.setSplitSuffixes(suffs);
 					} else {
@@ -140,12 +141,12 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 			Element grammarElement = e.getChild("grammar");
 			//String grammarFile = grammarElement.getAttributeValue("file");
 			String grammarResource = grammarElement.getAttributeValue("resource");
-			InputStream grammarStream = NamedResources.getNamedResource(grammarResource);	
+			InputStream grammarStream = NamedResources.getNamedResource(grammarResource);
 			ContextFreeGrammar grammar =
 				//ProbabalisticContextFreeGrammar.readFromFile(grammarFile, factory);
 				ContextFreeGrammarXmlConf.readFromStream(grammarStream, factory);
 
-			// Standardizer			
+			// Standardizer
 			Element standardizerElement = e.getChild("standardizer");
 			String standardizerClassName = standardizerElement.getAttributeValue("class");
 			Class standardizerClass = Class.forName(standardizerClassName);
@@ -155,7 +156,10 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 			AddressStandardizer standardizer = (AddressStandardizer) constructor.newInstance(args);
 
 			// AddressParser automatically saves it as the default parser.
-			AddressParser parser = new AddressParser(tokenizers, grammar, standardizer);
+			// 2014-04-24 rphall: Commented out unused local variable.
+			// Any side effects?
+			/* AddressParser parser = */
+			new AddressParser(tokenizers, grammar, standardizer);
 
 		} catch (ClassNotFoundException ex) {
 			throw new XmlConfException("Cannot find class", ex);

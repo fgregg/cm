@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -14,7 +14,7 @@ package com.choicemaker.cm.compiler;
 /**
  * Types
  *
- * @author   Matthias Zenger   
+ * @author   Matthias Zenger
  * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:09:46 $
  */
 public class Type implements SemanticTags {
@@ -278,7 +278,7 @@ public class Type implements SemanticTags {
 			return true;
 		return this == that;
 	}
-	
+
 	public int hashCode() {
 		return tag;
 	}
@@ -365,7 +365,14 @@ public class Type implements SemanticTags {
 		if ((thiz == null) || (that == null))
 			return false;
 		search : for (int i = 0; i < thiz.length; i++) {
-			for (int j = 0; i < that.length; j++)
+			/*
+			2014-04-24 rphall: Unused local variable j -- BUG?
+			ORIGINAL CODE:
+			  for (int j = 0; i < that.length; j++)
+			REWRITE:
+			  for (int j = 0; j < that.length; j++)
+			*/
+			for (int j = 0; j < that.length; j++)
 				if (thiz[i].subtype(that[i]))
 					continue search;
 			return false;
@@ -425,7 +432,7 @@ public class Type implements SemanticTags {
 			return (that == Type.ERROR)
 				|| ((that instanceof Type) && (((Type) that).tag == CLASS) && (((Type) that).sym() == this.sym));
 		}
-		
+
 		public int hashCode() {
 			return sym.fullname().hashCode();
 		}
@@ -490,7 +497,7 @@ public class Type implements SemanticTags {
 					&& elemtype.equals(((Type) that).elemtype())
 					&& multiIndex == ((ArrayType) that).multiIndex);
 		}
-		
+
 		public int hashCode() {
 			return elemtype.hashCode();
 		}
@@ -569,7 +576,7 @@ public class Type implements SemanticTags {
 					&& incl(thrown, that.thrown())
 					&& incl(that.thrown(), thrown));
 		}
-		
+
 		public int hashCode() {
 			return restype.hashCode();
 		}
@@ -622,7 +629,7 @@ public class Type implements SemanticTags {
 			return (that == Type.ERROR)
 				|| ((that instanceof Type) && (((Type) that).tag == PACKAGE) && (((Type) that).sym() == this.sym));
 		}
-		
+
 		public int hashCode() {
 			return sym.fullname().hashCode();
 		}

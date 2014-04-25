@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -14,18 +14,18 @@ import com.choicemaker.cm.core.util.StringUtils;
 
 /**
  * Utilities for dealing with US Zip Codes.
- * 
+ *
  * @author   Adam Winkel
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:02 $
  */
 public final class ZipCode {
-	
+
 	private ZipCode() { }
-	
+
 	/**
 	 * Returns true if <code>zip</code> is a valid zip code.
 	 * This means it has either five or nine digits.
-	 * 
+	 *
 	 * @param zip the input zip code
 	 * @return true if zip is a valid zip code
 	 */
@@ -42,13 +42,13 @@ public final class ZipCode {
 	 * Returns the 5-digit zip code from the (possibly) non-standard
 	 * zip code <code>zip</code>.  If the 5-digit zip code cannot
 	 * be extracted, returns null.
-	 * 
+	 *
 	 * @param zip the input zip code
 	 * @return the 5-digit zip code from the input zip
 	 */
 	public static String get5DigitZip(String zip) {
 		String s = cleanZip(zip);
-		if (zip != null && zip.length() > 4) {
+		if (s != null && s.length() > 4) {
 			return zip.substring(0,5);
 		}
 		return null;
@@ -58,7 +58,7 @@ public final class ZipCode {
 	 * Returns the plus4 zip code extension from the input
 	 * or null if the input zip is invalid or doesn't have a
 	 * plus4 extension.
-	 * 
+	 *
 	 * @param zip the input zip code
 	 * @return the plus4 extension for <code>zip</code>
 	 */
@@ -69,12 +69,12 @@ public final class ZipCode {
 		}
 		return null;
 	}
-	
+
 	private static String cleanZip(String zip) {
 		if (zip != null) {
-			return StringUtils.removeNonDigits(zip);	
+			return StringUtils.removeNonDigits(zip);
 		} else {
-			return null;	
+			return null;
 		}
 	}
 
@@ -82,7 +82,7 @@ public final class ZipCode {
 	 * Returns the state code for the specified zip code, or null
 	 * if the input zip is invalid or a the zip doesn't correspond
 	 * to a state.
-	 * 
+	 *
 	 * @param zip the input zip code
 	 * @return the state code for the input zip
 	 */
@@ -90,7 +90,7 @@ public final class ZipCode {
 		if (zip == null || zip.length() == 0) {
 			return null;
 		}
-		
+
 		int z = -1;
 		try {
 			z = Integer.parseInt(zip);
@@ -98,13 +98,13 @@ public final class ZipCode {
 			System.err.println("Unable to get state code from zip: " + zip);
 			return null;
 		}
-		
+
 		for (int i = 0; i < LENGTH; i++) {
 			if (z >= MIN[i] && z <= MAX[i]) {
 				return STATES[i];
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -180,7 +180,7 @@ public final class ZipCode {
 		98001,
 		99501
 	};
-	
+
 	private static final int[] MAX = {
 		988,
 		2791,

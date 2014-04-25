@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
-import com.choicemaker.cm.core.Accessor;
+// import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Match;
@@ -69,7 +69,7 @@ import com.choicemaker.cm.server.ejb.impl.CountsUpdate;
 
 /**
  * This message bean performs single record matching on the staging record source.
- * 
+ *
  * @author pcheung
  *
  */
@@ -100,15 +100,15 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 //	log.debug("starting ejbCreate...");
 		try {
 			this.configuration = EJBConfiguration.getInstance();
-			
+
 		} catch (Exception e) {
 	  log.error(e.toString(),e);
 		}
 //	log.debug("...finished ejbCreate");
 	}
 
-	
-	
+
+
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
@@ -119,9 +119,9 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
-				
+
 				long t = System.currentTimeMillis();
-				
+
 				log.info ("Starting Sinlge Record Match with maxSingle = " + data.maxCountSingle);
 
 				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
@@ -130,16 +130,16 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 				//final file
 				IMatchRecord2Sink mSink = oabaConfig.getCompositeMatchSink(data.jobID);
-		
+
 				//run OABA on the staging data set.
 				handleStageBatch (data, oabaConfig, mSink, batchJob);
-				
+
 				log.info("Time in dedup stage " + (System.currentTimeMillis() - t));
 				t = System.currentTimeMillis();
-				
-				//run single record match between stage and master. 
+
+				//run single record match between stage and master.
 				handleSingleMatching (data, oabaConfig, mSink);
-				
+
 				log.info("Time in single matching " + (System.currentTimeMillis() - t));
 
 				batchJob.setDescription(mSink.getInfo());
@@ -159,21 +159,21 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 		return;
 	} // onMessage(Message)
-	
-	
+
+
 	/** This method performs batch matching on only the staging source.
-	 * 
+	 *
 	 * @param data
 	 */
-	private void handleStageBatch (StartData data, 
-		OABAConfiguration oabaConfig, 
+	private void handleStageBatch (StartData data,
+		OABAConfiguration oabaConfig,
 		IMatchRecord2Sink mSinkFinal, BatchJob batchJob) throws Exception {
-			
+
 		IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
-		
+
 		IStatus status = configuration.getStatusLog(data);
 
-		RecordIDTranslator2 translator = new RecordIDTranslator2 (oabaConfig.getTransIDFactory()); 
+		RecordIDTranslator2 translator = new RecordIDTranslator2 (oabaConfig.getTransIDFactory());
 
 		//OABA parameters
 		String temp = (String) stageModel.properties().get("maxBlockSize");
@@ -193,8 +193,8 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 
 		//create rec_id, val_id files
-		RecValService2 rvService = new RecValService2 (data.staging, null, 
-			stageModel, null, 
+		RecValService2 rvService = new RecValService2 (data.staging, null,
+			stageModel, null,
 			oabaConfig.getRecValFactory(), translator, status);
 		rvService.runService();
 		data.numBlockFields = rvService.getNumBlockingFields();
@@ -210,7 +210,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		IBlockSink osSpecial =  osFactory.getNextSink();
 
 		//Start blocking
-		OABABlockingService blockingService = new OABABlockingService (maxBlock, bGroup, 
+		OABABlockingService blockingService = new OABABlockingService (maxBlock, bGroup,
 			oabaConfig.getOversizedGroupFactory(),
 			osSpecial, null, oabaConfig.getRecValFactory(), data.numBlockFields,
 			data.validator, status, batchJob, minFields, maxOversized);
@@ -229,10 +229,10 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		//start oversized dedup
 		IBlockSource osSource = osFactory.getSource(osSpecial);
 		IBlockSink osDedup = osFactory.getNextSink();
-					
-		OversizedDedupService osDedupService = 
-			new OversizedDedupService (osSource, osDedup, 
-			oabaConfig.getOversizedTempFactory(), 
+
+		OversizedDedupService osDedupService =
+			new OversizedDedupService (osSource, osDedup,
+			oabaConfig.getOversizedTempFactory(),
 			status, batchJob);
 		osDedupService.runService();
 		log.info( "Done oversized dedup " + osDedupService.getTimeElapsed());
@@ -253,57 +253,57 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		ChunkService2 chunkService = new ChunkService2 (source, source2, data.staging, null,
 			stageModel, null, translator,
 			oabaConfig.getChunkIDFactory(),
-			oabaConfig.getStageDataFactory(), oabaConfig.getMasterDataFactory(), 
+			oabaConfig.getStageDataFactory(), oabaConfig.getMasterDataFactory(),
 			oabaConfig.getCGFactory(), maxChunk, status );
 
 		chunkService.runService();
 		log.info( "Number of chunks " + chunkService.getNumChunks());
 		log.info( "Done creating chunks " + chunkService.getTimeElapsed());
-					
+
 		translator.cleanUp();
-					
+
 		data.numChunks = chunkService.getNumChunks();
 
 		//match sink
 		IMatchRecord2SinkSourceFactory mFactory = oabaConfig.getMatchTempFactory();
 		IMatchRecord2Sink mSink = mFactory.getNextSink();
-					
+
 		//matcher is the code that does the matching.
 		BlockMatcher2 matcher = new BlockMatcher2 ();
 
-		MatchingService2 matchingService = new MatchingService2 (oabaConfig.getStageDataFactory(), 
-			oabaConfig.getMasterDataFactory(), oabaConfig.getCGFactory(), stageModel, null, 
-			mSink, matcher, data.low, 
+		MatchingService2 matchingService = new MatchingService2 (oabaConfig.getStageDataFactory(),
+			oabaConfig.getMasterDataFactory(), oabaConfig.getCGFactory(), stageModel, null,
+			mSink, matcher, data.low,
 			data.high, maxBlock, status);
 		matchingService.runService();
 		log.info( "Done matching " + matchingService.getTimeElapsed());
-		
+
 		//dedup match file
 		IMatchRecord2Source mSource = mFactory.getSource(mSink);
-					
+
 		MatchDedupService2 mDedupService = new MatchDedupService2 (mSource, mSinkFinal,
 			mFactory, maxMatch, status);
 		mDedupService.runService ();
 		log.info( "Done match dedup " + mDedupService.getTimeElapsed());
 	}
-	
-	
-	
+
+
+
 	/** This method takes one record at a time from the staging source and performs matching against
 	 * the master source.  It's basically like findMatches.
-	 * 
+	 *
 	 * @param data
 	 * @throws Exception
 	 */
-	private void handleSingleMatching (StartData data, 
+	private void handleSingleMatching (StartData data,
 		OABAConfiguration oabaConfig, IMatchRecord2Sink mSinkFinal) throws Exception {
-		
+
 		IProbabilityModel model = PMManager.getModelInstance(data.masterModelName);
 		if (model == null) {
 			log.error("Invalid probability accessProvider: " + data.masterModelName);
 			throw new BlockingException (data.masterModelName);
 		}
-		
+
 		// BUG 2009-08-21 rphall
 		// The following code can cause unnecessary recalculations of counts
 		// that are persistent in a database. For example, if CM Server is
@@ -326,12 +326,14 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		new CountsUpdate().cacheCounts(configuration.getDataSource());
 		// END FIXME
 		// END BUGFIX
-		
-		Accessor accessor = model.getAccessor();
+
+		// 2014-04-24 rphall: Commented out unused local variable
+		// Any side effects?
+//		Accessor accessor = model.getAccessor();
 
 		RecordDecisionMaker dm = new RecordDecisionMaker();
 		DatabaseAccessor databaseAccessor;
-		
+
 		IExtension dbaExt = Platform.getPluginRegistry().getExtension(DATABASE_ACCESSOR, (String) model.properties().get(DATABASE_ACCESSOR));
 		databaseAccessor = (DatabaseAccessor) dbaExt.getConfigurationElements()[0].createExecutableExtension("class");
 		databaseAccessor.setCondition("");
@@ -340,29 +342,30 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		RecordSource stage = data.staging;
 		stage.setModel(model);
 		stage.open();
-		
+
 		mSinkFinal.append();
-		
-		MatchCandidateFactory matchCandidateFactory = (MatchCandidateFactory) 
+
+		MatchCandidateFactory matchCandidateFactory = (MatchCandidateFactory)
 			Platform.getPluginRegistry()
 			.getExtension(MATCH_CANDIDATE, "com.choicemaker.cm.core.beanMatchCandidate")
 			.getConfigurationElements()[0]
 			.createExecutableExtension("class");
+		log.debug("MatchCandidateFactory class: " + matchCandidateFactory.getClass().getName());
 
 		while (stage.hasNext()) {
 			Record q = stage.getNext();
 
 			SortedSet s;
 			AutomatedBlocker rs = new Blocker2(databaseAccessor, model, q);
-			
+
 			log.debug (q.getId() + " " + rs + " " + model);
-			
+
 			s = dm.getMatches(q, rs, model, data.low, data.high);
 
 			Iterator iS = s.iterator();
 			while (iS.hasNext()) {
 				Match match = (Match) iS.next();
-				
+
 				char type = 'M';
 				if (match.probability < data.high) type = 'H';
 
@@ -372,30 +375,30 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 				MatchRecord2 mr2 = new MatchRecord2 (q.getId(), match.id, 'D', match.probability,
 					type,noteInfo);
 				// END BUG FIX?
-					
+
 				//now write match candidates to file.
 				mSinkFinal.writeMatch(mr2);
 			}
-			
+
 		}
-		
+
 		stage.close ();
 		mSinkFinal.close();
 
 		//mark as done
 		sendToUpdateStatus (data.jobID, 100);
 	}
-	
-	
+
+
 	private void writeToSink (MatchCandidate [] candidates, IMatchRecord2Sink sink) {
 //		MatchRecord2 match = new MatchRecord2 ();
 //		sink.writeMatch(match);
 	}
-	
-	
-	
+
+
+
 	/** This method sends a message to the UpdateStatus message bean.
-	 * 
+	 *
 	 * @param jobID
 	 * @param percentComplete
 	 * @throws NamingException
@@ -409,12 +412,12 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		data.percentComplete = percentComplete;
 
 		configuration.sendMessage(queue, data);
-	} 
-	
+	}
+
 
 	public void ejbRemove() {
 //		log.debug("ejbRemove()");
 	}
-	
+
 
 }

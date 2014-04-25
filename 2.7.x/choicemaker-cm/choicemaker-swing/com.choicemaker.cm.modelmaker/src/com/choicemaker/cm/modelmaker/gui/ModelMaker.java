@@ -54,7 +54,7 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
+//import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
@@ -1065,7 +1065,9 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	 * Resets the weights in the probability model all to 1.
 	 */
 	public void resetWeights() {
-		MachineLearner ml = probabilityModel.getMachineLearner();
+		// 2014-04-24 rphall: Commented out unused local variable.
+		// Any side effects?
+		/* MachineLearner ml = */ probabilityModel.getMachineLearner();
 //		if (ml instanceof MaximumEntropy) {
 //			((MaximumEntropy) ml).resetWeights();
 //		}
@@ -1336,7 +1338,10 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	 */
 	public void dataModified() {
 		int index = getMarkedRecordPair();
-		ImmutableMarkedRecordPair r = (ImmutableMarkedRecordPair) sourceList.get(index);
+		// 2014-04-24 rphall: Commented out unused local variable.
+		// Any side effects?
+//		ImmutableMarkedRecordPair r = (ImmutableMarkedRecordPair)
+				sourceList.get(index);
 	//	trainer.computeProbability(r, thresholds.getDifferThreshold(), thresholds.getMatchThreshold());
 		setMarkedRecordPair(index);
 		fireMarkedRecordPairDataChange(new RepositoryChangeEvent(this, null));

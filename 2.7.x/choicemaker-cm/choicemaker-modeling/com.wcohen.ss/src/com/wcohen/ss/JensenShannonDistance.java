@@ -12,7 +12,7 @@ abstract public class JensenShannonDistance extends AbstractTokenizedStringDista
 {
 	private static final long serialVersionUID = 1L;
 	// maps tokens to document frequency
-	private Map backgroundFrequency = new HashMap(); 
+	private Map backgroundFrequency = new HashMap();
 	// count number of tokens
 	int totalTokens = 0;
 	// to save space, allocate the small numbers only once in the backgroundFrequency map
@@ -22,19 +22,21 @@ abstract public class JensenShannonDistance extends AbstractTokenizedStringDista
 
 	public JensenShannonDistance(Tokenizer tokenizer) { super(tokenizer); }
 	public JensenShannonDistance() { super(); }
-	
+
 	/** Accumulate statistics on how often each token occurs. */
-	final public void train(StringWrapperIterator i) 
+	final public void train(StringWrapperIterator i)
 	{
 		while (i.hasNext()) {
-			StringWrapper s = (StringWrapper)i.next();
+			// 2014-04-24 rphall: Commented out unused local variable.
+			// Note: method 'getNext()' has side effects
+			/* StringWrapper s = (StringWrapper) */ i.next();
 			BagOfTokens bag = asBagOfTokens(i.nextStringWrapper());
 			for (Iterator j=bag.tokenIterator(); j.hasNext(); ) {
 				Token tokj = (Token)j.next();
 				totalTokens++;
 				// increment backgroundFrequency counts
 				Integer freq = (Integer)backgroundFrequency.get(tokj);
-				if (freq==null) backgroundFrequency.put(tokj,ONE); 
+				if (freq==null) backgroundFrequency.put(tokj,ONE);
 				else if (freq==ONE) backgroundFrequency.put(tokj,TWO);
 				else if (freq==TWO) backgroundFrequency.put(tokj,THREE);
 				else backgroundFrequency.put(tokj, new Integer(freq.intValue()+1));
@@ -45,7 +47,7 @@ abstract public class JensenShannonDistance extends AbstractTokenizedStringDista
 	/** Preprocess a string by finding tokens and giving them weights W
 	 * such that W is the smoothed probability of the token appearing
 	 * in the document.
-	 */ 
+	 */
 	final public StringWrapper prepare(String s) {
 		BagOfTokens bag = new BagOfTokens(s, tokenizer.tokenize(s));
 		double totalWeight = bag.getTotalWeight();
@@ -61,15 +63,15 @@ abstract public class JensenShannonDistance extends AbstractTokenizedStringDista
 	abstract protected double smoothedProbability(Token tok, double freq, double totalWeight);
 
 	/** Probability of token in the background language model */
-	protected double backgroundProb(Token tok) 
+	protected double backgroundProb(Token tok)
 	{
 		Integer freqInteger = (Integer)backgroundFrequency.get(tok);
 		double freq = freqInteger==null ? 0 : freqInteger.intValue();
 		return freq/totalTokens;
 	}
-	
+
 	/** Jensen-Shannon distance between distributions. */
-	final public double score(StringWrapper s,StringWrapper t) 
+	final public double score(StringWrapper s,StringWrapper t)
 	{
 		BagOfTokens sBag = (BagOfTokens)s;
 		BagOfTokens tBag = (BagOfTokens)t;
@@ -86,7 +88,7 @@ abstract public class JensenShannonDistance extends AbstractTokenizedStringDista
 	}
 	private double h(double p) { return - p * Math.log(p); }
 
-	final public String explainScore(StringWrapper s,StringWrapper t) 
+	final public String explainScore(StringWrapper s,StringWrapper t)
 	{
 		StringBuffer buf = new StringBuffer();
 		PrintfFormat fmt = new PrintfFormat("%.3f");
@@ -100,14 +102,14 @@ abstract public class JensenShannonDistance extends AbstractTokenizedStringDista
 				double pt = tBag.getWeight(tok);
 				buf.append(" "+tok.getValue()+": ");
 				buf.append(fmt.sprintf(ps));
-				buf.append("*"); 
+				buf.append("*");
 				buf.append(fmt.sprintf(pt));
 				buf.append(":delta=");
 				buf.append(fmt.sprintf((h(ps + pt) - h(ps) - h(pt))));
 			}
 		}
 		buf.append("\nscore = "+score(s,t));
-		return buf.toString(); 
+		return buf.toString();
 	}
 
 }

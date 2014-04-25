@@ -4,7 +4,7 @@ import com.wcohen.ss.api.*;
 import java.io.*;
 
 /**
- * Needleman-Wunsch string distance, following Durban et al. 
+ * Needleman-Wunsch string distance, following Durban et al.
  * Sec 2.3, but using an approximate string distance.
  */
 
@@ -16,14 +16,14 @@ public class ApproxNeedlemanWunsch extends AbstractStringDistance
     private double gapCost;
     private MyMatrix mat;
     private int width = DEFAULT_WIDTH;
-	
+
     public ApproxNeedlemanWunsch() { this(CharMatchScore.DIST_01, 1.0 ); }
 
     public ApproxNeedlemanWunsch(CharMatchScore charMatchScore,double gapCost) {
         this.charMatchScore = charMatchScore;
         this.gapCost = gapCost;
     }
-	
+
     public void setWidth(int w) { this.width=w; }
 
     public double score(StringWrapper s,StringWrapper t) {
@@ -32,19 +32,22 @@ public class ApproxNeedlemanWunsch extends AbstractStringDistance
         for (int i=1; i<=s.length(); i++) {
             int j = (int)Math.round(i * mat.getScale());
             if (j>=1 && j<=t.length()) {
-                double forceComputatationHere = mat.get( i, j);                
+    			// 2014-04-24 rphall: Commented out unused local variable.
+            	// Assuming MyMatrix.get(int,int) has side effects
+                /* double forceComputatationHere = */
+            	mat.get( i, j);
             }
         }
         return mat.get(s.length(), t.length() );
     }
-	
+
     public String explainScore(StringWrapper s,StringWrapper t) {
         mat = new MyMatrix( s, t );
         double d = mat.get(s.length(), t.length() );
         mat.setPrintNegativeValues(true);
         return mat.toString() + "\nScore = "+d;
     }
-	
+
 
     /** Find a character in the first string, s, that can be aligned
      * with the i-th character in the second string, t. */
@@ -70,8 +73,8 @@ public class ApproxNeedlemanWunsch extends AbstractStringDistance
         // convert back to the usual 0...N-1 Java convention
         return bestJ-1;
     }
-    
-    private class MyMatrix extends ApproxMemoMatrix 
+
+    private class MyMatrix extends ApproxMemoMatrix
     {
         public MyMatrix(StringWrapper s,StringWrapper t) {
 	    super(s,t,width,-Double.MAX_VALUE);
@@ -84,7 +87,7 @@ public class ApproxNeedlemanWunsch extends AbstractStringDistance
                          get(i, j-1) - gapCost);
         }
     }
-	
+
 
     static public void main(String[] argv) throws Exception
     {
@@ -95,7 +98,7 @@ public class ApproxNeedlemanWunsch extends AbstractStringDistance
             long t0 = System.currentTimeMillis();
             double score = new ApproxNeedlemanWunsch().score(s,t);
             long tf = System.currentTimeMillis();
-            System.out.println("score = "+score+" runtime = "+((tf-t0)/1000.0)+" sec"); 
+            System.out.println("score = "+score+" runtime = "+((tf-t0)/1000.0)+" sec");
         } else {
             doMain(new ApproxNeedlemanWunsch(), argv);
         }

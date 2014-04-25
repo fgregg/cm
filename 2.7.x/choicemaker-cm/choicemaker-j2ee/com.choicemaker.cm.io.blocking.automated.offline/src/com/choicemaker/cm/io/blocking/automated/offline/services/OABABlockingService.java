@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -47,50 +47,50 @@ public class OABABlockingService {
 
 	private int maxBlockSize;
 
-	private IBlockSink bSink; 
-	
-	//these two variables are used to stop the program in the middle 
+	private IBlockSink bSink;
+
+	//these two variables are used to stop the program in the middle
 	private IControl control;
 	private boolean stop = false;
-	
+
 	private IBlockSinkSourceFactory osFactory;
 	private IValidatorBase validator;
-	
+
 	private int totalOversized = 0;
-	
+
 	private int numBlockingFields; //number of database blocking fields.
-	
+
 	//This contains a list of record ID's that show up in oversized blocks
 	//this is used to remove small sets from rec_id, val_id pairs file
 	private LongArrayList osIDs;
-	
+
 	private RecValSinkSourceFactory rvFactory;
-	
+
 	//	this is used to stored special oversized blocks that cannot be trimmed further
 	private IBlockSink osSpecial;
 	private IBlockSink osDump;
 
 	//this is the minimun number of blocking fields an oversized blocks needs to have in order to be saved
 	// in the special oversized blocks file.
-	private int minFields; 
+	private int minFields;
 	private int maxOversized;
-	
+
 	private IStatus status;
-	
+
 	private IRecValSource [] rvSources;
-	
+
 	private OversizedGroup osGroup;
-	
+
 	private int numBlocks = 0; //number of blocks
 	private int numOS = 0; //number of "good" oversized blocks
-	
+
 	private int numInvalid = 0; //number of invalid blocks as defined by the validator
 
 	private long time; //this keeps track of time
 
 
 	/** This constructor takes the following parameters
-	 * 
+	 *
 	 * @param maxSize - max size of blocking set
 	 * @param bSink - sink to write the blocks
 	 * @param osFactory - oversized factory for creating temp files
@@ -110,17 +110,17 @@ public class OABABlockingService {
 		RecValSinkSourceFactory rvFactory, int numBlockingFields,
 		IValidatorBase validator, IStatus status, IControl control,
 		int minFields, int maxOversized) throws IOException {
-		
+
 		this.validator = validator;
 		this.maxBlockSize = maxSize;
 		this.bSink = bSink;
 		this.osFactory = osFactory;
-		
+
 		this.osSpecial = osSpecial;
 		this.minFields = minFields;
 		this.maxOversized = maxOversized;
 		this.osDump = osDump;
-		
+
 		this.rvFactory = rvFactory;
 		this.numBlockingFields = numBlockingFields;
 		this.status = status;
@@ -135,14 +135,14 @@ public class OABABlockingService {
 
 
 	/** This method returns the time it takes to run the runService method.
-	 * 
+	 *
 	 * @return long - returns the time (in milliseconds) it took to run this service.
 	 */
 	public long getTimeElapsed () { return time; }
 
 
 	/** This method checks the current status and runs the appropiate method.
-	 * 
+	 *
 	 *
 	 */
 	public void runService () throws BlockingException {
@@ -150,29 +150,29 @@ public class OABABlockingService {
 
 		if (status.getStatus() >= IStatus.DONE_OVERSIZED_TRIMMING ) {
 			//do nothing here
-			
+
 		} else if (status.getStatus() < IStatus.BLOCK_BY_ONE_COLUMN) {
 			log.info ("Blocking By 1 column ");
-			
+
 			init ();
 
 			blockByOneColumn ();
-			
+
 			if (!stop) trimOversized ();
 
 		} else if (status.getStatus() == IStatus.BLOCK_BY_ONE_COLUMN) {
 			log.info ("Trying to recover blocking by one column");
 			init ();
-			
+
 			//started to created, but not done, so we need to recover
 			recoverBlockByOneColumn ();
-			
+
 			if (!stop) trimOversized ();
-			
+
 		} else if (status.getStatus() == IStatus.DONE_BLOCK_BY_ONE_COLUMN) {
 			log.info ("Starting from trimOversized");
 			init ();
-			
+
 			trimOversized ();
 
 		} else if (status.getStatus() == IStatus.OVERSIZED_TRIMMING) {
@@ -183,23 +183,23 @@ public class OABABlockingService {
 		}
 		time = System.currentTimeMillis() - time;
 	}
-	
-	
+
+
 	private void init () throws BlockingException {
-		this.rvSources = new IRecValSource [numBlockingFields];	
+		this.rvSources = new IRecValSource [numBlockingFields];
 		for (int i=0; i < numBlockingFields; i++) {
 			rvSources[i] = rvFactory.getNextSource();
 		}
 	}
 
-	
+
 	/** This method blocks one blocking field at a time.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	private void blockByOneColumn () throws BlockingException {
 		log.info ("blockByOneColumn");
-		
+
 		numBlocks = 0;
 
 		//use osGroup to group same max column sets into the same file.
@@ -207,22 +207,22 @@ public class OABABlockingService {
 		osGroup.openAllSinks();
 		bSink.open();
 		if (osDump != null) osDump.open();
-			
+
 		//block one column at a time.
 		for (int i=0; i< numBlockingFields && !stop; i++) {
 			stop = ControlChecker.checkStop (control, ControlChecker.CONTROL_INTERVAL);
 
 			IRecValSource rvSource = rvSources[i];
-			numBlocks += blockByField (i, rvSource, bSink, osGroup);	
-			
-			if (!stop) status.setStatus( IStatus.BLOCK_BY_ONE_COLUMN, Integer.toString(i) + "|" + 
+			numBlocks += blockByField (i, rvSource, bSink, osGroup);
+
+			if (!stop) status.setStatus( IStatus.BLOCK_BY_ONE_COLUMN, Integer.toString(i) + "|" +
 				Integer.toString(numBlocks));
 		}
 
 		bSink.close();
 		osGroup.closeAllSinks();
 		if (osDump != null) osDump.close();
-		
+
 		if (!stop) status.setStatus( IStatus.DONE_BLOCK_BY_ONE_COLUMN);
 	}
 
@@ -230,16 +230,16 @@ public class OABABlockingService {
 	/** This method resumes blocking from the last column written in the status file.
 	 * It is possible that there are dups if the previous process died in the middle of a column, but
 	 * we'll rely on blocks dedup to take care of that.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	private void recoverBlockByOneColumn () throws BlockingException{
-		StringTokenizer stk = new StringTokenizer (status.getAdditionalInfo(), "|"); 
+		StringTokenizer stk = new StringTokenizer (status.getAdditionalInfo(), "|");
 		int currentCol = Integer.parseInt(stk.nextToken()) + 1;
 		numBlocks = Integer.parseInt(stk.nextToken());
-		
+
 		log.info ("recovering starting at column " + currentCol + " " + numBlocks);
-		
+
 		//use osGroup to group same max column sets into the same file.
 		osGroup = new OversizedGroup (numBlockingFields, osFactory);
 
@@ -248,36 +248,36 @@ public class OABABlockingService {
 
 		bSink.append();
 		if (osDump != null) osDump.append();
-		
+
 		//block one column at a time starting from the last incomplete.
 		for (int i=currentCol; i< numBlockingFields && !stop; i++) {
 			stop = ControlChecker.checkStop (control, ControlChecker.CONTROL_INTERVAL);
 
 			IRecValSource rvSource = rvSources[i];
-			numBlocks += blockByField (i, rvSource, bSink, osGroup);				
+			numBlocks += blockByField (i, rvSource, bSink, osGroup);
 
-			if (!stop) status.setStatus( IStatus.BLOCK_BY_ONE_COLUMN, Integer.toString(i) + "|" + 
+			if (!stop) status.setStatus( IStatus.BLOCK_BY_ONE_COLUMN, Integer.toString(i) + "|" +
 				Integer.toString(numBlocks));
 		}
 
 		osGroup.closeAllSinks();
 		bSink.close();
 		if (osDump != null) osDump.close();
-		
+
 		if (!stop) status.setStatus( IStatus.DONE_BLOCK_BY_ONE_COLUMN);
-		
+
 	}
 
 
 	/** This method trims oversized blocks by adding more blocking fields.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	private void trimOversized () throws BlockingException {
 		if (osGroup == null) {
 			osGroup = new OversizedGroup (numBlockingFields, osFactory);
 			totalOversized = countOversized (osGroup);
-		} 
+		}
 
 		//this is for writing out
 		OversizedGroup osGroupNew = new OversizedGroup (numBlockingFields, osFactory);
@@ -285,7 +285,7 @@ public class OABABlockingService {
 
 		//number of blockings in the oversized blocks
 		int numFields = 1;
-		
+
 		if (osDump != null) osDump.open();
 		osSpecial.open();
 		bSink.append();
@@ -299,10 +299,10 @@ public class OABABlockingService {
 			numBlocks += num;
 
 			osGroupNew.closeAllSinks();
-			
+
 			if (!stop) {
 				log.info("Done Trimming.  blocks: " + num + " oversized:" + totalOversized);
-				
+
 				//prepare for the next pass of the loop
 				osGroup.cleanUp();
 				osGroup = osGroupNew;
@@ -319,7 +319,7 @@ public class OABABlockingService {
 		if (osDump != null) osDump.close();
 		osSpecial.close();
 		bSink.close();
-		
+
 		if (!stop) {
 			//final cleaup for osGroups
 			osGroup.cleanUp();
@@ -330,7 +330,7 @@ public class OABABlockingService {
 			cleanUp();
 
 			status.setStatus( IStatus.DONE_OVERSIZED_TRIMMING);
-		} 
+		}
 
 		t1 = System.currentTimeMillis() - t1;
 		log.info("Time in oversized block trimming " + t1);
@@ -338,29 +338,31 @@ public class OABABlockingService {
 
 
 	/** This method recovers the last number oversized blocking fields and continue to trim from
-	 * there. 
-	 * 
+	 * there.
+	 *
 	 * @throws IOException
 	 */
 	private void recoverTrimOversized () throws BlockingException {
 		//recover info first
 		int numFields = Integer.parseInt(status.getAdditionalInfo()) + 1;
-		
+
 		log.info ("recovering starting at " + numFields);
-		
+
 		//recover osGroup
 		//jump ahead on the osFactory
 		int m = numBlockingFields * (numFields - 1) + 1;
 		for (int i=2; i <= m; i++) {
-			IBlockSink sink = osFactory.getNextSink();
+			// 2014-04-24 rphall: Commented out unused local variable.
+			// Note: method 'getNextSink()' has side effects
+			/* IBlockSink sink = */ osFactory.getNextSink();
 		}
-		
+
 		//count the number of oversized
 		if (osGroup == null) osGroup = new OversizedGroup (numBlockingFields, osFactory);
 		totalOversized = countOversized (osGroup);
 
 		log.info ("number of oversized: " + totalOversized);
-		
+
 		//this is for writing out
 		OversizedGroup osGroupNew = new OversizedGroup (numBlockingFields, osFactory);
 		osGroupNew.appendAllSinks();
@@ -375,32 +377,32 @@ public class OABABlockingService {
 		while (totalOversized > 0) {
 			String info = Integer.toString(numFields);
 			status.setStatus( IStatus.OVERSIZED_TRIMMING, info);
-			
+
 			log.info(totalOversized + " Oversized blocks, blocking with " + numFields + " field");
-				
+
 			int num = blockOversized (numFields, osGroup, osGroupNew);
 			numBlocks += num;
 
 			osGroupNew.closeAllSinks();
 			log.info("blocks: " + num + " oversized:" + totalOversized);
-				
+
 			//prepare for the next pass of the loop
 			osGroup.cleanUp();
 			osGroup = osGroupNew;
 			osGroupNew = new OversizedGroup (numBlockingFields, osFactory);
 			osGroupNew.openAllSinks();
-				
-			numFields ++;			
+
+			numFields ++;
 
 			info = Integer.toString(numFields);
 			status.setStatus( IStatus.OVERSIZED_TRIMMING, info);
-			
+
 		}
 
 		if (osDump != null) osDump.close();
 		osSpecial.close();
 		bSink.close();
-		
+
 		//final cleaup for osGroups
 		osGroup.cleanUp();
 		osGroupNew.closeAllSinks();
@@ -411,7 +413,7 @@ public class OABABlockingService {
 			cleanUp();
 
 			status.setStatus( IStatus.DONE_OVERSIZED_TRIMMING);
-		} 
+		}
 
 		t1 = System.currentTimeMillis() - t1;
 		log.info("Time in oversized block trimming " + t1);
@@ -419,7 +421,7 @@ public class OABABlockingService {
 
 
 	/** This cleans up the rec_id, val_id files by deleting them.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	private void cleanUp () throws BlockingException {
@@ -433,9 +435,9 @@ public class OABABlockingService {
 	//This method removes dups in osIDs after it is sorted.
 	private LongArrayList removeDups (LongArrayList osIDs) {
 		osIDs.sort();
-		
+
 		LongArrayList newList = new LongArrayList (100);
-		
+
 		// NOTE Not a bug 2010-10-19 rphall
 		// This can assume record ids > 0, because it refers to internal ids,
 		// which are 0 or greater.  It would be nice to define a manifest constant
@@ -448,14 +450,14 @@ public class OABABlockingService {
 				newList.add(last);
 			}
 		}
-		
+
 		return newList;
 	}
 
 
 	/** This method removes these IDs from the recVal pair.  If an ID already shows up in a regular block
 	 * there is no need to keep it any further for oversize trimming.
-	 * 
+	 *
 	 * @param osIDs - IDs to keep
 	 * @param rvSource - the source from which comes these IDs
 	 */
@@ -466,23 +468,24 @@ public class OABABlockingService {
 
 		IRecValSink sink = rvFactory.getSink(rvSource);
 		sink.open();
-		
-		int count = 0;
-		
+
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		int count = 0;
+
 		//only keep those id in osIDs in the rec_id, val_id file.
 		for (int i=0; i < osIDs.size(); i++) {
 			IntArrayList list = (IntArrayList) recVal.get( osIDs.get(i) );
 			sink.writeRecordValue(osIDs.get(i), list);
-			count ++;
+//			count ++;
 		}
-		
+
 		sink.close();
 	}
 
 
 	private int countOversized (IOversizedGroup osg) throws BlockingException {
 		int ret = 0;
-		
+
 		for (int i=0; i < numBlockingFields; i++) {
 			IBlockSource source = osg.getSource(i);
 			source.open();
@@ -498,41 +501,41 @@ public class OABABlockingService {
 
 
 	/** This method blocks one column at a time and outputs the blocking sets to blocks.dat and oversized.dat.
-	 * It groups record IDs that have the same column value into blocks.  It reads in the 
+	 * It groups record IDs that have the same column value into blocks.  It reads in the
 	 * rec_id, val_id file that has already been created.
-	 * 
+	 *
 	 * @param col - the ith field to block on.
 	 * @param rvSource - source of rec_id, val_id information.
 	 * @param bSink - BlockSet sink.
 	 * @param osSink - Oversized Blocks sink for future trimming.
 	 */
-	private int blockByField (int col, IRecValSource rvSource, IBlockSink bSink, IOversizedGroup osGroup) 
+	private int blockByField (int col, IRecValSource rvSource, IBlockSink bSink, IOversizedGroup osGroup)
 		throws BlockingException{
-			
+
 		int count = 0;
 		HashMap map = new HashMap ();
-		
+
 		long recID = 0;
-		
+
 		//this keeps track of oversized block IDs
 		osIDs = new LongArrayList (100);
-		
+
 		RecordValue2 records = new RecordValue2 (rvSource);
-			
+
 		ArrayList recordList = records.getList();
-		
+
 		for (int j=0; j<recordList.size() && !stop; j++) {
-			stop = ControlChecker.checkStop (control, j);			
-			
+			stop = ControlChecker.checkStop (control, j);
+
 			recID = j;
 			IntArrayList values = (IntArrayList) recordList.get(j);
-				
+
 			if (values != null) {
-					
+
 				for (int i=0; i<values.size(); i++) {
 					Integer val = new Integer (values.get(i));
 					BlockSet bs = (BlockSet) map.get(val);
-					
+
 					if (bs != null) {
 						LongArrayList ids = bs.getRecordIDs();
 						ids.add( recID);
@@ -545,24 +548,24 @@ public class OABABlockingService {
 				}
 
 			} //end if
-				
+
 		} //end for
-			
+
 		if (!stop) {
 			count += writeBlocks(map, bSink, osGroup, col);
 
 			//only keep oversized block row id on the rec_id, val_id file.
 			removeIDs(osIDs, rvSource);
-		} 
-				
+		}
+
 		return count;
 	}
-	
+
 
 
 	/** This method writes the BlockSet to either the block file or the oversized file depending
 	 * on the block size.
-	 * 
+	 *
 	 * @param map - hash map containing the record ID's group by value
 	 * @param max - maximum size of a BlockSet
 	 * @param bSink - BlockSet sink
@@ -572,21 +575,21 @@ public class OABABlockingService {
 	 */
 	private int writeBlocks (HashMap map, IBlockSink bSink, IOversizedGroup osGroup,
 		int col) throws BlockingException {
-			
+
 		Iterator it = map.values().iterator();
 		BlockSet bs;
 		int currBlocks = 0;
 		int currOversized = 0;
-		
+
 		while (it.hasNext()) {
 			bs = (BlockSet) it.next();
-				
+
 			//check to see if this block is valid, no need to write out invalid blocks
 			if (validator.validBlockSet(bs)) {
 				LongArrayList list = bs.getRecordIDs();
-					
+
 				if (list.size() > maxBlockSize) {
-						
+
 					//don't write the last blocking column, because we can't trim it further.
 					if (col < numBlockingFields -1) {
 						osGroup.writeBlock(bs);
@@ -595,23 +598,23 @@ public class OABABlockingService {
 					} else {
 						if (osDump != null) osDump.writeBlock(bs);
 					}
-						
+
 					//keep track of all the oversized IDs
 					osIDs.addAll (list);
-						
+
 				} else if (list.size() > 1) {
 					bSink.writeBlock(bs);
 					currBlocks ++;
-				} 
+				}
 			} else {
 				if (bs.getRecordIDs().size() > 1) {
 					numInvalid ++;
-				} 
+				}
 			}
 		}
 
 		log.info("Done with initial blocking on " + col + "; blocks: " + currBlocks + "; oversized: " + currOversized);
-			
+
 		return currBlocks;
 	}
 
@@ -619,30 +622,30 @@ public class OABABlockingService {
 	/** This method compares the given block to the record hash.  It returns a
 	 * hash map keyed by valueid and value of IntArrayList.
 	 * This version allows for stacked data by using IntArrayList instead of Integer.
-	 * 
+	 *
 	 * @param bs - Oversized BlockSet object to compare
 	 * @param map - map of record source.
 	 * @return
 	 */
 	private static HashMap findMatching (BlockSet bs, RecordValue2 record) {
 		HashMap match = new HashMap ();
-		
+
 		LongArrayList recs = bs.getRecordIDs();
-		
+
 		//debug
 //		System.out.println ("block " + recs);
 //		System.out.println ("recs " + record.getList());
-		
+
 		for (int i=0; i<recs.size(); i++) {
 			long row = recs.get(i);
-			
+
 			//get the values of the given row
 			IntArrayList values = (IntArrayList) record.get(row);
-			
+
 			if (values != null) {
-				
+
 				for (int j=0; j< values.size(); j++) {
-					
+
 					Integer val = new Integer (values.get(j));
 					Object obj = match.get(val);
 					if (obj == null) {
@@ -656,16 +659,16 @@ public class OABABlockingService {
 				}
 			}
 		}
-		
+
 		return match;
 	}
 
 
 	/** This method is the new algorithm that chop Oversized blocking sets into smaller
 	 * ones.  This algorithm works as follows:
-	 * 
+	 *
 	 * 1.	Start with a list of Oversized blocks.
-	 * 2a.	Build a HashMap (record id, value id) of the whole data set on blocking 
+	 * 2a.	Build a HashMap (record id, value id) of the whole data set on blocking
 	 * 		field 2.
 	 * 2b.	Compare all Oversized blocks that blocks on field1 with 2a to find
 	 * 		common rows.  Create new blocking on for these rows.  This set is either OK
@@ -680,58 +683,58 @@ public class OABABlockingService {
 	 * 		k1 and k2 are both less than N.
 	 * 4.	Compared I-field blocks with HashMap on field N, where N > I, and each of the
 	 * 		blocks has no column >= N.
-	 * 
+	 *
 	 * @param numField - The number of blocking fields these oversized blocks have
-	 * @param osGroupIn - Input OversizedGroup 
+	 * @param osGroupIn - Input OversizedGroup
 	 * @param osGroupOut - Output OversizedGroup
 	 * @param startPoint - if this is not 0, it will load the corresponding rec,val first.
-	 * @return number of new blocks created 
+	 * @return number of new blocks created
 	 */
-	private int blockOversized (int numField, IOversizedGroup osGroupIn, IOversizedGroup osGroupOut) 
+	private int blockOversized (int numField, IOversizedGroup osGroupIn, IOversizedGroup osGroupOut)
 		throws BlockingException {
-		
+
 		int count = 0; //count the number of blocks
 		totalOversized = 0; //number of oversized blocks
-		
+
 		int c = 0;
-		
+
 		for (int j=numField; j < rvSources.length && !stop; j++) {
-			
+
 			RecordValue2 records = new RecordValue2 (rvSources[j]);
-			
+
 			//compare map to all Oversized blocks on field k < j.
 			for (int k=0; k <j && !stop; k++) {
 				IBlockSource osSource = osGroupIn.getSource(k);
-					
+
 				osSource.open();
-				
+
 				while (osSource.hasNext() && !stop) {
-					
+
 					stop = ControlChecker.checkStop (control, ++c);
-										
+
 					BlockSet bs = osSource.getNext();
-			
+
 					//returns hashmap of value, IntArrayList
 					HashMap matching = findMatching (bs, records);
 					Iterator it = matching.keySet().iterator();
-					
+
 					boolean any = false;
-						
+
 					while (it.hasNext()) {
 						Integer colVal = (Integer) it.next();
-							
+
 						BlockSet inter = new BlockSet();
 						inter.addColumns(bs.getColumns());
 						inter.addColumn(j);
-							
+
 						LongArrayList overlap = (LongArrayList) matching.get(colVal);
 						inter.setRecordIDs( overlap );
-							
+
 						if (validator.validBlockSet(inter)) {
 							if (inter.getRecordIDs().size() > maxBlockSize) {
 
 								//if trimming by the last column, this set cannot be further trimmed.
-								//only write to oversized if j is not the last column. 						
+								//only write to oversized if j is not the last column.
 								if (j < rvSources.length - 1) {
 									osGroupOut.writeBlock(inter);
 									totalOversized ++;
@@ -740,16 +743,16 @@ public class OABABlockingService {
 							} else if (inter.getRecordIDs().size() > 1) {
 								bSink.writeBlock(inter);
 								count ++;
-									
+
 							}
 						} else {
 							if (inter.getRecordIDs().size() > 1) {
 								numInvalid ++;
-							} 
+							}
 						}
 						any = true;
 					} //end while
-						
+
 					//keeps oversized blocks with minFields or more fields that can't be further trimmed
 					if (!any ) {
 						if (numField >= minFields && bs.getRecordIDs().size() <= maxOversized) {
@@ -759,15 +762,15 @@ public class OABABlockingService {
 							if (osDump != null) osDump.writeBlock(bs);
 						}
 					}
-						
+
 				} //end while hasNext
-				
+
 				osSource.close();
-				
+
 			} //end for k
-				
+
 		} //end for j
-		
+
 		return count;
 	}
 

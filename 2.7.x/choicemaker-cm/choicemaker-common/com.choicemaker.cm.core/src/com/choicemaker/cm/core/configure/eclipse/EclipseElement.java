@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -25,9 +25,9 @@ import com.choicemaker.cm.core.util.Precondition;
  * @version $Revision: 1.1 $ $Date: 2010/03/24 18:04:31 $
  */
 public class EclipseElement implements IElement {
-	
+
 	private static Logger logger = Logger.getLogger(EclipseElement.class);
-	
+
 	private final IConfigurationElement element;
 
 	public EclipseElement(IConfigurationElement element) {
@@ -78,7 +78,7 @@ public class EclipseElement implements IElement {
 		List list = getChildren(name);
 		if (list != null && list.size() >= 1) {
 			retVal = (IElement) list.get(0);
-		} 
+		}
 		if (list.size() > 1) {
 			StringBuffer sb = new StringBuffer();
 			int ignored = list.size() - 1;
@@ -86,7 +86,9 @@ public class EclipseElement implements IElement {
 			int count = -1;
 			for (Iterator i=list.iterator(); i.hasNext(); ) {
 				++count;
+				// 2014-04-24 rphall: Added use for unused local variable.
 				IConfigurationElement orphan = (IConfigurationElement) i.next();
+				sb.append(orphan.getName());
 				if (count < list.size()-1) {
 					sb.append(",");
 				}
