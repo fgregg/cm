@@ -85,7 +85,7 @@ private double matched, tr, sSize, tSize, totalScore;
       List candidateList = algorithm1(S, T);
       sortList(candidateList);
       totalScore = getScore(candidateList);
-      totalScore = (totalScore / ( (double) sSize) + totalScore / ( (double) tSize)) / 2.0;
+      totalScore = (totalScore / ( sSize) + totalScore / ( tSize)) / 2.0;
       return winkler(totalScore, S, T);
     }
   }
@@ -143,7 +143,7 @@ private double matched, tr, sSize, tSize, totalScore;
           matched++;
         }
       }
-      totalScore = (totalScore / ( (double) sSize) + totalScore / ( (double) tSize)) / 2.0;
+      totalScore = (totalScore / ( sSize) + totalScore / ( tSize)) / 2.0;
       System.out.println("score " + totalScore);
       buff.append("Score_ij(S,T)=" + round(winkler(totalScore, S, T)));
       buff.append("\nMatched characters=" + matched);
