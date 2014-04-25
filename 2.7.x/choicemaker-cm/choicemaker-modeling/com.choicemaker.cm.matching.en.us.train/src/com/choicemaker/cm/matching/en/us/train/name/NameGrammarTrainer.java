@@ -32,7 +32,7 @@ import com.choicemaker.cm.matching.en.us.name.NameSymbolFactory;
 public class NameGrammarTrainer implements IPlatformRunnable {
 		
 	public Object run(Object argObj) throws Exception {
-		String[] args = CommandLineArguments.eclipseArgsMapper((String[])argObj);
+		String[] args = CommandLineArguments.eclipseArgsMapper(argObj);
 		
 		if (args.length < 2) {
 			System.err.println("Need at least two arguments: grammar file and parsed data file(s)");	

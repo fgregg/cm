@@ -42,7 +42,7 @@ public final class NameParsedDataCreator implements IPlatformRunnable {
 		cla.addArgument(PARSER);
 		cla.addArgument(OUT);
 
-		String[] args = CommandLineArguments.eclipseArgsMapper((String[])argObj);
+		String[] args = CommandLineArguments.eclipseArgsMapper(argObj);
 		cla.enter(args);
 		if (cla.isError()) {
 			System.err.println("Unusable args");
