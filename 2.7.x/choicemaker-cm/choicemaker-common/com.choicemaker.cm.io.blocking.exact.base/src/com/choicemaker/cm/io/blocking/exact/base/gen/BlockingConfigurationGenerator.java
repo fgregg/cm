@@ -308,7 +308,7 @@ public class BlockingConfigurationGenerator {
 		w.write("private static class Key implements Cloneable {" + Constants.LINE_SEPARATOR);
 		Field[] fs = (Field[]) blockingFields.toArray(new Field[blockingFields.size()]);
 		for (int i = 0; i < fs.length; i++) {
-			w.write(fs[i].type + " " + fs[i].name + ";" + Constants.LINE_SEPARATOR);
+			w.write(fs[i].type + " " + fs[i]._name + ";" + Constants.LINE_SEPARATOR);
 		}
 		w.write("public int hashCode() {" + Constants.LINE_SEPARATOR);
 		w.write("return ");
@@ -321,9 +321,9 @@ public class BlockingConfigurationGenerator {
 				w.write(" ^ ");
 			}
 			if (GeneratorHelper.isPrimitiveType(f.type)) {
-				w.write("(int)" + f.name);
+				w.write("(int)" + f._name);
 			} else {
-				w.write("(" + f.name + " == null ? 0 : " + f.name + ".hashCode())");
+				w.write("(" + f._name + " == null ? 0 : " + f._name + ".hashCode())");
 			}
 			if (i != fs.length - 1) {
 				w.write(")");
@@ -339,7 +339,7 @@ public class BlockingConfigurationGenerator {
 				w.write(" && ");
 			}
 			w.write("(");
-			w.write(GeneratorHelper.compareField(fs[i].name, "k." + fs[i].name, fs[i].type, g.isIntern(), true));
+			w.write(GeneratorHelper.compareField(fs[i]._name, "k." + fs[i]._name, fs[i].type, g.isIntern(), true));
 			w.write(")");
 		}
 		w.write(";" + Constants.LINE_SEPARATOR);
@@ -368,14 +368,14 @@ public class BlockingConfigurationGenerator {
 	}
 
 	private class Field implements Comparable {
-		String name;
+		String _name;
 		String type;
 		Element bf;
 		int targetRecordNumber;
 		String targetGroup;
 		Element targetField;
 		Field(String name, String type, Element bf) {
-			this.name = name;
+			this._name = name;
 			this.type = type;
 			this.bf = bf;
 			init();

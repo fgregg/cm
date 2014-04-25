@@ -303,8 +303,8 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree[] decision_tree(int pos) {
-		Tree[] res = new Tree[ExtDecision.NUM_DECISIONS];
-		for (int i = 0; i < ExtDecision.NUM_DECISIONS; ++i)
+		Tree[] res = new Tree[ExtDecision.NUM_DECISIONS_EXT];
+		for (int i = 0; i < ExtDecision.NUM_DECISIONS_EXT; ++i)
 			res[i] = new Select(
 				pos,
 				i < Decision.NUM_DECISIONS ? decision_ident(pos) : ext_decision_ident(pos),
@@ -557,7 +557,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 				int_ident(t.pos),
                 "__evalNum",
                 null));
-		numClues = new int[ExtDecision.NUM_DECISIONS];
+		numClues = new int[ExtDecision.NUM_DECISIONS_EXT];
 		clueDesc = new TreeList();
 	}
 
@@ -569,9 +569,9 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 				clue_desc_arr_ident(t.pos),
 				"clueDescs",
 				new NewArray(0, null, null, clueDesc.toArray())));
-		Tree[] clueSizes = new Tree[ExtDecision.NUM_DECISIONS];
+		Tree[] clueSizes = new Tree[ExtDecision.NUM_DECISIONS_EXT];
 		size = 0;
-		for (int i = 0; i < ExtDecision.NUM_DECISIONS; ++i) {
+		for (int i = 0; i < ExtDecision.NUM_DECISIONS_EXT; ++i) {
 			clueSizes[i] = new Literal(Location.NOPOS, INT, new Integer(numClues[i]));
 			size += numClues[i];
 		}

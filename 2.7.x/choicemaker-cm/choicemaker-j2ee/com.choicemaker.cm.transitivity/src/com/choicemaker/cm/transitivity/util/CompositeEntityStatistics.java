@@ -47,7 +47,7 @@ public class CompositeEntityStatistics {
 		int s = ce.getChildren().size(); 
 		if (s > maxSize) maxSize = s;
 		StatisticsBucket bucket = getBucket2 (s);
-		bucket.count ++;
+		bucket._count ++;
 		
 		MatchHoldEdgeProperty mhp = MatchHoldEdgeProperty.getInstance ();
 		MatchEdgeProperty mp = MatchEdgeProperty.getInstance ();
@@ -87,11 +87,11 @@ public class CompositeEntityStatistics {
 		boolean isBi_M = ce.hasProperty(bcm);
 */
 		
-		if (isFull_MH) bucket.full_MH ++;
-		if (isBi_MH) bucket.bi_MH ++;
-		if (isFull_M) bucket.full_M ++;
-		if (isBi_M) bucket.bi_M ++;
-		if (isFull_MH && isBi_M) bucket.full_MH_bi_M ++;
+		if (isFull_MH) bucket._full_MH ++;
+		if (isBi_MH) bucket._bi_MH ++;
+		if (isFull_M) bucket._full_M ++;
+		if (isBi_M) bucket._bi_M ++;
+		if (isFull_MH && isBi_M) bucket._full_MH_bi_M ++;
 	}
 
 
@@ -103,11 +103,11 @@ public class CompositeEntityStatistics {
 		Iterator it = buckets.values().iterator();
 		while (it.hasNext()) {
 			StatisticsBucket bucket = (StatisticsBucket) it.next();
-			System.out.println ("size from " + bucket.lowerLimit + " to " + bucket.upperLimit 
-				+ " count: " + bucket.count + " Full: " + bucket.full_MH +
-				" Full_M: " + bucket.full_M + " Bi: " + bucket.bi_MH + 
-				" Bi_M: " + bucket.bi_M +
-				" Full_MH_Bi_M: " +  bucket.full_MH_bi_M);
+			System.out.println ("size from " + bucket._lowerLimit + " to " + bucket._upperLimit 
+				+ " count: " + bucket._count + " Full: " + bucket._full_MH +
+				" Full_M: " + bucket._full_M + " Bi: " + bucket._bi_MH + 
+				" Bi_M: " + bucket._bi_M +
+				" Full_MH_Bi_M: " +  bucket._full_MH_bi_M);
 		}
 		System.out.println ("number of clusters: " + count + " maxSize: " + maxSize);
 	}
@@ -119,8 +119,8 @@ public class CompositeEntityStatistics {
 		
 		if (b == null) {
 			b = new StatisticsBucket ();
-			b.lowerLimit = s;
-			b.upperLimit = s;
+			b._lowerLimit = s;
+			b._upperLimit = s;
 			buckets.put(I, b);
 		} 
 		return b;
@@ -129,14 +129,14 @@ public class CompositeEntityStatistics {
 	
 	private class StatisticsBucket {
 	
-		private int lowerLimit;
-		private int upperLimit;
-		private int count;
-		private int full_M;
-		private int full_MH;
-		private int bi_M;
-		private int bi_MH;
-		private int full_MH_bi_M;
+		private int _lowerLimit;
+		private int _upperLimit;
+		private int _count;
+		private int _full_M;
+		private int _full_MH;
+		private int _bi_M;
+		private int _bi_MH;
+		private int _full_MH_bi_M;
 	
 	}
 

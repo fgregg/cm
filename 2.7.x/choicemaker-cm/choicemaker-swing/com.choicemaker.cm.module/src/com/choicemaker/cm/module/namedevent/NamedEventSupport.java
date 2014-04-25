@@ -45,7 +45,7 @@ public class NamedEventSupport implements INamedEventControl {
 		public boolean equals(Object o) {
 			boolean retVal = false;
 			if (o instanceof IModule) {
-				retVal = this.equals((IModule)o);
+				retVal = this.equals(o);
 			}
 			return retVal;
 		}

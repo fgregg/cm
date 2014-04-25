@@ -13,19 +13,19 @@ import java.util.Iterator;
 public class TokenFelligiSunter extends AbstractStatisticalTokenDistance
 {
 	private static final long serialVersionUID = 1L;
-	private Tokenizer tokenizer;
-	private double mismatchFactor = 0.5;
-	private boolean oversimplified = false;
+	private Tokenizer _tokenizer;
+	private double _mismatchFactor = 0.5;
+	private boolean _oversimplified = false;
 	
 	public TokenFelligiSunter(Tokenizer tokenizer,double mismatchFactor) {
-		this.tokenizer = tokenizer;
-		this.mismatchFactor = mismatchFactor;
+		this._tokenizer = tokenizer;
+		this._mismatchFactor = mismatchFactor;
 	}
 	public TokenFelligiSunter() {
 		this(SimpleTokenizer.DEFAULT_TOKENIZER, 0.5);
 	}
-	public void setMismatchFactor(double d) { mismatchFactor=d; }
-	public void setMismatchFactor(Double d) { mismatchFactor=d.doubleValue(); }
+	public void setMismatchFactor(double d) { _mismatchFactor=d; }
+	public void setMismatchFactor(Double d) { _mismatchFactor=d.doubleValue(); }
 
 	public double score(StringWrapper s,StringWrapper t) {
 		BagOfTokens sBag = (BagOfTokens)s;
@@ -35,7 +35,7 @@ public class TokenFelligiSunter extends AbstractStatisticalTokenDistance
 		for (Iterator i=sBag.getDistinctTokens().iterator(); i.hasNext(); ) {
 			Token tok = (Token) i.next();
 			if (tBag.contains(tok)) {
-				if (oversimplified) {
+				if (_oversimplified) {
 					sim += tBag.getWeight(tok);
 				} else {
 					double p = Math.exp( -tBag.getWeight(tok) ); 
@@ -43,8 +43,8 @@ public class TokenFelligiSunter extends AbstractStatisticalTokenDistance
 					sim -= Math.log( 1.0 - Math.exp( sBag.size() * tBag.size() * Math.log(1.0 - p*p) ) );
 				}
 			} else {
-				if (oversimplified) {
-					sim -= sBag.getWeight(tok)*mismatchFactor;
+				if (_oversimplified) {
+					sim -= sBag.getWeight(tok)*_mismatchFactor;
 				}
 			}
 		}
@@ -54,7 +54,7 @@ public class TokenFelligiSunter extends AbstractStatisticalTokenDistance
 	
 	/** Preprocess a string by finding tokens and giving them appropriate weights */ 
 	public StringWrapper prepare(String s) {
-		BagOfTokens bag = new BagOfTokens(s, tokenizer.tokenize(s));
+		BagOfTokens bag = new BagOfTokens(s, _tokenizer.tokenize(s));
 		// reweight by -log( freq/collectionSize )
 		for (Iterator i=bag.getDistinctTokens().iterator(); i.hasNext(); ) {
 			Token tok = (Token) i.next();

@@ -360,7 +360,7 @@ public class XmlConfigurator {
 	 */
 	public static class PpsClassLoader extends URLClassLoader {
 
-		private static final Logger logger = Logger.getLogger(XmlConfigurator.class.getName() + ".PpsClassLoader");
+		private static final Logger log = Logger.getLogger(XmlConfigurator.class.getName() + ".PpsClassLoader");
 
 		private ClassLoader[] parents;
 
@@ -369,7 +369,7 @@ public class XmlConfigurator {
 			List l = new ArrayList();
 			IPluginDescriptor[] plugins = Platform.getPluginRegistry().getPluginDescriptors();
 			for (int i = 0; i < plugins.length; i++) {
-				logger.debug("Adding classloader of '" + plugins[i].getUniqueIdentifier() + "' as loader #" + i);
+				log.debug("Adding classloader of '" + plugins[i].getUniqueIdentifier() + "' as loader #" + i);
 				l.add(plugins[i].getPluginClassLoader());
 			}
 			parents = (ClassLoader[]) l.toArray(new ClassLoader[l.size()]);
@@ -383,30 +383,30 @@ public class XmlConfigurator {
 			for (int i = 0; i < parents.length; i++) {
 				try {
 					c = parents[i].loadClass(name);
-					logger.debug("Class '" + name + "' found by '" + parents[i] + "'");
+					log.debug("Class '" + name + "' found by '" + parents[i] + "'");
 					break;
 				} catch (ClassNotFoundException ex) {
-					if (logger.isDebugEnabled()) {
-						logger.debug("Class '" + name + "' not found by '" + parents[i] + "'; search continuing...");
+					if (log.isDebugEnabled()) {
+						log.debug("Class '" + name + "' not found by '" + parents[i] + "'; search continuing...");
 					}
 				}
 			}
 			if (c==null) {
-				logger.debug("Class '" + name + "' not found by plugin classloaders; search continuing with parent URLClassLoader.");
+				log.debug("Class '" + name + "' not found by plugin classloaders; search continuing with parent URLClassLoader.");
 				c = super.findClass(name);
-				if (logger.isDebugEnabled()) {
+				if (log.isDebugEnabled()) {
 					if (c!=null) {
 						String msg = "Class '" + name + "' found by parent ULRClassLoader '" + super.toString() + "'";
-						logger.debug(msg);
+						log.debug(msg);
 					} else {
 						String msg = "Class '" + name + "' not found by parent ULRClassLoader '" + super.toString() + "'";
-						logger.debug(msg);
+						log.debug(msg);
 					}
 				}
 			}
 			if (c==null) {
 				String msg = "Class '" + name + "' not found by PpsClassLoader.";
-				logger.error(msg);
+				log.error(msg);
 				throw new ClassNotFoundException (msg);
 			} 
 			return c;

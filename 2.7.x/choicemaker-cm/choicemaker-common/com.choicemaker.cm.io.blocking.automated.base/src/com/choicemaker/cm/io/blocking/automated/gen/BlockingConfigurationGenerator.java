@@ -338,7 +338,7 @@ public class BlockingConfigurationGenerator {
 						+ "\", dbts["
 						+ d.view.number
 						+ "], "
-						+ d.defaultCount
+						+ d._defaultCount
 						+ ")");
 			}
 			w.write(Constants.LINE_SEPARATOR + "};" + Constants.LINE_SEPARATOR);
@@ -632,8 +632,8 @@ public class BlockingConfigurationGenerator {
 		while (iDbfs.hasNext()) {
 			DField df = (DField) iDbfs.next();
 			if (viewName.equals(df.targetNodeTypeName) && column.equals(df.targetFieldName)) {
-				if (defaultCount < df.defaultCount) {
-					df.defaultCount = defaultCount;
+				if (defaultCount < df._defaultCount) {
+					df._defaultCount = defaultCount;
 				}
 				return df;
 			}
@@ -730,13 +730,13 @@ public class BlockingConfigurationGenerator {
 		String targetFieldName;
 		String targetColumnName;
 		String type;
-		int defaultCount;
+		int _defaultCount;
 		DField(DbC dbC, int number, String targetNodeTypeName, String targetFieldName, String type, int defaultCount) {
 			super(number);
 			this.targetNodeTypeName = targetNodeTypeName;
 			this.targetFieldName = targetFieldName;
 			this.type = type;
-			this.defaultCount = defaultCount;
+			this._defaultCount = defaultCount;
 			Element nodeType = GeneratorHelper.findNodeType(g.getRootElement(), targetNodeTypeName);
 			if (nodeType != null) {
 				Element field = GeneratorHelper.findField(nodeType, targetFieldName);

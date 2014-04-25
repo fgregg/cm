@@ -293,7 +293,7 @@ public class DataProfilerDialog extends JDialog {
 				processRecords(rs, fieldAccessor);
 			} catch (Exception ex) {
 				this.ex = ex;
-				firePropertyChange(GenericProgressDialog.ERROR, false, true);
+				firePropertyChange(GenericProgressDialog.PN_ERROR, false, true);
 			}
 		}
 	}
@@ -396,7 +396,7 @@ public class DataProfilerDialog extends JDialog {
 			createFilesButton.setEnabled(false);
 		}
 
-		firePropertyChange(GenericProgressDialog.DONE, false, true);
+		firePropertyChange(GenericProgressDialog.PN_DONE, false, true);
 	}
 
 	private void updateScalarStatsTable(FieldProfiler profiler) {

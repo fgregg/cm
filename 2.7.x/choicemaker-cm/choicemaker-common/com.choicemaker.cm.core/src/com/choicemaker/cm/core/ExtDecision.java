@@ -24,9 +24,9 @@ public class ExtDecision extends Decision {
 	private static final long serialVersionUID = 1L;
 
 	/** The number of decisions. */
-	public final static int NUM_DECISIONS = 7;
+	public final static int NUM_DECISIONS_EXT = 7;
 
-	private static Decision[] vals = new Decision[NUM_DECISIONS];
+	private static Decision[] vals = new Decision[NUM_DECISIONS_EXT];
 
 	/** The nodiffer pseudo-decision. */
 	public static final ExtDecision NODIFFER = new ExtDecision("nodiffer", "C", 3);
@@ -42,7 +42,7 @@ public class ExtDecision extends Decision {
 
 	private ExtDecision(String name, String singleChar, int no) {
 		super(name, singleChar, no);
-    if (0<= no && no < NUM_DECISIONS) {
+    if (0<= no && no < NUM_DECISIONS_EXT) {
 		  vals[no] = this;
     }
 	}
@@ -122,8 +122,8 @@ public class ExtDecision extends Decision {
 			retVal = -1;
 		} else if (o instanceof ExtDecision) {
 			ExtDecision e = (ExtDecision) o;
-			int thisOrdinal = NUM_DECISIONS - this.toInt();
-			int thatOrdinal = NUM_DECISIONS - e.toInt();
+			int thisOrdinal = NUM_DECISIONS_EXT - this.toInt();
+			int thatOrdinal = NUM_DECISIONS_EXT - e.toInt();
 			if (thisOrdinal < thatOrdinal) {
 				retVal = 1;
 			} else {

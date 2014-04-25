@@ -20,12 +20,12 @@ import com.wcohen.ss.tokens.*;
 public class Level2 extends AbstractTokenizedStringDistance
 {
 	private static final long serialVersionUID = 1L;
-	private Tokenizer tokenizer;
-	private StringDistance tokenDistance;
+	private Tokenizer _tokenizer;
+	private StringDistance _tokenDistance;
 	
 	public Level2(Tokenizer tokenizer,StringDistance tokenDistance) {
-		this.tokenizer = tokenizer;
-		this.tokenDistance = tokenDistance;
+		this._tokenizer = tokenizer;
+		this._tokenDistance = tokenDistance;
 	}
 	
 	public double score(StringWrapper s,StringWrapper t) {
@@ -37,7 +37,7 @@ public class Level2 extends AbstractTokenizedStringDistance
 			double maxOverJ = -Double.MAX_VALUE;
 			for (Iterator j = tBag.tokenIterator(); j.hasNext(); ) {
 				Token tokenJ = (Token) j.next();
-				double scoreItoJ = tokenDistance.score( tokenI.getValue(), tokenJ.getValue() );
+				double scoreItoJ = _tokenDistance.score( tokenI.getValue(), tokenJ.getValue() );
 				maxOverJ = Math.max( maxOverJ, scoreItoJ);
 			}
 			sumOverI += maxOverJ;
@@ -61,7 +61,7 @@ public class Level2 extends AbstractTokenizedStringDistance
 			Token closestToI = null;
 			for (Iterator j = tBag.tokenIterator(); j.hasNext(); ) {
 				Token tokenJ = (Token) j.next();
-				double scoreItoJ = tokenDistance.score( tokenI.getValue(), tokenJ.getValue() );
+				double scoreItoJ = _tokenDistance.score( tokenI.getValue(), tokenJ.getValue() );
 				buf.append(" dist("+tokenJ.getValue()+")="+scoreItoJ);
 				if (scoreItoJ >= maxOverJ) {
 					maxOverJ = scoreItoJ;
@@ -82,7 +82,7 @@ public class Level2 extends AbstractTokenizedStringDistance
 		/* do nothing */ ; 
 	}
 
-	public String toString() { return "[Level2:tokenizer="+tokenizer+";tokenDist="+tokenDistance+"]"; }
+	public String toString() { return "[Level2:tokenizer="+_tokenizer+";tokenDist="+_tokenDistance+"]"; }
 	
 	static public void main(String[] argv) {
 		doMain(new Level2(SimpleTokenizer.DEFAULT_TOKENIZER, new Levenstein()), argv);

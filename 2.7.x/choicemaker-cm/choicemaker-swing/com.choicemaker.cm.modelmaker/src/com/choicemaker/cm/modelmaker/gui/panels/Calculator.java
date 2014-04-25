@@ -53,10 +53,10 @@ public class Calculator extends JPanel {
 	private JButton setBothThresholds;
 	private StatPoint pt;
 	private static final DecimalFormat DF2 = new DecimalFormat("##0.00");
-	private static final int THRESHOLD = 0;
-	private static final int ERROR = 1;
-	private static final int HR = 2;
-	private static final int NONE = 3;
+	private static final int _THRESHOLD = 0;
+	private static final int _ERROR = 1;
+	private static final int _HR = 2;
+	private static final int _NONE = 3;
 
 	public Calculator(TestingControlPanel g) {
 		parent = g;
@@ -133,27 +133,27 @@ public class Calculator extends JPanel {
 					pt = new StatPoint();
 					float firstVal = Float.parseFloat(firstFld.getText()) / 100f;
 					switch (firstTpe.getSelectedIndex()) {
-						case THRESHOLD :
+						case _THRESHOLD :
 							pt.differThreshold = firstVal;
 							break;
-						case ERROR :
+						case _ERROR :
 							pt.falseNegatives = firstVal;
 							break;
-						case HR :
+						case _HR :
 							pt.humanReview = firstVal;
 							break;
 					}
 					int idx = sndTpe.getSelectedIndex();
-					if (idx != NONE) {
+					if (idx != _NONE) {
 						float sndVal = Float.parseFloat(sndFld.getText()) / 100f;
 						switch (idx) {
-							case THRESHOLD :
+							case _THRESHOLD :
 								pt.matchThreshold = sndVal;
 								break;
-							case ERROR :
+							case _ERROR :
 								pt.falsePositives = sndVal;
 								break;
-							case HR :
+							case _HR :
 								pt.humanReview = sndVal;
 								break;
 						}
@@ -210,8 +210,8 @@ public class Calculator extends JPanel {
 		int fi = firstTpe.getSelectedIndex();
 		int si = sndTpe.getSelectedIndex();
 		calculate.setEnabled(
-			(si != NONE || fi == HR) && !(fi == HR && si == HR) && parent.getModelMaker().isEvaluated());
-		sndFld.setEnabled(si != NONE);
+			(si != _NONE || fi == _HR) && !(fi == _HR && si == _HR) && parent.getModelMaker().isEvaluated());
+		sndFld.setEnabled(si != _NONE);
 	}
 
 	private JPanel layoutInputPanel() {

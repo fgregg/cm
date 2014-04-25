@@ -30,7 +30,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
 public class FilterClueTableRow extends ClTableRow {
 	private static Logger logger = Logger.getLogger(FilterClueTableRow.class);
 
-	private ClueDesc desc;
+	private ClueDesc _desc;
 	private FilterCondition condition;
 
 	FilterClueTableRow(ClueSet clueSet, ClueDesc desc) {
@@ -43,7 +43,7 @@ public class FilterClueTableRow extends ClTableRow {
 				ClTableRow.getType(desc),
 				ClTableRow.getModifier(desc)});
 		this.condition = createDefaultCondition(clueSet, desc);
-		this.desc = desc;
+		this._desc = desc;
 	}
 
 	protected FilterCondition createDefaultCondition(ClueSet clueSet, ClueDesc desc) {
@@ -63,13 +63,13 @@ public class FilterClueTableRow extends ClTableRow {
 	}
 
 	public void setFilterCondition(FilterCondition condition) {
-		if (desc == null) {
+		if (_desc == null) {
 			throw new IllegalStateException("TODO: how can desc be null?");
 		}
 		if (condition == null) {
 			this.condition = null;
 		} else {
-			this.condition = condition.createFilterCondition(desc.getNumber());
+			this.condition = condition.createFilterCondition(_desc.getNumber());
 		}
 	}
 }

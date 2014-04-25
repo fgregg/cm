@@ -127,7 +127,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 		Rectangle startingBounds;
 		int resizeDir;
 
-		protected final int RESIZE_NONE = 0;
+		protected final int _RESIZE_NONE = 0;
 		private boolean discardRelease = false;
 
 		int resizeCornerSize = 16;
@@ -158,7 +158,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 				discardRelease = false;
 				return;
 			}
-			if (resizeDir == RESIZE_NONE)
+			if (resizeDir == _RESIZE_NONE)
 				getDesktopManager().endDraggingFrame(frame);
 			else {
 				Container c = frame.getTopLevelAncestor();
@@ -183,7 +183,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 			__x = 0;
 			__y = 0;
 			startingBounds = null;
-			resizeDir = RESIZE_NONE;
+			resizeDir = _RESIZE_NONE;
 		}
 
 		public void mousePressed(MouseEvent e) {
@@ -193,7 +193,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 			_x = p.x;
 			_y = p.y;
 			startingBounds = frame.getBounds();
-			resizeDir = RESIZE_NONE;
+			resizeDir = _RESIZE_NONE;
 
 			if (!frame.isSelected()) {
 				try {
@@ -351,7 +351,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 			parentBounds = frame.getParent().getBounds();
 
 			switch (resizeDir) {
-				case RESIZE_NONE :
+				case _RESIZE_NONE :
 					return;
 				case NORTH :
 					if (startingBounds.height + deltaY < min.height)

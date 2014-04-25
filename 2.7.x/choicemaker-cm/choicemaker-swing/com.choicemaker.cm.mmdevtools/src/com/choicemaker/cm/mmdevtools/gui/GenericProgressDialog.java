@@ -37,8 +37,8 @@ import com.choicemaker.cm.core.util.MessageUtil;
 public class GenericProgressDialog extends JDialog implements PropertyChangeListener {
 
 	private static final long serialVersionUID = 1L;
-	public static final String DONE = "DONE";
-	public static final String ERROR = "ERROR";
+	public static final String PN_DONE = "DONE";
+	public static final String PN_ERROR = "ERROR";
 
 	private Thread thread;
 
@@ -148,11 +148,11 @@ public class GenericProgressDialog extends JDialog implements PropertyChangeList
 			newValue = "";
 		}
 
-		if (propertyName == DONE) {
+		if (propertyName == PN_DONE) {
 			boolean done = ((Boolean)newValue).booleanValue();
 			ok.setEnabled(done);
 			cancel.setEnabled(!done);
-		} else if (propertyName == ERROR) {
+		} else if (propertyName == PN_ERROR) {
 			dispose();
 		} else if (labels.containsKey(propertyName)) {
 			((JLabel)labels.get(propertyName)).setText(newValue.toString());

@@ -134,23 +134,23 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 			return false;	
 		} else {
 			// raw data
-			rawData = d.rawData;
+			rawData = d._rawData;
 			
 			// tokenizations
-			tokenizations = new List[d.tokenizations.size()];
+			tokenizations = new List[d._tokenizations.size()];
 			for (int i = 0; i < tokenizations.length; i++)
-				tokenizations[i] = (List) d.tokenizations.get(i);
+				tokenizations[i] = (List) d._tokenizations.get(i);
 			
 			// parse trees
-			parseTrees = new ParseTreeNode[d.parseTrees.size()];
+			parseTrees = new ParseTreeNode[d._parseTrees.size()];
 			for (int i = 0; i < parseTrees.length; i++) {
-				parseTrees[i] = (ParseTreeNode) d.parseTrees.get(i);
+				parseTrees[i] = (ParseTreeNode) d._parseTrees.get(i);
 			}
 			
 			// parsed data
-			parsedData = new ParsedData[d.parsedData.size()];
+			parsedData = new ParsedData[d._parsedData.size()];
 			for (int i = 0; i < parsedData.length; i++)
-				parsedData[i] = (ParsedData) d.parsedData.get(i);	
+				parsedData[i] = (ParsedData) d._parsedData.get(i);	
 			
 			return true;	
 		}
@@ -277,7 +277,7 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 			building = new DatumHolder();
 		} else if (depth == 3) {
 			if (qName == RAW_DATUM) {
-				if (building.rawData != null) {
+				if (building._rawData != null) {
 					throw new SAXException("A " + DATUM + " element can have at most one " + RAW_DATUM + " child.");	
 				}
 				rawDatum = new ArrayList();
@@ -371,9 +371,9 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 				}
 
 				// add the raw strings
-				building.rawData = new String[rawDatum.size()];
-				for (int i = 0; i < building.rawData.length; i++) {
-					building.rawData[i] = (String) rawDatum.get(i);	
+				building._rawData = new String[rawDatum.size()];
+				for (int i = 0; i < building._rawData.length; i++) {
+					building._rawData[i] = (String) rawDatum.get(i);	
 				}
 
 				rawDatum = null;
@@ -383,13 +383,13 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 				}
 
 				// add the tokenization
-				building.tokenizations.add(tokens);
+				building._tokenizations.add(tokens);
 				tokens = null;
 			} else if (qName == PARSE_TREE) {
 				try {
 					ParseTreeNode ptn = 
 						ParseTreeNode.parseFromString(parseTreeText, symbolFactory, grammar);
-					building.parseTrees.add(ptn);
+					building._parseTrees.add(ptn);
 				} catch (ParseException ex) {
 					System.err.println(parseTreeText);
 					throw new SAXException(ex);	
@@ -401,7 +401,7 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 				}
 				
 				// add the parsedDatum
-				building.parsedData.add(parsedDatum);
+				building._parsedData.add(parsedDatum);
 				parsedDatum = null;
 			}
 
@@ -457,14 +457,14 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 	//
 		
 	private class DatumHolder {
-		String[] rawData = null;
-		List tokenizations = new ArrayList();
-		List parseTrees = new ArrayList();
-		List parsedData = new ArrayList();
+		String[] _rawData = null;
+		List _tokenizations = new ArrayList();
+		List _parseTrees = new ArrayList();
+		List _parsedData = new ArrayList();
 		
 		public boolean hasSomething() {
-			return rawData != null || tokenizations.size() > 0 ||
-				parseTrees.size() > 0 || parsedData.size() > 0;
+			return _rawData != null || _tokenizations.size() > 0 ||
+				_parseTrees.size() > 0 || _parsedData.size() > 0;
 		}
 	}
 	

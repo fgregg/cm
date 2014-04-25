@@ -67,7 +67,7 @@ public abstract class NamedStateSupport implements INamedStateControl {
 		public boolean equals(Object o) {
 			boolean retVal = false;
 			if (o instanceof IModuleController) {
-				retVal = this.equals((IModuleController)o);
+				retVal = this.equals(o);
 			}
 			return retVal;
 		}
