@@ -4,27 +4,27 @@ package com.wcohen.ss;
 //
 // (c) 2000 Sun Microsystems, Inc.
 // ALL RIGHTS RESERVED
-// 
-// License Grant-
-// 
-// 
-// Permission to use, copy, modify, and distribute this Software and its 
-// documentation for NON-COMMERCIAL or COMMERCIAL purposes and without fee is 
-// hereby granted.  
-// 
-// This Software is provided "AS IS".  All express warranties, including any 
-// implied warranty of merchantability, satisfactory quality, fitness for a 
-// particular purpose, or non-infringement, are disclaimed, except to the extent 
-// that such disclaimers are held to be legally invalid.
-// 
-// You acknowledge that Software is not designed, licensed or intended for use in 
-// the design, construction, operation or maintenance of any nuclear facility 
-// ("High Risk Activities").  Sun disclaims any express or implied warranty of 
-// fitness for such uses.  
 //
-// Please refer to the file http://www.sun.com/policies/trademarks/ for further 
-// important trademark information and to 
-// http://java.sun.com/nav/business/index.html for further important licensing 
+// License Grant-
+//
+//
+// Permission to use, copy, modify, and distribute this Software and its
+// documentation for NON-COMMERCIAL or COMMERCIAL purposes and without fee is
+// hereby granted.
+//
+// This Software is provided "AS IS".  All express warranties, including any
+// implied warranty of merchantability, satisfactory quality, fitness for a
+// particular purpose, or non-infringement, are disclaimed, except to the extent
+// that such disclaimers are held to be legally invalid.
+//
+// You acknowledge that Software is not designed, licensed or intended for use in
+// the design, construction, operation or maintenance of any nuclear facility
+// ("High Risk Activities").  Sun disclaims any express or implied warranty of
+// fitness for such uses.
+//
+// Please refer to the file http://www.sun.com/policies/trademarks/ for further
+// important trademark information and to
+// http://java.sun.com/nav/business/index.html for further important licensing
 // information for the Java Technology.
 //
 
@@ -112,7 +112,7 @@ import java.text.DecimalFormatSymbols;
  *          current position is the start of a line.
  *</td></tr>
  *<tr><td>\f</td><td>form-feed</td><td>Moves the
- *          printing position to the initial 
+ *          printing position to the initial
  *          printing position of the next logical
  *          page.
  *</td></tr>
@@ -169,7 +169,7 @@ import java.text.DecimalFormatSymbols;
  * </p>
  *<p>
  * An optional h specifies that a following d, i, o,
- * x, or X conversion character applies to a type 
+ * x, or X conversion character applies to a type
  * short argument (the argument will be promoted
  * according to the integral promotions and its value
  * converted to type short before printing).</p>
@@ -352,7 +352,7 @@ import java.text.DecimalFormatSymbols;
  *
  * <dt>s,S<dd>The argument is taken to be a string and
  *        bytes from the string are written until the
- *        end of the string or the number of bytes 
+ *        end of the string or the number of bytes
  *        indicated by the precision specification of
  *        the argument is reached.  If the precision
  *        is omitted from the argument, it is taken to
@@ -406,7 +406,7 @@ import java.text.DecimalFormatSymbols;
  *<ul>
  * <li>%c is the same as %C.
  * <li>%s is the same as %S.
- * <li>u, p, and n conversion characters. 
+ * <li>u, p, and n conversion characters.
  * <li>%ws format.
  * <li>h modifier applied to an n conversion character.
  * <li>l (ell) modifier applied to the c, n, or s
@@ -432,7 +432,7 @@ import java.text.DecimalFormatSymbols;
  * @author Allan Jacobs
  * @version 1
  * Release 1: Initial release.
- * Release 2: Asterisk field widths and precisions    
+ * Release 2: Asterisk field widths and precisions
  *            %n$ and *m$
  *            Bug fixes
  *              g format fix (2 digits in e form corrupt)
@@ -526,7 +526,8 @@ public class PrintfFormat {
    *     to the beginning of the control string.
    */
   private String nonControl(String s,int start) {
-    String ret="";
+	// 2014-04-24 rphall: Commented out unused local variable.
+//    String ret="";
     cPos=s.indexOf("%",start);
     if (cPos==-1) cPos=s.length();
     return s.substring(start,cPos);
@@ -804,7 +805,7 @@ public class PrintfFormat {
    * only) exception is that the minimum number of
    * exponent digits is 3 instead of 2 for e and E
    * formats when the optional L is used before the
-   * e, E, g, or G conversion character.  The 
+   * e, E, g, or G conversion character.  The
    * optional L does not imply conversion to a long
    * long double.
    */
@@ -1171,7 +1172,8 @@ public class PrintfFormat {
      */
     private char[] fFormatDigits(double x) {
       // int defaultDigits=6;
-      String sx,sxOut;
+	// 2014-04-24 rphall: Commented out unused local variable.
+      String sx /* ,sxOut */;
       int i,j,k;
       int n1In,n2In;
       int expon=0;
@@ -1320,7 +1322,7 @@ public class PrintfFormat {
       for (i=0; i<nZeros; i++,j++)
         ca5[j]='0';
       for (i=0; i<ca4.length; i++,j++) ca5[j]=ca4[i];
-  
+
       int lead=0;
       if (ca5[0]=='+'||ca5[0]=='-'||ca5[0]==' ')
         lead=1;
@@ -1362,7 +1364,8 @@ public class PrintfFormat {
 	 * @return the converted double value.
 	 */
     private String fFormatString(double x) {
-      boolean noDigits=false;
+      // 2014-04-24 rphall: Commented out unused local variable.
+//    boolean noDigits=false;
       char[] ca6,ca7;
       if (Double.isInfinite(x)) {
         if (x==Double.POSITIVE_INFINITY) {
@@ -1373,14 +1376,14 @@ public class PrintfFormat {
         }
         else
           ca6 = "-Inf".toCharArray();
-        noDigits = true;
+//        noDigits = true;
       }
       else if (Double.isNaN(x)) {
         if (leadingSign) ca6 = "+NaN".toCharArray();
         else if (leadingSpace)
           ca6 = " NaN".toCharArray();
         else ca6 = "NaN".toCharArray();
-        noDigits = true;
+//        noDigits = true;
       }
       else
         ca6 = fFormatDigits(x);
@@ -1420,9 +1423,11 @@ public class PrintfFormat {
     private char[] eFormatDigits(double x,char eChar) {
       char[] ca1,ca2,ca3;
       // int defaultDigits=6;
-      String sx,sxOut;
+		// 2014-04-24 rphall: Commented out unused local variable.
+      String sx /* ,sxOut */;
       int i,j,k,p;
-      int n1In,n2In;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//      int n1In,n2In;
       int expon=0;
       int ePos,rPos,eSize;
       boolean minusSign=false;
@@ -1442,15 +1447,16 @@ public class PrintfFormat {
       ePos = sx.indexOf('E');
       if (ePos==-1) ePos = sx.indexOf('e');
       rPos = sx.indexOf('.');
-      if (rPos!=-1) n1In=rPos;
-      else if (ePos!=-1) n1In=ePos;
-      else n1In=sx.length();
-      if (rPos!=-1) {
-        if (ePos!=-1) n2In = ePos-rPos-1;
-        else n2In = sx.length()-rPos-1;
-      }
-      else
-        n2In = 0;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//      if (rPos!=-1) n1In=rPos;
+//      else if (ePos!=-1) n1In=ePos;
+//      else n1In=sx.length();
+//      if (rPos!=-1) {
+//        if (ePos!=-1) n2In = ePos-rPos-1;
+//        else n2In = sx.length()-rPos-1;
+//      }
+//      else
+//        n2In = 0;
       if (ePos!=-1) {
         int ie=ePos+1;
         expon=0;
@@ -1615,7 +1621,7 @@ public class PrintfFormat {
         ca3[j]='0';
       for (i=0; i<ca2.length && j<ca3.length; i++,j++)
         ca3[j]=ca2[i];
-  
+
       int lead=0;
       if (ca3[0]=='+'||ca3[0]=='-'||ca3[0]==' ')
         lead=1;
@@ -1720,7 +1726,8 @@ public class PrintfFormat {
 	 * @return the converted double value.
 	 */
     private String eFormatString(double x,char eChar) {
-      boolean noDigits=false;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//      boolean noDigits=false;
       char[] ca4,ca5;
       if (Double.isInfinite(x)) {
         if (x==Double.POSITIVE_INFINITY) {
@@ -1731,14 +1738,16 @@ public class PrintfFormat {
         }
         else
           ca4 = "-Inf".toCharArray();
-        noDigits = true;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//        noDigits = true;
       }
       else if (Double.isNaN(x)) {
         if (leadingSign) ca4 = "+NaN".toCharArray();
         else if (leadingSpace)
           ca4 = " NaN".toCharArray();
         else ca4 = "NaN".toCharArray();
-        noDigits = true;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//      noDigits = true;
       }
       else
         ca4 = eFormatDigits(x,eChar);
@@ -1843,7 +1852,8 @@ public class PrintfFormat {
       int savePrecision=precision;
       int i;
       char[] ca4,ca5;
-      boolean noDigits=false;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//    boolean noDigits=false;
       if (Double.isInfinite(x)) {
         if (x==Double.POSITIVE_INFINITY) {
           if (leadingSign) ca4 = "+Inf".toCharArray();
@@ -1853,14 +1863,16 @@ public class PrintfFormat {
         }
         else
           ca4 = "-Inf".toCharArray();
-        noDigits = true;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//      noDigits = true;
       }
       else if (Double.isNaN(x)) {
         if (leadingSign) ca4 = "+NaN".toCharArray();
         else if (leadingSpace)
           ca4 = " NaN".toCharArray();
         else ca4 = "NaN".toCharArray();
-        noDigits = true;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//        noDigits = true;
       }
       else {
         if (!precisionSet) precision=defaultDigits;
@@ -2055,7 +2067,7 @@ public class PrintfFormat {
         else if (leadingSpace) ca[i++] = ' ';
         char[] csx = sx.toCharArray();
         jFirst = neg?1:0;
-        for (int j=0; j<nLeadingZeros; i++,j++) 
+        for (int j=0; j<nLeadingZeros; i++,j++)
           ca[i]='0';
         for (int j=jFirst; j<csx.length; j++,i++)
           ca[i] = csx[j];
@@ -2412,7 +2424,7 @@ public class PrintfFormat {
      *
      * For o format, the flag character '-', means that
      * the output should be left justified within the
-     * field.  The default is to pad with blanks on the 
+     * field.  The default is to pad with blanks on the
      * left.  The '#' flag character means that the
      * output begins with a leading 0 and the precision
      * is increased by 1.
@@ -2462,7 +2474,7 @@ public class PrintfFormat {
      *
      * For o format, the flag character '-', means that
      * the output should be left justified within the
-     * field.  The default is to pad with blanks on the 
+     * field.  The default is to pad with blanks on the
      * left.  The '#' flag character means that the
      * output begins with a leading 0 and the precision
      * is increased by 1.
@@ -3032,13 +3044,13 @@ public class PrintfFormat {
      * d, i, o, u, x, or X conversions.  The number of
      * digits to appear after the radix character for
      * the e, E, and f conversions.  The maximum number
-     *  of significant digits for the g and G 
+     *  of significant digits for the g and G
      * conversions.  The maximum number of bytes to be
      * printed from a string in s and S conversions.
      */
     private int precision = 0;
     /** Default precision. */
-    private final static int defaultDigits=6; 
+    private final static int defaultDigits=6;
     /**
      * Flag indicating that the precision is *.
      */

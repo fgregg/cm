@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -29,7 +29,7 @@ public class XmlParserFactory {
 		ClassLoader oldCl = setClassLoader();
 		SAXBuilder builder = new SAXBuilder(validate);
 		restoreClassLoader(oldCl);
-		
+
 		return builder;
 	}
 
@@ -37,7 +37,7 @@ public class XmlParserFactory {
 		ClassLoader oldCl = setClassLoader();
 		XMLReader reader = XMLReaderFactory.createXMLReader(className);
 		restoreClassLoader(oldCl);
-		
+
 		return reader;
 	}
 
@@ -57,7 +57,9 @@ public class XmlParserFactory {
 	public static boolean connected() {
 		try {
 			URL url = new URL("http://www.choicemaker.com/");
-			Object o = url.getContent();
+			// 2014-04-24 rphall: Commented out unused local variable.
+			/* Object o = */
+			url.getContent();
 			return true;
 		} catch (Exception ex) {
 			return false;

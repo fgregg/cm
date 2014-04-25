@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -28,33 +28,33 @@ import com.choicemaker.cm.transitivity.core.TransitivityResult;
 /**
  * This object takes a TransitivityResult and a Writer and outputs the clusters as
  * RECORD_ID, MATCH_GROUP_ID, HOLD_GROUP_ID.
- * 
+ *
  * @author pcheung
  *
  * ChoiceMaker Technologies, Inc.
  */
 public class TextSerializer {
-	
+
 	private static final Logger log = Logger.getLogger(TextSerializer.class);
 
 	public static final int SORT_BY_ID = 1;
 	public static final int SORT_BY_HOLD_MERGE_ID = 2;
-	
+
 	protected static final char DELIMITER = '|';
 	protected static final String NEW_LINE = System.getProperty("line.separator");
-	
+
 	//counter variables to assign hold and merge group ids.
 	private int holdCount = 0;
 	private int matchCount = 0;
-	
+
 	//This list is created from all the nodes in TransitivityResult.
 	//This is memory intensive.
 	protected List records;
 
 	protected TransitivityResult result;
-	
+
 	protected Writer writer;
-	
+
 	protected int sortType;
 
 
@@ -67,7 +67,7 @@ public class TextSerializer {
 
 
 	/** This constructor takes a TransitivityResult and a Writer.
-	 * 
+	 *
 	 * @param result - the object to serialize
 	 * @param writer - the output writer
 	 */
@@ -80,7 +80,7 @@ public class TextSerializer {
 
 
 	/** This method serializes the result to the writer.
-	 * 
+	 *
 	 *
 	 */
 	public void serialize () throws IOException {
@@ -88,37 +88,38 @@ public class TextSerializer {
 		Iterator it = result.getNodes();
 		while (it.hasNext()) {
 			CompositeEntity ce = (CompositeEntity) it.next();
-			
+
 			getCompositeEntity (ce);
 		}
-		
+
 		//second, sort them accordingly
 		Object [] recs = handleSort ();
-		
+
 		//free memory
 		records = null;
-		
+
 		//third, write them out.
 		writeRecords (recs);
-		
+
 		writer.flush();
 		writer.close();
-		
+
 		//free up memory
 		recs = null;
 	}
-	
-	
+
+
 	/** This method gets the record ID and assign to it match group and hold group ids.
-	 * 
+	 *
 	 * @param ce
 	 * @throws IOException
 	 */
 	protected void getCompositeEntity (CompositeEntity ce) {
 		holdCount ++;
-		
-		StringBuffer sb = new StringBuffer ();
-		
+
+		// 2014-04-24 rphall: Commented out unused local variable
+//		StringBuffer sb = new StringBuffer ();
+
 		List children = ce.getChildren();
 		int s = children.size();
 		for (int i=0; i<s; i++) {
@@ -140,19 +141,19 @@ public class TextSerializer {
 						r.id = node2.getNodeId();
 						r.mergeGroupId = matchCount;
 						r.holdGroupId = holdCount;
-						records.add(r);						
+						records.add(r);
 					} else {
 						throw new IllegalArgumentException ("Does not support CompositeEntity within a CompositeEntity.");
 					}
 				}
-				
+
 			} else {
 				throw new IllegalArgumentException ("Unknown node: " + node.toString());
 			}
 		}
 	}
-	
-	
+
+
 	protected Object [] handleSort () {
 		Object [] recs = records.toArray();
 
@@ -190,7 +191,7 @@ public class TextSerializer {
 
 
 	/** This private inner class holds the record id, merge group id, and hold group id.
-	 * 
+	 *
 	 * @author pcheung
 	 *
 	 * ChoiceMaker Technologies, Inc.
@@ -199,7 +200,7 @@ public class TextSerializer {
 		protected Comparable id;
 		protected int mergeGroupId;
 		protected int holdGroupId;
-		
+
 		/* (non-Javadoc)
 		 * @see java.lang.Comparable#compareTo(java.lang.Object)
 		 */
@@ -208,10 +209,10 @@ public class TextSerializer {
 			return this.id.compareTo(r.id);
 		}
 	}
-	
-	
+
+
 	/** This private inner class sorts the records by id.
-	 * 
+	 *
 	 * @author pcheung
 	 *
 	 * ChoiceMaker Technologies, Inc.
@@ -231,7 +232,7 @@ public class TextSerializer {
 
 
 	/** This private inner class sorts the records by hold group, merge group, and id.
-	 * 
+	 *
 	 * @author pcheung
 	 *
 	 * ChoiceMaker Technologies, Inc.

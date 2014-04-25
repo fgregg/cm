@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -25,13 +25,13 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor;
 import com.choicemaker.cm.io.blocking.automated.inmemory.InMemoryAutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.inmemory.InMemoryDataSource;
+//import com.choicemaker.cm.io.blocking.automated.inmemory.InMemoryDataSource;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
 
 /**
  * Description
- * 
+ *
  * @author  Martin Buechi
  * @version $Revision: 1.2 $ $Date: 2010/03/28 09:40:53 $
  */
@@ -67,21 +67,22 @@ public class InMemoryAutomatedBlockerDialogPlugin extends MatchDialogBlockerPlug
 		String blockingConfiguration = (String)blockingConfBox.getSelectedItem();
 
 		// harder stuff...
-		InMemoryDataSource imds = null;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		InMemoryDataSource imds = null;
 
-		InMemoryAutomatedBlocker imab = 
+		InMemoryAutomatedBlocker imab =
 			new InMemoryAutomatedBlocker(model,
 										 limitPerBlockingSet,
 										 singleTableBlockingSetGraceLimit,
 										 limitSingleBlockingSet,
 										 dbConfiguration,
 										 blockingConfiguration);
-		
+
 		// TODO: possibly get/create counts from somewhere else...
-		
+
 		return imab;
 	}
-	
+
 	private int getInt(JTextField tf, int min, int def) {
 		String text = tf.getText().trim();
 		try {
@@ -91,32 +92,32 @@ public class InMemoryAutomatedBlockerDialogPlugin extends MatchDialogBlockerPlug
 			return def;
 		}
 	}
-	
+
 	private void createContent() {
 		GridBagLayout layout = new GridBagLayout();
 		layout.columnWeights = new double[] {0, 0, 0, 1};
 		setLayout(layout);
-		
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(2, 2, 2, 2);
-		
+
 		Dimension tfDimension = null;
-		
+
 		//
-		
+
 		c.gridy = 0;
 		c.gridx = 0;
 		add(Box.createVerticalStrut(10), c);
-		
+
 		//
 
 		c.gridy++;
-		
+
 		c.gridx = 0;
 		add(Box.createHorizontalStrut(10), c);
-		
+
 		c.gridx = 1;
-		c.anchor = GridBagConstraints.WEST;	
+		c.anchor = GridBagConstraints.WEST;
 		add(new JLabel("Database Configuration"), c);
 
 		c.gridx = 2;
@@ -124,16 +125,16 @@ public class InMemoryAutomatedBlockerDialogPlugin extends MatchDialogBlockerPlug
 
 		c.gridx = 3;
 		add(new JLabel("Blocking Configuration"), c);
-		
+
 		c.gridx = 4;
 		c.fill = GridBagConstraints.BOTH;
 		add(new JPanel(), c);
 		c.fill = GridBagConstraints.NONE;
-		
+
 		//
 
 		c.gridy++;
-				
+
 		c.gridx = 1;
 		c.anchor = GridBagConstraints.NORTHWEST;
 		dbConfBox = new JComboBox(((DbAccessor)model.getAccessor()).getDbConfigurations());
@@ -148,46 +149,46 @@ public class InMemoryAutomatedBlockerDialogPlugin extends MatchDialogBlockerPlug
 		add(blockingConfBox, c);
 
 		//
-		
+
 		c.gridy++;
 		add(Box.createVerticalStrut(10), c);
-		
+
 		//
-		
+
 		c.gridy++;
-		
+
 		c.gridx = 1;
 		add(new JLabel("Max Expected Blocking Set Size"), c);
-		
+
 		c.gridx = 3;
 		lpbsField = new JTextField("" + DEFAULT_LPBS, 20);
 		lpbsField.setMinimumSize(tfDimension);
 		add(lpbsField, c);
-		
+
 		//
-		
+
 		c.gridy++;
-		
+
 		c.gridx = 1;
 		add(new JLabel("Single Table Grace Limit"), c);
-		
+
 		c.gridx = 3;
 		stbsglField = new JTextField("" + DEFAULT_STBSGL, 20);
 		stbsglField.setMinimumSize(tfDimension);
 		add(stbsglField, c);
-		
+
 		//
-		
+
 		c.gridy++;
-		
+
 		c.gridx = 1;
 		add(new JLabel("Max Records Blocked"), c);
-		
+
 		c.gridx = 3;
 		lsbsField = new JTextField("" + DEFAULT_LSBS, 20);
 		lsbsField.setMinimumSize(tfDimension);
 		add(lsbsField, c);
-		
+
 	}
 
 }

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -38,7 +38,7 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.StringComparator;
 
 /**
  * Description
- * 
+ *
  * @author  Martin Buechi
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:16:21 $
  */
@@ -120,7 +120,8 @@ public class ToolsMenu extends JMenu {
 
 	private void buildMenu() {
 		AbstractAction matchAction = new MatchAction();
-		JMenuItem matchItem = add(matchAction);
+		// 2014-04-24 rphall: Commented out unused local variable.
+		/* JMenuItem matchItem = */ add(matchAction);
 		AbstractAction stringComparator = new AbstractAction("String Comparison Functions...") {
 			private static final long serialVersionUID = 1L;
 
@@ -129,7 +130,7 @@ public class ToolsMenu extends JMenu {
 			}
 		};
 		add(stringComparator);
-		
+
 		add( new GeoTestAction());
 
 		AbstractAction collections = new AbstractAction("Collections Lookup...") {
@@ -140,7 +141,7 @@ public class ToolsMenu extends JMenu {
 			}
 		};
 		add(collections);
-		
+
 		AbstractAction buildModelsJar = new AbstractAction("Build Holder Classes and DB Objects...") {
 			private static final long serialVersionUID = 1L;
 
@@ -149,14 +150,14 @@ public class ToolsMenu extends JMenu {
 			};
 		};
 		add(buildModelsJar);
-		
+
 		addSeparator();
-		
+
 		add(new ExportProbabilitiesAction());
-		
+
 		buildPluginToolMenuItems();
 	}
-	
+
 	private void buildPluginToolMenuItems() {
 		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.modelmaker.toolMenuItem");
 		IExtension[] extensions = pt.getExtensions();
@@ -171,15 +172,15 @@ public class ToolsMenu extends JMenu {
 					ex.printStackTrace();
 				}
 			}
-		}		
+		}
 	}
-	
+
 	private JMenuItem buildToolItem(IConfigurationElement element) throws CoreException {
 		Action action = (Action) element.createExecutableExtension("class");
 		if (action instanceof ToolAction) {
 			((ToolAction)action).setModelMaker(modelMaker);
 		}
-		
+
 		IConfigurationElement[] kids = element.getChildren();
 		if (kids.length > 0) {
 			JMenu menu = new JMenu(action);
@@ -192,22 +193,22 @@ public class ToolsMenu extends JMenu {
 			return item;
 		}
 	}
-	
+
 	public static abstract class ToolAction extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
 		protected ModelMaker modelMaker;
-		
+
 		public ToolAction() { }
-		
+
 		public ToolAction(String name) {
 			super(name);
 		}
 
 		public ToolAction(String name, Icon icon) {
-			super(name, icon);	
+			super(name, icon);
 		}
-		
+
 		public void setModelMaker(ModelMaker modelMaker) {
 			this.modelMaker = modelMaker;
 		}

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -28,7 +28,7 @@ import com.choicemaker.cm.core.util.ConvUtils;
 &LT/module&GT
    </pre>
  *
- * This loads the contents of the specified file, one token per line, into memory. 
+ * This loads the contents of the specified file, one token per line, into memory.
  * E.g., the file nicknames.txt may look like this:
  * <pre>
 JIM
@@ -40,13 +40,13 @@ JOSEPH
 ...
    </pre>
  *
- * Based on this, we can then use an expression like 
- * <code>Relations.emptyIntersection("nicknames", q.first_name, m.first_name) </code> 
+ * Based on this, we can then use an expression like
+ * <code>Relations.emptyIntersection("nicknames", q.first_name, m.first_name) </code>
  * in a schema expression or in a clue/rule.
- * 
- * All primitive Java types and String are supported as key and value types. 
- * The attribute reflexive governs whether the relation should be extended by 
- * (x, x) for all x. It only has an effect if the key and value types are the 
+ *
+ * All primitive Java types and String are supported as key and value types.
+ * The attribute reflexive governs whether the relation should be extended by
+ * (x, x) for all x. It only has an effect if the key and value types are the
  * same.
  *
  * @author    Martin Buechi
@@ -63,9 +63,9 @@ public final class Relations {
 	}
 
 	/**
-	 * Add a relation named <code>name</code> to the list of 
+	 * Add a relation named <code>name</code> to the list of
 	 * registered relations.
-	 * 
+	 *
 	 * @param name the name of the relation
 	 * @param r the relation itself
 	 */
@@ -76,7 +76,7 @@ public final class Relations {
 	/**
 	 * Retrieves the relation named by <code>name</code>
 	 * and then returns the mapped set keyed by <code>x</code>.
-	 * 
+	 *
 	 * @param name the name of the relation
 	 * @param x the key
 	 * @return x's mapped set in relation named by <code>name</code>
@@ -84,10 +84,10 @@ public final class Relations {
 	public static Set get(String name, Object x) {
 		return getRelation(name).get(x);
 	}
-	
+
 	/**
 	 * Returns the registered relation named by name.
-	 * 
+	 *
 	 * @param name the name of the relation
 	 * @return the relation named by <code>name</code>
 	 */
@@ -96,22 +96,22 @@ public final class Relations {
 		if (r instanceof LazyRelation) {
 			((LazyRelation)r).init();
 		}
-		return (Relation) relations.get(name);	
+		return (Relation) relations.get(name);
 	}
 
 	/**
 	 * Returns a Collection of the names of the registered relations.
-	 * 
+	 *
 	 * @return a Collection of the names of the registered relations
 	 */
 	public static Collection getRelationNames() {
-		return relations.keySet();	
+		return relations.keySet();
 	}
 
 	/**
 	 * Returns true iff the mapped sets of x1 and x2 in the Relation named by <code>name</code>
 	 * share no elements.
-	 * 
+	 *
 	 * @param name the name of the Relation
 	 * @param x1 the first key
 	 * @param x2 the second key
@@ -158,10 +158,10 @@ public final class Relations {
 		fis.close();
 		return r;
 	}
-	
+
 	/**
 	 * FOR CHOICEMAKER INTERNAL USE ONLY.
-	 */	
+	 */
 	public static Relation readFileRelation(InputStream stream, String keyType, String valueType, boolean reflexive) throws IOException {
 		Relation r = new Relation(reflexive);
 		InputStreamReader reader = new InputStreamReader(stream);
@@ -177,7 +177,7 @@ public final class Relations {
 		}
 		in.close();
 		reader.close();
-		return r;		
+		return r;
 	}
 
 	/**
@@ -195,31 +195,32 @@ public final class Relations {
 
 				String name = el.getAttribute("name");
 				String file = el.getAttribute("file");
-				boolean lazy = true;
-				boolean reload = true;
+
+				// 2014-04-24 rphall: Commented out unused local variables.
+//				boolean lazy = true;
+//				if (el.getAttribute("lazy") != null) {
+//					lazy = Boolean.getBoolean(el.getAttribute("lazy"));
+//				}
+//				boolean reload = true;
+//				if (el.getAttribute("reload") != null) {
+//					reload = Boolean.getBoolean(el.getAttribute("reload"));
+//				}
 				String keyType = "String";
-				String valueType = "String";
-				boolean reflexive = true;
-		
-				if (el.getAttribute("lazy") != null) {
-					lazy = Boolean.getBoolean(el.getAttribute("lazy"));
-				}
-				if (el.getAttribute("reload") != null) {
-					reload = Boolean.getBoolean(el.getAttribute("reload"));
-				}
 				if (el.getAttribute("keyType") != null) {
 					keyType = el.getAttribute("keyType");
 				}
+				String valueType = "String";
 				if (el.getAttribute("valueType") != null) {
 					valueType = el.getAttribute("valueType");
 				}
+				boolean reflexive = true;
 				if (el.getAttribute("reflexive") != null) {
 					reflexive = Boolean.getBoolean(el.getAttribute("reflexive"));
 				}
-			
+
 				try {
 					URL rUrl = new URL(pUrl, file);
-					Relation r = new LazyRelation(name, rUrl, keyType, valueType, reflexive);		
+					Relation r = new LazyRelation(name, rUrl, keyType, valueType, reflexive);
 					add(name, r);
 				} catch (MalformedURLException ex) {
 					ex.printStackTrace();
@@ -231,7 +232,7 @@ public final class Relations {
 }
 
 class LazyRelation extends Relation {
-	
+
 	private String name;
 	private URL url;
 	private String keyType;
@@ -239,7 +240,7 @@ class LazyRelation extends Relation {
 	private boolean reflexive;
 
 	private Relation store;
-	
+
 	public LazyRelation(String name, URL url, String keyType, String valueType, boolean reflexive) {
 		this.name = name;
 		this.url = url;
@@ -247,7 +248,7 @@ class LazyRelation extends Relation {
 		this.valueType = valueType;
 		this.reflexive = reflexive;
 	}
-	
+
 	protected void init() {
 		if (store == null) {
 			try {
@@ -258,7 +259,7 @@ class LazyRelation extends Relation {
 			}
 		}
 	}
-	
+
 	public boolean isReflexive() {
 		init();
 		return store.isReflexive();
@@ -268,20 +269,20 @@ class LazyRelation extends Relation {
 		init();
 		store.add(x, y);
 	}
-	
+
 	public Set get(Object x) {
 		init();
 		return store.get(x);
 	}
-	
+
 	public Set get(Object x, boolean considerReflexive) {
 		init();
 		return store.get(x, considerReflexive);
 	}
-	
+
 	public Relation getInverse() {
 		init();
 		return store.getInverse();
 	}
-	
+
 }

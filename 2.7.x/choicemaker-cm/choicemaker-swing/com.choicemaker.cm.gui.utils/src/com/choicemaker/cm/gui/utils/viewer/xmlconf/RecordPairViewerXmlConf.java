@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -60,7 +60,7 @@ public class RecordPairViewerXmlConf {
 		}
 		return readLayout(document, descriptor, fileName);
 	}
-	
+
 	public static CompositePaneModel readLayoutFromJar(String name, Descriptor descriptor) throws XmlConfException {
 		Document document = null;
 		SAXBuilder builder = XmlParserFactory.createSAXBuilder(false);
@@ -72,7 +72,7 @@ public class RecordPairViewerXmlConf {
 		}
 		return readLayout(document, descriptor, name);
 	}
-	
+
 	public static CompositePaneModel readLayout(URL url, Descriptor descriptor) throws XmlConfException {
 		Document document = null;
 		SAXBuilder builder = XmlParserFactory.createSAXBuilder(false);
@@ -84,14 +84,14 @@ public class RecordPairViewerXmlConf {
 		return readLayout(document, descriptor, url.toString());
 	}
 
-	
+
 	public static CompositePaneModel readLayout(Document document, Descriptor descriptor, String fileName) throws XmlConfException {
 		CompositePaneModel compositePaneModel =
 			compositePaneModelFromXml(document.getRootElement(), new DescriptorCollection(descriptor));
 		compositePaneModel.setFileName(fileName);
 		return compositePaneModel;
 	}
-	
+
 	public static CompositePaneModel compositePaneModelFromXml(Element e, DescriptorCollection d) {
 		List t = new ArrayList();
 		List viewerModels = e.getChildren(RECORD_PAIR_VIEWER_MODEL);
@@ -130,7 +130,7 @@ public class RecordPairViewerXmlConf {
 		}
 		return recordPairViewerModel;
 	}
-	
+
 	public static CompositeFrameModel compositeFrameModelFromXml(Element e, DescriptorCollection d) {
 		String alias = e.getAttributeValue(ALIAS);
 		int x = Integer.parseInt(e.getAttributeValue(X));
@@ -144,7 +144,8 @@ public class RecordPairViewerXmlConf {
 
 	public static RecordPairFrameModel recordPairFrameModelFromXml(Element e, DescriptorCollection d) {
 		RecordPairFrameModel recordPairFrameModel = null;
-		String descriptorName = e.getAttributeValue(DESCRIPTOR_NAME);
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		String descriptorName = e.getAttributeValue(DESCRIPTOR_NAME);
 		Descriptor descriptor = d.getDescriptor(e.getAttributeValue(DESCRIPTOR_NAME));
 		if (descriptor != null) {
 			String alias = e.getAttributeValue(ALIAS);
@@ -219,7 +220,7 @@ public class RecordPairViewerXmlConf {
 			throw new XmlConfException("Problem writing file.", ex);
 		}
 	}
-	
+
 	public static Element modelToXml(CompositePaneModel compositePaneModel) {
 		Element res = new Element(COMPOSITE_PANE_MODEL);
 		RecordPairViewerModel[] recordPairViewerModels = compositePaneModel.getViewerModels();
@@ -276,7 +277,7 @@ public class RecordPairViewerXmlConf {
 		res.setAttribute(Y, String.valueOf(bounds.y));
 		res.setAttribute(WIDTH, String.valueOf(bounds.width));
 		res.setAttribute(HEIGHT, String.valueOf(bounds.height));
-		res.addContent(modelToXml(compositeFrameModel.getCompositePaneModel()));	
+		res.addContent(modelToXml(compositeFrameModel.getCompositePaneModel()));
 		return res;
 	}
 

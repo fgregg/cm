@@ -169,7 +169,8 @@ public class FilterCluePanel extends JPanel {
 	}
 
 	public void buildPanel() {
-		JPanel content = this;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		JPanel content = this;
 
 		clueTable = createClueTable();
 		clueTableScrollPane = new JScrollPane();

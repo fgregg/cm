@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -22,7 +22,7 @@ import java.io.Reader;
  * to a pipe-delimited file
  *
  * @author    Adam Winkel
- * @version   
+ * @version
  */
 public class CsvToPipe extends Reader {
 
@@ -31,25 +31,26 @@ public class CsvToPipe extends Reader {
 			System.err.println("Usage: CsvToPipe inFile outFile");
 			System.exit(1);
 		}
-		
+
 		Transducer transducer = new Transducer();
-		
+
 		FileReader fr = new FileReader(args[0]);
 		BufferedReader reader = new BufferedReader(fr);
-		
+
 		FileWriter fw = new FileWriter(args[1]);
 		PrintWriter writer = new PrintWriter(fw);
-		
-		int lineNum = 0;
+
+		// 2014-04-24 rphall: Commented out unused local variables.
+//		int lineNum = 0;
 		while (reader.ready()) {
 			String line = reader.readLine();
 			String out = transducer.transduce(line);
 			writer.println(out);
 		}
-		
+
 		writer.close();
 		fw.close();
-		
+
 		reader.close();
 		fr.close();
 	}
@@ -64,11 +65,11 @@ public class CsvToPipe extends Reader {
 	public CsvToPipe(Reader reader) {
 		this(new BufferedReader(reader));
 	}
-	
+
 	public CsvToPipe(BufferedReader reader) {
 		this.reader = reader;
 		this.transducer = new Transducer();
-		
+
 		lineSep = System.getProperty("line.separator");
 	}
 
@@ -76,7 +77,7 @@ public class CsvToPipe extends Reader {
 		if (linePos >= lineLen && !fill()) {
 			return -1;
 		}
-				
+
 		int available = lineLen - linePos;
 		int toRead = len > available ? available : len;
 
@@ -89,7 +90,7 @@ public class CsvToPipe extends Reader {
 	public void close() throws IOException {
 		reader.close();
 	}
-	
+
 	private boolean fill() throws IOException {
 		String s = reader.readLine();
 		if (s != null) {
@@ -98,7 +99,7 @@ public class CsvToPipe extends Reader {
 			lineBuff = (line + lineSep).toCharArray();
 			lineLen = line.length();
 			linePos = 0;
-			
+
 			return true;
 		} else {
 			return false;
@@ -107,7 +108,7 @@ public class CsvToPipe extends Reader {
 
 	public static class Transducer {
 
-		// states		
+		// states
 		public static final byte STATE_START           = 0;
 		public static final byte STATE_REGFIELD        = 1;
 		public static final byte STATE_QUOTEDFIELD     = 2;
@@ -118,21 +119,21 @@ public class CsvToPipe extends Reader {
 		public static final byte QUOTE = 1;
 		public static final byte SPACE = 2;
 		public static final byte OTHER = 3;
-		
+
 		// actions
 		public static final byte OUTPUT_CHAR = -21;
 		public static final byte END_FIELD   = -22;
 		public static final byte END_LINE    = -23;
 		public static final byte ERROR       = -24;
 		public static final byte NONE        = -128;
-				
+
 		protected byte[][][] transitions = {
 			{
 				{END_FIELD, STATE_START},
 				{NONE, STATE_QUOTEDFIELD},
 				{NONE, STATE_START},
 				{OUTPUT_CHAR, STATE_REGFIELD}
-			}, 
+			},
 			{
 				{END_FIELD, STATE_START},
 				{ERROR, 0},
@@ -152,32 +153,33 @@ public class CsvToPipe extends Reader {
 				{ERROR, 2}
 			}
 		};
-		
+
 		protected String[] errorMessages = {
 			"Cannot have a quote in a regular field.",
 			"Unbalanced quotes.",
 			"Unexpected character outside of quotes in quoted field.",
 			"Unexpected line end."  // not used above, but used below.
 		};
-		
+
 		protected int lineNum;
-		
-		public Transducer() { 
+
+		public Transducer() {
 			lineNum = 0;
 		}
-		
+
 		public String transduce(String s) {
 			lineNum++;
 
 			byte state = STATE_START;
-			
+
 			StringBuffer buff = new StringBuffer(s.length());
-			int numFields = 0;
-			
+			// 2014-04-24 rphall: Commented out unused local variables.
+//			int numFields = 0;
+
 			int len = s.length();
 			for (int i = 0; i < len; i++) {
 				char c = s.charAt(i);
-				
+
 				byte type = OTHER;
 				if (c == '|') {
 					buff.append(' ');
@@ -187,8 +189,8 @@ public class CsvToPipe extends Reader {
 					type = COMMA;
 				} else if (c == '"') {
 					type = QUOTE;
-					if (state == STATE_QUOTEDFIELD && 
-						i + 1 < len && 
+					if (state == STATE_QUOTEDFIELD &&
+						i + 1 < len &&
 						s.charAt(i+1) == '"') { // handle double quotes inside a quoted string.
 
 						type = OTHER;
@@ -200,7 +202,7 @@ public class CsvToPipe extends Reader {
 				} else {
 					type = OTHER;
 				}
-					
+
 				byte[] trans = transitions[state][type];
 				switch (trans[0]) {
 					case ERROR:
@@ -213,10 +215,10 @@ public class CsvToPipe extends Reader {
 						buff.append('|');
 						break;
 				};
-				
+
 				state = trans[1];
 			}
-			
+
 			if (state != STATE_START) {
 				byte[] trans = transitions[state][COMMA];
 				if (trans[0] != END_FIELD) {  // just generate something that looks like an error...
@@ -225,20 +227,20 @@ public class CsvToPipe extends Reader {
 					} catch (RuntimeException ex) {
 						System.err.println(ex.getMessage());
 					}
-					
+
 					//padPipes(buff, 10);
 				}
 			}
-			
+
 			return buff.toString();
 		}
-	
+
 		private void error(int msgIndex, String s, int lineNum, int column) {
 			throw new RuntimeException(
-				"Error at line " + lineNum + " column " + column + ": " + errorMessages[msgIndex] + 
+				"Error at line " + lineNum + " column " + column + ": " + errorMessages[msgIndex] +
 				"\n\t" + s);
 		}
-		
+
 		/*
 		private void padPipes(StringBuffer buff, int numPipes) {
 			int count = 0;
@@ -251,7 +253,7 @@ public class CsvToPipe extends Reader {
 			}
 		}
 		*/
-		
+
 	}
 
 }

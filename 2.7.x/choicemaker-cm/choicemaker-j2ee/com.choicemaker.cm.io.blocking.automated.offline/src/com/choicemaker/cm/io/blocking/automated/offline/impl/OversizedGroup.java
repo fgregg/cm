@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -27,16 +27,16 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IOversizedGroup;
  * It breaks the oversized blocks into files with the same max column number.
  */
 public class OversizedGroup implements IOversizedGroup {
-	
+
 	int numColumn;
 	IBlockSinkSourceFactory bFactory;
-	ArrayList sinks; 
-	
-	
+	ArrayList sinks;
+
+
 	public OversizedGroup (int numColumn, IBlockSinkSourceFactory bFactory) throws BlockingException {
 		this.numColumn = numColumn;
 		this.bFactory = bFactory;
-		
+
 		sinks = new ArrayList (numColumn);
 
 		for (int i=0; i<numColumn; i++) {
@@ -44,21 +44,22 @@ public class OversizedGroup implements IOversizedGroup {
 			sinks.add(sink);
 		}
 	}
-	
-	
+
+
 	/** This method finds the maximum column id of the block set.
-	 * 
+	 *
 	 * @param bs
 	 * @return
 	 */
 	private int findMax (BlockSet bs) {
 		IntArrayList columns = bs.getColumns();
-		int s = columns.size();
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		int s = columns.size();
 
-		//columns are sorted so just return the last one.		
+		//columns are sorted so just return the last one.
 		return columns.get(columns.size() - 1);
 	}
-	
+
 
 	public void writeBlock(BlockSet bs) throws BlockingException {
 		IBlockSink sink = (IBlockSink) sinks.get(findMax(bs));
@@ -106,17 +107,17 @@ public class OversizedGroup implements IOversizedGroup {
 			sink.close();
 		}
 	}
-	
-	
-	
+
+
+
 	public void cleanUp () throws BlockingException {
 		for (int i=0; i<numColumn; i++) {
 			IBlockSink sink = (IBlockSink) sinks.get(i);
 			bFactory.removeSink(sink);
-			
+
 //			System.out.println ("Remove " + sink.getInfo());
 		}
-		
+
 	}
 
 }

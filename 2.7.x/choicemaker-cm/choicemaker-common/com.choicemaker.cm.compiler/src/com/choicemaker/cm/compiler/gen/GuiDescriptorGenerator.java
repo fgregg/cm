@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -81,7 +81,8 @@ public class GuiDescriptorGenerator implements GeneratorPlugin {
 			while (iFields.hasNext()) {
 				Element f = (Element) iFields.next();
 				Element displayField = f.getChild(DisplayTags.DISPLAY_FIELD);
-				Element derivedField = f.getChild(CoreTags.DERIVED);
+				// 2014-04-24 rphall: Commented out unused local variable.
+//				Element derivedField = f.getChild(CoreTags.DERIVED);
 				if (displayField != null && !GeneratorHelper.getBooleanAttribute(displayField, CoreTags.USE, true) ||
 					GeneratorHelper.isNodeInitScope(f)) {
 					iFields.remove();

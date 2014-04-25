@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -44,7 +44,7 @@ import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
 /**
  * This object takes a IMatchRecord2Source, RecordSource and a
  * MarkedRecordPairSink to create an MRPS file from the matched IDs.
- * 
+ *
  * It does the following (per processing batch):<ul>
  * <li>Builds a hash map of record ids that show up in IMatchRecord2Source</li>
  * <li>Gets the record objects from RecordSource</li>
@@ -95,10 +95,11 @@ public class MRPSCreator {
 			String xmlDataFileName = xmlMrps.getXmlFileName();
 			retVal = new File(xmlDataFileName).getParentFile();
 		}
-		if (retVal == null) {
-			String userHome = System.getProperty("user.home");
-			File userDir = new File(userHome);
-		}
+		// 2014-04-24 rphall: Commented out unused local variables.
+//		if (retVal == null) {
+//			String userHome = System.getProperty("user.home");
+//			File userDir = new File(userHome);
+//		}
 		return retVal;
 	}
 
@@ -611,7 +612,7 @@ public class MRPSCreator {
 
 	/** This method takes in a set of record ids and a records source.
 	 * Each record with id in the set is put on the output hash map.
-	 * 
+	 *
 	 * @param ids
 	 * @param rs
 	 * @return

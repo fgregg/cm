@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -33,7 +33,7 @@ public class SubsumedBlockRemover {
 		public int compare(Object a, Object b) {
 			BlockSet bsA = (BlockSet)a;
 			BlockSet bsB = (BlockSet)b;
-			
+
 			return bsA.getRecordIDs().size() - bsB.getRecordIDs().size();
 		}
 	};
@@ -42,15 +42,15 @@ public class SubsumedBlockRemover {
 
 	private IBlockSource source;
 	private IBlockSink sink;
-	
+
 	//these variables are for splitting the block source to avoid outofmemoryexception
 	private IBlockSinkSourceFactory bFactory;
 	private int maxBlockSize;
 
-	
+
 	BlocksSpliter spliter;
 //	private BlocksSpliterMap spliter;
-		
+
 	private int numBlocksIn; //number of blocks before remove subsumed
 	private int numBlocksOut; //number of blocks after remove subsumed
 
@@ -61,9 +61,9 @@ public class SubsumedBlockRemover {
 
 
 	/** This version is safer on the memory because it break the big block file into smaller files.  Each
-	 * file contains blocks of the same size, so there are maxBlock - 1 file, since there is no 1 element 
+	 * file contains blocks of the same size, so there are maxBlock - 1 file, since there is no 1 element
 	 * block.
-	 * 
+	 *
 	 * @param source
 	 * @param sink
 	 * @param bFactory
@@ -95,139 +95,141 @@ public class SubsumedBlockRemover {
 
 	}
 
-	
+
 
 	/**
-	 * Reads in the blockSets from the source, removed subsumed 
+	 * Reads in the blockSets from the source, removed subsumed
 	 * blockSets, and writes the unsubsumed blockSets to the sink.
-	 * 
+	 *
 	 * This is the memory friendly version that splits the big block source into smaller ones
-	 * 
+	 *
 	 */
 	public void removeSubsumedSafe() throws BlockingException {
 		//splits the blocks first
 		long t = System.currentTimeMillis();
-		
+
 		splitBlocks (source);
-		
+
 		t = System.currentTimeMillis() - t;
 		System.out.println ("Done split " + t);
-		
+
 		ArrayList parts = spliter.getSinks();
-		
-		//Initialize	
+
+		//Initialize
 		SuffixTreeNode root = SuffixTreeNode.createRootNode();
 		IntArrayList subsumedBlockSets = new IntArrayList();
-		
+
 		//read the files in size ascending order.
 		int blockSetId = 0;
-		
+
+		// 2014-04-24 rphall: Commented out unused local variable.
 		//count the number of block processed
-		int count = 0;
+//		int count = 0;
 
 		for (int i=0; i < parts.size() ; i++) {
 			if (i% INTERVAL == 0) MemoryEstimator.writeMem();
 
 			IBlockSource source = bFactory.getSource((IBlockSink) parts.get(i));
-			
+
 			if (source.exists()) {
 				source.open();
-				
+
 //				System.out.println ("Processing: " + source.getInfo() + " count: " + count);
-			
+
 				while (source.hasNext()) {
-					count ++;
+//					count ++;
 					BlockSet blockSet = source.getNext();
-				
+
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
 					checkForSubsets(root, recordIds, blockSetId, 0, subsumedBlockSets);
 					addBlockSet(root, recordIds, blockSetId);
-				
+
 					blockSetId ++;
 				}
-			
+
 				source.close();
 			}
 
 		}
-		
+
 		root = null;
-		
+
 		// write toSink
 		sink.open();
 		writeUnsubsumed3(subsumedBlockSets, sink);
 		sink.close();
 
-		spliter.removeAll();		
+		spliter.removeAll();
 	}
-	
-	
-	
+
+
+
 /**
- * Reads in the blockSets from the source, removed subsumed 
+ * Reads in the blockSets from the source, removed subsumed
  * blockSets, and writes the unsubsumed blockSets to the sink.
- * 
+ *
  * This is the memory friendly version that splits the big block source into smaller ones
  * Version 2 writes to sinks when memory is getting full.  This potentially will miss some
  * subsets, but it's better than getting an OutOfMemoryException.
- * 
+ *
  */
 public void removeSubsumedSafe2() throws BlockingException {
 	//splits the blocks first
 	long t = System.currentTimeMillis();
-		
+
 	splitBlocks (source);
-		
+
 	t = System.currentTimeMillis() - t;
 	System.out.println ("Done split " + t);
-		
+
 	ArrayList parts = spliter.getSinks();
-		
-	//Initialize	
+
+	//Initialize
 	SuffixTreeNode root = SuffixTreeNode.createRootNode();
 	IntArrayList subsumedBlockSets = new IntArrayList();
 	//read the files in size ascending order.
 	int blockSetId = 0;
-		
+
+	// 2014-04-24 rphall: Commented out unused local variable.
 	//count the number of block processed
-	int count = 0;
+//	int count = 0;
 
 	//open sink
 	sink.open();
-	
+
 	ArrayList sources = new ArrayList ();
 
 	for (int i=0; i < parts.size() ; i++) {
 		IBlockSource source = bFactory.getSource((IBlockSink) parts.get(i));
-			
+
 		if (source.exists()) {
 			sources.add(source);
-			
+
 			source.open();
-				
+
 			while (source.hasNext()) {
-				count ++;
+//				count ++;
 				BlockSet blockSet = source.getNext();
-				
+
 				LongArrayList recordIds = blockSet.getRecordIDs();
 
 				checkForSubsets(root, recordIds, blockSetId, 0, subsumedBlockSets);
 				addBlockSet(root, recordIds, blockSetId);
-				
+
 				blockSetId ++;
-				
+
 			}
-			
+
 			source.close();
 
 //			System.out.println ("Processing: " + source.getInfo() + " count: " + count);
-			
+
 			if (MemoryEstimator.isFull(.60f) || (i == parts.size() - 1)) {
 				System.out.println ("Resetting " + subsumedBlockSets.size());
 				//write out
 				writeUnsubsumed4(subsumedBlockSets, sink, sources);
-						
+
 				//reset
 				root = SuffixTreeNode.createRootNode();
 				subsumedBlockSets = new IntArrayList();
@@ -237,96 +239,96 @@ public void removeSubsumedSafe2() throws BlockingException {
 		} //end if
 
 	}
-		
+
 	root = null;
-		
+
 	sink.close();
 
-	spliter.removeAll();		
+	spliter.removeAll();
 }
-	
-	
-	
+
+
+
 /** This is the memory friendly version that uses intermediate files.
  * It also bypasses the list of block sets by sorting the subsumed list first.
- * 
+ *
  * @param subsumedBlockSets - ids of the subsumed blocks
  * @param sink - output sink
  * @param parts - array of block sources
  * @throws FileNotFoundException
  * @throws IOException
  */
-private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, ArrayList sources) 
+private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, ArrayList sources)
 	throws BlockingException {
-			
+
 	subsumedBlockSets.sort();
-		
+
 	int counter = 0; //counter for the blocks read
 	int ind = 0; //current index on subsumedBlockSets
-		
+
 	for (int i = 0; i < sources.size(); i++) {
 
 		IBlockSource srcI = (IBlockSource) sources.get(i);
-			
+
 		if (srcI.exists()) {
 			srcI.open();
-			
+
 			while (srcI.hasNext()) {
 				BlockSet bs = srcI.getNext();
-				
+
 				if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {
 					ind ++;
 				} else {
 					sink.writeBlock(bs);
 					numBlocksOut ++;
 				}
-				
+
 				counter ++;
 			}
-			
+
 			srcI.close();
 
 		}
-			
+
 	} //end for
-		
+
 	//at the end, ind should be the size of the subsumedsubset
 	if (ind != subsumedBlockSets.size()) throw new IllegalStateException
 	 ("Done write ind " + ind + " size " + subsumedBlockSets.size ());
-		
+
 }
-	
-	
-	
-	
-	
+
+
+
+
+
 	/** This is the memory friendly version that uses intermediate files.
 	 * It also bypasses the list of block sets by sorting the subsumed list first.
-	 * 
+	 *
 	 * @param subsumedBlockSets - ids of the subsumed blocks
 	 * @param sink - output sink
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private void writeUnsubsumed3(IntArrayList subsumedBlockSets, IBlockSink sink) 
+	private void writeUnsubsumed3(IntArrayList subsumedBlockSets, IBlockSink sink)
 		throws BlockingException {
-			
+
 		subsumedBlockSets.sort();
-		
+
 		ArrayList parts = spliter.getSinks();
 
 		int counter = 0; //counter for the blocks read
 		int ind = 0; //current index on subsumedBlockSets
-		
+
 		for (int i = 0; i < parts.size(); i++) {
 			IBlockSource srcI = bFactory.getSource((IBlockSink)parts.get(i));
-			
+
 			if (srcI.exists()) {
 				srcI.open();
-			
+
 				while (srcI.hasNext()) {
 					BlockSet bs = srcI.getNext();
-				
+
 //					if (subsumedBlockSets.size() > 0 && counter == subsumedBlockSets.get(ind)) {
 					if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {
 						ind ++;
@@ -334,43 +336,43 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 						sink.writeBlock(bs);
 						numBlocksOut ++;
 					}
-				
+
 					counter ++;
 				}
-			
+
 				srcI.close();
 
 			}
-			
+
 		} //end for
-		
+
 		//at the end, ind should be the size of the subsumedsubset
 		if (ind != subsumedBlockSets.size()) throw new IllegalStateException
 		 ("Done write ind " + ind + " size " + subsumedBlockSets.size ());
-		
+
 	}
-	
-	
-	
+
+
+
 	private List readBlocks (IBlockSource ibs) throws BlockingException{
 		ArrayList list = new ArrayList ();
 		ibs.open();
-		
+
 		while (ibs.hasNext()) {
 			list.add(ibs.getNext());
 			numBlocksIn ++;
 		}
-		
+
 		ibs.close();
 		return list;
 	}
-	
-	
-	
-	/** This is the memory friendly version.  It splits the IBlockSource into small ones that can fit 
+
+
+
+	/** This is the memory friendly version.  It splits the IBlockSource into small ones that can fit
 	 * into memory.  Each file contains block sets of the same size.  There are two for size = 2 because
 	 * there are a lot of them.
-	 * 
+	 *
 	 * @param ibs
 	 */
 	private void splitBlocks (IBlockSource ibs) throws BlockingException {
@@ -382,8 +384,9 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 		while (ibs.hasNext()) {
 			numBlocksIn ++;
 			BlockSet bs = ibs.getNext();
-			int n = bs.getRecordIDs().size();
-			
+			// 2014-04-24 rphall: Commented out unused local variable.
+//			int n = bs.getRecordIDs().size();
+
 			LongArrayList recordIds = bs.getRecordIDs();
 			recordIds.sort();
 
@@ -392,23 +395,23 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 
 
 		ibs.close();
-		
+
 		spliter.closeAll();
 	}
-	
-	
+
+
 
 	/**
 	 * This is subsumed
 	 */
-	public void writeUnsubsumed(List blockSets, IntArrayList indicesToRemove, IBlockSink sink) 
+	public void writeUnsubsumed(List blockSets, IntArrayList indicesToRemove, IBlockSink sink)
 		throws BlockingException {
 		// null out those blockingSets that were subsumed
 		for (int i = 0, n = indicesToRemove.size(); i < n; i++) {
 			int bsId = indicesToRemove.get(i);
 			blockSets.set(bsId, null);
 		}
-		
+
 		sink.open();
 		for (int i = 0, n = blockSets.size(); i < n; i++) {
 			BlockSet bs = (BlockSet)blockSets.get(i);
@@ -420,19 +423,19 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 		}
 		sink.close();
 	}
-	
+
 	public int getNumBlocksIn () {
 		return numBlocksIn;
 	}
-	
+
 	public int getNumBlocksOut () {
 		return numBlocksOut;
 	}
-	
 
-	public static void checkForSubsets(SuffixTreeNode node, LongArrayList recordIds, int blockSetId, 
+
+	public static void checkForSubsets(SuffixTreeNode node, LongArrayList recordIds, int blockSetId,
 		int fromIndex, IntArrayList subsumedSets) {
-		
+
 		for (int i = fromIndex, n = recordIds.size(); i < n; i++) {
 			long recordId = recordIds.get(i);
 			SuffixTreeNode kid = node.getChild(recordId);
@@ -446,7 +449,7 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 			}
 		}
 	}
-	
+
 	public static void addBlockSet(SuffixTreeNode root, LongArrayList recordIds, int blockSetId) {
 		SuffixTreeNode cur = root;
 
@@ -457,10 +460,10 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 			if (child == null) {
 				child = cur.putChild(recordId);
 			}
-			
+
 			cur = child;
 		}
-		
+
 		// the leaf node.
 		cur.putChild(recordIds.get(last), blockSetId);
 	}

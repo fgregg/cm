@@ -1,20 +1,20 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 package com.choicemaker.cm.matching.en;
 
 /**
- * The Winkler and Jaro algorithm (Porter and Winkler 1980) is a string 
- * comparator developed by two researchers at the US Census Bureau. It computes 
- * a similarity score between two strings in the range 0 to 1. It works 
- * especially well for English. Differences at the beginning are weighed more 
+ * The Winkler and Jaro algorithm (Porter and Winkler 1980) is a string
+ * comparator developed by two researchers at the US Census Bureau. It computes
+ * a similarity score between two strings in the range 0 to 1. It works
+ * especially well for English. Differences at the beginning are weighed more
  * strongly than differences towards the end of the strings.
  *
  * @author    Peining Tao
@@ -109,7 +109,7 @@ public class Jaro {
 
 	/**
 	 * Computes the similarity of two strings according to the Jaro algorithm.
-	 * This version uses classic symbol to symbol matching. 
+	 * This version uses classic symbol to symbol matching.
 	 * Another method of this class "jaro" uses more recent group matching approach.
 	 *
 	 * @param a The first string.
@@ -366,9 +366,9 @@ public class Jaro {
 
 	/**
 	 * Computes the Jaro-Winkler similarity between ying and yang.
-	 * This version uses classic symbol to symbol matching. 
+	 * This version uses classic symbol to symbol matching.
 	 * Another method of this class "jaro" uses more recent group matching approach.
-	 * 
+	 *
 	 * @param ying The first string.
 	 * @param yang The second string.
 	 * @param higherScoreForLongStrings Increase the probability of a match when the number of matched
@@ -394,7 +394,7 @@ public class Jaro {
 		boolean convertToUpper,
 		boolean checkForNumbers) {
 		int y_length = Math.min(ying.length(), yang.length());
-	
+
 		float weight, Num_sim;
 		int minv, search_range, ying_length, N_trans, Num_com, yang_length;
 		int lowlim,hilim;
@@ -402,53 +402,54 @@ public class Jaro {
 		int N_simi;
 		//int done, nchek, match;
 		boolean num_pres = false; /* added in version 3 */
-		int		yl1, yi_st;
-		int i, j, k, nc, m, n;
-	
+		// 2014-04-24 rphall: Commented out unused local variables.
+		int		yl1 /*, yi_st */;
+		int i, j, k /*, nc, m, n */;
+
 		char[] ying_hold1 = trimAndConvert(ying, y_length, convertToUpper);
 		char[] yang_hold1 = trimAndConvert(yang, y_length, convertToUpper);
-	
+
 		ying_length = ying_hold1.length;
 		yang_length = yang_hold1.length;
 		/* If either string is blank - return - added in Version 2                    */
 		if (ying_length == 0 || yang_length == 0) {
 			return 0.0f;
 		}
-	
+
 		/* Identify the strings to be compared by stripping off all leading and
 		   trailing spaces.                                                           */
 		if (ying_length > yang_length) {
 			search_range = ying_length;
 			minv = yang_length;
-	
+
 		} else {
 			search_range = yang_length;
 			minv = ying_length;
 		}
-	
+
 		/* If either string is blank - return                                         */
 		/* if (!minv) return(0.0);                   removed in version 2             */
-	
+
 		/* Blank out the flags                                                        */
 		byte[] ying_flag1 = new byte[search_range];
 		byte[] yang_flag1 = new byte[search_range];
-	
+
 		search_range = (search_range / 2) - 1;
 		if (search_range < 0)
 			search_range = 0; /* added in version 2               */
-	
+
 		/* If match numbers option is deactivated set a number present flag -
 		   Added Ver 3 ...  */
 		if (checkForNumbers) {
 			num_pres = chk_for_number(ying_hold1, yang_hold1);
 		}
-	
+
 		/* looking through substrings of decreasing size,
 		   Count and flag the matched pairs.                                          */
-	
+
 		N_trans = 0;
 		Num_com = 0;
-		
+
 		yl1 = yang_length - 1;
 		for (i = 0;i < ying_length;i++) {
 		  lowlim = (i >= search_range) ? i - search_range : 0;
@@ -460,16 +461,16 @@ public class Jaro {
 				Num_com++;
 				break;
 		} } }
- 
+
 		/* If no characters in common - return                                        */
-		if (Num_com == 0) return (0.0f);                          
- 
+		if (Num_com == 0) return (0.0f);
+
 		/* Count the number of transpositions                                         */
 		k = N_trans = 0;
 		for (i = 0;i < ying_length;i++) {
 		  if (ying_flag1[i] == '1') {
 			for (j = k;j < yang_length;j++) {
-				if (yang_flag1[j] == '1') { 
+				if (yang_flag1[j] == '1') {
 				 k = j + 1;
 				 break;
 			} }
@@ -507,24 +508,24 @@ public class Jaro {
 			}
 		}
 		Num_sim = ((float) N_simi) / 10.0f + Num_com;
-	
+
 		/* Main weight computation.                                                   */
 		weight =
 			Num_sim / ((float) ying_length)
 				+ Num_sim / ((float) yang_length)
 			    + ((float) (Num_com - N_trans)) / ((float) Num_com);
-	
+
 		weight = weight / 3.0f;
-	
+
 		/* Continue to boost the weight if the strings are similar                    */
 		if (weight > 0.7) {
-	
+
 			/* Adjust for having up to the first 4 characters in common                 */
 			j = (minv >= 4) ? 4 : minv;
 			for (i = 0;((i < j) && (ying_hold1[i] == yang_hold1[i]) && (notNum(ying_hold1[i]))); i++);
 			if (i != 0)
 				weight += i * 0.1 * (1.0 - weight);
-	
+
 			/* Optionally adjust for long strings.                                      */
 			/* After agreeing beginning chars, at least two more must agree and
 			   the agreeing characters must be > .5 of remaining characters.          */
@@ -533,9 +534,9 @@ public class Jaro {
 					weight += (float) (1.0 - weight)
 						* ((float) (Num_com - i - 1) / ((float) (ying_length + yang_length - i * 2 + 2)));
 		}
-	
+
 		return (weight);
-	
+
 	} /* end of strcmp95 */
 
 }

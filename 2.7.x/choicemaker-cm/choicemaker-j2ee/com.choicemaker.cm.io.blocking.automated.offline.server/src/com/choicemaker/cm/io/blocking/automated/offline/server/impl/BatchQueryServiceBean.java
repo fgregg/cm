@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -21,7 +21,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
-import javax.naming.InitialContext;
+//import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
@@ -55,13 +55,13 @@ public class BatchQueryServiceBean implements SessionBean {
 	private static boolean initialized = false;
 	private static boolean countsInitialized = false;
 
-	private transient SessionContext sessionContext;	
+	private transient SessionContext sessionContext;
 	private transient DataSource dataSource;
 	private transient EJBConfiguration configuration = null;
 
 
-	public long startOABA (String externalID, SerialRecordSource staging, SerialRecordSource master, 
-		float lowThreshold, 
+	public long startOABA (String externalID, SerialRecordSource staging, SerialRecordSource master,
+		float lowThreshold,
 		float highThreshold, String stageModelName, String masterModelName, int maxSingle)
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
 
@@ -71,8 +71,8 @@ public class BatchQueryServiceBean implements SessionBean {
 	}
 
 
-	public long startOABA (String externalID, SerialRecordSource staging, SerialRecordSource master, 
-		float lowThreshold, 
+	public long startOABA (String externalID, SerialRecordSource staging, SerialRecordSource master,
+		float lowThreshold,
 		float highThreshold, String stageModelName, String masterModelName, int maxSingle,
 		boolean runTransitivity)
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
@@ -82,14 +82,14 @@ public class BatchQueryServiceBean implements SessionBean {
 		BatchJob batchJob = configuration.createBatchJob(externalID);
 		batchJob.setDescription(stageModelName + ":" + masterModelName);
 		batchJob.markAsQueued();
-		
+
 		long id = batchJob.getId().longValue();
-		
+
 		batchJob.setTransactionId(batchJob.getId());
-		
+
 		//create a new current status EJB
 		configuration.createNewStatusLog(id);
-		
+
 		//set the parameters
 		BatchParameters batchParams = configuration.createBatchParameters(id);
 		batchParams.setHighThreshold(new Float(highThreshold));
@@ -97,35 +97,35 @@ public class BatchQueryServiceBean implements SessionBean {
 		batchParams.setMaxSingle(new Integer(maxSingle));
 		batchParams.setStageModel(stageModelName);
 		batchParams.setMasterModel(masterModelName);
-		
+
 		batchParams.setMasterRs(master);
 		batchParams.setStageRs(staging);
-		
-		sendToStartOABA (id, staging, master, stageModelName, masterModelName, 
+
+		sendToStartOABA (id, staging, master, stageModelName, masterModelName,
 			lowThreshold, highThreshold, maxSingle, runTransitivity );
-		
+
 		return id;
 
 	}
-	
-	public long startOABA (String externalID, 
+
+	public long startOABA (String externalID,
 		int transactionId,
-		SerialRecordSource staging, 
-		SerialRecordSource master, 
-		float lowThreshold, 
-		float highThreshold, 
+		SerialRecordSource staging,
+		SerialRecordSource master,
+		float lowThreshold,
+		float highThreshold,
 		String stageModelName, String masterModelName,
 		int maxSingle,
 		boolean runTransitivity)
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
-	
+
 		BatchJob batchJob = configuration.createBatchJob(externalID);
 		batchJob.setDescription(stageModelName + ":" + masterModelName);
 		batchJob.markAsQueued();
 		batchJob.setTransactionId(new Long (transactionId));
-		
+
 		long id = batchJob.getId().longValue();
-		
+
 		//set the parameters
 		BatchParameters batchParams = configuration.createBatchParameters(id);
 		batchParams.setHighThreshold(new Float(highThreshold));
@@ -138,19 +138,19 @@ public class BatchQueryServiceBean implements SessionBean {
 
 		//create a new current status EJB
 		configuration.createNewStatusLog(id);
-		
-		sendToStartOABA (id, staging, master, stageModelName, masterModelName, 
+
+		sendToStartOABA (id, staging, master, stageModelName, masterModelName,
 			lowThreshold, highThreshold, maxSingle, runTransitivity );
-		
+
 		return id;
 	}
-	
 
 
-	public long startOABAStage (String externalID, 
-	SerialRecordSource staging, 
-	float lowThreshold, 
-	float highThreshold, 
+
+	public long startOABAStage (String externalID,
+	SerialRecordSource staging,
+	float lowThreshold,
+	float highThreshold,
 	String stageModelName,
 	int maxSingle)
 	throws RemoteException, CreateException, NamingException, JMSException, SQLException {
@@ -163,22 +163,22 @@ public class BatchQueryServiceBean implements SessionBean {
 
 	public int abortJob(long jobID)
 		throws RemoteException, CreateException, NamingException, JMSException, FinderException {
-	
-		return abortBatch (jobID, true);		
+
+		return abortBatch (jobID, true);
 	}
 
 
 	public int suspendJob(long jobID)
 		throws RemoteException, CreateException, NamingException, JMSException, FinderException{
-			
-		return abortBatch (jobID, false);		
+
+		return abortBatch (jobID, false);
 	}
 
 
 	/**
 	 *  This method aborts a job.  If cleanStatus is true, then the aborted job will not be
 	 * recoverable.
-	 * 
+	 *
 	 */
 	private int abortBatch(long jobID, boolean cleanStatus) throws RemoteException, CreateException, NamingException, JMSException, FinderException {
 		log.info("aborting job " + jobID + " " + cleanStatus);
@@ -197,7 +197,7 @@ public class BatchQueryServiceBean implements SessionBean {
 
 	public BatchJobStatus getStatus (long jobID) throws RemoteException, CreateException, NamingException, JMSException, FinderException {
 		BatchJob batchJob = configuration.findBatchJobById(jobID);
-		
+
 		BatchJobStatus status = new BatchJobStatus (
 			batchJob.getId().longValue(),
 			batchJob.getTransactionId().longValue(),
@@ -206,7 +206,7 @@ public class BatchQueryServiceBean implements SessionBean {
 			batchJob.getStarted(),
 			batchJob.getCompleted()
 		);
-		
+
 		return status;
 	}
 
@@ -215,12 +215,12 @@ public class BatchQueryServiceBean implements SessionBean {
 		BatchJob batchJob = configuration.findBatchJobById(jobID);
 		return batchJob.getStatus();
 	}
-	
-	public boolean removeDir (long jobID) 
+
+	public boolean removeDir (long jobID)
 		throws RemoteException, CreateException, NamingException, JMSException, FinderException {
-			
+
 			BatchParameters batchParams = configuration.findBatchParamsById(jobID);
-			
+
 			String stageModelName = batchParams.getStageModel();
 			OABAConfiguration oConfig = new OABAConfiguration (stageModelName, jobID);
 			return oConfig.removeTempDir();
@@ -228,7 +228,7 @@ public class BatchQueryServiceBean implements SessionBean {
 
 
 	/** This method tries to resume a stop job.
-	 * 
+	 *
 	 * @param modelName - staging accessProvider name
 	 * @param jobID - job id of the job you want to resume
 	 * @return int = 1 if OK, or -1 if failed
@@ -238,45 +238,45 @@ public class BatchQueryServiceBean implements SessionBean {
 	 * @throws JMSException
 	 * @throws FinderException
 	 */
-	public int resumeJob ( long jobID) 
+	public int resumeJob ( long jobID)
 	throws RemoteException, CreateException, NamingException, JMSException, FinderException {
 		int ret = 1;
 		BatchJob job = configuration.findBatchJobById(jobID);
-		
-		if (!job.getStarted().equals(BatchJob.STATUS_COMPLETED) && 
+
+		if (!job.getStarted().equals(BatchJob.STATUS_COMPLETED) &&
 			!job.getDescription().equals(BatchJob.CLEAR)) {
-				
+
 			//change aborted to started
 			job.markAsReStarted();
-			
+
 			BatchParameters batchParams = configuration.findBatchParamsById(jobID);
-				
+
 			OABAConfiguration oConfig = new OABAConfiguration (batchParams.getStageModel(), jobID);
 
 			try {
 				StartData data = oConfig.getStartData();
-				
-				sendToStartOABA (jobID, data.staging, data.master, data.stageModelName, data.masterModelName, 
+
+				sendToStartOABA (jobID, data.staging, data.master, data.stageModelName, data.masterModelName,
 					data.low, data.high, data.maxCountSingle, false );
-				
+
 			} catch (IOException e) {
 				ret = -1;
 				log.error(e.toString(), e);
 			} catch (ClassNotFoundException e) {
 				ret = -1;
 				log.error(e.toString(), e);
-			} 
+			}
 		} else {
 			log.warn ("Could not resume job " + jobID);
 			ret = -1;
 		}
-		
+
 		return ret;
 	}
 
 
 	/** This method returns the MatchCandidate List Source for the job ID.
-	 * 
+	 *
 	 * @param jobID
 	 * @return MatchListSource - return a source from which to read MatchList objects.
 	 * @throws RemoteException
@@ -285,7 +285,7 @@ public class BatchQueryServiceBean implements SessionBean {
 	 * @throws JMSException
 	 * @throws FinderException
 	 */
-	public MatchListSource getMatchList (long jobID) 
+	public MatchListSource getMatchList (long jobID)
 		throws RemoteException, CreateException, NamingException, JMSException, FinderException {
 
 		MatchListSource mls = null;
@@ -304,11 +304,11 @@ public class BatchQueryServiceBean implements SessionBean {
 	}
 
 
-	public IMatchRecord2Source getMatchRecordSource (long jobID) 
+	public IMatchRecord2Source getMatchRecordSource (long jobID)
 		throws RemoteException, CreateException, NamingException, JMSException, FinderException {
-	
+
 		MatchRecord2Source mrs = null;
-		
+
 		//check to make sure the job is completed
 		BatchJob batchJob = configuration.findBatchJobById(jobID);
 		if (!batchJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
@@ -323,23 +323,23 @@ public class BatchQueryServiceBean implements SessionBean {
 
 
 	/** This method sends a message to the StartOABA message bean.
-	 * 
+	 *
 	 * @param request
 	 * @param queue
 	 * @throws RemoteException
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
-	private void sendToStartOABA (long jobID, SerialRecordSource staging, 
-		SerialRecordSource master, 
+	private void sendToStartOABA (long jobID, SerialRecordSource staging,
+		SerialRecordSource master,
 		String stageModelName, String masterModelName,
-		float low, float high, int maxSingle, boolean runTransitivity) 
+		float low, float high, int maxSingle, boolean runTransitivity)
 		throws JMSException, RemoteException, CreateException, NamingException {
 
 		Queue queue = configuration.getStartMessageQueue();
 
 		log.debug("Sending on queue '" + queue.getQueueName() + "'");
-		
+
 		StartData data = new StartData();
 		data.jobID = jobID;
 		data.master = master;
@@ -350,7 +350,7 @@ public class BatchQueryServiceBean implements SessionBean {
 		data.high = high;
 		data.maxCountSingle = maxSingle;
 		data.runTransitivity = runTransitivity;
-		
+
 		try {
 			configuration.sendMessage(queue, data);
 		} catch (Exception ex) {
@@ -358,15 +358,16 @@ public class BatchQueryServiceBean implements SessionBean {
 		} finally {
 //			if (session != null) session.close ();
 		}
-		
+
 		log.debug ("...finished sendToStartOABA");
-	} 
+	}
 
 
 
 	public void ejbCreate() throws CreateException {
 		try {
-			InitialContext ic = new InitialContext();
+			// 2014-04-24 rphall: Commented out unused local variable.
+//			InitialContext ic = new InitialContext();
 
 			this.configuration = EJBConfiguration.getInstance();
 
@@ -389,7 +390,7 @@ public class BatchQueryServiceBean implements SessionBean {
 
 	public void ejbRemove() throws EJBException, RemoteException { }
 
-	public void setSessionContext(SessionContext sessionContext) throws EJBException, RemoteException { 
+	public void setSessionContext(SessionContext sessionContext) throws EJBException, RemoteException {
 		this.sessionContext = sessionContext;
 	}
 

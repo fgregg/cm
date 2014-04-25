@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -24,7 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 /**
  * This version does not use a suffix tree, because suffix tree takes up too much memeory and the
  * data in this case contains many identical blocks.
- * 
+ *
  * @author pcheung
  *
  */
@@ -32,7 +32,7 @@ public class OversizedRemover {
 
 	private IBlockSource source;
 	private IBlockSink sink;
-	
+
 	//these variables are for splitting the block source to avoid outofmemoryexception
 	private IBlockSinkSourceFactory bFactory;
 
@@ -44,17 +44,17 @@ public class OversizedRemover {
 
 
 	/** This version is safer on the memory because it break the big block file into smaller files.  Each
-	 * file contains blocks of the same size, so there are maxBlock - 1 file, since there is no 1 element 
+	 * file contains blocks of the same size, so there are maxBlock - 1 file, since there is no 1 element
 	 * block.
-	 * 
+	 *
 	 * @param source
 	 * @param sink
 	 * @param bFactory
 	 * @param maxBlockSize
 	 */
-	public OversizedRemover (IBlockSource source, IBlockSink sink, IBlockSinkSourceFactory bFactory) 
+	public OversizedRemover (IBlockSource source, IBlockSink sink, IBlockSinkSourceFactory bFactory)
 		throws BlockingException {
-			
+
 		this.source = source;
 		this.sink = sink;
 		this.bFactory = bFactory;
@@ -64,11 +64,11 @@ public class OversizedRemover {
 		source.open();
 		int min;
 		int max
-		
+
 		while (source.hasNext()) {
 			BlockSet bs = source.getNext();
 			Integer I = new Integer (bs.getRecordIDs().size());
-			
+
 			if (!sizes.contains(I)) sizes.add(I);
 		}
 		source.close();
@@ -79,18 +79,18 @@ public class OversizedRemover {
 		while (it.hasNext ()) {
 			Integer I = (Integer) it.next();
 			spliter.setSize(I.intValue(), 1);
-			
+
 			System.out.println ("oversized size: " + I.intValue());
 		}
-*/		
+*/
 		source.open();
 		int min=1000;
 		int max=0;
-		
+
 		while (source.hasNext()) {
 			BlockSet bs = source.getNext();
 			int i = bs.getRecordIDs().size();
-			
+
 			if (i> max) max = i;
 			if (i < min)  min = i;
 		}
@@ -106,7 +106,7 @@ public class OversizedRemover {
 	/**
 	 * Reads in the blockSets from the source, removed identical block sets.
 	 * Each file contains blocks of the same size.
-	 * 
+	 *
 	 */
 	public void removeSubsumedSafe() throws BlockingException {
 		//splits the blocks first
@@ -114,26 +114,26 @@ public class OversizedRemover {
 		splitBlocks (source);
 		t = System.currentTimeMillis() - t;
 		System.out.println ("Done split " + t);
-		
+
 		ArrayList parts = spliter.getSinks();
 
 		//hashmap containing sum and block
 		HashMap sumMap = new HashMap ();
-		
+
 		//for each file
 		for (int i=0; i < parts.size() ; i++) {
 			IBlockSource source = bFactory.getSource((IBlockSink) parts.get(i));
-			
+
 			if (source.exists()) {
 				source.open();
-			
+
 				while (source.hasNext()) {
-				
+
 					BlockSet blockSet = source.getNext();
 					LongArrayList recordIds = blockSet.getRecordIDs();
-				
+
 					Long L = new Long (getSum(recordIds));
-				
+
 					ArrayList blockList = (ArrayList) sumMap.get(L);
 					if (blockList == null) {
 						blockList = new ArrayList ();
@@ -146,19 +146,19 @@ public class OversizedRemover {
 					}
 
 				}
-			
+
 				source.close();
 			}
 
 		}
-		
+
 		// write toSink
 		writeUnsubsumed3(sumMap, sink);
 
-		spliter.removeAll();		
+		spliter.removeAll();
 	}
-	
-	
+
+
 	private long getSum (LongArrayList list) {
 		long sum = 0;
 		for (int i=0; i<list.size(); i++) {
@@ -171,25 +171,25 @@ public class OversizedRemover {
 
 	private boolean contain (ArrayList blockList, LongArrayList ids) {
 		boolean found = false;
-		
+
 		int i =0;
-		
+
 		while (!found && i < blockList.size()) {
 			BlockSet bs = (BlockSet) blockList.get(i);
-			
+
 			if (!differ (bs.getRecordIDs(), ids)) found = true;
 			else i ++;
 		}
-		
+
 		return found;
 	}
 
 
 	private boolean differ (LongArrayList ids1, LongArrayList ids2) {
 		boolean diff = false;
-		
+
 		int i = 0;
-		
+
 		if (ids1.size() != ids2.size()) diff = true;
 		else {
 			while (!diff && i < ids1.size()) {
@@ -197,32 +197,33 @@ public class OversizedRemover {
 				else i ++;
 			}
 		}
-		
+
 		return diff;
 	}
 
 
-	/** This is the memory friendly version.  It splits the IBlockSource into small ones that can fit 
+	/** This is the memory friendly version.  It splits the IBlockSource into small ones that can fit
 	 * into memory.  Each file contains block sets of the same size.  There are two for size = 2 because
 	 * there are a lot of them.
-	 * 
+	 *
 	 * @param ibs
 	 */
 	private void splitBlocks (IBlockSource ibs) throws BlockingException {
 
 		spliter.Initialize();
-		
+
 		ibs.open();
-		
+
 		while (ibs.hasNext()) {
 			BlockSet bs = ibs.getNext();
-			int n = bs.getRecordIDs().size();
-			
+			// 2014-04-24 rphall: Commented out unused local variable.
+//			int n = bs.getRecordIDs().size();
+
 			LongArrayList recordIds = bs.getRecordIDs();
 			recordIds.sort();
 
 			spliter.writeToSink(bs);
-			
+
 			numBlocksIn ++;
 		}
 
@@ -232,23 +233,23 @@ public class OversizedRemover {
 
 	/** This writes out the distinct blocks.
 	 */
-	private void writeUnsubsumed3(HashMap sumMap, IBlockSink sink) 
+	private void writeUnsubsumed3(HashMap sumMap, IBlockSink sink)
 		throws BlockingException {
-			
+
 		sink.open();
 
 		Iterator it = sumMap.values().iterator();
-		
+
 		while (it.hasNext()) {
 			ArrayList blockList = (ArrayList) it.next();
-			
+
 			for (int i=0; i<blockList.size(); i++) {
-				BlockSet bs = (BlockSet) blockList.get(i);		
+				BlockSet bs = (BlockSet) blockList.get(i);
 				sink.writeBlock(bs);
 				numBlocksOut ++;
 			}
 		}
-		
+
 		sink.close();
 	}
 
@@ -256,15 +257,15 @@ public class OversizedRemover {
 	public int getNumBlocksIn () {
 		return numBlocksIn;
 	}
-	
+
 	public int getNumBlocksOut () {
 		return numBlocksOut;
 	}
-	
+
 /*
-	public static void checkForSubsets(SuffixTreeNode node, LongArrayList recordIds, int blockSetId, 
+	public static void checkForSubsets(SuffixTreeNode node, LongArrayList recordIds, int blockSetId,
 		int fromIndex, IntArrayList subsumedSets) {
-			
+
 		for (int i = fromIndex, n = recordIds.size(); i < n; i++) {
 			long recordId = recordIds.get(i);
 			SuffixTreeNode kid = node.getChild(recordId);
@@ -278,7 +279,7 @@ public class OversizedRemover {
 			}
 		}
 	}
-	
+
 	public static void addBlockSet(SuffixTreeNode root, LongArrayList recordIds, int blockSetId) {
 		SuffixTreeNode cur = root;
 
@@ -289,10 +290,10 @@ public class OversizedRemover {
 			if (child == null) {
 				child = cur.putChild(recordId);
 			}
-			
+
 			cur = child;
 		}
-		
+
 		// the leaf node.
 		cur.putChild(recordIds.get(last), blockSetId);
 	}

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -22,11 +22,12 @@ import java.io.FileOutputStream;
 public class RemoveBelow32 {
 	private static final int SIZE = 8192;
 	static byte[] buf = new byte[SIZE];
-	
+
 	public static void main(String[] args) throws Exception {
 		FileInputStream is = new FileInputStream(args[0]);
 		FileOutputStream os = new FileOutputStream(args[1]);
-		int available = is.available();
+		// 2014-04-24 rphall: Commented out unused local variable
+//		int available = is.available();
 		int read;
 		while((read = is.read(buf)) != -1) {
 			for (int i = 0; i < read; i++) {

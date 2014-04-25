@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -31,14 +31,14 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 /**
  * This object reads in an IMatchRecord2Source, creates equivalence classes, and outputs them
  * as blocks to a IBlockSink.
- * 
+ *
  *
  *
  * @author pcheung
  *
  */
 public class MatchToBlockTransformer {
-	
+
 	private static final Logger log = Logger.getLogger(MatchToBlockTransformer.class);
 
 	private IMatchRecord2Source mSource;
@@ -47,59 +47,59 @@ public class MatchToBlockTransformer {
 
 	private HashMap stageIDs;
 	private HashMap masterIDs;
-	
+
 	//this is the number of records that need to be chunked.
 	private int numRecords;
-	
+
 	//max size of an EC
 	private int max = 0;
-	
-	
+
+
 	/** This constructor takes these parameters.
-	 * 
+	 *
 	 * @param mSource - match record pairs source
 	 * @param translator - a mapping between record id and internal id
 	 * @param blockSink - a block sink to store the equivalence classes
 	 */
-	public MatchToBlockTransformer (IMatchRecord2Source mSource, 
+	public MatchToBlockTransformer (IMatchRecord2Source mSource,
 		IRecordIDTranslator2 translator, IBlockSink blockSink) {
-			
+
 		this.mSource = mSource;
 		this.blockSink = blockSink;
 		this.translator = translator;
 	}
-	
-	
-	/* This method goes through the MatchRecordSource to get a distinct list of stage and master ids. 
-	 * 
+
+
+	/* This method goes through the MatchRecordSource to get a distinct list of stage and master ids.
+	 *
 	 */
 	private void populateHashMaps () throws BlockingException{
 		stageIDs = new HashMap ();
 		masterIDs = new HashMap ();
-		
+
 		mSource.open();
-			
+
 		while (mSource.hasNext()) {
 			MatchRecord2 mr = mSource.getNext();
 			if (!stageIDs.containsKey( mr.getRecordID1())) stageIDs.put(mr.getRecordID1(), null);
-				
+
 			if (mr.getRecord2Source() == MatchRecord2.STAGE_SOURCE) {
 				if (!stageIDs.containsKey( mr.getRecordID2())) stageIDs.put(mr.getRecordID2(), null);
 			} else {
 				if (!masterIDs.containsKey(mr.getRecordID2())) masterIDs.put(mr.getRecordID2(), null);
 			}
-		}			
-			
+		}
+
 		mSource.close();
 	}
-	
-	
+
+
 	/* This method uses the arrays in the translator to match the record IDs to internal IDs.
-	 * 
+	 *
 	 */
 	private void setInternalIDs () throws BlockingException {
 		translator.initReverseTranslation();
-		
+
 		//stage record ids
 		ArrayList list = translator.getList1();
 		if (list != null) {
@@ -109,9 +109,9 @@ public class MatchToBlockTransformer {
 				if (stageIDs.containsKey(c)) stageIDs.put(c, new Long(i));
 			}
 		}
-		
+
 		//master record ids
-		list = translator.getList2(); 
+		list = translator.getList2();
 		if (list != null) {
 			int size = list.size();
 			for (int i=0; i< size; i++) {
@@ -120,24 +120,25 @@ public class MatchToBlockTransformer {
 			}
 		}
 	}
-	
-	
+
+
 	/* This method reads the MatchRecord2Source, translates the record ids to internal ids,
-	 * build equivalence classes with internal ids, adn write equivalence classes out as blocks. 
-	 * 
+	 * build equivalence classes with internal ids, adn write equivalence classes out as blocks.
+	 *
 	 */
 	private EquivalenceClassBuilder buildEquivalenceClasses () {
 		EquivalenceClassBuilder builder = new EquivalenceClassBuilder ();
 		try {
 			mSource.open();
-			
-			int count = 0;
+
+			// 2014-04-24 rphall: Commented out unused local variable.
+//			int count = 0;
 
 			while (mSource.hasNext()) {
-				count ++;
+//				count ++;
 
 				MatchRecord2 mr = mSource.getNext();
-				
+
 				//if (mr.getMatchType() == MatchRecord2.MATCH) {
 					Long l1 = (Long) stageIDs.get(mr.getRecordID1());
 
@@ -147,7 +148,7 @@ public class MatchToBlockTransformer {
 					} else {
 						l2 = (Long) masterIDs.get(mr.getRecordID2());
 					}
-				
+
 					if (l1 == null) {
 						log.error("l1 is null " + mr.getRecordID1());
 					} else if (l2 == null) {
@@ -167,10 +168,10 @@ public class MatchToBlockTransformer {
 		}
 		return builder;
 	}
-	
-	
+
+
 	/* This method writes the equivlence classes out as blocks.
-	 * 
+	 *
 	 */
 	private void writeBlocks (EquivalenceClassBuilder builder) throws BlockingException {
 		blockSink.open();
@@ -178,8 +179,8 @@ public class MatchToBlockTransformer {
 		SortedSet set = builder.getEquivalenceClasses();
 		Iterator it = set.iterator();
 
-		int twos = 0;	
-		int count = 0;	
+		int twos = 0;
+		int count = 0;
 		int compares = 0;
 
 		while (it.hasNext()) {
@@ -189,10 +190,10 @@ public class MatchToBlockTransformer {
 			int size = ec.size();
 			if (size > 2) {
 				Iterator it2 = ec.getMemberIds().iterator();
-					
+
 				BlockSet bs = new BlockSet (0);
 				LongArrayList list = new LongArrayList (size);
-					
+
 				while (it2.hasNext()) {
 					list.add( ((Long) it2.next()).longValue() );
 				}
@@ -206,7 +207,7 @@ public class MatchToBlockTransformer {
 			} else {
 				twos ++;
 			}
-			
+
 		}
 
 		blockSink.close();
@@ -217,41 +218,41 @@ public class MatchToBlockTransformer {
 		log.info ("total number of records required: " + numRecords);
 		log.info ("total number of comparisons required: " + compares);
 	}
-	
+
 	/** This method creates blocks of internal ids from match result source of record ids.
-	 * 
+	 *
 	 * @return int - the number of records needed for the next step.
 	 */
 	public int process () {
 		long t = System.currentTimeMillis();
-		
+
 		try {
 			populateHashMaps ();
 			setInternalIDs ();
 			EquivalenceClassBuilder builder = buildEquivalenceClasses ();
-			
+
 			//clear memory
 			stageIDs = null;
 			masterIDs = null;
-			
+
 			writeBlocks (builder);
-			
+
 			// clear memory
 			builder = null;
-			
+
 		} catch (BlockingException e) {
 			log.error(e.toString(), e);
 		}
-		
+
 		t = System.currentTimeMillis() - t;
 		log.info("time: " + t);
-		
+
 		return numRecords;
 	}
 
 
 	/** This returns the maximum size of an equivalence class.
-	 * 
+	 *
 	 * @return int - max size of an EC
 	 */
 	public int getMaxEC () {

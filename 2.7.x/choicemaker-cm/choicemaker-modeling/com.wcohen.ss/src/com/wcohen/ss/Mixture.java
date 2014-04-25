@@ -17,9 +17,9 @@ public class Mixture extends AbstractStatisticalTokenDistance
 	public Mixture(Tokenizer tokenizer) { super(tokenizer);	}
 	public Mixture() { super(); }
 
-	/** Distance is argmax_lambda prod_{w in s} lambda Pr(w|t) * (1-lambda) Pr(w|background). 
+	/** Distance is argmax_lambda prod_{w in s} lambda Pr(w|t) * (1-lambda) Pr(w|background).
 	 * This is computed with E/M. */
-	public double score(StringWrapper s,StringWrapper t) 
+	public double score(StringWrapper s,StringWrapper t)
 	{
 		BagOfTokens sBag = asBagOfTokens(s);
 		BagOfTokens tBag = asBagOfTokens(t);
@@ -35,10 +35,11 @@ public class Mixture extends AbstractStatisticalTokenDistance
 				double probTokGivenT = tWeight/tBag.getTotalWeight();
 				double probTokGivenCorpus = ((double)getDocumentFrequency(tok))/totalTokenCount;
 				double probDrawnFromT = lambda * probTokGivenT;
-				double probDrawnFromCorpus = (1.0-lambda) * probTokGivenCorpus;
+				// 2014-04-24 rphall: Commented out unused local variable.
+//				double probDrawnFromCorpus = (1.0-lambda) * probTokGivenCorpus;
 				double normalizingConstant = probTokGivenT + probTokGivenCorpus;
 				probDrawnFromT /= normalizingConstant;
-				probDrawnFromCorpus /= normalizingConstant;
+//				probDrawnFromCorpus /= normalizingConstant;
 				newLamba += probDrawnFromT * sWeight;
 			}
 			// M step: find best value of lambda
@@ -51,18 +52,18 @@ public class Mixture extends AbstractStatisticalTokenDistance
 		}
 		return lambda;
 	}
-	
-	/** Explain how the distance was computed. 
+
+	/** Explain how the distance was computed.
 	 * In the output, the tokens in S and T are listed, and the
 	 * common tokens are marked with an asterisk.
 	 */
-	public String explainScore(StringWrapper s, StringWrapper t) 
+	public String explainScore(StringWrapper s, StringWrapper t)
 	{
 		return "can't explain";
 	}
 
 	public String toString() { return "[Mixture]"; }
-	
+
 	static public void main(String[] argv) {
 		doMain(new Mixture(), argv);
 	}

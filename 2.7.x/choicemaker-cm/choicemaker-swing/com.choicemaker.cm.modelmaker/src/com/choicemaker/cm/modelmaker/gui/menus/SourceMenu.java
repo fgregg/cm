@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -46,8 +46,8 @@ import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
 
 /**
- * The menu from which a MarkedRecordPairSource is selected.  
- * 
+ * The menu from which a MarkedRecordPairSource is selected.
+ *
  * @author S. Yoakum-Stover
  * @version $Revision: 1.3 $ $Date: 2010/03/29 13:14:25 $
  */
@@ -65,7 +65,7 @@ public class SourceMenu extends JMenu {
 		parent = g;
 		this.setMnemonic(KeyEvent.VK_S);
 		buildMenu();
-		
+
 		// Set "Include Holds" to true for test sources
 		parent.setMultiIncludeHolds(1,true);
 	}
@@ -163,21 +163,21 @@ public class SourceMenu extends JMenu {
 		public SelectCheckedAction() {
 			super("Select checked");
 			parent.addEvaluationListener(this);
-			setEnabled(false);	
-		}	
-		
+			setEnabled(false);
+		}
+
 		private void setEnabled() {
-			setEnabled(parent.haveSourceList());	
+			setEnabled(parent.haveSourceList());
 		}
-		
+
 		public void evaluated(EvaluationEvent e) {
-			setEnabled();	
+			setEnabled();
 		}
-		
+
 		public void actionPerformed(ActionEvent e) {
 			parent.getFilter().reset();
 			parent.getFilter().setCollection(parent.getChecked());
-			parent.filterMarkedRecordPairList();	
+			parent.filterMarkedRecordPairList();
 		}
 	}
 
@@ -185,11 +185,11 @@ public class SourceMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
 
 		public SaveCheckedAction() {
-			super("Save checked as...");	
+			super("Save checked as...");
 			parent.addEvaluationListener(this);
 			setEnabled(false);
 		}
-		
+
 		private void setEnabled() {
 			setEnabled(parent.haveSourceList());
 		}
@@ -225,7 +225,7 @@ public class SourceMenu extends JMenu {
 			parent.addEvaluationListener(this);
 			setEnabled(false);
 		}
-		
+
 		private void setEnabled() {
 			setEnabled(parent.haveSourceList());
 		}
@@ -250,7 +250,8 @@ public class SourceMenu extends JMenu {
 		JMenu test = multiSourceMenus[1] = new MultiSourceMenu(parent, "Test", 1, ActionEvent.SHIFT_MASK);
 		add(test);
 
-		ImageIcon swapSourcesIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/swapSources.gif"));
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		ImageIcon swapSourcesIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/swapSources.gif"));
 		JMenuItem swapSourcesItem = add(new AbstractAction("Swap sources") {
 			private static final long serialVersionUID = 1L;
 
@@ -316,6 +317,6 @@ public class SourceMenu extends JMenu {
 		add(new SelectCheckedAction());
 
 		add(new SaveCheckedAction());
-		
+
 	}
 }

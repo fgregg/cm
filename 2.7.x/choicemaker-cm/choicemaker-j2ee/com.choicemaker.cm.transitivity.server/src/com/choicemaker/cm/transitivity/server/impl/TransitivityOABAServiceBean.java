@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -20,7 +20,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
-import javax.naming.InitialContext;
+//import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
@@ -50,18 +50,18 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 	private static final Logger log = Logger.getLogger(TransitivityOABAServiceBean.class);
 
-	private transient SessionContext sessionContext;	
+	private transient SessionContext sessionContext;
 	private transient EJBConfiguration configuration = null;
 
 	private static boolean initialized = false;
 
 
 	/**
-	 * This method starts the transitivity engine.  
-	 * WARNINGS: 
+	 * This method starts the transitivity engine.
+	 * WARNINGS:
 	 *  1. only call this after the OABA has finished.
 	 *  2. use the same parameters as the OABA.
-	 * 
+	 *
 	 * @param jobID - job id of the OABA job
 	 * @param staging - staging record source
 	 * @param master - master record source
@@ -77,14 +77,14 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	 * @throws SQLException
 	 */
 /*
-	public long startTransitivity (long jobID, 
-		ISerializableRecordSource staging, 
-		ISerializableRecordSource master, 
-		float lowThreshold, 
-		float highThreshold, 
+	public long startTransitivity (long jobID,
+		ISerializableRecordSource staging,
+		ISerializableRecordSource master,
+		float lowThreshold,
+		float highThreshold,
 		String stageModelName, String masterModelName)
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
-		
+
 		try {
 			StartData data = new StartData();
 			data.jobID = jobID;
@@ -95,7 +95,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 			data.low = lowThreshold;
 			data.high = highThreshold;
 			data.runTransitivity = false; //this means it's not a continuation from OABA.
-			
+
 			sendToTransitivity (data);
 
 		} catch (Exception e) {
@@ -104,21 +104,21 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 		return jobID;
 	}
-*/	
-	
+*/
+
 	/**
- 	* This method starts the transitivity engine.  
- 	* WARNINGS: 
+ 	* This method starts the transitivity engine.
+ 	* WARNINGS:
  	*  1. only call this after the OABA has finished.
  	*  2. use the same OAB jobID.
 	 */
 	public long startTransitivity (long jobID)
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
-		
+
 		try {
-			
+
 			BatchParameters batchParams = configuration.findBatchParamsById(jobID);
-			
+
 			StartData data = new StartData();
 			data.jobID = jobID;
 			data.master = batchParams.getMasterRs();
@@ -128,7 +128,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 			data.low = batchParams.getLowThreshold().floatValue();
 			data.high = batchParams.getHighThreshold().floatValue();
 			data.runTransitivity = false; //this means it's not a continuation from OABA.
-			
+
 			sendToTransitivity (data);
 
 		} catch (Exception e) {
@@ -137,11 +137,11 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 		return jobID;
 	}
-	
-	
-	
+
+
+
 	/** This gets the TE status.
-	 * 
+	 *
 	 * @param jobID
 	 * @return TransitivityJobtatus
 	 * @throws JMSException
@@ -151,26 +151,26 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	 * @throws NamingException
 	 * @throws SQLException
 	 */
-	public TransitivityJobStatus getStatus (long jobID) throws 
-		JMSException, FinderException, RemoteException, CreateException, 
+	public TransitivityJobStatus getStatus (long jobID) throws
+		JMSException, FinderException, RemoteException, CreateException,
 		NamingException, SQLException {
-			
+
 		TransitivityJob transJob = configuration.findTransitivityJobById(jobID);
-		
+
 		TransitivityJobStatus status = new TransitivityJobStatus (
 			transJob.getId().longValue(),
 			transJob.getStatus(),
 			transJob.getStarted(),
 			transJob.getCompleted()
 		);
-		
+
 		return status;
 	}
 
 
 
 	/** This method returns the TransitivityResult to the client.
-	 * 
+	 *
 	 * @param jobID - TE job id
 	 * @param compact - true if you want the graphs be compacted first
 	 * @return TransitivityResult
@@ -179,49 +179,49 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	 * @throws NamingException
 	 * @throws TransitivityException
 	 */
-	public TransitivityResult getTransitivityResult (long jobID, boolean compact) throws 
+	public TransitivityResult getTransitivityResult (long jobID, boolean compact) throws
 		RemoteException, FinderException, NamingException, TransitivityException {
-			
+
 		TransitivityJob transJob = configuration.findTransitivityJobById(jobID);
 		if (!transJob.getStatus().equals(TransitivityJob.STATUS_COMPLETED))
 			throw new TransitivityException ("Job " + jobID + " is not complete.");
-		
+
 		log.info("file source " + transJob.getDescription());
-		
+
 		// OLD
-		//MatchRecord2Source mrs = new MatchRecord2Source (transJob.getDescription(), 
+		//MatchRecord2Source mrs = new MatchRecord2Source (transJob.getDescription(),
 		//	Constants.STRING);
-			
+
 		//NEW
 		MatchRecord2CompositeSource mrs = new MatchRecord2CompositeSource (
 			transJob.getDescription());
-		
-		//OLD	
+
+		//OLD
 		//CompositeEntityBuilder ceb = new CompositeEntityBuilder (mrs);
 		//Iterator it = ceb.getCompositeEntities();
-		
-		//NEW	
+
+		//NEW
 		CompositeEntitySource ces = new CompositeEntitySource (mrs);
 		CompositeEntityIterator it = new CompositeEntityIterator (ces);
-		
+
 		TransitivityResult ret = null;
 		if (compact) {
 			MatchBiconnectedIterator ci = new MatchBiconnectedIterator (it);
-			ret = new TransitivityResult 
-				(transJob.getModel(), transJob.getDiffer(), transJob.getMatch(), 
+			ret = new TransitivityResult
+				(transJob.getModel(), transJob.getDiffer(), transJob.getMatch(),
 				ci);
 		} else {
-			ret = new TransitivityResult 
-				(transJob.getModel(), transJob.getDiffer(), transJob.getMatch(), 
+			ret = new TransitivityResult
+				(transJob.getModel(), transJob.getDiffer(), transJob.getMatch(),
 				it);
 		}
-		
+
 		return ret;
 	}
 
 
 	/** This method puts the request on the Transitivity Engine's message queue.
-	 * 
+	 *
 	 * @param d
 	 * @throws NamingException
 	 * @throws JMSException
@@ -260,7 +260,8 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 	public void ejbCreate() throws CreateException {
 		try {
-			InitialContext ic = new InitialContext();
+			// 2014-04-24 rphall: Commented out unused local variable.
+//			InitialContext ic = new InitialContext();
 
 			this.configuration = EJBConfiguration.getInstance();
 

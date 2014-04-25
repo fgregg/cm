@@ -189,7 +189,8 @@ public class ProductionModelsJarBuilder {
 		Thread error = new StreamRelayer(proc.getErrorStream(), System.err);
 		input.start();
 		error.start();
-		boolean interrupted = false;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		boolean interrupted = false;
 		try {
 			proc.waitFor();
 			input.join();
@@ -429,7 +430,8 @@ public class ProductionModelsJarBuilder {
 		Thread error = new StreamRelayer(proc.getErrorStream(), System.err);
 		input.start();
 		error.start();
-		boolean interrupted = false;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		boolean interrupted = false;
 		try {
 			proc.waitFor();
 			input.join();

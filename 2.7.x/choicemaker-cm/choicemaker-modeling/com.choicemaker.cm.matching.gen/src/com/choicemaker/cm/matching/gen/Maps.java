@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -21,9 +21,9 @@ import com.choicemaker.cm.core.util.ConvUtils;
 /**
  * Collection of collections.
  * A member collection may, for example, contain generic first names.
- * 
- * Maps work similar to sets. The module is loaded through the class 
- * <code>com.choicemaker.cm.xmlconf.XmlMapsInitializer</code>. The actual sets 
+ *
+ * Maps work similar to sets. The module is loaded through the class
+ * <code>com.choicemaker.cm.xmlconf.XmlMapsInitializer</code>. The actual sets
  * are defined as child elements, as shown in the example:
  * <pre>
  &LTmodule class="com.choicemaker.cm.xmlconf.XmlMapsInitializer"&GT
@@ -32,7 +32,7 @@ import com.choicemaker.cm.core.util.ConvUtils;
 	&LT!-- more maps --&GT
  &LT/module&GT
    </pre>
- * This loads the contents of the specified file, one token per line, into memory. 
+ * This loads the contents of the specified file, one token per line, into memory.
  * E.g., the file firstNameFrequency.txt may look like this:
 <pre>
 JIM
@@ -42,17 +42,17 @@ JACQUES
 ...
 </pre>
  *
- * Based on this, we can then use an expression like 
- * <code>Maps.lookupInt("firstNameFrequency", q.first_name)</code> in a schema 
+ * Based on this, we can then use an expression like
+ * <code>Maps.lookupInt("firstNameFrequency", q.first_name)</code> in a schema
  * expression or in a clue/rule.
- * 
+ *
  * All primitive Java types and String are supported as key and value types.
- * 
+ *
  * @author    Martin Buechi
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:04 $
  */
 public final class Maps {
-	
+
 	private static Map maps = new HashMap();
 
 	private Maps() { }
@@ -74,7 +74,7 @@ public final class Maps {
 
 	/**
 	 * Returns the map named by <code>name</code>.
-	 * 
+	 *
 	 * @param name the name of the collection
 	 * @return the collection named by name
 	 */
@@ -91,13 +91,13 @@ public final class Maps {
 	 * @return a Collection of the names of all registered maps
 	 */
 	public static Collection getMapNames() {
-		return maps.keySet();	
+		return maps.keySet();
 	}
 
 	/**
 	 * Retrieves the Map named by <code>name</code> and returns the
 	 * key's mapped entry in the Map.
-	 * 
+	 *
 	 * @param name the name of the Map in which to perform the lookup
 	 * @param key the key to lookup
 	 * @return the value keyed by <code>key</code>
@@ -115,7 +115,7 @@ public final class Maps {
 	/**
 	 * Convenience method that performs a lookup as in <code>lookup(name, key)</code>
 	 * and casts the return value to a String.
-	 * 
+	 *
 	 * @param name the name of the Map in which to perform the lookup
 	 * @param key the key to lookup in the Map
 	 * @return the value keyed by <code>key</code>
@@ -129,9 +129,9 @@ public final class Maps {
 	/**
 	 * Convenience method that performs a lookup as in <code>lookup(name, key)</code>
 	 * and converts the returned value to an int.  This method should only be called
-	 * on Maps whose value types are defined as "int".  If the specified map does not 
+	 * on Maps whose value types are defined as "int".  If the specified map does not
 	 * have a value for the specified key, this method returns <code>Integer.MIN_VALUE</code>.
-	 * 
+	 *
 	 * @param name the name of the Map in which to perform the lookup
 	 * @param key the key to lookup in the Map
 	 * @return the value keyed by <code>key</code>
@@ -146,7 +146,7 @@ public final class Maps {
 			return Integer.MIN_VALUE;
 		}
 	}
-	
+
 	/**
 	 * FOR CHOICEMAKER INTERNAL USE ONLY.
 	 */
@@ -179,7 +179,7 @@ public final class Maps {
 
 	/**
 	 * FOR CHOICEMAKER INTERNAL USE ONLY.
-	 */	
+	 */
 	public static Map readSingleLineMap(String fileName, String keyType, String valueType) throws IOException {
 		InputStream fis = new FileInputStream(new File(fileName).getAbsoluteFile());
 		Map m = readSingleLineMap(fis, keyType, valueType);
@@ -189,7 +189,7 @@ public final class Maps {
 
 	/**
 	 * FOR CHOICEMAKER INTERNAL USE ONLY.
-	 */	
+	 */
 	public static Map readSingleLineMap(InputStream stream, String keyType, String valueType) throws IOException {
 		Map m = new HashMap();
 		InputStreamReader reader = new InputStreamReader(stream);
@@ -200,16 +200,16 @@ public final class Maps {
 			if (index >= 0) {
 				line = line.substring(0, index).trim();
 			}
-			
+
 			if (line.length() == 0) {
 				continue;
 			}
-			
+
 			index = line.indexOf(':');
 			if (index < 0) {
 				throw new IOException("Problem parsing line:\n\t" + line);
 			}
-			
+
 			String value = line.substring(0, index).trim();
 			Object v = ConvUtils.convertString2Object(value, valueType);
 			String keys = line.substring(index + 1);
@@ -223,7 +223,7 @@ public final class Maps {
 		in.close();
 		return m;
 	}
-	
+
 	/**
 	 * Called by GenPlugin to load the registered sets.
 	 */
@@ -239,36 +239,36 @@ public final class Maps {
 
 				String name = el.getAttribute("name");
 				String file = el.getAttribute("file");
-				boolean lazy = true;
-				boolean reload = true;
 				String keyType = "String";
 				String valueType = "String";
 
-				boolean singleLine = false;
-		
-				if (el.getAttribute("lazy") != null) {
-					lazy = Boolean.getBoolean(el.getAttribute("lazy"));
-				}
-				
-				if (el.getAttribute("reload") != null) {
-					reload = Boolean.getBoolean(el.getAttribute("reload"));
-				}
-				
+				// 2014-04-24 rphall: Commented out unused local variables.
+//				boolean lazy = true;
+//				if (el.getAttribute("lazy") != null) {
+//					lazy = Boolean.getBoolean(el.getAttribute("lazy"));
+//				}
+//
+//				boolean reload = true;
+//				if (el.getAttribute("reload") != null) {
+//					reload = Boolean.getBoolean(el.getAttribute("reload"));
+//				}
+
 				if (el.getAttribute("keyType") != null) {
 					keyType = el.getAttribute("keyType");
 				}
-				
+
 				if (el.getAttribute("valueType") != null) {
 					valueType = el.getAttribute("valueType");
 				}
-				
+
+				boolean singleLine = false;
 				if (el.getAttribute("singleLine") != null) {
 					singleLine = "true".equals(el.getAttribute("singleLine"));
 				}
-			
+
 				try {
 					URL rUrl = new URL(pUrl, file);
-					
+
 					LazyMap m = new LazyMap(name, rUrl, keyType, valueType, singleLine);
 					addMap(name, m);
 				} catch (MalformedURLException ex) {
@@ -284,12 +284,12 @@ class LazyMap implements Map {
 
 	private String name;
 	private URL url;
-	private String keyType;		
+	private String keyType;
 	private String valueType;
 	private boolean singleLine;
 
 	private Map store;
-	
+
 	public LazyMap(String name, URL url, String keyType, String valueType, boolean singleLine) {
 		this.name = name;
 		this.url = url;
@@ -298,7 +298,7 @@ class LazyMap implements Map {
 		this.store = null;
 		this.singleLine = singleLine;
 	}
-	
+
 	protected synchronized void init() {
 		if (store == null) {
 			try {

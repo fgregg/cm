@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -16,10 +16,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+//import java.awt.event.ItemEvent;
+//import java.awt.event.ItemListener;
 import java.io.File;
-import java.util.List;
+//import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -139,8 +139,9 @@ public class ExportClueTableDialog extends JDialog {
 		getContentPane().setLayout(layout);
 
 		Insets smallInsets = new Insets(2, 3, 2, 3);
-		Insets bigInsets = new Insets(2, 20, 2, 3);
-		Insets reallyBigInsets = new Insets(2, 37, 2, 3);
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		Insets bigInsets = new Insets(2, 20, 2, 3);
+//		Insets reallyBigInsets = new Insets(2, 37, 2, 3);
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = smallInsets;
@@ -172,7 +173,7 @@ public class ExportClueTableDialog extends JDialog {
 		c.gridy = 1;
 		getContentPane().add(Box.createVerticalStrut(10), c);
 
-		// 
+		//
 
 		c.gridy++;
 
@@ -218,15 +219,17 @@ public class ExportClueTableDialog extends JDialog {
 			}
 		});
 
-		ItemListener updateListener = new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				updateEnabledness();
-			}
-		};
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		ItemListener updateListener = new ItemListener() {
+//			public void itemStateChanged(ItemEvent e) {
+//				updateEnabledness();
+//			}
+//		};
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List pairs = parent.getSourceList();
+				// 2014-04-24 rphall: Commented out unused local variable.
+//				List pairs = parent.getSourceList();
 				File file = getFile();
 				try {
 					mySetCursor(Cursor.WAIT_CURSOR);

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -42,54 +42,54 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  * It uses input record id to internal id translation.  As a result, it can use a array
  * instead of hashmap to stored the val_id's.
  * This also uses dbField instead of blocking fields to prep for swap.
- * 
+ *
  * This takes in a stage record source and master record source.  It translates the stage record source first,
  * then the master record source.
  *
- * Version 2 allows the record ID to be Integer, Long, or String. 
- * 
+ * Version 2 allows the record ID to be Integer, Long, or String.
+ *
  * @author pcheung
  *
  */
 public class RecValService2 {
 
 	private static final Logger log = Logger.getLogger(RecValService2.class);
-	
+
 	private RecordSource master;
 	private RecordSource stage;
 	private IProbabilityModel stageModel;
 	private IProbabilityModel masterModel;
-	
+
 	private IRecValSink [] sinks;
 	private int numBlockFields;
-	
+
 	private IRecValSinkSourceFactory rvFactory;
 
 	private static int INTERVAL = 100000;
-	
+
 	private BlockingConfiguration bc;
-	
+
 	//	this is the input record id to internal id translator
 	private IRecordIDTranslator2 translator;
-	
+
 	private IStatus status;
-	
+
 	//This stores if stage record id is Integer, Long, or string
 	private boolean firstStage = true;
 	private int stageType = -1;
-	
+
 	//This stores if master record id is Integer, Long, or string
 	private boolean firstMaster = true;
 	private int masterType = -1;
-	
+
 //	private String blockName;
 //	private String dbConf;
-	
+
 	private long time; //this keeps track of time
 
 
 	/** This constructor take these parameters:
-	 * 
+	 *
 	 * @param stage - stage record source of the data
 	 * @param master - master record source of the data.  This can be null.
 	 * @param accessProvider - probability accessProvider of the data
@@ -99,11 +99,11 @@ public class RecValService2 {
 	 * @param dbConf - db configuration in the schema
 	 * @param status - current status of the system
 	 */
-	public RecValService2 (RecordSource stage, RecordSource master, IProbabilityModel stageModel, 
-		IProbabilityModel masterModel, 
+	public RecValService2 (RecordSource stage, RecordSource master, IProbabilityModel stageModel,
+		IProbabilityModel masterModel,
 		IRecValSinkSourceFactory rvFactory, IRecordIDTranslator2 translator,
 		IStatus status) {
-		
+
 		this.stage = stage;
 		this.master = master;
 		this.stageModel = stageModel;
@@ -111,23 +111,23 @@ public class RecValService2 {
 		this.translator = translator;
 		this.rvFactory = rvFactory;
 		this.status = status;
-		
+
 //		this.blockName = blockName;
 //		this.dbConf = dbConf;
-		
+
 		BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
 		String blockName = (String) stageModel.properties().get("blockingConfiguration");
 		String dbConf = (String) stageModel.properties().get("dbConfiguration");
-		
+
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
 		BlockingField[] bfs = bc.blockingFields;
-		
+
 		//print blocking info
 		for (int i=0; i< bfs.length; i ++) {
 			DbField field = bfs[i].dbField;
 			log.info("i " + i + " field " + field.name + " number " + field.number );
 		}
-		
+
 		this.numBlockFields = countFields (bfs);
 
 //		System.out.println ("Numfields " + numBlockFields);
@@ -135,20 +135,20 @@ public class RecValService2 {
 
 
 	/** This method returns the time it takes to run the runService method.
-	 * 
+	 *
 	 * @return long - returns the time (in milliseconds) it took to run this service.
 	 */
 	public long getTimeElapsed () { return time; }
-	
-	
+
+
 	public int getNumBlockingFields () { return numBlockFields; }
-	
-	
+
+
 	/** This returns the type of stage record id.  It is one of the three:
 	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
-	 * 
+	 *
 	 * It returns -1 if there was not staging data.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getStageType () {
@@ -158,9 +158,9 @@ public class RecValService2 {
 
 	/** This returns the type of master record id.  It is one of the three:
 	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
-	 * 
+	 *
 	 * It returns -1 if there was not master data.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getMasterType () {
@@ -169,19 +169,19 @@ public class RecValService2 {
 
 
 	/** This method runs the service.
-	 * 
+	 *
 	 *
 	 */
 	public void runService () throws BlockingException {
 		time = System.currentTimeMillis();
-		
-		if (status.getStatus() >= IStatus.DONE_REC_VAL && 
+
+		if (status.getStatus() >= IStatus.DONE_REC_VAL &&
 			status.getStatus() < IStatus.DONE_REVERSE_TRANSLATE_OVERSIZED ) {
-				
+
 			log.info ("recover rec,val files and translator");
 			//need to initialize
 			init ();
-			
+
 		} else if (status.getStatus() < IStatus.CREATE_REC_VAL) {
 			log.info ("Creating new rec,val files");
 
@@ -189,12 +189,12 @@ public class RecValService2 {
 			status.setStatus( IStatus.CREATE_REC_VAL);
 
 			createFiles ();
-			
+
 			status.setStatus( IStatus.DONE_REC_VAL);
 
 		} else if (status.getStatus() == IStatus.CREATE_REC_VAL) {
 			log.info ("Trying to recover rec,val files");
-			
+
 			//started to created, but not done, so we need to recover
 			status.setStatus( IStatus.CREATE_REC_VAL);
 			recoverFiles ();
@@ -202,43 +202,44 @@ public class RecValService2 {
 		}
 		time = System.currentTimeMillis() - time;
 	}
-	
-	
+
+
 	/** This method sets up the sinks array for future use.
-	 * 
+	 *
 	 *
 	 */
 	private void init () throws BlockingException {
 		sinks = new IRecValSink [numBlockFields];
-		
-		int count = 0;
-			
+
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		int count = 0;
+
 		for (int i=0; i< numBlockFields; i++) {
 			sinks[i] = rvFactory.getNextSink();
 		}
-		
+
 		translator.recover();
 		translator.close();
 	}
-	
-	
+
+
 	/**
 	 * This method creates the files from scratch.
 	 *
 	 */
 	private void createFiles () throws BlockingException {
 		sinks = new IRecValSink [numBlockFields];
-		
+
 		int count = 0;
-			
+
 		for (int i=0; i< numBlockFields; i++) {
 			sinks[i] = rvFactory.getNextSink();
 			sinks[i].open();
 		}
 
 		translator.open();
-		
-		
+
+
 		try {
 			Record r;
 
@@ -246,20 +247,20 @@ public class RecValService2 {
 			if (stage != null) {
 				stage.setModel(stageModel);
 				stage.open();
-				
+
 				String blockName = (String) stageModel.properties().get("blockingConfiguration");
 				String dbConf = (String) stageModel.properties().get("dbConfiguration");
 				BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
-				
+
 				while (stage.hasNext()) {
 					count ++;
 					r = stage.getNext();
-					
+
 //					if (count < 15) log.info("id: " + r.getId());
-					
+
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
-			
+
 					writeRecord (r, stageModel);
 
 					//This checks the id type
@@ -268,9 +269,9 @@ public class RecValService2 {
 						stageType = Constants.checkType((Comparable)O);
 						firstStage = false;
 					}
-		
+
 				} // end while
-				stage.close ();			
+				stage.close ();
 			}
 
 			log.info(count + " stage records read");
@@ -279,7 +280,7 @@ public class RecValService2 {
 			//write the master record source
 			if (master != null) {
 				translator.split();
-			
+
 				master.setModel(masterModel);
 				master.open();
 
@@ -288,7 +289,8 @@ public class RecValService2 {
 				BlockingAccessor ba = (BlockingAccessor) masterModel.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
-				long lastID = Long.MIN_VALUE;
+				// 2014-04-24 rphall: Commented out unused local variable.
+//				long lastID = Long.MIN_VALUE;
 				while (master.hasNext()) {
 					count ++;
 					r = master.getNext();
@@ -296,9 +298,9 @@ public class RecValService2 {
 //					if (count < 15) log.info("id: " + r.getId());
 
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
-				
+
 					writeRecord (r, masterModel);
-				
+
 					//This checks the id type
 					if (firstMaster) {
 						Object O = r.getId();
@@ -307,25 +309,25 @@ public class RecValService2 {
 					}
 
 				} // end while
-				master.close ();			
+				master.close ();
 			}
 
 			log.info(count + " total records read");
 		} catch (IOException ex) {
 			throw new BlockingException (ex.toString());
 		}
-		
+
 		//close rec val sinks
 		for (int i=0; i<sinks.length; i++) {
 			sinks[i].close();
 		}
 		translator.close();
-				
+
 	}
 
 
 	/** This method writes 1 record's rec_id and val_id.
-	 * 
+	 *
 	 */
 	private void writeRecord (Record r, ImmutableProbabilityModel model) throws BlockingException {
 /*
@@ -336,21 +338,21 @@ public class RecValService2 {
 */
 		Object O = r.getId();
 		int internal = translator.translate((Comparable) O);
-		
+
 		HashSet seen = new HashSet(); //stores field value it has seen
 		Hashtable values = new Hashtable ();  //stores values per field
-				
+
 		BlockingValue[] bvs = bc.createBlockingValues(r);
-				
+
 		//loop over the blocking value for this record
 		for (int j=0; j < bvs.length; j++) {
 			BlockingValue bv = bvs[j];
 			BlockingField bf = bv.blockingField;
-					
+
 			Integer C = new Integer (bf.dbField.number);
-					
+
 //			System.out.println (bf.number + " " + bv.value + " " + bf.dbField.number + " " + bf.dbField.name);
-					
+
 			String val = new String (bv.value);
 			String key = bf.dbField.number + val;
 
@@ -361,26 +363,26 @@ public class RecValService2 {
 				if (list == null) {
 					list = new IntArrayList (1);
 				}
-						
+
 				list.add(val.hashCode()); //use hashcode of the string
 				values.put(C, list);
 			}
 
 		} // end for
-				
+
 		Enumeration e = values.keys();
 		while (e.hasMoreElements()) {
 			Integer C = (Integer) e.nextElement();
 			sinks [C.intValue()].writeRecordValue((long)internal, (IntArrayList) values.get(C));
-					
+
 //			log.info("id " + internal + " C " + C + " " + values.get(C));
 		}
 	}
 
-	
-	
+
+
 	/** This method tries to recover all the files previously written.
-	 * 
+	 *
 	 * It does the following:
 	 * 1. Recover existing rec_id, val_id files by check the maximum record ID that was written so far.
 	 * 2. Recover the translator file.
@@ -391,11 +393,11 @@ public class RecValService2 {
 		IRecValSource source;
 		int maxCount = 0;
 		int count = 0;
-		
+
 		sinks = new IRecValSink [numBlockFields];
 		for (int i=0; i< numBlockFields; i++) {
 			sinks[i] = rvFactory.getNextSink();
-			
+
 			source = rvFactory.getSource(sinks[i]);
 			source.open();
 			count = 0;
@@ -403,96 +405,98 @@ public class RecValService2 {
 				count ++;
 			}
 			source.close();
-			
+
 			if (count > maxCount) maxCount = count;
-			
+
 			sinks[i].append();
-			
+
 //			System.out.println (sinks[i].getInfo());
 		}
 
 		//recover the translator
 		translator.recover();
-		
-		
+
+
 		//create rec_id, val_id for the records that haven't been processed.
 		count = 0; //count the record we are currently at
 		int count2 = 0; //count the number of new rec,val added
-		
-		
+
+
 		try {
 			//first recover the stage
 			if (stage != null) {
 				stage.setModel(stageModel);
 				stage.open();
-				long lastID = Long.MIN_VALUE;
+				// 2014-04-24 rphall: Commented out unused local variable.
+//				long lastID = Long.MIN_VALUE;
 				while (stage.hasNext()) {
 					count ++;
 					Record r = stage.getNext();
 
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
-				
+
 					if (count > maxCount) {
 						writeRecord (r, stageModel);
 						count2 ++;
-					} 
+					}
 				} // end while
 				stage.close();
 			}
-		
+
 			//second recover the master
 			if (master != null) {
-			
-				//this mean that the previous run never got to the second record source, so we need to 
+
+				//this mean that the previous run never got to the second record source, so we need to
 				//tell the translator to split
 				if (count2 > 0) translator.split();
-			
+
 				master.setModel(masterModel);
 				master.open();
-				long lastID = Long.MIN_VALUE;
+				// 2014-04-24 rphall: Commented out unused local variable.
+//				long lastID = Long.MIN_VALUE;
 				while (master.hasNext()) {
 					count ++;
 					Record r = master.getNext();
 
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
-				
+
 					if (count > maxCount) {
 						writeRecord (r, masterModel);
 						count2 ++;
-					} 
+					}
 				} // end while
 				master.close();
 			}
 		} catch (IOException ex) {
 			throw new BlockingException (ex.toString());
 		}
-		
+
 		translator.close();
 		for (int i=0; i<sinks.length; i++) {
 			sinks[i].close();
 		}
-		
+
 		log.info(count2 + " recorded added in recovery");
 	}
 
 
 	/** This counts the number of distinct db fields used in the blocking.
-	 * 
+	 *
 	 * @param bfs - array of BlockingFields
 	 * @return
-	 */	
+	 */
 	private int countFields (BlockingField[] bfs) {
 		HashSet set = new HashSet();
-		
+
 		for (int i=0; i<bfs.length; i++) {
 			DbField field = bfs[i].dbField;
 			Integer I = new Integer (field.number);
-			
+
 			if (!set.contains(I)) {
 				set.add(I);
-			} 
+			}
 		}
-		
+
 		return set.size();
 	}
 

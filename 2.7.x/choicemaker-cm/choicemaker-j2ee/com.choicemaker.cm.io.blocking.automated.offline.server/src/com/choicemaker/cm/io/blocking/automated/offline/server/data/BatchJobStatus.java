@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -15,7 +15,7 @@ import java.util.Date;
 
 /**
  * This object tells the status of the job id.
- * 
+ *
  * @author pcheung
  *
  */
@@ -29,14 +29,15 @@ public class BatchJobStatus implements Serializable {
 	protected String status;
 	protected Date startDate;
 	protected Date finishDate;
-	
-	public BatchJobStatus() { 
-		String str = new java.sql.Timestamp(startDate.getTime() ).toString();
+
+	public BatchJobStatus() {
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		String str = new java.sql.Timestamp(startDate.getTime() ).toString();
 	}
 
-	public BatchJobStatus(long jobId, long transactionId, 
+	public BatchJobStatus(long jobId, long transactionId,
 		String desc, String status, Date startDate, Date finishDate) {
-			
+
 		setJobId(jobId);
 		setTransactionId (transactionId);
 		setDescription(desc);
@@ -48,11 +49,11 @@ public class BatchJobStatus implements Serializable {
 	public long getJobId() {
 		return jobId;
 	}
-	
-	public void setJobId(long jobId) {		
+
+	public void setJobId(long jobId) {
 		this.jobId = jobId;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
@@ -64,31 +65,31 @@ public class BatchJobStatus implements Serializable {
 	public String getStatus() {
 		return status;
 	}
-	
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	public Date getStartDate() {
 		return startDate;
 	}
-	
+
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	
+
 	public Date getFinishDate() {
 		return finishDate;
 	}
-	
+
 	public void setFinishDate(Date finishDate) {
 		this.finishDate = finishDate;
 	}
-	
+
 	public long getTransactionId () {
 		return transactionId;
 	}
-	
+
 	public void setTransactionId (long l) {
 		transactionId = l;
 	}

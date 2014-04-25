@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -49,7 +49,7 @@ public class InMemoryDataSource {
 
 	public void init(List records) {
 		numBlockingFields = bc.blockingFields.length;
-		
+
 		fieldMaps = new HashMap[numBlockingFields];
 		for (int i = 0; i < fieldMaps.length; i++) {
 			fieldMaps[i] = new HashMap();
@@ -60,12 +60,12 @@ public class InMemoryDataSource {
 		for (int recordIndex = 0; recordIndex < len; recordIndex++) {
 			Record r = (Record)recordList.get(recordIndex);
 			BlockingValue[] bvs = bc.createBlockingValues(r);
-				
+
 			for (int j = 0; j < bvs.length; j++) {
 				String value = bvs[j].value;
 				put(recordIndex, bvs[j].blockingField.dbField.number, value);
 			}
-		}					
+		}
 	}
 
 	private void put(int recordIndex, int blockingFieldNumber, String blockingValue) {
@@ -78,23 +78,24 @@ public class InMemoryDataSource {
 			bvList.add(recordIndex);
 		}
 	}
-	
+
 	//
 	// CountSource
 	//
-	
+
 	public CountSource createCountSource() {
-		int mainTableSize = recordList.size();
-		
-		int numFields = bc.dbFields.length;		
+		// 2014-04-24 rphall: Commented out unused local variables.
+//		int mainTableSize = recordList.size();
+
+		int numFields = bc.dbFields.length;
 		CountField[] countFields = new CountField[numFields];
 		for (int i = 0; i < numFields; i++) {
 			countFields[i] = createCountField(i);
 		}
-		
+
 		return new CacheCountSource(recordList.size(), countFields);
 	}
-	
+
 	private CountField createCountField(int index) {
 		DbField dbf = bc.dbFields[index];
 
@@ -119,16 +120,16 @@ public class InMemoryDataSource {
 		// create a CountField object to represent our results
 		CountField cf = new CountField(
 			2, // initial size of cf.m (which is replaced in the next line anyway anyway).
-			defaultCount, 
+			defaultCount,
 			fieldMap.size(),
 			dbf.name,
 			dbf.table.name,
 			dbf.table.uniqueId);
 		cf.m = biggerThanDefault;
-		
+
 		return cf;
 	}
-	
+
 	//
 	// Query methods
 	//
@@ -142,15 +143,15 @@ public class InMemoryDataSource {
 		for (int i = 0; i < its.length; i++) {
 			its[i] = createIndexIterator((BlockingSet)blockingSets.get(i), start);
 		}
-		
+
 		IntIterator union = createUnionIntIterator(its);
 		return new RecordSetIterator(recordList, union);
 	}
-	
+
 	//
 	// IntIterator stuff
 	//
-	
+
 	private static final IntIterator[] ZERO_INT_ITERATOR = new IntIterator[0];
 
 	private IntIterator createIndexIterator(BlockingSet bs, int start) {
@@ -160,13 +161,13 @@ public class InMemoryDataSource {
 		for (int i = 0; i < bvs.length; i++) {
 			int fieldNum = bvs[i].blockingField.dbField.number;
 			String fieldVal = bvs[i].value;
-			
+
 			IntArrayList ial = (IntArrayList) fieldMaps[fieldNum].get(fieldVal);
 			if (ial != null) {
 				lists.add(new IntArrayListIterator(ial, start));
 			}
 		}
-		
+
 		IntIterator[] its = (IntIterator[]) lists.toArray(ZERO_INT_ITERATOR);
 		return createIntersectionIntIterator(its);
 	}
@@ -190,9 +191,9 @@ public class InMemoryDataSource {
 			int pivot = (from + to) / 2;
 			IntIterator it1 = createUnionIntIterator(its, from, pivot);
 			IntIterator it2 = createUnionIntIterator(its, pivot, to);
-			
+
 			return new UnionIntIterator(it1, it2);
-		}		
+		}
 	}
 
 	private static IntIterator createIntersectionIntIterator(IntIterator[] its) {
@@ -214,19 +215,19 @@ public class InMemoryDataSource {
 			int pivot = (from + to) / 2;
 			IntIterator it1 = createIntersectionIntIterator(its, from, pivot);
 			IntIterator it2 = createIntersectionIntIterator(its, pivot, to);
-			
+
 			return new IntersectionIntIterator(it1, it2);
 		}
 	}
 
 	public static interface IntIterator {
 		public boolean hasNext();
-		public int next();	
+		public int next();
 	}
-	
+
 	private static final IntIterator EMPTY_ITERATOR = new IntIterator() {
 		public boolean hasNext() { return false; }
-		public int next() { throw new NoSuchElementException(); };	
+		public int next() { throw new NoSuchElementException(); };
 	};
 
 	public static class IntArrayListIterator implements IntIterator {
@@ -254,21 +255,21 @@ public class InMemoryDataSource {
 			}
 		}
 	}
-	
+
 	public static class UnionIntIterator implements IntIterator {
 		private static final int NEXT_IS_I1 = 1;
 		private static final int NEXT_IS_I2 = 2;
 		private static final int NEXT_IS_NULL = -1;
-		
+
 		private IntIterator it1, it2;
-		
+
 		private int i1, i2;
 		private boolean i1Valid, i2Valid;
-		
+
 		public UnionIntIterator(IntIterator it1, IntIterator it2) {
 			this.it1 = it1;
-			this.it2 = it2;	
-			
+			this.it2 = it2;
+
 			i1Valid = i2Valid = true;
 			advance();
 		}
@@ -313,7 +314,7 @@ public class InMemoryDataSource {
 					}
 					if (i2Valid) {
 						i2 = it2.next();
-					}					
+					}
 				}
 			} else if (i1Valid) {
 				i1Valid = it1.hasNext();
@@ -328,17 +329,17 @@ public class InMemoryDataSource {
 			}
 		}
 	}
-	
+
 	public static class IntersectionIntIterator implements IntIterator {
 		private IntIterator it1, it2;
-		
+
 		private int next;
-		private boolean nextIsValid;		
-		
+		private boolean nextIsValid;
+
 		public IntersectionIntIterator(IntIterator it1, IntIterator it2) {
 			this.it1 = it1;
 			this.it2 = it2;
-			
+
 			advance();
 		}
 		public boolean hasNext() {
@@ -350,7 +351,7 @@ public class InMemoryDataSource {
 				advance();
 				return nextInt;
 			} else {
-				throw new NoSuchElementException();				
+				throw new NoSuchElementException();
 			}
 		}
 		private void advance() {
@@ -376,12 +377,12 @@ public class InMemoryDataSource {
 			}
 		}
 	}
-	
+
 	private static class RecordSetIterator implements Iterator {
-		
+
 		private List recordList;
 		private IntIterator indices;
-		
+
 		private RecordSetIterator(List recordList, IntIterator indices) {
 			this.recordList = recordList;
 			this.indices = indices;
@@ -390,15 +391,15 @@ public class InMemoryDataSource {
 		public boolean hasNext() {
 			return indices.hasNext();
 		}
-		
+
 		public Object next() {
 			return recordList.get(indices.next());
 		}
 
 		public void remove() {
 			throw new UnsupportedOperationException();
-		}		
-		
+		}
+
 	}
 
 }

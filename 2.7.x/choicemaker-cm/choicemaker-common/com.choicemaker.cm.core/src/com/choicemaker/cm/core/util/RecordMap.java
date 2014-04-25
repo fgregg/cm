@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -27,13 +27,13 @@ public class RecordMap {
 	private Map map = new HashMap();
 
 	public RecordMap() { }
-	
+
 	public RecordMap(List records) {
 		for (int i = 0; i < records.size(); i++) {
-			addRecord((Record)records.get(i));	
+			addRecord((Record)records.get(i));
 		}
 	}
-	
+
 	public RecordMap(RecordSource rs) throws IOException {
 		rs.open();
 		while (rs.hasNext()) {
@@ -47,19 +47,21 @@ public class RecordMap {
 		if (id == null) {
 			throw new IllegalStateException("Attempt to add a record with a null ID");
 		}
-		
-		String idString = id.toString();
+
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		String idString = id.toString();
 		map.put(id, r);
 	}
-	
+
 	public boolean hasRecord(Comparable id) {
-		String idString = id.toString();
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		String idString = id.toString();
 		return map.containsKey(id);
 	}
-	
+
 	public Record getRecord(Comparable id) {
 		String idString = id.toString();
-		return (Record) map.get(idString);	
+		return (Record) map.get(idString);
 	}
 
 }

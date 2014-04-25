@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -30,7 +30,7 @@ import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.GeneratorHelper;
 import com.choicemaker.cm.core.gen.IGenerator;
 import com.choicemaker.cm.core.gen.GeneratorHelper.Id;
-import com.choicemaker.cm.io.db.base.DbField;
+//import com.choicemaker.cm.io.db.base.DbField;
 
 /**
  * Description
@@ -199,13 +199,14 @@ public class DbReaderSequentialConfigurationGenerator {
 			w.write("while(rs.next()) {" + Constants.LINE_SEPARATOR);
 			w.write(className + " r = new " + className + "();" + Constants.LINE_SEPARATOR);
 			List fields = new ArrayList(r.getChildren("field"));
-			
+
 			System.out.println ("fields size: " + fields.size());
 			GeneratorHelper.filterFields2(fields, src, "dbField", confName);
 			System.out.println ("fields size: " + fields.size());
-			
-			DbField[] dbFields = new DbField[fields.size() + ids.size()];
-			List keyTables = hd.getChildren("key");
+
+			// 2014-04-24 rphall: Commented out unused local variables.
+//			DbField[] dbFields = new DbField[fields.size() + ids.size()];
+//			List keyTables = hd.getChildren("key");
 			int fieldNo = 0;
 			Iterator iL = ids.iterator();
 			while (iL.hasNext()) {

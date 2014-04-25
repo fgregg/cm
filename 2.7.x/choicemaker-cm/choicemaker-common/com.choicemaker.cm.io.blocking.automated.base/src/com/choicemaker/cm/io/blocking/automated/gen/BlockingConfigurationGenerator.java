@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -410,7 +410,8 @@ public class BlockingConfigurationGenerator {
 	private void processRecord(Element r, String sourceNodeTypeName) throws IOException {
 		String className = r.getAttributeValue("className");
 		int recordNumber = Integer.parseInt(r.getAttributeValue("recordNumber"));
-		String nodeViewName = null;
+		// 2014-04-24 rphall: Commented out unused local variable.
+//		String nodeViewName = null;
 		int recordDefaultCount = defaultCount;
 		Element hd = GeneratorHelper.getNodeTypeExt(r, BlockingTags.BLOCKING);
 		if (hd != null) {
@@ -744,7 +745,7 @@ public class BlockingConfigurationGenerator {
 					if( targetColumnElm != null)
 						targetColumnName =  targetColumnElm.getAttributeValue("name"); //TODO "name"
 					if(targetColumnName == null || targetColumnName.length() == 0 )
-						targetColumnName = targetFieldName;	
+						targetColumnName = targetFieldName;
 					view = createOrGetDView(dbC, DbGenerator.getViewNameForField(field, dbC.name, g));
 				} else {
 					g.error("Could not find targetField: " + targetFieldName);
