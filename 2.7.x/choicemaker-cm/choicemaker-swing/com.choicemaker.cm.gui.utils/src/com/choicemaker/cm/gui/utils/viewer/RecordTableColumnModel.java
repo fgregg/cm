@@ -93,7 +93,7 @@ public class RecordTableColumnModel extends DefaultTableColumnModel {
 	
 	public void addAllColumns() {
 		for (int i = 0; i < visibleAndInvisibleColumns.length; i++) {
-			RecordTableColumn col = (RecordTableColumn) visibleAndInvisibleColumns[i];
+			RecordTableColumn col = visibleAndInvisibleColumns[i];
 			if (!col.isVisible()) {
 				col.setVisible(true);
 				addColumn(col);
@@ -104,7 +104,7 @@ public class RecordTableColumnModel extends DefaultTableColumnModel {
 	
 	public void removeAllColumns() {
 		for (int i = 0; i < visibleAndInvisibleColumns.length; i++) {
-			RecordTableColumn col = (RecordTableColumn) visibleAndInvisibleColumns[i];
+			RecordTableColumn col = visibleAndInvisibleColumns[i];
 			if (col.isVisible()) {
 				col.setVisible(false);
 				removeColumn(col);

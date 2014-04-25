@@ -152,13 +152,13 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 				if (aValue instanceof Boolean) {
 					if (Boolean.TRUE == ((Boolean) aValue)){
 						//BUG FIX #97: check the current condition.
-						if (!((RecordTableColumn) column).isVisible()){
+						if (!column.isVisible()){
 							columnModel.addColumn(column);
 						}
 					}
 					else{
 						//BUG FIX #97: check the current condition.
-						if (((RecordTableColumn) column).isVisible()){
+						if (column.isVisible()){
 							columnModel.removeColumn(column);
 						}
 					}
