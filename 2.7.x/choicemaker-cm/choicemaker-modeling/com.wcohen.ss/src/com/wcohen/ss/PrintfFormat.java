@@ -2170,7 +2170,7 @@ public class PrintfFormat {
         }
       }
       else
-        sx = Integer.toString((int)x,16);
+        sx = Integer.toString(x,16);
       return printXFormat(sx);
     }
     /**
@@ -2465,7 +2465,7 @@ public class PrintfFormat {
         }
       }
       else
-        sx = Integer.toString((int)x,8);
+        sx = Integer.toString(x,8);
       return printOFormat(sx);
     }
     /**
