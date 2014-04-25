@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -49,7 +49,7 @@ public class ExtDecision extends Decision {
 
 	/**
 	 * Returns the corresponding <code>Decision</code>.
-	 * 
+	 *
 	 * @return  The corresponding <code>Decision</code>.
 	 * @throws  IllegalArgumentException if <code>name</code> is not a valid decision.
 	 */
@@ -70,7 +70,7 @@ public class ExtDecision extends Decision {
 
 	/**
 	 * Returns the corresponding <code>Decision</code>.
-	 * 
+	 *
 	 * @return  The corresponding <code>Decision</code>.
 	 * @throws  IllegalArgumentException if <code>name</code> is not a valid decision.
 	 */
@@ -91,7 +91,7 @@ public class ExtDecision extends Decision {
 
 	/**
 	 * Returns the corresponding <code>Decision</code>.
-	 * 
+	 *
 	 * @return  The corresponding <code>Decision</code>.
 	 * @throws  IndexOutOfBoundsException if <code>no</code> is out of the range
 	 *            <code>(no < 0 || no >= NUM_DECISIONS)</code>.
@@ -104,7 +104,7 @@ public class ExtDecision extends Decision {
 		return valueOf(toInt());
 	}
 
-	/** 
+	/**
 	 * Compares this object with the specified object for order, where
 	 * quite arbitrarily<ul>
 	 * <li/> NONE &lt; NOHOLD &lt; NOMATCH &lt; NODIFFER</ul>
@@ -115,13 +115,13 @@ public class ExtDecision extends Decision {
 	 *           equal to, or greater than the specified object.
 	 */
 	public int compareTo(Object o) {
-		ExtDecision e = (ExtDecision) o;
 		int retVal;
-		if (e instanceof Decision) {
+		if (this == o) {
+			retVal = 0;
+		} else if (o instanceof Decision) {
 			retVal = -1;
-		} else if (this == e) {
-				retVal = 0;
-		} else {
+		} else if (o instanceof ExtDecision) {
+			ExtDecision e = (ExtDecision) o;
 			int thisOrdinal = NUM_DECISIONS - this.toInt();
 			int thatOrdinal = NUM_DECISIONS - e.toInt();
 			if (thisOrdinal < thatOrdinal) {
@@ -129,6 +129,11 @@ public class ExtDecision extends Decision {
 			} else {
 				retVal = -1;
 			}
+		} else if (o == null){
+			throw new ClassCastException("null argument to compareTo");
+		} else {
+			throw new ClassCastException("invalid argument to compareTo: "
+					+ o.getClass().getName());
 		}
 		return retVal;
 	}
