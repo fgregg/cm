@@ -190,7 +190,7 @@ public class PiecewiseMatcher {
 		rsBlocked.open();
 
 		while (rsBlocked.hasNext()) {
-			Record m = (Record) rsBlocked.getNext();
+			Record m = rsBlocked.getNext();
 			recordsBlocked.increment();
 
 			if (q.getId().equals(m.getId())) {

@@ -130,7 +130,7 @@ public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
 	private void loadMap () throws SQLException {
 		recordMap = new HashMap ();
 		while (dbr.hasNext()) {
-			Record q = (Record) dbr.getNext();
+			Record q = dbr.getNext();
 			recordMap.put(q.getId().toString(), q);
 		}
 	}

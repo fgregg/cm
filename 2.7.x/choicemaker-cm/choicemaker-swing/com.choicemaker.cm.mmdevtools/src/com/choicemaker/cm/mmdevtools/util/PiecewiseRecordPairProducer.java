@@ -168,7 +168,7 @@ public class PiecewiseRecordPairProducer implements Runnable {
 		try {
 			blocked.open();
 			while (blocked.hasNext()) {
-				Record m = (Record) blocked.getNext();
+				Record m = blocked.getNext();
 				// this will break if ID's are null, and in some cases, we may not even want to do this...
 				if (qId.equals(m.getId())) {
 					continue;

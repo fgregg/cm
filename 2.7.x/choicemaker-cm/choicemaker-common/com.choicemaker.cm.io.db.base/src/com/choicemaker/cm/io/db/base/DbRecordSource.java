@@ -159,7 +159,7 @@ public class DbRecordSource implements RecordSource {
 	private void getNextMain() throws IOException {
 		try {
 			if (dbr.hasNext()) {
-				record = (Record) dbr.getNext();
+				record = dbr.getNext();
 			} else {
 				record = null;
 			}

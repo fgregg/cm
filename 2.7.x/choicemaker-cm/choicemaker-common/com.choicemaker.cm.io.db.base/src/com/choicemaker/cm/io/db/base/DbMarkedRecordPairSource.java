@@ -172,8 +172,8 @@ class DbMarkedRecordPairSource implements MarkedRecordPairSource {
 			boolean hasAnotherPair =
 				rsDecision.next() && dbr.hasNext() && dbr2.hasNext();
 			if (hasAnotherPair) {
-				Record q = (Record) dbr.getNext();
-				Record m = (Record) dbr2.getNext();
+				Record q = dbr.getNext();
+				Record m = dbr2.getNext();
 				String d = rsDecision.getString(3);
 				Decision decision = null;
 				if (d != null && d.length() > 0) {
