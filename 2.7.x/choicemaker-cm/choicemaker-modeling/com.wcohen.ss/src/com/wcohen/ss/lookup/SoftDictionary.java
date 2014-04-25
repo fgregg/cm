@@ -9,7 +9,7 @@ import com.wcohen.ss.tokens.*;
 
 /**
  * Looks up nearly-matching strings in a dictionary, using a string distance.
- * 
+ *
  * A typical use:
  *<code><pre>
  * SoftDictionary softDict = new SoftDictionary(new SimpleTokenizer(true,true));
@@ -23,7 +23,7 @@ import com.wcohen.ss.tokens.*;
  *</pre></code>
  */
 
-public class SoftDictionary 
+public class SoftDictionary
 {
     private static final boolean DEBUG=false;
 
@@ -57,7 +57,7 @@ public class SoftDictionary
     // constructors
     //
 
-    public SoftDictionary() 
+    public SoftDictionary()
     {
 	this(new JaroWinklerTFIDF(), NGramTokenizer.DEFAULT_TOKENIZER);
     }
@@ -69,7 +69,7 @@ public class SoftDictionary
     {
 	this(new JaroWinklerTFIDF(), tokenizer);
     }
-    public SoftDictionary(StringDistanceLearner distanceLearner,Tokenizer tokenizer) 
+    public SoftDictionary(StringDistanceLearner distanceLearner,Tokenizer tokenizer)
     {
 	this.distanceLearner = distanceLearner;
 	this.distance = null;
@@ -79,11 +79,11 @@ public class SoftDictionary
 	this.idMap = new HashMap();
 	this.totalEntries = 0;
     }
-	
+
     /** Return the number of entries in the dictionary. */
-    public int size() 
-    { 
-	return totalEntries; 
+    public int size()
+    {
+	return totalEntries;
     }
 
     /** Prepare a string for quicker lookup.
@@ -143,7 +143,9 @@ public class SoftDictionary
      */
     public void put(String id,String string,Object value)
     {
-	if (DEBUG && id!=null) System.out.println(id+":"+string+" => "+value);
+	if (DEBUG) {
+		if (id!=null) System.out.println(id+":"+string+" => "+value);
+	}
 	put(id, new MyWrapper(string), value);
     }
 
@@ -172,7 +174,7 @@ public class SoftDictionary
 	}
 	map.put( wrapper, value );
 	if (id!=null) idMap.put( wrapper, id );
-	distance = null; // mark distance as "out of date" 
+	distance = null; // mark distance as "out of date"
 	totalEntries++;
     }
 
@@ -209,7 +211,7 @@ public class SoftDictionary
 	    ArrayList stringsWithToken = (ArrayList) index.get(tokens[i]);
 	    if (stringsWithToken!=null && ((double)stringsWithToken.size()/totalEntries) < maxFraction) {
 		for (Iterator j=stringsWithToken.iterator(); j.hasNext(); ) {
-		    MyWrapper wj = (MyWrapper)j.next(); 
+		    MyWrapper wj = (MyWrapper)j.next();
 		    String wjId = (String)idMap.get(wj);
 		    //if (DEBUG) System.out.println("id:"+id+" wjId:"+wjId);
 		    if (!closeMatches.contains(wj) && (wjId==null || !wjId.equals(id))) {
@@ -228,7 +230,7 @@ public class SoftDictionary
 	}
 	lastLookup = toFind;
     }
-	
+
     /** Lookup a string in the dictionary.
      *
      * <p>If id is non-null, then consider only strings with different ids (or null ids).
@@ -297,7 +299,7 @@ public class SoftDictionary
 	doLookup(null,toFind);
 	return distanceToClosestMatch;
     }
-	
+
     /** Return a teacher that can 'train' a distance metric
      * from the information in the dictionary.  Since there are
      * no known distances, this means unsupervised training,
@@ -312,7 +314,7 @@ public class SoftDictionary
 	private static final long serialVersionUID = 1L;
 	private StringWrapper w;
 	private Token[] tokens;
-	public MyWrapper(String s) 
+	public MyWrapper(String s)
 	{
 	    this.w = prepare(s);
 	    this.tokens = tokenizer.tokenize(s);
@@ -328,7 +330,7 @@ public class SoftDictionary
 	    return ((MyWrapper)o).unwrap().equals( this.unwrap() );
 	}
 	private StringWrapper prepare(String s) {
-	    StringWrapperIterator i = distanceLearner.prepare( 
+	    StringWrapperIterator i = distanceLearner.prepare(
 							      new BasicStringWrapperIterator( Collections.singleton(new BasicStringWrapper(s)).iterator()) );
 	    return i.nextStringWrapper();
 	}
@@ -352,7 +354,7 @@ public class SoftDictionary
 	    return new BasicDistanceInstanceIterator( Collections.EMPTY_SET.iterator() );
 	}
 	protected DistanceInstanceIterator distanceExamplePool() {
-	    return new BasicDistanceInstanceIterator( Collections.EMPTY_SET.iterator() );			
+	    return new BasicDistanceInstanceIterator( Collections.EMPTY_SET.iterator() );
 	}
 	protected DistanceInstance labelInstance(DistanceInstance distanceInstance) {
 	    return null;
