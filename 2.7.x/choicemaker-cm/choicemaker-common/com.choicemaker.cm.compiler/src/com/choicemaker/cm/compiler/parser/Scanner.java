@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -139,8 +139,8 @@ public class Scanner implements Characters, Tokens {
 					case 'f' :
 					case '\"' :
 					case '\'' :
-					case '\\' :
-						lit.append((char) '\\');
+					case BACKSLASH :
+						lit.append(BACKSLASH);
 						lit.append(ch);
 						break;
 					default :
@@ -861,9 +861,9 @@ public class Scanner implements Characters, Tokens {
 		enterKeyword("none", NONEDEC);
 		enterKeyword("decision", DECISION);
 		enterKeyword("minimum", MINIMUM);
-		enterKeyword("maximum", MAXIMUM);	
-		enterKeyword("and", AND_SHORTHAND);	
-		enterKeyword("or", OR_SHORTHAND);	
+		enterKeyword("maximum", MAXIMUM);
+		enterKeyword("and", AND_SHORTHAND);
+		enterKeyword("or", OR_SHORTHAND);
 		enterKeyword("xor", XOR_SHORTHAND);
 		enterKeyword("countunique", COUNTUNIQUE);
 	}
