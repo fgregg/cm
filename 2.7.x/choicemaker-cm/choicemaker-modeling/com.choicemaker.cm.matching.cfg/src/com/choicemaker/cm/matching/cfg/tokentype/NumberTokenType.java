@@ -55,7 +55,7 @@ public class NumberTokenType extends TokenType {
 	 * 1 / (10 * 2^5), regardless of how long it is.
 	 */
 	protected double getTokenProbability(String token) {
-		int len = (int) Math.min(token.length(), 5);
+		int len = Math.min(token.length(), 5);
 		return P[len];	
 	}
 

@@ -709,7 +709,7 @@ public class StringUtils {
 		if (s1 == null || s2 == null) {
 			return 0;
 		}
-		int len = (int) Math.min(s1.length(), s2.length());
+		int len = Math.min(s1.length(), s2.length());
 		int res = 0;
 		for (int i = 0; i < len; ++i) {
 			if (s1.charAt(i) == s2.charAt(i)) {

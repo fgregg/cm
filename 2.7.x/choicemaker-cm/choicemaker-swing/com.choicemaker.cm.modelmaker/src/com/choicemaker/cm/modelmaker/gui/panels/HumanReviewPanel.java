@@ -330,7 +330,7 @@ public class HumanReviewPanel
 			public void stateChanged(ChangeEvent e) {
 				JSlider source = (JSlider) e.getSource();
 				if (!reset && !source.getValueIsAdjusting()) {
-					int selection = (int) source.getValue();
+					int selection = source.getValue();
 					parent.setMarkedRecordPair(selection);
 				}
 			}

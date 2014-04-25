@@ -439,7 +439,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 			int visibleHeight = (int) d.getHeight();
 			
 			if (scrollY + visibleHeight > viewHeight) {
-				scrollY = (int) Math.max(0, viewHeight - visibleHeight);	
+				scrollY = Math.max(0, viewHeight - visibleHeight);	
 			}
 			
 			// move the view
