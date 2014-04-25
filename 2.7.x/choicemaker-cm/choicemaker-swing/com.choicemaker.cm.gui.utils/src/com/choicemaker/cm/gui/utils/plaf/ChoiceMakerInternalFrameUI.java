@@ -79,7 +79,7 @@ public class ChoiceMakerInternalFrameUI extends MetalInternalFrameUI {
 			public void propertyChange(PropertyChangeEvent evt) {
 				super.propertyChange(evt);
 
-				String prop = (String) evt.getPropertyName();
+				String prop = evt.getPropertyName();
 				JInternalFrame f = (JInternalFrame) evt.getSource();
 				if (prop.equals("ancestor")) {
 					if (frame.getParent() != null) {

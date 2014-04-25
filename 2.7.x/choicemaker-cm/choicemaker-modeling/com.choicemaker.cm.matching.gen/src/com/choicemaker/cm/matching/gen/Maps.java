@@ -215,7 +215,7 @@ public final class Maps {
 			String keys = line.substring(index + 1);
 			StringTokenizer toks = new StringTokenizer(keys, ",");
 			while (toks.hasMoreTokens()) {
-				Object k = ConvUtils.convertString2Object(((String)toks.nextToken()).trim(), keyType);
+				Object k = ConvUtils.convertString2Object(toks.nextToken().trim(), keyType);
 				m.put(k, v);
 			}
 		}

@@ -166,7 +166,7 @@ public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitleP
         extends BasicInternalFrameTitlePane.PropertyChangeHandler
     {
         public void propertyChange(PropertyChangeEvent evt) {
-	    String prop = (String)evt.getPropertyName();
+	    String prop = evt.getPropertyName();
             if( prop.equals(JInternalFrame.IS_SELECTED_PROPERTY) ) {
                 Boolean b = (Boolean)evt.getNewValue();
                 iconButton.putClientProperty("paintActive", b);
