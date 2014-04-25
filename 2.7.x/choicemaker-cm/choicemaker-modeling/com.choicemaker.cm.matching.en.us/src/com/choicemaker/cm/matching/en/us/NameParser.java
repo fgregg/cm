@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -22,15 +22,15 @@ import com.choicemaker.cm.matching.en.Soundex;
 
 /**
  * Utilities for dealing with compound names.
- * The name parser is used to break up names, e.g., first and middle name 
- * reported in a single field, to filter out titles and suffixes, e.g., MR and 
- * JR, and to remove invalid values, e.g., <code>N/A</code>. A name parser is instantiated 
- * with the given first, middle, and last name. The broken up name parts can be 
+ * The name parser is used to break up names, e.g., first and middle name
+ * reported in a single field, to filter out titles and suffixes, e.g., MR and
+ * JR, and to remove invalid values, e.g., <code>N/A</code>. A name parser is instantiated
+ * with the given first, middle, and last name. The broken up name parts can be
  * accessed via various accessor methods
- * 
+ *
  * @deprecated use the generic CFG Parser interface
  * @see com.choicemaker.cm.matching.cfg.Parsers
- * 
+ *
  * @author    S. Yoakum-Stover
  * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:17:24 $
  */
@@ -118,7 +118,7 @@ public class NameParser {
 	}
 
 	/**
-	 * @return the mother's first name. This is specific to children's names. 
+	 * @return the mother's first name. This is specific to children's names.
 	 */
 	public String getMothersFirstName() {
 		return mothersFirstName;
@@ -128,10 +128,10 @@ public class NameParser {
 	private final int NUM_NAMES2 = 2 * NUM_NAMES;
 
 	/**
-	 * @return a measure for how many name components are swapped. Each exact 
-	 * swap increments the score by 2. Each name approximate swap (Soundex) 
-	 * increases the score by 1.  
-	 * 
+	 * @return a measure for how many name components are swapped. Each exact
+	 * swap increments the score by 2. Each name approximate swap (Soundex)
+	 * increases the score by 1.
+	 *
 	 * A higher score indicates a higher similarity.
 	 * E.g., the similarity score for "JIM R. SMITH" and "SMIT JIM" is 3.
 	 */
@@ -147,7 +147,8 @@ public class NameParser {
 		n[6] = o.lastName;
 		n[7] = o.potentialMaidenName;
 		for (int i = 0; i < NUM_NAMES2; ++i) {
-			if ((f[i] = n[i] != null && n[i].length() > 0)) {
+			f[i] = n[i] != null;
+			if (f[i] && n[i].length() > 0) {
 				n[i + NUM_NAMES2] = Soundex.soundex(n[i]);
 			}
 		}
@@ -241,9 +242,9 @@ public class NameParser {
 	 * one or more middle names, and one or more titles.  We
 	 * parse only on spaces including  newlines and such.
 	 * We don't do anything special with hyphens, they remain.
-	 * 
+	 *
 	 * @param str
-	 * @param isAFirstName true if this is a first name string, 
+	 * @param isAFirstName true if this is a first name string,
 	 * false for last name.
 	 */
 	public String[] chunkUpNameString(String str, boolean isAFirstName) {
@@ -351,7 +352,7 @@ public class NameParser {
 			}
 		}
 
-		// The tmp variables hold tokens in reverse order		
+		// The tmp variables hold tokens in reverse order
 		theNames[0] = flipToks(tmpLast); //last name
 		theNames[3] = flipToks(tmpMaiden);
 		//potential maiden names flipped back into the correct order
@@ -409,7 +410,7 @@ public class NameParser {
 
 	/**
 	 * Flips the order of the tokens in the string.
-	 * 
+	 *
 	 * @param s
 	 */
 	public static String flipToks(String s) {
