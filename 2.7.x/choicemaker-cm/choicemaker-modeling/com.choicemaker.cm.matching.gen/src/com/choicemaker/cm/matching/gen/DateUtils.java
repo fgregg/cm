@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -31,10 +31,10 @@ public class DateUtils extends DateHelper {
 	// private static Calendar calendar = Calendar.getInstance();
 
 	/**
-	 * Removes the separators from the date leaving just the 
+	 * Removes the separators from the date leaving just the
 	 * numbers.  For example 8/9/62 become 8962 whereas 12/24/01
-	 * become 122401.  
-	 * 
+	 * become 122401.
+	 *
 	 * @param d the input date
 	 * @return the date as number according to the following formula:
 	 * year + 10000 * day + x * month, where x is 100000 if day &lt; 10 and 100000 otherwise
@@ -55,13 +55,13 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns an integer representation of <code>d</code> in YYYYMMDD format.
-	 * 
+	 *
 	 * Returns an int representation of <code>d</code> according to the following formula:
 	 * <p>
 	 * 	 year * 10000 + month * 100 + day
 	 * </p>
 	 * Thus, the result is in the format YYYYMMDD.
-	 * 
+	 *
 	 * @param d the input date
 	 * @return the date as number according to the following formula:
 	 */
@@ -82,17 +82,17 @@ public class DateUtils extends DateHelper {
 	/**
 	 * Returns true iff the years of d1 and d2 are the same and either
 	 * the month or day of one is missing a digit.
-	 * 
+	 *
 	 * In other words, in addition to the years being the same, one of the
 	 * following must be true:
 	 * <ul>
-	 * 	<li>the months are the same and the day of one is the day of the other 
+	 * 	<li>the months are the same and the day of one is the day of the other
 	 * 	with a digit added on the left or right </li>
-	 *	<li>the days are the same and the month of one is the month of the 
-	 * 	other with a digit added on the left or right </li>  
+	 *	<li>the days are the same and the month of one is the month of the
+	 * 	other with a digit added on the left or right </li>
 	 * </ul>
 	 * For example, the function returns true for <code>1/5/2002</code> and <code>1/25/2002</code>.
-	 * 
+	 *
 	 * @param d1 the first date
 	 * @param d2 the second date
 	 * @return true if d1 and d2 are the same modulo a missing number in one.
@@ -140,7 +140,7 @@ public class DateUtils extends DateHelper {
 	 * Returns the difference between d1 and d2 in days.
 	 * If d1 and d2 are different times of day, then the result will
 	 * not be an integer.
-	 * 
+	 *
 	 * @param d1 the first date
 	 * @param d2 the second date
 	 * @return the difference between d1 and d2 in days
@@ -149,13 +149,13 @@ public class DateUtils extends DateHelper {
 		long t1 = d1.getTime();
 		long t2 = d2.getTime();
 		long diff = java.lang.Math.abs(t1 - t2);
-		float daysDiff = (float) diff / 86400000f; //diff in days
+		float daysDiff = diff / 86400000f; //diff in days
 		return daysDiff;
 	}
 
 	/**
 	 * Returns true iff d1 and d2 are more than 365 days apart.
-	 * 
+	 *
 	 * @param d1 the first date
 	 * @param d2 the second date
 	 * @return true iff d1 and d2 are more than 365 days apart
@@ -167,7 +167,7 @@ public class DateUtils extends DateHelper {
 	/**
 	 * Returns true iff d is non-null and its day is the first of
 	 * the month.
-	 * 
+	 *
 	 * @param d the input date
 	 * @return true if d falls on the first of the month
 	 */
@@ -183,7 +183,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns true iff d is non-null and is on January 1st.
-	 * 
+	 *
 	 * @param d the input date
 	 * @return true if d falls on January 1st
 	 */
@@ -193,7 +193,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns true iff d is non-null and on January 1st.
-	 * 
+	 *
 	 * @param d the input date
 	 * @return true iff d falls on January 1st
 	 */
@@ -209,7 +209,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns true iff d1 and d2 have the same month and year.
-	 * 
+	 *
 	 * @param d1 the first date
 	 * @param d2 the second date
 	 * @return whether the month and year of d1 and d2 are the same
@@ -231,7 +231,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns true iff d1 and d2 have the same day and month.
-	 * 
+	 *
 	 * @param d1 the first date
 	 * @param d2 the second date
 	 * @return whether the day and month of d1 and d2 are the same
@@ -257,7 +257,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns true iff d1 and d2 have the same day and month.
-	 * 
+	 *
 	 * @param d1 the first date
 	 * @param d2 the second date
 	 * @return whether dates are different in either last digit of the year or 3rh(decade) digit of the year
@@ -291,7 +291,7 @@ public class DateUtils extends DateHelper {
 	 * Returns true iff d1 and d2 have the same year and the month of d1 is the day
 	 * of d2 and vice versa.  For example, returns true for '3/2/1979' and '2/3/1979',
 	 * returns false for '3/2/1979' and '3/3/1979'.
-	 * 
+	 *
 	 * @param d1 the first date
 	 * @param d2 the second date
 	 * @return whether the year of d1 and d2 are the same and the day and month are swapped.
@@ -315,7 +315,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns the input date's year and month as a String in YYYYMM format.
-	 * 
+	 *
 	 * @param d the input date
 	 * @return d's year and month as a YYYYMM String
 	 */
@@ -331,7 +331,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns the year as an integer.
-	 * 
+	 *
 	 * @param d the input date
 	 * @return the year
 	 */
@@ -343,7 +343,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns the month as an integer in the range [1,12].
-	 * 
+	 *
 	 * @param d the input date
 	 * @return the month in the range [1,12]
 	 */
@@ -355,7 +355,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns the day of the month.
-	 * 
+	 *
 	 * @param d the input date
 	 * @return the day of the month
 	 */
@@ -367,7 +367,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns the current year.
-	 * 
+	 *
 	 * @return the year of the current date
 	 */
 	public static int getCurrentYear() {
@@ -378,7 +378,7 @@ public class DateUtils extends DateHelper {
 
 	/**
 	 * Returns a representation of the input date in YYYYMMDDHHMMSS format.
-	 * 
+	 *
 	 * @param d the input date
 	 * @return a date time String in YYYYMMDDHHMMSS format
 	 */
