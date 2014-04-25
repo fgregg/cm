@@ -49,7 +49,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.choicemaker.cm.analyzer.filter.CollectionMarkedRecordPairFilter;
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairBinder;

@@ -35,7 +35,6 @@ import org.jfree.chart.event.ChartChangeEvent;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.ui.RectangleEdge;
 
-import com.choicemaker.cm.analyzer.filter.MarkedRecordPairFilter;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;

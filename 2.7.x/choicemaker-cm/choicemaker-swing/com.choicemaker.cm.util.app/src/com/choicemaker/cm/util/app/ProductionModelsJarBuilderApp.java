@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.boot.IPlatformRunnable;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;

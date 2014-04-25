@@ -19,8 +19,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.Box;
@@ -34,8 +32,6 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.util.MrpsExport;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModel;
 

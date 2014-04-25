@@ -29,7 +29,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
 import com.choicemaker.cm.modelmaker.gui.tables.CluePerformanceTable;
-import com.choicemaker.cm.modelmaker.gui.tables.ClueTable;
 import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModel;
 import com.choicemaker.cm.modelmaker.gui.tables.ClueTablePanel;
 
