@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -42,43 +42,43 @@ import com.choicemaker.cm.matching.gen.Sets;
  *
  */
 public class ParserXmlConf {
-	
+
 	private static ClassLoader defaultClassLoader = XmlConfigurator.getRmiClassLoader();
-	
+
 	// name and class attributes expected, plus
 	//   zero or more tokenizers
 	//   zero or one symbol factories
 	//   exactly one grammar
-	//   zero or one standardizers 
-	//		- the default standardizer appends each Token's standard token 
+	//   zero or one standardizers
+	//		- the default standardizer appends each Token's standard token
 	//			to the field named by TokenType.toString()
 	//   zero or one parsedDataC elements
 
 	public static Parser readFromFile(String file) throws XmlConfException, FileNotFoundException, IOException, JDOMException {
 		return readFromStream(new FileInputStream(file), null);
 	}
-	
+
 	public static Parser readFromFile(File file) throws XmlConfException, FileNotFoundException, IOException, JDOMException {
 		return readFromStream(new FileInputStream(file), null);
 	}
-	
+
 	public static Parser readFromStream(InputStream is) throws XmlConfException, IOException, JDOMException {
 		return readFromStream(is, null);
 	}
-	
+
 	public static Parser readFromStream(InputStream is, URL pluginUrl) throws XmlConfException, IOException, JDOMException {
 		Document doc = new SAXBuilder().build(is);
 		return readFromElement(doc.getRootElement(), pluginUrl);
 	}
 
 	/**
-	 * A parser element can have "name" and "class" attributes.  Name is optional, and 
+	 * A parser element can have "name" and "class" attributes.  Name is optional, and
 	 * class defaults to CykParser.
-	 * 
-	 * We expect zero or more "tokenizer" elements, at most one "factory" element, 
+	 *
+	 * We expect zero or more "tokenizer" elements, at most one "factory" element,
 	 * exactly one "grammar" element, and at most one "standardizer" element.
 	 */
-	public static Parser readFromElement(Element e, URL pluginUrl) throws XmlConfException {		
+	public static Parser readFromElement(Element e, URL pluginUrl) throws XmlConfException {
 		Class cls = ParserXmlConf.getClass(e, CykParser.class);
 		Parser parser = (Parser) ParserXmlConf.instantiate(cls);
 
@@ -87,7 +87,7 @@ public class ParserXmlConf {
 		Element grammarElement = null;
 		Element standardizerElement = null;
 		Element parsedDataElement = null;
-		
+
 		// break
 		List kids = e.getChildren();
 		for (int i = 0; i < kids.size(); i++) {
@@ -123,28 +123,28 @@ public class ParserXmlConf {
 				throw new XmlConfException("Unknown child element " + kidName + " in 'parser' element.");
 			}
 		}
-		
+
 		// Make sure we have our grammar element
 		if (grammarElement == null) {
 			throw new XmlConfException("'parser' element must specify a 'grammar' element.");
 		}
-		
+
 		// Temporary workarounds until we actually implement the defaults
 		if (tokenizerElements.size() == 0) {
 			throw new XmlConfException("Temporarily, parsers must specify at least one tokenizer.");
 		} else if (factoryElement == null) {
-			throw new XmlConfException("Temporarily, parsers must specify a symbol factory.");			
+			throw new XmlConfException("Temporarily, parsers must specify a symbol factory.");
 		} else if (standardizerElement == null) {
 			throw new XmlConfException("Temporarily, parsers must specify a standardizer.");
 		}
-		
+
 		// create tokenizers
 		for (int i = 0; i < tokenizerElements.size(); i++) {
 			Element kid = (Element) tokenizerElements.get(i);
 			Tokenizer t = TokenizerXmlConf.readFromElement(kid);
 			parser.addTokenizer(t);
 		}
-		
+
 		// create symbol factory
 		SymbolFactory factory = SymbolFactoryXmlConf.readFromElement(factoryElement);
 		parser.setSymbolFactory(factory);
@@ -152,25 +152,25 @@ public class ParserXmlConf {
 		// create grammar
 		ContextFreeGrammar grammar = ContextFreeGrammarXmlConf.readFromElement(grammarElement, factory, pluginUrl);
 		parser.setGrammar(grammar);
-		
+
 		// create standardizer
-		ParseTreeNodeStandardizer standardizer = 
+		ParseTreeNodeStandardizer standardizer =
 			StandardizerXmlConf.readFromElement(standardizerElement, factory);
 		parser.setStandardizer(standardizer);
-		
+
 		// use parsed data element, if it exists.
 		if (parsedDataElement != null) {
 			Class pdClass = getClass(parsedDataElement, ParsedData.class);
 			parser.setParsedDataClass(pdClass);
 		}
-		
+
 		return parser;
 	}
 
 	//
 	// Utilities
 	//
-	
+
 	public static Class getClass(Element e, Class defaultCls) throws XmlConfException {
 		String clsName = e.getAttributeValue("class");
 		if (clsName == null) {
@@ -183,11 +183,11 @@ public class ParserXmlConf {
 			}
 		}
 	}
-	
+
 	public static Object instantiate(Class cls) throws XmlConfException {
 		return instantiate(cls, new Class[0], new Object[0]);
 	}
-	
+
 	public static Object instantiate(Class cls, Class[] argTypes, Object[] args) throws XmlConfException {
 		Constructor constructor = null;
 		try {
@@ -195,7 +195,7 @@ public class ParserXmlConf {
 		} catch (NoSuchMethodException ex) {
 			throw new XmlConfException("Unable to find " + args.length + "-arg constructor for " + cls.getName(), ex);
 		}
-		
+
 		try {
 			return constructor.newInstance(args);
 		} catch (IllegalArgumentException ex) {
@@ -213,7 +213,7 @@ public class ParserXmlConf {
 		for (int i = 0; i < elements.size(); i++) {
 			Element e = (Element) elements.get(i);
 			String name = e.getName().intern();
-			
+
 			if (name == "property") {
 				setProperty(target, e);
 			} else if (name == "method") {
@@ -226,23 +226,23 @@ public class ParserXmlConf {
 
 	public static void setProperty(Object target, Element e) throws XmlConfException {
 		BeanInfo info = null;
-		
+
 		try {
 			info = Introspector.getBeanInfo(target.getClass());
 		} catch (IntrospectionException ex) {
 			throw new XmlConfException("Unable to get BeanInfo for class " + target.getClass().getName());
 		}
-		
+
 		PropertyDescriptor[] props = info.getPropertyDescriptors();
 
 		String propName = e.getAttributeValue("name");
 		if (propName == null) {
 			throw new XmlConfException("Must specify propertyName");
 		}
-		
+
 		// NOTE: this can be null...
 		String stringVal = e.getAttributeValue("value");
-		
+
 		for (int i = 0; i < props.length; i++) {
 			PropertyDescriptor pd = props[i];
 			if (pd.getName().equals(propName)) {
@@ -259,20 +259,20 @@ public class ParserXmlConf {
 				} catch (InvocationTargetException ex) {
 					throw new XmlConfException("", ex);
 				}
-				
+
 				return;
 			}
 		}
-		
-		throw new XmlConfException("Unable to find property '" + propName + "' in class " + target.getClass().getName()); 
+
+		throw new XmlConfException("Unable to find property '" + propName + "' in class " + target.getClass().getName());
 	}
-	
+
 	public static void invokeMethod(Object target, Element e) throws XmlConfException {
 		String methodName = e.getAttributeValue("name");
 		if (methodName == null) {
 			throw new XmlConfException("Must specify methodName");
 		}
-		
+
 		Class[] argTypes = buildArgTypes(e);
 		Method method = null;
 		try {
@@ -280,10 +280,10 @@ public class ParserXmlConf {
 		} catch (NoSuchMethodException ex) {
 			throw new XmlConfException("", ex);
 		}
-		
+
 		Object[] args = buildArgs(e);
 		try {
-			method.invoke(target, args);	
+			method.invoke(target, args);
 		} catch (IllegalArgumentException ex) {
 			throw new XmlConfException("", ex);
 		} catch (IllegalAccessException ex) {
@@ -303,15 +303,15 @@ public class ParserXmlConf {
 				clses.add(getType(type));
 			}
 		}
-		
+
 		Class[] classes = new Class[clses.size()];
 		for (int i = 0 ; i < classes.length; i++) {
 			classes[i] = (Class) clses.get(i);
 		}
-		
+
 		return classes;
 	}
-	
+
 	public static Object[] buildArgs(Element e) throws XmlConfException {
 		List vals = new ArrayList();
 		for (int i = 1; ; i++) {
@@ -319,20 +319,20 @@ public class ParserXmlConf {
 			String value = e.getAttributeValue("arg" + i);
 			if (type == null) {
 				break;
-			} 
-			
+			}
+
 			if (value != null && value.length() >= 3 && value.startsWith("${") && value.endsWith("}")) {
 				value = recoverStaticVariable(value);
 			}
-			
+
 			vals.add(convertToType(value, type));
 		}
-		
+
 		Object[] values = new Object[vals.size()];
 		for (int i = 0 ; i < values.length; i++) {
-			values[i] = (Object) vals.get(i);
+			values[i] = vals.get(i);
 		}
-		
+
 		return values;
 	}
 
@@ -340,13 +340,13 @@ public class ParserXmlConf {
 		if (!(value.length() >= 3 && value.startsWith("${") && value.endsWith("}"))) {
 			throw new IllegalArgumentException("Unable to recover static variable: " + value);
 		}
-		
+
 		int len = value.length();
 		int lastDot = value.lastIndexOf('.');
-		
+
 		String clsName = value.substring(2, lastDot);
 		String fieldName = value.substring(lastDot + 1, len - 1);
-		
+
 		Field f = null;
 
 		try {
@@ -361,9 +361,9 @@ public class ParserXmlConf {
 		if (!Modifier.isStatic(f.getModifiers())) {
 			throw new XmlConfException("Field " + fieldName + " in class " + clsName + " is not static!");
 		}
-		
+
 		Object fieldVal = null;
-		
+
 		try {
 			fieldVal = f.get(null);
 		} catch (IllegalArgumentException ex) {
@@ -371,7 +371,7 @@ public class ParserXmlConf {
 		} catch (IllegalAccessException ex) {
 			throw new XmlConfException("Perhaps " + fieldName + " is not public...", ex);
 		}
-		
+
 		if (fieldVal != null) {
 			return fieldVal.toString();
 		} else {
@@ -393,7 +393,7 @@ public class ParserXmlConf {
 			if (s == null) {
 				List names = new ArrayList(Sets.getCollectionNames());
 				System.out.println(names);
-			} 
+			}
 			return s;
 		} else if (type == Map.class) {
 			return Maps.getMap(value);
@@ -450,7 +450,7 @@ public class ParserXmlConf {
 			return Double.TYPE;
 		} else {
 			throw new XmlConfException("Unknown type: " + type);
-		}	
+		}
 	}
 
 }
