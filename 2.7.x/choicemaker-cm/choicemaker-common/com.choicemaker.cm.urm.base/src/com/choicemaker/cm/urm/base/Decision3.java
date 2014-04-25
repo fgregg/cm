@@ -72,7 +72,34 @@ public class Decision3 implements Serializable {
 	}
 	
 	
-	public boolean equals (Object o) {
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Decision3 other = (Decision3) obj;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
+	}
+ 	
+	/**
+	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
+	 * @deprecated
+	 */
+	public boolean equals_00(Object o){
 		if (o instanceof Decision3) {
 			Decision3 d = (Decision3) o;
 			return this.value.equals(d.value);

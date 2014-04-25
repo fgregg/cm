@@ -157,7 +157,50 @@ public class RecordPairFrameModel extends DefaultCompositeObservableData impleme
 		firePropertyChange(BOUNDS, oldValue, newValue);
 	}
 
-	public boolean equals(Object o){
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getAlias() == null) ? 0 : getAlias().hashCode());
+		result = prime * result + ((getBounds() == null) ? 0 : getBounds().hashCode());
+		result = prime * result
+				+ ((getDescriptor() == null) ? 0 : getDescriptor().hashCode());
+		result = prime * result + getDividerLocation();
+		return result;
+	}
+	
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RecordPairFrameModel other = (RecordPairFrameModel) obj;
+		if (getAlias() == null) {
+			if (other.getAlias() != null)
+				return false;
+		} else if (!getAlias().equals(other.getAlias()))
+			return false;
+		if (getBounds() == null) {
+			if (other.getBounds() != null)
+				return false;
+		} else if (!getBounds().equals(other.getBounds()))
+			return false;
+		if (getDescriptor() == null) {
+			if (other.getDescriptor() != null)
+				return false;
+		} else if (!getDescriptor().equals(other.getDescriptor()))
+			return false;
+		if (getDividerLocation() != other.getDividerLocation())
+			return false;
+		return true;
+	}
+	
+	/**
+	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
+	 * @deprecated
+	 */
+	public boolean equals_00(Object o){
 		if (o instanceof RecordPairFrameModel){
 			RecordPairFrameModel other = (RecordPairFrameModel)o;
 			boolean returnValue = true;

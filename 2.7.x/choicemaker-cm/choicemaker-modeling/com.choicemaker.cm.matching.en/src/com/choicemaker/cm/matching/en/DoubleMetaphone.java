@@ -95,18 +95,49 @@ public final class DoubleMetaphone {
 		return res;
 	}
 
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((getAlternate() == null) ? 0 : getAlternate().hashCode());
+		result = prime * result + (different ? 1231 : 1237);
+		result = prime * result + ((input == null) ? 0 : input.hashCode());
+		result = prime * result + ((getPrimary() == null) ? 0 : getPrimary().hashCode());
+		return result;
+	}
+
+ 	/**
+	 * Returns true if the getPrimary() or non-null getAlternate() codes are
+	 * equal. This includes equality between the getPrimary() code of one object
+	 * and the non-null getAlternate() of the other.
+ 	 * 
+	 * @param o
+	 *            the object for comparison
+ 	 * @return the equality of the Object
+ 	 */
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DoubleMetaphone om = (DoubleMetaphone) obj;
+		return getPrimary().equals(om.getPrimary())
+				|| om.different
+				&& getPrimary().equals(om.getAlternate())
+				|| different
+				&& getAlternate().equals(om.getPrimary())
+				|| different
+				&& om.different
+				&& getAlternate().equals(om.getAlternate());
+	}
+
 	/**
-	 * Returns true if the primary or non-null alternate codes are equal. This 
-	 * includes equality between the primary code of one object and the non-null 
-	 * alternate of the other.
-	 * 
-	 * Breaks Java spec a bit in that it will throw a ClassCastException if o
-	 * is not a DoubleMetaphone Object.
-	 * 
-	 * @param o the object for comparison
-	 * @return the equality of the Object
+	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
+	 * @deprecated
 	 */
-	public boolean equals(Object o) {
+	public boolean equals_00(Object o) {
 		DoubleMetaphone om = (DoubleMetaphone) o;
 		return getPrimary().equals(om.getPrimary())
 			|| om.different

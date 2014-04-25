@@ -142,7 +142,41 @@ public class FlatFileSerialRecordSource implements SerialRecordSource {
 		return getRS().getFileName();
 	}
 
-	public boolean equals (Object o) {
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((modelName == null) ? 0 : modelName.hashCode());
+		result = prime * result + ((rsFile == null) ? 0 : rsFile.hashCode());
+		return result;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FlatFileSerialRecordSource other = (FlatFileSerialRecordSource) obj;
+		if (modelName == null) {
+			if (other.modelName != null)
+				return false;
+		} else if (!modelName.equals(other.modelName))
+			return false;
+		if (rsFile == null) {
+			if (other.rsFile != null)
+				return false;
+		} else if (!rsFile.equals(other.rsFile))
+			return false;
+		return true;
+	}
+
+	/**
+	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
+	 * @deprecated
+	 */
+	public boolean equals_00(Object o) {
 		if (o instanceof FlatFileSerialRecordSource) {
 			FlatFileSerialRecordSource rs = (FlatFileSerialRecordSource) o;
 			return rs.rsFile.equals(this.rsFile) && 

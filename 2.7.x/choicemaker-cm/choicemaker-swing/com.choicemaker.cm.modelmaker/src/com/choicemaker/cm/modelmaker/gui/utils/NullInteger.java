@@ -62,7 +62,31 @@ public class NullInteger implements Comparable {
 		}
 	}
 
-	public boolean equals(Object o) {
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + val;
+		return result;
+	}
+	
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NullInteger other = (NullInteger) obj;
+		if (val != other.val)
+			return false;
+		return true;
+	}
+	
+	/**
+	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
+	 * @deprecated
+	 */
+	public boolean equals_00(Object o) {
 		NullInteger other = (NullInteger) o;
 		return nul && other.nul || val == other.val;
 	}

@@ -134,7 +134,38 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 		return getRS().getFileName();
 	}
 	
-	public boolean equals (Object o) {
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((modelName == null) ? 0 : modelName.hashCode());
+		result = prime * result + ((xmlFile == null) ? 0 : xmlFile.hashCode());
+		return result;
+	}
+	
+	
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		XMLSerializableRecordSource other = (XMLSerializableRecordSource) obj;
+		if (modelName == null) {
+			if (other.modelName != null)
+ 			return false;
+		} else if (!modelName.equals(other.modelName))
+			return false;
+		if (xmlFile == null) {
+			if (other.xmlFile != null)
+				return false;
+		} else if (!xmlFile.equals(other.xmlFile))
+			return false;
+		return true;
+	}
+
+	public boolean equals_00 (Object o) {
 		if (o instanceof XMLSerializableRecordSource) {
 			XMLSerializableRecordSource rs = (XMLSerializableRecordSource) o;
 			return rs.xmlFile.equals(this.xmlFile) && 

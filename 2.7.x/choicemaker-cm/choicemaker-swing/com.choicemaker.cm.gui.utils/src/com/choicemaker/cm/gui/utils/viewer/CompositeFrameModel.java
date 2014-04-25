@@ -104,6 +104,20 @@ public class CompositeFrameModel extends DefaultObservableData implements Intern
 		firePropertyChange(BOUNDS, oldValue, newValue);
 	}
 
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getAlias() == null) ? 0 : getAlias().hashCode());
+		result = prime * result + ((getBounds() == null) ? 0 : getBounds().hashCode());
+		result = prime
+				* result
+				+ ((getCompositePaneModel() == null) ? 0 : getCompositePaneModel()
+						.hashCode());
+		result = prime * result
+				+ ((getDescriptor() == null) ? 0 : getDescriptor().hashCode());
+		return result;
+	}
+
 	public boolean equals(Object o){
 		if (o instanceof CompositeFrameModel){
 			CompositeFrameModel other = (CompositeFrameModel)o;

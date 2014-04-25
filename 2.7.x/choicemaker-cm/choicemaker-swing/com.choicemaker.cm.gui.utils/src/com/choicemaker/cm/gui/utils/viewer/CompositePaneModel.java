@@ -82,6 +82,14 @@ public class CompositePaneModel extends DefaultCompositeObservableData {
 		return descriptor;
 	}
 
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((descriptor == null) ? 0 : descriptor.hashCode());
+		return result;
+	}
+
 	public boolean equals(Object o){
 		if (o instanceof CompositePaneModel){
 			CompositePaneModel other = (CompositePaneModel)o;

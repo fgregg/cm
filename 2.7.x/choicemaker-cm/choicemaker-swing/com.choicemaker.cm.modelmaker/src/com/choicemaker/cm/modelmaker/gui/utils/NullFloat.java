@@ -65,7 +65,31 @@ public class NullFloat implements Comparable {
 		}
 	}
 
-	public boolean equals(Object o) {
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(val);
+		return result;
+	}
+	
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NullFloat other = (NullFloat) obj;
+		if (Float.floatToIntBits(val) != Float.floatToIntBits(other.val))
+			return false;
+		return true;
+	}
+	
+	/**
+	 * Obsolete method for {@link #equals(Object)}. Used for testing only.
+	 * @deprecated
+	 */
+	public boolean equals_00(Object o) {
 		NullFloat other = (NullFloat) o;
 		return nul && other.nul || val == other.val;
 	}
