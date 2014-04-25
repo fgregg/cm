@@ -297,12 +297,12 @@ public class Jaro {
 				}
 			}
 		}
-		Num_sim = ((float) N_simi) / 10.0f + Num_com;
+		Num_sim = (N_simi) / 10.0f + Num_com;
 
 		/* Main weight computation.                                                   */
 		weight =
-			Num_sim / ((float) ying_length)
-				+ Num_sim / ((float) yang_length)
+			Num_sim / (ying_length)
+				+ Num_sim / (yang_length)
 				+ ((float) (2 * Num_com - N_trans - 2 * G_trans)) / ((float) (2 * Num_com));
 
 		weight = weight / 3.0f;
@@ -507,12 +507,12 @@ public class Jaro {
 				}
 			}
 		}
-		Num_sim = ((float) N_simi) / 10.0f + Num_com;
+		Num_sim = (N_simi) / 10.0f + Num_com;
 
 		/* Main weight computation.                                                   */
 		weight =
-			Num_sim / ((float) ying_length)
-				+ Num_sim / ((float) yang_length)
+			Num_sim / (ying_length)
+				+ Num_sim / (yang_length)
 			    + ((float) (Num_com - N_trans)) / ((float) Num_com);
 
 		weight = weight / 3.0f;

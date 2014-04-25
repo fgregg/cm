@@ -700,7 +700,7 @@ public final class Statistics implements IStatistics {
 				prev[j][k] = boundaries[j][k];
 			}
 		}
-		float step = 1f / (float) numBins;
+		float step = 1f / numBins;
 		float to = 0;
 		for (int i = 0; i < numBins; ++i) {
 			if (i + 1 < numBins) {
