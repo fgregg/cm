@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -46,9 +46,9 @@ public class ParserTestDialog extends JDialog {
 
 	public ParserTestDialog(ModelMaker modelMaker) {
 		super(modelMaker, "Parse Address", false);
-		
+
 		buildContent();
-		
+
 		pack();
 		setLocationRelativeTo(modelMaker);
 	}
@@ -57,18 +57,18 @@ public class ParserTestDialog extends JDialog {
 		GridBagLayout layout = new GridBagLayout();
 		layout.columnWeights = new double[] {0, 1, 0};
 		getContentPane().setLayout(layout);
-	
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(2, 5, 2, 5);
 		c.fill = GridBagConstraints.HORIZONTAL;
-	
+
 		// row
-		
+
 		c.gridy = 0;
-		
+
 		c.gridx = 0;
 		getContentPane().add(new JLabel("Parser:"), c);
-		
+
 		c.gridx = 1;
 		Vector v = new Vector(Parsers.getParserKeys());
 		Collections.sort(v);
@@ -77,7 +77,7 @@ public class ParserTestDialog extends JDialog {
 		getContentPane().add(parserBox, c);
 
 		// row
-		
+
 		c.gridy++;
 		c.gridx = 0;
 		getContentPane().add(new JLabel("Data:  "), c);
@@ -85,12 +85,12 @@ public class ParserTestDialog extends JDialog {
 		c.gridx = 1;
 		dataField = new JTextField(40);
 		getContentPane().add(dataField, c);
-		
+
 		c.gridx = 2;
 		JButton button = new JButton(new ParseAction());
 		getContentPane().add(button, c);
 	}
-	
+
 	private class ParseAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 		public ParseAction() {
@@ -99,7 +99,7 @@ public class ParserTestDialog extends JDialog {
 		public void actionPerformed(ActionEvent e) {
 			String s = dataField.getText().trim();
 			Parser parser = Parsers.get((String) parserBox.getSelectedItem());
-				
+
 			System.out.println("Tokenizations");
 			System.out.println("-------------");
 			List[] toks = parser.getAllTokenizations(s);
@@ -107,14 +107,14 @@ public class ParserTestDialog extends JDialog {
 				System.out.println(toks[i].toString());
 			}
 			System.out.println("\n");
-			
+
 			System.out.println("Tokenization Detail");
 			System.out.println("-------------------");
 			toks = parser.getAllTokenizations(s);
 			List tokenTypes = parser.getGrammar().getVariables();
 			for (int i = 0; i < toks.length; i++) {
-				List tokens = (List) toks[i];
-				
+				List tokens = toks[i];
+
 				System.out.println(tokens + ": ");
 
 				for (int j = 0; j < tokens.size(); j++) {
@@ -133,7 +133,7 @@ public class ParserTestDialog extends JDialog {
 				System.out.println();
 			}
 			System.out.println("\n");
-				
+
 			System.out.println("Parse Trees");
 			System.out.println("-----------");
 			ParseTreeNode[] parseTrees = parser.getAllParseTrees(s);
@@ -148,5 +148,5 @@ public class ParserTestDialog extends JDialog {
 			System.out.println("\n\n");
 		}
 	}
-		
+
 }

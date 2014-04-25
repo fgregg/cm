@@ -48,7 +48,7 @@ public class TextRefRecordCollection extends RefRecordCollection { //implements 
 
 
 	public ITextFormat getFormat() {
-		return (ITextFormat)format;
+		return format;
 	}
 	/**
 	 * @param format

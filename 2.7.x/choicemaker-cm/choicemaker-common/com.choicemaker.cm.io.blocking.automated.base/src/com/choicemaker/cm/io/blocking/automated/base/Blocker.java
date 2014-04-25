@@ -263,7 +263,7 @@ public class Blocker implements AutomatedBlocker {
 
 		int size = bs.numFields();
 		for (int i = 0; i < size; ++i) {
-			BlockingValue cbv = (BlockingValue) bs.getBlockingValue(i);
+			BlockingValue cbv = bs.getBlockingValue(i);
 			BlockingField cbf = cbv.blockingField;
 
 			// multiple use of same DbField (implied by multiple use of same BlockingField)

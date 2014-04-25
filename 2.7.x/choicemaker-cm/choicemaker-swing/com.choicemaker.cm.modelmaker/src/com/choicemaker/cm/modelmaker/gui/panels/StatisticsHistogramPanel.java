@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -38,12 +38,12 @@ import org.jfree.chart.plot.CategoryPlot;
 //import org.jfree.chart.renderer.CategoryItemRenderer;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.data.category.CategoryDataset;
+//import org.jfree.data.category.CategoryDataset;
 
 /**
- * Panel that contains the histogram showing the ChoiceMaker system accuracy.  This 
+ * Panel that contains the histogram showing the ChoiceMaker system accuracy.  This
  * histogram listens for mouse clicks on its bars.
- * 
+ *
  * @author S. Yoakum-Stover
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
@@ -85,7 +85,7 @@ public class StatisticsHistogramPanel extends JPanel {
 				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.accuracy"),
 				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.matchprob"),
 				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs"),
-				(CategoryDataset) data,
+				data,
 				orientation,
 				true,
 				true,
@@ -100,7 +100,7 @@ public class StatisticsHistogramPanel extends JPanel {
 		axis.setCategoryMargin(0.2);
 //		axis.setVerticalCategoryLabels(true);
 		CategoryItemRenderer renderer = plot.getRenderer();
-		whSeriesPaint = new Paint[3];	
+		whSeriesPaint = new Paint[3];
 		for (int i = 0; i < whSeriesPaint.length; ++i) {
 //			whSeriesPaint[i] = renderer.getSeriesPaint(0, i);
 			whSeriesPaint[i] = renderer.getSeriesPaint(i);

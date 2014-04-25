@@ -36,7 +36,7 @@ public class LinkMap {
 	public LinkMap(MarkedRecordPairSource mrps) throws IOException {
 		mrps.open();
 		while (mrps.hasNext()) {
-			addLink((MutableMarkedRecordPair)mrps.getNextMarkedRecordPair());
+			addLink(mrps.getNextMarkedRecordPair());
 		}
 		mrps.close();
 	}

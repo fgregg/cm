@@ -107,7 +107,7 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					}
 				}
 
-				Element splitDigitsElement = (Element) tokElement.getChild("splitDigitStrings");
+				Element splitDigitsElement = tokElement.getChild("splitDigitStrings");
 				if (splitDigitsElement != null) {
 					String minE = splitDigitsElement.getAttributeValue("minLength");
 					String lhsE = splitDigitsElement.getAttributeValue("lhsLength");
@@ -119,7 +119,7 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					}
 				}
 
-				Element legalPuncElement = (Element) tokElement.getChild("legalPunctuation");
+				Element legalPuncElement = tokElement.getChild("legalPunctuation");
 				if (legalPuncElement != null) {
 					String punc = legalPuncElement.getAttributeValue("value");
 					if (punc == null) {

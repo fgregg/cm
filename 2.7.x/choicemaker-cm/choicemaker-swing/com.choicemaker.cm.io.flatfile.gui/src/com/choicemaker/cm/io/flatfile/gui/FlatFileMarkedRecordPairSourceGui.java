@@ -417,7 +417,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 						parent.getProbabilityModel());
 				MarkedRecordPairBinder.store(sourceNames, parent.getProbabilityModel(), sinkFactory, d, s);
 				Source[] srcs = sinkFactory.getSources();
-				source = (MarkedRecordPairSource) srcs[0];
+				source = srcs[0];
 				for (int i = 1; i < srcs.length; ++i) {
 					try {
 						MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) srcs[i]);

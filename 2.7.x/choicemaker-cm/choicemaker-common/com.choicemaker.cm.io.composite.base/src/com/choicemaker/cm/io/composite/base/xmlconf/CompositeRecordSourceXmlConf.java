@@ -57,7 +57,7 @@ public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator
 			int numSources = src.getNumSources();
 			for (int i = 0; i < numSources; ++i) {
 				Element cons = new Element("constituent");
-				RecordSource mrps = (RecordSource) src.getSource(i);
+				RecordSource mrps = src.getSource(i);
 				if (src.saveAsRelative(i)) {
 					cons.setAttribute("name", FileUtilities.getRelativeFile(rel, mrps.getFileName()).toString());
 				} else {

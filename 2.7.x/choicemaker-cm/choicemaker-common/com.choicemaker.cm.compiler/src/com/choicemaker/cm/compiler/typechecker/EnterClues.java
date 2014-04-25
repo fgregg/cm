@@ -153,7 +153,7 @@ public class EnterClues extends DefaultVisitor implements Tags {
 			// DEBUG ClassCastException (mid-refactoring)
 			Symbol _dbg_baseClass = unit.getBaseClass();
 			ClassSymbol _dbg_classSymbol = (ClassSymbol) _dbg_baseClass;
-			unit.setExistsBaseClass(unit.createExistsBaseClass((ClassSymbol) _dbg_classSymbol));
+			unit.setExistsBaseClass(unit.createExistsBaseClass(_dbg_classSymbol));
 			// END DEBUG
 			unit.setDoubleIndexBaseClass(unit.createDoubleIndexBaseClass((ClassSymbol) unit.getBaseClass()));
 			// create a symbol and enter the body in the scope

@@ -166,7 +166,7 @@ public class HistoChartPanel extends ChartPanel {
 		CategoryPlot categoryPlot = (CategoryPlot) getChart().getPlot();
 		HistoCategoryDataset data = (HistoCategoryDataset) categoryPlot.getDataset();
 		if (data.hasData()) {
-			CategoryAxis axis = (CategoryAxis) categoryPlot.getDomainAxis();
+			CategoryAxis axis = categoryPlot.getDomainAxis();
 
 			//axis.set
 			Rectangle2D plotArea = getScreenDataArea();
