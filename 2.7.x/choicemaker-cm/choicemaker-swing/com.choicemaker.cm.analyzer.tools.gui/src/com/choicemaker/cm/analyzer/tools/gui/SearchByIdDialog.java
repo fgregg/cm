@@ -28,8 +28,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
+//import com.choicemaker.cm.core.Descriptor;
+//import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MutableMarkedRecordPair;
 import com.choicemaker.cm.modelmaker.filter.ModelMakerCollectionMRPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -150,8 +150,10 @@ public class SearchByIdDialog extends JDialog {
 
 	private void searchById() {
 		try {
-			ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
-			Descriptor d = model.getAccessor().getDescriptor();
+			// 2014-04-24 rphall: Commented out unused local variable.
+			// Any side effects?
+//			ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
+//			Descriptor d = model.getAccessor().getDescriptor();
 
 			String id = idField.getText().trim();
 			if (id == null) {

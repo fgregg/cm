@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
-import com.choicemaker.cm.core.Accessor;
+//import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.BeanMatchCandidate;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.InvalidProfileException;
@@ -76,7 +76,7 @@ public class TransitivityServiceBean implements SessionBean {
 
 
 	/** This method finds the matches and the cluster for the input record.
-	 * 
+	 *
 	 * @param profile - Profile containing the input record
 	 * @param constraint - constraint
 	 * @param probabilityModel - name of the probability accessProvider
@@ -103,18 +103,20 @@ public class TransitivityServiceBean implements SessionBean {
 		String returnDataFormat,
 		String purpose,
 		boolean compact)
-		throws AccessControlException, InvalidProfileException, RemoteException, 
+		throws AccessControlException, InvalidProfileException, RemoteException,
 		InvalidModelException, UnderspecifiedProfileException, DatabaseException {
 
 		logger.info("starting findCluster");
 
-			
+
 		IProbabilityModel model = PMManager.getModelInstance(probabilityModel);
 		if (model == null) {
 			logger.error("Invalid probability accessProvider: " + probabilityModel);
 			throw new InvalidModelException(probabilityModel);
 		}
-		Accessor accessor = model.getAccessor();
+		// 2014-04-24 rphall: Commented out unused local variable
+		// Any side effects?
+//		Accessor accessor = model.getAccessor();
 		Record q = profile.getRecord(model);
 		RecordDecisionMaker dm = new RecordDecisionMaker();
 		DatabaseAccessor databaseAccessor;
@@ -137,7 +139,7 @@ public class TransitivityServiceBean implements SessionBean {
 			logger.error("Database error: " + ex, ex);
 			throw new DatabaseException("", ex);
 		}
-		
+
 		TransitivityResult tr = null;
 		try {
 			Iterator ces = getCompositeEntities (q, s, probabilityModel, differThreshold,
@@ -156,18 +158,18 @@ public class TransitivityServiceBean implements SessionBean {
 
 		return tr;
 	}
-	
-	
+
+
 	/** This method takes the output of findMatches and runs the match result through the
 	 * Transitivity Engine.
-	 * 
+	 *
 	 * @param profile - contains the query record
 	 * @param candidates - match candidates to the query record
 	 * @param modelName - probability accessProvider name
 	 * @param differThreshold - differ threshold
 	 * @param matchThreshold - match threshold
 	 * @param compact - set this to true if you want the CompositeEntity in the
-	 * 			TransitivityResult to be compacted before returning. 
+	 * 			TransitivityResult to be compacted before returning.
 	 * @return A TransitivityResult object
 	 * @throws   RemoteException  If a communication problem occurs.
 	 * @throws InvalidProfileException
@@ -180,17 +182,17 @@ public class TransitivityServiceBean implements SessionBean {
 		String modelName,
 		float differThreshold,
 		float matchThreshold,
-		boolean compact) throws 
+		boolean compact) throws
 		RemoteException, InvalidProfileException, TransitivityException, InvalidModelException {
-	
+
 		BeanMatchCandidate [] bCandidates = new BeanMatchCandidate [candidates.length];
 		for (int i=0; i<candidates.length; i++) {
 			bCandidates[i] = (BeanMatchCandidate) candidates[i];
 		}
-	
+
 		CEFromMatchCandidatesBuilder ceb = new CEFromMatchCandidatesBuilder
 			(profile, bCandidates, modelName, differThreshold, matchThreshold);
-		
+
 		TransitivityResult tr = null;
 		if (compact) {
 			tr = new TransitivityResult (modelName, differThreshold,
@@ -199,26 +201,26 @@ public class TransitivityServiceBean implements SessionBean {
 			tr = new TransitivityResult (modelName, differThreshold,
 				matchThreshold, ceb.getCompositeEntities());
 		}
-	
+
 		return tr;
 	}
-	
-	
+
+
 	/** This takes in a set of Matches and returns an Iterator of CompositeEntity.
-	 * 
+	 *
 	 * @param s
 	 * @return
 	 */
 	private Iterator getCompositeEntities (Record q, SortedSet s, String modelName,
 		float low, float high) throws TransitivityException {
-			
+
 		CEFromMatchesBuilder builder = new CEFromMatchesBuilder (q, s.iterator(),
 			modelName, low, high);
 
 		return builder.getCompositeEntities();
 	}
-	
-	
+
+
 
 	private static synchronized void init(DataSource dataSource) throws XmlConfException, RemoteException, DatabaseException {
 		if (!inited) {

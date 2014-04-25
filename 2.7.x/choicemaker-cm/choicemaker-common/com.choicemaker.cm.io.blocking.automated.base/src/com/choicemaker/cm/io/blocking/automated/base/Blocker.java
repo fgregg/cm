@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -33,7 +33,7 @@ public class Blocker implements AutomatedBlocker {
 	public static final String LIMIT_PER_BLOCKING_SET = "limitPerBlockingSet";
 	public static final String LIMIT_SINGLE_BLOCKING_SET = "limitSingleBlockingSet";
 	private static Logger logger = Logger.getLogger(Blocker.class);
-	
+
 	private String name;
 	private CountSource countSource;
 	private DatabaseAccessor databaseAccessor;
@@ -72,7 +72,7 @@ public class Blocker implements AutomatedBlocker {
 		(CountSource) model.properties().get("countSource"),
 		dbConfigurationName,
 		blockingConfigurationName
-		);	
+		);
 	}
 
 	Blocker(
@@ -93,7 +93,7 @@ public class Blocker implements AutomatedBlocker {
 			(String) model.properties().get("dbConfiguration"),
 			(String) model.properties().get("blockingConfiguration"));
 	}
-	
+
 	public Blocker(
 		DatabaseAccessor databaseAccessor,
 		ImmutableProbabilityModel model,
@@ -129,7 +129,9 @@ public class Blocker implements AutomatedBlocker {
 		BlockingConfiguration blockingConfiguration) {
 		this.databaseAccessor = databaseAccessor;
 		this.model = model;
-		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
+		// 2014-04-24 rphall: Commented out unused local variable
+		// Any side effects?
+//		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 		this.q = q;
 		this.limitPerBlockingSet = limitPerBlockingSet;
 		this.singleTableBlockingSetGraceLimit =
@@ -142,15 +144,15 @@ public class Blocker implements AutomatedBlocker {
 	public void open() throws IOException {
 		numberOfRecordsRetrieved = 0;
 		BlockingValue[] blockingValues = blockingConfiguration.createBlockingValues(getQueryRecord());
-		
+
 		long mainTableSize = getCountSource().setCounts(blockingConfiguration, blockingValues);
-		
+
 		logger.debug("blockingValues numberOfRecordsRetrieved: " + blockingValues.length);
-		
+
 		for (int i=0; i<blockingValues.length; i++) {
-			logger.debug(blockingValues[i].value + " " + blockingValues[i].count + " " + blockingValues[i].blockingField.dbField.name);			
+			logger.debug(blockingValues[i].value + " " + blockingValues[i].count + " " + blockingValues[i].blockingField.dbField.name);
 		}
-		
+
 		Arrays.sort(blockingValues);
 		logger.debug("blockingValues size: " + blockingValues.length);
 		for (int i = 0; i < blockingValues.length; i++) {
@@ -173,7 +175,7 @@ public class Blocker implements AutomatedBlocker {
 				BlockingSet bs = (BlockingSet) possibleSubsets.get(j);
 
 				if (bs != null && valid(bv, bs)) {
-					
+
 					BlockingSet nbs = new BlockingSet(bs, bv);
 					PrintUtils.logBlockingSet(logger,"Candidate blocking set ", nbs);
 
@@ -217,7 +219,7 @@ public class Blocker implements AutomatedBlocker {
 		logger.debug(
 			"...Finished forming blocking sets. Blocking set size == "
 				+ getBlockingSets().size());
-		
+
 		if (getBlockingSets().isEmpty()) {
 			logger.debug(
 				"No blocking sets were formed yet. Looking for best possible subset of blocking values...");
@@ -243,27 +245,27 @@ public class Blocker implements AutomatedBlocker {
 				throw new UnderspecifiedQueryException("Query not specific enough; would return too many records.");
 			}
 		}
-		
+
 		logger.debug("Listing final blocking sets...");
 		for (int i = 0; i < getBlockingSets().size(); i++) {
 			BlockingSet b = (BlockingSet) getBlockingSets().get(i);
 			PrintUtils.logBlockingSet(logger,"Blocking set " + i + " ", b);
 		}
 		logger.debug("...Finished listing final blocking sets");
-		
+
 		getDatabaseAccessor().open(this);
 	}
-	
+
 	private boolean valid(BlockingValue bv, BlockingSet bs) {
 		BlockingField bf = bv.blockingField;
 		QueryField qf = bf.queryField;
 		DbField dbf = bf.dbField;
-		
+
 		int size = bs.numFields();
 		for (int i = 0; i < size; ++i) {
 			BlockingValue cbv = (BlockingValue) bs.getBlockingValue(i);
 			BlockingField cbf = cbv.blockingField;
-			
+
 			// multiple use of same DbField (implied by multiple use of same BlockingField)
 			if (dbf == cbf.dbField) {
 				logger.debug("invalid BlockingValue for BlockingSet: multiple use of same DbField");
@@ -358,7 +360,7 @@ public class Blocker implements AutomatedBlocker {
 	public int getNumberOfRecordsRetrieved() {
 		return numberOfRecordsRetrieved;
 	}
-	
+
 	public String getFileName() {
 		throw new UnsupportedOperationException();
 	}

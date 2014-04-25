@@ -14,14 +14,14 @@ public class SampleSoftTFIDFUsage
         Tokenizer tokenizer = new SimpleTokenizer(false,true);
         double minTokenSimilarity = 0.8;
         SoftTFIDF distance = new SoftTFIDF(tokenizer,new JaroWinkler(),minTokenSimilarity);
-        
+
         // train the distance on some strings - in general, this would
         // be a large corpus of existing strings, so that some
         // meaningful frequency estimates can be accumulated.  for
         // efficiency, you train on an iterator over StringWrapper
         // objects, which are produced with the 'prepare' function.
 
-        String[] corpus = {"Yahoo Research", "Microsoft Research", "IBM Research", 
+        String[] corpus = {"Yahoo Research", "Microsoft Research", "IBM Research",
                            "Google Labs", "Bell Labs", "NEC Research Labs"};
         List list = new ArrayList();
         for (int i=0; i<corpus.length; i++) {
@@ -54,6 +54,7 @@ public class SampleSoftTFIDFUsage
         // many strings t1, t2, ... it's a more efficient to only
         // 'prepare' s once.
 
-        double e = distance.score( distance.prepare(s), distance.prepare(t) );
+		// 2014-04-24 rphall: Commented out unused local variable.
+//        double e = distance.score( distance.prepare(s), distance.prepare(t) );
     }
 }

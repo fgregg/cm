@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -69,13 +69,13 @@ import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 public class GeneratorImpl implements IGenerator {
 
 	protected class DoubleWriter {
-		private Writer cw; 
+		private Writer cw;
 		private Writer ucw;
 		protected DoubleWriter(Writer cw, Writer ucw){
 			this.cw = cw;
 			this.ucw = ucw;
 		}
-		protected void write (String s) throws IOException { 
+		protected void write (String s) throws IOException {
 			cw.write(s);
 			if(ucw != null)
 				ucw.write(s);
@@ -90,16 +90,16 @@ public class GeneratorImpl implements IGenerator {
 	private static Logger logger = Logger.getLogger(GeneratorImpl.class);
 
 	protected class Version {
-		
+
 		public static final int UNDEFINED = -1;
 		long major = UNDEFINED;
 		long minor = UNDEFINED;
 		long revision = UNDEFINED;
-		
+
 		protected Version(String s){
 			if(s == null || s.length() == 0)
 				return;
-			int end = s.indexOf('.');	 
+			int end = s.indexOf('.');
 			String majorStr = s.substring(0,end == -1?s.length():end);
 			try {
 				major = Long.parseLong(majorStr);
@@ -108,7 +108,7 @@ public class GeneratorImpl implements IGenerator {
 				return;
 			}
 		}
-		
+
 		protected boolean isDefined(){
 			return major != UNDEFINED;
 		}
@@ -518,7 +518,7 @@ public class GeneratorImpl implements IGenerator {
 				+ "*/"
 				+ Constants.LINE_SEPARATOR);
 	}
-	
+
 	private void writeGetIdJavaDoc(Writer w) throws IOException {
 		if (w == null) return;
 		w.write(
@@ -612,7 +612,8 @@ public class GeneratorImpl implements IGenerator {
 	}
 
 	private void writeSetNestedIndexedJavaDoc(DoubleWriter w, Element record) throws IOException {
-		String base = "Sets the nested " + record.getAttributeValue(CoreTags.NAME) + " at the specified index.";
+		// 2014-04-24 rphall: Commented out unused local variable
+//		String base = "Sets the nested " + record.getAttributeValue(CoreTags.NAME) + " at the specified index.";
 		w.write(
 			"/**"
 				+ Constants.LINE_SEPARATOR
@@ -627,22 +628,23 @@ public class GeneratorImpl implements IGenerator {
 	}
 	private void createInterfaceClasses(Element r, Element outer) throws GenException {
 		try {
-			Set identifiers = new HashSet();
-			SrcNames srcNames = new SrcNames();
+			// 2014-04-24 rphall: Commented out unused local variable
+//			Set identifiers = new HashSet();
+//			SrcNames srcNames = new SrcNames();
 			String thisRecordName = r.getAttributeValue(CoreTags.NAME);
 			String className = r.getAttributeValue(CoreTags.HOLDER_CLASS_NAME);
-			String urmClassName = r.getAttributeValue(CoreTags.URM_HOLDER_CLASS_NAME);			 
+			String urmClassName = r.getAttributeValue(CoreTags.URM_HOLDER_CLASS_NAME);
 			String baseInterfaceName = r.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
-			String urmBaseInterfaceName = r.getAttributeValue(CoreTags.URM_BASE_INTERFACE_NAME); 
+			String urmBaseInterfaceName = r.getAttributeValue(CoreTags.URM_BASE_INTERFACE_NAME);
 			String interfaceName = r.getAttributeValue(CoreTags.INTERFACE_NAME);
 			String fileName = getExternalSourceCodePackageRoot() + File.separator + className + ".java";
-			String urmFileName = getExternalSourceCodePackageRoot() + File.separator + urmClassName + ".java"; 
+			String urmFileName = getExternalSourceCodePackageRoot() + File.separator + urmClassName + ".java";
 			String interfaceFileName = getExternalSourceCodePackageRoot() + File.separator + interfaceName + ".java";
 			String baseInterfaceFileName =
 				getExternalSourceCodePackageRoot() + File.separator + baseInterfaceName + ".java";
 			String urmBaseInterfaceFileName =
 							getExternalSourceCodePackageRoot() + File.separator + urmBaseInterfaceName + ".java";
-							
+
 			addGeneratedFile(fileName);
 			addGeneratedFile(interfaceFileName);
 			addGeneratedFile(baseInterfaceFileName);
@@ -652,7 +654,7 @@ public class GeneratorImpl implements IGenerator {
 			FileOutputStream bifs = new FileOutputStream(new File(baseInterfaceFileName).getAbsoluteFile());
 			FileOutputStream ufs = null;
 			FileOutputStream ubifs = null;
-			
+
 			Writer w1 = new OutputStreamWriter(new BufferedOutputStream(fs));
 			Writer iw = new OutputStreamWriter(new BufferedOutputStream(ifs));
 			Writer biw = new OutputStreamWriter(new BufferedOutputStream(bifs));
@@ -661,7 +663,7 @@ public class GeneratorImpl implements IGenerator {
 
 			DoubleWriter w;
 			Writer 		 ubiw = null;
-						
+
 			if(outer == null && version.isDefined()){
 				ufs = new FileOutputStream(new File(urmFileName).getAbsoluteFile());
 				ubifs = new FileOutputStream(new File(urmBaseInterfaceFileName).getAbsoluteFile());
@@ -674,7 +676,7 @@ public class GeneratorImpl implements IGenerator {
 			else {
 				w = new DoubleWriter(w1,null);
 			}
-						
+
 			w.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
 			iw.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
 			biw.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
@@ -703,7 +705,7 @@ public class GeneratorImpl implements IGenerator {
 					+ baseInterfaceName
 					+ ", java.io.Serializable {"
 					+ Constants.LINE_SEPARATOR);
-			if(outer == null && version.isDefined())		
+			if(outer == null && version.isDefined())
 				uw.write(
 				"public class "
 					+ urmClassName
@@ -713,7 +715,7 @@ public class GeneratorImpl implements IGenerator {
 					+ urmBaseInterfaceName
 					+ ", java.io.Serializable {"
 					+ Constants.LINE_SEPARATOR);
-		
+
 			biw.write(
 				"/**"
 					+ Constants.LINE_SEPARATOR
@@ -723,8 +725,8 @@ public class GeneratorImpl implements IGenerator {
 					+ Constants.LINE_SEPARATOR
 					+ " */"
 					+ Constants.LINE_SEPARATOR);
-					
-			biw.write("public interface " + baseInterfaceName + " extends java.io.Serializable {" + Constants.LINE_SEPARATOR);		
+
+			biw.write("public interface " + baseInterfaceName + " extends java.io.Serializable {" + Constants.LINE_SEPARATOR);
 			if(outer == null && version.isDefined()){
 				ubiw.write("// Generated by ChoiceMaker. Do not edit." + Constants.LINE_SEPARATOR);
 				ubiw.write("package " + getExternalPackage() + ";" + Constants.LINE_SEPARATOR);
@@ -737,7 +739,7 @@ public class GeneratorImpl implements IGenerator {
 						+ ". See package documentation for details."
 						+ Constants.LINE_SEPARATOR
 						+ " */"
-						+ Constants.LINE_SEPARATOR);				
+						+ Constants.LINE_SEPARATOR);
 				ubiw.write("public interface " + urmBaseInterfaceName+" extends com.choicemaker.cm.urm.base.IRecordHolder, "+baseInterfaceName+" {");
 			}
 				//ubiw.write("public interface " + urmBaseInterfaceName+" extends com.choicemaker.cm.urm.base.IRecordHolder {");
@@ -758,7 +760,7 @@ public class GeneratorImpl implements IGenerator {
 					+ baseInterfaceName
 					+ " {"
 					+ Constants.LINE_SEPARATOR);
-					
+
 			List embeddedRecords = r.getChildren(CoreTags.NODE_TYPE);
 			w.write(
 				"/** Default constructor. Initializes all all arrays for nested record to zero length arrays and all other values to their defaults (0/null). */");
@@ -775,7 +777,7 @@ public class GeneratorImpl implements IGenerator {
 						+ Constants.LINE_SEPARATOR);
 			}
 			w.write("}" + Constants.LINE_SEPARATOR);
-			if(version.isDefined()&& outer == null)						
+			if(version.isDefined()&& outer == null)
 				w.write("public void accept(com.choicemaker.cm.urm.base.IRecordVisitor ext){	ext.visit((com.choicemaker.cm.urm.base.IRecordHolder)this); }"+ Constants.LINE_SEPARATOR);
 
 			List fields = r.getChildren("field");
@@ -788,32 +790,32 @@ public class GeneratorImpl implements IGenerator {
 						+ className
 						+ "[0];"
 						+ Constants.LINE_SEPARATOR);
-						
+
 				String iface = outer.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
 				w.write(addField(iface, "outer", false, PRIVATE));
-				
+
 				writeGetOuterJavaDoc(w1);
 				writeGetOuterJavaDoc(uw);
 				w.write("public " + iface + " getOuter() {" + Constants.LINE_SEPARATOR);
 				w.write("return outer;" + Constants.LINE_SEPARATOR);
 				w.write("}" + Constants.LINE_SEPARATOR);
-				
+
 				writeGetOuterJavaDoc(biw);
 				biw.write("public " + iface + " getOuter();" + Constants.LINE_SEPARATOR);
-				
+
 				writeSetOuterJavaDoc(w1);
 				writeSetOuterJavaDoc(uw);
 				w.write("public void setOuter(" + iface + " outer) {" + Constants.LINE_SEPARATOR);
 				w.write("this.outer = outer;" + Constants.LINE_SEPARATOR);
 				w.write("}" + Constants.LINE_SEPARATOR);
-				
+
 				writeSetOuterJavaDoc(biw);
 				biw.write("public void setOuter(" + iface + " outer);" + Constants.LINE_SEPARATOR);
 
 			}
 			Iterator i = fields.iterator();
 			DerivedSource beanSource = DerivedSource.valueOf("bean");
-			String keyFiledName=null; 
+			String keyFiledName=null;
 			String keyFiledType=null;
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
@@ -821,9 +823,9 @@ public class GeneratorImpl implements IGenerator {
 				String fieldName = e.getAttributeValue("name");
 				if ("true".equals(e.getAttributeValue("key"))){
 					keyFiledName =	fieldName;
-					keyFiledType =	typeName; 
+					keyFiledType =	typeName;
 				}
-					
+
 				boolean trans = "true".equals(e.getAttributeValue("transient"));
 				boolean derived = GeneratorHelper.isDerived(e, beanSource);
 				String methodStem = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
@@ -882,14 +884,14 @@ public class GeneratorImpl implements IGenerator {
 					isString = true;
 				else
 					throw new GenException("Invalid data type");
-				//TODO check the list of valid datatypes and test	
-				if(isString)	
+				//TODO check the list of valid datatypes and test
+				if(isString)
 					uw.write("return "+keyFiledName+";" + Constants.LINE_SEPARATOR);
 				else
-					uw.write("return "+retResval+keyFiledName+");" + Constants.LINE_SEPARATOR);	
+					uw.write("return "+retResval+keyFiledName+");" + Constants.LINE_SEPARATOR);
 				uw.write("}" + Constants.LINE_SEPARATOR);
 			}
-			
+
 			i = embeddedRecords.iterator();
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
@@ -1256,10 +1258,12 @@ public class GeneratorImpl implements IGenerator {
 
 					String srcName = iteratedNodeType.getAttributeValue("src");
 					int srcId = srcNames.getId(srcName);
-					
+
 					w.write("if(__src" + srcId + ".includes(__src)) {" + Constants.LINE_SEPARATOR);
 					String eClassName = e.getAttributeValue(CoreTags.CLASS_NAME);
-					String eIFace = e.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
+					// 2014-04-24 rphall: Commented out unused local variable
+					// Any side effects?
+//					String eIFace = e.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
 					String iterator = iteratedNodeType.getAttributeValue("iterator");
 					String assignedFieldName = iteratedNodeType.getAttributeValue("assignedField");
 
@@ -1515,7 +1519,9 @@ public class GeneratorImpl implements IGenerator {
 			String rootURMHolder = rootRecord.getAttributeValue(CoreTags.URM_HOLDER_CLASS_NAME);
 			String implClass = rootRecord.getAttributeValue(CoreTags.CLASS_NAME);
 			String ifaceName = rootRecord.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
-			String iURMFaceName = rootRecord.getAttributeValue(CoreTags.URM_BASE_INTERFACE_NAME);
+			// 2014-04-24 rphall: Commented out unused local variable
+			// Any side effects?
+//			String iURMFaceName = rootRecord.getAttributeValue(CoreTags.URM_BASE_INTERFACE_NAME);
 
 			w.write("public Object toHolder(Record r) {" + Constants.LINE_SEPARATOR);
 			w.write("return new " + rootHolder + "((" + ifaceName + ")r);" + Constants.LINE_SEPARATOR);
@@ -1526,7 +1532,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write("return new " + rootURMHolder + "((" + ifaceName + ")r);" + Constants.LINE_SEPARATOR);
 			w.write("}" + Constants.LINE_SEPARATOR);
 			//end by PC
-			
+
 			w.write("public Record toImpl(Object o) {" + Constants.LINE_SEPARATOR);
 			w.write(implClass + " __res = new " + implClass + "((" + ifaceName + ")o);" + Constants.LINE_SEPARATOR);
 			w.write("__res.computeValidityAndDerived(BEAN_SOURCE);" + Constants.LINE_SEPARATOR);

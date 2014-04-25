@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -27,8 +27,8 @@ import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.PMManager;
+//import com.choicemaker.cm.core.ImmutableProbabilityModel;
+//import com.choicemaker.cm.core.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
@@ -43,7 +43,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
 /** This message bean handles the deduping of match records.
- * 
+ *
  * @author pcheung
  *
  */
@@ -90,7 +90,7 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 		ObjectMessage msg = null;
 		StartData data = null;
 		BatchJob batchJob = null;
-		
+
 		log.debug("MatchDedupOABA In onMessage");
 
 		try {
@@ -100,30 +100,32 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 				batchJob = configuration.findBatchJobById(data.jobID);
 
 				//init values
-				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
+				// 2014-04-24 rphall: Commented out unused local variable.
+				// Any side effects?
+//				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
 				oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 				IStatus status = configuration.getStatusLog(data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					batchJob.markAsAborted();
-					
+
 					if (batchJob.getDescription().equals(BatchJob.CLEAR)) {
 						status.setStatus (IStatus.DONE_PROGRAM);
 						oabaConfig.removeTempDir();
 					}
 				} else {
 /*
-					//max number of match in a temp file					
+					//max number of match in a temp file
 					String temp = (String) stageModel.properties.get("maxMatchSize");
 					int maxMatch = Integer.parseInt(temp);
 
 					//match sink
 					IMatchRecord2SinkSourceFactory mFactory = oabaConfig.getMatchTempFactory();
 					IMatchRecord2Sink mSink = mFactory.getNextSink();
-			
+
 					//dedup match file
 					IMatchRecord2Source mSource = mFactory.getSource(mSink);
-					
+
 					//final file
 					mSink = oabaConfig.getMatchFactory().getSink(Long.toString(data.jobID));
 
@@ -137,8 +139,8 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 
 					//since Matcher already dedups the files per chunk
 					mergeMatches (data.numChunks, data.jobID, batchJob);
-					
-					
+
+
 					//mark as done
 					sendToUpdateStatus (data.jobID, 100);
 					status.setStatus( IStatus.DONE_PROGRAM);
@@ -166,46 +168,46 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 
 
 	/** This method merges all the sorted and dedups matches files from the previous step.
-	 * 
+	 *
 	 *
 	 */
-	private void mergeMatches (int numChunk, long jobID, BatchJob batchJob) 
+	private void mergeMatches (int numChunk, long jobID, BatchJob batchJob)
 		throws BlockingException, RemoteException {
-			
+
 		long t = System.currentTimeMillis();
-			
+
 		IMatchRecord2SinkSourceFactory factory = oabaConfig.getMatchChunkFactory();
 		ArrayList tempSinks = new ArrayList ();
 		for (int i=0; i< numChunk; i++) {
 			IMatchRecord2Sink mSink = factory.getSink(i);
 			IComparableSink sink =  new ComparableMRSink (mSink);
 			tempSinks.add(sink);
-			
+
 			log.debug ("file " + sink.getInfo());
 		}
-		
+
 		IMatchRecord2Sink mSink = oabaConfig.getCompositeMatchSink(jobID);
 		IComparableSink sink =  new ComparableMRSink (mSink);
-		
+
 		//IMatchRecord2Source mSource = oabaConfig.getMatchFactory().getNextSource();
 		//ComparableMRSource source = new ComparableMRSource (mSource);
-		
+
 		ComparableMRSinkSourceFactory mFactory = new ComparableMRSinkSourceFactory (factory);
-		
+
 		int i = GenericDedupService.mergeFiles(tempSinks, sink, mFactory, true);
 		//source.remove();
-		
+
 		log.info("Number of Distinct matches after merge: " + i);
 		batchJob.setDescription(mSink.getInfo());
-		
+
 		t = System.currentTimeMillis() - t;
-		
+
 		log.info("Time in match dedup " + t);
 	}
 
 
 	/** This method sends a message to the UpdateStatus message bean.
-	 * 
+	 *
 	 * @param jobID
 	 * @param percentComplete
 	 * @throws NamingException
@@ -216,8 +218,8 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 		UpdateData data = new UpdateData();
 		data.jobID = jobID;
 		data.percentComplete = percentComplete;
-		
+
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 }

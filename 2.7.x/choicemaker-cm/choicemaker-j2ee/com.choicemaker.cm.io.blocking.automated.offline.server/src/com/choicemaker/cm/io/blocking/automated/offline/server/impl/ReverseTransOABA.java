@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -26,8 +26,8 @@ import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.PMManager;
+//import com.choicemaker.cm.core.ImmutableProbabilityModel;
+//import com.choicemaker.cm.core.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
@@ -37,7 +37,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 
 /**
  * This bean handles the reverse translation of internal ids back to record ids.
- * 
+ *
  * @author pcheung
  *
  */
@@ -82,7 +82,7 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		log.info("ReverseOABA In onMessage");
-		
+
 		ObjectMessage msg = null;
 		StartData data = null;
 		BatchJob batchJob = null;
@@ -92,13 +92,15 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
 				batchJob = configuration.findBatchJobById(data.jobID);
-				
+
 				//init values
-				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
+				// 2014-04-24 rphall: Commented out unused local variable.
+				// Any side effects?
+//				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
 				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 //				Status status = data.status;
 				IStatus status = configuration.getStatusLog(data);
-				
+
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					batchJob.markAsAborted();
 
@@ -107,48 +109,49 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 						oabaConfig.removeTempDir();
 					}
 				} else {
-					
-					String temp = (String) stageModel.properties().get("maxBlockSize");
-					int maxBlock = Integer.parseInt(temp);
 
-					//dedup is no longer needed. 
-					
+					// 2014-04-24 rphall: Commented out unused local variable.
+//					String temp = (String) stageModel.properties().get("maxBlockSize");
+//					int maxBlock = Integer.parseInt(temp);
+
+					//dedup is no longer needed.
+
 /*
 					//need to recover the translator
 					RecordIDTranslator translator = new RecordIDTranslator (oabaConfig.getTransIDFactory());
-					translator.recover(); 
+					translator.recover();
 
 					//reverse translate
 					IBlockSinkSourceFactory bFactory = oabaConfig.getBlockFactory();
 					IBlockSink bSink = bFactory.getNextSink();
 					IBlockSource source = bFactory.getSource(bSink);
 					bSink = bFactory.getNextSink();
-					
+
 					IBlockSinkSourceFactory osFactory = oabaConfig.getOversizedFactory();
 					IBlockSink osDedup = osFactory.getNextSink();
 					osDedup = osFactory.getNextSink();
 					IBlockSource source2 = osFactory.getSource(osDedup);
 					osDedup = osFactory.getNextSink();
-					
+
 					ReverseTranslateService rtService = new ReverseTranslateService (translator,
 						source, bSink, source2, osDedup, status);
 					rtService.runService();
 					log.info( "Done reverse translate " + rtService.getTimeElapsed());
-					
+
 					if (status.getStatus() <= IStatus.DONE_REVERSE_TRANSLATE_OVERSIZED) {
 						//write block statistics
 						source = bFactory.getSource(bSink);
-						
+
 						BlockStatistics stat2 = new BlockStatistics ( source, maxBlock, 10);
 						stat2.writeStat();
 					}
 */
 
 					sendToUpdateStatus (data.jobID, 40);
-				
+
 					sendToChunk (data);
 				}
-				
+
 			} else {
 				log.warn("wrong type: " + inMessage.getClass().getName());
 			}
@@ -170,7 +173,7 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 
 
 	/** This method sends a message to the UpdateStatus message bean.
-	 * 
+	 *
 	 * @param jobID
 	 * @param percentComplete
 	 * @throws NamingException
@@ -182,26 +185,26 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 		UpdateData data = new UpdateData();
 		data.jobID = jobID;
 		data.percentComplete = percentComplete;
-		
+
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 	/** This method sends a message to the DedupOABA message bean.
-	 * 
+	 *
 	 * @param request
 	 * @throws NamingException
 	 */
 	private void sendToChunk (StartData data) throws NamingException{
 		Queue queue = configuration.getChunkMessageQueue();
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 /*
 	private void sendMessage (Queue queue, Serializable data) {
 		QueueSession session = null;
-		
+
 		try {
 			if (connection == null) {
 				QueueConnectionFactory factory = configuration.getQueueConnectionFactory();
@@ -232,9 +235,9 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 				log.error(ex.toString(),ex);
 			}
 		}
-		
+
 		log.debug ("...finished sendMessage");
 	}
 */
-	
+
 }
