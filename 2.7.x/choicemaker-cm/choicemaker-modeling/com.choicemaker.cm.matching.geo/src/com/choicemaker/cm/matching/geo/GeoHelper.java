@@ -136,10 +136,10 @@ public class GeoHelper  {
 		double dist  = 0;
 		if(gp1 == null || gp2 == null)
 			return -1;
-		double dLat  = (double)(gp2.lat - gp1.lat)* RPG; 
-		double dLon = (double)(gp2.lon - gp1.lon)* RPG;
-		double lat1 = (double)gp1.lat * RPG;
-		double lat2 = (double)gp2.lat * RPG;
+		double dLat  = (gp2.lat - gp1.lat)* RPG; 
+		double dLon = (gp2.lon - gp1.lon)* RPG;
+		double lat1 = gp1.lat * RPG;
+		double lat2 = gp2.lat * RPG;
 
 		double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
 						Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon/2) * Math.sin(dLon/2);

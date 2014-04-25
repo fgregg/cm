@@ -119,9 +119,9 @@ public class ParserBenchmarkTest {
 		ps.println();
 		ps.println("Total Instances: " + getNumInstances());
 		ps.println("Parsed Instances: " + getNumParsedInstances() + " (" +
-			String.valueOf(100.0 * getNumParsedInstances() / (double) getNumInstances()).substring(0, 4) + "%)");
+			String.valueOf(100.0 * getNumParsedInstances() / getNumInstances()).substring(0, 4) + "%)");
 		ps.println("Unparsed Instances: " + getNumUnparsedInstances() + " (" +
-			String.valueOf(100.0 * getNumUnparsedInstances() / (double) getNumInstances()).substring(0, 4) + "%)");
+			String.valueOf(100.0 * getNumUnparsedInstances() / getNumInstances()).substring(0, 4) + "%)");
 		ps.println("Total time: " + getExecutionTime() + "ms (" +
 			String.valueOf(getExecutionTime() / (double) getNumInstances()).substring(0, 4) + "ms/instance)");
 	}

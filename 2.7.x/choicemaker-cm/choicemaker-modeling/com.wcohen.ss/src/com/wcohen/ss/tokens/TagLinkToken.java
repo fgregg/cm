@@ -198,7 +198,7 @@ private double matched, tr, sSize, tSize, totalScore;
       double lastTr = -1;
       for (int u = Math.max(0, t - bound), flag = 0;
            u < Math.min(t + bound + 1, T.length()) && flag == 0; u++) {
-        double tr2 = ( (double) Math.abs(t - u));
+        double tr2 = ( Math.abs(t - u));
         if ( (lastTr >= 0.0) && (lastTr < tr2)) {
           flag = 1;
         }
