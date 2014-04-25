@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -31,18 +31,20 @@ public final class AddressParsedDataCreator {
 
 		String task = args[0].intern();
 		if (task != PARSE_TREES && task != PARSED_DATA) {
-			System.err.println("First argument must be either '" + PARSE_TREES + "' or '" + PARSED_DATA + "'"); 	
+			System.err.println("First argument must be either '" + PARSE_TREES + "' or '" + PARSED_DATA + "'");
 			System.exit(1);
 		}
-	
+
 		AddressParserUtils.initRelevantSetsAndMaps();
 		Parser parser = AddressParserUtils.createEarleyAddressParser(args[1]);
 		RawDataReader reader = new FlatFileRawDataReader(args[2]);
-		ParsedDataWriter writer = new ParsedDataWriter(System.out);
+		ParsedDataWriter writer;
 		if (args.length > 3) {
 			writer = new ParsedDataWriter(args[3]);
+		} else {
+			writer = new ParsedDataWriter(System.out);
 		}
-		
+
 		ParsedDataCreator pdc = new ParsedDataCreator(reader, parser, writer);
 		if (task == PARSE_TREES) {
 			pdc.setParseTreePolicy(ParsedDataCreator.ALL);
@@ -54,5 +56,5 @@ public final class AddressParsedDataCreator {
 
 		pdc.createData();
 	}
-	
+
 }

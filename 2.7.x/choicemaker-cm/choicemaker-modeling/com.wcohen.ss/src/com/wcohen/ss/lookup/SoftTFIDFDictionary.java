@@ -27,7 +27,7 @@ import com.wcohen.ss.tokens.*;
  *    System.out.println("similarity of '"+dict.getResult(i)+"' to query string is "+dict.getScore(i));
  * }
  * </pre></code>
- * 
+ *
  */
 
 public class SoftTFIDFDictionary implements FastLookup
@@ -40,17 +40,17 @@ public class SoftTFIDFDictionary implements FastLookup
     private static final Comparator LEXICAL_ORDER_FOR_TOKENS = new Comparator() {
             public int compare(Object a,Object b) {
                 return ((Token)a).getValue().compareTo(((Token)b).getValue());
-            } 
+            }
         };
     private static final Comparator ID_ORDER_FOR_TOKENS = new Comparator() {
             public int compare(Object a,Object b) {
                 return ((Token)a).getIndex() - ((Token)b).getIndex();
-            } 
+            }
         };
 
     //
     // local information
-    // 
+    //
 
     // minTokenSimilarity and tokenizer are used to define a softTFIDF string distance
     private double minTokenSimilarity;
@@ -70,7 +70,7 @@ public class SoftTFIDFDictionary implements FastLookup
 
     // the dictionary itself - map a dictionary string to a set of values
     private Map valueMap = new HashMap();
-    // flag which indicates if this dictionary is 'frozen' 
+    // flag which indicates if this dictionary is 'frozen'
     private boolean frozen = false;
     //
     // after freezing, these things are pre-computed to make lookup faster
@@ -84,7 +84,7 @@ public class SoftTFIDFDictionary implements FastLookup
     // all tokens, in alphabetic order
     Token[] allTokens;
     // number of tokens in allTokens
-    int numTokens; 
+    int numTokens;
 
     //
     // file i/o
@@ -94,10 +94,10 @@ public class SoftTFIDFDictionary implements FastLookup
     {
         freeze();
 
-	ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
 
         // save the parameters of the SoftTFIDFDictionary
         if (tokenizer!=DEFAULT_TOKENIZER) throw new IllegalStateException("can't save a non-default tokenizer");
+    	ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
         out.writeDouble(minTokenSimilarity);
         out.writeInt(windowSize);
         out.writeInt(maxInvertedIndexSize);
@@ -112,7 +112,7 @@ public class SoftTFIDFDictionary implements FastLookup
             out.writeObject( e.getValue() );
         }
 
-        // save numTokens, allTokens 
+        // save numTokens, allTokens
         if (DEBUG) System.out.println("saving allTokens...");
         //if (DEBUG) showAllTokens();
         out.writeInt( numTokens );
@@ -149,7 +149,7 @@ public class SoftTFIDFDictionary implements FastLookup
 
         // save invertedIndex
         if (DEBUG) System.out.println("saving invertedIndex...");
-        for (int i=0; i<numTokens; i++) {        
+        for (int i=0; i<numTokens; i++) {
             Token toki = allTokens[i];
             Set ii = invertedIndex[toki.getIndex()];
             out.writeInt( ii.size() );
@@ -158,7 +158,7 @@ public class SoftTFIDFDictionary implements FastLookup
                 out.writeObject( s );
             }
         }
-        
+
         out.close();
     }
 
@@ -201,7 +201,7 @@ public class SoftTFIDFDictionary implements FastLookup
         }
         Arrays.sort( dict.allTokens, LEXICAL_ORDER_FOR_TOKENS );
         //if (DEBUG) dict.showAllTokens();
-        
+
         if (DEBUG) System.out.println("restoring df's...");
         for (int i=0; i<dict.numTokens; i++) {
             int df = in.readInt();
@@ -216,7 +216,7 @@ public class SoftTFIDFDictionary implements FastLookup
         if (DEBUG) System.out.println("restoring maxTFIDFScore...");
         dict.maxTFIDFScore = new double[ dict.tokenizer.maxTokenIndex()+1 ];
         for (int i=0; i<dict.numTokens; i++) {
-            Token toki = dict.allTokens[i];            
+            Token toki = dict.allTokens[i];
             dict.maxTFIDFScore[ toki.getIndex() ] = in.readDouble();
         }
         //if (DEBUG) dict.showAllMaxScores();
@@ -235,9 +235,9 @@ public class SoftTFIDFDictionary implements FastLookup
         }
 
         // read the invertedIndex
-        if (DEBUG) System.out.println("restoring invertedIndex...");        
+        if (DEBUG) System.out.println("restoring invertedIndex...");
         dict.invertedIndex = new Set[dict.tokenizer.maxTokenIndex()+1];
-        for (int i=0; i<dict.numTokens; i++) {        
+        for (int i=0; i<dict.numTokens; i++) {
             Token toki = dict.allTokens[i];
             dict.invertedIndex[toki.getIndex()] = new HashSet();
             int n = in.readInt();
@@ -252,18 +252,18 @@ public class SoftTFIDFDictionary implements FastLookup
         return dict;
     }
 
-    private void showValueMap() 
-    { 
-        System.out.println("valueMap: "+valueMap); 
+    private void showValueMap()
+    {
+        System.out.println("valueMap: "+valueMap);
     }
-    private void showAllTokens() 
-    { 
+    private void showAllTokens()
+    {
         for (int i=0; i<numTokens; i++) {
             System.out.println("allTokens["+i+"] = "+allTokens[i]);
         }
     }
-    private void showAllMaxScores() 
-    { 
+    private void showAllMaxScores()
+    {
         for (int i=0; i<numTokens; i++) {
             System.out.println("allTokens["+i+"] = "+allTokens[i]+" maxscore = "+maxTFIDFScore[i]);
         }
@@ -273,17 +273,17 @@ public class SoftTFIDFDictionary implements FastLookup
     // constructors
     //
 
-    public SoftTFIDFDictionary() 
-    { 
-        this(DEFAULT_TOKENIZER,DEFAULT_MIN_TOKEN_SIMILARITY,DEFAULT_WINDOW_SIZE,DEFAULT_MAX_INVERTED_INDEX_SIZE); 
+    public SoftTFIDFDictionary()
+    {
+        this(DEFAULT_TOKENIZER,DEFAULT_MIN_TOKEN_SIMILARITY,DEFAULT_WINDOW_SIZE,DEFAULT_MAX_INVERTED_INDEX_SIZE);
     }
-    public SoftTFIDFDictionary(Tokenizer tokenizer) 
-    { 
-        this(tokenizer,DEFAULT_MIN_TOKEN_SIMILARITY,DEFAULT_WINDOW_SIZE,DEFAULT_MAX_INVERTED_INDEX_SIZE); 
+    public SoftTFIDFDictionary(Tokenizer tokenizer)
+    {
+        this(tokenizer,DEFAULT_MIN_TOKEN_SIMILARITY,DEFAULT_WINDOW_SIZE,DEFAULT_MAX_INVERTED_INDEX_SIZE);
     }
-    public SoftTFIDFDictionary(Tokenizer tokenizer,double minTokenSimilarity) 
-    { 
-        this(tokenizer,minTokenSimilarity,DEFAULT_WINDOW_SIZE,DEFAULT_MAX_INVERTED_INDEX_SIZE); 
+    public SoftTFIDFDictionary(Tokenizer tokenizer,double minTokenSimilarity)
+    {
+        this(tokenizer,minTokenSimilarity,DEFAULT_WINDOW_SIZE,DEFAULT_MAX_INVERTED_INDEX_SIZE);
     }
 
     /**
@@ -358,7 +358,7 @@ public class SoftTFIDFDictionary implements FastLookup
         freeze();
     }
 
-    /** Make it impossible to add new values, but possible to perform lookups. 
+    /** Make it impossible to add new values, but possible to perform lookups.
      */
     public void freeze()
     {
@@ -390,7 +390,7 @@ public class SoftTFIDFDictionary implements FastLookup
         if (DEBUG) System.out.println("computing similar-tokens for "+tokenizer.maxTokenIndex()+" tokens, window="+windowSize);
         allTokens = new Token[tokenizer.maxTokenIndex()] ;
         numTokens=0;
-        for (Iterator i=tokenizer.tokenIterator(); i.hasNext(); ) {        
+        for (Iterator i=tokenizer.tokenIterator(); i.hasNext(); ) {
             Token toki = (Token)i.next();
             allTokens[numTokens++] = toki;
         }
@@ -408,7 +408,7 @@ public class SoftTFIDFDictionary implements FastLookup
                 similarTokens[toki.getIndex()][ k++ ] = tokj;
             }
         }
-        
+
         frozen = true;
     }
 
@@ -420,10 +420,10 @@ public class SoftTFIDFDictionary implements FastLookup
             String s = (String)i.next();
             accum.add( tfidfDistance.prepare( s ) );
         }
-        double elapsedSec1 = (System.currentTimeMillis()-start) / 1000.0;        
+        double elapsedSec1 = (System.currentTimeMillis()-start) / 1000.0;
         tfidfDistance.train( new BasicStringWrapperIterator(accum.iterator()) );
         softTFIDFDistance.train( new BasicStringWrapperIterator(accum.iterator()) );
-        double elapsedSec2 = (System.currentTimeMillis()-start) / 1000.0;        
+        double elapsedSec2 = (System.currentTimeMillis()-start) / 1000.0;
         if (DEBUG) System.out.println("training took: "+elapsedSec2+" (i.e. "+elapsedSec1+" then "+(elapsedSec2-elapsedSec1)+") sec");
     }
 
@@ -468,7 +468,7 @@ public class SoftTFIDFDictionary implements FastLookup
             }
         }
         Collections.sort( result );
-        lookupTime = (System.currentTimeMillis()-start) / 1000.0;        
+        lookupTime = (System.currentTimeMillis()-start) / 1000.0;
         return result.size();
     }
 
@@ -491,7 +491,7 @@ public class SoftTFIDFDictionary implements FastLookup
             Token tok = tokens[i];
             if (DEBUG) System.out.println("upper-bounding token "+i+"="+tok);
             // getIndex()<maxTFIDFScore then tok is somewhere in the dictionary
-            if (tok.getIndex() < maxTFIDFScore.length) { 
+            if (tok.getIndex() < maxTFIDFScore.length) {
                 // token should be in allTokens and similar tokens should be pre-computed
                 storeUpperBound( tok, tok, usefulTokens, upperBoundOnWeight, 1.0 );
                 for (int j=0; j<similarTokens[tok.getIndex()].length; j++) {
@@ -503,7 +503,7 @@ public class SoftTFIDFDictionary implements FastLookup
                 // token should NOT be in allTokens, so we need to computed similarTokens on-the-fly
                 int indexInAllTokens = Arrays.binarySearch( allTokens, tok, LEXICAL_ORDER_FOR_TOKENS );
                 if (indexInAllTokens<0) indexInAllTokens = -(indexInAllTokens+1);
-                Set likeTokI = findSimilarTokens( tok.getValue(), indexInAllTokens );   
+                Set likeTokI = findSimilarTokens( tok.getValue(), indexInAllTokens );
                 if (DEBUG) System.out.println("just found "+likeTokI.size()+" tokens similar to the novel token "+tok);
                 for (Iterator j=likeTokI.iterator(); j.hasNext(); ) {
                     Token simTok = (Token)j.next();
@@ -529,7 +529,7 @@ public class SoftTFIDFDictionary implements FastLookup
         double totScore = 0;
         for (Iterator i=usefulTokens.iterator(); i.hasNext(); ) {
             Token tok = (Token)i.next();
-            Double ub = (Double)upperBoundOnWeight.get(tok); 
+            Double ub = (Double)upperBoundOnWeight.get(tok);
             if (ub!=null) totScore += ub.doubleValue();
             if (totScore >= minScore) {
                 Set ii = invertedIndex[tok.getIndex()];
@@ -541,8 +541,8 @@ public class SoftTFIDFDictionary implements FastLookup
             }
             if (DEBUG) System.out.println("after "+tok+" with upper bound "+ub+": "+candidates.size()+" candidates");
         }
-        
-        // finally collect and score the candidates        
+
+        // finally collect and score the candidates
         result = new ArrayList( candidates.size() );
         StringWrapper wa = softTFIDFDistance.prepare( toFind );
         for (Iterator i=candidates.iterator(); i.hasNext(); ) {
@@ -560,7 +560,7 @@ public class SoftTFIDFDictionary implements FastLookup
         }
         if (DEBUG) System.out.println("result="+result);
         Collections.sort( result );
-        lookupTime = (System.currentTimeMillis()-start) / 1000.0;        
+        lookupTime = (System.currentTimeMillis()-start) / 1000.0;
         return result.size();
     }
     // subroutine of lookup
@@ -614,7 +614,7 @@ public class SoftTFIDFDictionary implements FastLookup
         double tot = 0;
         for (int i=0; i<numTokens; i++) {
             Token toki = allTokens[i];
-            tot += similarTokens[toki.getIndex()].length; 
+            tot += similarTokens[toki.getIndex()].length;
         }
         return tot;
     }
@@ -635,7 +635,7 @@ public class SoftTFIDFDictionary implements FastLookup
         SoftTFIDFDictionary dict = loadSomehow(argv[0]);
         if (argv.length==1) {
             System.out.println("inverted index sizes:");
-            for (int i=0; i<dict.numTokens; i++) {        
+            for (int i=0; i<dict.numTokens; i++) {
                 Token toki = dict.allTokens[i];
                 Set ii = dict.invertedIndex[toki.getIndex()];
                 System.out.println(ii.size()+" "+toki.getValue());
@@ -659,6 +659,7 @@ public class SoftTFIDFDictionary implements FastLookup
                         doLookup(dict,d,line,true,stats);
                         numQueries++;
                     }
+                    in.close();
                     System.out.println("optimized time:   "+stats[0]);
                     System.out.println("baseline time:    "+stats[1]);
                     System.out.println("speedup:          "+stats[1]/stats[0]);
@@ -678,7 +679,7 @@ public class SoftTFIDFDictionary implements FastLookup
                 dict.loadAliases(new File(argv[0]));
                 System.out.println("loaded "+dict.numTokens+" tokens");
                 System.out.println( "window" +"\t"+ "time" +"\t"+ "#pairs" +"\t"+ "pairs/token");
-                java.text.DecimalFormat fmt = new java.text.DecimalFormat("0.000"); 
+                java.text.DecimalFormat fmt = new java.text.DecimalFormat("0.000");
                 for (int i=1; i<argv.length; i++) {
                     int w = Integer.parseInt(argv[i]);
                     dict.setWindowSize( w );

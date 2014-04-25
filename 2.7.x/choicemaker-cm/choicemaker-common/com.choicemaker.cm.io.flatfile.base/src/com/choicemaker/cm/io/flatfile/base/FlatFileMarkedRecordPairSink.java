@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -75,7 +75,7 @@ public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 		this.filter = filter;
 		setModel(model);
 	}
-	
+
 	public void setRawFileNamePrefix(String fn) {
 		rawFileNamePrefix = fn;
 		fileNamePrefix =
@@ -111,6 +111,7 @@ public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 				outFile[i] = o;
 				ws[i] = w;
 			}
+			w.close();
 		}
 	}
 
@@ -194,5 +195,5 @@ public class FlatFileMarkedRecordPairSink implements MarkedRecordPairSink {
 	 */
 	public void flush() throws IOException {
 	}
-		
+
 }

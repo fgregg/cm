@@ -9,12 +9,12 @@ import java.io.*;
  * Holds data for evaluating a distance metric.
  */
 
-public class MatchData 
+public class MatchData
 {
 	private Map sourceLists;
 	private List sourceNames;
 	private String filename;
-	
+
 	/**
 	 * Read match data from a file.  Format should be:
 	 * sourceRelation TAB instanceID TAB field1 TAB ... fieldn LF
@@ -25,8 +25,9 @@ public class MatchData
 		this.filename = filename;
 		sourceNames = new ArrayList();
 		sourceLists = new HashMap();
+		BufferedReader in = null;
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(filename));
+			in = new BufferedReader(new FileReader(filename));
 			String line;
 			int lineNum = 0;
 			while ((line = in.readLine())!=null) {
@@ -50,14 +51,21 @@ public class MatchData
 				}
 				addInstance(src,id,text);
 			}
-			in.close();
 		} catch (IOException e) {
 			throw new InputFormatException(filename,0,e.toString());
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException x) {
+					x.printStackTrace();
+				}
+			}
 		}
 	}
 
 
-	public MatchData() 
+	public MatchData()
 	{
 		this.filename = "none";
 		sourceNames = new ArrayList();
@@ -65,7 +73,7 @@ public class MatchData
 	}
 
 	/** Add a single instance, with given src and id, to the datafile */
-	public void addInstance(String src,String id,String text) 
+	public void addInstance(String src,String id,String text)
 	{
 		Instance inst = new Instance(src,id,text);
 		List list = (List) sourceLists.get(src);
@@ -78,23 +86,23 @@ public class MatchData
 	}
 
 	/** Number of sources in data set */
-	public int numSources() { 
-		return sourceNames.size(); 
+	public int numSources() {
+		return sourceNames.size();
 	}
 
 	/** Get string identifier for i-th source */
-	public String getSource(int i) { 
-		return (String) sourceNames.get(i); 
+	public String getSource(int i) {
+		return (String) sourceNames.get(i);
 	}
 
 	/** Number of records for source with given string id */
-	public int numInstances(String src) { 
+	public int numInstances(String src) {
 		return ((List)sourceLists.get(src)).size();
 	}
 
 	/** Get the j-th record for the named source. */
-	public Instance getInstance(String src, int j) { 
-		return (Instance) ((List)sourceLists.get(src)).get(j); 
+	public Instance getInstance(String src, int j) {
+		return (Instance) ((List)sourceLists.get(src)).get(j);
 	}
 
 	public StringWrapperIterator getIterator() {
@@ -106,7 +114,7 @@ public class MatchData
 		return filename;
 	}
 
-	public String toString() 
+	public String toString()
 	{
 		StringBuffer buf = new StringBuffer();
 		for (int i=0; i<numSources(); i++) {
@@ -119,7 +127,7 @@ public class MatchData
 		return buf.toString();
 	}
 
-	
+
 	/** A single item (aka record, string, etc) to match against others.
 	 * An item has an id (for evaluating correctness of a match), a
 	 * source (which relation its from), and a text field.  Text is
@@ -143,20 +151,20 @@ public class MatchData
 		}
 		public String toString() { return "[src: '"+source+"' id: '"+id+"' unwrapped: '"+unwrap()+"']"; }
 	}
-	
+
 	/** Iterates over all stored StringWrappers */
-	static public class MatchIterator implements StringWrapperIterator 
+	static public class MatchIterator implements StringWrapperIterator
 	{
 		private static final long serialVersionUID = 1L;
 		private int sourceCursor,instanceCursor;
 		private String src;  // caches getSource(sourceCursor)
 		private MatchData data;
 
-		public MatchIterator(MatchData data) { 
+		public MatchIterator(MatchData data) {
 			this.data = data;
-			sourceCursor = 0; 
-			instanceCursor = 0; 
-			src = data.getSource(sourceCursor); 
+			sourceCursor = 0;
+			instanceCursor = 0;
+			src = data.getSource(sourceCursor);
 		}
 
 		/** Not implemented. */
@@ -166,12 +174,12 @@ public class MatchData
 		public String getSource() { return src; }
 
 		/** Return the next StringWrapper. */
-		public StringWrapper nextStringWrapper() { 
-			return (StringWrapper)next(); 
+		public StringWrapper nextStringWrapper() {
+			return (StringWrapper)next();
 		}
 
-		public boolean hasNext() { 
-			return sourceCursor<data.numSources() && instanceCursor<data.numInstances(src); 
+		public boolean hasNext() {
+			return sourceCursor<data.numSources() && instanceCursor<data.numInstances(src);
 		}
 
 		/** Returns the next StringWrapper as an object. */
@@ -179,13 +187,13 @@ public class MatchData
 			Instance inst = data.getInstance( src, instanceCursor++ );
 			if (instanceCursor>data.numInstances(src)) {
 				sourceCursor++; instanceCursor=0;
-				if (sourceCursor<data.numSources()) 
+				if (sourceCursor<data.numSources())
 					src = data.getSource(sourceCursor);
 			}
 			return inst;
 		}
 	}
-	
+
 
 	/** Signals an incorrectly formatted MatchData file.
 	 */
@@ -196,8 +204,8 @@ public class MatchData
 	    super("line "+line+" of file "+file+": "+msg);
 		}
 	}
-	
-	public static void main(String[] argv) 
+
+	public static void main(String[] argv)
 	{
 		try {
 	    System.out.println(new MatchData(argv[0]).toString());
