@@ -43,6 +43,7 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.StringComparator;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:16:21 $
  */
 public class ToolsMenu extends JMenu {
+	private static final long serialVersionUID = 1L;
 	private ModelMaker modelMaker;
 
 	public ToolsMenu(ModelMaker modelMaker) {
@@ -52,6 +53,7 @@ public class ToolsMenu extends JMenu {
 	}
 
 	private class MatchAction extends AbstractAction implements PropertyChangeListener {
+		private static final long serialVersionUID = 1L;
 		MatchAction() {
 			super(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.tools.match"));
 			modelMaker.addPropertyChangeListener(this);
@@ -73,6 +75,7 @@ public class ToolsMenu extends JMenu {
 
 
 	private class GeoTestAction extends AbstractAction implements PropertyChangeListener {
+		private static final long serialVersionUID = 1L;
 		GeoTestAction() {
 			super("Geographical Functions...");
 			modelMaker.addPropertyChangeListener(this);
@@ -96,6 +99,8 @@ public class ToolsMenu extends JMenu {
 
 	private class ExportProbabilitiesAction extends AbstractAction implements PropertyChangeListener {
 
+		private static final long serialVersionUID = 1L;
+
 		public ExportProbabilitiesAction() {
 			super("Export Probabilities and Active Clues...");
 			modelMaker.addPropertyChangeListener(this);
@@ -117,6 +122,8 @@ public class ToolsMenu extends JMenu {
 		AbstractAction matchAction = new MatchAction();
 		JMenuItem matchItem = add(matchAction);
 		AbstractAction stringComparator = new AbstractAction("String Comparison Functions...") {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent ev) {
 				new StringComparator(modelMaker).show();
 			}
@@ -126,6 +133,8 @@ public class ToolsMenu extends JMenu {
 		add( new GeoTestAction());
 
 		AbstractAction collections = new AbstractAction("Collections Lookup...") {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				new CollectionsDialog(modelMaker).show();
 			}
@@ -133,6 +142,8 @@ public class ToolsMenu extends JMenu {
 		add(collections);
 		
 		AbstractAction buildModelsJar = new AbstractAction("Build Holder Classes and DB Objects...") {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				new ObjectMakerDialog(modelMaker).show();
 			};
@@ -184,6 +195,7 @@ public class ToolsMenu extends JMenu {
 	
 	public static abstract class ToolAction extends AbstractAction {
 
+		private static final long serialVersionUID = 1L;
 		protected ModelMaker modelMaker;
 		
 		public ToolAction() { }

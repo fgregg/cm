@@ -36,7 +36,9 @@ import javax.ejb.EntityBean;
 public abstract class AutoNumberEJB2
    implements EntityBean
 {
-   public abstract Integer getValue();
+   private static final long serialVersionUID = 1L;
+
+public abstract Integer getValue();
 
    public abstract void setValue(Integer value);
    

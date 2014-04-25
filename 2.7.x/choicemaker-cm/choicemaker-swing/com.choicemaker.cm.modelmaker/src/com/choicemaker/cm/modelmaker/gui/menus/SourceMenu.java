@@ -52,6 +52,8 @@ import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
  * @version $Revision: 1.3 $ $Date: 2010/03/29 13:14:25 $
  */
 public class SourceMenu extends JMenu {
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(SourceMenu.class);
 
 	private ModelMaker parent;
@@ -69,6 +71,7 @@ public class SourceMenu extends JMenu {
 	}
 
 	private class SaveAsAction extends AbstractAction implements EvaluationListener {
+		private static final long serialVersionUID = 1L;
 		private boolean selection;
 
 		SaveAsAction(String name, Icon icon, boolean selection) {
@@ -103,6 +106,7 @@ public class SourceMenu extends JMenu {
 	}
 
 	private class SaveAction extends AbstractAction implements RepositoryChangeListener, PropertyChangeListener {
+		private static final long serialVersionUID = 1L;
 		private boolean saveableSource;
 
 		SaveAction(String name, Icon icon) {
@@ -154,6 +158,8 @@ public class SourceMenu extends JMenu {
 	}
 
 	private class SelectCheckedAction extends AbstractAction implements EvaluationListener {
+		private static final long serialVersionUID = 1L;
+
 		public SelectCheckedAction() {
 			super("Select checked");
 			parent.addEvaluationListener(this);
@@ -176,6 +182,8 @@ public class SourceMenu extends JMenu {
 	}
 
 	private class SaveCheckedAction extends AbstractAction implements EvaluationListener {
+		private static final long serialVersionUID = 1L;
+
 		public SaveCheckedAction() {
 			super("Save checked as...");	
 			parent.addEvaluationListener(this);
@@ -209,6 +217,7 @@ public class SourceMenu extends JMenu {
 	}
 
 	private class CheckAction extends AbstractAction implements EvaluationListener {
+		private static final long serialVersionUID = 1L;
 		private boolean check;
 		public CheckAction(boolean check) {
 			super(check ? "Check all" : "Uncheck all");
@@ -243,6 +252,8 @@ public class SourceMenu extends JMenu {
 
 		ImageIcon swapSourcesIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/swapSources.gif"));
 		JMenuItem swapSourcesItem = add(new AbstractAction("Swap sources") {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.swapSources();
 				opened(0);

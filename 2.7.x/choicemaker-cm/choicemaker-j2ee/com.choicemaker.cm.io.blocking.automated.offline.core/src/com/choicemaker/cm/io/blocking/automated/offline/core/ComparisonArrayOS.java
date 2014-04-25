@@ -36,6 +36,8 @@ import org.apache.log4j.Logger;
  */
 public class ComparisonArrayOS extends ComparisonArray {
 	
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger log = Logger.getLogger(ComparisonArrayOS.class);
 
 	private static final int STEP_4 = 0;

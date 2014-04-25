@@ -24,7 +24,9 @@ import javax.swing.text.PlainDocument;
  */
 public class UpperCaseTextField extends JTextField {
  
-	 public UpperCaseTextField(int cols) {
+	 private static final long serialVersionUID = 1L;
+
+	public UpperCaseTextField(int cols) {
 		 super(cols);
 	 }
  
@@ -34,7 +36,9 @@ public class UpperCaseTextField extends JTextField {
  
 	 static class UpperCaseDocument extends PlainDocument {
  
-		 public void insertString(int offs, String str, AttributeSet a) 
+		 private static final long serialVersionUID = 1L;
+
+		public void insertString(int offs, String str, AttributeSet a) 
 			  throws BadLocationException {
  
 			  if (str == null) {
@@ -50,6 +54,7 @@ public class UpperCaseTextField extends JTextField {
 	 
 	static public class LimitDocument extends PlainDocument {
  
+		private static final long serialVersionUID = 1L;
 		int limit = -1;
 
 		public LimitDocument(){

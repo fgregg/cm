@@ -35,6 +35,7 @@ import com.choicemaker.cm.modelmaker.gui.renderers.ColoredTableCellRenderer;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:35:52 $
  */
 public class CluePerformanceTable extends JTable {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(CluePerformanceTable.class);
 	private static final Color GREEN = new Color(195, 237, 196);
 	private CluePerformanceTableModel myModel;

@@ -41,7 +41,8 @@ import com.choicemaker.cm.modelmaker.gui.utils.*;
  * @version $Revision: 1.2 $ $Date: 2010/03/28 09:04:19 $
  */
 public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
-    private static Logger logger = Logger.getLogger(DbMarkedRecordPairSourceGui.class);
+    private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(DbMarkedRecordPairSourceGui.class);
     private String name;
     private JLabel sourceFileNameLabel;
     private JLabel confLabel;

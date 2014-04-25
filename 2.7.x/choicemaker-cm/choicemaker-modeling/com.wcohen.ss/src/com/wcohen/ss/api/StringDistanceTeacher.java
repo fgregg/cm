@@ -10,6 +10,8 @@ import java.io.Serializable;
  */
 public abstract class StringDistanceTeacher implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	final public StringDistance train(StringDistanceLearner learner) {
 		// TFIDF-style 'training' based on observing corpus statistics
 		learner.setStringWrapperPool( learner.prepare(stringWrapperIterator()) );

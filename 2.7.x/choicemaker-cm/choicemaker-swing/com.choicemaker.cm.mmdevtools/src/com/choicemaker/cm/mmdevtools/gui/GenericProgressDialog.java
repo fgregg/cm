@@ -36,6 +36,7 @@ import com.choicemaker.cm.core.util.MessageUtil;
  */
 public class GenericProgressDialog extends JDialog implements PropertyChangeListener {
 
+	private static final long serialVersionUID = 1L;
 	public static final String DONE = "DONE";
 	public static final String ERROR = "ERROR";
 

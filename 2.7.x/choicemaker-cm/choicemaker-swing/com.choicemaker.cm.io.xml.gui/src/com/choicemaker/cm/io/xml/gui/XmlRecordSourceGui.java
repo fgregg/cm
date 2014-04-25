@@ -47,6 +47,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  * @version $Revision: 1.2 $ $Date: 2010/03/28 09:16:12 $
  */
 public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(XmlRecordSourceGui.class);
 	private static String RELATIVE = MessageUtil.m.formatMessage("io.common.gui.source.file.relative");
 	private static String ABSOLUTE = MessageUtil.m.formatMessage("io.common.gui.source.file.absolute");

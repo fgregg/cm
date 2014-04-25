@@ -22,6 +22,8 @@ import com.choicemaker.cm.analyzer.filter.IntFilterCondition;
  */
 public class IntFilterParamsCellRenderer extends DefaultTableCellRenderer {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @see javax.swing.table.DefaultTableCellRenderer#setValue(java.lang.Object)
 	 */

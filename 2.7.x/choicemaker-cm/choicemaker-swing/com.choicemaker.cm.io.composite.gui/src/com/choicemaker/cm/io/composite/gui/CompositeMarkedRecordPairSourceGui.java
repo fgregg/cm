@@ -40,7 +40,8 @@ import com.choicemaker.cm.modelmaker.gui.utils.*;
  * @version $Revision: 1.2 $ $Date: 2010/03/28 08:56:49 $
  */
 public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
-    private static Logger logger = Logger.getLogger(CompositeMarkedRecordPairSourceGui.class);
+    private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(CompositeMarkedRecordPairSourceGui.class);
 	private static final String RELATIVE = MessageUtil.m.formatMessage("io.composite.gui.source.file.relative");
 	private static final String ABSOLUTE = MessageUtil.m.formatMessage("io.composite.gui.source.file.absolute");
     private JLabel sourceNameLabel;
@@ -113,7 +114,9 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         Object[] colNames = { MessageUtil.m.formatMessage("io.composite.gui.column0name"),
         					  MessageUtil.m.formatMessage("io.composite.gui.column1name") };
         DefaultTableModel model = new DefaultTableModel() {
-        	public boolean isCellEditable(int row, int column) {
+        	private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {
         		return column == 1;	
         	}
         };

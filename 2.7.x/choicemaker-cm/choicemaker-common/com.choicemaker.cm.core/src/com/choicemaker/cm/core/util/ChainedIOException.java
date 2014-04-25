@@ -17,6 +17,7 @@ import java.io.IOException;
  * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 public class ChainedIOException extends IOException {
+	private static final long serialVersionUID = 1L;
 	private Throwable cause = null;
 
 	public ChainedIOException(Throwable cause) {

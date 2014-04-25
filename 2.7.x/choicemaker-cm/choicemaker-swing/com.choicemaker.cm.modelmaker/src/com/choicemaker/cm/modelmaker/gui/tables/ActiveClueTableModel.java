@@ -46,6 +46,8 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:20:03 $
  */
 public class ActiveClueTableModel extends SortableTableModel {
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(ActiveClueTableModel.class);
 
 	private IProbabilityModel pModel;

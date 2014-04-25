@@ -76,6 +76,8 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class DataProfilerDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	public static final String RECORDS_READ = "Num Records Read:";
 
 	private static DataProfilerDialog dialog;
@@ -433,6 +435,7 @@ public class DataProfilerDialog extends JDialog {
 	}
 
 	private class ComputeAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public ComputeAction() {
 			super("Compute");
 		}
@@ -442,6 +445,7 @@ public class DataProfilerDialog extends JDialog {
 	}
 
 	private class CloseAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public CloseAction() {
 			super("Close");
 		}
@@ -451,6 +455,7 @@ public class DataProfilerDialog extends JDialog {
 	}
 
 	private class MrpsBrowseAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public MrpsBrowseAction() {
 			super("Browse");
 		}
@@ -463,6 +468,7 @@ public class DataProfilerDialog extends JDialog {
 	}
 
 	private class RsBrowseAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public RsBrowseAction() {
 			super("Browse");
 		}
@@ -475,6 +481,7 @@ public class DataProfilerDialog extends JDialog {
 	}
 
 	private class CreateFilesAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public CreateFilesAction() {
 			super("Create Files");
 			setEnabled(false);
@@ -641,6 +648,7 @@ public class DataProfilerDialog extends JDialog {
 
 	class CreateFilesDialog extends JDialog {
 
+		private static final long serialVersionUID = 1L;
 		private JRadioButton
 			fieldFreqBuckets,
 			fieldCounts,

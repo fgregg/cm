@@ -48,6 +48,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:44:54 $
  */
 public class ModelBuilderDialog extends JDialog implements Enable {
+	private static final long serialVersionUID = 1L;
 	private static final String ABSOLUTE = 
 		MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.cluefile.absolute");
 	private static final String RELATIVE = 

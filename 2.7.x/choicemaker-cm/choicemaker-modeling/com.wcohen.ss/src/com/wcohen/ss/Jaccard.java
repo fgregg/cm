@@ -13,6 +13,7 @@ import java.util.Iterator;
 
 public class Jaccard extends AbstractStringDistance
 {
+	private static final long serialVersionUID = 1L;
 	private Tokenizer tokenizer;
 	
 	public Jaccard(Tokenizer tokenizer) {	this.tokenizer = tokenizer;	}

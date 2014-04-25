@@ -10,6 +10,8 @@ import com.wcohen.ss.api.*;
 public class ScaledLevenstein extends Levenstein
 {
 	
+	private static final long serialVersionUID = 1L;
+
 	public double score(StringWrapper s,StringWrapper t){
 		double d = super.score(s,t);
 		double n = Math.max((double)s.length(),(double)t.length());

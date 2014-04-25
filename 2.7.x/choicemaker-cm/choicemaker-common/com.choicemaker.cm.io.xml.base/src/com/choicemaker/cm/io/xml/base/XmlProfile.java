@@ -25,6 +25,7 @@ import com.choicemaker.cm.core.Record;
  * @version  $Revision: 1.2 $ $Date: 2010/03/28 09:18:16 $
  */
 public class XmlProfile implements Profile {
+	private static final long serialVersionUID = 1L;
 	private String profile;
 	
 	/**

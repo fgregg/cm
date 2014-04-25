@@ -30,6 +30,8 @@ import com.choicemaker.cm.core.Sink;
  */
 public class FlatFileSerializableRecordSource implements ISerializableRecordSource {
 
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger log = Logger.getLogger(FlatFileSerializableRecordSource.class);
 
 	private String delimitedTextDataFile;

@@ -36,6 +36,8 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class CrossValidatorDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	private ModelMaker modelMaker;
 
 	private JRadioButton currentMrps, anotherMrps;

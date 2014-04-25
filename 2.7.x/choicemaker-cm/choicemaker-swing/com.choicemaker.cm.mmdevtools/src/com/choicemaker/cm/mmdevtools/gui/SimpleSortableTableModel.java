@@ -22,6 +22,7 @@ import com.choicemaker.cm.modelmaker.gui.tables.SortableTableModel;
  */
 public class SimpleSortableTableModel extends SortableTableModel {
 
+	private static final long serialVersionUID = 1L;
 	protected Object[][] data;
 	protected Object[] headers;
 	protected Class[] columnClasses;

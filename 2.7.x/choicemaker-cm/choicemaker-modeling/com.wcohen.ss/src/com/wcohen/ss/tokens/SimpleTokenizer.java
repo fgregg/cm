@@ -10,7 +10,9 @@ import com.wcohen.ss.api.*;
 
 public class SimpleTokenizer implements Tokenizer
 {
-    public static final SimpleTokenizer DEFAULT_TOKENIZER = new SimpleTokenizer(true,true);
+    private static final long serialVersionUID = 1L;
+
+	public static final SimpleTokenizer DEFAULT_TOKENIZER = new SimpleTokenizer(true,true);
 	
     private boolean ignorePunctuation = true;
     private boolean ignoreCase = true;

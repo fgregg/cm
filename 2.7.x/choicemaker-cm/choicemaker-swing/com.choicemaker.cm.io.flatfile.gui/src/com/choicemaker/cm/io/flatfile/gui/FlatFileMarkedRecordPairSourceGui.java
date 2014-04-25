@@ -41,6 +41,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.*;
  * @version $Revision: 1.2 $ $Date: 2010/03/28 09:11:07 $
  */
 public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(FlatFileMarkedRecordPairSourceGui.class);
 	private JLabel sourceNameLabel;
 	private JLabel fileNameLabel;

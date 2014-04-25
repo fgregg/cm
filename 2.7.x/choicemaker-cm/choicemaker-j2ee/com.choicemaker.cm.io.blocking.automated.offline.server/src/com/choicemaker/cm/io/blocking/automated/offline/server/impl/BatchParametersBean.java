@@ -26,6 +26,8 @@ import com.choicemaker.cm.core.SerialRecordSource;
  */
 public abstract class BatchParametersBean implements EntityBean {
 
+	private static final long serialVersionUID = 1L;
+
 	/** For CMP only */
 	public abstract void setId(Long id);
 	public abstract Long getId();

@@ -18,7 +18,8 @@ package com.choicemaker.cm.core.util;
  * @@version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 public class ChainedException extends Exception {
-        private Throwable cause = null;
+        private static final long serialVersionUID = 1L;
+		private Throwable cause = null;
 
         public ChainedException() {
                 super();

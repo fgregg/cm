@@ -19,6 +19,7 @@ import com.choicemaker.cm.core.MutableMarkedRecordPair;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:21:15 $
  */
 public abstract class ActiveClueTableModelPlugin extends ClueTableModelPlugin {
+	private static final long serialVersionUID = 1L;
 	protected MutableMarkedRecordPair markedRecordPair;
 	
 	public void setMarkedRecordPair(MutableMarkedRecordPair markedRecordPair) {

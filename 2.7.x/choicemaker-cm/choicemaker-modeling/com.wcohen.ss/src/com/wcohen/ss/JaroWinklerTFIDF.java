@@ -7,6 +7,8 @@ package com.wcohen.ss;
 
 public class JaroWinklerTFIDF extends SoftTFIDF
 {
+	private static final long serialVersionUID = 1L;
+
 	public JaroWinklerTFIDF() { super(new JaroWinkler(), 0.9); }
 	public String toString() { return "[JaroWinklerTFIDF:threshold="+getTokenMatchThreshold()+"]"; }
 	

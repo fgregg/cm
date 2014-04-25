@@ -18,6 +18,8 @@ package com.choicemaker.cm.core.configure;
  */
 public class XmlSpecificationException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 	public XmlSpecificationException() {
 		super();
 	}

@@ -38,6 +38,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJobHome;
  */
 public abstract class BatchJobBean implements EntityBean {
 
+	private static final long serialVersionUID = 1L;
+
 	private static Category log = Category.getInstance(BatchJobBean.class.getName());
 
 	/**

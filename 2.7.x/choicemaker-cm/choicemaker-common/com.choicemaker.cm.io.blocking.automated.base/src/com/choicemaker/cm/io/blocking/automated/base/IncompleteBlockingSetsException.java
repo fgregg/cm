@@ -21,6 +21,8 @@ package com.choicemaker.cm.io.blocking.automated.base;
 public class IncompleteBlockingSetsException
 	extends UnderspecifiedQueryException {
 
+	private static final long serialVersionUID = 1L;
+
 	public IncompleteBlockingSetsException() {}
 
 	public IncompleteBlockingSetsException(String message) {

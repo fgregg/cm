@@ -40,6 +40,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class ParserTestDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
 	private JComboBox parserBox;
 	private JTextField dataField;
 
@@ -91,6 +92,7 @@ public class ParserTestDialog extends JDialog {
 	}
 	
 	private class ParseAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public ParseAction() {
 			super("Parse");
 		}

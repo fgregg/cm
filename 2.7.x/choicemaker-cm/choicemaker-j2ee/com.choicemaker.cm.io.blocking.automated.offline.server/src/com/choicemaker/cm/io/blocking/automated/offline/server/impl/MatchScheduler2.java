@@ -62,6 +62,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  */
 public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 	
+	private static final long serialVersionUID = 1L;
+
 	private static final String DELIM = "|";
 
 	private static final Logger log = Logger.getLogger(MatchScheduler2.class);

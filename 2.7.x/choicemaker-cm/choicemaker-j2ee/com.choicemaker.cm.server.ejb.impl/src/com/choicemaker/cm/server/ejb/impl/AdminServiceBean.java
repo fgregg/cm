@@ -33,6 +33,7 @@ import com.choicemaker.cm.server.base.DatabaseException;
  * @version  $Revision: 1.2 $ $Date: 2010/03/27 22:02:32 $
  */
 public class AdminServiceBean implements SessionBean {
+	private static final long serialVersionUID = 1L;
 	private NameServiceLookup nameServiceLookup = new NameServiceLookup();
 
 	public void ejbCreate() throws CreateException {

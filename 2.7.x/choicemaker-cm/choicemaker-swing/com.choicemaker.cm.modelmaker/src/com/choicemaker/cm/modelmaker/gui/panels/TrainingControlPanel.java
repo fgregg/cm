@@ -43,7 +43,8 @@ import com.choicemaker.cm.modelmaker.gui.tables.ClueTablePanel;
  */
 public class TrainingControlPanel extends JPanel implements RepositoryChangeListener, PropertyChangeListener, EvaluationListener {
 
-    private static Logger logger = Logger.getLogger(TrainingControlPanel.class);
+    private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(TrainingControlPanel.class);
     private ModelMaker parent;
     private Trainer trainer;
 

@@ -20,6 +20,8 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.TrainDialog;
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:08 $
  */
 public abstract class TrainDialogPlugin extends JPanel {
+	private static final long serialVersionUID = 1L;
+
 	public abstract boolean isParametersValid();
 
 	public abstract void set();

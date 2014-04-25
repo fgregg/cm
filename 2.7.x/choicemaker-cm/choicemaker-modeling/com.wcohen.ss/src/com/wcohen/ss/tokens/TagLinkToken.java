@@ -30,7 +30,8 @@ import com.wcohen.ss.api.*;
 
 public class TagLinkToken
     extends AbstractStringDistance {
-  private double matched, tr, sSize, tSize, totalScore;
+  private static final long serialVersionUID = 1L;
+private double matched, tr, sSize, tSize, totalScore;
   private static final double DEF_TR = 0.3;
   private int largestIndex;
 

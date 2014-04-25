@@ -37,6 +37,8 @@ import com.choicemaker.cm.core.xmlconf.XmlConfException;
 public abstract class AbstractRecordSourceSerializer
 	implements IRecordSourceSerializer {
 
+	private static final long serialVersionUID = 1L;
+
 	/** The serializer class attribute, <code>class</code> */
 	public static final String SERIALIZABLE_RECORD_SOURCE_CLASS = "class"; //$NON-NLS-1$
 

@@ -38,6 +38,7 @@ import com.choicemaker.cm.module.swing.DefaultManagedPanel;
 public abstract class AbstractApplication extends JFrame
 /* implements IModelMaker2 */ {
 
+	private static final long serialVersionUID = 1L;
 	protected abstract void buildComponents();
 
 	public abstract JToolBar getToolBar();

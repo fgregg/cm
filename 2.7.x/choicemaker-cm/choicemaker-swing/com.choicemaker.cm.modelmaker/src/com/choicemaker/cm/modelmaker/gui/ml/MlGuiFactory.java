@@ -39,6 +39,7 @@ public abstract class MlGuiFactory implements DynamicDispatchHandler {
 	public synchronized ClueTableModelPlugin getClueTableModelPlugin() {
 		if(clueTableModelPlugin == null) {
 			clueTableModelPlugin = new ClueTableModelPlugin() {
+				private static final long serialVersionUID = 1L;
 				public TableColumn getColumn(int column) {
 					throw new UnsupportedOperationException();
 				}
@@ -59,6 +60,7 @@ public abstract class MlGuiFactory implements DynamicDispatchHandler {
 	public synchronized ActiveClueTableModelPlugin getActiveClueTableModelPlugin() {
 		if(activeClueTableModelPlugin == null) {
 			activeClueTableModelPlugin = new ActiveClueTableModelPlugin() {
+				private static final long serialVersionUID = 1L;
 				public TableColumn getColumn(int column) {
 					throw new UnsupportedOperationException();
 				}

@@ -40,6 +40,8 @@ import com.choicemaker.cm.modelmaker.gui.panels.HumanReviewPanel;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:10:23 $
  */
 public class LayoutMenu extends LastUsedMenu {
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(LayoutMenu.class);
 
 	private HumanReviewPanel parent;
@@ -52,6 +54,7 @@ public class LayoutMenu extends LastUsedMenu {
 	}
 
 	private abstract class LayoutAction extends AbstractAction implements PropertyChangeListener {
+		private static final long serialVersionUID = 1L;
 		private boolean dependsModel;
 
 		LayoutAction(String name, Icon icon, boolean dependsModel) {
@@ -81,6 +84,8 @@ public class LayoutMenu extends LastUsedMenu {
 
 	public void buildMenu() {
 		Action newAction = new LayoutAction(MessageUtil.m.formatMessage("new"), null, true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.setDefaultLayout();
 			}
@@ -88,6 +93,8 @@ public class LayoutMenu extends LastUsedMenu {
 		add(newAction);
 
 		Action openAction = new LayoutAction(MessageUtil.m.formatMessage("open.elipsis"), null, true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				File file = FileChooserFactory.selectLayoutFile(parent);
 				if (file != null) {
@@ -98,6 +105,8 @@ public class LayoutMenu extends LastUsedMenu {
 		add(openAction);
 
 		Action saveAction = new LayoutAction(MessageUtil.m.formatMessage("save"), null, true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				CompositePaneModel layout = parent.getCurrentLayout();
 				if (layout.getFileName() == null) {
@@ -114,6 +123,8 @@ public class LayoutMenu extends LastUsedMenu {
 		add(saveAction);
 
 		Action saveAsAction = new LayoutAction(MessageUtil.m.formatMessage("saveas.elipsis"), null, true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				saveAs();
 			}

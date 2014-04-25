@@ -19,6 +19,7 @@ import java.lang.reflect.Array;
  * @deprecated Never used
  */
 public class GenericRecord implements Record, Cloneable {
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String[] values;
 	private boolean[] validity;

@@ -24,6 +24,8 @@ import com.choicemaker.cm.matching.cfg.ParsedData;
  */
 public class ParsedName extends ParsedData {
 
+	private static final long serialVersionUID = 1L;
+
 	/** The key for the first name field. */
 	public static String FIRST_NAME = "FirstName";
 

@@ -20,6 +20,8 @@ import javax.swing.JPanel;
  * @author rphall
  */
 public abstract class AbstractTabbedPanel extends JPanel {
+	private static final long serialVersionUID = 1L;
+
 	public abstract String getTabName();
 	// public abstract void setVisible(boolean b);
 }

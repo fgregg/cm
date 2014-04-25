@@ -27,6 +27,7 @@ import com.choicemaker.cm.core.util.MessageUtil;
  */
 public class AboutDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AboutDialog.class);
 
 	public AboutDialog(Frame g, String title, String message) {

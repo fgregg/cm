@@ -19,6 +19,8 @@ package com.choicemaker.cm.core;
  */
 public class BlockingException extends Exception {
 	
+	private static final long serialVersionUID = 1L;
+
 	public BlockingException () {
 		super ();
 	}

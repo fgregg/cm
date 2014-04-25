@@ -28,6 +28,8 @@ import com.choicemaker.cm.gui.utils.JavaHelpUtils;
  */
 public class ErrorDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	public static void showErrorDialog(Frame frame, String message) {
 		showErrorDialog(frame, message, null);	
 	}

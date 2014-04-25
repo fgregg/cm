@@ -9,6 +9,7 @@ import com.wcohen.ss.api.*;
 
 public class BasicStringWrapper implements StringWrapper
 {
+	private static final long serialVersionUID = 1L;
 	private String s;
 
 	public BasicStringWrapper(String s) { this.s = s; } 

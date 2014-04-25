@@ -22,6 +22,7 @@ import com.wcohen.ss.api.*;
 
 public abstract class MultiStringDistance implements StringDistance
 {
+	private static final long serialVersionUID = 1L;
 	private String delim;
 
 	public MultiStringDistance(String delim) { 

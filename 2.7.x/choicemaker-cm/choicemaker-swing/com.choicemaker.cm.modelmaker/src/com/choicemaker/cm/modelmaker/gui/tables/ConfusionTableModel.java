@@ -27,6 +27,8 @@ import com.choicemaker.cm.modelmaker.gui.utils.ValueError;
  */
 public class ConfusionTableModel extends AbstractTableModel {
 
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(ConfusionTableModel.class);
 
 	private int[][] statMatrix;

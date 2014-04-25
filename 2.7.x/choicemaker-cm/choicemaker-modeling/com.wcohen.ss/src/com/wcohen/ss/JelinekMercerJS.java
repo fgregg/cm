@@ -10,6 +10,7 @@ import com.wcohen.ss.api.*;
 
 public class JelinekMercerJS extends JensenShannonDistance
 {
+	private static final long serialVersionUID = 1L;
 	private double lambda = 0.5;
 
 	public double getLambda() { return lambda; }

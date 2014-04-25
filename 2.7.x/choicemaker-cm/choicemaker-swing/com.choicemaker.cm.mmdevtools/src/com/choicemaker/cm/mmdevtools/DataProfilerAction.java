@@ -24,6 +24,8 @@ import com.choicemaker.cm.modelmaker.gui.menus.ToolsMenu.ToolAction;
  */
 public class DataProfilerAction extends ToolAction {
 
+	private static final long serialVersionUID = 1L;
+
 	public DataProfilerAction() {
 		super("Data Profiler...");
 	}

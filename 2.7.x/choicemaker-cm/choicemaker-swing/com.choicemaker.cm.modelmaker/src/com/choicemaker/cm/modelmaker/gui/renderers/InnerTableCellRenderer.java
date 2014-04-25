@@ -25,6 +25,7 @@ import javax.swing.table.TableCellRenderer;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 17:40:17 $
  */
 public class InnerTableCellRenderer extends JTable implements TableCellRenderer {
+	private static final long serialVersionUID = 1L;
 	protected static Border noFocusBorder;
 	public InnerTableCellRenderer() {
 		super();

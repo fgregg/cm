@@ -27,6 +27,7 @@ import com.choicemaker.cm.core.datamodel.*;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class CompositePane extends JPanel implements ObservableDataListener {
+	private static final long serialVersionUID = 1L;
 	private boolean contentEditable;
 	private JComponent pane;
 

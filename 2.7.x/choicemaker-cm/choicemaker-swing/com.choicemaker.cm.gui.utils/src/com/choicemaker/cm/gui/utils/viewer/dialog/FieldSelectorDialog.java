@@ -26,6 +26,8 @@ import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class FieldSelectorDialog extends JDialog {
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(FieldSelectorDialog.class);
 
 	private RecordPairFrameModel recordPairFrameModel;

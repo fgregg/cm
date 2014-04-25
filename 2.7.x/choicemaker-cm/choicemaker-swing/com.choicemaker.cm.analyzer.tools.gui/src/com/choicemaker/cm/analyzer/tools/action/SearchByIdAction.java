@@ -24,6 +24,8 @@ import com.choicemaker.cm.modelmaker.gui.menus.ToolsMenu.ToolAction;
  */
 public class SearchByIdAction extends ToolAction {
 
+	private static final long serialVersionUID = 1L;
+
 	public SearchByIdAction() {
 		super("Search by ID...");
 	}

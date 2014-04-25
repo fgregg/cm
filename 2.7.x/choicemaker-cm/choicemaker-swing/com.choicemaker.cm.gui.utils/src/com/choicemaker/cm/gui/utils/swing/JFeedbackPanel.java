@@ -27,6 +27,7 @@ public class JFeedbackPanel extends JPanel{
 
 	//************************ Constants
 
+	private static final long serialVersionUID = 1L;
 	public static final Color DEFAULT_WARNING_BACKGROUND = new Color(250,250,220);
 	private static final int INTERNAL_BORDER_SIZE = 4;
 

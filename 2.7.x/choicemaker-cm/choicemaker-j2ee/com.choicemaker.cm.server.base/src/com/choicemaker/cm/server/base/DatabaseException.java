@@ -18,6 +18,8 @@ package com.choicemaker.cm.server.base;
  */
 public class DatabaseException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Constructs a <code>DatabaseException</code> with no detail message.
 	 */

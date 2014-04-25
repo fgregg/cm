@@ -10,6 +10,7 @@ import com.wcohen.ss.tokens.*;
 
 public class Level2Levenstein extends Level2
 {
+	private static final long serialVersionUID = 1L;
 	private static final StringDistance MY_LEVENSTEIN = new Levenstein();
 
 	public Level2Levenstein() { super( SimpleTokenizer.DEFAULT_TOKENIZER, MY_LEVENSTEIN) ; }

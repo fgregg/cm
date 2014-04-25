@@ -16,6 +16,8 @@ package com.choicemaker.cm.core.compiler;
  */
 public class UnavailableCompilerFeaturesException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 	public UnavailableCompilerFeaturesException() {
 		super();
 	}

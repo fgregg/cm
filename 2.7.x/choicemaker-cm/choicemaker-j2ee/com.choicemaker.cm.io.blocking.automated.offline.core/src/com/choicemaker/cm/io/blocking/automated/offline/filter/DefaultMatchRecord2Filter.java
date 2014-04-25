@@ -30,6 +30,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  */
 public class DefaultMatchRecord2Filter implements IMatchRecord2Filter {
 
+	private static final long serialVersionUID = 1L;
+
 	/** Default "from" percentage (inclusive) */
 	public static final float DEFAULT_FROM_PERCENTAGE = 0.20f;
 

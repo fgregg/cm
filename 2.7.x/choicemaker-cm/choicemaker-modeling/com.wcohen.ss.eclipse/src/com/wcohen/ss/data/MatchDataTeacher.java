@@ -10,6 +10,7 @@ import java.util.Collections;
  */
 public class MatchDataTeacher extends StringDistanceTeacher
 {
+	private static final long serialVersionUID = 1L;
 	private Blocker blocker;
 	private MatchData data;
 
@@ -32,6 +33,7 @@ public class MatchDataTeacher extends StringDistanceTeacher
 	{
 		blocker.block(data);
 		return new DistanceInstanceIterator() {
+				private static final long serialVersionUID = 1L;
 				private int cursor=0;
 				public boolean hasNext() { return cursor<blocker.size(); }
 				public Object next() { return blocker.getPair( cursor++ ); }

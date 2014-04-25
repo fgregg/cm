@@ -21,6 +21,8 @@ import com.choicemaker.cm.modelmaker.gui.menus.ToolsMenu.ToolAction;
  */
 public class CrossValidatorAction extends ToolAction  {
 
+	private static final long serialVersionUID = 1L;
+
 	public CrossValidatorAction() {
 		super("Cross Validation Tool...");
 	}

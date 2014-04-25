@@ -32,6 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
  */
 public class UpdateStatus implements MessageDrivenBean, MessageListener {
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(UpdateStatus.class);
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + UpdateStatus.class.getName());
 

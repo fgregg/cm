@@ -30,6 +30,8 @@ public class FilterConditionCellEditor extends DefaultCellEditor {
 
 	//***************************** Constants
 
+	private static final long serialVersionUID = 1L;
+
 	private static final Object[] VALUES_DEFAULT =
 		{
 			new BooleanFilterCondition(BooleanFilterCondition.NULL_CONDITION),

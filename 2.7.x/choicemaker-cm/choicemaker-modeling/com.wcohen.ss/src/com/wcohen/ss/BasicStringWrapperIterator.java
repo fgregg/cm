@@ -7,6 +7,7 @@ import java.util.Iterator;
  */
 
 public class BasicStringWrapperIterator implements StringWrapperIterator {
+	private static final long serialVersionUID = 1L;
 	private Iterator myIterator;
 	public BasicStringWrapperIterator(Iterator i) { myIterator=i; }
 	public boolean hasNext() { return myIterator.hasNext(); }

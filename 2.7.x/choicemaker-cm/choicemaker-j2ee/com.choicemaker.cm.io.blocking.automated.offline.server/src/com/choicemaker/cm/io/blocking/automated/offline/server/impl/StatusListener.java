@@ -43,6 +43,7 @@ import org.apache.log4j.Logger;
  */
 public class StatusListener implements MessageDrivenBean, MessageListener {
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(StatusListener.class);
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + StatusListener.class.getName());
 

@@ -31,7 +31,8 @@ import com.wcohen.ss.api.*;
 
 public class TagLink
     extends AbstractStatisticalTokenDistance {
-  private AbstractStringDistance tokenDistance;
+  private static final long serialVersionUID = 1L;
+private AbstractStringDistance tokenDistance;
   private static final AbstractStringDistance DEFAULT_TOKEN_METRIC = new TagLinkToken();
 
   /**
@@ -148,6 +149,7 @@ public class TagLink
 	/** Marker class extending BagOfTokens */
 	protected class UnitVector extends BagOfTokens
 	{
+		private static final long serialVersionUID = 1L;
 		public UnitVector(String s,Token[] tokens) {
 			super(s,tokens);
 			termFreq2TFIDF();

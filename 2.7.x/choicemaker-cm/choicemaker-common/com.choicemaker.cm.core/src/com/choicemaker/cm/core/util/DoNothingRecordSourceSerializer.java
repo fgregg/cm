@@ -28,6 +28,7 @@ import com.choicemaker.cm.core.RecordSource;
 public class DoNothingRecordSourceSerializer
 	extends AbstractRecordSourceSerializer {
 
+	private static final long serialVersionUID = 1L;
 	private static Logger logger =
 		Logger.getLogger(DoNothingRecordSourceSerializer.class);
 		

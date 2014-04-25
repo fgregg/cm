@@ -41,6 +41,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfigura
  */
 public abstract class TransitivityJobBean implements EntityBean {
 
+	private static final long serialVersionUID = 1L;
+
 	private static Category log = Category.getInstance(TransitivityJobBean.class.getName());
 
 	/**

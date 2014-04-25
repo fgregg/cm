@@ -20,6 +20,8 @@ import com.choicemaker.cm.core.util.ChainedException;
  * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:01 $
  */
 public class XmlConfException extends ChainedException {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Constructs a <code>XmlConfException</code> with <code>s</code> as reason.
 	 *

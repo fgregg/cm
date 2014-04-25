@@ -46,6 +46,8 @@ import com.choicemaker.cm.transitivity.util.CompositeEntitySource;
  */
 public class TransitivityOABAServiceBean implements SessionBean {
 
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger log = Logger.getLogger(TransitivityOABAServiceBean.class);
 
 	private transient SessionContext sessionContext;	

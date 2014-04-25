@@ -28,6 +28,7 @@ import com.choicemaker.cm.modelmaker.gui.tables.SortableTableModel;
  */
 public class SimpleSortableTable extends JTable {
 
+	private static final long serialVersionUID = 1L;
 	private MouseListener headerListener = new HeaderListener();
 
 	public SimpleSortableTable() {

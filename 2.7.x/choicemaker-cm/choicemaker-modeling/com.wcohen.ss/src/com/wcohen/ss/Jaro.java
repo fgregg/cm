@@ -10,6 +10,8 @@ import com.wcohen.ss.api.*;
 
 public class Jaro extends AbstractStringDistance
 {
+	private static final long serialVersionUID = 1L;
+
 	public Jaro() { }
 
 	public String toString() { return "[Jaro]"; }

@@ -11,6 +11,7 @@ import com.wcohen.ss.api.*;
 
 public class MultiStringWrapper extends BasicStringWrapper
 {
+	private static final long serialVersionUID = 1L;
 	private String s;
 	private StringWrapper[] f;
 	private int[] learnerIndex, fieldIndex;

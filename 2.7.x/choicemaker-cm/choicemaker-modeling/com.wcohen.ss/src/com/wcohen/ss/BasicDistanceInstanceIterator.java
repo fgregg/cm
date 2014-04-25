@@ -7,6 +7,7 @@ import java.util.Iterator;
  */
 
 public class BasicDistanceInstanceIterator implements DistanceInstanceIterator {
+	private static final long serialVersionUID = 1L;
 	private Iterator myIterator;
 	public BasicDistanceInstanceIterator(Iterator i) { myIterator=i; }
 	public boolean hasNext() { return myIterator.hasNext(); }

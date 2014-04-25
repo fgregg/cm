@@ -18,6 +18,8 @@ package com.choicemaker.cm.server.base;
  */
 public class InvalidModelException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Constructs an <code>InvalidModelException</code> with no detail message.
 	 */

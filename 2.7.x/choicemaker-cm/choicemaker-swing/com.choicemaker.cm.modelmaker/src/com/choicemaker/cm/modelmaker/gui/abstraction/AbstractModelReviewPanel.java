@@ -42,6 +42,7 @@ public abstract class AbstractModelReviewPanel
 		PropertyChangeListener,
 		EvaluationListener {
 
+	private static final long serialVersionUID = 1L;
 	private ModelMaker parent;
 	private Trainer trainer;
 

@@ -128,6 +128,7 @@ public class MatchData
 	 */
 	public static class Instance extends BasicStringWrapper
 	{
+		private static final long serialVersionUID = 1L;
 		private final String source;
 		private final String id;
 		public Instance(String source, String id, String text) {
@@ -146,6 +147,7 @@ public class MatchData
 	/** Iterates over all stored StringWrappers */
 	static public class MatchIterator implements StringWrapperIterator 
 	{
+		private static final long serialVersionUID = 1L;
 		private int sourceCursor,instanceCursor;
 		private String src;  // caches getSource(sourceCursor)
 		private MatchData data;

@@ -98,6 +98,8 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		});
 		
 		renameFrame = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.rename.frame")) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					new InternalFrameDialog(getParentFrame(), ((CompositeFrame)SwingUtilities.getAncestorOfClass(CompositeFrame.class, parent)).getInternalFrameModel());
@@ -112,6 +114,8 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		
 		
 		addTab = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.insert.tab")) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					parent.addTab();
@@ -123,6 +127,8 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		insert2.add(addTab);
 		
 		renameTab = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.rename.tab")) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					new TabRenameDialog(getParentFrame(), parent.getRecordPairViewerModel());
@@ -134,6 +140,8 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		insert2.add(renameTab);
 		
 		removeTab = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.remove.tab")) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					parent.removeCurrentTab();

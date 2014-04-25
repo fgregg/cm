@@ -43,6 +43,7 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
  */
 public class FilterClueTable extends JTable{
 
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(FilterClueTable.class);
 	private FilterClueTableModel myModel;
 	private ModelMaker meTrainer;
@@ -72,6 +73,8 @@ public class FilterClueTable extends JTable{
 				renderer = createParameterRenderer();
 			} else {
 				DefaultTableCellRenderer textRenderer = new DefaultTableCellRenderer() {
+					private static final long serialVersionUID = 1L;
+
 					public Component getTableCellRendererComponent(
 						JTable table,
 						Object value,

@@ -22,6 +22,7 @@ import java.util.Collections;
  */
 public class ComparisonArray implements IComparisonSet {
 	
+	private static final long serialVersionUID = 1L;
 	protected ArrayList stagingIDs;
 	protected ArrayList masterIDs;
 	

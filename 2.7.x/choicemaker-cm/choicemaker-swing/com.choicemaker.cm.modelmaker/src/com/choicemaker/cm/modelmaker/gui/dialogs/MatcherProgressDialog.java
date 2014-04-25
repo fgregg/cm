@@ -34,6 +34,7 @@ import com.choicemaker.cm.modelmaker.gui.matcher.Matcher;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:08 $
  */
 class MatcherProgressDialog extends JDialog implements PropertyChangeListener {
+	private static final long serialVersionUID = 1L;
 	private Matcher matcher;
 	private JLabel numRecordsFromSmall;
 	private JLabel numRecordsFromLarge;

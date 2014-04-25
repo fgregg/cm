@@ -44,6 +44,7 @@ import com.choicemaker.cm.modelmaker.gui.tables.filtercluetable.FilterClueTable;
  * @version  $Revision: 1.2 $ $Date: 2010/03/29 12:57:39 $
  */
 public class FilterCluePanel extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger =
 		Logger.getLogger(RecordPairFilterDialog.class);
 	private static final DecimalFormat DF = new DecimalFormat("##0.00");

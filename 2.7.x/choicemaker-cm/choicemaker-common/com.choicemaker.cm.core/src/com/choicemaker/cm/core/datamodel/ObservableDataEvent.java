@@ -19,6 +19,7 @@ import java.util.EventObject;
  * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public class ObservableDataEvent extends EventObject {
+	private static final long serialVersionUID = 1L;
 	private ObservableData child;
 	
 	public ObservableDataEvent(CompositeObservableData parent, ObservableData child){

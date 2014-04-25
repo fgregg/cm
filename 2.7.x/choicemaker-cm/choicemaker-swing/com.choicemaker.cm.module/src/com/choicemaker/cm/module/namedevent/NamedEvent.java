@@ -25,6 +25,7 @@ import com.choicemaker.cm.module.INamedEvent;
  */
 public class NamedEvent extends EventObject implements INamedEvent {
 	
+	private static final long serialVersionUID = 1L;
 	public final String DEFAULT_EVENT_NAME = "EV.DEFAULT_EVENT_NAME";
 	
 	public NamedEvent(IModuleController source) {

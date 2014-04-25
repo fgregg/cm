@@ -9,6 +9,7 @@ import com.wcohen.ss.api.*;
  */
 
 abstract public class AbstractStatisticalTokenDistance extends AbstractTokenizedStringDistance {
+	private static final long serialVersionUID = 1L;
 	// to save space, allocate the small numbers only once in the documentFrequency map
 	private static final Integer ONE = new Integer(1);
 	private static final Integer TWO = new Integer(2);

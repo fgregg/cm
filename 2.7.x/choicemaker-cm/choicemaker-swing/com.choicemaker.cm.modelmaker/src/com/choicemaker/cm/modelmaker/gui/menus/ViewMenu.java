@@ -31,6 +31,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class ViewMenu extends JMenu {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ViewMenu.class);
 	private ModelMaker parent;
 	private static final String VIEW_MENU = MessageUtil.m.formatMessage("train.gui.modelmaker.menu.view");
@@ -50,6 +51,8 @@ public class ViewMenu extends JMenu {
 			new AbstractAction(
 				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.view.toolbar"),
 				showToolbarIcon) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.showToolbar(item.isSelected());
@@ -66,6 +69,8 @@ public class ViewMenu extends JMenu {
 			new AbstractAction(
 				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.view.pairindices"),
 				showPairIndicesIcon) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.showPairIndices(item.isSelected());
@@ -76,6 +81,8 @@ public class ViewMenu extends JMenu {
 		showPairIndicesItem.setIcon(null);
 		
 		Action showStatusMessagesAction = new AbstractAction("Status Messages") {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.showStatusMessages(item.isSelected());
@@ -93,6 +100,8 @@ public class ViewMenu extends JMenu {
 			new AbstractAction(
 				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.view.cluesummary"),
 				showSummaryIcon) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.getTrainingControlPanel().showCluePerformancePanel(item.isSelected());
@@ -105,6 +114,8 @@ public class ViewMenu extends JMenu {
 		
 		// Active Clue Table
 		Action showActiveCluesAction = new AbstractAction("Active Clue Table") {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.getHumanReviewPanel().showActiveCluesPanel(item.isSelected());

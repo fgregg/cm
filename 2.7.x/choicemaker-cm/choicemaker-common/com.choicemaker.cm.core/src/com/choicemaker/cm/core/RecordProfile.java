@@ -20,6 +20,7 @@ package com.choicemaker.cm.core;
  */
 public class RecordProfile implements Profile {
 	
+	private static final long serialVersionUID = 1L;
 	private Record record;
 	
 	public RecordProfile (Record r) {

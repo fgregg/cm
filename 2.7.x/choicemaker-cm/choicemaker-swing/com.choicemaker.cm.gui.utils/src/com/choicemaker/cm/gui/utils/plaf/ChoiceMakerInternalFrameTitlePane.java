@@ -30,7 +30,8 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 public class ChoiceMakerInternalFrameTitlePane  extends BasicInternalFrameTitlePane {
 
-    protected boolean isPalette = false;  	
+    private static final long serialVersionUID = 1L;
+	protected boolean isPalette = false;  	
     protected Icon paletteCloseIcon;
     protected int paletteTitleHeight;
 

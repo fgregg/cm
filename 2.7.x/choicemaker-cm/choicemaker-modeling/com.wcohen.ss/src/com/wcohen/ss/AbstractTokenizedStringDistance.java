@@ -11,6 +11,7 @@ import com.wcohen.ss.api.*;
 
 abstract public class AbstractTokenizedStringDistance extends AbstractStringDistance
 {
+	private static final long serialVersionUID = 1L;
 	protected Tokenizer tokenizer;
 	// cached, tokenized version of wrappers
 	private List tokenizedWrappers; 

@@ -47,6 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MatchDedupOA
  */
 public class TransMatchDedup extends MatchDedupOABA2 {
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(TransMatchDedup.class);
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransMatchDedup.class.getName());
 	

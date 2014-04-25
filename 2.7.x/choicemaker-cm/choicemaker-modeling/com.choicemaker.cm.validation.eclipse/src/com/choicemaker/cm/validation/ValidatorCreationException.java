@@ -15,6 +15,8 @@ package com.choicemaker.cm.validation;
  */
 public class ValidatorCreationException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 	public ValidatorCreationException() {}
 
 	public ValidatorCreationException(String message) {

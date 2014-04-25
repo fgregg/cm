@@ -379,6 +379,7 @@ public class ComparisonTreeNode implements Serializable {
 	 */	
 	private static class LeafComparisonTreeNode extends ComparisonTreeNode {
 		
+		private static final long serialVersionUID = 1L;
 		private final int blockingSetId;
 		
 		public LeafComparisonTreeNode(Comparable recordId, char type, int blockingSetId) {

@@ -9,6 +9,7 @@ import com.wcohen.ss.api.*;
 
 public class MultiStringAvgDistance extends MultiStringDistance
 {
+	private static final long serialVersionUID = 1L;
 	private StringDistance innerDistance;
 
 	public MultiStringAvgDistance(StringDistance distance, String delim) { 

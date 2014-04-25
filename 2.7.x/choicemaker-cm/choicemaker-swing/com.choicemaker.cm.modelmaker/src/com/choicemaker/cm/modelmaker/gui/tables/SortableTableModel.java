@@ -19,6 +19,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public abstract class SortableTableModel extends AbstractTableModel {
 
+	private static final long serialVersionUID = 1L;
 	protected int sortCol = 0;
 	protected boolean sortAsc = true;
 

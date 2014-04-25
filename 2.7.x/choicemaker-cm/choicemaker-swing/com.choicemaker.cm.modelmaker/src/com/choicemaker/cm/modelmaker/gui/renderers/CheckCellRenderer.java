@@ -27,6 +27,7 @@ import javax.swing.table.TableCellRenderer;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 17:39:49 $
  */
 public class CheckCellRenderer extends JCheckBox implements TableCellRenderer {
+	private static final long serialVersionUID = 1L;
 	protected static Border noFocusBorder;
 	public CheckCellRenderer() {
 		super();

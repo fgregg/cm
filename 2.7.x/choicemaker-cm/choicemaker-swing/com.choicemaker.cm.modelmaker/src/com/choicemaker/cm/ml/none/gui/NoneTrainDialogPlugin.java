@@ -26,6 +26,8 @@ import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:08 $
  */
 public class NoneTrainDialogPlugin extends TrainDialogPlugin {
+	private static final long serialVersionUID = 1L;
+
 	public NoneTrainDialogPlugin() {
 		setBorder(BorderFactory.createTitledBorder(MessageUtil.m.formatMessage("ml.none.train.label")));
 		setLayout(new FlowLayout(FlowLayout.LEFT));

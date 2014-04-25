@@ -14,6 +14,7 @@ import com.wcohen.ss.api.*;
 
 public class SoftTFIDF extends TFIDF
 {
+	private static final long serialVersionUID = 1L;
 	// distance to use to compare tokens
 	private StringDistance tokenDistance;
 	// threshold beyond which tokens are considered a match

@@ -9,7 +9,8 @@ import com.wcohen.ss.api.*;
 
 public class TFIDF extends AbstractStatisticalTokenDistance
 {
-    private UnitVector lastVector = null;
+    private static final long serialVersionUID = 1L;
+	private UnitVector lastVector = null;
 
     public TFIDF(Tokenizer tokenizer) { super(tokenizer);	}
     public TFIDF() { super(); }
@@ -88,7 +89,8 @@ public class TFIDF extends AbstractStatisticalTokenDistance
     /** Marker class extending BagOfTokens */
     protected class UnitVector extends BagOfTokens 
     {
-        public UnitVector(String s,Token[] tokens) {
+        private static final long serialVersionUID = 1L;
+		public UnitVector(String s,Token[] tokens) {
             super(s,tokens);
             termFreq2TFIDF();
         }

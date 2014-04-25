@@ -33,6 +33,7 @@ import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
  * @version $Revision: 1.2 $ $Date: 2010/03/28 15:30:29 $
  */
 public class ExactBlockerDialogPlugin extends MatchDialogBlockerPlugin {
+	private static final long serialVersionUID = 1L;
 	private JList configurationsList;
 	private IProbabilityModel model;
 

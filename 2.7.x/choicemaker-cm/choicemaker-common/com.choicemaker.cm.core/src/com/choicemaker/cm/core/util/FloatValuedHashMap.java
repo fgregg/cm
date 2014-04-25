@@ -24,6 +24,8 @@ import java.util.Map;
  * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:17:13 $
  */
 public class FloatValuedHashMap extends HashMap {
+	private static final long serialVersionUID = 1L;
+
 	public FloatValuedHashMap() { }
 
 	public FloatValuedHashMap(Map map) {

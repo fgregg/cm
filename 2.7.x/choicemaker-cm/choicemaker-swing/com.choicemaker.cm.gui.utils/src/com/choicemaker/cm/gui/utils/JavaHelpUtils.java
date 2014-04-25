@@ -76,6 +76,8 @@ public final class JavaHelpUtils {
 			component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(F1, HELP_ACTION_COMMAND);
 		
 			Action helpAction = new AbstractAction() {
+				private static final long serialVersionUID = 1L;
+
 				public void actionPerformed(ActionEvent e) {
 					ActionEvent newE = new ActionEvent(component, 0, id);
 					new CSH.DisplayHelpFromSource(helpBroker).actionPerformed(newE);

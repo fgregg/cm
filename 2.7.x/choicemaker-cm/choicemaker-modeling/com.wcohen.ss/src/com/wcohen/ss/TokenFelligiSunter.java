@@ -12,6 +12,7 @@ import java.util.Iterator;
 
 public class TokenFelligiSunter extends AbstractStatisticalTokenDistance
 {
+	private static final long serialVersionUID = 1L;
 	private Tokenizer tokenizer;
 	private double mismatchFactor = 0.5;
 	private boolean oversimplified = false;

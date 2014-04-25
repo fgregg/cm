@@ -17,6 +17,8 @@ package com.choicemaker.cm.core.compiler;
  * @version  $Revision: 1.2 $ $Date: 2010/03/24 16:59:02 $
  */
 public class CompilerException extends Exception {
+	private static final long serialVersionUID = 1L;
+
 	public CompilerException() {
 		super();
 	}

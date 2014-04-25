@@ -21,6 +21,8 @@ import javax.swing.text.Document;
  */
 public abstract class AbstractMessagePanel extends JPanel {
 
+	private static final long serialVersionUID = 1L;
+
 	public AbstractMessagePanel() {
 		super();
 		buildPanel();

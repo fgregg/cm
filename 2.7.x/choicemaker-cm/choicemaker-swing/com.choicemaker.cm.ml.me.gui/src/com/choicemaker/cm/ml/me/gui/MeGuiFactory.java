@@ -34,6 +34,7 @@ public class MeGuiFactory extends MlGuiFactory {
 	public ClueTableModelPlugin getClueTableModelPlugin() {
 		if (clueTableModelPlugin == null) {
 			clueTableModelPlugin = new ClueTableModelPlugin() {
+				private static final long serialVersionUID = 1L;
 				TableColumn weightColumn;
 				public TableColumn getColumn(int column) {
 					if (weightColumn == null) {
@@ -79,6 +80,7 @@ public class MeGuiFactory extends MlGuiFactory {
 	public ActiveClueTableModelPlugin getActiveClueTableModelPlugin() {
 		if (activeClueTableModelPlugin == null) {
 			activeClueTableModelPlugin = new ActiveClueTableModelPlugin() {
+				private static final long serialVersionUID = 1L;
 				TableColumn weightColumn;
 				public TableColumn getColumn(int column) {
 					if (weightColumn == null) {

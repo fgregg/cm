@@ -19,6 +19,8 @@ package com.choicemaker.cm.server.base;
  */
 public class UnderspecifiedProfileException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Constructs an <code>UnderspecifiedProfileException</code> with no detail message.
 	 */

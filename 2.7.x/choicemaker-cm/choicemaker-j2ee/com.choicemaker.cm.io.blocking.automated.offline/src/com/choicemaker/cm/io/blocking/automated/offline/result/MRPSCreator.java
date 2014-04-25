@@ -183,6 +183,8 @@ public class MRPSCreator {
 	 */
 	public static IMatchRecord2Filter NO_PRE_FILTER =
 		new IMatchRecord2Filter() {
+		private static final long serialVersionUID = 1L;
+
 		public boolean satisfy(MatchRecord2 mr2) {
 			return true;
 		}
@@ -193,6 +195,7 @@ public class MRPSCreator {
 	 * @see com.choicemaker.cm.analyzer.filter.Filter
 	 */
 	public static Filter NO_POST_FILTER = new Filter() {
+		private static final long serialVersionUID = 1L;
 		public boolean satisfy(MutableMarkedRecordPair mrp) {
 			return true;
 		}

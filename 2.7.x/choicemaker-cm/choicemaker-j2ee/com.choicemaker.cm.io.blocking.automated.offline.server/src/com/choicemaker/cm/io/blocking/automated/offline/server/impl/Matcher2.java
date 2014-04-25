@@ -67,6 +67,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
  */
 public class Matcher2 implements MessageDrivenBean, MessageListener {
 	
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(Matcher2.class);
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + Matcher2.class.getName());
 	

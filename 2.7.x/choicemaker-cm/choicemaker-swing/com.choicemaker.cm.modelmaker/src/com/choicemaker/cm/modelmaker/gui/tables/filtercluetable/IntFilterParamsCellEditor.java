@@ -34,6 +34,7 @@ import com.choicemaker.cm.gui.utils.swing.IntegerField;
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class IntFilterParamsCellEditor extends AbstractCellEditor implements TableCellEditor {
+	private static final long serialVersionUID = 1L;
 	private OneTextFields oneTextField = new OneTextFields(4, this);
 	private TwoTextFields twoTextFields = new TwoTextFields(4, this);
 	private Dimension PREFFERED_SIZE = twoTextFields.getPreferredSize();
@@ -171,6 +172,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 	}
 
 	public static class OneTextFields extends JPanel implements FocusListener {
+		private static final long serialVersionUID = 1L;
 		private IntegerField firstField;
 		private IntFilterParamsCellEditor editor;
 
@@ -219,6 +221,7 @@ public class IntFilterParamsCellEditor extends AbstractCellEditor implements Tab
 	}
 
 	public static class TwoTextFields extends JPanel implements FocusListener {
+		private static final long serialVersionUID = 1L;
 		private IntFilterParamsCellEditor editor;
 		private IntegerField firstField;
 		private IntegerField secondField;

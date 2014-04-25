@@ -116,6 +116,8 @@ import com.choicemaker.cm.module.swing.DefaultModuleMenu;
  * @version $Revision: 1.3 $ $Date: 2010/03/29 12:38:18 $
  */
 public class ModelMaker extends JFrame implements IPlatformRunnable {
+	private static final long serialVersionUID = 1L;
+
 	public static Logger logger = Logger.getLogger(ModelMaker.class);
 
 	public static final int CLUES = 1;

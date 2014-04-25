@@ -46,6 +46,8 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:12:51 $
  */
 public class MultiSourceMenu extends LastUsedMenu {
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(SourceMenu.class);
 
 	private ModelMaker parent;
@@ -62,6 +64,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 	}
 
 	private abstract class SourceAction extends AbstractAction implements PropertyChangeListener {
+		private static final long serialVersionUID = 1L;
 		private boolean dependsModel;
 		private boolean dependsSource;
 		private boolean licensed;
@@ -101,6 +104,8 @@ public class MultiSourceMenu extends LastUsedMenu {
 		// New
 		ImageIcon newIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/new.gif"));
 		Action newAction = new SourceAction(MessageUtil.m.formatMessage("new.elipsis"), newIcon, false, false, true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				MarkedRecordPairSource source = (MarkedRecordPairSource) new SourceTypeSelectorDialog(parent, false).define();
 				if (source != null) {
@@ -122,6 +127,8 @@ public class MultiSourceMenu extends LastUsedMenu {
 		// Open
 		ImageIcon openIcon = null; //open ImageIcon(AbstractApplication.class.getResource("images/open.gif"));
 		Action openAction = new SourceAction(MessageUtil.m.formatMessage("open.elipsis"), openIcon, false, false, true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				File file = FileChooserFactory.selectMrpsFile(parent);
 				if (file != null) {
@@ -135,6 +142,8 @@ public class MultiSourceMenu extends LastUsedMenu {
 		openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.ALT_MASK + +modifierMask));
 
 		add(new AbstractAction("Close") {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.setMultiSource(num, null);
 			}
@@ -143,6 +152,8 @@ public class MultiSourceMenu extends LastUsedMenu {
 		// Holds
 		ImageIcon holdIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/hold.gif"));
 		Action holdAction = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.source.includeholds"), holdIcon) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				parent.setMultiIncludeHolds(num, item.isSelected());
@@ -167,6 +178,8 @@ public class MultiSourceMenu extends LastUsedMenu {
 		// Edit
 		ImageIcon editIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/edit.gif"));
 		Action editAction = new SourceAction(MessageUtil.m.formatMessage("edit.elipsis"), editIcon, false, true, true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				MarkedRecordPairSource source = parent.getMultiSource(num);
 				SourceGuiFactory factory = null;

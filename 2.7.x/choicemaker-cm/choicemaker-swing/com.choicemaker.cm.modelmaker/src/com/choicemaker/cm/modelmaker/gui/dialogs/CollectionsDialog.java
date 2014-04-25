@@ -65,6 +65,8 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  */
 public class CollectionsDialog extends JDialog implements Enable {
 
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(CollectionsDialog.class);
 
 	private ModelMaker parent;
@@ -396,6 +398,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 	
 	private class ScrollableTable extends JTable {
 		
+		private static final long serialVersionUID = 1L;
 		SortedTableModel sortedModel;
 		JScrollPane scroller;
 		String prefix;
@@ -490,6 +493,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 		}
 		
 		private class HighlightingTableCellRenderer extends JTextPane implements TableCellRenderer {			
+			private static final long serialVersionUID = 1L;
 			DefaultStyledDocument doc;
 			Style regular, highlighted;
 			
@@ -546,6 +550,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 	}
 	
 	private class SetTableModel extends SortedTableModel {
+		private static final long serialVersionUID = 1L;
 		private Collection collection;
 		private Object[][] data;
 		private final Object[] colNames = new Object[1];
@@ -588,6 +593,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 	}
 	
 	private class MapTableModel extends SortedTableModel {
+		private static final long serialVersionUID = 1L;
 		private Map map;
 		private Object[][] data;
 		private Object[] colNames = {"Key", "Value"};
@@ -630,6 +636,8 @@ public class CollectionsDialog extends JDialog implements Enable {
 	}
 	
 	public abstract class SortedTableModel extends DefaultTableModel {
+		private static final long serialVersionUID = 1L;
+
 		public abstract Object[][] getSortedData();	
 	}
 }

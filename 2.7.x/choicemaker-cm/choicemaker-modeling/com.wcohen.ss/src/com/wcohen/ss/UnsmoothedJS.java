@@ -8,6 +8,8 @@ import com.wcohen.ss.api.*;
 
 public class UnsmoothedJS extends JensenShannonDistance
 {
+	private static final long serialVersionUID = 1L;
+
 	public String toString() { return "[UnsmoothedJS]"; }
 
 	/** Unsmoothed probability of the token */

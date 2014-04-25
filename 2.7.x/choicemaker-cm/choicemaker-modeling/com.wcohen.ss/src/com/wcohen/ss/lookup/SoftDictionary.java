@@ -309,6 +309,7 @@ public class SoftDictionary
     // a tokenized version of the string, plus one prepared for the distance metric
     //
     private class MyWrapper implements StringWrapper {
+	private static final long serialVersionUID = 1L;
 	private StringWrapper w;
 	private Token[] tokens;
 	public MyWrapper(String s) 
@@ -343,6 +344,7 @@ public class SoftDictionary
 
     // simple teacher that only supports unsupervised training
     private class MyTeacher extends StringDistanceTeacher {
+	private static final long serialVersionUID = 1L;
 	protected StringWrapperIterator stringWrapperIterator() {
 	    return new BasicStringWrapperIterator(map.keySet().iterator());
 	}

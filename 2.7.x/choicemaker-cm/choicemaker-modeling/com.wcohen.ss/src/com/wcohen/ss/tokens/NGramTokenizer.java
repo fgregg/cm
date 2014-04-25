@@ -10,7 +10,8 @@ import com.wcohen.ss.api.*;
 
 public class NGramTokenizer implements Tokenizer
 {
-    private int minNGramSize;
+    private static final long serialVersionUID = 1L;
+	private int minNGramSize;
     private int maxNGramSize;
     private boolean keepOldTokens;
     private Tokenizer innerTokenizer; // used for 

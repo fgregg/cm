@@ -66,6 +66,7 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.SourceTypeSelectorDialog;
  */
 public class SourceSplitDialog extends JDialog {
 	
+	private static final long serialVersionUID = 1L;
 	private static final int RS = 1;
 	private static final int MRPS = 2;
 	

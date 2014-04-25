@@ -47,6 +47,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class DerivedFieldsComputerDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
 	public static final int RS = -32;
 	public static final int MRPS = -33;
 

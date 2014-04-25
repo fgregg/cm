@@ -39,6 +39,8 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class MrpsFlattenDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	public static void showMrpsFlattenDialog(ModelMaker modelMaker) {
 		new MrpsFlattenDialog(modelMaker).show();
 	}

@@ -20,6 +20,7 @@ import com.choicemaker.cm.module.IModule.IOperationModel;
 
 public abstract class ModuleAction extends AbstractAction {
 
+	private static final long serialVersionUID = 1L;
 	private IModuleController module;
 	private IOperationModel operation; // cached
 

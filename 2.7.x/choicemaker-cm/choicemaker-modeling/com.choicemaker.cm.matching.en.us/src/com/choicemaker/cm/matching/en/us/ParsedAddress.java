@@ -22,6 +22,8 @@ import com.choicemaker.cm.matching.cfg.ParsedData;
  */
 public class ParsedAddress extends ParsedData {
 
+	private static final long serialVersionUID = 1L;
+
 	/** The key for the Attention field. */
 	public static final String ATTENTION = "Attention";
 

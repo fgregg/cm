@@ -44,6 +44,8 @@ import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModel;
  */
 public class ExportClueTableDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	private static File lastFile;
 
 	private ClueTableModel clueTableModel;

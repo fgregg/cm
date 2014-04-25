@@ -26,6 +26,8 @@ import com.choicemaker.cm.gui.utils.viewer.event.*;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class RecordPairFrame extends InternalFrame {
+	private static final long serialVersionUID = 1L;
+
 	private static final Dimension ZERO_DIMENSION = new Dimension(1,1);
 
 	private RecordTable topTable;

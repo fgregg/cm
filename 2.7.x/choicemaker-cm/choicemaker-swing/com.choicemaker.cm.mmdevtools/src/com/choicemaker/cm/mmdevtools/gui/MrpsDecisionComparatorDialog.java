@@ -49,6 +49,8 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class MrpsDecisionComparatorDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	public static void showDialog(ModelMaker modelMaker) {
 		new MrpsDecisionComparatorDialog(modelMaker).show();
 	}
@@ -285,6 +287,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 	}
 
 	static class ConfusionMatrix extends JTable {
+		private static final long serialVersionUID = 1L;
 		private static final Object[] rowHeaders = {"MRPS1 Differ", "MRPS1 Match", "MRPS1 Hold", "Not in MRPS1"};
 		private static final Object[] columnHeaders = {"MRPS2 Differ", "MRPS2 Match", "MRPS2 Hold", "Not in MRPS2"};
 		private TableCellRenderer headerRenderer;
@@ -318,6 +321,8 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 			}
 
 			setModel(new DefaultTableModel(realData, new Object[5]) {
+				private static final long serialVersionUID = 1L;
+
 				public boolean isCellEditable(int row, int col) {
 					return false;
 				}
@@ -326,6 +331,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 	}
 
 	class CompareAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public CompareAction() {
 			super("Compare");
 		}
@@ -335,6 +341,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 	}
 
 	class CancelAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public CancelAction() {
 			super("Cancel");
 		}
@@ -344,6 +351,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 	}
 
 	class MrpsBrowseAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		private JTextField tf;
 		public MrpsBrowseAction(JTextField tf) {
 			super("Browse");

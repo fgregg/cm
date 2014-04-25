@@ -11,6 +11,7 @@ import com.wcohen.ss.api.*;
 
 public class WinklerRescorer extends AbstractStringDistance
 {
+	private static final long serialVersionUID = 1L;
 	private StringDistance innerDistance;
 
 	/** Rescore the innerDistance's scores, to account for the

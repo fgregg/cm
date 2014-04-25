@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MatchSchedul
  */
 public class TransMatchScheduler extends MatchScheduler2 {
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(TransMatchScheduler.class);
 
 

@@ -48,6 +48,8 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.TrainDialog;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:12:09 $
  */
 public class ModelMenu extends LastUsedMenu {
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(ModelMenu.class);
 
 	private ModelMaker parent;
@@ -63,6 +65,7 @@ public class ModelMenu extends LastUsedMenu {
 	}
 
 	private abstract class ModelAction extends AbstractAction implements PropertyChangeListener {
+		private static final long serialVersionUID = 1L;
 		private boolean dependsModel;
 		private boolean dependsSource;
 		private boolean licensed;
@@ -100,6 +103,8 @@ public class ModelMenu extends LastUsedMenu {
 	}
 
 	private class EvaluateAction extends ModelAction {
+		private static final long serialVersionUID = 1L;
+
 		EvaluateAction() {
 			super(
 				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.evaluate"),
@@ -131,6 +136,8 @@ public class ModelMenu extends LastUsedMenu {
 	public void buildMenu() {
 		// New
 		Action newAction = new ModelAction(MessageUtil.m.formatMessage("new.elipsis"), null, false, false, true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				ModelBuilderDialog builder = new ModelBuilderDialog(parent);
 				builder.newModel();
@@ -144,6 +151,8 @@ public class ModelMenu extends LastUsedMenu {
 
 		// Open
 		Action openAction = new AbstractAction(MessageUtil.m.formatMessage("open.elipsis")) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				File file = FileChooserFactory.selectModelFile(parent);
 				if (file != null) {
@@ -166,6 +175,8 @@ public class ModelMenu extends LastUsedMenu {
 				true,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.postProbabilityModelInfo();
 			}
@@ -179,6 +190,8 @@ public class ModelMenu extends LastUsedMenu {
 
 		// Edit
 		Action editAction = new ModelAction(MessageUtil.m.formatMessage("edit.elipsis"), null, true, false, true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				ModelBuilderDialog builder = new ModelBuilderDialog(parent);
 				IProbabilityModel pm = parent.getProbabilityModel();
@@ -202,6 +215,8 @@ public class ModelMenu extends LastUsedMenu {
 				true,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.buildProbabilityModel(parent.getProbabilityModel());
 			}
@@ -221,6 +236,8 @@ public class ModelMenu extends LastUsedMenu {
 				true,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.reloadProbabilityModel();
 			}
@@ -238,6 +255,8 @@ public class ModelMenu extends LastUsedMenu {
 				false,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				File f = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
 				if(f.exists()) {
@@ -259,6 +278,8 @@ public class ModelMenu extends LastUsedMenu {
 				true,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.setAllCluesOrRules(ModelMaker.CLUES, true);
 			}
@@ -280,6 +301,8 @@ public class ModelMenu extends LastUsedMenu {
 				true,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.setAllCluesOrRules(ModelMaker.CLUES, false);
 			}
@@ -301,6 +324,8 @@ public class ModelMenu extends LastUsedMenu {
 				true,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.setAllCluesOrRules(ModelMaker.RULES, true);
 			}
@@ -322,6 +347,8 @@ public class ModelMenu extends LastUsedMenu {
 				true,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.setAllCluesOrRules(ModelMaker.RULES, false);
 			}
@@ -363,6 +390,8 @@ public class ModelMenu extends LastUsedMenu {
 				true,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				parent.saveActiveModel();
 			}
@@ -382,6 +411,8 @@ public class ModelMenu extends LastUsedMenu {
 				true,
 				false,
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				ExportClueTableDialog builder = new ExportClueTableDialog(parent);
 				// builder.newModel();
@@ -407,6 +438,8 @@ public class ModelMenu extends LastUsedMenu {
 				// Removed license validation for open-source release
 				// LicenseManager.getBoolean("train", true)) {
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				new TrainDialog(parent, false).show();
 			}
@@ -431,6 +464,8 @@ public class ModelMenu extends LastUsedMenu {
 				// Removed license validation for open-source release
 				// LicenseManager.getBoolean("train", true)) {
 				true) {
+			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				new TrainDialog(parent, true).show();
 			}

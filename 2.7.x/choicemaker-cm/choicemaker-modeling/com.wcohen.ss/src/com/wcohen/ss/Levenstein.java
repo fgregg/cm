@@ -8,6 +8,8 @@ package com.wcohen.ss;
 
 public class Levenstein extends NeedlemanWunsch
 {
+	private static final long serialVersionUID = 1L;
+
 	public Levenstein() {
 		super(CharMatchScore.DIST_01, 1.0 );
 	}

@@ -47,6 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
  */
 public class TransMatcher extends Matcher2  {
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(TransMatcher.class);
 
 	/** This method sends the message to the match result write bean.

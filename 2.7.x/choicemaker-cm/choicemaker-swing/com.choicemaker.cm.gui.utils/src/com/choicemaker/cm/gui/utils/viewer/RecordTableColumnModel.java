@@ -28,6 +28,8 @@ public class RecordTableColumnModel extends DefaultTableColumnModel {
 	
 	//****************** Constants
 	
+	private static final long serialVersionUID = 1L;
+
 	public static final String ENABLE_EDITING = "ENABLE_EDITING";
 	
 	//****************** Fields

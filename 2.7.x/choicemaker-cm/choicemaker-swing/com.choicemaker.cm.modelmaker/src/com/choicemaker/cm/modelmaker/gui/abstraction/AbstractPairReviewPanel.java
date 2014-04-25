@@ -23,6 +23,7 @@ import com.choicemaker.cm.module.swing.AbstractTabbedPanel;
  * @author rphall
  */
 public abstract class AbstractPairReviewPanel extends AbstractTabbedPanel {
+	private static final long serialVersionUID = 1L;
 	public abstract void propertyChange(PropertyChangeEvent evt);
 	public abstract void setChanged(RepositoryChangeEvent evt);
 	public abstract void recordDataChanged(RepositoryChangeEvent evt);

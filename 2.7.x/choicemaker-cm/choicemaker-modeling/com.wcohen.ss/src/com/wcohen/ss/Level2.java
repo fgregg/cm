@@ -19,6 +19,7 @@ import com.wcohen.ss.tokens.*;
 
 public class Level2 extends AbstractTokenizedStringDistance
 {
+	private static final long serialVersionUID = 1L;
 	private Tokenizer tokenizer;
 	private StringDistance tokenDistance;
 	

@@ -28,6 +28,7 @@ import org.apache.log4j.Category;
  */
 public abstract class StatusLogBean implements EntityBean{
 
+	private static final long serialVersionUID = 1L;
 	private static Category log = Category.getInstance(StatusLogBean.class.getName());
 	private EntityContext ctx;
 

@@ -22,6 +22,8 @@ import com.choicemaker.cm.module.swing.AbstractTabbedPanel;
  */
 public abstract class AbstractStatisticsReviewPanel extends AbstractTabbedPanel {
 
+	private static final long serialVersionUID = 1L;
+
 	public abstract boolean isEvaluated();
 
 	public abstract ModelMaker getModelMaker();

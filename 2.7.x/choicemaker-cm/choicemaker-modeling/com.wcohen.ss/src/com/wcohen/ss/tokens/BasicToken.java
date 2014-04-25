@@ -10,6 +10,7 @@ import com.wcohen.ss.api.*;
 
 public class BasicToken implements Token, Comparable
 {
+	private static final long serialVersionUID = 1L;
 	private final int index;
 	private final String value;
 	

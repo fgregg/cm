@@ -21,6 +21,8 @@ import java.io.ObjectStreamException;
  */
 public class ExtDecision extends Decision {
 
+	private static final long serialVersionUID = 1L;
+
 	/** The number of decisions. */
 	public final static int NUM_DECISIONS = 7;
 

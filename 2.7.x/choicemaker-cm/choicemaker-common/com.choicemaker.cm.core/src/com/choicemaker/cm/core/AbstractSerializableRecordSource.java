@@ -27,6 +27,8 @@ import com.choicemaker.cm.core.configure.IncompleteSpecificationException;
 public abstract class AbstractSerializableRecordSource
 	implements ISerializableRecordSource {
 		
+	private static final long serialVersionUID = 1L;
+
 	/** The record source class attribute, <code>class</code> */
 	public static final String SERIALIZABLE_RECORD_SOURCE_CLASS = "class"; //$NON-NLS-1$
 

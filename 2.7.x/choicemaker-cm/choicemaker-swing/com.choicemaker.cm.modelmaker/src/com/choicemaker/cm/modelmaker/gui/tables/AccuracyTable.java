@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.log4j.Logger;
 
 public class AccuracyTable extends JTable {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AccuracyTable.class);
 	private AccuracyTableModel myModel;
 

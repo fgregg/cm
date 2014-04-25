@@ -10,6 +10,7 @@ import java.util.*;
 
 public abstract class CombinedStringDistanceLearner implements StringDistanceLearner
 {
+	private static final long serialVersionUID = 1L;
 	protected StringDistanceLearner[] innerLearners;
 	protected String delim;
 
@@ -204,6 +205,7 @@ public abstract class CombinedStringDistanceLearner implements StringDistanceLea
 
 	/** Iterate over the j-th field of MultiStringWrapper */
 	protected class JthStringWrapperValueIterator implements StringWrapperIterator {
+		private static final long serialVersionUID = 1L;
 		private Iterator i;
 		private int j;
 		public JthStringWrapperValueIterator(int j,Iterator i) { this.j=j; this.i=i; }
@@ -228,6 +230,7 @@ public abstract class CombinedStringDistanceLearner implements StringDistanceLea
 	}
 
 	protected class MyDistanceInstance implements DistanceInstance {
+		private static final long serialVersionUID = 1L;
 		protected StringWrapper a,b;
 		protected boolean correct;
 		protected double distance;
@@ -245,6 +248,7 @@ public abstract class CombinedStringDistanceLearner implements StringDistanceLea
 	}
 
 	protected class MyMultiDistanceInstance extends MyDistanceInstance {
+		private static final long serialVersionUID = 1L;
 		MultiStringWrapper ma,mb;
 		public MyMultiDistanceInstance(StringWrapper a,StringWrapper b,boolean correct,double distance) {
 			super(a,b,correct,distance);
@@ -259,6 +263,7 @@ public abstract class CombinedStringDistanceLearner implements StringDistanceLea
 
 	/** Iterate over the j-th field of MultiStringWrapper's in a DistanceInstance of MultiStringWrapper's */
 	protected class JthDistanceInstanceIterator implements DistanceInstanceIterator {
+		private static final long serialVersionUID = 1L;
 		private Iterator i;
 		private int j;
 		public JthDistanceInstanceIterator(int j, Iterator i) { this.j=j; this.i=i; }
@@ -283,6 +288,7 @@ public abstract class CombinedStringDistanceLearner implements StringDistanceLea
 	 */
 	protected abstract class CombinedStringDistance implements StringDistance
 	{
+		private static final long serialVersionUID = 1L;
 		protected StringDistance[] innerDistances;
 		protected MultiStringWrapper prototype;
 

@@ -32,6 +32,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 
 	//********************** Fields
 
+	private static final long serialVersionUID = 1L;
 	private boolean contentEditable;
 	private CompositePane parentComposite;
 
@@ -299,6 +300,7 @@ public class RecordPairViewer extends JPanel implements ObservableDataListener, 
 
 	public class EnableableDesktopManager extends DefaultDesktopManager {
 
+		private static final long serialVersionUID = 1L;
 		private boolean enabled;
 
 		/* (non-Javadoc)

@@ -9,7 +9,8 @@ import com.wcohen.ss.api.*;
 
 public class NeedlemanWunsch extends AbstractStringDistance
 {
-    private CharMatchScore charMatchScore;
+    private static final long serialVersionUID = 1L;
+	private CharMatchScore charMatchScore;
     private double gapCost;
 	
     public NeedlemanWunsch() { this(CharMatchScore.DIST_01, 1.0 ); }

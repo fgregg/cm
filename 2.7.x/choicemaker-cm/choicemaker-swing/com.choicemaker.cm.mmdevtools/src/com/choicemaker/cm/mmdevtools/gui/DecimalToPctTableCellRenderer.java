@@ -20,6 +20,8 @@ import javax.swing.table.TableCellRenderer;
  */
 public class DecimalToPctTableCellRenderer extends DefaultTableCellRenderer {
 
+	private static final long serialVersionUID = 1L;
+
 	public static final TableCellRenderer INSTANCE = new DecimalToPctTableCellRenderer();
 
 	private static DecimalFormat df = new DecimalFormat("##0.00%");

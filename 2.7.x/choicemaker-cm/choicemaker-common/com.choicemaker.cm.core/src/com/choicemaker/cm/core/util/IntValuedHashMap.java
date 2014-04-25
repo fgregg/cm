@@ -22,6 +22,8 @@ import java.util.List;
  * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 public class IntValuedHashMap extends HashMap {
+	private static final long serialVersionUID = 1L;
+
 	public IntValuedHashMap() { }
 		
 	public IntValuedHashMap(IntValuedHashMap map) {

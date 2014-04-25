@@ -23,6 +23,7 @@ import com.choicemaker.cm.core.RecordData;
  */
 public class CompositeFrame extends InternalFrame{
 
+	private static final long serialVersionUID = 1L;
 	private boolean contentEditable;
 	private CompositePane pane;
 	private boolean pair;

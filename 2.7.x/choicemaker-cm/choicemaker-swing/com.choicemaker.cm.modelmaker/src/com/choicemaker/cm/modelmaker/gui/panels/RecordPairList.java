@@ -35,6 +35,7 @@ import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
 public class RecordPairList
 	extends JPanel
 	implements RepositoryChangeListener, PropertyChangeListener, EvaluationListener {
+	private static final long serialVersionUID = 1L;
 	private ModelMaker parent;
 	private DefaultListModel recordPairListModel;
 	private JList recordPairList;

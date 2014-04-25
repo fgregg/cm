@@ -17,6 +17,7 @@ import java.util.*;
 
 public class MongeElkan extends AffineGap
 {
+	private static final long serialVersionUID = 1L;
 	private boolean scaling = true;
 	/** If scaling is true, then distances are scaled to 0-1 */
 	public void setScaling(boolean flag) { scaling=flag; }

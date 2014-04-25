@@ -53,6 +53,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
  */
 public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(MatchDedupEach.class);
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MatchDedupEach.class.getName());
 

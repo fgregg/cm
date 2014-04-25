@@ -38,6 +38,8 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public abstract class LastUsedMenu extends JMenu {
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(LastUsedMenu.class);
 
 	private int maxNumItems;
@@ -164,6 +166,7 @@ public abstract class LastUsedMenu extends JMenu {
 	public abstract void open(String fileName);
 
 	private static class MenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
 		String fileName;
 
 		MenuItem(String fileName) {

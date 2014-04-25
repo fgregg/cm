@@ -55,6 +55,8 @@ import com.wcohen.ss.eclipse.StringDistances;
  * @author mbuechi
  */
 public class StringComparator extends JDialog implements Enable {
+	private static final long serialVersionUID = 1L;
+
 	private static DecimalFormat df = new DecimalFormat("##0.00");
 
 	private JTextField a;

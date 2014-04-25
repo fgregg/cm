@@ -35,6 +35,7 @@ import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
  */
 public class MultiFileList extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	public static final int RS = -1;
 	public static final int MRPS = -2;
 

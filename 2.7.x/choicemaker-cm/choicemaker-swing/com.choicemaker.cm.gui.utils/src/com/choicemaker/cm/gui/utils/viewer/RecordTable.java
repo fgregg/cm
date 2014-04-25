@@ -31,6 +31,7 @@ import com.choicemaker.cm.gui.utils.viewer.event.RecordTableMouseListener;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class RecordTable extends JTable {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(RecordTable.class);
 	public static final Color TOP_COLOR = new Color(195, 196, 237);
 	public static final Color BOTTOM_COLOR = new Color(195, 237, 196);
@@ -137,6 +138,7 @@ public class RecordTable extends JTable {
 	 * focus events to stop editing when it looses focus.
 	 */
 	public static class FocusListeningCellEditor extends DefaultCellEditor implements FocusListener {
+		private static final long serialVersionUID = 1L;
 		/**
 		 * Constructor for FocusListeningCellEditor.
 		 * @param textField

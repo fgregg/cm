@@ -33,6 +33,8 @@ import com.choicemaker.cm.core.xmlconf.XmlConfException;
  */
 public class SerializedRecordSourceDescriptor implements ISerializableFileBasedRecordSource {
 
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger log =
 		Logger.getLogger(SerializedRecordSourceDescriptor.class);
 

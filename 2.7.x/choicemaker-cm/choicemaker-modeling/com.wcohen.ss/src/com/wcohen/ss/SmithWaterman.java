@@ -9,6 +9,7 @@ import com.wcohen.ss.api.*;
 
 public class SmithWaterman extends AbstractStringDistance
 {
+	private static final long serialVersionUID = 1L;
 	private CharMatchScore charMatchScore;
 	private double gapCost;
 	

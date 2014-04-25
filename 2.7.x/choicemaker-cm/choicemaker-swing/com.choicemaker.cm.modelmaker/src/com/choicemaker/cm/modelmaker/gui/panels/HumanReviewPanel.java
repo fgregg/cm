@@ -73,6 +73,7 @@ import com.choicemaker.cm.modelmaker.gui.tables.ActiveClueTablePanel;
 public class HumanReviewPanel
 	extends JPanel
 	implements RepositoryChangeListener, PropertyChangeListener, EvaluationListener {
+	private static final long serialVersionUID = 1L;
 	private JLabel markedDecisionLabel;
 	private JLabel choiceMakerDecisionLabel;
 	private JLabel choiceMakerProbabilityLabel;
@@ -888,6 +889,8 @@ public class HumanReviewPanel
 	}
 
 	private class HumanDataDialog extends JDialog {
+		private static final long serialVersionUID = 1L;
+
 		HumanDataDialog() {
 			super(parent, MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.info"));
 			JPanel content = new JPanel();

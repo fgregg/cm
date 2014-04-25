@@ -21,6 +21,8 @@ import com.choicemaker.cm.modelmaker.gui.menus.ToolsMenu.ToolAction;
  */
 public class MrpsDecisionComparatorAction extends ToolAction {
 
+	private static final long serialVersionUID = 1L;
+
 	public MrpsDecisionComparatorAction() {
 		super("MRPS Decision Comparator...");
 	}

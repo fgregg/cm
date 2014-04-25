@@ -23,6 +23,8 @@ import com.choicemaker.cm.modelmaker.gui.utils.ValueError;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 17:39:59 $
  */
 public class ColorTableErrorCellRenderer extends DefaultTableCellRenderer {
+	private static final long serialVersionUID = 1L;
+
 	public void setValue(Object value) {
 		if (value instanceof ValueError) {
 			ValueError v = (ValueError) value;

@@ -36,6 +36,7 @@ import com.choicemaker.cm.modelmaker.gui.panels.FilterCluePanel;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:46:11 $
  */
 public class RecordPairFilterDialog extends JDialog {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(RecordPairFilterDialog.class);
 	private ModelMaker parent;
 	private ListeningMarkedRecordPairFilter filter;

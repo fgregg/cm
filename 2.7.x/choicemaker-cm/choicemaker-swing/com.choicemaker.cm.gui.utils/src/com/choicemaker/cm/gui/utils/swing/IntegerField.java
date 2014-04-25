@@ -18,6 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.text.*;
 
 public class IntegerField extends JTextField {
+	private static final long serialVersionUID = 1L;
+
 	public static final int DEFAULT = Integer.MIN_VALUE;
 
 	private Toolkit toolkit;
@@ -66,6 +68,8 @@ public class IntegerField extends JTextField {
 	}
 
 	protected class IntegerDocument extends PlainDocument {
+		private static final long serialVersionUID = 1L;
+
 		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 			char[] source = str.toCharArray();
 			char[] result = new char[source.length];

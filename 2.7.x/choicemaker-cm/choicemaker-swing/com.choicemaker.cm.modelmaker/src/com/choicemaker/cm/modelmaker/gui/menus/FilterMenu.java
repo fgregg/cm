@@ -32,7 +32,9 @@ import com.choicemaker.cm.modelmaker.gui.panels.HumanReviewPanel;
  */
 public class FilterMenu extends JMenu implements ActionListener {
 
-    private static Logger logger = Logger.getLogger(FilterMenu.class);
+    private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(FilterMenu.class);
 
 	// private AbstractApplication humanReview;
     private HumanReviewPanel humanReview;
@@ -51,6 +53,8 @@ public class FilterMenu extends JMenu implements ActionListener {
         item.addActionListener(this);
         add(item);
         add(new AbstractAction("Select all") {
+
+			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
 //				humanReview.getFilter().reset();

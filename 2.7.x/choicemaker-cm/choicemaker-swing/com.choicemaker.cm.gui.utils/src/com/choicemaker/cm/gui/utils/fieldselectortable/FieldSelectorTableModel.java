@@ -29,6 +29,8 @@ import com.choicemaker.cm.gui.utils.viewer.*;
  */
 public class FieldSelectorTableModel extends DefaultTableModel implements TableColumnModelListener, PropertyChangeListener {
 
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(FieldSelectorTableModel.class);
 
 	/**

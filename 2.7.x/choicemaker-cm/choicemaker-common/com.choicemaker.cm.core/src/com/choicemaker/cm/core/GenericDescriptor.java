@@ -19,6 +19,8 @@ import java.util.HashMap;
  * @deprecated Never used
  */
 public class GenericDescriptor implements Descriptor {
+	private static final long serialVersionUID = 1L;
+
 	public static final DerivedSource SOURCE = DerivedSource.valueOf("gui");
 	
 	private int[] path;

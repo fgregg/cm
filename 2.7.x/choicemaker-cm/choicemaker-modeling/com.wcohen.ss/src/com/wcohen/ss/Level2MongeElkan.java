@@ -9,6 +9,7 @@ import com.wcohen.ss.tokens.*;
 
 public class Level2MongeElkan extends Level2
 {
+	private static final long serialVersionUID = 1L;
 	private static final StringDistance MY_MONGE_ELKAN = new MongeElkan();
 
 	public Level2MongeElkan() { super( SimpleTokenizer.DEFAULT_TOKENIZER, MY_MONGE_ELKAN) ; }

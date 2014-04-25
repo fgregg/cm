@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 17:39:36 $
  */
 public class TypedTableCellRenderer extends DefaultTableCellRenderer {
+	private static final long serialVersionUID = 1L;
 	private Color black = new Color(0f, 0f, 0f);
 	private Color red = new Color(1f, 0f, 0f);
 	private Color invalidDerived = Color.lightGray;

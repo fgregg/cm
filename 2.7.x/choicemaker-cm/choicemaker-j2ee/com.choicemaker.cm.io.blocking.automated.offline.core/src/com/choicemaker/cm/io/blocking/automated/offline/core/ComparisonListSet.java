@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class ComparisonListSet implements IComparisonSet {
 	
+	private static final long serialVersionUID = 1L;
 	private List list;
 	private int ind;
 	private int size;

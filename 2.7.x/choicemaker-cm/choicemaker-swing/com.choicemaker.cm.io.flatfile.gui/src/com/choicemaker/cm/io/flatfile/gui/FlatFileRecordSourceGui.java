@@ -50,6 +50,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  * @version $Revision: 1.2 $ $Date: 2010/03/28 09:11:07 $
  */
 public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(FlatFileRecordSourceGui.class);
 	private static String RELATIVE = MessageUtil.m.formatMessage("io.common.gui.source.file.relative");
 	private static String ABSOLUTE = MessageUtil.m.formatMessage("io.common.gui.source.file.absolute");

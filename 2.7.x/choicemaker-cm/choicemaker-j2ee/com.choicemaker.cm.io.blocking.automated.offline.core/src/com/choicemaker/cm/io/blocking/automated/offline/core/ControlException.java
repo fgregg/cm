@@ -17,6 +17,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  */
 public class ControlException extends Exception {
 	
+	private static final long serialVersionUID = 1L;
+
 	public ControlException () {
 		super ();
 	}

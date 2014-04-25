@@ -21,6 +21,8 @@ import com.choicemaker.cm.modelmaker.gui.menus.ToolsMenu.ToolAction;
  */
 public class ParserUtilsAction extends ToolAction {
 
+	private static final long serialVersionUID = 1L;
+
 	public ParserUtilsAction() {
 		super("Parser Utils");
 	}
@@ -30,6 +32,8 @@ public class ParserUtilsAction extends ToolAction {
 	}
 	
 	public static class ParserTestAction extends ToolAction {
+
+		private static final long serialVersionUID = 1L;
 
 		public ParserTestAction() {
 			super("Parser Test...");

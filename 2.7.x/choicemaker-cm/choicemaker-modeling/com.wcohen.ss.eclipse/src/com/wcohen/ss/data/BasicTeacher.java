@@ -13,6 +13,7 @@ import com.wcohen.ss.api.StringWrapperIterator;
  */
 public class BasicTeacher extends StringDistanceTeacher
 {
+	private static final long serialVersionUID = 1L;
 	private DistanceInstanceIterator distanceExamplePool;
 	private DistanceInstanceIterator distanceInstancePool;
 	private StringWrapperIterator wrapperIterator;
@@ -27,6 +28,7 @@ public class BasicTeacher extends StringDistanceTeacher
 		distanceInstancePool = new BasicDistanceInstanceIterator(Collections.EMPTY_SET.iterator());
 		distanceExamplePool = 
 			new DistanceInstanceIterator() {
+				private static final long serialVersionUID = 1L;
 				private int cursor=0;
 				public boolean hasNext() { return cursor<blocker.size(); }
 				public Object next() { return blocker.getPair( cursor++ ); }

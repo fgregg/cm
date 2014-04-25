@@ -20,6 +20,8 @@ import com.choicemaker.cm.core.util.ChainedException;
  */
 public class InvalidProfileException extends ChainedException {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Constructs an <code>InvalidProfileException</code> with no detail message.
 	 */

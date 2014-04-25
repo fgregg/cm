@@ -19,6 +19,8 @@ package com.choicemaker.cm.core.configure;
  */
 public class InvalidPropertyValueException extends RuntimeException {
 
+	private static final long serialVersionUID = 1L;
+
 	public InvalidPropertyValueException() {
 		super();
 	}

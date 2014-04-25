@@ -24,6 +24,8 @@ import com.choicemaker.cm.core.RecordData;
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public abstract class InternalFrame extends JInternalFrame {
+	private static final long serialVersionUID = 1L;
+
 	private InternalFrameModel recordPairFrameModel;
 
 	private boolean ignoreUpdateFromView = false;

@@ -10,7 +10,8 @@ import java.io.*;
 
 public class ApproxNeedlemanWunsch extends AbstractStringDistance
 {
-    private static final int DEFAULT_WIDTH = 40;
+    private static final long serialVersionUID = 1L;
+	private static final int DEFAULT_WIDTH = 40;
     private CharMatchScore charMatchScore;
     private double gapCost;
     private MyMatrix mat;

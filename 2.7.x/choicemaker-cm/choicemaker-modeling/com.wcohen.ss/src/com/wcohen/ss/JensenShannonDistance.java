@@ -10,6 +10,7 @@ import com.wcohen.ss.api.*;
 
 abstract public class JensenShannonDistance extends AbstractTokenizedStringDistance
 {
+	private static final long serialVersionUID = 1L;
 	// maps tokens to document frequency
 	private Map backgroundFrequency = new HashMap(); 
 	// count number of tokens

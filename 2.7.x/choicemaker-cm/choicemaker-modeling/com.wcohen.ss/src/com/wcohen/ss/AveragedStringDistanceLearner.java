@@ -10,6 +10,7 @@ import java.util.*;
 
 public class AveragedStringDistanceLearner extends CombinedStringDistanceLearner
 {
+	private static final long serialVersionUID = 1L;
 	MultiStringWrapper prototype = null;
 	
 	public AveragedStringDistanceLearner() { super(); }
@@ -37,6 +38,8 @@ public class AveragedStringDistanceLearner extends CombinedStringDistanceLearner
 
 	private class AveragedStringDistance extends CombinedStringDistance
 	{
+		private static final long serialVersionUID = 1L;
+
 		public AveragedStringDistance(StringDistance[] innerDistances, MultiStringWrapper prototype) 
 		{
 			super(innerDistances,prototype);

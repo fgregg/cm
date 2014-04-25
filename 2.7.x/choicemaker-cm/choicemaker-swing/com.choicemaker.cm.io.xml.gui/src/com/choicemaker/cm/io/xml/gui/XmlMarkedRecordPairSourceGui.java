@@ -63,6 +63,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  * @version $Revision: 1.3 $ $Date: 2010/03/28 09:15:52 $
  */
 public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(XmlMarkedRecordPairSourceGui.class);
 	private static String GENERATE_MODE_LABEL = "Generate new source file";
 	private static String CREATE_MODE_LABEL = "Use existing source file";

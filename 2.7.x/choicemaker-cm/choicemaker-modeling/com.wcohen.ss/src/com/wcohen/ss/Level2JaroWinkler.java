@@ -10,6 +10,7 @@ import com.wcohen.ss.tokens.*;
 
 public class Level2JaroWinkler extends Level2
 {
+	private static final long serialVersionUID = 1L;
 	private static final StringDistance MY_JARO_WINKLER = new JaroWinkler();
 
 	public Level2JaroWinkler() { super( SimpleTokenizer.DEFAULT_TOKENIZER, MY_JARO_WINKLER) ; }

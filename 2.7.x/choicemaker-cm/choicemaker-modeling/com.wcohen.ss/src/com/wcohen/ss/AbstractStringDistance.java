@@ -15,6 +15,8 @@ public abstract class AbstractStringDistance implements StringDistance,StringDis
 	// implement StringDistance
 	//
 
+	private static final long serialVersionUID = 1L;
+
 	/** This method needs to be implemented by subclasses. 
 	 */
 	abstract public double score(StringWrapper s,StringWrapper t);

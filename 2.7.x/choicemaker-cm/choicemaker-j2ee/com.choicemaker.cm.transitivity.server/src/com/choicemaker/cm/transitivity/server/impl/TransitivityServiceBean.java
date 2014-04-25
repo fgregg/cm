@@ -63,6 +63,8 @@ import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
 public class TransitivityServiceBean implements SessionBean {
 
 
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(TransitivityServiceBean.class);
 
 	public static final String DATABASE_ACCESSOR = "com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";

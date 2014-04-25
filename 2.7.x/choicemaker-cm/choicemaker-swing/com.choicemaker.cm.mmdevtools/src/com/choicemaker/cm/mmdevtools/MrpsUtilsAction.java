@@ -25,6 +25,8 @@ import com.choicemaker.cm.modelmaker.gui.menus.ToolsMenu.ToolAction;
  */
 public class MrpsUtilsAction extends AbstractAction {
 
+	private static final long serialVersionUID = 1L;
+
 	public MrpsUtilsAction() {
 		super("Marked Record Pair Source Utils");
 	}
@@ -32,6 +34,7 @@ public class MrpsUtilsAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) { }
 
 	public static class MrpsFlattenAction extends ToolAction {
+		private static final long serialVersionUID = 1L;
 		public MrpsFlattenAction() {
 			super("Flatten...");
 			setEnabled(false);

@@ -20,6 +20,8 @@ import com.choicemaker.cm.core.util.ChainedException;
  * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public class GenException extends ChainedException {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Constructs a <code>GenException</code> with <code>s</code> as reason.
 	 *

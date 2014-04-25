@@ -20,6 +20,7 @@ import java.util.Stack;
  */
 public class ComparisonTreeSet implements IComparisonSet {
 	
+	private static final long serialVersionUID = 1L;
 	private ArrayList pairs = new ArrayList ();
 	private int ind = 0;
 	

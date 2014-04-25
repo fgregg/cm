@@ -35,6 +35,7 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.SourceTypeSelectorDialog;
 
 public class OpenRsAsMrpsDialog extends JDialog {
 		
+	private static final long serialVersionUID = 1L;
 	private ModelMaker modelMaker;
 	private FileSelector rsSelector;
 	private JButton newButton;

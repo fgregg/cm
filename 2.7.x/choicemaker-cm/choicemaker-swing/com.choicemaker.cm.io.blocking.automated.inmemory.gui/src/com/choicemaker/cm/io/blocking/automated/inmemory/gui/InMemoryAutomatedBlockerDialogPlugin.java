@@ -37,6 +37,7 @@ import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
  */
 public class InMemoryAutomatedBlockerDialogPlugin extends MatchDialogBlockerPlugin {
 
+	private static final long serialVersionUID = 1L;
 	private static final int MIN_LPBS = 10;
 	private static final int MIN_STBSGL = MIN_LPBS;
 	private static final int MIN_LSBS = MIN_STBSGL * 2;

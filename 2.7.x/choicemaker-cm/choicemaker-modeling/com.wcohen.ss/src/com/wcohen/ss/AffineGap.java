@@ -9,6 +9,7 @@ import com.wcohen.ss.api.*;
 
 public class AffineGap extends AbstractStringDistance
 {
+	private static final long serialVersionUID = 1L;
 	private CharMatchScore charMatchScore;
 	private double openGapScore;
 	private double extendGapScore;

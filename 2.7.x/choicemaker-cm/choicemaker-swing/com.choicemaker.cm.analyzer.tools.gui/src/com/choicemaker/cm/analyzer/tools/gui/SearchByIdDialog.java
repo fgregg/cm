@@ -40,6 +40,8 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class SearchByIdDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	private static SearchByIdDialog dialog;
 
 	public synchronized static void showSearchByIdDialog(ModelMaker mm) {
@@ -204,6 +206,7 @@ public class SearchByIdDialog extends JDialog {
 	}
 
 	private class SearchByIdAction extends AbstractAction implements DocumentListener {
+		private static final long serialVersionUID = 1L;
 		public SearchByIdAction() {
 			super("Search");
 			idField.getDocument().addDocumentListener(this);
@@ -222,6 +225,7 @@ public class SearchByIdDialog extends JDialog {
 	}
 
 	private class CancelAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public CancelAction() {
 			super("Close");
 		}

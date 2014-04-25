@@ -36,6 +36,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:05:38 $
  */
 public class MessagePanel extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MessagePanel.class);
 	private ModelMaker parent;
 	private JScrollPane statusTextAreaScrollPane;

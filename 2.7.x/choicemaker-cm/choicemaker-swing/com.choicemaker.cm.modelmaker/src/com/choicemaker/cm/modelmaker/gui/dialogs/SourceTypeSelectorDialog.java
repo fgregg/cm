@@ -51,6 +51,8 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
  */
 public class SourceTypeSelectorDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(SourceTypeSelectorDialog.class);
 
 	public static int MRPS = -1;

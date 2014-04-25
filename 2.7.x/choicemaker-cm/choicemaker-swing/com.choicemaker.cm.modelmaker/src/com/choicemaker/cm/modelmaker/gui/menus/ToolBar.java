@@ -40,6 +40,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  * @version   $Revision: 1.2 $ $Date: 2010/03/29 13:15:55 $
  */
 public class ToolBar extends JToolBar implements PropertyChangeListener, Enable {
+	private static final long serialVersionUID = 1L;
 	private ModelMaker parent;
 	private JTextField differThreshold;
 	private JTextField matchThreshold;

@@ -35,6 +35,7 @@ import com.choicemaker.cm.gui.utils.viewer.RecordTableColumnModel;
  */
 public class FieldSelectorTable extends JTable{
 
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(FieldSelectorTable.class);
 	private static int VISIBLE_COLUMN = 2;
 
@@ -92,6 +93,7 @@ public class FieldSelectorTable extends JTable{
 	}
 	
 	private class VisibilityHeaderRenderer extends JCheckBox implements TableCellRenderer {
+		private static final long serialVersionUID = 1L;
 		public VisibilityHeaderRenderer() {
 			setHorizontalAlignment(JCheckBox.CENTER);
 			setMargin(new Insets(0, 0, 0, 0));

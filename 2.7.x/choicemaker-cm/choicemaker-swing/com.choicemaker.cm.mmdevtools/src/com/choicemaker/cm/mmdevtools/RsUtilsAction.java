@@ -25,6 +25,8 @@ import com.choicemaker.cm.modelmaker.gui.menus.ToolsMenu.ToolAction;
  */
 public class RsUtilsAction extends AbstractAction {
 
+	private static final long serialVersionUID = 1L;
+
 	public RsUtilsAction() {
 		super("Record Source Utils");
 	}
@@ -32,6 +34,7 @@ public class RsUtilsAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) { }
 
 	public static class RsSplitAction extends ToolAction {
+		private static final long serialVersionUID = 1L;
 		public RsSplitAction() {
 			super("Split...");
 		}
@@ -41,6 +44,7 @@ public class RsUtilsAction extends AbstractAction {
 	}
 	
 	public static class RsDerivedFieldComputerAction extends ToolAction {
+		private static final long serialVersionUID = 1L;
 		public RsDerivedFieldComputerAction() {
 			super("Derived Fields Computer...");
 		}
@@ -54,6 +58,7 @@ public class RsUtilsAction extends AbstractAction {
 	}
 	
 	public static class OpenRsAsMrpsAction extends ToolAction {
+		private static final long serialVersionUID = 1L;
 		public OpenRsAsMrpsAction() {
 			super("Open RS as MRPS...");
 		}

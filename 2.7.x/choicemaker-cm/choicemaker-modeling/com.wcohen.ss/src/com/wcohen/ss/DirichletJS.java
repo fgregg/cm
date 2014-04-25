@@ -10,6 +10,7 @@ import com.wcohen.ss.api.*;
 
 public class DirichletJS extends JensenShannonDistance
 {
+	private static final long serialVersionUID = 1L;
 	private double pseudoCount = 1.0;
 
 	public double getPseudoCount() { return pseudoCount; }

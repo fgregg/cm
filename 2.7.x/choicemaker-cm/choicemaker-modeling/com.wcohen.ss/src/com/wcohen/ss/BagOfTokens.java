@@ -11,6 +11,7 @@ import com.wcohen.ss.api.*;
 
 public class BagOfTokens extends BasicStringWrapper
 {
+	private static final long serialVersionUID = 1L;
 	private Map weightMap = new TreeMap();
 	private double totalWeight = 0;
 	private Token[] tokens;

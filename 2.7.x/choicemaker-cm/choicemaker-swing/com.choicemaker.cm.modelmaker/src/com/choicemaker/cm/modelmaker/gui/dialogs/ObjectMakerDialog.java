@@ -49,6 +49,8 @@ import com.choicemaker.cm.modelmaker.gui.utils.ThreadWatcher;
  */
 public class ObjectMakerDialog extends JDialog implements Enable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private ModelMaker modelMaker;
 	
 	private JTextField dirField;

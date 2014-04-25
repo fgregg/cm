@@ -24,6 +24,8 @@ import com.choicemaker.cm.core.blocking.InMemoryBlocker;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class AllBlockerDialogPlugin extends MatchDialogBlockerPlugin {
+	private static final long serialVersionUID = 1L;
+
 	AllBlockerDialogPlugin() {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		add(new JLabel("Returns all records from small source."));

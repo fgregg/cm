@@ -41,6 +41,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:47:04 $
  */
 public abstract class SourceGui extends JDialog {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(SourceGui.class);
 	protected static final int CREATE = 0;
 	protected static final int GENERATE = 1;

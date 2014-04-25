@@ -19,6 +19,7 @@ import java.util.EventObject;
  * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:04 $
  */
 public class RepositoryChangeEvent extends EventObject {
+	private static final long serialVersionUID = 1L;
 	public static final int SET_CHANGED = 0;
 	public static final int RECORD_DATA_CHANGED = 1;
 	public static final int MARKUP_DATA_CHANGED = 2;

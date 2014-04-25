@@ -31,6 +31,8 @@ import com.choicemaker.cm.module.IModuleController;
  */
 public class DefaultModuleMenu extends JMenu {
 	
+	private static final long serialVersionUID = 1L;
+
 	public static final String DEFAULT_MESSAGE_KEY = "train.gui.modelmaker.menu.module";
 
 	private IModuleController module;

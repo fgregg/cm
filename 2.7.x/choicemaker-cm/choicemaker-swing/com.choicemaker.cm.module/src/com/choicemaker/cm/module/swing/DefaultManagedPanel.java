@@ -29,6 +29,7 @@ import com.choicemaker.cm.module.IModuleController.IUserInterface;
  */
 public class DefaultManagedPanel extends AbstractTabbedPanel implements IModelMakerAware {
 
+	private static final long serialVersionUID = 1L;
 	private final IModuleController module;
 	private Object modelMakerObject;
 	

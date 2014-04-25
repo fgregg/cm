@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 public class Mixture extends AbstractStatisticalTokenDistance
 {
+	private static final long serialVersionUID = 1L;
 	private double minChange = 0.01;
 	private double maxIterate = 20;
 

@@ -41,6 +41,8 @@ import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:46:36 $
  */
 public class RecordSourceViewerDialog extends JDialog {
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(RecordSourceViewerDialog.class);
 	
 	private RecordSource recordSource;
