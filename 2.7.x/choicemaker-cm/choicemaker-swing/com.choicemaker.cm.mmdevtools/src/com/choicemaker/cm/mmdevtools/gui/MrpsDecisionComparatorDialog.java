@@ -179,18 +179,22 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 		MarkedRecordPairSource mrps1 = null;
 		try {
 			mrps1 = MarkedRecordPairSourceXmlConf.getMarkedRecordPairSource(mrpsName1);
+			mrps1.setModel(model);
 		} catch (Exception ex) {
 			ErrorDialog.showErrorDialog(modelMaker, "Unable to open MRPS: " + mrpsName1, ex);
 		}
-		mrps1.setModel(model);
 
 		MarkedRecordPairSource mrps2 = null;
 		try {
 			mrps2 = MarkedRecordPairSourceXmlConf.getMarkedRecordPairSource(mrpsName2);
+			mrps2.setModel(model);
 		} catch (Exception ex) {
 			ErrorDialog.showErrorDialog(modelMaker, "Unable to open MRPS: " + mrpsName2, ex);
 		}
-		mrps2.setModel(model);
+
+		if (mrps1 == null || mrps2 == null) {
+			return;
+		}
 
 		pairs = new ArrayList();
 
@@ -253,36 +257,35 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 		try {
 			map1 = new LinkMap(mrps1);
 			map2 = new LinkMap(mrps2);
-		} catch (Exception ex) {
-			ErrorDialog.showErrorDialog(modelMaker, "Problems reading from MRPS", ex);
-		}
+			List links = map1.getLinks();
+			for (int index = 0; index < links.size(); index++) {
+				MutableMarkedRecordPair mrp = (MutableMarkedRecordPair) links.get(index);
 
-		List links = map1.getLinks();
-		for (int index = 0; index < links.size(); index++) {
-			MutableMarkedRecordPair mrp = (MutableMarkedRecordPair) links.get(index);
+				int i = mrp.getMarkedDecision().toInt();
+				int j = 3; // default not in other.
 
-			int i = mrp.getMarkedDecision().toInt();
-			int j = 3; // default not in other.
+				if (map2.hasLink(mrp.getQueryRecord(), mrp.getMatchRecord())) {
+					j = ((ImmutableMarkedRecordPair)map2.getLinks(mrp.getQueryRecord().getId().toString(), mrp.getMatchRecord().getId().toString()).get(0)).getMarkedDecision().toInt();
+				}
 
-			if (map2.hasLink(mrp.getQueryRecord(), mrp.getMatchRecord())) {
-				j = ((ImmutableMarkedRecordPair)map2.getLinks(mrp.getQueryRecord().getId().toString(), mrp.getMatchRecord().getId().toString()).get(0)).getMarkedDecision().toInt();
-			}
-
-			matrix[i][j].add(mrp);
-			pairs.add(mrp);
-		}
-
-		links = map2.getLinks();
-		for (int index = 0; index < links.size(); index++) {
-			MutableMarkedRecordPair mrp = (MutableMarkedRecordPair) links.get(index);
-
-			int i = 3; // default not in other
-			int j = mrp.getMarkedDecision().toInt();
-
-			if (!map1.hasLink(mrp.getQueryRecord(), mrp.getMatchRecord())) {
 				matrix[i][j].add(mrp);
 				pairs.add(mrp);
 			}
+
+			links = map2.getLinks();
+			for (int index = 0; index < links.size(); index++) {
+				MutableMarkedRecordPair mrp = (MutableMarkedRecordPair) links.get(index);
+
+				int i = 3; // default not in other
+				int j = mrp.getMarkedDecision().toInt();
+
+				if (!map1.hasLink(mrp.getQueryRecord(), mrp.getMatchRecord())) {
+					matrix[i][j].add(mrp);
+					pairs.add(mrp);
+				}
+			}
+		} catch (Exception ex) {
+			ErrorDialog.showErrorDialog(modelMaker, "Problems reading from MRPS", ex);
 		}
 	}
 

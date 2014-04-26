@@ -170,8 +170,9 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
 			log.error(e);
+			assert batchJob != null;
 			try {
-				if (batchJob != null) batchJob.markAsFailed();
+				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
 				log.error(e1.toString(),e1);
 			}

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -47,7 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
 /**
  * This bean dedups the temporary match file produces by a processor.  It is called by
  * MatchDedupOABA2 and it calls it back when it is done.
- * 
+ *
  * @author pcheung
  *
  */
@@ -61,7 +61,7 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 	protected transient EJBConfiguration configuration = null;
 	private transient OABAConfiguration oabaConfig = null;
 	private transient QueueConnection connection = null;
-	
+
 	private StartData data;
 
 
@@ -95,7 +95,7 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;
-		
+
 		log.debug("MatchDedupEach In onMessage");
 
 		try {
@@ -105,28 +105,28 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 				batchJob = configuration.findBatchJobById(data.jobID);
 
 				//init values
-				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
+				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
 				oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 				IStatus status = configuration.getStatusLog(data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					MessageBeanUtils.stopJob (batchJob, status, oabaConfig);
-					
+
 				} else {
 					if (status.getStatus() != IStatus.MERGE_DEDUP_MATCHES) {
-						//max number of match in a temp file					
+						//max number of match in a temp file
 						String temp = (String) stageModel.properties().get("maxMatchSize");
 						int maxMatches = Integer.parseInt(temp);
-			
+
 						//dedup a temp file
 						dedupEach (data.ind, maxMatches, batchJob);
 					}
-					
+
 					//send the message back to MatchDedupOABA2
 					MatchWriterData d = new MatchWriterData (data);
 					sendToMatchDedupOABA2 (d);
 				}
-				
+
 			} else {
 				log.warn("wrong type: " + inMessage.getClass().getName());
 			}
@@ -135,9 +135,10 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 			log.error(e.toString(),e);
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
+			log.error(e);
+			assert batchJob != null;
 			try {
-				log.error(e.toString(),e);
-				if (batchJob != null) batchJob.markAsFailed();
+				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
 				log.error(e1.toString(),e1);
 			}
@@ -148,8 +149,8 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 	}
 
 
-	/** This method dedups the Nth match temp file.  
-	 * 
+	/** This method dedups the Nth match temp file.
+	 *
 	 * @param num - The Nth match temp file
 	 * @param maxMatches - maximum number of matches to hold in memory
 	 * @throws OABABlockingException
@@ -159,7 +160,7 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 		IMatchRecord2Sink mSink = oabaConfig.getMatchChunkFactory().getSink(num);
 		IMatchRecord2Source mSource = oabaConfig.getMatchChunkFactory().getSource(mSink);
 		ComparableMRSource source = new ComparableMRSource (mSource);
-			
+
 		mSink = oabaConfig.getMatchTempFactory().getSink(num);
 		IComparableSink sink =  new ComparableMRSink (mSink);
 
@@ -167,9 +168,9 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 
 		IMatchRecord2SinkSourceFactory factory = oabaConfig.getMatchTempFactory(num);
 		ComparableMRSinkSourceFactory mFactory = new ComparableMRSinkSourceFactory (factory);
-		
+
 		if (source.exists()) {
-			GenericDedupService service = 
+			GenericDedupService service =
 				new GenericDedupService (source, sink, mFactory, maxMatches, batchJob);
 			service.runDedup();
 			int before = service.getNumBefore();
@@ -180,9 +181,9 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 			sink.open();
 			sink.close();
 		}
-		
+
 		t = System.currentTimeMillis() - t;
-		
+
 		log.info("Time in dedup each " + t);
 	}
 
@@ -191,6 +192,6 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 	protected void sendToMatchDedupOABA2 (MatchWriterData d) throws NamingException, JMSException {
 		Queue queue = configuration.getMatchDedupMessageQueue();
 		configuration.sendMessage(queue, d);
-	} 
+	}
 
 }

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -40,8 +40,8 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.SourceTypeSelectorDialog;
 import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
 
 /**
- * The menu from which a MarkedRecordPairSource is selected.  
- * 
+ * The menu from which a MarkedRecordPairSource is selected.
+ *
  * @author S. Yoakum-Stover
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:12:51 $
  */
@@ -60,7 +60,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		this.num = num;
 		this.modifierMask = modifierMask;
 		buildMenu();
-		
+
 	}
 
 	private abstract class SourceAction extends AbstractAction implements PropertyChangeListener {
@@ -93,7 +93,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		public void propertyChange(PropertyChangeEvent e) {
 			String propertyName = e.getPropertyName();
 			// AJW 2004-04-26: used parentheses here.
-			if ((dependsSource && propertyName == ModelMakerEventNames.MARKED_RECORD_PAIR_SOURCE) || 
+			if ((dependsSource && propertyName == ModelMakerEventNames.MARKED_RECORD_PAIR_SOURCE) ||
 				(dependsModel && propertyName == ModelMakerEventNames.PROBABILITY_MODEL)) {
 				doSetEnabled();
 			}
@@ -188,14 +188,20 @@ public class MultiSourceMenu extends LastUsedMenu {
 				} catch (XmlConfException e1) {
 					e1.printStackTrace();
 				}
-				source = (MarkedRecordPairSource) factory.createGui(parent, source).define();
-				if (source != null) {
-					try {
-						MarkedRecordPairSourceXmlConf.add(source);
-					} catch (XmlConfException ex) {
-						logger.error(new LoggingObject("CM-100402", source.getFileName()), ex);
+				if (factory != null) {
+					source = (MarkedRecordPairSource) factory.createGui(parent, source).define();
+					if (source != null) {
+						try {
+							MarkedRecordPairSourceXmlConf.add(source);
+						} catch (XmlConfException ex) {
+							logger.error(new LoggingObject("CM-100402", source.getFileName()), ex);
+						}
+						parent.setMultiSource(num, source);
+					} else {
+						logger.error("null source");
 					}
-					parent.setMultiSource(num, source);
+				} else {
+					logger.error("null factory");
 				}
 			}
 		};

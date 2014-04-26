@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -42,7 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
 
 /**
  * This bean handles the creation of chunks, including chunk data files and their corresponding block files.
- * 
+ *
  * @author pcheung
  *
  */
@@ -88,7 +88,7 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 		ObjectMessage msg = null;
 		StartData data = null;
 		BatchJob batchJob = null;
-		
+
 		log.info("ChunkOABA In onMessage");
 
 		try {
@@ -97,10 +97,10 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 				data = (StartData) msg.getObject();
 
 				batchJob = configuration.findBatchJobById(data.jobID);
-				
+
 				//init values
-				IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
-				IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);				
+				IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
+				IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
 				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 
 				//get the status
@@ -122,11 +122,11 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 					temp = (String) stageModel.properties().get("maxChunkFiles");
 					int maxChunkFiles = Integer.parseInt(temp);
 
-					RecordIDTranslator2 translator = new RecordIDTranslator2 (oabaConfig.getTransIDFactory()); 
+					RecordIDTranslator2 translator = new RecordIDTranslator2 (oabaConfig.getTransIDFactory());
 					//recover the translator
 					translator.recover();
 					translator.close();
-/*					
+/*
 					//create the proper block source
 					IBlockSinkSourceFactory bFactory = oabaConfig.getBlockFactory();
 					IBlockSink bSink = bFactory.getNextSink();
@@ -141,49 +141,49 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 					ChunkService2 chunkService = new ChunkService2 (source, source2, data.staging, data.master,
 						stageModel, masterModel, translator,
 						oabaConfig.getChunkIDFactory(),
-						oabaConfig.getStageDataFactory(), oabaConfig.getMasterDataFactory(), 
+						oabaConfig.getStageDataFactory(), oabaConfig.getMasterDataFactory(),
 						oabaConfig.getCGFactory(), maxChunk, status );
 
 					chunkService.runService();
 					log.info( "Number of chunks " + chunkService.getNumChunks());
 					log.info( "Done creating chunks " + chunkService.getTimeElapsed());
-*/					
+*/
 
 					//create the os block source.
 					IBlockSinkSourceFactory osFactory = oabaConfig.getOversizedFactory();
 					osFactory.getNextSource(); //the deduped OS file is file 2.
 					IDSetSource source2 = new IDSetSource (osFactory.getNextSource());
-					
+
 					//create the tree transformer.
-					TreeTransformer tTransformer = new TreeTransformer (translator, 
+					TreeTransformer tTransformer = new TreeTransformer (translator,
 						oabaConfig.getComparisonTreeFactory(data.stageType));
-						
+
 					//create the oversized block transformer
-					Transformer transformerO = new Transformer (translator, 
+					Transformer transformerO = new Transformer (translator,
 						oabaConfig.getComparisonArrayFactoryOS());
 
 					ChunkService3 chunkService = new ChunkService3 (
-						oabaConfig.getTreeSetSource(), 
-						source2, 
+						oabaConfig.getTreeSetSource(),
+						source2,
 						data.staging, data.master,
 						stageModel, masterModel,
 						oabaConfig.getChunkIDFactory(),
 						oabaConfig.getStageDataFactory(), oabaConfig.getMasterDataFactory(),
-						translator.getSplitIndex(), 
-						tTransformer, transformerO, maxChunk, maxChunkFiles, 
+						translator.getSplitIndex(),
+						tTransformer, transformerO, maxChunk, maxChunkFiles,
 						status, batchJob );
 					chunkService.runService();
 					log.info( "Number of chunks " + chunkService.getNumChunks());
 					log.info( "Done creating chunks " + chunkService.getTimeElapsed());
 
 					translator.cleanUp();
-					
+
 					data.numChunks = chunkService.getNumChunks();
 
 					sendToUpdateStatus (data.jobID, 50);
 					sendToMatch (data);
 				}
-				
+
 			} else {
 				log.warn("wrong type: " + inMessage.getClass().getName());
 			}
@@ -192,8 +192,10 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 			log.error(e.toString(),e);
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
+			log.error(e);
+			assert batchJob != null;
 			try {
-				if (batchJob != null) batchJob.markAsFailed();
+				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
 				log.error(e1.toString(),e1);
 			}
@@ -207,7 +209,7 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 
 
 	/** This method sends a message to the UpdateStatus message bean.
-	 * 
+	 *
 	 * @param jobID
 	 * @param percentComplete
 	 * @throws NamingException
@@ -218,24 +220,24 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 		UpdateData data = new UpdateData();
 		data.jobID = jobID;
 		data.percentComplete = percentComplete;
-		
+
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 	/** This method sends a message to the DedupOABA message bean.
-	 * 
+	 *
 	 * @param request
 	 * @throws NamingException
 	 */
 	private void sendToMatch (StartData data) throws NamingException, JMSException{
 //		Queue queue = configuration.getMatchingMessageQueue();
 		Queue queue = configuration.getMatchSchedulerMessageQueue();
-		
+
 		log.info("queue " + queue.getQueueName());
-		
+
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 }

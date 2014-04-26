@@ -79,7 +79,7 @@ public class EclipseElement implements IElement {
 		if (list != null && list.size() >= 1) {
 			retVal = (IElement) list.get(0);
 		}
-		if (list.size() > 1) {
+		if (list != null && list.size() > 1) {
 			StringBuffer sb = new StringBuffer();
 			int ignored = list.size() - 1;
 			sb.append("ignoring " + ignored + " IConfigurableElements: [");

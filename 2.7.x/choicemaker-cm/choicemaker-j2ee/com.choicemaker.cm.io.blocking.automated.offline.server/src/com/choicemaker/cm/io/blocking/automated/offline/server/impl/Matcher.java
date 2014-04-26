@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -62,22 +62,22 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
  * This message bean compares the pairs given to it and sends a list of matches to the match writer bean.
- * 
+ *
  * @deprecated
- * 
+ *
  * @author pcheung
  *
  */
 public class Matcher implements MessageDrivenBean, MessageListener {
-	
+
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(Matcher.class);
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + Matcher.class.getName());
-	
+
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
 	private transient OABAConfiguration oabaConfig = null;
-	
+
 	private transient Evaluator evaluator;
 	private transient ClueSet clueSet;
 	private transient boolean[] enabledClues;
@@ -85,7 +85,7 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 	private transient float high;
 
 	private long inReadHM;
-	
+
 	public void ejbCreate() {
 		log.debug("starting ejbCreate...");
 		try {
@@ -117,23 +117,23 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 		ObjectMessage msg = null;
 		StartData data = null;
 		BatchJob batchJob = null;
-		
+
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				Object o = msg.getObject();
-				
+
 				if (o instanceof StartData) {
 					//start matching
 					data = ((StartData) o);
-					
+
 					log.debug("Matcher In onMessage " + data.ind);
 
 					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 					batchJob = configuration.findBatchJobById(data.jobID);
 
-					IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
-					IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);				
+					IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
+					IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
 					//set up the clues and evaluators.
 					this.evaluator = stageModel.getEvaluator();
 					this.clueSet = stageModel.getClueSet();
@@ -141,11 +141,11 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 
 					low = data.low;
 					high = data.high;
-					
+
 					String temp = (String) stageModel.properties().get("maxMatchSize");
 					int maxMatch = Integer.parseInt(temp);
 
-					//max block size					
+					//max block size
 					temp = (String) stageModel.properties().get("maxBlockSize");
 					int maxBlock = Integer.parseInt(temp);
 
@@ -156,12 +156,12 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 						oabaConfig.getComparisonTreeFactory(data.stageType));
 					IComparisonSetSources sourcesO = new ComparisonSetOSSources (
 						oabaConfig.getComparisonArrayFactoryOS(), maxBlock);
-					
+
 					RecordSource stage = null;
 					RecordSource master = null;
-					IComparisonSetSource source = null;
 
 					//now get to the right chunk
+					IComparisonSetSource source = null;
 					for (int i=0; i<=data.ind; i++) {
 						stage = stageFactory.getNextSource();
 						master = masterFactory.getNextSource();
@@ -170,18 +170,24 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 						else if (sourcesO.hasNextSource()) source = sourcesO.getNextSource();
 						else throw new BlockingException ("Could not open any comparison set source for chunk " + i);
 					}
-					
-					log.info (getID () + " matching chunk " + data.ind + " " + source.getInfo());
+					if (source == null) {
+						throw new BlockingException("null source at index " + data.ind);
+					}
+
+					if (log.isInfoEnabled()) {
+						String sourceInfo = source.getInfo();
+						log.info (getID () + " matching chunk " + data.ind + " " + sourceInfo);
+					}
 
 					//start matching for this chunk
 					HashMap stageMap = getRecords (stage, stageModel);
 					HashMap masterMap = getRecords (master, masterModel);
-					
+
 					MemoryEstimator.writeMem();
-					
+
 					//result of the matches
 					ArrayList matches = new ArrayList ();
-					
+
 					int compares = 0;
 					int sets = 0;
 
@@ -191,7 +197,7 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 						IComparisonSet cSet = source.getNextSet();
 						while (cSet.hasNextPair()) {
 							ComparisonPair p = cSet.getNextPair();
-							
+
 							compares ++;
 
 							Record q = (Record) stageMap.get(p.id1);
@@ -204,54 +210,54 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 								matches.add(match);
 							}
 						}
-					}					
-					
+					}
+
 					source.close();
-					
-					log.info("Chunk: " + data.ind + ", sets: " + sets + ", compares: " + compares + 
+
+					log.info("Chunk: " + data.ind + ", sets: " + sets + ", compares: " + compares +
 						", matches: " + matches.size());
 
 					//free up resources
 					stageMap = null;
 					masterMap = null;
 
-/*					
+/*
 					MatchWriterData mwd = new MatchWriterData (data);
 					mwd.matches = matches;
 					mwd.numCompares = compares;
-					
+
 					//send to the write matches bean
 					long t = System.currentTimeMillis();
 					sendToWriteMatches (mwd);
 					t = System.currentTimeMillis() - t;
-					
+
 					log.info("time for message sending " + t);
 */
 
 					long t = System.currentTimeMillis();
 					writeMatches (matches, data.ind, maxMatch);
 					t = System.currentTimeMillis() - t;
-					
+
 					log.debug("Time in writeMatches " + t);
 
 					MatchWriterData mwd = new MatchWriterData (data);
 					mwd.numCompares = compares;
 					mwd.timeWriting = t;
 					mwd.numMatches = matches.size();
-					
+
 					sendToMatchScheduler (mwd);
 
 					//free up resources
 					matches = null;
-					
+
 				} else {
 					log.warn("wrong type: " + inMessage.getClass().getName());
 				}
-				
-			} else {			
+
+			} else {
 				log.warn("wrong type: " + inMessage.getClass().getName());
 			}
-			
+
 		} catch (JMSException e) {
 			log.error(e.toString(),e);
 			mdc.setRollbackOnly();
@@ -271,92 +277,92 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 	private void writeMatches (ArrayList matches, int ind, int maxMatch) throws BlockingException {
 		IMatchRecord2Sink mSink = oabaConfig.getMatchChunkFactory().getSink(ind);
 		IComparableSink sink =  new ComparableMRSink (mSink);
-		
+
 		IMatchRecord2SinkSourceFactory factory = oabaConfig.getMatchTempFactory(ind);
 		ComparableMRSinkSourceFactory fac = new ComparableMRSinkSourceFactory (factory);
-		
+
 		IComparableSource source = new ComparableArraySource (matches);
-		
+
 		SimpleControl control = new SimpleControl ();
 		GenericDedupService service = new GenericDedupService (source, sink, fac, maxMatch, control);
 		service.runDedup();
-		
+
 		int i = service.getNumBefore();
 		int j = service.getNumAfter();
-		
+
 		log.info("numBefore: " + i + " numAfter: " + j);
 	}
 
 
 	/** This method sends the message to the match result write bean.
-	 * 
+	 *
 	 * @param data
 	 * @throws NamingException
 	 */
 	private void sendToMatchScheduler (MatchWriterData data) throws NamingException, JMSException{
 		Queue queue = configuration.getMatchSchedulerMessageQueue();
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 	/** This method gets the data in the RecordSource and puts them into a hash map.
-	 * 
+	 *
 	 * @param rs - RecordSource
 	 * @param accessProvider - ProbabilityModel
 	 * @return
 	 */
 	private HashMap getRecords (RecordSource rs, IProbabilityModel model) throws BlockingException {
 		long t = System.currentTimeMillis();
-		
+
 		HashMap records = new HashMap ();
-		
+
 		try {
 			if (rs != null && model != null) {
 				rs.setModel(model);
 				rs.open();
-			
+
 				// put the whole chunk dataset into memory.
 				while (rs.hasNext()) {
 					Record r = rs.getNext();
 					Object O = r.getId();
-				
+
 					records.put(O, r);
 				}
-			
-				rs.close();		
+
+				rs.close();
 			}
 		} catch (IOException ex) {
 			throw new BlockingException (ex.toString());
 		}
-		
+
 		inReadHM += System.currentTimeMillis() - t;
-		
+
 		return records;
 	}
 
 
 	/** This method compares two records and returns a MatchRecord2 object.
-	 * 
+	 *
 	 * @param q - first record
 	 * @param m - second record
 	 * @param isStage - indicates if the second record is staging or master
 	 * @return
 	 */
 	private MatchRecord2 compareRecords (Record q, Record m, boolean isStage) {
-			
+
 		MatchRecord2 mr = null;
 
 		if ((q != null) && (m != null)) {
 			ActiveClues activeClues = clueSet.getActiveClues(q, m, enabledClues);
 			float matchProbability = evaluator.getProbability(activeClues);
 			Decision decision = evaluator.getDecision(activeClues, matchProbability, low, high);
-			
+
 			//char source = 'D';
 			char source = MatchRecord2.MASTER_SOURCE;
-			
+
 			Comparable i1 = q.getId();
 			Comparable i2 = m.getId();
-			
+
 			if (isStage) {
 				//source = 'S';
 				source = MatchRecord2.STAGE_SOURCE;
@@ -387,7 +393,7 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 
 
 	/** This returns an unique id for each instance of the object.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getID () {

@@ -237,11 +237,11 @@ public class DateUtils extends DateHelper {
 	 * @return whether the day and month of d1 and d2 are the same
 	 */
 	public static boolean sameDayAndMonth(Date d1, Date d2) {
+		if (d1 == null || d2 == null) {
+			return false;
+		}
 		boolean answer = false;
 		try {
-			if (d1 == null || d2 == null) {
-				return false;
-			}
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(d1);
 			int month = calendar.get(Calendar.MONTH);
@@ -263,11 +263,11 @@ public class DateUtils extends DateHelper {
 	 * @return whether dates are different in either last digit of the year or 3rh(decade) digit of the year
 	 */
 	public static boolean onlyDecadeOrLastYearDigitDiff(Date d1, Date d2) {
+		if (d1 == null || d2 == null) {
+			return false;
+		}
 		boolean answer = false;
 		try {
-			if (d1 == null || d2 == null) {
-				return false;
-			}
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(d1);
 			int month = calendar.get(Calendar.MONTH);

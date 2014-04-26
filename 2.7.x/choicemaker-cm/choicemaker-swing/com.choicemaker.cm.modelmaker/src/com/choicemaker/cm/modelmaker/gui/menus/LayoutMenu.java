@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -34,7 +34,7 @@ import com.choicemaker.cm.modelmaker.gui.abstraction.PreferenceKeys;
 import com.choicemaker.cm.modelmaker.gui.panels.HumanReviewPanel;
 
 /**
- * 
+ *
  * @author  S. Yoakum-Stover
  * @author  Martin Buechi
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:10:23 $
@@ -98,7 +98,7 @@ public class LayoutMenu extends LastUsedMenu {
 			public void actionPerformed(ActionEvent e) {
 				File file = FileChooserFactory.selectLayoutFile(parent);
 				if (file != null) {
-					open(file.getAbsolutePath());	
+					open(file.getAbsolutePath());
 				}
 			}
 		};
@@ -134,7 +134,7 @@ public class LayoutMenu extends LastUsedMenu {
 		addAutoItems();
 	}
 
-	private void saveAs() { 
+	private void saveAs() {
 		File file = FileChooserFactory.selectLayoutFile(parent, JFileChooser.SAVE_DIALOG);
 		if (file != null) {
 			CompositePaneModel layout = null;
@@ -160,7 +160,8 @@ public class LayoutMenu extends LastUsedMenu {
 				RecordPairViewerXmlConf.saveLayout(layout);
 				opened(layout.getFileName());
 			} catch (Exception ex) {
-				logger.error(new LoggingObject("CM-100301", layout.getFileName()), ex);
+				String fileName = layout == null ? "null" : layout.getFileName();
+				logger.error(new LoggingObject("CM-100301", fileName), ex);
 			}
 		}
 	}

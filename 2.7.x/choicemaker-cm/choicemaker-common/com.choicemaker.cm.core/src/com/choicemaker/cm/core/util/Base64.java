@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -123,7 +123,7 @@ public class Base64 {
 			(byte) '+',
 			(byte) '/' };
 
-	/** 
+	/**
 	 * Translates a Base64 value to either its 6-bit reconstruction value
 	 * or a negative number indicating some other meaning.
 	 **/
@@ -169,7 +169,7 @@ public class Base64 {
 	}
 
 	/**
-	 * Testing. Feel free--in fact I encourage you--to throw out 
+	 * Testing. Feel free--in fact I encourage you--to throw out
 	 * this entire "main" method when you actually deploy this code.
 	 */
 	 /*
@@ -370,7 +370,7 @@ public class Base64 {
 	 * Encodes up to three bytes of the array <var>source</var>
 	 * and writes the resulting four Base64 bytes to <var>destination</var>.
 	 * The source and destination arrays can be manipulated
-	 * anywhere along their length by specifying 
+	 * anywhere along their length by specifying
 	 * <var>srcOffset</var> and <var>destOffset</var>.
 	 * This method does not check to make sure your arrays
 	 * are large enough to accomodate <var>srcOffset</var> + 3 for
@@ -393,7 +393,7 @@ public class Base64 {
 		int numSigBytes,
 		byte[] destination,
 		int destOffset) {
-		//           1         2         3  
+		//           1         2         3
 		// 01234567890123456789012345678901 Bit position
 		// --------000000001111111122222222 Array position from threeBytes
 		// --------|    ||    ||    ||    | Six bit groups to index ALPHABET
@@ -478,21 +478,33 @@ public class Base64 {
 			return null;
 		} // end catch
 		finally {
-			try {
-				oos.close();
-			} catch (Exception e) {
+			if (oos != null) {
+				try {
+					oos.close();
+				} catch (Exception e) {
+				}
 			}
-			try {
-				b64os.close();
-			} catch (Exception e) {
+			if (b64os != null) {
+				try {
+					b64os.close();
+				} catch (Exception e) {
+				}
 			}
-			try {
-				baos.close();
-			} catch (Exception e) {
+			if (baos != null) {
+				try {
+					baos.close();
+				} catch (Exception e) {
+				}
 			}
 		} // end finally
 
-		return new String(baos.toByteArray());
+		String retVal;
+		if (baos != null) {
+			retVal = new String(baos.toByteArray());
+		} else {
+			retVal = null;
+		}
+		return retVal;
 	} // end encode
 
 	/**
@@ -545,7 +557,7 @@ public class Base64 {
 		int len43 = len * 4 / 3;
 			byte[] outBuff = new byte[(len43) // Main 4:3
 		+ ((len % 3) > 0 ? 4 : 0) // Account for padding
-	+ (breakLines ? (len43 / MAX_LINE_LENGTH) : 0)]; // New lines      
+	+ (breakLines ? (len43 / MAX_LINE_LENGTH) : 0)]; // New lines
 		int d = 0;
 		int e = 0;
 		int len2 = len - 2;
@@ -621,15 +633,15 @@ public class Base64 {
 	 * and writes the resulting bytes (up to three of them)
 	 * to <var>destination</var>.
 	 * The source and destination arrays can be manipulated
-	 * anywhere along their length by specifying 
+	 * anywhere along their length by specifying
 	 * <var>srcOffset</var> and <var>destOffset</var>.
 	 * This method does not check to make sure your arrays
 	 * are large enough to accomodate <var>srcOffset</var> + 4 for
 	 * the <var>source</var> array or <var>destOffset</var> + 3 for
 	 * the <var>destination</var> array.
-	 * This method returns the actual number of bytes that 
+	 * This method returns the actual number of bytes that
 	 * were converted from the Base64 encoding.
-	 * 
+	 *
 	 *
 	 * @param source the array to convert
 	 * @param srcOffset the index where conversion begins
@@ -751,13 +763,17 @@ public class Base64 {
 			return null;
 		} // end catch
 		finally {
-			try {
-				bais.close();
-			} catch (Exception e) {
+			if (bais != null) {
+				try {
+					bais.close();
+				} catch (Exception e) {
+				}
 			}
-			try {
-				ois.close();
-			} catch (Exception e) {
+			if (ois != null) {
+				try {
+					ois.close();
+				} catch (Exception e) {
+				}
 			}
 		} // end finally
 	} // end decodeObject
@@ -805,7 +821,7 @@ public class Base64 {
 			else {
 				System.err.println("Bad Base64 input character at " + i + ": " + source[i] + "(decimal)");
 				return null;
-			} // end else: 
+			} // end else:
 		} // each input character
 
 		byte[] out = new byte[outBuffPosn];
@@ -947,7 +963,7 @@ public class Base64 {
 					else {
 						// Must have broken out from above.
 						throw new java.io.IOException("Improperly padded Base64 input.");
-					} // end 
+					} // end
 
 				} // end else: decode
 			} // end else: get data
@@ -1129,7 +1145,7 @@ public class Base64 {
 		} // end write
 
 		/**
-		 * Calls {@link #write} repeatedly until <var>len</var> 
+		 * Calls {@link #write} repeatedly until <var>len</var>
 		 * bytes are written.
 		 *
 		 * @param theBytes array from which to read bytes
@@ -1166,8 +1182,8 @@ public class Base64 {
 			out.flush();
 		} // end flush
 
-		/** 
-		 * Flushes and closes stream. 
+		/**
+		 * Flushes and closes stream.
 		 *
 		 * @since 1.3
 		 */

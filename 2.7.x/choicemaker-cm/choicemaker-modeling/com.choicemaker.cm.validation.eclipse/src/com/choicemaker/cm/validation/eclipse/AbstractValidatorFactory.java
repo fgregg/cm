@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -106,13 +106,13 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 
 	/** Cached map of extension points to ValidatorFactories */
 	private static Map validatorFactories = null;
-	
+
 	/** Synchronization object for creating the validatorFactories singleton */
 	private static final Object validatorFactoriesInit = new Object();
 
 	public static IValidator createValidator(String name, String extensionPoint)
 		throws ValidatorCreationException {
-	
+
 		// Preconditions
 		if (!StringUtils.nonEmptyString(name)) {
 			throw new IllegalArgumentException("null or blank validator configuration name");
@@ -120,7 +120,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		if (!StringUtils.nonEmptyString(extensionPoint)) {
 			throw new IllegalArgumentException("null or blank name for validator extension point");
 		}
-	
+
 		// Get factory for the extension point
 		Map factories  = AbstractValidatorFactory.getValidatorFactories();
 		IValidatorFactory factory = (IValidatorFactory) factories.get(extensionPoint);
@@ -129,10 +129,10 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 				logger.error(msg);
 				throw new ValidatorCreationException(msg);
 		}
-		
+
 		// Ask the factory to create the extension point
-		IValidator retVal = factory.createValidator(name);		
-	
+		IValidator retVal = factory.createValidator(name);
+
 		return retVal;
 	}
 
@@ -149,13 +149,13 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		IExtensionPoint pt =
 			registry.getExtensionPoint(IValidatorFactory.VALIDATOR_FACTORY_EXTENSION_POINT);
 		IExtension[] extensions = pt.getExtensions();
-	
+
 		for (int i = 0; i < extensions.length; i++) {
 			IExtension ext = extensions[i];
 			IConfigurationElement[] els = ext.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
 				IConfigurationElement el = els[j];
-	
+
 				String handledExtensionPoint =
 					el.getAttribute("handledValidatorExtensionPoint");
 				IValidatorFactory factory = (IValidatorFactory) retVal.get(handledExtensionPoint);
@@ -177,7 +177,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		} // for i validator extensions
 		return retVal;
 	}
-	
+
 	public static Map getValidatorFactories() throws ValidatorCreationException {
 		if (validatorFactories == null) {
 			synchronized(validatorFactoriesInit) {
@@ -348,8 +348,9 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 					retVal.put(nv.configurationName, nv.validator);
 				} catch (Exception x) {
 					isError = true;
+					String nvConfName = nv == null ? "null" : nv.configurationName;
 					String msg =
-						registryExceptionMessage(nv.configurationName, extensionId, x);
+						registryExceptionMessage(nvConfName, extensionId, x);
 					logger.error(msg, x);
 					pw.println(msg);
 				} // catch
@@ -439,8 +440,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		if (handledValidatorExtensionPoint == null) {
 			handledValidatorExtensionPointsMap.put(key, trimmedId);
 		} else if (
-			handledValidatorExtensionPoint != null
-				&& !handledValidatorExtensionPoint.equals(trimmedId)) {
+			!handledValidatorExtensionPoint.equals(trimmedId)) {
 			throw new IllegalArgumentException(
 				"new value '"
 					+ id

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -40,7 +40,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingSer
 
 /**
  * This message bean performs the OABA blocking and oversized trimming.
- * 
+ *
  * @author pcheung
  *
  */
@@ -85,16 +85,16 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 		ObjectMessage msg = null;
 		StartData data = null;
 		BatchJob batchJob = null;
-		
+
 		log.info("BlockingOABA In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
-				
+
 				batchJob = configuration.findBatchJobById(data.jobID);
-				
+
 				//init values
 				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
 				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
@@ -103,7 +103,7 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					MessageBeanUtils.stopJob (batchJob, status, oabaConfig);
-					
+
 				} else {
 
 					String temp = (String) stageModel.properties().get("maxBlockSize");
@@ -121,22 +121,22 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 					IBlockSink osSpecial =  oabaConfig.getOversizedFactory().getNextSink();
 
 					//Start blocking
-					OABABlockingService blockingService = new OABABlockingService (maxBlock, bGroup, 
+					OABABlockingService blockingService = new OABABlockingService (maxBlock, bGroup,
 						oabaConfig.getOversizedGroupFactory(),
 						osSpecial, null, oabaConfig.getRecValFactory(), data.numBlockFields,
 						data.validator, status, batchJob, minFields, maxOversized);
 					blockingService.runService();
 					log.info ("num Blocks " + blockingService.getNumBlocks());
 					log.info ("num OS " + blockingService.getNumOversized());
-					
+
 					log.info("Done Blocking: " + blockingService.getTimeElapsed() );
-					
+
 					//clean up
 					blockingService = null;
 					System.gc();
-				
+
 					sendToUpdateStatus (data.jobID, 20);
-				
+
 					sendToDedup (data);
 
 				}
@@ -149,8 +149,9 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 			log.error(e.toString(),e);
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
+			assert batchJob != null;
 			try {
-				if (batchJob != null) batchJob.markAsFailed();
+				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
 				log.error(e1.toString(),e1);
 			}
@@ -164,7 +165,7 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 
 
 	/** This method sends a message to the UpdateStatus message bean.
-	 * 
+	 *
 	 * @param jobID
 	 * @param percentComplete
 	 * @throws NamingException
@@ -175,20 +176,20 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 		UpdateData data = new UpdateData();
 		data.jobID = jobID;
 		data.percentComplete = percentComplete;
-		
+
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 	/** This method sends a message to the DedupOABA message bean.
-	 * 
+	 *
 	 * @param request
 	 * @throws NamingException
 	 */
 	private void sendToDedup (StartData data) throws NamingException, JMSException{
 		Queue queue = configuration.getDedupMessageQueue();
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 }

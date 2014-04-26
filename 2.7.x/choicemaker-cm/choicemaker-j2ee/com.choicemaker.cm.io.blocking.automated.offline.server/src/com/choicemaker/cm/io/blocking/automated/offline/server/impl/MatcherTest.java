@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -37,23 +37,23 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanU
 
 /**
  * This message bean compares the pairs given to it and sends a list of matches to the match writer bean.
- * 
+ *
  * In this version, there is only one chunk data in memory and different processors work on different
  * trees/arrays of this chunk.
- * 
+ *
  * @author pcheung
  *
  */
 public class MatcherTest implements MessageDrivenBean, MessageListener {
-	
+
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(MatcherTest.class);
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MatcherTest.class.getName());
-	
+
 	private transient MessageDrivenContext mdc = null;
 	protected transient EJBConfiguration configuration = null;
 	protected transient OABAConfiguration oabaConfig = null;
-	
+
 	private transient Evaluator evaluator;
 	//private transient ClueSet clueSet;
 	//private transient boolean[] enabledClues;
@@ -61,14 +61,14 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 	protected transient float high;
 
 	protected StartData data;
-	
+
 	//These two tracker are set only in log debug mode
 	private long inHMLookup;
 	private long inCompare;
 
 	//number of comparisons made
 	private int compares;
-	
+
 	public void ejbCreate() {
 		log.debug("starting ejbCreate...");
 		try {
@@ -95,7 +95,7 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 
 	protected void setHighLow () {
 		low = data.low;
-		high = data.high;			
+		high = data.high;
 	}
 
 
@@ -106,16 +106,16 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;
-		
+
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				Object o = msg.getObject();
-				
+
 				if (o instanceof StartData) {
 					//start matching
 					data = ((StartData) o);
-					
+
 					log.debug("Matcher In onMessage " + data.ind + " " + data.treeInd);
 
 					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
@@ -124,27 +124,28 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 
 					if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 						MessageBeanUtils.stopJob (batchJob, status, oabaConfig);
-						
+
 					} else {
 						handleMatching (data, batchJob);
 					}
 
-					
+
 				} else {
 					log.warn("wrong type: " + inMessage.getClass().getName());
 				}
-				
-			} else {			
+
+			} else {
 				log.warn("wrong type: " + inMessage.getClass().getName());
 			}
-			
+
 		} catch (JMSException e) {
 			log.error(e.toString(),e);
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
+			log.error(e);
+			assert batchJob != null;
 			try {
-				log.error(e);
-				if (batchJob != null) batchJob.markAsFailed();
+				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
 				log.error(e1.toString(),e1);
 			}
@@ -153,11 +154,11 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
-	
-	
-	private void handleMatching (StartData data, BatchJob batchJob) 
+
+
+	private void handleMatching (StartData data, BatchJob batchJob)
 		throws BlockingException, RemoteException, NamingException, JMSException {
-			
+
 		long t = System.currentTimeMillis();
 		//TEST loop
 		BigInteger bi = new BigInteger ("85642");
@@ -170,9 +171,9 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 		}
 		log.info ("factorial of " + bi.toString() + " has " + ret.toString().length() + "digits");
 		//end TEST loop
-		
+
 		t = System.currentTimeMillis() - t;
-					
+
 		log.debug("Times: lookup " + inHMLookup + " compare: " + inCompare
 			+ " writeMatches: " + t);
 
@@ -182,22 +183,22 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 		mwd.inCompare = inCompare;
 		mwd.inLookup = inHMLookup;
 		mwd.numMatches = 0;
-					
+
 		sendToMatchScheduler (mwd);
 	}
-	
-	
+
+
 
 
 	/** This method sends the message to the match result write bean.
-	 * 
+	 *
 	 * @param data
 	 * @throws NamingException
 	 */
 	protected void sendToMatchScheduler (MatchWriterData data) throws NamingException, JMSException{
 		Queue queue = configuration.getMatchSchedulerMessageQueue();
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 

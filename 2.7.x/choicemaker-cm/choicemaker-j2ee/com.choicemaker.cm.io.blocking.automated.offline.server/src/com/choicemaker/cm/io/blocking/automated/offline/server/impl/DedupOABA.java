@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -43,7 +43,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupS
 
 /**
  * This bean handles the deduping of blocks and oversized blocks.
- * 
+ *
  * @author pcheung
  *
  */
@@ -88,7 +88,7 @@ public class DedupOABA implements MessageDrivenBean, MessageListener {
 		ObjectMessage msg = null;
 		StartData data = null;
 		BatchJob batchJob = null;
-		
+
 		log.info("DedupOABA In onMessage");
 
 		try {
@@ -97,46 +97,46 @@ public class DedupOABA implements MessageDrivenBean, MessageListener {
 				data = (StartData) msg.getObject();
 
 				batchJob = configuration.findBatchJobById(data.jobID);
-				
+
 				//init values
-				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
+				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
 				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 //				Status status = data.status;
 				IStatus status = configuration.getStatusLog(data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					MessageBeanUtils.stopJob (batchJob, status, oabaConfig);
-					
+
 				} else {
 					String temp = (String) stageModel.properties().get("maxBlockSize");
 					int maxBlock = Integer.parseInt(temp);
-					
+
 					temp = (String) stageModel.properties().get("interval");
 					int interval = Integer.parseInt(temp);
 
 					//using BlockGroup to speed up dedup later
 					BlockGroup bGroup = new BlockGroup (oabaConfig.getBlockGroupFactory(), maxBlock);
-					BlockDedupService4 dedupService = new BlockDedupService4 (bGroup, 
-						oabaConfig.getBigBlocksSinkSourceFactory(), 
-						oabaConfig.getTempBlocksSinkSourceFactory(), 
-						oabaConfig.getSuffixTreeSink(), 
+					BlockDedupService4 dedupService = new BlockDedupService4 (bGroup,
+						oabaConfig.getBigBlocksSinkSourceFactory(),
+						oabaConfig.getTempBlocksSinkSourceFactory(),
+						oabaConfig.getSuffixTreeSink(),
 						maxBlock, status, batchJob, interval);
 					dedupService.runService();
 					log.info( "Done block dedup " + dedupService.getTimeElapsed());
 					log.info ("Blocks In " + dedupService.getNumBlocksIn());
 					log.info ("Blocks Out " + dedupService.getNumBlocksOut());
 					log.info ("Tree Out " + dedupService.getNumTreesOut());
-				
-				
+
+
 					//start oversized dedup
 					IBlockSinkSourceFactory osFactory = oabaConfig.getOversizedFactory();
 					IBlockSink osSpecial = osFactory.getNextSink();
 					IBlockSource osSource = osFactory.getSource(osSpecial);
 					IBlockSink osDedup = osFactory.getNextSink();
-					
-					OversizedDedupService osDedupService = 
-						new OversizedDedupService (osSource, osDedup, 
-						oabaConfig.getOversizedTempFactory(), 
+
+					OversizedDedupService osDedupService =
+						new OversizedDedupService (osSource, osDedup,
+						oabaConfig.getOversizedTempFactory(),
 						status, batchJob);
 					osDedupService.runService();
 					log.info( "Done oversized dedup " + osDedupService.getTimeElapsed());
@@ -144,10 +144,10 @@ public class DedupOABA implements MessageDrivenBean, MessageListener {
 					log.info ("Num OS After Exact " + osDedupService.getNumAfterExact());
 					log.info ("Num OS Done " + osDedupService.getNumBlocksOut());
 					sendToUpdateStatus (data.jobID, 30);
-				
+
 					sendToChunk (data);
 				}
-				
+
 			} else {
 				log.warn("wrong type: " + inMessage.getClass().getName());
 			}
@@ -156,8 +156,10 @@ public class DedupOABA implements MessageDrivenBean, MessageListener {
 			log.error(e.toString(),e);
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
+			log.error(e);
+			assert batchJob != null;
 			try {
-				if (batchJob != null) batchJob.markAsFailed();
+				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
 				log.error(e1.toString(),e1);
 			}
@@ -171,7 +173,7 @@ public class DedupOABA implements MessageDrivenBean, MessageListener {
 
 
 	/** This method sends a message to the UpdateStatus message bean.
-	 * 
+	 *
 	 * @param jobID
 	 * @param percentComplete
 	 * @throws NamingException
@@ -182,20 +184,20 @@ public class DedupOABA implements MessageDrivenBean, MessageListener {
 		UpdateData data = new UpdateData();
 		data.jobID = jobID;
 		data.percentComplete = percentComplete;
-		
+
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 	/** This method sends a message to the DedupOABA message bean.
-	 * 
+	 *
 	 * @param request
 	 * @throws NamingException
 	 */
 	private void sendToChunk (StartData data) throws NamingException, JMSException{
 		Queue queue = configuration.getChunkMessageQueue();
 		configuration.sendMessage(queue, data);
-	} 
+	}
 
 
 }

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -34,17 +34,17 @@ public class StandardizerXmlConf {
 		Object[] args = ParserXmlConf.buildArgs(e);
 
 		ParseTreeNodeStandardizer standardizer = null;
-		
+
 		// first try to instantiate the standardizer with the symbol factory the the first argument...
 		try {
 			Class[] at = new Class[argTypes.length + 1];
 			at[at.length-1] = SymbolFactory.class;
 			Object[] a = new Object[at.length];
 			a[a.length-1] = factory;
-			
+
 			standardizer = (ParseTreeNodeStandardizer) ParserXmlConf.instantiate(cls, at, a);
 		} catch (XmlConfException ex) {
-			standardizer = null;
+			assert standardizer == null;
 		}
 
 		// if that didn't work, then just try with the declared arguments...
@@ -53,13 +53,13 @@ public class StandardizerXmlConf {
 				standardizer = (ParseTreeNodeStandardizer) ParserXmlConf.instantiate(cls, argTypes, args);
 			} catch (XmlConfException ex) {
 				ex.printStackTrace();
-				throw new XmlConfException("Standardizer class " + cls + 
+				throw new XmlConfException("Standardizer class " + cls +
 					" has neither a zero-arg or a SymbolFactory-arg constructor.", ex);
 			}
 		}
-		
+
 		boolean isRecursive = RecursiveStandardizer.class.isAssignableFrom(cls);
-		
+
 		// children can be either property, method, or other standardizer elements.  Note that
 		// a standardizer must be recursive in order to have standardizer children...
 		List kids = e.getChildren();
@@ -76,10 +76,10 @@ public class StandardizerXmlConf {
 					if (!factory.hasVariable(vName)) {
 						throw new XmlConfException("Variable " + vName + " does not exist!");
 					}
-					
+
 					Variable variable = factory.getVariable(vName);
 					ParseTreeNodeStandardizer kidStandardizer = readFromElement(kid, factory);
-					
+
 					((RecursiveStandardizer)standardizer).putStandardizer(variable, kidStandardizer);
 				} else {
 					throw new XmlConfException("Standardizer must be recursive to have child standardizers.");
@@ -91,5 +91,5 @@ public class StandardizerXmlConf {
 
 		return standardizer;
 	}
-	
+
 }

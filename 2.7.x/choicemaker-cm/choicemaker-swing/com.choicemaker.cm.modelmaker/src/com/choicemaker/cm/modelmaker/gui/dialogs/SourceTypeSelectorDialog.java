@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -45,7 +45,7 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
 
 /**
  * Description
- * 
+ *
  * @author S. Yoakum-Stover
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:47:39 $
  */
@@ -57,7 +57,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 
 	public static int MRPS = -1;
 	public static int RS = -2;
-	
+
 	protected ModelMaker parent;
 	private JPanel content;
 	private JList sourceTypeList;
@@ -71,7 +71,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 	private int type;
 
 	public SourceTypeSelectorDialog(ModelMaker g, boolean save) {
-		this(g, MRPS, save);	
+		this(g, MRPS, save);
 	}
 
 	public SourceTypeSelectorDialog(ModelMaker g, int type, boolean save) {
@@ -142,12 +142,12 @@ public class SourceTypeSelectorDialog extends JDialog {
 		SourceGuiFactory sourceGuiFactory = null;
 		try {
 			sourceGuiFactory = (SourceGuiFactory) ((ExtensionHolder) sourceTypeList.getSelectedValue()).getInstance();
+			dispose();
+			SourceGui sourceGui = save ? sourceGuiFactory.createSaveGui(parent) : sourceGuiFactory.createGui(parent);
+			source = sourceGui.define();
 		} catch (CoreException e) {
-			e.printStackTrace();
+			logger.error(e.toString(),e);;
 		}
-		dispose();
-		SourceGui sourceGui = save ? sourceGuiFactory.createSaveGui(parent) : sourceGuiFactory.createGui(parent);
-		source = sourceGui.define();
 	}
 
 	private void addContentListeners() {
