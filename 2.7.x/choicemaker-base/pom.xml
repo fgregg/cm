@@ -29,6 +29,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <!-- Dependency versions -->
     <ant-jsch.version>1.9.2</ant-jsch.version>
     <choicemaker.version>2.7.1-SNAPSHOT</choicemaker.version>
+    <choicemaker.prerequisites.dependency>2.7.1</choicemaker.prerequisites.dependency>
+    <choicemaker.prerequisites.version>2.7.2-SNAPSHOT</choicemaker.prerequisites.version>
     <docbook.version>4.4</docbook.version>
     <jsch.version>0.1.50</jsch.version>
     <junit.version>4.11</junit.version>
