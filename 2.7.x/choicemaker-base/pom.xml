@@ -13,7 +13,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <name>ChoiceMaker Dependencies</name>
 
   <prerequisites>
-    <maven>2.2.1</maven>
+    <maven>3.2.1</maven>
   </prerequisites>
 
   <properties>
