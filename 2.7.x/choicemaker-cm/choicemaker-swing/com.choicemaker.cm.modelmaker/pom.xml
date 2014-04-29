@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.modelmaker</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Module Plug-in</name>
+  <name>ChoiceMaker ModelMaker GUI</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>modelmaker.jar</eclipse.plugin.runtime.library.name>
