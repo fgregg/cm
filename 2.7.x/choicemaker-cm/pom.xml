@@ -27,12 +27,11 @@
     <url>http://sourceforge.net/projects/oscmt/support</url>
   </issueManagement>
 
+<!--
   <distributionManagement>
     <site>
-<!--
       <id>oscmt.rphall.com</id>
       <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
--->
       <id>${dm-site-id}</id>
       <url>${dm-site-url}</url>
     </site>
@@ -47,6 +46,7 @@
       <url>http://mavenrepo.rphall.com:8081/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
+-->
 
   <build>
     <sourceDirectory>src</sourceDirectory>

@@ -102,7 +102,9 @@
           <execution>
             <id>javadoc</id>
             <phase>package</phase>
-            <configuration/>
+            <configuration>
+              <maxmemory>800m</maxmemory>
+            </configuration>
             <goals>
               <goal>jar</goal>
             </goals>
