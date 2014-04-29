@@ -96,8 +96,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 -->
   <distributionManagement>
     <site>
+<!--
       <id>oscmt.rphall.com</id>
       <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
+-->
+      <id>${dm-site-id}</id>
+      <url>${dm-site-url}</url>
     </site>
     <repository>
       <id>releases</id>
