@@ -12,3 +12,4 @@ target
 temp.folder
 tmp
 /target
+.classpath
