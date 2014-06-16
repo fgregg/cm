@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -33,6 +33,8 @@ import org.jdom.output.XMLOutputter;
 
 import com.choicemaker.cm.core.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
+import com.choicemaker.cm.core.gen.Eclipse2GeneratorPluginFactory;
+import com.choicemaker.cm.core.gen.InstallableGeneratorPluginFactory;
 import com.choicemaker.cm.core.report.Reporter;
 import com.choicemaker.cm.core.util.FileUtilities;
 
@@ -51,7 +53,7 @@ import com.choicemaker.cm.core.util.FileUtilities;
  *       the specific initializers for these components. The <code>OracleConnectionCacheXmlConf</code>
  *       is an example of such an initializer.
  *   </li>
- * </ul>  
+ * </ul>
  *
  * @author    Martin Buechi
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 18:57:16 $
@@ -85,7 +87,7 @@ public class XmlConfigurator {
 			ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler, true);
 			initReports();
 		}
-	
+
 	}
 
 	private static void initReports() {
@@ -140,6 +142,7 @@ public class XmlConfigurator {
 	 */
 	public static void init(String fn, String log4jConfName, boolean reload, boolean initGui) throws XmlConfException {
 		XmlConfigurator.reload = reload;
+		initInstallableGeneratorPluginFactory();
 		fileName = new File(fn).getAbsolutePath();
 		readConfigurationFile();
 		setWorkingDir();
@@ -147,6 +150,14 @@ public class XmlConfigurator {
 		initClassLoader();
 		initReloadClassPath();
 		initModules(getCore().getChildren("module"), classLoader);
+	}
+
+	private static void initInstallableGeneratorPluginFactory() {
+		Class c = Eclipse2GeneratorPluginFactory.class;
+		String className = c.getName();
+		System.setProperty(
+				InstallableGeneratorPluginFactory.PROPERTY_INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
+				className);
 	}
 
 	/**
@@ -408,7 +419,7 @@ public class XmlConfigurator {
 				String msg = "Class '" + name + "' not found by PpsClassLoader.";
 				log.error(msg);
 				throw new ClassNotFoundException (msg);
-			} 
+			}
 			return c;
 		}
 	}
