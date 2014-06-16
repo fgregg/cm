@@ -1,9 +1,21 @@
 package com.choicemaker.cm.core.gen;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A singleton implementation that uses an installable delegate to implement
+ * IGeneratorPluginFactory methods. In general, a delegate should be installed
+ * only once in an application context, and this class enforces this restriction
+ * by using a {@link #PROPERTY_INSTALLABLE_GENERATOR_PLUGIN_FACTORY System
+ * property} to specify the delegate type. If the property is not set, a
+ * {@link #getDefaultGeneratorPluginFactory() default factory} is used.
+ *
+ * @author rphall
+ *
+ */
 public class InstallableGeneratorPluginFactory implements
 		IGeneratorPluginFactory {
 
@@ -11,103 +23,121 @@ public class InstallableGeneratorPluginFactory implements
 			.getLogger(InstallableGeneratorPluginFactory.class.getName());
 
 	/**
-	 * A System property that holds the FQCN of the default factory type
+	 * A System property that holds the FQCN of the installable factory delegate
 	 */
 	public static final String PROPERTY_INSTALLABLE_GENERATOR_PLUGIN_FACTORY = "installableGeneratorPluginFactory";
 
-	/** The default factory instance (Eclipse2GeneratorPluginFactory) */
-	private static final IGeneratorPluginFactory getDefaultGeneratorPluginFactory() {
-		return new Eclipse2GeneratorPluginFactory();
-	}
-
-	/** The singleton factory */
-	private static IGeneratorPluginFactory singleton;
-
 	/**
-	 * A default initialization method that looks up a System property to
-	 * determine which type of factory to install. Leaves the class in an
-	 * invalid state (which is checked in the {@link #getInstance()} method) if
-	 * a factory can not be installed.
+	 * The default factory instance is a stubbed implementation of
+	 * IGeneratorPluginFactory that returns an empty list of generator plugins.
 	 */
-	static {
-		String msgPrefix = "Installing generator plugin factory: ";
-		boolean isOK = false;
-		String fqcn = System
-				.getProperty(PROPERTY_INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
-		if (fqcn != null) {
-			try {
-				install(fqcn);
-				isOK = true;
-			} catch (ClassNotFoundException e) {
-				String msg = msgPrefix + e.toString() + ": " + e.getCause();
-				logger.warn(msg);
-			} catch (InstantiationException e) {
-				String msg = msgPrefix + e.toString() + ": " + e.getCause();
-				logger.warn(msg);
-			} catch (IllegalAccessException e) {
-				String msg = msgPrefix + e.toString() + ": " + e.getCause();
-				logger.warn(msg);
+	public static final IGeneratorPluginFactory getDefaultGeneratorPluginFactory() {
+		return new IGeneratorPluginFactory() {
+			public List lookupGeneratorPlugins() throws GenException {
+				return new LinkedList();
 			}
-
-		}
-		if (fqcn == null || !isOK) {
-			logger.info(msgPrefix
-					+ getDefaultGeneratorPluginFactory().getClass().getName());
-			try {
-				install(getDefaultGeneratorPluginFactory());
-			} catch (Exception x) {
-				String msg = msgPrefix + x.toString() + ": " + x.getCause();
-				logger.error(msg);
-				singleton = null;
-			}
-		}
+		};
 	}
 
-	/** A method for installing a different factory type */
-	public static void install(IGeneratorPluginFactory instance) {
-		if (instance == null) {
-			throw new IllegalArgumentException("null generator plugin factory");
-		}
-		singleton = instance;
-	}
+	/** The singleton instance of this factory */
+	private static InstallableGeneratorPluginFactory singleton = new InstallableGeneratorPluginFactory();
 
-	/**
-	 * An alternative method for installing a different factory type, using a
-	 * FQCN factory name
-	 *
-	 * @throws ClassNotFoundException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 */
-	public static void install(String fqcn) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException {
-		if (fqcn == null || fqcn.trim().isEmpty()) {
-			throw new IllegalArgumentException(
-					"null or blank class name for generator plugin factory");
-		}
-		Class c = Class.forName(fqcn);
-		IGeneratorPluginFactory instance = (IGeneratorPluginFactory) c
-				.newInstance();
-		install(instance);
-	}
-
-	/** A method to get the installed factory */
+	/** A method that returns the factory singleton */
 	public static IGeneratorPluginFactory getInstance() {
-		if (singleton == null) {
-			throw new IllegalStateException(
-					"null instance -- check log for related warnings or errors");
-		}
+		assert singleton != null;
 		return singleton;
 	}
 
+	/**
+	 * The delegate used by the factory singleton to implement the
+	 * IGeneratorPluginFactory interface.
+	 */
+	private IGeneratorPluginFactory delegate;
+
+	/**
+	 * If a delegate hasn't been set, this method looks up a System property to
+	 * determine which type of factory to set and then sets it. If the property
+	 * exists but the specified factory type can not be set, throws an
+	 * IllegalStateException. If the property doesn't exist, sets the
+	 * {@link #getDefaultGeneratorPluginFactory() default type}. If the default
+	 * type can not be set -- for example, if the default type is misconfigured
+	 * -- throws a IllegalStateException.
+	 *
+	 * @throws IllegalStateException
+	 *             if a delegate does not exist and can not be set.
+	 */
+	public IGeneratorPluginFactory getDelegate() {
+		if (delegate == null) {
+			String msgPrefix = "Installing generator plugin factory: ";
+			String fqcn = System
+					.getProperty(PROPERTY_INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
+			try {
+				if (fqcn != null) {
+					logger.info(msgPrefix + fqcn);
+					set(fqcn);
+				} else {
+					logger.info(msgPrefix
+							+ getDefaultGeneratorPluginFactory().getClass()
+									.getName());
+					set(getDefaultGeneratorPluginFactory());
+				}
+			} catch (Exception x) {
+				String msg = msgPrefix + x.toString() + ": " + x.getCause();
+				logger.error(msg, x);
+				assert delegate == null;
+				throw new IllegalStateException(msg);
+			}
+		}
+		assert delegate != null;
+		return delegate;
+	}
+
 	public List lookupGeneratorPlugins() throws GenException {
-		List retVal = getInstance().lookupGeneratorPlugins();
+		List retVal = getDelegate().lookupGeneratorPlugins();
 		assert retVal != null;
 		return retVal;
 	}
 
 	/** For testing only; otherwise treat as private */
 	InstallableGeneratorPluginFactory() {
+	}
+
+	/**
+	 * Sets the factory delegate.
+	 *
+	 * @throws IllegalArgumentException
+	 *             if the delegate can not be updated.
+	 * */
+	private void set(IGeneratorPluginFactory delegate) {
+		if (delegate == null) {
+			throw new IllegalArgumentException("null delegate");
+		}
+		this.delegate = delegate;
+	}
+
+	/**
+	 * An alternative method for setting a factory delegate using a FQCN factory
+	 * name.
+	 *
+	 * @throws IllegalArgumentException
+	 *             if the delegate can not be updated.
+	 */
+	private void set(String fqcn) {
+		if (fqcn == null || fqcn.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"null or blank class name for generator plugin factory");
+		}
+		final String msgPrefix = "Installing generator plugin factory: ";
+		try {
+			Class c = Class.forName(fqcn);
+			IGeneratorPluginFactory instance = (IGeneratorPluginFactory) c
+					.newInstance();
+			set(instance);
+		} catch (Exception e) {
+			String msg = msgPrefix + e.toString() + ": " + e.getCause();
+			logger.error(msg, e);
+			throw new IllegalArgumentException(msg);
+		}
 	}
 
 }
