@@ -24,11 +24,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -45,6 +40,8 @@ import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.GeneratorHelper;
 import com.choicemaker.cm.core.gen.GeneratorPlugin;
 import com.choicemaker.cm.core.gen.IGenerator;
+import com.choicemaker.cm.core.gen.IGeneratorPluginFactory;
+import com.choicemaker.cm.core.gen.InstallableGeneratorPluginFactory;
 import com.choicemaker.cm.core.xmlconf.GeneratorXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 
@@ -363,29 +360,15 @@ public class GeneratorImpl implements IGenerator {
 		createInterfacePackage();
 		createHolderClasses(rootRecord, null);
 		createAccessor();
-		IExtensionPoint extensionPoint = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.generatorPlugin");
-		IExtension[] extensions = extensionPoint.getExtensions();
-		for (int i = 0; i < extensions.length; i++) {
-			IExtension extension = extensions[i];
-			IConfigurationElement[] elems = extension.getConfigurationElements();
-			if (elems.length == 0) {
-				throw new GenException("no configurations for '" + extension.toString() + "'");
-			} else if (elems.length > 1) {
-				throw new GenException("multiple configurations for '" + extension.toString() + "'");
-			}
-			try {
-				GeneratorPlugin gp = (GeneratorPlugin) elems[0].createExecutableExtension("class");
-				// debug
-				System.out.println("Generator: '" + gp.toString() + "'");
-				// end debug
-				gp.generate(this);
-				// BUG never checks if GeneratorPlugin produces errors
-				// rphall 2005-10-11
-			} catch (CoreException e) {
-				// BUG poor diagnostic
-				// rphall 2005-10-12
-				e.printStackTrace();
-			}
+		IGeneratorPluginFactory factory = InstallableGeneratorPluginFactory
+				.getInstance();
+		List generatorPlugins = factory.lookupGeneratorPlugins();
+		for (Iterator i = generatorPlugins.iterator(); i.hasNext();) {
+			GeneratorPlugin gp = (GeneratorPlugin) i.next();
+			logger.info("Generator: '" + gp.toString() + "'");
+			gp.generate(this);
+			// BUG never checks if GeneratorPlugin produces errors
+			// rphall 2005-10-11
 		}
 		finishAccessor();
 	}
