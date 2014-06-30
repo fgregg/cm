@@ -15,12 +15,12 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.BeanMatchCandidate;
-import com.choicemaker.cm.core.BeanProfile;
-import com.choicemaker.cm.core.InvalidProfileException;
-import com.choicemaker.cm.core.PMManager;
-import com.choicemaker.cm.core.Profile;
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.BeanMatchCandidate;
+import com.choicemaker.cm.core.base.BeanProfile;
+import com.choicemaker.cm.core.base.InvalidProfileException;
+import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.base.Profile;
+import com.choicemaker.cm.core.base.Record;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 

@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.base.MarkedRecordPairSource;
 import com.choicemaker.cm.core.util.*;
 import com.choicemaker.cm.core.xmlconf.*;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;

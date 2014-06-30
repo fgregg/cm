@@ -38,7 +38,7 @@ public class JdomBuilder implements IBuilder {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.IBuilder#build(java.io.Reader)
+	 * @see com.choicemaker.cm.core.base.configure.IBuilder#build(java.io.Reader)
 	 */
 	public IDocument build(Reader characterStream)
 		throws XmlSpecificationException, IOException {

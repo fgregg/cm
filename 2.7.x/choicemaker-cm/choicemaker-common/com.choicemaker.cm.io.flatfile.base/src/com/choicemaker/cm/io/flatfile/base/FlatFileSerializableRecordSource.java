@@ -15,12 +15,12 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.ISerializableRecordSource;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.PMManager;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.core.base.ISerializableRecordSource;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.base.Sink;
 
 /**
  * This is a wrapper object around FlatFileRecordSource and it can be serialized, because it
@@ -70,42 +70,42 @@ public class FlatFileSerializableRecordSource implements ISerializableRecordSour
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.RecordSource#getNext()
+	 * @see com.choicemaker.cm.core.base.RecordSource#getNext()
 	 */
 	public Record getNext() throws IOException {
 		return getRS().getNext();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.Source#open()
+	 * @see com.choicemaker.cm.core.base.Source#open()
 	 */
 	public void open() throws IOException {
 		getRS().open ();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.Source#close()
+	 * @see com.choicemaker.cm.core.base.Source#close()
 	 */
 	public void close() throws IOException {
 		getRS().close();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.Source#hasNext()
+	 * @see com.choicemaker.cm.core.base.Source#hasNext()
 	 */
 	public boolean hasNext() throws IOException {
 		return getRS().hasNext();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.Source#getName()
+	 * @see com.choicemaker.cm.core.base.Source#getName()
 	 */
 	public String getName() {
 		return getRS().getName();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.Source#setName(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.Source#setName(java.lang.String)
 	 */
 	public void setName(String name) {
 		getRS().setName(name);
@@ -113,28 +113,28 @@ public class FlatFileSerializableRecordSource implements ISerializableRecordSour
 
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.Source#setModel(com.choicemaker.cm.core.ImmutableProbabilityModel)
+	 * @see com.choicemaker.cm.core.base.Source#setModel(com.choicemaker.cm.core.base.ImmutableProbabilityModel)
 	 */
 	public void setModel(ImmutableProbabilityModel m) {
 		getRS().setModel(m);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.Source#hasSink()
+	 * @see com.choicemaker.cm.core.base.Source#hasSink()
 	 */
 	public boolean hasSink() {
 		return getRS().hasSink();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.Source#getSink()
+	 * @see com.choicemaker.cm.core.base.Source#getSink()
 	 */
 	public Sink getSink() {
 		return getRS().getSink();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.Source#getFileName()
+	 * @see com.choicemaker.cm.core.base.Source#getFileName()
 	 */
 	public String getFileName() {
 		return getRS().getFileName();

@@ -12,16 +12,16 @@ package com.choicemaker.cm.mmdevtools.io;
 
 import java.io.IOException;
 
-import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.ImmutableRecordPair;
-import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSink;
-import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.SinkFactory;
-import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableRecordPair;
+import com.choicemaker.cm.core.base.MarkedRecordPairSink;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSink;
+import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.base.Sink;
+import com.choicemaker.cm.core.base.SinkFactory;
+import com.choicemaker.cm.core.base.Source;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.xml.base.XmlRecordSinkFactory;
@@ -116,7 +116,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 	
 	/**
 	 * NOP for now
-	 * @see com.choicemaker.cm.core.Sink#flush()
+	 * @see com.choicemaker.cm.core.base.Sink#flush()
 	 */
 	public void flush() {
 	}

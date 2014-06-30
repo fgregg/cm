@@ -24,8 +24,8 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.choicemaker.cm.core.RepositoryChangeEvent;
-import com.choicemaker.cm.core.RepositoryChangeListener;
+import com.choicemaker.cm.core.base.RepositoryChangeEvent;
+import com.choicemaker.cm.core.base.RepositoryChangeListener;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;

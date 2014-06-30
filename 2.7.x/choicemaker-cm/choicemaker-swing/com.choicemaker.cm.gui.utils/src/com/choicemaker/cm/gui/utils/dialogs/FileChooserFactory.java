@@ -19,7 +19,7 @@ import javax.swing.plaf.basic.BasicFileChooserUI;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.base.Constants;
 import com.choicemaker.cm.core.util.CustomFileFilter;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;

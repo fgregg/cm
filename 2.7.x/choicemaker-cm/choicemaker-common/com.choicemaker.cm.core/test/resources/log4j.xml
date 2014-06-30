@@ -24,7 +24,7 @@
    <!-- ================ -->
    <!-- Limit categories -->
    <!-- ================ -->
-    <category name="com.choicemaker.cm.core">
+    <category name="com.choicemaker.cm.core.base">
        <priority value="debug"/>
     </category>
 

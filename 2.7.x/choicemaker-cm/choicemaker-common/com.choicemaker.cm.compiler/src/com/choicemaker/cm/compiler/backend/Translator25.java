@@ -61,10 +61,10 @@ import com.choicemaker.cm.compiler.backend.TargetTree.Return;
 import com.choicemaker.cm.compiler.backend.TargetTree.Taged;
 import com.choicemaker.cm.compiler.backend.TargetTree.Try;
 import com.choicemaker.cm.compiler.parser.TreeList;
-import com.choicemaker.cm.core.ClueDesc;
-import com.choicemaker.cm.core.ClueSetType;
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.ExtDecision;
+import com.choicemaker.cm.core.base.ClueDesc;
+import com.choicemaker.cm.core.base.ClueSetType;
+import com.choicemaker.cm.core.base.Decision;
+import com.choicemaker.cm.core.base.ExtDecision;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.util.MessageUtil;
 
@@ -164,11 +164,11 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	// Factory methods
     
 	protected Tree clue_desc_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.ClueDesc");
+		return qualid(pos, "com.choicemaker.cm.core.base.ClueDesc");
 	}
    	
 	protected Tree[] interfaces(int pos) {
-		return new Tree[]{qualid(pos, "com.choicemaker.cm.core.ClueSet")};
+		return new Tree[]{qualid(pos, "com.choicemaker.cm.core.base.ClueSet")};
 	}
     
 	protected Tree clue_desc_arr_ident(int pos) {
@@ -192,11 +192,11 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree decision_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.Decision");
+		return qualid(pos, "com.choicemaker.cm.core.base.Decision");
 	}
     
 	protected Tree ext_decision_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.ExtDecision");
+		return qualid(pos, "com.choicemaker.cm.core.base.ExtDecision");
 	}
     
 	protected VarDecl[] decision_var_decls(int pos) {
@@ -212,19 +212,19 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree active_clues_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.ActiveClues");
+		return qualid(pos, "com.choicemaker.cm.core.base.ActiveClues");
 	}
     
 	protected Tree boolean_active_clues_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.BooleanActiveClues");
+		return qualid(pos, "com.choicemaker.cm.core.base.BooleanActiveClues");
 	}
     
 	protected Tree int_active_clues_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.IntActiveClues");
+		return qualid(pos, "com.choicemaker.cm.core.base.IntActiveClues");
 	}
     
 	protected Tree record_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.Record");
+		return qualid(pos, "com.choicemaker.cm.core.base.Record");
 	}
   	
 	protected Tree boolean_ident(int pos) {
@@ -432,7 +432,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 			unit.error(t.pos, x.getMessage());
 			return;
 		}
-		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "com.choicemaker.cm.core"), true));
+		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "com.choicemaker.cm.core.base"), true));
 		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "org.apache.log4j"), true));
 		createAuxiliaryMembersBegin(t);
 		clueBody = new TreeList();
@@ -597,7 +597,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 				new Literal(Location.NOPOS, INT, new Integer(size))));
 		Tree[] mb2 = { new Return(new Literal(Location.NOPOS, INT, new Integer(size)))};
 		body.append(new JMethodDecl(Modifiers.PUBLIC, "size", int_ident(t.pos), null, null, mb2));
-		Tree cluesettype = qualid(t.pos, "com.choicemaker.cm.core.ClueSetType");
+		Tree cluesettype = qualid(t.pos, "com.choicemaker.cm.core.base.ClueSetType");
 		body.append(
 			new JMethodDecl(
 				Modifiers.PUBLIC,
@@ -608,7 +608,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 					new Return(
 						qualid(
 							t.pos,
-							"com.choicemaker.cm.core.ClueSetType." +
+							"com.choicemaker.cm.core.base.ClueSetType." +
 							    t.type.getConstant()))}));
 		body.append(
 			new JMethodDecl(

@@ -49,12 +49,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.MarkedRecordPairSource;
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.Descriptor;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
+import com.choicemaker.cm.core.base.MarkedRecordPairSource;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.util.LogFrequencyPartitioner;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;

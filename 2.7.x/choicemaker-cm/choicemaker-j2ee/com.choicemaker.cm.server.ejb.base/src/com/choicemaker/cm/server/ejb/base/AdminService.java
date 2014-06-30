@@ -79,8 +79,8 @@ public interface AdminService extends EJBObject {
 	 * Updates the derived fields of the record with the specified id.
 	 * This method is only used for databases that do not update
 	 * derived fields via triggers.</p>
-	 * @see com.choicemaker.cm.core.Profile#getRecord()
-	 * @see com.choicemaker.cm.core.Record#getId()
+	 * @see com.choicemaker.cm.core.base.Profile#getRecord()
+	 * @see com.choicemaker.cm.core.base.Record#getId()
 	 * 
 	 * @param id the key that identifies the record that should be updated.
 	 * @throws	DatabaseException If a database error prevents

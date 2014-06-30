@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.modelmaker.gui.tables;
 
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
 /**
  * Description

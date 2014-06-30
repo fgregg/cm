@@ -12,8 +12,8 @@ package com.choicemaker.cm.io.xml.base.xmlconf;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.MarkedRecordPairSource;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.xml.base.SimpleXmlMarkedRecordPairSource;
 

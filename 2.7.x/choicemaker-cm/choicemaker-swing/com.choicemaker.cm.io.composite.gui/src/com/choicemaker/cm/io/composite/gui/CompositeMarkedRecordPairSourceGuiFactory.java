@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.composite.gui;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.io.composite.base.CompositeMarkedRecordPairSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceGui;

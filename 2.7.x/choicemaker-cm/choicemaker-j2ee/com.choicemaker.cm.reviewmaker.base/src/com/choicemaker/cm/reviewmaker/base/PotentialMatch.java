@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.reviewmaker.base;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.core.datamodel.DefaultObservableData;
 
 /**

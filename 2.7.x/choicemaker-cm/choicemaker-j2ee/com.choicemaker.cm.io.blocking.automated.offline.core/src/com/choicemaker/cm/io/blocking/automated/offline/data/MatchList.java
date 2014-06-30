@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.MatchCandidate;
+import com.choicemaker.cm.core.base.MatchCandidate;
 
 /**
  * This object holds a record ID and a list of MatchCandidate objects

@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.xml.base;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 
 /**
  * @author ajwinkel

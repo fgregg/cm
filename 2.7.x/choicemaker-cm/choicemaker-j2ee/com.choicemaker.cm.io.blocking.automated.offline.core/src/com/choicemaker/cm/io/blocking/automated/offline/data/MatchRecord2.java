@@ -12,8 +12,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.ActiveClues;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.ActiveClues;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 
 /**

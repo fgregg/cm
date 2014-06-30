@@ -9,17 +9,17 @@
     <library name="lib/jakarta-oro-2.0.1.jar" />
   </runtime>
   <requires>
-    <import plugin="com.choicemaker.cm.core" />
+    <import plugin="com.choicemaker.cm.core.base" />
     <import plugin="org.apache.ant" />
     <import plugin="org.apache.bcel" />
   </requires>
 
-  <extension point="com.choicemaker.cm.core.generatorPlugin">
+  <extension point="com.choicemaker.cm.core.base.generatorPlugin">
     <plugin name="GUI Descriptors"
       class="com.choicemaker.cm.compiler.gen.GuiDescriptorGenerator">
     </plugin>
   </extension>
-  <extension point="com.choicemaker.cm.core.objectGenerator">
+  <extension point="com.choicemaker.cm.core.base.objectGenerator">
     <generator default="true" description="Production Models Jar File"
       class="com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder$ProductionModelsBuilder">
     </generator>

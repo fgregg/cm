@@ -35,7 +35,7 @@ import com.choicemaker.cm.compiler.parser.Scanner;
 import com.choicemaker.cm.compiler.typechecker.DeriveType;
 import com.choicemaker.cm.compiler.typechecker.EnterClues;
 import com.choicemaker.cm.compiler.typechecker.TypeChecker;
-import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.base.Constants;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.util.MessageUtil;
 

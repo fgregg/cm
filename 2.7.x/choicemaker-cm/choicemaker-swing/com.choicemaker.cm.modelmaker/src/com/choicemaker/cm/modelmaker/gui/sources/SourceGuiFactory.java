@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.modelmaker.gui.sources;
 
-import com.choicemaker.cm.core.DynamicDispatchHandler;
-import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.DynamicDispatchHandler;
+import com.choicemaker.cm.core.base.Source;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceGui;
 /**

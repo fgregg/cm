@@ -17,7 +17,7 @@ import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.BlockingException;
 import com.choicemaker.cm.core.util.EquivalenceClass;
 import com.choicemaker.cm.core.util.EquivalenceClassBuilder;
 import com.choicemaker.cm.core.util.LongArrayList;

@@ -15,7 +15,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.base.Constants;
 
 /**
  * Description

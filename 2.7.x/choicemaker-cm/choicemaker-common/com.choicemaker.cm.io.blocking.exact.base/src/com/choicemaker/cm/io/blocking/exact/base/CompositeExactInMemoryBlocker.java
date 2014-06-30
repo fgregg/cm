@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.exact.base;
 
 import java.util.*;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 
 /**
@@ -48,7 +48,7 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.Record)
+	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record)
 	 */
 	public RecordSource block(Record q) {
 		HashSet res = new HashSet();
@@ -59,7 +59,7 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.Record, int)
+	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record, int)
 	 */
 	public RecordSource block(Record q, int start) {
 		HashSet res = new HashSet();

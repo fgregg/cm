@@ -12,8 +12,8 @@ package com.choicemaker.cm.mmdevtools.util;
 
 import java.util.Random;
 
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordData;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordData;
 
 /**
  *

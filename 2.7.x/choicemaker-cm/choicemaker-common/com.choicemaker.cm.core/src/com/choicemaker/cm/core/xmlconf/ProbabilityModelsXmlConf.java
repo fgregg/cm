@@ -32,11 +32,11 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.ClueDesc;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.PMManager;
-import com.choicemaker.cm.core.ProbabilityModel;
+import com.choicemaker.cm.core.base.Accessor;
+import com.choicemaker.cm.core.base.ClueDesc;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.base.ProbabilityModel;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
@@ -272,7 +272,7 @@ public class ProbabilityModelsXmlConf {
 			String name = mle.getAttributeValue("class");
 			MlModelConf mc =
 				(MlModelConf) ExtensionPointMapper.getInstance(
-					"com.choicemaker.cm.core.machineLearner",
+					"com.choicemaker.cm.core.base.machineLearner",
 					name);
 			ml = mc.readMachineLearner(mle, accessor, cl, oldClueNums);
 		} catch (Exception ex) {

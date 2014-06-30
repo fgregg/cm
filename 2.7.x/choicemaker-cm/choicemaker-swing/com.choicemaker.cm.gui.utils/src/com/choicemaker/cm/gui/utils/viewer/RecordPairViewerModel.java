@@ -13,7 +13,7 @@ package com.choicemaker.cm.gui.utils.viewer;
 import java.awt.Dimension;
 import java.util.*;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.core.datamodel.DefaultCompositeObservableData;
 
 /**

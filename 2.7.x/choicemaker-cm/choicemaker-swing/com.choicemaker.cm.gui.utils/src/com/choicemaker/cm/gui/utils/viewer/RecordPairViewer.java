@@ -18,7 +18,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.core.datamodel.*;
 import com.choicemaker.cm.gui.utils.viewer.event.DesktopPaneMouseListener;
 

@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.modelmaker;
 
-import com.choicemaker.cm.core.Repository;
+import com.choicemaker.cm.core.base.Repository;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.modelmaker.stats.Statistics;
 

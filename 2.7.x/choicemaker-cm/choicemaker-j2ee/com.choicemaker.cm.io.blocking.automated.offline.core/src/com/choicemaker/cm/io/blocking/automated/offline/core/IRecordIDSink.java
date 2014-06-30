@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.BlockingException;
 
 /**
  * This writes the record ID to a file.  The record ID can be an Integer or Long or String.

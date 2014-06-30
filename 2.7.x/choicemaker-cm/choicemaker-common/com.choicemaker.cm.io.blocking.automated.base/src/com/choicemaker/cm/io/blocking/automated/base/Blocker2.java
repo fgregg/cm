@@ -15,16 +15,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.core.base.Accessor;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.Sink;
 
 /**
  * Creates blockingSets (using a BlockingSetFactory) and provides
  * methods for retrieving blocked records from a database (the
  * {@link AutomatedBlocker} interface extends the
- * {@link com.choicemaker.cm.core.RecordSource} interface).<p>
+ * {@link com.choicemaker.cm.core.base.RecordSource} interface).<p>
  *
  * This class is a refactored version of the {@link Blocker} class. The
  * ABA algorithm has moved to a {@link BlockingSetFactory} class

@@ -14,8 +14,8 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBObject;
 
-import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Descriptor;
+import com.choicemaker.cm.core.base.Record;
 import com.choicemaker.cm.core.sort.SortCondition;
 import com.choicemaker.cm.reviewmaker.base.ClientData;
 import com.choicemaker.cm.reviewmaker.base.ServerData;

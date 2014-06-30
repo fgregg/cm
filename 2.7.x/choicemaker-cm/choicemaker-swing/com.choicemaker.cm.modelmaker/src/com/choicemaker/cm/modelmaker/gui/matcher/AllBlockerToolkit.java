@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.modelmaker.gui.matcher;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 
 /**
  * Description

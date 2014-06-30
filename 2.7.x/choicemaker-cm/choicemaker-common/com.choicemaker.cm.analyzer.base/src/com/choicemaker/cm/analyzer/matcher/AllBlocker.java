@@ -12,9 +12,9 @@ package com.choicemaker.cm.analyzer.matcher;
 
 import java.util.List;
 
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordBinder;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordBinder;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 
 /**
@@ -38,7 +38,7 @@ public class AllBlocker implements InMemoryBlocker {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.Record)
+	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record)
 	 */
 	public RecordSource block(Record q) {
 		return new RecordBinder(records);

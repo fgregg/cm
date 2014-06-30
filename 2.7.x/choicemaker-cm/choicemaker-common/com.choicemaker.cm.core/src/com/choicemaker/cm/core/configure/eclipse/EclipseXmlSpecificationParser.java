@@ -23,7 +23,7 @@ public class EclipseXmlSpecificationParser
 	/**
 	 * Returns an instance of <code>EclipseBuilder</code>
 	 * @see EclipseBuilder
-	 * @see com.choicemaker.cm.core.configure.AbstractXmlSpecificationParser#getBuilder()
+	 * @see com.choicemaker.cm.core.base.configure.AbstractXmlSpecificationParser#getBuilder()
 	 */
 	public IBuilder getBuilder() {
 		return new EclipseBuilder();

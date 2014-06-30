@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.composite.base;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 
 /**
  * Composite source of record pairs.

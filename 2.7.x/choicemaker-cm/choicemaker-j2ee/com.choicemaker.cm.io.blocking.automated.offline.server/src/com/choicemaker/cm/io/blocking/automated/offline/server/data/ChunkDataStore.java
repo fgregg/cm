@@ -13,10 +13,10 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 import java.io.IOException;
 import java.util.HashMap;
 
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 

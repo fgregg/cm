@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.io.xml.gui;
 
-import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.base.Source;
 import com.choicemaker.cm.io.xml.base.XmlRecordSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceGui;

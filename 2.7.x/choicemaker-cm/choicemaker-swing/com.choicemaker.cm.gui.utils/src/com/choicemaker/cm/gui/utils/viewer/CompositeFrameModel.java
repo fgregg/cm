@@ -12,7 +12,7 @@ package com.choicemaker.cm.gui.utils.viewer;
 
 import java.awt.Rectangle;
 
-import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.base.Descriptor;
 import com.choicemaker.cm.core.datamodel.DefaultObservableData;
 
 /**

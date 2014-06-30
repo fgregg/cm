@@ -12,10 +12,10 @@ package com.choicemaker.cm.io.xml.base;
 
 import org.xml.sax.SAXException;
 
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.InvalidProfileException;
-import com.choicemaker.cm.core.Profile;
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.InvalidProfileException;
+import com.choicemaker.cm.core.base.Profile;
+import com.choicemaker.cm.core.base.Record;
 
 /**
  * Profile that represents a query record as a XML document. Refer to the ChoiceMaker

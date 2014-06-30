@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.analyzer.filter;
 
-import com.choicemaker.cm.core.ActiveClues;
+import com.choicemaker.cm.core.base.ActiveClues;
 
 /**
  * Description
@@ -63,7 +63,7 @@ public class RuleFilterCondition implements FilterCondition {
 	}
 	
 	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.ActiveClues)
+	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.base.ActiveClues)
 	 */
 	public boolean satisfy(ActiveClues clues) {
 		return clues.containsRule(clueNum) == value.booleanValue();

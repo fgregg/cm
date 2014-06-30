@@ -15,9 +15,9 @@ import java.io.StringWriter;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
 
 /**
  * Comment

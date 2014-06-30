@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.result;
 
 import java.util.TreeSet;
 
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;

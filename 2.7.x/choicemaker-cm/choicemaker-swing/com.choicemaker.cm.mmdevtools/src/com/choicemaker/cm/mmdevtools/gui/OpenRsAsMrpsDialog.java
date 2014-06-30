@@ -23,8 +23,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.base.Source;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;

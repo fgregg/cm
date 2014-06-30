@@ -15,7 +15,7 @@ import java.beans.*;
 
 import javax.swing.JInternalFrame;
 
-import com.choicemaker.cm.core.RecordData;
+import com.choicemaker.cm.core.base.RecordData;
 
 /**
  * .

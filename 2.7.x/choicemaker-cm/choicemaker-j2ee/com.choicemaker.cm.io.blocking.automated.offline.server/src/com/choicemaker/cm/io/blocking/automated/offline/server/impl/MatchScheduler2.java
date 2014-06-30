@@ -26,11 +26,11 @@ import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.PMManager;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;

@@ -13,7 +13,7 @@ package com.choicemaker.cm.core.compiler;
 import java.io.Writer;
 import java.util.Properties;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 
 /**
  * A placeholder for objects that require, but don't use, a compiler.
@@ -29,7 +29,7 @@ public final class DoNothingCompiler implements ICompiler {
 	private DoNothingCompiler() {}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.compiler.ICompiler#compile(com.choicemaker.cm.core.compiler.CompilationArguments, java.io.Writer)
+	 * @see com.choicemaker.cm.core.base.compiler.ICompiler#compile(com.choicemaker.cm.core.base.compiler.CompilationArguments, java.io.Writer)
 	 */
 	public String compile(CompilationArguments arguments, Writer statusOutput)
 		throws CompilerException {
@@ -37,7 +37,7 @@ public final class DoNothingCompiler implements ICompiler {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.compiler.ICompiler#compile(com.choicemaker.cm.core.ProbabilityModel, java.io.Writer)
+	 * @see com.choicemaker.cm.core.base.compiler.ICompiler#compile(com.choicemaker.cm.core.base.ProbabilityModel, java.io.Writer)
 	 */
 	public boolean compile(IProbabilityModel model, Writer statusOutput)
 		throws CompilerException {
@@ -45,7 +45,7 @@ public final class DoNothingCompiler implements ICompiler {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.compiler.ICompiler#getFeatures()
+	 * @see com.choicemaker.cm.core.base.compiler.ICompiler#getFeatures()
 	 */
 	public Properties getFeatures() {
 		return new Properties();

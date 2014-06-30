@@ -27,16 +27,17 @@ import org.apache.log4j.Priority;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
-//import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.InvalidProfileException;
-import com.choicemaker.cm.core.Match;
-import com.choicemaker.cm.core.MatchCandidate;
-import com.choicemaker.cm.core.MatchCandidateFactory;
-import com.choicemaker.cm.core.PMManager;
-import com.choicemaker.cm.core.Profile;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordDecisionMaker;
+//import com.choicemaker.cm.core.base.Accessor;
+
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.InvalidProfileException;
+import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.base.MatchCandidate;
+import com.choicemaker.cm.core.base.MatchCandidateFactory;
+import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.base.Profile;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordDecisionMaker;
 import com.choicemaker.cm.core.compiler.DoNothingCompiler;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.report.Report;
@@ -69,7 +70,7 @@ public class QueryServiceBean implements SessionBean {
 	public static final String REPORTING_SOURCE = "java:comp/env/jdbc/reportingSource";
 	public static final String REPORTING_FILE = "reportingFile";
 	public static final String DATABASE_ACCESSOR = "com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
-	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.matchCandidate";
+	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.base.matchCandidate";
 
 	private static boolean inited;
 	private static transient Reporter fileReporter;

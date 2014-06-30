@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
 import com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder;
-import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.base.Constants;
 import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -177,7 +177,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		ArrayList descs = new ArrayList();
 		ArrayList defs = new ArrayList();
 		
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.objectGenerator");
+		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.base.objectGenerator");
 		IExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
 			IExtension extension = extensions[i];

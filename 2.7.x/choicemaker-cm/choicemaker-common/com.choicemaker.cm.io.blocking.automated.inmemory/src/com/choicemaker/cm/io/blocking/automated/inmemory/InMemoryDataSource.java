@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Record;
 import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;

@@ -12,7 +12,7 @@ package com.choicemaker.cm.mmdevtools.util.profiler;
 
 import java.util.Set;
 
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Record;
 import com.choicemaker.cm.core.util.IntArrayList;
 
 /**

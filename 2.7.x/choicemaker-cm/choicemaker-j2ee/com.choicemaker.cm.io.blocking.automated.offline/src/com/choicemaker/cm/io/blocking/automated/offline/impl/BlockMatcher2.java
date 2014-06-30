@@ -18,15 +18,15 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.ActiveClues;
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.Evaluator;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.ActiveClues;
+import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.base.ClueSet;
+import com.choicemaker.cm.core.base.Decision;
+import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
@@ -95,7 +95,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher#matchBlocks(com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource, com.choicemaker.cm.core.ProbabilityModel, com.choicemaker.cm.core.RecordSource, com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSink, float, float, int)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher#matchBlocks(com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource, com.choicemaker.cm.core.base.ProbabilityModel, com.choicemaker.cm.core.base.RecordSource, com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSink, float, float, int)
 	 */
 	public void matchBlocks(
 		IComparisonArraySource cgSource, IProbabilityModel stageModel, IProbabilityModel masterModel,

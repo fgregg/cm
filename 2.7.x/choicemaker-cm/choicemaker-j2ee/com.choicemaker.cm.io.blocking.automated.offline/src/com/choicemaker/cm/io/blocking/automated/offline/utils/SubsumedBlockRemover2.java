@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.utils;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.BlockingException;
 import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;

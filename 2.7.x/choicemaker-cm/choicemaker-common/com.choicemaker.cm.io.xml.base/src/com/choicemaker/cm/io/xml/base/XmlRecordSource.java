@@ -23,10 +23,10 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLFilterImpl;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.base.Sink;
 import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.NameUtils;

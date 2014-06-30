@@ -16,9 +16,9 @@ import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.analyzer.filter.IntFilterCondition;
 import com.choicemaker.cm.analyzer.filter.RuleFilterCondition;
-import com.choicemaker.cm.core.ClueDesc;
-import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.ClueSetType;
+import com.choicemaker.cm.core.base.ClueDesc;
+import com.choicemaker.cm.core.base.ClueSet;
+import com.choicemaker.cm.core.base.ClueSetType;
 import com.choicemaker.cm.modelmaker.gui.tables.ClTableRow;
 import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
 

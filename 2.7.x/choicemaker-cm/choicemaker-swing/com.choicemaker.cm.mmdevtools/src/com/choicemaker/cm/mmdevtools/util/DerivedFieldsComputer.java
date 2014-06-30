@@ -13,12 +13,12 @@ package com.choicemaker.cm.mmdevtools.util;
 import java.lang.reflect.Field;
 import java.util.Date;
 
-import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.DescriptorCollection;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSink;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.Descriptor;
+import com.choicemaker.cm.core.base.DescriptorCollection;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSink;
+import com.choicemaker.cm.core.base.RecordSource;
 
 /**
  * @author Adam Winkel

@@ -21,7 +21,7 @@ public class JdomXmlSpecificationParser
 	extends AbstractXmlSpecificationParser {
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.AbstractXmlSpecificationParser#getBuilder()
+	 * @see com.choicemaker.cm.core.base.configure.AbstractXmlSpecificationParser#getBuilder()
 	 */
 	public IBuilder getBuilder() {
 		return new JdomBuilder();

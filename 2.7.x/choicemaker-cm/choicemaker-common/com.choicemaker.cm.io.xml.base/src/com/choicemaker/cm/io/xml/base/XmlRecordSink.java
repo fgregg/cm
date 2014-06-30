@@ -17,10 +17,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSink;
+import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSink;
 
 /**
  * Description
@@ -60,7 +60,7 @@ public class XmlRecordSink implements RecordSink {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.Sink#flush()
+	 * @see com.choicemaker.cm.core.base.Sink#flush()
 	 */
 	public void flush() throws IOException {
 		w.flush();

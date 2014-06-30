@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Set;
 
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Record;
 
 /**
  * @author Adam Winkel

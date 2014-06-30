@@ -16,7 +16,7 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.base.Descriptor;
 import com.choicemaker.cm.core.util.*;
 import com.choicemaker.cm.gui.utils.viewer.*;
 import com.choicemaker.cm.gui.utils.viewer.dialog.*;

@@ -28,8 +28,8 @@ import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
-import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.ColumnDefinition;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.ClueNameCellListener;
 import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;

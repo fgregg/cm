@@ -19,10 +19,10 @@ import javax.swing.event.TableModelEvent;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
-import com.choicemaker.cm.core.ClueDesc;
-import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.ClueDesc;
+import com.choicemaker.cm.core.base.ClueSet;
+import com.choicemaker.cm.core.base.ColumnDefinition;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.tables.SortableTableModel;
 import com.choicemaker.cm.modelmaker.gui.utils.ClueDataComparator;

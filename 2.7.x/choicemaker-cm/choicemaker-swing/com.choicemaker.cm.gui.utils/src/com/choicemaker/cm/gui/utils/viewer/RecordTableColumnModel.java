@@ -14,7 +14,7 @@ import java.beans.*;
 
 import javax.swing.table.*;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 
 /**
  * This class acts as the TableColumnModel and as a Relay of PropertyChangeEvents

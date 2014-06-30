@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.Source;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;

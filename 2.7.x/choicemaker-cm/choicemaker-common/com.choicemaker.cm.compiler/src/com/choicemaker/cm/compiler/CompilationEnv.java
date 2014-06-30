@@ -15,7 +15,7 @@ import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.base.Constants;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.util.MessageUtil;
 

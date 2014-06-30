@@ -11,14 +11,14 @@
       </library>
    </runtime>
    <requires>
-      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.core.base"/>
    </requires>
 
 
    <extension
          id="xmlMrpsReader"
          name="xml"
-         point="com.choicemaker.cm.core.mrpsReader">
+         point="com.choicemaker.cm.core.base.mrpsReader">
       <handler
             name="XML IO"
             class="com.choicemaker.cm.io.xml.base.xmlconf.XmlMarkedRecordPairSourceXmlConf"
@@ -29,7 +29,7 @@
    <extension
          id="xml"
          name="xml"
-         point="com.choicemaker.cm.core.generatorPlugin">
+         point="com.choicemaker.cm.core.base.generatorPlugin">
       <plugin
             name="XML"
             class="com.choicemaker.cm.io.xml.base.gen.XmlGenerator">
@@ -38,7 +38,7 @@
    <extension
          id="xmlRsReader"
          name="xmlRsReader"
-         point="com.choicemaker.cm.core.rsReader">
+         point="com.choicemaker.cm.core.base.rsReader">
       <handler
             name="XML"
             class="com.choicemaker.cm.io.xml.base.xmlconf.XmlRecordSourceXmlConf"
@@ -49,7 +49,7 @@
    <extension
          id="simpleXmlMrpsReader"
          name="simpleXmlMrpsReader"
-         point="com.choicemaker.cm.core.fileMrpsReader">
+         point="com.choicemaker.cm.core.base.fileMrpsReader">
       <handler
             class="com.choicemaker.cm.io.xml.base.xmlconf.SimpleXmlMarkedRecordPairSourceXmlConf"
             extension="xml">
@@ -58,7 +58,7 @@
    <extension
          id="xmlMatchCandidate"
          name="xmlMatchCandidate"
-         point="com.choicemaker.cm.core.matchCandidate">
+         point="com.choicemaker.cm.core.base.matchCandidate">
       <matchCandidate
             class="com.choicemaker.cm.io.xml.base.XmlMatchCandidateFactory">
       </matchCandidate>
@@ -66,7 +66,7 @@
    <extension
          id="xmlAccessor"
          name="xmlAccessor"
-         point="com.choicemaker.cm.core.accessor">
+         point="com.choicemaker.cm.core.base.accessor">
       <accessor
             class="com.choicemaker.cm.io.xml.base.XmlAccessor">
       </accessor>
@@ -74,7 +74,7 @@
    <extension
          id="xmlReporterAccessor"
          name="xmlReporterAccessor"
-         point="com.choicemaker.cm.core.accessor">
+         point="com.choicemaker.cm.core.base.accessor">
       <accessor
             class="com.choicemaker.cm.io.xml.base.XmlReporterAccessor">
       </accessor>

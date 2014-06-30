@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.base.Constants;
 
 /**
  *

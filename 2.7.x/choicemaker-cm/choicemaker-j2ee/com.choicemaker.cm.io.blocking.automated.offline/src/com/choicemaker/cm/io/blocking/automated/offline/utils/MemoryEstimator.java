@@ -14,9 +14,9 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSource;
 
 /**
  * This object estimates how many records can fit safely into a hashmap in memory.

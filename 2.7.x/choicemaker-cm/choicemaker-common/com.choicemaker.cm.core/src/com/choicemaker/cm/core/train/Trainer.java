@@ -13,15 +13,15 @@ package com.choicemaker.cm.core.train;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.choicemaker.cm.core.ActiveClues;
-import com.choicemaker.cm.core.BooleanActiveClues;
-import com.choicemaker.cm.core.ClueDesc;
-import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.ClueSetType;
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.Evaluator;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.ActiveClues;
+import com.choicemaker.cm.core.base.BooleanActiveClues;
+import com.choicemaker.cm.core.base.ClueDesc;
+import com.choicemaker.cm.core.base.ClueSet;
+import com.choicemaker.cm.core.base.ClueSetType;
+import com.choicemaker.cm.core.base.Decision;
+import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.core.util.OperationFailedException;
 

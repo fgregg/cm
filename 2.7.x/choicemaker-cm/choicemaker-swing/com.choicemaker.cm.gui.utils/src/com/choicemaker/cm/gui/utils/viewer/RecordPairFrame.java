@@ -16,7 +16,7 @@ import java.beans.*;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.gui.utils.viewer.event.*;
 
 /**

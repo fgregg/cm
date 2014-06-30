@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.services;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;

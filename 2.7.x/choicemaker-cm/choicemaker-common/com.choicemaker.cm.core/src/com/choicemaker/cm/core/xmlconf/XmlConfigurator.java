@@ -31,7 +31,7 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.PMManager;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.gen.Eclipse2GeneratorPluginFactory;
 import com.choicemaker.cm.core.gen.InstallableGeneratorPluginFactory;
@@ -92,7 +92,7 @@ public class XmlConfigurator {
 
 	private static void initReports() {
 		List reporters = new ArrayList();
-		IExtensionPoint reporterExts = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.reporter");
+		IExtensionPoint reporterExts = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.base.reporter");
 		List reporterConfigs = getCore().getChildren("reporter");
 		for (Iterator iReporterConfigs = reporterConfigs.iterator(); iReporterConfigs.hasNext();) {
 			Element reporterConfig = (Element) iReporterConfigs.next();

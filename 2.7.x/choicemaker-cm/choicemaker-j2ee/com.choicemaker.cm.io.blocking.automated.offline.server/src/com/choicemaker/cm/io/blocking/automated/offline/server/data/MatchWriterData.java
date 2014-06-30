@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 
 /**

@@ -32,7 +32,7 @@ public class EclipseBuilder implements IBuilder {
 	 * before this method is invoked, the relevant portion of the plugin.xml
 	 * file should be isolated so that the character stream starts reading at
 	 * the start of a <code>configurable</code> element.
-	 * @see com.choicemaker.cm.core.configure.IBuilder#build(java.io.Reader)
+	 * @see com.choicemaker.cm.core.base.configure.IBuilder#build(java.io.Reader)
 	 */
 	public IDocument build(Reader characterStream)
 		throws XmlSpecificationException, IOException {

@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-import com.choicemaker.cm.core.RecordData;
+import com.choicemaker.cm.core.base.RecordData;
 import com.choicemaker.cm.core.datamodel.*;
 
 /**

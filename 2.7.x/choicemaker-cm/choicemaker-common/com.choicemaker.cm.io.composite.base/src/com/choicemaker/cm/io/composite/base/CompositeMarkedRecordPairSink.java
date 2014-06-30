@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.composite.base;
 
 import java.io.IOException;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 
 /**
  *

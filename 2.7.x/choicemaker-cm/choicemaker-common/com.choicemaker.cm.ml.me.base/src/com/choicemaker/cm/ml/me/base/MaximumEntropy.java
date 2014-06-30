@@ -14,11 +14,11 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.ClueSetType;
-import com.choicemaker.cm.core.Evaluator;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.Accessor;
+import com.choicemaker.cm.core.base.ClueSet;
+import com.choicemaker.cm.core.base.ClueSetType;
+import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 import com.choicemaker.cm.core.ml.MachineLearner;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
@@ -46,7 +46,7 @@ public class MaximumEntropy implements MachineLearner {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#setProbabilityModel(com.choicemaker.cm.core.ProbabilityModel)
+	 * @see com.choicemaker.cm.ml.MachineLearner#setProbabilityModel(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
 	public void setProbabilityModel(IProbabilityModel model) {
 		this.model = model;
@@ -158,7 +158,7 @@ public class MaximumEntropy implements MachineLearner {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#canUse(com.choicemaker.cm.core.ClueSet)
+	 * @see com.choicemaker.cm.ml.MachineLearner#canUse(com.choicemaker.cm.core.base.ClueSet)
 	 */
 	public boolean canUse(ClueSet cs) {
 		return cs.hasDecision() && cs.getType() == ClueSetType.BOOLEAN;

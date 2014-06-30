@@ -47,7 +47,7 @@ import com.choicemaker.cm.compiler.backend.TargetTree.Return;
 import com.choicemaker.cm.compiler.backend.TargetTree.Taged;
 import com.choicemaker.cm.compiler.backend.TargetTree.Try;
 import com.choicemaker.cm.compiler.parser.TreeList;
-import com.choicemaker.cm.core.ClueSetType;
+import com.choicemaker.cm.core.base.ClueSetType;
 import com.choicemaker.cm.core.compiler.CompilerException;
 
 /**

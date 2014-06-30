@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.base.SerialRecordSource;
 import com.choicemaker.cm.core.compiler.DoNothingCompiler;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;

@@ -45,11 +45,11 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.Evaluator;
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.RepositoryChangeEvent;
-import com.choicemaker.cm.core.RepositoryChangeListener;
+import com.choicemaker.cm.core.base.Decision;
+import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.RepositoryChangeEvent;
+import com.choicemaker.cm.core.base.RepositoryChangeListener;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;

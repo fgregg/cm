@@ -23,8 +23,8 @@ import java.util.zip.ZipOutputStream;
 import org.apache.tools.ant.util.JavaEnvUtils;
 
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.PMManager;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.ObjectMaker;

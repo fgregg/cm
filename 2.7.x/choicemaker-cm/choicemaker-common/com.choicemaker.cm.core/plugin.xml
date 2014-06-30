@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
-   id="com.choicemaker.cm.core"
+   id="com.choicemaker.cm.core.base"
    name="ChoiceMaker Core Plug-in"
    version="2.7.1"
    provider-name="rphall">
@@ -34,39 +34,39 @@
 
    <extension
          id="none"
-         point="com.choicemaker.cm.core.machineLearner">
+         point="com.choicemaker.cm.core.base.machineLearner">
       <config
             name="None"
-            class="com.choicemaker.cm.core.ml.none.NoneFactory">
+            class="com.choicemaker.cm.core.base.ml.none.NoneFactory">
       </config>
    </extension>
    <extension
          id="beanMatchCandidate"
          name="beanMatchCandidate"
-         point="com.choicemaker.cm.core.matchCandidate">
+         point="com.choicemaker.cm.core.base.matchCandidate">
       <matchCandidate
-            class="com.choicemaker.cm.core.BeanMatchCandidateFactory">
+            class="com.choicemaker.cm.core.base.BeanMatchCandidateFactory">
       </matchCandidate>
    </extension>
    <extension
          id="matchCandidate"
          name="matchCandidate"
-         point="com.choicemaker.cm.core.matchCandidate">
+         point="com.choicemaker.cm.core.base.matchCandidate">
       <matchCandidate
-            class="com.choicemaker.cm.core.MatchCandidateFactory">
+            class="com.choicemaker.cm.core.base.MatchCandidateFactory">
       </matchCandidate>
    </extension>
    <extension
          id="coreAccessor"
          name="coreAccessor"
-         point="com.choicemaker.cm.core.accessor">
+         point="com.choicemaker.cm.core.base.accessor">
       <accessor
-            class="com.choicemaker.cm.core.Accessor">
+            class="com.choicemaker.cm.core.base.Accessor">
       </accessor>
    </extension>
    <extension
          id="doNothingRecordSourceSerializer"
-         point="com.choicemaker.cm.core.rsSerializer">
+         point="com.choicemaker.cm.core.base.rsSerializer">
       <serializer
             class="com.choicemaker.cm.core.util.DoNothingRecordSourceSerializer"/>
    </extension>

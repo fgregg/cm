@@ -15,7 +15,7 @@ import java.security.AccessControlException;
 
 import javax.ejb.EJBObject;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.server.base.*;
 
 
@@ -47,7 +47,7 @@ public interface QueryService extends EJBObject {
 	 *             HOLD, DIFFER), then match probability decreasing.
 	 *             All returned records match with a probability of <code>differProbability</code>
 	 *             or higher or have a firing report clue or filter. The records are encoded in the same
-	 *             format as the <code>profile</code> (<code>null</code>, com.choicemaker.cm.core.beanMatchCandidate,
+	 *             format as the <code>profile</code> (<code>null</code>, com.choicemaker.cm.core.base.beanMatchCandidate,
 	 *             com.choicemaker.cm.io.xml.xmlMatchCandidate, etc).
 	 * @throws    UnderspecifiedProfileException  If the profile is not specific enough (e.g., all JIMs in NYC)
 	 *             to perform blocking given <code>maxNumMatches</code>.

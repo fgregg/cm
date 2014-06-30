@@ -12,7 +12,7 @@ package com.choicemaker.cm.analyzer.sampler;
 
 import java.util.List;
 
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
 /**
  * @author Adam Winkel

@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.Platform;
  */
 public class CommandLineArguments {
 	private static final String NOT_DEFINED = "$NOT_DEFINED$";
-	public static final String COMMAND_LINE_ARGUMENT = "com.choicemaker.cm.core.commandLineArgument";
+	public static final String COMMAND_LINE_ARGUMENT = "com.choicemaker.cm.core.base.commandLineArgument";
 	public static final String NAME = "name";
 	public static final String DEFAULT_VALUE = "defaultValue";
 	public static final String OPTION = "option";

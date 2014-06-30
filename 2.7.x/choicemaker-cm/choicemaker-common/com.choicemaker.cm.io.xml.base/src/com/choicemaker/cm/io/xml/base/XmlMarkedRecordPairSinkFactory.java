@@ -13,11 +13,11 @@ package com.choicemaker.cm.io.xml.base;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.SinkFactory;
-import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.Sink;
+import com.choicemaker.cm.core.base.SinkFactory;
+import com.choicemaker.cm.core.base.Source;
 
 /**
  *

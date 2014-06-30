@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Record;
 
 /**
  *

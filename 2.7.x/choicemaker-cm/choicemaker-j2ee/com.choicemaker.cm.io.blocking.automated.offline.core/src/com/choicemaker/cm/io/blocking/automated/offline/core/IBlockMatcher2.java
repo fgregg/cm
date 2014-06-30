@@ -10,9 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.RecordSource;
 
 /**
  * This interface defines how to match a block source.

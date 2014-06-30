@@ -52,7 +52,7 @@ public class EclipseRegistry
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.XmlConfigurablesRegistry#get(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.configure.XmlConfigurablesRegistry#get(java.lang.String)
 	 */
 	public XmlConfigurable get(String uniqueId) throws NotFoundException {
 		Precondition.assertNonEmptyString(uniqueId);
@@ -156,7 +156,7 @@ public class EclipseRegistry
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.XmlConfigurablesRegistry#register(java.lang.String, com.choicemaker.cm.core.configure.XmlConfigurable)
+	 * @see com.choicemaker.cm.core.base.configure.XmlConfigurablesRegistry#register(java.lang.String, com.choicemaker.cm.core.base.configure.XmlConfigurable)
 	 */
 	public void register(String uniqueId, XmlConfigurable configurable)
 		throws NotUniqueException {
@@ -186,7 +186,7 @@ public class EclipseRegistry
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.XmlConfigurablesRegistry#remove(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.configure.XmlConfigurablesRegistry#remove(java.lang.String)
 	 */
 	public void remove(String uniqueId) {
 		Precondition.assertNonEmptyString(uniqueId);
@@ -203,7 +203,7 @@ public class EclipseRegistry
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.XmlConfigurablesRegistry#update(java.lang.String, com.choicemaker.cm.core.configure.XmlConfigurable)
+	 * @see com.choicemaker.cm.core.base.configure.XmlConfigurablesRegistry#update(java.lang.String, com.choicemaker.cm.core.base.configure.XmlConfigurable)
 	 */
 	public void update(String uniqueId, XmlConfigurable configurable) {
 		Precondition.assertNonEmptyString(uniqueId);

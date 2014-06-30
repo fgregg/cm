@@ -11,7 +11,7 @@
 package com.choicemaker.cm.compiler.backend;
 
 import com.choicemaker.cm.compiler.Type;
-import com.choicemaker.cm.core.ClueSetType;
+import com.choicemaker.cm.core.base.ClueSetType;
 import com.choicemaker.cm.core.compiler.CompilerException;
 
 /**

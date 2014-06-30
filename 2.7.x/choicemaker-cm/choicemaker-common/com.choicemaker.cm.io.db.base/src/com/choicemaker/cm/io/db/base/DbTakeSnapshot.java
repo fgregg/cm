@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.base.Decision;
 
 /**
  * Client proxy of taking a snapshot of a record pair.

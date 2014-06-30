@@ -16,11 +16,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
-import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.ImmutableRecordPair;
-import com.choicemaker.cm.core.MarkedRecordPairSink;
+import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableRecordPair;
+import com.choicemaker.cm.core.base.MarkedRecordPairSink;
 
 /**
  * Description
@@ -40,21 +40,21 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.MarkedRecordPairSink#putMarkedRecordPair(com.choicemaker.cm.core.MarkedRecordPair)
+	 * @see com.choicemaker.cm.core.base.MarkedRecordPairSink#putMarkedRecordPair(com.choicemaker.cm.core.base.MarkedRecordPair)
 	 */
 	public void putMarkedRecordPair(ImmutableMarkedRecordPair r) throws IOException {
 		w.write(r.getQueryRecord().getId() + "," + r.getMatchRecord().getId() + "," + r.getMarkedDecision() + "," + df.format(r.getProbability()) + Constants.LINE_SEPARATOR);
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.RecordPairSink#put(com.choicemaker.cm.core.RecordPair)
+	 * @see com.choicemaker.cm.core.base.RecordPairSink#put(com.choicemaker.cm.core.base.RecordPair)
 	 */
 	public void put(ImmutableRecordPair r) throws IOException {
 		putMarkedRecordPair((ImmutableMarkedRecordPair)r);
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.Sink#open()
+	 * @see com.choicemaker.cm.core.base.Sink#open()
 	 */
 	public void open() throws IOException {
 		fw = new FileWriter(file);
@@ -62,7 +62,7 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.Sink#close()
+	 * @see com.choicemaker.cm.core.base.Sink#close()
 	 */
 	public void close() throws IOException {
 		w.flush();
@@ -72,7 +72,7 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.Sink#flush()
+	 * @see com.choicemaker.cm.core.base.Sink#flush()
 	 */
 	public void flush() throws IOException {
 		w.flush();
@@ -80,27 +80,27 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.Sink#getName()
+	 * @see com.choicemaker.cm.core.base.Sink#getName()
 	 */
 	public String getName() {
 		return null;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.Sink#setName(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.Sink#setName(java.lang.String)
 	 */
 	public void setName(String name) {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.Sink#getModel()
+	 * @see com.choicemaker.cm.core.base.Sink#getModel()
 	 */
 	public ImmutableProbabilityModel getModel() {
 		return null;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.Sink#setModel(com.choicemaker.cm.core.ProbabilityModel)
+	 * @see com.choicemaker.cm.core.base.Sink#setModel(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
 	public void setModel(ImmutableProbabilityModel m) {
 	}

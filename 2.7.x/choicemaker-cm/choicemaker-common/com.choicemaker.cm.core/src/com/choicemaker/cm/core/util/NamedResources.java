@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.Platform;
  */
 public final class NamedResources {
 
-	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.namedResource";
+	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.base.namedResource";
 
 	public static InputStream getNamedResource(String resourceName) throws IOException {
 		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(EXTENSION_POINT);

@@ -33,14 +33,14 @@ public class JdomElement implements IElement {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.IElement#getName()
+	 * @see com.choicemaker.cm.core.base.configure.IElement#getName()
 	 */
 	public String getName() {
 		return this.getElement().getName();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.IElement#getChildren()
+	 * @see com.choicemaker.cm.core.base.configure.IElement#getChildren()
 	 */
 	public List getChildren() {
 		List retVal = new LinkedList();
@@ -54,7 +54,7 @@ public class JdomElement implements IElement {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.IElement#getChildren(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.configure.IElement#getChildren(java.lang.String)
 	 */
 	public List getChildren(String name) {
 		List retVal = new LinkedList();
@@ -68,7 +68,7 @@ public class JdomElement implements IElement {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.IElement#getChild(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.configure.IElement#getChild(java.lang.String)
 	 */
 	public IElement getChild(String name) {
 		Element child = this.getElement().getChild(name);
@@ -77,7 +77,7 @@ public class JdomElement implements IElement {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.IElement#getAttributeValue(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.configure.IElement#getAttributeValue(java.lang.String)
 	 */
 	public String getAttributeValue(String name) {
 		return this.getElement().getAttributeValue(name);

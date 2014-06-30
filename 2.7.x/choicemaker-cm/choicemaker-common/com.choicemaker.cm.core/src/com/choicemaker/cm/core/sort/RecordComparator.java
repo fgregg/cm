@@ -12,9 +12,9 @@ package com.choicemaker.cm.core.sort;
 
 import java.util.Comparator;
 
-import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.DescriptorCollection;
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Descriptor;
+import com.choicemaker.cm.core.base.DescriptorCollection;
+import com.choicemaker.cm.core.base.Record;
 
 /**
  * Comment

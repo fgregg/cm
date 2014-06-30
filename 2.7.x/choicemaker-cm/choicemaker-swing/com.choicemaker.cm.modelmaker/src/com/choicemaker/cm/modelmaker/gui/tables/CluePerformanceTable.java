@@ -23,8 +23,8 @@ import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.ColumnDefinition;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.modelmaker.gui.renderers.ColoredTableCellRenderer;
 

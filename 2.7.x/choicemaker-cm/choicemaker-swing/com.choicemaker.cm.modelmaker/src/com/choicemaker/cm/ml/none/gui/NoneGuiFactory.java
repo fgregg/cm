@@ -30,13 +30,13 @@ public class NoneGuiFactory extends MlGuiFactory {
 		return new NoneTrainDialogPlugin();
 	}
 	/**
-	 * @see com.choicemaker.cm.core.DynamicDispatchHandler#getHandler()
+	 * @see com.choicemaker.cm.core.base.DynamicDispatchHandler#getHandler()
 	 */
 	public Object getHandler() {
 		return this;
 	}
 	/**
-	 * @see com.choicemaker.cm.core.DynamicDispatchHandler#getHandledType()
+	 * @see com.choicemaker.cm.core.base.DynamicDispatchHandler#getHandledType()
 	 */
 	public Class getHandledType() {
 		return None.class;

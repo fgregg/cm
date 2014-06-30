@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBObject;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.base.SerialRecordSource;
 
 /**
  * @author pcheung

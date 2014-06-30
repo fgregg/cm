@@ -12,7 +12,7 @@ package com.choicemaker.cm.analyzer.filter;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
 /**
  * A stripped down Filter implementation that only limits the

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.choicemaker.cm.core">
+<schema targetNamespace="com.choicemaker.cm.core.base">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.choicemaker.cm.core" id="rsSerializer" name="Record Source Serializer"/>
+         <meta.schema plugin="com.choicemaker.cm.core.base" id="rsSerializer" name="Record Source Serializer"/>
       </appInfo>
       <documentation>
          Enables record-source serializers to be registered as Eclipse plug-ins.
@@ -54,7 +54,7 @@ configure the serializer itself, immediately after construction.
                   The serializer class (which must implement IRecordSourceSerializer)
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.IRecordSourceSerializer"/>
+                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.base.IRecordSourceSerializer"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -115,7 +115,7 @@ the serializer that was registered first is treated as the default.
       <documentation>
          Following is an example of a record-source serialization configuration: &lt;p&gt;
 &lt;pre&gt;
-&lt;extension id=&quot;DoNothing&quot; point=&quot;com.choicemaker.cm.core.rsSerializer&quot;&gt;
+&lt;extension id=&quot;DoNothing&quot; point=&quot;com.choicemaker.cm.core.base.rsSerializer&quot;&gt;
   &lt;serializer
     class=&quot;com.choicemaker.cm.core.util.DoNothingRecordSourceSerializer&quot;
     priority=&quot;0&quot;/&gt;
@@ -135,7 +135,7 @@ the serializer that was registered first is treated as the default.
       </appInfo>
       <documentation>
          The value of the class attribute must represent an implementation of
-&lt;samp&gt;com.choicemaker.cm.core.IRecordSourceSerializer&lt;/samp&gt;.
+&lt;samp&gt;com.choicemaker.cm.core.base.IRecordSourceSerializer&lt;/samp&gt;.
 The value of the priority attribute must be an integer. If not specified, a default value (currently 0) will be assigned.
       </documentation>
    </annotation>

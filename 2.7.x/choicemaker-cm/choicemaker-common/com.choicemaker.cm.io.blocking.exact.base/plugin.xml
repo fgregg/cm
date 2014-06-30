@@ -11,7 +11,7 @@
       </library>
    </runtime>
    <requires>
-      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.core.base"/>
       <import plugin="com.choicemaker.cm.io.blocking.base"/>
    </requires>
 
@@ -19,7 +19,7 @@
    <extension
          id="exactBlockingGenerator"
          name="exactBlockingGenerator"
-         point="com.choicemaker.cm.core.generatorPlugin">
+         point="com.choicemaker.cm.core.base.generatorPlugin">
       <plugin
             name="Blocking Exact"
             class="com.choicemaker.cm.io.blocking.exact.base.gen.BlockingGenerator">
@@ -28,7 +28,7 @@
    <extension
          id="exactInMemoryAccessor"
          name="exactInMemoryAccessor"
-         point="com.choicemaker.cm.core.accessor">
+         point="com.choicemaker.cm.core.base.accessor">
       <accessor
             class="com.choicemaker.cm.io.blocking.exact.base.ExactInMemoryBlockerAccessor">
       </accessor>

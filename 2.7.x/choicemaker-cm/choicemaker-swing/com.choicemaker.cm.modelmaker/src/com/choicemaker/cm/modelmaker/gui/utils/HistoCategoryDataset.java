@@ -13,7 +13,8 @@ package com.choicemaker.cm.modelmaker.gui.utils;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.base.Decision;
+
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.DefaultKeyedValues2D;

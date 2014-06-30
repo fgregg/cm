@@ -18,7 +18,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.RecordSource;
 
 /**
  * XML configuration for record sources. Each actual source type has its own XML
@@ -28,7 +28,7 @@ import com.choicemaker.cm.core.RecordSource;
  * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:01 $
  */
 public class RecordSourceXmlConf {
-	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.rsReader";
+	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.base.rsReader";
 	
 	public static void add(RecordSource src) throws XmlConfException {
 		((RecordSourceXmlConfigurator)ExtensionPointMapper.getInstance(EXTENSION_POINT, src.getClass())).add(src);

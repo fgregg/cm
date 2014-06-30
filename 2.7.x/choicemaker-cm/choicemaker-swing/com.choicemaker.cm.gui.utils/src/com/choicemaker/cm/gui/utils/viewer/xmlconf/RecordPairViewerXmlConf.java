@@ -21,7 +21,7 @@ import org.jdom.*;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.core.xmlconf.*;
 import com.choicemaker.cm.gui.utils.viewer.*;
 

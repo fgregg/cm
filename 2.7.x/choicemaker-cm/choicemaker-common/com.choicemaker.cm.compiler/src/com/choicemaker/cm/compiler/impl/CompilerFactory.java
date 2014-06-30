@@ -40,7 +40,7 @@ public class CompilerFactory implements ICompilerFactory {
 
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.compiler.ICompilerFactory#getCompiler(java.util.Properties)
+	 * @see com.choicemaker.cm.core.base.compiler.ICompilerFactory#getCompiler(java.util.Properties)
 	 */
 	public ICompiler getCompiler(Properties features) throws UnavailableCompilerFeaturesException {
 		// TODO add more checks to features
@@ -51,7 +51,7 @@ public class CompilerFactory implements ICompilerFactory {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.compiler.ICompilerFactory#getCompiler(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.compiler.ICompilerFactory#getCompiler(java.lang.String)
 	 */
 	public ICompiler getCompiler(String name) throws UnavailableCompilerFeaturesException {
 
@@ -66,7 +66,7 @@ public class CompilerFactory implements ICompilerFactory {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.compiler.ICompilerFactory#getDefaultCompiler()
+	 * @see com.choicemaker.cm.core.base.compiler.ICompilerFactory#getDefaultCompiler()
 	 */
 	public ICompiler getDefaultCompiler() {
 		return new Compiler26();

@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.CollectionsDialog;

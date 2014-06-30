@@ -12,7 +12,7 @@ package com.choicemaker.cm.server.base;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.MatchCandidate;
+import com.choicemaker.cm.core.base.MatchCandidate;
 
 /**
  * The result of a match query.

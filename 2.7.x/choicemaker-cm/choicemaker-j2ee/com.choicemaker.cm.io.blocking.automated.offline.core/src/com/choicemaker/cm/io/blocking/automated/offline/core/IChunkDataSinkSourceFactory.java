@@ -10,9 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.RecordSink;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.base.RecordSink;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 
 /**

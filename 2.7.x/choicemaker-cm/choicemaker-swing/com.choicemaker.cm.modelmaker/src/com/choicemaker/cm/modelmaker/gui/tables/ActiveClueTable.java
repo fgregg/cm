@@ -19,9 +19,9 @@ import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.RepositoryChangeEvent;
-import com.choicemaker.cm.core.RepositoryChangeListener;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.RepositoryChangeEvent;
+import com.choicemaker.cm.core.base.RepositoryChangeListener;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.ClueNameCellListener;
 import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;

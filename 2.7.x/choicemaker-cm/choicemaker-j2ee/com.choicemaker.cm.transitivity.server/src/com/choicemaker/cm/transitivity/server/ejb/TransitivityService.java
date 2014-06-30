@@ -15,9 +15,9 @@ import java.security.AccessControlException;
 
 import javax.ejb.EJBObject;
 
-import com.choicemaker.cm.core.InvalidProfileException;
-import com.choicemaker.cm.core.MatchCandidate;
-import com.choicemaker.cm.core.Profile;
+import com.choicemaker.cm.core.base.InvalidProfileException;
+import com.choicemaker.cm.core.base.MatchCandidate;
+import com.choicemaker.cm.core.base.Profile;
 import com.choicemaker.cm.server.base.DatabaseException;
 import com.choicemaker.cm.server.base.InvalidModelException;
 import com.choicemaker.cm.server.base.UnderspecifiedProfileException;

@@ -12,10 +12,10 @@ package com.choicemaker.cm.core.ml.none;
 
 import java.util.Collection;
 
-import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Evaluator;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.Accessor;
+import com.choicemaker.cm.core.base.ClueSet;
+import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 import com.choicemaker.cm.core.ml.MachineLearner;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
 
@@ -28,54 +28,54 @@ import com.choicemaker.cm.core.xmlconf.MlModelConf;
 public class None implements MachineLearner {
 
 	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#getEvaluator()
+	 * @see com.choicemaker.cm.core.base.MachineLearner#getEvaluator()
 	 */
 	public Evaluator getEvaluator() {
 		return null;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#setProbabilityModel(com.choicemaker.cm.core.ProbabilityModel)
+	 * @see com.choicemaker.cm.core.base.MachineLearner#setProbabilityModel(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
 	public void setProbabilityModel(IProbabilityModel model) {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#changedAccessor(com.choicemaker.cm.core.Accessor, com.choicemaker.cm.core.Accessor, int)
+	 * @see com.choicemaker.cm.core.base.MachineLearner#changedAccessor(com.choicemaker.cm.core.base.Accessor, com.choicemaker.cm.core.base.Accessor, int)
 	 */
 	public void changedAccessor(Accessor oldAccessor, Accessor newAccessor, int[] oldClueNums) {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#train(java.util.Collection, double)
+	 * @see com.choicemaker.cm.core.base.MachineLearner#train(java.util.Collection, double)
 	 */
 	public Object train(Collection src, double[] firingPercentages) {
 		return null;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#getModelConf()
+	 * @see com.choicemaker.cm.core.base.MachineLearner#getModelConf()
 	 */
 	public MlModelConf getModelConf() {
 		return NoneFactory.instance;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#canEvaluate()
+	 * @see com.choicemaker.cm.core.base.MachineLearner#canEvaluate()
 	 */
 	public boolean canEvaluate() {
 		return false;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#canTrain()
+	 * @see com.choicemaker.cm.core.base.MachineLearner#canTrain()
 	 */
 	public boolean canTrain() {
 		return false;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#canUse(com.choicemaker.cm.core.ClueSet)
+	 * @see com.choicemaker.cm.core.base.MachineLearner#canUse(com.choicemaker.cm.core.base.ClueSet)
 	 */
 	public boolean canUse(ClueSet clueset) {
 		return true;

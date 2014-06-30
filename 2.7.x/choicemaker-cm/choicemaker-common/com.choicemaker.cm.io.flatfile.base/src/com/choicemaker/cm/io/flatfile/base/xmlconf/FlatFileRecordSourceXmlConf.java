@@ -15,7 +15,7 @@ import java.io.*;
 import org.jdom.*;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.core.xmlconf.*;
 import com.choicemaker.cm.io.flatfile.base.FlatFileRecordSource;
 

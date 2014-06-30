@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSource;
 
 /**
  * @author ajwinkel

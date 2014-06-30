@@ -12,7 +12,7 @@
    </runtime>
    <requires>
       <import plugin="com.choicemaker.cm.matching.gen"/>
-      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.core.base"/>
    </requires>
 
 
@@ -263,7 +263,7 @@
       </fileRelation>
    </extension>
    <extension
-         point="com.choicemaker.cm.core.namedResource">
+         point="com.choicemaker.cm.core.base.namedResource">
       <namedResource
             name="nameGrammar"
             file="etc/grammars/probabalisticNameGrammar.txt">

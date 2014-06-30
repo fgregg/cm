@@ -25,9 +25,9 @@ import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.BlockingException;
-//import com.choicemaker.cm.core.ImmutableProbabilityModel;
-//import com.choicemaker.cm.core.PMManager;
+import com.choicemaker.cm.core.base.BlockingException;
+//import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+//import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;

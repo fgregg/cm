@@ -17,13 +17,13 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.ImmutableRecordPair;
-import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.Accessor;
+import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableRecordPair;
+import com.choicemaker.cm.core.base.MarkedRecordPairSink;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.DateHelper;
 import com.choicemaker.cm.core.util.FileUtilities;
 

@@ -27,16 +27,17 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
-// import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Match;
-import com.choicemaker.cm.core.MatchCandidate;
-import com.choicemaker.cm.core.MatchCandidateFactory;
-import com.choicemaker.cm.core.PMManager;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordDecisionMaker;
-import com.choicemaker.cm.core.RecordSource;
+// import com.choicemaker.cm.core.base.Accessor;
+
+import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.base.MatchCandidate;
+import com.choicemaker.cm.core.base.MatchCandidateFactory;
+import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordDecisionMaker;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
@@ -80,7 +81,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + SingleRecordMatch.class.getName());
 
 	public static final String DATABASE_ACCESSOR = "com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
-	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.matchCandidate";
+	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.base.matchCandidate";
 
 	private transient MessageDrivenContext mdc = null;
 	private EJBConfiguration configuration = null;
@@ -347,7 +348,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 		MatchCandidateFactory matchCandidateFactory = (MatchCandidateFactory)
 			Platform.getPluginRegistry()
-			.getExtension(MATCH_CANDIDATE, "com.choicemaker.cm.core.beanMatchCandidate")
+			.getExtension(MATCH_CANDIDATE, "com.choicemaker.cm.core.base.beanMatchCandidate")
 			.getConfigurationElements()[0]
 			.createExecutableExtension("class");
 		log.debug("MatchCandidateFactory class: " + matchCandidateFactory.getClass().getName());

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.choicemaker.cm.core">
+<schema targetNamespace="com.choicemaker.cm.core.base">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.choicemaker.cm.core" id="reporter" name="reporter"/>
+         <meta.schema plugin="com.choicemaker.cm.core.base" id="reporter" name="reporter"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -47,7 +47,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.report.Reporter"/>
+                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.base.report.Reporter"/>
                </appInfo>
             </annotation>
          </attribute>

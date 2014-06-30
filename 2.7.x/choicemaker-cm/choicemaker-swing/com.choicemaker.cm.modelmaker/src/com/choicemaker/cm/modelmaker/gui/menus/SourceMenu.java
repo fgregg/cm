@@ -30,12 +30,12 @@ import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.MarkedRecordPairSource;
-import com.choicemaker.cm.core.RepositoryChangeEvent;
-import com.choicemaker.cm.core.RepositoryChangeListener;
-import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
+import com.choicemaker.cm.core.base.MarkedRecordPairSink;
+import com.choicemaker.cm.core.base.MarkedRecordPairSource;
+import com.choicemaker.cm.core.base.RepositoryChangeEvent;
+import com.choicemaker.cm.core.base.RepositoryChangeListener;
+import com.choicemaker.cm.core.base.Source;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;

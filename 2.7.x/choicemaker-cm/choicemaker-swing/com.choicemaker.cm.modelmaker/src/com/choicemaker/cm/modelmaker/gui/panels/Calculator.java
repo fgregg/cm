@@ -27,7 +27,7 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Thresholds;
+import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.stats.StatPoint;

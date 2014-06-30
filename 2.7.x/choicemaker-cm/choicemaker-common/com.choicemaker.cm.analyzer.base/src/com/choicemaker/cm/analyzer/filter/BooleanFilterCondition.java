@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.analyzer.filter;
 
-import com.choicemaker.cm.core.ActiveClues;
-import com.choicemaker.cm.core.BooleanActiveClues;
+import com.choicemaker.cm.core.base.ActiveClues;
+import com.choicemaker.cm.core.base.BooleanActiveClues;
 
 /**
  * Description
@@ -56,7 +56,7 @@ public class BooleanFilterCondition implements FilterCondition {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.ActiveClues)
+	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.base.ActiveClues)
 	 */
 	public boolean satisfy(ActiveClues clues) {
 		BooleanActiveClues bac = (BooleanActiveClues)clues;

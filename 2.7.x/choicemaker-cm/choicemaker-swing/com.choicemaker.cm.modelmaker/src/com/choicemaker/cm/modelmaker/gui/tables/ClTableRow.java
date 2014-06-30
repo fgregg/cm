@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.modelmaker.gui.tables;
 
-import com.choicemaker.cm.core.ClueDesc;
+import com.choicemaker.cm.core.base.ClueDesc;
 
 public class ClTableRow {
 	protected ClueDesc desc;

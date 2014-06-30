@@ -12,7 +12,7 @@ package com.choicemaker.cm.gui.utils.viewer;
 
 import java.awt.*;
 
-import com.choicemaker.cm.core.RecordData;
+import com.choicemaker.cm.core.base.RecordData;
 
 
 /**

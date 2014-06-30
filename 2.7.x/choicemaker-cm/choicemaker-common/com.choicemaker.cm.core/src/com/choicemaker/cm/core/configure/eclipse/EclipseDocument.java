@@ -30,7 +30,7 @@ public class EclipseDocument implements IDocument {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.IDocument#getConfigurableElement()
+	 * @see com.choicemaker.cm.core.base.configure.IDocument#getConfigurableElement()
 	 */
 	public IElement getConfigurableElement() {
 		IElement retVal = new EclipseElement(root);

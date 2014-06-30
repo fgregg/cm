@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.core.report;
 
-import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.base.Constants;
 
 /**
  * Reports exceptions thrown during matching.

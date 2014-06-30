@@ -145,7 +145,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.Configurable#getProperties()
+	 * @see com.choicemaker.cm.core.base.configure.Configurable#getProperties()
 	 */
 	public Properties getProperties() {
 		Properties retVal = (Properties) this.properties.clone();
@@ -153,7 +153,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.Configurable#getProperty(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.configure.Configurable#getProperty(java.lang.String)
 	 */
 	public String getProperty(String propertyName) {
 		return this.properties.getProperty(propertyName);
@@ -201,7 +201,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.Configurable#removeProperty(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.configure.Configurable#removeProperty(java.lang.String)
 	 */
 	public void removeProperty(String propertyName)
 		throws IncompleteSpecificationException {
@@ -218,7 +218,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.Configurable#setProperties(java.util.Properties)
+	 * @see com.choicemaker.cm.core.base.configure.Configurable#setProperties(java.util.Properties)
 	 */
 	public void setAllProperties(Properties p)
 		throws
@@ -236,7 +236,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.Configurable#setProperties(java.util.Properties)
+	 * @see com.choicemaker.cm.core.base.configure.Configurable#setProperties(java.util.Properties)
 	 */
 	public void setProperties(Properties p)
 		throws InvalidPropertyNameException, InvalidPropertyValueException {
@@ -248,7 +248,7 @@ public abstract class AbstractXmlSpecification implements XmlSpecification {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.Configurable#setProperty(java.lang.String, java.lang.String)
+	 * @see com.choicemaker.cm.core.base.configure.Configurable#setProperty(java.lang.String, java.lang.String)
 	 */
 	public void setProperty(String propertyName, String propertyValue)
 		throws InvalidPropertyNameException, InvalidPropertyValueException {

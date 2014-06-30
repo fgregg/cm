@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.db.gui;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.io.db.base.DbMarkedRecordPairSource2;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceGui;

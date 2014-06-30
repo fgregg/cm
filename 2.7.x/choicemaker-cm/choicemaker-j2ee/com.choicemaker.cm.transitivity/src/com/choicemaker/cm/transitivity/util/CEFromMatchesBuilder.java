@@ -16,12 +16,12 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.Evaluator;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Match;
-import com.choicemaker.cm.core.PMManager;
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Decision;
+import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.base.Record;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 

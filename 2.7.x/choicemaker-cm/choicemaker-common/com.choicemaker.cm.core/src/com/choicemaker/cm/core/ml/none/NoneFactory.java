@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.base.Accessor;
 import com.choicemaker.cm.core.ml.MachineLearner;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
 
@@ -31,7 +31,7 @@ public class NoneFactory implements MlModelConf {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.xmlconf.MlModelConf#readMachineLearner(org.jdom.Element, com.choicemaker.cm.core.Accessor, java.util.List, int)
+	 * @see com.choicemaker.cm.xmlconf.MlModelConf#readMachineLearner(org.jdom.Element, com.choicemaker.cm.core.base.Accessor, java.util.List, int)
 	 */
 	public MachineLearner readMachineLearner(Element e, Accessor acc, List clues, int[] oldClueNums) {
 		return new None();
@@ -53,6 +53,6 @@ public class NoneFactory implements MlModelConf {
 	 * @see com.choicemaker.cm.xmlconf.MlModelConf#getExtensionPointId()
 	 */
 	public String getExtensionPointId() {
-		return "com.choicemaker.cm.core.none";
+		return "com.choicemaker.cm.core.base.none";
 	}
 }

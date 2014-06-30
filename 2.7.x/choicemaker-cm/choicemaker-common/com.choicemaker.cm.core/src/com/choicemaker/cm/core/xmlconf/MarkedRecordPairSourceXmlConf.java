@@ -24,7 +24,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
-import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.base.MarkedRecordPairSource;
 
 /**
  * XML configuration for marked record pairs. Each actual source type
@@ -34,8 +34,8 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
  * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:01 $
  */
 public class MarkedRecordPairSourceXmlConf {
-	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.mrpsReader";
-	public static final String EXTENSION_POINT_2 = "com.choicemaker.cm.core.fileMrpsReader";
+	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.base.mrpsReader";
+	public static final String EXTENSION_POINT_2 = "com.choicemaker.cm.core.base.fileMrpsReader";
 
 	public static HashMap fileMrpsReaders;
 

@@ -18,15 +18,15 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Evaluator;
-import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.ImmutableRecordPair;
-import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.Match;
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.RecordPairSink;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableRecordPair;
+import com.choicemaker.cm.core.base.MarkedRecordPairSink;
+import com.choicemaker.cm.core.base.Match;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.RecordPairSink;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.core.util.BoundedQueue;
 import com.choicemaker.cm.core.util.StringUtils;

@@ -28,9 +28,9 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ProbabilityModel;
+import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.ProbabilityModel;
 import com.choicemaker.cm.core.ml.none.None;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.LoggingObject;

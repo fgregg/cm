@@ -10,11 +10,11 @@
  */
 package com.choicemaker.cm.ml.me.base;
 
-import com.choicemaker.cm.core.ActiveClues;
-import com.choicemaker.cm.core.BooleanActiveClues;
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.Evaluator;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.ActiveClues;
+import com.choicemaker.cm.core.base.BooleanActiveClues;
+import com.choicemaker.cm.core.base.Decision;
+import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 
 /**
  * Matches records and computes matching probabilities.
@@ -55,7 +55,7 @@ public class MeEvaluator extends Evaluator {
 	
 	/**
 	 * Returns an array of classification probabilities. The array size is equal to
-	 * {@link com.choicemaker.cm.core.ImmutableProbabilityModel#getDecisionDomainSize() the decision domain size},
+	 * {@link com.choicemaker.cm.core.base.ImmutableProbabilityModel#getDecisionDomainSize() the decision domain size},
 	 * either 2 (differs and matches) or 3 (differs, matches and holds).
 	 * The array elements represent differs (element 0), matches (element 1)
 	 * and possibly holds (element 2, if present).

@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.modelmaker;
 
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.OperationFailedException;
 import com.choicemaker.cm.modelmaker.gui.listeners.EventMultiplexer;
 

@@ -31,11 +31,11 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
-import com.choicemaker.cm.core.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.MarkedRecordPairSource;
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
+import com.choicemaker.cm.core.base.MarkedRecordPairSource;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.LinkMap;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;

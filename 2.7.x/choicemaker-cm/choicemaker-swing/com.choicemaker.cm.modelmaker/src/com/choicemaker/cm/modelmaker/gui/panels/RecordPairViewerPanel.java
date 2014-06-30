@@ -16,10 +16,10 @@ import java.beans.PropertyChangeListener;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.DescriptorCollection;
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.RepositoryChangeEvent;
-import com.choicemaker.cm.core.RepositoryChangeListener;
+import com.choicemaker.cm.core.base.DescriptorCollection;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.RepositoryChangeEvent;
+import com.choicemaker.cm.core.base.RepositoryChangeListener;
 import com.choicemaker.cm.gui.utils.viewer.CompositePane;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.gui.utils.viewer.xmlconf.RecordPairViewerXmlConf;

@@ -17,9 +17,9 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
-import com.choicemaker.cm.core.AbstractRecordSourceSerializer;
-import com.choicemaker.cm.core.ISerializableRecordSource;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.AbstractRecordSourceSerializer;
+import com.choicemaker.cm.core.base.ISerializableRecordSource;
+import com.choicemaker.cm.core.base.RecordSource;
 
 /**
  * @author rphall
@@ -65,7 +65,7 @@ public class DoNothingRecordSourceSerializer
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.IRecordSourceSerializer#getSerializableRecordSource(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializer#getSerializableRecordSource(java.lang.String)
 	 */
 	public ISerializableRecordSource getSerializableRecordSource(Properties properties)
 		throws NotSerializableException {
@@ -77,7 +77,7 @@ public class DoNothingRecordSourceSerializer
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.IRecordSourceSerializer#getSerializableRecordSource(com.choicemaker.cm.core.RecordSource)
+	 * @see com.choicemaker.cm.core.base.IRecordSourceSerializer#getSerializableRecordSource(com.choicemaker.cm.core.base.RecordSource)
 	 */
 	public ISerializableRecordSource getSerializableRecordSource(RecordSource rs)
 		throws NotSerializableException {

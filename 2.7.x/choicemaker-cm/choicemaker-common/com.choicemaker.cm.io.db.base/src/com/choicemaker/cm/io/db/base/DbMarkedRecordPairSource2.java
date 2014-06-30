@@ -22,13 +22,13 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.ImmutableRecordPair;
-import com.choicemaker.cm.core.MarkedRecordPairSource;
-import com.choicemaker.cm.core.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.core.base.Decision;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableRecordPair;
+import com.choicemaker.cm.core.base.MarkedRecordPairSource;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.Sink;
 import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.NameUtils;
 

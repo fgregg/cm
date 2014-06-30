@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.Sink;
+import com.choicemaker.cm.core.base.Source;
 import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.core.util.NameUtils;

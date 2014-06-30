@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.flatfile.gui;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 import com.choicemaker.cm.io.flatfile.base.FlatFileMarkedRecordPairSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceGui;

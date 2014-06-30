@@ -124,13 +124,13 @@ public class MeGuiFactory extends MlGuiFactory {
 		return new MeTrainDialogPlugin((MaximumEntropy) learner);
 	}
 	/**
-	 * @see com.choicemaker.cm.core.DynamicDispatchHandler#getHandler()
+	 * @see com.choicemaker.cm.core.base.DynamicDispatchHandler#getHandler()
 	 */
 	public Object getHandler() {
 		return this;
 	}
 	/**
-	 * @see com.choicemaker.cm.core.DynamicDispatchHandler#getHandledType()
+	 * @see com.choicemaker.cm.core.base.DynamicDispatchHandler#getHandledType()
 	 */
 	public Class getHandledType() {
 		return MaximumEntropy.class;

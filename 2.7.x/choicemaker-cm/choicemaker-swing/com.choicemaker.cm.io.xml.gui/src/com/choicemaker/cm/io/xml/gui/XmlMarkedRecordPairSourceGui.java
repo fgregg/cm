@@ -32,10 +32,10 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.MarkedRecordPairSource;
-import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
+import com.choicemaker.cm.core.base.MarkedRecordPairSource;
+import com.choicemaker.cm.core.base.Source;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;

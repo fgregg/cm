@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.base.Constants;
 import com.choicemaker.cm.core.gen.CoreTags;
 import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.GeneratorHelper;

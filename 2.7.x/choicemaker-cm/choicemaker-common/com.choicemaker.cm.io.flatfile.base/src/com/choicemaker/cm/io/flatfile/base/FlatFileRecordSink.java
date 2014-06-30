@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSink;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSink;
 import com.choicemaker.cm.core.util.FileUtilities;
 
 /**
@@ -155,7 +155,7 @@ public class FlatFileRecordSink implements RecordSink {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.Sink#flush()
+	 * @see com.choicemaker.cm.core.base.Sink#flush()
 	 */
 	public void flush() throws IOException {
 		if (multiFile) {

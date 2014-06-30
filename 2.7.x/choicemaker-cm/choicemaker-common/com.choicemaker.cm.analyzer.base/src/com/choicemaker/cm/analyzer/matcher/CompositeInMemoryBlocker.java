@@ -13,10 +13,10 @@ package com.choicemaker.cm.analyzer.matcher;
 import java.io.IOException;
 import java.util.List;
 
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.base.Sink;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 
 /**
@@ -47,7 +47,7 @@ public class CompositeInMemoryBlocker implements InMemoryBlocker {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.Record)
+	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record)
 	 */
 	public RecordSource block(Record q) {
 		RecordSource[] is = new RecordSource[constituents.length];
@@ -58,7 +58,7 @@ public class CompositeInMemoryBlocker implements InMemoryBlocker {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.Record, int)
+	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record, int)
 	 */
 	public RecordSource block(Record q, int start) {
 		RecordSource[] is = new RecordSource[constituents.length];

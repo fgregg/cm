@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.analyzer.filter;
 
-import com.choicemaker.cm.core.ActiveClues;
-import com.choicemaker.cm.core.IntActiveClues;
+import com.choicemaker.cm.core.base.ActiveClues;
+import com.choicemaker.cm.core.base.IntActiveClues;
 
 /**
  * Description
@@ -90,7 +90,7 @@ public class IntFilterCondition implements FilterCondition {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.ActiveClues)
+	 * @see com.choicemaker.cm.train.filter.FilterCondition#satisfy(com.choicemaker.cm.core.base.ActiveClues)
 	 */
 	public boolean satisfy(ActiveClues clues) {
 		IntActiveClues intActiveClues = (IntActiveClues)clues;

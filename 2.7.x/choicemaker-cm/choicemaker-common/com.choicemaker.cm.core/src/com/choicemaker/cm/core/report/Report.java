@@ -14,8 +14,8 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
 
 /**
  * Comment

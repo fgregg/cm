@@ -57,7 +57,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.ml.MachineLearner"/>
+                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.base.ml.MachineLearner"/>
                </appInfo>
             </annotation>
          </attribute>

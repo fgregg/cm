@@ -17,8 +17,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.Record;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 
 /**
@@ -57,7 +57,7 @@ public class XmlSingleRecordReader implements RecordHandler {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.xml.RecordHandler#handleRecord(com.choicemaker.cm.core.Record)
+	 * @see com.choicemaker.cm.io.xml.RecordHandler#handleRecord(com.choicemaker.cm.core.base.Record)
 	 */
 	public void handleRecord(Record r) throws SAXException {
 		record = r;

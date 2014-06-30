@@ -13,7 +13,7 @@ package com.choicemaker.cm.modelmaker.filter;
 import java.beans.PropertyChangeEvent;
 
 import com.choicemaker.cm.analyzer.filter.MarkedRecordPairFilter;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 

@@ -15,10 +15,10 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.RecordSink;
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.RecordSink;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;

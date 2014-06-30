@@ -22,8 +22,8 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.DerivedSource;
+import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.base.DerivedSource;
 import com.choicemaker.cm.core.gen.CoreTags;
 import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.GeneratorHelper;
@@ -58,7 +58,7 @@ public class XmlReaderGenerator implements GeneratorPlugin {
 			w.write("import java.util.*;" + Constants.LINE_SEPARATOR);
 			w.write("import org.xml.sax.*;" + Constants.LINE_SEPARATOR);
 			w.write("import org.xml.sax.helpers.*;" + Constants.LINE_SEPARATOR);
-			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.io.xml.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.util.*;" + Constants.LINE_SEPARATOR);
 			w.write("import " + g.getPackage() + ".*;" + Constants.LINE_SEPARATOR);

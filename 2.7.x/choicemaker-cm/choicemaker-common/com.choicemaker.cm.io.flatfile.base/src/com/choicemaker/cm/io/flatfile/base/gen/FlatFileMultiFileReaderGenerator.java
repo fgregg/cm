@@ -23,9 +23,9 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.DerivedSource;
 import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.base.DerivedSource;
 import com.choicemaker.cm.core.gen.CoreTags;
 import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.IGenerator;
@@ -66,7 +66,7 @@ public class FlatFileMultiFileReaderGenerator implements GeneratorPlugin {
 			w.write("import org.apache.log4j.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.util.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.io.*;" + Constants.LINE_SEPARATOR);
-			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.io.flatfile.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import " + g.getPackage() + ".*;" + Constants.LINE_SEPARATOR);
 			w.write(g.getImports());

@@ -18,9 +18,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.PMManager;
+import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
@@ -38,6 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFac
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.SuffixTreeSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.SuffixTreeSource;
+
 import org.apache.log4j.Logger;
 
 /**

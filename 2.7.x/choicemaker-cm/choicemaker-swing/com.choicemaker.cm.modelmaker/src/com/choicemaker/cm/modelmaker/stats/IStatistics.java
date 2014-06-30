@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.modelmaker.stats;
 
-import com.choicemaker.cm.core.Thresholds;
+import com.choicemaker.cm.core.base.Thresholds;
 
 /**
  * @author mchen

@@ -12,8 +12,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
 
 import java.util.ArrayList;
 
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.MatchCandidate;
+import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.base.MatchCandidate;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSource;
 
 /**

@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.base.IProbabilityModel;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.OperationFailedException;
 import com.choicemaker.cm.core.util.StringUtils;

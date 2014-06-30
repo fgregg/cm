@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.flatfile.base;
 
 import java.util.*;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 
 /**
  * Description

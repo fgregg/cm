@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.base.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSink;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
@@ -85,7 +85,7 @@ public class MatchRecordSink extends BaseFileSink implements IMatchRecordSink {
 	
 	/**
 	 * NOP for now
-	 * @see com.choicemaker.cm.core.Sink#flush()
+	 * @see com.choicemaker.cm.core.base.Sink#flush()
 	 */
 	public void flush() {
 	}

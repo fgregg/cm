@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.exact.base;
 
 import java.util.*;
 
-import com.choicemaker.cm.core.*;
+import com.choicemaker.cm.core.base.*;
 
 /**
  * Description

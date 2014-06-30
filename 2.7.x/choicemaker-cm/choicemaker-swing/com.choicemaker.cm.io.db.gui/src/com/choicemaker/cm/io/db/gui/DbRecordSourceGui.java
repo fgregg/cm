@@ -19,7 +19,7 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;

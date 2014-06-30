@@ -12,7 +12,7 @@
    </runtime>
    <requires>
       <import plugin="com.wcohen.ss"/>
-      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.core.base"/>
       <import plugin="org.jdom"/>
    </requires>
 
