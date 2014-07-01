@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.choicemaker.cm.core.util.IntValuedHashMap;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.Rule;
@@ -28,6 +27,7 @@ import com.choicemaker.cm.matching.cfg.Symbol;
 import com.choicemaker.cm.matching.cfg.Token;
 import com.choicemaker.cm.matching.cfg.TokenType;
 import com.choicemaker.cm.matching.cfg.Variable;
+import com.choicemaker.util.IntValuedHashMap;
 
 /**
  * .

@@ -28,10 +28,10 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.core.util.OperationFailedException;
 import com.choicemaker.cm.core.xmlconf.GeneratorXmlConf;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;

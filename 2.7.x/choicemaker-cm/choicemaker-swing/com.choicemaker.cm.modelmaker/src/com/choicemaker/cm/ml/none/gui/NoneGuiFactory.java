@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.ml.none.gui;
 
-import com.choicemaker.cm.core.ml.MachineLearner;
+import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ml.none.None;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
@@ -24,7 +24,7 @@ import com.choicemaker.cm.modelmaker.gui.ml.MlGuiFactory;
  */
 public class NoneGuiFactory extends MlGuiFactory {
 	/**
-	 * @see com.choicemaker.cm.ml.gui.MlGuiFactory#getTrainDialogPlugin(com.choicemaker.cm.ml.MachineLearner)
+	 * @see com.choicemaker.cm.ml.gui.MlGuiFactory#getTrainDialogPlugin(com.choicemaker.cm.core.MachineLearner)
 	 */
 	public TrainDialogPlugin getTrainDialogPlugin(MachineLearner learner) {
 		return new NoneTrainDialogPlugin();

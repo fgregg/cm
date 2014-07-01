@@ -14,9 +14,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.validation.AbstractValidator;
 import com.choicemaker.cm.validation.IValidator;
+import com.choicemaker.util.StringUtils;
 
 /**
  * A simple validator for testing aggregation. This class extends

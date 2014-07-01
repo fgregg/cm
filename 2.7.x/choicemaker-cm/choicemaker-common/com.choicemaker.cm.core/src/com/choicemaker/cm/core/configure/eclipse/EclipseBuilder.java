@@ -13,10 +13,10 @@ package com.choicemaker.cm.core.configure.eclipse;
 import java.io.IOException;
 import java.io.Reader;
 
-import com.choicemaker.cm.core.configure.IBuilder;
-import com.choicemaker.cm.core.configure.IDocument;
-import com.choicemaker.cm.core.configure.XmlSpecificationException;
 import com.choicemaker.cm.core.configure.jdom.JdomBuilder;
+import com.choicemaker.cm.core.configure.xml.IBuilder;
+import com.choicemaker.cm.core.configure.xml.IDocument;
+import com.choicemaker.cm.core.configure.xml.XmlSpecificationException;
 
 /**
  * Parses a fragment of plugin.xml files for extensions based on XmlConfigurable.

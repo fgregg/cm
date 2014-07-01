@@ -18,8 +18,8 @@ import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.ml.MachineLearner;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
 import com.choicemaker.cm.ml.me.xmlconf.MeModelConf;
@@ -39,14 +39,14 @@ public class MaximumEntropy implements MachineLearner {
 	private IProbabilityModel model;
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#getEvaluator()
+	 * @see com.choicemaker.cm.core.MachineLearner#getEvaluator()
 	 */
 	public Evaluator getEvaluator() {
 		return new MeEvaluator(model, weights);
 	}
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#setProbabilityModel(com.choicemaker.cm.core.base.ProbabilityModel)
+	 * @see com.choicemaker.cm.core.MachineLearner#setProbabilityModel(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
 	public void setProbabilityModel(IProbabilityModel model) {
 		this.model = model;
@@ -122,7 +122,7 @@ public class MaximumEntropy implements MachineLearner {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#train(java.util.Collection, double)
+	 * @see com.choicemaker.cm.core.MachineLearner#train(java.util.Collection, double)
 	 */
 	public Object train(Collection src, double[] firingPercentages) {
 		try {
@@ -137,35 +137,35 @@ public class MaximumEntropy implements MachineLearner {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#getModelConf()
+	 * @see com.choicemaker.cm.core.MachineLearner#getModelConf()
 	 */
 	public MlModelConf getModelConf() {
 		return new MeModelConf(this);
 	}
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#canEvaluate()
+	 * @see com.choicemaker.cm.core.MachineLearner#canEvaluate()
 	 */
 	public boolean canEvaluate() {
 		return true;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#canTrain()
+	 * @see com.choicemaker.cm.core.MachineLearner#canTrain()
 	 */
 	public boolean canTrain() {
 		return true;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#canUse(com.choicemaker.cm.core.base.ClueSet)
+	 * @see com.choicemaker.cm.core.MachineLearner#canUse(com.choicemaker.cm.core.base.ClueSet)
 	 */
 	public boolean canUse(ClueSet cs) {
 		return cs.hasDecision() && cs.getType() == ClueSetType.BOOLEAN;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.ml.MachineLearner#isRegression()
+	 * @see com.choicemaker.cm.core.MachineLearner#isRegression()
 	 */
 	public boolean isRegression() {
 		return true;

@@ -16,8 +16,6 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.IntArrayList;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
@@ -28,6 +26,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
+import com.choicemaker.util.IntArrayList;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * This object reads in an IMatchRecord2Source, creates equivalence classes, and outputs them

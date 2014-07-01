@@ -32,10 +32,10 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.composite.base.CompositeRecordSource;

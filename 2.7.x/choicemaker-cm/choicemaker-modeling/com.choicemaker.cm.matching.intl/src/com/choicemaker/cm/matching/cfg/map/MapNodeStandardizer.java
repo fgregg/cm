@@ -13,10 +13,10 @@ package com.choicemaker.cm.matching.cfg.map;
 import java.util.List;
 import java.util.Map;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.ParsedData;
 import com.choicemaker.cm.matching.cfg.standardizer.DefaultStandardizer;
+import com.choicemaker.util.StringUtils;
 
 /**
  * @author ajwinkel

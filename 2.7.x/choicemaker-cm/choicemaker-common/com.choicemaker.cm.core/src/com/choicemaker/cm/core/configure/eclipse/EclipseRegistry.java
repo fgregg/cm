@@ -21,12 +21,12 @@ import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.IPluginRegistry;
 import org.eclipse.core.runtime.Platform;
 
-import com.choicemaker.cm.core.configure.IDocument;
-import com.choicemaker.cm.core.configure.NotFoundException;
-import com.choicemaker.cm.core.configure.NotUniqueException;
-import com.choicemaker.cm.core.configure.XmlConfigurable;
-import com.choicemaker.cm.core.configure.XmlConfigurablesRegistry;
-import com.choicemaker.cm.core.util.Precondition;
+import com.choicemaker.cm.core.configure.xml.IDocument;
+import com.choicemaker.cm.core.configure.xml.NotFoundException;
+import com.choicemaker.cm.core.configure.xml.NotUniqueException;
+import com.choicemaker.cm.core.configure.xml.XmlConfigurable;
+import com.choicemaker.cm.core.configure.xml.XmlConfigurablesRegistry;
+import com.choicemaker.util.Precondition;
 
 /**
  * An eclipse-based registry of XmlConfigurables.

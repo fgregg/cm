@@ -59,6 +59,7 @@ public class GuiDescriptorGenerator implements GeneratorPlugin {
 			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.util.*;" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.util.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.util.ArrayList;" + Constants.LINE_SEPARATOR);
 			w.write("import java.util.HashMap;" + Constants.LINE_SEPARATOR);
 			w.write("import javax.swing.JLabel;" + Constants.LINE_SEPARATOR);

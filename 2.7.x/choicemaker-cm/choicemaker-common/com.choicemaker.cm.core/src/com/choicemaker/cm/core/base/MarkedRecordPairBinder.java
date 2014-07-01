@@ -24,8 +24,8 @@ import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.SinkFactory;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 
 /**
  * Provides conversions between a <code>MarkedRecordPairSource</code>,

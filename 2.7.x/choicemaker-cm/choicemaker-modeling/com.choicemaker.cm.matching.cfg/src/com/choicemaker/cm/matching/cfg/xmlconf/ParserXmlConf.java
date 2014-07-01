@@ -37,8 +37,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.DateHelper;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.ParseTreeNodeStandardizer;

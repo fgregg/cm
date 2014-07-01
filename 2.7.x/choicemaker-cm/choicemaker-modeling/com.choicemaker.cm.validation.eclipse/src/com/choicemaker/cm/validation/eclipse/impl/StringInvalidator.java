@@ -18,9 +18,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.matching.gen.Sets;
 import com.choicemaker.cm.validation.AbstractSetBasedValidator;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Validates a non-null value by checking that it does <em>NOT</em> match

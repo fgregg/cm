@@ -13,7 +13,7 @@ package com.choicemaker.cm.core.util;
 import java.io.File;
 import java.io.IOException;
 
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 
 /**
  *

@@ -19,6 +19,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.XmlConfException;
 
 /**
  * XML configuration for record sources. Each actual source type has its own XML

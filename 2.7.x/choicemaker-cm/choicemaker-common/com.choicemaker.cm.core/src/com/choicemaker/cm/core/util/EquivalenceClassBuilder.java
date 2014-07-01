@@ -17,6 +17,8 @@ import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.choicemaker.util.IntValuedHashMap;
+
 
 /**
  * @author ajwinkel

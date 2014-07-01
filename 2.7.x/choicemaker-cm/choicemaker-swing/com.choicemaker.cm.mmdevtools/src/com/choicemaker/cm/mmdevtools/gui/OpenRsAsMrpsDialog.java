@@ -25,8 +25,8 @@ import javax.swing.event.DocumentListener;
 
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.mmdevtools.io.RsToMrpsAdapter;

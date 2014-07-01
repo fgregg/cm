@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.choicemaker.cm.core.util.PrefixTree;
-import com.choicemaker.cm.core.util.SuffixTree;
 import com.choicemaker.cm.matching.cfg.SimpleTokenizer;
 import com.choicemaker.cm.matching.cfg.Token;
+import com.choicemaker.util.PrefixTree;
+import com.choicemaker.util.SuffixTree;
 
 /**
  * Tokenizer whose main purpose is to split up addresses that

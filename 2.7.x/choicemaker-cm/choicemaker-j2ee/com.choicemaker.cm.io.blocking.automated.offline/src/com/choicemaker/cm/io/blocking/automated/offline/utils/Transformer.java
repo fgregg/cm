@@ -13,7 +13,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.utils;
 import java.util.ArrayList;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -22,6 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySin
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * This object takes an array or tree of internal id and transforms them back to stage and master IDs.

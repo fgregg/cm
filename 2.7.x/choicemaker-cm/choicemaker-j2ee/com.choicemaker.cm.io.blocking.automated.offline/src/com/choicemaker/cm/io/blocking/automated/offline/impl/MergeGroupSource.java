@@ -15,11 +15,11 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMergeGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMergeGroupSource;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MergeGroup;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * @author pcheung

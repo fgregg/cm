@@ -22,7 +22,6 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
@@ -36,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * This object performs the creation of rec_id, val_id pairs.

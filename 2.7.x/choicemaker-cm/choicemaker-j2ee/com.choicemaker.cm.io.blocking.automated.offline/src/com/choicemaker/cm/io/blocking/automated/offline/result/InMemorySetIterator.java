@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.util.IntArrayList;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * This object takes in an int array containing set root and return elements in

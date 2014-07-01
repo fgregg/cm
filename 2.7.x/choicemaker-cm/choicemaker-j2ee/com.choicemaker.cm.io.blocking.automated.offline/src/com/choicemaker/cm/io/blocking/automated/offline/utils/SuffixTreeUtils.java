@@ -13,9 +13,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.utils;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * @author pcheung

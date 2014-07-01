@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.jdom.JDOMException;
 
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.matching.cfg.xmlconf.ParserXmlConf;
 
 /**

@@ -12,6 +12,8 @@ package com.choicemaker.cm.core.xmlconf;
 
 import org.jdom.Element;
 
+import com.choicemaker.cm.core.XmlConfException;
+
 /**
  * Base interface for all XML module initializers.
  *

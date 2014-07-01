@@ -23,8 +23,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.util.LongArrayList;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSinkSourceFactory;
@@ -35,6 +34,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
+import com.choicemaker.util.LongArrayList;
 
 /**This version takes in blocks that contains internal id instead of the record id.
  * 

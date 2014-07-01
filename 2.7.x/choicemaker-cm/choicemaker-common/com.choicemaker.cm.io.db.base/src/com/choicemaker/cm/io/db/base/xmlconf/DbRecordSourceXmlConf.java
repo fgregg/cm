@@ -20,8 +20,8 @@ import org.jdom.output.XMLOutputter;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.db.base.DbRecordSource;
 
 /**

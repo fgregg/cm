@@ -18,8 +18,8 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * @author pcheung

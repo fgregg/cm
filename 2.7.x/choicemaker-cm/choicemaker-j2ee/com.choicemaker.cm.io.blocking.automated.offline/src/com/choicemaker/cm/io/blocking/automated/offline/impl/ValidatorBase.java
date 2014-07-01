@@ -12,10 +12,10 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IValidatorBase;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * @author pcheung

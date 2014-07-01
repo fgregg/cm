@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.util.LongArrayList;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * @author Adam Winkel

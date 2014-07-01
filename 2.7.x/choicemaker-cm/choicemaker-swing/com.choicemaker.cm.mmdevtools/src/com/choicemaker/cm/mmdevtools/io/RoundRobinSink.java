@@ -22,8 +22,8 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.SinkFactory;
 import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.xml.base.XmlRecordSinkFactory;
 
 public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {

@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.train.Trainer;
-import com.choicemaker.cm.core.util.OperationFailedException;
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.modelmaker.stats.Statistics;
+import com.choicemaker.util.StringUtils;
 
 /**
  * @author ajwinkel

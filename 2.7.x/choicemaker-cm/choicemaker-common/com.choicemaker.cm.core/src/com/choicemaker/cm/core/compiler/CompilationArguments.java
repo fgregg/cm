@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.core.compiler;
 
-import com.choicemaker.cm.core.util.Arguments;
+import com.choicemaker.util.Arguments;
 
 /**
  * Command line arguments for compiler.

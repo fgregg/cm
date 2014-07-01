@@ -22,10 +22,10 @@ import java.util.regex.PatternSyntaxException;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.matching.gen.Sets;
 import com.choicemaker.cm.validation.AbstractSetBasedValidator;
 import com.choicemaker.cm.validation.IPatternMatcher;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Validates a non-null name by checking whether it matches

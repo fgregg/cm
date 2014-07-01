@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.util.Precondition;
+import com.choicemaker.util.Precondition;
 
 /**
  * A collection of eclipse-based registries.

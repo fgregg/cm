@@ -16,10 +16,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.choicemaker.cm.core.util.DoubleValuedHashMap;
 import com.choicemaker.cm.matching.cfg.TokenType;
 import com.choicemaker.cm.matching.gen.Maps;
 import com.choicemaker.cm.matching.gen.Sets;
+import com.choicemaker.util.DoubleValuedHashMap;
 
 /**
  * TokenType subclass for which the membership in the TokenType,

@@ -20,9 +20,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.validation.AbstractAggregateValidator;
 import com.choicemaker.cm.validation.IValidator;
+import com.choicemaker.util.StringUtils;
 
 /**
  * A validator that delegates to a collection of plugin validators.

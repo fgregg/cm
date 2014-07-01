@@ -36,7 +36,7 @@ import com.choicemaker.cm.core.ClueSetType;
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.ml.MachineLearner;
+import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ml.MlGuiFactories;

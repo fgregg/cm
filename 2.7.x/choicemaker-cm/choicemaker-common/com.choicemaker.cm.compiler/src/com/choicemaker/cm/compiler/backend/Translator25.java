@@ -353,7 +353,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree int_array_list_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.util.IntArrayList");
+		return qualid(pos, "com.choicemaker.util.IntArrayList");
 	}
     
 	protected Tree string_value_of(int pos) {

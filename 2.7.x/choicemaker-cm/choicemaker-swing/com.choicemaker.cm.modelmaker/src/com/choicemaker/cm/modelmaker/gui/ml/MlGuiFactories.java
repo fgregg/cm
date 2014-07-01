@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
-import com.choicemaker.cm.core.ml.MachineLearner;
+import com.choicemaker.cm.core.MachineLearner;
 
 /**
  * Description

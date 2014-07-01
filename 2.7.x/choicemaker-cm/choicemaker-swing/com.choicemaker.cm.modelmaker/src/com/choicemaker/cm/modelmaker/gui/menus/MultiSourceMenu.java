@@ -27,11 +27,11 @@ import javax.swing.KeyStroke;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.core.xmlconf.ExtensionPointMapper;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;

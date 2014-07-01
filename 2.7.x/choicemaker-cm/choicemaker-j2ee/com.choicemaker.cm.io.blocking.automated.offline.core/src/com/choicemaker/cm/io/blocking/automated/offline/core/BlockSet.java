@@ -12,8 +12,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.util.IntArrayList;
-import com.choicemaker.cm.core.util.LongArrayList;
+import com.choicemaker.util.IntArrayList;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * This object represents a Blocking Set.  It stores the columns id and values, and a list of row ids in the 

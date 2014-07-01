@@ -13,13 +13,13 @@ package com.choicemaker.cm.io.blocking.automated.offline.utils;
 import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource;
+import com.choicemaker.util.LongArrayList;
 
 /**
  *	This object handles translating input record ids into internal record id.  The internal record ids are all

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -32,7 +32,6 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.DateHelper;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.NameUtils;
@@ -51,7 +50,7 @@ public class XmlMarkedRecordPairSource
 	private final String READER = "org.apache.xerces.parsers.SAXParser";
 	private final int BUF_SIZE = 1000;
 	private String name;
-	
+
 	// If the inputStream is null, the xmlFileName must not be null
 	private InputStream inputStream;
 	private String xmlFileName;
@@ -124,7 +123,7 @@ public class XmlMarkedRecordPairSource
 				wait();
 			}
 			if (thrown != null) {
-				throw new ChainedIOException(thrown);
+				throw new IOException(thrown);
 			}
 			return size != 0;
 		} catch (InterruptedException ex) {
@@ -135,7 +134,7 @@ public class XmlMarkedRecordPairSource
 
 	public synchronized MutableMarkedRecordPair getNextMarkedRecordPair() throws IOException {
 		if (thrown != null) {
-			throw new ChainedIOException(thrown);
+			throw new IOException(thrown);
 		}
 		try {
 			while (size == 0 && mayHaveMore) {

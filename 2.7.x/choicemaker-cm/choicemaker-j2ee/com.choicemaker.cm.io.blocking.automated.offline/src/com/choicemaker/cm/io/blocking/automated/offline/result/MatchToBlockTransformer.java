@@ -20,12 +20,12 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.util.EquivalenceClass;
 import com.choicemaker.cm.core.util.EquivalenceClassBuilder;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.util.LongArrayList;
 
 
 /**

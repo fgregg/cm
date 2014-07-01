@@ -29,8 +29,8 @@ import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.GeneratorHelper;
 import com.choicemaker.cm.core.gen.GeneratorPlugin;
 import com.choicemaker.cm.core.gen.IGenerator;
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.io.flatfile.base.FlatFileOutput;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Description

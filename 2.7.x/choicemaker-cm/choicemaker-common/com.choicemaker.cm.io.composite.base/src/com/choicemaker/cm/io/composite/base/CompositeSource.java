@@ -17,9 +17,8 @@ import java.util.Iterator;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.Source;
-import com.choicemaker.cm.core.util.ChainedIOException;
-import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.core.util.NameUtils;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * Collection of other sources.
@@ -78,7 +77,7 @@ public abstract class CompositeSource implements Source {
 				nextValid();
 			}
 		} catch (Exception ex) {
-			throw new ChainedIOException("Error reading file referenced by " + fileName, ex);
+			throw new IOException("Error reading file referenced by " + fileName, ex);
 		}
 	}
 

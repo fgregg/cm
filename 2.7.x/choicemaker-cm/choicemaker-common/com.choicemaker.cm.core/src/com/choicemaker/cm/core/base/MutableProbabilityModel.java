@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -34,30 +34,31 @@ import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.ml.MachineLearner;
+import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.core.ProbabilityModelSpecification;
 import com.choicemaker.cm.core.ml.none.None;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.cm.core.report.Reporter;
-import com.choicemaker.cm.core.util.ArrayHelper;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.NameUtils;
+import com.choicemaker.util.ArrayHelper;
 
 /**
  * A probability model consisting of holder classes, translators, a clue set, weights, and
  * a list of clues to be evaluated.
- * 
+ *
  * Class invariant:
  * clueSet != null <=>
  *   cluesToEval != null AND cluesToEval.length == clueSet.size() AND
  *   weights != null AND weights.length == clueSet.size
- * 
+ *
  * @author Martin Buechi
  * @author S. Yoakum-Stover
  * @author rphall (Split ProbabilityModel into separate instance and manager types)
  * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:30 $
  * @see PMManager
  */
-class MutableProbabilityModel implements IProbabilityModel, ImmutableProbabilityModel {
+public class MutableProbabilityModel implements IProbabilityModel, ImmutableProbabilityModel {
 
 	private Accessor acc;
 	private String accessorClassName;
@@ -96,6 +97,14 @@ class MutableProbabilityModel implements IProbabilityModel, ImmutableProbability
 		setFileName(fileName);
 		setRawClueFileName(rawClueFileName);
 		setMachineLearner(new None());
+	}
+
+	public MutableProbabilityModel(ProbabilityModelSpecification spec, Accessor acc) {
+		this();
+		setFileName(spec.getWeightFileName());
+		setRawClueFileName(spec.getClueFileName());
+		setMachineLearner(spec.getMachineLearner());
+		this.setAccessor(acc);
 	}
 
 	MutableProbabilityModel(
@@ -194,11 +203,11 @@ class MutableProbabilityModel implements IProbabilityModel, ImmutableProbability
 
 	/**
 	 * Returns the name of the Accessor class.
-	 * 
-	 * Note: this is not the same as getAccessor().getClass().getName() 
+	 *
+	 * Note: this is not the same as getAccessor().getClass().getName()
 	 * because getAccessor() returns a dynamic proxy, so the class name
 	 * is something like $Proxy0.
-	 * 
+	 *
 	 * @return The name of the accessor class.
 	 */
 	public String getAccessorClassName() {
@@ -378,7 +387,7 @@ class MutableProbabilityModel implements IProbabilityModel, ImmutableProbability
 		}
 		return res;
 	}
-	
+
 	public Hashtable properties() {
 		return this.properties;
 	}

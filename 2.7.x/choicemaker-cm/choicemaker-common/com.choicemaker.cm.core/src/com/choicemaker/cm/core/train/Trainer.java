@@ -19,12 +19,12 @@ import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.core.util.OperationFailedException;
 
 /**
  * Train and test models with data from a marked record pair source.

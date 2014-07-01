@@ -21,7 +21,6 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
@@ -33,6 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIDTranslator;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * @author pcheung

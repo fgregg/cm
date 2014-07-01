@@ -13,11 +13,11 @@ package com.choicemaker.cm.validation.eclipse.impl;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.validation.AbstractAggregateValidator;
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.cm.validation.ValidatorCreationException;
 import com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Factory class for aggregate validators.

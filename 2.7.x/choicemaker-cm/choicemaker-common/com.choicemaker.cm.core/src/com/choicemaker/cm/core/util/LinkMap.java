@@ -22,6 +22,7 @@ import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.util.IntArrayList;
 
 public class LinkMap {
 	

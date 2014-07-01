@@ -12,9 +12,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IValidator;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * This implementation of IValidator assumes that staging and master each has a distinct range of

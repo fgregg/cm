@@ -21,6 +21,8 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.output.DOMOutputter;
 
+import com.choicemaker.cm.core.XmlConfException;
+
 /**
  * XML configurator for Log4j.
  *

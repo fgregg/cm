@@ -27,8 +27,8 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources;

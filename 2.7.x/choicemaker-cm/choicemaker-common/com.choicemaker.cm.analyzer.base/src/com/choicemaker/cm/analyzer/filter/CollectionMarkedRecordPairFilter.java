@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import com.choicemaker.cm.core.util.IntArrayList;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * @author	Adam Winkel

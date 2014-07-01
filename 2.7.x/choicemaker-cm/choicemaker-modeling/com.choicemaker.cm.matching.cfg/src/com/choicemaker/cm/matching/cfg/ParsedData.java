@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.StringUtils;
 
 
 

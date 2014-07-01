@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.IntArrayList;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * This interface handles writting out record_id, value_id pairs.

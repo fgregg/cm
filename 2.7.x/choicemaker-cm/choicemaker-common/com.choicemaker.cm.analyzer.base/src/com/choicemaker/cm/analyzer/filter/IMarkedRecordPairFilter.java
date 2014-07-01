@@ -13,7 +13,7 @@ package com.choicemaker.cm.analyzer.filter;
 import java.io.Serializable;
 import java.util.Collection;
 
-import com.choicemaker.cm.core.util.IntArrayList;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * @author rphall

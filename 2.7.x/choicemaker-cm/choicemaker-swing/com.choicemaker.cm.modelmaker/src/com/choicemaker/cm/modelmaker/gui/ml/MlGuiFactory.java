@@ -13,7 +13,7 @@ package com.choicemaker.cm.modelmaker.gui.ml;
 import javax.swing.table.TableColumn;
 
 import com.choicemaker.cm.core.DynamicDispatchHandler;
-import com.choicemaker.cm.core.ml.MachineLearner;
+import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
 import com.choicemaker.cm.modelmaker.gui.tables.ActiveClueTableModelPlugin;
 import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModelPlugin;

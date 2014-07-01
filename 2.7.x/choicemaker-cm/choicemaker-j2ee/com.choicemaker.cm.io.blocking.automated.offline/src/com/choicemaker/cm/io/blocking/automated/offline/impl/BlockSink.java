@@ -13,11 +13,11 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.IntArrayList;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
+import com.choicemaker.util.IntArrayList;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * @author pcheung

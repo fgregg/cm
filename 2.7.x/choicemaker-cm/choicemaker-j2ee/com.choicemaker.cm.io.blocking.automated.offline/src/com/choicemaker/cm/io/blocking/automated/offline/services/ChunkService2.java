@@ -22,8 +22,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.util.LongArrayList;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -36,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySin
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.util.LongArrayList;
 
 /**This version takes in blocks that contains internal id instead of the record id.
  * 

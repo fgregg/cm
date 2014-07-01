@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.matching.cfg.map;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.matching.gen.LongestCommonSubsequence;
+import com.choicemaker.util.StringUtils;
 
 
 class StandardMatch {

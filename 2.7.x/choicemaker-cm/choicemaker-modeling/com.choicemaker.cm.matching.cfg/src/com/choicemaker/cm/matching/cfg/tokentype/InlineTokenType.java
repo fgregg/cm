@@ -12,8 +12,8 @@ package com.choicemaker.cm.matching.cfg.tokentype;
 
 import java.util.Iterator;
 
-import com.choicemaker.cm.core.util.DoubleValuedHashMap;
 import com.choicemaker.cm.matching.cfg.TokenType;
+import com.choicemaker.util.DoubleValuedHashMap;
 
 
 /**

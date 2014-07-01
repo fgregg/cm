@@ -16,7 +16,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.DateHelper;
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Utilities for dealing with <code>Date</code>s.

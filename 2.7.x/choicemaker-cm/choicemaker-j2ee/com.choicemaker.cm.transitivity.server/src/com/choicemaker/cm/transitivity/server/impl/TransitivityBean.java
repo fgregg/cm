@@ -27,8 +27,8 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;

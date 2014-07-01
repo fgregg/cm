@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
@@ -26,6 +25,7 @@ import com.choicemaker.cm.io.blocking.automated.base.CountField;
 import com.choicemaker.cm.io.blocking.automated.base.CountSource;
 import com.choicemaker.cm.io.blocking.automated.base.DbField;
 import com.choicemaker.cm.io.blocking.automated.cachecount.CacheCountSource;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * @author ajwinkel

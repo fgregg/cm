@@ -24,15 +24,15 @@ import java.util.List;
 
 import org.jdom.Element;
 
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.NamedResources;
-import com.choicemaker.cm.core.util.StringUtils;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.Rule;
 import com.choicemaker.cm.matching.cfg.SymbolFactory;
 import com.choicemaker.cm.matching.cfg.TokenType;
 import com.choicemaker.cm.matching.cfg.Variable;
 import com.choicemaker.cm.matching.cfg.tokentype.InlineTokenType;
+import com.choicemaker.util.StringUtils;
 
 /**
  * @author ajwinkel

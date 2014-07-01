@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.choicemaker.cm.core.util.IntArrayList;
+import com.choicemaker.util.IntArrayList;
 
 /**This object tells the system which data file contains the block data.
  *

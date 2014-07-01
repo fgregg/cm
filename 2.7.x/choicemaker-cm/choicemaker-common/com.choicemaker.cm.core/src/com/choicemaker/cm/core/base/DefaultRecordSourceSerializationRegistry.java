@@ -28,8 +28,8 @@ import org.eclipse.core.runtime.Platform;
 import com.choicemaker.cm.core.IRecordSourceSerializationRegistry;
 import com.choicemaker.cm.core.IRecordSourceSerializer;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.util.Precondition;
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.Precondition;
+import com.choicemaker.util.StringUtils;
 
 /**
  * An eclipse-based registry of record source serializers.

@@ -25,6 +25,7 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.XmlConfException;
 
 /**
  * XML configuration for marked record pairs. Each actual source type

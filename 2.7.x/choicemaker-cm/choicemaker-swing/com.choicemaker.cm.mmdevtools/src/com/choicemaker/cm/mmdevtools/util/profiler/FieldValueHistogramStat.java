@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.util.IntValuedHashMap;
+import com.choicemaker.util.IntValuedHashMap;
 
 
 /**

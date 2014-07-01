@@ -13,9 +13,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * @author pcheung

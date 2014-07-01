@@ -16,10 +16,10 @@ import java.util.List;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.ml.MachineLearner;
-import com.choicemaker.cm.core.util.ArrayHelper;
+import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
 import com.choicemaker.cm.ml.me.base.MaximumEntropy;
+import com.choicemaker.util.ArrayHelper;
 
 /**
  *

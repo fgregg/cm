@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.matching.cfg.SimpleSymbolFactory;
 import com.choicemaker.cm.matching.cfg.SymbolFactory;
 import com.choicemaker.cm.matching.cfg.TokenType;

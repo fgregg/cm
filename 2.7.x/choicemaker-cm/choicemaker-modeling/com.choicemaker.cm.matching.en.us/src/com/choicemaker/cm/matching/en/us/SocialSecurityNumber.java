@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.matching.en.us;
 
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Returns the first 9 digits of a SSN.

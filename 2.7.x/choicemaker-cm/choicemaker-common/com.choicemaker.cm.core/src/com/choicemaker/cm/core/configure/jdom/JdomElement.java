@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.configure.IElement;
-import com.choicemaker.cm.core.util.Precondition;
+import com.choicemaker.cm.core.configure.xml.IElement;
+import com.choicemaker.util.Precondition;
 
 /**
  * @author rphall

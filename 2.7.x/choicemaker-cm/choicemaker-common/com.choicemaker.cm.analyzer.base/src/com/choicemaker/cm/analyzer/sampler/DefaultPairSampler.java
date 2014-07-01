@@ -21,8 +21,8 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.IntArrayList;
-import com.choicemaker.cm.core.util.IntValuedHashMap;
+import com.choicemaker.util.IntArrayList;
+import com.choicemaker.util.IntValuedHashMap;
 
 /**
  * A default class that samples from a large number of pairs to create a set that

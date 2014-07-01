@@ -22,12 +22,12 @@ import com.choicemaker.cm.core.IncompleteSpecificationException;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.util.Equal;
-import com.choicemaker.cm.core.util.HashUtils;
-import com.choicemaker.cm.core.util.Precondition;
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.util.Equal;
+import com.choicemaker.util.HashUtils;
+import com.choicemaker.util.Precondition;
+import com.choicemaker.util.StringUtils;
 
 /**
  * This is a wrapper object around a Record Source Descriptor. It can be serialized, because it

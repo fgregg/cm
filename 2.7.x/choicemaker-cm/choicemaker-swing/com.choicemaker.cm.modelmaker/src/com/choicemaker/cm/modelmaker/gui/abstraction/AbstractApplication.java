@@ -17,12 +17,11 @@ import javax.swing.JToolBar;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.RepositoryChangeListener;
 import com.choicemaker.cm.core.base.Repository;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.train.Trainer;
-import com.choicemaker.cm.core.util.IntArrayList;
-import com.choicemaker.cm.core.util.OperationFailedException;
 import com.choicemaker.cm.modelmaker.IRecordPairList;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
@@ -31,6 +30,7 @@ import com.choicemaker.cm.modelmaker.stats.Statistics;
 import com.choicemaker.cm.module.IUserMessages;
 import com.choicemaker.cm.module.swing.AbstractTabbedPanel;
 import com.choicemaker.cm.module.swing.DefaultManagedPanel;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * @author rphall

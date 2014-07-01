@@ -13,7 +13,7 @@ package com.choicemaker.cm.matching.gen.tfidf;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.choicemaker.cm.core.util.FloatValuedHashMap;
+import com.choicemaker.util.FloatValuedHashMap;
 
 /**
  * Comment

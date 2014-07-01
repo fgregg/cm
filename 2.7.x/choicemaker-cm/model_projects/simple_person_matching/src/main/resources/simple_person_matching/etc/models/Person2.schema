@@ -4,7 +4,7 @@
 	xsi:noNamespaceSchemaLocation="http://oscmt.sourceforge.net/xml_schemas/2.6/ChoiceMakerAll.xsd"
 	version="2.6.0">
     <import>java.util.Date</import>
-    <import>com.choicemaker.cm.core.util.StringUtils</import>
+    <import>com.choicemaker.util.StringUtils</import>
     <import>com.choicemaker.cm.validation.eclipse.impl.Validators</import>
     <global>
         <globalExt>

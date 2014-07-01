@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2013 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -23,7 +23,6 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.NameUtils;
 
 /**
@@ -82,12 +81,12 @@ public class DbRecordSource implements RecordSource {
 			conn.setAutoCommit(false);
 
 //			System.out.println (" user: " + conn.getMetaData().getUserName());
-			
+
 			DbAccessor dba = (DbAccessor) model.getAccessor();
 			dbr = (dba).getDbReaderParallel(conf);
-			
+
 			logger.debug (conf + " " + dbr);
-			
+
 			// Set _debugSql=true for SqlDeveloper debugging
 			//
 			// See Sue Harper, 2006-07-13, http://links.rph.cx/XyfaZ5,
@@ -111,7 +110,7 @@ public class DbRecordSource implements RecordSource {
 
 			String sql = "call CMTTRAINING.RS_SNAPSHOT (?,?,?)";
 			stmt = conn.prepareCall(sql);
-			
+
 			stmt.setString(1, selection);
 			String s = dbr.getName();
 			stmt.setString(2, s);
@@ -135,14 +134,14 @@ public class DbRecordSource implements RecordSource {
 					rs[i] = (ResultSet) outer.getObject(i + 1);
 				}
 			}
-			
+
 			dbr.open(rs);
 
 			getNextMain();
 
 		} catch (java.sql.SQLException e) {
 			e.printStackTrace();
-			throw new ChainedIOException(e.getMessage(), e);
+			throw new IOException(e.getMessage(), e);
 		}
 	}
 
@@ -164,7 +163,7 @@ public class DbRecordSource implements RecordSource {
 				record = null;
 			}
 		} catch (java.sql.SQLException e) {
-			throw new ChainedIOException(e.getMessage(), e);
+			throw new IOException(e.getMessage(), e);
 		}
 	}
 
@@ -194,7 +193,7 @@ public class DbRecordSource implements RecordSource {
 			ex = e;
 		}
 		if (ex != null) {
-			throw new ChainedIOException(ex.getMessage(), ex);
+			throw new IOException(ex.getMessage(), ex);
 		}
 	}
 

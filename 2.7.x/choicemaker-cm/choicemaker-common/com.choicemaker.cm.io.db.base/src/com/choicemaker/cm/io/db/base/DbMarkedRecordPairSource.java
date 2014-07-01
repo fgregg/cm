@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -27,7 +27,6 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.NameUtils;
 
 /**
@@ -149,7 +148,7 @@ class DbMarkedRecordPairSource implements MarkedRecordPairSource {
 
 			getNextMain();
 		} catch (java.sql.SQLException e) {
-			throw new ChainedIOException("", e);
+			throw new IOException("", e);
 		}
 	}
 
@@ -188,7 +187,7 @@ class DbMarkedRecordPairSource implements MarkedRecordPairSource {
 				pair = null;
 			}
 		} catch (java.sql.SQLException e) {
-			throw new ChainedIOException("", e);
+			throw new IOException("", e);
 		}
 	}
 
@@ -225,7 +224,7 @@ class DbMarkedRecordPairSource implements MarkedRecordPairSource {
 			ex = e;
 		}
 		if (ex != null) {
-			throw new ChainedIOException("", ex);
+			throw new IOException("", ex);
 		}
 	}
 

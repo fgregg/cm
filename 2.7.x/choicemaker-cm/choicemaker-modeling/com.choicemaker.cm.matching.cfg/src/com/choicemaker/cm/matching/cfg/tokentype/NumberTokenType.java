@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.matching.cfg.tokentype;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.matching.cfg.TokenType;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Token type made up exclusively of Strings of digits.  The

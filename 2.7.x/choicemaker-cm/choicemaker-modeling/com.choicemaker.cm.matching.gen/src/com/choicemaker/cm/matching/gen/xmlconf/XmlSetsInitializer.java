@@ -17,7 +17,7 @@ import java.util.Set;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.matching.gen.Sets;
 

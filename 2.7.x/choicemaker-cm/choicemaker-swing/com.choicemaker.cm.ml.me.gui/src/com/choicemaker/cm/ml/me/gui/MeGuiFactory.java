@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
-import com.choicemaker.cm.core.ml.MachineLearner;
+import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.ml.me.base.MaximumEntropy;
 import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
@@ -123,7 +123,7 @@ public class MeGuiFactory extends MlGuiFactory {
 		return activeClueTableModelPlugin;
 	}
 	/**
-	 * @see com.choicemaker.cm.ml.gui.MlGuiFactory#getTrainDialogPlugin(com.choicemaker.cm.ml.MachineLearner)
+	 * @see com.choicemaker.cm.ml.gui.MlGuiFactory#getTrainDialogPlugin(com.choicemaker.cm.core.MachineLearner)
 	 */
 	public TrainDialogPlugin getTrainDialogPlugin(MachineLearner learner) {
 		return new MeTrainDialogPlugin((MaximumEntropy) learner);

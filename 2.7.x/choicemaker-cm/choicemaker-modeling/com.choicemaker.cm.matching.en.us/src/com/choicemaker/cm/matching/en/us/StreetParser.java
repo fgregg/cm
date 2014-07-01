@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.StringUtils;
 
 /**
  * The street parser is used to split a street address into street name, street 

@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.ArrayList;
 
-import com.choicemaker.cm.core.util.LongArrayList;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * Represents a node in a suffix tree, specifically designed from elimination

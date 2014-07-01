@@ -12,8 +12,6 @@ package com.choicemaker.cm.core;
 
 import java.util.Date;
 
-import com.choicemaker.cm.core.ml.MachineLearner;
-
 /**
  * @author rphall
  * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $

@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.util.LongArrayList;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * This is a generic representation of a set of IDS.  This could be a BlockSet containing one block

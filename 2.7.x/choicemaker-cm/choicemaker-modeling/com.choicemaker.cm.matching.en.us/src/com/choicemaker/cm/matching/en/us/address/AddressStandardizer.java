@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.matching.en.us.address;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.ParsedData;
 import com.choicemaker.cm.matching.cfg.SymbolFactory;
@@ -21,6 +20,7 @@ import com.choicemaker.cm.matching.cfg.standardizer.RecursiveStandardizer;
 import com.choicemaker.cm.matching.cfg.standardizer.TokenTypeStandardizer;
 import com.choicemaker.cm.matching.cfg.tokentype.OrdinalTokenType;
 import com.choicemaker.cm.matching.en.us.ParsedAddress;
+import com.choicemaker.util.StringUtils;
 
 /**
  * @author   Adam Winkel

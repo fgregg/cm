@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -34,17 +34,16 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.util.ChainedIOException;
 
 
 /**
- * This object creates a MRPS from data in an Oracle database.  It is also serializable and can run in a 
+ * This object creates a MRPS from data in an Oracle database.  It is also serializable and can run in a
  * J2EE server.
  * <p>
  * FIXME: rename and move this Oracle-specific implementation
  * to the com.choicemaker.cm.io.db.oracle package
  * </p>
- * 
+ *
  * @author pcheung
  *
  */
@@ -113,12 +112,12 @@ public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
 				}
 			}
 			dbr.open(rs);
-			
+
 			loadMap ();
-			
+
 			getNextMain();
 		} catch (java.sql.SQLException e) {
-			throw new ChainedIOException("", e);
+			throw new IOException("", e);
 		}
 	}
 
@@ -151,12 +150,12 @@ public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
 				String src = rsDecision.getString(6);
 				String comment = rsDecision.getString(7);
 				pair = new MutableMarkedRecordPair(q, m, decision, date, user, src, comment);
-				
+
 			} else {
 				pair = null;
 			}
 		} catch (java.sql.SQLException e) {
-			throw new ChainedIOException("", e);
+			throw new IOException("", e);
 		}
 	}
 
@@ -207,7 +206,7 @@ public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
 			ex = e;
 		}
 		if (ex != null) {
-			throw new ChainedIOException("", ex);
+			throw new IOException("", ex);
 		}
 	}
 
@@ -235,7 +234,7 @@ public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
 
 
 	/** These method below are not used.
-	 * 
+	 *
 	 */
 
 	public void setModel(ImmutableProbabilityModel m) {

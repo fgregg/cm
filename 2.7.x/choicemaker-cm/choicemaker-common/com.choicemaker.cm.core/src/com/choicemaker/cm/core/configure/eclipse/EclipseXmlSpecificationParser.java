@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.core.configure.eclipse;
 
-import com.choicemaker.cm.core.configure.AbstractXmlSpecificationParser;
-import com.choicemaker.cm.core.configure.IBuilder;
+import com.choicemaker.cm.core.configure.xml.AbstractXmlSpecificationParser;
+import com.choicemaker.cm.core.configure.xml.IBuilder;
 
 /**
  * @author rphall

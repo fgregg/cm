@@ -10,9 +10,9 @@
  */
 package com.choicemaker.cm.matching.cfg.tokentype;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.matching.gen.Maps;
 import com.choicemaker.cm.matching.gen.Sets;
+import com.choicemaker.util.StringUtils;
 
 /**
  * 

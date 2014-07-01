@@ -12,7 +12,7 @@ package com.choicemaker.cm.matching.cfg.xmlconf;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.matching.cfg.TokenType;
 
 /**

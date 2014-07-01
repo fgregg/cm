@@ -30,12 +30,12 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.base.ProbabilityModel;
 import com.choicemaker.cm.core.ml.none.None;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.core.util.OperationFailedException;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;

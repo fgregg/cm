@@ -17,10 +17,10 @@ import org.jdom.Element;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.mmdevtools.io.MrpsToRsAdapter;
 
 /**

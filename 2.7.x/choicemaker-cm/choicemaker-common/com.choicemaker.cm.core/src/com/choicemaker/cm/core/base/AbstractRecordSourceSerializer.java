@@ -23,9 +23,9 @@ import com.choicemaker.cm.core.IRecordSourceSerializer;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.IncompleteSpecificationException;
 import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.DoNothingRecordSourceSerializer;
-import com.choicemaker.cm.core.util.Precondition;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.util.Precondition;
 
 /**
  * An eclipse-based abstract class that partially implements

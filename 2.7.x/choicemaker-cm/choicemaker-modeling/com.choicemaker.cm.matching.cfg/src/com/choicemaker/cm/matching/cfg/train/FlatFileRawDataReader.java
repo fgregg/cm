@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.StringUtils;
 
 /**
  * .

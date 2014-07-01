@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.choicemaker.cm.core.util.ConvUtils;
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.StringUtils;
 /**
  * The class GeoHelper contains methods for determining co-ordinates of different geo-entities
  * and calculation of the distance between two points on the earth surface (geo-points). 

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -25,7 +25,6 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.NameUtils;
 
@@ -193,7 +192,7 @@ public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
 			recordReader.open();
 			getNextMain();
 		} catch (Exception ex) {
-			throw new ChainedIOException("Error reading file referenced by " + fileName, ex);
+			throw new IOException("Error reading file referenced by " + fileName, ex);
 		}
 	}
 

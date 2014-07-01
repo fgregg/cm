@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.IntArrayList;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
+import com.choicemaker.util.IntArrayList;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * This version uses BlockGroup so it doesn't need to split up the blocks.

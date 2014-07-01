@@ -19,11 +19,11 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.cm.validation.ValidatorCreationException;
 import com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory;
 import com.choicemaker.cm.validation.eclipse.IValidatorFactory;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Collection of validators. The semantics of the class

@@ -12,7 +12,7 @@ package com.choicemaker.cm.matching.en.us.xmlconf;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.matching.en.us.StreetParser;
 import com.choicemaker.cm.matching.gen.Maps;

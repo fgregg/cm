@@ -26,9 +26,9 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPluginRegistry;
 import org.eclipse.core.runtime.Platform;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.cm.validation.ValidatorCreationException;
+import com.choicemaker.util.StringUtils;
 
 /**
  * A base class for validator factories.

@@ -34,8 +34,8 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
 import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.DescriptorCollection;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 import com.choicemaker.cm.gui.utils.viewer.CompositeFrameModel;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;

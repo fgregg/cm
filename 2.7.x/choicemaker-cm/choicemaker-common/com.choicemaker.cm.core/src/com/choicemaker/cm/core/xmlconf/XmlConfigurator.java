@@ -31,10 +31,11 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import com.choicemaker.cm.core.PropertyNames;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.gen.Eclipse2GeneratorPluginFactory;
-import com.choicemaker.cm.core.gen.InstallableGeneratorPluginFactory;
 import com.choicemaker.cm.core.report.Reporter;
 import com.choicemaker.cm.core.util.FileUtilities;
 
@@ -156,7 +157,7 @@ public class XmlConfigurator {
 		Class c = Eclipse2GeneratorPluginFactory.class;
 		String className = c.getName();
 		System.setProperty(
-				InstallableGeneratorPluginFactory.PROPERTY_INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
+				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
 				className);
 	}
 

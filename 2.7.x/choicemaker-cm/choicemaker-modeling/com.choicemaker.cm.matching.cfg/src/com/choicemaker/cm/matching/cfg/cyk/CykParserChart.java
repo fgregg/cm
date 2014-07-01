@@ -16,13 +16,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.choicemaker.cm.core.util.IntValuedHashMap;
 import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.Rule;
 import com.choicemaker.cm.matching.cfg.Token;
 import com.choicemaker.cm.matching.cfg.TokenType;
 import com.choicemaker.cm.matching.cfg.Variable;
 import com.choicemaker.cm.matching.cfg.cnf.NearlyCnfGrammar;
+import com.choicemaker.util.IntValuedHashMap;
 
 /**
  * .

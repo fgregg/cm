@@ -12,7 +12,7 @@ package com.choicemaker.cm.matching.gen;
 
 import java.util.StringTokenizer;
 
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.StringUtils;
 
 // import javax.mail.internet.AddressException;
 // import javax.mail.internet.InternetAddress;

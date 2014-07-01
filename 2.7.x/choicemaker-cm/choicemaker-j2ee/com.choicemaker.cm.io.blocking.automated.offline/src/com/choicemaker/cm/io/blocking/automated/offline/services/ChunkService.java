@@ -22,8 +22,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.util.LongArrayList;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
@@ -33,6 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * This service creates does the following:

@@ -17,8 +17,8 @@ import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IMarkedRecordPair;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.ArrayHelper;
-import com.choicemaker.cm.core.util.IntArrayList;
+import com.choicemaker.util.ArrayHelper;
+import com.choicemaker.util.IntArrayList;
 
 public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	private static final long serialVersionUID = 1L;

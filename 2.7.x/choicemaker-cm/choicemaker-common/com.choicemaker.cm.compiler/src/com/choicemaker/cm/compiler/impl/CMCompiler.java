@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -31,15 +31,23 @@ import org.jdom.Element;
 import com.choicemaker.cm.compiler.CompilationEnv;
 import com.choicemaker.cm.compiler.ICompilationUnit;
 import com.choicemaker.cm.compiler.Sourcecode;
+import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ProbabilityModelSpecification;
+import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
+import com.choicemaker.cm.core.configure.ChoiceMakerConfiguration;
+import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
+import com.choicemaker.cm.core.install.InstallableChoiceMakerConfigurator;
+import com.choicemaker.cm.core.install.InstalledChoiceMakerConfiguration;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.core.xmlconf.GeneratorXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 
 /**
@@ -50,7 +58,7 @@ import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
  * @version   $Revision: 1.1 $ $Date: 2010/03/24 20:10:52 $
  */
 public abstract class CMCompiler implements ICompiler {
-	
+
 	public static final ClassLoader getJavacClassLoader() {
 		String tools =
 			new File(System.getProperty("java.home"))
@@ -162,16 +170,16 @@ public abstract class CMCompiler implements ICompiler {
 						new File((String) generatedFiles.get(i))
 							.getAbsolutePath();
 				}
-				
+
 				// result will store a return code from the compile function
 				int result = -1;
-				
+
 				//save the location of System.out and System.err
 				PrintStream out = System.out;
 				PrintStream err = System.err;
 				ClassLoader cl = getJavacClassLoader();
 				try {
-					
+
 					// Change the location of System.out and System.err
 					PrintStream ps =
 						new PrintStream(
@@ -185,11 +193,11 @@ public abstract class CMCompiler implements ICompiler {
 						);
 					System.setErr(ps);
 					System.setOut(ps);
-					
+
 					// Get a handle on Sun's compiler object
 					Class c = Class.forName("com.sun.tools.javac.Main", true, cl);
 					Object compiler = c.newInstance();
-					
+
 					// Use reflection to call the compile method with the args setup earlier
 					Method compile =
 						c.getMethod(
@@ -199,7 +207,7 @@ public abstract class CMCompiler implements ICompiler {
 							}
 						);
 					Integer returncode = (Integer) compile.invoke(compiler, new Object[] {args});
-					
+
 					//save the return code
 					result = returncode.intValue();
 				}
@@ -236,15 +244,15 @@ public abstract class CMCompiler implements ICompiler {
 					System.err.println(
 						"The Java compiler javac could not be found.");
 					logger.error("Javac", ex);
-					return null;	
+					return null;
 				}
-				
+
 				finally {
 					System.setErr(err);
 					System.setOut(out);
 				}
-				
-				
+
+
 				if (result == MODERN_COMPILER_SUCCESS)
 				{
 					return unit.getAccessorClass();
@@ -257,7 +265,7 @@ public abstract class CMCompiler implements ICompiler {
 			else
 			{
 				return null;
-			}	
+			}
 		}
 		catch (IOException e)
 		{
@@ -308,6 +316,51 @@ public abstract class CMCompiler implements ICompiler {
 			return false;
 		}
 		return true;
+	}
+
+	public ImmutableProbabilityModel compile(
+			ProbabilityModelSpecification spec, Writer statusOutput)
+			throws CompilerException {
+		CompilationArguments arguments = new CompilationArguments();
+		String[] compilerArgs = new String[1];
+		compilerArgs[0] = spec.getClueFileName();
+		arguments.enter(compilerArgs);
+		String accessorClass = compile(arguments, statusOutput);
+		ImmutableProbabilityModel retVal = null;
+		if (accessorClass == null) {
+			String status = statusOutput.toString();
+			assert status != null && !status.trim().isEmpty();
+			throw new CompilerException("Compilation failed: " + status);
+		} else {
+			assert !accessorClass.trim().isEmpty();
+			try {
+				/* FIXME Review this design */
+//				Accessor acc = InstallableModelManager.getInstance().createAccessor(accessorClass,
+//						XmlConfigurator.getInstance().reload());
+//				retVal = InstallableModelManager.getInstance().createModelInstance(spec,acc);
+				ChoiceMakerConfiguration cmc = InstalledChoiceMakerConfiguration
+						.getInstance();
+				ChoiceMakerConfigurator configurator = InstallableChoiceMakerConfigurator
+						.getInstance();
+				cmc = configurator.reloadClasses(cmc);
+				ClassLoader cl = cmc.getClassLoader();
+//				ProbabilityModelManager pmm = InstallableModelManager
+//						.getInstance();
+//				Accessor acc = pmm.createAccessor(accessorClass, cl);
+//				retVal = pmm.createModelInstance(spec, acc);
+				Class accessorC = Class.forName(accessorClass, true, cl);
+				Accessor acc = (Accessor) accessorC.newInstance();
+				retVal = new MutableProbabilityModel(spec,acc);
+				/* END */
+			} catch (Exception ex) {
+				String msg = "Compilation failed: " + ex.toString();
+				logger.error(msg);
+				throw new CompilerException(msg);
+			}
+		}
+		assert retVal != null;
+
+		return retVal;
 	}
 
 } // Compiler

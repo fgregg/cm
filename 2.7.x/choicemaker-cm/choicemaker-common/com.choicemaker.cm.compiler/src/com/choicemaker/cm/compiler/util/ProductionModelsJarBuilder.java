@@ -24,6 +24,7 @@ import org.apache.tools.ant.util.JavaEnvUtils;
 
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.util.FileUtilities;
@@ -31,7 +32,6 @@ import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.cm.core.util.StreamRelayer;
 import com.choicemaker.cm.core.xmlconf.GeneratorXmlConf;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 
 /**

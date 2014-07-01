@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.XmlConfException;
 
 /**
  * This Object handles creating RecordSink to put chunk data.

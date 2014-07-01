@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -29,14 +29,13 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.NameUtils;
 
 /**
  * Db 8i marked record pair source implementing
  * <code>MarkedRecordPairSource</code>. Used for reading training
  * data from a training database.
- * 
+ *
  * This version fixes a problem with the getNextMethod.  dbr and rsDecision are not necessarily in order so
  * we need to put dbr records in a hashmap first.
  * <p>
@@ -128,12 +127,12 @@ public class DbMarkedRecordPairSource2 implements MarkedRecordPairSource {
 				}
 			}
 			dbr.open(rs);
-			
+
 			loadMap ();
-			
+
 			getNextMain();
 		} catch (java.sql.SQLException e) {
-			throw new ChainedIOException("", e);
+			throw new IOException("", e);
 		}
 	}
 
@@ -150,8 +149,8 @@ public class DbMarkedRecordPairSource2 implements MarkedRecordPairSource {
 		getNextMain();
 		return res;
 	}
-	
-	
+
+
 	/**
 	 *  This method loads the records into a map.
 	 *
@@ -163,7 +162,7 @@ public class DbMarkedRecordPairSource2 implements MarkedRecordPairSource {
 			recordMap.put(q.getId().toString(), q);
 		}
 	}
-	
+
 
 	private void getNextMain() throws IOException {
 		try {
@@ -180,12 +179,12 @@ public class DbMarkedRecordPairSource2 implements MarkedRecordPairSource {
 				String src = rsDecision.getString(6);
 				String comment = rsDecision.getString(7);
 				pair = new MutableMarkedRecordPair(q, m, decision, date, user, src, comment);
-				
+
 			} else {
 				pair = null;
 			}
 		} catch (java.sql.SQLException e) {
-			throw new ChainedIOException("", e);
+			throw new IOException("", e);
 		}
 	}
 
@@ -220,7 +219,7 @@ public class DbMarkedRecordPairSource2 implements MarkedRecordPairSource {
 			ex = e;
 		}
 		if (ex != null) {
-			throw new ChainedIOException("", ex);
+			throw new IOException("", ex);
 		}
 	}
 

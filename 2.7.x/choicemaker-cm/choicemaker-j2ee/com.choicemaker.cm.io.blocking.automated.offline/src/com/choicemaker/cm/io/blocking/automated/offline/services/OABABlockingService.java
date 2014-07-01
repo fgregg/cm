@@ -19,8 +19,6 @@ import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.IntArrayList;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
@@ -35,6 +33,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.OversizedGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offlinelong.RecordValue2;
+import com.choicemaker.util.IntArrayList;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * @author pcheung

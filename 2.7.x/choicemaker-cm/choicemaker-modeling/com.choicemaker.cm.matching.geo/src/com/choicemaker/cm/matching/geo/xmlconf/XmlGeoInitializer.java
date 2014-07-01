@@ -22,13 +22,13 @@ import java.util.Vector;
 
 import org.jdom.Element;
 
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.ConvUtils;
-import com.choicemaker.cm.core.util.StringUtils;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.matching.geo.GeoHelper;
 import com.choicemaker.cm.matching.geo.GeoMap;
 import com.choicemaker.cm.matching.geo.GeoPoint;
+import com.choicemaker.util.StringUtils;
 
 /**
  * XML initializer for geo-entity maps .

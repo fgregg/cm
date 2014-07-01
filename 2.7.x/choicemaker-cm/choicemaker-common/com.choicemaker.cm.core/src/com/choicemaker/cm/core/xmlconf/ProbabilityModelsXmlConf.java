@@ -35,14 +35,15 @@ import org.jdom.output.XMLOutputter;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.ProbabilityModel;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.ml.MachineLearner;
-import com.choicemaker.cm.core.util.ArrayHelper;
 import com.choicemaker.cm.core.util.FileUtilities;
+import com.choicemaker.util.ArrayHelper;
 
 /**
  * Handling of probability models in XML configuration.

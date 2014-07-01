@@ -13,8 +13,8 @@ package com.choicemaker.cm.io.blocking.automated.offlinelong;
 import java.util.ArrayList;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
+import com.choicemaker.util.IntArrayList;
 
 /**This object takes a IRecValSource and creates a ArrayList storing the record ids and
  * IntArrayList of value ids.

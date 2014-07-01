@@ -41,7 +41,7 @@ import com.choicemaker.cm.core.gen.GeneratorHelper;
 import com.choicemaker.cm.core.gen.GeneratorPlugin;
 import com.choicemaker.cm.core.gen.IGenerator;
 import com.choicemaker.cm.core.gen.IGeneratorPluginFactory;
-import com.choicemaker.cm.core.gen.InstallableGeneratorPluginFactory;
+import com.choicemaker.cm.core.install.InstallableGeneratorPluginFactory;
 import com.choicemaker.cm.core.xmlconf.GeneratorXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 

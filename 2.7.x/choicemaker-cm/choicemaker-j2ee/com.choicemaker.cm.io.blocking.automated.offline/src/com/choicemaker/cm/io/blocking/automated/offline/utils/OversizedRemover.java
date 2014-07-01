@@ -15,11 +15,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * This version does not use a suffix tree, because suffix tree takes up too much memeory and the

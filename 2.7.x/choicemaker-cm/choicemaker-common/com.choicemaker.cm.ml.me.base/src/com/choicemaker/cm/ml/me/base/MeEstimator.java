@@ -21,7 +21,7 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.IntArrayList;
+import com.choicemaker.util.IntArrayList;
 
 /**
  * Java implementation of Maximum Entropy estimator.

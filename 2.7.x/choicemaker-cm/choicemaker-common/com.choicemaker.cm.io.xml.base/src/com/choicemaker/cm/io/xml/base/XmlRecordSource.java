@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -27,7 +27,6 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
-import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.NameUtils;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
@@ -86,7 +85,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 				wait();
 			}
 			if (thrown != null) {
-				throw new ChainedIOException(thrown);
+				throw new IOException(thrown);
 			}
 			return size != 0;
 		} catch (InterruptedException ex) {
@@ -97,7 +96,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 
 	public synchronized Record getNext() throws IOException {
 		if (thrown != null) {
-			throw new ChainedIOException(thrown);
+			throw new IOException(thrown);
 		}
 		try {
 			while (size == 0 && mayHaveMore) {

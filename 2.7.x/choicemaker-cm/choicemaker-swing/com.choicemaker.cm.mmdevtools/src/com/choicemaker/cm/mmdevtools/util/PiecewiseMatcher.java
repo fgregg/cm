@@ -30,7 +30,7 @@ import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Description

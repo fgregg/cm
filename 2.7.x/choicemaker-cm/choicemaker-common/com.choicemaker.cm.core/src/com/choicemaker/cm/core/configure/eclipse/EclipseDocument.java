@@ -12,9 +12,9 @@ package com.choicemaker.cm.core.configure.eclipse;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 
-import com.choicemaker.cm.core.configure.IDocument;
-import com.choicemaker.cm.core.configure.IElement;
-import com.choicemaker.cm.core.util.Precondition;
+import com.choicemaker.cm.core.configure.xml.IDocument;
+import com.choicemaker.cm.core.configure.xml.IElement;
+import com.choicemaker.util.Precondition;
 
 /**
  * @author rphall

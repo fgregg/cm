@@ -28,8 +28,8 @@ import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
-import com.choicemaker.cm.core.util.BoundedQueue;
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.util.BoundedQueue;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Description

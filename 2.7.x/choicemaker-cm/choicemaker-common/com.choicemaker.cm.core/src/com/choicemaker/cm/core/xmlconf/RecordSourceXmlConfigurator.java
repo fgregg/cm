@@ -15,6 +15,7 @@ import org.jdom.Element;
 import com.choicemaker.cm.core.DynamicDispatchHandler;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.XmlConfException;
 
 /**
  * Base interface for all XML marked record pair configurators.

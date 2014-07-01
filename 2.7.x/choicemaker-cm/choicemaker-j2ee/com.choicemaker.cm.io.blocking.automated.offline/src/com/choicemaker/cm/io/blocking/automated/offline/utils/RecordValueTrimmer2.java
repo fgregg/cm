@@ -11,12 +11,12 @@
 package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.util.IntArrayList;
-import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
 import com.choicemaker.cm.io.blocking.automated.offlinelong.RecordValue2;
+import com.choicemaker.util.IntArrayList;
+import com.choicemaker.util.LongArrayList;
 
 /**
  * This object trims the rec_id, val_id pair file by only keeping rec_id's that show up in

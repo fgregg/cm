@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.Hashtable;
 
 import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.ml.MachineLearner;
 import com.choicemaker.cm.core.report.Report;
 
 /**

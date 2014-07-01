@@ -17,8 +17,8 @@ import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.matching.en.Soundex;
+import com.choicemaker.util.StringUtils;
 
 /**
  * Utilities for dealing with compound names.

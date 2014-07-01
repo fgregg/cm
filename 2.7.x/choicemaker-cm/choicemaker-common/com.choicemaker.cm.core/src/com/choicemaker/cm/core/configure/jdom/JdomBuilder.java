@@ -18,9 +18,9 @@ import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import com.choicemaker.cm.core.configure.IBuilder;
-import com.choicemaker.cm.core.configure.IDocument;
-import com.choicemaker.cm.core.configure.XmlSpecificationException;
+import com.choicemaker.cm.core.configure.xml.IBuilder;
+import com.choicemaker.cm.core.configure.xml.IDocument;
+import com.choicemaker.cm.core.configure.xml.XmlSpecificationException;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 
 /**

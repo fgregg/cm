@@ -20,8 +20,8 @@ import org.jdom.output.XMLOutputter;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.flatfile.base.FlatFileMarkedRecordPairSource;
 
 /**

@@ -16,8 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.choicemaker.cm.core.util.DoubleValuedHashMap;
-import com.choicemaker.cm.core.util.IntValuedHashMap;
+import com.choicemaker.util.DoubleValuedHashMap;
+import com.choicemaker.util.IntValuedHashMap;
 
 /**
  * @author ajwinkel

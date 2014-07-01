@@ -21,8 +21,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.NamedResources;
-import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.SymbolFactory;
