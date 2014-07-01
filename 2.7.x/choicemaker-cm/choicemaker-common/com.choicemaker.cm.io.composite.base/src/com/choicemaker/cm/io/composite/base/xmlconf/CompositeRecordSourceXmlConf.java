@@ -10,15 +10,22 @@
  */
 package com.choicemaker.cm.io.composite.base.xmlconf;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
-import org.jdom.*;
+import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.util.FileUtilities;
-import com.choicemaker.cm.core.xmlconf.*;
+import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
+import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;
+import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.composite.base.CompositeRecordSource;
 
 /**

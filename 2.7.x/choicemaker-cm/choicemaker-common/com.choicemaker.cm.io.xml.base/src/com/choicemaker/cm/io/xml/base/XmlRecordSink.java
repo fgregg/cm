@@ -17,10 +17,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import com.choicemaker.cm.core.base.Constants;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSink;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSink;
 
 /**
  * Description

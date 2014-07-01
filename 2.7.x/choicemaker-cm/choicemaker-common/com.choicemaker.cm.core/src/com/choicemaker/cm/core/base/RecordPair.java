@@ -10,6 +10,11 @@
  */
 package com.choicemaker.cm.core.base;
 
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IRecordPair;
+import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.Record;
+
 
 /**
  * Use the MutableRecordPair class instead, or better yet,

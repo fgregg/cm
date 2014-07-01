@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 
 /**
  * A Sink is an interface designed for writing data.

@@ -23,13 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-//import org.apache.log4j.Logger;
-
-import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.modelmaker.gui.ModelMaker;
-import com.choicemaker.cm.modelmaker.gui.utils.HistoCategoryDataset;
-import com.choicemaker.cm.modelmaker.gui.utils.HistoChartPanel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -39,6 +32,12 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 //import org.jfree.data.category.CategoryDataset;
+
+//import org.apache.log4j.Logger;
+import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.modelmaker.gui.ModelMaker;
+import com.choicemaker.cm.modelmaker.gui.utils.HistoCategoryDataset;
+import com.choicemaker.cm.modelmaker.gui.utils.HistoChartPanel;
 
 /**
  * Panel that contains the histogram showing the ChoiceMaker system accuracy.  This

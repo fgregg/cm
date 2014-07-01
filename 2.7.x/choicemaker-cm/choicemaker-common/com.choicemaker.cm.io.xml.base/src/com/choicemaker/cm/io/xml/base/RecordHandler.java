@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.xml.base;
 
 import org.xml.sax.SAXException;
 
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Record;
 
 /**
  * Description

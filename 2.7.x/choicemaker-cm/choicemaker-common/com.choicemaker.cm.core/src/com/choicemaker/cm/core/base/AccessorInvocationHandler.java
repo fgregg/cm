@@ -16,6 +16,8 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.choicemaker.cm.core.Accessor;
+
 class AccessorInvocationHandler implements InvocationHandler {
 	private Accessor accessor;
 	private Map methodMap;

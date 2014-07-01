@@ -15,8 +15,8 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 
-import com.choicemaker.cm.core.base.Descriptor;
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.Record;
 
 /**
  * @author Owner

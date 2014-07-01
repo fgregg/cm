@@ -10,8 +10,10 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import java.awt.event.*;
-import java.beans.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JInternalFrame;
 

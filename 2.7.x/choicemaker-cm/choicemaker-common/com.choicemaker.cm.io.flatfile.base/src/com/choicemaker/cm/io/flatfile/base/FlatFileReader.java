@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.flatfile.base;
 
 import java.io.IOException;
 
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Record;
 
 /**
  * Description

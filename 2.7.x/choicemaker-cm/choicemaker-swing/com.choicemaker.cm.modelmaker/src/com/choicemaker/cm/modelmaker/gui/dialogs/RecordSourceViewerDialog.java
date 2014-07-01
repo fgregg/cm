@@ -26,9 +26,9 @@ import javax.swing.JScrollPane;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.RecordRecordData;
-import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.viewer.CompositePane;

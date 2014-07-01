@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -36,14 +36,14 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-import com.choicemaker.cm.core.base.Constants;
-import com.choicemaker.cm.core.base.MarkedRecordPairSource;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSink;
-import com.choicemaker.cm.core.base.RecordSource;
-import com.choicemaker.cm.core.base.Sink;
-import com.choicemaker.cm.core.base.SinkFactory;
-import com.choicemaker.cm.core.base.Source;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSink;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.core.SinkFactory;
+import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
@@ -65,79 +65,79 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.SourceTypeSelectorDialog;
  *
  */
 public class SourceSplitDialog extends JDialog {
-	
+
 	private static final long serialVersionUID = 1L;
 	private static final int RS = 1;
 	private static final int MRPS = 2;
-	
+
 	public static void showRsSplitDialog(ModelMaker mm) {
 		new SourceSplitDialog(mm, RS).show();
 	}
-	
+
 	private ModelMaker modelMaker;
 	private int type;
-	
+
 	private MultiFileList inputList;
-	
+
 	private JRadioButton allButton, selectionButton, randomTargetButton, randomPercentButton;
 	private JTextField selectionField, randomTargetField, randomPercentField;
-	
+
 	private JTextField sinkField;
 	private JButton browseButton, newButton;
 	private JRadioButton singleSinkButton, multiSinkButton;
 	private JLabel roundRobinLabel, maxPairsLabel;
-	private JTextField roundRobinField, maxPairsField;	
-	
+	private JTextField roundRobinField, maxPairsField;
+
 	private JButton okButton, cancelButton;
-	
+
 	private SourceSplitDialog(ModelMaker modelMaker, int type) {
 		super(modelMaker, "", true);
 		this.modelMaker = modelMaker;
 		this.type = type;
-		
+
 		if (type == RS) {
 			setTitle("Record Source Split/Merge");
 		} else if (type == MRPS) {
 			setTitle("Marked Record Pair Source Split/Merge");
 		}
-		
+
 		createContent();
 		createListeners();
-		
+
 		pack();
 		setLocationRelativeTo(modelMaker);
 	}
-	
+
 	private void splitOrMerge() {
 		try {
-			
+
 			RecordSource source = (RecordSource) createSource();
 			Filter filter = createFilter();
 			RecordSink sink = (RecordSink) createSink();
-			
+
 			source.open();
 			sink.open();
-			
+
 			while (source.hasNext()) {
 				Record r = source.getNext();
 				if (filter.satisfy(r)) {
 					sink.put(r);
 				}
 			}
-			
+
 			if (sink instanceof RoundRobinSink) {
 				((RoundRobinSink)sink).saveSourceDescriptors();
 			}
-			
+
 			sink.close();
 			source.close();
-			
+
 		} catch (XmlConfException ex) {
 			ex.printStackTrace();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}	
+	}
 
 	private Source createSource() throws XmlConfException {
 		CompositeRecordSource rs = new CompositeRecordSource();
@@ -151,8 +151,8 @@ public class SourceSplitDialog extends JDialog {
 
 		return rs;
 	}
-	
-	private Sink createSink() throws XmlConfException {		
+
+	private Sink createSink() throws XmlConfException {
 		if (type == RS) {
 			RecordSource genericRs = RecordSourceXmlConf.getRecordSource( sinkField.getText().trim() );
 			genericRs.setModel(modelMaker.getProbabilityModel());
@@ -163,8 +163,8 @@ public class SourceSplitDialog extends JDialog {
 				SinkFactory f = null;
 				if (genericRs instanceof FlatFileRecordSource) {
 					FlatFileRecordSource rs = (FlatFileRecordSource) genericRs;
-					f = new FlatFileRecordSinkFactory(rs.getName(), 
-													  rs.getFileNamePrefix(), 
+					f = new FlatFileRecordSinkFactory(rs.getName(),
+													  rs.getFileNamePrefix(),
 													  rs.getFileNameSuffix(),
 													  rs.isMultiFile(),
 													  rs.isSingleLine(),
@@ -178,7 +178,7 @@ public class SourceSplitDialog extends JDialog {
 					String fn = rs.getFileName();
 					String descriptorBase = fn.substring(0, fn.length() - Constants.RS_EXTENSION.length() - 1);
 
-					String rawXmlFn = rs.getXmlFileName();					
+					String rawXmlFn = rs.getXmlFileName();
 					String contentBase = rawXmlFn;
 					String contentExtension = "";
 					int dotIndex = rawXmlFn.lastIndexOf('.');
@@ -186,12 +186,12 @@ public class SourceSplitDialog extends JDialog {
 						contentBase = rawXmlFn.substring(0, dotIndex);
 						contentExtension = rawXmlFn.substring(dotIndex);
 					}
-					
+
 					f = new XmlRecordSinkFactory(descriptorBase, contentBase, contentExtension, rs.getModel());
 				} else {
 					throw new IllegalStateException("Unknown RS type: " + genericRs.getClass().getName());
 				}
-				
+
 				int distrib = Integer.parseInt(roundRobinField.getText().trim());
 				if (distrib <= 0) {
 					distrib = 1;
@@ -205,9 +205,9 @@ public class SourceSplitDialog extends JDialog {
 		} else {
 			throw new UnsupportedOperationException();
 		}
-		
+
 	}
-	
+
 	private Filter createFilter() {
 
 		if (allButton.isSelected()) {
@@ -218,13 +218,13 @@ public class SourceSplitDialog extends JDialog {
 		} else {
 			throw new UnsupportedOperationException();
 		}
-		
+
 	}
-	
+
 	//
 	// Creation and listening methods...
 	//
-			
+
 	private void createContent() {
 		GridBagLayout layout = new GridBagLayout();
 		layout.columnWeights = new double[] {1};
@@ -243,15 +243,15 @@ public class SourceSplitDialog extends JDialog {
 		JPanel filterPanel = createFilterPanel();
 		getContentPane().add(filterPanel, c);
 
-		c.gridy++;		
+		c.gridy++;
 		JPanel sinkPanel = createSinkPanel();
 		getContentPane().add(sinkPanel, c);
-		
+
 		c.gridy++;
 		JPanel buttonsPanel = createButtonsPanel();
 		getContentPane().add(buttonsPanel, c);
 	}
-	
+
 	private JPanel createSourcePanel() {
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createTitledBorder("Source: "));
@@ -260,7 +260,7 @@ public class SourceSplitDialog extends JDialog {
 		panel.add(inputList, BorderLayout.CENTER);
 		return panel;
 	}
-	
+
 	private JPanel createFilterPanel() {
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createTitledBorder("Filter: "));
@@ -275,7 +275,7 @@ public class SourceSplitDialog extends JDialog {
 		c.anchor = GridBagConstraints.WEST;
 
 		//
-		
+
 		c.gridy = 0;
 		c.gridx = 0;
 		allButton = new JRadioButton("All Records");
@@ -283,12 +283,12 @@ public class SourceSplitDialog extends JDialog {
 		panel.add(allButton, c);
 
 		//
-		
+
 		c.gridy++;
 		c.gridx = 0;
 		selectionButton = new JRadioButton("Selection (e.g. \"200-300, 405\")");
 		panel.add(selectionButton, c);
-		
+
 		c.gridx++;
 		selectionField = new JTextField(15);
 		selectionField.setMinimumSize(selectionField.getPreferredSize());
@@ -300,14 +300,14 @@ public class SourceSplitDialog extends JDialog {
 		c.gridx = 0;
 		randomTargetButton = new JRadioButton("Random Records (how many)");
 		panel.add(randomTargetButton, c);
-		
+
 		c.gridx++;
 		randomTargetField = new JTextField(8);
 		randomTargetField.setMinimumSize(randomTargetField.getPreferredSize());
 		panel.add(randomTargetField, c);
-		
+
 		//
-	
+
 		c.gridy++;
 		c.gridx = 0;
 		randomPercentButton = new JRadioButton("Random Records (percent)");
@@ -320,7 +320,7 @@ public class SourceSplitDialog extends JDialog {
 
 		return panel;
 	}
-	
+
 	private JPanel createSinkPanel() {
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createTitledBorder("Sink: "));
@@ -329,33 +329,33 @@ public class SourceSplitDialog extends JDialog {
 		layout.columnWeights = new double[] {0, 0, 0, 1, 0, 0};
 		layout.rowWeights = new double[] {0, 0, 0, 1};
 		panel.setLayout(layout);
-		
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(2, 2, 2, 2);
 		c.fill = GridBagConstraints.HORIZONTAL;
-		
+
 		//
-		
+
 		c.gridy = 0;
 		c.gridx = 0;
 		c.anchor = GridBagConstraints.WEST;
 		panel.add(new JLabel("  Sink:   "), c);
-		
+
 		c.gridx++;
 		c.gridwidth = 3;
 		sinkField = new JTextField(40);
 		panel.add(sinkField, c);
 		c.gridwidth = 1;
-		
+
 		c.gridx += 3;
 		browseButton = new JButton("Browse");
 		panel.add(browseButton, c);
-		
+
 		c.gridx++;
 		newButton = new JButton("New");
 		newButton.setPreferredSize(browseButton.getPreferredSize());
 		panel.add(newButton, c);
-		
+
 		//
 
 		c.gridy++;
@@ -365,9 +365,9 @@ public class SourceSplitDialog extends JDialog {
 		singleSinkButton.setSelected(true);
 		panel.add(singleSinkButton, c);
 		c.gridwidth = 1;
-		
+
 		//
-		
+
 		c.gridy++;
 		c.gridx = 0;
 		c.gridwidth = 5;
@@ -376,7 +376,7 @@ public class SourceSplitDialog extends JDialog {
 		c.gridwidth = 1;
 
 		//
-		
+
 		c.gridy++;
 		c.gridx = 1;
 		c.gridwidth = 2;
@@ -384,7 +384,7 @@ public class SourceSplitDialog extends JDialog {
 		roundRobinLabel.setEnabled(false);
 		panel.add(roundRobinLabel, c);
 		c.gridwidth = 1;
-		
+
 		c.gridx += 2;
 		c.gridwidth = 3;
 		c.fill = GridBagConstraints.NONE;
@@ -395,9 +395,9 @@ public class SourceSplitDialog extends JDialog {
 		panel.add(roundRobinField, c);
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		
+
 		//
-		
+
 		c.gridy++;
 		c.gridx = 1;
 		c.gridwidth = 2;
@@ -405,7 +405,7 @@ public class SourceSplitDialog extends JDialog {
 		maxPairsLabel.setEnabled(false);
 		panel.add(maxPairsLabel, c);
 		c.gridwidth = 1;
-		
+
 		c.gridx += 2;
 		c.gridwidth = 3;
 		c.fill = GridBagConstraints.NONE;
@@ -418,36 +418,36 @@ public class SourceSplitDialog extends JDialog {
 		c.fill = GridBagConstraints.HORIZONTAL;
 
 		// dummy last row
-		
+
 		c.gridy++;
 		panel.add(new JLabel());
 
 		return panel;
 	}
-	
+
 	private JPanel createButtonsPanel() {
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		
+
 		okButton = new JButton("OK");
 		cancelButton = new JButton("Cancel");
 
 		okButton.setPreferredSize(cancelButton.getPreferredSize());
 		okButton.setEnabled(false);
-		
+
 		panel.add(Box.createHorizontalGlue());
 		panel.add(okButton);
 		panel.add(Box.createHorizontalStrut(5));
 		panel.add(cancelButton);
-		
+
 		return panel;
 	}
 
 	private void createListeners() {
-		
+
 		// source panel
-		
+
 		inputList.addListener(new ListDataListener() {
 			public void intervalAdded(ListDataEvent e) {
 				updateOkButton();
@@ -457,11 +457,11 @@ public class SourceSplitDialog extends JDialog {
 			}
 			public void contentsChanged(ListDataEvent e) {
 				updateOkButton();
-			}			
+			}
 		});
-		
+
 		// filter panel
-		
+
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(allButton);
 		bg.add(selectionButton);
@@ -473,12 +473,12 @@ public class SourceSplitDialog extends JDialog {
 				updateOkButton();
 			}
 		};
-		
+
 		allButton.addActionListener(al);
 		selectionButton.addActionListener(al);
 		randomTargetButton.addActionListener(al);
 		randomPercentButton.addActionListener(al);
-		
+
 		selectionField.getDocument().addDocumentListener(new DocumentEventRedirector() {
 			public void redirectedEvent(DocumentEvent e) {
 				selectionButton.setSelected(true);
@@ -499,19 +499,19 @@ public class SourceSplitDialog extends JDialog {
 				updateOkButton();
 			}
 		});
-				
+
 		// sink panel
-		
+
 		ButtonGroup bg2 = new ButtonGroup();
 		bg2.add(singleSinkButton);
 		bg2.add(multiSinkButton);
-		
+
 		sinkField.getDocument().addDocumentListener(new DocumentEventRedirector() {
 			public void redirectedEvent(DocumentEvent e) {
 				updateOkButton();
 			}
 		});
-		
+
 		browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				File file = null;
@@ -527,14 +527,14 @@ public class SourceSplitDialog extends JDialog {
 				}
 			}
 		});
-		
+
 		newButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Source src = null;
 				if (type == RS) {
 					src = new SourceTypeSelectorDialog(modelMaker, SourceTypeSelectorDialog.RS, true).define();
 				} else if (type == MRPS) {
-					src = new SourceTypeSelectorDialog(modelMaker, SourceTypeSelectorDialog.MRPS, true).define();					
+					src = new SourceTypeSelectorDialog(modelMaker, SourceTypeSelectorDialog.MRPS, true).define();
 				} else {
 					throw new IllegalStateException();
 				}
@@ -550,9 +550,9 @@ public class SourceSplitDialog extends JDialog {
 						ex.printStackTrace();
 					}
 				}
-			}			
+			}
 		});
-		
+
 		multiSinkButton.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				boolean enabled = e.getStateChange() == ItemEvent.SELECTED;
@@ -560,11 +560,11 @@ public class SourceSplitDialog extends JDialog {
 				roundRobinField.setEnabled(enabled);
 				maxPairsLabel.setEnabled(enabled);
 				maxPairsField.setEnabled(enabled);
-				
+
 				updateOkButton();
 			}
 		});
-		
+
 		roundRobinField.getDocument().addDocumentListener(new DocumentEventRedirector() {
 			public void redirectedEvent(DocumentEvent e) {
 				updateOkButton();
@@ -578,30 +578,30 @@ public class SourceSplitDialog extends JDialog {
 		});
 
 		// buttons panel
-		
+
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				splitOrMerge();
 			}
 		});
-		
+
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
-		
+
 	}
-	
+
 	private void updateOkButton() {
 		boolean enabled = true;
 		enabled &= inputList.getNumFiles() > 0;
 		enabled &= checkFilterPanel();
 		enabled &= checkSinkPanel();
-		
+
 		okButton.setEnabled(enabled);
 	}
-	
+
 	private boolean checkFilterPanel() {
 		if (allButton.isSelected()) {
 			return true;
@@ -613,7 +613,7 @@ public class SourceSplitDialog extends JDialog {
 			return hasText(randomPercentField);
 		}
 	}
-	
+
 	private boolean checkSinkPanel() {
 		if (!hasText(sinkField)) {
 			return false;
@@ -625,11 +625,11 @@ public class SourceSplitDialog extends JDialog {
 			return hasText(roundRobinField) && hasText(maxPairsField);
 		}
 	}
-	
+
 	public boolean hasText(JTextField field) {
 		return field.getText().trim().length() > 0;
 	}
-	
+
 	public static abstract class DocumentEventRedirector implements DocumentListener {
 		public void insertUpdate(DocumentEvent e) {
 			redirectedEvent(e);
@@ -642,5 +642,5 @@ public class SourceSplitDialog extends JDialog {
 		}
 		public abstract void redirectedEvent(DocumentEvent e);
 	}
-	
+
 }

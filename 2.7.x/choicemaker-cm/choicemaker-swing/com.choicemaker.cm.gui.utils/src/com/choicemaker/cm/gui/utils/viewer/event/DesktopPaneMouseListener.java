@@ -10,16 +10,29 @@
  */
 package com.choicemaker.cm.gui.utils.viewer.event;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.Descriptor;
-import com.choicemaker.cm.core.util.*;
-import com.choicemaker.cm.gui.utils.viewer.*;
-import com.choicemaker.cm.gui.utils.viewer.dialog.*;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.util.LoggingObject;
+import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.gui.utils.viewer.CompositeFrame;
+import com.choicemaker.cm.gui.utils.viewer.CompositeFrameModel;
+import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;
+import com.choicemaker.cm.gui.utils.viewer.RecordPairViewer;
+import com.choicemaker.cm.gui.utils.viewer.dialog.InternalFrameDialog;
+import com.choicemaker.cm.gui.utils.viewer.dialog.TabRenameDialog;
 
 /**
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $

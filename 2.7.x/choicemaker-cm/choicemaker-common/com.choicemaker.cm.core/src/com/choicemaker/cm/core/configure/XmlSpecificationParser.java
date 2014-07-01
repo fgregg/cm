@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.core.configure;
 
+import com.choicemaker.cm.core.IncompleteSpecificationException;
+
 /**
  * Creates Configurable instances from XML documents.
  * @author rphall

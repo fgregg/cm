@@ -10,7 +10,9 @@
  */
 package com.choicemaker.cm.io.db.base;
 
-import com.choicemaker.cm.core.base.Record;
+import java.sql.SQLException;
+
+import com.choicemaker.cm.core.Record;
 
 /**
  * Base interface for all generated database readers, which

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -24,7 +24,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
-import com.choicemaker.cm.core.base.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
 
 /**
  * XML configuration for marked record pairs. Each actual source type
@@ -44,19 +44,19 @@ public class MarkedRecordPairSourceXmlConf {
 	}
 
 	public static MarkedRecordPairSource getMarkedRecordPairSource(String fileName) throws XmlConfException {
-		
+
 		try {
 			// the extension way
 			String fn = new File(fileName).getName();
 			int dotIndex = fn.lastIndexOf(".");
 			String extension = "";
 			if (dotIndex > -1) {
-				extension = fn.substring(dotIndex + 1);	
+				extension = fn.substring(dotIndex + 1);
 			}
 
 			if (extension.length() > 0) {
 				if (fileMrpsReaders == null) {
-					initFileMrpsReaders();	
+					initFileMrpsReaders();
 				}
 				Class cls = (Class) fileMrpsReaders.get(extension);
 				if (cls != null) {
@@ -64,7 +64,7 @@ public class MarkedRecordPairSourceXmlConf {
 					return c.getMarkedRecordPairSource(fileName, null, null);
 				}
 			}
-			
+
 			// the new way
 			SAXBuilder builder = XmlParserFactory.createSAXBuilder(false);
 			Document document = builder.build(fileName);
@@ -76,10 +76,10 @@ public class MarkedRecordPairSourceXmlConf {
 			throw new XmlConfException("Internal error.", ex);
 		}
 	}
-	
+
 	public static void initFileMrpsReaders() {
 		fileMrpsReaders = new HashMap();
-		
+
 		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(EXTENSION_POINT_2);
 		IExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
@@ -90,16 +90,16 @@ public class MarkedRecordPairSourceXmlConf {
 				Object obj = elems[0].createExecutableExtension("class");
 				fileMrpsReaders.put(fileExtension, obj.getClass());
 			} catch (Exception ex) {
-				ex.printStackTrace();	
+				ex.printStackTrace();
 			}
 		}
 	}
-	
+
 	public static String[] getMrpsExtensions() {
 		if (fileMrpsReaders == null) {
-			initFileMrpsReaders();	
+			initFileMrpsReaders();
 		}
-		
+
 		List extensions = new ArrayList();
 		extensions.add("mrps");
 
@@ -107,14 +107,14 @@ public class MarkedRecordPairSourceXmlConf {
 		if (keys.contains("mrps")) {
 			keys.remove("mrps");
 		}
-		
+
 		extensions.addAll(keys);
-		
+
 		String[] strings = new String[extensions.size()];
 		for (int i = 0; i < strings.length; i++) {
-			strings[i] = (String) extensions.get(i);	
+			strings[i] = (String) extensions.get(i);
 		}
-		
+
 		return strings;
 	}
 }

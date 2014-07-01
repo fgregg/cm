@@ -11,7 +11,8 @@
 package com.choicemaker.cm.gui.utils.plaf;
 
 import javax.swing.UIDefaults;
-import javax.swing.plaf.metal.*;
+import javax.swing.plaf.metal.DefaultMetalTheme;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 /**
  * Description

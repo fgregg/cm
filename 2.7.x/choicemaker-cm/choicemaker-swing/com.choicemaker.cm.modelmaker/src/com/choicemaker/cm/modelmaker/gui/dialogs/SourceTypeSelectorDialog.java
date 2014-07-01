@@ -36,7 +36,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
-import com.choicemaker.cm.core.base.Source;
+import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.ExtensionHolder;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;

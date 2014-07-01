@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -16,7 +16,12 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.configure.IncompleteSpecificationException;
+import com.choicemaker.cm.core.ISerializableFileBasedRecordSource;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.IncompleteSpecificationException;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.util.Equal;
 import com.choicemaker.cm.core.util.HashUtils;
 import com.choicemaker.cm.core.util.Precondition;
@@ -177,7 +182,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	}
 
 	public void  setProperties(Properties properties) throws IncompleteSpecificationException {
-		
+
 		Precondition.assertNonNullArgument("null properties",properties);
 
 		String s = properties.getProperty(PN_DESCRIPTOR_FILE_NAME);

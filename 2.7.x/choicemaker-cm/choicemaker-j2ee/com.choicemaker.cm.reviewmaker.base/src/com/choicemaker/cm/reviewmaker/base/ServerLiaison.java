@@ -14,9 +14,10 @@ import java.rmi.RemoteException;
 
 import javax.security.auth.login.LoginException;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.datamodel.CompositeObservableData;
-import com.choicemaker.cm.core.sort.*;
+import com.choicemaker.cm.core.sort.SortCondition;
 
 /**
  * .

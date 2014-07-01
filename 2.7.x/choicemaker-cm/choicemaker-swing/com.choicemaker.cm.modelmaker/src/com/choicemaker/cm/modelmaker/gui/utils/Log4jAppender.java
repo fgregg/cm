@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.spi.LoggingEvent;
 
-import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
 

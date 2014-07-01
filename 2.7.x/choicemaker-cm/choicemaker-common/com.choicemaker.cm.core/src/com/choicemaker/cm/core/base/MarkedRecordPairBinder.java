@@ -16,6 +16,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.MarkedRecordPairSink;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.core.SinkFactory;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 

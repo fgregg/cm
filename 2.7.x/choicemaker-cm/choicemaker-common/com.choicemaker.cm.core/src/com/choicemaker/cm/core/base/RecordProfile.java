@@ -10,6 +10,11 @@
  */
 package com.choicemaker.cm.core.base;
 
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.InvalidProfileException;
+import com.choicemaker.cm.core.Profile;
+import com.choicemaker.cm.core.Record;
+
 /**
  * This object wraps a Record for findMatches.
  * 

@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 

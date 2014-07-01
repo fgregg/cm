@@ -1,6 +1,6 @@
 package com.wcohen.ss.tokens;
 
-import com.wcohen.ss.api.*;
+import com.wcohen.ss.api.Token;
 
 
 /**

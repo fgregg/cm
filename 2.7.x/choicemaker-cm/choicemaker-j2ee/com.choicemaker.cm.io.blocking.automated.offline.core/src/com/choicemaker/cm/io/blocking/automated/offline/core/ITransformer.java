@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 
 /**This interface is used in the chunking code to tranform data structure of internal id to 
  * staging and master ids.

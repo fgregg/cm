@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.inmemory.gui;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.modelmaker.gui.matcher.BlockerToolkit;
 import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
 

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -23,8 +23,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.choicemaker.cm.core.base.RecordSource;
-import com.choicemaker.cm.core.base.Source;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
@@ -34,40 +34,40 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceTypeSelectorDialog;
 
 public class OpenRsAsMrpsDialog extends JDialog {
-		
+
 	private static final long serialVersionUID = 1L;
 	private ModelMaker modelMaker;
 	private FileSelector rsSelector;
 	private JButton newButton;
 	private JButton ok, cancel;
-	
+
 	public OpenRsAsMrpsDialog(ModelMaker modelMaker) {
 		super(modelMaker, "Open RS as MRPS", true);
 		this.modelMaker = modelMaker;
 
 		createContent();
 		createListeners();
-		
+
 		pack();
 		setLocationRelativeTo(modelMaker);
 	}
-	
+
 	private void createContent() {
 		rsSelector = new RsSelector("Record Source");
-		
+
 		ok = new JButton("OK");
 		cancel = new JButton("Cancel");
 		ok.setMinimumSize(cancel.getPreferredSize());
 		ok.setEnabled(false);
-		
+
 		GridBagLayout layout = new GridBagLayout();
 		layout.columnWeights = new double[] {0, 1, 0, 0, 0};
 		getContentPane().setLayout(layout);
-		
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(3, 5, 3, 5);
 		c.fill = GridBagConstraints.HORIZONTAL;
-		
+
 		//
 
 		c.gridy = 0;
@@ -75,31 +75,31 @@ public class OpenRsAsMrpsDialog extends JDialog {
 		c.gridx = 0;
 		c.gridwidth = 1;
 		getContentPane().add(rsSelector.getLabel(), c);
-		
+
 		c.gridx = 1;
 		c.gridwidth = 2;
 		getContentPane().add(rsSelector.getTextField(), c);
-		
+
 		c.gridx = 3;
 		c.gridwidth = 1;
 		getContentPane().add(rsSelector.getBrowseButton(), c);
-		
+
 		c.gridx = 4;
 		newButton = new JButton("New");
 		getContentPane().add(newButton, c);
-		
+
 		//
-		
+
 		c.gridy++;
-				
+
 		c.gridx = 3;
 		getContentPane().add(ok, c);
-		
+
 		c.gridx = 4;
 		getContentPane().add(cancel, c);
-		
+
 	}
-	
+
 	private void createListeners() {
 		DocumentListener dl = new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -113,7 +113,7 @@ public class OpenRsAsMrpsDialog extends JDialog {
 			}
 		};
 		rsSelector.addDocumentListener(dl);
-		
+
 		newButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Source s = new SourceTypeSelectorDialog(modelMaker, SourceTypeSelectorDialog.RS, false).define();
@@ -127,7 +127,7 @@ public class OpenRsAsMrpsDialog extends JDialog {
 				}
 			}
 		});
-		
+
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -141,14 +141,14 @@ public class OpenRsAsMrpsDialog extends JDialog {
 				}
 			}
 		});
-		
+
 		cancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 	}
-	
+
 	private void showError(final Throwable ex) {
 		Runnable runner = new Runnable() {
 			public void run() {
@@ -157,11 +157,11 @@ public class OpenRsAsMrpsDialog extends JDialog {
 		};
 		SwingUtilities.invokeLater(runner);
 	}
-	
+
 	private void updateEnabledness() {
 		ok.setEnabled(rsSelector.hasFile());
 	}
-	
+
 	class RsSelector extends FileSelector {
 		public RsSelector(String label) {
 			super(label);

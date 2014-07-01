@@ -1,7 +1,11 @@
 package com.wcohen.ss;
 
-import com.wcohen.ss.api.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import com.wcohen.ss.api.StringWrapper;
 
 /**
  * Needleman-Wunsch string distance, following Durban et al.

@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.validation.eclipse.impl;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.StringUtils;

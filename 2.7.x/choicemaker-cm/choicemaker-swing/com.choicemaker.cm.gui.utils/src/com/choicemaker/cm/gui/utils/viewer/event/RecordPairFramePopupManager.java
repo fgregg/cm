@@ -10,14 +10,22 @@
  */
 package com.choicemaker.cm.gui.utils.viewer.event;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.gui.utils.viewer.*;
+import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;
+import com.choicemaker.cm.gui.utils.viewer.RecordTable;
+import com.choicemaker.cm.gui.utils.viewer.RecordTableModel;
 import com.choicemaker.cm.gui.utils.viewer.dialog.FieldSelectorDialog;
 
 /**

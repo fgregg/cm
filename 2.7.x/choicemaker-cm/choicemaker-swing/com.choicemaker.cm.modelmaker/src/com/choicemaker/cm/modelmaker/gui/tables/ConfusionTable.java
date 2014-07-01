@@ -25,8 +25,8 @@ import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.ColumnDefinition;
-import com.choicemaker.cm.core.base.Decision;
+import com.choicemaker.cm.core.ColumnDefinition;
+import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.gui.utils.viewer.HeaderRenderer;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.panels.TestingControlPanel;

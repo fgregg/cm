@@ -1,10 +1,12 @@
 package com.wcohen.ss;
 
-import com.wcohen.ss.api.*;
-
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.wcohen.ss.api.StringDistance;
+import com.wcohen.ss.api.StringDistanceLearner;
 
 
 /**

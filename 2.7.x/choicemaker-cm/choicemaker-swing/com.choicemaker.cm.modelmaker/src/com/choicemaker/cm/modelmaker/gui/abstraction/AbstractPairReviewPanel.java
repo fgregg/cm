@@ -12,8 +12,8 @@ package com.choicemaker.cm.modelmaker.gui.abstraction;
 
 import java.beans.PropertyChangeEvent;
 
-import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
-import com.choicemaker.cm.core.base.RepositoryChangeEvent;
+import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.gui.utils.viewer.CompositePane;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;

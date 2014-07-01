@@ -10,7 +10,8 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.table.DefaultTableCellRenderer;
 

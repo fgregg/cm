@@ -18,7 +18,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.io.blocking.exact.base.CompositeExactInMemoryBlocker;
 import com.choicemaker.cm.io.blocking.exact.base.ExactInMemoryBlocker;

@@ -23,18 +23,18 @@ import javax.swing.event.SwingPropertyChangeSupport;
 
 import com.choicemaker.cm.analyzer.filter.Filter;
 import com.choicemaker.cm.analyzer.sampler.PairSampler;
+import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IMarkedRecordPair;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.MarkedRecordPairSink;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.ClueSet;
-import com.choicemaker.cm.core.base.Decision;
 import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.IMarkedRecordPair;
-import com.choicemaker.cm.core.base.IProbabilityModel;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.MarkedRecordPairSink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.base.Record;
 import com.choicemaker.cm.core.base.RecordBinder;
-import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 
 /**

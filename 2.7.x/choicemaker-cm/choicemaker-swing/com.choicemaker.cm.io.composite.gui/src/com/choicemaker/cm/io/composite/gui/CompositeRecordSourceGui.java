@@ -10,24 +10,39 @@
  */
 package com.choicemaker.cm.io.composite.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.RecordSource;
-import com.choicemaker.cm.core.util.*;
-import com.choicemaker.cm.core.xmlconf.*;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.util.LoggingObject;
+import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
+import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
-import com.choicemaker.cm.gui.utils.dialogs.*;
+import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.composite.base.CompositeRecordSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
-import com.choicemaker.cm.modelmaker.gui.dialogs.*;
-import com.choicemaker.cm.modelmaker.gui.utils.*;
+import com.choicemaker.cm.modelmaker.gui.dialogs.RecordSourceGui;
+import com.choicemaker.cm.modelmaker.gui.utils.Enable;
+import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
  * The RecordRSGui associated the CompositeRecordSource.

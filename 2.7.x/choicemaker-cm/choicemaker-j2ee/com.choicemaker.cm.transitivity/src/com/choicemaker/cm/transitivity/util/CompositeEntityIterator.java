@@ -14,7 +14,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 
 /**
  * This object takes a CompositeEntitySource and wraps it as an Iterator.

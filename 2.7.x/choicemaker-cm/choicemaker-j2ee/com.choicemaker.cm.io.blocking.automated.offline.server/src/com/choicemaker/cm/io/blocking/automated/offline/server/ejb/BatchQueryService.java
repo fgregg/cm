@@ -19,7 +19,7 @@ import javax.ejb.FinderException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
-import com.choicemaker.cm.core.base.SerialRecordSource;
+import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;

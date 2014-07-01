@@ -12,7 +12,7 @@ package com.choicemaker.cm.matching.cfg.train;
 
 import java.io.IOException;
 
-import com.choicemaker.cm.matching.cfg.*;
+import com.choicemaker.cm.matching.cfg.Parser;
 
 /**
  * .

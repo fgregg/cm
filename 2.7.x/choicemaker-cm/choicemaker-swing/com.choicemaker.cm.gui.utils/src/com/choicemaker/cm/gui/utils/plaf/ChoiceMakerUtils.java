@@ -10,7 +10,9 @@
  */
 package com.choicemaker.cm.gui.utils.plaf;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;

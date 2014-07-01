@@ -12,6 +12,11 @@ package com.choicemaker.cm.core.base;
 
 import java.lang.reflect.Array;
 
+import com.choicemaker.cm.core.BaseRecord;
+import com.choicemaker.cm.core.DerivedSource;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.Record;
+
 /**
  * TODO Remove this class
  * @author   Martin Buechi

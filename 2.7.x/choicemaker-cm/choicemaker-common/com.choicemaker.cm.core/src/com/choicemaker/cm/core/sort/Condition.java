@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.core.sort;
 
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Record;
 
 /**
  * Comment

@@ -1,6 +1,6 @@
 package com.wcohen.ss.data;
 
-import com.wcohen.ss.api.*;
+import com.wcohen.ss.api.Tokenizer;
 
 /**
  * TokenBlocker for clustering.

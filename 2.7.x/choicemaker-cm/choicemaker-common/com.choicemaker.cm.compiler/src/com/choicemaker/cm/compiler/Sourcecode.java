@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.HashMap;
 
-import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.Constants;
 
 /**
  * This class represents a single source code file

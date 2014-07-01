@@ -12,9 +12,9 @@ package com.choicemaker.cm.analyzer.matcher;
 
 import java.util.List;
 
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.RecordBinder;
-import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 
 /**

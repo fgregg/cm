@@ -26,8 +26,8 @@ import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;

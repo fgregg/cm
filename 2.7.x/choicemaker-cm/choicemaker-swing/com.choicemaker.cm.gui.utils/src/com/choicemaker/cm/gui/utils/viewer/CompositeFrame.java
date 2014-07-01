@@ -10,7 +10,8 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import com.choicemaker.cm.core.base.RecordData;
 

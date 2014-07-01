@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
-import com.choicemaker.cm.matching.cfg.*;
+import com.choicemaker.cm.matching.cfg.ParseTreeNode;
+import com.choicemaker.cm.matching.cfg.ParsedData;
+import com.choicemaker.cm.matching.cfg.Parser;
 
 /**
  * .

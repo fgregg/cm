@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -32,10 +32,10 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.base.MarkedRecordPairSource;
-import com.choicemaker.cm.core.base.Source;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
@@ -53,11 +53,11 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
  * The MRPSGui associated the XmlMarkedRecordPairSource.
- * An objects of this class would be created by the 
+ * An objects of this class would be created by the
  * XmlMarkedRecordPairSourceGuiFactory.  It is used
  * by the AbstractApplication so that users can easily configure
  * and build XmlMarkedRecordPairSources.
- * 
+ *
  * @author  S. Yoakum-Stover
  * @author  Martin Buechi
  * @version $Revision: 1.3 $ $Date: 2010/03/28 09:15:52 $
@@ -116,7 +116,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 			xmlFileName.setText(s.getXmlFileName());
 			if (s.getRawXmlFileName() != null &&
 				FileUtilities.isFileAbsolute(s.getRawXmlFileName())) {
-				xmlFileRelativeBox.setSelectedItem(ABSOLUTE);	
+				xmlFileRelativeBox.setSelectedItem(ABSOLUTE);
 			} else {
 				xmlFileRelativeBox.setSelectedItem(RELATIVE);
 			}
@@ -163,7 +163,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 
 	private String getSaveXmlFileName() {
 		if (xmlFileRelativeBox.getSelectedItem().equals(ABSOLUTE)) {
-			return getAbsoluteXmlFileName();		
+			return getAbsoluteXmlFileName();
 		} else {
 			File rel = new File(sourceFileName.getText().trim()).getAbsoluteFile().getParentFile();
 			return FileUtilities.getRelativeFile(rel, getAbsoluteXmlFileName()).toString();
@@ -240,7 +240,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 			public void actionPerformed(ActionEvent ev) {
 				File f = FileChooserFactory.selectXmlFile(parent);
 				if (f != null) {
-					xmlFileName.setText(f.getAbsolutePath());	
+					xmlFileName.setText(f.getAbsolutePath());
 				}
 			}
 		});
@@ -299,7 +299,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 
 		sourceFileName.getDocument().addDocumentListener(dl);
 		xmlFileName.getDocument().addDocumentListener(dl);
-		
+
 		JavaHelpUtils.enableHelpKey(this, "io.gui.xml.mrps");
 	}
 
@@ -371,7 +371,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 		c.fill = GridBagConstraints.HORIZONTAL;
 		content.add(sourceFileName, c);
 		c.gridwidth = 1;
-		
+
 		c.gridx = 3;
 		layout.setConstraints(sourceFileBrowseButton, c);
 		content.add(sourceFileBrowseButton);
@@ -394,7 +394,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 		content.add(xmlFileRelativeLabel, c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.WEST;
-		
+
 		c.gridx = 2;
 		c.fill = GridBagConstraints.NONE;
 		content.add(xmlFileRelativeBox, c);
@@ -427,11 +427,11 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 			content.add(sourcesListScrollPane, c);
 			c.gridwidth = 1;
 			c.gridheight = 1;
-			
+
 			c.gridx = 3;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			content.add(addButton, c);
-			
+
 			c.gridy = 6;
 			content.add(removeButton, c);
 

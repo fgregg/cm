@@ -10,7 +10,10 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import com.choicemaker.cm.core.BlockingException;
 
 /**
  * This interface handles the writing of oversized blocks.  It manages where a oversized block is written to

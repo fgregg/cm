@@ -10,12 +10,15 @@
  */
 package com.choicemaker.cm.matching.gen.xmlconf;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.xmlconf.*;
+import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 import com.choicemaker.cm.matching.gen.Maps;
 
 /**

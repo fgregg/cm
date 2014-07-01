@@ -10,11 +10,12 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;

@@ -17,9 +17,8 @@ import com.choicemaker.cm.compiler.ICompilationUnit;
 import com.choicemaker.cm.compiler.Location;
 import com.choicemaker.cm.compiler.Modifiers;
 import com.choicemaker.cm.compiler.NamePool;
-import com.choicemaker.cm.compiler.Tree;
-import com.choicemaker.cm.compiler.Type;
 import com.choicemaker.cm.compiler.Symbol.VarSymbol;
+import com.choicemaker.cm.compiler.Tree;
 import com.choicemaker.cm.compiler.Tree.Apply;
 import com.choicemaker.cm.compiler.Tree.ArrayType;
 import com.choicemaker.cm.compiler.Tree.Binop;
@@ -35,6 +34,7 @@ import com.choicemaker.cm.compiler.Tree.Quantified;
 import com.choicemaker.cm.compiler.Tree.Select;
 import com.choicemaker.cm.compiler.Tree.Unop;
 import com.choicemaker.cm.compiler.Tree.VarDecl;
+import com.choicemaker.cm.compiler.Type;
 import com.choicemaker.cm.compiler.backend.TargetTree.Assign;
 import com.choicemaker.cm.compiler.backend.TargetTree.Block;
 import com.choicemaker.cm.compiler.backend.TargetTree.Break;
@@ -47,7 +47,7 @@ import com.choicemaker.cm.compiler.backend.TargetTree.Return;
 import com.choicemaker.cm.compiler.backend.TargetTree.Taged;
 import com.choicemaker.cm.compiler.backend.TargetTree.Try;
 import com.choicemaker.cm.compiler.parser.TreeList;
-import com.choicemaker.cm.core.base.ClueSetType;
+import com.choicemaker.cm.core.ClueSetType;
 import com.choicemaker.cm.core.compiler.CompilerException;
 
 /**

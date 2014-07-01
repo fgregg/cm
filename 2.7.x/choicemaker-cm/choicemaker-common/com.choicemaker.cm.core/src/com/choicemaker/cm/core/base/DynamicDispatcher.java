@@ -13,6 +13,8 @@ package com.choicemaker.cm.core.base;
 import java.util.Iterator;
 import java.util.List;
 
+import com.choicemaker.cm.core.DynamicDispatchHandler;
+
 /**
  * Helper class for finding the best matching <code>DynamicDispatchHandler</code>.
  *

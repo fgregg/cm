@@ -24,9 +24,15 @@
 
 package com.wcohen.ss.tokens;
 
-import java.util.*;
-import com.wcohen.ss.*;
-import com.wcohen.ss.api.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import com.wcohen.ss.AbstractStringDistance;
+import com.wcohen.ss.TagLink;
+import com.wcohen.ss.api.StringWrapper;
 
 public class TagLinkToken
     extends AbstractStringDistance {

@@ -10,11 +10,16 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.ColumnDefinition;
+import com.choicemaker.cm.core.DerivedSource;
+import com.choicemaker.cm.core.Descriptor;
 
 /**
  * This class acts as the TableColumnModel and as a Relay of PropertyChangeEvents

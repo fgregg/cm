@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -18,7 +18,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.RecordSource;
 
 /**
  * XML configuration for record sources. Each actual source type has its own XML
@@ -29,7 +29,7 @@ import com.choicemaker.cm.core.base.RecordSource;
  */
 public class RecordSourceXmlConf {
 	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.base.rsReader";
-	
+
 	public static void add(RecordSource src) throws XmlConfException {
 		((RecordSourceXmlConfigurator)ExtensionPointMapper.getInstance(EXTENSION_POINT, src.getClass())).add(src);
 	}

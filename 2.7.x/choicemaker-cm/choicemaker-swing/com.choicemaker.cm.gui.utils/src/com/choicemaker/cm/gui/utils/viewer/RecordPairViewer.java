@@ -10,16 +10,30 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import java.awt.*;
-import java.beans.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.DefaultDesktopManager;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JPanel;
+import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
-import com.choicemaker.cm.core.base.*;
-import com.choicemaker.cm.core.datamodel.*;
+import com.choicemaker.cm.core.base.DescriptorCollection;
+import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.core.datamodel.ObservableDataEvent;
+import com.choicemaker.cm.core.datamodel.ObservableDataListener;
 import com.choicemaker.cm.gui.utils.viewer.event.DesktopPaneMouseListener;
 
 /**

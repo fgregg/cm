@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.core.base;
 
+import com.choicemaker.cm.core.IProbabilityModel;
+
 /**
  * Comment
  *

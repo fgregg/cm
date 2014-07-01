@@ -12,10 +12,10 @@ package com.choicemaker.cm.core.ml.none;
 
 import java.util.Collection;
 
-import com.choicemaker.cm.core.base.Accessor;
-import com.choicemaker.cm.core.base.ClueSet;
+import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.IProbabilityModel;
 import com.choicemaker.cm.core.ml.MachineLearner;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
 

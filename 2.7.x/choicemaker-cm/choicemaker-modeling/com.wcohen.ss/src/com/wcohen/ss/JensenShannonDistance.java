@@ -1,7 +1,13 @@
 package com.wcohen.ss;
 
-import java.util.*;
-import com.wcohen.ss.api.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.wcohen.ss.api.StringWrapper;
+import com.wcohen.ss.api.StringWrapperIterator;
+import com.wcohen.ss.api.Token;
+import com.wcohen.ss.api.Tokenizer;
 
 /**
  * Distance metrics based on Jensen-Shannon distance of two smoothed

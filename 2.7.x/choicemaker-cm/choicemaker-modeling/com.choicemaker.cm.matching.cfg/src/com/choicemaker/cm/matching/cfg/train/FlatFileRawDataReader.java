@@ -10,7 +10,10 @@
  */
 package com.choicemaker.cm.matching.cfg.train;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 import com.choicemaker.cm.core.util.StringUtils;
 

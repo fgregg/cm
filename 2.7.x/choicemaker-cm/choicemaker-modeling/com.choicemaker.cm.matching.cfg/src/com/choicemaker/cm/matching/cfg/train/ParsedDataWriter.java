@@ -10,12 +10,20 @@
  */
 package com.choicemaker.cm.matching.cfg.train;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import com.choicemaker.cm.core.util.XmlWriter;
-
-import com.choicemaker.cm.matching.cfg.*;
+import com.choicemaker.cm.matching.cfg.ParseTreeNode;
+import com.choicemaker.cm.matching.cfg.ParsedData;
 
 /**
  * .

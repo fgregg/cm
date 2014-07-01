@@ -10,8 +10,14 @@
  */
 package com.choicemaker.cm.matching.gen.tfidf;
 
-import java.util.*;
-import com.choicemaker.cm.core.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import com.choicemaker.cm.core.util.DoubleValuedHashMap;
+import com.choicemaker.cm.core.util.IntValuedHashMap;
 
 /**
  * @author ajwinkel

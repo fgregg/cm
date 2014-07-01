@@ -10,7 +10,10 @@
  */
 package com.choicemaker.cm.io.composite.base;
 
-import com.choicemaker.cm.core.base.*;
+import java.io.IOException;
+
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
 /**
  * Composite source of marked record pairs.

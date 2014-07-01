@@ -26,9 +26,9 @@ import javax.swing.JDialog;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.choicemaker.cm.core.RecordSink;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.base.RecordSink;
-import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;

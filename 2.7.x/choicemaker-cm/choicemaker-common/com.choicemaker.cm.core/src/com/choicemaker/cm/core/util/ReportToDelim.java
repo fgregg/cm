@@ -25,7 +25,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.Constants;
 
 /**
  * Description

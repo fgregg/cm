@@ -12,7 +12,7 @@ package com.choicemaker.cm.modelmaker.gui.abstraction;
 
 import java.beans.PropertyChangeEvent;
 
-import com.choicemaker.cm.core.base.RepositoryChangeEvent;
+import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;
 import com.choicemaker.cm.module.swing.AbstractTabbedPanel;

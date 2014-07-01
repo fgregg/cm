@@ -16,6 +16,12 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
+import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
+
 /**
  * Evaluation of matches.
  *

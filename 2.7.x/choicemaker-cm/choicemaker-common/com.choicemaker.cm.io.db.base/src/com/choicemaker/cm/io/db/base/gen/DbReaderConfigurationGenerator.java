@@ -23,13 +23,13 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.base.Constants;
-import com.choicemaker.cm.core.base.DerivedSource;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.DerivedSource;
 import com.choicemaker.cm.core.gen.CoreTags;
 import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.GeneratorHelper;
-import com.choicemaker.cm.core.gen.IGenerator;
 import com.choicemaker.cm.core.gen.GeneratorHelper.Id;
+import com.choicemaker.cm.core.gen.IGenerator;
 import com.choicemaker.cm.io.db.base.DbField;
 import com.choicemaker.cm.io.db.base.DbView;
 import com.choicemaker.cm.io.db.base.Index;

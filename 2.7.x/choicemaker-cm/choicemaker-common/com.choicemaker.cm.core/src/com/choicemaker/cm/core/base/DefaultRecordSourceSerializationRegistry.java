@@ -25,6 +25,9 @@ import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.IPluginRegistry;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.IRecordSourceSerializationRegistry;
+import com.choicemaker.cm.core.IRecordSourceSerializer;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.util.Precondition;
 import com.choicemaker.cm.core.util.StringUtils;
 

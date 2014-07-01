@@ -12,8 +12,8 @@ package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.util.List;
 
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
 
 /**
  * Automatically blocks and returns candidate match records

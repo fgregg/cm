@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.util.ArrayList;
 
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Record;
 
 /**
  *

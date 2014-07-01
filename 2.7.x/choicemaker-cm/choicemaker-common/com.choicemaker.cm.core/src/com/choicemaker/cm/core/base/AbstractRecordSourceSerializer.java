@@ -19,7 +19,10 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
-import com.choicemaker.cm.core.configure.IncompleteSpecificationException;
+import com.choicemaker.cm.core.IRecordSourceSerializer;
+import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.core.IncompleteSpecificationException;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.util.DoNothingRecordSourceSerializer;
 import com.choicemaker.cm.core.util.Precondition;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;

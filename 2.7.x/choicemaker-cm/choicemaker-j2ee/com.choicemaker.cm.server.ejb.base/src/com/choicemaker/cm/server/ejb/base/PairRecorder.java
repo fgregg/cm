@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBObject;
 
-import com.choicemaker.cm.core.base.MarkedRecordPairSource;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
 
 
 /**

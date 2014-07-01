@@ -12,9 +12,9 @@ package com.choicemaker.cm.core.xmlconf;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.base.DynamicDispatchHandler;
-import com.choicemaker.cm.core.base.IProbabilityModel;
-import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.DynamicDispatchHandler;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.RecordSource;
 
 /**
  * Base interface for all XML marked record pair configurators.

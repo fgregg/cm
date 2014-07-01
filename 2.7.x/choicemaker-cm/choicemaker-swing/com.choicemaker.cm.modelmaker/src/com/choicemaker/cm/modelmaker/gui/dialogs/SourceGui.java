@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -24,19 +24,19 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.Source;
+import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
 /**
  * Superclass of the different types of MRPSGuis associated
- * with the different types of SourceRecordPairSources.  
+ * with the different types of SourceRecordPairSources.
  * Objects of this class are created by the corresponding
  * type of SourceGuiFactory.  They are used
- * by the Application so that users can easily configure 
+ * by the Application so that users can easily configure
  * and build SourceSources.
- * 
+ *
  * @author S. Yoakum-Stover
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:47:04 $
  */
@@ -45,7 +45,7 @@ public abstract class SourceGui extends JDialog {
 	private static Logger logger = Logger.getLogger(SourceGui.class);
 	protected static final int CREATE = 0;
 	protected static final int GENERATE = 1;
-	
+
 	protected int mode = CREATE;
 
 	protected ModelMaker parent;
@@ -117,11 +117,11 @@ public abstract class SourceGui extends JDialog {
 
 
 	protected abstract String getFileTypeDescription();
-	
+
 	protected abstract String getExtension();
 
 	/**
-	 * The build button triggers the building of the model.  
+	 * The build button triggers the building of the model.
 	 */
 	protected void addContentListeners() {
 		//okayButton
@@ -151,13 +151,13 @@ public abstract class SourceGui extends JDialog {
 
 	/**
 	 * Abstract method that must be implemented by subclasses
-	 * to build the JPanel for display by the parent.  This 
+	 * to build the JPanel for display by the parent.  This
 	 * method is executed by the constructor.
 	 */
 	public abstract void buildContent();
 
 	/**
-	 * Abstract method that must be implemented by subclasses 
+	 * Abstract method that must be implemented by subclasses
 	 * to build the appropriate kind of Source.
 	 */
 	public abstract void buildSource();
@@ -170,5 +170,5 @@ public abstract class SourceGui extends JDialog {
 		}
 		return n;
 	}
-		
+
 }

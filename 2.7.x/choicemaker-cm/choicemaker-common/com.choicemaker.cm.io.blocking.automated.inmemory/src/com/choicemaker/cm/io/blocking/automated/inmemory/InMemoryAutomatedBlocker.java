@@ -16,10 +16,10 @@ import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSource;
-import com.choicemaker.cm.core.base.Sink;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;

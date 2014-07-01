@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.modelmaker.gui.dialogs;
 
-import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
 /**

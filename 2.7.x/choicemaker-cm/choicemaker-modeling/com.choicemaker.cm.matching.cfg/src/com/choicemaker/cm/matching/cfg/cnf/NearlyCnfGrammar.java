@@ -10,10 +10,15 @@
  */
 package com.choicemaker.cm.matching.cfg.cnf;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 //import com.choicemaker.cm.core.util.*;
-import com.choicemaker.cm.matching.cfg.*;
+import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
+import com.choicemaker.cm.matching.cfg.Rule;
+import com.choicemaker.cm.matching.cfg.TokenType;
+import com.choicemaker.cm.matching.cfg.Variable;
 
 /**
  * Subclass of PCFG that ensures that the grammar is NEARLY in Chomsky Normal Form.

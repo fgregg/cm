@@ -1,11 +1,31 @@
 package com.wcohen.ss.lookup;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
-import com.wcohen.ss.*;
-import com.wcohen.ss.api.*;
-import com.wcohen.ss.tokens.*;
+import com.wcohen.ss.BasicDistanceInstanceIterator;
+import com.wcohen.ss.BasicStringWrapper;
+import com.wcohen.ss.BasicStringWrapperIterator;
+import com.wcohen.ss.JaroWinklerTFIDF;
+import com.wcohen.ss.api.DistanceInstance;
+import com.wcohen.ss.api.DistanceInstanceIterator;
+import com.wcohen.ss.api.StringDistance;
+import com.wcohen.ss.api.StringDistanceLearner;
+import com.wcohen.ss.api.StringDistanceTeacher;
+import com.wcohen.ss.api.StringWrapper;
+import com.wcohen.ss.api.StringWrapperIterator;
+import com.wcohen.ss.api.Token;
+import com.wcohen.ss.api.Tokenizer;
+import com.wcohen.ss.tokens.NGramTokenizer;
 
 /**
  * Looks up nearly-matching strings in a dictionary, using a string distance.

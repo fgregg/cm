@@ -10,7 +10,9 @@
  */
 package com.choicemaker.cm.reviewmaker.base;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.datamodel.DefaultObservableData;
 
 /**

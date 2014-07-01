@@ -16,11 +16,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
-import com.choicemaker.cm.core.base.Constants;
-import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.ImmutableRecordPair;
-import com.choicemaker.cm.core.base.MarkedRecordPairSink;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.MarkedRecordPairSink;
 
 /**
  * Description

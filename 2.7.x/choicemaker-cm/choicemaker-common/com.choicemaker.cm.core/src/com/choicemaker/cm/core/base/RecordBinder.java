@@ -16,6 +16,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSink;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.Sink;
+
 /**
  * Description
  * 

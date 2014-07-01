@@ -10,9 +10,10 @@
  */
 package com.choicemaker.cm.matching.geo;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.choicemaker.cm.core.util.ConvUtils;
 import com.choicemaker.cm.core.util.StringUtils;
 /**

@@ -1,9 +1,14 @@
 package com.wcohen.ss.data;
 
-import com.wcohen.ss.api.*;
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import com.wcohen.ss.api.DistanceInstance;
+import com.wcohen.ss.api.StringWrapper;
 
 /**
  * Produces candidate pairs from a MatchData structure, and provides

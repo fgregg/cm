@@ -17,7 +17,11 @@ import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
-import com.choicemaker.cm.urm.exceptions.*;
+import com.choicemaker.cm.urm.exceptions.ArgumentException;
+import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
+import com.choicemaker.cm.urm.exceptions.ConfigException;
+import com.choicemaker.cm.urm.exceptions.ModelException;
+import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 
 /**
  * Allows a client application to match specified record collections and execute further match

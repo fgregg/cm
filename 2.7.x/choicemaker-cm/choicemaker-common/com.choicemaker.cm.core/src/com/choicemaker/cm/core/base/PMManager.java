@@ -12,6 +12,10 @@ package com.choicemaker.cm.core.base;
 
 import java.util.Map;
 
+import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModelManager;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.report.Reporter;
 
 /**

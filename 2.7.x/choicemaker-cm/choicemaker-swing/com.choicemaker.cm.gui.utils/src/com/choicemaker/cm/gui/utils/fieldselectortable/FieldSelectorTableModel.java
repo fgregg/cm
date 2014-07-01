@@ -10,16 +10,21 @@
  */
 package com.choicemaker.cm.gui.utils.fieldselectortable;
 
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JLabel;
-import javax.swing.event.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.ColumnDefinition;
-import com.choicemaker.cm.gui.utils.viewer.*;
+import com.choicemaker.cm.core.ColumnDefinition;
+import com.choicemaker.cm.gui.utils.viewer.RecordTableColumn;
+import com.choicemaker.cm.gui.utils.viewer.RecordTableColumnModel;
 
 /**
  * .  

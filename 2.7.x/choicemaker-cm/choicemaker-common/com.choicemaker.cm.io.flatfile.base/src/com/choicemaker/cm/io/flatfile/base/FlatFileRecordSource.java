@@ -17,10 +17,10 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSource;
-import com.choicemaker.cm.core.base.Sink;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.NameUtils;
 

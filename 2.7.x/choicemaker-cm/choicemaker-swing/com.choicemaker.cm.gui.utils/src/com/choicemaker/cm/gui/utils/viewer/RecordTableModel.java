@@ -14,7 +14,12 @@ import javax.swing.table.AbstractTableModel;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.DerivedSource;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RepositoryChangeEvent;
+import com.choicemaker.cm.core.RepositoryChangeListener;
+import com.choicemaker.cm.core.base.RecordData;
 
 /**
  * The TableModel for the RecordTable.

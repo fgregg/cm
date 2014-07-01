@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.services;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSource;

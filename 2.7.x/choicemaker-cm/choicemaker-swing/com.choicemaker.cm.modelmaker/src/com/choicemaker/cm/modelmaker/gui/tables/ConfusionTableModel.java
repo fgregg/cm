@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.ColumnDefinition;
+import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.utils.ValueError;
 

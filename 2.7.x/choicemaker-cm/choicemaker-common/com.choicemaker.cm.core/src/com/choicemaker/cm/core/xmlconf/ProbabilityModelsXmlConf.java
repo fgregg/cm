@@ -32,9 +32,9 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.base.Accessor;
-import com.choicemaker.cm.core.base.ClueDesc;
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.ClueDesc;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.ProbabilityModel;
 import com.choicemaker.cm.core.compiler.CompilationArguments;

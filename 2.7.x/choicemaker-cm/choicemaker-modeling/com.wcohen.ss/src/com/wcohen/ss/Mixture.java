@@ -1,8 +1,10 @@
 package com.wcohen.ss;
 
-import com.wcohen.ss.api.*;
-
 import java.util.Iterator;
+
+import com.wcohen.ss.api.StringWrapper;
+import com.wcohen.ss.api.Token;
+import com.wcohen.ss.api.Tokenizer;
 
 /**
  * Mixture-based distance metric.

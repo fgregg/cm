@@ -16,11 +16,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordPairSink;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.MutableRecordPair;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordPairSink;
-import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 
 /**

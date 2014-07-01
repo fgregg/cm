@@ -10,12 +10,24 @@
  */
 package com.choicemaker.cm.matching.cfg.train;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import com.choicemaker.cm.core.util.IntValuedHashMap;
-
-import com.choicemaker.cm.matching.cfg.*;
+import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
+import com.choicemaker.cm.matching.cfg.ParseTreeNode;
+import com.choicemaker.cm.matching.cfg.Rule;
+import com.choicemaker.cm.matching.cfg.Symbol;
+import com.choicemaker.cm.matching.cfg.Token;
+import com.choicemaker.cm.matching.cfg.TokenType;
+import com.choicemaker.cm.matching.cfg.Variable;
 
 /**
  * .

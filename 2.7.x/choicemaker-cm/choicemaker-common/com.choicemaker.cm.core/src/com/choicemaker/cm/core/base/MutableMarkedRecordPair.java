@@ -12,6 +12,11 @@ package com.choicemaker.cm.core.base;
 
 import java.util.Date;
 
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IMarkedRecordPair;
+import com.choicemaker.cm.core.IRecordPair;
+import com.choicemaker.cm.core.Record;
+
 /**
  * A record pair marked with a decision. Mostly used for human
  * marked training/testing pairs.

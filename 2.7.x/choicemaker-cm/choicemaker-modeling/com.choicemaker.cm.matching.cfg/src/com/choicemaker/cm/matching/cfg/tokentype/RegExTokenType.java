@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.matching.cfg.tokentype;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.choicemaker.cm.matching.cfg.TokenType;
 

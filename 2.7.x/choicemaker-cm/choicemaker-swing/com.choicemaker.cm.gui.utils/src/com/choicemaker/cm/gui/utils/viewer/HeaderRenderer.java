@@ -10,10 +10,14 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Font;
 
-import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 /**
  * Rendered used to give different colors to the data in the RecordTables.

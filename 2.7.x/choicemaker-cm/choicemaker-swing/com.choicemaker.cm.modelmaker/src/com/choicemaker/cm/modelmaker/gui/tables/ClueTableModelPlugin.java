@@ -13,7 +13,7 @@ package com.choicemaker.cm.modelmaker.gui.tables;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 
 /**
  * Description

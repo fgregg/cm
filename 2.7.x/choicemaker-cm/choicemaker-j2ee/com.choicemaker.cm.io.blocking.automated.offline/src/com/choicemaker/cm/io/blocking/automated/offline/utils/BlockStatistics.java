@@ -16,7 +16,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.core.util.LongArrayList;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;

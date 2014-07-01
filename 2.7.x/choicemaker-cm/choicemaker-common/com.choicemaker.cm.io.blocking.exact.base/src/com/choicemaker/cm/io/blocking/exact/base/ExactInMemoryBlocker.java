@@ -10,9 +10,17 @@
  */
 package com.choicemaker.cm.io.blocking.exact.base;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.base.RecordBinder;
 
 /**
  * Description

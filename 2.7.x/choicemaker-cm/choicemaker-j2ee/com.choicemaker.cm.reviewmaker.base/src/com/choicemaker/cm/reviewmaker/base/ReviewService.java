@@ -10,10 +10,12 @@
  */
 package com.choicemaker.cm.reviewmaker.base;
 
-import java.rmi.*;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-import com.choicemaker.cm.core.base.*;
-import com.choicemaker.cm.core.sort.*;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.sort.SortCondition;
 
 /**
  * Description

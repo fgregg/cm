@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.ArrayList;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 
 /**
  * This interface handles reading of oversized blocks.  An oversized block is an BlockSet object.  It has

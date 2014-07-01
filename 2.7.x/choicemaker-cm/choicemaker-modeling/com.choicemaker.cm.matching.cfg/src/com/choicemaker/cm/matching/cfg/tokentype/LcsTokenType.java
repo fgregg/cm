@@ -10,7 +10,10 @@
  */
 package com.choicemaker.cm.matching.cfg.tokentype;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.choicemaker.cm.matching.cfg.TokenType;
 import com.choicemaker.cm.matching.gen.LongestCommonSubsequence;

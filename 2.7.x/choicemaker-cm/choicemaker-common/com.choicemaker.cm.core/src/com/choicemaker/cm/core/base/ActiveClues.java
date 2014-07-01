@@ -10,6 +10,9 @@
  */
 package com.choicemaker.cm.core.base;
 
+import com.choicemaker.cm.core.ClueDesc;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.IntArrayList;
 
 /**

@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.Iterator;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 
 /**
  * @author pcheung

@@ -1,11 +1,35 @@
 package com.wcohen.ss.lookup;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import com.wcohen.ss.*;
-import com.wcohen.ss.api.*;
-import com.wcohen.ss.tokens.*;
+import com.wcohen.ss.BasicStringWrapperIterator;
+import com.wcohen.ss.JaroWinkler;
+import com.wcohen.ss.SoftTFIDF;
+import com.wcohen.ss.TFIDF;
+import com.wcohen.ss.api.StringWrapper;
+import com.wcohen.ss.api.Token;
+import com.wcohen.ss.api.Tokenizer;
+import com.wcohen.ss.tokens.SimpleTokenizer;
 
 /**
  * Looks up nearly-matching strings in a dictionary, using SoftTFIDF

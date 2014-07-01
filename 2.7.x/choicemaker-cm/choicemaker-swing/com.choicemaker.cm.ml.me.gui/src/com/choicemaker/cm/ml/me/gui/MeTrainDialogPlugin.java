@@ -12,7 +12,9 @@ package com.choicemaker.cm.ml.me.gui;
 
 import java.awt.FlowLayout;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.ml.me.base.MaximumEntropy;

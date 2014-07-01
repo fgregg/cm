@@ -18,9 +18,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.Sink;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
 
 /**

@@ -13,7 +13,8 @@ package com.choicemaker.cm.core.base;
 import java.util.Iterator;
 import java.util.Properties;
 
-import com.choicemaker.cm.core.configure.IncompleteSpecificationException;
+import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.core.IncompleteSpecificationException;
 
 /**
  * Provides standardized methods for

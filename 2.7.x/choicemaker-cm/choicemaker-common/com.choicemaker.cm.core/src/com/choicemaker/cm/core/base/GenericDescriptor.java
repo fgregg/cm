@@ -12,6 +12,11 @@ package com.choicemaker.cm.core.base;
 
 import java.util.HashMap;
 
+import com.choicemaker.cm.core.ColumnDefinition;
+import com.choicemaker.cm.core.DerivedSource;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.Record;
+
 /**
  * TODO: remove this class
  * @author   Martin Buechi

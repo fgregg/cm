@@ -1,7 +1,13 @@
 package com.wcohen.ss.tokens;
 
-import java.util.*;
-import com.wcohen.ss.api.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import com.wcohen.ss.api.Token;
+import com.wcohen.ss.api.Tokenizer;
 
 /**
  * Simple implementation of a Tokenizer.  Tokens are sequences of

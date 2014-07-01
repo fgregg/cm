@@ -13,7 +13,7 @@ package com.choicemaker.cm.core.compiler;
 import java.io.Writer;
 import java.util.Properties;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 
 /**
  * A placeholder for objects that require, but don't use, a compiler.

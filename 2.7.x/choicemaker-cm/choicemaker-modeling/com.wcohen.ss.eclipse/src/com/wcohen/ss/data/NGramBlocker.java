@@ -1,7 +1,8 @@
 package com.wcohen.ss.data;
 
-import com.wcohen.ss.api.*;
-import com.wcohen.ss.tokens.*;
+import com.wcohen.ss.api.Tokenizer;
+import com.wcohen.ss.tokens.NGramTokenizer;
+import com.wcohen.ss.tokens.SimpleTokenizer;
 
 /**
  * Finds all pairs that share a not-too-common character n-gram.

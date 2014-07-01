@@ -15,10 +15,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.Accessor;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.Sink;
+import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.Sink;
 
 /**
  * Creates blockingSets (using a BlockingSetFactory) and provides

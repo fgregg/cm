@@ -10,12 +10,13 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;

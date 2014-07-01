@@ -10,9 +10,13 @@
  */
 package com.choicemaker.cm.matching.cfg.util;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-import com.choicemaker.cm.matching.cfg.*;
+import com.choicemaker.cm.matching.cfg.ParseTreeNode;
+import com.choicemaker.cm.matching.cfg.ParsedData;
 
 /**
  * .

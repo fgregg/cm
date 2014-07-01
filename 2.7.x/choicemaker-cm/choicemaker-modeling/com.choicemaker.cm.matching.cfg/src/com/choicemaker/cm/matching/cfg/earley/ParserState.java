@@ -10,7 +10,9 @@
  */
 package com.choicemaker.cm.matching.cfg.earley;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.choicemaker.cm.matching.cfg.ParseTreeNode;
 import com.choicemaker.cm.matching.cfg.Rule;

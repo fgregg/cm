@@ -10,9 +10,12 @@
  */
 package com.choicemaker.cm.reviewmaker.base;
 
-import java.util.*;
+import java.util.Date;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
+import com.choicemaker.cm.core.base.Repository;
 import com.choicemaker.cm.core.datamodel.DefaultCompositeObservableData;
 
 /**

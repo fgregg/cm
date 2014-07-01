@@ -17,11 +17,11 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.BlockingException;
-import com.choicemaker.cm.core.base.IProbabilityModel;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;

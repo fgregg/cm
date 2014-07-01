@@ -10,7 +10,8 @@
  */
 package com.choicemaker.cm.matching.cfg;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Comment

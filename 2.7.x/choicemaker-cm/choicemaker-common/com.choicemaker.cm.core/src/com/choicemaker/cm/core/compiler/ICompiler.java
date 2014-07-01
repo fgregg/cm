@@ -13,7 +13,7 @@ package com.choicemaker.cm.core.compiler;
 import java.io.Writer;
 import java.util.Properties;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 
 /**
  * Interface used for testing compiler implementations.

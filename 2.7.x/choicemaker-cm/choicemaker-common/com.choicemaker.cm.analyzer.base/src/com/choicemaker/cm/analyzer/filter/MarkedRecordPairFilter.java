@@ -13,9 +13,9 @@ package com.choicemaker.cm.analyzer.filter;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IMarkedRecordPair;
 import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.Decision;
-import com.choicemaker.cm.core.base.IMarkedRecordPair;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.ArrayHelper;
 import com.choicemaker.cm.core.util.IntArrayList;

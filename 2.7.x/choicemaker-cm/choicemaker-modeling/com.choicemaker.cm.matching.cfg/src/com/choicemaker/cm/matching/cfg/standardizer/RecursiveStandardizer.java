@@ -10,9 +10,13 @@
  */
 package com.choicemaker.cm.matching.cfg.standardizer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.choicemaker.cm.matching.cfg.*;
+import com.choicemaker.cm.matching.cfg.ParseTreeNode;
+import com.choicemaker.cm.matching.cfg.ParseTreeNodeStandardizer;
+import com.choicemaker.cm.matching.cfg.ParsedData;
+import com.choicemaker.cm.matching.cfg.Variable;
 
 /**
  * The RecursiveStandardizer serves as a base class for the NameStandardizer

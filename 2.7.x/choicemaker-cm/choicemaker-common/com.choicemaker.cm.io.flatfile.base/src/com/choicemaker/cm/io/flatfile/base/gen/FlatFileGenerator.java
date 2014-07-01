@@ -21,12 +21,12 @@ import org.jdom.Attribute;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.gen.CoreTags;
 import com.choicemaker.cm.core.gen.GenException;
-import com.choicemaker.cm.core.gen.IGenerator;
 import com.choicemaker.cm.core.gen.GeneratorHelper;
 import com.choicemaker.cm.core.gen.GeneratorPlugin;
+import com.choicemaker.cm.core.gen.IGenerator;
 
 /**
  * Main generator plugin for Flat File IO.

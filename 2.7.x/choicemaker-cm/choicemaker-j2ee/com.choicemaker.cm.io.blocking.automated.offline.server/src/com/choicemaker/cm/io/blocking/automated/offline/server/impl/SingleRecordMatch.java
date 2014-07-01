@@ -27,17 +27,15 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
-// import com.choicemaker.cm.core.base.Accessor;
-
-import com.choicemaker.cm.core.base.BlockingException;
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.MatchCandidate;
 import com.choicemaker.cm.core.base.MatchCandidateFactory;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.base.Record;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
-import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
@@ -66,6 +64,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingSer
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService2;
 import com.choicemaker.cm.server.ejb.impl.CountsUpdate;
+// import com.choicemaker.cm.core.base.Accessor;
 
 
 /**

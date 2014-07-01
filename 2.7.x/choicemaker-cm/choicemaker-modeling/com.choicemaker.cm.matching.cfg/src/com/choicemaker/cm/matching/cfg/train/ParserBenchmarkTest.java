@@ -10,9 +10,13 @@
  */
 package com.choicemaker.cm.matching.cfg.train;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
-import com.choicemaker.cm.matching.cfg.*;
+import com.choicemaker.cm.matching.cfg.ParsedData;
+import com.choicemaker.cm.matching.cfg.Parser;
 
 /**
  * @author Adam Winkel

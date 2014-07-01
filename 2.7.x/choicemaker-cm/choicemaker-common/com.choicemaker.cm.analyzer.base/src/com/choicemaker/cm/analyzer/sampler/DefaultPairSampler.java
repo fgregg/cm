@@ -16,10 +16,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.ClueSet;
-import com.choicemaker.cm.core.base.IProbabilityModel;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.core.util.IntValuedHashMap;

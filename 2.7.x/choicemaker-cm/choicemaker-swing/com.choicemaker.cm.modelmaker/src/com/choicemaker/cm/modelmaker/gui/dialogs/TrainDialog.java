@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ml.MachineLearner;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;

@@ -10,7 +10,10 @@
  */
 package com.choicemaker.cm.matching.geo;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
 /**
  * A map that defines co-ordinates for geo-entities of a certain type.
  * Each map can be either TreeMap or HashMap. In addition to map itselt the object stores

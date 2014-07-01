@@ -13,9 +13,10 @@ package com.choicemaker.cm.matching.en.us.train.address;
 import java.io.IOException;
 import java.text.ParseException;
 
-import com.choicemaker.cm.matching.cfg.*;
-import com.choicemaker.cm.matching.cfg.train.*;
-
+import com.choicemaker.cm.matching.cfg.Parser;
+import com.choicemaker.cm.matching.cfg.train.FlatFileRawDataReader;
+import com.choicemaker.cm.matching.cfg.train.ParserBenchmarkTest;
+import com.choicemaker.cm.matching.cfg.train.RawDataReader;
 import com.choicemaker.cm.matching.en.us.address.AddressParserUtils;
 
 /**

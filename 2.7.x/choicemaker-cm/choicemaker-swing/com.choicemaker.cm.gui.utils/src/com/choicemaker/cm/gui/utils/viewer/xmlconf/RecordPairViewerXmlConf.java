@@ -10,20 +10,40 @@
  */
 package com.choicemaker.cm.gui.utils.viewer.xmlconf;
 
-import java.awt.*;
-import java.io.*;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.jdom.*;
+import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.base.*;
-import com.choicemaker.cm.core.xmlconf.*;
-import com.choicemaker.cm.gui.utils.viewer.*;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.base.DescriptorCollection;
+import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
+import com.choicemaker.cm.gui.utils.viewer.CompositeFrameModel;
+import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
+import com.choicemaker.cm.gui.utils.viewer.InternalFrameModel;
+import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;
+import com.choicemaker.cm.gui.utils.viewer.RecordPairViewerModel;
+import com.choicemaker.cm.gui.utils.viewer.RecordTableColumn;
+import com.choicemaker.cm.gui.utils.viewer.RecordTableColumnModel;
 
 /**
  *

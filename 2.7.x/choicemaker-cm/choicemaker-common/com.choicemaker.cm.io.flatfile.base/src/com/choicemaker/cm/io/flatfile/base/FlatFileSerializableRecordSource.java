@@ -15,12 +15,12 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.ISerializableRecordSource;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSource;
-import com.choicemaker.cm.core.base.Sink;
 
 /**
  * This is a wrapper object around FlatFileRecordSource and it can be serialized, because it

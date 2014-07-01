@@ -24,7 +24,7 @@ import java.util.Set;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
 
 /**

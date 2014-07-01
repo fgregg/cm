@@ -10,13 +10,18 @@
  */
 package com.choicemaker.cm.io.flatfile.base.xmlconf;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-import org.jdom.*;
+import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.base.*;
-import com.choicemaker.cm.core.xmlconf.*;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
+import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.flatfile.base.FlatFileMarkedRecordPairSource;
 
 /**

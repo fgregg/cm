@@ -17,7 +17,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
 
 /**

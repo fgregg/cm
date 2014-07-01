@@ -10,6 +10,9 @@
  */
 package com.choicemaker.cm.core.base;
 
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Record;
+
 /** Deprecated */
 public class MarkedRecordPairWithPseudoProbability extends MutableRecordPair {
 	/** The <code>Decision</code> whether this pair matches or not. */

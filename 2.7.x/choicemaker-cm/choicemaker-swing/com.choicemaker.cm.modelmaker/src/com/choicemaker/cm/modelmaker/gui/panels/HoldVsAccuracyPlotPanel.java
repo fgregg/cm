@@ -25,22 +25,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 
-//import org.apache.log4j.Logger;
-
-
-
-import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.modelmaker.gui.ModelMaker;
-import com.choicemaker.cm.modelmaker.gui.tables.AccuracyTable;
-import com.choicemaker.cm.modelmaker.stats.StatPoint;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+
+//import org.apache.log4j.Logger;
+import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.modelmaker.gui.ModelMaker;
+import com.choicemaker.cm.modelmaker.gui.tables.AccuracyTable;
+import com.choicemaker.cm.modelmaker.stats.StatPoint;
 
 /**
  * Hold percentage versus accuracy using a symmetric match/differ threshold window.

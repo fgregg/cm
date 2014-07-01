@@ -18,11 +18,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Locale;
 
-import com.choicemaker.cm.core.base.Constants;
-import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.ImmutableRecordPair;
-import com.choicemaker.cm.core.base.MarkedRecordPairSink;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.util.DateHelper;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.XmlOutput;

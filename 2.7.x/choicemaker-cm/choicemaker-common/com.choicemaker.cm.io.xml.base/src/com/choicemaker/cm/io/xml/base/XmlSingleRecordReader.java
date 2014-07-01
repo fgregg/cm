@@ -17,8 +17,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 
 /**

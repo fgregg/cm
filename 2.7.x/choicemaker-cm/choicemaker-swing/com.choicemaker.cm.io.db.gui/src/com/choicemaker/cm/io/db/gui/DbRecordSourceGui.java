@@ -1,33 +1,48 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 package com.choicemaker.cm.io.db.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.Collection;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
-import com.choicemaker.cm.io.db.base.*;
+import com.choicemaker.cm.io.db.base.DataSources;
+import com.choicemaker.cm.io.db.base.DbRecordSource;
 import com.choicemaker.cm.io.db.base.util.DbMessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.RecordSourceGui;
-import com.choicemaker.cm.modelmaker.gui.utils.*;
+import com.choicemaker.cm.modelmaker.gui.utils.Enable;
+import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:56 $
@@ -36,7 +51,7 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
     private static final long serialVersionUID = 1L;
 
 	private static Logger logger = Logger.getLogger(DbRecordSourceGui.class);
-    
+
     private String name;
     private JLabel sourceFileNameLabel;
     private JLabel confLabel;
@@ -115,7 +130,7 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
 
     public void addContentListeners() {
         super.addContentListeners();
-        
+
         EnablednessGuard dl = new EnablednessGuard(this);
         sourceFileName.getDocument().addDocumentListener(dl);
         whereField.getDocument().addDocumentListener(dl);

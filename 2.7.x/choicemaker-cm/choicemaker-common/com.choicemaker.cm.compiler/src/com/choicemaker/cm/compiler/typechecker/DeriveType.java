@@ -18,11 +18,11 @@ import com.choicemaker.cm.compiler.SemanticTags;
 import com.choicemaker.cm.compiler.Symbol;
 import com.choicemaker.cm.compiler.Tags;
 import com.choicemaker.cm.compiler.Tree;
-import com.choicemaker.cm.compiler.Type;
 import com.choicemaker.cm.compiler.Tree.ArrayType;
 import com.choicemaker.cm.compiler.Tree.Ident;
 import com.choicemaker.cm.compiler.Tree.PrimitiveType;
 import com.choicemaker.cm.compiler.Tree.Select;
+import com.choicemaker.cm.compiler.Type;
 import com.choicemaker.cm.compiler.parser.DefaultVisitor;
 import com.choicemaker.cm.core.compiler.CompilerException;
 /**

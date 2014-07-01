@@ -10,9 +10,10 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 
 /**
  * This is the generic record id to internal id translator.

@@ -15,6 +15,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModelManager;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.report.Reporter;
 import com.choicemaker.cm.core.util.Precondition;
 

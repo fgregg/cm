@@ -10,9 +10,13 @@
  */
 package com.choicemaker.cm.matching.cfg.earley;
 
-import java.util.*;
+import java.util.List;
 
-import com.choicemaker.cm.matching.cfg.*;
+import com.choicemaker.cm.matching.cfg.AbstractParser;
+import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
+import com.choicemaker.cm.matching.cfg.ParseTreeNode;
+import com.choicemaker.cm.matching.cfg.ParseTreeNodeStandardizer;
+import com.choicemaker.cm.matching.cfg.Tokenizer;
 
 /**
  * 

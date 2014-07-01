@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
-import com.choicemaker.cm.core.base.BlockingException;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;

@@ -11,14 +11,19 @@
 package com.choicemaker.cm.gui.utils.viewer.event;
 
 import java.awt.Point;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.gui.utils.viewer.*;
+import com.choicemaker.cm.gui.utils.viewer.RecordTable;
+import com.choicemaker.cm.gui.utils.viewer.RecordTableModel;
 
 /**
  * This is the thing that listens for the mouse

@@ -10,6 +10,10 @@
  */
 package com.choicemaker.cm.core.base;
 
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.Profile;
+import com.choicemaker.cm.core.Record;
+
 /**
  * Profile that represents a query record as a Java bean using the
  * generated holder classes.

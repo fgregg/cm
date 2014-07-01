@@ -19,7 +19,14 @@ import com.choicemaker.cm.urm.base.EvalRecordFormat;
 import com.choicemaker.cm.urm.base.EvaluatedRecord;
 import com.choicemaker.cm.urm.base.ISingleRecord;
 import com.choicemaker.cm.urm.base.LinkCriteria;
-import com.choicemaker.cm.urm.exceptions.*;
+import com.choicemaker.cm.urm.exceptions.ArgumentException;
+import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
+import com.choicemaker.cm.urm.exceptions.ConfigException;
+import com.choicemaker.cm.urm.exceptions.ModelException;
+import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
+import com.choicemaker.cm.urm.exceptions.RecordException;
+import com.choicemaker.cm.urm.exceptions.UrmIncompleteBlockingSetsException;
+import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
 
 /**
  * Allows a client application to find all records matching (evaluated as MATCH or HOLD ) with the specified record in online (synchronous) mode 

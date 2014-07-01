@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
 import com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder;
-import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;

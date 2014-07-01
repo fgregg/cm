@@ -15,10 +15,10 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
 
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.MarkedRecordPairSource;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.RepositoryChangeListener;
 import com.choicemaker.cm.core.base.Repository;
-import com.choicemaker.cm.core.base.RepositoryChangeListener;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.IntArrayList;

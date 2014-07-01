@@ -10,17 +10,29 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-import javax.swing.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JViewport;
+import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.UIResource;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.base.RecordData;
 import com.choicemaker.cm.gui.utils.viewer.event.RecordTableMouseListener;
 
 /**

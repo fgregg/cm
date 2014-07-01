@@ -10,7 +10,9 @@
  */
 package com.choicemaker.cm.gui.utils;
 
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
 
 /**
  * Comment

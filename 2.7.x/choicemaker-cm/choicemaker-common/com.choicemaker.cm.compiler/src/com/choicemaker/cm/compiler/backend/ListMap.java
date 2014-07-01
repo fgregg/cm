@@ -13,9 +13,9 @@ package com.choicemaker.cm.compiler.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.choicemaker.cm.compiler.Symbol.VarSymbol;
 import com.choicemaker.cm.compiler.Tree;
 import com.choicemaker.cm.compiler.Type;
-import com.choicemaker.cm.compiler.Symbol.VarSymbol;
 
 /**
  * Helper class for translating shorthands.

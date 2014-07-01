@@ -12,6 +12,9 @@ package com.choicemaker.cm.core.base;
 
 import java.io.Serializable;
 
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IProbabilityModel;
+
 /**
  * Holder class for a returned record. If the actual record data should be returned
  * to the caller, a subclass instance must be used.

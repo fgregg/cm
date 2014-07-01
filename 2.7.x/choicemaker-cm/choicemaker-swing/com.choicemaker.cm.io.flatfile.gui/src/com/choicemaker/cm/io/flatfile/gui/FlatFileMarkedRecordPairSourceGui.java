@@ -1,41 +1,67 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 package com.choicemaker.cm.io.flatfile.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.IOException;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.*;
-import com.choicemaker.cm.core.util.*;
-import com.choicemaker.cm.core.xmlconf.*;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.Source;
+import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
+import com.choicemaker.cm.core.util.FileUtilities;
+import com.choicemaker.cm.core.util.LoggingObject;
+import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
+import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
-import com.choicemaker.cm.gui.utils.dialogs.*;
-import com.choicemaker.cm.io.flatfile.base.*;
+import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
+import com.choicemaker.cm.io.flatfile.base.FlatFileMarkedRecordPairSink;
+import com.choicemaker.cm.io.flatfile.base.FlatFileMarkedRecordPairSinkFactory;
+import com.choicemaker.cm.io.flatfile.base.FlatFileMarkedRecordPairSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
-import com.choicemaker.cm.modelmaker.gui.dialogs.*;
-import com.choicemaker.cm.modelmaker.gui.utils.*;
+import com.choicemaker.cm.modelmaker.gui.dialogs.MarkedRecordPairSourceGui;
+import com.choicemaker.cm.modelmaker.gui.utils.Enable;
+import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
  * The MRPSGui associated the FlatFileMarkedRecordPairSource.
- * An objects of this class would be created by the 
+ * An objects of this class would be created by the
  * FlatFileMarkedRecordPairSourceGuiFactory.  It is used
  * by the AbstractApplication so that users can easily configure
  * and build FlatFileMarkedRecordPairSources.
- * 
+ *
  * @author  Martin Buechi
  * @author  S. Yoakum-Stover
  * @version $Revision: 1.2 $ $Date: 2010/03/28 09:11:07 $
@@ -111,7 +137,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		fileName.setText(s.getFileNamePrefix() + s.getFileNameSuffix());
 		if (s.getRawFileNamePrefix() != null &&
 			FileUtilities.isFileAbsolute(s.getRawFileNamePrefix())) {
-			fileRelativeBox.setSelectedItem(ABSOLUTE);	
+			fileRelativeBox.setSelectedItem(ABSOLUTE);
 		} else {
 			fileRelativeBox.setSelectedItem(RELATIVE);
 		}
@@ -150,9 +176,9 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		fn = getSaveFileName();
 		pos = fn.lastIndexOf('.');
 		if (pos >= 0) {
-			saveFileN = fn.substring(0, pos);	
+			saveFileN = fn.substring(0, pos);
 		} else {
-			saveFileN = fn;	
+			saveFileN = fn;
 		}
 	}
 
@@ -203,7 +229,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 
 	private String getSaveFileName() {
 		if (fileRelativeBox.getSelectedItem().equals(ABSOLUTE)) {
-			return getAbsoluteFileName();		
+			return getAbsoluteFileName();
 		} else {
 			File rel = new File(sourceFileName.getText().trim()).getAbsoluteFile().getParentFile();
 			return FileUtilities.getRelativeFile(rel, getAbsoluteFileName()).toString();
@@ -352,7 +378,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 					setEnabledness();
 				}
 			});
-			
+
 			sourcesList.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
 					setEnabledness();
@@ -370,7 +396,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 				setEnabledness();
 			}
 		});
-		
+
 		JavaHelpUtils.enableHelpKey(this, "io.gui.flatfile.mrps");
 	}
 

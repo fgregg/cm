@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.Sink;
-import com.choicemaker.cm.core.base.Source;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.util.ChainedIOException;
 import com.choicemaker.cm.core.util.IntArrayList;
 import com.choicemaker.cm.core.util.NameUtils;
@@ -145,7 +145,7 @@ public abstract class CompositeSource implements Source {
 	}
 
 	/**
-	 * Add a source at the end of the collection, 
+	 * Add a source at the end of the collection,
 	 * and by default, save its filename as an absolute path.
 	 */
 	protected void add(Source s) {

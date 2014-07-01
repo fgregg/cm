@@ -27,6 +27,13 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.ClueDesc;
+import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ml.MachineLearner;
 import com.choicemaker.cm.core.ml.none.None;
 import com.choicemaker.cm.core.report.Report;

@@ -12,6 +12,7 @@ package com.choicemaker.cm.core.base;
 
 import java.util.Date;
 
+import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ml.MachineLearner;
 
 /**

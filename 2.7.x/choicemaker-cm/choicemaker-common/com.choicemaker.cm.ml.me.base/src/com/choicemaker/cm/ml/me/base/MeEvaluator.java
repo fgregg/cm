@@ -10,11 +10,11 @@
  */
 package com.choicemaker.cm.ml.me.base;
 
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.Decision;
 import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.IProbabilityModel;
 
 /**
  * Matches records and computes matching probabilities.

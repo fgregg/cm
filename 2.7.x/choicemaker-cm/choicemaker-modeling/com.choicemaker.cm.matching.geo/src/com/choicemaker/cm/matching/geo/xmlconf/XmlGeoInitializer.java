@@ -10,8 +10,15 @@
  */
 package com.choicemaker.cm.matching.geo.xmlconf;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 import org.jdom.Element;
 
@@ -19,9 +26,9 @@ import com.choicemaker.cm.core.util.ConvUtils;
 import com.choicemaker.cm.core.util.StringUtils;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
-import com.choicemaker.cm.matching.geo.GeoPoint;
-import com.choicemaker.cm.matching.geo.GeoMap;
 import com.choicemaker.cm.matching.geo.GeoHelper;
+import com.choicemaker.cm.matching.geo.GeoMap;
+import com.choicemaker.cm.matching.geo.GeoPoint;
 
 /**
  * XML initializer for geo-entity maps .

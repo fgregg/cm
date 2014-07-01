@@ -10,6 +10,10 @@
  */
 package com.choicemaker.cm.core.base;
 
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IRecordPair;
+import com.choicemaker.cm.core.Record;
+
 /**
  * A replacement for the deprecated RecordPair class, which
  * allows direct access to field members.

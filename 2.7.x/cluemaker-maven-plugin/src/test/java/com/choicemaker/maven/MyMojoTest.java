@@ -1,6 +1,7 @@
 package com.choicemaker.maven;
 
 import java.io.File;
+
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 
 public class MyMojoTest extends AbstractMojoTestCase {

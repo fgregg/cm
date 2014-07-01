@@ -24,13 +24,13 @@ import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
 
+import com.choicemaker.cm.core.ClueDesc;
+import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.ClueSetType;
+import com.choicemaker.cm.core.ColumnDefinition;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.ClueDesc;
-import com.choicemaker.cm.core.base.ClueSet;
-import com.choicemaker.cm.core.base.ClueSetType;
-import com.choicemaker.cm.core.base.ColumnDefinition;
-import com.choicemaker.cm.core.base.IProbabilityModel;
 import com.choicemaker.cm.core.base.IntActiveClues;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.ml.MachineLearner;

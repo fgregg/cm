@@ -10,15 +10,25 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import java.awt.*;
-import java.beans.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import com.choicemaker.cm.core.base.RecordData;
-import com.choicemaker.cm.core.datamodel.*;
+import com.choicemaker.cm.core.datamodel.ObservableDataEvent;
+import com.choicemaker.cm.core.datamodel.ObservableDataListener;
 
 /**
  * TODO: we still have to deal with the Tab Label...

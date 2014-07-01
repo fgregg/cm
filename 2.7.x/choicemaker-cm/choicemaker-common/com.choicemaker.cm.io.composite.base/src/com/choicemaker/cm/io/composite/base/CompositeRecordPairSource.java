@@ -10,7 +10,10 @@
  */
 package com.choicemaker.cm.io.composite.base;
 
-import com.choicemaker.cm.core.base.*;
+import java.io.IOException;
+
+import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.RecordPairSource;
 
 /**
  * Composite source of record pairs.

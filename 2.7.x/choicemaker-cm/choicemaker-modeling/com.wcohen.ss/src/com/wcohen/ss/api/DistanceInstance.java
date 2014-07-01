@@ -1,7 +1,7 @@
 package com.wcohen.ss.api;
 
-import java.util.*;
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * An 'instance' for a StringDistance, analogous to an 'instance' for

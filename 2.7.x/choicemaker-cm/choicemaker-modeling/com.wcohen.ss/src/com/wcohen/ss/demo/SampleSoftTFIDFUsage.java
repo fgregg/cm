@@ -1,10 +1,13 @@
 package com.wcohen.ss.demo;
 
-import com.wcohen.ss.*;
-import com.wcohen.ss.api.*;
-import com.wcohen.ss.tokens.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.*;
+import com.wcohen.ss.BasicStringWrapperIterator;
+import com.wcohen.ss.JaroWinkler;
+import com.wcohen.ss.SoftTFIDF;
+import com.wcohen.ss.api.Tokenizer;
+import com.wcohen.ss.tokens.SimpleTokenizer;
 
 public class SampleSoftTFIDFUsage
 {

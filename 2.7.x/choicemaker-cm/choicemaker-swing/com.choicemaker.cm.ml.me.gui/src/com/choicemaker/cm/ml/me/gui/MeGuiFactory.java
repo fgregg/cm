@@ -10,15 +10,20 @@
  */
 package com.choicemaker.cm.ml.me.gui;
 
-import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 
 import com.choicemaker.cm.core.ml.MachineLearner;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.ml.me.base.MaximumEntropy;
 import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
 import com.choicemaker.cm.modelmaker.gui.ml.MlGuiFactory;
-import com.choicemaker.cm.modelmaker.gui.tables.*;
+import com.choicemaker.cm.modelmaker.gui.tables.ActiveClueTableModelPlugin;
+import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModelPlugin;
 import com.choicemaker.cm.modelmaker.gui.utils.NullFloat;
 
 /**

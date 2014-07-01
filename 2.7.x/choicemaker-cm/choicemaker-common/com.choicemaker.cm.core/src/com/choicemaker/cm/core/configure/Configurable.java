@@ -12,6 +12,8 @@ package com.choicemaker.cm.core.configure;
 
 import java.util.Properties;
 
+import com.choicemaker.cm.core.IncompleteSpecificationException;
+
 /**
  * An object that can be configured via properties.
  * @author rphall

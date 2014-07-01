@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.choicemaker.cm.core.base.Accessor;
+import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.ClueDesc;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
-import com.choicemaker.cm.core.base.ClueDesc;
-import com.choicemaker.cm.core.base.Constants;
-import com.choicemaker.cm.core.base.Decision;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
 /**

@@ -10,12 +10,19 @@
  */
 package com.choicemaker.cm.matching.cfg.cyk;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-import com.choicemaker.cm.core.util.*;
-
-import com.choicemaker.cm.matching.cfg.*;
-import com.choicemaker.cm.matching.cfg.cnf.*;
+import com.choicemaker.cm.core.util.IntValuedHashMap;
+import com.choicemaker.cm.matching.cfg.ParseTreeNode;
+import com.choicemaker.cm.matching.cfg.Rule;
+import com.choicemaker.cm.matching.cfg.Token;
+import com.choicemaker.cm.matching.cfg.TokenType;
+import com.choicemaker.cm.matching.cfg.Variable;
+import com.choicemaker.cm.matching.cfg.cnf.NearlyCnfGrammar;
 
 /**
  * .

@@ -1,9 +1,16 @@
 package com.wcohen.ss.data;
 
-import com.wcohen.ss.*;
-import com.wcohen.ss.api.*;
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.wcohen.ss.BasicStringWrapper;
+import com.wcohen.ss.api.StringWrapper;
+import com.wcohen.ss.api.StringWrapperIterator;
 
 /**
  * Holds data for evaluating a distance metric.

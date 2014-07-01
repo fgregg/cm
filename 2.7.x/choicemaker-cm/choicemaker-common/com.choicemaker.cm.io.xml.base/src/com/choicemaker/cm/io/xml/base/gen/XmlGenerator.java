@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.xml.base.gen;
 
 import java.io.File;
 
-import com.choicemaker.cm.core.base.Constants;
+import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.GeneratorPlugin;
 import com.choicemaker.cm.core.gen.IGenerator;

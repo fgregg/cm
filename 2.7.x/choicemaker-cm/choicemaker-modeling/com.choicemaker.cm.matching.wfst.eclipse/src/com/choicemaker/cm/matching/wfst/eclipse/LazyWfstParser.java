@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.List;
 
 import com.choicemaker.cm.matching.wfst.AmbiguousParser;
-import com.choicemaker.cm.matching.wfst.*;
+import com.choicemaker.cm.matching.wfst.WfstParser;
 
 /**
  * @author rphall

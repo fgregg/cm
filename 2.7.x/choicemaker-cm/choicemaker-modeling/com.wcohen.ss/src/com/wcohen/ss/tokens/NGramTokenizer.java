@@ -1,7 +1,11 @@
 package com.wcohen.ss.tokens;
 
-import java.util.*;
-import com.wcohen.ss.api.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import com.wcohen.ss.api.Token;
+import com.wcohen.ss.api.Tokenizer;
 
 /**
  * Wraps another tokenizer, and adds all computes all ngrams of

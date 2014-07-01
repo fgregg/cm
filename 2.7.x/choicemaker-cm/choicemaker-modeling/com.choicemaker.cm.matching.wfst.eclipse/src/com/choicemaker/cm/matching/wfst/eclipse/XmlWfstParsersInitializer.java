@@ -10,14 +10,17 @@
  */
 package com.choicemaker.cm.matching.wfst.eclipse;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.xmlconf.*;
+import com.choicemaker.cm.core.xmlconf.XmlConfException;
+import com.choicemaker.cm.core.xmlconf.XmlModuleInitializer;
 
 /**
  * XML initializer for WfstParsers

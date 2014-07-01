@@ -10,6 +10,13 @@
  */
 package com.choicemaker.cm.core.base;
 
+import com.choicemaker.cm.core.ClueDesc;
+import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.ExtDecision;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.Record;
+
 /**
  * Matches records and computes matching probabilities. This class is extended
  * by the Evaluator's specific to machine learning techniques.

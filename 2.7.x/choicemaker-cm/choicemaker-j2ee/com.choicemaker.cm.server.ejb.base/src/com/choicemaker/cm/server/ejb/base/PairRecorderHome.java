@@ -10,9 +10,10 @@
  */
 package com.choicemaker.cm.server.ejb.base;
 
-import javax.ejb.EJBHome;
-import javax.ejb.CreateException;
 import java.rmi.RemoteException;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBHome;
 
 /**
  * @author pcheung

@@ -10,9 +10,11 @@
  */
 package com.choicemaker.cm.gui.utils.viewer.event;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;

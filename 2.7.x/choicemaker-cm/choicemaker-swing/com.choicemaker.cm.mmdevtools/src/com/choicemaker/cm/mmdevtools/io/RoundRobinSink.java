@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -12,16 +12,16 @@ package com.choicemaker.cm.mmdevtools.io;
 
 import java.io.IOException;
 
-import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.ImmutableRecordPair;
-import com.choicemaker.cm.core.base.MarkedRecordPairSink;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSink;
-import com.choicemaker.cm.core.base.RecordSource;
-import com.choicemaker.cm.core.base.Sink;
-import com.choicemaker.cm.core.base.SinkFactory;
-import com.choicemaker.cm.core.base.Source;
+import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.MarkedRecordPairSink;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSink;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.core.SinkFactory;
+import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.io.xml.base.XmlRecordSinkFactory;
@@ -69,7 +69,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 	public void put(ImmutableRecordPair rp) throws IOException {
 		putMarkedRecordPair((ImmutableMarkedRecordPair)rp);
 	}
-	
+
 	public void saveSourceDescriptors() throws XmlConfException {
 		if (factory instanceof XmlRecordSinkFactory) {
 			Source[] sources = ((XmlRecordSinkFactory)factory).getSources();
@@ -97,7 +97,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 		sinks = null;
 		curSink = -1;
 	}
-		
+
 	public String getName() {
 		throw new UnsupportedOperationException();
 	}
@@ -113,7 +113,7 @@ public class RoundRobinSink implements RecordSink, MarkedRecordPairSink {
 	public void setModel(ImmutableProbabilityModel m) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * NOP for now
 	 * @see com.choicemaker.cm.core.base.Sink#flush()

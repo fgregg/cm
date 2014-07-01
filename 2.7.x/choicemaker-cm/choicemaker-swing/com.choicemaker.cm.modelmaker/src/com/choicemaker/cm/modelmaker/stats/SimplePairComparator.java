@@ -12,7 +12,7 @@ package com.choicemaker.cm.modelmaker.stats;
 
 import java.util.Comparator;
 
-import com.choicemaker.cm.core.base.IMarkedRecordPair;
+import com.choicemaker.cm.core.IMarkedRecordPair;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
 /**

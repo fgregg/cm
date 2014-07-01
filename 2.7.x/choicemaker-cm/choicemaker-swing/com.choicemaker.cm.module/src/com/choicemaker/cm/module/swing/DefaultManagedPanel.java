@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.module.IModule;
 import com.choicemaker.cm.module.IModuleController;
 import com.choicemaker.cm.module.IModuleController.IUserInterface;
 

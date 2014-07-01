@@ -14,8 +14,18 @@ package com.choicemaker.cm.gui.utils;
 import java.awt.event.ActionEvent;
 import java.net.URL;
 
-import javax.help.*;
-import javax.swing.*;
+import javax.help.CSH;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.help.HelpSetException;
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
 

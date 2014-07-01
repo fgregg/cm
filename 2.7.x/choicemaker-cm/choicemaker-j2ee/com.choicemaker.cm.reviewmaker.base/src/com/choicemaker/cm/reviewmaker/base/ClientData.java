@@ -12,7 +12,7 @@ package com.choicemaker.cm.reviewmaker.base;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.base.Decision;
+import com.choicemaker.cm.core.Decision;
 
 /**
  * Description

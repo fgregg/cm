@@ -14,9 +14,9 @@ import java.io.File;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.base.IProbabilityModel;
-import com.choicemaker.cm.core.base.MarkedRecordPairSource;
-import com.choicemaker.cm.core.base.RecordSource;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;

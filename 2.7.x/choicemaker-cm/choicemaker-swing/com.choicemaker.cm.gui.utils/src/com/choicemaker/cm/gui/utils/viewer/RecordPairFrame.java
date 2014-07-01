@@ -11,13 +11,17 @@
 package com.choicemaker.cm.gui.utils.viewer;
 
 import java.awt.Dimension;
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-import javax.swing.*;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.table.JTableHeader;
 
-import com.choicemaker.cm.core.base.*;
-import com.choicemaker.cm.gui.utils.viewer.event.*;
+import com.choicemaker.cm.core.Descriptor;
+import com.choicemaker.cm.core.base.RecordData;
+import com.choicemaker.cm.gui.utils.viewer.event.ColumnDragListener;
+import com.choicemaker.cm.gui.utils.viewer.event.RecordPairFramePopupManager;
 
 /**
  * Description

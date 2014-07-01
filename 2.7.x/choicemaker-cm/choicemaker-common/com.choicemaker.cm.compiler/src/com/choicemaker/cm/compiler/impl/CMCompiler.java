@@ -31,7 +31,7 @@ import org.jdom.Element;
 import com.choicemaker.cm.compiler.CompilationEnv;
 import com.choicemaker.cm.compiler.ICompilationUnit;
 import com.choicemaker.cm.compiler.Sourcecode;
-import com.choicemaker.cm.core.base.IProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;

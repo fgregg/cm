@@ -13,11 +13,11 @@ package com.choicemaker.cm.modelmaker.gui.utils;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import com.choicemaker.cm.core.base.Decision;
-
-import org.jfree.data.general.AbstractDataset;
-import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.DefaultKeyedValues2D;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.general.AbstractDataset;
+
+import com.choicemaker.cm.core.Decision;
 
 /**
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:10 $

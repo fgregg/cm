@@ -17,16 +17,15 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-//import org.apache.log4j.Logger;
-
-import com.choicemaker.cm.core.util.MessageUtil;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+
+//import org.apache.log4j.Logger;
+import com.choicemaker.cm.core.util.MessageUtil;
 
 /**
  * Hold percentage versus accuracy using a independent match/differ thresholds.

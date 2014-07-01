@@ -12,8 +12,11 @@ package com.choicemaker.cm.urm;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 
 import javax.sql.DataSource;
+
+import com.choicemaker.cm.urm.base.DbRecordCollection;
 
 /**
  * An interface implemented by model-specific code to update

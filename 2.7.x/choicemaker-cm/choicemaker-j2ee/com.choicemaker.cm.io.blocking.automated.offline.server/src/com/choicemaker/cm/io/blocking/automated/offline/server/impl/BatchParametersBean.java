@@ -18,7 +18,7 @@ import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
 import javax.ejb.RemoveException;
 
-import com.choicemaker.cm.core.base.SerialRecordSource;
+import com.choicemaker.cm.core.SerialRecordSource;
 
 /**
  * @author pcheung

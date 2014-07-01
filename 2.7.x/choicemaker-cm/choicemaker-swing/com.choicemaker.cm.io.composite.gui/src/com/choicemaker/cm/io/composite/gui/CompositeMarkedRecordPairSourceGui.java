@@ -1,41 +1,56 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 package com.choicemaker.cm.io.composite.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.MarkedRecordPairSource;
-import com.choicemaker.cm.core.util.*;
-import com.choicemaker.cm.core.xmlconf.*;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.util.LoggingObject;
+import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
+import com.choicemaker.cm.core.xmlconf.XmlConfException;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
-import com.choicemaker.cm.gui.utils.dialogs.*;
+import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.composite.base.CompositeMarkedRecordPairSource;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
-import com.choicemaker.cm.modelmaker.gui.dialogs.*;
-import com.choicemaker.cm.modelmaker.gui.utils.*;
+import com.choicemaker.cm.modelmaker.gui.dialogs.MarkedRecordPairSourceGui;
+import com.choicemaker.cm.modelmaker.gui.utils.Enable;
+import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 
 /**
  * The MRPSGui associated the CompositeMarkedRecordPairSource.
- * An objects of this class would be created by the 
+ * An objects of this class would be created by the
  * CompositeMarkedRecordPairSourceFactory.  It is used
  * by the AbstractApplication so that users can easily configure
  * and build CompositeMarkedRecordPairSource.
- * 
+ *
  * @author S. Yoakum-Stover
  * @version $Revision: 1.2 $ $Date: 2010/03/28 08:56:49 $
  */
@@ -110,14 +125,14 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         sourceFileBrowseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
 
         sourcesTableLabel = new JLabel(MessageUtil.m.formatMessage("io.composite.gui.constituting"));
-        
+
         Object[] colNames = { MessageUtil.m.formatMessage("io.composite.gui.column0name"),
         					  MessageUtil.m.formatMessage("io.composite.gui.column1name") };
         DefaultTableModel model = new DefaultTableModel() {
         	private static final long serialVersionUID = 1L;
 
 			public boolean isCellEditable(int row, int column) {
-        		return column == 1;	
+        		return column == 1;
         	}
         };
         model.setDataVector(new Object[0][], colNames);
@@ -131,11 +146,11 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
 		relBox.addItem(RELATIVE);
 		relBox.addItem(ABSOLUTE);
 		sourcesTable.setDefaultEditor(Object.class, new DefaultCellEditor(relBox));
-		
+
         sourcesTableScrollPane = new JScrollPane(sourcesTable);
         sourcesTableScrollPane.setMinimumSize(new Dimension(400, 150));
         sourcesTableScrollPane.setPreferredSize(new Dimension(400, 150));
-                
+
         addButton = new JButton("Add...");
         removeButton = new JButton("Remove");
 
@@ -173,7 +188,7 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         //addButton
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
-				DefaultTableModel m = (DefaultTableModel) sourcesTable.getModel();				
+				DefaultTableModel m = (DefaultTableModel) sourcesTable.getModel();
 				File[] fs = FileChooserFactory.selectMrpsFiles(parent);
                 for (int i = 0; i < fs.length; i++) {
                 	Object[] row = new Object[] { fs[i].getAbsolutePath(), RELATIVE };
@@ -182,10 +197,10 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
                 setEnabledness();
             }
         });
-        
+
         EnablednessGuard guard = new EnablednessGuard(this);
         sourceFileName.getDocument().addDocumentListener(guard);
-        
+
 		JavaHelpUtils.enableHelpKey(this, "io.gui.composite.mrps");
     }
 

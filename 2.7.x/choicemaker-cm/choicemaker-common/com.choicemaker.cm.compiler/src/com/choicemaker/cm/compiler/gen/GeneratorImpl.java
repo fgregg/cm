@@ -32,8 +32,8 @@ import org.xml.sax.SAXParseException;
 
 import com.choicemaker.cm.compiler.ICompilationUnit;
 import com.choicemaker.cm.compiler.parser.Scanner;
-import com.choicemaker.cm.core.base.Constants;
-import com.choicemaker.cm.core.base.DerivedSource;
+import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.DerivedSource;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.gen.CoreTags;
 import com.choicemaker.cm.core.gen.GenException;

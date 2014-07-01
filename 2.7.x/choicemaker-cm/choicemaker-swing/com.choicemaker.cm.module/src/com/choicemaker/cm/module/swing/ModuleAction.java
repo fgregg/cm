@@ -14,8 +14,9 @@ import javax.swing.AbstractAction;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
 
-import com.choicemaker.cm.module.IModuleController;
+import com.choicemaker.cm.module.IModule;
 import com.choicemaker.cm.module.IModule.IOperationModel;
+import com.choicemaker.cm.module.IModuleController;
 
 
 public abstract class ModuleAction extends AbstractAction {

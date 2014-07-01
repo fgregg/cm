@@ -1,8 +1,12 @@
 package com.wcohen.ss.data;
 
-import com.wcohen.ss.*;
-import com.wcohen.ss.api.*;
 import java.util.Collections;
+
+import com.wcohen.ss.BasicDistanceInstanceIterator;
+import com.wcohen.ss.api.DistanceInstance;
+import com.wcohen.ss.api.DistanceInstanceIterator;
+import com.wcohen.ss.api.StringDistanceTeacher;
+import com.wcohen.ss.api.StringWrapperIterator;
 
 /**
  * Train a StringDistanceLearner using MatchData and a Blocker. 

@@ -17,9 +17,9 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
+import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.AbstractRecordSourceSerializer;
-import com.choicemaker.cm.core.base.ISerializableRecordSource;
-import com.choicemaker.cm.core.base.RecordSource;
 
 /**
  * @author rphall

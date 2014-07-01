@@ -10,9 +10,12 @@
  */
 package com.choicemaker.cm.matching.en.us.train.address;
 
-import com.choicemaker.cm.matching.cfg.*;
-import com.choicemaker.cm.matching.en.us.address.*;
-import com.choicemaker.cm.matching.cfg.train.*;
+import com.choicemaker.cm.matching.cfg.Parser;
+import com.choicemaker.cm.matching.cfg.train.FlatFileRawDataReader;
+import com.choicemaker.cm.matching.cfg.train.ParsedDataCreator;
+import com.choicemaker.cm.matching.cfg.train.ParsedDataWriter;
+import com.choicemaker.cm.matching.cfg.train.RawDataReader;
+import com.choicemaker.cm.matching.en.us.address.AddressParserUtils;
 
 /**
  * @author   Adam Winkel

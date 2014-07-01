@@ -1,7 +1,7 @@
 package com.wcohen.ss.api;
 
-import java.util.Iterator;
 import java.io.Serializable;
+import java.util.Iterator;
 
 /**
  * Split a string into tokens.

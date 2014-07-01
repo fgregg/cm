@@ -10,7 +10,9 @@
  */
 package com.choicemaker.cm.server.ejb.impl;
 
-import javax.naming.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 
 /**

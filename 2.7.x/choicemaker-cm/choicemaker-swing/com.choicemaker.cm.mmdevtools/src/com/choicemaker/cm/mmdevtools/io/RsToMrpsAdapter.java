@@ -13,14 +13,14 @@ package com.choicemaker.cm.mmdevtools.io;
 import java.io.IOException;
 import java.util.Date;
 
-import com.choicemaker.cm.core.base.Decision;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.ImmutableRecordPair;
-import com.choicemaker.cm.core.base.MarkedRecordPairSource;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSource;
-import com.choicemaker.cm.core.base.Sink;
 
 /**
  * Comment

@@ -15,11 +15,11 @@ import javax.swing.table.AbstractTableModel;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.base.ClueSet;
-import com.choicemaker.cm.core.base.ColumnDefinition;
-import com.choicemaker.cm.core.base.Decision;
-import com.choicemaker.cm.core.base.IProbabilityModel;
-import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.ColumnDefinition;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.MessageUtil;
 

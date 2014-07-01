@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Record;
 
 /**
  * Description

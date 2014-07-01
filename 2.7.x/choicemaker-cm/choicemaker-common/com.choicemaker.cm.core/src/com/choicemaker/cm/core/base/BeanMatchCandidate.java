@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.core.base;
 
+import com.choicemaker.cm.core.IProbabilityModel;
+
 
 /**
  * Match candidate that holds the actual match record in form of a Java bean constructed

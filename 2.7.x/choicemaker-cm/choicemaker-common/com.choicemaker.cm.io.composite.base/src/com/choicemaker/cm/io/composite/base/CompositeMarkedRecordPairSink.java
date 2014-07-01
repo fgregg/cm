@@ -12,7 +12,11 @@ package com.choicemaker.cm.io.composite.base;
 
 import java.io.IOException;
 
-import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ImmutableRecordPair;
+import com.choicemaker.cm.core.MarkedRecordPairSink;
+import com.choicemaker.cm.core.MarkedRecordPairSource;
 
 /**
  *

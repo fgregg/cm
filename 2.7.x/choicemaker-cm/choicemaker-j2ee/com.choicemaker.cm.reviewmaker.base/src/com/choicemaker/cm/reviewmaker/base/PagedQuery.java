@@ -12,7 +12,7 @@ package com.choicemaker.cm.reviewmaker.base;
 
 import java.rmi.RemoteException;
 
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.sort.SortCondition;
 
 public class PagedQuery {

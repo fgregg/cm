@@ -11,10 +11,10 @@
 package com.choicemaker.cm.mmdevtools.util.profiler;
 
 import java.util.Iterator;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import com.choicemaker.cm.core.base.Record;
+import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.util.IntValuedHashMap;
 
 

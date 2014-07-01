@@ -20,15 +20,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.choicemaker.cm.core.ClueSet;
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.MarkedRecordPairSink;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.ClueSet;
-import com.choicemaker.cm.core.base.Decision;
 import com.choicemaker.cm.core.base.Evaluator;
-import com.choicemaker.cm.core.base.IProbabilityModel;
-import com.choicemaker.cm.core.base.MarkedRecordPairSink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.base.Record;
-import com.choicemaker.cm.core.base.RecordSource;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.core.util.StringUtils;
 

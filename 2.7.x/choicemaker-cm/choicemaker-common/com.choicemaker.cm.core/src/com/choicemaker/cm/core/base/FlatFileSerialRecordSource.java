@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -14,6 +14,11 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfException;
 
@@ -29,29 +34,29 @@ import com.choicemaker.cm.core.xmlconf.XmlConfException;
  * or FlatRecordDataSource or SerializedRecordData or SerializedRecords
  * or SerializedRecordSourceDescriptor or SerializedRecordSource?
  * END BUG
- * </pre> 
+ * </pre>
  * @author pcheung
  *
  */
 public class FlatFileSerialRecordSource implements SerialRecordSource {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger(FlatFileSerialRecordSource.class);
 
 	private String rsFile;
 	private String modelName;
-	
+
 	private transient RecordSource rs;
 	private transient ImmutableProbabilityModel model;
-	
-	
+
+
 	public FlatFileSerialRecordSource (String rsFile, String modelName) {
 		this.modelName = modelName;
 		this.rsFile = rsFile;
 	}
-	
-	
+
+
 	private RecordSource getRS () {
 		if (rs == null) {
 			try {
@@ -179,7 +184,7 @@ public class FlatFileSerialRecordSource implements SerialRecordSource {
 	public boolean equals_00(Object o) {
 		if (o instanceof FlatFileSerialRecordSource) {
 			FlatFileSerialRecordSource rs = (FlatFileSerialRecordSource) o;
-			return rs.rsFile.equals(this.rsFile) && 
+			return rs.rsFile.equals(this.rsFile) &&
 				rs.modelName.equals(this.modelName);
 		} else {
 			return false;

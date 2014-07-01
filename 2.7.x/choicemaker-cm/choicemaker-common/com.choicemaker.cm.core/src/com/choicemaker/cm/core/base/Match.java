@@ -12,6 +12,9 @@ package com.choicemaker.cm.core.base;
 
 import java.util.Arrays;
 
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Record;
+
 /**
  * A match consisting of the ID of the matching record and the
  * match probability.

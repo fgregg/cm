@@ -1,15 +1,7 @@
 package com.choicemaker.maven;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -37,8 +29,6 @@ import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 import com.choicemaker.cm.core.compiler.ICompiler;
-
-import edu.emory.mathcs.backport.java.util.concurrent.helpers.Utils;
 
 /**
  * Parses ClueMaker 2 model files {@code *.g4} and transforms them into Java
@@ -215,22 +205,22 @@ public class ClueMaker2Mojo extends AbstractMojo {
 	// Now pick up all the files and process them with the Tool
 	//
 
-	List<List<String>> argumentSets;
-	try {
-	    List<String> args = getCommandArguments();
-	    argumentSets = processGrammarFiles(args, sourceDirectory);
-	} catch (InclusionScanException ie) {
-	    log.error(ie);
-	    throw new MojoExecutionException(
-		    "Fatal error occured while evaluating the names of the model files to analyze",
-		    ie);
-	}
+//	List<List<String>> argumentSets;
+//	try {
+//	    List<String> args = getCommandArguments();
+//	    argumentSets = processGrammarFiles(args, sourceDirectory);
+//	} catch (InclusionScanException ie) {
+//	    log.error(ie);
+//	    throw new MojoExecutionException(
+//		    "Fatal error occured while evaluating the names of the model files to analyze",
+//		    ie);
+//	}
 
 	log.debug("Output directory base will be "
 		+ outputDirectory.getAbsolutePath());
 	log.info("ClueMaker 2: Processing source directory "
 		+ sourceDirectory.getAbsolutePath());
-	for (List<String> args : argumentSets) {
+//	for (List<String> args : argumentSets) {
 //	    try {
 //		// Create an instance of the ClueMaker 2 build compiler
 //		compiler = new CustomTool(args.toArray(new String[args.size()]));
@@ -252,7 +242,7 @@ public class ClueMaker2Mojo extends AbstractMojo {
 	    // If any of the model files caused errors but did nto throw
 	    // exceptions
 	    // then we should have accumulated errors in the counts
-	}
+//	}
 
 	if (project != null) {
 	    // Tell Maven that there are some new source files underneath the

@@ -10,9 +10,11 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import com.choicemaker.cm.core.base.Descriptor;
+import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.datamodel.DefaultCompositeObservableData;
 
 /**
