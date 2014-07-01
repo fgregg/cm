@@ -11,7 +11,7 @@
       </library>
    </runtime>
    <requires>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.matching.gen"/>
    </requires>
 

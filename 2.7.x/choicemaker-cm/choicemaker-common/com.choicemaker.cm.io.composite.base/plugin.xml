@@ -12,14 +12,14 @@
    </runtime>
    <requires>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
    </requires>
 
 
    <extension
          id="compositeMrpsReader"
          name="compositeMrpsReader"
-         point="com.choicemaker.cm.core.base.mrpsReader">
+         point="com.choicemaker.cm.core.mrpsReader">
       <handler
             name="Composite IO"
             class="com.choicemaker.cm.io.composite.base.xmlconf.CompositeMarkedRecordPairSourceXmlConf"
@@ -30,7 +30,7 @@
    <extension
          id="compositeRsReader"
          name="compositeRsReader"
-         point="com.choicemaker.cm.core.base.rsReader">
+         point="com.choicemaker.cm.core.rsReader">
       <handler
             name="Composite RS"
             class="com.choicemaker.cm.io.composite.base.xmlconf.CompositeRecordSourceXmlConf"

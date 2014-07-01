@@ -51,7 +51,7 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record)
+	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.Record)
 	 */
 	public RecordSource block(Record q) {
 		HashSet res = new HashSet();
@@ -62,7 +62,7 @@ public class CompositeExactInMemoryBlocker implements InMemoryBlocker {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.base.Record, int)
+	 * @see com.choicemaker.cm.train.matcher.InMemoryBlocker#block(com.choicemaker.cm.core.Record, int)
 	 */
 	public RecordSource block(Record q, int start) {
 		HashSet res = new HashSet();

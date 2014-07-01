@@ -11,11 +11,11 @@
       </library>
    </runtime>
    <requires>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
    </requires>
 
 
-   <extension-point id="initializer" name="%ExtPoint.initializer" schema="schema/initializer.exsd"/>
-   <extension-point id="boundObject" name="%ExtPoint.boundObject" schema="schema/boundObject.exsd"/>
+   <extension-point id="initializer" name="Initializer" schema="schema/initializer.exsd"/>
+   <extension-point id="boundObject" name="Bound Object" schema="schema/boundObject.exsd"/>
 
 </plugin>

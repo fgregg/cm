@@ -78,7 +78,7 @@ public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
 
 	List omList = new LinkedList();
 	IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(
-		"com.choicemaker.cm.core.base.objectGenerator");
+		"com.choicemaker.cm.core.objectGenerator");
 	IExtension[] extensions = pt.getExtensions();
 	for (int i = 0; i < extensions.length; i++) {
 	    IExtension extension = extensions[i];

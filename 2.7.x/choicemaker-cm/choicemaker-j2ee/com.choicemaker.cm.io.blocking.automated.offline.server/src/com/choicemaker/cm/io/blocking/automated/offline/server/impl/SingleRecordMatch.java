@@ -80,7 +80,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + SingleRecordMatch.class.getName());
 
 	public static final String DATABASE_ACCESSOR = "com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
-	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.base.matchCandidate";
+	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.matchCandidate";
 
 	private transient MessageDrivenContext mdc = null;
 	private EJBConfiguration configuration = null;
@@ -347,7 +347,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 		MatchCandidateFactory matchCandidateFactory = (MatchCandidateFactory)
 			Platform.getPluginRegistry()
-			.getExtension(MATCH_CANDIDATE, "com.choicemaker.cm.core.base.beanMatchCandidate")
+			.getExtension(MATCH_CANDIDATE, "com.choicemaker.cm.core.beanMatchCandidate")
 			.getConfigurationElements()[0]
 			.createExecutableExtension("class");
 		log.debug("MatchCandidateFactory class: " + matchCandidateFactory.getClass().getName());

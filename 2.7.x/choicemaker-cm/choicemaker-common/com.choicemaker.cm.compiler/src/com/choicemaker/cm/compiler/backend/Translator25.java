@@ -164,11 +164,11 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	// Factory methods
     
 	protected Tree clue_desc_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.ClueDesc");
+		return qualid(pos, "com.choicemaker.cm.core.ClueDesc");
 	}
    	
 	protected Tree[] interfaces(int pos) {
-		return new Tree[]{qualid(pos, "com.choicemaker.cm.core.base.ClueSet")};
+		return new Tree[]{qualid(pos, "com.choicemaker.cm.core.ClueSet")};
 	}
     
 	protected Tree clue_desc_arr_ident(int pos) {
@@ -192,11 +192,11 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree decision_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.Decision");
+		return qualid(pos, "com.choicemaker.cm.core.Decision");
 	}
     
 	protected Tree ext_decision_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.ExtDecision");
+		return qualid(pos, "com.choicemaker.cm.core.ExtDecision");
 	}
     
 	protected VarDecl[] decision_var_decls(int pos) {
@@ -224,7 +224,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree record_ident(int pos) {
-		return qualid(pos, "com.choicemaker.cm.core.base.Record");
+		return qualid(pos, "com.choicemaker.cm.core.Record");
 	}
   	
 	protected Tree boolean_ident(int pos) {
@@ -432,6 +432,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 			unit.error(t.pos, x.getMessage());
 			return;
 		}
+		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "com.choicemaker.cm.core"), true));
 		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "com.choicemaker.cm.core.base"), true));
 		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "org.apache.log4j"), true));
 		createAuxiliaryMembersBegin(t);
@@ -597,7 +598,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 				new Literal(Location.NOPOS, INT, new Integer(size))));
 		Tree[] mb2 = { new Return(new Literal(Location.NOPOS, INT, new Integer(size)))};
 		body.append(new JMethodDecl(Modifiers.PUBLIC, "size", int_ident(t.pos), null, null, mb2));
-		Tree cluesettype = qualid(t.pos, "com.choicemaker.cm.core.base.ClueSetType");
+		Tree cluesettype = qualid(t.pos, "com.choicemaker.cm.core.ClueSetType");
 		body.append(
 			new JMethodDecl(
 				Modifiers.PUBLIC,
@@ -608,7 +609,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 					new Return(
 						qualid(
 							t.pos,
-							"com.choicemaker.cm.core.base.ClueSetType." +
+							"com.choicemaker.cm.core.ClueSetType." +
 							    t.type.getConstant()))}));
 		body.append(
 			new JMethodDecl(

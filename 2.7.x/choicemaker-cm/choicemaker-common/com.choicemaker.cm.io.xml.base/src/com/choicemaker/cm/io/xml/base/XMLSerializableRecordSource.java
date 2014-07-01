@@ -64,42 +64,42 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.RecordSource#getNext()
+	 * @see com.choicemaker.cm.core.RecordSource#getNext()
 	 */
 	public Record getNext() throws IOException {
 		return getRS().getNext();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.Source#open()
+	 * @see com.choicemaker.cm.core.Source#open()
 	 */
 	public void open() throws IOException {
 		getRS().open ();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.Source#close()
+	 * @see com.choicemaker.cm.core.Source#close()
 	 */
 	public void close() throws IOException {
 		getRS().close();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.Source#hasNext()
+	 * @see com.choicemaker.cm.core.Source#hasNext()
 	 */
 	public boolean hasNext() throws IOException {
 		return getRS().hasNext();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.Source#getName()
+	 * @see com.choicemaker.cm.core.Source#getName()
 	 */
 	public String getName() {
 		return getRS().getName();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.Source#setName(java.lang.String)
+	 * @see com.choicemaker.cm.core.Source#setName(java.lang.String)
 	 */
 	public void setName(String name) {
 		getRS().setName(name);
@@ -107,28 +107,28 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.Source#setModel(com.choicemaker.cm.core.base.ImmutableProbabilityModel)
+	 * @see com.choicemaker.cm.core.Source#setModel(com.choicemaker.cm.core.ImmutableProbabilityModel)
 	 */
 	public void setModel(ImmutableProbabilityModel m) {
 		getRS().setModel(m);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.Source#hasSink()
+	 * @see com.choicemaker.cm.core.Source#hasSink()
 	 */
 	public boolean hasSink() {
 		return getRS().hasSink();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.Source#getSink()
+	 * @see com.choicemaker.cm.core.Source#getSink()
 	 */
 	public Sink getSink() {
 		return getRS().getSink();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.Source#getFileName()
+	 * @see com.choicemaker.cm.core.Source#getFileName()
 	 */
 	public String getFileName() {
 		return getRS().getFileName();

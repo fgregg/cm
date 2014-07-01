@@ -60,7 +60,7 @@ public class XmlRecordSink implements RecordSink {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.base.Sink#flush()
+	 * @see com.choicemaker.cm.core.Sink#flush()
 	 */
 	public void flush() throws IOException {
 		w.flush();

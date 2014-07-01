@@ -53,6 +53,6 @@ public class NoneFactory implements MlModelConf {
 	 * @see com.choicemaker.cm.xmlconf.MlModelConf#getExtensionPointId()
 	 */
 	public String getExtensionPointId() {
-		return "com.choicemaker.cm.core.base.none";
+		return "com.choicemaker.cm.core.none";
 	}
 }

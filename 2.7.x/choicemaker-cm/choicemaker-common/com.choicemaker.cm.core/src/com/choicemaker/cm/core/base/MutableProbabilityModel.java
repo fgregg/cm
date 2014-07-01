@@ -454,7 +454,7 @@ class MutableProbabilityModel implements IProbabilityModel, ImmutableProbability
 	}
 
 	private void setAccessorInternal(Accessor accessor) {
-		IExtension[] accessorElems = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.base.accessor").getExtensions();
+		IExtension[] accessorElems = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.accessor").getExtensions();
 		Class[] interfaces = new Class[accessorElems.length];
 		for (int i = 0; i < interfaces.length; i++) {
 			IExtension accessorElem = accessorElems[i];

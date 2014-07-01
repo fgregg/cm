@@ -16,7 +16,7 @@ public class Eclipse2GeneratorPluginFactory implements
 	private static final Logger logger = Logger
 			.getLogger(Eclipse2GeneratorPluginFactory.class.getName());
 
-	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.base.generatorPlugin";
+	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.generatorPlugin";
 
 	public static final String EXTENSION_EXECUTABLE_PROPERTY = "class";
 

@@ -82,6 +82,7 @@ public class DbReaderConfigurationGenerator {
 			w.write("import org.apache.log4j.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.util.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.sql.*;" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.io.db.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import " + g.getPackage() + ".*;" + Constants.LINE_SEPARATOR);

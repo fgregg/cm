@@ -69,7 +69,7 @@ public class QueryServiceBean implements SessionBean {
 	public static final String REPORTING_SOURCE = "java:comp/env/jdbc/reportingSource";
 	public static final String REPORTING_FILE = "reportingFile";
 	public static final String DATABASE_ACCESSOR = "com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
-	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.base.matchCandidate";
+	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.matchCandidate";
 
 	private static boolean inited;
 	private static transient Reporter fileReporter;

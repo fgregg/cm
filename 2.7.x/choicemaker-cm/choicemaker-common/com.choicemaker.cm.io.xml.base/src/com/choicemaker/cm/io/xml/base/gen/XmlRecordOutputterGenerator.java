@@ -107,6 +107,7 @@ public class XmlRecordOutputterGenerator implements GeneratorPlugin {
 			w.write("import org.apache.log4j.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.util.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.io.*;" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.util.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.io.xml.base.*;" + Constants.LINE_SEPARATOR);

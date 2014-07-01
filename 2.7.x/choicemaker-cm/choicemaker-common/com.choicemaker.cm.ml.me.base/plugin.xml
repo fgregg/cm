@@ -11,14 +11,14 @@
       </library>
    </runtime>
    <requires>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
    </requires>
 
 
    <extension
          id="me"
          name="me"
-         point="com.choicemaker.cm.core.base.machineLearner">
+         point="com.choicemaker.cm.core.machineLearner">
       <config
             name="ME"
             class="com.choicemaker.cm.ml.me.xmlconf.MeModelConf"

@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.Sink;
  * Creates blockingSets (using a BlockingSetFactory) and provides
  * methods for retrieving blocked records from a database (the
  * {@link AutomatedBlocker} interface extends the
- * {@link com.choicemaker.cm.core.base.RecordSource} interface).<p>
+ * {@link com.choicemaker.cm.core.RecordSource} interface).<p>
  *
  * This class is a refactored version of the {@link Blocker} class. The
  * ABA algorithm has moved to a {@link BlockingSetFactory} class

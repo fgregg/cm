@@ -12,13 +12,13 @@
       <library name="lib/protomatter-1.1.8-ABRIDGED.jar"/>
    </runtime>
    <requires>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
       <!-- import plugin="javax.sql" export="true"/ -->
    </requires>
 
 
    <extension
-         point="com.choicemaker.cm.core.base.generatorPlugin">
+         point="com.choicemaker.cm.core.generatorPlugin">
       <plugin
             name="DB"
             class="com.choicemaker.cm.io.db.base.gen.DbGenerator">
@@ -27,7 +27,7 @@
    <extension
          id="dbMrpsReader"
          name="dbMrpsReader"
-         point="com.choicemaker.cm.core.base.mrpsReader">
+         point="com.choicemaker.cm.core.mrpsReader">
       <handler
             name="DB"
             class="com.choicemaker.cm.io.db.base.xmlconf.DbMarkedRecordPairSourceXmlConf"
@@ -38,14 +38,14 @@
    <extension
          id="dbAccessor"
          name="dbAccessor"
-         point="com.choicemaker.cm.core.base.accessor">
+         point="com.choicemaker.cm.core.accessor">
       <accessor
             class="com.choicemaker.cm.io.db.base.DbAccessor">
       </accessor>
    </extension>
    <extension
          id="dbRsReader"
-         point="com.choicemaker.cm.core.base.rsReader">
+         point="com.choicemaker.cm.core.rsReader">
       <handler
             name="DB"
             class="com.choicemaker.cm.io.db.base.xmlconf.DbRecordSourceXmlConf"

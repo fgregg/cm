@@ -13,7 +13,7 @@
       <import plugin="com.choicemaker.cm.io.blocking.automated.offline.core"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="com.choicemaker.cm.transitivity.core"/>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
    </requires>
 
 

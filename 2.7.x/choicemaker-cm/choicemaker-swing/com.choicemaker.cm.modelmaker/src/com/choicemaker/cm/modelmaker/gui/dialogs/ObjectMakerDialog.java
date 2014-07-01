@@ -177,7 +177,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		ArrayList descs = new ArrayList();
 		ArrayList defs = new ArrayList();
 		
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.base.objectGenerator");
+		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.objectGenerator");
 		IExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
 			IExtension extension = extensions[i];

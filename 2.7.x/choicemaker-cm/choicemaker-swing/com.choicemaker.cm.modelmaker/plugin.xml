@@ -14,7 +14,7 @@
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="com.choicemaker.cm.analyzer.base"/>
       <import plugin="com.choicemaker.cm.compiler"/>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
       <import plugin="jfree.jfreechart.eclipse2plugin"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="javax.help.eclipse2plugin"/>
@@ -29,13 +29,13 @@
    </requires>
 
 
-   <extension-point id="mrpsReaderGui" name="%ExtPoint.mrpsReaderGui" schema="schema/mrpsReaderGui.exsd"/>
-   <extension-point id="mlTrainGuiPlugin" name="mlTrainGuiPlugin" schema="schema/mlTrainGuiPlugin.exsd"/>
-   <extension-point id="rsReaderGui" name="%ExtPoint.rsReaderGui" schema="schema/rsReaderGui.exsd"/>
-   <extension-point id="matcherBlockingToolkit" name="%ExtPoint.matcherBlockingToolkit" schema="schema/matcherBlockingToolkit.exsd"/>
-   <extension-point id="toolMenuItem" name="toolMenuItem" schema="schema/toolMenuItem.exsd"/>
-   <extension-point id="pluggableMenuItem" name="pluggableMenuItem" schema="schema/pluggableMenuItem.exsd"/>
-   <extension-point id="pluggableController" name="clusterController" schema="schema/clusterController.exsd"/>
+   <extension-point id="mrpsReaderGui" name="MRPS Reader Gui" schema="schema/mrpsReaderGui.exsd"/>
+   <extension-point id="mlTrainGuiPlugin" name="Machine Learning Training Gui" schema="schema/mlTrainGuiPlugin.exsd"/>
+   <extension-point id="rsReaderGui" name="RecordSource Reader Gui" schema="schema/rsReaderGui.exsd"/>
+   <extension-point id="matcherBlockingToolkit" name="Matcher Blocking Toolkit" schema="schema/matcherBlockingToolkit.exsd"/>
+   <extension-point id="toolMenuItem" name="Tool Menu Item" schema="schema/toolMenuItem.exsd"/>
+   <extension-point id="pluggableMenuItem" name="Pluggable Menu Item" schema="schema/pluggableMenuItem.exsd"/>
+   <extension-point id="pluggableController" name="Cluster Controller" schema="schema/clusterController.exsd"/>
 
    <extension
          id="ModelMaker"
@@ -58,7 +58,7 @@
       <gui
             name="None"
             class="com.choicemaker.cm.ml.none.gui.NoneGuiFactory"
-            handledClass="com.choicemaker.cm.core.base.ml.none.None">
+            handledClass="com.choicemaker.cm.core.ml.none.None">
       </gui>
    </extension>
 

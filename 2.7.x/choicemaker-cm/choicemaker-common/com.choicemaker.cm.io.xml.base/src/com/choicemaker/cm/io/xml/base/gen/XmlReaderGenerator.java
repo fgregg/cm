@@ -58,6 +58,7 @@ public class XmlReaderGenerator implements GeneratorPlugin {
 			w.write("import java.util.*;" + Constants.LINE_SEPARATOR);
 			w.write("import org.xml.sax.*;" + Constants.LINE_SEPARATOR);
 			w.write("import org.xml.sax.helpers.*;" + Constants.LINE_SEPARATOR);
+			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.io.xml.base.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.util.*;" + Constants.LINE_SEPARATOR);

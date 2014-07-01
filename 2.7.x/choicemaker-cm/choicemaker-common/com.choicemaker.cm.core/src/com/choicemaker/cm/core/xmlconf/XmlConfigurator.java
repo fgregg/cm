@@ -92,7 +92,7 @@ public class XmlConfigurator {
 
 	private static void initReports() {
 		List reporters = new ArrayList();
-		IExtensionPoint reporterExts = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.base.reporter");
+		IExtensionPoint reporterExts = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.reporter");
 		List reporterConfigs = getCore().getChildren("reporter");
 		for (Iterator iReporterConfigs = reporterConfigs.iterator(); iReporterConfigs.hasNext();) {
 			Element reporterConfig = (Element) iReporterConfigs.next();

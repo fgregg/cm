@@ -12,7 +12,7 @@
    </runtime>
    <requires>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.matching.gen"/>
       <import plugin="com.choicemaker.cm.matching.cfg"/>
       <import plugin="com.choicemaker.cm.matching.en.us"/>

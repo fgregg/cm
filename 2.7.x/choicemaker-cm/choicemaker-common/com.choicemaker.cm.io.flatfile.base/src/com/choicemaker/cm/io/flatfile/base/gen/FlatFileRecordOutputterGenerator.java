@@ -122,6 +122,8 @@ public class FlatFileRecordOutputterGenerator implements GeneratorPlugin {
 			w.write("import java.util.*;" + Constants.LINE_SEPARATOR);
 			w.write("import java.io.*;" + Constants.LINE_SEPARATOR);
 			w.write(
+				"import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
+			w.write(
 				"import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 			w.write(
 				"import com.choicemaker.cm.io.flatfile.base.*;"

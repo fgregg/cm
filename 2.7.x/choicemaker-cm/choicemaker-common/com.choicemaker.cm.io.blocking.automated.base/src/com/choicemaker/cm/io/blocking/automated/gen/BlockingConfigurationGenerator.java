@@ -113,6 +113,7 @@ public class BlockingConfigurationGenerator {
 		w.write("package " + packageName + ";" + Constants.LINE_SEPARATOR);
 		w.write("import org.apache.log4j.*;" + Constants.LINE_SEPARATOR);
 		w.write("import java.util.*;" + Constants.LINE_SEPARATOR);
+		w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 		w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
 		w.write("import com.choicemaker.cm.io.blocking.automated.base.*;" + Constants.LINE_SEPARATOR);
 		w.write("import " + g.getPackage() + ".*;" + Constants.LINE_SEPARATOR);

@@ -12,7 +12,7 @@
    </runtime>
    <requires>
       <import plugin="com.choicemaker.cm.compiler"/>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.gui.utils"/>
       <import plugin="com.choicemaker.cm.matching.gen"/>
       <import plugin="com.choicemaker.cm.matching.en.us"/>
@@ -63,7 +63,7 @@
    <extension
          id="RsToMrpsAdapter"
          name="RsToMrps"
-         point="com.choicemaker.cm.core.base.mrpsReader">
+         point="com.choicemaker.cm.core.mrpsReader">
       <handler
             name="RsToMrps"
             class="com.choicemaker.cm.mmdevtools.xmlconf.RsToMrpsAdapterXmlConf"
@@ -73,7 +73,7 @@
    <extension
          id="MrpsToRsAdapter"
          name="MrpsToRs"
-         point="com.choicemaker.cm.core.base.rsReader">
+         point="com.choicemaker.cm.core.rsReader">
       <handler
             name="MrpsToRs"
             class="com.choicemaker.cm.mmdevtools.xmlconf.MrpsToRsAdapterXmlConf"

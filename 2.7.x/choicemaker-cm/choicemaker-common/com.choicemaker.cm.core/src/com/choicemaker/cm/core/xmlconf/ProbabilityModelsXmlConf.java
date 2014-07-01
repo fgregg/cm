@@ -272,7 +272,7 @@ public class ProbabilityModelsXmlConf {
 			String name = mle.getAttributeValue("class");
 			MlModelConf mc =
 				(MlModelConf) ExtensionPointMapper.getInstance(
-					"com.choicemaker.cm.core.base.machineLearner",
+					"com.choicemaker.cm.core.machineLearner",
 					name);
 			ml = mc.readMachineLearner(mle, accessor, cl, oldClueNums);
 		} catch (Exception ex) {

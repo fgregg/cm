@@ -50,7 +50,7 @@ public class DefaultRecordSourceSerializationRegistry
 	 * <code>com.choicemaker.cm.urm.updateDerivedFields</code>
 	 */
 	public static final String SERIALIZABLE_RECORD_SOURCE_EXTENSION_POINT =
-		"com.choicemaker.cm.core.base.rsSerializer";
+		"com.choicemaker.cm.core.rsSerializer";
 
 	/** The serializer priority attribute, <code>priority</code> */
 	public static final String SERIALIZABLE_RECORD_SOURCE_PRIORITY = "priority"; //$NON-NLS-1$

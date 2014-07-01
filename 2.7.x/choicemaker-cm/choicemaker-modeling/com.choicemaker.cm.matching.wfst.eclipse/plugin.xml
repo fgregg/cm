@@ -12,7 +12,7 @@
    </runtime>
    <requires>
       <import plugin="com.choicemaker.cm.matching.wfst"/>
-      <import plugin="com.choicemaker.cm.core.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
    </requires>
 
 
