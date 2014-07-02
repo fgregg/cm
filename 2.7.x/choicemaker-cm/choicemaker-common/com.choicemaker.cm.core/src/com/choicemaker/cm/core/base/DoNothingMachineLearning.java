@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.core.ml.none;
+package com.choicemaker.cm.core.base;
 
 import java.util.Collection;
 
@@ -16,7 +16,6 @@ import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
 
 /**
@@ -25,7 +24,7 @@ import com.choicemaker.cm.core.xmlconf.MlModelConf;
  * @author  Martin Buechi
  * @version $Revision: 1.2 $ $Date: 2010/03/24 18:24:05 $
  */
-public class None implements MachineLearner {
+public class DoNothingMachineLearning implements MachineLearner {
 
 	/**
 	 * @see com.choicemaker.cm.core.MachineLearner#getEvaluator()
@@ -57,7 +56,7 @@ public class None implements MachineLearner {
 	 * @see com.choicemaker.cm.core.MachineLearner#getModelConf()
 	 */
 	public MlModelConf getModelConf() {
-		return NoneFactory.instance;
+		return DoNothingMachineLearningPersistance.instance;
 	}
 
 	/**

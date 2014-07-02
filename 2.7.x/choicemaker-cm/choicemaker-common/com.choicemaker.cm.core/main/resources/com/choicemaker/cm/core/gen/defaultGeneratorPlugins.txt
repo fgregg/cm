@@ -1,15 +1,15 @@
 # The default list of generator plugin classes
-com.choicemaker.cm.io.blocking.automated.gen.BlockingConfigurationsGenerator
-com.choicemaker.cm.io.blocking.exact.base.gen.BlockingConfigurationsGenerator
+#com.choicemaker.cm.io.blocking.automated.gen.BlockingConfigurationsGenerator
+#com.choicemaker.cm.io.blocking.exact.base.gen.BlockingConfigurationsGenerator
 com.choicemaker.cm.io.blocking.automated.gen.BlockingGenerator
 com.choicemaker.cm.io.blocking.exact.base.gen.BlockingGenerator
 com.choicemaker.cm.io.db.base.gen.DbGenerator
-com.choicemaker.cm.io.db.base.gen.DbReaderConfigurationsGenerator
+#com.choicemaker.cm.io.db.base.gen.DbReaderConfigurationsGenerator
 com.choicemaker.cm.io.flatfile.base.gen.FlatFileGenerator
-com.choicemaker.cm.io.flatfile.base.gen.FlatFileMultiFileReaderGenerator
-com.choicemaker.cm.io.flatfile.base.gen.FlatFileRecordOutputterGenerator
-com.choicemaker.cm.io.flatfile.base.gen.FlatFileSingleFileReaderGenerator
+#com.choicemaker.cm.io.flatfile.base.gen.FlatFileMultiFileReaderGenerator
+#com.choicemaker.cm.io.flatfile.base.gen.FlatFileRecordOutputterGenerator
+#com.choicemaker.cm.io.flatfile.base.gen.FlatFileSingleFileReaderGenerator
 com.choicemaker.cm.compiler.gen.GuiDescriptorGenerator
 com.choicemaker.cm.io.xml.base.gen.XmlGenerator
-com.choicemaker.cm.io.xml.base.gen.XmlReaderGenerator
-com.choicemaker.cm.io.xml.base.gen.XmlRecordOutputterGenerator
+#com.choicemaker.cm.io.xml.base.gen.XmlReaderGenerator
+#com.choicemaker.cm.io.xml.base.gen.XmlRecordOutputterGenerator

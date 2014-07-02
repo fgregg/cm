@@ -36,9 +36,7 @@ import com.choicemaker.cm.core.base.BeanMatchCandidate;
 import com.choicemaker.cm.core.base.MatchCandidate;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
-import com.choicemaker.cm.core.compiler.DoNothingCompiler;
-import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
+import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
@@ -224,8 +222,9 @@ public class TransitivityServiceBean implements SessionBean {
 
 	private static synchronized void init(DataSource dataSource) throws XmlConfException, RemoteException, DatabaseException {
 		if (!inited) {
-			ICompiler compiler = DoNothingCompiler.instance;
-			XmlConfigurator.embeddedInit(compiler);
+//			ICompiler compiler = DoNothingCompiler.instance;
+//			XmlConfigurator.embeddedInit(compiler);
+			EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
 			// BUG 2009-08-21 rphall
 			// The following code can cause unnecessary recalculations of counts
 			// that are persistent in a database. For example, if CM Server is

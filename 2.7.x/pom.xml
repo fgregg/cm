@@ -64,6 +64,7 @@
     <!--
     <module>cluemaker-maven-plugin</module>
     -->
+    <module>misc/compiler-app</module>
   </modules>
 
 </project>

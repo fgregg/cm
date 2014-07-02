@@ -24,38 +24,27 @@ import com.choicemaker.cm.core.ProbabilityModelSpecification;
  *
  * @author rphall
  */
-public final class DoNothingCompiler implements ICompiler {
+final class DoNothingCompiler implements ICompiler {
 
-	public static final ICompiler instance = new DoNothingCompiler();
+	static final ICompiler instance = new DoNothingCompiler();
 
 	private DoNothingCompiler() {}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.compiler.ICompiler#compile(com.choicemaker.cm.core.base.compiler.CompilationArguments, java.io.Writer)
-	 */
 	public String compile(CompilationArguments arguments, Writer statusOutput)
 		throws CompilerException {
-		throw new RuntimeException("Compiler method 'compile' not implemented");
+		throw new CompilerException("Compiler method 'compile' not implemented");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.compiler.ICompiler#compile(com.choicemaker.cm.core.base.ProbabilityModel, java.io.Writer)
-	 */
-	public boolean compile(IProbabilityModel model, Writer statusOutput)
+	public ImmutableProbabilityModel compile(ProbabilityModelSpecification model, Writer statusOutput)
 		throws CompilerException {
-			throw new RuntimeException("Compiler method 'compile' not implemented");
+			throw new CompilerException("Compiler method 'compile' not implemented");
 	}
 
-	public ImmutableProbabilityModel compile(
-			ProbabilityModelSpecification model, Writer statusOutput)
+	public boolean compile(IProbabilityModel model, Writer statusOutput)
 			throws CompilerException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new CompilerException("Compiler method 'compile' not implemented");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.base.compiler.ICompiler#getFeatures()
-	 */
 	public Properties getFeatures() {
 		return new Properties();
 	}

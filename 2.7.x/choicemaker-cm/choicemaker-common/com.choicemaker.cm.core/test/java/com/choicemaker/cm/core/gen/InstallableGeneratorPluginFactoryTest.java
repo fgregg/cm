@@ -1,4 +1,4 @@
-package com.choicemaker.cm.core.install;
+package com.choicemaker.cm.core.gen;
 
 import java.util.List;
 import java.util.Properties;
@@ -9,8 +9,8 @@ import com.choicemaker.cm.core.PropertyNames;
 import com.choicemaker.cm.core.gen.Eclipse2GeneratorPluginFactory;
 import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.IGeneratorPluginFactory;
+import com.choicemaker.cm.core.gen.InstallableGeneratorPluginFactory;
 import com.choicemaker.cm.core.gen.ListBackedGeneratorPluginFactory;
-import com.choicemaker.cm.core.gen.ListBackedGeneratorPluginFactoryTest;
 
 public class InstallableGeneratorPluginFactoryTest extends TestCase {
 

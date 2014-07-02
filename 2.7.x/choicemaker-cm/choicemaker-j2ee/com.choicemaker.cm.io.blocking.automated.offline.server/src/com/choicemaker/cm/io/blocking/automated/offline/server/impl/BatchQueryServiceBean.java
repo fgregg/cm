@@ -28,9 +28,7 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.SerialRecordSource;
-import com.choicemaker.cm.core.compiler.DoNothingCompiler;
-import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
+import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
@@ -372,8 +370,9 @@ public class BatchQueryServiceBean implements SessionBean {
 			this.configuration = EJBConfiguration.getInstance();
 
 			if (!initialized) {
-				ICompiler compiler = DoNothingCompiler.instance;
-				XmlConfigurator.embeddedInit(compiler);
+//				ICompiler compiler = DoNothingCompiler.instance;
+//				XmlConfigurator.embeddedInit(compiler);
+				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
 				initialized = true;
 			}
 		} catch (Exception ex) {

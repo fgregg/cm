@@ -36,7 +36,7 @@
          point="com.choicemaker.cm.core.machineLearner">
       <config
             name="None"
-            class="com.choicemaker.cm.core.ml.none.NoneFactory">
+            class="com.choicemaker.cm.core.base.DoNothingMachineLearningPersistance">
       </config>
    </extension>
    <extension

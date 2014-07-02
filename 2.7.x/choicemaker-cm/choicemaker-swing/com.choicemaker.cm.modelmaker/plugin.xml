@@ -58,7 +58,7 @@
       <gui
             name="None"
             class="com.choicemaker.cm.ml.none.gui.NoneGuiFactory"
-            handledClass="com.choicemaker.cm.core.ml.none.None">
+            handledClass="com.choicemaker.cm.core.base.DoNothingMachineLearning">
       </gui>
    </extension>
 

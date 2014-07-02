@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.core.ml.none;
+package com.choicemaker.cm.core.base;
 
 import java.util.List;
 
@@ -24,17 +24,17 @@ import com.choicemaker.cm.core.xmlconf.MlModelConf;
  * @author  Martin Buechi
  * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:05 $
  */
-public class NoneFactory implements MlModelConf {
-	public static NoneFactory instance = new NoneFactory();
+public class DoNothingMachineLearningPersistance implements MlModelConf {
+	public static DoNothingMachineLearningPersistance instance = new DoNothingMachineLearningPersistance();
 
-	public NoneFactory() {
+	public DoNothingMachineLearningPersistance() {
 	}
 
 	/**
 	 * @see com.choicemaker.cm.xmlconf.MlModelConf#readMachineLearner(org.jdom.Element, com.choicemaker.cm.core.base.Accessor, java.util.List, int)
 	 */
 	public MachineLearner readMachineLearner(Element e, Accessor acc, List clues, int[] oldClueNums) {
-		return new None();
+		return new DoNothingMachineLearning();
 	}
 
 	/**

@@ -154,7 +154,7 @@ public class ClueTableModel extends SortableTableModel {
 		}
 		
 		MachineLearner ml = model.getMachineLearner();
-		if (ml != null && !(ml instanceof com.choicemaker.cm.core.ml.none.None)) {
+		if (ml != null && !(ml instanceof com.choicemaker.cm.core.base.DoNothingMachineLearning)) {
 			plugin = MlGuiFactories.getGui(ml).getClueTableModelPlugin();
 			plugin.setModel(model);
 			plugin.setStartColumn(PRE_COLUMNS.length);

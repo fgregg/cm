@@ -1,13 +1,15 @@
 package com.choicemaker.cm.core.configure;
 
+import java.io.File;
 import java.util.List;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.core.compiler.ICompiler;
 
 /**
  * A read-only bean that represents a ChoiceMaker configuration in a particular
- * application in a particular operatin environment. The structure of the bean
+ * application in a particular operating environment. The structure of the bean
  * is basically dictated by the structure of the so-called project.xml
  * configuration files that have been part of every ChoiceMaker deployment at
  * least since version 2.3.<br/>
@@ -22,8 +24,8 @@ import com.choicemaker.cm.core.MachineLearner;
  * <br/>
  * The current ChoiceMaker configuration for an application may be obtained from
  * the singleton instance of the
- * {@link com.choicemaker.cm.core.install.InstalledChoiceMakerConfiguration
- * InstalledChoiceMakerConfiguration} class.
+ * {@link com.choicemaker.cm.core.install.InstalledConfiguration
+ * InstalledConfiguration} class.
  *
  * @author rphall
  *
@@ -36,36 +38,18 @@ public interface ChoiceMakerConfiguration {
 	 */
 	public static final String INSTANCE = "instance";
 
-	/**
-	 * Checks whether a configuration is valid. A configuration should be valid
-	 * immediately after a {@link ChoiceMakerConfigurator configurator}
-	 * {@link ChoiceMakerConfigurator#init(String, boolean, boolean) creates and
-	 * initializes it}. A configuration may become invalid if a
-	 * {@link ChoiceMakerConfigurator configurator} subsequently modifies it.
-	 * Implementations should treat {@link #isValid() validity} as an invariant;
-	 * if a configuration is invalid, any method for a property accessor
-	 * (besides {@link #isValid()}) should throw an
-	 * {@link java.lang.IllegalStateException}.
-	 */
-	boolean isValid();
+	String getFileName();
 
-//	/**
-//	 * Invalidates a configuration. This method should be nilpotent after the
-//	 * first invocation; i.e. it should invalidate a configuration on the first
-//	 * invocation, but have no effect on subsequent invocations.
-//	 */
-//	void invalidate();
+	MachineLearnerPersistence getMachineLearnerPersistence(MachineLearner model);
 
 	ProbabilityModelPersistence getModelPersistence(
 			ImmutableProbabilityModel model);
 
-	MachineLearnerPersistence getMachineLearnerPersistence(MachineLearner model);
+	List getProbabilityModelConfigurations();
 
 	ClassLoader getClassLoader();
 
 	ClassLoader getRmiClassLoader();
-
-	List getProbabilityModelConfigurations();
 
 	String getClassPath();
 
@@ -73,8 +57,16 @@ public interface ChoiceMakerConfiguration {
 
 	String getJavaDocClasspath();
 
-	String toXml();
+	File getWorkingDirectory();
 
-	String getFileName();
+	ICompiler getChoiceMakerCompiler();
+
+	void reloadClasses();
+
+	void deleteGeneratedCode();
+
+	String getCodeRoot();
+
+	String toXml();
 
 }

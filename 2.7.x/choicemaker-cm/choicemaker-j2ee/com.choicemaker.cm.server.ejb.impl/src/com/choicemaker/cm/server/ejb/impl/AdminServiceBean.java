@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -21,9 +21,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.core.compiler.DoNothingCompiler;
-import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
+import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.server.base.DatabaseException;
 
 /**
@@ -38,8 +36,9 @@ public class AdminServiceBean implements SessionBean {
 
 	public void ejbCreate() throws CreateException {
 		try {
-			ICompiler compiler = DoNothingCompiler.instance;
-			XmlConfigurator.embeddedInit(compiler);
+//			ICompiler compiler = DoNothingCompiler.instance;
+//			XmlConfigurator.embeddedInit(compiler);
+			EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
 		} catch (Exception ex) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);

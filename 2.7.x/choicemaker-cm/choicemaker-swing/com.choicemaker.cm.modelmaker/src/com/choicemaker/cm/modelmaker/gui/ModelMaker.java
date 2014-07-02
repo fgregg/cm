@@ -63,17 +63,17 @@ import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
 import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.base.DoNothingMachineLearning;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.base.Repository;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.ml.none.None;
+import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.AboutDialog;
 import com.choicemaker.cm.gui.utils.plaf.ChoiceMakerMetalTheme;
@@ -669,7 +669,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 					"train.gui.modelmaker.model.last.train.firing.threshold",
 					new Integer(probabilityModel.getFiringThreshold())));
 			MachineLearner ml = probabilityModel.getMachineLearner();
-			if(ml != null && !(ml instanceof None)) {
+			if(ml != null && !(ml instanceof DoNothingMachineLearning)) {
 				postInfo(
 					MessageUtil.m.formatMessage(
 						"train.gui.modelmaker.model.last.train.ml",
@@ -1477,7 +1477,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			getPreferences().put("configurationfile", conf);
 		}
 		try {
-			XmlConfigurator.init(conf, log, true, true);
+			ConfigurationManager.getInstance().init(conf, log, true, true);
 			// create
 			init();
 			buildComponents();
@@ -1532,7 +1532,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			getPreferences().put("configurationfile", conf);
 		}
 		try {
-			XmlConfigurator.init(conf, log, true, true);
+			ConfigurationManager.getInstance().init(conf, log, true, true);
 			// create
 			new ModelMaker();
 		} catch (XmlConfException e) {

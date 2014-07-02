@@ -260,7 +260,7 @@ public class ExportProbabilitiesDialog extends JDialog {
 		c.insets = bigInsets;
 				
 		c.gridy++;
-		acNone = new JRadioButton("None");
+		acNone = new JRadioButton("DoNothingMachineLearning");
 		acNone.setSelected(true);
 		getContentPane().add(acNone, c);
 

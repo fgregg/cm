@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -28,7 +28,7 @@ public class ConnectionPoolDataSourceXmlConf {
 	private static boolean alreadyInited = false;
 
 	public static void init() {
-		Element db = XmlConfigurator.getPlugin("db");
+		Element db = XmlConfigurator.getInstance().getPlugin("db");
 		if (db != null) {
 			Iterator i = db.getChildren("ConnectionPool").iterator();
 			while (i.hasNext()) {
@@ -95,7 +95,7 @@ public class ConnectionPoolDataSourceXmlConf {
 	/**
 	 * Conditionally calls init() if it hasn't been called before over the life
 	 * of the VM that this process is running in.
-	 * 
+	 *
 	 * @return whether or not init() was actually called.
 	 */
 	public static boolean maybeInit() {

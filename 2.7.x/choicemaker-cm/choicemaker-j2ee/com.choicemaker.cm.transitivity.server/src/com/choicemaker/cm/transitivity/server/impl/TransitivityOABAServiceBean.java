@@ -25,9 +25,7 @@ import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.compiler.DoNothingCompiler;
-import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
+import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
@@ -266,8 +264,9 @@ public class TransitivityOABAServiceBean implements SessionBean {
 			this.configuration = EJBConfiguration.getInstance();
 
 			if (!initialized) {
-				ICompiler compiler = DoNothingCompiler.instance;
-				XmlConfigurator.embeddedInit(compiler);
+//				ICompiler compiler = DoNothingCompiler.instance;
+//				XmlConfigurator.embeddedInit(compiler);
+				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
 				initialized = true;
 			}
 		} catch (Exception ex) {

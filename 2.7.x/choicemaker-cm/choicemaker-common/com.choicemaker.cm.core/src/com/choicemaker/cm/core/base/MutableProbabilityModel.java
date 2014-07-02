@@ -36,7 +36,6 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ProbabilityModelSpecification;
-import com.choicemaker.cm.core.ml.none.None;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.cm.core.report.Reporter;
 import com.choicemaker.cm.core.util.FileUtilities;
@@ -96,7 +95,7 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 		this();
 		setFileName(fileName);
 		setRawClueFileName(rawClueFileName);
-		setMachineLearner(new None());
+		setMachineLearner(new DoNothingMachineLearning());
 	}
 
 	public MutableProbabilityModel(ProbabilityModelSpecification spec, Accessor acc) {
@@ -455,7 +454,7 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 		} else {
 			setAccessorInternal(newAcc);
 			computeDecisionDomainSize();
-			setMachineLearner(new None());
+			setMachineLearner(new DoNothingMachineLearning());
 		}
 		if (!multiPropertyChange) {
 			propertyChangeListeners.firePropertyChange(null, oldAccessor, acc);

@@ -57,9 +57,4 @@ public interface ChoiceMakerConfigurator {
 	ChoiceMakerConfiguration init(String fn, String log4jConfName,
 			boolean reload, boolean initGui) throws XmlConfException;
 
-	ChoiceMakerConfiguration reloadClasses(ChoiceMakerConfiguration cmc);
-
-	// FIXME Where's the model???
-	ChoiceMakerConfiguration addProbabilityModel(ChoiceMakerConfiguration cmc);
-
 }

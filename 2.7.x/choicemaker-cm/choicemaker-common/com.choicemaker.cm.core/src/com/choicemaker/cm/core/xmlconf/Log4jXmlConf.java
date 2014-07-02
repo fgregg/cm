@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -30,9 +30,9 @@ import com.choicemaker.cm.core.XmlConfException;
  * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:28:10 $
  */
 public class Log4jXmlConf {
-	
+
 	private static final Logger logger = Logger.getLogger(Log4jXmlConf.class);
-	
+
 	public static void configIfPresent(String name) {
 		try {
 			config(name);
@@ -41,7 +41,7 @@ public class Log4jXmlConf {
 			logger.info("log config " + name + " was not found.");
 		}
 	}
-	
+
 	/**
 	 * Configures log4j.
 	 *
@@ -50,7 +50,7 @@ public class Log4jXmlConf {
 	 */
 	public static void config(String name) throws XmlConfException {
 		if (name != null) {
-			org.jdom.Element l = XmlConfigurator.getCore().getChild("logging");
+			org.jdom.Element l = XmlConfigurator.getInstance().getCore().getChild("logging");
 			if (l != null) {
 				Iterator i = l.getChildren("log4jconf").iterator();
 				while (i.hasNext()) { // contains break
@@ -64,7 +64,7 @@ public class Log4jXmlConf {
 					}
 				}
 			}
-			
+
 			throw new XmlConfException("No such log configuration: " + name);
 		} else {
 			Logger root = Logger.getRootLogger();

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -26,14 +26,14 @@ import javax.swing.JMenuItem;
 
 import org.apache.log4j.Logger;
 
+import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
 /**
  * Provides a menu that displays at the end a list of least recently
  * used files.
- * 
+ *
  * @author  Martin Buechi
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
@@ -56,14 +56,14 @@ public abstract class LastUsedMenu extends JMenu {
 	 *   <li>Implement <code>open()</code> to open files selected from auto-generated
 	 *     menu items.</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param   name  The name of the menu.
 	 * @param   key The key for storing the state between program invocations in the preferences.
 	 * @param   maxNumItems  The maximum number of items to display.
 	 */
 	public LastUsedMenu(String name, String key, int maxNumItems) {
 		super(name);
-		this.key = XmlConfigurator.getFileName() + ": " + key;
+		this.key = ConfigurationManager.getInstance().getFileName() + ": " + key;
 		if(this.key.length() > Preferences.MAX_KEY_LENGTH) {
 			this.key = this.key.substring(this.key.length() - Preferences.MAX_KEY_LENGTH);
 		}
@@ -207,7 +207,7 @@ public abstract class LastUsedMenu extends JMenu {
 				}
 			}
 		} catch (IOException ex) {
-			logger.error(new LoggingObject("CM-100202"), ex);			
+			logger.error(new LoggingObject("CM-100202"), ex);
 		} catch (ClassNotFoundException ex) {
 			logger.error(new LoggingObject("CM-100202"), ex);
 		}

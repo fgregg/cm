@@ -242,7 +242,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 * with the holder classes.
 	 *
 	 * All classes are in the same package as the clue set file generated
-	 * by the ClueMaker compiler, namely GeneratorXmlConf.getPackage().
+	 * by the ClueMaker compiler.
 	 *
 	 * Currently, the non-qualified name is passed, e.g., Sample__patient.
 	 * I can easily change this to pass the fully qualified name instead.

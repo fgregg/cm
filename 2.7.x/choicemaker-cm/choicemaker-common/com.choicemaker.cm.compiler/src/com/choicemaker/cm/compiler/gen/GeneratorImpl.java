@@ -35,14 +35,14 @@ import com.choicemaker.cm.compiler.parser.Scanner;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.DerivedSource;
 import com.choicemaker.cm.core.compiler.CompilerException;
+import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.gen.CoreTags;
 import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.GeneratorHelper;
 import com.choicemaker.cm.core.gen.GeneratorPlugin;
 import com.choicemaker.cm.core.gen.IGenerator;
 import com.choicemaker.cm.core.gen.IGeneratorPluginFactory;
-import com.choicemaker.cm.core.install.InstallableGeneratorPluginFactory;
-import com.choicemaker.cm.core.xmlconf.GeneratorXmlConf;
+import com.choicemaker.cm.core.gen.InstallableGeneratorPluginFactory;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 
 /**
@@ -172,7 +172,8 @@ public class GeneratorImpl implements IGenerator {
 	 * @see      getPackage
 	 */
 	public String getSourceCodeRoot() throws GenException {
-		return GeneratorXmlConf.getCodeRoot() + File.separator + "src";
+		// return GeneratorXmlConf.getCodeRoot() + File.separator + "src";
+		return ConfigurationManager.getInstance().getCodeRoot() + File.separator + "src";
 	}
 
 	/**

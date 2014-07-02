@@ -20,7 +20,8 @@ import com.choicemaker.cm.core.compiler.UnavailableCompilerFeaturesException;
  * This object returns the appropiate compiler to the invoker.
  *
  * @author pcheung
- *
+ * @deprecated
+ * @see com.choicemaker.cm.core.compiler.InstallableCompiler
  */
 public class CompilerFactory implements ICompilerFactory {
 

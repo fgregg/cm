@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.core.install;
+package com.choicemaker.cm.core.configure;
 
 import java.lang.reflect.Field;
 
@@ -16,12 +16,10 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.PropertyNames;
 import com.choicemaker.cm.core.XmlConfException;
-import com.choicemaker.cm.core.configure.ChoiceMakerConfiguration;
-import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
 
-public final class InstallableChoiceMakerConfigurator implements ChoiceMakerConfigurator {
+public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 
-	private static final Logger logger = Logger.getLogger(InstallableChoiceMakerConfigurator.class
+	private static final Logger logger = Logger.getLogger(InstallableConfigurator.class
 			.getName());
 
 	/**
@@ -58,10 +56,10 @@ public final class InstallableChoiceMakerConfigurator implements ChoiceMakerConf
 		};
 	}
 
-	/** The singleton instance of this manager */
-	private static ChoiceMakerConfigurator singleton = new InstallableChoiceMakerConfigurator();
+	/** The singleton instance of this configurator */
+	private static ChoiceMakerConfigurator singleton = new InstallableConfigurator();
 
-	/** A method that returns the manager singleton */
+	/** A method that returns the configurator singleton */
 	public static ChoiceMakerConfigurator getInstance() {
 		assert singleton != null;
 		return singleton;
@@ -71,8 +69,8 @@ public final class InstallableChoiceMakerConfigurator implements ChoiceMakerConf
 
 	/**
 	 * If a delegate hasn't been set, this method looks up a System property to
-	 * determine which type of manager to set and then sets it. If the property
-	 * exists but the specified manager type can not be set, throws an
+	 * determine which type of configurator to set and then sets it. If the property
+	 * exists but the specified configurator type can not be set, throws an
 	 * IllegalStateException. If the property doesn't exist, sets the
 	 * {@link #getDefaultInstance() default type}. If the default type can not be
 	 * set -- for example, if the default type is misconfigured -- throws a
@@ -83,17 +81,23 @@ public final class InstallableChoiceMakerConfigurator implements ChoiceMakerConf
 	 */
 	ChoiceMakerConfigurator getDelegate() {
 		if (delegate == null) {
-			String msgPrefix = "Installing model manager: ";
+			String msgPrefix = "Installing ChoiceMaker configurator: ";
 			String fqcn = System
 					.getProperty(PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR);
+//			Properties p = System.getProperties();
+//			for (Iterator i=p.keySet().iterator(); i.hasNext(); ) {
+//				Object k = i.next();
+//				Object v = p.getProperty((String) k);
+//				System.out.println(k + ": " + v);
+//			}
 			try {
 				if (fqcn != null) {
 					logger.info(msgPrefix + fqcn);
-					set(fqcn);
+					setDelegate(fqcn);
 				} else {
 					logger.info(msgPrefix
 							+ getDefaultInstance().getClass().getName());
-					set(getDefaultInstance());
+					setDelegate(getDefaultInstance());
 				}
 			} catch (Exception x) {
 				String msg = msgPrefix + x.toString() + ": " + x.getCause();
@@ -111,15 +115,6 @@ public final class InstallableChoiceMakerConfigurator implements ChoiceMakerConf
 		return getDelegate().init(fn, reload, initGui);
 	}
 
-	public ChoiceMakerConfiguration reloadClasses(ChoiceMakerConfiguration cmc) {
-		return getDelegate().reloadClasses(cmc);
-	}
-
-	public ChoiceMakerConfiguration addProbabilityModel(
-			ChoiceMakerConfiguration cmc) {
-		return getDelegate().addProbabilityModel(cmc);
-	}
-
 	public ChoiceMakerConfiguration init() throws XmlConfException {
 		return getDelegate().init();
 	}
@@ -130,16 +125,16 @@ public final class InstallableChoiceMakerConfigurator implements ChoiceMakerConf
 	}
 
 	/** For testing only; otherwise treat as private */
-	InstallableChoiceMakerConfigurator() {
+	InstallableConfigurator() {
 	}
 
 	/**
-	 * Sets the manager delegate.
+	 * Sets the configurator delegate.
 	 *
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 * */
-	private void set(ChoiceMakerConfigurator delegate) {
+	private void setDelegate(ChoiceMakerConfigurator delegate) {
 		if (delegate == null) {
 			throw new IllegalArgumentException("null delegate");
 		}
@@ -147,25 +142,25 @@ public final class InstallableChoiceMakerConfigurator implements ChoiceMakerConf
 	}
 
 	/**
-	 * An alternative method for setting a manager delegate using a FQCN manager
+	 * An alternative method for setting a configurator delegate using a FQCN configurator
 	 * name.
 	 *
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 */
-	private void set(String fqcn) {
+	private void setDelegate(String fqcn) {
 		if (fqcn == null || fqcn.trim().isEmpty()) {
 			throw new IllegalArgumentException(
-					"null or blank class name for model manager");
+					"null or blank class name for ChoiceMaker configurator");
 		}
-		final String msgPrefix = "Installing model manager: ";
+		final String msgPrefix = "Installing ChoiceMaker configurator: ";
 		try {
 			Class c = Class.forName(fqcn);
 			Field f = c.getDeclaredField(ChoiceMakerConfigurator.INSTANCE);
 			Object o = f.get(null);
 			assert o instanceof ChoiceMakerConfigurator;
 			ChoiceMakerConfigurator pmm = (ChoiceMakerConfigurator) o;
-			set(pmm);
+			setDelegate(pmm);
 		} catch (Exception e) {
 			String msg = msgPrefix + e.toString() + ": " + e.getCause();
 			logger.error(msg, e);

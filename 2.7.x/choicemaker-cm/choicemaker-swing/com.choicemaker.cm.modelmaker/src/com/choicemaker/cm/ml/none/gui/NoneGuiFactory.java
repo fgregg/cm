@@ -11,7 +11,7 @@
 package com.choicemaker.cm.ml.none.gui;
 
 import com.choicemaker.cm.core.MachineLearner;
-import com.choicemaker.cm.core.ml.none.None;
+import com.choicemaker.cm.core.base.DoNothingMachineLearning;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
 import com.choicemaker.cm.modelmaker.gui.ml.MlGuiFactory;
@@ -39,7 +39,7 @@ public class NoneGuiFactory extends MlGuiFactory {
 	 * @see com.choicemaker.cm.core.base.DynamicDispatchHandler#getHandledType()
 	 */
 	public Class getHandledType() {
-		return None.class;
+		return DoNothingMachineLearning.class;
 	}
 	
 	public String toString() {
@@ -49,6 +49,6 @@ public class NoneGuiFactory extends MlGuiFactory {
 	 * @see com.choicemaker.cm.ml.gui.MlGuiFactory#getMlInstance()
 	 */
 	public MachineLearner getMlInstance() {
-		return new None();
+		return new DoNothingMachineLearning();
 	}
 }

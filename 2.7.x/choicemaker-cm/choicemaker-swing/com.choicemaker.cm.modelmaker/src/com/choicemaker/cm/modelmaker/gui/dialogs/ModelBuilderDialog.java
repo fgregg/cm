@@ -31,8 +31,8 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.OperationFailedException;
+import com.choicemaker.cm.core.base.DoNothingMachineLearning;
 import com.choicemaker.cm.core.base.ProbabilityModel;
-import com.choicemaker.cm.core.ml.none.None;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
@@ -152,7 +152,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 		IProbabilityModel pm = new ProbabilityModel(modelFileName, cluesFileName);
 		pm.setUseAnt(useAntCheckBox.isSelected());
 		pm.setAntCommand(antCommandField.getText());
-		pm.setMachineLearner(new None());
+		pm.setMachineLearner(new DoNothingMachineLearning());
 		boolean success = parent.buildProbabilityModel(pm);
 		if (success) {
 			try {

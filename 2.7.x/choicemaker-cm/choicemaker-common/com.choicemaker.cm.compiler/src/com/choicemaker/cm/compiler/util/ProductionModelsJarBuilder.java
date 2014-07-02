@@ -27,12 +27,11 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
+import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.cm.core.util.StreamRelayer;
-import com.choicemaker.cm.core.xmlconf.GeneratorXmlConf;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 
 /**
  * @author    Adam Winkel
@@ -80,7 +79,7 @@ public class ProductionModelsJarBuilder {
 	    throw new IllegalArgumentException(msg);
 	}
 
-	XmlConfigurator.init(conf, null, true, false);
+	ConfigurationManager.getInstance().init(conf, null, true, false);
 
 	ProductionModelsJarBuilder.refreshProductionProbabilityModels();
 
@@ -101,7 +100,8 @@ public class ProductionModelsJarBuilder {
 	//
 
 	public static void refreshProductionProbabilityModels() throws XmlConfException {
-		File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
+		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
+		File genDir = new File(ConfigurationManager.getInstance().getCodeRoot()).getAbsoluteFile();
 		if (genDir.isDirectory()) {
 			FileUtilities.removeDir(genDir);
 		}
@@ -138,7 +138,8 @@ public class ProductionModelsJarBuilder {
 	}
 
 	public static void zipHolderJavadoc(File outputFile) throws XmlConfException, IOException {
-		File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
+		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
+		File genDir = new File(ConfigurationManager.getInstance().getCodeRoot()).getAbsoluteFile();
 		File srcDir = new File(genDir, "src").getAbsoluteFile();
 
 		File tempDir = createTempDirectory();
@@ -157,7 +158,7 @@ public class ProductionModelsJarBuilder {
 
 		// classpath to ChoiceMaker classes.
 		args.add("-classpath");
-		args.add(XmlConfigurator.getJavaDocClasspath());
+		args.add(ConfigurationManager.getInstance().getJavaDocClasspath());
 
 		// link to the JDK.
 		args.add("-link");
@@ -214,7 +215,8 @@ public class ProductionModelsJarBuilder {
 	}
 
 	public static void jarHolderClasses(File outputFile) throws XmlConfException, IOException {
-		File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
+		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
+		File genDir = new File(ConfigurationManager.getInstance().getCodeRoot()).getAbsoluteFile();
 		File classesDir = new File(genDir, "classes").getAbsoluteFile();
 
 		File tempDir = createTempDirectory();
@@ -245,7 +247,8 @@ public class ProductionModelsJarBuilder {
 	}
 
 	public static void jarProductionProbabilityModels(File outputFile) throws XmlConfException, IOException {
-		File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
+		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
+		File genDir = new File(ConfigurationManager.getInstance().getCodeRoot()).getAbsoluteFile();
 		File classesDir = new File(genDir, "classes").getAbsoluteFile();
 
 		File tempDir = createTempDirectory();
@@ -273,7 +276,7 @@ public class ProductionModelsJarBuilder {
 		try {
 			// AJW 2004-03-10: rename the project file to project.xml so XmlConfigurator.embeddedInit()
 			//   can find it...
-			File projectFrom = new File(XmlConfigurator.getFileName()).getAbsoluteFile();
+			File projectFrom = new File(ConfigurationManager.getInstance().getFileName()).getAbsoluteFile();
 			File projectTo = new File(metaInfDir, "project.xml").getAbsoluteFile();
 			copyFile(projectFrom, projectTo);
 			//copyToDir(new File(XmlConfigurator.getFileName()).getAbsoluteFile(), metaInfDir);

@@ -1,4 +1,4 @@
-package com.choicemaker.cm.core.install;
+package com.choicemaker.cm.core.gen;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.PropertyNames;
-import com.choicemaker.cm.core.gen.GenException;
-import com.choicemaker.cm.core.gen.IGeneratorPluginFactory;
 
 /**
  * A singleton implementation that uses an installable delegate to implement

@@ -1,4 +1,4 @@
-package com.choicemaker.cm.core.install;
+package com.choicemaker.cm.core.compiler;
 
 import java.io.Writer;
 import java.util.Properties;
@@ -9,9 +9,6 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ProbabilityModelSpecification;
 import com.choicemaker.cm.core.PropertyNames;
-import com.choicemaker.cm.core.compiler.CompilationArguments;
-import com.choicemaker.cm.core.compiler.CompilerException;
-import com.choicemaker.cm.core.compiler.ICompiler;
 
 /**
  * A singleton implementation that uses an installable delegate to implement
@@ -72,11 +69,11 @@ public final class InstallableCompiler implements ICompiler {
 			try {
 				if (fqcn != null) {
 					logger.info(msgPrefix + fqcn);
-					set(fqcn);
+					setDelegate(fqcn);
 				} else {
 					logger.info(msgPrefix
 							+ getDefaultInstance().getClass().getName());
-					set(getDefaultInstance());
+					setDelegate(getDefaultInstance());
 				}
 			} catch (Exception x) {
 				String msg = msgPrefix + x.toString() + ": " + x.getCause();
@@ -118,7 +115,7 @@ public final class InstallableCompiler implements ICompiler {
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 * */
-	private void set(ICompiler delegate) {
+	private void setDelegate(ICompiler delegate) {
 		if (delegate == null) {
 			throw new IllegalArgumentException("null delegate");
 		}
@@ -132,7 +129,7 @@ public final class InstallableCompiler implements ICompiler {
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 */
-	private void set(String fqcn) {
+	private void setDelegate(String fqcn) {
 		if (fqcn == null || fqcn.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank class name for compiler factory");
@@ -141,7 +138,7 @@ public final class InstallableCompiler implements ICompiler {
 		try {
 			Class c = Class.forName(fqcn);
 			ICompiler instance = (ICompiler) c.newInstance();
-			set(instance);
+			setDelegate(instance);
 		} catch (Exception e) {
 			String msg = msgPrefix + e.toString() + ": " + e.getCause();
 			logger.error(msg, e);

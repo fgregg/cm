@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,9 +23,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IPluginDescriptor;
-import org.eclipse.core.runtime.Platform;
-import org.jdom.Element;
 
 import com.choicemaker.cm.compiler.CompilationEnv;
 import com.choicemaker.cm.compiler.ICompilationUnit;
@@ -41,13 +37,8 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.configure.ChoiceMakerConfiguration;
-import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
-import com.choicemaker.cm.core.install.InstallableChoiceMakerConfigurator;
-import com.choicemaker.cm.core.install.InstalledChoiceMakerConfiguration;
-import com.choicemaker.cm.core.util.FileUtilities;
+import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.util.MessageUtil;
-import com.choicemaker.cm.core.xmlconf.GeneratorXmlConf;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 
 /**
@@ -95,32 +86,32 @@ public abstract class CMCompiler implements ICompiler {
 	}
 
 	protected String getClassPath() {
-		String res = System.getProperty("java.class.path");
-		try {
-			Element e = XmlConfigurator.getCore().getChild("classpath");
-			if (e != null) {
-				res += FileUtilities.toAbsoluteClasspath(e.getText());
-			}
-			e = XmlConfigurator.getCore().getChild("reload");
-			if (e != null) {
-				e = e.getChild("classpath");
-				if (e != null) {
-					res += FileUtilities.toAbsoluteClasspath(e.getText());
-				}
-			}
-		} catch (IOException ex) {
-			logger.error("Problem with classpath", ex);
-		}
-		IPluginDescriptor[] plugins =
-			Platform.getPluginRegistry().getPluginDescriptors();
-		for (int i = 0; i < plugins.length; i++) {
-			URL[] ucp =
-				((URLClassLoader) plugins[i].getPluginClassLoader()).getURLs();
-			for (int j = 0; j < ucp.length; j++) {
-				res += File.pathSeparator + ucp[j].getPath();
-			}
-		}
-		return res;
+//		String res = System.getProperty("java.class.path");
+//		try {
+//			Element e = XmlConfigurator.getInstance().getCore().getChild("classpath");
+//			if (e != null) {
+//				res += FileUtilities.toAbsoluteClasspath(e.getText());
+//			}
+//			e = XmlConfigurator.getInstance().getCore().getChild("reload");
+//			if (e != null) {
+//				e = e.getChild("classpath");
+//				if (e != null) {
+//					res += FileUtilities.toAbsoluteClasspath(e.getText());
+//				}
+//			}
+//		} catch (IOException ex) {
+//			logger.error("Problem with classpath", ex);
+//		}
+//		IPluginDescriptor[] plugins =
+//			Platform.getPluginRegistry().getPluginDescriptors();
+//		for (int i = 0; i < plugins.length; i++) {
+//			URL[] ucp =
+//				((URLClassLoader) plugins[i].getPluginClassLoader()).getURLs();
+//			for (int j = 0; j < ucp.length; j++) {
+//				res += File.pathSeparator + ucp[j].getPath();
+//			}
+//		}
+		return ConfigurationManager.getInstance().getClassPath();
 	}
 
 	protected abstract ICompilationUnit getCompilationUnit(
@@ -128,12 +119,6 @@ public abstract class CMCompiler implements ICompiler {
 		Sourcecode source);
 
 	public abstract Properties getFeatures();
-
-
-
-
-
-
 
 	public String compile(CompilationArguments arguments, final Writer statusOutput)
 		throws CompilerException {
@@ -152,7 +137,8 @@ public abstract class CMCompiler implements ICompiler {
 				String targetdir = null;
 				targetdir =
 					new File(
-						GeneratorXmlConf.getCodeRoot()
+						//GeneratorXmlConf.getCodeRoot()
+						ConfigurationManager.getInstance().getCodeRoot()
 							+ File.separator
 							+ "classes")
 						.getAbsolutePath();
@@ -178,10 +164,11 @@ public abstract class CMCompiler implements ICompiler {
 				PrintStream out = System.out;
 				PrintStream err = System.err;
 				ClassLoader cl = getJavacClassLoader();
+				PrintStream ps = null;
 				try {
 
 					// Change the location of System.out and System.err
-					PrintStream ps =
+					ps =
 						new PrintStream(
 							new OutputStream()
 							{
@@ -211,43 +198,18 @@ public abstract class CMCompiler implements ICompiler {
 					//save the return code
 					result = returncode.intValue();
 				}
-				catch (ClassNotFoundException e)
-                {
-                	logger.error("Could not find com.sun.tools.javac.Main in the classloader " + cl.toString());
-					logger.error("Compiler.compile()", e);
-                }
-                catch (SecurityException e)
-                {
-					logger.error("Compiler.compile()", e);
-                }
-                catch (NoSuchMethodException e)
-                {
-					logger.error("Compiler.compile()", e);
-                }
-                catch (IllegalArgumentException e)
-                {
-					logger.error("Compiler.compile()", e);
-                }
-                catch (IllegalAccessException e)
-                {
-					logger.error("Compiler.compile()", e);
-                }
-                catch (InvocationTargetException e)
-                {
-					logger.error("Compiler.compile()", e);
-                }
-                catch (InstantiationException e)
-                {
-					logger.error("Compiler.compile()", e);
-                }
+
 				catch (Exception ex) {
-					System.err.println(
-						"The Java compiler javac could not be found.");
-					logger.error("Javac", ex);
+					logger.error("Compiler.compile(): " + ex.toString(), ex);
 					return null;
 				}
 
 				finally {
+					if (ps != null) {
+						ps.flush();
+						ps.close();
+						ps = null;
+					}
 					System.setErr(err);
 					System.setOut(out);
 				}
@@ -276,16 +238,6 @@ public abstract class CMCompiler implements ICompiler {
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
 	public boolean compile(IProbabilityModel model, Writer statusOutput)
 		throws CompilerException {
 		CompilationArguments arguments = new CompilationArguments();
@@ -298,7 +250,7 @@ public abstract class CMCompiler implements ICompiler {
 				model.setAccessor(
 					PMManager.createAccessor(
 						accessorClass,
-						XmlConfigurator.reload()));
+						XmlConfigurator.getInstance().reload()));
 			} catch (ClassNotFoundException ex) {
 				logger.error(ex);
 				return false;
@@ -325,32 +277,34 @@ public abstract class CMCompiler implements ICompiler {
 		String[] compilerArgs = new String[1];
 		compilerArgs[0] = spec.getClueFileName();
 		arguments.enter(compilerArgs);
-		String accessorClass = compile(arguments, statusOutput);
+		String accessorFQCN = compile(arguments, statusOutput);
 		ImmutableProbabilityModel retVal = null;
-		if (accessorClass == null) {
+		if (accessorFQCN == null) {
 			String status = statusOutput.toString();
 			assert status != null && !status.trim().isEmpty();
 			throw new CompilerException("Compilation failed: " + status);
 		} else {
-			assert !accessorClass.trim().isEmpty();
+			assert !accessorFQCN.trim().isEmpty();
 			try {
 				/* FIXME Review this design */
 //				Accessor acc = InstallableModelManager.getInstance().createAccessor(accessorClass,
 //						XmlConfigurator.getInstance().reload());
 //				retVal = InstallableModelManager.getInstance().createModelInstance(spec,acc);
-				ChoiceMakerConfiguration cmc = InstalledChoiceMakerConfiguration
-						.getInstance();
-				ChoiceMakerConfigurator configurator = InstallableChoiceMakerConfigurator
-						.getInstance();
-				cmc = configurator.reloadClasses(cmc);
-				ClassLoader cl = cmc.getClassLoader();
+//				ChoiceMakerConfiguration cmc = InstalledConfiguration
+//						.getInstance();
+//				ChoiceMakerConfigurator configurator = InstallableConfigurator
+//						.getInstance();
+//				cmc = configurator.reloadClasses(cmc);
+//				ClassLoader cl = cmc.getClassLoader();
+				ClassLoader cl = ConfigurationManager.getInstance()
+						.getClassLoader();
 //				ProbabilityModelManager pmm = InstallableModelManager
 //						.getInstance();
 //				Accessor acc = pmm.createAccessor(accessorClass, cl);
 //				retVal = pmm.createModelInstance(spec, acc);
-				Class accessorC = Class.forName(accessorClass, true, cl);
-				Accessor acc = (Accessor) accessorC.newInstance();
-				retVal = new MutableProbabilityModel(spec,acc);
+				Class accessorClass = Class.forName(accessorFQCN, true, cl);
+				Accessor acc = (Accessor) accessorClass.newInstance();
+				retVal = new MutableProbabilityModel(spec, acc);
 				/* END */
 			} catch (Exception ex) {
 				String msg = "Compilation failed: " + ex.toString();

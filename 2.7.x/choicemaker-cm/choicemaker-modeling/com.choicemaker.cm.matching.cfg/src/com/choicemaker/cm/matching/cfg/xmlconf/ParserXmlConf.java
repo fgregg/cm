@@ -38,8 +38,8 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.util.DateHelper;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.ParseTreeNodeStandardizer;
 import com.choicemaker.cm.matching.cfg.ParsedData;
@@ -58,7 +58,7 @@ import com.choicemaker.cm.matching.gen.Sets;
  */
 public class ParserXmlConf {
 
-	private static ClassLoader defaultClassLoader = XmlConfigurator.getRmiClassLoader();
+	private static ClassLoader defaultClassLoader = ConfigurationManager.getInstance().getRmiClassLoader();
 
 	// name and class attributes expected, plus
 	//   zero or more tokenizers
