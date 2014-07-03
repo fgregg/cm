@@ -12,3 +12,6 @@ temp.folder
 tmp
 urm-ejb.jar
 urm-ejbsrc.zip
+.project
+.classpath
+.settings

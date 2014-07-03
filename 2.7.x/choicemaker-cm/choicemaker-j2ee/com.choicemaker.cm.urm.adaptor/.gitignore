@@ -12,3 +12,6 @@ project.xml
 target
 temp.folder
 tmp
+.project
+.classpath
+.settings

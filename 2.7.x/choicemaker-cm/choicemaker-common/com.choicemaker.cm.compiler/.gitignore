@@ -9,3 +9,6 @@ coresrc.zip
 tmp
 _compiler_effective_pom.xml
 /target
+.project
+.classpath
+.settings

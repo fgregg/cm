@@ -1,7 +1,7 @@
 tmp
-.classpath
-
-.settings:
 org.eclipse.core.resources.prefs
 org.eclipse.jdt.core.prefs
 org.eclipse.m2e.core.prefs
+.project
+.classpath
+.settings

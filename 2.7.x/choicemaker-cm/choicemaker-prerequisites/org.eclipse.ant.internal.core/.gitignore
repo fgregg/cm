@@ -7,3 +7,6 @@ project.t.xml
 antsupport.jar
 org.eclipse.ant.core_2.1.1.jar
 antsupportsrc.zip
+.project
+.classpath
+.settings

@@ -12,3 +12,6 @@ tmp
 wfst.jar
 wfstsrc.zip
 /target
+.project
+.classpath
+.settings

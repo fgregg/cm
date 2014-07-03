@@ -12,3 +12,6 @@ tmp
 utils.jar
 utilssrc.zip
 /target
+.project
+.classpath
+.settings
