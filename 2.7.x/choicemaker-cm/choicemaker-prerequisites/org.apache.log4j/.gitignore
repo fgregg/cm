@@ -5,3 +5,6 @@ boot.jar
 tmp
 build.xml
 /target
+.project
+.classpath
+.settings

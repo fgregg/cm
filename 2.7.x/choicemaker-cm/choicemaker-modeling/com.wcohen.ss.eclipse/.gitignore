@@ -7,3 +7,6 @@ project.t.xml
 target
 tmp
 /target
+.project
+.classpath
+.settings

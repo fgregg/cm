@@ -5,3 +5,6 @@ tmp
 build.xml
 project.t.xml
 /target
+.project
+.classpath
+.settings

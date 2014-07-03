@@ -2,3 +2,6 @@ archive
 bin
 target
 tmp
+.project
+.classpath
+.settings

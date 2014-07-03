@@ -9,3 +9,6 @@ tmp
 validation-eclipse.jar
 validation-eclipsesrc.jar
 /target
+.project
+.classpath
+.settings

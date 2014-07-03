@@ -12,3 +12,6 @@ tmp
 wfst-eclipse.jar
 wfst-eclipsesrc.zip
 /target
+.project
+.classpath
+.settings

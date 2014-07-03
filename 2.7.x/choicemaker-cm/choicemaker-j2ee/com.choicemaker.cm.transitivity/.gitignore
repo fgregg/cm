@@ -13,3 +13,6 @@ tmp
 transitivity.jar
 transitivitysrc.jar
 /target
+.project
+.classpath
+.settings

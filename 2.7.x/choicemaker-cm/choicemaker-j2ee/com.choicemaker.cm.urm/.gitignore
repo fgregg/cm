@@ -13,3 +13,6 @@ tmp
 urm.jar
 urmsrc.zip
 /target
+.project
+.classpath
+.settings

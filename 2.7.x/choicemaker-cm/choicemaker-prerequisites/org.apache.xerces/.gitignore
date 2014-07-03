@@ -6,3 +6,6 @@ pom.xml-00
 target
 tmp
 /target
+.project
+.classpath
+.settings

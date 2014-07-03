@@ -15,3 +15,6 @@ tmp
 transitivity-server.jar
 transitivity-serversrc.jar
 /target
+.project
+.classpath
+.settings

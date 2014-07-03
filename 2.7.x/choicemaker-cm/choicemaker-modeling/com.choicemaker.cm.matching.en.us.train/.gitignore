@@ -12,3 +12,6 @@ target
 temp.folder
 tmp
 /target
+.project
+.classpath
+.settings
