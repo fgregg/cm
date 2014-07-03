@@ -183,10 +183,10 @@ public final class FileChooserFactory {
 		}
 	}
 
-	private static JFileChooser getFileChooser(File file) {
-		resetFileChooser(file, null);
-		return chooser;	
-	}
+//	private static JFileChooser getFileChooser(File file) {
+//		resetFileChooser(file, null);
+//		return chooser;	
+//	}
 
 	private static JFileChooser getFileChooser(File file, FileFilter filter) {
 		resetFileChooser(file, filter);

@@ -26,8 +26,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.viewer.RecordPairViewerModel;
 
@@ -38,7 +36,7 @@ import com.choicemaker.cm.gui.utils.viewer.RecordPairViewerModel;
 public class TabRenameDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(TabRenameDialog.class);
+//	private static Logger logger = Logger.getLogger(TabRenameDialog.class);
 
 	private RecordPairViewerModel viewerModel;
 
@@ -58,7 +56,7 @@ public class TabRenameDialog extends JDialog {
 		
 		pack();
 		setLocationRelativeTo(frame);
-		show();
+		setVisible(true);
 	}
 
 	public void buildPanel() {

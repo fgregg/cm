@@ -52,7 +52,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	public static void showDialog(ModelMaker modelMaker) {
-		new MrpsDecisionComparatorDialog(modelMaker).show();
+		new MrpsDecisionComparatorDialog(modelMaker).setVisible(true);
 	}
 
 	private ModelMaker modelMaker;

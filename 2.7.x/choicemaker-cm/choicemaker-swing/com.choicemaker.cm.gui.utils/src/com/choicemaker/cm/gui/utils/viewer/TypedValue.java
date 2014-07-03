@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.gui.utils.viewer;
 
-import org.apache.log4j.Logger;
 
 /**
  * Class that wraps a String in order to tag it so
@@ -26,7 +25,7 @@ public class TypedValue {
 	public boolean isUnique;
 	public boolean isDerived;
 
-	private static Logger logger = Logger.getLogger(TypedValue.class);
+//	private static Logger logger = Logger.getLogger(TypedValue.class);
 
 	public TypedValue(String value, boolean isValid, boolean isUnique, boolean isDerived) {
 		myValue = value;

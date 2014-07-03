@@ -334,8 +334,8 @@ public class DefaultStringProfiler implements FieldProfiler {
 	// Min/Max Length
 	//
 	
-	private static final int MIN = -111;
-	private static final int MAX = -123;
+//	private static final int MIN = -111;
+//	private static final int MAX = -123;
 	
 	private static class LengthBoundStatAccumulator implements StatAccumulator {
 		private FieldAccessor fa;

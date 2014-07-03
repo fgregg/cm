@@ -13,8 +13,6 @@ package com.choicemaker.cm.io.flatfile.base;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -32,7 +30,7 @@ public class FlatFileSerializableRecordSource implements ISerializableRecordSour
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(FlatFileSerializableRecordSource.class);
+//	private static final Logger log = Logger.getLogger(FlatFileSerializableRecordSource.class);
 
 	private String delimitedTextDataFile;
 	private String modelName;

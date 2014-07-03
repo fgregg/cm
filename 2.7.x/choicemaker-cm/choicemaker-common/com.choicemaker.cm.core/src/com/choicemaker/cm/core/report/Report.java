@@ -25,7 +25,7 @@ import com.choicemaker.cm.core.Record;
  */
 public class Report {
 	private static final ReporterPlugin[] NO_PLUGINS = new ReporterPlugin[0];
-	private static final String[] NO_ARGS = new String[0];
+//	private static final String[] NO_ARGS = new String[0];
 	private static final SortedSet NO_MATCHES = Collections.unmodifiableSortedSet(new TreeSet());
 	
 	private float differThreshold;

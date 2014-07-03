@@ -51,14 +51,14 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 	private final Map models = new HashMap();
 	private Reporter[] reporters = new Reporter[0];
 
-	private static final String CLUES_TO_EVALUATE = ImmutableProbabilityModel.CLUES_TO_EVALUATE;
-
-	private static final String MACHINE_LEARNER = ImmutableProbabilityModel.MACHINE_LEARNER;
-
-	private static final String MACHINE_LEARNER_PROPERTY =
-		ImmutableProbabilityModel.MACHINE_LEARNER_PROPERTY;
-
-	private static final String NAME = ImmutableProbabilityModel.NAME;
+//	private static final String CLUES_TO_EVALUATE = ImmutableProbabilityModel.CLUES_TO_EVALUATE;
+//
+//	private static final String MACHINE_LEARNER = ImmutableProbabilityModel.MACHINE_LEARNER;
+//
+//	private static final String MACHINE_LEARNER_PROPERTY =
+//		ImmutableProbabilityModel.MACHINE_LEARNER_PROPERTY;
+//
+//	private static final String NAME = ImmutableProbabilityModel.NAME;
 
 	/**
 	 * Adds a probability model to the collection of configured models.

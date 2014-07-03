@@ -64,7 +64,7 @@ public class RsUtilsAction extends AbstractAction {
 		}
 		public void actionPerformed(ActionEvent e) {
 			try {
-				new OpenRsAsMrpsDialog(modelMaker).show();
+				new OpenRsAsMrpsDialog(modelMaker).setVisible(true);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

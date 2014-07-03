@@ -27,8 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.fieldselectortable.FieldSelectorTable;
 import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;
@@ -40,7 +38,7 @@ import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;
 public class FieldSelectorDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(FieldSelectorDialog.class);
+//	private static Logger logger = Logger.getLogger(FieldSelectorDialog.class);
 
 	private RecordPairFrameModel recordPairFrameModel;
 
@@ -60,7 +58,7 @@ public class FieldSelectorDialog extends JDialog {
 		
 		pack();
 		setLocationRelativeTo(frame);
-		show();
+		setVisible(true);
 	}
 
 	public void buildPanel() {		

@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.validation.eclipse.impl;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 import com.choicemaker.cm.validation.AbstractAggregateValidator;
@@ -27,8 +26,8 @@ import com.choicemaker.util.StringUtils;
  */
 public class AggregateValidatorFactory extends AbstractValidatorFactory {
 
-	private static Logger logger =
-		Logger.getLogger(AggregateValidatorFactory.class);
+//	private static Logger logger =
+//		Logger.getLogger(AggregateValidatorFactory.class);
 
 	/**
 	 * The {@link setHandledValidatorExtensionPoint(String)} method

@@ -12,8 +12,6 @@ package com.choicemaker.cm.validation.eclipse.impl;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.validation.AbstractValidator;
 import com.choicemaker.cm.validation.IValidator;
 
@@ -26,7 +24,7 @@ import com.choicemaker.cm.validation.IValidator;
  */
 public class AlwaysTrueValidator extends AbstractValidator {
 
-	private static Logger logger = Logger.getLogger(AlwaysTrueValidator.class);
+//	private static Logger logger = Logger.getLogger(AlwaysTrueValidator.class);
 
 	/**
 	 * Partially constructs an aggregate validator. The

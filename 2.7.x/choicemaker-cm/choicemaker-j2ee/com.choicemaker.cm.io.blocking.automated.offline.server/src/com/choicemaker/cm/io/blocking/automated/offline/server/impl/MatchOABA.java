@@ -30,7 +30,6 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
-//import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonSetOSSources;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeSetSources;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -39,6 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchingService3;
+//import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
 
 /**
  * This message bean handles the matching of chunks and deduping of match pairs.
@@ -54,7 +54,7 @@ public class MatchOABA implements MessageDrivenBean, MessageListener {
 
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
-	private transient OABAConfiguration oabaConfig = null;
+//	private transient OABAConfiguration oabaConfig = null;
 
 	public void ejbCreate() {
 //	log.debug("starting ejbCreate...");

@@ -121,14 +121,14 @@ public class EJBConfiguration implements Serializable {
 	private transient Queue startMessageQueue;
 	private transient Queue blockMessageQueue;
 	private transient Queue dedupMessageQueue;
-	private transient Queue reverseMessageQueue;
+//	private transient Queue reverseMessageQueue;
 	private transient Queue chunkMessageQueue;
 	private transient Queue matchMessageQueue;
 	private transient Queue matchDedupMessageQueue;
 	private transient Queue matchDedupEachMessageQueue;
 	private transient Queue matchSchedulerMessageQueue;
 	private transient Queue matcherMessageQueue;
-	private transient Queue matchWriterMessageQueue;
+//	private transient Queue matchWriterMessageQueue;
 	private transient Queue updateMessageQueue;
 	private transient Queue updateTransMessageQueue;
 	private transient Queue singleMatchMessageQueue;

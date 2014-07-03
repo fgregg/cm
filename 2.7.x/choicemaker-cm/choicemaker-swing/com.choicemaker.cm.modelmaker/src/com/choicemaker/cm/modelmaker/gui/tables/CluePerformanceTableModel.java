@@ -13,8 +13,6 @@ package com.choicemaker.cm.modelmaker.gui.tables;
 import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.Decision;
@@ -32,7 +30,7 @@ public class CluePerformanceTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(CluePerformanceTableModel.class);
+//	private static Logger logger = Logger.getLogger(CluePerformanceTableModel.class);
 
 	private boolean isEmpty;
 	private CluePerformanceTableRow[] rows;

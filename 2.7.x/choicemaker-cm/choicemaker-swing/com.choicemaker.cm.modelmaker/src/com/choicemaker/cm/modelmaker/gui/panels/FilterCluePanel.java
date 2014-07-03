@@ -58,7 +58,7 @@ public class FilterCluePanel extends JPanel {
 	private JLabel matchLabel;
 	private JLabel humanLabel;
 	private JLabel choiceMakerLabel;
-	private JLabel probRangeLabel;
+//	private JLabel probRangeLabel;
 	private JLabel limiterLabel;
 	private JLabel lowLabel;
 	private JLabel hiLabel;
@@ -200,11 +200,11 @@ public class FilterCluePanel extends JPanel {
 			choiceMakerDecision[i] = new JCheckBox();
 		}
 
-		probRangeLabel =
-			new JLabel(
-				MessageUtil.m.formatMessage(
-					"train.gui.modelmaker.dialog.recordpairfilter.probabilityrange"),
-				JLabel.LEFT);
+//		probRangeLabel =
+//			new JLabel(
+//				MessageUtil.m.formatMessage(
+//					"train.gui.modelmaker.dialog.recordpairfilter.probabilityrange"),
+//				JLabel.LEFT);
 		lowLabel =
 			new JLabel(
 				MessageUtil.m.formatMessage(

@@ -60,7 +60,7 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
 	private static final String RELATIVE = MessageUtil.m.formatMessage("io.composite.gui.source.file.relative");
 	private static final String ABSOLUTE = MessageUtil.m.formatMessage("io.composite.gui.source.file.absolute");
     private JLabel sourceNameLabel;
-    private JLabel fileNameLabel;
+//    private JLabel fileNameLabel;
     private JButton addButton;
     private JButton removeButton;
 
@@ -76,7 +76,7 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
     public void show() {
         setFields();
         setEnabledness();
-        super.show();
+        super.setVisible(true);
     }
 
     public void setFields() {

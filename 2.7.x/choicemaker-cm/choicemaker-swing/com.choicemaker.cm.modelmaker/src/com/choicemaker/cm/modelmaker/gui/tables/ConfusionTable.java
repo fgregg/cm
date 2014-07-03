@@ -23,8 +23,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.gui.utils.viewer.HeaderRenderer;
@@ -41,7 +39,7 @@ import com.choicemaker.cm.modelmaker.gui.renderers.ColorTableErrorCellRenderer;
 public class ConfusionTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(ConfusionTable.class);
+//	private static Logger logger = Logger.getLogger(ConfusionTable.class);
 	private TestingControlPanel parent;
 	private ConfusionTableModel myModel;
 

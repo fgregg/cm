@@ -59,7 +59,7 @@ public abstract class TransitivityJobBean implements EntityBean {
 	static String STATUS_ABORTED = "ABORTED";
 	static String STATUS_FAILED = "FAILED";
 
-	private EntityContext ctx;
+//	private EntityContext ctx;
 
 	// CMP fields
 
@@ -286,11 +286,11 @@ public abstract class TransitivityJobBean implements EntityBean {
 	// EJB callbacks
 
 	public void setEntityContext(EntityContext context) {
-		ctx = context;
+//		ctx = context;
 	}
 
 	public void unsetEntityContext() {
-		ctx = null;
+//		ctx = null;
 	}
 
 	public void ejbActivate() {

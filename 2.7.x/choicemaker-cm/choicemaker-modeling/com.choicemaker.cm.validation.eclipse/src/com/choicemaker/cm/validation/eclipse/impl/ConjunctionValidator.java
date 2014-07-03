@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.validation.AbstractAggregateValidator;
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.util.StringUtils;
@@ -34,8 +32,8 @@ import com.choicemaker.util.StringUtils;
  */
 public class ConjunctionValidator extends AbstractAggregateValidator {
 	
-	private static Logger logger =
-		Logger.getLogger(SetBasedValidatorFactory.class);
+//	private static Logger logger =
+//		Logger.getLogger(SetBasedValidatorFactory.class);
 
 	private Map validatorMap;
 	

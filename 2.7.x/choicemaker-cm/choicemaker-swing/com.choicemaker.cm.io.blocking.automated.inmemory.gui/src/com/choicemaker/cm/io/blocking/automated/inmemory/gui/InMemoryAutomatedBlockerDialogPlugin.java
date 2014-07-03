@@ -42,7 +42,7 @@ public class InMemoryAutomatedBlockerDialogPlugin extends MatchDialogBlockerPlug
 	private static final int MIN_STBSGL = MIN_LPBS;
 	private static final int MIN_LSBS = MIN_STBSGL * 2;
 
-	private static final String DEFAULT_DBCONFIG = "default";
+//	private static final String DEFAULT_DBCONFIG = "default";
 	private static final int DEFAULT_LPBS = 50;
 	private static final int DEFAULT_STBSGL = 100;
 	private static final int DEFAULT_LSBS = 200;

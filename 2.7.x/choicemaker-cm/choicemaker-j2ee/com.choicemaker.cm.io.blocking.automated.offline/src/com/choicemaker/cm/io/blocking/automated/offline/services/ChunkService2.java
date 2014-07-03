@@ -74,7 +74,7 @@ public class ChunkService2 {
 	
 //	private RecordSink [] recordSinks;
 
-	private int totalBlocks = 0;
+//	private int totalBlocks = 0;
 	private int numChunks;
 	
 	private long time; //this keeps track of time
@@ -396,7 +396,7 @@ public class ChunkService2 {
 		count = 0;
 		while (source.hasNext()) {
 			count ++;
-			totalBlocks ++;
+//			totalBlocks ++;
 			countAll ++;
 			
 			BlockSet bs = source.getNext();

@@ -193,28 +193,28 @@ public class CykParserChart {
 		}
 	}
 
-	private ParseTreeNode recoverNcnfParseTree() {
-		return recoverNcnfParseTree(0, 0, numTokens - 1);
-	}
+//	private ParseTreeNode recoverNcnfParseTree() {
+//		return recoverNcnfParseTree(0, 0, numTokens - 1);
+//	}
 
-	private ParseTreeNode recoverNcnfParseTree(int v, int i, int j) {
-		int r = ruleChart[v][i][j];
-		int k = kChart[v][i][j];
-
-		if (r < 0) {
-			return null;
-		} else if (r == numRules) {
-			Rule rule = new Rule((TokenType)variables[v], (Token) tokens.get(i));
-			return new ParseTreeNode(rule);
-		} else {
-			List kids = new ArrayList(2);
-			kids.add(recoverParseTree(ruleRhs1[r], i, k));
-			if (ruleRhs2[r] >= 0) {
-				kids.add(recoverParseTree(ruleRhs2[r], k+1, j));
-			}
-			return new ParseTreeNode(rules[r], kids);
-		}
-	}
+//	private ParseTreeNode recoverNcnfParseTree(int v, int i, int j) {
+//		int r = ruleChart[v][i][j];
+//		int k = kChart[v][i][j];
+//
+//		if (r < 0) {
+//			return null;
+//		} else if (r == numRules) {
+//			Rule rule = new Rule((TokenType)variables[v], (Token) tokens.get(i));
+//			return new ParseTreeNode(rule);
+//		} else {
+//			List kids = new ArrayList(2);
+//			kids.add(recoverParseTree(ruleRhs1[r], i, k));
+//			if (ruleRhs2[r] >= 0) {
+//				kids.add(recoverParseTree(ruleRhs2[r], k+1, j));
+//			}
+//			return new ParseTreeNode(rules[r], kids);
+//		}
+//	}
 	
 	private ParseTreeNode recoverParseTree() {
 		ParseTreeNode ptn = recoverParseTree(0, 0, numTokens - 1);

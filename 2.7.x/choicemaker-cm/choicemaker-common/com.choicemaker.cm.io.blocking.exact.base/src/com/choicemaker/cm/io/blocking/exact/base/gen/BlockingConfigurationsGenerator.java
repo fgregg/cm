@@ -33,7 +33,7 @@ import com.choicemaker.cm.io.blocking.base.gen.BlockingTags;
  */
 public class BlockingConfigurationsGenerator implements GeneratorPlugin {
 	public static BlockingConfigurationsGenerator instance = new BlockingConfigurationsGenerator();
-	private String name;
+//	private String name;
 
 	private BlockingConfigurationsGenerator() {
 	}

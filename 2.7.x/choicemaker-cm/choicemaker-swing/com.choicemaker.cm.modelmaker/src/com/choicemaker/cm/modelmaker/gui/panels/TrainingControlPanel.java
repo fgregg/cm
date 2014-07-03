@@ -19,11 +19,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
-import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;
@@ -43,11 +40,11 @@ import com.choicemaker.cm.modelmaker.gui.tables.ClueTablePanel;
 public class TrainingControlPanel extends JPanel implements RepositoryChangeListener, PropertyChangeListener, EvaluationListener {
 
     private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(TrainingControlPanel.class);
+//	private static Logger logger = Logger.getLogger(TrainingControlPanel.class);
     private ModelMaker parent;
-    private Trainer trainer;
+//    private Trainer trainer;
 
-    private JPanel controlsPanel;
+//    private JPanel controlsPanel;
     private JScrollPane cluePerformancePanel;
     private CluePerformanceTable performanceTable;
 
@@ -77,7 +74,7 @@ public class TrainingControlPanel extends JPanel implements RepositoryChangeList
     }
 
     private void buildPanel() {
-        controlsPanel = new JPanel();
+//        controlsPanel = new JPanel();
         buildCluePerformancePanel();
 
         //ClueTable

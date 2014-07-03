@@ -16,8 +16,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTable;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModel;
 import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
@@ -31,7 +29,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
  */
 public class ClueTableCellListener extends MouseAdapter {
 
-	private static Logger logger = Logger.getLogger(ClueTableCellListener.class);
+//	private static Logger logger = Logger.getLogger(ClueTableCellListener.class);
 	private JTable table;
 	private ModelMaker meTrainer;
 	private int numPluginColumns;

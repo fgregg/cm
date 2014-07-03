@@ -61,7 +61,7 @@ public class MatchingService3 {
 	private IMatchRecord2Sink mSink;
 	private float low;
 	private float high;
-	private int maxBlockSize;
+//	private int maxBlockSize;
 	private IStatus status;
 
 	private int numChunks;
@@ -119,7 +119,7 @@ public class MatchingService3 {
 
 		this.low = low;
 		this.high = high;
-		this.maxBlockSize = maxBlockSize;
+//		this.maxBlockSize = maxBlockSize;
 
 		this.status = status;
 

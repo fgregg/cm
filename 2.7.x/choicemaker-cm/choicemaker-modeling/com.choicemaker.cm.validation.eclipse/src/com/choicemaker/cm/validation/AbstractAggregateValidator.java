@@ -13,8 +13,6 @@ package com.choicemaker.cm.validation;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 /**
  * Base class for aggregate validators. This class extends the interface of
  * IAggregateValidator by declaring a <code>set</code> operation
@@ -29,8 +27,8 @@ import org.apache.log4j.Logger;
 public abstract class AbstractAggregateValidator
 	implements IAggregateValidator {
 
-	private static Logger logger =
-		Logger.getLogger(AbstractAggregateValidator.class);
+//	private static Logger logger =
+//		Logger.getLogger(AbstractAggregateValidator.class);
 		
 	private int cachedHashCode = 0;
 

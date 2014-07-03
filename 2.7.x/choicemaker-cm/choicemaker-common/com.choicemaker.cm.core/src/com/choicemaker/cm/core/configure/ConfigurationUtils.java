@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.tools.ant.util.FileUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -23,7 +22,7 @@ public class ConfigurationUtils {
 	private static final Logger logger = Logger
 			.getLogger(ConfigurationUtils.class.getName());
 
-	private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
+//	private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
 
 	public static final String DEFAULT_CODE_ROOT = "etc/models/gen";
 	public static final String CONFIGURATION_GENERATOR_ELEMENT = "generator";

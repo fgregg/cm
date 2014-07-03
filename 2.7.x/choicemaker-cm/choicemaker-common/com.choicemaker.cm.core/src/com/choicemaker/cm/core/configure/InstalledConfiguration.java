@@ -13,8 +13,6 @@ package com.choicemaker.cm.core.configure;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
@@ -23,8 +21,8 @@ import com.choicemaker.cm.core.compiler.ICompiler;
 final class InstalledConfiguration implements
 		ChoiceMakerConfiguration {
 
-	private static final Logger logger = Logger
-			.getLogger(InstalledConfiguration.class.getName());
+//	private static final Logger logger = Logger
+//			.getLogger(InstalledConfiguration.class.getName());
 
 	/** The singleton instance of this configuration */
 	private static InstalledConfiguration singleton = new InstalledConfiguration();

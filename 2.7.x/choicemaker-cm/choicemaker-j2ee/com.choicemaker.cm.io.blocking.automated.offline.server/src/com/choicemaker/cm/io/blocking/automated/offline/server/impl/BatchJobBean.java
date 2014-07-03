@@ -14,7 +14,6 @@ import java.util.Date;
 
 import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
-import javax.ejb.EntityContext;
 
 import org.apache.log4j.Category;
 
@@ -56,7 +55,7 @@ public abstract class BatchJobBean implements EntityBean {
 	static String STATUS_ABORTED = "ABORTED";
 	static String STATUS_FAILED = "FAILED";
 
-	private EntityContext ctx;
+//	private EntityContext ctx;
 
 	// CMP fields
 
@@ -278,13 +277,13 @@ public abstract class BatchJobBean implements EntityBean {
 
 	// EJB callbacks
 
-	public void setEntityContext(EntityContext context) {
-		ctx = context;
-	}
-
-	public void unsetEntityContext() {
-		ctx = null;
-	}
+//	public void setEntityContext(EntityContext context) {
+//		ctx = context;
+//	}
+//
+//	public void unsetEntityContext() {
+//		ctx = null;
+//	}
 
 	public void ejbActivate() {
 	}

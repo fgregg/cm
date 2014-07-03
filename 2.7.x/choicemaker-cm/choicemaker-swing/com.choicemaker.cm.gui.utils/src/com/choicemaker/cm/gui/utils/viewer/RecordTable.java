@@ -29,8 +29,6 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.UIResource;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.base.RecordData;
 import com.choicemaker.cm.gui.utils.viewer.event.RecordTableMouseListener;
@@ -44,7 +42,7 @@ import com.choicemaker.cm.gui.utils.viewer.event.RecordTableMouseListener;
  */
 public class RecordTable extends JTable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(RecordTable.class);
+//	private static Logger logger = Logger.getLogger(RecordTable.class);
 	public static final Color TOP_COLOR = new Color(195, 196, 237);
 	public static final Color BOTTOM_COLOR = new Color(195, 237, 196);
 

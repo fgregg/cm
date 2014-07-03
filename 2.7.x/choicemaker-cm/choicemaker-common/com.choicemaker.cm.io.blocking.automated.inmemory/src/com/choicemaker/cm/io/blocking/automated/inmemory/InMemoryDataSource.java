@@ -257,9 +257,9 @@ public class InMemoryDataSource {
 	}
 
 	public static class UnionIntIterator implements IntIterator {
-		private static final int NEXT_IS_I1 = 1;
-		private static final int NEXT_IS_I2 = 2;
-		private static final int NEXT_IS_NULL = -1;
+//		private static final int NEXT_IS_I1 = 1;
+//		private static final int NEXT_IS_I2 = 2;
+//		private static final int NEXT_IS_NULL = -1;
 
 		private IntIterator it1, it2;
 

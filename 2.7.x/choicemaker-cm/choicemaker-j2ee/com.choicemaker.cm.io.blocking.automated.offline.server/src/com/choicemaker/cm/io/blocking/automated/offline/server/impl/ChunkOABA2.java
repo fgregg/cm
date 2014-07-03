@@ -58,7 +58,7 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
-	private transient OABAConfiguration oabaConfig = null;
+//	private transient OABAConfiguration oabaConfig = null;
 
 	public void ejbCreate() {
 //	log.debug("starting ejbCreate...");

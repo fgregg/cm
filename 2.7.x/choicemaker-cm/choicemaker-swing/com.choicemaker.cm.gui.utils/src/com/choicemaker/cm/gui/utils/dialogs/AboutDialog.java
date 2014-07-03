@@ -25,9 +25,8 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.util.MessageUtil;
+
 /**
  * Description
  * 
@@ -37,7 +36,7 @@ import com.choicemaker.cm.core.util.MessageUtil;
 public class AboutDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(AboutDialog.class);
+//	private static Logger logger = Logger.getLogger(AboutDialog.class);
 
 	public AboutDialog(Frame g, String title, String message) {
 		super(g, title, false);

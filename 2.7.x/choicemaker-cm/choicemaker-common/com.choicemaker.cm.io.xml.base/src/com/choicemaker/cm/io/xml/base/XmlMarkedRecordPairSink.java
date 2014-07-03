@@ -55,9 +55,6 @@ public class XmlMarkedRecordPairSink implements MarkedRecordPairSink {
 		return encoding;
 	}
 
-	private XmlMarkedRecordPairSink() {
-	}
-
 	public XmlMarkedRecordPairSink(String name, String rawXmlFileName, ImmutableProbabilityModel model) {
 		this.name = name;
 		setRawXmlFileName(rawXmlFileName);

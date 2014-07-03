@@ -63,7 +63,7 @@ public class BlockDedupService3 {
 	private IBlockSink bSink;
 
 	//maximum block size
-	private int maxBlockSize;
+//	private int maxBlockSize;
 
 	private IStatus status;
 
@@ -90,7 +90,7 @@ public class BlockDedupService3 {
 		this.bFactory = bFactory;
 		this.biFactory = biFactory;
 		this.bSink = bSink;
-		this.maxBlockSize = maxBlockSize;
+//		this.maxBlockSize = maxBlockSize;
 		this.status = status;
 		this.INTERVAL = interval;
 	}

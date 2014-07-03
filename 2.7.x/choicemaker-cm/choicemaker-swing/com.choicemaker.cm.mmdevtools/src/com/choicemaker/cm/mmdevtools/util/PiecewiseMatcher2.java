@@ -13,7 +13,7 @@ package com.choicemaker.cm.mmdevtools.util;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.text.DateFormat;
+//import java.text.DateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -61,12 +61,12 @@ public class PiecewiseMatcher2 {
 	private int numThreads;
 
 	private PropertyChangeSupport propertyChangeListeners;
-	private int numRecordsFromSmall;
-	private int numRecordsFromLarge;
-	private int numPairs;
-	private boolean done;
+//	private int numRecordsFromSmall;
+//	private int numRecordsFromLarge;
+//	private int numPairs;
+//	private boolean done;
 
-	private DateFormat df = DateFormat.getTimeInstance(DateFormat.MEDIUM);
+//	private DateFormat df = DateFormat.getTimeInstance(DateFormat.MEDIUM);
 
 	public PiecewiseMatcher2(RecordSource[] sources, 
 				   MarkedRecordPairSink sink, 

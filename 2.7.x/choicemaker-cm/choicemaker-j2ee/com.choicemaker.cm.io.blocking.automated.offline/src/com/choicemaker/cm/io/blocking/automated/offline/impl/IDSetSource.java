@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource;
 public class IDSetSource implements IIDSetSource {
 	
 	private IBlockSource bSource;
-	private IIDSet next;
+//	private IIDSet next;
 	
 	public IDSetSource (IBlockSource bSource) {
 		this.bSource = bSource;

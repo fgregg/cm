@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -34,7 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.base.UnderspecifiedQueryExceptio
  */
 public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 
-	private static Logger logger = Logger.getLogger(InMemoryAutomatedBlocker.class);
+//	private static Logger logger = Logger.getLogger(InMemoryAutomatedBlocker.class);
 	
 	// passed by constructor.
 	private ImmutableProbabilityModel model;

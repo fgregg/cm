@@ -75,7 +75,7 @@ public class BlockDedupService4 {
 	private ISuffixTreeSink sSink;
 	
 	//maximum block size
-	private int maxBlockSize;
+//	private int maxBlockSize;
 	
 	private IStatus status;
 	
@@ -104,7 +104,7 @@ public class BlockDedupService4 {
 		this.bFactory = bFactory;
 		this.biFactory = biFactory;
 		this.sSink = sSink;
-		this.maxBlockSize = maxBlockSize;
+//		this.maxBlockSize = maxBlockSize;
 		this.status = status;
 		this.control = control;
 		

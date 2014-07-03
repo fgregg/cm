@@ -28,8 +28,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
@@ -55,7 +53,7 @@ public class ClueTableModel extends SortableTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(ClueTableModel.class);
+//	private static Logger logger = Logger.getLogger(ClueTableModel.class);
 
 	private ClueDesc[] descriptions;
 	private boolean[] enabled;

@@ -78,9 +78,9 @@ public class LinkMap {
 		links.add(mrp);
 	}
 	
-	private ImmutableMarkedRecordPair getLink(int index) {
-		return (ImmutableMarkedRecordPair) links.get(index);	
-	}
+//	private ImmutableMarkedRecordPair getLink(int index) {
+//		return (ImmutableMarkedRecordPair) links.get(index);	
+//	}
 	
 	public boolean hasLink(Record q, Record m) {
 		return hasLink(q.getId().toString(), m.getId().toString());	

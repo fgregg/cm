@@ -85,7 +85,7 @@ public class DataProfilerDialog extends JDialog {
 		//if (dialog == null) {
 			dialog = new DataProfilerDialog(mm);
 		//}
-		dialog.show();
+		dialog.setVisible(true);
 	}
 
 	protected ModelMaker modelMaker;
@@ -261,7 +261,7 @@ public class DataProfilerDialog extends JDialog {
 									  t);
 		DataProfilerDialog.this.addPropertyChangeListener(progressDialog);
 		t.start();
-		progressDialog.show();
+		progressDialog.setVisible(true);
 
 		if (dispatcher.ex != null) {
 			ErrorDialog.showErrorDialog(modelMaker, dispatcher.ex);
@@ -489,7 +489,7 @@ public class DataProfilerDialog extends JDialog {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					JDialog createFilesDialog = new CreateFilesDialog();
-					createFilesDialog.show();
+					createFilesDialog.setVisible(true);
 				}
 			});
 		}

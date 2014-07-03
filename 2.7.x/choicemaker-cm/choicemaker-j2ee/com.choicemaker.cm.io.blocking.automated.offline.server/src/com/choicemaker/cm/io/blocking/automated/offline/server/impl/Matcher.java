@@ -84,7 +84,7 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 	private transient float low;
 	private transient float high;
 
-	private long inReadHM;
+//	private long inReadHM;
 
 	public void ejbCreate() {
 		log.debug("starting ejbCreate...");
@@ -312,7 +312,7 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 	 * @return
 	 */
 	private HashMap getRecords (RecordSource rs, IProbabilityModel model) throws BlockingException {
-		long t = System.currentTimeMillis();
+//		long t = System.currentTimeMillis();
 
 		HashMap records = new HashMap ();
 
@@ -335,7 +335,7 @@ public class Matcher implements MessageDrivenBean, MessageListener {
 			throw new BlockingException (ex.toString());
 		}
 
-		inReadHM += System.currentTimeMillis() - t;
+//		inReadHM += System.currentTimeMillis() - t;
 
 		return records;
 	}

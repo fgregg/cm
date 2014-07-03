@@ -124,7 +124,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 		Point pt = getLocation();
 		pt.y = Math.max(0, pt.y - 100);
 		setLocation(pt);
-		super.show();
+		super.setVisible(true);
 	}
 
 	public void setFields() {

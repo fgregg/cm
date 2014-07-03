@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -30,7 +28,7 @@ import com.choicemaker.cm.core.util.NameUtils;
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileRecordSource implements RecordSource {
-	private static Logger logger = Logger.getLogger(FlatFileRecordSource.class);
+//	private static Logger logger = Logger.getLogger(FlatFileRecordSource.class);
 
 	private String fileName;
 	private String name;

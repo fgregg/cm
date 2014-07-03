@@ -22,8 +22,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.MessageUtil;
@@ -48,7 +46,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  */
 public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(XmlRecordSourceGui.class);
+//	private static Logger logger = Logger.getLogger(XmlRecordSourceGui.class);
 	private static String RELATIVE = MessageUtil.m.formatMessage("io.common.gui.source.file.relative");
 	private static String ABSOLUTE = MessageUtil.m.formatMessage("io.common.gui.source.file.absolute");
 	private JLabel sourceFileNameLabel;
@@ -66,7 +64,7 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	public void show() {
 		setFields();
 		setEnabledness();
-		super.show();
+		super.setVisible(true);
 	}
 
 	public void setFields() {

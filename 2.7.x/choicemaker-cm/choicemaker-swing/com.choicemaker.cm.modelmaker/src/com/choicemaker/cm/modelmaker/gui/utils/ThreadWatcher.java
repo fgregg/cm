@@ -33,16 +33,16 @@ import com.choicemaker.cm.core.util.MessageUtil;
 public class ThreadWatcher extends JDialog implements Runnable {
 	private static final long serialVersionUID = 1L;
 	private Thread worker;
-	private Frame owner;
-	private String title;
-	private String message;
+//	private Frame owner;
+//	private String title;
+//	private String message;
 	private boolean interrupted;
 
 	public static boolean watchThread(Thread worker, Frame owner, String title, String message) {
 		ThreadWatcher t = new ThreadWatcher(worker, owner, title, message);
 		Thread tt = new Thread(t);
 		tt.start();
-		t.show();
+		t.setVisible(true);
 		try {
 			tt.join();
 		} catch (InterruptedException ex) {

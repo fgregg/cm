@@ -36,8 +36,8 @@ public class BlocksSpliter2 {
 	// this variable stores the rotation info
 	private int [] rotate;
 	
-	private int maxSize; //maximum size of a block set.
-	private int minSize; //minimun size of a block set.
+//	private int maxSize; //maximum size of a block set.
+	private int minSize; //minimum size of a block set.
 	
 	/* sinks.get(i) contains blocks with size  
 	 * >= minSize + interval*(i) and < minSize + interval*(i+1) 
@@ -53,7 +53,7 @@ public class BlocksSpliter2 {
 	
 	
 	public BlocksSpliter2 (IBlockSinkSourceFactory bFactory, int minSize, int maxSize, int numFiles) {
-		this.maxSize = maxSize;
+//		this.maxSize = maxSize;
 		this.minSize = minSize;
 		this.numFiles = numFiles;
 		this.bFactory = bFactory;

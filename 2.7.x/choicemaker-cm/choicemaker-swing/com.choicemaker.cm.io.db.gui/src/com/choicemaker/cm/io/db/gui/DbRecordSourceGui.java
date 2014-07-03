@@ -30,8 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
@@ -50,15 +48,15 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 public class DbRecordSourceGui extends RecordSourceGui implements Enable {
     private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(DbRecordSourceGui.class);
+//	private static Logger logger = Logger.getLogger(DbRecordSourceGui.class);
 
-    private String name;
+//    private String name;
     private JLabel sourceFileNameLabel;
     private JLabel confLabel;
     private JTextField conf;
     private JLabel whereFieldLabel;
     private JTextArea whereField;
-    private String where;
+//    private String where;
     private JLabel dataSourceLabel;
     private JComboBox dataSource;
 
@@ -105,7 +103,7 @@ public class DbRecordSourceGui extends RecordSourceGui implements Enable {
     public void show() {
         setFields();
         setEnabledness();
-        super.show();
+        super.setVisible(true);
     }
 
     private void setFields() {

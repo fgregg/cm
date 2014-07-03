@@ -41,7 +41,7 @@ public class BlockGroup implements IBlockSink {
 	// this variable stores the rotation info
 	private int [] rotate;
 	
-	private int maxSize; //maximum size of a block set.
+//	private int maxSize; //maximum size of a block set.
 
 	private IBlockSinkSourceFactory bFactory;
 	
@@ -55,7 +55,7 @@ public class BlockGroup implements IBlockSink {
 	 * @throws BlockingException
 	 */
 	public BlockGroup (IBlockSinkSourceFactory bFactory, int maxSize) throws BlockingException {
-		this.maxSize = maxSize;
+//		this.maxSize = maxSize;
 		this.bFactory = bFactory;
 		
 		//initialize numBuckets

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.tools.ant.util.FileUtils;
 import org.jdom.Document;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -16,7 +15,7 @@ import com.choicemaker.cm.core.util.FileUtilities;
 
 class ListBackedConfiguration implements ChoiceMakerConfiguration {
 
-	private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
+//	private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
 
 	private static final Logger logger = Logger
 			.getLogger(ListBackedConfiguration.class.getName());

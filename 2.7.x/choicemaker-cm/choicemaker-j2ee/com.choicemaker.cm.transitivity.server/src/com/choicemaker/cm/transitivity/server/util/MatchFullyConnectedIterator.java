@@ -28,7 +28,7 @@ public class MatchFullyConnectedIterator extends GenericIterator {
 
 	public static final String NAME = "FCM";
 
-	private Iterator compositeEntities;
+//	private Iterator compositeEntities;
 
 	/** This constructor takes in an Iterator of CompositeEntity.
 	 * 

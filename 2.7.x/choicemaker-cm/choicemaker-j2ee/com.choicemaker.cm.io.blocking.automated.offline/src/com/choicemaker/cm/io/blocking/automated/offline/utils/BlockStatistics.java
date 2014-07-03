@@ -40,7 +40,7 @@ public class BlockStatistics {
 	private float avg;
 	
 	private int intervals = 10;
-	private int max;
+//	private int max;
 	private int step;
 	
 	//total number of pairwaise comparisons
@@ -62,7 +62,7 @@ public class BlockStatistics {
 	 */
 	public BlockStatistics (IBlockSource blockSource, int max, int intervals) {
 		this.bs = blockSource;
-		this.max = max;
+//		this.max = max;
 		this.intervals = intervals;
 		
 		this.step = max / intervals;

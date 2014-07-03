@@ -48,7 +48,7 @@ public class SearchByIdDialog extends JDialog {
 		if (dialog == null) {
 			dialog = new SearchByIdDialog(mm);
 		}
-		dialog.show();
+		dialog.setVisible(true);
 	}
 
 	protected ModelMaker modelMaker;

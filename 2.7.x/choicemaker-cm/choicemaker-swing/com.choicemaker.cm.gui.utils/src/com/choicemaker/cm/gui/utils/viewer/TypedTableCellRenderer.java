@@ -26,7 +26,7 @@ public class TypedTableCellRenderer extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 1L;
 	private Color black = new Color(0f, 0f, 0f);
 	private Color red = new Color(1f, 0f, 0f);
-	private Color invalidDerived = Color.lightGray;
+//	private Color invalidDerived = Color.lightGray;
 	private Color defaultBackground;
 
 	public TypedTableCellRenderer(Color backgroundColor) {

@@ -84,7 +84,7 @@ public class ChunkService3 {
 	
 	private ArrayList recIDSinks = new ArrayList (); //list of chunk id sinks
 	
-	private int totalBlocks = 0;
+//	private int totalBlocks = 0;
 	private int numChunks = 0;
 	private int maxFiles = 0;
 	
@@ -473,7 +473,7 @@ public class ChunkService3 {
 		count = 0;
 		while (source.hasNext() && !stop) {
 			count ++;
-			totalBlocks ++;
+//			totalBlocks ++;
 			countAll ++;
 			
 			stop = ControlChecker.checkStop (control, countAll);

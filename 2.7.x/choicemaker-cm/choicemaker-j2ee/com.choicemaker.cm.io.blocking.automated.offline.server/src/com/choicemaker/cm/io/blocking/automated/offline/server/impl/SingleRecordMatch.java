@@ -20,7 +20,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.jms.QueueConnection;
 import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
@@ -32,7 +31,6 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.Match;
-import com.choicemaker.cm.core.base.MatchCandidate;
 import com.choicemaker.cm.core.base.MatchCandidateFactory;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
@@ -84,7 +82,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 	private transient MessageDrivenContext mdc = null;
 	private EJBConfiguration configuration = null;
-	private transient QueueConnection connection = null;
+//	private transient QueueConnection connection = null;
 
 	public SingleRecordMatch() {
 //	log.debug("constuctor");
@@ -390,10 +388,10 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 	}
 
 
-	private void writeToSink (MatchCandidate [] candidates, IMatchRecord2Sink sink) {
-//		MatchRecord2 match = new MatchRecord2 ();
-//		sink.writeMatch(match);
-	}
+//	private void writeToSink (MatchCandidate [] candidates, IMatchRecord2Sink sink) {
+////		MatchRecord2 match = new MatchRecord2 ();
+////		sink.writeMatch(match);
+//	}
 
 
 

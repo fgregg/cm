@@ -25,7 +25,7 @@ import com.choicemaker.cm.module.INamedEventListener;
  */
 public class NamedEventSupport implements INamedEventControl {
 	
-	private final IModule source;
+//	private final IModule source;
 	private final Observable delegate = new Observable();
 	
 	/** Implements the Observer method for an instance of INamedEventListener */
@@ -55,7 +55,7 @@ public class NamedEventSupport implements INamedEventControl {
 	}
 	
 	public NamedEventSupport(IModule source) {
-		this.source = source;
+//		this.source = source;
 		// Fail fast
 		if (source == null) {
 			throw new IllegalArgumentException("null source");

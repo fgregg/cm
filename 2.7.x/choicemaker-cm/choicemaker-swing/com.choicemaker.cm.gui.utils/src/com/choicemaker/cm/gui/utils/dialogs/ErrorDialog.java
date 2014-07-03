@@ -94,7 +94,7 @@ public class ErrorDialog extends JDialog {
 		} else {
 			throw new IllegalArgumentException("Non frame or dialog argument given");
 		}
-		instance.show();
+		instance.setVisible(true);
 	}
 
 	//
@@ -118,7 +118,7 @@ public class ErrorDialog extends JDialog {
 	
 	private String message, stackTraceString;
 	
-	private Throwable ex;
+//	private Throwable ex;
 	private boolean showsDetail;
 	
 	protected ErrorDialog(Dialog owner) {
@@ -155,7 +155,7 @@ public class ErrorDialog extends JDialog {
 	}
 	
 	public void setThrowable(Throwable ex) {
-		this.ex = ex;
+//		this.ex = ex;
 
 		stackTraceString = "";
 		

@@ -30,7 +30,7 @@ import com.choicemaker.cm.core.base.RecordBinder;
  */
 public abstract class ExactInMemoryBlocker {
 	protected static final List EMPTY_LIST = new ArrayList(0);
-	private static final HashSet EMPTY_SET = new HashSet();
+//	private static final HashSet EMPTY_SET = new HashSet();
 
 	private Map keyToRecordSet = new HashMap();
 	private PositionMap positionMap;

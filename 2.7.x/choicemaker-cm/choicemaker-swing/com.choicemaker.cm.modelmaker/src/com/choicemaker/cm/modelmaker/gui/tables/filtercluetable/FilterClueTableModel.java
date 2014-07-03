@@ -16,8 +16,6 @@ import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.event.TableModelEvent;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
@@ -37,7 +35,7 @@ public class FilterClueTableModel extends SortableTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(FilterClueTableModel.class);
+//	private static Logger logger = Logger.getLogger(FilterClueTableModel.class);
 
 	private ClueDesc[] descriptions;
 	private boolean isEmpty;

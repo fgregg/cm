@@ -40,7 +40,8 @@ public class CrossValidatorDialog extends JDialog {
 
 	private ModelMaker modelMaker;
 
-	private JRadioButton currentMrps, anotherMrps;
+	private JRadioButton currentMrps;
+//	private JRadioButton anotherMrps;
 	private JTextField numPieces;
 	private JButton runButton, closeButton;
 

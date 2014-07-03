@@ -126,7 +126,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	public static final int RULES = 2;
 
 	//XmlConf file name
-	private static String xmlConfFileName;
+//	private static String xmlConfFileName;
 
 	// Delegates
 	final private IUserMessages userMessages =
@@ -401,7 +401,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				}
 				String text = MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.about.message", d);
 
-				new AboutDialog(ModelMaker.this, title, text).show();
+				new AboutDialog(ModelMaker.this, title, text).setVisible(true);
 			}
 		});
 
@@ -1307,7 +1307,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	}
 
 	public void displayRecordPairFilterDialog() {
-		new RecordPairFilterDialog(this).show();
+		new RecordPairFilterDialog(this).setVisible(true);
 	}
 
 	public void filterMarkedRecordPairList() {

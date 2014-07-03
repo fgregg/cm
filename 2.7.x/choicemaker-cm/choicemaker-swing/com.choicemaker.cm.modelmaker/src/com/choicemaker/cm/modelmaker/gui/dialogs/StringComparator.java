@@ -77,9 +77,9 @@ public class StringComparator extends JDialog implements Enable {
 	private JLabel dMetaphoneA1;
 	private JLabel dMetaphoneB1;
 	private JLabel dMetaphoneEquals;
-	private JLabel dmA;
-	private JLabel dmB;
-	private JLabel dmEquals;
+//	private JLabel dmA;
+//	private JLabel dmB;
+//	private JLabel dmEquals;
 	private JLabel jaro;
 	private JCheckBox jaroHigherScoreForLongerStrings;
 	private JCheckBox jaroCheckForNumbers;

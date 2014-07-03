@@ -60,7 +60,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 	private long inWriteMatches = 0;
 	
 	//debug
-	private static IProbabilityModel stageModel;
+//	private static IProbabilityModel stageModel;
 	
 	//default constructor
 	public BlockMatcher2 () {
@@ -121,7 +121,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 		inReadMaps = System.currentTimeMillis() - t;
 		
 		
-		BlockMatcher2.stageModel = stageModel;
+//		BlockMatcher2.stageModel = stageModel;
 		
 		cgSource.open();
 		
@@ -160,29 +160,29 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 	}
 	
 	
-	/* Debuging Comparison Group
-	 * 
-	 */
-	private void debugComparisonGroup (ComparisonArray cg) {
-		ArrayList list = cg.getStagingIDs();
-		
-		StringBuffer sb = new StringBuffer ("stage: ");
-		for (int i=0; i< list.size(); i++) {
-			Comparable c = (Comparable) list.get(i);
-			sb.append(c);
-			sb.append(" ");
-		}
-		log.debug(sb.toString());
-		
-		list = cg.getMasterIDs();
-		sb = new StringBuffer ("master: ");
-		for (int i=0; i< list.size(); i++) {
-			Comparable c = (Comparable) list.get(i);
-			sb.append(c);
-			sb.append(" ");
-		}
-		log.debug(sb.toString());
-	}
+//	/* Debuging Comparison Group
+//	 * 
+//	 */
+//	private void debugComparisonGroup (ComparisonArray cg) {
+//		ArrayList list = cg.getStagingIDs();
+//		
+//		StringBuffer sb = new StringBuffer ("stage: ");
+//		for (int i=0; i< list.size(); i++) {
+//			Comparable c = (Comparable) list.get(i);
+//			sb.append(c);
+//			sb.append(" ");
+//		}
+//		log.debug(sb.toString());
+//		
+//		list = cg.getMasterIDs();
+//		sb = new StringBuffer ("master: ");
+//		for (int i=0; i< list.size(); i++) {
+//			Comparable c = (Comparable) list.get(i);
+//			sb.append(c);
+//			sb.append(" ");
+//		}
+//		log.debug(sb.toString());
+//	}
 	
 	
 	/** This method performs round robin matching for the block.  Every element is compared with every 

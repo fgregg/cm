@@ -18,8 +18,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Entity;
 import com.choicemaker.cm.transitivity.core.INode;
@@ -35,7 +33,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityResult;
  */
 public class TextSerializer {
 
-	private static final Logger log = Logger.getLogger(TextSerializer.class);
+//	private static final Logger log = Logger.getLogger(TextSerializer.class);
 
 	public static final int SORT_BY_ID = 1;
 	public static final int SORT_BY_HOLD_MERGE_ID = 2;

@@ -160,7 +160,7 @@ public class Base64 {
 		-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9         // Decimal 244 - 255 */
 	};
 
-	private final static byte BAD_ENCODING = -9; // Indicates error in encoding
+//	private final static byte BAD_ENCODING = -9; // Indicates error in encoding
 	private final static byte WHITE_SPACE_ENC = -5; // Indicates white space in encoding
 	private final static byte EQUALS_SIGN_ENC = -1; // Indicates equals sign in encoding
 
@@ -335,17 +335,17 @@ public class Base64 {
 
 	/* ********  E N C O D I N G   M E T H O D S  ******** */
 
-	/**
-	 * Encodes the first three bytes of array <var>threeBytes</var>
-	 * and returns a four-byte array in Base64 notation.
-	 *
-	 * @param threeBytes the array to convert
-	 * @return four byte array in Base64 notation.
-	 * @since 1.3
-	 */
-	private static byte[] encode3to4(byte[] threeBytes) {
-		return encode3to4(threeBytes, 3);
-	} // end encodeToBytes
+//	/**
+//	 * Encodes the first three bytes of array <var>threeBytes</var>
+//	 * and returns a four-byte array in Base64 notation.
+//	 *
+//	 * @param threeBytes the array to convert
+//	 * @return four byte array in Base64 notation.
+//	 * @since 1.3
+//	 */
+//	private static byte[] encode3to4(byte[] threeBytes) {
+//		return encode3to4(threeBytes, 3);
+//	} // end encodeToBytes
 
 	/**
 	 * Encodes up to the first three bytes of array <var>threeBytes</var>

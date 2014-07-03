@@ -325,26 +325,26 @@ public class Matcher2 implements MessageDrivenBean, MessageListener {
 
 
 
-	/** This method returns true if the ComparisonPair contains a record we are interested
-	 * in.
-	 *
-	 * @param p
-	 * @return
-	 */
-	private boolean isDebug (ComparisonPair p) {
-		Long l1 = new Long (1926738);
-		Long l2 = new Long (1935180);
-		Long l3 = new Long (1954035);
-		Long l4 = new Long (1956168);
-		Long l5 = new Long (1955320);
-		Long l6 = new Long (1991943);
-
-		if ((p.id1.equals(l1) && p.id2.equals(l2)) ||
-			(p.id1.equals(l3) && p.id2.equals(l4)) ||
-			(p.id1.equals(l5) && p.id2.equals(l6))
-		) return true;
-		else return false;
-	}
+//	/** This method returns true if the ComparisonPair contains a record we are interested
+//	 * in.
+//	 *
+//	 * @param p
+//	 * @return
+//	 */
+//	private boolean isDebug (ComparisonPair p) {
+//		Long l1 = new Long (1926738);
+//		Long l2 = new Long (1935180);
+//		Long l3 = new Long (1954035);
+//		Long l4 = new Long (1956168);
+//		Long l5 = new Long (1955320);
+//		Long l6 = new Long (1991943);
+//
+//		if ((p.id1.equals(l1) && p.id2.equals(l2)) ||
+//			(p.id1.equals(l3) && p.id2.equals(l4)) ||
+//			(p.id1.equals(l5) && p.id2.equals(l6))
+//		) return true;
+//		else return false;
+//	}
 
 
 	protected Record getQ (ChunkDataStore dataStore, ComparisonPair p) {

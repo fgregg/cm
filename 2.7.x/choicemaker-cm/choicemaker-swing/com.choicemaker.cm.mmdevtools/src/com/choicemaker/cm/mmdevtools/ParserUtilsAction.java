@@ -40,7 +40,7 @@ public class ParserUtilsAction extends ToolAction {
 		}
 	
 		public void actionPerformed(ActionEvent e) {
-			new ParserTestDialog(modelMaker).show();
+			new ParserTestDialog(modelMaker).setVisible(true);
 		}
 
 	}

@@ -25,7 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.util.MessageUtil;
@@ -34,7 +34,7 @@ import com.choicemaker.cm.modelmaker.stats.StatPoint;
 
 public class Calculator extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(Calculator.class);
+//	private static Logger logger = Logger.getLogger(Calculator.class);
 	private TestingControlPanel parent;
 	private JComboBox firstTpe;
 	private JComboBox sndTpe;

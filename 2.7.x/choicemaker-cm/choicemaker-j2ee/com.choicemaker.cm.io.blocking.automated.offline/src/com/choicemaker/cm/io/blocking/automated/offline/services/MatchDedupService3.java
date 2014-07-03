@@ -48,7 +48,7 @@ public class MatchDedupService3 {
 	private IMatchRecord2Sink mSink;
 	private IMatchRecord2SinkSourceFactory mFactory;
 	private IStatus status;
-	private int max;
+//	private int max;
 	
 	private int numBefore = 0; //this counts the number of input matches
 	private int numAfter = 0; //this counts the number of output matches
@@ -57,7 +57,7 @@ public class MatchDedupService3 {
 
 	// these two variables are used to stop the program in the middle 
 	private IControl control;
-	private boolean stop;
+//	private boolean stop;
 
 	
 	public MatchDedupService3 (IMatchRecord2Source mSource, IMatchRecord2Sink mSink,
@@ -67,7 +67,7 @@ public class MatchDedupService3 {
 		this.mSink = mSink;
 		this.mFactory = mFactory;
 		this.status = status;
-		this.max = max;
+//		this.max = max;
 		this.control = control;
 	}
 	

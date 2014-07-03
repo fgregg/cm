@@ -12,8 +12,6 @@ package com.choicemaker.cm.modelmaker.gui.utils;
 
 import java.awt.Color;
 
-import org.apache.log4j.Logger;
-
 /**
  * Class that wraps a String in order to tag it so
  * that we can give it a different color when we go to display it in a table.
@@ -26,7 +24,7 @@ public class ValueError {
 	private String myValue;
 	public Color color = new Color(0.8f, 0f, 0f);
 
-	private static Logger logger = Logger.getLogger(ValueError.class);
+//	private static Logger logger = Logger.getLogger(ValueError.class);
 
 	public ValueError(String value) {
 		myValue = value;

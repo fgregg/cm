@@ -17,8 +17,6 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
@@ -34,7 +32,7 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
  */
 public class ActiveClueTable extends JTable implements RepositoryChangeListener {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(ActiveClueTable.class);
+//	private static Logger logger = Logger.getLogger(ActiveClueTable.class);
 	private ModelMaker modelMaker;
 	private ActiveClueTableModel myModel;
 	private MutableMarkedRecordPair markedRecordPair;

@@ -396,17 +396,17 @@ public final class Statistics implements IStatistics {
 		return res;
 	}
 
-	// differ = 0, hold = 1, match = 2
-	// temporary fix while Decision.toInt() broken
-	private int decisionToInt(Decision dec) {
-		if (dec == Decision.DIFFER) {
-			return 0;
-		} else if (dec == Decision.MATCH) {
-			return 2;
-		} else {
-			return 1;
-		}
-	}
+//	// differ = 0, hold = 1, match = 2
+//	// temporary fix while Decision.toInt() broken
+//	private int decisionToInt(Decision dec) {
+//		if (dec == Decision.DIFFER) {
+//			return 0;
+//		} else if (dec == Decision.MATCH) {
+//			return 2;
+//		} else {
+//			return 1;
+//		}
+//	}
 
 	public void computeStatPoint(StatPoint pt) {
 		init();

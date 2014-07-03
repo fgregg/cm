@@ -52,7 +52,7 @@ public class DerivedFieldsComputerDialog extends JDialog {
 	public static final int MRPS = -33;
 
 	public static void showDerivedFieldsComputerDialog(ModelMaker modelMaker, int type) {
-		new DerivedFieldsComputerDialog(modelMaker, type).show();
+		new DerivedFieldsComputerDialog(modelMaker, type).setVisible(true);
 	}
 
 	protected int type;
@@ -94,7 +94,7 @@ public class DerivedFieldsComputerDialog extends JDialog {
 		GenericProgressDialog d = new GenericProgressDialog(modelMaker, "Computing Derived Fields", names, values, t);
 		addPropertyChangeListener(d);
 		t.start();
-		d.show();
+		d.setVisible(true);
 	}
 	
 	protected void actuallyDoIt() throws Exception {

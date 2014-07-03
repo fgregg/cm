@@ -24,7 +24,7 @@ public class SoftTFIDF extends TFIDF
 	// threshold beyond which tokens are considered a match
 	private double tokenMatchThreshold;
 	// default token distance
-	private static final StringDistance DEFAULT_TOKEN_DISTANCE = new JaroWinkler();
+//	private static final StringDistance DEFAULT_TOKEN_DISTANCE = new JaroWinkler();
 
 	public SoftTFIDF(Tokenizer tokenizer,StringDistance tokenDistance,double tokenMatchThreshold) { 
 		super(tokenizer);	

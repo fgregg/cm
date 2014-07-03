@@ -16,8 +16,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.util.StringUtils;
 
 /**
@@ -32,7 +30,7 @@ import com.choicemaker.util.StringUtils;
  * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:16:00 $
  */
 public class StreetParser {
-	private static Logger logger = Logger.getLogger(StreetParser.class);
+//	private static Logger logger = Logger.getLogger(StreetParser.class);
 	public static Collection directions = new HashSet();
 	public static Collection streetTypes = new HashSet();
 	public static Collection ordinalExtensions = new HashSet();

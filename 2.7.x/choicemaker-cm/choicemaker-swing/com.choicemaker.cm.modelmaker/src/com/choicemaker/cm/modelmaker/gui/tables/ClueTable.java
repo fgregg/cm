@@ -12,12 +12,8 @@ package com.choicemaker.cm.modelmaker.gui.tables;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-
-import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.ClueNameCellListener;
@@ -32,10 +28,10 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
  */
 public class ClueTable extends JTable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(ClueTable.class);
+//	private static Logger logger = Logger.getLogger(ClueTable.class);
 	private ClueTableModel myModel;
 	private ModelMaker modelMaker;
-	private TableColumn[] columns;
+//	private TableColumn[] columns;
 
 	public ClueTable(ModelMaker modelMaker) {
 		super();
@@ -66,17 +62,18 @@ public class ClueTable extends JTable {
 		//setPreferredSize(new Dimension(500, 800));
 	}
 
-	private void refresh() {
-		//refresh the column headings
-		TableColumnModel colModel = getColumnModel();
-		for (int i = 0; i < myModel.getColumnCount(); i++) {
-			TableColumn tCol = colModel.getColumn(i);
-			tCol.setHeaderValue(myModel.getColumnName(tCol.getModelIndex()));
-		}
-		getTableHeader().repaint();
+//	private void refresh() {
+//		//refresh the column headings
+//		TableColumnModel colModel = getColumnModel();
+//		for (int i = 0; i < myModel.getColumnCount(); i++) {
+//			TableColumn tCol = colModel.getColumn(i);
+//			tCol.setHeaderValue(myModel.getColumnName(tCol.getModelIndex()));
+//		}
+//		getTableHeader().repaint();
+//
+//		//repaint the table
+//		tableChanged(new TableModelEvent(myModel));
+//		repaint();
+//	}	
 
-		//repaint the table
-		tableChanged(new TableModelEvent(myModel));
-		repaint();
-	}	
 }

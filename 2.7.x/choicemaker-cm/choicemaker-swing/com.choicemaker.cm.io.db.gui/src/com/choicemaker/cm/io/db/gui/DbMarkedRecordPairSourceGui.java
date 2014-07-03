@@ -30,8 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
@@ -42,8 +40,8 @@ import com.choicemaker.cm.io.db.base.util.DbMessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.MarkedRecordPairSourceGui;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
-//import db.jdbc.pool.*;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
+//import db.jdbc.pool.*;
 
 /**
  * The MRPSGui associated the DbMarkedRecordPairSource2.
@@ -57,14 +55,14 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  */
 public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
     private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(DbMarkedRecordPairSourceGui.class);
-    private String name;
+//	private static Logger logger = Logger.getLogger(DbMarkedRecordPairSourceGui.class);
+//    private String name;
     private JLabel sourceFileNameLabel;
     private JLabel confLabel;
     private JTextField conf;
     private JLabel whereFieldLabel;
     private JTextArea whereField;
-    private String where;
+//    private String where;
     private JLabel dataSourceLabel;
     private JComboBox dataSource;
 
@@ -111,7 +109,7 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
     public void show() {
         setFields();
         setEnabledness();
-        super.show();
+        super.setVisible(true);
     }
 
     private void setFields() {

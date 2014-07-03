@@ -48,7 +48,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 	private static final Logger log = Logger.getLogger(TransitivityOABAServiceBean.class);
 
-	private transient SessionContext sessionContext;
+//	private transient SessionContext sessionContext;
 	private transient EJBConfiguration configuration = null;
 
 	private static boolean initialized = false;
@@ -252,7 +252,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	 * @see javax.ejb.SessionBean#setSessionContext(javax.ejb.SessionContext)
 	 */
 	public void setSessionContext(SessionContext sessionContext) throws EJBException, RemoteException {
-		this.sessionContext = sessionContext;
+//		this.sessionContext = sessionContext;
 	}
 
 

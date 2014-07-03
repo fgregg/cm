@@ -10,8 +10,6 @@
  */
 package com.choicemaker.cm.modelmaker.gui.tables.filtercluetable;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.analyzer.filter.IntFilterCondition;
@@ -28,7 +26,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class FilterClueTableRow extends ClTableRow {
-	private static Logger logger = Logger.getLogger(FilterClueTableRow.class);
+//	private static Logger logger = Logger.getLogger(FilterClueTableRow.class);
 
 	private ClueDesc _desc;
 	private FilterCondition condition;

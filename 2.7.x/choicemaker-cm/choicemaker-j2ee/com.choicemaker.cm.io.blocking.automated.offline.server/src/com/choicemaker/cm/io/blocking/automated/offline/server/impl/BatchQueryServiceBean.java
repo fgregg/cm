@@ -21,9 +21,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
-//import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
@@ -40,6 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfigur
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+//import javax.naming.InitialContext;
 
 /**
  * @author pcheung
@@ -51,10 +50,10 @@ public class BatchQueryServiceBean implements SessionBean {
 	private static final Logger log = Logger.getLogger(BatchQueryServiceBean.class);
 
 	private static boolean initialized = false;
-	private static boolean countsInitialized = false;
+//	private static boolean countsInitialized = false;
 
-	private transient SessionContext sessionContext;
-	private transient DataSource dataSource;
+//	private transient SessionContext sessionContext;
+//	private transient DataSource dataSource;
 	private transient EJBConfiguration configuration = null;
 
 
@@ -390,7 +389,7 @@ public class BatchQueryServiceBean implements SessionBean {
 	public void ejbRemove() throws EJBException, RemoteException { }
 
 	public void setSessionContext(SessionContext sessionContext) throws EJBException, RemoteException {
-		this.sessionContext = sessionContext;
+//		this.sessionContext = sessionContext;
 	}
 
 }

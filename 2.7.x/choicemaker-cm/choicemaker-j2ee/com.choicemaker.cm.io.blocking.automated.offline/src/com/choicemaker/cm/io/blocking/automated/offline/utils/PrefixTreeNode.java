@@ -354,9 +354,10 @@ public class PrefixTreeNode {
 			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
 		}
 		
-		public PrefixTreeNode putChild(long childId, int blockingSetId) {
-			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
-		}
+//		public PrefixTreeNode putChild(long childId, int blockingSetId) {
+//			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
+//		}
+
 	}
 
 }

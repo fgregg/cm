@@ -151,17 +151,17 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 	}
 
 	
-	/**
-	 *  This is only for the text output file.  type == Constants.STRING is assumed.
-	 * 
-	 * @param c
-	 * @param dataType
-	 * @param sb
-	 */
-	private void writeID (Comparable c, int dataType, StringBuffer sb) {
-		sb.append(c.toString());
-		sb.append(' ');
-	}
+//	/**
+//	 *  This is only for the text output file.  type == Constants.STRING is assumed.
+//	 * 
+//	 * @param c
+//	 * @param dataType
+//	 * @param sb
+//	 */
+//	private void writeID (Comparable c, int dataType, StringBuffer sb) {
+//		sb.append(c.toString());
+//		sb.append(' ');
+//	}
 
 
 }

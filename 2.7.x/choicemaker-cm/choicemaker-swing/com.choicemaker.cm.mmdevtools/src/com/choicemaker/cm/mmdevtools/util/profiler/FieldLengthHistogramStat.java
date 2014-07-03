@@ -103,43 +103,43 @@ public class FieldLengthHistogramStat extends AbstractTableStat {
 	// helpers...
 	//
 	
-	private static StringBuffer buff = new StringBuffer();
+//	private static StringBuffer buff = new StringBuffer();
 	
-	private static synchronized String profile(String s, boolean collapseWhitespace, boolean convertAlphaToUpper, boolean convertPuncToSpace) {
-		int len = s.length();
-		boolean lastIsSpace = false;
-		for (int i = 0; i < len; i++) {
-			char c = s.charAt(i);
-			
-			if (Character.isLetter(c)) {
-				if (convertAlphaToUpper || Character.isUpperCase(c)) {
-					buff.append('A');
-				} else {
-					buff.append('a');
-				}
-				lastIsSpace = false;
-			} else if (Character.isDigit(c)) {
-				buff.append('9');
-				lastIsSpace = false;
-			} else if (convertPuncToSpace || Character.isWhitespace(c)) {
-				if (!collapseWhitespace || !lastIsSpace) {
-					buff.append(c);
-				}
-				lastIsSpace = true;
-			} else {
-				buff.append(c);
-				lastIsSpace = false;
-			}
-		}
-		
-		String ret = buff.toString();
-		buff.setLength(0);
-		
-		if (collapseWhitespace) {
-			ret = ret.trim();
-		}
-
-		return ret;
-	}
+//	private static synchronized String profile(String s, boolean collapseWhitespace, boolean convertAlphaToUpper, boolean convertPuncToSpace) {
+//		int len = s.length();
+//		boolean lastIsSpace = false;
+//		for (int i = 0; i < len; i++) {
+//			char c = s.charAt(i);
+//			
+//			if (Character.isLetter(c)) {
+//				if (convertAlphaToUpper || Character.isUpperCase(c)) {
+//					buff.append('A');
+//				} else {
+//					buff.append('a');
+//				}
+//				lastIsSpace = false;
+//			} else if (Character.isDigit(c)) {
+//				buff.append('9');
+//				lastIsSpace = false;
+//			} else if (convertPuncToSpace || Character.isWhitespace(c)) {
+//				if (!collapseWhitespace || !lastIsSpace) {
+//					buff.append(c);
+//				}
+//				lastIsSpace = true;
+//			} else {
+//				buff.append(c);
+//				lastIsSpace = false;
+//			}
+//		}
+//		
+//		String ret = buff.toString();
+//		buff.setLength(0);
+//		
+//		if (collapseWhitespace) {
+//			ret = ret.trim();
+//		}
+//
+//		return ret;
+//	}
 
 }

@@ -12,8 +12,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
@@ -27,7 +25,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator
  */
 public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 	
-	private static final Logger log = Logger.getLogger(RecordIDTranslator2.class);
+//	private static final Logger log = Logger.getLogger(RecordIDTranslator2.class);
 
 	private IRecordIDSinkSourceFactory rFactory;
 

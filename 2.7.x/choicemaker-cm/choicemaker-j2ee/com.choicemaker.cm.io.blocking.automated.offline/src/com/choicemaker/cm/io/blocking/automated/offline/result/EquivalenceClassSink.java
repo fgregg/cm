@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.SortedSet;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.util.EquivalenceClass;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 
@@ -29,7 +27,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
  */
 public class EquivalenceClassSink {
 
-	private static final Logger log = Logger.getLogger(EquivalenceClassSink.class);
+//	private static final Logger log = Logger.getLogger(EquivalenceClassSink.class);
 
 	DataOutputStream dos;
 	FileWriter fw;

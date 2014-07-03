@@ -19,7 +19,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.jdom.Element;
 
@@ -43,8 +42,8 @@ public class FlatFileSingleFileReaderGenerator implements GeneratorPlugin {
 
 	public static FlatFileSingleFileReaderGenerator instance = new FlatFileSingleFileReaderGenerator();
 
-	private Set recordTypes;
-	private int recordNum;
+//	private Set recordTypes;
+//	private int recordNum;
 
 	public void generate(IGenerator g) throws GenException {
 		String className = g.getSchemaName() + "SingleFileFlatFileReader";
@@ -116,7 +115,7 @@ public class FlatFileSingleFileReaderGenerator implements GeneratorPlugin {
 	}
 
 	private void writeGetters(IGenerator g, Writer w, Element r, String outerClassName) throws IOException {
-		++recordNum;
+//		++recordNum;
 		String recordName = r.getAttributeValue("name");
 		String className = r.getAttributeValue("className");
 		if (outerClassName != null) {

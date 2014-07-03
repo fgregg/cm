@@ -23,7 +23,7 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 			.getName());
 
 	/**
-	 * The default instance is an that doesn't actually do anything.
+	 * The default instance is a configurator that doesn't actually do anything.
 	 */
 	static final ChoiceMakerConfigurator getDefaultInstance() {
 		// FIXME Auto-generated method stub
@@ -31,15 +31,6 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 
 			public ChoiceMakerConfiguration init(String fn, boolean reload,
 					boolean initGui) throws XmlConfException {
-				return null;
-			}
-
-			public ChoiceMakerConfiguration reloadClasses(ChoiceMakerConfiguration cmc) {
-				return null;
-			}
-
-			public ChoiceMakerConfiguration addProbabilityModel(
-					ChoiceMakerConfiguration cmc) {
 				return null;
 			}
 

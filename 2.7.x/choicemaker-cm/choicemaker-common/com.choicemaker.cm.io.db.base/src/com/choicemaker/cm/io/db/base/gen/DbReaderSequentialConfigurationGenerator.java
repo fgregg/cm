@@ -39,22 +39,22 @@ import com.choicemaker.cm.core.gen.IGenerator;
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:06:55 $
  */
 public class DbReaderSequentialConfigurationGenerator {
-	private static final List EMPTY_LIST = new ArrayList(0);
+//	private static final List EMPTY_LIST = new ArrayList(0);
 
 	private static DerivedSource src = DerivedSource.valueOf("db");
 
 	private IGenerator g;
 	String confName;
-	private DerivedSource conf;
-	private Element def;
+//	private DerivedSource conf;
+//	private Element def;
 	private boolean virtualRootRecord;
 	String className;
 
 	DbReaderSequentialConfigurationGenerator(IGenerator g, String confName, Element def) throws GenException {
 		this.g = g;
 		this.confName = confName;
-		this.conf = DerivedSource.valueOf(confName);
-		this.def = def;
+//		this.conf = DerivedSource.valueOf(confName);
+//		this.def = def;
 		generate();
 	}
 
@@ -332,8 +332,8 @@ public class DbReaderSequentialConfigurationGenerator {
 		return b.toString();
 	}
 
-	private String ifNotNull(String def, String val) {
-		return val != null ? val : def;
-	}
+//	private String ifNotNull(String def, String val) {
+//		return val != null ? val : def;
+//	}
 
 }

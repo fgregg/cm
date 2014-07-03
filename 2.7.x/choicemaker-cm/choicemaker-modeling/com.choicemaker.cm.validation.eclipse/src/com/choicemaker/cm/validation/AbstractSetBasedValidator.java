@@ -12,8 +12,6 @@ package com.choicemaker.cm.validation;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 /**
  * Base class for set-based validators. This class extends the interface of
  * ISetBasedValidator by declaring a set operation
@@ -26,8 +24,8 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 
-	private static Logger logger =
-		Logger.getLogger(AbstractSetBasedValidator.class);
+//	private static Logger logger =
+//		Logger.getLogger(AbstractSetBasedValidator.class);
 
 	/**
 	 * Partially constructs a validator. The

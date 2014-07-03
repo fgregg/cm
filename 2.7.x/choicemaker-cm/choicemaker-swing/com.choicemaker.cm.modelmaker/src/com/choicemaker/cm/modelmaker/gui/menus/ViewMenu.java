@@ -20,8 +20,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
@@ -32,7 +30,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class ViewMenu extends JMenu {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(ViewMenu.class);
+//	private static Logger logger = Logger.getLogger(ViewMenu.class);
 	private ModelMaker parent;
 	private static final String VIEW_MENU = MessageUtil.m.formatMessage("train.gui.modelmaker.menu.view");
 

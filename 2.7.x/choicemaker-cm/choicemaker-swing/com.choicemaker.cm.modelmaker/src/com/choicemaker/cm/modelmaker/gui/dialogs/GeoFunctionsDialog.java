@@ -31,7 +31,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.UpperCaseTextField;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
@@ -52,9 +52,9 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 public class GeoFunctionsDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private static DecimalFormat df = new DecimalFormat("####0.00000");
-	private static Logger logger = Logger.getLogger(GeoFunctionsDialog.class);
+//	private static Logger logger = Logger.getLogger(GeoFunctionsDialog.class);
 
-	private ModelMaker parent;
+//	private ModelMaker parent;
 
 	// keep Enableness Guard as a separate object to be able to handle differently changes in the different parts of the dialog
 	GeEnablenessGuard  entityGuard = new GeEnablenessGuard(this);
@@ -94,7 +94,7 @@ public class GeoFunctionsDialog extends JDialog {
 	public GeoFunctionsDialog(ModelMaker parent) {
 		super(parent, "Geographical Entities Distance Functions", false);
 		
-		this.parent = parent;
+//		this.parent = parent;
 		
 		buildPanel();
 		addListeners();

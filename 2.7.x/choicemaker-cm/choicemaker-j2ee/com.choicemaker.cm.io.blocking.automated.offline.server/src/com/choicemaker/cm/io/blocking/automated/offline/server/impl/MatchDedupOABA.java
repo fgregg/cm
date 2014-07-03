@@ -21,14 +21,11 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.jms.QueueConnection;
 import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-//import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
-//import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
@@ -41,6 +38,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
+//import com.choicemaker.cm.core.base.ImmutableProbabilityModel;
+//import com.choicemaker.cm.core.base.PMManager;
 
 /** This message bean handles the deduping of match records.
  *
@@ -56,7 +55,7 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
 	private transient OABAConfiguration oabaConfig = null;
-	private transient QueueConnection connection = null;
+//	private transient QueueConnection connection = null;
 
 	public void ejbCreate() {
 		try {

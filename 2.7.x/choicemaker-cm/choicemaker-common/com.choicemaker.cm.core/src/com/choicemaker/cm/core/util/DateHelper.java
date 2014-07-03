@@ -199,8 +199,8 @@ public class DateHelper {
 		}
 	}
 
-	private static String[] MONTHS =
-		{ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+//	private static String[] MONTHS =
+//		{ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
 
 	public static String formatDb(Date d) {
 		Calendar cal = Calendar.getInstance();

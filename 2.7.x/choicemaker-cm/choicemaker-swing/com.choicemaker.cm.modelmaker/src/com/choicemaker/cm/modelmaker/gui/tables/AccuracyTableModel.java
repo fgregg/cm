@@ -15,13 +15,11 @@ import java.text.DecimalFormat;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.util.MessageUtil;
 
 public class AccuracyTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(AccuracyTableModel.class);
+//	private static Logger logger = Logger.getLogger(AccuracyTableModel.class);
 	private boolean isEmpty;
 	private float[][] data;
 	private float[] firstColumn;

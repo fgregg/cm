@@ -276,22 +276,22 @@ public class SoftTFIDFDictionary implements FastLookup
         return dict;
     }
 
-    private void showValueMap()
-    {
-        System.out.println("valueMap: "+valueMap);
-    }
-    private void showAllTokens()
-    {
-        for (int i=0; i<numTokens; i++) {
-            System.out.println("allTokens["+i+"] = "+allTokens[i]);
-        }
-    }
-    private void showAllMaxScores()
-    {
-        for (int i=0; i<numTokens; i++) {
-            System.out.println("allTokens["+i+"] = "+allTokens[i]+" maxscore = "+maxTFIDFScore[i]);
-        }
-    }
+//    private void showValueMap()
+//    {
+//        System.out.println("valueMap: "+valueMap);
+//    }
+//    private void showAllTokens()
+//    {
+//        for (int i=0; i<numTokens; i++) {
+//            System.out.println("allTokens["+i+"] = "+allTokens[i]);
+//        }
+//    }
+//    private void showAllMaxScores()
+//    {
+//        for (int i=0; i<numTokens; i++) {
+//            System.out.println("allTokens["+i+"] = "+allTokens[i]+" maxscore = "+maxTFIDFScore[i]);
+//        }
+//    }
 
     //
     // constructors
@@ -616,22 +616,22 @@ public class SoftTFIDFDictionary implements FastLookup
             System.out.println( result.get(i) );
         }
     }
-    private void showSimilarTokens()
-    {
-        for (int i=0; i<numTokens; i++) {
-            Token toki = allTokens[i];
-            System.out.print(toki+"\t~");
-            if (similarTokens[toki.getIndex()]==null) {
-                System.out.print(" NULL");
-            } else {
-                for (int j=0; j<similarTokens[toki.getIndex()].length; j++) {
-                    Token tokj = similarTokens[toki.getIndex()][j];
-                    System.out.print(" "+tokj.getValue());
-                }
-            }
-            System.out.println();
-        }
-    }
+//    private void showSimilarTokens()
+//    {
+//        for (int i=0; i<numTokens; i++) {
+//            Token toki = allTokens[i];
+//            System.out.print(toki+"\t~");
+//            if (similarTokens[toki.getIndex()]==null) {
+//                System.out.print(" NULL");
+//            } else {
+//                for (int j=0; j<similarTokens[toki.getIndex()].length; j++) {
+//                    Token tokj = similarTokens[toki.getIndex()][j];
+//                    System.out.print(" "+tokj.getValue());
+//                }
+//            }
+//            System.out.println();
+//        }
+//    }
 
     private double getNumberOfSimilarTokenPairs()
     {

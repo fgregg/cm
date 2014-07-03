@@ -24,8 +24,8 @@ public class FieldIdfStat extends AbstractTableStat {
 	private FieldAccessor fa;
 
 	private TfIdfCalculator calc;
-	private int totalRows;
-	private int nonNullRows;
+//	private int totalRows;
+//	private int nonNullRows;
 	
 	public FieldIdfStat(FieldAccessor fa) {
 		this.fa = fa;
@@ -38,18 +38,18 @@ public class FieldIdfStat extends AbstractTableStat {
 
 	public void reset() {
 		calc = new TfIdfCalculator();
-		totalRows = 0;
-		nonNullRows = 0;
+//		totalRows = 0;
+//		nonNullRows = 0;
 	}
 
 	public void processRecord(Record r) {
 		int numRows = fa.getRowCount(r);
-		totalRows += numRows;
+//		totalRows += numRows;
 
 		for (int i = 0; i < numRows; i++) {
 			Object obj = fa.getValue(r, i);
 			if (obj != null) {
-				nonNullRows++;
+//				nonNullRows++;
 				String val = obj.toString();
 
 				calc.chunkAndAdd(val);

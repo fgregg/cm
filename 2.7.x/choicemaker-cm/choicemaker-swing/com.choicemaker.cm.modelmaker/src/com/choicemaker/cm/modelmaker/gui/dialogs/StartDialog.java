@@ -28,8 +28,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
@@ -45,7 +43,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 public class StartDialog extends JFrame implements Enable {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(ModelBuilderDialog.class);
+//	private static Logger logger = Logger.getLogger(ModelBuilderDialog.class);
 
 	private JPanel content;
 	private JLabel configurationLabel;

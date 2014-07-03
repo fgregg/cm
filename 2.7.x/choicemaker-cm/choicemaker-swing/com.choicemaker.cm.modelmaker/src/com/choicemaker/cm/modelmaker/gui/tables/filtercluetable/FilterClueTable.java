@@ -25,7 +25,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.core.ColumnDefinition;
@@ -44,7 +44,7 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
 public class FilterClueTable extends JTable{
 
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(FilterClueTable.class);
+//	private static Logger logger = Logger.getLogger(FilterClueTable.class);
 	private FilterClueTableModel myModel;
 	private ModelMaker meTrainer;
 

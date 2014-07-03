@@ -45,7 +45,7 @@ public class SubsumedBlockRemover2 {
 	private BlockGroup bGroup;
 	private IBlockSink sink;
 	
-	private int maxBlockSize;
+//	private int maxBlockSize;
 
 	private int numBlocksIn; //number of blocks before remove subsumed
 	private int numBlocksOut; //number of blocks after remove subsumed
@@ -63,7 +63,7 @@ public class SubsumedBlockRemover2 {
 	public SubsumedBlockRemover2(BlockGroup bGroup, IBlockSink sink, int maxBlockSize) {
 		this.bGroup = bGroup;
 		this.sink = sink;
-		this.maxBlockSize = maxBlockSize;
+//		this.maxBlockSize = maxBlockSize;
 
 	}
 

@@ -65,7 +65,7 @@ public final class Parser implements Tokens {
 
 	private int lastClueDeclEndPos;
 	
-	private boolean rDoubleIndex;
+//	private boolean rDoubleIndex;
 
 	/** precedence table
 	 */
@@ -689,9 +689,9 @@ public final class Parser implements Tokens {
 						}
 						int spos = s.current();
 						accept(LPAREN);
-						rDoubleIndex = true;
+//						rDoubleIndex = true;
 						res = new Shorthand(spos, form, new Tree[] { expr()}, null);
-						rDoubleIndex = false;
+//						rDoubleIndex = false;
 						accept(RPAREN);
 						break;
 					}

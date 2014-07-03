@@ -31,8 +31,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.gui.utils.viewer.RecordTableColumnModel;
 
 /**
@@ -44,7 +42,7 @@ import com.choicemaker.cm.gui.utils.viewer.RecordTableColumnModel;
 public class FieldSelectorTable extends JTable{
 
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(FieldSelectorTable.class);
+//	private static Logger logger = Logger.getLogger(FieldSelectorTable.class);
 	private static int VISIBLE_COLUMN = 2;
 
 	private TableCellRenderer visibilityHeaderRenderer;

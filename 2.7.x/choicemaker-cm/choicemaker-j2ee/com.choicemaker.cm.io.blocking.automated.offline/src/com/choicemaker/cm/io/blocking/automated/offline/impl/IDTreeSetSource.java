@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSource;
 public class IDTreeSetSource implements IIDSetSource {
 	
 	private ISuffixTreeSource bSource;
-	private IIDSet next;
+//	private IIDSet next;
 	
 	public IDTreeSetSource (ISuffixTreeSource bSource) {
 		this.bSource = bSource;

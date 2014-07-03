@@ -90,7 +90,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 	}
 
 	public Source define() {
-		show();
+		setVisible(true);
 		setEnabledness();
 		return source;
 	}

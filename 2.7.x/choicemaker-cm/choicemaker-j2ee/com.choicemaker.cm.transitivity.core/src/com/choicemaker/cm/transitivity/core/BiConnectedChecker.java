@@ -161,7 +161,7 @@ public class BiConnectedChecker {
 		NodeInfo v = (NodeInfo) nodeInfoMap.get (node);
 		if (v == null) {
 			v = new NodeInfo ();
-			v.visited = true;
+//			v.visited = true;
 			v.pre = id++;
 			v.low = v.pre;
 			
@@ -213,10 +213,10 @@ public class BiConnectedChecker {
 
 
 	private class NodeInfo {
-		/**
-		 *  This is true if the node has been visited.
-		*/
-		private boolean visited;
+//		/**
+//		 *  This is true if the node has been visited.
+//		*/
+//		private boolean visited;
 	
 		/**
 		* The id of the node, aka, pre

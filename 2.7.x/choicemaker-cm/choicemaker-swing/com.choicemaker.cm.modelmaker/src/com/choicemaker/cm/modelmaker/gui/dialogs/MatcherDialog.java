@@ -139,8 +139,8 @@ public class MatcherDialog extends JDialog implements Enable {
 	private final int default_outputFormat = 0;
 	private final String default_sink = "";
 	private final boolean default_isFiltered = true;
-	private final boolean[] default_filters =
-		new boolean[] { default_isFiltered, default_isFiltered, default_isFiltered };
+//	private final boolean[] default_filters =
+//		new boolean[] { default_isFiltered, default_isFiltered, default_isFiltered };
 	private final float default_probablityLowerBound = ImmutableThresholds.MIN_VALUE;
 	private final float default_probablityUpperBound = ImmutableThresholds.MAX_VALUE;
 
@@ -362,7 +362,7 @@ public class MatcherDialog extends JDialog implements Enable {
 						MatcherProgressDialog matcherProgressDialog =
 							new MatcherProgressDialog(modelMaker, matcher, t);
 						t.start();
-						matcherProgressDialog.show();
+						matcherProgressDialog.setVisible(true);
 					}
 				} catch (XmlConfException ex) {
 					logger.error(new LoggingObject("CM-100401"), ex);
@@ -485,7 +485,7 @@ public class MatcherDialog extends JDialog implements Enable {
 						RecordSourceXmlConf.getRecordSource(small.getText()),
 						modelMaker.getProbabilityModel(),
 						compositePaneModel)
-						.show();
+						.setVisible(true);
 				} catch (XmlConfException ex) {
 					logger.error(
 						new LoggingObject("CM-100601", small.getText()),
@@ -516,7 +516,7 @@ public class MatcherDialog extends JDialog implements Enable {
 						RecordSourceXmlConf.getRecordSource(large.getText()),
 						modelMaker.getProbabilityModel(),
 						compositePaneModel)
-						.show();
+						.setVisible(true);
 				} catch (XmlConfException ex) {
 					logger.error(
 						new LoggingObject("CM-100601", large.getText()),

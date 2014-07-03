@@ -227,7 +227,7 @@ public abstract class AbstractRecordSourceSerializer
 	}
 
 	private final Class[] handledClasses;
-	private final Properties serializerProperties;
+//	private final Properties serializerProperties;
 	private final Pattern uriPattern;
 
 	/**
@@ -261,12 +261,12 @@ public abstract class AbstractRecordSourceSerializer
 
 		this.uriPattern = uriPattern;
 		this.handledClasses = handledClasses;
-		if (otherSerializerProperties == null) {
-			this.serializerProperties = new Properties();
-		} else {
-			this.serializerProperties =
-				(Properties) otherSerializerProperties.clone();
-		}
+//		if (otherSerializerProperties == null) {
+//			this.serializerProperties = new Properties();
+//		} else {
+//			this.serializerProperties =
+//				(Properties) otherSerializerProperties.clone();
+//		}
 	}
 
 	/* (non-Javadoc)

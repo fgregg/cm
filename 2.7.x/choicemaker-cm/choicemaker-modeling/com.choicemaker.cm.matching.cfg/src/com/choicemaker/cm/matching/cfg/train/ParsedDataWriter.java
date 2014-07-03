@@ -46,7 +46,7 @@ public class ParsedDataWriter extends XmlWriter {
 
 	// depth 4
 	private static final String FIELD = "field";
-	private static final String EMPTY_FIELD = "emptyField";
+//	private static final String EMPTY_FIELD = "emptyField";
 	private static final String TOKEN = "token";
 	
 	// attributes of field (at depth 4)

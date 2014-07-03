@@ -27,11 +27,8 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
@@ -41,8 +38,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
-import com.choicemaker.cm.io.flatfile.base.FlatFileRecordSource;
-import com.choicemaker.cm.io.xml.base.XmlRecordSink;
 
 /**
  * This message bean is the first step of the OABA.  It creates rec_id, val_id files using
@@ -184,67 +179,64 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 	}
 
 
-	/** This is a debug method that writes the data to output xml and text files.
-	 *
-	 * @param data
-	 */
-	private void saveToFiles (StartData data) {
-		try {
-			RecordSource rs = data.staging;
-			IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
-
-			XmlRecordSink xSink = new XmlRecordSink ("xmlstage","stage.xml",stageModel);
-			xSink.open();
-
-			FlatFileRecordSource tmpRS = new FlatFileRecordSource("stage.rs", "stage",
-			".txt", false, false, false, '|', true, stageModel);
-			RecordSourceXmlConf.add(tmpRS);
-			RecordSink fSink  = (RecordSink)tmpRS.getSink();
-			fSink.open();
-
-			rs.open();
-			while (rs.hasNext()) {
-				Record r= rs.getNext();
-				xSink.put(r);
-				fSink.put(r);
-			}
-
-			xSink.close();
-			fSink.close();
-
-			// master
-			rs = data.master;
-			if (rs == null) return;
-
-			IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
-
-			xSink = new XmlRecordSink ("xmlmaster","master.xml",masterModel);
-			xSink.open();
-
-			tmpRS = new FlatFileRecordSource("master.rs", "master",
-			".txt", false, false, false, '|', true, masterModel);
-			RecordSourceXmlConf.add(tmpRS);
-			fSink  = (RecordSink)tmpRS.getSink();
-			fSink.open();
-
-			rs.open();
-			while (rs.hasNext()) {
-				Record r= rs.getNext();
-				xSink.put(r);
-				fSink.put(r);
-			}
-
-			xSink.close();
-			fSink.close();
-
-		} catch (Exception ex) {
-			log.error(ex.toString());
-		}
-
-	}
-
-
-
+//	/** This is a debug method that writes the data to output xml and text files.
+//	 *
+//	 * @param data
+//	 */
+//	private void saveToFiles (StartData data) {
+//		try {
+//			RecordSource rs = data.staging;
+//			IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
+//
+//			XmlRecordSink xSink = new XmlRecordSink ("xmlstage","stage.xml",stageModel);
+//			xSink.open();
+//
+//			FlatFileRecordSource tmpRS = new FlatFileRecordSource("stage.rs", "stage",
+//			".txt", false, false, false, '|', true, stageModel);
+//			RecordSourceXmlConf.add(tmpRS);
+//			RecordSink fSink  = (RecordSink)tmpRS.getSink();
+//			fSink.open();
+//
+//			rs.open();
+//			while (rs.hasNext()) {
+//				Record r= rs.getNext();
+//				xSink.put(r);
+//				fSink.put(r);
+//			}
+//
+//			xSink.close();
+//			fSink.close();
+//
+//			// master
+//			rs = data.master;
+//			if (rs == null) return;
+//
+//			IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
+//
+//			xSink = new XmlRecordSink ("xmlmaster","master.xml",masterModel);
+//			xSink.open();
+//
+//			tmpRS = new FlatFileRecordSource("master.rs", "master",
+//			".txt", false, false, false, '|', true, masterModel);
+//			RecordSourceXmlConf.add(tmpRS);
+//			fSink  = (RecordSink)tmpRS.getSink();
+//			fSink.open();
+//
+//			rs.open();
+//			while (rs.hasNext()) {
+//				Record r= rs.getNext();
+//				xSink.put(r);
+//				fSink.put(r);
+//			}
+//
+//			xSink.close();
+//			fSink.close();
+//
+//		} catch (Exception ex) {
+//			log.error(ex.toString());
+//		}
+//
+//	}
 
 	/** This method checks to see if the number of records in the RecordSource is greater than the
 	 * threshold.

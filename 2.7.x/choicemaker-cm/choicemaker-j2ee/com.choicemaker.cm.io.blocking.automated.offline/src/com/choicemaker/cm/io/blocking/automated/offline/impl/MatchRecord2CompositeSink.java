@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
@@ -40,7 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  */
 public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 
-	private static final Logger log = Logger.getLogger(MatchRecord2CompositeSink.class);
+//	private static final Logger log = Logger.getLogger(MatchRecord2CompositeSink.class);
 	
 	private String fileBase;
 	private String fileExt;

@@ -20,7 +20,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.jms.QueueConnection;
 import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
@@ -60,7 +59,7 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 	private transient MessageDrivenContext mdc = null;
 	protected transient EJBConfiguration configuration = null;
 	private transient OABAConfiguration oabaConfig = null;
-	private transient QueueConnection connection = null;
+//	private transient QueueConnection connection = null;
 
 	private StartData data;
 

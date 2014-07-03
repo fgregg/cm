@@ -57,10 +57,10 @@ public abstract class SourceGui extends JDialog {
 	protected JTextField sourceFileName;
 	protected JButton sourceFileBrowseButton;
 	protected String oldName;
-	private int type;
+//	private int type;
 
 	public Source define() {
-		show();
+		setVisible(true);
 		return source;
 	}
 

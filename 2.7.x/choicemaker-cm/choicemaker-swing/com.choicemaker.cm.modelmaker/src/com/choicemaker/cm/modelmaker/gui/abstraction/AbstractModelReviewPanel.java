@@ -14,17 +14,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
-import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
-import com.choicemaker.cm.modelmaker.gui.tables.CluePerformanceTable;
-import com.choicemaker.cm.modelmaker.gui.tables.ClueTablePanel;
 import com.choicemaker.cm.module.swing.AbstractTabbedPanel;
 
 /**
@@ -44,15 +39,15 @@ public abstract class AbstractModelReviewPanel
 
 	private static final long serialVersionUID = 1L;
 	private ModelMaker parent;
-	private Trainer trainer;
+//	private Trainer trainer;
 
-	private JPanel controlsPanel;
-	private JScrollPane cluePerformancePanel;
-	private CluePerformanceTable performanceTable;
+//	private JPanel controlsPanel;
+//	private JScrollPane cluePerformancePanel;
+//	private CluePerformanceTable performanceTable;
 
-	private ClueTablePanel clueTablePanel;
+//	private ClueTablePanel clueTablePanel;
 
-	private boolean dirty;
+//	private boolean dirty;
 
 	public AbstractModelReviewPanel(ModelMaker g) {
 		super();

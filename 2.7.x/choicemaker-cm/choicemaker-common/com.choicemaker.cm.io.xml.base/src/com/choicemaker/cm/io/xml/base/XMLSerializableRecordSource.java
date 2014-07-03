@@ -13,8 +13,6 @@ package com.choicemaker.cm.io.xml.base;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -34,7 +32,7 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(XMLSerializableRecordSource.class);
+//	private static final Logger log = Logger.getLogger(XMLSerializableRecordSource.class);
 
 	private String xmlFile;
 	private String modelName;

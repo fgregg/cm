@@ -26,11 +26,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
-import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -53,9 +50,9 @@ public class TestingControlPanel
 	extends JPanel
 	implements RepositoryChangeListener, PropertyChangeListener, EvaluationListener {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(TestingControlPanel.class);
+//	private static Logger logger = Logger.getLogger(TestingControlPanel.class);
 	private ModelMaker parent;
-	private Trainer trainer;
+//	private Trainer trainer;
 
 	private JPanel confusionPanel;
 	private JScrollPane confusionPane;
@@ -70,9 +67,9 @@ public class TestingControlPanel
 	private JTextField matchRecall;
 	private JLabel humanReviewsLabel;
 	private JTextField humanReviews;
-	private JLabel precisionLabel;
+//	private JLabel precisionLabel;
 	private JTextField precision;
-	private JLabel recallLabel;
+//	private JLabel recallLabel;
 	private JTextField recall;
 	private JLabel correlationLabel;
 	private JTextField correlation;
@@ -156,12 +153,12 @@ public class TestingControlPanel
 		humanReviews = new JTextField(5);
 		humanReviews.setHorizontalAlignment(JTextField.RIGHT);
 		humanReviews.setEditable(false);
-		precisionLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.precision"), JLabel.RIGHT);
+//		precisionLabel =
+//			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.precision"), JLabel.RIGHT);
 		precision = new JTextField(5);
 		precision.setHorizontalAlignment(JTextField.RIGHT);
 		precision.setEditable(false);
-		recallLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.recall"), JLabel.RIGHT);
+//		recallLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.recall"), JLabel.RIGHT);
 		recall = new JTextField(5);
 		recall.setHorizontalAlignment(JTextField.RIGHT);
 		recall.setEditable(false);

@@ -35,7 +35,7 @@ public class GenericIterator implements Iterator {
 
 	private static final Logger log = Logger.getLogger(GenericIterator.class);
 	
-	private final String name;
+//	private final String name;
 	
 	private final Iterator compositeEntities;
 	
@@ -50,7 +50,7 @@ public class GenericIterator implements Iterator {
 	public GenericIterator (String name, Iterator compositeEntities, EdgeProperty ep, 
 		SubGraphProperty sp) {
 			
-		this.name = name;
+//		this.name = name;
 		this.compositeEntities = compositeEntities;
 		this.edge = ep;
 		this.subGraph = sp;

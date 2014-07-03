@@ -12,8 +12,6 @@ package com.choicemaker.cm.validation.eclipse.impl;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.validation.AbstractValidator;
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.util.StringUtils;
@@ -27,7 +25,7 @@ import com.choicemaker.util.StringUtils;
  */
 public class NonEmptyStringValidator extends AbstractValidator {
 
-	private static Logger logger = Logger.getLogger(NonEmptyStringValidator.class);
+//	private static Logger logger = Logger.getLogger(NonEmptyStringValidator.class);
 
 	/**
 	 * Partially constructs an aggregate validator. The

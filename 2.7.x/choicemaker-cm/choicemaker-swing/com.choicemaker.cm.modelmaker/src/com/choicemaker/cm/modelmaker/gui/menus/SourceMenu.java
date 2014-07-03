@@ -72,7 +72,7 @@ public class SourceMenu extends JMenu {
 
 	private class SaveAsAction extends AbstractAction implements EvaluationListener {
 		private static final long serialVersionUID = 1L;
-		private boolean selection;
+//		private boolean selection;
 
 		SaveAsAction(String name, Icon icon, boolean selection) {
 			super(name, icon);

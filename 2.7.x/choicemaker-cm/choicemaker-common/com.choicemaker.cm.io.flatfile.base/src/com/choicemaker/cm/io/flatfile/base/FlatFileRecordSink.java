@@ -31,7 +31,7 @@ import com.choicemaker.cm.core.util.FileUtilities;
 public class FlatFileRecordSink implements RecordSink {
 	private String name;
 	private String fileNamePrefix;
-	private String rawFileNamePrefix;
+//	private String rawFileNamePrefix;
 	private String fileNameSuffix;
 	private boolean multiFile;
 	private boolean singleLine;
@@ -80,7 +80,7 @@ public class FlatFileRecordSink implements RecordSink {
 	}
 
 	public void setRawFileNamePrefix(String fn) {
-		rawFileNamePrefix = fn;
+//		rawFileNamePrefix = fn;
 		fileNamePrefix = FileUtilities.getAbsoluteFile(new File(name).getAbsoluteFile().getParentFile(), fn).toString();
 	}
 

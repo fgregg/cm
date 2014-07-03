@@ -80,7 +80,7 @@ public class RecValService2 {
 
 	//This stores if master record id is Integer, Long, or string
 	private boolean firstMaster = true;
-	private int masterType = -1;
+//	private int masterType = -1;
 
 //	private String blockName;
 //	private String dbConf;
@@ -303,8 +303,8 @@ public class RecValService2 {
 
 					//This checks the id type
 					if (firstMaster) {
-						Object O = r.getId();
-						masterType = Constants.checkType((Comparable)O);
+//						Object O = r.getId();
+//						masterType = Constants.checkType((Comparable)O);
 						firstMaster = false;
 					}
 

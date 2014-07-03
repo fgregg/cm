@@ -12,8 +12,6 @@ package com.choicemaker.cm.transitivity.server.util;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 //import com.choicemaker.cm.transitivity.core.BiConnectedProperty;
 //import com.choicemaker.cm.transitivity.core.CompositeEntity;
 //import com.choicemaker.cm.transitivity.core.MatchEdgeProperty;
@@ -34,7 +32,7 @@ public class MatchBiMatchHoldFullyConnectedIterator implements Iterator {
 
 	public static final String NAME = "BCM_FCMH";
 
-	private static final Logger log = Logger.getLogger(MatchBiMatchHoldFullyConnectedIterator.class);
+//	private static final Logger log = Logger.getLogger(MatchBiMatchHoldFullyConnectedIterator.class);
 	
 	private Iterator compositeEntities;
 	

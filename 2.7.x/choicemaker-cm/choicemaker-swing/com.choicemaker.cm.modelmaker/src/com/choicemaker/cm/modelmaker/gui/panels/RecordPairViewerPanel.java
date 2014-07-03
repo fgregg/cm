@@ -13,7 +13,6 @@ package com.choicemaker.cm.modelmaker.gui.panels;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.RepositoryChangeEvent;
@@ -35,7 +34,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:06:20 $
  */
 public class RecordPairViewerPanel implements RepositoryChangeListener, PropertyChangeListener {
-	private static Logger logger = Logger.getLogger(RecordPairViewerPanel.class);
+//	private static Logger logger = Logger.getLogger(RecordPairViewerPanel.class);
 	public static RecordPairViewerPanel instance;
 
 	private HumanReviewPanel parent;

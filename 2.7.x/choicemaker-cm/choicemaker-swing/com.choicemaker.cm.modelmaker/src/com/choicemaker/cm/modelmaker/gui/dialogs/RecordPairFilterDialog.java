@@ -22,8 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
@@ -37,7 +35,7 @@ import com.choicemaker.cm.modelmaker.gui.panels.FilterCluePanel;
  */
 public class RecordPairFilterDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(RecordPairFilterDialog.class);
+//	private static Logger logger = Logger.getLogger(RecordPairFilterDialog.class);
 	private ModelMaker parent;
 	private ListeningMarkedRecordPairFilter filter;
 	private JPanel panel;

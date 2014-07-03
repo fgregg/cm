@@ -28,8 +28,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.util.MessageUtil;
@@ -48,9 +46,9 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  */
 public class TrainDialog extends JDialog implements Enable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(TrainDialog.class);
-	private static int BASE_HEIGHT = 220;
-	private static int MIN_WIDTH = 330;
+//	private static Logger logger = Logger.getLogger(TrainDialog.class);
+//	private static int BASE_HEIGHT = 220;
+//	private static int MIN_WIDTH = 330;
 	private ModelMaker parent;
 	private JPanel content;
 	private JButton trainButton;
@@ -98,7 +96,7 @@ public class TrainDialog extends JDialog implements Enable {
 			mlc.setSelectedIndex(0);
 		}
 		setEnabledness();
-		super.show();
+		super.setVisible(true);
 	}
 
 	private void setMachineLearner() {

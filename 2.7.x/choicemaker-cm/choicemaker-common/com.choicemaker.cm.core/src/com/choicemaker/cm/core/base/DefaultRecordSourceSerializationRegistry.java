@@ -64,8 +64,8 @@ public class DefaultRecordSourceSerializationRegistry
 	private static final String POINT =
 		SERIALIZABLE_RECORD_SOURCE_EXTENSION_POINT;
 	private static final String PRIORITY = SERIALIZABLE_RECORD_SOURCE_PRIORITY;
-	private static final String PROPERTIES =
-		AbstractRecordSourceSerializer.SERIALIZABLE_RECORD_SOURCE_PROPERTIES;
+//	private static final String PROPERTIES =
+//		AbstractRecordSourceSerializer.SERIALIZABLE_RECORD_SOURCE_PROPERTIES;
 	private static final String PROPERTY =
 		AbstractRecordSourceSerializer.SERIALIZABLE_RECORD_SOURCE_PROPERTY;
 	private static final String PROPERTY_NAME =
@@ -74,8 +74,8 @@ public class DefaultRecordSourceSerializationRegistry
 	private static final String PROPERTY_VALUE =
 		AbstractRecordSourceSerializer
 			.SERIALIZABLE_RECORD_SOURCE_PROPERTY_VALUE;
-	private static final String SERIALIZER =
-		AbstractRecordSourceSerializer.RECORD_SOURCE_SERIALIZER;
+//	private static final String SERIALIZER =
+//		AbstractRecordSourceSerializer.RECORD_SOURCE_SERIALIZER;
 
 	public static DefaultRecordSourceSerializationRegistry getInstance() {
 		if (_instance == null) {

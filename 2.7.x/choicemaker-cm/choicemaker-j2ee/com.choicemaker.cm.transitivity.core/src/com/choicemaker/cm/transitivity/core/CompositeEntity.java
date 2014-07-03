@@ -44,7 +44,7 @@ public class CompositeEntity implements INode {
 	//a mapping of node to adjacency list of INode
 	private HashMap adjacencyMap = new HashMap ();
 	
-	private HashMap propertiesMap;
+//	private HashMap propertiesMap;
 	
 	
 	/** This constructor takes in an id.

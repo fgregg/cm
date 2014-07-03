@@ -12,8 +12,6 @@ package com.choicemaker.cm.modelmaker.gui.utils;
 
 import java.util.Comparator;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.modelmaker.gui.tables.ClTableRow;
 
 /**
@@ -25,7 +23,7 @@ import com.choicemaker.cm.modelmaker.gui.tables.ClTableRow;
 
 public class ClueDataComparator implements Comparator {
 
-	private static Logger logger = Logger.getLogger(ClueDataComparator.class);
+//	private static Logger logger = Logger.getLogger(ClueDataComparator.class);
 	protected int sortCol;
 	protected boolean sortAsc;
 

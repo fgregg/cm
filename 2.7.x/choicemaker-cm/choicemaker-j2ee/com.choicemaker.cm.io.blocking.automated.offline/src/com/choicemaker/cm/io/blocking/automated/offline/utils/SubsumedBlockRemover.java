@@ -47,7 +47,7 @@ public class SubsumedBlockRemover {
 
 	//these variables are for splitting the block source to avoid outofmemoryexception
 	private IBlockSinkSourceFactory bFactory;
-	private int maxBlockSize;
+//	private int maxBlockSize;
 
 
 	BlocksSpliter spliter;
@@ -76,7 +76,7 @@ public class SubsumedBlockRemover {
 		this.source = source;
 		this.sink = sink;
 		this.bFactory = bFactory;
-		this.maxBlockSize = maxBlockSize;
+//		this.maxBlockSize = maxBlockSize;
 
 		//set up spliter
 		spliter = new BlocksSpliter (bFactory, maxBlockSize);
@@ -356,18 +356,18 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 
 
 
-	private List readBlocks (IBlockSource ibs) throws BlockingException{
-		ArrayList list = new ArrayList ();
-		ibs.open();
-
-		while (ibs.hasNext()) {
-			list.add(ibs.getNext());
-			numBlocksIn ++;
-		}
-
-		ibs.close();
-		return list;
-	}
+//	private List readBlocks (IBlockSource ibs) throws BlockingException{
+//		ArrayList list = new ArrayList ();
+//		ibs.open();
+//
+//		while (ibs.hasNext()) {
+//			list.add(ibs.getNext());
+//			numBlocksIn ++;
+//		}
+//
+//		ibs.close();
+//		return list;
+//	}
 
 
 

@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.matching.en.Soundex;
 import com.choicemaker.util.StringUtils;
 
@@ -35,7 +33,7 @@ import com.choicemaker.util.StringUtils;
  * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:17:24 $
  */
 public class NameParser {
-	private static Logger logger = Logger.getLogger(NameParser.class);
+//	private static Logger logger = Logger.getLogger(NameParser.class);
 
 	public static Collection genericFirstNames = new HashSet();
 	public static Collection childOfIndicators = new HashSet();

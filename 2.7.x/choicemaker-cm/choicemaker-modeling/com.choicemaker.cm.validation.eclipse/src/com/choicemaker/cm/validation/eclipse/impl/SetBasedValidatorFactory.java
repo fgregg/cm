@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.validation.eclipse.impl;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 import com.choicemaker.cm.validation.AbstractSetBasedValidator;
@@ -24,8 +23,8 @@ import com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory;
  */
 public class SetBasedValidatorFactory extends AbstractValidatorFactory {
 
-	private static Logger logger =
-		Logger.getLogger(SetBasedValidatorFactory.class);
+//	private static Logger logger =
+//		Logger.getLogger(SetBasedValidatorFactory.class);
 
 	/**
 	 * The {@link setHandledValidatorExtensionPoint(String)} method

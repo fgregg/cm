@@ -26,7 +26,7 @@ public class DefaultDateProfiler implements FieldProfiler {
 	private FieldAccessor fa;
 
 	private int totalRecords;
-	private int numNull;
+//	private int numNull;
 	private int numInvalid;
 	
 	private LongArrayList values = new LongArrayList();
@@ -34,7 +34,7 @@ public class DefaultDateProfiler implements FieldProfiler {
 
 	// These properties are computed from the values array above...
 	private int totalRows;
-	private int numZeros, numNegative, numPositive;
+//	private int numZeros, numNegative, numPositive;
 	
 	private long min, max;
 	private double median;
@@ -57,7 +57,7 @@ public class DefaultDateProfiler implements FieldProfiler {
 		values = new LongArrayList();
 
 		totalRecords = 0;
-		numNull = 0;
+//		numNull = 0;
 		numInvalid = 0;
 		
 		fvhStat.reset();
@@ -76,8 +76,8 @@ public class DefaultDateProfiler implements FieldProfiler {
 			
 			if (obj != null) {
 				values.add(((Date)obj).getTime());
-			} else {
-				numNull++;
+//			} else {
+////				numNull++;
 			}
 			
 			if (!fa.getValidity(r, row)) {
@@ -95,9 +95,9 @@ public class DefaultDateProfiler implements FieldProfiler {
 			dirty = false;
 
 			// the default values
-			numZeros = 0;
-			numNegative = 0;
-			numPositive = 0;
+//			numZeros = 0;
+//			numNegative = 0;
+//			numPositive = 0;
 			min = 0;
 			max = 0;
 			median = 0;
@@ -137,13 +137,13 @@ public class DefaultDateProfiler implements FieldProfiler {
 					total += val;
 					
 					// numZeros, numNegative, numPositive
-					if (val > 0) {
-						numPositive++;
-					} else if (val == 0) {
-						numZeros++;
-					} else {
-						numNegative++;
-					}
+//					if (val > 0) {
+//						numPositive++;
+//					} else if (val == 0) {
+//						numZeros++;
+//					} else {
+//						numNegative++;
+//					}
 					
 					// mode
 					if (val == last) {

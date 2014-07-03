@@ -22,8 +22,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
@@ -48,7 +46,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
 public class ActiveClueTableModel extends SortableTableModel {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(ActiveClueTableModel.class);
+//	private static Logger logger = Logger.getLogger(ActiveClueTableModel.class);
 
 	private IProbabilityModel pModel;
 	private ActiveClues activeClues;

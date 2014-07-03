@@ -13,8 +13,6 @@ package com.choicemaker.cm.modelmaker.gui.tables;
 import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.utils.ValueError;
@@ -29,7 +27,7 @@ public class ConfusionTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(ConfusionTableModel.class);
+//	private static Logger logger = Logger.getLogger(ConfusionTableModel.class);
 
 	private int[][] statMatrix;
 	private boolean isEmpty;

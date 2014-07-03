@@ -28,7 +28,7 @@ public class CrossValidatorAction extends ToolAction  {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		new CrossValidatorDialog(modelMaker).show();
+		new CrossValidatorDialog(modelMaker).setVisible(true);
 	}
 
 }

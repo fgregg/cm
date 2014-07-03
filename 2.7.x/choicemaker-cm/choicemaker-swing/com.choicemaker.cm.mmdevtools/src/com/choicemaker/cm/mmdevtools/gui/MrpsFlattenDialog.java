@@ -42,7 +42,7 @@ public class MrpsFlattenDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	public static void showMrpsFlattenDialog(ModelMaker modelMaker) {
-		new MrpsFlattenDialog(modelMaker).show();
+		new MrpsFlattenDialog(modelMaker).setVisible(true);
 	}
 
 	private ModelMaker modelMaker;

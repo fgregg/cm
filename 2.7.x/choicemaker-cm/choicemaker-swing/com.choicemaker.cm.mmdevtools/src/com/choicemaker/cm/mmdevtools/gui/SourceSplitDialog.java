@@ -71,7 +71,7 @@ public class SourceSplitDialog extends JDialog {
 	private static final int MRPS = 2;
 
 	public static void showRsSplitDialog(ModelMaker mm) {
-		new SourceSplitDialog(mm, RS).show();
+		new SourceSplitDialog(mm, RS).setVisible(true);
 	}
 
 	private ModelMaker modelMaker;

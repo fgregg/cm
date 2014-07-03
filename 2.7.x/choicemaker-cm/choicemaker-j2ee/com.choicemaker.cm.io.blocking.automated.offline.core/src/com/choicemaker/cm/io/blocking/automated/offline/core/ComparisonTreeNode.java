@@ -399,17 +399,18 @@ public class ComparisonTreeNode implements Serializable {
 			return blockingSetId;
 		}
 		
-		public SuffixTreeNode getChild(long childId) {
-			throw new UnsupportedOperationException("Leaf nodes have no children");
-		}
+//		public SuffixTreeNode getChild(long childId) {
+//			throw new UnsupportedOperationException("Leaf nodes have no children");
+//		}
 		
-		public ComparisonTreeNode putChild(long childId) {
-			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
-		}
+//		public ComparisonTreeNode putChild(long childId) {
+//			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
+//		}
 		
-		public ComparisonTreeNode putChild(long childId, Comparable blockingSetId) {
-			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
-		}
+//		public ComparisonTreeNode putChild(long childId, Comparable blockingSetId) {
+//			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
+//		}
+
 	}
 
 }

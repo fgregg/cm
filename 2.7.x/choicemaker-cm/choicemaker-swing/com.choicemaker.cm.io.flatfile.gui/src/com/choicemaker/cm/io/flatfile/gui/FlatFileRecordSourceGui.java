@@ -25,8 +25,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.MessageUtil;
@@ -51,7 +49,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  */
 public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(FlatFileRecordSourceGui.class);
+//	private static Logger logger = Logger.getLogger(FlatFileRecordSourceGui.class);
 	private static String RELATIVE = MessageUtil.m.formatMessage("io.common.gui.source.file.relative");
 	private static String ABSOLUTE = MessageUtil.m.formatMessage("io.common.gui.source.file.absolute");
 	private JLabel sourceNameLabel;
@@ -71,7 +69,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 	private JCheckBox tagged;
 
 	private String saveFileN;
-	private String absFileN;
+//	private String absFileN;
 	private String extension;
 
 
@@ -83,7 +81,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 	public void show() {
 		setFields();
 		setEnabledness();
-		super.show();
+		super.setVisible(true);
 	}
 
 	public void setFields() {
@@ -121,10 +119,10 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 		String fn = getAbsoluteFileName();
 		int pos = fn.lastIndexOf('.');
 		if (pos >= 0) {
-			absFileN = fn.substring(0, pos);
+//			absFileN = fn.substring(0, pos);
 			extension = fn.substring(pos, fn.length());
 		} else {
-			absFileN = fn;
+//			absFileN = fn;
 			extension = "";
 		}
 		fn = getSaveFileName();

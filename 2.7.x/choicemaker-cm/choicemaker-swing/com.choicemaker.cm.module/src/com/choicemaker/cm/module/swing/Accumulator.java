@@ -17,7 +17,6 @@ import java.io.Writer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.EventListenerList;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -27,7 +26,7 @@ import com.choicemaker.cm.module.IUserMessages;
 class Accumulator implements IUserMessages, Runnable {
 		
 	private final Document document;
-	private final EventListenerList listeners = new EventListenerList();
+//	private final EventListenerList listeners = new EventListenerList();
 	private StringBuffer buf = new StringBuffer();
 	private boolean queued;
 	private final Writer w = new Writer() {

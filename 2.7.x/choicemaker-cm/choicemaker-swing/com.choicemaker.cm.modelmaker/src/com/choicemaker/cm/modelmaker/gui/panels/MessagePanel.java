@@ -24,8 +24,6 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
@@ -37,8 +35,8 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class MessagePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(MessagePanel.class);
-	private ModelMaker parent;
+//	private static Logger logger = Logger.getLogger(MessagePanel.class);
+//	private ModelMaker parent;
 	private JScrollPane statusTextAreaScrollPane;
 	private JTextArea statusTextArea;
 	private Writer w;
@@ -47,7 +45,7 @@ public class MessagePanel extends JPanel {
 
 	public MessagePanel(ModelMaker g) {
 		super();
-		parent = g;
+//		parent = g;
 		accumulator = new Accumulator();
 		buildPanel();
 		w = new Writer() {

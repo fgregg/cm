@@ -441,7 +441,7 @@ public class ModelMenu extends LastUsedMenu {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
-				new TrainDialog(parent, false).show();
+				new TrainDialog(parent, false).setVisible(true);
 			}
 		};
 		JMenuItem trainItem = add(trainAction);
@@ -467,7 +467,7 @@ public class ModelMenu extends LastUsedMenu {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
-				new TrainDialog(parent, true).show();
+				new TrainDialog(parent, true).setVisible(true);
 			}
 		};
 		JMenuItem trainAndTestItem = add(trainAndTestAction);

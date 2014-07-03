@@ -148,7 +148,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 			Logger.getLogger(ObjectMakerDialog.class).error("Problem creating Holder classes and DB objects", thrown[0]);
 			dispose();
 		} else if (interrupted) {
-			show();
+			setVisible(true);
 		} else {
 			final JDialog d = new JDialog(modelMaker, "Status", true);
 			d.getContentPane().setLayout(new GridBagLayout());
@@ -167,7 +167,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 			});
 			d.pack();
 			d.setLocationRelativeTo(modelMaker);
-			d.show();
+			d.setVisible(true);
 			dispose();
 		}
 	}

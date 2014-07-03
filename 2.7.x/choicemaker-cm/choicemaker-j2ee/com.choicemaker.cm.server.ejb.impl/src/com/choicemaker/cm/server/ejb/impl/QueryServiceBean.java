@@ -38,7 +38,6 @@ import com.choicemaker.cm.core.base.MatchCandidateFactory;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
 import com.choicemaker.cm.core.report.Report;
-import com.choicemaker.cm.core.report.Reporter;
 import com.choicemaker.cm.core.report.ReporterPlugin;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
@@ -70,9 +69,9 @@ public class QueryServiceBean implements SessionBean {
 	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.matchCandidate";
 
 	private static boolean inited;
-	private static transient Reporter fileReporter;
+//	private static transient Reporter fileReporter;
 	protected transient DataSource blockingSource;
-	private transient DataSource reportingSource;
+//	private transient DataSource reportingSource;
 	private NameServiceLookup nameServiceLookup = new NameServiceLookup();
 
 	private static synchronized void init(DataSource dataSource) throws XmlConfException, RemoteException, DatabaseException {

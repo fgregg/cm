@@ -48,9 +48,9 @@ public class MatchWriter implements MessageDrivenBean, MessageListener {
 	
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
-	private transient OABAConfiguration oabaConfig = null;
+//	private transient OABAConfiguration oabaConfig = null;
 	
-	private transient int written = 0;
+//	private transient int written = 0;
 	
 
 	public void ejbCreate() {
@@ -112,7 +112,7 @@ public class MatchWriter implements MessageDrivenBean, MessageListener {
 					for (int i=0; i<data.matches.size(); i++) {
 						MatchRecord2 mr = (MatchRecord2) data.matches.get(i);
 						mSink.writeMatch(mr);
-						written ++;
+//						written ++;
 					}
 					
 					mSink.close();

@@ -47,7 +47,7 @@ public class RecValDBSource implements IRecValSource {
 	private boolean exists = false;
 	private PreparedStatement selectStmt;
 	private ResultSet selectRS;
-	private int count = 0;
+//	private int count = 0;
 	
 	private long nextRecID = Long.MIN_VALUE;
 	private long nextRecID2 = Long.MIN_VALUE;

@@ -28,7 +28,7 @@ public class MatchBiconnectedIterator extends GenericIterator {
 
 	public static final String NAME = "BCM";
 
-	private Iterator compositeEntities;
+//	private Iterator compositeEntities;
 
 	/** This constructor takes in an Iterator of CompositeEntity.
 	 * 

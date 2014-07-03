@@ -22,7 +22,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.jms.QueueConnection;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
@@ -68,7 +67,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 	protected transient MessageDrivenContext mdc;
 	protected transient EJBConfiguration configuration;
 	protected transient OABAConfiguration oabaConfig;
-	private transient QueueConnection connection;
+//	private transient QueueConnection connection;
 	protected transient BatchJob batchJob;
 
 	//This counts the number of messages sent to MatchDedupEach and number of done messages got back.

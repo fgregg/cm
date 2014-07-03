@@ -17,8 +17,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
-import org.apache.log4j.Logger;
-
 /**
  * This class holds on to a column from a RecordTable so that it can be removed and
  * inserted according to the users preference.
@@ -26,15 +24,15 @@ import org.apache.log4j.Logger;
  * @author S. Yoakum-Stover
  */
 public class ColumnKeeper implements ActionListener {
-	private static Logger logger = Logger.getLogger(ColumnKeeper.class);
+//	private static Logger logger = Logger.getLogger(ColumnKeeper.class);
 	private JTable table;
 	private TableColumn col;
-	private int colTableModelIndex;
+//	private int colTableModelIndex;
 
 	public ColumnKeeper(JTable table, TableColumn col, int index) {
 		this.table = table;
 		this.col = col;
-		this.colTableModelIndex = index;
+//		this.colTableModelIndex = index;
 	}
 
 	public void actionPerformed(ActionEvent e) {

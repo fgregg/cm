@@ -61,7 +61,7 @@ public class ToolsMenu extends JMenu {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new MatcherDialog(modelMaker).show();
+			new MatcherDialog(modelMaker).setVisible(true);
 		}
 		/**
 		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
@@ -83,7 +83,7 @@ public class ToolsMenu extends JMenu {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new GeoFunctionsDialog(modelMaker).show();
+			new GeoFunctionsDialog(modelMaker).setVisible(true);
 		}
 		/**
 		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
@@ -108,7 +108,7 @@ public class ToolsMenu extends JMenu {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new ExportProbabilitiesDialog(modelMaker).show();
+			new ExportProbabilitiesDialog(modelMaker).setVisible(true);
 		}
 
 		public void propertyChange(PropertyChangeEvent evt) {
@@ -126,7 +126,7 @@ public class ToolsMenu extends JMenu {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent ev) {
-				new StringComparator(modelMaker).show();
+				new StringComparator(modelMaker).setVisible(true);
 			}
 		};
 		add(stringComparator);
@@ -137,7 +137,7 @@ public class ToolsMenu extends JMenu {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
-				new CollectionsDialog(modelMaker).show();
+				new CollectionsDialog(modelMaker).setVisible(true);
 			}
 		};
 		add(collections);
@@ -146,7 +146,7 @@ public class ToolsMenu extends JMenu {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
-				new ObjectMakerDialog(modelMaker).show();
+				new ObjectMakerDialog(modelMaker).setVisible(true);
 			};
 		};
 		add(buildModelsJar);

@@ -34,7 +34,7 @@ public class OABAPropertiesFile implements IOABAProperties {
 	
 	private static final String FILE_NAME = "OABA.properties";
 	
-	private static OABAPropertiesFile oProperties = null;
+//	private static OABAPropertiesFile oProperties = null;
 	
 	//The default values are meant to get over written.
 	private int numProc = 1;

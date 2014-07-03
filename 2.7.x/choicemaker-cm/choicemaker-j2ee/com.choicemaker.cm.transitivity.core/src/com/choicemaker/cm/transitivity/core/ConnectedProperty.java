@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.transitivity.core;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -50,15 +49,15 @@ public class ConnectedProperty implements SubGraphProperty {
 	}
 
 
-	private void writeDebug (TreeSet set) {
-		System.out.println ("{");
-		Iterator it = set.iterator();
-		while (it.hasNext()) {
-			INode node = (INode) it.next();
-			System.out.println (node.getNodeId().toString());
-		}
-		System.out.println ("}");
-	}
+//	private void writeDebug (TreeSet set) {
+//		System.out.println ("{");
+//		Iterator it = set.iterator();
+//		while (it.hasNext()) {
+//			INode node = (INode) it.next();
+//			System.out.println (node.getNodeId().toString());
+//		}
+//		System.out.println ("}");
+//	}
 
 	
 	/** This method calculates the set of reachable nodes from the input

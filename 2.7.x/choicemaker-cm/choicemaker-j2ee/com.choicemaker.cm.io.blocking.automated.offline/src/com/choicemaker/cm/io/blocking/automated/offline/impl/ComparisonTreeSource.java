@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -28,7 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  */
 public class ComparisonTreeSource extends BaseFileSource implements IComparisonTreeSource {
 
-	private static final Logger log = Logger.getLogger(ComparisonTreeSource.class);
+//	private static final Logger log = Logger.getLogger(ComparisonTreeSource.class);
 	
 	private ComparisonTreeNode nextTree = null;
 	

@@ -26,7 +26,6 @@ import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
@@ -54,7 +53,7 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 	protected transient EJBConfiguration configuration = null;
 	protected transient OABAConfiguration oabaConfig = null;
 
-	private transient Evaluator evaluator;
+//	private transient Evaluator evaluator;
 	//private transient ClueSet clueSet;
 	//private transient boolean[] enabledClues;
 	protected transient float low;

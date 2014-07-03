@@ -13,7 +13,6 @@ package com.choicemaker.cm.mmdevtools.util;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,18 +65,18 @@ public class PiecewiseMatcher {
 	private boolean[] enabledClues;
 
 	private PropertyChangeSupport propertyChangeListeners;
-	private int numRecordsFromSmall;
-	private int numRecordsFromLarge;
-	private int numPairs;
-	private boolean done;
-	private int maxNumMatchesPerSourceRecord;
+//	private int numRecordsFromSmall;
+//	private int numRecordsFromLarge;
+//	private int numPairs;
+//	private boolean done;
+//	private int maxNumMatchesPerSourceRecord;
 	
 	private Counter recordsRead;
 	private Counter recordsTreatedAsSource;
 	private Counter recordsBlocked;
 	private Counter matches;
 
-	private DateFormat df = DateFormat.getTimeInstance(DateFormat.MEDIUM);
+//	private DateFormat df = DateFormat.getTimeInstance(DateFormat.MEDIUM);
 
 	public PiecewiseMatcher() {
 		propertyChangeListeners = new PropertyChangeSupport(this);
@@ -262,20 +261,20 @@ public class PiecewiseMatcher {
 			this.propertyName = propertyName;
 			this.updateFreq = updateFreq;
 		}
-		public void reset() {
-			count = 0;
-			nextUpdate = updateFreq;
-			update();
-		}
-		public void add(int i) {
-			count += i;
-			if (count >= nextUpdate) {
-				update();
-				while (nextUpdate < count) {
-					nextUpdate += updateFreq;
-				}
-			}
-		}
+//		public void reset() {
+//			count = 0;
+//			nextUpdate = updateFreq;
+//			update();
+//		}
+//		public void add(int i) {
+//			count += i;
+//			if (count >= nextUpdate) {
+//				update();
+//				while (nextUpdate < count) {
+//					nextUpdate += updateFreq;
+//				}
+//			}
+//		}
 		public void increment() {
 			if (++count >= nextUpdate) {
 				update();

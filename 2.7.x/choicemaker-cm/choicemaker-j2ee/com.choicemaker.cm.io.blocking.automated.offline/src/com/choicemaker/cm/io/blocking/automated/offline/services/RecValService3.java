@@ -88,7 +88,7 @@ public class RecValService3 {
 
 	//This stores if master record id is Integer, Long, or string
 	private boolean firstMaster = true;
-	private int masterType = -1;
+//	private int masterType = -1;
 
 //	private String blockName;
 //	private String dbConf;
@@ -237,11 +237,11 @@ public class RecValService3 {
 			if (master != null) {
 				master.setModel(masterModel);
 				master.open();
-				if (master.hasNext()) {
-					Record r = master.getNext();
-					Object O = r.getId();
-					masterType = Constants.checkType((Comparable)O);
-				}
+//				if (master.hasNext()) {
+//					Record r = master.getNext();
+//					Object O = r.getId();
+//					masterType = Constants.checkType((Comparable)O);
+//				}
 				master.close();
 			}
 
@@ -332,8 +332,8 @@ public class RecValService3 {
 
 					//This checks the id type
 					if (firstMaster) {
-						Object O = r.getId();
-						masterType = Constants.checkType((Comparable)O);
+//						Object O = r.getId();
+//						masterType = Constants.checkType((Comparable)O);
 						firstMaster = false;
 					}
 

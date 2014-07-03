@@ -15,11 +15,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-
-import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -34,11 +31,11 @@ public class FilterMenu extends JMenu implements ActionListener {
 
     private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(FilterMenu.class);
+//	private static Logger logger = Logger.getLogger(FilterMenu.class);
 
 	// private AbstractApplication humanReview;
     private HumanReviewPanel humanReview;
-    private ButtonGroup bGroup;
+//    private ButtonGroup bGroup;
     private static final String ENABLE = MessageUtil.m.formatMessage("train.gui.modelmaker.menu.filter.set");
 
     public FilterMenu(HumanReviewPanel g) {

@@ -43,8 +43,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
@@ -81,7 +79,7 @@ public class HumanReviewPanel
 	private JLabel currentRecordLabel;
 	private JLabel nextInLoggerLabel;
 	private JLabel selectionSizeLabel;
-	private static Logger logger = Logger.getLogger(HumanReviewPanel.class);
+//	private static Logger logger = Logger.getLogger(HumanReviewPanel.class);
 	private static final DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 	private ModelMaker parent;
 	private RecordPairViewerPanel viewer;
@@ -99,7 +97,7 @@ public class HumanReviewPanel
 	private int markedRecordPairIndex;
 	private Icon forwardIcon = new ImageIcon(ModelMaker.class.getResource("images/StepForward16.gif"));
 	private Icon backIcon = new ImageIcon(ModelMaker.class.getResource("images/StepBack16.gif"));
-	private Icon warnIcon = new ImageIcon(ModelMaker.class.getResource("images/wand1.gif"));
+//	private Icon warnIcon = new ImageIcon(ModelMaker.class.getResource("images/wand1.gif"));
 	private JPanel navigationPanel;
 	private JTextField selectionSize;
 	private JButton stepForwardButton;
@@ -297,7 +295,7 @@ public class HumanReviewPanel
 
 		fullButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent A) {
-				humanDataDialog.show();
+				humanDataDialog.setVisible(true);
 			}
 		});
 

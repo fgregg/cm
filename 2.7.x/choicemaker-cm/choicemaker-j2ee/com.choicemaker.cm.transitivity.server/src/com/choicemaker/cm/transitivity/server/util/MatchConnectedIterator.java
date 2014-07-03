@@ -28,7 +28,7 @@ public class MatchConnectedIterator extends GenericIterator {
 
 	public static final String NAME = "CM";
 
-	private Iterator compositeEntities;
+//	private Iterator compositeEntities;
 
 	/** This constructor takes in an Iterator of CompositeEntity.
 	 * 

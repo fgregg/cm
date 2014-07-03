@@ -32,7 +32,7 @@ public class MeTrainDialogPlugin extends TrainDialogPlugin {
 	private JLabel trainingIterationsLabel;
 	private JTextField trainingIterations;
 	private MaximumEntropy me;
-	private TrainDialog trainDialog;
+//	private TrainDialog trainDialog;
 
 	public MeTrainDialogPlugin(MaximumEntropy me) {
 		this.me = me;
@@ -46,7 +46,7 @@ public class MeTrainDialogPlugin extends TrainDialogPlugin {
 	}
 	
 	public void setTrainDialog(TrainDialog trainDialog) {
-		this.trainDialog = trainDialog;
+//		this.trainDialog = trainDialog;
 		EnablednessGuard dl = new EnablednessGuard(trainDialog);
 		trainingIterations.getDocument().addDocumentListener(dl);
 	}

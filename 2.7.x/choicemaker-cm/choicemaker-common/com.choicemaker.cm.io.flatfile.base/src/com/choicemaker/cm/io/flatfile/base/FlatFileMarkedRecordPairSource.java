@@ -16,8 +16,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
@@ -34,7 +32,7 @@ import com.choicemaker.cm.core.util.NameUtils;
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
-	private static Logger logger = Logger.getLogger(FlatFileMarkedRecordPairSource.class);
+//	private static Logger logger = Logger.getLogger(FlatFileMarkedRecordPairSource.class);
 
 	private String fileName;
 	private String name;

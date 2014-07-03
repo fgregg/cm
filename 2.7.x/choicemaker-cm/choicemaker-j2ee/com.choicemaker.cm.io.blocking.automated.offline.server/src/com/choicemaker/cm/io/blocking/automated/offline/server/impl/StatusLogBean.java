@@ -18,8 +18,6 @@ import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
 import javax.ejb.RemoveException;
 
-import org.apache.log4j.Category;
-
 /**
  * This is the EJB implemenation of the OABA IStatus interface.
  * 
@@ -29,8 +27,8 @@ import org.apache.log4j.Category;
 public abstract class StatusLogBean implements EntityBean{
 
 	private static final long serialVersionUID = 1L;
-	private static Category log = Category.getInstance(StatusLogBean.class.getName());
-	private EntityContext ctx;
+//	private static Category log = Category.getInstance(StatusLogBean.class.getName());
+//	private EntityContext ctx;
 
 	public abstract void setJobId(Long id) throws RemoteException;
 	public abstract Long getJobId() throws RemoteException;
@@ -88,14 +86,14 @@ public abstract class StatusLogBean implements EntityBean{
 	 */
 	public void setEntityContext(EntityContext arg0)
 		throws EJBException, RemoteException {
-		ctx = arg0;
+//		ctx = arg0;
 	}
 
 	/* (non-Javadoc)
 	 * @see javax.ejb.EntityBean#unsetEntityContext()
 	 */
 	public void unsetEntityContext() throws EJBException, RemoteException {
-		ctx = null;
+//		ctx = null;
 	}
 
 }

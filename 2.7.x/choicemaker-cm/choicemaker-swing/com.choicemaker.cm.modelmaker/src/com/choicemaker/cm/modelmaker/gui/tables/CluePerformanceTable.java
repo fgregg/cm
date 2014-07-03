@@ -21,8 +21,6 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.train.Trainer;
@@ -36,7 +34,7 @@ import com.choicemaker.cm.modelmaker.gui.renderers.ColoredTableCellRenderer;
  */
 public class CluePerformanceTable extends JTable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(CluePerformanceTable.class);
+//	private static Logger logger = Logger.getLogger(CluePerformanceTable.class);
 	private static final Color GREEN = new Color(195, 237, 196);
 	private CluePerformanceTableModel myModel;
 

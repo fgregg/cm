@@ -20,8 +20,6 @@ import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.log4j.Logger;
-
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.gui.utils.viewer.RecordTableColumn;
 import com.choicemaker.cm.gui.utils.viewer.RecordTableColumnModel;
@@ -36,11 +34,11 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(FieldSelectorTableModel.class);
+//	private static Logger logger = Logger.getLogger(FieldSelectorTableModel.class);
 
 	/**
 	 * NOTE: this is the ColumnModel for the RecordTable... The <code> FieldSelectorTable </code>
-	 * 		 is used to configute the <code>RecordTable</code>.  So the RecordTableColumnModel is
+	 * 		 is used to configure the <code>RecordTable</code>.  So the RecordTableColumnModel is
 	 * 		 the actual <code>TableModel</code> for the FieldSelectorTable.
 	 */
 	private RecordTableColumnModel columnModel;
@@ -56,7 +54,7 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 	public static final int COL_ALIAS = 1;
 	public static final int COL_DISPLAYED = 2;
 
-	private static final int COL_MAX = COL_DISPLAYED;
+//	private static final int COL_MAX = COL_DISPLAYED;
 
 	public FieldSelectorTableModel(RecordTableColumnModel columnModel) {
 		this.columnModel = columnModel;
