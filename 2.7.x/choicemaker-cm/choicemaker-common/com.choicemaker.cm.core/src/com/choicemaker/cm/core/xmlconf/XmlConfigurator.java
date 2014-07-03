@@ -14,35 +14,31 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.Platform;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.PropertyNames;
+import com.choicemaker.cm.core.WellKnownPropertyValues;
 import com.choicemaker.cm.core.XmlConfException;
-import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
+import com.choicemaker.cm.core.compiler.InstallableCompiler;
 import com.choicemaker.cm.core.configure.ChoiceMakerConfiguration;
 import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
+import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.configure.MachineLearnerPersistence;
 import com.choicemaker.cm.core.configure.ProbabilityModelPersistence;
-import com.choicemaker.cm.core.gen.Eclipse2GeneratorPluginFactory;
-import com.choicemaker.cm.core.report.Reporter;
 import com.choicemaker.cm.core.util.FileUtilities;
 
 /**
@@ -69,6 +65,10 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 
 	private static final Logger logger = Logger.getLogger(XmlConfigurator.class);
 
+	public static final boolean DEFAULT_RELOAD = true;
+
+	public static final boolean DEFAULT_INIT_GUI = true;
+
 	/** The XML document read as configuration file. */
 	Document document;
 	ClassLoader classLoader;
@@ -77,43 +77,16 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 	ClassLoader reloadClassLoader;
 	String fileName;
 
-	public File wdir;
+	private File workingDirectory;
 
-	private static XmlConfigurator instance = new XmlConfigurator();
+	private String classpath;
+
+	private String codeRoot;
+
+	public static XmlConfigurator instance = new XmlConfigurator();
 
 	public static XmlConfigurator getInstance() {
 		return instance;
-	}
-
-	void initReports() {
-		List reporters = new ArrayList();
-		IExtensionPoint reporterExts = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.reporter");
-		List reporterConfigs = getCore().getChildren("reporter");
-		for (Iterator iReporterConfigs = reporterConfigs.iterator(); iReporterConfigs.hasNext();) {
-			Element reporterConfig = (Element) iReporterConfigs.next();
-			try {
-				String ext = reporterConfig.getAttributeValue("extension");
-				Reporter reporter = (Reporter) reporterExts.getExtension(ext).getConfigurationElements()[0].createExecutableExtension("class");
-				Method[] methods = reporter.getClass().getMethods();
-				HashMap methodMap = new HashMap();
-				for (int i = 0; i < methods.length; i++) {
-					methodMap.put(methods[i].getName(), methods[i]);
-				}
-				List properties = reporterConfig.getChildren("property");
-				for (Iterator iProperties = properties.iterator(); iProperties.hasNext();) {
-					Element property = (Element) iProperties.next();
-					String name = property.getAttributeValue("name");
-					name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-					String value = property.getAttributeValue("value");
-					set((Method) methodMap.get(name), reporter, value);
-				}
-				reporter.open();
-				reporters.add(reporter);
-			} catch (Exception ex) {
-				logger.error("Configuring reporter", ex);
-			}
-		}
-		PMManager.setGlobalReporters((Reporter[]) reporters.toArray(new Reporter[reporters.size()]));
 	}
 
 	void set(Method method, Object obj, String value) throws Exception {
@@ -128,86 +101,79 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 		method.invoke(obj, new Object[] { param });
 	}
 
-	void initInstallableGeneratorPluginFactory() {
-		Class c = Eclipse2GeneratorPluginFactory.class;
-		String className = c.getName();
+	/**
+	 * ChoiceMaker uses System properties for configuration. If the
+	 * configuration properties haven't already been set, this method sets some
+	 * defaults expected in an Eclipse 2 context.
+	 */
+	protected static void initializeInstallableComponents() {
+		// Configure the compiler
+		System.setProperty(
+				PropertyNames.INSTALLABLE_COMPILER,
+				WellKnownPropertyValues.ECLIPSE2_COMPILER);
+
+		// Configure a factory for generator plugins used by the compiler
 		System.setProperty(
 				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
-				className);
+				WellKnownPropertyValues.ECLIPSE2_GENERATOR_PLUGIN_FACTORY);
 	}
 
-	/**
-	 * Read the XML configuration file.
-	 *
-	 * @throws  XmlConfException  if any error occurs.
-	 */
-	void readConfigurationFile() throws XmlConfException {
-		SAXBuilder builder = XmlParserFactory.createSAXBuilder(false);
-		try {
-			document = builder.build(fileName);
-		} catch (Exception ex) {
-			throw new XmlConfException("Internal error.", ex);
-		}
-	}
-
-	void setWorkingDir() throws XmlConfException {
-		Element e = getCore();
-		wdir = new File(fileName).getAbsoluteFile().getParentFile();
-		if (e != null) {
-			e = e.getChild("workingDir");
-			if (e != null) {
-				wdir = FileUtilities.getAbsoluteFile(wdir, e.getText());
+	static String initializeClassPath(File wdir, Document document) throws XmlConfException {
+		String retVal = ConfigurationUtils.getClassPath(wdir, document);
+		IPluginDescriptor[] plugins =
+			Platform.getPluginRegistry().getPluginDescriptors();
+		for (int i = 0; i < plugins.length; i++) {
+			URL[] ucp =
+				((URLClassLoader) plugins[i].getPluginClassLoader()).getURLs();
+			for (int j = 0; j < ucp.length; j++) {
+				retVal += File.pathSeparator + ucp[j].getPath();
 			}
 		}
-		try {
-			wdir = wdir.getCanonicalFile();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		System.setProperty("user.dir", wdir.toString());
+		return retVal;
 	}
 
-	void initClassLoader() throws XmlConfException {
-		Element cp = getCore().getChild("classpath");
-		URL[] classPath = null;
+	static ClassLoader initializeClassLoader(File wdir, Document document)
+			throws XmlConfException {
+		URL[] classPath = new URL[0];
+		Element cp = ConfigurationUtils.getCore(document).getChild(
+				ConfigurationUtils.CONFIGURATION_CLASSPATH_ELEMENT);
 		if (cp != null) {
+			String s = cp.getText();
 			try {
-				classPath = FileUtilities.cpToUrls(wdir,cp.getText());
-			} catch (MalformedURLException ex) {
-				throw new XmlConfException("Classpath", ex);
-			} catch (IOException ex) {
+				classPath = FileUtilities.cpToUrls(wdir, s);
+			} catch (Exception ex) {
 				throw new XmlConfException("Classpath", ex);
 			}
-		} else {
-			classPath = new URL[0];
 		}
-		classLoader = new PpsClassLoader(classPath, XmlConfigurator.class
-				.getClassLoader());
+		ClassLoader parentClassLoader = XmlConfigurator.class.getClassLoader();
+		ClassLoader retVal = new PpsClassLoader(classPath, parentClassLoader);
+		return retVal;
 	}
 
-	void initReloadClassPath() throws XmlConfException {
-		reloadClassPath = new URL[0];
-		Element rl = getCore().getChild("reload");
+	static URL[] initializeReloadClassPath(File wdir, Document document) throws XmlConfException {
+		URL[] retVal = new URL[0];
+		Element rl = ConfigurationUtils.getCore(document).getChild(ConfigurationUtils.CONFIGURATION_RELOAD_ELEMENT);
 		if (rl != null) {
-			Element cp = rl.getChild("classpath");
+			Element cp = rl.getChild(ConfigurationUtils.CONFIGURATION_CLASSPATH_ELEMENT);
 			if (cp != null) {
+				String s = cp.getText();
 				try {
-					reloadClassPath = FileUtilities.cpToUrls(wdir,cp.getText());
-				} catch (MalformedURLException ex) {
-					throw new XmlConfException("Classpath", ex);
-				} catch (IOException ex) {
+					retVal = FileUtilities.cpToUrls(wdir,s);
+				} catch (Exception ex) {
 					throw new XmlConfException("Classpath", ex);
 				}
 			}
 		}
+		return retVal;
 	}
 
 	/**
 	 * Initializes all the modules listed in the configuration file.
 	 * @throws  XmlConfException  if any error occurs.
 	 */
-	void initModules(List modules, ClassLoader cl) throws XmlConfException {
+	static void initializeModules(Document document, ClassLoader cl) throws XmlConfException {
 		try {
+			List modules = ConfigurationUtils.getModules(document);
 			Iterator i = modules.iterator();
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
@@ -216,12 +182,28 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 				XmlModuleInitializer m = (XmlModuleInitializer) clazz.getDeclaredField("instance").get(null);
 				m.init(e);
 			}
-		} catch (ClassNotFoundException ex) {
-			throw new XmlConfException("Internal error.", ex);
-		} catch (IllegalAccessException ex) {
-			throw new XmlConfException("Internal error.", ex);
-		} catch (NoSuchFieldException ex) {
-			throw new XmlConfException("Internal error.", ex);
+		} catch (Exception ex) {
+			throw new XmlConfException("Internal error: " + ex.toString(), ex);
+		}
+	}
+
+	/**
+	 * Initializes just the modules listed in the reload stanza.
+	 * @throws  XmlConfException  if any error occurs.
+	 */
+	static void initializeReloadModules(Document document, ClassLoader cl) throws XmlConfException {
+		try {
+			List modules = ConfigurationUtils.getReloadModules(document);
+			Iterator i = modules.iterator();
+			while (i.hasNext()) {
+				Element e = (Element) i.next();
+				String className = e.getAttributeValue("class");
+				Class clazz = Class.forName(className, true, cl);
+				XmlModuleInitializer m = (XmlModuleInitializer) clazz.getDeclaredField("instance").get(null);
+				m.init(e);
+			}
+		} catch (Exception ex) {
+			throw new XmlConfException("Internal error: " + ex.toString(), ex);
 		}
 	}
 
@@ -284,21 +266,20 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 
 	public ClassLoader getReloadClassLoader() throws XmlConfException {
 		if (reloadClassLoader == null) {
-			reload();
+			reloadClassLoader = reload();
 		}
 		return reloadClassLoader;
 	}
 
 	public ClassLoader reload() throws XmlConfException {
+		ClassLoader retVal;
 		if (!reload && reloadClassLoader != null) {
-			return reloadClassLoader;
+			retVal = reloadClassLoader;
+		} else {
+			retVal = new PpsClassLoader(reloadClassPath, getClassLoader());
+			initializeReloadModules(getDocument(), retVal);
 		}
-		reloadClassLoader = new PpsClassLoader(reloadClassPath, classLoader);
-		Element rl = getCore().getChild("reload");
-		if (rl != null) {
-			initModules(rl.getChildren("module"), reloadClassLoader);
-		}
-		return reloadClassLoader;
+		return retVal;
 	}
 
 	/**
@@ -368,16 +349,16 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 	public String getRmiCodebase() {
 		String res = "";
 		try {
-			res = FileUtilities.toAbsoluteUrlClasspath(wdir,System.getProperty("java.class.path"));
+			res = FileUtilities.toAbsoluteUrlClasspath(getWorkingDirectory(),System.getProperty("java.class.path"));
 			Element e = getCore().getChild("classpath");
 			if (e != null) {
-				res += FileUtilities.toAbsoluteUrlClasspath(wdir,e.getText());
+				res += FileUtilities.toAbsoluteUrlClasspath(getWorkingDirectory(),e.getText());
 			}
 			e = getCore().getChild("reload");
 			if (e != null) {
 				e = e.getChild("classpath");
 				if (e != null) {
-					res += FileUtilities.toAbsoluteUrlClasspath(wdir,e.getText());
+					res += FileUtilities.toAbsoluteUrlClasspath(getWorkingDirectory(),e.getText());
 				}
 			}
 		} catch (IOException ex) {
@@ -393,11 +374,41 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 		return res;
 	}
 
+	public ChoiceMakerConfiguration init(String fn, boolean reload,
+			boolean initGui) throws XmlConfException {
+		return init(fn, null, reload, initGui);
+	}
+
 	 XmlConfigurator() {
 	}
 
-	public ClassLoader getRmiClassLoader() {
-		return new PpsClassLoader(new URL[0], null);
+	public void deleteGeneratedCode() {
+		File f = new File(getCodeRoot()).getAbsoluteFile();
+		if (f.exists()) {
+			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			FileUtilities.removeDir(f);
+		}
+	}
+
+	public ICompiler getChoiceMakerCompiler() {
+		return InstallableCompiler.getInstance();
+	}
+
+	public ClassLoader getClassLoader() {
+		return classLoader;
+	}
+
+	public String getClassPath() {
+		return classpath;
+	}
+
+	public String getCodeRoot() {
+		return codeRoot;
+	}
+
+	/** Returns the configuration file name */
+	public String getFileName() {
+		return fileName;
 	}
 
 	public String getJavaDocClasspath() {
@@ -418,44 +429,6 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 		return res;
 	}
 
-	/**
-	 * Returns the configuration file name.
-	 *
-	 * @return  The configuration file name.
-	 */
-	public String getFileName() {
-		return fileName;
-	}
-
-	public ClassLoader getClassLoader() {
-		return classLoader;
-	}
-
-	/**
-	 * Initializes ChoiceMaker from an XML configuration file.
-	 * Reads the XML configuration file and initializes logging and all modules.
-	 *
-	 * @param   fn  The name of the configuration file.
-	 * @return
-	 * @throws  XmlConfException  if any error occurs.
-	 */
-	public ChoiceMakerConfiguration init(String fn, String log4jConfName, boolean reload, boolean initGui) throws XmlConfException {
-		this.reload = reload;
-		initInstallableGeneratorPluginFactory();
-		fileName = new File(fn).getAbsolutePath();
-		readConfigurationFile();
-		setWorkingDir();
-		Log4jXmlConf.config(log4jConfName);
-		initClassLoader();
-		initReloadClassPath();
-		initModules(getCore().getChildren("module"), classLoader);
-		return this;
-	}
-
-	public boolean isValid() {
-		return true;
-	}
-
 	public MachineLearnerPersistence getMachineLearnerPersistence(
 			MachineLearner model) {
 		// FIXME non-functional method stub
@@ -473,19 +446,21 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 		throw new Error("not yet implemented");
 	}
 
-	public String getClassPath() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
-
 	public String getReloadClassPath() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
-	public void reloadClasses() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
+	public ClassLoader getRmiClassLoader() {
+		return new PpsClassLoader(new URL[0], null);
+	}
+
+	public File getWorkingDirectory() {
+		return workingDirectory;
+	}
+
+	public void reloadClasses() throws XmlConfException {
+		this.reloadClassLoader = reload();
 	}
 
 	public String toXml() {
@@ -493,37 +468,70 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 		throw new Error("not yet implemented");
 	}
 
-	public ChoiceMakerConfiguration init() throws XmlConfException {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+	/**
+	 * Initializes ChoiceMaker from an XML configuration file.
+	 * Reads the XML configuration file and initializes logging and all modules.
+	 *
+	 * @param   fn  The name of the configuration file.
+	 * @return
+	 * @throws  XmlConfException  if any error occurs.
+	 */
+	public ChoiceMakerConfiguration init(String fn, String log4jConfName,
+			boolean reload, boolean initGui) throws XmlConfException {
 
-	public ChoiceMakerConfiguration init(String fn, boolean reload,
-			boolean initGui) throws XmlConfException {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+		initializeInstallableComponents();
 
-	public ICompiler getChoiceMakerCompiler() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+		this.reload = reload;
+		this.fileName = new File(fn).getAbsolutePath();
+		this.document = ConfigurationUtils.readConfigurationFile(fileName);
 
-	public File getWorkingDirectory() {
-		return wdir;
-	}
+		this.workingDirectory = ConfigurationUtils.getWorkingDirectory(
+				getFileName(), getDocument());
+		System.setProperty(ConfigurationUtils.SYSTEM_USER_DIR,
+				getWorkingDirectory().toString());
 
-	public String getCodeRoot() {
-		// FIXME non-functional method stub
-		throw new Error("not yet implemented");
-	}
+		this.codeRoot = ConfigurationUtils.getCodeRoot(getWorkingDirectory(),
+				getDocument());
+		this.classpath = initializeClassPath(getWorkingDirectory(),
+				getDocument());
 
-	public void deleteGeneratedCode() {
-		File f = new File(getCodeRoot()).getAbsoluteFile();
-		if (f.exists()) {
-			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
-			FileUtilities.removeDir(f);
+		// Log4jXmlConf.config(log4jConfName);
+		if (log4jConfName != null && !log4jConfName.trim().isEmpty()) {
+			logger.warn("Ignoring Log4j configuration name: " + log4jConfName);
+
 		}
+
+		this.classLoader = initializeClassLoader(getWorkingDirectory(),
+				getDocument());
+
+		this.reloadClassPath = initializeReloadClassPath(getWorkingDirectory(),
+				getDocument());
+
+		initializeModules(getDocument(), getClassLoader());
+
+		return this;
+	}
+
+	public static String getClassPath(File workingDir, Document document)
+			throws XmlConfException {
+		String res = ConfigurationUtils.getClassPath(workingDir, document);
+		IPluginDescriptor[] plugins =
+			Platform.getPluginRegistry().getPluginDescriptors();
+		for (int i = 0; i < plugins.length; i++) {
+			URL[] ucp =
+				((URLClassLoader) plugins[i].getPluginClassLoader()).getURLs();
+			for (int j = 0; j < ucp.length; j++) {
+				res += File.pathSeparator + ucp[j].getPath();
+			}
+		}
+		return res;
+	}
+
+	public ChoiceMakerConfiguration init() throws XmlConfException {
+		String fn = System.getProperty(PropertyNames.CHOICEMAKER_CONFIGURATION_FILE);
+		boolean reload = DEFAULT_RELOAD;
+		boolean initGui = DEFAULT_INIT_GUI;
+		return init(fn, reload, initGui);
 	}
 
 }

@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 
 final class InstalledConfiguration implements
@@ -98,7 +99,7 @@ final class InstalledConfiguration implements
 		return getDelegate().getChoiceMakerCompiler();
 	}
 
-	public void reloadClasses() {
+	public void reloadClasses() throws XmlConfException {
 		getDelegate().reloadClasses();
 	}
 

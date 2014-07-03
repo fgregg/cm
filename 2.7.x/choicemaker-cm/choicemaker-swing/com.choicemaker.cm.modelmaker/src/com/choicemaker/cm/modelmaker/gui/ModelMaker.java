@@ -60,8 +60,10 @@ import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.OperationFailedException;
+import com.choicemaker.cm.core.PropertyNames;
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
+import com.choicemaker.cm.core.WellKnownPropertyValues;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.DoNothingMachineLearning;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
@@ -1439,6 +1441,55 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	private static String LOG_ARG = "-log";
 	private static String DIALOG_OPT = "-dialog";
 
+	/**
+	 * ChoiceMaker uses System properties for configuration. If the
+	 * configuration properties haven't already been set, this method sets some
+	 * defaults expected by Analyzer when running in a plain-old Java object
+	 * (POJO) context.
+	 */
+	protected static void setPojoConfigurationProperties() {
+		// Install a ChoiceMaker configurator
+		System.setProperty(
+				PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR,
+				WellKnownPropertyValues.LIST_BACKED_CONFIGURATOR);
+
+		// Configure the compiler
+		System.setProperty(
+				PropertyNames.INSTALLABLE_COMPILER,
+				WellKnownPropertyValues.BASIC_COMPILER);
+
+		// Configure a factory for generator plugins used by the compiler
+		System.setProperty(
+				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
+				WellKnownPropertyValues.ECLIPSE2_GENERATOR_PLUGIN_FACTORY);
+	}
+
+	/**
+	 * ChoiceMaker uses System properties for configuration. If the
+	 * configuration properties haven't already been set, this method sets some
+	 * defaults expected by Analyzer when running in an Eclipse 2 context.
+	 * ChoiceMaker uses System properties for configuration.
+	 * This method sets some defaults expected by Analyzer
+	 * when running in  context (if the properties
+	 * haven't already been set).
+	 */
+	protected static void setEclipse2ConfigurationProperties() {
+		// Install a ChoiceMaker configurator
+		System.setProperty(
+				PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR,
+				WellKnownPropertyValues.ECLIPSE2_CONFIGURATOR);
+
+//		// Configure the compiler
+//		System.setProperty(
+//				PropertyNames.INSTALLABLE_COMPILER,
+//				WellKnownPropertyValues.ECLIPSE2_COMPILER);
+//
+//		// Configure a factory for generator plugins used by the compiler
+//		System.setProperty(
+//				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
+//				WellKnownPropertyValues.ECLIPSE2_GENERATOR_PLUGIN_FACTORY);
+	}
+
 	public Object run(Object args2) throws Exception {
 		String[] args = null;
 		if(args2 instanceof String[]) {
@@ -1446,6 +1497,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		}
 		// defineFrameLookAndFeel();
 		processLicenseFile();
+		setEclipse2ConfigurationProperties();
 
 		// Must skip unknown arguments, since this method will be passed
 		// (unknown) Eclipse arguments as well as ModelMaker arguments
@@ -1505,6 +1557,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	public static void main(String[] args) throws IOException {
 		//defineFrameLookAndFeel();
 		processLicenseFile();
+		setPojoConfigurationProperties();
 		Arguments ca = new Arguments();
 		ca.addArgument(CONF_ARG, "");
 		ca.addArgument(LOG_ARG, Arguments.DEFAULT);

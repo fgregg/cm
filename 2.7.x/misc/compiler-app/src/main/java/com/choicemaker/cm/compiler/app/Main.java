@@ -57,13 +57,18 @@ public class Main {
 		String[] additionalCompilationArgs = new String[acaCount];
 		System.arraycopy(args, 1, additionalCompilationArgs, 0, acaCount);
 
-		// Configure the compiler
+		// Configure ChoiceMaker
+		System.setProperty(
+				PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR,
+				WellKnownPropertyValues.LIST_BACKED_CONFIGURATOR);
 		System.setProperty(
 				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
 				WellKnownPropertyValues.LIST_BACKED_GENERATOR_PLUGIN_FACTORY);
 		System.setProperty(
 				PropertyNames.INSTALLABLE_COMPILER,
 				WellKnownPropertyValues.BASIC_COMPILER);
+
+		// Get the configured compiler
 		ICompiler compiler = InstallableCompiler.getInstance();
 		if (compiler == null) {
 			throw new IllegalStateException("null compiler");

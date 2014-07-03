@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 
 /**
@@ -38,7 +39,19 @@ public interface ChoiceMakerConfiguration {
 	 */
 	public static final String INSTANCE = "instance";
 
+	void deleteGeneratedCode();
+
+	ICompiler getChoiceMakerCompiler();
+
+	ClassLoader getClassLoader();
+
+	String getClassPath();
+
+	String getCodeRoot();
+
 	String getFileName();
+
+	String getJavaDocClasspath();
 
 	MachineLearnerPersistence getMachineLearnerPersistence(MachineLearner model);
 
@@ -47,25 +60,13 @@ public interface ChoiceMakerConfiguration {
 
 	List getProbabilityModelConfigurations();
 
-	ClassLoader getClassLoader();
+	String getReloadClassPath();
 
 	ClassLoader getRmiClassLoader();
 
-	String getClassPath();
-
-	String getReloadClassPath();
-
-	String getJavaDocClasspath();
-
 	File getWorkingDirectory();
 
-	ICompiler getChoiceMakerCompiler();
-
-	void reloadClasses();
-
-	void deleteGeneratedCode();
-
-	String getCodeRoot();
+	void reloadClasses() throws XmlConfException;
 
 	String toXml();
 

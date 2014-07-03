@@ -7,13 +7,6 @@ import com.choicemaker.util.SystemPropertyUtils;
 
 public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 
-	/**
-	 * A System property that holds the name of configuration file.
-	 *
-	 * @see #init()
-	 */
-	public static final String PROPERTY_CHOICEMAKER_CONFIGURATION_FILE = "choicemakerConfigurationFile";
-
 	public static final boolean DEFAULT_RELOAD = false;
 
 	public static final boolean DEFAULT_INIT_GUI = false;
@@ -25,14 +18,14 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 
 	/**
 	 * Looks for the name of a configuration file stored as a System property
-	 * under the key {@link #PROPERTY_CHOICEMAKER_CONFIGURATION_FILE}. Uses this
+	 * under the key {@link PropertyNames#CHOICEMAKER_CONFIGURATION_FILE}. Uses this
 	 * value to invoke {@link #init(String, boolean, boolean)} with default
 	 * values {@link #DEFAULT_RELOAD} and {@link #DEFAULT_INIT_GUI} for
 	 * <code>reload</code> and <code>initGui</code>, respectively. Equivalent to
 	 * the following code:
 	 *
 	 * <pre>
-	 * String fn = System.getProperty(PROPERTY_CHOICEMAKER_CONFIGURATION_FILE);
+	 * String fn = System.getProperty(CHOICEMAKER_CONFIGURATION_FILE);
 	 * boolean reload = DEFAULT_RELOAD;
 	 * boolean initGui = DEFAULT_INIT_GUI;
 	 * init(fn, reload, initiGui);
@@ -40,10 +33,10 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 	 *
 	 * @throws IllegalArgumentException
 	 *             if no System property has been set for
-	 *             {@link #PROPERTY_CHOICEMAKER_CONFIGURATION_FILE}
+	 *             {@link PropertyNames#CHOICEMAKER_CONFIGURATION_FILE}
 	 */
 	public ChoiceMakerConfiguration init() throws XmlConfException {
-		String fn = System.getProperty(PROPERTY_CHOICEMAKER_CONFIGURATION_FILE);
+		String fn = System.getProperty(PropertyNames.CHOICEMAKER_CONFIGURATION_FILE);
 		boolean reload = DEFAULT_RELOAD;
 		boolean initGui = DEFAULT_INIT_GUI;
 		return init(fn, reload, initGui);

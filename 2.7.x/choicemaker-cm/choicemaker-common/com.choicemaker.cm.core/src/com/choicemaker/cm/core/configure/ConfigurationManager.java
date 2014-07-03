@@ -82,7 +82,7 @@ public class ConfigurationManager {
 		return getConfiguration().getChoiceMakerCompiler();
 	}
 
-	public void reloadClasses() {
+	public void reloadClasses() throws XmlConfException {
 		getConfiguration().reloadClasses();
 	}
 

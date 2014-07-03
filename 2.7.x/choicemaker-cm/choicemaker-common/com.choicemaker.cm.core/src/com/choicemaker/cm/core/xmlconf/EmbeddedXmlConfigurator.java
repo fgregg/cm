@@ -11,11 +11,16 @@
 package com.choicemaker.cm.core.xmlconf;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.Platform;
 import org.jdom.Element;
@@ -24,11 +29,13 @@ import org.jdom.input.SAXBuilder;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.configure.ChoiceMakerConfiguration;
 import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
 import com.choicemaker.cm.core.configure.MachineLearnerPersistence;
 import com.choicemaker.cm.core.configure.ProbabilityModelPersistence;
+import com.choicemaker.cm.core.report.Reporter;
 import com.choicemaker.cm.core.util.FileUtilities;
 
 /**
@@ -85,12 +92,14 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 	}
 
 	public ClassLoader reload() throws XmlConfException {
-		delegate.reloadClassLoader = EmbeddedXmlConfigurator.class.getClassLoader();
-		Element rl = delegate.getCore().getChild("reload");
-		if (rl != null) {
-			delegate.initModules(rl.getChildren("module"), delegate.reloadClassLoader);
-		}
-		return delegate.reloadClassLoader;
+		// FIXME non-functional method stub
+		throw new Error("not yet implemented");
+//		delegate.reloadClassLoader = EmbeddedXmlConfigurator.class.getClassLoader();
+//		Element rl = delegate.getCore().getChild("reload");
+//		if (rl != null) {
+//			delegate.initializeModules(rl.getChildren("module"), delegate.reloadClassLoader);
+//		}
+//		return delegate.reloadClassLoader;
 	}
 
 	protected void readConfigurationFile() throws XmlConfException {
@@ -201,21 +210,23 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 	 */
 	public ChoiceMakerConfiguration init() throws XmlConfException {
 
-		Platform.getPluginRegistry();
-		delegate.reload = false;
-		delegate.initInstallableGeneratorPluginFactory();
-		delegate.fileName = EMBEDDED_FILENAME;
-		readConfigurationFileFromResource();
-		delegate.setWorkingDir();
-		Log4jXmlConf.configIfPresent(DEFAULT_LOG4J_CONF);
-		initClassLoader();
-		initReloadClassPath();
-		delegate.initModules(delegate.getCore().getChildren("module"), delegate.classLoader);
-		ICompiler compiler = getChoiceMakerCompiler();
-		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler, true);
-		delegate.initReports();
-
-		return this;
+		// FIXME non-functional method stub
+		throw new Error("not yet implemented");
+//		Platform.getPluginRegistry();
+//		delegate.reload = false;
+//		delegate.initializeInstallableComponents();
+//		delegate.fileName = EMBEDDED_FILENAME;
+//		readConfigurationFileFromResource();
+//		delegate.setWorkingDir();
+//		Log4jXmlConf.configIfPresent(DEFAULT_LOG4J_CONF);
+//		initClassLoader();
+//		initReloadClassPath();
+//		delegate.initializeModules(delegate.getCore().getChildren("module"), delegate.classLoader);
+//		ICompiler compiler = getChoiceMakerCompiler();
+//		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler, true);
+//		initReports();
+//
+//		return this;
 	}
 
 	/**
@@ -231,6 +242,37 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 	public ChoiceMakerConfiguration init(String fn, boolean reload,
 			boolean initGui) throws XmlConfException {
 		return init();
+	}
+
+	void initReports() {
+		List reporters = new ArrayList();
+		IExtensionPoint reporterExts = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.reporter");
+		List reporterConfigs = delegate.getCore().getChildren("reporter");
+		for (Iterator iReporterConfigs = reporterConfigs.iterator(); iReporterConfigs.hasNext();) {
+			Element reporterConfig = (Element) iReporterConfigs.next();
+			try {
+				String ext = reporterConfig.getAttributeValue("extension");
+				Reporter reporter = (Reporter) reporterExts.getExtension(ext).getConfigurationElements()[0].createExecutableExtension("class");
+				Method[] methods = reporter.getClass().getMethods();
+				HashMap methodMap = new HashMap();
+				for (int i = 0; i < methods.length; i++) {
+					methodMap.put(methods[i].getName(), methods[i]);
+				}
+				List properties = reporterConfig.getChildren("property");
+				for (Iterator iProperties = properties.iterator(); iProperties.hasNext();) {
+					Element property = (Element) iProperties.next();
+					String name = property.getAttributeValue("name");
+					name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+					String value = property.getAttributeValue("value");
+					delegate.set((Method) methodMap.get(name), reporter, value);
+				}
+				reporter.open();
+				reporters.add(reporter);
+			} catch (Exception ex) {
+				logger.error("Configuring reporter", ex);
+			}
+		}
+		PMManager.setGlobalReporters((Reporter[]) reporters.toArray(new Reporter[reporters.size()]));
 	}
 
 	public ICompiler getChoiceMakerCompiler() {

@@ -36,4 +36,12 @@ public interface PropertyNames {
 	 */
 	public static final String INSTALLABLE_RECORD_PAIR_CACHE = "cmInstallableRecordPairCache";
 
+	/**
+	 * A System property that holds the name of configuration file.
+	 * Currently used only for testing some {@link ChoiceMakerConfigurator configurators}.
+	 *
+	 * @see ChoiceMakerConfigurator#init()
+	 */
+	public static final String CHOICEMAKER_CONFIGURATION_FILE = "choicemakerConfigurationFile";
+
 }
