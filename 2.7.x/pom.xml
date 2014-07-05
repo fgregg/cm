@@ -65,6 +65,7 @@
     <module>cluemaker-maven-plugin</module>
     -->
     <module>misc/compiler-app</module>
+    <module>misc/mymojo-plugin</module>
   </modules>
 
 </project>
