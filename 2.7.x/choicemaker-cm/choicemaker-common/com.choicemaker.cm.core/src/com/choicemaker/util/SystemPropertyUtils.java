@@ -36,7 +36,7 @@ public class SystemPropertyUtils {
 //		}
 	}
 
-	public void unsetProperty(String key) {
+	public static void unsetProperty(String key) {
 		Properties p = System.getProperties();
 		p.remove(key);
 	}
