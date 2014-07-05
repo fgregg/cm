@@ -9,3 +9,4 @@ project.t.xml
 .project
 .classpath
 .settings
+*.swp
