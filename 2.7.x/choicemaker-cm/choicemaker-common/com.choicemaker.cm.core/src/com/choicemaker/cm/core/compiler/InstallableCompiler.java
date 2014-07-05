@@ -13,7 +13,7 @@ import com.choicemaker.cm.core.PropertyNames;
 /**
  * A singleton implementation that uses an installable delegate to implement
  * Compiler methods. In general, a delegate should be installed only once in an
- * application context, and this class enforces this restriction by using a
+ * application context, and this class encourages this restriction by using a
  * {@link PropertyNames#INSTALLABLE_COMPILER System property} to specify the
  * delegate type. If the property is not set, a
  * {@link #getDefaultInstance() default factory} is used.
@@ -38,7 +38,7 @@ public final class InstallableCompiler implements ICompiler {
 	private static InstallableCompiler singleton = new InstallableCompiler();
 
 	/** A method that returns the factory singleton */
-	public static ICompiler getInstance() {
+	public static InstallableCompiler getInstance() {
 		assert singleton != null;
 		return singleton;
 	}
@@ -69,11 +69,11 @@ public final class InstallableCompiler implements ICompiler {
 			try {
 				if (fqcn != null) {
 					logger.info(msgPrefix + fqcn);
-					setDelegate(fqcn);
+					install(fqcn);
 				} else {
 					logger.info(msgPrefix
 							+ getDefaultInstance().getClass().getName());
-					setDelegate(getDefaultInstance());
+					install(getDefaultInstance());
 				}
 			} catch (Exception x) {
 				String msg = msgPrefix + x.toString() + ": " + x.getCause();
@@ -110,12 +110,12 @@ public final class InstallableCompiler implements ICompiler {
 	}
 
 	/**
-	 * Sets the factory delegate.
+	 * Sets the factory delegate explicitly.
 	 *
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 * */
-	private void setDelegate(ICompiler delegate) {
+	public void install(ICompiler delegate) {
 		if (delegate == null) {
 			throw new IllegalArgumentException("null delegate");
 		}
@@ -129,7 +129,7 @@ public final class InstallableCompiler implements ICompiler {
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 */
-	private void setDelegate(String fqcn) {
+	private void install(String fqcn) {
 		if (fqcn == null || fqcn.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank class name for compiler factory");
@@ -138,7 +138,7 @@ public final class InstallableCompiler implements ICompiler {
 		try {
 			Class c = Class.forName(fqcn);
 			ICompiler instance = (ICompiler) c.newInstance();
-			setDelegate(instance);
+			install(instance);
 		} catch (Exception e) {
 			String msg = msgPrefix + e.toString() + ": " + e.getCause();
 			logger.error(msg, e);

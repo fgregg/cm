@@ -114,7 +114,7 @@ public class ListBackedGeneratorPluginFactory implements
 			throw new IllegalArgumentException("null or blank file name");
 		}
 
-		final String msgPrefix = "Loading generator plugins: ";
+		String msgPrefix = "Loading generator plugins";
 		final List retVal = new LinkedList();
 		BufferedReader r = null;
 		try {
@@ -123,6 +123,7 @@ public class ListBackedGeneratorPluginFactory implements
 			r = new BufferedReader(new InputStreamReader(is, DATA_CHARSET));
 			String fqcn = r.readLine();
 			while (fqcn != null) {
+				msgPrefix = "Loading generator plugin: " + fqcn;
 				if (!fqcn.isEmpty() && !fqcn.startsWith(COMMENT)) {
 					Class c = Class.forName(fqcn);
 					GeneratorPlugin instance = (GeneratorPlugin) c
@@ -144,6 +145,38 @@ public class ListBackedGeneratorPluginFactory implements
 					logger.error(msg);
 				}
 			}
+		}
+
+		assert retVal != null;
+		return retVal;
+	}
+
+	/**
+	 * An alternative method for loading a list of generator plugins from an
+	 * array of fully qualified class names
+	 *
+	 * @throws IllegalArgumentException
+	 */
+	public static List load(String[] fqcns) throws IllegalArgumentException {
+
+		if (fqcns == null) {
+			throw new IllegalArgumentException("null array");
+		}
+
+		final List retVal = new LinkedList();
+		String msgPrefix = "Loading generator plugins";
+		try {
+			for (int i = 0; i < fqcns.length; i++) {
+				msgPrefix = "Loading generator plugin: " + fqcns[i];
+				String fqcn = fqcns[i];
+				Class c = Class.forName(fqcn);
+				GeneratorPlugin instance = (GeneratorPlugin) c.newInstance();
+				retVal.add(instance);
+			}
+		} catch (Exception x) {
+			String msg = msgPrefix + x.toString() + ": " + x.getCause();
+			logger.error(msg, x);
+			throw new IllegalArgumentException(msg);
 		}
 
 		assert retVal != null;

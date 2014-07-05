@@ -48,10 +48,10 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 	}
 
 	/** The singleton instance of this configurator */
-	private static ChoiceMakerConfigurator singleton = new InstallableConfigurator();
+	private static InstallableConfigurator singleton = new InstallableConfigurator();
 
 	/** A method that returns the configurator singleton */
-	public static ChoiceMakerConfigurator getInstance() {
+	public static InstallableConfigurator getInstance() {
 		assert singleton != null;
 		return singleton;
 	}
@@ -84,11 +84,11 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 			try {
 				if (fqcn != null) {
 					logger.info(msgPrefix + fqcn);
-					setDelegate(fqcn);
+					install(fqcn);
 				} else {
 					logger.info(msgPrefix
 							+ getDefaultInstance().getClass().getName());
-					setDelegate(getDefaultInstance());
+					install(getDefaultInstance());
 				}
 			} catch (Exception x) {
 				String msg = msgPrefix + x.toString() + ": " + x.getCause();
@@ -120,12 +120,12 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 	}
 
 	/**
-	 * Sets the configurator delegate.
+	 * Sets the configurator delegate explicitly.
 	 *
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 * */
-	private void setDelegate(ChoiceMakerConfigurator delegate) {
+	public void install(ChoiceMakerConfigurator delegate) {
 		if (delegate == null) {
 			throw new IllegalArgumentException("null delegate");
 		}
@@ -139,7 +139,7 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 */
-	private void setDelegate(String fqcn) {
+	private void install(String fqcn) {
 		if (fqcn == null || fqcn.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank class name for ChoiceMaker configurator");
@@ -151,7 +151,7 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 			Object o = f.get(null);
 			assert o instanceof ChoiceMakerConfigurator;
 			ChoiceMakerConfigurator pmm = (ChoiceMakerConfigurator) o;
-			setDelegate(pmm);
+			install(pmm);
 		} catch (Exception e) {
 			String msg = msgPrefix + e.toString() + ": " + e.getCause();
 			logger.error(msg, e);
