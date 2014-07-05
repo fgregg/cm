@@ -11,6 +11,7 @@ import com.choicemaker.cm.core.gen.GenException;
 import com.choicemaker.cm.core.gen.IGeneratorPluginFactory;
 import com.choicemaker.cm.core.gen.InstallableGeneratorPluginFactory;
 import com.choicemaker.cm.core.gen.ListBackedGeneratorPluginFactory;
+import com.choicemaker.util.SystemPropertyUtils;
 
 public class InstallableGeneratorPluginFactoryTest extends TestCase {
 
@@ -46,26 +47,28 @@ public class InstallableGeneratorPluginFactoryTest extends TestCase {
 
 	public void testInstallableGeneratorPluginFactory() {
 		// Check behavior when PROPERTY_GENERATOR_PLUGIN_FACTORIES is not set
-		String fqcn = System
-				.getProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
+		SystemPropertyUtils
+				.unsetProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
+		String fqcn =
+			System.getProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
 		assertTrue(fqcn == null);
-		InstallableGeneratorPluginFactory igpf = new InstallableGeneratorPluginFactory();
+		InstallableGeneratorPluginFactory igpf =
+			new InstallableGeneratorPluginFactory();
 		IGeneratorPluginFactory delegate = igpf.getDelegate();
 		assertTrue(delegate != null);
 		Class delegateClass = delegate.getClass();
-		IGeneratorPluginFactory defaultGPF = InstallableGeneratorPluginFactory
-				.getDefaultInstance();
+		IGeneratorPluginFactory defaultGPF =
+			InstallableGeneratorPluginFactory.getDefaultInstance();
 		Class defaultClass = defaultGPF.getClass();
 		assertTrue(delegateClass.equals(defaultClass));
 
 		// Check behavior when PROPERTY_GENERATOR_PLUGIN_FACTORIES is set
 		Class c = ListBackedGeneratorPluginFactory.class;
 		String className = c.getName();
-		System.setProperty(
-				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
+		System.setProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
 				className);
-		fqcn = System
-				.getProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
+		fqcn =
+			System.getProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
 		assertTrue(fqcn.equals(className));
 		igpf = new InstallableGeneratorPluginFactory();
 		delegate = igpf.getDelegate();
@@ -78,24 +81,19 @@ public class InstallableGeneratorPluginFactoryTest extends TestCase {
 		// is not initialized and running
 		c = Eclipse2GeneratorPluginFactory.class;
 		className = c.getName();
-		System.setProperty(
-				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
+		System.setProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
 				className);
-		fqcn = System
-				.getProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
+		fqcn =
+			System.getProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
 		assertTrue(fqcn.equals(className));
 		igpf = new InstallableGeneratorPluginFactory();
 		/*
-		delegate = null;
-		try {
-			delegate = igpf.getDelegate();
-			assertTrue(delegate != null);
-			fail("getDelegate() method should have failed because "
-					+ "the Eclipse framework shouldn't be running");
-		} catch (IllegalStateException x) {
-			assertTrue(delegate == null);
-		}
-    */
+		 * delegate = null; try { delegate = igpf.getDelegate();
+		 * assertTrue(delegate != null);
+		 * fail("getDelegate() method should have failed because " +
+		 * "the Eclipse framework shouldn't be running"); } catch
+		 * (IllegalStateException x) { assertTrue(delegate == null); }
+		 */
 	}
 
 	public void testLookupGeneratorPlugins() throws GenException {
