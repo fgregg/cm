@@ -168,9 +168,6 @@ public class ProductionModelsJarBuilder {
 		if (outputFile == null) {
 			throw new IllegalArgumentException("null output file");
 		}
-		if (!outputFile.isFile() || !outputFile.canWrite()) {
-			throw new IllegalArgumentException("invalid output file: " + outputFile.getPath());
-		}
 
 		File srcDir = new File(ConfigurationManager.getInstance().getSourceCodeRoot()).getAbsoluteFile();
 
@@ -250,10 +247,7 @@ public class ProductionModelsJarBuilder {
 		if (outputFile == null) {
 			throw new IllegalArgumentException("null output file");
 		}
-		if (!outputFile.isFile() || !outputFile.canWrite()) {
-			throw new IllegalArgumentException("invalid output file: " + outputFile.getPath());
-		}
-		
+
 		File classesDir = new File(ConfigurationManager.getInstance().getCompiledCodeRoot()).getAbsoluteFile();
 
 		File tempDir = createTempDirectory();
@@ -286,9 +280,6 @@ public class ProductionModelsJarBuilder {
 	public static void jarProductionProbabilityModels(File outputFile) throws XmlConfException, IOException {
 		if (outputFile == null) {
 			throw new IllegalArgumentException("null output file");
-		}
-		if (!outputFile.isFile() || !outputFile.canWrite()) {
-			throw new IllegalArgumentException("invalid output file: " + outputFile.getPath());
 		}
 
 		File classesDir = new File(ConfigurationManager.getInstance().getCompiledCodeRoot()).getAbsoluteFile();
