@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -118,7 +118,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	private boolean intern;
 
 	private String schemaName;
-	
+
 	/** create a new compilation unit
 	 */
 	public CompilationUnit(CompilationEnv env, Sourcecode source) {
@@ -129,7 +129,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		if (source == null) {
 			throw new IllegalArgumentException("null source code");
 		}
-		
+
 		// initialize compilation unit
 		setCompilationEnv(env);
 		setSource(source);
@@ -272,7 +272,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		// will be passed. Also, all types will be verified to exist in the classpath.
 		// Because the schema has its own set of import's, it is not guaranteed that
 		// typeName exists in the import's of the clue set. (We could change it to
-		// have only one set of import's if absolutely necessary.) 
+		// have only one set of import's if absolutely necessary.)
 
 		// The following implementation assumes that className and fieldName
 		// are simple names; typeName does not have to be a fully qualified name
@@ -568,7 +568,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	//      * Used for compiling validity, pre-condition, and derived fields.
 	//      *
 	//      * Might be better to create intermediate file.
-	//      * 
+	//      *
 	//      * @param   className  The name of the class in which this expression occurs.
 	//      * @param   fieldName  The name of the field to which this expression relates.
 	//      * @param   exp  The ClueMaker expression to be compiled.
@@ -576,7 +576,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	//      *            expression must be assigned.
 	//      * @return  Java statements suitable to be inserted into the class.
 	//      * @throws  SomeException  if an error occurs during compilation.
-	//      */ 
+	//      */
 	//     public String compileExpression(String className, String exp, String variableToAssignTo) throws IllegalArgumentException {
 	//         return "";
 	//     }

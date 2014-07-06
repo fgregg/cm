@@ -1,7 +1,8 @@
 package com.choicemaker.cm.compiler.app;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.StringWriter;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import com.choicemaker.cm.core.PropertyNames;
@@ -91,11 +92,16 @@ public class Main {
 		assert files.length == 1;
 
 		// Compile the target clue file
-		final Writer w = new StringWriter();
-//		Writer w = new BufferedWriter(new OutputStreamWriter(System.out));
+//		final Writer w = new StringWriter();
+		Writer w = new BufferedWriter(new OutputStreamWriter(System.out));
 		ChoiceMakerInit.deleteGeneratedCode();
 		String accessorName = compiler.compile(arguments, w);
 		System.out.println(w.toString());
 		assert accessorName != null;
+		if (accessorName == null) {
+			System.err.println("Error: compilation failed");
+		} else {
+			System.out.println("SUCCESS: accessor == '" + accessorName + "'");
+		}
 	}
 }

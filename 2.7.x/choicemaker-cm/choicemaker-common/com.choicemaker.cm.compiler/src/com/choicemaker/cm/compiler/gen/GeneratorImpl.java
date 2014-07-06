@@ -310,8 +310,9 @@ public class GeneratorImpl implements IGenerator {
 
 	/**
 	 * Generate files.
+	 * @throws CompilerException
 	 */
-	public void generate() {
+	public void generate() throws CompilerException {
 		boolean validate = XmlParserFactory.connected();
 		SAXBuilder builder = XmlParserFactory.createSAXBuilder(validate);
 		if (validate) {
@@ -326,13 +327,13 @@ public class GeneratorImpl implements IGenerator {
 				process();
 			}
 		} catch (JDOMException ex) {
-			// BUG poor diagnostics
-			// rphall 2005-10-12
-			logger.error("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
+			String msg = "XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex;
+			cu.error(msg);
+			logger.error(msg);
 		} catch (Exception ex) {
-			// BUG poor diagnostics
-			// rphall 2005-10-12
-			logger.error("Error processing schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
+			String msg = "Error processing schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex;
+			cu.error(msg);
+			logger.error(msg);
 		} finally {
 			XmlParserFactory.restoreClassLoader(oldCl);
 		}
