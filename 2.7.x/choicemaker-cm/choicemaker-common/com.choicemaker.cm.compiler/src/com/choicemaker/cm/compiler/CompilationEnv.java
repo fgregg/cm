@@ -82,21 +82,22 @@ public class CompilationEnv {
 	
 	private Writer w;
 
-	public CompilationEnv(CompilationArguments arguments, String cp, Writer w) {
+	public CompilationEnv(CompilationArguments arguments, String defaultPath, Writer w) {
 		sourcePackages = new HashSet();
 		this.w = w;
-		nowarn = arguments.optionSet("-nowarn");
-		verbose = arguments.optionSet("-verbose");
-		debug = arguments.optionSet("-debug");
-		prompt = arguments.optionSet("-prompt");
-		sourceEncoding = arguments.argumentVal("-encoding");
-		targetEncoding = arguments.argumentVal("-targetencoding");
+		nowarn = arguments.optionSet(CompilationArguments.NOWARN);
+		verbose = arguments.optionSet(CompilationArguments.VERBOSE);
+		debug = arguments.optionSet(CompilationArguments.DEBUG);
+		prompt = arguments.optionSet(CompilationArguments.PROMPT);
+		sourceEncoding = arguments.argumentVal(CompilationArguments.ENCODING);
+		targetEncoding = arguments.argumentVal(CompilationArguments.TARGET_ENCODING);
 		try {
-			tabsize = Integer.parseInt(arguments.argumentVal("-tabsize"));
+			tabsize = Integer.parseInt(arguments.argumentVal(CompilationArguments.TABSIZE));
 		} catch (NumberFormatException e) {
-			error("illegal tabsize " + arguments.argumentVal("-tabsize"));
+			error("illegal tabsize " + arguments.argumentVal(CompilationArguments.TABSIZE));
 		}
-		classPath = new Classpath(cp, arguments.argumentVal("-classpath"));
+		String primaryPath = arguments.argumentVal(CompilationArguments.CLASSPATH);
+		classPath = new Classpath(defaultPath, primaryPath);
 		repository = new ClassRepository(this);
 	}
 

@@ -14,22 +14,39 @@ import com.choicemaker.util.Arguments;
 
 /**
  * Command line arguments for compiler.
- *
- * @author   Matthias Zenger
- * @version  $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
+ * 
+ * @author Matthias Zenger
+ * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:06 $
  */
 public class CompilationArguments extends Arguments {
+
+	public static final String VERBOSE = "-verbose";
+	public static final String NOWARN = "-nowarn";
+	public static final String DEBUG = "-debug";
+	public static final String PROMPT = "-prompt";
+	public static final String TABSIZE = "-tabsize";
+	public static final String ENCODING = "-encoding";
+	public static final String TARGET_ENCODING = "-targetencoding";
+	public static final String CLASSPATH = "-classpath";
+	public static final String OUTPUT_DIRECTORY = "-d";
+	public static final String CHOICEMAKER_CONFIGURATION_FILE = "-config";
+	public static final String LOGGING_CONFIGURATION_NAME = "-log";
+
+	public static final int DEFAULT_TABSIZE = 8;
+	public static final String DEFAULT_OUTPUT_DIRECTORY = ".";
+
 	public CompilationArguments() {
-		addOption("-verbose");
-		addOption("-nowarn");
-		addOption("-debug");
-		addOption("-prompt");
-		addArgument("-tabsize", 8);
-		addArgument("-encoding");
-		addArgument("-targetencoding");
-		addArgument("-classpath");
-		addArgument("-d", ".");
-		addArgument("-config");
-		addArgument("-log");
+		addOption(VERBOSE);
+		addOption(NOWARN);
+		addOption(DEBUG);
+		addOption(PROMPT);
+		addArgument(TABSIZE, DEFAULT_TABSIZE);
+		addArgument(ENCODING);
+		addArgument(TARGET_ENCODING);
+		addArgument(CompilationArguments.CLASSPATH);
+		addArgument(CompilationArguments.OUTPUT_DIRECTORY,
+				DEFAULT_OUTPUT_DIRECTORY);
+		addArgument(CHOICEMAKER_CONFIGURATION_FILE);
+		addArgument(LOGGING_CONFIGURATION_NAME);
 	}
 }

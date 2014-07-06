@@ -69,6 +69,7 @@ import com.choicemaker.cm.core.base.DoNothingMachineLearning;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.base.Repository;
 import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.configure.ConfigurationManager;
@@ -1438,7 +1439,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	} // processLicenseFile()
 
 	private static String CONF_ARG = "-conf";
-	private static String LOG_ARG = "-log";
+	private static String LOG_ARG = CompilationArguments.LOGGING_CONFIGURATION_NAME;
 	private static String DIALOG_OPT = "-dialog";
 
 	/**

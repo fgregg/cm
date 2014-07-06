@@ -24,7 +24,7 @@
 				<artifactId>choicemaker-maven-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
-					<sourceDirectory>src/test/resources/cluemaker</sourceDirectory>
+					<sourceDirectory>src/main/cluemaker</sourceDirectory>
 				</configuration>
                 <executions>
                     <execution>

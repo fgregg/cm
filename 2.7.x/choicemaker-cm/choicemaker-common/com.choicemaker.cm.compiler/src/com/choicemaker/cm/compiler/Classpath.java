@@ -46,19 +46,21 @@ public class Classpath {
 	protected String[] components;
 
 	/** classpath constructor
+	 * @param defaultPath ignored unless <code>classpath</code> is null
+	 * @param classPath 
 	 */
-	public Classpath(String cp, String classpath) {
-		if (classpath == null) {
-			classpath = addDefaults(cp); // CLASS_PATH
+	public Classpath(String defaultPath, String classPath) {
+		if (classPath == null) {
+			classPath = addBootAndExtensionPaths(defaultPath); // CLASS_PATH
 		} else {
-			classpath = addDefaults(classpath);
+			classPath = addBootAndExtensionPaths(classPath);
 		}
-		components = decompose(classpath);
+		components = decompose(classPath);
 	}
 
 	/** mix in boot class path and the jars in the extension directory
 	 */
-	protected String addDefaults(String path) {
+	protected String addBootAndExtensionPaths(String path) {
 		if (!path.endsWith(PATH_SEP))
 			path += PATH_SEP;
 		if (EXTENSION_PATH != null) {

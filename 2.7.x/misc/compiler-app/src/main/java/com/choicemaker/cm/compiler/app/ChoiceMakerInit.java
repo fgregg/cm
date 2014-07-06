@@ -48,10 +48,10 @@ public final class ChoiceMakerInit {
 //				throw new IllegalArgumentException("null log configuration name");
 //			}
 
-			SystemPropertyUtils.setProperty(
+			SystemPropertyUtils.setPropertyIfMissing(
 					PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
 					WellKnownPropertyValues.LIST_BACKED_GENERATOR_PLUGIN_FACTORY);
-			SystemPropertyUtils.setProperty(
+			SystemPropertyUtils.setPropertyIfMissing(
 					PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR,
 					WellKnownPropertyValues.LIST_BACKED_CONFIGURATOR);
 

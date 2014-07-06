@@ -27,6 +27,10 @@ public class ConfigurationManager {
 	public static final ConfigurationManager getInstance() {
 		return instance;
 	}
+	
+	public static void install(ChoiceMakerConfigurator configurator) {
+		InstallableConfigurator.getInstance().install(configurator);
+	}
 
 	private boolean isInitialized() {
 		return InstalledConfiguration.getInstance().hasDelegate();

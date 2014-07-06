@@ -120,120 +120,127 @@ public abstract class CMCompiler implements ICompiler {
 
 	public abstract Properties getFeatures();
 
-	public String compile(CompilationArguments arguments, final Writer statusOutput)
-		throws CompilerException {
+	public int generateJavaCode(CompilationArguments arguments,
+			Writer statusOutput) throws CompilerException {
+		ICompilationUnit unit = generateJavaCodeInternal(arguments,
+			statusOutput);
+		int retVal = unit.getErrors();
+		return retVal;
+	}
+
+	/**
+	 * Returns the number of ClueMaker errors
+	 * @throws CompilerException 
+	 */
+	public ICompilationUnit generateJavaCodeInternal(CompilationArguments arguments,
+			Writer statusOutput) throws CompilerException {
+
 		String file = arguments.files()[0];
+		String defaultPath = getClassPath();
+		CompilationEnv env =
+			new CompilationEnv(arguments, defaultPath, statusOutput);
+		Sourcecode source;
+		ICompilationUnit retVal = null;
 		try {
-			String classPath = getClassPath();
-			CompilationEnv env = new CompilationEnv(arguments, classPath, statusOutput);
-			Sourcecode source =
-				new Sourcecode(file, arguments.argumentVal("-encoding"), statusOutput);
+			source = new Sourcecode(file, arguments.argumentVal(CompilationArguments.ENCODING),
+					statusOutput);
 			ICompilationUnit unit = getCompilationUnit(env, source);
 			unit.compile();
 			unit.conclusion(statusOutput);
-			// env.conclusion();
-			if (unit.getErrors() == 0)
-			{
-				String targetdir = null;
-				targetdir =
-					new File(
-						//GeneratorXmlConf.getCodeRoot()
-						ConfigurationManager.getInstance().getCodeRoot()
-							+ File.separator
-							+ "classes")
-						.getAbsolutePath();
-				new File(targetdir).getAbsoluteFile().mkdirs();
-				List generatedFiles = unit.getGeneratedJavaSourceFiles();
-				final int numStdArgs = 5;
-				Object[] args = new String[generatedFiles.size() + numStdArgs];
-				args[0] = "-classpath";
-				args[1] = classPath;
-				args[2] = "-d";
-				args[3] = targetdir;
-				args[4] = "-O";
-				for (int i = 0; i < generatedFiles.size(); ++i) {
-					args[i + numStdArgs] =
-						new File((String) generatedFiles.get(i))
-							.getAbsolutePath();
-				}
+			retVal = unit;
+		} catch (IOException e) {
+			e.fillInStackTrace();
+			String msg = e.toString();
+			logger.error(msg,e);
+			throw new CompilerException(msg,e);
+		}
 
-				// result will store a return code from the compile function
-				int result = -1;
+		return retVal;
+	}
 
-				//save the location of System.out and System.err
-				PrintStream out = System.out;
-				PrintStream err = System.err;
-				ClassLoader cl = getJavacClassLoader();
-				PrintStream ps = null;
-				try {
-
-					// Change the location of System.out and System.err
-					ps =
-						new PrintStream(
-							new OutputStream()
-							{
-								public void write(int c) throws IOException
-								{
-									statusOutput.write(c);
-								}
-							}
-						);
-					System.setErr(ps);
-					System.setOut(ps);
-
-					// Get a handle on Sun's compiler object
-					Class c = Class.forName("com.sun.tools.javac.Main", true, cl);
-					Object compiler = c.newInstance();
-
-					// Use reflection to call the compile method with the args setup earlier
-					Method compile =
-						c.getMethod(
-							"compile",
-							new Class[] {
-								(new String[0]).getClass()
-							}
-						);
-					Integer returncode = (Integer) compile.invoke(compiler, new Object[] {args});
-
-					//save the return code
-					result = returncode.intValue();
-				}
-
-				catch (Exception ex) {
-					logger.error("Compiler.compile(): " + ex.toString(), ex);
-					return null;
-				}
-
-				finally {
-					if (ps != null) {
-						ps.flush();
-						ps.close();
-						ps = null;
-					}
-					System.setErr(err);
-					System.setOut(out);
-				}
-
-
-				if (result == MODERN_COMPILER_SUCCESS)
-				{
-					return unit.getAccessorClass();
-				}
-				else
-				{
-					return null;
-				}
+	public String compile(CompilationArguments arguments,
+			final Writer statusOutput) throws CompilerException {
+		ICompilationUnit unit =
+			generateJavaCodeInternal(arguments, statusOutput);
+		if (unit.getErrors() == 0) {
+			// Create the output directory
+			File targetDir =
+				new File(ConfigurationManager.getInstance().getCodeRoot()
+						+ File.separator + "classes");
+			targetDir.getAbsoluteFile().mkdirs();
+			
+			// Create the compilation arguments
+			String targetDirPath = targetDir.getAbsolutePath();
+			String classPath = getClassPath();
+			List generatedFiles = unit.getGeneratedJavaSourceFiles();
+			final int numStdArgs = 5;
+			Object[] args = new String[generatedFiles.size() + numStdArgs];
+			args[0] = CompilationArguments.CLASSPATH;
+			args[1] = classPath;
+			args[2] = CompilationArguments.OUTPUT_DIRECTORY;
+			args[3] = targetDirPath;
+			args[4] = "-O";
+			for (int i = 0; i < generatedFiles.size(); ++i) {
+				args[i + numStdArgs] =
+					new File((String) generatedFiles.get(i)).getAbsolutePath();
 			}
-			else
-			{
+
+			// result will store a return code from the compile function
+			int result = -1;
+
+			// save the location of System.out and System.err
+			PrintStream out = System.out;
+			PrintStream err = System.err;
+			ClassLoader cl = getJavacClassLoader();
+			PrintStream ps = null;
+			try {
+
+				// Change the location of System.out and System.err
+				ps = new PrintStream(new OutputStream() {
+					public void write(int c) throws IOException {
+						statusOutput.write(c);
+					}
+				});
+				System.setErr(ps);
+				System.setOut(ps);
+
+				// Get a handle on Sun's compiler object
+				Class c = Class.forName("com.sun.tools.javac.Main", true, cl);
+				Object compiler = c.newInstance();
+
+				// Use reflection to call the compile method with the args setup
+				// earlier
+				Method compile =
+					c.getMethod("compile",
+							new Class[] { (new String[0]).getClass() });
+				Integer returncode =
+					(Integer) compile.invoke(compiler, new Object[] { args });
+
+				// save the return code
+				result = returncode.intValue();
+			}
+
+			catch (Exception ex) {
+				logger.error("Compiler.compile(): " + ex.toString(), ex);
 				return null;
 			}
-		}
-		catch (IOException e)
-		{
-			System.err.println(
-				MessageUtil.m.formatMessage("compiler.comp.file.error", file));
-			logger.error("Compiler", e);
+
+			finally {
+				if (ps != null) {
+					ps.flush();
+					ps.close();
+					ps = null;
+				}
+				System.setErr(err);
+				System.setOut(out);
+			}
+
+			if (result == MODERN_COMPILER_SUCCESS) {
+				return unit.getAccessorClass();
+			} else {
+				return null;
+			}
+		} else {
 			return null;
 		}
 	}

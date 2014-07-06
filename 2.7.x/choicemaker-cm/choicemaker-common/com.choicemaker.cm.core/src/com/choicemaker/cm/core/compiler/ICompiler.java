@@ -24,18 +24,22 @@ import com.choicemaker.cm.core.ProbabilityModelSpecification;
 public interface ICompiler {
 
 	/** Integer returned by the "Modern" jdk1.3 compiler to indicate success. */
-	public static final int MODERN_COMPILER_SUCCESS = 0;
+	int MODERN_COMPILER_SUCCESS = 0;
 
-	public abstract String compile(CompilationArguments arguments, Writer statusOutput)
-		throws CompilerException;
-
-	public abstract boolean compile(IProbabilityModel model, Writer statusOutput)
-		throws CompilerException;
-
-	public ImmutableProbabilityModel compile(ProbabilityModelSpecification model, Writer statusOutput)
+	/** Returns the number of ClueMaker compilation errors */
+	int generateJavaCode(CompilationArguments arguments, Writer statusOutput)
 			throws CompilerException;
 
-	public abstract Properties getFeatures();
+	String compile(CompilationArguments arguments, Writer statusOutput)
+		throws CompilerException;
+
+	boolean compile(IProbabilityModel model, Writer statusOutput)
+		throws CompilerException;
+
+	ImmutableProbabilityModel compile(ProbabilityModelSpecification model, Writer statusOutput)
+			throws CompilerException;
+
+	Properties getFeatures();
 
 }
 

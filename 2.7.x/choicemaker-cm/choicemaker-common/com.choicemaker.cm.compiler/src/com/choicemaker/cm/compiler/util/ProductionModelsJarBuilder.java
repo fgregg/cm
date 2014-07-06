@@ -26,6 +26,7 @@ import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.util.FileUtilities;
@@ -153,11 +154,11 @@ public class ProductionModelsJarBuilder {
 		args.add(javadoc);
 
 		// the outputDir
-		args.add("-d");
+		args.add(CompilationArguments.OUTPUT_DIRECTORY);
 		args.add(javadocDir.getAbsolutePath());
 
 		// classpath to ChoiceMaker classes.
-		args.add("-classpath");
+		args.add(CompilationArguments.CLASSPATH);
 		args.add(ConfigurationManager.getInstance().getJavaDocClasspath());
 
 		// link to the JDK.

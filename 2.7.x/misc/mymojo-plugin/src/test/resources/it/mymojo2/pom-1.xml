@@ -8,14 +8,9 @@
 	<packaging>jar</packaging>
 	<name>Test MyMojo</name>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+	<properties>
+		<aetherVersion>1.0.0.v20140518</aetherVersion>
+	</properties>
 
 	<build>
 		<plugins>
@@ -24,11 +19,32 @@
 				<artifactId>choicemaker-maven-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
-					<sourceDirectory>src/test/resources/cluemaker</sourceDirectory>
+					<sourceDirectory>src/main/cluemaker</sourceDirectory>
+					<targetDirectory>${java.io.tmpdir}/generated</targetDirectory>
+					<generators>
+						<generator>
+							com.choicemaker.cm.compiler.gen.GuiDescriptorGenerator
+						</generator>
+						<generator>
+							com.choicemaker.cm.io.blocking.automated.gen.BlockingGenerator
+						</generator>
+						<generator>
+							com.choicemaker.cm.io.blocking.exact.base.gen.BlockingGenerator
+						</generator>
+						<generator>
+							com.choicemaker.cm.io.db.base.gen.DbGenerator
+						</generator>
+						<generator>
+							com.choicemaker.cm.io.flatfile.base.gen.FlatFileGenerator
+						</generator>
+						<generator>
+							com.choicemaker.cm.io.xml.base.gen.XmlGenerator
+						</generator>
+					</generators>
 				</configuration>
                 <executions>
                     <execution>
-                        <id>generate-test-2</id>
+                        <id>generate-test-1</id>
                         <phase>process-sources</phase>
                         <goals>
                             <goal>generate</goal>

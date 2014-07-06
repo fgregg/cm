@@ -86,6 +86,11 @@ public final class InstallableCompiler implements ICompiler {
 		return delegate;
 	}
 
+	public int generateJavaCode(CompilationArguments arguments,
+			Writer statusOutput) throws CompilerException {
+		return getDelegate().generateJavaCode(arguments, statusOutput);
+	}
+
 	public String compile(CompilationArguments arguments, Writer statusOutput)
 			throws CompilerException {
 		return getDelegate().compile(arguments, statusOutput);
@@ -129,7 +134,7 @@ public final class InstallableCompiler implements ICompiler {
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 */
-	private void install(String fqcn) {
+	public void install(String fqcn) {
 		if (fqcn == null || fqcn.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank class name for compiler factory");

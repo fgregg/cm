@@ -28,6 +28,8 @@ import org.apache.tools.ant.DemuxOutputStream;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.Target;
 
+import com.choicemaker.cm.core.compiler.CompilationArguments;
+
 /**
  * Command line entry point into Ant. This class is entered via the
  * cannonical `public static void main` entry point and reads the
@@ -168,10 +170,11 @@ public class Main {
 				return;
 			} else if (arg.equals("-quiet") || arg.equals("-q")) {
 				msgOutputLevel = Project.MSG_WARN;
-			} else if (arg.equals("-verbose") || arg.equals("-v")) {
+			} else if (arg.equals(CompilationArguments.VERBOSE)
+					|| arg.equals(CompilationArguments.VERBOSE)) {
 				printVersion();
 				msgOutputLevel = Project.MSG_VERBOSE;
-			} else if (arg.equals("-debug")) {
+			} else if (arg.equals(CompilationArguments.DEBUG)) {
 				printVersion();
 				msgOutputLevel = Project.MSG_DEBUG;
 			} else if (arg.equals("-logfile") || arg.equals("-l")) {
@@ -185,20 +188,25 @@ public class Main {
 				} catch (IOException ioe) {
 					String msg =
 						"Cannot write on the specified log file. "
-							+ "Make sure the path exists and you have write permissions.";
+								+ "Make sure the path exists and you have write permissions.";
 					System.out.println(msg);
 					return;
 				} catch (ArrayIndexOutOfBoundsException aioobe) {
-					String msg = "You must specify a log file when " + "using the -log argument";
+					String msg =
+						"You must specify a log file when "
+								+ "using the -log argument";
 					System.out.println(msg);
 					return;
 				}
-			} else if (arg.equals("-buildfile") || arg.equals("-file") || arg.equals("-f")) {
+			} else if (arg.equals("-buildfile") || arg.equals("-file")
+					|| arg.equals("-f")) {
 				try {
 					buildFile = new File(args[i + 1]).getAbsoluteFile();
 					i++;
 				} catch (ArrayIndexOutOfBoundsException aioobe) {
-					String msg = "You must specify a buildfile when " + "using the -buildfile argument";
+					String msg =
+						"You must specify a buildfile when "
+								+ "using the -buildfile argument";
 					System.out.println(msg);
 					return;
 				}
@@ -207,21 +215,23 @@ public class Main {
 					listeners.addElement(args[i + 1]);
 					i++;
 				} catch (ArrayIndexOutOfBoundsException aioobe) {
-					String msg = "You must specify a classname when " + "using the -listener argument";
+					String msg =
+						"You must specify a classname when "
+								+ "using the -listener argument";
 					System.out.println(msg);
 					return;
 				}
 			} else if (arg.startsWith("-D")) {
 
-				/* Interestingly enough, we get to here when a user
-				 * uses -Dname=value. However, in some cases, the JDK
-				 * goes ahead * and parses this out to args
-				 *   {"-Dname", "value"}
-				 * so instead of parsing on "=", we just make the "-D"
-				 * characters go away and skip one argument forward.
-				 *
-				 * I don't know how to predict when the JDK is going
-				 * to help or not, so we simply look for the equals sign.
+				/*
+				 * Interestingly enough, we get to here when a user uses
+				 * -Dname=value. However, in some cases, the JDK goes ahead *
+				 * and parses this out to args {"-Dname", "value"} so instead of
+				 * parsing on "=", we just make the "-D" characters go away and
+				 * skip one argument forward.
+				 * 
+				 * I don't know how to predict when the JDK is going to help or
+				 * not, so we simply look for the equals sign.
 				 */
 
 				String name = arg.substring(2, arg.length());
@@ -236,13 +246,15 @@ public class Main {
 				definedProps.put(name, value);
 			} else if (arg.equals("-logger")) {
 				if (loggerClassname != null) {
-					System.out.println("Only one logger class may be specified.");
+					System.out
+							.println("Only one logger class may be specified.");
 					return;
 				}
 				try {
 					loggerClassname = args[++i];
 				} catch (ArrayIndexOutOfBoundsException aioobe) {
-					System.out.println("You must specify a classname when " + "using the -logger argument");
+					System.out.println("You must specify a classname when "
+							+ "using the -logger argument");
 					return;
 				}
 			} else if (arg.equals("-emacs")) {

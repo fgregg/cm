@@ -44,7 +44,7 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 
 	public ChoiceMakerConfiguration init(String fn, boolean reload,
 			boolean initGui) throws XmlConfException {
-		SystemPropertyUtils.setProperty(
+		SystemPropertyUtils.setPropertyIfMissing(
 				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
 				WellKnownPropertyValues.LIST_BACKED_GENERATOR_PLUGIN_FACTORY);
 		ChoiceMakerConfiguration retVal = new ListBackedConfiguration(fn);
