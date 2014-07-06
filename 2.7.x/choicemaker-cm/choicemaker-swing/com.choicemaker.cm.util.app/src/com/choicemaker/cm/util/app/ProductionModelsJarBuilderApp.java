@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
 import com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder;
+import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.core.util.ObjectMaker;
 
@@ -29,9 +30,14 @@ import com.choicemaker.cm.core.util.ObjectMaker;
  * @version
  */
 public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
-
-	// 2013-08-07 rphall
-	// private static boolean DELETE_TEMP = true;
+	
+	public static final String CONFIGURATION = "-conf";
+	
+	public static final String OUTDIR = "-outDir";
+	
+	public static final String OBJECT_GENERATOR_EXTENSION_POINT = "com.choicemaker.cm.core.objectGenerator";
+	
+	public static final String EXECUTABLE_EXTENSION = "class";
 
 	/**
 	 * Runs ProductionModelsJarBuilder as an Eclipse command-line application.
@@ -43,7 +49,8 @@ public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
 	 * </ul>
 	 * Another is optional:<ul>
 	 * <li>-outDir &lt;<em>path-to-output-directory</em>&gt;<br>
-	 * The default value is <code>etc/models/gen/ou</code></li>
+	 * The default value is {@link ConfigurationManager#getPackageCodeDirectory() the
+	 * packaged code directory}</li>
 	 * </ul>
 	 * In addition, the usual Java and Eclipse command-line arguments are required,
 	 * namely the extension id for this application. A minimal command line
@@ -60,17 +67,17 @@ public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
     public Object run(Object args) throws Exception {
 
 	CommandLineArguments cla = new CommandLineArguments(true);
-	cla.addArgument("-conf");
-	cla.addArgument("-outDir", "etc/models/gen/out");
+	cla.addArgument(CONFIGURATION);
+	String outDirName = ConfigurationManager.getInstance().getPackagedCodeRoot();
+	cla.addArgument(OUTDIR, outDirName);
 	cla.enter((String[]) args);
 
-	String conf = cla.getArgument("-conf");
+	String conf = cla.getArgument(CONFIGURATION);
 	if (conf == null) {
 	    throw new IllegalArgumentException("Must provide a -conf argument");
 	}
 
-	String outDirName = cla.getArgument("-outDir");
-	// this will be relative to the path of the project.xml
+	outDirName = cla.getArgument(OUTDIR);
 	File outDir = new File(outDirName).getAbsoluteFile();
 	if (!outDir.isDirectory()) {
 	    outDir.mkdirs();
@@ -78,7 +85,7 @@ public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
 
 	List omList = new LinkedList();
 	IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(
-		"com.choicemaker.cm.core.objectGenerator");
+		OBJECT_GENERATOR_EXTENSION_POINT);
 	IExtension[] extensions = pt.getExtensions();
 	for (int i = 0; i < extensions.length; i++) {
 	    IExtension extension = extensions[i];
@@ -86,7 +93,7 @@ public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
 	    for (int j = 0; j < els.length; j++) {
 		IConfigurationElement element = els[j];
 		ObjectMaker maker = (ObjectMaker) element
-			.createExecutableExtension("class");
+			.createExecutableExtension(EXECUTABLE_EXTENSION);
 		omList.add(maker);
 	    }
 	}

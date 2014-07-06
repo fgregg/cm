@@ -36,7 +36,6 @@ import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
 import com.choicemaker.cm.core.configure.MachineLearnerPersistence;
 import com.choicemaker.cm.core.configure.ProbabilityModelPersistence;
 import com.choicemaker.cm.core.report.Reporter;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.util.SystemPropertyUtils;
 
 /**
@@ -285,17 +284,23 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 		return delegate.getWorkingDirectory();
 	}
 
-	public String getCodeRoot() {
+	public String getSourceCodeRoot() {
+		// FIXME non-functional method stub
+		throw new Error("not yet implemented");
+	}
+
+	public String getCompiledCodeRoot() {
+		// FIXME non-functional method stub
+		throw new Error("not yet implemented");
+	}
+
+	public String getPackagedCodeRoot() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}
 
 	public void deleteGeneratedCode() {
-		File f = new File(getCodeRoot()).getAbsoluteFile();
-		if (f.exists()) {
-			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
-			FileUtilities.removeDir(f);
-		}
+		throw new UnsupportedOperationException();
 	}
 
 }

@@ -69,6 +69,12 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 	public static final boolean DEFAULT_RELOAD = true;
 
 	public static final boolean DEFAULT_INIT_GUI = true;
+	
+	private static final String SOURCE_DIRECTORY = "src";
+
+	private static final String CLASSES_DIRECTORY = "classes";
+
+	private static final String PACKAGES_DIRECTORY = "out";
 
 	/** The XML document read as configuration file. */
 	Document document;
@@ -384,10 +390,20 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 	}
 
 	public void deleteGeneratedCode() {
-		File f = new File(getCodeRoot()).getAbsoluteFile();
+		File f = new File(getSourceCodeRoot()).getAbsoluteFile();
 		if (f.exists()) {
 			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
-			FileUtilities.removeDir(f);
+			FileUtilities.removeChildren(f);
+		}
+		f = new File(getCompiledCodeRoot()).getAbsoluteFile();
+		if (f.exists()) {
+			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			FileUtilities.removeChildren(f);
+		}
+		f = new File(getPackagedCodeRoot()).getAbsoluteFile();
+		if (f.exists()) {
+			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			FileUtilities.removeChildren(f);
 		}
 	}
 
@@ -403,7 +419,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 		return classpath;
 	}
 
-	public String getCodeRoot() {
+	protected String getCodeRoot() {
 		return codeRoot;
 	}
 
@@ -533,6 +549,18 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 		boolean reload = DEFAULT_RELOAD;
 		boolean initGui = DEFAULT_INIT_GUI;
 		return init(fn, reload, initGui);
+	}
+
+	public String getSourceCodeRoot() {
+		return getCodeRoot() + File.separator + SOURCE_DIRECTORY;
+	}
+
+	public String getCompiledCodeRoot() {
+		return getCodeRoot() + File.separator + CLASSES_DIRECTORY;
+	}
+
+	public String getPackagedCodeRoot() {
+		return getCodeRoot() + File.separator + PACKAGES_DIRECTORY;
 	}
 
 }

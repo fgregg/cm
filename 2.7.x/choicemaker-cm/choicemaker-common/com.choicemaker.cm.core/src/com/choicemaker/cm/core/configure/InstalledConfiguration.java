@@ -113,8 +113,20 @@ final class InstalledConfiguration implements
 		return getDelegate().getWorkingDirectory();
 	}
 
-	public String getCodeRoot() {
-		return getDelegate().getCodeRoot();
+//	public String getCodeRoot() {
+//		return getDelegate().getCodeRoot();
+//	}
+
+	public String getSourceCodeRoot() {
+		return getDelegate().getSourceCodeRoot();
+	}
+
+	public String getCompiledCodeRoot() {
+		return getDelegate().getCompiledCodeRoot();
+	}
+
+	public String getPackagedCodeRoot() {
+		return getDelegate().getPackagedCodeRoot();
 	}
 
 	public void deleteGeneratedCode() {

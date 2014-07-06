@@ -168,25 +168,53 @@ public class FileUtilities {
 		}
 		return res.toString();
 	}
-
-	public static void removeDir(File d) {
-		String[] list = d.list();
-		if (list == null) {
-			list = new String[0];
+	
+	/**
+	 * Deletes the files and subdirectories contained in the specified
+	 * directory <code>d</code>. If the specified file <code>d</code>
+	 * is not a directory, this method has no effect.
+	 * @param d a non-null file or directory. If a file, this method has no effect.
+	 * If a directory has empty, this method has no effect.
+	 */
+	public static void removeChildren(File d) {
+		if (d == null) {
+			throw new IllegalArgumentException("null file or directory");
 		}
-		for (int i = 0; i < list.length; i++) {
-			String s = list[i];
-			File f = new File(d, s);
-			if (f.isDirectory()) {
-				removeDir(f);
-			} else {
-				if (!f.delete()) {
-					logger.error("Unable to delete file " + f.getAbsolutePath());
+		String[] list = d.list();
+		if (d.isDirectory() && list != null) {
+			for (int i = 0; i < list.length; i++) {
+				String s = list[i];
+				File f = new File(d, s);
+				if (f.isDirectory()) {
+					removeDir(f);
+				} else {
+					if (!f.delete()) {
+						logger.error("Unable to delete file "
+								+ f.getAbsolutePath());
+					}
 				}
 			}
 		}
-		if (!d.delete()) {
-			logger.error("Unable to delete directory " + d.getAbsolutePath());
+	}
+
+	/**
+	 * Deletes the specified file or directory <code>f</code>. If <code>f</code>
+	 * is a directory, removes all the children in the directory. If a file or
+	 * directory or child can not be removed, this method fails without an
+	 * exception being thrown, although the error is logged.
+	 * 
+	 * @param f
+	 *            file or directory
+	 */
+	public static void removeDir(File f) {
+		if (f == null) {
+			throw new IllegalArgumentException("null file or directory");
+		}
+		if (f.isDirectory()) {
+			removeChildren(f);
+		}
+		if (!f.delete()) {
+			logger.error("Unable to delete directory " + f.getAbsolutePath());
 		}
 	}
 

@@ -102,9 +102,17 @@ public class ProductionModelsJarBuilder {
 
 	public static void refreshProductionProbabilityModels() throws XmlConfException {
 		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
-		File genDir = new File(ConfigurationManager.getInstance().getCodeRoot()).getAbsoluteFile();
-		if (genDir.isDirectory()) {
-			FileUtilities.removeDir(genDir);
+		File d = new File(ConfigurationManager.getInstance().getSourceCodeRoot()).getAbsoluteFile();
+		if (d.exists() && d.isDirectory()) {
+			FileUtilities.removeChildren(d);
+		}
+		d = new File(ConfigurationManager.getInstance().getCompiledCodeRoot()).getAbsoluteFile();
+		if (d.exists() && d.isDirectory()) {
+			FileUtilities.removeChildren(d);
+		}
+		d = new File(ConfigurationManager.getInstance().getPackagedCodeRoot()).getAbsoluteFile();
+		if (d.exists() && d.isDirectory()) {
+			FileUtilities.removeChildren(d);
 		}
 
 		CompilerFactory factory = CompilerFactory.getInstance ();
@@ -119,6 +127,12 @@ public class ProductionModelsJarBuilder {
 
 	public static class ProductionModelsBuilder implements ObjectMaker {
 		public void generateObjects(File outDir) throws XmlConfException, IOException {
+			if (outDir == null) {
+				throw new IllegalArgumentException("null output directory");
+			}
+			if (!outDir.isDirectory()) {
+				throw new IllegalArgumentException("invalid output directory: " + outDir.getPath());
+			}
 			File modelsJar = new File(outDir, "models.jar");
 			jarProductionProbabilityModels(modelsJar);
 		}
@@ -126,6 +140,12 @@ public class ProductionModelsJarBuilder {
 
 	public static class HolderClassesBuilder implements ObjectMaker {
 		public void generateObjects(File outDir) throws XmlConfException, IOException {
+			if (outDir == null) {
+				throw new IllegalArgumentException("null output directory");
+			}
+			if (!outDir.isDirectory()) {
+				throw new IllegalArgumentException("invalid output directory: " + outDir.getPath());
+			}
 			File holderClassesJar = new File(outDir, "holderClasses.jar");
 			jarHolderClasses(holderClassesJar);
 		}
@@ -133,15 +153,26 @@ public class ProductionModelsJarBuilder {
 
 	public static class ZippedJavadocBuilder implements ObjectMaker {
 		public void generateObjects(File outDir) throws XmlConfException, IOException {
+			if (outDir == null) {
+				throw new IllegalArgumentException("null output directory");
+			}
+			if (!outDir.isDirectory()) {
+				throw new IllegalArgumentException("invalid output directory: " + outDir.getPath());
+			}
 			File javadocZip = new File(outDir, "holderJavadoc.zip");
 			zipHolderJavadoc(javadocZip);
 		}
 	}
 
 	public static void zipHolderJavadoc(File outputFile) throws XmlConfException, IOException {
-		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
-		File genDir = new File(ConfigurationManager.getInstance().getCodeRoot()).getAbsoluteFile();
-		File srcDir = new File(genDir, "src").getAbsoluteFile();
+		if (outputFile == null) {
+			throw new IllegalArgumentException("null output file");
+		}
+		if (!outputFile.isFile() || !outputFile.canWrite()) {
+			throw new IllegalArgumentException("invalid output file: " + outputFile.getPath());
+		}
+
+		File srcDir = new File(ConfigurationManager.getInstance().getSourceCodeRoot()).getAbsoluteFile();
 
 		File tempDir = createTempDirectory();
 		File javadocDir = new File(tempDir, "javadoc").getAbsoluteFile();
@@ -216,9 +247,14 @@ public class ProductionModelsJarBuilder {
 	}
 
 	public static void jarHolderClasses(File outputFile) throws XmlConfException, IOException {
-		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
-		File genDir = new File(ConfigurationManager.getInstance().getCodeRoot()).getAbsoluteFile();
-		File classesDir = new File(genDir, "classes").getAbsoluteFile();
+		if (outputFile == null) {
+			throw new IllegalArgumentException("null output file");
+		}
+		if (!outputFile.isFile() || !outputFile.canWrite()) {
+			throw new IllegalArgumentException("invalid output file: " + outputFile.getPath());
+		}
+		
+		File classesDir = new File(ConfigurationManager.getInstance().getCompiledCodeRoot()).getAbsoluteFile();
 
 		File tempDir = createTempDirectory();
 
@@ -248,9 +284,14 @@ public class ProductionModelsJarBuilder {
 	}
 
 	public static void jarProductionProbabilityModels(File outputFile) throws XmlConfException, IOException {
-		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
-		File genDir = new File(ConfigurationManager.getInstance().getCodeRoot()).getAbsoluteFile();
-		File classesDir = new File(genDir, "classes").getAbsoluteFile();
+		if (outputFile == null) {
+			throw new IllegalArgumentException("null output file");
+		}
+		if (!outputFile.isFile() || !outputFile.canWrite()) {
+			throw new IllegalArgumentException("invalid output file: " + outputFile.getPath());
+		}
+
+		File classesDir = new File(ConfigurationManager.getInstance().getCompiledCodeRoot()).getAbsoluteFile();
 
 		File tempDir = createTempDirectory();
 

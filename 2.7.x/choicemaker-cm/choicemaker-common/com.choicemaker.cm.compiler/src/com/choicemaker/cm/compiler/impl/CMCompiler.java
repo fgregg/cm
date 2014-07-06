@@ -165,8 +165,7 @@ public abstract class CMCompiler implements ICompiler {
 		if (unit.getErrors() == 0) {
 			// Create the output directory
 			File targetDir =
-				new File(ConfigurationManager.getInstance().getCodeRoot()
-						+ File.separator + "classes");
+				new File(ConfigurationManager.getInstance().getCompiledCodeRoot());
 			targetDir.getAbsoluteFile().mkdirs();
 			
 			// Create the compilation arguments

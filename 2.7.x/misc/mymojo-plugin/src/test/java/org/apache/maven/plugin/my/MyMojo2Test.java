@@ -38,6 +38,8 @@ public class MyMojo2Test extends AbstractMojoTestCase {
 	 */
 	public void testSomething() throws Exception {
 
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		System.out.println("ClassLoader: " + cl.getClass().getName());
 
 		for (String p : poms) {
 			try {

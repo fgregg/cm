@@ -27,9 +27,9 @@ import com.choicemaker.cm.core.compiler.ICompiler;
  * the singleton instance of the
  * {@link com.choicemaker.cm.core.install.InstalledConfiguration
  * InstalledConfiguration} class.
- *
+ * 
  * @author rphall
- *
+ * 
  */
 public interface ChoiceMakerConfiguration {
 
@@ -39,7 +39,7 @@ public interface ChoiceMakerConfiguration {
 	 */
 	public static final String INSTANCE = "instance";
 
-	void deleteGeneratedCode();
+	void deleteGeneratedCode() throws UnsupportedOperationException;
 
 	ICompiler getChoiceMakerCompiler();
 
@@ -47,7 +47,22 @@ public interface ChoiceMakerConfiguration {
 
 	String getClassPath();
 
-	String getCodeRoot();
+	/**
+	 * Returns the root directory for generated source code files.
+	 */
+	String getSourceCodeRoot();
+
+	/**
+	 * Returns the root directory for compiled class files.
+	 */
+	String getCompiledCodeRoot();
+
+	/**
+	 * Returns the root directory for packaged code such as model
+	 * JAR files, Holder Class JAR files, JavaDoc Zip files, and
+	 * SQL scripts.
+	 */
+	String getPackagedCodeRoot();
 
 	String getFileName();
 
@@ -66,7 +81,7 @@ public interface ChoiceMakerConfiguration {
 
 	File getWorkingDirectory();
 
-	void reloadClasses() throws XmlConfException;
+	void reloadClasses() throws UnsupportedOperationException, XmlConfException;
 
 	String toXml();
 

@@ -78,8 +78,16 @@ public class ConfigurationManager {
 		return getConfiguration().getJavaDocClasspath();
 	}
 
-	public String getCodeRoot() {
-		return getConfiguration().getCodeRoot();
+	public String getSourceCodeRoot() {
+		return getConfiguration().getSourceCodeRoot();
+	}
+
+	public String getCompiledCodeRoot() {
+		return getConfiguration().getCompiledCodeRoot();
+	}
+
+	public String getPackagedCodeRoot() {
+		return getConfiguration().getPackagedCodeRoot();
 	}
 
 	public ICompiler getChoiceMakerCompiler() {

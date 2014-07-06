@@ -20,6 +20,12 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 	private static final Logger logger = Logger
 			.getLogger(ListBackedConfiguration.class.getName());
 
+	private static final String SOURCE_DIRECTORY = "src";
+
+	private static final String CLASSES_DIRECTORY = "classes";
+
+	private static final String PACKAGES_DIRECTORY = "out";
+
 	/** The class path */
 	private final String classpath;
 
@@ -49,10 +55,20 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 	}
 
 	public void deleteGeneratedCode() {
-		File f = new File(getCodeRoot()).getAbsoluteFile();
+		File f = new File(getSourceCodeRoot()).getAbsoluteFile();
 		if (f.exists()) {
 			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
-			FileUtilities.removeDir(f);
+			FileUtilities.removeChildren(f);
+		}
+		f = new File(getCompiledCodeRoot()).getAbsoluteFile();
+		if (f.exists()) {
+			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			FileUtilities.removeChildren(f);
+		}
+		f = new File(getPackagedCodeRoot()).getAbsoluteFile();
+		if (f.exists()) {
+			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			FileUtilities.removeChildren(f);
 		}
 	}
 
@@ -68,7 +84,7 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		return this.classpath;
 	}
 
-	public String getCodeRoot() {
+	protected String getCodeRoot() {
 		return this.codeRoot;
 	}
 
@@ -118,6 +134,18 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 	public String toXml() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
+	}
+
+	public String getSourceCodeRoot() {
+		return getCodeRoot() + File.separator + SOURCE_DIRECTORY;
+	}
+
+	public String getCompiledCodeRoot() {
+		return getCodeRoot() + File.separator + CLASSES_DIRECTORY;
+	}
+
+	public String getPackagedCodeRoot() {
+		return getCodeRoot() + File.separator + PACKAGES_DIRECTORY;
 	}
 
 }
