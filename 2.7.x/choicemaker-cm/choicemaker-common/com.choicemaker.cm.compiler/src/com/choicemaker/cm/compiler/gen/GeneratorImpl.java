@@ -173,7 +173,8 @@ public class GeneratorImpl implements IGenerator {
 	 */
 	public String getSourceCodeRoot() throws GenException {
 		// return GeneratorXmlConf.getCodeRoot() + File.separator + "src";
-		return ConfigurationManager.getInstance().getCodeRoot() + File.separator + "src";
+//		return ConfigurationManager.getInstance().getCodeRoot() + File.separator + "src";
+		return ConfigurationManager.getInstance().getCodeRoot();
 	}
 
 	/**
