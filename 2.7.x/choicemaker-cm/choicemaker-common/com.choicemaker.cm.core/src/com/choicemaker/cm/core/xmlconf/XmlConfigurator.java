@@ -40,6 +40,7 @@ import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.configure.MachineLearnerPersistence;
 import com.choicemaker.cm.core.configure.ProbabilityModelPersistence;
 import com.choicemaker.cm.core.util.FileUtilities;
+import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  * XML configuration file reader.
@@ -412,7 +413,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 	}
 
 	public String getJavaDocClasspath() {
-		String pathSeparator = System.getProperty("path.separator");
+		String pathSeparator = System.getProperty(SystemPropertyUtils.PATH_SEPARATOR);
 		String res = null;
 		IPluginDescriptor[] plugins = Platform.getPluginRegistry().getPluginDescriptors();
 		for (int i = 0; i < plugins.length; i++) {

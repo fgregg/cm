@@ -12,6 +12,8 @@ package com.choicemaker.cm.compiler;
 
 import java.io.File;
 
+import com.choicemaker.util.SystemPropertyUtils;
+
 /**
  * Classpath management.
  * 
@@ -20,28 +22,42 @@ import java.io.File;
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:35 $
  */
 public class Classpath {
+	
+	/** The name of the System property that specifies the JVM boot class path */
+	// FIXME is "sun.boot.class.path" valid for all JVM's?
+	private static final String PROPERTY_BOOT_PATH = "sun.boot.class.path";
 
-	/** the file separator character
+	/**
+	 * the file separator character
 	 */
 	protected static String FILE_SEP = File.separator;
 
-	/** the string used as separator in class paths
+	/**
+	 * the string used as separator in class paths
 	 */
-	protected static String PATH_SEP = System.getProperty("path.separator");
+	protected static String PATH_SEP = System
+			.getProperty(SystemPropertyUtils.PATH_SEPARATOR);
 
-	/** the boot class path
+	/**
+	 * the boot class path
 	 */
-	protected static String CLASS_PATH = System.getProperty("java.class.path") + PATH_SEP;
+	protected static String CLASS_PATH = System
+			.getProperty(SystemPropertyUtils.JAVA_CLASS_PATH) + PATH_SEP;
 
-	/** the boot class path
+	/**
+	 * the boot class path
 	 */
-	protected static String BOOT_PATH = System.getProperty("sun.boot.class.path") + PATH_SEP;
+	protected static String BOOT_PATH = System.getProperty(PROPERTY_BOOT_PATH)
+			+ PATH_SEP;
 
-	/** the extension path
+	/**
+	 * the extension path
 	 */
-	protected static String EXTENSION_PATH = System.getProperty("java.ext.dirs") + PATH_SEP;
+	protected static String EXTENSION_PATH = System
+			.getProperty(SystemPropertyUtils.JAVA_EXT_DIRS) + PATH_SEP;
 
-	/** the classpath string
+	/**
+	 * the classpath string
 	 */
 	protected String[] components;
 
