@@ -26,11 +26,15 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <pmd.skip>true</pmd.skip>
     <maven.site.skip>false</maven.site.skip>
 
+    <!-- ChoiceMaker versions -->
+    <choicemaker.current.version>2.7.1-SNAPSHOT</choicemaker.current.version>
+    <choicemaker.prerequisite.dependency>2.7.1</choicemaker.prerequisite.dependency>
+    <choicemaker.prerequisite.version>2.7.2-SNAPSHOT</choicemaker.prerequisite.version>
+    <choicemaker.tool.dependency>2.7.1-SNAPSHOT</choicemaker.tool.dependency>
+    <choicemaker.tool.version>2.7.1-SNAPSHOT</choicemaker.tool.version>
+
     <!-- Dependency versions -->
     <ant-jsch.version>1.9.2</ant-jsch.version>
-    <choicemaker.version>2.7.1-SNAPSHOT</choicemaker.version>
-    <choicemaker.prerequisites.dependency>2.7.1</choicemaker.prerequisites.dependency>
-    <choicemaker.prerequisites.version>2.7.2-SNAPSHOT</choicemaker.prerequisites.version>
     <docbook.version>4.4</docbook.version>
     <jsch.version>0.1.50</jsch.version>
     <junit.version>3.8.2</junit.version>
@@ -464,17 +468,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.autonumber</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -482,37 +486,37 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.analyzer.tools.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.analyzer.tools.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.core</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.core</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.compiler</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.compiler</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -531,72 +535,72 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.docs</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.docs</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.gui.utils</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.gui.utils</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -604,13 +608,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -618,61 +622,61 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.en.us.train</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.en.us.train</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -680,37 +684,37 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.mmdevtools</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.mmdevtools</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -718,37 +722,37 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.modelmaker.pkg_eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.modelmaker.pkg_eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.module</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.module</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -756,13 +760,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -770,13 +774,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.inmemory.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.inmemory.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -784,13 +788,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -798,13 +802,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -812,13 +816,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -826,13 +830,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -840,13 +844,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.exact.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.exact.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -854,13 +858,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.exact.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.blocking.exact.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -868,13 +872,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.composite.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.composite.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -882,37 +886,37 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.composite.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.composite.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -920,12 +924,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -934,73 +938,73 @@ END: C-E Exclusion -->
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.flatfile.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.io.flatfile.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.flatfile.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.flatfile.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.io.xml.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.ml.me.gui</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1008,61 +1012,61 @@ END: C-E Exclusion -->
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.reviewmaker.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.reviewmaker.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.server.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.server.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.server.ejb.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.server.ejb.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.transitivity</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.transitivity</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1070,13 +1074,13 @@ END: C-E Exclusion -->
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.transitivity.core</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.transitivity.core</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1084,85 +1088,85 @@ END: C-E Exclusion -->
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.transitivity.server</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.transitivity.server</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.adaptor</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.adaptor</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.base</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.pkg_eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.urm.pkg_eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.util.app</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.util.app</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1170,13 +1174,13 @@ END: C-E Exclusion -->
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.util.app.pkg_eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.util.app.pkg_eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1184,37 +1188,37 @@ END: C-E Exclusion -->
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.validation.eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>
         com.choicemaker.cm.validation.eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss.eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.wcohen.ss.eclipse</artifactId>
-        <version>${choicemaker.version}</version>
+        <version>${choicemaker.current.version}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1257,7 +1261,7 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>javax.help.eclipse2plugin</artifactId>
-        <version>2.7.1</version>
+        <version>${choicemaker.prerequisite.dependency}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1298,9 +1302,14 @@ END: C-E Exclusion -->
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jfreechart.eclipse2plugin</artifactId>
-        <version>2.7.1</version>
+        <version>${choicemaker.prerequisite.dependency}</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.maven</groupId>
+        <artifactId>cluemaker-maven-plugin</artifactId>
+        <version>${choicemaker.tool.version}</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
