@@ -1,0 +1,38 @@
+<ProbabilityModel clueFileName="SimplePersonClues.clues" trainingSource="test-01" trainedWithHolds="true" lastTrainingDate="1207616176843" firingThreshold="3" userName="rphall" enableAllCluesBeforeTraining="true" enableAllRulesBeforeTraining="true" accessorClass="com.choicemaker.demo.simple_person_matching.gendata.gend.internal.Person.SimplePersonCluesAccessor" useAnt="false" antCommand="-Dnomain=true compile">
+    <machineLearner class="com.choicemaker.cm.ml.me.base.me" trainingIterations="1000" />
+    <clue name="mFirstName" evaluate="true" weight="5.360511" />
+    <clue name="dFirstName" evaluate="true" weight="9.649709" />
+    <clue name="dFirstNameOnlyInitialMatch" evaluate="true" weight="25.411993" />
+    <clue name="mFirstNameVsInitial" evaluate="true" weight="48.599068" />
+    <clue name="mJaroFirstName" evaluate="true" weight="39.57543" />
+    <clue name="mEditDistanceFirstName" evaluate="true" weight="84.416374" />
+    <clue name="mMiddleNameInitialOnly" evaluate="true" weight="2.2676623" />
+    <clue name="mMiddleName" evaluate="true" weight="0.6231343" />
+    <clue name="dMiddleName" evaluate="true" weight="2.3284094" />
+    <clue name="mLastName" evaluate="true" weight="3.8129365" />
+    <clue name="dLastName" evaluate="true" weight="5.847409" />
+    <clue name="mJaroLastName" evaluate="true" weight="15.689447" />
+    <clue name="mEditDistanceLastName" evaluate="true" weight="27.42944" />
+    <clue name="mSwapFnameLname" evaluate="true" weight="19.191404" />
+    <clue name="mSwapFnameLnameApproximate" evaluate="true" weight="445.31763" />
+    <clue name="mStreetNumber" evaluate="true" weight="1.8050528" />
+    <clue name="dStreetNumber" evaluate="true" weight="0.7488591" />
+    <clue name="mStreetName" evaluate="true" weight="2.2249887" />
+    <clue name="dStreetName" evaluate="true" weight="1.8875672" />
+    <clue name="mApproxStreetName" evaluate="true" weight="5.6697164" />
+    <clue name="mApartmentNumber" evaluate="true" weight="2.3177316" />
+    <clue name="dApartmentNumber" evaluate="true" weight="2.0121229" />
+    <clue name="mstate" evaluate="true" weight="1.2172678" />
+    <clue name="dstate" evaluate="true" weight="0.8988296" />
+    <clue name="mSsn" evaluate="true" weight="25.926414" />
+    <clue name="dSsn" evaluate="true" weight="1.8142034" />
+    <clue name="mApproxSsn[3]" evaluate="true" weight="54.097538" />
+    <clue name="mApproxSsn[2]" evaluate="true" weight="36.15102" />
+    <clue name="mApproxSsn[1]" evaluate="true" weight="8.289996" />
+    <clue name="mCity" evaluate="true" weight="1.3832635" />
+    <clue name="dCity" evaluate="true" weight="0.99363965" />
+    <clue name="mJaroCity" evaluate="true" weight="2.2250707" />
+    <clue name="mZip" evaluate="true" weight="2.091018" />
+    <clue name="dZip" evaluate="true" weight="2.864858" />
+    <clue name="mApproxZip" evaluate="true" weight="5.550842" />
+</ProbabilityModel>
