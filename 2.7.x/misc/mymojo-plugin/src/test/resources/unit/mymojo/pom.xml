@@ -21,7 +21,7 @@
 		<plugins>
 			<plugin>
 				<groupId>com.choicemaker.fake</groupId>
-				<artifactId>choicemaker-maven-plugin</artifactId>
+	<artifactId>mymojo-maven-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
 					<!-- Specify the MyMojo parameter -->
