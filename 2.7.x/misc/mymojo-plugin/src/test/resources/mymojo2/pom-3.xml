@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.maven.plugin.my.unit</groupId>
+	<groupId>com.choicemaker.fake.unit</groupId>
 	<artifactId>project-to-test</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -21,20 +21,22 @@
 		<plugins>
 			<plugin>
 				<groupId>com.choicemaker.fake</groupId>
-	<artifactId>mymojo-maven-plugin</artifactId>
+				<artifactId>mymojo-maven-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
-					<sourceDirectory>src/test/resources/cluemaker</sourceDirectory>
+					<cluemakerDirectory>src/main/cluemaker</cluemakerDirectory>
+					<generatedSourceDirectory>${project.build.directory}/generated-sources</generatedSourceDirectory>
+					<compiledCodeDirectory>${project.build.outputDirectory}</compiledCodeDirectory>
 				</configuration>
-                <executions>
-                    <execution>
-                        <id>generate-test-2</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
+				<executions>
+					<execution>
+						<id>generate-test-2</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
 				<dependencies>
 					<dependency>
 						<groupId>com.choicemaker.cm</groupId>

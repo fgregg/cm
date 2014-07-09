@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.my;
+package com.choicemaker.fake;
 
 import java.io.File;
 import java.util.List;

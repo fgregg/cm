@@ -29,8 +29,11 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 	/** The class path */
 	private final String classpath;
 
+//	/** The directory where ClueMaker code is located */
+//	private final String cluemakerRoot;
+
 	/** The directory where generated code is created */
-	private final String codeRoot;
+	private final String generatedSourceRoot;
 
 	/** An absolute path to the configuration file */
 	private final String filePath;
@@ -51,23 +54,23 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		this.workingDirectory = ConfigurationUtils.getWorkingDirectory(this.filePath, document);
 		System.setProperty(ConfigurationUtils.SYSTEM_USER_DIR, this.workingDirectory.toString());
 		this.classpath = ConfigurationUtils.getClassPath(this.workingDirectory, document);
-		this.codeRoot = ConfigurationUtils.getCodeRoot(this.workingDirectory, document);
+		this.generatedSourceRoot = ConfigurationUtils.getCodeRoot(this.workingDirectory, document);
 	}
 
 	public void deleteGeneratedCode() {
-		File f = new File(getSourceCodeRoot()).getAbsoluteFile();
+		File f = new File(getGeneratedSourceRoot()).getAbsoluteFile();
 		if (f.exists()) {
-			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			logger.info("Deleting generatedSourceRoot('" + f.getAbsoluteFile() + "')");
 			FileUtilities.removeChildren(f);
 		}
 		f = new File(getCompiledCodeRoot()).getAbsoluteFile();
 		if (f.exists()) {
-			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			logger.info("Deleting generatedSourceRoot('" + f.getAbsoluteFile() + "')");
 			FileUtilities.removeChildren(f);
 		}
 		f = new File(getPackagedCodeRoot()).getAbsoluteFile();
 		if (f.exists()) {
-			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			logger.info("Deleting generatedSourceRoot('" + f.getAbsoluteFile() + "')");
 			FileUtilities.removeChildren(f);
 		}
 	}
@@ -85,7 +88,7 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 	}
 
 	protected String getCodeRoot() {
-		return this.codeRoot;
+		return this.generatedSourceRoot;
 	}
 
 	public String getFileName() {
@@ -136,7 +139,12 @@ class ListBackedConfiguration implements ChoiceMakerConfiguration {
 		throw new Error("not yet implemented");
 	}
 
-	public String getSourceCodeRoot() {
+	public String getClueMakerSourceRoot() {
+		// FIXME non-functional method stub
+		throw new Error("not yet implemented");
+	}
+
+	public String getGeneratedSourceRoot() {
 		return getCodeRoot() + File.separator + SOURCE_DIRECTORY;
 	}
 

@@ -69,7 +69,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 	public static final boolean DEFAULT_RELOAD = true;
 
 	public static final boolean DEFAULT_INIT_GUI = true;
-	
+
 	private static final String SOURCE_DIRECTORY = "src";
 
 	private static final String CLASSES_DIRECTORY = "classes";
@@ -390,19 +390,20 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 	}
 
 	public void deleteGeneratedCode() {
-		File f = new File(getSourceCodeRoot()).getAbsoluteFile();
+		File f;
+		f = new File(getGeneratedSourceRoot()).getAbsoluteFile();
 		if (f.exists()) {
-			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			logger.info("Deleting source code root('" + f.getAbsoluteFile() + "')");
 			FileUtilities.removeChildren(f);
 		}
 		f = new File(getCompiledCodeRoot()).getAbsoluteFile();
 		if (f.exists()) {
-			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			logger.info("Deleting compiled code root('" + f.getAbsoluteFile() + "')");
 			FileUtilities.removeChildren(f);
 		}
 		f = new File(getPackagedCodeRoot()).getAbsoluteFile();
 		if (f.exists()) {
-			logger.info("Deleting codeRoot('" + f.getAbsoluteFile() + "')");
+			logger.info("Deleting packaged code root('" + f.getAbsoluteFile() + "')");
 			FileUtilities.removeChildren(f);
 		}
 	}
@@ -551,7 +552,12 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 		return init(fn, reload, initGui);
 	}
 
-	public String getSourceCodeRoot() {
+	public String getClueMakerSourceRoot() {
+		// FIXME non-functional method stub
+		throw new Error("not yet implemented");
+	}
+
+	public String getGeneratedSourceRoot() {
 		return getCodeRoot() + File.separator + SOURCE_DIRECTORY;
 	}
 

@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.my;
+package com.choicemaker.fake;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -35,10 +35,7 @@ import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 /**
  * Goal which generates Java source code from ClueMaker model files
  */
-@Mojo( name = "generate",
-	defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-    requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
-    )
+@Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
 public class MyMojo2 extends AbstractMojo {
 
 	private static final String EOL = System.getProperty("line.separator");
@@ -50,44 +47,45 @@ public class MyMojo2 extends AbstractMojo {
 	private MavenProject project;
 
 	/**
-	 * parameter expression="${plugin.artifacts}"
-	 * required
+	 * parameter expression="${plugin.artifacts}" required
 	 */
-	@Parameter( defaultValue = "${plugin.artifacts}",
-			required = true
-			)
+	@Parameter(defaultValue = "${plugin.artifacts}", required = true)
 	private List<Artifact> artifacts;
 
 	/**
 	 * An optional list of fully qualified class names for generator plugins.
-	 * 
+	 *
 	 * parameter alias="generators"
 	 */
-	@Parameter( alias = "generators"
-			)
+	@Parameter(alias = "generators")
 	private String[] generatorFqcns;
 
 	/**
 	 * A required location for model files
-	 * 
+	 *
 	 * parameter property="cluemaker.source.directory"
-	 *            default-value="src/main/cluemaker"
-	 * required
+	 * default-value="src/main/cluemaker" required
 	 */
-	@Parameter( property = "cluemaker.source.directory",
-			defaultValue = "src/main/cluemaker",
-			required = true)
-	private File sourceDirectory;
+	@Parameter(property = "cluemaker.source.directory", defaultValue = "src/main/cluemaker", required = true)
+	private File cluemakerDirectory;
 
 	/**
 	 * A required location for generated Java files
-	 * 
+	 *
 	 * @parameter defaultValue="${project.build.directory}/generated-sources"
 	 * @required
 	 */
-	@Parameter( defaultValue = "${project.build.directory}/generated-sources",
-			required = true)
-	private File targetDirectory;
+	@Parameter(defaultValue = "${project.build.directory}/generated-sources", required = true)
+	private File generatedSourceDirectory;
+
+	/**
+	 * A required location for generated Java files
+	 *
+	 * @parameter defaultValue="${project.build.directory}/generated-sources"
+	 * @required
+	 */
+	@Parameter(defaultValue = "${project.build.outputDirectory}", required = true)
+	private File compiledCodeDirectory;
 
 	public void setGenerators(String[] fqcns) {
 		generatorFqcns = fqcns;
@@ -95,14 +93,26 @@ public class MyMojo2 extends AbstractMojo {
 
 	@SuppressWarnings("unchecked")
 	protected void installChoiceMakerComponents() throws XmlConfException {
+
 		// Install the generator plugins used by the compiler
-		List<GeneratorPlugin> generators =
-			ListBackedGeneratorPluginFactory.load();
+		List<GeneratorPlugin> generators;
 		if (generatorFqcns != null && generatorFqcns.length > 0) {
 			generators = ListBackedGeneratorPluginFactory.load(generatorFqcns);
+		} else {
+			generators = ListBackedGeneratorPluginFactory.load();
 		}
-		IGeneratorPluginFactory factory =
-			new ListBackedGeneratorPluginFactory(generators);
+		if (getLog().isDebugEnabled()) {
+			for (GeneratorPlugin generator : generators) {
+				getLog().debug(
+						"generator plugin: " + generator.getClass().getName());
+			}
+		}
+		if (generators.isEmpty()) {
+			getLog().info("NOTE: No generator plugins -- was this intended?");
+		}
+
+		IGeneratorPluginFactory factory = new ListBackedGeneratorPluginFactory(
+				generators);
 		InstallableGeneratorPluginFactory.getInstance().install(factory);
 
 		// Install the compiler
@@ -110,9 +120,8 @@ public class MyMojo2 extends AbstractMojo {
 				WellKnownPropertyValues.BASIC_COMPILER);
 
 		// Configure ChoiceMaker
-		MojoConfigurator configurator =
-			new MojoConfigurator(project, sourceDirectory, targetDirectory,
-					artifacts);
+		MojoConfigurator configurator = new MojoConfigurator(project,
+				cluemakerDirectory, generatedSourceDirectory, compiledCodeDirectory, artifacts);
 		ConfigurationManager.install(configurator);
 		ConfigurationManager.getInstance().init();
 	}
@@ -121,33 +130,38 @@ public class MyMojo2 extends AbstractMojo {
 
 	public void execute() throws MojoExecutionException {
 
-		if (artifacts != null) {
-			for (Artifact a : artifacts) {
-				System.out.println(a.getClass().getName());
-				System.out.println(SP2 + "groupId: " + a.getGroupId());
-				System.out.println(SP2 + "artifactId: " + a.getArtifactId());
-				System.out.println(SP2 + "version: " + a.getVersion());
-				System.out.println(SP2 + "classifier: " + a.getClassifier());
-				System.out.println(SP2 + "isResolved: " + a.isResolved());
-				System.out.println(SP2 + "file: " + a.getFile().getName());
+		if (getLog().isDebugEnabled()) {
+			if (artifacts != null) {
+				for (Artifact a : artifacts) {
+					getLog().debug(a.getClass().getName());
+					getLog().debug(SP2 + "groupId: " + a.getGroupId());
+					getLog().debug(SP2 + "artifactId: " + a.getArtifactId());
+					getLog().debug(SP2 + "version: " + a.getVersion());
+					getLog().debug(SP2 + "classifier: " + a.getClassifier());
+					getLog().debug(SP2 + "isResolved: " + a.isResolved());
+					getLog().debug(SP2 + "file: " + a.getFile().getName());
+				}
 			}
 		}
 
 		// Set up the source and target directories
-		File f = targetDirectory;
+		File f = generatedSourceDirectory;
 		if (!f.exists()) {
 			f.mkdirs();
 		}
-		f = sourceDirectory;
+		getLog().debug("generatedSourceDirectory: " + generatedSourceDirectory);
+
+		f = cluemakerDirectory;
 		if (!f.exists()) {
 			throw new MojoExecutionException(
 					"source directory does not exist: "
-							+ sourceDirectory.getPath());
+							+ cluemakerDirectory.getPath());
 		}
 		if (!f.isDirectory()) {
 			throw new MojoExecutionException("not a directory: "
-					+ sourceDirectory.getPath());
+					+ cluemakerDirectory.getPath());
 		}
+		getLog().debug("cluemakerDirectory: " + cluemakerDirectory);
 
 		// Configure ChoiceMaker
 		try {
@@ -161,8 +175,8 @@ public class MyMojo2 extends AbstractMojo {
 		FileFilter ff = new FileFilter() {
 			public boolean accept(File pathname) {
 				boolean retVal = pathname.isFile();
-				retVal =
-					retVal && pathname.getName().endsWith(MODEL_FILE_PATTERN);
+				retVal = retVal
+						&& pathname.getName().endsWith(MODEL_FILE_PATTERN);
 				return retVal;
 			}
 		};
@@ -170,7 +184,11 @@ public class MyMojo2 extends AbstractMojo {
 		if (models == null || models.length == 0) {
 			throw new MojoExecutionException(
 					"no models found in source directory '"
-							+ sourceDirectory.getPath() + "'");
+							+ cluemakerDirectory.getPath() + "'");
+		} else {
+			for (File model : models) {
+				getLog().info("Found model: " + model.getName());
+			}
 		}
 
 		// Generate Java code from the ClueMaker models
@@ -182,13 +200,16 @@ public class MyMojo2 extends AbstractMojo {
 				generateJavaCode(model);
 			} catch (CompilerException e) {
 				++exceptionCount;
-				String msg = "Error(s) compiling " + model.getName() + ": ";
+				String msg = "Code generation failed for " + model.getName()
+						+ ": ";
+				// 'info' since failures are expected in unit tests
+				getLog().info(msg);
 				sb.append(msg).append(EOL);
 			}
 		}
 		if (exceptionCount != 0) {
-			String msg =
-				"Compilation failures: " + exceptionCount + EOL + sb.toString();
+			String msg = "Compilation failures: " + exceptionCount + EOL
+					+ sb.toString();
 			throw new MojoExecutionException(msg);
 		}
 	}
@@ -196,7 +217,7 @@ public class MyMojo2 extends AbstractMojo {
 	void generateJavaCode(File model) throws CompilerException {
 
 		// Log the current file to the console
-		System.out.println(model.getName());
+		getLog().info("Generating code for " + model.getName());
 
 		// Parse the model file for the name of the clues file
 		String fileName = model.getAbsolutePath();
@@ -209,13 +230,13 @@ public class MyMojo2 extends AbstractMojo {
 		}
 		Element m = document.getRootElement();
 		String clueFileName = m.getAttributeValue("clueFileName");
+		getLog().debug("Clues: " + clueFileName);
 
 		// Set up the compilation arguments
 		CompilationArguments arguments = new CompilationArguments();
 		// String[] args = { clueFileName };
-		String[] args =
-			{ FileUtilities.getAbsoluteFile(new File(fileName).getParentFile(),
-					clueFileName).toString() };
+		String[] args = { FileUtilities.getAbsoluteFile(
+				new File(fileName).getParentFile(), clueFileName).toString() };
 		arguments.enter(args);
 		StringWriter statusOutput = new StringWriter();
 
@@ -224,10 +245,11 @@ public class MyMojo2 extends AbstractMojo {
 		ICompiler compiler = InstallableCompiler.getInstance();
 		int errorCount = compiler.generateJavaCode(arguments, statusOutput);
 		if (errorCount != 0) {
-			String msg =
-				"Errors: " + errorCount + EOL + statusOutput.toString();
+			String msg = "Errors: " + errorCount + EOL
+					+ statusOutput.toString();
 			throw new CompilerException(msg);
 		}
+		getLog().info("Code generation completed for " + model.getName());
 	}
 
 }

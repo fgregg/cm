@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.my;
+package com.choicemaker.fake;
 
 import java.io.File;
 import java.util.List;
@@ -17,28 +17,33 @@ import com.choicemaker.cm.core.configure.ProbabilityModelPersistence;
 public class MojoConfiguration implements ChoiceMakerConfiguration {
 
 	// private final MavenProject project;
-	private final File sourceDirectory;
-	private final File targetDirectory;
+	private final File cluemakerDirectory;
+	private final File generatedSourceDirectory;
+	private final File compiledCodeDirectory;
 	private final List<Artifact> artifacts;
-	
+
 	private String classpath;
 
-	public MojoConfiguration(MavenProject p, File srcDir, File outDir, List<Artifact> a) {
+	public MojoConfiguration(MavenProject p, File cluemakerDir, File generatedSrcDir, File compiledCodeDir, List<Artifact> a) {
 //		if (p == null) {
 //			throw new IllegalArgumentException("null maven project");
 //		}
-		if (srcDir == null) {
-			throw new IllegalArgumentException("null source directory");
+		if (cluemakerDir == null) {
+			throw new IllegalArgumentException("null ClueMaker directory");
 		}
-		if (outDir == null) {
-			throw new IllegalArgumentException("null target directory");
+		if (generatedSrcDir == null) {
+			throw new IllegalArgumentException("null generated-source directory");
+		}
+		if (compiledCodeDir == null) {
+			throw new IllegalArgumentException("null compiled-code directory");
 		}
 		if (a == null) {
 			throw new IllegalArgumentException("null artifact list");
 		}
 //		this.project = p;
-		this.sourceDirectory = srcDir;
-		this.targetDirectory = outDir;
+		this.cluemakerDirectory = cluemakerDir;
+		this.generatedSourceDirectory = generatedSrcDir;
+		this.compiledCodeDirectory = compiledCodeDir;
 		this.artifacts = a;
 	}
 
@@ -105,12 +110,16 @@ public class MojoConfiguration implements ChoiceMakerConfiguration {
 		throw new Error("not yet implemented");
 	}
 
-	public String getSourceCodeRoot() {
-		return this.sourceDirectory.getAbsolutePath();
+	public String getClueMakerSourceRoot() {
+		return this.cluemakerDirectory.getAbsolutePath();
+	}
+
+	public String getGeneratedSourceRoot() {
+		return this.generatedSourceDirectory.getAbsolutePath();
 	}
 
 	public String getCompiledCodeRoot() {
-		return this.targetDirectory.getAbsolutePath();
+		return this.compiledCodeDirectory.getAbsolutePath();
 	}
 
 	public String getPackagedCodeRoot() {

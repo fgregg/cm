@@ -27,9 +27,9 @@ import com.choicemaker.cm.core.compiler.ICompiler;
  * the singleton instance of the
  * {@link com.choicemaker.cm.core.install.InstalledConfiguration
  * InstalledConfiguration} class.
- * 
+ *
  * @author rphall
- * 
+ *
  */
 public interface ChoiceMakerConfiguration {
 
@@ -47,18 +47,17 @@ public interface ChoiceMakerConfiguration {
 
 	String getClassPath();
 
-	/**
-	 * Returns the root directory for generated source code files.
-	 */
-	String getSourceCodeRoot();
+	/** The root directory for ClueMaker model, clue and schema files */
+	String getClueMakerSourceRoot();
 
-	/**
-	 * Returns the root directory for compiled class files.
-	 */
+	/** The root directory for generated Java source code files. */
+	String getGeneratedSourceRoot();
+
+	/** The root directory for compiled Java class files. */
 	String getCompiledCodeRoot();
 
 	/**
-	 * Returns the root directory for packaged code such as model
+	 * The root directory for packaged code such as model
 	 * JAR files, Holder Class JAR files, JavaDoc Zip files, and
 	 * SQL scripts.
 	 */

@@ -284,7 +284,12 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 		return delegate.getWorkingDirectory();
 	}
 
-	public String getSourceCodeRoot() {
+	public String getClueMakerSourceRoot() {
+		// FIXME non-functional method stub
+		throw new Error("not yet implemented");
+	}
+
+	public String getGeneratedSourceRoot() {
 		// FIXME non-functional method stub
 		throw new Error("not yet implemented");
 	}

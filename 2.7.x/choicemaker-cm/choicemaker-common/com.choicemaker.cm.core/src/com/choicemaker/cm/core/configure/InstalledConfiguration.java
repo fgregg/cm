@@ -113,12 +113,12 @@ final class InstalledConfiguration implements
 		return getDelegate().getWorkingDirectory();
 	}
 
-//	public String getCodeRoot() {
-//		return getDelegate().getCodeRoot();
-//	}
+	public String getClueMakerSourceRoot() {
+		return getDelegate().getClueMakerSourceRoot();
+	}
 
-	public String getSourceCodeRoot() {
-		return getDelegate().getSourceCodeRoot();
+	public String getGeneratedSourceRoot() {
+		return getDelegate().getGeneratedSourceRoot();
 	}
 
 	public String getCompiledCodeRoot() {

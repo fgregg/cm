@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.my;
+package com.choicemaker.fake;
 
 import java.io.File;
 import java.util.List;
@@ -13,29 +13,31 @@ import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
 public class MojoConfigurator implements ChoiceMakerConfigurator {
 
 	private final MavenProject project;
-	private final File sourceDirectory;
-	private final File targetDirectory;
+	private final File cluemakerDirectory;
+	private final File generatedSourceDirectory;
+	private final File compiledCodeDirectory;
 	private final List<Artifact> artifacts;
 
-	public MojoConfigurator(MavenProject p, File srcDir, File outDir,
+	public MojoConfigurator(MavenProject p, File cluemakerDir, File generatedSrcDir, File compiledCodeDir,
 			List<Artifact> a) {
 		if (p == null) {
 			throw new IllegalArgumentException("null maven project");
 		}
-		if (srcDir == null) {
+		if (cluemakerDir == null) {
 			throw new IllegalArgumentException("null source directory");
 		}
-		if (outDir == null) {
+		if (generatedSrcDir == null) {
 			throw new IllegalArgumentException("null target directory");
 		}
 		this.project = p;
-		this.sourceDirectory = srcDir;
-		this.targetDirectory = outDir;
+		this.cluemakerDirectory = cluemakerDir;
+		this.generatedSourceDirectory = generatedSrcDir;
+		this.compiledCodeDirectory = compiledCodeDir;
 		this.artifacts = a;
 	}
 
 	public ChoiceMakerConfiguration init() throws XmlConfException {
-		return new MojoConfiguration(project, sourceDirectory, targetDirectory, artifacts);
+		return new MojoConfiguration(project, cluemakerDirectory, generatedSourceDirectory, compiledCodeDirectory, artifacts);
 	}
 
 	/**

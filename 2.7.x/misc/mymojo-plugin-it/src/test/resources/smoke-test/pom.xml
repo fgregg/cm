@@ -36,6 +36,11 @@
 				<groupId>com.choicemaker.fake</groupId>
 				<artifactId>mymojo-maven-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
+				<configuration>
+					<cluemakerDirectory>src/main/cluemaker</cluemakerDirectory>
+					<generatedSourceDirectory>${project.build.directory}/generated-sources</generatedSourceDirectory>
+					<compiledCodeDirectory>${project.build.outputDirectory}</compiledCodeDirectory>
+				</configuration>
                 <executions>
                     <execution>
                         <id>generate</id>
@@ -46,16 +51,6 @@
                     </execution>
                 </executions>
 				<dependencies>
-					<dependency>
-						<groupId>com.choicemaker.cm</groupId>
-						<artifactId>com.choicemaker.cm.compiler</artifactId>
-						<version>2.7.1-SNAPSHOT</version>
-					</dependency>
-					<dependency>
-						<groupId>com.choicemaker.cm</groupId>
-						<artifactId>com.choicemaker.cm.core</artifactId>
-						<version>2.7.1-SNAPSHOT</version>
-					</dependency>
 					<dependency>
 						<groupId>com.choicemaker.cm</groupId>
 						<artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
@@ -83,17 +78,7 @@
 					</dependency>
 					<dependency>
 						<groupId>com.choicemaker.cm</groupId>
-						<artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-						<version>2.7.1-SNAPSHOT</version>
-					</dependency>
-					<dependency>
-						<groupId>com.choicemaker.cm</groupId>
 						<artifactId>com.choicemaker.cm.matching.en</artifactId>
-						<version>2.7.1-SNAPSHOT</version>
-					</dependency>
-					<dependency>
-						<groupId>com.choicemaker.cm</groupId>
-						<artifactId>com.choicemaker.cm.matching.en.au</artifactId>
 						<version>2.7.1-SNAPSHOT</version>
 					</dependency>
 					<dependency>

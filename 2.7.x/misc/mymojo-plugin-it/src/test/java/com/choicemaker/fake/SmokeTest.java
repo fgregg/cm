@@ -20,6 +20,9 @@ package com.choicemaker.fake;
  */
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.it.Verifier;
 
@@ -27,22 +30,47 @@ import org.apache.maven.it.Verifier;
  * Based on the maven-it-sample archetype.
  *
  * @author <a href="mailto:brianf@apache.org">Brian Fox</a>
- * @version $Id: MavenITmngXXXXDescriptionOfProblemTest.java 707999 2008-10-26 14:42:38Z bentmann $
+ * @version $Id: MavenITmngXXXXDescriptionOfProblemTest.java 707999 2008-10-26
+ *          14:42:38Z bentmann $
  */
-public class SmokeTest
-    extends AbstractMavenIntegrationTestCase
-{
+public class SmokeTest extends AbstractMavenIntegrationTestCase {
 
-    public static final String GROUPID = "com.choicemaker.fake";
+	// /**
+	// * Path to the log4j configuration for this test, relative to the project
+	// * POM
+	// */
+	// public static final String LOG4J_PATH = "src/test/resources/log4j.xml";
+	//
+	// /** Log4j configuration property */
+	// public static final String LOG4J_PROPERTY = "log4j.configuration";
 
-    // TODO: RENAME THIS PATH TO MATCH YOUR ISSUE ID.
-    public static final String STEP000_WORKING_DIR = "/smoke-test";
+	/** Set to true to enable debugger connection */
+	private static final boolean debugger = true;
 
-    public static final String STEP000_ARTIFACT_ID = "smoke-test";
-    public static final String STEP000_VERSION = "1.0-SNAPSHOT";
-    public static final String STEP000_PACKAGING = "jar";
+	/**
+	 * Path to the resource directory for this test, relative to the project POM
+	 */
+	public static final String PROJECT_PATH = "src/test/resources/smoke-test";
 
-    public static final String STEP001_GOAL = "generate";
+	/**
+	 * Path to the generated-sources directory, relative to the project POM
+	 */
+	public static final String GENERATED_SOURCES_PATH = "target/generated-sources";
+
+	/** Property in the test POM */
+	public static final String GENERATED_SOURCES_PROPERTY = "smoke-test-generated-sources";
+
+	/** Maven debug property */
+	public static final String MAVEN_DEBUG_PARAMETER = "-X";
+
+	public static final String MAVEN_OPTIONS_PROPERTY =
+			"MAVEN_OPTS";
+
+	public static final String MAVEN_DEBUGGER_OPTIONS =
+			"-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8785";
+
+	/** Maven execution goal */
+	public static final String MAVEN_EXECUTION_GOAL = "generate-sources";
 
 	public SmokeTest() {
 		super("(1.0,)"); // only test in 1.0+
@@ -50,52 +78,32 @@ public class SmokeTest
 
 	public void testGenerate() throws Exception {
 
-		String MY_PROJECT_PATH = "src/test/resources/smoke-test";
-//		String MY_PROJECT_PATH = "."; // Relative to POM
-//		String MY_PROJECT_PATH = "/"; // Absolute (File system root)
-		File MY_PROJECT = new File(MY_PROJECT_PATH);
-		assertTrue(MY_PROJECT.exists());
-		String absPath = MY_PROJECT.getAbsolutePath();
-		Verifier verifier = new Verifier(absPath);
-		verifier.executeGoal("generate-sources");
+		// Get a copy of the current system properties
+		Properties p = new Properties(System.getProperties());
 
-//    	// The root of the test directories
-//        File testDir = ResourceExtractor.simpleExtractResources( getClass(), STEP000_WORKING_DIR );
-//
-//        // Create or cleanup the test directories
-//        Verifier verifier = new Verifier( testDir.getAbsolutePath() );
-//        verifier.deleteArtifact( GROUPID, STEP000_ARTIFACT_ID, STEP000_VERSION, STEP000_PACKAGING );
-//
-//        // Set the command-line options
-//        List<String> cliOptions = new ArrayList<String>();
-//        cliOptions.add( "-N" );
-//        cliOptions.add( "-X" );
-//        verifier.setCliOptions( cliOptions );
-//
-//        // Test step 1 (generation)
-//        verifier = new Verifier( new File( testDir.getAbsolutePath(), STEP000_WORKING_DIR ).getAbsolutePath() );
-//        verifier.executeGoal( STEP001_GOAL );
-//        verifier.verifyErrorFreeLog();
-////      verifier.resetStreams();
-//
-////        /*
-////         * Now we are running the actual test. This
-////         * particular test will attempt to load the
-////         * resources from the extension jar previously
-////         * installed. If Maven doesn't pass this to the
-////         * classpath correctly, the build will fail. This
-////         * particular test will fail in Maven <2.0.6.
-////         */
-////        verifier = new Verifier( new File( testDir.getAbsolutePath(), STEP002_WORKING_DIR ).getAbsolutePath() );
-////        verifier.executeGoal( STEP002_GOAL );
-////        verifier.verifyErrorFreeLog();
-////        verifier.resetStreams();
-////
-////        /*
-////         * The verifier also supports beanshell scripts for
-////         * verification of more complex scenarios. There are
-////         * plenty of examples in the core-it tests here:
-////         * http://svn.apache.org/repos/asf/maven/core-integration-testing/trunk
-////         */
-    }
+		// Set properties used in generation
+		File f = new File(GENERATED_SOURCES_PATH);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
+		assertTrue(f.exists());
+		p.setProperty(GENERATED_SOURCES_PROPERTY, f.getAbsolutePath());
+
+		if (debugger) {
+			p.setProperty(MAVEN_OPTIONS_PROPERTY, MAVEN_DEBUGGER_OPTIONS);
+		}
+
+		// Set command-line parameters for Maven
+		List<String> cliOptions = new ArrayList<>();
+		cliOptions.add(MAVEN_DEBUG_PARAMETER);
+
+		// Verify that the default POM in the project executes the specified
+		// goal
+		f = new File(PROJECT_PATH);
+		assertTrue(f.exists());
+		Verifier verifier = new Verifier(f.getAbsolutePath());
+		verifier.setCliOptions(cliOptions);
+		verifier.executeGoal(MAVEN_EXECUTION_GOAL, p);
+
+	}
 }

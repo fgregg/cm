@@ -102,7 +102,7 @@ public class ProductionModelsJarBuilder {
 
 	public static void refreshProductionProbabilityModels() throws XmlConfException {
 		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
-		File d = new File(ConfigurationManager.getInstance().getSourceCodeRoot()).getAbsoluteFile();
+		File d = new File(ConfigurationManager.getInstance().getGeneratedSourceRoot()).getAbsoluteFile();
 		if (d.exists() && d.isDirectory()) {
 			FileUtilities.removeChildren(d);
 		}
@@ -169,7 +169,7 @@ public class ProductionModelsJarBuilder {
 			throw new IllegalArgumentException("null output file");
 		}
 
-		File srcDir = new File(ConfigurationManager.getInstance().getSourceCodeRoot()).getAbsoluteFile();
+		File srcDir = new File(ConfigurationManager.getInstance().getGeneratedSourceRoot()).getAbsoluteFile();
 
 		File tempDir = createTempDirectory();
 		File javadocDir = new File(tempDir, "javadoc").getAbsoluteFile();
