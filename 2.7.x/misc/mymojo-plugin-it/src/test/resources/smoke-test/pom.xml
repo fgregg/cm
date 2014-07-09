@@ -8,6 +8,12 @@
 	<packaging>jar</packaging>
 	<name>MyMojo Plugin Smoke Test</name>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <parent.build.dir>../../../../target</parent.build.dir>
+    <parent.generated-source.dir>${parent.build.dir}/generated-source</parent.generated-source.dir>
+    <parent.compiled-code.dir>${parent.build.dir}/classes</parent.compiled-code.dir>
+  </properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -38,8 +44,8 @@
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
 					<cluemakerDirectory>src/main/cluemaker</cluemakerDirectory>
-					<generatedSourceDirectory>${project.build.directory}/generated-sources</generatedSourceDirectory>
-					<compiledCodeDirectory>${project.build.outputDirectory}</compiledCodeDirectory>
+					<generatedSourceDirectory>${parent.generated-source.dir}</generatedSourceDirectory>
+					<compiledCodeDirectory>${parent.compiled-code.dir}</compiledCodeDirectory>
 				</configuration>
                 <executions>
                     <execution>
