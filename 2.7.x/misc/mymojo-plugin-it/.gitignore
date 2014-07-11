@@ -5,3 +5,6 @@ target
 target-00
 target-01
 target-02
+.project
+.classpath
+.settings
