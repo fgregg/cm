@@ -66,6 +66,7 @@
     -->
     <module>misc/compiler-app</module>
     <module>misc/mymojo-plugin</module>
+    <module>misc/mymojo-plugin-it</module>
   </modules>
 
 </project>
