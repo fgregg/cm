@@ -17,8 +17,6 @@ public class MyMojo2Test extends AbstractMojoTestCase {
 
 	private static final Logger logger = Logger.getLogger(MyMojo2Test.class.getName());
 
-	private static final String EOL = System.getProperty("line.separator");
-
 	protected static final String TEST_PROJECT_PATH = "src/test/resources/mymojo2/";
 
 	protected static final String[] POMS = { "pom-1.xml", "pom-2.xml",
