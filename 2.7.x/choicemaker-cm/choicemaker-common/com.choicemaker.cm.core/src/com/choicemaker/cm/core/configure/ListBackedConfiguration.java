@@ -11,7 +11,7 @@ import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.compiler.InstallableCompiler;
-import com.choicemaker.cm.core.util.FileUtilities;
+import com.choicemaker.util.FileUtilities;
 
 class ListBackedConfiguration implements ChoiceMakerConfiguration {
 

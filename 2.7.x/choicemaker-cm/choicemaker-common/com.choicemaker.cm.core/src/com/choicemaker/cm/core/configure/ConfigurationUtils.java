@@ -11,8 +11,8 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
 import com.choicemaker.cm.core.XmlConfException;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
+import com.choicemaker.util.FileUtilities;
 
 public class ConfigurationUtils {
 

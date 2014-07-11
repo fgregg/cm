@@ -33,7 +33,6 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.base.DoNothingMachineLearning;
 import com.choicemaker.cm.core.base.ProbabilityModel;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
@@ -41,6 +40,7 @@ import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
+import com.choicemaker.util.FileUtilities;
 /**
  * Description
  * 

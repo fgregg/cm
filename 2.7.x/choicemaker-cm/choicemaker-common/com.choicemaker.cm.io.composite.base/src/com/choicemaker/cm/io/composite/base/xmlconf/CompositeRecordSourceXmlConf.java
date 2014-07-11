@@ -23,10 +23,10 @@ import org.jdom.output.XMLOutputter;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;
 import com.choicemaker.cm.io.composite.base.CompositeRecordSource;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * Handling of composite Marked Record Pair sources.

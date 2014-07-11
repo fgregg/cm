@@ -38,9 +38,9 @@ import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ProbabilityModelSpecification;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.cm.core.report.Reporter;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.NameUtils;
 import com.choicemaker.util.ArrayHelper;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * A probability model consisting of holder classes, translators, a clue set, weights, and

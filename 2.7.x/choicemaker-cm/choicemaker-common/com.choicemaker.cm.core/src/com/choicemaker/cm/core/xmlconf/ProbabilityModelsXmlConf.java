@@ -42,8 +42,8 @@ import com.choicemaker.cm.core.base.ProbabilityModel;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.util.ArrayHelper;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * Handling of probability models in XML configuration.

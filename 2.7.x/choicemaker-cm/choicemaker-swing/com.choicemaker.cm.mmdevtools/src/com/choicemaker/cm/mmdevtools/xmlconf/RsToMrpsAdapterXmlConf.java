@@ -18,10 +18,10 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.mmdevtools.io.RsToMrpsAdapter;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * Comment

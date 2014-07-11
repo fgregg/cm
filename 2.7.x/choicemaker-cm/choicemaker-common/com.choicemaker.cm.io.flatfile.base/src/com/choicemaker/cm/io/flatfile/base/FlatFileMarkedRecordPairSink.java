@@ -25,7 +25,7 @@ import com.choicemaker.cm.core.ImmutableRecordPair;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.DateHelper;
-import com.choicemaker.cm.core.util.FileUtilities;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * Description

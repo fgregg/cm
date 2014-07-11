@@ -29,10 +29,10 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.configure.ConfigurationManager;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.ObjectMaker;
 import com.choicemaker.cm.core.util.StreamRelayer;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * @author    Adam Winkel

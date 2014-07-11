@@ -33,9 +33,9 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.util.DateHelper;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.NameUtils;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * Description

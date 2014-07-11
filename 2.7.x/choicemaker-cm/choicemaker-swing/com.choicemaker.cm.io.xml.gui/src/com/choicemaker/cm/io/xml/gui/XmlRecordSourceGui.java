@@ -23,7 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
@@ -32,6 +31,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.RecordSourceGui;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * The MRPSGui associated the XmlRecordSource.

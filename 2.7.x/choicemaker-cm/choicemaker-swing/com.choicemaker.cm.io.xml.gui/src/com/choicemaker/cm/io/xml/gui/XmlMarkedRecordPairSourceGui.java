@@ -37,7 +37,6 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
-import com.choicemaker.cm.core.util.FileUtilities;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.MessageUtil;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
@@ -50,6 +49,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.MarkedRecordPairSourceGui;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * The MRPSGui associated the XmlMarkedRecordPairSource.

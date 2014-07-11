@@ -39,7 +39,7 @@ import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
 import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.configure.MachineLearnerPersistence;
 import com.choicemaker.cm.core.configure.ProbabilityModelPersistence;
-import com.choicemaker.cm.core.util.FileUtilities;
+import com.choicemaker.util.FileUtilities;
 import com.choicemaker.util.SystemPropertyUtils;
 
 /**

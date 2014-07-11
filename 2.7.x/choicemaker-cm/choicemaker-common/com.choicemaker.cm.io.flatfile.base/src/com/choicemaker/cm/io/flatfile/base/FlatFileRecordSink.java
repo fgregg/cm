@@ -20,7 +20,7 @@ import java.io.Writer;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSink;
-import com.choicemaker.cm.core.util.FileUtilities;
+import com.choicemaker.util.FileUtilities;
 
 /**
  * Description
