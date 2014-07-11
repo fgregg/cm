@@ -1,0 +1,6 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html><head/><body bgcolor="white">
+<p>Containts the public API generated from the ChoiceMaker schema Person2. For each node type <em>x</em>, two interfaces andone class are generated:</p>
+<ol><li>Base interface <em>X</em>Base: This interface contains getter methods for all fields and nested node types that are not derived (for the beans source). Clients should use this to read the results presented in a BeanMatchCandidate.</li><li>Holder class <em>X</em>Holder: This class implements <em>X</em>Base. It also contains setter methods. Clients should use this to construct arguments sent in a BeanProfile.</li>
+<li>ClueMaker interface <em>X</em>: This interface extends <em>X</em>Base with getter methods for derived fields. This interface can be used to pass complete nodes from ClueMaker and schema expressions to embedded methods and external Java classes. If the latter only require the methods of <em>X</em>Base, it is recommended that that is used instead. This way the Java classes are isolated from changes in derived fields, which are typically more frequent.</li></ol>
+</body></html>
