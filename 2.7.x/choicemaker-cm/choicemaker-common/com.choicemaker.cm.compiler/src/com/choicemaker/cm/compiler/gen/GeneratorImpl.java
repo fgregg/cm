@@ -172,7 +172,6 @@ public class GeneratorImpl implements IGenerator {
 	 * @see      getPackage
 	 */
 	public String getSourceCodeRoot() throws GenException {
-		// return GeneratorXmlConf.getCodeRoot() + File.separator + "src";
 		return ConfigurationManager.getInstance().getGeneratedSourceRoot();
 	}
 
@@ -318,7 +317,6 @@ public class GeneratorImpl implements IGenerator {
 		if (validate) {
 			builder.setFeature("http://apache.org/xml/features/validation/schema", true);
 		}
-		//		builder.setFeature("http://apache.org/xml/features/validation/dynamic", true);
 		builder.setErrorHandler(new SaxErrorHandler());
 		ClassLoader oldCl = XmlParserFactory.setClassLoader();
 		try {
@@ -597,8 +595,6 @@ public class GeneratorImpl implements IGenerator {
 	}
 
 	private void writeSetNestedIndexedJavaDoc(DoubleWriter w, Element record) throws IOException {
-		// 2014-04-24 rphall: Commented out unused local variable
-//		String base = "Sets the nested " + record.getAttributeValue(CoreTags.NAME) + " at the specified index.";
 		w.write(
 			"/**"
 				+ Constants.LINE_SEPARATOR
@@ -613,9 +609,6 @@ public class GeneratorImpl implements IGenerator {
 	}
 	private void createInterfaceClasses(Element r, Element outer) throws GenException {
 		try {
-			// 2014-04-24 rphall: Commented out unused local variable
-//			Set identifiers = new HashSet();
-//			SrcNames srcNames = new SrcNames();
 			String thisRecordName = r.getAttributeValue(CoreTags.NAME);
 			String className = r.getAttributeValue(CoreTags.HOLDER_CLASS_NAME);
 			String urmClassName = r.getAttributeValue(CoreTags.URM_HOLDER_CLASS_NAME);
@@ -727,7 +720,6 @@ public class GeneratorImpl implements IGenerator {
 						+ Constants.LINE_SEPARATOR);
 				ubiw.write("public interface " + urmBaseInterfaceName+" extends com.choicemaker.cm.urm.base.IRecordHolder, "+baseInterfaceName+" {");
 			}
-				//ubiw.write("public interface " + urmBaseInterfaceName+" extends com.choicemaker.cm.urm.base.IRecordHolder {");
 
 			iw.write(
 				"/**"
@@ -869,7 +861,7 @@ public class GeneratorImpl implements IGenerator {
 					isString = true;
 				else
 					throw new GenException("Invalid data type");
-				//TODO check the list of valid datatypes and test
+				//TODO check the list of valid data types and test
 				if(isString)
 					uw.write("return "+keyFiledName+";" + Constants.LINE_SEPARATOR);
 				else
@@ -1099,7 +1091,6 @@ public class GeneratorImpl implements IGenerator {
 					String fieldName = e.getAttributeValue("name");
 					boolean trans = "true".equals(e.getAttributeValue("transient"));
 					identifierCheck(fieldName, identifiers);
-					// check type
 					cu.addField(className, typeName, fieldName);
 					w.write(addField(typeName, fieldName, trans, PUBLIC));
 					String methodStem = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
@@ -1234,8 +1225,8 @@ public class GeneratorImpl implements IGenerator {
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
 				String eName = e.getAttributeValue(CoreTags.NAME);
-				// 2005-08-19 CHANGED: added processing for iterated nodes (rphall)
-				Element iteratedNodeType = GeneratorHelper.getNodeTypeExt(e,"iterated"); // FIXME DEFINE CoreTags: iteratedNode and assigned
+				// FIXME DEFINE CoreTags: iteratedNode and assigned
+				Element iteratedNodeType = GeneratorHelper.getNodeTypeExt(e,"iterated");
 				if (iteratedNodeType == null) {
 					w.write("for(int i = 0; i < " + eName + ".length; ++i) {" + Constants.LINE_SEPARATOR);
 					w.write(eName + "[i].computeValidityAndDerived(__src);" + Constants.LINE_SEPARATOR);
@@ -1247,9 +1238,6 @@ public class GeneratorImpl implements IGenerator {
 
 					w.write("if(__src" + srcId + ".includes(__src)) {" + Constants.LINE_SEPARATOR);
 					String eClassName = e.getAttributeValue(CoreTags.CLASS_NAME);
-					// 2014-04-24 rphall: Commented out unused local variable
-					// Any side effects?
-//					String eIFace = e.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
 					String iterator = iteratedNodeType.getAttributeValue("iterator");
 					String assignedFieldName = iteratedNodeType.getAttributeValue("assignedField");
 
@@ -1284,7 +1272,6 @@ public class GeneratorImpl implements IGenerator {
 					w.write("}" + Constants.LINE_SEPARATOR);
 
 				}
-				// 2005-08-19 END CHANGED
 			}
 			w.write("} catch(Exception __ex) {" + Constants.LINE_SEPARATOR);
 			w.write(
@@ -1317,8 +1304,8 @@ public class GeneratorImpl implements IGenerator {
 			while (i.hasNext()) {
 				Element e = (Element) i.next();
 				String eName = e.getAttributeValue(CoreTags.NAME);
-				// 2005-08-19 CHANGED: added processing for iterated nodes (rphall)
-				Element iteratedNodeType = GeneratorHelper.getNodeTypeExt(e,"iterated"); // FIXME DEFINE CoreTags: iteratedNode and assigned
+				// FIXME DEFINE CoreTags: iteratedNode and assigned
+				Element iteratedNodeType = GeneratorHelper.getNodeTypeExt(e,"iterated");
 				if (iteratedNodeType == null) {
 					w.write("for(int i = 0; i < " + eName + ".length; ++i) {" + Constants.LINE_SEPARATOR);
 					w.write(eName + "[i].resetValidityAndDerived(__src);" + Constants.LINE_SEPARATOR);
@@ -1335,7 +1322,6 @@ public class GeneratorImpl implements IGenerator {
 					w.write("}" + Constants.LINE_SEPARATOR);
 					w.write("}" + Constants.LINE_SEPARATOR);
 				}
-				// 2005-08-19 END CHANGED
 			}
 			w.write("}" + Constants.LINE_SEPARATOR);
 			w.write("public static " + className + " instance() {" + Constants.LINE_SEPARATOR);
@@ -1350,7 +1336,6 @@ public class GeneratorImpl implements IGenerator {
 			w.write("return tmpInstance;" + Constants.LINE_SEPARATOR);
 			w.write("}" + Constants.LINE_SEPARATOR);
 
-			//ELMUS 8/29/2006 START
 			List methodsTags = r.getChildren("method");
 			Iterator methIter = methodsTags.iterator();
 			while (methIter.hasNext()) {
@@ -1358,7 +1343,6 @@ public class GeneratorImpl implements IGenerator {
 				String methodCode = e.getText();
 				w.write(methodCode + Constants.LINE_SEPARATOR);
 			}
-			//ELMUS 8/29/2006 END
 
 			w.write(srcNames.getDeclarations());
 			w.write("}" + Constants.LINE_SEPARATOR);
@@ -1506,19 +1490,14 @@ public class GeneratorImpl implements IGenerator {
 			String rootURMHolder = rootRecord.getAttributeValue(CoreTags.URM_HOLDER_CLASS_NAME);
 			String implClass = rootRecord.getAttributeValue(CoreTags.CLASS_NAME);
 			String ifaceName = rootRecord.getAttributeValue(CoreTags.BASE_INTERFACE_NAME);
-			// 2014-04-24 rphall: Commented out unused local variable
-			// Any side effects?
-//			String iURMFaceName = rootRecord.getAttributeValue(CoreTags.URM_BASE_INTERFACE_NAME);
 
 			w.write("public Object toHolder(Record r) {" + Constants.LINE_SEPARATOR);
 			w.write("return new " + rootHolder + "((" + ifaceName + ")r);" + Constants.LINE_SEPARATOR);
 			w.write("}" + Constants.LINE_SEPARATOR);
 
-			//By PC 10/10/06 - need to return recordHolder
 			w.write("public Object toRecordHolder(Record r) {" + Constants.LINE_SEPARATOR);
 			w.write("return new " + rootURMHolder + "((" + ifaceName + ")r);" + Constants.LINE_SEPARATOR);
 			w.write("}" + Constants.LINE_SEPARATOR);
-			//end by PC
 
 			w.write("public Record toImpl(Object o) {" + Constants.LINE_SEPARATOR);
 			w.write(implClass + " __res = new " + implClass + "((" + ifaceName + ")o);" + Constants.LINE_SEPARATOR);
