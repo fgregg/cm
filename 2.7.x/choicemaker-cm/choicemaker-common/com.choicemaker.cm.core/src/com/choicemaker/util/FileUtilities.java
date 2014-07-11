@@ -8,12 +8,17 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.core.util;
+package com.choicemaker.util;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -28,12 +33,14 @@ import org.apache.tools.ant.util.FileUtils;
  * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:03 $
  */
 public class FileUtilities {
+	
+    public static final String MD5_HASH_ALGORITHM = "MD5";
+    
+    public static final String SHA1_HASH_ALGORITHM = "SHA1";
+	
 	private static Logger logger = Logger.getLogger(FileUtilities.class);
-	private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
 
-//	public static File resolveFile(String fileName) throws IOException {
-//		return FILE_UTILS.resolveFile(XmlConfigurator.getInstance().wdir, fileName).getCanonicalFile();
-//	}
+	private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
 
 	public static File resolveFile(File relativeTo, String fileName) throws IOException {
 		return FILE_UTILS.resolveFile(relativeTo, fileName).getCanonicalFile();
@@ -245,6 +252,77 @@ public class FileUtilities {
 			return f;
 		} else {
 			return new File(f.getAbsolutePath() + "." + extension);
-		}
+		}	
 	}
+
+    /**
+     * Computes the MD5 or SHA1
+     * 
+     * @param algo
+     *            see {@link #MD5_HASH_ALGORITHM} and
+     *            {@link #SHA1_HASH_ALGORITHM}
+     * @param f
+     *            a non-null, readable file
+     * @return A String representing the hash value in hexadecimal
+     * @throws IllegalArgumentException
+     *             if <code>algo</code> is neither MD5 nor SHA1, or if
+     *             <code>f</code> is null, doesn't exist or can not be read
+     * @throws IOException
+     *             if a IO exception occurs while the file is being read
+     * @throws Error
+     *          if a NoSuchAlgorithmException occurs (should never happen)
+     */
+    public static String computeHash(String algo, File f)
+            throws IllegalArgumentException, IOException {
+        if (!MD5_HASH_ALGORITHM.equals(algo)
+                && !SHA1_HASH_ALGORITHM.equals(algo)) {
+            throw new IllegalArgumentException("invalid algorithm: " + algo);
+        }
+        if (f == null || !f.exists() || !f.canRead()) {
+            String fName = f == null ? "null" : f.getName();
+            String msg =
+                "file '" + fName + "' is null, doesn't exist or cannot be read";
+            throw new IllegalArgumentException(msg);
+        }
+
+        byte[] buffer = new byte[8192];
+        BufferedInputStream bis = null;
+        try {
+            MessageDigest digest = null;
+            digest = MessageDigest.getInstance(algo);
+            InputStream fis = new FileInputStream(f);
+            bis = new BufferedInputStream(fis);
+            int n = 0;
+            while (n != -1) {
+                n = bis.read(buffer);
+                if (n > 0) {
+                    digest.update(buffer, 0, n);
+                }
+            }
+            buffer = digest.digest();
+        } catch (NoSuchAlgorithmException e) {
+            String msg = "UNEXPECTED FAILURE: algorithm '" + algo + "'";
+            throw new Error(msg, e);
+        } finally {
+            if (bis != null) {
+                bis.close();
+            }
+        }
+        String retVal = bytesToHex(buffer);
+
+        return retVal;
+    }
+
+    final protected static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for ( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
+
 }
