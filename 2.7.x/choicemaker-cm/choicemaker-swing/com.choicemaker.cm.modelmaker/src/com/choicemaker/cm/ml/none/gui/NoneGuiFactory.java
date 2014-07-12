@@ -12,7 +12,7 @@ package com.choicemaker.cm.ml.none.gui;
 
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.base.DoNothingMachineLearning;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
 import com.choicemaker.cm.modelmaker.gui.ml.MlGuiFactory;
 
@@ -43,7 +43,7 @@ public class NoneGuiFactory extends MlGuiFactory {
 	}
 	
 	public String toString() {
-		return MessageUtil.m.formatMessage("ml.none.label");
+		return ChoiceMakerCoreMessages.m.formatMessage("ml.none.label");
 	}
 	/**
 	 * @see com.choicemaker.cm.ml.gui.MlGuiFactory#getMlInstance()

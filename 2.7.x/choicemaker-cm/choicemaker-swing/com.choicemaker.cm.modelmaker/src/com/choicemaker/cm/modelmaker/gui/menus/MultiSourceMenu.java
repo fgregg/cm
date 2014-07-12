@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.ExtensionPointMapper;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
@@ -103,7 +103,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 	public void buildMenu() {
 		// New
 		ImageIcon newIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/new.gif"));
-		Action newAction = new SourceAction(MessageUtil.m.formatMessage("new.elipsis"), newIcon, false, false, true) {
+		Action newAction = new SourceAction(ChoiceMakerCoreMessages.m.formatMessage("new.elipsis"), newIcon, false, false, true) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -126,7 +126,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 
 		// Open
 		ImageIcon openIcon = null; //open ImageIcon(AbstractApplication.class.getResource("images/open.gif"));
-		Action openAction = new SourceAction(MessageUtil.m.formatMessage("open.elipsis"), openIcon, false, false, true) {
+		Action openAction = new SourceAction(ChoiceMakerCoreMessages.m.formatMessage("open.elipsis"), openIcon, false, false, true) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -151,7 +151,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 
 		// Holds
 		ImageIcon holdIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/hold.gif"));
-		Action holdAction = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.source.includeholds"), holdIcon) {
+		Action holdAction = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.source.includeholds"), holdIcon) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -177,7 +177,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 
 		// Edit
 		ImageIcon editIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/edit.gif"));
-		Action editAction = new SourceAction(MessageUtil.m.formatMessage("edit.elipsis"), editIcon, false, true, true) {
+		Action editAction = new SourceAction(ChoiceMakerCoreMessages.m.formatMessage("edit.elipsis"), editIcon, false, true, true) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -210,7 +210,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 		editItem.setMnemonic('m');
 		editItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.ALT_MASK + modifierMask));
 		// 	JButton editButton = parent.getToolBar().add(editAction);
-		// 	editButton.setToolTipText(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.source.edit.tooltip"));
+		// 	editButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.source.edit.tooltip"));
 
 		addAutoItems();
 	}

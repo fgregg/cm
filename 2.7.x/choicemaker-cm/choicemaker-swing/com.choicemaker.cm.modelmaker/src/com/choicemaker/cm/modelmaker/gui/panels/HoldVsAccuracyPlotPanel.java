@@ -34,7 +34,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 //import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.tables.AccuracyTable;
 import com.choicemaker.cm.modelmaker.stats.StatPoint;
@@ -84,15 +84,15 @@ public class HoldVsAccuracyPlotPanel extends JPanel {
 
 	private void buildPanel() {
 		XYSeriesCollection dataset = new XYSeriesCollection();
-		String title = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.title");
+		String title = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.title");
 		data = new XYSeries(title);
 		dataset.addSeries(data);
 		final PlotOrientation orientation = PlotOrientation.VERTICAL;
 		chart =
 			ChartFactory.createXYLineChart(
 				title,
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.cm.accuracy"),
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.holdpercentage"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.cm.accuracy"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.holdpercentage"),
 				dataset,
 				orientation, true, true, true);
 		MouseListener tableMouseListener = new MouseAdapter() {
@@ -131,11 +131,11 @@ public class HoldVsAccuracyPlotPanel extends JPanel {
 		accuracyTable = new AccuracyTable(true, accuracies);
 		accuracyTable.addMouseListener(tableMouseListener);
 		accuracyPanel =
-			getPanel(accuracyTable, MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.hrvsacc"));
+			getPanel(accuracyTable, ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.hrvsacc"));
 
 		hrTable = new AccuracyTable(false, hrs);
 		hrTable.addMouseListener(tableMouseListener);
-		hrPanel = getPanel(hrTable, MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.accvshr"));
+		hrPanel = getPanel(hrTable, ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.accvshr"));
 
 		accuracyTable.setEnabled(false);
 		hrTable.setEnabled(false);

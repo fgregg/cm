@@ -21,7 +21,7 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.tables.SortableTableModel;
 import com.choicemaker.cm.modelmaker.gui.utils.ClueDataComparator;
 
@@ -46,11 +46,11 @@ public class FilterClueTableModel extends SortableTableModel {
 
 	static final public ColumnDefinition columns[] =
 		{
-			new ColumnDefinition(MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.id"), 100, JLabel.RIGHT),
-			new ColumnDefinition(MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.cluename"), 550, JLabel.LEFT),
-			new ColumnDefinition(MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.decision"), 150, JLabel.RIGHT),
-			new ColumnDefinition(MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.type"), 150, JLabel.RIGHT),
-			new ColumnDefinition(MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.report"), 150, JLabel.RIGHT),
+			new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.id"), 100, JLabel.RIGHT),
+			new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.cluename"), 550, JLabel.LEFT),
+			new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.decision"), 150, JLabel.RIGHT),
+			new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.type"), 150, JLabel.RIGHT),
+			new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.report"), 150, JLabel.RIGHT),
 			new ColumnDefinition("Condition", 150, JLabel.CENTER),
 			new ColumnDefinition("Parameters", 450, JLabel.CENTER)};
 
@@ -128,7 +128,7 @@ public class FilterClueTableModel extends SortableTableModel {
 	}
 
 	public String getTitle() {
-		return MessageUtil.m.formatMessage("train.gui.modelmaker.table.filter.label");
+		return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.filter.label");
 	}
 
 	/**

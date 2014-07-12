@@ -38,7 +38,7 @@ import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
@@ -67,8 +67,8 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 	private static Logger logger = Logger.getLogger(XmlMarkedRecordPairSourceGui.class);
 	private static String GENERATE_MODE_LABEL = "Generate new source file";
 	private static String CREATE_MODE_LABEL = "Use existing source file";
-	private static String RELATIVE = MessageUtil.m.formatMessage("io.common.gui.source.file.relative");
-	private static String ABSOLUTE = MessageUtil.m.formatMessage("io.common.gui.source.file.absolute");
+	private static String RELATIVE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.relative");
+	private static String ABSOLUTE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.absolute");
 	private static Dimension CREATE_DIMENSION = new Dimension(500, 140);
 	private static Dimension GENERATE_DIMENSION = new Dimension(500, 400);
 	private JComponent[] generateComponents;
@@ -94,7 +94,7 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 	private boolean save;
 
 	public XmlMarkedRecordPairSourceGui(ModelMaker parent, MarkedRecordPairSource s, boolean save) {
-		super(parent, MessageUtil.m.formatMessage("io.xml.gui.label"));
+		super(parent, ChoiceMakerCoreMessages.m.formatMessage("io.xml.gui.label"));
 		this.save = save;
 		init(s);
 	}
@@ -179,26 +179,26 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 	 * Executed by the superclass constructor to build the panel.
 	 */
 	public void buildContent() {
-		sourceFileNameLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
+		sourceFileNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
 		sourceFileName = new JTextField(35);
-		sourceFileBrowseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+		sourceFileBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 
-		xmlFileNameLabel = new JLabel(MessageUtil.m.formatMessage("io.xml.guilsource.file"));
+		xmlFileNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.xml.guilsource.file"));
 		xmlFileName = new JTextField(10);
-		browseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+		browseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 
-		xmlFileRelativeLabel = new JLabel(MessageUtil.m.formatMessage("io.common.gui.save.source.file.as"));
+		xmlFileRelativeLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.save.source.file.as"));
 		xmlFileRelativeBox = new JComboBox();
 		xmlFileRelativeBox.addItem(RELATIVE);
 		xmlFileRelativeBox.addItem(ABSOLUTE);
 
-		okayButton = new JButton(MessageUtil.m.formatMessage("ok"));
-		cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+		okayButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
+		cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 
 		if (!save) {
 			modeButton = new JButton(GENERATE_MODE_LABEL);
 			generateComponents = new JComponent[8];
-			sourcesListLabel = new JLabel(MessageUtil.m.formatMessage("io.common.gui.source.sources"));
+			sourcesListLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.sources"));
 			generateComponents[0] = sourcesListLabel;
 			sourcesList = new JList(new DefaultListModel());
 			sourcesListScrollPane = new JScrollPane();
@@ -209,11 +209,11 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 			generateComponents[2] = addButton;
 			removeButton = new JButton("Remove");
 			generateComponents[3] = removeButton;
-			distributeOverLabel = new JLabel(MessageUtil.m.formatMessage("io.common.gui.distribute.roundrobin"));
+			distributeOverLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.distribute.roundrobin"));
 			generateComponents[4] = distributeOverLabel;
 			distributeOver = new JTextField(5);
 			generateComponents[5] = distributeOver;
-			maxPairsPerFileLabel = new JLabel(MessageUtil.m.formatMessage("io.common.gui.distribute.maxpairsperfile"));
+			maxPairsPerFileLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.distribute.maxpairsperfile"));
 			generateComponents[6] = maxPairsPerFileLabel;
 			maxPairsPerFile = new JTextField(5);
 			generateComponents[7] = maxPairsPerFile;

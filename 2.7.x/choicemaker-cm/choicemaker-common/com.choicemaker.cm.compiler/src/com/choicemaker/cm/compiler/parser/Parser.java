@@ -44,7 +44,7 @@ import com.choicemaker.cm.compiler.Tree.Unop;
 import com.choicemaker.cm.compiler.Tree.Valid;
 import com.choicemaker.cm.compiler.Tree.VarDecl;
 import com.choicemaker.cm.core.compiler.CompilerException;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * The syntactic analyzer of the ClueMaker compiler
@@ -136,10 +136,10 @@ public final class Parser implements Tokens {
 		return error(
 			pos,
 			(((category & EXPR) != 0)
-				? MessageUtil.m.formatMessage("compiler.parser.illegal.start.expression")
+				? ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.illegal.start.expression")
 				: (((category & TYPE) != 0)
-					? MessageUtil.m.formatMessage("compiler.parser.illegal.start.type")
-					: MessageUtil.m.formatMessage("compiler.parser.illegal.start.identifier"))));
+					? ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.illegal.start.type")
+					: ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.illegal.start.identifier"))));
 	}
 
 	/** illegal start of an expression or type at the current location
@@ -191,7 +191,7 @@ public final class Parser implements Tokens {
 		if (s.token == token)
 			s.nextToken();
 		else {
-			error(MessageUtil.m.formatMessage("compiler.parser.token.expected", Scanner.tokenToString(token)));
+			error(ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.token.expected", Scanner.tokenToString(token)));
 			if (s.token == token)
 				s.nextToken();
 		}
@@ -302,7 +302,7 @@ public final class Parser implements Tokens {
 			rule = true;
 		} else if (s.token != CLUE) {
 			error(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"compiler.parser.token.or.token.expected",
 					Scanner.tokenToString(RULE),
 					Scanner.tokenToString(CLUE)));
@@ -377,7 +377,7 @@ public final class Parser implements Tokens {
 							s.nextToken();
 							return Tags.NONEDEC;
 						default :
-							simpleError(s.pos, MessageUtil.m.formatMessage("compiler.parser.extdecision.expected"));
+							simpleError(s.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.extdecision.expected"));
 							return Tags.ERROR;
 					}
 				} else {
@@ -701,7 +701,7 @@ public final class Parser implements Tokens {
 					res = simpleTerm(EXPR);
 					accept(RPAREN);
 					if (res.tag != Tags.SELECT)
-						simpleError(res.pos, MessageUtil.m.formatMessage("compiler.parser.field.selection.expected"));
+						simpleError(res.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.field.selection.expected"));
 					res = new Valid(vpos, res);
 					break;
 				case Q :
@@ -803,7 +803,7 @@ public final class Parser implements Tokens {
 						allowSelect = true;
 						allowIndexed = true;
 					} else {
-						simpleError(s.pos, MessageUtil.m.formatMessage("compiler.parser.class.not.selectable"));
+						simpleError(s.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.class.not.selectable"));
 						s.nextToken();
 					}
 					break;
@@ -816,7 +816,7 @@ public final class Parser implements Tokens {
 						allowApply = false;
 						allowIndexed = false;
 					} else if (!allowIndexed) {
-						error(MessageUtil.m.formatMessage("compiler.parser.misplaced.bracket"));
+						error(ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.misplaced.bracket"));
 						s.nextToken();
 					} else if ((category & EXPR) != 0) {
 						if(s.token == RBRACKET) {
@@ -832,7 +832,7 @@ public final class Parser implements Tokens {
 						allowIndexed = true;
 						category = EXPR;
 					} else {
-						error(MessageUtil.m.formatMessage("compiler.parser.misplaced.bracket"));
+						error(ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.misplaced.bracket"));
 						s.nextToken();
 					}
 					break;
@@ -902,7 +902,7 @@ public final class Parser implements Tokens {
 		} else if (s.token == LPAREN)
 			return new New(pos, res, args());
 		else
-			return error(MessageUtil.m.formatMessage("compiler.parser.token.or.token.expected", "(", "["));
+			return error(ChoiceMakerCoreMessages.m.formatMessage("compiler.parser.token.or.token.expected", "(", "["));
 	}
 
 	private Tree[] initializer() throws CompilerException {

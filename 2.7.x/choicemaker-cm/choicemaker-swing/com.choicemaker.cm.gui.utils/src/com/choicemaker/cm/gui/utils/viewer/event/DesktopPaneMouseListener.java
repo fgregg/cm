@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.viewer.CompositeFrame;
 import com.choicemaker.cm.gui.utils.viewer.CompositeFrameModel;
 import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;
@@ -62,7 +62,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 
 	private void buildMenu() {
 		popup = new JPopupMenu();
-		JMenu insert = new JMenu(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.insert"));
+		JMenu insert = new JMenu(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.insert"));
 		popup.add(insert);
 		for (int i = 0; i < descs.length; ++i) {
 			Descriptor d = descs[i];
@@ -74,7 +74,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		popup.addSeparator();
 		
 		popup.add(
-			MessageUtil.m.formatMessage(
+			ChoiceMakerCoreMessages.m.formatMessage(
 				"train.gui.modelmaker.listener.desktop.add.space.right")).addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				parent.growDesktopPane(200, 0);
@@ -82,14 +82,14 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		});
 		
 		popup.add(
-			MessageUtil.m.formatMessage(
+			ChoiceMakerCoreMessages.m.formatMessage(
 				"train.gui.modelmaker.listener.desktop.add.space.bottom")).addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				parent.growDesktopPane(0, 200);
 			};
 		});
 
-		fitContents = popup.add(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.fitcontents"));
+		fitContents = popup.add(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.fitcontents"));
 		fitContents.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				parent.fitDesktopPane();
@@ -98,9 +98,9 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 
 		popup.addSeparator();
 		
-		JMenu insert2 = new JMenu(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.layout"));
+		JMenu insert2 = new JMenu(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.layout"));
 		popup.add(insert2);
-		insert2.add(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.insert.frame")).addActionListener(new ActionListener() {
+		insert2.add(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.insert.frame")).addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					parent.getRecordPairViewerModel().addFrameModel(new CompositeFrameModel(parentDescriptor, x, y));
@@ -110,7 +110,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 			};
 		});
 		
-		renameFrame = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.rename.frame")) {
+		renameFrame = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.rename.frame")) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent ev) {
@@ -126,7 +126,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		insert2.addSeparator();
 		
 		
-		addTab = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.insert.tab")) {
+		addTab = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.insert.tab")) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent ev) {
@@ -139,7 +139,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		};
 		insert2.add(addTab);
 		
-		renameTab = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.rename.tab")) {
+		renameTab = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.rename.tab")) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent ev) {
@@ -152,7 +152,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 		};
 		insert2.add(renameTab);
 		
-		removeTab = new AbstractAction(MessageUtil.m.formatMessage("train.gui.modelmaker.listener.desktop.remove.tab")) {
+		removeTab = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.desktop.remove.tab")) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent ev) {

@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
 /**
@@ -96,8 +96,8 @@ public abstract class SourceGui extends JDialog {
 				if (JOptionPane
 					.showConfirmDialog(
 						null,
-						MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.replace", newName),
-						MessageUtil.m.formatMessage("confirm"),
+						ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.replace", newName),
+						ChoiceMakerCoreMessages.m.formatMessage("confirm"),
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.WARNING_MESSAGE)
 					== JOptionPane.YES_OPTION) {

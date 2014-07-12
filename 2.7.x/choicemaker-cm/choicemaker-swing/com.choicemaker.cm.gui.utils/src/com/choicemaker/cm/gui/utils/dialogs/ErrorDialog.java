@@ -33,7 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 
 /**
@@ -137,10 +137,10 @@ public class ErrorDialog extends JDialog {
 		
 		setModal(true);
 
-		setTitle(MessageUtil.m.formatMessage("error"));
+		setTitle(ChoiceMakerCoreMessages.m.formatMessage("error"));
 
-		moreString = MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.error.more");
-		lessString = MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.error.less");
+		moreString = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.error.more");
+		lessString = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.error.less");
 
 		setShowsDetail(false);
 	}
@@ -250,12 +250,12 @@ public class ErrorDialog extends JDialog {
 		
 		c.gridx = 2;
 		c.gridy = 1;
-		copyButton = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.error.copytoclipboard"));
+		copyButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.error.copytoclipboard"));
 		content.add(copyButton, c);
 		
 		c.gridx = 3;
 		c.gridy = 1;
-		closeButton = new JButton(MessageUtil.m.formatMessage("close"));
+		closeButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("close"));
 		content.add(closeButton, c);
 		
 		c.gridx = 0;

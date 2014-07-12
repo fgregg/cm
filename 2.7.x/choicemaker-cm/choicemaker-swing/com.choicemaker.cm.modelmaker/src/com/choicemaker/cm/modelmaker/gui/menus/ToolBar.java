@@ -28,7 +28,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
@@ -58,7 +58,7 @@ public class ToolBar extends JToolBar implements PropertyChangeListener, Enable 
 		thresholdComponents = new JComponent[5];
 		ImageIcon divider = new ImageIcon(ModelMaker.class.getResource("images/divider2.gif"));
 		add(new JLabel(divider));
-		JLabel l = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.toolbar.differ.threshold"));
+		JLabel l = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.toolbar.differ.threshold"));
 		thresholdComponents[0] = l;
 		l.setBorder(new EmptyBorder(0, 5, 0, 3));
 		add(l);
@@ -69,7 +69,7 @@ public class ToolBar extends JToolBar implements PropertyChangeListener, Enable 
 		differThreshold.setPreferredSize(size);
 		differThreshold.setMaximumSize(size);
 		add(differThreshold);
-		l = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.toolbar.match.threshold"));
+		l = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.toolbar.match.threshold"));
 		thresholdComponents[2] = l; 
 		l.setBorder(new EmptyBorder(0, 10, 0, 3));
 		add(l);
@@ -80,7 +80,7 @@ public class ToolBar extends JToolBar implements PropertyChangeListener, Enable 
 		matchThreshold.setMaximumSize(size);
 		add(matchThreshold);
 		displayThresholds(parent.getThresholds());
-		setButton = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.toolbar.set.thresholds"));
+		setButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.toolbar.set.thresholds"));
 		thresholdComponents[4] = setButton; 
 		setButton.setBorder(new CompoundBorder(new EmptyBorder(0, 5, 0, 5), setButton.getBorder()));
 		add(setButton);

@@ -24,7 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
 /**
@@ -110,7 +110,7 @@ public class MessagePanel extends JPanel {
 			BorderFactory.createCompoundBorder(
 				BorderFactory.createCompoundBorder(
 					BorderFactory.createTitledBorder(
-						MessageUtil.m.formatMessage("train.gui.modelmaker.panel.message.title")),
+						ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.message.title")),
 					BorderFactory.createEmptyBorder(5, 5, 5, 5)),
 				statusTextAreaScrollPane.getBorder()));
 

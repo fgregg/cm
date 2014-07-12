@@ -32,7 +32,7 @@ import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
 import com.choicemaker.cm.core.base.IntActiveClues;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ml.MlGuiFactories;
 import com.choicemaker.cm.modelmaker.gui.utils.ClueDataComparator;
 import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
@@ -61,25 +61,25 @@ public class ActiveClueTableModel extends SortableTableModel {
 		
 	static final private ColumnDefinition[] NB_PRE_COLUMNS =
 		{
-			new ColumnDefinition(MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.id"), 80, JLabel.RIGHT),
+			new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.id"), 80, JLabel.RIGHT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.cluename"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.cluename"),
 				580,
 				JLabel.LEFT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.decision"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.decision"),
 				150,
 				JLabel.CENTER),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.type"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.type"),
 				150,
 				JLabel.RIGHT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.report"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.report"),
 				150,
 				JLabel.RIGHT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.active.value"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.active.value"),
 				150,
 				JLabel.RIGHT)
 			};
@@ -221,7 +221,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 	}
 
 	public String getTitle() {
-		return MessageUtil.m.formatMessage("train.gui.modelmaker.table.active.label");
+		return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.active.label");
 	}
 
 	/**

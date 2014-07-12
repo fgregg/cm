@@ -37,7 +37,7 @@ import com.choicemaker.cm.compiler.typechecker.EnterClues;
 import com.choicemaker.cm.compiler.typechecker.TypeChecker;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.compiler.CompilerException;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * Objects of that class represent a single compilation unit;
@@ -182,7 +182,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		if (getSource().printMessageIfNew(Location.NOPOS, message)) {
 			setErrors(getErrors() + 1);
 			if (getCompilationEnv().prompt) {
-				throw new CompilerException(MessageUtil.m.formatMessage("compiler.unit.abort"));
+				throw new CompilerException(ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.abort"));
 			}
 		}
 	}
@@ -202,7 +202,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		if (getSource().printMessageIfNew(pos, message)) {
 			setErrors(getErrors() + 1);
 			if (getCompilationEnv().prompt) {
-				throw new CompilerException(MessageUtil.m.formatMessage("compiler.unit.abort"));
+				throw new CompilerException(ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.abort"));
 			}
 		}
 	}
@@ -210,14 +210,14 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	/** issue a warning for a specific source code file
 	 */
 	public void warning(Sourcecode source, String message) {
-		if (source.printMessageIfNew(Location.NOPOS, MessageUtil.m.formatMessage("compiler.unit.warning", message)));
+		if (source.printMessageIfNew(Location.NOPOS, ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.warning", message)));
 		setWarnings(getWarnings() + 1);
 	}
 
 	/** issue a warning for a specific line of a specific source code file
 	 */
 	public void warning(int pos, String message) {
-		if (getSource().printMessageIfNew(pos, MessageUtil.m.formatMessage("compiler.unit.warning", message)));
+		if (getSource().printMessageIfNew(pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.warning", message)));
 		setWarnings(getWarnings() + 1);
 	}
 
@@ -227,10 +227,10 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		try {
 			if ((getErrors() + getWarnings()) > 0) {
 				statusOutput.write(
-					MessageUtil.m.formatMessage("compiler.unit.conclusion", new Integer(getErrors()), new Integer(getWarnings()))
+					ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.conclusion", new Integer(getErrors()), new Integer(getWarnings()))
 						+ Constants.LINE_SEPARATOR);
 			} else {
-				statusOutput.write(MessageUtil.m.formatMessage("compiler.unit.compilation.complete") + Constants.LINE_SEPARATOR);
+				statusOutput.write(ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.compilation.complete") + Constants.LINE_SEPARATOR);
 			}
 		} catch (IOException ex) {
 			System.err.println(ex);

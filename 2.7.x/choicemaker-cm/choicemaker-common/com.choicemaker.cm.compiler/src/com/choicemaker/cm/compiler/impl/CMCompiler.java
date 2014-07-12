@@ -38,7 +38,7 @@ import com.choicemaker.cm.core.compiler.CompilationArguments;
 import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.configure.ConfigurationManager;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 
 /**
@@ -80,7 +80,7 @@ public abstract class CMCompiler implements ICompiler {
 
 	protected static void usage() {
 		System.out.println(
-			MessageUtil.m.formatMessage(
+			ChoiceMakerCoreMessages.m.formatMessage(
 				"compiler.comp.usage",
 				"$Revision: 1.1 $, $Date: 2010/03/24 20:10:52 $"));
 	}

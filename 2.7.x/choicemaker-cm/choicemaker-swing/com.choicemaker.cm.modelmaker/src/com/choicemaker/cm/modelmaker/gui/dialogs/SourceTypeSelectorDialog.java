@@ -37,7 +37,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
 import com.choicemaker.cm.core.Source;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.ExtensionHolder;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -75,7 +75,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 	}
 
 	public SourceTypeSelectorDialog(ModelMaker g, int type, boolean save) {
-		super(g, MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.typeselector.label"), true);
+		super(g, ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.typeselector.label"), true);
 		parent = g;
 		this.type = type;
 		this.save = save;
@@ -102,7 +102,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 	private void buildContent() {
 		content = new JPanel();
 		sourceTypeLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.typeselector.available"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.typeselector.available"));
 		IExtensionPoint extensionPoint = null;
 		if (type == RS) {
 			extensionPoint = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.modelmaker.rsReaderGui");
@@ -134,8 +134,8 @@ public class SourceTypeSelectorDialog extends JDialog {
 		sourceTypeScrollPane = new JScrollPane();
 		sourceTypeScrollPane.getViewport().add(sourceTypeList);
 
-		okayButton = new JButton(MessageUtil.m.formatMessage("new.elipsis"));
-		cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+		okayButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("new.elipsis"));
+		cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 	}
 
 	private void showSource() {

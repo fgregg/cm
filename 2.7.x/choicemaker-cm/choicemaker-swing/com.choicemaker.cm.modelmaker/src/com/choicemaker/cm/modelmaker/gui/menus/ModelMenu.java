@@ -30,7 +30,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.GeneratorXmlConf;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
@@ -54,7 +54,7 @@ public class ModelMenu extends LastUsedMenu {
 
 	private ModelMaker parent;
 
-	private static final String MODEL_MENU = MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model");
+	private static final String MODEL_MENU = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model");
 
 	public ModelMenu(ModelMaker g) {
 		super(MODEL_MENU, "models", 10);
@@ -107,7 +107,7 @@ public class ModelMenu extends LastUsedMenu {
 
 		EvaluateAction() {
 			super(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.evaluate"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.evaluate"),
 				new ImageIcon(ModelMaker.class.getResource("images/evaluate.gif")),
 				true,
 				true,
@@ -135,7 +135,7 @@ public class ModelMenu extends LastUsedMenu {
 
 	public void buildMenu() {
 		// New
-		Action newAction = new ModelAction(MessageUtil.m.formatMessage("new.elipsis"), null, false, false, true) {
+		Action newAction = new ModelAction(ChoiceMakerCoreMessages.m.formatMessage("new.elipsis"), null, false, false, true) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -150,7 +150,7 @@ public class ModelMenu extends LastUsedMenu {
 		newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 
 		// Open
-		Action openAction = new AbstractAction(MessageUtil.m.formatMessage("open.elipsis")) {
+		Action openAction = new AbstractAction(ChoiceMakerCoreMessages.m.formatMessage("open.elipsis")) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -170,7 +170,7 @@ public class ModelMenu extends LastUsedMenu {
 		ImageIcon infoIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/info.gif"));
 		Action infoAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.info"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.info"),
 				infoIcon,
 				true,
 				false,
@@ -186,10 +186,10 @@ public class ModelMenu extends LastUsedMenu {
 		infoItem.setMnemonic(KeyEvent.VK_I);
 		infoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
 		//	JButton infoButton = parent.getToolBar().add(infoAction);
-		//infoButton.setToolTipText(MessageUtil.m.formatMessage("info"));
+		//infoButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("info"));
 
 		// Edit
-		Action editAction = new ModelAction(MessageUtil.m.formatMessage("edit.elipsis"), null, true, false, true) {
+		Action editAction = new ModelAction(ChoiceMakerCoreMessages.m.formatMessage("edit.elipsis"), null, true, false, true) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -210,7 +210,7 @@ public class ModelMenu extends LastUsedMenu {
 		ImageIcon buildIcon = new ImageIcon(ModelMaker.class.getResource("images/build.gif"));
 		Action buildAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.rebuild"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.rebuild"),
 				buildIcon,
 				true,
 				false,
@@ -226,12 +226,12 @@ public class ModelMenu extends LastUsedMenu {
 		buildItem.setMnemonic(KeyEvent.VK_B);
 		buildItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.CTRL_MASK));
 		JButton buildButton = parent.getToolBar().add(buildAction);
-		buildButton.setToolTipText(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.rebuild.tooltip"));
+		buildButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.rebuild.tooltip"));
 
 		// Reload
 		Action reloadAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.reload"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.reload"),
 				null,
 				true,
 				false,
@@ -250,7 +250,7 @@ public class ModelMenu extends LastUsedMenu {
 		// deleteGenerated
 		Action deleteGeneratedAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.deletegenerated"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.deletegenerated"),
 				null,
 				false,
 				false,
@@ -273,7 +273,7 @@ public class ModelMenu extends LastUsedMenu {
 		ImageIcon enableCluesIcon = new ImageIcon(ModelMaker.class.getResource("images/enableClues.gif"));
 		Action enableCluesAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.enable.clues"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.enable.clues"),
 				enableCluesIcon,
 				true,
 				false,
@@ -290,13 +290,13 @@ public class ModelMenu extends LastUsedMenu {
 		enableCluesItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
 		JButton enableCluesButton = parent.getToolBar().add(enableCluesAction);
 		enableCluesButton.setToolTipText(
-			MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.enable.clues.tooltip"));
+			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.enable.clues.tooltip"));
 
 		// Disable all clues
 		ImageIcon disableCluesIcon = new ImageIcon(ModelMaker.class.getResource("images/disableClues.gif"));
 		Action disableCluesAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.disable.clues"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.disable.clues"),
 				disableCluesIcon,
 				true,
 				false,
@@ -313,13 +313,13 @@ public class ModelMenu extends LastUsedMenu {
 		disableCluesItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
 		JButton disableCluesButton = parent.getToolBar().add(disableCluesAction);
 		disableCluesButton.setToolTipText(
-			MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.disable.clues.tooltip"));
+			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.disable.clues.tooltip"));
 
 		// Enable all rules
 		ImageIcon enableRulesIcon = new ImageIcon(ModelMaker.class.getResource("images/enableRules.gif"));
 		Action enableRulesAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.enable.rules"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.enable.rules"),
 				enableRulesIcon,
 				true,
 				false,
@@ -336,13 +336,13 @@ public class ModelMenu extends LastUsedMenu {
 			KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 		JButton enableRulesButton = parent.getToolBar().add(enableRulesAction);
 		enableRulesButton.setToolTipText(
-			MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.enable.rules.tooltip"));
+			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.enable.rules.tooltip"));
 
 		// Disable all rules
 		ImageIcon disableRulesIcon = new ImageIcon(ModelMaker.class.getResource("images/disableRules.gif"));
 		Action disableRulesAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.disable.rules"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.disable.rules"),
 				disableRulesIcon,
 				true,
 				false,
@@ -359,13 +359,13 @@ public class ModelMenu extends LastUsedMenu {
 			KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 		JButton disableRulesButton = parent.getToolBar().add(disableRulesAction);
 		disableRulesButton.setToolTipText(
-			MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.disable.rules.tooltip"));
+			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.disable.rules.tooltip"));
 
 		// Reset weights
 //		ImageIcon resetWeightsIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/resetWeights.gif"));
 //		Action resetWeightsAction =
 //			new ModelAction(
-//				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.resetweights"),
+//				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.resetweights"),
 //				resetWeightsIcon,
 //				true,
 //				false,
@@ -379,13 +379,13 @@ public class ModelMenu extends LastUsedMenu {
 //		resetWeightsItem.setMnemonic(KeyEvent.VK_R);
 //		resetWeightsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		// 	JButton resetWeightsButton = parent.getToolBar().add(resetWeightsAction);
-		// 	resetWeightsButton.setToolTipText(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.resetweights.tooltip"));
+		// 	resetWeightsButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.resetweights.tooltip"));
 
 		// Save
 		ImageIcon saveIcon = new ImageIcon(ModelMaker.class.getResource("images/save.gif"));
 		Action saveAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.save"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.save"),
 				saveIcon,
 				true,
 				false,
@@ -401,12 +401,12 @@ public class ModelMenu extends LastUsedMenu {
 		saveItem.setMnemonic(KeyEvent.VK_S);
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		// JButton saveButton = parent.getToolBar().add(saveAction);
-		// saveButton.setToolTipText(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.save.tooltip"));
+		// saveButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.save.tooltip"));
 
 		// Export clue table
 		Action exportClueTableAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.exportClueTable"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.exportClueTable"),
 				null,
 				true,
 				false,
@@ -430,7 +430,7 @@ public class ModelMenu extends LastUsedMenu {
 		ImageIcon trainIcon = new ImageIcon(ModelMaker.class.getResource("images/train.gif"));
 		Action trainAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.train"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.train"),
 				trainIcon,
 				true,
 				true,
@@ -449,14 +449,14 @@ public class ModelMenu extends LastUsedMenu {
 		trainItem.setMnemonic(KeyEvent.VK_T);
 		trainItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
 		JButton trainButton = parent.getToolBar().add(trainAction);
-		trainButton.setToolTipText(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.train.tooltip"));
+		trainButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.train.tooltip"));
 
 
 		// trainAndTest
 		ImageIcon trainAndTestIcon = new ImageIcon(ModelMaker.class.getResource("images/trainAndTest.gif"));
 		Action trainAndTestAction =
 			new ModelAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.trainandtest"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.trainandtest"),
 				trainAndTestIcon,
 				true,
 				true,
@@ -474,7 +474,7 @@ public class ModelMenu extends LastUsedMenu {
 		trainAndTestItem.setIcon(null);
 		trainAndTestItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 		JButton trainAndTestButton = parent.getToolBar().add(trainAndTestAction);
-		trainAndTestButton.setToolTipText(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.trainandtest.tooltip"));
+		trainAndTestButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.trainandtest.tooltip"));
 
 
 
@@ -485,7 +485,7 @@ public class ModelMenu extends LastUsedMenu {
 		evaluateItem.setMnemonic(KeyEvent.VK_G);
 		evaluateItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
 		JButton evaluateButton = parent.getToolBar().add(evaluateAction);
-		evaluateButton.setToolTipText(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.model.evaluate.tooltip"));
+		evaluateButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.model.evaluate.tooltip"));
 
 		parent.getToolBar().addSeparator();
 

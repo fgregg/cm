@@ -45,7 +45,7 @@ import com.choicemaker.cm.compiler.Tree.Valid;
 import com.choicemaker.cm.compiler.Tree.VarDecl;
 import com.choicemaker.cm.compiler.Tree.Visitor;
 import com.choicemaker.cm.core.compiler.CompilerException;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * Printing of ClueMaker code.
@@ -213,11 +213,11 @@ public class Printer implements Visitor, Tags {
 
 	public void printProlog(String filename) {
 		println(
-			MessageUtil.m.formatMessage(
+			ChoiceMakerCoreMessages.m.formatMessage(
 				"compiler.printer.generated",
 				"$Revision: 1.1.1.1 $, $Date: 2009/05/03 16:02:35 $"));
-		println(MessageUtil.m.formatMessage("compiler.printer.file", filename));
-		println(MessageUtil.m.formatMessage("compiler.printer.date", new Date()));
+		println(ChoiceMakerCoreMessages.m.formatMessage("compiler.printer.file", filename));
+		println(ChoiceMakerCoreMessages.m.formatMessage("compiler.printer.date", new Date()));
 		println();
 	}
 

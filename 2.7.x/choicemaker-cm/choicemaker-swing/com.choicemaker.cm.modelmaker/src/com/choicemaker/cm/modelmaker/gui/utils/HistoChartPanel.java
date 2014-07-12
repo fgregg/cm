@@ -36,7 +36,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.ui.RectangleEdge;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
@@ -70,7 +70,7 @@ public class HistoChartPanel extends ChartPanel {
 //		setHorizontalZoom(false);
 //		setVerticalZoom(true);
 		final JCheckBoxMenuItem logYScale =
-			new JCheckBoxMenuItem(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.logscale.y"));
+			new JCheckBoxMenuItem(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.logscale.y"));
 		logYScale.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				CategoryPlot p = (CategoryPlot) chart.getPlot();
@@ -78,11 +78,11 @@ public class HistoChartPanel extends ChartPanel {
 				if (logYScale.isSelected()) {
 					p.setRangeAxis(
 						new LogarithmicAxis(
-							MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs")));
+							ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs")));
 				} else {
 					p.setRangeAxis(
 						new NumberAxis(
-							MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs")));
+							ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs")));
 				}
 				oldAxis.setPlot(null);
 				chartChanged(new ChartChangeEvent(this));

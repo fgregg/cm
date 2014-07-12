@@ -23,7 +23,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  *
@@ -62,7 +62,7 @@ public class ThreadWatcher extends JDialog implements Runnable {
 		c.gridy = 0;
 		JLabel l = new JLabel(message);
 		content.add(l, c);
-		JButton stop = new JButton(MessageUtil.m.formatMessage("cancel"));
+		JButton stop = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 		c.gridy = 1;
 		c.anchor = GridBagConstraints.EAST;
 		content.add(stop, c);

@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.flatfile.base.FlatFileRecordSource;
@@ -50,8 +50,8 @@ import com.choicemaker.util.FileUtilities;
 public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;
 //	private static Logger logger = Logger.getLogger(FlatFileRecordSourceGui.class);
-	private static String RELATIVE = MessageUtil.m.formatMessage("io.common.gui.source.file.relative");
-	private static String ABSOLUTE = MessageUtil.m.formatMessage("io.common.gui.source.file.absolute");
+	private static String RELATIVE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.relative");
+	private static String ABSOLUTE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.absolute");
 	private JLabel sourceNameLabel;
 	private JLabel fileNameLabel;
 	private JTextField fileName;
@@ -74,7 +74,7 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 
 
 	public FlatFileRecordSourceGui(ModelMaker parent, RecordSource s) {
-		super(parent, MessageUtil.m.formatMessage("io.flatfile.gui.record.label"));
+		super(parent, ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.record.label"));
 		init(s);
 	}
 
@@ -174,32 +174,32 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 	 * Executed by the superclass constructor to build the panel.
 	 */
 	public void buildContent() {
-		sourceNameLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
+		sourceNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
 		sourceFileName = new JTextField(35);
-		sourceFileBrowseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+		sourceFileBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 
-		fileNameLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.source.file"));
+		fileNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.source.file"));
 		fileName = new JTextField(10);
-		browseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+		browseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 
-		fileRelative = new JLabel(MessageUtil.m.formatMessage("io.common.gui.save.source.file.as"));
+		fileRelative = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.save.source.file.as"));
 		fileRelativeBox = new JComboBox();
 		fileRelativeBox.addItem(RELATIVE);
 		fileRelativeBox.addItem(ABSOLUTE);
 
-		multiFileLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.multifile"));
+		multiFileLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.multifile"));
 		multiFile = new JCheckBox();
-		fixedLengthLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.fixedwidth"));
+		fixedLengthLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.fixedwidth"));
 		fixedLength = new JCheckBox();
-		separatorLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.delimiter"));
+		separatorLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.delimiter"));
 		separator = new JTextField(3);
 		separator.setPreferredSize(separator.getPreferredSize());
 		separatorList = new JComboBox(Separator.SEPARATORS);
-		taggedLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.tagged"));
+		taggedLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.tagged"));
 		tagged = new JCheckBox();
 
-		okayButton = new JButton(MessageUtil.m.formatMessage("ok"));
-		cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+		okayButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
+		cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 
 		layoutContent();
 	}

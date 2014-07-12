@@ -18,7 +18,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
@@ -37,7 +37,7 @@ public class ActiveClueTablePanel extends JScrollPane implements PropertyChangeL
 		this.modelMaker = modelMaker;
 		setBorder(
 			BorderFactory.createTitledBorder(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.activeclues")));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.activeclues")));
 		setPreferredSize(new Dimension(800, 140));
 		modelMaker.addPropertyChangeListener(this);
 		modelMaker.getProbabilityModelEventMultiplexer().addPropertyChangeListener(this);

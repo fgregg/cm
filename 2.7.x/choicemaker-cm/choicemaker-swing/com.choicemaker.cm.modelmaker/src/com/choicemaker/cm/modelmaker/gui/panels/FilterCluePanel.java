@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.RecordPairFilterDialog;
@@ -178,18 +178,18 @@ public class FilterCluePanel extends JPanel {
 		clueTableScrollPane.setPreferredSize(new Dimension(400, 100));
 		clueTableScrollPane.setMinimumSize(new Dimension(400, 100));
 
-		differLabel = new JLabel(MessageUtil.m.formatMessage("differ"));
-		holdLabel = new JLabel(MessageUtil.m.formatMessage("hold"));
-		matchLabel = new JLabel(MessageUtil.m.formatMessage("match"));
+		differLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("differ"));
+		holdLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("hold"));
+		matchLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("match"));
 
 		humanLabel =
 			new JLabel(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.recordpairfilter.marked.human"),
 				JLabel.LEFT);
 		choiceMakerLabel =
 			new JLabel(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.recordpairfilter.marked.choicemaker"),
 				JLabel.LEFT);
 
@@ -202,18 +202,18 @@ public class FilterCluePanel extends JPanel {
 
 //		probRangeLabel =
 //			new JLabel(
-//				MessageUtil.m.formatMessage(
+//				ChoiceMakerCoreMessages.m.formatMessage(
 //					"train.gui.modelmaker.dialog.recordpairfilter.probabilityrange"),
 //				JLabel.LEFT);
 		lowLabel =
 			new JLabel(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.recordpairfilter.probabilityrange.low"),
 				JLabel.LEFT);
 		pLow = new JTextField("", 5);
 		hiLabel =
 			new JLabel(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.recordpairfilter.probabilityrange.high"),
 				JLabel.LEFT);
 		pHi = new JTextField("", 5);

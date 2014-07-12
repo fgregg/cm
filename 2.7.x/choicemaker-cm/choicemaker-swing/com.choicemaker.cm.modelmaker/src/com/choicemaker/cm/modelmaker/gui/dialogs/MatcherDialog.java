@@ -51,7 +51,7 @@ import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.gui.utils.ExtensionHolder;
@@ -245,7 +245,7 @@ public class MatcherDialog extends JDialog implements Enable {
 	public MatcherDialog(ModelMaker modelMaker) {
 		super(
 			modelMaker,
-			MessageUtil.m.formatMessage(
+			ChoiceMakerCoreMessages.m.formatMessage(
 				"train.gui.modelmaker.dialog.matcher.label"),
 			true);
 		this.modelMaker = modelMaker;
@@ -609,15 +609,15 @@ public class MatcherDialog extends JDialog implements Enable {
 
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab(
-			MessageUtil.m.formatMessage(
+			ChoiceMakerCoreMessages.m.formatMessage(
 				"train.gui.modelmaker.dialog.matcher.sources.label"),
 			getSourcePanel());
 		tabbedPane.addTab(
-			MessageUtil.m.formatMessage(
+			ChoiceMakerCoreMessages.m.formatMessage(
 				"train.gui.modelmaker.dialog.matcher.blocking.label"),
 			getBlockingPanel());
 		tabbedPane.addTab(
-			MessageUtil.m.formatMessage(
+			ChoiceMakerCoreMessages.m.formatMessage(
 				"train.gui.modelmaker.dialog.matcher.filter.label"),
 			getFilterPanel());
 		tabbedPane.addTab("Sampler", getSamplerPanel());
@@ -631,10 +631,10 @@ public class MatcherDialog extends JDialog implements Enable {
 		c.gridwidth = 1;
 		matchButton =
 			new JButton(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.matcher.match"));
 		content.add(matchButton, c);
-		cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+		cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 		c.gridx = 4;
 		content.add(cancelButton, c);
 
@@ -660,7 +660,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		JLabel smallLabel =
 			new JLabel(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.matcher.sources.small"));
 		content.add(smallLabel, c);
 		c.gridx = 1;
@@ -668,10 +668,10 @@ public class MatcherDialog extends JDialog implements Enable {
 		content.add(small, c);
 		c.gridx = 2;
 		smallBrowse =
-			new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+			new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 		content.add(smallBrowse, c);
 		c.gridx = 3;
-		smallNew = new JButton(MessageUtil.m.formatMessage("new.elipsis"));
+		smallNew = new JButton(ChoiceMakerCoreMessages.m.formatMessage("new.elipsis"));
 		content.add(smallNew, c);
 		c.gridx = 4;
 		smallPreview = new JButton("Preview");
@@ -690,7 +690,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		c.gridx = 0;
 		largeLabel =
 			new JLabel(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.matcher.sources.large"));
 		content.add(largeLabel, c);
 		c.gridx = 1;
@@ -698,10 +698,10 @@ public class MatcherDialog extends JDialog implements Enable {
 		content.add(large, c);
 		c.gridx = 2;
 		largeBrowse =
-			new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+			new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 		content.add(largeBrowse, c);
 		c.gridx = 3;
-		largeNew = new JButton(MessageUtil.m.formatMessage("new.elipsis"));
+		largeNew = new JButton(ChoiceMakerCoreMessages.m.formatMessage("new.elipsis"));
 		content.add(largeNew, c);
 		c.gridx = 4;
 		largePreview = new JButton("Preview");
@@ -730,7 +730,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		c.gridx = 0;
 		JLabel algorithm =
 			new JLabel(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.matcher.blocking.algorithm"));
 		content.add(algorithm, c);
 		c.gridx = 1;
@@ -858,7 +858,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		JPanel content = new JPanel();
 		content.setBorder(
 			BorderFactory.createTitledBorder(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.matcher.output.label")));
 
 		GridBagLayout layout = new GridBagLayout();
@@ -885,17 +885,17 @@ public class MatcherDialog extends JDialog implements Enable {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		JLabel sinkLabel =
 			new JLabel(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.dialog.matcher.output.sink"));
 		content.add(sinkLabel, c);
 		c.gridx = 1;
 		sink = new JTextField(20);
 		content.add(sink, c);
 		c.gridx = 2;
-		sinkBrowse = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+		sinkBrowse = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 		content.add(sinkBrowse, c);
 		c.gridx = 3;
-		sinkNew = new JButton(MessageUtil.m.formatMessage("new.elipsis"));
+		sinkNew = new JButton(ChoiceMakerCoreMessages.m.formatMessage("new.elipsis"));
 		content.add(sinkNew, c);
 
 		return content;

@@ -28,7 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -55,15 +55,15 @@ public class StartDialog extends JFrame implements Enable {
 
 	public StartDialog(String confText) {
 		super();
-		setTitle(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.launchpad.label"));
+		setTitle(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.label"));
 		setIconImage(new ImageIcon(ModelMaker.class.getResource("images/cmIcon.gif")).getImage());
 		content = new JPanel();
 		configurationLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.launchpad.configurationfile"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.configurationfile"));
 		configuration = new JTextField(confText);
-		configurationBrowse = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
-		ok = new JButton(MessageUtil.m.formatMessage("ok"));
-		cancel = new JButton(MessageUtil.m.formatMessage("cancel"));
+		configurationBrowse = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
+		ok = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
+		cancel = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 		layoutContent();
 		addContentListeners();
 		setContentPane(content);
@@ -96,12 +96,12 @@ public class StartDialog extends JFrame implements Enable {
 //		c.gridy = 0;
 //		c.gridx = 0;
 //		c.anchor = GridBagConstraints.WEST;
-//		content.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.launchpad.licensed.to")), c);
+//		content.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.licensed.to")), c);
 //		c.gridx = 1;
 //		c.gridwidth = 2;
 //		content.add(
 //			new JLabel(
-//				MessageUtil.m.formatMessage(
+//				ChoiceMakerCoreMessages.m.formatMessage(
 //					"train.gui.modelmaker.dialog.launchpad.licensee",
 //					LicenseManager.getString("name"),
 //					LicenseManager.getString("company"))),
@@ -111,12 +111,12 @@ public class StartDialog extends JFrame implements Enable {
 //		c.gridx = 0;
 //		c.gridwidth = 1;
 //		c.anchor = GridBagConstraints.WEST;
-//		content.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.launchpad.expires")), c);
+//		content.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.launchpad.expires")), c);
 //		c.gridx = 1;
 //		c.gridwidth = 2;
 //		content.add(
 //			new JLabel(
-//				MessageUtil.m.formatMessage(
+//				ChoiceMakerCoreMessages.m.formatMessage(
 //					"train.gui.modelmaker.dialog.launchpad.expiration",
 //					java.sql.Date.valueOf(LicenseManager.getString("expiration")))),
 //			c);

@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.CollectionsDialog;
 import com.choicemaker.cm.modelmaker.gui.dialogs.ExportProbabilitiesDialog;
@@ -47,7 +47,7 @@ public class ToolsMenu extends JMenu {
 	private ModelMaker modelMaker;
 
 	public ToolsMenu(ModelMaker modelMaker) {
-		super(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.tools"));
+		super(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.tools"));
 		this.modelMaker = modelMaker;
 		buildMenu();
 	}
@@ -55,7 +55,7 @@ public class ToolsMenu extends JMenu {
 	private class MatchAction extends AbstractAction implements PropertyChangeListener {
 		private static final long serialVersionUID = 1L;
 		MatchAction() {
-			super(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.tools.match"));
+			super(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.tools.match"));
 			modelMaker.addPropertyChangeListener(this);
 			setEnabled(false);
 		}

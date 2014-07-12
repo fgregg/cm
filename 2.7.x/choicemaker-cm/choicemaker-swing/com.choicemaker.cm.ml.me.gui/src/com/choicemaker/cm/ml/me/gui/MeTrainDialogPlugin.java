@@ -16,7 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.ml.me.base.MaximumEntropy;
 import com.choicemaker.cm.modelmaker.gui.dialogs.TrainDialog;
 import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
@@ -36,8 +36,8 @@ public class MeTrainDialogPlugin extends TrainDialogPlugin {
 
 	public MeTrainDialogPlugin(MaximumEntropy me) {
 		this.me = me;
-		setBorder(BorderFactory.createTitledBorder(MessageUtil.m.formatMessage("ml.me.train.label")));
-		trainingIterationsLabel = new JLabel(MessageUtil.m.formatMessage("ml.me.train.iterations"));
+		setBorder(BorderFactory.createTitledBorder(ChoiceMakerCoreMessages.m.formatMessage("ml.me.train.label")));
+		trainingIterationsLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("ml.me.train.iterations"));
 		trainingIterations = new JTextField(5);
 		trainingIterations.setText(String.valueOf(me.getTrainingIterations()));
 		setLayout(new FlowLayout(FlowLayout.LEFT));

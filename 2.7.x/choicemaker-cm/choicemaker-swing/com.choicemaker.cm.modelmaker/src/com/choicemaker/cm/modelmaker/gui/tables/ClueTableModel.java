@@ -36,7 +36,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.train.Trainer;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ml.MlGuiFactories;
 import com.choicemaker.cm.modelmaker.gui.renderers.CheckCellRenderer;
 import com.choicemaker.cm.modelmaker.gui.utils.ClueDataComparator;
@@ -74,46 +74,46 @@ public class ClueTableModel extends SortableTableModel {
 	public static final ColumnDefinition[] PRE_COLUMNS =
 		{
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.id"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.id"),
 				100,
 				JLabel.RIGHT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.cluename"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.cluename"),
 				550,
 				JLabel.LEFT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.enabled"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.enabled"),
 				150,
 				JLabel.CENTER),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.decision"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.decision"),
 				150,
 				JLabel.RIGHT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.type"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.type"),
 				150,
 				JLabel.RIGHT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.report"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.report"),
 				150,
 				JLabel.RIGHT)};
 
 	private static final ColumnDefinition[] BD_POST_COLUMNS =
 		{
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.clue.fires"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.clue.fires"),
 				150,
 				JLabel.RIGHT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.clue.hits"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.clue.hits"),
 				150,
 				JLabel.RIGHT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.clue.misses"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.clue.misses"),
 				150,
 				JLabel.RIGHT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.clue.hit.percentage"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.clue.hit.percentage"),
 				150,
 				JLabel.RIGHT)};
 
@@ -315,7 +315,7 @@ public class ClueTableModel extends SortableTableModel {
 	}
 
 	public String getTitle() {
-		return MessageUtil.m.formatMessage("train.gui.modelmaker.table.clue.label");
+		return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.clue.label");
 	}
 
 	/**

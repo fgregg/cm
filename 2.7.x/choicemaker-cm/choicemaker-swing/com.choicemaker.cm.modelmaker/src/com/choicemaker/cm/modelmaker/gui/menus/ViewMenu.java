@@ -20,7 +20,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
 /**
@@ -32,7 +32,7 @@ public class ViewMenu extends JMenu {
 	private static final long serialVersionUID = 1L;
 //	private static Logger logger = Logger.getLogger(ViewMenu.class);
 	private ModelMaker parent;
-	private static final String VIEW_MENU = MessageUtil.m.formatMessage("train.gui.modelmaker.menu.view");
+	private static final String VIEW_MENU = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.view");
 
 	public ViewMenu(ModelMaker g) {
 		super(VIEW_MENU);
@@ -47,7 +47,7 @@ public class ViewMenu extends JMenu {
 		//new ImageIcon(MaximumEntropyShowTotaler.class.getResource("images/showToolbar.gif"));
 		Action showToolbarAction =
 			new AbstractAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.view.toolbar"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.view.toolbar"),
 				showToolbarIcon) {
 			private static final long serialVersionUID = 1L;
 
@@ -65,7 +65,7 @@ public class ViewMenu extends JMenu {
 		//new ImageIcon(MaximumEntropyShowTotaler.class.getResource("images/showPairIndices.gif"));
 		Action showPairIndicesAction =
 			new AbstractAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.view.pairindices"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.view.pairindices"),
 				showPairIndicesIcon) {
 			private static final long serialVersionUID = 1L;
 
@@ -96,7 +96,7 @@ public class ViewMenu extends JMenu {
 		//new ImageIcon(MaximumEntropyShowTotaler.class.getResource("images/showSummary.gif"));
 		Action showSummaryAction =
 			new AbstractAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.view.cluesummary"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.view.cluesummary"),
 				showSummaryIcon) {
 			private static final long serialVersionUID = 1L;
 

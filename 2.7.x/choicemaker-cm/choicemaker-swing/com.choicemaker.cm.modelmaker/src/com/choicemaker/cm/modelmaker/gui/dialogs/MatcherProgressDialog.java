@@ -24,7 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.matcher.Matcher;
 
 /**
@@ -137,11 +137,11 @@ class MatcherProgressDialog extends JDialog implements PropertyChangeListener {
 		c.gridy = 3;
 		c.gridx = 0;
 		c.anchor = GridBagConstraints.EAST;
-		ok = new JButton(MessageUtil.m.formatMessage("ok"));
+		ok = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
 		ok.setEnabled(false);
 		content.add(ok, c);
 		c.gridx = 1;
-		cancel = new JButton(MessageUtil.m.formatMessage("cancel"));
+		cancel = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 		content.add(cancel, c);
 
 		setContentPane(content);

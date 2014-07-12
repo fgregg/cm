@@ -28,7 +28,7 @@ import javax.swing.JTextField;
 
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;
@@ -87,10 +87,10 @@ public class TestingControlPanel
 	// FIXME UNUSED private JMenu testingMenu;
 	private boolean dirty;
 
-	private static final String HISTO = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.histogram");
-	private static final String HOLDS = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.holdvsacc");
-	private static final String ASYMM = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.asymm");
-	private static final String CALC = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.calculator");
+	private static final String HISTO = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.histogram");
+	private static final String HOLDS = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.holdvsacc");
+	private static final String ASYMM = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.asymm");
+	private static final String CALC = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.calculator");
 
 	public TestingControlPanel(ModelMaker g) {
 		super();
@@ -124,46 +124,46 @@ public class TestingControlPanel
 		percentagesPanel = new JPanel();
 		percentagesPanel.setBorder(
 			BorderFactory.createTitledBorder(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.statistics.label")));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.statistics.label")));
 
 		falsePositivesLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.false.positives"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.false.positives"), JLabel.RIGHT);
 		falsePositives = new JTextField(5);
 		falsePositives.setHorizontalAlignment(JTextField.RIGHT);
 		falsePositives.setEditable(false);
 		falseNegativesLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.false.negatives"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.false.negatives"), JLabel.RIGHT);
 		falseNegatives = new JTextField(5);
 		falseNegatives.setMinimumSize(falseNegatives.getPreferredSize());
 		falseNegatives.setHorizontalAlignment(JTextField.RIGHT);
 		falseNegatives.setEditable(false);
 		differRecallLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.differ.recall"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.differ.recall"), JLabel.RIGHT);
 		differRecall = new JTextField(5);
 		differRecall.setMinimumSize(differRecall.getPreferredSize());
 		differRecall.setHorizontalAlignment(JTextField.RIGHT);
 		differRecall.setEditable(false);
 		matchRecallLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.match.recall"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.match.recall"), JLabel.RIGHT);
 		matchRecall = new JTextField(5);
 		matchRecall.setHorizontalAlignment(JTextField.RIGHT);
 		matchRecall.setEditable(false);
 		humanReviewsLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.humanreview"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.humanreview"), JLabel.RIGHT);
 		humanReviews = new JTextField(5);
 		humanReviews.setHorizontalAlignment(JTextField.RIGHT);
 		humanReviews.setEditable(false);
 //		precisionLabel =
-//			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.precision"), JLabel.RIGHT);
+//			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.precision"), JLabel.RIGHT);
 		precision = new JTextField(5);
 		precision.setHorizontalAlignment(JTextField.RIGHT);
 		precision.setEditable(false);
-//		recallLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.recall"), JLabel.RIGHT);
+//		recallLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.recall"), JLabel.RIGHT);
 		recall = new JTextField(5);
 		recall.setHorizontalAlignment(JTextField.RIGHT);
 		recall.setEditable(false);
 		correlationLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.correlation"), JLabel.RIGHT);
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.correlation"), JLabel.RIGHT);
 		correlation = new JTextField(5);
 		correlation.setHorizontalAlignment(JTextField.RIGHT);
 		correlation.setEditable(false);
@@ -179,7 +179,7 @@ public class TestingControlPanel
 		confusionPanel = new JPanel(new BorderLayout());
 		confusionPanel.setBorder(
 			BorderFactory.createTitledBorder(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.confusion.label")));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.confusion.label")));
 		confusionPanel.add(confusionPane, BorderLayout.CENTER);
 
 		statisticsHistoPanel = new StatisticsHistogramPanel(this);
@@ -259,7 +259,7 @@ public class TestingControlPanel
 
 	public void dataChanged() {
 		if (parent.haveSourceList()) {
-			parent.getUserMessages().postInfo(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.data.changed"));
+			parent.getUserMessages().postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.data.changed"));
 		}
 	}
 

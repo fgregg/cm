@@ -42,7 +42,7 @@ import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
@@ -86,8 +86,8 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	private JTextField separator;
 	private JLabel taggedLabel;
 	private JCheckBox tagged;
-	private static String RELATIVE = MessageUtil.m.formatMessage("io.common.gui.source.file.relative");
-	private static String ABSOLUTE = MessageUtil.m.formatMessage("io.common.gui.source.file.absolute");
+	private static String RELATIVE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.relative");
+	private static String ABSOLUTE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.absolute");
 	private static String GENERATE_MODE_LABEL = "Generate new source file";
 	private static String CREATE_MODE_LABEL = "Use existing source file";
 	private static Dimension CREATE_DIMENSION = new Dimension(500, 300);
@@ -113,7 +113,7 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	private boolean save;
 
 	public FlatFileMarkedRecordPairSourceGui(ModelMaker parent, MarkedRecordPairSource s, boolean save) {
-		super(parent, MessageUtil.m.formatMessage("io.flatfile.gui.label"));
+		super(parent, ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.label"));
 		this.save = save;
 		init(s);
 	}
@@ -245,43 +245,43 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 	 * Executed by the superclass constructor to build the panel.
 	 */
 	public void buildContent() {
-		sourceNameLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
+		sourceNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
 		sourceFileName = new JTextField(35);
-		sourceFileBrowseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+		sourceFileBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 
-		fileNameLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.source.file"));
+		fileNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.source.file"));
 		fileName = new JTextField(10);
-		browseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+		browseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 
-		fileRelative = new JLabel(MessageUtil.m.formatMessage("io.common.gui.save.source.file.as"));
+		fileRelative = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.save.source.file.as"));
 		fileRelativeBox = new JComboBox();
 		fileRelativeBox.addItem(RELATIVE);
 		fileRelativeBox.addItem(ABSOLUTE);
 
-		multiFileLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.multifile"));
+		multiFileLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.multifile"));
 		multiFile = new JCheckBox();
-		singleLineLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.singleline"));
+		singleLineLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.singleline"));
 		singleLine = new JCheckBox();
-		fixedLengthLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.fixedwidth"));
+		fixedLengthLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.fixedwidth"));
 		fixedLength = new JCheckBox();
-		separatorLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.delimiter"));
+		separatorLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.delimiter"));
 		separator = new JTextField(3);
 		separatorList = new JComboBox(Separator.SEPARATORS);
-		taggedLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.tagged"));
+		taggedLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.tagged"));
 		tagged = new JCheckBox();
 
-		okayButton = new JButton(MessageUtil.m.formatMessage("ok"));
-		cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+		okayButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
+		cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 
 		if (!save) {
 			modeButton = new JButton(GENERATE_MODE_LABEL);
 			generateComponents = new JComponent[10];
-			sourcesListLabel = new JLabel(MessageUtil.m.formatMessage("io.common.gui.source.sources"));
+			sourcesListLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.sources"));
 			generateComponents[0] = sourcesListLabel;
 			sourcesList = new JList(new DefaultListModel());
 			sourcesListScrollPane = new JScrollPane();
 			sourcesListScrollPane.getViewport().add(sourcesList);
-			removeCharLabel = new JLabel(MessageUtil.m.formatMessage("io.flatfile.gui.remove.delimiter"));
+			removeCharLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.remove.delimiter"));
 			generateComponents[1] = removeCharLabel;
 			removeChar = new JCheckBox();
 			removeChar.setSelected(true);
@@ -291,11 +291,11 @@ public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui
 			generateComponents[4] = addButton;
 			removeButton = new JButton("Remove");
 			generateComponents[5] = removeButton;
-			distributeOverLabel = new JLabel(MessageUtil.m.formatMessage("io.common.gui.distribute.roundrobin"));
+			distributeOverLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.distribute.roundrobin"));
 			generateComponents[6] = distributeOverLabel;
 			distributeOver = new JTextField(5);
 			generateComponents[7] = distributeOver;
-			maxPairsPerFileLabel = new JLabel(MessageUtil.m.formatMessage("io.common.gui.distribute.maxpairsperfile"));
+			maxPairsPerFileLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.distribute.maxpairsperfile"));
 			generateComponents[8] = maxPairsPerFileLabel;
 			maxPairsPerFile = new JTextField(5);
 			generateComponents[9] = maxPairsPerFile;

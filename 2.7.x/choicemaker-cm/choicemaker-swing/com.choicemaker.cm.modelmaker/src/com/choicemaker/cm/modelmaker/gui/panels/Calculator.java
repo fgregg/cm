@@ -28,7 +28,7 @@ import javax.swing.JTextField;
 //import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.stats.StatPoint;
 
@@ -84,19 +84,19 @@ public class Calculator extends JPanel {
 		firstTpe =
 			new JComboBox(
 				new String[] {
-					MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.differ.threshold"),
-					MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.false.negatives"),
-					MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.human.review")});
+					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.differ.threshold"),
+					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.false.negatives"),
+					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.human.review")});
 		sndTpe =
 			new JComboBox(
 				new String[] {
-					MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.match.threshold"),
-					MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.false.positives"),
-					MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.human.review"),
-					MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.none")});
+					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.match.threshold"),
+					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.false.positives"),
+					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.human.review"),
+					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.none")});
 		firstFld = new JTextField(5);
 		sndFld = new JTextField(5);
-		calculate = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.calculate"));
+		calculate = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.calculate"));
 		differThreshold = new JTextField(5);
 		differThreshold.setEditable(false);
 		matchThreshold = new JTextField(5);
@@ -111,9 +111,9 @@ public class Calculator extends JPanel {
 		matchRecall.setEditable(false);
 		humanReview = new JTextField(5);
 		humanReview.setEditable(false);
-		setDifferThreshold = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.set.differ"));
-		setMatchThreshold = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.set.match"));
-		setBothThresholds = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.set.both"));
+		setDifferThreshold = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.set.differ"));
+		setMatchThreshold = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.set.match"));
+		setBothThresholds = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.set.both"));
 	}
 
 	private String formatPercentage(float v) {
@@ -236,7 +236,7 @@ public class Calculator extends JPanel {
 		c.gridy = 2;
 		inputPanel.add(calculate, c);
 		inputPanel.setBorder(
-			BorderFactory.createTitledBorder(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.input")));
+			BorderFactory.createTitledBorder(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.input")));
 		return inputPanel;
 	}
 
@@ -250,15 +250,15 @@ public class Calculator extends JPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		outputPanel.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.differ.threshold")), c);
+		outputPanel.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.differ.threshold")), c);
 		c.gridx = 1;
 		outputPanel.add(differThreshold, c);
 		c.gridx = 2;
-		outputPanel.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.false.negatives")), c);
+		outputPanel.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.false.negatives")), c);
 		c.gridx = 3;
 		outputPanel.add(falseNegatives, c);
 		c.gridx = 4;
-		outputPanel.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.differ.recall")), c);
+		outputPanel.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.differ.recall")), c);
 		c.gridx = 5;
 		outputPanel.add(differRecall, c);
 		c.gridx = 6;
@@ -269,26 +269,26 @@ public class Calculator extends JPanel {
 		c.gridheight = 1;
 		c.gridx = 0;
 		c.gridy = 1;
-		outputPanel.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.match.threshold")), c);
+		outputPanel.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.match.threshold")), c);
 		c.gridx = 1;
 		outputPanel.add(matchThreshold, c);
 		c.gridx = 2;
-		outputPanel.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.false.positives")), c);
+		outputPanel.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.false.positives")), c);
 		c.gridx = 3;
 		outputPanel.add(falsePositives, c);
 		c.gridx = 4;
-		outputPanel.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.match.recall")), c);
+		outputPanel.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.match.recall")), c);
 		c.gridx = 5;
 		outputPanel.add(matchRecall, c);
 		c.gridx = 6;
 		outputPanel.add(setMatchThreshold, c);
 		c.gridx = 0;
 		c.gridy = 2;
-		outputPanel.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.human.review")), c);
+		outputPanel.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.human.review")), c);
 		c.gridx = 1;
 		outputPanel.add(humanReview, c);
 		outputPanel.setBorder(
-			BorderFactory.createTitledBorder(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.calc.output")));
+			BorderFactory.createTitledBorder(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.calc.output")));
 		return outputPanel;
 	}
 

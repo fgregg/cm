@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * Train and test models with data from a marked record pair source.
@@ -146,7 +146,7 @@ public class Trainer /* implements ITrainer */ {
 		}
 		noPairs = src.size();
 		if (noPairs == 0) {
-			throw new OperationFailedException(MessageUtil.m.formatMessage("train.trainer.source.is.empty"));
+			throw new OperationFailedException(ChoiceMakerCoreMessages.m.formatMessage("train.trainer.source.is.empty"));
 		}
 	}
 

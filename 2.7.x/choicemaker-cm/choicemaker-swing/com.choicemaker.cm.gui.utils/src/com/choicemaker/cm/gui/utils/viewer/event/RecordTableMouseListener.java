@@ -19,7 +19,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.viewer.RecordTable;
 import com.choicemaker.cm.gui.utils.viewer.RecordTableModel;
 
@@ -37,11 +37,11 @@ public class RecordTableMouseListener extends MouseAdapter {
 	private JPopupMenu popup;
 	private RecordTable recordTable;
 	private static final String INSERT_ABOVE =
-		MessageUtil.m.formatMessage("train.gui.modelmaker.listener.recordtable.insert.row.above");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.recordtable.insert.row.above");
 	private static final String INSERT_BELOW =
-		MessageUtil.m.formatMessage("train.gui.modelmaker.listener.recordtable.insert.row.below");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.recordtable.insert.row.below");
 	private static final String DELETE =
-		MessageUtil.m.formatMessage("train.gui.modelmaker.listener.recordtable.delete.row");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.recordtable.delete.row");
 	private int rowIndex;
 
 	public RecordTableMouseListener() {

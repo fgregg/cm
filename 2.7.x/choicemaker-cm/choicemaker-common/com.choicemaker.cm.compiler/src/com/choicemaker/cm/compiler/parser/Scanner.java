@@ -17,7 +17,7 @@ import com.choicemaker.cm.compiler.ICompilationUnit;
 import com.choicemaker.cm.compiler.Location;
 import com.choicemaker.cm.compiler.Names;
 import com.choicemaker.cm.core.compiler.CompilerException;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * The lexical analyzer of the ClueMaker compiler
@@ -146,7 +146,7 @@ public class Scanner implements Characters, Tokens {
 					default :
 						error(
 							Location.encode(line, column) - 1,
-							MessageUtil.m.formatMessage("compiler.scanner.illegal.escape.sequence"));
+							ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.illegal.escape.sequence"));
 						lit.append(ch);
 				}
 				ch = buf[++bp];
@@ -200,9 +200,9 @@ public class Scanner implements Characters, Tokens {
 		try {
 			floatVal = Double.valueOf(new String(buf, index, bp - index)).doubleValue();
 			if (floatVal > limit)
-				error(MessageUtil.m.formatMessage("compiler.scanner.floating.number.too.large"));
+				error(ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.floating.number.too.large"));
 		} catch (NumberFormatException e) {
-			error(MessageUtil.m.formatMessage("compiler.scanner.malformed.floating.number"));
+			error(ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.malformed.floating.number"));
 		}
 	}
 
@@ -217,13 +217,13 @@ public class Scanner implements Characters, Tokens {
 		for (int i = index; i < index + len; i++) {
 			int d = char2int(buf[i], base);
 			if (d < 0) {
-				error(MessageUtil.m.formatMessage("compiler.scanner.lexical.error.in.int"));
+				error(ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.lexical.error.in.int"));
 				return;
 			}
 			if ((intVal < 0)
 				|| (max / (base / divider) < intVal)
 				|| (max - (d / divider) < (intVal * (base / divider) - (token == USUB ? 1 : 0)))) {
-				error(MessageUtil.m.formatMessage("compiler.scanner.integer.too.large"));
+				error(ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.integer.too.large"));
 				return;
 			}
 			intVal = intVal * base + d;
@@ -593,7 +593,7 @@ public class Scanner implements Characters, Tokens {
 							column++;
 							break;
 						} else {
-							error(MessageUtil.m.formatMessage("compiler.scanner.unclosed.comment"));
+							error(ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.unclosed.comment"));
 							return;
 						}
 					} else {
@@ -636,7 +636,7 @@ public class Scanner implements Characters, Tokens {
 									break;
 							}
 					} else
-						error(MessageUtil.m.formatMessage("compiler.scanner.unclosed.character.literal"));
+						error(ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.unclosed.character.literal"));
 					return;
 				case '\"' :
 					ch = buf[++bp];
@@ -652,7 +652,7 @@ public class Scanner implements Characters, Tokens {
 					} else
 						error(
 							Location.encode(line, column),
-							MessageUtil.m.formatMessage("compiler.scanner.open.character.literal"));
+							ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.open.character.literal"));
 					return;
 				case FE :
 					token = EOF;
@@ -663,7 +663,7 @@ public class Scanner implements Characters, Tokens {
 					else {
 						ch = buf[++bp];
 						column++;
-						error(MessageUtil.m.formatMessage("compiler.scanner.illegal.character"));
+						error(ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.illegal.character"));
 					}
 					return;
 			}
@@ -708,23 +708,23 @@ public class Scanner implements Characters, Tokens {
 			case RBRACE :
 				return "'}'";
 			case IDENTIFIER :
-				return MessageUtil.m.formatMessage("compiler.scanner.identifier");
+				return ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.identifier");
 			case CHARLITERAL :
-				return MessageUtil.m.formatMessage("compiler.scanner.character.literal");
+				return ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.character.literal");
 			case STRINGLITERAL :
-				return MessageUtil.m.formatMessage("compiler.scanner.string.literal");
+				return ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.string.literal");
 			case INTLITERAL :
-				return MessageUtil.m.formatMessage("compiler.scanner.integer.literal");
+				return ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.integer.literal");
 			case LONGLITERAL :
-				return MessageUtil.m.formatMessage("compiler.scanner.long.literal");
+				return ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.long.literal");
 			case FLOATLITERAL :
-				return MessageUtil.m.formatMessage("compiler.scanner.float.literal");
+				return ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.float.literal");
 			case DOUBLELITERAL :
-				return MessageUtil.m.formatMessage("compiler.scanner.double.literal");
+				return ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.double.literal");
 			case ERROR :
-				return MessageUtil.m.formatMessage("compiler.scanner.bad.input");
+				return ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.bad.input");
 			case EOF :
-				return MessageUtil.m.formatMessage("compiler.scanner.end.of.input");
+				return ChoiceMakerCoreMessages.m.formatMessage("compiler.scanner.end.of.input");
 			default :
 				return tokenName[token];
 		}

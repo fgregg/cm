@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
@@ -57,8 +57,8 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
     private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(CompositeMarkedRecordPairSourceGui.class);
-	private static final String RELATIVE = MessageUtil.m.formatMessage("io.composite.gui.source.file.relative");
-	private static final String ABSOLUTE = MessageUtil.m.formatMessage("io.composite.gui.source.file.absolute");
+	private static final String RELATIVE = ChoiceMakerCoreMessages.m.formatMessage("io.composite.gui.source.file.relative");
+	private static final String ABSOLUTE = ChoiceMakerCoreMessages.m.formatMessage("io.composite.gui.source.file.absolute");
     private JLabel sourceNameLabel;
 //    private JLabel fileNameLabel;
     private JButton addButton;
@@ -69,7 +69,7 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
     private JScrollPane sourcesTableScrollPane;
 
     public CompositeMarkedRecordPairSourceGui(ModelMaker parent, MarkedRecordPairSource s) {
-        super(parent, MessageUtil.m.formatMessage("io.composite.gui.label"));
+        super(parent, ChoiceMakerCoreMessages.m.formatMessage("io.composite.gui.label"));
         init(s);
     }
 
@@ -120,14 +120,14 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
      * Executed by the superclass constructor to build the panel.
      */
     public void buildContent() {
-        sourceNameLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
+        sourceNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
         sourceFileName = new JTextField(35);
-        sourceFileBrowseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+        sourceFileBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 
-        sourcesTableLabel = new JLabel(MessageUtil.m.formatMessage("io.composite.gui.constituting"));
+        sourcesTableLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.composite.gui.constituting"));
 
-        Object[] colNames = { MessageUtil.m.formatMessage("io.composite.gui.column0name"),
-        					  MessageUtil.m.formatMessage("io.composite.gui.column1name") };
+        Object[] colNames = { ChoiceMakerCoreMessages.m.formatMessage("io.composite.gui.column0name"),
+        					  ChoiceMakerCoreMessages.m.formatMessage("io.composite.gui.column1name") };
         DefaultTableModel model = new DefaultTableModel() {
         	private static final long serialVersionUID = 1L;
 
@@ -154,8 +154,8 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         addButton = new JButton("Add...");
         removeButton = new JButton("Remove");
 
-        okayButton = new JButton(MessageUtil.m.formatMessage("ok"));
-        cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+        okayButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
+        cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 
         layoutContent();
     }

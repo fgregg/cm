@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.util.CustomFileFilter;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 
 /**
@@ -276,37 +276,37 @@ public final class FileChooserFactory {
 		"Directories", new String[0], true);
 
 	private static final FileFilter flatFileFilter = new CustomFileFilter(
-		MessageUtil.m.formatMessage("io.flatfile.gui.filefilter"),
+		ChoiceMakerCoreMessages.m.formatMessage("io.flatfile.gui.filefilter"),
 		new String[] {Constants.TXT_EXTENSION, Constants.CSV_EXTENSION}, true);
 
 	private static final FileFilter xmlFilter = new CustomFileFilter(
-		MessageUtil.m.formatMessage("io.xml.gui.filefilter"),
+		ChoiceMakerCoreMessages.m.formatMessage("io.xml.gui.filefilter"),
 		Constants.XML_EXTENSION, true);
 
 	private static final FileFilter rsFilter = new CustomFileFilter(
-		MessageUtil.m.formatMessage("io.rs.gui.filefilter"),
+		ChoiceMakerCoreMessages.m.formatMessage("io.rs.gui.filefilter"),
 		Constants.RS_EXTENSION, true);
 
 	private static final FileFilter rpsFilter = new CustomFileFilter(
-		MessageUtil.m.formatMessage("io.rps.gui.filefilter"),
+		ChoiceMakerCoreMessages.m.formatMessage("io.rps.gui.filefilter"),
 		new String[] {Constants.RPS_EXTENSION, Constants.MRPS_EXTENSION}, 
 		true);
 
 	private static FileFilter mrpsFilter;
 	//private static final FileFilter mrpsFilter = new CustomFileFilter(
-	//	MessageUtil.m.formatMessage("io.mrps.gui.filefilter"),
+	//	ChoiceMakerCoreMessages.m.formatMessage("io.mrps.gui.filefilter"),
 	//	Constants.MRPS_EXTENSION, true);
 
 	private static final FileFilter modelFilter = new CustomFileFilter(
-		MessageUtil.m.formatMessage("io.model.gui.filefilter"),
+		ChoiceMakerCoreMessages.m.formatMessage("io.model.gui.filefilter"),
 		Constants.MODEL_EXTENSION, true);
 
 	private static final FileFilter cluesFilter = new CustomFileFilter(
-		MessageUtil.m.formatMessage("io.clues.gui.filefilter"),
+		ChoiceMakerCoreMessages.m.formatMessage("io.clues.gui.filefilter"),
 		Constants.CLUES_EXTENSION, true);
 
 	private static final FileFilter layoutFilter = new CustomFileFilter(
-		MessageUtil.m.formatMessage("io.layout.gui.filefilter"),
+		ChoiceMakerCoreMessages.m.formatMessage("io.layout.gui.filefilter"),
 		Constants.LAYOUT_EXTENSION, true);
 
 	private FileChooserFactory() { }

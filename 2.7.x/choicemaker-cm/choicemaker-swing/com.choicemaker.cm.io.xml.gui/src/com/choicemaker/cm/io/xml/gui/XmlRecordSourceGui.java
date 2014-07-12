@@ -23,7 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.xml.base.XmlRecordSource;
@@ -47,8 +47,8 @@ import com.choicemaker.util.FileUtilities;
 public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;
 //	private static Logger logger = Logger.getLogger(XmlRecordSourceGui.class);
-	private static String RELATIVE = MessageUtil.m.formatMessage("io.common.gui.source.file.relative");
-	private static String ABSOLUTE = MessageUtil.m.formatMessage("io.common.gui.source.file.absolute");
+	private static String RELATIVE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.relative");
+	private static String ABSOLUTE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.absolute");
 	private JLabel sourceFileNameLabel;
 	private JLabel xmlFileNameLabel;
 	private JTextField xmlFileName;
@@ -57,7 +57,7 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	private JComboBox xmlFileRelativeBox;
 
 	public XmlRecordSourceGui(ModelMaker parent, RecordSource s) {
-		super(parent, MessageUtil.m.formatMessage("io.xml.gui.record.label"));
+		super(parent, ChoiceMakerCoreMessages.m.formatMessage("io.xml.gui.record.label"));
 		init(s);
 	}
 
@@ -110,21 +110,21 @@ public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	 * Executed by the superclass constructor to build the panel.
 	 */
 	public void buildContent() {
-		sourceFileNameLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
+		sourceFileNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
 		sourceFileName = new JTextField(35);
-		sourceFileBrowseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+		sourceFileBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 
-		xmlFileNameLabel = new JLabel(MessageUtil.m.formatMessage("io.xml.guilsource.file"));
+		xmlFileNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.xml.guilsource.file"));
 		xmlFileName = new JTextField(10);
-		browseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
+		browseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
 
-		xmlFileRelativeLabel = new JLabel(MessageUtil.m.formatMessage("io.common.gui.save.source.file.as"));
+		xmlFileRelativeLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.save.source.file.as"));
 		xmlFileRelativeBox = new JComboBox();
 		xmlFileRelativeBox.addItem(RELATIVE);
 		xmlFileRelativeBox.addItem(ABSOLUTE);
 
-		okayButton = new JButton(MessageUtil.m.formatMessage("ok"));
-		cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+		okayButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
+		cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 
 		layoutContent();
 	}

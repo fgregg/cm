@@ -34,7 +34,7 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
 //import org.jfree.data.category.CategoryDataset;
 
 //import org.apache.log4j.Logger;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.utils.HistoCategoryDataset;
 import com.choicemaker.cm.modelmaker.gui.utils.HistoChartPanel;
@@ -81,9 +81,9 @@ public class StatisticsHistogramPanel extends JPanel {
 		data = new HistoCategoryDataset(SERIES, getNumBins());
 		histogram =
 			ChartFactory.createBarChart(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.accuracy"),
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.matchprob"),
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.accuracy"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.matchprob"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs"),
 				data,
 				orientation,
 				true,
@@ -111,7 +111,7 @@ public class StatisticsHistogramPanel extends JPanel {
 		histoPanel = new HistoChartPanel(histogram, false, false, false, true, true, parent.getModelMaker());
 		//	histoPanel.setEnabled(false);
 
-		binWidthLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.histogram.binwidth"));
+		binWidthLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.histogram.binwidth"));
 		binWidthField = new JTextField(Float.toString(binWidth), 4);
 		binWidthField.setMinimumSize(new Dimension(50, 20));
 	}

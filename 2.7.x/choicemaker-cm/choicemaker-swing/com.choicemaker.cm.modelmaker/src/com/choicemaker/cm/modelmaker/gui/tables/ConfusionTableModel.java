@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 
 import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.utils.ValueError;
 
 /**
@@ -36,19 +36,19 @@ public class ConfusionTableModel extends AbstractTableModel {
 		{
 			new ColumnDefinition(" ", 200, JLabel.LEFT),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.cm.differ"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.cm.differ"),
 				200,
 				JLabel.CENTER),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.cm.match"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.cm.match"),
 				200,
 				JLabel.CENTER),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.cm.hold"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.cm.hold"),
 				200,
 				JLabel.CENTER),
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.total"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.total"),
 				200,
 				JLabel.CENTER),
 			};
@@ -77,7 +77,7 @@ public class ConfusionTableModel extends AbstractTableModel {
 	}
 
 	public String getTitle() {
-		return MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.label");
+		return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.label");
 	}
 
 	/**
@@ -128,16 +128,16 @@ public class ConfusionTableModel extends AbstractTableModel {
 		if (iCol == COL_ROW_LABEL) {
 			switch (iRow) {
 				case 0 :
-					thing = MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.human.differ");
+					thing = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.human.differ");
 					break;
 				case 1 :
-					thing = MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.human.match");
+					thing = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.human.match");
 					break;
 				case 2 :
-					thing = MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.human.hold");
+					thing = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.human.hold");
 					break;
 				case 3 :
-					thing = MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.total");
+					thing = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.total");
 					break;
 			}
 		} else if (isEmpty || (iRow < 0) || (iRow >= getRowCount())) {

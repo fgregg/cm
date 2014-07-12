@@ -18,7 +18,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.panels.HumanReviewPanel;
 
@@ -36,10 +36,10 @@ public class FilterMenu extends JMenu implements ActionListener {
 	// private AbstractApplication humanReview;
     private HumanReviewPanel humanReview;
 //    private ButtonGroup bGroup;
-    private static final String ENABLE = MessageUtil.m.formatMessage("train.gui.modelmaker.menu.filter.set");
+    private static final String ENABLE = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.filter.set");
 
     public FilterMenu(HumanReviewPanel g) {
-        super(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.filter"));
+        super(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.filter"));
         humanReview = g;
         buildMenu();
         setMnemonic(KeyEvent.VK_R);

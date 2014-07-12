@@ -18,7 +18,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 import com.choicemaker.cm.core.MachineLearner;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.ml.me.base.MaximumEntropy;
 import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
 import com.choicemaker.cm.modelmaker.gui.ml.MlGuiFactory;
@@ -51,7 +51,7 @@ public class MeGuiFactory extends MlGuiFactory {
 					return weightColumn;
 				}
 				public String getColumnName(int column) {
-					return MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.weight");
+					return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.weight");
 				}
 				public boolean isCellEditable(int row, int column) {
 					return !model.getClueSet().getClueDesc()[row].rule;
@@ -97,7 +97,7 @@ public class MeGuiFactory extends MlGuiFactory {
 					return weightColumn;
 				}
 				public String getColumnName(int column) {
-					return MessageUtil.m.formatMessage("train.gui.modelmaker.table.common.weight");
+					return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.common.weight");
 				}
 				public boolean isCellEditable(int row, int column) {
 					return false;
@@ -142,7 +142,7 @@ public class MeGuiFactory extends MlGuiFactory {
 	}
 
 	public String toString() {
-		return MessageUtil.m.formatMessage("ml.me.label");
+		return ChoiceMakerCoreMessages.m.formatMessage("ml.me.label");
 	}
 	/**
 	 * @see com.choicemaker.cm.ml.gui.MlGuiFactory#getMlInstance()

@@ -34,7 +34,7 @@ import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.base.DoNothingMachineLearning;
 import com.choicemaker.cm.core.base.ProbabilityModel;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -50,9 +50,9 @@ import com.choicemaker.util.FileUtilities;
 public class ModelBuilderDialog extends JDialog implements Enable {
 	private static final long serialVersionUID = 1L;
 	private static final String ABSOLUTE = 
-		MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.cluefile.absolute");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.cluefile.absolute");
 	private static final String RELATIVE = 
-		MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.cluefile.relative");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.cluefile.relative");
 	
 	private static Logger logger = Logger.getLogger(ModelBuilderDialog.class);
 	private ModelMaker parent;
@@ -75,7 +75,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 	private String oldName;
 
 	public ModelBuilderDialog(ModelMaker g) {
-		super(g, MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.label"), true);
+		super(g, ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.label"), true);
 		parent = g;
 		isNewModel = true;
 		buildContent();
@@ -121,8 +121,8 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 			if (JOptionPane
 				.showConfirmDialog(
 					this,
-					MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.replace", modelFileName),
-					MessageUtil.m.formatMessage("confirm"),
+					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.replace", modelFileName),
+					ChoiceMakerCoreMessages.m.formatMessage("confirm"),
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.WARNING_MESSAGE)
 				== JOptionPane.YES_OPTION) {
@@ -220,24 +220,24 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 
 	private void buildContent() {
 		content = new JPanel();
-		modelFileName = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.name"));
+		modelFileName = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.name"));
 		modelFileNameField = new JTextField(35);
-		modelFileNameBrowseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
-		cluesFileName = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.cluefile"));
+		modelFileNameBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
+		cluesFileName = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.cluefile"));
 		cluesFileNameField = new JTextField(35);
-		cluesFileNameBrowseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
-		cluesRelativeLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.save.cluefile.as"));
+		cluesFileNameBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
+		cluesRelativeLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.save.cluefile.as"));
 		cluesRelativeBox = new JComboBox();
 		cluesRelativeBox.addItem(RELATIVE);
 		cluesRelativeBox.addItem(ABSOLUTE);
-		useAnt = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.useant"));
+		useAnt = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.useant"));
 		useAntCheckBox = new JCheckBox();
 		useAntCheckBox.setSelected(false);
-		antCommand = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.antcommand"));
+		antCommand = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.antcommand"));
 		antCommandField = new JTextField(35);
 		antCommandField.setText("-Dnomain=true compile");
-		buildButton = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.model.builder.build"));
-		cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+		buildButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.build"));
+		cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 	}
 
 	private void layoutContent() {

@@ -31,7 +31,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.choicemaker.cm.core.MarkedRecordPairSource;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.io.db.base.DataSources;
@@ -75,10 +75,10 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
      * Executed by the superclass constructor to build the panel.
      */
     public void buildContent() {
-        sourceFileNameLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
+        sourceFileNameLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.name"));
         sourceFileName = new JTextField(35);
-        sourceFileBrowseButton = new JButton(MessageUtil.m.formatMessage("browse.elipsis"));
-        confLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.source.conf"));
+        sourceFileBrowseButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("browse.elipsis"));
+        confLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.conf"));
         conf = new JTextField(10);
         whereFieldLabel = new JLabel(DbMessageUtil.m.formatMessage("plugin.db.io.db.gui.select"));
         whereField = new JTextArea(4, 1);
@@ -88,8 +88,8 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
         whereField.setBorder(BorderFactory.createLoweredBevelBorder());
         dataSourceLabel = new JLabel(DbMessageUtil.m.formatMessage("plugin.db.io.db.gui.data.source"));
         dataSource = new JComboBox(getDataSources());
-        okayButton = new JButton(MessageUtil.m.formatMessage("ok"));
-        cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+        okayButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
+        cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 
         layoutContent();
     }

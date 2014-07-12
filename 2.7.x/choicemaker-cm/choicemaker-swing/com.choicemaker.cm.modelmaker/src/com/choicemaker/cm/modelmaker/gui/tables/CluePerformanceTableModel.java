@@ -19,7 +19,7 @@ import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.train.Trainer;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * 
@@ -41,11 +41,11 @@ public class CluePerformanceTableModel extends AbstractTableModel {
 		columns[0] = new ColumnDefinition("", 150, JLabel.CENTER);
 		for (int i = 0; i < Decision.NUM_DECISIONS; ++i) {
 			columns[i + 1] =
-				new ColumnDefinition(MessageUtil.m.formatMessage(Decision.valueOf(i).toString()), 100, JLabel.RIGHT);
+				new ColumnDefinition(ChoiceMakerCoreMessages.m.formatMessage(Decision.valueOf(i).toString()), 100, JLabel.RIGHT);
 		}
 		columns[Decision.NUM_DECISIONS + 1] =
 			new ColumnDefinition(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.table.performance.total"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.performance.total"),
 				100,
 				JLabel.RIGHT);
 	};
@@ -68,11 +68,11 @@ public class CluePerformanceTableModel extends AbstractTableModel {
 
 	public static final String[] FIRST_COLS =
 		{
-			MessageUtil.m.formatMessage("train.gui.modelmaker.table.performance.total.clues"),
-			MessageUtil.m.formatMessage("train.gui.modelmaker.table.performance.active.clues"),
-			MessageUtil.m.formatMessage("train.gui.modelmaker.table.performance.correct.firings"),
-			MessageUtil.m.formatMessage("train.gui.modelmaker.table.performance.incorrect.firings"),
-			MessageUtil.m.formatMessage("train.gui.modelmaker.table.performance.total.firings")};
+			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.performance.total.clues"),
+			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.performance.active.clues"),
+			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.performance.correct.firings"),
+			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.performance.incorrect.firings"),
+			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.performance.total.firings")};
 
 	public void buildRows(ImmutableProbabilityModel pm, Trainer t) {
 		rows = new CluePerformanceTableRow[FIRST_COLS.length];
@@ -104,7 +104,7 @@ public class CluePerformanceTableModel extends AbstractTableModel {
 	}
 
 	public String getTitle() {
-		return MessageUtil.m.formatMessage("train.gui.modelmaker.table.performance.label");
+		return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.performance.label");
 	}
 
 	public int getColumnCount() {

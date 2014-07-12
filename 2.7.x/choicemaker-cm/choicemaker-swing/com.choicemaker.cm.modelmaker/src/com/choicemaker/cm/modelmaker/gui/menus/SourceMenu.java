@@ -38,7 +38,7 @@ import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.SourceTypeSelectorDialog;
@@ -57,7 +57,7 @@ public class SourceMenu extends JMenu {
 	private static Logger logger = Logger.getLogger(SourceMenu.class);
 
 	private ModelMaker parent;
-	private static final String SOURCE_MENU = MessageUtil.m.formatMessage("train.gui.modelmaker.menu.source");
+	private static final String SOURCE_MENU = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.source");
 	private MultiSourceMenu[] multiSourceMenus = new MultiSourceMenu[2];
 
 	public SourceMenu(ModelMaker g) {
@@ -286,19 +286,19 @@ public class SourceMenu extends JMenu {
 		// Save
 		ImageIcon saveIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/save.gif"));
 		Action saveAction =
-			new SaveAction(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.source.save"), saveIcon);
+			new SaveAction(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.source.save"), saveIcon);
 		JMenuItem saveItem = add(saveAction);
 		saveItem.setIcon(null);
 		saveItem.setMnemonic(KeyEvent.VK_S);
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
 		// 	JButton saveButton = parent.getToolBar().add(saveAction);
-		// 	saveButton.setToolTipText(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.source.save.tooltip"));
+		// 	saveButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.source.save.tooltip"));
 
 		// Save selection
 		ImageIcon saveSelectionIcon = null; //new ImageIcon(AbstractApplication.class.getResource("images/saveSelection.gif"));
 		Action saveSelectionAction =
 			new SaveAsAction(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.menu.source.save.selection"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.source.save.selection"),
 				saveSelectionIcon,
 				true);
 		JMenuItem saveSelectionItem = add(saveSelectionAction);
@@ -307,7 +307,7 @@ public class SourceMenu extends JMenu {
 		saveSelectionItem.setAccelerator(
 			KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK + ActionEvent.SHIFT_MASK));
 		// 	JButton saveSelectionButton = parent.getToolBar().add(saveSelectionAction);
-		// 	saveSelectionButton.setToolTipText(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.source.saveSelection.tooltip"));
+		// 	saveSelectionButton.setToolTipText(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.source.saveSelection.tooltip"));
 
 		addSeparator();
 

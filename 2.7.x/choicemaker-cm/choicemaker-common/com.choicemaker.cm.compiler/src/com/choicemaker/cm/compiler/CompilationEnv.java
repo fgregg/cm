@@ -17,7 +17,7 @@ import java.util.Set;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * Objects of that class represent a global compilation context; this
@@ -192,7 +192,7 @@ public class CompilationEnv {
 	public boolean conclusion() {
 		if ((errors + warnings) > 0) {
 			System.out.println(
-				MessageUtil.m.formatMessage("compiler.unit.conclusion", new Integer(errors), new Integer(warnings))
+				ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.conclusion", new Integer(errors), new Integer(warnings))
 					+ Constants.LINE_SEPARATOR);
 			if (errors > 0) {
 				return false;

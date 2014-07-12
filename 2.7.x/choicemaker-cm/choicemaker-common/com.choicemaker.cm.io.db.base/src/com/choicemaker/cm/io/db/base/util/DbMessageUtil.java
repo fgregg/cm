@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.db.base.util;
 
 import java.util.ResourceBundle;
 
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.util.MessageUtil;
 
 /**
@@ -21,5 +22,5 @@ import com.choicemaker.cm.core.util.MessageUtil;
  */
 public class DbMessageUtil {
 	public static MessageUtil m = 
-		new MessageUtil(ResourceBundle.getBundle("com.choicemaker.cm.io.db.base.util.res.Db"));
+		new ChoiceMakerCoreMessages(ResourceBundle.getBundle("com.choicemaker.cm.io.db.base.util.res.Db"));
 }

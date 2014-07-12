@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.hooks.TrainDialogPlugin;
@@ -69,7 +69,7 @@ public class TrainDialog extends JDialog implements Enable {
 	private boolean andTest;
 
 	public TrainDialog(ModelMaker parent, boolean andTest) {
-		super(parent, MessageUtil.m.formatMessage(andTest ? "train.gui.modelmaker.dialog.trainandtest.label" : "train.gui.modelmaker.dialog.train.label"), true);
+		super(parent, ChoiceMakerCoreMessages.m.formatMessage(andTest ? "train.gui.modelmaker.dialog.trainandtest.label" : "train.gui.modelmaker.dialog.train.label"), true);
 		this.parent = parent;
 		this.andTest = andTest;
 		buildContent();
@@ -181,20 +181,20 @@ public class TrainDialog extends JDialog implements Enable {
 
 	private void buildContent() {
 		content = new JPanel();
-		firingThreshold = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.train.firingthreshold"));
+		firingThreshold = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.train.firingthreshold"));
 		firingThresholdField = new JTextField(5);
 		recompileLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.train.recompile.if.necessary"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.train.recompile.if.necessary"));
 		recompile = new JCheckBox();
 		recompile.setSelected(true);
 		enableCluesLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.train.enable.all.clues"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.train.enable.all.clues"));
 		enableClues = new JCheckBox();
 		enableRulesLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.train.enable.all.rules"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.train.enable.all.rules"));
 		enableRules = new JCheckBox();
-		trainButton = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.train.train"));
-		cancelButton = new JButton(MessageUtil.m.formatMessage("cancel"));
+		trainButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.train.train"));
+		cancelButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 		trainDialogPluginContainer = new JPanel(new BorderLayout());
 		mlc = new JComboBox(new Vector(MlGuiFactories.getAllGuis()));
 	}
@@ -251,7 +251,7 @@ public class TrainDialog extends JDialog implements Enable {
 		//Row 2 ........................................
 		c.gridy = 4;
 		c.gridx = 0;
-		content.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.train.ml")), c);
+		content.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.train.ml")), c);
 		c.gridx = 1;
 		content.add(mlc, c);
 

@@ -25,7 +25,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * Description
@@ -55,7 +55,7 @@ public class AboutDialog extends JDialog {
 		JLabel txt = new JLabel(message);
 		content.add(txt, BorderLayout.CENTER);
 
-		JButton okay = new JButton(MessageUtil.m.formatMessage("ok"));
+		JButton okay = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
 		okay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();

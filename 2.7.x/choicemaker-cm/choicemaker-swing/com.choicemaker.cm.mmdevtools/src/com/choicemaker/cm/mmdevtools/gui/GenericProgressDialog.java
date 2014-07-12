@@ -26,7 +26,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * Description
@@ -109,12 +109,12 @@ public class GenericProgressDialog extends JDialog implements PropertyChangeList
 
 		c.gridx = 0;
 		c.anchor = GridBagConstraints.EAST;
-		ok = new JButton(MessageUtil.m.formatMessage("ok"));
+		ok = new JButton(ChoiceMakerCoreMessages.m.formatMessage("ok"));
 		ok.setEnabled(false);
 
 		getContentPane().add(ok, c);
 		c.gridx = 1;
-		cancel = new JButton(MessageUtil.m.formatMessage("cancel"));
+		cancel = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
 		getContentPane().add(cancel, c);
 	}
 		

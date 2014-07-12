@@ -62,8 +62,8 @@ public class LoggingObject {
 	}
 	
 	public String getFormattedMessage() {
-		//return MessageUtil.m.formatMessage(message, params);
-		return getFormattedMessage(MessageUtil.m);
+		//return ChoiceMakerCoreMessages.m.formatMessage(message, params);
+		return getFormattedMessage(ChoiceMakerCoreMessages.m);
 	}
 
 	public String getFormattedMessage(MessageUtil m) {

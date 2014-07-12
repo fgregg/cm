@@ -51,7 +51,7 @@ import com.choicemaker.cm.compiler.Tree.VarDecl;
 import com.choicemaker.cm.compiler.Type;
 import com.choicemaker.cm.compiler.parser.DefaultVisitor;
 import com.choicemaker.cm.core.compiler.CompilerException;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * ClueMaker type checker
@@ -163,7 +163,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 			&& t instanceof VarDecl)
 			return t.type;
 		else {
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.expected.but.found", p, t.type));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.expected.but.found", p, t.type));
 			return t.type = Type.ERROR;
 		}
 	}
@@ -213,7 +213,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 			type = derive.typeOf(t.tpe);
 		} else {
 			type = Type.DOUBLE;
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.primitivetype.expected"));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.primitivetype.expected"));
 		}
 		cluesetType = type;
 		typecheck(t.body, type, set.members(), true);
@@ -223,13 +223,13 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 	public void visit(ClueDecl t) throws CompilerException {
 		// enter clue if not already defined
 		if (scope.lookup(t.name) != Symbol.NONE)
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.duplicate.clue", t.name));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.duplicate.clue", t.name));
 		else
 			scope.enter(t.sym);
 		// create a local scope for this clue
 		Scope local = new Scope(t.sym, scope);
 		if (hasDecision && t.decision == NODEC || t.rule && t.decision == NODEC) {
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.decision.expected"));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.decision.expected"));
 		}
 		// enter indices
 		typecheck(t.indices, Type.NONE, local);
@@ -238,10 +238,10 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		Type exprtype = typecheck(t.expr, cst, local, true);
 		if (exprtype != Type.BOOLEAN) {
 			if ((t.clueModifiers & Modifiers.REPORT) != 0) {
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.report.booleanonly"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.report.booleanonly"));
 			}
 			if ((t.clueModifiers & Modifiers.NOTE) != 0) {
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.note.booleanonly"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.note.booleanonly"));
 			}
 		}
 		t.sym.setType(exprtype);
@@ -253,7 +253,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		t.sym = new VarSymbol(t.name, derive.typeOf(t.tpe), 0, scope.owner);
 		// enter the symbol into the current scope if new
 		if (scope.lookup(t.name) != Symbol.NONE)
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.variable.already.defined", t.name));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.variable.already.defined", t.name));
 		else
 			scope.enter(t.sym);
 		// typecheck the initializer
@@ -266,7 +266,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		t.sym = new VarSymbol(t.name, derive.typeOf(t.tpe), 0, scope.owner);
 		// enter the symbol into the current scope if new
 		if (scope.localLookup(t.name) != Symbol.NONE)
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.duplicate.index", t.name));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.duplicate.index", t.name));
 		else
 			scope.enter(t.sym);
 		// typecheck the initializer
@@ -293,7 +293,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 			if (((VarSymbol) t.sVars[i]).range == null) {
 				unit.error(
 					t.pos,
-					MessageUtil.m.formatMessage("compiler.typechecker.bound.variable.not.used", t.vars[i]));
+					ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.bound.variable.not.used", t.vars[i]));
 			}
 		}
 		if (t.valueExpr == null) {
@@ -331,7 +331,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 					Type baseType = ts.length > 0 ? ts[0] : Type.VOID;
 					for (int i = 0; i < ts.length; i++) {
 						if (ts[i] == Type.VOID) {
-							unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.illegal.void.type"));
+							unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.illegal.void.type"));
 						} else if (baseType.isPrim() ^ ts[i].isPrim()) {
 							unit.error(t.pos, "Incompatible types");
 						} else if (baseType.isPrim() && ts[i].isPrim()) {
@@ -350,7 +350,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				Type[] ts = typecheck(t.exprs, Type.ANY, scope);
 				for (int i = 0; i < ts.length; i++)
 					if (ts[i] == Type.VOID)
-						unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.illegal.void.type"));
+						unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.illegal.void.type"));
 		}
 		if (t.cond != null) {
 			typecheck(t.cond, Type.BOOLEAN, scope);
@@ -371,7 +371,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 			&& (t.access.symbol().getOwner().modifiers() & Modifiers.SCHEMA) != 0)
 			result = Type.BOOLEAN;
 		else {
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.only.schema.fields.valid"));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.only.schema.fields.valid"));
 			result = Type.ERROR;
 		}
 	}
@@ -391,7 +391,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		else if (t.elsep.type.subtype(t.thenp.type))
 			result = t.thenp.type;
 		else {
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.unable.type.conditional.expression"));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.unable.type.conditional.expression"));
 			result = Type.ERROR;
 		}
 	}
@@ -430,12 +430,12 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 			}
 			// no constructor found
 			if (e == ScopeEntry.NONE) {
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.constructor.not.found"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.constructor.not.found"));
 				result = Type.ERROR;
 			} else
 				result = ctpe;
 		} else {
-			unit.error(t.clazz.pos, MessageUtil.m.formatMessage("compiler.typechecker.cannot.instantiate", ctpe));
+			unit.error(t.clazz.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.cannot.instantiate", ctpe));
 			result = Type.ERROR;
 		}
 	}
@@ -448,7 +448,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 					typecheck(t.init[i], tpe, scope);
 				result = prototype;
 			} else {
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.cannot.derive.array.lit.type"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.cannot.derive.array.lit.type"));
 				result = Type.ERROR;
 			}
 		} else if (t.dims == null) {
@@ -459,7 +459,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 					typecheck(t.init[i], etpe, scope);
 				result = tpe;
 			} else {
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.array.type.expected"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.array.type.expected"));
 				result = Type.ERROR;
 			}
 		} else {
@@ -486,7 +486,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				default :
 					throw new CompilerException("illegal type operator " + t.tag);
 			} else {
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.cannot.apply.type.operator"));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.cannot.apply.type.operator"));
 			result = Type.ERROR;
 		}
 	}
@@ -501,7 +501,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				if (isIntegral(typecheck(t.arg, Type.ANY, scope)))
 					result = promote(t.arg.type);
 				else
-					unit.error(t.arg.pos, MessageUtil.m.formatMessage("compiler.typechecker.value.integral.expected"));
+					unit.error(t.arg.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.value.integral.expected"));
 				break;
 			case PLUS :
 			case MINUS :
@@ -510,7 +510,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				else
 					unit.error(
 						t.arg.pos,
-						MessageUtil.m.formatMessage("compiler.typechecker.primitive.numeric.value.expected"));
+						ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.primitive.numeric.value.expected"));
 				break;
 			default :
 				throw new CompilerException("illegal unary operator " + t.opcode);
@@ -577,7 +577,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				else
 					unit.error(
 						t.pos,
-						MessageUtil.m.formatMessage("compiler.typechecker.illegal.operation.on.types", left, right));
+						ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.illegal.operation.on.types", left, right));
 				break;
 			case LSHIFT :
 			case RSHIFT :
@@ -589,7 +589,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				else
 					unit.error(
 						t.pos,
-						MessageUtil.m.formatMessage("compiler.typechecker.integer.primitive.numeric.required"));
+						ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.integer.primitive.numeric.required"));
 				break;
 			case LT :
 			case GT :
@@ -602,7 +602,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				else
 					unit.error(
 						t.pos,
-						MessageUtil.m.formatMessage("compiler.typechecker.only.primitive.numeric.comparable"));
+						ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.only.primitive.numeric.comparable"));
 				break;
 			case EQEQ :
 			case NOTEQ :
@@ -610,14 +610,14 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 					result = Type.BOOLEAN;
 				else if (left.equals(Type.BOOLEAN)) {
 					if (!right.equals(Type.BOOLEAN))
-						unit.error(t.right.pos, MessageUtil.m.formatMessage("compiler.typechecker.boolean.required"));
+						unit.error(t.right.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.boolean.required"));
 					else
 						result = Type.BOOLEAN;
 				} else if (isNumeric(left)) {
 					if (!isNumeric(right))
 						unit.error(
 							t.right.pos,
-							MessageUtil.m.formatMessage("compiler.typechecker.primitive.numeric.required"));
+							ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.primitive.numeric.required"));
 					else
 						result = Type.BOOLEAN;
 				} else if (left.isRef()) {
@@ -629,9 +629,9 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 					else
 						unit.error(
 							t.right.pos,
-							MessageUtil.m.formatMessage("compiler.typechecker.primitive.numeric.required"));
+							ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.primitive.numeric.required"));
 				} else
-					unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.cannot.compare"));
+					unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.cannot.compare"));
 				break;
 			case AND :
 			case OR :
@@ -640,7 +640,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 					result = Type.BOOLEAN;
 				else if (left.equals(Type.BOOLEAN)) {
 					if (!right.equals(Type.BOOLEAN))
-						unit.error(t.right.pos, MessageUtil.m.formatMessage("compiler.typechecker.boolean.required"));
+						unit.error(t.right.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.boolean.required"));
 					else
 						result = Type.BOOLEAN;
 				} else if (isNumeric(left) && isNumeric(right))
@@ -648,7 +648,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				else
 					unit.error(
 						t.pos,
-						MessageUtil.m.formatMessage("compiler.typechecker.illegal.operation.on.types", left, right));
+						ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.illegal.operation.on.types", left, right));
 				break;
 			case ANDAND :
 			case OROR :
@@ -657,7 +657,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				else if ((left.equals(Type.BOOLEAN)) && (right.equals(Type.BOOLEAN)))
 					result = Type.BOOLEAN;
 				else
-					unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.boolean.operands.required"));
+					unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.boolean.operands.required"));
 				break;
 			default :
 				throw new CompilerException("illegal binary operator");
@@ -779,7 +779,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 			if (s.range == null) {
 				s.range = expr;
 			} else if (!s.range.equals(expr)) {
-				unit.error(expr.pos, MessageUtil.m.formatMessage("compiler.typechecker.incompatible.ranges", s));
+				unit.error(expr.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.incompatible.ranges", s));
 			}
 		}
 	}
@@ -818,14 +818,14 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				} else
 					unit.error(
 						t.pos,
-						MessageUtil.m.formatMessage(
+						ChoiceMakerCoreMessages.m.formatMessage(
 							"compiler.typechecker.cannot.resolve.identifier.in",
 							t.name,
 							t.qualifier));
 			} else if (accessible(s))
 				t.sym = s;
 			else
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.cannot.access", s));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.cannot.access", s));
 			result = t.sym.getType();
 			// is the qualifier an object?
 		} else if (tpe.isObject()) {
@@ -860,7 +860,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				}
 				if (c == repository.objectClass) {
 					if (pool.empty()) {
-						unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.member.not.found", t.name));
+						unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.member.not.found", t.name));
 						break;
 					}
 					c = (ClassSymbol) pool.pop();
@@ -874,7 +874,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 			result = t.sym.getType();
 			// unable to select from a value that is not a package or an object
 		} else {
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.cannot.select", t.name, tpe));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.cannot.select", t.name, tpe));
 			result = Type.ERROR;
 		}
 	}
@@ -906,9 +906,9 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 		// package or a class
 		if (t.sym == Symbol.BAD) {
 			if (kind == SemanticTags.MTH)
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.method.not.found"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.method.not.found"));
 			else if (unit.getAmbiguousImports().lookup(t.name) != Symbol.NONE)
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.ambiguous.class.reference"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.ambiguous.class.reference"));
 			else {
 				// start looking into the named import scope
 				Symbol s = unit.getNamedImports().lookup(t.name);
@@ -937,7 +937,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 					else {
 						unit.error(
 							t.pos,
-							MessageUtil.m.formatMessage("compiler.typechecker.cannot.resolve.identifier", t.name));
+							ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.cannot.resolve.identifier", t.name));
 						result = Type.ERROR;
 					}
 				}
@@ -955,7 +955,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				break;
 			case R :
 				if (typeOfR == Type.NONE) {
-					unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.r.outside.shorthand"));
+					unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.r.outside.shorthand"));
 					result = Type.ERROR;
 				} else
 					result = typeOfR;
@@ -995,7 +995,7 @@ public class TypeChecker extends DefaultVisitor implements Tags {
 				result = repository.stringClass.getType();
 				break;
 			default :
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.typechecker.unknown.literal"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.typechecker.unknown.literal"));
 				result = Type.ERROR;
 		}
 	}

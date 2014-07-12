@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 public class AccuracyTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
@@ -26,13 +26,13 @@ public class AccuracyTableModel extends AbstractTableModel {
 	private TableModelEvent tme;
 	private String[] columnNames;
 	private static final String ACCURACY =
-		MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.accuracy");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.accuracy");
 	private static final String HUMAN_REVIEW =
-		MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.humanreview");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.humanreview");
 	private static final String DIFFER_THRESHOLD =
-		MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.differthreshold");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.differthreshold");
 	private static final String MATCH_THRESHOLD =
-		MessageUtil.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.matchthreshold");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.holdvsacc.table.matchthreshold");
 	private static final DecimalFormat DF2 = new DecimalFormat("##0.00");
 
 	public AccuracyTableModel(boolean firstColAcc, float[] firstColumn) {
@@ -68,7 +68,7 @@ public class AccuracyTableModel extends AbstractTableModel {
 	}
 
 	public String getTitle() {
-		return MessageUtil.m.formatMessage("train.gui.modelmaker.table.confusion.label");
+		return ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.table.confusion.label");
 	}
 
 	public int getColumnCount() {

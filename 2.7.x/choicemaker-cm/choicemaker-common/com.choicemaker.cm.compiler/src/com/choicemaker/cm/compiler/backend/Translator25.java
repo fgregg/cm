@@ -66,7 +66,7 @@ import com.choicemaker.cm.core.ClueSetType;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ExtDecision;
 import com.choicemaker.cm.core.compiler.CompilerException;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * Main translator class. Should be completely rewritten. See spreadsheet for todos.
@@ -972,7 +972,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 */
 	public void visit(Quantified t) throws CompilerException {
 		if (insideShorthand)
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.translator.no.quant.inside.limitation"));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.translator.no.quant.inside.limitation"));
 		if ((t.quantifier == EXISTS) || (t.quantifier == ALL)) {
 			if (visitAorE(t)) //return only if it was handled
 				return;
@@ -1174,7 +1174,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 
 	public void visit(Let t) throws CompilerException {
 		if (insideShorthand)
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.translator.no.let.inside.limitation"));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.translator.no.let.inside.limitation"));
 		if (t.binders != null)
 			for (int i = 0; i < t.binders.length; ++i) {
 				t.binders[i].apply(this);
@@ -1258,7 +1258,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 			res = new Binop(Location.NOPOS, opcode, qExpr, res);
 		} else {
 			if (insideShorthand) {
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.translator.no.shorthand.inside.limitation"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.translator.no.shorthand.inside.limitation"));
 				res = t;
 				return;
 			}
@@ -1696,7 +1696,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		if (t.sym instanceof ClueSymbol) {
 			ClueDecl clue = ((ClueSymbol)t.sym).decl;
 			if ((clue.indices != null) && (clue.indices.length != 0))
-				unit.error(t.pos, MessageUtil.m.formatMessage("compiler.translator.no.indexed.referencing.limitation"));
+				unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.translator.no.indexed.referencing.limitation"));
 			Tree[] args = { q_ident(t.pos), m_ident(t.pos) };
 			res = new Apply(t.pos, new Ident(t.pos, "getClue" + t.name), args);
 			res.type = t.type;
@@ -1720,7 +1720,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 
 	public void visit(Valid t) throws CompilerException {
 		if (insideShorthand)
-			unit.error(t.pos, MessageUtil.m.formatMessage("compiler.translator.no.valid.inside.limitation"));
+			unit.error(t.pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.translator.no.valid.inside.limitation"));
 		Select s = (Select) t.access;
 		s.qualifier.apply(this);
 		res = new Select(s.pos, res, "__v_" + s.name);

@@ -26,7 +26,7 @@ import javax.swing.event.ListSelectionListener;
 
 import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationEvent;
@@ -55,7 +55,7 @@ public class RecordPairList
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.recordpairlist")), c);
+		add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.recordpairlist")), c);
 		recordPairListModel = new DefaultListModel();
 		recordPairList = new JList(recordPairListModel);
 		JScrollPane p = new JScrollPane(recordPairList);

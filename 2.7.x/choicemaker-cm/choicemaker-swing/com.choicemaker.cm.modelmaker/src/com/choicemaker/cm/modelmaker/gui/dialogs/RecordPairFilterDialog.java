@@ -22,7 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -45,7 +45,7 @@ public class RecordPairFilterDialog extends JDialog {
 	private JButton set;
 
 	public RecordPairFilterDialog(ModelMaker g) {
-		super(g, MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.recordpairfilter.label"), false);
+		super(g, ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.recordpairfilter.label"), false);
 		parent = g;
 		// Fail fast
 		filter = parent.getFilter();
@@ -86,9 +86,9 @@ public class RecordPairFilterDialog extends JDialog {
 		panel = new JPanel();
 		content = new FilterCluePanel(parent, parent.getFilter());
 
-		cancel = new JButton(MessageUtil.m.formatMessage("cancel"));
-		reSet = new JButton(MessageUtil.m.formatMessage("reset"));
-		set = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.recordpairfilter.apply"));
+		cancel = new JButton(ChoiceMakerCoreMessages.m.formatMessage("cancel"));
+		reSet = new JButton(ChoiceMakerCoreMessages.m.formatMessage("reset"));
+		set = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.recordpairfilter.apply"));
 	}
 
 

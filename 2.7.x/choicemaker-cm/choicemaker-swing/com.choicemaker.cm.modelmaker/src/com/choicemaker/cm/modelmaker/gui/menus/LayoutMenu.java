@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.gui.utils.viewer.xmlconf.RecordPairViewerXmlConf;
@@ -47,7 +47,7 @@ public class LayoutMenu extends LastUsedMenu {
 	private HumanReviewPanel parent;
 
 	public LayoutMenu(HumanReviewPanel g) {
-		super(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.layout"), PreferenceKeys.LAYOUT_MENU, 10);
+		super(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.layout"), PreferenceKeys.LAYOUT_MENU, 10);
 		parent = g;
 		this.setMnemonic(KeyEvent.VK_L);
 		buildMenu();
@@ -83,7 +83,7 @@ public class LayoutMenu extends LastUsedMenu {
 	}
 
 	public void buildMenu() {
-		Action newAction = new LayoutAction(MessageUtil.m.formatMessage("new"), null, true) {
+		Action newAction = new LayoutAction(ChoiceMakerCoreMessages.m.formatMessage("new"), null, true) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -92,7 +92,7 @@ public class LayoutMenu extends LastUsedMenu {
 		};
 		add(newAction);
 
-		Action openAction = new LayoutAction(MessageUtil.m.formatMessage("open.elipsis"), null, true) {
+		Action openAction = new LayoutAction(ChoiceMakerCoreMessages.m.formatMessage("open.elipsis"), null, true) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -104,7 +104,7 @@ public class LayoutMenu extends LastUsedMenu {
 		};
 		add(openAction);
 
-		Action saveAction = new LayoutAction(MessageUtil.m.formatMessage("save"), null, true) {
+		Action saveAction = new LayoutAction(ChoiceMakerCoreMessages.m.formatMessage("save"), null, true) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -122,7 +122,7 @@ public class LayoutMenu extends LastUsedMenu {
 		};
 		add(saveAction);
 
-		Action saveAsAction = new LayoutAction(MessageUtil.m.formatMessage("saveas.elipsis"), null, true) {
+		Action saveAsAction = new LayoutAction(ChoiceMakerCoreMessages.m.formatMessage("saveas.elipsis"), null, true) {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -148,8 +148,8 @@ public class LayoutMenu extends LastUsedMenu {
 					if (JOptionPane
 						.showConfirmDialog(
 							this,
-							MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.savelayout.replace", fileName),
-							MessageUtil.m.formatMessage("confirm"),
+							ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.savelayout.replace", fileName),
+							ChoiceMakerCoreMessages.m.formatMessage("confirm"),
 							JOptionPane.YES_NO_OPTION,
 							JOptionPane.WARNING_MESSAGE)
 						!= JOptionPane.YES_OPTION) {

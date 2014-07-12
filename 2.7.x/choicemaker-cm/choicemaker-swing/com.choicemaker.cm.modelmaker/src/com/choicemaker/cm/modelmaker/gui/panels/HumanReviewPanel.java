@@ -48,7 +48,7 @@ import com.choicemaker.cm.core.RepositoryChangeEvent;
 import com.choicemaker.cm.core.RepositoryChangeListener;
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -182,20 +182,20 @@ public class HumanReviewPanel
 		cmDecisionPanel = new JPanel();
 		cmDecisionPanel.setBorder(
 			BorderFactory.createTitledBorder(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.decisions")));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.decisions")));
 
 		choiceMakerProbabilityLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.probability"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.probability"));
 		choiceMakerProbabilityField = new JTextField(20);
 		choiceMakerProbabilityField.setEditable(false);
 
 		choiceMakerDecisionLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.cm"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.cm"));
 		choiceMakerDecisionField = new JTextField(20);
 		choiceMakerDecisionField.setEditable(false);
 
 		markedDecisionLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.human"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.human"));
 		String[] decisionValues = new String[Decision.NUM_DECISIONS];
 		for (int i = 0; i < Decision.NUM_DECISIONS; ++i) {
 			decisionValues[i] = Decision.valueOf(i).toString();
@@ -207,7 +207,7 @@ public class HumanReviewPanel
 		markedDecisionComboBox.setEnabled(false);
 		markedDecisionComboBox.setMinimumSize(markedDecisionComboBox.getPreferredSize());
 
-		fullButton = new JButton(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.more"));
+		fullButton = new JButton(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.more"));
 		fullButton.setEnabled(false);
 		fullButton.setMinimumSize(fullButton.getPreferredSize());
 	}
@@ -217,14 +217,14 @@ public class HumanReviewPanel
 		//navigationPanel.setPreferredSize(new Dimension(200, 120));
 		navigationPanel.setBorder(
 			BorderFactory.createTitledBorder(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation")));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation")));
 
-		selectionSizeLabel = new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation.selection.size"));
+		selectionSizeLabel = new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation.selection.size"));
 		selectionSize = new JTextField(10);
 		selectionSize.setEditable(false);
 
 		nextInLoggerLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation.selection.next"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation.selection.next"));
 		stepForwardButton = new JButton(forwardIcon);
 		stepForwardButton.setEnabled(false);
 		stepForwardButton.setMnemonic(KeyEvent.VK_N);
@@ -233,12 +233,12 @@ public class HumanReviewPanel
 		stepBackButton.setMnemonic(KeyEvent.VK_P);
 
 		currentRecordLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation.current"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation.current"));
 		currentRecord = new JTextField(Integer.toString(markedRecordPairIndex), 8);
 		currentRecord.setEnabled(false);
 
 		globalSelectLabel =
-			new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation.all"));
+			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.navigation.all"));
 		recordPairSlider = new JSlider(JSlider.HORIZONTAL);
 		recordPairSlider.setPaintTicks(true);
 		recordPairSlider.setPaintLabels(true);
@@ -524,10 +524,10 @@ public class HumanReviewPanel
 	private void setChoiceMakerDecisionField() {
 		choiceMakerDecisionField.setText(
 			Evaluator.isBasedOnRule(markedRP, parent.getThresholds())
-				? MessageUtil.m.formatMessage(
+				? ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.panel.humanreview.rulebased",
 					markedRP.getCmDecision().toString())
-				: MessageUtil.m.formatMessage(
+				: ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.panel.humanreview.not.rulebased",
 					markedRP.getCmDecision().toString()));
 		choiceMakerDecisionField.setForeground(markedRP.getMarkedDecision() == markedRP.getCmDecision() ? Color.black : Color.red);
@@ -890,7 +890,7 @@ public class HumanReviewPanel
 		private static final long serialVersionUID = 1L;
 
 		HumanDataDialog() {
-			super(parent, MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.info"));
+			super(parent, ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.info"));
 			JPanel content = new JPanel();
 			GridBagLayout layout = new GridBagLayout();
 			content.setLayout(layout);
@@ -899,20 +899,20 @@ public class HumanReviewPanel
 			c.gridy = 0;
 			c.gridx = 0;
 			c.anchor = GridBagConstraints.NORTHWEST;
-			content.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.user")), c);
+			content.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.user")), c);
 			c.gridx = 1;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			content.add(user, c);
 
 			c.gridy = 1;
 			c.gridx = 0;
-			content.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.date")), c);
+			content.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.date")), c);
 			c.gridx = 1;
 			content.add(date, c);
 
 			c.gridy = 2;
 			c.gridx = 0;
-			content.add(new JLabel(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.comment")), c);
+			content.add(new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.comment")), c);
 			c.gridx = 1;
 			c.weightx = 1;
 			c.weighty = 1;

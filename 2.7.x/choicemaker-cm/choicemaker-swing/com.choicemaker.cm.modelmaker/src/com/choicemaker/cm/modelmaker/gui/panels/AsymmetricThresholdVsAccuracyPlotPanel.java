@@ -25,7 +25,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 //import org.apache.log4j.Logger;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
  * Hold percentage versus accuracy using a independent match/differ thresholds.
@@ -38,8 +38,8 @@ public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 	private static final long serialVersionUID = -1283403271414404208L;
 
 //	private static Logger logger = Logger.getLogger(AsymmetricThresholdVsAccuracyPlotPanel.class);
-	private static final String PRECISION = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.precision");
-	private static final String RECALL = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.recall");
+	private static final String PRECISION = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.precision");
+	private static final String RECALL = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.recall");
 	private TestingControlPanel parent;
 	private JFreeChart dPlot;
 	private JFreeChart mPlot;
@@ -66,23 +66,23 @@ public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 			buildPlot(
 				differPrecision,
 				differRecall,
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.hold.vs.accuracy.d.title"),
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.threshold.differ"));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.hold.vs.accuracy.d.title"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.threshold.differ"));
 		matchPrecision = new XYSeries(PRECISION);
 		matchRecall = new XYSeries(RECALL);
 		mPlot =
 			buildPlot(
 				matchPrecision,
 				matchRecall,
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.hold.vs.accuracy.m.title"),
-				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.threshold.match"));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.hold.vs.accuracy.m.title"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.threshold.match"));
 	}
 
 	private JFreeChart buildPlot(XYSeries d, XYSeries m, String title, String xAxis) {
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		dataset.addSeries(d);
 		dataset.addSeries(m);
-		final String yAxis = MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.cm.accuracy");
+		final String yAxis = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.cm.accuracy");
 		final PlotOrientation orientation = PlotOrientation.VERTICAL;
 		final boolean hasLegend = true;
 		final boolean hasToolTips = true;
@@ -91,7 +91,7 @@ public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 //			ChartFactory.createLineXYChart(
 //				title,
 //				xAxis,
-//				MessageUtil.m.formatMessage("train.gui.modelmaker.panel.asymm.cm.accuracy"),
+//				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.cm.accuracy"),
 //				dataset,
 //				true, true, true);
 		ChartFactory.createXYLineChart(title, xAxis, yAxis, dataset, orientation, hasLegend, hasToolTips, hasURLs);

@@ -20,7 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;
 import com.choicemaker.cm.gui.utils.viewer.RecordTable;
 import com.choicemaker.cm.gui.utils.viewer.RecordTableModel;
@@ -37,7 +37,7 @@ public class RecordPairFramePopupManager extends MouseAdapter {
 //	private static Logger logger = Logger.getLogger(RecordPairFramePopupManager.class);
 	private static final String EDIT_COL = "Edit Columns";
 	private static final String INSERT =
-		MessageUtil.m.formatMessage("train.gui.modelmaker.listener.recordviewer.insert.row");
+		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.recordviewer.insert.row");
 
 
 	private boolean enableEditing;

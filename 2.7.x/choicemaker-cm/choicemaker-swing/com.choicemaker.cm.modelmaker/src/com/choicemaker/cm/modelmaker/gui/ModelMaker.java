@@ -75,7 +75,7 @@ import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.LoggingObject;
-import com.choicemaker.cm.core.util.MessageUtil;
+import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.AboutDialog;
@@ -149,7 +149,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			}
 			public void postInfo(String s) {
 				String displayString =
-					MessageUtil.m.formatMessage("train.gui.modelmaker.message.info", s) + Constants.LINE_SEPARATOR;
+					ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.info", s) + Constants.LINE_SEPARATOR;
 				ModelMaker.this.getMessagePanel().postMessage(displayString);
 			}
 	};
@@ -220,7 +220,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	private EventMultiplexer probabilityModelEventMultiplexer = new EventMultiplexer();
 	private EventListenerList listenerList = new EventListenerList();
 
-	private static final String FRAME_TITLE = MessageUtil.m.formatMessage("train.gui.modelmaker.title");
+	private static final String FRAME_TITLE = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.title");
 
 	public EventMultiplexer getProbabilityModelEventMultiplexer() {
 		return probabilityModelEventMultiplexer;
@@ -302,17 +302,17 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		JavaHelpUtils.init(ModelMaker.class.getClassLoader());
 
 		// Toolbar
-		toolbar = new ToolBar(this, MessageUtil.m.formatMessage("train.gui.modelmaker.modelmaker"));
+		toolbar = new ToolBar(this, ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.modelmaker"));
 		getContentPane().add(toolbar, BorderLayout.NORTH);
 
 		// Menus
 		myMenuBar = new JMenuBar();
 		setJMenuBar(myMenuBar);
 
-		JMenu fileMenu = new JMenu(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.file"));
+		JMenu fileMenu = new JMenu(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.file"));
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		myMenuBar.add(fileMenu);
-		exitItem = new JMenuItem(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.file.exit"));
+		exitItem = new JMenuItem(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.file.exit"));
 		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
 		fileMenu.add(exitItem);
 
@@ -344,10 +344,10 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 		//TabbedPane
 		tabbedPane = new JTabbedPane();
-		tabbedPane.addTab(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.training.tabtext"), trainingPanel);
-		tabbedPane.addTab(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.test.tabtext"), testingPanel);
-		tabbedPane.addTab(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.cluster.tabtext"), modulePanel);
-		tabbedPane.addTab(MessageUtil.m.formatMessage("train.gui.modelmaker.panel.humanreview.tabtext"), reviewPanel);
+		tabbedPane.addTab(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.training.tabtext"), trainingPanel);
+		tabbedPane.addTab(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.test.tabtext"), testingPanel);
+		tabbedPane.addTab(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.cluster.tabtext"), modulePanel);
+		tabbedPane.addTab(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.humanreview.tabtext"), reviewPanel);
 
 		//SplitPane to hold everything.
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -372,12 +372,12 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		myMenuBar.add(dmm);
 		myMenuBar.add(new ToolsMenu(this));
 
-		JMenu helpMenu = new JMenu(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.help"));
+		JMenu helpMenu = new JMenu(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.help"));
 		myMenuBar.add(helpMenu);
 		JMenuItem contentsItem = new JMenuItem("Contents");
 		JavaHelpUtils.enableHelp(contentsItem, "train.gui.modelmaker");
 		helpMenu.add(contentsItem);
-		aboutItem = new JMenuItem(MessageUtil.m.formatMessage("train.gui.modelmaker.menu.help.about"));
+		aboutItem = new JMenuItem(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.help.about"));
 		helpMenu.add(aboutItem);
 
 		JavaHelpUtils.enableHelpKey(this, "train.gui.modelmaker");
@@ -392,7 +392,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 		aboutItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				String title = MessageUtil.m.formatMessage("train.gui.modelmaker.title");
+				String title = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.title");
 
 				Date d = null;
 				try {
@@ -400,7 +400,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				} catch(Exception ex) {
 					// DO NOTHING
 				}
-				String text = MessageUtil.m.formatMessage("train.gui.modelmaker.dialog.about.message", d);
+				String text = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.about.message", d);
 
 				new AboutDialog(ModelMaker.this, title, text).setVisible(true);
 			}
@@ -598,7 +598,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			// AJW 2004-04-26: removed to avoid duplicate error messages.
 			//logger.error(new LoggingObject("CM-100502", modelName, ex));
 			throw new OperationFailedException(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.model.retrieve.error", modelName),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.retrieve.error", modelName),
 				ex);
 		} finally {
 			setCursor(cursor);
@@ -645,36 +645,36 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	public void postProbabilityModelInfo() {
 		if (probabilityModel != null) {
-			postInfo(MessageUtil.m.formatMessage("train.gui.modelmaker.model.name", probabilityModel.getName()));
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.name", probabilityModel.getName()));
 			postInfo(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.clue.file.name",
 					probabilityModel.getClueFileName()));
 			postInfo(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.schema.file.name",
 					probabilityModel.getAccessor().getSchemaFileName()));
 			postInfo(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.user",
 					probabilityModel.getUserName()));
 			postInfo(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.date",
 					probabilityModel.getLastTrainingDate()));
 			postInfo(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.source",
 					probabilityModel.getTrainingSource()));
 			postInfo(probabilityModel.isTrainedWithHolds() ? "Trained with holds" : "Trained without holds");
 			postInfo(
-				MessageUtil.m.formatMessage(
+				ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.firing.threshold",
 					new Integer(probabilityModel.getFiringThreshold())));
 			MachineLearner ml = probabilityModel.getMachineLearner();
 			if(ml != null && !(ml instanceof DoNothingMachineLearning)) {
 				postInfo(
-					MessageUtil.m.formatMessage(
+					ChoiceMakerCoreMessages.m.formatMessage(
 						"train.gui.modelmaker.model.last.train.ml",
 						MlGuiFactories.getGui(probabilityModel.getMachineLearner())));
 				String modelInfo = ml.getModelInfo();
@@ -698,7 +698,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			pm = ProbabilityModelsXmlConf.readModel(modelName,is,compiler,statusOutput);
 		} catch (XmlConfException ex) {
 			throw new OperationFailedException(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.model.retrieve.error", modelName));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.retrieve.error", modelName));
 		} catch(FileNotFoundException ex) {
 			String msg = "Unable to find '" + modelName + "'";
 			throw new OperationFailedException(msg);
@@ -717,10 +717,10 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		try {
 			ProbabilityModelsXmlConf.saveModel(pm);
 			//logger.info("Saved probability model to disk: " + pm.getName());
-			postInfo(MessageUtil.m.formatMessage("train.gui.modelmaker.model.saved", pm.getName()));
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.saved", pm.getName()));
 		} catch (XmlConfException ex) {
 			throw new OperationFailedException(
-				MessageUtil.m.formatMessage("train.gui.modelmaker.model.save.error", pm.getName()),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.save.error", pm.getName()),
 				ex);
 		}
 	}
@@ -957,7 +957,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 					multiSourceLists[usedMultiSource] = sourceList;
 				} catch (IOException ex) {
 					throw new OperationFailedException(
-						MessageUtil.m.formatMessage("train.gui.modelmaker.source.list.retrieve.error"),
+						ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.source.list.retrieve.error"),
 						ex);
 				}
 			} else {
@@ -1114,15 +1114,15 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			ThreadWatcher.watchThread(
 				t,
 				this,
-				MessageUtil.m.formatMessage("train.gui.modelmaker.wait"),
-				MessageUtil.m.formatMessage("train.gui.modelmaker.evaluation.evaulate"));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.wait"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.evaluation.evaulate"));
 		if (interrupted) {
 			postInfo("Clue evaluation cancelled.");
 			multiSourceLists[usedMultiSource] = null;
 			setEvaluated(false);
 		} else {
 			long deltaT = System.currentTimeMillis() - t0;
-			postInfo(MessageUtil.m.formatMessage("train.gui.modelmaker.evaluation.complete", new Long(deltaT)));
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.evaluation.complete", new Long(deltaT)));
 			setEvaluated(haveSourceList());
 		}
 	}
@@ -1174,7 +1174,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			}
 		}
 		if (firingThreshold < 2) {
-			//postError(MessageUtil.m.formatMessage("train.gui.modelmaker.train.firing.threshold.warning"));
+			//postError(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.train.firing.threshold.warning"));
 			return false;
 		}
 		probabilityModel.beginMultiPropertyChange();
@@ -1206,8 +1206,8 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			ThreadWatcher.watchThread(
 				t,
 				this,
-				MessageUtil.m.formatMessage("train.gui.modelmaker.wait"),
-				MessageUtil.m.formatMessage("train.gui.modelmaker.train.train"));
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.wait"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.train.train"));
 		if (interrupted) {
 			postInfo("Training cancelled.");
 			probabilityModel.endMultiPropertyChange();
@@ -1221,7 +1221,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				probabilityModel.setTrainedWithHolds(isIncludeHolds());
 				probabilityModel.setUserName(System.getProperty("user.name"));
 				long deltaT = System.currentTimeMillis() - t0;
-				postInfo(MessageUtil.m.formatMessage("train.gui.modelmaker.train.complete", new Long(deltaT)));
+				postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.train.complete", new Long(deltaT)));
 				probabilityModel.endMultiPropertyChange();
 				if (andTest && usedMultiSource == 0 && multiSources[1] != null) {
 					evaluateClues();
@@ -1392,7 +1392,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	 */
 	private void postInfo(String s) {
 //		String displayString =
-//			MessageUtil.m.formatMessage("train.gui.modelmaker.message.info", s) + Constants.LINE_SEPARATOR;
+//			ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.info", s) + Constants.LINE_SEPARATOR;
 //		messagePanel.postMessage(displayString);
 		this.getUserMessages().postInfo(s);
 	}
@@ -1402,7 +1402,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	 */
 	//public void postWarning(String s) {
 	//	String displayString =
-	//		MessageUtil.m.formatMessage("train.gui.modelmaker.message.warning", s) + Constants.LINE_SEPARATOR;
+	//		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.warning", s) + Constants.LINE_SEPARATOR;
 	//	messagePanel.postMessage(displayString);
 	//}
 
@@ -1411,7 +1411,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	 */
 	//public void postError(String s) {
 	//	String displayString =
-	//		MessageUtil.m.formatMessage("train.gui.modelmaker.message.error", s) + Constants.LINE_SEPARATOR;
+	//		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.error", s) + Constants.LINE_SEPARATOR;
 	//	messagePanel.postMessage(displayString);
 	//}
 
@@ -1420,7 +1420,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	 */
 	//public void postFatalError(String s) {
 	//	String displayString =
-	//		MessageUtil.m.formatMessage("train.gui.modelmaker.message.fatal.error", s) + Constants.LINE_SEPARATOR;
+	//		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.message.fatal.error", s) + Constants.LINE_SEPARATOR;
 	//	messagePanel.clearMessages();
 	//	messagePanel.postMessage(displayString);
 	//}
@@ -1541,8 +1541,8 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(
 				null,
-				MessageUtil.m.formatMessage("train.gui.modelmaker.configurationfile.invalid.error", conf),
-				MessageUtil.m.formatMessage("error"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.configurationfile.invalid.error", conf),
+				ChoiceMakerCoreMessages.m.formatMessage("error"),
 				JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
@@ -1593,8 +1593,8 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(
 				null,
-				MessageUtil.m.formatMessage("train.gui.modelmaker.configurationfile.invalid.error", conf),
-				MessageUtil.m.formatMessage("error"),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.configurationfile.invalid.error", conf),
+				ChoiceMakerCoreMessages.m.formatMessage("error"),
 				JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
