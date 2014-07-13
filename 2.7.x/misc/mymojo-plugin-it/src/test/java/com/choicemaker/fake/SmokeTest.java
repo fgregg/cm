@@ -234,7 +234,6 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		}
 	}
 
-/*
 	public void testClean() {
 		verifyCleanBuildDirectory();
 		String diagnostic = MAVEN_CLEAN_GOAL;
@@ -267,7 +266,6 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		executeMavenGoal(verifier, MAVEN_CLEAN_GOAL);
 		verifyCleanBuildDirectory();
 	}
-*/
 	
 	public void testCompile() {
 		verifyCleanBuildDirectory();
