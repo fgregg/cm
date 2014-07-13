@@ -14,21 +14,21 @@ import java.util.ResourceBundle;
 
 
 /**
- * Description
+ * The core set of messages used by ChoiceMaker. This class has only one
+ * instance, <code>m</code>, and all of its functionality is defined by its
+ * superclass, {@link MessageUtil}
  *
- * @author    Martin Buechi
- * @version   $Revision: 1.2 $ $Date: 2010/03/27 21:21:01 $
+ * @author    rphall (refactored from MessageUtil)
  */
-
 public class ChoiceMakerCoreMessages extends MessageUtil {
+	
+	public static final String RESOURCE_BUNDLE = "com.choicemaker.cm.core.util.res.ChoiceMaker";
 
-	public static ChoiceMakerCoreMessages m = new ChoiceMakerCoreMessages("com.choicemaker.cm.core.util.res.ChoiceMaker");
+	public static ChoiceMakerCoreMessages m = new ChoiceMakerCoreMessages(RESOURCE_BUNDLE);
 
-	public ChoiceMakerCoreMessages(String name) {
-		myResources = ResourceBundle.getBundle(name);
+	// TESTING ONLY
+	ChoiceMakerCoreMessages(String name) {
+		super(name);
 	}
 
-	public ChoiceMakerCoreMessages(ResourceBundle myResources) {
-		this.myResources = myResources;
-	}
 }

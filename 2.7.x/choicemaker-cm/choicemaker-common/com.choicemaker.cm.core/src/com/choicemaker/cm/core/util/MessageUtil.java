@@ -7,14 +7,25 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A utility class that formats user-visible text using a specified resource
+ * bundle.
+ *
+ * @author    Martin Buechi
+ * @see ChoiceMakerCoreMessages
+ */
 public class MessageUtil {
 
-	private static Logger logger = Logger.getLogger(ChoiceMakerCoreMessages.class);
-	private static Object[] ZERO_LENGTH_ARRAY = new Object[0];
+	private static final Logger logger = Logger.getLogger(MessageUtil.class);
+	private static final Object[] ZERO_LENGTH_ARRAY = new Object[0];
 	protected ResourceBundle myResources;
 
-	public MessageUtil() {
-		super();
+	public MessageUtil(String name) {
+		myResources = ResourceBundle.getBundle(name);
+	}
+
+	public MessageUtil(ResourceBundle myResources) {
+		this.myResources = myResources;
 	}
 
 	private String getMessageString(String messageKey) {
