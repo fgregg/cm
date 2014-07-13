@@ -8,16 +8,67 @@
 	<packaging>jar</packaging>
 	<name>MyMojo Plugin Smoke Test</name>
 
-    <!-- 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<parent.build.dir>../../../../target</parent.build.dir>
-		<parent.generated-source.dir>${parent.build.dir}/generated-source</parent.generated-source.dir>
-		<parent.compiled-code.dir>${parent.build.dir}/classes</parent.compiled-code.dir>
-	</properties>
-    -->
-
 	<dependencies>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.core</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.io.db.base</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.io.xml.base</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.matching.cfg</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.matching.en</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.matching.en.au</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>com.choicemaker.cm.matching.en.us</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.urm.base</artifactId>
+			<version>2.7.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -45,13 +96,7 @@
 				<groupId>com.choicemaker.fake</groupId>
 				<artifactId>mymojo-maven-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
-				<configuration>
-				    <!--
-					<cluemakerDirectory>src/main/cluemaker</cluemakerDirectory>
-					<generatedSourceDirectory>${parent.generated-source.dir}</generatedSourceDirectory>
-					<compiledCodeDirectory>${parent.compiled-code.dir}</compiledCodeDirectory>
-					-->
-				</configuration>
+				<configuration/>
 				<executions>
 					<execution>
 						<id>generate</id>

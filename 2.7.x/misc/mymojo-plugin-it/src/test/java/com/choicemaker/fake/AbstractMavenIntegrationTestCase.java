@@ -349,7 +349,7 @@ public abstract class AbstractMavenIntegrationTestCase
         return simpleName;
     }
 
-    private String getTestName()
+    protected String getTestName()
     {
         String className = getITName();
         String methodName = getName();

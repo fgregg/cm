@@ -1,4 +1,4 @@
-package com.choicemaker.util3;
+package com.choicemaker.it.util;
 
 import java.io.File;
 import java.io.IOException;

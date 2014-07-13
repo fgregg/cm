@@ -1,6 +1,5 @@
 package com.choicemaker.fake;
 
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -20,10 +19,10 @@ import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
 import org.apache.maven.it.util.ResourceExtractor;
 
+import com.choicemaker.it.util.DefaultFileContentListener;
+import com.choicemaker.it.util.FileTreeComparator;
 import com.choicemaker.util.FileUtilities;
 import com.choicemaker.util.SystemPropertyUtils;
-import com.choicemaker.util3.DefaultFileContentListener;
-import com.choicemaker.util3.FileTreeComparator;
 
 /**
  * Based on the maven-it-sample archetype.
@@ -154,6 +153,9 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 	/** Maven 'generate-sources' goal */
 	public static final String MAVEN_GENERATE_SOURCES_GOAL = "generate-sources";
 
+	/** Maven 'compile' goal */
+	public static final String MAVEN_COMPILE_GOAL = "compile";
+
 	/** Default build directory */
 	public static final String BUILD_DIRECTORY = "target";
 
@@ -162,7 +164,7 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 	 * {@link MyMojo2#GENERATED_SOURCE_PATH}
 	 */
 	public static final String GENERATED_SOURCE_ROOT = BUILD_DIRECTORY
-			+ File.separator + "generated-sources";
+			+ File.separator + MyMojo2.GENERATED_SOURCE_PATH;
 
 	/** The root of Java code that the Verifier results are checked against */
 	public static final String EXPECTED_CODE_ROOT =
@@ -232,6 +234,7 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		}
 	}
 
+/*
 	public void testClean() {
 		verifyCleanBuildDirectory();
 		String diagnostic = MAVEN_CLEAN_GOAL;
@@ -263,6 +266,16 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		verifyGeneratedSourcesDirectory();
 		executeMavenGoal(verifier, MAVEN_CLEAN_GOAL);
 		verifyCleanBuildDirectory();
+	}
+*/
+	
+	public void testCompile() {
+		verifyCleanBuildDirectory();
+		String diagnostic = MAVEN_COMPILE_GOAL;
+		Verifier verifier = createVerifier(diagnostic);
+		verifier.setLogFileName(diagnostic + LOG_FILE_SUFFIX);
+		assertTrue(verifier != null);
+		executeMavenGoal(verifier, MAVEN_COMPILE_GOAL);
 	}
 
 	private void verifyCleanBuildDirectory() {

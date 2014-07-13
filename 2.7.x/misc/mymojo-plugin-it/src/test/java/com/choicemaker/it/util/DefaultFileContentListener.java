@@ -1,4 +1,4 @@
-package com.choicemaker.util3;
+package com.choicemaker.it.util;
 
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -12,7 +12,7 @@ public class DefaultFileContentListener implements FileContentListener {
 
 	public static final int DEFAULT_MAX_DIFFERENCES = 3;
 	
-	private static final String RESOURCE_BUNDLE = "com.choicemaker.util3.Messages";
+	private static final String RESOURCE_BUNDLE = "com.choicemaker.it.util.Messages";
 	private final int maxRecorded;
 	private final boolean recordResultIfSame;
 	private final MessageUtil m;
