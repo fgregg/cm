@@ -42,7 +42,7 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 
 	/** The path to the ClueSet for the Person model */
 	private static final String SIMPLEPERSON_CLUESET_PATH = BASE_EXCLUSION_PATH
-			+ "Person/Person/SimplePersonCluesClueSet.java";
+			+ "Person/SimplePersonCluesClueSet.java";
 
 	/** The path to the Accessor for the Person2 model */
 	private static final String SIMPLEPERSON2_CLUESACCESSOR_PATH =
@@ -172,7 +172,6 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		Path rootGeneratedSource = Paths.get(f.toURI());
 
 		// Compare the generated tree against the expected tree
-		// Set the number of collected messages to one more than will be displayed
 		final int maxCollected = MAX_REPORTED_DIFFERENCES + 1;
 		DefaultFileContentListener listener = new DefaultFileContentListener(maxCollected,false);
 		FileTreeComparator ftc = new FileTreeComparator(rootExpectedSource, rootGeneratedSource);

@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.core.util;
 
-import java.util.ResourceBundle;
 
 
 /**

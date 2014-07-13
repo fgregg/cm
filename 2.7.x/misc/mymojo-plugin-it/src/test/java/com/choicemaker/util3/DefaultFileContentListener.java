@@ -12,8 +12,7 @@ public class DefaultFileContentListener implements FileContentListener {
 
 	public static final int DEFAULT_MAX_DIFFERENCES = 3;
 	
-	private static final String RESOURCE_BUNDLE = "com.choicemaker.util.Messages";
-
+	private static final String RESOURCE_BUNDLE = "com.choicemaker.util3.Messages";
 	private final int maxRecorded;
 	private final boolean recordResultIfSame;
 	private final MessageUtil m;
@@ -38,8 +37,6 @@ public class DefaultFileContentListener implements FileContentListener {
 		assert result != null;
 
 		if (!FILE_CONTENT_COMPARISON0.SAME_CONTENT.equals(result)) {
-			if (msgs.size() < maxRecorded) {
-			}
 			++diffs;
 		}
 		if (msgs.size() < maxRecorded) {

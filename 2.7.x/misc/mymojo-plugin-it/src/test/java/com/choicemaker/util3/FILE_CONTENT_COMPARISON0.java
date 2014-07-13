@@ -52,7 +52,8 @@ public final class FILE_CONTENT_COMPARISON0 implements Serializable {
 		};
 	}
 	
-	private static final Map<String, FILE_CONTENT_COMPARISON0> instances  = new HashMap<>(); {
+	private static final Map<String, FILE_CONTENT_COMPARISON0> instances  = new HashMap<>();
+	static {
 		instances.put(ONLY_IN_PATH1.toString(), ONLY_IN_PATH1);
 		instances.put(ONLY_IN_PATH2.toString(), ONLY_IN_PATH2);
 		instances.put(DIFFERENT_CONTENT.toString(), DIFFERENT_CONTENT);

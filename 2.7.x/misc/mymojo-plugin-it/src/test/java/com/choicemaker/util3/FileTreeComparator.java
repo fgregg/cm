@@ -187,7 +187,7 @@ class DirectoryVisitor implements FileVisitor<Path> {
 		Path relative = this.thisRoot.relativize(p1);
 		Path p2 = thatRoot.resolve(relative);
 		if (!this.excludedPaths.contains(relative)
-				&& !this.excludedPaths.contains(p2)) {
+				/* && !this.excludedPaths.contains(p2) */ ) {
 
 			File fOther = p2.toFile();
 			if (fOther.exists()) {

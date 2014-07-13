@@ -35,7 +35,7 @@ public class DefaultMessageSupport implements IMessageSupport {
 	 * Retrieves messages from a specified resource bundle
 	 */
 	public DefaultMessageSupport(ResourceBundle resourceBundle) {
-		this.choiceMakerCoreMessages = new ChoiceMakerCoreMessages(resourceBundle);
+		this.choiceMakerCoreMessages = new MessageUtil(resourceBundle);
 	}
 
 	/* (non-Javadoc)
