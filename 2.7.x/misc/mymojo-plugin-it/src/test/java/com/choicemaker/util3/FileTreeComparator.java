@@ -53,7 +53,7 @@ public class FileTreeComparator {
 	}
 
 	protected void notifyListeners(Path p1, Path p2,
-			FILE_CONTENT_COMPARISON0 result) {
+			FileContentComparison0 result) {
 		for (FileContentListener l : listeners) {
 			l.fileComparison(p1, p2, result);
 		}
@@ -93,7 +93,7 @@ class DirectoryVisitor implements FileVisitor<Path> {
 	// private final Set<String> notifications = new HashSet<>();
 
 //	public static String createKey(Path p1, Path p2,
-//			FILE_CONTENT_COMPARISON0 result) {
+//			FileContentComparison0 result) {
 //		String s1 = p1 == null ? "null" : p1.toString();
 //		String s2 = p2 == null ? "null" : p2.toString();
 //		String r = result == null ? "null" : result.toString();
@@ -125,17 +125,17 @@ class DirectoryVisitor implements FileVisitor<Path> {
 	 * registered listeners:
 	 * <ul>
 	 * <li>The file appears only in the first tree; see
-	 * {@link FILE_CONTENT_COMPARISON0#ONLY_IN_PATH1}</li>
+	 * {@link FileContentComparison0#ONLY_IN_PATH1}</li>
 	 * <li>The file appears only in the second tree; see
-	 * {@link FILE_CONTENT_COMPARISON0#ONLY_IN_PATH2}</li>
+	 * {@link FileContentComparison0#ONLY_IN_PATH2}</li>
 	 * <li>The file has the same content in both trees; see
-	 * {@link FILE_CONTENT_COMPARISON0#SAME_CONTENT}</li>
+	 * {@link FileContentComparison0#SAME_CONTENT}</li>
 	 * <li>The file has the different content in the two trees; see
-	 * {@link FILE_CONTENT_COMPARISON0#DIFFERENT_CONTENT}</li>
+	 * {@link FileContentComparison0#DIFFERENT_CONTENT}</li>
 	 * <li>An error occurred while trying to read the a file in the first tree;
-	 * see {@link FILE_CONTENT_COMPARISON0#UNREACHABLE_PATH1}</li>
+	 * see {@link FileContentComparison0#UNREACHABLE_PATH1}</li>
 	 * <li>An error occurred while trying to read the a file in the second tree;
-	 * see {@link FILE_CONTENT_COMPARISON0#UNREACHABLE_PATH2}</li>
+	 * see {@link FileContentComparison0#UNREACHABLE_PATH2}</li>
 	 * </ul>
 	 * 
 	 * @param thisRoot
@@ -169,7 +169,7 @@ class DirectoryVisitor implements FileVisitor<Path> {
 	}
 
 	protected void notifyListeners(Path p1, Path p2,
-			FILE_CONTENT_COMPARISON0 result) {
+			FileContentComparison0 result) {
 		for (FileContentListener l : listeners) {
 			l.fileComparison(p1, p2, result);
 		}
@@ -201,16 +201,16 @@ class DirectoryVisitor implements FileVisitor<Path> {
 							fOther);
 				if (md5Ref.equals(md5Other)) {
 					notifyListeners(p1, p2,
-							FILE_CONTENT_COMPARISON0.SAME_CONTENT);
+							FileContentComparison0.SAME_CONTENT);
 				} else {
 					notifyListeners(p1, p2,
-							FILE_CONTENT_COMPARISON0.DIFFERENT_CONTENT);
+							FileContentComparison0.DIFFERENT_CONTENT);
 				}
 			} else {
 				File fRef = p1.toFile();
 				assert fRef.exists();
 				notifyListeners(p1, p2,
-						FILE_CONTENT_COMPARISON0.ONLY_IN_PATH1);
+						FileContentComparison0.ONLY_IN_PATH1);
 			}
 		}
 		return FileVisitResult.CONTINUE;
@@ -222,7 +222,7 @@ class DirectoryVisitor implements FileVisitor<Path> {
 		Path relative = this.thisRoot.relativize(reference);
 		Path other = thatRoot.resolve(relative);
 		notifyListeners(relative, other,
-				FILE_CONTENT_COMPARISON0.UNREACHABLE_PATH1);
+				FileContentComparison0.UNREACHABLE_PATH1);
 		return FileVisitResult.CONTINUE;
 	}
 

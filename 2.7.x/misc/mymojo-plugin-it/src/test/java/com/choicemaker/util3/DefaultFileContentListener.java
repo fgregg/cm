@@ -33,14 +33,14 @@ public class DefaultFileContentListener implements FileContentListener {
 	}
 
 	@Override
-	public void fileComparison(Path p1, Path p2, FILE_CONTENT_COMPARISON0 result) {
+	public void fileComparison(Path p1, Path p2, FileContentComparison0 result) {
 		assert result != null;
 
-		if (!FILE_CONTENT_COMPARISON0.SAME_CONTENT.equals(result)) {
+		if (!FileContentComparison0.SAME_CONTENT.equals(result)) {
 			++diffs;
 		}
 		if (msgs.size() < maxRecorded) {
-			if (recordResultIfSame || !FILE_CONTENT_COMPARISON0.SAME_CONTENT.equals(result)) {
+			if (recordResultIfSame || !FileContentComparison0.SAME_CONTENT.equals(result)) {
 				String msg = m.formatMessage(result.toString(), p1, p2);
 				msgs.add(msg);
 			}

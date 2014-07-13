@@ -48,7 +48,7 @@ public abstract class AbstractMavenIntegrationTestCase
     /**
      * Save System.out for progress reports etc.
      */
-    private static PrintStream out = System.out;
+    protected static PrintStream out = System.out;
 
     /**
      * The format for elapsed time.

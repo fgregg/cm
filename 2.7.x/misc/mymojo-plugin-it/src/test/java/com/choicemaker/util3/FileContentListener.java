@@ -9,6 +9,6 @@ public interface FileContentListener {
 //		UNREACHABLE_PATH1, UNREACHABLE_PATH2
 //	}
 
-	void fileComparison(Path p1, Path p2, FILE_CONTENT_COMPARISON0 result);
+	void fileComparison(Path p1, Path p2, FileContentComparison0 result);
 
 }

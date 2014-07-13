@@ -8,9 +8,9 @@ final class FileComparisonResult {
 	
 	private final Path p1;
 	private final Path p2;
-	private final FILE_CONTENT_COMPARISON0 result;
+	private final FileContentComparison0 result;
 
-	FileComparisonResult(Path p1, Path p2, FILE_CONTENT_COMPARISON0 result) {
+	FileComparisonResult(Path p1, Path p2, FileContentComparison0 result) {
 		if (result == null) {
 			throw new IllegalArgumentException("null result");
 		}
@@ -27,7 +27,7 @@ final class FileComparisonResult {
 		return p2;
 	}
 
-	public FILE_CONTENT_COMPARISON0 getResult() {
+	public FileContentComparison0 getResult() {
 		return result;
 	}
 

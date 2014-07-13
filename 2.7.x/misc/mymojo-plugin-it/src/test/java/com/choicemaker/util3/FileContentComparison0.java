@@ -16,43 +16,43 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Type-safe enum for comparison results on file pairs.
- * This class will be replaced with an enum, FILE_CONTENT_COMPARISON, when
+ * Java 1.4, type-safe enum for comparison results on file pairs.
+ * This class will be replaced with a proper enum, FileContentComparison, when
  * the com.choicemaker.util package migrates to Java 1.5 or later.
  * 
  * @author rphall
  */
 
-public final class FILE_CONTENT_COMPARISON0 implements Serializable {
+public final class FileContentComparison0 implements Serializable {
 
 	static final long serialVersionUID = 1;
 	
-	public static final FILE_CONTENT_COMPARISON0 ONLY_IN_PATH1 =
-		new FILE_CONTENT_COMPARISON0("ONLY_IN_PATH1");
+	public static final FileContentComparison0 ONLY_IN_PATH1 =
+		new FileContentComparison0("ONLY_IN_PATH1");
 
-	public static final FILE_CONTENT_COMPARISON0 ONLY_IN_PATH2 =
-		new FILE_CONTENT_COMPARISON0("ONLY_IN_PATH2");
+	public static final FileContentComparison0 ONLY_IN_PATH2 =
+		new FileContentComparison0("ONLY_IN_PATH2");
 
-	public static final FILE_CONTENT_COMPARISON0 DIFFERENT_CONTENT =
-		new FILE_CONTENT_COMPARISON0("DIFFERENT_CONTENT");
+	public static final FileContentComparison0 DIFFERENT_CONTENT =
+		new FileContentComparison0("DIFFERENT_CONTENT");
 
-	public static final FILE_CONTENT_COMPARISON0 SAME_CONTENT =
-			new FILE_CONTENT_COMPARISON0("SAME_CONTENT");
+	public static final FileContentComparison0 SAME_CONTENT =
+			new FileContentComparison0("SAME_CONTENT");
 
-	public static final FILE_CONTENT_COMPARISON0 UNREACHABLE_PATH1 =
-			new FILE_CONTENT_COMPARISON0("UNREACHABLE_PATH1");
+	public static final FileContentComparison0 UNREACHABLE_PATH1 =
+			new FileContentComparison0("UNREACHABLE_PATH1");
 
-	public static final FILE_CONTENT_COMPARISON0 UNREACHABLE_PATH2 =
-			new FILE_CONTENT_COMPARISON0("UNREACHABLE_PATH2");
+	public static final FileContentComparison0 UNREACHABLE_PATH2 =
+			new FileContentComparison0("UNREACHABLE_PATH2");
 	
-	public static final FILE_CONTENT_COMPARISON0[] values() {
-		return new FILE_CONTENT_COMPARISON0[] {
+	public static final FileContentComparison0[] values() {
+		return new FileContentComparison0[] {
 				ONLY_IN_PATH1, ONLY_IN_PATH2, DIFFERENT_CONTENT, SAME_CONTENT,
 				UNREACHABLE_PATH1, UNREACHABLE_PATH2
 		};
 	}
 	
-	private static final Map<String, FILE_CONTENT_COMPARISON0> instances  = new HashMap<>();
+	private static final Map<String, FileContentComparison0> instances  = new HashMap<>();
 	static {
 		instances.put(ONLY_IN_PATH1.toString(), ONLY_IN_PATH1);
 		instances.put(ONLY_IN_PATH2.toString(), ONLY_IN_PATH2);
@@ -64,7 +64,7 @@ public final class FILE_CONTENT_COMPARISON0 implements Serializable {
 
 	private final String name;
 
-	protected FILE_CONTENT_COMPARISON0(String name) {
+	protected FileContentComparison0(String name) {
 		this.name = name;
 	}
 
@@ -73,14 +73,14 @@ public final class FILE_CONTENT_COMPARISON0 implements Serializable {
 	}
 
 	/**
-	 * Returns the corresponding <code>FILE_CONTENT_COMPARISON0</code>.
+	 * Returns the corresponding <code>FileContentComparison0</code>.
 	 * 
-	 * @return The corresponding <code>FILE_CONTENT_COMPARISON0</code>.
+	 * @return The corresponding <code>FileContentComparison0</code>.
 	 * @throws IllegalArgumentException
 	 *             if <code>name</code> is not a valid name.
 	 */
-	public static FILE_CONTENT_COMPARISON0 valueOf(String name) {
-		FILE_CONTENT_COMPARISON0 retVal = instances.get(name);
+	public static FileContentComparison0 valueOf(String name) {
+		FileContentComparison0 retVal = instances.get(name);
 		if (retVal == null) {
 			throw new IllegalArgumentException("invalid name: '" + name + "'");
 		}
@@ -92,7 +92,7 @@ public final class FILE_CONTENT_COMPARISON0 implements Serializable {
 	}
 
 	public boolean equals(Object o) {
-		FILE_CONTENT_COMPARISON0 d = (FILE_CONTENT_COMPARISON0) o;
+		FileContentComparison0 d = (FileContentComparison0) o;
 		boolean retVal = this.name.equals(d.name);
 		return retVal;
 	}
