@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.choicemaker.cm.core.base">
+<schema targetNamespace="com.choicemaker.cm.core">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.choicemaker.cm.core.base" id="fileMrpsReader" name="fileMrpsReader"/>
+         <meta.schema plugin="com.choicemaker.cm.core" id="fileMrpsReader" name="fileMrpsReader"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]

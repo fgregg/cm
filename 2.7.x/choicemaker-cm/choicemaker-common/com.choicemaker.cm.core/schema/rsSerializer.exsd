@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.choicemaker.cm.core.base">
+<schema targetNamespace="com.choicemaker.cm.core">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.choicemaker.cm.core.base" id="rsSerializer" name="Record Source Serializer"/>
+         <meta.schema plugin="com.choicemaker.cm.core" id="rsSerializer" name="Record Source Serializer"/>
       </appInfo>
       <documentation>
          Enables record-source serializers to be registered as Eclipse plug-ins.
@@ -54,7 +54,7 @@ configure the serializer itself, immediately after construction.
                   The serializer class (which must implement IRecordSourceSerializer)
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.base.IRecordSourceSerializer"/>
+                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.IRecordSourceSerializer"/>
                </appInfo>
             </annotation>
          </attribute>

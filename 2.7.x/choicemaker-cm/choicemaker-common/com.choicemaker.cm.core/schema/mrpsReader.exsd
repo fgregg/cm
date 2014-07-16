@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.choicemaker.cm.core.base">
+<schema targetNamespace="com.choicemaker.cm.core">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.choicemaker.cm.core.base" id="mrpsReader" name="%ExtPoint.mrpsReader"/>
+         <meta.schema plugin="com.choicemaker.cm.core" id="mrpsReader" name="%ExtPoint.mrpsReader"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -47,7 +47,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.base.xmlconf.MarkedRecordPairSourceXmlConf"/>
+                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -57,7 +57,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.base.MarkedRecordPairSource"/>
+                  <meta.attribute kind="java" basedOn="com.choicemaker.cm.core.MarkedRecordPairSource"/>
                </appInfo>
             </annotation>
          </attribute>
