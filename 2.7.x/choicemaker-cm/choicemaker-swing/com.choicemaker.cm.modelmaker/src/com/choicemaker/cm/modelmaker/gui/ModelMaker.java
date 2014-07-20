@@ -110,6 +110,7 @@ import com.choicemaker.cm.module.swing.DefaultManagedPanel;
 import com.choicemaker.cm.module.swing.DefaultModuleMenu;
 import com.choicemaker.util.Arguments;
 import com.choicemaker.util.ArrayHelper;
+import com.choicemaker.util.InstanceRegistry;
 import com.choicemaker.util.IntArrayList;
 
 /**
@@ -119,12 +120,64 @@ import com.choicemaker.util.IntArrayList;
  * @version $Revision: 1.3 $ $Date: 2010/03/29 12:38:18 $
  */
 public class ModelMaker extends JFrame implements IPlatformRunnable {
+
 	private static final long serialVersionUID = 1L;
 
 	public static Logger logger = Logger.getLogger(ModelMaker.class);
+	
+	public static String PLUGIN_APPLICATION_ID = "com.choicemaker.cm.modelmaker.ModelMaker";
 
 	public static final int CLUES = 1;
 	public static final int RULES = 2;
+	
+	public static final int EXIT_OK = 0;
+	public static final int EXIT_ERROR = 1;
+	
+	private final Object statusSynchronization = new Object();
+	private boolean isReady = false;
+	private boolean doWait = true;
+	private int returnCode = EXIT_ERROR;
+
+	private boolean isWait() {
+		synchronized(statusSynchronization) {
+			return doWait;
+		}
+	}
+
+	private void setWait(boolean doWait) {
+		synchronized(statusSynchronization) {
+			this.doWait = doWait;
+		}
+	}
+
+	public boolean isReady() {
+		synchronized(statusSynchronization) {
+			return isReady;
+		}
+	}
+
+	private void setReady(boolean isReady) {
+		synchronized(statusSynchronization) {
+			this.isReady = isReady;
+		}
+	}
+
+	private int getReturnCode() {
+		synchronized(statusSynchronization) {
+			return returnCode;
+		}
+	}
+	
+	private void setReturnCode(int returnCode) {
+		if (returnCode != EXIT_OK && returnCode != EXIT_ERROR) {
+			logger.warn("Ignoring invalid return code: " + returnCode
+					+ "; settting error code instead: " + EXIT_ERROR);
+			return;
+		}
+		synchronized (statusSynchronization) {
+			this.returnCode = returnCode;
+		}
+	}
 
 	//XmlConf file name
 //	private static String xmlConfFileName;
@@ -153,6 +206,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				ModelMaker.this.getMessagePanel().postMessage(displayString);
 			}
 	};
+
 	public IUserMessages getUserMessages() {
 		return userMessages;
 	}
@@ -272,6 +326,9 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	}
 
 	public ModelMaker() {
+		// Register this instance for testing purposes
+		InstanceRegistry.getInstance().registerInstance(PLUGIN_APPLICATION_ID,
+				this);
 	}
 
 	/**
@@ -383,9 +440,12 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		JavaHelpUtils.enableHelpKey(this, "train.gui.modelmaker");
 	}
 
-	private void programExit() {
-		this.dispose();
-		System.exit(0);
+	public void programExit(int rc) {
+		synchronized(statusSynchronization) {
+			setReturnCode(rc);
+			setWait(false);
+			statusSynchronization.notify();
+		}
 	}
 
 	private void addListeners() {
@@ -408,7 +468,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 		exitItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				programExit();
+				programExit(EXIT_OK);
 			}
 		});
 	}
@@ -566,9 +626,9 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	public void reloadProbabilityModel() {
 		try {
-			setProbabilityModel(probabilityModel.getFileName(), true);
+			setProbabilityModel(probabilityModel.getModelFilePath(), true);
 		} catch (OperationFailedException ex) {
-			logger.error(new LoggingObject("CM-100501", probabilityModel.getFileName()), ex);
+			logger.error(new LoggingObject("CM-100501", probabilityModel.getModelFilePath()), ex);
 		}
 	}
 
@@ -645,61 +705,63 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	public void postProbabilityModelInfo() {
 		if (probabilityModel != null) {
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.name", probabilityModel.getName()));
-			postInfo(
-				ChoiceMakerCoreMessages.m.formatMessage(
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+					"train.gui.modelmaker.model.name",
+					probabilityModel.getModelName()));
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.clue.file.name",
-					probabilityModel.getClueFileName()));
-			postInfo(
-				ChoiceMakerCoreMessages.m.formatMessage(
+					probabilityModel.getClueFilePath()));
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.schema.file.name",
 					probabilityModel.getAccessor().getSchemaFileName()));
-			postInfo(
-				ChoiceMakerCoreMessages.m.formatMessage(
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.user",
 					probabilityModel.getUserName()));
-			postInfo(
-				ChoiceMakerCoreMessages.m.formatMessage(
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.date",
 					probabilityModel.getLastTrainingDate()));
-			postInfo(
-				ChoiceMakerCoreMessages.m.formatMessage(
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.source",
 					probabilityModel.getTrainingSource()));
-			postInfo(probabilityModel.isTrainedWithHolds() ? "Trained with holds" : "Trained without holds");
-			postInfo(
-				ChoiceMakerCoreMessages.m.formatMessage(
+			postInfo(probabilityModel.isTrainedWithHolds() ? "Trained with holds"
+					: "Trained without holds");
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
 					"train.gui.modelmaker.model.last.train.firing.threshold",
 					new Integer(probabilityModel.getFiringThreshold())));
 			MachineLearner ml = probabilityModel.getMachineLearner();
-			if(ml != null && !(ml instanceof DoNothingMachineLearning)) {
-				postInfo(
-					ChoiceMakerCoreMessages.m.formatMessage(
+			if (ml != null && !(ml instanceof DoNothingMachineLearning)) {
+				postInfo(ChoiceMakerCoreMessages.m.formatMessage(
 						"train.gui.modelmaker.model.last.train.ml",
-						MlGuiFactories.getGui(probabilityModel.getMachineLearner())));
+						MlGuiFactories.getGui(probabilityModel
+								.getMachineLearner())));
 				String modelInfo = ml.getModelInfo();
-				if(modelInfo != null) {
+				if (modelInfo != null) {
 					postInfo(modelInfo);
 				}
 			}
 		}
 	}
 
-	public ImmutableProbabilityModel getProbabilityModel(String modelName) throws OperationFailedException {
+	public ImmutableProbabilityModel getProbabilityModel(String modelName)
+			throws OperationFailedException {
 		ImmutableProbabilityModel pm = null;
 		Writer statusOutput = new StringWriter();
 		try {
 			File f = new File(modelName);
 			InputStream is = new FileInputStream(f);
 
-			CompilerFactory factory = CompilerFactory.getInstance ();
+			CompilerFactory factory = CompilerFactory.getInstance();
 			ICompiler compiler = factory.getDefaultCompiler();
 
-			pm = ProbabilityModelsXmlConf.readModel(modelName,is,compiler,statusOutput);
+			pm =
+				ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
+						statusOutput);
 		} catch (XmlConfException ex) {
 			throw new OperationFailedException(
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.retrieve.error", modelName));
-		} catch(FileNotFoundException ex) {
+					ChoiceMakerCoreMessages.m.formatMessage(
+							"train.gui.modelmaker.model.retrieve.error",
+							modelName));
+		} catch (FileNotFoundException ex) {
 			String msg = "Unable to find '" + modelName + "'";
 			throw new OperationFailedException(msg);
 		} finally {
@@ -717,10 +779,10 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		try {
 			ProbabilityModelsXmlConf.saveModel(pm);
 			//logger.info("Saved probability model to disk: " + pm.getName());
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.saved", pm.getName()));
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.saved", pm.getModelName()));
 		} catch (XmlConfException ex) {
 			throw new OperationFailedException(
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.save.error", pm.getName()),
+				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.save.error", pm.getModelName()),
 				ex);
 		}
 	}
@@ -732,7 +794,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		try {
 			saveProbabilityModel(probabilityModel);
 		} catch (OperationFailedException ex) {
-			logger.error(new LoggingObject("CM-100503", probabilityModel.getFileName()), ex);
+			logger.error(new LoggingObject("CM-100503", probabilityModel.getModelFilePath()), ex);
 		}
 	}
 
@@ -753,7 +815,9 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				success = compiler.compile(pm, messagePanel.getWriter());
 			} catch (CompilerException ex) {
 				// TODO FIXME error message for compiler exception
-				logger.error(new LoggingObject("TODO FIXME", probabilityModel.getFileName()), ex);
+				logger.error(
+						new LoggingObject("TODO FIXME", probabilityModel
+								.getModelFilePath()), ex);
 			}
 		}
 		setCursor(cursor);
@@ -906,7 +970,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		if (probabilityModel == null) {
 			message += "<no model>";
 		} else {
-			message += probabilityModel.getName() + ".model";
+			message += probabilityModel.getModelName() + ".model";
 		}
 		message += " - ";
 		message += getSourceMessage(0);
@@ -1491,7 +1555,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 //				WellKnownPropertyValues.ECLIPSE2_GENERATOR_PLUGIN_FACTORY);
 	}
 
-	public Object run(Object args2) throws Exception {
+	public Object run(Object args2) /* throws Exception */ {
 		String[] args = null;
 		if(args2 instanceof String[]) {
 			args = (String[]) args2;
@@ -1524,7 +1588,8 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				// do nothing
 			}
 			if (!sd.isRes()) {
-				System.exit(0);
+				// User cancelled the StartDialog
+				programExit(EXIT_OK);
 			}
 			conf = sd.getConfigurationFileName();
 			getPreferences().put("configurationfile", conf);
@@ -1544,15 +1609,27 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.configurationfile.invalid.error", conf),
 				ChoiceMakerCoreMessages.m.formatMessage("error"),
 				JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
+			programExit(EXIT_ERROR);
 		}
-		Object o = new Object();
-		while(true) {
-			synchronized(o) {
-				o.wait();
+
+		while(isWait()) {
+			synchronized(statusSynchronization) {
+				try {
+					setReturnCode(EXIT_OK);
+					setReady(true);
+					this.wait();
+				} catch (InterruptedException e) {
+					setReturnCode(EXIT_ERROR);
+					logger.error(e.toString());
+				}
+				setWait(false);
 			}
 		}
-		//return new Integer(0);
+
+		this.setVisible(false);
+		this.dispose();
+		int rc = getReturnCode();
+		return Integer.valueOf(rc);
 	}
 
 	public static void main(String[] args) throws IOException {
