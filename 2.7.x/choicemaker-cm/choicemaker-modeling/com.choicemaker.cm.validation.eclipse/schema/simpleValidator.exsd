@@ -5,7 +5,7 @@
          <meta.schema plugin="com.choicemaker.cm.validation.eclipse" id="setBasedValidator" name="Set-based Validator"/>
       </appInfo>
       <documentation>
-         Defines a plugin-configurable instance of ISetBasedValidator.
+         Defines a plugin-configurable instance of IValidator.
       </documentation>
    </annotation>
 

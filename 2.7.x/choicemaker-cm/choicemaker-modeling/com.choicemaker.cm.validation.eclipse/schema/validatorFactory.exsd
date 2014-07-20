@@ -5,7 +5,7 @@
          <meta.schema plugin="com.choicemaker.cm.validation.eclipse" id="validatorFactory" name="Validator Factory"/>
       </appInfo>
       <documentation>
-         Defines a plugin-configurable factory for plugin-configurable instances of IValidator.
+         Defines a plugin-configurable factory for instances of IValidator.
       </documentation>
    </annotation>
 
