@@ -175,6 +175,7 @@ public class ModelMakerTest extends TestCase {
 		return new Thread(r);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void setUp() throws Exception {
 
 		System.out.println("Starting setUp()");
@@ -198,18 +199,30 @@ public class ModelMakerTest extends TestCase {
 		Thread t = createModelMakerThread(cl, this.launcher, args);
 		t.start();
 
+//		int count = 0;
+//		this.bootLoader = new Eclipse2BootLoader(this.launcher);
+//		while (!Eclipse2Utils.isEclipseRunning(this.bootLoader)) {
+//			System.out.println("setUp() wait interval: " + count);
+//			if (count > MAX_INTERVALS) {
+//				break;
+//			}
+//			Thread.sleep(SLEEP_INTERVAL_MSECS);
+//			++count;
+//		}
 		int count = 0;
-		this.bootLoader = new Eclipse2BootLoader(this.launcher);
-		while (!Eclipse2Utils.isEclipseRunning(this.bootLoader)) {
+		Map<String,Object> mms = InstanceRegistry.getInstance().findRegisteredInstances(ModelMaker.PLUGIN_APPLICATION_ID);
+		while (mms.size() < 1) {
 			System.out.println("setUp() wait interval: " + count);
 			if (count > MAX_INTERVALS) {
 				break;
 			}
 			Thread.sleep(SLEEP_INTERVAL_MSECS);
 			++count;
+			mms = InstanceRegistry.getInstance().findRegisteredInstances(ModelMaker.PLUGIN_APPLICATION_ID);
 		}
 
-		if (!Eclipse2Utils.isEclipseRunning(this.bootLoader)) {
+		mms = InstanceRegistry.getInstance().findRegisteredInstances(ModelMaker.PLUGIN_APPLICATION_ID);
+		if (mms.size() < 1) {
 			fail("setUp() failed: unable to start Eclipse 2");
 		}
 		System.out.println("setUp() complete");
