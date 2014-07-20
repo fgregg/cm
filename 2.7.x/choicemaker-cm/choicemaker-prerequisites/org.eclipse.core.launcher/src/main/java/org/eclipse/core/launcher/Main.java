@@ -656,7 +656,7 @@ protected String[] processCommandLine(String[] args) throws Exception {
 			continue;
 		String arg = args[++i];
 
-		// look for the laucher to run
+		// look for the launcher to run
 		if (args[i - 1].equalsIgnoreCase(BOOT)) {
 			bootLocation = arg;
 			found = true;
