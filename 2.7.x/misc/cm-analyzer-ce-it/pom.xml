@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../../choicemaker-base/pom.xml</relativePath>
+  </parent>
+
+	<groupId>com.choicemaker.cmit</groupId>
+  <artifactId>cm-analyzer-ce-it</artifactId>
+
+	<name>ChoiceMaker Analyzer IT</name>
+  <description><![CDATA[
+  Integration test for the zip distribution of CM Analyzer, Community Edition.
+  ]]></description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <eclipse.application.dir>${project.build.testOutputDirectory}/eclipse.application.dir</eclipse.application.dir>
+    <eclipse.application.examples.dir>${eclipse.application.dir}/examples</eclipse.application.examples.dir>
+  </properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<!--
+                <version>3.1</version>
+				-->
+				<configuration>
+					<verbose>true</verbose>
+					<!-- fork>true</fork -->
+					<fork>false</fork>
+					<compilerVersion>1.7</compilerVersion>
+					<source>1.7</source>
+					<target>1.7</target>
+					<compilerArgument>-g</compilerArgument>
+				</configuration>
+			</plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>plugins</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>com.choicemaker.cm</includeArtifactIds>
+              <includeArtifactIds>cm-analyzer-ce</includeArtifactIds>
+<!--
+              <excludeArtifactIds>org.eclipse.core.launcher</excludeArtifactIds>
+              <excludeGroupIds>junit</excludeGroupIds>
+-->
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>${eclipse.application.dir}</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>examples</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>com.choicemaker.cm</includeArtifactIds>
+              <includeArtifactIds>simple_person_matching</includeArtifactIds>
+<!--
+              <excludeArtifactIds>org.eclipse.core.launcher</excludeArtifactIds>
+              <excludeGroupIds>junit</excludeGroupIds>
+-->
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>${eclipse.application.examples.dir}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-dependency-plugin
+										</artifactId>
+										<versionRange>
+											[2.8,)
+										</versionRange>
+										<goals>
+											<goal>
+												unpack-dependencies
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute/>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>cm-analyzer-ce</artifactId>
+			<classifier>distrib</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.choicemaker.cm</groupId>
+			<artifactId>simple_person_matching</artifactId>
+		</dependency>
+		<dependency>
+		  <groupId>com.choicemaker.cm</groupId>
+		  <artifactId>org.eclipse.core.boot</artifactId>
+		</dependency>
+        <dependency>
+          <groupId>com.choicemaker.cm</groupId>
+          <artifactId>org.eclipse.core.launcher</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
