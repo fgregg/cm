@@ -246,7 +246,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-		setName(NameUtils.getNameFromFileName(fileName));
+		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
 	/**

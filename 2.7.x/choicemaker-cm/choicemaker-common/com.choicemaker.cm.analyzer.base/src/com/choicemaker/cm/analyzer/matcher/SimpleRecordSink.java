@@ -80,14 +80,14 @@ public class SimpleRecordSink implements MarkedRecordPairSink {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.base.Sink#getName()
+	 * @see com.choicemaker.cm.core.base.Sink#getModelName()
 	 */
 	public String getName() {
 		return null;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.base.Sink#setName(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.Sink#setModelName(java.lang.String)
 	 */
 	public void setName(String name) {
 	}

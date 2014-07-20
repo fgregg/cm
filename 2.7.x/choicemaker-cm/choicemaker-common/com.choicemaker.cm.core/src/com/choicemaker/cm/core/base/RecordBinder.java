@@ -98,14 +98,14 @@ public class RecordBinder implements RecordSource {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.base.Source#getName()
+	 * @see com.choicemaker.cm.core.base.Source#getModelName()
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.base.Source#setName(java.lang.String)
+	 * @see com.choicemaker.cm.core.base.Source#setModelName(java.lang.String)
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -140,7 +140,7 @@ public class RecordBinder implements RecordSource {
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.base.Source#getFileName()
+	 * @see com.choicemaker.cm.core.base.Source#getModelFilePath()
 	 */
 	public String getFileName() {
 		return null;

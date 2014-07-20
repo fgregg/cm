@@ -66,7 +66,7 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 	 * @param   model  The probability model.
 	 */
 	public void addModel(IProbabilityModel model) {
-		models.put(model.getName(), model);
+		models.put(model.getModelName(), model);
 	}
 
 	public Accessor createAccessor(String className, ClassLoader cl) throws ClassNotFoundException, InstantiationException, IllegalAccessException {

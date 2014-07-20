@@ -61,7 +61,7 @@ public abstract class CompositeSource implements Source {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-		setName(NameUtils.getNameFromFileName(fileName));
+		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
 	public String getFileName() {

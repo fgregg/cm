@@ -33,7 +33,6 @@ import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ProbabilityModelSpecification;
 import com.choicemaker.cm.core.report.Report;
@@ -57,32 +56,34 @@ import com.choicemaker.util.FileUtilities;
  * @version $Revision: 1.1 $ $Date: 2010/03/24 18:02:30 $
  * @see PMManager
  */
-public class MutableProbabilityModel implements IProbabilityModel, ImmutableProbabilityModel {
+public class MutableProbabilityModel implements IProbabilityModel {
 
 	private Accessor acc;
 	private String accessorClassName;
-	private String antCommand;
-	private String clueFileName;
+	private String clueFilePath;
+	private File clueFile;
 	private boolean[] cluesToEvaluate;
 	private int decisionDomainSize;
 	private boolean enableAllCluesBeforeTraining;
 	private boolean enableAllRulesBeforeTraining;
-	private String fileName;
 	private int firingThreshold = 3;
 	private Date lastTrainingDate;
 	private MachineLearner ml;
+	private String modelName;
+	private String modelFilePath;
 	private boolean multiPropertyChange;
-
-	private String name;
 	private Hashtable properties;
+	private boolean trainedWithHolds;
+	private String trainingSource;
+	private String userName;
+	
+	/** @deprecated */
+	private String antCommand;
+	/** @deprecated */
+	private boolean useAnt;
 
 	// listeners
 	private SwingPropertyChangeSupport propertyChangeListeners = new SwingPropertyChangeSupport(this);
-	private String rawClueFileName;
-	private boolean trainedWithHolds;
-	private String trainingSource;
-	private boolean useAnt;
-	private String userName;
 
 	/**
 	 * Constructor.
@@ -91,24 +92,47 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 		this.properties = new Hashtable();
 	}
 
-	MutableProbabilityModel(String fileName, String rawClueFileName) {
+	MutableProbabilityModel(String modelFilePath, String clueFilePath) {
 		this();
-		setFileName(fileName);
-		setRawClueFileName(rawClueFileName);
+		setModelFilePath(modelFilePath);
+		setClueFilePath(clueFilePath);
 		setMachineLearner(new DoNothingMachineLearning());
 	}
 
 	public MutableProbabilityModel(ProbabilityModelSpecification spec, Accessor acc) {
 		this();
-		setFileName(spec.getWeightFileName());
-		setRawClueFileName(spec.getClueFileName());
+		setModelFilePath(spec.getWeightFilePath());
+		setClueFilePath(spec.getClueFilePath());
 		setMachineLearner(spec.getMachineLearner());
 		this.setAccessor(acc);
 	}
 
 	MutableProbabilityModel(
-		String fileName,
-		String rawClueFileName,
+			String modelFilePath,
+			String clueFilePath,
+			Accessor acc,
+			MachineLearner ml,
+			boolean[] cluesToEvaluate,
+			String trainingSource,
+			boolean trainedWithHolds,
+			Date lastTrainingDate)
+			throws IllegalArgumentException {
+		this (
+				modelFilePath,
+				clueFilePath,
+				acc,
+				ml,
+				cluesToEvaluate,
+				trainingSource,
+				trainedWithHolds,
+				lastTrainingDate,
+				/* useAnt */ false,
+				/* String */ null);
+		}
+
+	private MutableProbabilityModel(
+		String modelFilePath,
+		String clueFilePath,
 		Accessor acc,
 		MachineLearner ml,
 		boolean[] cluesToEvaluate,
@@ -118,7 +142,7 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 		boolean useAnt,
 		String antCommand)
 		throws IllegalArgumentException {
-		this(fileName, rawClueFileName);
+		this(modelFilePath, clueFilePath);
 		setAccessorInternal(acc);
 		this.trainingSource = trainingSource;
 		this.trainedWithHolds = trainedWithHolds;
@@ -201,28 +225,16 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 	}
 
 	/**
-	 * Returns the name of the Accessor class.
+	 * Returns the modelName of the Accessor class.
 	 *
 	 * Note: this is not the same as getAccessor().getClass().getName()
-	 * because getAccessor() returns a dynamic proxy, so the class name
+	 * because getAccessor() returns a dynamic proxy, so the class modelName
 	 * is something like $Proxy0.
 	 *
-	 * @return The name of the accessor class.
+	 * @return The modelName of the accessor class.
 	 */
 	public String getAccessorClassName() {
 		return accessorClassName;
-	}
-
-	/**
-	 * Get the value of antCommand.
-	 * @return value of antCommand.
-	 */
-	public String getAntCommand() {
-		return antCommand;
-	}
-
-	public String getClueFileName() {
-		return clueFileName;
 	}
 
 	/**
@@ -232,6 +244,18 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 	 */
 	public ClueSet getClueSet() {
 		return acc.getClueSet();
+	}
+
+//	public String getClueSetPath() {
+//		return clueSetPath;
+//	}
+
+	public String getClueFilePath() {
+		return clueFilePath;
+	}
+
+	public File getClueFile() {
+		return this.clueFile;
 	}
 
 	/**
@@ -248,7 +272,7 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 		int start = cd.getStartLineNumber();
 		int end = cd.getEndLineNumber();
 		int len = end - start;
-		BufferedReader in = new BufferedReader(new FileReader(getClueFileName()));
+		BufferedReader in = new BufferedReader(new FileReader(getClueFilePath()));
 		for (int i = 1; i < start && in.ready(); ++i) {
 			in.readLine();
 		}
@@ -269,12 +293,12 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 	}
 
 	/**
-	 * Returns the file name of the probability model.
+	 * Returns the file modelName of the probability model.
 	 *
-	 * @return   The file name of the probability model.
+	 * @return   The file modelName of the probability model.
 	 */
-	public String getFileName() {
-		return fileName;
+	public String getModelFilePath() {
+		return modelFilePath;
 	}
 
 	/**
@@ -298,16 +322,12 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 	}
 
 	/**
-	 * Returns the name of the probability model.
+	 * Returns the modelName of the probability model.
 	 *
-	 * @return   The name of the probability model.
+	 * @return   The modelName of the probability model.
 	 */
-	public String getName() {
-		return name;
-	}
-
-	public String getRawClueFileName() {
-		return rawClueFileName;
+	public String getModelName() {
+		return modelName;
 	}
 
 	public boolean[] getTrainCluesToEvaluate() {
@@ -355,14 +375,6 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 		return trainedWithHolds;
 	}
 
-	/**
-	 * Get the value of useAnt.
-	 * @return value of useAnt.
-	 */
-	public boolean isUseAnt() {
-		return useAnt;
-	}
-
 	public void machineLearnerChanged(Object oldValue, Object newValue) {
 		propertyChangeListeners.firePropertyChange(MACHINE_LEARNER_PROPERTY, oldValue, newValue);
 	}
@@ -372,7 +384,7 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 			return true;
 		} else {
 			long cd = acc.getCreationDate();
-			return cd < new File(getClueFileName()).lastModified() || cd < new File(acc.getSchemaFileName()).getAbsoluteFile().lastModified();
+			return cd < getClueFile().lastModified() || cd < new File(acc.getSchemaFileName()).getAbsoluteFile().lastModified();
 		}
 	}
 
@@ -493,14 +505,6 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 	}
 
 	/**
-	 * Set the value of antCommand.
-	 * @param v  Value to assign to antCommand.
-	 */
-	public void setAntCommand(String v) {
-		this.antCommand = v;
-	}
-
-	/**
 	 * Sets the clues to evaluate.
 	 *
 	 * @param   cluesToEvaluate  The clues to evaluate.
@@ -537,17 +541,18 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 	}
 
 	/**
-	 * Sets the name of the probability model.
-	 *
+	 * Sets the path to the probability model weights file (*.model)
+	 * 
 	 * If this model is in the collection of probability models, the
-	 * name that it is associated with in the collection does not get
-	 * changed.
-	 *
-	 * @param   fileName  The new name.
+	 * {@link #getModelName() modelName} that it is associated with in the collection does
+	 * not get changed.
+	 * 
+	 * @param modelFilePath
+	 *            The new modelName.
 	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-		setName(NameUtils.getNameFromFileName(fileName));
+	public void setModelFilePath(String filePath) {
+		this.modelFilePath = filePath;
+		setModelName(NameUtils.getNameFromFilePath(filePath));
 	}
 
 	/**
@@ -575,18 +580,22 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 		}
 	}
 
-	public void setName(String name) {
-		String oldName = this.name;
-		this.name = name;
+	public void setModelName(String name) {
+		String oldName = this.modelName;
+		this.modelName = name;
 		if (!multiPropertyChange) {
 			propertyChangeListeners.firePropertyChange(NAME, oldName, name);
 		}
 	}
 
-	public void setRawClueFileName(String fn) {
-		this.rawClueFileName = fn;
-		if (fn != null && fileName != null) {
-			this.clueFileName = FileUtilities.getAbsoluteFile(new File(fileName).getParentFile(), fn).toString();
+	public void setClueFilePath(String fn) {
+		this.clueFilePath = fn;
+		if (fn != null && modelFilePath != null) {
+			this.clueFile = FileUtilities.getAbsoluteFile(new File(modelFilePath).getParentFile(), fn);
+		} else if (fn != null) {
+			this.clueFile = new File(fn).getAbsoluteFile();
+		} else {
+			this.clueFile = null;
 		}
 	}
 
@@ -603,19 +612,40 @@ public class MutableProbabilityModel implements IProbabilityModel, ImmutableProb
 	}
 
 	/**
-	 * Set the value of useAnt.
-	 * @param v  Value to assign to useAnt.
-	 */
-	public void setUseAnt(boolean v) {
-		this.useAnt = v;
-	}
-
-	/**
 	 * Set the value of userName.
 	 * @param v  Value to assign to userName.
 	 */
 	public void setUserName(String v) {
 		this.userName = v;
 	}
+	
+	/** @deprecated */
+	public boolean isUseAnt() {
+		assert useAnt == false;
+		return useAnt;
+	}
+
+	/** @deprecated */
+	public void setUseAnt(boolean ignored) {
+		assert this.useAnt == false;
+	}
+
+	/**
+	 * Get the value of antCommand.
+	 * @return value of antCommand.
+	 */
+	public String getAntCommand() {
+		assert antCommand == null;
+		return antCommand;
+	}
+
+	/**
+	 * Set the value of antCommand.
+	 * @param v  Value to assign to antCommand.
+	 */
+	public void setAntCommand(String ignored) {
+		assert antCommand == null;
+	}
+
 }
 

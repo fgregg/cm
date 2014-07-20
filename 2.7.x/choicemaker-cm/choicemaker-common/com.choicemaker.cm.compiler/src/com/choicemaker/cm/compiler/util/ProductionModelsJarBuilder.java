@@ -316,7 +316,7 @@ public class ProductionModelsJarBuilder {
 			IProbabilityModel[] models = PMManager.getModels();
 			for (int i=0; i<models.length; i++) {
 				IProbabilityModel model = models[i];
-				File f = new File(model.getFileName()).getAbsoluteFile();
+				File f = new File(model.getModelFilePath()).getAbsoluteFile();
 				copyToDir(f, etcModelsDir);
 			}
 		} catch (IOException ex) {

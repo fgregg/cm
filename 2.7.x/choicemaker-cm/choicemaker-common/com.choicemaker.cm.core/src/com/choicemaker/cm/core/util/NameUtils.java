@@ -20,7 +20,7 @@ import java.io.File;
  */
 
 public class NameUtils {
-	public static String getNameFromFileName(String fileName) {
+	public static String getNameFromFilePath(String fileName) {
 		if (fileName == null) {
 			return "";
 		} else {

@@ -89,10 +89,10 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 
 	public void modifyModel(IProbabilityModel pm) {
 		isNewModel = false;
-		oldName = pm.getFileName();
+		oldName = pm.getModelFilePath();
 		modelFileNameField.setText(oldName);
-		cluesFileNameField.setText(pm.getClueFileName());
-		if (FileUtilities.isFileAbsolute(pm.getRawClueFileName())) {
+		cluesFileNameField.setText(pm.getClueFilePath());
+		if (FileUtilities.isFileAbsolute(pm.getClueFilePath())) {
 			cluesRelativeBox.setSelectedItem(ABSOLUTE);	
 		} else {
 			cluesRelativeBox.setSelectedItem(RELATIVE);	
@@ -160,7 +160,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 				parent.setProbabilityModel(pm);
 				return true;
 			} catch (OperationFailedException ex) {
-				logger.error(new LoggingObject("CM-100501", pm.getName()), ex);
+				logger.error(new LoggingObject("CM-100501", pm.getModelName()), ex);
 				return false;
 			}
 		} else {

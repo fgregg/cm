@@ -1,20 +1,16 @@
 package com.choicemaker.cm.core;
 
-
 public interface ProbabilityModelSpecification {
 
-	String getWeightFileName();
+	/** A path to the model weights file (*.model) */
+	String getWeightFilePath();
 
-	String getClueFileName();
-
-	void setAntCommand(String v);
+	/**
+	 * A relative path from the model weights file (*.model) to the clue set
+	 * file (*.clues)
+	 */
+	String getClueFilePath();
 
 	MachineLearner getMachineLearner();
-
-	void setUseAnt(boolean v);
-
-	boolean isUseAnt();
-
-	String getAntCommand();
 
 }

@@ -206,7 +206,7 @@ public abstract class AbstractRecordSourceSerializer
 			.append("\" fileName=\"")
 			.append(srs.getFileName())
 			.append("\" model=\"")
-			.append(srs.getModel().getName())
+			.append(srs.getModel().getModelName())
 			.append("\">");
 		sb.append("<properties>");
 		Properties p = srs.getProperties();

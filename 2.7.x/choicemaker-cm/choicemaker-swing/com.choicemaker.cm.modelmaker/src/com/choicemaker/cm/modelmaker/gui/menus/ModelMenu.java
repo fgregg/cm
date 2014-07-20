@@ -498,7 +498,7 @@ public class ModelMenu extends LastUsedMenu {
 				if (evt.getPropertyName().equals(ModelMakerEventNames.PROBABILITY_MODEL)) {
 					IProbabilityModel model = parent.getProbabilityModel();
 					if (model != null) {
-						opened(model.getFileName());
+						opened(model.getModelFilePath());
 					}
 				}
 			}

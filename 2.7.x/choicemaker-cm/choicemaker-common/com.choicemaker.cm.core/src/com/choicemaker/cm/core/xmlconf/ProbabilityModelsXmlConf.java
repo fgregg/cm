@@ -60,7 +60,7 @@ public class ProbabilityModelsXmlConf {
 		throws XmlConfException {
 		Element m = new Element("ProbabilityModel");
 		//m.setAttribute("clueFileName", model.getClueFileName());
-		m.setAttribute("clueFileName", model.getRawClueFileName());
+		m.setAttribute("clueFileName", model.getClueFilePath());
 		String ts = model.getTrainingSource();
 		m.setAttribute("trainingSource", ts == null ? "" : ts);
 		m.setAttribute(
@@ -104,7 +104,7 @@ public class ProbabilityModelsXmlConf {
 			mlc.saveClue(c, i);
 		}
 		try {
-			String fileName = model.getFileName();
+			String fileName = model.getModelFilePath();
 			FileOutputStream fs =
 				new FileOutputStream(new File(fileName).getAbsoluteFile());
 			XMLOutputter o = new XMLOutputter("    ", true);
@@ -358,7 +358,7 @@ public class ProbabilityModelsXmlConf {
 				} else {
 					m = readModel(fileName, compiler, new StringWriter());
 				}
-				m.setName(name);
+				m.setModelName(name);
 				List props = e.getChildren("property");
 				Iterator iProps = props.iterator();
 				while (iProps.hasNext()) {

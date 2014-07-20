@@ -246,7 +246,7 @@ class DbMarkedRecordPairSource implements MarkedRecordPairSource {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-		setName(NameUtils.getNameFromFileName(fileName));
+		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
 	public String getFileName() {

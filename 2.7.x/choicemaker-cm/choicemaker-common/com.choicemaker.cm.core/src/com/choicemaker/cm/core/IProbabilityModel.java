@@ -49,15 +49,17 @@ public interface IProbabilityModel extends AccessProvider, ImmutableProbabilityM
 	 */
 	public abstract void setEnableAllRulesBeforeTraining(boolean v);
 	/**
-	 * Sets the name of the probability model.
-	 *
+	 * Sets the path to the probability model weights file (*.model)
+	 * 
 	 * If this model is in the collection of probability models, the
-	 * name that it is associated with in the collection does not get
-	 * changed.
-	 *
-	 * @param   fileName  The new name.
+	 * {@link #getModelName() name} that it is associated with in the collection does
+	 * not get changed.
+	 * 
+	 * @param filePath
+	 *            The new name.
 	 */
-	public abstract void setFileName(String fileName);
+	public abstract void setModelFilePath(String fileName);
+	public abstract void setModelName(String name);
 	/**
 	 * Set the value of firingThreshold.
 	 * @param v  Value to assign to firingThreshold.
@@ -69,8 +71,7 @@ public interface IProbabilityModel extends AccessProvider, ImmutableProbabilityM
 	 */
 	public abstract void setLastTrainingDate(Date v);
 	public abstract void setMachineLearner(MachineLearner ml);
-	public abstract void setName(String name);
-	public abstract void setRawClueFileName(String fn);
+	public abstract void setClueFilePath(String fn);
 	public abstract void setTrainedWithHolds(boolean b);
 	/**
 	 * Set the value of trainingSource.

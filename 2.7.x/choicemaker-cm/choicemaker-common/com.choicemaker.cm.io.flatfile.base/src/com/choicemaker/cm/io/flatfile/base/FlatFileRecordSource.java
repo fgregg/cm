@@ -262,7 +262,7 @@ public class FlatFileRecordSource implements RecordSource {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-		setName(NameUtils.getNameFromFileName(fileName));
+		setName(NameUtils.getNameFromFilePath(fileName));
 	}
 
 	public String getFileName() {

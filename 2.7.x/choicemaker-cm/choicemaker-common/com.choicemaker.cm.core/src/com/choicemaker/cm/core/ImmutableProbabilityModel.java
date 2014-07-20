@@ -80,7 +80,9 @@ public interface ImmutableProbabilityModel {
 	 */
 	public abstract String getAntCommand();
 
-	public abstract String getClueFileName();
+	public abstract String getClueFilePath();
+
+//	public abstract String getClueSetName();
 
 	/**
 	 * Returns an instance of the clue set.
@@ -103,15 +105,25 @@ public interface ImmutableProbabilityModel {
 	public abstract Evaluator getEvaluator();
 
 	/**
-	 * Returns the file name of the probability model.
-	 *
-	 * @return   The file name of the probability model.
+	 * Returns the path to the probability model weights file (*.model).
+	 * 
+	 * @return The path to the *.model file
 	 */
-	public abstract String getFileName();
+	public abstract String getModelFilePath();
 
 	/**
-	 * Get the value of firingThreshold.
-	 * @return value of firingThreshold.
+	 * Returns the name of the probability model.
+	 *
+	 * @return   The name of the probability model.
+	 */
+	public abstract String getModelName();
+
+	/**
+	 * Returns the value of firingThreshold. The firing threshold is the number
+	 * of times a clue must fire <em>correctly</em> during a training session in
+	 * order for the clue to be enabled.
+	 * 
+	 * @return a positive value
 	 */
 	public abstract int getFiringThreshold();
 
@@ -122,15 +134,6 @@ public interface ImmutableProbabilityModel {
 	public abstract Date getLastTrainingDate();
 
 	public abstract MachineLearner getMachineLearner();
-
-	/**
-	 * Returns the name of the probability model.
-	 *
-	 * @return   The name of the probability model.
-	 */
-	public abstract String getName();
-
-	public abstract String getRawClueFileName();
 
 	public abstract boolean[] getTrainCluesToEvaluate();
 
