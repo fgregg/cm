@@ -1612,8 +1612,9 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			programExit(EXIT_ERROR);
 		}
 
+//		Object o = new Object();
 		while(isWait()) {
-			synchronized(statusSynchronization) {
+			synchronized(this) {
 				try {
 					setReturnCode(EXIT_OK);
 					setReady(true);
