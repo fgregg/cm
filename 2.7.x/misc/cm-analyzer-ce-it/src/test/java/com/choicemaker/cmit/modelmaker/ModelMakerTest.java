@@ -53,7 +53,7 @@ public class ModelMakerTest extends TestCase {
 	public static final String CONFIGURATION_PATH = EXAMPLE_DIRECTORY
 			+ RESOURCE_NAME_SEPARATOR + CONFIGURATION_FILE;
 
-	public static String CONFIGURATION_ARGS = "-conf";
+	public static String CONFIGURATION_ARG = "-conf";
 
 	public static final String WORKSPACE = "target/workspace";
 
@@ -91,9 +91,11 @@ public class ModelMakerTest extends TestCase {
 		URL configURL = ModelMakerTest.class.getResource(CONFIGURATION_PATH);
 		URI configURI = configURL.toURI();
 		File configFile = new File(configURI);
+		assertTrue(configFile.exists());
+		assertTrue(configFile.canRead());
 		String configPath = configFile.getAbsolutePath();
 		String[] retVal = new String[] {
-				CONFIGURATION_ARGS, configPath };
+				CONFIGURATION_ARG, configPath };
 		return retVal;
 	}
 
@@ -121,15 +123,14 @@ public class ModelMakerTest extends TestCase {
 		return retVal;
 	}
 
-	static Object startModelMaker(final Object modelMaker, final String[] args)
+	static void startupModelMaker(final Object modelMaker, final String[] args)
 			throws Exception {
 		assert modelMaker != null;
 		Class<?>[] parameterTypes = new Class<?>[] { Object.class };
 		Class<?> mmClass = modelMaker.getClass();
-		Method m = mmClass.getMethod("run", parameterTypes);
+		Method m = mmClass.getMethod("startup", parameterTypes);
 		Object[] parameters = new Object[] { args };
-		Object retVal = m.invoke(modelMaker, parameters);
-		return retVal;
+		m.invoke(modelMaker, parameters);
 	}
 
 	static boolean isModelMakerReady(final Object modelMaker) throws Exception {
@@ -144,7 +145,7 @@ public class ModelMakerTest extends TestCase {
 		return retVal;
 	}
 
-	static Object shutdownModelMaker(final Object modelMaker, int exitCode)
+	static Object tearDownModelMaker(final Object modelMaker, int exitCode)
 			throws Exception {
 		assert modelMaker != null;
 		Class<?>[] parameterTypes = new Class<?>[] { int.class };
@@ -199,24 +200,10 @@ public class ModelMakerTest extends TestCase {
 		// Instantiate ModelMaker
 		this.modelMaker = instantiateModelMaker(this.bootLoader);
 
-		// Run ModelMaker in a new thread
-		Thread t = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					String[] args1 = getModelMakerRunArgs();
-					Object rc =
-						startModelMaker(ModelMakerTest.this.modelMaker, args1);
-					System.out.println("ModelMaker.run(..) return code: " + rc);
-				} catch (Exception e) {
-					System.out.println("ModelMaker.run(..) failed: "
-							+ e.toString());
-				}
-			}
-		});
-		t.start();
-		Thread.currentThread().yield();
-		Thread.currentThread().sleep(WAIT_HACK_5_SECONDS);
+		// Prepare, but do not display, the ModelMaker GUI
+		String[] args1 = getModelMakerRunArgs();
+		startupModelMaker(ModelMakerTest.this.modelMaker, args1);
+		System.out.println("ModelMaker GUI prepared (but not displayed)");
 
 		System.out.println("setUp() complete");
 	}
@@ -225,7 +212,7 @@ public class ModelMakerTest extends TestCase {
 		System.out.println("Starting tearDown()");
 		super.tearDown();
 
-		Object rc = shutdownModelMaker(this.modelMaker, EXIT_OK);
+		Object rc = tearDownModelMaker(this.modelMaker, EXIT_OK);
 		System.out.println("ModelMaker.programExit() return code: " + rc);
 
 		shutdownEclipse(this.bootLoader);
