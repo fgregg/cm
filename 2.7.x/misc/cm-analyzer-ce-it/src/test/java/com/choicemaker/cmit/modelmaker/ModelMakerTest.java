@@ -53,13 +53,11 @@ public class ModelMakerTest extends TestCase {
 	public static final String CONFIGURATION_PATH = EXAMPLE_DIRECTORY
 			+ RESOURCE_NAME_SEPARATOR + CONFIGURATION_FILE;
 
-	public static String CONFIGURATION_ARGS = "-conf ";
+	public static String CONFIGURATION_ARGS = "-conf";
 
 	public static final String WORKSPACE = "target/workspace";
 
 	public static final String MISC_OPTS = "-noupdate";
-
-	private static final String SP = " ";
 
 	// Copied from ModelMaker to avoid linking to that class
 	private static final int EXIT_OK = 0;
@@ -90,7 +88,6 @@ public class ModelMakerTest extends TestCase {
 	}
 
 	public static String[] getModelMakerRunArgs() throws URISyntaxException {
-//		ClassLoader cl = ModelMakerTest.class.getClassLoader();
 		URL configURL = ModelMakerTest.class.getResource(CONFIGURATION_PATH);
 		URI configURI = configURL.toURI();
 		File configFile = new File(configURI);
@@ -98,10 +95,6 @@ public class ModelMakerTest extends TestCase {
 		String[] retVal = new String[] {
 				CONFIGURATION_ARGS, configPath };
 		return retVal;
-	}
-
-	public static String[] getArgsAsArray(String args) {
-		return args.split(SP);
 	}
 
 	static Object startEclipse(final Class<?> bootLoader,
