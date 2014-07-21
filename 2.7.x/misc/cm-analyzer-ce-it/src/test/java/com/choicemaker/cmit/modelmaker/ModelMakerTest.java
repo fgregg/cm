@@ -222,6 +222,8 @@ public class ModelMakerTest extends TestCase {
 			}
 		});
 		t.start();
+		Thread.currentThread().yield();
+		Thread.currentThread().sleep(WAIT_HACK_5_SECONDS);
 
 		System.out.println("setUp() complete");
 	}

@@ -29,11 +29,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<!--
-                <version>3.1</version>
-				-->
 				<configuration>
-					<verbose>true</verbose>
+					<!-- verbose>true</verbose -->
+					<verbose>false</verbose>
 					<!-- fork>true</fork -->
 					<fork>false</fork>
 					<compilerVersion>1.7</compilerVersion>
@@ -55,10 +53,6 @@
             <configuration>
               <includeArtifactIds>com.choicemaker.cm</includeArtifactIds>
               <includeArtifactIds>cm-analyzer-ce</includeArtifactIds>
-<!--
-              <excludeArtifactIds>org.eclipse.core.launcher</excludeArtifactIds>
-              <excludeGroupIds>junit</excludeGroupIds>
--->
               <excludeTransitive>true</excludeTransitive>
               <outputDirectory>${eclipse.application.dir}</outputDirectory>
             </configuration>
@@ -72,10 +66,6 @@
             <configuration>
               <includeArtifactIds>com.choicemaker.cm</includeArtifactIds>
               <includeArtifactIds>simple_person_matching</includeArtifactIds>
-<!--
-              <excludeArtifactIds>org.eclipse.core.launcher</excludeArtifactIds>
-              <excludeGroupIds>junit</excludeGroupIds>
--->
               <excludeTransitive>true</excludeTransitive>
               <outputDirectory>${eclipse.application.examples.dir}</outputDirectory>
             </configuration>
