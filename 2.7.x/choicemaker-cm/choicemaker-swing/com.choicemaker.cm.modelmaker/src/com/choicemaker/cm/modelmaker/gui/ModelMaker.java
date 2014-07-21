@@ -441,6 +441,8 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			setReturnCode(rc);
 			setWait(false);
 			statusSynchronization.notifyAll();
+		}
+		synchronized(this) {
 			this.notifyAll();
 		}
 	}
