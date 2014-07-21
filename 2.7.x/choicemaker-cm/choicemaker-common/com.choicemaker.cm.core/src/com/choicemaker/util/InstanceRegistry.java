@@ -28,6 +28,10 @@ public class InstanceRegistry {
 	private static InstanceRegistry instance = new InstanceRegistry();
 
 	public static InstanceRegistry getInstance() {
+//		System.out.println("InstanceRegistry class: "
+//				+ InstanceRegistry.class.toString());
+//		System.out.println("InstanceRegistry classLoader: "
+//				+ InstanceRegistry.class.getClassLoader().toString());
 		return instance;
 	}
 
