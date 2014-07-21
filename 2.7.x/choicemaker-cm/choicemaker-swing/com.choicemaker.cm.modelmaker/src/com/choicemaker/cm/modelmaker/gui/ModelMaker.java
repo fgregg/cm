@@ -110,7 +110,6 @@ import com.choicemaker.cm.module.swing.DefaultManagedPanel;
 import com.choicemaker.cm.module.swing.DefaultModuleMenu;
 import com.choicemaker.util.Arguments;
 import com.choicemaker.util.ArrayHelper;
-import com.choicemaker.util.InstanceRegistry;
 import com.choicemaker.util.IntArrayList;
 
 /**
@@ -326,9 +325,6 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	}
 
 	public ModelMaker() {
-		// Register this instance for testing purposes
-		InstanceRegistry.getInstance().registerInstance(PLUGIN_APPLICATION_ID,
-				this);
 	}
 
 	/**
@@ -444,7 +440,8 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		synchronized(statusSynchronization) {
 			setReturnCode(rc);
 			setWait(false);
-			statusSynchronization.notify();
+			statusSynchronization.notifyAll();
+			this.notifyAll();
 		}
 	}
 
