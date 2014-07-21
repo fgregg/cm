@@ -1,54 +1,22 @@
 package com.choicemaker.cmit.modelmaker;
 
+import java.io.File;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 
 import junit.framework.TestCase;
 
-import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cmit.util.Eclipse2BootLoader;
-import com.choicemaker.cmit.util.Eclipse2Launcher;
 import com.choicemaker.cmit.util.Eclipse2Utils;
-import com.choicemaker.util.InstanceRegistry;
 
 public class ModelMakerTest extends TestCase {
 
-	// private static final Logger logger =
-	// Logger.getLogger(ModelMakerTest.class
-	// .getName());
-
-	private static final int SLEEP_INTERVAL_MSECS = 1000;
-
-	private static final int MAX_INTERVALS = 100;
-
-	/**
-	 * The name of the System property that controls whether
-	 * {@link #useDebugger} is set.
-	 */
-	public static final String CHOICEMAKER_IT_USE_DEBUGGER =
-		"com.choicemaker.cm.it.UseDebugger";
-
-	/** Set to true to enable useDebugger connection to the Eclipse platform */
-	private static final Boolean useDebugger = Boolean
-			.getBoolean(CHOICEMAKER_IT_USE_DEBUGGER);
-
-	public static final String JAVA_OPTS = "-Xms384M -Xmx512M";
-
-	public static final String DEBUG_PORT = "28787";
-
-	public static final String DEBUG_OPTS = "-Xdebug "
-			+ "-Xrunjdwp:transport=dt_socket,address=" + DEBUG_PORT
-			+ ",server=y,suspend=y";
-
-	// public static final String LOG4J_FILE = "log4j.xml";
-	//
-	// public static final String LOG4J_OPTS = "-Dlog4j.configuration="
-	// + LOG4J_FILE;
+	public static final int WAIT_HACK_5_SECONDS = 1000 * 5;
 
 	private static final String RESOURCE_ROOT = "/";
 
@@ -56,13 +24,6 @@ public class ModelMakerTest extends TestCase {
 
 	public static final String ECLIPSE_APPLICATION_DIRECTORY = RESOURCE_ROOT
 			+ "eclipse.application.dir";
-
-	public static final String STARTUP_JAR = "startup.jar";
-
-	public static final String STARTUP_JAR_PATH = ECLIPSE_APPLICATION_DIRECTORY
-			+ RESOURCE_NAME_SEPARATOR + STARTUP_JAR;
-
-	// public static final String CLASSPATH_OPTS = "-cp " + STARTUP_JAR;
 
 	public static final String PLUGIN_DIRECTORY = ECLIPSE_APPLICATION_DIRECTORY
 			+ RESOURCE_NAME_SEPARATOR + "plugins";
@@ -83,24 +44,29 @@ public class ModelMakerTest extends TestCase {
 			+ RESOURCE_NAME_SEPARATOR + BOOT_PLUGIN_DIRECTORY
 			+ RESOURCE_NAME_SEPARATOR + BOOT_PLUGIN_JAR;
 
-	public static final String INSTALL_ARG = "-install";
+	public static final String EXAMPLE_DIRECTORY =
+		ECLIPSE_APPLICATION_DIRECTORY + RESOURCE_NAME_SEPARATOR
+				+ "examples/simple_person_matching";
 
-	public static final String LAUNCHER_CLASS =
-		"org.eclipse.core.launcher.Main";
+	public static final String CONFIGURATION_FILE = "project.xml";
 
-	public static final String APP_PLUGIN_ID =
-		"com.choicemaker.cm.modelmaker.ModelMaker";
+	public static final String CONFIGURATION_PATH = EXAMPLE_DIRECTORY
+			+ RESOURCE_NAME_SEPARATOR + CONFIGURATION_FILE;
 
-	public static final String APPLICATION_OPTS = "-application "
-			+ APP_PLUGIN_ID;
+	public static String CONFIGURATION_ARGS = "-conf ";
 
 	public static final String WORKSPACE = "target/workspace";
-
-	public static final String DATA_OPTS = "-data " + WORKSPACE;
 
 	public static final String MISC_OPTS = "-noupdate";
 
 	private static final String SP = " ";
+
+	// Copied from ModelMaker to avoid linking to that class
+	private static final int EXIT_OK = 0;
+	private static final String FQCN_MODELMAKER =
+		"com.choicemaker.cm.modelmaker.gui.ModelMaker";
+	private static final String APP_PLUGIN_ID =
+		"com.choicemaker.cm.modelmaker.ModelMaker";
 
 	public static URL getJarUrl(String path) throws URISyntaxException,
 			MalformedURLException {
@@ -108,8 +74,8 @@ public class ModelMakerTest extends TestCase {
 		return retVal;
 	}
 
-	public static String getJarUrlAsString(String path) throws URISyntaxException,
-			MalformedURLException {
+	public static String getJarUrlAsString(String path)
+			throws URISyntaxException, MalformedURLException {
 		URL startupJarUrl = getJarUrl(path);
 		Path startupJarPath = Paths.get(startupJarUrl.toURI());
 		Path installPath = startupJarPath.getParent();
@@ -119,68 +85,101 @@ public class ModelMakerTest extends TestCase {
 		return retVal;
 	}
 
-	public static String getArgs() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(JAVA_OPTS).append(SP);
-		if (useDebugger) {
-			sb.append(DEBUG_OPTS).append(SP);
-		}
-		// sb.append(LOG4J_OPTS).append(SP);
-		// sb.append(CLASSPATH_OPTS).append(SP);
-		// sb.append(INSTALL_ARG).append(SP);
-
-		String installURL = null;
-		try {
-			installURL = getJarUrlAsString(STARTUP_JAR_PATH);
-		} catch (MalformedURLException | URISyntaxException e) {
-			throw new Error("Unexpected (i.e. design error): " + e.toString());
-		}
-		assert installURL != null;
-
-		sb.append(INSTALL_ARG).append(SP).append(installURL).append(SP);
-		sb.append(LAUNCHER_CLASS).append(SP);
-		sb.append(APPLICATION_OPTS).append(SP);
-		sb.append(DATA_OPTS).append(SP);
-		sb.append(MISC_OPTS);
-		return sb.toString();
+	public static String[] getEclipseStartupArgs() {
+		return new String[] { MISC_OPTS };
 	}
 
-	public static String[] getArgsAsArray() {
-		return getArgs().split(SP);
+	public static String[] getModelMakerRunArgs() throws URISyntaxException {
+//		ClassLoader cl = ModelMakerTest.class.getClassLoader();
+		URL configURL = ModelMakerTest.class.getResource(CONFIGURATION_PATH);
+		URI configURI = configURL.toURI();
+		File configFile = new File(configURI);
+		String configPath = configFile.getAbsolutePath();
+		String[] retVal = new String[] {
+				CONFIGURATION_ARGS, configPath };
+		return retVal;
 	}
 
-	private Eclipse2Launcher launcher;
-	private Eclipse2BootLoader bootLoader;
+	public static String[] getArgsAsArray(String args) {
+		return args.split(SP);
+	}
+
+	static Object startEclipse(final Class<?> bootLoader,
+			final URL pluginPathLocation, final String location,
+			final String[] args, final Runnable handler) throws Exception {
+		assert bootLoader != null;
+		Class<?>[] parameterTypes = new Class<?>[] {
+				URL.class, String.class, String[].class, Runnable.class };
+		Method m = bootLoader.getMethod("startup", parameterTypes);
+		Object[] parameters = new Object[] {
+				pluginPathLocation, location, args, handler };
+		Object retVal = m.invoke(null, parameters);
+		return retVal;
+	}
+
+	static Object instantiateModelMaker(final Class<?> bootLoader)
+			throws Exception {
+		assert bootLoader != null;
+		Class<?>[] parameterTypes = new Class<?>[] { String.class };
+		Method m = bootLoader.getMethod("getRunnable", parameterTypes);
+		Object[] parameters = new Object[] { APP_PLUGIN_ID };
+		Object retVal = m.invoke(null, parameters);
+		System.out.println("BootLoader.getRunnable() return code: " + retVal);
+		return retVal;
+	}
+
+	static Object startModelMaker(final Object modelMaker, final String[] args)
+			throws Exception {
+		assert modelMaker != null;
+		Class<?>[] parameterTypes = new Class<?>[] { Object.class };
+		Class<?> mmClass = modelMaker.getClass();
+		Method m = mmClass.getMethod("run", parameterTypes);
+		Object[] parameters = new Object[] { args };
+		Object retVal = m.invoke(modelMaker, parameters);
+		return retVal;
+	}
+
+	static boolean isModelMakerReady(final Object modelMaker) throws Exception {
+		assert modelMaker != null;
+		Class<?>[] parameterTypes = null;
+		Class<?> mmClass = modelMaker.getClass();
+		Method m = mmClass.getMethod("isReady", parameterTypes);
+		Object[] parameters = null;
+		Object rc = m.invoke(modelMaker, parameters);
+		assertTrue(rc instanceof Boolean);
+		boolean retVal = ((Boolean) rc).booleanValue();
+		return retVal;
+	}
+
+	static Object shutdownModelMaker(final Object modelMaker, int exitCode)
+			throws Exception {
+		assert modelMaker != null;
+		Class<?>[] parameterTypes = new Class<?>[] { int.class };
+		Class<?> mmClass = modelMaker.getClass();
+		Method m = mmClass.getMethod("programExit", parameterTypes);
+		Object[] parameters = new Object[] { Integer.valueOf(exitCode) };
+		Object retVal = m.invoke(modelMaker, parameters);
+		return retVal;
+	}
+
+	static void shutdownEclipse(final Class<?> bootLoader) throws Exception {
+		assert bootLoader != null;
+		Class<?>[] parameterTypes = null;
+		Method m = bootLoader.getMethod("shutdown", parameterTypes);
+		Object[] parameters = null;
+		m.invoke(null, parameters);
+	}
+
+	private Class<?> bootLoader;
 	private ClassLoader initialClassLoader;
+	private Object modelMaker;
 
-	Thread createModelMakerThread(final ClassLoader cl,
-			final Eclipse2Launcher launcher, final String[] args) {
-		assert cl != null;
-		assert launcher != null;
-		Runnable r = new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Thread.currentThread().setContextClassLoader(cl);
-					System.out.println("ModelMaker thread class loader: "
-							+ Thread.currentThread().getContextClassLoader()
-									.toString());
-					launcher.run(args);
-				} catch (Exception e) {
-					System.err.println("ModelMaker thread failed: "
-							+ e.toString());
-				}
-			}
-		};
-		return new Thread(r);
-	}
-
-	@SuppressWarnings("unchecked")
 	protected void setUp() throws Exception {
 
 		System.out.println("Starting setUp()");
 		super.setUp();
 
+		// Set up a restricted class path in the current thread context
 		assertTrue(this.initialClassLoader == null);
 		this.initialClassLoader =
 			Thread.currentThread().getContextClassLoader();
@@ -190,73 +189,62 @@ public class ModelMakerTest extends TestCase {
 		Thread.currentThread().setContextClassLoader(cl);
 		System.out.println("setUp() new ContextClassLoader: " + cl.toString());
 
-		assertTrue(this.launcher == null);
-		URL startupURL = getJarUrl(STARTUP_JAR_PATH);
+		// Dynamically load the BootLoader class/singleton
 		URL bootURL = getJarUrl(BOOT_PLUGIN_JAR_PATH);
-		this.launcher = new Eclipse2Launcher(startupURL, bootURL);
-		String[] args = getArgsAsArray();
-		System.out.println("Args: " + args);
-		Thread t = createModelMakerThread(cl, this.launcher, args);
+		this.bootLoader = new Eclipse2BootLoader(bootURL).getBootLoaderClass();
+
+		// Eclipse startup parameters
+		final URL installURL = null;
+		final Runnable handler = null;
+		final String[] args0 = getEclipseStartupArgs();
+
+		// Start Eclipse
+		Object rc =
+			startEclipse(this.bootLoader, installURL, WORKSPACE, args0, handler);
+		System.out.println("Eclipse startup return code: " + rc);
+
+		// Instantiate ModelMaker
+		this.modelMaker = instantiateModelMaker(this.bootLoader);
+
+		// Run ModelMaker in a new thread
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					String[] args1 = getModelMakerRunArgs();
+					Object rc =
+						startModelMaker(ModelMakerTest.this.modelMaker, args1);
+					System.out.println("ModelMaker.run(..) return code: " + rc);
+				} catch (Exception e) {
+					System.out.println("ModelMaker.run(..) failed: "
+							+ e.toString());
+				}
+			}
+		});
 		t.start();
 
-//		int count = 0;
-//		this.bootLoader = new Eclipse2BootLoader(this.launcher);
-//		while (!Eclipse2Utils.isEclipseRunning(this.bootLoader)) {
-//			System.out.println("setUp() wait interval: " + count);
-//			if (count > MAX_INTERVALS) {
-//				break;
-//			}
-//			Thread.sleep(SLEEP_INTERVAL_MSECS);
-//			++count;
-//		}
-		int count = 0;
-		Map<String,Object> mms = InstanceRegistry.getInstance().findRegisteredInstances(ModelMaker.PLUGIN_APPLICATION_ID);
-		while (mms.size() < 1) {
-			System.out.println("setUp() wait interval: " + count);
-			if (count > MAX_INTERVALS) {
-				break;
-			}
-			Thread.sleep(SLEEP_INTERVAL_MSECS);
-			++count;
-			mms = InstanceRegistry.getInstance().findRegisteredInstances(ModelMaker.PLUGIN_APPLICATION_ID);
-		}
-
-		mms = InstanceRegistry.getInstance().findRegisteredInstances(ModelMaker.PLUGIN_APPLICATION_ID);
-		if (mms.size() < 1) {
-			fail("setUp() failed: unable to start Eclipse 2");
-		}
 		System.out.println("setUp() complete");
 	}
 
 	protected void tearDown() throws Exception {
 		System.out.println("Starting tearDown()");
 		super.tearDown();
-		Eclipse2Utils.shutdownEclipse(this.bootLoader);
 
-		assertTrue(this.initialClassLoader != null);
-		System.out.println("setUp() restoring initialClassLoader: "
-				+ this.initialClassLoader.toString());
-		Thread.currentThread().setContextClassLoader(this.initialClassLoader);
+		Object rc = shutdownModelMaker(this.modelMaker, EXIT_OK);
+		System.out.println("ModelMaker.programExit() return code: " + rc);
+
+		shutdownEclipse(this.bootLoader);
+		System.out.println("BootLoader.shutdown() returned");
 
 		System.out.println("tearDown() complete");
 	}
 
-	public void testSetupTeardown() throws Exception {
-		System.out.println("testSetupTeardown");
+	public void testModelMakerIsReady() throws Exception {
+		System.out.println("testModelMakerIsReady");
 		System.out.println("starting test");
-		assertTrue(this.launcher != null);
-		assertTrue(Eclipse2Utils.isEclipseRunning(this.bootLoader));
-		@SuppressWarnings("unchecked")
-		Map<String, Object> mmInstances =
-			InstanceRegistry.getInstance().findRegisteredInstances(
-					ModelMaker.PLUGIN_APPLICATION_ID);
-		assertTrue(mmInstances != null);
-		assertTrue(mmInstances.size() == 1);
-		for (Map.Entry<String, Object> entry : mmInstances.entrySet()) {
-			assertTrue(entry.getKey().startsWith(
-					ModelMaker.PLUGIN_APPLICATION_ID));
-			assertTrue(entry.getValue() instanceof ModelMaker);
-		}
+		assertTrue(this.modelMaker != null);
+		assertTrue(FQCN_MODELMAKER.equals(this.modelMaker.getClass().getName()));
+		assertTrue(isModelMakerReady(this.modelMaker));
 		System.out.println("test completed");
 	}
 

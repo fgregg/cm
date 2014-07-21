@@ -27,7 +27,7 @@ public class Eclipse2Launcher {
 	public static final String DEBUG = "-debug"; //$NON-NLS-1$
 	public static final String DEV = "-dev"; //$NON-NLS-1$
 	public static final String DATA = "-data"; //$NON-NLS-1$
-	public static final String CONFIGURATION = "-configuration"; //$NON-NLS-1$
+	public static final String CONFIGURATION_FILE = "-configuration"; //$NON-NLS-1$
 	public static final String FEATURE = "-feature"; //$NON-NLS-1$
 	public static final String SHOWSPLASH = "-showsplash"; //$NON-NLS-1$
 	public static final String ENDSPLASH = "-endsplash"; //$NON-NLS-1$

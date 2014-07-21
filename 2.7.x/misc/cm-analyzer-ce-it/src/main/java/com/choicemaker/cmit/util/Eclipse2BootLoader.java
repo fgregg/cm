@@ -77,11 +77,11 @@ public class Eclipse2BootLoader {
 			Eclipse2Utils.loadClassFromJar(FQCN_BOOTLOADER, bootJar);
 	}
 
-	URL getBootJar() {
+	public URL getBootJar() {
 		return bootJar;
 	}
 
-	Class<?> getBootLoaderClass() {
+	public Class<?> getBootLoaderClass() {
 		return bootLoaderClass;
 	}
 

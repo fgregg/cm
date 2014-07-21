@@ -128,15 +128,14 @@ public class Eclipse2Utils {
 		return retVal;
 	}
 
-	public static boolean isEclipseRunning(Eclipse2BootLoader bootLoader)
+	public static boolean isEclipseRunning(Class<?> bootLoader)
 			throws Exception {
 		if (bootLoader == null) {
 			throw new IllegalArgumentException("null launcher");
 		}
 		Boolean retVal = null;
 		try {
-			Class<?> c = bootLoader.getBootLoaderClass();
-			Method m = getMethod(c, "isRunning", null);
+			Method m = getMethod(bootLoader, "isRunning", null);
 			retVal = (Boolean) m.invoke(null, (Object[]) null);
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | ClassCastException e) {
@@ -146,14 +145,13 @@ public class Eclipse2Utils {
 		return retVal.booleanValue();
 	}
 
-	public static void shutdownEclipse(Eclipse2BootLoader bootLoader)
+	public static void shutdownEclipse(Class<?> bootLoader)
 			throws Exception {
 		if (bootLoader == null) {
-			throw new IllegalArgumentException("null launcher");
+			throw new IllegalArgumentException("null boot loader");
 		}
 		try {
-			Class<?> c = bootLoader.getBootLoaderClass();
-			Method m = getMethod(c, "shutdown", null);
+			Method m = getMethod(bootLoader, "shutdown", null);
 			m.invoke(null, (Object[]) null);
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | ClassCastException e) {
