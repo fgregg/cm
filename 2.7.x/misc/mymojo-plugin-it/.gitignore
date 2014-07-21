@@ -8,3 +8,4 @@ target-02
 .project
 .classpath
 .settings
+/bin
