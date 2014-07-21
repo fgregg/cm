@@ -10,7 +10,7 @@ import java.net.URL;
  * that is specified when an instance is created, so that the <code>Main</code>
  * class does not have to be statically linked to clients that use it.
  * </p>
- * 
+ *
  * @see org.eclipse.core.launcher.Main
  */
 public class Eclipse2Launcher {
@@ -87,7 +87,7 @@ public class Eclipse2Launcher {
 	public Class<?> getStartupClass() {
 		return startupClass;
 	}
-	
+
 	public Object getStartupInstance() {
 		return startupInstance;
 	}
@@ -103,7 +103,7 @@ public class Eclipse2Launcher {
 	/**
 	 * Creates and returns a platform <code>BootLoader</code> class which can be used
 	 * to start up and run the platform.
-	 * 
+	 *
 	 * @return the new boot loader
 	 * @param path
 	 *            search path for the BootLoader
@@ -115,7 +115,7 @@ public class Eclipse2Launcher {
 		try {
 			URL[] urls = new URL[] { getBootJar() };
 			Object[] params = new Object[]{ urls };
-			retVal = (Class<?>) m.invoke(this.getStartupInstance(), (Object[]) params);
+			retVal = (Class<?>) m.invoke(this.getStartupInstance(), params);
 		} catch (IllegalAccessException | IllegalArgumentException | ClassCastException
 				e) {
 			throw new Error("Unexpected (i.e. design error: " + e.toString());
@@ -132,7 +132,7 @@ public class Eclipse2Launcher {
 
 	/**
 	 * Runs the application to be launched.
-	 * 
+	 *
 	 * @return the return value from the launched application
 	 * @param args
 	 *            the arguments to pass to the application
@@ -145,7 +145,7 @@ public class Eclipse2Launcher {
 		Object retVal = null;
 		try {
 			Object[] params = new Object[]{ args };
-			retVal = m.invoke(this.getStartupInstance(), (Object[]) params);
+			retVal = m.invoke(this.getStartupInstance(), params);
 		} catch (IllegalAccessException | IllegalArgumentException
 				e) {
 			throw new Error("Unexpected (i.e. design error: " + e.toString());
@@ -171,9 +171,9 @@ public class Eclipse2Launcher {
 	 * <p>
 	 * Clients wishing to run the platform without a following
 	 * <code>System.exit</code> call should use <code>run()</code>.
-	 * 
+	 *
 	 * @see #run
-	 * 
+	 *
 	 * @param args
 	 *            the command line arguments
 	 */
@@ -195,10 +195,10 @@ public class Eclipse2Launcher {
 			}
 		}
 	}
-	
+
 	/**
 	 * Runs this launcher with the arguments specified in the given string.
-	 * 
+	 *
 	 * @param argString
 	 *            the arguments string
 	 * @exception Exception

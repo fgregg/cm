@@ -26,7 +26,7 @@ import com.choicemaker.util.SystemPropertyUtils;
 
 /**
  * Based on the maven-it-sample archetype.
- * 
+ *
  * @author rphall
  */
 public class SmokeTest extends AbstractMavenIntegrationTestCase {
@@ -87,7 +87,7 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 	/**
 	 * Set to true to enable verbose Maven log messages. (Unrelated to the
 	 * {@link #useDebugger} connection setting.)
-	 * 
+	 *
 	 * @see #MAVEN_DEBUG_PARAMETER
 	 */
 	private static final Boolean isMavenDebug = Boolean
@@ -111,7 +111,7 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 
 	/**
 	 * Name of Maven environment variable
-	 * 
+	 *
 	 * @see #useDebugger
 	 * @see #MAVEN_DEBUGGER_OPTIONS
 	 */
@@ -123,7 +123,7 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 	/**
 	 * Value of the Maven environment variable that configures the Verifier
 	 * build to wait for a useDebugger connection.
-	 * 
+	 *
 	 * @see #useDebugger
 	 */
 	private static final String MAVEN_DEBUGGER_OPTIONS =
@@ -142,7 +142,7 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 	/**
 	 * Maven debug command-line parameter. Enables verbose output to the
 	 * Verifier log. (Unrelated to the {@link #useDebugger} connection setting.)
-	 * 
+	 *
 	 * @see #isMavenDebug
 	 */
 	public static final String MAVEN_DEBUG_PARAMETER = "-X";
@@ -238,8 +238,8 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		verifyCleanBuildDirectory();
 		String diagnostic = MAVEN_CLEAN_GOAL;
 		Verifier verifier = createVerifier(diagnostic);
-		verifier.setLogFileName(diagnostic + LOG_FILE_SUFFIX);
 		assertTrue(verifier != null);
+		verifier.setLogFileName(diagnostic + LOG_FILE_SUFFIX);
 		executeMavenGoal(verifier, MAVEN_CLEAN_GOAL);
 		verifyCleanBuildDirectory();
 	}
@@ -248,8 +248,8 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		verifyCleanBuildDirectory();
 		String diagnostic = MAVEN_GENERATE_SOURCES_GOAL;
 		Verifier verifier = createVerifier(diagnostic);
-		verifier.setLogFileName(diagnostic + LOG_FILE_SUFFIX);
 		assertTrue(verifier != null);
+		verifier.setLogFileName(diagnostic + LOG_FILE_SUFFIX);
 		executeMavenGoal(verifier, MAVEN_GENERATE_SOURCES_GOAL);
 		verifyGeneratedSourcesDirectory();
 	}
@@ -259,20 +259,20 @@ public class SmokeTest extends AbstractMavenIntegrationTestCase {
 		String diagnostic =
 			concatentateNames(MAVEN_GENERATE_SOURCES_GOAL, MAVEN_CLEAN_GOAL);
 		Verifier verifier = createVerifier(diagnostic);
-		verifier.setLogFileName(diagnostic + LOG_FILE_SUFFIX);
 		assertTrue(verifier != null);
+		verifier.setLogFileName(diagnostic + LOG_FILE_SUFFIX);
 		executeMavenGoal(verifier, MAVEN_GENERATE_SOURCES_GOAL);
 		verifyGeneratedSourcesDirectory();
 		executeMavenGoal(verifier, MAVEN_CLEAN_GOAL);
 		verifyCleanBuildDirectory();
 	}
-	
+
 	public void testCompile() {
 		verifyCleanBuildDirectory();
 		String diagnostic = MAVEN_COMPILE_GOAL;
 		Verifier verifier = createVerifier(diagnostic);
-		verifier.setLogFileName(diagnostic + LOG_FILE_SUFFIX);
 		assertTrue(verifier != null);
+		verifier.setLogFileName(diagnostic + LOG_FILE_SUFFIX);
 		executeMavenGoal(verifier, MAVEN_COMPILE_GOAL);
 	}
 

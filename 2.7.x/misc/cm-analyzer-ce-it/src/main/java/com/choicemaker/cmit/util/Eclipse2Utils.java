@@ -7,7 +7,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 public class Eclipse2Utils {
-	
+
 	private Eclipse2Utils() {
 	}
 
@@ -29,7 +29,7 @@ public class Eclipse2Utils {
 	/**
 	 * Loads a specified class from a specified JAR file using a class loader
 	 * whose parent is the System boot loader.
-	 * 
+	 *
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
