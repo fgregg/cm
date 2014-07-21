@@ -1554,7 +1554,17 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 //				WellKnownPropertyValues.ECLIPSE2_GENERATOR_PLUGIN_FACTORY);
 	}
 
-	public Object run(Object args2) /* throws Exception */ {
+	/**
+	 * Performs all initializations for an instance to that it is ready to
+	 * {@link run(Object) run}.
+	 * 
+	 * @param args2
+	 *            typically a non-null String array. Other types, including
+	 *            null, are ignored.
+	 */
+	public void startup(Object args2) {
+		logger.info("ModelMaker starting up");
+
 		String[] args = null;
 		if(args2 instanceof String[]) {
 			args = (String[]) args2;
@@ -1599,7 +1609,6 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			init();
 			buildComponents();
 			addListeners();
-			display();
 			setTitleMessage();
 		} catch (XmlConfException e) {
 			e.printStackTrace();
@@ -1610,13 +1619,39 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				JOptionPane.ERROR_MESSAGE);
 			programExit(EXIT_ERROR);
 		}
+		
+		// Set the default return code (it may overridden later)
+		setReturnCode(EXIT_OK);
+		
+		// Signal that the instance is ready to be displayed
+		setReady(true);
 
-//		Object o = new Object();
+		logger.info("ModelMaker startup complete");
+	}
+		
+	/**
+	 * Displays the GUI of an instance; waits for user input; and tears down the
+	 * GUI when the user indirectly invokes {@link #programExit(int)} through
+	 * some menu choice.
+	 * 
+	 * @param args2
+	 *            typically a non-null String array. Other types, including
+	 *            null, are ignored.
+	 * @return the exit code that was specified when programExit(int) was
+	 *         invoked.
+	 */
+	public Object run(Object args2) {
+		
+		// Get this instance ready to display a GUI
+		startup(args2);
+
+		// Display the GUI and wait for user input
+		display();
+		
+		// Wait for programExit(int) to be invoked
 		while(isWait()) {
 			synchronized(this) {
 				try {
-					setReturnCode(EXIT_OK);
-					setReady(true);
 					this.wait();
 				} catch (InterruptedException e) {
 					setReturnCode(EXIT_ERROR);
@@ -1625,11 +1660,24 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				setWait(false);
 			}
 		}
+		
+		// Tear down the GUI
+		tearDown();
 
+		// Return the exit code that is set by invoking programExit(int)
+		Integer exitCode = Integer.valueOf(getReturnCode());
+		return exitCode;
+	}
+
+	/**
+	 * Tears down an instance:<ul>
+	 * <li>First hides the GUI</li>
+	 * <li>Then disposes of the GUI</li>
+	 * </ul>
+	 */
+	public void tearDown() {
 		this.setVisible(false);
 		this.dispose();
-		int rc = getReturnCode();
-		return Integer.valueOf(rc);
 	}
 
 	public static void main(String[] args) throws IOException {
