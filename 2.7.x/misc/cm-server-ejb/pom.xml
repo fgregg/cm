@@ -17,15 +17,6 @@
 			UTF-8</project.build.sourceEncoding>
 	</properties>
 
-<!--
--->
-	<repositories>
-		<repository>
-			<id>JBOSS_NEXUS</id>
-			<url>http://repository.jboss.org/nexus/content/groups/public</url>
-		</repository>
-	</repositories>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -106,7 +97,7 @@
 		</profile>
 
 		<profile>
-			<id>arquillian-jbossas-managed</id>
+			<id>arquillian-jbossas72-remote</id>
 			<dependencies>
 				<dependency>
 					<groupId>org.jboss.spec</groupId>
@@ -117,18 +108,35 @@
 				</dependency>
 				<dependency>
 					<groupId>org.jboss.as</groupId>
-					<artifactId>jboss-as-arquillian-container-managed</artifactId>
+					<artifactId>jboss-as-arquillian-container-remote</artifactId>
 					<version>7.2.0.Final</version>
 					<scope>test</scope>
 				</dependency>
-				<!-- <dependency> <groupId>org.jboss.arquillian.protocol</groupId> <artifactId>arquillian-protocol-servlet</artifactId> 
-					<version>1.1.5.Final</version> <scope>test</scope> </dependency> -->
+				<dependency>
+					<groupId>org.jboss.arquillian.protocol</groupId>
+					<artifactId>arquillian-protocol-servlet</artifactId>
+					<version>1.1.5.Final</version>
+					<scope>test</scope>
+				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.17</version>
+						<configuration>
+							<systemPropertyVariables>
+								<jboss.home>/Users/rphall/Applications/EAP-6.2.0/jboss-eap-6.2</jboss.home>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 
 		<profile>
 			<id>wildlfly81-embedded</id>
-			<!-- the dependencies for Wildfly8.1 -->
 			<dependencies>
 				<dependency>
 					<groupId>org.wildfly</groupId>
@@ -144,9 +152,6 @@
 
 			<build>
 				<plugins>
-					<!-- You need the maven dependency plugin to download locally a zip 
-						with the server, unless you provide your own, it will download under the 
-						/target directory -->
 					<plugin>
 						<groupId>
 							org.apache.maven.plugins
@@ -180,12 +185,9 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>2.17</version>
 						<configuration>
-							<!-- Fork every test because it will launch a separate AS instance -->
 							<forkMode>always</forkMode>
 							<systemPropertyVariables>
 								<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-								<!-- the maven dependency plugin will have already downloaded the 
-									server on /target -->
 								<jboss.home>${project.basedir}/target/wildfly-8.1.0.Final</jboss.home>
 								<module.path>${project.basedir}/target/wildfly-8.1.0.Final/modules</module.path>
 							</systemPropertyVariables>
@@ -216,9 +218,16 @@
 					</compilerArguments>
 				</configuration>
 			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-ejb-plugin</artifactId> 
-				<version>2.3</version> <configuration> <ejbVersion>3.1</ejbVersion> </configuration> 
-				</plugin> -->
+			<!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ejb-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<ejbVersion>3.1</ejbVersion>
+				</configuration>
+			</plugin>
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>

@@ -3,9 +3,9 @@
     xsi:schemaLocation="
         http://jboss.org/schema/arquillian
         http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
-    <container qualifier="jbossas-managed" default="true">
+    <container qualifier="arquillian-jbossas72-remote" default="true">
         <configuration>
-            <property name="jbossHome">target/jboss-as-7.2.0.Final</property>
+            <property name="jbossHome">/Users/rphall/Applications/EAP-6.2.0/jboss-eap-6.2</property>
         </configuration>
     </container>
 </arquillian>
