@@ -7,6 +7,7 @@ package com.choicemaker.fake;
 import java.util.LinkedList;
 import java.util.List;
 
+//import javax.ejb.Local;
 //import javax.ejb.LocalBean;
 //import javax.ejb.Stateless;
 
@@ -14,9 +15,7 @@ import java.util.List;
  * Bean that uses PluginDiscovery
  * rphall
  */
-
-
-public class PluginDiscoveryBean {
+public class PluginDiscoveryBean implements PluginDiscovery {
 
     public List<String> listPluginIds() {
     	// FIXME hard-coded, fake list
