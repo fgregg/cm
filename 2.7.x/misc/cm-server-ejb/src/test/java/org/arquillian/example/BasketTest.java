@@ -37,9 +37,11 @@ import org.junit.runner.RunWith;
 public class BasketTest {
     @Deployment
     public static JavaArchive createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class, "test.jar")
+        JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "test.jar")
             .addClasses(Basket.class, OrderRepository.class, SingletonOrderRepository.class)
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+        System.out.println(jar.toString(true));
+        return jar;
     }
     
     @Inject

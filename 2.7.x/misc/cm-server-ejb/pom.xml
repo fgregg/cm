@@ -6,13 +6,12 @@
         http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jboss.arquillian.examples</groupId>
-    <artifactId>arquillian-tutorial-rinse-repeat</artifactId>
+    <groupId>com.choicemaker.fake</groupId>
+    <artifactId>cm-server-ejb</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>arquillian-tutorial</name>
-    <url>http://arquillian.org/guides/getting_started_rinse_and_repeat/</url>
+    <name>ChoiceMaker EJB Prototype</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,6 +45,13 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
+<!--
+        <dependency>
+            <groupId>com.choicemaker.fake</groupId>
+            <artifactId>cm-server-plugin-discovery</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

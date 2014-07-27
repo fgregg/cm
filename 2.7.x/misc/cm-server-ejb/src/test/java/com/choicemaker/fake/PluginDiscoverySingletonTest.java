@@ -15,15 +15,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-public class PluginDiscoveryBeanTest {
+public class PluginDiscoverySingletonTest {
 	
 	@Inject
-	PluginDiscoveryBean pluginDiscovery;
+	PluginDiscovery pluginDiscovery;
 
     @Deployment
     public static JavaArchive createDeployment() {
     	JavaArchive retVal =  ShrinkWrap.create(JavaArchive.class)
-            .addClass(PluginDiscoveryBean.class)
+            .addClass(PluginDiscoverySingleton.class)
+            .addClass(PluginDiscovery.class)
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     	System.out.println(retVal.toString(true));
     	return retVal;

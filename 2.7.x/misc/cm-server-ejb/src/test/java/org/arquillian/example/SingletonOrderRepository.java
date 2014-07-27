@@ -32,6 +32,7 @@ import javax.ejb.Singleton;
 @Singleton
 @Lock(LockType.READ)
 public class SingletonOrderRepository implements OrderRepository {
+
     private List<List<String>> orders;
     
     @Override
