@@ -1,0 +1,7 @@
+#ChoiceMaker 2.5 License File
+#Wed Jul 18 12:21:36 EDT 2007
+company=Evaluation
+expiration=2027-12-31
+name=Evaluator
+sgn=MC0CFBvdei8YLtEVoJQRXoncihERrdgaAhUAreNAh1pfXa7mYv8vs8HYykpV6bY\=
+train=false

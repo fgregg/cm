@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.blocking.automated.offline.core"
+   name="com.choicemaker.cm.io.blocking.automated.offline.core"
+   version="2.5.0">
+
+   <runtime>
+      <library name="oaba-core.jar">
+      	<export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+   </requires>
+
+
+</plugin>
