@@ -11,31 +11,49 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.junit.Assert;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.fake.EmbeddedPluginDiscovery;
 
 @RunWith(Arquillian.class)
-public class PluginDiscoverySingletonTest {
+public class EarTest {
 
 	@Inject
 	PluginDiscoveryEJB pluginDiscoveryEJB;
 
-	@Deployment
-	public static JavaArchive createDeployment() {
+	public static JavaArchive createEjbJar() {
+		JavaArchive retVal =
+			ShrinkWrap.create(JavaArchive.class)
+					.addClass(PluginDiscoverySingletonBean.class)
+					.addClass(PluginDiscoveryEJB.class)
+					.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+
+		// Add test class to JAR
+		retVal.addClass(EarTest.class);
+		retVal.addClass(Utils.class);
+
+		// Print the JAR contents
+		System.out.println();
+		System.out.println("EJB JAR:");
+		System.out.println(retVal.toString(true));
+		System.out.println();
+		return retVal;
+	}
+
+	public static JavaArchive createPluginDiscoveryLib() {
 		JavaArchive retVal =
 			ShrinkWrap
 					.create(JavaArchive.class)
-					.addClass(PluginDiscoverySingletonBean.class)
-					.addClass(PluginDiscoveryEJB.class)
-					.addClass(Utils.class)
 					.addClass(
 							com.choicemaker.fake.EmbeddedPluginDiscovery.class)
 					.addClass(com.choicemaker.fake.IModel.class)
@@ -43,10 +61,8 @@ public class PluginDiscoverySingletonTest {
 							com.choicemaker.fake.InstallablePluginDiscovery.class)
 					.addClass(com.choicemaker.fake.PluginDiscovery.class)
 					.addClass(
-							com.choicemaker.fake.PluginDiscoveryException.class)
-					.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-		URL resourceUrl =
-			PluginDiscoverySingletonTest.class.getResource("/META-INF/plugins");
+							com.choicemaker.fake.PluginDiscoveryException.class);
+		URL resourceUrl = EarTest.class.getResource("/META-INF/plugins");
 		try {
 			Path resourcePath;
 			resourcePath = Paths.get(resourceUrl.toURI());
@@ -58,7 +74,46 @@ public class PluginDiscoverySingletonTest {
 			System.err.println("WARNING: " + e.toString());
 		}
 		System.out.println();
-		System.out.println("PluginDiscoverySingletonTest EJB:");
+		System.out.println("PluginDiscovery LIB:");
+		System.out.println(retVal.toString(true));
+		System.out.println();
+		return retVal;
+	}
+
+	public static File[] createTestDependencies() {
+		PomEquippedResolveStage pom =
+			Maven.resolver().loadPomFromFile("pom.xml");
+		File[] retVal = pom.resolve("log4j:log4j:1.2.16").withTransitivity().asFile();
+		// File[] retVal =
+		// pom.importDependencies(ScopeType.COMPILE).resolve()
+		// .withTransitivity().asFile();
+		System.out.println();
+		System.out.println("Test dependencies:");
+		for (File f : retVal) {
+			System.out.println(f.getAbsolutePath());
+		}
+		System.out.println();
+		return retVal;
+	}
+
+	@Deployment
+	public static EnterpriseArchive createEarArchive() {
+		JavaArchive lib1 = createPluginDiscoveryLib();
+		JavaArchive ejb1 = createEjbJar();
+		// create the EAR
+		EnterpriseArchive retVal =
+			ShrinkWrap.create(EnterpriseArchive.class);
+		retVal.addAsLibrary(lib1);
+		retVal.addAsModule(ejb1);
+		try {
+		File[] deps = createTestDependencies();
+		retVal.addAsLibraries(deps);
+		} catch( Exception x) {
+			String msg = "WARNING: failed to add test dependencies: " + x.toString();
+			System.out.println(msg);
+		}
+		System.out.println();
+		System.out.println("Deployment EAR:");
 		System.out.println(retVal.toString(true));
 		System.out.println();
 		return retVal;
