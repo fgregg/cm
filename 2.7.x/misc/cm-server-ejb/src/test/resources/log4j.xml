@@ -21,7 +21,7 @@
       </layout>
    </appender>
 
-    <category name="com.choicemaker.fake">
+    <category name="com.choicemaker.fake.ejb.ejb">
        <priority value="debug"/>
     </category>
 

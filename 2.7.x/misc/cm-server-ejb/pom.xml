@@ -6,7 +6,7 @@
         http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.choicemaker.fake</groupId>
+    <groupId>com.choicemaker.fake.ejb.ejb</groupId>
     <artifactId>cm-server-ejb</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -45,13 +45,11 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-<!--
         <dependency>
             <groupId>com.choicemaker.fake</groupId>
             <artifactId>cm-server-plugin-discovery</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
--->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
