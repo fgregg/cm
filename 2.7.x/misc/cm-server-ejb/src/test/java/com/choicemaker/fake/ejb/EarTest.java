@@ -19,6 +19,7 @@ import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
+import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,18 +51,10 @@ public class EarTest {
 		return retVal;
 	}
 
-	public static JavaArchive createPluginDiscoveryLib() {
+	public static JavaArchive createPluginsLib() {
 		JavaArchive retVal =
 			ShrinkWrap
-					.create(JavaArchive.class)
-					.addClass(
-							com.choicemaker.fake.EmbeddedPluginDiscovery.class)
-					.addClass(com.choicemaker.fake.IModel.class)
-					.addClass(
-							com.choicemaker.fake.InstallablePluginDiscovery.class)
-					.addClass(com.choicemaker.fake.PluginDiscovery.class)
-					.addClass(
-							com.choicemaker.fake.PluginDiscoveryException.class);
+					.create(JavaArchive.class);
 		URL resourceUrl = EarTest.class.getResource("/META-INF/plugins");
 		try {
 			Path resourcePath;
@@ -74,7 +67,7 @@ public class EarTest {
 			System.err.println("WARNING: " + e.toString());
 		}
 		System.out.println();
-		System.out.println("PluginDiscovery LIB:");
+		System.out.println("Plugins LIB:");
 		System.out.println(retVal.toString(true));
 		System.out.println();
 		return retVal;
@@ -83,10 +76,10 @@ public class EarTest {
 	public static File[] createTestDependencies() {
 		PomEquippedResolveStage pom =
 			Maven.resolver().loadPomFromFile("pom.xml");
-		File[] retVal = pom.resolve("log4j:log4j:1.2.16").withTransitivity().asFile();
-		// File[] retVal =
-		// pom.importDependencies(ScopeType.COMPILE).resolve()
-		// .withTransitivity().asFile();
+//		File[] retVal = pom.resolve("log4j:log4j:1.2.16").withTransitivity().asFile();
+		File[] retVal =
+			pom.importDependencies(ScopeType.COMPILE).resolve()
+					.withTransitivity().asFile();
 		System.out.println();
 		System.out.println("Test dependencies:");
 		for (File f : retVal) {
@@ -98,7 +91,7 @@ public class EarTest {
 
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		JavaArchive lib1 = createPluginDiscoveryLib();
+		JavaArchive lib1 = createPluginsLib();
 		JavaArchive ejb1 = createEjbJar();
 		// create the EAR
 		EnterpriseArchive retVal =

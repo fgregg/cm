@@ -10,8 +10,8 @@ if [ -f "$POM" ] ;
 then
  echo 
  start="`date`" 
- #for p in arquillian-jbossas-remote 
- for p in arquillian-glassfish-remote
+ for p in arquillian-jbossas-remote 
+ #for p in arquillian-glassfish-remote
  do
   date 
   echo $p 
