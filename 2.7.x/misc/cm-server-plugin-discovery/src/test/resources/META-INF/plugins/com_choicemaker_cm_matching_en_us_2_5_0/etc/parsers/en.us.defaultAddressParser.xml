@@ -1,0 +1,24 @@
+<!-- This parser definition is exactly the same as that used for regular address parsing. -->
+<parser>
+	<symbolFactory class="com.choicemaker.cm.matching.en.us.address.AddressSymbolFactory" />
+	<tokenizer class="com.choicemaker.cm.matching.en.us.address.AddressTokenizer" />
+	<tokenizer class="com.choicemaker.cm.matching.en.us.address.AddressTokenizer">
+		<method name="setSplitDigitStrings" type1="int" arg1="4" type2="int" arg2="2" />		
+	</tokenizer>
+	<tokenizer class="com.choicemaker.cm.matching.en.us.address.AddressTokenizer">
+		<property name="splitPreDirections" value="directionsToSplit" />
+		<property name="splitSuffixes" value="streetSuffixes" />
+		<property name="splitPostDirections" value="directionsToSplit" />
+		<property name="splitAptTypes" value="aptTypes" />
+	</tokenizer>
+	<tokenizer class="com.choicemaker.cm.matching.en.us.address.AddressTokenizer">
+		<method name="setSplitDigitStrings" type1="int" arg1="4" type2="int" arg2="2" />		
+		<property name="splitPreDirections" value="directionsToSplit" />
+		<property name="splitSuffixes" value="streetSuffixes" />
+		<property name="splitPostDirections" value="directionsToSplit" />
+		<property name="splitAptTypes" value="aptTypes" />
+	</tokenizer>
+	<grammar file="etc/grammars/en.us.defaultAddressGrammar.txt" />
+	<standardizer class="com.choicemaker.cm.matching.en.us.address.AddressStandardizer" />
+	<parsedData class="com.choicemaker.cm.matching.en.us.ParsedAddress" />
+</parser>

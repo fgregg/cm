@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="org.jdom"
+   name="JDOM Plug-in"
+   version="0.9.0"
+   provider-name="jdom.org"
+   class="">
+
+   <runtime>
+      <library name="jdom.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.apache.xerces"/>
+   </requires>
+
+
+</plugin>
