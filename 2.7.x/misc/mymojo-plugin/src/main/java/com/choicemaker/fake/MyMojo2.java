@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -57,7 +56,7 @@ public class MyMojo2 extends AbstractMojo {
 	/** File extension for model files */
 	public static final String MODEL_FILE_PATTERN = ".model";
 
-	@Component
+	@Parameter(defaultValue = "${project}", readonly = true, required = true)
 	private MavenProject project;
 
 	/**
