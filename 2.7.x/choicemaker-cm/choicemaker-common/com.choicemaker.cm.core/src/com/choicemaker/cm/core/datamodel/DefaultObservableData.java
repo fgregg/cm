@@ -13,8 +13,6 @@ package com.choicemaker.cm.core.datamodel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import org.apache.log4j.Logger;
-
 /**
  * Part of the Model in the MVC framework for ReviewMaker.
  *
@@ -25,7 +23,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class DefaultObservableData implements ObservableData {
 
-	private static final Logger logger = Logger.getLogger(DefaultObservableData.class);
+//	private static final Logger logger = Logger.getLogger(DefaultObservableData.class);
 
 	private PropertyChangeSupport support = null;
 
@@ -44,18 +42,7 @@ public abstract class DefaultObservableData implements ObservableData {
 	 * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
 	 */
 	public PropertyChangeListener[] getPropertyChangeListeners() {
-		try {
-			// return support.getPropertyChangeListeners();
-			return (PropertyChangeListener[]) support.getClass().getMethod(
-				"getPropertyChangeListeners",
-				new Class[0]).invoke(
-				this,
-				new Object[0]);
-
-		} catch (Exception ex) {
-			logger.info("Caught Exception", ex);
-		}
-		throw new UnsupportedOperationException("Operation DefaultObservableData.etPropertyChangeListeners() not supported under JDK 1.3");
+		return support.getPropertyChangeListeners();
 	}
 
 	/**

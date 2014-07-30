@@ -1,8 +1,0 @@
-Undo the following when moving to JDK 1.4 only
-- remove com.choicemaker.core/lib/jakarta-oro-2.0.1.jar
-- replace com.choicemaker.cm.core.base.gen.ValidConverter
-- com.choicemaker.cm.core.base.datamodel.DefaultObservableData.getPropertyChangeListeners()
-- Remove com.choicemaker.cm.core.util.ChainedException and have classes that extend it extend Exception directly
-- com.choicemaker.cm.core.util.ChainedIOException use initCause and remove cause and printStackTrace.
-
-
