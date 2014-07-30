@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  -  @(#)$RCSfile$        $Revision$ $Date$
+  -
+  -  Copyright (c) 2005 ChoiceMaker Technologies, Inc.
+  -  48 Wall Street, 11th Floor, New York, NY 10128
+  -  All rights reserved.
+  -
+  -  This software is the confidential and proprietary information of
+  -  ChoiceMaker Technologies Inc. ("Confidential Information").
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="compNodeTypeExt" type="compNodeTypeExtType" abstract="true"/>
+    <xs:complexType name="compNodeTypeExtType"/>
+    <xs:element name="compGlobal" type="compGlobalType" abstract="true"/>
+    <xs:complexType name="compGlobalType"/>
+    <xs:element name="compField" type="compFieldType" abstract="true"/>
+    <xs:complexType name="compFieldType"/>
+    <xs:complexType name="globalExtType">
+        <xs:sequence>
+            <xs:element ref="compGlobal" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="intern" type="xs:string" use="optional"/>
+    </xs:complexType>
+    <xs:simpleType name="scopeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="global"/>
+            <xs:enumeration value="nodeInit"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="fieldType">
+        <xs:sequence>
+            <xs:element name="comment" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element name="derived" type="derivedType"/>
+                <xs:element name="assigned" type="assignedType"/>
+            </xs:choice>
+            <xs:element ref="compField" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="valid" type="xs:string" use="optional"/>
+        <xs:attribute name="key" type="xs:boolean" use="optional"/>
+        <xs:attribute name="transient" type="xs:boolean" default="false"/>
+        <xs:attribute name="scope" type="scopeType" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="nodeTypeExtType">
+        <xs:sequence>
+            <xs:element ref="compNodeTypeExt" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="globalStringsType">
+        <xs:attribute name="intern" type="xs:boolean"/>
+    </xs:complexType>
+    <xs:complexType name="globalType">
+        <xs:sequence>
+            <xs:element name="comment" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="globalExt" type="globalExtType" minOccurs="0"/>
+            <xs:element name="strings" type="globalStringsType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ChoiceMakerSchema">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="comment" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="import" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="global" type="globalType" minOccurs="0"/>
+                <xs:element name="nodeType" type="nodeTypeType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="nodeTypeType">
+        <xs:sequence>
+            <xs:element name="comment" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="nodeTypeExt" type="nodeTypeExtType" minOccurs="0"/>
+            <xs:element name="field" type="fieldType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="nodeType" type="nodeTypeType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:simpleType name="nodeInclusionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="none"/>
+            <xs:enumeration value="select"/>
+            <xs:enumeration value="nodeType"/>
+            <xs:enumeration value="all"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="iteratedNodeType" type="iteratedNodeTypeType" substitutionGroup="compNodeTypeExt"/>
+    <xs:complexType name="iteratedNodeTypeType">
+        <xs:complexContent>
+            <xs:extension base="compNodeTypeExtType">
+                <xs:attribute name="iterator" type="xs:string" use="required"/>
+                <xs:attribute name="assignedField" type="xs:string" use="required"/>
+                <xs:attribute name="src" type="xs:string" default="all"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="derivedType">
+        <xs:complexContent>
+            <xs:extension base="compFieldType">
+                <xs:attribute name="src" type="xs:string" default="all"/>
+                <xs:attribute name="pre" type="xs:string" default="true"/>
+                <xs:attribute name="value" type="xs:string" use="required"/>
+                <xs:attribute name="valid" type="xs:string" default="true"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="assignedType">
+        <xs:complexContent>
+            <xs:extension base="compFieldType">
+                <!-- xs:attribute name="src" type="xs:string" default="all"/ -->
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- display -->
+    <xs:element name="displayNodeType" type="displayNodeTypeType" substitutionGroup="compNodeTypeExt"/>
+    <xs:complexType name="displayNodeTypeType">
+        <xs:complexContent>
+            <xs:extension base="compNodeTypeExtType">
+                <xs:attribute name="include" type="nodeInclusionType"/>
+                <xs:attribute name="name" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="displayField" type="displayFieldType" substitutionGroup="compField"/>
+    <xs:complexType name="displayFieldType">
+        <xs:complexContent>
+            <xs:extension base="compFieldType">
+                <xs:attribute name="use" type="xs:boolean" use="optional" default="true"/>
+                <xs:attribute name="name" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- auxiliary -->
+    <xs:simpleType name="unknownItemType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ignore"/>
+            <xs:enumeration value="warn"/>
+            <xs:enumeration value="exception"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

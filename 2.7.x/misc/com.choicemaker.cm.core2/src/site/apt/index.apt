@@ -1,0 +1,54 @@
+com.choicemaker.cm.core.base
+
+ This module builds the core ChoiceMaker JAR file, which contains the following packages.
+
+ * <<com.choicemaker.cm.core.base>> \
+ The core interfaces and implementation classes for ChoiceMaker record matching.
+ 
+ * <<com.choicemaker.cm.core.base.compiler>> \
+ Interfaces and stubbed implementations classes for the ClueMaker compiler.
+
+ * <<com.choicemaker.cm.core.blocking>> \
+ The interface of an in-memory record blocker.
+
+ * <<com.choicemaker.cm.core.base.configure>> \
+ A relatively lightweight framework for configuring objects via XML specifications.
+
+ * <<com.choicemaker.cm.core.base.configure.eclipse>> \
+ A specialization of the XML configuration framework for Eclipse plugins.
+
+ * <<com.choicemaker.cm.core.base.configure.jdom>> \
+ An implementation of the XML configuration framework based on the JDOM library.
+
+ * <<com.choicemaker.cm.core.base.datamodel>> \
+ An event model for monitoring changes to records and pairs of records.
+
+ * <<com.choicemaker.cm.core.base.gen>> \
+ Interfaces and classes used to extend the basic functionality of the ClueMaker compiler.
+
+ * <<com.choicemaker.cm.core.base.report>> \
+ Interfaces and classes used to report the results of ChoiceMaker record matching.
+
+ * <<com.choicemaker.cm.core.base.ml>> \
+ Machine learning interfaces.
+
+ * <<com.choicemaker.cm.core.base.ml.none>> \
+ A do-nothing implementation of the ChoiceMaker maching learning interfaces.
+
+ * <<com.choicemaker.cm.core.base.sort>> \
+ Interfaces and classes used to sort records.
+
+ * <<com.choicemaker.cm.core.base.train>> \
+ Computes the clue weights of ChoiceMaker matching models.
+
+ * <<com.choicemaker.cm.core.util>> \
+ Utility classes used in record matching.
+
+ * <<com.choicemaker.cm.core.util.res>> \
+ Resource files such as language localizations.
+
+ * <<com.choicemaker.cm.core.base.xmlconf>> \
+ Another XML configuration that is tightly integrated with the Eclipse 2.1 plugin framework.
+
+ []
+
