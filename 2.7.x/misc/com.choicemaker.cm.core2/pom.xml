@@ -19,6 +19,7 @@
   <properties>
     <eclipse.plugin.runtime.library.name>core.jar</eclipse.plugin.runtime.library.name>
     <eclipse.plugin.src.zip.name>coresrc.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.pluginsMetaDir>com_choicemaker_cm_2_7_1</eclipse.plugin.pluginsMetaDir>
   </properties>
 
   <build>
