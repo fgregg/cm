@@ -1,6 +1,7 @@
 package com.choicemaker.fake;
 
-import java.util.List;
+import java.net.URL;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -85,8 +86,8 @@ public final class InstallablePluginDiscovery implements PluginDiscovery {
 	}
 
 	@Override
-	public List<String> listPluginIds() {
-		return getDelegate().listPluginIds();
+	public Set<URL> getPluginUrls() {
+		return getDelegate().getPluginUrls();
 	}
 
 	/** For testing only; otherwise treat as private */

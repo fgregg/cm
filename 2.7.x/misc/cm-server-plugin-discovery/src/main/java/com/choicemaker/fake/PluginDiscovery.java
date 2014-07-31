@@ -1,9 +1,10 @@
 package com.choicemaker.fake;
 
-import java.util.List;
+import java.net.URL;
+import java.util.Set;
 
 public interface PluginDiscovery {
 
-    List<String> listPluginIds();
+    Set<URL> getPluginUrls();
     
 }
