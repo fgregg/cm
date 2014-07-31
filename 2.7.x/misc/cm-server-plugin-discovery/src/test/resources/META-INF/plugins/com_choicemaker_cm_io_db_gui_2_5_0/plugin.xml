@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.db.gui"
+   name="DB IO Gui Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="gui.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+      <import plugin="com.choicemaker.cm.modelmaker"/>
+      <import plugin="com.choicemaker.cm.gui.utils"/>
+   </requires>
+
+
+   <extension
+         id="dbMrpsReaderGui"
+         name="dbMrpsReaderGui"
+         point="com.choicemaker.cm.modelmaker.mrpsReaderGui">
+      <gui
+            hasSink="false"
+            name="Database"
+            class="com.choicemaker.cm.io.db.gui.DbMarkedRecordPairSourceGuiFactory"
+            handledClass="com.choicemaker.cm.io.db.base.DbMarkedRecordPairSource">
+      </gui>
+   </extension>
+   <extension
+         id="dbRsReaderGui"
+         name="dbRsReaderGui"
+         point="com.choicemaker.cm.modelmaker.rsReaderGui">
+      <gui
+            hasSink="false"
+            name="Database"
+            class="com.choicemaker.cm.io.db.gui.DbRecordSourceGuiFactory"
+            handledClass="com.choicemaker.cm.io.db.base.DbRecordSource">
+      </gui>
+   </extension>
+
+</plugin>

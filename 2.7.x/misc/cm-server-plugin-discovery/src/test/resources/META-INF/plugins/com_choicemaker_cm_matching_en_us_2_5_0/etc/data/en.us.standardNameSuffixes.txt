@@ -1,8 +1,0 @@
-JR 	: JR, JUNIOR
-SR	: SR, SENIOR
-I	: I, 1, 1ST
-II	: II, 2, 2ND, LL, 11
-III : III, 3, 3RD, LLL, 111
-IV  : IV, 4, 4TH
-V   : V, 5, 5TH
-VI  : VI, 6

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.matching.geo"
+   name="Matching Geographical Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="geo.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+   </requires>
+
+
+</plugin>
