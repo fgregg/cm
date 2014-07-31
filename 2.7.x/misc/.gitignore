@@ -1,2 +1,4 @@
 archive
 com.choicemaker.eclipse.*
+cm-server-ear
+cm-server-war
