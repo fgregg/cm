@@ -21,7 +21,7 @@
   </files>
 	<fileSets>
 		<fileSet>
-    <directory>src/main/resources/META-INF</directory>
+    <directory>src/main/eclipse2</directory>
     <outputDirectory>/</outputDirectory>
 		<includes>
         <include>**</include>
@@ -40,3 +40,4 @@
 		</fileSet>
 	</fileSets>
 </assembly>
+src/main/eclipse2
