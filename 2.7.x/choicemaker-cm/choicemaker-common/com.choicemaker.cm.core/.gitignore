@@ -10,3 +10,5 @@ project.t.xml
 .classpath
 .settings
 *.swp
+tmp
+archive

@@ -17,16 +17,19 @@
   <name>Sun JDK 1.7.0 Tools</name>
 
   <properties>
-    <eclipse.plugin.runtime.library.name>tools.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.runtime.library.name>src/main/eclipse2/plugin/tools.jar</eclipse.plugin.runtime.library.name>
   </properties>
 
   <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
     <resources>
       <resource>
-        <directory>${project.projectDirectory}</directory>
-        <includes>
-          <include>ORACLE*txt</include>
-        </includes>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/eclipse2</directory>
+        <targetPath>META-INF/plugins</targetPath>
       </resource>
     </resources>
     <plugins>
@@ -79,10 +82,10 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>prj-assembly</id>
+            <id>assembly</id>
             <phase>package</phase>
             <configuration>
-              <descriptor>prj-assembly.xml</descriptor>
+              <descriptor>src/main/assembly/assembly.xml</descriptor>
             </configuration>
             <goals>
               <goal>single</goal>
