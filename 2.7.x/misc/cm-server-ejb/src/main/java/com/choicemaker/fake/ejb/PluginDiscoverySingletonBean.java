@@ -4,8 +4,9 @@
  */
 package com.choicemaker.fake.ejb;
 
+import java.net.URL;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
@@ -23,17 +24,17 @@ import com.choicemaker.fake.PluginDiscovery;
 @Lock(LockType.READ)
 public class PluginDiscoverySingletonBean implements PluginDiscoveryEJB {
 
-    private List<String> pluginIds;
+    private Set<URL> pluginIds;
     
     @Override
-    public List<String> listPluginIds() {
-    	return Collections.unmodifiableList(pluginIds);
+    public Set<URL> listPluginIds() {
+    	return Collections.unmodifiableSet(pluginIds);
     }
 
     @PostConstruct
     void initialize() {
     	PluginDiscovery pd = InstallablePluginDiscovery.getInstance();
-    	pluginIds = pd.listPluginIds();
+    	pluginIds = pd.getPluginUrls();
     }
 
 }
