@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Bad plugin: missing version -->
 <plugin
    id="com.choicemaker.cm.compiler"
    name="Compiler Plug-in"
    provider-name="CHOICEMAKER">
+<!-- NOTE ABOVE: missing version -->
 
    <runtime>
       <library name="compiler.jar">

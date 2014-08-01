@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Bad plugin: missing id -->
 <plugin
    name="Compiler Plug-in"
    version="2.5.0"
    provider-name="CHOICEMAKER">
+<!-- NOTE ABOVE: missing id -->
 
    <runtime>
       <library name="compiler.jar">

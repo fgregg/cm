@@ -209,7 +209,7 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 			throws SAXException, ParserConfigurationException, IOException {
 		XMLReader xmlReader =
 			SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-		DescriptorParser descriptorParser = new DescriptorParser();
+		DescriptorParser descriptorParser = new DescriptorParser(descriptor);
 		xmlReader.setContentHandler(descriptorParser);
 		InputStream in = descriptor.openStream();
 		InputSource is = new InputSource(in);
@@ -219,9 +219,18 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 	}
 
 	private static class DescriptorParser extends DefaultHandler {
+	
+		/** Used only for exception messages */
+		private final URL u;
+		
+		// Values set by parsing
 		private String id;
 		private String version;
 		private PluginIdVersionType.TYPE type;
+		
+		DescriptorParser(URL u) {
+			this.u = u;
+		}
 
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) throws SAXException {
@@ -233,10 +242,16 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 				// We're interest in the first occurrence, which we'll use to
 				// set the id, version and type of this instance.
 				if (id == null) {
-					id = attributes.getValue(IModel.PLUGIN_ID);
-					assert id != null;
-					assert id.trim().length() > 0;
 
+					id = attributes.getValue(IModel.PLUGIN_ID);
+					if (id == null) {
+						throw new PluginDiscoveryException("null id for " + u);
+					}
+					id = id.trim();
+					if (id.isEmpty()) {
+						throw new PluginDiscoveryException("empty id for " + u);
+					}
+					
 					assert type == null;
 					if (qName == IModel.PLUGIN) {
 						type = PluginIdVersionType.TYPE.fragment;
@@ -247,8 +262,13 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 
 					assert version == null;
 					version = attributes.getValue(IModel.PLUGIN_VERSION);
-					assert version != null;
-					assert version.trim().length() > 0;
+					if (version == null) {
+						throw new PluginDiscoveryException("null version for " + u);
+					}
+					version = version.trim();
+					if (version.isEmpty()) {
+						throw new PluginDiscoveryException("empty version for " + u);
+					}
 				}
 			}
 		}

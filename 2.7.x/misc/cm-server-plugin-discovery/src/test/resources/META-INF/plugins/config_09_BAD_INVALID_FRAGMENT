@@ -36,4 +36,4 @@ org_eclipse_core_resources_2_1_1/plugin.xml
 org_eclipse_core_runtime_2_1_1/plugin.xml
 org_jboss_autonumber_3_2_3/plugin.xml
 org_jdom_0_9_0/plugin.xml
-com_choicemaker_cm_compiler_tools_BAD_FRAGMENT_09
+com_choicemaker_cm_compiler_tools_BAD_FRAGMENT_09/fragment.xml

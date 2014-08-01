@@ -191,8 +191,8 @@ public class ExampleData {
 	private static Map<String, List<String>> _testData = new HashMap<>();
 	static {
 		_testData.put("default", EXPECTED_1);
-		_testData.put("config_2", EXPECTED_2);
-		_testData.put("config_3", EXPECTED_3);
+		_testData.put("config_02", EXPECTED_2);
+		_testData.put("config_03", EXPECTED_3);
 		_testData.put("config_04_BAD_DUP_PATHS", EXPECTED_4);
 	}
 	public static final Map<String, List<String>> TEST_DATA = Collections

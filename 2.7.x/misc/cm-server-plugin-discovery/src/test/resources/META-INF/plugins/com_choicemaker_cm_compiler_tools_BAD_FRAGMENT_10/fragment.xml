@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Bad fragment: missing version -->
 <fragment
    id="com.choicemaker.cm.compiler.tools.jdk142"
    name="Jdk142 Fragment"
@@ -7,6 +6,7 @@
    plugin-id="com.choicemaker.cm.compiler"
    plugin-version="2.5.0"
    match="equivalent">
+<!-- NOTE ABOVE: missing version -->
 
    <runtime>
       <library name="tools.jar">
