@@ -21,12 +21,8 @@
   </files>
 	<fileSets>
 		<fileSet>
-		<includes>
-      <include>about.html</include>
-      <include>README</include>
-      <include>fragment.xml</include>
-      <include>resources-ant.jar</include>
-		</includes>
+    <directory>src/main/eclipse2/plugin</directory>
+    <outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>
