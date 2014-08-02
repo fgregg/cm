@@ -1,78 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.choicemaker.cm</groupId>
-    <!--artifactId>choicemaker-swing</artifactId-->
-    <artifactId>choicemaker-base</artifactId>
-    <version>2.7.1-SNAPSHOT</version>
-    <!--relativePath>../pom.xml</relativePath-->
-    <relativePath>../../../choicemaker-base/pom.xml</relativePath>
-  </parent>
+	<parent>
+		<groupId>com.choicemaker.cm</groupId>
+		<!--artifactId>choicemaker-swing</artifactId -->
+		<artifactId>choicemaker-base</artifactId>
+		<version>2.7.1-SNAPSHOT</version>
+		<!--relativePath>../pom.xml</relativePath -->
+		<relativePath>../../../choicemaker-base/pom.xml</relativePath>
+	</parent>
 
-  <artifactId>com.choicemaker.cm.docs</artifactId>
-  <packaging>jar</packaging>
-  <name>ChoiceMaker JavaHelp Plugin</name>
+	<artifactId>com.choicemaker.cm.docs</artifactId>
+	<packaging>jar</packaging>
+	<name>ChoiceMaker JavaHelp Plugin</name>
 
-  <properties>
-    <eclipse.plugin.runtime.library.name>UsersGuide.jar</eclipse.plugin.runtime.library.name>
-  </properties>
+	<properties>
+		<eclipse.plugin.runtime.library.name>UsersGuide.jar</eclipse.plugin.runtime.library.name>
+	</properties>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>parse-version</id>
-            <goals>
-              <goal>parse-version</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>echo-params</id>
-            <phase>validate</phase>
-            <configuration>
-              <target>
-                <echo
-                  message="eclipse.plugin.runtime.library.name: ${eclipse.plugin.runtime.library.name}" />
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>prj-assembly</id>
-            <phase>package</phase>
-            <configuration>
-              <descriptor>prj-assembly.xml</descriptor>
-            </configuration>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/eclipse2</directory>
+				<targetPath>META-INF/plugins</targetPath>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>parse-version</id>
+						<goals>
+							<goal>parse-version</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>echo-params</id>
+						<phase>validate</phase>
+						<configuration>
+							<target>
+								<echo
+									message="eclipse.plugin.runtime.library.name: ${eclipse.plugin.runtime.library.name}" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>assembly</id>
+						<phase>package</phase>
+						<configuration>
+							<descriptor>src/main/assembly/assembly.xml</descriptor>
+						</configuration>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-	<dependencies/>
+	<dependencies />
 
 </project>
