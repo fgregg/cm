@@ -85,10 +85,10 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>prj-assembly</id>
+            <id>assembly</id>
             <phase>package</phase>
             <configuration>
-              <descriptor>src/main/assembly/prj-assembly.xml</descriptor>
+              <descriptor>src/main/assembly/assembly.xml</descriptor>
             </configuration>
             <goals>
               <goal>single</goal>
