@@ -88,11 +88,10 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>eclipse-application</id>
+            <id>assembly</id>
             <phase>package</phase>
             <configuration>
-              <descriptor>
-              eclipse-application-assembly.xml</descriptor>
+              <descriptor>src/main/assembly/assembly.xml</descriptor>
             </configuration>
             <goals>
               <goal>single</goal>

@@ -21,15 +21,15 @@
   </properties>
 
   <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
     <resources>
       <resource>
-        <directory>src</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
+        <directory>src/main/resources</directory>
       </resource>
       <resource>
-        <directory>etc</directory>
+        <directory>src/main/eclipse2</directory>
+        <targetPath>META-INF/plugins</targetPath>
       </resource>
     </resources>
     <plugins>
@@ -84,10 +84,10 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>prj-assembly</id>
+            <id>assembly</id>
             <phase>package</phase>
             <configuration>
-              <descriptor>prj-assembly.xml</descriptor>
+              <descriptor>src/main/assembly/assembly.xml</descriptor>
             </configuration>
             <goals>
               <goal>single</goal>
