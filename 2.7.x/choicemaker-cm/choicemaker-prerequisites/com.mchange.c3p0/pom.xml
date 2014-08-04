@@ -49,15 +49,6 @@
 
   <build>
     <plugins>
-<!--
-      <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>${plugin.maven-site.version}</version>
-        <configuration>
-          <skip>false</skip>
-        </configuration>
-      </plugin>
--->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -129,7 +120,7 @@
             <id>prj-assembly</id>
             <phase>package</phase>
         		<configuration>
-							<descriptor>prj-assembly.xml</descriptor>
+							<descriptor>src/main/assembly/assembly.xml</descriptor>
         		</configuration>
             <goals>
               <goal>single</goal>

@@ -8,25 +8,15 @@
   <files>
     <file>
       <source>
-      ${project.build.directory}/dependency/javahelp.jar</source>
+      ${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
       <outputDirectory>/</outputDirectory>
       <destName>${eclipse.plugin.runtime.library.name}</destName>
-    </file>
-    <file>
-      <source>
-      ${project.build.directory}/dependency/javahelp-sources.jar</source>
-      <outputDirectory>/</outputDirectory>
-      <destName>${eclipse.plugin.src.zip.name}</destName>
     </file>
   </files>
 	<fileSets>
 		<fileSet>
-		<includes>
-        <include>about.html</include>
-        <include>plugin.properties</include>
-        <include>plugin.xml</include>
-        <include>LICENSE-JAVAHELP.html</include>
-		</includes>
+    <directory>src/main/eclipse2/plugin</directory>
+    <outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>

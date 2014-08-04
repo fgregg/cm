@@ -119,7 +119,7 @@
             <id>prj-assembly</id>
             <phase>package</phase>
             <configuration>
-              <descriptor>prj-assembly.xml</descriptor>
+              <descriptor>src/main/assembly/assembly.xml</descriptor>
             </configuration>
             <goals>
               <goal>single</goal>

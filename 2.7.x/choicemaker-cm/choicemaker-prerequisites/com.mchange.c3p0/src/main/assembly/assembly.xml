@@ -8,21 +8,21 @@
   <files>
     <file>
       <source>
-      ${project.build.directory}/${eclipse.plugin.runtime.library.name}</source>
+      ${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
       <outputDirectory>/</outputDirectory>
+      <destName>${eclipse.plugin.runtime.library.name}</destName>
     </file>
     <file>
       <source>
-      ${project.build.directory}/${eclipse.plugin.src.zip.name}</source>
+      ${project.build.directory}/${project.build.finalName}-sources.${project.packaging}</source>
       <outputDirectory>/</outputDirectory>
+      <destName>${eclipse.plugin.src.zip.name}</destName>
     </file>
   </files>
 	<fileSets>
 		<fileSet>
-		<includes>
-      <include>about.html</include>
-      <include>fragment.xml</include>
-		</includes>
+    <directory>src/main/eclipse2/plugin</directory>
+    <outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>
