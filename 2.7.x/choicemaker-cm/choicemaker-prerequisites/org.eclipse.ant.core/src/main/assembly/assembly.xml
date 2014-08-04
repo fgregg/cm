@@ -21,15 +21,8 @@
   </files>
 	<fileSets>
 		<fileSet>
-		<includes>
-        <include>about.html</include>
-        <include>boot.xml</include>
-        <include>.options</include>
-        <include>plugin.properties</include>
-        <include>plugin.xml</include>
-        <include>splash.bmp</include>
-		</includes>
+    <directory>src/main/eclipse2/plugin</directory>
+    <outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>
-    <eclipse.plugin.src.zip.name>bootsrc.zip</eclipse.plugin.src.zip.name>
