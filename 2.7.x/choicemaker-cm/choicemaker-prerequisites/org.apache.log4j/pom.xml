@@ -48,10 +48,24 @@
 
   <properties>
     <eclipse.plugin.runtime.library.name>log4j-1.2.8.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.runtime.library.download>src/main/download/${eclipse.plugin.runtime.library.name}</eclipse.plugin.runtime.library.download>
+
     <eclipse.plugin.src.zip.name>log4j-1.2.8src.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.src.zip.download>src/main/download/${eclipse.plugin.src.zip.name}</eclipse.plugin.src.zip.download>
   </properties>
 
   <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/eclipse2</directory>
+        <targetPath>META-INF/plugins</targetPath>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -89,7 +103,7 @@
             <phase>compile</phase>
             <configuration>
               <target>
-                <unzip src="${eclipse.plugin.runtime.library.name}"
+                <unzip src="${eclipse.plugin.runtime.library.download}"
                   dest="${project.build.outputDirectory}" />
               </target>
             </configuration>
@@ -104,10 +118,10 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>prj-assembly</id>
+            <id>assembly</id>
             <phase>package</phase>
             <configuration>
-              <descriptor>prj-assembly.xml</descriptor>
+              <descriptor>src/main/assembly/assembly.xml</descriptor>
             </configuration>
             <goals>
               <goal>single</goal>
