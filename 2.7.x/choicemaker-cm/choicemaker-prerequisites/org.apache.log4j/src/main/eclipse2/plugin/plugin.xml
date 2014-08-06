@@ -14,5 +14,4 @@
       <import plugin="org.apache.xerces"/>
    </requires>
 
-
 </plugin>
