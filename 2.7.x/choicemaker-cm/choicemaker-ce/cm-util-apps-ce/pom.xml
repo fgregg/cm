@@ -14,7 +14,7 @@
   <artifactId>cm-util-apps-ce</artifactId>
   <packaging>pom</packaging>
 
-  <name>ChoiceMaker Utilities, Communitiy Edition</name>
+  <name>ChoiceMaker Utilities, Community Edition</name>
   <description><![CDATA[
   Zip distribution of ChoiceMaker utiltiy applications, Community Edition.
   ]]>
