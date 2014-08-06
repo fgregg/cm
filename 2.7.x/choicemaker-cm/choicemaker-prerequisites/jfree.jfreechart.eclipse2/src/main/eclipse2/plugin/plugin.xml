@@ -9,9 +9,9 @@
       <library name="jfreechart.jar">
          <export name="*"/>
       </library>
-      <library name="jcommon.jar">
-         <export name="*"/>
-      </library>
    </runtime>
+   <requires>
+      <import plugin="jfree.jcommon.eclipse2plugin"/>
+   </requires>
 
 </plugin>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="jfree.jcommon.eclipse2plugin"
+   name="JCommon Plug-in"
+   version="1.0.17"
+   provider-name="Rick Hall">
+
+   <runtime>
+      <library name="jcommon.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+</plugin>

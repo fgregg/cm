@@ -1,0 +1,4 @@
+jfree.jcommon.eclipse2
+
+  This module repackages the {{{https://sourceforge.net/projects/jfreechart/}open-source JCommon library}}
+as an Eclipse 2.1 plugin.

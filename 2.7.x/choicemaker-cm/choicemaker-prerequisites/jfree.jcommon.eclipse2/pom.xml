@@ -11,13 +11,13 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>jfree.jfreechart.eclipse2plugin</artifactId>
-  <version>1.0.15-SNAPSHOT</version>
+  <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
+  <version>1.0.17-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>JFreeChart Plugin</name>
 
   <description><![CDATA[
-  Repackages the open-source JFreeChart library
+  Repackages the open-source JCommon library
   (https://sourceforge.net/projects/jfreechart/) as an Eclipse 2.1 plugin.
   ]]>
   </description>
@@ -46,11 +46,11 @@
   </contributors>
 
   <properties>
-    <eclipse.plugin.runtime.library.name>jfreechart.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.runtime.library.download>${project.build.directory}/dependency/jfreechart.jar</eclipse.plugin.runtime.library.download>
-
-    <eclipse.plugin.src.zip.name>jfreechartsrc.zip</eclipse.plugin.src.zip.name>
-    <eclipse.plugin.src.zip.download>${project.build.directory}/dependency/jfreechart-sources.jar</eclipse.plugin.src.zip.download>
+    <eclipse.plugin.runtime.library.name>jcommon.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.runtime.library.download>${project.build.directory}/dependency/jcommon.jar</eclipse.plugin.runtime.library.download>
+  
+    <eclipse.plugin.src.zip.name>jcommonsrc.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.src.zip.download>${project.build.directory}/dependency/jcommon-sources.jar</eclipse.plugin.src.zip.download>
   </properties>
 
   <build>
@@ -113,7 +113,7 @@
               <artifactItems>
               <artifactItem>
                 <groupId>org.jfree</groupId>
-                <artifactId>jfreechart</artifactId>
+                <artifactId>jcommon</artifactId>
                 <outputDirectory>${project.build.outputDirectory}</outputDirectory>
               </artifactItem>
               </artifactItems>
@@ -129,11 +129,11 @@
               <artifactItems>
               <artifactItem>
                 <groupId>org.jfree</groupId>
-                <artifactId>jfreechart</artifactId>
+                <artifactId>jcommon</artifactId>
               </artifactItem>
               <artifactItem>
                 <groupId>org.jfree</groupId>
-                <artifactId>jfreechart</artifactId>
+                <artifactId>jcommon</artifactId>
                 <classifier>sources</classifier>
               </artifactItem>
               </artifactItems>
@@ -164,11 +164,11 @@
   <dependencies>
     <dependency>
       <groupId>org.jfree</groupId>
-      <artifactId>jfreechart</artifactId>
+      <artifactId>jcommon</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jfree</groupId>
-      <artifactId>jfreechart</artifactId>
+      <artifactId>jcommon</artifactId>
       <classifier>sources</classifier>
     </dependency>
   </dependencies>
