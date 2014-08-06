@@ -2,7 +2,7 @@
 <fragment
   id="com.mchange.c3p0"
   name="ChoiceMaker IO Fragment (C3P0 JDBC Pooling)"
-  version="0.9.2.1-SNAPSHOT"
+  version="0.9.2.2"
   provider-name="rphall"
   plugin-id="com.choicemaker.cm.io.db.base"
   plugin-version="2.5.0">

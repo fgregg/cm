@@ -13,7 +13,7 @@
 
   <artifactId>com.mchange.c3p0</artifactId>
   <version>0.9.2.2-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>C3P0 JDBC3 Pooling Fragment</name>
 
   <description><![CDATA[
@@ -44,10 +44,24 @@
 
   <properties>
     <eclipse.plugin.runtime.library.name>c3p0.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.runtime.library.download>${project.build.directory}/dependency/c3p0.jar</eclipse.plugin.runtime.library.download>
+
     <eclipse.plugin.src.zip.name>c3p0src.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.src.zip.download>${project.build.directory}/dependency/c3p0-sources.jar</eclipse.plugin.src.zip.download>
   </properties>
 
   <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/eclipse2</directory>
+        <targetPath>META-INF/plugins</targetPath>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -87,7 +101,23 @@
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
-            <id>jars</id>
+            <id>unpack-dependency</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+              <artifactItem>
+                <groupId>com.mchange</groupId>
+                <artifactId>c3p0</artifactId>
+                <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+              </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>download-dependencies</id>
             <phase>package</phase>
             <goals>
               <goal>copy</goal>
@@ -97,17 +127,14 @@
               <artifactItem>
                 <groupId>com.mchange</groupId>
                 <artifactId>c3p0</artifactId>
-                <outputDirectory>${project.build.directory}</outputDirectory>
-                <destFileName>${eclipse.plugin.runtime.library.name}</destFileName>
               </artifactItem>
               <artifactItem>
                 <groupId>com.mchange</groupId>
                 <artifactId>c3p0</artifactId>
                 <classifier>sources</classifier>
-                <outputDirectory>${project.build.directory}</outputDirectory>
-                <destFileName>${eclipse.plugin.src.zip.name}</destFileName>
               </artifactItem>
               </artifactItems>
+              <stripVersion>true</stripVersion>
             </configuration>
           </execution>
         </executions>
@@ -117,7 +144,7 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>prj-assembly</id>
+            <id>assembly</id>
             <phase>package</phase>
         		<configuration>
 							<descriptor>src/main/assembly/assembly.xml</descriptor>
@@ -135,6 +162,11 @@
     <dependency>
       <groupId>com.mchange</groupId>
       <artifactId>c3p0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+      <classifier>sources</classifier>
     </dependency>
   </dependencies>
 
