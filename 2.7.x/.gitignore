@@ -2,7 +2,7 @@
 tmp
 .DS_Store
 cobertura.ser
-target*
+target
 _effective-pom*
 com.wcohen.ss2
 .project
