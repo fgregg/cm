@@ -14,7 +14,7 @@
   <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
   <version>1.0.17-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>JFreeChart Plugin</name>
+  <name>JCommon Plugin</name>
 
   <description><![CDATA[
   Repackages the open-source JCommon library
