@@ -1,0 +1,308 @@
+<ValidConverterExamples>
+<ValidConverter><input>mci_id != 0</input><output>mci_id !=
+0</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(facility_id) &amp;&amp;
+!facility_id.equals(&quot;CIRU&quot;)</input><output>StringUtils.nonEmptyString(facility_id)
+&amp;&amp; !facility_id.equals(&quot;CIRU&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(language_cd) &amp;&amp;
+!language_cd.equals(&quot;99&quot;)  &amp;&amp; !language_cd.equals(&quot;00&quot;) &amp;&amp;
+!language_cd.equals(&quot;0&quot;)</input><output>StringUtils.nonEmptyString(language_cd)
+&amp;&amp; !language_cd.equals(&quot;99&quot;)  &amp;&amp; !language_cd.equals(&quot;00&quot;) &amp;&amp;
+!language_cd.equals(&quot;0&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(birth_country_cd) &amp;&amp;
+!birth_country_cd.equals(&quot;XXX&quot;)</input><output>StringUtils.nonEmptyString(birth_country_cd)
+&amp;&amp; !birth_country_cd.equals(&quot;XXX&quot;)</output></ValidConverter>
+<ValidConverter><input>multi_birth_ind != '\0'</input><output>multi_birth_ind
+!= '\0'</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(src_system_id)</input><output>StringUtils.nonEmptyString(src_system_id)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(first_name) &amp;&amp;
+!Sets.includes(&quot;genericFirstNames&quot;, first_name) &amp;&amp;
+StringUtils.containsLetters(first_name)</input><output>StringUtils.nonEmptyString(first_name)
+&amp;&amp;                                 !Sets.includes(&quot;genericFirstNames&quot;,
+first_name) &amp;&amp;
+StringUtils.containsLetters(first_name)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(middle_name) &amp;&amp;
+!Sets.includes(&quot;genericFirstNames&quot;,
+middle_name)</input><output>StringUtils.nonEmptyString(middle_name) &amp;&amp;
+!Sets.includes(&quot;genericFirstNames&quot;, middle_name)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(last_name) &amp;&amp;
+!Sets.includes(&quot;invalidLastNames&quot;,
+last_name)</input><output>StringUtils.nonEmptyString(last_name) &amp;&amp;
+!Sets.includes(&quot;invalidLastNames&quot;, last_name)</output></ValidConverter>
+<ValidConverter><input>valid(first_name)</input><output>__v_first_name</output></ValidConverter>
+<ValidConverter><input>Soundex.soundex(first_name)</input><output>Soundex.soundex(first_name)</output></ValidConverter>
+<ValidConverter><input>valid(last_name)</input><output>__v_last_name</output></ValidConverter>
+<ValidConverter><input>Soundex.soundex(last_name)</input><output>Soundex.soundex(last_name)</output></ValidConverter>
+<ValidConverter><input>valid(last_name) || valid(first_name) ||
+valid(middle_name)</input><output>__v_last_name || __v_first_name ||
+__v_middle_name</output></ValidConverter>
+<ValidConverter><input>new NameParser(valid(first_name) ?
+MciNameUtils.preprocessFirstName(first_name) : &quot;&quot;, valid(middle_name) ?
+middle_name : &quot;&quot;, valid(last_name) ?
+MciNameUtils.preprocessLastName(last_name) : &quot;&quot;)</input><output>new
+NameParser(__v_first_name ? MciNameUtils.preprocessFirstName(first_name) : &quot;&quot;,
+__v_middle_name ? middle_name : &quot;&quot;, __v_last_name ?
+MciNameUtils.preprocessLastName(last_name) : &quot;&quot;)</output></ValidConverter>
+<ValidConverter><input>valid(parsedName)</input><output>__v_parsedName</output></ValidConverter>
+<ValidConverter><input>parsedName.getFirstName()</input><output>parsedName.getFirstName()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameF)</input><output>StringUtils.nonEmptyString(nameF)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameF)</input><output>StringUtils.nonEmptyString(nameF)</output></ValidConverter>
+<ValidConverter><input>valid(parsedName)</input><output>__v_parsedName</output></ValidConverter>
+<ValidConverter><input>parsedName.getMiddleNames()</input><output>parsedName.getMiddleNames()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameM)</input><output>StringUtils.nonEmptyString(nameM)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameM)</input><output>StringUtils.nonEmptyString(nameM)</output></ValidConverter>
+<ValidConverter><input>valid(parsedName)</input><output>__v_parsedName</output></ValidConverter>
+<ValidConverter><input>parsedName.getLastName()</input><output>parsedName.getLastName()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameL)</input><output>StringUtils.nonEmptyString(nameL)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameL)</input><output>StringUtils.nonEmptyString(nameL)</output></ValidConverter>
+<ValidConverter><input>valid(parsedName)</input><output>__v_parsedName</output></ValidConverter>
+<ValidConverter><input>parsedName.getPotentialMaidenName()</input><output>parsedName.getPotentialMaidenName()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameMaidn)</input><output>StringUtils.nonEmptyString(nameMaidn)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameMaidn)</input><output>StringUtils.nonEmptyString(nameMaidn)</output></ValidConverter>
+<ValidConverter><input>valid(parsedName)</input><output>__v_parsedName</output></ValidConverter>
+<ValidConverter><input>parsedName.getTitles()</input><output>parsedName.getTitles()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameT)</input><output>StringUtils.nonEmptyString(nameT)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameT)</input><output>StringUtils.nonEmptyString(nameT)</output></ValidConverter>
+<ValidConverter><input>valid(parsedName)</input><output>__v_parsedName</output></ValidConverter>
+<ValidConverter><input>parsedName.getMothersFirstName()</input><output>parsedName.getMothersFirstName()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(mothersFirstName)</input><output>StringUtils.nonEmptyString(mothersFirstName)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(mothersFirstName)</input><output>StringUtils.nonEmptyString(mothersFirstName)</output></ValidConverter>
+<ValidConverter><input>dob != null &amp;&amp;      DateUtils.getYear(dob) &lt;=
+DateUtils.getYear(new Date(System.currentTimeMillis())) &amp;&amp;
+!(DateUtils.getMonth(dob) == 12 &amp;&amp; DateUtils.getDayOfMonth(dob) == 31 &amp;&amp;
+DateUtils.getYear(dob) == 1950) &amp;&amp;     !(DateUtils.getMonth(dob) == 1 &amp;&amp;
+DateUtils.getDayOfMonth(dob) == 1 &amp;&amp; DateUtils.getYear(dob) &lt; 1910) &amp;&amp;
+!(DateUtils.getMonth(dob) == DateUtils.getDayOfMonth(dob) &amp;&amp;
+DateUtils.getDayOfMonth(dob) == DateUtils.getYear(dob) % 100 &amp;&amp;
+DateUtils.getYear(dob) &lt; 1913)     </input><output>dob != null &amp;&amp;
+DateUtils.getYear(dob) &lt;= DateUtils.getYear(new
+Date(System.currentTimeMillis())) &amp;&amp;     !(DateUtils.getMonth(dob) == 12 &amp;&amp;
+DateUtils.getDayOfMonth(dob) == 31 &amp;&amp; DateUtils.getYear(dob) == 1950) &amp;&amp;
+!(DateUtils.getMonth(dob) == 1 &amp;&amp; DateUtils.getDayOfMonth(dob) == 1 &amp;&amp;
+DateUtils.getYear(dob) &lt; 1910) &amp;&amp;     !(DateUtils.getMonth(dob) ==
+DateUtils.getDayOfMonth(dob) &amp;&amp; DateUtils.getDayOfMonth(dob) ==
+DateUtils.getYear(dob) % 100 &amp;&amp; DateUtils.getYear(dob) &lt; 1913)
+</output></ValidConverter>
+<ValidConverter><input>valid(dob)</input><output>__v_dob</output></ValidConverter>
+<ValidConverter><input>DateUtils.yearAndMonth(dob)</input><output>DateUtils.yearAndMonth(dob)</output></ValidConverter>
+<ValidConverter><input>valid(dob)</input><output>__v_dob</output></ValidConverter>
+<ValidConverter><input>DateUtils.numbersOnly(dob)</input><output>DateUtils.numbersOnly(dob)</output></ValidConverter>
+<ValidConverter><input>dobNumbers != 0</input><output>dobNumbers !=
+0</output></ValidConverter>
+<ValidConverter><input>dobNumbers != 0</input><output>dobNumbers !=
+0</output></ValidConverter>
+<ValidConverter><input>sex_cd != '\0' &amp;&amp; sex_cd != 'U'</input><output>sex_cd
+!= '\0' &amp;&amp; sex_cd != 'U'</output></ValidConverter>
+<ValidConverter><input>true</input><output>true</output></ValidConverter>
+<ValidConverter><input>sex_cd == '1' ? 'M' : sex_cd == '2' ? 'F' :
+sex_cd</input><output>sex_cd == '1' ? 'M' : sex_cd == '2' ? 'F' :
+sex_cd</output></ValidConverter>
+<ValidConverter><input>clean_sex != '\0' &amp;&amp; clean_sex !=
+'U'</input><output>clean_sex != '\0' &amp;&amp; clean_sex !=
+'U'</output></ValidConverter>
+<ValidConverter><input>clean_sex != '\0' &amp;&amp; clean_sex !=
+'U'</input><output>clean_sex != '\0' &amp;&amp; clean_sex !=
+'U'</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(facility_id) &amp;&amp;
+!facility_id.startsWith(&quot;UNKNOWN&quot;) &amp;&amp; !facility_id.equals(&quot;CIRU&quot;) &amp;&amp;
+!facility_id.equals(&quot;DOH&quot;)</input><output>StringUtils.nonEmptyString(facility_id)
+&amp;&amp; !facility_id.startsWith(&quot;UNKNOWN&quot;) &amp;&amp; !facility_id.equals(&quot;CIRU&quot;) &amp;&amp;
+!facility_id.equals(&quot;DOH&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(ethnicity_cd) &amp;&amp;
+!ethnicity_cd.equals(&quot;9&quot;)</input><output>StringUtils.nonEmptyString(ethnicity_cd)
+&amp;&amp; !ethnicity_cd.equals(&quot;9&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(race_cd) &amp;&amp;
+!race_cd.equals(&quot;U&quot;) &amp;&amp;
+!race_cd.equals(&quot;O&quot;)</input><output>StringUtils.nonEmptyString(race_cd) &amp;&amp;
+!race_cd.equals(&quot;U&quot;) &amp;&amp; !race_cd.equals(&quot;O&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(patient_id) &amp;&amp;
+!Sets.includes(&quot;invalidPatientIds&quot;, patient_id) &amp;&amp;
+(!(FacilityUtils.isMedicalRecord(identifier_type) ||
+FacilityUtils.isFacility(identifier_type)) ||
+FacilityUtils.noIdenticalVital(patient_id,
+outer))</input><output>StringUtils.nonEmptyString(patient_id) &amp;&amp;
+!Sets.includes(&quot;invalidPatientIds&quot;, patient_id) &amp;&amp;
+(!(FacilityUtils.isMedicalRecord(identifier_type) ||
+FacilityUtils.isFacility(identifier_type)) ||
+FacilityUtils.noIdenticalVital(patient_id, outer))</output></ValidConverter>
+<ValidConverter><input>valid(patient_id)</input><output>__v_patient_id</output></ValidConverter>
+<ValidConverter><input>FacilityUtils.removeNonLettersNonDigitsAndLeadingZeros(patient_id)</input><output>FacilityUtils.removeNonLettersNonDigitsAndLeadingZeros(patient_id)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(patient_id_norm)</input><output>StringUtils.nonEmptyString(patient_id_norm)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(patient_id_norm)</input><output>StringUtils.nonEmptyString(patient_id_norm)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(identifier_type)</input><output>StringUtils.nonEmptyString(identifier_type)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(facility_id) &amp;&amp;
+!facility_id.equals(&quot;CIRU&quot;)</input><output>StringUtils.nonEmptyString(facility_id)
+&amp;&amp; !facility_id.equals(&quot;CIRU&quot;)</output></ValidConverter>
+<ValidConverter><input>addr_id != 0</input><output>addr_id !=
+0</output></ValidConverter>
+<ValidConverter><input>boro_cd!='\0' &amp;&amp; boro_cd !=
+'9'</input><output>boro_cd!='\0' &amp;&amp; boro_cd != '9'</output></ValidConverter>
+<ValidConverter><input>bin &gt; 100 &amp;&amp; bin != 10000007 &amp;&amp; bin / 10 != 1000001 &amp;&amp;
+bin / 10 != 9005000</input><output>bin &gt; 100 &amp;&amp; bin != 10000007 &amp;&amp; bin / 10 !=
+1000001 &amp;&amp; bin / 10 != 9005000</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(house_no) &amp;&amp;
+!house_no.equals(&quot;999999&quot;) &amp;&amp; !house_no.equals(&quot;????&quot;) &amp;&amp;
+!house_no.equals(&quot;UNK&quot;)</input><output>StringUtils.nonEmptyString(house_no) &amp;&amp;
+!house_no.equals(&quot;999999&quot;) &amp;&amp; !house_no.equals(&quot;????&quot;) &amp;&amp;
+!house_no.equals(&quot;UNK&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(street_cd) &amp;&amp;
+!street_cd.equals(&quot;99999999999&quot;) &amp;&amp; !street_cd.startsWith(&quot;1000000000&quot;) &amp;&amp;
+!street_cd.equals(&quot;0&quot;)</input><output>StringUtils.nonEmptyString(street_cd) &amp;&amp;
+!street_cd.equals(&quot;99999999999&quot;) &amp;&amp; !street_cd.startsWith(&quot;1000000000&quot;) &amp;&amp;
+!street_cd.equals(&quot;0&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(street_name) &amp;&amp;
+!street_name.equals(&quot;NOT GIVEN&quot;) &amp;&amp; !street_name.equals(&quot;?????&quot;) &amp;&amp;
+!street_name.equals(&quot;X&quot;)</input><output>StringUtils.nonEmptyString(street_name)
+&amp;&amp; !street_name.equals(&quot;NOT GIVEN&quot;) &amp;&amp; !street_name.equals(&quot;?????&quot;) &amp;&amp;
+!street_name.equals(&quot;X&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(city_name)</input><output>StringUtils.nonEmptyString(city_name)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(state_cd)</input><output>StringUtils.nonEmptyString(state_cd)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(zipcode) &amp;&amp;
+!zipcode.equals(&quot;99999&quot;) &amp;&amp;
+!zipcode.equals(&quot;00000&quot;)</input><output>StringUtils.nonEmptyString(zipcode) &amp;&amp;
+!zipcode.equals(&quot;99999&quot;) &amp;&amp; !zipcode.equals(&quot;00000&quot;)</output></ValidConverter>
+<ValidConverter><input>last_date_rptd !=null</input><output>last_date_rptd
+!=null</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(apt_no) &amp;&amp;
+!&quot;UNK&quot;.equals(apt_no)</input><output>StringUtils.nonEmptyString(apt_no) &amp;&amp;
+!&quot;UNK&quot;.equals(apt_no)</output></ValidConverter>
+<ValidConverter><input>valid(apt_no)</input><output>__v_apt_no</output></ValidConverter>
+<ValidConverter><input>StreetParser.aptNormalize(apt_no)</input><output>StreetParser.aptNormalize(apt_no)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(cleanAptNo)</input><output>StringUtils.nonEmptyString(cleanAptNo)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(cleanAptNo)</input><output>StringUtils.nonEmptyString(cleanAptNo)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(addr_type_cd)</input><output>StringUtils.nonEmptyString(addr_type_cd)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(raw_street_name) &amp;&amp;
+!raw_street_name.equals(&quot;X&quot;) &amp;&amp; !raw_street_name.equals(&quot;????
+?????&quot;)</input><output>StringUtils.nonEmptyString(raw_street_name) &amp;&amp;
+!raw_street_name.equals(&quot;X&quot;) &amp;&amp; !raw_street_name.equals(&quot;????
+?????&quot;)</output></ValidConverter>
+<ValidConverter><input>valid(raw_street_name)</input><output>__v_raw_street_name</output></ValidConverter>
+<ValidConverter><input>AddressParser.getDefaultParser().parseAddress(raw_street_name)</input><output>AddressParser.getDefaultParser().parseAddress(raw_street_name)</output></ValidConverter>
+<ValidConverter><input>parsedStreet != null</input><output>parsedStreet !=
+null</output></ValidConverter>
+<ValidConverter><input>parsedStreet != null</input><output>parsedStreet !=
+null</output></ValidConverter>
+<ValidConverter><input>valid(parsedStreet)</input><output>__v_parsedStreet</output></ValidConverter>
+<ValidConverter><input>parsedStreet.get(ParsedAddress.HOUSE_NUMBER)</input><output>parsedStreet.get(ParsedAddress.HOUSE_NUMBER)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(parsedHouseNumber)</input><output>StringUtils.nonEmptyString(parsedHouseNumber)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(parsedHouseNumber)</input><output>StringUtils.nonEmptyString(parsedHouseNumber)</output></ValidConverter>
+<ValidConverter><input>valid(parsedStreet)</input><output>__v_parsedStreet</output></ValidConverter>
+<ValidConverter><input>parsedStreet.get(ParsedAddress.STREET_NAME)</input><output>parsedStreet.get(ParsedAddress.STREET_NAME)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(parsedStreetName)</input><output>StringUtils.nonEmptyString(parsedStreetName)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(parsedStreetName)</input><output>StringUtils.nonEmptyString(parsedStreetName)</output></ValidConverter>
+<ValidConverter><input>valid(parsedStreet) &amp;&amp;
+parsedStreet.has(ParsedAddress.APARTMENT_NUMBER)</input><output>__v_parsedStreet
+&amp;&amp; parsedStreet.has(ParsedAddress.APARTMENT_NUMBER)</output></ValidConverter>
+<ValidConverter><input>StreetParser.aptNormalize(parsedStreet.get(ParsedAddress.APARTMENT_NUMBER))</input><output>StreetParser.aptNormalize(parsedStreet.get(ParsedAddress.APARTMENT_NUMBER))</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(parsedApartment)</input><output>StringUtils.nonEmptyString(parsedApartment)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(parsedApartment)</input><output>StringUtils.nonEmptyString(parsedApartment)</output></ValidConverter>
+<ValidConverter><input>valid(parsedStreet)</input><output>__v_parsedStreet</output></ValidConverter>
+<ValidConverter><input>parsedStreet.get(ParsedAddress.PO_BOX)</input><output>parsedStreet.get(ParsedAddress.PO_BOX)</output></ValidConverter>
+<ValidConverter><input>parsedPoBox != null</input><output>parsedPoBox !=
+null</output></ValidConverter>
+<ValidConverter><input>parsedPoBox != null</input><output>parsedPoBox !=
+null</output></ValidConverter>
+<ValidConverter><input>valid(raw_street_name)</input><output>__v_raw_street_name</output></ValidConverter>
+<ValidConverter><input>PhoneUtils.parseFullPhone(raw_street_name)</input><output>PhoneUtils.parseFullPhone(raw_street_name)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(phoneAsStreet)</input><output>StringUtils.nonEmptyString(phoneAsStreet)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(phoneAsStreet)</input><output>StringUtils.nonEmptyString(phoneAsStreet)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(phone_no) &amp;&amp;
+!phone_no.endsWith(&quot;000&quot;)</input><output>StringUtils.nonEmptyString(phone_no)
+&amp;&amp; !phone_no.endsWith(&quot;000&quot;)</output></ValidConverter>
+<ValidConverter><input>valid(phone_no)</input><output>__v_phone_no</output></ValidConverter>
+<ValidConverter><input>PhoneUtils.clean(phone_no)</input><output>PhoneUtils.clean(phone_no)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(clean_phone_no)</input><output>StringUtils.nonEmptyString(clean_phone_no)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(clean_phone_no)</input><output>StringUtils.nonEmptyString(clean_phone_no)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(relationship_cd) &amp;&amp;
+!relationship_cd.equals(&quot;21&quot;)</input><output>StringUtils.nonEmptyString(relationship_cd)
+&amp;&amp; !relationship_cd.equals(&quot;21&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(last_name) &amp;&amp;
+!Sets.includes(&quot;invalidLastNames&quot;, last_name) &amp;&amp;              !&quot;SALVATION
+ARMY&quot;.equals(last_name)</input><output>StringUtils.nonEmptyString(last_name)
+&amp;&amp;
+!Sets.includes(&quot;invalidLastNames&quot;, last_name) &amp;&amp;              !&quot;SALVATION
+ARMY&quot;.equals(last_name)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(first_name) &amp;&amp;
+!Sets.includes(&quot;genericFirstNames&quot;,
+first_name)</input><output>StringUtils.nonEmptyString(first_name) &amp;&amp;
+!Sets.includes(&quot;genericFirstNames&quot;, first_name)</output></ValidConverter>
+<ValidConverter><input>valid(last_name) ||
+valid(first_name)</input><output>__v_last_name ||
+__v_first_name</output></ValidConverter>
+<ValidConverter><input>new NameParser(first_name, &quot;&quot;,
+last_name)</input><output>new NameParser(first_name, &quot;&quot;,
+last_name)</output></ValidConverter>
+<ValidConverter><input>parsedContactName !=
+null</input><output>parsedContactName != null</output></ValidConverter>
+<ValidConverter><input>parsedContactName !=
+null</input><output>parsedContactName != null</output></ValidConverter>
+<ValidConverter><input>valid(parsedContactName)</input><output>__v_parsedContactName</output></ValidConverter>
+<ValidConverter><input>parsedContactName.getFirstName()</input><output>parsedContactName.getFirstName()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameF)</input><output>StringUtils.nonEmptyString(nameF)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameF)</input><output>StringUtils.nonEmptyString(nameF)</output></ValidConverter>
+<ValidConverter><input>valid(parsedContactName)</input><output>__v_parsedContactName</output></ValidConverter>
+<ValidConverter><input>parsedContactName.getMiddleNames()</input><output>parsedContactName.getMiddleNames()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameM)</input><output>StringUtils.nonEmptyString(nameM)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameM)</input><output>StringUtils.nonEmptyString(nameM)</output></ValidConverter>
+<ValidConverter><input>valid(parsedContactName)</input><output>__v_parsedContactName</output></ValidConverter>
+<ValidConverter><input>parsedContactName.getLastName()</input><output>parsedContactName.getLastName()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameL)</input><output>StringUtils.nonEmptyString(nameL)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameL)</input><output>StringUtils.nonEmptyString(nameL)</output></ValidConverter>
+<ValidConverter><input>valid(parsedContactName)</input><output>__v_parsedContactName</output></ValidConverter>
+<ValidConverter><input>parsedContactName.getPotentialMaidenName()</input><output>parsedContactName.getPotentialMaidenName()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameMaidn)</input><output>StringUtils.nonEmptyString(nameMaidn)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameMaidn)</input><output>StringUtils.nonEmptyString(nameMaidn)</output></ValidConverter>
+<ValidConverter><input>valid(parsedContactName)</input><output>__v_parsedContactName</output></ValidConverter>
+<ValidConverter><input>parsedContactName.getTitles()</input><output>parsedContactName.getTitles()</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameT)</input><output>StringUtils.nonEmptyString(nameT)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(nameT)</input><output>StringUtils.nonEmptyString(nameT)</output></ValidConverter>
+<ValidConverter><input>sex_cd != '\0' &amp;&amp; sex_cd != 'U'</input><output>sex_cd
+!= '\0' &amp;&amp; sex_cd != 'U'</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(phone_no_h) &amp;&amp;
+!phone_no_h.endsWith(&quot;000&quot;)</input><output>StringUtils.nonEmptyString(phone_no_h)
+&amp;&amp; !phone_no_h.endsWith(&quot;000&quot;)</output></ValidConverter>
+<ValidConverter><input>valid(phone_no_h)</input><output>__v_phone_no_h</output></ValidConverter>
+<ValidConverter><input>PhoneUtils.clean(phone_no_h)</input><output>PhoneUtils.clean(phone_no_h)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(clean_phone_no_h)</input><output>StringUtils.nonEmptyString(clean_phone_no_h)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(clean_phone_no_h)</input><output>StringUtils.nonEmptyString(clean_phone_no_h)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(phone_no_w) &amp;&amp;
+!phone_no_w.endsWith(&quot;000&quot;)</input><output>StringUtils.nonEmptyString(phone_no_w)
+&amp;&amp; !phone_no_w.endsWith(&quot;000&quot;)</output></ValidConverter>
+<ValidConverter><input>valid(phone_no_w)</input><output>__v_phone_no_w</output></ValidConverter>
+<ValidConverter><input>PhoneUtils.clean(phone_no_w)</input><output>PhoneUtils.clean(phone_no_w)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(clean_phone_no_w)</input><output>StringUtils.nonEmptyString(clean_phone_no_w)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(clean_phone_no_w)</input><output>StringUtils.nonEmptyString(clean_phone_no_w)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(mothers_maiden_name) &amp;&amp;
+!Sets.includes(&quot;invalidLastNames&quot;,
+mothers_maiden_name)</input><output>StringUtils.nonEmptyString(mothers_maiden_name)
+&amp;&amp;
+!Sets.includes(&quot;invalidLastNames&quot;,
+mothers_maiden_name)</output></ValidConverter>
+<ValidConverter><input>mothers_dob != null</input><output>mothers_dob !=
+null</output></ValidConverter>
+<ValidConverter><input>event_date != null</input><output>event_date !=
+null</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(event_type_cd)</input><output>StringUtils.nonEmptyString(event_type_cd)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(facility_id)</input><output>StringUtils.nonEmptyString(facility_id)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(event_id)</input><output>StringUtils.nonEmptyString(event_id)</output></ValidConverter>
+<ValidConverter><input>lab_date != null</input><output>lab_date !=
+null</output></ValidConverter>
+<ValidConverter><input>valid(event_type_cd) &amp;&amp; valid(event_id) &amp;&amp;
+event_type_cd.equals(&quot;CDSS&quot;)</input><output>__v_event_type_cd &amp;&amp; __v_event_id
+&amp;&amp; event_type_cd.equals(&quot;CDSS&quot;)</output></ValidConverter>
+<ValidConverter><input>CdssDiseaseUtils.fastDecryptHealthEventDiseaseCode(event_id)</input><output>CdssDiseaseUtils.fastDecryptHealthEventDiseaseCode(event_id)</output></ValidConverter>
+<ValidConverter><input>Sets.includes(&quot;diseaseCodes&quot;,
+disease_cd)</input><output>Sets.includes(&quot;diseaseCodes&quot;,
+disease_cd)</output></ValidConverter>
+<ValidConverter><input>Sets.includes(&quot;diseaseCodes&quot;,
+disease_cd)</input><output>Sets.includes(&quot;diseaseCodes&quot;,
+disease_cd)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(provider_id) &amp;&amp;
+!provider_id.equals(&quot;-9&quot;)</input><output>StringUtils.nonEmptyString(provider_id)
+&amp;&amp; !provider_id.equals(&quot;-9&quot;)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(facility_id)</input><output>StringUtils.nonEmptyString(facility_id)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(src_system_id)</input><output>StringUtils.nonEmptyString(src_system_id)</output></ValidConverter>
+<ValidConverter><input>StringUtils.nonEmptyString(src_system_id)</input><output>StringUtils.nonEmptyString(src_system_id)</output></ValidConverter>
+<ValidConverter><input>patient_id != 0</input><output>patient_id !=
+0</output></ValidConverter>
+</ValidConverterExamples>
