@@ -13,7 +13,7 @@
 
   <artifactId>com.oracle.jdbc</artifactId>
   <version>10.2.0.4</version>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>Oracle JDBC Fragment</name>
 
   <description><![CDATA[
@@ -48,9 +48,21 @@
 
   <properties>
     <eclipse.plugin.runtime.library.name>classes12.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.runtime.library.download>${project.build.directory}/dependency/classes12.jar</eclipse.plugin.runtime.library.download>
   </properties>
 
   <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/eclipse2</directory>
+        <targetPath>META-INF/plugins</targetPath>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -88,7 +100,23 @@
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
-            <id>copy jar</id>
+            <id>unpack-dependency</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+              <artifactItem>
+                <groupId>com.oracle</groupId>
+                <artifactId>classes12</artifactId>
+                <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+              </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>download-dependencies</id>
             <phase>package</phase>
             <goals>
               <goal>copy</goal>
@@ -98,10 +126,9 @@
               <artifactItem>
                 <groupId>com.oracle</groupId>
                 <artifactId>classes12</artifactId>
-                <outputDirectory>${project.build.directory}</outputDirectory>
-                <destFileName>${eclipse.plugin.runtime.library.name}</destFileName>
               </artifactItem>
               </artifactItems>
+              <stripVersion>true</stripVersion>
             </configuration>
           </execution>
         </executions>
@@ -111,7 +138,7 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>prj-assembly</id>
+            <id>assembly</id>
             <phase>package</phase>
         		<configuration>
 							<descriptor>src/main/assembly/assembly.xml</descriptor>
@@ -127,8 +154,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.mchange</groupId>
-      <artifactId>c3p0</artifactId>
+      <groupId>com.oracle</groupId>
+      <artifactId>classes12</artifactId>
     </dependency>
   </dependencies>
 
