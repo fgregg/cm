@@ -21,10 +21,8 @@
   </files>
 	<fileSets>
 		<fileSet>
-		<includes>
-        <include>about.html</include>
-        <include>plugin.xml</include>
-		</includes>
+    <directory>src/main/eclipse2/plugin</directory>
+    <outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>
