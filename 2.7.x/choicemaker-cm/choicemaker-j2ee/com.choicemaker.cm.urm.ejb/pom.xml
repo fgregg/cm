@@ -13,7 +13,7 @@
 
   <artifactId>com.choicemaker.cm.urm.ejb</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker URM Plug-in</name>
+  <name>ChoiceMaker URM EJB Plug-in</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>urm-ejb.jar</eclipse.plugin.runtime.library.name>
