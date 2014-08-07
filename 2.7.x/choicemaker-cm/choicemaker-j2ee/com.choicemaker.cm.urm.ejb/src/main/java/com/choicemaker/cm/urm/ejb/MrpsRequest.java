@@ -15,15 +15,15 @@ import java.util.Properties;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.PMManager;
 import com.choicemaker.cm.core.SerialRecordSource;
-import com.choicemaker.cm.core.util.StringUtils;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
+import com.choicemaker.util.StringUtils;
 
 /**
  * An MrpsRequest contains the information necessary to start

@@ -19,10 +19,10 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
-import com.choicemaker.cm.core.Evaluator;
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Evaluator;
+import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.urm.adaptor.tocmcore.UrmRecordBuilder;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.EvalRecordFormat;

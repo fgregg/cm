@@ -23,8 +23,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Match;
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Entity;
 import com.choicemaker.cm.transitivity.core.INode;

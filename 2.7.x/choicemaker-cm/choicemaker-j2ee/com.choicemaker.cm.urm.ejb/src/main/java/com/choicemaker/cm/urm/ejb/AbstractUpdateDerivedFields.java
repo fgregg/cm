@@ -12,8 +12,8 @@ package com.choicemaker.cm.urm.ejb;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.configure.AbstractXmlSpecification;
-import com.choicemaker.cm.core.configure.XmlConfigurable;
+import com.choicemaker.cm.core.configure.xml.AbstractXmlSpecification;
+import com.choicemaker.cm.core.configure.xml.XmlConfigurable;
 import com.choicemaker.cm.urm.IUpdateDerivedFields;
 
 /**
@@ -29,6 +29,7 @@ public abstract class AbstractUpdateDerivedFields
 	extends AbstractXmlSpecification
 	implements IUpdateDerivedFields {
 		
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AbstractUpdateDerivedFields.class);
 		
 	/**

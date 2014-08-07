@@ -17,12 +17,12 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.DefaultRecordSourceSerializationRegistry;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.IRecordSourceSerializationRegistry;
 import com.choicemaker.cm.core.IRecordSourceSerializer;
 import com.choicemaker.cm.core.ISerializableRecordSource;
-import com.choicemaker.cm.core.SerializedRecordSourceDescriptor;
+import com.choicemaker.cm.core.base.DefaultRecordSourceSerializationRegistry;
+import com.choicemaker.cm.core.base.SerializedRecordSourceDescriptor;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.base.ISerializableDbRecordSource;
@@ -117,7 +117,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 	}
 
 	public void visit(XmlTextFormat f){		
-		resRs = new XMLSerializableRecordSource ( fileName, model.getName());
+		resRs = new XMLSerializableRecordSource ( fileName, model.getModelName());
 	}
 	
 	protected boolean isTaggedByDefault(){
@@ -127,12 +127,12 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 
 	public void visit(DelimitedTextFormat f){
 		boolean tagged = isTaggedByDefault();	
-		resRs = new FlatFileSerializableRecordSource ( fileName, false, f.getSeparator(),tagged ,!tagged, model.getName());
+		resRs = new FlatFileSerializableRecordSource ( fileName, false, f.getSeparator(),tagged ,!tagged, model.getModelName());
 	}
 
 	public void visit(FixedLengthTextFormat f){
 		boolean tagged = isTaggedByDefault();		
-		resRs = new FlatFileSerializableRecordSource ( fileName,true, '\0', tagged, !tagged,model.getName());
+		resRs = new FlatFileSerializableRecordSource ( fileName,true, '\0', tagged, !tagged,model.getModelName());
 	}
 
 	/* (non-Javadoc)
@@ -142,7 +142,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 		resRs = null;
 	  if(rc != null){
 		// Configure the query determined by the model configuration
-		final String modelName = model.getName();								
+		final String modelName = model.getModelName();								
 		DbAccessor accessor = (DbAccessor) model.getAccessor();
 		DbReaderSequential dbr = accessor.getDbReaderSequential(rc.getName());
 		String schemaName = dbr.getName();
@@ -184,7 +184,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 												DbRecordCollection.DEFAULT_REC_COLLETION_BUFFER_SIZE;
 			final String safeBufferSize = Integer.toString(nonnullBufferSize);
 			final String dbConfig = rc.getName();
-			final String modelName = model.getName();								
+			final String modelName = model.getModelName();								
 		
 			// Create a serializable record source
 			IRecordSourceSerializationRegistry registry2 = DefaultRecordSourceSerializationRegistry.getInstance();
@@ -231,7 +231,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 		String urlString = extractUrl(rc);
 		try {
 			URL url = new URL(urlString);
-			resRs = new SerializedRecordSourceDescriptor ( url.getFile(), model.getName());
+			resRs = new SerializedRecordSourceDescriptor ( url.getFile(), model.getModelName());
 		} catch (MalformedURLException e) {
 			log.error(e);
 			throw new RecordCollectionException(e.toString());

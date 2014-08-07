@@ -27,12 +27,11 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.PMManager;
-import com.choicemaker.cm.core.compiler.DoNothingCompiler;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.configure.NotFoundException;
-import com.choicemaker.cm.core.configure.XmlConfigurablesRegistry;
-import com.choicemaker.cm.core.util.Precondition;
+import com.choicemaker.cm.core.configure.xml.NotFoundException;
+import com.choicemaker.cm.core.configure.xml.XmlConfigurablesRegistry;
+import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.server.base.DatabaseException;
 import com.choicemaker.cm.server.ejb.impl.CountsUpdate;
@@ -41,6 +40,7 @@ import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.cm.urm.exceptions.ModelException;
 import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
+import com.choicemaker.util.Precondition;
 
 /**
  * @author emoussikaev
@@ -70,8 +70,7 @@ public class CmServerAdminBean implements SessionBean {
 		log.debug("starting ejbCreate...");
 		try {
 			if (!initialized) {
-				ICompiler compiler = DoNothingCompiler.instance;
-				XmlConfigurator.embeddedInit(compiler);
+				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
 				initialized = true;
 			}
 		} catch (Exception ex) {

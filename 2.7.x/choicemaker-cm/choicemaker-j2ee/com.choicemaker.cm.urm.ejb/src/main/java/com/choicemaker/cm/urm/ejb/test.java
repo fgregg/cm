@@ -10,7 +10,9 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
-import com.choicemaker.cm.urm.base.*;
+import com.choicemaker.cm.urm.base.EvalRecordFormat;
+import com.choicemaker.cm.urm.base.RecordType;
+import com.choicemaker.cm.urm.base.ScoreType;
 import com.choicemaker.cm.urm.base.SubsetDbRecordCollection;
 import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 

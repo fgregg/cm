@@ -35,11 +35,10 @@ import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.PMManager;
 import com.choicemaker.cm.core.SerialRecordSource;
-import com.choicemaker.cm.core.compiler.DoNothingCompiler;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
+import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
@@ -86,8 +85,7 @@ public class BatchMatchBaseBean implements SessionBean {
 	public void ejbCreate() throws CreateException, RemoteException {
 		try {
 			if (!initialized) {
-				ICompiler compiler = DoNothingCompiler.instance;
-				XmlConfigurator.embeddedInit(compiler);
+				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
 				initialized = true;
 			}
 		} catch (Exception ex) {
