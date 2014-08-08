@@ -48,7 +48,7 @@ public interface AutoNumberHome
     */
    AutoNumber create(String name) throws CreateException, RemoteException;
    
-   Collection findAll() throws RemoteException, FinderException;
+   Collection<AutoNumber> findAll() throws RemoteException, FinderException;
 
    /**
     * Finds an AutoNumber by its name.
