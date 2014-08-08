@@ -19,15 +19,17 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 /**
  * A MatchRecord has a pair of id's and a match probability on this pair.
  * 
- * Version 2 is more generalized, because it allows for Integer, Long, or String as record IDs.
+ * Version 2 is more generalized, because it allows for Integer, Long, or String
+ * as record IDs.
  * 
  * @author pcheung
  *
  */
-public class MatchRecord2 implements Comparable, Serializable {
+public class MatchRecord2<T extends Comparable<? super T>> implements
+		Comparable<MatchRecord2<T>>, Serializable {
 
 	/* As of 2010-03-10 */
-	static final long serialVersionUID = -3108962876276009775L;
+	static final long serialVersionUID = 271;
 
 	public static final char MATCH = 'M';
 	public static final char DIFFER = 'D';
@@ -39,14 +41,16 @@ public class MatchRecord2 implements Comparable, Serializable {
 	/** Probabilities that differ by less than this amount are considered equal */
 	public static final float PRECISION = 0.0001f;
 
-	private final Comparable recordID1;
-	private final Comparable recordID2;
+	private final T recordID1;
+	private final T recordID2;
 	private final float probability;
 	private final char matchType;
 	private final char record2Source;
 	private final String notes;
 
-	/** This method concats the notes into a single string delimited by Constants.DELIMITER.
+	/**
+	 * This method concatenates the notes into a single string delimited by
+	 * Constants.DELIMITER.
 	 * 
 	 * @param notes
 	 * @return
@@ -65,57 +69,63 @@ public class MatchRecord2 implements Comparable, Serializable {
 		return retVal;
 	}
 
-	/** This method concats the notes into a single string delimited by Constants.DELIMITER.
+	/**
+	 * This method concatenates the notes into a single string delimited by
+	 * Constants.DELIMITER.
 	 * 
 	 * @param notes
 	 * @return
 	 */
-	public static String getNotesAsDelimitedString(
-		ActiveClues ac,
-		ImmutableProbabilityModel model) {
+	public static String getNotesAsDelimitedString(ActiveClues ac,
+			ImmutableProbabilityModel model) {
 
 		String[] notes = ac.getNotes(model);
 		String retVal = getNotesAsDelimitedString(notes);
 		return retVal;
 	}
 
-	/** This constructor takes in these key parameters.
+	/**
+	 * This constructor takes in these key parameters.
 	 * 
-	 * @param i1 - id of the first record.  Can be Integer, Long, or String.
-	 * @param i2 - id of the second record.  Can be Integer, Long, or String.
-	 * @param source - indicates if the second record is from staging or master
-	 * @param f - match probability
-	 * @param type - Match or Hold or Differ
-	 * @param ac - Active clue firings
-	 * @param model - The model used to evaluate this pair
+	 * @param i1
+	 *            - id of the first record. Can be Integer, Long, or String.
+	 * @param i2
+	 *            - id of the second record. Can be Integer, Long, or String.
+	 * @param source
+	 *            - indicates if the second record is from staging or master
+	 * @param f
+	 *            - match probability
+	 * @param type
+	 *            - Match or Hold or Differ
+	 * @param ac
+	 *            - Active clue firings
+	 * @param model
+	 *            - The model used to evaluate this pair
 	 */
-	public MatchRecord2(
-		Comparable i1,
-		Comparable i2,
-		char source,
-		float f,
-		char type,
-		ActiveClues ac,
-		ImmutableProbabilityModel model) {
+	public MatchRecord2(T i1, T i2, char source, float f, char type,
+			ActiveClues ac, ImmutableProbabilityModel model) {
 		this(i1, i2, source, f, type, getNotesAsDelimitedString(ac, model));
 	}
 
-	/** This constructor takes in these key parameters.
+	/**
+	 * This constructor takes these parameters.
 	 * 
-	 * @param i1 - id of the first record.  Can be Integer, Long, or String.
-	 * @param i2 - id of the second record.  Can be Integer, Long, or String.
-	 * @param source - indicates if the second record is from staging or master
-	 * @param f - match probability
-	 * @param type - Match or Hold or Differ
-	 * @param notes - delimited String representing any notes on clues fired by this pair.
+	 * @param i1
+	 *            - id of the first record. Can be Integer, Long, or String.
+	 * @param i2
+	 *            - id of the second record. Can be Integer, Long, or String.
+	 * @param source
+	 *            - indicates if the second record is from staging or master
+	 * @param f
+	 *            - match probability
+	 * @param type
+	 *            - Match or Hold or Differ
+	 * @param notes
+	 *            - delimited String representing any notes on clues fired by
+	 *            this pair.
 	 */
-	public MatchRecord2(
-		Comparable i1,
-		Comparable i2,
-		char source,
-		float f,
-		char type,
-		String notes) {
+	public MatchRecord2(T i1, T i2, char source, float f, char type,
+			String notes) {
 		recordID1 = i1;
 		recordID2 = i2;
 		record2Source = source;
@@ -124,29 +134,11 @@ public class MatchRecord2 implements Comparable, Serializable {
 		this.notes = notes;
 	}
 
-	/** This is true if this MatchRecord has the same id pair as the input MatchRecord.
-	 * 
-	 * It checks that recordID1, recordID2, and record2 source are the same and
-	 * probabiility equal to within {@link #PRECISION} 
-	 * 
-	 * @param mr
-	 * @return boolean - true if the ids from both MatchRecords match.
-	 */
-	public boolean equals(MatchRecord2 mr) {
-		boolean ret = false;
-		if (this.recordID1.equals(mr.recordID1)
-			&& this.recordID2.equals(mr.recordID2)
-			&& this.record2Source == mr.record2Source
-			&& Math.abs(this.probability - mr.probability) < PRECISION)
-			ret = true;
-		return ret;
-	}
-
-	public Comparable getRecordID1() {
+	public T getRecordID1() {
 		return recordID1;
 	}
 
-	public Comparable getRecordID2() {
+	public T getRecordID2() {
 		return recordID2;
 	}
 
@@ -166,10 +158,8 @@ public class MatchRecord2 implements Comparable, Serializable {
 		return notes;
 	}
 
-	public int compareTo(Object o) {
+	public int compareTo(MatchRecord2<T> mr) {
 		int ret = 0;
-		MatchRecord2 mr = (MatchRecord2) o;
-
 		if (recordID1.compareTo(mr.recordID1) < 0)
 			ret = -1;
 		else if (recordID1.compareTo(mr.recordID1) > 0)
@@ -191,25 +181,94 @@ public class MatchRecord2 implements Comparable, Serializable {
 		return ret;
 	}
 
-	/** This is true if this Object is a MatchRecord and has the same id pair as the input MatchRecord.
-	 * 
-	 * @param o
-	 * @return boolean - true if the ids from both MatchRecords match.
-	 */
-	public boolean equals(Object o) {
-		boolean ret = false;
-
-		if (o.getClass() == MatchRecord2.class) {
-			return equals((MatchRecord2) o);
-		}
-		return ret;
-	}
-
+	@Override
 	public int hashCode() {
-		int i1 = recordID1.hashCode();
-		int i2 = recordID2.hashCode();
-
-		return i1 ^ i2;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + record2Source;
+		result =
+			prime * result + ((recordID1 == null) ? 0 : recordID1.hashCode());
+		result =
+			prime * result + ((recordID2 == null) ? 0 : recordID2.hashCode());
+		return result;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		@SuppressWarnings("rawtypes")
+		MatchRecord2 other = (MatchRecord2) obj;
+		if (record2Source != other.record2Source) {
+			return false;
+		}
+		if (recordID1 == null) {
+			if (other.recordID1 != null) {
+				return false;
+			}
+		} else if (!recordID1.equals(other.recordID1)) {
+			return false;
+		}
+		if (recordID2 == null) {
+			if (other.recordID2 != null) {
+				return false;
+			}
+		} else if (!recordID2.equals(other.recordID2)) {
+			return false;
+		}
+		return true;
+	}
+
+	// /**
+	// * This is true if this MatchRecord has the same id pair as the input
+	// * MatchRecord.
+	// *
+	// * It checks that recordID1, recordID2, and record2 source are the same
+	// and
+	// * probabiility equal to within {@link #PRECISION}
+	// *
+	// * @param mr
+	// * @return boolean - true if the ids from both MatchRecords match.
+	// */
+	// public boolean equals(MatchRecord2<T> mr) {
+	// boolean ret = false;
+	// if (this.recordID1.equals(mr.recordID1)
+	// && this.recordID2.equals(mr.recordID2)
+	// && this.record2Source == mr.record2Source
+	// && Math.abs(this.probability - mr.probability) < PRECISION)
+	// ret = true;
+	// return ret;
+	// }
+
+	// /**
+	// * This is true if this Object is a MatchRecord and has the same id pair
+	// as
+	// * the input MatchRecord.
+	// *
+	// * @param o
+	// * @return boolean - true if the ids from both MatchRecords match.
+	// */
+	// public boolean equals(Object o) {
+	// boolean ret = false;
+	//
+	// if (o.getClass() == MatchRecord2.class) {
+	// return equals((MatchRecord2) o);
+	// }
+	// return ret;
+	// }
+	//
+	// public int hashCode() {
+	// int i1 = recordID1.hashCode();
+	// int i2 = recordID2.hashCode();
+	//
+	// return i1 ^ i2;
+	// }
+	//
 }

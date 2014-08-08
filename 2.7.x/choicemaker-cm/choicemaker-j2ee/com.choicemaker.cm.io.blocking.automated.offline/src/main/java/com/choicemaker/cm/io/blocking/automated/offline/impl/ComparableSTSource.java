@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
@@ -30,7 +30,7 @@ public class ComparableSTSource implements IComparableSource {
 
 	private ISuffixTreeSource source;
 	private int count = 0;
-	private ArrayList pairs = null;
+	private List<PairID> pairs = null;
 	private int ind = 0;
 	
 	
@@ -42,8 +42,8 @@ public class ComparableSTSource implements IComparableSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource#getNext()
 	 */
-	public Comparable getNext() throws BlockingException {
-		PairID p = (PairID) pairs.get(ind);
+	public PairID getNext() throws BlockingException {
+		PairID p = pairs.get(ind);
 		ind++;
 		return p;
 	}

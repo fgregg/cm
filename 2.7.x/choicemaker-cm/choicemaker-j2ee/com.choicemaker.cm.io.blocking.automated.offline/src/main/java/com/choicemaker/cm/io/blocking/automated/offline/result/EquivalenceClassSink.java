@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.SortedSet;
 
-import com.choicemaker.cm.core.util.EquivalenceClass;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EquivalenceClass;
 
 /**
  * @author pcheung

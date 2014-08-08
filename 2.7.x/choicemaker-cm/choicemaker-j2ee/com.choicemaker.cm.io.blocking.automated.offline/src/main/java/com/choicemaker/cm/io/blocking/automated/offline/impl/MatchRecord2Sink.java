@@ -19,6 +19,7 @@ import java.util.Iterator;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
@@ -72,11 +73,11 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 				fw.write(getOutputString(match));
 				
 			} else if (type == Constants.BINARY) {
-				int dataType = Constants.checkType(match.getRecordID1());
+				int dataType = RecordIdentifierType.checkType(match.getRecordID1()).typeId;
 				dos.writeInt( dataType );
 				writeID (match.getRecordID1(), dataType);
 
-				dataType = Constants.checkType(match.getRecordID2());
+				dataType = RecordIdentifierType.checkType(match.getRecordID2()).typeId;
 				dos.writeInt( dataType );
 				writeID (match.getRecordID2(), dataType);
 				
@@ -106,13 +107,13 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 	 */
 	public static String getOutputString (MatchRecord2 match) {
 		StringBuffer sb = new StringBuffer ();
-		int dataType = Constants.checkType(match.getRecordID1());
+		int dataType = RecordIdentifierType.checkType(match.getRecordID1()).typeId;
 		sb.append(dataType);
 		sb.append(' ');
 		sb.append(match.getRecordID1().toString());
 		sb.append(' ');
 
-		dataType = Constants.checkType(match.getRecordID2());
+		dataType = RecordIdentifierType.checkType(match.getRecordID2()).typeId;
 		sb.append(dataType);
 		sb.append(' ');
 		sb.append(match.getRecordID2().toString());
@@ -136,13 +137,13 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 
 	private void writeID (Comparable c, int dataType) throws IOException {
 		if (type == Constants.STRING) {
-			if (dataType == Constants.TYPE_INTEGER) fw.write( c.toString() + " ");
-			else if (dataType == Constants.TYPE_LONG) fw.write( c.toString() + " ");
-			else if (dataType == Constants.TYPE_STRING) fw.write( c.toString() + " ");
+			if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) fw.write( c.toString() + " ");
+			else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) fw.write( c.toString() + " ");
+			else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) fw.write( c.toString() + " ");
 		} else if (type == Constants.BINARY) {
-			if (dataType == Constants.TYPE_INTEGER) dos.writeInt( ((Integer)c).intValue() ); 
-			else if (dataType == Constants.TYPE_LONG) dos.writeLong( ((Long)c).longValue() ); 
-			else if (dataType == Constants.TYPE_STRING) {
+			if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) dos.writeInt( ((Integer)c).intValue() ); 
+			else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) dos.writeLong( ((Long)c).longValue() ); 
+			else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
 				String S = (String) c;
 				dos.writeInt(S.length());
 				dos.writeChars(S);

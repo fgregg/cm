@@ -19,6 +19,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 
 /**
  * @author pcheung
@@ -65,13 +66,13 @@ public class ComparisonArraySource extends BaseFileSource implements IComparison
 		for (int i=0; i<size; i++) {
 			str = br.readLine();
 			
-			if (dataType == Constants.TYPE_INTEGER) {
+			if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
 				Integer I = new Integer (str);
 				list.add(I);
-			} else if (dataType == Constants.TYPE_LONG) {
+			} else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
 				Long L = new Long (str);
 				list.add(L);
-			} else if (dataType == Constants.TYPE_STRING) {
+			} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
 				list.add(str);
 			}
 		}
@@ -86,13 +87,13 @@ public class ComparisonArraySource extends BaseFileSource implements IComparison
 		
 		ArrayList list = new ArrayList (size);
 		for (int i=0; i<size; i++) {
-			if (dataType == Constants.TYPE_INTEGER) {
+			if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
 				Integer I = new Integer ( dis.readInt() );
 				list.add(I);
-			} else if (dataType == Constants.TYPE_LONG) {
+			} else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
 				Long L = new Long ( dis.readLong() );
 				list.add(L);
-			} else if (dataType == Constants.TYPE_STRING) {
+			} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
 				int s = dis.readInt();
 				
 				char[] data = new char[s];

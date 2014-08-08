@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
@@ -59,9 +60,9 @@ public class SuffixTreeUtils {
 			int ret = 0;
 			
 			if (node.getNumKids() > 0) {
-				ArrayList children = node.getAllChildren();
+				List<SuffixTreeNode> children = node.getAllChildren();
 				for (int i=0; i<children.size(); i++) {
-					ret += countLeaves ((SuffixTreeNode) children.get(i));
+					ret += countLeaves (children.get(i));
 				}
 			}
 			
@@ -79,24 +80,24 @@ public class SuffixTreeUtils {
 	 * @param root
 	 * @return
 	 */
-	public static ArrayList getPairs (SuffixTreeNode root) {
-		ArrayList pairs = new ArrayList ();
+	public static List<PairID> getPairs (SuffixTreeNode root) {
+		List<PairID> pairs = new ArrayList<>();
 		
 		//there should only be one node
 		SuffixTreeNode kid = (SuffixTreeNode) root.getAllChildren().get(0);
 		
-		Stack stack = new Stack ();
+		Stack<Long> stack = new Stack<>();
 		getCompares(kid, stack, pairs);
 		
 		return pairs;
 	}
 
 
-	private static void getCompares (SuffixTreeNode node, Stack stack, ArrayList pairs) {
+	private static void getCompares (SuffixTreeNode node, Stack<Long> stack, List<PairID> pairs) {
 		if (!stack.empty()) {
 			//compare this to everything in the stack
 			for (int i=0; i<stack.size(); i++) {
-				long id1 = ((Long) stack.get(i)).longValue();
+				long id1 = stack.get(i);
 				long id2 = node.getRecordId();
 				PairID p = new PairID (id1, id2);
 				pairs.add(p);
@@ -104,13 +105,13 @@ public class SuffixTreeUtils {
 		}
 		
 		//push this onto the stack
-		stack.push(new Long (node.getRecordId()));
+		stack.push(node.getRecordId());
 
 		//compare all the children		
 		if (node.getNumKids() > 0) {
-			ArrayList children = node.getAllChildren();
+			List<SuffixTreeNode> children = node.getAllChildren();
 			for (int i=0; i<children.size(); i++) {
-				SuffixTreeNode kid = (SuffixTreeNode) children.get(i);
+				SuffixTreeNode kid = children.get(i);
 				getCompares(kid, stack, pairs);
 			}
 		}
