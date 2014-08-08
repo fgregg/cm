@@ -32,9 +32,6 @@ import com.choicemaker.util.StringUtils;
  */
 public class MrpsRequest implements IMrpsRequest {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static final String MRPS_SUFFIX = "mrps";
 	private static final String DATA_SUFFIX = "xml";

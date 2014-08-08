@@ -46,9 +46,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  */
 public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public static final long BMA_STEPS_NUMB = 3;
 	public static final int BATCH_MATCH_STEP_INDEX = 0; 

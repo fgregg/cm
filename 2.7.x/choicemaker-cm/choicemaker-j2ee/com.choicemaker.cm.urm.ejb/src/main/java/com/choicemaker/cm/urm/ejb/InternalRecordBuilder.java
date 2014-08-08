@@ -28,9 +28,6 @@ import com.choicemaker.cm.urm.base.RecordRef;
  */
 public class InternalRecordBuilder implements IRecordVisitor {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	Record		resRec;
 	ImmutableProbabilityModel model;

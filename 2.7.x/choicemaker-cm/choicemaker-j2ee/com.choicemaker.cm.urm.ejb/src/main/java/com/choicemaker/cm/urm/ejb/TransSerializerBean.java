@@ -36,9 +36,6 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
  */
 public class TransSerializerBean implements SessionBean {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	protected static Logger log = Logger.getLogger(TransSerializerBean.class);

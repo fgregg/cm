@@ -52,9 +52,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  */
 public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	static {

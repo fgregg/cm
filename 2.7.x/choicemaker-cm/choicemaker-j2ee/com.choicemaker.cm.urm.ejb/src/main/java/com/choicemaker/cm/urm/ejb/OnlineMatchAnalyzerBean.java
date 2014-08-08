@@ -60,9 +60,6 @@ import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
  */
 public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	static	{

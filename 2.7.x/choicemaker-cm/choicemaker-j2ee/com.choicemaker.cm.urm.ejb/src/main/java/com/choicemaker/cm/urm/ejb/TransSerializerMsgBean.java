@@ -46,9 +46,6 @@ import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 public class TransSerializerMsgBean
 	implements MessageDrivenBean, MessageListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static final Logger log =
 		Logger.getLogger(TransSerializerMsgBean.class);

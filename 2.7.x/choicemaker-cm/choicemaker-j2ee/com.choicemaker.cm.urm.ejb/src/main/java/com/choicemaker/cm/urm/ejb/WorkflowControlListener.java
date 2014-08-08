@@ -35,9 +35,6 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
  */
 public abstract class WorkflowControlListener implements MessageDrivenBean, MessageListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(WorkflowControlListener.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + WorkflowControlListener.class.getName());

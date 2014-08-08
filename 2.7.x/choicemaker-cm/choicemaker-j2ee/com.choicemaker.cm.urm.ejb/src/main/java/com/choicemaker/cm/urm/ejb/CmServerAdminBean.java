@@ -46,9 +46,6 @@ import com.choicemaker.util.Precondition;
  * @see
  */
 public class CmServerAdminBean implements SessionBean {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	protected static boolean initialized = false;

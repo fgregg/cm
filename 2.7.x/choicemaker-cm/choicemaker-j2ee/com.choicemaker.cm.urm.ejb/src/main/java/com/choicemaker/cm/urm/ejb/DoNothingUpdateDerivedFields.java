@@ -30,9 +30,6 @@ import com.choicemaker.cm.urm.exceptions.UrmIncompleteSpecificationException;
  */
 public class DoNothingUpdateDerivedFields extends AbstractUpdateDerivedFields {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static Logger log =
 		Logger.getLogger(DoNothingUpdateDerivedFields.class);

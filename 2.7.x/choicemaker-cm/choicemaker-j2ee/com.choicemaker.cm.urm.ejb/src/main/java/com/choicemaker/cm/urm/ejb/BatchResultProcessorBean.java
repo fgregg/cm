@@ -43,9 +43,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  */
 public class BatchResultProcessorBean implements SessionBean {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	protected static Logger log = Logger.getLogger(BatchResultProcessorBean.class);

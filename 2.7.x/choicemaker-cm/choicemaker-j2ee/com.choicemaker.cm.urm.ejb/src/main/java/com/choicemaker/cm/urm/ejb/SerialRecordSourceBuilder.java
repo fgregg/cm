@@ -44,9 +44,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 
 public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITextFormatVisitor {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected static Logger log = Logger.getLogger(SerialRecordSourceBuilder.class);
 	private ISerializableRecordSource resRs;

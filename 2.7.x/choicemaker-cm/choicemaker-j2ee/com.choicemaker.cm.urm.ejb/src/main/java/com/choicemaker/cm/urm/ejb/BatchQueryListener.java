@@ -35,9 +35,6 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
  */
 public class BatchQueryListener extends WorkflowControlListener{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(BatchQueryListener.class.getName());
 

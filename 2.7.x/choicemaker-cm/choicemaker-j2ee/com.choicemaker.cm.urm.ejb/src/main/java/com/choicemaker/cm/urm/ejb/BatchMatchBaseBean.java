@@ -58,9 +58,6 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  */
 public class BatchMatchBaseBean implements SessionBean {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected static Logger log;
 	protected static boolean initialized = false;

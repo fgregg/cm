@@ -79,9 +79,6 @@ import com.choicemaker.util.StringUtils;
  */
 public class OnlineMatchBaseBean implements SessionBean {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected transient SessionContext sessionContext;
 	protected static Logger log = Logger.getLogger(OnlineMatchBaseBean.class);
