@@ -21,20 +21,20 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IRecordIDTranslator<T extends Comparable<? super T>> {
+public interface IRecordIDTranslator {
 
 	/** This method returns the range of record ids in the first source.
 	 * 
 	 * @return long[0] is min and long[1] is max
 	 */
-	public T [] getRange1 () ;
+	public long [] getRange1 () ;
 
 
 	/** This method returns the range of record ids in the second source.
 	 * 
 	 * @return long[0] is min and long[1] is max
 	 */
-	public T [] getRange2 () ;
+	public long [] getRange2 () ;
 
 
 	/** This returns the internal id at which the second source begins.
@@ -106,7 +106,6 @@ public interface IRecordIDTranslator<T extends Comparable<? super T>> {
 	 * @param bSink
 	 * @throws BlockingException
 	 */
-	public void reverseTranslate(IBlockSource<T> bSource, IBlockSink<T> bSink)
-			throws BlockingException;
+	public void reverseTranslate (IBlockSource bSource, IBlockSink bSink) throws BlockingException;	
 	 	
 }

@@ -10,9 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
@@ -23,16 +23,16 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
  * @author pcheung
  *
  */
-public interface IMatchRecordSink<T extends Comparable<? super T>> extends ISink {
+public interface IMatchRecordSink extends ISink {
 
 	/** Writes out an ArrayList of MatchRecord. */
-	public void writeMatches (List<T> matches) throws BlockingException;
+	public void writeMatches (ArrayList matches) throws BlockingException;
 	
 	/** Writes out a Collection of MatchRecord. */
-	public void writeMatches (Collection<T> c) throws BlockingException;
+	public void writeMatches (Collection c) throws BlockingException;
 	
 	/** Writes out an Iterator containing MatchRecord. */
-	public void writeMatches (Iterator<T> it) throws BlockingException;
+	public void writeMatches (Iterator it) throws BlockingException;
 	
 	/** Writes out a single MatchRecord. */
 	public void writeMatch (MatchRecord match) throws BlockingException;

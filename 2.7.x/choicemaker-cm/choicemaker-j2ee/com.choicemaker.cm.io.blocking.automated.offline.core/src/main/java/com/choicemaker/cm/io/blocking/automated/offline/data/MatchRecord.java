@@ -18,7 +18,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
  * @author pcheung
  *
  */
-public class MatchRecord implements Comparable<MatchRecord> {
+public class MatchRecord implements Comparable {
 	
 	public static final char MATCH = 'M';
 	public static final char DIFFER = 'D';
@@ -80,8 +80,10 @@ public class MatchRecord implements Comparable<MatchRecord> {
 		return record2Source;
 	}
 
-	public int compareTo(MatchRecord mr) {
+	public int compareTo(Object o) {
 		int ret = 0;
+		MatchRecord mr = (MatchRecord) o;
+		
 		if (recordID1 < mr.recordID1) ret = -1;
 		else if (recordID1 > mr.recordID1) ret = 1;
 		else if (recordID1 == mr.recordID1) {

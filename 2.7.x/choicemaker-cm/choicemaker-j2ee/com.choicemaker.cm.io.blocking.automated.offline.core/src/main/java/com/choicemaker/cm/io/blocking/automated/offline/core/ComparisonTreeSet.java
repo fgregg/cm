@@ -11,7 +11,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 /** This object creates a list of pairs to compare from a tree of ComparisonTreeNode.
@@ -19,38 +18,32 @@ import java.util.Stack;
  * @author pcheung
  *
  */
-public class ComparisonTreeSet<T extends Comparable<? super T>> implements IComparisonSet<T> {
+public class ComparisonTreeSet implements IComparisonSet {
 	
 	private static final long serialVersionUID = 1L;
-	private List<ComparisonPair<T>> pairs = new ArrayList<>();
+	private ArrayList pairs = new ArrayList ();
 	private int ind = 0;
 	
-	/** This constructor takes the root node and builds a list of pairs to compare.
+	/** This consructor takes the root node and builds a list of pairs to compare.
 	 * The root node has id = null and 1 child.
 	 * 
 	 * @param root
 	 */
-	public ComparisonTreeSet (ComparisonTreeNode<T> root) {
+	public ComparisonTreeSet (ComparisonTreeNode root) {
 		//there should only be one node
-		if (root == null) {
-			throw new IllegalArgumentException("null root");
-		}
-		final int count = root.getAllChildren().size();
-		if (count != 1) {
-			throw new IllegalArgumentException("too many children: " + count);
-		}
-		ComparisonTreeNode<T>kid = root.getAllChildren().get(0);
-		Stack<T> stack = new Stack<>();
+		ComparisonTreeNode kid = (ComparisonTreeNode) root.getAllChildren().get(0);
+		
+		Stack stack = new Stack ();
 		getCompares(kid, stack);
 	}
 	
 	
-	private void getCompares (ComparisonTreeNode<T> node, Stack<T> stack) {
+	private void getCompares (ComparisonTreeNode node, Stack stack) {
 		if (!stack.empty()) {
 			//compare this to everything in the stack
 			for (int i=0; i<stack.size(); i++) {
-				ComparisonPair<T> p = new ComparisonPair<>();
-				p.id1 = stack.get(i);
+				ComparisonPair p = new ComparisonPair ();
+				p.id1 = (Comparable) stack.get(i);
 				p.id2 = node.getRecordId();
 				p.isStage = node.isStage();
 				pairs.add(p);
@@ -64,9 +57,9 @@ public class ComparisonTreeSet<T extends Comparable<? super T>> implements IComp
 
 		//compare all the children		
 		if (node.getNumKids() > 0) {
-			List<ComparisonTreeNode<T>> children = node.getAllChildren();
+			ArrayList children = node.getAllChildren();
 			for (int i=0; i<children.size(); i++) {
-				ComparisonTreeNode<T> kid = children.get(i);
+				ComparisonTreeNode kid = (ComparisonTreeNode) children.get(i);
 				getCompares(kid, stack);
 			}
 		}
@@ -80,8 +73,8 @@ public class ComparisonTreeSet<T extends Comparable<? super T>> implements IComp
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#getNextPair()
 	 */
-	public ComparisonPair<T> getNextPair() {
-		ComparisonPair<T> ret = pairs.get(ind);
+	public ComparisonPair getNextPair() {
+		ComparisonPair ret = (ComparisonPair) pairs.get(ind);
 		ind ++;
 		return ret;
 	}
@@ -103,7 +96,7 @@ public class ComparisonTreeSet<T extends Comparable<? super T>> implements IComp
 		StringBuffer sb = new StringBuffer ();
 		sb.append(Constants.LINE_SEPARATOR);
 		for (int i=0; i<pairs.size(); i++) {
-			ComparisonPair<T> p = pairs.get(i);
+			ComparisonPair p = (ComparisonPair) pairs.get(i);
 			sb.append('(');
 			sb.append(p.id1.toString());
 			sb.append(',');

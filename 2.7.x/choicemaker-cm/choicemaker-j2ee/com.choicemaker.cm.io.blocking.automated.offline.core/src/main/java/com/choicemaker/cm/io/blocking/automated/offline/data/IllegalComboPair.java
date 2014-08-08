@@ -11,58 +11,57 @@
 package com.choicemaker.cm.io.blocking.automated.offline.data;
 
 /**
- * This object represents a pair of columns that should not be blocked together
- * by BABA.
+ * This object represents a pair of columns that should not be blocked together by
+ * BABA.
  * 
  * @author pcheung
  *
  */
-public class IllegalComboPair implements Comparable<IllegalComboPair> {
+public class IllegalComboPair implements Comparable{
 
 	private int col1;
 	private int col2;
-
-	public IllegalComboPair(int col1, int col2) {
+	
+	public IllegalComboPair (int col1, int col2) {
 		this.col1 = col1;
 		this.col2 = col2;
 	}
-
-	public int getCol1() {
+	
+	public int getCol1 () {
 		return col1;
 	}
-
-	public int getCol2() {
+	
+	public int getCol2 () {
 		return col2;
 	}
 
-	public boolean equals(Object o) {
+	public boolean equals (Object o) {
 		if (o instanceof IllegalComboPair) {
 			IllegalComboPair p = (IllegalComboPair) o;
-			if (this.col1 == p.col1 && this.col2 == p.col2)
-				return true;
-			else
-				return false;
+			if (this.col1 == p.col1 && this.col2 == p.col2) return true;
+			else return false;
 		} else {
 			return false;
 		}
 	}
 
-	public int compareTo(IllegalComboPair p) {
-		if (this.col1 < p.col1)
-			return -1;
-		else if (this.col1 > p.col1)
+	public int compareTo(Object o) {
+		if (o instanceof IllegalComboPair) {
+			IllegalComboPair p = (IllegalComboPair) o;
+			
+			if (this.col1 < p.col1)  return -1;
+			else if (this.col1 > p.col1)  return 1;
+			else {
+				if (this.col2 < p.col2) return -1;
+				else if (this.col2 > p.col2) return 1;
+				else return 0;
+			}
+		} else {
 			return 1;
-		else {
-			if (this.col2 < p.col2)
-				return -1;
-			else if (this.col2 > p.col2)
-				return 1;
-			else
-				return 0;
 		}
 	}
-
-	public int hashCode() {
+		
+	public int hashCode () {
 		return col1 ^ col2;
 	}
 

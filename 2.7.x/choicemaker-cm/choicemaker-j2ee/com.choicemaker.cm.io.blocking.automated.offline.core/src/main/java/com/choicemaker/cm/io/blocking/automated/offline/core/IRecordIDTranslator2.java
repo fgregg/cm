@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
 import com.choicemaker.cm.core.BlockingException;
 
@@ -24,20 +24,20 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IRecordIDTranslator2<T extends Comparable<? super T>> {
+public interface IRecordIDTranslator2 {
 
 	/** This method returns the range of record ids in the first source.
 	 * 
 	 * @return Comparable[0] is min and Comparable[1] is max
 	 */
-	public Comparable<T> [] getRange1 () ;
+	public Comparable [] getRange1 () ;
 
 
 	/** This method returns the range of record ids in the second source.
 	 * 
 	 * @return Comparable[0] is min and Comparable[1] is max
 	 */
-	public Comparable<T> [] getRange2 () ;
+	public Comparable [] getRange2 () ;
 
 
 	/** This returns the internal id at which the second source begins.
@@ -79,8 +79,8 @@ public interface IRecordIDTranslator2<T extends Comparable<? super T>> {
 	public void cleanUp () throws BlockingException;
 
 
-	/** This method attempts to recover the data from a previous run by reading in existing
-	 * sources containing the record identifiers.
+	/** This method attemps to recover the data from a previous run by reading in existing
+	 * sources containing the record ids.
 	 * 
 	 * @throws BlockingException
 	 */
@@ -93,7 +93,7 @@ public interface IRecordIDTranslator2<T extends Comparable<? super T>> {
 	 * @return int - returns internal id for this record id.
 	 * @throws BlockingException
 	 */
-	public int translate (Comparable<T> o) throws BlockingException;
+	public int translate (Comparable o) throws BlockingException;
 	
 	
 	/** This method prepares for reverse translation. 
@@ -111,19 +111,19 @@ public interface IRecordIDTranslator2<T extends Comparable<? super T>> {
 	 * @param internalID
 	 * @return Comparable - the original record ID associated with this internal ID.
 	 */
-	public Comparable<T> reverseLookup (int internalID);
+	public Comparable reverseLookup (int internalID);
 
 
 	/** This returns an ArrayList of record IDs from the first source.  Usually, the staging source.
 	 * 
 	 * @return ArrayList
 	 */
-	public List<T> getList1 ();
+	public ArrayList getList1 ();
 
 	/** This returns an ArrayList of record IDs from the second source.  Usually, the master source.
 	 * 
 	 * @return ArrayList
 	 */
-	public List<T> getList2 ();
+	public ArrayList getList2 ();
 
 }

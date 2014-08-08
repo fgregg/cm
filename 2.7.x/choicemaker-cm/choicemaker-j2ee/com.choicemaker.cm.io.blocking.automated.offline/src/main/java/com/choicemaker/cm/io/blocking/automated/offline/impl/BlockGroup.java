@@ -12,7 +12,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
@@ -31,7 +30,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
  */
 public class BlockGroup implements IBlockSink {
 
-	private List<IBlockSink> sinks;
+	private ArrayList sinks;
 	
 	//this keeps track of number of bucket files per block size.
 	// numBuckets[i] contains the buckets for size i + 1.
@@ -56,6 +55,7 @@ public class BlockGroup implements IBlockSink {
 	 * @throws BlockingException
 	 */
 	public BlockGroup (IBlockSinkSourceFactory bFactory, int maxSize) throws BlockingException {
+//		this.maxSize = maxSize;
 		this.bFactory = bFactory;
 		
 		//initialize numBuckets
@@ -77,7 +77,7 @@ public class BlockGroup implements IBlockSink {
 		setSize(5,2); //2 files for size = 5;
 		
 		int num = getSum (maxSize + 1);
-		sinks = new ArrayList<>(num);
+		sinks = new ArrayList (num);
 		
 		for (int i=0; i< num; i++) {
 			IBlockSink sink = bFactory.getNextSink();
@@ -170,7 +170,7 @@ public class BlockGroup implements IBlockSink {
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#exists()
 	 */
 	public boolean exists() {
-		// Auto-generated
+		// TODO Auto-generated method stub
 		return false;
 	}
 

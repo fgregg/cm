@@ -18,7 +18,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface ITransformer <T extends Comparable<? super T>> {
+public interface ITransformer {
 	
 	/**
 	 * This method prepares the tranformer.
@@ -56,7 +56,7 @@ public interface ITransformer <T extends Comparable<? super T>> {
 	 * @param bs
 	 * @throws BlockingException
 	 */
-	public void transform (IIDSet<T> bs) throws BlockingException;
+	public void transform (IIDSet bs) throws BlockingException;
 	
 	
 	/** This method frees up all the resources.  It is called when there is nothing to transform.

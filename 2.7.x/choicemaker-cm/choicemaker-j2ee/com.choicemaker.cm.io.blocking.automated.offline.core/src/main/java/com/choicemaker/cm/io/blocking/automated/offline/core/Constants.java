@@ -22,6 +22,10 @@ public class Constants {
 	public static final int STRING = 1;
 	public static final int BINARY = 2;
 
+	//data file constants
+//	public static final long NEWLINE = -1;
+//	public static final int NEWLINE = -1;
+
 	//Used by RecordValue	
 	public static final int HASHMAP = 1;
 	public static final int ARRAY = 2;
@@ -44,7 +48,6 @@ public class Constants {
 	/* The following 3 variables indicates the type of the record IDs.
 	 * 
 	 */
-	public static final int TYPE_UNKNOWN = 0;
 	public static final int TYPE_INTEGER = 1;
 	public static final int TYPE_LONG = 2;
 	public static final int TYPE_STRING = 3;
@@ -60,10 +63,11 @@ public class Constants {
 	/** This method checks if the object is an Integer, Long, or String.
 	 * 
 	 * @param o
-	 * @return int - TYPE_INTEGER or TYPE_LONG or TYPE_STRING or TYPE_UNKNOWN
+	 * @return int - TYPE_INTEGER, or TYPE_LONG, or TYPE_STRING
 	 */
-	public static<T extends Comparable<? super T>> int checkType (T o) {
-		int ret = TYPE_UNKNOWN;
+	public static int checkType (Comparable o) {
+		int ret = 0;
+
 		if (o.getClass() == java.lang.Integer.class) {
 			ret = TYPE_INTEGER;
 		} else if (o.getClass() == java.lang.Long.class) {

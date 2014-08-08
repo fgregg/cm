@@ -18,13 +18,13 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface ISuffixTreeSink<T extends Comparable<? super T>> extends ISink {
+public interface ISuffixTreeSink extends ISink {
 
 	/** This method writes the input node all its descendants to the sink.
 	 * 
 	 * @param root
 	 * @throws BlockingException
 	 */
-	public void writeSuffixTree (SuffixTreeNode<T> root) throws BlockingException;
+	public void writeSuffixTree (SuffixTreeNode root) throws BlockingException;
 
 }

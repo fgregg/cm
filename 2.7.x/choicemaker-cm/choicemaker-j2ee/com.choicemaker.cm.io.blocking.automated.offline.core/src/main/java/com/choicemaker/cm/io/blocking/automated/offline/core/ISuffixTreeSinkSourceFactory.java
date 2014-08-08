@@ -18,13 +18,13 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface ISuffixTreeSinkSourceFactory<T extends Comparable<? super T>> {
+public interface ISuffixTreeSinkSourceFactory {
 
 	/** Gets the next ISuffixTreeSink in the sequence. */
-	public ISuffixTreeSink<T> getNextSink () throws BlockingException;
+	public ISuffixTreeSink getNextSink () throws BlockingException;
 	
 	/** Gets the next ISuffixTreeSource in the sequence. */
-	public ISuffixTreeSource<T> getNextSource () throws BlockingException;
+	public ISuffixTreeSource getNextSource () throws BlockingException;
 	
 	/** Gets the number of sequence sinks created. */
 	public int getNumSink ();
@@ -33,17 +33,17 @@ public interface ISuffixTreeSinkSourceFactory<T extends Comparable<? super T>> {
 	public int getNumSource ();
 	
 	/** Creates an ISuffixTreeSource for an existing ISuffixTreeSink. */
-	public ISuffixTreeSource<T> getSource (ISuffixTreeSink <T>sink) throws BlockingException;
+	public ISuffixTreeSource getSource (ISuffixTreeSink sink) throws BlockingException;
 
 	/** Creates an ISuffixTreeSink for an existing ISuffixTreeSource. */
-	public ISuffixTreeSink<T> getSink (IComparisonArraySource<T> source) throws BlockingException;
+	public ISuffixTreeSink getSink (IComparisonArraySource source) throws BlockingException;
 
 	/** Removes this sink.
 	 * 
 	 * @param sink
 	 * @throws BlockingException
 	 */
-	public void removeSink (ISuffixTreeSink<T> sink) throws BlockingException;
+	public void removeSink (ISuffixTreeSink sink) throws BlockingException;
 
 
 	/** Removes this source.
@@ -51,6 +51,6 @@ public interface ISuffixTreeSinkSourceFactory<T extends Comparable<? super T>> {
 	 * @param source
 	 * @throws BlockingException
 	 */
-	public void removeSource (ISuffixTreeSource<T> source) throws BlockingException;
+	public void removeSource (ISuffixTreeSource source) throws BlockingException;
 
 }

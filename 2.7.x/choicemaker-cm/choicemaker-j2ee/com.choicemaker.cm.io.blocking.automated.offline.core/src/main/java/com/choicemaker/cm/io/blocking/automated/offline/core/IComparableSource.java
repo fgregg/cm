@@ -18,10 +18,10 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IComparableSource<T extends Comparable<? super T>> extends ISource {
+public interface IComparableSource extends ISource {
 
 	/** Gets the next Comparable. */
-	public T getNext () throws BlockingException;
+	public Comparable getNext () throws BlockingException;
 	
 	/** Returns the number of MatchRecords read so far. */
 	public int getCount ();

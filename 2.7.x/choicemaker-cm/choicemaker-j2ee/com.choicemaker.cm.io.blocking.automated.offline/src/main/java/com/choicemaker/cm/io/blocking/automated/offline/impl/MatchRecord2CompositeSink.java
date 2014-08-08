@@ -11,9 +11,9 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -36,7 +36,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
-public class MatchRecord2CompositeSink<T extends Comparable<? super T>> implements IMatchRecord2Sink<T> {
+public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 
 //	private static final Logger log = Logger.getLogger(MatchRecord2CompositeSink.class);
 	
@@ -45,7 +45,7 @@ public class MatchRecord2CompositeSink<T extends Comparable<? super T>> implemen
 	private long maxFileSize;
 	private int interval = 100000;
 	
-	private IMatchRecord2Sink<T> currentFile;
+	private IMatchRecord2Sink currentFile;
 	private int numberOfFiles = 0; 
 	
 	private int count = 0;
@@ -90,7 +90,7 @@ public class MatchRecord2CompositeSink<T extends Comparable<? super T>> implemen
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink#writeMatches(java.util.ArrayList)
 	 */
-	public void writeMatches(List<MatchRecord2<T>> matches) throws BlockingException {
+	public void writeMatches(ArrayList matches) throws BlockingException {
 		writeMatches(matches.iterator());
 		
 	}
@@ -98,16 +98,16 @@ public class MatchRecord2CompositeSink<T extends Comparable<? super T>> implemen
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink#writeMatches(java.util.Collection)
 	 */
-	public void writeMatches(Collection<MatchRecord2<T>> c) throws BlockingException {
+	public void writeMatches(Collection c) throws BlockingException {
 		writeMatches(c.iterator());
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink#writeMatches(java.util.Iterator)
 	 */
-	public void writeMatches(Iterator<MatchRecord2<T>> it) throws BlockingException {
+	public void writeMatches(Iterator it) throws BlockingException {
 		while (it.hasNext()) {
-			MatchRecord2<T>  mr = it.next();
+			MatchRecord2  mr = (MatchRecord2) it.next();
 			writeMatch(mr);
 		}
 	}
@@ -115,7 +115,7 @@ public class MatchRecord2CompositeSink<T extends Comparable<? super T>> implemen
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink#writeMatch(com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2)
 	 */
-	public void writeMatch(MatchRecord2<T> match) throws BlockingException {
+	public void writeMatch(MatchRecord2 match) throws BlockingException {
 		currentFile.writeMatch(match);
 		count ++;
 		

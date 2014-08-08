@@ -18,13 +18,13 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IBlockSinkSourceFactory<T extends Comparable<? super T>> {
+public interface IBlockSinkSourceFactory {
 
 	/** Gets the next IOverSizedSink in the sequence. */
-	public IBlockSink<T> getNextSink () throws BlockingException;
+	public IBlockSink getNextSink () throws BlockingException;
 	
 	/** Gets the next IOverSizedSource in the sequence. */
-	public IBlockSource<T> getNextSource () throws BlockingException;
+	public IBlockSource getNextSource () throws BlockingException;
 	
 	/** Gets the number of sequence sinks created. */
 	public int getNumSink ();
@@ -33,13 +33,13 @@ public interface IBlockSinkSourceFactory<T extends Comparable<? super T>> {
 	public int getNumSource ();
 	
 	/** Creates an IOverSizedSource for an existing IOversizedSink. */
-	public IBlockSource<T> getSource (IBlockSink<T> sink) throws BlockingException;
+	public IBlockSource getSource (IBlockSink sink) throws BlockingException;
 
 	/** Creates an IOverSizedSource for an existing IOversizedSink. */
-	public IBlockSink<T> getSink (IBlockSource<T> source) throws BlockingException;
+	public IBlockSink getSink (IBlockSource source) throws BlockingException;
 
-	public void removeSink (IBlockSink<T> sink) throws BlockingException;
+	public void removeSink (IBlockSink sink) throws BlockingException;
 
-	public void removeSource (IBlockSource<T> source) throws BlockingException;
+	public void removeSource (IBlockSource source) throws BlockingException;
 
 }

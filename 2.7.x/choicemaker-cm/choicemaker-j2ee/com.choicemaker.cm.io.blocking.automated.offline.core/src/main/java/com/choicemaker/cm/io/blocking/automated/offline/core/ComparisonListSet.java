@@ -18,10 +18,10 @@ import java.util.List;
  * @author pcheung
  *
  */
-public class ComparisonListSet<T extends Comparable<? super T>> implements IComparisonSet<T> {
+public class ComparisonListSet implements IComparisonSet {
 	
 	private static final long serialVersionUID = 1L;
-	private List<ComparisonPair<T>> list;
+	private List list;
 	private int ind;
 	private int size;
 	
@@ -30,7 +30,7 @@ public class ComparisonListSet<T extends Comparable<? super T>> implements IComp
 	 * 
 	 * @param list
 	 */
-	public ComparisonListSet (List<ComparisonPair<T>> list) {
+	public ComparisonListSet (List list) {
 		this.list = list;
 		ind = 0;
 		size = list.size ();
@@ -48,8 +48,8 @@ public class ComparisonListSet<T extends Comparable<? super T>> implements IComp
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#getNextPair()
 	 */
-	public ComparisonPair<T> getNextPair() {
-		ComparisonPair<T> ret = list.get(ind);
+	public ComparisonPair getNextPair() {
+		ComparisonPair ret = (ComparisonPair) list.get(ind);
 		ind ++;
 		return ret;
 	}
@@ -61,7 +61,7 @@ public class ComparisonListSet<T extends Comparable<? super T>> implements IComp
 		StringBuffer sb = new StringBuffer ();
 		sb.append(Constants.LINE_SEPARATOR);
 		for (int i=0; i<size; i++) {
-			ComparisonPair<T> p = list.get(i);
+			ComparisonPair p = (ComparisonPair) list.get(i);
 			sb.append('(');
 			sb.append(p.id1.toString());
 			sb.append(',');

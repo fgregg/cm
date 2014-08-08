@@ -18,13 +18,13 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IRecordIDSinkSourceFactory<T extends Comparable<? super T>> {
+public interface IRecordIDSinkSourceFactory {
 
 	/** Gets the next IRecordIDSink in the sequence. */
-	public IRecordIDSink<T> getNextSink () throws BlockingException;
+	public IRecordIDSink getNextSink () throws BlockingException;
 	
 	/** Gets the next IRecordIDSource in the sequence. */
-	public IRecordIDSource<T> getNextSource () throws BlockingException;
+	public IRecordIDSource getNextSource () throws BlockingException;
 	
 	/** Gets the number of sequence sinks created. */
 	public int getNumSink ();
@@ -33,17 +33,17 @@ public interface IRecordIDSinkSourceFactory<T extends Comparable<? super T>> {
 	public int getNumSource ();
 	
 	/** Creates an IRecordIDSource for an existing IRecordIDSink. */
-	public IRecordIDSource<T> getSource (IRecordIDSink<T> sink) throws BlockingException;
+	public IRecordIDSource getSource (IRecordIDSink sink) throws BlockingException;
 
 	/** Creates an IRecordIDSink for an existing IRecordIDSource. */
-	public IRecordIDSink<T> getSink (IRecordIDSource<T> source) throws BlockingException;
+	public IRecordIDSink getSink (IRecordIDSource source) throws BlockingException;
 
 	/** Removes this sink.
 	 * 
 	 * @param sink
 	 * @throws BlockingException
 	 */
-	public void removeSink (IRecordIDSink<T> sink) throws BlockingException;
+	public void removeSink (IRecordIDSink sink) throws BlockingException;
 
 
 	/** Removes this source.
@@ -51,6 +51,6 @@ public interface IRecordIDSinkSourceFactory<T extends Comparable<? super T>> {
 	 * @param source
 	 * @throws BlockingException
 	 */
-	public void removeSource (IRecordIDSource<T> source) throws BlockingException;
+	public void removeSource (IRecordIDSource source) throws BlockingException;
 
 }

@@ -18,59 +18,54 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IMatchRecord2SinkSourceFactory<T extends Comparable<? super T>> {
+public interface IMatchRecord2SinkSourceFactory {
 
 	/** Gets the next IMatchRecord2Sink in the sequence. */
-	public IMatchRecord2Sink<T> getNextSink() throws BlockingException;
-
+	public IMatchRecord2Sink getNextSink () throws BlockingException;
+	
 	/** Gets the next IMatchRecord2Source in the sequence. */
-	public IMatchRecord2Source<T> getNextSource() throws BlockingException;
-
+	public IMatchRecord2Source getNextSource () throws BlockingException;
+	
 	/** Gets the number of sequence sinks created. */
-	public int getNumSink();
-
+	public int getNumSink ();
+	
 	/** Gets the number of sequence sources created. */
-	public int getNumSource();
-
+	public int getNumSource ();
+	
 	/** Creates an IMatchRecord2Source for an existing IMatchRecord2Sink. */
-	public IMatchRecord2Source<T> getSource(IMatchRecord2Sink<T> sink)
-			throws BlockingException;
-
+	public IMatchRecord2Source getSource (IMatchRecord2Sink sink) throws BlockingException;
+	
 	/** Creates an IMatchRecord2Sink for an existing IMatchRecord2Source. */
-	public IMatchRecord2Sink<T> getSink(IMatchRecord2Source<T> source)
-			throws BlockingException;
+	public IMatchRecord2Sink getSink (IMatchRecord2Source source) throws BlockingException;
 
 	/** Removes a given IMatchRecord2Sink. */
-	public void removeSink(IMatchRecord2Sink<T> sink) throws BlockingException;
+	public void removeSink (IMatchRecord2Sink sink) throws BlockingException;
 
 	/** Removes a given IMatchRecordSource. */
-	public void removeSource(IMatchRecord2Source<T> source)
-			throws BlockingException;
-
+	public void removeSource (IMatchRecord2Source source) throws BlockingException;
+	
 	/** Moves source1 to source2. */
-	public void move(IMatchRecord2Source<T> source1,
-			IMatchRecord2Source<T> source2) throws BlockingException;
+	public void move (IMatchRecord2Source source1, IMatchRecord2Source source2) throws BlockingException;
 
 	/** Moves sink1 to sink2. */
-	public void move(IMatchRecord2Sink<T> sink1, IMatchRecord2Sink<T> sink2)
-			throws BlockingException;
-
-	/**
-	 * This gets a specific sink.
+	public void move (IMatchRecord2Sink sink1, IMatchRecord2Sink sink2) throws BlockingException;
+	
+	/** This gets a specific sink. 
 	 * 
 	 * @param info
 	 * @return IMatchRecordSink - a sink with the corresponding info.
 	 * @throws BlockingException
 	 */
-	public IMatchRecord2Sink<T> getSink(String info) throws BlockingException;
-
-	/**
-	 * This gets the sink with the specific number.
+	public IMatchRecord2Sink getSink (String info) throws BlockingException;
+	
+	
+	/**	This gets the sink with the specific number.
 	 * 
 	 * @param i
 	 * @return IMatchRecord2Sink
 	 * @throws BlockingException
 	 */
-	public IMatchRecord2Sink<T> getSink(int i) throws BlockingException;
+	public IMatchRecord2Sink getSink (int i) throws BlockingException;
+	
 
 }

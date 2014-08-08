@@ -24,7 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
  * @author pcheung
  *
  */
-public class MatchRecord2<T extends Comparable<? super T>> implements Comparable<MatchRecord2<T>>, Serializable {
+public class MatchRecord2 implements Comparable, Serializable {
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = -3108962876276009775L;
@@ -39,8 +39,8 @@ public class MatchRecord2<T extends Comparable<? super T>> implements Comparable
 	/** Probabilities that differ by less than this amount are considered equal */
 	public static final float PRECISION = 0.0001f;
 
-	private final T recordID1;
-	private final T recordID2;
+	private final Comparable recordID1;
+	private final Comparable recordID2;
 	private final float probability;
 	private final char matchType;
 	private final char record2Source;
@@ -90,8 +90,8 @@ public class MatchRecord2<T extends Comparable<? super T>> implements Comparable
 	 * @param model - The model used to evaluate this pair
 	 */
 	public MatchRecord2(
-		T i1,
-		T i2,
+		Comparable i1,
+		Comparable i2,
 		char source,
 		float f,
 		char type,
@@ -110,8 +110,8 @@ public class MatchRecord2<T extends Comparable<? super T>> implements Comparable
 	 * @param notes - delimited String representing any notes on clues fired by this pair.
 	 */
 	public MatchRecord2(
-		T i1,
-		T i2,
+		Comparable i1,
+		Comparable i2,
 		char source,
 		float f,
 		char type,
@@ -132,7 +132,7 @@ public class MatchRecord2<T extends Comparable<? super T>> implements Comparable
 	 * @param mr
 	 * @return boolean - true if the ids from both MatchRecords match.
 	 */
-	boolean equals_00(MatchRecord2<T> mr) {
+	public boolean equals(MatchRecord2 mr) {
 		boolean ret = false;
 		if (this.recordID1.equals(mr.recordID1)
 			&& this.recordID2.equals(mr.recordID2)
@@ -142,11 +142,11 @@ public class MatchRecord2<T extends Comparable<? super T>> implements Comparable
 		return ret;
 	}
 
-	public T getRecordID1() {
+	public Comparable getRecordID1() {
 		return recordID1;
 	}
 
-	public T getRecordID2() {
+	public Comparable getRecordID2() {
 		return recordID2;
 	}
 
@@ -166,9 +166,10 @@ public class MatchRecord2<T extends Comparable<? super T>> implements Comparable
 		return notes;
 	}
 
-	@Override
-	public int compareTo(MatchRecord2<T> mr) {
+	public int compareTo(Object o) {
 		int ret = 0;
+		MatchRecord2 mr = (MatchRecord2) o;
+
 		if (recordID1.compareTo(mr.recordID1) < 0)
 			ret = -1;
 		else if (recordID1.compareTo(mr.recordID1) > 0)
@@ -199,9 +200,7 @@ public class MatchRecord2<T extends Comparable<? super T>> implements Comparable
 		boolean ret = false;
 
 		if (o.getClass() == MatchRecord2.class) {
-			@SuppressWarnings("unchecked")
-			MatchRecord2<T> mr = (MatchRecord2<T>) o;
-			return equals(mr);
+			return equals((MatchRecord2) o);
 		}
 		return ret;
 	}

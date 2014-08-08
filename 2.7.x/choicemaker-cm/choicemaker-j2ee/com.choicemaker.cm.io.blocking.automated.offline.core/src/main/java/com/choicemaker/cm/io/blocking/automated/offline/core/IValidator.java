@@ -16,18 +16,17 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  * @author pcheung
  *
  */
-public interface IValidator<T extends Comparable<? super T>> extends
-		IValidatorBase<T> {
-
+public interface IValidator extends IValidatorBase{
+	
 	/** This returns true if this is a valid pair for comparison. */
-	public boolean validPair(long id1, long id2);
-
-	/**
-	 * This returns true if id1 is for a staging record.
+	public boolean validPair (long id1, long id2);
+	
+	
+	/** This returns true if id1 is for a staging record.
 	 * 
 	 * @param id1
 	 * @return boolean - true if this id is from staging.
 	 */
-	public boolean isStaging(long id1);
+	public boolean isStaging (long id1);
 
 }

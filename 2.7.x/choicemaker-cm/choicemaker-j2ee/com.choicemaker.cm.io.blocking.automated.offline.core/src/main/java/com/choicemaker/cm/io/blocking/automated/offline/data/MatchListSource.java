@@ -11,7 +11,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.data;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchCandidate;
@@ -61,7 +60,7 @@ public class MatchListSource {
 		boolean ret = false;
 		boolean stop = false;
 		long currentID = Long.MIN_VALUE;
-		List<MatchCandidate> candidates = new ArrayList<>();
+		ArrayList candidates = new ArrayList ();
 		MatchCandidate mc;
 		MatchRecord record;
 		

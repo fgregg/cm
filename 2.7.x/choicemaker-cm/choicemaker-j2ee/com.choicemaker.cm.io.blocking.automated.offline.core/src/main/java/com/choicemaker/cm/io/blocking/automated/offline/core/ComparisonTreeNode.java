@@ -12,13 +12,12 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author pcheung
  *
  */
-public class ComparisonTreeNode<T extends Comparable<? super T>> implements Serializable {
+public class ComparisonTreeNode implements Serializable {
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = -8258266551802037565L;
@@ -36,7 +35,7 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	/**
 	 * The id of the record this ComparisonTreeNode represents.
 	 */
-	private final T recordId;
+	private final Comparable recordId;
 	
 	/** This indicates if the record is a staging or master record.
 	 * 
@@ -55,7 +54,7 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	 * The next node in the linked list that this SuffixTreeNode
 	 * is in its parent.
 	 */
-	private ComparisonTreeNode<T> next = null;
+	private ComparisonTreeNode next = null;
 
 	/**
 	 * The number of children of this SuffixTreeNode in the suffix tree.
@@ -68,7 +67,7 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	 * contains a linked list (linked by the SuffixTreeNode.next field) of
 	 * child nodes.
 	 */
-	private ComparisonTreeNode<T>[] kids = null;
+	private ComparisonTreeNode[] kids = null;
 
 	/**
 	 * This constructor is only be called by createRootNode();
@@ -80,7 +79,7 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	/**
 	 * Creates a new ComparisonTreeNode with the specified parent and recordId.
 	 */
-	private ComparisonTreeNode(T c, char type) {
+	private ComparisonTreeNode(Comparable c, char type) {
 		this.recordId = c;
 		this.type = type;
 
@@ -117,13 +116,13 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	 * 
 	 * @return ArrayList
 	 */
-	public List<ComparisonTreeNode<T>> getAllChildren () {
-		List<ComparisonTreeNode<T>> children = null;
+	public ArrayList getAllChildren () {
+		ArrayList children = null;
 		if (numKids > 0) {
-			children = new ArrayList<>();
+			children = new ArrayList ();
 			for (int i=0; i< kids.length; i++) {
 				if (kids[i] != null) {
-					ComparisonTreeNode<T> kid = kids[i];
+					ComparisonTreeNode kid = kids[i];
 					children.add(kid);
 					while (kid.next != null) {
 						kid = kid.next;
@@ -175,12 +174,12 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 			sb.append(Constants.LINE_SEPARATOR);
 			return sb.toString();
 		} else {
-			List<ComparisonTreeNode<T>> children = getAllChildren();
+			ArrayList children = getAllChildren();
 			sb.append(' ');
 			String temp = sb.toString();
 			sb = new StringBuffer ();
 			for (int i=0; i<children.size(); i++) {
-				ComparisonTreeNode<T> kid = children.get(i);
+				ComparisonTreeNode kid = (ComparisonTreeNode) children.get(i);
 				sb.append( kid.writeTree(temp) );
 			}
 			
@@ -202,9 +201,9 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 		sb.append(recordId.toString());
 		
 		if (numKids > 0) {
-			List<ComparisonTreeNode<T>> children = getAllChildren();
+			ArrayList children = getAllChildren();
 			for (int i=0; i<children.size(); i++) {
-				ComparisonTreeNode<T> kid = children.get(i);
+				ComparisonTreeNode kid = (ComparisonTreeNode) children.get(i);
 				kid.writeTree2(sb);
 			}
 		}
@@ -212,9 +211,53 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 		sb.append(Constants.CLOSE_NODE);
 	}
 
-	private int getBucket (T id, int length) {
+/*
+	public String writeTree2 (String prefix) {
+		StringBuffer sb = new StringBuffer (prefix);
+		sb.append(Constants.OPEN_NODE);
+		sb.append(type);
+		sb.append(':');
+		sb.append(recordId.toString());
+		
+		if (numKids > 0) {
+			ArrayList children = getAllChildren();
+			for (int i=0; i<children.size(); i++) {
+				ComparisonTreeNode kid = (ComparisonTreeNode) children.get(i);
+				sb.append( kid.writeTree2("") );
+			}
+		}
+
+		sb.append(Constants.CLOSE_NODE);
+		return sb.toString();
+	}
+*/
+	
+/*	
+	private void readObject (ObjectInputStream stream) throws IOException, ClassNotFoundException {
+		char c = stream.readChar();
+		System.out.println (c);
+		boolean stop = false;
+		while (!stop) {
+			if (c == Constants.OPEN_NODE) {
+				c = stream.readChar();
+				this.type = c;
+				
+				c = stream.readChar(); //this is a ':'
+			}
+		}
+	}
+	
+	
+	private void writeObject (ObjectOutputStream stream) throws IOException {
+		stream.writeChars(writeTree2(""));
+	}
+*/
+
+	private int getBucket (Comparable id, int length) {
 		int ret = 0;
 		int i = id.hashCode();
+//		if (id > 0) ret = i % length;
+//		else ret = -i % length;
 
 		ret = i % length;
 		if (ret < 0) ret = -ret;
@@ -222,17 +265,17 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 		return ret;
 	}
 	
-	public T getRecordId () {
+	public Comparable getRecordId () {
 		return recordId;
 	}
 	
 	
-	public ComparisonTreeNode<T> putChild(T childId, char type) {
-		return putChildImpl(new ComparisonTreeNode<T>(childId, type));
+	public ComparisonTreeNode putChild(Comparable childId, char type) {
+		return putChildImpl(new ComparisonTreeNode(childId, type));
 	}
 	
-	public ComparisonTreeNode<T> putChild(T childId, char type, int blockingSetId) {
-		return putChildImpl(new LeafComparisonTreeNode<T>(childId, type, blockingSetId));
+	public ComparisonTreeNode putChild(Comparable childId, char type, int blockingSetId) {
+		return putChildImpl(new LeafComparisonTreeNode(childId, type, blockingSetId));
 	}
 	
 	/**
@@ -244,14 +287,15 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	 * @throws IllegalArgumentException if a node with childId already exists or if childId
 	 * is an invalid record ID (see Constructor)
 	 */
-	private ComparisonTreeNode<T> putChildImpl(ComparisonTreeNode<T> kid) {
-		T childId = kid.recordId;
+	private ComparisonTreeNode putChildImpl(ComparisonTreeNode kid) {
+		Comparable childId = kid.recordId;
 
 		ensureCapacity();
+//		int bucket = (int) (childId % kids.length);
 		int bucket = getBucket(childId,kids.length);
 
 		// check that no child node with the given ID previously existed.
-		ComparisonTreeNode<T> node = kids[bucket];
+		ComparisonTreeNode node = kids[bucket];
 		while (node != null) {
 			if (node.recordId == childId) {
 				throw new IllegalArgumentException("Child node with id " + childId + " already exists");
@@ -276,7 +320,6 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	 * is Integer.MAX_VALUE, at which point the performance will begin to degrade
 	 * as hash buckets turn into long linked lists.
 	 */
-	@SuppressWarnings("unchecked")
 	private void ensureCapacity() {
 		if (kids == null) {
 			kids = new ComparisonTreeNode[2];
@@ -295,17 +338,18 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	 * non-null.
 	 */
 	private void resize(int newCapacity) {
-		ComparisonTreeNode<T>[] oldKids = kids;
+		ComparisonTreeNode[] oldKids = kids;
 		
-		@SuppressWarnings("unchecked")
-		ComparisonTreeNode<T>[] newKids = new ComparisonTreeNode[newCapacity];
+		ComparisonTreeNode[] newKids = new ComparisonTreeNode[newCapacity];
 		for (int i = 0, n = oldKids.length; i < n; i++) {
-			ComparisonTreeNode<T> e = oldKids[i];
+			ComparisonTreeNode e = oldKids[i];
 			if (e != null) {
 				oldKids[i] = null;
 				do {
-					ComparisonTreeNode<T> next = e.next;
+					ComparisonTreeNode next = e.next;
 					
+					// insert it at the front of the new bucket
+//					int bucket = (int)(e.recordId % newCapacity);
 					int bucket = getBucket(e.recordId, newCapacity);
 					
 					e.next = newKids[bucket];
@@ -323,8 +367,8 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	/**
 	 * Factory method for creating the root of a suffix tree.
 	 */
-	public static <T extends Comparable<? super T>> ComparisonTreeNode<T> createRootNode() {
-		return new ComparisonTreeNode<T>();
+	public static ComparisonTreeNode createRootNode() {
+		return new ComparisonTreeNode();
 	}
 	
 	/**
@@ -333,12 +377,12 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 	 * children.  (If a node has children, it is subsumed by the blocking sets represented
 	 * by each of its children, and their children, and their children...)
 	 */	
-	private static class LeafComparisonTreeNode<T extends Comparable<? super T>> extends ComparisonTreeNode<T> {
+	private static class LeafComparisonTreeNode extends ComparisonTreeNode {
 		
 		private static final long serialVersionUID = 1L;
 		private final int blockingSetId;
 		
-		public LeafComparisonTreeNode(T recordId, char type, int blockingSetId) {
+		public LeafComparisonTreeNode(Comparable recordId, char type, int blockingSetId) {
 			super(recordId, type);
 			this.blockingSetId = blockingSetId;
 			
@@ -355,6 +399,18 @@ public class ComparisonTreeNode<T extends Comparable<? super T>> implements Seri
 			return blockingSetId;
 		}
 		
+//		public SuffixTreeNode getChild(long childId) {
+//			throw new UnsupportedOperationException("Leaf nodes have no children");
+//		}
+		
+//		public ComparisonTreeNode putChild(long childId) {
+//			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
+//		}
+		
+//		public ComparisonTreeNode putChild(long childId, Comparable blockingSetId) {
+//			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
+//		}
+
 	}
 
 }
