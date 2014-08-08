@@ -76,8 +76,6 @@ public class MatchDBWriter {
 			ArrayList matches = new ArrayList ();
 				
 			int count = 0;
-			boolean error = false;
-			long ret;
 				
 			while (mSource.hasNext()) {
 				MatchRecord2 mr = (MatchRecord2) mSource.getNext();
@@ -115,10 +113,6 @@ public class MatchDBWriter {
 		Calendar cal = Calendar.getInstance ();
 		long start = cal.getTimeInMillis();
 
-		int ret = 0;
-		//String err;
-		//String errText;
-		
 		String insStmt = "insert into "+name+
 					  " (job_id, record_1, record_2, record_2_source, probability, match_ind)"+
 					  " values (?, ?, ?, ?, ?, ?)";
@@ -126,22 +120,12 @@ public class MatchDBWriter {
 		PreparedStatement pstmt = null;
 		
 		try {
-//			if(connWrite != null){
-//				connWrite = ds.getConnection();
-//				connWrite.setAutoCommit(false);
-//			}
-			
-			//String user = connWrite.getMetaData().getUserName();
-			
 			pstmt = connWrite.prepareStatement(insStmt);			  
-			//int max = 2000;  //this needs to correspond to the database type definition.
 			String decision;
 			String secondRecordLocation;
 			String r1s;
 			String r2s;
 			float prob;
-			//int size = 0;
-			//int k = 0;
 
 			for (int j=0; j< matches.size(); j++) {
 				MatchRecord2 mr = (MatchRecord2) matches.get(j);
@@ -150,8 +134,6 @@ public class MatchDBWriter {
 				secondRecordLocation = Character.toString(mr.getRecord2Source());
 				prob = mr.getProbability();
 				decision = Character.toString(mr.getMatchType());
-				//size ++;
-				//k ++;
 					
 				pstmt.setString(1, jobID);
 				pstmt.setString(2, r1s);

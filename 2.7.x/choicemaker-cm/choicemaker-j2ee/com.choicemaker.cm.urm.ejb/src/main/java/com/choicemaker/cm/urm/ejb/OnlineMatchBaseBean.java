@@ -36,12 +36,10 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
-import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.report.ErrorReporter;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.cm.core.report.ReporterPlugin;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSetReporter;
@@ -81,6 +79,10 @@ import com.choicemaker.util.StringUtils;
  */
 public class OnlineMatchBaseBean implements SessionBean {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected transient SessionContext sessionContext;
 	protected static Logger log = Logger.getLogger(OnlineMatchBaseBean.class);
 	protected static boolean initialized = false;

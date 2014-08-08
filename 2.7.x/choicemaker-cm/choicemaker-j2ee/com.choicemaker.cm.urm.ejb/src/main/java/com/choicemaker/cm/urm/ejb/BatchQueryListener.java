@@ -19,7 +19,6 @@ import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAService;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
@@ -36,6 +35,10 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
  */
 public class BatchQueryListener extends WorkflowControlListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(BatchQueryListener.class.getName());
 
 	/**
@@ -70,13 +73,8 @@ public class BatchQueryListener extends WorkflowControlListener{
 									{
 						
 		urmJob.markAsTransOABA();
-		SerialRecordSource qrs = urmJob.getQueryRs();
-		SerialRecordSource mrs = urmJob.getMasterRs();
 
 		TransitivityOABAService ts = Single.getInst().getTransitivityOABAService();
-		float lth = urmJob.getLowerThreshold().floatValue();
-		float uth = urmJob.getUpperThreshold().floatValue();
-		String modelName = urmJob.getModelName();
 		
 		if( urmJob.markAbortedIfRequested())
 			throw new JobAlreadyAbortedException();
@@ -87,8 +85,7 @@ public class BatchQueryListener extends WorkflowControlListener{
 	} 
 	
 	public void abortJobStep(long id) throws ConfigException, CmRuntimeException {
-		TransitivityOABAService ts = Single.getInst().getTransitivityOABAService();
-		log.debug("transitivity preprocessing abort is issued");
+		log.debug("transitivity preprocessing abort is ignored");
 		//TODO: abort transitivity service
 	}
 

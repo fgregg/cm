@@ -32,6 +32,10 @@ import com.choicemaker.util.StringUtils;
  */
 public class MrpsRequest implements IMrpsRequest {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final String MRPS_SUFFIX = "mrps";
 	private static final String DATA_SUFFIX = "xml";
 
@@ -200,7 +204,6 @@ public class MrpsRequest implements IMrpsRequest {
 		throws CmRuntimeException, ConfigException, RemoteException {
 		IMatchRecord2Source retVal = this.matchPairs;
 		if (retVal == null) {
-			BatchParameters bp = getBatchParameters();
 			String stagingModelName = this.getStagingModelName();
 			OABAConfiguration config =
 				new OABAConfiguration(

@@ -25,7 +25,6 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAService;
 import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -47,6 +46,10 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  */
 public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final long BMA_STEPS_NUMB = 3;
 	public static final int BATCH_MATCH_STEP_INDEX = 0; 
 	public static final int TRANS_OABA_STEP_INDEX = 1;
@@ -253,8 +256,6 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 		
 	{
 		try {
-			UrmJob uj = Single.getInst().findUrmJobById(urmJobId);
-			
 			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(urmJobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					
 			long batchJobId  = batchStep.getStepJobId().longValue();		
 			log.debug("batch job jd = "+batchJobId);
@@ -372,9 +373,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 						abortBatchJob(stepJobId);
 					break; 
 					case TRANS_OABA_STEP_INDEX:{
-						TransitivityOABAService ts = Single.getInst().getTransitivityOABAService();
-						//TODO: ask Put to add abort method
-						//qs.abortBatch(jobId,clear);
+						log.info("no action on step index "+stepIndex);
 					}
 					break;
 					case TRANS_SERIAL_STEP_INDEX:{
@@ -432,7 +431,6 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 
 	{
 		log.debug("<<resumeJob");
-		boolean res = false;//resumeBatchJob(jobID);
 		//TODO: implement 
 		//log.debug(">>resumeJob");
 		//return res;

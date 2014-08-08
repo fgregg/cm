@@ -35,10 +35,13 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
  */
 public abstract class WorkflowControlListener implements MessageDrivenBean, MessageListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(WorkflowControlListener.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + WorkflowControlListener.class.getName());
 
-	private transient MessageDrivenContext mdc = null;
 	/**
 	 * Constructor, which is public and takes no arguments.
 	 */
@@ -46,9 +49,6 @@ public abstract class WorkflowControlListener implements MessageDrivenBean, Mess
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
-		log.debug("<<< setMessageDrivenContext");
-		this.mdc = mdc;
-		log.debug(">>> setMessageDrivenContext");
 	}
 
 	public void ejbCreate() {

@@ -46,11 +46,14 @@ import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 public class TransSerializerMsgBean
 	implements MessageDrivenBean, MessageListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final Logger log =
 		Logger.getLogger(TransSerializerMsgBean.class);
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransSerializerMsgBean.class.getName());
 
-	private transient MessageDrivenContext mdc = null;
 	/**
 	 * Constructor, which is public and takes no arguments.
 	 */
@@ -59,9 +62,6 @@ public class TransSerializerMsgBean
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
-		log.debug("<<< setMessageDrivenContext");
-		this.mdc = mdc;
-		log.debug(">>> setMessageDrivenContext");
 	}
 
 	public void ejbCreate() {

@@ -16,4 +16,9 @@ package com.choicemaker.cm.urm.ejb;
  */
 public class JobAlreadyAbortedException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 }

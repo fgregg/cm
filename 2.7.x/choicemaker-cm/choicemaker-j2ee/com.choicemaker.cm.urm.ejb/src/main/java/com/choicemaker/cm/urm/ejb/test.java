@@ -10,9 +10,6 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
-import com.choicemaker.cm.urm.base.EvalRecordFormat;
-import com.choicemaker.cm.urm.base.RecordType;
-import com.choicemaker.cm.urm.base.ScoreType;
 import com.choicemaker.cm.urm.base.SubsetDbRecordCollection;
 import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 
@@ -26,7 +23,6 @@ public class test {
 
 	public static void main(String[] args) {
 		try {
-			EvalRecordFormat erf = new EvalRecordFormat(ScoreType.NO_NOTE,RecordType.REF);
 			SubsetDbRecordCollection qRs = new SubsetDbRecordCollection("","",10,""); 
 			SerialRecordSourceBuilder	rcb = new SerialRecordSourceBuilder(null,true);
 			qRs.accept(rcb);

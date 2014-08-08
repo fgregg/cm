@@ -17,8 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 
-import javax.sql.DataSource;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
@@ -62,6 +60,11 @@ import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
  */
 public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	static	{
 		log = Logger.getLogger(OnlineMatchAnalyzerBean.class);
 	}
@@ -94,7 +97,6 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 									RemoteException
  	 {
 		ArrayList  evalRecords = new ArrayList();					
-		DataSource ds = null;		
 		
 		IProbabilityModel model = getProbabilityModel(modelName);
 		Record q = getInternalRecord(model,queryRecord);
@@ -102,12 +104,11 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 		try {
 			long startTime = System.currentTimeMillis();
 			log.debug("<< getMatchCandidates");
-			log.debug("link criteria: " + linkCriteria.getGraphPropType().toString() + " " + 
-				linkCriteria.isMustIncludeQuery());
 			
-			if(resultFormat == null || resultFormat.getRecordType() == null || resultFormat.getScoreType() == null
-			   || resultFormat.getRecordType() == RecordType.NONE	){
-				String errMessage ="Invalid result format argument.";  
+			if (resultFormat == null || resultFormat.getRecordType() == null
+					|| resultFormat.getScoreType() == null
+					|| resultFormat.getRecordType() == RecordType.NONE) {
+				String errMessage = "Invalid result format argument.";
 				log.error(errMessage);
 				throw new ArgumentException(errMessage);
 			}
@@ -121,6 +122,9 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 				log.error(errMessage);
 				throw new ArgumentException(errMessage);
 			}			
+			log.debug("link criteria: "
+					+ linkCriteria.getGraphPropType().toString() + " "
+					+ linkCriteria.isMustIncludeQuery());
 			if (log.isDebugEnabled()) {
 				writeDebugInfo(
 					queryRecord,
@@ -198,7 +202,6 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 					CompositeEntity group = (CompositeEntity) childNode;
 					ArrayList groupRecords = new ArrayList();
 					ArrayList groupScores =  new ArrayList();
-					int cenInd = 0;
 					boolean isContainQuery = false;
 					
 					// Iterate over the records in the group

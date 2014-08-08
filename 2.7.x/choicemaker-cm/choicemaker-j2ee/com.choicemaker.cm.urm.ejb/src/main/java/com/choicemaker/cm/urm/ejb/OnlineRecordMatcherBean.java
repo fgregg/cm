@@ -14,8 +14,6 @@ import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.SortedSet;
 
-import javax.sql.DataSource;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
@@ -47,6 +45,11 @@ import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
  */
 public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	static {
 		log = Logger.getLogger(OnlineRecordMatcherBean.class);
 	}
@@ -144,7 +147,6 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 										RemoteException
 	{
 		EvaluatedRecord[] matchCand = null;					
-		DataSource ds = null;		
 				
 		try {
 			long startTime = System.currentTimeMillis();
@@ -185,7 +187,6 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 			// END BUGFIX
 
 			Iterator iS = s.iterator();
-			ISingleRecord	resRecord;
 			IProbabilityModel model = getProbabilityModel(modelName);
 			for (int i = 0; i < matchCand.length; i++) {
 				matchCand[i] = getEvaluatedRecord(resultFormat,(Match) iS.next(),model);

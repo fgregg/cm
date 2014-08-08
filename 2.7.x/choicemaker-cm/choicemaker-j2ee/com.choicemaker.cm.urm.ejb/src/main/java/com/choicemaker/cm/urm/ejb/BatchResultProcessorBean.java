@@ -23,12 +23,8 @@ import javax.jms.Queue;
 
 import org.apache.log4j.Logger;
 
-import com.choicemaker.cm.core.SerialRecordSource;
-import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
@@ -46,6 +42,11 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * @see
  */
 public class BatchResultProcessorBean implements SessionBean {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	protected static Logger log = Logger.getLogger(BatchResultProcessorBean.class);
 	
@@ -152,13 +153,6 @@ public class BatchResultProcessorBean implements SessionBean {
 				
 		CmsJob oj = Single.getInst().createCmsJob(externalId, JobStatus.UNDEFINED_ID);
 		oj.markAsStarted();
-		
-		String mrFileName = bj.getDescription();
-		
-		BatchParameters batchParams = Single.getInst().findBatchParamsById(batchJobId);
-		String modelName = batchParams.getStageModel();
-		SerialRecordSource staging = batchParams.getStageRs(); 
-		SerialRecordSource master = batchParams.getMasterRs();
 		
 		URL url;
 		try {

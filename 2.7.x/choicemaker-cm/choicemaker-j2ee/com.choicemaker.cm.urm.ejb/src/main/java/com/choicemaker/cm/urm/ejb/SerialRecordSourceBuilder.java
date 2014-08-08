@@ -44,6 +44,10 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 
 public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITextFormatVisitor {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected static Logger log = Logger.getLogger(SerialRecordSourceBuilder.class);
 	private ISerializableRecordSource resRs;
 	private IProbabilityModel model;
@@ -142,7 +146,6 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 		resRs = null;
 	  if(rc != null){
 		// Configure the query determined by the model configuration
-		final String modelName = model.getModelName();								
 		DbAccessor accessor = (DbAccessor) model.getAccessor();
 		DbReaderSequential dbr = accessor.getDbReaderSequential(rc.getName());
 		String schemaName = dbr.getName();

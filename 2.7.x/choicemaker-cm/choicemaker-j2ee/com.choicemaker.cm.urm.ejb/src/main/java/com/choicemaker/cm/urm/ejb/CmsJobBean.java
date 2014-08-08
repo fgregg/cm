@@ -30,6 +30,12 @@ import com.choicemaker.cm.urm.base.JobStatus;
  */
 public abstract class CmsJobBean implements EntityBean {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	protected static Logger log = Logger.getLogger(CmsJobBean.class);
 
 

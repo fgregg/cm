@@ -34,6 +34,12 @@ import com.choicemaker.autonumber.AutoNumberFactory;
  */
 public abstract class UrmStepJobBean implements EntityBean {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	protected static Logger log = Logger.getLogger(UrmStepJobBean.class);
 
 

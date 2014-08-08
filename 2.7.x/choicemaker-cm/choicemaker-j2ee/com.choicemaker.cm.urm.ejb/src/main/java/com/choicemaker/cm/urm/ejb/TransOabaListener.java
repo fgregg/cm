@@ -34,6 +34,10 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
  */
 public class TransOabaListener extends WorkflowControlListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(TransOabaListener.class.getName());
 
 	/**
@@ -86,8 +90,7 @@ public class TransOabaListener extends WorkflowControlListener{
 	} 
 	
 	public void abortJobStep(long id) throws ConfigException, CmRuntimeException {
-		TransSerializer ts = Single.getInst().getTransSerializer();
-		log.debug("transitivity processing and serialization abort is issued");
+		log.debug("transitivity processing and serialization abort is ignored");
 		//TODO: abort serialization step
 	}
 

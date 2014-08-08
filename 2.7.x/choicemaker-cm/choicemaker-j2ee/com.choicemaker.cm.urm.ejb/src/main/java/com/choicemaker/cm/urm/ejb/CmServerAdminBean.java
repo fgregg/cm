@@ -28,11 +28,9 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.configure.xml.NotFoundException;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurablesRegistry;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.server.base.DatabaseException;
 import com.choicemaker.cm.server.ejb.impl.CountsUpdate;
 import com.choicemaker.cm.urm.IUpdateDerivedFields;
@@ -48,6 +46,11 @@ import com.choicemaker.util.Precondition;
  * @see
  */
 public class CmServerAdminBean implements SessionBean {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	protected static boolean initialized = false;
 
 	private static final Logger log = Logger.getLogger(CmServerAdminBean.class);

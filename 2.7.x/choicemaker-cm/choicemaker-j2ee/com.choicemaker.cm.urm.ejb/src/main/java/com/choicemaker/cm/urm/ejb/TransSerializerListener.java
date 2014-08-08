@@ -30,6 +30,10 @@ import com.choicemaker.cm.urm.exceptions.ModelException;
  */
 public class TransSerializerListener extends WorkflowControlListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(TransSerializerListener.class.getName());
 
 	/**

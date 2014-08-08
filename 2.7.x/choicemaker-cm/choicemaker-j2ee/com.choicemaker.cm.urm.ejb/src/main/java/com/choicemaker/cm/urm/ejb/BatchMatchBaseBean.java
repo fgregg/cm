@@ -37,7 +37,6 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
 import com.choicemaker.cm.urm.base.IRecordCollection;
@@ -59,6 +58,10 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  */
 public class BatchMatchBaseBean implements SessionBean {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected static Logger log;
 	protected static boolean initialized = false;
 	protected transient SessionContext sessionContext;	

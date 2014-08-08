@@ -159,11 +159,6 @@ public class HorizontalPartitioner {
 			chunkNumb = (int)Math.ceil((float)availSymbolNumb/(float)step); // chunkNumber = ]12/3[ = 4 - not 5
 		}
 		
-		int nonEmptyChunkNumb = chunkNumb;
-		if(symbols[0] == EP && symbols[1] == typeMin[pos])
-			nonEmptyChunkNumb--;
-		if(symbols[availSymbolNumb-1] == EP && symbols[availSymbolNumb-2] == EP)	
-			nonEmptyChunkNumb--;
 		int newCount = count/chunkNumb;
 		char[] newMin = new char[width];
 		char[] newMax = new char[width];
