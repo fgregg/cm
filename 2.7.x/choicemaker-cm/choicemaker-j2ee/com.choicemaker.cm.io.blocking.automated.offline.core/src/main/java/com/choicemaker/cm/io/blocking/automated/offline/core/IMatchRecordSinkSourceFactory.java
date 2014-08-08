@@ -18,10 +18,10 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IMatchRecordSinkSourceFactory {
+public interface IMatchRecordSinkSourceFactory<T extends Comparable<? super T>> {
 
 	/** Gets the next IMatchRecordSink in the sequence. */
-	public IMatchRecordSink getNextSink () throws BlockingException;
+	public IMatchRecordSink<T> getNextSink () throws BlockingException;
 	
 	/** Gets the next IMatchRecordSource in the sequence. */
 	public IMatchRecordSource getNextSource () throws BlockingException;
@@ -33,13 +33,13 @@ public interface IMatchRecordSinkSourceFactory {
 	public int getNumSource ();
 	
 	/** Creates an IMatchRecordSource for an existing IMatchRecordSink. */
-	public IMatchRecordSource getSource (IMatchRecordSink sink) throws BlockingException;
+	public IMatchRecordSource getSource (IMatchRecordSink<T> sink) throws BlockingException;
 	
 	/** Creates an IMatchRecordSink for an existing IMatchRecordSource. */
-	public IMatchRecordSink getSink (IMatchRecordSource source) throws BlockingException;
+	public IMatchRecordSink<T> getSink (IMatchRecordSource source) throws BlockingException;
 
 	/** Removes a given IMatchRecordSink. */
-	public void removeSink (IMatchRecordSink sink) throws BlockingException;
+	public void removeSink (IMatchRecordSink<T> sink) throws BlockingException;
 
 	/** Removes a given IMatchRecordSource. */
 	public void removeSource (IMatchRecordSource source) throws BlockingException;
@@ -48,7 +48,7 @@ public interface IMatchRecordSinkSourceFactory {
 	public void move (IMatchRecordSource source1, IMatchRecordSource source2) throws BlockingException;
 
 	/** Moves sink1 to sink2. */
-	public void move (IMatchRecordSink sink1, IMatchRecordSink sink2) throws BlockingException;
+	public void move (IMatchRecordSink<T> sink1, IMatchRecordSink<T> sink2) throws BlockingException;
 	
 	/** This gets a specific sink. 
 	 * 
@@ -56,7 +56,7 @@ public interface IMatchRecordSinkSourceFactory {
 	 * @return IMatchRecordSink - a sink with the corresponding info.
 	 * @throws BlockingException
 	 */
-	public IMatchRecordSink getSink (String info) throws BlockingException;
+	public IMatchRecordSink<T> getSink (String info) throws BlockingException;
 	
 
 }

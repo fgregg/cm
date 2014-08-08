@@ -19,16 +19,16 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IComparableSinkSourceFactory {
+public interface IComparableSinkSourceFactory<T extends Comparable<? super T>> {
 
 	/** Gets the next IComparableSink in the sequence. */
-	public IComparableSink getNextSink () throws BlockingException;
+	public IComparableSink<T> getNextSink () throws BlockingException;
 	
 	/** Gets the next IComparableSource in the sequence. */
-	public IComparableSource getNextSource () throws BlockingException;
+	public IComparableSource<T> getNextSource () throws BlockingException;
 	
 	/** Gets the next IComparableSource from the sink. */
-	public IComparableSource getSource (IComparableSink sink) throws BlockingException;
+	public IComparableSource<T> getSource (IComparableSink<T> sink) throws BlockingException;
 	
 	/** Gets the number of sequence sinks created. */
 	public int getNumSink ();
@@ -37,6 +37,6 @@ public interface IComparableSinkSourceFactory {
 	public int getNumSource ();
 
 	/** Moves sink1 to sink2. */
-	public void move (IComparableSink sink1, IComparableSink sink2) throws BlockingException;
+	public void move (IComparableSink<T> sink1, IComparableSink<T> sink2) throws BlockingException;
 
 }

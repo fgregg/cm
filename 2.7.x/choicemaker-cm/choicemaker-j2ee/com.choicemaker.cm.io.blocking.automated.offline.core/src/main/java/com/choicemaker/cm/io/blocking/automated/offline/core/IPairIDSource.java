@@ -16,10 +16,10 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IPairIDSource extends ISource {
+public interface IPairIDSource<T extends Comparable<? super T>> extends ISource {
 
 	/** Gets the next PairID. */
-	public PairID getNext () throws BlockingException;
+	public PairID<T> getNext () throws BlockingException;
 
 	/** Returns the number of PairID read so far. */
 	public int getCount ();

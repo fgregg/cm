@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 
@@ -21,10 +21,10 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IBlockSource extends ISource {
+public interface IBlockSource<T extends Comparable<? super T>> extends ISource {
 	
 	/** Gets the next BlockSet. */
-	public BlockSet getNext () throws BlockingException;
+	public BlockSet<T> getNext () throws BlockingException;
 	
 	
 	/** This method returns true if there is another block that is blocked by the
@@ -43,7 +43,7 @@ public interface IBlockSource extends ISource {
 	 * @param col - maximum column id that this needs to have
 	 * @return - an ArrayList of BlockSet with each containing the oversized blocking set
 	 */
-	public ArrayList readOversizedInt (int fields, int col) throws BlockingException;
+	public List<?> readOversizedInt (int fields, int col) throws BlockingException;
 	
 	
 	/** Returns the total number of oversized blocks in this source. */

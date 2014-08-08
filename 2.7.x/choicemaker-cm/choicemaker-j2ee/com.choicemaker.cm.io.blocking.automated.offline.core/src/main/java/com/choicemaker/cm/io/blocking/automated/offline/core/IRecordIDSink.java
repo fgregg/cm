@@ -18,13 +18,13 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IRecordIDSink extends ISink {
+public interface IRecordIDSink<T extends Comparable<? super T>> extends ISink {
 	
 	/** This method writes the record ID object to the sink.
 	 * 
 	 * @param o
 	 */
-	public void writeRecordID (Comparable o) throws BlockingException;
+	public void writeRecordID (T o) throws BlockingException;
 	
 	
 	/** This tells the sink the object type of the record id.  Call this method before calling the open

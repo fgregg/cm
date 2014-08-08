@@ -11,9 +11,10 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.choicemaker.util.IntArrayList;
-import com.choicemaker.util.LongArrayList;
 
 /**
  * This object represents a Blocking Set.  It stores the columns id and values, and a list of row ids in the 
@@ -22,23 +23,23 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
-public class BlockSet implements Serializable, IIDSet{
+public class BlockSet<T extends Comparable<? super T>> implements Serializable, IIDSet<T>{
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = 4684611552672342011L;
 
 	IntArrayList columns;  //LinkedList containing BlockValue objects.
-	LongArrayList ids; //This stores the Record ids belonging to this blocking set.
+	List<T> ids; //This stores the Record ids belonging to this blocking set.
 	
 	public BlockSet () {
 		columns = new IntArrayList (3);
-		ids = new LongArrayList (2);
+		ids = new ArrayList<>(2);
 	}
 	
 	public BlockSet (int column) {
 		columns = new IntArrayList ();
 		columns.add(column);
-		ids = new LongArrayList (2);
+		ids = new ArrayList<> (2);
 	}
 	
 	public void addColumn (int column) {
@@ -53,23 +54,19 @@ public class BlockSet implements Serializable, IIDSet{
 		return columns;
 	}
 	
-	public void addRecordID (int i) {
+	public void addRecordID (T i) {
 		ids.add(i);
 	}
 	
-	public void addRecordID (long l) {
-		ids.add(l);
-	}
-	
-	public void setRecordIDs (LongArrayList list) {
+	public void setRecordIDs (List<T> list) {
 		ids = list;
 	}
 	
-	public LongArrayList getRecordIDs () {
+	public List<T> getRecordIDs () {
 		return ids;
 	}
 	
-	public boolean equals (BlockSet bs) {
+	public boolean equals (BlockSet<T> bs) {
 		if (this.columns.equals(bs.columns) && this.ids.equals(bs.ids)) return true;
 		else return false;
 	}

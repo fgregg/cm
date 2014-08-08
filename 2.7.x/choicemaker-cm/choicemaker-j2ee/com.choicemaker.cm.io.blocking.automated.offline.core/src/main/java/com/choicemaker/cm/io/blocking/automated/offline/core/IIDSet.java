@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.util.LongArrayList;
+import java.util.List;
 
 /**
  * This is a generic representation of a set of IDS.  This could be a BlockSet containing one block
@@ -19,13 +19,13 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
-public interface IIDSet {
+public interface IIDSet<T extends Comparable<? super T>> {
 	
 	/** This method a LongArrayList of all the IDs in this set, array, or tree.
 	 * Note that the set of IDs returns is not guaranteed for uniqueness.
 	 * 
 	 * @return LongArrayList
 	 */
-	public LongArrayList getRecordIDs (); 
+	public List<T> getRecordIDs (); 
 
 }

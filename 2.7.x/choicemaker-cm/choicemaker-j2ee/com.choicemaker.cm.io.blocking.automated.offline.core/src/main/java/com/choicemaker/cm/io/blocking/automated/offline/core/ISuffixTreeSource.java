@@ -17,7 +17,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface ISuffixTreeSource extends ISource {
+public interface ISuffixTreeSource<T extends Comparable<? super T>> extends ISource {
 
 	/** This returns the next SuffixTree in the source.  Make sure you call hasNext before calling
 	 * this method.
@@ -25,7 +25,7 @@ public interface ISuffixTreeSource extends ISource {
 	 * @return SuffixTreeNode
 	 * @throws OABABlockingException
 	 */
-	public SuffixTreeNode getNext () throws BlockingException;
+	public SuffixTreeNode<T> getNext () throws BlockingException;
 
 	/** Returns the number of Suffix Tree read so far.
 	 * 

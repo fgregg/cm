@@ -28,7 +28,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @version $Revision: 1.1 $ $Date: 2010/03/28 15:45:19 $
  * @see com.choicemaker.cm.analyzer.filter.DefaultPairFilter
  */
-public class DefaultMatchRecord2Filter implements IMatchRecord2Filter {
+public class DefaultMatchRecord2Filter<T extends Comparable<? super T>> implements IMatchRecord2Filter<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -102,7 +102,7 @@ public class DefaultMatchRecord2Filter implements IMatchRecord2Filter {
 		checkSanity();
 	}
 
-	public boolean satisfy(MatchRecord2 mrp) {
+	public boolean satisfy(MatchRecord2<T> mrp) {
 		checkSanity();
 		return fromPercentage <= mrp.getProbability()
 			&& mrp.getProbability() <= toPercentage;

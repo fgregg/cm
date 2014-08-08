@@ -18,13 +18,13 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IComparisonSetSources {
+public interface IComparisonSetSources<T extends Comparable<? super T>> {
 	
 	/** This returns the next comparison set source.
 	 * 
 	 * @return IComparisonSetSource
 	 */
-	public IComparisonSetSource getNextSource ();
+	public IComparisonSetSource<T> getNextSource ();
 	
 	
 	/** This returns true if this collection has more sources.

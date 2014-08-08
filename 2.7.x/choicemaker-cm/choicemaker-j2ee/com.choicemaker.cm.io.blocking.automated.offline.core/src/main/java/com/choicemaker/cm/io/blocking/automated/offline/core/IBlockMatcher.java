@@ -20,7 +20,7 @@ import com.choicemaker.cm.core.RecordSource;
  * @author pcheung
  *
  */
-public interface IBlockMatcher {
+public interface IBlockMatcher<T extends Comparable<? super T>> {
 
 	/** This method matches all the blocks in the block source.
 	 * 
@@ -34,10 +34,10 @@ public interface IBlockMatcher {
 	 * @param maxBlockSize - maximum block size
 	 * @param validator - indicates if a pair is valid for comparison
 	 */
-	public void matchBlocks (IBlockSource bSource, IProbabilityModel model, 
-		RecordSource rs, IMatchRecordSink mSink, boolean append, float differ, float match, 
-		int maxBlockSize, IValidator validator) throws BlockingException;
-		
+	public void matchBlocks(IBlockSource<T> bSource, IProbabilityModel model,
+			RecordSource rs, IMatchRecordSink<T> mSink, boolean append,
+			float differ, float match, int maxBlockSize, IValidator<T> validator)
+			throws BlockingException;		
 	
 	/** This returns the number of comparisons made.
 	 * 

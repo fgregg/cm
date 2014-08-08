@@ -22,7 +22,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IOversizedGroup {
+public interface IOversizedGroup<T extends Comparable<? super T>> {
 	
 	/** This method writes the oversized block set to the appropiate file/table based on the maximum
 	 * column id of the block set.
@@ -30,7 +30,7 @@ public interface IOversizedGroup {
 	 * @param bs
 	 * @throws IOException
 	 */
-	public void writeBlock (BlockSet bs) throws BlockingException;
+	public void writeBlock (BlockSet<T> bs) throws BlockingException;
 	
 	
 	/**
@@ -52,7 +52,7 @@ public interface IOversizedGroup {
 	 * 
 	 * @param maxColumn - maximum column id of the bloct sets
 	 */
-	public IBlockSource getSource (int maxColumn) throws BlockingException;
+	public IBlockSource<T> getSource (int maxColumn) throws BlockingException;
 	
 	
 	/** This method close all the sinks

@@ -16,9 +16,9 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IIDSetSource extends ISource{
+public interface IIDSetSource<T extends Comparable<? super T>> extends ISource{
 
 	/** Gets the next IIDSet. */
-	public IIDSet getNext () throws BlockingException;
+	public IIDSet<T> getNext () throws BlockingException;
 
 }

@@ -20,9 +20,9 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IBlockSink extends ISink {
+public interface IBlockSink<T extends Comparable<? super T>> extends ISink {
 
 	/** Writes the BlockSet to the sink. */
-	public void writeBlock (BlockSet bs) throws BlockingException;
+	public void writeBlock (BlockSet<T> bs) throws BlockingException;
 
 }

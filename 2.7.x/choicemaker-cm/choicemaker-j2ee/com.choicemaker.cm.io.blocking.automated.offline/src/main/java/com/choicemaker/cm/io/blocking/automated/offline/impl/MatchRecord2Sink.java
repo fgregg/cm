@@ -12,9 +12,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -27,7 +27,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
-public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink {
+public class MatchRecord2Sink<T extends Comparable<? super T>> extends BaseFileSink implements IMatchRecord2Sink<T> {
 
 	
 	/** This creates a new match record sink.  By default it does not append to existing file, but
@@ -42,30 +42,30 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 		init (fileName, type);
 	}
 
-	public void writeMatches (ArrayList matches) throws BlockingException {
+	public void writeMatches (List<MatchRecord2<T>> matches) throws BlockingException {
 		int size = matches.size();
 		for (int i=0; i<size; i++) {
-			MatchRecord2 match = (MatchRecord2) matches.get(i);
+			MatchRecord2<T> match = matches.get(i);
 			writeMatch (match);
 		}
 	}
 	
 	
-	public void writeMatches (Collection c) throws BlockingException {
-		Iterator it = c.iterator();
+	public void writeMatches (Collection<MatchRecord2<T>> c) throws BlockingException {
+		Iterator<MatchRecord2<T>> it = c.iterator();
 		writeMatches (it);
 	}
 
 
-	public void writeMatches (Iterator it) throws BlockingException {
+	public void writeMatches (Iterator<MatchRecord2<T>> it) throws BlockingException {
 		while (it.hasNext()) {
-			MatchRecord2 match = (MatchRecord2) it.next();
+			MatchRecord2<T> match = it.next();
 			writeMatch (match);
 		}
 	}
 		
 	
-	public void writeMatch (MatchRecord2 match) throws BlockingException {
+	public void writeMatch (MatchRecord2<T> match) throws BlockingException {
 		try {
 			if (type == Constants.STRING) {
 				
@@ -104,7 +104,7 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 	 * @param match
 	 * @return
 	 */
-	public static String getOutputString (MatchRecord2 match) {
+	public static <T extends Comparable<? super T>> String getOutputString (MatchRecord2<T> match) {
 		StringBuffer sb = new StringBuffer ();
 		int dataType = Constants.checkType(match.getRecordID1());
 		sb.append(dataType);
@@ -134,7 +134,7 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 	}
 	
 
-	private void writeID (Comparable c, int dataType) throws IOException {
+	private void writeID (T c, int dataType) throws IOException {
 		if (type == Constants.STRING) {
 			if (dataType == Constants.TYPE_INTEGER) fw.write( c.toString() + " ");
 			else if (dataType == Constants.TYPE_LONG) fw.write( c.toString() + " ");
@@ -151,17 +151,4 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 	}
 
 	
-//	/**
-//	 *  This is only for the text output file.  type == Constants.STRING is assumed.
-//	 * 
-//	 * @param c
-//	 * @param dataType
-//	 * @param sb
-//	 */
-//	private void writeID (Comparable c, int dataType, StringBuffer sb) {
-//		sb.append(c.toString());
-//		sb.append(' ');
-//	}
-
-
 }

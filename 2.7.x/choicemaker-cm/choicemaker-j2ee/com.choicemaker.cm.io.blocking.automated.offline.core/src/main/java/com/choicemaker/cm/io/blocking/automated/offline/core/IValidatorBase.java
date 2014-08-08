@@ -16,10 +16,10 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  * @author pcheung
  *
  */
-public interface IValidatorBase {
+public interface IValidatorBase<T extends Comparable<? super T>> {
 
 	/** This returns true if this is a valid BlockSet. */
-	public boolean validBlockSet (BlockSet bs);
+	public boolean validBlockSet (BlockSet<T> bs);
 
 
 }

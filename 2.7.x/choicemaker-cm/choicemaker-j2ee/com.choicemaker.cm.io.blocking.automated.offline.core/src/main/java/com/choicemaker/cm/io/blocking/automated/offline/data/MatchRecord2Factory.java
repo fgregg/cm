@@ -14,7 +14,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
  * @author pcheung
  *
  */
-public class MatchRecord2Factory {
+public class MatchRecord2Factory<T extends Comparable<? super T>> {
 	
 	/**
 	 * This method returns a special MatchRecord2 that serves as a separator when
@@ -22,8 +22,8 @@ public class MatchRecord2Factory {
 	 * 
 	 * @return
 	 */
-	public static MatchRecord2 getSeparator (Comparable C) {
-		Comparable id = null;
+	public static <T extends Comparable<? super T>> MatchRecord2<T> getSeparator (T C) {
+		Object id = null;
 		if (C instanceof Integer) id = new Integer (0);
 		else if (C instanceof Long) id = new Long (0);
 		else if (C instanceof String) id = "@";
@@ -32,9 +32,11 @@ public class MatchRecord2Factory {
 		// 2009-08-17 rphall
 		// NO BUG: clue notes are not required for separator records
 		final String noteInfo = null;
-		return new MatchRecord2 (id, id, MatchRecord2.STAGE_SOURCE, 
+		@SuppressWarnings("unchecked")
+		MatchRecord2<T> retVal = new MatchRecord2<T>((T)id, (T)id, MatchRecord2.STAGE_SOURCE, 
 			0.0f, MatchRecord2.DIFFER,noteInfo);
 		// END NO BUG
+		return retVal;
 	}
 
 }

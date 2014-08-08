@@ -16,65 +16,96 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSour
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
- * This is a wrapper on MatchRecord2SinkSourceFactory to make look like a 
+ * This is a wrapper on MatchRecord2SinkSourceFactory to make look like a
  * IComparableSinkSourceFactory.
  * 
  * @author pcheung
  *
  */
-public class ComparableMRSinkSourceFactory 	implements IComparableSinkSourceFactory {
-	
-	private IMatchRecord2SinkSourceFactory factory;
-	
-	public ComparableMRSinkSourceFactory (IMatchRecord2SinkSourceFactory factory) {
+public class ComparableMRSinkSourceFactory<T extends Comparable<? super T>>
+		implements IComparableSinkSourceFactory<MatchRecord2<T>> {
+
+	private IMatchRecord2SinkSourceFactory<T> factory;
+
+	public ComparableMRSinkSourceFactory(
+			IMatchRecord2SinkSourceFactory<T> factory) {
 		this.factory = factory;
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getNextSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory#getNextSink()
 	 */
-	public IComparableSink getNextSink() throws BlockingException {
-		return new ComparableMRSink (factory.getNextSink());
+	public IComparableSink<MatchRecord2<T>> getNextSink()
+			throws BlockingException {
+		return new ComparableMRSink<T>(factory.getNextSink());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory#getNextSource()
 	 */
-	public IComparableSource getNextSource() throws BlockingException {
-		return new ComparableMRSource(factory.getNextSource());
+	public IComparableSource<MatchRecord2<T>> getNextSource()
+			throws BlockingException {
+		return new ComparableMRSource<T>(factory.getNextSource());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getSource(com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory
+	 * #getSource(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IComparableSink)
 	 */
-	public IComparableSource getSource(IComparableSink sink) throws BlockingException {
-		IMatchRecord2Sink o = (IMatchRecord2Sink) sink.getBaseObject();
-		
-		return new ComparableMRSource (factory.getSource(o));
+	@Override
+	public IComparableSource<MatchRecord2<T>> getSource(
+			IComparableSink<MatchRecord2<T>> sink) throws BlockingException {
+		@SuppressWarnings("unchecked")
+		IMatchRecord2Sink<T> o = (IMatchRecord2Sink<T>) sink.getBaseObject();
+		return new ComparableMRSource<T>(factory.getSource(o));
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getNumSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory#getNumSink()
 	 */
 	public int getNumSink() {
 		return factory.getNumSink();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getNumSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory#getNumSource()
 	 */
 	public int getNumSource() {
 		return factory.getNumSource();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#move(com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink, com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory
+	 * #move(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IComparableSink,
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink)
 	 */
-	public void move(IComparableSink sink1, IComparableSink sink2) throws BlockingException {
-		factory.move((IMatchRecord2Sink)sink1.getBaseObject(), (IMatchRecord2Sink)sink2.getBaseObject());
+	@SuppressWarnings("unchecked")
+	public void move(IComparableSink<MatchRecord2<T>> sink1,
+			IComparableSink<MatchRecord2<T>> sink2) throws BlockingException {
+		factory.move((IMatchRecord2Sink<T>)sink1.getBaseObject(), (IMatchRecord2Sink<T>)sink2.getBaseObject());
 	}
 
 }

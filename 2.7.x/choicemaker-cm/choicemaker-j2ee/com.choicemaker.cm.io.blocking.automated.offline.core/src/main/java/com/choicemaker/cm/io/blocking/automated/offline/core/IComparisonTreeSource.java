@@ -18,10 +18,10 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IComparisonTreeSource extends ISource {
+public interface IComparisonTreeSource<T extends Comparable<? super T>> extends ISource {
 
 	/** Gets the next ComparisonTree. */
-	public ComparisonTreeNode getNext () throws BlockingException;
+	public ComparisonTreeNode<T> getNext () throws BlockingException;
 	
 	/** Returns the number of ComparisonTree read so far. */
 	public int getCount ();
