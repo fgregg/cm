@@ -12,6 +12,7 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.jms.JMSException;
 import javax.jms.Queue;
@@ -108,7 +109,7 @@ public class TransMatcher extends Matcher2  {
 	 * @throws RemoteException
 	 * @throws BlockingException
 	 */
-	protected ArrayList handleComparisonSet (IComparisonSet cSet, BatchJob batchJob, 
+	protected List handleComparisonSet (IComparisonSet cSet, BatchJob batchJob, 
 		ChunkDataStore dataStore, IProbabilityModel stageModel) 
 		throws RemoteException, BlockingException {
 			
