@@ -19,7 +19,6 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 
 /**
  * @author pcheung
@@ -94,11 +93,11 @@ public class ComparisonTreeSource extends BaseFileSource implements IComparisonT
 					
 				Comparable c = null;
 					
-				if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
+				if (dataType == Constants.TYPE_LONG) {
 					c = new Long (str.substring(ind+3,i));
-				} else if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+				} else if (dataType == Constants.TYPE_INTEGER) {
 					c = new Integer (str.substring(ind+3,i));
-				} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
+				} else if (dataType == Constants.TYPE_STRING) {
 					c = str.substring(ind+3,i);
 				} else {
 					throw new IllegalArgumentException("Unknown DataType: " + dataType);

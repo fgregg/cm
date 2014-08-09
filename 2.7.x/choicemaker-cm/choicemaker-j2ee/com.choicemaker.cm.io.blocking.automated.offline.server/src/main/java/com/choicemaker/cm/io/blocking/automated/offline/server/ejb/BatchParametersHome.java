@@ -27,7 +27,7 @@ public interface BatchParametersHome extends EJBHome {
 
 	BatchParameters create(long id) throws RemoteException, CreateException;
 
-	Collection findAll() throws RemoteException, FinderException;
+	Collection<BatchParameters> findAll() throws RemoteException, FinderException;
 
 	BatchParameters findByPrimaryKey(Long id) throws RemoteException, FinderException;
 

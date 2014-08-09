@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.EJBException;
 import javax.ejb.MessageDrivenBean;
@@ -178,25 +179,20 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 		long t = System.currentTimeMillis();
 
 		IMatchRecord2SinkSourceFactory factory = oabaConfig.getMatchChunkFactory();
-		ArrayList tempSinks = new ArrayList ();
+		List<IComparableSink> tempSinks = new ArrayList<>();
 		for (int i=0; i< numChunk; i++) {
 			IMatchRecord2Sink mSink = factory.getSink(i);
 			IComparableSink sink =  new ComparableMRSink (mSink);
 			tempSinks.add(sink);
-
 			log.debug ("file " + sink.getInfo());
 		}
 
 		IMatchRecord2Sink mSink = oabaConfig.getCompositeMatchSink(jobID);
 		IComparableSink sink =  new ComparableMRSink (mSink);
 
-		//IMatchRecord2Source mSource = oabaConfig.getMatchFactory().getNextSource();
-		//ComparableMRSource source = new ComparableMRSource (mSource);
-
 		ComparableMRSinkSourceFactory mFactory = new ComparableMRSinkSourceFactory (factory);
 
 		int i = GenericDedupService.mergeFiles(tempSinks, sink, mFactory, true);
-		//source.remove();
 
 		log.info("Number of Distinct matches after merge: " + i);
 		batchJob.setDescription(mSink.getInfo());

@@ -17,7 +17,6 @@ import java.util.NoSuchElementException;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 
 /**
  * @author pcheung
@@ -73,11 +72,11 @@ public class RecordIDSource extends BaseFileSource implements IRecordIDSource {
 			str = br.readLine();
 				
 			if (str != null && !str.equals("")) {
-				if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+				if (dataType == Constants.TYPE_INTEGER) {
 					ret = new Integer (str);
-				} else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
+				} else if (dataType == Constants.TYPE_LONG) {
 					ret = new Long (str);
-				} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
+				} else if (dataType == Constants.TYPE_STRING) {
 					ret = str;
 				}
 			} else {
@@ -90,13 +89,13 @@ public class RecordIDSource extends BaseFileSource implements IRecordIDSource {
 				isFirst = false;
 			}
 				
-			if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+			if (dataType == Constants.TYPE_INTEGER) {
 				int i = dis.readInt();
 				ret = new Integer (i);
-			} else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
+			} else if (dataType == Constants.TYPE_LONG) {
 				long l = dis.readLong();
 				ret = new Long (l);
-			} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
+			} else if (dataType == Constants.TYPE_STRING) {
 				int size = dis.readInt();
 				char[] data = new char[size];
 				for (int i=0; i< size; i++) {

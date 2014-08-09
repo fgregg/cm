@@ -11,113 +11,92 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
-/**
- * This object creates a list of pairs to compare from a tree of
- * ComparisonTreeNode.
+/** This object creates a list of pairs to compare from a tree of ComparisonTreeNode.
  * 
  * @author pcheung
  *
  */
-public class ComparisonTreeSet<T extends Comparable<? super T>> implements
-		IComparisonSet {
-
+public class ComparisonTreeSet implements IComparisonSet {
+	
 	private static final long serialVersionUID = 1L;
-	private List<ComparisonPair<T>> pairs = new ArrayList<>();
+	private ArrayList pairs = new ArrayList ();
 	private int ind = 0;
-
-	/**
-	 * This constructor takes the root node and builds a list of pairs to
-	 * compare. The root node has id = null and 1 child.
+	
+	/** This consructor takes the root node and builds a list of pairs to compare.
+	 * The root node has id = null and 1 child.
 	 * 
 	 * @param root
 	 */
-	public ComparisonTreeSet(ComparisonTreeNode<T> root) {
-		// there should only be one node
-		final List<ComparisonTreeNode<T>> kids = root.getAllChildren();
-		final int count = kids.size();
-		if (count != 1) {
-			throw new IllegalArgumentException(
-					"Root doesn have a single child. Child count: " + count);
-		}
-		ComparisonTreeNode<T> kid = root.getAllChildren().get(0);
-		Stack<T> stack = new Stack<T>();
+	public ComparisonTreeSet (ComparisonTreeNode root) {
+		//there should only be one node
+		ComparisonTreeNode kid = (ComparisonTreeNode) root.getAllChildren().get(0);
+		
+		Stack stack = new Stack ();
 		getCompares(kid, stack);
 	}
-
-	private void getCompares(ComparisonTreeNode<T> node, Stack<T> stack) {
+	
+	
+	private void getCompares (ComparisonTreeNode node, Stack stack) {
 		if (!stack.empty()) {
-			// compare this to everything in the stack
-			for (int i = 0; i < stack.size(); i++) {
-				ComparisonPair<T> p = new ComparisonPair<T>();
-				p.id1 = stack.get(i);
+			//compare this to everything in the stack
+			for (int i=0; i<stack.size(); i++) {
+				ComparisonPair p = new ComparisonPair ();
+				p.id1 = (Comparable) stack.get(i);
 				p.id2 = node.getRecordId();
 				p.isStage = node.isStage();
 				pairs.add(p);
 			}
 		}
+		
+		//push this onto the stack
+		//do not allow the first id to be master, because we don't compare 
+		//master to master.
+		if (node.isStage()) stack.push(node.getRecordId());
 
-		// push this onto the stack
-		// do not allow the first id to be master, because we don't compare
-		// master to master.
-		if (node.isStage())
-			stack.push(node.getRecordId());
-
-		// compare all the children
+		//compare all the children		
 		if (node.getNumKids() > 0) {
-			List<ComparisonTreeNode<T>> children = node.getAllChildren();
-			for (int i = 0; i < children.size(); i++) {
-				ComparisonTreeNode<T> kid = children.get(i);
+			ArrayList children = node.getAllChildren();
+			for (int i=0; i<children.size(); i++) {
+				ComparisonTreeNode kid = (ComparisonTreeNode) children.get(i);
 				getCompares(kid, stack);
 			}
 		}
-
-		// pop the stack since this is done
-		if (node.isStage())
-			stack.pop();
+			
+		//pop the stack since this is done
+		if (node.isStage()) stack.pop();
 	}
+	
+	
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#
-	 * getNextPair()
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#getNextPair()
 	 */
-	public ComparisonPair<T> getNextPair() {
-		ComparisonPair<T> ret = pairs.get(ind);
-		ind++;
+	public ComparisonPair getNextPair() {
+		ComparisonPair ret = (ComparisonPair) pairs.get(ind);
+		ind ++;
 		return ret;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#
-	 * hasNextPair()
+
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#hasNextPair()
 	 */
 	public boolean hasNextPair() {
-		if (ind < pairs.size())
-			return true;
-		else
-			return false;
+		if (ind < pairs.size()) return true;
+		else return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#
-	 * writeDebug()
+
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#writeDebug()
 	 */
 	public String writeDebug() {
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer ();
 		sb.append(Constants.LINE_SEPARATOR);
-		for (int i = 0; i < pairs.size(); i++) {
-			ComparisonPair<T> p = pairs.get(i);
+		for (int i=0; i<pairs.size(); i++) {
+			ComparisonPair p = (ComparisonPair) pairs.get(i);
 			sb.append('(');
 			sb.append(p.id1.toString());
 			sb.append(',');

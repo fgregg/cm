@@ -11,124 +11,119 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
 import com.choicemaker.cm.core.BlockingException;
 
 /**
- * This is the generic record id to internal id translator. It takes in 1 or 2
- * record sources.
+ * This is the generic record id to internal id translator.
+ * It takes in 1 or 2 record sources.
  * 
  * This version allows for record id of the type Long, Integer, and String.
  * 
  * @author pcheung
  *
  */
-public interface IRecordIDTranslator2<T extends Comparable<? super T>> {
+public interface IRecordIDTranslator2 {
 
-	/**
-	 * This method returns the range of record ids in the first source.
+	/** This method returns the range of record ids in the first source.
 	 * 
 	 * @return Comparable[0] is min and Comparable[1] is max
 	 */
-	public T[] getRange1();
+	public Comparable [] getRange1 () ;
 
-	/**
-	 * This method returns the range of record ids in the second source.
+
+	/** This method returns the range of record ids in the second source.
 	 * 
 	 * @return Comparable[0] is min and Comparable[1] is max
 	 */
-	public T[] getRange2();
+	public Comparable [] getRange2 () ;
 
-	/**
-	 * This returns the internal id at which the second source begins. This is 0
-	 * if there is only one source.
+
+	/** This returns the internal id at which the second source begins.
+	 * This is 0 if there is only one source.
 	 * 
-	 * RecordSource1 would have internal id from 0 to splitIndex - 1. And
-	 * RecordSource2 starts from splitIndex.
+	 * RecordSource1 would have internal id from 0 to splitIndex - 1.  And RecordSource2
+	 * starts from splitIndex.
 	 * 
 	 * @return int - the index that separates the staging and master records.
 	 */
-	public int getSplitIndex();
+	public int getSplitIndex () ;
 
-	/**
-	 * This method performs initialization.
+
+	/** This method performs initialization.
 	 * 
 	 * @throws BlockingException
 	 */
-	public void open() throws BlockingException;
-
-	/**
-	 * This method tells the objects that source1 is done and it sets the split
-	 * index at where source 2 begins.
+	public void open () throws BlockingException;
+	
+	
+	/** This method tells the objects that source1 is done and it sets the split index at where source 2
+	 * begins.
 	 * 
 	 */
-	public void split() throws BlockingException;
-
-	/**
-	 * This method closes the file or db depending on the implementation.
+	public void split () throws BlockingException;
+	
+	
+	/** This method closes the file or db depending on the implementation.
 	 * 
 	 * @throws BlockingException
 	 */
-	public void close() throws BlockingException;
-
-	/**
-	 * This method cleans up underlying file or database resources.
+	public void close () throws BlockingException;
+	
+	
+	/** This method cleans up underlying file or db resources.
 	 * 
 	 * @throws IOException
 	 */
-	public void cleanUp() throws BlockingException;
+	public void cleanUp () throws BlockingException;
 
-	/**
-	 * This method attempts to recover the data from a previous run by reading
-	 * in existing sources containing the record identifiers.
+
+	/** This method attemps to recover the data from a previous run by reading in existing
+	 * sources containing the record ids.
 	 * 
 	 * @throws BlockingException
 	 */
-	public void recover() throws BlockingException;
-
-	/**
-	 * This method translates input record id to internal system id.
+	public void recover () throws BlockingException;
+	
+	
+	/** This method translates input record id to internal system id.
 	 * 
-	 * @param o
-	 *            - the record id object (Long, Integer, String)
+	 * @param o - the record id object (Long, Integer, String)
 	 * @return int - returns internal id for this record id.
 	 * @throws BlockingException
 	 */
-	public int translate(T o) throws BlockingException;
-
-	/**
-	 * This method prepares for reverse translation.
+	public int translate (Comparable o) throws BlockingException;
+	
+	
+	/** This method prepares for reverse translation. 
 	 * 
 	 * @throws BlockingException
 	 */
-	public void initReverseTranslation() throws BlockingException;
+	public void initReverseTranslation () throws BlockingException;
+	
+	
 
 	/**
-	 * This method returns the original record ID associated with this internal
-	 * ID. Make sure the method initReverseTranslation is called before this
-	 * method.
+	 * This method returns the original record ID associated with this internal ID.
+	 * Make sure the method initReverseTranslation is called before this method.
 	 * 
 	 * @param internalID
-	 * @return Comparable - the original record ID associated with this internal
-	 *         ID.
+	 * @return Comparable - the original record ID associated with this internal ID.
 	 */
-	public T reverseLookup(int internalID);
+	public Comparable reverseLookup (int internalID);
 
-	/**
-	 * This returns an ArrayList of record IDs from the first source. Usually,
-	 * the staging source.
+
+	/** This returns an ArrayList of record IDs from the first source.  Usually, the staging source.
 	 * 
 	 * @return ArrayList
 	 */
-	public List<T> getList1();
+	public ArrayList getList1 ();
 
-	/**
-	 * This returns an ArrayList of record IDs from the second source. Usually,
-	 * the master source.
+	/** This returns an ArrayList of record IDs from the second source.  Usually, the master source.
 	 * 
 	 * @return ArrayList
 	 */
-	public List<T> getList2();
+	public ArrayList getList2 ();
 
 }

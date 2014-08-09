@@ -15,7 +15,6 @@ import java.io.IOException;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 
 /**
  * @author pcheung
@@ -39,17 +38,17 @@ public class RecordIDSink extends BaseFileSink implements IRecordIDSink {
 				
 				if (count == 0) dos.writeInt(idType);
 				
-				if (idType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+				if (idType == Constants.TYPE_INTEGER) {
 					
 					Integer I = (Integer) o;
 					dos.writeInt(I.intValue());
 					
-				} else if (idType == RecordIdentifierType.TYPE_LONG.typeId) {
+				} else if (idType == Constants.TYPE_LONG) {
 					
 					Long L = (Long) o;
 					dos.writeLong(L.longValue());
 					
-				} else if (idType == RecordIdentifierType.TYPE_STRING.typeId) {
+				} else if (idType == Constants.TYPE_STRING) {
 
 					String S = (String) o;
 					dos.writeInt(S.length());
@@ -63,17 +62,17 @@ public class RecordIDSink extends BaseFileSink implements IRecordIDSink {
 
 				if (count == 0) fw.write (Integer.toString(idType) + Constants.LINE_SEPARATOR);
 
-				if (idType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+				if (idType == Constants.TYPE_INTEGER) {
 					
 					Integer I = (Integer) o;
 					fw.write(I.toString() + Constants.LINE_SEPARATOR);
 					
-				} else if (idType == RecordIdentifierType.TYPE_LONG.typeId) {
+				} else if (idType == Constants.TYPE_LONG) {
 
 					Long L = (Long) o;
 					fw.write(L.toString() + Constants.LINE_SEPARATOR);
 
-				} else if (idType == RecordIdentifierType.TYPE_STRING.typeId) {
+				} else if (idType == Constants.TYPE_STRING) {
 					
 					String S = (String) o;
 					fw.write(S + Constants.LINE_SEPARATOR);

@@ -18,20 +18,22 @@ import java.io.Serializable;
  * @author pcheung
  *
  */
-public class ComparisonPair<T extends Comparable<? super T>> implements
-		Comparable<ComparisonPair<T>>, Serializable {
+public class ComparisonPair implements Comparable, Serializable {
 
-	static final long serialVersionUID = 271;
+	/* As of 2010-03-10 */
+	static final long serialVersionUID = -8367155014018115222L;
 
 	/**
 	 * Record id of the first record.
 	 */
-	public T id1;
+	public Comparable id1;
+
 
 	/**
 	 * Record if of the second record.
 	 */
-	public T id2;
+	public Comparable id2;
+
 
 	/**
 	 * This is true is id2 is a staging record.
@@ -47,13 +49,11 @@ public class ComparisonPair<T extends Comparable<? super T>> implements
 		return result;
 	}
 
-	/**
-	 * This is true if this Object is a MatchRecord and has the same id pair as
-	 * the input MatchRecord.
-	 *
-	 * @param o
-	 * @return boolean - true if the ids from both MatchRecords match.
-	 */
+ 	/** This is true if this Object is a MatchRecord and has the same id pair as the input MatchRecord.
+ 	 *
+ 	 * @param o
+ 	 * @return boolean - true if the ids from both MatchRecords match.
+ 	 */
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -61,7 +61,6 @@ public class ComparisonPair<T extends Comparable<? super T>> implements
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		@SuppressWarnings("rawtypes")
 		ComparisonPair other = (ComparisonPair) obj;
 		if (id1 == null) {
 			if (other.id1 != null)
@@ -79,31 +78,38 @@ public class ComparisonPair<T extends Comparable<? super T>> implements
 	}
 
 	/**
-	 * This returns -1 if this object is less than input o, 0 is equals input 0,
+	 * Obsolete method for <code>equals(ComparisonPair)</code>. Used for testing only.
+	 * @deprecated
+	 */
+	public boolean equals_00 (ComparisonPair p) {
+		boolean ret = false;
+		if (this.id1.equals(p.id1) && this.id2.equals(p.id2) &&
+			this.isStage == p.isStage) ret = true;
+		return ret;
+	}
+
+	/** This returns -1 if this object is less than input o,
+	 * 0 is equals input 0,
 	 * and 1 if it is greater than input o.
 	 *
 	 */
-	public int compareTo(ComparisonPair<T> p) {
+	public int compareTo(Object o) {
 		int ret = 0;
-		if (id1.compareTo(p.id1) < 0)
-			ret = -1;
-		else if (id1.compareTo(p.id1) > 0)
-			ret = 1;
+		ComparisonPair p = (ComparisonPair) o;
+
+		if (id1.compareTo(p.id1) < 0) ret = -1;
+		else if (id1.compareTo(p.id1) > 0) ret = 1;
 		else if (id1.compareTo(p.id1) == 0) {
-			if (id2.compareTo(p.id2) < 0)
-				ret = -1;
-			else if (id2.compareTo(p.id2) > 0)
-				ret = 1;
+			if (id2.compareTo(p.id2) < 0) ret = -1;
+			else if (id2.compareTo(p.id2) > 0) ret = 1;
 			else if (id2.compareTo(p.id2) == 0) {
-				if (isStage == p.isStage)
-					ret = 0;
-				else if (isStage == true)
-					ret = -1;
-				else if (isStage == false)
-					ret = 1;
+				if (isStage == p.isStage) ret = 0;
+				else if (isStage == true) ret = -1;
+				else if (isStage == false) ret = 1;
 			}
 		}
 		return ret;
 	}
+
 
 }

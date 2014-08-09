@@ -25,6 +25,7 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
+import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
@@ -34,7 +35,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySin
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 import com.choicemaker.util.LongArrayList;
 
 /**This version takes in blocks that contains internal id instead of the record id.
@@ -421,18 +421,18 @@ public class ChunkService2 {
 				if (translator.getSplitIndex() == 0) {
 					//only staging record source
 					
-					if (stage.size()== 0) stageType = RecordIdentifierType.checkType(comp).typeId;
+					if (stage.size()== 0) stageType = Constants.checkType(comp);
 					stage.add(comp);
 
 				} else {
 					//two record sources
 					if (block.get(i) < translator.getSplitIndex()) {
 						//stage
-						if (stage.size()== 0) stageType = RecordIdentifierType.checkType(comp).typeId;
+						if (stage.size()== 0) stageType = Constants.checkType(comp);
 						stage.add(comp);
 					} else {
 						//master
-						if (master.size()== 0) masterType = RecordIdentifierType.checkType(comp).typeId;
+						if (master.size()== 0) masterType = Constants.checkType(comp);
 						master.add(comp);
 					}
 				}

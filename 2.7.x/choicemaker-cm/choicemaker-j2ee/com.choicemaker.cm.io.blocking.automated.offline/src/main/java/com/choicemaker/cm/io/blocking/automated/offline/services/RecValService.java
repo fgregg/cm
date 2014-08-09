@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor;
@@ -27,16 +26,17 @@ import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
 import com.choicemaker.cm.io.blocking.automated.base.DbField;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
+import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIDTranslator;
 import com.choicemaker.util.IntArrayList;
 
 /**
+ * @author pcheung
+ *
  * This object performs the creation of rec_id, val_id pairs.
 
  * It uses input record id to internal id translation.  As a result, it can use a array
@@ -46,44 +46,29 @@ import com.choicemaker.util.IntArrayList;
  * This takes in a stage record source and master record source.  It translates the stage record source first,
  * then the master record source.
  *
- * Version 2 allows the record ID to be Integer, Long, or String.
- *
- * @author pcheung
- *
  */
-public class RecValService2 {
+public class RecValService {
 
-	private static final Logger log = Logger.getLogger(RecValService2.class);
+	private static final Logger log = Logger.getLogger(RecValService.class);
 
 	private RecordSource master;
 	private RecordSource stage;
-	private IProbabilityModel stageModel;
-	private IProbabilityModel masterModel;
+	private IProbabilityModel model;
 
 	private IRecValSink [] sinks;
 	private int numBlockFields;
 
-	private IRecValSinkSourceFactory rvFactory;
-
 	private static int INTERVAL = 100000;
 
-	private BlockingConfiguration bc;
+	private IRecValSinkSourceFactory rvFactory;
 
 	//	this is the input record id to internal id translator
-	private IRecordIDTranslator2 translator;
+	private RecordIDTranslator translator;
 
 	private IStatus status;
 
-	//This stores if stage record id is Integer, Long, or string
-	private boolean firstStage = true;
-	private int stageType = -1;
-
-	//This stores if master record id is Integer, Long, or string
-	private boolean firstMaster = true;
-//	private int masterType = -1;
-
-//	private String blockName;
-//	private String dbConf;
+	private String blockName;
+	private String dbConf;
 
 	private long time; //this keeps track of time
 
@@ -99,26 +84,21 @@ public class RecValService2 {
 	 * @param dbConf - db configuration in the schema
 	 * @param status - current status of the system
 	 */
-	public RecValService2 (RecordSource stage, RecordSource master, IProbabilityModel stageModel,
-		IProbabilityModel masterModel,
-		IRecValSinkSourceFactory rvFactory, IRecordIDTranslator2 translator,
-		IStatus status) {
+	public RecValService (RecordSource stage, RecordSource master, IProbabilityModel model,
+		IRecValSinkSourceFactory rvFactory, RecordIDTranslator translator,
+		String blockName, String dbConf, IStatus status) {
 
 		this.stage = stage;
 		this.master = master;
-		this.stageModel = stageModel;
-		this.masterModel = masterModel;
+		this.model = model;
 		this.translator = translator;
 		this.rvFactory = rvFactory;
 		this.status = status;
 
-//		this.blockName = blockName;
-//		this.dbConf = dbConf;
+		this.blockName = blockName;
+		this.dbConf = dbConf;
 
-		BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
-		String blockName = (String) stageModel.properties().get("blockingConfiguration");
-		String dbConf = (String) stageModel.properties().get("dbConfiguration");
-
+		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
 		BlockingField[] bfs = bc.blockingFields;
 
@@ -142,30 +122,6 @@ public class RecValService2 {
 
 
 	public int getNumBlockingFields () { return numBlockFields; }
-
-
-	/** This returns the type of stage record id.  It is one of the three:
-	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
-	 *
-	 * It returns -1 if there was not staging data.
-	 *
-	 * @return
-	 */
-	public int getStageType () {
-		return stageType;
-	}
-
-
-	/** This returns the type of master record id.  It is one of the three:
-	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
-	 *
-	 * It returns -1 if there was not master data.
-	 *
-	 * @return
-	 */
-	public int getMasterType () {
-		return stageType;
-	}
 
 
 	/** This method runs the service.
@@ -241,34 +197,22 @@ public class RecValService2 {
 
 
 		try {
-			Record r;
-
 			//write the stage record source
 			if (stage != null) {
-				stage.setModel(stageModel);
+				stage.setModel(model);
 				stage.open();
 
-				String blockName = (String) stageModel.properties().get("blockingConfiguration");
-				String dbConf = (String) stageModel.properties().get("dbConfiguration");
-				BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
-				bc = ba.getBlockingConfiguration(blockName, dbConf);
-
+				long lastID = Long.MIN_VALUE;
 				while (stage.hasNext()) {
 					count ++;
-					r = stage.getNext();
-
-//					if (count < 15) log.info("id: " + r.getId());
+					Record r = stage.getNext();
 
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
 
-					writeRecord (r, stageModel);
+					long recID = writeRecord (r);
 
-					//This checks the id type
-					if (firstStage) {
-						Object O = r.getId();
-						stageType = Constants.checkType((Comparable)O);
-						firstStage = false;
-					}
+					if (recID > lastID) lastID = recID;
+					else throw new BlockingException ("RecordSource is not sorted " + recID + " " + lastID);
 
 				} // end while
 				stage.close ();
@@ -281,33 +225,20 @@ public class RecValService2 {
 			if (master != null) {
 				translator.split();
 
-				master.setModel(masterModel);
+				master.setModel(model);
 				master.open();
 
-				String blockName = (String) masterModel.properties().get("blockingConfiguration");
-				String dbConf = (String) masterModel.properties().get("dbConfiguration");
-				BlockingAccessor ba = (BlockingAccessor) masterModel.getAccessor();
-				bc = ba.getBlockingConfiguration(blockName, dbConf);
-
-				// 2014-04-24 rphall: Commented out unused local variable.
-//				long lastID = Long.MIN_VALUE;
+				long lastID = Long.MIN_VALUE;
 				while (master.hasNext()) {
 					count ++;
-					r = master.getNext();
-
-//					if (count < 15) log.info("id: " + r.getId());
+					Record r = master.getNext();
 
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
 
-					writeRecord (r, masterModel);
+					long recID = writeRecord (r);
 
-					//This checks the id type
-					if (firstMaster) {
-//						Object O = r.getId();
-//						masterType = Constants.checkType((Comparable)O);
-						firstMaster = false;
-					}
-
+					if (recID > lastID) lastID = recID;
+					else throw new BlockingException ("RecordSource is not sorted");
 				} // end while
 				master.close ();
 			}
@@ -328,16 +259,23 @@ public class RecValService2 {
 
 	/** This method writes 1 record's rec_id and val_id.
 	 *
+	 * returns the record id
 	 */
-	private void writeRecord (Record r, ImmutableProbabilityModel model) throws BlockingException {
-/*
-		String blockName = (String) stageModel.properties.get("blockingConfiguration");
-		String dbConf = (String) stageModel.properties.get("dbConfiguration");
-		BlockingAccessor ba = (BlockingAccessor) accessProvider.getAccessor();
+	private long writeRecord (Record r) throws BlockingException {
+		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
-*/
+
 		Object O = r.getId();
-		int internal = translator.translate((Comparable) O);
+		long recID=0;
+
+		if (O.getClass().equals( java.lang.Long.class )) {
+			Long L = (Long) r.getId();
+			recID = L.longValue();
+		} else if (O.getClass().equals( java.lang.Integer.class )) {
+			recID = ((Integer) r.getId()).longValue ();
+		}
+
+		int internal = translator.translate(recID);
 
 		HashSet seen = new HashSet(); //stores field value it has seen
 		Hashtable values = new Hashtable ();  //stores values per field
@@ -377,6 +315,7 @@ public class RecValService2 {
 
 //			log.info("id " + internal + " C " + C + " " + values.get(C));
 		}
+		return recID;
 	}
 
 
@@ -425,10 +364,9 @@ public class RecValService2 {
 		try {
 			//first recover the stage
 			if (stage != null) {
-				stage.setModel(stageModel);
+				stage.setModel(model);
 				stage.open();
-				// 2014-04-24 rphall: Commented out unused local variable.
-//				long lastID = Long.MIN_VALUE;
+				long lastID = Long.MIN_VALUE;
 				while (stage.hasNext()) {
 					count ++;
 					Record r = stage.getNext();
@@ -436,8 +374,11 @@ public class RecValService2 {
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
 
 					if (count > maxCount) {
-						writeRecord (r, stageModel);
+						long recID = writeRecord (r);
 						count2 ++;
+
+						if (recID > lastID) lastID = recID;
+						else throw new BlockingException ("RecordSource is not sorted " + recID + " " + lastID);
 					}
 				} // end while
 				stage.close();
@@ -450,10 +391,9 @@ public class RecValService2 {
 				//tell the translator to split
 				if (count2 > 0) translator.split();
 
-				master.setModel(masterModel);
+				master.setModel(model);
 				master.open();
-				// 2014-04-24 rphall: Commented out unused local variable.
-//				long lastID = Long.MIN_VALUE;
+				long lastID = Long.MIN_VALUE;
 				while (master.hasNext()) {
 					count ++;
 					Record r = master.getNext();
@@ -461,8 +401,11 @@ public class RecValService2 {
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
 
 					if (count > maxCount) {
-						writeRecord (r, masterModel);
+						long recID = writeRecord (r);
 						count2 ++;
+
+						if (recID > lastID) lastID = recID;
+						else throw new BlockingException ("RecordSource is not sorted");
 					}
 				} // end while
 				master.close();
@@ -499,6 +442,7 @@ public class RecValService2 {
 
 		return set.size();
 	}
+
 
 
 }

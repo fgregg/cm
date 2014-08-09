@@ -13,11 +13,11 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import java.util.ArrayList;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 
 /**
  * @author pcheung
@@ -181,13 +181,13 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 
 		//figure out the id type for the first file
 		if (currentIndex == 0) {
-			dataType = RecordIdentifierType.checkType(o).typeId;
+			dataType = Constants.checkType(o);
 			sink1.setRecordIDType(dataType);
 		}
 		
 		//figure out the id type for the second file
 		if (currentIndex == splitIndex) {
-			dataType = RecordIdentifierType.checkType(o).typeId;
+			dataType = Constants.checkType(o);
 			sink2.setRecordIDType(dataType);
 		}
 		

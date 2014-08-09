@@ -19,7 +19,6 @@ import java.util.StringTokenizer;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
@@ -132,11 +131,11 @@ public class MatchRecord2Source
 		throws EOFException, IOException {
 		Comparable c = null;
 
-		if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+		if (dataType == Constants.TYPE_INTEGER) {
 			c = new Integer(data);
-		} else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
+		} else if (dataType == Constants.TYPE_LONG) {
 			c = new Long(data);
-		} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
+		} else if (dataType == Constants.TYPE_STRING) {
 			c = data;
 		}
 
@@ -148,11 +147,11 @@ public class MatchRecord2Source
 
 		int dataType = dis.readInt();
 
-		if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+		if (dataType == Constants.TYPE_INTEGER) {
 			c = new Integer(dis.readInt());
-		} else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
+		} else if (dataType == Constants.TYPE_LONG) {
 			c = new Long(dis.readLong());
-		} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
+		} else if (dataType == Constants.TYPE_STRING) {
 			int size = dis.readInt();
 			char[] data = new char[size];
 			for (int i = 0; i < size; i++) {

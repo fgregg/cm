@@ -29,6 +29,6 @@ public interface StatusLogHome extends EJBHome {
 
 	StatusLog findByPrimaryKey(Long id) throws RemoteException, FinderException;
 
-	Collection findAll() throws RemoteException, FinderException;
+	Collection<StatusLog> findAll() throws RemoteException, FinderException;
 
 }

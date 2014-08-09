@@ -19,7 +19,7 @@ import com.choicemaker.util.LongArrayList;
  * 
  *
  */
-public class PairID implements Comparable<PairID>, IIDSet {
+public class PairID implements Comparable, IIDSet {
 	
 	private long id1, id2;
 	
@@ -36,12 +36,11 @@ public class PairID implements Comparable<PairID>, IIDSet {
 		return id2;
 	}
 
-	@Override
-	public int compareTo (PairID p) {
-		if (p == null) {
-			throw new IllegalArgumentException("null pair");
-		}
+	
+	public int compareTo (Object o) {
 		int ret = 0;
+		PairID p = (PairID) o;
+		
 		if (id1 < p.id1) ret = -1;
 		else if (id1 > p.id1) ret = 1;
 		else if (id1 == p.id1) {
@@ -52,34 +51,21 @@ public class PairID implements Comparable<PairID>, IIDSet {
 		return ret;
 	}
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id1 ^ (id1 >>> 32));
-		result = prime * result + (int) (id2 ^ (id2 >>> 32));
-		return result;
+	
+	public boolean equals (Object o) {
+		boolean ret = false;
+		
+		if (o.getClass() == PairID.class) {
+			PairID p = (PairID) o;
+			if ((id1 == p.id1) && (id2 == p.id2)) ret = true;
+		}
+		
+		return ret;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		PairID other = (PairID) obj;
-		if (id1 != other.id1) {
-			return false;
-		}
-		if (id2 != other.id2) {
-			return false;
-		}
-		return true;
+	
+	
+	public int hashCode () {
+		return (int)(id1 ^(id1>>>32) ^ id2 ^ (id2>>>32) );
 	}
 
 	/* (non-Javadoc)

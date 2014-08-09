@@ -31,6 +31,6 @@ public interface TransitivityJobHome extends EJBHome {
 
 	TransitivityJob findByPrimaryKey(Long id) throws RemoteException, FinderException;
 
-	Collection findAll() throws RemoteException, FinderException;
+	Collection<TransitivityJob> findAll() throws RemoteException, FinderException;
 
 }

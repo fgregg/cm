@@ -17,7 +17,6 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 
 /**
  * This is a file implementation of IComparisonArraySink.
@@ -84,13 +83,13 @@ public class ComparisonArraySink extends BaseFileSink implements IComparisonArra
 		
 			//then write each element
 			for (int i=0; i<list.size(); i++) {
-				if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+				if (dataType == Constants.TYPE_INTEGER) {
 					dos.writeInt( ((Integer) list.get(i)).intValue() );
 				
-				} else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
+				} else if (dataType == Constants.TYPE_LONG) {
 					dos.writeLong( ((Long) list.get(i)).longValue() );
 
-				} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
+				} else if (dataType == Constants.TYPE_STRING) {
 					String s = (String) list.get(i);
 					dos.writeInt(s.length());
 					dos.writeChars(s);
@@ -104,13 +103,13 @@ public class ComparisonArraySink extends BaseFileSink implements IComparisonArra
 		
 			//then write each element
 			for (int i=0; i<list.size(); i++) {
-				if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+				if (dataType == Constants.TYPE_INTEGER) {
 					fw.write (((Integer) list.get(i)).toString() + Constants.LINE_SEPARATOR);
 				
-				} else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
+				} else if (dataType == Constants.TYPE_LONG) {
 					fw.write ( ((Long) list.get(i)).toString() + Constants.LINE_SEPARATOR);
 
-				} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
+				} else if (dataType == Constants.TYPE_STRING) {
 					String s = (String) list.get(i);
 					fw.write ( s + Constants.LINE_SEPARATOR);
 				}
@@ -118,13 +117,13 @@ public class ComparisonArraySink extends BaseFileSink implements IComparisonArra
 
 /*
 			for (int i=0; i<list.size(); i++) {
-				if (dataType == RecordIdentifierType.TYPE_INTEGER.typeId) {
+				if (dataType == Constants.TYPE_INTEGER) {
 					fw.write (((Integer) list.get(i)).toString() + " ");
 				
-				} else if (dataType == RecordIdentifierType.TYPE_LONG.typeId) {
+				} else if (dataType == Constants.TYPE_LONG) {
 					fw.write ( ((Long) list.get(i)).toString() + " ");
 
-				} else if (dataType == RecordIdentifierType.TYPE_STRING.typeId) {
+				} else if (dataType == Constants.TYPE_STRING) {
 					String s = (String) list.get(i);
 					fw.write ( s + " ");
 				}

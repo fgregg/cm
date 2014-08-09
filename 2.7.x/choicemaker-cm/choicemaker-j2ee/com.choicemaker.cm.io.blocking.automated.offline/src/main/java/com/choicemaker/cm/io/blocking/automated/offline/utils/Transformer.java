@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
+import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RecordIdentifierType;
 import com.choicemaker.util.LongArrayList;
 
 /**
@@ -92,18 +92,18 @@ public class Transformer implements ITransformer{
 			if (translator.getSplitIndex() == 0) {
 				//only staging record source
 					
-				if (stage.size()== 0) stageType = RecordIdentifierType.checkType(comp).typeId;
+				if (stage.size()== 0) stageType = Constants.checkType(comp);
 				stage.add(comp);
 
 			} else {
 				//two record sources
 				if (block.get(i) < translator.getSplitIndex()) {
 					//stage
-					if (stage.size()== 0) stageType = RecordIdentifierType.checkType(comp).typeId;
+					if (stage.size()== 0) stageType = Constants.checkType(comp);
 					stage.add(comp);
 				} else {
 					//master
-					if (master.size()== 0) masterType = RecordIdentifierType.checkType(comp).typeId;
+					if (master.size()== 0) masterType = Constants.checkType(comp);
 					master.add(comp);
 				}
 			}

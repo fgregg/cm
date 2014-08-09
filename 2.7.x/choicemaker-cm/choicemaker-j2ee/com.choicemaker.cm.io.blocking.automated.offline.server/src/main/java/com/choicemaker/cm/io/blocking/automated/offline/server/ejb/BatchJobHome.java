@@ -28,7 +28,7 @@ public interface BatchJobHome extends EJBHome {
 	BatchJob create(String externalId, String type)
 		throws RemoteException, CreateException;
 
-	Collection findAll() throws RemoteException, FinderException;
+	Collection<BatchJob> findAll() throws RemoteException, FinderException;
 
 	BatchJob findByPrimaryKey(Long id) throws RemoteException, FinderException;
 
