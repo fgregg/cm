@@ -10,6 +10,12 @@
   -  ChoiceMaker Technologies Inc. ("Confidential Information").
   -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="compNodeTypeExt" type="compNodeTypeExtType" abstract="true"/>
+    <xs:complexType name="compNodeTypeExtType"/>
+    <xs:element name="compGlobal" type="compGlobalType" abstract="true"/>
+    <xs:complexType name="compGlobalType"/>
+    <xs:element name="compField" type="compFieldType" abstract="true"/>
+    <xs:complexType name="compFieldType"/>
 	<xs:element name="xmlGlobal" type="xmlGlobalType" substitutionGroup="compGlobal"/>
 	<xs:complexType name="xmlGlobalType">
 		<xs:complexContent>
@@ -27,4 +33,12 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+    <!-- auxiliary -->
+    <xs:simpleType name="unknownItemType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ignore"/>
+            <xs:enumeration value="warn"/>
+            <xs:enumeration value="exception"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>

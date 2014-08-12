@@ -3,17 +3,17 @@
 <!ELEMENT country-info (phone-info*)>
 <!ATTLIST country-info display-name CDATA #REQUIRED>
 <!-- if no CMT code is given, this defaults to internet-code, ioc-code, and display-name in that order -->
-<!ATTLIST country-info cmt-code CDATA>
-<!ATTLIST country-info ioc-code CDATA>
-<!ATTLIST country-info internet-code CDATA>
+<!ATTLIST country-info cmt-code CDATA "">
+<!ATTLIST country-info ioc-code CDATA "">
+<!ATTLIST country-info internet-code CDATA "">
 
 <!ELEMENT phone-info EMPTY>
 <!-- area code is the US/Canada/Mexico/Caribbean-style area code.
 	Some countries, especially in the caribbean have only an area code, and no country code -->
-<!ATTLIST phone-info area-code CDATA>
-<!ATTLIST phone-info country-code CDATA>
+<!ATTLIST phone-info area-code CDATA "">
+<!ATTLIST phone-info country-code CDATA "">
 <!-- patterns is a comma-separated list of patterns -->
-<!ATTLIST phone-info patterns CDATA>
+<!ATTLIST phone-info patterns CDATA "">
 
 <!ELEMENT postal-code-info EMPTY>
-<!ATTLIST postal-code-info patterns CDATA>
+<!ATTLIST postal-code-info patterns CDATA "">
