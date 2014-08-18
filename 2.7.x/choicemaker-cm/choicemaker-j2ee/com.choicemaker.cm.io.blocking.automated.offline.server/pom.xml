@@ -16,6 +16,20 @@
   <name>ChoiceMaker Offline Matching (OABA Server)</name>
 
   <properties>
+		<!-- JBoss dependency versions -->
+		<version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
+		<version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
+
+		<!-- maven-compiler-plugin -->
+    <plugin.maven-compiler.version>3.1</plugin.maven-compiler.version>
+    <plugin.maven-compiler.compilerVersion>1.7</plugin.maven-compiler.compilerVersion>
+    <plugin.maven-compiler.source>1.7</plugin.maven-compiler.source>
+    <plugin.maven-compiler.target>1.7</plugin.maven-compiler.target>
+
+		<!-- other plugin versions -->
+		<plugin.ejb.version>2.3</plugin.ejb.version>
+
+    <!-- Eclipse 2 plugin parameters -->
     <eclipse.plugin.runtime.library.name>oaba-server.jar</eclipse.plugin.runtime.library.name>
     <eclipse.plugin.src.zip.name>oaba-serversrc.zip</eclipse.plugin.src.zip.name>
   </properties>
