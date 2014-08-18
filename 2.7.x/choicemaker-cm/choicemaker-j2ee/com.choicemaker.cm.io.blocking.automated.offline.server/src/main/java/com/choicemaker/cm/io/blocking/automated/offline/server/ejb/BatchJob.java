@@ -118,7 +118,7 @@ public interface BatchJob extends EJBObject, IControl{
 		
 	/**
 	 * This operation has effect only if job status is STARTED.
-	 * @param fractionCompleted an non-negative fraction not greateer than 1.0f
+	 * @param fractionCompleted an non-negative fraction not greater than 1.0f
 	 */
 	void updateFractionCompleted(int fractionCompleted)
 		throws RemoteException;
