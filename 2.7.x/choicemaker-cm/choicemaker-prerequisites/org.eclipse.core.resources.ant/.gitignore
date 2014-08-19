@@ -10,3 +10,4 @@ resourcessrc.zip
 .classpath
 .settings
 target-??
+*.BAK-??

@@ -12,3 +12,4 @@ tmp
 *.BAK*
 *DEBUG*
 target-??
+*.BAK-??

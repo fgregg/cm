@@ -8,3 +8,4 @@ project.t.xml
 .classpath
 .settings
 target-??
+*.BAK-??

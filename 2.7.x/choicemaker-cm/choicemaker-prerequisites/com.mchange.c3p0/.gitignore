@@ -11,3 +11,4 @@ antsupportsrc.zip
 .classpath
 .settings
 target-??
+*.BAK-??
