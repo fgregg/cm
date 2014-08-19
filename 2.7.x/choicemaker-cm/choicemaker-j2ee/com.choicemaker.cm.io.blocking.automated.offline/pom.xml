@@ -22,22 +22,18 @@
   <name>ChoiceMaker Offline Matching (OABA Base Impl)</name>
 
   <properties>
+		<!-- maven-compiler-plugin -->
+    <plugin.maven-compiler.version>3.1</plugin.maven-compiler.version>
+    <plugin.maven-compiler.compilerVersion>1.7</plugin.maven-compiler.compilerVersion>
+    <plugin.maven-compiler.source>1.7</plugin.maven-compiler.source>
+    <plugin.maven-compiler.target>1.7</plugin.maven-compiler.target>
+
+    <!-- Eclipse 2 plugin parameters -->
     <eclipse.plugin.runtime.library.name>offline.jar</eclipse.plugin.runtime.library.name>
     <eclipse.plugin.src.zip.name>offlinesrc.zip</eclipse.plugin.src.zip.name>
   </properties>
 
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
-    <testSourceDirectory>src/test/java</testSourceDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-      <resource>
-        <directory>src/main/eclipse2</directory>
-        <targetPath>META-INF/plugins</targetPath>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
