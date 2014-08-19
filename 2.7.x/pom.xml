@@ -59,6 +59,7 @@
   </build>
 
   <modules>
+    <module>choicemaker-assembly</module>
     <module>choicemaker-base</module>
     <module>choicemaker-cm</module>
     <!--
