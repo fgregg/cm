@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.choicemaker.fake.ejb.ejb</groupId>
-	<artifactId>com.choicemaker.fake.stateless-01-IT</artifactId>
+  <artifactId>com.choicemaker.fake.stateless-01-IT</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Stateless EJB Integration Test</name>
   <packaging>jar</packaging>
 
   <properties>
     <project.build.sourceEncoding>
-    UTF-8</project.build.sourceEncoding>
+      UTF-8</project.build.sourceEncoding>
 
     <!-- JBoss dependency versions -->
     <version.org.jboss.as.plugins.maven.plugin>
-    7.3.Final</version.org.jboss.as.plugins.maven.plugin>
+      7.3.Final</version.org.jboss.as.plugins.maven.plugin>
     <version.org.jboss.spec.jboss.javaee.6.0>
-    3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
+      3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
 
     <!-- other plugin versions -->
     <version.compiler.plugin>2.3.1</version.compiler.plugin>
@@ -39,7 +38,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <version>${version.compiler.plugin}</version>
         <configuration>
           <compilerVersion>
-          ${maven.compiler.version}</compilerVersion>
+            ${maven.compiler.version}</compilerVersion>
           <source>${maven.compiler.source}</source>
           <target>${maven.compiler.target}</target>
         </configuration>
@@ -53,10 +52,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
           <filename>${project.build.finalName}.jar</filename>
         </configuration>
       </plugin>
+      <!--
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.17</version>
       </plugin>
+      -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.17</version>
@@ -90,11 +91,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   </dependencyManagement>
 
   <dependencies>
-	<dependency>
-		<groupId>com.choicemaker.fake</groupId>
-		<artifactId>com.choicemaker.fake.stateless-01</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</dependency>
+    <dependency>
+      <groupId>com.choicemaker.fake</groupId>
+      <artifactId>com.choicemaker.fake.stateless-01</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
     <!--
     <dependency>
         <groupId>com.choicemaker.fake</groupId>
@@ -140,11 +141,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</dependency>
     -->
 
-	<dependency>
-		<groupId>org.jboss.spec.javax.transaction</groupId>
-		<artifactId>jboss-transaction-api_1.1_spec</artifactId>
-		<scope>runtime</scope>
-	</dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.transaction</groupId>
+      <artifactId>jboss-transaction-api_1.1_spec</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>org.jboss.spec.javax.annotation</groupId>
       <artifactId>jboss-annotations-api_1.1_spec</artifactId>
@@ -165,6 +166,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     -->
 
     <dependency>
+      <groupId>org.jboss.spec</groupId>
+      <artifactId>jboss-javaee-6.0</artifactId>
+      <version>1.0.0.Final</version>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.jboss.shrinkwrap.resolver</groupId>
       <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
       <scope>test</scope>
@@ -182,21 +191,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jboss.spec</groupId>
-      <artifactId>jboss-javaee-6.0</artifactId>
-      <version>1.0.0.Final</version>
-      <type>pom</type>
-      <scope>provided</scope>
+      <groupId>org.jboss.arquillian.protocol</groupId>
+      <artifactId>arquillian-protocol-servlet</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.as</groupId>
       <artifactId>jboss-as-arquillian-container-remote</artifactId>
       <version>7.1.1.Final</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.arquillian.protocol</groupId>
-      <artifactId>arquillian-protocol-servlet</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

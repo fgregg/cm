@@ -15,7 +15,9 @@ then
  do
   date 
   echo $p 
-  time mvn clean test -P $p 2>/tmp/${p}.err | tee /tmp/${p}.log | grep -A 1 "Tests in error\|Tests run" 
+  time mvn clean test -P $p 2>/tmp/${p}.err \
+    | tee /tmp/${p}.log \
+    | grep -A 1 "Tests in error\|Tests run" 
   echo  
  done 
  finish="`date`" 
