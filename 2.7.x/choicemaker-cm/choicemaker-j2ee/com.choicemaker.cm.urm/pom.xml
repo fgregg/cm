@@ -109,6 +109,7 @@
     <dependency>
       <groupId>javaee</groupId>
       <artifactId>javaee-api</artifactId>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
