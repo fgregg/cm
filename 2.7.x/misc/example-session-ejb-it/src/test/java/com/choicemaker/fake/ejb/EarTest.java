@@ -120,14 +120,14 @@ public class EarTest {
 	public static EnterpriseArchive createEarArchive() {
 		JavaArchive ejb1 = createEjbJar();
 		// create the EAR
-		EnterpriseArchive retVal =
-			ShrinkWrap.create(EnterpriseArchive.class);
+		EnterpriseArchive retVal = ShrinkWrap.create(EnterpriseArchive.class);
 		retVal.addAsModule(ejb1);
 		try {
-		File[] deps = createTestDependencies();
-		retVal.addAsLibraries(deps);
-		} catch( Exception x) {
-			String msg = "WARNING: failed to add test dependencies: " + x.toString();
+			File[] deps = createTestDependencies();
+			retVal.addAsLibraries(deps);
+		} catch (Exception x) {
+			String msg =
+				"WARNING: failed to add test dependencies: " + x.toString();
 			System.out.println(msg);
 		}
 		System.out.println();
