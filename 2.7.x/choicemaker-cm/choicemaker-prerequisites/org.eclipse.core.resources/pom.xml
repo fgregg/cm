@@ -122,6 +122,7 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.xerces</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

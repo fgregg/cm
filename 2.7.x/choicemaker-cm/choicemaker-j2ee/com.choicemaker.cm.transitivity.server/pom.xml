@@ -104,6 +104,11 @@
   <dependencies>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.log4j</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
     </dependency>
     <dependency>
@@ -150,6 +155,7 @@
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
+      <scope>provided</scope>
     </dependency>
 <!--
     <dependency>

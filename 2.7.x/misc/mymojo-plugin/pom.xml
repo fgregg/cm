@@ -46,6 +46,12 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.log4j</artifactId>
+      <version>1.2.9-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
 		<dependency>
 			<groupId>com.choicemaker.cm</groupId>
 			<artifactId>com.choicemaker.cm.compiler</artifactId>

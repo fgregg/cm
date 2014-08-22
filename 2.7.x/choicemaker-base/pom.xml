@@ -28,7 +28,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
     <!-- ChoiceMaker versions -->
     <choicemaker.current.version>2.7.1-SNAPSHOT</choicemaker.current.version>
-    <choicemaker.prerequisite.dependency>2.7.1</choicemaker.prerequisite.dependency>
+    <!-- choicemaker.prerequisite.dependency>2.7.1</choicemaker.prerequisite.dependency -->
+    <choicemaker.prerequisite.dependency>2.7.2-SNAPSHOT</choicemaker.prerequisite.dependency>
     <choicemaker.prerequisite.version>2.7.2-SNAPSHOT</choicemaker.prerequisite.version>
     <choicemaker.tool.dependency>2.7.1-SNAPSHOT</choicemaker.tool.dependency>
     <choicemaker.tool.version>2.7.1-SNAPSHOT</choicemaker.tool.version>
@@ -308,12 +309,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.ant</artifactId>
-        <version>1.5.3</version>
+        <version>1.5.4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.ant</artifactId>
-        <version>1.5.3</version>
+        <version>1.5.4-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -332,12 +333,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.log4j</artifactId>
-        <version>1.2.8</version>
+        <version>1.2.9-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.log4j</artifactId>
-        <version>1.2.8</version>
+        <version>1.2.9-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -356,12 +357,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.xerces</artifactId>
-        <version>4.0.13</version>
+        <version>4.0.14-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.xerces</artifactId>
-        <version>4.0.13</version>
+        <version>4.0.14-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -392,12 +393,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.boot</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.boot</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -440,24 +441,24 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.jdom</artifactId>
-        <version>0.9.0</version>
+        <version>0.9.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.jdom</artifactId>
-        <version>0.9.0</version>
+        <version>0.9.1-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
