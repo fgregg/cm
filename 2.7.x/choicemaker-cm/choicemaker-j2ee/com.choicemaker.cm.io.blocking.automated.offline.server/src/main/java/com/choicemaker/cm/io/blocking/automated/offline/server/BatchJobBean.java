@@ -17,13 +17,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.TableGenerator;
 
 import org.apache.log4j.Logger;
 
@@ -36,7 +41,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 @NamedQuery(name = "batchJobFindAll",
 		query = "Select job from BatchJobBean job")
 @Entity
-@Table(/*schema = "CHOICEMAKER", */name = "CMT_OABA_BATCH_JOB")
+@Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_BATCHJOB")
 public class BatchJobBean implements IControl, Serializable {
 
 	private static final long serialVersionUID = 271L;
@@ -55,13 +60,21 @@ public class BatchJobBean implements IControl, Serializable {
 	public static final String TABLE_DISCRIMINATOR = "OABA";
 
 	public static enum STATUS {
-		NEW, QUEUED, STARTED, COMPLETED, FAILED, ABORT_REQUESTED, ABORTED,
-		CLEAR
+		NEW(false), QUEUED(false), STARTED(false), COMPLETED(true),
+		FAILED(true), ABORT_REQUESTED(false), ABORTED(true), CLEAR(true);
+		public boolean isTerminal;
+
+		private STATUS(boolean terminal) {
+			this.isTerminal = terminal;
+		}
 	}
 
 	@Id
-	@GeneratedValue
 	@Column(name = "ID")
+	@TableGenerator(name = "CMT_SEQUENCE", table = "CMT_SEQUENCE",
+			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+			pkColumnValue = "OABA_BATCHJOB")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "CMT_SEQUENCE")
 	private long id;
 
 	@Column(name = "EXTERNAL_ID")
@@ -82,10 +95,22 @@ public class BatchJobBean implements IControl, Serializable {
 	@Column(name = "STATUS")
 	private STATUS status;
 
-	@Transient
-	private Map<STATUS, Date> history;
+	@ElementCollection
+	@MapKeyColumn(name = "STATUS")
+	@Column(name = "DATE")
+	@CollectionTable(name = "CMT_OABA_BATCHJOB_TIMESTAMPS",
+			joinColumns = @JoinColumn(name = "BATCHJOB_ID"))
+	Map<String, String> attributes = new HashMap<String, String>();
+	private Map<STATUS, Date> timestamps = new HashMap<>();
 
-	// State machine
+	// -- Construction
+
+	public BatchJobBean() {
+		setStatus(STATUS.NEW);
+		timestamps.put(STATUS.NEW, new Date());
+	}
+
+	// -- State machine
 
 	private static Map<STATUS, EnumSet<STATUS>> allowedTransitions =
 		new HashMap<>();
@@ -116,24 +141,10 @@ public class BatchJobBean implements IControl, Serializable {
 		return retVal;
 	}
 
-	private void logTransition(STATUS newStatus) {
-		String msg =
-			getId() + ", '" + getExternalId() + "': transitioning from "
-					+ getStatusAsString() + " to " + newStatus;
-		log.warn(msg);
-	}
-
-	private void logIgnoredTransition(String transition) {
-		String msg =
-			getId() + ", '" + getExternalId() + "': " + transition
-					+ " ignored (status == '" + getStatusAsString() + "'";
-		log.warn(msg);
-	}
-
 	public void markAsQueued() {
 		if (isAllowedTransition(getStatus(), STATUS.QUEUED)) {
 			logTransition(STATUS.QUEUED);
-			history.put(STATUS.QUEUED, new Date());
+			timestamps.put(STATUS.QUEUED, new Date());
 			setStatus(STATUS.QUEUED);
 		} else {
 			logIgnoredTransition("markAsQueued");
@@ -143,7 +154,7 @@ public class BatchJobBean implements IControl, Serializable {
 	public void markAsStarted() {
 		if (isAllowedTransition(getStatus(), STATUS.STARTED)) {
 			logTransition(STATUS.QUEUED);
-			history.put(STATUS.STARTED, new Date());
+			timestamps.put(STATUS.STARTED, new Date());
 			setStatus(STATUS.STARTED);
 		} else {
 			logIgnoredTransition("markAsStarted");
@@ -157,7 +168,7 @@ public class BatchJobBean implements IControl, Serializable {
 	 *
 	 */
 	public void markAsReStarted() {
-		history.put(STATUS.QUEUED, new Date());
+		timestamps.put(STATUS.QUEUED, new Date());
 		setStatus(STATUS.QUEUED);
 	}
 
@@ -165,7 +176,7 @@ public class BatchJobBean implements IControl, Serializable {
 		if (isAllowedTransition(getStatus(), STATUS.COMPLETED)) {
 			logTransition(STATUS.COMPLETED);
 			setPercentageComplete(100);
-			history.put(STATUS.COMPLETED, new Date());
+			timestamps.put(STATUS.COMPLETED, new Date());
 			setStatus(STATUS.COMPLETED);
 		} else {
 			logIgnoredTransition("markAsCompleted");
@@ -175,7 +186,7 @@ public class BatchJobBean implements IControl, Serializable {
 	public void markAsFailed() {
 		if (isAllowedTransition(getStatus(), STATUS.FAILED)) {
 			logTransition(STATUS.FAILED);
-			history.put(STATUS.FAILED, new Date());
+			timestamps.put(STATUS.FAILED, new Date());
 			setStatus(STATUS.FAILED);
 		} else {
 			logIgnoredTransition("markAsFailed");
@@ -185,7 +196,7 @@ public class BatchJobBean implements IControl, Serializable {
 	public void markAsAbortRequested() {
 		if (isAllowedTransition(getStatus(), STATUS.ABORT_REQUESTED)) {
 			logTransition(STATUS.ABORT_REQUESTED);
-			history.put(STATUS.ABORT_REQUESTED, new Date());
+			timestamps.put(STATUS.ABORT_REQUESTED, new Date());
 			setStatus(STATUS.ABORT_REQUESTED);
 		} else {
 			logIgnoredTransition("markAsAbortRequested");
@@ -198,7 +209,7 @@ public class BatchJobBean implements IControl, Serializable {
 				markAsAbortRequested();
 			}
 			logTransition(STATUS.ABORTED);
-			history.put(STATUS.ABORTED, new Date());
+			timestamps.put(STATUS.ABORTED, new Date());
 			setStatus(STATUS.ABORTED);
 		} else {
 			logIgnoredTransition("markAsAborted");
@@ -229,22 +240,109 @@ public class BatchJobBean implements IControl, Serializable {
 		}
 		if (isAllowedTransition(getStatus(), STATUS.STARTED)) {
 			logTransition(STATUS.STARTED);
-			history.put(STATUS.STARTED, new Date());
+			timestamps.put(STATUS.STARTED, new Date());
 			setStatus(STATUS.STARTED);
 		} else {
 			logIgnoredTransition("updatePercentageCompleted");
 		}
 	}
 
-	public boolean shouldStop() {
-		if (getStatus().equals(STATUS.ABORT_REQUESTED)
-				|| getStatus().equals(STATUS.ABORTED))
-			return true;
-		else
-			return false;
+	private void logTransition(STATUS newStatus) {
+		String msg =
+			getId() + ", '" + getExternalId() + "': transitioning from "
+					+ getStatusAsString() + " to " + newStatus;
+		log.warn(msg);
 	}
 
-	// Persistent fields
+	private void logIgnoredTransition(String transition) {
+		String msg =
+			getId() + ", '" + getExternalId() + "': " + transition
+					+ " ignored (status == '" + getStatusAsString() + "'";
+		log.warn(msg);
+	}
+
+	// -- Job Control
+
+	public boolean shouldStop() {
+		if (getStatus().equals(STATUS.ABORT_REQUESTED)
+				|| getStatus().equals(STATUS.ABORTED)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// -- Backwards compatibility
+
+	public void setRequested(Date date) {
+		this.timestamps.put(STATUS.NEW, date);
+	}
+
+	public Date getRequested() {
+		return this.timestamps.get(STATUS.NEW);
+	}
+
+	public void setQueued(Date queued) {
+		this.timestamps.put(STATUS.QUEUED, queued);
+	}
+
+	public Date getQueued() {
+		return this.timestamps.get(STATUS.QUEUED);
+	}
+
+	public void setStarted(Date started) {
+		this.timestamps.put(STATUS.STARTED, started);
+	}
+
+	public Date getStarted() {
+		return this.timestamps.get(STATUS.STARTED);
+	}
+
+	public void setUpdated(Date updated) {
+		if (!getStatus().isTerminal) {
+			this.timestamps.put(getStatus(), updated);
+		} else {
+			logIgnoredTransition("updated(" + updated + ")");
+		}
+	}
+
+	public Date getUpdated() {
+		return this.timestamps.get(getStatus());
+	}
+
+	public void setCompleted(Date completed) {
+		this.timestamps.put(STATUS.COMPLETED, completed);
+	}
+
+	public Date getCompleted() {
+		return this.timestamps.get(STATUS.COMPLETED);
+	}
+
+	public void setFailed(Date failed) {
+		this.timestamps.put(STATUS.FAILED, failed);
+	}
+
+	public Date getFailed() {
+		return this.timestamps.get(STATUS.FAILED);
+	}
+
+	public void setAbortRequested(Date abortRequested) {
+		this.timestamps.put(STATUS.ABORT_REQUESTED, abortRequested);
+	}
+
+	public Date getAbortRequested() {
+		return this.timestamps.get(STATUS.ABORT_REQUESTED);
+	}
+
+	public void setAborted(Date aborted) {
+		this.timestamps.put(STATUS.ABORTED, aborted);
+	}
+
+	public Date getAborted() {
+		return this.timestamps.get(STATUS.ABORTED);
+	}
+
+	// -- Persistent fields
 
 	public long getId() {
 		return id;
@@ -306,6 +404,14 @@ public class BatchJobBean implements IControl, Serializable {
 		this.status = currentStatus;
 	}
 
+	public Date getTimeStamp(STATUS status) {
+		return this.timestamps.get(status);
+	}
+
+	public void setTimeStamp(STATUS status, Date date) {
+		this.timestamps.put(status, date);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -341,6 +447,7 @@ public class BatchJobBean implements IControl, Serializable {
 
 	/**
 	 * Hashcode for instances with id == 0
+	 * 
 	 * @return
 	 */
 	public int hashCode0() {
@@ -351,7 +458,8 @@ public class BatchJobBean implements IControl, Serializable {
 					+ ((description == null) ? 0 : description.hashCode());
 		result =
 			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
-		result = prime * result + ((history == null) ? 0 : history.hashCode());
+		result =
+			prime * result + ((timestamps == null) ? 0 : timestamps.hashCode());
 		result = prime * result + percentageComplete;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result =
@@ -384,11 +492,11 @@ public class BatchJobBean implements IControl, Serializable {
 		} else if (!externalId.equals(other.externalId)) {
 			return false;
 		}
-		if (history == null) {
-			if (other.history != null) {
+		if (timestamps == null) {
+			if (other.timestamps != null) {
 				return false;
 			}
-		} else if (!history.equals(other.history)) {
+		} else if (!timestamps.equals(other.timestamps)) {
 			return false;
 		}
 		if (percentageComplete != other.percentageComplete) {
@@ -410,5 +518,4 @@ public class BatchJobBean implements IControl, Serializable {
 		return true;
 	}
 
-} // BatchJobBean
-
+}
