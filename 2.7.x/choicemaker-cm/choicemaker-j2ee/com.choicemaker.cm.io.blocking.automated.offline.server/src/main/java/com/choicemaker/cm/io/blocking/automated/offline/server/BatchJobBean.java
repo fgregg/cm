@@ -17,9 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +26,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
@@ -71,10 +71,11 @@ public class BatchJobBean implements IControl, Serializable {
 
 	@Id
 	@Column(name = "ID")
-	@TableGenerator(name = "CMT_SEQUENCE", table = "CMT_SEQUENCE",
+	@TableGenerator(name = "CMT_BATCHJOB_SEQUENCE", table = "CMT_SEQUENCE",
 			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
 			pkColumnValue = "OABA_BATCHJOB")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "CMT_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.TABLE,
+			generator = "CMT_BATCHJOB_SEQUENCE")
 	private long id;
 
 	@Column(name = "EXTERNAL_ID")
@@ -93,21 +94,18 @@ public class BatchJobBean implements IControl, Serializable {
 	private int percentageComplete;
 
 	@Column(name = "STATUS")
-	private STATUS status;
+	private String sts;
 
-	@ElementCollection
-	@MapKeyColumn(name = "STATUS")
-	@Column(name = "DATE")
-	@CollectionTable(name = "CMT_OABA_BATCHJOB_TIMESTAMPS",
-			joinColumns = @JoinColumn(name = "BATCHJOB_ID"))
-	Map<String, String> attributes = new HashMap<String, String>();
-	private Map<STATUS, Date> timestamps = new HashMap<>();
+	@OneToMany(mappedBy = "batchJob", cascade = CascadeType.ALL)
+//	@JoinColumn(name = "BATCHJOB_ID")
+	@MapKeyColumn(name = "status")
+	private Map<String, BatchJobTimestamp> timestamps = new HashMap<>();
 
 	// -- Construction
 
 	public BatchJobBean() {
 		setStatus(STATUS.NEW);
-		timestamps.put(STATUS.NEW, new Date());
+		setTimeStamp(STATUS.NEW, new Date());
 	}
 
 	// -- State machine
@@ -131,6 +129,13 @@ public class BatchJobBean implements IControl, Serializable {
 		allowedTransitions.put(STATUS.CLEAR, EnumSet.noneOf(STATUS.class));
 	}
 
+	public static boolean isAllowedTransition(String current, STATUS next) {
+		if (current == null) {
+			throw new IllegalArgumentException("null status");
+		}
+		return isAllowedTransition(STATUS.valueOf(current), next);
+	}
+
 	public static boolean isAllowedTransition(STATUS current, STATUS next) {
 		if (current == null || next == null) {
 			throw new IllegalArgumentException("null status");
@@ -144,7 +149,7 @@ public class BatchJobBean implements IControl, Serializable {
 	public void markAsQueued() {
 		if (isAllowedTransition(getStatus(), STATUS.QUEUED)) {
 			logTransition(STATUS.QUEUED);
-			timestamps.put(STATUS.QUEUED, new Date());
+			setTimeStamp(STATUS.QUEUED, new Date());
 			setStatus(STATUS.QUEUED);
 		} else {
 			logIgnoredTransition("markAsQueued");
@@ -154,7 +159,7 @@ public class BatchJobBean implements IControl, Serializable {
 	public void markAsStarted() {
 		if (isAllowedTransition(getStatus(), STATUS.STARTED)) {
 			logTransition(STATUS.QUEUED);
-			timestamps.put(STATUS.STARTED, new Date());
+			setTimeStamp(STATUS.STARTED, new Date());
 			setStatus(STATUS.STARTED);
 		} else {
 			logIgnoredTransition("markAsStarted");
@@ -162,13 +167,13 @@ public class BatchJobBean implements IControl, Serializable {
 	}
 
 	/**
-	 * This method is misnamed. It is called when a job is re-queued, not when
-	 * it is restarted. This method doesn't check the current state of the job
-	 * before re-queuing it.
+	 * This method is misleadingly named. It is called when a job is re-queued,
+	 * not when it is restarted. This method doesn't check the current state of
+	 * the job before re-queuing it.
 	 *
 	 */
 	public void markAsReStarted() {
-		timestamps.put(STATUS.QUEUED, new Date());
+		setTimeStamp(STATUS.QUEUED, new Date());
 		setStatus(STATUS.QUEUED);
 	}
 
@@ -176,7 +181,7 @@ public class BatchJobBean implements IControl, Serializable {
 		if (isAllowedTransition(getStatus(), STATUS.COMPLETED)) {
 			logTransition(STATUS.COMPLETED);
 			setPercentageComplete(100);
-			timestamps.put(STATUS.COMPLETED, new Date());
+			setTimeStamp(STATUS.COMPLETED, new Date());
 			setStatus(STATUS.COMPLETED);
 		} else {
 			logIgnoredTransition("markAsCompleted");
@@ -186,7 +191,7 @@ public class BatchJobBean implements IControl, Serializable {
 	public void markAsFailed() {
 		if (isAllowedTransition(getStatus(), STATUS.FAILED)) {
 			logTransition(STATUS.FAILED);
-			timestamps.put(STATUS.FAILED, new Date());
+			setTimeStamp(STATUS.FAILED, new Date());
 			setStatus(STATUS.FAILED);
 		} else {
 			logIgnoredTransition("markAsFailed");
@@ -196,7 +201,7 @@ public class BatchJobBean implements IControl, Serializable {
 	public void markAsAbortRequested() {
 		if (isAllowedTransition(getStatus(), STATUS.ABORT_REQUESTED)) {
 			logTransition(STATUS.ABORT_REQUESTED);
-			timestamps.put(STATUS.ABORT_REQUESTED, new Date());
+			setTimeStamp(STATUS.ABORT_REQUESTED, new Date());
 			setStatus(STATUS.ABORT_REQUESTED);
 		} else {
 			logIgnoredTransition("markAsAbortRequested");
@@ -209,7 +214,7 @@ public class BatchJobBean implements IControl, Serializable {
 				markAsAbortRequested();
 			}
 			logTransition(STATUS.ABORTED);
-			timestamps.put(STATUS.ABORTED, new Date());
+			setTimeStamp(STATUS.ABORTED, new Date());
 			setStatus(STATUS.ABORTED);
 		} else {
 			logIgnoredTransition("markAsAborted");
@@ -240,7 +245,7 @@ public class BatchJobBean implements IControl, Serializable {
 		}
 		if (isAllowedTransition(getStatus(), STATUS.STARTED)) {
 			logTransition(STATUS.STARTED);
-			timestamps.put(STATUS.STARTED, new Date());
+			setTimeStamp(STATUS.STARTED, new Date());
 			setStatus(STATUS.STARTED);
 		} else {
 			logIgnoredTransition("updatePercentageCompleted");
@@ -250,14 +255,14 @@ public class BatchJobBean implements IControl, Serializable {
 	private void logTransition(STATUS newStatus) {
 		String msg =
 			getId() + ", '" + getExternalId() + "': transitioning from "
-					+ getStatusAsString() + " to " + newStatus;
+					+ getStatus() + " to " + newStatus;
 		log.warn(msg);
 	}
 
 	private void logIgnoredTransition(String transition) {
 		String msg =
 			getId() + ", '" + getExternalId() + "': " + transition
-					+ " ignored (status == '" + getStatusAsString() + "'";
+					+ " ignored (status == '" + getStatus() + "'";
 		log.warn(msg);
 	}
 
@@ -275,71 +280,71 @@ public class BatchJobBean implements IControl, Serializable {
 	// -- Backwards compatibility
 
 	public void setRequested(Date date) {
-		this.timestamps.put(STATUS.NEW, date);
+		this.setTimeStamp(STATUS.NEW, date);
 	}
 
 	public Date getRequested() {
-		return this.timestamps.get(STATUS.NEW);
+		return this.getTimeStamp(STATUS.NEW);
 	}
 
 	public void setQueued(Date queued) {
-		this.timestamps.put(STATUS.QUEUED, queued);
+		this.setTimeStamp(STATUS.QUEUED, queued);
 	}
 
 	public Date getQueued() {
-		return this.timestamps.get(STATUS.QUEUED);
+		return this.getTimeStamp(STATUS.QUEUED);
 	}
 
 	public void setStarted(Date started) {
-		this.timestamps.put(STATUS.STARTED, started);
+		this.setTimeStamp(STATUS.STARTED, started);
 	}
 
 	public Date getStarted() {
-		return this.timestamps.get(STATUS.STARTED);
+		return this.getTimeStamp(STATUS.STARTED);
 	}
 
 	public void setUpdated(Date updated) {
-		if (!getStatus().isTerminal) {
-			this.timestamps.put(getStatus(), updated);
+		if (!STATUS.valueOf(getStatus()).isTerminal) {
+			this.setTimeStamp(getStatus(), updated);
 		} else {
 			logIgnoredTransition("updated(" + updated + ")");
 		}
 	}
 
 	public Date getUpdated() {
-		return this.timestamps.get(getStatus());
+		return this.getTimeStamp(getStatus());
 	}
 
 	public void setCompleted(Date completed) {
-		this.timestamps.put(STATUS.COMPLETED, completed);
+		this.setTimeStamp(STATUS.COMPLETED, completed);
 	}
 
 	public Date getCompleted() {
-		return this.timestamps.get(STATUS.COMPLETED);
+		return this.getTimeStamp(STATUS.COMPLETED);
 	}
 
 	public void setFailed(Date failed) {
-		this.timestamps.put(STATUS.FAILED, failed);
+		this.setTimeStamp(STATUS.FAILED, failed);
 	}
 
 	public Date getFailed() {
-		return this.timestamps.get(STATUS.FAILED);
+		return this.getTimeStamp(STATUS.FAILED);
 	}
 
 	public void setAbortRequested(Date abortRequested) {
-		this.timestamps.put(STATUS.ABORT_REQUESTED, abortRequested);
+		this.setTimeStamp(STATUS.ABORT_REQUESTED, abortRequested);
 	}
 
 	public Date getAbortRequested() {
-		return this.timestamps.get(STATUS.ABORT_REQUESTED);
+		return this.getTimeStamp(STATUS.ABORT_REQUESTED);
 	}
 
 	public void setAborted(Date aborted) {
-		this.timestamps.put(STATUS.ABORTED, aborted);
+		this.setTimeStamp(STATUS.ABORTED, aborted);
 	}
 
 	public Date getAborted() {
-		return this.timestamps.get(STATUS.ABORTED);
+		return this.getTimeStamp(STATUS.ABORTED);
 	}
 
 	// -- Persistent fields
@@ -380,14 +385,6 @@ public class BatchJobBean implements IControl, Serializable {
 		this.description = description;
 	}
 
-	public String getStatusAsString() {
-		return status.name();
-	}
-
-	public void setStatusFromString(String status) {
-		setStatus(STATUS.valueOf(status));
-	}
-
 	public int getPercentageComplete() {
 		return percentageComplete;
 	}
@@ -396,20 +393,48 @@ public class BatchJobBean implements IControl, Serializable {
 		this.percentageComplete = fractionComplete;
 	}
 
-	public STATUS getStatus() {
-		return status;
+	public String getStatus() {
+		return sts;
+	}
+
+	public void setStatus(String s) {
+		STATUS currentStatus = s == null ? null : STATUS.valueOf(s);
+		setStatus(currentStatus);
 	}
 
 	public void setStatus(STATUS currentStatus) {
-		this.status = currentStatus;
+		this.sts = currentStatus.name();
+		setTimeStamp(currentStatus, new Date());
+	}
+
+	public Date getTimeStamp(String status) {
+		BatchJobTimestamp ts = this.timestamps.get(status);
+		Date retVal = ts.getTimeStamp();
+		return retVal;
 	}
 
 	public Date getTimeStamp(STATUS status) {
-		return this.timestamps.get(status);
+		BatchJobTimestamp ts = this.timestamps.get(status.name());
+		Date retVal = ts.getTimeStamp();
+		return retVal;
 	}
 
-	public void setTimeStamp(STATUS status, Date date) {
-		this.timestamps.put(status, date);
+	protected void setTimeStamp(String status, Date date) {
+		BatchJobTimestamp timestamp = new BatchJobTimestamp(status, date);
+		this.timestamps.put(status, timestamp);
+	}
+
+	protected void setTimeStamp(STATUS status, Date date) {
+		BatchJobTimestamp timestamp = new BatchJobTimestamp(status, date);
+		this.timestamps.put(status.name(), timestamp);
+	}
+
+	// -- Object overrides
+
+	@Override
+	public String toString() {
+		return "BatchJobBean [id=" + id + ", externalId=" + externalId
+				+ ", transactionId=" + transactionId + ", status=" + sts + "]";
 	}
 
 	@Override
@@ -461,7 +486,7 @@ public class BatchJobBean implements IControl, Serializable {
 		result =
 			prime * result + ((timestamps == null) ? 0 : timestamps.hashCode());
 		result = prime * result + percentageComplete;
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((sts == null) ? 0 : sts.hashCode());
 		result =
 			prime * result + (int) (transactionId ^ (transactionId >>> 32));
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
@@ -502,7 +527,11 @@ public class BatchJobBean implements IControl, Serializable {
 		if (percentageComplete != other.percentageComplete) {
 			return false;
 		}
-		if (status != other.status) {
+		if (sts == null) {
+			if (other.sts != null) {
+				return false;
+			}
+		} else if (!sts.equals(other.sts)) {
 			return false;
 		}
 		if (transactionId != other.transactionId) {

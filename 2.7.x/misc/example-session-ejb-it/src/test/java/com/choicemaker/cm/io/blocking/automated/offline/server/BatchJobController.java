@@ -25,6 +25,7 @@ public class BatchJobController {
 		} else {
 			em.merge(batchJob);
 		}
+		em.flush();
 		return batchJob;
 	}
 
@@ -46,5 +47,6 @@ public class BatchJobController {
 	public void delete(BatchJobBean batchJob) {
 		batchJob = em.merge(batchJob);
 		em.remove(batchJob);
+		em.flush();
 	}
 }
