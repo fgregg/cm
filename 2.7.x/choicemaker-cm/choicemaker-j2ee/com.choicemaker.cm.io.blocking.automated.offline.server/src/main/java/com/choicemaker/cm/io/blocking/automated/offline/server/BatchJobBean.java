@@ -60,6 +60,9 @@ public class BatchJobBean implements IControl, Serializable {
 	}
 
 	public static final String TABLE_DISCRIMINATOR = "OABA";
+	
+	public static final int MIN_PERCENTAGE_COMPLETED = 0;
+	public static final int MAX_PERCENTAGE_COMPLETED = 100;
 
 	public static enum STATUS {
 		NEW(false), QUEUED(false), STARTED(false), COMPLETED(true),
@@ -274,71 +277,71 @@ public class BatchJobBean implements IControl, Serializable {
 		}
 	}
 
-// 	// -- Backwards compatibility
+	// // -- Backwards compatibility
 
-// 	public void setRequested(Date date) {
-// 		this.timestamps.put(STATUS.NEW, date);
-// 	}
+	// public void setRequested(Date date) {
+	// this.timestamps.put(STATUS.NEW, date);
+	// }
 
 	public Date getRequested() {
 		return this.timestamps.get(STATUS.NEW);
 	}
 
-// 	public void setQueued(Date queued) {
-// 		this.timestamps.put(STATUS.QUEUED, queued);
-// 	}
+	// public void setQueued(Date queued) {
+	// this.timestamps.put(STATUS.QUEUED, queued);
+	// }
 
 	public Date getQueued() {
 		return this.timestamps.get(STATUS.QUEUED);
 	}
 
-// 	public void setStarted(Date started) {
-// 		this.timestamps.put(STATUS.STARTED, started);
-// 	}
+	// public void setStarted(Date started) {
+	// this.timestamps.put(STATUS.STARTED, started);
+	// }
 
 	public Date getStarted() {
 		return this.timestamps.get(STATUS.STARTED);
 	}
 
-// 	public void setUpdated(Date updated) {
-// 		if (!getStatus().isTerminal) {
-// 			this.timestamps.put(getStatus(), updated);
-// 		} else {
-// 			logIgnoredTransition("updated(" + updated + ")");
-// 		}
-// 	}
+	// public void setUpdated(Date updated) {
+	// if (!getStatus().isTerminal) {
+	// this.timestamps.put(getStatus(), updated);
+	// } else {
+	// logIgnoredTransition("updated(" + updated + ")");
+	// }
+	// }
 
-	public Date getUpdated() {
-		return this.timestamps.get(getStatus());
-	}
+	// public Date getUpdated() {
+	// return this.timestamps.get(getStatus());
+	// }
 
-// 	public void setCompleted(Date completed) {
-// 		this.timestamps.put(STATUS.COMPLETED, completed);
-// 	}
+	// public void setCompleted(Date completed) {
+	// this.timestamps.put(STATUS.COMPLETED, completed);
+	// }
 
 	public Date getCompleted() {
 		return this.timestamps.get(STATUS.COMPLETED);
 	}
 
-// 	public void setFailed(Date failed) {
-// 		this.timestamps.put(STATUS.FAILED, failed);
-// 	}
+	// public void setFailed(Date failed) {
+	// this.timestamps.put(STATUS.FAILED, failed);
+	// }
 
 	public Date getFailed() {
 		return this.timestamps.get(STATUS.FAILED);
 	}
 
-// 	public void setAbortRequested(Date abortRequested) {
-// 		this.timestamps.put(STATUS.ABORT_REQUESTED, abortRequested);
-// 	}
+	// public void setAbortRequested(Date abortRequested) {
+	// this.timestamps.put(STATUS.ABORT_REQUESTED, abortRequested);
+	// }
 
 	public Date getAbortRequested() {
 		return this.timestamps.get(STATUS.ABORT_REQUESTED);
 	}
 
-// 	public void setAborted(Date aborted) {
-// 		this.timestamps.put(STATUS.ABORTED, aborted);
-// 	}
+	// public void setAborted(Date aborted) {
+	// this.timestamps.put(STATUS.ABORTED, aborted);
+	// }
 
 	public Date getAborted() {
 		return this.timestamps.get(STATUS.ABORTED);
@@ -394,8 +397,13 @@ public class BatchJobBean implements IControl, Serializable {
 		return percentageComplete;
 	}
 
-	public void setPercentageComplete(int fractionComplete) {
-		this.percentageComplete = fractionComplete;
+	public void setPercentageComplete(int percentage) {
+		if (percentage < MIN_PERCENTAGE_COMPLETED || percentage > MAX_PERCENTAGE_COMPLETED) {
+			throw new IllegalArgumentException("invalid percentage: " + percentage);
+		}
+		this.percentageComplete = percentage;
+		// Update the timestamp, indirectly
+		setStatus(getStatus());
 	}
 
 	public STATUS getStatus() {
@@ -411,7 +419,7 @@ public class BatchJobBean implements IControl, Serializable {
 		return this.timestamps.get(status);
 	}
 
-  // Should be invoked only by setStatus(STATUS)
+	// Should be invoked only by setStatus(STATUS)
 	protected void setTimeStamp(STATUS status, Date date) {
 		this.timestamps.put(status, date);
 	}
@@ -421,9 +429,9 @@ public class BatchJobBean implements IControl, Serializable {
 		final int prime = 31;
 		int result = 1;
 		if (id == 0) {
-			result = prime * result + (int) (id ^ (id >>> 32));
-		} else {
 			result = hashCode0();
+		} else {
+			result = prime * result + (int) (id ^ (id >>> 32));
 		}
 		return result;
 	}
