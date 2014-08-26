@@ -10,7 +10,7 @@
 		<jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
 
 		<class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean</class>
-        <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobTimestamp</class>
+ 		<!-- class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobTimestamp</class -->
 
 		<properties>
 			<property name="eclipselink.target-server" value="JBoss" />
