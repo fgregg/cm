@@ -25,8 +25,8 @@ import javax.persistence.Transient;
 import com.choicemaker.cm.core.SerialRecordSource;
 
 /**
- * @author pcheung
- * @author rphall
+ * @author pcheung (original version)
+ * @author rphall (migrated to JPA 2.0)
  *
  */
 @NamedQuery(name = "batchParametersFindAll",
@@ -87,7 +87,7 @@ public class BatchParametersBean implements Serializable {
 		return id;
 	}
 
-	public void setId(long id) {
+	protected void setId(long id) {
 		this.id = id;
 	}
 

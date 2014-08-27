@@ -37,8 +37,8 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 
 /**
- * @author pcheung
- * @author rphall
+ * @author pcheung (original version)
+ * @author rphall (migrated to JPA 2.0)
  *
  */
 @NamedQuery(name = "batchJobFindAll",
@@ -342,7 +342,7 @@ public class BatchJobBean implements IControl, Serializable {
 		return id;
 	}
 
-	public void setId(long id) {
+	protected void setId(long id) {
 		this.id = id;
 	}
 

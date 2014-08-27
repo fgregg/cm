@@ -11,6 +11,7 @@
 
 		<class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean</class>
         <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchParametersBean</class>
+        <class>com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean</class>
 
 		<properties>
 			<property name="eclipselink.target-server" value="JBoss" />
