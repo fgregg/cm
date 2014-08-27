@@ -438,7 +438,7 @@ public class BatchJobBeanTest {
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
 		
-		job1.setDescription(new Date().toString());
+		job1.setDescription("nonsense");
 		assertTrue(!job1.getDescription().equals(job2.getDescription()));
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
