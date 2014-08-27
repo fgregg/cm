@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 
 /**
+ * @author pcheung
  * @author rphall
  *
  */
@@ -76,10 +77,10 @@ public class BatchJobBean implements IControl, Serializable {
 
 	@Id
 	@Column(name = "ID")
-	@TableGenerator(name = "CMT_SEQUENCE", table = "CMT_SEQUENCE",
+	@TableGenerator(name = "OABA_BATCHJOB", table = "CMT_SEQUENCE",
 			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
 			pkColumnValue = "OABA_BATCHJOB")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "CMT_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "OABA_BATCHJOB")
 	private long id;
 
 	@Column(name = "EXTERNAL_ID")
@@ -303,18 +304,6 @@ public class BatchJobBean implements IControl, Serializable {
 		return this.timestamps.get(STATUS.STARTED);
 	}
 
-	// public void setUpdated(Date updated) {
-	// if (!getStatus().isTerminal) {
-	// this.timestamps.put(getStatus(), updated);
-	// } else {
-	// logIgnoredTransition("updated(" + updated + ")");
-	// }
-	// }
-
-	// public Date getUpdated() {
-	// return this.timestamps.get(getStatus());
-	// }
-
 	// public void setCompleted(Date completed) {
 	// this.timestamps.put(STATUS.COMPLETED, completed);
 	// }
@@ -436,6 +425,27 @@ public class BatchJobBean implements IControl, Serializable {
 		return result;
 	}
 
+	/**
+	 * Hashcode for instances with id == 0
+	 */
+	protected int hashCode0() {
+		final int prime = 31;
+		int result = 1;
+		result =
+			prime * result
+					+ ((description == null) ? 0 : description.hashCode());
+		result =
+			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
+		result =
+			prime * result + ((timestamps == null) ? 0 : timestamps.hashCode());
+		result = prime * result + percentageComplete;
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result =
+			prime * result + (int) (transactionId ^ (transactionId >>> 32));
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -458,32 +468,9 @@ public class BatchJobBean implements IControl, Serializable {
 	}
 
 	/**
-	 * Hashcode for instances with id == 0
-	 * 
-	 * @return
-	 */
-	public int hashCode0() {
-		final int prime = 31;
-		int result = 1;
-		result =
-			prime * result
-					+ ((description == null) ? 0 : description.hashCode());
-		result =
-			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
-		result =
-			prime * result + ((timestamps == null) ? 0 : timestamps.hashCode());
-		result = prime * result + percentageComplete;
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result =
-			prime * result + (int) (transactionId ^ (transactionId >>> 32));
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
-	}
-
-	/**
 	 * Equality test for instances with id == 0
 	 */
-	public boolean equals0(BatchJobBean other) {
+	protected boolean equals0(BatchJobBean other) {
 		if (this == other) {
 			return true;
 		}

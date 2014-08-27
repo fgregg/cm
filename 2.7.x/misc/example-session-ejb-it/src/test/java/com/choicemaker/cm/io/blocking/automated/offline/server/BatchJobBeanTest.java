@@ -30,7 +30,7 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.STATUS;
 
-//import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.NamedQuery;
+//import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.k;
 
 /*
  import javax.ejb.EJB;
@@ -69,8 +69,8 @@ public class BatchJobBeanTest {
 			STATUS.QUEUED, STATUS.STARTED, STATUS.ABORT_REQUESTED).toArray(
 			new STATUS[0]);
 
-	private static final STATUS[] _terminal = EnumSet.of(STATUS.COMPLETED,
-			STATUS.FAILED, STATUS.ABORTED, STATUS.CLEAR).toArray(new STATUS[0]);
+//	private static final STATUS[] _terminal = EnumSet.of(STATUS.COMPLETED,
+//			STATUS.FAILED, STATUS.ABORTED, STATUS.CLEAR).toArray(new STATUS[0]);
 
 	private final Random random = new Random(new Date().getTime());
 
@@ -82,10 +82,10 @@ public class BatchJobBeanTest {
 		return _nonterminal[i];
 	}
 
-	private STATUS getRandomTerminalStatus() {
-		int i = random.nextInt(_terminal.length);
-		return _terminal[i];
-	}
+//	private STATUS getRandomTerminalStatus() {
+//		int i = random.nextInt(_terminal.length);
+//		return _terminal[i];
+//	}
 
 	@Test
 	public void testBatchJobController() {
@@ -147,6 +147,8 @@ public class BatchJobBeanTest {
 		controller.save(job);
 		assertTrue(job.getId() != 0);
 		final long id = job.getId();
+		controller.detach(job);
+
 		assertTrue(job.getExternalId() == null);
 		final String externalId = "external test id";
 		job.setExternalId(externalId);
