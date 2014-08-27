@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.LinkedList;
@@ -14,17 +15,8 @@ import javax.ejb.EJB;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.asset.FileAsset;
-import org.jboss.shrinkwrap.api.importer.ZipImporter;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.jboss.shrinkwrap.resolver.api.maven.MavenFormatStage;
-import org.jboss.shrinkwrap.resolver.api.maven.MavenStrategyStage;
-import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
-import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -41,51 +33,41 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.STAT
 @RunWith(Arquillian.class)
 public class BatchJobBeanTest {
 
-	private static final String MAVEN_COORDINATE_SEPARATOR = ":";
+	private static final String PROJECT_POM = "pom.xml";
 
-	public static final String PROJECT_POM = "pom.xml";
-
-	public static final String DEPENDENCIES_POM =
+	private static final String DEPENDENCIES_POM =
 		"src/test/dependencies/dependency-pom.xml";
-
-	public static final String PERSISTENCE_CONFIGURATION =
-		"src/test/resources/jboss/sqlserver/persistence.xml";
-
-	public static final String EJB_MAVEN_GROUPID = "com.choicemaker.cm";
-
-	public static final String EJB_MAVEN_ARTIFACTID =
-		"com.choicemaker.cm.io.blocking.automated.offline.server";
-
-	public static final String EJB_MAVEN_VERSION = "2.7.1-SNAPSHOT";
-
-	public static final String EJB_MAVEN_COORDINATES = new StringBuilder()
-			.append(EJB_MAVEN_GROUPID).append(MAVEN_COORDINATE_SEPARATOR)
-			.append(EJB_MAVEN_ARTIFACTID).append(MAVEN_COORDINATE_SEPARATOR)
-			.append(EJB_MAVEN_VERSION).toString();
-
-	public final int MAX_TEST_ITERATIONS = 10;
 
 	private static final STATUS[] _nonterminal = EnumSet.of(STATUS.NEW,
 			STATUS.QUEUED, STATUS.STARTED, STATUS.ABORT_REQUESTED).toArray(
 			new STATUS[0]);
-
-//	private static final STATUS[] _terminal = EnumSet.of(STATUS.COMPLETED,
-//			STATUS.FAILED, STATUS.ABORTED, STATUS.CLEAR).toArray(new STATUS[0]);
-
-	private final Random random = new Random(new Date().getTime());
-
-	@EJB
-	protected BatchJobController controller;
 
 	private STATUS getRandomNonTerminalStatus() {
 		int i = random.nextInt(_nonterminal.length);
 		return _nonterminal[i];
 	}
 
-//	private STATUS getRandomTerminalStatus() {
-//		int i = random.nextInt(_terminal.length);
-//		return _terminal[i];
-//	}
+	@Deployment
+	public static EnterpriseArchive createEarArchive() {
+		List<Class<?>> testClasses = new ArrayList<>();
+		testClasses.add(BatchJobBeanTest.class);
+		testClasses.add(BatchJobController.class);
+
+		JavaArchive ejb =
+			DeploymentUtils.createEjbJar(PROJECT_POM, testClasses);
+
+		File[] deps = DeploymentUtils.createTestDependencies(DEPENDENCIES_POM);
+
+		EnterpriseArchive retVal = DeploymentUtils.createEarArchive(ejb, deps);
+		return retVal;
+	}
+
+	public static final int MAX_TEST_ITERATIONS = 10;
+
+	private final Random random = new Random(new Date().getTime());
+
+	@EJB
+	protected BatchJobController controller;
 
 	@Test
 	public void testBatchJobController() {
@@ -414,30 +396,30 @@ public class BatchJobBeanTest {
 		BatchJobBean job2 = new BatchJobBean();
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
-		
+
 		// Change something on one of the jobs and verify inequality
 		job1.setDescription(new Date().toString());
 		assertTrue(!job1.getDescription().equals(job2.getDescription()));
 		assertTrue(!job1.equals(job2));
 		assertTrue(job1.hashCode() != job2.hashCode());
-		
+
 		// Restore equality
 		job2.setDescription(job1.getDescription());
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
-		
+
 		// Verify a non-persistent job is not equal to a persistent job
 		job1 = controller.save(job1);
 		assertTrue(!job1.equals(job2));
 		assertTrue(job1.hashCode() != job2.hashCode());
-		
+
 		// Verify that equality of persisted jobs is set only by persistence id
 		controller.detach(job1);
 		job2 = controller.find(job1.getId());
 		controller.detach(job2);
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
-		
+
 		job1.setDescription("nonsense");
 		assertTrue(!job1.getDescription().equals(job2.getDescription()));
 		assertTrue(job1.equals(job2));
@@ -600,95 +582,6 @@ public class BatchJobBeanTest {
 		}
 
 		assertTrue(initialCount == controller.findAll().size());
-	}
-
-	public static JavaArchive createEjbJar() {
-		// Create a copy of the EJB jar
-		// PomEquippedResolveStage pom =
-		// Maven.resolver().loadPomFromFile(PROJECT_POM);
-		PomEquippedResolveStage pom =
-			Maven.resolver().loadPomFromFile(PROJECT_POM);
-		File jarFile =
-			pom.resolve(EJB_MAVEN_COORDINATES).withoutTransitivity()
-					.asSingleFile();
-		JavaArchive retVal =
-			ShrinkWrap.create(ZipImporter.class, "ejb.jar").importFrom(jarFile)
-					.as(JavaArchive.class);
-
-		// Flag this JAR to CDI as containing injectable beans
-		retVal.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-
-		// Add persistence configuration
-		File f = new File(PERSISTENCE_CONFIGURATION);
-		assertTrue(f.exists());
-		FileAsset fileAsset = new FileAsset(f);
-		retVal.addAsManifestResource(fileAsset, "persistence.xml");
-
-		// Add test classes to JAR
-		retVal.addClass(BatchJobBeanTest.class);
-		retVal.addClass(BatchJobController.class);
-
-		// Print the JAR contents
-		System.out.println();
-		System.out.println("EJB JAR:");
-		System.out.println(retVal.toString(true));
-		System.out.println();
-		return retVal;
-	}
-
-	public static File[] createTestDependencies() {
-
-		// Break out steps for easier debugging
-		File f0 = new File(DEPENDENCIES_POM);
-		assertTrue(f0.exists());
-		PomEquippedResolveStage pom =
-			Maven.resolver().loadPomFromFile(DEPENDENCIES_POM);
-		pom = pom.importDependencies(ScopeType.COMPILE);
-		MavenStrategyStage mss = pom.resolve();
-		assertTrue(mss != null);
-		MavenFormatStage mfs = mss.withTransitivity();
-		assertTrue(mfs != null);
-
-		File[] retVal = mfs.asFile();
-
-		// Print the dependencies
-		System.out.println();
-		System.out.println("Test dependencies:");
-		for (File f : retVal) {
-			System.out.println(f.getAbsolutePath());
-		}
-		System.out.println();
-
-		return retVal;
-	}
-
-	@Deployment
-	public static EnterpriseArchive createEarArchive() {
-
-		// Create the EAR
-		EnterpriseArchive retVal = ShrinkWrap.create(EnterpriseArchive.class);
-
-		// Create and add the EJB
-		JavaArchive ejb1 = createEjbJar();
-		retVal.addAsModule(ejb1);
-		// retVal.addAsLibrary(ejb1);
-
-		// Add the EJB dependencies
-		try {
-			File[] deps = createTestDependencies();
-			retVal.addAsLibraries(deps);
-		} catch (Exception x) {
-			String msg =
-				"WARNING: failed to add test dependencies: " + x.toString();
-			System.out.println(msg);
-		}
-
-		// Print the EAR contents
-		System.out.println();
-		System.out.println("Deployment EAR:");
-		System.out.println(retVal.toString(true));
-		System.out.println();
-		return retVal;
 	}
 
 }

@@ -63,10 +63,12 @@ public class EarTest {
 		retVal.addClass(EarTest.class);
 
 		// Print the JAR contents
+		/*
 		System.out.println();
 		System.out.println("EJB JAR:");
 		System.out.println(retVal.toString(true));
 		System.out.println();
+		*/
 		return retVal;
 	}
 
@@ -78,40 +80,28 @@ public class EarTest {
 		File[] directDependencies =
 			pom.importDependencies(ScopeType.COMPILE).resolve()
 					.withTransitivity().asFile();
+		/*
 		System.out.println();
 		System.out.println("Direct dependencies:");
+    */
 		for (File f : directDependencies) {
 			if (!f.getName().contains(EJB_MAVEN_ARTIFACTID)) {
-				System.out.println(f.getAbsolutePath());
+				// System.out.println(f.getAbsolutePath());
 				files.add(f);
 			} else {
 				System.out.println("Skipping: " + f.getName());
 			}
 		}
 
-//		PomEquippedResolveStage dependenciesPOM =
-//			Maven.resolver().loadPomFromFile(DEPENDENCIES_POM);
-//		File[] ejbDependencies =
-//			dependenciesPOM.importDependencies(ScopeType.COMPILE).resolve()
-//					.withTransitivity().asFile();
-//		System.out.println();
-//		System.out.println("EJB dependencies:");
-//		for (File f : ejbDependencies) {
-//			if (!f.getName().contains(EJB_MAVEN_ARTIFACTID)) {
-//				System.out.println(f.getAbsolutePath());
-//				files.add(f);
-//			} else {
-//				System.out.println("Skipping: " + f.getName());
-//			}
-//		}
-
 		File[] retVal = files.toArray(new File[files.size()]);
+		/*
 		System.out.println();
 		System.out.println("Test dependencies:");
 		for (File f : directDependencies) {
 			System.out.println(f.getAbsolutePath());
 		}
 		System.out.println();
+		*/
 
 		return retVal;
 	}
@@ -130,10 +120,12 @@ public class EarTest {
 				"WARNING: failed to add test dependencies: " + x.toString();
 			System.out.println(msg);
 		}
+		/*
 		System.out.println();
 		System.out.println("Deployment EAR:");
 		System.out.println(retVal.toString(true));
 		System.out.println();
+		*/
 		return retVal;
 	}
 
@@ -143,7 +135,7 @@ public class EarTest {
 		Assert.assertTrue (helloWorld != null);
 		String hello = helloWorld.sayHello();
 		Assert.assertTrue(hello != null);
-		System.out.println(this.getClass().getSimpleName() + ": " +hello);
+		// System.out.println(this.getClass().getSimpleName() + ": " +hello);
 	}
 
 }
