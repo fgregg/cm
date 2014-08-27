@@ -33,8 +33,10 @@ query = "Select status from StatusLogBean status")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_STATUS_LOG")
 public class StatusLogBean implements Serializable {
-
-	private static final long serialVersionUID = 271L;
+	
+	public static final int DEFAULT_VERSION = 271;
+	
+	private static final long serialVersionUID = DEFAULT_VERSION;
 
 	public static enum NamedQuery {
 		FIND_ALL("statusLogFindAll");
@@ -60,7 +62,7 @@ public class StatusLogBean implements Serializable {
 	private int statusId;
 
 	@Column(name = "VERSION")
-	private int version;
+	private int version = DEFAULT_VERSION;
 
 	@Column(name = "INFO")
 	private String info;
