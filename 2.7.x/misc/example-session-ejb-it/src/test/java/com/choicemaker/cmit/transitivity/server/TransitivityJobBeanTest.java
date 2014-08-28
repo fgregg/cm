@@ -270,8 +270,8 @@ public class TransitivityJobBeanTest {
 			final STATUS sts = getRandomNonTerminalStatus();
 			final int v1 =
 				random.nextInt(TransitivityJobBean.MAX_PERCENTAGE_COMPLETED + 1);
-			job.setStatus(sts);
 			before = new Date();
+			job.setStatus(sts);
 			job.setPercentageComplete(v1);
 			after = new Date();
 
