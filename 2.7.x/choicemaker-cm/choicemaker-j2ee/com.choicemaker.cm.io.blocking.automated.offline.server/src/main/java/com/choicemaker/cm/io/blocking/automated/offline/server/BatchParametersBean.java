@@ -74,7 +74,7 @@ public class BatchParametersBean implements Serializable {
 	@Column(name = "LOW_THRESHOLD")
 	private float lowThreshold;
 	
-	@Column(name = "matchThreshold")
+	@Column(name = "HIGH_THRESHOLD")
 	private float highThreshold;
 
 	@Transient

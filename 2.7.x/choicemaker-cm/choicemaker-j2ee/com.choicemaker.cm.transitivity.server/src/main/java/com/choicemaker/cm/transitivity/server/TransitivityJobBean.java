@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.server;
+package com.choicemaker.cm.transitivity.server;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -36,8 +36,9 @@ import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 
+
 /**
- * A BatchJobBean tracks the progress of a (long-running) offline blocking
+ * A TransitivityJobBean tracks the progress of a (long-running) transitivity
  * process. A successful request goes through a sequence of states: NEW, QUEUED,
  * STARTED, and COMPLETED. A request may be aborted at any point, in which
  * case it goes through the ABORT_REQUESTED and the ABORT states.</p>
@@ -46,29 +47,27 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
  * progress. It can provide
  * this estimate as a fraction between 0 and 100 (inclusive) by updating
  * the getFractionComplete() field.</p>
- * 
+ *
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)
  *
  */
-@NamedQuery(name = "batchJobFindAll",
-		query = "Select job from BatchJobBean job")
+@NamedQuery(name = "transitivityJobFindAll",
+query = "Select job from TransitivityJobBean job")
 @Entity
-@Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_BATCHJOB")
-public class BatchJobBean implements IControl, Serializable {
+@Table(/* schema = "CHOICEMAKER", */name = "CMT_TRANSITIVITY_JOB")
+public class TransitivityJobBean implements IControl, Serializable {
 
 	private static final long serialVersionUID = 271L;
 
-	private static Logger log = Logger.getLogger(BatchJobBean.class.getName());
+	private static Logger log = Logger.getLogger(TransitivityJobBean.class.getName());
 
-	public static final String TABLE_DISCRIMINATOR = "OABA";
-	
 	public static final int MIN_PERCENTAGE_COMPLETED = 0;
 
 	public static final int MAX_PERCENTAGE_COMPLETED = 100;
 
 	public static enum NamedQuery {
-		FIND_ALL("batchJobFindAll");
+		FIND_ALL("transitivityJobFindAll");
 		public final String name;
 
 		NamedQuery(String name) {
@@ -88,44 +87,49 @@ public class BatchJobBean implements IControl, Serializable {
 
 	@Id
 	@Column(name = "ID")
-	@TableGenerator(name = "OABA_BATCHJOB", table = "CMT_SEQUENCE",
+	@TableGenerator(name = "TRANSITIVITYJOB", table = "CMT_SEQUENCE",
 			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-			pkColumnValue = "OABA_BATCHJOB")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "OABA_BATCHJOB")
+			pkColumnValue = "TRANSITIVITYJOB")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TRANSITIVITYJOB")
 	private long id;
-
-	@Column(name = "EXTERNAL_ID")
-	private String externalId;
-
-	@Column(name = "TRANSACTION_ID")
-	private long transactionId;
-
-	@Column(name = "TYPE")
-	private final String type = TABLE_DISCRIMINATOR;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
 
-	@Column(name = "FRACTION_COMPLETE")
-	private int percentageComplete;
-
 	@Column(name = "STATUS")
 	private STATUS status;
 
+	@Column(name = "FRACTION_COMPLETE")
+	private int percentageComplete;
+
+	@Column(name = "MODEL")
+	private String model;
+
+	@Column(name = "MATCH")
+	private float match;
+
+	@Column(name = "DIFFER")
+	private float differ;
+	
 	@ElementCollection
 	@MapKeyColumn(name = "STATUS")
 	@Column(name = "TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
-	@CollectionTable(name = "CMT_OABA_BATCHJOB_TIMESTAMPS",
-			joinColumns = @JoinColumn(name = "BATCHJOB_ID"))
+	@CollectionTable(name = "CMT_TRANSITIVITYJOB_TIMESTAMPS",
+			joinColumns = @JoinColumn(name = "TRANSITIVITYJOB_ID"))
 	private Map<STATUS, Date> timestamps = new HashMap<>();
-
+	
 	// -- Construction
-
-	public BatchJobBean() {
+	
+	protected TransitivityJobBean() {
 		setStatus(STATUS.NEW);
 	}
-
+	
+	public TransitivityJobBean(String model) {
+		setModel(model);
+		setStatus(STATUS.NEW);
+	}
+	
 	// -- State machine
 
 	private static Map<STATUS, EnumSet<STATUS>> allowedTransitions =
@@ -265,15 +269,15 @@ public class BatchJobBean implements IControl, Serializable {
 
 	private void logTransition(STATUS newStatus) {
 		String msg =
-			getId() + ", '" + getExternalId() + "': transitioning from "
-					+ getStatusAsString() + " to " + newStatus;
+			getId() + ", '" + getModel() + "': transitioning from "
+					+ getStatus() + " to " + newStatus;
 		log.warn(msg);
 	}
 
 	private void logIgnoredTransition(String transition) {
 		String msg =
-			getId() + ", '" + getExternalId() + "': " + transition
-					+ " ignored (status == '" + getStatusAsString() + "'";
+			getId() + ", '" + getModel() + "': " + transition
+					+ " ignored (status == '" + getStatus() + "'";
 		log.warn(msg);
 	}
 
@@ -356,26 +360,6 @@ public class BatchJobBean implements IControl, Serializable {
 		this.id = id;
 	}
 
-	public String getExternalId() {
-		return externalId;
-	}
-
-	public void setExternalId(String externalId) {
-		this.externalId = externalId;
-	}
-
-	public long getTransactionId() {
-		return transactionId;
-	}
-
-	public void setTransactionId(long transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	public String getType() {
-		return type;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -384,25 +368,43 @@ public class BatchJobBean implements IControl, Serializable {
 		this.description = description;
 	}
 
-	public String getStatusAsString() {
-		return status.name();
-	}
-
-	public void setStatusAsString(String status) {
-		setStatus(STATUS.valueOf(status));
-	}
-
 	public int getPercentageComplete() {
 		return percentageComplete;
 	}
 
-	public void setPercentageComplete(int percentage) {
-		if (percentage < MIN_PERCENTAGE_COMPLETED || percentage > MAX_PERCENTAGE_COMPLETED) {
-			throw new IllegalArgumentException("invalid percentage: " + percentage);
+	public void setPercentageComplete(int percentageComplete) {
+		this.percentageComplete = percentageComplete;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	protected void setModel(String model) {
+		if (model == "null") {
+			throw new IllegalArgumentException("null model");
 		}
-		this.percentageComplete = percentage;
-		// Update the timestamp, indirectly
-		setStatus(getStatus());
+		model = model.trim();
+		if (model.isEmpty()) {
+			throw new IllegalArgumentException("blank model");
+		}
+		this.model = model;
+	}
+
+	public float getMatch() {
+		return match;
+	}
+
+	public void setMatch(float match) {
+		this.match = match;
+	}
+
+	public float getDiffer() {
+		return differ;
+	}
+
+	public void setDiffer(float differ) {
+		this.differ = differ;
 	}
 
 	public STATUS getStatus() {
@@ -412,6 +414,14 @@ public class BatchJobBean implements IControl, Serializable {
 	public void setStatus(STATUS currentStatus) {
 		this.status = currentStatus;
 		setTimeStamp(currentStatus, new Date());
+	}
+
+	public String getStatusAsString() {
+		return status.name();
+	}
+
+	public void setStatusAsString(String status) {
+		setStatus(STATUS.valueOf(status));
 	}
 
 	public Date getTimeStamp(STATUS status) {
@@ -444,15 +454,13 @@ public class BatchJobBean implements IControl, Serializable {
 		result =
 			prime * result
 					+ ((description == null) ? 0 : description.hashCode());
-		result =
-			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
-		result =
-			prime * result + ((timestamps == null) ? 0 : timestamps.hashCode());
+		result = prime * result + Float.floatToIntBits(differ);
+		result = prime * result + Float.floatToIntBits(match);
+		result = prime * result + ((model == null) ? 0 : model.hashCode());
 		result = prime * result + percentageComplete;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result =
-			prime * result + (int) (transactionId ^ (transactionId >>> 32));
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+			prime * result + ((timestamps == null) ? 0 : timestamps.hashCode());
 		return result;
 	}
 
@@ -467,7 +475,7 @@ public class BatchJobBean implements IControl, Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		BatchJobBean other = (BatchJobBean) obj;
+		TransitivityJobBean other = (TransitivityJobBean) obj;
 		if (id != other.id) {
 			return false;
 		}
@@ -480,13 +488,17 @@ public class BatchJobBean implements IControl, Serializable {
 	/**
 	 * Equality test for instances with id == 0
 	 */
-	protected boolean equals0(BatchJobBean other) {
-		if (this == other) {
+	protected boolean equals0(Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		if (other == null) {
+		if (obj == null) {
 			return false;
 		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		TransitivityJobBean other = (TransitivityJobBean) obj;
 		if (description == null) {
 			if (other.description != null) {
 				return false;
@@ -494,11 +506,23 @@ public class BatchJobBean implements IControl, Serializable {
 		} else if (!description.equals(other.description)) {
 			return false;
 		}
-		if (externalId == null) {
-			if (other.externalId != null) {
+		if (Float.floatToIntBits(differ) != Float.floatToIntBits(other.differ)) {
+			return false;
+		}
+		if (Float.floatToIntBits(match) != Float.floatToIntBits(other.match)) {
+			return false;
+		}
+		if (model == null) {
+			if (other.model != null) {
 				return false;
 			}
-		} else if (!externalId.equals(other.externalId)) {
+		} else if (!model.equals(other.model)) {
+			return false;
+		}
+		if (percentageComplete != other.percentageComplete) {
+			return false;
+		}
+		if (status != other.status) {
 			return false;
 		}
 		if (timestamps == null) {
@@ -508,23 +532,56 @@ public class BatchJobBean implements IControl, Serializable {
 		} else if (!timestamps.equals(other.timestamps)) {
 			return false;
 		}
-		if (percentageComplete != other.percentageComplete) {
-			return false;
-		}
-		if (status != other.status) {
-			return false;
-		}
-		if (transactionId != other.transactionId) {
-			return false;
-		}
-		if (type == null) {
-			if (other.type != null) {
-				return false;
-			}
-		} else if (!type.equals(other.type)) {
-			return false;
-		}
 		return true;
 	}
 
-}
+	@Override
+	public String toString() {
+		return "TransitivityJobBean [id=" + id + ", status=" + status
+				+ ", model=" + model + "]";
+	}
+
+//	// -- Implementation
+//
+//	/** This method publishes the status to a topic queue.
+//	 * 
+//	 * @param status
+//	 */
+//	private void publishStatus(){
+//		throw new Error("not yet implemented");
+////		TopicConnection conn = null;
+////		TopicSession session = null;
+////		try {
+////			conn = EJBConfiguration.getInstance().getTopicConnectionFactory().createTopicConnection();
+////			session = conn.createTopicSession(false,  TopicSession.AUTO_ACKNOWLEDGE);
+////			conn.start();
+////			Topic topic = EJBConfiguration.getInstance().getTransStatusTopic();
+////			TopicPublisher pub = session.createPublisher(topic);
+////			ObjectMessage notifMsg = session.createObjectMessage(getId ());
+////			pub.publish(notifMsg);
+////			pub.close();
+////		}
+////		catch (Exception e) {
+////			log.error(e.toString(),e);
+////		} 
+////		finally {
+////			if (session != null) {
+////				try {
+////					session.close();
+////				} catch (Exception e) {
+////					log.error(e);
+////				}
+////			}
+////			if (conn != null) {
+////				try {
+////					conn.close();
+////				} catch (Exception e) {
+////					log.error(e);
+////				}
+////			}
+////		}
+////		log.debug("...finished published status");
+//	}
+
+} // TransitivityJobBean
+

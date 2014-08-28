@@ -4,7 +4,7 @@
 >
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.choicemaker.fake.ejb.ejb</groupId>
+  <groupId>com.choicemaker.cmit.fake.ejb.ejb</groupId>
   <artifactId>com.choicemaker.fake.stateless-01-IT</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Stateless EJB Integration Test</name>
@@ -139,6 +139,11 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.transitivity.server</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>

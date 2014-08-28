@@ -1,4 +1,4 @@
-package com.choicemaker.cm.io.blocking.automated.offline.server;
+package com.choicemaker.cmit.utils;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,31 +17,14 @@ import org.jboss.shrinkwrap.resolver.api.maven.MavenStrategyStage;
 import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 
-class DeploymentUtils {
+public class DeploymentUtils {
 
-	private static final String MAVEN_COORDINATE_SEPARATOR = ":";
+	public static final String PROJECT_POM = "pom.xml";
 
-	static final String PROJECT_POM = "pom.xml";
+	public static final String PERSISTENCE_CONFIGURATION =
+			"src/test/resources/jboss/sqlserver/persistence.xml";
 
-	static final String DEPENDENCIES_POM =
-		"src/test/dependencies/dependency-pom.xml";
-
-	static final String PERSISTENCE_CONFIGURATION =
-		"src/test/resources/jboss/sqlserver/persistence.xml";
-
-	static final String EJB_MAVEN_GROUPID = "com.choicemaker.cm";
-
-	static final String EJB_MAVEN_ARTIFACTID =
-		"com.choicemaker.cm.io.blocking.automated.offline.server";
-
-	static final String EJB_MAVEN_VERSION = "2.7.1-SNAPSHOT";
-
-	static final String EJB_MAVEN_COORDINATES = new StringBuilder()
-			.append(EJB_MAVEN_GROUPID).append(MAVEN_COORDINATE_SEPARATOR)
-			.append(EJB_MAVEN_ARTIFACTID).append(MAVEN_COORDINATE_SEPARATOR)
-			.append(EJB_MAVEN_VERSION).toString();
-
-	static JavaArchive createEjbJar(String projectPOM, List<Class<?>> testClasses) {
+	public static JavaArchive createEjbJar(String projectPOM, String MavenCoordinates, List<Class<?>> testClasses, String persistenceConfiguration) {
 		if (projectPOM == null) {
 			throw new IllegalArgumentException("null POM");
 		}
@@ -55,7 +38,7 @@ class DeploymentUtils {
 		PomEquippedResolveStage pom =
 			Maven.resolver().loadPomFromFile(projectPOM);
 		File jarFile =
-			pom.resolve(EJB_MAVEN_COORDINATES).withoutTransitivity()
+			pom.resolve(MavenCoordinates).withoutTransitivity()
 					.asSingleFile();
 		JavaArchive retVal =
 			ShrinkWrap.create(ZipImporter.class, "ejb.jar").importFrom(jarFile)
@@ -65,10 +48,12 @@ class DeploymentUtils {
 		retVal.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 
 		// Add persistence configuration
-		File f = new File(PERSISTENCE_CONFIGURATION);
-		assertTrue(f.exists());
-		FileAsset fileAsset = new FileAsset(f);
-		retVal.addAsManifestResource(fileAsset, "persistence.xml");
+		if (persistenceConfiguration != null) {
+			File f = new File(persistenceConfiguration);
+			assertTrue(f.exists());
+			FileAsset fileAsset = new FileAsset(f);
+			retVal.addAsManifestResource(fileAsset, "persistence.xml");
+		}
 
 		// Add test classes to JAR
 		for (Class<?> testClass : testClasses) {
@@ -85,7 +70,7 @@ class DeploymentUtils {
 		return retVal;
 	}
 
-	static File[] createTestDependencies(String dependenciesPOM) {
+	public static File[] createTestDependencies(String dependenciesPOM) {
 		if (dependenciesPOM == null) {
 			throw new IllegalArgumentException("null POM");
 		}
@@ -116,7 +101,7 @@ class DeploymentUtils {
 		return retVal;
 	}
 
-	static EnterpriseArchive createEarArchive(JavaArchive ejb, File[] dependencies) {
+	public static EnterpriseArchive createEarArchive(JavaArchive ejb, File[] dependencies) {
 		// Create the EAR
 		EnterpriseArchive retVal = ShrinkWrap.create(EnterpriseArchive.class);
 

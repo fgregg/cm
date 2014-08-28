@@ -1,5 +1,9 @@
-package com.choicemaker.cm.io.blocking.automated.offline.server;
+package com.choicemaker.cmit.io.blocking.automated.offline.server;
 
+import static com.choicemaker.cmit.io.blocking.automated.offline.server.BatchDeploymentUtils.DEPENDENCIES_POM;
+import static com.choicemaker.cmit.io.blocking.automated.offline.server.BatchDeploymentUtils.EJB_MAVEN_COORDINATES;
+import static com.choicemaker.cmit.utils.DeploymentUtils.PERSISTENCE_CONFIGURATION;
+import static com.choicemaker.cmit.utils.DeploymentUtils.PROJECT_POM;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -17,13 +21,11 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean;
+import com.choicemaker.cmit.utils.DeploymentUtils;
+
 @RunWith(Arquillian.class)
 public class StatusLogBeanTest {
-
-	private static final String PROJECT_POM = DeploymentUtils.PROJECT_POM;
-
-	private static final String DEPENDENCIES_POM =
-		DeploymentUtils.DEPENDENCIES_POM;
 
 	public final int MAX_TEST_ITERATIONS = 10;
 
@@ -33,7 +35,8 @@ public class StatusLogBeanTest {
 		testClasses.add(StatusLogBeanTest.class);
 		testClasses.add(StatusLogController.class);
 		JavaArchive ejb1 =
-			DeploymentUtils.createEjbJar(PROJECT_POM, testClasses);
+			DeploymentUtils.createEjbJar(PROJECT_POM, EJB_MAVEN_COORDINATES,
+					testClasses, PERSISTENCE_CONFIGURATION);
 
 		File[] deps = DeploymentUtils.createTestDependencies(DEPENDENCIES_POM);
 

@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -17,8 +18,8 @@
 
   <properties>
 		<!-- JBoss dependency versions -->
-		<version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
-		<version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
+    <version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
+    <version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
 
 		<!-- maven-compiler-plugin -->
     <plugin.maven-compiler.version>3.1</plugin.maven-compiler.version>
@@ -27,7 +28,7 @@
     <plugin.maven-compiler.target>1.7</plugin.maven-compiler.target>
 
 		<!-- other plugin versions -->
-		<plugin.ejb.version>2.3</plugin.ejb.version>
+    <plugin.ejb.version>2.3</plugin.ejb.version>
 
     <!-- Eclipse 2 plugin parameters -->
     <eclipse.plugin.runtime.library.name>oaba-server.jar</eclipse.plugin.runtime.library.name>
@@ -93,13 +94,22 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId><dependencies><dependency><groupId>com.choicemaker.cm</groupId><artifactId>choicemaker-assembly</artifactId><version>2.7.1-SNAPSHOT</version></dependency></dependencies>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>com.choicemaker.cm</groupId>
+            <artifactId>choicemaker-assembly</artifactId>
+            <version>2.7.1-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <id>assembly</id>
             <phase>package</phase>
             <configuration>
-              <descriptorRefs><descriptorRef>cm-std-assembly</descriptorRef></descriptorRefs>
+              <descriptorRefs>
+                <descriptorRef>cm-std-assembly</descriptorRef>
+              </descriptorRefs>
             </configuration>
             <goals>
               <goal>single</goal>
@@ -114,7 +124,7 @@
           <execution>
             <id>javadoc</id>
             <phase>package</phase>
-            <configuration/>
+            <configuration />
             <goals>
               <goal>jar</goal>
             </goals>
@@ -173,26 +183,20 @@
       <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
     </dependency>
     <dependency>
-        <groupId>org.eclipse.persistence</groupId>
-        <artifactId>javax.persistence</artifactId>
-        <version>2.1.0</version>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+      <version>2.1.0</version>
     </dependency>
     <dependency>
       <groupId>javaee</groupId>
       <artifactId>javaee-api</artifactId>
       <scope>provided</scope>
     </dependency>
-<!--
     <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
--->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
   </dependencies>
 
 </project>

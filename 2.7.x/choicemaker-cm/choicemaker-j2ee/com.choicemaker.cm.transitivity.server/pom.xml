@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -22,6 +23,15 @@
 
   <build>
     <plugins>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -70,13 +80,22 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId><dependencies><dependency><groupId>com.choicemaker.cm</groupId><artifactId>choicemaker-assembly</artifactId><version>2.7.1-SNAPSHOT</version></dependency></dependencies>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>com.choicemaker.cm</groupId>
+            <artifactId>choicemaker-assembly</artifactId>
+            <version>2.7.1-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <id>assembly</id>
             <phase>package</phase>
             <configuration>
-              <descriptorRefs><descriptorRef>cm-std-assembly</descriptorRef></descriptorRefs>
+              <descriptorRefs>
+                <descriptorRef>cm-std-assembly</descriptorRef>
+              </descriptorRefs>
             </configuration>
             <goals>
               <goal>single</goal>
@@ -91,7 +110,7 @@
           <execution>
             <id>javadoc</id>
             <phase>package</phase>
-            <configuration/>
+            <configuration />
             <goals>
               <goal>jar</goal>
             </goals>
@@ -148,6 +167,11 @@
       <artifactId>com.choicemaker.cm.transitivity.core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+      <version>2.1.0</version>
+    </dependency>
+    <dependency>
       <groupId>javaee</groupId>
       <artifactId>javaee-api</artifactId>
       <scope>provided</scope>
@@ -157,24 +181,6 @@
       <artifactId>log4j</artifactId>
       <scope>provided</scope>
     </dependency>
-<!--
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
-    </dependency>
--->
   </dependencies>
 
 </project>

@@ -1,4 +1,4 @@
-package com.choicemaker.cm.io.blocking.automated.offline.server;
+package com.choicemaker.cmit.io.blocking.automated.offline.server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.NamedQuery;
 
 @Stateless

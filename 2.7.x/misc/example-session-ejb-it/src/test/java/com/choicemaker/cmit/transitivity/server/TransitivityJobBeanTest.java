@@ -1,5 +1,9 @@
-package com.choicemaker.cm.io.blocking.automated.offline.server;
+package com.choicemaker.cmit.transitivity.server;
 
+import static com.choicemaker.cmit.transitivity.server.TransitivityDeploymentUtils.DEPENDENCIES_POM;
+import static com.choicemaker.cmit.transitivity.server.TransitivityDeploymentUtils.EJB_MAVEN_COORDINATES;
+import static com.choicemaker.cmit.utils.DeploymentUtils.PERSISTENCE_CONFIGURATION;
+import static com.choicemaker.cmit.utils.DeploymentUtils.PROJECT_POM;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -20,23 +24,18 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.STATUS;
-
-//import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.k;
-
-/*
- import javax.ejb.EJB;
- import org.jboss.shrinkwrap.api.asset.EmptyAsset;
- import org.junit.Assert;
- */
+import com.choicemaker.cm.transitivity.server.TransitivityJobBean;
+import com.choicemaker.cm.transitivity.server.TransitivityJobBean.STATUS;
+import com.choicemaker.cmit.utils.DeploymentUtils;
 
 @RunWith(Arquillian.class)
-public class BatchJobBeanTest {
+public class TransitivityJobBeanTest {
 
-	private static final String PROJECT_POM = "pom.xml";
+	public static final int MAX_TEST_ITERATIONS = 10;
 
-	private static final String DEPENDENCIES_POM =
-		"src/test/dependencies/dependency-pom.xml";
+	static final String FAKE_MODEL = "fake";
+
+	final protected Random random = new Random(new Date().getTime());
 
 	private static final STATUS[] _nonterminal = EnumSet.of(STATUS.NEW,
 			STATUS.QUEUED, STATUS.STARTED, STATUS.ABORT_REQUESTED).toArray(
@@ -46,28 +45,31 @@ public class BatchJobBeanTest {
 		int i = random.nextInt(_nonterminal.length);
 		return _nonterminal[i];
 	}
+	
+	protected float getRandomThreshold() {
+		return random.nextFloat();
+	}
 
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
 		List<Class<?>> testClasses = new ArrayList<>();
-		testClasses.add(BatchJobBeanTest.class);
-		testClasses.add(BatchJobController.class);
+		testClasses.add(TransitivityJobBeanTest.class);
+		testClasses.add(TransitivityJobController.class);
 
 		JavaArchive ejb =
-			DeploymentUtils.createEjbJar(PROJECT_POM, testClasses);
+			DeploymentUtils.createEjbJar(PROJECT_POM, EJB_MAVEN_COORDINATES,
+					testClasses, PERSISTENCE_CONFIGURATION);
 
-		File[] deps = DeploymentUtils.createTestDependencies(DEPENDENCIES_POM);
+		File[] deps =
+			DeploymentUtils
+					.createTestDependencies(DEPENDENCIES_POM);
 
 		EnterpriseArchive retVal = DeploymentUtils.createEarArchive(ejb, deps);
 		return retVal;
 	}
 
-	public static final int MAX_TEST_ITERATIONS = 10;
-
-	private final Random random = new Random(new Date().getTime());
-
 	@EJB
-	protected BatchJobController controller;
+	protected TransitivityJobController controller;
 
 	@Test
 	public void testBatchJobController() {
@@ -77,7 +79,7 @@ public class BatchJobBeanTest {
 	@Test
 	public void testConstruction() {
 		Date now = new Date();
-		BatchJobBean job = new BatchJobBean();
+		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 		Date now2 = new Date();
 
 		assertTrue(0 == job.getId());
@@ -99,7 +101,7 @@ public class BatchJobBeanTest {
 		final int initialCount = controller.findAll().size();
 
 		// Create a job
-		BatchJobBean job = new BatchJobBean();
+		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 		assertTrue(job.getId() == 0);
 
 		// Save the job
@@ -107,13 +109,13 @@ public class BatchJobBeanTest {
 		assertTrue(job.getId() != 0);
 
 		// Find the job
-		BatchJobBean batchJob2 = controller.find(job.getId());
+		TransitivityJobBean batchJob2 = controller.find(job.getId());
 		assertTrue(job.getId() == batchJob2.getId());
 		assertTrue(job.equals(batchJob2));
 
 		// Delete the job
 		controller.delete(batchJob2);
-		BatchJobBean batchJob3 = controller.find(job.getId());
+		TransitivityJobBean batchJob3 = controller.find(job.getId());
 		assertTrue(batchJob3 == null);
 
 		// Check that the number of existing jobs equals the initial count
@@ -125,21 +127,21 @@ public class BatchJobBeanTest {
 		// Count existing jobs
 		final int initialCount = controller.findAll().size();
 
-		BatchJobBean job = new BatchJobBean();
+		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 		controller.save(job);
 		assertTrue(job.getId() != 0);
 		final long id = job.getId();
 		controller.detach(job);
 
-		assertTrue(job.getExternalId() == null);
+		assertTrue(job.getDescription() == null);
 		final String externalId = "external test id";
-		job.setExternalId(externalId);
+		job.setDescription(externalId);
 		controller.save(job);
 
 		job = null;
-		BatchJobBean batchJob2 = controller.find(id);
+		TransitivityJobBean batchJob2 = controller.find(id);
 		assertTrue(id == batchJob2.getId());
-		assertTrue(externalId.equals(batchJob2.getExternalId()));
+		assertTrue(externalId.equals(batchJob2.getDescription()));
 		controller.delete(batchJob2);
 
 		assertTrue(initialCount == controller.findAll().size());
@@ -153,7 +155,7 @@ public class BatchJobBeanTest {
 		List<Long> jobIds = new LinkedList<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a job
-			BatchJobBean job = new BatchJobBean();
+			TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 			assertTrue(job.getId() == 0);
 			controller.save(job);
 			final long id = job.getId();
@@ -162,14 +164,14 @@ public class BatchJobBeanTest {
 		}
 
 		// Verify the number of jobs has increased
-		List<BatchJobBean> jobs = controller.findAll();
+		List<TransitivityJobBean> jobs = controller.findAll();
 		assertTrue(jobs != null);
 		assertTrue(initialCount + MAX_TEST_ITERATIONS == jobs.size());
 
 		// Find the jobs
 		boolean isFound = false;
 		for (long jobId : jobIds) {
-			for (BatchJobBean job : jobs) {
+			for (TransitivityJobBean job : jobs) {
 				if (jobId == job.getId()) {
 					isFound = true;
 					break;
@@ -180,7 +182,7 @@ public class BatchJobBeanTest {
 
 		// Remove the job
 		for (long id : jobIds) {
-			BatchJobBean job = controller.find(id);
+			TransitivityJobBean job = controller.find(id);
 			controller.delete(job);
 		}
 
@@ -194,7 +196,7 @@ public class BatchJobBeanTest {
 		int countNullStatus = 0;
 		int countNullTimestamp = 0;
 		int count = 0;
-		for (BatchJobBean job : controller.findAll()) {
+		for (TransitivityJobBean job : controller.findAll()) {
 			++count;
 			STATUS status = job.getStatus();
 			if (status == null) {
@@ -214,91 +216,12 @@ public class BatchJobBeanTest {
 	}
 
 	@Test
-	public void testExternalId() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
-
-		// Create a job and set a value
-		BatchJobBean job = new BatchJobBean();
-		final String v1 = new Date().toString();
-		job.setExternalId(v1);
-
-		// Save the job
-		final long id1 = controller.save(job).getId();
-		assertTrue(initialCount + 1 == controller.findAll().size());
-		job = null;
-
-		// Retrieve the job
-		job = controller.find(id1);
-
-		// Check the value
-		final String v2 = job.getExternalId();
-		assertTrue(v1.equals(v2));
-
-		// Remove the job and the number of remaining jobs
-		controller.delete(job);
-		assertTrue(initialCount == controller.findAll().size());
-	}
-
-	@Test
-	public void testTransactionId() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
-
-		// Create a job and set a value
-		BatchJobBean job = new BatchJobBean();
-		final long v1 = random.nextLong();
-		job.setTransactionId(v1);
-
-		// Save the job
-		final long id1 = controller.save(job).getId();
-		assertTrue(initialCount + 1 == controller.findAll().size());
-		job = null;
-
-		// Get the job
-		job = controller.find(id1);
-
-		// Check the value
-		final long v2 = job.getTransactionId();
-		assertTrue(v1 == v2);
-
-		// Remove the job and the number of remaining jobs
-		controller.delete(job);
-		assertTrue(initialCount == controller.findAll().size());
-	}
-
-	@Test
-	public void testType() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
-
-		// Create a job and set a value
-		BatchJobBean job = new BatchJobBean();
-		assertTrue(BatchJobBean.TABLE_DISCRIMINATOR.equals(job.getType()));
-
-		// Save the job
-		final long id1 = controller.save(job).getId();
-		assertTrue(initialCount + 1 == controller.findAll().size());
-		job = null;
-
-		// Get the job
-		job = controller.find(id1);
-
-		// Check the value
-		assertTrue(BatchJobBean.TABLE_DISCRIMINATOR.equals(job.getType()));
-
-		// Remove the job and the number of remaining jobs
-		controller.delete(job);
-		assertTrue(initialCount == controller.findAll().size());
-	}
-
-	@Test
 	public void testDescription() {
 		// Count existing jobs
 		final int initialCount = controller.findAll().size();
 
 		// Create a job and set a value
-		BatchJobBean job = new BatchJobBean();
+		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 		final String v1 = new Date().toString();
 		job.setDescription(v1);
 
@@ -307,7 +230,7 @@ public class BatchJobBeanTest {
 		assertTrue(initialCount + 1 == controller.findAll().size());
 		job = null;
 
-		// Get the job
+		// Retrieve the job
 		job = controller.find(id1);
 
 		// Check the value
@@ -328,13 +251,13 @@ public class BatchJobBeanTest {
 		Date before = new Date();
 
 		// 1. Create a job and check the percentage complete
-		BatchJobBean job = new BatchJobBean();
+		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 
 		// Record a timestamp after a transition is made
 		Date after = new Date();
 
 		// Check the status and timestamp
-		assertTrue(job.getPercentageComplete() == BatchJobBean.MIN_PERCENTAGE_COMPLETED);
+		assertTrue(job.getPercentageComplete() == TransitivityJobBean.MIN_PERCENTAGE_COMPLETED);
 		Date d = job.getTimeStamp(job.getStatus());
 		assertTrue(d != null);
 		assertTrue(before.compareTo(d) <= 0);
@@ -346,7 +269,7 @@ public class BatchJobBeanTest {
 
 			final STATUS sts = getRandomNonTerminalStatus();
 			final int v1 =
-				random.nextInt(BatchJobBean.MAX_PERCENTAGE_COMPLETED + 1);
+				random.nextInt(TransitivityJobBean.MAX_PERCENTAGE_COMPLETED + 1);
 			job.setStatus(sts);
 			before = new Date();
 			job.setPercentageComplete(v1);
@@ -390,10 +313,89 @@ public class BatchJobBeanTest {
 	}
 
 	@Test
+	public void testModel() {
+		// Count existing jobs
+		final int initialCount = controller.findAll().size();
+
+		// Create a job and set a value
+		final String v1 = new Date().toString();
+		TransitivityJobBean job = new TransitivityJobBean(v1);
+
+		// Save the job
+		final long id1 = controller.save(job).getId();
+		assertTrue(initialCount + 1 == controller.findAll().size());
+		job = null;
+
+		// Retrieve the job
+		job = controller.find(id1);
+
+		// Check the value
+		final String v2 = job.getModel();
+		assertTrue(v1.equals(v2));
+
+		// Remove the job and the number of remaining jobs
+		controller.delete(job);
+		assertTrue(initialCount == controller.findAll().size());
+	}
+
+	@Test
+	public void testMatch() {
+		// Count existing jobs
+		final int initialCount = controller.findAll().size();
+
+		// Create a job and set a value
+		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
+		final float v1 = getRandomThreshold();
+		job.setMatch(v1);
+
+		// Save the job
+		final long id1 = controller.save(job).getId();
+		assertTrue(initialCount + 1 == controller.findAll().size());
+		job = null;
+
+		// Get the job
+		job = controller.find(id1);
+
+		// Check the value
+		final float v2 = job.getMatch();
+		assertTrue(v1 == v2);
+
+		// Remove the job and check the number of remaining entries
+		controller.delete(job);
+		assertTrue(initialCount == controller.findAll().size());
+	}
+
+	@Test
+	public void testDiffer() {		// Count existing jobs
+		final int initialCount = controller.findAll().size();
+
+		// Create a job and set a value
+		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
+		final float v1 = getRandomThreshold();
+		job.setDiffer(v1);
+
+		// Save the job
+		final long id1 = controller.save(job).getId();
+		assertTrue(initialCount + 1 == controller.findAll().size());
+		job = null;
+
+		// Get the job
+		job = controller.find(id1);
+
+		// Check the value
+		final float v2 = job.getDiffer();
+		assertTrue(v1 == v2);
+
+		// Remove the job and check the number of remaining entries
+		controller.delete(job);
+		assertTrue(initialCount == controller.findAll().size());
+	}
+
+	@Test
 	public void testEqualsHashCode() {
 		// Create two generic jobs and verify equality
-		BatchJobBean job1 = new BatchJobBean();
-		BatchJobBean job2 = new BatchJobBean();
+		TransitivityJobBean job1 = new TransitivityJobBean(FAKE_MODEL);
+		TransitivityJobBean job2 = new TransitivityJobBean(FAKE_MODEL);
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
 
@@ -432,7 +434,7 @@ public class BatchJobBeanTest {
 		Date before = new Date();
 
 		// 1. Create a job and check the status
-		BatchJobBean job = new BatchJobBean();
+		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 
 		// Record a timestamp after a transition is made
 		Date after = new Date();
@@ -470,13 +472,13 @@ public class BatchJobBeanTest {
 
 		// 4. Update the percentage complete
 		job.setPercentageComplete(random
-				.nextInt(BatchJobBean.MAX_PERCENTAGE_COMPLETED + 1));
+				.nextInt(TransitivityJobBean.MAX_PERCENTAGE_COMPLETED + 1));
 		assertTrue(job.getStatus().equals(STATUS.STARTED));
 
 		// 5. Mark the job as completed
 		job.markAsCompleted();
 		assertTrue(job.getStatus().equals(STATUS.COMPLETED));
-		assertTrue(job.getPercentageComplete() == BatchJobBean.MAX_PERCENTAGE_COMPLETED);
+		assertTrue(job.getPercentageComplete() == TransitivityJobBean.MAX_PERCENTAGE_COMPLETED);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();
@@ -489,12 +491,12 @@ public class BatchJobBeanTest {
 	}
 
 	@Test
-	public void testStatusAsString() {
+	public void testStatus() {
 		// Count existing jobs
 		final int initialCount = controller.findAll().size();
 
 		for (STATUS sts : STATUS.values()) {
-			BatchJobBean job = new BatchJobBean();
+			TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 			job.setStatus(sts);
 			assertTrue(sts.name().equals(job.getStatusAsString()));
 
@@ -515,7 +517,7 @@ public class BatchJobBeanTest {
 		}
 
 		for (STATUS sts : STATUS.values()) {
-			BatchJobBean job = new BatchJobBean();
+			TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 			job.setStatusAsString(sts.name());
 			assertTrue(sts.equals(job.getStatus()));
 
@@ -543,7 +545,7 @@ public class BatchJobBeanTest {
 		final Date now = new Date();
 
 		// Set the status
-		BatchJobBean job = new BatchJobBean();
+		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
 		job.setStatus(sts);
 
 		// Record a timestamp after the status is set

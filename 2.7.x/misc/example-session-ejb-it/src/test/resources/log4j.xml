@@ -21,7 +21,15 @@
       </layout>
    </appender>
 
-    <category name="com.choicemaker.fake.ejb.ejb">
+    <category name="com.choicemaker.cm.io.blocking.automated.offline.server">
+       <priority value="debug"/>
+    </category>
+
+    <category name="com.choicemaker.cm.transitivity.server">
+       <priority value="debug"/>
+    </category>
+
+    <category name="com.choicemaker.cm.fake">
        <priority value="debug"/>
     </category>
 
