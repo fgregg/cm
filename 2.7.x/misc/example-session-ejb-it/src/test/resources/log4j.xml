@@ -33,8 +33,12 @@
        <priority value="debug"/>
     </category>
 
-    <category name="org.arquillian.example">
-       <priority value="debug"/>
+    <category name="org.xnio">
+       <priority value="warn"/>
+    </category>
+
+    <category name="org.arquillian">
+       <priority value="info"/>
     </category>
 
     <root>

@@ -14,12 +14,9 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 
 /**
  * This is the EJB implemenation of the OABA IStatus interface.
@@ -32,11 +29,12 @@ import javax.persistence.TableGenerator;
 query = "Select status from StatusLogBean status")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_STATUS_LOG")
-public class StatusLogBean implements Serializable {
-	
-	public static final int DEFAULT_VERSION = 271;
+public class StatusLogBean implements Serializable, StatusLog {
 	
 	private static final long serialVersionUID = DEFAULT_VERSION;
+	
+	/** Default value when no jobId is assigned */
+	public static final long INVALID_JOBID = 0;
 
 	public static enum NamedQuery {
 		FIND_ALL("statusLogFindAll");
@@ -49,10 +47,10 @@ public class StatusLogBean implements Serializable {
 
 	@Id
 	@Column(name = "JOB_ID")
-	@TableGenerator(name = "OABA_STATUSLOG", table = "CMT_SEQUENCE",
-			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-			pkColumnValue = "OABA_STATUSLOG")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "OABA_STATUSLOG")
+//	@TableGenerator(name = "OABA_STATUSLOG", table = "CMT_SEQUENCE",
+//			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+//			pkColumnValue = "OABA_STATUSLOG")
+//	@GeneratedValue(strategy = GenerationType.TABLE, generator = "OABA_STATUSLOG")
 	private long jobId;
 
 	@Column(name = "JOB_TYPE")
@@ -66,7 +64,26 @@ public class StatusLogBean implements Serializable {
 
 	@Column(name = "INFO")
 	private String info;
+	
+	protected StatusLogBean() {
+		this(INVALID_JOBID);
+	}
 
+	protected StatusLogBean(long jobId) {
+		setJobId(jobId);
+	}
+	
+	public StatusLogBean(BatchJob batchJob) {
+		this(batchJob.getId());
+		if (BatchJobBean.isNonPersistent(batchJob)) {
+			throw new IllegalArgumentException("non-persistent batch job");
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getJobId()
+	 */
+	@Override
 	public long getJobId() {
 		return jobId;
 	}
@@ -75,10 +92,18 @@ public class StatusLogBean implements Serializable {
 		this.jobId = jobId;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getJobType()
+	 */
+	@Override
 	public String getJobType() {
 		return jobType;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setJobType(java.lang.String)
+	 */
+	@Override
 	public void setJobType(String jobType) {
 		if (jobType == null) {
 			throw new IllegalArgumentException("null job type");
@@ -86,26 +111,50 @@ public class StatusLogBean implements Serializable {
 		this.jobType = jobType;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getStatusId()
+	 */
+	@Override
 	public int getStatusId() {
 		return statusId;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setStatusId(int)
+	 */
+	@Override
 	public void setStatusId(int statusId) {
 		this.statusId = statusId;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getVersion()
+	 */
+	@Override
 	public int getVersion() {
 		return version;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setVersion(int)
+	 */
+	@Override
 	public void setVersion(int version) {
 		this.version = version;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getInfo()
+	 */
+	@Override
 	public String getInfo() {
 		return info;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setInfo(java.lang.String)
+	 */
+	@Override
 	public void setInfo(String info) {
 		this.info = info;
 	}

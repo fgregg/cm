@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchParametersBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchParametersBean.NamedQuery;
 
@@ -20,7 +21,7 @@ public class BatchParametersController {
 		if (batchParameters.getId() == 0) {
 			em.persist(batchParameters);
 		} else {
-			em.merge(batchParameters);
+			batchParameters = em.merge(batchParameters);
 		}
 		return batchParameters;
 	}
@@ -46,7 +47,7 @@ public class BatchParametersController {
 		em.flush();
 	}
 
-	public void detach(BatchParametersBean batchParameters) {
+	public void detach(BatchParameters batchParameters) {
 		em.detach(batchParameters);
 	}
 

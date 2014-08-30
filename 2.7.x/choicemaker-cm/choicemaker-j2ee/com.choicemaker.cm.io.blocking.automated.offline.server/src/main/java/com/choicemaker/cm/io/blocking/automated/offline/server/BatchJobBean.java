@@ -55,7 +55,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 		query = "Select job from BatchJobBean job")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_BATCHJOB")
-public class BatchJobBean implements IControl, Serializable {
+public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	private static final long serialVersionUID = 271L;
 
@@ -63,10 +63,6 @@ public class BatchJobBean implements IControl, Serializable {
 
 	public static final String TABLE_DISCRIMINATOR = "OABA";
 	
-	public static final int MIN_PERCENTAGE_COMPLETED = 0;
-
-	public static final int MAX_PERCENTAGE_COMPLETED = 100;
-
 	public static enum NamedQuery {
 		FIND_ALL("batchJobFindAll");
 		public final String name;
@@ -84,6 +80,21 @@ public class BatchJobBean implements IControl, Serializable {
 		private STATUS(boolean terminal) {
 			this.isTerminal = terminal;
 		}
+	}
+	
+	/** Default value for non-persistent batch jobs */
+	private static final long INVALID_BATCHJOB_ID = 0;
+
+	static boolean isInvalidBatchJobId(long id) {
+		return id == INVALID_BATCHJOB_ID;
+	}
+	
+	static boolean isNonPersistent(BatchJob batchJob) {
+		boolean retVal = true;
+		if (batchJob != null) {
+			retVal = isInvalidBatchJobId(batchJob.getId());
+		}
+		return retVal;
 	}
 
 	@Id
@@ -122,7 +133,12 @@ public class BatchJobBean implements IControl, Serializable {
 
 	// -- Construction
 
-	public BatchJobBean() {
+	protected BatchJobBean() {
+		this(null);
+	}
+
+	public BatchJobBean(String externalId) {
+		setExternalId(externalId);
 		setStatus(STATUS.NEW);
 	}
 
@@ -157,6 +173,10 @@ public class BatchJobBean implements IControl, Serializable {
 		return retVal;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#markAsQueued()
+	 */
+	@Override
 	public void markAsQueued() {
 		if (isAllowedTransition(getStatus(), STATUS.QUEUED)) {
 			logTransition(STATUS.QUEUED);
@@ -167,6 +187,10 @@ public class BatchJobBean implements IControl, Serializable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#markAsStarted()
+	 */
+	@Override
 	public void markAsStarted() {
 		if (isAllowedTransition(getStatus(), STATUS.STARTED)) {
 			logTransition(STATUS.QUEUED);
@@ -177,17 +201,19 @@ public class BatchJobBean implements IControl, Serializable {
 		}
 	}
 
-	/**
-	 * This method is misnamed. It is called when a job is re-queued, not when
-	 * it is restarted. This method doesn't check the current state of the job
-	 * before re-queuing it.
-	 *
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#markAsReStarted()
 	 */
+	@Override
 	public void markAsReStarted() {
 		// REMOVE timestamps.put(STATUS.QUEUED, new Date());
 		setStatus(STATUS.QUEUED);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#markAsCompleted()
+	 */
+	@Override
 	public void markAsCompleted() {
 		if (isAllowedTransition(getStatus(), STATUS.COMPLETED)) {
 			logTransition(STATUS.COMPLETED);
@@ -199,6 +225,10 @@ public class BatchJobBean implements IControl, Serializable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#markAsFailed()
+	 */
+	@Override
 	public void markAsFailed() {
 		if (isAllowedTransition(getStatus(), STATUS.FAILED)) {
 			logTransition(STATUS.FAILED);
@@ -209,6 +239,10 @@ public class BatchJobBean implements IControl, Serializable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#markAsAbortRequested()
+	 */
+	@Override
 	public void markAsAbortRequested() {
 		if (isAllowedTransition(getStatus(), STATUS.ABORT_REQUESTED)) {
 			logTransition(STATUS.ABORT_REQUESTED);
@@ -219,6 +253,10 @@ public class BatchJobBean implements IControl, Serializable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#markAsAborted()
+	 */
+	@Override
 	public void markAsAborted() {
 		if (isAllowedTransition(getStatus(), STATUS.ABORTED)) {
 			if (!STATUS.ABORT_REQUESTED.equals(getStatus())) {
@@ -232,22 +270,18 @@ public class BatchJobBean implements IControl, Serializable {
 		}
 	}
 
-	/**
-	 * This operation has effect only if job status is STARTED.
-	 * 
-	 * @param percentageCompleted
-	 *            a non-negative percentage in the range 0 to 100, inclusive.
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#updatePercentageCompleted(float)
 	 */
+	@Override
 	public void updatePercentageCompleted(float percentageCompleted) {
 		updatePercentageCompleted((int) percentageCompleted);
 	}
 
-	/**
-	 * This operation has effect only if job status is STARTED or QUEUED
-	 * 
-	 * @param percentageCompleted
-	 *            a non-negative percentage in the range 0 to 100, inclusive.
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#updatePercentageCompleted(int)
 	 */
+	@Override
 	public void updatePercentageCompleted(int percentageCompleted) {
 		if (percentageCompleted < 0 || percentageCompleted > 100) {
 			String msg =
@@ -294,6 +328,10 @@ public class BatchJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.NEW, date);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getRequested()
+	 */
+	@Override
 	public Date getRequested() {
 		return this.timestamps.get(STATUS.NEW);
 	}
@@ -302,6 +340,10 @@ public class BatchJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.QUEUED, queued);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getQueued()
+	 */
+	@Override
 	public Date getQueued() {
 		return this.timestamps.get(STATUS.QUEUED);
 	}
@@ -310,6 +352,10 @@ public class BatchJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.STARTED, started);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getStarted()
+	 */
+	@Override
 	public Date getStarted() {
 		return this.timestamps.get(STATUS.STARTED);
 	}
@@ -318,6 +364,10 @@ public class BatchJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.COMPLETED, completed);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getCompleted()
+	 */
+	@Override
 	public Date getCompleted() {
 		return this.timestamps.get(STATUS.COMPLETED);
 	}
@@ -326,6 +376,10 @@ public class BatchJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.FAILED, failed);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getFailed()
+	 */
+	@Override
 	public Date getFailed() {
 		return this.timestamps.get(STATUS.FAILED);
 	}
@@ -334,6 +388,10 @@ public class BatchJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.ABORT_REQUESTED, abortRequested);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getAbortRequested()
+	 */
+	@Override
 	public Date getAbortRequested() {
 		return this.timestamps.get(STATUS.ABORT_REQUESTED);
 	}
@@ -342,12 +400,20 @@ public class BatchJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.ABORTED, aborted);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getAborted()
+	 */
+	@Override
 	public Date getAborted() {
 		return this.timestamps.get(STATUS.ABORTED);
 	}
 
 	// -- Persistent fields
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getId()
+	 */
+	@Override
 	public long getId() {
 		return id;
 	}
@@ -356,46 +422,90 @@ public class BatchJobBean implements IControl, Serializable {
 		this.id = id;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getExternalId()
+	 */
+	@Override
 	public String getExternalId() {
 		return externalId;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#setExternalId(java.lang.String)
+	 */
+	@Override
 	public void setExternalId(String externalId) {
 		this.externalId = externalId;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getTransactionId()
+	 */
+	@Override
 	public long getTransactionId() {
 		return transactionId;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#setTransactionId(long)
+	 */
+	@Override
 	public void setTransactionId(long transactionId) {
 		this.transactionId = transactionId;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getType()
+	 */
+	@Override
 	public String getType() {
 		return type;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getDescription()
+	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#setDescription(java.lang.String)
+	 */
+	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getStatusAsString()
+	 */
+	@Override
 	public String getStatusAsString() {
 		return status.name();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#setStatusAsString(java.lang.String)
+	 */
+	@Override
 	public void setStatusAsString(String status) {
 		setStatus(STATUS.valueOf(status));
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getPercentageComplete()
+	 */
+	@Override
 	public int getPercentageComplete() {
 		return percentageComplete;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#setPercentageComplete(int)
+	 */
+	@Override
 	public void setPercentageComplete(int percentage) {
 		if (percentage < MIN_PERCENTAGE_COMPLETED || percentage > MAX_PERCENTAGE_COMPLETED) {
 			throw new IllegalArgumentException("invalid percentage: " + percentage);
@@ -405,15 +515,27 @@ public class BatchJobBean implements IControl, Serializable {
 		setStatus(getStatus());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getStatus()
+	 */
+	@Override
 	public STATUS getStatus() {
 		return status;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#setStatus(com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.STATUS)
+	 */
+	@Override
 	public void setStatus(STATUS currentStatus) {
 		this.status = currentStatus;
 		setTimeStamp(currentStatus, new Date());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob#getTimeStamp(com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.STATUS)
+	 */
+	@Override
 	public Date getTimeStamp(STATUS status) {
 		return this.timestamps.get(status);
 	}

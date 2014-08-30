@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.NamedQuery;
 
@@ -20,7 +21,7 @@ public class BatchJobController {
 		if (batchJob.getId() == 0) {
 			em.persist(batchJob);
 		} else {
-			em.merge(batchJob);
+			batchJob = em.merge(batchJob);
 		}
 		return batchJob;
 	}
@@ -46,7 +47,7 @@ public class BatchJobController {
 		em.flush();
 	}
 
-	public void detach(BatchJobBean batchJob) {
+	public void detach(BatchJob batchJob) {
 		em.detach(batchJob);
 	}
 

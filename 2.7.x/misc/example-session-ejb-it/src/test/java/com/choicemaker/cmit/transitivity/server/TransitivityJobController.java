@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.TransitivityJobBean;
 import com.choicemaker.cm.transitivity.server.TransitivityJobBean.NamedQuery;
 
@@ -46,7 +47,7 @@ public class TransitivityJobController {
 		em.flush();
 	}
 
-	public void detach(TransitivityJobBean batchJob) {
+	public void detach(TransitivityJob batchJob) {
 		em.detach(batchJob);
 	}
 

@@ -78,6 +78,7 @@
             <configuration>
               <excludeTransitive>false</excludeTransitive>
               <outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+              <silent>true</silent>
             </configuration>
           </execution>
         </executions>

@@ -35,6 +35,7 @@ import javax.persistence.TemporalType;
 import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
+import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob;
 
 
 /**
@@ -56,15 +57,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 query = "Select job from TransitivityJobBean job")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMT_TRANSITIVITY_JOB")
-public class TransitivityJobBean implements IControl, Serializable {
+public class TransitivityJobBean implements IControl, Serializable, TransitivityJob {
 
 	private static final long serialVersionUID = 271L;
 
 	private static Logger log = Logger.getLogger(TransitivityJobBean.class.getName());
-
-	public static final int MIN_PERCENTAGE_COMPLETED = 0;
-
-	public static final int MAX_PERCENTAGE_COMPLETED = 100;
 
 	public static enum NamedQuery {
 		FIND_ALL("transitivityJobFindAll");
@@ -72,16 +69,6 @@ public class TransitivityJobBean implements IControl, Serializable {
 
 		NamedQuery(String name) {
 			this.name = name;
-		}
-	}
-
-	public static enum STATUS {
-		NEW(false), QUEUED(false), STARTED(false), COMPLETED(true),
-		FAILED(true), ABORT_REQUESTED(false), ABORTED(true), CLEAR(true);
-		public boolean isTerminal;
-
-		private STATUS(boolean terminal) {
-			this.isTerminal = terminal;
 		}
 	}
 
@@ -161,6 +148,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 		return retVal;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#markAsQueued()
+	 */
+	@Override
 	public void markAsQueued() {
 		if (isAllowedTransition(getStatus(), STATUS.QUEUED)) {
 			logTransition(STATUS.QUEUED);
@@ -171,6 +162,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#markAsStarted()
+	 */
+	@Override
 	public void markAsStarted() {
 		if (isAllowedTransition(getStatus(), STATUS.STARTED)) {
 			logTransition(STATUS.QUEUED);
@@ -181,17 +176,19 @@ public class TransitivityJobBean implements IControl, Serializable {
 		}
 	}
 
-	/**
-	 * This method is misnamed. It is called when a job is re-queued, not when
-	 * it is restarted. This method doesn't check the current state of the job
-	 * before re-queuing it.
-	 *
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#markAsReStarted()
 	 */
+	@Override
 	public void markAsReStarted() {
 		// REMOVE timestamps.put(STATUS.QUEUED, new Date());
 		setStatus(STATUS.QUEUED);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#markAsCompleted()
+	 */
+	@Override
 	public void markAsCompleted() {
 		if (isAllowedTransition(getStatus(), STATUS.COMPLETED)) {
 			logTransition(STATUS.COMPLETED);
@@ -203,6 +200,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#markAsFailed()
+	 */
+	@Override
 	public void markAsFailed() {
 		if (isAllowedTransition(getStatus(), STATUS.FAILED)) {
 			logTransition(STATUS.FAILED);
@@ -213,6 +214,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#markAsAbortRequested()
+	 */
+	@Override
 	public void markAsAbortRequested() {
 		if (isAllowedTransition(getStatus(), STATUS.ABORT_REQUESTED)) {
 			logTransition(STATUS.ABORT_REQUESTED);
@@ -223,6 +228,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#markAsAborted()
+	 */
+	@Override
 	public void markAsAborted() {
 		if (isAllowedTransition(getStatus(), STATUS.ABORTED)) {
 			if (!STATUS.ABORT_REQUESTED.equals(getStatus())) {
@@ -236,22 +245,18 @@ public class TransitivityJobBean implements IControl, Serializable {
 		}
 	}
 
-	/**
-	 * This operation has effect only if job status is STARTED.
-	 * 
-	 * @param percentageCompleted
-	 *            a non-negative percentage in the range 0 to 100, inclusive.
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#updatePercentageCompleted(float)
 	 */
+	@Override
 	public void updatePercentageCompleted(float percentageCompleted) {
 		updatePercentageCompleted((int) percentageCompleted);
 	}
 
-	/**
-	 * This operation has effect only if job status is STARTED or QUEUED
-	 * 
-	 * @param percentageCompleted
-	 *            a non-negative percentage in the range 0 to 100, inclusive.
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#updatePercentageCompleted(int)
 	 */
+	@Override
 	public void updatePercentageCompleted(int percentageCompleted) {
 		if (percentageCompleted < 0 || percentageCompleted > 100) {
 			String msg =
@@ -298,6 +303,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.NEW, date);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getRequested()
+	 */
+	@Override
 	public Date getRequested() {
 		return this.timestamps.get(STATUS.NEW);
 	}
@@ -306,6 +315,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.QUEUED, queued);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getQueued()
+	 */
+	@Override
 	public Date getQueued() {
 		return this.timestamps.get(STATUS.QUEUED);
 	}
@@ -314,6 +327,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.STARTED, started);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getStarted()
+	 */
+	@Override
 	public Date getStarted() {
 		return this.timestamps.get(STATUS.STARTED);
 	}
@@ -322,6 +339,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.COMPLETED, completed);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getCompleted()
+	 */
+	@Override
 	public Date getCompleted() {
 		return this.timestamps.get(STATUS.COMPLETED);
 	}
@@ -330,6 +351,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.FAILED, failed);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getFailed()
+	 */
+	@Override
 	public Date getFailed() {
 		return this.timestamps.get(STATUS.FAILED);
 	}
@@ -338,6 +363,10 @@ public class TransitivityJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.ABORT_REQUESTED, abortRequested);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getAbortRequested()
+	 */
+	@Override
 	public Date getAbortRequested() {
 		return this.timestamps.get(STATUS.ABORT_REQUESTED);
 	}
@@ -346,12 +375,20 @@ public class TransitivityJobBean implements IControl, Serializable {
 	// this.timestamps.put(STATUS.ABORTED, aborted);
 	// }
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getAborted()
+	 */
+	@Override
 	public Date getAborted() {
 		return this.timestamps.get(STATUS.ABORTED);
 	}
 
 	// -- Persistent fields
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getId()
+	 */
+	@Override
 	public long getId() {
 		return id;
 	}
@@ -360,22 +397,42 @@ public class TransitivityJobBean implements IControl, Serializable {
 		this.id = id;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getDescription()
+	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#setDescription(java.lang.String)
+	 */
+	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getPercentageComplete()
+	 */
+	@Override
 	public int getPercentageComplete() {
 		return percentageComplete;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#setPercentageComplete(int)
+	 */
+	@Override
 	public void setPercentageComplete(int percentageComplete) {
 		this.percentageComplete = percentageComplete;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getModel()
+	 */
+	@Override
 	public String getModel() {
 		return model;
 	}
@@ -391,39 +448,75 @@ public class TransitivityJobBean implements IControl, Serializable {
 		this.model = model;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getMatch()
+	 */
+	@Override
 	public float getMatch() {
 		return match;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#setMatch(float)
+	 */
+	@Override
 	public void setMatch(float match) {
 		this.match = match;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getDiffer()
+	 */
+	@Override
 	public float getDiffer() {
 		return differ;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#setDiffer(float)
+	 */
+	@Override
 	public void setDiffer(float differ) {
 		this.differ = differ;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getStatus()
+	 */
+	@Override
 	public STATUS getStatus() {
 		return status;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#setStatus(com.choicemaker.cm.transitivity.server.TransitivityJobBean.STATUS)
+	 */
+	@Override
 	public void setStatus(STATUS currentStatus) {
 		this.status = currentStatus;
 		setTimeStamp(currentStatus, new Date());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getStatusAsString()
+	 */
+	@Override
 	public String getStatusAsString() {
 		return status.name();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#setStatusAsString(java.lang.String)
+	 */
+	@Override
 	public void setStatusAsString(String status) {
 		setStatus(STATUS.valueOf(status));
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.transitivity.server.TransitivityJob#getTimeStamp(com.choicemaker.cm.transitivity.server.TransitivityJobBean.STATUS)
+	 */
+	@Override
 	public Date getTimeStamp(STATUS status) {
 		return this.timestamps.get(status);
 	}

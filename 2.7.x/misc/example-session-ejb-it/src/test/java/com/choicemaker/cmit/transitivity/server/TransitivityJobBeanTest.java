@@ -24,8 +24,9 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob.STATUS;
 import com.choicemaker.cm.transitivity.server.TransitivityJobBean;
-import com.choicemaker.cm.transitivity.server.TransitivityJobBean.STATUS;
 import com.choicemaker.cmit.utils.DeploymentUtils;
 
 @RunWith(Arquillian.class)
@@ -79,7 +80,7 @@ public class TransitivityJobBeanTest {
 	@Test
 	public void testConstruction() {
 		Date now = new Date();
-		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
+		TransitivityJob job = new TransitivityJobBean(FAKE_MODEL);
 		Date now2 = new Date();
 
 		assertTrue(0 == job.getId());
@@ -115,7 +116,7 @@ public class TransitivityJobBeanTest {
 
 		// Delete the job
 		controller.delete(batchJob2);
-		TransitivityJobBean batchJob3 = controller.find(job.getId());
+		TransitivityJob batchJob3 = controller.find(job.getId());
 		assertTrue(batchJob3 == null);
 
 		// Check that the number of existing jobs equals the initial count
@@ -171,7 +172,7 @@ public class TransitivityJobBeanTest {
 		// Find the jobs
 		boolean isFound = false;
 		for (long jobId : jobIds) {
-			for (TransitivityJobBean job : jobs) {
+			for (TransitivityJob job : jobs) {
 				if (jobId == job.getId()) {
 					isFound = true;
 					break;
@@ -196,7 +197,7 @@ public class TransitivityJobBeanTest {
 		int countNullStatus = 0;
 		int countNullTimestamp = 0;
 		int count = 0;
-		for (TransitivityJobBean job : controller.findAll()) {
+		for (TransitivityJob job : controller.findAll()) {
 			++count;
 			STATUS status = job.getStatus();
 			if (status == null) {
@@ -257,7 +258,7 @@ public class TransitivityJobBeanTest {
 		Date after = new Date();
 
 		// Check the status and timestamp
-		assertTrue(job.getPercentageComplete() == TransitivityJobBean.MIN_PERCENTAGE_COMPLETED);
+		assertTrue(job.getPercentageComplete() == TransitivityJob.MIN_PERCENTAGE_COMPLETED);
 		Date d = job.getTimeStamp(job.getStatus());
 		assertTrue(d != null);
 		assertTrue(before.compareTo(d) <= 0);
@@ -269,7 +270,7 @@ public class TransitivityJobBeanTest {
 
 			final STATUS sts = getRandomNonTerminalStatus();
 			final int v1 =
-				random.nextInt(TransitivityJobBean.MAX_PERCENTAGE_COMPLETED + 1);
+				random.nextInt(TransitivityJob.MAX_PERCENTAGE_COMPLETED + 1);
 			before = new Date();
 			job.setStatus(sts);
 			job.setPercentageComplete(v1);
@@ -395,7 +396,7 @@ public class TransitivityJobBeanTest {
 	public void testEqualsHashCode() {
 		// Create two generic jobs and verify equality
 		TransitivityJobBean job1 = new TransitivityJobBean(FAKE_MODEL);
-		TransitivityJobBean job2 = new TransitivityJobBean(FAKE_MODEL);
+		TransitivityJob job2 = new TransitivityJobBean(FAKE_MODEL);
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
 
@@ -434,7 +435,7 @@ public class TransitivityJobBeanTest {
 		Date before = new Date();
 
 		// 1. Create a job and check the status
-		TransitivityJobBean job = new TransitivityJobBean(FAKE_MODEL);
+		TransitivityJob job = new TransitivityJobBean(FAKE_MODEL);
 
 		// Record a timestamp after a transition is made
 		Date after = new Date();
@@ -472,13 +473,13 @@ public class TransitivityJobBeanTest {
 
 		// 4. Update the percentage complete
 		job.setPercentageComplete(random
-				.nextInt(TransitivityJobBean.MAX_PERCENTAGE_COMPLETED + 1));
+				.nextInt(TransitivityJob.MAX_PERCENTAGE_COMPLETED + 1));
 		assertTrue(job.getStatus().equals(STATUS.STARTED));
 
 		// 5. Mark the job as completed
 		job.markAsCompleted();
 		assertTrue(job.getStatus().equals(STATUS.COMPLETED));
-		assertTrue(job.getPercentageComplete() == TransitivityJobBean.MAX_PERCENTAGE_COMPLETED);
+		assertTrue(job.getPercentageComplete() == TransitivityJob.MAX_PERCENTAGE_COMPLETED);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();

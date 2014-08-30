@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean.NamedQuery;
 
@@ -20,7 +21,7 @@ public class StatusLogController {
 		if (statusLog.getJobId() == 0) {
 			em.persist(statusLog);
 		} else {
-			em.merge(statusLog);
+			statusLog = em.merge(statusLog);
 		}
 		return statusLog;
 	}
@@ -46,7 +47,7 @@ public class StatusLogController {
 		em.flush();
 	}
 
-	public void detach(StatusLogBean statusLog) {
+	public void detach(StatusLog statusLog) {
 		em.detach(statusLog);
 	}
 

@@ -14,12 +14,9 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
 import com.choicemaker.cm.core.SerialRecordSource;
@@ -33,18 +30,10 @@ import com.choicemaker.cm.core.SerialRecordSource;
 query = "Select params from BatchParametersBean params")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_BATCH_PARAMS")
-public class BatchParametersBean implements Serializable {
+public class BatchParametersBean implements Serializable, BatchParameters {
 
 	private static final long serialVersionUID = 271L;
 	
-	// Inclusive
-	public static final float MIN_THRESHOLD = 0.0f;
-	
-	public static final float MID_THRESHOLD = 0.5f;
-
-	// Inclusive
-	public static final float MAX_THRESHOLD = 1.0f;
-
 	public static enum NamedQuery {
 		FIND_ALL("batchParametersFindAll");
 		public final String name;
@@ -54,12 +43,15 @@ public class BatchParametersBean implements Serializable {
 		}
 	}
 
+	/** Default value when no jobId is assigned */
+	public static final long INVALID_JOBID = 0;
+
 	@Id
 	@Column(name = "ID")
-	@TableGenerator(name = "OABA_BATCHPARAMS", table = "CMT_SEQUENCE",
-			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-			pkColumnValue = "OABA_BATCHPARAMS")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "OABA_BATCHPARAMS")
+//	@TableGenerator(name = "OABA_BATCHPARAMS", table = "CMT_SEQUENCE",
+//			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+//			pkColumnValue = "OABA_BATCHPARAMS")
+//	@GeneratedValue(strategy = GenerationType.TABLE, generator = "OABA_BATCHPARAMS")
 	private long id;
 
 	@Column(name = "STAGE_MODEL")
@@ -76,13 +68,32 @@ public class BatchParametersBean implements Serializable {
 	
 	@Column(name = "HIGH_THRESHOLD")
 	private float highThreshold;
-
+	
 	@Transient
 	private SerialRecordSource stageRs;
 
 	@Transient
 	private SerialRecordSource masterRs;
 
+	protected BatchParametersBean() {
+		this(INVALID_JOBID);
+	}
+
+	protected BatchParametersBean(long jobId) {
+		setId(jobId);
+	}
+	
+	public BatchParametersBean(BatchJob batchJob) {
+		this(batchJob.getId());
+		if (BatchJobBean.isNonPersistent(batchJob)) {
+			throw new IllegalArgumentException("non-persistent batch job");
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getId()
+	 */
+	@Override
 	public long getId() {
 		return id;
 	}
@@ -91,58 +102,114 @@ public class BatchParametersBean implements Serializable {
 		this.id = id;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getStageModel()
+	 */
+	@Override
 	public String getStageModel() {
 		return stageModel;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setStageModel(java.lang.String)
+	 */
+	@Override
 	public void setStageModel(String stageModel) {
 		this.stageModel = stageModel;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getMasterModel()
+	 */
+	@Override
 	public String getMasterModel() {
 		return masterModel;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setMasterModel(java.lang.String)
+	 */
+	@Override
 	public void setMasterModel(String masterModel) {
 		this.masterModel = masterModel;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getMaxSingle()
+	 */
+	@Override
 	public int getMaxSingle() {
 		return maxSingle;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setMaxSingle(int)
+	 */
+	@Override
 	public void setMaxSingle(int maxSingle) {
 		this.maxSingle = maxSingle;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getLowThreshold()
+	 */
+	@Override
 	public float getLowThreshold() {
 		return lowThreshold;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setLowThreshold(float)
+	 */
+	@Override
 	public void setLowThreshold(float lowThreshold) {
 		this.lowThreshold = lowThreshold;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getHighThreshold()
+	 */
+	@Override
 	public float getHighThreshold() {
 		return highThreshold;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setHighThreshold(float)
+	 */
+	@Override
 	public void setHighThreshold(float highThreshold) {
 		this.highThreshold = highThreshold;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getStageRs()
+	 */
+	@Override
 	public SerialRecordSource getStageRs() {
 		return stageRs;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setStageRs(com.choicemaker.cm.core.SerialRecordSource)
+	 */
+	@Override
 	public void setStageRs(SerialRecordSource stageRs) {
 		this.stageRs = stageRs;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getMasterRs()
+	 */
+	@Override
 	public SerialRecordSource getMasterRs() {
 		return masterRs;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setMasterRs(com.choicemaker.cm.core.SerialRecordSource)
+	 */
+	@Override
 	public void setMasterRs(SerialRecordSource masterRs) {
 		this.masterRs = masterRs;
 	}
