@@ -57,22 +57,23 @@ public class BatchQueryServiceBean implements SessionBean {
 	private transient EJBConfiguration configuration = null;
 
 
-	public long startOABA (String externalID, SerialRecordSource staging, SerialRecordSource master,
-		float lowThreshold,
-		float highThreshold, String stageModelName, String masterModelName, int maxSingle)
-		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
+	public long startOABA(String externalID, SerialRecordSource staging,
+			SerialRecordSource master, float lowThreshold, float highThreshold,
+			String stageModelName, String masterModelName, int maxSingle)
+			throws RemoteException, CreateException, NamingException,
+			JMSException, SQLException {
 
-		return startOABA (externalID, staging, master, lowThreshold, highThreshold,
-		stageModelName, masterModelName, maxSingle, false);
+		return startOABA(externalID, staging, master, lowThreshold,
+				highThreshold, stageModelName, masterModelName, maxSingle,
+				false);
 
 	}
 
-
-	public long startOABA (String externalID, SerialRecordSource staging, SerialRecordSource master,
-		float lowThreshold,
-		float highThreshold, String stageModelName, String masterModelName, int maxSingle,
-		boolean runTransitivity)
-		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
+	public long startOABA(String externalID, SerialRecordSource staging,
+			SerialRecordSource master, float lowThreshold, float highThreshold,
+			String stageModelName, String masterModelName, int maxSingle,
+			boolean runTransitivity) throws RemoteException, CreateException,
+			NamingException, JMSException, SQLException {
 
 		log.debug("starting startBatch...");
 
