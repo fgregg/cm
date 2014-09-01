@@ -115,7 +115,7 @@
       <artifactId>com.choicemaker.cm.server.base</artifactId>
     </dependency>
     <dependency>
-      <groupId>javaee</groupId>
+      <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <scope>provided</scope>
     </dependency>

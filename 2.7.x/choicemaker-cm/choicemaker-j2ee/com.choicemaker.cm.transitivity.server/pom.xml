@@ -172,7 +172,7 @@
       <version>2.1.0</version>
     </dependency>
     <dependency>
-      <groupId>javaee</groupId>
+      <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <scope>provided</scope>
     </dependency>
