@@ -1,0 +1,32 @@
+# Batch script to add the JMS configuration to the JBoss server
+
+# Start batching commands
+batch
+
+# Configure the JMS test queue
+jms-queue add --queue-address=blockQueue --entries=jms/blockQueue,choicemaker/urm/jms/blockQueue
+jms-queue add --queue-address=chunkQueue --entries=jms/chunkQueue,choicemaker/urm/jms/chunkQueue
+jms-queue add --queue-address=dedupQueue --entries=jms/dedupQueue,choicemaker/urm/jms/dedupQueue
+jms-queue add --queue-address=matchDedupEachQueue --entries=jms/matchDedupEachQueue,choicemaker/urm/jms/matchDedupEachQueue
+jms-queue add --queue-address=matchDedupQueue --entries=jms/matchDedupQueue,choicemaker/urm/jms/matchDedupQueue
+jms-queue add --queue-address=matcherQueue --entries=jms/matcherQueue,choicemaker/urm/jms/matcherQueue
+jms-queue add --queue-address=matchQueue --entries=jms/matchQueue,choicemaker/urm/jms/matchQueue
+jms-queue add --queue-address=matchSchedulerQueue --entries=jms/matchSchedulerQueue,choicemaker/urm/jms/matchSchedulerQueue
+jms-queue add --queue-address=mrpsProcessorQueue --entries=jms/mrpsProcessorQueue,choicemaker/urm/jms/mrpsProcessorQueue
+jms-queue add --queue-address=singleMatchQueue --entries=jms/singleMatchQueue,choicemaker/urm/jms/singleMatchQueue
+jms-queue add --queue-address=startQueue --entries=jms/startQueue,choicemaker/urm/jms/startQueue
+jms-queue add --queue-address=statusTopic --entries=jms/statusTopic,choicemaker/urm/jms/statusTopic
+jms-queue add --queue-address=transitivityQueue --entries=jms/transitivityQueue,choicemaker/urm/jms/transitivityQueue
+jms-queue add --queue-address=transMatchDedupEachQueue --entries=jms/transMatchDedupEachQueue,choicemaker/urm/jms/transMatchDedupEachQueue
+jms-queue add --queue-address=transMatchDedupQueue --entries=jms/transMatchDedupQueue,choicemaker/urm/jms/transMatchDedupQueue
+jms-queue add --queue-address=transMatcherQueue --entries=jms/transMatcherQueue,choicemaker/urm/jms/transMatcherQueue
+jms-queue add --queue-address=transMatcherSchedulerQueue --entries=jms/transMatcherSchedulerQueue,choicemaker/urm/jms/transMatcherSchedulerQueue
+jms-queue add --queue-address=transMatchSchedulerQueue --entries=jms/transMatchSchedulerQueue,choicemaker/urm/jms/transMatchSchedulerQueue
+jms-queue add --queue-address=transSerializationQueue --entries=jms/transSerializationQueue,choicemaker/urm/jms/transSerializationQueue
+jms-queue add --queue-address=transSerialStatusTopic --entries=jms/transSerialStatusTopic,choicemaker/urm/jms/transSerialStatusTopic
+jms-queue add --queue-address=transStatusTopic --entries=jms/transStatusTopic,choicemaker/urm/jms/transStatusTopic
+jms-queue add --queue-address=updateQueue --entries=jms/updateQueue,choicemaker/urm/jms/updateQueue
+jms-queue add --queue-address=updateTransQueue --entries=jms/updateTransQueue,choicemaker/urm/jms/updateTransQueue
+
+# Run the batch commands
+run-batch
