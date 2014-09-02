@@ -309,12 +309,12 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.ant</artifactId>
-        <version>1.5.4-SNAPSHOT</version>
+        <version>1.5.3</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.ant</artifactId>
-        <version>1.5.4-SNAPSHOT</version>
+        <version>1.5.3</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -453,12 +453,12 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.jdom</artifactId>
-        <version>0.9.1-SNAPSHOT</version>
+        <version>0.9.0</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.jdom</artifactId>
-        <version>0.9.1-SNAPSHOT</version>
+        <version>0.9.0</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
