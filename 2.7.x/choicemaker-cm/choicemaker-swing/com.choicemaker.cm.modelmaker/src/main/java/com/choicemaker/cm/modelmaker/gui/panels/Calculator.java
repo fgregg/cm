@@ -25,7 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-//import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;

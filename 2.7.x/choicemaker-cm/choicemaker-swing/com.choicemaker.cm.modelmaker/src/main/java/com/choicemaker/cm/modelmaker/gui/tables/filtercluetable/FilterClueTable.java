@@ -25,7 +25,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-//import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.core.ColumnDefinition;
