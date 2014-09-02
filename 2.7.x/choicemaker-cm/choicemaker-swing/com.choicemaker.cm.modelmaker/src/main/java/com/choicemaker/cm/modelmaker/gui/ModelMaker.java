@@ -102,7 +102,6 @@ import com.choicemaker.cm.modelmaker.gui.panels.RecordPairList;
 import com.choicemaker.cm.modelmaker.gui.panels.TestingControlPanel;
 import com.choicemaker.cm.modelmaker.gui.panels.TrainingControlPanel;
 import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModel;
-import com.choicemaker.cm.modelmaker.gui.utils.Log4jAppender;
 import com.choicemaker.cm.modelmaker.gui.utils.ThreadWatcher;
 import com.choicemaker.cm.modelmaker.stats.Statistics;
 import com.choicemaker.cm.module.IUserMessages;
@@ -267,7 +266,6 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	private boolean sourceDataModified;
 
 	private static Preferences preferences = Preferences.userNodeForPackage(ModelMaker.class);
-	private Log4jAppender log4jAppender;
 
 	// listeners
 	private EventMultiplexer probabilityModelEventMultiplexer = new EventMultiplexer();
@@ -380,8 +378,6 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 		//MessagePanel
 		messagePanel = new MessagePanel(this);
-		log4jAppender = new Log4jAppender(this, messagePanel.getWriter());
-		log4jAppender.addTo("com");
 
 		//TrainingPanel
 		trainingPanel = new TrainingControlPanel(this);
@@ -684,7 +680,6 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			probabilityModel.addPropertyChangeListener(probabilityModelEventMultiplexer);
 		setTitleMessage();
 		postProbabilityModelInfo();
-		log4jAppender.addTo(probabilityModel == null ? null : probabilityModel.getAccessor());
 		multiSourceLists[0] = null;
 		multiSourceLists[1] = null;
 		setEvaluated(false);
