@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -33,7 +34,7 @@
     <developer>
       <id>rphall</id>
       <name>Rick Hall</name>
-		  <url>http://sourceforge.net/users/rphall</url>
+      <url>http://sourceforge.net/users/rphall</url>
       <roles>
         <role>Maven packaging</role>
       </roles>
@@ -41,10 +42,10 @@
   </developers>
 
   <contributors>
-  	<contributor>
-  		<name>Eclipse Project</name>
-  		<url>http://www.eclipse.org/</url>
-  	</contributor>
+    <contributor>
+      <name>Eclipse Project</name>
+      <url>http://www.eclipse.org/</url>
+    </contributor>
   </contributors>
 
   <build>

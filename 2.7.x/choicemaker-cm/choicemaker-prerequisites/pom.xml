@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -23,50 +24,50 @@
   </description>
 
   <contributors>
-  	<contributor>
-  		<name>Apache ANT project</name>
-  		<url>http://ant.apache.org/</url>
-  	</contributor>
-  	<contributor>
-  		<name>Apache BCEL project</name>
-  		<url>http://commons.apache.org/bcel/</url>
-  	</contributor>
-  	<contributor>
-  		<name>Apache LOG4J project</name>
-  		<url>http://logging.apache.org/log4j/</url>
-  	</contributor>
-  	<contributor>
-  		<name>Apache ORO project</name>
-  		<url>http://jakarta.apache.org/oro/</url>
-  	</contributor>
-  	<contributor>
-  		<name>Apache XERCES project</name>
-  		<url>http://xerces.apache.org/</url>
-  	</contributor>
-  	<contributor>
-  		<name>Eclipse Project</name>
-  		<url>http://www.eclipse.org/</url>
-  	</contributor>
-  	<contributor>
-  		<name>JavaHelp Project</name>
-  		<url>https://javahelp.java.net/</url>
-  	</contributor>
-  	<contributor>
-  		<name>JDOM project</name>
-  		<url>http://www.jdom.org/</url>
-  	</contributor>
-  	<contributor>
-  		<name>JFreeChart Project</name>
-  		<url>http://sourceforge.net/projects/jfreechart/</url>
-  	</contributor>
-  	<contributor>
-  		<name>Machinery For Change, Inc.</name>
-  		<url>http://www.mchange.com/projects/c3p0/</url>
-  	</contributor>
-  	<contributor>
-  		<name>Oracle Corporation</name>
-  		<url>http://www.oracle.com/</url>
-  	</contributor>
+    <contributor>
+      <name>Apache ANT project</name>
+      <url>http://ant.apache.org/</url>
+    </contributor>
+    <contributor>
+      <name>Apache BCEL project</name>
+      <url>http://commons.apache.org/bcel/</url>
+    </contributor>
+    <contributor>
+      <name>Apache LOG4J project</name>
+      <url>http://logging.apache.org/log4j/</url>
+    </contributor>
+    <contributor>
+      <name>Apache ORO project</name>
+      <url>http://jakarta.apache.org/oro/</url>
+    </contributor>
+    <contributor>
+      <name>Apache XERCES project</name>
+      <url>http://xerces.apache.org/</url>
+    </contributor>
+    <contributor>
+      <name>Eclipse Project</name>
+      <url>http://www.eclipse.org/</url>
+    </contributor>
+    <contributor>
+      <name>JavaHelp Project</name>
+      <url>https://javahelp.java.net/</url>
+    </contributor>
+    <contributor>
+      <name>JDOM project</name>
+      <url>http://www.jdom.org/</url>
+    </contributor>
+    <contributor>
+      <name>JFreeChart Project</name>
+      <url>http://sourceforge.net/projects/jfreechart/</url>
+    </contributor>
+    <contributor>
+      <name>Machinery For Change, Inc.</name>
+      <url>http://www.mchange.com/projects/c3p0/</url>
+    </contributor>
+    <contributor>
+      <name>Oracle Corporation</name>
+      <url>http://www.oracle.com/</url>
+    </contributor>
   </contributors>
 
   <modules>

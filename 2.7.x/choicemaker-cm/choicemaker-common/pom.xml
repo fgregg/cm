@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -38,7 +39,7 @@ END: C-E Exclusion -->
     <module>com.choicemaker.cm.ml.me.base</module>
     <module>com.choicemaker.cm.compiler</module>
     <!--module>com.choicemaker.cm.compiler.tools.jdk142</module-->
-		<module>com.choicemaker.cm.compiler.tools.jdk170</module>
+    <module>com.choicemaker.cm.compiler.tools.jdk170</module>
   </modules>
 
   <build>

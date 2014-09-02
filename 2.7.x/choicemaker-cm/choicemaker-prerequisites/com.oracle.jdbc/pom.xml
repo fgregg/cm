@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -25,14 +26,15 @@
     <license>
       <name>Oracle Technology Network Development and Distribution License</name>
       <url>http://www.oracle.com/technetwork/licenses/distribution-license-152002.html</url>
-      <comments>Applies to Oracle binary code.</comments></license>
+      <comments>Applies to Oracle binary code.</comments>
+    </license>
   </licenses>
 
   <developers>
     <developer>
       <id>rphall</id>
       <name>Rick Hall</name>
-		  <url>http://sourceforge.net/users/rphall</url>
+      <url>http://sourceforge.net/users/rphall</url>
       <roles>
         <role>Eclipse/Maven packaging</role>
       </roles>
@@ -40,10 +42,10 @@
   </developers>
 
   <contributors>
-  	<contributor>
-  		<name>Oracle Corporation</name>
-  		<url>http://www.oracle.com/</url>
-  	</contributor>
+    <contributor>
+      <name>Oracle Corporation</name>
+      <url>http://www.oracle.com/</url>
+    </contributor>
   </contributors>
 
   <properties>
@@ -96,11 +98,11 @@
             </goals>
             <configuration>
               <artifactItems>
-              <artifactItem>
-                <groupId>com.oracle</groupId>
-                <artifactId>classes12</artifactId>
-                <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-              </artifactItem>
+                <artifactItem>
+                  <groupId>com.oracle</groupId>
+                  <artifactId>classes12</artifactId>
+                  <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
@@ -112,10 +114,10 @@
             </goals>
             <configuration>
               <artifactItems>
-              <artifactItem>
-                <groupId>com.oracle</groupId>
-                <artifactId>classes12</artifactId>
-              </artifactItem>
+                <artifactItem>
+                  <groupId>com.oracle</groupId>
+                  <artifactId>classes12</artifactId>
+                </artifactItem>
               </artifactItems>
               <stripVersion>true</stripVersion>
             </configuration>
@@ -123,15 +125,15 @@
         </executions>
       </plugin>
       <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
             <id>assembly</id>
             <phase>package</phase>
-        		<configuration>
-							<descriptor>src/main/assembly/assembly.xml</descriptor>
-        		</configuration>
+            <configuration>
+              <descriptor>src/main/assembly/assembly.xml</descriptor>
+            </configuration>
             <goals>
               <goal>single</goal>
             </goals>

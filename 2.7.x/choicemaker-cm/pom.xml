@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -83,124 +84,124 @@
   </modules>
 
   <developers>
-  	<developer>
-  		<id>rphall</id>
-  		<name>Rick Hall</name>
-		  <url>http://sourceforge.net/users/rphall</url>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+      <url>http://sourceforge.net/users/rphall</url>
       <roles>
         <role>ChoiceMaker developer</role>
         <role>Eclipse/Maven packaging</role>
       </roles>
-  	</developer>
+    </developer>
   </developers>
 
   <contributors>
-  	<contributor>
+    <contributor>
   		<!-- id>aborthwick</id -->
-  		<name>Andrew Borthwick</name>
+      <name>Andrew Borthwick</name>
       <roles>
         <role>Founder, ChoiceMaker Technologies Inc.</role>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id>mbuechi</id -->
-  		<name>Martin Buechi</name>
+      <name>Martin Buechi</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id>mchen</id -->
-  		<name>Michael Chen</name>
+      <name>Michael Chen</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id>pcheung</id -->
-  		<name>Put Cheung</name>
+      <name>Put Cheung</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id>jdickinson</id -->
-  		<name>Jim Dickinson</name>
+      <name>Jim Dickinson</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id>arturof</id -->
-  		<name>Arturo Falck</name>
+      <name>Arturo Falck</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
       <name>Gaelen Green</name>
       <roles>
         <role>Technical writer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id>agoldberg</id -->
-  		<name>Arthur Goldberg</name>
+      <name>Arthur Goldberg</name>
       <roles>
         <role>Founder, ChoiceMaker Technologies Inc.</role>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Ashley Larive</name>
+    </contributor>
+    <contributor>
+      <name>Ashley Larive</name>
       <roles>
         <role>Customer deployments</role>
         <role>Technical writer</role>
       </roles>
-  	</contributor>
-  	<contributor>
-  		<name>Gail Mitnik</name>
+    </contributor>
+    <contributor>
+      <name>Gail Mitnik</name>
       <roles>
         <role>Customer deployments</role>
         <role>Technical writer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id>emoussikaev</id -->
-  		<name>Elmer Moussikaev</name>
+      <name>Elmer Moussikaev</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id>christer</id -->
-  		<name>Christer Samuelsson</name>
+      <name>Christer Samuelsson</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
       <name>Maggie Soffer</name>
       <roles>
         <role>Customer deployments</role>
         <role>Technical writer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id>ajwinkel</id -->
-  		<name>Adam Winkel</name>
+      <name>Adam Winkel</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
-  	<contributor>
+    </contributor>
+    <contributor>
   		<!-- id></id -->
-  		<name>S. Yoakum-Stover</name>
+      <name>S. Yoakum-Stover</name>
       <roles>
         <role>ChoiceMaker developer</role>
       </roles>
-  	</contributor>
+    </contributor>
   </contributors>
 
 </project>
