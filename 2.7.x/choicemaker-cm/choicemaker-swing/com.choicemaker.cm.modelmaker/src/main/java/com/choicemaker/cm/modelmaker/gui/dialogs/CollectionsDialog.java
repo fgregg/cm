@@ -47,7 +47,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.util.UpperCaseTextField;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
@@ -540,7 +540,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 						d.insertString(prefix.length(), s.substring(prefix.length()), regular);
 					}
 				} catch (BadLocationException ex) {
-					logger.error("", ex);
+					logger.severe(ex.toString());
 				}
 
 				return this;

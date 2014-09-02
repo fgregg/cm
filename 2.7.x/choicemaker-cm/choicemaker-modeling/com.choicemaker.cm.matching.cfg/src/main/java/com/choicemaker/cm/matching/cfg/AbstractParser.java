@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.matching.cfg.util.CfgUtils;
 
@@ -190,10 +190,10 @@ public abstract class AbstractParser implements Parser {
 		try {
 			return (ParsedData)parsedDataClass.newInstance();
 		} catch (IllegalAccessException ex) {
-			Logger.getLogger(getClass()).error(ex);
+			Logger.getLogger(getClass().getName()).severe(ex.toString());
 			return null;
 		} catch (InstantiationException ex) {
-			Logger.getLogger(getClass()).error(ex);
+			Logger.getLogger(getClass().getName()).severe(ex.toString());
 			return null;
 		}
 	}

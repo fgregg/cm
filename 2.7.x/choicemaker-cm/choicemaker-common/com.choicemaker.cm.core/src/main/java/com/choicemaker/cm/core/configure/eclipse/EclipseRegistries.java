@@ -13,7 +13,7 @@ package com.choicemaker.cm.core.configure.eclipse;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.util.Precondition;
 
@@ -50,7 +50,7 @@ public class EclipseRegistries {
 						"Added Eclipse-based registry for extension point '"
 							+ uniqueExtensionPointId
 							+ "'";
-					logger.debug(msg);
+					logger.fine(msg);
 				}
 			}
 		}

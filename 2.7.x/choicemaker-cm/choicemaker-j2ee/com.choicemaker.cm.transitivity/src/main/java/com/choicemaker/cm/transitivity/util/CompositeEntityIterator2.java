@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
@@ -48,7 +48,7 @@ public class CompositeEntityIterator2 implements Iterator {
 			
 			it = list.iterator();
 		} catch (BlockingException e) {
-			log.error(e,e);
+			log.severe(e.toString());
 		}
 	}
 	

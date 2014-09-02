@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.xml.base;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -48,8 +48,8 @@ public class XmlSingleRecordWriter {
 				sw,
 				record);
 		} catch (IOException e) {
-			String msg = "Unable to write record " + record.getId();
-			log.error(msg,e);
+			String msg = "Unable to write record " + record.getId() + ": " + e.toString();
+			log.severe(msg);
 			sw.write("<error>" + msg + "</error>");
 		}
 

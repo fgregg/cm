@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 public class ListBackedGeneratorPluginFactory implements
 		IGeneratorPluginFactory {
@@ -86,10 +86,10 @@ public class ListBackedGeneratorPluginFactory implements
 			retVal = load(gpf);
 		} else if (gpf != null) {
 			assert gpf.isEmpty();
-			logger.warn("Ignoring empty list: " + gpf);
+			logger.warning("Ignoring empty list: " + gpf);
 		}
 		if (retVal == null) {
-			logger.debug("Loading generator plugins from " + DEFAULT_LIST);
+			logger.fine("Loading generator plugins from " + DEFAULT_LIST);
 			try {
 				retVal = load(DEFAULT_LIST);
 			} catch (IllegalArgumentException x) {
@@ -134,7 +134,7 @@ public class ListBackedGeneratorPluginFactory implements
 			}
 		} catch (Exception x) {
 			String msg = msgPrefix + x.toString() + ": " + x.getCause();
-			logger.error(msg, x);
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		} finally {
 			if (r != null) {
@@ -142,7 +142,7 @@ public class ListBackedGeneratorPluginFactory implements
 					r.close();
 				} catch (IOException x) {
 					String msg = msgPrefix + x.toString() + ": " + x.getCause();
-					logger.error(msg);
+					logger.severe(msg);
 				}
 			}
 		}
@@ -175,7 +175,7 @@ public class ListBackedGeneratorPluginFactory implements
 			}
 		} catch (Exception x) {
 			String msg = msgPrefix + x.toString() + ": " + x.getCause();
-			logger.error(msg, x);
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 
@@ -213,7 +213,7 @@ public class ListBackedGeneratorPluginFactory implements
 			}
 		}
 		if (retVal.isEmpty()) {
-			logger.warn("Empty list of generator plugins");
+			logger.warning("Empty list of generator plugins");
 		}
 		return Collections.unmodifiableList(retVal);
 	}

@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.result;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
@@ -150,8 +150,8 @@ public class MatchToBlockTransformer2 {
 			masterIDs = new HashMap (1);
 		}
 
-		log.debug("stage size " + stageIDs.size());
-		log.debug("master size " + masterIDs.size());
+		log.fine("stage size " + stageIDs.size());
+		log.fine("master size " + masterIDs.size());
 
 		IMatchRecord2Sink retVal = mFactory.getNextSink();
 

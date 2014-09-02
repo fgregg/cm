@@ -28,7 +28,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
@@ -97,9 +97,9 @@ public class SourceMenu extends JMenu {
 					MarkedRecordPairBinder.store(parent.getSourceList(), parent.getSelection(), sink);
 					MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) source);
 				} catch (IOException ex) {
-					logger.error(new LoggingObject("CM-100602", sink.getName()), ex);
+					logger.severe(new LoggingObject("CM-100602", sink.getName()).toString() + ": " + ex);
 				} catch (XmlConfException ex) {
-					logger.error(new LoggingObject("CM-100602", sink.getName()), ex);
+					logger.severe(new LoggingObject("CM-100602", sink.getName()).toString() + ": " + ex);
 				}
 			}
 		}
@@ -208,9 +208,9 @@ public class SourceMenu extends JMenu {
 					MarkedRecordPairBinder.store(parent.getSourceList(), parent.getCheckedIndices(), sink);
 					MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) source);
 				} catch (IOException ex) {
-					logger.error(new LoggingObject("CM-100602", sink.getName()), ex);
+					logger.severe(new LoggingObject("CM-100602", sink.getName()).toString() + ": " + ex);
 				} catch (XmlConfException ex) {
-					logger.error(new LoggingObject("CM-100602", sink.getName()), ex);
+					logger.severe(new LoggingObject("CM-100602", sink.getName()).toString() + ": " + ex);
 				}
 			}
 		}

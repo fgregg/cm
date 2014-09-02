@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
@@ -101,7 +101,7 @@ public class BiConnectedChecker {
 			} 
 		}
 		
-		log.debug ("Number of BiConnected Components " + numBiComp);
+		log.fine ("Number of BiConnected Components " + numBiComp);
 		
 		if (numBiComp == 1) return true;
 		else return false;
@@ -141,7 +141,7 @@ public class BiConnectedChecker {
 			} 
 		}
 		
-		log.debug ("Number of BiConnected Components " + numBiComp);
+		log.fine ("Number of BiConnected Components " + numBiComp);
 		
 		if (numBiComp == 1) return true;
 		else return false;
@@ -187,16 +187,16 @@ public class BiConnectedChecker {
 					w = (NodeInfo) nodeInfoMap.get (next);
 					if (w.low >= v.pre) {
 						numBiComp ++;
-						log.debug ("New BiConnected Component");
+						log.fine ("New BiConnected Component");
 						
 						boolean stop = false;
 						while (!stop) {
 							Pair p = (Pair) S.pop();
-							log.debug (p.v.getNodeId() + " " + p.w.getNodeId());
+							log.fine (p.v.getNodeId() + " " + p.w.getNodeId());
 							
 							if (p.v.equals(node)) stop = true;
 						}
-						log.debug ("End BiConnected Component");
+						log.fine ("End BiConnected Component");
 					}
 					
 					v.low = Math.min(v.low, w.low);

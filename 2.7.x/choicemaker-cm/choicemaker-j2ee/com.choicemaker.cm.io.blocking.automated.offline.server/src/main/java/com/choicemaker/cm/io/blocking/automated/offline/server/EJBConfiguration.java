@@ -33,7 +33,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 
@@ -469,17 +469,17 @@ public class EJBConfiguration implements Serializable {
 
 			sender.send(message);
 
-			log.debug ("Sending on queue '" + queue.getQueueName()) ;
-			log.debug("session " + session);
-			log.debug("message " + message);
-			log.debug("sender " + sender);
+			log.fine ("Sending on queue '" + queue.getQueueName()) ;
+			log.fine("session " + session);
+			log.fine("message " + message);
+			log.fine("sender " + sender);
 		} catch (Exception ex) {
-			log.error(ex.toString(),ex);
+			log.severe(ex.toString());
 		} finally {
 			try {
 				if (session != null) session.close();
 			} catch (JMSException ex) {
-				log.error(ex.toString(),ex);
+				log.severe(ex.toString());
 			}
 		}
 	}

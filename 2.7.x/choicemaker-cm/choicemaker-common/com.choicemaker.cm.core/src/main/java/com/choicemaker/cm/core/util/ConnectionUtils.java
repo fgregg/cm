@@ -14,7 +14,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 
 /**
@@ -32,7 +32,7 @@ public class ConnectionUtils {
 			try {
 				stmt.close();
 			} catch (Exception ex) {
-				logger.warn(ex.toString(),ex);
+				logger.warning(ex.toString());
 			}
 		}
 	}
@@ -42,7 +42,7 @@ public class ConnectionUtils {
 			try {
 				stmt.close();
 			} catch (Exception ex) {
-				logger.warn(ex.toString(),ex);
+				logger.warning(ex.toString());
 			}
 		}
 	}
@@ -52,7 +52,7 @@ public class ConnectionUtils {
 			try {
 				conn.close();
 			} catch (Exception ex) {
-				logger.warn(ex.toString(),ex);
+				logger.warning(ex.toString());
 			}
 		}
 	}
@@ -62,7 +62,7 @@ public class ConnectionUtils {
 			try {
 				conn.rollback();
 			} catch (Exception ex) {
-				logger.warn(ex.toString(),ex);
+				logger.warning(ex.toString());
 			}
 		}
 	}
@@ -72,7 +72,7 @@ public class ConnectionUtils {
 			try {
 				conn.commit();
 			} catch (Exception ex) {
-				logger.warn(ex.toString(),ex);
+				logger.warning(ex.toString());
 			}
 		}
 	}

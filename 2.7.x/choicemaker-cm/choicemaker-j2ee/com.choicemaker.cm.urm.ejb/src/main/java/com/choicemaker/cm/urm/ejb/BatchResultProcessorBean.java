@@ -21,7 +21,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.Queue;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
@@ -80,7 +80,7 @@ public class BatchResultProcessorBean implements SessionBean {
 				initialized = true;
 			}
 		} catch (Exception ex) {
-			log.error(ex.toString (), ex);
+			log.severe(ex.toString());
 			throw new CreateException(ex.toString());
 		}
 
@@ -128,7 +128,7 @@ public class BatchResultProcessorBean implements SessionBean {
 						CmRuntimeException, 
 						RemoteException
 	{
-		log.debug("<<startResultToMrpsConversion");
+		log.fine("<<startResultToMrpsConversion");
 		long batchJobId = -1;
 		
 		BatchJob bj = null;
@@ -136,15 +136,15 @@ public class BatchResultProcessorBean implements SessionBean {
 			bj = Single.getInst().findBatchJobById(jobId);
 			batchJobId = bj.getId().longValue();
 		} catch (ConfigException e1) {
-			log.debug(e1);
+			log.fine(e1.toString());
 		} catch (CmRuntimeException e1) {
-			log.debug(e1);
+			log.fine(e1.toString());
 		}
 		
 		if(batchJobId == -1){		
 			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(jobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					
 			batchJobId  = batchStep.getStepJobId().longValue();		
-			log.debug("batch job jd = "+batchJobId);		
+			log.fine("batch job jd = "+batchJobId);		
 			bj  = Single.getInst().findBatchJobById(batchJobId);
 		}
 				
@@ -155,7 +155,7 @@ public class BatchResultProcessorBean implements SessionBean {
 		try {
 			url = new URL(mrpsUrl);
 		} catch (MalformedURLException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ArgumentException("invalid target url; "+e.toString()); 
 		}
 							
@@ -178,7 +178,7 @@ public class BatchResultProcessorBean implements SessionBean {
 				configuration);
 
 		sendToMrpsProcessorBean(br);
-		log.debug (">>startResultToMrpsConversion");
+		log.fine (">>startResultToMrpsConversion");
 		return oj.getId().longValue();		
 	}
 

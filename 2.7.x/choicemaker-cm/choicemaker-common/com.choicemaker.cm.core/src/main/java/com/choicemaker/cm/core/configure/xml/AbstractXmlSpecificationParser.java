@@ -20,7 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.util.Precondition;
 
@@ -45,7 +46,7 @@ public abstract class AbstractXmlSpecificationParser
 		try {
 			retVal = c.getConstructor(new Class[0]);
 		} catch (Exception x) {
-			log.debug(c.getName() + ": no default ctor");
+			log.fine(c.getName() + ": no default ctor");
 		}
 		return retVal;
 	}
@@ -58,7 +59,7 @@ public abstract class AbstractXmlSpecificationParser
 				c.getConstructor(
 					new Class[] { Properties.class, CHILDREN_CLASS });
 		} catch (Exception x) {
-			log.debug(c.getName() + ": no (Properties,XmlConfigurable[]) ctor");
+			log.fine(c.getName() + ": no (Properties,XmlConfigurable[]) ctor");
 		}
 		return retVal;
 	}
@@ -69,7 +70,7 @@ public abstract class AbstractXmlSpecificationParser
 		try {
 			retVal = c.getConstructor(new Class[] { Properties.class });
 		} catch (Exception x) {
-			log.debug(c.getName() + ": no (Properties) ctor");
+			log.fine(c.getName() + ": no (Properties) ctor");
 		}
 		return retVal;
 	}
@@ -90,7 +91,7 @@ public abstract class AbstractXmlSpecificationParser
 				}
 			}
 			sb.append("]");
-			log.warn(sb.toString());
+			log.warning(sb.toString());
 		}
 	}
 
@@ -140,7 +141,7 @@ public abstract class AbstractXmlSpecificationParser
 			if (!isSerializable) {
 				String msg =
 					"Not serializable: '" + configurable.getName() + "'";
-				log.error(msg);
+				log.severe(msg);
 				throw new XmlSpecificationException(msg);
 			}
 			*/
@@ -161,7 +162,7 @@ public abstract class AbstractXmlSpecificationParser
 			//				/* Third choice: a default constructor */
 			//				new Object[] { new Class[0], null }, };
 
-			if (log.isDebugEnabled()) {
+			if (log.isLoggable(Level.FINE)) {
 				Constructor[] ctors = configurableClass.getConstructors();
 				for (int i = 0; i < ctors.length; i++) {
 					Constructor ctor = ctors[i];
@@ -203,7 +204,7 @@ public abstract class AbstractXmlSpecificationParser
 			// Check if construction failed
 			if (retVal == null) {
 				String msg = "No appropriate contructor";
-				log.error(msg);
+				log.severe(msg);
 				throw new InstantiationException(msg);
 			}
 
@@ -211,7 +212,7 @@ public abstract class AbstractXmlSpecificationParser
 			String msg =
 				"Unable to create configurable object from XmlSpecification: "
 					+ x.toString();
-			log.error(msg, x);
+			log.severe(msg);
 			throw new XmlSpecificationException(msg, x);
 		}
 
@@ -222,7 +223,7 @@ public abstract class AbstractXmlSpecificationParser
 		int i,
 		Constructor ctor,
 		Class[] types) {
-		if (log.isDebugEnabled()) {
+		if (log.isLoggable(Level.FINE)) {
 			StringBuffer sb =
 				new StringBuffer()
 					.append("Constructor ")
@@ -237,7 +238,7 @@ public abstract class AbstractXmlSpecificationParser
 				}
 			}
 			sb.append(")");
-			log.debug(sb.toString());
+			log.fine(sb.toString());
 		}
 	}
 
@@ -282,8 +283,8 @@ public abstract class AbstractXmlSpecificationParser
 			retVal = this.fromXML(classLoader, document);
 		} catch (IOException x) {
 			String msg =
-				"UNEXPECTED: The string '" + xml + "' could not be read";
-			log.error(msg, x);
+				"UNEXPECTED: The string '" + xml + "' could not be read: ";
+			log.severe(msg + x);
 			throw new XmlSpecificationException(msg, x);
 		}
 		return retVal;
@@ -327,7 +328,7 @@ public abstract class AbstractXmlSpecificationParser
 			retVal = fromXML(classLoader, configurable);
 		} catch (Exception ex) {
 			String msg = "Unable to parse document";
-			log.error(msg);
+			log.severe(msg);
 			throw new XmlSpecificationException(msg, ex);
 		}
 		return retVal;

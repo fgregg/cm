@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -126,7 +126,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		IValidatorFactory factory = (IValidatorFactory) factories.get(extensionPoint);
 		if (factory == null) {
 				String msg = "no validator factory for '" + extensionPoint + "'";
-				logger.error(msg);
+				logger.severe(msg);
 				throw new ValidatorCreationException(msg);
 		}
 
@@ -166,7 +166,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 					} catch (CoreException x) {
 						String className = el.getAttribute("class");
 						String msg = registryExceptionMessage(className,handledExtensionPoint,x);
-						logger.error(msg,x);
+						logger.severe(msg);
 						throw new ValidatorCreationException(msg,x);
 					}
 					factory.setHandledValidatorExtensionPoint(
@@ -249,7 +249,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 			retVal = (IValidator) cachedValidators.get(name);
 			if (retVal == null) {
 				String msg = "no validator cached as '" + name + "')";
-				logger.error(msg);
+				logger.severe(msg);
 				throw new NoSuchElementException(msg);
 			}
 		} // else
@@ -282,7 +282,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 				} catch (Exception x) {
 					String msg =
 						registryExceptionMessage(name, extensionId, x);
-					logger.error(msg, x);
+					logger.severe(msg);
 					throw new ValidatorCreationException(msg, x);
 				}
 			} // for j ConfigurationElements
@@ -290,7 +290,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 
 		if (retVal == null) {
 			String msg = "no validator registered as '" + name + "')";
-			logger.error(msg);
+			logger.severe(msg);
 			throw new NoSuchElementException(msg);
 		}
 
@@ -351,7 +351,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 					String nvConfName = nv == null ? "null" : nv.configurationName;
 					String msg =
 						registryExceptionMessage(nvConfName, extensionId, x);
-					logger.error(msg, x);
+					logger.severe(msg);
 					pw.println(msg);
 				} // catch
 			} // for j ConfigurationElements
@@ -448,7 +448,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 					+ handledValidatorExtensionPoint
 					+ "'");
 		} else {
-			logger.debug(
+			logger.fine(
 				"redundant value '"
 					+ trimmedId
 					+ "' for handled extension point id");

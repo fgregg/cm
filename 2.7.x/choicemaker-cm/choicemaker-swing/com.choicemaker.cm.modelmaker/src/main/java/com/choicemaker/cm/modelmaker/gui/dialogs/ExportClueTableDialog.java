@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModel;
@@ -239,9 +239,8 @@ public class ExportClueTableDialog extends JDialog {
 					mySetCursor(Cursor.DEFAULT_CURSOR);
 				} catch (Exception ex) {
 					mySetCursor(Cursor.DEFAULT_CURSOR);
-					Logger.getLogger(ExportClueTableDialog.class.getName()).error(
-						"Unable to export clue table",
-						ex);
+					Logger.getLogger(ExportClueTableDialog.class.getName()).severe(
+						"Unable to export clue table: " + ex);
 				}
 			}
 		});

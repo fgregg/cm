@@ -24,7 +24,7 @@ package com.choicemaker.autonumber;
 
 import javax.naming.InitialContext;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  * AutoNumberFactory can persistently auto number items.
@@ -65,7 +65,7 @@ public class AutoNumberFactory
 				autoNumberHome = (AutoNumberHome) new InitialContext()
 						.lookup(JNDI_NAME);
 			} catch (javax.naming.NamingException e) {
-				log.error("operation failed", e);
+				log.severe("operation failed: " + e);
 			}
 		}
 
@@ -77,12 +77,12 @@ public class AutoNumberFactory
 				autoNumber = autoNumberHome.create(collectionName);
 				autoNumber.setValue(new Integer(0));
 			} catch (javax.ejb.CreateException x) {
-				log.error("operation failed", x);
+				log.severe("operation failed: " + x);
 			} catch (java.rmi.RemoteException x) {
-				log.error("operation failed", x);
+				log.severe("operation failed: " + x);
 			}
 		} catch (java.rmi.RemoteException e) {
-			log.error("operation failed", e);
+			log.severe("operation failed: " + e);
 		}
 
 		if (autoNumber != null) {
@@ -90,10 +90,10 @@ public class AutoNumberFactory
 				value = autoNumber.getValue();
 				autoNumber.setValue(new Integer(value.intValue() + 1));
 			} catch (java.rmi.RemoteException e) {
-				log.error("operation failed", e);
+				log.severe("operation failed: " + e);
 			}
 		} else {
-			log.error("null autoNumber instance for '" + collectionName + "'");
+			log.severe("null autoNumber instance for '" + collectionName + "'");
 		}
 
 		return value;
@@ -123,7 +123,7 @@ public class AutoNumberFactory
 				autoNumberHome = (AutoNumberHome) new InitialContext()
 						.lookup(JNDI_NAME);
 			} catch (javax.naming.NamingException e) {
-				log.error("operation failed", e);
+				log.severe("operation failed: " + e);
 			}
 		}
 
@@ -134,22 +134,22 @@ public class AutoNumberFactory
 			try {
 				autoNumber = autoNumberHome.create(collectionName);
 			} catch (javax.ejb.CreateException x) {
-				log.error("operation failed", x);
+				log.severe("operation failed: " + x);
 			} catch (java.rmi.RemoteException x) {
-				log.error("operation failed", x);
+				log.severe("operation failed: " + x);
 			}
 		} catch (java.rmi.RemoteException e) {
-			log.error("operation failed", e);
+			log.severe("operation failed: " + e);
 		}
 
 		if (autoNumber != null) {
 			try {
 				autoNumber.setValue(value);
 			} catch (java.rmi.RemoteException e) {
-				log.error("operation failed", e);
+				log.severe("operation failed: " + e);
 			}
 		} else {
-			log.error("null autoNumber instance for '" + collectionName + "'");
+			log.severe("null autoNumber instance for '" + collectionName + "'");
 		}
 
 

@@ -19,7 +19,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.analyzer.filter.DefaultPairFilter;
 import com.choicemaker.cm.analyzer.filter.Filter;
@@ -64,17 +64,17 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 	 * Constructor, which is public and takes no arguments.
 	 */
 	public MrpsBackend() {
-		log.debug("constractor");
+		log.fine("constractor");
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
-		log.debug("setMessageDrivenContext()");
+		log.fine("setMessageDrivenContext()");
 		this.mdc = mdc;
 	}
 
 	public void ejbCreate() {
-		log.debug("starting ejbCreate...");
-		log.debug("...finished ejbCreate");
+		log.fine("starting ejbCreate...");
+		log.fine("...finished ejbCreate");
 	}
 
 
@@ -86,7 +86,7 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 		IMrpsRequest request = null;
 		IControl control = null; 
 
-		log.debug("starting onMessage...");
+		log.fine("starting onMessage...");
 		try {
 
 			if (inMessage instanceof ObjectMessage) {
@@ -96,11 +96,11 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 				if (msgPayload instanceof IMrpsRequest) {
 
 					request = (IMrpsRequest) msg.getObject();
-					log.debug("received: " + request.getMrpsConvJobId());
+					log.fine("received: " + request.getMrpsConvJobId());
 
 					long jobId = request.getMrpsConvJobId().longValue();
 					CmsJob job = Single.getInst().findCmsJobById(jobId);
-					log.debug("starting backend process, id == " + jobId);
+					log.fine("starting backend process, id == " + jobId);
 					
 					Properties p = request.getProperties();
 					int batchSize = getBatchSize(p);
@@ -125,20 +125,20 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 					mrpsCreator.createMRPS();
 					job.markAsCompleted();
 				} else {
-					log.warn(
+					log.warning(
 						"wrong object type: '"
 							+ msgPayload.getClass().getName());
 				}
 			} else {
-				log.warn(
+				log.warning(
 					"wrong message type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 			e.printStackTrace();
 		} finally {
 			if (control != null) {
@@ -148,13 +148,13 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 			control = null;
 		}
 
-		log.debug("...finished onMessage");
+		log.fine("...finished onMessage");
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 		return;
 	} // onMessage(Message)
 
 	public void ejbRemove() {
-		log.debug("ejbRemove()");
+		log.fine("ejbRemove()");
 	}
 
 	static int getBatchSize(Properties p) {
@@ -260,16 +260,15 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 				if (statusMessage instanceof TextMessage) {
 					msg = (TextMessage) statusMessage;
 					String msgText = msg.getText();
-					log.debug(
+					log.fine(
 						"received status change notification :" + msgText);
 					this.lastStatus = msgText;
 				} else {
-					log.debug("received unexpected notification ...");
+					log.fine("received unexpected notification ...");
 				}
 			} catch (Exception x) {
-				log.error(
-					"Error in MrpsController.onMessage: " + x.toString(),
-					x);
+				log.severe(
+					"Error in MrpsController.onMessage: " + x.toString());
 			}
 			throw new RuntimeException("not yet implemented");
 		}
@@ -279,7 +278,7 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 				try {
 					this.statusSession.close();
 				} catch (JMSException x) {
-					log.warn("can't close session: " + x.toString());
+					log.warning("can't close session: " + x.toString());
 				}
 				this.statusSession = null;
 			}
@@ -288,7 +287,7 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 					this.statusConnection.stop();
 					this.statusConnection.close();
 				} catch (JMSException x) {
-					log.warn("can't close connection: " + x.toString());
+					log.warning("can't close connection: " + x.toString());
 				}
 				this.statusConnection = null;
 			}
@@ -297,7 +296,7 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 					this.statusSubscriber.setMessageListener(null);
 					this.statusSubscriber.close();
 				} catch (JMSException x) {
-					log.warn("can't close subscriber: " + x.toString());
+					log.warning("can't close subscriber: " + x.toString());
 				}
 				this.statusSubscriber = null;
 			}

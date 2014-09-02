@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.apache.tools.ant.util.FileUtils;
 
 /**
@@ -196,7 +196,7 @@ public class FileUtilities {
 					removeDir(f);
 				} else {
 					if (!f.delete()) {
-						logger.error("Unable to delete file "
+						logger.severe("Unable to delete file "
 								+ f.getAbsolutePath());
 					}
 				}
@@ -221,7 +221,7 @@ public class FileUtilities {
 			removeChildren(f);
 		}
 		if (!f.delete()) {
-			logger.error("Unable to delete directory " + f.getAbsolutePath());
+			logger.severe("Unable to delete directory " + f.getAbsolutePath());
 		}
 	}
 

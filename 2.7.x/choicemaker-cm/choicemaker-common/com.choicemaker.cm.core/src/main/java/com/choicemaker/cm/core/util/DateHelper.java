@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  * Utilities for dealing with <code>Date</code>s.
@@ -134,7 +134,7 @@ public class DateHelper {
 				d = oldTwoDigitYearLocaleSpecificDateParser.parse(s);
 			}
 		} catch (Exception ex) {
-			logger.error("Parsing date: " + s, ex);
+			logger.severe("Parsing date: " + s + ": " + ex);
 		}
 		return d;
 	}
@@ -163,7 +163,7 @@ public class DateHelper {
 				d = new java.sql.Date(d.getTime());
 			}
 		} catch (Exception ex) {
-			logger.error("Parsing date: " + s, ex);
+			logger.severe("Parsing date: " + s + ": " + ex);
 		}
 		return d;
 	}
@@ -176,7 +176,7 @@ public class DateHelper {
 		try {
 			d = java.sql.Date.valueOf(s);
 		} catch (Exception ex) {
-			logger.error("Parsing date: " + s, ex);
+			logger.severe("Parsing date: " + s + ": " + ex);
 		}
 		return d;
 	}

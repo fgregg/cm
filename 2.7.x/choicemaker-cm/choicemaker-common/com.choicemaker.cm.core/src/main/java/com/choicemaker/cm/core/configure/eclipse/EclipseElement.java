@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 import com.choicemaker.cm.core.configure.xml.IElement;
@@ -95,7 +95,7 @@ public class EclipseElement implements IElement {
 			}
 			sb.append("]");
 			String msg = sb.toString();
-			logger.warn(msg);
+			logger.warning(msg);
 		}
 		return retVal;
 	}

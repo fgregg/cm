@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.matching.gen.Sets;
 import com.choicemaker.cm.validation.AbstractSetBasedValidator;
@@ -91,7 +91,7 @@ public class StringInvalidator extends AbstractSetBasedValidator {
 		Collection c = Sets.getCollection(_setName);
 		if (c == null) {
 			String msg = "No set named '" + _setName + "'";
-			logger.error(msg);
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 
@@ -101,12 +101,12 @@ public class StringInvalidator extends AbstractSetBasedValidator {
 			String s = (String) i.next();
 			boolean nonEmpty = StringUtils.nonEmptyString(s);
 			if (nonEmpty && !s.startsWith(COMMENT_FLAG)) {
-				logger.debug(this.setName + ": adding '" + s + "'");
+				logger.fine(this.setName + ": adding '" + s + "'");
 				this.strings.add(s);
 			} else if (nonEmpty) {
-				logger.debug(this.setName + ": skipping '" + s + "'");
+				logger.fine(this.setName + ": skipping '" + s + "'");
 			} else {
-				logger.debug(this.setName + ": skipping blank line");
+				logger.fine(this.setName + ": skipping blank line");
 			}
 		}
 

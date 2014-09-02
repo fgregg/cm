@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -101,7 +101,7 @@ public class GeneratorImpl implements IGenerator {
 			try {
 				major = Long.parseLong(majorStr);
 			} catch (NumberFormatException e){
-				logger.error("invalid schema version value "+s);
+				logger.severe("invalid schema version value "+s);
 				return;
 			}
 		}
@@ -280,11 +280,11 @@ public class GeneratorImpl implements IGenerator {
 	}
 
 	public void error(String message) {
-		logger.error(message);
+		logger.severe(message);
 	}
 
 	public void warning(String message) {
-		logger.warn(message);
+		logger.warning(message);
 	}
 
 	public boolean hasErrors() {
@@ -327,11 +327,11 @@ public class GeneratorImpl implements IGenerator {
 		} catch (JDOMException ex) {
 			String msg = "XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex;
 			cu.error(msg);
-			logger.error(msg);
+			logger.severe(msg);
 		} catch (Exception ex) {
 			String msg = "Error processing schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex;
 			cu.error(msg);
-			logger.error(msg);
+			logger.severe(msg);
 		} finally {
 			XmlParserFactory.restoreClassLoader(oldCl);
 		}
@@ -340,15 +340,15 @@ public class GeneratorImpl implements IGenerator {
 
 	private class SaxErrorHandler implements org.xml.sax.ErrorHandler {
 		public void error(SAXParseException ex) {
-			logger.error("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
+			logger.severe("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
 		}
 
 		public void fatalError(SAXParseException ex) {
-			logger.error("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
+			logger.severe("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
 		}
 
 		public void warning(SAXParseException ex) {
-			logger.error("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
+			logger.severe("XML error in schema file " + schemaFileName + Constants.LINE_SEPARATOR + ex);
 		}
 	}
 

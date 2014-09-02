@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
@@ -150,7 +150,7 @@ public class FilterCluePanel extends JPanel {
 		} catch (NumberFormatException ex) {
 			// ignore
 		} catch (IllegalArgumentException ex) {
-			logger.error(new LoggingObject("CM-100101"), ex);
+			logger.severe(new LoggingObject("CM-100101").toString() + ": " + ex);
 		}
 		filter.setConditions(clueTable.getFilterConditions());
 		filter.setCollection(checked.isSelected() ? parent.getChecked() : null);

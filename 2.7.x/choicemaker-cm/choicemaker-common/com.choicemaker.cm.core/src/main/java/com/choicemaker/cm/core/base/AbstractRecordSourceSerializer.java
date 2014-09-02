@@ -16,8 +16,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.IRecordSourceSerializer;
 import com.choicemaker.cm.core.ISerializableRecordSource;
@@ -150,7 +150,7 @@ public abstract class AbstractRecordSourceSerializer
 		String propValue) {
 		Precondition.assertNonNullArgument("null logger", log);
 		Precondition.assertNonNullArgument("null priority", priority);
-		log.warn(
+		log.warning(
 			"Ignoring new value '"
 				+ propValue
 				+ "' for property named '"

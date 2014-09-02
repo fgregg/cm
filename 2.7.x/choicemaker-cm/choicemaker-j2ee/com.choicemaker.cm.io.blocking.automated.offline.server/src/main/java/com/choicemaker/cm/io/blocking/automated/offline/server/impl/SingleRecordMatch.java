@@ -22,7 +22,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
@@ -90,23 +90,23 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 	// private transient QueueConnection connection = null;
 
 	public SingleRecordMatch() {
-		// log.debug("constuctor");
+		// log.fine("constuctor");
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
-		// log.debug("setMessageDrivenContext()");
+		// log.fine("setMessageDrivenContext()");
 		this.mdc = mdc;
 	}
 
 	public void ejbCreate() {
-		// log.debug("starting ejbCreate...");
+		// log.fine("starting ejbCreate...");
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
-		// log.debug("...finished ejbCreate");
+		// log.fine("...finished ejbCreate");
 	}
 
 	public void onMessage(Message inMessage) {
@@ -150,14 +150,14 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 				batchJob.setDescription(mSink.getInfo());
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 			e.printStackTrace();
 		}
 
@@ -313,7 +313,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		IProbabilityModel model =
 			PMManager.getModelInstance(data.masterModelName);
 		if (model == null) {
-			log.error("Invalid probability accessProvider: "
+			log.severe("Invalid probability accessProvider: "
 					+ data.masterModelName);
 			throw new BlockingException(data.masterModelName);
 		}
@@ -343,13 +343,13 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 								"com.choicemaker.cm.core.beanMatchCandidate")
 						.getConfigurationElements()[0]
 						.createExecutableExtension("class");
-			log.debug("MatchCandidateFactory class: "
+			log.fine("MatchCandidateFactory class: "
 					+ matchCandidateFactory.getClass().getName());
 
 			while (stage.hasNext()) {
 				Record q = stage.getNext();
 				AutomatedBlocker rs = new Blocker2(databaseAccessor, model, q);
-				log.debug(q.getId() + " " + rs + " " + model);
+				log.fine(q.getId() + " " + rs + " " + model);
 
 				@SuppressWarnings("unchecked")
 				SortedSet<Match> s =
@@ -401,7 +401,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 	}
 
 	public void ejbRemove() {
-		// log.debug("ejbRemove()");
+		// log.fine("ejbRemove()");
 	}
 
 }

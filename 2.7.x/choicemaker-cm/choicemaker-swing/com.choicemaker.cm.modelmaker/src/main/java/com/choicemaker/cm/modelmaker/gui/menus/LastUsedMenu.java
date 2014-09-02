@@ -24,7 +24,7 @@ import java.util.prefs.Preferences;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.util.LoggingObject;
@@ -189,7 +189,7 @@ public abstract class LastUsedMenu extends JMenu {
 			oos.flush();
 			prefs.putByteArray(key, bos.toByteArray());
 		} catch (IOException ex) {
-			logger.error(new LoggingObject("CM-100201"), ex);
+			logger.severe(new LoggingObject("CM-100201").toString() + ": " + ex);
 		}
 	}
 
@@ -207,9 +207,9 @@ public abstract class LastUsedMenu extends JMenu {
 				}
 			}
 		} catch (IOException ex) {
-			logger.error(new LoggingObject("CM-100202"), ex);
+			logger.severe(new LoggingObject("CM-100202").toString() + ": " + ex);
 		} catch (ClassNotFoundException ex) {
-			logger.error(new LoggingObject("CM-100202"), ex);
+			logger.severe(new LoggingObject("CM-100202").toString() + ": " + ex);
 		}
 	}
 }

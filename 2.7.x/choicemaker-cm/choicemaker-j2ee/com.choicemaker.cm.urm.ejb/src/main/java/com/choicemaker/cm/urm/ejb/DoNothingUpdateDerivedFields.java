@@ -16,7 +16,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.urm.exceptions.UrmIncompleteSpecificationException;
 
@@ -42,10 +42,10 @@ public class DoNothingUpdateDerivedFields extends AbstractUpdateDerivedFields {
 
 		if (dataSource == null) {
 			// Normally, an IllegalArgumentException
-			log.error("null data source");
+			log.severe("null data source");
 		}
 		final int retVal = 0;
-		log.warn(
+		log.warning(
 			"Default updateDirtyDerivedFields does nothing; "
 				+ retVal
 				+ " records updated.");
@@ -60,10 +60,10 @@ public class DoNothingUpdateDerivedFields extends AbstractUpdateDerivedFields {
 
 		if (dataSource == null) {
 			// Normally, an IllegalArgumentException
-			log.error("null data source");
+			log.severe("null data source");
 		}
 		final int retVal = 0;
-		log.warn(
+		log.warning(
 			"Default updateAllDerivedFields does nothing; "
 				+ retVal
 				+ " records updated.");
@@ -78,10 +78,10 @@ public class DoNothingUpdateDerivedFields extends AbstractUpdateDerivedFields {
 
 		if (dataSource == null) {
 			// Normally, an IllegalArgumentException
-			log.error("null data source");
+			log.severe("null data source");
 		}
 		final int retVal = 0;
-		log.warn(
+		log.warning(
 			"Default updateDerivedFields does nothing; "
 				+ retVal
 				+ " records updated.");
@@ -93,7 +93,7 @@ public class DoNothingUpdateDerivedFields extends AbstractUpdateDerivedFields {
 	 */
 	protected void checkProperties(Properties p)
 		throws UrmIncompleteSpecificationException {
-		log.debug("properties: " + p.toString());
+		log.fine("properties: " + p.toString());
 	}
 
 }

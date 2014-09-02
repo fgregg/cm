@@ -30,7 +30,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -146,7 +146,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 			SourceGui sourceGui = save ? sourceGuiFactory.createSaveGui(parent) : sourceGuiFactory.createGui(parent);
 			source = sourceGui.define();
 		} catch (CoreException e) {
-			logger.error(e.toString(),e);;
+			logger.severe(e.toString());;
 		}
 	}
 

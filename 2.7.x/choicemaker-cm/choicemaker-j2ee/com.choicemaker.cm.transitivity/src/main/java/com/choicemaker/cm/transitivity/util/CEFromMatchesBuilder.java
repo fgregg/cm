@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -100,7 +100,7 @@ public class CEFromMatchesBuilder {
 		List l = allMatch(records);
 		pairs.addAll(l);
 
-		logger.debug("number of pairs: " + pairs.size());
+		logger.fine("number of pairs: " + pairs.size());
 
 		CompositeEntityBuilder ceb = new CompositeEntityBuilder (pairs);
 		return ceb.getCompositeEntities();
@@ -124,7 +124,7 @@ public class CEFromMatchesBuilder {
 				MatchRecord2 mr = match (r1, r2);
 				if (mr != null) ret.add(mr);
 
-				logger.debug("r1 " + r1.getId().toString() + " r2 " + r2.getId().toString());
+				logger.fine("r1 " + r1.getId().toString() + " r2 " + r2.getId().toString());
 			}
 		}
 		return ret;

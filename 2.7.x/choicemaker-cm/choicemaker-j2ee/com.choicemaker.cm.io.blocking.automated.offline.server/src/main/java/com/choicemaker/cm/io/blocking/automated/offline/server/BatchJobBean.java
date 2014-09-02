@@ -32,7 +32,7 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 
@@ -301,14 +301,14 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		String msg =
 			getId() + ", '" + getExternalId() + "': transitioning from "
 					+ getStatusAsString() + " to " + newStatus;
-		log.warn(msg);
+		log.warning(msg);
 	}
 
 	private void logIgnoredTransition(String transition) {
 		String msg =
 			getId() + ", '" + getExternalId() + "': " + transition
 					+ " ignored (status == '" + getStatusAsString() + "'";
-		log.warn(msg);
+		log.warning(msg);
 	}
 
 	// -- Job Control

@@ -17,7 +17,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.basic.BasicFileChooserUI;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.util.CustomFileFilter;
@@ -216,7 +216,7 @@ public final class FileChooserFactory {
 		try {
 			((BasicFileChooserUI)chooser.getUI()).setFileName("");
 		} catch (ClassCastException ex) {
-			logger.error("Unable to clear file name field", ex);	
+			logger.severe("Unable to clear file name field: " + ex);	
 		}
 		if (file != null) {
 			chooser.setCurrentDirectory(file);

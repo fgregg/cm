@@ -24,7 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -509,7 +509,7 @@ public class ModelMenu extends LastUsedMenu {
 		try {
 			parent.setProbabilityModel(fileName, false);
 		} catch (OperationFailedException ex) {
-			logger.error(new LoggingObject("CM-100502", fileName), ex);
+			logger.severe(new LoggingObject("CM-100502", fileName).toString() + ": " + ex);
 			remove(fileName);
 		}
 	}

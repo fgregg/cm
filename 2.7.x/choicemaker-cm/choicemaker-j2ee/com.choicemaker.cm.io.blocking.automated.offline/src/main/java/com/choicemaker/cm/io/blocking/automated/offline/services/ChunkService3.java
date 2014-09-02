@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -355,7 +355,7 @@ public class ChunkService3 {
 		long [] ind, RecordSource rs, IProbabilityModel model) 
 		throws BlockingException, XmlConfException, IOException {
 			
-		log.debug ("starting " + start + " ending " + end);
+		log.fine ("starting " + start + " ending " + end);
 
 		//set up	
 		for (int i=start; i < end; i++) {

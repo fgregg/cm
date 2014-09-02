@@ -14,8 +14,8 @@ import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.SortedSet;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -88,7 +88,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 		MatchScore resMs = null;	
 		IProbabilityModel model = getProbabilityModel(modelName);
 		if(resultFormat == null){
-			log.error("Invalid resultFormat argument." );
+			log.severe("Invalid resultFormat argument." );
 			throw new ArgumentException("Invalid resultFormat argument.");
 		}
 			
@@ -147,13 +147,13 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 				
 		try {
 			long startTime = System.currentTimeMillis();
-			log.debug("<< getMatchCandidates");
+			log.fine("<< getMatchCandidates");
 			if(resultFormat == null || resultFormat.getRecordType() == null || resultFormat.getScoreType() == null ){
 				String errMessage ="Invalid result format argument.";  
-				log.error(errMessage);
+				log.severe(errMessage);
 				throw new ArgumentException(errMessage);
 			}
-			if (log.isDebugEnabled()) {
+			if (log.isLoggable(Level.FINE)) {
 				writeDebugInfo(
 					queryRecord,
 					modelName,
@@ -162,7 +162,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 					maxNumMatches,
 					resultFormat,
 					externalId,
-					Level.DEBUG);
+					Level.FINE);
 			}
 			SortedSet s = getMatches(startTime,
 									 queryRecord, 
@@ -189,10 +189,10 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 				matchCand[i] = getEvaluatedRecord(resultFormat,(Match) iS.next(),model);
 			}
 		} catch (RuntimeException ex) {
-			log.error("runtime exception", ex);
+			log.severe("runtime exception: " + ex);
 			throw new CmRuntimeException(ex.toString());
 		}		
-		log.debug (">> getMatchCandidates");
+		log.fine (">> getMatchCandidates");
 		return matchCand;
 	}
 

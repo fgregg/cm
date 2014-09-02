@@ -3,7 +3,7 @@ package com.choicemaker.cm.core.compiler;
 import java.io.Writer;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -77,7 +77,7 @@ public final class InstallableCompiler implements ICompiler {
 				}
 			} catch (Exception x) {
 				String msg = msgPrefix + x.toString() + ": " + x.getCause();
-				logger.error(msg, x);
+				logger.severe(msg);
 				assert delegate == null;
 				throw new IllegalStateException(msg);
 			}
@@ -146,7 +146,7 @@ public final class InstallableCompiler implements ICompiler {
 			install(instance);
 		} catch (Exception e) {
 			String msg = msgPrefix + e.toString() + ": " + e.getCause();
-			logger.error(msg, e);
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 	}

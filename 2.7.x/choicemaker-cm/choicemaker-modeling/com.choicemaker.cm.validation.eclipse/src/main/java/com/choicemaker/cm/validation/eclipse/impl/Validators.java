@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.cm.validation.ValidatorCreationException;
@@ -93,7 +93,7 @@ public final class Validators {
 			Map newValidatorMap = cloneMap(getValidators());
 			Object alreadyPresent = newValidatorMap.put(name, validator);
 			if (alreadyPresent != null) {
-				logger.warn(
+				logger.warning(
 					"An instance of "
 						+ alreadyPresent.getClass().getName()
 						+ "was replaced as a validator by an instance of "
@@ -128,7 +128,7 @@ public final class Validators {
 		IValidator retVal = (IValidator) getValidators().get(name);
 		if (retVal == null) {
 			String msg = "unknown validator '" + name + "'";
-			logger.error(msg);
+			logger.severe(msg);
 		}
 		return retVal;
 	}

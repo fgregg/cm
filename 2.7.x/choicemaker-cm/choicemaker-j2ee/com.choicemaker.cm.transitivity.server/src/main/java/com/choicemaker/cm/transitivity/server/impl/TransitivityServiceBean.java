@@ -22,7 +22,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
@@ -109,7 +109,7 @@ public class TransitivityServiceBean implements SessionBean {
 
 		IProbabilityModel model = PMManager.getModelInstance(probabilityModel);
 		if (model == null) {
-			logger.error("Invalid probability accessProvider: " + probabilityModel);
+			logger.severe("Invalid probability accessProvider: " + probabilityModel);
 			throw new InvalidModelException(probabilityModel);
 		}
 		// 2014-04-24 rphall: Commented out unused local variable
@@ -131,10 +131,10 @@ public class TransitivityServiceBean implements SessionBean {
 		try {
 			s = dm.getMatches(q, rs, model, differThreshold, matchThreshold);
 		} catch (UnderspecifiedQueryException ex) {
-			logger.warn("", ex);
+			logger.warning(ex.toString());
 			throw new UnderspecifiedProfileException("", ex);
 		} catch (IOException ex) {
-			logger.error("Database error: " + ex, ex);
+			logger.severe("Database error: " + ex);
 			throw new DatabaseException("", ex);
 		}
 
@@ -151,7 +151,7 @@ public class TransitivityServiceBean implements SessionBean {
 					matchThreshold, ces);
 			}
 		} catch (TransitivityException e) {
-			logger.error(e.toString(), e);
+			logger.severe(e.toString());
 		}
 
 		return tr;

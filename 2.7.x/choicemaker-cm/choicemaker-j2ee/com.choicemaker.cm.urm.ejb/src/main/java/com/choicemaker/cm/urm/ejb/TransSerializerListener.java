@@ -17,7 +17,7 @@ import javax.ejb.CreateException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
@@ -37,7 +37,7 @@ public class TransSerializerListener extends WorkflowControlListener{
 	 * Constructor, which is public and takes no arguments.
 	 */
 	public TransSerializerListener() {
-    	log.debug("TransSerializerListener constructor");
+    	log.fine("TransSerializerListener constructor");
 	}
 	protected boolean isAbortCheckRequired() {return false;}
 

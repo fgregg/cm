@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -85,7 +85,7 @@ public class DbRecordSource implements RecordSource {
 			DbAccessor dba = (DbAccessor) model.getAccessor();
 			dbr = (dba).getDbReaderParallel(conf);
 
-			logger.debug (conf + " " + dbr);
+			logger.fine (conf + " " + dbr);
 
 			// Set _debugSql=true for SqlDeveloper debugging
 			//
@@ -103,7 +103,7 @@ public class DbRecordSource implements RecordSource {
 					_stmt.execute();
 					_stmt.close();
 				} catch (Exception _x) {
-					logger.warn(_x.toString());
+					logger.warning(_x.toString());
 				}
 			}
 			// END SqlDeveloper debugging
@@ -116,8 +116,8 @@ public class DbRecordSource implements RecordSource {
 			stmt.setString(2, s);
 			stmt.registerOutParameter(3, CURSOR);
 
-			logger.debug("select: " + selection);
-			logger.debug("dbrName: " + s);
+			logger.fine("select: " + selection);
+			logger.fine("dbrName: " + s);
 
 			stmt.execute();
 
@@ -130,7 +130,7 @@ public class DbRecordSource implements RecordSource {
 				rs[0] = outer;
 			} else {
 				for (int i = 0; i < noCursors; ++i) {
-					logger.debug("Get cursor: " + i);
+					logger.fine("Get cursor: " + i);
 					rs[i] = (ResultSet) outer.getObject(i + 1);
 				}
 			}

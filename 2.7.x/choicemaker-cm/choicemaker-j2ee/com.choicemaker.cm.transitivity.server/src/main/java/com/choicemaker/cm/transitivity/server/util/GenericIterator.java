@@ -13,7 +13,7 @@ package com.choicemaker.cm.transitivity.server.util;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.EdgeProperty;
@@ -94,7 +94,7 @@ public class GenericIterator implements Iterator {
 			ret = compactor.compact(ce);
 			
 		} catch (TransitivityException e) {
-			log.error(e,e);
+			log.severe(e.toString());
 			throw new NoSuchElementException(e.getMessage());
 		}
 

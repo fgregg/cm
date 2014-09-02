@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.Platform;
@@ -269,7 +269,7 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 				reporter.open();
 				reporters.add(reporter);
 			} catch (Exception ex) {
-				logger.error("Configuring reporter", ex);
+				logger.severe("Configuring reporter: " + ex);
 			}
 		}
 		PMManager.setGlobalReporters((Reporter[]) reporters.toArray(new Reporter[reporters.size()]));

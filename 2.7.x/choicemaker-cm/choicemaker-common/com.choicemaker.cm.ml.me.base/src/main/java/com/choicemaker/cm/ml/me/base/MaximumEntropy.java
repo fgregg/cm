@@ -12,7 +12,7 @@ package com.choicemaker.cm.ml.me.base;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
@@ -131,7 +131,7 @@ public class MaximumEntropy implements MachineLearner {
 			setWeights(estimator.getWeights());
 			return estimator.getWarning();
 		} catch (Exception ex) {
-			logger.error(new LoggingObject("CM-010001"), ex);
+			logger.severe(new LoggingObject("CM-010001").toString());
 			return null;
 		}
 	}

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  * This object contains a group of record IDs belonging to a block that need to be compared against
@@ -85,7 +85,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 		int s = stagingIDs.size() + masterIDs.size();
 		random = new Random (s);
 
-		log.debug("Random " + s);
+		log.fine("Random " + s);
 
 		//create the S set
 		int sSize;
@@ -171,7 +171,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 				ret.id2 = (Comparable) S.get(sID2);
 				ret.isStage = true;
 
-				log.debug ("Round robin s " + ret.id1.toString() + " " + ret.id2.toString());
+				log.fine ("Round robin s " + ret.id1.toString() + " " + ret.id2.toString());
 
 				sID2 ++;
 				if (sID2 == s1) {
@@ -208,7 +208,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 				ret.id2 = (Comparable) S.get(sID2);
 				ret.isStage = true;
 					
-				log.debug ("TStage with S " + ret.id1.toString() + " " + ret.id2.toString());
+				log.fine ("TStage with S " + ret.id1.toString() + " " + ret.id2.toString());
 
 				sID2++;
 				if (sID2 == s1) {
@@ -238,7 +238,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 				ret.id2 = (Comparable) masterIDs.get(sID1);
 				ret.isStage = false;
 
-				log.debug ("TMaster with S " + ret.id1.toString() + " " + ret.id2.toString());
+				log.fine ("TMaster with S " + ret.id1.toString() + " " + ret.id2.toString());
 
 				sID2++;
 				if (sID2 == s1) {
@@ -265,7 +265,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 					ret.id2 = (Comparable) masterIDs.get(sID1);
 					ret.isStage = false;
 					
-					log.debug ("TMaster random " + ret.id1.toString() + " " + ret.id2.toString());
+					log.fine ("TMaster random " + ret.id1.toString() + " " + ret.id2.toString());
 
 					sID2++;
 					if (sID2 == s1) {
@@ -289,7 +289,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 					ret.id2 = (Comparable) masterIDs.get(sID1);
 					ret.isStage = false;
 					
-					log.debug ("TMaster random " + ret.id1.toString() + " " + ret.id2.toString());
+					log.fine ("TMaster random " + ret.id1.toString() + " " + ret.id2.toString());
 
 					sID2 ++;
 					if (sID2 == 4) {
@@ -322,7 +322,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 					ret.id2 = (Comparable) TStage.get(n);
 					ret.isStage = true;
 					
-					log.debug ("TStage random i+1 " + ret.id1.toString() + " " + ret.id2.toString());
+					log.fine ("TStage random i+1 " + ret.id1.toString() + " " + ret.id2.toString());
 
 					checkedNext = true;
 					
@@ -348,7 +348,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 							ret.isStage = true;
 						}
 						
-						log.debug ("TStage random " + ret.id1.toString() + " " + ret.id2.toString());
+						log.fine ("TStage random " + ret.id1.toString() + " " + ret.id2.toString());
 
 						sID2 ++;
 						mID1 ++;

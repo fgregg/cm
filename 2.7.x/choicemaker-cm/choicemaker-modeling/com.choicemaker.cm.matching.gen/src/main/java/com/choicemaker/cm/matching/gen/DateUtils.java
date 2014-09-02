@@ -13,7 +13,7 @@ package com.choicemaker.cm.matching.gen;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.util.DateHelper;
 import com.choicemaker.util.StringUtils;
@@ -250,7 +250,7 @@ public class DateUtils extends DateHelper {
 			answer = (day == calendar.get(Calendar.DAY_OF_MONTH));
 			answer = answer && (month == calendar.get(Calendar.MONTH));
 		} catch (IllegalArgumentException ex) {
-			logger.error("d1: " + d1.getTime() + ", d2: " + d2.getTime(), ex);
+			logger.severe("d1: " + d1.getTime() + ", d2: " + d2.getTime() + ": " + ex);
 		}
 		return answer;
 	}
@@ -282,7 +282,7 @@ public class DateUtils extends DateHelper {
 			int lt2 = year2 % 100;
 			answer = answer && (lt1 / 10 == lt2 / 10 || lt1 % 10 == lt2 % 10);
 		} catch (IllegalArgumentException ex) {
-			logger.error("d1: " + d1.getTime() + ", d2: " + d2.getTime(), ex);
+			logger.severe("d1: " + d1.getTime() + ", d2: " + d2.getTime() + ": " + ex);
 		}
 		return answer;
 	}

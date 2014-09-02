@@ -3,7 +3,7 @@ package com.choicemaker.cm.core.gen;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.PropertyNames;
 
@@ -80,7 +80,7 @@ public final class InstallableGeneratorPluginFactory implements
 				}
 			} catch (Exception x) {
 				String msg = msgPrefix + x.toString() + ": " + x.getCause();
-				logger.error(msg, x);
+				logger.severe(msg);
 				assert delegate == null;
 				throw new IllegalStateException(msg);
 			}
@@ -132,7 +132,7 @@ public final class InstallableGeneratorPluginFactory implements
 			install(instance);
 		} catch (Exception e) {
 			String msg = msgPrefix + e.toString() + ": " + e.getCause();
-			logger.error(msg, e);
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 	}

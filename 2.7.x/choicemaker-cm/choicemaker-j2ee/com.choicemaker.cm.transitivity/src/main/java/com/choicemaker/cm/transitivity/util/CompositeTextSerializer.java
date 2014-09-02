@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
@@ -62,7 +62,7 @@ public class CompositeTextSerializer extends TextSerializer {
 			writer = new FileWriter (
 				FileUtils.getFileName(fileBase, fileExt, currentFile), false);
 		} catch (IOException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 	}
 	

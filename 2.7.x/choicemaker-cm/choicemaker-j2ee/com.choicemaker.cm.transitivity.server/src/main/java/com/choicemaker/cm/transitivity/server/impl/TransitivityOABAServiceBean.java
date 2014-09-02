@@ -23,7 +23,7 @@ import javax.jms.Queue;
 //import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
@@ -97,7 +97,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 			sendToTransitivity (data);
 
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
 
 		return jobID;
@@ -130,7 +130,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 			sendToTransitivity (data);
 
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
 
 		return jobID;
@@ -270,7 +270,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 				initialized = true;
 			}
 		} catch (Exception ex) {
-			log.error(ex.toString (), ex);
+			log.severe(ex.toString());
 			throw new CreateException(ex.getMessage());
 		}
 

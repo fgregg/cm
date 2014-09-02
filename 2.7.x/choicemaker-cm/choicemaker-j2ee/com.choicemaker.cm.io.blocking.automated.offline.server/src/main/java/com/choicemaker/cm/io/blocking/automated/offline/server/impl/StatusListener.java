@@ -17,7 +17,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 
 /**
@@ -53,24 +53,24 @@ public class StatusListener implements MessageDrivenBean, MessageListener {
 	 * Constructor, which is public and takes no arguments.
 	 */
 	public StatusListener() {
-    	log.debug("constructor");
+    	log.fine("constructor");
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
-		log.debug("setMessageDrivenContext()");
+		log.fine("setMessageDrivenContext()");
 		this.mdc = mdc;
 	}
 
 	public void ejbCreate() {
-    	log.debug("starting ejbCreate...");
-		log.debug("...finished ejbCreate");
+    	log.fine("starting ejbCreate...");
+		log.fine("...finished ejbCreate");
 	}
 
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		
-		log.debug("starting onMessage...");
+		log.fine("starting onMessage...");
 		try {
 		 if (inMessage instanceof ObjectMessage) {
 			msg = (ObjectMessage) inMessage;
@@ -78,22 +78,22 @@ public class StatusListener implements MessageDrivenBean, MessageListener {
     		log.info("received status change notification :" + L.toString());
 		 }
 		 else
-		 	log.debug("received unexpected notification ...");
+		 	log.fine("received unexpected notification ...");
 		} catch (JMSException e) {
-      		log.error(e.toString(),e);
+      		log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (Exception e) {
-      		log.error(e.toString(),e);
+      		log.severe(e.toString());
 			e.printStackTrace();
 		}
 
-    log.debug("... finished onMessage");
+    log.fine("... finished onMessage");
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
     return;
 	} // onMessage(Message)
 
 	public void ejbRemove() {
-		log.debug("ejbRemove()");
+		log.fine("ejbRemove()");
 	}
 
 } // StatusListener

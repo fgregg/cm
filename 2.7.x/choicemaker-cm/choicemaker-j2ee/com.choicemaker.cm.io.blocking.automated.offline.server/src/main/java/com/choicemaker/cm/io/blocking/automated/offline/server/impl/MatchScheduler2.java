@@ -24,7 +24,8 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -115,11 +116,11 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 
 
 	public void ejbCreate() {
-		log.debug("starting ejbCreate...");
+		log.fine("starting ejbCreate...");
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 	}
 
@@ -145,7 +146,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;
 		
-		log.debug ("MatchScheduler2 In onMessage");
+		log.fine ("MatchScheduler2 In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -199,21 +200,21 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 				}
 				
 			} else {			
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 			
 		} catch (JMSException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
 			try {
-				log.error(e);
+				log.severe(e.toString());
 				if (batchJob != null) batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(),e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
@@ -257,7 +258,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 			numMatches += d.numMatches;
 					
 			//update time trackers
-			if (log.isDebugEnabled()) {
+			if (log.isLoggable(Level.FINE)) {
 				timeWriting[d.treeInd - 1] += d.timeWriting;
 				inHMLookUp[d.treeInd - 1] += d.inLookup;
 				inCompare[d.treeInd - 1] += d.inCompare;
@@ -289,9 +290,9 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 					log.info("total garbage collection time: " + timegc);
 							
 					//writing out time break downs
-					if (log.isDebugEnabled()) {
+					if (log.isLoggable(Level.FINE)) {
 						for (int i=0; i < numProcessors; i++) {
-							log.debug("Processor " + i + " writing time: " + timeWriting[i] +
+							log.fine("Processor " + i + " writing time: " + timeWriting[i] +
 							" lookup time: " + inHMLookUp[i] + " compare time: " + inCompare[i]);
 						}
 					}
@@ -391,7 +392,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 			IMatchRecord2Sink mSink = oabaConfig.getMatchChunkFactory().getSink(i);
 			mSink.open();
 			mSink.close();
-			log.debug("creating " + mSink.getInfo());
+			log.fine("creating " + mSink.getInfo());
 		}
 		
 		nextSteps ();
@@ -404,7 +405,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 	private void startChunk (int ind, BatchJob batchJob) 
 		throws BlockingException, NamingException, JMSException {
 
-		log.debug("startChunk " + ind);
+		log.fine("startChunk " + ind);
 			
 		IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
 		IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
@@ -490,7 +491,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 	protected void sendToMatcher (StartData sd) throws NamingException, JMSException{
 		Queue queue = configuration.getMatcherMessageQueue();
 		
-		log.debug(" Sending chunkId " + sd.ind + " treeId " + sd.treeInd + " to " + queue.getQueueName());
+		log.fine(" Sending chunkId " + sd.ind + " treeId " + sd.treeInd + " to " + queue.getQueueName());
 		
 		configuration.sendMessage(queue, sd);
 	} 

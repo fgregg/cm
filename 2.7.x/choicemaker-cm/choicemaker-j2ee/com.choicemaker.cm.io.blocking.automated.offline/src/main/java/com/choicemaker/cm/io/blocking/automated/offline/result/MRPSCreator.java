@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.analyzer.filter.Filter;
 import com.choicemaker.cm.analyzer.sampler.PairSampler;
@@ -290,7 +291,7 @@ public class MRPSCreator {
 					this.control,
 					batchSize);
 				incrementPairCount(matchRecords.size());
-				if (log.isInfoEnabled()) {
+				if (log.isLoggable(Level.INFO)) {
 					log.info("Batch number: " + getBatchNum());
 					log.info(
 						PRETTY_PRINT_INDENT
@@ -356,7 +357,7 @@ public class MRPSCreator {
 								+ xmlData
 								+ "'");
 					} catch (Exception x) {
-						log.warn("Sampler could not be dumped", x);
+						log.warning("Sampler could not be dumped: " + x);
 					}
 				}
 
@@ -370,7 +371,7 @@ public class MRPSCreator {
 			if (this.sampler == null) {
 
 				// If there is no sampler, just log the total number of pairs
-				if (log.isInfoEnabled()) {
+				if (log.isLoggable(Level.INFO)) {
 					log.info("Total number of pairs: " + getPairCount());
 				}
 
@@ -390,7 +391,7 @@ public class MRPSCreator {
 							+ ","
 							+ mrp.getMatchRecord().getId());
 				}
-				if (log.isInfoEnabled()) {
+				if (log.isLoggable(Level.INFO)) {
 					log.info("Total number of (sampled) pairs: " + count);
 				}
 
@@ -404,12 +405,12 @@ public class MRPSCreator {
 			try {
 				mrSource.close();
 			} catch (Exception x) {
-				log.warn("Unable to close mrSource: " + x.getMessage());
+				log.warning("Unable to close mrSource: " + x.getMessage());
 			}
 			try {
 				mrps.close();
 			} catch (Exception x) {
-				log.warn("Unable to close mrps: " + x.getMessage());
+				log.warning("Unable to close mrps: " + x.getMessage());
 			}
 		}
 
@@ -530,9 +531,9 @@ public class MRPSCreator {
 
 		// Stage map shouldn't be empty (usually), but master map may be
 		if (stageMap.isEmpty()) {
-			log.warn("empty stage map");
+			log.warning("empty stage map");
 		}
-		if (masterMap.isEmpty() && log.isInfoEnabled()) {
+		if (masterMap.isEmpty() && log.isLoggable(Level.INFO)) {
 			log.info("empty master map");
 		}
 
@@ -641,7 +642,7 @@ public class MRPSCreator {
 
 		// id set shouldn't be empty (usually)
 		if (ids.isEmpty()) {
-			log.warn("empty id set");
+			log.warning("empty id set");
 		}
 
 		try {
@@ -655,7 +656,7 @@ public class MRPSCreator {
 				rs.open();
 			} catch (IOException x) {
 				String msg = "Unable to open record source: " + x.getMessage();
-				log.error(msg);
+				log.severe(msg);
 				throw new BlockingException(msg);
 			}
 
@@ -674,8 +675,8 @@ public class MRPSCreator {
 					//count++;
 				}
 
-				if (log.isDebugEnabled() && count2 % DEBUG_INTERVAL == 0) {
-					log.debug(
+				if (log.isLoggable(Level.FINE) && count2 % DEBUG_INTERVAL == 0) {
+					log.fine(
 						PRETTY_PRINT_INDENT
 							+ PRETTY_PRINT_INDENT
 							+ count2
@@ -696,7 +697,7 @@ public class MRPSCreator {
 				rs.close();
 			} catch (Exception x) {
 				String msg = "Unable to close record source: " + x.getMessage();
-				log.warn(msg);
+				log.warning(msg);
 			}
 		} // finally
 

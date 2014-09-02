@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.matching.gen.Sets;
 import com.choicemaker.cm.validation.AbstractSetBasedValidator;
@@ -95,20 +95,20 @@ public class StringPatternValidator
 			String s = (String) i.next();
 			boolean nonEmptyString = StringUtils.nonEmptyString(s);
 			if (nonEmptyString && !s.startsWith(COMMENT_FLAG)) {
-				logger.debug(setName + ": adding '" + s + "'");
+				logger.fine(setName + ": adding '" + s + "'");
 				Pattern p = null;
 				try {
 					p = Pattern.compile(s);
 				} catch (PatternSyntaxException x) {
 					String msg = "invalid pattern '" + s + "'";
-					logger.error(msg, x);
+					logger.severe(msg + ": " + x);
 					throw x;
 				}
 				patternList.add(p);
 			} else if (nonEmptyString) {
-				logger.debug(setName + ": skipping '" + s + "'");
+				logger.fine(setName + ": skipping '" + s + "'");
 			} else {
-				logger.debug(setName + ": skipping blank line");
+				logger.fine(setName + ": skipping blank line");
 			}
 		}
 		this.patterns = (Pattern[]) patternList.toArray(new Pattern[0]);

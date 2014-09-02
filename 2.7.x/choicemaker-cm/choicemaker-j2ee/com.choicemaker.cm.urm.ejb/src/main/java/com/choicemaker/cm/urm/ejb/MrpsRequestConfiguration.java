@@ -20,7 +20,8 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Defines allowed property names and default values for an MrpsRequest. This
@@ -34,7 +35,7 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration,
 		Cloneable {
 
 	private final static Logger theLog = Logger
-			.getLogger(MrpsRequestConfiguration.class);
+			.getLogger(MrpsRequestConfiguration.class.getName());
 
 	/** Allowed property names (excluding PN_VERSION) */
 	private static String[] ALLOWED_NONVERSION_NAMES = new String[] {
@@ -64,13 +65,13 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration,
 		try {
 			is = MrpsRequestConfiguration.class.getClassLoader().getResourceAsStream(PROPERTY_FILE);
 			defaultProperties.load(is);
-			if (theLog.isDebugEnabled()) {
-				theLog.debug("loaded properties from '" + PROPERTY_FILE + "'");
+			if (theLog.isLoggable(Level.FINE)) {
+				theLog.fine("loaded properties from '" + PROPERTY_FILE + "'");
 				java.util.Iterator _e =
 					getDefaultproperties().entrySet().iterator();
 				while (_e.hasNext()) {
 					Entry entry = (Entry) _e.next();
-					theLog.debug("property: " + entry.getKey() + ", value: "
+					theLog.fine("property: " + entry.getKey() + ", value: "
 							+ entry.getValue());
 				}
 			}
@@ -78,7 +79,7 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration,
 			String msg =
 				"unable to load default properties from '" + PROPERTY_FILE
 						+ "'";
-			theLog.fatal(msg, x);
+			theLog.severe(msg + ": " + x);
 			throw new IllegalStateException(msg);
 		} finally {
 			if (is != null) {

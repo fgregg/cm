@@ -18,7 +18,7 @@ import java.util.Calendar;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.util.ConnectionUtils;
@@ -146,7 +146,7 @@ public class MatchDBWriter {
 			connWrite.commit();
 	
 		} catch (SQLException ex) {
-			log.error(ex.toString(), ex);
+			log.severe(ex.toString());
 			ConnectionUtils.tryToCloseStatement(pstmt);
 			ConnectionUtils.tryToCloseConnection(connWrite);
 			throw new RecordCollectionException(ex.toString());	
@@ -168,12 +168,12 @@ public class MatchDBWriter {
 		try {
 			String trStmt = "truncate table "+this.name;
 			pstmt = connWrite.prepareStatement(trStmt);
-			log.debug("prepared stmt: "+pstmt);
+			log.fine("prepared stmt: "+pstmt);
 			pstmt.execute();
 			connWrite.commit();
 			
 		} catch (SQLException ex) {
-			log.error(ex.toString(), ex);
+			log.severe(ex.toString());
 			ConnectionUtils.tryToCloseStatement(pstmt);
 			ConnectionUtils.tryToCloseConnection(connWrite);
 			connWrite = null;

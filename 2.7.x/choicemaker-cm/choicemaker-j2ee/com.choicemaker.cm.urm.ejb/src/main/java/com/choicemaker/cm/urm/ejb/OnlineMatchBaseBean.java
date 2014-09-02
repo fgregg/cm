@@ -23,8 +23,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
@@ -102,7 +102,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 		}
 		IProbabilityModel retVal = PMManager.getModelInstance(modelName);
 		if (retVal == null) {
-			log.error("Invalid probability accessProvider: " + modelName);
+			log.severe("Invalid probability accessProvider: " + modelName);
 			throw new ModelException(modelName);
 		}
 		return retVal;
@@ -143,7 +143,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 				initialized = true;
 			}
 		} catch (Exception ex) {
-			log.error(ex.toString(), ex);
+			log.severe(ex.toString());
 			throw new CreateException(ex.toString());
 		}
 
@@ -242,7 +242,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 				maxNumMatches = Integer.MAX_VALUE;
 			}
 			String urlString = masterCollection.getUrl().trim();
-			log.debug("url" + urlString);
+			log.fine("url" + urlString);
 			if (urlString == null || urlString.length() == 0)
 				throw new RecordCollectionException("empty URL");
 			Context ctx = new InitialContext();
@@ -288,7 +288,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 
 					String masterId = dbr.getMasterId();
 					String condition = parseSQL(subset.getIdsQuery(), masterId);
-					log.debug("Condition: " + condition);
+					log.fine("Condition: " + condition);
 					String[] cs = new String[2];
 					cs[0] = " ";
 					cs[1] = condition;
@@ -332,20 +332,20 @@ public class OnlineMatchBaseBean implements SessionBean {
 				retVal);
 
 		} catch (DatabaseException ex) {
-			log.error(ex);
+			log.severe(ex.toString());
 			throw new RecordCollectionException(ex.toString());
 
 		} catch (NamingException ex) {
-			log.error(ex);
+			log.severe(ex.toString());
 			throw new RecordCollectionException(ex.toString());
 
 		} catch (RuntimeException ex) {
-			log.error(ex);
+			log.severe(ex.toString());
 			throw new CmRuntimeException(ex.toString());
 
 		} catch (IncompleteBlockingSetsException ex) {
 			// This is a data issue, so report it, then throw it.
-			log.warn(ex);
+			log.warning(ex.toString());
 			UrmIncompleteBlockingSetsException thrown =
 				new UrmIncompleteBlockingSetsException(ex.toString());
 			reportUnsuccessfulQuery(
@@ -360,7 +360,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			throw thrown;
 
 		} catch (UnderspecifiedQueryException ex) {
-			log.warn(ex);
+			log.warning(ex.toString());
 			// This is a data issue, so report it, then throw it.
 			UrmUnderspecifiedQueryException thrown =
 				new UrmUnderspecifiedQueryException(ex.toString());
@@ -376,7 +376,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			throw thrown;
 
 		} catch (IOException ex) {
-			log.error(ex);
+			log.severe(ex.toString());
 			throw new RecordCollectionException(ex.toString()); //TODO
 		}
 
@@ -410,7 +410,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 					retVal,
 					reporterPlugins));
 		} catch (Exception ex) {
-			log.error("reporting", ex);
+			log.severe("reporting: " + ex);
 		}
 	}
 
@@ -442,7 +442,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 					results,
 					reporterPlugins));
 		} catch (Exception ex) {
-			log.error("reporting", ex);
+			log.severe("reporting: " + ex);
 		}
 	}
 

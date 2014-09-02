@@ -1,6 +1,6 @@
 package com.choicemaker.cm.core.gen;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 public class FakeGeneratorPlugin implements GeneratorPlugin {
 

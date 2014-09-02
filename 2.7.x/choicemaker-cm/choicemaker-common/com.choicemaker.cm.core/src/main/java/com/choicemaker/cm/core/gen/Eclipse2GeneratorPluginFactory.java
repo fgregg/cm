@@ -3,7 +3,7 @@ package com.choicemaker.cm.core.gen;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -62,7 +62,7 @@ public class Eclipse2GeneratorPluginFactory implements
 			}
 			try {
 				GeneratorPlugin gp = (GeneratorPlugin) elems[0].createExecutableExtension(EXTENSION_EXECUTABLE_PROPERTY);
-				logger.debug("Generator: '" + gp.toString() + "'");
+				logger.fine("Generator: '" + gp.toString() + "'");
 				retVal.add(gp);
 			} catch (CoreException e) {
 				String msg = msgPrefix + e.toString() + ": " + e.getCause();

@@ -24,7 +24,8 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.Decision;
@@ -97,11 +98,11 @@ public class Matcher2<T extends Comparable<? super T>> implements
 	protected int compares;
 
 	public void ejbCreate() {
-		log.debug("starting ejbCreate...");
+		log.fine("starting ejbCreate...");
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
 	}
 
@@ -148,7 +149,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 					// start matching
 					data = ((StartData) o);
 
-					log.debug("Matcher2 In onMessage " + data.jobID + " "
+					log.fine("Matcher2 In onMessage " + data.jobID + " "
 							+ data.ind + " " + data.treeInd);
 
 					oabaConfig =
@@ -165,26 +166,26 @@ public class Matcher2<T extends Comparable<? super T>> implements
 					}
 
 				} else {
-					log.warn("wrong type: " + inMessage.getClass().getName());
+					log.warning("wrong type: " + inMessage.getClass().getName());
 				}
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			assert batchJob != null;
 			try {
 				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(), e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -252,7 +253,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 		long t = System.currentTimeMillis();
 		t = System.currentTimeMillis() - t;
 
-		log.debug("Times: lookup " + inHMLookup + " compare: " + inCompare
+		log.fine("Times: lookup " + inHMLookup + " compare: " + inCompare
 				+ " writeMatches: " + t);
 
 		MatchWriterData mwd = new MatchWriterData(data);
@@ -300,7 +301,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 			// major problem if this happens
 			if (p.id1.equals(p.id2) && p.isStage) {
-				log.error("id1 = id2: " + p.id1.toString());
+				log.severe("id1 = id2: " + p.id1.toString());
 				throw new BlockingException("id1 = id2");
 			}
 
@@ -336,12 +337,12 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 	protected Record getQ(ChunkDataStore dataStore, ComparisonPair p) {
 		long t = 0;
-		if (log.isDebugEnabled())
+		if (log.isLoggable(Level.FINE))
 			t = System.currentTimeMillis();
 
 		Record r = (Record) dataStore.getStage(p.id1);
 
-		if (log.isDebugEnabled()) {
+		if (log.isLoggable(Level.FINE)) {
 			t = System.currentTimeMillis() - t;
 			inHMLookup += t;
 		}
@@ -351,7 +352,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 	protected Record getM(ChunkDataStore dataStore, ComparisonPair p) {
 		long t = 0;
-		if (log.isDebugEnabled())
+		if (log.isLoggable(Level.FINE))
 			t = System.currentTimeMillis();
 
 		Record r = null;
@@ -360,7 +361,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 		else
 			r = (Record) dataStore.getMaster(p.id2);
 
-		if (log.isDebugEnabled()) {
+		if (log.isLoggable(Level.FINE)) {
 			t = System.currentTimeMillis() - t;
 			inHMLookup += t;
 		}
@@ -465,7 +466,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 	protected MatchRecord2 compareRecords(Record q, Record m, boolean isStage,
 			ImmutableProbabilityModel model) {
 		long t = 0;
-		if (log.isDebugEnabled())
+		if (log.isLoggable(Level.FINE))
 			t = System.currentTimeMillis();
 
 		MatchRecord2 mr = null;
@@ -514,7 +515,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 		}
 
-		if (log.isDebugEnabled()) {
+		if (log.isLoggable(Level.FINE)) {
 			t = System.currentTimeMillis() - t;
 			inCompare += t;
 		}

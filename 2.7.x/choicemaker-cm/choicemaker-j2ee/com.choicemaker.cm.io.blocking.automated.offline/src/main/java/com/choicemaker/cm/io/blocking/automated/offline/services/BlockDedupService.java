@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.services;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
@@ -147,7 +147,7 @@ public class BlockDedupService {
 		for (int i=startPoint; i < parts.length ; i++) {
 			IBlockSource source = parts[i];
 			
-			log.debug("deduping file: " + source.getInfo());
+			log.fine("deduping file: " + source.getInfo());
 			
 			if (source.exists()) {
 				sources.add(source);

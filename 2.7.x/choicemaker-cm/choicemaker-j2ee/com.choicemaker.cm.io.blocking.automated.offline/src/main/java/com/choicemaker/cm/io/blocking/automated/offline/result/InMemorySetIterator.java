@@ -13,7 +13,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.result;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.util.IntArrayList;
 
@@ -90,8 +91,8 @@ public class InMemorySetIterator {
 		array = pairs.toArray();
 		Arrays.sort (array);
 		
-		log.debug("array size: " + size);
-		if (log.isDebugEnabled()) debug ();
+		log.fine("array size: " + size);
+		if (log.isLoggable(Level.FINE)) debug ();
 	}
 	
 	
@@ -103,7 +104,7 @@ public class InMemorySetIterator {
 			sb.append(p.id);
 			sb.append (' ');
 		}
-		log.debug(sb.toString());
+		log.fine(sb.toString());
 
 		sb = new StringBuffer ("set: ");
 		for (int i=0; i< size; i++) {
@@ -111,7 +112,7 @@ public class InMemorySetIterator {
 			sb.append(p.set);
 			sb.append (' ');
 		}
-		log.debug(sb.toString());
+		log.fine(sb.toString());
 	}
 	
 	

@@ -16,7 +16,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.server.base.DatabaseException;
@@ -44,12 +44,12 @@ public class CountsUpdate {
 			
 			countsCreator.commit();
 		} catch (Exception ex) {
-			logger.error(ex.toString(), ex);
+			logger.severe(ex.toString());
 			if (connection != null) {
 				try {
 					connection.rollback();
 				} catch (SQLException e) {
-					logger.error(e.toString(), e);
+					logger.severe(e.toString());
 				}
 			}
 		} finally {
@@ -58,7 +58,7 @@ public class CountsUpdate {
 					connection.close();
 				}
 			} catch (SQLException e1) {
-				logger.error(e1.toString(), e1);
+				logger.severe(e1.toString());
 			}
 		}
 	}
@@ -71,14 +71,14 @@ public class CountsUpdate {
 			countsCreator = new DbbCountsCreator(connection);
 			countsCreator.setCacheCountSources();
 		} catch (Exception ex) {
-			logger.error(ex.toString(), ex);
+			logger.severe(ex.toString());
 		} finally {
 			try {
 				if (connection != null) {
 					connection.close();
 				}
 			} catch (SQLException e1) {
-				logger.error(e1.toString(), e1);
+				logger.severe(e1.toString());
 			}
 		}
 	}

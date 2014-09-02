@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.Platform;
 import org.jdom.Document;
@@ -309,7 +310,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 			List l = new ArrayList();
 			IPluginDescriptor[] plugins = Platform.getPluginRegistry().getPluginDescriptors();
 			for (int i = 0; i < plugins.length; i++) {
-				log.debug("Adding classloader of '" + plugins[i].getUniqueIdentifier() + "' as loader #" + i);
+				log.fine("Adding classloader of '" + plugins[i].getUniqueIdentifier() + "' as loader #" + i);
 				l.add(plugins[i].getPluginClassLoader());
 			}
 			parents = (ClassLoader[]) l.toArray(new ClassLoader[l.size()]);
@@ -323,30 +324,30 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 			for (int i = 0; i < parents.length; i++) {
 				try {
 					c = parents[i].loadClass(name);
-					log.debug("Class '" + name + "' found by '" + parents[i] + "'");
+					log.fine("Class '" + name + "' found by '" + parents[i] + "'");
 					break;
 				} catch (ClassNotFoundException ex) {
-					if (log.isDebugEnabled()) {
-						log.debug("Class '" + name + "' not found by '" + parents[i] + "'; search continuing...");
+					if (log.isLoggable(Level.FINE)) {
+						log.fine("Class '" + name + "' not found by '" + parents[i] + "'; search continuing...");
 					}
 				}
 			}
 			if (c==null) {
-				log.debug("Class '" + name + "' not found by plugin classloaders; search continuing with parent URLClassLoader.");
+				log.fine("Class '" + name + "' not found by plugin classloaders; search continuing with parent URLClassLoader.");
 				c = super.findClass(name);
-				if (log.isDebugEnabled()) {
+				if (log.isLoggable(Level.FINE)) {
 					if (c!=null) {
 						String msg = "Class '" + name + "' found by parent ULRClassLoader '" + super.toString() + "'";
-						log.debug(msg);
+						log.fine(msg);
 					} else {
 						String msg = "Class '" + name + "' not found by parent ULRClassLoader '" + super.toString() + "'";
-						log.debug(msg);
+						log.fine(msg);
 					}
 				}
 			}
 			if (c==null) {
 				String msg = "Class '" + name + "' not found by PpsClassLoader.";
-				log.error(msg);
+				log.severe(msg);
 				throw new ClassNotFoundException (msg);
 			}
 			return c;
@@ -515,7 +516,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 
 		// Log4jXmlConf.config(log4jConfName);
 		if (log4jConfName != null && !log4jConfName.trim().isEmpty()) {
-			logger.warn("Ignoring Log4j configuration name: " + log4jConfName);
+			logger.warning("Ignoring Log4j configuration name: " + log4jConfName);
 
 		}
 

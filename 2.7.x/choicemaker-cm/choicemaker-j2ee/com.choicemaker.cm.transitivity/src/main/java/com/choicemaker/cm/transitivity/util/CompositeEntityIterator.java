@@ -12,7 +12,7 @@ package com.choicemaker.cm.transitivity.util;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 
@@ -33,7 +33,7 @@ public class CompositeEntityIterator implements Iterator {
 		try {
 			source.open();
 		} catch (BlockingException e) {
-			log.error(e,e);
+			log.severe(e.toString());
 		}
 	}
 	
@@ -41,7 +41,7 @@ public class CompositeEntityIterator implements Iterator {
 		try {
 			source.close();
 		} catch (BlockingException e) {
-			log.error(e,e);
+			log.severe(e.toString());
 		}
 	}
 	
@@ -61,7 +61,7 @@ public class CompositeEntityIterator implements Iterator {
 		try {
 			ret = source.hasNext();
 		} catch (BlockingException e) {
-			log.error(e,e);
+			log.severe(e.toString());
 		}
 		return ret;
 	}
@@ -74,7 +74,7 @@ public class CompositeEntityIterator implements Iterator {
 		try {
 			o = source.getNext();
 		} catch (BlockingException e) {
-			log.error(e,e);
+			log.severe(e.toString());
 		}
 		return o;
 	}

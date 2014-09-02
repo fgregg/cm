@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -212,7 +212,7 @@ public class MatchRecord2CompositeSource implements IMatchRecord2Source {
 			MatchRecord2Source mrs = new MatchRecord2Source (getFileName(i), 
 				Constants.STRING);
 			mrs.remove();
-			log.debug("removing " + mrs.getInfo());
+			log.fine("removing " + mrs.getInfo());
 		}
 	}
 

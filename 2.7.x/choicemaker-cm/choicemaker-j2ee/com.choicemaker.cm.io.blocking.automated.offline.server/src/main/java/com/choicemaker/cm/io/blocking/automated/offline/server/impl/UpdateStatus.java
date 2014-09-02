@@ -17,7 +17,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
@@ -40,24 +40,24 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 	private EJBConfiguration configuration = null;
 
 	public UpdateStatus() {
-//	log.debug("constuctor");
+//	log.fine("constuctor");
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
-//		log.debug("setMessageDrivenContext()");
+//		log.fine("setMessageDrivenContext()");
 		this.mdc = mdc;
 	}
 
 
 	public void ejbCreate() {
-//	log.debug("starting ejbCreate...");
+//	log.fine("starting ejbCreate...");
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 			
 		} catch (Exception e) {
-	  log.error(e.toString(),e);
+	  log.severe(e.toString());
 		}
-//	log.debug("...finished ejbCreate");
+//	log.fine("...finished ejbCreate");
 	}
 
 	
@@ -73,7 +73,7 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (UpdateData) msg.getObject();
 				
-				log.debug("Starting to update job ID: " + data.jobID + " " + data.percentComplete);
+				log.fine("Starting to update job ID: " + data.jobID + " " + data.percentComplete);
 
 				final BatchJob job = this.configuration.findBatchJobById(data.jobID);
 				
@@ -82,14 +82,14 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 				else job.updateFractionCompleted( data.percentComplete );
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			e.printStackTrace();
 		}
 
@@ -99,7 +99,7 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 	
 	
 	public void ejbRemove() {
-//		log.debug("ejbRemove()");
+//		log.fine("ejbRemove()");
 	}
 	
 

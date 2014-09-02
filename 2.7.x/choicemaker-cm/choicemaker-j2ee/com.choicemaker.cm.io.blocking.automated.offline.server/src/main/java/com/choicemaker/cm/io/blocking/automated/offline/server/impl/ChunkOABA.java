@@ -22,7 +22,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -57,13 +57,13 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 //	private transient OABAConfiguration oabaConfig = null;
 
 	public void ejbCreate() {
-//	log.debug("starting ejbCreate...");
+//	log.fine("starting ejbCreate...");
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
-//	log.debug("...finished ejbCreate");
+//	log.fine("...finished ejbCreate");
 	}
 
 	/* (non-Javadoc)
@@ -185,22 +185,22 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 				}
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			assert batchJob != null;
 			try {
 				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(),e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			e.printStackTrace();
 		}
 

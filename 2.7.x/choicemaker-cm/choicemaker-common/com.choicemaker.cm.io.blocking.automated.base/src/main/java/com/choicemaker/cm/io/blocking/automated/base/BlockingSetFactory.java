@@ -21,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
@@ -198,7 +198,7 @@ public class BlockingSetFactory {
 			notUsedBecauseOfOptimization);
 
 		if (blockingSets.isEmpty()) {
-			logger.debug(
+			logger.fine(
 				"No blocking sets were formed yet. Looking for best possible subset of blocking values...");
 			Iterator iPossibleSubsets = oversized.iterator();
 			iPossibleSubsets.next(); // skip empty set
@@ -220,7 +220,7 @@ public class BlockingSetFactory {
 					best);
 				blockingSets.add(best);
 			} else {
-				logger.debug("...No suitable subset of blocking values.");
+				logger.fine("...No suitable subset of blocking values.");
 				throw new UnderspecifiedQueryException("Query not specific enough; would return too many records.");
 			}
 		}
@@ -235,7 +235,7 @@ public class BlockingSetFactory {
 				notUsedBecauseOfOptimization);
 		// Log the values that are missing
 		if (missingBlockingValues.length > 0) {
-			if (logger.isInfoEnabled()) {
+			if (logger.isLoggable(Level.INFO)) {
 				String msg =
 					prettyPrintMissingBlockingValues(missingBlockingValues);
 				logger.info(msg);
@@ -254,8 +254,8 @@ public class BlockingSetFactory {
 				"...Finished looking for larger blocking sets that use the missing blocking values.");
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Listing final blocking sets...");
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Listing final blocking sets...");
 			for (int i = 0; i < blockingSets.size(); i++) {
 				BlockingSet b = (BlockingSet) blockingSets.get(i);
 				PrintUtils.logBlockingSet(
@@ -264,7 +264,7 @@ public class BlockingSetFactory {
 					"Blocking set " + i + " ",
 					b);
 			}
-			logger.debug("...Finished listing final blocking sets");
+			logger.fine("...Finished listing final blocking sets");
 		}
 
 		// Throw an exception if any blocking values aren't used
@@ -273,7 +273,7 @@ public class BlockingSetFactory {
 				blockingValues,
 				blockingSets,
 				notUsedBecauseOfOptimization);
-		if (logger.isInfoEnabled() && missingBlockingValues.length > 0) {
+		if (logger.isLoggable(Level.INFO) && missingBlockingValues.length > 0) {
 			String msg =
 				prettyPrintMissingBlockingValues(missingBlockingValues);
 			if (isIgnoreIncompleteBlockingSetsRequested()) {
@@ -345,8 +345,8 @@ public class BlockingSetFactory {
 
 		// Sort the blockingValues by increasing count
 		Arrays.sort(blockingValues);
-		if (logger.isDebugEnabled()) {
-			logger.debug("blockingValues size: " + blockingValues.length);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("blockingValues size: " + blockingValues.length);
 			for (int i = 0; i < blockingValues.length; i++) {
 				PrintUtils.logBlockingValue(
 					logger,
@@ -356,7 +356,7 @@ public class BlockingSetFactory {
 			}
 		}
 
-		logger.debug("Starting to form blocking sets...");
+		logger.fine("Starting to form blocking sets...");
 		for (int i = 0; i < blockingValues.length; ++i) {
 
 			BlockingValue bv = blockingValues[i];
@@ -421,7 +421,7 @@ public class BlockingSetFactory {
 						// don't consider in future
 						oversized.set(j, null);
 
-						if (logger.isDebugEnabled()) {
+						if (logger.isLoggable(Level.FINE)) {
 							int blockingSetOrdinal = blockingSets.size() - 1;
 							String msg =
 								"Formed a grace-limit blocking set (ordinal # "
@@ -438,7 +438,7 @@ public class BlockingSetFactory {
 						candidate.getExpectedCount() <= limitPerBlockingSet) {
 						addToBlockingSets(blockingSets, candidate);
 						if (emptySet) {
-							if (logger.isDebugEnabled()) {
+							if (logger.isLoggable(Level.FINE)) {
 								int blockingSetOrdinal =
 									blockingSets.size() - 1;
 								String msg =
@@ -453,7 +453,7 @@ public class BlockingSetFactory {
 							// restart with the next blocking value
 							break;
 						} else {
-							if (logger.isDebugEnabled()) {
+							if (logger.isLoggable(Level.FINE)) {
 								int blockingSetOrdinal =
 									blockingSets.size() - 1;
 								// 2014-04-24 rphall: Commented out unused local variable.
@@ -477,10 +477,10 @@ public class BlockingSetFactory {
 						// of (oversized) possible blocking sets
 					} else {
 						oversized.add(candidate);
-						if (logger.isDebugEnabled()) {
+						if (logger.isLoggable(Level.FINE)) {
 							String msg =
 								"Added candidate blocking set to collection of (oversized) possible blocking sets.";
-							logger.debug(msg);
+							logger.fine(msg);
 						}
 					}
 
@@ -492,7 +492,7 @@ public class BlockingSetFactory {
 			}
 			// end iteration over blocking values
 		}
-		logger.debug(
+		logger.fine(
 			"...Finished forming blocking sets. Blocking set size == "
 				+ blockingSets.size());
 
@@ -512,33 +512,33 @@ public class BlockingSetFactory {
 
 			// multiple use of same DbField (implied by multiple use of same BlockingField)
 			if (dbf == cbf.dbField) {
-				logger.debug(
+				logger.fine(
 					"invalid BlockingValue for BlockingSet: multiple use of same DbField");
 				retVal = false;
 				break;
 			}
 			// multiple use of same QueryField
 			if (qf == cbf.queryField) {
-				logger.debug(
+				logger.fine(
 					"invalid BlockingValue for BlockingSet: multiple use of same QueryField");
 				retVal = false;
 				break;
 			}
 			// illegal combinations
 			if (illegalCombination(bs, bf.illegalCombinations)) {
-				logger.debug(
+				logger.fine(
 					"invalid BlockingValue for BlockingSet: Illegal BlockingField combination");
 				retVal = false;
 				break;
 			}
 			if (illegalCombination(bs, qf.illegalCombinations)) {
-				logger.debug(
+				logger.fine(
 					"invalid BlockingValue for BlockingSet: Illegal QueryField combination");
 				retVal = false;
 				break;
 			}
 			if (illegalCombination(bs, dbf.illegalCombinations)) {
-				logger.debug(
+				logger.fine(
 					"invalid BlockingValue for BlockingSet: Illegal DbField combination");
 				retVal = false;
 				break;
@@ -571,11 +571,11 @@ public class BlockingSetFactory {
 		while (iBlockingSets.hasNext()) {
 			BlockingSet currentBlockingSet = (BlockingSet) iBlockingSets.next();
 			if (candidate.returnsSupersetOf(currentBlockingSet)) {
-				logger.debug(
+				logger.fine(
 					"Candidate blocking set is a superset of an existing blocking set");
 				iBlockingSets.remove();
 			} else if (currentBlockingSet.returnsSupersetOf(candidate)) {
-				logger.debug(
+				logger.fine(
 					"Candidate blocking set is a subset of an existing blocking set");
 				isCandidateAlreadyInBlockingSet = true;
 				break;
@@ -679,10 +679,10 @@ public class BlockingSetFactory {
 		}
 
 		// Log the values that are missing
-		if (logger.isDebugEnabled() && missingBlockingValues.size() > 0) {
+		if (logger.isLoggable(Level.FINE) && missingBlockingValues.size() > 0) {
 			String msg =
 				prettyPrintMissingBlockingValues(missingBlockingValues);
-			logger.debug(msg);
+			logger.fine(msg);
 		}
 
 		BlockingValue[] retVal =

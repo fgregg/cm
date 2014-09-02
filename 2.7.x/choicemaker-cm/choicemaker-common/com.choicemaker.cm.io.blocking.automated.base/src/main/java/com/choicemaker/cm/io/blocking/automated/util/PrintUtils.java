@@ -13,8 +13,8 @@ package com.choicemaker.cm.io.blocking.automated.util;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
@@ -24,7 +24,7 @@ public class PrintUtils {
 	private PrintUtils() {}
 
 	public static void logBlockingValue(Logger logger, String msg, BlockingValue bv) {
-		logBlockingValue(logger, Level.DEBUG, msg, bv);
+		logBlockingValue(logger, Level.FINE, msg, bv);
 	}
 
 	public static void logBlockingValue(Logger logger, Level level, String msg, BlockingValue bv) {
@@ -36,7 +36,7 @@ public class PrintUtils {
 			throw new IllegalArgumentException("null logging level");
 		}
 
-		if (logger.isEnabledFor(level)) {
+		if (logger.isLoggable(level)) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			if (msg != null) {
@@ -72,7 +72,7 @@ public class PrintUtils {
 	}
 
 	public static void logBlockingSet(Logger logger, String msg, BlockingSet b) {
-		logBlockingSet(logger, Level.DEBUG, msg, b);
+		logBlockingSet(logger, Level.FINE, msg, b);
 	}
 
 	public static void logBlockingSet(Logger logger, Level level, String msg, BlockingSet b) {
@@ -84,7 +84,7 @@ public class PrintUtils {
 			throw new IllegalArgumentException("null logging level");
 		}
 
-		if (logger.isEnabledFor(level)) {
+		if (logger.isLoggable(level)) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			if (msg != null) {

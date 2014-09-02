@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.util;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.IPluginRegistry;
 import org.eclipse.core.runtime.Platform;
@@ -27,9 +27,9 @@ public class PluginUtils {
 		IPluginDescriptor[] plugins = registry.getPluginDescriptors();
 		for (int i = 0; i < plugins.length; i++) {
 			if (plugins[i].isPluginActivated()) {
-				log.debug("Plugin active: " + plugins[i].getUniqueIdentifier());
+				log.fine("Plugin active: " + plugins[i].getUniqueIdentifier());
 			} else {
-				log.debug("Plugin NOT active: " + plugins[i].getUniqueIdentifier());				
+				log.fine("Plugin NOT active: " + plugins[i].getUniqueIdentifier());				
 			}
 		}
 	}

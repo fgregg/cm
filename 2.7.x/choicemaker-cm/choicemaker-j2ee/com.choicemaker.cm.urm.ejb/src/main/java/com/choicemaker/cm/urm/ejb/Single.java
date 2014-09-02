@@ -31,7 +31,7 @@ import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJobHome;
@@ -160,16 +160,16 @@ public class Single implements Serializable {
 						BatchQueryServiceHome.class);
 				batchQueryService = batchQueryServiceHome.create();
 			} catch (ClassCastException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			} catch (RemoteException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			} catch (NamingException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			} catch (CreateException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			}
 		}
@@ -188,16 +188,16 @@ public class Single implements Serializable {
 						TransitivityOABAServiceHome.class);
 				transOABAService = trServiceHome.create();
 			} catch (ClassCastException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			} catch (RemoteException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			} catch (NamingException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			} catch (CreateException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			}
 		}
@@ -216,16 +216,16 @@ public class Single implements Serializable {
 						TransSerializerHome.class);
 				transSerializer = trHome.create();
 			} catch (ClassCastException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			} catch (RemoteException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			} catch (NamingException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			} catch (CreateException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			}
 		}
@@ -243,10 +243,10 @@ public class Single implements Serializable {
 						homeRef,
 						UrmJobHome.class);
 			} catch (ClassCastException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			} catch (NamingException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			}
 		}
@@ -260,10 +260,10 @@ public class Single implements Serializable {
 			UrmJob status = getUrmJobHome().create(externalId);
 			return status;
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -274,10 +274,10 @@ public class Single implements Serializable {
 			UrmJobHome home = getUrmJobHome();
 			return home.findByPrimaryKey(new Long(id));
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -288,10 +288,10 @@ public class Single implements Serializable {
 			UrmJobHome home = getUrmJobHome();
 			return home.findAll();
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -307,10 +307,10 @@ public class Single implements Serializable {
 						homeRef,
 						CmsJobHome.class);
 			} catch (ClassCastException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			} catch (NamingException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			}
 		}
@@ -323,10 +323,10 @@ public class Single implements Serializable {
 			CmsJob status = getCmsJobHome().create(externalId, transId);
 			return status;
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -337,10 +337,10 @@ public class Single implements Serializable {
 			CmsJobHome home = getCmsJobHome();
 			return home.findByPrimaryKey(new Long(id));
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -356,10 +356,10 @@ public class Single implements Serializable {
 						homeRef,
 						UrmStepJobHome.class);
 			} catch (ClassCastException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			} catch (NamingException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			}
 		}
@@ -373,10 +373,10 @@ public class Single implements Serializable {
 			UrmStepJob status = getUrmStepJobHome().create(urmJobId, stepIndex);
 			return status;
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -389,13 +389,13 @@ public class Single implements Serializable {
 			}
 			return urmStepJobHome.findAllStepsOfUrmJob(new Long(id));
 		} catch (ClassCastException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -412,7 +412,7 @@ public class Single implements Serializable {
 				si = usj.getStepIndex().longValue();
 			}
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		}
 		if (si == -1)
@@ -439,7 +439,7 @@ public class Single implements Serializable {
 				si = usj.getStepIndex().intValue();
 				stepJobId = usj.getStepJobId().longValue();
 			} catch (RemoteException e) {
-				log.error(e);
+				log.severe(e.toString());
 				continue;
 			}
 			try {
@@ -467,14 +467,14 @@ public class Single implements Serializable {
 						break;
 					default :
 						//TODO:
-						log.error(
+						log.severe(
 							"invalid step job index "
 								+ si
 								+ " urm job "
 								+ urmJobId);
 				}
 			} catch (Exception e1) {
-				log.error(e1);
+				log.severe(e1.toString());
 			}
 		}
 		it = col.iterator();
@@ -484,12 +484,12 @@ public class Single implements Serializable {
 				usj.remove();
 			}
 		} catch (Exception e) {
-			log.error(e);
+			log.severe(e.toString());
 		}
 		try {
 			uj.remove();
 		} catch (Exception e) {
-			log.error(e);
+			log.severe(e.toString());
 		}
 	}
 
@@ -506,16 +506,16 @@ public class Single implements Serializable {
 			}
 			return batchJobHome.findByPrimaryKey(new Long(id));
 		} catch (ClassCastException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -539,13 +539,13 @@ public class Single implements Serializable {
 			BatchParametersHome home = getBatchParamsHome();
 			return home.findByPrimaryKey(new Long(id));
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -563,16 +563,16 @@ public class Single implements Serializable {
 			}
 			return batchJobHome.findAll();
 		} catch (ClassCastException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -590,16 +590,16 @@ public class Single implements Serializable {
 			}
 			return transJobHome.findByPrimaryKey(new Long(id));
 		} catch (ClassCastException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (RemoteException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -662,7 +662,7 @@ public class Single implements Serializable {
 			Context ctx = getInitialContext();
 			retVal = (Queue) ctx.lookup(jndiQueueName);
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 		return retVal;
@@ -678,18 +678,18 @@ public class Single implements Serializable {
 
 			sender.send(message);
 
-			log.debug("Sending on queue '" + queue.getQueueName());
-			log.debug("session " + session);
-			log.debug("message " + message);
-			log.debug("sender " + sender);
+			log.fine("Sending on queue '" + queue.getQueueName());
+			log.fine("session " + session);
+			log.fine("message " + message);
+			log.fine("sender " + sender);
 		} catch (Exception ex) {
-			log.error(ex.toString(), ex);
+			log.severe(ex.toString());
 		} finally {
 			try {
 				if (session != null)
 					session.close();
 			} catch (JMSException ex) {
-				log.error(ex.toString(), ex);
+				log.severe(ex.toString());
 			}
 		}
 	}

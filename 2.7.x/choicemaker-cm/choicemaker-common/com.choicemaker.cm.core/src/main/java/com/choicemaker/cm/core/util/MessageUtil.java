@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  * A utility class that formats user-visible text using a specified resource
@@ -32,7 +32,7 @@ public class MessageUtil {
 		try {
 			return myResources.getString(messageKey);
 		} catch (MissingResourceException ex) {
-			logger.error("missing resource in locale: " + Locale.getDefault(), ex);
+			logger.severe("missing resource in locale: " + Locale.getDefault() + ": " + ex);
 			return "Missing resource: " + messageKey;
 		}
 	}

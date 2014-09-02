@@ -22,7 +22,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
@@ -49,15 +49,15 @@ public abstract class WorkflowControlListener implements MessageDrivenBean, Mess
 	}
 
 	public void ejbCreate() {
-    	log.debug("ejbCreate");
+    	log.fine("ejbCreate");
 	}
 
 	public void onMessage(Message inMessage) {
-		log.debug("<<< onMessage");
+		log.fine("<<< onMessage");
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		
 	    if ( ! (inMessage instanceof ObjectMessage) ) {
-			log.error("Incorrect message type. Message is ignored.");
+			log.severe("Incorrect message type. Message is ignored.");
 			return;
 	    }
 
@@ -67,17 +67,17 @@ public abstract class WorkflowControlListener implements MessageDrivenBean, Mess
 		try {
 			ObjectMessage msg = (ObjectMessage) inMessage;
 			id = ((Long) msg.getObject()).longValue();
-			log.debug("received step job "+id+" completed message");
+			log.fine("received step job "+id+" completed message");
 			//TODO: confirm that if this message came then the status of batchQueryServoce is completed
 			urmJobId = getUrmJobId(id);
 	    	
 			if(urmJobId == JobStatus.UNDEFINED_ID){
-				log.debug("urm job id is undefined. no further urm processing required.");
+				log.fine("urm job id is undefined. no further urm processing required.");
 				return;
 			}
 			urmJob = Single.getInst().findUrmJobById(urmJobId);
 		} catch (Exception e) {
-			log.error(e);
+			log.severe(e.toString());
 			return;
 		}
 	    
@@ -98,18 +98,18 @@ public abstract class WorkflowControlListener implements MessageDrivenBean, Mess
 				this.abortJobStep(stepJobId);
 					
 		} catch (Exception  e) {
-			log.error(e);
+			log.severe(e.toString());
 			try {
 				if(urmJob !=  null)
 					urmJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1);
+				log.severe(e1.toString());
 				e1.printStackTrace();
 			}
 			return;
 		}
 
-		log.debug(">>> onMessage");
+		log.fine(">>> onMessage");
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	} // onMessage(Message)
 	
@@ -134,7 +134,7 @@ public abstract class WorkflowControlListener implements MessageDrivenBean, Mess
 	public abstract void abortJobStep(long id) throws ConfigException, CmRuntimeException;
 
 	public void ejbRemove() {
-		log.debug("ejbRemove()");
+		log.fine("ejbRemove()");
 	}
 
 }

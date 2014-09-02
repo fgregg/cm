@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -199,7 +199,7 @@ public class ProbabilityModelsXmlConf {
 		if (classLoader == null) {
 			classLoader = XmlConfigurator.getInstance().reload();
 		}
-		logger.debug("classLoader == " + customClassLoader);
+		logger.fine("classLoader == " + customClassLoader);
 
 		if (classLoader instanceof URLClassLoader) {
 			String resourcePath = accessorName.replace('.', '/') + ".class";
@@ -316,7 +316,7 @@ public class ProbabilityModelsXmlConf {
 					return new Integer(i);
 				}
 			} catch (NumberFormatException ex) {
-				logger.info("Caught NumberFormatException", ex);
+				logger.info("Caught NumberFormatException: " + ex);
 			}
 		}
 		return null;
@@ -371,7 +371,7 @@ public class ProbabilityModelsXmlConf {
 				PMManager.addModel(m);
 			}
 		} else {
-			logger.warn("Missing Element 'productionProbabilityModels'");
+			logger.warning("Missing Element 'productionProbabilityModels'");
 		}
 	}
 

@@ -14,7 +14,7 @@ import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -60,7 +60,7 @@ public class TransMatchScheduler extends MatchScheduler2 {
 	 *
 	 */
 	protected void cleanUp () throws XmlConfException, BlockingException {
-		log.debug("cleanUp");
+		log.fine("cleanUp");
 
 		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
 		//get the number of processors
@@ -85,7 +85,7 @@ public class TransMatchScheduler extends MatchScheduler2 {
 			for (int j=1; j<=numProcessors; j++) {
 				IComparisonArraySource sourceOS = factoryOS.getSource(i, j);
 				sourceOS.remove();
-				log.debug("removing " + sourceOS.getInfo());
+				log.fine("removing " + sourceOS.getInfo());
 			}
 		}
 	}
@@ -105,7 +105,7 @@ public class TransMatchScheduler extends MatchScheduler2 {
 	protected void sendToMatcher (StartData sd) throws NamingException, JMSException{
 		Queue queue = configuration.getTransMatcherMessageQueue();
 		
-		log.debug(" Sending chunkId " + sd.ind + " treeId " + sd.treeInd + " to " + queue.getQueueName());
+		log.fine(" Sending chunkId " + sd.ind + " treeId " + sd.treeInd + " to " + queue.getQueueName());
 		configuration.sendMessage(queue, sd);
 	} 
 

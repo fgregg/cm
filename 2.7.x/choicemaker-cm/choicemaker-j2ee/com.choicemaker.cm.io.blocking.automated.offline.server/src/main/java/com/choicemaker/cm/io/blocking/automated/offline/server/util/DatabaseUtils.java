@@ -15,7 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.util.ConnectionUtils;
 
@@ -50,7 +50,7 @@ public class DatabaseUtils {
 			ConnectionUtils.tryToCloseStatement(stmt);
 			
 		} catch (Exception ex) {
-			logger.error(ex.toString() , ex);
+			logger.severe(ex.toString());
 		}
 		
 		return ret;
@@ -83,7 +83,7 @@ public class DatabaseUtils {
 			ConnectionUtils.tryToCloseStatement(stmt);
 			
 		} catch (Exception ex) {
-			logger.error(ex.toString() , ex);
+			logger.severe(ex.toString());
 		}
 		
 		return ret;

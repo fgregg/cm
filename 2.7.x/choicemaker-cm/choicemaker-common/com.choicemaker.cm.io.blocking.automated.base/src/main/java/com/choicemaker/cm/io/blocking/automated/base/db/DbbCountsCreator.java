@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -102,7 +102,7 @@ public class DbbCountsCreator {
 	}
 
 	private void setConfigFields() throws SQLException {
-		logger.debug("setConfigFields");
+		logger.fine("setConfigFields");
 		Statement stmt = null;
 		try {
 			stmt = connection.createStatement();
@@ -110,7 +110,7 @@ public class DbbCountsCreator {
 				BlockingConfiguration bc = blockingConfigurations[i];
 				String name = bc.getName();
 				String query = "DELETE FROM TB_CMT_COUNT_CONFIG_FIELDS WHERE config = \'" + name + "\'";
-				logger.debug(query);
+				logger.fine(query);
 				stmt.execute(query);
 				for (int j = 0; j < bc.dbFields.length; ++j) {
 					DbField df = bc.dbFields[j];
@@ -130,7 +130,7 @@ public class DbbCountsCreator {
 							+ "',"
 							+ df.defaultCount
 							+ ")";
-					logger.debug(query);
+					logger.fine(query);
 					stmt.execute(query);
 				}
 				for (int j = 0; j < bc.dbTables.length; ++j) {
@@ -148,7 +148,7 @@ public class DbbCountsCreator {
 							+ dt.uniqueId
 							+ "',"
 							+ "null)";
-					logger.debug(query);
+					logger.fine(query);
 					stmt.execute(query);
 				}
 			}
@@ -160,13 +160,13 @@ public class DbbCountsCreator {
 	}
 
 	private void setMainFields() throws SQLException {
-		logger.debug("setMainFields");
+		logger.fine("setMainFields");
 		Statement stmt = null;
 		try {
 			stmt = connection.createStatement();
 			int maxId = -1;
 			String query = "SELECT MAX(FieldId) FROM TB_CMT_COUNT_FIELDS";
-			logger.debug(query);
+			logger.fine(query);
 			ResultSet rs = stmt.executeQuery(query);
 			if (rs.next()) {
 				maxId = rs.getInt(1);
@@ -176,7 +176,7 @@ public class DbbCountsCreator {
 				"SELECT ViewName, ColumnName, MasterId, MIN(MinCount) FROM TB_CMT_COUNT_CONFIG_FIELDS t1 WHERE "
 					+ "ColumnName IS NOT NULL AND NOT EXISTS (SELECT * FROM TB_CMT_COUNT_FIELDS t2 WHERE t1.ViewName = t2.ViewName AND "
 					+ "t1.ColumnName = t2.ColumnName AND t1.MasterId = t2.MasterId) GROUP BY ViewName, ColumnName, MasterId";
-			logger.debug(query);
+			logger.fine(query);
 			rs = stmt.executeQuery(query);
 			// Some JDBC drivers don't support multiple statements or result sets on a single connection.
 			ArrayList l = new ArrayList();
@@ -218,7 +218,7 @@ public class DbbCountsCreator {
 					+ iL.next()
 					+ "', null)";
 */						
-				logger.debug(query);
+				logger.fine(query);
 				stmt.execute(query);
 			}
 			l.clear();
@@ -226,7 +226,7 @@ public class DbbCountsCreator {
 				"SELECT DISTINCT ViewName, MasterId FROM TB_CMT_COUNT_CONFIG_FIELDS t1 WHERE ColumnName IS NULL AND NOT EXISTS "
 					+ "(SELECT * FROM TB_CMT_COUNT_FIELDS t2 WHERE t1.ViewName = t2.ViewName AND t2.ColumnName IS NULL "
 					+ "AND t1.MasterId = t2.MasterId)";
-			logger.debug(query);
+			logger.fine(query);
 			rs = stmt.executeQuery(query);
 			while (rs.next()) {
 				for (int i = 1; i <= 2; ++i) {
@@ -237,26 +237,26 @@ public class DbbCountsCreator {
 			iL = l.iterator();
 			while (iL.hasNext()) {
 				query = "INSERT INTO TB_CMT_COUNT_FIELDS VALUES(" + (++maxId) + ", '" + iL.next() + "', null, '" + iL.next() + "', null, null)";
-				logger.debug(query);
+				logger.fine(query);
 				stmt.execute(query);
 			}
 			query =
 				"DELETE FROM TB_CMT_COUNTS WHERE fieldId NOT IN"
 					+ "(SELECT fieldId FROM TB_CMT_COUNT_FIELDS f, TB_CMT_COUNT_CONFIG_FIELDS k WHERE f.ViewName = k.ViewName AND"
 					+ "((f.ColumnName IS NULL AND k.ColumnName IS NULL) OR (f.ColumnName = k.ColumnName)))";
-			logger.debug(query);
+			logger.fine(query);
 			stmt.execute(query);
 			query =
 				"DELETE FROM TB_CMT_COUNT_FIELDS WHERE ColumnName IS NOT NULL AND "
 					+ "NOT EXISTS (SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName AND "
 					+ "TB_CMT_COUNT_FIELDS.ColumnName = t2.ColumnName AND TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId)";
-			logger.debug(query);
+			logger.fine(query);
 			stmt.execute(query);
 			query =
 				"DELETE FROM TB_CMT_COUNT_FIELDS WHERE ColumnName IS NULL AND "
 					+ "NOT EXISTS (SELECT * FROM TB_CMT_COUNT_CONFIG_FIELDS t2 WHERE TB_CMT_COUNT_FIELDS.ViewName = t2.ViewName AND TB_CMT_COUNT_FIELDS.MasterId = t2.MasterId "
 					+ "AND t2.ColumnName IS NULL)";
-			logger.debug(query);
+			logger.fine(query);
 			stmt.execute(query);
 			//		stmt.execute("DELETE FROM TB_CMT_COUNTS WHERE fieldId NOT IN (SELECT fieldId FROM TB_CMT_COUNT_FIELDS)");
 		} finally {
@@ -305,7 +305,7 @@ public class DbbCountsCreator {
 		// This method may be problematic if two CM Server instances use the same database
 		// simultaneously. This scenario needs documented test results on a variety of databases
 		// (MySQL, Oracle, MS SqlServer, etc.)
-		logger.debug("create");
+		logger.fine("create");
 		Statement stmt = null;
 		try {
 			stmt = connection.createStatement();
@@ -334,9 +334,9 @@ public class DbbCountsCreator {
 				query = "SELECT * FROM TB_CMT_COUNT_FIELDS";
 				// END DESIGN BUG
 			}
-			logger.debug(delete);
+			logger.fine(delete);
 			stmt.execute(delete);
-			logger.debug(query);
+			logger.fine(query);
 			ResultSet rs = stmt.executeQuery(query);
 			List l = new ArrayList();
 			while (rs.next()) {
@@ -354,11 +354,11 @@ public class DbbCountsCreator {
 				String minCount = (String) iL.next();
 				if (column == null || column.length() == 0) { // table
 					query = "INSERT INTO TB_CMT_COUNTS SELECT " + fieldId + ", 'table', COUNT(DISTINCT " + uniqueId + ") FROM " + table;
-					logger.debug(query);
+					logger.fine(query);
 					stmt.execute(query);
 				} else { // field
 					query = "SELECT " + column + " FROM " + table + " WHERE 0 = 1";
-					logger.debug(query);
+					logger.fine(query);
 					ResultSet tmpRs = stmt.executeQuery(query);
 					int columnType = tmpRs.getMetaData().getColumnType(1);
 					boolean isDate = columnType == Types.DATE || columnType == Types.TIMESTAMP;
@@ -396,11 +396,11 @@ public class DbbCountsCreator {
 						"GROUP BY " + column + 
 						" HAVING COUNT(" + uniqueId + ") > " + minCount;
 					
-					logger.debug(query);
+					logger.fine(query);
 					stmt.execute(query);
 				}
 				query = "UPDATE TB_CMT_COUNT_FIELDS SET LastUpdate = " + databaseAbstraction.getSysdateExpression() + " WHERE FieldId = " + fieldId;
-				logger.debug(query);
+				logger.fine(query);
 				stmt.execute(query);
 			}
 		} finally {
@@ -411,7 +411,7 @@ public class DbbCountsCreator {
 	}
 
 	public void setCacheCountSources() throws SQLException {
-		logger.debug("setCacheCountSources");
+		logger.fine("setCacheCountSources");
 		// BUG 2009-08-21 rphall
 		// The "models" instance data can be null (because of
 		// a flawed constructor) and if so, this methold fails quietly
@@ -443,13 +443,13 @@ public class DbbCountsCreator {
 									+ "' AND MasterId = '"
 									+ uniqueId
 									+ "'";
-							logger.debug(query);
+							logger.fine(query);
 							ResultSet rs = stmt.executeQuery(query);
 							if (rs.next()) {
 								int fieldId = rs.getInt(1);
 								rs.close();
 								query = "SELECT Value, Count FROM TB_CMT_COUNTS WHERE FieldId = " + fieldId;
-								logger.debug(query);
+								logger.fine(query);
 								rs = stmt.executeQuery(query);
 								while (rs.next()) {
 									f.m.put(rs.getString(1), CountField.getInteger(rs.getInt(2)));
@@ -467,7 +467,7 @@ public class DbbCountsCreator {
 					ImmutableProbabilityModel model = models[i];
 					String bcName = (String) model.properties().get("blockingConfiguration");
 					String dn = (String) model.properties().get("dbConfiguration");
-					logger.debug("Using blocking configuration: " + bcName);
+					logger.fine("Using blocking configuration: " + bcName);
 					BlockingConfiguration bc = ((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(bcName, dn);
 					String bcClassName = bc.getClass().getName();
 					int j = 0;
@@ -493,10 +493,10 @@ public class DbbCountsCreator {
 	}
 
 	private Map readTableSizes(Statement stmt) throws SQLException {
-		logger.debug("readTableSizes");
+		logger.fine("readTableSizes");
 		Map l = new HashMap();
 		String query = "SELECT ViewName, MasterId, Count FROM TB_CMT_COUNT_FIELDS f, TB_CMT_COUNTS c " + "WHERE f.FieldId = c.FieldId AND f.ColumnName IS NULL";
-		logger.debug(query);
+		logger.fine(query);
 		ResultSet rs = stmt.executeQuery(query);
 		while (rs.next()) {
 			l.put(new DbTable(rs.getString(1), 0, rs.getString(2)), new Integer(Math.max(1, rs.getInt(3))));
@@ -524,12 +524,12 @@ public class DbbCountsCreator {
 	}
 
 	public void commit() throws SQLException {
-		logger.debug("commit");
+		logger.fine("commit");
 		connection.commit();
 	}
 
 	public void rollback() throws SQLException {
-		logger.debug("rollback");
+		logger.fine("rollback");
 		connection.rollback();
 	}
 
@@ -537,7 +537,7 @@ public class DbbCountsCreator {
 		// BUG? 2009-08-21 rphall
 		// This method doesn't seem to be called reliably,
 		// particularly from CM Server EJB components
-		logger.debug("close");
+		logger.fine("close");
 		connection.close();
 	}
 

@@ -24,7 +24,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
@@ -62,7 +62,7 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 	}
 
@@ -91,7 +91,7 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 		StartData data = null;
 		BatchJob batchJob = null;
 
-		log.debug("MatchDedupOABA In onMessage");
+		log.fine("MatchDedupOABA In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -148,22 +148,22 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 				}
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			assert batchJob != null;
 			try {
 				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(),e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -184,7 +184,7 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 			IMatchRecord2Sink mSink = factory.getSink(i);
 			IComparableSink sink =  new ComparableMRSink (mSink);
 			tempSinks.add(sink);
-			log.debug ("file " + sink.getInfo());
+			log.fine ("file " + sink.getInfo());
 		}
 
 		IMatchRecord2Sink mSink = oabaConfig.getCompositeMatchSink(jobID);

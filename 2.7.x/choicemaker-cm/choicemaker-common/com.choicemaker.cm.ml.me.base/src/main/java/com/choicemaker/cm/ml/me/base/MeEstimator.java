@@ -15,7 +15,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -239,9 +240,9 @@ public class MeEstimator {
 				
 		for (int i = 0; i < numIterations; i++) {
 			
-			if (logger.isDebugEnabled()) {
-				logger.debug("iteration: " + i);
-			} else if (logger.isInfoEnabled()) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("iteration: " + i);
+			} else if (logger.isLoggable(Level.INFO)) {
 				if (i % 100 == 0) {
 					logger.info("iteration: " + i);
 				}

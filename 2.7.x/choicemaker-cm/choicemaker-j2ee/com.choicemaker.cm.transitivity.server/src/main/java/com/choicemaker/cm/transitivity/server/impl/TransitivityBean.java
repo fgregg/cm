@@ -23,7 +23,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -72,7 +72,7 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 	}
 
@@ -97,7 +97,7 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 
-		log.debug("TransitivityBean In onMessage");
+		log.fine("TransitivityBean In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -122,16 +122,16 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 				createChunks ();
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 			try {
 				if (transJob != null) transJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(),e1);
+				log.severe(e1.toString());
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
@@ -164,7 +164,7 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 		MatchToBlockTransformer2 transformer = new MatchToBlockTransformer2(mSource,
 			mFactory, translator, bSink, idSink);
 		int numRecords = transformer.process();
-		log.debug("Number of records: " + numRecords);
+		log.fine("Number of records: " + numRecords);
 
 		//build a MatchRecord2Sink for all pairs belonging to the size 2 sets.
 		Size2MatchProducer producer = new Size2MatchProducer(mSource,

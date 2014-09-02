@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ISerializableFileBasedRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -60,7 +60,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 				rs = RecordSourceXmlConf.getRecordSource(getRsFile());
 				rs.setModel(getModel());
 			} catch (XmlConfException e) {
-				log.error(e);
+				log.severe(e.toString());
 			}
 		}
 		return rs;
@@ -157,9 +157,9 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 						File thatFile = new File(rs.getRsFile()).getAbsoluteFile();
 						retVal = Equal.and(retVal, thisFile, thatFile);
 					} catch (Exception x) {
-						log.warn(
-							"Unable to get absolute files for equality test",
-							x);
+						log.warning(
+							"Unable to get absolute files for equality test: "
+							+ x.toString());
 						retVal = Equal.and(retVal, this.getRsFile(), rs.getRsFile());
 					}
 				}
@@ -188,7 +188,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 		String s = properties.getProperty(PN_DESCRIPTOR_FILE_NAME);
 		if (!StringUtils.nonEmptyString(s)) {
 			String msg = "Missing property '" + PN_DESCRIPTOR_FILE_NAME + "'";
-			log.error(msg);
+			log.severe(msg);
 			throw new IncompleteSpecificationException(msg);
 		}
 		setRsFile(s);
@@ -196,7 +196,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 		s = properties.getProperty(PN_MODEL_NAME);
 		if (!StringUtils.nonEmptyString(s)) {
 			String msg = "Missing property '" + PN_MODEL_NAME + "'";
-			log.error(msg);
+			log.severe(msg);
 			throw new IncompleteSpecificationException(msg);
 		}
 		setModelName(s);
@@ -208,7 +208,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 			}
 		} catch (Exception x) {
 			String msg = "Unable to close " + (rs == null ? "record source" : rs.getName());
-			log.warn(msg);
+			log.warning(msg);
 		} finally {
 			rs = null;
 		}

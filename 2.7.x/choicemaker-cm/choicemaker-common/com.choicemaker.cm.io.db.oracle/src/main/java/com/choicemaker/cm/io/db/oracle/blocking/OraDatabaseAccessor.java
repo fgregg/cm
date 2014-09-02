@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 
 import oracle.jdbc.driver.OracleTypes;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -110,7 +110,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	}
 
 	public void open(AutomatedBlocker blocker) throws IOException {
-		logger.debug("open");
+		logger.fine("open");
 		ImmutableProbabilityModel model = blocker.getModel();
 		if (startSession == SET_FROM_MODEL) {
 			startSession = (String) model.properties().get("startSession");
@@ -121,8 +121,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		dbr = ((DbAccessor) acc).getDbReaderParallel(dbrName);
 		String query = getQuery(blocker,dbr);
 		
-		logger.debug("query length: " + query.length());
-		logger.debug("query: " + query);
+		logger.fine("query length: " + query.length());
+		logger.fine("query: " + query);
 		
 		try {
 			connection = ds.getConnection();
@@ -141,8 +141,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 					while (query.length() >= MAX_LEN) {
 						int pos = query.lastIndexOf(BS_SEP, MAX_LEN);
 						String pre = query.substring(0, pos);
-						if (logger.isDebugEnabled()) {
-							logger.debug("INSERT INTO tb_cmt_temp_q VALUES('" + pre + ")");
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("INSERT INTO tb_cmt_temp_q VALUES('" + pre + ")");
 						}
 						prep.setString(1, pre);
 						prep.execute();
@@ -161,8 +161,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				}
 			}
 
-			if (logger.isDebugEnabled()) {
-				logger.debug(
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine(
 					"call CMTBlocking.Blocking('"
 						+ blocker.getBlockingConfiguration().getName()
 						+ "', '"
@@ -184,9 +184,9 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			stmt.setString(4, condition2);
 			stmt.setString(5, acc.getSchemaName() + ":r:" + dbrName);
 			stmt.registerOutParameter(6, OracleTypes.CURSOR);
-			logger.debug("execute");
+			logger.fine("execute");
 			stmt.execute();
-			logger.debug("retrieve outer");
+			logger.fine("retrieve outer");
 			outer = (ResultSet) stmt.getObject(6);
 			outer.setFetchSize(100);
 			int len = dbr.getNoCursors();
@@ -197,15 +197,15 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				outer.next();
 				rs = new ResultSet[len];
 				for (int i = 0; i < len; ++i) {
-					logger.debug("retrieve nested cursor: " + i);
+					logger.fine("retrieve nested cursor: " + i);
 					rs[i] = (ResultSet) outer.getObject(i + 1);
 					rs[i].setFetchSize(100);
 				}
 			}
-			logger.debug("open dbr");
+			logger.fine("open dbr");
 			dbr.open(rs);
 		} catch (SQLException ex) {
-			logger.error(
+			logger.severe(
 				"call CMTBlocking.Blocking('"
 					+ blocker.getBlockingConfiguration().getName()
 					+ "', '"
@@ -223,7 +223,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	}
 
 	public void close() throws IOException {
-		logger.debug("close");
+		logger.fine("close");
 		Exception ex = null;
 		if (rs != null) {
 			for (int i = 0; i < rs.length; ++i) {
@@ -232,7 +232,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 						rs[i].close();
 					} catch (java.sql.SQLException e) {
 						ex = e;
-						logger.error("Closing cursors.", e);
+						logger.severe("Closing cursors.", e);
 					}
 				}
 			}
@@ -243,7 +243,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				outer.close();
 			} catch (java.sql.SQLException e) {
 				ex = e;
-				logger.error("Closing cursors.", e);
+				logger.severe("Closing cursors.", e);
 			}
 			outer = null;
 		}
@@ -254,14 +254,14 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			}
 		} catch (java.sql.SQLException e) {
 			ex = e;
-			logger.error("Closing statement.", e);
+			logger.severe("Closing statement.", e);
 		}
 		if (connection != null) {
 			try {
 				connection.commit();
 			} catch (java.sql.SQLException e) {
 				ex = e;
-				logger.error("Commiting.", e);
+				logger.severe("Commiting.", e);
 			}
 			if (endSession != null) {
 				try {
@@ -270,7 +270,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 					stmt.close();
 				} catch (SQLException e) {
 					ex = e;
-					logger.error("Ending session", e);
+					logger.severe("Ending session", e);
 				}
 			}
 			try {
@@ -278,7 +278,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				connection = null;
 			} catch (java.sql.SQLException e) {
 				ex = e;
-				logger.error("Closing connection.", e);
+				logger.severe("Closing connection.", e);
 			}
 		}
 		if (ex != null) {
@@ -294,7 +294,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		try {
 			return dbr.getNext();
 		} catch (SQLException ex) {
-			logger.error("getNext", ex);
+			logger.severe("getNext", ex);
 			throw new IOException(ex.toString());
 		}
 	}

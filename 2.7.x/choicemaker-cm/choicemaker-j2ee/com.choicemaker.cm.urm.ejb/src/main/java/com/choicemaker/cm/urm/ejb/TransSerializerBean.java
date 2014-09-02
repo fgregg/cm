@@ -18,7 +18,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.Queue;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
@@ -96,7 +96,7 @@ public class TransSerializerBean implements SessionBean {
 						CmRuntimeException, 
 						RemoteException
 	{
-		log.debug("<<startSerialization");
+		log.fine("<<startSerialization");
 		CmsJob oj = Single.getInst().createCmsJob(externalId, transactionId);
 		oj.markAsStarted();
 		TransSerializeData tsd = new TransSerializeData();
@@ -108,7 +108,7 @@ public class TransSerializerBean implements SessionBean {
 		tsd.serializationType = serializationType; 
 		
 		sendToSerializer(tsd);
-		log.debug (">>startSerialization");
+		log.fine (">>startSerialization");
 		return tsd.ownId;		
 	}
 

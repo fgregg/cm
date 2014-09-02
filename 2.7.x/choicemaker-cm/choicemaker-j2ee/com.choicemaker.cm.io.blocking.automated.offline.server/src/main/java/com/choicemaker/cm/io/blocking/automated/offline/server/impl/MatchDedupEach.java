@@ -22,7 +22,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -68,7 +68,7 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 	}
 
@@ -95,7 +95,7 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;
 
-		log.debug("MatchDedupEach In onMessage");
+		log.fine("MatchDedupEach In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -127,22 +127,22 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 				}
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			assert batchJob != null;
 			try {
 				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(),e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -176,7 +176,7 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 			int after = service.getNumAfter();
 			log.info ("numBefore " + before + " numAfter " + after);
 		} else {
-			log.warn(mSource.getInfo() + " does not exist.");
+			log.warning(mSource.getInfo() + " does not exist.");
 			sink.open();
 			sink.close();
 		}

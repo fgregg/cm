@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.filter;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
@@ -117,7 +117,7 @@ public class DefaultMatchRecord2Filter implements IMatchRecord2Filter {
 	/** Checks whether fromPercentage <= toPercentage */
 	private void checkSanity() {
 		if (this.fromPercentage > this.toPercentage) {
-			logger.warn(
+			logger.warning(
 				"fromPercentage ("
 					+ fromPercentage
 					+ ") is greater that toPercentage("

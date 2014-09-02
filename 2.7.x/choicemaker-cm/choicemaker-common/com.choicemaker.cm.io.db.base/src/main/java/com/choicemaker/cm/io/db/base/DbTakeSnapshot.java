@@ -16,7 +16,8 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.Decision;
 
@@ -67,8 +68,8 @@ public class DbTakeSnapshot {
 		String user)
 		throws SQLException {
 		Connection conn = ds.getConnection();
-		if (logger.isDebugEnabled()) {
-			logger.debug(
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine(
 				"call TAKE_SNAPSHOT ("
 					+ baseId.toString()
 					+ ", "

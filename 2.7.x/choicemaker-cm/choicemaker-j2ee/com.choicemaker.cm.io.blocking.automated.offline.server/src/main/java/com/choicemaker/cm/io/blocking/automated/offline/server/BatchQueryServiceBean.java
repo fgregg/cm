@@ -28,7 +28,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
@@ -44,7 +44,7 @@ public class BatchQueryServiceBean implements Serializable {
 	private static final long serialVersionUID = 271L;
 
 	private static final Logger log = Logger
-			.getLogger(BatchQueryServiceBean.class);
+			.getLogger(BatchQueryServiceBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	protected EntityManager em;
@@ -93,7 +93,7 @@ public class BatchQueryServiceBean implements Serializable {
 			String masterModelName, int maxSingle, boolean runTransitivity)
 			throws JMSException {
 
-		log.debug("starting startBatch...");
+		log.fine("starting startBatch...");
 
 		// BatchJob batchJob =
 		// EJBConfiguration.getInstance().createBatchJob(externalID);
@@ -246,13 +246,13 @@ public class BatchQueryServiceBean implements Serializable {
 		//
 		// } catch (IOException e) {
 		// ret = -1;
-		// log.error(e.toString(), e);
+		// log.severe(e.toString());
 		// } catch (ClassNotFoundException e) {
 		// ret = -1;
-		// log.error(e.toString(), e);
+		// log.severe(e.toString());
 		// }
 		// } else {
-		// log.warn("Could not resume job " + jobID);
+		// log.warning("Could not resume job " + jobID);
 		// ret = -1;
 		// }
 		//
@@ -341,7 +341,7 @@ public class BatchQueryServiceBean implements Serializable {
 			String masterModelName, float low, float high, int maxSingle,
 			boolean runTransitivity) throws JMSException {
 
-		log.debug("Sending on queue '" + queue.getQueueName() + "'");
+		log.fine("Sending on queue '" + queue.getQueueName() + "'");
 
 		StartData data =
 			createStartData(jobID, staging, master, stageModelName,
@@ -352,21 +352,21 @@ public class BatchQueryServiceBean implements Serializable {
 			message = context.createObjectMessage(data);
 			sender = context.createProducer();
 
-			log.debug("Sending on queue '" + queue.getQueueName() + "' data '"
+			log.fine("Sending on queue '" + queue.getQueueName() + "' data '"
 					+ data + "' by sender '" + sender + "'");
 			sender.send(queue, message);
-			log.debug("Sent on queue '" + queue.getQueueName() + "' data '"
+			log.fine("Sent on queue '" + queue.getQueueName() + "' data '"
 					+ data + "' by sender '" + sender + "'");
 		} catch (JMSException t) {
-			log.error("queue: '" + queue.getQueueName() + "', data: '" + data
+			log.severe("queue: '" + queue.getQueueName() + "', data: '" + data
 					+ "', sender: '" + sender + "'");
-			log.error(t.toString(), t);
+			log.severe(t.toString());
 			sc.setRollbackOnly();
 		}
 	}
 
 //	public void ejbCreate() throws CreateException {
-//		log.error("ejbCreate: not yet implemented");
+//		log.severe("ejbCreate: not yet implemented");
 //		// try {
 //		// // 2014-04-24 rphall: Commented out unused local variable.
 //		// // InitialContext ic = new InitialContext();
@@ -380,7 +380,7 @@ public class BatchQueryServiceBean implements Serializable {
 //		// initialized = true;
 //		// }
 //		// } catch (Exception ex) {
-//		// log.error(ex.toString(), ex);
+//		// log.severe(ex.toString());
 //		// throw new CreateException(ex.getMessage());
 //		// }
 //	} // ejbCreate()

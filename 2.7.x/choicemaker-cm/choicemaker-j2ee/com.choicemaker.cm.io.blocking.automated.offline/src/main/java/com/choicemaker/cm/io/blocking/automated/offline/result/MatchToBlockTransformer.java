@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.SortedSet;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.util.EquivalenceClass;
@@ -150,12 +150,12 @@ public class MatchToBlockTransformer {
 					}
 
 					if (l1 == null) {
-						log.error("l1 is null " + mr.getRecordID1());
+						log.severe("l1 is null " + mr.getRecordID1());
 					} else if (l2 == null) {
-						log.error("l2 is null " + mr.getRecordID2());
+						log.severe("l2 is null " + mr.getRecordID2());
 					} else if (l1.equals(l2)) {
-						log.error("l1 == l2 " + l1.toString() + " " + l2.toString());
-						log.error("l1 == l2 " + mr.getRecordID1() + " " + mr.getRecordID2());
+						log.severe("l1 == l2 " + l1.toString() + " " + l2.toString());
+						log.severe("l1 == l2 " + mr.getRecordID1() + " " + mr.getRecordID2());
 					}
 
 					builder.addLink(l1, l2);
@@ -164,7 +164,7 @@ public class MatchToBlockTransformer {
 
 			mSource.close();
 		} catch (BlockingException e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
 		return builder;
 	}
@@ -241,7 +241,7 @@ public class MatchToBlockTransformer {
 			builder = null;
 
 		} catch (BlockingException e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
 
 		t = System.currentTimeMillis() - t;

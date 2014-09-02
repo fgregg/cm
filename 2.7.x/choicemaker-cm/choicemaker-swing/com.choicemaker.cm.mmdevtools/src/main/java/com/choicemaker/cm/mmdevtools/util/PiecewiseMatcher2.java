@@ -16,7 +16,7 @@ import java.io.IOException;
 //import java.text.DateFormat;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

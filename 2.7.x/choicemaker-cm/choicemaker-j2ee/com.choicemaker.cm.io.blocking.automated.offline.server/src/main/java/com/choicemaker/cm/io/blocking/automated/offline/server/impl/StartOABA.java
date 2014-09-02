@@ -23,7 +23,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -56,13 +56,13 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 	private transient EJBConfiguration configuration = null;
 
 	public void ejbCreate() {
-//	log.debug("starting ejbCreate...");
+//	log.fine("starting ejbCreate...");
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-	  		log.error(e.toString(),e);
+	  		log.severe(e.toString());
 		}
-//	log.debug("...finished ejbCreate");
+//	log.fine("...finished ejbCreate");
 	}
 
 
@@ -70,14 +70,14 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 	 * @see javax.ejb.MessageDrivenBean#ejbRemove()
 	 */
 	public void ejbRemove() throws EJBException {
-//		log.debug("ejbRemove()");
+//		log.fine("ejbRemove()");
 	}
 
 	/* (non-Javadoc)
 	 * @see javax.ejb.MessageDrivenBean#setMessageDrivenContext(javax.ejb.MessageDrivenContext)
 	 */
 	public void setMessageDrivenContext(MessageDrivenContext mdc) throws EJBException {
-//			log.debug("setMessageDrivenContext()");
+//			log.fine("setMessageDrivenContext()");
 			this.mdc = mdc;
 	}
 
@@ -157,22 +157,22 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 				}
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			assert batchJob != null;
 			try {
 				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(),e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			e.printStackTrace();
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
@@ -233,7 +233,7 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 //			fSink.close();
 //
 //		} catch (Exception ex) {
-//			log.error(ex.toString());
+//			log.severe(ex.toString());
 //		}
 //
 //	}

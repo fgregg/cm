@@ -24,7 +24,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
@@ -113,7 +113,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 						MarkedRecordPairSourceXmlConf.add(source);
 						opened(source.getFileName());
 					} catch (XmlConfException ex) {
-						logger.error(new LoggingObject("CM-100601", source.getFileName()), ex);
+						logger.severe(new LoggingObject("CM-100601", source.getFileName()).toString() + ": " + ex);
 					}
 					parent.setMultiSource(num, source);
 				}
@@ -194,14 +194,14 @@ public class MultiSourceMenu extends LastUsedMenu {
 						try {
 							MarkedRecordPairSourceXmlConf.add(source);
 						} catch (XmlConfException ex) {
-							logger.error(new LoggingObject("CM-100402", source.getFileName()), ex);
+							logger.severe(new LoggingObject("CM-100402", source.getFileName()).toString() + ": " + ex);
 						}
 						parent.setMultiSource(num, source);
 					} else {
-						logger.error("null source");
+						logger.severe("null source");
 					}
 				} else {
-					logger.error("null factory");
+					logger.severe("null factory");
 				}
 			}
 		};
@@ -221,7 +221,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 			parent.setMultiSource(num, s);
 			opened(fileName);
 		} catch (XmlConfException ex) {
-			logger.error(new LoggingObject("CM-100601", fileName), ex);
+			logger.severe(new LoggingObject("CM-100601", fileName).toString() + ": " + ex);
 			remove(fileName);
 		}
 	}

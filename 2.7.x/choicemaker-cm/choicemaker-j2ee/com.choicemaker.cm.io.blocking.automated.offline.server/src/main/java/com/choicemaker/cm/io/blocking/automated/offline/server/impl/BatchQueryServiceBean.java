@@ -23,7 +23,7 @@ import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
@@ -75,7 +75,7 @@ public class BatchQueryServiceBean implements SessionBean {
 			boolean runTransitivity) throws RemoteException, CreateException,
 			NamingException, JMSException, SQLException {
 
-		log.debug("starting startBatch...");
+		log.fine("starting startBatch...");
 
 		BatchJob batchJob = configuration.createBatchJob(externalID);
 		batchJob.setDescription(stageModelName + ":" + masterModelName);
@@ -259,13 +259,13 @@ public class BatchQueryServiceBean implements SessionBean {
 
 			} catch (IOException e) {
 				ret = -1;
-				log.error(e.toString(), e);
+				log.severe(e.toString());
 			} catch (ClassNotFoundException e) {
 				ret = -1;
-				log.error(e.toString(), e);
+				log.severe(e.toString());
 			}
 		} else {
-			log.warn ("Could not resume job " + jobID);
+			log.warning("Could not resume job " + jobID);
 			ret = -1;
 		}
 
@@ -336,7 +336,7 @@ public class BatchQueryServiceBean implements SessionBean {
 
 		Queue queue = configuration.getStartMessageQueue();
 
-		log.debug("Sending on queue '" + queue.getQueueName() + "'");
+		log.fine("Sending on queue '" + queue.getQueueName() + "'");
 
 		StartData data = new StartData();
 		data.jobID = jobID;
@@ -352,12 +352,12 @@ public class BatchQueryServiceBean implements SessionBean {
 		try {
 			configuration.sendMessage(queue, data);
 		} catch (Exception ex) {
-			log.error(ex.toString(),ex);
+			log.severe(ex.toString());
 		} finally {
 //			if (session != null) session.close ();
 		}
 
-		log.debug ("...finished sendToStartOABA");
+		log.fine ("...finished sendToStartOABA");
 	}
 
 
@@ -376,7 +376,7 @@ public class BatchQueryServiceBean implements SessionBean {
 				initialized = true;
 			}
 		} catch (Exception ex) {
-			log.error(ex.toString (), ex);
+			log.severe(ex.toString());
 			throw new CreateException(ex.getMessage());
 		}
 

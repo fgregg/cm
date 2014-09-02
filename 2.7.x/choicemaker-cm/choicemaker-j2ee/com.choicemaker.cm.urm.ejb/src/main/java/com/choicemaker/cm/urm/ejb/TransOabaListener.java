@@ -17,7 +17,7 @@ import javax.ejb.CreateException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
@@ -41,7 +41,7 @@ public class TransOabaListener extends WorkflowControlListener{
 	 * Constructor, which is public and takes no arguments.
 	 */
 	public TransOabaListener() {
-    	log.debug("TransOabaListener constructor");
+    	log.fine("TransOabaListener constructor");
 	}
 	protected boolean isAbortCheckRequired() {return true;}
 		
@@ -82,12 +82,12 @@ public class TransOabaListener extends WorkflowControlListener{
 				urmJob.getSerializationType(),
 				urmJob.getModelName(),
 				urmJob.getExternalId());
-		log.debug("transitivity processing and serialization is started");					
+		log.fine("transitivity processing and serialization is started");					
 		return sid;
 	} 
 	
 	public void abortJobStep(long id) throws ConfigException, CmRuntimeException {
-		log.debug("transitivity processing and serialization abort is ignored");
+		log.fine("transitivity processing and serialization abort is ignored");
 		//TODO: abort serialization step
 	}
 

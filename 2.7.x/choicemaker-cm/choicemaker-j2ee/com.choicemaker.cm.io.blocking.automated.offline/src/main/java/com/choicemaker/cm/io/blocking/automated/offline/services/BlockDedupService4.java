@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.services;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
@@ -193,7 +193,7 @@ public class BlockDedupService4 {
 			
 			stop = ControlChecker.checkStop (control, ControlChecker.CONTROL_INTERVAL);
 			
-			log.debug("pair " + pair[0] + " " + pair[1]);
+			log.fine("pair " + pair[0] + " " + pair[1]);
 
 			//Initialize
 			SuffixTreeNode root = SuffixTreeNode.createRootNode();
@@ -217,7 +217,7 @@ public class BlockDedupService4 {
 				
 				// save the tree to a temp file
 				IBlockSink tempSink = biFactory.getNextSink();
-				log.debug("Saving temporarily to " + tempSink.getInfo());
+				log.fine("Saving temporarily to " + tempSink.getInfo());
 				tempSink.open();
 				writeUnsubsumedTemp (subsumedBlockSets, tempSink, sources);
 				tempSink.close();
@@ -274,7 +274,7 @@ public class BlockDedupService4 {
 				
 				//reset and free memory
 				subsumedBlockSets = new IntArrayList();
-				log.debug( ("removing " + source.getInfo()));
+				log.fine( ("removing " + source.getInfo()));
 				source.remove();
 				root = null;
 				System.gc();
@@ -282,11 +282,11 @@ public class BlockDedupService4 {
 			
 /*
 			//debug
-			if (log.isDebugEnabled()) {
+			if (log.isLoggable(Level.FINE)) {
 				ArrayList children = root.getAllChildren();
 				for (int i=0; i<children.size(); i++) {
 					SuffixTreeNode kid = (SuffixTreeNode) children.get(i);
-					log.debug(kid.writeSuffixTree2(i + ":"));
+					log.fine(kid.writeSuffixTree2(i + ":"));
 				}
 			}
 */			
@@ -348,7 +348,7 @@ public class BlockDedupService4 {
 		
 		while (ret < to && !stop) {
 			IBlockSource source = parts[ret];
-			log.debug("deduping file: " + source.getInfo() + " i " + ret);
+			log.fine("deduping file: " + source.getInfo() + " i " + ret);
 				
 			if (source.exists()) {
 				sources.add(source);
@@ -393,7 +393,7 @@ public class BlockDedupService4 {
 	 * @return
 	 */
 	private SuffixTreeNode readFromFile (IBlockSource bSource) throws BlockingException {
-		log.debug("Reading deduped file: " + bSource.getInfo());
+		log.fine("Reading deduped file: " + bSource.getInfo());
 
 		SuffixTreeNode root = SuffixTreeNode.createRootNode();
 		bSource.open();
@@ -411,7 +411,7 @@ public class BlockDedupService4 {
 			count ++;
 		}
 		bSource.close();
-		log.debug("count " + count);
+		log.fine("count " + count);
 		return root;
 	}
 	
@@ -433,7 +433,7 @@ public class BlockDedupService4 {
 			IBlockSink sink = (IBlockSink) bigBlocks.get(i);
 			IBlockSource bigSource = bFactory.getSource(sink);
 			
-			log.debug ("CompareToBig " + bigSource.getInfo());
+			log.fine ("CompareToBig " + bigSource.getInfo());
 			
 			bigSource.open();
 			

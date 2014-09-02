@@ -24,7 +24,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -107,7 +107,7 @@ public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
 				rs[0] = outer;
 			} else {
 				for (int i = 0; i < noCursors; ++i) {
-					logger.debug("Get cursor: " + i);
+					logger.fine("Get cursor: " + i);
 					rs[i] = (ResultSet) outer.getObject(i + 1);
 				}
 			}
@@ -227,7 +227,7 @@ public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
 				ds = (DataSource) ctx.lookup (dataSourceName);
 			}
 		} catch (NamingException ex) {
-			logger.error(ex.toString(), ex);
+			logger.severe(ex.toString());
 		}
 		return ds;
 	}

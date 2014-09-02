@@ -22,7 +22,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.util.LoggingObject;
@@ -105,7 +105,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 				try {
 					parent.getRecordPairViewerModel().addFrameModel(new CompositeFrameModel(parentDescriptor, x, y));
 				} catch (Exception ex) {
-					logger.error(new LoggingObject("CM-100001"), ex);
+					logger.severe(new LoggingObject("CM-100001").toString() + ": " + ex);
 				}
 			};
 		});
@@ -117,7 +117,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 				try {
 					new InternalFrameDialog(getParentFrame(), ((CompositeFrame)SwingUtilities.getAncestorOfClass(CompositeFrame.class, parent)).getInternalFrameModel());
 				} catch (Exception ex) {
-					logger.error(new LoggingObject("CM-100002"), ex);
+					logger.severe(new LoggingObject("CM-100002").toString() + "; " + ex);
 				}
 			};
 		};
@@ -133,7 +133,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 				try {
 					parent.addTab();
 				} catch (Exception ex) {
-					logger.error(new LoggingObject("CM-100003"), ex);
+					logger.severe(new LoggingObject("CM-100003").toString() + ": " + ex);
 				}
 			};
 		};
@@ -146,7 +146,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 				try {
 					new TabRenameDialog(getParentFrame(), parent.getRecordPairViewerModel());
 				} catch (Exception ex) {
-					logger.error(new LoggingObject("CM-100004"), ex);
+					logger.severe(new LoggingObject("CM-100004").toString() + ": " + ex);
 				}
 			};
 		};
@@ -159,7 +159,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 				try {
 					parent.removeCurrentTab();
 				} catch (Exception ex) {
-					logger.error(new LoggingObject("CM-100005"), ex);
+					logger.severe(new LoggingObject("CM-100005").toString() + ": " + ex);
 				}
 			};
 		};
@@ -208,7 +208,7 @@ public class DesktopPaneMouseListener extends MouseAdapter {
 				parent.getRecordPairViewerModel().addFrameModel(new RecordPairFrameModel(d, x, y, desktopPaneWidth));
 				parent.fitDesktopPane();
 			} catch (Exception ex) {
-				logger.error(new LoggingObject("CM-100006", ex));
+				logger.severe(new LoggingObject("CM-100006").toString() + ": " + ex);
 			}
 		}
 	}

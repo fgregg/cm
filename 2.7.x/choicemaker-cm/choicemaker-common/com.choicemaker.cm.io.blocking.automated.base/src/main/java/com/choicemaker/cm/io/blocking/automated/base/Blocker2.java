@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.base;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -204,7 +204,7 @@ public class Blocker2 implements AutomatedBlocker {
 		// was not thrown), then the results from this class should be the same as
 		// the ones from the original Blocker class.
 		if (Blocker2.isSanityCheckRequested()) {
-			logger.warn("SanityCheck is slowing down blocking");
+			logger.warning("SanityCheck is slowing down blocking");
 			logger.info(
 				"Comparing BlockingSets to ones from original Blocker class...");
 			doSanityCheck();
@@ -225,7 +225,7 @@ public class Blocker2 implements AutomatedBlocker {
 		} catch (CloneNotSupportedException x) {
 			String msg =
 				"Unable to perform sanity check because database accessor can't be cloned";
-			logger.warn(msg);
+			logger.warning(msg);
 		}
 
 		// Verify that the clone is different from the original
@@ -233,7 +233,7 @@ public class Blocker2 implements AutomatedBlocker {
 		if (clone == this.getDatabaseAccessor()) {
 			String msg =
 				"Unable to perform sanity check because database accessor hasn't been cloned";
-			logger.warn(msg);
+			logger.warning(msg);
 			clone = null;
 		}
 

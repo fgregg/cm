@@ -18,7 +18,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.IncompleteSpecificationException;
@@ -92,7 +92,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 				ds = (DataSource) ctx.lookup (dsJNDIName);
 			}
 		} catch (NamingException ex) {
-			log.error(ex.toString(), ex);
+			log.severe(ex.toString(), ex);
 		}
 		return ds;
 	}
@@ -105,7 +105,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 			sqlRS.setConf(getDbConfig());
 			sqlRS.setSelection(getSqlQuery());
 			
-			log.debug("dbConfig: " + getDbConfig() + " sql: " + getSqlQuery());
+			log.fine("dbConfig: " + getDbConfig() + " sql: " + getSqlQuery());
 		}
 		return sqlRS;
 	}
@@ -269,7 +269,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 		String s = properties.getProperty(PN_DATABASE_CONFIG);
 		if (!StringUtils.nonEmptyString(s)) {
 			String msg = "Missing property '" + PN_DATABASE_CONFIG + "'";
-			log.error(msg);
+			log.severe(msg);
 			throw new IncompleteSpecificationException(msg);
 		}
 		this.dbConfig = s;
@@ -277,7 +277,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 		s = properties.getProperty(PN_DATASOURCE_JNDI_NAME);
 		if (!StringUtils.nonEmptyString(s)) {
 			String msg = "Missing property '" + PN_DATASOURCE_JNDI_NAME + "'";
-			log.error(msg);
+			log.severe(msg);
 			throw new IncompleteSpecificationException(msg);
 		}
 		this.dsJNDIName = s;
@@ -285,7 +285,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 		s = properties.getProperty(PN_MODEL_NAME);
 		if (!StringUtils.nonEmptyString(s)) {
 			String msg = "Missing property '" + PN_MODEL_NAME + "'";
-			log.error(msg);
+			log.severe(msg);
 			throw new IncompleteSpecificationException(msg);
 		}
 		this.modelName = s;
@@ -293,7 +293,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 		s = properties.getProperty(PN_SQL_QUERY);
 		if (!StringUtils.nonEmptyString(s)) {
 			String msg = "Missing property '" + PN_SQL_QUERY + "'";
-			log.error(msg);
+			log.severe(msg);
 			throw new IncompleteSpecificationException(msg);
 		}
 		this.sqlQuery = s;
@@ -305,7 +305,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 			}
 		} catch (Exception x) {
 			String msg = "Unable to close " + (sqlRS == null ? "record source" : sqlRS.getName());
-			log.warn(msg);
+			log.warning(msg);
 		} finally {
 			sqlRS = null;
 		}

@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -120,7 +120,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 			fs = new FileInputStream(new File(xmlFileName).getAbsoluteFile());
 			reader.parse(new InputSource(new BufferedInputStream(fs)));
 		} catch (Exception ex) {
-			logger.error("", ex);
+			logger.severe(ex.toString());
 			thrown = ex;
 		} finally {
 			try {

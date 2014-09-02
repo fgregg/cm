@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
@@ -99,15 +99,15 @@ public class GenericDedupService {
 			//remove the temporary sinks
 			for (int i = 0; i<max; i++) {
 				IComparableSink tempSink = (IComparableSink) tempSinks.get(i);
-				log.debug("removing " + tempSink.getInfo());
+				log.fine("removing " + tempSink.getInfo());
 				tempSink.remove();
 			}
 			
-			log.debug("removing " + cSource.getInfo());
+			log.fine("removing " + cSource.getInfo());
 			cSource.remove();
 			
 			//create a blank output file
-			log.debug("creating " + cSink.getInfo());
+			log.fine("creating " + cSink.getInfo());
 			cSink.open();
 			cSink.close();
 			
@@ -138,7 +138,7 @@ public class GenericDedupService {
 		
 		cSource.open();
 
-		log.debug("Reading from " + cSource.getInfo() + " writing to " + tempSink.getInfo());
+		log.fine("Reading from " + cSource.getInfo() + " writing to " + tempSink.getInfo());
 
 		while (cSource.hasNext() && !stop) {
 			Comparable c = cSource.getNext();
@@ -150,7 +150,7 @@ public class GenericDedupService {
 				matches.add(c);
 
 				if (numBefore % INTERVAL == 0 && isFull (matches.size(), max) ) {
-					log.debug ("writing out " + matches.size());
+					log.fine ("writing out " + matches.size());
 					MemoryEstimator.writeMem();
 
 					tempSink.writeComparables( matches.iterator());
@@ -169,7 +169,7 @@ public class GenericDedupService {
 
 		//one last file
 		if (matches.size() > 0) {
-			log.debug ("final writing out " + matches.size());
+			log.fine ("final writing out " + matches.size());
 			numAfter = matches.size();
 			
 			//This iterator returns comparables in ascending order.
@@ -256,7 +256,7 @@ public class GenericDedupService {
 
 		cSink.close();
 
-		log.debug ("total matches written " + num);
+		log.fine ("total matches written " + num);
 
 		//close and remove all files
 		for (int i=0; i< numFiles; i++) {

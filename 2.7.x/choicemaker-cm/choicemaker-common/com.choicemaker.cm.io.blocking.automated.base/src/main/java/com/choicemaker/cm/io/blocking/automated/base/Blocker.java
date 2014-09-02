@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -147,14 +147,14 @@ public class Blocker implements AutomatedBlocker {
 
 		long mainTableSize = getCountSource().setCounts(blockingConfiguration, blockingValues);
 
-		logger.debug("blockingValues numberOfRecordsRetrieved: " + blockingValues.length);
+		logger.fine("blockingValues numberOfRecordsRetrieved: " + blockingValues.length);
 
 		for (int i=0; i<blockingValues.length; i++) {
-			logger.debug(blockingValues[i].value + " " + blockingValues[i].count + " " + blockingValues[i].blockingField.dbField.name);
+			logger.fine(blockingValues[i].value + " " + blockingValues[i].count + " " + blockingValues[i].blockingField.dbField.name);
 		}
 
 		Arrays.sort(blockingValues);
-		logger.debug("blockingValues size: " + blockingValues.length);
+		logger.fine("blockingValues size: " + blockingValues.length);
 		for (int i = 0; i < blockingValues.length; i++) {
 			PrintUtils.logBlockingValue(logger,"Blocking value " + i + " ", blockingValues[i]);
 		}
@@ -163,7 +163,7 @@ public class Blocker implements AutomatedBlocker {
 		possibleSubsets.add(new BlockingSet(mainTableSize));
 		blockingSets = new ArrayList(64);
 
-		logger.debug("Starting to form blocking sets...");
+		logger.fine("Starting to form blocking sets...");
 		for (int i = 0; i < blockingValues.length; ++i) {
 
 			BlockingValue bv = blockingValues[i];
@@ -210,18 +210,18 @@ public class Blocker implements AutomatedBlocker {
 						possibleSubsets.add(nbs);
 						String msg =
 							"Added candidate blocking set to collection of (oversized) possible blocking sets.";
-						logger.debug(msg);
+						logger.fine(msg);
 					}
 				}
 				emptySet = false;
 			}
 		}
-		logger.debug(
+		logger.fine(
 			"...Finished forming blocking sets. Blocking set size == "
 				+ getBlockingSets().size());
 
 		if (getBlockingSets().isEmpty()) {
-			logger.debug(
+			logger.fine(
 				"No blocking sets were formed yet. Looking for best possible subset of blocking values...");
 			Iterator iPossibleSubsets = possibleSubsets.iterator();
 			iPossibleSubsets.next(); // skip empty set
@@ -241,17 +241,17 @@ public class Blocker implements AutomatedBlocker {
 					best);
 				getBlockingSets().add(best);
 			} else {
-				logger.debug("...No suitable subset of blocking values.");
+				logger.fine("...No suitable subset of blocking values.");
 				throw new UnderspecifiedQueryException("Query not specific enough; would return too many records.");
 			}
 		}
 
-		logger.debug("Listing final blocking sets...");
+		logger.fine("Listing final blocking sets...");
 		for (int i = 0; i < getBlockingSets().size(); i++) {
 			BlockingSet b = (BlockingSet) getBlockingSets().get(i);
 			PrintUtils.logBlockingSet(logger,"Blocking set " + i + " ", b);
 		}
-		logger.debug("...Finished listing final blocking sets");
+		logger.fine("...Finished listing final blocking sets");
 
 		getDatabaseAccessor().open(this);
 	}
@@ -268,25 +268,25 @@ public class Blocker implements AutomatedBlocker {
 
 			// multiple use of same DbField (implied by multiple use of same BlockingField)
 			if (dbf == cbf.dbField) {
-				logger.debug("invalid BlockingValue for BlockingSet: multiple use of same DbField");
+				logger.fine("invalid BlockingValue for BlockingSet: multiple use of same DbField");
 				return false;
 			}
 			// multiple use of same QueryField
 			if (qf == cbf.queryField) {
-				logger.debug("invalid BlockingValue for BlockingSet: multiple use of same QueryField");
+				logger.fine("invalid BlockingValue for BlockingSet: multiple use of same QueryField");
 				return false;
 			}
 			// illegal combinations
 			if (illegalCombination(bs, bf.illegalCombinations)) {
-				logger.debug("invalid BlockingValue for BlockingSet: Illegal BlockingField combination");
+				logger.fine("invalid BlockingValue for BlockingSet: Illegal BlockingField combination");
 				return false;
 			}
 			if (illegalCombination(bs, qf.illegalCombinations)) {
-				logger.debug("invalid BlockingValue for BlockingSet: Illegal QueryField combination");
+				logger.fine("invalid BlockingValue for BlockingSet: Illegal QueryField combination");
 				return false;
 			}
 			if (illegalCombination(bs, dbf.illegalCombinations)) {
-				logger.debug("invalid BlockingValue for BlockingSet: Illegal DbField combination");
+				logger.fine("invalid BlockingValue for BlockingSet: Illegal DbField combination");
 				return false;
 			}
 		}

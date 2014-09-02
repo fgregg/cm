@@ -15,7 +15,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;

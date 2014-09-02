@@ -18,7 +18,7 @@ import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -132,7 +132,7 @@ public class TransMatcher extends Matcher2  {
 							
 			//major problem if this happens
 			if (p.id1.equals(p.id2) && p.isStage) {
-				log.error("id1 = id2: " + p.id1.toString());
+				log.severe("id1 = id2: " + p.id1.toString());
 				throw new BlockingException ("id1 = id2");								
 			}
 
@@ -144,8 +144,8 @@ public class TransMatcher extends Matcher2  {
 		}
 		
 		if (matches.size()==0) {
-			log.error("No matches found for this comparison set.");
-			log.error("Set: " + cSet.writeDebug());
+			log.severe("No matches found for this comparison set.");
+			log.severe("Set: " + cSet.writeDebug());
 			throw new IllegalStateException ("Invalid comparison set in TransMatcher");
 		}
 		

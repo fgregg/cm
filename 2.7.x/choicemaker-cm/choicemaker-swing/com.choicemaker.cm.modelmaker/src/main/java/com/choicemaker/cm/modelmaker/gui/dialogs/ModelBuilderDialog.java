@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -160,7 +160,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 				parent.setProbabilityModel(pm);
 				return true;
 			} catch (OperationFailedException ex) {
-				logger.error(new LoggingObject("CM-100501", pm.getModelName()), ex);
+				logger.severe(new LoggingObject("CM-100501", pm.getModelName()).toString() + ": " + ex);
 				return false;
 			}
 		} else {

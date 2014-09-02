@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
@@ -334,15 +334,15 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 					try {
 						MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) srcs[i]);
 					} catch (XmlConfException ex) {
-						logger.error(new LoggingObject("CM-020001", srcs[i]), ex);
+						logger.severe(new LoggingObject("CM-020001", srcs[i]).toString() + ": " + ex);
 					}
 				}
 			}
 		} catch (XmlConfException ex) {
-			logger.error(new LoggingObject("CM-020001"), ex);
+			logger.severe(new LoggingObject("CM-020001").toString() + ": " + ex);
 			return;
 		} catch (IOException ex) {
-			logger.error(new LoggingObject("CM-020001"), ex);
+			logger.severe(new LoggingObject("CM-020001").toString() + ": " + ex);
 			return;
 		}
 		dispose();

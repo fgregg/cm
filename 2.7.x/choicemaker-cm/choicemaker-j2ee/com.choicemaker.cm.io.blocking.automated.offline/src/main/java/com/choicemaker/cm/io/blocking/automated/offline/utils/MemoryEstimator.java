@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -71,7 +71,7 @@ public class MemoryEstimator {
 
 			rs.close();
 		} catch (Exception ex) {
-			log.error( ex.toString(), ex);
+			log.severe( ex.toString());
 		}
 
 		return ret;
@@ -124,7 +124,7 @@ public class MemoryEstimator {
 
 			rs.close();
 		} catch (Exception ex) {
-			log.error( ex.toString(), ex);
+			log.severe( ex.toString());
 		}
 
 		return memLeft ();

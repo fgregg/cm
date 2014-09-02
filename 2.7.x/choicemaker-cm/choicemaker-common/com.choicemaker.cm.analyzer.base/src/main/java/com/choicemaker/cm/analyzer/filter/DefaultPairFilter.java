@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.analyzer.filter;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
@@ -111,7 +111,7 @@ public class DefaultPairFilter implements Filter {
 	/** Checks whether fromPercentage <= toPercentage */
 	private void checkSanity() {
 		if (this.fromPercentage > this.toPercentage) {
-			logger.warn(
+			logger.warning(
 				"fromPercentage ("
 					+ fromPercentage
 					+ ") is greater that toPercentage("

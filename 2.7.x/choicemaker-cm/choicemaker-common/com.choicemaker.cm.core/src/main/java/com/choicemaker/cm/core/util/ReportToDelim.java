@@ -17,7 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -59,7 +59,7 @@ public class ReportToDelim extends DefaultHandler {
 			FileInputStream fs = new FileInputStream(new File(inputFile).getAbsoluteFile());
 			reader.parse(new InputSource(new BufferedInputStream(fs)));
 		} catch (Exception ex) {
-			logger.error("Internal Error", ex);
+			logger.severe("Internal Error: " + ex);
 		} finally {
 			try {
 				w.close();

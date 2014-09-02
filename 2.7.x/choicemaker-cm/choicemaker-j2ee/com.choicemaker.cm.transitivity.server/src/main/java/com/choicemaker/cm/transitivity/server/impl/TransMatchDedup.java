@@ -20,7 +20,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -59,7 +59,7 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 
-		log.debug("MatchDedupOABA2 In onMessage");
+		log.fine("MatchDedupOABA2 In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -68,21 +68,21 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 
 				handleMerge(o);
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
 			try {
-				log.error(e.toString(),e);
+				log.severe(e.toString());
 				if (batchJob != null) batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(),e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -100,7 +100,7 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 	protected void handleMerge (Object o)
 		throws FinderException, RemoteException, BlockingException, NamingException, JMSException {
 
-		log.debug("in handleMerge");
+		log.fine("in handleMerge");
 
 		StartData d = (StartData) o;
 		batchJob = configuration.findBatchJobById(d.jobID);
@@ -225,7 +225,7 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 			TransitivityJob transJob = configuration.getTransitivityJob(d.jobID);
 			transJob.setDescription(finalSink.getInfo());
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
 	}
 

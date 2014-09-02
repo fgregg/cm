@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.util.LoggingObject;
@@ -108,7 +108,7 @@ public abstract class SourceGui extends JDialog {
 			buildSource();
 			dispose();
 		} catch (Exception ex) {
-			logger.error(new LoggingObject("CM-100701", getSourceFileName()), ex);
+			logger.severe(new LoggingObject("CM-100701", getSourceFileName()).toString() + ": " + ex);
 		}
 	}
 

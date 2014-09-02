@@ -12,7 +12,7 @@ package com.choicemaker.cm.transitivity.server.util;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  * @author rphall
@@ -67,7 +67,7 @@ public class ClusteringIteratorFactory {
 			retVal = new MatchConnectedIterator(ceIter);
 		} else {
 			String msg = "unknown group match criterium";
-			log.error(msg);
+			log.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 

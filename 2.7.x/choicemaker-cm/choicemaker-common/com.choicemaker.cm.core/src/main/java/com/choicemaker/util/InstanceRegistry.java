@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  * A global registry for any kind of Java instances. This registry was
@@ -126,7 +126,7 @@ public class InstanceRegistry {
 						i = Math.min(minSuffix - 1, minSuffix);
 					}
 				} catch (NumberFormatException x) {
-					logger.debug("Not an integer suffix: " + s);
+					logger.fine("Not an integer suffix: " + s);
 				}
 			}
 		}

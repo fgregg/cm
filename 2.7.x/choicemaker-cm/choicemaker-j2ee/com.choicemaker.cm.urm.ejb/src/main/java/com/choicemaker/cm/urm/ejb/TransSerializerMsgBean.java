@@ -26,7 +26,8 @@ import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.naming.Context;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
@@ -55,22 +56,22 @@ public class TransSerializerMsgBean
 	 * Constructor, which is public and takes no arguments.
 	 */
 	public TransSerializerMsgBean() {
-		log.debug("TransSerializerMsgBean constructor");
+		log.fine("TransSerializerMsgBean constructor");
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
 	}
 
 	public void ejbCreate() {
-		log.debug("ejbCreate");
+		log.fine("ejbCreate");
 	}
 
 	public void onMessage(Message inMessage) {
-		log.debug("<<< onMessage");
+		log.fine("<<< onMessage");
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 
 		if (!(inMessage instanceof ObjectMessage)) {
-			log.error("Incorrect message type. Message is ignored.");
+			log.severe("Incorrect message type. Message is ignored.");
 			return;
 		}
 
@@ -81,7 +82,7 @@ public class TransSerializerMsgBean
 
 		try {
 			tsd = (TransSerializeData) msg.getObject();
-			if (log.isDebugEnabled()) {
+			if (log.isLoggable(Level.FINE)) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				pw.println("received TransSerializeData ownId '"
@@ -92,13 +93,13 @@ public class TransSerializerMsgBean
 				pw.println("  groupMatchType '" + tsd.groupMatchType + "'");
 				pw.println("  serializationType '" + tsd.serializationType + "'");
 				String s = sw.toString();
-				log.debug(s);
+				log.fine(s);
 			}
 			ownJob = Single.getInst().findCmsJobById(tsd.ownId);
 
 			if (ownJob.isAbortRequested()) {
 				ownJob.markAsAborted();
-				log.debug(
+				log.fine(
 					"Trans serialization job is aborted,trans id "
 						+ tsd.transId
 						+ " ownId "
@@ -111,7 +112,7 @@ public class TransSerializerMsgBean
 			TransitivityJob trJob =
 				Single.getInst().findTransJobById(tsd.batchId);
 			if (!trJob.getStatus().equals(TransitivityJob.STATUS_COMPLETED)) {
-				log.error(
+				log.severe(
 					"transitivity job " + tsd.batchId + " is not complete");
 				ownJob.markAsFailed();
 				return;
@@ -129,7 +130,7 @@ public class TransSerializerMsgBean
 				new MatchRecord2CompositeSource(matchResultFileName);
 
 			//TODO: replace by extension point
-			log.debug(
+			log.fine(
 				"create composite entity iterators for " + tsd.groupMatchType);
 
 			CompositeEntitySource ces = new CompositeEntitySource(mrs);
@@ -139,7 +140,7 @@ public class TransSerializerMsgBean
 			try {
 				compactedCeIter = f.createClusteringIterator(name,ceIter);
 			} catch (Exception x) {
-				log.error("Unable to create clustering iterator",x);
+				log.severe("Unable to create clustering iterator: " + x);
 				ownJob.markAsFailed();
 				return;
 			}
@@ -152,7 +153,7 @@ public class TransSerializerMsgBean
 					compactedCeIter);
 
 			ownJob.updateStepInfo(40);
-			log.debug("serialize to " + tsd.serializationType + "format");
+			log.fine("serialize to " + tsd.serializationType + "format");
 
 			if (tsd
 				.serializationType
@@ -187,17 +188,17 @@ public class TransSerializerMsgBean
 						TextSerializer.SORT_BY_ID);
 				sr.serialize();
 			} else {
-				log.error("unknown group match criteris");
+				log.severe("unknown group match criteris");
 				ownJob.markAsFailed();
 				return;
 			}
 		} catch (Exception e) {
-			log.error(e);
+			log.severe(e.toString());
 			try {
 				if (ownJob != null)
 					ownJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1);
+				log.severe(e1.toString());
 			}
 			return;
 		}
@@ -206,15 +207,15 @@ public class TransSerializerMsgBean
 			if (ownJob != null)
 				ownJob.markAsCompleted();
 		} catch (RemoteException e1) {
-			log.error(e1);
+			log.severe(e1.toString());
 		}
-		log.debug(">>> onMessage");
+		log.fine(">>> onMessage");
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 		return;
 	} // onMessage(Message)
 
 	public void ejbRemove() {
-		log.debug("ejbRemove()");
+		log.fine("ejbRemove()");
 	}
 
 	private void publishStatus(Long ownId) {
@@ -238,24 +239,24 @@ public class TransSerializerMsgBean
 			pub.publish(notifMsg);
 			pub.close();
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		} finally {
 			if (session != null) {
 				try {
 					session.close();
 				} catch (Exception e) {
-					log.error(e);
+					log.severe(e.toString());
 				}
 			}
 			if (conn != null) {
 				try {
 					conn.close();
 				} catch (Exception e) {
-					log.error(e);
+					log.severe(e.toString());
 				}
 			}
 		}
-		log.debug("status is published");
+		log.fine("status is published");
 	}
 
 }

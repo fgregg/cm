@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -104,7 +104,7 @@ public class ConfigurationUtils {
 				}
 			}
 		} catch (IOException ex) {
-			logger.error("Problem with classpath: " + ex.toString(), ex);
+			logger.severe("Problem with classpath: " + ex.toString());
 			throw new XmlConfException(ex.toString(), ex);
 		}
 		return res;
@@ -126,7 +126,7 @@ public class ConfigurationUtils {
 			}
 			retVal = f.getAbsolutePath();
 		} catch (IOException e1) {
-			logger.error("Problem with code root", e1);
+			logger.severe("Problem with code root: " + e1);
 			throw new XmlConfException(e1.toString(), e1);
 		}
 

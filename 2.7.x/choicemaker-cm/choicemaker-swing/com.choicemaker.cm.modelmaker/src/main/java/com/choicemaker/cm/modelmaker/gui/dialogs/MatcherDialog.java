@@ -32,7 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 import org.jdom.Element;
@@ -353,8 +353,8 @@ public class MatcherDialog extends JDialog implements Enable {
 								try {
 									matcher.match();
 								} catch (IOException e) {
-									logger.error(
-										new LoggingObject("CM-100401"),
+									logger.severe(
+										new LoggingObject("CM-100401").toString() + ": " +
 										e);
 								}
 							}
@@ -365,7 +365,7 @@ public class MatcherDialog extends JDialog implements Enable {
 						matcherProgressDialog.setVisible(true);
 					}
 				} catch (XmlConfException ex) {
-					logger.error(new LoggingObject("CM-100401"), ex);
+					logger.severe(new LoggingObject("CM-100401").toString() + ": " + ex);
 				}
 				dispose();
 			}
@@ -419,8 +419,8 @@ public class MatcherDialog extends JDialog implements Enable {
 						MarkedRecordPairSourceXmlConf.add(
 							(MarkedRecordPairSource) s);
 					} catch (XmlConfException e) {
-						logger.error(
-							new LoggingObject("CM-100402", s.getFileName()),
+						logger.severe(
+							new LoggingObject("CM-100402", s.getFileName()).toString() + ": " +
 							e);
 					}
 					sink.setText(((MarkedRecordPairSource) s).getFileName());
@@ -440,8 +440,8 @@ public class MatcherDialog extends JDialog implements Enable {
 					try {
 						RecordSourceXmlConf.add((RecordSource) s);
 					} catch (XmlConfException e) {
-						logger.error(
-							new LoggingObject("CM-100403", s.getFileName()),
+						logger.severe(
+							new LoggingObject("CM-100403", s.getFileName()).toString() + ": " +
 							e);
 					}
 					String path = ((RecordSource) s).getFileName();
@@ -487,8 +487,8 @@ public class MatcherDialog extends JDialog implements Enable {
 						compositePaneModel)
 						.setVisible(true);
 				} catch (XmlConfException ex) {
-					logger.error(
-						new LoggingObject("CM-100601", small.getText()),
+					logger.severe(
+						new LoggingObject("CM-100601", small.getText()).toString() + ": " +
 						ex);
 				}
 			}
@@ -518,8 +518,8 @@ public class MatcherDialog extends JDialog implements Enable {
 						compositePaneModel)
 						.setVisible(true);
 				} catch (XmlConfException ex) {
-					logger.error(
-						new LoggingObject("CM-100601", large.getText()),
+					logger.severe(
+						new LoggingObject("CM-100601", large.getText()).toString() + ": " +
 						ex);
 				}
 			}

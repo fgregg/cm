@@ -35,7 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.MrpsExport;
@@ -159,7 +159,7 @@ public class ExportProbabilitiesDialog extends JDialog {
 			retVal = AC_GROUPS;
 		} else {
 			// Error
-			logger.error("Design error: unexpected ActiveCluesPolicy. No clues exported.");
+			logger.severe("Design error: unexpected ActiveCluesPolicy. No clues exported.");
 			retVal = AC_NONE;
 		}
 		return retVal;
@@ -373,7 +373,7 @@ public class ExportProbabilitiesDialog extends JDialog {
 					mySetCursor(Cursor.DEFAULT_CURSOR);
 				} catch (IOException ex) {
 					mySetCursor(Cursor.DEFAULT_CURSOR);
-					logger.error("Unable to export probabilities", ex);
+					logger.severe("Unable to export probabilities: " + ex);
 				}
 			}
 		});

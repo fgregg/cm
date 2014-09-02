@@ -2,7 +2,7 @@ package com.choicemaker.cm.core.configure;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
@@ -112,7 +112,7 @@ public class ConfigurationManager {
 
 	public void init() throws XmlConfException {
 		if (isInitialized()) {
-			logger.warn("Already initialized");
+			logger.warning("Already initialized");
 		}
 		ChoiceMakerConfiguration cmc = getConfigurator().init();
 		getConfiguration().setDelegate(cmc);
@@ -124,7 +124,7 @@ public class ConfigurationManager {
 	public void init(String fn, boolean reload, boolean initGui)
 			throws XmlConfException {
 		if (isInitialized()) {
-			logger.warn("Already initialized");
+			logger.warning("Already initialized");
 		}
 		ChoiceMakerConfiguration cmc = getConfigurator().init(fn, reload,
 				initGui);
@@ -137,7 +137,7 @@ public class ConfigurationManager {
 	public void init(String fn, String log4jConfName, boolean reload,
 			boolean initGui) throws XmlConfException {
 		if (isInitialized()) {
-			logger.warn("Already initialized");
+			logger.warning("Already initialized");
 		}
 		ChoiceMakerConfiguration cmc = getConfigurator().init(fn,
 				log4jConfName, reload, initGui);

@@ -10,7 +10,7 @@
  */
 package com.choicemaker.util;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  * Encodes and decodes to and from Base64 notation.
@@ -474,7 +474,7 @@ public class Base64 {
 			oos.writeObject(serializableObject);
 		} // end try
 		catch (java.io.IOException e) {
-			logger.error("", e);
+			logger.severe(e.toString());
 			return null;
 		} // end catch
 		finally {
@@ -755,11 +755,11 @@ public class Base64 {
 			return ois.readObject();
 		} // end try
 		catch (java.io.IOException e) {
-			logger.error("", e);
+			logger.severe(e.toString());
 			return null;
 		} // end catch
 		catch (java.lang.ClassNotFoundException e) {
-			logger.error("", e);
+			logger.severe(e.toString());
 			return null;
 		} // end catch
 		finally {

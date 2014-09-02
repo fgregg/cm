@@ -24,7 +24,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -67,17 +68,17 @@ public class CmServerAdminBean implements SessionBean {
 	 * Instantiates and configures the EJB.
 	 */
 	public void ejbCreate() throws CreateException, RemoteException {
-		log.debug("starting ejbCreate...");
+		log.fine("starting ejbCreate...");
 		try {
 			if (!initialized) {
 				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
 				initialized = true;
 			}
 		} catch (Exception ex) {
-			log.error(ex.toString(), ex);
+			log.severe(ex.toString());
 			throw new CreateException(ex.toString());
 		}
-		log.debug("...finished ejbCreate");
+		log.fine("...finished ejbCreate");
 	} // ejbCreate()
 
 	/* (non-Javadoc)
@@ -99,14 +100,14 @@ public class CmServerAdminBean implements SessionBean {
 		DataSource retVal = null;
 		try {
 			uri = rc.getUrl();
-			log.debug("DataSource URI: " + uri);
+			log.fine("DataSource URI: " + uri);
 			Context ctx = new InitialContext();
 			Object o = ctx.lookup(uri);
 			retVal = (DataSource) o;
-			if (log.isDebugEnabled()) {
+			if (log.isLoggable(Level.FINE)) {
 				Connection conn = retVal.getConnection();
 				String connUrl = conn.getMetaData().getURL();
-				log.debug("DB connection URL: " + connUrl);
+				log.fine("DB connection URL: " + connUrl);
 				conn.close();
 			}
 		} catch (NamingException x) {
@@ -115,11 +116,11 @@ public class CmServerAdminBean implements SessionBean {
 					+ uri
 					+ "': "
 					+ x.toString();
-			log.error(msg, x);
+			log.severe(msg);
 			throw new RecordCollectionException(msg, x);
 		} catch (SQLException x) {
 			String msg = "Unable to check JDBC connection of datasource";
-			log.warn(msg);
+			log.warning(msg);
 		}
 		return retVal;
 	}
@@ -129,7 +130,7 @@ public class CmServerAdminBean implements SessionBean {
 		throws ModelException, ConfigException {
 		IProbabilityModel model = PMManager.getModelInstance(modelName);
 		if (model == null) {
-			log.error("Invalid probability accessProvider: " + modelName);
+			log.severe("Invalid probability accessProvider: " + modelName);
 			throw new ModelException(modelName);
 		}
 		String delegateExtension =
@@ -142,7 +143,7 @@ public class CmServerAdminBean implements SessionBean {
 			retVal = (IUpdateDerivedFields) registry.get(delegateExtension);
 		} catch (NotFoundException x) {
 			String msg = x.getMessage();
-			log.error(msg,x);
+			log.severe(msg);
 			throw new ConfigException(msg);
 		}
 		return retVal;
@@ -173,11 +174,11 @@ public class CmServerAdminBean implements SessionBean {
 			updator.updateDirtyDerivedFields(ds);
 		} catch (IOException x) {
 			String msg = "Unable to access records: " + x.toString();
-			log.error(msg, x);
+			log.severe(msg);
 			throw new RecordCollectionException(msg);
 		} catch (SQLException x) {
 			String msg = "Unable to query records: " + x.toString();
-			log.error(msg, x);
+			log.severe(msg);
 			throw new RecordCollectionException(msg);
 		}
 	}
@@ -194,11 +195,11 @@ public class CmServerAdminBean implements SessionBean {
 			updator.updateDirtyDerivedFields(ds);
 		} catch (IOException x) {
 			String msg = "Unable to access records: " + x.toString();
-			log.error(msg, x);
+			log.severe(msg);
 			throw new RecordCollectionException(msg);
 		} catch (SQLException x) {
 			String msg = "Unable to query records: " + x.toString();
-			log.error(msg);
+			log.severe(msg);
 			throw new RecordCollectionException(msg, x);
 		}
 	}
@@ -207,7 +208,7 @@ public class CmServerAdminBean implements SessionBean {
 		throws RecordCollectionException, ConfigException, RemoteException {
 		DataSource ds = null;
 		try {
-			log.debug("url" + urlString);
+			log.fine("url" + urlString);
 			if (urlString == null || urlString.length() == 0)
 				throw new RecordCollectionException("empty url");
 			Context ctx = new InitialContext();
@@ -225,10 +226,10 @@ public class CmServerAdminBean implements SessionBean {
 			// </BUGFIX>
 			new CountsUpdate().updateCounts(ds, false);
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (DatabaseException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new RecordCollectionException(e.toString());
 		}
 	}

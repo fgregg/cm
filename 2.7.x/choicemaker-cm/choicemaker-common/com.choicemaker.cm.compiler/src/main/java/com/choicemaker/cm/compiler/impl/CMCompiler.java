@@ -22,7 +22,7 @@ import java.net.URLClassLoader;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.compiler.CompilationEnv;
 import com.choicemaker.cm.compiler.ICompilationUnit;
@@ -66,12 +66,12 @@ public abstract class CMCompiler implements ICompiler {
 					new URL[] { new File(tools).toURL() },
 					CMCompiler.class.getClassLoader()
 				);
-			//logger.error("Returning URLClassLoader URLcl");
+			//logger.severe("Returning URLClassLoader URLcl");
 			return URLcl;
 		}
 		catch (MalformedURLException ex)
 		{
-			//logger.error("Returning ICompiler ClassLoader");
+			//logger.severe("Returning ICompiler ClassLoader");
 			return ICompiler.class.getClassLoader();
 		}
 	}
@@ -100,7 +100,7 @@ public abstract class CMCompiler implements ICompiler {
 //				}
 //			}
 //		} catch (IOException ex) {
-//			logger.error("Problem with classpath", ex);
+//			logger.severe("Problem with classpath: " + ex);
 //		}
 //		IPluginDescriptor[] plugins =
 //			Platform.getPluginRegistry().getPluginDescriptors();
@@ -151,7 +151,7 @@ public abstract class CMCompiler implements ICompiler {
 		} catch (IOException e) {
 			e.fillInStackTrace();
 			String msg = e.toString();
-			logger.error(msg,e);
+			logger.severe(msg);
 			throw new CompilerException(msg,e);
 		}
 
@@ -220,7 +220,7 @@ public abstract class CMCompiler implements ICompiler {
 			}
 
 			catch (Exception ex) {
-				logger.error("Compiler.compile(): " + ex.toString(), ex);
+				logger.severe("Compiler.compile(): " + ex.toString());
 				return null;
 			}
 
@@ -258,16 +258,16 @@ public abstract class CMCompiler implements ICompiler {
 						accessorClass,
 						XmlConfigurator.getInstance().reload()));
 			} catch (ClassNotFoundException ex) {
-				logger.error(ex);
+				logger.severe(ex.toString());
 				return false;
 			} catch (InstantiationException ex) {
-				logger.error(ex);
+				logger.severe(ex.toString());
 				return false;
 			} catch (IllegalAccessException ex) {
-				logger.error(ex);
+				logger.severe(ex.toString());
 				return false;
 			} catch (XmlConfException ex) {
-				logger.error(ex);
+				logger.severe(ex.toString());
 				return false;
 			}
 		} else {
@@ -314,7 +314,7 @@ public abstract class CMCompiler implements ICompiler {
 				/* END */
 			} catch (Exception ex) {
 				String msg = "Compilation failed: " + ex.toString();
-				logger.error(msg);
+				logger.severe(msg);
 				throw new CompilerException(msg);
 			}
 		}

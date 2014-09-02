@@ -13,7 +13,7 @@ package com.choicemaker.cm.core.configure.jdom;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -48,7 +48,7 @@ public class JdomBuilder implements IBuilder {
 			retVal = new JdomDocument(document);
 		} catch (JDOMException x) {
 			String msg = "Unable to build document: " + x.toString();
-			logger.error(msg, x);
+			logger.severe(msg);
 			throw new XmlSpecificationException(msg, x);
 		}
 		return retVal;

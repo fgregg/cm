@@ -17,8 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -100,29 +100,29 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 				
 		try {
 			long startTime = System.currentTimeMillis();
-			log.debug("<< getMatchCandidates");
+			log.fine("<< getMatchCandidates");
 			
 			if (resultFormat == null || resultFormat.getRecordType() == null
 					|| resultFormat.getScoreType() == null
 					|| resultFormat.getRecordType() == RecordType.NONE) {
 				String errMessage = "Invalid result format argument.";
-				log.error(errMessage);
+				log.severe(errMessage);
 				throw new ArgumentException(errMessage);
 			}
 			if(linkCriteria == null ){
 				String errMessage ="Invalid link criteria argument.";  
-				log.error(errMessage);
+				log.severe(errMessage);
 				throw new ArgumentException(errMessage);
 			}
 			if(queryRecord.getId() == null){
 				String errMessage ="Query record must have valid ID.";  
-				log.error(errMessage);
+				log.severe(errMessage);
 				throw new ArgumentException(errMessage);
 			}			
-			log.debug("link criteria: "
+			log.fine("link criteria: "
 					+ linkCriteria.getGraphPropType().toString() + " "
 					+ linkCriteria.isMustIncludeQuery());
-			if (log.isDebugEnabled()) {
+			if (log.isLoggable(Level.FINE)) {
 				writeDebugInfo(
 					queryRecord,
 					modelName,
@@ -131,7 +131,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 					maxNumMatches,
 					resultFormat,
 					externalId,
-					Level.DEBUG);
+					Level.FINE);
 			}
 			SortedSet sortedMatches = getMatches(startTime,
 						 queryRecord, 
@@ -170,7 +170,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 				return null;
 			} else if (compactedCeIter.hasNext()) {
 				String msg = "algorithm error: too many matching composite entities";
-				log.error(msg);
+				log.severe(msg);
 				throw new Error(msg);
 			}
 
@@ -252,7 +252,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 					
 				} else {
 					String msg = "internal error: unexpected node type";
-					log.error(msg);
+					log.severe(msg);
 					throw new CmRuntimeException(msg);
 				}
 					
@@ -260,7 +260,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 				
 		} catch (TransitivityException ex) {
 			String msg = "transitivity exception: " + ex.toString();
-			log.error(msg);
+			log.severe(msg);
 			throw new RemoteException(msg);
 		}
 

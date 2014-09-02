@@ -12,7 +12,7 @@ package com.choicemaker.cm.core.base;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -63,7 +63,7 @@ public class FlatFileSerialRecordSource implements SerialRecordSource {
 				rs = RecordSourceXmlConf.getRecordSource(rsFile);
 				rs.setModel(getModel ());
 			} catch (XmlConfException e) {
-				log.error(e);
+				log.severe(e.toString());
 			}
 		}
 		return rs;

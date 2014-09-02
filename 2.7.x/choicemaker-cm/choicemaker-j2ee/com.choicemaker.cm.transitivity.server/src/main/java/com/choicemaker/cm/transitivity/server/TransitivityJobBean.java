@@ -32,7 +32,7 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob;
@@ -276,14 +276,14 @@ public class TransitivityJobBean implements IControl, Serializable, Transitivity
 		String msg =
 			getId() + ", '" + getModel() + "': transitioning from "
 					+ getStatus() + " to " + newStatus;
-		log.warn(msg);
+		log.warning(msg);
 	}
 
 	private void logIgnoredTransition(String transition) {
 		String msg =
 			getId() + ", '" + getModel() + "': " + transition
 					+ " ignored (status == '" + getStatus() + "'";
-		log.warn(msg);
+		log.warning(msg);
 	}
 
 	// -- Job Control
@@ -655,25 +655,25 @@ public class TransitivityJobBean implements IControl, Serializable, Transitivity
 ////			pub.close();
 ////		}
 ////		catch (Exception e) {
-////			log.error(e.toString(),e);
+////			log.severe(e.toString(),e);
 ////		} 
 ////		finally {
 ////			if (session != null) {
 ////				try {
 ////					session.close();
 ////				} catch (Exception e) {
-////					log.error(e);
+////					log.severe(e);
 ////				}
 ////			}
 ////			if (conn != null) {
 ////				try {
 ////					conn.close();
 ////				} catch (Exception e) {
-////					log.error(e);
+////					log.severe(e);
 ////				}
 ////			}
 ////		}
-////		log.debug("...finished published status");
+////		log.fine("...finished published status");
 //	}
 
 } // TransitivityJobBean

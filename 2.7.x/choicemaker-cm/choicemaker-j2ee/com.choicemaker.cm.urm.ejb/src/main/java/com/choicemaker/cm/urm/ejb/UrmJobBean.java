@@ -18,7 +18,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.autonumber.AutoNumberFactory;
 import com.choicemaker.cm.core.SerialRecordSource;
@@ -114,7 +114,7 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 			   + "'. Current status '"
 			   + getStatus()
 			   + "'";
-	   log.warn(msg);
+	   log.warning(msg);
 	   return msg;
    }
    
@@ -177,7 +177,7 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 			setStatus(JobStatus.STATUS_FAILED);
 			//TODO set errorDesription
 			setFinishDate(new Date());	
-			log.debug("job "+getId()+" is failed, external id "+ getExternalId());
+			log.fine("job "+getId()+" is failed, external id "+ getExternalId());
 		} else 
 			logInvalidStatusUpdate(JobStatus.STATUS_FAILED);
 	}
@@ -200,7 +200,7 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 		) {
 			setAbortRequestDate(new Date());
 			setStatus(JobStatus.STATUS_ABORT_REQUESTED);
-			log.debug("job "+getId()+"aborted is requested, external id "+ getExternalId());
+			log.fine("job "+getId()+"aborted is requested, external id "+ getExternalId());
 			return true;
 		}
 		return false;
@@ -212,7 +212,7 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 			&& (!JobStatus.STATUS_FAILED.equals(getStatus()))) {	
 			setFinishDate(new Date());
 			setStatus(JobStatus.STATUS_ABORTED);	
-			log.debug("job "+getId()+" is aborted, external id "+ getExternalId());
+			log.fine("job "+getId()+" is aborted, external id "+ getExternalId());
 		}
 		return;
 	}
@@ -221,7 +221,7 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 		if(isAbortRequested()){
 			setFinishDate(new Date());
 			setStatus(JobStatus.STATUS_ABORTED);
-			log.debug("job "+getId()+" is aborted, external id "+ getExternalId());
+			log.fine("job "+getId()+" is aborted, external id "+ getExternalId());
 	   		return true;
 		}
 		else

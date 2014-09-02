@@ -20,7 +20,7 @@ import javax.ejb.FinderException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
@@ -77,7 +77,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 							CmRuntimeException, 
 							RemoteException
 	{
-		log.debug("<< startMatching...");
+		log.fine("<< startMatching...");
 		UrmJob uj = Single.getInst().createUrmJob(externalId);
 		uj.setCurStepIndex(new Long(0));
 		uj.setGroupMatchType(c.getGraphPropType().toString());
@@ -96,7 +96,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 		
 						uj);
 		uj.setCurStepJobId(new Long(id));					
-		log.debug (">> startMatching");
+		log.fine (">> startMatching");
 		return uj.getId().longValue();		
 	}
 
@@ -114,7 +114,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 								CmRuntimeException, 
 								RemoteException
 	 {
-		log.debug("<<startAnalysis");
+		log.fine("<<startAnalysis");
 		//TODO implement
 		//TODO: check input parameters
 //		try {
@@ -135,22 +135,22 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 //			data.runTransitivity = true;
 //			sendToTransitivity (data);
 //		} catch (RemoteException e) {
-//			log.error(e);
+//			log.severe(e.toString());
 //			throw new CmRuntimeException(e);
 //		} catch (CreateException e) {
-//			log.error(e);
+//			log.severe(e.toString());
 //			throw new ConfigException(e);
 //		} catch (NamingException e) {
-//			log.error(e);
+//			log.severe(e.toString());
 //			throw new ConfigException(e);
 //		} catch (JMSException e) {
-//			log.error(e);
+//			log.severe(e.toString());
 //			throw new ConfigException(e);
 //		} catch (FinderException e) {
-//			log.error(e);
+//			log.severe(e.toString());
 //			throw new ConfigException(e);
 //		}
-		log.debug (">>startAnalysis");
+		log.fine (">>startAnalysis");
 		return jobId;
 	 }
 	 
@@ -176,7 +176,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 										CmRuntimeException, 
 										RemoteException
 	{	
-		log.debug("<<getJobStatus");
+		log.fine("<<getJobStatus");
 			UrmJob urmJob = Single.getInst().findUrmJobById(jobID);
 			JobStatus js = urmJob.getJobStatus();
 			if( !urmJob.isAbortRequested() && !urmJob.isStarted()  ){//isStarted actually menas is running
@@ -232,7 +232,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 				}
 						
 			}	
-			log.debug(">>getJobStatus");	
+			log.fine(">>getJobStatus");	
 			return js;					
 	}
 
@@ -255,23 +255,23 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 		try {
 			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(urmJobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					
 			long batchJobId  = batchStep.getStepJobId().longValue();		
-			log.debug("batch job jd = "+batchJobId);
+			log.fine("batch job jd = "+batchJobId);
 
 			BatchQueryService qs = Single.getInst().getBatchQueryService();
 			boolean ret = qs.removeDir(batchJobId);
 			Single.getInst().removeUrmJob(urmJobId);
 			return ret;
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (JMSException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		}		
 	}
@@ -294,7 +294,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 							CmRuntimeException, 
 							RemoteException			{
 		
-		log.debug("<<copyResult");						
+		log.fine("<<copyResult");						
 		if(! (resRc instanceof TextRefRecordCollection) )
 			throw new ArgumentException("this implementation supports only text record collection copying");							
 		try {
@@ -320,7 +320,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 				dirName = fileName.substring(0,slashInd+1);
 				fileName = fileName.substring(slashInd+1);
 			}
-			log.debug("file name : "+fileName);	
+			log.fine("file name : "+fileName);	
 			if (!trJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
 				throw new ArgumentException ("The job has not completed.");
 			} 
@@ -329,10 +329,10 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 			}
 			
 		} catch (IOException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		}
-		log.debug(">>copyResult");	
+		log.fine(">>copyResult");	
 	}
 	
 	/**
@@ -352,11 +352,11 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 										RemoteException
 
 	{
-		log.debug("<<abortJob");	
+		log.fine("<<abortJob");	
 			UrmJob	job = Single.getInst().findUrmJobById(jobId);
 			if(  job.isAbortRequested() ) {
 				job.getStatus();
-				log.debug(">>abortJob - false");
+				log.fine(">>abortJob - false");
 				return false;
 			}
 			boolean isAcualyRequested = job.markAsAbortRequested();
@@ -382,7 +382,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 						log.info("unknown step index "+stepIndex);
 				}
 			}
-			log.debug(">>abortJob - true");
+			log.fine(">>abortJob - true");
 			return true;
 	}
 
@@ -403,9 +403,9 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 								RemoteException
 
 	{
-		log.debug("<<suspendJob");
+		log.fine("<<suspendJob");
 		//TODO: implement  
-		//log.debug(">>suspendJob");
+		//log.fine(">>suspendJob");
 		throw new CmRuntimeException("method is not implemented");
 		//return false;
 	}
@@ -427,9 +427,9 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 								RemoteException
 
 	{
-		log.debug("<<resumeJob");
+		log.fine("<<resumeJob");
 		//TODO: implement 
-		//log.debug(">>resumeJob");
+		//log.fine(">>resumeJob");
 		//return res;
 		throw new CmRuntimeException("method is not implemented");
 	}
@@ -443,7 +443,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 
 	{
 		long[] res;
-		log.debug("<<getJobList");
+		log.fine("<<getJobList");
 		Collection jobColl = Single.getInst().getUrmJobList();
 		res = new long[jobColl.size()];
 		Iterator jobIter = jobColl.iterator();
@@ -453,7 +453,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 			urmJob = (UrmJob) jobIter.next();
 			res[ind++] = urmJob.getId().longValue(); 
 		}
-		log.debug(">>getJobList");
+		log.fine(">>getJobList");
 		return res;
 	}
 
@@ -465,8 +465,8 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 							ArgumentException,
 							CmRuntimeException, 
 							RemoteException{
-		log.debug("<<getResultIterator rc");
-		//log.debug(">>getResultIterator rc");						
+		log.fine("<<getResultIterator rc");
+		//log.fine(">>getResultIterator rc");						
 		//return null;//TODO:implememnt
 		throw new CmRuntimeException("method is not implemented");							
 	}
@@ -480,8 +480,8 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 							ArgumentException,
 							CmRuntimeException, 
 							RemoteException{
-		log.debug("<<getResultIterator job");
-		//log.debug(">>getResultIterator job");						
+		log.fine("<<getResultIterator job");
+		//log.fine(">>getResultIterator job");						
 		//return null;//TODO:implememnt
 		throw new CmRuntimeException("method is not implemented");							
 	}

@@ -29,7 +29,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
@@ -108,10 +108,10 @@ public class CompositeRecordSourceGui extends RecordSourceGui implements Enable 
             boolean saveAsRel = sourcesTable.getValueAt(i, 1).equals(RELATIVE);
             try {
                 RecordSource s = RecordSourceXmlConf.getRecordSource(conFile);
-                logger.debug("Adding source: " + s.getFileName());
+                logger.fine("Adding source: " + s.getFileName());
                 compSource.add(s, saveAsRel);
             } catch (XmlConfException ex) {
-				logger.error(new LoggingObject("CM-020001", conFile), ex);
+				logger.severe(new LoggingObject("CM-020001", conFile).toString() + ": " + ex);
             }
         }
     }

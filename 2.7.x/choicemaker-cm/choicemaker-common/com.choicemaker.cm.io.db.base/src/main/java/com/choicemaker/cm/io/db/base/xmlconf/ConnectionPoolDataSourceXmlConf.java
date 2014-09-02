@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.db.base.xmlconf;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
@@ -84,7 +84,7 @@ public class ConnectionPoolDataSourceXmlConf {
 					DataSources.addDataSource(name, cpds);
 
 				} catch (Exception ex) {
-					logger.warn("Error creating connection pool.", ex);
+					logger.warning("Error creating connection pool: " + ex);
 				}
 			}
 		}

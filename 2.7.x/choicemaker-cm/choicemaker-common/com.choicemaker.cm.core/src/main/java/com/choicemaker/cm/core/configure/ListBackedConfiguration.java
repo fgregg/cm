@@ -3,7 +3,7 @@ package com.choicemaker.cm.core.configure;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.jdom.Document;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

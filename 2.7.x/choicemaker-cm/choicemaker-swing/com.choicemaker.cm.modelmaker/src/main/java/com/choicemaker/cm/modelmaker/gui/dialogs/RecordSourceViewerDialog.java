@@ -24,7 +24,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
@@ -109,7 +109,7 @@ public class RecordSourceViewerDialog extends JDialog {
 				nextButton.setEnabled(recordSource.hasNext());
 			}
 		} catch (IOException ex) {
-			logger.error(new LoggingObject("CM-100601", recordSource.getName()), ex);
+			logger.severe(new LoggingObject("CM-100601", recordSource.getName()).toString() + ": " + ex);
 		}
 	}
 

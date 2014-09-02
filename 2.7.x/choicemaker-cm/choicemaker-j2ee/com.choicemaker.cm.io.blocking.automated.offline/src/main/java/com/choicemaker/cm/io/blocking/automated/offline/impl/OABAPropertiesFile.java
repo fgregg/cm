@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IOABAProperties;
 
@@ -56,13 +56,13 @@ public class OABAPropertiesFile implements IOABAProperties {
 		try {
 			prop.load(new FileInputStream (FILE_NAME));
 		} catch (FileNotFoundException e) {
-			log.error("Could not open properties files: " + FILE_NAME);
-			log.error("Use Default values.");
-			log.error(e.toString());
+			log.severe("Could not open properties files: " + FILE_NAME);
+			log.severe("Use Default values.");
+			log.severe(e.toString());
 		} catch (IOException e) {
-			log.error("Could not read properties files: " + FILE_NAME);
-			log.error("Use Default values.");
-			log.error(e.toString());
+			log.severe("Could not read properties files: " + FILE_NAME);
+			log.severe("Use Default values.");
+			log.severe(e.toString());
 		}
 		numProc = Integer.parseInt(prop.getProperty("numProcessors","1"));
 		tempFileDir = prop.getProperty("fileDir","/");

@@ -13,7 +13,7 @@ package com.choicemaker.cm.transitivity.util;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.InvalidProfileException;
 import com.choicemaker.cm.core.Profile;
@@ -109,7 +109,7 @@ public class CEFromMatchCandidatesBuilder extends CEFromMatchesBuilder{
 					translateDecision(candidates[i].getDecision()),noteInfo);
 				// END BUG FIX?
 
-				logger.debug("q " + q.getId().toString() + " m " + m.getId().toString());
+				logger.fine("q " + q.getId().toString() + " m " + m.getId().toString());
 
 				pairs.add(mr);
 
@@ -119,7 +119,7 @@ public class CEFromMatchCandidatesBuilder extends CEFromMatchesBuilder{
 			//second match the m records against each other.
 			pairs.addAll( allMatch(records));
 		} catch (InvalidProfileException e) {
-			logger.error(e, e);
+			logger.severe(e.toString());
 		}
 
 		CompositeEntityBuilder ceb = new CompositeEntityBuilder (pairs);

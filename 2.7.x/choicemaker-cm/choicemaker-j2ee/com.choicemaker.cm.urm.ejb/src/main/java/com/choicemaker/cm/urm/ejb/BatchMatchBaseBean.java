@@ -32,7 +32,7 @@ import javax.ejb.SessionContext;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.SerialRecordSource;
@@ -89,7 +89,7 @@ public class BatchMatchBaseBean implements SessionBean {
 				initialized = true;
 			}
 		} catch (Exception ex) {
-			log.error(ex.toString (), ex);
+			log.severe(ex.toString());
 			throw new CreateException(ex.toString());
 		}
 
@@ -126,10 +126,10 @@ public class BatchMatchBaseBean implements SessionBean {
 									CmRuntimeException, 
 									RemoteException
 	{	//TODO: check input parameters
-		log.debug("<< startBatchQueryService...");
+		log.fine("<< startBatchQueryService...");
 		IProbabilityModel model = PMManager.getModelInstance(modelName);
 		if (model == null) {
-			log.error("Invalid probability accessProvider: " + modelName);
+			log.severe("Invalid probability accessProvider: " + modelName);
 			throw new ModelException("Invalid probability accessProvider: " + modelName);
 		}
 		SerialRecordSourceBuilder	rcb = new SerialRecordSourceBuilder(model,true);
@@ -163,19 +163,19 @@ public class BatchMatchBaseBean implements SessionBean {
 					maxSingle,
 					false);	
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (JMSException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (SQLException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		}
-		log.debug (">> startBatchQueryService");
+		log.fine (">> startBatchQueryService");
 		return id;
 	
 	}
@@ -202,16 +202,16 @@ public class BatchMatchBaseBean implements SessionBean {
 			BatchQueryService qs = Single.getInst().getBatchQueryService();
 			return qs.abortJob(jobId) == 0;
 			} catch (NamingException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			} catch (CreateException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			} catch (JMSException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new ConfigException(e.toString());
 			} catch (FinderException e) {
-				log.error(e);
+				log.severe(e.toString());
 				throw new CmRuntimeException(e.toString());
 			}		
 	}
@@ -285,7 +285,7 @@ public class BatchMatchBaseBean implements SessionBean {
 					String nameCopiedPart = fileName.substring(sourceFileNameBegining.length(),fileName.lastIndexOf("."+sourceExt));
 					URL url = new URL(urlBeginingPart+nameCopiedPart+urlEndingPart);
 					log.info("URL is created: " + url.toString());
-					log.debug("Host: " + url.getHost());
+					log.fine("Host: " + url.getHost());
 					OutputStream os;
 					if(  url.getProtocol().equals("file") && (url.getHost()== null || url.getHost().length() == 0)){ 
 						os  = new FileOutputStream(url.getFile());					
@@ -312,13 +312,13 @@ public class BatchMatchBaseBean implements SessionBean {
 					log.info(count + " byte(s) copied");								
 				}			
 		} catch (FileNotFoundException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new RecordCollectionException(e.toString());
 		} catch (MalformedURLException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new RecordCollectionException(e.toString());
 		} catch (IOException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		}
 	}

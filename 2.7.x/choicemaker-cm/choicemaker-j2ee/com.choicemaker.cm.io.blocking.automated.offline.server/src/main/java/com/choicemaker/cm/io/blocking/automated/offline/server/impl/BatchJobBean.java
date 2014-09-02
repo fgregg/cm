@@ -15,7 +15,7 @@ import java.util.Date;
 import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.autonumber.AutoNumberFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
@@ -133,7 +133,7 @@ public abstract class BatchJobBean implements EntityBean {
 					+ "': markAsQueued ignored (status == '"
 					+ getStatus()
 					+ "'";
-			log.warn(msg);
+			log.warning(msg);
 		}
 	}
 
@@ -149,7 +149,7 @@ public abstract class BatchJobBean implements EntityBean {
 					+ "': markAsQueued ignored (status == '"
 					+ getStatus()
 					+ "'";
-			log.warn(msg);
+			log.warning(msg);
 		}
 	}
 
@@ -181,7 +181,7 @@ public abstract class BatchJobBean implements EntityBean {
 					+ "': updateFractionCompleted ignored (status == '"
 					+ getStatus()
 					+ "'";
-			log.warn(msg);
+			log.warning(msg);
 		}
 
 		return;
@@ -206,7 +206,7 @@ public abstract class BatchJobBean implements EntityBean {
 					+ "': markAsCompleted ignored (status == '"
 					+ getStatus()
 					+ "'";
-			log.warn(msg);
+			log.warning(msg);
 		}
 	}
 	
@@ -219,7 +219,7 @@ public abstract class BatchJobBean implements EntityBean {
 		} else {
 			String msg = getId() + ", '" + getExternalId() + 
 				"': markAsFailed ignored (status == '" + getStatus() + "'";
-			log.warn(msg);
+			log.warning(msg);
 		}
 	}
 
@@ -292,7 +292,7 @@ public abstract class BatchJobBean implements EntityBean {
 	}
 
 	public void ejbRemove() {
-		log.debug("Removing " + getExternalId());
+		log.fine("Removing " + getExternalId());
 	}
 
 	public void ejbStore() {

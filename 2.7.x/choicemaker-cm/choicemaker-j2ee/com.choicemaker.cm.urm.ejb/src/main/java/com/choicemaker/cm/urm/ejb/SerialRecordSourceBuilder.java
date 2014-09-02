@@ -14,7 +14,7 @@ import java.util.Properties;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -59,7 +59,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 	
 	protected String extractUrl(RefRecordCollection rc) throws RecordCollectionException{
 		String urlString = rc.getUrl(); 
-		log.debug("url:"+urlString);
+		log.fine("url:"+urlString);
 		if(urlString == null || urlString.length() == 0 ){
 		  if(checkEmpty)
 			throw new RecordCollectionException("empty url");
@@ -87,7 +87,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 			retVal = urlString.substring(JBOSS_LENGTH);
 		}
 
-		log.debug("Datasource URI: "+retVal);
+		log.fine("Datasource URI: "+retVal);
 		// Post-condition
 		if (retVal.length() == 0) {
 			throw new RecordCollectionException("blank database URI");
@@ -112,7 +112,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 			ITextFormat f = ((TextRefRecordCollection)rc).getFormat();
 			f.accept(this);
 		} catch (MalformedURLException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new RecordCollectionException(e.toString());
 		} 
 	}
@@ -175,7 +175,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 			DataSource ds = Single.getInst().getDataSource (dsJndiName);
 			Connection conn = ds.getConnection();
 			String connUrl  = conn.getMetaData().getURL();
-			log.debug("DB connection URL: "+connUrl);
+			log.fine("DB connection URL: "+connUrl);
 			conn.close();
 		
 			// Configure the record source buffer size, dbConfig name and model name
@@ -198,13 +198,13 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 			resRs = serializer.getSerializableRecordSource(properties);
 		} catch (NotSerializableException e) {
 			String errMsg = "Unable to create serializable record source";
-			log.error(errMsg,e);
+			log.severe(errMsg);
 			throw new RecordCollectionException(errMsg + ": " + e.toString());
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new RecordCollectionException(e.toString()); 
 		} catch (SQLException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new RecordCollectionException(e.toString()); 
 		}
 	}
@@ -233,7 +233,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 			URL url = new URL(urlString);
 			resRs = new SerializedRecordSourceDescriptor ( url.getFile(), model.getModelName());
 		} catch (MalformedURLException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new RecordCollectionException(e.toString());
 		} 
 

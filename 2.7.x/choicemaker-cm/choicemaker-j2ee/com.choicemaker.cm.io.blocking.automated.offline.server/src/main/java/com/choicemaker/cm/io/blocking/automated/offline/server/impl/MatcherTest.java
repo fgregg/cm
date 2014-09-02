@@ -23,7 +23,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
@@ -69,11 +69,11 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 	private int compares;
 
 	public void ejbCreate() {
-		log.debug("starting ejbCreate...");
+		log.fine("starting ejbCreate...");
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 	}
 
@@ -115,7 +115,7 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 					//start matching
 					data = ((StartData) o);
 
-					log.debug("Matcher In onMessage " + data.ind + " " + data.treeInd);
+					log.fine("Matcher In onMessage " + data.ind + " " + data.treeInd);
 
 					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 					batchJob = configuration.findBatchJobById(data.jobID);
@@ -130,26 +130,26 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 
 
 				} else {
-					log.warn("wrong type: " + inMessage.getClass().getName());
+					log.warning("wrong type: " + inMessage.getClass().getName());
 				}
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			assert batchJob != null;
 			try {
 				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(),e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -173,7 +173,7 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 
 		t = System.currentTimeMillis() - t;
 
-		log.debug("Times: lookup " + inHMLookup + " compare: " + inCompare
+		log.fine("Times: lookup " + inHMLookup + " compare: " + inCompare
 			+ " writeMatches: " + t);
 
 		MatchWriterData mwd = new MatchWriterData (data);

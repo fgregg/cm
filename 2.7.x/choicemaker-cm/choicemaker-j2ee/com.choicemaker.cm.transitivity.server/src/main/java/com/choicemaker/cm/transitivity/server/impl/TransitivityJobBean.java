@@ -21,7 +21,7 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 
@@ -162,7 +162,7 @@ public abstract class TransitivityJobBean implements EntityBean {
 					+ ": updateFractionCompleted ignored (status == '"
 					+ getStatus()
 					+ "'";
-			log.warn(msg);
+			log.warning(msg);
 		}
 
 		return;
@@ -185,7 +185,7 @@ public abstract class TransitivityJobBean implements EntityBean {
 					+ ": markAsCompleted ignored (status == '"
 					+ getStatus()
 					+ "'";
-			log.warn(msg);
+			log.warning(msg);
 		}
 	}
 	
@@ -198,7 +198,7 @@ public abstract class TransitivityJobBean implements EntityBean {
 		} else {
 			String msg = getId() + 
 				": markAsFailed ignored (status == '" + getStatus() + "'";
-			log.warn(msg);
+			log.warning(msg);
 		}
 	}
 
@@ -252,25 +252,25 @@ public abstract class TransitivityJobBean implements EntityBean {
 			pub.close();
 		}
 		catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		} 
 		finally {
 			if (session != null) {
 				try {
 					session.close();
 				} catch (Exception e) {
-					log.error(e);
+					log.severe(e.toString());
 				}
 			}
 			if (conn != null) {
 				try {
 					conn.close();
 				} catch (Exception e) {
-					log.error(e);
+					log.severe(e.toString());
 				}
 			}
 		}
-		log.debug("...finished published status");
+		log.fine("...finished published status");
 	}
 
 
@@ -300,7 +300,7 @@ public abstract class TransitivityJobBean implements EntityBean {
 	}
 
 	public void ejbRemove() {
-		log.debug("Removing " + getId());
+		log.fine("Removing " + getId());
 	}
 
 	public void ejbStore() {

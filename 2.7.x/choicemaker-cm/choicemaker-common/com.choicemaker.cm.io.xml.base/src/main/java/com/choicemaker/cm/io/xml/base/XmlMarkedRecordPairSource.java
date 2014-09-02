@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -170,12 +170,12 @@ public class XmlMarkedRecordPairSource
 						"org.xml.sax.SAXParseException: The element type \"Report\" must be terminated by the matching end-tag \"</Report>\"."))
 						|| ex.toString().startsWith("org.xml.sax.SAXParseException: End of entity not allowed; an end tag is missing.") ||
 						ex.toString().startsWith("org.xml.sax.SAXParseException: XML document structures must start and end within the same entity."))) {
-					logger.error("", ex);
+					logger.severe(ex.toString());
 					thrown = ex;
 				}
 			}
 		} catch (Exception ex) {
-			logger.error("Error reading file referenced by " + fileName, ex);
+			logger.severe("Error reading file referenced by " + fileName + ": " + ex);
 			thrown = ex;
 		} finally {
 			try {

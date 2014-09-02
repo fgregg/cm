@@ -29,7 +29,7 @@ import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -85,7 +85,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
 	}
 
@@ -117,7 +117,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 
-		log.debug("MatchDedupOABA2 In onMessage");
+		log.fine("MatchDedupOABA2 In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -142,22 +142,22 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 				}
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
 			try {
-				log.error(e.toString(), e);
+				log.severe(e.toString());
 				if (batchJob != null)
 					batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(), e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -359,24 +359,24 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 			pub.close();
 			// conn.stop();
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.severe(e.toString());
 		} finally {
 			if (session != null) {
 				try {
 					session.close();
 				} catch (Exception e) {
-					log.error(e);
+					log.severe(e.toString());
 				}
 			}
 			if (conn != null) {
 				try {
 					conn.close();
 				} catch (Exception e) {
-					log.error(e);
+					log.severe(e.toString());
 				}
 			}
 		}
-		log.debug("...finished published status");
+		log.fine("...finished published status");
 	}
 
 }

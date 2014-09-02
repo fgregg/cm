@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Decision;
@@ -75,7 +76,7 @@ public class RecordDecisionMaker {
 		} finally {
 			src.close();
 		}
-		if (logger.isInfoEnabled()) {
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Number matched: " + numMatched + ", number above lower threshold: " + numAdded);
 		}
 		return matches;
@@ -100,7 +101,7 @@ public class RecordDecisionMaker {
 		} finally {
 			src.close();
 		}
-		if (logger.isInfoEnabled()) {
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Number matched: " + numMatched);
 		}
 		return matches;

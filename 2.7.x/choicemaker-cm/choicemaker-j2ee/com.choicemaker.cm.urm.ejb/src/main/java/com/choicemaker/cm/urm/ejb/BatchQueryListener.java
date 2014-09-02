@@ -17,7 +17,7 @@ import javax.ejb.CreateException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAService;
@@ -42,7 +42,7 @@ public class BatchQueryListener extends WorkflowControlListener{
 	 * Constructor, which is public and takes no arguments.
 	 */
 	public BatchQueryListener() {
-    	log.debug("constructor");
+    	log.fine("constructor");
 	}
 	
 	protected boolean isAbortCheckRequired() {return true;}
@@ -77,12 +77,12 @@ public class BatchQueryListener extends WorkflowControlListener{
 			throw new JobAlreadyAbortedException();
 			
 		long tid = ts.startTransitivity(prevStepId);
-		log.debug("transitivity preprocessing is started");
+		log.fine("transitivity preprocessing is started");
 		return tid;
 	} 
 	
 	public void abortJobStep(long id) throws ConfigException, CmRuntimeException {
-		log.debug("transitivity preprocessing abort is ignored");
+		log.fine("transitivity preprocessing abort is ignored");
 		//TODO: abort transitivity service
 	}
 

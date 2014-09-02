@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 
 import oracle.jdbc.pool.OracleConnectionCacheImpl;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.db.oracle.xmlconf.OraConnectionCacheXmlConf;
@@ -96,7 +96,7 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 		try {
 			cc.close();
 		} catch (SQLException ex) {
-			logger.error("Closing connection cache.", ex);
+			logger.severe("Closing connection cache.", ex);
 		}
 	}
 
@@ -114,13 +114,13 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 						TimeoutConnection b = (TimeoutConnection) i.next();
 						if (curTime > b.endTime) {
 							++numTimeouts;
-							logger.warn("Forced closing of connection.");
+							logger.warning("Forced closing of connection.");
 							new ConnectionCloser(b.connection).start();
 							i.remove();
 						}
 					}
 					if (numTimeouts > 5) {
-						logger.warn("Replacing connection cache.");
+						logger.warning("Replacing connection cache.");
 						i = connections.iterator();
 						while (i.hasNext()) {
 							new ConnectionCloser(((TimeoutConnection) i.next()).connection).start();
@@ -131,7 +131,7 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 					}
 				}
 			} catch (InterruptedException ex) {
-				logger.warn("Watchdog", ex);
+				logger.warning("Watchdog", ex);
 			}
 		}
 	}
@@ -171,7 +171,7 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 			try {
 				b.close();
 			} catch (SQLException ex) {
-				logger.error("Error closing.", ex);
+				logger.severe("Error closing.", ex);
 			}
 			logger.info("Completed closing.");
 		}
@@ -185,7 +185,7 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 				cc = (OracleConnectionCacheImpl) OraConnectionCacheXmlConf.getConnectionCache(name);
 				tmp.close();
 			} catch (Exception ex) {
-				logger.error("Replacing connection cache.", ex);
+				logger.severe("Replacing connection cache.", ex);
 			}
 		}
 	}

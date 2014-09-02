@@ -22,7 +22,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
@@ -52,13 +52,13 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 //	private transient QueueConnection connection = null;
 
 	public void ejbCreate() {
-//	log.debug("starting ejbCreate...");
+//	log.fine("starting ejbCreate...");
 		try {
 			this.configuration = EJBConfiguration.getInstance();
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
-//	log.debug("...finished ejbCreate");
+//	log.fine("...finished ejbCreate");
 	}
 
 	/* (non-Javadoc)
@@ -152,22 +152,22 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 				}
 
 			} else {
-				log.warn("wrong type: " + inMessage.getClass().getName());
+				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (JMSException e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			assert batchJob != null;
 			try {
 				batchJob.markAsFailed();
 			} catch (RemoteException e1) {
-				log.error(e1.toString(),e1);
+				log.severe(e1.toString());
 			}
 		} catch (Exception e) {
-			log.error(e.toString(),e);
+			log.severe(e.toString());
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -221,23 +221,23 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 			sender.send(message);
 
 
-			log.debug ("Sending on queue '" + queue.getQueueName()) ;
-			log.debug("connection " + connection);
-			log.debug("session " + session);
-			log.debug("message " + message);
-			log.debug("sender " + sender);
+			log.fine ("Sending on queue '" + queue.getQueueName()) ;
+			log.fine("connection " + connection);
+			log.fine("session " + session);
+			log.fine("message " + message);
+			log.fine("sender " + sender);
 
 		} catch (Exception ex) {
-			log.error(ex.toString(),ex);
+			log.severe(ex.toString());
 		} finally {
 			try {
 				if (session != null) session.close();
 			} catch (JMSException ex) {
-				log.error(ex.toString(),ex);
+				log.severe(ex.toString());
 			}
 		}
 
-		log.debug ("...finished sendMessage");
+		log.fine ("...finished sendMessage");
 	}
 */
 

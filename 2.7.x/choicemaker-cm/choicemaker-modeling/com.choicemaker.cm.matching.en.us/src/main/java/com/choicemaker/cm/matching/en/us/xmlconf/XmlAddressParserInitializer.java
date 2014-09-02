@@ -18,7 +18,7 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
@@ -73,7 +73,7 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					if (dirs != null) {
 						t.setSplitPreDirections(dirs);
 					} else {
-						logger.warn("null collection for preDirections");
+						logger.warning("null collection for preDirections");
 					}
 				}
 
@@ -83,7 +83,7 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					if (suffs != null) {
 						t.setSplitSuffixes(suffs);
 					} else {
-						logger.warn("null collection for streetSuffixes");
+						logger.warning("null collection for streetSuffixes");
 					}
 				}
 
@@ -93,7 +93,7 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					if (c != null) {
 						t.setSplitPostDirections(c);
 					} else {
-						logger.warn("null collection for postDirections");
+						logger.warning("null collection for postDirections");
 					}
 				}
 
@@ -103,7 +103,7 @@ public class XmlAddressParserInitializer implements XmlModuleInitializer {
 					if (c != null) {
 						t.setSplitAptTypes(c);
 					} else {
-						logger.warn("null collection for aptTypes");
+						logger.warning("null collection for aptTypes");
 					}
 				}
 

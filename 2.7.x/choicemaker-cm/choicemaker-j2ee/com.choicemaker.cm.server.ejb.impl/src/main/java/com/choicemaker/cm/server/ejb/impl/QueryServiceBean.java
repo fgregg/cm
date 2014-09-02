@@ -22,8 +22,8 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
@@ -119,8 +119,8 @@ public class QueryServiceBean implements SessionBean {
 		throws InvalidModelException, InvalidProfileException, UnderspecifiedProfileException, DatabaseException, AccessControlException, RemoteException {
 		try {
 			long startTime = System.currentTimeMillis();
-			logger.debug("findMatches:begin");
-			if (logger.isDebugEnabled()) {
+			logger.fine("findMatches:begin");
+			if (logger.isLoggable(Level.FINE)) {
 				writeDebugInfo(
 					profile,
 					constraint,
@@ -130,12 +130,12 @@ public class QueryServiceBean implements SessionBean {
 					maxNumMatches,
 					returnDataFormat,
 					purpose,
-					Level.DEBUG);
+					Level.FINE);
 			}
 
 			IProbabilityModel model = PMManager.getModelInstance(probabilityModel);
 			if (model == null) {
-				logger.error("Invalid probability accessProvider: " + probabilityModel);
+				logger.severe("Invalid probability accessProvider: " + probabilityModel);
 				throw new InvalidModelException(probabilityModel);
 			}
 			// 2014-04-24 rphall: Commented out unused local variable
@@ -157,11 +157,11 @@ public class QueryServiceBean implements SessionBean {
 			try {
 				s = dm.getMatches(q, rs, model, differThreshold, matchThreshold);
 			} catch (UnderspecifiedQueryException ex) {
-				logger.warn("", ex);
+				logger.warning(ex.toString());
 				throw new UnderspecifiedProfileException("", ex);
 			} catch (IOException ex) {
-				logger.error("Database error: " + ex, ex);
-				if (!logger.isDebugEnabled()) {
+				logger.severe("Database error: " + ex);
+				if (!logger.isLoggable(Level.FINE)) {
 					writeDebugInfo(
 						profile,
 						constraint,
@@ -171,7 +171,7 @@ public class QueryServiceBean implements SessionBean {
 						maxNumMatches,
 						returnDataFormat,
 						purpose,
-						Level.ERROR);
+						Level.SEVERE);
 				}
 				throw new DatabaseException("", ex);
 			}
@@ -213,11 +213,11 @@ public class QueryServiceBean implements SessionBean {
 						s,
 						reporterPlugins));
 			} catch (IOException ex) {
-				logger.error("reporting", ex);
+				logger.severe("reporting: " + ex);
 			}
 			return new Result(matchCandidates);
 		} catch (RuntimeException ex) {
-			logger.error("runtime exception", ex);
+			logger.severe("runtime exception: " + ex);
 			throw new RemoteException("runtime exception", ex);
 		}
 	}

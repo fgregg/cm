@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ClueSet;
@@ -134,7 +134,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 			ComparisonArray cg = cgSource.getNext();
 			
 			//debug
-//			if (log.isDebugEnabled()) debugComparisonGroup (cg);
+//			if (log.isLoggable(Level.FINE)) debugComparisonGroup (cg);
 			
 			int size = cg.getMasterIDs().size() + cg.getStagingIDs().size();
 				
@@ -172,7 +172,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 //			sb.append(c);
 //			sb.append(" ");
 //		}
-//		log.debug(sb.toString());
+//		log.fine(sb.toString());
 //		
 //		list = cg.getMasterIDs();
 //		sb = new StringBuffer ("master: ");
@@ -181,7 +181,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 //			sb.append(c);
 //			sb.append(" ");
 //		}
-//		log.debug(sb.toString());
+//		log.fine(sb.toString());
 //	}
 	
 	
@@ -212,7 +212,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 			Comparable c = (Comparable) stageList.get(i);
 			Record q = (Record) stage.get(c);
 			if (q == null) {
-				log.error("q is null " + c);
+				log.severe("q is null " + c);
 			} 
 			
 			//compare with all the other staging records.
@@ -220,7 +220,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 				Comparable c2 = (Comparable) stageList.get(j);
 				Record m = (Record) stage.get(c2);
 				
-				if (m == null) log.error ("m is null " + c2);
+				if (m == null) log.severe ("m is null " + c2);
 		
 				MatchRecord2 mr = compareRecords (clueSet, enabledClues, model, q, m, true,
 					low, high);
@@ -245,14 +245,14 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 			Comparable c = (Comparable) stageList.get(i);
 			Record q = (Record) stage.get(c);
 			if (q == null) {
-				log.error("q is null " + c);
+				log.severe("q is null " + c);
 			} 
 			
 			for (int j=0; j < masterList.size(); j++) {
 				Comparable c2 = (Comparable) masterList.get(j);
 				Record m = (Record) master.get(c2);
 
-				if (m == null) log.error ("master m is null " + c2);
+				if (m == null) log.severe ("master m is null " + c2);
 		
 				MatchRecord2 mr = compareRecords (clueSet, enabledClues, model, q, m, false,
 					low, high);
@@ -308,7 +308,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 		int s = stageList.size() + TMaster.size();
 		Random random = new Random (s);
 		
-		log.debug("Random " + s);
+		log.fine("Random " + s);
 		
 		int sSize;
 		if (cg.getStagingIDs().size() <= maxBlockSize) {
@@ -345,7 +345,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 				Comparable c2 = (Comparable) S.get(j);
 				Record m = (Record) stage.get(c2);
 				
-				log.debug ("Round robin s " + c1.toString() + " " + c2.toString());
+				log.fine ("Round robin s " + c1.toString() + " " + c2.toString());
 				
 				MatchRecord2 mr = compareRecords (clueSet, enabledClues, model, q, m, true,
 					low, high);
@@ -368,7 +368,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 				Comparable c2 = (Comparable) S.get(j);
 				Record m = (Record) stage.get(c2);
 				
-				log.debug ("TStage with S " + c1.toString() + " " + c2.toString());
+				log.fine ("TStage with S " + c1.toString() + " " + c2.toString());
 
 				MatchRecord2 mr = compareRecords (clueSet, enabledClues, model, q, m, true,
 					low, high);
@@ -389,7 +389,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 				Comparable c2 = (Comparable) S.get(j);
 				Record q = (Record) stage.get(c2);
 				
-				log.debug ("TMaster with S " + c2.toString() + " " + c1.toString());
+				log.fine ("TMaster with S " + c2.toString() + " " + c1.toString());
 
 				MatchRecord2 mr = compareRecords (clueSet, enabledClues, model, q, m, false,
 					low, high);
@@ -411,7 +411,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 					Comparable c2 = (Comparable) TStage.get(j);
 					Record q = (Record) stage.get(c2);
 
-					log.debug ("TMaster random " + c2.toString() + " " + c1.toString());
+					log.fine ("TMaster random " + c2.toString() + " " + c1.toString());
 
 					MatchRecord2 mr = compareRecords (clueSet, enabledClues, model, q, m, false,
 						low, high);
@@ -428,7 +428,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 					Comparable c2 = (Comparable) TStage.get(ids[j]);
 					Record q = (Record) stage.get(c2);
 
-					log.debug ("TMaster random " + c2.toString() + " " + c1.toString());
+					log.fine ("TMaster random " + c2.toString() + " " + c1.toString());
 
 					MatchRecord2 mr = compareRecords (clueSet, enabledClues, model, q, m, false,
 						low, high);
@@ -455,7 +455,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 			c2 = (Comparable) TStage.get(n);
 			m = (Record) stage.get(c2);
 
-			log.debug ("TStage random i+1 " + c1.toString() + " " + c2.toString());
+			log.fine ("TStage random i+1 " + c1.toString() + " " + c2.toString());
 
 			MatchRecord2 mr = compareRecords (clueSet, enabledClues, model, q, m, true,
 				low, high);
@@ -476,13 +476,13 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 						m = (Record) master.get(c2);
 						mr = compareRecords (clueSet, enabledClues, model, q, m, false,low, high);					
 
-						log.debug ("TStage random " + c1.toString() + " " + c2.toString());
+						log.fine ("TStage random " + c1.toString() + " " + c2.toString());
 					} else {
 						c2 = (Comparable) TStage.get(ids[j]);
 						m = (Record) stage.get(c2);
 						mr = compareRecords (clueSet, enabledClues, model, q, m, true,low, high);					
 
-						log.debug ("TStage random " + c1.toString() + " " + c2.toString());
+						log.fine ("TStage random " + c1.toString() + " " + c2.toString());
 					}
 					if (mr != null) list.add(mr);
 

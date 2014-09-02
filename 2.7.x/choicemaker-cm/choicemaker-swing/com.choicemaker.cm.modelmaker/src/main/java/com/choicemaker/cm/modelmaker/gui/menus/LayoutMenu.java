@@ -22,7 +22,7 @@ import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
@@ -115,7 +115,7 @@ public class LayoutMenu extends LastUsedMenu {
 					try {
 						RecordPairViewerXmlConf.saveLayout(layout);
 					} catch (Exception ex) {
-						logger.error(new LoggingObject("CM-100301", layout.getFileName()), ex);
+						logger.severe(new LoggingObject("CM-100301", layout.getFileName()).toString() + ": " + ex);
 					}
 				}
 			}
@@ -161,7 +161,7 @@ public class LayoutMenu extends LastUsedMenu {
 				opened(layout.getFileName());
 			} catch (Exception ex) {
 				String fileName = layout == null ? "null" : layout.getFileName();
-				logger.error(new LoggingObject("CM-100301", fileName), ex);
+				logger.severe(new LoggingObject("CM-100301", fileName).toString() + ": " + ex);
 			}
 		}
 	}
@@ -173,7 +173,7 @@ public class LayoutMenu extends LastUsedMenu {
 			parent.setCurrentLayout(layout);
 			opened(fileName);
 		} catch (Exception ex) {
-			logger.error(new LoggingObject("CM-100302", fileName), ex);
+			logger.severe(new LoggingObject("CM-100302", fileName).toString() + ": " + ex);
 			remove(fileName);
 		}
 	}

@@ -18,7 +18,7 @@ import java.sql.ResultSet;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -124,7 +124,7 @@ class DbMarkedRecordPairSource implements MarkedRecordPairSource {
 				rs[0] = outer;
 			} else {
 				for (int i = 0; i < numCursors; ++i) {
-					logger.debug("Get cursor: " + i);
+					logger.fine("Get cursor: " + i);
 					rs[i] = (ResultSet) outer.getObject(i + 1);
 				}
 			}
@@ -139,7 +139,7 @@ class DbMarkedRecordPairSource implements MarkedRecordPairSource {
 				rs2[0] = outer2;
 			} else {
 				for (int i = 0; i < numCursors; ++i) {
-					logger.debug("Get cursor: " + i);
+					logger.fine("Get cursor: " + i);
 					rs2[i] = (ResultSet) outer2.getObject(i + 1);
 				}
 			}

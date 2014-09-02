@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.configure.xml.AbstractXmlSpecification;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurable;
@@ -41,7 +41,7 @@ public abstract class AbstractUpdateDerivedFields
 	public void add(XmlConfigurable ignored) {
 		String msg = "Ignoring XmlConfigurable delegate (type "
 		+ (ignored == null ? "null" : ignored.getClass().getName() + ")");
-		logger.warn(msg);
+		logger.warning(msg);
 	}
 
 	/**

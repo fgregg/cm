@@ -12,7 +12,7 @@ package com.choicemaker.cm.core.configure;
 
 import java.lang.reflect.Field;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.PropertyNames;
 import com.choicemaker.cm.core.XmlConfException;
@@ -92,7 +92,7 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 				}
 			} catch (Exception x) {
 				String msg = msgPrefix + x.toString() + ": " + x.getCause();
-				logger.error(msg, x);
+				logger.severe(msg);
 				assert delegate == null;
 				throw new IllegalStateException(msg);
 			}
@@ -154,7 +154,7 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 			install(pmm);
 		} catch (Exception e) {
 			String msg = msgPrefix + e.toString() + ": " + e.getCause();
-			logger.error(msg, e);
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 	}

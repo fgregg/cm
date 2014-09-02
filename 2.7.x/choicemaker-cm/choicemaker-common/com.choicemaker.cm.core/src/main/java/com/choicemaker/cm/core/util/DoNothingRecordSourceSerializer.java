@@ -14,8 +14,8 @@ import java.io.NotSerializableException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.RecordSource;
@@ -38,7 +38,7 @@ public class DoNothingRecordSourceSerializer
 	
 	public void setProperties(Properties p) {
 		if (p != null) {
-			logger.debug("Ignoring properties: [" + p.toString() + "]");
+			logger.fine("Ignoring properties: [" + p.toString() + "]");
 		}
 	}
 
@@ -46,9 +46,9 @@ public class DoNothingRecordSourceSerializer
 		Pattern uriPattern,
 		Class[] handledClasses,
 		Properties properties) {
-		logIgnoredPattern(logger, Level.DEBUG, uriPattern);
-		logIgnoredClasses(logger, Level.DEBUG, handledClasses);
-		logIgnoredProperties(logger, Level.DEBUG, properties);
+		logIgnoredPattern(logger, Level.FINE, uriPattern);
+		logIgnoredClasses(logger, Level.FINE, handledClasses);
+		logIgnoredProperties(logger, Level.FINE, properties);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class DoNothingRecordSourceSerializer
 		String msg =
 			AbstractRecordSourceSerializer.msgCanNotSerializeProperties(
 				properties);
-		logger.error(msg);
+		logger.severe(msg);
 		throw new NotSerializableException(msg);
 	}
 
@@ -83,7 +83,7 @@ public class DoNothingRecordSourceSerializer
 		throws NotSerializableException {
 		String msg =
 			AbstractRecordSourceSerializer.msgCanNotSerializeInstance(rs);
-		logger.error(msg);
+		logger.severe(msg);
 		throw new NotSerializableException(msg);
 	}
 

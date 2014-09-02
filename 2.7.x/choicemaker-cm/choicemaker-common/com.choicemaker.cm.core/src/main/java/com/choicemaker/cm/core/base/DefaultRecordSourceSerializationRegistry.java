@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -97,7 +97,7 @@ public class DefaultRecordSourceSerializationRegistry
 			String msg =
 				"Exception thrown during registry initialization: "
 					+ x.toString();
-			log.error(msg, x);
+			log.severe(msg);
 			throw new RuntimeException(msg);
 		}
 	}
@@ -162,7 +162,7 @@ public class DefaultRecordSourceSerializationRegistry
 				"Unable to find record source serializer for '"
 					+ (rs == null ? null : rs.toString())
 					+ "'";
-			log.error(msg);
+			log.severe(msg);
 			throw new NotSerializableException(msg);
 		}
 		return retVal;
@@ -189,7 +189,7 @@ public class DefaultRecordSourceSerializationRegistry
 				"Unable to find record source serializer for '"
 					+ recordsourceURI
 					+ "'";
-			log.error(msg);
+			log.severe(msg);
 			throw new NotSerializableException(msg);
 		}
 		return retVal;
@@ -238,8 +238,8 @@ public class DefaultRecordSourceSerializationRegistry
 								+ POINT
 								+ "' in the plug-in '"
 								+ descriptor.getUniqueIdentifier()
-								+ "' -- CONTINUING";
-						log.error(msg, x2);
+								+ "' -- CONTINUING: ";
+						log.severe(msg + x2);
 					}
 
 				} catch (Exception x1) {
@@ -248,16 +248,16 @@ public class DefaultRecordSourceSerializationRegistry
 							+ i
 							+ " of the extension point '"
 							+ POINT
-							+ "' -- CONTINUING";
-					log.error(msg, x1);
+							+ "' -- CONTINUING: ";
+					log.severe(msg + x1);
 				}
 			} // i, extensions
 			Collections.sort(serializerRegistry);
 
 		} catch (Exception x0) {
 			String msg =
-				"Unable to get extension point '" + POINT + "' -- FAILED";
-			log.error(msg, x0);
+				"Unable to get extension point '" + POINT + "' -- FAILED: ";
+			log.severe(msg + x0);
 			throw new RuntimeException(x0);
 		}
 	}
@@ -279,7 +279,7 @@ public class DefaultRecordSourceSerializationRegistry
 		if (!StringUtils.nonEmptyString(priorityValue)) {
 			String msg =
 				"null priority value -- DEFAULTING TO " + DEFAULT_PRIORITY;
-			log.debug(msg);
+			log.fine(msg);
 		} else {
 			try {
 				priority = Integer.parseInt(priorityValue);
@@ -289,7 +289,7 @@ public class DefaultRecordSourceSerializationRegistry
 						+ priorityValue
 						+ "' -- DEFAULTING TO "
 						+ DEFAULT_PRIORITY;
-				log.error(msg);
+				log.severe(msg);
 			}
 		}
 

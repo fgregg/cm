@@ -13,7 +13,7 @@ package com.choicemaker.cm.core.configure.eclipse;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -64,7 +64,7 @@ public class EclipseRegistry
 					"No configurable registered under the id '"
 						+ uniqueId
 						+ "', returning null";
-				logger.error(msg);
+				logger.severe(msg);
 				throw new NotFoundException(msg);
 			}
 		}
@@ -130,8 +130,8 @@ public class EclipseRegistry
 								+ this.getUniqueExtensionPointId()
 								+ "' in the plug-in '"
 								+ descriptor.getUniqueIdentifier()
-								+ "' -- CONTINUING";
-						logger.error(msg, x2);
+								+ "' -- CONTINUING: ";
+						logger.severe(msg + x2);
 					}
 
 				} catch (Exception x1) {
@@ -140,8 +140,8 @@ public class EclipseRegistry
 							+ i
 							+ " of the extension point '"
 							+ this.getUniqueExtensionPointId()
-							+ "' -- CONTINUING";
-					logger.error(msg, x1);
+							+ "' -- CONTINUING: ";
+					logger.severe(msg + x1);
 				}
 			} // i, extensions
 
@@ -149,8 +149,8 @@ public class EclipseRegistry
 			String msg =
 				"Unable to get extension point '"
 					+ this.getUniqueExtensionPointId()
-					+ "' -- FAILED";
-			logger.error(msg, x0);
+					+ "' -- FAILED: ";
+			logger.severe(msg + x0);
 			throw new RuntimeException(msg + ": " + x0.toString());
 		}
 	}
@@ -168,19 +168,19 @@ public class EclipseRegistry
 				(XmlConfigurable) this._getConfigurables().get(uniqueId);
 			if (test != null && !test.equals(configurable)) {
 				String msg = "non-unique id: '" + uniqueId + "'";
-				logger.error(msg);
+				logger.severe(msg);
 				throw new NotUniqueException(msg);
 			} else if (test != null) {
 				String msg =
 					"This configurable is already registered under the id ("
 						+ uniqueId
 						+ ")";
-				logger.warn(msg);
+				logger.warning(msg);
 			} else {
 				this._getConfigurables().put(uniqueId, configurable);
 				String msg =
 					"Registered a configurable under the id '" + uniqueId + "'";
-				logger.debug(msg);
+				logger.fine(msg);
 			}
 		}
 	}
@@ -197,7 +197,7 @@ public class EclipseRegistry
 					"No configurable registered under the id '"
 						+ uniqueId
 						+ "'";
-				logger.debug(msg);
+				logger.fine(msg);
 			}
 		}
 	}
@@ -218,7 +218,7 @@ public class EclipseRegistry
 					"Modified the configurable registered under the id '"
 						+ uniqueId
 						+ "'";
-				logger.debug(msg);
+				logger.fine(msg);
 			} else if (test != null) {
 				String msg =
 					"No change to the configurable registered under the id '"
@@ -229,7 +229,7 @@ public class EclipseRegistry
 				this._getConfigurables().put(uniqueId, configurable);
 				String msg =
 					"Registered a configurable under the id '" + uniqueId + "'";
-				logger.debug(msg);
+				logger.fine(msg);
 			}
 		}
 	}

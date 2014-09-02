@@ -26,7 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -145,7 +145,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 				"Generating Objects");
 		
 		if (thrown[0] != null) {
-			Logger.getLogger(ObjectMakerDialog.class.getName()).error("Problem creating Holder classes and DB objects", thrown[0]);
+			Logger.getLogger(ObjectMakerDialog.class.getName()).severe("Problem creating Holder classes and DB objects: " + thrown[0]);
 			dispose();
 		} else if (interrupted) {
 			setVisible(true);

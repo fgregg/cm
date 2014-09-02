@@ -19,7 +19,7 @@ import java.util.TreeMap;
 import oracle.jdbc.pool.OracleConnectionCache;
 import oracle.jdbc.pool.OracleConnectionCacheImpl;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
@@ -44,7 +44,7 @@ public class OraConnectionCacheXmlConf {
 				DataSources.addDataSource(l[i], getConnectionCache(l[i]));
 			}
 		} catch (Exception ex) {
-			logger.error("", ex);
+			logger.severe("", ex);
 		}
 	}
 

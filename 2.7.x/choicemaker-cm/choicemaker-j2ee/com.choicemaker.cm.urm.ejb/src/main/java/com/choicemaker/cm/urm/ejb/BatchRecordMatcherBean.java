@@ -24,7 +24,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
@@ -78,7 +78,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 										CmRuntimeException, 
 										RemoteException
 	{
-		log.debug("<< startMatching...");
+		log.fine("<< startMatching...");
 //		TODO: check input parameters
 		long id = startBatchQueryService(
 					qRs,
@@ -89,7 +89,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 					maxSingle,
 					externalId,
 					null);	
-		log.debug (">> startMatching");
+		log.fine (">> startMatching");
 		return id;
 	}
 	
@@ -120,16 +120,16 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 
 			return js;					
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (JMSException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		}
 	}
@@ -181,7 +181,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 						dirName = fileName.substring(0,slashInd+1);
 						fileName = fileName.substring(slashInd+1);
 					}
-					log.debug("("+dirName+")("+fileName+")("+ext+")");	
+					log.fine("("+dirName+")("+fileName+")("+ext+")");	
 					
 					copyResultFromFile(dirName,fileName, ext,(TextRefRecordCollection)resRc);
 				}
@@ -190,19 +190,19 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 			}
 			
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (JMSException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (IOException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		}
 	}
@@ -232,16 +232,16 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 		BatchQueryService qs = Single.getInst().getBatchQueryService();
 		return qs.suspendJob(jobId) == 0;
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (JMSException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		}	
 	}
@@ -260,16 +260,16 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 			BatchQueryService qs = Single.getInst().getBatchQueryService();
 			return (qs.resumeJob(jobId)==1);
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (JMSException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		}	
 	}
@@ -282,7 +282,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 
 	{
 		long[] res;
-		log.debug("<<getJobList");
+		log.fine("<<getJobList");
 		Collection jobColl = Single.getInst().getBatchJobList();
 		res = new long[jobColl.size()];
 		Iterator jobIter = jobColl.iterator();
@@ -292,7 +292,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 			batchJob = (BatchJob) jobIter.next();
 			res[ind++] = batchJob.getId().longValue(); 
 		}
-		log.debug(">>getJobList");
+		log.fine(">>getJobList");
 		return res;
 	}
 	/**
@@ -318,19 +318,19 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 			bj.remove();
 			return ret;
 		} catch (NamingException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (CreateException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (JMSException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new ConfigException(e.toString());
 		} catch (FinderException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		} catch (RemoveException e) {
-			log.error(e);
+			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
 		}	
 	}

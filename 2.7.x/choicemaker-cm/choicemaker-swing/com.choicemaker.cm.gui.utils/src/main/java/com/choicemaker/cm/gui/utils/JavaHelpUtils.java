@@ -27,7 +27,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  * @author   Adam Winkel
@@ -111,7 +111,7 @@ public final class JavaHelpUtils {
 			helpSet = new HelpSet(cl, url);
 			initSuccessful = true;
 		} catch (HelpSetException e) {
-			logger.error("Help Set " + HELP_SET_NAME + " not found", e);
+			logger.severe("Help Set " + HELP_SET_NAME + " not found: " + e);
 		}
 
 		helpBroker = helpSet.createHelpBroker();

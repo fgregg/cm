@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -93,7 +93,7 @@ public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 //				throw new XmlConfException ("No such file " + str);
 //			}
 		} catch (Exception ex) {
-			log.error (ex.toString(), ex);
+			log.severe (ex.toString());
 		}
 		
 		return rs;

@@ -42,7 +42,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.EventListenerList;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.eclipse.core.boot.IPlatformRunnable;
 
 import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
@@ -168,7 +168,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	
 	private void setReturnCode(int returnCode) {
 		if (returnCode != EXIT_OK && returnCode != EXIT_ERROR) {
-			logger.warn("Ignoring invalid return code: " + returnCode
+			logger.warning("Ignoring invalid return code: " + returnCode
 					+ "; settting error code instead: " + EXIT_ERROR);
 			return;
 		}
@@ -623,7 +623,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		try {
 			setProbabilityModel(probabilityModel.getModelFilePath(), true);
 		} catch (OperationFailedException ex) {
-			logger.error(new LoggingObject("CM-100501", probabilityModel.getModelFilePath()), ex);
+			logger.severe(new LoggingObject("CM-100501", probabilityModel.getModelFilePath()).toString() + ": " + ex);
 		}
 	}
 
@@ -651,7 +651,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			setProbabilityModel(pm);
 		} catch (Exception ex) {
 			// AJW 2004-04-26: removed to avoid duplicate error messages.
-			//logger.error(new LoggingObject("CM-100502", modelName, ex));
+			//logger.severe(new LoggingObject("CM-100502", modelName, ex));
 			throw new OperationFailedException(
 				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.retrieve.error", modelName),
 				ex);
@@ -788,7 +788,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		try {
 			saveProbabilityModel(probabilityModel);
 		} catch (OperationFailedException ex) {
-			logger.error(new LoggingObject("CM-100503", probabilityModel.getModelFilePath()), ex);
+			logger.severe(new LoggingObject("CM-100503", probabilityModel.getModelFilePath()).toString() + ": " + ex);
 		}
 	}
 
@@ -809,9 +809,9 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 				success = compiler.compile(pm, messagePanel.getWriter());
 			} catch (CompilerException ex) {
 				// TODO FIXME error message for compiler exception
-				logger.error(
+				logger.severe(
 						new LoggingObject("TODO FIXME", probabilityModel
-								.getModelFilePath()), ex);
+								.getModelFilePath()).toString() + ": " + ex);
 			}
 		}
 		setCursor(cursor);
@@ -1099,7 +1099,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			logger.info("Re-saved MarkedRecordPairSource: " + markedRecordPairSource.getName());
 			setSourceDataModified(false);
 		} catch (IOException ex) {
-			logger.error(new LoggingObject("CM-100602", markedRecordPairSource.getName()), ex);
+			logger.severe(new LoggingObject("CM-100602", markedRecordPairSource.getName()).toString() + ": " + ex);
 		}
 	}
 
@@ -1164,7 +1164,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 						}
 					}
 				} catch (OperationFailedException ex) {
-					logger.error(new LoggingObject("CM-100801"), ex);
+					logger.severe(new LoggingObject("CM-100801").toString() + ": " + ex);
 				}
 			}
 		};
@@ -1190,7 +1190,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			String text = probabilityModel.getClueText(clueId);
 			postClue(text);
 		} catch (IOException ex) {
-			logger.error(new LoggingObject("CM-100802", new Integer(clueId)), ex);
+			logger.severe(new LoggingObject("CM-100802", new Integer(clueId)).toString() + ": " + ex);
 		}
 	}
 
@@ -1217,7 +1217,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 		boolean enableAllRules,
 		int firingThreshold,
 		boolean andTest) {
-		//logger.debug("train called.");
+		//logger.fine("train called.");
 		long t0 = System.currentTimeMillis();
 		if (usedMultiSource == 1 && multiSources[0] != null) {
 			usedMultiSource = 0;
@@ -1256,7 +1256,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 						}
 					}
 				} catch (OperationFailedException ex) {
-					logger.error(new LoggingObject("CM-100801"), ex);
+					logger.severe(new LoggingObject("CM-100801").toString() + ": " + ex);
 				}
 			}
 		};
@@ -1650,7 +1650,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 					this.wait();
 				} catch (InterruptedException e) {
 					setReturnCode(EXIT_ERROR);
-					logger.error(e.toString());
+					logger.severe(e.toString());
 				}
 				setWait(false);
 			}
