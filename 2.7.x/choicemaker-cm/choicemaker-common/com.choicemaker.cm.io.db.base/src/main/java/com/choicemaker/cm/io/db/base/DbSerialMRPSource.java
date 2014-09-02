@@ -53,7 +53,7 @@ public class DbSerialMRPSource implements MarkedRecordPairSource, Serializable {
 	static final long serialVersionUID = 2592253692957626142L;
 
 	private static final int CURSOR = -10;
-	private static Logger logger = Logger.getLogger(DbSerialMRPSource.class);
+	private static Logger logger = Logger.getLogger(DbSerialMRPSource.class.getName());
 
 	// Properties
 	private String dataSourceName;

@@ -121,7 +121,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static Logger logger = Logger.getLogger(ModelMaker.class);
+	public static Logger logger = Logger.getLogger(ModelMaker.class.getName());
 	
 	public static String PLUGIN_APPLICATION_ID = "com.choicemaker.cm.modelmaker.ModelMaker";
 

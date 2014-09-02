@@ -32,7 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
 public class Blocker implements AutomatedBlocker {
 	public static final String LIMIT_PER_BLOCKING_SET = "limitPerBlockingSet";
 	public static final String LIMIT_SINGLE_BLOCKING_SET = "limitSingleBlockingSet";
-	private static Logger logger = Logger.getLogger(Blocker.class);
+	private static Logger logger = Logger.getLogger(Blocker.class.getName());
 
 	private String name;
 	private CountSource countSource;

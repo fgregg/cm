@@ -37,7 +37,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  */
 public class GenericDedupService {
 	
-	private static final Logger log = Logger.getLogger(GenericDedupService.class);
+	private static final Logger log = Logger.getLogger(GenericDedupService.class.getName());
 	
 	private static final int INTERVAL = 1000;
 

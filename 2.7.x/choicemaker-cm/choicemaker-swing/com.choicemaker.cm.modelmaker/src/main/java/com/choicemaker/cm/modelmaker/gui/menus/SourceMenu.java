@@ -54,7 +54,7 @@ import com.choicemaker.cm.modelmaker.gui.listeners.EvaluationListener;
 public class SourceMenu extends JMenu {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(SourceMenu.class);
+	private static Logger logger = Logger.getLogger(SourceMenu.class.getName());
 
 	private ModelMaker parent;
 	private static final String SOURCE_MENU = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.source");

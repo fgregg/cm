@@ -41,7 +41,7 @@ public class SerializedRecordSourceDescriptor implements ISerializableFileBasedR
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger log =
-		Logger.getLogger(SerializedRecordSourceDescriptor.class);
+		Logger.getLogger(SerializedRecordSourceDescriptor.class.getName());
 
 	private String descriptorFileName;
 	private String modelName;

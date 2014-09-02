@@ -32,7 +32,7 @@ import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
  */
 public final class FileChooserFactory {
 
-	private static final Logger logger = Logger.getLogger(FileChooserFactory.class);
+	private static final Logger logger = Logger.getLogger(FileChooserFactory.class.getName());
 
 	//
 	// methods that return a JFileChooser

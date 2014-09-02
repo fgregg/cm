@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.Platform;
  *
  */
 public class PluginUtils {
-	private static final Logger log = Logger.getLogger(PluginUtils.class);
+	private static final Logger log = Logger.getLogger(PluginUtils.class.getName());
 
 	public static void debugPlugins () {
 		IPluginRegistry registry = Platform.getPluginRegistry();

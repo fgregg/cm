@@ -54,7 +54,7 @@ public class ChunkService3 {
 	
 	private static final String DELIM = "|";
 	
-	private static final Logger log = Logger.getLogger(ChunkService3.class);
+	private static final Logger log = Logger.getLogger(ChunkService3.class.getName());
 	
 	private IIDSetSource bSource;
 	private IIDSetSource osSource;

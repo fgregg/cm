@@ -48,7 +48,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  */
 public class BlockMatcher2 implements IBlockMatcher2 {
 
-	private static final Logger log = Logger.getLogger(BlockMatcher2.class);
+	private static final Logger log = Logger.getLogger(BlockMatcher2.class.getName());
 
 	private int compares = 0; //number of comparisons made.
 	private int matches = 0; //number of matches and holds.

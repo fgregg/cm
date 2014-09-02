@@ -50,7 +50,7 @@ import com.choicemaker.util.FileUtilities;
 public class ModelMenu extends LastUsedMenu {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(ModelMenu.class);
+	private static Logger logger = Logger.getLogger(ModelMenu.class.getName());
 
 	private ModelMaker parent;
 

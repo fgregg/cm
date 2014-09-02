@@ -30,7 +30,7 @@ public class DoNothingRecordSourceSerializer
 
 	private static final long serialVersionUID = 1L;
 	private static Logger logger =
-		Logger.getLogger(DoNothingRecordSourceSerializer.class);
+		Logger.getLogger(DoNothingRecordSourceSerializer.class.getName());
 		
 	public Properties getProperties() {
 		return new Properties();

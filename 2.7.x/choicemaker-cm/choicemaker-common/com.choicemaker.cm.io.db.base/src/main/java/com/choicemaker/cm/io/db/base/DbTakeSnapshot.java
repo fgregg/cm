@@ -31,7 +31,7 @@ import com.choicemaker.cm.core.Decision;
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:04:53 $
  */
 public class DbTakeSnapshot {
-	private static Logger logger = Logger.getLogger(DbTakeSnapshot.class);
+	private static Logger logger = Logger.getLogger(DbTakeSnapshot.class.getName());
 
 	private DataSource ds;
 

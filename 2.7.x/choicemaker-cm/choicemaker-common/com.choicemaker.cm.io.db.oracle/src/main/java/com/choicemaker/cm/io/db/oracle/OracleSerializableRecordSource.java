@@ -41,7 +41,7 @@ import com.choicemaker.util.StringUtils;
  */
 public class OracleSerializableRecordSource implements ISerializableDbRecordSource {
 	
-	private static final Logger log = Logger.getLogger(OracleSerializableRecordSource.class);
+	private static final Logger log = Logger.getLogger(OracleSerializableRecordSource.class.getName());
 
 	// 2010-03-12 rphall
 	// Serial version UID unchanged.

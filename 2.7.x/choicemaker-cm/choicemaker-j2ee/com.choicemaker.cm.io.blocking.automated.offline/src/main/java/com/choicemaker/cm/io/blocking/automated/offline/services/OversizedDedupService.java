@@ -43,7 +43,7 @@ import com.choicemaker.util.LongArrayList;
  */
 public class OversizedDedupService {
 
-	private static final Logger log = Logger.getLogger(OversizedDedupService.class);
+	private static final Logger log = Logger.getLogger(OversizedDedupService.class.getName());
 
 	// these two variables are used to stop the program in the middle
 	private IControl control;

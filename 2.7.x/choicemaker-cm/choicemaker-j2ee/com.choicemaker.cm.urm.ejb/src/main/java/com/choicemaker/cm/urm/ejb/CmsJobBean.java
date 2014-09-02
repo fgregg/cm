@@ -33,7 +33,7 @@ public abstract class CmsJobBean implements EntityBean {
 	private static final long serialVersionUID = 1L;
 
 
-	protected static Logger log = Logger.getLogger(CmsJobBean.class);
+	protected static Logger log = Logger.getLogger(CmsJobBean.class.getName());
 
 
 	protected EntityContext ctx;

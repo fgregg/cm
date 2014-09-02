@@ -48,7 +48,7 @@ import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
 public class MultiSourceMenu extends LastUsedMenu {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(SourceMenu.class);
+	private static Logger logger = Logger.getLogger(SourceMenu.class.getName());
 
 	private ModelMaker parent;
 	private int num;

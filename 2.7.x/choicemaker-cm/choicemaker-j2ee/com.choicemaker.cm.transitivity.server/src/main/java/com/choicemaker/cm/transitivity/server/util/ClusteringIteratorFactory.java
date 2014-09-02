@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  */
 public class ClusteringIteratorFactory {
 
-	private static final Logger log = Logger.getLogger(GenericIterator.class);
+	private static final Logger log = Logger.getLogger(GenericIterator.class.getName());
 	
 	private static ClusteringIteratorFactory instance = null;
 	private static Object instanceSynch = new Object();

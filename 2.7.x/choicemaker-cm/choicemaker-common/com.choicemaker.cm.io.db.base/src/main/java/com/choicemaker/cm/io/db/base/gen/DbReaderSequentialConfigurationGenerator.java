@@ -79,7 +79,7 @@ public class DbReaderSequentialConfigurationGenerator {
 			w.write("import " + g.getPackage() + ".*;" + Constants.LINE_SEPARATOR);
 			w.write(g.getImports());
 			w.write("public final class " + className + " implements DbReaderSequential {" + Constants.LINE_SEPARATOR);
-			w.write("private static Logger logger = Logger.getLogger(" + packageName + "." + className + ".class);" + Constants.LINE_SEPARATOR);
+			w.write("private static Logger logger = Logger.getLogger(" + packageName + "." + className + ".class.getName());" + Constants.LINE_SEPARATOR);
 			w.write("private ResultSet rs;" + Constants.LINE_SEPARATOR);
 			w.write("private List res = new ArrayList();" + Constants.LINE_SEPARATOR);
 			w.write("private int resSize;" + Constants.LINE_SEPARATOR);

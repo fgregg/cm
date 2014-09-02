@@ -78,7 +78,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  */
 public class MatcherDialog extends JDialog implements Enable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(MatcherDialog.class);
+	private static Logger logger = Logger.getLogger(MatcherDialog.class.getName());
 	private static int MRPS_OUTPUT = 0;
 
 	private ModelMaker modelMaker;

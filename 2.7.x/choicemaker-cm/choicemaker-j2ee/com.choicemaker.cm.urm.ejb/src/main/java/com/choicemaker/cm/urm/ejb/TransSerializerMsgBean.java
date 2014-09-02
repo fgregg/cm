@@ -48,7 +48,7 @@ public class TransSerializerMsgBean
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger log =
-		Logger.getLogger(TransSerializerMsgBean.class);
+		Logger.getLogger(TransSerializerMsgBean.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransSerializerMsgBean.class.getName());
 
 	/**

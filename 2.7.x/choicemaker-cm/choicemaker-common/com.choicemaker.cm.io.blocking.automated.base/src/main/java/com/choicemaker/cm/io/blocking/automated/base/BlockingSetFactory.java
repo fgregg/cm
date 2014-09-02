@@ -82,7 +82,7 @@ public class BlockingSetFactory {
 		return retVal;
 	}
 
-	private static Logger logger = Logger.getLogger(BlockingSetFactory.class);
+	private static Logger logger = Logger.getLogger(BlockingSetFactory.class.getName());
 
 	private BlockingSetFactory() {
 	}

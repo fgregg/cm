@@ -63,7 +63,7 @@ public class TransitivityServiceBean implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(TransitivityServiceBean.class);
+	private static Logger logger = Logger.getLogger(TransitivityServiceBean.class.getName());
 
 	public static final String DATABASE_ACCESSOR = "com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
 	public static final String BLOCKING_SOURCE = "java:comp/env/jdbc/blockingSource";

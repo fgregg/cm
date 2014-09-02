@@ -55,7 +55,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.result.MRPSCreator;
 public class MrpsBackend implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(TransSerializerMsgBean.class);
+	private static final Logger log = Logger.getLogger(TransSerializerMsgBean.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MrpsBackend.class.getName());
 
 	private transient MessageDrivenContext mdc = null;

@@ -42,7 +42,7 @@ import com.choicemaker.cm.modelmaker.gui.panels.HumanReviewPanel;
 public class LayoutMenu extends LastUsedMenu {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(LayoutMenu.class);
+	private static Logger logger = Logger.getLogger(LayoutMenu.class.getName());
 
 	private HumanReviewPanel parent;
 

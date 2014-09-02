@@ -47,7 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  */
 public class MatchingService3 {
 
-	private static final Logger log = Logger.getLogger(MatchingService3.class);
+	private static final Logger log = Logger.getLogger(MatchingService3.class.getName());
 
 	private static int BUFFER_SIZE = 1000;
 

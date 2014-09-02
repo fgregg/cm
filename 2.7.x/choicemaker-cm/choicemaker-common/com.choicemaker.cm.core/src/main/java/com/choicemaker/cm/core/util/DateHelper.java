@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  */
 public class DateHelper {
 
-	private static Logger logger = Logger.getLogger(DateHelper.class);
+	private static Logger logger = Logger.getLogger(DateHelper.class.getName());
 
 	//	protected static final DateFormat oldTwoDigitYearLocaleSpecificDateParser = DateFormat.getDateInstance(DateFormat.SHORT);
 	private static final ThreadLocal

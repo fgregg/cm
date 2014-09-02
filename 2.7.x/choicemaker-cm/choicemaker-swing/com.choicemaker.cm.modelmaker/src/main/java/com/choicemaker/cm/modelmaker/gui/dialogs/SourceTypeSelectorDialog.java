@@ -53,7 +53,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(SourceTypeSelectorDialog.class);
+	private static Logger logger = Logger.getLogger(SourceTypeSelectorDialog.class.getName());
 
 	public static int MRPS = -1;
 	public static int RS = -2;

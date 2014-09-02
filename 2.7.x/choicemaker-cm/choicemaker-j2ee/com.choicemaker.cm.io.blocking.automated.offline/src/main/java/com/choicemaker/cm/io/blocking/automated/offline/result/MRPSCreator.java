@@ -55,7 +55,7 @@ import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
  */
 public class MRPSCreator {
 
-	private static final Logger log = Logger.getLogger(MRPSCreator.class);
+	private static final Logger log = Logger.getLogger(MRPSCreator.class.getName());
 
 	private static final int CONTROL_INTERVAL = 1000;
 	private static final int DEBUG_INTERVAL = 10000;

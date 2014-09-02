@@ -43,7 +43,7 @@ public class DefaultRecordSourceSerializationRegistry
 	private static Object _instanceSynch = new Object();
 
 	private static final Logger log =
-		Logger.getLogger(DefaultRecordSourceSerializationRegistry.class);
+		Logger.getLogger(DefaultRecordSourceSerializationRegistry.class.getName());
 
 	/**
 	 * The extension point,

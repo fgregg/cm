@@ -66,7 +66,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 
 	private static final String DELIM = "|";
 
-	private static final Logger log = Logger.getLogger(MatchScheduler2.class);
+	private static final Logger log = Logger.getLogger(MatchScheduler2.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MatchScheduler2.class.getName());
 	
 	/** This should be greater or equal to the number of instances of the Matcher Bean.

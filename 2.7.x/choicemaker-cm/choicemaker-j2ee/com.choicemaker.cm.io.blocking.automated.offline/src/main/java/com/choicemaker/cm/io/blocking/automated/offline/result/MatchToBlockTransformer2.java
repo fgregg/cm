@@ -48,7 +48,7 @@ import com.choicemaker.util.LongArrayList;
  */
 public class MatchToBlockTransformer2 {
 
-	private static final Logger log = Logger.getLogger(MatchToBlockTransformer2.class);
+	private static final Logger log = Logger.getLogger(MatchToBlockTransformer2.class.getName());
 
 	private IMatchRecord2Source mSource;
 	private IMatchRecord2SinkSourceFactory mFactory;

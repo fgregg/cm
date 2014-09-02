@@ -27,7 +27,7 @@ import com.choicemaker.cm.core.Record;
  */
 public class XmlSingleRecordWriter {
 
-	protected static Logger log = Logger.getLogger(XmlSingleRecordWriter.class);
+	protected static Logger log = Logger.getLogger(XmlSingleRecordWriter.class.getName());
 
 	public static String writeRecord(
 		ImmutableProbabilityModel probabilityModel,

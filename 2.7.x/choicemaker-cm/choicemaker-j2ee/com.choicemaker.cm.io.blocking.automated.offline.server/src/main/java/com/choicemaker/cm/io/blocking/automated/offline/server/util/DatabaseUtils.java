@@ -25,7 +25,7 @@ import com.choicemaker.cm.core.util.ConnectionUtils;
  */
 public class DatabaseUtils {
 	
-	private static final Logger logger = Logger.getLogger(DatabaseUtils.class);
+	private static final Logger logger = Logger.getLogger(DatabaseUtils.class.getName());
 	
 	
 	/** This method gets the next number in the job id sequence.

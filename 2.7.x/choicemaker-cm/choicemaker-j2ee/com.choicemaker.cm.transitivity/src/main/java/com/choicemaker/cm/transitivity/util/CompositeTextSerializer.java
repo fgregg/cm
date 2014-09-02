@@ -30,7 +30,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityResult;
  */
 public class CompositeTextSerializer extends TextSerializer {
 
-	private static final Logger log = Logger.getLogger(CompositeTextSerializer.class);
+	private static final Logger log = Logger.getLogger(CompositeTextSerializer.class.getName());
 	
 	//This counts the number of files.
 	private int currentFile;

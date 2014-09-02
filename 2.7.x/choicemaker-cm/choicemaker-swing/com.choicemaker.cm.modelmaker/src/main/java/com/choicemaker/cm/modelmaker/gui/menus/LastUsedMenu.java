@@ -40,7 +40,7 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 public abstract class LastUsedMenu extends JMenu {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(LastUsedMenu.class);
+	private static Logger logger = Logger.getLogger(LastUsedMenu.class.getName());
 
 	private int maxNumItems;
 	private List items;

@@ -39,7 +39,7 @@ import com.choicemaker.util.LongArrayList;
  */
 public class MatchToBlockTransformer {
 
-	private static final Logger log = Logger.getLogger(MatchToBlockTransformer.class);
+	private static final Logger log = Logger.getLogger(MatchToBlockTransformer.class.getName());
 
 	private IMatchRecord2Source mSource;
 	private IBlockSink blockSink;

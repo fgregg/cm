@@ -53,7 +53,7 @@ import com.choicemaker.util.IntArrayList;
  */
 public class RecValService2 {
 
-	private static final Logger log = Logger.getLogger(RecValService2.class);
+	private static final Logger log = Logger.getLogger(RecValService2.class.getName());
 
 	private RecordSource master;
 	private RecordSource stage;

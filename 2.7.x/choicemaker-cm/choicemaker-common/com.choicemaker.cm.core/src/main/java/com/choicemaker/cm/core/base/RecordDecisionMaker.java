@@ -30,8 +30,8 @@ import com.choicemaker.cm.core.RecordSource;
  */
 public class RecordDecisionMaker {
 
-	private static Logger logger = Logger.getLogger(RecordDecisionMaker.class);
-	private static Logger profiler = Logger.getLogger("profile." + RecordDecisionMaker.class);
+	private static Logger logger = Logger.getLogger(RecordDecisionMaker.class.getName());
+	private static Logger profiler = Logger.getLogger("profile." + RecordDecisionMaker.class.getName());
 
 	/**
 	 * Returns the sorted set of all records from source <code>src</code> that match the

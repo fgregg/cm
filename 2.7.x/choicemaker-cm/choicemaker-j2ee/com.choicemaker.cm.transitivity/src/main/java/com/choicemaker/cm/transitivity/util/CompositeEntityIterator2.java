@@ -29,7 +29,7 @@ import com.choicemaker.cm.transitivity.core.CompositeEntity;
  */
 public class CompositeEntityIterator2 implements Iterator {
 	
-	private static final Logger log = Logger.getLogger(CompositeEntityIterator2.class);
+	private static final Logger log = Logger.getLogger(CompositeEntityIterator2.class.getName());
 	
 	private Iterator it;
 

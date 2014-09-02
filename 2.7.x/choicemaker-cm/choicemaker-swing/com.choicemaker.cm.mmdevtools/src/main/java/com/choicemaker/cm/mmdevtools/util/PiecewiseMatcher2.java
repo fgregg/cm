@@ -39,7 +39,7 @@ import com.choicemaker.util.StringUtils;
  */
 public class PiecewiseMatcher2 {
 
-	private static Logger logger = Logger.getLogger(PiecewiseMatcher2.class);
+	private static Logger logger = Logger.getLogger(PiecewiseMatcher2.class.getName());
 
 	public static final String INDEXED_SOURCE = "Indexed Source";
 	public static final String Q_SOURCE = "Q Source";

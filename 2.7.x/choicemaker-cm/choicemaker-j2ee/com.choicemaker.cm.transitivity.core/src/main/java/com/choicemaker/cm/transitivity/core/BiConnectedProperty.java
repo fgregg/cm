@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  */
 public class BiConnectedProperty implements SubGraphProperty {
 
-	private static final Logger log = Logger.getLogger(BiConnectedProperty.class);
+	private static final Logger log = Logger.getLogger(BiConnectedProperty.class.getName());
 
 
 	//this keep track of node information during the DFS search. 

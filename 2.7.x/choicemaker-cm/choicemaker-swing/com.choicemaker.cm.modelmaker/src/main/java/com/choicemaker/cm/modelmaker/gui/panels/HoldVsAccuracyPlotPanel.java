@@ -48,7 +48,7 @@ public class HoldVsAccuracyPlotPanel extends JPanel {
 
 	private static final long serialVersionUID = -2486951345210387891L;
 
-	//	private static Logger logger = Logger.getLogger(HoldVsAccuracyPlotPanel.class);
+	//	private static Logger logger = Logger.getLogger(HoldVsAccuracyPlotPanel.class.getName());
 	private TestingControlPanel parent;
 	private XYSeries data;
 	private JFreeChart chart;

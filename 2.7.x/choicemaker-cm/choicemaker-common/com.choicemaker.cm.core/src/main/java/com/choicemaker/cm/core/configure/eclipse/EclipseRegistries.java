@@ -25,7 +25,7 @@ import com.choicemaker.util.Precondition;
 public class EclipseRegistries {
 
 	private static final Logger logger =
-		Logger.getLogger(EclipseRegistries.class);
+		Logger.getLogger(EclipseRegistries.class.getName());
 
 	private static final Object _mapSynch = new Object();
 	private static Map _instances = new Hashtable();

@@ -64,7 +64,7 @@ public class OABAConfiguration implements Serializable {
 	
 	private transient IProbabilityModel model;
 	private static final Logger logger =
-			Logger.getLogger(OABAConfiguration.class);
+			Logger.getLogger(OABAConfiguration.class.getName());
 
 	public OABAConfiguration (String modelName, long jobID) {
 		this.modelName = modelName;

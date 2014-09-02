@@ -48,7 +48,7 @@ import com.choicemaker.util.LongArrayList;
  */
 public class BlockDedupService4 {
 	
-	private static final Logger log = Logger.getLogger(BlockDedupService4.class);
+	private static final Logger log = Logger.getLogger(BlockDedupService4.class.getName());
 	
 	public final static float FULL = .6f;
 	

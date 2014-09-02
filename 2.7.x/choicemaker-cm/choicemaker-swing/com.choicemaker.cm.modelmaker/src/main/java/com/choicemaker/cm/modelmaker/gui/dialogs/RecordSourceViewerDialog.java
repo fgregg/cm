@@ -43,7 +43,7 @@ import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 public class RecordSourceViewerDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(RecordSourceViewerDialog.class);
+	private static Logger logger = Logger.getLogger(RecordSourceViewerDialog.class.getName());
 	
 	private RecordSource recordSource;
 	private JPanel content;

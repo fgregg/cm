@@ -239,7 +239,7 @@ public class ExportClueTableDialog extends JDialog {
 					mySetCursor(Cursor.DEFAULT_CURSOR);
 				} catch (Exception ex) {
 					mySetCursor(Cursor.DEFAULT_CURSOR);
-					Logger.getLogger(ExportClueTableDialog.class).error(
+					Logger.getLogger(ExportClueTableDialog.class.getName()).error(
 						"Unable to export clue table",
 						ex);
 				}

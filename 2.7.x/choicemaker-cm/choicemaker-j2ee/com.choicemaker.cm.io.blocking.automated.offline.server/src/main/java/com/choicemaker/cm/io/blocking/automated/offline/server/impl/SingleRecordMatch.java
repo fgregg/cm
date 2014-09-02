@@ -75,7 +75,7 @@ import com.choicemaker.cm.server.ejb.impl.CountsUpdate;
 public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(SingleRecordMatch.class);
+	private static final Logger log = Logger.getLogger(SingleRecordMatch.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ SingleRecordMatch.class.getName());
 

@@ -55,7 +55,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 public class MatchScheduler implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(MatchScheduler.class);
+	private static final Logger log = Logger.getLogger(MatchScheduler.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MatchScheduler.class.getName());
 	
 	/** This should be greater or equal to the number of instances of the Matcher Bean.

@@ -38,7 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  */
 public class BiConnectedChecker {
 	
-	private static final Logger log = Logger.getLogger(BiConnectedChecker.class);
+	private static final Logger log = Logger.getLogger(BiConnectedChecker.class.getName());
 
 	
 	private CompositeEntity cluster;

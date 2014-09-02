@@ -54,7 +54,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJ
  */
 public class EJBConfiguration implements Serializable {
 
-	private static final Logger log = Logger.getLogger(EJBConfiguration.class);
+	private static final Logger log = Logger.getLogger(EJBConfiguration.class.getName());
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = -3162430788712859929L;

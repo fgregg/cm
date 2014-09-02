@@ -36,7 +36,7 @@ import com.choicemaker.util.StringUtils;
  */
 public final class Validators {
 
-	private static Logger logger = Logger.getLogger(Validators.class);
+	private static Logger logger = Logger.getLogger(Validators.class.getName());
 
 	/**
 	 * Cached map of validator configuration names to validators.

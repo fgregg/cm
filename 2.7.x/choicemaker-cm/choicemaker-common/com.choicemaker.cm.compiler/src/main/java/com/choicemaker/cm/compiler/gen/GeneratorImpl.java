@@ -84,7 +84,7 @@ public class GeneratorImpl implements IGenerator {
 
 	private String externalSourceCodePackageRoot;
 	/** log4j category */
-	private static Logger logger = Logger.getLogger(GeneratorImpl.class);
+	private static Logger logger = Logger.getLogger(GeneratorImpl.class.getName());
 
 	protected class Version {
 

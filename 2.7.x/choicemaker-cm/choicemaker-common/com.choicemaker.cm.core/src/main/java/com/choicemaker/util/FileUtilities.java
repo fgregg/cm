@@ -38,7 +38,7 @@ public class FileUtilities {
     
     public static final String SHA1_HASH_ALGORITHM = "SHA1";
 	
-	private static Logger logger = Logger.getLogger(FileUtilities.class);
+	private static Logger logger = Logger.getLogger(FileUtilities.class.getName());
 
 	private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
 

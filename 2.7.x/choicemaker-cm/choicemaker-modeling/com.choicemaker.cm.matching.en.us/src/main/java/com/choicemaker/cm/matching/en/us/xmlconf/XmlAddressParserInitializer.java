@@ -39,7 +39,7 @@ import com.choicemaker.cm.matching.gen.Sets;
  */
 public class XmlAddressParserInitializer implements XmlModuleInitializer {
 
-	private static Logger logger = Logger.getLogger(XmlAddressParserInitializer.class);
+	private static Logger logger = Logger.getLogger(XmlAddressParserInitializer.class.getName());
 
 	public final static XmlAddressParserInitializer instance = new XmlAddressParserInitializer();
 

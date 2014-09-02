@@ -32,7 +32,7 @@ public class DoNothingUpdateDerivedFields extends AbstractUpdateDerivedFields {
 
 	private static final long serialVersionUID = 1L;
 	private static Logger log =
-		Logger.getLogger(DoNothingUpdateDerivedFields.class);
+		Logger.getLogger(DoNothingUpdateDerivedFields.class.getName());
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.urm.IUpdateDerivedFields#updateDirtyDerivedFields(javax.sql.DataSource)

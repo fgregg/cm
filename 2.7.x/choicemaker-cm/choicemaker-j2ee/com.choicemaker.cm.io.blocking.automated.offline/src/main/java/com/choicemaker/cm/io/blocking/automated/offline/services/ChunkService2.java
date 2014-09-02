@@ -49,7 +49,7 @@ import com.choicemaker.util.LongArrayList;
  */
 public class ChunkService2 {
 	
-	private static final Logger log = Logger.getLogger(ChunkService2.class);
+	private static final Logger log = Logger.getLogger(ChunkService2.class.getName());
 
 	private IBlockSource bSource;
 	private IBlockSource osSource;

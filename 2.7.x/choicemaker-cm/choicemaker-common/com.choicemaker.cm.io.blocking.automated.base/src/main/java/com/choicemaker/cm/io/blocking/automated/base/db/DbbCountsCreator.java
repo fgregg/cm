@@ -44,7 +44,7 @@ import com.choicemaker.cm.io.blocking.automated.cachecount.CacheCountSource;
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 21:39:04 $
  */
 public class DbbCountsCreator {
-	private static Logger logger = Logger.getLogger(DbbCountsCreator.class);
+	private static Logger logger = Logger.getLogger(DbbCountsCreator.class.getName());
 
 	// BUG 2009-08-21 rphall
 	// If the "models" instance data is whacked (see below),

@@ -145,7 +145,7 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 				"Generating Objects");
 		
 		if (thrown[0] != null) {
-			Logger.getLogger(ObjectMakerDialog.class).error("Problem creating Holder classes and DB objects", thrown[0]);
+			Logger.getLogger(ObjectMakerDialog.class.getName()).error("Problem creating Holder classes and DB objects", thrown[0]);
 			dispose();
 		} else if (interrupted) {
 			setVisible(true);

@@ -33,7 +33,7 @@ import com.choicemaker.cm.io.db.oracle.xmlconf.OraConnectionCacheXmlConf;
  * @version   $Revision: 1.1 $ $Date: 2010/01/28 02:02:10 $
  */
 public class WatchdogConnectionCache extends Thread implements DataSource {
-	private static Logger logger = Logger.getLogger(WatchdogConnectionCache.class);
+	private static Logger logger = Logger.getLogger(WatchdogConnectionCache.class.getName());
 	private String name;
 	private OracleConnectionCacheImpl cc;
 	private LinkedList connections = new LinkedList();

@@ -33,7 +33,7 @@ import com.choicemaker.util.LongArrayList;
  */
 public class BlockStatistics {
 	
-	private static final Logger log = Logger.getLogger(BlockStatistics.class);
+	private static final Logger log = Logger.getLogger(BlockStatistics.class.getName());
 
 	private IBlockSource bs;
 	private int totalBlocks = 0, totalElements = 0;

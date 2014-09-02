@@ -34,7 +34,7 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  */
 public class MatchDBWriter {
 	
-	private static final Logger log = Logger.getLogger(MatchDBWriter.class);
+	private static final Logger log = Logger.getLogger(MatchDBWriter.class.getName());
 	private static final int BATCH_SIZE = 500;
 
 	private String name;

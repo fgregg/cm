@@ -44,7 +44,7 @@ import com.choicemaker.util.LongArrayList;
  */
 public class ChunkService {
 	
-	private static final Logger log = Logger.getLogger(ChunkService.class);
+	private static final Logger log = Logger.getLogger(ChunkService.class.getName());
 
 	private IBlockSource bSource;
 	private IBlockSource osSource;

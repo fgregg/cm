@@ -46,7 +46,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanU
 public class MatcherTest implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(MatcherTest.class);
+	private static final Logger log = Logger.getLogger(MatcherTest.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MatcherTest.class.getName());
 
 	private transient MessageDrivenContext mdc = null;

@@ -26,7 +26,7 @@ import com.choicemaker.cm.core.RecordSource;
  */
 public class MemoryEstimator {
 
-	private static final Logger log = Logger.getLogger(MemoryEstimator.class);
+	private static final Logger log = Logger.getLogger(MemoryEstimator.class.getName());
 
 	private static int INTERVAL = 100;
 

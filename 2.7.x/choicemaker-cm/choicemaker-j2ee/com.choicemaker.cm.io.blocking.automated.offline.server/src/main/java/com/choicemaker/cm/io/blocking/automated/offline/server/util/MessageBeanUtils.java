@@ -27,7 +27,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
  */
 public class MessageBeanUtils {
 
-	private static final Logger log = Logger.getLogger(MessageBeanUtils.class);
+	private static final Logger log = Logger.getLogger(MessageBeanUtils.class.getName());
 	
 	
 	/** This method stops the BatchJob by setting the status to aborted, and removes the

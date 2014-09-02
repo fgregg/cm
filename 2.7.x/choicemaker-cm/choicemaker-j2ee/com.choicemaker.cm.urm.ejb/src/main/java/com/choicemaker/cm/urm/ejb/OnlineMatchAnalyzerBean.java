@@ -63,7 +63,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 	private static final long serialVersionUID = 1L;
 
 	static	{
-		log = Logger.getLogger(OnlineMatchAnalyzerBean.class);
+		log = Logger.getLogger(OnlineMatchAnalyzerBean.class.getName());
 	}
 	
 		/**

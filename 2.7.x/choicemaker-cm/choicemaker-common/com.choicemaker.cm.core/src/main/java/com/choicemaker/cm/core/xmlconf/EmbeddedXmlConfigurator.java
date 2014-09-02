@@ -60,7 +60,7 @@ import com.choicemaker.util.SystemPropertyUtils;
  */
 public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConfiguration {
 
-	private static final Logger logger = Logger.getLogger(EmbeddedXmlConfigurator.class);
+	private static final Logger logger = Logger.getLogger(EmbeddedXmlConfigurator.class.getName());
 
 	public static final String EMBEDDED_FILENAME = "META-INF/project.xml";
 

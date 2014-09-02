@@ -88,7 +88,7 @@ public class DbReaderConfigurationGenerator {
 			w.write("import " + g.getPackage() + ".*;" + Constants.LINE_SEPARATOR);
 			w.write(g.getImports());
 			w.write("public final class " + className + " implements DbReaderParallel {" + Constants.LINE_SEPARATOR);
-			w.write("private static Logger logger = Logger.getLogger(" + packageName + "." + className + ".class);" + Constants.LINE_SEPARATOR);
+			w.write("private static Logger logger = Logger.getLogger(" + packageName + "." + className + ".class.getName());" + Constants.LINE_SEPARATOR);
 			w.write("private ResultSet[] rs;" + Constants.LINE_SEPARATOR);
 			w.write("private static DerivedSource src = DerivedSource.valueOf(\"db\");" + Constants.LINE_SEPARATOR);
 			w.write("public String getName() {" + Constants.LINE_SEPARATOR);

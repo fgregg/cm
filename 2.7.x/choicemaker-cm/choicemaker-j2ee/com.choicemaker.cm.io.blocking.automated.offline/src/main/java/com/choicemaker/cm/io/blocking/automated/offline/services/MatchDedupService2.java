@@ -38,7 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  */
 public class MatchDedupService2 {
 	
-	private static final Logger log = Logger.getLogger(MatchDedupService2.class);
+	private static final Logger log = Logger.getLogger(MatchDedupService2.class.getName());
 
 	private IMatchRecord2Source mSource;
 	private IMatchRecord2Sink mSink;

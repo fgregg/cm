@@ -33,7 +33,7 @@ import com.choicemaker.util.IntArrayList;
  */
 public class MeEstimator {
 
-	private static final Logger logger = Logger.getLogger(MeEstimator.class);
+	private static final Logger logger = Logger.getLogger(MeEstimator.class.getName());
 
 	private final IProbabilityModel model;
 	private float[] finalWeights;

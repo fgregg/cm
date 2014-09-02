@@ -42,7 +42,7 @@ public class FlatFileSerialRecordSource implements SerialRecordSource {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(FlatFileSerialRecordSource.class);
+	private static final Logger log = Logger.getLogger(FlatFileSerialRecordSource.class.getName());
 
 	private String rsFile;
 	private String modelName;

@@ -27,7 +27,7 @@ import com.choicemaker.util.StringUtils;
 public class AggregateValidatorFactory extends AbstractValidatorFactory {
 
 //	private static Logger logger =
-//		Logger.getLogger(AggregateValidatorFactory.class);
+//		Logger.getLogger(AggregateValidatorFactory.class.getName());
 
 	/**
 	 * The {@link setHandledValidatorExtensionPoint(String)} method

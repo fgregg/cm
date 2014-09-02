@@ -65,7 +65,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
 public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(MatchDedupOABA2.class);
+	private static final Logger log = Logger.getLogger(MatchDedupOABA2.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatchDedupOABA2.class.getName());
 

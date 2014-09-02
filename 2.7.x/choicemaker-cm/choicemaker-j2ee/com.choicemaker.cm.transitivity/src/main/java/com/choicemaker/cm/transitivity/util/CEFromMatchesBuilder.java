@@ -35,7 +35,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityException;
  */
 public class CEFromMatchesBuilder {
 
-	private static Logger logger = Logger.getLogger(CEFromMatchesBuilder.class);
+	private static Logger logger = Logger.getLogger(CEFromMatchesBuilder.class.getName());
 
 	protected Record q;
 	protected Iterator matches;

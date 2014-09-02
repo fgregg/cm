@@ -29,7 +29,7 @@ import com.choicemaker.cm.server.base.DatabaseException;
  */
 public class CountsUpdate {
 
-	private static Logger logger = Logger.getLogger(CountsUpdate.class);
+	private static Logger logger = Logger.getLogger(CountsUpdate.class.getName());
 
 	public void updateCounts(DataSource dataSource, boolean neverComputedOnly) throws DatabaseException, RemoteException {
 		Connection connection = null;

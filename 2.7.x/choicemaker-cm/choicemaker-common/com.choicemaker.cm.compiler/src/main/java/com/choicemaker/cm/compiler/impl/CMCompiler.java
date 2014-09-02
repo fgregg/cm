@@ -76,7 +76,7 @@ public abstract class CMCompiler implements ICompiler {
 		}
 	}
 
-	protected static Logger logger = Logger.getLogger(CMCompiler.class);
+	protected static Logger logger = Logger.getLogger(CMCompiler.class.getName());
 
 	protected static void usage() {
 		System.out.println(

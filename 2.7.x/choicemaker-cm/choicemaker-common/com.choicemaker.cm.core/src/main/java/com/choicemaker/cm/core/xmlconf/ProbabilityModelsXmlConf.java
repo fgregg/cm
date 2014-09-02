@@ -54,7 +54,7 @@ import com.choicemaker.util.FileUtilities;
 public class ProbabilityModelsXmlConf {
 
 	private static final Logger logger =
-		Logger.getLogger(ProbabilityModelsXmlConf.class);
+		Logger.getLogger(ProbabilityModelsXmlConf.class.getName());
 
 	public static void saveModel(IProbabilityModel model)
 		throws XmlConfException {

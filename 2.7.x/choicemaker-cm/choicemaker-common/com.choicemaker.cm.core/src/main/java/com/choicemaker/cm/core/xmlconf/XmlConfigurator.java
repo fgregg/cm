@@ -64,7 +64,7 @@ import com.choicemaker.util.SystemPropertyUtils;
  */
 public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConfiguration {
 
-	private static final Logger logger = Logger.getLogger(XmlConfigurator.class);
+	private static final Logger logger = Logger.getLogger(XmlConfigurator.class.getName());
 
 	public static final boolean DEFAULT_RELOAD = true;
 

@@ -44,7 +44,7 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 
 	private static final long serialVersionUID = 1L;
 	public static final Long UNDEFINED_STEP_INDEX = new Long(-1);
-	protected static Logger log = Logger.getLogger(UrmJobBean.class);
+	protected static Logger log = Logger.getLogger(UrmJobBean.class.getName());
 	protected EntityContext ctx;
 
 	// CMP fields

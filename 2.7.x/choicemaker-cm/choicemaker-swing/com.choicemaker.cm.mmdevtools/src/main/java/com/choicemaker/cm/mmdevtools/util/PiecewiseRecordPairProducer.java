@@ -31,7 +31,7 @@ import com.choicemaker.cm.core.blocking.InMemoryBlocker;
  */
 public class PiecewiseRecordPairProducer implements Runnable {
 
-	private static Logger logger = Logger.getLogger(PiecewiseRecordPairProducer.class);
+	private static Logger logger = Logger.getLogger(PiecewiseRecordPairProducer.class.getName());
 
 	private RecordSource[] sources;
 	private InMemoryBlocker blocker;

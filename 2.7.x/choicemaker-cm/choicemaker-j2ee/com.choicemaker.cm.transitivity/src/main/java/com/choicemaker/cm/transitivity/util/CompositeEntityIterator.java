@@ -24,7 +24,7 @@ import com.choicemaker.cm.core.BlockingException;
  */
 public class CompositeEntityIterator implements Iterator {
 	
-	private static final Logger log = Logger.getLogger(CompositeEntityIterator.class);
+	private static final Logger log = Logger.getLogger(CompositeEntityIterator.class.getName());
 
 	private CompositeEntitySource source;
 	

@@ -102,7 +102,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	protected static Map handledValidatorExtensionPointsMap = new HashMap();
 
 	private static Logger logger =
-		Logger.getLogger(AbstractValidatorFactory.class);
+		Logger.getLogger(AbstractValidatorFactory.class.getName());
 
 	/** Cached map of extension points to ValidatorFactories */
 	private static Map validatorFactories = null;

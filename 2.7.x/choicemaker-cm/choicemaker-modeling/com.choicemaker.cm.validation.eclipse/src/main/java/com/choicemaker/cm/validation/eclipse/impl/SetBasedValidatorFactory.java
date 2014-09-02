@@ -24,7 +24,7 @@ import com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory;
 public class SetBasedValidatorFactory extends AbstractValidatorFactory {
 
 //	private static Logger logger =
-//		Logger.getLogger(SetBasedValidatorFactory.class);
+//		Logger.getLogger(SetBasedValidatorFactory.class.getName());
 
 	/**
 	 * The {@link setHandledValidatorExtensionPoint(String)} method

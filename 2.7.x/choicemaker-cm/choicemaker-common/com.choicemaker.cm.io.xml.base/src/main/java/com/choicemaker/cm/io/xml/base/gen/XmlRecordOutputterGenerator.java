@@ -115,7 +115,7 @@ public class XmlRecordOutputterGenerator implements GeneratorPlugin {
 			w.write("import " + g.getPackage() + ".*;" + Constants.LINE_SEPARATOR);
 			w.write(g.getImports());
 			w.write("public final class " + className + " implements XmlRecordOutputter {" + Constants.LINE_SEPARATOR);
-			w.write("private static Logger logger = Logger.getLogger(" + packageName + "." + className + ".class);" + Constants.LINE_SEPARATOR);
+			w.write("private static Logger logger = Logger.getLogger(" + packageName + "." + className + ".class.getName());" + Constants.LINE_SEPARATOR);
 			w.write("public void put(Writer w, Record r) throws IOException {" + Constants.LINE_SEPARATOR);
 			Element rootRecord = g.getRootRecord();
 			int rl = NONE;

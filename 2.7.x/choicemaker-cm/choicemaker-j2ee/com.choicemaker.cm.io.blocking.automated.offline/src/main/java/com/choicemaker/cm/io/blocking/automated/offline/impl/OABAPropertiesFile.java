@@ -30,7 +30,7 @@ public class OABAPropertiesFile implements IOABAProperties {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(OABAPropertiesFile.class);
+	private static final Logger log = Logger.getLogger(OABAPropertiesFile.class.getName());
 	
 	private static final String FILE_NAME = "OABA.properties";
 	

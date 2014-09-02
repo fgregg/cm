@@ -38,7 +38,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(ComparisonArrayOS.class);
+	private static final Logger log = Logger.getLogger(ComparisonArrayOS.class.getName());
 
 	private static final int STEP_4 = 0;
 	private static final int STEP_5 = 1;

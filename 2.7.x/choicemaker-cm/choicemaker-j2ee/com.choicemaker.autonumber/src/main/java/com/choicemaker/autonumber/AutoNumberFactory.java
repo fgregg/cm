@@ -38,7 +38,7 @@ public class AutoNumberFactory
    // 2009-12=15 rphall
    private static final String JNDI_NAME = AutoNumberHome.DEFAULT_JNDI_COMP_NAME;
 
-   private static final Logger log = Logger.getLogger(AutoNumberFactory.class);
+   private static final Logger log = Logger.getLogger(AutoNumberFactory.class.getName());
 
    private static AutoNumberHome autoNumberHome;
 

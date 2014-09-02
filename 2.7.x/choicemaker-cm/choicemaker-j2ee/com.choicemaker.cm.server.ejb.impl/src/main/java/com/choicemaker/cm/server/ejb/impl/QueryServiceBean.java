@@ -60,7 +60,7 @@ import com.choicemaker.cm.server.base.UnderspecifiedProfileException;
 public class QueryServiceBean implements SessionBean {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(QueryServiceBean.class);
+	private static Logger logger = Logger.getLogger(QueryServiceBean.class.getName());
 
 	public static final String BLOCKING_SOURCE = "java:comp/env/jdbc/blockingSource";
 	public static final String REPORTING_SOURCE = "java:comp/env/jdbc/reportingSource";

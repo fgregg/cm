@@ -36,7 +36,7 @@ import com.choicemaker.cm.core.util.NameUtils;
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:36:54 $
  */
 public class DbRecordSource implements RecordSource {
-	private static Logger logger = Logger.getLogger(DbRecordSource.class);
+	private static Logger logger = Logger.getLogger(DbRecordSource.class.getName());
 	private static final int CURSOR = -10;
 
 	// Properties

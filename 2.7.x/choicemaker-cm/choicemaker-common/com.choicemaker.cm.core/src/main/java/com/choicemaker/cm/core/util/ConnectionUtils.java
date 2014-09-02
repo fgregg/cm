@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
  */
 public class ConnectionUtils {
 
-	private static Logger logger = Logger.getLogger(ConnectionUtils.class);
+	private static Logger logger = Logger.getLogger(ConnectionUtils.class.getName());
 
 	public static void tryToCloseResultSet(ResultSet stmt) {
 		if (stmt != null) {

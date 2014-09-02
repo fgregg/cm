@@ -33,7 +33,7 @@ import com.choicemaker.cm.transitivity.util.SimpleGraphCompactor;
  */
 public class GenericIterator implements Iterator {
 
-	private static final Logger log = Logger.getLogger(GenericIterator.class);
+	private static final Logger log = Logger.getLogger(GenericIterator.class.getName());
 	
 //	private final String name;
 	

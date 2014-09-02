@@ -29,7 +29,7 @@ import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
  */
 public class JdomBuilder implements IBuilder {
 
-	private static Logger logger = Logger.getLogger(JdomBuilder.class);
+	private static Logger logger = Logger.getLogger(JdomBuilder.class.getName());
 
 	private final SAXBuilder builder;
 

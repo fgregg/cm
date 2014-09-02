@@ -30,7 +30,7 @@ public abstract class AbstractUpdateDerivedFields
 	implements IUpdateDerivedFields {
 		
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(AbstractUpdateDerivedFields.class);
+	private static Logger logger = Logger.getLogger(AbstractUpdateDerivedFields.class.getName());
 		
 	/**
 	 * Most implementations of IUpdateDerivedFields will not need

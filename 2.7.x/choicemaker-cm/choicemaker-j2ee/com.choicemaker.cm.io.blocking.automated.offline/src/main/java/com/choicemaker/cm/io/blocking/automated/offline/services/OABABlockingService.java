@@ -43,7 +43,7 @@ import com.choicemaker.util.LongArrayList;
  */
 public class OABABlockingService {
 
-	private static final Logger log = Logger.getLogger(OABABlockingService.class);
+	private static final Logger log = Logger.getLogger(OABABlockingService.class.getName());
 
 	private int maxBlockSize;
 

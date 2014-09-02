@@ -38,7 +38,7 @@ public class TransSerializerBean implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
 
-	protected static Logger log = Logger.getLogger(TransSerializerBean.class);
+	protected static Logger log = Logger.getLogger(TransSerializerBean.class.getName());
 	
 	public final static String JMS_TRANS_SERIALIZATION_QUEUE = "java:comp/env/jms/transSerializationQueue";
 

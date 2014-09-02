@@ -50,7 +50,7 @@ public class ExportProbabilitiesDialog extends JDialog {
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = Logger.getLogger(ExportProbabilitiesDialog.class);
+	private static final Logger logger = Logger.getLogger(ExportProbabilitiesDialog.class.getName());
 
 	private static final int AC_NONE = MrpsExport.AC_NONE;
 	private static final int AC_BIT_VECTOR = MrpsExport.AC_BIT_VECTOR;

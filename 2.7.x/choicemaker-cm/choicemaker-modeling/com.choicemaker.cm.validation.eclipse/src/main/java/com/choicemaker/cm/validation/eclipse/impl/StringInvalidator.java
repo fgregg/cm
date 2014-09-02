@@ -34,7 +34,7 @@ public class StringInvalidator extends AbstractSetBasedValidator {
 	/** The hash character (#) */
 	public static final String COMMENT_FLAG = "#";
 
-	private static Logger logger = Logger.getLogger(StringInvalidator.class);
+	private static Logger logger = Logger.getLogger(StringInvalidator.class.getName());
 
 	private Set strings;
 

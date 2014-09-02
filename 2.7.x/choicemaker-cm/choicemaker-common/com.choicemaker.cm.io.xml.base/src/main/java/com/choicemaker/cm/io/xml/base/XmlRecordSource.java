@@ -38,7 +38,7 @@ import com.choicemaker.util.FileUtilities;
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:18:16 $
  */
 public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Runnable, RecordSource {
-	private static Logger logger = Logger.getLogger(XmlRecordSource.class);
+	private static Logger logger = Logger.getLogger(XmlRecordSource.class.getName());
 	public static String FORCED_CLOSE = "forcedClose";
 	private final String READER = "org.apache.xerces.parsers.SAXParser";
 	private final int BUF_SIZE = 1000;

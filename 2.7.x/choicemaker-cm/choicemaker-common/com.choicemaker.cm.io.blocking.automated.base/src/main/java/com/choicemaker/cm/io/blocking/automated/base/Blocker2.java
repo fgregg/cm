@@ -35,7 +35,7 @@ import com.choicemaker.cm.core.Sink;
  */
 public class Blocker2 implements AutomatedBlocker {
 
-	private static Logger logger = Logger.getLogger(Blocker2.class);
+	private static Logger logger = Logger.getLogger(Blocker2.class.getName());
 
 	/**
 	 * The name of a system property that can be set to "true" to force the

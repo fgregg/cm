@@ -55,7 +55,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 	private static final long serialVersionUID = 1L;
 
 	static {
-		log = Logger.getLogger(BatchRecordMatcherBean.class);
+		log = Logger.getLogger(BatchRecordMatcherBean.class.getName());
 	}
 	
 	public BatchRecordMatcherBean() {

@@ -39,7 +39,7 @@ public class DefaultMatchRecord2Filter implements IMatchRecord2Filter {
 	public static final float DEFAULT_TO_PERCENTAGE = 0.80f;
 
 	private static Logger logger =
-		Logger.getLogger(DefaultMatchRecord2Filter.class);
+		Logger.getLogger(DefaultMatchRecord2Filter.class.getName());
 
 	private float fromPercentage = DEFAULT_FROM_PERCENTAGE;
 	private float toPercentage = DEFAULT_TO_PERCENTAGE;

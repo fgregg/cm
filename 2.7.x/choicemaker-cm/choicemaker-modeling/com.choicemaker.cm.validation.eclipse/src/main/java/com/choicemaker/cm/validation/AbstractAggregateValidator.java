@@ -28,7 +28,7 @@ public abstract class AbstractAggregateValidator
 	implements IAggregateValidator {
 
 //	private static Logger logger =
-//		Logger.getLogger(AbstractAggregateValidator.class);
+//		Logger.getLogger(AbstractAggregateValidator.class.getName());
 		
 	private int cachedHashCode = 0;
 

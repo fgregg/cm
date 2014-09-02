@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  */
 public class MessageUtil {
 
-	private static final Logger logger = Logger.getLogger(MessageUtil.class);
+	private static final Logger logger = Logger.getLogger(MessageUtil.class.getName());
 	private static final Object[] ZERO_LENGTH_ARRAY = new Object[0];
 	protected ResourceBundle myResources;
 

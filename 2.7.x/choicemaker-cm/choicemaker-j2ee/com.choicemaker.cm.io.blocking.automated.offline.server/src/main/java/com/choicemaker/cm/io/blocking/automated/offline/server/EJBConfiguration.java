@@ -46,7 +46,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
  */
 public class EJBConfiguration implements Serializable {
 
-	private static final Logger log = Logger.getLogger(EJBConfiguration.class);
+	private static final Logger log = Logger.getLogger(EJBConfiguration.class.getName());
 
 	static final long serialVersionUID = 271L;
 

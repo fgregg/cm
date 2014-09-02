@@ -37,7 +37,7 @@ public abstract class UrmStepJobBean implements EntityBean {
 	private static final long serialVersionUID = 1L;
 
 
-	protected static Logger log = Logger.getLogger(UrmStepJobBean.class);
+	protected static Logger log = Logger.getLogger(UrmStepJobBean.class.getName());
 
 
 	protected EntityContext ctx;

@@ -43,7 +43,7 @@ import com.choicemaker.cm.core.util.NameUtils;
  * @deprecated use DbMarkedRecordPairSource2 instead
  */
 class DbMarkedRecordPairSource implements MarkedRecordPairSource {
-	private static Logger logger = Logger.getLogger(DbMarkedRecordPairSource.class);
+	private static Logger logger = Logger.getLogger(DbMarkedRecordPairSource.class.getName());
 	private static final int CURSOR = -10;
 
 	// Properties

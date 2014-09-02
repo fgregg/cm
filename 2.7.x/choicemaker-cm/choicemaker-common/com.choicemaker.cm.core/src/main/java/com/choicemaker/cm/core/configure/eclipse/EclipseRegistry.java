@@ -37,7 +37,7 @@ public class EclipseRegistry
 	implements XmlConfigurablesRegistry {
 
 	private static final Logger logger =
-		Logger.getLogger(EclipseRegistry.class);
+		Logger.getLogger(EclipseRegistry.class.getName());
 
 	private final Object _mapSynch = new Object();
 	private final Map _configurables = new LinkedHashMap();

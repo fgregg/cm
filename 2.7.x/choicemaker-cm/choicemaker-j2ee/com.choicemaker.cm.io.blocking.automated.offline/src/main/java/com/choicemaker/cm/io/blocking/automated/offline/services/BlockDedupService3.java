@@ -43,7 +43,7 @@ import com.choicemaker.util.LongArrayList;
  */
 public class BlockDedupService3 {
 
-	private static final Logger log = Logger.getLogger(BlockDedupService3.class);
+	private static final Logger log = Logger.getLogger(BlockDedupService3.class.getName());
 
 	public final static float FULL = .6f;
 

@@ -38,7 +38,7 @@ import org.apache.log4j.Logger;
  * @version 1.3.4
  */
 public class Base64 {
-	private static Logger logger = Logger.getLogger(Base64.class);
+	private static Logger logger = Logger.getLogger(Base64.class.getName());
 
 	/** Specify encoding (value is <tt>true</tt>). */
 	public final static boolean ENCODE = true;

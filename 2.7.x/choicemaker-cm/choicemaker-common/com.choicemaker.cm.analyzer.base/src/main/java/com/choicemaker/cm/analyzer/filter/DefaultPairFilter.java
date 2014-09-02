@@ -38,7 +38,7 @@ public class DefaultPairFilter implements Filter {
 	public static final float DEFAULT_TO_PERCENTAGE = 0.80f;
 
 	private static Logger logger =
-		Logger.getLogger(DefaultPairFilter.class);
+		Logger.getLogger(DefaultPairFilter.class.getName());
 
 	private float fromPercentage = DEFAULT_FROM_PERCENTAGE;
 	private float toPercentage = DEFAULT_TO_PERCENTAGE;

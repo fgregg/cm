@@ -43,7 +43,7 @@ public class StringPatternValidator
 	public static final String COMMENT_FLAG = "#";
 
 	protected static Logger logger =
-		Logger.getLogger(StringPatternValidator.class);
+		Logger.getLogger(StringPatternValidator.class.getName());
 	protected Pattern[] patterns;
 
 	protected String setName;

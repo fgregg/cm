@@ -50,7 +50,7 @@ public class CmServerAdminBean implements SessionBean {
 
 	protected static boolean initialized = false;
 
-	private static final Logger log = Logger.getLogger(CmServerAdminBean.class);
+	private static final Logger log = Logger.getLogger(CmServerAdminBean.class.getName());
 	SessionContext sc = null;
 
 	public CmServerAdminBean() {

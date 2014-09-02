@@ -53,7 +53,7 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
  */
 public class Single implements Serializable {
 
-	private static final Logger log = Logger.getLogger(Single.class);
+	private static final Logger log = Logger.getLogger(Single.class.getName());
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = 3897669963105467617L;

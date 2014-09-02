@@ -45,7 +45,7 @@ public class BatchResultProcessorBean implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
 
-	protected static Logger log = Logger.getLogger(BatchResultProcessorBean.class);
+	protected static Logger log = Logger.getLogger(BatchResultProcessorBean.class.getName());
 	
 	public final static String JMS_MRPS_PROCESSOR_QUEUE = "java:comp/env/jms/mrpsProcessorQueue";
 

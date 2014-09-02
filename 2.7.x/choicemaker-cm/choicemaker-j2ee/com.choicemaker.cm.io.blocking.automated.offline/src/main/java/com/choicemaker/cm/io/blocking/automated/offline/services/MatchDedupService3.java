@@ -42,7 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
  */
 public class MatchDedupService3 {
 	
-	private static final Logger log = Logger.getLogger(MatchDedupService3.class);
+	private static final Logger log = Logger.getLogger(MatchDedupService3.class.getName());
 
 	private IMatchRecord2Source mSource;
 	private IMatchRecord2Sink mSink;

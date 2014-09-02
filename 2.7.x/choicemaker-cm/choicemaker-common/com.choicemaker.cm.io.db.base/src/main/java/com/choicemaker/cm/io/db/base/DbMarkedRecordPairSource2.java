@@ -47,7 +47,7 @@ import com.choicemaker.cm.core.util.NameUtils;
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:36:05 $
  */
 public class DbMarkedRecordPairSource2 implements MarkedRecordPairSource {
-	private static Logger logger = Logger.getLogger(DbMarkedRecordPairSource2.class);
+	private static Logger logger = Logger.getLogger(DbMarkedRecordPairSource2.class.getName());
 	private static final int CURSOR = -10;
 
 	// Properties

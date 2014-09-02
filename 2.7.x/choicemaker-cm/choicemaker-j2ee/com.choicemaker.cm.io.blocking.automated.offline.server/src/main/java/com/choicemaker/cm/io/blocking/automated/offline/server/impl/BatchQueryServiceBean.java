@@ -47,7 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
 public class BatchQueryServiceBean implements SessionBean {
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(BatchQueryServiceBean.class);
+	private static final Logger log = Logger.getLogger(BatchQueryServiceBean.class.getName());
 
 	private static boolean initialized = false;
 //	private static boolean countsInitialized = false;

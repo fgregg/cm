@@ -30,7 +30,7 @@ import com.choicemaker.cm.io.flatfile.base.FlatFileRecordSource;
  */
 public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 	
-	private static final Logger log = Logger.getLogger(ChunkDataSinkSourceFactory.class);
+	private static final Logger log = Logger.getLogger(ChunkDataSinkSourceFactory.class.getName());
 
 	private String fileDir;
 	private String baseName;

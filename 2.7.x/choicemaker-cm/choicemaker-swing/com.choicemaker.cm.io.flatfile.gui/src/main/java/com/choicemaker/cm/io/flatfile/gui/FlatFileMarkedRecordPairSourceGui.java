@@ -68,7 +68,7 @@ import com.choicemaker.util.FileUtilities;
  */
 public class FlatFileMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(FlatFileMarkedRecordPairSourceGui.class);
+	private static Logger logger = Logger.getLogger(FlatFileMarkedRecordPairSourceGui.class.getName());
 	private JLabel sourceNameLabel;
 	private JLabel fileNameLabel;
 	private JTextField fileName;

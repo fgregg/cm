@@ -28,7 +28,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityResult;
  */
 public class CompositeXMLSerializer extends XMLSerializer {
 
-	private static final Logger log = Logger.getLogger(CompositeXMLSerializer.class);
+	private static final Logger log = Logger.getLogger(CompositeXMLSerializer.class.getName());
 
 	//This defines how often to check the file size.
 	private static final int INTERVAL = 2000;

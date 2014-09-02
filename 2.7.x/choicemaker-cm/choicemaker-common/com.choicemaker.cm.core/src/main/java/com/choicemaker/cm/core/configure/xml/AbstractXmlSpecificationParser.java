@@ -34,7 +34,7 @@ public abstract class AbstractXmlSpecificationParser
 	implements XmlSpecificationParser {
 
 	private static final Logger log =
-		Logger.getLogger(AbstractXmlSpecificationParser.class);
+		Logger.getLogger(AbstractXmlSpecificationParser.class.getName());
 
 	private static final Class CHILDREN_CLASS =
 		(new XmlConfigurable[0]).getClass();

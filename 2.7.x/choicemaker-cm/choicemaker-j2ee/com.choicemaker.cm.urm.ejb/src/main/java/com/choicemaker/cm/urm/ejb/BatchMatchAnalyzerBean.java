@@ -52,7 +52,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 	public static final int TRANS_OABA_STEP_INDEX = 1;
 	public static final int TRANS_SERIAL_STEP_INDEX = 2;
 	static {
-		log = Logger.getLogger(BatchMatchAnalyzerBean.class);
+		log = Logger.getLogger(BatchMatchAnalyzerBean.class.getName());
 	}
 	
 	public BatchMatchAnalyzerBean() {

@@ -25,7 +25,7 @@ import java.util.Set;
 public abstract class AbstractSetBasedValidator implements ISetBasedValidator {
 
 //	private static Logger logger =
-//		Logger.getLogger(AbstractSetBasedValidator.class);
+//		Logger.getLogger(AbstractSetBasedValidator.class.getName());
 
 	/**
 	 * Partially constructs a validator. The

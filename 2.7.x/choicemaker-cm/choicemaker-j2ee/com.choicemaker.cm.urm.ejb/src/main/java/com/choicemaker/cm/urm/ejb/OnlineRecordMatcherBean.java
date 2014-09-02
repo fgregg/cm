@@ -48,7 +48,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 	private static final long serialVersionUID = 1L;
 
 	static {
-		log = Logger.getLogger(OnlineRecordMatcherBean.class);
+		log = Logger.getLogger(OnlineRecordMatcherBean.class.getName());
 	}
 		
 	/**

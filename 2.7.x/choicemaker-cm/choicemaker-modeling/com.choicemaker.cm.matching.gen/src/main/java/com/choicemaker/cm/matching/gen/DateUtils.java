@@ -26,7 +26,7 @@ import com.choicemaker.util.StringUtils;
  */
 public class DateUtils extends DateHelper {
 
-	private static Logger logger = Logger.getLogger(DateUtils.class);
+	private static Logger logger = Logger.getLogger(DateUtils.class.getName());
 
 	// private static Calendar calendar = Calendar.getInstance();
 

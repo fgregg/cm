@@ -27,7 +27,7 @@ import com.choicemaker.util.IntArrayList;
  */
 public class InMemorySetIterator {
 	
-	private static final Logger log = Logger.getLogger(InMemorySetIterator.class);
+	private static final Logger log = Logger.getLogger(InMemorySetIterator.class.getName());
 
 	/** This inner class is used to sort the array by set id.
 	 * 

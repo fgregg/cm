@@ -64,7 +64,7 @@ import com.choicemaker.util.FileUtilities;
  */
 public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(XmlMarkedRecordPairSourceGui.class);
+	private static Logger logger = Logger.getLogger(XmlMarkedRecordPairSourceGui.class.getName());
 	private static String GENERATE_MODE_LABEL = "Generate new source file";
 	private static String CREATE_MODE_LABEL = "Use existing source file";
 	private static String RELATIVE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.relative");

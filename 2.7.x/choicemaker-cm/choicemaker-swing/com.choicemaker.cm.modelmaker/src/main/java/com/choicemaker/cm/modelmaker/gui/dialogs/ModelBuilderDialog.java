@@ -54,7 +54,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 	private static final String RELATIVE = 
 		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.model.builder.cluefile.relative");
 	
-	private static Logger logger = Logger.getLogger(ModelBuilderDialog.class);
+	private static Logger logger = Logger.getLogger(ModelBuilderDialog.class.getName());
 	private ModelMaker parent;
 	private JPanel content;
 	private JLabel modelFileName;

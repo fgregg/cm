@@ -50,7 +50,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	private static final char TB_VAL_SEP = '`';
 	private static final int MAX_LEN = 3950;
 	private static final String SET_FROM_MODEL = new String();
-	private static Logger logger = Logger.getLogger(OraDatabaseAccessor.class);
+	private static Logger logger = Logger.getLogger(OraDatabaseAccessor.class.getName());
 	private DataSource ds;
 	private Connection connection;
 	private DbReaderParallel dbr;

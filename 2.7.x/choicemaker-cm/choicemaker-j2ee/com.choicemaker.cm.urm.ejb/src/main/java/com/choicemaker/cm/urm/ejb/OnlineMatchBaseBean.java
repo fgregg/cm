@@ -81,7 +81,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
 	protected transient SessionContext sessionContext;
-	protected static Logger log = Logger.getLogger(OnlineMatchBaseBean.class);
+	protected static Logger log = Logger.getLogger(OnlineMatchBaseBean.class.getName());
 	protected static boolean initialized = false;
 
 	/**

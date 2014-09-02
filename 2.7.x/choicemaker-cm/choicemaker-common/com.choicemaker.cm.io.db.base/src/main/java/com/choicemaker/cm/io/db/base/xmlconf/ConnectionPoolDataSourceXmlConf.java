@@ -23,7 +23,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * XML configurator for the connection cache.
  */
 public class ConnectionPoolDataSourceXmlConf {
-	private static Logger logger = Logger.getLogger(ConnectionPoolDataSourceXmlConf.class);
+	private static Logger logger = Logger.getLogger(ConnectionPoolDataSourceXmlConf.class.getName());
 
 	private static boolean alreadyInited = false;
 

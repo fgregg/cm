@@ -67,7 +67,7 @@ public class CollectionsDialog extends JDialog implements Enable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(CollectionsDialog.class);
+	private static Logger logger = Logger.getLogger(CollectionsDialog.class.getName());
 
 	private ModelMaker parent;
 

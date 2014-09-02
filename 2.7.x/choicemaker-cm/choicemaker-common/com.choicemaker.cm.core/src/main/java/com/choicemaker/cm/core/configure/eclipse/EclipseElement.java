@@ -26,7 +26,7 @@ import com.choicemaker.util.Precondition;
  */
 public class EclipseElement implements IElement {
 
-	private static Logger logger = Logger.getLogger(EclipseElement.class);
+	private static Logger logger = Logger.getLogger(EclipseElement.class.getName());
 
 	private final IConfigurationElement element;
 

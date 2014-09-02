@@ -32,7 +32,7 @@ import com.choicemaker.cm.ml.me.xmlconf.MeModelConf;
  */
 public class MaximumEntropy implements MachineLearner {
 
-	private static Logger logger = Logger.getLogger(MaximumEntropy.class);
+	private static Logger logger = Logger.getLogger(MaximumEntropy.class.getName());
 
 	private float[] weights;
 	private int trainingIterations = 4000;

@@ -33,7 +33,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityException;
  */
 public class CEFromMatchCandidatesBuilder extends CEFromMatchesBuilder{
 
-	private static Logger logger = Logger.getLogger(CEFromMatchCandidatesBuilder.class);
+	private static Logger logger = Logger.getLogger(CEFromMatchCandidatesBuilder.class.getName());
 	private BeanMatchCandidate[] candidates;
 
 

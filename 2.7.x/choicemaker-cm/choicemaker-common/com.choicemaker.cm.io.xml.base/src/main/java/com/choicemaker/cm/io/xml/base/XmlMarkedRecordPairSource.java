@@ -46,7 +46,7 @@ import com.choicemaker.util.FileUtilities;
 public class XmlMarkedRecordPairSource
 	extends XMLFilterImpl
 	implements RecordHandler, Runnable, MarkedRecordPairSource {
-	private static Logger logger = Logger.getLogger(XmlMarkedRecordPairSource.class);
+	private static Logger logger = Logger.getLogger(XmlMarkedRecordPairSource.class.getName());
 	private final String READER = "org.apache.xerces.parsers.SAXParser";
 	private final int BUF_SIZE = 1000;
 	private String name;

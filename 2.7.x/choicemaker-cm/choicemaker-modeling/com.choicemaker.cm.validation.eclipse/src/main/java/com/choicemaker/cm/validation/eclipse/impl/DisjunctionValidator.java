@@ -33,7 +33,7 @@ import com.choicemaker.util.StringUtils;
 public class DisjunctionValidator extends AbstractAggregateValidator {
 	
 //	private static Logger logger =
-//		Logger.getLogger(SetBasedValidatorFactory.class);
+//		Logger.getLogger(SetBasedValidatorFactory.class.getName());
 
 	private Map validatorMap;
 	

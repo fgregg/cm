@@ -47,7 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingSer
 public class BlockingOABA implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(BlockingOABA.class);
+	private static final Logger log = Logger.getLogger(BlockingOABA.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + BlockingOABA.class.getName());
 
 	private transient MessageDrivenContext mdc = null;

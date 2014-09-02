@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  */
 public final class JavaHelpUtils {
 
-	private static final Logger logger = Logger.getLogger(JavaHelpUtils.class);
+	private static final Logger logger = Logger.getLogger(JavaHelpUtils.class.getName());
 
 	private static final KeyStroke F1 = KeyStroke.getKeyStroke("F1");
 	

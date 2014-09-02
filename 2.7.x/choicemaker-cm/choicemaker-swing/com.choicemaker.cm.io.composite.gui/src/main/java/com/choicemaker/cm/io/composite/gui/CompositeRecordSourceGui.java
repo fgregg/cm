@@ -56,7 +56,7 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  */
 public class CompositeRecordSourceGui extends RecordSourceGui implements Enable {
     private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(CompositeRecordSourceGui.class);
+	private static Logger logger = Logger.getLogger(CompositeRecordSourceGui.class.getName());
 	private static final String RELATIVE = ChoiceMakerCoreMessages.m.formatMessage("io.composite.gui.source.file.relative");
 	private static final String ABSOLUTE = ChoiceMakerCoreMessages.m.formatMessage("io.composite.gui.source.file.absolute");
     private JLabel sourceNameLabel;

@@ -81,7 +81,7 @@ public class BlockingConfigurationGenerator {
 		w.write("import " + g.getPackage() + ".*;" + Constants.LINE_SEPARATOR);
 		w.write(g.getImports());
 		w.write("public final class " + className + " extends ExactInMemoryBlocker {" + Constants.LINE_SEPARATOR);
-		w.write("private static Logger logger = Logger.getLogger(" + packageName + "." + className + ".class);" + Constants.LINE_SEPARATOR);
+		w.write("private static Logger logger = Logger.getLogger(" + packageName + "." + className + ".class.getName());" + Constants.LINE_SEPARATOR);
 		w.write("public " + className + "(PositionMap positionMap) {" + Constants.LINE_SEPARATOR);
 		w.write("super(positionMap);" + Constants.LINE_SEPARATOR);
 		w.write("}" + Constants.LINE_SEPARATOR);
