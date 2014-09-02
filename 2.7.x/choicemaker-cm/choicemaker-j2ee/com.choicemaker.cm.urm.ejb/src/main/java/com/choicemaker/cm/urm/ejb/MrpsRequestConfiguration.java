@@ -21,7 +21,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.helpers.Loader;
 
 /**
  * Defines allowed property names and default values for an MrpsRequest. This
@@ -63,8 +62,7 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration,
 	static {
 		InputStream is = null;
 		try {
-			URL url = Loader.getResource(PROPERTY_FILE);
-			is = url.openStream();
+			is = MrpsRequestConfiguration.class.getClassLoader().getResourceAsStream(PROPERTY_FILE);
 			defaultProperties.load(is);
 			if (theLog.isDebugEnabled()) {
 				theLog.debug("loaded properties from '" + PROPERTY_FILE + "'");
