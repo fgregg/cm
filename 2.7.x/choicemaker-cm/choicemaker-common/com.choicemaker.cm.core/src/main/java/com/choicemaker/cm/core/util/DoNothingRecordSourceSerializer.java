@@ -15,7 +15,7 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.RecordSource;
@@ -46,9 +46,9 @@ public class DoNothingRecordSourceSerializer
 		Pattern uriPattern,
 		Class[] handledClasses,
 		Properties properties) {
-		logIgnoredPattern(logger, Priority.DEBUG, uriPattern);
-		logIgnoredClasses(logger, Priority.DEBUG, handledClasses);
-		logIgnoredProperties(logger, Priority.DEBUG, properties);
+		logIgnoredPattern(logger, Level.DEBUG, uriPattern);
+		logIgnoredClasses(logger, Level.DEBUG, handledClasses);
+		logIgnoredProperties(logger, Level.DEBUG, properties);
 	}
 
 	/**

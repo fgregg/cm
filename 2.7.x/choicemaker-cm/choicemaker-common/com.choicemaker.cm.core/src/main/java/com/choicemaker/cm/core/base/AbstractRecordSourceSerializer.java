@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 
 import com.choicemaker.cm.core.IRecordSourceSerializer;
 import com.choicemaker.cm.core.ISerializableRecordSource;
@@ -89,7 +89,7 @@ public abstract class AbstractRecordSourceSerializer
 
 	public static void logIgnoredClasses(
 		Logger log,
-		Priority priority,
+		Level priority,
 		Class[] handledClasses) {
 		Precondition.assertNonNullArgument("null logger", log);
 		Precondition.assertNonNullArgument("null priority", priority);
@@ -111,7 +111,7 @@ public abstract class AbstractRecordSourceSerializer
 
 	public static void logIgnoredPattern(
 		Logger log,
-		Priority priority,
+		Level priority,
 		Pattern uriPattern) {
 		Precondition.assertNonNullArgument("null logger", log);
 		Precondition.assertNonNullArgument("null priority", priority);
@@ -123,7 +123,7 @@ public abstract class AbstractRecordSourceSerializer
 
 	public static void logIgnoredProperties(
 		Logger log,
-		Priority priority,
+		Level priority,
 		Properties properties) {
 		Precondition.assertNonNullArgument("null logger", log);
 		Precondition.assertNonNullArgument("null priority", priority);
@@ -145,7 +145,7 @@ public abstract class AbstractRecordSourceSerializer
 
 	public static void logIgnoredPropertyChange(
 		Logger log,
-		Priority priority,
+		Level priority,
 		String propName,
 		String propValue) {
 		Precondition.assertNonNullArgument("null logger", log);
@@ -160,7 +160,7 @@ public abstract class AbstractRecordSourceSerializer
 
 	public static void logNullPropertyReturned(
 		Logger log,
-		Priority priority,
+		Level priority,
 		String propName) {
 		Precondition.assertNonNullArgument("null logger", log);
 		Precondition.assertNonNullArgument("null priority", priority);

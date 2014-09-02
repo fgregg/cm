@@ -24,7 +24,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
@@ -171,7 +171,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 		int maxNumMatches,
 		EvalRecordFormat returnDataFormat,
 		String purpose,
-		Priority priority) {
+		Level priority) {
 
 		log.log(priority, "record: " + record);
 		log.log(priority, "probabilityModel: " + probabilityModel);

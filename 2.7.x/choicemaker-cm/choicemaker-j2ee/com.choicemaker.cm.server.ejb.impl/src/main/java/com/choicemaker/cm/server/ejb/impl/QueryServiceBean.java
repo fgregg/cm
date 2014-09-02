@@ -23,7 +23,7 @@ import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
@@ -130,7 +130,7 @@ public class QueryServiceBean implements SessionBean {
 					maxNumMatches,
 					returnDataFormat,
 					purpose,
-					Priority.DEBUG);
+					Level.DEBUG);
 			}
 
 			IProbabilityModel model = PMManager.getModelInstance(probabilityModel);
@@ -171,7 +171,7 @@ public class QueryServiceBean implements SessionBean {
 						maxNumMatches,
 						returnDataFormat,
 						purpose,
-						Priority.ERROR);
+						Level.ERROR);
 				}
 				throw new DatabaseException("", ex);
 			}
@@ -231,7 +231,7 @@ public class QueryServiceBean implements SessionBean {
 		int maxNumMatches,
 		String returnDataFormat,
 		String purpose,
-		Priority priority) {
+		Level priority) {
 		logger.log(priority, "profile: " + profile);
 		logger.log(priority, "constraint: " + constraint);
 		logger.log(priority, "probabilityModel: " + probabilityModel);

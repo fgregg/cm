@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -162,7 +162,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 					maxNumMatches,
 					resultFormat,
 					externalId,
-					Priority.DEBUG);
+					Level.DEBUG);
 			}
 			SortedSet s = getMatches(startTime,
 									 queryRecord, 
