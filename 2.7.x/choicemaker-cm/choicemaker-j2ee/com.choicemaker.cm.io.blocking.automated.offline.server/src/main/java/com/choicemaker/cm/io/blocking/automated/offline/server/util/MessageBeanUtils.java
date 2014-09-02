@@ -11,7 +11,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.util;
 
 import java.rmi.RemoteException;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;

@@ -17,6 +17,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.text.DecimalFormat;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -26,12 +27,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import java.util.logging.Logger;
-
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
-import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
+import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.dialogs.RecordPairFilterDialog;

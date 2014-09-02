@@ -12,7 +12,6 @@ package com.choicemaker.cm.transitivity.server.util;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.transitivity.core.CompositeEntity;

@@ -13,7 +13,6 @@ package com.choicemaker.cm.transitivity.util;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.transitivity.core.CompositeEntity;

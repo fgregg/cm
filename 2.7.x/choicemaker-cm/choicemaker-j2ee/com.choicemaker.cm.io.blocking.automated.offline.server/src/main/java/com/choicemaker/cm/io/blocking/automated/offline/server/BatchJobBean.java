@@ -16,6 +16,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -31,8 +32,6 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 

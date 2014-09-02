@@ -13,7 +13,6 @@ package com.choicemaker.cm.core.base;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ISerializableFileBasedRecordSource;

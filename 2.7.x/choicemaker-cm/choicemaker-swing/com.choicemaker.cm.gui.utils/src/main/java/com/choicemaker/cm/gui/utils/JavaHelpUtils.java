@@ -13,6 +13,7 @@ package com.choicemaker.cm.gui.utils;
 
 import java.awt.event.ActionEvent;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import javax.help.CSH;
 import javax.help.HelpBroker;
@@ -26,8 +27,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
-
-import java.util.logging.Logger;
 
 /**
  * @author   Adam Winkel

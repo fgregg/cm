@@ -12,8 +12,8 @@ package com.choicemaker.cm.core.configure.jdom;
 
 import java.io.IOException;
 import java.io.Reader;
-
 import java.util.logging.Logger;
+
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;

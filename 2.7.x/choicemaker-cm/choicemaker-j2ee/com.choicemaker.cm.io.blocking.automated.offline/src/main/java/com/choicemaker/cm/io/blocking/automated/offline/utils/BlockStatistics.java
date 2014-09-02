@@ -13,7 +13,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.utils;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;

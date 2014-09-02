@@ -12,7 +12,6 @@ package com.choicemaker.cm.core.configure.eclipse;
 
 import java.util.Hashtable;
 import java.util.Map;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.util.Precondition;

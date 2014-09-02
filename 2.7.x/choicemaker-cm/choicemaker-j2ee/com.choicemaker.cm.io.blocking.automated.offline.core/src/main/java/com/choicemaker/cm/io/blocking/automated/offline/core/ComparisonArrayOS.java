@@ -13,7 +13,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-
 import java.util.logging.Logger;
 
 /**

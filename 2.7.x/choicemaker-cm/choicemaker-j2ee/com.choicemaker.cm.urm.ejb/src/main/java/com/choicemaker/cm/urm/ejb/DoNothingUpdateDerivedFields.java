@@ -13,10 +13,9 @@ package com.choicemaker.cm.urm.ejb;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.urm.exceptions.UrmIncompleteSpecificationException;
 

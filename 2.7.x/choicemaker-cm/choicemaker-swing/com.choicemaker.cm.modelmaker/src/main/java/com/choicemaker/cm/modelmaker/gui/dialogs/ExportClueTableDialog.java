@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 //import java.awt.event.ItemListener;
 import java.io.File;
 //import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -29,8 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.tables.ClueTableModel;

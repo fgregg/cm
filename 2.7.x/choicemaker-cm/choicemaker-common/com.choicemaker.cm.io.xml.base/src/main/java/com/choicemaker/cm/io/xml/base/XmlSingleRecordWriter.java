@@ -12,7 +12,6 @@ package com.choicemaker.cm.io.xml.base;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Constants;

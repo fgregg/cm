@@ -12,8 +12,8 @@ package com.choicemaker.cm.core.configure.eclipse;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import java.util.logging.Logger;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;

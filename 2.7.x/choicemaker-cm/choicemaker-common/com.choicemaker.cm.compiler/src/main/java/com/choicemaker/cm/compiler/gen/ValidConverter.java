@@ -13,7 +13,6 @@ package com.choicemaker.cm.compiler.gen;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 //import org.apache.oro.text.regex.MalformedPatternException;
 //import org.apache.oro.text.regex.MatchResult;

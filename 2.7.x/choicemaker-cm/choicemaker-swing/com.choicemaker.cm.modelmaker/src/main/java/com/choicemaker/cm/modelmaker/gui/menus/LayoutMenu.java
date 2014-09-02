@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -22,10 +23,8 @@ import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import java.util.logging.Logger;
-
-import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
+import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.gui.utils.viewer.xmlconf.RecordPairViewerXmlConf;

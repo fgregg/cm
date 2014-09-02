@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
@@ -22,11 +23,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import java.util.logging.Logger;
-
 import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
+import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.gui.utils.viewer.CompositeFrame;
 import com.choicemaker.cm.gui.utils.viewer.CompositeFrameModel;
 import com.choicemaker.cm.gui.utils.viewer.RecordPairFrameModel;

@@ -11,7 +11,6 @@
 package com.choicemaker.cm.urm.ejb;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,9 +18,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Defines allowed property names and default values for an MrpsRequest. This

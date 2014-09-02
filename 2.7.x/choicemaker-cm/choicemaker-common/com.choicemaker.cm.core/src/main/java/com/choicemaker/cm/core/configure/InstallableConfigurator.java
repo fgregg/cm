@@ -11,7 +11,6 @@
 package com.choicemaker.cm.core.configure;
 
 import java.lang.reflect.Field;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.PropertyNames;

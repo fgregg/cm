@@ -20,6 +20,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
@@ -32,7 +33,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import java.util.logging.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 import org.jdom.Element;
@@ -50,8 +50,8 @@ import com.choicemaker.cm.core.base.DescriptorCollection;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
-import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
+import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConf;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.gui.utils.ExtensionHolder;

@@ -13,10 +13,9 @@ package com.choicemaker.cm.server.ejb.impl;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.server.base.DatabaseException;

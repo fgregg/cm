@@ -15,7 +15,6 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 //import java.text.DateFormat;
 import java.util.Date;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;

@@ -12,6 +12,7 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import javax.ejb.FinderException;
 import javax.jms.JMSException;
@@ -19,8 +20,6 @@ import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

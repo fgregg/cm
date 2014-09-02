@@ -12,7 +12,6 @@ package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.io.IOException;
 import java.util.List;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;

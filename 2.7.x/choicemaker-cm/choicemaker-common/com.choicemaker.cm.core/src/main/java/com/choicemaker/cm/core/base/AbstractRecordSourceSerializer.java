@@ -14,10 +14,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.regex.Pattern;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import com.choicemaker.cm.core.IRecordSourceSerializer;
 import com.choicemaker.cm.core.ISerializableRecordSource;

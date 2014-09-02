@@ -1,7 +1,6 @@
 package com.choicemaker.cm.core.configure;
 
 import java.util.List;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

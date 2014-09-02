@@ -12,9 +12,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.result;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.choicemaker.util.IntArrayList;
 

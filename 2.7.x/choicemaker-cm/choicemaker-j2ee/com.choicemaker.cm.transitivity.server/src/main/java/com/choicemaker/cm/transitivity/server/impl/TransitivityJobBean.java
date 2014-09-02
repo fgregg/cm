@@ -11,6 +11,7 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
@@ -20,8 +21,6 @@ import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 

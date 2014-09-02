@@ -15,6 +15,8 @@ import java.rmi.RemoteException;
 import java.security.AccessControlException;
 import java.util.Iterator;
 import java.util.SortedSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -22,8 +24,6 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 

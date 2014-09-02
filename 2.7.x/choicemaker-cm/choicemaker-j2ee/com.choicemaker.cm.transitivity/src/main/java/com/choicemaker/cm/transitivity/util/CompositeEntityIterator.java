@@ -11,7 +11,6 @@
 package com.choicemaker.cm.transitivity.util;
 
 import java.util.Iterator;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;

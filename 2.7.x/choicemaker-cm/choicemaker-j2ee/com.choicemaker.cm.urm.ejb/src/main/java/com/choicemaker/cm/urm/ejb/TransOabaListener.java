@@ -12,12 +12,11 @@ package com.choicemaker.cm.urm.ejb;
 
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;

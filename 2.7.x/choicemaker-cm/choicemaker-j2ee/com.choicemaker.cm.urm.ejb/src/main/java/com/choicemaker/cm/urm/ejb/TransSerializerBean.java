@@ -11,14 +11,13 @@
 package com.choicemaker.cm.urm.ejb;
 
 import java.rmi.RemoteException;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.Queue;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;

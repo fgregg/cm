@@ -11,7 +11,6 @@
 package com.choicemaker.cm.ml.me.base;
 
 import java.util.Collection;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;

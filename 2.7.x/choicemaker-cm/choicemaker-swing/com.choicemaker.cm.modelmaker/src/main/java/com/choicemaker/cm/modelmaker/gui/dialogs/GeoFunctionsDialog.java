@@ -31,7 +31,6 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-
 import com.choicemaker.cm.core.util.UpperCaseTextField;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.matching.geo.GeoHelper;

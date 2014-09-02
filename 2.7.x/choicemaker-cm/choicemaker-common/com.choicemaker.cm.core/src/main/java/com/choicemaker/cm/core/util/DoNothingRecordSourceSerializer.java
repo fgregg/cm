@@ -12,10 +12,9 @@ package com.choicemaker.cm.core.util;
 
 import java.io.NotSerializableException;
 import java.util.Properties;
-import java.util.regex.Pattern;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.RecordSource;

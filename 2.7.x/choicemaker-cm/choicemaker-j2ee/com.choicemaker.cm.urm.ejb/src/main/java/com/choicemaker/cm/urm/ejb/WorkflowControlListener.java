@@ -12,6 +12,7 @@ package com.choicemaker.cm.urm.ejb;
 
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.MessageDrivenBean;
@@ -21,8 +22,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;

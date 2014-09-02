@@ -13,9 +13,8 @@ package com.choicemaker.cm.core.base;
 import java.io.IOException;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Decision;

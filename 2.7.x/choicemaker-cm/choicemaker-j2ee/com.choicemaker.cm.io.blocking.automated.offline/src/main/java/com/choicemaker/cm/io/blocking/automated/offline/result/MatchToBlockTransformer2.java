@@ -12,7 +12,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.result;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;

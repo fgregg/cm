@@ -12,6 +12,7 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -22,8 +23,6 @@ import javax.jms.JMSException;
 import javax.jms.Queue;
 //import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;

@@ -13,7 +13,6 @@ package com.choicemaker.cm.matching.cfg;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.matching.cfg.util.CfgUtils;

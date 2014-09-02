@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -46,8 +47,6 @@ import javax.swing.text.Document;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.util.UpperCaseTextField;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;

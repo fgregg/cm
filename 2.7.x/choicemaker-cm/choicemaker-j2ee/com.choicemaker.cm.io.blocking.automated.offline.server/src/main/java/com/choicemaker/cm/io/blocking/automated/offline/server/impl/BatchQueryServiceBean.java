@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -22,8 +23,6 @@ import javax.ejb.SessionContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.naming.NamingException;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;

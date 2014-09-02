@@ -27,6 +27,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Date;
 import java.util.EventListener;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
@@ -42,7 +43,6 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.EventListenerList;
 
-import java.util.logging.Logger;
 import org.eclipse.core.boot.IPlatformRunnable;
 
 import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
@@ -74,8 +74,8 @@ import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.train.Trainer;
-import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
+import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.AboutDialog;

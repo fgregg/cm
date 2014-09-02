@@ -4,7 +4,6 @@ import static com.choicemaker.cmit.io.blocking.automated.offline.server.BatchDep
 import static com.choicemaker.cmit.io.blocking.automated.offline.server.BatchDeploymentUtils.EJB_MAVEN_COORDINATES;
 import static com.choicemaker.cmit.utils.DeploymentUtils.PERSISTENCE_CONFIGURATION;
 import static com.choicemaker.cmit.utils.DeploymentUtils.PROJECT_POM;
-import static com.choicemaker.cmit.io.blocking.automated.offline.server.RandomStartOabaParameters.PARAMETER_OPTION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -34,6 +33,7 @@ import org.junit.runner.RunWith;
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog;
+import com.choicemaker.cmit.io.blocking.automated.offline.server.RandomStartOabaParameters.PARAMETER_OPTION;
 import com.choicemaker.cmit.utils.DeploymentUtils;
 
 @RunWith(Arquillian.class)

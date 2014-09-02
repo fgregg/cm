@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.CreateException;
@@ -27,8 +28,6 @@ import javax.jms.Queue;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;

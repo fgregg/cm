@@ -10,11 +10,11 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import java.util.logging.Logger;
+
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.naming.NamingException;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

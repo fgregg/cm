@@ -12,6 +12,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.rmi.RemoteException;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.EJBException;
 import javax.ejb.FinderException;
@@ -23,9 +25,6 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;

@@ -11,8 +11,8 @@
 package com.choicemaker.cm.io.db.base.xmlconf;
 
 import java.util.Iterator;
-
 import java.util.logging.Logger;
+
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;

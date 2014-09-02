@@ -1,5 +1,7 @@
 package com.choicemaker.cm.core;
 
+import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
+
 /**
  * Names of system-wide properties used to configure
  * ChoiceMaker

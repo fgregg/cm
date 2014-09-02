@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.util;
 
 import java.util.logging.Logger;
+
 import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.IPluginRegistry;
 import org.eclipse.core.runtime.Platform;

@@ -2,7 +2,6 @@ package com.choicemaker.cm.core.compiler;
 
 import java.io.Writer;
 import java.util.Properties;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;

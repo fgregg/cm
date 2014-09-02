@@ -10,14 +10,14 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import java.util.logging.Logger;
+
 import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-
-import java.util.logging.Logger;
 
 
 /**

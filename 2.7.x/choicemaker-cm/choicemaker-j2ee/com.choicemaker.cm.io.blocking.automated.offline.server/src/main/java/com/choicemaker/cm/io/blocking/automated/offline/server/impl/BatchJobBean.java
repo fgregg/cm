@@ -11,11 +11,10 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.autonumber.AutoNumberFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;

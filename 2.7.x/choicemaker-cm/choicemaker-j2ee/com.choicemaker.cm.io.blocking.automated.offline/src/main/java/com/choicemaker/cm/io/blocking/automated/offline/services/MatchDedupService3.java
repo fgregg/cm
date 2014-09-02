@@ -11,7 +11,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.services;
 
 import java.io.IOException;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;

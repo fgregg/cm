@@ -23,6 +23,7 @@ import java.net.URLConnection;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -31,8 +32,6 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.SerialRecordSource;

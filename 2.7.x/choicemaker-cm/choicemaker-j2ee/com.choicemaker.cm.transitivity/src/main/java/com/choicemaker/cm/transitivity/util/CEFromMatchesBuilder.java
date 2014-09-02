@@ -13,7 +13,6 @@ package com.choicemaker.cm.transitivity.util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Decision;

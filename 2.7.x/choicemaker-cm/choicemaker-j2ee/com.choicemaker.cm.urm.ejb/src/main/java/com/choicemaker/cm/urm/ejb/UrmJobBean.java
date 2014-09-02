@@ -13,12 +13,11 @@ package com.choicemaker.cm.urm.ejb;
 //import org.jboss.varia.autonumber.AutoNumberFactory;
 import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.autonumber.AutoNumberFactory;
 import com.choicemaker.cm.core.SerialRecordSource;

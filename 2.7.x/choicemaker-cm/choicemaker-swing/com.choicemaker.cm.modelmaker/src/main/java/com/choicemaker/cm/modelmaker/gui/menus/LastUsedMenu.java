@@ -19,12 +19,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.util.LoggingObject;

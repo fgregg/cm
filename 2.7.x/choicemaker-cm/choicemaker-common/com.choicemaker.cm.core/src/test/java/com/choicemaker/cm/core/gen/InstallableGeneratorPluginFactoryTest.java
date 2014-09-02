@@ -6,11 +6,6 @@ import java.util.Properties;
 import junit.framework.TestCase;
 
 import com.choicemaker.cm.core.PropertyNames;
-import com.choicemaker.cm.core.gen.Eclipse2GeneratorPluginFactory;
-import com.choicemaker.cm.core.gen.GenException;
-import com.choicemaker.cm.core.gen.IGeneratorPluginFactory;
-import com.choicemaker.cm.core.gen.InstallableGeneratorPluginFactory;
-import com.choicemaker.cm.core.gen.ListBackedGeneratorPluginFactory;
 import com.choicemaker.util.SystemPropertyUtils;
 
 public class InstallableGeneratorPluginFactoryTest extends TestCase {

@@ -22,9 +22,9 @@
 // package org.jboss.varia.autonumber;
 package com.choicemaker.autonumber;
 
-import javax.naming.InitialContext;
-
 import java.util.logging.Logger;
+
+import javax.naming.InitialContext;
 
 /**
  * AutoNumberFactory can persistently auto number items.

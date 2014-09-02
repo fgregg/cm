@@ -11,7 +11,6 @@
 package com.choicemaker.cm.transitivity.server.util;
 
 import java.util.Iterator;
-
 import java.util.logging.Logger;
 
 /**

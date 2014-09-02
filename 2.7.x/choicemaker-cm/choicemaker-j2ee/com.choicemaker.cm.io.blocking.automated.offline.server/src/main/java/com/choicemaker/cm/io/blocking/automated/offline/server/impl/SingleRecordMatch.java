@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.util.Iterator;
 import java.util.SortedSet;
+import java.util.logging.Logger;
 
 import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
@@ -22,7 +23,6 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import java.util.logging.Logger;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 

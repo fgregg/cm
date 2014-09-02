@@ -10,11 +10,11 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
+import java.util.logging.Logger;
+
 import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.autonumber.AutoNumberFactory;
 

@@ -11,7 +11,6 @@
 package com.choicemaker.cm.core.base;
 
 import java.io.IOException;
-
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;

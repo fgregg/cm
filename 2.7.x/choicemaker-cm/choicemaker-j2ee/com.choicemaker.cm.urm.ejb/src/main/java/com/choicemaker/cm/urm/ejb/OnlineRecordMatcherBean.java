@@ -13,9 +13,8 @@ package com.choicemaker.cm.urm.ejb;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.SortedSet;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
