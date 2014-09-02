@@ -10,10 +10,13 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
@@ -24,17 +27,37 @@ import org.apache.log4j.helpers.Loader;
  * Defines allowed property names and default values for an MrpsRequest. This
  * implementation goes to some lengths to define names and values in one
  * definitive spot, namely the property file defined by {@link #PROPERTY_FILE}
+ * 
  * @author rphall
  * @version $Revision: 1.1 $ $Date: 2010/03/25 00:17:22 $
  */
-public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
+public class MrpsRequestConfiguration implements IMrpsRequestConfiguration,
+		Cloneable {
 
-	private final static Logger theLog =
-		Logger.getLogger(MrpsRequestConfiguration.class);
+	private final static Logger theLog = Logger
+			.getLogger(MrpsRequestConfiguration.class);
+
+	/** Allowed property names (excluding PN_VERSION) */
+	private static String[] ALLOWED_NONVERSION_NAMES = new String[] {
+			IMrpsRequestConfiguration.PN_BATCH_SIZE,
+			IMrpsRequestConfiguration.PN_USE_DEFAULT_PREFILTER,
+			IMrpsRequestConfiguration.PN_DEFAULT_PREFILTER_FROM_PERCENTAGE,
+			IMrpsRequestConfiguration.PN_DEFAULT_PREFILTER_TO_PERCENTAGE,
+			IMrpsRequestConfiguration.PN_USE_DEFAULT_POSTFILTER,
+			IMrpsRequestConfiguration.PN_DEFAULT_POSTFILTER_FROM_PERCENTAGE,
+			IMrpsRequestConfiguration.PN_DEFAULT_POSTFILTER_TO_PERCENTAGE,
+			IMrpsRequestConfiguration.PN_USE_DEFAULT_PAIR_SAMPLER,
+			IMrpsRequestConfiguration.PN_DEFAULT_PAIR_SAMPLER_SIZE };
 
 	/** The property file that defines allowed property names and default values */
 	public static final String PROPERTY_FILE =
 		"com/choicemaker/cm/urm/ejb/mrpsRequest.properties";
+
+	/** A special property that is accessible only from {@link #getVersion()} */
+	private static final String PN_VERSION = "mrpsRequest.configurationVersion";
+
+	/** The required extension for MRPS specification files */
+	public static final String MRPS_EXTENSION = ".mrps";
 
 	private final static Properties defaultProperties = new Properties();
 	static {
@@ -45,16 +68,18 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
 			defaultProperties.load(is);
 			if (theLog.isDebugEnabled()) {
 				theLog.debug("loaded properties from '" + PROPERTY_FILE + "'");
-				java.util.Enumeration _e = defaultProperties.propertyNames();
-				while (_e.hasMoreElements()) {
-					theLog.debug("property: " + _e.nextElement());
+				java.util.Iterator _e =
+					getDefaultproperties().entrySet().iterator();
+				while (_e.hasNext()) {
+					Entry entry = (Entry) _e.next();
+					theLog.debug("property: " + entry.getKey() + ", value: "
+							+ entry.getValue());
 				}
 			}
 		} catch (Exception x) {
 			String msg =
-				"unable to load default properties from '"
-					+ PROPERTY_FILE
-					+ "'";
+				"unable to load default properties from '" + PROPERTY_FILE
+						+ "'";
 			theLog.fatal(msg, x);
 			throw new IllegalStateException(msg);
 		} finally {
@@ -68,16 +93,14 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
 		} // finally
 	} // static
 
-	/** A special property that is accessible only from {@link #getVersion()}*/
-	private static final String PN_VERSION = "mrpsRequest.configurationVersion";
-
-	/** The required extension for MRPS specification files */
-	public static final String MRPS_EXTENSION = ".mrps";
+	public static Map getDefaultproperties() {
+		return Collections.unmodifiableMap(defaultProperties);
+	}
 
 	/**
- * A utility that standardizes the file name of an MRPS specification
- * file so that it ends with <code>mrps</code>
- */
+	 * A utility that standardizes the file name of an MRPS specification file
+	 * so that it ends with <code>mrps</code>
+	 */
 	public static String standardizeMrpsSpecificationFileName(String fileName) {
 		if (fileName == null || fileName.trim().length() == 0) {
 			throw new IllegalArgumentException("null or blank fileName");
@@ -89,29 +112,26 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
 		return retVal;
 	}
 
-	/**
- * A utility that creates an MRPS specification file with the
- * specified name. The name is not standdardized before the file
- * is created. If a standardized name is desired, invoke
- * {@link #standardizeMrpsSpecificationFileName(String)} before
- * invoking this method.
- */
-  public static File createMrpsSpecificationFile(String fileName) {
-		// FIXME IMPLEMENTME
-		return new File(fileName);
-	}
+	// /**
+	// * A utility that creates an MRPS specification file with the specified
+	// * name. The name is not standdardized before the file is created. If a
+	// * standardized name is desired, invoke
+	// * {@link #standardizeMrpsSpecificationFileName(String)} before invoking
+	// * this method.
+	// */
+	// public static File createMrpsSpecificationFile(String fileName) {
+	// throw new Error("not yet implemented");
+	// }
+	//
+	// /**
+	// * Checks that the file contents are valid XML for an MRPS specification
+	// * file. This methood does not check if the file name is properly
+	// * standardized.
+	// */
+	// public static boolean isValidMrpsSpecificationFile(File file) {
+	// throw new Error("not yet implemented");
+	// }
 
-	/**
- * Checks that the file contents are valid XML for an MRPS
- * specification file. This methood does not check if the file
- * name is properly standardized.
- */
-  public static boolean isValidMrpsSpecificationFile(File file) {
-		// FIXME IMPLEMENTME
-		return true;
-	}
-
-	/** Moved from deprecated AbstractConfigureable */
 	private Properties _properties = new Properties();
 
 	/** The version of this implementation */
@@ -120,13 +140,22 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
 	/** Creates a configuration with default values */
 	public MrpsRequestConfiguration() {
 		super();
-		Properties p = (Properties) defaultProperties.clone();
+		// Clone isn't working as expected -- Java 1.4, 2014-09-02
+		// Properties p = (Properties) defaultProperties.clone();
+		Properties p = new Properties();
+		for (Iterator it = getDefaultproperties().entrySet().iterator(); it
+				.hasNext();) {
+			Entry e = (Entry) it.next();
+			String key = (String) e.getKey();
+			String value = (String) e.getValue();
+			p.put(key, value);
+		}
 		this.version = p.getProperty(PN_VERSION);
 		p.remove(PN_VERSION);
 		this.setProperties(p);
 	}
 
-	/** Creates a copy  of the specified configuration */
+	/** Creates a copy of the specified configuration */
 	public MrpsRequestConfiguration(MrpsRequestConfiguration config) {
 		try {
 			MrpsRequestConfiguration copy =
@@ -134,31 +163,25 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
 			this.version = copy.version;
 			this.setProperties(copy.getProperties());
 		} catch (CloneNotSupportedException x) {
-			String msg = "Unexpected CloneNotSupportedException: " + x.getMessage();
+			String msg =
+				"Unexpected CloneNotSupportedException: " + x.getMessage();
 			throw new Error(msg);
 		}
 	}
 
-	/** Moved from deprecated AbstractConfigureable */
 	public Properties getProperties() {
 		Properties retVal = (Properties) this._properties.clone();
 		return retVal;
 	}
 
-
-	/** Moved from deprecated AbstractConfigureable */
 	public String getProperty(String propertyName) {
 		return this._properties.getProperty(propertyName);
 	}
 
-
-	/** Moved from deprecated AbstractConfigureable */
 	public void removeProperty(String propertyName) {
-		this.removeProperty(propertyName);
+		this._properties.remove(propertyName);
 	}
 
-
-	/** Moved from deprecated AbstractConfigureable */
 	public void setProperties(Properties p) {
 
 		// Precondition
@@ -167,7 +190,9 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
 		}
 
 		Set newKeys = p.keySet();
-		Set allowedKeys = getAllowedPropertyNames();
+		Set allowedKeys = new HashSet();
+		allowedKeys.addAll(getAllowedPropertyNames());
+		allowedKeys.add(PN_VERSION);
 		if (!allowedKeys.containsAll(newKeys)) {
 			String msg = "new keys contain unknown property name(s): '";
 			for (Iterator i = newKeys.iterator(); i.hasNext();) {
@@ -178,21 +203,22 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
 			}
 			throw new IllegalArgumentException(msg);
 		}
+		this._properties.clear();
 		this._properties.putAll(p);
 	}
 
-
-	/** Moved from deprecated AbstractConfigureable */
 	public void setProperty(String propertyName, String propertyValue) {
 		if (propertyName == null
-			|| !getAllowedPropertyNames().contains(propertyName)) {
+				|| !getAllowedPropertyNames().contains(propertyName)) {
 			throw new IllegalArgumentException(
-				"Null or illegal property name: '" + propertyName + "'");
+					"Null or illegal property name: '" + propertyName + "'");
 		}
 		this._properties.setProperty(propertyName, propertyValue);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Cloneable
 	 */
 	public Object clone() throws CloneNotSupportedException {
@@ -203,21 +229,16 @@ public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
 		return retVal;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.AbstractConfigurable#getAllowedPropertyNames()
-	 */
 	public Set getAllowedPropertyNames() {
-		Set retVal = defaultProperties.keySet();
-		retVal.remove(PN_VERSION);
+		Set retVal = new HashSet();
+		for (int i = 0; i < ALLOWED_NONVERSION_NAMES.length; i++) {
+			retVal.add(ALLOWED_NONVERSION_NAMES[i]);
+		}
 		return retVal;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.core.configure.Configureable#getVersion()
-	 */
 	public String getVersion() {
 		return this.version;
 	}
 
 }
-
