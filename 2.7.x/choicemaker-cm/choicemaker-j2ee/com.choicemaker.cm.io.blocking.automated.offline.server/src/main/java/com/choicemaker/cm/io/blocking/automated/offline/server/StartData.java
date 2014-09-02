@@ -24,8 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
  */
 public class StartData implements Serializable {
 
-	/* As of 2010-03-10 */
-	static final long serialVersionUID = -5889842975920462082L;
+	static final long serialVersionUID = 271L;
 
 	public long jobID;
 	public int numBlockFields;
@@ -111,6 +110,13 @@ public class StartData implements Serializable {
 		this.staging = data.staging;
 		this.master = data.master;
 		this.runTransitivity = data.runTransitivity;
+	}
+
+
+	@Override
+	public String toString() {
+		return "StartData [jobID=" + jobID + ", runTransitivity="
+				+ runTransitivity + "]";
 	}
 
 }

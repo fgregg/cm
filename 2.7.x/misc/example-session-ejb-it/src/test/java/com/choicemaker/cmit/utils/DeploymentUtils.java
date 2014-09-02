@@ -61,10 +61,10 @@ public class DeploymentUtils {
 		}
 
 		// Print the JAR contents
-		System.out.println();
-		System.out.println("EJB JAR:");
-		System.out.println(retVal.toString(true));
-		System.out.println();
+//		System.out.println();
+//		System.out.println("EJB JAR:");
+//		System.out.println(retVal.toString(true));
+//		System.out.println();
 		return retVal;
 	}
 
@@ -116,15 +116,15 @@ public class DeploymentUtils {
 			} catch (Exception x) {
 				String msg =
 					"WARNING: failed to add test dependencies: " + x.toString();
-				System.out.println(msg);
+				System.err.println(msg);
 			}
 		}
 
 		// Print the EAR contents
-		System.out.println();
-		System.out.println("Deployment EAR:");
-		System.out.println(retVal.toString(true));
-		System.out.println();
+//		System.out.println();
+//		System.out.println("Deployment EAR:");
+//		System.out.println(retVal.toString(true));
+//		System.out.println();
 		return retVal;
 	}
 

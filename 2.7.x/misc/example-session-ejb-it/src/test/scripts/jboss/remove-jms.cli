@@ -1,0 +1,32 @@
+# Batch script to add the JMS configuration to the JBoss server
+
+# Start batching commands
+batch
+
+# Configure the JMS test queue
+jms-queue remove --queue-address=blockQueue 
+jms-queue remove --queue-address=chunkQueue 
+jms-queue remove --queue-address=dedupQueue 
+jms-queue remove --queue-address=matchDedupEachQueue 
+jms-queue remove --queue-address=matchDedupQueue 
+jms-queue remove --queue-address=matcherQueue 
+jms-queue remove --queue-address=matchQueue 
+jms-queue remove --queue-address=matchSchedulerQueue 
+jms-queue remove --queue-address=mrpsProcessorQueue 
+jms-queue remove --queue-address=singleMatchQueue 
+jms-queue remove --queue-address=startQueue 
+jms-queue remove --queue-address=statusTopic 
+jms-queue remove --queue-address=transitivityQueue 
+jms-queue remove --queue-address=transMatchDedupEachQueue 
+jms-queue remove --queue-address=transMatchDedupQueue 
+jms-queue remove --queue-address=transMatcherQueue 
+jms-queue remove --queue-address=transMatcherSchedulerQueue 
+jms-queue remove --queue-address=transMatchSchedulerQueue 
+jms-queue remove --queue-address=transSerializationQueue 
+jms-queue remove --queue-address=transSerialStatusTopic 
+jms-queue remove --queue-address=transStatusTopic 
+jms-queue remove --queue-address=updateQueue 
+jms-queue remove --queue-address=updateTransQueue 
+
+# Run the batch commands
+run-batch

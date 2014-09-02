@@ -12,12 +12,17 @@ package com.choicemaker.cm.io.blocking.automated.offline.server;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 
+import javax.annotation.Resource;
 import javax.ejb.CreateException;
 import javax.ejb.FinderException;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
+import javax.jms.JMSProducer;
+import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -42,14 +47,21 @@ public class BatchQueryServiceBean implements Serializable {
 			.getLogger(BatchQueryServiceBean.class);
 
 	@PersistenceContext(unitName = "oaba")
-	private EntityManager em;
+	protected EntityManager em;
 
-//	private static boolean initialized = false;
+	@Resource
+	protected SessionContext sc;
+
+	@Resource(name = "jms/startQueue",
+			lookup = "java:/choicemaker/urm/jms/startQueue")
+	protected Queue queue;
+
+	@Inject
+	protected JMSContext context;
 
 	public long startOABAStage(String externalID, SerialRecordSource staging,
 			float lowThreshold, float highThreshold, String stageModelName,
-			int maxSingle) throws RemoteException, CreateException,
-			NamingException, JMSException, SQLException {
+			int maxSingle) throws JMSException {
 
 		return startOABA(externalID, null, staging, null, lowThreshold,
 				highThreshold, stageModelName, null, maxSingle, false);
@@ -58,8 +70,7 @@ public class BatchQueryServiceBean implements Serializable {
 	public long startOABA(String externalID, SerialRecordSource staging,
 			SerialRecordSource master, float lowThreshold, float highThreshold,
 			String stageModelName, String masterModelName, int maxSingle)
-			throws RemoteException, CreateException, NamingException,
-			JMSException, SQLException {
+			throws JMSException {
 
 		return this.startOABA(externalID, null, staging, master, lowThreshold,
 				highThreshold, stageModelName, masterModelName, maxSingle,
@@ -69,8 +80,7 @@ public class BatchQueryServiceBean implements Serializable {
 	public long startOABA(String externalID, SerialRecordSource staging,
 			SerialRecordSource master, float lowThreshold, float highThreshold,
 			String stageModelName, String masterModelName, int maxSingle,
-			boolean runTransitivity) throws RemoteException, CreateException,
-			NamingException, JMSException, SQLException {
+			boolean runTransitivity) throws JMSException {
 
 		return this.startOABA(externalID, null, staging, master, lowThreshold,
 				highThreshold, stageModelName, masterModelName, maxSingle,
@@ -81,12 +91,12 @@ public class BatchQueryServiceBean implements Serializable {
 			SerialRecordSource staging, SerialRecordSource master,
 			float lowThreshold, float highThreshold, String stageModelName,
 			String masterModelName, int maxSingle, boolean runTransitivity)
-			throws RemoteException, CreateException, NamingException,
-			JMSException, SQLException {
+			throws JMSException {
 
 		log.debug("starting startBatch...");
 
-//		BatchJob batchJob = EJBConfiguration.getInstance().createBatchJob(externalID);
+		// BatchJob batchJob =
+		// EJBConfiguration.getInstance().createBatchJob(externalID);
 		BatchJobBean batchJob = new BatchJobBean(externalID);
 		em.persist(batchJob);
 		batchJob.setDescription(stageModelName + ":" + masterModelName);
@@ -97,13 +107,15 @@ public class BatchQueryServiceBean implements Serializable {
 		}
 
 		// create a new current status EJB
-//		EJBConfiguration.getInstance().createNewStatusLog(id);
+		// EJBConfiguration.getInstance().createNewStatusLog(id);
 		StatusLogBean statusLog = new StatusLogBean(batchJob.getId());
 		em.persist(statusLog);
 
 		// set the parameters
-//		BatchParameters batchParams = EJBConfiguration.getInstance().createBatchParameters(id);
-		BatchParametersBean batchParams = new BatchParametersBean(batchJob.getId());
+		// BatchParameters batchParams =
+		// EJBConfiguration.getInstance().createBatchParameters(id);
+		BatchParametersBean batchParams =
+			new BatchParametersBean(batchJob.getId());
 		batchParams.setHighThreshold(new Float(highThreshold));
 		batchParams.setLowThreshold(new Float(lowThreshold));
 		batchParams.setMaxSingle(new Integer(maxSingle));
@@ -140,51 +152,55 @@ public class BatchQueryServiceBean implements Serializable {
 			throws RemoteException, CreateException, NamingException,
 			JMSException, FinderException {
 
-		throw new RemoteException("not yet implemented");
-//		log.info("aborting job " + jobID + " " + cleanStatus);
-//		BatchJob batchJob = EJBConfiguration.getInstance().findBatchJobById(jobID);
-//		batchJob.markAsAbortRequested();
-//
-//		// set status as done, so it won't continue during the next run
-//		if (cleanStatus) {
-//			batchJob.setDescription(BatchJob.CLEAR);
-//		}
-//
-//		return 0;
+		throw new RemoteException("abortBatch: not yet implemented");
+		// log.info("aborting job " + jobID + " " + cleanStatus);
+		// BatchJob batchJob =
+		// EJBConfiguration.getInstance().findBatchJobById(jobID);
+		// batchJob.markAsAbortRequested();
+		//
+		// // set status as done, so it won't continue during the next run
+		// if (cleanStatus) {
+		// batchJob.setDescription(BatchJob.CLEAR);
+		// }
+		//
+		// return 0;
 	}
 
 	public BatchJobStatus getStatus(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
 
-		throw new RemoteException("not yet implemented");
-//		BatchJob batchJob = EJBConfiguration.getInstance().findBatchJobById(jobID);
-//
-//		BatchJobStatus status =
-//
-//			new BatchJobStatus(batchJob.getId().longValue(), batchJob
-//					.getTransactionId().longValue(), batchJob.getDescription(),
-//					batchJob.getStatus(), batchJob.getStarted(),
-//					batchJob.getCompleted());
-//
-//		return status;
+		throw new RemoteException("getStatus: not yet implemented");
+		// BatchJob batchJob =
+		// EJBConfiguration.getInstance().findBatchJobById(jobID);
+		//
+		// BatchJobStatus status =
+		//
+		// new BatchJobStatus(batchJob.getId().longValue(), batchJob
+		// .getTransactionId().longValue(), batchJob.getDescription(),
+		// batchJob.getStatus(), batchJob.getStarted(),
+		// batchJob.getCompleted());
+		//
+		// return status;
 	}
 
 	public String checkStatus(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
-		BatchJob batchJob = EJBConfiguration.getInstance().findBatchJobById(jobID);
+		BatchJob batchJob =
+			EJBConfiguration.getInstance().findBatchJobById(jobID);
 		return batchJob.getStatus().name();
 	}
 
 	public boolean removeDir(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
 
-		throw new RemoteException("not yet implemented");
-//		BatchParameters batchParams = EJBConfiguration.getInstance().findBatchParamsById(jobID);
-//
-//		String stageModelName = batchParams.getStageModel();
-//		OABAConfiguration oConfig =
-//			new OABAConfiguration(stageModelName, jobID);
-//		return oConfig.removeTempDir();
+		throw new RemoteException("checkStatus: not yet implemented");
+		// BatchParameters batchParams =
+		// EJBConfiguration.getInstance().findBatchParamsById(jobID);
+		//
+		// String stageModelName = batchParams.getStageModel();
+		// OABAConfiguration oConfig =
+		// new OABAConfiguration(stageModelName, jobID);
+		// return oConfig.removeTempDir();
 	}
 
 	/**
@@ -204,42 +220,43 @@ public class BatchQueryServiceBean implements Serializable {
 	public int resumeJob(long jobID) throws RemoteException, CreateException,
 			NamingException, JMSException, FinderException {
 
-		throw new RemoteException("not yet implemented");
-//		int ret = 1;
-//		BatchJob job = EJBConfiguration.getInstance().findBatchJobById(jobID);
-//
-//		if (!job.getStarted().equals(BatchJob.STATUS_COMPLETED)
-//				&& !job.getDescription().equals(BatchJob.CLEAR)) {
-//
-//			// change aborted to started
-//			job.markAsReStarted();
-//
-//			BatchParameters batchParams =
-//				EJBConfiguration.getInstance().findBatchParamsById(jobID);
-//
-//			OABAConfiguration oConfig =
-//				new OABAConfiguration(batchParams.getStageModel(), jobID);
-//
-//			try {
-//				StartData data = oConfig.getStartData();
-//
-//				sendToStartOABA(jobID, data.staging, data.master,
-//						data.stageModelName, data.masterModelName, data.low,
-//						data.high, data.maxCountSingle, false);
-//
-//			} catch (IOException e) {
-//				ret = -1;
-//				log.error(e.toString(), e);
-//			} catch (ClassNotFoundException e) {
-//				ret = -1;
-//				log.error(e.toString(), e);
-//			}
-//		} else {
-//			log.warn("Could not resume job " + jobID);
-//			ret = -1;
-//		}
-//
-//		return ret;
+		throw new RemoteException("resumeJob: not yet implemented");
+		// int ret = 1;
+		// BatchJob job =
+		// EJBConfiguration.getInstance().findBatchJobById(jobID);
+		//
+		// if (!job.getStarted().equals(BatchJob.STATUS_COMPLETED)
+		// && !job.getDescription().equals(BatchJob.CLEAR)) {
+		//
+		// // change aborted to started
+		// job.markAsReStarted();
+		//
+		// BatchParameters batchParams =
+		// EJBConfiguration.getInstance().findBatchParamsById(jobID);
+		//
+		// OABAConfiguration oConfig =
+		// new OABAConfiguration(batchParams.getStageModel(), jobID);
+		//
+		// try {
+		// StartData data = oConfig.getStartData();
+		//
+		// sendToStartOABA(jobID, data.staging, data.master,
+		// data.stageModelName, data.masterModelName, data.low,
+		// data.high, data.maxCountSingle, false);
+		//
+		// } catch (IOException e) {
+		// ret = -1;
+		// log.error(e.toString(), e);
+		// } catch (ClassNotFoundException e) {
+		// ret = -1;
+		// log.error(e.toString(), e);
+		// }
+		// } else {
+		// log.warn("Could not resume job " + jobID);
+		// ret = -1;
+		// }
+		//
+		// return ret;
 	}
 
 	/**
@@ -257,102 +274,115 @@ public class BatchQueryServiceBean implements Serializable {
 	public MatchListSource getMatchList(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
 
-		throw new RemoteException("not yet implemented");
-//		MatchListSource mls = null;
-//
-//		// check to make sure the job is completed
-//		BatchJob batchJob = EJBConfiguration.getInstance().findBatchJobById(jobID);
-//		if (!batchJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
-//			throw new IllegalStateException("The job has not completed.");
-//		} else {
-//			String fileName = batchJob.getDescription();
-//			MatchRecordSource mrs =
-//				new MatchRecordSource(fileName, Constants.STRING);
-//			mls = new MatchListSource(mrs);
-//		}
-//
-//		return mls;
+		throw new RemoteException("getMatchList: not yet implemented");
+		// MatchListSource mls = null;
+		//
+		// // check to make sure the job is completed
+		// BatchJob batchJob =
+		// EJBConfiguration.getInstance().findBatchJobById(jobID);
+		// if (!batchJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
+		// throw new IllegalStateException("The job has not completed.");
+		// } else {
+		// String fileName = batchJob.getDescription();
+		// MatchRecordSource mrs =
+		// new MatchRecordSource(fileName, Constants.STRING);
+		// mls = new MatchListSource(mrs);
+		// }
+		//
+		// return mls;
 	}
 
 	public IMatchRecord2Source getMatchRecordSource(long jobID)
 			throws RemoteException, CreateException, NamingException,
 			JMSException, FinderException {
 
-//		MatchRecord2Source mrs = null;
-//
-//		// check to make sure the job is completed
-//		BatchJob batchJob = EJBConfiguration.getInstance().findBatchJobById(jobID);
-//		if (!batchJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
-//			throw new IllegalStateException("The job has not completed.");
-//		} else {
-//			String fileName = batchJob.getDescription();
-//			mrs = new MatchRecord2Source(fileName, Constants.STRING);
-//		}
-//
-//		return mrs;
-		throw new RemoteException("not yet implemented");
+		// MatchRecord2Source mrs = null;
+		//
+		// // check to make sure the job is completed
+		// BatchJob batchJob =
+		// EJBConfiguration.getInstance().findBatchJobById(jobID);
+		// if (!batchJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
+		// throw new IllegalStateException("The job has not completed.");
+		// } else {
+		// String fileName = batchJob.getDescription();
+		// mrs = new MatchRecord2Source(fileName, Constants.STRING);
+		// }
+		//
+		// return mrs;
+		throw new RemoteException("getMatchRecordSource: not yet implemented");
+	}
+
+	public static StartData createStartData(long jobID,
+			SerialRecordSource staging, SerialRecordSource master,
+			String stageModelName, String masterModelName, float low,
+			float high, int maxSingle, boolean runTransitivity) {
+
+		StartData retVal = new StartData();
+		retVal.jobID = jobID;
+		retVal.master = master;
+		retVal.staging = staging;
+		retVal.stageModelName = stageModelName;
+		retVal.masterModelName = masterModelName;
+		retVal.low = low;
+		retVal.high = high;
+		retVal.maxCountSingle = maxSingle;
+		retVal.runTransitivity = runTransitivity;
+
+		return retVal;
 	}
 
 	/**
 	 * This method sends a message to the StartOABA message bean.
-	 *
-	 * @param request
-	 * @param queue
-	 * @throws RemoteException
-	 * @throws NamingException
+	 * 
 	 * @throws JMSException
 	 */
-	private void sendToStartOABA(long jobID, SerialRecordSource staging,
+	protected void sendToStartOABA(long jobID, SerialRecordSource staging,
 			SerialRecordSource master, String stageModelName,
 			String masterModelName, float low, float high, int maxSingle,
-			boolean runTransitivity) throws JMSException, RemoteException,
-			CreateException, NamingException {
+			boolean runTransitivity) throws JMSException {
 
-		log.error("not yet implemented");
-//		Queue queue = EJBConfiguration.getInstance().getStartMessageQueue();
-//
-//		log.debug("Sending on queue '" + queue.getQueueName() + "'");
-//
-//		StartData data = new StartData();
-//		data.jobID = jobID;
-//		data.master = master;
-//		data.staging = staging;
-//		data.stageModelName = stageModelName;
-//		data.masterModelName = masterModelName;
-//		data.low = low;
-//		data.high = high;
-//		data.maxCountSingle = maxSingle;
-//		data.runTransitivity = runTransitivity;
-//
-//		try {
-//			EJBConfiguration.getInstance().sendMessage(queue, data);
-//		} catch (Exception ex) {
-//			log.error(ex.toString(), ex);
-//		} finally {
-//			// if (session != null) session.close ();
-//		}
-//
-//		log.debug("...finished sendToStartOABA");
+		log.debug("Sending on queue '" + queue.getQueueName() + "'");
+
+		StartData data =
+			createStartData(jobID, staging, master, stageModelName,
+					masterModelName, low, high, maxSingle, runTransitivity);
+		ObjectMessage message = null;
+		JMSProducer sender = null;
+		try {
+			message = context.createObjectMessage(data);
+			sender = context.createProducer();
+
+			log.debug("Sending on queue '" + queue.getQueueName() + "' data '"
+					+ data + "' by sender '" + sender + "'");
+			sender.send(queue, message);
+			log.debug("Sent on queue '" + queue.getQueueName() + "' data '"
+					+ data + "' by sender '" + sender + "'");
+		} catch (JMSException t) {
+			log.error("queue: '" + queue.getQueueName() + "', data: '" + data
+					+ "', sender: '" + sender + "'");
+			log.error(t.toString(), t);
+			sc.setRollbackOnly();
+		}
 	}
 
-	public void ejbCreate() throws CreateException {
-		log.error("not yet implemented");
-//		try {
-//			// 2014-04-24 rphall: Commented out unused local variable.
-//			// InitialContext ic = new InitialContext();
-//
-//			this.EJBConfiguration.getInstance() = EJBConfiguration.getInstance();
-//
-//			if (!initialized) {
-//				// ICompiler compiler = DoNothingCompiler.instance;
-//				// XmlConfigurator.embeddedInit(compiler);
-//				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
-//				initialized = true;
-//			}
-//		} catch (Exception ex) {
-//			log.error(ex.toString(), ex);
-//			throw new CreateException(ex.getMessage());
-//		}
-	} // ejbCreate()
+//	public void ejbCreate() throws CreateException {
+//		log.error("ejbCreate: not yet implemented");
+//		// try {
+//		// // 2014-04-24 rphall: Commented out unused local variable.
+//		// // InitialContext ic = new InitialContext();
+//		//
+//		// this.EJBConfiguration.getInstance() = EJBConfiguration.getInstance();
+//		//
+//		// if (!initialized) {
+//		// // ICompiler compiler = DoNothingCompiler.instance;
+//		// // XmlConfigurator.embeddedInit(compiler);
+//		// EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
+//		// initialized = true;
+//		// }
+//		// } catch (Exception ex) {
+//		// log.error(ex.toString(), ex);
+//		// throw new CreateException(ex.getMessage());
+//		// }
+//	} // ejbCreate()
 
 }
