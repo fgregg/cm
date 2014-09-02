@@ -15,8 +15,8 @@ import java.util.Properties;
 
 
 /**
- * A RecordSource that can be serialized. Implementors should define
- * a nullity constructor. All serializable record sources require at least a
+ * A RecordSource that can be serialized.
+ * All serializable record sources require at least a
  * model name to be specified to be configured before they are used.
  * See {@link #setProperties(Properties)}.
  * Extensions of this interface define additional, type-specific
