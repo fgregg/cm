@@ -32,7 +32,6 @@ import com.choicemaker.cm.io.blocking.automated.base.UnderspecifiedQueryExceptio
  */
 public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 
-//	private static Logger logger = Logger.getLogger(InMemoryAutomatedBlocker.class);
 	
 	// passed by constructor.
 	private ImmutableProbabilityModel model;

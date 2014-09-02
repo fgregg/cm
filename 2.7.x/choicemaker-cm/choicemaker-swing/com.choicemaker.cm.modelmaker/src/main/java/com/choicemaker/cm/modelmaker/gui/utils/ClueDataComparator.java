@@ -23,7 +23,6 @@ import com.choicemaker.cm.modelmaker.gui.tables.ClTableRow;
 
 public class ClueDataComparator implements Comparator {
 
-//	private static Logger logger = Logger.getLogger(ClueDataComparator.class);
 	protected int sortCol;
 	protected boolean sortAsc;
 

@@ -24,7 +24,6 @@ import com.choicemaker.cm.validation.IValidator;
  */
 public class AlwaysTrueValidator extends AbstractValidator {
 
-//	private static Logger logger = Logger.getLogger(AlwaysTrueValidator.class);
 
 	/**
 	 * Partially constructs an aggregate validator. The

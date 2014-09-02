@@ -25,7 +25,6 @@ import com.choicemaker.util.StringUtils;
  */
 public class NonEmptyStringValidator extends AbstractValidator {
 
-//	private static Logger logger = Logger.getLogger(NonEmptyStringValidator.class);
 
 	/**
 	 * Partially constructs an aggregate validator. The

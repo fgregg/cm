@@ -23,7 +23,6 @@ import java.beans.PropertyChangeSupport;
  */
 public abstract class DefaultObservableData implements ObservableData {
 
-//	private static final Logger logger = Logger.getLogger(DefaultObservableData.class);
 
 	private PropertyChangeSupport support = null;
 

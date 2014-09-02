@@ -79,7 +79,6 @@ public class HumanReviewPanel
 	private JLabel currentRecordLabel;
 	private JLabel nextInLoggerLabel;
 	private JLabel selectionSizeLabel;
-//	private static Logger logger = Logger.getLogger(HumanReviewPanel.class);
 	private static final DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 	private ModelMaker parent;
 	private RecordPairViewerPanel viewer;

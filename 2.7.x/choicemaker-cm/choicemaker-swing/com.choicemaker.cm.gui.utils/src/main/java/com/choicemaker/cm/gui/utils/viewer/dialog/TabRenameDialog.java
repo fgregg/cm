@@ -36,7 +36,6 @@ import com.choicemaker.cm.gui.utils.viewer.RecordPairViewerModel;
 public class TabRenameDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(TabRenameDialog.class);
 
 	private RecordPairViewerModel viewerModel;
 

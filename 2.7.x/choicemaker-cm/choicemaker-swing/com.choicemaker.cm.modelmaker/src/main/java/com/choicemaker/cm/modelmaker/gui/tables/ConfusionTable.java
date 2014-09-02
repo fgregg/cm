@@ -39,7 +39,6 @@ import com.choicemaker.cm.modelmaker.gui.renderers.ColorTableErrorCellRenderer;
 public class ConfusionTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(ConfusionTable.class);
 	private TestingControlPanel parent;
 	private ConfusionTableModel myModel;
 

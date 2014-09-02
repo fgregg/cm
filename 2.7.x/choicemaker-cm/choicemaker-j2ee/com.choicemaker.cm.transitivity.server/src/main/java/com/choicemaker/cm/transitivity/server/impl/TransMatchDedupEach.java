@@ -26,7 +26,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MatchDedupEa
 public class TransMatchDedupEach extends MatchDedupEach {
 
 	private static final long serialVersionUID = 1L;
-//	private static final Logger log = Logger.getLogger(TransMatchDedupEach.class);
 
 
 	protected void sendToMatchDedupOABA2 (MatchWriterData d) throws NamingException, JMSException {

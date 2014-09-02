@@ -30,7 +30,6 @@ public class FlatFileSerializableRecordSource implements ISerializableRecordSour
 
 	private static final long serialVersionUID = 1L;
 
-//	private static final Logger log = Logger.getLogger(FlatFileSerializableRecordSource.class);
 
 	private String delimitedTextDataFile;
 	private String modelName;

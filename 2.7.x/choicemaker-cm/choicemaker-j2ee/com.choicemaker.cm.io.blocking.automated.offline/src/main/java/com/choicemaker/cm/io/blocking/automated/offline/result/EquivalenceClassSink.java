@@ -27,7 +27,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
  */
 public class EquivalenceClassSink {
 
-//	private static final Logger log = Logger.getLogger(EquivalenceClassSink.class);
 
 	DataOutputStream dos;
 	FileWriter fw;

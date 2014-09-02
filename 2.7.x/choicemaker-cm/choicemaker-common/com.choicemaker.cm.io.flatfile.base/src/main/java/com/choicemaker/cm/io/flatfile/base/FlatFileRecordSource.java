@@ -28,7 +28,6 @@ import com.choicemaker.util.FileUtilities;
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileRecordSource implements RecordSource {
-//	private static Logger logger = Logger.getLogger(FlatFileRecordSource.class);
 
 	private String fileName;
 	private String name;

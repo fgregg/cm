@@ -37,7 +37,6 @@ public class AsymmetricThresholdVsAccuracyPlotPanel extends JPanel {
 
 	private static final long serialVersionUID = -1283403271414404208L;
 
-//	private static Logger logger = Logger.getLogger(AsymmetricThresholdVsAccuracyPlotPanel.class);
 	private static final String PRECISION = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.precision");
 	private static final String RECALL = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.asymm.recall");
 	private TestingControlPanel parent;

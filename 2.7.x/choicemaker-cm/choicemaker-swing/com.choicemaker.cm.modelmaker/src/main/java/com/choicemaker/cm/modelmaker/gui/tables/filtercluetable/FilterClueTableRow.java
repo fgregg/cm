@@ -26,7 +26,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class FilterClueTableRow extends ClTableRow {
-//	private static Logger logger = Logger.getLogger(FilterClueTableRow.class);
 
 	private ClueDesc _desc;
 	private FilterCondition condition;

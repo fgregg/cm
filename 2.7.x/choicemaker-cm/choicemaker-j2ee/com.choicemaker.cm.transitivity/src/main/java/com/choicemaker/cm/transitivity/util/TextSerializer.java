@@ -33,7 +33,6 @@ import com.choicemaker.cm.transitivity.core.TransitivityResult;
  */
 public class TextSerializer {
 
-//	private static final Logger log = Logger.getLogger(TextSerializer.class);
 
 	public static final int SORT_BY_ID = 1;
 	public static final int SORT_BY_HOLD_MERGE_ID = 2;

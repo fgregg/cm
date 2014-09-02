@@ -25,7 +25,6 @@ import com.choicemaker.util.StringUtils;
  */
 public class StringContainsLettersValidator extends AbstractValidator {
 
-//	private static Logger logger = Logger.getLogger(StringContainsLettersValidator.class);
 
 	/**
 	 * Partially constructs an aggregate validator. The

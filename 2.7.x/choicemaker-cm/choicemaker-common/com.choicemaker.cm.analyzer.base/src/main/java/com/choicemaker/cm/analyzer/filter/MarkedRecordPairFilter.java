@@ -22,7 +22,6 @@ import com.choicemaker.util.IntArrayList;
 
 public class MarkedRecordPairFilter implements Filter, IMarkedRecordPairFilter {
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(MarkedRecordPairFilter.class);
 	//private static IMarkedRecordPairFilter instance = null;
 	private static final FilterCondition[] ZERO_CONDITION = new FilterCondition[0];
 	private static final Limiter[] ZERO_SAMPLER = new Limiter[0];

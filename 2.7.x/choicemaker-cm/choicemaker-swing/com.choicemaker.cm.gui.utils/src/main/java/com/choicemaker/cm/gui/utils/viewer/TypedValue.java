@@ -25,7 +25,6 @@ public class TypedValue {
 	public boolean isUnique;
 	public boolean isDerived;
 
-//	private static Logger logger = Logger.getLogger(TypedValue.class);
 
 	public TypedValue(String value, boolean isValid, boolean isUnique, boolean isDerived) {
 		myValue = value;

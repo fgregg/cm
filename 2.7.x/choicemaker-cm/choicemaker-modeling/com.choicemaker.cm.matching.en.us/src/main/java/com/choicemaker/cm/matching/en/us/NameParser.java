@@ -33,7 +33,6 @@ import com.choicemaker.util.StringUtils;
  * @version   $Revision: 1.2 $ $Date: 2010/03/27 22:17:24 $
  */
 public class NameParser {
-//	private static Logger logger = Logger.getLogger(NameParser.class);
 
 	public static Collection genericFirstNames = new HashSet();
 	public static Collection childOfIndicators = new HashSet();

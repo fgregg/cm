@@ -34,7 +34,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:06:20 $
  */
 public class RecordPairViewerPanel implements RepositoryChangeListener, PropertyChangeListener {
-//	private static Logger logger = Logger.getLogger(RecordPairViewerPanel.class);
 	public static RecordPairViewerPanel instance;
 
 	private HumanReviewPanel parent;

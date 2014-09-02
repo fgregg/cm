@@ -29,7 +29,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.NullInteger;
  */
 public class ClueTableCellListener extends MouseAdapter {
 
-//	private static Logger logger = Logger.getLogger(ClueTableCellListener.class);
 	private JTable table;
 	private ModelMaker meTrainer;
 	private int numPluginColumns;

@@ -50,7 +50,6 @@ public class TestingControlPanel
 	extends JPanel
 	implements RepositoryChangeListener, PropertyChangeListener, EvaluationListener {
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(TestingControlPanel.class);
 	private ModelMaker parent;
 //	private Trainer trainer;
 

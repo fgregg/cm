@@ -26,7 +26,6 @@ import com.choicemaker.cm.core.blocking.InMemoryBlocker;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 13:47:57 $
  */
 public class CompositeInMemoryBlocker implements InMemoryBlocker {
-//	private static Logger logger = Logger.getLogger(InMemoryBlocker.class);
 
 	private InMemoryBlocker[] constituents;
 

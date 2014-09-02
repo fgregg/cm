@@ -25,7 +25,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator
  */
 public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 	
-//	private static final Logger log = Logger.getLogger(RecordIDTranslator2.class);
 
 	private IRecordIDSinkSourceFactory rFactory;
 

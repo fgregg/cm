@@ -32,7 +32,6 @@ public class XMLSerializableRecordSource implements ISerializableRecordSource {
 	
 	private static final long serialVersionUID = 1L;
 
-//	private static final Logger log = Logger.getLogger(XMLSerializableRecordSource.class);
 
 	private String xmlFile;
 	private String modelName;

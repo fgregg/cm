@@ -24,7 +24,6 @@ import javax.swing.table.TableColumn;
  * @author S. Yoakum-Stover
  */
 public class ColumnKeeper implements ActionListener {
-//	private static Logger logger = Logger.getLogger(ColumnKeeper.class);
 	private JTable table;
 	private TableColumn col;
 //	private int colTableModelIndex;

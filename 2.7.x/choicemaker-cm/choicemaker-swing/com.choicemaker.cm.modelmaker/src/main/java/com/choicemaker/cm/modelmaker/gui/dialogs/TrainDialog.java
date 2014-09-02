@@ -46,7 +46,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
  */
 public class TrainDialog extends JDialog implements Enable {
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(TrainDialog.class);
 //	private static int BASE_HEIGHT = 220;
 //	private static int MIN_WIDTH = 330;
 	private ModelMaker parent;

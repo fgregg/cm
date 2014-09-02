@@ -30,7 +30,6 @@ import com.choicemaker.util.IntArrayList;
  */
 public class RecordValue2 {
 
-//	private static final Logger log = Logger.getLogger(RecordValue2.class);
 
 	private ArrayList recordList = null;
 

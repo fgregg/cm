@@ -50,7 +50,6 @@ public class StatisticsHistogramPanel extends JPanel {
 
 	private static final long serialVersionUID = -9207566748507473389L;
 
-//	private static Logger logger = Logger.getLogger(StatisticsHistogramPanel.class);
 	private TestingControlPanel parent;
 	private HistoChartPanel histoPanel;
 	private JFreeChart histogram;

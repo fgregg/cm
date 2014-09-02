@@ -31,7 +31,6 @@ public class FilterMenu extends JMenu implements ActionListener {
 
     private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(FilterMenu.class);
 
 	// private AbstractApplication humanReview;
     private HumanReviewPanel humanReview;

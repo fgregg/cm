@@ -43,7 +43,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 public class StartDialog extends JFrame implements Enable {
 	private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(ModelBuilderDialog.class);
 
 	private JPanel content;
 	private JLabel configurationLabel;

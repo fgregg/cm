@@ -34,7 +34,6 @@ import com.choicemaker.cm.modelmaker.stats.StatPoint;
 
 public class Calculator extends JPanel {
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(Calculator.class);
 	private TestingControlPanel parent;
 	private JComboBox firstTpe;
 	private JComboBox sndTpe;

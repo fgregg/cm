@@ -34,7 +34,6 @@ import com.choicemaker.cm.gui.utils.viewer.dialog.FieldSelectorDialog;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class RecordPairFramePopupManager extends MouseAdapter {
-//	private static Logger logger = Logger.getLogger(RecordPairFramePopupManager.class);
 	private static final String EDIT_COL = "Edit Columns";
 	private static final String INSERT =
 		ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.listener.recordviewer.insert.row");

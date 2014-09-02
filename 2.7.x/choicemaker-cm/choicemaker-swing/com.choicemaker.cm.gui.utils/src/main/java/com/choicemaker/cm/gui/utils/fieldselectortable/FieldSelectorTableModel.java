@@ -34,7 +34,6 @@ public class FieldSelectorTableModel extends DefaultTableModel implements TableC
 
 	private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(FieldSelectorTableModel.class);
 
 	/**
 	 * NOTE: this is the ColumnModel for the RecordTable... The <code> FieldSelectorTable </code>

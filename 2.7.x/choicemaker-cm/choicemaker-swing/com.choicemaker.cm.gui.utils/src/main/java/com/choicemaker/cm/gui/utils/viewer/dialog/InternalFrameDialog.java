@@ -36,7 +36,6 @@ import com.choicemaker.cm.gui.utils.viewer.InternalFrameModel;
 public class InternalFrameDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(InternalFrameDialog.class);
 
 	private InternalFrameModel internalFrameModel;
 

@@ -28,7 +28,6 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
  */
 public class ClueTable extends JTable {
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(ClueTable.class);
 	private ClueTableModel myModel;
 	private ModelMaker modelMaker;
 //	private TableColumn[] columns;

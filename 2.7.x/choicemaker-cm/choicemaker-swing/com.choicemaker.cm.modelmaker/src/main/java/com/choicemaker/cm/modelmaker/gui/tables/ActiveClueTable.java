@@ -32,7 +32,6 @@ import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
  */
 public class ActiveClueTable extends JTable implements RepositoryChangeListener {
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(ActiveClueTable.class);
 	private ModelMaker modelMaker;
 	private ActiveClueTableModel myModel;
 	private MutableMarkedRecordPair markedRecordPair;

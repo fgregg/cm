@@ -48,7 +48,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 public class DbRecordSourceGui extends RecordSourceGui implements Enable {
     private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(DbRecordSourceGui.class);
 
 //    private String name;
     private JLabel sourceFileNameLabel;

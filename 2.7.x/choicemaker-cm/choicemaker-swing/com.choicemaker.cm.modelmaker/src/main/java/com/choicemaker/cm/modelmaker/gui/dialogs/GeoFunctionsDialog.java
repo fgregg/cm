@@ -52,7 +52,6 @@ import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 public class GeoFunctionsDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private static DecimalFormat df = new DecimalFormat("####0.00000");
-//	private static Logger logger = Logger.getLogger(GeoFunctionsDialog.class);
 
 //	private ModelMaker parent;
 

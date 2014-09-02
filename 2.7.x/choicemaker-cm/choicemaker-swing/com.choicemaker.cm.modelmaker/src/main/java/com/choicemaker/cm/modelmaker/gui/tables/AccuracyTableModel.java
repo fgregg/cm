@@ -19,7 +19,6 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 public class AccuracyTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(AccuracyTableModel.class);
 	private boolean isEmpty;
 	private float[][] data;
 	private float[] firstColumn;

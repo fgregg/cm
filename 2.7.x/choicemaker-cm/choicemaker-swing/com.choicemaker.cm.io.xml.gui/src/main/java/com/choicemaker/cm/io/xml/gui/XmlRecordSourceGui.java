@@ -46,7 +46,6 @@ import com.choicemaker.util.FileUtilities;
  */
 public class XmlRecordSourceGui extends RecordSourceGui implements Enable {
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(XmlRecordSourceGui.class);
 	private static String RELATIVE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.relative");
 	private static String ABSOLUTE = ChoiceMakerCoreMessages.m.formatMessage("io.common.gui.source.file.absolute");
 	private JLabel sourceFileNameLabel;

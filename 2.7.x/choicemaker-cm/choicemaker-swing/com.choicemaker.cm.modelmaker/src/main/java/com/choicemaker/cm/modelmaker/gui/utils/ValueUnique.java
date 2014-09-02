@@ -24,7 +24,6 @@ public class ValueUnique {
 	private String myValue;
 	public Color color = new Color(1f, 0f, 0f);
 
-//	private static Logger logger = Logger.getLogger(ValueUnique.class);
 
 	public ValueUnique(String value) {
 		myValue = value;

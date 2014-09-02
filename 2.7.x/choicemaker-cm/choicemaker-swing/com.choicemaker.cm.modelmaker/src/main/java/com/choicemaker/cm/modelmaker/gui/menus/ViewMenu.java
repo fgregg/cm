@@ -30,7 +30,6 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
  */
 public class ViewMenu extends JMenu {
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(ViewMenu.class);
 	private ModelMaker parent;
 	private static final String VIEW_MENU = ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.menu.view");
 

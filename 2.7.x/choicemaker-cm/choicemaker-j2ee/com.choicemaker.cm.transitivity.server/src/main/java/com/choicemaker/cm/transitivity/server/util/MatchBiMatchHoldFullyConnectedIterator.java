@@ -32,7 +32,6 @@ public class MatchBiMatchHoldFullyConnectedIterator implements Iterator {
 
 	public static final String NAME = "BCM_FCMH";
 
-//	private static final Logger log = Logger.getLogger(MatchBiMatchHoldFullyConnectedIterator.class);
 	
 	private Iterator compositeEntities;
 	

@@ -32,7 +32,6 @@ import com.choicemaker.util.FileUtilities;
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileMarkedRecordPairSource implements MarkedRecordPairSource {
-//	private static Logger logger = Logger.getLogger(FlatFileMarkedRecordPairSource.class);
 
 	private String fileName;
 	private String name;

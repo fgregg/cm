@@ -26,7 +26,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  */
 public class ComparisonTreeSource extends BaseFileSource implements IComparisonTreeSource {
 
-//	private static final Logger log = Logger.getLogger(ComparisonTreeSource.class);
 	
 	private ComparisonTreeNode nextTree = null;
 	

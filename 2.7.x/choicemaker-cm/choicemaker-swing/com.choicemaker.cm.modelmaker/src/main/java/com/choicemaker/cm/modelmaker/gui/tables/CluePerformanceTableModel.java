@@ -30,7 +30,6 @@ public class CluePerformanceTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(CluePerformanceTableModel.class);
 
 	private boolean isEmpty;
 	private CluePerformanceTableRow[] rows;

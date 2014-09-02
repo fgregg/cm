@@ -24,7 +24,6 @@ public class ValueError {
 	private String myValue;
 	public Color color = new Color(0.8f, 0f, 0f);
 
-//	private static Logger logger = Logger.getLogger(ValueError.class);
 
 	public ValueError(String value) {
 		myValue = value;

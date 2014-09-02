@@ -28,7 +28,6 @@ import com.choicemaker.cm.core.base.RecordData;
 public class RecordTableModel extends AbstractTableModel implements RepositoryChangeListener {
 	private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(RecordTableModel.class);
 
 	private Descriptor descriptor;
 	private boolean topTable;

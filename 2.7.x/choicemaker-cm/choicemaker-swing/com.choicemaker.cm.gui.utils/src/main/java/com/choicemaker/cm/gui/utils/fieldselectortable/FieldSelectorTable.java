@@ -42,7 +42,6 @@ import com.choicemaker.cm.gui.utils.viewer.RecordTableColumnModel;
 public class FieldSelectorTable extends JTable{
 
 	private static final long serialVersionUID = 1L;
-//	private static Logger logger = Logger.getLogger(FieldSelectorTable.class);
 	private static int VISIBLE_COLUMN = 2;
 
 	private TableCellRenderer visibilityHeaderRenderer;
