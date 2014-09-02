@@ -21,7 +21,7 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 
@@ -43,7 +43,7 @@ public abstract class TransitivityJobBean implements EntityBean {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Category log = Category.getInstance(TransitivityJobBean.class.getName());
+	private static Logger log = Logger.getLogger(TransitivityJobBean.class.getName());
 
 	/**
 	 * These status values are copied from

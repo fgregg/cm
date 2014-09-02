@@ -15,7 +15,7 @@ import java.util.Date;
 import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import com.choicemaker.autonumber.AutoNumberFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
@@ -39,7 +39,7 @@ public abstract class BatchJobBean implements EntityBean {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Category log = Category.getInstance(BatchJobBean.class.getName());
+	private static Logger log = Logger.getLogger(BatchJobBean.class.getName());
 
 	/**
 	 * These status values are copied from

@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.log4j.helpers.Loader;
 
 /**
@@ -29,8 +29,8 @@ import org.apache.log4j.helpers.Loader;
  */
 public class MrpsRequestConfiguration implements IMrpsRequestConfiguration {
 
-	private final static Category theLog =
-		Category.getInstance(MrpsRequestConfiguration.class);
+	private final static Logger theLog =
+		Logger.getLogger(MrpsRequestConfiguration.class);
 
 	/** The property file that defines allowed property names and default values */
 	public static final String PROPERTY_FILE =
