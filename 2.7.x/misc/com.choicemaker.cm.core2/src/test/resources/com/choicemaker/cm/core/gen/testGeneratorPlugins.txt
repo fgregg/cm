@@ -1,2 +1,0 @@
-# A list of generator plugin classes for testing
-com.choicemaker.cm.core.gen.FakeGeneratorPlugin
