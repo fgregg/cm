@@ -3,7 +3,7 @@ package com.choicemaker.fake;
 import java.net.URL;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  * A singleton implementation that uses an installable delegate to implement
@@ -76,7 +76,7 @@ public final class InstallablePluginDiscovery implements PluginDiscovery {
 				}
 			} catch (Exception x) {
 				String msg = msgPrefix + x.toString() + ": " + x.getCause();
-				logger.error(msg, x);
+				logger.severe(msg, x);
 				assert delegate == null;
 				throw new IllegalStateException(msg);
 			}
@@ -126,7 +126,7 @@ public final class InstallablePluginDiscovery implements PluginDiscovery {
 			install(instance);
 		} catch (Exception e) {
 			String msg = msgPrefix + e.toString() + ": " + e.getCause();
-			logger.error(msg, e);
+			logger.severe(msg, e);
 			throw new IllegalArgumentException(msg);
 		}
 	}

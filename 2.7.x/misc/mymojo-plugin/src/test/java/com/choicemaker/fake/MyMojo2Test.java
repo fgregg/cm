@@ -3,7 +3,7 @@ package com.choicemaker.fake;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.model.Build;
@@ -39,7 +39,7 @@ public class MyMojo2Test extends AbstractMojoTestCase {
 	public void testConfiguration() throws Exception {
 
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		logger.debug("ClassLoader: " + cl.getClass().getName());
+		logger.fine("ClassLoader: " + cl.getClass().getName());
 
 		for (String p : POMS) {
 			int index = p.indexOf(".xml");
