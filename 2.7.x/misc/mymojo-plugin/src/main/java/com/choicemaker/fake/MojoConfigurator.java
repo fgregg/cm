@@ -54,9 +54,9 @@ public class MojoConfigurator implements ChoiceMakerConfigurator {
 	 * All method parameters are ignored. Equivalent to invoking {@link #init()}
 	 * without any parameters.
 	 * @param fn may be null
-	 * @param log4jConfName may be null
+	 * @param logConfName may be null
 	 */
-	public ChoiceMakerConfiguration init(String fn, String log4jConfName,
+	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
 		return init();
 	}

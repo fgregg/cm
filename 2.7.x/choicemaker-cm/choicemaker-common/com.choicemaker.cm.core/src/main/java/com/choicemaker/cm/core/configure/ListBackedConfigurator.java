@@ -53,10 +53,10 @@ public class ListBackedConfigurator implements ChoiceMakerConfigurator {
 
 	/**
 	 * For backward compatibility with ChoiceMaker 2.3. The
-	 * <code>log4jConfName</code> parameter is ignored. Equivalent to invoking
+	 * <code>logConfName</code> parameter is ignored. Equivalent to invoking
 	 * <code>init(fn, reload, initGui)</code>.
 	 */
-	public ChoiceMakerConfiguration init(String fn, String log4jConfName,
+	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
 		return init(fn, reload, initGui);
 	}

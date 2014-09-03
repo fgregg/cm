@@ -38,7 +38,7 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 			}
 
 			public ChoiceMakerConfiguration init(String fn,
-					String log4jConfName, boolean reload, boolean initGui)
+					String logConfName, boolean reload, boolean initGui)
 					throws XmlConfException {
 				return null;
 			}
@@ -109,9 +109,9 @@ public final class InstallableConfigurator implements ChoiceMakerConfigurator {
 		return getDelegate().init();
 	}
 
-	public ChoiceMakerConfiguration init(String fn, String log4jConfName,
+	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
-		return getDelegate().init(fn, log4jConfName, reload, initGui);
+		return getDelegate().init(fn, logConfName, reload, initGui);
 	}
 
 	/** For testing only; otherwise treat as private */

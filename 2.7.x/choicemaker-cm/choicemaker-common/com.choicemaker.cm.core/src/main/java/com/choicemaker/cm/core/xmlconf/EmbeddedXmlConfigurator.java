@@ -232,7 +232,7 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 	/**
 	 * All argument are ignored
 	 */
-	public ChoiceMakerConfiguration init(String fn, String log4jConfName, boolean reload, boolean initGui) throws XmlConfException {
+	public ChoiceMakerConfiguration init(String fn, String logConfName, boolean reload, boolean initGui) throws XmlConfException {
 		return init();
 	}
 

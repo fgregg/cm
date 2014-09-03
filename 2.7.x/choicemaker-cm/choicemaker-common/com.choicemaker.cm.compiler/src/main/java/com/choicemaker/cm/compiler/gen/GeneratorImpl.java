@@ -83,7 +83,7 @@ public class GeneratorImpl implements IGenerator {
 	private static final String PROTECTED = "protected";
 
 	private String externalSourceCodePackageRoot;
-	/** log4j category */
+
 	private static Logger logger = Logger.getLogger(GeneratorImpl.class.getName());
 
 	protected class Version {

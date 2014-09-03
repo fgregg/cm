@@ -37,7 +37,7 @@ public interface ChoiceMakerConfigurator {
 
 	/**
 	 * For backward compatibility with ChoiceMaker 2.3. The
-	 * <code>log4jConfName</code> argument is ignored and may be null.
+	 * <code>logConfName</code> argument is ignored and should be null.
 	 * Equivalent to invoking:
 	 *
 	 * <pre>
@@ -46,7 +46,7 @@ public interface ChoiceMakerConfigurator {
 	 *
 	 * @param fn
 	 *            path to an XML configuration file
-	 * @param log4jConfName
+	 * @param logConfName
 	 *            ignored with a warning message
 	 * @param reload
 	 * @param initGui
@@ -54,7 +54,7 @@ public interface ChoiceMakerConfigurator {
 	 * @throws XmlConfException
 	 *             if a valid configuration can not be created and initialized
 	 */
-	ChoiceMakerConfiguration init(String fn, String log4jConfName,
+	ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException;
 
 }

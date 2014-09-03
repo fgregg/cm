@@ -495,7 +495,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 	 * @return
 	 * @throws  XmlConfException  if any error occurs.
 	 */
-	public ChoiceMakerConfiguration init(String fn, String log4jConfName,
+	public ChoiceMakerConfiguration init(String fn, String logConfName,
 			boolean reload, boolean initGui) throws XmlConfException {
 
 		initializeInstallableComponents();
@@ -514,9 +514,9 @@ public class XmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConf
 		this.classpath = initializeClassPath(getWorkingDirectory(),
 				getDocument());
 
-		// Log4jXmlConf.config(log4jConfName);
-		if (log4jConfName != null && !log4jConfName.trim().isEmpty()) {
-			logger.warning("Ignoring Log4j configuration name: " + log4jConfName);
+		// Log4jXmlConf.config(logConfName);
+		if (logConfName != null && !logConfName.trim().isEmpty()) {
+			logger.warning("Ignoring log configuration name: " + logConfName);
 
 		}
 

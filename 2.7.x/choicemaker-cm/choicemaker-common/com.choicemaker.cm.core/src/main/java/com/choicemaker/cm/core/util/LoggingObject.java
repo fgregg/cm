@@ -11,7 +11,7 @@
 package com.choicemaker.cm.core.util;
 
 /**
- * A LoggingObject is a logging message for log4j that
+ * A LoggingObject is a logging message that
  * can take parameters.
  * 
  * @author   Adam Winkel

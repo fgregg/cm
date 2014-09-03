@@ -133,13 +133,13 @@ public class ConfigurationManager {
 		assert isInitialized();
 	}
 
-	public void init(String fn, String log4jConfName, boolean reload,
+	public void init(String fn, String logConfName, boolean reload,
 			boolean initGui) throws XmlConfException {
 		if (isInitialized()) {
 			logger.warning("Already initialized");
 		}
 		ChoiceMakerConfiguration cmc = getConfigurator().init(fn,
-				log4jConfName, reload, initGui);
+				logConfName, reload, initGui);
 		getConfiguration().setDelegate(cmc);
 
 		// Postcondition
