@@ -7,3 +7,5 @@ _effective-pom*
 com.wcohen.ss2
 .project
 .settings/
+.classpath
+.settings
