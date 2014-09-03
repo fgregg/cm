@@ -76,7 +76,7 @@ public final class InstallablePluginDiscovery implements PluginDiscovery {
 				}
 			} catch (Exception x) {
 				String msg = msgPrefix + x.toString() + ": " + x.getCause();
-				logger.severe(msg, x);
+				logger.severe(msg);
 				assert delegate == null;
 				throw new IllegalStateException(msg);
 			}
@@ -126,7 +126,7 @@ public final class InstallablePluginDiscovery implements PluginDiscovery {
 			install(instance);
 		} catch (Exception e) {
 			String msg = msgPrefix + e.toString() + ": " + e.getCause();
-			logger.severe(msg, e);
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 	}
