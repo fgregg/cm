@@ -2,12 +2,13 @@
 package com.choicemaker.demo.simple_person_matching.gendata.gend.internal.Person2;
 import com.choicemaker.cm.core.*;
 import com.choicemaker.cm.core.base.*;
-import org.apache.log4j.*;import java.util.Date;
+import java.util.logging.*;
+import java.util.Date;
 import com.choicemaker.util.StringUtils;
 import com.choicemaker.cm.validation.eclipse.impl.Validators;
 import com.choicemaker.demo.simple_person_matching.gendata.gend.Person2.*;
 public class PersonImpl implements Record, Person {
-private static Logger logger = Logger.getLogger(com.choicemaker.demo.simple_person_matching.gendata.gend.internal.Person2.PersonImpl.class);
+private static Logger logger = Logger.getLogger(com.choicemaker.demo.simple_person_matching.gendata.gend.internal.Person2.PersonImpl.class.getName());
 private com.choicemaker.cm.core.DerivedSource __src;
 public DerivedSource getDerivedSource() {
 return __src;
@@ -158,7 +159,7 @@ __v_city = StringUtils.nonEmptyString(city);
 __v_state = Validators.isValid("uspsStateCodeValidator",state);
 __v_zip = Validators.isValid("exampleZipValidator",zip);
 } catch(Exception __ex) {
-logger.error("Computing validity and derived of PersonImpl", __ex);
+logger.severe("Computing validity and derived of PersonImpl" + __ex);
 }
 }
 public void resetValidityAndDerived(DerivedSource __src) {

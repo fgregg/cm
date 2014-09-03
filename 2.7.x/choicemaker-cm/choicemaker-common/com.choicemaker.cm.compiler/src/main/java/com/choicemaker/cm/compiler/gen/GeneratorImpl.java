@@ -1005,7 +1005,7 @@ public class GeneratorImpl implements IGenerator {
 			w.write("package " + getPackage() + ";" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.*;" + Constants.LINE_SEPARATOR);
 			w.write("import com.choicemaker.cm.core.base.*;" + Constants.LINE_SEPARATOR);
-			w.write("import org.apache.log4j.*;");
+			w.write("import java.util.logging.*;" + Constants.LINE_SEPARATOR);
 			w.write(getImports());
 			w.write("import " + getExternalPackage() + ".*;" + Constants.LINE_SEPARATOR);
 			w.write(
@@ -1022,7 +1022,7 @@ public class GeneratorImpl implements IGenerator {
 					+ getPackage()
 					+ "."
 					+ className
-					+ ".class);"
+					+ ".class.getName());"
 					+ Constants.LINE_SEPARATOR);
 			List fields = r.getChildren("field");
 			if (outer == null) {
@@ -1275,9 +1275,9 @@ public class GeneratorImpl implements IGenerator {
 			}
 			w.write("} catch(Exception __ex) {" + Constants.LINE_SEPARATOR);
 			w.write(
-				"logger.error(\"Computing validity and derived of "
+				"logger.severe(\"Computing validity and derived of "
 					+ className
-					+ "\", __ex);"
+					+ "\" + __ex);"
 					+ Constants.LINE_SEPARATOR);
 			w.write("}" + Constants.LINE_SEPARATOR);
 			w.write("}" + Constants.LINE_SEPARATOR);

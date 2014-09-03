@@ -11,9 +11,9 @@ import com.choicemaker.cm.matching.gen.*;
 import com.choicemaker.util.*;
 import com.choicemaker.cm.core.*;
 import com.choicemaker.cm.core.base.*;
-import org.apache.log4j.*;
+import java.util.logging.*;
 public class SimplePersonCluesClueSet implements com.choicemaker.cm.core.ClueSet {
-   private static org.apache.log4j.Logger cat = org.apache.log4j.Logger.getLogger(SimplePersonCluesClueSet.class);
+   private static java.util.logging.Logger cat = java.util.logging.Logger.getLogger(SimplePersonCluesClueSet.class.getName());
    private int __evalNum;
    private int __evalNummFirstName;
    private boolean __exprmFirstName;
@@ -438,9 +438,9 @@ public class SimplePersonCluesClueSet implements com.choicemaker.cm.core.ClueSet
    };
    public com.choicemaker.cm.core.base.ActiveClues getActiveClues(com.choicemaker.cm.core.Record qi, com.choicemaker.cm.core.Record mi, boolean[] eval) {
       __evalNum = __evalNum + 1;
-      cat.debug("PersonImpl.class.getName() == " + PersonImpl.class.getName());
-      cat.debug("PersonImpl.class.toString() == " + PersonImpl.class.toString());
-      cat.debug("PersonImpl.class.getClassLoader().toString() == " + PersonImpl.class.getClassLoader().toString());
+      cat.fine("PersonImpl.class.getName() == " + PersonImpl.class.getName());
+      cat.fine("PersonImpl.class.toString() == " + PersonImpl.class.toString());
+      cat.fine("PersonImpl.class.getClassLoader().toString() == " + PersonImpl.class.getClassLoader().toString());
       PersonImpl q = (PersonImpl)qi;
       PersonImpl m = (PersonImpl)mi;
       com.choicemaker.cm.core.base.BooleanActiveClues a = new com.choicemaker.cm.core.base.BooleanActiveClues(8);
@@ -449,265 +449,265 @@ public class SimplePersonCluesClueSet implements com.choicemaker.cm.core.ClueSet
             if (getCluemFirstName(q, m))
                {
                   a.add(0, 0);
-                  cat.debug("Clue mFirstName (0) fired.");
+                  cat.fine("Clue mFirstName (0) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mFirstName (0) exception: ", ex);
+            cat.severe("Clue mFirstName (0) exception: " + ex);
          };
       if (eval[1])
          try {
             if (getCluedFirstName(q, m))
                {
                   a.add(1, 0);
-                  cat.debug("Clue dFirstName (1) fired.");
+                  cat.fine("Clue dFirstName (1) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dFirstName (1) exception: ", ex);
+            cat.severe("Clue dFirstName (1) exception: " + ex);
          };
       if (eval[2])
          try {
             if (getCluedFirstNameOnlyInitialMatch(q, m))
                {
                   a.add(2, 0);
-                  cat.debug("Clue dFirstNameOnlyInitialMatch (2) fired.");
+                  cat.fine("Clue dFirstNameOnlyInitialMatch (2) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dFirstNameOnlyInitialMatch (2) exception: ", ex);
+            cat.severe("Clue dFirstNameOnlyInitialMatch (2) exception: " + ex);
          };
       if (eval[3])
          try {
             if (getCluemFirstNameVsInitial(q, m))
                {
                   a.add(3, 0);
-                  cat.debug("Clue mFirstNameVsInitial (3) fired.");
+                  cat.fine("Clue mFirstNameVsInitial (3) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mFirstNameVsInitial (3) exception: ", ex);
+            cat.severe("Clue mFirstNameVsInitial (3) exception: " + ex);
          };
       if (eval[4])
          try {
             if (getCluemJaroFirstName(q, m))
                {
                   a.add(4, 0);
-                  cat.debug("Clue mJaroFirstName (4) fired.");
+                  cat.fine("Clue mJaroFirstName (4) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mJaroFirstName (4) exception: ", ex);
+            cat.severe("Clue mJaroFirstName (4) exception: " + ex);
          };
       if (eval[5])
          try {
             if (getCluemEditDistanceFirstName(q, m))
                {
                   a.add(5, 0);
-                  cat.debug("Clue mEditDistanceFirstName (5) fired.");
+                  cat.fine("Clue mEditDistanceFirstName (5) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mEditDistanceFirstName (5) exception: ", ex);
+            cat.severe("Clue mEditDistanceFirstName (5) exception: " + ex);
          };
       if (eval[6])
          try {
             if (getCluemMiddleNameInitialOnly(q, m))
                {
                   a.add(6, 0);
-                  cat.debug("Clue mMiddleNameInitialOnly (6) fired.");
+                  cat.fine("Clue mMiddleNameInitialOnly (6) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mMiddleNameInitialOnly (6) exception: ", ex);
+            cat.severe("Clue mMiddleNameInitialOnly (6) exception: " + ex);
          };
       if (eval[7])
          try {
             if (getCluemMiddleName(q, m))
                {
                   a.add(7, 0);
-                  cat.debug("Clue mMiddleName (7) fired.");
+                  cat.fine("Clue mMiddleName (7) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mMiddleName (7) exception: ", ex);
+            cat.severe("Clue mMiddleName (7) exception: " + ex);
          };
       if (eval[8])
          try {
             if (getCluedMiddleName(q, m))
                {
                   a.add(8, 0);
-                  cat.debug("Clue dMiddleName (8) fired.");
+                  cat.fine("Clue dMiddleName (8) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dMiddleName (8) exception: ", ex);
+            cat.severe("Clue dMiddleName (8) exception: " + ex);
          };
       if (eval[9])
          try {
             if (getCluemLastName(q, m))
                {
                   a.add(9, 0);
-                  cat.debug("Clue mLastName (9) fired.");
+                  cat.fine("Clue mLastName (9) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mLastName (9) exception: ", ex);
+            cat.severe("Clue mLastName (9) exception: " + ex);
          };
       if (eval[10])
          try {
             if (getCluedLastName(q, m))
                {
                   a.add(10, 0);
-                  cat.debug("Clue dLastName (10) fired.");
+                  cat.fine("Clue dLastName (10) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dLastName (10) exception: ", ex);
+            cat.severe("Clue dLastName (10) exception: " + ex);
          };
       if (eval[11])
          try {
             if (getCluemJaroLastName(q, m))
                {
                   a.add(11, 0);
-                  cat.debug("Clue mJaroLastName (11) fired.");
+                  cat.fine("Clue mJaroLastName (11) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mJaroLastName (11) exception: ", ex);
+            cat.severe("Clue mJaroLastName (11) exception: " + ex);
          };
       if (eval[12])
          try {
             if (getCluemEditDistanceLastName(q, m))
                {
                   a.add(12, 0);
-                  cat.debug("Clue mEditDistanceLastName (12) fired.");
+                  cat.fine("Clue mEditDistanceLastName (12) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mEditDistanceLastName (12) exception: ", ex);
+            cat.severe("Clue mEditDistanceLastName (12) exception: " + ex);
          };
       if (eval[13])
          try {
             if (getCluemSwapFnameLname(q, m))
                {
                   a.add(13, 0);
-                  cat.debug("Clue mSwapFnameLname (13) fired.");
+                  cat.fine("Clue mSwapFnameLname (13) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mSwapFnameLname (13) exception: ", ex);
+            cat.severe("Clue mSwapFnameLname (13) exception: " + ex);
          };
       if (eval[14])
          try {
             if (getCluemSwapFnameLnameApproximate(q, m))
                {
                   a.add(14, 0);
-                  cat.debug("Clue mSwapFnameLnameApproximate (14) fired.");
+                  cat.fine("Clue mSwapFnameLnameApproximate (14) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mSwapFnameLnameApproximate (14) exception: ", ex);
+            cat.severe("Clue mSwapFnameLnameApproximate (14) exception: " + ex);
          };
       if (eval[15])
          try {
             if (getCluemStreetNumber(q, m))
                {
                   a.add(15, 0);
-                  cat.debug("Clue mStreetNumber (15) fired.");
+                  cat.fine("Clue mStreetNumber (15) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mStreetNumber (15) exception: ", ex);
+            cat.severe("Clue mStreetNumber (15) exception: " + ex);
          };
       if (eval[16])
          try {
             if (getCluedStreetNumber(q, m))
                {
                   a.add(16, 0);
-                  cat.debug("Clue dStreetNumber (16) fired.");
+                  cat.fine("Clue dStreetNumber (16) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dStreetNumber (16) exception: ", ex);
+            cat.severe("Clue dStreetNumber (16) exception: " + ex);
          };
       if (eval[17])
          try {
             if (getCluemStreetName(q, m))
                {
                   a.add(17, 0);
-                  cat.debug("Clue mStreetName (17) fired.");
+                  cat.fine("Clue mStreetName (17) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mStreetName (17) exception: ", ex);
+            cat.severe("Clue mStreetName (17) exception: " + ex);
          };
       if (eval[18])
          try {
             if (getCluedStreetName(q, m))
                {
                   a.add(18, 0);
-                  cat.debug("Clue dStreetName (18) fired.");
+                  cat.fine("Clue dStreetName (18) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dStreetName (18) exception: ", ex);
+            cat.severe("Clue dStreetName (18) exception: " + ex);
          };
       if (eval[19])
          try {
             if (getCluemApproxStreetName(q, m))
                {
                   a.add(19, 0);
-                  cat.debug("Clue mApproxStreetName (19) fired.");
+                  cat.fine("Clue mApproxStreetName (19) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mApproxStreetName (19) exception: ", ex);
+            cat.severe("Clue mApproxStreetName (19) exception: " + ex);
          };
       if (eval[20])
          try {
             if (getCluemApartmentNumber(q, m))
                {
                   a.add(20, 0);
-                  cat.debug("Clue mApartmentNumber (20) fired.");
+                  cat.fine("Clue mApartmentNumber (20) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mApartmentNumber (20) exception: ", ex);
+            cat.severe("Clue mApartmentNumber (20) exception: " + ex);
          };
       if (eval[21])
          try {
             if (getCluedApartmentNumber(q, m))
                {
                   a.add(21, 0);
-                  cat.debug("Clue dApartmentNumber (21) fired.");
+                  cat.fine("Clue dApartmentNumber (21) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dApartmentNumber (21) exception: ", ex);
+            cat.severe("Clue dApartmentNumber (21) exception: " + ex);
          };
       if (eval[22])
          try {
             if (getCluemstate(q, m))
                {
                   a.add(22, 0);
-                  cat.debug("Clue mstate (22) fired.");
+                  cat.fine("Clue mstate (22) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mstate (22) exception: ", ex);
+            cat.severe("Clue mstate (22) exception: " + ex);
          };
       if (eval[23])
          try {
             if (getCluedstate(q, m))
                {
                   a.add(23, 0);
-                  cat.debug("Clue dstate (23) fired.");
+                  cat.fine("Clue dstate (23) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dstate (23) exception: ", ex);
+            cat.severe("Clue dstate (23) exception: " + ex);
          };
       if (eval[24])
          try {
             if (getCluemSsn(q, m))
                {
                   a.add(24, 0);
-                  cat.debug("Clue mSsn (24) fired.");
+                  cat.fine("Clue mSsn (24) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mSsn (24) exception: ", ex);
+            cat.severe("Clue mSsn (24) exception: " + ex);
          };
       if (eval[25])
          try {
             if (getCluedSsn(q, m))
                {
                   a.add(25, 0);
-                  cat.debug("Clue dSsn (25) fired.");
+                  cat.fine("Clue dSsn (25) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dSsn (25) exception: ", ex);
+            cat.severe("Clue dSsn (25) exception: " + ex);
          };
       try {
          editDistanceSSN = EditDistance2.editDistance2(q.ssn, m.ssn, 3);
       } catch (java.lang.Exception ex) {
-         cat.error("Expression editDistanceSSN exception: ", ex);
+         cat.severe("Expression editDistanceSSN exception: " + ex);
       };
       mApproxSsn[0] = -1;
       __tmApproxSsn: for (int i0 = 0, clueNum = 0; i0 < __mApproxSsn__idx__distance.length; i0 = i0 + 1, clueNum = clueNum + 1)
@@ -717,74 +717,74 @@ public class SimplePersonCluesClueSet implements com.choicemaker.cm.core.ClueSet
                   {
                      a.add(26 + clueNum, 0);
                      if (cat.isDebugEnabled())
-                        cat.debug(("Clue mApproxSsn" + (" (" + ((26 + clueNum) + ")"))) + " fired");
+                        cat.fine(("Clue mApproxSsn" + (" (" + ((26 + clueNum) + ")"))) + " fired");
                      {
                         mApproxSsn[0] = i0;
                      };
                      break __tmApproxSsn;
                   };
             } catch (java.lang.Exception ex) {
-               cat.error(("Clue mApproxSsn" + (" (" + ((26 + clueNum) + ")"))) + " exception: ", ex);
+               cat.severe(("Clue mApproxSsn" + (" (" + ((26 + clueNum) + ")"))) + " exception: " + ex);
             };
       if (eval[29])
          try {
             if (getCluemCity(q, m))
                {
                   a.add(29, 0);
-                  cat.debug("Clue mCity (29) fired.");
+                  cat.fine("Clue mCity (29) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mCity (29) exception: ", ex);
+            cat.severe("Clue mCity (29) exception: " + ex);
          };
       if (eval[30])
          try {
             if (getCluedCity(q, m))
                {
                   a.add(30, 0);
-                  cat.debug("Clue dCity (30) fired.");
+                  cat.fine("Clue dCity (30) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dCity (30) exception: ", ex);
+            cat.severe("Clue dCity (30) exception: " + ex);
          };
       if (eval[31])
          try {
             if (getCluemJaroCity(q, m))
                {
                   a.add(31, 0);
-                  cat.debug("Clue mJaroCity (31) fired.");
+                  cat.fine("Clue mJaroCity (31) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mJaroCity (31) exception: ", ex);
+            cat.severe("Clue mJaroCity (31) exception: " + ex);
          };
       if (eval[32])
          try {
             if (getCluemZip(q, m))
                {
                   a.add(32, 0);
-                  cat.debug("Clue mZip (32) fired.");
+                  cat.fine("Clue mZip (32) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mZip (32) exception: ", ex);
+            cat.severe("Clue mZip (32) exception: " + ex);
          };
       if (eval[33])
          try {
             if (getCluedZip(q, m))
                {
                   a.add(33, 0);
-                  cat.debug("Clue dZip (33) fired.");
+                  cat.fine("Clue dZip (33) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue dZip (33) exception: ", ex);
+            cat.severe("Clue dZip (33) exception: " + ex);
          };
       if (eval[34])
          try {
             if (getCluemApproxZip(q, m))
                {
                   a.add(34, 0);
-                  cat.debug("Clue mApproxZip (34) fired.");
+                  cat.fine("Clue mApproxZip (34) fired.");
                };
          } catch (java.lang.Exception ex) {
-            cat.error("Clue mApproxZip (34) exception: ", ex);
+            cat.severe("Clue mApproxZip (34) exception: " + ex);
          };
       return a;
    };

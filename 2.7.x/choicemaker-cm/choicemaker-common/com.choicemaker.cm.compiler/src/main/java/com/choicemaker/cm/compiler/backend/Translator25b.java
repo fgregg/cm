@@ -223,7 +223,10 @@ public class Translator25b extends Translator25 implements TargetTags, Modifiers
 			clueDesc.append(new New(t.pos, clue_desc_ident(t.pos), cdArgs));
 			++numClues[compToDecision(t.decision).toInt()];
 		}
-		Tree[] cArgs = { clueNameNumException, ex_ident(t.pos) };
+		// Tree[] cArgs = { clueNameNumException, ex_ident(t.pos) };
+		Tree clueNameNumException2 =
+				new Binop(Location.NOPOS, PLUS, clueNameNumException, ex_ident(t.pos));
+		Tree[] cArgs = { clueNameNumException2 };
 		Catch[] sCatch = { new Catch(ex_var_decl(t.pos), new Apply(t.pos, cat_error(t.pos), cArgs))};
 		vars.add(Var.create(t));
 		t.expr.apply(this);

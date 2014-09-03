@@ -283,11 +283,11 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	}
     
 	protected Tree cat_error(int pos) {
-		return new Select(pos, cat_ident(pos), "error");
+		return new Select(pos, cat_ident(pos), "severe");
 	}
     
 	protected Tree cat_debug(int pos) {
-		return new Select(pos, cat_ident(pos), "debug");
+		return new Select(pos, cat_ident(pos), "fine");
 	}
     
 	protected Tree a_add(int pos) {
@@ -345,7 +345,8 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 	protected static final Tree[] EMPTY_TREE_ARR = {};
     
 	protected Tree cat_debug_enabled(int pos) {
-		return new Apply(pos, new Select(pos, cat_ident(pos), "isDebugEnabled"), EMPTY_TREE_ARR);
+		Tree[] level = { new Ident(pos, "java.util.logging.Level.FINE") };
+		return new Apply(pos, new Select(pos, cat_ident(pos), "isLoggable"), level );
 	}
     
 	protected Tree true_lit(int pos) {
@@ -434,7 +435,7 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		}
 		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "com.choicemaker.cm.core"), true));
 		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "com.choicemaker.cm.core.base"), true));
-		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "org.apache.log4j"), true));
+		target.append(new ImportDecl(Location.NOPOS, qualid(Location.NOPOS, "java.util.logging"), true));
 		createAuxiliaryMembersBegin(t);
 		clueBody = new TreeList();
 		createClueBodyHeader(t.body.length);
@@ -539,14 +540,14 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 			new VarDecl(
 				t.pos,
 				Modifiers.PRIVATE + Modifiers.STATIC,
-				qualid(t.pos, "org.apache.log4j.Logger"),
+				qualid(t.pos, "java.util.logging.Logger"),
 				"cat",
 				new Apply(t.pos,
-				          qualid(Location.NOPOS, "org.apache.log4j.Logger.getLogger"),
+				          qualid(Location.NOPOS, "java.util.logging.Logger.getLogger"),
 				          new Tree[]{
 				          	  // This is a hack; I currently don't see a way to avoid it without
 				          	  // generating a new method:
-				          	  new Ident(t.pos, t.name + "ClueSet.class")
+				          	  new Ident(t.pos, t.name + "ClueSet.class.getName()")
 				              //new Apply(t.pos,
 				              //          qualid(t.pos, "java.lang.Class.forName"),
 				              //          new Tree[]{new Literal(t.pos, Tags.STRING,  t.name + "ClueSet")})
@@ -771,7 +772,10 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 			clueDesc.append(new New(t.pos, clue_desc_ident(t.pos), cdArgs));
 			++numClues[compToDecision(t.decision).toInt()];
 		}
-		Tree[] cArgs = { clueNameNumException, ex_ident(t.pos) };
+		// Tree[] cArgs = { clueNameNumException, ex_ident(t.pos) };
+		Tree clueNameNumException2 =
+				new Binop(Location.NOPOS, PLUS, clueNameNumException, ex_ident(t.pos));
+		Tree[] cArgs = { clueNameNumException2 };
 		Catch[] sCatch = { new Catch(ex_var_decl(t.pos), new Apply(t.pos, cat_error(t.pos), cArgs))};
 		vars.add(Var.create(t));
 		t.expr.apply(this);
@@ -1166,7 +1170,10 @@ public class Translator25 extends TreeGen implements TargetTags, Modifiers, ITra
 		if ((t.modifiers & Modifiers.FINAL) != 0) {
 			Tree ass = new Assign(new Ident(t.pos, t.name), t.initializer);
 			Tree clueNameNumException = new Literal(t.pos, STRING, "Expression " + t.name + " exception: ");
-			Tree[] cArgs = { clueNameNumException, ex_ident(t.pos) };
+			// Tree[] cArgs = { clueNameNumException, ex_ident(t.pos) };
+			Tree clueNameNumException2 =
+					new Binop(Location.NOPOS, PLUS, clueNameNumException, ex_ident(t.pos));
+			Tree[] cArgs = { clueNameNumException2 };
 			Catch[] cat = { new Catch(ex_var_decl(t.pos), new Apply(t.pos, cat_error(t.pos), cArgs))};
 			clueBody.append(new Try(ass, cat));
 		}
