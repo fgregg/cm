@@ -36,6 +36,7 @@ import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.core.ModelAttributeNames;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.ProbabilityModel;
@@ -59,36 +60,36 @@ public class ProbabilityModelsXmlConf {
 	public static void saveModel(IProbabilityModel model)
 		throws XmlConfException {
 		Element m = new Element("ProbabilityModel");
-		//m.setAttribute("clueFileName", model.getClueFileName());
-		m.setAttribute("clueFileName", model.getClueFilePath());
+		//m.setAttribute(ModelAttributeNames.AN_CLUE_FILE_NAME, model.getClueFileName());
+		m.setAttribute(ModelAttributeNames.AN_CLUE_FILE_NAME, model.getClueFilePath());
 		String ts = model.getTrainingSource();
-		m.setAttribute("trainingSource", ts == null ? "" : ts);
+		m.setAttribute(ModelAttributeNames.AN_TRAINING_SOURCE, ts == null ? "" : ts);
 		m.setAttribute(
-			"trainedWithHolds",
+			ModelAttributeNames.AN_TRAINED_WITH_HOLDS,
 			String.valueOf(model.isTrainedWithHolds()));
 		Date lt = model.getLastTrainingDate();
 		m.setAttribute(
-			"lastTrainingDate",
+			ModelAttributeNames.AN_LAST_TRAINING_DATE,
 			lt == null ? "" : String.valueOf(lt.getTime()));
 		m.setAttribute(
-			"firingThreshold",
+			ModelAttributeNames.AN_FIRING_THRESHOLD,
 			String.valueOf(model.getFiringThreshold()));
 		String userName = model.getUserName();
 		if (userName == null)
 			userName = "";
-		m.setAttribute("userName", userName);
+		m.setAttribute(ModelAttributeNames.AN_USER_NAME, userName);
 		m.setAttribute(
-			"enableAllCluesBeforeTraining",
+			ModelAttributeNames.AN_ENABLE_ALL_CLUES_BEFORE_TRAINING,
 			String.valueOf(model.isEnableAllCluesBeforeTraining()));
 		m.setAttribute(
-			"enableAllRulesBeforeTraining",
+			ModelAttributeNames.AN_ENABLE_ALL_RULES_BEFORE_TRAINING,
 			String.valueOf(model.isEnableAllRulesBeforeTraining()));
 		Accessor acc = model.getAccessor();
 		// AJW 1/8/04: the actual accessor class is a dynamic proxy...
-		//m.setAttribute("accessorClass", acc.getClass().getName());
-		m.setAttribute("accessorClass", model.getAccessorClassName());
-		m.setAttribute("useAnt", String.valueOf(model.isUseAnt()));
-		m.setAttribute("antCommand", model.getAntCommand());
+		//m.setAttribute(ModelAttributeNames.AN_ACCESSOR_CLASS, acc.getClass().getName());
+		m.setAttribute(ModelAttributeNames.AN_ACCESSOR_CLASS, model.getAccessorClassName());
+		m.setAttribute(ModelAttributeNames.AN_USE_ANT, String.valueOf(model.isUseAnt()));
+		m.setAttribute(ModelAttributeNames.AN_ANT_COMMAND, model.getAntCommand());
 		MlModelConf mlc = model.getMachineLearner().getModelConf();
 		Element mle = new Element("machineLearner");
 		mle.setAttribute("class", mlc.getExtensionPointId());
@@ -169,30 +170,30 @@ public class ProbabilityModelsXmlConf {
 			throw new XmlConfException("Internal error.", ex);
 		}
 		Element m = document.getRootElement();
-		String clueFileName = m.getAttributeValue("clueFileName");
-		String trainingSource = m.getAttributeValue("trainingSource");
+		String clueFileName = m.getAttributeValue(ModelAttributeNames.AN_CLUE_FILE_NAME);
+		String trainingSource = m.getAttributeValue(ModelAttributeNames.AN_TRAINING_SOURCE);
 		if (trainingSource == null)
 			trainingSource = "";
-		String ltd = m.getAttributeValue("lastTrainingDate");
+		String ltd = m.getAttributeValue(ModelAttributeNames.AN_LAST_TRAINING_DATE);
 		boolean trainedWithHolds =
-			"true".equals(m.getAttributeValue("trainedWithHolds"));
+			"true".equals(m.getAttributeValue(ModelAttributeNames.AN_TRAINED_WITH_HOLDS));
 		Date lastTrainingDate =
 			ltd == null
 				|| ltd.length() == 0 ? null : new Date(Long.parseLong(ltd));
-		String ft = m.getAttributeValue("firingThreshold");
+		String ft = m.getAttributeValue(ModelAttributeNames.AN_FIRING_THRESHOLD);
 		int firingThreshold = 3;
 		if (ft != null)
 			firingThreshold = Integer.parseInt(ft);
 		boolean enableAllCluesBeforeTraining =
-			"true".equals(m.getAttributeValue("enableAllCluesBeforeTraining"));
+			"true".equals(m.getAttributeValue(ModelAttributeNames.AN_ENABLE_ALL_CLUES_BEFORE_TRAINING));
 		boolean enableAllRulesBeforeTraining =
-			"true".equals(m.getAttributeValue("enableAllRulesBeforeTraining"));
-		String userName = m.getAttributeValue("userName");
-		boolean useAnt = "true".equals(m.getAttributeValue("useAnt"));
-		String antCommand = m.getAttributeValue("antCommand");
+			"true".equals(m.getAttributeValue(ModelAttributeNames.AN_ENABLE_ALL_RULES_BEFORE_TRAINING));
+		String userName = m.getAttributeValue(ModelAttributeNames.AN_USER_NAME);
+		boolean useAnt = "true".equals(m.getAttributeValue(ModelAttributeNames.AN_USE_ANT));
+		String antCommand = m.getAttributeValue(ModelAttributeNames.AN_ANT_COMMAND);
 		if (antCommand == null)
 			antCommand = "";
-		String accessorName = m.getAttributeValue("accessorClass");
+		String accessorName = m.getAttributeValue(ModelAttributeNames.AN_ACCESSOR_CLASS);
 		Accessor accessor = null;
 
 		ClassLoader classLoader = customClassLoader;

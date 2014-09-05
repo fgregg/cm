@@ -17,6 +17,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
+import com.choicemaker.cm.core.ModelAttributeNames;
 import com.choicemaker.cm.core.WellKnownPropertyValues;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
@@ -249,7 +250,7 @@ public class MyMojo2 extends AbstractMojo {
 			throw new CompilerException("Internal error.", ex);
 		}
 		Element m = document.getRootElement();
-		String clueFileName = m.getAttributeValue("clueFileName");
+		String clueFileName = m.getAttributeValue(ModelAttributeNames.AN_CLUE_FILE_NAME);
 		getLog().debug("Clues: " + clueFileName);
 
 		// Set up the compilation arguments
