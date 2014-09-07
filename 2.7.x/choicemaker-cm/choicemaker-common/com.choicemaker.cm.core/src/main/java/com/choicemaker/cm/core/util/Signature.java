@@ -18,6 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -56,35 +57,33 @@ public class Signature {
 
 	private static final Logger log = Logger.getLogger(Signature.class
 			.getName());
-	
+
 	public static String calculateClueSetSignature(ClueSet cs) {
 		Precondition.assertNonNullArgument("null ClueSet", cs);
 		String retVal = Signature.calculateSignature(cs.getClass());
 		return retVal;
 	}
 
-	public static String calculateEvaulatorSignature(Evaluator e) {
-		Precondition.assertNonNullArgument("null evaluator", e);
-		String retVal = Signature.calculateSignature(e.getClass());
-		return retVal;
-	}
-
 	public static String calculateModelSignature(ImmutableProbabilityModel ipm) {
 		Precondition.assertNonNullArgument("null model", ipm);
 
-		String s1 = calculateEvaulatorSignature(ipm.getEvaluator());
-		String s2 = calculateClueSetSignature(ipm.getClueSet());
-		String s3 =
-			calculateRecordLayoutSignature(ipm.getAccessor().getDescriptor());
-		String retVal = calculateModelSignature(s1, s2, s3);
+		Evaluator e = ipm.getEvaluator();
+		String s1 = e == null ? "" : e.getSignature();
+		ClueSet cs = ipm.getClueSet();
+		String s2 = cs == null ? "" : calculateClueSetSignature(cs);
+		Accessor a = ipm.getAccessor();
+		Descriptor d = a == null ? null : a.getDescriptor();
+		String s3 = d == null ? null :
+			calculateRecordLayoutSignature(d);
+		String retVal = calculateSignature(s1, s2, s3);
 		return retVal;
 	}
 
-	public static String calculateModelSignature(String evaluatorSignature,
+	public static String calculateSignature(String evaluatorSignature,
 			String cluesetSignature, String recordLayoutSignature) {
 		Precondition.assertNonEmptyString(evaluatorSignature);
-		Precondition.assertNonEmptyString(evaluatorSignature);
-		Precondition.assertNonEmptyString(evaluatorSignature);
+		Precondition.assertNonEmptyString(cluesetSignature);
+		Precondition.assertNonEmptyString(recordLayoutSignature);
 
 		String s =
 			evaluatorSignature + cluesetSignature + recordLayoutSignature;
@@ -148,12 +147,26 @@ public class Signature {
 			byte[] sig_bytes = getMessageDigest().digest(toDigest);
 			retVal = Base64.encodeBytes(sig_bytes, false);
 		} catch (UnsupportedEncodingException x) {
-			String msg =
-				"default hash algorithm is not available: " + x.getMessage();
-			log.severe(msg + x);
+			String msg = x.getMessage();
+			log.severe(msg);
 			throw new IllegalStateException(msg);
 		}
 
+		return retVal;
+	}
+
+	public static String calculateSignature(float f) {
+		int v = Float.floatToIntBits(f);
+		return calculateSignature(v);
+	}
+
+	public static String calculateSignature(int v) {
+		byte[] toDigest = new byte[4];
+		for (int i = 0; i < 4; i++) {
+			toDigest[i] = (byte) (v >> (i * 4));
+		}
+		byte[] sig_bytes = getMessageDigest().digest(toDigest);
+		String retVal = Base64.encodeBytes(sig_bytes, false);
 		return retVal;
 	}
 

@@ -13,7 +13,7 @@ package com.choicemaker.cm.core;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.Map;
 
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.report.Report;
@@ -23,100 +23,124 @@ import com.choicemaker.cm.core.report.Report;
  * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $
  */
 public interface ImmutableProbabilityModel {
-	public static final String CLUES_TO_EVALUATE = "cluesToEvaluate";
 
-	public static final String MACHINE_LEARNER = "machineLearner";
+	String CLUES_TO_EVALUATE = "cluesToEvaluate";
 
-	public static final String MACHINE_LEARNER_PROPERTY =
-		"machineLearnerProperty";
+	String MACHINE_LEARNER = "machineLearner";
 
-	public static final String NAME = "name";
+	String MACHINE_LEARNER_PROPERTY = "machineLearnerProperty";
 
-	public Hashtable properties();
+	String NAME = "name";
 
 	/**
 	 * Returns the number of active clues in this <code>ClueSet</code>.
 	 *
-	 * @return  The number of active clues in this <code>ProbabilityModel</code>.
+	 * @return The number of active clues in this <code>ProbabilityModel</code>.
 	 */
-	public abstract int activeSize();
+	int activeSize();
 
 	/**
 	 * Returns the number of clues predicting <code>Decision<code>
 	 * <code>d</code> in this <code>ProbabilityModel</code>.
 	 *
-	 * @return  The number of clues predicting <code>Decision</code>
-	 *            <code>d</code> in this <code>ProbabilityModel</code>.
+	 * @return The number of clues predicting <code>Decision</code>
+	 *         <code>d</code> in this <code>ProbabilityModel</code>.
 	 */
-	public abstract int activeSize(Decision d);
+	int activeSize(Decision d);
 
-	public abstract void addPropertyChangeListener(PropertyChangeListener l);
+	void addPropertyChangeListener(PropertyChangeListener l);
 
-	public abstract boolean canEvaluate();
+	boolean canEvaluate();
 
-	public abstract void changedCluesToEvaluate();
+	void changedCluesToEvaluate();
 
 	/**
 	 * Returns the translator accessors.
 	 *
-	 * @return  The translator accessors.
+	 * @return The translator accessors.
 	 */
-	public abstract Accessor getAccessor();
+	Accessor getAccessor();
 
 	/**
 	 * Returns the name of the Accessor class.
 	 * 
-	 * Note: this is not the same as getAccessor().getClass().getName() 
-	 * because getAccessor() returns a dynamic proxy, so the class name
-	 * is something like $Proxy0.
+	 * Note: this is not the same as getAccessor().getClass().getName() because
+	 * getAccessor() returns a dynamic proxy, so the class name is something
+	 * like $Proxy0.
 	 * 
 	 * @return The name of the accessor class.
 	 */
-	public abstract String getAccessorClassName();
+	String getAccessorClassName();
 
 	/**
-	 * Get the value of antCommand.
-	 * @return value of antCommand.
-	 */
-	public abstract String getAntCommand();
-
-	public abstract String getClueFilePath();
-
-//	public abstract String getClueSetName();
-
-	/**
-	 * Returns an instance of the clue set.
-	 *
-	 * @return   An instance of the clue set.
-	 */
-	public abstract ClueSet getClueSet();
-
-	/**
-	 * Returns the list of clues to evaluate.
-	 *
-	 * @return  The list of clues to evaluate.
-	 */
-	public abstract boolean[] getCluesToEvaluate();
-
-	public abstract String getClueText(int clueNum) throws IOException;
-
-	public abstract int getDecisionDomainSize();
-
-	public abstract Evaluator getEvaluator();
-
-	/**
-	 * Returns the path to the probability model weights file (*.model).
+	 * Get the ant command
 	 * 
-	 * @return The path to the *.model file
+	 * @deprecated
 	 */
-	public abstract String getModelFilePath();
+	String getAntCommand();
 
 	/**
-	 * Returns the name of the probability model.
-	 *
-	 * @return   The name of the probability model.
+	 * Returns the file path of the ClueMaker file that defines the ClueSet of
+	 * this model. In future versions of ChoiceMaker, models may not be
+	 * associated with schema ClueMaker files, if and when other languages
+	 * besides ClueMaker are used to define ClueSets.
 	 */
-	public abstract String getModelName();
+	String getClueFilePath();
+
+	/** Returns the clue set instance used by this model */
+	ClueSet getClueSet();
+
+	/**
+	 * Returns the simple name of the ClueSet, as defined in the ClueMaker file.
+	 * <p>
+	 * Currently, the clue set name is the same as the base file name obtained
+	 * from the {@link #getClueFilePath() clue-file path}, minus any extension.
+	 * So, for example, the file <code>MyModels/MyClueSet.clues</code> currently
+	 * corresponds to the clue set named <code>MyClueSet</code>. However, this
+	 * correspondence is a convention enforced by the ClueMaker language, and it
+	 * may not be enforced in future versions of ChoiceMaker, if and when other
+	 * languages besides ClueMaker are used to define ClueSets.
+	 * 
+	 * @return
+	 */
+	String getClueSetName();
+
+	/**
+	 * Returns the signature of the clue set. The signature should be a SHA1 or
+	 * similar hash calculated from the clues and rules used by the model,
+	 * including their order and logic, but excluding their weights. If two
+	 * models have the same clue-set signature, then they use the same clues to
+	 * compare entities, although the clue weights may be different.
+	 * 
+	 * @see #getSchemaSignature()
+	 * @see #getEvaluatorSignature()
+	 */
+	String getClueSetSignature();
+
+	/** Returns a list of indices of the clues to evaluate */
+	boolean[] getCluesToEvaluate();
+
+	String getClueText(int clueNum) throws IOException;
+
+	int getDecisionDomainSize();
+
+	// NOT YET DEFINED (as of version 2.7.1)
+	// /**
+	// * Returns the name of the interface representing the entities matched by
+	// * this model.
+	// */
+	// String getEntityInterfaceName();
+
+	Evaluator getEvaluator();
+
+	/**
+	 * Returns the signature of the evaluator used by this model.
+	 * 
+	 * @see #getSchemaSignature()
+	 * @see #getClueSetSignature()
+	 * @see Evaluator#getSignature()
+	 */
+	String getEvaluatorSignature();
 
 	/**
 	 * Returns the value of firingThreshold. The firing threshold is the number
@@ -125,59 +149,93 @@ public interface ImmutableProbabilityModel {
 	 * 
 	 * @return a positive value
 	 */
-	public abstract int getFiringThreshold();
+	int getFiringThreshold();
+
+	/** Get the last training date */
+	Date getLastTrainingDate();
+
+	MachineLearner getMachineLearner();
+
+	/** Returns the path to the probability model weights file (*.model) */
+	String getModelFilePath();
 
 	/**
-	 * Get the value of lastTrainingDate.
-	 * @return value of lastTrainingDate.
+	 * Returns the configuration name of a probability model, as registered with
+	 * a {@link IProbabilityModelManager}. If a model configuration hasn't been
+	 * registered, then the model name is simply the base name of the
+	 * {@link #getModelFilePath() model file path} without any extension; for
+	 * example, the name of an unregistered model loaded from the path
+	 * <code>myModels/MyModel.model</code> would be <code>MyModel</code>.
+	 *
+	 * @return The name of the probability model.
 	 */
-	public abstract Date getLastTrainingDate();
-
-	public abstract MachineLearner getMachineLearner();
-
-	public abstract boolean[] getTrainCluesToEvaluate();
+	String getModelName();
 
 	/**
-	 * Get the value of trainingSource.
-	 * @return value of trainingSource.
+	 * Returns the signature for this model. The signature should be a SHA1 or
+	 * similar hash calculated the signatures of the schema, clue set and
+	 * machine learning used by this model.
+	 * 
+	 * @see #getSchemaSignature()
+	 * @see #getClueSetSignature()
+	 * @see #getEvaluatorSignature()
+	 * @see com.choicemaker.cm.core.util.Signature#calculateSignature(String,
+	 *      String, String)
 	 */
-	public abstract String getTrainingSource();
+	String getModelSignature();
 
 	/**
-	 * Get the value of userName.
-	 * @return value of userName.
+	 * Returns the name of the schema that defines the layout of entity records.
+	 * Schema names are an artifact required by the ClueMaker language. In
+	 * future versions of ChoiceMaker, models may not be associated with schema
+	 * names, if and when other languages besides ClueMaker are used to define
+	 * ClueSets.
 	 */
-	public abstract String getUserName();
+	String getSchemaName();
 
 	/**
-	 * Get the value of enableAllCluesBeforeTraining.
-	 * @return value of enableAllCluesBeforeTraining.
+	 * Returns the signature of the record schema used by the model. The
+	 * signature should be a SHA1 or similar hash that reflects the tree of
+	 * interfaces that define the type entity matched by the model. If two
+	 * models have the same schema signature, then they apply to the same type
+	 * of entity, although they may use different clues and weights to compute
+	 * match probabilities.
 	 */
-	public abstract boolean isEnableAllCluesBeforeTraining();
+	String getSchemaSignature();
+
+	boolean[] getTrainCluesToEvaluate();
+
+	/** Get the name of training source */
+	String getTrainingSource();
+
+	/** Get the name of the account used to train the model */
+	String getUserName();
+
+	/** Check whether to enable all clues before training. */
+	boolean isEnableAllCluesBeforeTraining();
+
+	/** Check whether to enable all rules before training. */
+	boolean isEnableAllRulesBeforeTraining();
+
+	boolean isTrainedWithHolds();
 
 	/**
-	 * Get the value of enableAllRulesBeforeTraining.
-	 * @return value of enableAllRulesBeforeTraining.
+	 * Check whether to use the value of Ant
+	 * 
+	 * @deprecated
 	 */
-	public abstract boolean isEnableAllRulesBeforeTraining();
+	boolean isUseAnt();
 
-	public abstract boolean isTrainedWithHolds();
+	void machineLearnerChanged(Object oldValue, Object newValue);
 
-	/**
-	 * Get the value of useAnt.
-	 * @return value of useAnt.
-	 */
-	public abstract boolean isUseAnt();
+	boolean needsRecompilation();
 
-	public abstract void machineLearnerChanged(
-		Object oldValue,
-		Object newValue);
+	int numTrainCluesToEvaluate();
 
-	public abstract boolean needsRecompilation();
+	Map properties();
 
-	public abstract int numTrainCluesToEvaluate();
+	void removePropertyChangeListener(PropertyChangeListener l);
 
-	public abstract void removePropertyChangeListener(PropertyChangeListener l);
+	void report(Report report) throws IOException;
 
-	public abstract void report(Report report) throws IOException;
 }

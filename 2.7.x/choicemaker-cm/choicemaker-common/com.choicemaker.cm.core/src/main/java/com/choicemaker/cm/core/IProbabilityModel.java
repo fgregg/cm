@@ -59,7 +59,12 @@ public interface IProbabilityModel extends AccessProvider, ImmutableProbabilityM
 	 *            The new name.
 	 */
 	public abstract void setModelFilePath(String fileName);
-	public abstract void setModelName(String name);
+
+	// A model name should be set by a IProbabilityModelManager using
+	// a non-interface method of a concrete ProbabilityModel class that
+	// implements this interface
+	// public abstract void setModelName(String name);
+
 	/**
 	 * Set the value of firingThreshold.
 	 * @param v  Value to assign to firingThreshold.
@@ -70,9 +75,18 @@ public interface IProbabilityModel extends AccessProvider, ImmutableProbabilityM
 	 * @param v  Value to assign to lastTrainingDate.
 	 */
 	public abstract void setLastTrainingDate(Date v);
+
 	public abstract void setMachineLearner(MachineLearner ml);
+	
 	public abstract void setClueFilePath(String fn);
+	
+	// A ClueSet name should be set by a IProbabilityModelManager using
+	// a non-interface method of a concrete ProbabilityModel class that
+	// implements this interface
+	// public abstract void setClueSetName(String name);
+
 	public abstract void setTrainedWithHolds(boolean b);
+
 	/**
 	 * Set the value of trainingSource.
 	 * @param v  Value to assign to trainingSource.
@@ -88,4 +102,5 @@ public interface IProbabilityModel extends AccessProvider, ImmutableProbabilityM
 	 * @param v  Value to assign to userName.
 	 */
 	public abstract void setUserName(String v);
+
 }

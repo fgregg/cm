@@ -223,4 +223,6 @@ public abstract class Evaluator {
 		return m.decision != d;
 	}
 
+	public abstract String getSignature();
+
 }

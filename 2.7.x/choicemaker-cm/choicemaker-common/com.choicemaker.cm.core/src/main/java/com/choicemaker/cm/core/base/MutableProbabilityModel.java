@@ -19,6 +19,7 @@ import java.lang.reflect.Proxy;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.swing.event.SwingPropertyChangeSupport;
 
@@ -32,12 +33,14 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ProbabilityModelSpecification;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.cm.core.report.Reporter;
 import com.choicemaker.cm.core.util.NameUtils;
+import com.choicemaker.cm.core.util.Signature;
 import com.choicemaker.util.ArrayHelper;
 import com.choicemaker.util.FileUtilities;
 
@@ -79,6 +82,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	
 	/** @deprecated */
 	private String antCommand;
+
 	/** @deprecated */
 	private boolean useAnt;
 
@@ -399,7 +403,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		return res;
 	}
 
-	public Hashtable properties() {
+	public Map properties() {
 		return this.properties;
 	}
 
@@ -544,8 +548,8 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	 * Sets the path to the probability model weights file (*.model)
 	 * 
 	 * If this model is in the collection of probability models, the
-	 * {@link #getModelName() modelName} that it is associated with in the collection does
-	 * not get changed.
+	 * {@link #getModelName() modelName configuration name} that it is
+	 * associated with in the collection is not changed.
 	 * 
 	 * @param modelFilePath
 	 *            The new modelName.
@@ -645,6 +649,37 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	 */
 	public void setAntCommand(String ignored) {
 		assert antCommand == null;
+	}
+
+	public String getClueSetName() {
+		return this.getAccessor().getClueSetName();
+	}
+
+	// NOT YET IMPLEMENTED (as of version 2.7.1)
+	// public String getEntityInterfaceName() {
+	// return null;
+	// }
+
+	public String getSchemaName() {
+		return this.getAccessor().getSchemaFileName();
+	}
+
+	public String getClueSetSignature() {
+		return Signature.calculateClueSetSignature(this.getClueSet());
+	}
+
+	public String getModelSignature() {
+		return Signature.calculateModelSignature(this);
+	}
+
+	public String getSchemaSignature() {
+		Descriptor d = this.getAccessor().getDescriptor();
+		return Signature.calculateRecordLayoutSignature(d);
+	}
+
+	public String getEvaluatorSignature() {
+		Evaluator e = getEvaluator();
+		return e == null ? "" : e.getSignature();
 	}
 
 }

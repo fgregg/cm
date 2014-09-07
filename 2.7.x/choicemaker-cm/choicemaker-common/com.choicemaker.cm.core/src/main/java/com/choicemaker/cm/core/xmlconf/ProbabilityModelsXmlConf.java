@@ -38,6 +38,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ModelAttributeNames;
 import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.ProbabilityModel;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
@@ -343,8 +344,8 @@ public class ProbabilityModelsXmlConf {
 				Element e = (Element) i.next();
 				String name = e.getAttributeValue("name");
 				String fileName = e.getAttributeValue("file");
-				IProbabilityModel m;
 
+				IProbabilityModel m;
 				if (fromResource) {
 					m =
 						readModel(
@@ -359,7 +360,11 @@ public class ProbabilityModelsXmlConf {
 				} else {
 					m = readModel(fileName, compiler, new StringWriter());
 				}
-				m.setModelName(name);
+				
+				assert m != null;
+				assert m instanceof MutableProbabilityModel;
+				((MutableProbabilityModel)m).setModelName(name);
+
 				List props = e.getChildren("property");
 				Iterator iProps = props.iterator();
 				while (iProps.hasNext()) {

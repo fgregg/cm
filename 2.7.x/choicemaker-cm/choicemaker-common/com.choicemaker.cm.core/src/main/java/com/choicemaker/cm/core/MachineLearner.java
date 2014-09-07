@@ -103,10 +103,5 @@ public interface MachineLearner {
 	boolean isRegression();
 
 	String getModelInfo();
-	/**
-	 * Returns the factory of this machine learning technique.
-	 *
-	 * @return  The factory of this machine learning technique.
-	 */
-//	MachineLearnerFactory getFactory();	
+	
 }
