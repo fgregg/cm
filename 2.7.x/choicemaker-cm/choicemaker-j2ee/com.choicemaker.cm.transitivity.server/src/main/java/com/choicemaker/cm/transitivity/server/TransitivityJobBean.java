@@ -31,12 +31,10 @@ import javax.persistence.MapKeyTemporal;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
-import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.STATUS;
 
 
 /**
