@@ -393,8 +393,9 @@ public class BatchJobBeanTest {
 	@Test
 	public void testEqualsHashCode() {
 		// Create two generic jobs and verify equality
-		BatchJobBean job1 = new BatchJobBean("EXT ID: " + new Date().toString());
-		BatchJobBean job2 = new BatchJobBean("EXT ID: " + new Date().toString());
+		String externalId = "EXT ID: " + new Date().toString();
+		BatchJobBean job1 = new BatchJobBean(externalId);
+		BatchJobBean job2 = new BatchJobBean(externalId);
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
 
