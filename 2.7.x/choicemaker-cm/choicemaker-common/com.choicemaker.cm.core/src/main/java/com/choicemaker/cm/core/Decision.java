@@ -51,7 +51,12 @@ public class Decision implements Serializable, Comparable {
 		if (0 <= no && no < NUM_DECISIONS)
 			vals[no] = this;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
+	/** Same as {@link #getName()} */
 	public String toString() {
 		return name;
 	}
