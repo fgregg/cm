@@ -156,25 +156,18 @@ public class CM_ModelBean implements Serializable {
 	private String schemaSignature;
 
 	@ElementCollection
+	@MapKeyColumn(name = "CLUE_NUMBER")
+	@CollectionTable(name = "CM_MDB_MODEL_FEATURE", joinColumns = @JoinColumn(
+			name = "MODEL_ID"))
+	private Map<Integer, CM_Feature> features = new HashMap<>();
+
+	@ElementCollection
 	@MapKeyColumn(name = "TIMESTAMP")
 	@MapKeyTemporal(TemporalType.TIMESTAMP)
 	@Column(name = "NOTE")
-	@CollectionTable(name = "CM_MDB_MODEL_NOTE", joinColumns = @JoinColumn(
+	@CollectionTable(name = "CM_MDB_MODEL_AUDIT", joinColumns = @JoinColumn(
 			name = "MODEL_ID"))
-	private Map<Date, String> notes = new HashMap<>();
-
-	 @ElementCollection
-	 @MapKeyColumn(name = "CLUE_NUMBER")
-	 @CollectionTable(name = "CM_MDB_MODEL_FEATURE", joinColumns = @JoinColumn(
-	 name = "MODEL_ID"))
-	 private Map<Integer, CM_Feature> features = new HashMap<>();
-	
-	 @ElementCollection
-	 @MapKeyColumn(name = "NAME")
-	 @Column(name = "VALUE")
-	 @CollectionTable(name = "CM_MDB_MODEL_PROPERTY", joinColumns = @JoinColumn(
-	 name = "MODEL_ID"))
-	 private Map<String, String> configurationProperties = new HashMap<>();
+	private Map<Date, String> audit = new HashMap<>();
 
 	// -- Construction
 
@@ -204,18 +197,11 @@ public class CM_ModelBean implements Serializable {
 				weights = ((MaximumEntropy) ml).getWeights();
 				assert weights.length == clueDescriptors.length;
 			}
-			for (int i=0; i<clueDescriptors.length; i++) {
-				CM_Feature cmf = new CM_Feature(this.machineLearning, clueDescriptors,
-			weights, i);
-				this.features.put(i,cmf);
-			}
-		}
-		
-		@SuppressWarnings("unchecked")
-		Map<String,String> properties = ipm.properties();
-		if (properties != null) {
-			for (Map.Entry<String,String> e : properties.entrySet()) {
-				this.configurationProperties.put(e.getKey(), e.getValue());
+			for (int i = 0; i < clueDescriptors.length; i++) {
+				CM_Feature cmf =
+					new CM_Feature(this.machineLearning, clueDescriptors,
+							weights, i);
+				this.features.put(i, cmf);
 			}
 		}
 	}
@@ -258,7 +244,7 @@ public class CM_ModelBean implements Serializable {
 	}
 
 	public Map<Date, String> getNotes() {
-		return Collections.unmodifiableMap(notes);
+		return Collections.unmodifiableMap(audit);
 	}
 
 	public void addNote(String note) {
@@ -273,7 +259,7 @@ public class CM_ModelBean implements Serializable {
 		}
 		final Date now0 = new Date();
 		Date now = now0;
-		String existing = this.notes.get(now);
+		String existing = this.audit.get(now);
 
 		// Weird corner case -- entry already exists
 		final int MAX_ATTEMPTS = 1000;
@@ -281,10 +267,10 @@ public class CM_ModelBean implements Serializable {
 		while (existing != null && count < MAX_ATTEMPTS) {
 			// Hack: add a millisecond and try again
 			now = new Date(now.getTime() + 1);
-			existing = this.notes.get(now);
+			existing = this.audit.get(now);
 		}
 		if (existing == null) {
-			this.notes.put(now, note);
+			this.audit.put(now, note);
 		} else {
 			String msg =
 				"Notes already exist: " + now0 + " to " + now
@@ -429,7 +415,7 @@ public class CM_ModelBean implements Serializable {
 		return true;
 	}
 
-	// public List<CM_ModelConfiguration> getModelConfigurations() {
+	// public List<CM_ModelConfigurationBean> getModelConfigurations() {
 	// return modelConfigurations;
 	// }
 	//

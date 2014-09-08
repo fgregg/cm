@@ -14,6 +14,7 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 
@@ -40,6 +41,8 @@ public class BatchJobBeanTest {
 		int i = random.nextInt(_nonterminal.length);
 		return _nonterminal[i];
 	}
+	
+	private static final Logger logger = Logger.getLogger(BatchJobBeanTest.class.getName());
 
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
@@ -194,10 +197,12 @@ public class BatchJobBeanTest {
 			++count;
 			STATUS status = job.getStatus();
 			if (status == null) {
+				logger.severe(job.getId() + ": " + count + ": null status");
 				++countNullStatus;
 			}
 			Date ts = job.getTimeStamp(status);
 			if (ts == null) {
+				logger.severe(job.getId() + ": " + count + ": null timestamp");
 				++countNullTimestamp;
 			}
 		}
