@@ -26,12 +26,13 @@ import com.choicemaker.cm.ml.me.xmlconf.MeModelConf;
 /**
  * .
  *
- * @author   Adam Winkel
- * @version  $Revision: 1.2 $ $Date: 2010/03/24 23:18:01 $
+ * @author Adam Winkel
+ * @version $Revision: 1.2 $ $Date: 2010/03/24 23:18:01 $
  */
 public class MaximumEntropy implements MachineLearner {
 
-	private static Logger logger = Logger.getLogger(MaximumEntropy.class.getName());
+	private static Logger logger = Logger.getLogger(MaximumEntropy.class
+			.getName());
 
 	private float[] weights;
 	private int trainingIterations = 4000;
@@ -51,7 +52,8 @@ public class MaximumEntropy implements MachineLearner {
 		this.model = model;
 	}
 
-	public void changedAccessor(Accessor oldAccessor, Accessor newAccessor, int[] oldClueNums) {
+	public void changedAccessor(Accessor oldAccessor, Accessor newAccessor,
+			int[] oldClueNums) {
 		int size = oldClueNums.length;
 		float[] newWeights = new float[size];
 		for (int i = 0; i < size; ++i) {
@@ -68,7 +70,7 @@ public class MaximumEntropy implements MachineLearner {
 	/**
 	 * Returns the weights.
 	 *
-	 * @return   The weights.
+	 * @return The weights.
 	 */
 	public float[] getWeights() {
 		return weights;
@@ -77,7 +79,8 @@ public class MaximumEntropy implements MachineLearner {
 	/**
 	 * Sets the weights.
 	 *
-	 * @param   weights  The weights.
+	 * @param weights
+	 *            The weights.
 	 */
 	public void setWeights(float[] weights) throws IllegalArgumentException {
 		if (model != null) {
@@ -106,6 +109,7 @@ public class MaximumEntropy implements MachineLearner {
 
 	/**
 	 * Get the value of trainingIterations.
+	 * 
 	 * @return value of trainingIterations.
 	 */
 	public int getTrainingIterations() {
@@ -114,18 +118,23 @@ public class MaximumEntropy implements MachineLearner {
 
 	/**
 	 * Set the value of trainingIterations.
-	 * @param v  Value to assign to trainingIterations.
+	 * 
+	 * @param v
+	 *            Value to assign to trainingIterations.
 	 */
 	public void setTrainingIterations(int v) {
 		this.trainingIterations = v;
 	}
 
 	/**
-	 * @see com.choicemaker.cm.core.MachineLearner#train(java.util.Collection, double)
+	 * @see com.choicemaker.cm.core.MachineLearner#train(java.util.Collection,
+	 *      double)
 	 */
 	public Object train(Collection src, double[] firingPercentages) {
 		try {
-			MeEstimator estimator = new MeEstimator(model, src, firingPercentages, trainingIterations);
+			MeEstimator estimator =
+				new MeEstimator(model, src, firingPercentages,
+						trainingIterations);
 			estimator.run();
 			setWeights(estimator.getWeights());
 			return estimator.getWarning();
