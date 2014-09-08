@@ -5,13 +5,18 @@ import static com.choicemaker.cmit.io.blocking.automated.offline.server.BatchDep
 import static com.choicemaker.cmit.utils.DeploymentUtils.PERSISTENCE_CONFIGURATION;
 import static com.choicemaker.cmit.utils.DeploymentUtils.PROJECT_POM;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
@@ -55,12 +60,26 @@ public class CM_ModelBean_0_Test {
 
 	public static final int BRIEF_DELAY_MILLIS = 2;
 
-	@EJB
-	protected CM_ModelController0 controller;
+	/**
+	 * The method compares two String lists for equality. It works with
+	 * unmodifiable lists, which the List.equals(List) method doesn't seem to.
+	 * 
+	 * @param c1
+	 *            first list
+	 * @param c2
+	 *            second list
+	 * @return true if the lists are equal
+	 */
+	public static <T> boolean equal(Collection<T> c1, Collection<T> c2) {
+		boolean retVal = c1 != null && c2 != null && c1.size() == c2.size() &&
+				c1.containsAll(c2);
+		return retVal;
+	}
 
-	@Test
-	public void testModelController() {
-		assertTrue(controller != null);
+	public static boolean equalNoteContent(CM_ModelBean model,
+			Collection<String> expectedNotes) {
+		Collection<String> c = model.getNotes().values();
+		return equal(c,expectedNotes);
 	}
 
 	public static void assertSameValuesExcludingNotes(CM_ModelBean model,
@@ -74,16 +93,31 @@ public class CM_ModelBean_0_Test {
 		assertTrue(model.getModelSignature().equals(ipm.getModelSignature()));
 	}
 
+	public static List<String> createExpectedNotes(ImmutableProbabilityModel ipm) {
+		final String expectedNote = CM_ModelBean.createDefaultNote(ipm);
+		final List<String> retVal = new ArrayList<>();
+		retVal.add(expectedNote);
+		return retVal;
+	}
+
+	@EJB
+	protected CM_ModelController0 controller;
+
+	@Test
+	public void testModelController() {
+		assertTrue(controller != null);
+	}
+
 	@Test
 	public void testConstruction() {
 		final ImmutableProbabilityModel ipm =
 			new MutableProbabilityModelStub0();
-		final String expectedNotes = CM_ModelBean.createDefaultNotes(ipm);
+		final List<String> expectedNotes = createExpectedNotes(ipm);
 
 		CM_ModelBean model = new CM_ModelBean(ipm);
 		assertTrue(0 == model.getId());
 		assertSameValuesExcludingNotes(model, ipm);
-		assertTrue(model.getNotes().equals(expectedNotes));
+		assertTrue(equalNoteContent(model,expectedNotes));
 	}
 
 	@Test
@@ -94,23 +128,24 @@ public class CM_ModelBean_0_Test {
 		// Create a model
 		final ImmutableProbabilityModel ipm =
 			new MutableProbabilityModelStub0();
-		final String expectedNotes = CM_ModelBean.createDefaultNotes(ipm);
+		final List<String> expectedNotes = createExpectedNotes(ipm);
+
 		CM_ModelBean model = new CM_ModelBean(ipm);
 		assertTrue(model.getId() == 0);
 		assertSameValuesExcludingNotes(model, ipm);
-		assertTrue(model.getNotes().equals(expectedNotes));
+		assertTrue(equalNoteContent(model,expectedNotes));
 
 		// Save the model
 		controller.save(model);
 		assertTrue(model.getId() != 0);
 		assertSameValuesExcludingNotes(model, ipm);
-		assertTrue(model.getNotes().equals(expectedNotes));
+		assertTrue(equalNoteContent(model,expectedNotes));
 
 		// Find the model
 		CM_ModelBean model2 = controller.find(model.getId());
 		assertTrue(model.getId() == model2.getId());
 		assertSameValuesExcludingNotes(model2, ipm);
-		assertTrue(model2.getNotes().equals(expectedNotes));
+		assertTrue(equalNoteContent(model,expectedNotes));
 
 		// Delete the model
 		controller.delete(model2);
@@ -128,28 +163,32 @@ public class CM_ModelBean_0_Test {
 
 		final ImmutableProbabilityModel ipm =
 			new MutableProbabilityModelStub0();
-		final String expectedNotes = CM_ModelBean.createDefaultNotes(ipm);
+		final List<String> expectedNotes = createExpectedNotes(ipm);
+
 		CM_ModelBean model = new CM_ModelBean(ipm);
 		assertTrue(model.getId() == 0);
 		assertSameValuesExcludingNotes(model, ipm);
-		assertTrue(model.getNotes().equals(expectedNotes));
+		assertTrue(equalNoteContent(model,expectedNotes));
 
 		controller.save(model);
 		assertTrue(model.getId() != 0);
 		final long id = model.getId();
 		controller.detach(model);
 
-		assertTrue(expectedNotes.equals(model.getNotes()));
-		final String expectedNotes2 = "new notes";
-		assertTrue(!expectedNotes.equalsIgnoreCase(expectedNotes2));
-		model.setNotes(expectedNotes2);
-		assertTrue(expectedNotes2.equals(model.getNotes()));
+		assertTrue(equalNoteContent(model,expectedNotes));
+		final String expectedNote2 = "new note";
+		model.addNote(expectedNote2);
+		assertTrue(model.getNotes().size() == 2);
+		assertTrue(model.getNotes().values().containsAll(expectedNotes));
+		assertTrue(model.getNotes().values().contains(expectedNote2));
 		controller.save(model);
 
 		model = null;
 		CM_ModelBean model2 = controller.find(id);
 		assertTrue(id == model2.getId());
-		assertTrue(expectedNotes2.equals(model2.getNotes()));
+		assertTrue(model2.getNotes().size() == 2);
+		assertTrue(model2.getNotes().values().containsAll(expectedNotes));
+		assertTrue(model2.getNotes().values().contains(expectedNote2));
 		controller.delete(model2);
 
 		assertTrue(initialCount == controller.findAll().size());
@@ -160,8 +199,8 @@ public class CM_ModelBean_0_Test {
 		// Count existing jobs
 		final int initialCount = controller.findAll().size();
 
-		List<Long> jobIds = new LinkedList<>();
-		List<ImmutableProbabilityModel> models = new LinkedList<>();
+		List<Long> jobIds = new ArrayList<>();
+		List<ImmutableProbabilityModel> models = new ArrayList<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a model
 			try {
@@ -214,48 +253,50 @@ public class CM_ModelBean_0_Test {
 	@Test
 	public void testEqualsHashCode() {
 		// Create two generic jobs and verify equality
-		ImmutableProbabilityModel ipm = new MutableProbabilityModelStub0();
-		CM_ModelBean model1 = new CM_ModelBean(ipm);
-		CM_ModelBean model2 = new CM_ModelBean(ipm);
-		assertTrue(model1.equals(model2));
-		assertTrue(model1.hashCode() == model2.hashCode());
+		final ImmutableProbabilityModel ipm =
+			new MutableProbabilityModelStub0();
+		CM_ModelBean m1 = new CM_ModelBean(ipm);
+		CM_ModelBean m2 = new CM_ModelBean(ipm);
+		assertTrue(m1.equals(m2));
+		assertTrue(m1.hashCode() == m2.hashCode());
 
 		// Different notes do not affect equality or hash code of models that
-		// have not been persisted
-		model1.setNotes(new Date().toString());
-		assertTrue(!model1.getNotes().equals(model2.getNotes()));
-		assertTrue(model1.equals(model2));
-		assertTrue(model1.hashCode() == model2.hashCode());
+		// have not been persisted.
+		assertTrue(equal(m1.getNotes().values(), m1.getNotes().values()));
+		m1.addNote(new Date().toString());
+		assertTrue(!equal(m1.getNotes().values(), m2.getNotes().values()));
+		assertTrue(m1.equals(m2));
+		assertTrue(m1.hashCode() == m2.hashCode());
 
 		// Verify a non-persistent model is not equal to a persistent model
-		model1 = controller.save(model1);
-		assertTrue(!model1.equals(model2));
-		assertTrue(model1.hashCode() != model2.hashCode());
+		m1 = controller.save(m1);
+		assertTrue(!m1.equals(m2));
+		assertTrue(m1.hashCode() != m2.hashCode());
 
 		// Different notes do not affect equality or hash code models that have
 		// been persisted; i.e. different notes never affect equality or hash
 		// code
-		controller.detach(model1);
-		model2 = controller.find(model1.getId());
-		controller.detach(model2);
-		assertTrue(model1.equals(model2));
-		assertTrue(model1.hashCode() == model2.hashCode());
+		controller.detach(m1);
+		m2 = controller.find(m1.getId());
+		controller.detach(m2);
+		assertTrue(m1.getNotes().equals(m2.getNotes()));
+		m1.addNote("nonsense");
+		assertTrue(!equal(m1.getNotes().values(), m2.getNotes().values()));
+		assertTrue(m1.equals(m2));
+		assertTrue(m1.hashCode() == m2.hashCode());
 
-		model1.setNotes("nonsense");
-		assertTrue(!model1.getNotes().equals(model2.getNotes()));
-		assertTrue(model1.equals(model2));
-		assertTrue(model1.hashCode() == model2.hashCode());
-		
 		// Different models are not equal and have different hashCodes
 		try {
 			Thread.sleep(BRIEF_DELAY_MILLIS);
 		} catch (InterruptedException e) {
 			logger.fine(e.toString());
 		}
-		ipm = new MutableProbabilityModelStub0();
-		model2 = new CM_ModelBean(ipm);
-		assertTrue(!model1.equals(model2));
-		assertTrue(model1.hashCode() != model2.hashCode());
+		final ImmutableProbabilityModel ipm2 =
+			new MutableProbabilityModelStub0();
+		assertTrue(!ipm2.getModelName().equals(ipm.getModelName()));
+		m2 = new CM_ModelBean(ipm);
+		assertTrue(!m1.equals(m2));
+		assertTrue(m1.hashCode() != m2.hashCode());
 	}
 
 }

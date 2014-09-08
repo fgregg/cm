@@ -13,18 +13,32 @@ package com.choicemaker.cm.io.blocking.automated.offline.server;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyTemporal;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.TemporalType;
 
+import com.choicemaker.cm.core.ClueDesc;
+import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.ml.me.base.MaximumEntropy;
 import com.choicemaker.util.SystemPropertyUtils;
 
 /**
@@ -43,10 +57,24 @@ public class CM_ModelBean implements Serializable {
 
 	private static final long serialVersionUID = 271L;
 
+	private static final Logger log = Logger.getLogger(CM_ModelBean.class
+			.getName());
+
 	/** Default value for non-persistent models */
 	public static final int INVALID_MODEL_ID = 0;
 
 	public static final String DATE_FORMAT_SPEC = "yyyy-MM-dd HH:mm";
+
+	private static final String DEFAULT_MACHINE_LEARNING_CLASS_NAME =
+		"com.choicemaker.cm.ml.me.base.MaximumEntropy";
+
+	/**
+	 * An abbreviation representing the
+	 * {@link com.choicemaker.cm.ml.me.base.MaximumEntropy default machine
+	 * learning technique}
+	 * 
+	 */
+	public static final String DEFAULT_MACHINE_LEARNING_TYPE = "CMME";
 
 	public static enum NamedQuery {
 		FIND_ALL("modelFindAll");
@@ -69,14 +97,29 @@ public class CM_ModelBean implements Serializable {
 		return retVal;
 	}
 
-	public static String createDefaultNotes(ImmutableProbabilityModel ipm) {
+	public static String createDefaultNote(ImmutableProbabilityModel ipm) {
 		String modelName = ipm.getModelName();
 		String user = System.getProperty(SystemPropertyUtils.USER_NAME);
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_SPEC);
 		String timeStamp = dateFormat.format(new Date());
 		String retVal =
 			"Persisted from '" + modelName + "' by '" + user + "' ("
-					+ timeStamp + "); ";
+					+ timeStamp + ")";
+		return retVal;
+	}
+
+	public static String getMachineLearningTypeName(MachineLearner ml) {
+		String retVal = null;
+		if (ml != null) {
+			Class<?> mlClass = ml.getClass();
+			String mlClassName = mlClass.getName();
+			;
+			if (DEFAULT_MACHINE_LEARNING_CLASS_NAME.equals(mlClassName)) {
+				retVal = DEFAULT_MACHINE_LEARNING_TYPE;
+			} else {
+				retVal = mlClass.getSimpleName();
+			}
+		}
 		return retVal;
 	}
 
@@ -94,6 +137,9 @@ public class CM_ModelBean implements Serializable {
 	@Column(name = "MODEL_NAME")
 	private String modelName;
 
+	@Column(name = "ML_TYPE")
+	private String machineLearning;
+
 	@Column(name = "EVALUATOR_SIGNATURE")
 	private String evaluatorSignature;
 
@@ -109,27 +155,26 @@ public class CM_ModelBean implements Serializable {
 	@Column(name = "SCHEMA_SIGNATURE")
 	private String schemaSignature;
 
-	@Column(name = "NOTES")
-	private String notes;
+	@ElementCollection
+	@MapKeyColumn(name = "TIMESTAMP")
+	@MapKeyTemporal(TemporalType.TIMESTAMP)
+	@Column(name = "NOTE")
+	@CollectionTable(name = "CM_MDB_MODEL_NOTE", joinColumns = @JoinColumn(
+			name = "MODEL_ID"))
+	private Map<Date, String> notes = new HashMap<>();
 
-//	@ElementCollection
-//	@CollectionTable(name = "CMT_MODEL_CONFIGURATION",
-//			joinColumns = @JoinColumn(name = "MODEL_ID"))
-//	private List<CM_ModelConfiguration> modelConfigurations = new ArrayList<>();
-//
-//	@ElementCollection
-//	@MapKeyColumn(name = "CLUE_NUMBER")
-//	@Column(name = "CLUE_NAME")
-//	@CollectionTable(name = "CMT_MODEL_CLUE", joinColumns = @JoinColumn(
-//			name = "MODEL_ID"))
-//	private Map<Integer, String> clueNames = new HashMap<>();
-//
-//	@ElementCollection
-//	@MapKeyColumn(name = "NAME")
-//	@Column(name = "VALUE")
-//	@CollectionTable(name = "CMT_MODEL_PROPERTY", joinColumns = @JoinColumn(
-//			name = "MODEL_ID"))
-//	private Map<String, String> modelProperties = new HashMap<>();
+	 @ElementCollection
+	 @MapKeyColumn(name = "CLUE_NUMBER")
+	 @CollectionTable(name = "CM_MDB_MODEL_FEATURE", joinColumns = @JoinColumn(
+	 name = "MODEL_ID"))
+	 private Map<Integer, CM_Feature> features = new HashMap<>();
+	
+	 @ElementCollection
+	 @MapKeyColumn(name = "NAME")
+	 @Column(name = "VALUE")
+	 @CollectionTable(name = "CM_MDB_MODEL_PROPERTY", joinColumns = @JoinColumn(
+	 name = "MODEL_ID"))
+	 private Map<String, String> configurationProperties = new HashMap<>();
 
 	// -- Construction
 
@@ -142,17 +187,37 @@ public class CM_ModelBean implements Serializable {
 		}
 		this.modelName = ipm.getModelName();
 		this.modelSignature = ipm.getModelSignature();
+		final MachineLearner ml = ipm.getMachineLearner();
+		this.machineLearning = CM_ModelBean.getMachineLearningTypeName(ml);
 		this.evaluatorSignature = ipm.getEvaluatorSignature();
 		this.cluesetName = ipm.getClueSetName();
 		this.cluesetSignature = ipm.getClueSetSignature();
 		this.schemaName = ipm.getSchemaName();
 		this.schemaSignature = ipm.getSchemaSignature();
-		this.setNotes(createDefaultNotes(ipm));
+		this.addNote(createDefaultNote(ipm));
+
+		ClueSet cs = ipm.getClueSet();
+		if (cs != null) {
+			ClueDesc[] clueDescriptors = cs.getClueDesc();
+			float[] weights = null;
+			if (ml instanceof MaximumEntropy) {
+				weights = ((MaximumEntropy) ml).getWeights();
+				assert weights.length == clueDescriptors.length;
+			}
+			for (int i=0; i<clueDescriptors.length; i++) {
+				CM_Feature cmf = new CM_Feature(this.machineLearning, clueDescriptors,
+			weights, i);
+				this.features.put(i,cmf);
+			}
+		}
 		
-//		final Accessor a = ipm.getAccessor();
-//		DbAccessor dba = (DbAccessor) a;
-//		String[] db
-//		String dbConf = ipm.getA
+		@SuppressWarnings("unchecked")
+		Map<String,String> properties = ipm.properties();
+		if (properties != null) {
+			for (Map.Entry<String,String> e : properties.entrySet()) {
+				this.configurationProperties.put(e.getKey(), e.getValue());
+			}
+		}
 	}
 
 	// -- Accessors
@@ -169,6 +234,17 @@ public class CM_ModelBean implements Serializable {
 		return cluesetSignature;
 	}
 
+	/**
+	 * Returns a type indicator, currently the simple class name of the machine
+	 * learner used by a model. This column is used as a table discriminator so
+	 * that additional machine learning implementations can be accommodated in
+	 * the future, besides the Maximum Entropy machine learning currently
+	 * implemented by {@link com.choicemaker.cm.ml.me.base.MaximumEntropy}.
+	 */
+	public String getMachineLearning() {
+		return machineLearning;
+	}
+
 	public String getEvaluatorSignature() {
 		return evaluatorSignature;
 	}
@@ -181,12 +257,40 @@ public class CM_ModelBean implements Serializable {
 		return modelName;
 	}
 
-	public String getNotes() {
-		return notes;
+	public Map<Date, String> getNotes() {
+		return Collections.unmodifiableMap(notes);
 	}
 
-	public void setNotes(String notes) {
-		this.notes = notes;
+	public void addNote(String note) {
+		if (note == null) {
+			log.warning("Skipping null note");
+			return;
+		}
+		note = note.trim();
+		if (note.isEmpty()) {
+			log.warning("Skipping blank note");
+			return;
+		}
+		final Date now0 = new Date();
+		Date now = now0;
+		String existing = this.notes.get(now);
+
+		// Weird corner case -- entry already exists
+		final int MAX_ATTEMPTS = 1000;
+		int count = 0;
+		while (existing != null && count < MAX_ATTEMPTS) {
+			// Hack: add a millisecond and try again
+			now = new Date(now.getTime() + 1);
+			existing = this.notes.get(now);
+		}
+		if (existing == null) {
+			this.notes.put(now, note);
+		} else {
+			String msg =
+				"Notes already exist: " + now0 + " to " + now
+						+ "; ignoring new note: '" + note + "'";
+			log.warning(msg);
+		}
 	}
 
 	public String getSchemaName() {
@@ -325,16 +429,16 @@ public class CM_ModelBean implements Serializable {
 		return true;
 	}
 
-//	public List<CM_ModelConfiguration> getModelConfigurations() {
-//		return modelConfigurations;
-//	}
-//
-//	public Map<Integer, String> getClueNames() {
-//		return clueNames;
-//	}
-//
-//	public Map<String, String> getModelProperties() {
-//		return modelProperties;
-//	}
-//
+	// public List<CM_ModelConfiguration> getModelConfigurations() {
+	// return modelConfigurations;
+	// }
+	//
+	// public Map<Integer, String> getClueNames() {
+	// return features;
+	// }
+	//
+	// public Map<String, String> getModelProperties() {
+	// return modelProperties;
+	// }
+	//
 }
