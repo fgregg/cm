@@ -11,7 +11,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>simple-person-matching-plugin</artifactId>
+  <artifactId>simple-person-plugin</artifactId>
   <packaging>jar</packaging>
   <name>Simple Person Matching Plugin</name>
 

@@ -26,7 +26,7 @@
   </description>
 
   <modules>
-    <module>simple_person_matching_plugin</module>
+    <module>simple-person-plugin</module>
   </modules>
 
   <build>

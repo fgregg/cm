@@ -25,7 +25,7 @@
   </description>
 
   <modules>
-    <module>simple_person_matching_project</module>
+    <module>simple-person-project</module>
   </modules>
 
   <build>
