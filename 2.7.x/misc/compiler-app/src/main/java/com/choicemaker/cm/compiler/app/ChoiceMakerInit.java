@@ -11,6 +11,7 @@
 package com.choicemaker.cm.compiler.app;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.PropertyNames;
 import com.choicemaker.cm.core.WellKnownPropertyValues;
@@ -27,6 +28,7 @@ public final class ChoiceMakerInit {
 	private static File theProjectFile = null;
 	private static String theLogConfiguration = null;
 	private static boolean isInitialized = false;
+	private static Logger logger = Logger.getLogger(ChoiceMakerInit.class.getName());
 
 	public static synchronized boolean isInitialized() {
 		return isInitialized;
@@ -75,14 +77,15 @@ public final class ChoiceMakerInit {
 			throw new IllegalStateException(msg);
 
 		} else if (!theLogConfiguration.equals(logConfiguration)) {
-			String msg =
-				"Attempt to reinitialize ChoiceMaker with a new log configuration "
-					+ "(current == '"
-					+ theLogConfiguration
-					+ "', new == '"
-					+ logConfiguration
-					+ "')";
-			throw new IllegalStateException(msg);
+			logger.warning("the deprecated logging configuration is ignored: " + logConfiguration);
+//			String msg =
+//				"Attempt to reinitialize ChoiceMaker with a new log configuration "
+//					+ "(current == '"
+//					+ theLogConfiguration
+//					+ "', new == '"
+//					+ logConfiguration
+//					+ "')";
+//			throw new IllegalStateException(msg);
 		}
 
 		return;
