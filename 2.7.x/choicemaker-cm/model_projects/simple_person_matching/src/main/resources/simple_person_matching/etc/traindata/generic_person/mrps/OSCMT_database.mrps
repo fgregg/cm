@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<MarkedRecordPairSource class="com.choicemaker.cm.io.db.base.dbMrpsReader" conf="default">
-    <selection>
-			select id as id, id_matched as id_matched, decision as decision
-			from tb_cmt_pairs
-		</selection>
-    <connectionName>persons_1</connectionName>
-</MarkedRecordPairSource>
-

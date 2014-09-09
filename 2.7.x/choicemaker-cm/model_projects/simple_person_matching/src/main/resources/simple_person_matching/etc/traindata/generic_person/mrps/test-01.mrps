@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<MarkedRecordPairSource class="com.choicemaker.cm.io.xml.base.xmlMrpsReader">
-    <fileName>test-01.xml</fileName>
-</MarkedRecordPairSource>
-
