@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MarkedRecordPairSource class="com.choicemaker.cm.io.flatfile.base.flatfileMrpsReader"><fileNamePrefix>flatfile-01</fileNamePrefix><fileNameSuffix>.txt</fileNameSuffix><multiFile>false</multiFile><singleLine>false</singleLine><fixedLength>false</fixedLength><separatorChar>|</separatorChar><tagged>true</tagged></MarkedRecordPairSource>
