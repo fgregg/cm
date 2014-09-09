@@ -6,14 +6,14 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>model_projects</artifactId>
+    <artifactId>model_plugins</artifactId>
     <version>2.7.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>person-matching-models</artifactId>
+  <artifactId>simple-person-matching-plugin</artifactId>
   <packaging>jar</packaging>
-  <name>Person Matching Plugin Models</name>
+  <name>Simple Person Matching Plugin</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>person.jar</eclipse.plugin.runtime.library.name>

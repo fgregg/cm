@@ -11,9 +11,9 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>simple_person_matching</artifactId>
+  <artifactId>simple-person-matching-project</artifactId>
   <packaging>jar</packaging>
-  <name>Simple Person Matching</name>
+  <name>Simple Person Matching Project</name>
 
   <properties>
     <eclipse.plugin.runtime.library.name>person.jar</eclipse.plugin.runtime.library.name>
