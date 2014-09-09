@@ -15,14 +15,18 @@
   <artifactId>model_plugins</artifactId>
   <packaging>pom</packaging>
 
-  <name>Plugin Models for ChoiceMaker Matching</name>
+  <name>Modeling Plugins</name>
   <description><![CDATA[
-  Examples of record-matching plugins.
+  Examples of record-matching plugins. These represent models that are
+  at more formal stages of development than simple model projects.
+  at Maven-controlled stages of development because binary code --
+  not just ClueMaker and Java source code -- is being deployed to a
+  Maven repository.
   ]]>
   </description>
 
   <modules>
-    <module>person-models</module>
+    <module>simple_person_matching_plugin</module>
   </modules>
 
   <build>

@@ -15,14 +15,17 @@
   <artifactId>model_projects</artifactId>
   <packaging>pom</packaging>
 
-  <name>ChoiceMaker Model Projects</name>
+  <name>Modeling Projects</name>
   <description><![CDATA[
-  Examples of record-matching projects.
+  Examples of record-matching projects. These represent models that are
+  at initial stages of development, before they are formalized into
+  ChoiceMaker plugins. Maven artifacts of model projects consist of
+  ClueMaker and Java source code.
   ]]>
   </description>
 
   <modules>
-    <module>simple_person_matching</module>
+    <module>simple_person_matching_project</module>
   </modules>
 
   <build>
