@@ -8,7 +8,8 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.core;
+package com.choicemaker.cm.core;
+
 
 /**
  * Thrown if a service that uses IControl can not be stopped cleanly.

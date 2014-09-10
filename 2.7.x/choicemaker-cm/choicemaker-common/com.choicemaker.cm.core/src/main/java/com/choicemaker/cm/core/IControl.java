@@ -8,12 +8,11 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.core;
+package com.choicemaker.cm.core;
 
-import java.rmi.RemoteException;
 
 /**
- * This interface tells OABA service objects if a loop should be interupted.
+ * This interface tells long-running objects if a loop should be interrupted.
  * 
  * @author pcheung
  *
@@ -24,6 +23,6 @@ public interface IControl {
 	 * 
 	 * @return boolean
 	 */
-	public boolean shouldStop () throws RemoteException;
+	public boolean shouldStop ();
 
 }
