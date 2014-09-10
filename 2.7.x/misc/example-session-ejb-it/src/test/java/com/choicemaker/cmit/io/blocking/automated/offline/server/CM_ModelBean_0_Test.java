@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.io.blocking.automated.offline.server.CM_ModelBean;
+import com.choicemaker.cm.persist.CM_ModelBean;
 import com.choicemaker.cmit.core.base.MutableProbabilityModelStub0;
 import com.choicemaker.cmit.utils.DeploymentUtils;
 

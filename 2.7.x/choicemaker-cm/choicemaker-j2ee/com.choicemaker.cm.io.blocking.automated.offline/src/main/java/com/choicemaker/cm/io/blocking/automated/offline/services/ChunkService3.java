@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSink;
@@ -27,7 +28,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;

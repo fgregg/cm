@@ -33,7 +33,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.TemporalType;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
+import com.choicemaker.cm.core.IControl;
 
 /**
  * A BatchJobBean tracks the progress of a (long-running) offline blocking
@@ -67,16 +67,6 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 		NamedQuery(String name) {
 			this.name = name;
-		}
-	}
-
-	public static enum STATUS {
-		NEW(false), QUEUED(false), STARTED(false), COMPLETED(true),
-		FAILED(true), ABORT_REQUESTED(false), ABORTED(true), CLEAR(true);
-		public boolean isTerminal;
-
-		private STATUS(boolean terminal) {
-			this.isTerminal = terminal;
 		}
 	}
 
@@ -122,7 +112,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	private int percentageComplete;
 
 	@Column(name = "STATUS")
-	private STATUS status;
+	private BatchJob.STATUS status;
 
 	@ElementCollection
 	@MapKeyColumn(name = "TIMESTAMP")
@@ -130,7 +120,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	@Column(name = "STATUS")
 	@CollectionTable(name = "CMT_OABA_BATCHJOB_AUDIT",
 			joinColumns = @JoinColumn(name = "BATCHJOB_ID"))
-	private Map<Date, STATUS> audit = new HashMap<>();
+	private Map<Date, BatchJob.STATUS> audit = new HashMap<>();
 
 	// -- Construction
 
@@ -140,7 +130,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	public BatchJobBean(String externalId) {
 		setExternalId(externalId);
-		setStatus(STATUS.NEW);
+		setStatus(BatchJob.STATUS.NEW);
 	}
 	
 	// -- Accessors
@@ -171,7 +161,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public STATUS getStatus() {
+	public BatchJob.STATUS getStatus() {
 		return status;
 	}
 
@@ -186,16 +176,16 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public Date getTimeStamp(STATUS status) {
+	public Date getTimeStamp(BatchJob.STATUS status) {
 		return this.mostRecentTimestamp(status);
 	}
 
 	/** Backwards compatibility */
-	protected Date mostRecentTimestamp(STATUS status) {
+	protected Date mostRecentTimestamp(BatchJob.STATUS status) {
 		// This could be replaced with a named, parameterized query
 		Date retVal = null;
 		if (status != null) {
-			for (Map.Entry<Date, STATUS> e : audit.entrySet()) {
+			for (Map.Entry<Date, BatchJob.STATUS> e : audit.entrySet()) {
 				if (status == e.getValue()) {
 					if (retVal == null || retVal.compareTo(e.getKey()) < 0) {
 						retVal = e.getKey();
@@ -208,44 +198,44 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	@Override
 	public Date getRequested() {
-		return mostRecentTimestamp(STATUS.NEW);
+		return mostRecentTimestamp(BatchJob.STATUS.NEW);
 	}
 
 	@Override
 	public Date getQueued() {
-		return mostRecentTimestamp(STATUS.QUEUED);
+		return mostRecentTimestamp(BatchJob.STATUS.QUEUED);
 	}
 
 	@Override
 	public Date getStarted() {
-		return mostRecentTimestamp(STATUS.STARTED);
+		return mostRecentTimestamp(BatchJob.STATUS.STARTED);
 	}
 
 	@Override
 	public Date getCompleted() {
-		return mostRecentTimestamp(STATUS.COMPLETED);
+		return mostRecentTimestamp(BatchJob.STATUS.COMPLETED);
 	}
 
 	@Override
 	public Date getFailed() {
-		return mostRecentTimestamp(STATUS.FAILED);
+		return mostRecentTimestamp(BatchJob.STATUS.FAILED);
 	}
 
 	@Override
 	public Date getAbortRequested() {
-		return mostRecentTimestamp(STATUS.ABORT_REQUESTED);
+		return mostRecentTimestamp(BatchJob.STATUS.ABORT_REQUESTED);
 	}
 
 	@Override
 	public Date getAborted() {
-		return mostRecentTimestamp(STATUS.ABORTED);
+		return mostRecentTimestamp(BatchJob.STATUS.ABORTED);
 	}
 
 	// -- Job Control
 
 	public boolean shouldStop() {
-		if (getStatus().equals(STATUS.ABORT_REQUESTED)
-				|| getStatus().equals(STATUS.ABORTED)) {
+		if (getStatus().equals(BatchJob.STATUS.ABORT_REQUESTED)
+				|| getStatus().equals(BatchJob.STATUS.ABORTED)) {
 			return true;
 		} else {
 			return false;
@@ -254,30 +244,30 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	// -- State machine
 
-	private static Map<STATUS, EnumSet<STATUS>> allowedTransitions =
+	private static Map<BatchJob.STATUS, EnumSet<BatchJob.STATUS>> allowedTransitions =
 		new HashMap<>();
 	static {
-		allowedTransitions.put(STATUS.NEW, EnumSet.of(STATUS.QUEUED,
-				STATUS.ABORT_REQUESTED, STATUS.ABORTED));
-		allowedTransitions.put(STATUS.QUEUED, EnumSet.of(STATUS.STARTED,
-				STATUS.ABORT_REQUESTED, STATUS.ABORTED));
-		allowedTransitions.put(STATUS.STARTED, EnumSet.of(STATUS.STARTED,
-				STATUS.COMPLETED, STATUS.FAILED, STATUS.ABORT_REQUESTED,
-				STATUS.ABORTED));
-		allowedTransitions.put(STATUS.ABORT_REQUESTED,
-				EnumSet.of(STATUS.ABORTED));
+		allowedTransitions.put(BatchJob.STATUS.NEW, EnumSet.of(BatchJob.STATUS.QUEUED,
+				BatchJob.STATUS.ABORT_REQUESTED, BatchJob.STATUS.ABORTED));
+		allowedTransitions.put(BatchJob.STATUS.QUEUED, EnumSet.of(BatchJob.STATUS.STARTED,
+				BatchJob.STATUS.ABORT_REQUESTED, BatchJob.STATUS.ABORTED));
+		allowedTransitions.put(BatchJob.STATUS.STARTED, EnumSet.of(BatchJob.STATUS.STARTED,
+				BatchJob.STATUS.COMPLETED, BatchJob.STATUS.FAILED, BatchJob.STATUS.ABORT_REQUESTED,
+				BatchJob.STATUS.ABORTED));
+		allowedTransitions.put(BatchJob.STATUS.ABORT_REQUESTED,
+				EnumSet.of(BatchJob.STATUS.ABORTED));
 		// Terminal transitions (unless re-queued/re-started)
-		allowedTransitions.put(STATUS.COMPLETED, EnumSet.noneOf(STATUS.class));
-		allowedTransitions.put(STATUS.FAILED, EnumSet.noneOf(STATUS.class));
-		allowedTransitions.put(STATUS.ABORTED, EnumSet.noneOf(STATUS.class));
-		allowedTransitions.put(STATUS.CLEAR, EnumSet.noneOf(STATUS.class));
+		allowedTransitions.put(BatchJob.STATUS.COMPLETED, EnumSet.noneOf(BatchJob.STATUS.class));
+		allowedTransitions.put(BatchJob.STATUS.FAILED, EnumSet.noneOf(BatchJob.STATUS.class));
+		allowedTransitions.put(BatchJob.STATUS.ABORTED, EnumSet.noneOf(BatchJob.STATUS.class));
+		allowedTransitions.put(BatchJob.STATUS.CLEAR, EnumSet.noneOf(BatchJob.STATUS.class));
 	}
 
-	public static boolean isAllowedTransition(STATUS current, STATUS next) {
+	public static boolean isAllowedTransition(BatchJob.STATUS current, BatchJob.STATUS next) {
 		if (current == null || next == null) {
 			throw new IllegalArgumentException("null status");
 		}
-		Set<STATUS> allowed = allowedTransitions.get(current);
+		Set<BatchJob.STATUS> allowed = allowedTransitions.get(current);
 		assert allowed != null;
 		boolean retVal = allowed.contains(next);
 		return retVal;
@@ -285,10 +275,10 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	@Override
 	public void markAsQueued() {
-		if (isAllowedTransition(getStatus(), STATUS.QUEUED)) {
-			logTransition(STATUS.QUEUED);
+		if (isAllowedTransition(getStatus(), BatchJob.STATUS.QUEUED)) {
+			logTransition(BatchJob.STATUS.QUEUED);
 			// REMOVE timestamps.put(STATUS.QUEUED, new Date());
-			setStatus(STATUS.QUEUED);
+			setStatus(BatchJob.STATUS.QUEUED);
 		} else {
 			logIgnoredTransition("markAsQueued");
 		}
@@ -296,10 +286,10 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	@Override
 	public void markAsStarted() {
-		if (isAllowedTransition(getStatus(), STATUS.STARTED)) {
-			logTransition(STATUS.QUEUED);
+		if (isAllowedTransition(getStatus(), BatchJob.STATUS.STARTED)) {
+			logTransition(BatchJob.STATUS.QUEUED);
 			// REMOVE timestamps.put(STATUS.STARTED, new Date());
-			setStatus(STATUS.STARTED);
+			setStatus(BatchJob.STATUS.STARTED);
 		} else {
 			logIgnoredTransition("markAsStarted");
 		}
@@ -308,16 +298,16 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	@Override
 	public void markAsReStarted() {
 		// REMOVE timestamps.put(STATUS.QUEUED, new Date());
-		setStatus(STATUS.QUEUED);
+		setStatus(BatchJob.STATUS.QUEUED);
 	}
 
 	@Override
 	public void markAsCompleted() {
-		if (isAllowedTransition(getStatus(), STATUS.COMPLETED)) {
-			logTransition(STATUS.COMPLETED);
+		if (isAllowedTransition(getStatus(), BatchJob.STATUS.COMPLETED)) {
+			logTransition(BatchJob.STATUS.COMPLETED);
 			setPercentageComplete(100);
 			// REMOVE timestamps.put(STATUS.COMPLETED, new Date());
-			setStatus(STATUS.COMPLETED);
+			setStatus(BatchJob.STATUS.COMPLETED);
 		} else {
 			logIgnoredTransition("markAsCompleted");
 		}
@@ -325,10 +315,10 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	@Override
 	public void markAsFailed() {
-		if (isAllowedTransition(getStatus(), STATUS.FAILED)) {
-			logTransition(STATUS.FAILED);
+		if (isAllowedTransition(getStatus(), BatchJob.STATUS.FAILED)) {
+			logTransition(BatchJob.STATUS.FAILED);
 			// REMOVE timestamps.put(STATUS.FAILED, new Date());
-			setStatus(STATUS.FAILED);
+			setStatus(BatchJob.STATUS.FAILED);
 		} else {
 			logIgnoredTransition("markAsFailed");
 		}
@@ -336,10 +326,10 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	@Override
 	public void markAsAbortRequested() {
-		if (isAllowedTransition(getStatus(), STATUS.ABORT_REQUESTED)) {
-			logTransition(STATUS.ABORT_REQUESTED);
+		if (isAllowedTransition(getStatus(), BatchJob.STATUS.ABORT_REQUESTED)) {
+			logTransition(BatchJob.STATUS.ABORT_REQUESTED);
 			// REMOVE timestamps.put(STATUS.ABORT_REQUESTED, new Date());
-			setStatus(STATUS.ABORT_REQUESTED);
+			setStatus(BatchJob.STATUS.ABORT_REQUESTED);
 		} else {
 			logIgnoredTransition("markAsAbortRequested");
 		}
@@ -347,13 +337,13 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	@Override
 	public void markAsAborted() {
-		if (isAllowedTransition(getStatus(), STATUS.ABORTED)) {
-			if (!STATUS.ABORT_REQUESTED.equals(getStatus())) {
+		if (isAllowedTransition(getStatus(), BatchJob.STATUS.ABORTED)) {
+			if (!BatchJob.STATUS.ABORT_REQUESTED.equals(getStatus())) {
 				markAsAbortRequested();
 			}
-			logTransition(STATUS.ABORTED);
+			logTransition(BatchJob.STATUS.ABORTED);
 			// REMOVE timestamps.put(STATUS.ABORTED, new Date());
-			setStatus(STATUS.ABORTED);
+			setStatus(BatchJob.STATUS.ABORTED);
 		} else {
 			logIgnoredTransition("markAsAborted");
 		}
@@ -373,16 +363,16 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 				"invalid percentageCompleted == '" + percentageCompleted + "'";
 			throw new IllegalArgumentException(msg);
 		}
-		if (isAllowedTransition(getStatus(), STATUS.STARTED)) {
-			logTransition(STATUS.STARTED);
+		if (isAllowedTransition(getStatus(), BatchJob.STATUS.STARTED)) {
+			logTransition(BatchJob.STATUS.STARTED);
 			// REMOVE timestamps.put(STATUS.STARTED, new Date());
-			setStatus(STATUS.STARTED);
+			setStatus(BatchJob.STATUS.STARTED);
 		} else {
 			logIgnoredTransition("updatePercentageCompleted");
 		}
 	}
 
-	private void logTransition(STATUS newStatus) {
+	private void logTransition(BatchJob.STATUS newStatus) {
 		String msg =
 			getId() + ", '" + getExternalId() + "': transitioning from "
 					+ getStatusAsString() + " to " + newStatus;
@@ -417,7 +407,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	@Override
 	public void setStatusAsString(String status) {
-		setStatus(STATUS.valueOf(status));
+		setStatus(BatchJob.STATUS.valueOf(status));
 	}
 
 	@Override
@@ -433,13 +423,13 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public void setStatus(STATUS currentStatus) {
+	public void setStatus(BatchJob.STATUS currentStatus) {
 		this.status = currentStatus;
 		setTimeStamp(currentStatus, new Date());
 	}
 
 	// Should be invoked only by setStatus(STATUS)
-	protected void setTimeStamp(STATUS status, Date date) {
+	protected void setTimeStamp(BatchJob.STATUS status, Date date) {
 		this.audit.put(date, status);
 	}
 

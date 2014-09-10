@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
 /**

@@ -16,10 +16,10 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 

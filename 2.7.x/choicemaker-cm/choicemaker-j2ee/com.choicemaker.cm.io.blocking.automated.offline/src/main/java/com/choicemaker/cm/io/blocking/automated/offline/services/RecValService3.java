@@ -17,6 +17,7 @@ import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -27,7 +28,6 @@ import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
 import com.choicemaker.cm.io.blocking.automated.base.DbField;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;

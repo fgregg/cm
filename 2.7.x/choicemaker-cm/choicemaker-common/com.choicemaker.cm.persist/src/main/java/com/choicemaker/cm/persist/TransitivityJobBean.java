@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.transitivity.server;
+package com.choicemaker.cm.persist;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -33,8 +33,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.TemporalType;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
-import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob;
+import com.choicemaker.cm.core.IControl;
 
 
 /**

@@ -10,10 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
-import java.rmi.RemoteException;
-
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
+import com.choicemaker.cm.core.IControl;
 
 /**
  * This utility object 
@@ -53,7 +51,7 @@ public class ControlChecker {
 		boolean ret = false;
 		if (c % interval == 0) try {
 			ret = control.shouldStop();
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			throw new BlockingException (e.toString());
 		}
 		return ret;

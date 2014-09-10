@@ -10,9 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
-import java.rmi.RemoteException;
-
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
+import com.choicemaker.cm.core.IControl;
 
 /**
  * @author pcheung
@@ -23,7 +21,7 @@ public class SimpleControl implements IControl {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IControl#shouldStop()
 	 */
-	public boolean shouldStop() throws RemoteException {
+	public boolean shouldStop() {
 		return false;
 	}
 

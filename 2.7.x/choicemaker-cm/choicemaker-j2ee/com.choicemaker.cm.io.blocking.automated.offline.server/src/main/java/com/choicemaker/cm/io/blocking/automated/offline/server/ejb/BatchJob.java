@@ -15,7 +15,7 @@ import java.util.Date;
 
 import javax.ejb.EJBObject;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
+import com.choicemaker.cm.core.IControl;
 
 /**
  * @author rphall
@@ -124,7 +124,7 @@ public interface BatchJob extends EJBObject, IControl{
 		throws RemoteException;
 
 
-	public boolean shouldStop () throws RemoteException;
+	public boolean shouldStop ();
 
 		
 } // BatchJob

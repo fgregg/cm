@@ -8,9 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.TransitivityJobBean;
-import com.choicemaker.cm.transitivity.server.TransitivityJobBean.NamedQuery;
+import com.choicemaker.cm.persist.TransitivityJob;
+import com.choicemaker.cm.persist.TransitivityJobBean;
+import com.choicemaker.cm.persist.TransitivityJobBean.NamedQuery;
 
 @Stateless
 public class TransitivityJobController {

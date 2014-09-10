@@ -10,11 +10,11 @@
 
     <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
 
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchParametersBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean</class>
-    <class>com.choicemaker.cm.transitivity.server.TransitivityJobBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.CM_ModelBean</class>
+    <class>com.choicemaker.cm.persist.BatchJobBean</class>
+    <class>com.choicemaker.cm.persist.BatchParametersBean</class>
+    <class>com.choicemaker.cm.persist.StatusLogBean</class>
+    <class>com.choicemaker.cm.persist.TransitivityJobBean</class>
+    <class>com.choicemaker.cm.persist.CM_ModelBean</class>
 
     <properties>
       <property name="eclipselink.target-server" value="JBoss" />

@@ -35,6 +35,7 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 
 
 /**

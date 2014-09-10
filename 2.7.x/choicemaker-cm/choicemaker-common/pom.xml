@@ -38,6 +38,7 @@ END: C-E Exclusion -->
     <module>com.choicemaker.cm.io.xml.base</module>
     <module>com.choicemaker.cm.ml.me.base</module>
     <module>com.choicemaker.cm.compiler</module>
+    <module>com.choicemaker.cm.persist</module>
     <!--module>com.choicemaker.cm.compiler.tools.jdk142</module-->
     <module>com.choicemaker.cm.compiler.tools.jdk170</module>
   </modules>

@@ -2,10 +2,19 @@ package com.choicemaker.cm.io.blocking.automated.offline.server;
 
 import java.util.Date;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
-import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.STATUS;
+import com.choicemaker.cm.core.IControl;
 
 public interface BatchJob extends IControl{
+
+	public static enum STATUS {
+		NEW(false), QUEUED(false), STARTED(false), COMPLETED(true),
+		FAILED(true), ABORT_REQUESTED(false), ABORTED(true), CLEAR(true);
+		public boolean isTerminal;
+	
+		private STATUS(boolean terminal) {
+			this.isTerminal = terminal;
+		}
+	}
 
 	int MIN_PERCENTAGE_COMPLETED = 0;
 
@@ -85,10 +94,10 @@ public interface BatchJob extends IControl{
 
 	void setPercentageComplete(int percentage);
 
-	STATUS getStatus();
+	BatchJob.STATUS getStatus();
 
-	void setStatus(STATUS currentStatus);
+	void setStatus(BatchJob.STATUS currentStatus);
 
-	Date getTimeStamp(STATUS status);
+	Date getTimeStamp(BatchJob.STATUS status);
 
 }

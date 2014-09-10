@@ -1,8 +1,8 @@
-package com.choicemaker.cm.io.blocking.automated.offline.server;
+package com.choicemaker.cm.persist;
 
 import java.util.Date;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
+import com.choicemaker.cm.core.IControl;
 
 public interface TransitivityJob extends IControl {
 

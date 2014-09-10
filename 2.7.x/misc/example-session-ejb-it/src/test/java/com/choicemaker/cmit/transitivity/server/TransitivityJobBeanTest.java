@@ -24,9 +24,9 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.TransitivityJob.STATUS;
-import com.choicemaker.cm.transitivity.server.TransitivityJobBean;
+import com.choicemaker.cm.persist.TransitivityJob;
+import com.choicemaker.cm.persist.TransitivityJobBean;
+import com.choicemaker.cm.persist.TransitivityJob.STATUS;
 import com.choicemaker.cmit.utils.DeploymentUtils;
 
 @RunWith(Arquillian.class)

@@ -27,15 +27,15 @@ import java.util.logging.Logger;
 import com.choicemaker.cm.analyzer.filter.Filter;
 import com.choicemaker.cm.analyzer.sampler.PairSampler;
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.ControlException;
 import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.io.blocking.automated.offline.OabaProperties;
-import com.choicemaker.cm.io.blocking.automated.offline.core.ControlException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.filter.IMatchRecord2Filter;
@@ -170,7 +170,7 @@ public class MRPSCreator {
 	/**
 	 * An instance of IControl that always returns <code>false</code>
 	 * to <code>shouldStop()</code>
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IControl
+	 * @see com.choicemaker.cm.core.IControl
 	 */
 	public static IControl NO_CONTROL = new IControl() {
 		public boolean shouldStop() {

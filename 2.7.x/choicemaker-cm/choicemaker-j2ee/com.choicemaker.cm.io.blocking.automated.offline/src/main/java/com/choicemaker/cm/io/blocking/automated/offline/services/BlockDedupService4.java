@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;

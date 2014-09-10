@@ -8,8 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.CM_ModelBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.CM_ModelBean.NamedQuery;
+import com.choicemaker.cm.persist.CM_ModelBean;
+import com.choicemaker.cm.persist.CM_ModelBean.NamedQuery;
 
 @Stateless
 public class CM_ModelController0 {

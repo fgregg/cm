@@ -27,17 +27,16 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean.STATUS;
 import com.choicemaker.cmit.utils.DeploymentUtils;
 
 @RunWith(Arquillian.class)
 public class BatchJobBeanTest {
 
-	private static final STATUS[] _nonterminal = EnumSet.of(STATUS.NEW,
-			STATUS.QUEUED, STATUS.STARTED, STATUS.ABORT_REQUESTED).toArray(
-			new STATUS[0]);
+	private static final BatchJob.STATUS[] _nonterminal = EnumSet.of(BatchJob.STATUS.NEW,
+			BatchJob.STATUS.QUEUED, BatchJob.STATUS.STARTED, BatchJob.STATUS.ABORT_REQUESTED).toArray(
+			new BatchJob.STATUS[0]);
 
-	private STATUS getRandomNonTerminalStatus() {
+	private BatchJob.STATUS getRandomNonTerminalStatus() {
 		int i = random.nextInt(_nonterminal.length);
 		return _nonterminal[i];
 	}
@@ -80,14 +79,14 @@ public class BatchJobBeanTest {
 
 		assertTrue(0 == job.getId());
 
-		assertTrue(STATUS.NEW.equals(job.getStatus()));
+		assertTrue(BatchJob.STATUS.NEW.equals(job.getStatus()));
 
 		Date d = job.getRequested();
 		assertTrue(d != null);
 		assertTrue(now.compareTo(d) <= 0);
 		assertTrue(d.compareTo(now2) <= 0);
 
-		Date d2 = job.getTimeStamp(STATUS.NEW);
+		Date d2 = job.getTimeStamp(BatchJob.STATUS.NEW);
 		assertTrue(d.equals(d2));
 	}
 
@@ -195,7 +194,7 @@ public class BatchJobBeanTest {
 		int count = 0;
 		for (BatchJob job : controller.findAll()) {
 			++count;
-			STATUS status = job.getStatus();
+			BatchJob.STATUS status = job.getStatus();
 			if (status == null) {
 				logger.severe(job.getId() + ": " + count + ": null status");
 				++countNullStatus;
@@ -345,7 +344,7 @@ public class BatchJobBeanTest {
 
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 
-			final STATUS sts = getRandomNonTerminalStatus();
+			final BatchJob.STATUS sts = getRandomNonTerminalStatus();
 			final int v1 =
 				random.nextInt(BatchJob.MAX_PERCENTAGE_COMPLETED + 1);
 			job.setStatus(sts);
@@ -440,7 +439,7 @@ public class BatchJobBeanTest {
 		Date after = new Date();
 
 		// Check the status and timestamp
-		assertTrue(job.getStatus().equals(STATUS.NEW));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.NEW));
 		Date d = job.getTimeStamp(job.getStatus());
 		assertTrue(d != null);
 		assertTrue(before.compareTo(d) <= 0);
@@ -450,43 +449,43 @@ public class BatchJobBeanTest {
 
 		// Transitions out of sequence should be ignored
 		job.markAsCompleted();
-		assertTrue(job.getStatus().equals(STATUS.NEW));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.NEW));
 		job.markAsStarted();
-		assertTrue(job.getStatus().equals(STATUS.NEW));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.NEW));
 
 		// 2. Queue the job
 		job.markAsQueued();
-		assertTrue(job.getStatus().equals(STATUS.QUEUED));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.QUEUED));
 
 		// Transitions out of sequence should be ignored
 		job.markAsCompleted();
-		assertTrue(job.getStatus().equals(STATUS.QUEUED));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.QUEUED));
 
 		// 3. Start the job
 		job.markAsStarted();
-		assertTrue(job.getStatus().equals(STATUS.STARTED));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.STARTED));
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();
-		assertTrue(job.getStatus().equals(STATUS.STARTED));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.STARTED));
 
 		// 4. Update the percentage complete
 		job.setPercentageComplete(random
 				.nextInt(BatchJob.MAX_PERCENTAGE_COMPLETED + 1));
-		assertTrue(job.getStatus().equals(STATUS.STARTED));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.STARTED));
 
 		// 5. Mark the job as completed
 		job.markAsCompleted();
-		assertTrue(job.getStatus().equals(STATUS.COMPLETED));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.COMPLETED));
 		assertTrue(job.getPercentageComplete() == BatchJob.MAX_PERCENTAGE_COMPLETED);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();
-		assertTrue(job.getStatus().equals(STATUS.COMPLETED));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.COMPLETED));
 		job.markAsStarted();
-		assertTrue(job.getStatus().equals(STATUS.COMPLETED));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.COMPLETED));
 		job.markAsAbortRequested();
-		assertTrue(job.getStatus().equals(STATUS.COMPLETED));
+		assertTrue(job.getStatus().equals(BatchJob.STATUS.COMPLETED));
 
 	}
 
@@ -495,7 +494,7 @@ public class BatchJobBeanTest {
 		// Count existing jobs
 		final int initialCount = controller.findAll().size();
 
-		for (STATUS sts : STATUS.values()) {
+		for (BatchJob.STATUS sts : BatchJob.STATUS.values()) {
 			BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 			job.setStatus(sts);
 			assertTrue(sts.name().equals(job.getStatusAsString()));
@@ -516,7 +515,7 @@ public class BatchJobBeanTest {
 			assertTrue(initialCount == controller.findAll().size());
 		}
 
-		for (STATUS sts : STATUS.values()) {
+		for (BatchJob.STATUS sts : BatchJob.STATUS.values()) {
 			BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 			job.setStatusAsString(sts.name());
 			assertTrue(sts.equals(job.getStatus()));
@@ -540,7 +539,7 @@ public class BatchJobBeanTest {
 		assertTrue(initialCount == controller.findAll().size());
 	}
 
-	public void testTimestamp(STATUS sts) {
+	public void testTimestamp(BatchJob.STATUS sts) {
 		// Record a timestamp before status is set
 		final Date now = new Date();
 
@@ -552,7 +551,7 @@ public class BatchJobBeanTest {
 		final Date now2 = new Date();
 
 		// Check that the expected value of the status
-		final STATUS status = job.getStatus();
+		final BatchJob.STATUS status = job.getStatus();
 		assert (sts.equals(status));
 
 		// Check the expected timestamp of the status
@@ -579,7 +578,7 @@ public class BatchJobBeanTest {
 		// Count existing jobs
 		final int initialCount = controller.findAll().size();
 
-		for (STATUS sts : STATUS.values()) {
+		for (BatchJob.STATUS sts : BatchJob.STATUS.values()) {
 			testTimestamp(sts);
 		}
 

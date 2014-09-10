@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.server;
+package com.choicemaker.cm.persist;
 
 import java.io.Serializable;
 import java.text.DateFormat;
