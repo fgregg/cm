@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.choicemaker.cm</groupId>
+  <artifactId>transitivity.server-dependencies</artifactId>
+  <version>2.7.1-SNAPSHOT</version>
+  <name>ChoiceMaker Transitivity Server Dependencies</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.apache.log4j</artifactId>
+      <version>1.2.8</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.core</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.persist0</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.server.base</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.server.ejb.base</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.transitivity</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.transitivity.core</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+      <version>2.1.0</version>
+    </dependency>
+  </dependencies>
+
+</project>
