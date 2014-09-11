@@ -20,23 +20,9 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.persist0.BatchJob;
-import com.choicemaker.cm.persist0.BatchJobBean;
-import com.choicemaker.cm.persist0.BatchJobStatus;
 import com.choicemaker.cm.persist0.BatchParameters;
 import com.choicemaker.cm.persist0.BatchParametersBean;
-import com.choicemaker.cm.persist0.CM_AuditEvent;
-import com.choicemaker.cm.persist0.CM_Feature;
-import com.choicemaker.cm.persist0.CM_ModelBean;
-import com.choicemaker.cm.persist0.CM_ModelConfigurationBean;
-import com.choicemaker.cm.persist0.CM_ModelConfigurationPK;
-import com.choicemaker.cm.persist0.OfflineMatchingAuditEvent;
 import com.choicemaker.cm.persist0.OfflineMatchingBean;
-import com.choicemaker.cm.persist0.StatusLog;
-import com.choicemaker.cm.persist0.StatusLogBean;
-import com.choicemaker.cm.persist0.TransitivityJob;
-import com.choicemaker.cm.persist0.TransitivityJobAuditEvent;
-import com.choicemaker.cm.persist0.TransitivityJobBean;
 import com.choicemaker.cmit.utils0.DeploymentUtils;
 
 @RunWith(Arquillian.class)
@@ -79,7 +65,8 @@ public class BatchParametersBeanTest {
 
 	@Test
 	public void testConstruction() {
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		assertTrue(job.getId() == params.getId());
@@ -91,7 +78,8 @@ public class BatchParametersBeanTest {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		assertTrue(params.getId() == job.getId());
@@ -101,7 +89,8 @@ public class BatchParametersBeanTest {
 		assertTrue(params.getId() != 0);
 
 		// Find the params
-		BatchParametersBean batchParameters2 = prmController.find(params.getId());
+		BatchParametersBean batchParameters2 =
+			prmController.find(params.getId());
 		assertTrue(params.getId() == batchParameters2.getId());
 		assertTrue(params.equals(batchParameters2));
 
@@ -119,7 +108,8 @@ public class BatchParametersBeanTest {
 		// Count existing jobs
 		final int initialCount = prmController.findAll().size();
 
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		prmController.save(params);
@@ -144,7 +134,8 @@ public class BatchParametersBeanTest {
 	@Test
 	public void testEqualsHashCode() {
 		// Create two generic parameter sets and verify equality
-		OfflineMatchingBean job1 = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job1 =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		jobController.save(job1);
 		BatchParametersBean params1 = new BatchParametersBean(job1);
 		BatchParametersBean params2 = new BatchParametersBean(job1);
@@ -157,29 +148,29 @@ public class BatchParametersBeanTest {
 		assertTrue(params1.equals(params2));
 		assertTrue(params1.hashCode() == params2.hashCode());
 
-//		// Restore equality
-//		params2.setLowThreshold(params1.getLowThreshold());
-//		assertTrue(params1.equals(params2));
-//		assertTrue(params1.hashCode() == params2.hashCode());
-//
-//		// Verify non-persistent parameters is not equal to persistent
-//		// parameters
-//		params1 = prmController.save(params1);
-//		assertTrue(!params1.equals(params2));
-//		assertTrue(params1.hashCode() != params2.hashCode());
-//
-//		// Verify that equality of persisted parameter sets is set only by
-//		// persistence id
-//		prmController.detach(params1);
-//		params2 = prmController.find(params1.getId());
-//		prmController.detach(params2);
-//		assertTrue(params1.equals(params2));
-//		assertTrue(params1.hashCode() == params2.hashCode());
-//
-//		params1.setLowThreshold(getRandomThreshold());
-//		assertTrue(params1.getLowThreshold() != params2.getLowThreshold());
-//		assertTrue(params1.equals(params2));
-//		assertTrue(params1.hashCode() == params2.hashCode());
+		// // Restore equality
+		// params2.setLowThreshold(params1.getLowThreshold());
+		// assertTrue(params1.equals(params2));
+		// assertTrue(params1.hashCode() == params2.hashCode());
+		//
+		// // Verify non-persistent parameters is not equal to persistent
+		// // parameters
+		// params1 = prmController.save(params1);
+		// assertTrue(!params1.equals(params2));
+		// assertTrue(params1.hashCode() != params2.hashCode());
+		//
+		// // Verify that equality of persisted parameter sets is set only by
+		// // persistence id
+		// prmController.detach(params1);
+		// params2 = prmController.find(params1.getId());
+		// prmController.detach(params2);
+		// assertTrue(params1.equals(params2));
+		// assertTrue(params1.hashCode() == params2.hashCode());
+		//
+		// params1.setLowThreshold(getRandomThreshold());
+		// assertTrue(params1.getLowThreshold() != params2.getLowThreshold());
+		// assertTrue(params1.equals(params2));
+		// assertTrue(params1.hashCode() == params2.hashCode());
 	}
 
 	@Test
@@ -188,7 +179,8 @@ public class BatchParametersBeanTest {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final String v1 = new Date().toString();
@@ -217,7 +209,8 @@ public class BatchParametersBeanTest {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final String v1 = new Date().toString();
@@ -246,7 +239,8 @@ public class BatchParametersBeanTest {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final int v1 = random.nextInt();
@@ -275,7 +269,8 @@ public class BatchParametersBeanTest {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final float v1 = getRandomThreshold();
@@ -304,7 +299,8 @@ public class BatchParametersBeanTest {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final float v1 = getRandomThreshold();

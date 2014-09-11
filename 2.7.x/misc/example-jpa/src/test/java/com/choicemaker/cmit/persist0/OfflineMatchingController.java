@@ -43,6 +43,9 @@ public class OfflineMatchingController {
 
 	public void delete(OfflineMatchingBean batchJob) {
 		batchJob = em.merge(batchJob);
+//		for (CMP_AuditEvent e : batchJob.getTimeStamps()) {
+//			em.remove(e);
+//		}
 		em.remove(batchJob);
 		em.flush();
 	}

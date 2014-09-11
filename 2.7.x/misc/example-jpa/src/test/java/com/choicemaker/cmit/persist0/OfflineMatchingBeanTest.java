@@ -1,6 +1,5 @@
 package com.choicemaker.cmit.persist0;
 
-import static com.choicemaker.cmit.persist0.BatchDeploymentUtils.DEPENDENCIES_POM;
 import static com.choicemaker.cmit.persist0.BatchDeploymentUtils.EJB_MAVEN_COORDINATES;
 import static com.choicemaker.cmit.utils0.DeploymentUtils.PERSISTENCE_CONFIGURATION;
 import static com.choicemaker.cmit.utils0.DeploymentUtils.PROJECT_POM;
@@ -27,8 +26,8 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.persist0.BatchJob;
 import com.choicemaker.cm.persist0.BatchJobBean;
-import com.choicemaker.cm.persist0.OfflineMatchingBean;
 import com.choicemaker.cm.persist0.BatchJobStatus;
+import com.choicemaker.cm.persist0.OfflineMatchingBean;
 import com.choicemaker.cmit.utils0.DeploymentUtils;
 
 @RunWith(Arquillian.class)
@@ -447,12 +446,16 @@ public class OfflineMatchingBeanTest {
 
 	@Test
 	public void testStateMachineMainSequence() {
+		// Count existing jobs
+		final int initialCount = controller.findAll().size();
+
 		// Record a timestamp before a transition is made
 		Date before = new Date();
 
 		// 1. Create a job and check the status
 		OfflineMatchingBean job =
 			new OfflineMatchingBean("EXT ID: " + new Date().toString());
+//		controller.save(job);
 
 		// Record a timestamp after a transition is made
 		Date after = new Date();
@@ -475,6 +478,7 @@ public class OfflineMatchingBeanTest {
 		// 2. Queue the job
 		job.markAsQueued();
 		assertTrue(job.getStatus().equals(BatchJobStatus.QUEUED));
+//		controller.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsCompleted();
@@ -483,20 +487,24 @@ public class OfflineMatchingBeanTest {
 		// 3. Start the job
 		job.markAsStarted();
 		assertTrue(job.getStatus().equals(BatchJobStatus.STARTED));
+//		controller.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();
 		assertTrue(job.getStatus().equals(BatchJobStatus.STARTED));
+//		controller.save(job);
 
 		// 4. Update the percentage complete
 		job.setPercentageComplete(random
 				.nextInt(BatchJob.MAX_PERCENTAGE_COMPLETED + 1));
 		assertTrue(job.getStatus().equals(BatchJobStatus.STARTED));
+//		controller.save(job);
 
 		// 5. Mark the job as completed
 		job.markAsCompleted();
 		assertTrue(job.getStatus().equals(BatchJobStatus.COMPLETED));
 		assertTrue(job.getPercentageComplete() == BatchJob.MAX_PERCENTAGE_COMPLETED);
+//		controller.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();
@@ -506,6 +514,9 @@ public class OfflineMatchingBeanTest {
 		job.markAsAbortRequested();
 		assertTrue(job.getStatus().equals(BatchJobStatus.COMPLETED));
 
+		// Remove the job and the number of remaining jobs
+		controller.delete(job);
+		assertTrue(initialCount == controller.findAll().size());
 	}
 
 	@Test

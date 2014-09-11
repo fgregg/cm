@@ -1,6 +1,5 @@
 package com.choicemaker.cmit.persist0;
 
-import static com.choicemaker.cmit.persist0.BatchDeploymentUtils.DEPENDENCIES_POM;
 import static com.choicemaker.cmit.persist0.BatchDeploymentUtils.EJB_MAVEN_COORDINATES;
 import static com.choicemaker.cmit.utils0.DeploymentUtils.PERSISTENCE_CONFIGURATION;
 import static com.choicemaker.cmit.utils0.DeploymentUtils.PROJECT_POM;
@@ -24,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.persist0.CM_ModelBean;
+import com.choicemaker.cm.persist0.CMP_ModelBean;
 import com.choicemaker.cmit.core.base0.MutableProbabilityModelStub0;
 import com.choicemaker.cmit.utils0.DeploymentUtils;
 
@@ -66,18 +65,19 @@ public class CM_ModelBean_0_Test {
 	 * @return true if the lists are equal
 	 */
 	public static <T> boolean equal(Collection<T> c1, Collection<T> c2) {
-		boolean retVal = c1 != null && c2 != null && c1.size() == c2.size() &&
-				c1.containsAll(c2);
+		boolean retVal =
+			c1 != null && c2 != null && c1.size() == c2.size()
+					&& c1.containsAll(c2);
 		return retVal;
 	}
 
-	public static boolean equalNoteContent(CM_ModelBean model,
+	public static boolean equalNoteContent(CMP_ModelBean model,
 			Collection<String> expectedNotes) {
 		Collection<String> c = model.getNotes().values();
-		return equal(c,expectedNotes);
+		return equal(c, expectedNotes);
 	}
 
-	public static void assertSameValuesExcludingNotes(CM_ModelBean model,
+	public static void assertSameValuesExcludingNotes(CMP_ModelBean model,
 			ImmutableProbabilityModel ipm) {
 		assertTrue(model.getCluesetName().equals(ipm.getClueSetName()));
 		assertTrue(model.getCluesetSignature()
@@ -89,7 +89,7 @@ public class CM_ModelBean_0_Test {
 	}
 
 	public static List<String> createExpectedNotes(ImmutableProbabilityModel ipm) {
-		final String expectedNote = CM_ModelBean.createDefaultNote(ipm);
+		final String expectedNote = CMP_ModelBean.createDefaultNote(ipm);
 		final List<String> retVal = new ArrayList<>();
 		retVal.add(expectedNote);
 		return retVal;
@@ -109,10 +109,10 @@ public class CM_ModelBean_0_Test {
 			new MutableProbabilityModelStub0();
 		final List<String> expectedNotes = createExpectedNotes(ipm);
 
-		CM_ModelBean model = new CM_ModelBean(ipm);
+		CMP_ModelBean model = new CMP_ModelBean(ipm);
 		assertTrue(0 == model.getId());
 		assertSameValuesExcludingNotes(model, ipm);
-		assertTrue(equalNoteContent(model,expectedNotes));
+		assertTrue(equalNoteContent(model, expectedNotes));
 	}
 
 	@Test
@@ -125,26 +125,26 @@ public class CM_ModelBean_0_Test {
 			new MutableProbabilityModelStub0();
 		final List<String> expectedNotes = createExpectedNotes(ipm);
 
-		CM_ModelBean model = new CM_ModelBean(ipm);
+		CMP_ModelBean model = new CMP_ModelBean(ipm);
 		assertTrue(model.getId() == 0);
 		assertSameValuesExcludingNotes(model, ipm);
-		assertTrue(equalNoteContent(model,expectedNotes));
+		assertTrue(equalNoteContent(model, expectedNotes));
 
 		// Save the model
 		controller.save(model);
 		assertTrue(model.getId() != 0);
 		assertSameValuesExcludingNotes(model, ipm);
-		assertTrue(equalNoteContent(model,expectedNotes));
+		assertTrue(equalNoteContent(model, expectedNotes));
 
 		// Find the model
-		CM_ModelBean model2 = controller.find(model.getId());
+		CMP_ModelBean model2 = controller.find(model.getId());
 		assertTrue(model.getId() == model2.getId());
 		assertSameValuesExcludingNotes(model2, ipm);
-		assertTrue(equalNoteContent(model,expectedNotes));
+		assertTrue(equalNoteContent(model, expectedNotes));
 
 		// Delete the model
 		controller.delete(model2);
-		CM_ModelBean model3 = controller.find(model.getId());
+		CMP_ModelBean model3 = controller.find(model.getId());
 		assertTrue(model3 == null);
 
 		// Check that the number of existing jobs equals the initial count
@@ -160,17 +160,17 @@ public class CM_ModelBean_0_Test {
 			new MutableProbabilityModelStub0();
 		final List<String> expectedNotes = createExpectedNotes(ipm);
 
-		CM_ModelBean model = new CM_ModelBean(ipm);
+		CMP_ModelBean model = new CMP_ModelBean(ipm);
 		assertTrue(model.getId() == 0);
 		assertSameValuesExcludingNotes(model, ipm);
-		assertTrue(equalNoteContent(model,expectedNotes));
+		assertTrue(equalNoteContent(model, expectedNotes));
 
 		controller.save(model);
 		assertTrue(model.getId() != 0);
 		final long id = model.getId();
 		controller.detach(model);
 
-		assertTrue(equalNoteContent(model,expectedNotes));
+		assertTrue(equalNoteContent(model, expectedNotes));
 		final String expectedNote2 = "new note";
 		model.addNote(expectedNote2);
 		assertTrue(model.getNotes().size() == 2);
@@ -179,7 +179,7 @@ public class CM_ModelBean_0_Test {
 		controller.save(model);
 
 		model = null;
-		CM_ModelBean model2 = controller.find(id);
+		CMP_ModelBean model2 = controller.find(id);
 		assertTrue(id == model2.getId());
 		assertTrue(model2.getNotes().size() == 2);
 		assertTrue(model2.getNotes().values().containsAll(expectedNotes));
@@ -204,7 +204,7 @@ public class CM_ModelBean_0_Test {
 				logger.fine(e.toString());
 			}
 			ImmutableProbabilityModel ipm = new MutableProbabilityModelStub0();
-			CM_ModelBean model = new CM_ModelBean(ipm);
+			CMP_ModelBean model = new CMP_ModelBean(ipm);
 			assertTrue(model.getId() == 0);
 			controller.save(model);
 			final long id = model.getId();
@@ -215,7 +215,7 @@ public class CM_ModelBean_0_Test {
 		assertTrue(jobIds.size() == models.size());
 
 		// Verify the number of jobs has increased
-		List<CM_ModelBean> jobs = controller.findAll();
+		List<CMP_ModelBean> jobs = controller.findAll();
 		assertTrue(jobs != null);
 		assertTrue(initialCount + MAX_TEST_ITERATIONS == jobs.size());
 
@@ -224,7 +224,7 @@ public class CM_ModelBean_0_Test {
 		Iterator<ImmutableProbabilityModel> itModel = models.iterator();
 		for (long jobId : jobIds) {
 			ImmutableProbabilityModel ipm = itModel.next();
-			for (CM_ModelBean model : jobs) {
+			for (CMP_ModelBean model : jobs) {
 				if (jobId == model.getId()) {
 					assertSameValuesExcludingNotes(model, ipm);
 					isFound = true;
@@ -236,7 +236,7 @@ public class CM_ModelBean_0_Test {
 
 		// Remove the model
 		for (long id : jobIds) {
-			CM_ModelBean model = controller.find(id);
+			CMP_ModelBean model = controller.find(id);
 			controller.delete(model);
 		}
 
@@ -250,8 +250,8 @@ public class CM_ModelBean_0_Test {
 		// Create two generic jobs and verify equality
 		final ImmutableProbabilityModel ipm =
 			new MutableProbabilityModelStub0();
-		CM_ModelBean m1 = new CM_ModelBean(ipm);
-		CM_ModelBean m2 = new CM_ModelBean(ipm);
+		CMP_ModelBean m1 = new CMP_ModelBean(ipm);
+		CMP_ModelBean m2 = new CMP_ModelBean(ipm);
 		assertTrue(m1.equals(m2));
 		assertTrue(m1.hashCode() == m2.hashCode());
 
@@ -289,7 +289,7 @@ public class CM_ModelBean_0_Test {
 		final ImmutableProbabilityModel ipm2 =
 			new MutableProbabilityModelStub0();
 		assertTrue(!ipm2.getModelName().equals(ipm.getModelName()));
-		m2 = new CM_ModelBean(ipm);
+		m2 = new CMP_ModelBean(ipm);
 		assertTrue(!m1.equals(m2));
 		assertTrue(m1.hashCode() != m2.hashCode());
 	}

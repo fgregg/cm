@@ -50,14 +50,14 @@ import com.choicemaker.util.SystemPropertyUtils;
  *
  */
 @NamedQuery(name = "modelFindAll",
-		query = "Select model from CM_ModelBean model")
+		query = "Select model from CMP_ModelBean model")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMP_MODEL")
-public class CM_ModelBean implements Serializable {
+public class CMP_ModelBean implements Serializable {
 
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger.getLogger(CM_ModelBean.class
+	private static final Logger log = Logger.getLogger(CMP_ModelBean.class
 			.getName());
 
 	/** Default value for non-persistent models */
@@ -89,7 +89,7 @@ public class CM_ModelBean implements Serializable {
 		return id == INVALID_MODEL_ID;
 	}
 
-	static boolean isNonPersistent(CM_ModelBean model) {
+	static boolean isNonPersistent(CMP_ModelBean model) {
 		boolean retVal = true;
 		if (model != null) {
 			retVal = isInvalidModelId(model.getId());
@@ -159,7 +159,7 @@ public class CM_ModelBean implements Serializable {
 	@MapKeyColumn(name = "CLUE_NUMBER")
 	@CollectionTable(name = "CM_MDB_MODEL_FEATURE", joinColumns = @JoinColumn(
 			name = "MODEL_ID"))
-	private Map<Integer, CM_Feature> features = new HashMap<>();
+	private Map<Integer, CMP_Feature> features = new HashMap<>();
 
 	@ElementCollection
 	@MapKeyColumn(name = "TIMESTAMP")
@@ -171,17 +171,17 @@ public class CM_ModelBean implements Serializable {
 
 	// -- Construction
 
-	protected CM_ModelBean() {
+	protected CMP_ModelBean() {
 	}
 
-	public CM_ModelBean(ImmutableProbabilityModel ipm) {
+	public CMP_ModelBean(ImmutableProbabilityModel ipm) {
 		if (ipm == null) {
 			throw new IllegalArgumentException("null model");
 		}
 		this.modelName = ipm.getModelName();
 		this.modelSignature = ipm.getModelSignature();
 		final MachineLearner ml = ipm.getMachineLearner();
-		this.machineLearning = CM_ModelBean.getMachineLearningTypeName(ml);
+		this.machineLearning = CMP_ModelBean.getMachineLearningTypeName(ml);
 		this.evaluatorSignature = ipm.getEvaluatorSignature();
 		this.cluesetName = ipm.getClueSetName();
 		this.cluesetSignature = ipm.getClueSetSignature();
@@ -198,8 +198,8 @@ public class CM_ModelBean implements Serializable {
 				assert weights.length == clueDescriptors.length;
 			}
 			for (int i = 0; i < clueDescriptors.length; i++) {
-				CM_Feature cmf =
-					new CM_Feature(this.machineLearning, clueDescriptors,
+				CMP_Feature cmf =
+					new CMP_Feature(this.machineLearning, clueDescriptors,
 							weights, i);
 				this.features.put(i, cmf);
 			}
@@ -342,7 +342,7 @@ public class CM_ModelBean implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		CM_ModelBean other = (CM_ModelBean) obj;
+		CMP_ModelBean other = (CMP_ModelBean) obj;
 		if (id != other.id) {
 			return false;
 		}
@@ -362,7 +362,7 @@ public class CM_ModelBean implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		CM_ModelBean other = (CM_ModelBean) obj;
+		CMP_ModelBean other = (CMP_ModelBean) obj;
 		if (cluesetName == null) {
 			if (other.cluesetName != null) {
 				return false;
@@ -415,7 +415,7 @@ public class CM_ModelBean implements Serializable {
 		return true;
 	}
 
-	// public List<CM_ModelConfigurationBean> getModelConfigurations() {
+	// public List<CMP_ModelConfigurationBean> getModelConfigurations() {
 	// return modelConfigurations;
 	// }
 	//

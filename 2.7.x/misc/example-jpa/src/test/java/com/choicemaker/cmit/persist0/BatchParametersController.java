@@ -27,7 +27,8 @@ public class BatchParametersController {
 	}
 
 	public BatchParametersBean find(long id) {
-		BatchParametersBean batchParameters = em.find(BatchParametersBean.class, id);
+		BatchParametersBean batchParameters =
+			em.find(BatchParametersBean.class, id);
 		return batchParameters;
 	}
 

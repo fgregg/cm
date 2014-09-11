@@ -43,8 +43,7 @@ public enum BatchJobStatus {
 
 	// -- State machine
 
-	public static boolean isAllowedTransition(BatchJobStatus current,
-			BatchJobStatus next) {
+	public static boolean isAllowed(BatchJobStatus current, BatchJobStatus next) {
 		if (current == null || next == null) {
 			throw new IllegalArgumentException("null batchJobStatus");
 		}
@@ -56,7 +55,7 @@ public enum BatchJobStatus {
 	}
 
 	// -- String representation
-	
+
 	public static final String toString(BatchJobStatus status) {
 		String retVal = null;
 		if (status != null) {
@@ -73,5 +72,5 @@ public enum BatchJobStatus {
 		}
 		return retVal;
 	}
-	
+
 }

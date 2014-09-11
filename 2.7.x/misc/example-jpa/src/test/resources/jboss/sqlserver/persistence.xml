@@ -18,12 +18,12 @@
     -->
 
     <class>com.choicemaker.cm.persist0.BatchJobBean</class>
-    <class>com.choicemaker.cm.persist0.CM_AuditEvent</class>
+    <class>com.choicemaker.cm.persist0.CMP_AuditEvent</class>
     <class>com.choicemaker.cm.persist0.OfflineMatchingBean</class>
     <class>com.choicemaker.cm.persist0.OfflineMatchingAuditEvent</class>
     <class>com.choicemaker.cm.persist0.TransitivityJobBean</class>
     <class>com.choicemaker.cm.persist0.TransitivityJobAuditEvent</class>
-    <class>com.choicemaker.cm.persist0.CM_ModelBean</class>
+    <class>com.choicemaker.cm.persist0.CMP_ModelBean</class>
     <class>com.choicemaker.cm.persist0.BatchParametersBean</class>
     <class>com.choicemaker.cm.persist0.StatusLogBean</class>
 

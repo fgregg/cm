@@ -1,10 +1,11 @@
 package com.choicemaker.cm.persist0;
 
 import java.util.Date;
+import java.util.List;
 
 import com.choicemaker.cm.core.IControl;
 
-public interface BatchJob extends IControl{
+public interface BatchJob extends IControl {
 
 	int MIN_PERCENTAGE_COMPLETED = 0;
 
@@ -78,10 +79,14 @@ public interface BatchJob extends IControl{
 
 	void setPercentageComplete(int percentage);
 
+	Date getTimeStamp(BatchJobStatus batchJobStatus);
+
+	List<CMP_AuditEvent> getTimeStamps();
+
 	BatchJobStatus getStatus();
 
 	void setStatus(BatchJobStatus currentStatus);
 
-	Date getTimeStamp(BatchJobStatus batchJobStatus);
+	void setStatus(BatchJobStatus batchJobStatus, String detail);
 
 }

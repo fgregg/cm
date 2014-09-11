@@ -21,11 +21,12 @@ import com.choicemaker.cm.persist0.BatchJobBean;
 import com.choicemaker.cm.persist0.BatchJobStatus;
 import com.choicemaker.cm.persist0.BatchParameters;
 import com.choicemaker.cm.persist0.BatchParametersBean;
-import com.choicemaker.cm.persist0.CM_AuditEvent;
-import com.choicemaker.cm.persist0.CM_Feature;
-import com.choicemaker.cm.persist0.CM_ModelBean;
-import com.choicemaker.cm.persist0.CM_ModelConfigurationBean;
-import com.choicemaker.cm.persist0.CM_ModelConfigurationPK;
+import com.choicemaker.cm.persist0.CMP_AuditEvent;
+import com.choicemaker.cm.persist0.CMP_Feature;
+import com.choicemaker.cm.persist0.CMP_ModelBean;
+import com.choicemaker.cm.persist0.CMP_ModelConfigurationBean;
+import com.choicemaker.cm.persist0.CMP_ModelConfigurationPK;
+import com.choicemaker.cm.persist0.CMP_WellKnownEventType;
 import com.choicemaker.cm.persist0.OfflineMatchingAuditEvent;
 import com.choicemaker.cm.persist0.OfflineMatchingBean;
 import com.choicemaker.cm.persist0.StatusLog;
@@ -39,28 +40,32 @@ public class DeploymentUtils {
 	public static final String PROJECT_POM = "pom.xml";
 
 	public static final String PERSISTENCE_CONFIGURATION =
-			"src/test/resources/jboss/sqlserver/persistence.xml";
+		"src/test/resources/jboss/sqlserver/persistence.xml";
 
-	public static JavaArchive createEjbJar(String unused, String MavenCoordinates, List<Class<?>> testClasses, String persistenceConfiguration) {
-//		if (unused == null) {
-//			throw new IllegalArgumentException("null POM");
-//		}
-//		if (!new File(unused).exists()) {
-//			throw new IllegalArgumentException("POM doesn't exist: '" + unused + "'");
-//		}
-//		if (testClasses == null || testClasses.isEmpty()) {
-//			throw new IllegalArgumentException("null or empty list of test classes");
-//		}
-//		
-//		PomEquippedResolveStage pom =
-//			Maven.resolver().loadPomFromFile(unused);
-//		File jarFile =
-//			pom.resolve(MavenCoordinates).withoutTransitivity()
-//					.asSingleFile();
-//		JavaArchive retVal =
-//			ShrinkWrap.create(ZipImporter.class, "ejb.jar").importFrom(jarFile)
-//					.as(JavaArchive.class);
-		JavaArchive retVal =ShrinkWrap.create(JavaArchive.class, "ejb.jar");
+	public static JavaArchive createEjbJar(String unused,
+			String MavenCoordinates, List<Class<?>> testClasses,
+			String persistenceConfiguration) {
+		// if (unused == null) {
+		// throw new IllegalArgumentException("null POM");
+		// }
+		// if (!new File(unused).exists()) {
+		// throw new IllegalArgumentException("POM doesn't exist: '" + unused +
+		// "'");
+		// }
+		// if (testClasses == null || testClasses.isEmpty()) {
+		// throw new
+		// IllegalArgumentException("null or empty list of test classes");
+		// }
+		//
+		// PomEquippedResolveStage pom =
+		// Maven.resolver().loadPomFromFile(unused);
+		// File jarFile =
+		// pom.resolve(MavenCoordinates).withoutTransitivity()
+		// .asSingleFile();
+		// JavaArchive retVal =
+		// ShrinkWrap.create(ZipImporter.class, "ejb.jar").importFrom(jarFile)
+		// .as(JavaArchive.class);
+		JavaArchive retVal = ShrinkWrap.create(JavaArchive.class, "ejb.jar");
 
 		// Flag this JAR to CDI as containing injectable beans
 		retVal.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -77,17 +82,17 @@ public class DeploymentUtils {
 		for (Class<?> testClass : testClasses) {
 			retVal.addClass(testClass);
 		}
-		
+
 		retVal.addClass(BatchJob.class);
 		retVal.addClass(BatchJobBean.class);
 		retVal.addClass(BatchJobStatus.class);
 		retVal.addClass(BatchParameters.class);
 		retVal.addClass(BatchParametersBean.class);
-		retVal.addClass(CM_AuditEvent.class);
-		retVal.addClass(CM_Feature.class);
-		retVal.addClass(CM_ModelBean.class);
-		retVal.addClass(CM_ModelConfigurationBean.class);
-		retVal.addClass(CM_ModelConfigurationPK.class);
+		retVal.addClass(CMP_AuditEvent.class);
+		retVal.addClass(CMP_Feature.class);
+		retVal.addClass(CMP_ModelBean.class);
+		retVal.addClass(CMP_ModelConfigurationBean.class);
+		retVal.addClass(CMP_ModelConfigurationPK.class);
 		retVal.addClass(OfflineMatchingAuditEvent.class);
 		retVal.addClass(OfflineMatchingBean.class);
 		retVal.addClass(StatusLog.class);
@@ -95,12 +100,13 @@ public class DeploymentUtils {
 		retVal.addClass(TransitivityJob.class);
 		retVal.addClass(TransitivityJobAuditEvent.class);
 		retVal.addClass(TransitivityJobBean.class);
-		
+		retVal.addClass(CMP_WellKnownEventType.class);
+
 		// Print the JAR contents
-//		System.out.println();
-//		System.out.println("EJB JAR:");
-//		System.out.println(retVal.toString(true));
-//		System.out.println();
+		// System.out.println();
+		// System.out.println("EJB JAR:");
+		// System.out.println(retVal.toString(true));
+		// System.out.println();
 		return retVal;
 	}
 
@@ -109,7 +115,8 @@ public class DeploymentUtils {
 			throw new IllegalArgumentException("null POM");
 		}
 		if (!new File(dependenciesPOM).exists()) {
-			throw new IllegalArgumentException("POM doesn't exist: '" + dependenciesPOM + "'");
+			throw new IllegalArgumentException("POM doesn't exist: '"
+					+ dependenciesPOM + "'");
 		}
 
 		// Break out steps for easier debugging
@@ -125,17 +132,15 @@ public class DeploymentUtils {
 
 		// Print the dependencies
 		/*
-		System.out.println();
-		System.out.println("Test dependencies:");
-		for (File f : retVal) {
-			System.out.println(f.getAbsolutePath());
-		}
-		System.out.println();
-		*/
+		 * System.out.println(); System.out.println("Test dependencies:"); for
+		 * (File f : retVal) { System.out.println(f.getAbsolutePath()); }
+		 * System.out.println();
+		 */
 		return retVal;
 	}
 
-	public static EnterpriseArchive createEarArchive(JavaArchive ejb, File[] dependencies) {
+	public static EnterpriseArchive createEarArchive(JavaArchive ejb,
+			File[] dependencies) {
 		// Create the EAR
 		EnterpriseArchive retVal = ShrinkWrap.create(EnterpriseArchive.class);
 
@@ -157,10 +162,10 @@ public class DeploymentUtils {
 		}
 
 		// Print the EAR contents
-//		System.out.println();
-//		System.out.println("Deployment EAR:");
-//		System.out.println(retVal.toString(true));
-//		System.out.println();
+		// System.out.println();
+		// System.out.println("Deployment EAR:");
+		// System.out.println(retVal.toString(true));
+		// System.out.println();
 		return retVal;
 	}
 

@@ -27,13 +27,13 @@ import com.choicemaker.cm.core.SerialRecordSource;
  *
  */
 @NamedQuery(name = "batchParametersFindAll",
-query = "Select params from BatchParametersBean params")
+		query = "Select params from BatchParametersBean params")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMP_BATCH_PARAMS")
 public class BatchParametersBean implements Serializable, BatchParameters {
 
 	private static final long serialVersionUID = 271L;
-	
+
 	public static enum NamedQuery {
 		FIND_ALL("batchParametersFindAll");
 		public final String name;
@@ -48,10 +48,11 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 
 	@Id
 	@Column(name = "ID")
-//	@TableGenerator(name = "OABA_BATCHPARAMS", table = "CMT_SEQUENCE",
-//			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-//			pkColumnValue = "OABA_BATCHPARAMS")
-//	@GeneratedValue(strategy = GenerationType.TABLE, generator = "OABA_BATCHPARAMS")
+	// @TableGenerator(name = "OABA_BATCHPARAMS", table = "CMT_SEQUENCE",
+	// pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+	// pkColumnValue = "OABA_BATCHPARAMS")
+	// @GeneratedValue(strategy = GenerationType.TABLE, generator =
+	// "OABA_BATCHPARAMS")
 	private long id;
 
 	@Column(name = "STAGE_MODEL")
@@ -65,10 +66,10 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 
 	@Column(name = "LOW_THRESHOLD")
 	private float lowThreshold;
-	
+
 	@Column(name = "HIGH_THRESHOLD")
 	private float highThreshold;
-	
+
 	@Transient
 	private SerialRecordSource stageRs;
 
@@ -82,7 +83,7 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	protected BatchParametersBean(long jobId) {
 		setId(jobId);
 	}
-	
+
 	public BatchParametersBean(BatchJob batchJob) {
 		this(batchJob.getId());
 		if (BatchJobBean.isNonPersistent(batchJob)) {
@@ -90,8 +91,12 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getId()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #getId()
 	 */
 	@Override
 	public long getId() {
@@ -102,112 +107,168 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 		this.id = id;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getStageModel()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #getStageModel()
 	 */
 	@Override
 	public String getStageModel() {
 		return stageModel;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setStageModel(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #setStageModel(java.lang.String)
 	 */
 	@Override
 	public void setStageModel(String stageModel) {
 		this.stageModel = stageModel;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getMasterModel()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #getMasterModel()
 	 */
 	@Override
 	public String getMasterModel() {
 		return masterModel;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setMasterModel(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #setMasterModel(java.lang.String)
 	 */
 	@Override
 	public void setMasterModel(String masterModel) {
 		this.masterModel = masterModel;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getMaxSingle()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #getMaxSingle()
 	 */
 	@Override
 	public int getMaxSingle() {
 		return maxSingle;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setMaxSingle(int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #setMaxSingle(int)
 	 */
 	@Override
 	public void setMaxSingle(int maxSingle) {
 		this.maxSingle = maxSingle;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getLowThreshold()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #getLowThreshold()
 	 */
 	@Override
 	public float getLowThreshold() {
 		return lowThreshold;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setLowThreshold(float)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #setLowThreshold(float)
 	 */
 	@Override
 	public void setLowThreshold(float lowThreshold) {
 		this.lowThreshold = lowThreshold;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getHighThreshold()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #getHighThreshold()
 	 */
 	@Override
 	public float getHighThreshold() {
 		return highThreshold;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setHighThreshold(float)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #setHighThreshold(float)
 	 */
 	@Override
 	public void setHighThreshold(float highThreshold) {
 		this.highThreshold = highThreshold;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getStageRs()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #getStageRs()
 	 */
 	@Override
 	public SerialRecordSource getStageRs() {
 		return stageRs;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setStageRs(com.choicemaker.cm.core.SerialRecordSource)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #setStageRs(com.choicemaker.cm.core.SerialRecordSource)
 	 */
 	@Override
 	public void setStageRs(SerialRecordSource stageRs) {
 		this.stageRs = stageRs;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#getMasterRs()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #getMasterRs()
 	 */
 	@Override
 	public SerialRecordSource getMasterRs() {
 		return masterRs;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters#setMasterRs(com.choicemaker.cm.core.SerialRecordSource)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
+	 * #setMasterRs(com.choicemaker.cm.core.SerialRecordSource)
 	 */
 	@Override
 	public void setMasterRs(SerialRecordSource masterRs) {

@@ -30,7 +30,7 @@ import com.choicemaker.cm.core.Decision;
  * @author rphall
  */
 @Embeddable
-public class CM_Feature implements Serializable {
+public class CMP_Feature implements Serializable {
 
 	protected static final String INVALID_MISSING = "INVALID: MISSING";
 
@@ -39,84 +39,6 @@ public class CM_Feature implements Serializable {
 	public static final float WEIGHT_NOT_AVAILABLE = -1.0f;
 
 	private static final long serialVersionUID = 271L;
-
-	public static enum DefaultFeatureType {
-		CLUE_MATCH(true, "match"), CLUE_HOLD(true, "hold"), CLUE_DIFFER(true,
-				"differ"), RULE_NONE(false, "none"),
-		RULE_MATCH(false, "match"), RULE_HOLD(false, "hold"), RULE_DIFFER(
-				false, "differ"), RULE_NOMATCH(false, "nomatch"), RULE_NOHOLD(
-				false, "nohold"), RULE_NODIFFER(false, "nodiffer");
-		static String CLUE = "clue";
-		static String RULE = "rule";
-		private final boolean isClue;
-		private final String nickname;
-
-		DefaultFeatureType(boolean isClue, String nick) {
-			this.isClue = isClue;
-			this.nickname = nick;
-			assert nickname.equals(nick.toLowerCase());
-		}
-
-		public boolean isClue() {
-			return isClue;
-		}
-
-		public boolean isRule() {
-			return !isClue;
-		}
-
-		public String getNickName() {
-			return nickname;
-		}
-
-		public String toString() {
-			String type = isClue ? CLUE : RULE;
-			String retVal = type + nickname;
-			assert retVal.equals(retVal.toLowerCase());
-			return retVal;
-		}
-
-		private static String toName(boolean isClue, String s1) {
-			String s0 = isClue ? CLUE : RULE;
-			return toName(s0, s1);
-		}
-
-		private static String toName(String s0, String s1) {
-			return s0.toUpperCase() + "_" + s1.toUpperCase();
-		}
-
-		static DefaultFeatureType fromFlaggedNickname(boolean isClue, String s) {
-			String enumName = toName(isClue, s);
-			DefaultFeatureType retVal = DefaultFeatureType.valueOf(enumName);
-			return retVal;
-		}
-
-		static DefaultFeatureType fromString(String s) {
-			if (s == null) {
-				throw new IllegalArgumentException("null argument");
-			}
-			s = s.trim().toLowerCase();
-			if (s.isEmpty()) {
-				throw new IllegalArgumentException("blank argument");
-			}
-			String[] components = s.split(":");
-			if (components.length != 2) {
-				throw new IllegalArgumentException("invalid form: '" + s + "'");
-			}
-			String enumName = toName(components[0], components[1]);
-			DefaultFeatureType retVal = DefaultFeatureType.valueOf(enumName);
-			return retVal;
-		}
-
-		static DefaultFeatureType fromDecision(boolean isClue, Decision d) {
-			if (d == null) {
-				throw new IllegalArgumentException("null argument");
-			}
-			DefaultFeatureType retVal =
-				fromFlaggedNickname(isClue, d.getName());
-			return retVal;
-		}
-	}
 
 	@Column(name = "NAME")
 	private String featureName;
@@ -138,10 +60,10 @@ public class CM_Feature implements Serializable {
 
 	// -- Construction
 
-	protected CM_Feature() {
+	protected CMP_Feature() {
 	}
 
-	// public CM_Feature(final ImmutableProbabilityModel ipm, final int idx) {
+	// public CMP_Feature(final ImmutableProbabilityModel ipm, final int idx) {
 	// if (ipm == null) {
 	// throw new IllegalArgumentException("null model");
 	// }
@@ -162,9 +84,9 @@ public class CM_Feature implements Serializable {
 	// final boolean isClue = !cd.rule;
 	// final Decision d = cd.getDecision();
 	// this.featureName = cd.getName();
-	// this.machineLearning = CM_ModelBean.getMachineLearningTypeName(ml);
+	// this.machineLearning = CMP_ModelBean.getMachineLearningTypeName(ml);
 	// this.featureType =
-	// DefaultFeatureType.fromDecision(isClue, d).toString();
+	// CMP_DefaultFeatureType.fromDecision(isClue, d).toString();
 	// if (ml instanceof MaximumEntropy) {
 	// final MaximumEntropy me = (MaximumEntropy) ml;
 	// final float[] weights = me.getWeights();
@@ -175,7 +97,7 @@ public class CM_Feature implements Serializable {
 	// }
 	// }
 
-	CM_Feature(String mlType, final ClueDesc[] clueDescriptors,
+	CMP_Feature(String mlType, final ClueDesc[] clueDescriptors,
 			final float[] weights, final int idx) {
 		if (mlType == null) {
 			throw new IllegalArgumentException("null machine learning type");
@@ -210,7 +132,7 @@ public class CM_Feature implements Serializable {
 		final boolean isClue = !cd.rule;
 		final Decision d = cd.getDecision();
 		this.featureType =
-			DefaultFeatureType.fromDecision(isClue, d).toString();
+			CMP_DefaultFeatureType.fromDecision(isClue, d).toString();
 		if (weights != null) {
 			this.weight = weights[idx];
 		} else {
@@ -264,7 +186,7 @@ public class CM_Feature implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		CM_Feature other = (CM_Feature) obj;
+		CMP_Feature other = (CMP_Feature) obj;
 		if (featureName == null) {
 			if (other.featureName != null) {
 				return false;
@@ -294,7 +216,7 @@ public class CM_Feature implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CM_Feature [featureName=" + featureName + ", featureType="
+		return "CMP_Feature [featureName=" + featureName + ", featureType="
 				+ featureType + ", weight=" + weight + "]";
 	}
 

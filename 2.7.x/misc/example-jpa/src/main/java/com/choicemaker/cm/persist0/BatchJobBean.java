@@ -12,6 +12,7 @@ package com.choicemaker.cm.persist0;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -85,11 +86,11 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 		}
 		return retVal;
 	}
-	
+
 	public static String randomTransactionId() {
 		return UUID.randomUUID().toString().trim().toUpperCase();
 	}
-	
+
 	// -- Instance data
 
 	@Id
@@ -97,8 +98,7 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	@TableGenerator(name = "CMP_BATCHJOB", table = "CMT_SEQUENCE",
 			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
 			pkColumnValue = "CMP_BATCHJOB")
-	@GeneratedValue(strategy = GenerationType.TABLE,
-			generator = "CMP_BATCHJOB")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "CMP_BATCHJOB")
 	protected long id;
 
 	@Column(name = "EXTERNAL_ID")
@@ -119,8 +119,8 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	@Column(name = "BatchJobStatus")
 	protected BatchJobStatus batchJobStatus;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="job")
-	protected List<OfflineMatchingAuditEvent> audit = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "job")
+	protected List<CMP_AuditEvent> audit = new ArrayList<>();
 
 	// -- Construction
 
@@ -134,59 +134,76 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 		this.type = type;
 		setStatus(BatchJobStatus.NEW);
 	}
-	
+
 	// -- Accessors
 
 	@Override
-	public long getId() {
+	public final long getId() {
 		return id;
 	}
-	
+
 	@Override
-	public String getExternalId() {
+	public final String getExternalId() {
 		return externalId;
 	}
 
 	@Override
-	public String getTransactionId() {
+	public final String getTransactionId() {
 		return transactionId;
 	}
 
 	@Override
-	public String getDescription() {
+	public final String getDescription() {
 		return description;
 	}
 
 	@Override
-	public int getPercentageComplete() {
+	public final int getPercentageComplete() {
 		return percentageComplete;
 	}
 
 	@Override
-	public BatchJobStatus getStatus() {
+	public final BatchJobStatus getStatus() {
 		return batchJobStatus;
 	}
 
 	@Override
-	public String getType() {
+	public final String getType() {
 		return type;
 	}
 
 	@Override
-	public Date getTimeStamp(BatchJobStatus batchJobStatus) {
+	public final Date getTimeStamp(BatchJobStatus batchJobStatus) {
 		return this.mostRecentTimestamp(batchJobStatus);
 	}
 
+	@Override
+	public final List<CMP_AuditEvent> getTimeStamps() {
+		return Collections.unmodifiableList(audit);
+	}
+
 	/** Backwards compatibility */
-	protected Date mostRecentTimestamp(BatchJobStatus batchJobStatus) {
+	protected final Date mostRecentTimestamp(BatchJobStatus batchJobStatus) {
 		// This could (should?) be replaced with a named, parameterized query
+		final String statusEventTypeName =
+			CMP_WellKnownEventType.STATUS.toString();
 		Date retVal = null;
 		if (batchJobStatus != null) {
-			for (OfflineMatchingAuditEvent e : audit) {
-				if (batchJobStatus == e.getStatus()) {
-					Date ts = e.getTimestamp();
-					if (retVal == null || retVal.compareTo(ts) < 0) {
-						retVal = ts;
+			for (CMP_AuditEvent e : audit) {
+				assert this.getType().equals(e.getObjectType());
+				if (statusEventTypeName.equals(e.getEventType())) {
+					final String s = e.getEvent();
+					BatchJobStatus status = null;
+					try {
+						status = BatchJobStatus.fromString(s);
+					} catch (Exception x) {
+						log.severe("invalid batch job status: " + s);
+					}
+					if (status == batchJobStatus) {
+						Date ts = e.getTimestamp();
+						if (retVal == null || retVal.compareTo(ts) < 0) {
+							retVal = ts;
+						}
 					}
 				}
 			}
@@ -195,37 +212,37 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public Date getRequested() {
+	public final Date getRequested() {
 		return mostRecentTimestamp(BatchJobStatus.NEW);
 	}
 
 	@Override
-	public Date getQueued() {
+	public final Date getQueued() {
 		return mostRecentTimestamp(BatchJobStatus.QUEUED);
 	}
 
 	@Override
-	public Date getStarted() {
+	public final Date getStarted() {
 		return mostRecentTimestamp(BatchJobStatus.STARTED);
 	}
 
 	@Override
-	public Date getCompleted() {
+	public final Date getCompleted() {
 		return mostRecentTimestamp(BatchJobStatus.COMPLETED);
 	}
 
 	@Override
-	public Date getFailed() {
+	public final Date getFailed() {
 		return mostRecentTimestamp(BatchJobStatus.FAILED);
 	}
 
 	@Override
-	public Date getAbortRequested() {
+	public final Date getAbortRequested() {
 		return mostRecentTimestamp(BatchJobStatus.ABORT_REQUESTED);
 	}
 
 	@Override
-	public Date getAborted() {
+	public final Date getAborted() {
 		return mostRecentTimestamp(BatchJobStatus.ABORTED);
 	}
 
@@ -241,10 +258,8 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public void markAsQueued() {
-		if (BatchJobStatus.isAllowedTransition(getStatus(), BatchJobStatus.QUEUED)) {
-			logTransition(BatchJobStatus.QUEUED);
-			// REMOVE timestamps.put(BatchJobStatus.QUEUED, new Date());
+	public final void markAsQueued() {
+		if (BatchJobStatus.isAllowed(getStatus(), BatchJobStatus.QUEUED)) {
 			setStatus(BatchJobStatus.QUEUED);
 		} else {
 			logIgnoredTransition("markAsQueued");
@@ -252,10 +267,8 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public void markAsStarted() {
-		if (BatchJobStatus.isAllowedTransition(getStatus(), BatchJobStatus.STARTED)) {
-			logTransition(BatchJobStatus.QUEUED);
-			// REMOVE timestamps.put(BatchJobStatus.STARTED, new Date());
+	public final void markAsStarted() {
+		if (BatchJobStatus.isAllowed(getStatus(), BatchJobStatus.STARTED)) {
 			setStatus(BatchJobStatus.STARTED);
 		} else {
 			logIgnoredTransition("markAsStarted");
@@ -263,17 +276,14 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public void markAsReStarted() {
-		// REMOVE timestamps.put(BatchJobStatus.QUEUED, new Date());
+	public final void markAsReStarted() {
 		setStatus(BatchJobStatus.QUEUED);
 	}
 
 	@Override
-	public void markAsCompleted() {
-		if (BatchJobStatus.isAllowedTransition(getStatus(), BatchJobStatus.COMPLETED)) {
-			logTransition(BatchJobStatus.COMPLETED);
+	public final void markAsCompleted() {
+		if (BatchJobStatus.isAllowed(getStatus(), BatchJobStatus.COMPLETED)) {
 			setPercentageComplete(100);
-			// REMOVE timestamps.put(BatchJobStatus.COMPLETED, new Date());
 			setStatus(BatchJobStatus.COMPLETED);
 		} else {
 			logIgnoredTransition("markAsCompleted");
@@ -281,10 +291,8 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public void markAsFailed() {
-		if (BatchJobStatus.isAllowedTransition(getStatus(), BatchJobStatus.FAILED)) {
-			logTransition(BatchJobStatus.FAILED);
-			// REMOVE timestamps.put(BatchJobStatus.FAILED, new Date());
+	public final void markAsFailed() {
+		if (BatchJobStatus.isAllowed(getStatus(), BatchJobStatus.FAILED)) {
 			setStatus(BatchJobStatus.FAILED);
 		} else {
 			logIgnoredTransition("markAsFailed");
@@ -292,10 +300,9 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public void markAsAbortRequested() {
-		if (BatchJobStatus.isAllowedTransition(getStatus(), BatchJobStatus.ABORT_REQUESTED)) {
-			logTransition(BatchJobStatus.ABORT_REQUESTED);
-			// REMOVE timestamps.put(BatchJobStatus.ABORT_REQUESTED, new Date());
+	public final void markAsAbortRequested() {
+		if (BatchJobStatus.isAllowed(getStatus(),
+				BatchJobStatus.ABORT_REQUESTED)) {
 			setStatus(BatchJobStatus.ABORT_REQUESTED);
 		} else {
 			logIgnoredTransition("markAsAbortRequested");
@@ -303,66 +310,62 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public void markAsAborted() {
-		if (BatchJobStatus.isAllowedTransition(getStatus(), BatchJobStatus.ABORTED)) {
+	public final void markAsAborted() {
+		if (BatchJobStatus.isAllowed(getStatus(), BatchJobStatus.ABORTED)) {
 			if (!BatchJobStatus.ABORT_REQUESTED.equals(getStatus())) {
 				markAsAbortRequested();
 			}
-			logTransition(BatchJobStatus.ABORTED);
-			// REMOVE timestamps.put(BatchJobStatus.ABORTED, new Date());
 			setStatus(BatchJobStatus.ABORTED);
 		} else {
 			logIgnoredTransition("markAsAborted");
 		}
 	}
-	
+
 	// -- Other modifiers
 
 	@Override
-	public void updatePercentageCompleted(float percentageCompleted) {
+	public final void updatePercentageCompleted(float percentageCompleted) {
 		updatePercentageCompleted((int) percentageCompleted);
 	}
 
 	@Override
-	public void updatePercentageCompleted(int percentageCompleted) {
+	public final void updatePercentageCompleted(int percentageCompleted) {
 		if (percentageCompleted < 0 || percentageCompleted > 100) {
 			String msg =
 				"invalid percentageCompleted == '" + percentageCompleted + "'";
 			throw new IllegalArgumentException(msg);
 		}
-		if (BatchJobStatus.isAllowedTransition(getStatus(), BatchJobStatus.STARTED)) {
-			logTransition(BatchJobStatus.STARTED);
-			// REMOVE timestamps.put(BatchJobStatus.STARTED, new Date());
+		if (BatchJobStatus.isAllowed(getStatus(), BatchJobStatus.STARTED)) {
 			setStatus(BatchJobStatus.STARTED);
 		} else {
 			logIgnoredTransition("updatePercentageCompleted");
 		}
 	}
 
-	protected void logTransition(BatchJobStatus newStatus) {
+	protected final void logTransition(BatchJobStatus newStatus) {
 		String msg =
 			getId() + ", '" + getExternalId() + "': transitioning from "
 					+ getStatus() + " to " + newStatus;
-		log.warning(msg);
+		log.info(msg);
 	}
 
-	protected void logIgnoredTransition(String transition) {
+	protected final void logIgnoredTransition(String transition) {
 		String msg =
 			getId() + ", '" + getExternalId() + "': " + transition
 					+ " ignored (batchJobStatus == '" + getStatus() + "'";
 		log.warning(msg);
 	}
 
-	protected void setId(long id) {
+	protected final void setId(long id) {
 		this.id = id;
 	}
 
 	@Override
-	public void setExternalId(String externalId) {
+	public final void setExternalId(String externalId) {
 		this.externalId = externalId;
 	}
 
-	protected void setTransactionId(String transactionId) {
+	protected final void setTransactionId(String transactionId) {
 		if (transactionId != null) {
 			transactionId = transactionId.trim().toUpperCase();
 			if (transactionId.isEmpty()) {
@@ -373,38 +376,60 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public void setDescription(String description) {
+	public final void setDescription(String description) {
 		this.description = description;
 	}
 
 	@Override
-	public void setPercentageComplete(int percentage) {
+	public final void setPercentageComplete(int percentage) {
 		if (percentage < MIN_PERCENTAGE_COMPLETED
 				|| percentage > MAX_PERCENTAGE_COMPLETED) {
 			throw new IllegalArgumentException("invalid percentage: "
 					+ percentage);
 		}
 		this.percentageComplete = percentage;
+		String detail = "completed: " + percentage;
 		// Update the timestamp, indirectly
-		setStatus(getStatus());
+		setStatus(getStatus(), detail);
 	}
 
 	@Override
-	public void setStatus(BatchJobStatus currentStatus) {
-		this.batchJobStatus = currentStatus;
-		setTimeStamp(currentStatus, new Date());
+	public final void setStatus(BatchJobStatus status) {
+		this.setStatus(status, null);
 	}
 
-	// Should be invoked only by setStatus(BatchJobStatus)
-	protected void setTimeStamp(BatchJobStatus batchJobStatus, Date date) {
-		OfflineMatchingAuditEvent e = new OfflineMatchingAuditEvent(
-				this.getTransactionId(),
-				this,
-				date,
-				batchJobStatus
-				);
+	@Override
+	public final void setStatus(BatchJobStatus status, String detail) {
+		this.batchJobStatus = status;
+		Date date = new Date();
+		CMP_AuditEvent e = createStatusEvent(batchJobStatus, date);
+		if (e == null) {
+			throw new IllegalStateException("event type is null");
+		}
+		final String expected = CMP_WellKnownEventType.STATUS.toString();
+		final String computed = e.getEventType();
+		if (!expected.equals(computed)) {
+			String msg = "event type is not '" + expected + "': " + computed;
+			throw new IllegalStateException(msg);
+		}
+		if (detail != null && !detail.trim().isEmpty()) {
+			e.setEventDetail(detail);
+		}
+		logTransition(status);
 		this.audit.add(e);
 	}
+
+	/**
+	 * Callback used by {@link setStatus(BatchJobStatus, String)}
+	 * 
+	 * @param s
+	 *            a non-null status
+	 * @param d
+	 *            a non-null date
+	 * @return a null date with a event type equal to
+	 *         {@link CMP_WellKnownEventType.STATUS#name() "STATUS"}.
+	 */
+	protected abstract CMP_AuditEvent createStatusEvent(BatchJobStatus s, Date d);
 
 	// -- Identity
 
@@ -426,14 +451,17 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 	protected int hashCode0() {
 		final int prime = 31;
 		int result = 1;
-//		result =
-//			prime * result
-//					+ ((description == null) ? 0 : description.hashCode());
+		// result =
+		// prime * result
+		// + ((description == null) ? 0 : description.hashCode());
 		result =
 			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
-//		result = prime * result + ((audit == null) ? 0 : audit.hashCode());
+		// result = prime * result + ((audit == null) ? 0 : audit.hashCode());
 		result = prime * result + percentageComplete;
-		result = prime * result + ((batchJobStatus == null) ? 0 : batchJobStatus.hashCode());
+		result =
+			prime
+					* result
+					+ ((batchJobStatus == null) ? 0 : batchJobStatus.hashCode());
 		result =
 			prime * result
 					+ ((transactionId == null) ? 0 : transactionId.hashCode());
@@ -473,14 +501,10 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 			return false;
 		}
 		/*
-		if (description == null) {
-			if (other.description != null) {
-				return false;
-			}
-		} else if (!description.equals(other.description)) {
-			return false;
-		}
-		*/
+		 * if (description == null) { if (other.description != null) { return
+		 * false; } } else if (!description.equals(other.description)) { return
+		 * false; }
+		 */
 		if (externalId == null) {
 			if (other.externalId != null) {
 				return false;
@@ -489,14 +513,9 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 			return false;
 		}
 		/*
-		if (audit == null) {
-			if (other.audit != null) {
-				return false;
-			}
-		} else if (!audit.equals(other.audit)) {
-			return false;
-		}
-		*/
+		 * if (audit == null) { if (other.audit != null) { return false; } }
+		 * else if (!audit.equals(other.audit)) { return false; }
+		 */
 		if (percentageComplete != other.percentageComplete) {
 			return false;
 		}
@@ -518,7 +537,8 @@ public abstract class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	@Override
 	public String toString() {
-		return "BatchJobBean [" + id + "/" + externalId + "/" + batchJobStatus + "]";
+		return "BatchJobBean [" + id + "/" + externalId + "/" + batchJobStatus
+				+ "]";
 	}
 
 }

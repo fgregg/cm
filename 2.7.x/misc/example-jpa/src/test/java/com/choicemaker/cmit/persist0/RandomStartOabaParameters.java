@@ -24,7 +24,7 @@ public class RandomStartOabaParameters {
 		float retVal = lowerBound + offset;
 		return retVal;
 	}
-	
+
 	public static enum PARAMETER_OPTION {
 		OPTION_6, OPTION_8, OPTION_9
 	}
@@ -48,7 +48,7 @@ public class RandomStartOabaParameters {
 		if (option == null || o == null) {
 			throw new IllegalArgumentException("null option or object");
 		}
-		switch(option) {
+		switch (option) {
 		case OPTION_6:
 			this.externalID = "EXT_ID: " + o.toString();
 			this.staging = null;
@@ -82,8 +82,8 @@ public class RandomStartOabaParameters {
 			this.maxSingle = random.nextInt(Integer.MAX_VALUE);
 			this.runTransitivity = random.nextBoolean();
 			break;
-		 default:
-			 throw new Error("Unexpected option: " + option);
+		default:
+			throw new Error("Unexpected option: " + option);
 		}
 	}
 

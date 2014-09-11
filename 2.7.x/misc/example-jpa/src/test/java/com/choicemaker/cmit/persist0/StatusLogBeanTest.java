@@ -1,6 +1,5 @@
 package com.choicemaker.cmit.persist0;
 
-import static com.choicemaker.cmit.persist0.BatchDeploymentUtils.DEPENDENCIES_POM;
 import static com.choicemaker.cmit.persist0.BatchDeploymentUtils.EJB_MAVEN_COORDINATES;
 import static com.choicemaker.cmit.utils0.DeploymentUtils.PERSISTENCE_CONFIGURATION;
 import static com.choicemaker.cmit.utils0.DeploymentUtils.PROJECT_POM;
@@ -62,7 +61,8 @@ public class StatusLogBeanTest {
 
 	@Test
 	public void testConstruction() {
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		StatusLogBean statusEntry = new StatusLogBean(job);
 		assertTrue(job.getId() == statusEntry.getJobId());
@@ -74,7 +74,8 @@ public class StatusLogBeanTest {
 		final int initialCount = stsController.findAll().size();
 
 		// Create a statusEntry
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		StatusLogBean statusEntry = new StatusLogBean(job);
 
@@ -103,7 +104,8 @@ public class StatusLogBeanTest {
 		// Count existing jobs
 		final int initialCount = stsController.findAll().size();
 
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		StatusLogBean statusEntry = new StatusLogBean(job);
 
@@ -129,7 +131,8 @@ public class StatusLogBeanTest {
 	@Test
 	public void testEqualsHashCode() {
 		// Create two generic parameter sets and verify equality
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		StatusLogBean statusEntry1 = new StatusLogBean(job);
 		StatusLog statusEntry2 = new StatusLogBean(job);
@@ -142,28 +145,28 @@ public class StatusLogBeanTest {
 		assertTrue(statusEntry1.equals(statusEntry2));
 		assertTrue(statusEntry1.hashCode() == statusEntry2.hashCode());
 
-//		// Restore equality
-//		statusEntry2.setInfo(statusEntry1.getInfo());
-//		assertTrue(statusEntry1.equals(statusEntry2));
-//		assertTrue(statusEntry1.hashCode() == statusEntry2.hashCode());
-//
-//		// Verify non-persistent status is not equal to persistent status
-//		statusEntry1 = stsController.save(statusEntry1);
-//		assertTrue(!statusEntry1.equals(statusEntry2));
-//		assertTrue(statusEntry1.hashCode() != statusEntry2.hashCode());
-//
-//		// Verify that equality of persisted parameter sets is set only by
-//		// persistence id
-//		stsController.detach(statusEntry1);
-//		statusEntry2 = stsController.find(statusEntry1.getJobId());
-//		stsController.detach(statusEntry2);
-//		assertTrue(statusEntry1.equals(statusEntry2));
-//		assertTrue(statusEntry1.hashCode() == statusEntry2.hashCode());
-//
-//		statusEntry1.setInfo("nonsense");
-//		assertTrue(!statusEntry1.getInfo().equals(statusEntry2.getInfo()));
-//		assertTrue(statusEntry1.equals(statusEntry2));
-//		assertTrue(statusEntry1.hashCode() == statusEntry2.hashCode());
+		// // Restore equality
+		// statusEntry2.setInfo(statusEntry1.getInfo());
+		// assertTrue(statusEntry1.equals(statusEntry2));
+		// assertTrue(statusEntry1.hashCode() == statusEntry2.hashCode());
+		//
+		// // Verify non-persistent status is not equal to persistent status
+		// statusEntry1 = stsController.save(statusEntry1);
+		// assertTrue(!statusEntry1.equals(statusEntry2));
+		// assertTrue(statusEntry1.hashCode() != statusEntry2.hashCode());
+		//
+		// // Verify that equality of persisted parameter sets is set only by
+		// // persistence id
+		// stsController.detach(statusEntry1);
+		// statusEntry2 = stsController.find(statusEntry1.getJobId());
+		// stsController.detach(statusEntry2);
+		// assertTrue(statusEntry1.equals(statusEntry2));
+		// assertTrue(statusEntry1.hashCode() == statusEntry2.hashCode());
+		//
+		// statusEntry1.setInfo("nonsense");
+		// assertTrue(!statusEntry1.getInfo().equals(statusEntry2.getInfo()));
+		// assertTrue(statusEntry1.equals(statusEntry2));
+		// assertTrue(statusEntry1.hashCode() == statusEntry2.hashCode());
 	}
 
 	@Test
@@ -172,7 +175,8 @@ public class StatusLogBeanTest {
 		final int initialCount = stsController.findAll().size();
 
 		// Create a statusEntry and set a value
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		StatusLogBean statusEntry = new StatusLogBean(job);
 
@@ -202,7 +206,8 @@ public class StatusLogBeanTest {
 		final int initialCount = stsController.findAll().size();
 
 		// Create a statusEntry and set a value
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		StatusLogBean statusEntry = new StatusLogBean(job);
 
@@ -232,7 +237,8 @@ public class StatusLogBeanTest {
 		final int initialCount = stsController.findAll().size();
 
 		// Create a statusEntry and set a value
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		StatusLogBean statusEntry = new StatusLogBean(job);
 
@@ -262,7 +268,8 @@ public class StatusLogBeanTest {
 		final int initialCount = stsController.findAll().size();
 
 		// Create a statusEntry and set a value
-		OfflineMatchingBean job = new OfflineMatchingBean("EXT ID: " + new Date().toString());
+		OfflineMatchingBean job =
+			new OfflineMatchingBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		StatusLogBean statusEntry = new StatusLogBean(job);
 

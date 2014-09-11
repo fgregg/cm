@@ -26,13 +26,13 @@ import javax.persistence.Table;
  *
  */
 @NamedQuery(name = "statusLogFindAll",
-query = "Select status from StatusLogBean status")
+		query = "Select status from StatusLogBean status")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMP_STATUS_LOG")
 public class StatusLogBean implements Serializable, StatusLog {
-	
+
 	private static final long serialVersionUID = DEFAULT_VERSION;
-	
+
 	/** Default value when no jobId is assigned */
 	public static final long INVALID_JOBID = 0;
 
@@ -47,10 +47,11 @@ public class StatusLogBean implements Serializable, StatusLog {
 
 	@Id
 	@Column(name = "JOB_ID")
-//	@TableGenerator(name = "OABA_STATUSLOG", table = "CMT_SEQUENCE",
-//			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-//			pkColumnValue = "OABA_STATUSLOG")
-//	@GeneratedValue(strategy = GenerationType.TABLE, generator = "OABA_STATUSLOG")
+	// @TableGenerator(name = "OABA_STATUSLOG", table = "CMT_SEQUENCE",
+	// pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+	// pkColumnValue = "OABA_STATUSLOG")
+	// @GeneratedValue(strategy = GenerationType.TABLE, generator =
+	// "OABA_STATUSLOG")
 	private long jobId;
 
 	@Column(name = "JOB_TYPE")
@@ -64,7 +65,7 @@ public class StatusLogBean implements Serializable, StatusLog {
 
 	@Column(name = "INFO")
 	private String info;
-	
+
 	protected StatusLogBean() {
 		this(INVALID_JOBID);
 	}
@@ -72,7 +73,7 @@ public class StatusLogBean implements Serializable, StatusLog {
 	protected StatusLogBean(long jobId) {
 		setJobId(jobId);
 	}
-	
+
 	public StatusLogBean(BatchJob batchJob) {
 		this(batchJob.getId());
 		if (BatchJobBean.isNonPersistent(batchJob)) {
@@ -80,8 +81,12 @@ public class StatusLogBean implements Serializable, StatusLog {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getJobId()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getJobId
+	 * ()
 	 */
 	@Override
 	public long getJobId() {
@@ -92,16 +97,24 @@ public class StatusLogBean implements Serializable, StatusLog {
 		this.jobId = jobId;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getJobType()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getJobType
+	 * ()
 	 */
 	@Override
 	public String getJobType() {
 		return jobType;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setJobType(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setJobType
+	 * (java.lang.String)
 	 */
 	@Override
 	public void setJobType(String jobType) {
@@ -111,48 +124,72 @@ public class StatusLogBean implements Serializable, StatusLog {
 		this.jobType = jobType;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getStatusId()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getStatusId
+	 * ()
 	 */
 	@Override
 	public int getStatusId() {
 		return statusId;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setStatusId(int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setStatusId
+	 * (int)
 	 */
 	@Override
 	public void setStatusId(int statusId) {
 		this.statusId = statusId;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getVersion()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getVersion
+	 * ()
 	 */
 	@Override
 	public int getVersion() {
 		return version;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setVersion(int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setVersion
+	 * (int)
 	 */
 	@Override
 	public void setVersion(int version) {
 		this.version = version;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getInfo()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#getInfo
+	 * ()
 	 */
 	@Override
 	public String getInfo() {
 		return info;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setInfo(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.server.StatusLog#setInfo
+	 * (java.lang.String)
 	 */
 	@Override
 	public void setInfo(String info) {
@@ -167,7 +204,8 @@ public class StatusLogBean implements Serializable, StatusLog {
 			result = hashCode0();
 		} else {
 			result = prime * result + (int) (jobId ^ (jobId >>> 32));
-			result = prime * result + ((jobType == null) ? 0 : jobType.hashCode());
+			result =
+				prime * result + ((jobType == null) ? 0 : jobType.hashCode());
 		}
 		return result;
 	}

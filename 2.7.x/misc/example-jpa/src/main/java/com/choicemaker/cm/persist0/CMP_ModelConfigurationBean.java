@@ -38,18 +38,18 @@ import javax.persistence.TemporalType;
  *
  */
 @NamedQuery(name = "modelConfigFindAll",
-		query = "Select config from CM_ModelConfigurationBean config")
+		query = "Select config from CMP_ModelConfigurationBean config")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMP_MODEL_CONFIG")
-public class CM_ModelConfigurationBean implements Serializable {
+public class CMP_ModelConfigurationBean implements Serializable {
 
 	private static final long serialVersionUID = 271L;
 
 	private static final String CLASS_LOG_NAME =
-		CM_ModelConfigurationBean.class.getSimpleName();
+		CMP_ModelConfigurationBean.class.getSimpleName();
 
 	private static final Logger log = Logger
-			.getLogger(CM_ModelConfigurationBean.class.getName());
+			.getLogger(CMP_ModelConfigurationBean.class.getName());
 
 	public static enum NamedQuery {
 		FIND_ALL("modelConfigFindAll");
@@ -84,11 +84,11 @@ public class CM_ModelConfigurationBean implements Serializable {
 		}
 		return retVal;
 	}
-	
+
 	// -- Instance data
 
 	@Id
-	private CM_ModelConfigurationPK id;
+	private CMP_ModelConfigurationPK id;
 
 	@ElementCollection
 	@MapKeyColumn(name = "NAME")
@@ -101,20 +101,20 @@ public class CM_ModelConfigurationBean implements Serializable {
 	@MapKeyColumn(name = "TIMESTAMP")
 	@MapKeyTemporal(TemporalType.TIMESTAMP)
 	@Column(name = "NOTE")
-	@CollectionTable(name = "CM_MDB_MODEL_CONFIG_AUDIT", joinColumns = @JoinColumn(
-			name = "MODEL_ID"))
+	@CollectionTable(name = "CM_MDB_MODEL_CONFIG_AUDIT",
+			joinColumns = @JoinColumn(name = "MODEL_ID"))
 	private Map<Date, String> audit = new HashMap<>();
 
 	// -- Construction
 
-	protected CM_ModelConfigurationBean() {
+	protected CMP_ModelConfigurationBean() {
 	}
 
-	public CM_ModelConfigurationBean(CM_ModelBean model, String name) {
-		this.id = new CM_ModelConfigurationPK(model, name);
+	public CMP_ModelConfigurationBean(CMP_ModelBean model, String name) {
+		this.id = new CMP_ModelConfigurationPK(model, name);
 	}
 
-	public CM_ModelConfigurationBean(CM_ModelConfigurationPK pk) {
+	public CMP_ModelConfigurationBean(CMP_ModelConfigurationPK pk) {
 		if (pk == null) {
 			throw new IllegalArgumentException("null primary key");
 		}
@@ -123,7 +123,7 @@ public class CM_ModelConfigurationBean implements Serializable {
 
 	// -- Accessors
 
-	public CM_ModelConfigurationPK getId() {
+	public CMP_ModelConfigurationPK getId() {
 		return id;
 	}
 
@@ -134,7 +134,7 @@ public class CM_ModelConfigurationBean implements Serializable {
 	public String getConfigurationName() {
 		return id.getConfigurationName();
 	}
-	
+
 	public String getProperty(String name) {
 		name = validateAndStandardizePropertyName(name);
 		String retVal = this.configurationProperties.get(name);
@@ -228,7 +228,7 @@ public class CM_ModelConfigurationBean implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		CM_ModelConfigurationBean other = (CM_ModelConfigurationBean) obj;
+		CMP_ModelConfigurationBean other = (CMP_ModelConfigurationBean) obj;
 		if (configurationProperties == null) {
 			if (other.configurationProperties != null) {
 				return false;
@@ -249,8 +249,8 @@ public class CM_ModelConfigurationBean implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CM_ModelConfigurationBean [id=" + id
+		return "CMP_ModelConfigurationBean [id=" + id
 				+ ", configurationProperties=" + configurationProperties + "]";
 	}
-	
+
 }

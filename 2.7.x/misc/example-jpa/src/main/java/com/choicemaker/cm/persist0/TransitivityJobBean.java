@@ -10,38 +10,39 @@
  */
 package com.choicemaker.cm.persist0;
 
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 
-
 /**
  * A TransitivityJobBean tracks the progress of a (long-running) transitivity
  * process. A successful request goes through a sequence of states: NEW, QUEUED,
- * STARTED, and COMPLETED. A request may be aborted at any point, in which
- * case it goes through the ABORT_REQUESTED and the ABORT states.</p>
+ * STARTED, and COMPLETED. A request may be aborted at any point, in which case
+ * it goes through the ABORT_REQUESTED and the ABORT states.</p>
  *
  * A long-running process should provide some indication that it is making
- * progress. It can provide
- * this estimate as a fraction between 0 and 100 (inclusive) by updating
- * the getFractionComplete() field.</p>
+ * progress. It can provide this estimate as a fraction between 0 and 100
+ * (inclusive) by updating the getFractionComplete() field.</p>
  *
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)
  *
  */
 @NamedQuery(name = "transitivityFindAll",
-query = "Select job from TransitivityJobBean job")
+		query = "Select job from TransitivityJobBean job")
 @Entity
 @DiscriminatorValue(value = "TRANSITIVITY")
-public class TransitivityJobBean extends BatchJobBean implements TransitivityJob {
+public class TransitivityJobBean extends BatchJobBean implements
+		TransitivityJob {
 
 	private static final long serialVersionUID = 271L;
 
 	@SuppressWarnings("unused")
-	private static Logger log = Logger.getLogger(TransitivityJobBean.class.getName());
+	private static Logger log = Logger.getLogger(TransitivityJobBean.class
+			.getName());
 
 	public static final String TABLE_DISCRIMINATOR = "TRANSITIVITY";
 
@@ -57,7 +58,7 @@ public class TransitivityJobBean extends BatchJobBean implements TransitivityJob
 	// -- Instance data
 
 	// -- Construction
-	
+
 	protected TransitivityJobBean() {
 		this(null);
 	}
@@ -72,12 +73,24 @@ public class TransitivityJobBean extends BatchJobBean implements TransitivityJob
 
 	// -- Accessors
 
+	// -- Modifiers
+
+	// -- Call backs
+
+	@Override
+	protected CMP_AuditEvent createStatusEvent(BatchJobStatus s, Date d) {
+		TransitivityJobAuditEvent e =
+			new TransitivityJobAuditEvent(this.getTransactionId(), this, d,
+					batchJobStatus);
+		return e;
+	}
+
 	// -- Identity
 
 	@Override
 	public String toString() {
-		return "TransitivityJobBean [" + id + "/" + externalId + "/" + batchJobStatus
-				+ "]";
+		return "TransitivityJobBean [" + id + "/" + externalId + "/"
+				+ batchJobStatus + "]";
 	}
 
 }

@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.persist0;
 
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.persistence.DiscriminatorValue;
@@ -71,6 +72,18 @@ public class OfflineMatchingBean extends BatchJobBean {
 	}
 
 	// -- Accessors
+
+	// -- Modifiers
+
+	// -- Call backs
+
+	@Override
+	protected CMP_AuditEvent createStatusEvent(BatchJobStatus s, Date d) {
+		OfflineMatchingAuditEvent e =
+			new OfflineMatchingAuditEvent(this.getTransactionId(), this, d,
+					batchJobStatus);
+		return e;
+	}
 
 	// -- Identity
 

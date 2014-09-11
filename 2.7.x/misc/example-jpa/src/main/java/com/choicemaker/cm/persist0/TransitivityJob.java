@@ -69,7 +69,7 @@ public interface TransitivityJob extends IControl {
 	Date getAbortRequested();
 
 	Date getAborted();
-	
+
 	long getId();
 
 	String getTransactionId();
@@ -82,15 +82,15 @@ public interface TransitivityJob extends IControl {
 
 	void setPercentageComplete(int percentageComplete);
 
-//	String getModel();
-//
-//	float getMatch();
-//
-//	void setMatch(float match);
-//
-//	float getDiffer();
-//
-//	void setDiffer(float differ);
+	// String getModel();
+	//
+	// float getMatch();
+	//
+	// void setMatch(float match);
+	//
+	// float getDiffer();
+	//
+	// void setDiffer(float differ);
 
 	BatchJobStatus getStatus();
 

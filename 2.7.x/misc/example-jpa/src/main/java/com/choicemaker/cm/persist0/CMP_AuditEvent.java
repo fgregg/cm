@@ -37,16 +37,16 @@ import javax.persistence.TemporalType;
  *
  */
 @NamedQuery(name = "auditFindAll",
-		query = "Select event from CM_AuditEvent event")
+		query = "Select event from CMP_AuditEvent event")
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = "CMP_AUDIT")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "JOB_TYPE")
-public abstract class CM_AuditEvent implements Serializable {
+public abstract class CMP_AuditEvent implements Serializable {
 
 	private static final long serialVersionUID = 271L;
 
-	// private static final Logger log = Logger.getLogger(CM_AuditEvent.class
+	// private static final Logger log = Logger.getLogger(CMP_AuditEvent.class
 	// .getName());
 
 	/** Default value for non-persistent audit events */
@@ -66,11 +66,13 @@ public abstract class CM_AuditEvent implements Serializable {
 		}
 	}
 
+	/** Well-known event types */
+
 	static boolean isInvalidAuditId(long id) {
 		return id == INVALID_AUDIT_ID;
 	}
 
-	public static boolean isNonPersistent(CM_AuditEvent e) {
+	public static boolean isNonPersistent(CMP_AuditEvent e) {
 		boolean retVal = true;
 		if (e != null) {
 			retVal = isInvalidAuditId(e.getId());
@@ -122,8 +124,8 @@ public abstract class CM_AuditEvent implements Serializable {
 
 	// -- Construction
 
-	 protected CM_AuditEvent() {
-	 }
+	protected CMP_AuditEvent() {
+	}
 
 	/**
 	 * Creates an entry for the audit table
@@ -149,16 +151,16 @@ public abstract class CM_AuditEvent implements Serializable {
 	 *            optional. May be null. Will not be trimmed nor converted to
 	 *            upper case.
 	 */
-	public CM_AuditEvent(String transactionId, String objectType,
-			BatchJobBean batchJob, Date timestamp, String eventType, String event,
-			String eventDetails) {
+	public CMP_AuditEvent(String transactionId, String objectType,
+			BatchJobBean batchJob, Date timestamp, String eventType,
+			String event, String eventDetails) {
 		this.setTransactionId(transactionId);
 		this.setObjectType(objectType);
 		this.setObject(batchJob);
 		this.setTimestamp(timestamp);
 		this.setEventType(eventType);
 		this.setEvent(event);
-		this.setEventDetails(eventDetails);
+		this.setEventDetail(eventDetails);
 	}
 
 	// -- Accessors
@@ -191,7 +193,7 @@ public abstract class CM_AuditEvent implements Serializable {
 		return event;
 	}
 
-	public String getEventDetails() {
+	public String getEventDetail() {
 		return eventDetails;
 	}
 
@@ -206,16 +208,16 @@ public abstract class CM_AuditEvent implements Serializable {
 	}
 
 	protected void setObject(BatchJobBean o) {
-//		if (oid < OBJECT_ID_LOWER_BOUND) {
-//			throw new IllegalArgumentException("Invalid job id: " + oid);
-//		}
+		// if (oid < OBJECT_ID_LOWER_BOUND) {
+		// throw new IllegalArgumentException("Invalid job id: " + oid);
+		// }
 		this.job = o;
 	}
 
 	protected void setTimestamp(Date ts) {
-//		if (ts == null) {
-//			throw new IllegalArgumentException("null timestamp");
-//		}
+		// if (ts == null) {
+		// throw new IllegalArgumentException("null timestamp");
+		// }
 		this.timestamp = ts;
 	}
 
@@ -227,7 +229,7 @@ public abstract class CM_AuditEvent implements Serializable {
 		this.event = standardize(event);
 	}
 
-	protected void setEventDetails(String eventDetails) {
+	protected void setEventDetail(String eventDetails) {
 		this.eventDetails = eventDetails;
 	}
 
@@ -249,10 +251,8 @@ public abstract class CM_AuditEvent implements Serializable {
 		result = prime * result + ((event == null) ? 0 : event.hashCode());
 		result =
 			prime * result + ((eventType == null) ? 0 : eventType.hashCode());
-		result =
-				prime * result + ((job == null) ? 0 : job.hashCode());
-		result =
-			prime * result + ((jobType == null) ? 0 : jobType.hashCode());
+		result = prime * result + ((job == null) ? 0 : job.hashCode());
+		result = prime * result + ((jobType == null) ? 0 : jobType.hashCode());
 		result =
 			prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
 		result =
@@ -272,7 +272,7 @@ public abstract class CM_AuditEvent implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		CM_AuditEvent other = (CM_AuditEvent) obj;
+		CMP_AuditEvent other = (CMP_AuditEvent) obj;
 		if (id != other.id) {
 			return false;
 		}
@@ -292,7 +292,7 @@ public abstract class CM_AuditEvent implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		CM_AuditEvent other = (CM_AuditEvent) obj;
+		CMP_AuditEvent other = (CMP_AuditEvent) obj;
 		if (event == null) {
 			if (other.event != null) {
 				return false;
@@ -336,10 +336,10 @@ public abstract class CM_AuditEvent implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CM_AuditEvent [id=" + id + ", transactionId=" + transactionId
-				+ ", jobType=" + jobType + ", job=" + job
-				+ ", timestamp=" + timestamp + ", eventType=" + eventType
-				+ ", event=" + event + "]";
+		return "CMP_AuditEvent [id=" + id + ", transactionId=" + transactionId
+				+ ", jobType=" + jobType + ", job=" + job + ", timestamp="
+				+ timestamp + ", eventType=" + eventType + ", event=" + event
+				+ "]";
 	}
 
 }

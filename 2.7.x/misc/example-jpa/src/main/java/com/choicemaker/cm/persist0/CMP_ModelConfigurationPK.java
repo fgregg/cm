@@ -21,7 +21,7 @@ import javax.persistence.Embeddable;
  * @author rphall
  */
 @Embeddable
-public class CM_ModelConfigurationPK implements Serializable {
+public class CMP_ModelConfigurationPK implements Serializable {
 
 	private static final long serialVersionUID = 271L;
 
@@ -33,14 +33,14 @@ public class CM_ModelConfigurationPK implements Serializable {
 
 	// -- Construction
 
-	protected CM_ModelConfigurationPK() {
+	protected CMP_ModelConfigurationPK() {
 	}
 
-	public CM_ModelConfigurationPK(CM_ModelBean model, String name) {
+	public CMP_ModelConfigurationPK(CMP_ModelBean model, String name) {
 		if (model == null) {
 			throw new IllegalArgumentException("null model");
 		}
-		if (!CM_ModelBean.isNonPersistent(model)) {
+		if (!CMP_ModelBean.isNonPersistent(model)) {
 			throw new IllegalArgumentException("non-persistent model");
 		}
 		if (name == null) {
@@ -91,7 +91,7 @@ public class CM_ModelConfigurationPK implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		CM_ModelConfigurationPK other = (CM_ModelConfigurationPK) obj;
+		CMP_ModelConfigurationPK other = (CMP_ModelConfigurationPK) obj;
 		if (configurationName == null) {
 			if (other.configurationName != null) {
 				return false;
@@ -107,7 +107,7 @@ public class CM_ModelConfigurationPK implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CM_ModelConfigurationPK [" + modelId + "/" + configurationName
+		return "CMP_ModelConfigurationPK [" + modelId + "/" + configurationName
 				+ "]";
 	}
 
