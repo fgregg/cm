@@ -248,7 +248,7 @@ public class BatchJobBeanTest {
 		// Create a job and set a value
 		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 		final long v1 = random.nextLong();
-		job.setTransactionId(v1);
+		job.setDescription("" + v1);
 
 		// Save the job
 		final long id1 = controller.save(job).getId();
@@ -259,7 +259,7 @@ public class BatchJobBeanTest {
 		job = controller.find(id1);
 
 		// Check the value
-		final long v2 = job.getTransactionId();
+		final long v2 = Long.parseLong(job.getDescription());
 		assertTrue(v1 == v2);
 
 		// Remove the job and the number of remaining jobs
