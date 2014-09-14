@@ -15,17 +15,23 @@
    </requires>
 
    <extension
+         point="com.choicemaker.cm.core.model">
+      <modelConfiguration
+            name="model1"
+            file="/com/choicemaker/cm/simple-person-plugin/SimplePerson.model"/>
+      <modelConfiguration
+            name="model2"
+            file="/com/choicemaker/cm/simple-person-plugin/SimplePerson2.model"/>
+   </extension>
+
+   <extension
          point="com.choicemaker.cm.core.modelConfiguration">
       <modelConfiguration
-            name="modelConfig1"
-            file="/SimplePerson.model"
-            dbConfig="default"
-            blockingConfig="default"/>
+            name="model1Config1"
+            file="/com/choicemaker/cm/simple-person-plugin/Mode1Config1.xml"/>
       <modelConfiguration
-            name="modelConfig2"
-            file="/SimplePerson2.model"
-            dbConfig="default"
-            blockingConfig="default"/>
+            name="model1Config2"
+            file="/com/choicemaker/cm/simple-person-plugin/Mode1Config1.xml"/>
    </extension>
 
 </plugin>
