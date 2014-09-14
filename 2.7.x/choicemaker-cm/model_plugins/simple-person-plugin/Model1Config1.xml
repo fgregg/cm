@@ -1,0 +1,79 @@
+<!--
+A model configuration consists of the following:
+
+(*) A trained model, specified as the name of a com.choicemaker.cm.core.model
+    extension.
+ 
+(*) Model configuration parameters
+    The name of a database configuration
+    The name of a blocking configuration
+ 
+(*) Datasource configuration parameters
+    The name of a DataSource for connecting to a staging database
+    A SQL selection statement for pulling records from the staging database
+ 
+    The name of a DataSource for connecting to a master database
+    A SQL selection statement for pulling records from the master database
+ 
+(*) The name of a blocking configuration defined by the model
+
+(*) The name of a database configuration defined by the model
+ 
+(*) Matching configuration parameters
+    Single-record matching parameters
+    Batch-record matching parameters
+
+(*) Transitivity analysis parameters
+    A flag that indicates whether transitivity analysis is performed
+    Parameters that control how transitivity analysis is performed
+-->
+<cmModelConfiguration>
+  <model name="model1" />
+  <datasources>
+    <staging dsName="MyOracleDatasource">
+      <sql>
+        <![CDATA[
+select person_id as id from person where deduped="N"
+        ]]>
+      </sql>
+    </staging>
+    <master dsName="MyOracleDatasource">
+      <sql>
+        <![CDATA[
+select person_id as id from person where deduped="Y"
+        ]]>
+      </sql>
+    </master>
+  </datasources>
+  <databaseConfiguration name="default" />
+  <blockingConfiguration name="default" />
+  <matching>
+    <thresholds differ="0.2" match="0.8" />
+    <singleRecordMatching>
+      <limitPerBlockingSet>50</limitPerBlockingSet>
+      <singleTableBlockingSetGraceLimit>100
+      </singleTableBlockingSetGraceLimit>
+      <limitSingleBlockingSet>200</limitSingleBlockingSet>
+    </singleRecordMatching>
+    <batchRecordMatching>
+      <batchThreshold>1000</batchThreshold>
+      <maxChunkFiles>500</maxChunkFiles>
+      <maxChunkSize>250000</maxChunkSize>
+      <maxBlockSize>50</maxBlockSize>
+      <maxOversized>1000</maxOversized>
+      <minFields>5</minFields>
+      <maxMatchSize>800000</maxMatchSize>
+    </batchRecordMatching>
+  </matching>
+  <transitivity enabled="true">
+    <graphPropType>BCM</graphPropType>
+    <analysisResultFormat>SORT_BY_HOLD_GROUP</analysisResultFormat>
+    <scoreType>NO_NOTE</scoreType>
+  </transitivity>
+  <properties>
+    <property name="someProperty1" value="someValue" />
+    <property name="someProperty2" value="250000" />
+    <property name="someProperty9" value="3.14" />
+  </properties>
+</cmModelConfiguration>
+
