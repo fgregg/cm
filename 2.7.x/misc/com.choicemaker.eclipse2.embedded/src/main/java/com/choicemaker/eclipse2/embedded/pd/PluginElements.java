@@ -11,7 +11,7 @@
 
 package com.choicemaker.eclipse2.embedded.pd;
 
-public interface IPluginModel {
+public interface PluginElements {
 
 	public static final int INDENT = 2;
 	public static final int RADIX = 36;

@@ -39,7 +39,7 @@ import com.choicemaker.eclipse2.pd.PluginDiscoveryException;
 public class EmbeddedPluginDiscovery implements PluginDiscovery {
 
 	public static final String COMMENT_SYMBOL = "#";
-	public static final String PREFIX = "META-INF/plugins/";
+	public static final String PREFIX = "META-INF/eclipse2/";
 	public static final String DEFAULT_PLUGIN_CONFIGURATION = "default";
 	public static final String PLUGIN_DESCRIPTOR_FILE = "plugin.xml";
 	public static final String FRAGMENT_DESCRIPTOR_FILE = "fragment.xml";
@@ -126,22 +126,22 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 			}
 
 			// Parse the descriptor URL
-			IdVersionType pivt = null;
+			IdVersionType ivt = null;
 			try {
-				pivt = parseDescriptor(u);
+				ivt = parseDescriptor(u);
 			} catch (SAXException | ParserConfigurationException | IOException e) {
 				fail("Descriptor parsing failed for " + u, e);
 			}
-			assert pivt != null;
+			assert ivt != null;
 
 			// Add a mapping for the plugin or fragment to the other mappings
-			URL u0 = plugins.put(pivt, u);
+			URL u0 = plugins.put(ivt, u);
 
 			// Fail if there are mapping conflicts
 			if (u0 != null) {
 				StringBuilder sb =
 					new StringBuilder()
-							.append("Conflicting URLs for " + pivt.toString())
+							.append("Conflicting URLs for " + ivt.toString())
 							.append(":  urls[ ").append(u0 + ", ")
 							.append(u + "]");
 				fail(sb.toString(), null);
@@ -239,7 +239,7 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) throws SAXException {
 			qName = qName.intern();
-			if (qName == IPluginModel.PLUGIN || qName == IPluginModel.FRAGMENT) {
+			if (qName == PluginElements.PLUGIN || qName == PluginElements.FRAGMENT) {
 				// CMPluginModel.PLUGIN or CMPluginModel.FRAGMENT may occur several times
 				// within a descriptor, first within the root element, and then
 				// perhaps later in declarations of extensions (as an example).
@@ -247,7 +247,7 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 				// set the id, version and type of this instance.
 				if (id == null) {
 
-					id = attributes.getValue(IPluginModel.PLUGIN_ID);
+					id = attributes.getValue(PluginElements.PLUGIN_ID);
 					if (id == null) {
 						throw new PluginDiscoveryException("null id for " + u);
 					}
@@ -257,15 +257,15 @@ public class EmbeddedPluginDiscovery implements PluginDiscovery {
 					}
 					
 					assert type == null;
-					if (qName == IPluginModel.PLUGIN) {
+					if (qName == PluginElements.PLUGIN) {
 						type = IdVersionType.TYPE.fragment;
 					} else {
-						assert qName == IPluginModel.FRAGMENT;
+						assert qName == PluginElements.FRAGMENT;
 						type = IdVersionType.TYPE.fragment;
 					}
 
 					assert version == null;
-					version = attributes.getValue(IPluginModel.PLUGIN_VERSION);
+					version = attributes.getValue(PluginElements.PLUGIN_VERSION);
 					if (version == null) {
 						throw new PluginDiscoveryException("null version for " + u);
 					}
