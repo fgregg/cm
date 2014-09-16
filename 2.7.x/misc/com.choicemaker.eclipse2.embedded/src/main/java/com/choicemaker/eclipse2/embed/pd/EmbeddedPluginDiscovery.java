@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.choicemaker.eclipse2.embedded.pd;
+package com.choicemaker.eclipse2.embed.pd;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,7 +39,7 @@ import com.choicemaker.eclipse2.pd.PluginDiscoveryException;
 public class EmbeddedPluginDiscovery implements PluginDiscovery {
 
 	public static final String COMMENT_SYMBOL = "#";
-	public static final String PREFIX = "META-INF/eclipse2/";
+	public static final String PREFIX = "META-INF/plugins/";
 	public static final String DEFAULT_PLUGIN_CONFIGURATION = "default";
 	public static final String PLUGIN_DESCRIPTOR_FILE = "plugin.xml";
 	public static final String FRAGMENT_DESCRIPTOR_FILE = "fragment.xml";

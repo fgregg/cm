@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -27,6 +29,8 @@ import com.choicemaker.cm.persist0.CMP_ModelBean;
 import com.choicemaker.cm.persist0.CMP_ModelConfigurationBean;
 import com.choicemaker.cm.persist0.CMP_ModelConfigurationPK;
 import com.choicemaker.cm.persist0.CMP_WellKnownEventType;
+import com.choicemaker.cm.persist0.EmbeddedEclipseBean;
+import com.choicemaker.cm.persist0.EmbeddedEclipseBean2;
 import com.choicemaker.cm.persist0.OfflineMatchingAuditEvent;
 import com.choicemaker.cm.persist0.OfflineMatchingBean;
 import com.choicemaker.cm.persist0.StatusLog;
@@ -36,6 +40,8 @@ import com.choicemaker.cm.persist0.TransitivityJobAuditEvent;
 import com.choicemaker.cm.persist0.TransitivityJobBean;
 
 public class DeploymentUtils {
+	
+	private static final Logger logger = Logger.getLogger(DeploymentUtils.class.getName());
 
 	public static final String PROJECT_POM = "pom.xml";
 
@@ -45,26 +51,7 @@ public class DeploymentUtils {
 	public static JavaArchive createEjbJar(String unused,
 			String MavenCoordinates, List<Class<?>> testClasses,
 			String persistenceConfiguration) {
-		// if (unused == null) {
-		// throw new IllegalArgumentException("null POM");
-		// }
-		// if (!new File(unused).exists()) {
-		// throw new IllegalArgumentException("POM doesn't exist: '" + unused +
-		// "'");
-		// }
-		// if (testClasses == null || testClasses.isEmpty()) {
-		// throw new
-		// IllegalArgumentException("null or empty list of test classes");
-		// }
-		//
-		// PomEquippedResolveStage pom =
-		// Maven.resolver().loadPomFromFile(unused);
-		// File jarFile =
-		// pom.resolve(MavenCoordinates).withoutTransitivity()
-		// .asSingleFile();
-		// JavaArchive retVal =
-		// ShrinkWrap.create(ZipImporter.class, "ejb.jar").importFrom(jarFile)
-		// .as(JavaArchive.class);
+
 		JavaArchive retVal = ShrinkWrap.create(JavaArchive.class, "ejb.jar");
 
 		// Flag this JAR to CDI as containing injectable beans
@@ -93,6 +80,9 @@ public class DeploymentUtils {
 		retVal.addClass(CMP_ModelBean.class);
 		retVal.addClass(CMP_ModelConfigurationBean.class);
 		retVal.addClass(CMP_ModelConfigurationPK.class);
+		retVal.addClass(CMP_WellKnownEventType.class);
+		retVal.addClass(EmbeddedEclipseBean.class);
+		retVal.addClass(EmbeddedEclipseBean2.class);
 		retVal.addClass(OfflineMatchingAuditEvent.class);
 		retVal.addClass(OfflineMatchingBean.class);
 		retVal.addClass(StatusLog.class);
@@ -100,13 +90,14 @@ public class DeploymentUtils {
 		retVal.addClass(TransitivityJob.class);
 		retVal.addClass(TransitivityJobAuditEvent.class);
 		retVal.addClass(TransitivityJobBean.class);
-		retVal.addClass(CMP_WellKnownEventType.class);
 
 		// Print the JAR contents
-		// System.out.println();
-		// System.out.println("EJB JAR:");
-		// System.out.println(retVal.toString(true));
-		// System.out.println();
+		if (logger.isLoggable(Level.INFO)) {
+			 logger.info("");;
+			 logger.info("EJB JAR:");
+			 logger.info(retVal.toString(true));
+			 logger.info("");;
+		}
 		return retVal;
 	}
 
@@ -131,11 +122,14 @@ public class DeploymentUtils {
 		File[] retVal = mfs.asFile();
 
 		// Print the dependencies
-		/*
-		 * System.out.println(); System.out.println("Test dependencies:"); for
-		 * (File f : retVal) { System.out.println(f.getAbsolutePath()); }
-		 * System.out.println();
-		 */
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("");
+			logger.info("Test dependencies:");
+			for (File f : retVal) {
+				logger.info(f.getAbsolutePath());
+			}
+			logger.info("");
+		}
 		return retVal;
 	}
 
@@ -162,10 +156,12 @@ public class DeploymentUtils {
 		}
 
 		// Print the EAR contents
-		// System.out.println();
-		// System.out.println("Deployment EAR:");
-		// System.out.println(retVal.toString(true));
-		// System.out.println();
+		if (logger.isLoggable(Level.INFO)) {
+			 logger.info("");;
+			 logger.info("Deployment EAR:");
+			 logger.info(retVal.toString(true));
+			 logger.info("");;
+		}
 		return retVal;
 	}
 

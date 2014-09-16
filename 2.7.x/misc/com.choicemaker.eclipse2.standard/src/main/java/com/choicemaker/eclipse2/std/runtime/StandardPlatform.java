@@ -1,4 +1,4 @@
-package com.choicemaker.eclipse2.std.core.runtime;
+package com.choicemaker.eclipse2.std.runtime;
 
 import java.net.URL;
 

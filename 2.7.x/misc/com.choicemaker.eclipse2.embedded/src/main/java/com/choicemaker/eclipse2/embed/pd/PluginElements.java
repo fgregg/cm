@@ -9,7 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package com.choicemaker.eclipse2.embedded.pd;
+package com.choicemaker.eclipse2.embed.pd;
 
 public interface PluginElements {
 

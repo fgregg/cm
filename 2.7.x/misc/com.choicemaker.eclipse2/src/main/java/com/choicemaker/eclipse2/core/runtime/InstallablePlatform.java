@@ -9,7 +9,7 @@ import com.choicemaker.eclipse2.core.boot.CMPlatformRunnable;
  * A singleton implementation that uses an installable delegate to implement
  * CMPlatform methods. In general, a delegate should be installed only once
  * in an application context, and this class encourages this restriction by
- * using a {@link #INSTALLABLE_PLUGIN_DISCOVERY System property} to specify the
+ * using a {@link #INSTALLABLE_PLATFORM_DISCOVERY System property} to specify the
  * delegate type. If the property is not set, a {@link #getDefaultInstance()
  * default plugin-discovery} is used.
  *
@@ -22,7 +22,7 @@ public final class InstallablePlatform implements CMPlatform {
 			.getLogger(InstallablePlatform.class.getName());
 
 	/** Property name */
-	public static final String INSTALLABLE_PLUGIN_DISCOVERY =
+	public static final String INSTALLABLE_PLATFORM_DISCOVERY =
 		"cmInstallablePlatform";
 
 	/**
@@ -64,7 +64,7 @@ public final class InstallablePlatform implements CMPlatform {
 	CMPlatform getDelegate() {
 		if (delegate == null) {
 			String msgPrefix = "Installing plugin discovery: ";
-			String fqcn = System.getProperty(INSTALLABLE_PLUGIN_DISCOVERY);
+			String fqcn = System.getProperty(INSTALLABLE_PLATFORM_DISCOVERY);
 			try {
 				if (fqcn != null) {
 					logger.info(msgPrefix + fqcn);
@@ -85,6 +85,10 @@ public final class InstallablePlatform implements CMPlatform {
 		return delegate;
 	}
 
+	private void setDelegate(CMPlatform delegate) {
+		this.delegate = delegate;
+	}
+
 	/** For testing only; otherwise treat as private */
 	InstallablePlatform() {
 	}
@@ -99,7 +103,7 @@ public final class InstallablePlatform implements CMPlatform {
 		if (delegate == null) {
 			throw new IllegalArgumentException("null delegate");
 		}
-		this.delegate = delegate;
+		this.setDelegate(delegate);
 	}
 
 	/**
@@ -127,20 +131,20 @@ public final class InstallablePlatform implements CMPlatform {
 	}
 
 	public CMPluginRegistry getPluginRegistry() {
-		return delegate.getPluginRegistry();
+		return getDelegate().getPluginRegistry();
 	}
 
 	public CMPlatformRunnable loaderGetRunnable(String applicationName) {
-		return delegate.loaderGetRunnable(applicationName);
+		return getDelegate().loaderGetRunnable(applicationName);
 	}
 
 	public String getPluginDirectory(String id, String version) {
-		return delegate.getPluginDirectory(id, version);
+		return getDelegate().getPluginDirectory(id, version);
 	}
 
 	public URL getPluginDescriptorUrl(String id, String version,
 			String descriptorFile) {
-		return delegate.getPluginDescriptorUrl(id, version, descriptorFile);
+		return getDelegate().getPluginDescriptorUrl(id, version, descriptorFile);
 	}
 
 }

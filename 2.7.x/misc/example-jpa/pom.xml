@@ -196,6 +196,23 @@
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <!--
+    -->
+    <dependency>
+      <groupId>com.choicemaker.eclipse2</groupId>
+      <artifactId>com.choicemaker.eclipse2</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.eclipse2</groupId>
+      <artifactId>com.choicemaker.eclipse2.embedded</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <version>7.0</version>
