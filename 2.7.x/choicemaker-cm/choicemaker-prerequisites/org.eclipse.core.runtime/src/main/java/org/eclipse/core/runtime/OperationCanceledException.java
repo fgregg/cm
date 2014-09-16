@@ -15,6 +15,7 @@ package org.eclipse.core.runtime;
  * when the user cancels it.
  */
 public final class OperationCanceledException extends RuntimeException {
+	private static final long serialVersionUID = 271L;
 /**
  * Creates a new exception.
  */

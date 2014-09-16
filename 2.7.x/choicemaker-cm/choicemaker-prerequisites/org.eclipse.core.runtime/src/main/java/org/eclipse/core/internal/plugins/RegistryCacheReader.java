@@ -130,14 +130,14 @@ public class RegistryCacheReader {
 	private static final String SUBELEMENTS_LENGTH = "<length of subelement list>"; //$NON-NLS-1$
 	private static final String PROPERTIES_LENGTH = "<length of properties list>"; //$NON-NLS-1$
 	private static final String PARENT_REGISTRY = "<index of parent registry>"; //$NON-NLS-1$
-	private static final String CONFIGURATION_ELEMENT_PARENT = "<index of element parent>"; //$NON-NLS-1$
+//	private static final String CONFIGURATION_ELEMENT_PARENT = "<index of element parent>"; //$NON-NLS-1$
 	private static final String PLUGIN_INDEX = "<index of plugin>"; //$NON-NLS-1$
 	private static final String EXTENSION_INDEX = "<index of extension>"; //$NON-NLS-1$
 	private static final String EXT_PT_PARENT_INDEX = "<index of extension point parent>"; //$NON-NLS-1$
 	private static final String EXT_PT_EXTENSION_LENGTH = "<length of extension list>"; //$NON-NLS-1$
 	private static final String EXT_LIST = "<list of extensions>"; //$NON-NLS-1$
 	private static final String EXTENSION_PARENT = "<index of extension parent>"; //$NON-NLS-1$
-	private static final String ELEMENT_INDEX = "<index of element>"; //$NON-NLS-1$
+//	private static final String ELEMENT_INDEX = "<index of element>"; //$NON-NLS-1$
 	private static final String REGISTRY_INDEX = "<index of registry>"; //$NON-NLS-1$
 	private static final String FRAGMENT_INDEX = "<index of fragment>"; //$NON-NLS-1$
 	private static final String EXTENSION_POINT_INDEX = "<index of extension point>"; //$NON-NLS-1$
@@ -1544,16 +1544,16 @@ public final PluginRegistryModel readPluginRegistry(DataInputStream in, URL[] pl
 		return cachedRegistry;
 	}
 }
-private String[] getPathMembers(URL path) {
-	String[] list = null;
-	String protocol = path.getProtocol();
-	if (protocol.equals("file")) { //$NON-NLS-1$
-		list = (new File(path.getFile())).list();
-	} else {
-		// XXX: attempt to read URL and see if we got html dir page
-	}
-	return list == null ? new String[0] : list;
-}
+//private String[] getPathMembers(URL path) {
+//	String[] list = null;
+//	String protocol = path.getProtocol();
+//	if (protocol.equals("file")) { //$NON-NLS-1$
+//		list = (new File(path.getFile())).list();
+//	} else {
+//		// XXX: attempt to read URL and see if we got html dir page
+//	}
+//	return list == null ? new String[0] : list;
+//}
 /**
  * Loads the configuration elements for an extension.
  */
@@ -1610,6 +1610,7 @@ private void checkSubElements(DataInputStream in, ExtensionModel parent, boolean
 	}	
 }
 public class InvalidRegistryCacheException extends Exception {
+	private static final long serialVersionUID = 271L;
 	public InvalidRegistryCacheException() {
 		super(); 
 	}

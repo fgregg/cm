@@ -139,6 +139,8 @@ public class Preferences {
 	 */
 	public static class PropertyChangeEvent extends EventObject {
 
+		private static final long serialVersionUID = 271L;
+
 		/**
 		 * The name of the changed property.
  		 */
@@ -363,15 +365,15 @@ public class Preferences {
 			return result;
 		}
 
-		/**
-		 * Returns whether this listener list is empty.
-		 *
-		 * @return <code>true</code> if there are no registered listeners, and
-		 *   <code>false</code> otherwise
-		 */
-		public boolean isEmpty() {
-			return size == 0;
-		}
+//		/**
+//		 * Returns whether this listener list is empty.
+//		 *
+//		 * @return <code>true</code> if there are no registered listeners, and
+//		 *   <code>false</code> otherwise
+//		 */
+//		public boolean isEmpty() {
+//			return size == 0;
+//		}
 
 		/**
 		 * Removes the given listener from this list. Has no effect if an 
@@ -397,14 +399,14 @@ public class Preferences {
 			}
 		}
 
-		/**
-		 * Returns the number of registered listeners.
-		 *
-		 * @return the number of registered listeners
-		 */
-		public int size() {
-			return size;
-		}
+//		/**
+//		 * Returns the number of registered listeners.
+//		 *
+//		 * @return the number of registered listeners
+//		 */
+//		public int size() {
+//			return size;
+//		}
 	}
 
 	/** 

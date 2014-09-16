@@ -21,12 +21,12 @@ import org.eclipse.core.runtime.model.*;
 
 public class PluginRegistry extends PluginRegistryModel implements IPluginRegistry {
 
-	private static final String URL_PROTOCOL_FILE = "file"; //$NON-NLS-1$
+//	private static final String URL_PROTOCOL_FILE = "file"; //$NON-NLS-1$
 	private static final String F_DEBUG_REGISTRY = ".debugregistry"; //$NON-NLS-1$
 
 	// lifecycle events
-	private static final int STARTUP = 0;
-	private static final int SHUTDOWN = 1;
+//	private static final int STARTUP = 0;
+//	private static final int SHUTDOWN = 1;
 	
 	// the registry keeps a reference to the cache reader for lazily loading extensions
 	private RegistryCacheReader registryCacheReader;

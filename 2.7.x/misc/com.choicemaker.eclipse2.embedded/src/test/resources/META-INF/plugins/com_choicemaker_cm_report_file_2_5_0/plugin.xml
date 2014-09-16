@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.report.file"
+   name="XML File Report Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="file.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.io.xml.base"/>
+   </requires>
+
+
+   <extension
+         id="fileReporter"
+         name="fileReporter"
+         point="com.choicemaker.cm.core.reporter">
+      <reporter
+            class="com.choicemaker.cm.report.file.FileReporter">
+      </reporter>
+   </extension>
+   <extension
+         id="periodicRollingFileReporter"
+         name="periodicRollingFileReporter"
+         point="com.choicemaker.cm.core.reporter">
+      <reporter
+            class="com.choicemaker.cm.report.file.PeriodicRollingFileReporter">
+      </reporter>
+   </extension>
+   <extension
+         id="rollingFileReporter"
+         name="rollingFileReporter"
+         point="com.choicemaker.cm.core.reporter">
+      <reporter
+            class="com.choicemaker.cm.report.file.RollingFileReporter">
+      </reporter>
+   </extension>
+
+</plugin>

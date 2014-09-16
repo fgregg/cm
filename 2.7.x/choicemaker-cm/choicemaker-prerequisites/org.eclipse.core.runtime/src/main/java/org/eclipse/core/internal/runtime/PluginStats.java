@@ -211,9 +211,9 @@ public class PluginStats {
 		traceEnd = position;
 	}
 
-	private void setStartupMethodTime(long time) {
-		startupMethodTime = time;
-	}
+//	private void setStartupMethodTime(long time) {
+//		startupMethodTime = time;
+//	}
 
 	private void setActivatedBy(PluginStats value) {
 		activatedBy = value;

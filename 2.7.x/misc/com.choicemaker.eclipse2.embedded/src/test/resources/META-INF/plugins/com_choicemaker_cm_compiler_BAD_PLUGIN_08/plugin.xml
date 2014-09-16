@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plug
+   id="com.choicemaker.cm.compiler"
+   name="Compiler Plug-in"
+   version="2.5.0"
+   provider-name="CHOICEMAKER">
+<!-- NOTE ABOVE: missing plugin root element -->
+
+   <runtime>
+      <library name="compiler.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/jakarta-oro-2.0.1.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="org.apache.ant"/>
+      <import plugin="org.apache.bcel"/>
+   </requires>
+
+</plug>

@@ -48,7 +48,7 @@ public class PluginDescriptor extends PluginDescriptorModel implements IPluginDe
 	private static final String KEY_PREFIX = "%"; //$NON-NLS-1$
 	private static final String KEY_DOUBLE_PREFIX = "%%"; //$NON-NLS-1$
 
-	private static final String URL_PROTOCOL_FILE = "file"; //$NON-NLS-1$
+//	private static final String URL_PROTOCOL_FILE = "file"; //$NON-NLS-1$
 
 	// Places to look for library files 
 	private static String[] WS_JAR_VARIANTS = buildWSVariants();
@@ -799,11 +799,11 @@ private void pluginActivationExit(boolean errorExit) {
 	} else
 		active = true;
 }
-private String getFragmentLocation(PluginFragmentModel fragment) {
-	if (usePlatformURLs)
-		return FragmentDescriptor.FRAGMENT_URL + fragment.toString() + "/"; //$NON-NLS-1$
-	return fragment.getLocation();
-}
+//private String getFragmentLocation(PluginFragmentModel fragment) {
+//	if (usePlatformURLs)
+//		return FragmentDescriptor.FRAGMENT_URL + fragment.toString() + "/"; //$NON-NLS-1$
+//	return fragment.getLocation();
+//}
 public void setPluginClassLoader(DelegatingURLClassLoader value) {
 	loader = value;
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.blocking.automated.offline"
+   name="Offline Plug-in"
+   version="2.5.0"
+   provider-name="CHOICEMAKER">
+
+   <runtime>
+      <library name="offline.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+      <import plugin="com.choicemaker.cm.io.flatfile.base"/>
+      <import plugin="com.choicemaker.cm.io.xml.base"/>
+      <import plugin="com.choicemaker.cm.io.blocking.automated.offline.core"/>
+      <import plugin="com.choicemaker.cm.analyzer.base"/>
+   </requires>
+
+
+</plugin>

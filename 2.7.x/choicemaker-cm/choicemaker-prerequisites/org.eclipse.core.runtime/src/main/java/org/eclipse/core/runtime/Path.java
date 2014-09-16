@@ -67,11 +67,12 @@ public class Path implements IPath, Cloneable {
 	//arrays are never modified, so that they can be shared between 
 	//path instances
 	
-/* (Intentionally not included in javadoc)
- * Private constructor.
- */
-private Path() {
-}
+///* (Intentionally not included in javadoc)
+// * Private constructor.
+// */
+//private Path() {
+//}
+
 /* (Intentionally not included in javadoc)
  * Private constructor.
  */

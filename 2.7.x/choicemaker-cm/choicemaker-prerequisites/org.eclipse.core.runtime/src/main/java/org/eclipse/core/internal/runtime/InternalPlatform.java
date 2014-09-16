@@ -81,7 +81,7 @@ public final class InternalPlatform {
 
 	// default plugin data
 	private static final String PI_XML = "org.apache.xerces"; //$NON-NLS-1$
-	private static final String PLUGINSDIR = "plugins/"; //$NON-NLS-1$
+//	private static final String PLUGINSDIR = "plugins/"; //$NON-NLS-1$
 	private static final String XML_LOCATION = "plugins/" + PI_XML + "/"; //$NON-NLS-1$ //$NON-NLS-2$
 	
 	// execution options
@@ -1289,14 +1289,14 @@ private static void applyPluginDefaultOverrides(
 		}
 			
 		in = new SafeFileInputStream(inFile);
-		if (in == null) {
-			// fail quietly
-			if (DEBUG_PREFERENCES) {
-				System.out.println("Failed to open " + //$NON-NLS-1$
-					propertiesURL);
-			}
-			return;
-		}
+//		if (in == null) {
+//			// fail quietly
+//			if (DEBUG_PREFERENCES) {
+//				System.out.println("Failed to open " + //$NON-NLS-1$
+//					propertiesURL);
+//			}
+//			return;
+//		}
 		overrides.load(in);
 	} catch (IOException e) {
 		// cannot read ini file - fail silently

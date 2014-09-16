@@ -11,12 +11,34 @@
 
 package org.eclipse.core.internal.plugins;
 
-import java.util.*;
-import org.apache.xerces.parsers.SAXParser;
+import java.util.Stack;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+// import org.apache.xerces.parsers.SAXParser;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.eclipse.core.internal.runtime.Policy;
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.runtime.model.*;
-import org.xml.sax.*;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.model.ConfigurationElementModel;
+import org.eclipse.core.runtime.model.ConfigurationPropertyModel;
+import org.eclipse.core.runtime.model.ExtensionModel;
+import org.eclipse.core.runtime.model.ExtensionPointModel;
+import org.eclipse.core.runtime.model.Factory;
+import org.eclipse.core.runtime.model.LibraryModel;
+import org.eclipse.core.runtime.model.PluginDescriptorModel;
+import org.eclipse.core.runtime.model.PluginFragmentModel;
+import org.eclipse.core.runtime.model.PluginModel;
+import org.eclipse.core.runtime.model.PluginPrerequisiteModel;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class PluginParser extends DefaultHandler implements IModel {
@@ -36,7 +58,8 @@ public class PluginParser extends DefaultHandler implements IModel {
 	Stack objectStack = new Stack();
 
 	// model parser
-	private static SAXParser parser;
+//	private static SAXParser parser;
+	private static XMLReader parser;
 	
 	Locator locator = null;
 	
@@ -54,7 +77,7 @@ public class PluginParser extends DefaultHandler implements IModel {
 	private static final int PLUGIN_EXTENSION_STATE = 6;
 	private static final int RUNTIME_LIBRARY_STATE = 7;
 	private static final int LIBRARY_EXPORT_STATE = 8;
-	private static final int LIBRARY_PACKAGES_STATE = 12;
+//	private static final int LIBRARY_PACKAGES_STATE = 12;
 	private static final int PLUGIN_REQUIRES_IMPORT_STATE = 9;
 	private static final int CONFIGURATION_ELEMENT_STATE = 10;
 	private static final int FRAGMENT_STATE = 11;
@@ -77,12 +100,21 @@ public PluginParser(Factory factory) {
 }
 
 private static void initializeParser() {
-	parser = new SAXParser();
-	try {
-	 	((SAXParser)parser).setFeature("http://xml.org/sax/features/string-interning", true); //$NON-NLS-1$
-	} catch (SAXException e) {
-		// In case support for this feature is removed
-	}
+//	parser = new SAXParser();
+//	try {
+//	 	((SAXParser)parser).setFeature("http://xml.org/sax/features/string-interning", true); //$NON-NLS-1$
+//	} catch (SAXException e) {
+//		// In case support for this feature is removed
+//	}
+    SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+    try {
+      saxParserFactory.setFeature("http://xml.org/sax/features/string-interning", true);
+      saxParserFactory.setFeature("http://xml.org/sax/features/namespaces", true);
+      SAXParser saxParser = saxParserFactory.newSAXParser();
+      parser = saxParser.getXMLReader();
+    } catch (Exception ex) {
+      throw new RuntimeException("Could not init SAX Parser", ex);
+    }
 }
 
 /**
