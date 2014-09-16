@@ -1,9 +1,9 @@
-package com.choicemaker.fake;
+package com.choicemaker.eclipse2.pd;
 
 import static com.choicemaker.eclipse2.embedded.pd.EmbeddedPluginDiscovery.PREFIX;
-import static com.choicemaker.fake.ExampleData.BAD_CONFIGURATIONS;
-import static com.choicemaker.fake.ExampleData.EXPECTED_1;
-import static com.choicemaker.fake.ExampleData.TEST_DATA;
+import static com.choicemaker.eclipse2.pd.ExampleData.BAD_CONFIGURATIONS;
+import static com.choicemaker.eclipse2.pd.ExampleData.EXPECTED_1;
+import static com.choicemaker.eclipse2.pd.ExampleData.TEST_DATA;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
