@@ -417,12 +417,12 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
