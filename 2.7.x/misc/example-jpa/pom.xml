@@ -140,29 +140,125 @@
   </dependencyManagement>
 
   <dependencies>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.autonumber</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.core</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.io.db.base</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.io.xml.base</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.ml.me.base</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.server.base</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>com.choicemaker.cm</groupId> <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId> <version>2.7.1-SNAPSHOT</version> </dependency>
-    <dependency> <groupId>javax</groupId> <artifactId>javaee-api</artifactId> <version>7.0</version> <scope>provided</scope> </dependency>
-    <dependency> <groupId>junit</groupId> <artifactId>junit</artifactId> <version>4.8.1</version> <scope>test</scope> </dependency>
-    <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-collections4</artifactId> <version>4.0</version> </dependency>
-    <dependency> <groupId>org.eclipse.persistence</groupId> <artifactId>javax.persistence</artifactId> <version>2.1.0</version> </dependency>
-    <dependency> <groupId>org.jboss.arquillian.junit</groupId> <artifactId>arquillian-junit-container</artifactId> <scope>test</scope> </dependency>
-    <dependency> <groupId>org.jboss.arquillian.protocol</groupId> <artifactId>arquillian-protocol-servlet</artifactId> <scope>test</scope> </dependency>
-    <dependency> <groupId>org.jboss.shrinkwrap.resolver</groupId> <artifactId>shrinkwrap-resolver-impl-maven</artifactId> <scope>test</scope> </dependency>
-    <dependency> <groupId>org.jboss.spec.javax.annotation</groupId> <artifactId>jboss-annotations-api_1.2_spec</artifactId> <scope>provided</scope> </dependency>
-    <dependency> <groupId>org.jboss.spec.javax.ejb</groupId> <artifactId>jboss-ejb-api_3.2_spec</artifactId> <scope>provided</scope> </dependency>
-    <dependency> <groupId>org.jboss.spec.javax.transaction</groupId> <artifactId>jboss-transaction-api_1.2_spec</artifactId> <scope>runtime</scope> </dependency>
-    <dependency> <groupId>org.wildfly</groupId> <artifactId>wildfly-arquillian-container-remote</artifactId> <version>8.1.0.Final</version> <scope>test</scope> </dependency>
-    <dependency> <groupId>org.wildfly</groupId> <artifactId>wildfly-jms-client-bom</artifactId> <version>${version.wildfly}</version> <type>pom</type> </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.autonumber</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.core</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.base</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.server.base</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
+      <version>2.7.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>7.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <version>4.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+      <version>2.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.protocol</groupId>
+      <artifactId>arquillian-protocol-servlet</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.annotation</groupId>
+      <artifactId>jboss-annotations-api_1.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.ejb</groupId>
+      <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.transaction</groupId>
+      <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly</groupId>
+      <artifactId>wildfly-arquillian-container-remote</artifactId>
+      <version>8.1.0.Final</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly</groupId>
+      <artifactId>wildfly-jms-client-bom</artifactId>
+      <version>${version.wildfly}</version>
+      <type>pom</type>
+    </dependency>
   </dependencies>
 
 </project>
