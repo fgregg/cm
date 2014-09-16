@@ -13,7 +13,10 @@ package org.eclipse.core.internal.resources;
 import java.io.*;
 import java.util.*;
 
-import org.apache.xerces.parsers.SAXParser;
+// import org.apache.xerces.parsers.SAXParser;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.eclipse.core.internal.events.BuildCommand;
 import org.eclipse.core.internal.localstore.SafeFileInputStream;
 import org.eclipse.core.internal.utils.Policy;
@@ -436,16 +439,28 @@ public class ProjectDescriptionReader extends DefaultHandler implements IModelOb
 		objectStack = new Stack();
 		state = S_INITIAL;
 		try {
-			SAXParser parser = new SAXParser();
+			// SAXParser parser = new SAXParser();
+			
+			XMLReader parser = null;
+		    SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+		    try {
+		      saxParserFactory.setFeature("http://xml.org/sax/features/string-interning", true);
+		      saxParserFactory.setFeature("http://xml.org/sax/features/namespaces", true);
+		      SAXParser saxParser = saxParserFactory.newSAXParser();
+		      parser = saxParser.getXMLReader();
+		    } catch (Exception ex) {
+		      throw new RuntimeException("Could not init SAX Parser", ex);
+		    }
+			
 			parser.setContentHandler(this);
 			parser.setDTDHandler(this);
 			parser.setEntityResolver(this);
 			parser.setErrorHandler(this);
-			try {
-				((SAXParser) parser).setFeature("http://xml.org/sax/features/string-interning", true); //$NON-NLS-1$
-			} catch (SAXException e) {
-				// In case support for this feature is removed
-			}
+//			try {
+//				((SAXParser) parser).setFeature("http://xml.org/sax/features/string-interning", true); //$NON-NLS-1$
+//			} catch (SAXException e) {
+//				// In case support for this feature is removed
+//			}
 
 			parser.parse(input);
 		} catch (IOException e) {
