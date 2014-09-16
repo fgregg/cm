@@ -32,7 +32,7 @@ public interface IConfigurationElement {
 	 * <p>
 	 * The specified class is instantiated using its 0-argument public 
 	 * constructor. If the specified class implements the
-	 * <code>CMExecutableExtension</code> interface, the method
+	 * <code>IExecutableExtension</code> interface, the method
 	 * <code>setInitializationData</code> is called, passing to the object
 	 * the configuration information that was used to create it. 
 	 * </p>
@@ -43,9 +43,9 @@ public interface IConfigurationElement {
 	 *
 	 * @param propertyName the name of the property
 	 * @return the executable instance
-	 * @exception CMCoreException if an instance of the executable extension
+	 * @exception CoreException if an instance of the executable extension
 	 *   could not be created for any reason.
-	 * @see CMExecutableExtension#setInitializationData
+	 * @see IExecutableExtension#setInitializationData
 	 */
 	public Object createExecutableExtension(String propertyName) throws CoreException;
 	/**
@@ -66,7 +66,7 @@ public interface IConfigurationElement {
 	 * file is automatically applied.
 	 * </p>
 	 *
-	 * @see CMPluginDescriptor#getResourceString 
+	 * @see IPluginDescriptor#getResourceString 
 	 *
 	 * @param name the name of the attribute
 	 * @return attribute value, or <code>null</code> if none
@@ -177,7 +177,7 @@ public interface IConfigurationElement {
 	 * file is automatically applied.
 	 * </p>
 	 *
-	 * @see CMPluginDescriptor#getResourceString 
+	 * @see IPluginDescriptor#getResourceString 
 	 *
 	 * @return the text value of this configuration element or <code>null</code>
 	 */

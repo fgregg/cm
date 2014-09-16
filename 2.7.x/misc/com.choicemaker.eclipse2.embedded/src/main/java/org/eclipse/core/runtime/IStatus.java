@@ -12,7 +12,7 @@ package org.eclipse.core.runtime;
 
 /**
  * A status object represents the outcome of an operation.
- * All <code>CMCoreException</code>s carry a status object to indicate 
+ * All <code>CoreException</code>s carry a status object to indicate 
  * what went wrong. Status objects are also returned by methods needing 
  * to provide details of failures (e.g., validation methods).
  * <p>

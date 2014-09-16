@@ -52,7 +52,7 @@ public interface IExtension {
 	 * file is automatically applied.
 	 * <p>
 	 *
-	 * @see CMPluginDescriptor#getResourceString 
+	 * @see IPluginDescriptor#getResourceString 
 	 *
 	 * @return a displayable string label for this extension,
 	 *    possibly the empty string

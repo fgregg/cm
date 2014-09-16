@@ -19,7 +19,7 @@ import java.io.PrintWriter;
  * cause of the exception.
  * </p>
  *
- * @see CMStatus
+ * @see IStatus
  */
 public class CoreException extends Exception {
 

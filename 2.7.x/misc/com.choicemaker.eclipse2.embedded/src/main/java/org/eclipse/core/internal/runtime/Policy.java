@@ -58,19 +58,19 @@ public static String bind(String id, String[] bindings) {
 		return message;
 	return MessageFormat.format(message, bindings);
 }
-//public static CMProgressMonitor monitorFor(CMProgressMonitor monitor) {
+//public static IProgressMonitor monitorFor(IProgressMonitor monitor) {
 //	if (monitor == null)
 //		return new NullProgressMonitor();
 //	return monitor;
 //}
-//public static CMProgressMonitor subMonitorFor(CMProgressMonitor monitor, int ticks) {
+//public static IProgressMonitor subMonitorFor(IProgressMonitor monitor, int ticks) {
 //	if (monitor == null)
 //		return new NullProgressMonitor();
 //	if (monitor instanceof NullProgressMonitor)
 //		return monitor;
 //	return new SubProgressMonitor(monitor, ticks);
 //}
-//public static CMProgressMonitor subMonitorFor(CMProgressMonitor monitor, int ticks, int style) {
+//public static IProgressMonitor subMonitorFor(IProgressMonitor monitor, int ticks, int style) {
 //	if (monitor == null)
 //		return new NullProgressMonitor();
 //	if (monitor instanceof NullProgressMonitor)

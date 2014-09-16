@@ -11,7 +11,7 @@
 package org.eclipse.core.runtime;
 
 /**
- * The <code>CMProgressMonitor</code> interface is implemented
+ * The <code>IProgressMonitor</code> interface is implemented
  * by objects that monitor the progress of an activity; the methods
  * in this interface are invoked by code that performs the activity.
  * <p>

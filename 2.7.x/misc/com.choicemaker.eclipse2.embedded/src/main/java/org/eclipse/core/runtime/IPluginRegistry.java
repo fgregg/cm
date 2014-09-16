@@ -144,7 +144,7 @@ public interface IPluginRegistry {
 //	 * will be returned
 //	 * @return the plug-in descriptor, or <code>null</code>
 //	 */
-//	public CMPluginDescriptor getPluginDescriptor(String pluginId, PluginVersionIdentifier version);
+//	public IPluginDescriptor getPluginDescriptor(String pluginId, PluginVersionIdentifier version);
 	/**
 	 * Returns all plug-in descriptors known to this plug-in registry.
 	 * Returns an empty array if there are no installed plug-ins.

@@ -26,12 +26,12 @@ package org.eclipse.core.runtime;
  * Clients may implement this interface.
  * </p>
  * 
- * @see CMConfigurationElement#createExecutableExtension 
+ * @see IConfigurationElement#createExecutableExtension 
  */
 public interface IExecutableExtension {
 /**
  * This method is called by the implementation of the method
- * <code>CMConfigurationElement.createExecutableExtension</code>
+ * <code>IConfigurationElement.createExecutableExtension</code>
  * on a newly constructed extension, passing it its relevant configuration 
  * information. Most executable extensions only make use of the first 
  * two call arguments.
@@ -111,8 +111,8 @@ public interface IExecutableExtension {
  *		is used to define multiple executable extensions.
  * @param data adapter data in the form of a <code>String</code>, 
  *		a <code>Hashtable</code>, or <code>null</code>.
- * @exception CMCoreException if error(s) detected during initialization processing
- * @see CMConfigurationElement#createExecutableExtension
+ * @exception CoreException if error(s) detected during initialization processing
+ * @see IConfigurationElement#createExecutableExtension
  */
 public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException;
 }

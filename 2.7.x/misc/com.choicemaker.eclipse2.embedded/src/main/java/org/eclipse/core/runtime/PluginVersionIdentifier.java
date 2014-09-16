@@ -50,7 +50,7 @@ import org.eclipse.core.internal.runtime.Policy;
  * <p>
  * Clients may instantiate; not intended to be subclassed by clients.
  * </p>
- * @see CMPluginDescriptor#getVersionIdentifier
+ * @see IPluginDescriptor#getVersionIdentifier
  * @see java.lang.String#compareTo 
  */	
 public final class PluginVersionIdentifier {
@@ -128,7 +128,7 @@ public PluginVersionIdentifier(String versionId) {
  * Validates the given string as a plug-in version identifier.
  * 
  * @param version the string to validate
- * @return a status object with code <code>CMStatus.OK</code> if
+ * @return a status object with code <code>IStatus.OK</code> if
  *		the given string is valid as a plug-in version identifier, otherwise a status
  *		object indicating what is wrong with the string
  * @since 2.0

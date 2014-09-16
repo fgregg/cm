@@ -18,7 +18,7 @@ package org.eclipse.core.runtime;
  * This interface is not intended to be implemented by developers.
  * </p>
  *
- * @see CMPluginDescriptor#getPluginPrerequisites
+ * @see IPluginDescriptor#getPluginPrerequisites
  */
 public interface IPluginPrerequisite {
 /**

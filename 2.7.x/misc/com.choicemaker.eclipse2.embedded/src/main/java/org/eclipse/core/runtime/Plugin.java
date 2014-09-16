@@ -16,8 +16,6 @@ import org.eclipse.core.internal.plugins.PluginDescriptor;
 import org.eclipse.core.internal.runtime.Assert;
 import org.eclipse.core.internal.runtime.Policy;
 
-import com.choicemaker.eclipse2.core.runtime.CMPlugin;
-
 /**
  * The abstract superclass of all plug-in runtime class
  * implementations. A plug-in subclasses this class and overrides
@@ -60,7 +58,7 @@ import com.choicemaker.eclipse2.core.runtime.CMPlugin;
  *
  *         public static MyPluginClass getInstance() { return instance; }
  *
- *         public void MyPluginClass(CMPluginDescriptor descriptor) {
+ *         public void MyPluginClass(IPluginDescriptor descriptor) {
  *             super(descriptor);
  *             instance = this;
  *             // ... other initialization
@@ -95,7 +93,7 @@ import com.choicemaker.eclipse2.core.runtime.CMPlugin;
  *     private static final String INI = "myplugin.ini"; 
  *     private Properties myProperties = null;
  *
- *     public void startup() throws CMCoreException {
+ *     public void startup() throws CoreException {
  *         try {
  *             InputStream input = null;
  *             // look for working properties.  If none, use shipped defaults 
@@ -118,13 +116,13 @@ import com.choicemaker.eclipse2.core.runtime.CMPlugin;
  *                 }
  *             }
  *         } catch (Exception e) {
- *             throw new CMCoreException(
- *                 new Status(CMStatus.ERROR, getDescriptor().getUniqueIdentifier(),
+ *             throw new CoreException(
+ *                 new Status(IStatus.ERROR, getDescriptor().getUniqueIdentifier(),
  *                     0, "Problems starting plug-in myplugin", e));
  *         }
  *     }
  *
- *     public void shutdown() throws CMCoreException { 
+ *     public void shutdown() throws CoreException { 
  *         // save properties in plugin state location (r/w)
  *         try {
  *             FileOutputStream output = null; 
@@ -139,8 +137,8 @@ import com.choicemaker.eclipse2.core.runtime.CMPlugin;
  *                 }
  *             }
  *         } catch (Exception e) {
- *             throw new CMCoreException(
- *                 new Status(CMStatus.ERROR, getDescriptor().getUniqueIdentifier(),
+ *             throw new CoreException(
+ *                 new Status(IStatus.ERROR, getDescriptor().getUniqueIdentifier(),
  *                     0, "Problems shutting down plug-in myplugin", e));
  *         }
  *     }
@@ -152,7 +150,7 @@ import com.choicemaker.eclipse2.core.runtime.CMPlugin;
  * </pre>
  * </p>
  */
-public abstract class Plugin implements CMPlugin {
+public abstract class Plugin {
 
 	/**
 	 * The debug flag for this plug-in.  The flag is false by default.
@@ -164,6 +162,20 @@ public abstract class Plugin implements CMPlugin {
 	/** The plug-in descriptor.
 	 */
 	private IPluginDescriptor descriptor;
+
+	/**
+	 * The name of the file (value <code>"preferences.ini"</code>) in a
+	 * plug-in's (read-only) directory that, when present, contains values that
+	 * override the normal default values for this plug-in's preferences.
+	 * <p>
+	 * The format of the file is as per <code>java.io.Properties</code> where
+	 * the keys are property names and values are strings.
+	 * </p>
+	 * 
+	 * @since 2.0
+	 */
+	public static final String PREFERENCES_DEFAULT_OVERRIDE_BASE_NAME = "preferences"; //$NON-NLS-1$
+	public static final String PREFERENCES_DEFAULT_OVERRIDE_FILE_NAME = PREFERENCES_DEFAULT_OVERRIDE_BASE_NAME + ".ini"; //$NON-NLS-1$
 
 	/**
 	 * The preference object for this plug-in; initially <code>null</code>
@@ -210,7 +222,7 @@ public abstract class Plugin implements CMPlugin {
 //	 * @param file path relative to plug-in installation location 
 //	 * @return a URL for the given path or <code>null</code>
 //	 */
-//	public final URL find(CMPath path) {
+//	public final URL find(IPath path) {
 //		return getDescriptor().find(path);
 //	}
 //	/**
@@ -226,7 +238,7 @@ public abstract class Plugin implements CMPlugin {
 //	 * is used.
 //	 * @return a URL for the given path or <code>null</code>
 //	 */
-//	public final URL find(CMPath path, Map override) {
+//	public final URL find(IPath path, Map override) {
 //		return getDescriptor().find(path, override);
 //	}
 //	private String getFileFromURL(URL target) {
@@ -250,7 +262,6 @@ public abstract class Plugin implements CMPlugin {
 	 *
 	 * @return the plug-in descriptor for this plug-in runtime object
 	 */
-	@Override
 	public final IPluginDescriptor getDescriptor() {
 		return descriptor;
 	}
@@ -278,7 +289,7 @@ public abstract class Plugin implements CMPlugin {
 //	 *
 //	 * @return a local file system path
 //	 */
-//	public final CMPath getStateLocation() {
+//	public final IPath getStateLocation() {
 //		return InternalPlatform.getPluginStateLocation(descriptor, true);
 //	}
 
@@ -510,7 +521,7 @@ public abstract class Plugin implements CMPlugin {
 //	 */
 //	private void applyInternalPluginDefaultOverrides() {
 //
-//		CMPluginDescriptor pluginDescriptor = getDescriptor();
+//		IPluginDescriptor pluginDescriptor = getDescriptor();
 //		// use URLs so we can find the file in fragments too
 //		URL baseURL = pluginDescriptor.find(new Path(PREFERENCES_DEFAULT_OVERRIDE_FILE_NAME));
 //
@@ -596,7 +607,6 @@ public abstract class Plugin implements CMPlugin {
 	 *
 	 * @return whether this plug-in is in debug mode
 	 */
-	@Override
 	public boolean isDebugging() {
 		return debug;
 	}
@@ -606,9 +616,9 @@ public abstract class Plugin implements CMPlugin {
 //	 *
 //	 * @param file path relative to plug-in installation location
 //	 * @return an input stream
-//	 * @see #openStream(CMPath,boolean)
+//	 * @see #openStream(IPath,boolean)
 //	 */
-//	public final InputStream openStream(CMPath file) throws IOException {
+//	public final InputStream openStream(IPath file) throws IOException {
 //		return openStream(file, false);
 //	}
 //	/**
@@ -628,7 +638,7 @@ public abstract class Plugin implements CMPlugin {
 //	 *   as specified
 //	 * @return an input stream
 //	 */
-//	public final InputStream openStream(CMPath file, boolean localized) throws IOException {
+//	public final InputStream openStream(IPath file, boolean localized) throws IOException {
 //		URL target = PlatformURLFactory.createURL(getDescriptor().getInstallURL() + file.toString());
 //		return target.openStream();
 //	}
@@ -639,7 +649,6 @@ public abstract class Plugin implements CMPlugin {
 	 *
 	 * @param value whether or not this plugi-in is in debug mode
 	 */
-	@Override
 	public void setDebugging(boolean value) {
 		debug = value;
 	}
@@ -667,10 +676,9 @@ public abstract class Plugin implements CMPlugin {
 	 * </p>
 	 * <b>Clients must never explicitly call this method.</b>
 	 *
-	 * @exception CMCoreException if this method fails to shut down
+	 * @exception CoreException if this method fails to shut down
 	 *   this plug-in
 	 */
-	@Override
 	public void shutdown() throws CoreException {
 	}
 
@@ -708,9 +716,8 @@ public abstract class Plugin implements CMPlugin {
 	 * </p>
 	 * <b>Clients must never explicitly call this method.</b>
 	 *
-	 * @exception CMCoreException if this plug-in did not start up properly
+	 * @exception CoreException if this plug-in did not start up properly
 	 */
-	@Override
 	public void startup() throws CoreException {
 	}
 	/**

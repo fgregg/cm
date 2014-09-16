@@ -383,7 +383,7 @@ public void removePlugins(String pluginId) {
 // * @param doCrossLinking if true, link all ExtensionModels in the registry
 // * to their corresponding ExtensionPointModel (recommended value = true).
 // */
-//public CMStatus resolve(boolean trimDisabledPlugins, boolean doCrossLinking) {
+//public IStatus resolve(boolean trimDisabledPlugins, boolean doCrossLinking) {
 //	RegistryResolver resolver = new RegistryResolver();
 //	resolver.setTrimPlugins(trimDisabledPlugins);
 //	resolver.setCrossLink(doCrossLinking);

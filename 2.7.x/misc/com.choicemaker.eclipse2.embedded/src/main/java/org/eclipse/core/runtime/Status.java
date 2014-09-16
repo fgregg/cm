@@ -67,55 +67,55 @@ public Status(int severity, String pluginId, int code, String message, Throwable
 	setException(exception);
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
 public IStatus[] getChildren() {
 	return theEmptyStatusArray;
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
 public int getCode() {
 	return code;
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
 public Throwable getException() {
 	return exception;
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
 public String getMessage() {
 	return message;
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
 public String getPlugin() {
 	return pluginId;
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
 public int getSeverity() {
 	return severity;
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
 public boolean isMultiStatus() {
 	return false;
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
 public boolean isOK() {
 	return severity == OK;
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
 public boolean matches(int severityMask) {
 	return (severity & severityMask) != 0;

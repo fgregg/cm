@@ -15,7 +15,7 @@ import java.io.File;
 import org.eclipse.core.internal.runtime.Assert;
 
 /** 
- * The standard implementation of the <code>CMPath</code> interface.
+ * The standard implementation of the <code>IPath</code> interface.
  * Paths are always maintained in canonicalized form.  That is, parent
  * references (i.e., <code>../../</code>) and duplicate separators are 
  * resolved.  For example,
@@ -26,7 +26,7 @@ import org.eclipse.core.internal.runtime.Assert;
  * This class is not intended to be subclassed by clients but
  * may be instantiated.
  * </p>
- * @see CMPath
+ * @see IPath
  */
 public class Path implements IPath, Cloneable {
 	
@@ -114,7 +114,7 @@ public Path(String device, String path) {
 	initialize(device, path);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#addFileExtension
+ * @see IPath#addFileExtension
  */
 public IPath addFileExtension(String extension) {
 	if (isRoot() || isEmpty() || hasTrailingSeparator())
@@ -126,7 +126,7 @@ public IPath addFileExtension(String extension) {
 	return new Path(device, newSegments, separators);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#addTrailingSeparator
+ * @see IPath#addTrailingSeparator
  */
 public IPath addTrailingSeparator() {
 	if (hasTrailingSeparator() || isRoot()) {
@@ -139,7 +139,7 @@ public IPath addTrailingSeparator() {
 	return new Path(device, segments, separators | HAS_TRAILING);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#append(java.lang.String)
+ * @see IPath#append(java.lang.String)
  */
 public IPath append(String tail) {
 	//optimize addition of a single segment
@@ -169,7 +169,7 @@ public IPath append(String tail) {
 	return append(new Path(tail));
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#append(CMPath)
+ * @see IPath#append(IPath)
  */
 public IPath append(IPath tail) {
 	//optimize some easy cases
@@ -428,13 +428,13 @@ public boolean equals(Object obj) {
 }
 
 /* (Intentionally not included in javadoc)
- * @see CMPath#getDevice
+ * @see IPath#getDevice
  */
 public String getDevice() {
 	return device;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#getFileExtension
+ * @see IPath#getFileExtension
  */
 public String getFileExtension() {
 	if (hasTrailingSeparator()) {
@@ -458,7 +458,7 @@ public int hashCode() {
 }
 
 /* (Intentionally not included in javadoc)
- * @see CMPath#hasTrailingSeparator
+ * @see IPath#hasTrailingSeparator
  */
 public boolean hasTrailingSeparator() {
 	return (separators & HAS_TRAILING) != 0;
@@ -508,21 +508,21 @@ private void initialize(String device, String fullPath) {
 	}
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#isAbsolute
+ * @see IPath#isAbsolute
  */
 public boolean isAbsolute() {
 	//it's absolute if it has a leading separator
 	return (separators & HAS_LEADING) != 0;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#isEmpty
+ * @see IPath#isEmpty
  */
 public boolean isEmpty() {
 	//true if no segments and no leading prefix
 	return segments.length == 0 && ((separators & HAS_LEADING) == 0);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#isPrefixOf
+ * @see IPath#isPrefixOf
  */
 public boolean isPrefixOf(IPath anotherPath) {
 	Assert.isNotNull(anotherPath);
@@ -549,14 +549,14 @@ public boolean isPrefixOf(IPath anotherPath) {
 	return true;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#isRoot
+ * @see IPath#isRoot
  */
 public boolean isRoot() {
 	//must have no segments, a leading separator, and not be a UNC path.
 	return this == ROOT || (segments.length == 0 && ((separators & ALL_SEPARATORS) == HAS_LEADING));
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#isUNC
+ * @see IPath#isUNC
  */
 public boolean isUNC() {
 	if (device != null) 
@@ -564,7 +564,7 @@ public boolean isUNC() {
 	return (separators & IS_UNC) != 0;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#isValidPath
+ * @see IPath#isValidPath
  */
 public boolean isValidPath(String path) {
 	// We allow "//" at the beginning for UNC paths
@@ -581,7 +581,7 @@ public boolean isValidPath(String path) {
 	return true;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#isValidSegment
+ * @see IPath#isValidSegment
  */
 public boolean isValidSegment(String segment) {
 	int size = segment.length();
@@ -600,14 +600,14 @@ public boolean isValidSegment(String segment) {
 	return true;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#lastSegment
+ * @see IPath#lastSegment
  */
 public String lastSegment() {
 	int len = segments.length;
 	return len == 0 ? null : segments[len-1];
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#makeAbsolute
+ * @see IPath#makeAbsolute
  */
 public IPath makeAbsolute() {
 	if (isAbsolute()) {
@@ -624,7 +624,7 @@ public IPath makeAbsolute() {
 	return result;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#makeRelative
+ * @see IPath#makeRelative
  */
 public IPath makeRelative() {
 	if (!isAbsolute()) {
@@ -633,7 +633,7 @@ public IPath makeRelative() {
 	return new Path(device, segments, separators & HAS_TRAILING);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#makeUNC
+ * @see IPath#makeUNC
  */
 public IPath makeUNC(boolean toUNC) {
 	// if we are already in the right form then just return
@@ -650,7 +650,7 @@ public IPath makeUNC(boolean toUNC) {
 	return new Path(toUNC ? null : device, segments, newSeparators);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#matchingFirstSegments
+ * @see IPath#matchingFirstSegments
  */
 public int matchingFirstSegments(IPath anotherPath) {
 	Assert.isNotNull(anotherPath);
@@ -666,7 +666,7 @@ public int matchingFirstSegments(IPath anotherPath) {
 	return count;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#removeFileExtension
+ * @see IPath#removeFileExtension
  */
 public IPath removeFileExtension() {
 	String extension = getFileExtension();
@@ -678,7 +678,7 @@ public IPath removeFileExtension() {
 	return removeLastSegments(1).append(lastSegment.substring(0, index));
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#removeFirstSegments
+ * @see IPath#removeFirstSegments
  */
 public IPath removeFirstSegments(int count) {
 	if (count == 0)
@@ -695,7 +695,7 @@ public IPath removeFirstSegments(int count) {
 	return new Path(device, newSegments, separators & HAS_TRAILING);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#removeLastSegments
+ * @see IPath#removeLastSegments
  */
 public IPath removeLastSegments(int count) {
 	if (count == 0)
@@ -711,7 +711,7 @@ public IPath removeLastSegments(int count) {
 	return new Path(device, newSegments, separators);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#removeTrailingSeparator
+ * @see IPath#removeTrailingSeparator
  */
 public IPath removeTrailingSeparator() {
 	if (!hasTrailingSeparator()) {
@@ -720,7 +720,7 @@ public IPath removeTrailingSeparator() {
 	return new Path(device, segments, separators & (HAS_LEADING | IS_UNC));
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#segment
+ * @see IPath#segment
  */
 public String segment(int index) {
 	if (index >= segments.length)
@@ -728,13 +728,13 @@ public String segment(int index) {
 	return segments[index];
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#segmentCount
+ * @see IPath#segmentCount
  */
 public int segmentCount() {
 	return segments.length;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#segments
+ * @see IPath#segments
  */
 public String[] segments() {
 	String[] segmentCopy = new String[segments.length];
@@ -742,7 +742,7 @@ public String[] segments() {
 	return segmentCopy;
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#setDevice
+ * @see IPath#setDevice
  */
 public IPath setDevice(String value) {
 	if (value != null) {
@@ -755,13 +755,13 @@ public IPath setDevice(String value) {
 	return new Path(value, segments, separators);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#toFile
+ * @see IPath#toFile
  */
 public File toFile() {
 	return new File(toOSString());
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#toOSString
+ * @see IPath#toOSString
  */
 public String toOSString() {
 	//Note that this method is identical to toString except
@@ -800,7 +800,7 @@ public String toOSString() {
 	return new String(result);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#toString
+ * @see IPath#toString
  */
 public String toString() {
 	int resultSize = computeLength();
@@ -836,7 +836,7 @@ public String toString() {
 	return new String(result);
 }
 /* (Intentionally not included in javadoc)
- * @see CMPath#uptoSegment
+ * @see IPath#uptoSegment
  */
 public IPath uptoSegment(int count) {
 	if (count == 0)

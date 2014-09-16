@@ -99,7 +99,7 @@ public interface IPluginDescriptor {
 	 * is an internally-supplied one that does not react to life cycle requests.
 	 *
 	 * @return the plug-in runtime object
-	 * @exception CMCoreException 
+	 * @exception CoreException 
 	 *   if this plug-in's runtime object could not be created.
 	 * @see #isPluginActivated
 	 */
@@ -138,7 +138,7 @@ public interface IPluginDescriptor {
 	 * </pre>
 	 *
 	 * @return the plug-in class loader
-	 * @see CMConfigurationElement#createExecutableExtension
+	 * @see IConfigurationElement#createExecutableExtension
 	 * @see #isPluginActivated
 	 * @see #getResourceBundle
 	 */
@@ -238,7 +238,7 @@ public interface IPluginDescriptor {
 //	 *
 //	 * @return the runtime libraries declared by this plug-in
 //	 */
-//	public CMLibrary[] getRuntimeLibraries();
+//	public ILibrary[] getRuntimeLibraries();
 	/**
 	 * Returns the unique identifier of this plug-in.
 	 * This identifier is a non-empty string and is unique 
@@ -274,7 +274,7 @@ public interface IPluginDescriptor {
 //	 * 
 //	 * @since 2.0
 //	 */
-//	public URL find(CMPath path);
+//	public URL find(IPath path);
 //	/**
 //	 * Returns a URL for the given path.  Returns <code>null</code> if the URL
 //	 * could not be computed or created.
@@ -321,5 +321,5 @@ public interface IPluginDescriptor {
 //	 * 
 //	 * @since 2.0
 //	 */
-//	public URL find(CMPath path, Map override);
+//	public URL find(IPath path, Map override);
 }

@@ -12,13 +12,11 @@ package org.eclipse.core.runtime;
 
 import org.eclipse.core.internal.runtime.Assert;
 
-import com.choicemaker.eclipse2.core.runtime.CMMultiStatus;
-
 /**
  * A concrete multi-status implementation, 
  * suitable either for instantiating or subclassing.
  */
-public class MultiStatus extends Status implements CMMultiStatus {
+public class MultiStatus extends Status {
 
 	/** List of child statuses.
 	 */
@@ -61,7 +59,6 @@ public MultiStatus(String pluginId, int code, String message, Throwable exceptio
  *
  * @param status the new child status
  */
-@Override
 public void add(IStatus status) {
 	Assert.isLegal(status != null);
 	IStatus[] result = new IStatus[children.length + 1];
@@ -80,7 +77,6 @@ public void add(IStatus status) {
  *
  * @param status the status whose children are to be added to this one
  */
-@Override
 public void addAll(IStatus status) {
 	Assert.isLegal(status != null);
 	IStatus[] statuses = status.getChildren();
@@ -89,16 +85,14 @@ public void addAll(IStatus status) {
 	}
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
-@Override
 public IStatus[] getChildren() {
 	return children;
 }
 /* (Intentionally not javadoc'd)
- * Implements the corresponding method on <code>CMStatus</code>.
+ * Implements the corresponding method on <code>IStatus</code>.
  */
-@Override
 public boolean isMultiStatus() {
 	return true;
 }
@@ -113,7 +107,6 @@ public boolean isMultiStatus() {
  * @see #add
  * @see #addAll
  */
-@Override
 public void merge(IStatus status) {
 	Assert.isLegal(status != null);
 	if (!status.isMultiStatus()) {
@@ -126,7 +119,6 @@ public void merge(IStatus status) {
  * Returns a string representation of the status, suitable 
  * for debugging purposes only.
  */
-@Override
 public String toString() {
 	StringBuffer buf = new StringBuffer(super.toString());
 	buf.append(" children=["); //$NON-NLS-1$

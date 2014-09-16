@@ -217,7 +217,7 @@ void logError(IStatus status) {
 //		System.out.println(status.getMessage());
 }
 public void saveRegistry() throws IOException {
-//	CMPath path = InternalPlatform.getMetaArea().getRegistryPath();
+//	IPath path = InternalPlatform.getMetaArea().getRegistryPath();
 //	if (!cacheDirty && path.toFile().exists()) {
 //		// The registry cache file exists.  Assume it is fine and
 //		// we don't need to re-write it.
@@ -232,7 +232,7 @@ public void saveRegistry() throws IOException {
 //		output = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(tempFile)));
 //	} catch (IOException ioe) {
 //		String message = Policy.bind("meta.unableToCreateCache"); //$NON-NLS-1$
-//		CMStatus status = new Status(CMStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, ioe);
+//		IStatus status = new Status(IStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, ioe);
 //		logError(status);
 //		return;
 //	}
@@ -253,8 +253,8 @@ public void saveRegistry() throws IOException {
 //	}
 }
 public void flushRegistry() {
-//	CMPath path = InternalPlatform.getMetaArea().getRegistryPath();
-//	CMPath tempPath = InternalPlatform.getMetaArea().getBackupFilePathFor(path);
+//	IPath path = InternalPlatform.getMetaArea().getRegistryPath();
+//	IPath tempPath = InternalPlatform.getMetaArea().getBackupFilePathFor(path);
 //	path.toFile().delete();
 //	tempPath.toFile().delete();
 }
@@ -263,7 +263,7 @@ public void flushRegistry() {
 //	path = (Path)path.makeAbsolute();
 //	if (!path.isValidPath(path.toOSString())) {
 //		String message = Policy.bind("meta.invalidRegDebug", path.toOSString()); //$NON-NLS-1$
-//		CMStatus status = new Status(CMStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, null);
+//		IStatus status = new Status(IStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, null);
 //		logError(status);
 //		return;
 //	}
@@ -281,12 +281,12 @@ public void flushRegistry() {
 //		}
 //	} catch (IOException ioe) {
 //		String message = Policy.bind("meta.unableToCreateRegDebug", path.toOSString()); //$NON-NLS-1$
-//		CMStatus status = new Status(CMStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, ioe);
+//		IStatus status = new Status(IStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, ioe);
 //		logError(status);
 //	}
 //}
 public void flushDebugRegistry() {
-//	CMPath path = InternalPlatform.getMetaArea().getLocation().append(F_DEBUG_REGISTRY);
+//	IPath path = InternalPlatform.getMetaArea().getLocation().append(F_DEBUG_REGISTRY);
 //	path.toFile().delete();
 }
 public void shutdown(IProgressMonitor progress) {

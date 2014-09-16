@@ -19,7 +19,7 @@ package org.eclipse.core.runtime;
  * </p>
  * For example,
  * <pre>
- *     CMAdaptable a = [some adaptable];
+ *     IAdaptable a = [some adaptable];
  *     IFoo x = (IFoo)a.getAdapter(IFoo.class);
  *     if (x != null)
  *         [do IFoo things with x]

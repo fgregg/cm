@@ -16,64 +16,64 @@ import org.eclipse.core.runtime.model.*;
 
 public class PluginPrerequisite extends PluginPrerequisiteModel implements IPluginPrerequisite {
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public PluginVersionIdentifier getResolvedVersionIdentifier() {
 	String version = getResolvedVersion();
 	return version == null ? null : new PluginVersionIdentifier(version);
 }
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public String getUniqueIdentifier() {
 	return getPlugin();
 }
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public PluginVersionIdentifier getVersionIdentifier() {
 	String version = getVersion();
 	return version == null ? null : new PluginVersionIdentifier(version);
 }
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public boolean isExported() {
 	return getExport();
 }
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public boolean isMatchedAsGreaterOrEqual() {
 	return getMatchByte() == PREREQ_MATCH_GREATER_OR_EQUAL;
 }
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public boolean isMatchedAsCompatible() {
 	return (getMatchByte() == PREREQ_MATCH_COMPATIBLE) ||
 	        ((getVersionIdentifier() != null) && (getMatchByte() == PREREQ_MATCH_UNSPECIFIED));
 }
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public boolean isMatchedAsEquivalent() {
 	return getMatchByte() == PREREQ_MATCH_EQUIVALENT;
 }
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public boolean isMatchedAsPerfect() {
 	return getMatchByte() == PREREQ_MATCH_PERFECT;
 }
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public boolean isMatchedAsExact() {
 	return isMatchedAsEquivalent();
 }
 /**
- * @see CMPluginPrerequisite
+ * @see IPluginPrerequisite
  */
 public boolean isOptional() {
 	return getOptional();

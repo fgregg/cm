@@ -442,14 +442,14 @@ public class Preferences {
 //	 * The file that is written can be read later using the importPreferences method.
 //	 * </p>
 //	 * @param file The absolute filesystem path of the file to export preferences to.
-//	 * @exception CMCoreException if this method fails. Reasons include:
+//	 * @exception CoreException if this method fails. Reasons include:
 //	 * <ul>
 //	 * <li> The file could not be written.</li>
 //	 * </ul>
 //	 * @see #importPreferences
 //	 * @see #validatePreferenceVersions
 //	 */
-//	public static void exportPreferences(CMPath file) throws CMCoreException {
+//	public static void exportPreferences(IPath file) throws CoreException {
 //		PreferenceExporter.exportPreferences(file);
 //	}
 //	/**
@@ -466,7 +466,7 @@ public class Preferences {
 //	 * The file must have been written by the exportPreferences method.
 //	 * </p>
 //	 * @param file The absolute filesystem path of the file to import preferences from.
-//	 * @exception CMCoreException if this method fails. Reasons include:
+//	 * @exception CoreException if this method fails. Reasons include:
 //	 * <ul>
 //	 * <li> The file does not exist.</li>
 //	 * <li> The file could not be read.</li>
@@ -474,7 +474,7 @@ public class Preferences {
 //	 * @see #exportPreferences
 //	 * @see #validatePreferenceVersions
 //	 */
-//	public static void importPreferences(CMPath file) throws CMCoreException {
+//	public static void importPreferences(IPath file) throws CoreException {
 //		PreferenceExporter.importPreferences(file);
 //	}
 //	/**
@@ -483,10 +483,10 @@ public class Preferences {
 //	 * the currently installed plugins, otherwise a MultiStatus describing what 
 //	 * plugins have preferences that don't match.  
 //	 * <p>
-//	 * If the returned status has a <code>CMStatus.WARNING</code> severity, 
+//	 * If the returned status has a <code>IStatus.WARNING</code> severity, 
 //	 * it means that some preferences may not be applicable but for the most 
 //	 * part they will be compatible.  If the returned status has a 
-//	 * <code>CMStatus.ERROR</code> severity, it means that the preferences 
+//	 * <code>IStatus.ERROR</code> severity, it means that the preferences 
 //	 * will probably not be compatible.
 //	 * <p>
 //	 * If the file contains preferences for plug-ins that don't exist in the current
@@ -499,7 +499,7 @@ public class Preferences {
 //	 * @see #exportPreferences
 //	 * @see #importPreferences
 //	 */
-//	public static CMStatus validatePreferenceVersions(CMPath file) {
+//	public static IStatus validatePreferenceVersions(IPath file) {
 //		return PreferenceExporter.validatePreferenceVersions(file);
 //	}
 	/**

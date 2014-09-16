@@ -236,7 +236,7 @@ private static String[] getArrayFromList(String prop) {
 	return list.isEmpty() ? new String[0] : (String[]) list.toArray(new String[0]);
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public IExtension getExtension(String id) {
 	if (id == null)
@@ -251,7 +251,7 @@ public IExtension getExtension(String id) {
 	return null;
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public IExtensionPoint getExtensionPoint(String extensionPointId) {
 	if (extensionPointId == null)
@@ -266,7 +266,7 @@ public IExtensionPoint getExtensionPoint(String extensionPointId) {
 	return null;
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public IExtensionPoint[] getExtensionPoints() {
 	ExtensionPointModel[] list = getDeclaredExtensionPoints();
@@ -277,7 +277,7 @@ public IExtensionPoint[] getExtensionPoints() {
 	return newValues;
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public IExtension[] getExtensions() {
 	ExtensionModel[] list = getDeclaredExtensions();
@@ -288,7 +288,7 @@ public IExtension[] getExtensions() {
 	return newValues;
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public URL getInstallURL() {
 	try {
@@ -307,7 +307,7 @@ public URL getInstallURL() {
 //	}
 //}
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public String getLabel() {
 	String s = getName();
@@ -319,7 +319,7 @@ public String getLabel() {
 	 return localized;
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public Plugin getPlugin() throws CoreException {
 	if (pluginObject == null)
@@ -327,7 +327,7 @@ public Plugin getPlugin() throws CoreException {
 	return pluginObject;
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public ClassLoader getPluginClassLoader() {
 	return getPluginClassLoader(true);
@@ -371,7 +371,7 @@ public String getFileFromURL(URL target) {
 }
 
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public IPluginPrerequisite[] getPluginPrerequisites() {
 	PluginPrerequisiteModel[] list = getRequires();
@@ -385,7 +385,7 @@ public PluginRegistry getPluginRegistry() {
 	return (PluginRegistry) getRegistry();
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public String getProviderName() {
 	String s = super.getProviderName();
@@ -397,7 +397,7 @@ public String getProviderName() {
 	 return localized;
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public ResourceBundle getResourceBundle() throws MissingResourceException {
 	return getResourceBundle(Locale.getDefault());
@@ -446,13 +446,13 @@ public ResourceBundle getResourceBundle(Locale targetLocale) throws MissingResou
 //	return newBundle;
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public String getResourceString(String value) {
 	return getResourceString(value, null);
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public String getResourceString(String value, ResourceBundle b) {
 	String s = value.trim();
@@ -481,18 +481,18 @@ public String getResourceString(String value, ResourceBundle b) {
 	}
 }
 ///**
-// * @see CMPluginDescriptor
+// * @see IPluginDescriptor
 // */
-//public CMLibrary[] getRuntimeLibraries() {
+//public ILibrary[] getRuntimeLibraries() {
 //	LibraryModel[] list = getRuntime();
 //	if (list == null)
-//		return new CMLibrary[0];
-//	CMLibrary[] newValues = new CMLibrary[list.length];
+//		return new ILibrary[0];
+//	ILibrary[] newValues = new ILibrary[list.length];
 //	System.arraycopy(list, 0, newValues, 0, list.length);
 //	return newValues;
 //}
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public String getUniqueIdentifier() {
 	return getId();
@@ -505,7 +505,7 @@ public static String getUniqueIdentifierFromString(String pluginString) {
 	return ix==-1 ? pluginString : pluginString.substring(0,ix);
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public PluginVersionIdentifier getVersionIdentifier() {
 	String version = getVersion();
@@ -596,7 +596,7 @@ private void internalDoPluginActivation() throws CoreException {
 	// run startup()
 	final String message = Policy.bind("plugin.startupProblems", getId()); //$NON-NLS-1$
 //	final MultiStatus multiStatus = new MultiStatus(Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, null);
-//	CMSafeRunnable code = new CMSafeRunnable() {
+//	ISafeRunnable code = new ISafeRunnable() {
 //		public void run() throws Exception {
 //			pluginObject.startup();
 //		}
@@ -616,10 +616,10 @@ private void internalDoPluginActivation() throws CoreException {
 //		System.out.println("Finished plugin startup for " + getId() + " time: " + time + "ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 //	}
 //	if (!multiStatus.isOK())
-//		throw new CMCoreException(multiStatus);
+//		throw new CoreException(multiStatus);
 }
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public synchronized boolean isPluginActivated() {
 	//note that this method is synchronized for good reason.  
@@ -633,7 +633,7 @@ public synchronized boolean isPluginActivated() {
 public synchronized boolean isPluginDeactivated() {
 	return deactivated;
 }
-//private void logError(CMStatus status) {
+//private void logError(IStatus status) {
 //	InternalPlatform.getRuntimePlugin().getLog().log(status);
 //	if (InternalPlatform.DEBUG)
 //		System.out.println(status.getMessage());
@@ -692,15 +692,15 @@ public String toString() {
 //	loader.addURLs((URL[]) result[0], (URLContentFilter[]) result[1], (URL[]) result[2], (URLContentFilter[]) result[3]);
 //}
 /**
- * @see CMPluginDescriptor
+ * @see IPluginDescriptor
  */
 public final URL find(IPath path) {
 	return null; // find(path, null);
 }
 ///**
-// * @see CMPluginDescriptor
+// * @see IPluginDescriptor
 // */
-//public final URL find(CMPath path, Map override) {
+//public final URL find(IPath path, Map override) {
 //	if (path == null)
 //		return null;
 //	
@@ -728,7 +728,7 @@ public final URL find(IPath path) {
 //	}
 //		
 //	// Worry about variable substitution
-//	CMPath rest = path.removeFirstSegments(1);
+//	IPath rest = path.removeFirstSegments(1);
 //	if (first.equalsIgnoreCase("$nl$")) //$NON-NLS-1$
 //		return findNL(install, rest, override);
 //	if (first.equalsIgnoreCase("$os$")) //$NON-NLS-1$

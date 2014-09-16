@@ -65,7 +65,7 @@ public interface IExtensionPoint {
 	 *
 	 * @return a displayable string label for this extension point,
 	 *    possibly the empty string
-	 * @see CMPluginDescriptor#getResourceString 
+	 * @see IPluginDescriptor#getResourceString 
 	 */
 	public String getLabel();
 	/**
@@ -76,7 +76,7 @@ public interface IExtensionPoint {
 	 * is specified in the plug-in manifest file.
 	 *
 	 * @return a relative URL path, or an empty string
-	 * @see CMPluginDescriptor#getInstallURL
+	 * @see IPluginDescriptor#getInstallURL
 	 */
 	public String getSchemaReference();
 	/**
