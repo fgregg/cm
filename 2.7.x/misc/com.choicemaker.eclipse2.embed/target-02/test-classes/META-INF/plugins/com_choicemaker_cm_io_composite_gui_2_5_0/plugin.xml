@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.composite.gui"
+   name="Composite IO Gui Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="gui.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.io.composite.base"/>
+      <import plugin="com.choicemaker.cm.modelmaker"/>
+      <import plugin="com.choicemaker.cm.gui.utils"/>
+   </requires>
+
+
+   <extension
+         id="compositeMrpsReaderGui"
+         name="compositeMrpsReaderGui"
+         point="com.choicemaker.cm.modelmaker.mrpsReaderGui">
+      <gui
+            hasSink="false"
+            name="Composite"
+            class="com.choicemaker.cm.io.composite.gui.CompositeMarkedRecordPairSourceGuiFactory"
+            handledClass="com.choicemaker.cm.io.composite.base.CompositeMarkedRecordPairSource">
+      </gui>
+   </extension>
+   <extension
+         id="compositeRsReaderGui"
+         name="compositeRsReaderGui"
+         point="com.choicemaker.cm.modelmaker.rsReaderGui">
+      <gui
+            hasSink="false"
+            name="Composite"
+            class="com.choicemaker.cm.io.composite.gui.CompositeRecordSourceGuiFactory"
+            handledClass="com.choicemaker.cm.io.composite.base.CompositeRecordSource">
+      </gui>
+   </extension>
+
+</plugin>

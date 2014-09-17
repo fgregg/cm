@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.docs"
+   name="Docs Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="UsersGuide.jar" type="resource">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+</plugin>

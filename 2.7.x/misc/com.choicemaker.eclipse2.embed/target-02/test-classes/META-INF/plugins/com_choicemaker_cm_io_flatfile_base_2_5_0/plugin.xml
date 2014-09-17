@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.flatfile.base"
+   name="Flatfile IO Base Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="base.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+   </requires>
+
+
+   <extension
+         id="flatfileMrpsReader"
+         name="flatFile"
+         point="com.choicemaker.cm.core.mrpsReader">
+      <handler
+            name="Flatfile"
+            class="com.choicemaker.cm.io.flatfile.base.xmlconf.FlatFileMarkedRecordPairSourceXmlConf"
+            backwardCompatibilityId="com.choicemaker.cm.io.flatfile.xmlconf.FlatFileMarkedRecordPairSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.flatfile.base.FlatFileMarkedRecordPairSource">
+      </handler>
+   </extension>
+   <extension
+         id="flatfileGenerator"
+         name="flatfileGenerator"
+         point="com.choicemaker.cm.core.generatorPlugin">
+      <plugin
+            name="Flatfile"
+            class="com.choicemaker.cm.io.flatfile.base.gen.FlatFileGenerator">
+      </plugin>
+   </extension>
+   <extension
+         id="flatfileRsReader"
+         name="flatfileRsReader"
+         point="com.choicemaker.cm.core.rsReader">
+      <handler
+            name="Flatfile"
+            class="com.choicemaker.cm.io.flatfile.base.xmlconf.FlatFileRecordSourceXmlConf"
+            backwardCompatibilityId="com.choicemaker.cm.io.flatfile.xmlconf.FlatFileRecordSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.flatfile.base.FlatFileRecordSource">
+      </handler>
+   </extension>
+   <extension
+         id="flatfileAccessor"
+         name="flatfileAccessor"
+         point="com.choicemaker.cm.core.accessor">
+      <accessor
+            class="com.choicemaker.cm.io.flatfile.base.FlatFileAccessor">
+      </accessor>
+   </extension>
+
+</plugin>

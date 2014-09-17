@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="javax.sql"
+   name="JDBC Standard Extension Plug-in"
+   version="2.0.0"
+   provider-name="Sun Microsystems">
+
+   <runtime>
+      <library name="jdbc2_0-stdext.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+</plugin>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.bootstrapping"
+   name="Bootstrapping Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="bootstrapping.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.modelmaker"/>
+      <import plugin="com.choicemaker.cm.ml.me.base"/>
+      <import plugin="com.choicemaker.cm.ml.svm.base"/>
+      <import plugin="com.choicemaker.cm.gui.utils"/>
+   </requires>
+
+
+   <extension
+         point="com.choicemaker.cm.modelmaker.toolMenuItem">
+      <action
+            class="com.choicemaker.cm.bootstrapping.gui.BootstrappingAction">
+      </action>
+   </extension>
+
+</plugin>

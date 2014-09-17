@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="javax.ejb"
+   name="EJB Plug-in"
+   version="2.0.0"
+   provider-name="Sun Microsystems / jboss.org"
+   class="">
+
+   <runtime>
+      <library name="jboss-j2ee.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+</plugin>

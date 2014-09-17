@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.db.oracle"
+   name="Oracle DB IO Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="oracle.jar">
+         <export name="*"/>
+      </library>
+      <library name="lib/classes12_10.2.0.4.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.compiler"/>
+   </requires>
+
+
+   <extension
+         id="OraDbObjectMaker"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.choicemaker.cm.io.db.oracle.dbom.DbDbObjectMaker">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="com.choicemaker.cm.core.objectGenerator">
+      <generator
+            description="Oracle Custom Objects (DDL)"
+            class="com.choicemaker.cm.io.db.oracle.dbom.DbDbObjectMaker">
+      </generator>
+   </extension>
+   <extension
+         id="oracleDatabaseAccessor"
+         name="oracleDatabaseAccessor"
+         point="com.choicemaker.cm.io.blocking.automated.base.databaseAccessor">
+      <databaseAccessor
+            class="com.choicemaker.cm.io.db.oracle.blocking.OraDatabaseAccessor">
+      </databaseAccessor>
+   </extension>
+   <extension
+         id="oracleDatabaseAbstraction"
+         name="oracleDatabaseAbstraction"
+         point="com.choicemaker.cm.io.blocking.automated.base.databaseAbstraction">
+      <databaseAbstraction
+            class="com.choicemaker.cm.io.db.oracle.blocking.OraDatabaseAbstraction">
+      </databaseAbstraction>
+   </extension>
+
+</plugin>
