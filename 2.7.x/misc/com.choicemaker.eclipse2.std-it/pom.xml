@@ -14,9 +14,9 @@
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>com.choicemaker.eclipse2.std-it</artifactId>
 
-  <name>Standard Eclipse2 IT</name>
+  <name>Integration Test: Standard Eclipse2</name>
   <description><![CDATA[
-  >Integration test for standard Eclipse2 platform.
+  Integration test for standard Eclipse2 platform.
   ]]></description>
 
   <properties>

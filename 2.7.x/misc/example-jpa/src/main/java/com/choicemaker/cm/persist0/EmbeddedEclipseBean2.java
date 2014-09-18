@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.choicemaker.eclipse2.embed.pd.EmbeddedPluginDiscovery;
+import com.choicemaker.e2.mbd.pd.EmbeddedPluginDiscovery;
 import com.choicemaker.eclipse2.pd.PluginDiscovery;
 
 /**

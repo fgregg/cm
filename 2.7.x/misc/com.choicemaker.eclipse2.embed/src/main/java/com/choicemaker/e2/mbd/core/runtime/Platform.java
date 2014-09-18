@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -42,6 +43,9 @@ import com.choicemaker.eclipse2.pd.PluginDiscovery;
  * @version  $Revision: 1.1 $ $Date: 2010/01/27 03:58:28 $
  */
 public class Platform {
+	
+	private static final Logger logger = Logger.getLogger(Platform.class.getName());
+	
 	/**
 	 * The unique identifier constant (value "<code>org.eclipse.core.runtime</code>")
 	 * of the Core Runtime (pseudo-) plug-in.
@@ -124,6 +128,14 @@ public class Platform {
 
 	private static URL[] getPluginPaths() {
 		ClassLoader classLoader = Platform.class.getClassLoader();
+		logger.fine("Platform classLoader: " + classLoader + "("
+				+ classLoader.getClass().getName() + ": "
+				+ classLoader.hashCode() + ")");
+//		classLoader = Thread.currentThread().getContextClassLoader();
+//		logger.fine("Context classLoader: " + classLoader + "("
+//				+ classLoader.getClass().getName() + ": "
+//				+ classLoader.hashCode() + ")");
+
 //		try {
 //			XMLReader xmlReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
 //			PluginsParser pluginsParser = new PluginsParser();

@@ -26,10 +26,10 @@ public class EmbeddedPlatformTest {
 	@Test
 	public void testEmbeddedPlatform() {
 		@SuppressWarnings("unused")
-		CMPlatform pd0 = new EmbeddedPlatform();
+		CMPlatform ep0 = new EmbeddedPlatform();
 
-		CMPlatform pd1 = InstallablePlatform.getInstance();
-		assertTrue(pd1 != null);
+		CMPlatform ep1 = InstallablePlatform.getInstance();
+		assertTrue(ep1 != null);
 		
 		CMPlatform delegate = InstallablePlatform.getInstance().getDelegate();
 		assertTrue(delegate instanceof EmbeddedPlatform);
@@ -37,8 +37,8 @@ public class EmbeddedPlatformTest {
 
 	@Test
 	public void testEmbeddedRegistry() {
-		CMPlatform pd = new EmbeddedPlatform();
-		PlatformTest.testRegistry(pd);
+		CMPlatform ep = new EmbeddedPlatform();
+		PlatformTest.testRegistry(ep);
 	}
 
 }

@@ -12,9 +12,9 @@ public class PlatformTest {
 	private PlatformTest() {
 	}
 	
-	public static void testRegistry(CMPlatform pd) {
-		assertTrue(pd != null);
-		CMPluginRegistry registry = pd.getPluginRegistry();
+	public static void testRegistry(CMPlatform cmp) {
+		assertTrue(cmp != null);
+		CMPluginRegistry registry = cmp.getPluginRegistry();
 		assertTrue(registry != null);
 		
 		CMPluginDescriptor[] descriptors = registry.getPluginDescriptors();

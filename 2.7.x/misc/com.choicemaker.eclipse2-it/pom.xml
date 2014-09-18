@@ -11,7 +11,7 @@
   <version>2.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>Integration tests for the Eclipse 2 API</name>
+  <name>Integration Test: Eclipse2 API</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

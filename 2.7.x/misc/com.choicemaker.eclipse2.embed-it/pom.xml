@@ -14,7 +14,7 @@
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>com.choicemaker.eclipse2.embed-it</artifactId>
  
-  <name>Embedded Eclipse IT 1</name>
+  <name>Integration Test: Embedded Eclipse2</name>
   <description><![CDATA[
   Integration test for the embedded Eclipse framework.
   ]]></description>

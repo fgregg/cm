@@ -11,7 +11,7 @@
   <version>2.7.1-SNAPSHOT</version>
   <packaging>ejb</packaging>
 
-  <name>Embedded Eclipse 2 Platform</name>
+  <name>J2EE Eclipse 2 Platform</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

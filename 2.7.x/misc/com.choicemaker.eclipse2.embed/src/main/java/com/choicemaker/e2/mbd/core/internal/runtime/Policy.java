@@ -15,7 +15,8 @@ import java.text.MessageFormat;
 import java.util.*;
 
 public class Policy {
-	private static String bundleName = "org.eclipse.core.internal.runtime.messages";//$NON-NLS-1$
+//	private static String bundleName = "org.eclipse.core.internal.runtime.messages";//$NON-NLS-1$
+	private static String bundleName = "com.choicemaker.e2.mbd.core.internal.runtime.messages";//$NON-NLS-1$
 	private static ResourceBundle bundle = ResourceBundle.getBundle(bundleName, Locale.getDefault());
 
 /**
