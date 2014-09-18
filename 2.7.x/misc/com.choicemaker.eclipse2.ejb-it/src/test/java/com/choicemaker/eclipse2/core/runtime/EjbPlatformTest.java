@@ -21,7 +21,7 @@ import com.choicemaker.eclipse2.ejb.Eclipse2Service;
 import com.choicemaker.eclipse2.embed.EmbeddedPlatform;
 
 @RunWith(Arquillian.class)
-public class Eclipse2EjbTest {
+public class EjbPlatformTest {
 	
 	private static final String MAVEN_COORDINATE_SEPARATOR = ":";
 	
@@ -46,7 +46,7 @@ public class Eclipse2EjbTest {
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
 		List<Class<?>> testClasses = new ArrayList<>();
-		testClasses.add(Eclipse2EjbTest.class);
+		testClasses.add(EjbPlatformTest.class);
 		testClasses.add(PlatformTest.class);
 
 		JavaArchive ejb =

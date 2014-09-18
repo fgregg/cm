@@ -16,8 +16,6 @@ import com.choicemaker.cmit.util.Eclipse2Utils;
 
 public class ModelMakerTest0 extends TestCase {
 
-	public static final int WAIT_HACK_5_SECONDS = 1000 * 5;
-
 	private static final String RESOURCE_ROOT = "/";
 
 	private static final String RESOURCE_NAME_SEPARATOR = "/";
