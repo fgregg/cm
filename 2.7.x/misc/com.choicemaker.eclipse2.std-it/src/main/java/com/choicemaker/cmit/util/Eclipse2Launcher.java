@@ -18,48 +18,6 @@ public class Eclipse2Launcher {
 	public static final String PI_STARTUP = "org.eclipse.core.launcher"; //$NON-NLS-1$
 	public static final String FQCN_STARTUP = "org.eclipse.core.launcher.Main"; //$NON-NLS-1$
 
-	/*
-	// constants
-	public static final String APPLICATION = "-application"; //$NON-NLS-1$
-	public static final String BOOT = "-boot"; //$NON-NLS-1$
-	public static final String INSTALL = "-install"; //$NON-NLS-1$
-	public static final String INITIALIZE = "-initialize"; //$NON-NLS-1$
-	public static final String DEBUG = "-debug"; //$NON-NLS-1$
-	public static final String DEV = "-dev"; //$NON-NLS-1$
-	public static final String DATA = "-data"; //$NON-NLS-1$
-	public static final String CONFIGURATION_FILE = "-configuration"; //$NON-NLS-1$
-	public static final String FEATURE = "-feature"; //$NON-NLS-1$
-	public static final String SHOWSPLASH = "-showsplash"; //$NON-NLS-1$
-	public static final String ENDSPLASH = "-endsplash"; //$NON-NLS-1$
-	public static final String FIRST_USE = "-firstuse"; //$NON-NLS-1$
-	public static final String SPLASH_IMAGE = "splash.bmp"; //$NON-NLS-1$
-	public static final String PI_BOOT = "org.eclipse.core.boot"; //$NON-NLS-1$
-	public static final String BOOTLOADER = "org.eclipse.core.boot.BootLoader"; //$NON-NLS-1$
-	public static final String BOOTJAR = "boot.jar"; //$NON-NLS-1$
-	public static final String PLATFORM_URL = "platform:/base/"; //$NON-NLS-1$
-
-	// constants: configuration file location
-	public static final String CONFIG_FILE = "platform.cfg"; //$NON-NLS-1$
-	public static final String CONFIG_FILE_TEMP_SUFFIX = ".tmp"; //$NON-NLS-1$
-	public static final String CONFIG_FILE_BAK_SUFFIX = ".bak"; //$NON-NLS-1$
-	public static final String ARG_USER_DIR = "user.dir"; //$NON-NLS-1$
-
-	// constants: configuration file elements
-	public static final String CFG_CORE_BOOT = "bootstrap." + PI_BOOT; //$NON-NLS-1$
-	public static final String CFG_FEATURE_ENTRY = "feature"; //$NON-NLS-1$
-	public static final String CFG_FEATURE_ENTRY_DEFAULT = "feature.default.id"; //$NON-NLS-1$
-	public static final String CFG_FEATURE_ENTRY_ID = "id"; //$NON-NLS-1$
-	public static final String CFG_FEATURE_ENTRY_ROOT = "root"; //$NON-NLS-1$
-	public static final String CFG_EOF = "eof"; //$NON-NLS-1$
-
-	// log file handling
-	public static final String SESSION = "!SESSION"; //$NON-NLS-1$
-	public static final String ENTRY = "!ENTRY"; //$NON-NLS-1$
-	public static final String MESSAGE = "!MESSAGE"; //$NON-NLS-1$
-	public static final String STACK = "!STACK"; //$NON-NLS-1$
-	public static final int ERROR = 4;
-	*/
-
 	private final URL startupJar;
 	private final Class<?> startupClass;
 	private final Object startupInstance;

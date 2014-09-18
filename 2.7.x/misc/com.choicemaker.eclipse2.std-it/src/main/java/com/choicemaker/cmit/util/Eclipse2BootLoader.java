@@ -17,29 +17,6 @@ public class Eclipse2BootLoader {
 	public static final String FQCN_BOOTLOADER =
 		"org.eclipse.core.boot.BootLoader";//$NON-NLS-1$
 
-	/*
-	public static final String OS_WIN32 = "win32";//$NON-NLS-1$
-	public static final String OS_LINUX = "linux";//$NON-NLS-1$
-	public static final String OS_AIX = "aix";//$NON-NLS-1$
-	public static final String OS_SOLARIS = "solaris";//$NON-NLS-1$
-	public static final String OS_HPUX = "hpux";//$NON-NLS-1$
-	public static final String OS_QNX = "qnx";//$NON-NLS-1$
-	public static final String OS_MACOSX = "macosx";//$NON-NLS-1$
-	public static final String OS_UNKNOWN = "unknown";//$NON-NLS-1$
-
-	public static final String ARCH_X86 = "x86";//$NON-NLS-1$
-	public static final String ARCH_PA_RISC = "PA_RISC";//$NON-NLS-1$
-	public static final String ARCH_PPC = "ppc";//$NON-NLS-1$
-	public static final String ARCH_SPARC = "sparc";//$NON-NLS-1$
-
-	public static final String WS_WIN32 = "win32";//$NON-NLS-1$
-	public static final String WS_MOTIF = "motif";//$NON-NLS-1$
-	public static final String WS_GTK = "gtk";//$NON-NLS-1$
-	public static final String WS_PHOTON = "photon";//$NON-NLS-1$
-	public static final String WS_CARBON = "carbon";//$NON-NLS-1$
-	public static final String WS_UNKNOWN = "unknown";//$NON-NLS-1$
-	*/
-
 	private final URL bootJar;
 	private final Class<?> bootLoaderClass;
 	
