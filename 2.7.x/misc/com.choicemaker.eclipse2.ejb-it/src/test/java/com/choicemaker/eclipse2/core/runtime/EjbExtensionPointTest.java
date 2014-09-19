@@ -16,9 +16,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cmit.e2.ExtensionPointTest;
-import com.choicemaker.cmit.e2.PlatformTest;
 import com.choicemaker.cmit.utils.DeploymentUtils;
-import com.choicemaker.eclipse2.ejb.Eclipse2Service;
+import com.choicemaker.eclipse2.ejb.EjbPlatform;
 
 @RunWith(Arquillian.class)
 public class EjbExtensionPointTest {
@@ -44,7 +43,7 @@ public class EjbExtensionPointTest {
 	public static EnterpriseArchive createEarArchive() {
 		List<Class<?>> testClasses = new ArrayList<>();
 		testClasses.add(EjbExtensionPointTest.class);
-		testClasses.add(PlatformTest.class);
+		testClasses.add(ExtensionPointTest.class);
 
 		JavaArchive ejb =
 			DeploymentUtils.createEjbJar(PROJECT_POM, EJB_MAVEN_COORDINATES,
@@ -57,7 +56,7 @@ public class EjbExtensionPointTest {
 	}
 
 	@EJB
-	Eclipse2Service e2service;
+	EjbPlatform e2service;
 
 	@Test
 	public void testEclipse2Service() {
@@ -191,53 +190,6 @@ public class EjbExtensionPointTest {
 	public void testComChoicemakerCmMatchingWfstParser() {
 		CMPluginRegistry registry = getPluginRegistry();
 		ExtensionPointTest.testComChoicemakerCmMatchingWfstParser(registry);
-	}
-
-	@Test
-	public void testComChoicemakerCmModelmakerMatcherBlockingToolkit() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest
-				.testComChoicemakerCmModelmakerMatcherBlockingToolkit(registry);
-	}
-
-	@Test
-	public void testComChoicemakerCmModelmakerMlTrainGuiPlugin() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest
-				.testComChoicemakerCmModelmakerMlTrainGuiPlugin(registry);
-	}
-
-	@Test
-	public void testComChoicemakerCmModelmakerMrpsReaderGui() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest
-				.testComChoicemakerCmModelmakerMrpsReaderGui(registry);
-	}
-
-	@Test
-	public void testComChoicemakerCmModelmakerPluggableController() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest
-				.testComChoicemakerCmModelmakerPluggableController(registry);
-	}
-
-	@Test
-	public void testComChoicemakerCmModelmakerPluggableMenuItem() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest
-				.testComChoicemakerCmModelmakerPluggableMenuItem(registry);
-	}
-
-	@Test
-	public void testComChoicemakerCmModelmakerRsReaderGui() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest.testComChoicemakerCmModelmakerRsReaderGui(registry);
-	}
-
-	@Test
-	public void testComChoicemakerCmModelmakerToolMenuItem() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest.testComChoicemakerCmModelmakerToolMenuItem(registry);
 	}
 
 	@Test

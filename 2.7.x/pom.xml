@@ -69,12 +69,14 @@
     <module>misc/compiler-app</module>
     <module>misc/com.choicemaker.eclipse2</module>
     <module>misc/com.choicemaker.eclipse2.ejb</module>
-    <module>misc/com.choicemaker.eclipse2.ejb-it</module>
     <module>misc/com.choicemaker.eclipse2.embed</module>
-    <module>misc/com.choicemaker.eclipse2.embed-it</module>
     <module>misc/com.choicemaker.eclipse2.std</module>
-    <!-- module>misc/com.choicemaker.eclipse2.std-it</module -->
     <module>misc/mymojo-plugin</module>
+    <!--
+    <module>misc/com.choicemaker.eclipse2.ejb-it</module>
+    <module>misc/com.choicemaker.eclipse2.embed-it</module>
+    <module>misc/com.choicemaker.eclipse2.std-it</module>
+    -->
     <module>misc/mymojo-plugin-it</module>
   </modules>
 

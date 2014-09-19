@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cmit.e2.PlatformTest;
 import com.choicemaker.cmit.utils.DeploymentUtils;
-import com.choicemaker.eclipse2.ejb.Eclipse2Service;
+import com.choicemaker.eclipse2.ejb.EjbPlatform;
 import com.choicemaker.eclipse2.embed.EmbeddedPlatform;
 
 @RunWith(Arquillian.class)
@@ -60,7 +60,7 @@ public class EjbPlatformTest {
 	}
 
 	@EJB
-	Eclipse2Service e2service;
+	EjbPlatform e2service;
 
 	@Test
 	public void testEclipse2Service() {

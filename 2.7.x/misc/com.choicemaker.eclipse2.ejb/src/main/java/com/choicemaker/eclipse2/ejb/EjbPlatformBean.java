@@ -23,7 +23,7 @@ import com.choicemaker.eclipse2.embed.EmbeddedPlatform;
 // read-only, even for the EmbeddedPlatform? Is the CMPlatform and its
 // related interfaces read-only?
 @Singleton
-public class Eclipse2ServiceBean implements Eclipse2Service {
+public class EjbPlatformBean implements EjbPlatform {
 
 	private CMPlatform embeddedPlatform;
 

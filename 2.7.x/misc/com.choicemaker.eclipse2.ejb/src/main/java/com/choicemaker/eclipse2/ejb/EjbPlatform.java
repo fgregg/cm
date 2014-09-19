@@ -12,5 +12,5 @@ import com.choicemaker.eclipse2.core.runtime.CMPlatform;
  *
  */
 @Local
-public interface Eclipse2Service extends CMPlatform {
+public interface EjbPlatform extends CMPlatform {
 }
