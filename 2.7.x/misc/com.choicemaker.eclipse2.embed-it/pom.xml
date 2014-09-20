@@ -12,8 +12,8 @@
     <relativePath>../../choicemaker-base/pom.xml</relativePath>
   </parent>
 
-  <groupId>com.choicemaker.cmit</groupId>
-  <artifactId>com.choicemaker.eclipse2.embed-it</artifactId>
+  <groupId>com.choicemaker.e2it</groupId>
+  <artifactId>com.choicemaker.e2it.embed-it</artifactId>
  
   <name>Integration Test: Embedded Eclipse2</name>
   <description><![CDATA[
@@ -45,20 +45,19 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.choicemaker.eclipse2</groupId>
-      <artifactId>com.choicemaker.eclipse2</artifactId>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.eclipse2</groupId>
-      <artifactId>com.choicemaker.eclipse2.embed</artifactId>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.embed</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.eclipse2</groupId>
-      <artifactId>com.choicemaker.eclipse2-it</artifactId>
+      <groupId>com.choicemaker.e2it</groupId>
+      <artifactId>com.choicemaker.e2it</artifactId>
       <version>2.7.1-SNAPSHOT</version>
-      <scope>test</scope>
     </dependency>
 
     <dependency>

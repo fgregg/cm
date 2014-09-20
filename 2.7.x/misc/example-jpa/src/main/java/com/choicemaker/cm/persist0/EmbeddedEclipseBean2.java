@@ -16,8 +16,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.choicemaker.e2.mbd.pd.EmbeddedPluginDiscovery;
-import com.choicemaker.eclipse2.pd.PluginDiscovery;
+import com.choicemaker.e2.PluginDiscovery;
+import com.choicemaker.e2.mbd.plugin.EmbeddedPluginDiscovery;
 
 /**
  * A test bean that looks up registered plugins in an

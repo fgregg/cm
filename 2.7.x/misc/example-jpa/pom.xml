@@ -203,13 +203,13 @@
     <!--
     -->
     <dependency>
-      <groupId>com.choicemaker.eclipse2</groupId>
-      <artifactId>com.choicemaker.eclipse2</artifactId>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.eclipse2</groupId>
-      <artifactId>com.choicemaker.eclipse2.embed</artifactId>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.embed</artifactId>
       <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>

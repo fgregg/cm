@@ -1,6 +1,6 @@
 package com.choicemaker.eclipse2.pd;
 
-import static com.choicemaker.e2.mbd.pd.EmbeddedPluginDiscovery.PREFIX;
+import static com.choicemaker.e2.mbd.plugin.EmbeddedPluginDiscovery.PREFIX;
 import static com.choicemaker.eclipse2.pd.ExampleData.BAD_CONFIGURATIONS;
 import static com.choicemaker.eclipse2.pd.ExampleData.EXPECTED_1;
 import static com.choicemaker.eclipse2.pd.ExampleData.TEST_DATA;
@@ -14,9 +14,9 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.choicemaker.e2.mbd.pd.EmbeddedPluginDiscovery;
-import com.choicemaker.eclipse2.pd.PluginDiscovery;
-import com.choicemaker.eclipse2.pd.PluginDiscoveryException;
+import com.choicemaker.e2.PluginDiscovery;
+import com.choicemaker.e2.PluginDiscoveryException;
+import com.choicemaker.e2.mbd.plugin.EmbeddedPluginDiscovery;
 
 public class EmbeddedPluginDiscoveryTest {
 

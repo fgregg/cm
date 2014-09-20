@@ -22,9 +22,9 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.persist0.EmbeddedEclipseBean2;
 import com.choicemaker.cmit.utils0.DeploymentUtils;
-import com.choicemaker.eclipse2.core.runtime.CMPlatform;
-import com.choicemaker.eclipse2.core.runtime.InstallablePlatform;
-import com.choicemaker.eclipse2.core.runtime.CMPluginRegistry;;
+import com.choicemaker.e2.CMPlatform;
+import com.choicemaker.e2.CMPluginRegistry;
+import com.choicemaker.e2.platform.InstallablePlatform;
 
 @RunWith(Arquillian.class)
 public class EmbeddedEclipseBean2Test {
