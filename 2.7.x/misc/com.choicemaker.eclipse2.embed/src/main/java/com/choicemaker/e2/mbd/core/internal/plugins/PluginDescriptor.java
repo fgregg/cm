@@ -11,21 +11,16 @@
 
 package com.choicemaker.e2.mbd.core.internal.plugins;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.logging.Logger;
 
-import com.choicemaker.e2.mbd.core.boot.BootLoader;
 import com.choicemaker.e2.mbd.core.internal.runtime.Policy;
 import com.choicemaker.e2.mbd.core.runtime.CoreException;
 import com.choicemaker.e2.mbd.core.runtime.IConfigurationElement;
@@ -36,7 +31,6 @@ import com.choicemaker.e2.mbd.core.runtime.IPath;
 import com.choicemaker.e2.mbd.core.runtime.IPluginDescriptor;
 import com.choicemaker.e2.mbd.core.runtime.IPluginPrerequisite;
 import com.choicemaker.e2.mbd.core.runtime.IStatus;
-import com.choicemaker.e2.mbd.core.runtime.Path;
 import com.choicemaker.e2.mbd.core.runtime.Platform;
 import com.choicemaker.e2.mbd.core.runtime.Plugin;
 import com.choicemaker.e2.mbd.core.runtime.PluginVersionIdentifier;
@@ -44,138 +38,69 @@ import com.choicemaker.e2.mbd.core.runtime.Status;
 import com.choicemaker.e2.mbd.core.runtime.model.ExtensionModel;
 import com.choicemaker.e2.mbd.core.runtime.model.ExtensionPointModel;
 import com.choicemaker.e2.mbd.core.runtime.model.PluginDescriptorModel;
-import com.choicemaker.e2.mbd.core.runtime.model.PluginFragmentModel;
 import com.choicemaker.e2.mbd.core.runtime.model.PluginPrerequisiteModel;
 
 public class PluginDescriptor extends PluginDescriptorModel implements IPluginDescriptor {
+	
+	private static final Logger logger = Logger
+			.getLogger(PluginDescriptor.class.getName());
 
 	private boolean active = false; // plugin is active
 	private boolean activePending = false; // being activated
 	private boolean deactivated = false; // plugin deactivated due to startup errors
 	protected Plugin pluginObject = null; // plugin object
-	private boolean usePlatformURLs = true;
-	private ResourceBundle bundle = null; // plugin.properties
-	private Locale locale = null; // bundle locale
 	private boolean bundleNotFound = false; // marker to prevent unnecessary lookups
-	private Object[] cachedClasspath = null; // cached value of class loader's classpath
 
 	// constants
-//	static final String PLUGIN_URL = PlatformURLHandler.PROTOCOL + PlatformURLHandler.PROTOCOL_SEPARATOR + "/" + PlatformURLPluginConnection.PLUGIN + "/"; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String VERSION_SEPARATOR = "_"; //$NON-NLS-1$
 
 	private static final String DEFAULT_BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 	private static final String KEY_PREFIX = "%"; //$NON-NLS-1$
 	private static final String KEY_DOUBLE_PREFIX = "%%"; //$NON-NLS-1$
 
-	private static final String URL_PROTOCOL_FILE = "file"; //$NON-NLS-1$
-
-	// Places to look for library files 
-	private static String[] WS_JAR_VARIANTS = buildWSVariants();
-	private static String[] OS_JAR_VARIANTS = buildOSVariants();
-	private static String[] NL_JAR_VARIANTS = buildNLVariants(BootLoader.getNL());
-	private static String[] JAR_VARIANTS = buildVanillaVariants();
-
 public PluginDescriptor() {
 	super();
 }
-private static String[] buildWSVariants() {
-	ArrayList result = new ArrayList();
-	result.add("ws/" + BootLoader.getWS()); //$NON-NLS-1$
-	result.add(""); //$NON-NLS-1$
-	return (String[])result.toArray(new String[result.size()]);
-}
-private static String[] buildOSVariants() {
-	ArrayList result = new ArrayList();
-	result.add("os/" + BootLoader.getOS() + "/" + BootLoader.getOSArch()); //$NON-NLS-1$ //$NON-NLS-2$
-	result.add("os/" + BootLoader.getOS()); //$NON-NLS-1$
-	result.add(""); //$NON-NLS-1$
-	return (String[])result.toArray(new String[result.size()]);
-}
-private static String[] buildNLVariants(String nl) {
-	ArrayList result = new ArrayList();
-	IPath base = new Path("nl"); //$NON-NLS-1$
-	
-	IPath path = new Path(nl.replace('_', '/'));
-	while (path.segmentCount() > 0) {
-		result.add(base.append(path).toString());
-		// for backwards compatibility only, don't replace the slashes
-		if (path.segmentCount() > 1)
-			result.add(base.append(path.toString().replace('/', '_')).toString());
-		path = path.removeLastSegments(1);
-	}
 
-	return (String[]) result.toArray(new String[result.size()]);
+public Object createExecutableExtension(String className, Object initData,
+		IConfigurationElement cfig, String propertyName)
+		throws CoreException {
+// load the requested class from this plugin
+Class<?> classInstance = null;
+try {
+	classInstance = getPluginClassLoader(true).loadClass(className);
+} catch (Exception e1) {
+	throwException(Policy.bind("plugin.loadClassError", getId(), className), e1); //$NON-NLS-1$
 }
-private static String[] buildVanillaVariants() {
-	return new String[] {""}; //$NON-NLS-1$
+
+// create a new instance
+Object result = null;
+try {
+	result = classInstance.newInstance();
+} catch (Exception e) {
+	throwException(Policy.bind("plugin.instantiateClassError", getId(), className), e); //$NON-NLS-1$
 }
-private String[] buildBasePaths(String pluginBase) {
-	// Now build a list of all the bases to use
-	ArrayList result = new ArrayList();
-	result.add(pluginBase);
-	PluginFragmentModel[] fragments = getFragments();
-	int fragmentLength = (fragments == null) ? 0 : fragments.length;
-	for (int i = 0; i < fragmentLength; i++) {
-		FragmentDescriptor fragment = (FragmentDescriptor)fragments[i];
-		result.add(fragment.getInstallURL().toString());
-	}
-	return (String[])result.toArray(new String[result.size()]);
-}
-/**
- * concatenates start and end.  If end has a '.' construct at the beginning
- * trim off any leading '.' constructs.  Since the libSpec was a path, we
- * know that it was canonicalized and will only have at most one set
- * of '.' constructs at the beginning.  Returns <code>null</code> if the 
- * end is null or starts with '..'.
- */
-private String concat(String start, String end) {
-	if (end == null)
-		return null;
-	if (end.startsWith("..")) //$NON-NLS-1$
-		// ISSUE: should log an error here
-		// error case.  Can't '..' out of the scope of a plugin.  Signal that this
-		// should be ignored (return null).
-		return null;
-	if (end.startsWith("./")) //$NON-NLS-1$
-		return start + (end.substring(2));
-	if (end.startsWith(".")) //$NON-NLS-1$
-		return start + end.substring(1);
-	return start + end;
-}
-public Object createExecutableExtension(String className, Object initData, IConfigurationElement cfig, String propertyName) throws CoreException {
-	// load the requested class from this plugin
-	Class classInstance = null;
+
+// check if we have extension adapter and initialize
+if (result instanceof IExecutableExtension) {
 	try {
-		classInstance = getPluginClassLoader(true).loadClass(className);
-	} catch (Exception e1) {
-		throwException(Policy.bind("plugin.loadClassError", getId(), className), e1); //$NON-NLS-1$
-	}
-
-	// create a new instance
-	Object result = null;
-	try {
-		result = classInstance.newInstance();
-	} catch (Exception e) {
-		throwException(Policy.bind("plugin.instantiateClassError", getId(), className), e); //$NON-NLS-1$
-	}
-
-	// check if we have extension adapter and initialize
-	if (result instanceof IExecutableExtension) {
-		try {
-			// make the call even if the initialization string is null
-			 ((IExecutableExtension) result).setInitializationData(cfig, propertyName, initData);
-		} catch (CoreException ce) {
-			// user code threw exception
+		// make the call even if the initialization string is null
+		 ((IExecutableExtension) result).setInitializationData(cfig, propertyName, initData);
+	} catch (CoreException ce) {
+		// user code threw exception
 //			logError(ce.getStatus());
-			throw new CoreException(ce.getStatus());
-		} catch (Exception te) {
-			// user code caused exception
-			throwException(Policy.bind("policy.initObjectError", getId(), className), te); //$NON-NLS-1$
-		}
+		throw new CoreException(ce.getStatus());
+	} catch (Exception te) {
+		// user code caused exception
+		throwException(Policy.bind("policy.initObjectError", getId(), className), te); //$NON-NLS-1$
 	}
-	return result;
 }
-Object createExecutableExtension(String pluginName, String className, Object initData, IConfigurationElement cfig, String propertyName) throws CoreException {
+return result;
+}
+
+Object createExecutableExtension(String pluginName, String className,
+		Object initData, IConfigurationElement cfig, String propertyName)
+		throws CoreException {
 	String id = getUniqueIdentifier(); // this plugin id
 	// check if we need to delegate to some other plugin
 	if (pluginName != null && !pluginName.equals("") && !pluginName.equals(id)) { //$NON-NLS-1$
@@ -220,21 +145,7 @@ synchronized void doPluginDeactivation() {
 	activePending = false;
 	deactivated = false;
 }
-/**
- * convert a list of comma-separated tokens into an array
- */
-private static String[] getArrayFromList(String prop) {
-	if (prop == null || prop.trim().equals("")) //$NON-NLS-1$
-		return new String[0];
-	Vector list = new Vector();
-	StringTokenizer tokens = new StringTokenizer(prop, ","); //$NON-NLS-1$
-	while (tokens.hasMoreTokens()) {
-		String token = tokens.nextToken().trim();
-		if (!token.equals("")) //$NON-NLS-1$
-			list.addElement(token);
-	}
-	return list.isEmpty() ? new String[0] : (String[]) list.toArray(new String[0]);
-}
+
 /**
  * @see IPluginDescriptor
  */
@@ -538,86 +449,65 @@ public IPluginPrerequisite[] getPluginResolvedPrerequisites() {
 	PluginPrerequisiteModel[] prereqs = this.getRequires();
 	if (prereqs == null || prereqs.length == 0)
 		return new IPluginPrerequisite[0];
-	List resolvedPrerequisites = new ArrayList(prereqs.length);
+	List<PluginPrerequisiteModel> resolvedPrerequisites = new ArrayList<>(prereqs.length);
 	for (int i = 0; i < prereqs.length; i++) {
 		if (prereqs[i].getResolvedVersion() == null)
 			continue;
-		String prereqId = prereqs[i].getPlugin();
-		// skip over the runtime and boot plugins if they were specified.  They are automatically included
-		// as the platform and parent respectively.
-//		if (prereqId.equalsIgnoreCase(Platform.PI_RUNTIME) || prereqId.equalsIgnoreCase(BootLoader.PI_BOOT))
-//			continue;
 		resolvedPrerequisites.add(prereqs[i]);
 	}
 	if (resolvedPrerequisites.isEmpty())
 		return new IPluginPrerequisite[0];
 	return (IPluginPrerequisite[]) resolvedPrerequisites.toArray(new IPluginPrerequisite[resolvedPrerequisites.size()]);
 }
+
 private void internalDoPluginActivation() throws CoreException {
+
 	String errorMsg;
-	// load the runtime class 
+	// load the runtime class
 	String pluginClassName = getPluginClass();
-	Class runtimeClass = null;
-	try {
-		if (pluginClassName == null || pluginClassName.equals("")) //$NON-NLS-1$
-			runtimeClass = DefaultPlugin.class;
-		else
-			runtimeClass = getPluginClassLoader(true).loadClass(pluginClassName);
-	} catch (ClassNotFoundException e) {
-		errorMsg = Policy.bind("plugin.loadClassError", getId(), pluginClassName); //$NON-NLS-1$
-		throwException(errorMsg, e);
+	Class<?> runtimeClass = null;
+	if (pluginClassName == null || pluginClassName.equals("")) { //$NON-NLS-1$
+		runtimeClass = DefaultPlugin.class;
+	} else {
+		// FIXME externalize message
+		errorMsg = "Ignoring customized plugin class: " + pluginClassName;
+		logger.warning(errorMsg);
+		// runtimeClass =
+		// getPluginClassLoader(true).loadClass(pluginClassName);
+		runtimeClass = DefaultPlugin.class;
 	}
 
 	// find the correct constructor
-	Constructor construct = null;
+	Constructor<?> construct = null;
 	try {
-		construct = runtimeClass.getConstructor(new Class[] { IPluginDescriptor.class });
+		construct =
+			runtimeClass
+					.getConstructor(new Class[] { IPluginDescriptor.class });
 	} catch (NoSuchMethodException eNoConstructor) {
 		errorMsg = Policy.bind("plugin.instantiateClassError", getId(), pluginClassName ); //$NON-NLS-1$
 		throwException(errorMsg, eNoConstructor);
 	}
 
-	long time = 0L;
-//	if (InternalPlatform.DEBUG_STARTUP) {
-//		time = System.currentTimeMillis();
-//		System.out.println("Starting plugin: " + getId()); //$NON-NLS-1$
-//	}
 	// create a new instance
 	try {
-		pluginObject = (Plugin) construct.newInstance(new Object[] { this });
+		pluginObject =
+			(Plugin) construct.newInstance(new Object[] { this });
 	} catch (ClassCastException e) {
 		errorMsg = Policy.bind("plugin.notPluginClass", pluginClassName); //$NON-NLS-1$
 		throwException(errorMsg, e);
 	} catch (Exception e) {
-		errorMsg = Policy.bind("plugin.instantiateClassError", getId(), pluginClassName); //$NON-NLS-1$
+		errorMsg =
+			Policy.bind(
+					"plugin.instantiateClassError", getId(), pluginClassName); //$NON-NLS-1$
 		throwException(errorMsg, e);
-	} 
+	}
 
-	// run startup()
-	final String message = Policy.bind("plugin.startupProblems", getId()); //$NON-NLS-1$
-//	final MultiStatus multiStatus = new MultiStatus(Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, null);
-//	ISafeRunnable code = new ISafeRunnable() {
-//		public void run() throws Exception {
-//			pluginObject.startup();
-//		}
-//		public void handleException(Throwable e) {
-//			multiStatus.add(new Status(Status.WARNING, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, e));
-//			try {
-//				pluginObject.shutdown();
-//			} catch (Exception ex) {
-//				// Ignore exceptions during shutdown. Since startup failed we are probably
-//				// in a weird state anyway.
-//			}
-//		}
-//	};
-//	InternalPlatform.run(code);
-//	if (InternalPlatform.DEBUG_STARTUP) {
-//		time = System.currentTimeMillis() - time;
-//		System.out.println("Finished plugin startup for " + getId() + " time: " + time + "ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-//	}
-//	if (!multiStatus.isOK())
-//		throw new CoreException(multiStatus);
+	// skip startup()
+	// FIXME externalize message
+	errorMsg = "Skipping startup: " + pluginClassName;
+	logger.fine(errorMsg);
 }
+
 /**
  * @see IPluginDescriptor
  */
@@ -630,14 +520,11 @@ public synchronized boolean isPluginActivated() {
 	//plugin being activated during shutdown would never be shut down.
 	return active;
 }
+
 public synchronized boolean isPluginDeactivated() {
 	return deactivated;
 }
-//private void logError(IStatus status) {
-//	InternalPlatform.getRuntimePlugin().getLog().log(status);
-//	if (InternalPlatform.DEBUG)
-//		System.out.println(status.getMessage());
-//}
+
 /**
  * Returns <code>true</code> if we should continue with the plugin activation.
  */
@@ -664,22 +551,13 @@ private void pluginActivationExit(boolean errorExit) {
 	} else
 		active = true;
 }
-//private String getFragmentLocation(PluginFragmentModel fragment) {
-//	if (usePlatformURLs)
-//		return FragmentDescriptor.FRAGMENT_URL + fragment.toString() + "/"; //$NON-NLS-1$
-//	return fragment.getLocation();
-//}
-//public void setPluginClassLoader(DelegatingURLClassLoader value) {
-//	loader = value;
-//}
-//public void setPluginClassLoader(PluginClassLoader value) {
-//	loader = value;
-//}
+
 private void throwException(String message, Throwable exception) throws CoreException {
 	IStatus status = new Status(IStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, exception);
-//	logError(status);
+	logger.severe(message);
 	throw new CoreException(status);
 }
+
 /**
  * @see #getUniqueIdentifierFromString
  * @see #getVersionIdentifierFromString
@@ -687,210 +565,12 @@ private void throwException(String message, Throwable exception) throws CoreExce
 public String toString() {
 	return getUniqueIdentifier()+VERSION_SEPARATOR + getVersionIdentifier().toString();
 }
-//public void activateDefaultPlugins(DelegatingURLClassLoader loader) {
-//	Object[] result = getPluginClassLoaderPath(true);
-//	loader.addURLs((URL[]) result[0], (URLContentFilter[]) result[1], (URL[]) result[2], (URLContentFilter[]) result[3]);
-//}
+
 /**
  * @see IPluginDescriptor
  */
 public final URL find(IPath path) {
 	return null; // find(path, null);
 }
-///**
-// * @see IPluginDescriptor
-// */
-//public final URL find(IPath path, Map override) {
-//	if (path == null)
-//		return null;
-//	
-//	URL install = getInstallURLInternal();
-//	URL result = null;	
-//	
-//	// Check for the empty or root case first
-//	if (path.isEmpty() || path.isRoot()) {
-//		// Watch for the root case.  It will produce a new
-//		// URL which is only the root directory (and not the
-//		// root of this plugin).	
-//		result = findInPlugin(install, Path.EMPTY);
-//		if (result == null)
-//			result = findInFragments(Path.EMPTY);
-//		return result;
-//	}
-//	
-//	// Now check for paths without variable substitution
-//	String first = path.segment(0);
-//	if (first.charAt(0) != '$') {
-//		result = findInPlugin(install, path);
-//		if (result == null)
-//			result = findInFragments(path);
-//		return result;	
-//	}
-//		
-//	// Worry about variable substitution
-//	IPath rest = path.removeFirstSegments(1);
-//	if (first.equalsIgnoreCase("$nl$")) //$NON-NLS-1$
-//		return findNL(install, rest, override);
-//	if (first.equalsIgnoreCase("$os$")) //$NON-NLS-1$
-//		return findOS(install, rest, override);
-//	if (first.equalsIgnoreCase("$ws$")) //$NON-NLS-1$
-//		return findWS(install, rest, override);
-//	if (first.equalsIgnoreCase("$files$")) //$NON-NLS-1$
-//		return null;
-//
-//	return null;
-//}
 
-private URL findOS(URL install, IPath path, Map override) {
-	String os = null;
-	if (override != null)
-		try {
-			// check for override
-			os = (String) override.get("$os$"); //$NON-NLS-1$
-		} catch (ClassCastException e) {
-			// just in case
-		}
-	if (os == null)
-		// use default
-		os = BootLoader.getOS();
-	if (os.length() == 0)
-		return null;
-		
-	// Now do the same for osarch
-	String osArch = null;
-	if (override != null)
-		try {
-			// check for override
-			osArch = (String) override.get("$arch$"); //$NON-NLS-1$
-		} catch (ClassCastException e) {
-			// just in case
-		}
-	if (osArch == null)
-		// use default
-		osArch = BootLoader.getOSArch();
-	if (osArch.length() == 0)
-		return null;
-
-	URL result = null;
-	IPath base = new Path("os").append(os).append(osArch); //$NON-NLS-1$
-	// Keep doing this until all you have left is "os" as a path
-	while (base.segmentCount() != 1) {
-		IPath filePath = base.append(path);	
-		result = findInPlugin(install, filePath);
-		if (result != null)
-			return result;	
-		result = findInFragments(filePath);
-		if (result != null)
-			return result;
-		base = base.removeLastSegments(1);
-	}
-	// If we get to this point, we haven't found it yet.
-	// Look in the plugin and fragment root directories
-	result = findInPlugin(install, path);
-	if (result != null)
-		return result;
-	return findInFragments(path);
-}
-
-private URL findWS(URL install, IPath path, Map override) {
-	String ws = null;
-	if (override != null)
-		try {
-			// check for override
-			ws = (String) override.get("$ws$"); //$NON-NLS-1$
-		} catch (ClassCastException e) {
-			// just in case
-		}
-	if (ws == null)
-		// use default
-		ws = BootLoader.getWS();
-	IPath filePath = new Path("ws").append(ws).append(path); //$NON-NLS-1$
-	// We know that there is only one segment to the ws path
-	// e.g. ws/win32	
-	URL result = findInPlugin(install, filePath);
-	if (result != null)
-		return result;	
-	result = findInFragments(filePath);
-	if (result != null)
-		return result;
-	// If we get to this point, we haven't found it yet.
-	// Look in the plugin and fragment root directories
-	result = findInPlugin(install, path);
-	if (result != null)
-		return result;
-	return findInFragments(path);
-}
-
-private URL findNL(URL install, IPath path, Map override) {
-	String nl = null;
-	String[] nlVariants = null;
-	if (override != null)
-		try {
-			// check for override
-			nl = (String) override.get("$nl$"); //$NON-NLS-1$
-		} catch (ClassCastException e) {
-			// just in case
-		}
-	nlVariants = nl == null ? NL_JAR_VARIANTS : buildNLVariants(nl);
-	if (nl != null && nl.length() == 0)
-		return null;
-
-	URL result = null;
-	for (int i=0; i<nlVariants.length; i++) {
-		IPath filePath = new Path(nlVariants[i]).append(path);
-		result = findInPlugin(install, filePath);
-		if (result != null)
-			return result;
-		result = findInFragments(filePath);
-		if (result != null)
-			return result;
-	}
-	// If we get to this point, we haven't found it yet.
-	// Look in the plugin and fragment root directories
-	result = findInPlugin(install, path);
-	if (result != null)
-		return result;
-	return findInFragments(path);
-}
-
-private URL findInPlugin(URL install, IPath filePath) {
-	try {
-		URL location = new URL(install, filePath.toString());
-		String file = getFileFromURL(location);
-		if (file != null && new File(file).exists()) {
-			Path pluginRootPath = new Path(install.getFile());
-			Path foundPath = new Path(file);
-			if (pluginRootPath.isPrefixOf(foundPath))
-				return location;
-		}						
-	} catch (IOException e) {
-		// ignore bad URLs
-	}
-	return null;
-}
-
-private URL findInFragments(IPath filePath) {
-	// This method will return a 'real' URL (as opposed to a platform
-	// URL).
-	PluginFragmentModel[] fragments = getFragments();
-	if (fragments == null)
-		return null;
-		
-	for (int i = 0; i < fragments.length; i++) {
-		try {
-			URL fragmentRootURL =  new URL(fragments[i].getLocation());
-			URL location = new URL(fragmentRootURL, filePath.toString());
-			String file = getFileFromURL(location);
-			if (file != null && new File(file).exists()) {
-				Path fragmentRootPath = new Path(fragmentRootURL.getFile());
-				Path foundPath = new Path(file);
-				if (fragmentRootPath.isPrefixOf(foundPath))
-					return location;
-			}
-		} catch (IOException e) {
-			// skip malformed url and urls that cannot be resolved
-		}
-	}
-	return null;
-}
 }

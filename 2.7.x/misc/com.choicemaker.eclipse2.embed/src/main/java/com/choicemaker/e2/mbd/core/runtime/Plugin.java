@@ -11,6 +11,8 @@
  *******************************************************************************/
 package com.choicemaker.e2.mbd.core.runtime;
 
+import java.util.logging.Logger;
+
 import com.choicemaker.e2.mbd.core.internal.plugins.DefaultPlugin;
 import com.choicemaker.e2.mbd.core.internal.plugins.PluginDescriptor;
 import com.choicemaker.e2.mbd.core.internal.runtime.Assert;
@@ -151,6 +153,8 @@ import com.choicemaker.e2.mbd.core.internal.runtime.Policy;
  * </p>
  */
 public abstract class Plugin {
+	
+	private static final Logger logger = Logger.getLogger(Plugin.class.getName());
 
 	/**
 	 * The debug flag for this plug-in.  The flag is false by default.
@@ -178,14 +182,6 @@ public abstract class Plugin {
 	public static final String PREFERENCES_DEFAULT_OVERRIDE_FILE_NAME = PREFERENCES_DEFAULT_OVERRIDE_BASE_NAME + ".ini"; //$NON-NLS-1$
 
 	/**
-	 * The preference object for this plug-in; initially <code>null</code>
-	 * meaning not yet created and initialized.
-	 * 
-	 * @since 2.0
-	 */
-	private Preferences preferences = null;
-
-	/**
 	 * Creates a new plug-in runtime object for the given plug-in descriptor.
 	 * <p>
 	 * Instances of plug-in runtime classes are automatically created 
@@ -205,58 +201,24 @@ public abstract class Plugin {
 		Assert.isNotNull(descriptor);
 		Assert.isTrue(!descriptor.isPluginActivated(), Policy.bind("plugin.deactivatedLoad", this.getClass().getName(), descriptor.getUniqueIdentifier() + " is not activated")); //$NON-NLS-1$ //$NON-NLS-2$
 		String className = ((PluginDescriptor) descriptor).getPluginClass();
-		if (this.getClass() == DefaultPlugin.class)
-			Assert.isTrue(className == null || className.equals(""), Policy.bind("plugin.mismatchRuntime", descriptor.getUniqueIdentifier())); //$NON-NLS-1$ //$NON-NLS-2$
-		else
-			Assert.isTrue(this.getClass().getName().equals(className), Policy.bind("plugin.mismatchRuntime", descriptor.getUniqueIdentifier())); //$NON-NLS-1$
+		if (this.getClass() == DefaultPlugin.class) {
+//			Assert.isTrue(className == null || className.equals(""), Policy.bind("plugin.mismatchRuntime", descriptor.getUniqueIdentifier())); //$NON-NLS-1$ //$NON-NLS-2$
+			if (className != null && !className.equals("")) {
+				String msg = Policy.bind("plugin.mismatchRuntime", descriptor.getUniqueIdentifier());
+				logger.warning(msg);
+			}
+		}
+		else {
+//			Assert.isTrue(this.getClass().getName().equals(className), ); //$NON-NLS-1$
+			if (!this.getClass().getName().equals(className)) {
+				String msg = Policy.bind("plugin.mismatchRuntime", descriptor.getUniqueIdentifier());
+				logger.warning(msg);
+			}
+		}
 		this.descriptor = descriptor;
-		String key = descriptor.getUniqueIdentifier() + "/debug"; //$NON-NLS-1$
-//		String value = Platform.getDebugOption(key);
-//		this.debug = value == null ? false : value.equalsIgnoreCase("true"); //$NON-NLS-1$
 		this.debug = false;
 	}
-//	/**
-//	 * Returns a URL for the given path.  Returns <code>null</code> if the URL
-//	 * could not be computed or created.
-//	 * 
-//	 * @param file path relative to plug-in installation location 
-//	 * @return a URL for the given path or <code>null</code>
-//	 */
-//	public final URL find(IPath path) {
-//		return getDescriptor().find(path);
-//	}
-//	/**
-//	 * Returns a URL for the given path.  Returns <code>null</code> if the URL
-//	 * could not be computed or created.
-//	 * 
-//	 * @param path file path relative to plug-in installation location
-//	 * @param override map of override substitution arguments to be used for
-//	 * any $arg$ path elements. The map keys correspond to the substitution
-//	 * arguments (eg. "$nl$" or "$os$"). The resulting
-//	 * values must be of type java.lang.String. If the map is <code>null</code>,
-//	 * or does not contain the required substitution argument, the default
-//	 * is used.
-//	 * @return a URL for the given path or <code>null</code>
-//	 */
-//	public final URL find(IPath path, Map override) {
-//		return getDescriptor().find(path, override);
-//	}
-//	private String getFileFromURL(URL target) {
-//		String protocol = target.getProtocol();
-//		if (protocol.equals(PlatformURLHandler.FILE))
-//			return target.getFile();
-//		if (protocol.equals(PlatformURLHandler.JAR)) {
-//			// strip off the jar separator at the end of the url then do a recursive call
-//			// to interpret the sub URL.
-//			String file = target.getFile();
-//			file = file.substring(0, file.length() - PlatformURLHandler.JAR_SEPARATOR.length());
-//			try {
-//				return getFileFromURL(PlatformURLFactory.createURL(file));
-//			} catch (MalformedURLException e) {
-//			}
-//		}
-//		return null;
-//	}
+
 	/**
 	 * Returns the plug-in descriptor for this plug-in runtime object.
 	 *
@@ -265,216 +227,6 @@ public abstract class Plugin {
 	public final IPluginDescriptor getDescriptor() {
 		return descriptor;
 	}
-//	/**
-//	 * Returns the log for this plug-in.  If no such log exists, one is created.
-//	 *
-//	 * @return the log for this plug-in
-//	 */
-//	public final ILog getLog() {
-//		return InternalPlatform.getLog(this);
-//	}
-//	/**
-//	 * Returns the location in the local file system of the 
-//	 * plug-in state area for this plug-in.
-//	 * If the plug-in state area did not exist prior to this call,
-//	 * it is created.
-//	 * <p>
-//	 * The plug-in state area is a file directory within the
-//	 * platform's metadata area where a plug-in is free to create files.
-//	 * The content and structure of this area is defined by the plug-in,
-//	 * and the particular plug-in is solely responsible for any files
-//	 * it puts there. It is recommended for plug-in preference settings and 
-//	 * other configuration parameters.
-//	 * </p>
-//	 *
-//	 * @return a local file system path
-//	 */
-//	public final IPath getStateLocation() {
-//		return InternalPlatform.getPluginStateLocation(descriptor, true);
-//	}
-
-//	/**
-//	 * Returns the preference store for this plug-in.
-//	 * <p>
-//	 * Note that if an error occurs reading the preference store from disk, an empty 
-//	 * preference store is quietly created, initialized with defaults, and returned.
-//	 * </p>
-//	 * <p>
-//	 * Calling this method may cause the preference store to be created and
-//	 * initialized. Subclasses which reimplement the 
-//	 * <code>initializeDefaultPluginPreferences</code> method have this opportunity
-//	 * to initialize preference default values, just prior to processing override
-//	 * default values imposed externally to this plug-in (specified for the product,
-//	 * or at platform start up).
-//	 * </p>
-//	 * <p>
-//	 * After settings in the preference store are changed (for example, with 
-//	 * <code>Preferences.setValue</code> or <code>setToDefault</code>),
-//	 * <code>savePluginPreferences</code> should be called to store the changed
-//	 * values back to disk. Otherwise the changes will be lost on plug-in
-//	 * shutdown.
-//	 * </p>
-//	 *
-//	 * @return the preference store
-//	 * @see #savePluginPreferences
-//	 * @see Preferences#setValue
-//	 * @see Preferences#setToDefault
-//	 * @since 2.0
-//	 */
-//	public final Preferences getPluginPreferences() {
-//		if (preferences != null) {
-//			if (InternalPlatform.DEBUG_PREFERENCES) {
-//				System.out.println("Plugin preferences already loaded for " + getDescriptor().getUniqueIdentifier()); //$NON-NLS-1$
-//			}
-//			// N.B. preferences instance field set means already created
-//			// and initialized (or in process of being initialized)
-//			return preferences;
-//		}
-//
-//		if (InternalPlatform.DEBUG_PREFERENCES) {
-//			System.out.println("Loading preferences for plugin " + getDescriptor().getUniqueIdentifier()); //$NON-NLS-1$
-//		}
-//		// lazily create preference store
-//		// important: set preferences instance field to prevent re-entry
-//		preferences = new Preferences();
-//		// load settings into preference store 
-//		loadPluginPreferences();
-//
-//		// 1. fill in defaults supplied by this plug-in
-//		initializeDefaultPluginPreferences();
-//		// 2. override with defaults stored with plug-in
-//		applyInternalPluginDefaultOverrides();
-//		// 3. override with defaults from primary feature or command line
-//		applyExternalPluginDefaultOverrides();
-//		if (InternalPlatform.DEBUG_PREFERENCES) {
-//			System.out.println("Completed loading preferences for plugin " + getDescriptor().getUniqueIdentifier()); //$NON-NLS-1$
-//		}
-//		return preferences;
-//	}
-
-//	/**
-//	 * Loads preferences settings for this plug-in from the plug-in preferences
-//	 * file in the plug-in's state area. This plug-in must have a preference store
-//	 * object.
-//	 * 
-//	 * @see Preferences#load
-//	 * @since 2.0
-//	 */
-//	private void loadPluginPreferences() {
-//		// the preferences file is located in the plug-in's state area at a well-known name
-//		// don't need to create the directory if there are no preferences to load
-//		File prefFile = InternalPlatform.getMetaArea().getPluginPreferenceLocation(descriptor, false).toFile();
-//		if (!prefFile.exists()) {
-//			// no preference file - that's fine
-//			if (InternalPlatform.DEBUG_PREFERENCES) {
-//				System.out.println("Plugin preference file " + prefFile + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
-//			}
-//			return;
-//		}
-//
-//		if (InternalPlatform.DEBUG_PREFERENCES) {
-//			System.out.println("Loading preferences from " + prefFile); //$NON-NLS-1$
-//		}
-//		// load preferences from file
-//		SafeFileInputStream in = null;
-//		try {
-//			in = new SafeFileInputStream(prefFile);
-//			preferences.load(in);
-//		} catch (IOException e) {
-//			// problems loading preference store - quietly ignore
-//			if (InternalPlatform.DEBUG_PREFERENCES) {
-//				System.out.println("IOException encountered loading preference file " + prefFile); //$NON-NLS-1$
-//				e.printStackTrace();
-//			}
-//		} finally {
-//			if (in != null) {
-//				try {
-//					in.close();
-//				} catch (IOException e) {
-//					// ignore problems with close
-//					if (InternalPlatform.DEBUG_PREFERENCES) {
-//						System.out.println("IOException encountered closing preference file " + prefFile); //$NON-NLS-1$
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		}
-//		if (InternalPlatform.DEBUG_PREFERENCES) {
-//			System.out.println("Preferences now set as follows:"); //$NON-NLS-1$
-//			String[] prefNames = preferences.propertyNames();
-//			for (int i = 0; i < prefNames.length; i++) {
-//				String value = preferences.getString(prefNames[i]);
-//				System.out.println("\t" + prefNames[i] + " = " + value); //$NON-NLS-1$ //$NON-NLS-2$
-//			}
-//			prefNames = preferences.defaultPropertyNames();
-//			for (int i = 0; i < prefNames.length; i++) {
-//				String value = preferences.getDefaultString(prefNames[i]);
-//				System.out.println("\tDefault values: " + prefNames[i] + " = " + value); //$NON-NLS-1$ //$NON-NLS-2$
-//			}
-//		}
-//	}
-
-//	/**
-//	 * Saves preferences settings for this plug-in. Does nothing if the preference
-//	 * store does not need saving.
-//	 * <p>
-//	 * Plug-in preferences are <b>not</b> saved automatically on plug-in shutdown.
-//	 * </p>
-//	 * 
-//	 * @see Preferences#store
-//	 * @see Preferences#needsSaving
-//	 * @since 2.0
-//	 */
-//	public final void savePluginPreferences() {
-//		if (preferences == null || !preferences.needsSaving()) {
-//			// nothing to save
-//			return;
-//		}
-//
-//		// preferences need to be saved
-//		// the preferences file is located in the plug-in's state area
-//		// at a well-known name (pref_store.ini)
-//		File prefFile = InternalPlatform.getMetaArea().getPluginPreferenceLocation(descriptor, true).toFile();
-//		if (preferences.propertyNames().length == 0) {
-//			// there are no preference settings
-//			// rather than write an empty file, just delete any existing file
-//			if (InternalPlatform.DEBUG_PREFERENCES) {
-//				System.out.println("Removing saved preferences from " + prefFile); //$NON-NLS-1$
-//			}
-//			if (prefFile.exists()) {
-//				prefFile.delete();
-//				// don't worry if delete unsuccessful
-//			}
-//			return;
-//		}
-//
-//		// write file, overwriting an existing one
-//		OutputStream out = null;
-//		try {
-//			// do it as carefully as we know how so that we don't lose/mangle
-//			// the setting in times of stress
-//			out = new SafeFileOutputStream(prefFile);
-//			preferences.store(out, null);
-//		} catch (IOException e) {
-//			// problems saving preference store - quietly ignore
-//			if (InternalPlatform.DEBUG_PREFERENCES) {
-//				System.out.println("IOException writing to preference file " + prefFile); //$NON-NLS-1$
-//				e.printStackTrace();
-//			}
-//		} finally {
-//			if (out != null) {
-//				try {
-//					out.close();
-//				} catch (IOException e) {
-//					// ignore problems with close
-//					if (InternalPlatform.DEBUG_PREFERENCES) {
-//						System.out.println("IOException closing preference file " + prefFile); //$NON-NLS-1$
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		}
-//	}
 
 	/**
 	 * Initializes the default preferences settings for this plug-in.
@@ -498,108 +250,6 @@ public abstract class Plugin {
 		// default implementation of this method - spec'd to do nothing
 	}
 
-//	/**
-//	 * Applies external overrides to default preferences for this plug-in. By the
-//	 * time this method is called, the default settings for the plug-in itself will
-//	 * have already have been filled in.
-//	 * 
-//	 * @since 2.0
-//	 */
-//	private void applyExternalPluginDefaultOverrides() {
-//		// 1. InternalPlatform is central authority for platform configuration questions
-//		InternalPlatform.applyPrimaryFeaturePluginDefaultOverrides(getDescriptor().getUniqueIdentifier(), preferences);
-//		// 2. command line overrides take precedence over feature-specified overrides
-//		InternalPlatform.applyCommandLinePluginDefaultOverrides(getDescriptor().getUniqueIdentifier(), preferences);
-//	}
-
-//	/**
-//	 * Applies overrides to the default preferences for this plug-in. Looks
-//	 * for a file in the (read-only) plug-in directory. The default settings will
-//	 * have already have been applied.
-//	 * 
-//	 * @since 2.0
-//	 */
-//	private void applyInternalPluginDefaultOverrides() {
-//
-//		IPluginDescriptor pluginDescriptor = getDescriptor();
-//		// use URLs so we can find the file in fragments too
-//		URL baseURL = pluginDescriptor.find(new Path(PREFERENCES_DEFAULT_OVERRIDE_FILE_NAME));
-//
-//		if (baseURL == null) {
-//			if (InternalPlatform.DEBUG_PREFERENCES) {
-//				System.out.println("Plugin preference file " + PREFERENCES_DEFAULT_OVERRIDE_FILE_NAME + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
-//			}
-//			return;
-//		}
-//		File iniFile = new File(getFileFromURL(baseURL));
-//		if (!iniFile.exists()) {
-//			// no preference file - that's fine
-//			if (InternalPlatform.DEBUG_PREFERENCES) {
-//				System.out.println("Plugin preference file " + iniFile + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
-//			}
-//			return;
-//		}
-//
-//		if (InternalPlatform.DEBUG_PREFERENCES) {
-//			System.out.println("Loading preferences from " + iniFile); //$NON-NLS-1$
-//		}
-//		Properties overrides = new Properties();
-//		SafeFileInputStream in = null;
-//		try {
-//			in = new SafeFileInputStream(iniFile);
-//			overrides.load(in);
-//		} catch (IOException e) {
-//			// cannot read ini file - fail silently
-//			if (InternalPlatform.DEBUG_PREFERENCES) {
-//				System.out.println("IOException encountered loading preference file " + //$NON-NLS-1$
-//				iniFile);
-//				e.printStackTrace();
-//			}
-//			return;
-//		} finally {
-//			try {
-//				if (in != null) {
-//					in.close();
-//				}
-//			} catch (IOException e) {
-//				// ignore problems closing file
-//				if (InternalPlatform.DEBUG_PREFERENCES) {
-//					System.out.println("IOException encountered closing preference file " + //$NON-NLS-1$
-//					iniFile);
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//
-//		// Now get the translation file for these preferences (if one
-//		// exists).
-//		Properties props = null;
-//		if (!overrides.isEmpty()) {
-//			props = InternalPlatform.getPreferenceTranslator(pluginDescriptor, PREFERENCES_DEFAULT_OVERRIDE_BASE_NAME);
-//		}
-//
-//		for (Iterator it = overrides.entrySet().iterator(); it.hasNext();) {
-//			Map.Entry entry = (Map.Entry) it.next();
-//			String key = (String) entry.getKey();
-//			String value = (String) entry.getValue();
-//			value = InternalPlatform.translatePreference(value, props);
-//			preferences.setDefault(key, value);
-//		}
-//		if (InternalPlatform.DEBUG_PREFERENCES) {
-//			System.out.println("Preferences now set as follows:"); //$NON-NLS-1$
-//			String[] prefNames = preferences.propertyNames();
-//			for (int i = 0; i < prefNames.length; i++) {
-//				String value = preferences.getString(prefNames[i]);
-//				System.out.println("\t" + prefNames[i] + " = " + value); //$NON-NLS-1$ //$NON-NLS-2$
-//			}
-//			prefNames = preferences.defaultPropertyNames();
-//			for (int i = 0; i < prefNames.length; i++) {
-//				String value = preferences.getDefaultString(prefNames[i]);
-//				System.out.println("\tDefault values: " + prefNames[i] + " = " + value); //$NON-NLS-1$ //$NON-NLS-2$
-//			}
-//		}
-//	}
-
 	/**
 	 * Returns whether this plug-in is in debug mode.
 	 * By default plug-ins are not in debug mode.  A plug-in can put itself
@@ -610,38 +260,7 @@ public abstract class Plugin {
 	public boolean isDebugging() {
 		return debug;
 	}
-//	/**
-//	 * Returns an input stream for the specified file. The file path
-//	 * must be specified relative this the plug-in's installation location.
-//	 *
-//	 * @param file path relative to plug-in installation location
-//	 * @return an input stream
-//	 * @see #openStream(IPath,boolean)
-//	 */
-//	public final InputStream openStream(IPath file) throws IOException {
-//		return openStream(file, false);
-//	}
-//	/**
-//	 * Returns an input stream for the specified file. The file path
-//	 * must be specified relative to this plug-in's installation location.
-//	 * Optionally, the platform searches for the correct localized version
-//	 * of the specified file using the users current locale, and Java
-//	 * naming convention for localized resource files (locale suffix appended 
-//	 * to the specified file extension).
-//	 * <p>
-//	 * The caller must close the returned stream when done.
-//	 * </p>
-//	 *
-//	 * @param file path relative to plug-in installation location
-//	 * @param localized <code>true</code> for the localized version
-//	 *   of the file, and <code>false</code> for the file exactly
-//	 *   as specified
-//	 * @return an input stream
-//	 */
-//	public final InputStream openStream(IPath file, boolean localized) throws IOException {
-//		URL target = PlatformURLFactory.createURL(getDescriptor().getInstallURL() + file.toString());
-//		return target.openStream();
-//	}
+
 	/**
 	 * Sets whether this plug-in is in debug mode.
 	 * By default plug-ins are not in debug mode.  A plug-in can put itself
@@ -652,6 +271,7 @@ public abstract class Plugin {
 	public void setDebugging(boolean value) {
 		debug = value;
 	}
+
 	/**
 	 * Shuts down this plug-in and discards all plug-in state.
 	 * <p>
@@ -720,6 +340,7 @@ public abstract class Plugin {
 	 */
 	public void startup() throws CoreException {
 	}
+
 	/**
 	 * Returns a string representation of the plug-in, suitable 
 	 * for debugging purposes only.
@@ -727,4 +348,5 @@ public abstract class Plugin {
 	public String toString() {
 		return descriptor.toString();
 	}
+
 }

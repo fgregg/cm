@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.choicemaker.e2.mbd.adapter.PluginDescriptorAdapter;
 import com.choicemaker.e2.mbd.core.boot.BootLoader;
 import com.choicemaker.e2.mbd.core.boot.IPlatformRunnable;
 import com.choicemaker.e2.mbd.core.internal.plugins.InternalFactory;
@@ -28,6 +29,8 @@ import com.choicemaker.e2.mbd.core.internal.plugins.RegistryResolver;
 import com.choicemaker.e2.mbd.core.internal.runtime.Policy;
 import com.choicemaker.e2.mbd.core.runtime.model.PluginRegistryModel;
 import com.choicemaker.e2.mbd.pd.EmbeddedPluginDiscovery;
+import com.choicemaker.eclipse2.core.runtime.CMPluginDescriptor;
+import com.choicemaker.eclipse2.core.runtime.CMPluginPrerequisite;
 import com.choicemaker.eclipse2.pd.PluginDiscovery;
 
 /**
@@ -109,7 +112,7 @@ public class Platform {
 
 			URL[] pluginPath = getPluginPaths();
 			if (pluginPath == null || pluginPath.length == 0) {
-				String msg = "PluginRegistry: no plugin paths";
+				String msg = "(embedded) Platform: no plugin paths";
 				logger.severe(msg);
 				maybeReady = false;
 			}
@@ -122,7 +125,7 @@ public class Platform {
 				(PluginRegistry) RegistryLoader.parseRegistry(pluginPath,
 						factory, debugParse);
 			if (registry == null) {
-				String msg = "PluginRegistry: failed to parse registry";
+				String msg = "(embedded) Platform: failed to parse registry";
 				logger.severe(msg);
 				maybeReady = false;
 			} else {
@@ -152,7 +155,7 @@ public class Platform {
 				IPluginDescriptor[] pluginDescriptors =
 					registry.getPluginDescriptors();
 				if (pluginDescriptors == null || pluginDescriptors.length == 0) {
-					String msg = "PluginRegistry: no plugin descriptors";
+					String msg = "(embedded) Platform: no plugin descriptors";
 					logger.severe(msg);
 					maybeReady = false;
 				}
@@ -161,7 +164,9 @@ public class Platform {
 					PluginDescriptor pluginDescriptor =
 						(PluginDescriptor) pluginDescriptors[i];
 					try {
-						activatePlugin(pluginDescriptor);
+						CMPluginDescriptor cmpd =
+							PluginDescriptorAdapter.convert(pluginDescriptor);
+						activatePlugin(cmpd);
 					} catch (CoreException e) {
 						String msg =
 							"PluginRegistry activation failed for '"
@@ -173,29 +178,42 @@ public class Platform {
 			}
 			isReady = maybeReady;
 			if (isReady) {
-				String msg = "PluginRegistry: READY";
+				String msg = "(embedded) Platform: READY";
 				logger.info(msg);
 			} else {
-				String msg = "PluginRegistry: NOT READY";
+				String msg = "(embedded) Platform: NOT READY";
 				logger.severe(msg);
 			}
 			initialized = true;
 		}
 	}
 
-	private static void activatePlugin(PluginDescriptor pluginDescriptor)
+	private static void activatePlugin(CMPluginDescriptor cmpd)
 			throws CoreException {
-		if (!pluginDescriptor.isPluginActivated()) {
-			IPluginPrerequisite[] pluginPrerequisites =
-				pluginDescriptor.getPluginPrerequisites();
+		if (!cmpd.isPluginActivated()) {
+			CMPluginPrerequisite[] pluginPrerequisites =
+				cmpd.getPluginPrerequisites();
 			for (int i = 0; i < pluginPrerequisites.length; i++) {
-				PluginDescriptor prereq =
-					(PluginDescriptor) registry
-							.getPluginDescriptor(pluginPrerequisites[i]
-									.getUniqueIdentifier());
-				activatePlugin(prereq);
+				IPluginDescriptor prereq =
+					registry.getPluginDescriptor(pluginPrerequisites[i]
+							.getUniqueIdentifier());
+				CMPluginDescriptor cmprereq =
+					PluginDescriptorAdapter.convert(prereq);
+				activatePlugin(cmprereq);
 			}
-			pluginDescriptor.doPluginActivation();
+			IPluginDescriptor ipd =
+				registry.getPluginDescriptor(cmpd.getUniqueIdentifier());
+			if (!(ipd instanceof PluginDescriptor)) {
+				String msg =
+					"(embedded) Platform: unknown plugin descriptor class: "
+							+ ipd.getClass().getName();
+				logger.severe(msg);
+				IStatus status =
+					new Status(IStatus.ERROR, Platform.PI_RUNTIME,
+							Platform.PLUGIN_ERROR, msg, null);
+				throw new CoreException(status);
+			}
+			((PluginDescriptor) ipd).doPluginActivation();
 		}
 	}
 
@@ -211,7 +229,7 @@ public class Platform {
 		URL[] retVal = plugins.toArray(new URL[plugins.size()]);
 		assert retVal != null;
 		if (retVal.length == 0) {
-			String msg = "PluginRegistry: returning 0 [zero] plugin paths";
+			String msg = "(embedded) Platform: returning 0 [zero] plugin paths";
 			logger.severe(msg);
 		}
 		return retVal;
@@ -232,7 +250,7 @@ public class Platform {
 		assert initialized;
 		IPlatformRunnable retVal;
 		if (!isReady) {
-			String msg = "PluginRegistry: NOT READY";
+			String msg = "(embedded) Platform: NOT READY";
 			logger.severe(msg);
 			retVal = null;
 		} else {
@@ -241,7 +259,7 @@ public class Platform {
 						Platform.PT_APPLICATIONS, applicationName);
 			if (extension == null) {
 				String msg =
-					"PluginRegistry: no executable extension for '"
+					"(embedded) Platform: no executable extension for '"
 							+ applicationName + "'";
 				logger.severe(msg);
 				retVal = null;
@@ -250,7 +268,7 @@ public class Platform {
 					extension.getConfigurationElements();
 				if (configs.length == 0) {
 					String msg =
-						"PluginRegistry: no configured elements for '"
+						"(embedded) Platform: no configured elements for '"
 								+ applicationName + "'";
 					logger.severe(msg);
 					retVal = null;
@@ -258,7 +276,7 @@ public class Platform {
 				try {
 					if (configs.length > 1) {
 						String msg =
-							"PluginRegistry: multiple configured elements ("
+							"(embedded) Platform: multiple configured elements ("
 									+ configs.length + ") for '"
 									+ applicationName
 									+ "'; using first configured element";
@@ -270,7 +288,7 @@ public class Platform {
 								.createExecutableExtension(EXECUTABLE_PROPERTY_NAME);
 				} catch (CoreException e) {
 					String msg =
-						"PluginRegistry: failed to create executable extension for '"
+						"(embedded) Platform: failed to create executable extension for '"
 								+ applicationName + "'";
 					logger.severe(msg);
 					retVal = null;
@@ -278,7 +296,7 @@ public class Platform {
 			}
 		}
 		if (retVal == null) {
-			String msg = "PluginRegistry: returning null PlatformRunnable";
+			String msg = "(embedded) Platform: returning null PlatformRunnable";
 			logger.severe(msg);
 		}
 		return retVal;
