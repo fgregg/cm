@@ -1,4 +1,0 @@
-org.apache.xerces
-
-  This module repackages the {{{http://xerces.apache.org//}open-source Apache XERCES library}}
-  as an Eclipse 2.1 plugin.

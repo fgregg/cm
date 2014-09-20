@@ -126,10 +126,6 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.apache.xerces</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.core.boot</artifactId>
     </dependency>
     <dependency>

@@ -553,9 +553,11 @@ public class RegistryResolver {
 			ok = value;
 		}
 	}
-public RegistryResolver() {	
-//	String debug = Platform.getDebugOption(OPTION_DEBUG_RESOLVE);
-//	DEBUG_RESOLVE = debug==null ? false : ( debug.equalsIgnoreCase("true") ? true : false ); //$NON-NLS-1$
+public RegistryResolver() {
+	this(false);
+	}
+public RegistryResolver(boolean debug) {
+	DEBUG_RESOLVE = debug;
 }
 private void add(PluginDescriptorModel pd) {
 

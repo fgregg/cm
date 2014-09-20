@@ -248,18 +248,6 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.apache.log4j</artifactId>
-      <classifier>eclipse2prj</classifier>
-      <type>zip</type>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.apache.xerces</artifactId>
-      <classifier>eclipse2prj</classifier>
-      <type>zip</type>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.eclipse.ant.core</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>

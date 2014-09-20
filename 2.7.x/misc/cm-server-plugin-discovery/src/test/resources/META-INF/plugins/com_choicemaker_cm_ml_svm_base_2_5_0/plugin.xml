@@ -16,7 +16,6 @@
    <requires>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="com.choicemaker.cm.core"/>
-      <import plugin="org.apache.log4j"/>
    </requires>
 
 

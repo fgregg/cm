@@ -6,7 +6,6 @@
   provider-name="%providerName">
 
   <requires>
-    <import plugin="org.apache.xerces"/>
   </requires>
   
   <runtime>

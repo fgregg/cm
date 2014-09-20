@@ -321,24 +321,12 @@
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.bcel</artifactId>
-        <version>5.0.0</version>
+        <version>5.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.apache.bcel</artifactId>
-        <version>5.0.0</version>
-        <classifier>eclipse2prj</classifier>
-        <type>zip</type>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.apache.log4j</artifactId>
-        <version>1.2.9-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.apache.log4j</artifactId>
-        <version>1.2.9-SNAPSHOT</version>
+        <version>5.0.1-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -356,25 +344,13 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.apache.xerces</artifactId>
-        <version>4.0.14-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.apache.xerces</artifactId>
-        <version>4.0.14-SNAPSHOT</version>
-        <classifier>eclipse2prj</classifier>
-        <type>zip</type>
+        <artifactId>org.eclipse.ant.core</artifactId>
+        <version>2.1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>org.eclipse.ant.core</artifactId>
-        <version>2.1.1</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>org.eclipse.ant.core</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1290,11 +1266,6 @@ END: C-E Exclusion -->
         <groupId>org.jfree</groupId>
         <artifactId>jcommon</artifactId>
         <version>1.0.17</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jfree</groupId>
-        <artifactId>jcommon</artifactId>
-        <version>1.0.17</version>
         <classifier>sources</classifier>
       </dependency>
       <dependency>
@@ -1314,6 +1285,11 @@ END: C-E Exclusion -->
         <version>0.9.2.1</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.jfree</groupId>
+        <artifactId>jcommon</artifactId>
+        <version>1.0.17</version>
       </dependency>
       <dependency>
         <groupId>org.jfree</groupId>
@@ -1350,12 +1326,6 @@ END: C-E Exclusion -->
         <artifactId>junit</artifactId>
         <version>3.8.1</version>
         <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.8</version>
-        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>

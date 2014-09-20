@@ -33,16 +33,8 @@
       <url>http://commons.apache.org/bcel/</url>
     </contributor>
     <contributor>
-      <name>Apache LOG4J project</name>
-      <url>http://logging.apache.org/log4j/</url>
-    </contributor>
-    <contributor>
       <name>Apache ORO project</name>
       <url>http://jakarta.apache.org/oro/</url>
-    </contributor>
-    <contributor>
-      <name>Apache XERCES project</name>
-      <url>http://xerces.apache.org/</url>
     </contributor>
     <contributor>
       <name>Eclipse Project</name>
@@ -73,9 +65,7 @@
   <modules>
     <module>org.apache.ant</module>
     <module>org.apache.bcel</module>
-    <module>org.apache.log4j</module>
     <module>org.apache.oro</module>
-    <module>org.apache.xerces</module>
     <module>org.eclipse.ant.core</module>
     <module>org.eclipse.ant.internal.core</module>
     <module>org.eclipse.core.boot</module>

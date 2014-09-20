@@ -15,6 +15,7 @@ package com.choicemaker.e2.mbd.core.runtime;
 
 import java.net.URL;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.choicemaker.e2.mbd.core.boot.BootLoader;
@@ -113,15 +114,25 @@ public class Platform {
 				maybeReady = false;
 			}
 
+			boolean debugParse = false;
+			if (logger.isLoggable(Level.FINE)) {
+				debugParse = true;
+			}
 			registry =
 				(PluginRegistry) RegistryLoader.parseRegistry(pluginPath,
-						factory, false);
+						factory, debugParse);
 			if (registry == null) {
 				String msg = "PluginRegistry: failed to parse registry";
 				logger.severe(msg);
 				maybeReady = false;
 			} else {
-				RegistryResolver registryResolver = new RegistryResolver();
+
+				boolean debugRegistryResolver = false;
+				if (logger.isLoggable(Level.FINE)) {
+					debugRegistryResolver = true;
+				}
+				RegistryResolver registryResolver =
+					new RegistryResolver(debugRegistryResolver);
 
 				IStatus status =
 					registryResolver.resolve((PluginRegistryModel) registry);

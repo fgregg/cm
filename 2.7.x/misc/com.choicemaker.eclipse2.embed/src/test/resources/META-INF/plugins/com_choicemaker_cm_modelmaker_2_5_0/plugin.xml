@@ -15,7 +15,6 @@
       <import plugin="com.choicemaker.cm.compiler"/>
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.jrefinery"/>
-      <import plugin="org.apache.log4j"/>
       <import plugin="javax.help"/>
       <import plugin="com.choicemaker.cm.gui.utils"/>
       <import plugin="com.choicemaker.cm.matching.en"/>
@@ -24,7 +23,6 @@
       <import plugin="com.choicemaker.cm.matching.geo"/>
       <import plugin="com.wcohen.ss.eclipse"/>
       <import plugin="com.choicemaker.cm.module"/>
-      <import plugin="org.apache.xerces"/>
    </requires>
 
 
