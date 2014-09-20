@@ -159,7 +159,7 @@ private static Object[] parseVersion(String versionId) {
 		Assert.isTrue(false, Policy.bind("parse.doubleSeparatorVersion", s)); //$NON-NLS-1$
 	
 	StringTokenizer st = new StringTokenizer(s, SEPARATOR);
-	Vector elements = new Vector(4);
+	Vector<String> elements = new Vector<>(4);
 
 	while (st.hasMoreTokens())
 		elements.addElement(st.nextToken());

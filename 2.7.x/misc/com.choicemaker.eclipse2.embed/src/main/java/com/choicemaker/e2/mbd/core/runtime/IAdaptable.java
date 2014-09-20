@@ -41,5 +41,5 @@ public interface IAdaptable {
  *    or <code>null</code> if this object does not
  *    have an adapter for the given class
  */
-public Object getAdapter(Class adapter);
+public Object getAdapter(Class<?> adapter);
 }

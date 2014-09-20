@@ -70,11 +70,6 @@ public class Path implements IPath, Cloneable {
 /* (Intentionally not included in javadoc)
  * Private constructor.
  */
-private Path() {
-}
-/* (Intentionally not included in javadoc)
- * Private constructor.
- */
 private Path(String device, String[] segments, int _separators) {
 	// no segment validations are done for performance reasons	
 	this.segments = segments;
@@ -132,7 +127,7 @@ public IPath addTrailingSeparator() {
 	if (hasTrailingSeparator() || isRoot()) {
 		return this;
 	}
-	//XXX workaround, see 1GIGQ9V
+	// workaround, see 1GIGQ9V
 	if (isEmpty()) {
 		return new Path(device, segments, HAS_LEADING);
 	}

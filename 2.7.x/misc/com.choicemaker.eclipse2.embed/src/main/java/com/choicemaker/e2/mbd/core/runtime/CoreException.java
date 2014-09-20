@@ -23,6 +23,8 @@ import java.io.PrintWriter;
  */
 public class CoreException extends Exception {
 
+	private static final long serialVersionUID = 271L;
+
 	/** Status object. */
 	private IStatus status;
 /**
