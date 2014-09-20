@@ -198,23 +198,23 @@ public class EmbeddedExtensionPointTest {
 		ExtensionPointTest.testComChoicemakerCmModelmakerToolMenuItem(registry);
 	}
 
-	@Test
-	public void testComChoicemakerCmServerBaseBoundObject() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest.testComChoicemakerCmServerBaseBoundObject(registry);
-	}
+//	@Test
+//	public void testComChoicemakerCmServerBaseBoundObject() {
+//		CMPluginRegistry registry = getPluginRegistry();
+//		ExtensionPointTest.testComChoicemakerCmServerBaseBoundObject(registry);
+//	}
 
-	@Test
-	public void testComChoicemakerCmServerBaseInitializer() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest.testComChoicemakerCmServerBaseInitializer(registry);
-	}
+//	@Test
+//	public void testComChoicemakerCmServerBaseInitializer() {
+//		CMPluginRegistry registry = getPluginRegistry();
+//		ExtensionPointTest.testComChoicemakerCmServerBaseInitializer(registry);
+//	}
 
-	@Test
-	public void testComChoicemakerCmUrmUpdateDerivedFields() {
-		CMPluginRegistry registry = getPluginRegistry();
-		ExtensionPointTest.testComChoicemakerCmUrmUpdateDerivedFields(registry);
-	}
+//	@Test
+//	public void testComChoicemakerCmUrmUpdateDerivedFields() {
+//		CMPluginRegistry registry = getPluginRegistry();
+//		ExtensionPointTest.testComChoicemakerCmUrmUpdateDerivedFields(registry);
+//	}
 
 	@Test
 	public void testComChoicemakerCmValidationEclipseAggregateValidator() {
