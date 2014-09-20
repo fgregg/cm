@@ -1259,6 +1259,11 @@ END: C-E Exclusion -->
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>javax.help.eclipse2plugin</artifactId>
         <version>2.0.05-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>javax.help.eclipse2plugin</artifactId>
+        <version>2.0.05-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
       </dependency>
@@ -1306,8 +1311,18 @@ END: C-E Exclusion -->
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
         <version>1.0.17-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>jfree.jcommon.eclipse2plugin</artifactId>
+        <version>1.0.17-SNAPSHOT</version>
         <classifier>eclipse2prj</classifier>
         <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>jfree.jfreechart.eclipse2plugin</artifactId>
+        <version>1.0.15-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
