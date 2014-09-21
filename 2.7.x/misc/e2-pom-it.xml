@@ -52,13 +52,13 @@
   </build>
 
   <modules>
-    <module>com.choicemaker.eclipse2</module>
-    <module>com.choicemaker.eclipse2-it</module>
-    <module>com.choicemaker.eclipse2.ejb</module>
-    <module>com.choicemaker.eclipse2.ejb-it</module>
-    <module>com.choicemaker.eclipse2.embed</module>
-    <module>com.choicemaker.eclipse2.embed-it</module>
-    <module>com.choicemaker.eclipse2.std</module>
+    <module>com.choicemaker.e2</module>
+    <module>com.choicemaker.e2-it</module>
+    <module>com.choicemaker.e2.ejb</module>
+    <module>com.choicemaker.e2.ejb-it</module>
+    <module>com.choicemaker.e2.embed</module>
+    <module>com.choicemaker.e2.embed-it</module>
+    <module>com.choicemaker.e2.std</module>
     <!-- module>com.choicemaker.eclipse2.std-it</module -->
     <module>example-jpa</module>
   </modules>
