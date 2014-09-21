@@ -1,5 +1,6 @@
 archive
 cm-server-ear
+cm-server-ejb
 cm-server-plugin-discovery
 cm-server-war
 com.choicemaker.eclipse.*
