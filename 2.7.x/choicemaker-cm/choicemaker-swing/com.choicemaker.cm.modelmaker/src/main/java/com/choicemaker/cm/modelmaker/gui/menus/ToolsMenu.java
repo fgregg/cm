@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -159,7 +160,7 @@ public class ToolsMenu extends JMenu {
 	}
 
 	private void buildPluginToolMenuItems() {
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.modelmaker.toolMenuItem");
+		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MODELMAKER_TOOLMENUITEM);
 		IExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
 			IExtension extension = extensions[i];

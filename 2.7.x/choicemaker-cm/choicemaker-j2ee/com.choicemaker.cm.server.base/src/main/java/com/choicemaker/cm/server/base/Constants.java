@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.server.base;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+
 /**
  * Comment
  *
@@ -17,8 +19,8 @@ package com.choicemaker.cm.server.base;
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:13 $
  */
 public class Constants {
-	public static final String INITIALIZER = "com.choicemaker.cm.server.base.initializer";
-	public static final String BINDERS = "com.choicemaker.cm.server.base.boundObject";
+	public static final String INITIALIZER = ChoiceMakerExtensionPoint.CM_SERVER_BASE_INITIALIZER;
+	public static final String BINDERS = ChoiceMakerExtensionPoint.CM_SERVER_BASE_BOUNDOBJECT;
 	public static final String COMMAND_LINE_ARGUMENTS = "commandLineArguments";
 	public static final String CLASS = "class";
 	public static final String NAME = "name";

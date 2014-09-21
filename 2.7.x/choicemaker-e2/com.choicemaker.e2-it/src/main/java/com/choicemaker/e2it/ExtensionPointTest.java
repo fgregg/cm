@@ -1,116 +1,46 @@
 package com.choicemaker.e2it;
 
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_ACCESSOR;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_COMMANDLINEARGUMENT;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_FILEMRPSREADER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_GENERATORPLUGIN;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MACHINELEARNER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MRPSREADER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_NAMEDRESOURCE;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_OBJECTGENERATOR;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_REPORTER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_RSREADER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_RSSERIALIZER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_CFG_PARSER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_GEN_MAP;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_GEN_RELATION;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_GEN_SET;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MATCHING_WFST_PARSER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_MATCHERBLOCKINGTOOLKIT;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_MLTRAINGUIPLUGIN;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_MRPSREADERGUI;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_PLUGGABLECONTROLLER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_PLUGGABLEMENUITEM;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_RSREADERGUI;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_TOOLMENUITEM;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_SERVER_BASE_BOUNDOBJECT;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_SERVER_BASE_INITIALIZER;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_URM_UPDATEDERIVEDFIELDS;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_VALIDATION_ECLIPSE_AGGREGATEVALIDATOR;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_VALIDATION_ECLIPSE_SETBASEDVALIDATOR;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_VALIDATION_ECLIPSE_SIMPLEVALIDATOR;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_VALIDATION_ECLIPSE_VALIDATORFACTORY;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.SECONDSTRING_STRINGDISTANCE;
 import static org.junit.Assert.assertTrue;
 
 import com.choicemaker.e2.CMExtensionPoint;
 import com.choicemaker.e2.CMPluginRegistry;
 
 public class ExtensionPointTest {
-
-	public static final String EXT_PT_CM_CORE_ACCESSOR =
-		"com.choicemaker.cm.core.accessor";
-
-	public static final String EXT_PT_CM_CORE_COMMANDLINEARGUMENT =
-		"com.choicemaker.cm.core.commandLineArgument";
-
-	public static final String EXT_PT_CM_CORE_FILEMRPSREADER =
-		"com.choicemaker.cm.core.fileMrpsReader";
-
-	public static final String EXT_PT_CM_CORE_GENERATORPLUGIN =
-		"com.choicemaker.cm.core.generatorPlugin";
-
-	public static final String EXT_PT_CM_CORE_MACHINELEARNER =
-		"com.choicemaker.cm.core.machineLearner";
-
-	public static final String EXT_PT_CM_CORE_MATCHCANDIDATE =
-		"com.choicemaker.cm.core.matchCandidate";
-
-	public static final String EXT_PT_CM_CORE_MRPSREADER =
-		"com.choicemaker.cm.core.mrpsReader";
-
-	public static final String EXT_PT_CM_CORE_NAMEDRESOURCE =
-		"com.choicemaker.cm.core.namedResource";
-
-	public static final String EXT_PT_CM_CORE_OBJECTGENERATOR =
-		"com.choicemaker.cm.core.objectGenerator";
-
-	public static final String EXT_PT_CM_CORE_REPORTER =
-		"com.choicemaker.cm.core.reporter";
-
-	public static final String EXT_PT_CM_CORE_RSREADER =
-		"com.choicemaker.cm.core.rsReader";
-
-	public static final String EXT_PT_CM_CORE_RSSERIALIZER =
-		"com.choicemaker.cm.core.rsSerializer";
-
-	public static final String EXT_PT_CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION =
-		"com.choicemaker.cm.io.blocking.automated.base.databaseAbstraction";
-
-	public static final String EXT_PT_CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR =
-		"com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
-
-	public static final String EXT_PT_CM_MATCHING_CFG_CASCADEDPARSER =
-		"com.choicemaker.cm.matching.cfg.cascadedParser";
-
-	public static final String EXT_PT_CM_MATCHING_CFG_PARSER =
-		"com.choicemaker.cm.matching.cfg.parser";
-
-	public static final String EXT_PT_CM_MATCHING_GEN_MAP =
-		"com.choicemaker.cm.matching.gen.map";
-
-	public static final String EXT_PT_CM_MATCHING_GEN_RELATION =
-		"com.choicemaker.cm.matching.gen.relation";
-
-	public static final String EXT_PT_CM_MATCHING_GEN_SET =
-		"com.choicemaker.cm.matching.gen.set";
-
-	public static final String EXT_PT_CM_MATCHING_WFST_PARSER =
-		"com.choicemaker.cm.matching.wfst.parser";
-
-	public static final String EXT_PT_CM_MODELMAKER_MATCHERBLOCKINGTOOLKIT =
-		"com.choicemaker.cm.modelmaker.matcherBlockingToolkit";
-
-	public static final String EXT_PT_CM_MODELMAKER_MLTRAINGUIPLUGIN =
-		"com.choicemaker.cm.modelmaker.mlTrainGuiPlugin";
-
-	public static final String EXT_PT_CM_MODELMAKER_MRPSREADERGUI =
-		"com.choicemaker.cm.modelmaker.mrpsReaderGui";
-
-	public static final String EXT_PT_CM_MODELMAKER_PLUGGABLECONTROLLER =
-		"com.choicemaker.cm.modelmaker.pluggableController";
-
-	public static final String EXT_PT_CM_MODELMAKER_PLUGGABLEMENUITEM =
-		"com.choicemaker.cm.modelmaker.pluggableMenuItem";
-
-	public static final String EXT_PT_CM_MODELMAKER_RSREADERGUI =
-		"com.choicemaker.cm.modelmaker.rsReaderGui";
-
-	public static final String EXT_PT_CM_MODELMAKER_TOOLMENUITEM =
-		"com.choicemaker.cm.modelmaker.toolMenuItem";
-
-	public static final String EXT_PT_CM_SERVER_BASE_BOUNDOBJECT =
-		"com.choicemaker.cm.server.base.boundObject";
-
-	public static final String EXT_PT_CM_SERVER_BASE_INITIALIZER =
-		"com.choicemaker.cm.server.base.initializer";
-
-	public static final String EXT_PT_CM_URM_UPDATEDERIVEDFIELDS =
-		"com.choicemaker.cm.urm.updateDerivedFields";
-
-	public static final String EXT_PT_CM_VALIDATION_ECLIPSE_AGGREGATEVALIDATOR =
-		"com.choicemaker.cm.validation.eclipse.aggregateValidator";
-
-	public static final String EXT_PT_CM_VALIDATION_ECLIPSE_SETBASEDVALIDATOR =
-		"com.choicemaker.cm.validation.eclipse.setBasedValidator";
-
-	public static final String EXT_PT_CM_VALIDATION_ECLIPSE_SIMPLEVALIDATOR =
-		"com.choicemaker.cm.validation.eclipse.simpleValidator";
-
-	public static final String EXT_PT_CM_VALIDATION_ECLIPSE_VALIDATORFACTORY =
-		"com.choicemaker.cm.validation.eclipse.validatorFactory";
-
-	public static final String EXT_PT_WCOHEN_SS_STRINGDISTANCE =
-		"com.wcohen.ss.stringdistance";
 
 	private ExtensionPointTest(CMPluginRegistry registry) {
 	}
@@ -119,7 +49,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_ACCESSOR);
+			registry.getExtensionPoint(CM_CORE_ACCESSOR);
 		assertTrue(ep != null);
 	}
 
@@ -127,7 +57,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_COMMANDLINEARGUMENT);
+			registry.getExtensionPoint(CM_CORE_COMMANDLINEARGUMENT);
 		assertTrue(ep != null);
 	}
 
@@ -135,7 +65,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_FILEMRPSREADER);
+			registry.getExtensionPoint(CM_CORE_FILEMRPSREADER);
 		assertTrue(ep != null);
 	}
 
@@ -143,7 +73,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_GENERATORPLUGIN);
+			registry.getExtensionPoint(CM_CORE_GENERATORPLUGIN);
 		assertTrue(ep != null);
 	}
 
@@ -151,7 +81,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_MACHINELEARNER);
+			registry.getExtensionPoint(CM_CORE_MACHINELEARNER);
 		assertTrue(ep != null);
 	}
 
@@ -159,7 +89,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_MATCHCANDIDATE);
+			registry.getExtensionPoint(CM_CORE_MATCHCANDIDATE);
 		assertTrue(ep != null);
 	}
 
@@ -167,7 +97,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_MRPSREADER);
+			registry.getExtensionPoint(CM_CORE_MRPSREADER);
 		assertTrue(ep != null);
 	}
 
@@ -175,7 +105,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_NAMEDRESOURCE);
+			registry.getExtensionPoint(CM_CORE_NAMEDRESOURCE);
 		assertTrue(ep != null);
 	}
 
@@ -183,7 +113,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_OBJECTGENERATOR);
+			registry.getExtensionPoint(CM_CORE_OBJECTGENERATOR);
 		assertTrue(ep != null);
 	}
 
@@ -191,7 +121,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_REPORTER);
+			registry.getExtensionPoint(CM_CORE_REPORTER);
 		assertTrue(ep != null);
 	}
 
@@ -199,7 +129,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_RSREADER);
+			registry.getExtensionPoint(CM_CORE_RSREADER);
 		assertTrue(ep != null);
 	}
 
@@ -207,7 +137,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_CORE_RSSERIALIZER);
+			registry.getExtensionPoint(CM_CORE_RSSERIALIZER);
 		assertTrue(ep != null);
 	}
 
@@ -215,7 +145,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION);
+			registry.getExtensionPoint(CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION);
 		assertTrue(ep != null);
 	}
 
@@ -223,7 +153,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR);
+			registry.getExtensionPoint(CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR);
 		assertTrue(ep != null);
 	}
 
@@ -231,7 +161,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MATCHING_CFG_CASCADEDPARSER);
+			registry.getExtensionPoint(CM_MATCHING_CFG_CASCADEDPARSER);
 		assertTrue(ep != null);
 	}
 
@@ -239,7 +169,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MATCHING_CFG_PARSER);
+			registry.getExtensionPoint(CM_MATCHING_CFG_PARSER);
 		assertTrue(ep != null);
 	}
 
@@ -247,7 +177,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MATCHING_GEN_MAP);
+			registry.getExtensionPoint(CM_MATCHING_GEN_MAP);
 		assertTrue(ep != null);
 	}
 
@@ -255,7 +185,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MATCHING_GEN_RELATION);
+			registry.getExtensionPoint(CM_MATCHING_GEN_RELATION);
 		assertTrue(ep != null);
 	}
 
@@ -263,7 +193,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MATCHING_GEN_SET);
+			registry.getExtensionPoint(CM_MATCHING_GEN_SET);
 		assertTrue(ep != null);
 	}
 
@@ -271,7 +201,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MATCHING_WFST_PARSER);
+			registry.getExtensionPoint(CM_MATCHING_WFST_PARSER);
 		assertTrue(ep != null);
 	}
 
@@ -279,7 +209,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MODELMAKER_MATCHERBLOCKINGTOOLKIT);
+			registry.getExtensionPoint(CM_MODELMAKER_MATCHERBLOCKINGTOOLKIT);
 		assertTrue(ep != null);
 	}
 
@@ -287,7 +217,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MODELMAKER_MLTRAINGUIPLUGIN);
+			registry.getExtensionPoint(CM_MODELMAKER_MLTRAINGUIPLUGIN);
 		assertTrue(ep != null);
 	}
 
@@ -295,7 +225,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MODELMAKER_MRPSREADERGUI);
+			registry.getExtensionPoint(CM_MODELMAKER_MRPSREADERGUI);
 		assertTrue(ep != null);
 	}
 
@@ -303,7 +233,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MODELMAKER_PLUGGABLECONTROLLER);
+			registry.getExtensionPoint(CM_MODELMAKER_PLUGGABLECONTROLLER);
 		assertTrue(ep != null);
 	}
 
@@ -311,7 +241,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MODELMAKER_PLUGGABLEMENUITEM);
+			registry.getExtensionPoint(CM_MODELMAKER_PLUGGABLEMENUITEM);
 		assertTrue(ep != null);
 	}
 
@@ -319,7 +249,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MODELMAKER_RSREADERGUI);
+			registry.getExtensionPoint(CM_MODELMAKER_RSREADERGUI);
 		assertTrue(ep != null);
 	}
 
@@ -327,7 +257,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_MODELMAKER_TOOLMENUITEM);
+			registry.getExtensionPoint(CM_MODELMAKER_TOOLMENUITEM);
 		assertTrue(ep != null);
 	}
 
@@ -335,7 +265,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_SERVER_BASE_BOUNDOBJECT);
+			registry.getExtensionPoint(CM_SERVER_BASE_BOUNDOBJECT);
 		assertTrue(ep != null);
 	}
 
@@ -343,7 +273,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_SERVER_BASE_INITIALIZER);
+			registry.getExtensionPoint(CM_SERVER_BASE_INITIALIZER);
 		assertTrue(ep != null);
 	}
 
@@ -351,7 +281,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_URM_UPDATEDERIVEDFIELDS);
+			registry.getExtensionPoint(CM_URM_UPDATEDERIVEDFIELDS);
 		assertTrue(ep != null);
 	}
 
@@ -359,7 +289,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_VALIDATION_ECLIPSE_AGGREGATEVALIDATOR);
+			registry.getExtensionPoint(CM_VALIDATION_ECLIPSE_AGGREGATEVALIDATOR);
 		assertTrue(ep != null);
 	}
 
@@ -367,7 +297,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_VALIDATION_ECLIPSE_SETBASEDVALIDATOR);
+			registry.getExtensionPoint(CM_VALIDATION_ECLIPSE_SETBASEDVALIDATOR);
 		assertTrue(ep != null);
 	}
 
@@ -375,7 +305,7 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_VALIDATION_ECLIPSE_SIMPLEVALIDATOR);
+			registry.getExtensionPoint(CM_VALIDATION_ECLIPSE_SIMPLEVALIDATOR);
 		assertTrue(ep != null);
 	}
 
@@ -383,14 +313,14 @@ public class ExtensionPointTest {
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_CM_VALIDATION_ECLIPSE_VALIDATORFACTORY);
+			registry.getExtensionPoint(CM_VALIDATION_ECLIPSE_VALIDATORFACTORY);
 		assertTrue(ep != null);
 	}
 
 	public static void testComWcohenSsStringdistance(CMPluginRegistry registry) {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
-			registry.getExtensionPoint(EXT_PT_WCOHEN_SS_STRINGDISTANCE);
+			registry.getExtensionPoint(SECONDSTRING_STRINGDISTANCE);
 		assertTrue(ep != null);
 	}
 

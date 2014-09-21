@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.InvalidProfileException;
 import com.choicemaker.cm.core.Profile;
@@ -65,7 +66,7 @@ public class TransitivityServiceBean implements SessionBean {
 
 	private static Logger logger = Logger.getLogger(TransitivityServiceBean.class.getName());
 
-	public static final String DATABASE_ACCESSOR = "com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
+	public static final String DATABASE_ACCESSOR = ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 	public static final String BLOCKING_SOURCE = "java:comp/env/jdbc/blockingSource";
 
 	private transient DataSource blockingSource;

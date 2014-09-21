@@ -10,13 +10,15 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+
 public class Eclipse2GeneratorPluginFactory implements
 		IGeneratorPluginFactory {
 
 	private static final Logger logger = Logger
 			.getLogger(Eclipse2GeneratorPluginFactory.class.getName());
 
-	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.generatorPlugin";
+	public static final String EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_CORE_GENERATORPLUGIN;
 
 	public static final String EXTENSION_EXECUTABLE_PROPERTY = "class";
 

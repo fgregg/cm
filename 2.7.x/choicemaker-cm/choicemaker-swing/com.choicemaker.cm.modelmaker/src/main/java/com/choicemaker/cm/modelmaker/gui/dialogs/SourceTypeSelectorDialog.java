@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 import com.choicemaker.cm.gui.utils.ExtensionHolder;
@@ -105,9 +106,9 @@ public class SourceTypeSelectorDialog extends JDialog {
 			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.typeselector.available"));
 		IExtensionPoint extensionPoint = null;
 		if (type == RS) {
-			extensionPoint = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.modelmaker.rsReaderGui");
+			extensionPoint = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MODELMAKER_RSREADERGUI);
 		} else {
-			extensionPoint = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.modelmaker.mrpsReaderGui");
+			extensionPoint = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MODELMAKER_MRPSREADERGUI);
 		}
 		if (save) {
 			Vector l = new Vector();

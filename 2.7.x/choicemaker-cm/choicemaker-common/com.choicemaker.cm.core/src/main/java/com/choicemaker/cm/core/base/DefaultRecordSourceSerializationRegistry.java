@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.IPluginRegistry;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IRecordSourceSerializationRegistry;
 import com.choicemaker.cm.core.IRecordSourceSerializer;
 import com.choicemaker.cm.core.RecordSource;
@@ -50,7 +51,7 @@ public class DefaultRecordSourceSerializationRegistry
 	 * <code>com.choicemaker.cm.urm.updateDerivedFields</code>
 	 */
 	public static final String SERIALIZABLE_RECORD_SOURCE_EXTENSION_POINT =
-		"com.choicemaker.cm.core.rsSerializer";
+		ChoiceMakerExtensionPoint.CM_CORE_RSSERIALIZER;
 
 	/** The serializer priority attribute, <code>priority</code> */
 	public static final String SERIALIZABLE_RECORD_SOURCE_PRIORITY = "priority"; //$NON-NLS-1$

@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.Platform;
 
 import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Constants;
@@ -478,7 +479,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	}
 
 	private void setAccessorInternal(Accessor accessor) {
-		IExtension[] accessorElems = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.accessor").getExtensions();
+		IExtension[] accessorElems = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_CORE_ACCESSOR).getExtensions();
 		Class[] interfaces = new Class[accessorElems.length];
 		for (int i = 0; i < interfaces.length; i++) {
 			IExtension accessorElem = accessorElems[i];

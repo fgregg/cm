@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.module.IModuleController;
 
 /**
@@ -75,7 +76,7 @@ public class DefaultModuleMenu extends JMenu {
 	private void buildPluginClusterMenuItems() {
 		IExtensionPoint pt =
 			Platform.getPluginRegistry().getExtensionPoint(
-				"com.choicemaker.cm.modelmaker.pluggableMenuItem");
+				ChoiceMakerExtensionPoint.CM_MODELMAKER_PLUGGABLEMENUITEM);
 		if (pt != null) {
 			IExtension[] extensions = pt.getExtensions();
 			for (int i = 0; i < extensions.length; i++) {

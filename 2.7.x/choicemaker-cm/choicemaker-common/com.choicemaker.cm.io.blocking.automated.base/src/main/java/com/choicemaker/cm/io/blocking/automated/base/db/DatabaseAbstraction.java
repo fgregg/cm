@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.base.db;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+
 /**
  * Description
  * 
@@ -17,7 +19,7 @@ package com.choicemaker.cm.io.blocking.automated.base.db;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
  */
 public interface DatabaseAbstraction {
-	String EXTENSION_POINT = "com.choicemaker.cm.io.blocking.automated.base.databaseAbstraction";
+	String EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION;
 	
 	String getSetDateFormatExpression();
 	

@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
 import com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder;
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.core.util.ObjectMaker;
@@ -35,7 +36,7 @@ public class ProductionModelsJarBuilderApp implements IPlatformRunnable {
 	
 	public static final String OUTDIR = "-outDir";
 	
-	public static final String OBJECT_GENERATOR_EXTENSION_POINT = "com.choicemaker.cm.core.objectGenerator";
+	public static final String OBJECT_GENERATOR_EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_CORE_OBJECTGENERATOR;
 	
 	public static final String EXECUTABLE_EXTENSION = "class";
 

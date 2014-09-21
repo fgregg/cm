@@ -46,6 +46,8 @@ public interface IUpdateDerivedFields {
 	 * @see CmServerAdmin#updateAllDerivedFields(String,DbRecordCollection)
 	 * @see CmServerAdmin#updateDerivedFields(String,DbRecordCollection)
 	 */
+	// Avoid dependence on com.choicemaker.cm.core package
+	// String PN_MODEL_CONFIGURATION_UPDATOR_DELEGATE = ChoiceMakerExtensionPoint.CM_URM_UPDATEDERIVEDFIELDS;
 	String PN_MODEL_CONFIGURATION_UPDATOR_DELEGATE = "com.choicemaker.cm.urm.updateDerivedFields";
 
 	/**

@@ -13,6 +13,7 @@ package com.choicemaker.cm.validation.eclipse;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.cm.validation.ValidatorCreationException;
 
@@ -25,7 +26,7 @@ import com.choicemaker.cm.validation.ValidatorCreationException;
 public interface IValidatorFactory {
 
 	public final String VALIDATOR_FACTORY_EXTENSION_POINT =
-		"com.choicemaker.cm.validation.eclipse.validatorFactory";
+		ChoiceMakerExtensionPoint.CM_VALIDATION_ECLIPSE_VALIDATORFACTORY;
 
 	/**
 	 * Creates a validator identified by the specified name.

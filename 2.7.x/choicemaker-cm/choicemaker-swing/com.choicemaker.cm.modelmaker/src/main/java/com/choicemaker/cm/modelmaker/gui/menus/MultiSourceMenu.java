@@ -25,6 +25,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
@@ -183,7 +184,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 				MarkedRecordPairSource source = parent.getMultiSource(num);
 				SourceGuiFactory factory = null;
 				try {
-					factory = (SourceGuiFactory) ExtensionPointMapper.getInstance("com.choicemaker.cm.modelmaker.mrpsReaderGui", source.getClass());
+					factory = (SourceGuiFactory) ExtensionPointMapper.getInstance(ChoiceMakerExtensionPoint.CM_MODELMAKER_MRPSREADERGUI, source.getClass());
 				} catch (XmlConfException e1) {
 					e1.printStackTrace();
 				}

@@ -24,6 +24,8 @@ public interface IUpdateDerivedFieldsRegistration {
 	 * <code>com.choicemaker.cm.urm.updateDerivedFields</code>
 	 */
 	public static final String UPDATE_DERIVED_FIELD_EXTENSION_POINT =
+		// Avoid dependence on com.choicemaker.cm.core package
+		// ChoiceMakerExtensionPoint.CM_URM_UPDATEDERIVEDFIELDS;
 		"com.choicemaker.cm.urm.updateDerivedFields";
 
 }

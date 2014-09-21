@@ -18,6 +18,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 
@@ -29,7 +30,7 @@ import com.choicemaker.cm.core.XmlConfException;
  * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:01 $
  */
 public class RecordSourceXmlConf {
-	public static final String EXTENSION_POINT = "com.choicemaker.cm.core.rsReader";
+	public static final String EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_CORE_RSREADER;
 
 	public static void add(RecordSource src) throws XmlConfException {
 		((RecordSourceXmlConfigurator)ExtensionPointMapper.getInstance(EXTENSION_POINT, src.getClass())).add(src);

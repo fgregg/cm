@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.module.IModule;
 import com.choicemaker.cm.module.IModuleController;
 import com.choicemaker.cm.module.IModuleController.IUserInterface;
@@ -68,7 +69,7 @@ public class DefaultManagedPanel extends AbstractTabbedPanel implements IModelMa
 		// Replace the default with a configured instance, if one exists
 		IExtensionPoint pt =
 			Platform.getPluginRegistry().getExtensionPoint(
-				"com.choicemaker.cm.modelmaker.pluggableController");
+				ChoiceMakerExtensionPoint.CM_MODELMAKER_PLUGGABLECONTROLLER);
 		if (pt != null) {
 		IExtension[] extensions = pt.getExtensions();
 		if (extensions.length > 1) {

@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.InvalidProfileException;
 import com.choicemaker.cm.core.Profile;
@@ -65,8 +66,8 @@ public class QueryServiceBean implements SessionBean {
 	public static final String BLOCKING_SOURCE = "java:comp/env/jdbc/blockingSource";
 	public static final String REPORTING_SOURCE = "java:comp/env/jdbc/reportingSource";
 	public static final String REPORTING_FILE = "reportingFile";
-	public static final String DATABASE_ACCESSOR = "com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
-	public static final String MATCH_CANDIDATE = "com.choicemaker.cm.core.matchCandidate";
+	public static final String DATABASE_ACCESSOR = ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
+	public static final String MATCH_CANDIDATE = ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
 
 	private static boolean inited;
 //	private static transient Reporter fileReporter;

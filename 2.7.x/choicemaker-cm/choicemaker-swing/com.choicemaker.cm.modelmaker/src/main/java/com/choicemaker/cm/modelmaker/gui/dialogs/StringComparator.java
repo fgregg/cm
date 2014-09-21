@@ -36,6 +36,7 @@ import javax.swing.JTextField;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.util.UpperCaseTextField;
 import com.choicemaker.cm.gui.utils.ExtensionHolder;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
@@ -415,7 +416,7 @@ public class StringComparator extends JDialog implements Enable {
 		c.gridx = 1;
 		content.add(new JLabel("available"), c);
 		c.gridx = 2;
-		ExtensionHolder[] extensions = ExtensionHolder.getExtensionHolders(Platform.getPluginRegistry().getExtensionPoint("com.wcohen.ss.stringdistance"));
+		ExtensionHolder[] extensions = ExtensionHolder.getExtensionHolders(Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.SECONDSTRING_STRINGDISTANCE));
 		c.fill = GridBagConstraints.HORIZONTAL;
 		// BUG: combo box doesn't show all instances, just instance 0
 		// stringDistanceNames = new JComboBox(extensions);

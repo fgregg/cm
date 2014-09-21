@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.MachineLearner;
 
 /**
@@ -29,7 +30,7 @@ import com.choicemaker.cm.core.MachineLearner;
  * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:09 $
  */
 public class MlGuiFactories {
-	public static final String EXTENSION_POINT = "com.choicemaker.cm.modelmaker.mlTrainGuiPlugin";
+	public static final String EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_MODELMAKER_MLTRAINGUIPLUGIN;
 	
 	private static Map guis = new HashMap();
 	private static boolean initialized = false;

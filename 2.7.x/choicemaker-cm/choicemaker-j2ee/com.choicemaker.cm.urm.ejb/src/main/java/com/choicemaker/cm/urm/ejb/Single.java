@@ -32,6 +32,7 @@ import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJobHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
@@ -92,9 +93,9 @@ public class Single implements Serializable {
 
 	// ChoiceMaker extension names
 	public static final String DATABASE_ACCESSOR =
-		"com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
+		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 	public static final String MATCH_CANDIDATE =
-		"com.choicemaker.cm.core.matchCandidate";
+		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
 	/* UNUSED
 	public static final String BEAN_MATCH_CANDIDATE =
 		"com.choicemaker.cm.core.beanMatchCandidate";

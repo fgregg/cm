@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.Record;
 
 /**
@@ -22,7 +23,7 @@ import com.choicemaker.cm.core.Record;
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 21:35:40 $
  */
 public interface DatabaseAccessor {
-	String EXTENSION_POINT = "com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
+	String EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 	
 	void open(AutomatedBlocker blocker) throws IOException;
 	void close() throws IOException;

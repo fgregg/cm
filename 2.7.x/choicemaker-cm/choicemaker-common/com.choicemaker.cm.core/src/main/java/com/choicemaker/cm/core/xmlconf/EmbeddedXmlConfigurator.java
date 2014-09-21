@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.Platform;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.XmlConfException;
@@ -246,7 +247,7 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 
 	void initReports() {
 		List reporters = new ArrayList();
-		IExtensionPoint reporterExts = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.core.reporter");
+		IExtensionPoint reporterExts = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_CORE_REPORTER);
 		List reporterConfigs = delegate.getCore().getChildren("reporter");
 		for (Iterator iReporterConfigs = reporterConfigs.iterator(); iReporterConfigs.hasNext();) {
 			Element reporterConfig = (Element) iReporterConfigs.next();

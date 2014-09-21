@@ -21,6 +21,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+
 /**
  * Managing of command line arguments.
  *
@@ -29,7 +31,7 @@ import org.eclipse.core.runtime.Platform;
  */
 public class CommandLineArguments {
 	private static final String NOT_DEFINED = "$NOT_DEFINED$";
-	public static final String COMMAND_LINE_ARGUMENT = "com.choicemaker.cm.core.commandLineArgument";
+	public static final String COMMAND_LINE_ARGUMENT = ChoiceMakerExtensionPoint.CM_CORE_COMMANDLINEARGUMENT;
 	public static final String NAME = "name";
 	public static final String DEFAULT_VALUE = "defaultValue";
 	public static final String OPTION = "option";

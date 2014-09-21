@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.matching.wfst.AmbiguousParser;
 import com.choicemaker.cm.matching.wfst.WfstParser;
 
@@ -156,7 +157,7 @@ public final class WfstParsers {
 	static void initRegisteredWfstParsers() {
 		IExtensionPoint pt =
 			Platform.getPluginRegistry().getExtensionPoint(
-				"com.choicemaker.cm.matching.wfst.parser");
+				ChoiceMakerExtensionPoint.CM_MATCHING_WFST_PARSER);
 		IExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
 			IExtension ext = extensions[i];

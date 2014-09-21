@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.wcohen.ss.api.StringDistance;
 
 /**
@@ -139,7 +140,7 @@ public final class StringDistances {
 	static void initRegisteredStringDistances() {
 		IExtensionPoint pt =
 			Platform.getPluginRegistry().getExtensionPoint(
-				"com.wcohen.ss.stringdistance");
+				ChoiceMakerExtensionPoint.SECONDSTRING_STRINGDISTANCE);
 		IExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
 			IExtension ext = extensions[i];

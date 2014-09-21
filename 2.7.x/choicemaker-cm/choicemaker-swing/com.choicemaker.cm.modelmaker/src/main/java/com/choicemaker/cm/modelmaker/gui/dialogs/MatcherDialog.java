@@ -40,6 +40,7 @@ import org.jdom.Element;
 import com.choicemaker.cm.analyzer.matcher.SimpleRecordSink;
 import com.choicemaker.cm.analyzer.sampler.DefaultPairSampler;
 import com.choicemaker.cm.analyzer.sampler.PairSampler;
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
@@ -738,7 +739,7 @@ public class MatcherDialog extends JDialog implements Enable {
 			new JComboBox(
 				ExtensionHolder.getExtensionHolders(
 					Platform.getPluginRegistry().getExtensionPoint(
-						"com.choicemaker.cm.modelmaker.matcherBlockingToolkit")));
+						ChoiceMakerExtensionPoint.CM_MODELMAKER_MATCHERBLOCKINGTOOLKIT)));
 		content.add(blocking);
 
 		c.gridy = 1;

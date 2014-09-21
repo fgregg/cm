@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.jdom.JDOMException;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.matching.cfg.xmlconf.ParserXmlConf;
 
@@ -81,7 +82,7 @@ public final class Parsers {
 	}
 
 	static void initRegisteredParsers() {
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.matching.cfg.parser");
+		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MATCHING_CFG_PARSER);
 		IExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
 			IExtension ext = extensions[i];
@@ -99,7 +100,7 @@ public final class Parsers {
 	}
 	
 	static void initRegisteredCascadedParsers() {
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint("com.choicemaker.cm.matching.cfg.cascadedParser");
+		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER);
 		IExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
 			IExtension ext = extensions[i];

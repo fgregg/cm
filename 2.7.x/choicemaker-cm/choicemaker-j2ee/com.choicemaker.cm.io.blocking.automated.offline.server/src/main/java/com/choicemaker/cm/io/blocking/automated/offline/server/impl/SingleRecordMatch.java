@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -80,9 +81,9 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 			+ SingleRecordMatch.class.getName());
 
 	public static final String DATABASE_ACCESSOR =
-		"com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
+		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 	public static final String MATCH_CANDIDATE =
-		"com.choicemaker.cm.core.matchCandidate";
+		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
 
 	private transient MessageDrivenContext mdc = null;
 	private EJBConfiguration configuration = null;
