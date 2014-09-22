@@ -24,6 +24,7 @@ import org.apache.tools.ant.util.JavaEnvUtils;
 
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
@@ -100,7 +101,7 @@ public class ProductionModelsJarBuilder {
 	// static stuff below...
 	//
 
-	public static void refreshProductionProbabilityModels() throws XmlConfException {
+	public static void refreshProductionProbabilityModels() throws ModelConfigurationException {
 		// File genDir = new File(GeneratorXmlConf.getCodeRoot()).getAbsoluteFile();
 		File d = new File(ConfigurationManager.getInstance().getGeneratedSourceRoot()).getAbsoluteFile();
 		if (d.exists() && d.isDirectory()) {

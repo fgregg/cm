@@ -18,17 +18,14 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IPluginDescriptor;
-import org.eclipse.core.runtime.IPluginRegistry;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IRecordSourceSerializationRegistry;
 import com.choicemaker.cm.core.IRecordSourceSerializer;
 import com.choicemaker.cm.core.RecordSource;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMPluginDescriptor;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
@@ -198,24 +195,22 @@ public class DefaultRecordSourceSerializationRegistry
 
 	private void initialize() {
 		try {
-			IPluginRegistry registry = Platform.getPluginRegistry();
-			IExtensionPoint pt = registry.getExtensionPoint(POINT);
-			IExtension[] extensions = pt.getExtensions();
+			CMExtension[] extensions = CMPlatformUtils.getExtensions(POINT);
 
 			for (int i = 0; i < extensions.length; i++) {
 				try {
-					IExtension ext = extensions[i];
-					IPluginDescriptor descriptor =
+					CMExtension ext = extensions[i];
+					CMPluginDescriptor descriptor =
 						ext.getDeclaringPluginDescriptor();
 					ClassLoader pluginClassLoader =
 						descriptor.getPluginClassLoader();
 
-					IConfigurationElement[] els =
+					CMConfigurationElement[] els =
 						ext.getConfigurationElements();
 					// assert els.length >= 1;
 					// assert els.length <= 2;
-					IConfigurationElement elSerializer = els[0];
-					IConfigurationElement elProperties = null;
+					CMConfigurationElement elSerializer = els[0];
+					CMConfigurationElement elProperties = null;
 					if (els.length == 2) {
 						elProperties = els[1];
 					}
@@ -264,8 +259,8 @@ public class DefaultRecordSourceSerializationRegistry
 	}
 
 	private PrioritizedSerializer instantiateSerializer(
-		IConfigurationElement elSerializer,
-		IConfigurationElement elProperties,
+		CMConfigurationElement elSerializer,
+		CMConfigurationElement elProperties,
 		ClassLoader pluginClassLoader)
 		throws Exception {
 
@@ -299,7 +294,7 @@ public class DefaultRecordSourceSerializationRegistry
 			properties = null;
 		} else {
 			properties = new Properties();
-			IConfigurationElement[] els = elProperties.getChildren(PROPERTY);
+			CMConfigurationElement[] els = elProperties.getChildren(PROPERTY);
 			for (int i = 0; i < els.length; i++) {
 				String key = els[i].getAttribute(PROPERTY_NAME);
 				String value = els[i].getAttribute(PROPERTY_VALUE);

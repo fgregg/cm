@@ -10,12 +10,11 @@
  */
 package com.choicemaker.cm.validation.eclipse.impl;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-
 import com.choicemaker.cm.validation.AbstractAggregateValidator;
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.cm.validation.ValidatorCreationException;
 import com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory;
+import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.util.StringUtils;
 
 /**
@@ -45,7 +44,7 @@ public class AggregateValidatorFactory extends AbstractValidatorFactory {
 		super(id);
 	}
 
-	private NamedValidator createNamedDelegate(IConfigurationElement el)
+	private NamedValidator createNamedDelegate(CMConfigurationElement el)
 		throws Exception {
 		NamedValidator retVal = null;
 		String delegateName = el.getAttribute("name");
@@ -70,18 +69,18 @@ public class AggregateValidatorFactory extends AbstractValidatorFactory {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory#createValidatorFromRegistryConfigurationElements(org.eclipse.core.runtime.IConfigurationElement[])
+	 * @see com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory#createValidatorFromRegistryConfigurationElements(org.eclipse.core.runtime.CMConfigurationElement[])
 	 */
-	protected NamedValidator createValidatorFromRegistryConfigurationElement(IConfigurationElement el)
-		throws Exception {
+	protected NamedValidator createValidatorFromRegistryConfigurationElement(
+			CMConfigurationElement el) throws Exception {
 
 		String validatorName = el.getAttribute("name");
 		Object o = el.createExecutableExtension("class");
 		AbstractAggregateValidator validator = (AbstractAggregateValidator) o;
-		IConfigurationElement[] delegates = el.getChildren("validatorRef");
+		CMConfigurationElement[] delegates = el.getChildren("validatorRef");
 
 		for (int i = 0; i < delegates.length; i++) {
-			IConfigurationElement delegateInfo = delegates[i];
+			CMConfigurationElement delegateInfo = delegates[i];
 			NamedValidator nv = createNamedDelegate(delegateInfo);
 			validator.addValidator(nv.configurationName, nv.validator);
 		}

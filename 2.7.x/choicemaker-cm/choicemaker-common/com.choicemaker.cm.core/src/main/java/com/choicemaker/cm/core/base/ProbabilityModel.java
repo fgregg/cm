@@ -13,6 +13,7 @@ package com.choicemaker.cm.core.base;
 import java.util.Date;
 
 import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.MachineLearner;
 
 /**
@@ -48,7 +49,8 @@ public class ProbabilityModel extends MutableProbabilityModel {
 			Accessor acc, MachineLearner ml, boolean[] cluesToEvaluate,
 			String trainingSource, boolean trainedWithHolds,
 			Date lastTrainingDate, boolean /* useAnt */ignored1,
-			String /* antCommand */ignored2) throws IllegalArgumentException {
+			String /* antCommand */ignored2) throws IllegalArgumentException,
+			ModelConfigurationException {
 		super(fileName, rawClueFileName, acc, ml, cluesToEvaluate,
 				trainingSource, trainedWithHolds, lastTrainingDate);
 	}

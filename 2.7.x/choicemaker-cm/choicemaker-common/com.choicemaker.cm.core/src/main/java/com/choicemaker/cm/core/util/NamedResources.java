@@ -14,12 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMExtensionPoint;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * @author ajwinkel
@@ -27,28 +26,34 @@ import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
  */
 public final class NamedResources {
 
-	public static final String EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_CORE_NAMEDRESOURCE;
+	public static final String EXTENSION_POINT =
+		ChoiceMakerExtensionPoint.CM_CORE_NAMEDRESOURCE;
 
-	public static InputStream getNamedResource(String resourceName) throws IOException {
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(EXTENSION_POINT);
-		IExtension[] extensions = pt.getExtensions();
+	public static InputStream getNamedResource(String resourceName)
+			throws IOException {
+		CMExtensionPoint pt =
+			CMPlatformUtils.getExtensionPoint(EXTENSION_POINT);
+		CMExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension ext = extensions[i];
-			IConfigurationElement[] els = ext.getConfigurationElements();
+			CMExtension ext = extensions[i];
+			CMConfigurationElement[] els = ext.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement el = els[j];
+				CMConfigurationElement el = els[j];
 				String name = el.getAttribute("name");
 				if (name.equals(resourceName)) {
 					String file = el.getAttribute("file");
-					URL url = new URL(ext.getDeclaringPluginDescriptor().getInstallURL(), file);
+					URL url =
+						new URL(ext.getDeclaringPluginDescriptor()
+								.getInstallURL(), file);
 					return url.openStream();
 				}
 			}
 		}
-		
+
 		throw new IOException("Can't find named resource: " + resourceName);
 	}
 
-	private NamedResources() { }
+	private NamedResources() {
+	}
 
 }

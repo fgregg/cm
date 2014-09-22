@@ -14,18 +14,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IPluginDescriptor;
-import org.eclipse.core.runtime.IPluginRegistry;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.configure.xml.IDocument;
 import com.choicemaker.cm.core.configure.xml.NotFoundException;
 import com.choicemaker.cm.core.configure.xml.NotUniqueException;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurable;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurablesRegistry;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMPluginDescriptor;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.util.Precondition;
 
 /**
@@ -93,29 +90,27 @@ public class EclipseRegistry
 			final EclipseXmlSpecificationParser parser =
 				new EclipseXmlSpecificationParser();
 
-			final IPluginRegistry registry = Platform.getPluginRegistry();
-			final IExtensionPoint pt =
-				registry.getExtensionPoint(this.getUniqueExtensionPointId());
-			if (pt == null) {
-				throw new IllegalArgumentException(
-					"no such extension point: '"
-						+ this.getUniqueExtensionPointId()
-						+ "'");
+			final CMExtension[] extensions =
+				CMPlatformUtils.getExtensions(this.getUniqueExtensionPointId());
+			if (extensions == null || extensions.length == 0) {
+				String msg =
+					"No such extensions for '"
+							+ this.getUniqueExtensionPointId() + "'";
+				logger.warning(msg);
 			}
-			final IExtension[] extensions = pt.getExtensions();
 
 			for (int i = 0; i < extensions.length; i++) {
 				try {
-					IExtension ext = extensions[i];
-					IPluginDescriptor descriptor =
+					CMExtension ext = extensions[i];
+					CMPluginDescriptor descriptor =
 						ext.getDeclaringPluginDescriptor();
 					ClassLoader pluginClassLoader =
 						descriptor.getPluginClassLoader();
 
-					IConfigurationElement[] els =
+					CMConfigurationElement[] els =
 						ext.getConfigurationElements();
 					// assert els.length == 1;
-					IConfigurationElement elConfigurable = els[0];
+					CMConfigurationElement elConfigurable = els[0];
 					try {
 						IDocument document =
 							new EclipseDocument(elConfigurable);

@@ -4,6 +4,8 @@ public interface ChoiceMakerExtensionPoint {
 
 	public static final String CM_CORE_ACCESSOR =
 		"com.choicemaker.cm.core.accessor";
+	public static final String CM_CORE_ACCESSOR_ATTR_CLASS =
+			"class";
 	public static final String CM_CORE_COMMANDLINEARGUMENT =
 		"com.choicemaker.cm.core.commandLineArgument";
 	public static final String CM_CORE_FILEMRPSREADER =

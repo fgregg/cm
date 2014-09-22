@@ -185,7 +185,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 				SourceGuiFactory factory = null;
 				try {
 					factory = (SourceGuiFactory) ExtensionPointMapper.getInstance(ChoiceMakerExtensionPoint.CM_MODELMAKER_MRPSREADERGUI, source.getClass());
-				} catch (XmlConfException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				if (factory != null) {

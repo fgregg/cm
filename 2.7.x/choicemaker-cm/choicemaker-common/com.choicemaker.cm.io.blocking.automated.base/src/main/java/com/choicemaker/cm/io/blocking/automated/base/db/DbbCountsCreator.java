@@ -22,12 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IPluginRegistry;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -37,6 +31,9 @@ import com.choicemaker.cm.io.blocking.automated.base.CountField;
 import com.choicemaker.cm.io.blocking.automated.base.DbField;
 import com.choicemaker.cm.io.blocking.automated.base.DbTable;
 import com.choicemaker.cm.io.blocking.automated.cachecount.CacheCountSource;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  *
@@ -286,14 +283,13 @@ public class DbbCountsCreator {
 			String das = (String) models[0].properties().get(DatabaseAbstraction.EXTENSION_POINT);
 
 			try {
-				IPluginRegistry pluginRegistry = Platform.getPluginRegistry();
-				IExtension dbExtension = pluginRegistry.getExtension(DatabaseAbstraction.EXTENSION_POINT, das);
-				IConfigurationElement[] configurationElements = dbExtension.getConfigurationElements();
-				IConfigurationElement classConfiguration = configurationElements[0];
+				CMExtension dbExtension = CMPlatformUtils.getExtension(DatabaseAbstraction.EXTENSION_POINT, das);
+				CMConfigurationElement[] configurationElements = dbExtension.getConfigurationElements();
+				CMConfigurationElement classConfiguration = configurationElements[0];
 				DatabaseAbstraction databaseAbstraction =
 					(DatabaseAbstraction) classConfiguration.createExecutableExtension("class");
 				create(databaseAbstraction, neverComputedOnly);
-			} catch (CoreException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				throw new SQLException(e.toString());
 			}

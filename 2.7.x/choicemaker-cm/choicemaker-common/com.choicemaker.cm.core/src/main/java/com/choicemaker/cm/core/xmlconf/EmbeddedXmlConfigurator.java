@@ -13,16 +13,12 @@ package com.choicemaker.cm.core.xmlconf;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IPluginDescriptor;
-import org.eclipse.core.runtime.Platform;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
@@ -37,7 +33,8 @@ import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
 import com.choicemaker.cm.core.configure.MachineLearnerPersistence;
 import com.choicemaker.cm.core.configure.ProbabilityModelPersistence;
 import com.choicemaker.cm.core.report.Reporter;
-import com.choicemaker.util.SystemPropertyUtils;
+import com.choicemaker.e2.CMExtensionPoint;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * XML configuration file reader.
@@ -58,6 +55,7 @@ import com.choicemaker.util.SystemPropertyUtils;
  *
  * @author    Martin Buechi
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 18:57:16 $
+ * @deprecated
  */
 public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceMakerConfiguration {
 
@@ -130,21 +128,7 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 	}
 
 	public String getJavaDocClasspath() {
-		String pathSeparator = System.getProperty(SystemPropertyUtils.PATH_SEPARATOR);
-		String res = null;
-		IPluginDescriptor[] plugins = Platform.getPluginRegistry().getPluginDescriptors();
-		for (int i = 0; i < plugins.length; i++) {
-			URL[] ucp = ((URLClassLoader) plugins[i].getPluginClassLoader()).getURLs();
-			for (int j = 0; j < ucp.length; j++) {
-				if (res == null) {
-					res = "";
-				} else {
-					res += pathSeparator;
-				}
-				res += ucp[j].getPath();
-			}
-		}
-		return res;
+		throw new Error("not implemented");
 	}
 
 	/**
@@ -247,23 +231,32 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 
 	void initReports() {
 		List reporters = new ArrayList();
-		IExtensionPoint reporterExts = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_CORE_REPORTER);
+		CMExtensionPoint reporterExts =
+			CMPlatformUtils
+					.getExtensionPoint(ChoiceMakerExtensionPoint.CM_CORE_REPORTER);
 		List reporterConfigs = delegate.getCore().getChildren("reporter");
-		for (Iterator iReporterConfigs = reporterConfigs.iterator(); iReporterConfigs.hasNext();) {
+		for (Iterator iReporterConfigs = reporterConfigs.iterator(); iReporterConfigs
+				.hasNext();) {
 			Element reporterConfig = (Element) iReporterConfigs.next();
 			try {
 				String ext = reporterConfig.getAttributeValue("extension");
-				Reporter reporter = (Reporter) reporterExts.getExtension(ext).getConfigurationElements()[0].createExecutableExtension("class");
+				Reporter reporter =
+					(Reporter) reporterExts.getExtension(ext)
+							.getConfigurationElements()[0]
+							.createExecutableExtension("class");
 				Method[] methods = reporter.getClass().getMethods();
 				HashMap methodMap = new HashMap();
 				for (int i = 0; i < methods.length; i++) {
 					methodMap.put(methods[i].getName(), methods[i]);
 				}
 				List properties = reporterConfig.getChildren("property");
-				for (Iterator iProperties = properties.iterator(); iProperties.hasNext();) {
+				for (Iterator iProperties = properties.iterator(); iProperties
+						.hasNext();) {
 					Element property = (Element) iProperties.next();
 					String name = property.getAttributeValue("name");
-					name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+					name =
+						"set" + Character.toUpperCase(name.charAt(0))
+								+ name.substring(1);
 					String value = property.getAttributeValue("value");
 					delegate.set((Method) methodMap.get(name), reporter, value);
 				}
@@ -273,7 +266,8 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 				logger.severe("Configuring reporter: " + ex);
 			}
 		}
-		PMManager.setGlobalReporters((Reporter[]) reporters.toArray(new Reporter[reporters.size()]));
+		PMManager.setGlobalReporters((Reporter[]) reporters
+				.toArray(new Reporter[reporters.size()]));
 	}
 
 	public ICompiler getChoiceMakerCompiler() {

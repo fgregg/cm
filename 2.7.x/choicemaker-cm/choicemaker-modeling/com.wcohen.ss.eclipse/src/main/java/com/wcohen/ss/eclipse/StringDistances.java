@@ -16,12 +16,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.wcohen.ss.api.StringDistance;
 
 /**
@@ -138,16 +136,15 @@ public final class StringDistances {
 	 * Loads  distances registered by plugins.
 	 */
 	static void initRegisteredStringDistances() {
-		IExtensionPoint pt =
-			Platform.getPluginRegistry().getExtensionPoint(
-				ChoiceMakerExtensionPoint.SECONDSTRING_STRINGDISTANCE);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtension[] extensions =
+			CMPlatformUtils
+					.getExtensions(ChoiceMakerExtensionPoint.SECONDSTRING_STRINGDISTANCE);
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension ext = extensions[i];
+			CMExtension ext = extensions[i];
 			URL pUrl = ext.getDeclaringPluginDescriptor().getInstallURL();
-			IConfigurationElement[] els = ext.getConfigurationElements();
+			CMConfigurationElement[] els = ext.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement el = els[j];
+				CMConfigurationElement el = els[j];
 
 				String name = el.getAttribute("name");
 				String filterFile = el.getAttribute("file");

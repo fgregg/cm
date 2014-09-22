@@ -4,13 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 public class Eclipse2GeneratorPluginFactory implements
 		IGeneratorPluginFactory {
@@ -48,25 +45,33 @@ public class Eclipse2GeneratorPluginFactory implements
 	 * exist for each GeneratorPlugin defined in the registry,
 	 */
 	public static List load() throws IllegalStateException {
-		final String msgPrefix = "Loading generatorPlugins from an Eclipse 2 registry: ";
+		final String msgPrefix =
+			"Loading generatorPlugins from an Eclipse 2 registry: ";
 		List retVal = new LinkedList();
-		IExtensionPoint extensionPoint = Platform.getPluginRegistry().getExtensionPoint(EXTENSION_POINT);
-		IExtension[] extensions = extensionPoint.getExtensions();
+		CMExtension[] extensions =
+			CMPlatformUtils.getExtensions(EXTENSION_POINT);
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension extension = extensions[i];
-			IConfigurationElement[] elems = extension.getConfigurationElements();
+			CMExtension extension = extensions[i];
+			CMConfigurationElement[] elems =
+				extension.getConfigurationElements();
 			if (elems.length == 0) {
-				String msg = msgPrefix + "no configurations for '" + extension.toString() + "'";
+				String msg =
+					msgPrefix + "no configurations for '"
+							+ extension.toString() + "'";
 				throw new IllegalStateException(msg);
 			} else if (elems.length > 1) {
-				String msg = msgPrefix + "multiple configurations for '" + extension.toString() + "'";
+				String msg =
+					msgPrefix + "multiple configurations for '"
+							+ extension.toString() + "'";
 				throw new IllegalStateException(msg);
 			}
 			try {
-				GeneratorPlugin gp = (GeneratorPlugin) elems[0].createExecutableExtension(EXTENSION_EXECUTABLE_PROPERTY);
+				GeneratorPlugin gp =
+					(GeneratorPlugin) elems[0]
+							.createExecutableExtension(EXTENSION_EXECUTABLE_PROPERTY);
 				logger.fine("Generator: '" + gp.toString() + "'");
 				retVal.add(gp);
-			} catch (CoreException e) {
+			} catch (Exception e) {
 				String msg = msgPrefix + e.toString() + ": " + e.getCause();
 				throw new IllegalStateException(msg);
 			}

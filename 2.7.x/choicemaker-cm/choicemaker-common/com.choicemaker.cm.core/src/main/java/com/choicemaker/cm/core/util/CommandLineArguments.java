@@ -17,11 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Managing of command line arguments.
@@ -51,11 +50,12 @@ public class CommandLineArguments {
 	}
 
 	public void addExtensions() {
-		IExtension[] extensions = Platform.getPluginRegistry().getExtensionPoint(COMMAND_LINE_ARGUMENT).getExtensions();
+		CMExtension[] extensions = CMPlatformUtils.getExtensions(COMMAND_LINE_ARGUMENT);
 		for (int i = 0; i < extensions.length; i++) {
-			IConfigurationElement[] configElems = extensions[i].getConfigurationElements();
+			CMConfigurationElement[] configElems =
+				extensions[i].getConfigurationElements();
 			for (int j = 0; j < configElems.length; j++) {
-				IConfigurationElement elem = configElems[j];
+				CMConfigurationElement elem = configElems[j];
 				String name = elem.getName().intern();
 				if (name == OPTION) {
 					addOption(elem.getAttribute(NAME));

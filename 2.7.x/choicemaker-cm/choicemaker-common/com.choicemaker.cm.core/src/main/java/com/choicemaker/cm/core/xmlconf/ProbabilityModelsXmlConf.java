@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -38,7 +37,7 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ModelAttributeNames;
-import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.ProbabilityModel;
@@ -60,7 +59,7 @@ public class ProbabilityModelsXmlConf {
 		Logger.getLogger(ProbabilityModelsXmlConf.class.getName());
 
 	public static void saveModel(IProbabilityModel model)
-		throws XmlConfException {
+		throws ModelConfigurationException {
 		Element m = new Element("ProbabilityModel");
 		//m.setAttribute(ModelAttributeNames.AN_CLUE_FILE_NAME, model.getClueFileName());
 		m.setAttribute(ModelAttributeNames.AN_CLUE_FILE_NAME, model.getClueFilePath());
@@ -96,17 +95,17 @@ public class ProbabilityModelsXmlConf {
 		Element mle = new Element("machineLearner");
 		mle.setAttribute("class", mlc.getExtensionPointId());
 		m.addContent(mle);
-		mlc.saveMachineLearner(mle);
-		boolean[] cluesToEvaluate = model.getCluesToEvaluate();
-		ClueDesc[] clueDesc = acc.getClueSet().getClueDesc();
-		for (int i = 0; i < clueDesc.length; ++i) {
-			Element c = new Element("clue");
-			m.addContent(c);
-			c.setAttribute("name", clueDesc[i].getName());
-			c.setAttribute("evaluate", String.valueOf(cluesToEvaluate[i]));
-			mlc.saveClue(c, i);
-		}
 		try {
+			mlc.saveMachineLearner(mle);
+			boolean[] cluesToEvaluate = model.getCluesToEvaluate();
+			ClueDesc[] clueDesc = acc.getClueSet().getClueDesc();
+			for (int i = 0; i < clueDesc.length; ++i) {
+				Element c = new Element("clue");
+				m.addContent(c);
+				c.setAttribute("name", clueDesc[i].getName());
+				c.setAttribute("evaluate", String.valueOf(cluesToEvaluate[i]));
+				mlc.saveClue(c, i);
+			}
 			String fileName = model.getModelFilePath();
 			FileOutputStream fs =
 				new FileOutputStream(new File(fileName).getAbsoluteFile());
@@ -114,8 +113,9 @@ public class ProbabilityModelsXmlConf {
 			//o.setTextNormalize(true);
 			o.output(m, fs);
 			fs.close();
-		} catch (IOException ex) {
-			throw new XmlConfException("Problem writing file.", ex);
+		} catch (Exception ex) {
+			throw new ModelConfigurationException("Problem saving model: "
+					+ ex.toString(), ex);
 		}
 	}
 
@@ -123,7 +123,7 @@ public class ProbabilityModelsXmlConf {
 		String fileName,
 		ICompiler compiler,
 		Writer w)
-		throws XmlConfException {
+		throws ModelConfigurationException {
 		// Preconditions checked by called to overloaded readModel(..)
 		try {
 			return readModel(
@@ -132,7 +132,8 @@ public class ProbabilityModelsXmlConf {
 				compiler,
 				w);
 		} catch (FileNotFoundException ex) {
-			throw new XmlConfException("Internal error.", ex);
+			throw new ModelConfigurationException("Internal error: "
+					+ ex.toString(), ex);
 		}
 	}
 
@@ -141,17 +142,13 @@ public class ProbabilityModelsXmlConf {
 		InputStream is,
 		ICompiler compiler,
 		Writer statusOutput)
-		throws XmlConfException {
+		throws ModelConfigurationException {
 		return readModel(fileName, is, compiler, statusOutput, null);
 	}
 
-	public static IProbabilityModel readModel(
-		String fileName,
-		InputStream is,
-		ICompiler compiler,
-		Writer statusOutput,
-		ClassLoader customClassLoader)
-		throws XmlConfException {
+	public static IProbabilityModel readModel(String fileName, InputStream is,
+			ICompiler compiler, Writer statusOutput,
+			ClassLoader customClassLoader) throws ModelConfigurationException {
 
 		// Preconditions
 		if (is == null) {
@@ -169,137 +166,123 @@ public class ProbabilityModelsXmlConf {
 		try {
 			document = builder.build(is);
 		} catch (Exception ex) {
-			throw new XmlConfException("Internal error.", ex);
+			throw new ModelConfigurationException("Internal error: "
+					+ ex.toString(), ex);
 		}
 		Element m = document.getRootElement();
-		String clueFileName = m.getAttributeValue(ModelAttributeNames.AN_CLUE_FILE_NAME);
-		String trainingSource = m.getAttributeValue(ModelAttributeNames.AN_TRAINING_SOURCE);
+		String clueFileName =
+			m.getAttributeValue(ModelAttributeNames.AN_CLUE_FILE_NAME);
+		String trainingSource =
+			m.getAttributeValue(ModelAttributeNames.AN_TRAINING_SOURCE);
 		if (trainingSource == null)
 			trainingSource = "";
-		String ltd = m.getAttributeValue(ModelAttributeNames.AN_LAST_TRAINING_DATE);
+		String ltd =
+			m.getAttributeValue(ModelAttributeNames.AN_LAST_TRAINING_DATE);
 		boolean trainedWithHolds =
-			"true".equals(m.getAttributeValue(ModelAttributeNames.AN_TRAINED_WITH_HOLDS));
+			"true".equals(m
+					.getAttributeValue(ModelAttributeNames.AN_TRAINED_WITH_HOLDS));
 		Date lastTrainingDate =
-			ltd == null
-				|| ltd.length() == 0 ? null : new Date(Long.parseLong(ltd));
-		String ft = m.getAttributeValue(ModelAttributeNames.AN_FIRING_THRESHOLD);
+			ltd == null || ltd.length() == 0 ? null : new Date(
+					Long.parseLong(ltd));
+		String ft =
+			m.getAttributeValue(ModelAttributeNames.AN_FIRING_THRESHOLD);
 		int firingThreshold = 3;
 		if (ft != null)
 			firingThreshold = Integer.parseInt(ft);
 		boolean enableAllCluesBeforeTraining =
-			"true".equals(m.getAttributeValue(ModelAttributeNames.AN_ENABLE_ALL_CLUES_BEFORE_TRAINING));
+			"true".equals(m
+					.getAttributeValue(ModelAttributeNames.AN_ENABLE_ALL_CLUES_BEFORE_TRAINING));
 		boolean enableAllRulesBeforeTraining =
-			"true".equals(m.getAttributeValue(ModelAttributeNames.AN_ENABLE_ALL_RULES_BEFORE_TRAINING));
+			"true".equals(m
+					.getAttributeValue(ModelAttributeNames.AN_ENABLE_ALL_RULES_BEFORE_TRAINING));
 		String userName = m.getAttributeValue(ModelAttributeNames.AN_USER_NAME);
-		boolean useAnt = "true".equals(m.getAttributeValue(ModelAttributeNames.AN_USE_ANT));
-		String antCommand = m.getAttributeValue(ModelAttributeNames.AN_ANT_COMMAND);
+		boolean useAnt =
+			"true".equals(m.getAttributeValue(ModelAttributeNames.AN_USE_ANT));
+		String antCommand =
+			m.getAttributeValue(ModelAttributeNames.AN_ANT_COMMAND);
 		if (antCommand == null)
 			antCommand = "";
-		String accessorName = m.getAttributeValue(ModelAttributeNames.AN_ACCESSOR_CLASS);
+		String accessorName =
+			m.getAttributeValue(ModelAttributeNames.AN_ACCESSOR_CLASS);
 		Accessor accessor = null;
 
-		ClassLoader classLoader = customClassLoader;
-		if (classLoader == null) {
-			classLoader = XmlConfigurator.getInstance().reload();
-		}
-		logger.fine("classLoader == " + customClassLoader);
+		IProbabilityModel retVal = null;
+		try {
+			ClassLoader classLoader = customClassLoader;
+			if (classLoader == null) {
+				classLoader = XmlConfigurator.getInstance().reload();
+			}
+			logger.fine("classLoader == " + customClassLoader);
 
-		if (classLoader instanceof URLClassLoader) {
-			String resourcePath = accessorName.replace('.', '/') + ".class";
-			URL resourceUrl =
-				((URLClassLoader) classLoader).findResource(resourcePath);
-			if (resourceUrl == null) {
-				CompilationArguments arguments = new CompilationArguments();
-				//String[] args = { clueFileName };
-				String[] args =
-					{
-						FileUtilities
-							.getAbsoluteFile(
+			if (classLoader instanceof URLClassLoader) {
+				String resourcePath = accessorName.replace('.', '/') + ".class";
+				URL resourceUrl =
+					((URLClassLoader) classLoader).findResource(resourcePath);
+				if (resourceUrl == null) {
+					CompilationArguments arguments = new CompilationArguments();
+					// String[] args = { clueFileName };
+					String[] args =
+						{ FileUtilities.getAbsoluteFile(
 								new File(fileName).getParentFile(),
-								clueFileName)
-							.toString()};
-				arguments.enter(args);
-				try {
+								clueFileName).toString() };
+					arguments.enter(args);
 					accessorName = compiler.compile(arguments, statusOutput);
-				} catch (CompilerException x) {
-					throw new XmlConfException(
-						"Compilation error:" + x.toString(),
-						x);
-				}
-				if (accessorName == null) {
-					throw new XmlConfException(
-						"Compilation error: " + statusOutput.toString());
+					if (accessorName == null) {
+						throw new CompilerException("Compilation error: "
+								+ statusOutput.toString());
+					}
 				}
 			}
-		}
-		try {
 			accessor = PMManager.createAccessor(accessorName, classLoader);
-		} catch (ClassNotFoundException ex2) {
-			throw new XmlConfException("Internal error.", ex2);
-		} catch (InstantiationException ex2) {
-			throw new XmlConfException("Internal error.", ex2);
-		} catch (IllegalAccessException ex2) {
-			throw new XmlConfException("Internal error.", ex2);
-		}
-		ClueDesc[] clueDesc = accessor.getClueSet().getClueDesc();
-		Map cm = new HashMap();
-		for (int i = 0; i < clueDesc.length; ++i) {
-			cm.put(clueDesc[i].getName(), new Integer(i));
-		}
-		boolean[] cluesToEvaluate = ArrayHelper.getTrueArray(clueDesc.length);
-		List cl = m.getChildren("clue");
-		int[] oldClueNums = new int[cl.size()];
-		int i = 0;
-		Iterator iCl = cl.iterator();
-		while (iCl.hasNext()) {
-			Element c = (Element) iCl.next();
-			String name = c.getAttributeValue("name");
-			Object o = cm.get(name);
-			if (o == null) {
-				o = getByOldName(clueDesc, name);
+			ClueDesc[] clueDesc = accessor.getClueSet().getClueDesc();
+			Map cm = new HashMap();
+			for (int i = 0; i < clueDesc.length; ++i) {
+				cm.put(clueDesc[i].getName(), new Integer(i));
 			}
-			if (o != null) {
-				int index = ((Integer) o).intValue();
-				oldClueNums[i] = index;
-				cluesToEvaluate[index] =
-					Boolean
-						.valueOf(c.getAttributeValue("evaluate"))
-						.booleanValue();
-			} else {
-				oldClueNums[i] = -1;
+			boolean[] cluesToEvaluate =
+				ArrayHelper.getTrueArray(clueDesc.length);
+			List cl = m.getChildren("clue");
+			int[] oldClueNums = new int[cl.size()];
+			int i = 0;
+			Iterator iCl = cl.iterator();
+			while (iCl.hasNext()) {
+				Element c = (Element) iCl.next();
+				String name = c.getAttributeValue("name");
+				Object o = cm.get(name);
+				if (o == null) {
+					o = getByOldName(clueDesc, name);
+				}
+				if (o != null) {
+					int index = ((Integer) o).intValue();
+					oldClueNums[i] = index;
+					cluesToEvaluate[index] =
+						Boolean.valueOf(c.getAttributeValue("evaluate"))
+								.booleanValue();
+				} else {
+					oldClueNums[i] = -1;
+				}
+				++i;
 			}
-			++i;
-		}
-		Element mle = m.getChild("machineLearner");
-		MachineLearner ml = null;
-		try {
+			Element mle = m.getChild("machineLearner");
+			MachineLearner ml = null;
 			String name = mle.getAttributeValue("class");
 			MlModelConf mc =
 				(MlModelConf) ExtensionPointMapper.getInstance(
-					ChoiceMakerExtensionPoint.CM_CORE_MACHINELEARNER,
-					name);
+						ChoiceMakerExtensionPoint.CM_CORE_MACHINELEARNER, name);
 			ml = mc.readMachineLearner(mle, accessor, cl, oldClueNums);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new XmlConfException("Internal error.", ex);
+			retVal =
+				new ProbabilityModel(fileName, clueFileName, accessor, ml,
+						cluesToEvaluate, trainingSource, trainedWithHolds,
+						lastTrainingDate, useAnt, antCommand);
+			retVal.setFiringThreshold(firingThreshold);
+			retVal.setEnableAllCluesBeforeTraining(enableAllCluesBeforeTraining);
+			retVal.setEnableAllRulesBeforeTraining(enableAllRulesBeforeTraining);
+			retVal.setUserName(userName);
+		} catch (Exception e) {
+			throw new ModelConfigurationException(e.toString(), e);
 		}
-		IProbabilityModel model =
-			new ProbabilityModel(
-				fileName,
-				clueFileName,
-				accessor,
-				ml,
-				cluesToEvaluate,
-				trainingSource,
-				trainedWithHolds,
-				lastTrainingDate,
-				useAnt,
-				antCommand);
-		model.setFiringThreshold(firingThreshold);
-		model.setEnableAllCluesBeforeTraining(enableAllCluesBeforeTraining);
-		model.setEnableAllRulesBeforeTraining(enableAllRulesBeforeTraining);
-		model.setUserName(userName);
-		return model;
+		assert retVal != null;
+		return retVal;
 	}
 
 	private static Integer getByOldName(ClueDesc[] clueDescs, String name) {
@@ -328,7 +311,7 @@ public class ProbabilityModelsXmlConf {
 	public static void loadProductionProbabilityModels(
 		ICompiler compiler,
 		boolean fromResource)
-		throws XmlConfException {
+		throws ModelConfigurationException {
 
 		// Precondition
 		if (compiler == null) {
@@ -383,7 +366,7 @@ public class ProbabilityModelsXmlConf {
 	}
 
 	public static void loadProductionProbabilityModels(ICompiler compiler)
-		throws XmlConfException {
+		throws ModelConfigurationException {
 		loadProductionProbabilityModels(compiler, false);
 	}
 }

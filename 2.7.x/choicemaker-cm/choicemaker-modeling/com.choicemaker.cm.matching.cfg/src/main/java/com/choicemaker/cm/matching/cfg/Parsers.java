@@ -17,21 +17,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
 import org.jdom.JDOMException;
 
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.matching.cfg.xmlconf.ParserXmlConf;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Comment
  *
- * @author   Adam Winkel
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
+ * @author Adam Winkel
+ * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:59 $
  */
 public final class Parsers {
 	private static HashMap parsers = new HashMap();
@@ -40,15 +39,15 @@ public final class Parsers {
 		initRegisteredParsers();
 		initRegisteredCascadedParsers();
 	}
-	
+
 	public static boolean has(String name) {
 		return parsers.containsKey(name);
 	}
-	
+
 	public static Parser get(String name) {
 		Object parser = parsers.get(name);
 		if (parser instanceof ParserDef) {
-			Parser p = ((ParserDef)parser).load();
+			Parser p = ((ParserDef) parser).load();
 			put(p);
 			return p;
 		} else {
@@ -65,15 +64,16 @@ public final class Parsers {
 		if (name == null) {
 			throw new IllegalArgumentException("A parser must have a name!");
 		}
-		
+
 		put(name, parser);
 	}
-	
+
 	public static void put(String name, Parser parser) {
 		if (name == null) {
-			throw new IllegalArgumentException("Cannot add a parser without a name!");
+			throw new IllegalArgumentException(
+					"Cannot add a parser without a name!");
 		}
-		
+
 		parsers.put(name, parser);
 	}
 
@@ -82,55 +82,60 @@ public final class Parsers {
 	}
 
 	static void initRegisteredParsers() {
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MATCHING_CFG_PARSER);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtension[] extensions =
+			CMPlatformUtils
+					.getExtensions(ChoiceMakerExtensionPoint.CM_MATCHING_CFG_PARSER);
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension ext = extensions[i];
+			CMExtension ext = extensions[i];
 			URL pUrl = ext.getDeclaringPluginDescriptor().getInstallURL();
-			IConfigurationElement[] els = ext.getConfigurationElements();
+			CMConfigurationElement[] els = ext.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement el = els[j];
+				CMConfigurationElement el = els[j];
 
 				String name = el.getAttribute("name");
 				String file = el.getAttribute("file");
-				
+
 				Parsers.put(new ParserDef(name, pUrl, file));
 			}
-		}	
+		}
 	}
-	
-	static void initRegisteredCascadedParsers() {
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER);
-		IExtension[] extensions = pt.getExtensions();
-		for (int i = 0; i < extensions.length; i++) {
-			IExtension ext = extensions[i];
-			IConfigurationElement[] els = ext.getConfigurationElements();
-			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement[] parserEls = els[j].getChildren();
 
-				CascadedParserDef cp = new CascadedParserDef(els[j].getAttribute("name"));				
+	static void initRegisteredCascadedParsers() {
+		CMExtension[] extensions = CMPlatformUtils
+				.getExtensions(ChoiceMakerExtensionPoint.CM_MATCHING_CFG_CASCADEDPARSER);
+		for (int i = 0; i < extensions.length; i++) {
+			CMExtension ext = extensions[i];
+			CMConfigurationElement[] els = ext.getConfigurationElements();
+			for (int j = 0; j < els.length; j++) {
+				CMConfigurationElement[] parserEls = els[j].getChildren();
+
+				CascadedParserDef cp =
+					new CascadedParserDef(els[j].getAttribute("name"));
 				for (int k = 0; k < parserEls.length; k++) {
-					IConfigurationElement el = parserEls[k];
-					
+					CMConfigurationElement el = parserEls[k];
+
 					String name = el.getAttribute("name");
 					if (name != null) {
 						if (Parsers.has(name)) {
 							cp.addParser(name);
 						} else {
-							throw new RuntimeException("Parser named " + name + " doesn't exist!");
+							throw new RuntimeException("Parser named " + name
+									+ " doesn't exist!");
 						}
 					} else {
-						throw new RuntimeException("Parser element must define either a name or a file attribute");
+						throw new RuntimeException(
+								"Parser element must define either a name or a file attribute");
 					}
 				}
-				
+
 				Parsers.put(cp);
 			}
-		}	
-		
+		}
+
 	}
 
-	private Parsers() { }
+	private Parsers() {
+	}
 
 	private static class ParserDef {
 		protected String name;
@@ -154,7 +159,8 @@ public final class Parsers {
 		public Parser load() {
 			try {
 				URL rUrl = new URL(pUrl, relPath);
-				Parser p = ParserXmlConf.readFromStream(rUrl.openStream(), pUrl);
+				Parser p =
+					ParserXmlConf.readFromStream(rUrl.openStream(), pUrl);
 				p.setName(name);
 				return p;
 			} catch (XmlConfException e) {
@@ -164,27 +170,30 @@ public final class Parsers {
 			} catch (JDOMException e) {
 				e.printStackTrace();
 			}
-			
+
 			return null;
 		}
 	}
-	
+
 	private static class CascadedParserDef extends ParserDef {
 		List kids = new ArrayList();
+
 		public CascadedParserDef(String name) {
 			super(name);
 		}
+
 		public void addParser(String name) {
 			kids.add(name);
 		}
+
 		public Parser load() {
 			CascadedParser cp = new CascadedParser();
 			cp.setName(name);
 			for (int i = 0; i < kids.size(); i++) {
-				Parser kid = Parsers.get((String)kids.get(i));
+				Parser kid = Parsers.get((String) kids.get(i));
 				cp.addParser(kid);
 			}
-			return cp;			
+			return cp;
 		}
 	}
 

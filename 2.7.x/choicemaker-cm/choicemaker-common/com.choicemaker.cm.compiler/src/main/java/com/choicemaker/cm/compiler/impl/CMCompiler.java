@@ -30,7 +30,6 @@ import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ProbabilityModelSpecification;
-import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.CompilationArguments;
@@ -256,16 +255,7 @@ public abstract class CMCompiler implements ICompiler {
 					PMManager.createAccessor(
 						accessorClass,
 						XmlConfigurator.getInstance().reload()));
-			} catch (ClassNotFoundException ex) {
-				logger.severe(ex.toString());
-				return false;
-			} catch (InstantiationException ex) {
-				logger.severe(ex.toString());
-				return false;
-			} catch (IllegalAccessException ex) {
-				logger.severe(ex.toString());
-				return false;
-			} catch (XmlConfException ex) {
+			} catch (Exception ex) {
 				logger.severe(ex.toString());
 				return false;
 			}

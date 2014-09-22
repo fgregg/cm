@@ -23,9 +23,6 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -63,6 +60,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingSer
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService2;
 import com.choicemaker.cm.server.ejb.impl.CountsUpdate;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 // import com.choicemaker.cm.core.base.Accessor;
 
@@ -322,9 +321,9 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		new CountsUpdate().cacheCounts(configuration.getDataSource());
 
 		RecordDecisionMaker dm = new RecordDecisionMaker();
-		IExtension dbaExt =
-			Platform.getPluginRegistry().getExtension(DATABASE_ACCESSOR,
-					(String) model.properties().get(DATABASE_ACCESSOR));
+		CMExtension dbaExt =
+			CMPlatformUtils.getExtension(DATABASE_ACCESSOR, (String) model
+					.properties().get(DATABASE_ACCESSOR));
 		DatabaseAccessor databaseAccessor =
 			(DatabaseAccessor) dbaExt.getConfigurationElements()[0]
 					.createExecutableExtension("class");
@@ -333,15 +332,14 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 		RecordSource stage = data.staging;
 		stage.setModel(model);
-		
+
 		try {
 			stage.open();
 			mSinkFinal.append();
 			MatchCandidateFactory matchCandidateFactory =
-				(MatchCandidateFactory) Platform
-						.getPluginRegistry()
-						.getExtension(MATCH_CANDIDATE,
-								"com.choicemaker.cm.core.beanMatchCandidate")
+				(MatchCandidateFactory) CMPlatformUtils.getExtension(
+						MATCH_CANDIDATE,
+						"com.choicemaker.cm.core.beanMatchCandidate")
 						.getConfigurationElements()[0]
 						.createExecutableExtension("class");
 			log.fine("MatchCandidateFactory class: "

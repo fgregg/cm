@@ -24,13 +24,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.util.ConvUtils;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Relations provide support for generic relations.
@@ -198,14 +196,15 @@ public final class Relations {
 	 * Called by GenPlugin to init the registered relations.
 	 */
 	static void initRegisteredRelations() {
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MATCHING_GEN_RELATION);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtension[] extensions =
+			CMPlatformUtils
+					.getExtensions(ChoiceMakerExtensionPoint.CM_MATCHING_GEN_RELATION);
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension ext = extensions[i];
+			CMExtension ext = extensions[i];
 			URL pUrl = ext.getDeclaringPluginDescriptor().getInstallURL();
-			IConfigurationElement[] els = ext.getConfigurationElements();
+			CMConfigurationElement[] els = ext.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement el = els[j];
+				CMConfigurationElement el = els[j];
 
 				String name = el.getAttribute("name");
 				String file = el.getAttribute("file");

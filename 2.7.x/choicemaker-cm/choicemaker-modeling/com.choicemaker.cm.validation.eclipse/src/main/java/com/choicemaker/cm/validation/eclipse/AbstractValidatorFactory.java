@@ -19,15 +19,12 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IPluginRegistry;
-import org.eclipse.core.runtime.Platform;
-
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.cm.validation.ValidatorCreationException;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.util.StringUtils;
 
 /**
@@ -39,34 +36,44 @@ import com.choicemaker.util.StringUtils;
 public abstract class AbstractValidatorFactory implements IValidatorFactory {
 
 	/**
-	 * An immutable tuple consisting of a validator configuation name, the validator,
-	 * and optionally the name of the validator extension point.
+	 * An immutable tuple consisting of a validator configuation name, the
+	 * validator, and optionally the name of the validator extension point.
 	 */
 	public static class NamedValidator {
 		public final String configurationName;
 		public final String extensionPointName;
 		public final IValidator validator;
+
 		/**
-		 * Create a NamedValidator without specifying
-		 * the validator extension point
-		 * @param n the validator configuration name
-		 * @param v the validator
+		 * Create a NamedValidator without specifying the validator extension
+		 * point
+		 * 
+		 * @param n
+		 *            the validator configuration name
+		 * @param v
+		 *            the validator
 		 */
 		public NamedValidator(String n, IValidator v) {
-			this(n,v,null);
+			this(n, v, null);
 		}
+
 		/**
 		 * Create a NamedValidator
-		 * @param n the validator configuration name
-		 * @param v the validator
-		 * @param e the name of the validator extension point
+		 * 
+		 * @param n
+		 *            the validator configuration name
+		 * @param v
+		 *            the validator
+		 * @param e
+		 *            the name of the validator extension point
 		 */
 		public NamedValidator(String n, IValidator v, String e) {
 			this.configurationName = n;
 			this.validator = v;
 			this.extensionPointName = e;
 			if (!StringUtils.nonEmptyString(n)) {
-				throw new IllegalArgumentException("null or blank validator name");
+				throw new IllegalArgumentException(
+						"null or blank validator name");
 			}
 			if (validator == null) {
 				throw new IllegalArgumentException("null validator");
@@ -75,7 +82,8 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	}
 
 	/**
-	 * Cached array of registered validator names.<ul>
+	 * Cached array of registered validator names.
+	 * <ul>
 	 * <li>key - factory class name</li>
 	 * <li>value - factory-specific array of validator names</li>
 	 * </ul>
@@ -84,7 +92,8 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	protected static Map cachedValidatorNamesMap = new HashMap();
 
 	/**
-	 * Cached maps of validators.<ul>
+	 * Cached maps of validators.
+	 * <ul>
 	 * <li>key - factory class name</li>
 	 * <li>value - factory-specific map of validators</li>
 	 * </ul>
@@ -93,7 +102,8 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	protected static Map cachedValidatorsMap = new HashMap();
 
 	/**
-	 * One extension point per factory class.<ul>
+	 * One extension point per factory class.
+	 * <ul>
 	 * <li>key - factory class name</li>
 	 * <li>value - factory-specific extension point name</li>
 	 * </ul>
@@ -101,8 +111,8 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	// private static String handledValidatorExtensionPoint;
 	protected static Map handledValidatorExtensionPointsMap = new HashMap();
 
-	private static Logger logger =
-		Logger.getLogger(AbstractValidatorFactory.class.getName());
+	private static Logger logger = Logger
+			.getLogger(AbstractValidatorFactory.class.getName());
 
 	/** Cached map of extension points to ValidatorFactories */
 	private static Map validatorFactories = null;
@@ -111,23 +121,26 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	private static final Object validatorFactoriesInit = new Object();
 
 	public static IValidator createValidator(String name, String extensionPoint)
-		throws ValidatorCreationException {
+			throws ValidatorCreationException {
 
 		// Preconditions
 		if (!StringUtils.nonEmptyString(name)) {
-			throw new IllegalArgumentException("null or blank validator configuration name");
+			throw new IllegalArgumentException(
+					"null or blank validator configuration name");
 		}
 		if (!StringUtils.nonEmptyString(extensionPoint)) {
-			throw new IllegalArgumentException("null or blank name for validator extension point");
+			throw new IllegalArgumentException(
+					"null or blank name for validator extension point");
 		}
 
 		// Get factory for the extension point
-		Map factories  = AbstractValidatorFactory.getValidatorFactories();
-		IValidatorFactory factory = (IValidatorFactory) factories.get(extensionPoint);
+		Map factories = AbstractValidatorFactory.getValidatorFactories();
+		IValidatorFactory factory =
+			(IValidatorFactory) factories.get(extensionPoint);
 		if (factory == null) {
-				String msg = "no validator factory for '" + extensionPoint + "'";
-				logger.severe(msg);
-				throw new ValidatorCreationException(msg);
+			String msg = "no validator factory for '" + extensionPoint + "'";
+			logger.severe(msg);
+			throw new ValidatorCreationException(msg);
 		}
 
 		// Ask the factory to create the extension point
@@ -138,40 +151,42 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 
 	/**
 	 * Creates a map of validator extension points to validator factories.
-	 * @return a non-null, but possibly empty map of validator
-	 * extension points to factories.
+	 * 
+	 * @return a non-null, but possibly empty map of validator extension points
+	 *         to factories.
 	 */
 	public static Map createValidatorFactoryMap()
-		throws ValidatorCreationException {
+			throws ValidatorCreationException {
 
 		Map retVal = new HashMap();
-		IPluginRegistry registry = Platform.getPluginRegistry();
-		IExtensionPoint pt =
-			registry.getExtensionPoint(IValidatorFactory.VALIDATOR_FACTORY_EXTENSION_POINT);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtension[] extensions =
+			CMPlatformUtils
+					.getExtensions(IValidatorFactory.VALIDATOR_FACTORY_EXTENSION_POINT);
 
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension ext = extensions[i];
-			IConfigurationElement[] els = ext.getConfigurationElements();
+			CMExtension ext = extensions[i];
+			CMConfigurationElement[] els = ext.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement el = els[j];
+				CMConfigurationElement el = els[j];
 
 				String handledExtensionPoint =
 					el.getAttribute("handledValidatorExtensionPoint");
-				IValidatorFactory factory = (IValidatorFactory) retVal.get(handledExtensionPoint);
+				IValidatorFactory factory =
+					(IValidatorFactory) retVal.get(handledExtensionPoint);
 				if (factory == null) {
 					try {
 						Object o = el.createExecutableExtension("class");
 						factory = (IValidatorFactory) o;
-					} catch (CoreException x) {
+					} catch (Exception x) {
 						String className = el.getAttribute("class");
-						String msg = registryExceptionMessage(className,handledExtensionPoint,x);
+						String msg =
+							registryExceptionMessage(className,
+									handledExtensionPoint, x);
 						logger.severe(msg);
-						throw new ValidatorCreationException(msg,x);
+						throw new ValidatorCreationException(msg, x);
 					}
-					factory.setHandledValidatorExtensionPoint(
-						handledExtensionPoint);
-					retVal.put(handledExtensionPoint,factory);
+					factory.setHandledValidatorExtensionPoint(handledExtensionPoint);
+					retVal.put(handledExtensionPoint, factory);
 				} // if null factory
 			} // for j validator extension configurations
 		} // for i validator extensions
@@ -180,7 +195,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 
 	public static Map getValidatorFactories() throws ValidatorCreationException {
 		if (validatorFactories == null) {
-			synchronized(validatorFactoriesInit) {
+			synchronized (validatorFactoriesInit) {
 				if (validatorFactories == null) {
 					validatorFactories = createValidatorFactoryMap();
 				}
@@ -189,33 +204,27 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		return Collections.unmodifiableMap(validatorFactories);
 	}
 
-	protected static String registryExceptionMessage(
-		String registryName,
-		String extension,
-		Exception x) {
+	protected static String registryExceptionMessage(String registryName,
+			String extension, Exception x) {
 		String retVal =
-			"registry name (validator or factory) '"
-				+ registryName
-				+ "' (extension '"
-				+ extension
-				+ "'): "
-				+ x.getClass().getName()
-				+ ": "
-				+ x.getMessage();
+			"registry name (validator or factory) '" + registryName
+					+ "' (extension '" + extension + "'): "
+					+ x.getClass().getName() + ": " + x.getMessage();
 		return retVal;
 	}
 
 	/**
-	 * The {@link setHandledValidatorExtensionPoint(String)} method
-	 * must be called after construction and before other methods are
-	 * used.
+	 * The {@link setHandledValidatorExtensionPoint(String)} method must be
+	 * called after construction and before other methods are used.
 	 */
 	public AbstractValidatorFactory() {
 	}
 
 	/**
 	 * Sets the extension point handled by this factory.
-	 * @param id	validator extension point handled by this factory.
+	 * 
+	 * @param id
+	 *            validator extension point handled by this factory.
 	 */
 	public AbstractValidatorFactory(String id) {
 		setHandledValidatorExtensionPoint(id);
@@ -227,11 +236,15 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		return retVal;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#createValidator(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.validation.eclipse.IValidatorFactory#createValidator
+	 * (java.lang.String)
 	 */
 	public IValidator createValidator(String name)
-		throws ValidatorCreationException {
+			throws ValidatorCreationException {
 
 		// Precondition
 		if (!StringUtils.nonEmptyString(name)) {
@@ -258,19 +271,17 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	} // createValidator(String)
 
 	private IValidator createValidatorFromRegistry(String name)
-		throws ValidatorCreationException {
+			throws ValidatorCreationException {
 
-		IPluginRegistry registry = Platform.getPluginRegistry();
 		String extensionId = this.getHandledValidatorExtensionPoint();
-		IExtensionPoint pt = registry.getExtensionPoint(extensionId);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtension[] extensions = CMPlatformUtils.getExtensions(extensionId);
 
 		IValidator retVal = null;
 		for (int i = 0; retVal == null && i < extensions.length; i++) {
-			IExtension ext = extensions[i];
-			IConfigurationElement[] els = ext.getConfigurationElements();
+			CMExtension ext = extensions[i];
+			CMConfigurationElement[] els = ext.getConfigurationElements();
 			for (int j = 0; retVal == null && j < els.length; j++) {
-				IConfigurationElement el = els[j];
+				CMConfigurationElement el = els[j];
 				try {
 					String validatorName =
 						getValidatorNameFromRegistryConfigurationElement(el);
@@ -280,8 +291,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 						retVal = nv.validator;
 					} // if validatorName
 				} catch (Exception x) {
-					String msg =
-						registryExceptionMessage(name, extensionId, x);
+					String msg = registryExceptionMessage(name, extensionId, x);
 					logger.severe(msg);
 					throw new ValidatorCreationException(msg, x);
 				}
@@ -298,17 +308,24 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	} // createValidatorFromRegistry
 
 	/**
-	 * Abstract, factory-dependent method that must be implemented
-	 * by subclasses.
-	 * @param els ConfigurationElements associated with a validator extension.
+	 * Abstract, factory-dependent method that must be implemented by
+	 * subclasses.
+	 * 
+	 * @param els
+	 *            ConfigurationElements associated with a validator extension.
 	 * @return the validator specified by the extension.
-	 * @throws Exception if the validator can not be created.
+	 * @throws Exception
+	 *             if the validator can not be created.
 	 */
-	protected abstract NamedValidator createValidatorFromRegistryConfigurationElement(IConfigurationElement el)
-		throws Exception;
+	protected abstract NamedValidator createValidatorFromRegistryConfigurationElement(
+			CMConfigurationElement el) throws Exception;
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#createValidators()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.validation.eclipse.IValidatorFactory#createValidators
+	 * ()
 	 */
 	public Map createValidators() throws ValidatorCreationException {
 		invariant();
@@ -322,8 +339,7 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		return retVal;
 	} // createValidators()
 
-	public Map createValidatorsFromRegistry()
-		throws ValidatorCreationException {
+	public Map createValidatorsFromRegistry() throws ValidatorCreationException {
 		invariant();
 		Map retVal = new HashMap();
 
@@ -332,23 +348,22 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 
-		IPluginRegistry registry = Platform.getPluginRegistry();
 		String extensionId = this.getHandledValidatorExtensionPoint();
-		IExtensionPoint pt = registry.getExtensionPoint(extensionId);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtension[] extensions = CMPlatformUtils.getExtensions(extensionId);
 
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension ext = extensions[i];
-			IConfigurationElement[] els = ext.getConfigurationElements();
+			CMExtension ext = extensions[i];
+			CMConfigurationElement[] els = ext.getConfigurationElements();
 			NamedValidator nv = null;
 			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement el = els[j];
+				CMConfigurationElement el = els[j];
 				try {
 					nv = createValidatorFromRegistryConfigurationElement(el);
 					retVal.put(nv.configurationName, nv.validator);
 				} catch (Exception x) {
 					isError = true;
-					String nvConfName = nv == null ? "null" : nv.configurationName;
+					String nvConfName =
+						nv == null ? "null" : nv.configurationName;
 					String msg =
 						registryExceptionMessage(nvConfName, extensionId, x);
 					logger.severe(msg);
@@ -365,8 +380,11 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		return retVal;
 	} // createValidatorsFromRegistry()
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#getHandledValidatorExtensionPoint()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#
+	 * getHandledValidatorExtensionPoint()
 	 */
 	public String getHandledValidatorExtensionPoint() {
 		invariant();
@@ -374,16 +392,19 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 		String retVal = (String) handledValidatorExtensionPointsMap.get(key);
 		if (!StringUtils.nonEmptyString(retVal)) {
 			throw new IllegalStateException(
-				"null or blank handled extension point for " + key);
+					"null or blank handled extension point for " + key);
 		}
 		return retVal;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#getRegisteredValidatorNames()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#
+	 * getRegisteredValidatorNames()
 	 */
 	public String[] getRegisteredValidatorNames()
-		throws ValidatorCreationException {
+			throws ValidatorCreationException {
 		invariant();
 		String key = this.getClass().getName();
 		String[] cachedValidatorNames =
@@ -400,15 +421,18 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	}
 
 	/**
-	 * Abstract, factory-dependent method that must be implemented
-	 * by subclasses.
-	 * @param els ConfigurationElements associated with a validator extension.
+	 * Abstract, factory-dependent method that must be implemented by
+	 * subclasses.
+	 * 
+	 * @param els
+	 *            ConfigurationElements associated with a validator extension.
 	 * @return the plugin name of the validator
-	 * @throws Exception if a non-null, non-empty name could
-	 * not be determined for the validator
+	 * @throws Exception
+	 *             if a non-null, non-empty name could not be determined for the
+	 *             validator
 	 */
-	protected String getValidatorNameFromRegistryConfigurationElement(IConfigurationElement el)
-		throws Exception {
+	protected String getValidatorNameFromRegistryConfigurationElement(
+			CMConfigurationElement el) throws Exception {
 		String retVal = el.getAttribute("name");
 		return retVal;
 	}
@@ -417,21 +441,26 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 	 * Checks that a factory has been properly initialized.
 	 */
 	private void invariant() {
-		/* Not a useful invariant
-		String key = this.getClass().getName();
-		String handledValidatorExtensionPoint = handledValidatorExtensionPointsMap.get(key);
-		if (handledValidatorExtensionPoint == null) {
-			throw new IllegalStateException("not initialized: null handledValidatorExtensionPointsMap");
-		}
-		*/
+		/*
+		 * Not a useful invariant String key = this.getClass().getName(); String
+		 * handledValidatorExtensionPoint =
+		 * handledValidatorExtensionPointsMap.get(key); if
+		 * (handledValidatorExtensionPoint == null) { throw new
+		 * IllegalStateException
+		 * ("not initialized: null handledValidatorExtensionPointsMap"); }
+		 */
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#setHandledValidatorExtensionPoint(String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.validation.eclipse.IValidatorFactory#
+	 * setHandledValidatorExtensionPoint(String)
 	 */
 	public void setHandledValidatorExtensionPoint(String id) {
 		if (!StringUtils.nonEmptyString(id)) {
-			throw new IllegalArgumentException("null handled extension point id");
+			throw new IllegalArgumentException(
+					"null handled extension point id");
 		}
 		String trimmedId = id.trim();
 		String key = this.getClass().getName();
@@ -439,21 +468,16 @@ public abstract class AbstractValidatorFactory implements IValidatorFactory {
 			(String) handledValidatorExtensionPointsMap.get(key);
 		if (handledValidatorExtensionPoint == null) {
 			handledValidatorExtensionPointsMap.put(key, trimmedId);
-		} else if (
-			!handledValidatorExtensionPoint.equals(trimmedId)) {
+		} else if (!handledValidatorExtensionPoint.equals(trimmedId)) {
 			throw new IllegalArgumentException(
-				"new value '"
-					+ id
-					+ "' of handled extension point id differs from current value '"
-					+ handledValidatorExtensionPoint
-					+ "'");
+					"new value '"
+							+ id
+							+ "' of handled extension point id differs from current value '"
+							+ handledValidatorExtensionPoint + "'");
 		} else {
-			logger.fine(
-				"redundant value '"
-					+ trimmedId
+			logger.fine("redundant value '" + trimmedId
 					+ "' for handled extension point id");
 		}
 	}
 
 }
-

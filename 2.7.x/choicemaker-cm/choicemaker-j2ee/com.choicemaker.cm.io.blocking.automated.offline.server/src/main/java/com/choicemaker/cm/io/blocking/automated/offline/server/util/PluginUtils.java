@@ -12,25 +12,26 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.util;
 
 import java.util.logging.Logger;
 
-import org.eclipse.core.runtime.IPluginDescriptor;
-import org.eclipse.core.runtime.IPluginRegistry;
-import org.eclipse.core.runtime.Platform;
+import com.choicemaker.e2.CMPluginDescriptor;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * @author pcheung
  *
  */
 public class PluginUtils {
-	private static final Logger log = Logger.getLogger(PluginUtils.class.getName());
 
-	public static void debugPlugins () {
-		IPluginRegistry registry = Platform.getPluginRegistry();
-		IPluginDescriptor[] plugins = registry.getPluginDescriptors();
+	private static final Logger log = Logger.getLogger(PluginUtils.class
+			.getName());
+
+	public static void debugPlugins() {
+		CMPluginDescriptor[] plugins = CMPlatformUtils.getPluginDescriptors();
 		for (int i = 0; i < plugins.length; i++) {
 			if (plugins[i].isPluginActivated()) {
 				log.fine("Plugin active: " + plugins[i].getUniqueIdentifier());
 			} else {
-				log.fine("Plugin NOT active: " + plugins[i].getUniqueIdentifier());				
+				log.fine("Plugin NOT active: "
+						+ plugins[i].getUniqueIdentifier());
 			}
 		}
 	}

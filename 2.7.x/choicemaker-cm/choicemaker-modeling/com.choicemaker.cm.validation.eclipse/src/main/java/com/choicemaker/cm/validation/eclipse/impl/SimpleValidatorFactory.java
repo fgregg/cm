@@ -10,10 +10,9 @@
  */
 package com.choicemaker.cm.validation.eclipse.impl;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory;
+import com.choicemaker.e2.CMConfigurationElement;
 
 /**
  * Factory class for simple validators. Simple validators have a default constructor
@@ -44,10 +43,10 @@ public class SimpleValidatorFactory extends AbstractValidatorFactory {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory#createValidatorFromRegistryConfigurationElements(org.eclipse.core.runtime.IConfigurationElement[])
+	 * @see com.choicemaker.cm.validation.eclipse.AbstractValidatorFactory#createValidatorFromRegistryConfigurationElements(org.eclipse.core.runtime.CMConfigurationElement[])
 	 */
-	protected NamedValidator createValidatorFromRegistryConfigurationElement(IConfigurationElement el)
-		throws Exception {
+	protected NamedValidator createValidatorFromRegistryConfigurationElement(
+			CMConfigurationElement el) throws Exception {
 
 		String validatorName = el.getAttribute("name");
 		Object o = el.createExecutableExtension("class");

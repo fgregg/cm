@@ -17,14 +17,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.module.IModuleController;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * @author  rphall
@@ -74,38 +71,33 @@ public class DefaultModuleMenu extends JMenu {
 	}
 
 	private void buildPluginClusterMenuItems() {
-		IExtensionPoint pt =
-			Platform.getPluginRegistry().getExtensionPoint(
-				ChoiceMakerExtensionPoint.CM_MODELMAKER_PLUGGABLEMENUITEM);
-		if (pt != null) {
-			IExtension[] extensions = pt.getExtensions();
+		CMExtension[] extensions = CMPlatformUtils
+				.getExtensions(ChoiceMakerExtensionPoint.CM_MODELMAKER_PLUGGABLEMENUITEM);
 			for (int i = 0; i < extensions.length; i++) {
-				IExtension extension = extensions[i];
-				IConfigurationElement[] els = extension.getConfigurationElements();
+				CMExtension extension = extensions[i];
+				CMConfigurationElement[] els = extension.getConfigurationElements();
 				for (int j = 0; j < els.length; j++) {
 					try {
 						JMenuItem item = buildModuleItem(els[j]);
 						add(item);
-					} catch (CoreException ex) {
+					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				}
 			}
 		}
-	}
 
-	private JMenuItem buildModuleItem(IConfigurationElement element)
-		throws CoreException {
-		Action action = (Action) element.createExecutableExtension("class");
+	private JMenuItem buildModuleItem(CMConfigurationElement e) throws Exception {
+		Action action = (Action) e.createExecutableExtension("class");
 		if (action instanceof ModuleAction) {
 			ModuleAction ca = (ModuleAction) action;
 			ca.setModule(module);
 		}
 
 		JMenuItem retVal = null;
-		IConfigurationElement[] kids = element.getChildren();
+		CMConfigurationElement[] kids = e.getChildren();
 		if (kids.length > 0) {
-			String name = element.getName();
+			String name = e.getName();
 			if (name.equals("action")) {
 				retVal = new JMenu(action);
 				for (int i = 0; i < kids.length; i++) {
@@ -125,7 +117,7 @@ public class DefaultModuleMenu extends JMenu {
 			}
 
 		} else {
-			String name = element.getName();
+			String name = e.getName();
 			if (name.equals("action")) {
 				retVal = new JMenuItem(action);
 			} else if (name.equals("toggle")) {

@@ -19,14 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.matching.wfst.AmbiguousParser;
 import com.choicemaker.cm.matching.wfst.WfstParser;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Collection of {@link AmbiguousParser ambiguous} parsers, implemented by
@@ -155,16 +153,15 @@ public final class WfstParsers {
 	 * Loads  parsers registered by plugins.
 	 */
 	static void initRegisteredWfstParsers() {
-		IExtensionPoint pt =
-			Platform.getPluginRegistry().getExtensionPoint(
-				ChoiceMakerExtensionPoint.CM_MATCHING_WFST_PARSER);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtension[] extensions =
+			CMPlatformUtils
+					.getExtensions(ChoiceMakerExtensionPoint.CM_MATCHING_WFST_PARSER);
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension ext = extensions[i];
+			CMExtension ext = extensions[i];
 			URL pUrl = ext.getDeclaringPluginDescriptor().getInstallURL();
-			IConfigurationElement[] els = ext.getConfigurationElements();
+			CMConfigurationElement[] els = ext.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement el = els[j];
+				CMConfigurationElement el = els[j];
 
 				String name = el.getAttribute("name");
 				String filterFile = el.getAttribute("filterFile");

@@ -24,9 +24,6 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.InvalidProfileException;
@@ -51,6 +48,8 @@ import com.choicemaker.cm.server.base.InvalidModelException;
 import com.choicemaker.cm.server.base.Result;
 import com.choicemaker.cm.server.base.UnderspecifiedProfileException;
 //import com.choicemaker.cm.core.base.Accessor;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Comment
@@ -146,7 +145,7 @@ public class QueryServiceBean implements SessionBean {
 			RecordDecisionMaker dm = new RecordDecisionMaker();
 			DatabaseAccessor databaseAccessor;
 			try {
-				IExtension dbaExt = Platform.getPluginRegistry().getExtension(DATABASE_ACCESSOR, (String) model.properties().get(DATABASE_ACCESSOR));
+				CMExtension dbaExt = CMPlatformUtils.getExtension(DATABASE_ACCESSOR, (String) model.properties().get(DATABASE_ACCESSOR));
 				databaseAccessor = (DatabaseAccessor) dbaExt.getConfigurationElements()[0].createExecutableExtension("class");
 				databaseAccessor.setCondition(constraint);
 				databaseAccessor.setDataSource(blockingSource);
@@ -182,8 +181,7 @@ public class QueryServiceBean implements SessionBean {
 			} else {
 				try {
 					matchCandidateFactory =
-						(MatchCandidateFactory) Platform
-							.getPluginRegistry()
+						(MatchCandidateFactory) CMPlatformUtils
 							.getExtension(MATCH_CANDIDATE, returnDataFormat)
 							.getConfigurationElements()[0]
 							.createExecutableExtension(

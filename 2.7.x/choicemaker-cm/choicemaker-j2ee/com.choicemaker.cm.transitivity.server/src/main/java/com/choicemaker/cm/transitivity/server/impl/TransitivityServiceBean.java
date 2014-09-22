@@ -23,9 +23,6 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.InvalidProfileException;
@@ -52,6 +49,8 @@ import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.server.util.MatchBiconnectedIterator;
 import com.choicemaker.cm.transitivity.util.CEFromMatchCandidatesBuilder;
 import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 
 /**
@@ -120,7 +119,7 @@ public class TransitivityServiceBean implements SessionBean {
 		RecordDecisionMaker dm = new RecordDecisionMaker();
 		DatabaseAccessor databaseAccessor;
 		try {
-			IExtension dbaExt = Platform.getPluginRegistry().getExtension(DATABASE_ACCESSOR, (String) model.properties().get(DATABASE_ACCESSOR));
+			CMExtension dbaExt = CMPlatformUtils.getExtension(DATABASE_ACCESSOR, (String) model.properties().get(DATABASE_ACCESSOR));
 			databaseAccessor = (DatabaseAccessor) dbaExt.getConfigurationElements()[0].createExecutableExtension("class");
 			databaseAccessor.setCondition(constraint);
 			databaseAccessor.setDataSource(blockingSource);

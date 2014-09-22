@@ -16,10 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -27,25 +23,39 @@ import org.jdom.input.SAXBuilder;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMExtensionPoint;
+import com.choicemaker.e2.E2Exception;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
- * XML configuration for marked record pairs. Each actual source type
- * has its own XML configurator in the respective io.type package.
+ * XML configuration for marked record pairs. Each actual source type has its
+ * own XML configurator in the respective io.type package.
  *
- * @author    Martin Buechi
- * @version   $Revision: 1.1 $ $Date: 2010/01/20 15:05:01 $
+ * @author Martin Buechi
+ * @version $Revision: 1.1 $ $Date: 2010/01/20 15:05:01 $
  */
 public class MarkedRecordPairSourceXmlConf {
-	public static final String EXTENSION_POINT = ChoiceMakerExtensionPoint.CM_CORE_MRPSREADER;
-	public static final String EXTENSION_POINT_2 = ChoiceMakerExtensionPoint.CM_CORE_FILEMRPSREADER;
+
+	public static final String EXTENSION_POINT =
+		ChoiceMakerExtensionPoint.CM_CORE_MRPSREADER;
+	public static final String EXTENSION_POINT_2 =
+		ChoiceMakerExtensionPoint.CM_CORE_FILEMRPSREADER;
 
 	public static HashMap fileMrpsReaders;
 
 	public static void add(MarkedRecordPairSource src) throws XmlConfException {
-		((MarkedRecordPairSourceXmlConfigurator)ExtensionPointMapper.getInstance(EXTENSION_POINT, src.getClass())).add(src);
+		try {
+			((MarkedRecordPairSourceXmlConfigurator) ExtensionPointMapper
+					.getInstance(EXTENSION_POINT, src.getClass())).add(src);
+		} catch (E2Exception e) {
+			throw new XmlConfException(e.toString(), e);
+		}
 	}
 
-	public static MarkedRecordPairSource getMarkedRecordPairSource(String fileName) throws XmlConfException {
+	public static MarkedRecordPairSource getMarkedRecordPairSource(
+			String fileName) throws XmlConfException {
 
 		try {
 			// the extension way
@@ -62,7 +72,9 @@ public class MarkedRecordPairSourceXmlConf {
 				}
 				Class cls = (Class) fileMrpsReaders.get(extension);
 				if (cls != null) {
-					MarkedRecordPairSourceXmlConfigurator c = (MarkedRecordPairSourceXmlConfigurator) cls.newInstance();
+					MarkedRecordPairSourceXmlConfigurator c =
+						(MarkedRecordPairSourceXmlConfigurator) cls
+								.newInstance();
 					return c.getMarkedRecordPairSource(fileName, null, null);
 				}
 			}
@@ -72,7 +84,9 @@ public class MarkedRecordPairSourceXmlConf {
 			Document document = builder.build(fileName);
 			Element e = document.getRootElement();
 			String cls = e.getAttributeValue("class");
-			MarkedRecordPairSourceXmlConfigurator c = (MarkedRecordPairSourceXmlConfigurator)ExtensionPointMapper.getInstance(EXTENSION_POINT, cls);
+			MarkedRecordPairSourceXmlConfigurator c =
+				(MarkedRecordPairSourceXmlConfigurator) ExtensionPointMapper
+						.getInstance(EXTENSION_POINT, cls);
 			return c.getMarkedRecordPairSource(fileName, e, null);
 		} catch (Exception ex) {
 			throw new XmlConfException("Internal error.", ex);
@@ -82,10 +96,11 @@ public class MarkedRecordPairSourceXmlConf {
 	public static void initFileMrpsReaders() {
 		fileMrpsReaders = new HashMap();
 
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(EXTENSION_POINT_2);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtension[] extensions =
+			CMPlatformUtils.getExtensions(EXTENSION_POINT_2);
 		for (int i = 0; i < extensions.length; i++) {
-			IConfigurationElement[] elems = extensions[i].getConfigurationElements();
+			CMConfigurationElement[] elems =
+				extensions[i].getConfigurationElements();
 			String fileExtension = elems[0].getAttribute("extension");
 
 			try {

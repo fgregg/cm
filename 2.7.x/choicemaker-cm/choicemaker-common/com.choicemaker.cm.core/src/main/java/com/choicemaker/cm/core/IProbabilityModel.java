@@ -24,8 +24,9 @@ public interface IProbabilityModel extends AccessProvider, ImmutableProbabilityM
 	 * Sets the translator accessors.
 	 *
 	 * @param   newAcc  The translator accessors.
+	 * @throws ModelConfigurationException 
 	 */
-	public abstract void setAccessor(Accessor newAcc);
+	public abstract void setAccessor(Accessor newAcc) throws ModelConfigurationException;
 	/**
 	 * Set the value of antCommand.
 	 * @param v  Value to assign to antCommand.

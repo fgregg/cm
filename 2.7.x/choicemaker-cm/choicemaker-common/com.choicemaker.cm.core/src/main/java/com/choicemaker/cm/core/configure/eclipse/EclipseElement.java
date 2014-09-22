@@ -15,9 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-
 import com.choicemaker.cm.core.configure.xml.IElement;
+import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.util.Precondition;
 
 /**
@@ -28,9 +27,9 @@ public class EclipseElement implements IElement {
 
 	private static Logger logger = Logger.getLogger(EclipseElement.class.getName());
 
-	private final IConfigurationElement element;
+	private final CMConfigurationElement element;
 
-	public EclipseElement(IConfigurationElement element) {
+	public EclipseElement(CMConfigurationElement element) {
 		Precondition.assertNonNullArgument("null element", element);
 		this.element = element;
 	}
@@ -47,9 +46,9 @@ public class EclipseElement implements IElement {
 	 */
 	public List getChildren() {
 		List retVal = new LinkedList();
-		IConfigurationElement[] eclipseChildren = this.getElement().getChildren();
+		CMConfigurationElement[] eclipseChildren = this.getElement().getChildren();
 		for (int i=0; i<eclipseChildren.length; i++) {
-			IConfigurationElement eclipseChild = eclipseChildren[i];
+			CMConfigurationElement eclipseChild = eclipseChildren[i];
 			EclipseElement returnable = new EclipseElement(eclipseChild);
 			retVal.add(returnable);
 		}
@@ -61,9 +60,9 @@ public class EclipseElement implements IElement {
 	 */
 	public List getChildren(String name) {
 		List retVal = new LinkedList();
-		IConfigurationElement[] eclipseChildren = this.getElement().getChildren(name);
+		CMConfigurationElement[] eclipseChildren = this.getElement().getChildren(name);
 		for (int i=0; i<eclipseChildren.length; i++) {
-			IConfigurationElement eclipseChild = eclipseChildren[i];
+			CMConfigurationElement eclipseChild = eclipseChildren[i];
 			EclipseElement returnable = new EclipseElement(eclipseChild);
 			retVal.add(returnable);
 		}
@@ -87,7 +86,7 @@ public class EclipseElement implements IElement {
 			for (Iterator i=list.iterator(); i.hasNext(); ) {
 				++count;
 				// 2014-04-24 rphall: Added use for unused local variable.
-				IConfigurationElement orphan = (IConfigurationElement) i.next();
+				CMConfigurationElement orphan = (CMConfigurationElement) i.next();
 				sb.append(orphan.getName());
 				if (count < list.size()-1) {
 					sb.append(",");
@@ -107,7 +106,7 @@ public class EclipseElement implements IElement {
 		return this.getElement().getAttribute(name);
 	}
 
-	protected IConfigurationElement getElement() {
+	protected CMConfigurationElement getElement() {
 		return element;
 	}
 

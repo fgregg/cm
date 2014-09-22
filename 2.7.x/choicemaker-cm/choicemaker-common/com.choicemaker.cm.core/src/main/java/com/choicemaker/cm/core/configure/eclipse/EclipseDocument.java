@@ -10,10 +10,9 @@
  */
 package com.choicemaker.cm.core.configure.eclipse;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-
 import com.choicemaker.cm.core.configure.xml.IDocument;
 import com.choicemaker.cm.core.configure.xml.IElement;
+import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.util.Precondition;
 
 /**
@@ -22,9 +21,9 @@ import com.choicemaker.util.Precondition;
  */
 public class EclipseDocument implements IDocument {
 	
-	private final IConfigurationElement root;
+	private final CMConfigurationElement root;
 
-	public EclipseDocument(IConfigurationElement root) {
+	public EclipseDocument(CMConfigurationElement root) {
 		Precondition.assertNonNullArgument("null configuration element",root);
 		this.root = root;
 	}

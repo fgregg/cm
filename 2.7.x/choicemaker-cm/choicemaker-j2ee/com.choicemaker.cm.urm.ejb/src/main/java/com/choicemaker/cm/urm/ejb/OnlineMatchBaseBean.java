@@ -25,9 +25,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -70,6 +67,8 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 import com.choicemaker.cm.urm.exceptions.RecordException;
 import com.choicemaker.cm.urm.exceptions.UrmIncompleteBlockingSetsException;
 import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.util.StringUtils;
 
 /**
@@ -268,8 +267,8 @@ public class OnlineMatchBaseBean implements SessionBean {
 			RecordDecisionMaker dm = new RecordDecisionMaker();
 			DatabaseAccessor databaseAccessor;
 			try {
-				IExtension dbaExt =
-					Platform.getPluginRegistry().getExtension(
+				CMExtension dbaExt =
+					CMPlatformUtils.getPluginRegistry().getExtension(
 						Single.DATABASE_ACCESSOR,
 						(String) model.properties().get(
 							Single.DATABASE_ACCESSOR));

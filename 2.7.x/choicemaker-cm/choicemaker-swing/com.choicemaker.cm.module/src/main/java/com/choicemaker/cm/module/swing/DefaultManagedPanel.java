@@ -12,15 +12,13 @@ package com.choicemaker.cm.module.swing;
 
 import javax.swing.text.Document;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.module.IModule;
 import com.choicemaker.cm.module.IModuleController;
 import com.choicemaker.cm.module.IModuleController.IUserInterface;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Panel that loads a configuration of {@link IModule} from the
@@ -67,24 +65,23 @@ public class DefaultManagedPanel extends AbstractTabbedPanel implements IModelMa
 		IModuleController retVal = new DefaultModuleController(d);
 
 		// Replace the default with a configured instance, if one exists
-		IExtensionPoint pt =
-			Platform.getPluginRegistry().getExtensionPoint(
-				ChoiceMakerExtensionPoint.CM_MODELMAKER_PLUGGABLECONTROLLER);
-		if (pt != null) {
-		IExtension[] extensions = pt.getExtensions();
-		if (extensions.length > 1) {
+		CMExtension[] extensions = CMPlatformUtils
+					.getExtensions(ChoiceMakerExtensionPoint.CM_MODELMAKER_PLUGGABLECONTROLLER);
+		if (extensions == null || extensions.length < 1) {
+			throw new Error( "Invalid module: no extensions");
+		} else if (extensions.length > 1) {
 			throw new Error(
-				"too many extensions of IModule: "
-					+ extensions.length);
-		} else if (extensions.length == 1) {
-			IExtension extension = extensions[0];
-			IConfigurationElement[] els = extension.getConfigurationElements();
-			if (els.length != 1) {
+				"Misconfigured module: " + extensions.length + " extensions");
+		} else {
+			assert extensions.length == 1 ;
+			CMExtension extension = extensions[0];
+			CMConfigurationElement[] els = extension.getConfigurationElements();
+			if (els == null || els.length != 1) {
+				int invalidLength = els == null ? 0 : els.length ;
 				throw new Error(
-					"too many configurations of the default module: "
-						+ extensions.length);
+					"Invalid module: " + invalidLength + " configurations");
 			}
-			IConfigurationElement element = els[0];
+			CMConfigurationElement element = els[0];
 			try {
 				retVal =
 					(IModuleController) element.createExecutableExtension(
@@ -100,7 +97,6 @@ public class DefaultManagedPanel extends AbstractTabbedPanel implements IModelMa
 						+ ex.getMessage();
 				throw new Error(msg, ex);
 			}
-		}
 		}
 
 		return retVal;

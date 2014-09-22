@@ -43,8 +43,6 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.EventListenerList;
 
-import org.eclipse.core.boot.IPlatformRunnable;
-
 import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.analyzer.filter.RuleFilterCondition;
@@ -59,6 +57,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
+import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.PropertyNames;
 import com.choicemaker.cm.core.RepositoryChangeEvent;
@@ -107,6 +106,7 @@ import com.choicemaker.cm.modelmaker.stats.Statistics;
 import com.choicemaker.cm.module.IUserMessages;
 import com.choicemaker.cm.module.swing.DefaultManagedPanel;
 import com.choicemaker.cm.module.swing.DefaultModuleMenu;
+import com.choicemaker.e2.CMPlatformRunnable;
 import com.choicemaker.util.Arguments;
 import com.choicemaker.util.ArrayHelper;
 import com.choicemaker.util.IntArrayList;
@@ -117,7 +117,7 @@ import com.choicemaker.util.IntArrayList;
  * @author S. Yoakum-Stover
  * @version $Revision: 1.3 $ $Date: 2010/03/29 12:38:18 $
  */
-public class ModelMaker extends JFrame implements IPlatformRunnable {
+public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -750,7 +750,7 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 			pm =
 				ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
 						statusOutput);
-		} catch (XmlConfException ex) {
+		} catch (ModelConfigurationException ex) {
 			throw new OperationFailedException(
 					ChoiceMakerCoreMessages.m.formatMessage(
 							"train.gui.modelmaker.model.retrieve.error",
@@ -769,15 +769,18 @@ public class ModelMaker extends JFrame implements IPlatformRunnable {
 	 *
 	 * @param pm
 	 */
-	public void saveProbabilityModel(IProbabilityModel pm) throws OperationFailedException {
+	public void saveProbabilityModel(IProbabilityModel pm)
+			throws OperationFailedException {
 		try {
 			ProbabilityModelsXmlConf.saveModel(pm);
-			//logger.info("Saved probability model to disk: " + pm.getName());
-			postInfo(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.saved", pm.getModelName()));
-		} catch (XmlConfException ex) {
+			// logger.info("Saved probability model to disk: " + pm.getName());
+			postInfo(ChoiceMakerCoreMessages.m.formatMessage(
+					"train.gui.modelmaker.model.saved", pm.getModelName()));
+		} catch (ModelConfigurationException ex) {
 			throw new OperationFailedException(
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.save.error", pm.getModelName()),
-				ex);
+					ChoiceMakerCoreMessages.m.formatMessage(
+							"train.gui.modelmaker.model.save.error",
+							pm.getModelName()), ex);
 		}
 	}
 

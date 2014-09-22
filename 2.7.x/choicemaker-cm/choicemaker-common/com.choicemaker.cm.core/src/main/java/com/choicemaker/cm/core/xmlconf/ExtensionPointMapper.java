@@ -13,14 +13,12 @@ package com.choicemaker.cm.core.xmlconf;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Plugin;
-
-import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMExtensionPoint;
+import com.choicemaker.e2.CMPlugin;
+import com.choicemaker.e2.E2Exception;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Comment
@@ -29,60 +27,58 @@ import com.choicemaker.cm.core.XmlConfException;
  * @version  $Revision: 1.2 $ $Date: 2010/03/27 21:27:24 $
  */
 public class ExtensionPointMapper {
-	public static Object getInstance(String extensionPoint, String extensionId) throws XmlConfException {
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(extensionPoint);
-		IExtension ext = pt.getExtension(extensionId);
+	public static Object getInstance(String extensionPoint, String extensionId) throws E2Exception {
+		CMExtension ext = CMPlatformUtils.getExtension(extensionPoint,extensionId);
 		if (ext == null) {
-			IExtension[] extensions = pt.getExtensions();
+			CMExtension[] extensions = CMPlatformUtils.getExtensions(extensionPoint);
 			for (int i = 0; i < extensions.length; i++) {
-				IConfigurationElement[] elems = extensions[i].getConfigurationElements();
+				CMConfigurationElement[] elems = extensions[i].getConfigurationElements();
 				if (elems.length > 0 && extensionId.equals(elems[0].getAttribute("backwardCompatibilityId"))) {
 					ext = extensions[i];
 					break;
 				}
 			}
 			if (ext == null) {
-				throw new XmlConfException("Unknown extension: " + extensionId);
+				throw new E2Exception("Unknown extension: " + extensionId);
 			}
 		}
 		try {
 			return ext.getConfigurationElements()[0].createExecutableExtension("class");
-		} catch (CoreException ex) {
-			throw new XmlConfException("Configuration error", ex);
+		} catch (E2Exception ex) {
+			throw new E2Exception("Configuration error", ex);
 		}
 	}
 
 	public static Object getInstance(String extensionPoint, Class handledClass)
-		throws XmlConfException {
+		throws E2Exception {
 		try {
 			String handledClassName = handledClass.getName();
-			IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(extensionPoint);
-			IExtension[] extensions = pt.getExtensions();
+			CMExtension[] extensions = CMPlatformUtils.getExtensions(extensionPoint);
 
 			for (int i = 0; i < extensions.length; i++) {
-				IExtension extension = extensions[i];
-				IConfigurationElement[] elems = extension.getConfigurationElements();
+				CMExtension extension = extensions[i];
+				CMConfigurationElement[] elems = extension.getConfigurationElements();
 				if (elems.length > 0 && handledClassName.equals(elems[0].getAttribute("handledClass"))) {
 					return elems[0].createExecutableExtension("class");
 				}
 			}
 		} catch (Exception ex) {
-			throw new XmlConfException("Configuration error.", ex);
+			throw new E2Exception("Configuration error.", ex);
 		}
-		throw new XmlConfException("No configurator found.");
+		throw new E2Exception("No configurator found.");
 	}
 
-	public static Object[] getAllInstances(Plugin plugin, String extensionPoint) {
+	public static Object[] getAllInstances(CMPlugin plugin, String extensionPoint) {
 		List l = new ArrayList();
-		IExtensionPoint pt = plugin.getDescriptor().getExtensionPoint(extensionPoint);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtensionPoint pt = plugin.getDescriptor().getExtensionPoint(extensionPoint);
+		CMExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension extension = extensions[i];
-			IConfigurationElement[] elems = extension.getConfigurationElements();
+			CMExtension extension = extensions[i];
+			CMConfigurationElement[] elems = extension.getConfigurationElements();
 			if (elems.length > 0) {
 				try {
 					l.add(elems[0].createExecutableExtension("class"));
-				} catch (CoreException e) {
+				} catch (E2Exception e) {
 					e.printStackTrace();
 				}
 			}

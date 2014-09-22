@@ -23,25 +23,29 @@ import java.util.Map;
 
 import javax.swing.event.SwingPropertyChangeSupport;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IPluginDescriptor;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Decision;
+//import org.eclipse.core.runtime.IConfigurationElement;
+//import org.eclipse.core.runtime.IExtension;
+//import org.eclipse.core.runtime.IPluginDescriptor;
+//import org.eclipse.core.runtime.Platform;
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.ProbabilityModelSpecification;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.cm.core.report.Reporter;
 import com.choicemaker.cm.core.util.NameUtils;
 import com.choicemaker.cm.core.util.Signature;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMPluginDescriptor;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.util.ArrayHelper;
 import com.choicemaker.util.FileUtilities;
 
@@ -104,7 +108,8 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		setMachineLearner(new DoNothingMachineLearning());
 	}
 
-	public MutableProbabilityModel(ProbabilityModelSpecification spec, Accessor acc) {
+	public MutableProbabilityModel(ProbabilityModelSpecification spec,
+			Accessor acc) throws ModelConfigurationException {
 		this();
 		setModelFilePath(spec.getWeightFilePath());
 		setClueFilePath(spec.getClueFilePath());
@@ -121,7 +126,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 			String trainingSource,
 			boolean trainedWithHolds,
 			Date lastTrainingDate)
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, ModelConfigurationException {
 		this (
 				modelFilePath,
 				clueFilePath,
@@ -146,7 +151,7 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		Date lastTrainingDate,
 		boolean useAnt,
 		String antCommand)
-		throws IllegalArgumentException {
+		throws IllegalArgumentException, ModelConfigurationException {
 		this(modelFilePath, clueFilePath);
 		setAccessorInternal(acc);
 		this.trainingSource = trainingSource;
@@ -433,8 +438,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	 * Sets the translator accessors.
 	 *
 	 * @param   newAcc  The translator accessors.
+	 * @throws ModelConfigurationException 
 	 */
-	public void setAccessor(Accessor newAcc) {
+	public void setAccessor(Accessor newAcc) throws ModelConfigurationException {
 		Accessor oldAccessor = acc;
 		ClueSet newClueSet = newAcc.getClueSet();
 		int newSize = newClueSet.size();
@@ -478,35 +484,46 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		}
 	}
 
-	private void setAccessorInternal(Accessor accessor) {
-		IExtension[] accessorElems = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_CORE_ACCESSOR).getExtensions();
-		Class[] interfaces = new Class[accessorElems.length];
+	private void setAccessorInternal(Accessor accessor)
+			throws ModelConfigurationException {
+		CMExtension[] exts =
+			CMPlatformUtils.getExtensions(ChoiceMakerExtensionPoint.CM_CORE_ACCESSOR);
+		Class[] interfaces = new Class[exts.length];
 		for (int i = 0; i < interfaces.length; i++) {
-			IExtension accessorElem = accessorElems[i];
+			CMExtension ext = exts[i];
 			try {
-				IConfigurationElement ce = accessorElem.getConfigurationElements()[0];
-				String clsName = ce.getAttribute("class");
-
-				IPluginDescriptor descriptor = accessorElem.getDeclaringPluginDescriptor();
-				ClassLoader cl1= descriptor.getPluginClassLoader();
-
-				interfaces[i] = Class.forName( clsName,  false, cl1);
+				CMConfigurationElement[] configs =
+					ext.getConfigurationElements();
+				assert configs != null;
+				if (configs.length < 1) {
+					String msg =
+						"No accessors configured for " + this.getModelName();
+					throw new ModelConfigurationException(msg);
+				}
+				if (configs.length > 1) {
+					String msg =
+						"Multiple accessors configured for "
+								+ this.getModelName();
+					throw new ModelConfigurationException(msg);
+				}
+				CMConfigurationElement ce = configs[0];
+				String clsName =
+					ce.getAttribute(ChoiceMakerExtensionPoint.CM_CORE_ACCESSOR_ATTR_CLASS);
+				CMPluginDescriptor descriptor =
+					ext.getDeclaringPluginDescriptor();
+				ClassLoader cl1 = descriptor.getPluginClassLoader();
+				interfaces[i] = Class.forName(clsName, false, cl1);
 			} catch (ClassNotFoundException e) {
-				// BUG 2013-08-15 rphall
-				// If an interface isn't loaded, then the call to
-				// Proxy.newProxyInstance will fail mysteriously in a few
-				// more lines. Better to log the exception and then
-				// rethrow this exception or throw a new one -- or not
-				// catch it at all
-				e.printStackTrace();
-				// END BUG
+				throw new ModelConfigurationException(e.toString(), e);
 			}
 		}
 		Class accessorClass = accessor.getClass();
 		this.accessorClassName = accessor.getClass().getName();
 
 		ClassLoader cl2 = accessorClass.getClassLoader();
-		this.acc = (Accessor) Proxy.newProxyInstance(cl2, interfaces, new AccessorInvocationHandler(accessor));
+		this.acc =
+			(Accessor) Proxy.newProxyInstance(cl2, interfaces,
+					new AccessorInvocationHandler(accessor));
 	}
 
 	/**
