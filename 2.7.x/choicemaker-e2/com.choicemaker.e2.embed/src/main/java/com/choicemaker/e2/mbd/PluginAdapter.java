@@ -1,6 +1,6 @@
 package com.choicemaker.e2.mbd;
 
-import com.choicemaker.e2.CMCoreException;
+import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMPlugin;
 import com.choicemaker.e2.CMPluginDescriptor;
 import com.choicemaker.e2.mbd.runtime.CoreException;
@@ -69,20 +69,20 @@ public class PluginAdapter {
 			delegate.setDebugging(value);
 		}
 
-		public void shutdown() throws CMCoreException {
+		public void shutdown() throws E2Exception {
 			try {
 				delegate.shutdown();
 			} catch (CoreException e) {
-				CMCoreException cmce = CoreExceptionAdapter.convert(e);
+				E2Exception cmce = CoreExceptionAdapter.convert(e);
 				throw cmce;
 			}
 		}
 
-		public void startup() throws CMCoreException {
+		public void startup() throws E2Exception {
 			try {
 				delegate.startup();
 			} catch (CoreException e) {
-				CMCoreException cmce = CoreExceptionAdapter.convert(e);
+				E2Exception cmce = CoreExceptionAdapter.convert(e);
 				throw cmce;
 			}
 		}

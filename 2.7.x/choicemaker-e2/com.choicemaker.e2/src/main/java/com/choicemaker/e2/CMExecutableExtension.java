@@ -111,8 +111,8 @@ public interface CMExecutableExtension {
  *		is used to define multiple executable extensions.
  * @param data adapter data in the form of a <code>String</code>, 
  *		a <code>Hashtable</code>, or <code>null</code>.
- * @exception CMCoreException if error(s) detected during initialization processing
+ * @exception E2Exception if error(s) detected during initialization processing
  * @see CMConfigurationElement#createExecutableExtension
  */
-public void setInitializationData(CMConfigurationElement config, String propertyName, Object data) throws CMCoreException;
+public void setInitializationData(CMConfigurationElement config, String propertyName, Object data) throws E2Exception;
 }

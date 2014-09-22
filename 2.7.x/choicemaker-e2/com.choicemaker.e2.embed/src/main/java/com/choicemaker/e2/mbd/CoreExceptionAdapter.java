@@ -10,7 +10,7 @@
  *******************************************************************************/
 package com.choicemaker.e2.mbd;
 
-import com.choicemaker.e2.CMCoreException;
+import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.mbd.runtime.CoreException;
 import com.choicemaker.e2.mbd.runtime.IStatus;
 /**
@@ -24,11 +24,11 @@ import com.choicemaker.e2.mbd.runtime.IStatus;
  */
 public class CoreExceptionAdapter {
 
-	public static CMCoreException convert(CoreException x) {
-		return new CMCoreException(StatusAdapter.convert(x.getStatus()));
+	public static E2Exception convert(CoreException x) {
+		return new E2Exception(StatusAdapter.convert(x.getStatus()));
 	}
 	
-	public static CoreException convert(CMCoreException x) {
+	public static CoreException convert(E2Exception x) {
 		return new CoreException(StatusAdapter.convert(x.getStatus()));
 	}
 	

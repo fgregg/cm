@@ -169,10 +169,10 @@ public interface CMPlugin {
 	 * </p>
 	 * <b>Clients must never explicitly call this method.</b>
 	 *
-	 * @exception CMCoreException if this method fails to shut down
+	 * @exception E2Exception if this method fails to shut down
 	 *   this plug-in
 	 */
-	void shutdown() throws CMCoreException;
+	void shutdown() throws E2Exception;
 
 	/**
 	 * Starts up this plug-in.
@@ -208,8 +208,8 @@ public interface CMPlugin {
 	 * </p>
 	 * <b>Clients must never explicitly call this method.</b>
 	 *
-	 * @exception CMCoreException if this plug-in did not start up properly
+	 * @exception E2Exception if this plug-in did not start up properly
 	 */
-	void startup() throws CMCoreException;
+	void startup() throws E2Exception;
 
 }

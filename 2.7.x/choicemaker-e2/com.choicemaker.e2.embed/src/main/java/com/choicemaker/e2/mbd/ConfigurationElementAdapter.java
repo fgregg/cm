@@ -1,7 +1,7 @@
 package com.choicemaker.e2.mbd;
 
 import com.choicemaker.e2.CMConfigurationElement;
-import com.choicemaker.e2.CMCoreException;
+import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.mbd.runtime.CoreException;
 import com.choicemaker.e2.mbd.runtime.IConfigurationElement;
@@ -59,11 +59,11 @@ public class ConfigurationElementAdapter {
 		}
 
 		public Object createExecutableExtension(String propertyName)
-				throws CMCoreException {
+				throws E2Exception {
 			try {
 				return delegate.createExecutableExtension(propertyName);
 			} catch (CoreException e) {
-				CMCoreException cmce = CoreExceptionAdapter.convert(e);
+				E2Exception cmce = CoreExceptionAdapter.convert(e);
 				throw cmce;
 			}
 		}
@@ -121,7 +121,7 @@ public class ConfigurationElementAdapter {
 				throws CoreException {
 			try {
 				return delegate.createExecutableExtension(propertyName);
-			} catch (CMCoreException e) {
+			} catch (E2Exception e) {
 				CoreException ce = CoreExceptionAdapter.convert(e);
 				throw ce;
 			}

@@ -43,11 +43,11 @@ public interface CMConfigurationElement {
 	 *
 	 * @param propertyName the name of the property
 	 * @return the executable instance
-	 * @exception CMCoreException if an instance of the executable extension
+	 * @exception E2Exception if an instance of the executable extension
 	 *   could not be created for any reason.
 	 * @see CMExecutableExtension#setInitializationData
 	 */
-	public Object createExecutableExtension(String propertyName) throws CMCoreException;
+	public Object createExecutableExtension(String propertyName) throws E2Exception;
 	/**
 	 * Returns the named attribute of this configuration element, or
 	 * <code>null</code> if none. 

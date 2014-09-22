@@ -13,7 +13,7 @@ package com.choicemaker.e2.std;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 
-import com.choicemaker.e2.CMCoreException;
+import com.choicemaker.e2.E2Exception;
 /**
  * A checked exception representing a failure.
  * <p>
@@ -25,11 +25,11 @@ import com.choicemaker.e2.CMCoreException;
  */
 public class CoreExceptionAdapter {
 
-	public static CMCoreException convert(CoreException x) {
-		return new CMCoreException(StatusAdapter.convert(x.getStatus()));
+	public static E2Exception convert(CoreException x) {
+		return new E2Exception(StatusAdapter.convert(x.getStatus()));
 	}
 	
-	public static CoreException convert(CMCoreException x) {
+	public static CoreException convert(E2Exception x) {
 		return new CoreException(StatusAdapter.convert(x.getStatus()));
 	}
 	

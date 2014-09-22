@@ -12,7 +12,7 @@ package com.choicemaker.e2;
 
 /**
  * A status object represents the outcome of an operation.
- * All <code>CMCoreException</code>s carry a status object to indicate 
+ * All <code>E2Exception</code>s carry a status object to indicate 
  * what went wrong. Status objects are also returned by methods needing 
  * to provide details of failures (e.g., validation methods).
  * <p>
@@ -38,30 +38,10 @@ package com.choicemaker.e2;
  */
 public interface CMStatus {
 	
-//	/** Status severity constant (value 0) indicating this status represents the nominal case.
-//	 * This constant is also used as the status code representing the nominal case.
-//	 * @see #getSeverity
-//	 * @see #isOK
-// 	 */
-//	public static final int OK = 0;
-//
-//	/** Status type severity (bit mask, value 1) indicating this status is informational only.
-//	 * @see #getSeverity
-//	 * @see #matches
-// 	 */
-//	public static final int INFO = 1;
-//
-//	/** Status type severity (bit mask, value 2) indicating this status represents a warning.
-//	 * @see #getSeverity
-//	 * @see #matches
-// 	 */
-//	public static final int WARNING = 2;
-//
-//	/** Status type severity (bit mask, value 4) indicating this status represents an error.
-//	 * @see #getSeverity
-//	 * @see #matches
-// 	 */
-//	public static final int ERROR = 4;
+	public static final int OK = 0;
+	public static final int INFO = 1;
+	public static final int WARNING = 2;
+	public static final int ERROR = 4;
 	
 /**
  * Returns a list of status object immediately contained in this

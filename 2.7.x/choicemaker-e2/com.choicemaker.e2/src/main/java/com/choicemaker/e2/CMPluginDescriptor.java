@@ -99,11 +99,11 @@ public interface CMPluginDescriptor {
 	 * is an internally-supplied one that does not react to life cycle requests.
 	 *
 	 * @return the plug-in runtime object
-	 * @exception CMCoreException 
+	 * @exception E2Exception 
 	 *   if this plug-in's runtime object could not be created.
 	 * @see #isPluginActivated
 	 */
-	public CMPlugin getPlugin() throws CMCoreException;
+	public CMPlugin getPlugin() throws E2Exception;
 	/**
 	 * Returns the plug-in class loader used to load classes and resources
 	 * for this plug-in. The class loader can be used to directly access

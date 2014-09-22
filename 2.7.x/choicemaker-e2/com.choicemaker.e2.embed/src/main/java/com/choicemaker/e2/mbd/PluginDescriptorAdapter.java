@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import com.choicemaker.e2.CMCoreException;
+import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.CMExtensionPoint;
 import com.choicemaker.e2.CMLibrary;
@@ -99,11 +99,11 @@ public class PluginDescriptorAdapter {
 			return delegate.getLabel();
 		}
 
-		public CMPlugin getPlugin() throws CMCoreException {
+		public CMPlugin getPlugin() throws E2Exception {
 			try {
 				return PluginAdapter.convert(delegate.getPlugin());
 			} catch (CoreException e) {
-				CMCoreException ce = CoreExceptionAdapter.convert(e);
+				E2Exception ce = CoreExceptionAdapter.convert(e);
 				throw ce;
 			}
 		}
@@ -197,7 +197,7 @@ public class PluginDescriptorAdapter {
 		public Plugin getPlugin() throws CoreException {
 			try {
 				return PluginAdapter.convert(delegate.getPlugin());
-			} catch (CMCoreException e) {
+			} catch (E2Exception e) {
 				CoreException ce = CoreExceptionAdapter.convert(e);
 				throw ce;
 			}
