@@ -60,14 +60,14 @@
     <module>choicemaker-base</module>
 
     <module>choicemaker-e2</module>
-
     <module>choicemaker-cm</module>
-    <!-- <module>cluemaker-maven-plugin</module> -->
-    <module>misc/mymojo-plugin</module>
+    <module>choicemaker-maven</module>
+
     <module>misc/compiler-app</module>
 
     <module>choicemaker-e2it</module>
-    <module>misc/mymojo-plugin-it</module>
+    <module>choicemaker-cmit</module>
+    <module>choicemaker-mavenit</module>
 
   </modules>
 
