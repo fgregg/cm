@@ -33,9 +33,10 @@ public class XmlParserFactory {
 		return builder;
 	}
 
-	public static XMLReader createXMLReader(String className) throws SAXException {
+	public static XMLReader createXMLReader(String /* ignored */className) throws SAXException {
 		ClassLoader oldCl = setClassLoader();
-		XMLReader reader = XMLReaderFactory.createXMLReader(className);
+//		XMLReader reader = XMLReaderFactory.createXMLReader(className);
+		XMLReader reader = XMLReaderFactory.createXMLReader();
 		restoreClassLoader(oldCl);
 
 		return reader;
