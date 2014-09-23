@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+  name="%pluginName"
+  id="com.choicemaker.e2"
+  version="2.7.1"
+  provider-name="ChoiceMaker LLC">
+
+  <runtime>
+    <library name="e2.jar">
+      <export name="*"/>
+    </library>
+  </runtime>
+
+  <requires/>
+
+  <extension-point name="Applications" id="applications" schema="schema/applications.mxsd"/>
+  <extension-point name="URL Handlers" id="urlHandlers" schema="schema/urlHandlers.mxsd"/>
+
+</plugin>

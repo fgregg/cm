@@ -13,36 +13,80 @@ package com.choicemaker.e2.mbd;
 import com.choicemaker.e2.CMPlatformRunnable;
 import com.choicemaker.e2.mbd.boot.IPlatformRunnable;
 
-/**
- * Bootstrap type for the platform. Platform runnables represent executable 
- * entry points into plug-ins.  Runnables can be configured into the Platform's
- * <code>org.eclipse.core.runtime.applications</code> extension-point 
- * or be made available through code or extensions on other plug-in's extension-points.
- *
- * <p>
- * Clients may implement this interface.
- * </p>
- */
-public class PlatformRunnableAdapter implements CMPlatformRunnable {
+public class PlatformRunnableAdapter {
 
-	private final IPlatformRunnable delegate;
-	
-	public PlatformRunnableAdapter(IPlatformRunnable cmpr) {
-		if (cmpr == null) {
-			throw new IllegalArgumentException("null delegate");
+	public static IPlatformRunnable convert(CMPlatformRunnable o) {
+		IPlatformRunnable retVal = null;
+		if (o != null) {
+			retVal = new CMtoStd(o);
 		}
-		this.delegate = cmpr;
+		return retVal;
 	}
-	
-/**
- * Runs this runnable with the given args and returns a result.
- * The content of the args is unchecked and should conform to the expectations of
- * the runnable being invoked.  Typically this is a <code>String<code> array.
- * 
- * @exception Exception if there is a problem running this runnable.
- */
-public Object run(Object args) throws Exception {
-	return this.delegate.run(args);
-}
+
+	public static IPlatformRunnable[] convert(CMPlatformRunnable[] o) {
+		IPlatformRunnable[] retVal = null;
+		if (o != null) {
+			retVal = new IPlatformRunnable[o.length];
+			for (int i = 0; i < o.length; i++) {
+				retVal[i] = convert(o[i]);
+			}
+		}
+		return retVal;
+	}
+
+	public static CMPlatformRunnable convert(IPlatformRunnable o) {
+		CMPlatformRunnable retVal = null;
+		if (o != null) {
+			retVal = new StdToCM(o);
+		}
+		return retVal;
+	}
+
+	public static CMPlatformRunnable[] convert(IPlatformRunnable[] o) {
+		CMPlatformRunnable[] retVal = null;
+		if (o != null) {
+			retVal = new CMPlatformRunnable[o.length];
+			for (int i = 0; i < o.length; i++) {
+				retVal[i] = convert(o[i]);
+			}
+		}
+		return retVal;
+	}
+
+	protected static class StdToCM implements CMPlatformRunnable {
+
+		private final IPlatformRunnable delegate;
+
+		public StdToCM(IPlatformRunnable o) {
+			if (o == null) {
+				throw new IllegalArgumentException("null delegate");
+			}
+			this.delegate = o;
+		}
+
+		@Override
+		public Object run(Object args) throws Exception {
+			return delegate.run(args);
+		}
+
+	}
+
+	protected static class CMtoStd implements IPlatformRunnable {
+
+		private final CMPlatformRunnable delegate;
+
+		public CMtoStd(CMPlatformRunnable o) {
+			if (o == null) {
+				throw new IllegalArgumentException("null delegate");
+			}
+			this.delegate = o;
+		}
+
+		@Override
+		public Object run(Object args) throws Exception {
+			return delegate.run(args);
+		}
+
+	}
 
 }

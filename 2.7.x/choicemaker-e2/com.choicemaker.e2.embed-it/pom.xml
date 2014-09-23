@@ -294,40 +294,6 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.ant.core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.ant.internal.core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.boot</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.launcher</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.resources.ant</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.resources</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.runtime</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.jdom</artifactId>
       <scope>test</scope>
     </dependency>

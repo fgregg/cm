@@ -35,6 +35,35 @@ public class CMPlatformUtils {
 		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
+	
+	public static CMPluginDescriptor getPluginDescriptor(String pluginId) {
+		final String METHOD = "getPluginDescriptor";
+		log.entering(SIMPLE_CLASS_NAME, METHOD, pluginId);
+		CMPluginRegistry registry = getPluginRegistry();
+		CMPluginDescriptor retVal = registry.getPluginDescriptor(pluginId);
+		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		return retVal;
+	}
+
+	/** Returns the extensions implemented by the specified plugin */
+	public static CMExtension[] getPluginExtensions(String pluginId) {
+		final String METHOD = "getPluginDescriptor";
+		log.entering(SIMPLE_CLASS_NAME, METHOD, pluginId);
+		CMPluginDescriptor plugin = getPluginDescriptor(pluginId);
+		CMExtension[] retVal = plugin.getExtensions();
+		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		return retVal;
+	}
+
+	/** Returns the extension points defined by the specified plugin */
+	public static CMExtensionPoint[] getPluginExtensionPoints(String pluginId) {
+		final String METHOD = "getPluginDescriptor";
+		log.entering(SIMPLE_CLASS_NAME, METHOD, pluginId);
+		CMPluginDescriptor plugin = getPluginDescriptor(pluginId);
+		CMExtensionPoint[] retVal = plugin.getExtensionPoints();
+		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		return retVal;
+	}
 
 	public static ClassLoader[] getPluginClassLoaders() {
 		final String METHOD = "getPluginClassLoaders";

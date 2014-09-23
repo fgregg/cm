@@ -13,11 +13,13 @@
 
 package com.choicemaker.e2.mbd.runtime;
 
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.choicemaker.e2.CMPlatformRunnable;
 import com.choicemaker.e2.CMPluginDescriptor;
 import com.choicemaker.e2.CMPluginPrerequisite;
 import com.choicemaker.e2.PluginDiscovery;
@@ -248,11 +250,11 @@ public class Platform {
 	 */
 	public static IPlatformRunnable loaderGetRunnable(String applicationName) {
 		assert initialized;
-		IPlatformRunnable retVal;
+		IPlatformRunnable retVal = null;
 		if (!isReady) {
 			String msg = "(embedded) Platform: NOT READY";
 			logger.severe(msg);
-			retVal = null;
+			assert retVal == null ;
 		} else {
 			IExtension extension =
 				registry.getExtension(Platform.PI_RUNTIME,
@@ -262,7 +264,7 @@ public class Platform {
 					"(embedded) Platform: no executable extension for '"
 							+ applicationName + "'";
 				logger.severe(msg);
-				retVal = null;
+				assert retVal == null ;
 			} else {
 				IConfigurationElement[] configs =
 					extension.getConfigurationElements();
@@ -271,7 +273,7 @@ public class Platform {
 						"(embedded) Platform: no configured elements for '"
 								+ applicationName + "'";
 					logger.severe(msg);
-					retVal = null;
+					assert retVal == null ;
 				}
 				try {
 					if (configs.length > 1) {
@@ -283,15 +285,26 @@ public class Platform {
 						logger.warning(msg);
 					}
 					IConfigurationElement config = configs[0];
-					retVal =
-						(IPlatformRunnable) config
-								.createExecutableExtension(EXECUTABLE_PROPERTY_NAME);
+					Object o =
+						config.createExecutableExtension(EXECUTABLE_PROPERTY_NAME);
+					if (o instanceof IPlatformRunnable) {
+						retVal = (IPlatformRunnable) o;
+						assert retVal != null;
+					} else if (o instanceof CMPlatformRunnable) {
+						retVal = createRunnableFacade((CMPlatformRunnable) o);
+						assert retVal != null;
+					} else if (o != null) {
+						retVal = createRunnableFacade(o);
+						assert retVal != null;
+					} else {
+						assert retVal == null;
+					}
 				} catch (CoreException e) {
 					String msg =
 						"(embedded) Platform: failed to create executable extension for '"
 								+ applicationName + "'";
 					logger.severe(msg);
-					retVal = null;
+					assert retVal == null;
 				}
 			}
 		}
@@ -299,6 +312,84 @@ public class Platform {
 			String msg = "(embedded) Platform: returning null PlatformRunnable";
 			logger.severe(msg);
 		}
+		return retVal;
+	}
+	
+	/**
+	 * Returns an instance of IPlatformRunnable implemented by delegation to the
+	 * specified instance of CMPlatformRunnable. This method avoids introducing
+	 * a circular dependence between this package
+	 * (com.choicemaker.e2.mbd.runtime) and the adapter package
+	 * (com.choicemaker.e2.mbd) by re-implementing functionality of the
+	 * PlatformRunnableAdapter class.
+	 * 
+	 * @param o
+	 * @return
+	 * @throws CoreException
+	 */
+	protected static IPlatformRunnable createRunnableFacade(
+			final CMPlatformRunnable o) throws CoreException {
+		if (o == null) {
+			throw new IllegalArgumentException("null argument");
+		}
+		IPlatformRunnable retVal = new IPlatformRunnable() {
+
+			@Override
+			public Object run(Object args) throws Exception {
+				Object retVal2 = o.run(args);
+				return retVal2;
+			}
+
+		};
+		return retVal;
+	}
+
+	/**
+	 * Allows classes to implement a <code>run(Object)<code> method without
+	 * linking to the CMPlatformRunnable interface. This allows classes written
+	 * to the org.eclipse.core.runtime.IPlatformRunnable to (possibly) run on
+	 * this platform. This is unlikely to work except for the simplest "HelloWorld"
+	 * cases.
+	 * 
+	 * @param o
+	 *            a non-null instance of a class implementing <code>Object
+	 *            run(Object)</code>
+	 * @return an IPlatformRunnable wrapper that delegates to the specified
+	 *         instance.
+	 * @throws CoreException
+	 *             the class of the specified instance does not implement the
+	 *             required method.
+	 */
+	protected static IPlatformRunnable createRunnableFacade(final Object o)
+			throws CoreException {
+		if (o == null) {
+			throw new IllegalArgumentException("null argument");
+		}
+		IPlatformRunnable retVal = null;
+		try {
+			Class<?> c = o.getClass();
+			final Method m =
+				c.getMethod("run", new Class<?>[] { Object.class });
+			retVal = new IPlatformRunnable() {
+
+				@Override
+				public Object run(Object args) throws Exception {
+					Object retVal = m.invoke(o, args);
+					return retVal;
+				}
+
+			};
+		} catch (NoSuchMethodException x) {
+			String msg =
+				"(embedded) Platform: unable to create IPlatformRunnable facade: "
+						+ x.toString();
+			logger.severe(msg);
+			IStatus status =
+				new Status(IStatus.ERROR, Platform.PI_RUNTIME,
+						Platform.PLUGIN_ERROR, msg, x);
+			throw new CoreException(status);
+		}
+		assert retVal != null;
 		return retVal;
 	}
 
