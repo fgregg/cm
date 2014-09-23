@@ -10,8 +10,6 @@
  */
 package com.choicemaker.cm.matching.en.us.train.name;
 
-import org.eclipse.core.boot.IPlatformRunnable;
-
 import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.matching.cfg.Parser;
 import com.choicemaker.cm.matching.cfg.Parsers;
@@ -19,6 +17,7 @@ import com.choicemaker.cm.matching.cfg.train.FlatFileRawDataReader;
 import com.choicemaker.cm.matching.cfg.train.ParsedDataCreator;
 import com.choicemaker.cm.matching.cfg.train.ParsedDataWriter;
 import com.choicemaker.cm.matching.cfg.train.RawDataReader;
+import com.choicemaker.e2.CMPlatformRunnable;
 
 /**
  * .
@@ -26,7 +25,7 @@ import com.choicemaker.cm.matching.cfg.train.RawDataReader;
  * @author   Adam Winkel
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:04 $
  */
-public final class NameParsedDataCreator implements IPlatformRunnable {
+public final class NameParsedDataCreator implements CMPlatformRunnable {
 
 	public static final String PARSE_TREES = "-parseTrees";
 	public static final String PARSED_DATA = "-parsedData";

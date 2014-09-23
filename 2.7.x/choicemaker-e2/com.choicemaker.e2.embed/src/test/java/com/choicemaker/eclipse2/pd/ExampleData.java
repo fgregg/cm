@@ -47,7 +47,8 @@ public class ExampleData {
 				"org_jdom_0_9_0/plugin.xml",
 				"org_eclipse_ant_core_2_1_3/plugin.xml",
 				"com_choicemaker_cm_ml_me_base_2_5_0/plugin.xml",
-				"com_choicemaker_cm_report_file_2_5_0/plugin.xml" };
+				"com_choicemaker_cm_report_file_2_5_0/plugin.xml",
+				"plugin/plugin.xml" };
 	static {
 		Arrays.sort(_expected_1);
 	}

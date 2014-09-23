@@ -33,9 +33,6 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.util.UpperCaseTextField;
 import com.choicemaker.cm.gui.utils.ExtensionHolder;
@@ -50,6 +47,8 @@ import com.choicemaker.cm.matching.gen.LongestCommonSubsequence;
 import com.choicemaker.cm.matching.gen.LongestCommonSubstring;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.wcohen.ss.eclipse.StringDistances;
 
 /**
@@ -416,14 +415,14 @@ public class StringComparator extends JDialog implements Enable {
 		c.gridx = 1;
 		content.add(new JLabel("available"), c);
 		c.gridx = 2;
-		ExtensionHolder[] extensions = ExtensionHolder.getExtensionHolders(Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.SECONDSTRING_STRINGDISTANCE));
+		ExtensionHolder[] extensions = ExtensionHolder.getExtensionsOfExtensionPoint(CMPlatformUtils.getExtensionPoint(ChoiceMakerExtensionPoint.SECONDSTRING_STRINGDISTANCE));
 		c.fill = GridBagConstraints.HORIZONTAL;
 		// BUG: combo box doesn't show all instances, just instance 0
 		// stringDistanceNames = new JComboBox(extensions);
 		// BUGFIX: iterate over all configuration elements (a.k.a. instances)
 		List nameList = new ArrayList();
 		for (int _i=0; _i<extensions.length; _i++) {
-			IConfigurationElement[] instances = extensions[_i].getExtension().getConfigurationElements();
+			CMConfigurationElement[] instances = extensions[_i].getExtension().getConfigurationElements();
 			for (int _j=0; _j<instances.length; _j++) {
 				String _name = instances[_j].getAttribute("name");
 				nameList.add(_name);

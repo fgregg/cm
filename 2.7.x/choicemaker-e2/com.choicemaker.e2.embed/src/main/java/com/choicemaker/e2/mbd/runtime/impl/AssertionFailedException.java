@@ -22,6 +22,9 @@ package com.choicemaker.e2.mbd.runtime.impl;
  */
 /* package */
 class AssertionFailedException extends RuntimeException {
+
+	private static final long serialVersionUID = 271L;
+
 /** Constructs a new exception.
  */
 public AssertionFailedException() {

@@ -20,12 +20,6 @@ import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
@@ -36,6 +30,10 @@ import com.choicemaker.cm.modelmaker.gui.dialogs.GeoFunctionsDialog;
 import com.choicemaker.cm.modelmaker.gui.dialogs.MatcherDialog;
 import com.choicemaker.cm.modelmaker.gui.dialogs.ObjectMakerDialog;
 import com.choicemaker.cm.modelmaker.gui.dialogs.StringComparator;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMExtensionPoint;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Description
@@ -160,29 +158,29 @@ public class ToolsMenu extends JMenu {
 	}
 
 	private void buildPluginToolMenuItems() {
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MODELMAKER_TOOLMENUITEM);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtensionPoint pt = CMPlatformUtils.getExtensionPoint(ChoiceMakerExtensionPoint.CM_MODELMAKER_TOOLMENUITEM);
+		CMExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension extension = extensions[i];
-			IConfigurationElement[] els = extension.getConfigurationElements();
+			CMExtension extension = extensions[i];
+			CMConfigurationElement[] els = extension.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
 				try {
 					JMenuItem item = buildToolItem(els[j]);
 					add(item);
-				} catch (CoreException ex) {
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		}
 	}
 
-	private JMenuItem buildToolItem(IConfigurationElement element) throws CoreException {
+	private JMenuItem buildToolItem(CMConfigurationElement element) throws Exception {
 		Action action = (Action) element.createExecutableExtension("class");
 		if (action instanceof ToolAction) {
 			((ToolAction)action).setModelMaker(modelMaker);
 		}
 
-		IConfigurationElement[] kids = element.getChildren();
+		CMConfigurationElement[] kids = element.getChildren();
 		if (kids.length > 0) {
 			JMenu menu = new JMenu(action);
 			for (int i = 0; i < kids.length; i++) {

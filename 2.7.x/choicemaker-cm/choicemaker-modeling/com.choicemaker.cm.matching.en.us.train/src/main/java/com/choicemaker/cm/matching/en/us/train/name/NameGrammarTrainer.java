@@ -12,8 +12,6 @@ package com.choicemaker.cm.matching.en.us.train.name;
 
 import java.io.FileInputStream;
 
-import org.eclipse.core.boot.IPlatformRunnable;
-
 import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.matching.cfg.ContextFreeGrammar;
 import com.choicemaker.cm.matching.cfg.SymbolFactory;
@@ -21,6 +19,7 @@ import com.choicemaker.cm.matching.cfg.train.GrammarTrainer;
 import com.choicemaker.cm.matching.cfg.train.ParsedDataReader;
 import com.choicemaker.cm.matching.cfg.xmlconf.ContextFreeGrammarXmlConf;
 import com.choicemaker.cm.matching.en.us.name.NameSymbolFactory;
+import com.choicemaker.e2.CMPlatformRunnable;
 
 
 /**
@@ -29,7 +28,7 @@ import com.choicemaker.cm.matching.en.us.name.NameSymbolFactory;
  * @author   Adam Winkel
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:04 $
  */
-public class NameGrammarTrainer implements IPlatformRunnable {
+public class NameGrammarTrainer implements CMPlatformRunnable {
 		
 	public Object run(Object argObj) throws Exception {
 		String[] args = CommandLineArguments.eclipseArgsMapper(argObj);

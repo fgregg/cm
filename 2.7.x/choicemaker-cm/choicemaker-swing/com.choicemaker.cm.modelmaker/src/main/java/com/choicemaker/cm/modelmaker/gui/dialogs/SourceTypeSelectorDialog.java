@@ -31,11 +31,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.Source;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
@@ -43,6 +38,9 @@ import com.choicemaker.cm.gui.utils.ExtensionHolder;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.sources.SourceGuiFactory;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMExtensionPoint;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Description
@@ -104,17 +102,17 @@ public class SourceTypeSelectorDialog extends JDialog {
 		content = new JPanel();
 		sourceTypeLabel =
 			new JLabel(ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.dialog.source.typeselector.available"));
-		IExtensionPoint extensionPoint = null;
+		CMExtensionPoint extensionPoint = null;
 		if (type == RS) {
-			extensionPoint = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MODELMAKER_RSREADERGUI);
+			extensionPoint = CMPlatformUtils.getExtensionPoint(ChoiceMakerExtensionPoint.CM_MODELMAKER_RSREADERGUI);
 		} else {
-			extensionPoint = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_MODELMAKER_MRPSREADERGUI);
+			extensionPoint = CMPlatformUtils.getExtensionPoint(ChoiceMakerExtensionPoint.CM_MODELMAKER_MRPSREADERGUI);
 		}
 		if (save) {
 			Vector l = new Vector();
-			IExtension[] extensions = extensionPoint.getExtensions();
+			CMExtension[] extensions = extensionPoint.getExtensions();
 			for (int i = 0; i < extensions.length; i++) {
-				IExtension ext = extensions[i];
+				CMExtension ext = extensions[i];
 				if(Boolean.valueOf(ext.getConfigurationElements()[0].getAttribute("hasSink")).booleanValue()) {
 					l.add(new ExtensionHolder(ext));
 				}
@@ -123,7 +121,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 		} else {
 			sourceTypeList =
 				new JList(
-					ExtensionHolder.getExtensionHolders(extensionPoint
+					ExtensionHolder.getExtensionsOfExtensionPoint(extensionPoint
 						));
 		}
 		sourceTypeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -146,7 +144,7 @@ public class SourceTypeSelectorDialog extends JDialog {
 			dispose();
 			SourceGui sourceGui = save ? sourceGuiFactory.createSaveGui(parent) : sourceGuiFactory.createGui(parent);
 			source = sourceGui.define();
-		} catch (CoreException e) {
+		} catch (Exception e) {
 			logger.severe(e.toString());;
 		}
 	}

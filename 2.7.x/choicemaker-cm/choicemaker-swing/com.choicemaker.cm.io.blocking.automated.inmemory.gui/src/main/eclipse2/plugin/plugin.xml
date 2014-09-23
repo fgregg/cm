@@ -9,7 +9,6 @@
       <library name="gui.jar"/>
    </runtime>
    <requires>
-      <import plugin="org.eclipse.core.resources"/>
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.io.blocking.automated.inmemory"/>
       <import plugin="com.choicemaker.cm.modelmaker"/>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../choicemaker-base/pom.xml</relativePath>
+  </parent>
+
+  <groupId>com.choicemaker.e2</groupId>
+  <artifactId>choicemaker-e2</artifactId>
+  <packaging>pom</packaging>
+
+  <name>ChoiceMaker E2 Components</name>
+  <url>http://oscmt.sourceforge.net/dev-doc</url>
+
+  <scm>
+    <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url>
+  </scm>
+
+  <issueManagement>
+    <url>http://sourceforge.net/projects/oscmt/support</url>
+  </issueManagement>
+
+  <properties>
+    <project.build.sourceEncoding>
+      UTF-8</project.build.sourceEncoding>
+
+    <!-- other plugin versions -->
+    <version.compiler.plugin>2.3.1</version.compiler.plugin>
+
+    <!-- maven-compiler-plugin -->
+    <maven.compiler.version>1.7</maven.compiler.version>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.7</maven.compiler.source>
+  </properties>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/eclipse2</directory>
+        <targetPath>META-INF/plugins</targetPath>
+      </resource>
+    </resources>
+
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.compiler.plugin}</version>
+        <configuration>
+          <compilerVersion>
+            ${maven.compiler.version}</compilerVersion>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>${javadocs.skip}</skip>
+          <skipDeploy>${javadocs.skip}</skipDeploy>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <modules>
+<module>com.choicemaker.e2</module>
+<module>com.choicemaker.e2.ejb</module>
+<module>com.choicemaker.e2.embed</module>
+<module>com.choicemaker.e2.std</module>
+  </modules>
+
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+      <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>ChoiceMaker developer</role>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <contributors>
+    <contributor>
+  		<!-- id>mbuechi</id -->
+      <name>Martin Buechi</name>
+      <roles>
+        <role>Original ChoiceMaker developer</role>
+      </roles>
+    </contributor>
+  </contributors>
+
+</project>

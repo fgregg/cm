@@ -55,7 +55,7 @@ public Object createExecutableExtension(String attributeName) throws CoreExcepti
 		IConfigurationElement[] exec;
 		IConfigurationElement[] parms;
 		IConfigurationElement element;
-		Hashtable initParms;
+		Hashtable<String,String> initParms;
 		String pname;
 
 		exec = getChildren(attributeName);
@@ -65,7 +65,7 @@ public Object createExecutableExtension(String attributeName) throws CoreExcepti
 			className = (String) element.getAttribute("class"); //$NON-NLS-1$
 			parms = element.getChildren("parameter"); //$NON-NLS-1$
 			if (parms != null) {
-				initParms = new Hashtable(parms.length + 1);
+				initParms = new Hashtable<>(parms.length + 1);
 				for (i = 0; i < parms.length; i++) {
 					pname = (String) parms[i].getAttribute("name"); //$NON-NLS-1$
 					if (pname != null)
@@ -160,7 +160,7 @@ public IConfigurationElement[] getChildren(String name) {
 	ConfigurationElementModel[] list = getSubElements();
 	if (list == null)
 		return new IConfigurationElement[0];
-	ArrayList children = new ArrayList();
+	ArrayList<ConfigurationElementModel> children = new ArrayList<>();
 	for (int i = 0; i < list.length; i++) {
 		ConfigurationElementModel	element = list[i];
 		if (name.equals(element.getName()))

@@ -129,10 +129,6 @@
       <artifactId>com.choicemaker.cm.io.db.base</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>org.eclipse.core.resources</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.oracle</groupId>
       <artifactId>classes12</artifactId>
       <version>10.2.0.5</version>

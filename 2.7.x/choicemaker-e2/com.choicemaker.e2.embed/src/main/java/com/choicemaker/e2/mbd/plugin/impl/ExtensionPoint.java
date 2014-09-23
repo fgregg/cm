@@ -31,7 +31,7 @@ public IConfigurationElement[] getConfigurationElements() {
 	ExtensionModel[] list = getDeclaredExtensions();
 	if (list == null)
 		return new IConfigurationElement[0];
-	ArrayList result = new ArrayList();
+	ArrayList<ConfigurationElementModel> result = new ArrayList<>();
 	for (int i = 0; i < list.length; i++) {
 		ConfigurationElementModel[] configs = list[i].getSubElements();
 		if (configs != null)

@@ -10,47 +10,68 @@
  */
 package com.choicemaker.cm.gui.utils;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMExtensionPoint;
+import com.choicemaker.e2.E2Exception;
 
 /**
  * Comment
  *
- * @author   Martin Buechi
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
+ * @author Martin Buechi
+ * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:46 $
  */
 public class ExtensionHolder {
-	private IExtension extension;
+	private CMExtension extension;
 	private String name;
-	
-	public static ExtensionHolder[] getExtensionHolders(IExtensionPoint extensionPoint) {
-		IExtension[] extensions = extensionPoint.getExtensions();
+
+	/**
+	 * Returns all the extensions implemented against a specified extension
+	 * point
+	 */
+	public static ExtensionHolder[] getExtensionsOfExtensionPoint(
+			CMExtensionPoint extensionPoint) {
+		CMExtension[] extensions = extensionPoint.getExtensions();
 		ExtensionHolder[] res = new ExtensionHolder[extensions.length];
 		for (int i = 0; i < res.length; i++) {
 			res[i] = new ExtensionHolder(extensions[i]);
 		}
 		return res;
 	}
-	
-	public ExtensionHolder(IExtension extension, String name) {
+
+//	/**
+//	 * Returns all the extensions implemented by a specified plugin against any
+//	 * extension point
+//	 */
+//	public static ExtensionHolder[] getExtensionsOfPlugin(String pluginId) {
+//		CMExtension[] extensions =
+//			CMPlatformUtils.getPluginExtensions(pluginId);
+//		ExtensionHolder[] res = new ExtensionHolder[extensions.length];
+//		for (int i = 0; i < res.length; i++) {
+//			res[i] = new ExtensionHolder(extensions[i]);
+//		}
+//		return res;
+//	}
+
+	public ExtensionHolder(CMExtension extension, String name) {
 		this.extension = extension;
 		this.name = name;
 	}
-	
-	public ExtensionHolder(IExtension extension) {
+
+	public ExtensionHolder(CMExtension extension) {
 		this.extension = extension;
-		this.name = extension.getConfigurationElements()[0].getAttribute("name");
+		this.name =
+			extension.getConfigurationElements()[0].getAttribute("name");
 	}
-	
-	public Object getInstance() throws CoreException {
-		return extension.getConfigurationElements()[0].createExecutableExtension("class");
+
+	public Object getInstance() throws E2Exception {
+		return extension.getConfigurationElements()[0]
+				.createExecutableExtension("class");
 	}
-	
+
 	/**
 	 * @return
 	 */
-	public IExtension getExtension() {
+	public CMExtension getExtension() {
 		return extension;
 	}
 

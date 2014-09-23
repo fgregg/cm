@@ -27,12 +27,6 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.Constants;
@@ -42,6 +36,10 @@ import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
 import com.choicemaker.cm.modelmaker.gui.utils.ThreadWatcher;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMExtensionPoint;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  *
@@ -178,18 +176,18 @@ public class ObjectMakerDialog extends JDialog implements Enable {
 		ArrayList descs = new ArrayList();
 		ArrayList defs = new ArrayList();
 		
-		IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(ChoiceMakerExtensionPoint.CM_CORE_OBJECTGENERATOR);
-		IExtension[] extensions = pt.getExtensions();
+		CMExtensionPoint pt = CMPlatformUtils.getExtensionPoint(ChoiceMakerExtensionPoint.CM_CORE_OBJECTGENERATOR);
+		CMExtension[] extensions = pt.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
-			IExtension extension = extensions[i];
-			IConfigurationElement[] els = extension.getConfigurationElements();
+			CMExtension extension = extensions[i];
+			CMConfigurationElement[] els = extension.getConfigurationElements();
 			for (int j = 0; j < els.length; j++) {
-				IConfigurationElement element = els[j];
+				CMConfigurationElement element = els[j];
 				try {
 					makers.add(element.createExecutableExtension("class"));
 					descs.add(element.getAttribute("description"));
 					defs.add(new Boolean("true".equals(element.getAttribute("default"))));
-				} catch (CoreException ex) {
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}

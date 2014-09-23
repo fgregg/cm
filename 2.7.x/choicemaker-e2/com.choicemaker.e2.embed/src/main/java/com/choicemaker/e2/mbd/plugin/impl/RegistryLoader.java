@@ -54,8 +54,8 @@ private String[] getPathMembers(URL path) {
 	String protocol = path.getProtocol();
 	if (protocol.equals("file")) { //$NON-NLS-1$
 		list = (new File(path.getFile())).list();
-	} else {
-		// XXX: attempt to read URL and see if we got html dir page
+//	} else {
+//		// attempt to read URL and see if we got html dir page
 	}
 	return list == null ? new String[0] : list;
 }
@@ -68,7 +68,7 @@ private boolean parseProblem(String message) {
 	return true;
 }
 private PluginRegistryModel parseRegistry(URL[] pluginPath) {
-	long startTick = System.currentTimeMillis();
+//	long startTick = System.currentTimeMillis();
 	PluginRegistryModel result = processManifestFiles(pluginPath);
 //	if (InternalPlatform.DEBUG) {
 //		long endTick = System.currentTimeMillis();

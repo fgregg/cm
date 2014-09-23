@@ -15,7 +15,7 @@
   <groupId>com.choicemaker.e2it</groupId>
   <artifactId>com.choicemaker.e2it.embed-it</artifactId>
  
-  <name>Integration Test: Embedded Eclipse2</name>
+  <name>Integration Test: ChoiceMaker E2 Embedded Platform</name>
   <description><![CDATA[
   Integration test for the embedded Eclipse framework.
   ]]></description>
@@ -61,7 +61,6 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.1</version><!--$NO-MVN-MAN-VER$-->
-      <scope>test</scope>
     </dependency>
 
     <dependency>

@@ -46,7 +46,7 @@ public class AllPluginsClassLoader {
 			super(path, parent);
 		}
 		
-		protected Class findClass(String name) throws ClassNotFoundException {
+		protected Class<?> findClass(String name) throws ClassNotFoundException {
 			try {
 				return super.findClass(name);
 			} catch (ClassNotFoundException ex) {

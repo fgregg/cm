@@ -33,8 +33,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Platform;
 import org.jdom.Element;
 
 import com.choicemaker.cm.analyzer.matcher.SimpleRecordSink;
@@ -70,6 +68,7 @@ import com.choicemaker.cm.modelmaker.gui.panels.FilterCluePanel;
 import com.choicemaker.cm.modelmaker.gui.panels.RecordPairViewerPanel;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Description
@@ -268,7 +267,7 @@ public class MatcherDialog extends JDialog implements Enable {
 						.getInstance())
 						.getDialogPlugin(
 					modelMaker.getProbabilityModel());
-		} catch (CoreException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		blockerPluginContainer.add(blockerPlugin, BorderLayout.CENTER);
@@ -737,8 +736,8 @@ public class MatcherDialog extends JDialog implements Enable {
 		c.gridx = 1;
 		blocking =
 			new JComboBox(
-				ExtensionHolder.getExtensionHolders(
-					Platform.getPluginRegistry().getExtensionPoint(
+				ExtensionHolder.getExtensionsOfExtensionPoint(
+					CMPlatformUtils.getExtensionPoint(
 						ChoiceMakerExtensionPoint.CM_MODELMAKER_MATCHERBLOCKINGTOOLKIT)));
 		content.add(blocking);
 

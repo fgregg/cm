@@ -11,7 +11,6 @@
 
 package com.choicemaker.e2.mbd.plugin.impl;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,22 +34,22 @@ import com.choicemaker.e2.mbd.runtime.model.PluginRegistryModel;
 
 public class PluginRegistry extends PluginRegistryModel implements IPluginRegistry {
 
-	private static final String URL_PROTOCOL_FILE = "file"; //$NON-NLS-1$
-	private static final String F_DEBUG_REGISTRY = ".debugregistry"; //$NON-NLS-1$
+//	private static final String URL_PROTOCOL_FILE = "file"; //$NON-NLS-1$
+//	private static final String F_DEBUG_REGISTRY = ".debugregistry"; //$NON-NLS-1$
 
 	// lifecycle events
-	private static final int STARTUP = 0;
-	private static final int SHUTDOWN = 1;
+//	private static final int STARTUP = 0;
+//	private static final int SHUTDOWN = 1;
 	
 //	// the registry keeps a reference to the cache reader for lazily loading extensions
 //	private RegistryCacheReader registryCacheReader;
-	final private File registryCacheFile;
+//	final private File registryCacheFile;
 	
 	//indicates if the registry cache needs to be rewritten
-	private boolean cacheDirty = false;
+//	private boolean cacheDirty = false;
 
 public PluginRegistry() {
-	this.registryCacheFile = null; // InternalPlatform.getMetaArea().getRegistryPath().toFile();
+//	this.registryCacheFile = null; // InternalPlatform.getMetaArea().getRegistryPath().toFile();
 }  
 /**
  * Iterate over the plug-ins in this registry.  Plug-ins are visited in dependent order.  That is, 
@@ -58,7 +57,7 @@ public PluginRegistry() {
  * visited before B).  
  */
 public void accept(IPluginVisitor visitor, boolean activeOnly) {
-	Map dependents = getDependentCounts(activeOnly);
+	Map<IPluginDescriptor,Integer> dependents = getDependentCounts(activeOnly);
 	// keep iterating until all have been visited.
 	while (!dependents.isEmpty()) {
 		// loop over the dependents list.  For each entry, if there are no dependents, visit
@@ -111,10 +110,10 @@ public IConfigurationElement[] getConfigurationElementsFor(String pluginId, Stri
  * keys are the plug-in descriptors and the values are an (<code>Integer</code>) count of
  * descriptors which depend on that plug-in.
  */
-private Map getDependentCounts(boolean activeOnly) {
+private Map<IPluginDescriptor,Integer> getDependentCounts(boolean activeOnly) {
 	IPluginDescriptor[] descriptors = getPluginDescriptors();
 	int descSize = (descriptors == null) ? 0 : descriptors.length;
-	Map dependents = new HashMap(5);
+	Map<IPluginDescriptor,Integer> dependents = new HashMap<>(5);
 	// build a table of all dependent counts.  The table is keyed by descriptor and
 	// the value the integer number of dependent plugins.
 	for (int i = 0; i < descSize; i++) {
@@ -167,7 +166,7 @@ public IExtensionPoint[] getExtensionPoints() {
 	PluginDescriptorModel[] list = getPlugins();
 	if (list == null)
 		return new IExtensionPoint[0];
-	ArrayList result = new ArrayList();
+	ArrayList<ExtensionPointModel> result = new ArrayList<>();
 	for (int i = 0; i < list.length; i++) {
 		ExtensionPointModel[] pointList = list[i].getDeclaredExtensionPoints();
 		if (pointList != null) {
@@ -303,7 +302,7 @@ private void shutdownPlugins() {
 						return;
 					try {
 						Plugin plugin = descriptor.getPlugin();
-						long time = 0L;
+//						long time = 0L;
 //						if (InternalPlatform.DEBUG_SHUTDOWN) {
 //							time = System.currentTimeMillis();
 //							System.out.println("Shutting down plugin: " + plugin.getDescriptor().getUniqueIdentifier()); //$NON-NLS-1$
@@ -362,7 +361,7 @@ public void startup(IProgressMonitor progress) {}
  * Indicates that the registry cache is dirty and should be rewritten on shutdown.
  */
 public void setCacheDirty() {
-	cacheDirty = true;
+//	cacheDirty = true;
 }
 //void setCacheReader(RegistryCacheReader registryCacheReader) {
 //	this.registryCacheReader = registryCacheReader;

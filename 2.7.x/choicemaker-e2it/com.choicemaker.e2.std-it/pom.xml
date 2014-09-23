@@ -14,7 +14,7 @@
   <groupId>com.choicemaker.e2it</groupId>
   <artifactId>com.choicemaker.e2it.std-it</artifactId>
 
-  <name>Integration Test: Standard Eclipse2</name>
+  <name>Integration Test: ChoiceMaker E2 Standard Platform</name>
   <description><![CDATA[
   Integration test for standard Eclipse2 platform.
   ]]></description>
@@ -137,7 +137,6 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
     </dependency>
 
     <dependency>

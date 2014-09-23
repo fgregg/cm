@@ -31,7 +31,7 @@ public class EclipseObjectInputStream extends ObjectInputStream {
 		super(in);
 	}
 
-	protected Class resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
+	protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
 		try {
 			return super.resolveClass(desc);
 		} catch (ClassNotFoundException ex) {
@@ -39,16 +39,16 @@ public class EclipseObjectInputStream extends ObjectInputStream {
 		}
 	}
 
-	protected Class resolveProxyClass(String[] interfaces) throws IOException, ClassNotFoundException {
+	protected Class<?> resolveProxyClass(String[] interfaces) throws IOException, ClassNotFoundException {
 		try {
 			return super.resolveProxyClass(interfaces);
 		} catch (ClassNotFoundException ex) {
 			ClassLoader allLoader = AllPluginsClassLoader.getInstance();
 			ClassLoader nonPublicLoader = null;
 			boolean hasNonPublicInterface = false;
-			Class[] classObjs = new Class[interfaces.length];
+			Class<?>[] classObjs = new Class[interfaces.length];
 			for (int i = 0; i < interfaces.length; i++) {
-				Class cl = Class.forName(interfaces[i], false, allLoader);
+				Class<?> cl = Class.forName(interfaces[i], false, allLoader);
 				if ((cl.getModifiers() & Modifier.PUBLIC) == 0) {
 					if (hasNonPublicInterface) {
 						if (nonPublicLoader != cl.getClassLoader()) {

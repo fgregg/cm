@@ -13,7 +13,6 @@
       <import plugin="com.choicemaker.cm.matching.cfg"/>
       <import plugin="com.choicemaker.cm.matching.en.us"/>
       <import plugin="com.choicemaker.cm.matching.gen"/>
-      <import plugin="org.eclipse.core.resources"/>
    </requires>
 
 

@@ -14,14 +14,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
-
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.CMExtensionPoint;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
  * Description
@@ -47,16 +45,16 @@ public class MlGuiFactories {
 	
 	private static void init() {
 		if (!initialized) {
-			IExtensionPoint pt = Platform.getPluginRegistry().getExtensionPoint(EXTENSION_POINT);
-			IExtension[] extensions = pt.getExtensions();
+			CMExtensionPoint pt = CMPlatformUtils.getExtensionPoint(EXTENSION_POINT);
+			CMExtension[] extensions = pt.getExtensions();
 			for (int i = 0; i < extensions.length; i++) {
-				IExtension extension = extensions[i];
-				IConfigurationElement[] elems = extension.getConfigurationElements();
+				CMExtension extension = extensions[i];
+				CMConfigurationElement[] elems = extension.getConfigurationElements();
 				String handledClassName = elems[0].getAttribute("handledClass");
 				MlGuiFactory mlgf = null;
 				try {
 					mlgf = (MlGuiFactory) elems[0].createExecutableExtension("class");
-				} catch (CoreException ex) {
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 				if (mlgf != null) {

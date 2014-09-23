@@ -11,7 +11,6 @@
       </library>
    </runtime>
    <requires>
-      <import plugin="org.eclipse.core.resources"/>
       <import plugin="com.choicemaker.cm.analyzer.base"/>
       <import plugin="com.choicemaker.cm.compiler"/>
       <import plugin="com.choicemaker.cm.core"/>
@@ -45,6 +44,7 @@
       </application>
    </extension>
    <extension
+         id="AllBlocker"
          point="com.choicemaker.cm.modelmaker.matcherBlockingToolkit">
       <toolkit
             name="All Blocker"
@@ -52,6 +52,7 @@
       </toolkit>
    </extension>
    <extension
+         id="NoMachineLearningGui"
          point="com.choicemaker.cm.modelmaker.mlTrainGuiPlugin">
       <gui
             name="None"

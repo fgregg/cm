@@ -27,10 +27,6 @@
 
   <distributionManagement>
     <site>
-<!--
-      <id>oscmt.rphall.com</id>
-      <url>scp://localhost:/home/project-web/oscmt/htdocs/dev-doc/</url>
--->
       <id>${dm-site-id}</id>
       <url>${dm-site-url}</url>
     </site>
@@ -63,20 +59,14 @@
     <module>choicemaker-assembly</module>
     <module>choicemaker-base</module>
 
-    <module>choicemaker-e2/com.choicemaker.e2</module>
-    <module>choicemaker-e2/com.choicemaker.e2.ejb</module>
-    <module>choicemaker-e2/com.choicemaker.e2.embed</module>
-    <module>choicemaker-e2/com.choicemaker.e2.std</module>
+    <module>choicemaker-e2</module>
 
     <module>choicemaker-cm</module>
     <!-- <module>cluemaker-maven-plugin</module> -->
     <module>misc/mymojo-plugin</module>
     <module>misc/compiler-app</module>
 
-    <module>choicemaker-e2/com.choicemaker.e2-it</module>
-    <module>choicemaker-e2/com.choicemaker.e2.ejb-it</module>
-    <module>choicemaker-e2/com.choicemaker.e2.embed-it</module>
-    <!-- <module>choicemaker-e2/com.choicemaker.eclipse2.std-it</module> -->
+    <module>choicemaker-e2it</module>
     <module>misc/mymojo-plugin-it</module>
 
   </modules>
