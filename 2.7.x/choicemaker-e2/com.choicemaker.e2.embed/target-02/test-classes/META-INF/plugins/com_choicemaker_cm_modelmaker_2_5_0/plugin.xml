@@ -38,7 +38,7 @@
 
    <extension
          id="ModelMaker"
-         point="org.eclipse.core.runtime.applications">
+         point="com.choicemaker.e2.applications">
       <application>
          <run
                class="com.choicemaker.cm.modelmaker.gui.ModelMaker">

@@ -23,7 +23,7 @@
 
    <extension
          id="OraDbObjectMaker"
-         point="org.eclipse.core.runtime.applications">
+         point="com.choicemaker.e2.applications">
       <application>
          <run
                class="com.choicemaker.cm.io.db.oracle.dbom.DbDbObjectMaker">

@@ -17,7 +17,7 @@
    <extension
          id="ProductionModelsJarBuilderApp"
          name="ProductionModelsJarBuilderApp"
-         point="org.eclipse.core.runtime.applications">
+         point="com.choicemaker.e2.applications">
       <application>
          <run
                class="com.choicemaker.cm.util.app.ProductionModelsJarBuilderApp">

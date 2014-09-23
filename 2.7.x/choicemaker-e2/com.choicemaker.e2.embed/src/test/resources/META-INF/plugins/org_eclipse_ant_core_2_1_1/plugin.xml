@@ -23,7 +23,7 @@
    <!-- Applications -->
    <extension
      id="antRunner"
-     point="org.eclipse.core.runtime.applications">
+     point="com.choicemaker.e2.applications">
      <application>
        <run
          class="org.eclipse.ant.core.AntRunner">

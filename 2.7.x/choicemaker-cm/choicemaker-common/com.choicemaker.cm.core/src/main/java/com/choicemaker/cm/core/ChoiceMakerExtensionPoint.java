@@ -2,6 +2,11 @@ package com.choicemaker.cm.core;
 
 public interface ChoiceMakerExtensionPoint {
 
+	public static final String E2_APPLICATIONS =
+		"com.choicemaker.e2.applications";
+	public static final String E2_URLHANDLERS =
+		"com.choicemaker.e2.urlHandlers";
+
 	public static final String CM_CORE_ACCESSOR =
 		"com.choicemaker.cm.core.accessor";
 	public static final String CM_CORE_ACCESSOR_ATTR_CLASS =
@@ -28,22 +33,27 @@ public interface ChoiceMakerExtensionPoint {
 		"com.choicemaker.cm.core.rsReader";
 	public static final String CM_CORE_RSSERIALIZER =
 		"com.choicemaker.cm.core.rsSerializer";
+
 	public static final String CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION =
 		"com.choicemaker.cm.io.blocking.automated.base.databaseAbstraction";
 	public static final String CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR =
 		"com.choicemaker.cm.io.blocking.automated.base.databaseAccessor";
+
 	public static final String CM_MATCHING_CFG_CASCADEDPARSER =
 		"com.choicemaker.cm.matching.cfg.cascadedParser";
 	public static final String CM_MATCHING_CFG_PARSER =
 		"com.choicemaker.cm.matching.cfg.parser";
+
 	public static final String CM_MATCHING_GEN_MAP =
 		"com.choicemaker.cm.matching.gen.map";
 	public static final String CM_MATCHING_GEN_RELATION =
 		"com.choicemaker.cm.matching.gen.relation";
 	public static final String CM_MATCHING_GEN_SET =
 		"com.choicemaker.cm.matching.gen.set";
+
 	public static final String CM_MATCHING_WFST_PARSER =
 		"com.choicemaker.cm.matching.wfst.parser";
+
 	public static final String CM_MODELMAKER_MATCHERBLOCKINGTOOLKIT =
 		"com.choicemaker.cm.modelmaker.matcherBlockingToolkit";
 	public static final String CM_MODELMAKER_MLTRAINGUIPLUGIN =
@@ -58,12 +68,15 @@ public interface ChoiceMakerExtensionPoint {
 		"com.choicemaker.cm.modelmaker.rsReaderGui";
 	public static final String CM_MODELMAKER_TOOLMENUITEM =
 		"com.choicemaker.cm.modelmaker.toolMenuItem";
+
 	public static final String CM_SERVER_BASE_BOUNDOBJECT =
 		"com.choicemaker.cm.server.base.boundObject";
 	public static final String CM_SERVER_BASE_INITIALIZER =
 		"com.choicemaker.cm.server.base.initializer";
+
 	public static final String CM_URM_UPDATEDERIVEDFIELDS =
 		"com.choicemaker.cm.urm.updateDerivedFields";
+
 	public static final String CM_VALIDATION_ECLIPSE_AGGREGATEVALIDATOR =
 		"com.choicemaker.cm.validation.eclipse.aggregateValidator";
 	public static final String CM_VALIDATION_ECLIPSE_SETBASEDVALIDATOR =
@@ -72,6 +85,7 @@ public interface ChoiceMakerExtensionPoint {
 		"com.choicemaker.cm.validation.eclipse.simpleValidator";
 	public static final String CM_VALIDATION_ECLIPSE_VALIDATORFACTORY =
 		"com.choicemaker.cm.validation.eclipse.validatorFactory";
+
 	public static final String SECONDSTRING_STRINGDISTANCE =
 		"com.wcohen.ss.stringdistance";
 

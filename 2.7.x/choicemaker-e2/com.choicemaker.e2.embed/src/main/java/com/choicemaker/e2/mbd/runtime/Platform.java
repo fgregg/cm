@@ -47,11 +47,10 @@ public class Platform {
 			.getName());
 
 	/**
-	 * The unique identifier constant (value "
-	 * <code>org.eclipse.core.runtime</code>") of the Core Runtime (pseudo-)
-	 * plug-in.
+	 * The unique identifier constant (value "<code>com.choicemaker.e2</code>")
+	 * of the Core Runtime (pseudo-) plug-in.
 	 */
-	public static final String PI_RUNTIME = "org.eclipse.core.runtime"; //$NON-NLS-1$
+	public static final String PI_RUNTIME = "com.choicemaker.e2"; //$NON-NLS-1$
 
 	public static final String PLUGIN_BASE_DIR = "META-INF/plugins"; //$NON-NLS-1$
 	public static final String PLUGINS_FILE = PLUGIN_BASE_DIR + "/plugins.xml"; //$NON-NLS-1$
