@@ -27,8 +27,8 @@ import com.choicemaker.e2.mbd.runtime.impl.Assert;
 public class PluginRegistryModel {
 
 	// transient properties (not included in plug-in manifest)
-	private Map plugins = new HashMap(30);
-	private Map fragments = new HashMap(30);
+	private Map<String,PluginDescriptorModel[]> plugins = new HashMap<>(30);
+	private Map<String, PluginFragmentModel[]> fragments = new HashMap<>(30);
 	private boolean readOnly = false;
 	private boolean resolved = false;
 /**
@@ -149,8 +149,8 @@ public PluginFragmentModel getFragment(String id, String version) {
  * @return the fragments in this registry
  */
 public PluginFragmentModel[] getFragments() {
-	List result = new ArrayList(fragments.size());
-	for (Iterator i = fragments.values().iterator(); i.hasNext();) {
+	List<PluginFragmentModel> result = new ArrayList<>(fragments.size());
+	for (Iterator<PluginFragmentModel[]> i = fragments.values().iterator(); i.hasNext();) {
 		PluginFragmentModel[] entries = (PluginFragmentModel[]) i.next();
 		for (int j = 0; j < entries.length; j++)
 			result.add(entries[j]);
@@ -216,8 +216,8 @@ public PluginDescriptorModel getPlugin(String pluginId, String version) {
  * @return the plug-ins in this registry
  */
 public PluginDescriptorModel[] getPlugins() {
-	List result = new ArrayList(plugins.size());
-	for (Iterator i = plugins.values().iterator(); i.hasNext();) {
+	List<PluginDescriptorModel> result = new ArrayList<>(plugins.size());
+	for (Iterator<PluginDescriptorModel[]> i = plugins.values().iterator(); i.hasNext();) {
 		PluginDescriptorModel[] entries = (PluginDescriptorModel[]) i.next();
 		for (int j = 0; j < entries.length; j++)
 			result.add(entries[j]);
@@ -265,12 +265,12 @@ public boolean isResolved() {
  */
 public void markReadOnly() {
 	readOnly = true;
-	for (Iterator it = plugins.values().iterator(); it.hasNext();) {
+	for (Iterator<PluginDescriptorModel[]> it = plugins.values().iterator(); it.hasNext();) {
 		PluginDescriptorModel[] list = (PluginDescriptorModel[]) it.next();
 		for (int i = 0; i < list.length; i++)
 			list[i].markReadOnly();
 	}
-	for (Iterator it = fragments.values().iterator(); it.hasNext();) {
+	for (Iterator<PluginFragmentModel[]> it = fragments.values().iterator(); it.hasNext();) {
 		PluginFragmentModel[] list = (PluginFragmentModel[]) it.next();
 		for (int i = 0; i < list.length; i++)
 			list[i].markReadOnly();

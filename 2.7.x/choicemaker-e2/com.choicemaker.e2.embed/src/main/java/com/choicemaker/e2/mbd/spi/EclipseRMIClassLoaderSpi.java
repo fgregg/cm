@@ -24,8 +24,8 @@ import java.util.StringTokenizer;
 /**
  * Comment
  *
- * @author   Martin Buechi
- * @version  $Revision: 1.1 $ $Date: 2010/01/27 03:58:28 $
+ * @author Martin Buechi
+ * @version $Revision: 1.1 $ $Date: 2010/01/27 03:58:28 $
  */
 public class EclipseRMIClassLoaderSpi extends RMIClassLoaderSpi {
 	private static ClassLoader classLoader;
@@ -34,20 +34,24 @@ public class EclipseRMIClassLoaderSpi extends RMIClassLoaderSpi {
 		classLoader = v;
 	}
 
-	public ClassLoader getClassLoader(String codebase) throws MalformedURLException {
-		return RMIClassLoader.getDefaultProviderInstance().getClassLoader(codebase);
+	public ClassLoader getClassLoader(String codebase)
+			throws MalformedURLException {
+		return RMIClassLoader.getDefaultProviderInstance().getClassLoader(
+				codebase);
 	}
 
-	public String getClassAnnotation(Class cl) {
-		RMIClassLoaderSpi defaultProvider = RMIClassLoader.getDefaultProviderInstance();
+	public String getClassAnnotation(Class<?> cl) {
+		RMIClassLoaderSpi defaultProvider =
+			RMIClassLoader.getDefaultProviderInstance();
 		if (cl.isPrimitive() || cl.isArray()) {
 			return defaultProvider.getClassAnnotation(cl);
 		} else {
-			Set codebaseElements = new HashSet();
+			Set<String> codebaseElements = new HashSet<>();
 			addClassAnnotations(codebaseElements, cl, defaultProvider);
 			StringBuffer annotation = new StringBuffer();
 			boolean first = true;
-			for (Iterator iCodeBaseElements = codebaseElements.iterator(); iCodeBaseElements.hasNext();) {
+			for (Iterator<String> iCodeBaseElements =
+				codebaseElements.iterator(); iCodeBaseElements.hasNext();) {
 				if (first) {
 					first = false;
 				} else {
@@ -59,24 +63,27 @@ public class EclipseRMIClassLoaderSpi extends RMIClassLoaderSpi {
 		}
 	}
 
-	private void addClassAnnotations(Set codebaseElements, Class cl, RMIClassLoaderSpi defaultProvider) {
+	private void addClassAnnotations(Set<String> codebaseElements, Class<?> cl,
+			RMIClassLoaderSpi defaultProvider) {
 		String defaultAnnotation = defaultProvider.getClassAnnotation(cl);
 		StringTokenizer st = new StringTokenizer(defaultAnnotation, " ");
-		while(st.hasMoreTokens()) {
+		while (st.hasMoreTokens()) {
 			codebaseElements.add(st.nextToken());
 		}
-		Class superclass = cl.getSuperclass();
-		if(superclass != null) {
+		Class<?> superclass = cl.getSuperclass();
+		if (superclass != null) {
 			addClassAnnotations(codebaseElements, superclass, defaultProvider);
 		}
-		Class[] interfaces = cl.getInterfaces();
+		Class<?>[] interfaces = cl.getInterfaces();
 		for (int i = 0; i < interfaces.length; i++) {
-			addClassAnnotations(codebaseElements, interfaces[i], defaultProvider);
+			addClassAnnotations(codebaseElements, interfaces[i],
+					defaultProvider);
 		}
 	}
 
-	public Class loadClass(String codebase, String name, ClassLoader defaultLoader)
-		throws MalformedURLException, ClassNotFoundException {
+	public Class<?> loadClass(String codebase, String name,
+			ClassLoader defaultLoader) throws MalformedURLException,
+			ClassNotFoundException {
 		if (defaultLoader != null) {
 			try {
 				return defaultLoader.loadClass(name);
@@ -92,9 +99,11 @@ public class EclipseRMIClassLoaderSpi extends RMIClassLoaderSpi {
 		return classLoader.loadClass(name);
 	}
 
-	public Class loadProxyClass(String codebase, String[] interfaces, ClassLoader defaultLoader)
-		throws MalformedURLException, ClassNotFoundException {
-		return RMIClassLoader.getDefaultProviderInstance().loadProxyClass(codebase, interfaces, classLoader);
+	public Class<?> loadProxyClass(String codebase, String[] interfaces,
+			ClassLoader defaultLoader) throws MalformedURLException,
+			ClassNotFoundException {
+		return RMIClassLoader.getDefaultProviderInstance().loadProxyClass(
+				codebase, interfaces, classLoader);
 	}
 
 }

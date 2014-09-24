@@ -41,6 +41,7 @@ import com.choicemaker.e2.mbd.runtime.model.PluginFragmentModel;
 import com.choicemaker.e2.mbd.runtime.model.PluginModel;
 import com.choicemaker.e2.mbd.runtime.model.PluginPrerequisiteModel;
 
+@SuppressWarnings({"rawtypes", "unused", "unchecked"})
 public class PluginParser extends DefaultHandler implements IModel {
 
 	// concrete object factory

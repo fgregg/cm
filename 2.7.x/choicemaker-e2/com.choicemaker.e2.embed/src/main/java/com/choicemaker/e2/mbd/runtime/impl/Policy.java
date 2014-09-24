@@ -60,7 +60,7 @@ public static String bind(String id, String[] bindings) {
 	}
 	if (bindings == null)
 		return message;
-	return MessageFormat.format(message, bindings);
+	return MessageFormat.format(message, (Object[])bindings);
 }
 //public static IProgressMonitor monitorFor(IProgressMonitor monitor) {
 //	if (monitor == null)

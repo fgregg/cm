@@ -36,6 +36,7 @@ import com.choicemaker.e2.mbd.runtime.model.PluginModel;
 import com.choicemaker.e2.mbd.runtime.model.PluginPrerequisiteModel;
 import com.choicemaker.e2.mbd.runtime.model.PluginRegistryModel;
 
+@SuppressWarnings({"rawtypes", "unused", "unchecked"})
 public class RegistryResolver {
 
 	private Map idmap;
