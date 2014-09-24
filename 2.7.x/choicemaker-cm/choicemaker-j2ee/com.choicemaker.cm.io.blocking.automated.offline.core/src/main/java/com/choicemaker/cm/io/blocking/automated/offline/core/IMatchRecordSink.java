@@ -10,12 +10,12 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
+import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
 
 /**
  * This is a sink that stores MatchRecord.
@@ -26,15 +26,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
 public interface IMatchRecordSink extends ISink {
 
 	/** Writes out an ArrayList of MatchRecord. */
-	public void writeMatches (ArrayList matches) throws BlockingException;
+	public void writeMatches (List<IMatchRecord> matches) throws BlockingException;
 	
 	/** Writes out a Collection of MatchRecord. */
-	public void writeMatches (Collection c) throws BlockingException;
+	public void writeMatches (Collection<IMatchRecord> c) throws BlockingException;
 	
 	/** Writes out an Iterator containing MatchRecord. */
-	public void writeMatches (Iterator it) throws BlockingException;
+	public void writeMatches (Iterator<IMatchRecord> it) throws BlockingException;
 	
 	/** Writes out a single MatchRecord. */
-	public void writeMatch (MatchRecord match) throws BlockingException;
+	public void writeMatch (IMatchRecord match) throws BlockingException;
 	
 }

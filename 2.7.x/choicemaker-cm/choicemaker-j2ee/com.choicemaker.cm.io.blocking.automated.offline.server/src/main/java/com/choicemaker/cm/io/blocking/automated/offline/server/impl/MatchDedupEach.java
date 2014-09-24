@@ -49,6 +49,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
  * @author pcheung
  *
  */
+@SuppressWarnings("rawtypes")
 public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;

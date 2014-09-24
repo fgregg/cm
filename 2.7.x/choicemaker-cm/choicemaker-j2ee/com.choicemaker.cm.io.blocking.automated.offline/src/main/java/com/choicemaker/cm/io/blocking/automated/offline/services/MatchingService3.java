@@ -252,10 +252,10 @@ public class MatchingService3 {
 				while (cSet.hasNextPair()) {
 					ComparisonPair p = cSet.getNextPair();
 
-					Record q = (Record) stageMap.get(p.id1);
+					Record q = (Record) stageMap.get(p.getId1());
 					Record m;
-					if (p.isStage) m =  (Record) stageMap.get(p.id2);
-					else m =  (Record) masterMap.get(p.id2);
+					if (p.isStage) m =  (Record) stageMap.get(p.getId2());
+					else m =  (Record) masterMap.get(p.getId2());
 
 					MatchRecord2 match = compareRecords (q, m, p.isStage);
 					if (match != null) {

@@ -69,6 +69,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
  * @param <T>
  *            the type of record identifier
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Matcher2<T extends Comparable<? super T>> implements
 		MessageDrivenBean, MessageListener {
 
@@ -299,8 +300,8 @@ public class Matcher2<T extends Comparable<? super T>> implements
 			m = getM(dataStore, p);
 
 			// major problem if this happens
-			if (p.id1.equals(p.id2) && p.isStage) {
-				log.severe("id1 = id2: " + p.id1.toString());
+			if (p.getId1().equals(p.getId2()) && p.isStage) {
+				log.severe("id1 = id2: " + p.getId1().toString());
 				throw new BlockingException("id1 = id2");
 			}
 
@@ -339,7 +340,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 		if (log.isLoggable(Level.FINE))
 			t = System.currentTimeMillis();
 
-		Record r = (Record) dataStore.getStage(p.id1);
+		Record r = (Record) dataStore.getStage(p.getId1());
 
 		if (log.isLoggable(Level.FINE)) {
 			t = System.currentTimeMillis() - t;
@@ -356,9 +357,9 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 		Record r = null;
 		if (p.isStage)
-			r = (Record) dataStore.getStage(p.id2);
+			r = (Record) dataStore.getStage(p.getId2());
 		else
-			r = (Record) dataStore.getMaster(p.id2);
+			r = (Record) dataStore.getMaster(p.getId2());
 
 		if (log.isLoggable(Level.FINE)) {
 			t = System.currentTimeMillis() - t;
@@ -482,9 +483,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 			// char source = 'D';
 			char source = MatchRecord2.MASTER_SOURCE;
 
-			@SuppressWarnings("unchecked")
 			T i1 = (T) q.getId();
-			@SuppressWarnings("unchecked")
 			T i2 = (T) m.getId();
 
 			if (isStage) {

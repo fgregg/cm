@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.choicemaker.util.LongArrayList;
 
@@ -20,17 +21,17 @@ import com.choicemaker.util.LongArrayList;
  * 
  * This class is not thread-safe in the least.
  * 
- * TODO: create a subclass of SuffixTreeNode for non-leaf nodes.  Then can move all
- * the putChild, getChild, removeChild, etc. funcationality (as well as numKids and kids
+ * Improvement: create a subclass of SuffixTreeNode for non-leaf nodes.  Then can move all
+ * the putChild, getChild, removeChild, etc. functionality (as well as numKids and kids
  * instance variables) in that class.
  * 
  * @author Adam Winkel
  */
 
-public class SuffixTreeNode implements IIDSet{
+public class SuffixTreeNode implements IIDSet {
 
 	/**
-	 * We hardcode the effective load factor as .75f, and use the the value 
+	 * We use an effective load factor as .75f, and use the the value 
 	 * of numKids * 100 as the threshold for expansion.
 	 */
 	public static final int LOAD_FACTOR = 75;
@@ -110,10 +111,10 @@ public class SuffixTreeNode implements IIDSet{
 	 * 
 	 * @return ArrayList
 	 */ 
-	public ArrayList getAllChildren () {
-		ArrayList children = null;
+	public List<SuffixTreeNode> getAllChildren () {
+		List<SuffixTreeNode> children = null;
 		if (numKids > 0) {
-			children = new ArrayList ();
+			children = new ArrayList<>();
 			for (int i=0; i< kids.length; i++) {
 				if (kids[i] != null) {
 					SuffixTreeNode kid = kids[i];
@@ -148,7 +149,7 @@ public class SuffixTreeNode implements IIDSet{
 		list.add(recordId);
 		
 		if (numKids > 0) {
-			ArrayList children = getAllChildren();
+			List<SuffixTreeNode> children = getAllChildren();
 			for (int i=0; i<numKids; i++) {
 				SuffixTreeNode kid = (SuffixTreeNode) children.get(i);
 				list.addAll( kid.getRecordIDs());
@@ -161,7 +162,7 @@ public class SuffixTreeNode implements IIDSet{
 
 	/** PC 4/5/05
 	 * 
-	 * This returns a string represetation of the tree.  For example, it might look like
+	 * This returns a string representation of the tree.  For example, it might look like
 	 * 
 	 * prefix 1 2 3 4 5
 	 * 1 2 6
@@ -181,7 +182,7 @@ public class SuffixTreeNode implements IIDSet{
 			sb.append(Constants.LINE_SEPARATOR);
 			return sb.toString();
 		} else {
-			ArrayList children = getAllChildren();
+			List<SuffixTreeNode> children = getAllChildren();
 			sb.append(' ');
 			String temp = sb.toString();
 			sb = new StringBuffer ();
@@ -206,7 +207,7 @@ public class SuffixTreeNode implements IIDSet{
 		sb.append(recordId);
 		
 		if (numKids > 0) {
-			ArrayList children = getAllChildren();
+			List<SuffixTreeNode> children = getAllChildren();
 			for (int i=0; i<children.size(); i++) {
 				SuffixTreeNode kid = (SuffixTreeNode) children.get(i);
 				kid.writeSuffixTree2(sb);

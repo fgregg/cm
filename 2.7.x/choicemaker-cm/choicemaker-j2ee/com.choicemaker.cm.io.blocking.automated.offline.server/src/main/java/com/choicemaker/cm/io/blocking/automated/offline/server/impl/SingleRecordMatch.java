@@ -72,6 +72,7 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
@@ -350,7 +351,6 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 				AutomatedBlocker rs = new Blocker2(databaseAccessor, model, q);
 				log.fine(q.getId() + " " + rs + " " + model);
 
-				@SuppressWarnings("unchecked")
 				SortedSet<Match> s =
 					dm.getMatches(q, rs, model, data.low, data.high);
 				Iterator<Match> iS = s.iterator();

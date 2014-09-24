@@ -60,6 +60,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 	
 	private static final long serialVersionUID = 1L;

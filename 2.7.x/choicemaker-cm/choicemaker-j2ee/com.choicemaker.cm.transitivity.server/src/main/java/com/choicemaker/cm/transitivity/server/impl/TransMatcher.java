@@ -130,8 +130,8 @@ public class TransMatcher extends Matcher2  {
 			m = getM(dataStore, p);
 							
 			//major problem if this happens
-			if (p.id1.equals(p.id2) && p.isStage) {
-				log.severe("id1 = id2: " + p.id1.toString());
+			if (p.getId1().equals(p.getId2()) && p.isStage) {
+				log.severe("id1 = id2: " + p.getId1().toString());
 				throw new BlockingException ("id1 = id2");								
 			}
 

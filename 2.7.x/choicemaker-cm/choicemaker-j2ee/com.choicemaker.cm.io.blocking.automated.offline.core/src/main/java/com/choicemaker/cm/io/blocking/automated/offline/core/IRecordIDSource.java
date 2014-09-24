@@ -24,7 +24,7 @@ public interface IRecordIDSource extends ISource {
 	 * 
 	 * @return Object - next record ID.
 	 */
-	public Comparable getNextID () throws BlockingException;
+	public Comparable<?> getNextID () throws BlockingException;
 	
 	
 	/** This returns the object type of the record ID.  See IRecordIDSink.

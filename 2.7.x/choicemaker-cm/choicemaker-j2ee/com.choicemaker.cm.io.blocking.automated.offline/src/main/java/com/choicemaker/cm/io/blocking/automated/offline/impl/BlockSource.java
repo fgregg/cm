@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.BlockingException;
@@ -178,8 +179,8 @@ public class BlockSource extends BaseFileSource implements IBlockSource{
 	 * @param col - maximum column id that this needs to have
 	 * @return - an ArrayList of BlockSet with each containing the oversized blocking set
 	 */
-	public ArrayList readOversizedInt (int fields, int col) throws BlockingException {
-		ArrayList oversized = new ArrayList ();
+	public List<BlockSet> readOversizedInt (int fields, int col) throws BlockingException {
+		List<BlockSet> oversized = new ArrayList<>();
 
 		open ();
 		while (hasNext ()) {

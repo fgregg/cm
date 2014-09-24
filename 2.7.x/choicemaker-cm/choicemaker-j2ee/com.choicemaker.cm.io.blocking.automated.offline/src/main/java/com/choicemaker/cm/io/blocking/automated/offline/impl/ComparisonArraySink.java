@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
@@ -75,7 +75,7 @@ public class ComparisonArraySink extends BaseFileSink implements IComparisonArra
 	}
 	
 	
-	private void writeArray (ArrayList list, int dataType) throws IOException {
+	private void writeArray (List list, int dataType) throws IOException {
 
 		if (type == Constants.BINARY) {
 			//first write the size

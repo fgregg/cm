@@ -22,8 +22,9 @@ public class MatchRecord2Factory {
 	 * 
 	 * @return
 	 */
-	public static MatchRecord2 getSeparator (Comparable C) {
-		Comparable id = null;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static MatchRecord2<?> getSeparator (Comparable<?> C) {
+		Comparable<?> id = null;
 		if (C instanceof Integer) id = new Integer (0);
 		else if (C instanceof Long) id = new Long (0);
 		else if (C instanceof String) id = "@";

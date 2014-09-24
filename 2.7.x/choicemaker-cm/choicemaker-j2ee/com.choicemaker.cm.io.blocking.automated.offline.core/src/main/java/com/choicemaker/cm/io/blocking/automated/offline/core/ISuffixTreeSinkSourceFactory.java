@@ -18,7 +18,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface ISuffixTreeSinkSourceFactory {
+public interface ISuffixTreeSinkSourceFactory<T extends Comparable<T>> {
 
 	/** Gets the next ISuffixTreeSink in the sequence. */
 	public ISuffixTreeSink getNextSink () throws BlockingException;
@@ -36,7 +36,7 @@ public interface ISuffixTreeSinkSourceFactory {
 	public ISuffixTreeSource getSource (ISuffixTreeSink sink) throws BlockingException;
 
 	/** Creates an ISuffixTreeSink for an existing ISuffixTreeSource. */
-	public ISuffixTreeSink getSink (IComparisonArraySource source) throws BlockingException;
+	public ISuffixTreeSink getSink (IComparisonArraySource<T> source) throws BlockingException;
 
 	/** Removes this sink.
 	 * 

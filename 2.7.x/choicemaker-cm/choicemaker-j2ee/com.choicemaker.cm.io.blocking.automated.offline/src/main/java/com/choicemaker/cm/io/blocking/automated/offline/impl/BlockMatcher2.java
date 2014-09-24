@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -45,6 +46,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class BlockMatcher2 implements IBlockMatcher2 {
 
 	private static final Logger log = Logger.getLogger(BlockMatcher2.class.getName());
@@ -199,13 +201,13 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 	private void handleBlock (ComparisonArray cg, HashMap stage, HashMap master, ImmutableProbabilityModel model,
 		IMatchRecord2Sink mSink, float low, float high) throws BlockingException {
 		
-		ArrayList list = new ArrayList ();
+		List list = new ArrayList ();
 		
 		ClueSet clueSet = model.getClueSet();
 		boolean[] enabledClues = model.getCluesToEvaluate();
 		
-		ArrayList stageList = cg.getStagingIDs();
-		ArrayList masterList = cg.getMasterIDs();
+		List stageList = cg.getStagingIDs();
+		List masterList = cg.getMasterIDs();
 		
 		for (int i=0; i< stageList.size()-1; i++) {
 			Comparable c = (Comparable) stageList.get(i);
@@ -292,16 +294,16 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 	private void handleOversized (ComparisonArray cg, HashMap stage, HashMap master, ImmutableProbabilityModel model,
 		IMatchRecord2Sink mSink, float low, float high, int maxBlockSize) throws BlockingException {
 
-		ArrayList list = new ArrayList ();
+		List list = new ArrayList ();
 		
 		ClueSet clueSet = model.getClueSet();
 		boolean[] enabledClues = model.getCluesToEvaluate();
 		
 		//first split up into S and T sets, S only contains staging records
-		ArrayList stageList = cg.getStagingIDs();
-		ArrayList S = null;
-		ArrayList TStage = null;
-		ArrayList TMaster = cg.getMasterIDs();
+		List stageList = cg.getStagingIDs();
+		List S = null;
+		List TStage = null;
+		List TMaster = cg.getMasterIDs();
 
 		//seed the random number generator
 		int s = stageList.size() + TMaster.size();

@@ -12,9 +12,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -42,7 +42,7 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 		init (fileName, type);
 	}
 
-	public void writeMatches (ArrayList matches) throws BlockingException {
+	public void writeMatches (List matches) throws BlockingException {
 		int size = matches.size();
 		for (int i=0; i<size; i++) {
 			MatchRecord2 match = (MatchRecord2) matches.get(i);

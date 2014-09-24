@@ -45,6 +45,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.MatchingService
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class MatchOABA implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;

@@ -69,6 +69,7 @@ public class MatchWriterData implements Serializable {
 	public long inCompare;
 	
 	/** Matches to be written */
+	@SuppressWarnings("rawtypes")
 	public List<MatchRecord2> matches;
 	
 	public MatchWriterData () {

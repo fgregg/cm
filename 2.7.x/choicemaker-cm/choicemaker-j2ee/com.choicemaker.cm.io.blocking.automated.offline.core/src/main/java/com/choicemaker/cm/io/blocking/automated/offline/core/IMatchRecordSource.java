@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
+import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
 
 /**
  * This is a source that reads MatchRecord.
@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
 public interface IMatchRecordSource extends ISource {
 	
 	/** Gets the next MatchRecord. */
-	public MatchRecord getNext () throws BlockingException;
+	public IMatchRecord getNext () throws BlockingException;
 	
 	/** Returns the number of MatchRecords read so far. */
 	public int getCount ();

@@ -24,7 +24,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
  * @author pcheung
  *
  */
-public class MatchRecord2 implements Comparable, Serializable {
+public class MatchRecord2<T extends Comparable<T>> implements
+		Comparable<MatchRecord2<T>>, Serializable {
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = -3108962876276009775L;
@@ -39,8 +40,8 @@ public class MatchRecord2 implements Comparable, Serializable {
 	/** Probabilities that differ by less than this amount are considered equal */
 	public static final float PRECISION = 0.0001f;
 
-	private final Comparable recordID1;
-	private final Comparable recordID2;
+	private final T recordID1;
+	private final T recordID2;
 	private final float probability;
 	private final char matchType;
 	private final char record2Source;
@@ -90,8 +91,8 @@ public class MatchRecord2 implements Comparable, Serializable {
 	 * @param model - The model used to evaluate this pair
 	 */
 	public MatchRecord2(
-		Comparable i1,
-		Comparable i2,
+		T i1,
+		T i2,
 		char source,
 		float f,
 		char type,
@@ -110,8 +111,8 @@ public class MatchRecord2 implements Comparable, Serializable {
 	 * @param notes - delimited String representing any notes on clues fired by this pair.
 	 */
 	public MatchRecord2(
-		Comparable i1,
-		Comparable i2,
+		T i1,
+		T i2,
 		char source,
 		float f,
 		char type,
@@ -132,7 +133,7 @@ public class MatchRecord2 implements Comparable, Serializable {
 	 * @param mr
 	 * @return boolean - true if the ids from both MatchRecords match.
 	 */
-	public boolean equals(MatchRecord2 mr) {
+	public boolean equals(MatchRecord2<T> mr) {
 		boolean ret = false;
 		if (this.recordID1.equals(mr.recordID1)
 			&& this.recordID2.equals(mr.recordID2)
@@ -142,11 +143,11 @@ public class MatchRecord2 implements Comparable, Serializable {
 		return ret;
 	}
 
-	public Comparable getRecordID1() {
+	public Comparable<?> getRecordID1() {
 		return recordID1;
 	}
 
-	public Comparable getRecordID2() {
+	public Comparable<?> getRecordID2() {
 		return recordID2;
 	}
 
@@ -166,9 +167,8 @@ public class MatchRecord2 implements Comparable, Serializable {
 		return notes;
 	}
 
-	public int compareTo(Object o) {
+	public int compareTo(MatchRecord2<T> mr) {
 		int ret = 0;
-		MatchRecord2 mr = (MatchRecord2) o;
 
 		if (recordID1.compareTo(mr.recordID1) < 0)
 			ret = -1;
@@ -191,19 +191,19 @@ public class MatchRecord2 implements Comparable, Serializable {
 		return ret;
 	}
 
-	/** This is true if this Object is a MatchRecord and has the same id pair as the input MatchRecord.
-	 * 
-	 * @param o
-	 * @return boolean - true if the ids from both MatchRecords match.
-	 */
-	public boolean equals(Object o) {
-		boolean ret = false;
-
-		if (o.getClass() == MatchRecord2.class) {
-			return equals((MatchRecord2) o);
-		}
-		return ret;
-	}
+//	/** This is true if this Object is a MatchRecord and has the same id pair as the input MatchRecord.
+//	 * 
+//	 * @param o
+//	 * @return boolean - true if the ids from both MatchRecords match.
+//	 */
+//	public boolean equals(Object o) {
+//		boolean ret = false;
+//
+//		if (o.getClass() == MatchRecord2.class) {
+//			return equals((MatchRecord2) o);
+//		}
+//		return ret;
+//	}
 
 	public int hashCode() {
 		int i1 = recordID1.hashCode();

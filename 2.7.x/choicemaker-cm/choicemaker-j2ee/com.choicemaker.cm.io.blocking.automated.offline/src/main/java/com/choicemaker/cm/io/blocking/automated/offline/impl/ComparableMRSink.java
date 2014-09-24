@@ -23,6 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ComparableMRSink implements IComparableSink {
 	
 	private IMatchRecord2Sink sink;

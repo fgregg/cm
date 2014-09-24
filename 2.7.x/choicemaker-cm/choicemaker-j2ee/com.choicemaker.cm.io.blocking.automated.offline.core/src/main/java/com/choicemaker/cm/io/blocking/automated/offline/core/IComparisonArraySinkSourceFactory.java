@@ -18,13 +18,13 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IComparisonArraySinkSourceFactory {
+public interface IComparisonArraySinkSourceFactory<T extends Comparable<T>> {
 
 	/** Gets the next IComparisonGroupSink in the sequence. */
-	public IComparisonArraySink getNextSink () throws BlockingException;
+	public IComparisonArraySink<T> getNextSink () throws BlockingException;
 	
 	/** Gets the next IComparisonGroupSource in the sequence. */
-	public IComparisonArraySource getNextSource () throws BlockingException;
+	public IComparisonArraySource<T> getNextSource () throws BlockingException;
 	
 	/** Gets the number of sequence sinks created. */
 	public int getNumSink ();
@@ -33,17 +33,17 @@ public interface IComparisonArraySinkSourceFactory {
 	public int getNumSource ();
 	
 	/** Creates an IComparisonGroupSource for an existing IComparisonGroupSink. */
-	public IComparisonArraySource getSource (IComparisonArraySink sink) throws BlockingException;
+	public IComparisonArraySource<T> getSource (IComparisonArraySink<T> sink) throws BlockingException;
 
 	/** Creates an IComparisonGroupSink for an existing IComparisonGroupSource. */
-	public IComparisonArraySink getSink (IComparisonArraySource source) throws BlockingException;
+	public IComparisonArraySink<T> getSink (IComparisonArraySource<T> source) throws BlockingException;
 
 	/** Removes this sink.
 	 * 
 	 * @param sink
 	 * @throws BlockingException
 	 */
-	public void removeSink (IComparisonArraySink sink) throws BlockingException;
+	public void removeSink (IComparisonArraySink<T> sink) throws BlockingException;
 
 
 	/** Removes this source.
@@ -51,6 +51,6 @@ public interface IComparisonArraySinkSourceFactory {
 	 * @param source
 	 * @throws BlockingException
 	 */
-	public void removeSource (IComparisonArraySource source) throws BlockingException;
+	public void removeSource (IComparisonArraySource<T> source) throws BlockingException;
 
 }

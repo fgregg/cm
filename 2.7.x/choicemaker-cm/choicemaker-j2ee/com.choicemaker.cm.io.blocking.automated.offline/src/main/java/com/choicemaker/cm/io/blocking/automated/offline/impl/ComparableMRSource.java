@@ -20,6 +20,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
  * @author pcheung
  *
  */
+@SuppressWarnings("rawtypes")
 public class ComparableMRSource implements IComparableSource {
 	
 	private IMatchRecord2Source source;

@@ -11,9 +11,9 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -89,7 +89,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink#writeMatches(java.util.ArrayList)
 	 */
-	public void writeMatches(ArrayList matches) throws BlockingException {
+	public void writeMatches(List matches) throws BlockingException {
 		writeMatches(matches.iterator());
 		
 	}

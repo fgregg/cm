@@ -12,12 +12,13 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author pcheung
  *
  */
-public class ComparisonTreeNode implements Serializable {
+public class ComparisonTreeNode<T extends Comparable<T>> implements Serializable {
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = -8258266551802037565L;
@@ -35,7 +36,7 @@ public class ComparisonTreeNode implements Serializable {
 	/**
 	 * The id of the record this ComparisonTreeNode represents.
 	 */
-	private final Comparable recordId;
+	private final T recordId;
 	
 	/** This indicates if the record is a staging or master record.
 	 * 
@@ -54,7 +55,7 @@ public class ComparisonTreeNode implements Serializable {
 	 * The next node in the linked list that this SuffixTreeNode
 	 * is in its parent.
 	 */
-	private ComparisonTreeNode next = null;
+	private ComparisonTreeNode<T> next = null;
 
 	/**
 	 * The number of children of this SuffixTreeNode in the suffix tree.
@@ -67,7 +68,7 @@ public class ComparisonTreeNode implements Serializable {
 	 * contains a linked list (linked by the SuffixTreeNode.next field) of
 	 * child nodes.
 	 */
-	private ComparisonTreeNode[] kids = null;
+	private ComparisonTreeNode<T>[] kids = null;
 
 	/**
 	 * This constructor is only be called by createRootNode();
@@ -79,7 +80,7 @@ public class ComparisonTreeNode implements Serializable {
 	/**
 	 * Creates a new ComparisonTreeNode with the specified parent and recordId.
 	 */
-	private ComparisonTreeNode(Comparable c, char type) {
+	private ComparisonTreeNode(T c, char type) {
 		this.recordId = c;
 		this.type = type;
 
@@ -116,13 +117,13 @@ public class ComparisonTreeNode implements Serializable {
 	 * 
 	 * @return ArrayList
 	 */
-	public ArrayList getAllChildren () {
-		ArrayList children = null;
+	public List<ComparisonTreeNode<T>> getAllChildren () {
+		List<ComparisonTreeNode<T>> children = null;
 		if (numKids > 0) {
-			children = new ArrayList ();
+			children = new ArrayList<>();
 			for (int i=0; i< kids.length; i++) {
 				if (kids[i] != null) {
-					ComparisonTreeNode kid = kids[i];
+					ComparisonTreeNode<T> kid = kids[i];
 					children.add(kid);
 					while (kid.next != null) {
 						kid = kid.next;
@@ -174,12 +175,12 @@ public class ComparisonTreeNode implements Serializable {
 			sb.append(Constants.LINE_SEPARATOR);
 			return sb.toString();
 		} else {
-			ArrayList children = getAllChildren();
+			List<ComparisonTreeNode<T>> children = getAllChildren();
 			sb.append(' ');
 			String temp = sb.toString();
 			sb = new StringBuffer ();
 			for (int i=0; i<children.size(); i++) {
-				ComparisonTreeNode kid = (ComparisonTreeNode) children.get(i);
+				ComparisonTreeNode<T> kid = children.get(i);
 				sb.append( kid.writeTree(temp) );
 			}
 			
@@ -201,9 +202,9 @@ public class ComparisonTreeNode implements Serializable {
 		sb.append(recordId.toString());
 		
 		if (numKids > 0) {
-			ArrayList children = getAllChildren();
+			List<ComparisonTreeNode<T>> children = getAllChildren();
 			for (int i=0; i<children.size(); i++) {
-				ComparisonTreeNode kid = (ComparisonTreeNode) children.get(i);
+				ComparisonTreeNode<T> kid = children.get(i);
 				kid.writeTree2(sb);
 			}
 		}
@@ -253,7 +254,7 @@ public class ComparisonTreeNode implements Serializable {
 	}
 */
 
-	private int getBucket (Comparable id, int length) {
+	private int getBucket (T id, int length) {
 		int ret = 0;
 		int i = id.hashCode();
 //		if (id > 0) ret = i % length;
@@ -265,17 +266,17 @@ public class ComparisonTreeNode implements Serializable {
 		return ret;
 	}
 	
-	public Comparable getRecordId () {
+	public T getRecordId () {
 		return recordId;
 	}
 	
 	
-	public ComparisonTreeNode putChild(Comparable childId, char type) {
-		return putChildImpl(new ComparisonTreeNode(childId, type));
+	public ComparisonTreeNode<T> putChild(T childId, char type) {
+		return putChildImpl(new ComparisonTreeNode<T>(childId, type));
 	}
 	
-	public ComparisonTreeNode putChild(Comparable childId, char type, int blockingSetId) {
-		return putChildImpl(new LeafComparisonTreeNode(childId, type, blockingSetId));
+	public ComparisonTreeNode<T> putChild(T childId, char type, int blockingSetId) {
+		return putChildImpl(new LeafComparisonTreeNode<T>(childId, type, blockingSetId));
 	}
 	
 	/**
@@ -287,15 +288,15 @@ public class ComparisonTreeNode implements Serializable {
 	 * @throws IllegalArgumentException if a node with childId already exists or if childId
 	 * is an invalid record ID (see Constructor)
 	 */
-	private ComparisonTreeNode putChildImpl(ComparisonTreeNode kid) {
-		Comparable childId = kid.recordId;
+	private ComparisonTreeNode<T> putChildImpl(ComparisonTreeNode<T> kid) {
+		T childId = kid.recordId;
 
 		ensureCapacity();
 //		int bucket = (int) (childId % kids.length);
 		int bucket = getBucket(childId,kids.length);
 
 		// check that no child node with the given ID previously existed.
-		ComparisonTreeNode node = kids[bucket];
+		ComparisonTreeNode<T> node = kids[bucket];
 		while (node != null) {
 			if (node.recordId == childId) {
 				throw new IllegalArgumentException("Child node with id " + childId + " already exists");
@@ -320,6 +321,7 @@ public class ComparisonTreeNode implements Serializable {
 	 * is Integer.MAX_VALUE, at which point the performance will begin to degrade
 	 * as hash buckets turn into long linked lists.
 	 */
+	@SuppressWarnings("unchecked")
 	private void ensureCapacity() {
 		if (kids == null) {
 			kids = new ComparisonTreeNode[2];
@@ -338,15 +340,16 @@ public class ComparisonTreeNode implements Serializable {
 	 * non-null.
 	 */
 	private void resize(int newCapacity) {
-		ComparisonTreeNode[] oldKids = kids;
+		ComparisonTreeNode<T>[] oldKids = kids;
 		
-		ComparisonTreeNode[] newKids = new ComparisonTreeNode[newCapacity];
+		@SuppressWarnings("unchecked")
+		ComparisonTreeNode<T>[] newKids = new ComparisonTreeNode[newCapacity];
 		for (int i = 0, n = oldKids.length; i < n; i++) {
-			ComparisonTreeNode e = oldKids[i];
+			ComparisonTreeNode<T> e = oldKids[i];
 			if (e != null) {
 				oldKids[i] = null;
 				do {
-					ComparisonTreeNode next = e.next;
+					ComparisonTreeNode<T> next = e.next;
 					
 					// insert it at the front of the new bucket
 //					int bucket = (int)(e.recordId % newCapacity);
@@ -367,8 +370,8 @@ public class ComparisonTreeNode implements Serializable {
 	/**
 	 * Factory method for creating the root of a suffix tree.
 	 */
-	public static ComparisonTreeNode createRootNode() {
-		return new ComparisonTreeNode();
+	public static <T extends Comparable<T>> ComparisonTreeNode<T> createRootNode() {
+		return new ComparisonTreeNode<T>();
 	}
 	
 	/**
@@ -377,12 +380,12 @@ public class ComparisonTreeNode implements Serializable {
 	 * children.  (If a node has children, it is subsumed by the blocking sets represented
 	 * by each of its children, and their children, and their children...)
 	 */	
-	private static class LeafComparisonTreeNode extends ComparisonTreeNode {
+	private static class LeafComparisonTreeNode<T extends Comparable<T>> extends ComparisonTreeNode<T> {
 		
 		private static final long serialVersionUID = 1L;
 		private final int blockingSetId;
 		
-		public LeafComparisonTreeNode(Comparable recordId, char type, int blockingSetId) {
+		public LeafComparisonTreeNode(T recordId, char type, int blockingSetId) {
 			super(recordId, type);
 			this.blockingSetId = blockingSetId;
 			
@@ -407,7 +410,7 @@ public class ComparisonTreeNode implements Serializable {
 //			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
 //		}
 		
-//		public ComparisonTreeNode putChild(long childId, Comparable blockingSetId) {
+//		public ComparisonTreeNode putChild(long childId, T blockingSetId) {
 //			throw new UnsupportedOperationException("Attempt to add a child to a leaf node");
 //		}
 

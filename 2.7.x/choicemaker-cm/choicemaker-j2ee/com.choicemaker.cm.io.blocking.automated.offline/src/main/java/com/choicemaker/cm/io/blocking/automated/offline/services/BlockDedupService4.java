@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.services;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
@@ -521,7 +522,7 @@ public class BlockDedupService4 {
 			throw new BlockingException ("Invalid root id " + root.getRecordId());
 		}
 		
-		ArrayList branches = root.getAllChildren();
+		List branches = root.getAllChildren();
 		
 		if (branches != null) {
 			for (int i = 0; i < branches.size(); i++) {

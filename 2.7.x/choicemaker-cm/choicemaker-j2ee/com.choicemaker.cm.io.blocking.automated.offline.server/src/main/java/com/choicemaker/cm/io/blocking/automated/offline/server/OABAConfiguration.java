@@ -46,6 +46,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.SuffixTreeSource;
  * @author pcheung
  *
  */
+@SuppressWarnings("rawtypes")
 public class OABAConfiguration implements Serializable {
 
 	/* As of 2010-03-10 */

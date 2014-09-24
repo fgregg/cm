@@ -65,7 +65,7 @@ public class Constants {
 	 * @param o
 	 * @return int - TYPE_INTEGER, or TYPE_LONG, or TYPE_STRING
 	 */
-	public static int checkType (Comparable o) {
+	public static int checkType (Comparable<?> o) {
 		int ret = 0;
 
 		if (o.getClass() == java.lang.Integer.class) {

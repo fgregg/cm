@@ -16,9 +16,9 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IComparisonSetSource extends ISource {
+public interface IComparisonSetSource<T extends Comparable<T>> extends ISource {
 
 	/** Gets the next IComparisonSet. */
-	public IComparisonSet getNextSet () throws BlockingException;
+	public IComparisonSet<T> getNextSet () throws BlockingException;
 
 }

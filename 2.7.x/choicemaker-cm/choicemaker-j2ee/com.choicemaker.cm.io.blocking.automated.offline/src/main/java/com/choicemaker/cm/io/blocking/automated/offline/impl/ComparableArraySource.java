@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
@@ -21,12 +21,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
  * @author pcheung
  *
  */
+@SuppressWarnings("rawtypes")
 public class ComparableArraySource implements IComparableSource {
 
-	private ArrayList list;
+	private List list;
 	private int ind = 0;
 	
-	public ComparableArraySource (ArrayList list) {
+	public ComparableArraySource (List list) {
 		this.list = list;
 	}
 

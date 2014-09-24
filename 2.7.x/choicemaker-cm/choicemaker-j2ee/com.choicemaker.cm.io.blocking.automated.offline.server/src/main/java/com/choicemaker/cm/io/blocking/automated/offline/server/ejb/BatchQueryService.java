@@ -28,6 +28,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStat
  * @author pcheung
  *
  */
+@SuppressWarnings("rawtypes")
 public interface BatchQueryService extends EJBObject {
 
 	/** This method starts the Offline Automated Blocking Algorithm.  

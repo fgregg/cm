@@ -291,6 +291,7 @@ public class BatchQueryServiceBean implements Serializable {
 		// return mls;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public IMatchRecord2Source getMatchRecordSource(long jobID)
 			throws RemoteException, CreateException, NamingException,
 			JMSException, FinderException {

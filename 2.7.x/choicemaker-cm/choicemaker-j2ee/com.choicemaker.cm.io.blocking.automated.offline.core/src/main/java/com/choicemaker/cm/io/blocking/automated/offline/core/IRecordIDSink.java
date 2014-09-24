@@ -24,7 +24,7 @@ public interface IRecordIDSink extends ISink {
 	 * 
 	 * @param o
 	 */
-	public void writeRecordID (Comparable o) throws BlockingException;
+	public void writeRecordID (Comparable<?> o) throws BlockingException;
 	
 	
 	/** This tells the sink the object type of the record id.  Call this method before calling the open

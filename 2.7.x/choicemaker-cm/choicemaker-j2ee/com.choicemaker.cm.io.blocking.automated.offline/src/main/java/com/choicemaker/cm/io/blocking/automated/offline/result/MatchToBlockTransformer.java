@@ -10,9 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.result;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.logging.Logger;
 
@@ -100,7 +100,7 @@ public class MatchToBlockTransformer {
 		translator.initReverseTranslation();
 
 		//stage record ids
-		ArrayList list = translator.getList1();
+		List list = translator.getList1();
 		if (list != null) {
 			int size = list.size();
 			for (int i=0; i< size; i++) {

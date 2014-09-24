@@ -18,10 +18,10 @@ import java.util.List;
  * @author pcheung
  *
  */
-public class ComparisonListSet implements IComparisonSet {
+public class ComparisonListSet<T extends Comparable<T>> implements IComparisonSet<T> {
 	
 	private static final long serialVersionUID = 1L;
-	private List list;
+	private List<ComparisonPair<T>> list;
 	private int ind;
 	private int size;
 	
@@ -30,7 +30,7 @@ public class ComparisonListSet implements IComparisonSet {
 	 * 
 	 * @param list
 	 */
-	public ComparisonListSet (List list) {
+	public ComparisonListSet (List<ComparisonPair<T>> list) {
 		this.list = list;
 		ind = 0;
 		size = list.size ();
@@ -48,8 +48,8 @@ public class ComparisonListSet implements IComparisonSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#getNextPair()
 	 */
-	public ComparisonPair getNextPair() {
-		ComparisonPair ret = (ComparisonPair) list.get(ind);
+	public ComparisonPair<T> getNextPair() {
+		ComparisonPair<T> ret = list.get(ind);
 		ind ++;
 		return ret;
 	}
@@ -61,11 +61,11 @@ public class ComparisonListSet implements IComparisonSet {
 		StringBuffer sb = new StringBuffer ();
 		sb.append(Constants.LINE_SEPARATOR);
 		for (int i=0; i<size; i++) {
-			ComparisonPair p = (ComparisonPair) list.get(i);
+			ComparisonPair<T> p = list.get(i);
 			sb.append('(');
-			sb.append(p.id1.toString());
+			sb.append(p.getId1().toString());
 			sb.append(',');
-			sb.append(p.id2.toString());
+			sb.append(p.getId2().toString());
 			sb.append(')');
 		}
 		sb.append(Constants.LINE_SEPARATOR);

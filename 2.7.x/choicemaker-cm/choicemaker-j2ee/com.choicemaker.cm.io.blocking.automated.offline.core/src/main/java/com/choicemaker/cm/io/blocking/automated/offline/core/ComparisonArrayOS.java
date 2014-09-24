@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -33,7 +34,7 @@ import java.util.logging.Logger;
  * @author pcheung
  *
  */
-public class ComparisonArrayOS extends ComparisonArray {
+public class ComparisonArrayOS<T extends Comparable<T>> extends ComparisonArray<T> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -55,8 +56,8 @@ public class ComparisonArrayOS extends ComparisonArray {
 
 	private int maxBlockSize;	
 	private Random random;
-	private ArrayList S = null;
-	private ArrayList TStage = null;
+	private List<T> S = null;
+	private List<T> TStage = null;
 	private int [] randomStage = null;
 
 	/** This constructor takes in a ComparisonArray and an integer representing the maximum block size.
@@ -64,7 +65,7 @@ public class ComparisonArrayOS extends ComparisonArray {
 	 * @param ca
 	 * @param maxBlockSize
 	 */
-	public ComparisonArrayOS (ComparisonArray ca, int maxBlockSize) {
+	public ComparisonArrayOS (ComparisonArray<T> ca, int maxBlockSize) {
 		this.stagingIDs = ca.stagingIDs;
 		this.masterIDs = ca.masterIDs;
 		this.stagingIDType = ca.stagingIDType;
@@ -91,12 +92,12 @@ public class ComparisonArrayOS extends ComparisonArray {
 		if (stagingIDs.size() <= maxBlockSize) {
 			S = stagingIDs;
 			sSize = stagingIDs.size();
-			TStage = new ArrayList (0);
+			TStage = new ArrayList<T>(0);
 		} else {
-			S = new ArrayList (maxBlockSize);
+			S = new ArrayList<T>(maxBlockSize);
 			sSize = maxBlockSize;
 
-			TStage = new ArrayList (stagingIDs.size() - sSize);
+			TStage = new ArrayList<T>(stagingIDs.size() - sSize);
 
 			//contains indexes of ids in set S.
 			int [] sids = getRandomIDs (random, maxBlockSize, stagingIDs.size());
@@ -160,17 +161,17 @@ public class ComparisonArrayOS extends ComparisonArray {
 	}
 	
 	
-	private ComparisonPair readNext () {
-		ComparisonPair ret = null;
+	private ComparisonPair<T> readNext () {
+		ComparisonPair<T> ret = null;
 		if (step == STEP_4) {
 			//round robin on S
 			if (sID1 < s1 - 1 && sID2 < s1) {
-				ret = new ComparisonPair ();
-				ret.id1 = (Comparable) S.get(sID1);
-				ret.id2 = (Comparable) S.get(sID2);
+				ret = new ComparisonPair<T>();
+				ret.setId1(S.get(sID1));
+				ret.setId2(S.get(sID2));
 				ret.isStage = true;
 
-				log.fine ("Round robin s " + ret.id1.toString() + " " + ret.id2.toString());
+				log.fine ("Round robin s " + ret.getId1().toString() + " " + ret.getId2().toString());
 
 				sID2 ++;
 				if (sID2 == s1) {
@@ -202,12 +203,12 @@ public class ComparisonArrayOS extends ComparisonArray {
 			//for each in Tstage, compare to S.
 			int s2 = TStage.size();
 			if (sID1 < s2 && sID2 < s1) {
-				ret = new ComparisonPair ();
-				ret.id1 = (Comparable) TStage.get(sID1);
-				ret.id2 = (Comparable) S.get(sID2);
+				ret = new ComparisonPair<T>();
+				ret.setId1(TStage.get(sID1));
+				ret.setId2(S.get(sID2));
 				ret.isStage = true;
 					
-				log.fine ("TStage with S " + ret.id1.toString() + " " + ret.id2.toString());
+				log.fine ("TStage with S " + ret.getId1().toString() + " " + ret.getId2().toString());
 
 				sID2++;
 				if (sID2 == s1) {
@@ -232,12 +233,12 @@ public class ComparisonArrayOS extends ComparisonArray {
 			//for each in Tmaster, compare to S.
 			int s2 = masterIDs.size();
 			if (sID1 < s2 && sID2 < s1) {
-				ret = new ComparisonPair ();
-				ret.id1 = (Comparable) S.get(sID2);
-				ret.id2 = (Comparable) masterIDs.get(sID1);
+				ret = new ComparisonPair<T>();
+				ret.setId1(S.get(sID2));
+				ret.setId2(masterIDs.get(sID1));
 				ret.isStage = false;
 
-				log.fine ("TMaster with S " + ret.id1.toString() + " " + ret.id2.toString());
+				log.fine ("TMaster with S " + ret.getId1().toString() + " " + ret.getId2().toString());
 
 				sID2++;
 				if (sID2 == s1) {
@@ -259,12 +260,12 @@ public class ComparisonArrayOS extends ComparisonArray {
 			if (s1 <= 4) {
 				//compare with all TStage
 				if (sID1 < s2 && sID2 < s1) {
-					ret = new ComparisonPair ();
-					ret.id1 = (Comparable) TStage.get(sID2);
-					ret.id2 = (Comparable) masterIDs.get(sID1);
+					ret = new ComparisonPair<T>();
+					ret.setId1(TStage.get(sID2));
+					ret.setId2(masterIDs.get(sID1));
 					ret.isStage = false;
 					
-					log.fine ("TMaster random " + ret.id1.toString() + " " + ret.id2.toString());
+					log.fine ("TMaster random " + ret.getId1().toString() + " " + ret.getId2().toString());
 
 					sID2++;
 					if (sID2 == s1) {
@@ -283,12 +284,12 @@ public class ComparisonArrayOS extends ComparisonArray {
 				if (randomStage == null) randomStage = getRandomIDs (random, 4, s1);
 				
 				if (sID1 < s2 && sID2 < 4) {
-					ret = new ComparisonPair ();
-					ret.id1 = (Comparable) TStage.get(randomStage[sID2]);
-					ret.id2 = (Comparable) masterIDs.get(sID1);
+					ret = new ComparisonPair<T>();
+					ret.setId1(TStage.get(randomStage[sID2]));
+					ret.setId2(masterIDs.get(sID1));
 					ret.isStage = false;
 					
-					log.fine ("TMaster random " + ret.id1.toString() + " " + ret.id2.toString());
+					log.fine ("TMaster random " + ret.getId1().toString() + " " + ret.getId2().toString());
 
 					sID2 ++;
 					if (sID2 == 4) {
@@ -316,12 +317,12 @@ public class ComparisonArrayOS extends ComparisonArray {
 					n = sID1 + 1;
 					if (sID1 ==  s1 - 1) n = 0;
 					
-					ret = new ComparisonPair ();
-					ret.id1 = (Comparable) TStage.get(sID1);
-					ret.id2 = (Comparable) TStage.get(n);
+					ret = new ComparisonPair<T>();
+					ret.setId1(TStage.get(sID1));
+					ret.setId2(TStage.get(n));
 					ret.isStage = true;
 					
-					log.fine ("TStage random i+1 " + ret.id1.toString() + " " + ret.id2.toString());
+					log.fine ("TStage random i+1 " + ret.getId1().toString() + " " + ret.getId2().toString());
 
 					checkedNext = true;
 					
@@ -336,18 +337,18 @@ public class ComparisonArrayOS extends ComparisonArray {
 					
 						if (sID1 == randomStage[sID2] || n == randomStage[sID2]) sID2 ++;
 						
-						ret = new ComparisonPair ();
-						ret.id1 = (Comparable) TStage.get(sID1);
+						ret = new ComparisonPair<T>();
+						ret.setId1(TStage.get(sID1));
 						
 						if (randomStage[sID2] >= s1) {
-							ret.id2 = (Comparable) masterIDs.get(randomStage[sID2] - s1);
+							ret.setId2(masterIDs.get(randomStage[sID2] - s1));
 							ret.isStage = false;
 						} else {
-							ret.id2 = (Comparable) TStage.get(randomStage[sID2]);
+							ret.setId2(TStage.get(randomStage[sID2]));
 							ret.isStage = true;
 						}
 						
-						log.fine ("TStage random " + ret.id1.toString() + " " + ret.id2.toString());
+						log.fine ("TStage random " + ret.getId1().toString() + " " + ret.getId2().toString());
 
 						sID2 ++;
 						mID1 ++;
@@ -381,11 +382,11 @@ public class ComparisonArrayOS extends ComparisonArray {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#getNextPair()
 	 */
-	public ComparisonPair getNextPair() {
+	public ComparisonPair<T> getNextPair() {
 		if (this.nextPair == null) {
 			this.nextPair = readNext();
 		}
-		ComparisonPair retVal = this.nextPair;
+		ComparisonPair<T> retVal = this.nextPair;
 		this.nextPair = null;
 
 		return retVal;

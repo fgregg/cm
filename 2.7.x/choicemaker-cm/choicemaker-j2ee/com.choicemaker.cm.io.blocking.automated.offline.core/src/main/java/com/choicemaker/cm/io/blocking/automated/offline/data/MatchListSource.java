@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.base.MatchCandidate;
@@ -60,9 +61,9 @@ public class MatchListSource {
 		boolean ret = false;
 		boolean stop = false;
 		long currentID = Long.MIN_VALUE;
-		ArrayList candidates = new ArrayList ();
+		List<MatchCandidate> candidates = new ArrayList<>();
 		MatchCandidate mc;
-		MatchRecord record;
+		IMatchRecord record;
 		
 		if (lastID != Long.MIN_VALUE) {
 			currentID = lastID;
@@ -116,13 +117,13 @@ public class MatchListSource {
 	}
 	
 	
-	private MatchCandidate getMatchCandidate (MatchRecord mr) {
+	private MatchCandidate getMatchCandidate (IMatchRecord mr) {
 		Long L = new Long (mr.getRecordID2());
 		int decision = 0;
 		
-		if (mr.getMatchType() == MatchRecord.DIFFER) decision = MatchCandidate.DIFFER;
-		else if (mr.getMatchType() == MatchRecord.MATCH) decision = MatchCandidate.MATCH;
-		else if (mr.getMatchType() == MatchRecord.HOLD) decision = MatchCandidate.HOLD;
+		if (mr.getMatchType() == IMatchRecord.DIFFER) decision = MatchCandidate.DIFFER;
+		else if (mr.getMatchType() == IMatchRecord.MATCH) decision = MatchCandidate.MATCH;
+		else if (mr.getMatchType() == IMatchRecord.HOLD) decision = MatchCandidate.HOLD;
 		
 		MatchCandidate mc = new MatchCandidate (L, mr.getProbability(), decision, null);
 		return mc;

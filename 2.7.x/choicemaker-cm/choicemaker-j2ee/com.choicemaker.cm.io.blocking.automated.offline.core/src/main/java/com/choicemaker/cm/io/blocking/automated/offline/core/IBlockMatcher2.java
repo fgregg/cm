@@ -25,7 +25,7 @@ import com.choicemaker.cm.core.RecordSource;
  * @author pcheung
  *
  */
-public interface IBlockMatcher2 {
+public interface IBlockMatcher2<T extends Comparable<T>> {
 
 	/** This method matches all the blocks in the ComparisonGroup source.
 	 * 
@@ -40,9 +40,9 @@ public interface IBlockMatcher2 {
 	 * @param match - match threshold
 	 * @param maxBlockSize - maximum block size
 	 */
-	public void matchBlocks (IComparisonArraySource cgSource, IProbabilityModel stageModel, 
+	public void matchBlocks (IComparisonArraySource<T> cgSource, IProbabilityModel stageModel, 
 		IProbabilityModel masterModel, 
-		RecordSource stage, RecordSource master, IMatchRecord2Sink mSink, 
+		RecordSource stage, RecordSource master, IMatchRecord2Sink<T> mSink, 
 		boolean append, float differ, float match, 
 		int maxBlockSize) throws BlockingException;
 		

@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.result;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
@@ -123,7 +123,7 @@ public class MatchToBlockTransformer2 {
 		HashMap masterIDs = null;
 
 		//get the staging id mapping
-		ArrayList list = translator.getList1();
+		List list = translator.getList1();
 		assert list != null;
 		int size = list.size();
 		stageIDs = new HashMap (size);

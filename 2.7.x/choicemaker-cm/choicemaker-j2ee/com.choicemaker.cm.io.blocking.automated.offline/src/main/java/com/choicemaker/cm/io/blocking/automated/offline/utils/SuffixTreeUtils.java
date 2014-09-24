@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
@@ -59,7 +60,7 @@ public class SuffixTreeUtils {
 			int ret = 0;
 			
 			if (node.getNumKids() > 0) {
-				ArrayList children = node.getAllChildren();
+				List children = node.getAllChildren();
 				for (int i=0; i<children.size(); i++) {
 					ret += countLeaves ((SuffixTreeNode) children.get(i));
 				}
@@ -108,7 +109,7 @@ public class SuffixTreeUtils {
 
 		//compare all the children		
 		if (node.getNumKids() > 0) {
-			ArrayList children = node.getAllChildren();
+			List children = node.getAllChildren();
 			for (int i=0; i<children.size(); i++) {
 				SuffixTreeNode kid = (SuffixTreeNode) children.get(i);
 				getCompares(kid, stack, pairs);

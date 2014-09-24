@@ -18,10 +18,10 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IComparisonArraySource extends ISource {
+public interface IComparisonArraySource<T extends Comparable<T>> extends ISource {
 
 	/** Gets the next ComparisonGroup. */
-	public ComparisonArray getNext () throws BlockingException;
+	public ComparisonArray<T> getNext () throws BlockingException;
 	
 	/** Returns the number of ComparisonGroup read so far. */
 	public int getCount ();

@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @author pcheung
  *
  */
-public interface IComparisonSet extends Serializable {
+public interface IComparisonSet<T extends Comparable<T>> extends Serializable {
 	
 	/** This returns true if there are more pairs to compare in this set.
 	 * 
@@ -32,7 +32,7 @@ public interface IComparisonSet extends Serializable {
 	 * 
 	 * @return ComparisonPair
 	 */
-	public ComparisonPair getNextPair ();
+	public ComparisonPair<T> getNextPair ();
 
 
 	/** This method returns a string of all the elements in this comparison set for

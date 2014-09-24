@@ -19,7 +19,7 @@ import com.choicemaker.util.LongArrayList;
  * 
  *
  */
-public class PairID implements Comparable, IIDSet {
+public class PairID implements Comparable<PairID>, IIDSet {
 	
 	private long id1, id2;
 	
@@ -37,9 +37,8 @@ public class PairID implements Comparable, IIDSet {
 	}
 
 	
-	public int compareTo (Object o) {
+	public int compareTo (PairID p) {
 		int ret = 0;
-		PairID p = (PairID) o;
 		
 		if (id1 < p.id1) ret = -1;
 		else if (id1 > p.id1) ret = 1;
@@ -52,11 +51,10 @@ public class PairID implements Comparable, IIDSet {
 	}
 	
 	
-	public boolean equals (Object o) {
+	public boolean equals (PairID p) {
 		boolean ret = false;
 		
-		if (o.getClass() == PairID.class) {
-			PairID p = (PairID) o;
+		if (p != null) {
 			if ((id1 == p.id1) && (id2 == p.id2)) ret = true;
 		}
 		

@@ -16,7 +16,7 @@ import java.io.IOException;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSource;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
+import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
 
 
 /**
@@ -27,7 +27,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
  */
 public class MatchRecordSource extends BaseFileSource implements IMatchRecordSource {
 
-	private MatchRecord next;
+	private IMatchRecord next;
 
 
 	public MatchRecordSource (String fileName, int type) {
@@ -95,7 +95,7 @@ public class MatchRecordSource extends BaseFileSource implements IMatchRecordSou
 	}
 	
 	
-	public MatchRecord getNext () {
+	public IMatchRecord getNext () {
 		return next;
 	}
 	

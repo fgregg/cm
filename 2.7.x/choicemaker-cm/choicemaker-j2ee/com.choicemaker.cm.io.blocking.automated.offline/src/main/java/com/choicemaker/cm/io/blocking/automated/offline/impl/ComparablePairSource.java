@@ -20,6 +20,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSource;
  * @author pcheung
  *
  */
+@SuppressWarnings("rawtypes")
 public class ComparablePairSource implements IComparableSource {
 
 	private IPairIDSource source;

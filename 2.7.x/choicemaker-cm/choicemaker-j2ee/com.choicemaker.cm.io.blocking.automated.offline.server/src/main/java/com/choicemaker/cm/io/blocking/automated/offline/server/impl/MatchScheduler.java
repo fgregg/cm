@@ -51,6 +51,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class MatchScheduler implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;

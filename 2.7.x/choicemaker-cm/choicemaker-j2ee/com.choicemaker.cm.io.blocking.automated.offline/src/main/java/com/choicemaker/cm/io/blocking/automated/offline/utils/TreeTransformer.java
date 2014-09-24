@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonTreeNode;
@@ -106,7 +107,7 @@ public class TreeTransformer implements ITransformer {
 		copyTree (node, tree);
 		
 		//don't write the root.
-		ArrayList al = tree.getAllChildren();
+		List al = tree.getAllChildren();
 		ComparisonTreeNode kid = (ComparisonTreeNode) al.get(0);
 		cOut.writeComparisonTree(kid);
 	}
@@ -118,7 +119,7 @@ public class TreeTransformer implements ITransformer {
 	 * @param node2
 	 */
 	private void copyTree (SuffixTreeNode node1, ComparisonTreeNode node2) {
-		ArrayList kids = node1.getAllChildren();
+		List kids = node1.getAllChildren();
 		for (int i=0; i<kids.size(); i++) {
 			SuffixTreeNode kid = (SuffixTreeNode) kids.get(i);
 			int id = (int) kid.getRecordId();

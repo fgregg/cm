@@ -43,6 +43,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
  * @author pcheung
  *
  */
+@SuppressWarnings("rawtypes")
 public class BatchQueryServiceBean implements SessionBean {
 	private static final long serialVersionUID = 1L;
 

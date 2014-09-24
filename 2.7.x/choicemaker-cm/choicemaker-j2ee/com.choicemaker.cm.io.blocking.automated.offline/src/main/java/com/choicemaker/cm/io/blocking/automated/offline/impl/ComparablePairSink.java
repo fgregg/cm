@@ -23,6 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
  * @author pcheung
  *
  */
+@SuppressWarnings("rawtypes")
 public class ComparablePairSink implements IComparableSink {
 
 	private IPairIDSink sink;

@@ -27,6 +27,7 @@ import com.choicemaker.cm.io.flatfile.base.FlatFileRecordSource;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 	
 	private static final Logger log = Logger.getLogger(ChunkDataSinkSourceFactory.class.getName());

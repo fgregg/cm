@@ -19,10 +19,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
-public interface IMatchRecord2Source extends ISource {
+public interface IMatchRecord2Source<T extends Comparable<T>> extends ISource {
 	
 	/** Gets the next MatchRecord2. */
-	public MatchRecord2 getNext () throws BlockingException;
+	public MatchRecord2<T> getNext () throws BlockingException;
 	
 	/** Returns the number of MatchRecords read so far. */
 	public int getCount ();

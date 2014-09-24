@@ -22,6 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
  * 
  *
  */
+@SuppressWarnings("rawtypes")
 public class MatchWriterData implements Serializable {
 
 	/* As of 2010-03-10 */

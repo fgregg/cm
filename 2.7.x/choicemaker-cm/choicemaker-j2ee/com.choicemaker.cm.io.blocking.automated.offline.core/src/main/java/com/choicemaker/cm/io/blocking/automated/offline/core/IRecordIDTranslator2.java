@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 
@@ -24,20 +24,20 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IRecordIDTranslator2 {
+public interface IRecordIDTranslator2<T extends Comparable<T>> {
 
 	/** This method returns the range of record ids in the first source.
 	 * 
 	 * @return Comparable[0] is min and Comparable[1] is max
 	 */
-	public Comparable [] getRange1 () ;
+	public T [] getRange1 () ;
 
 
 	/** This method returns the range of record ids in the second source.
 	 * 
 	 * @return Comparable[0] is min and Comparable[1] is max
 	 */
-	public Comparable [] getRange2 () ;
+	public T [] getRange2 () ;
 
 
 	/** This returns the internal id at which the second source begins.
@@ -93,7 +93,7 @@ public interface IRecordIDTranslator2 {
 	 * @return int - returns internal id for this record id.
 	 * @throws BlockingException
 	 */
-	public int translate (Comparable o) throws BlockingException;
+	public int translate (T o) throws BlockingException;
 	
 	
 	/** This method prepares for reverse translation. 
@@ -109,21 +109,21 @@ public interface IRecordIDTranslator2 {
 	 * Make sure the method initReverseTranslation is called before this method.
 	 * 
 	 * @param internalID
-	 * @return Comparable - the original record ID associated with this internal ID.
+	 * @return Comparable<?> - the original record ID associated with this internal ID.
 	 */
-	public Comparable reverseLookup (int internalID);
+	public Comparable<?> reverseLookup (int internalID);
 
 
-	/** This returns an ArrayList of record IDs from the first source.  Usually, the staging source.
+	/** This returns an List of record IDs from the first source.  Usually, the staging source.
 	 * 
-	 * @return ArrayList
+	 * @return List
 	 */
-	public ArrayList getList1 ();
+	public List<T> getList1 ();
 
-	/** This returns an ArrayList of record IDs from the second source.  Usually, the master source.
+	/** This returns an List of record IDs from the second source.  Usually, the master source.
 	 * 
-	 * @return ArrayList
+	 * @return List
 	 */
-	public ArrayList getList2 ();
+	public List<T> getList2 ();
 
 }

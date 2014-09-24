@@ -17,7 +17,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
  * @author pcheung
  *
  */
-public class IllegalComboPair implements Comparable{
+public class IllegalComboPair implements Comparable<IllegalComboPair> {
 
 	private int col1;
 	private int col2;
@@ -45,19 +45,18 @@ public class IllegalComboPair implements Comparable{
 		}
 	}
 
-	public int compareTo(Object o) {
-		if (o instanceof IllegalComboPair) {
-			IllegalComboPair p = (IllegalComboPair) o;
-			
-			if (this.col1 < p.col1)  return -1;
-			else if (this.col1 > p.col1)  return 1;
-			else {
-				if (this.col2 < p.col2) return -1;
-				else if (this.col2 > p.col2) return 1;
-				else return 0;
-			}
-		} else {
+	public int compareTo(IllegalComboPair p) {
+		if (this.col1 < p.col1)
+			return -1;
+		else if (this.col1 > p.col1)
 			return 1;
+		else {
+			if (this.col2 < p.col2)
+				return -1;
+			else if (this.col2 > p.col2)
+				return 1;
+			else
+				return 0;
 		}
 	}
 		

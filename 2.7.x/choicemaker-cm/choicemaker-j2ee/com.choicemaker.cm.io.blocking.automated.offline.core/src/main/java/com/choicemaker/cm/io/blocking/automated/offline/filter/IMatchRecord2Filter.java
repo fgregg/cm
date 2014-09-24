@@ -20,12 +20,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @version $Revision: 1.1 $ $Date: 2010/03/28 15:45:19 $
  * @see com.choicemaker.cm.analyzer.filter.Filter
  */
-public interface IMatchRecord2Filter extends Serializable {
+public interface IMatchRecord2Filter<T extends Comparable<T>> extends Serializable {
 	
 	/**
 	 * Checks if a pair satisfies a filter constraint
 	 */
-	boolean satisfy(MatchRecord2 pair);
+	boolean satisfy(MatchRecord2<T> pair);
 	
 }
 

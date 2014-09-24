@@ -12,14 +12,14 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSink;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord;
+import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
 
 /**
  * This object writes MatchRecord objects to file.
@@ -42,9 +42,9 @@ public class MatchRecordSink extends BaseFileSink implements IMatchRecordSink {
 		init (fileName, type);
 	}
 
-	public void writeMatches (ArrayList matches) throws BlockingException {
+	public void writeMatches (List matches) throws BlockingException {
 		for (int i=0; i<matches.size(); i++) {
-			MatchRecord match = (MatchRecord) matches.get(i);
+			IMatchRecord match = (IMatchRecord) matches.get(i);
 			writeMatch (match);
 		}
 	}
@@ -58,13 +58,13 @@ public class MatchRecordSink extends BaseFileSink implements IMatchRecordSink {
 
 	public void writeMatches (Iterator it) throws BlockingException {
 		while (it.hasNext()) {
-			MatchRecord match = (MatchRecord) it.next();
+			IMatchRecord match = (IMatchRecord) it.next();
 			writeMatch (match);
 		}
 	}
 		
 	
-	public void writeMatch (MatchRecord match) throws BlockingException {
+	public void writeMatch (IMatchRecord match) throws BlockingException {
 		try {
 			if (type == Constants.STRING) {
 				fw.write( match.getRecordID1() + " " + match.getRecordID2() + " " + 

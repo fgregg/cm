@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /** This object creates a list of pairs to compare from a tree of ComparisonTreeNode.
@@ -18,10 +19,10 @@ import java.util.Stack;
  * @author pcheung
  *
  */
-public class ComparisonTreeSet implements IComparisonSet {
+public class ComparisonTreeSet<T extends Comparable<T>> implements IComparisonSet<T> {
 	
 	private static final long serialVersionUID = 1L;
-	private ArrayList pairs = new ArrayList ();
+	private List<ComparisonPair<T>> pairs = new ArrayList<>();
 	private int ind = 0;
 	
 	/** This consructor takes the root node and builds a list of pairs to compare.
@@ -29,22 +30,22 @@ public class ComparisonTreeSet implements IComparisonSet {
 	 * 
 	 * @param root
 	 */
-	public ComparisonTreeSet (ComparisonTreeNode root) {
+	public ComparisonTreeSet (ComparisonTreeNode<T> root) {
 		//there should only be one node
-		ComparisonTreeNode kid = (ComparisonTreeNode) root.getAllChildren().get(0);
+		ComparisonTreeNode<T> kid = root.getAllChildren().get(0);
 		
-		Stack stack = new Stack ();
+		Stack<T> stack = new Stack<T>();
 		getCompares(kid, stack);
 	}
 	
 	
-	private void getCompares (ComparisonTreeNode node, Stack stack) {
+	private void getCompares (ComparisonTreeNode<T> node, Stack<T> stack) {
 		if (!stack.empty()) {
 			//compare this to everything in the stack
 			for (int i=0; i<stack.size(); i++) {
-				ComparisonPair p = new ComparisonPair ();
-				p.id1 = (Comparable) stack.get(i);
-				p.id2 = node.getRecordId();
+				ComparisonPair<T> p = new ComparisonPair<T>();
+				p.setId1(stack.get(i));
+				p.setId2(node.getRecordId());
 				p.isStage = node.isStage();
 				pairs.add(p);
 			}
@@ -57,9 +58,9 @@ public class ComparisonTreeSet implements IComparisonSet {
 
 		//compare all the children		
 		if (node.getNumKids() > 0) {
-			ArrayList children = node.getAllChildren();
+			List<ComparisonTreeNode<T>> children = node.getAllChildren();
 			for (int i=0; i<children.size(); i++) {
-				ComparisonTreeNode kid = (ComparisonTreeNode) children.get(i);
+				ComparisonTreeNode<T> kid = children.get(i);
 				getCompares(kid, stack);
 			}
 		}
@@ -73,8 +74,8 @@ public class ComparisonTreeSet implements IComparisonSet {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#getNextPair()
 	 */
-	public ComparisonPair getNextPair() {
-		ComparisonPair ret = (ComparisonPair) pairs.get(ind);
+	public ComparisonPair<T> getNextPair() {
+		ComparisonPair<T> ret = pairs.get(ind);
 		ind ++;
 		return ret;
 	}
@@ -96,11 +97,11 @@ public class ComparisonTreeSet implements IComparisonSet {
 		StringBuffer sb = new StringBuffer ();
 		sb.append(Constants.LINE_SEPARATOR);
 		for (int i=0; i<pairs.size(); i++) {
-			ComparisonPair p = (ComparisonPair) pairs.get(i);
+			ComparisonPair<T> p = pairs.get(i);
 			sb.append('(');
-			sb.append(p.id1.toString());
+			sb.append(p.getId1().toString());
 			sb.append(',');
-			sb.append(p.id2.toString());
+			sb.append(p.getId2().toString());
 			sb.append(')');
 		}
 		sb.append(Constants.LINE_SEPARATOR);
