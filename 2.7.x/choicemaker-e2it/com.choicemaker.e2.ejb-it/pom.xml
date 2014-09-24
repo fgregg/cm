@@ -67,24 +67,20 @@
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.embed</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.ejb</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-      <scope>test</scope>
+            <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.e2it</groupId>
       <artifactId>com.choicemaker.e2it</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-      <scope>test</scope>
+            <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -112,7 +108,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.1</version>
+      <version>4.8.1</version><!--$NO-MVN-MAN-VER$-->
     </dependency>
     <dependency>
       <groupId>org.jboss.arquillian.junit</groupId>
@@ -134,7 +130,7 @@
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
-      <version>7.0</version>
+      <!-- <version>7.0</version> -->
       <scope>provided</scope>
     </dependency>
 
@@ -154,148 +150,120 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.compiler</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.docs</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.io.blocking.automated.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.io.blocking.automated.inmemory</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.io.blocking.exact.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.composite.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.urm.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.module</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.wcohen.ss</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.wcohen.ss.eclipse</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
-    </dependency>
+          </dependency>
     <!--
     END ARQUILLIAN DEPENDENCIES
     -->
