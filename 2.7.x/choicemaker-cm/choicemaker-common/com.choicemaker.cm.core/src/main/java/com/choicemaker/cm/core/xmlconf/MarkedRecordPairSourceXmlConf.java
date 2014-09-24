@@ -25,7 +25,6 @@ import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.e2.CMExtension;
-import com.choicemaker.e2.CMExtensionPoint;
 import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 

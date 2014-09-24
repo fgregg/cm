@@ -19,7 +19,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.validation.IValidator;
 import com.choicemaker.cm.validation.ValidatorCreationException;
 import com.choicemaker.e2.CMConfigurationElement;
