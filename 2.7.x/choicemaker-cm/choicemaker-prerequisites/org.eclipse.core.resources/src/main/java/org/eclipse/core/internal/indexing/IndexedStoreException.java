@@ -13,7 +13,8 @@ package org.eclipse.core.internal.indexing;
 import org.eclipse.core.internal.utils.Policy;
 
 public class IndexedStoreException extends StoreException {
-
+	private static final long serialVersionUID = 1L;
+	
 	public static final int GenericError                =  0;
 	public static final int EntryKeyLengthError         =  1;
 	public static final int EntryNotRemoved             =  2;

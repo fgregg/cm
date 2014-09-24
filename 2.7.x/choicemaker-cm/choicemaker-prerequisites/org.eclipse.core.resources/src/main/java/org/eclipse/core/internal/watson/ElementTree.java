@@ -205,30 +205,30 @@ public ElementTree collapseTo(ElementTree parent) {
  *
  * <p> This element tree must be immutable.
  */
-private ElementTree collapsing(int depth) {
-	//this method is not currently used
-	//it is based on assumptions that may no longer be valid.
-	return this;
-
-	/*
-	if (depth <= 0) return this;
-	
-	Assert.isTrue(tree.isImmutable());
-	
-	DeltaDataTree c= tree;
-	DeltaDataTree a= tree;
-	//find the "depth"th parent of c
-	for (int i=1; i<=depth; i++) {
-		DeltaDataTree parent= a.getParent();
-		if (parent==null) break;
-		a= parent;
-	}
-	DeltaDataTree d= a.assembleWithForwardDelta(a.forwardDeltaWith(c, DefaultElementComparator.getComparator()));
-	ElementTree result= new ElementTree(d);
-	result.immutable();
-	Assert.isTrue(depth<=2 || result.deltaDepth()==this.deltaDepth()-depth);
-	return result;*/
-}
+//private ElementTree collapsing(int depth) {
+//	//this method is not currently used
+//	//it is based on assumptions that may no longer be valid.
+//	return this;
+//
+//	/*
+//	if (depth <= 0) return this;
+//	
+//	Assert.isTrue(tree.isImmutable());
+//	
+//	DeltaDataTree c= tree;
+//	DeltaDataTree a= tree;
+//	//find the "depth"th parent of c
+//	for (int i=1; i<=depth; i++) {
+//		DeltaDataTree parent= a.getParent();
+//		if (parent==null) break;
+//		a= parent;
+//	}
+//	DeltaDataTree d= a.assembleWithForwardDelta(a.forwardDeltaWith(c, DefaultElementComparator.getComparator()));
+//	ElementTree result= new ElementTree(d);
+//	result.immutable();
+//	Assert.isTrue(depth<=2 || result.deltaDepth()==this.deltaDepth()-depth);
+//	return result;*/
+//}
 /**
  * Computes a delta between this element tree and the given one,
  * using the given comparator to compare elements.

@@ -48,10 +48,10 @@ public class ElementTreeWriter {
 	 */
 	public static final int D_INFINITE = DataTreeWriter.D_INFINITE;
 	
-	/**
-	 * The element info factory.
-	 */
-	private IElementInfoFlattener elementInfoFlattener;
+//	/**
+//	 * The element info factory.
+//	 */
+//	private IElementInfoFlattener elementInfoFlattener;
 
 	/**
 	 * For writing DeltaDataTrees
@@ -62,7 +62,7 @@ public class ElementTreeWriter {
  * the given element info flattener. 
  */
 public ElementTreeWriter(final IElementInfoFlattener flattener) {
-	elementInfoFlattener= flattener;
+	//elementInfoFlattener= flattener;
 
 	/* wrap the IElementInfoFlattener in an IDataFlattener */
 	IDataFlattener f = new IDataFlattener() {

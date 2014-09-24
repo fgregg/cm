@@ -15,6 +15,7 @@ package org.eclipse.core.internal.dtree;
  * element that does not exist in the given SourceTree
  */
 public class ObjectNotFoundException extends RuntimeException {
+	private static final long serialVersionUID = 271L;
 /**
  * ObjectNotFoundException constructor comment.
  */

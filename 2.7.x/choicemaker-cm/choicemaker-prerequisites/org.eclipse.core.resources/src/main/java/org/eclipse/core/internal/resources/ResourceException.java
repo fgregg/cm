@@ -26,6 +26,7 @@ import java.io.PrintWriter;
  * @see IStatus
  */
 public class ResourceException extends CoreException {
+	private static final long serialVersionUID = 271L;
 public ResourceException(int code, IPath path, String message, Throwable exception) {
 	super(new ResourceStatus(code, path, message, exception));
 }

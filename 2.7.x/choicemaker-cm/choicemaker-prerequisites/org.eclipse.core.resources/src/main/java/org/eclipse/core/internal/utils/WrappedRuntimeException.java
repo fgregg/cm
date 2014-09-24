@@ -11,6 +11,7 @@
 package org.eclipse.core.internal.utils;
 
 public class WrappedRuntimeException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
 
 	private Throwable target;
 

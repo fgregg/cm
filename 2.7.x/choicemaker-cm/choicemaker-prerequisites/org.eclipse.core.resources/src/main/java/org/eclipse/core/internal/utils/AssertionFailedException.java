@@ -20,6 +20,7 @@ package org.eclipse.core.internal.utils;
  * </p>
  */
 /* package */ class AssertionFailedException extends RuntimeException {
+	private static final long serialVersionUID = 271L;
 /** Constructs a new exception.
  */
 public AssertionFailedException() {

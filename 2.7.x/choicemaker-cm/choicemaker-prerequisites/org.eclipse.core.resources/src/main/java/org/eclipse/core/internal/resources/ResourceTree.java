@@ -397,12 +397,12 @@ private boolean isContentChange(IProject project, IProjectDescription destinatio
 		return true;
 	return !sourceDescription.getLocation().equals(destinationDescription.getLocation());
 }
-/**
- * Returns <code>true</code> if we are doing a change in the case of the project name.
- */
-private boolean isCaseChange(IProject project, IProjectDescription description) {
-	return !project.getName().equals(description.getName()) && project.getName().equalsIgnoreCase(description.getName());
-}
+///**
+// * Returns <code>true</code> if we are doing a change in the case of the project name.
+// */
+//private boolean isCaseChange(IProject project, IProjectDescription description) {
+//	return !project.getName().equals(description.getName()) && project.getName().equalsIgnoreCase(description.getName());
+//}
 /**
  * @see IResourceTree#isSynchronized
  */
@@ -1065,7 +1065,7 @@ public void standardMoveProject(IProject source, IProjectDescription description
 		// Check to see if we are synchronized with the local file system. 
 		boolean force = (updateFlags & IResource.FORCE) != 0;
 		if (!force && !isSynchronized(source, IResource.DEPTH_INFINITE)) {
-			// FIXME: make this a best effort move?
+			// make this a best effort move?
 			message = Policy.bind("localstore.resourceIsOutOfSync", source.getFullPath().toString()); //$NON-NLS-1$
 			IStatus status = new ResourceStatus(IResourceStatus.OUT_OF_SYNC_LOCAL, source.getFullPath(), message);
 			failed(status);
@@ -1093,13 +1093,13 @@ public void standardMoveProject(IProject source, IProjectDescription description
 		monitor.done();
 	}
 }
-/**
- * Moves any children of this project to their new location in the file system.
- */
-private void moveLinkedChildren(IProject source, IProjectDescription description, int updateFlags, IProgressMonitor monitor) {
-	
-
-}
+///**
+// * Moves any children of this project to their new location in the file system.
+// */
+//private void moveLinkedChildren(IProject source, IProjectDescription description, int updateFlags, IProgressMonitor monitor) {
+//	
+//
+//}
 /**
  * Move the contents of the specified file from the source location to the destination location.
  * If the source points to a directory then move that directory and all its contents.

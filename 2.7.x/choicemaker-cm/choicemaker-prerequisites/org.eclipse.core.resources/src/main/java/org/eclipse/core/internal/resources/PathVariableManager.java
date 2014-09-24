@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.*;
 public class PathVariableManager implements IPathVariableManager, IManager {
 
 	private Set listeners;
-	private Workspace workspace;
+	//private Workspace workspace;
 	private Preferences preferences;
 
 	static final String VARIABLE_PREFIX = "pathvariable."; //$NON-NLS-1$
@@ -32,7 +32,7 @@ public class PathVariableManager implements IPathVariableManager, IManager {
 	 * Constructor for the class.
 	 */
 	public PathVariableManager(Workspace workspace) {
-		this.workspace = workspace;
+		//this.workspace = workspace;
 		this.listeners = Collections.synchronizedSet(new HashSet());
 		this.preferences = ResourcesPlugin.getPlugin().getPluginPreferences();
 	}
@@ -146,7 +146,7 @@ public class PathVariableManager implements IPathVariableManager, IManager {
 				// and/or values. We can get in this state if the user has 
 				// edited the file on disk or set a preference using the prefix 
 				// reserved to path variables (#VARIABLE_PREFIX).
-				// TODO: we may want to look at removing these keys from the
+				// We may want to look at removing these keys from the
 				// preference store as a garbage collection means
 				if (validateName(key).isOK() && validateValue(getValue(key)).isOK())
 					result.add(key);

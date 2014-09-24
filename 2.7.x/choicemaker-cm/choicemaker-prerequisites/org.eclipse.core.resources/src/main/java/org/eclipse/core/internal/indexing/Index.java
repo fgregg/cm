@@ -21,12 +21,6 @@ public class Index {
 	private ObjectAddress anchorAddress;
 
 	/**
-	 * Default Index constructor.
-	 */
-	private Index() {
-		super();
-	}
-	/**
 	 * Index constructor.
 	 */
 	Index(IndexedStore store, ObjectAddress anchorAddress) {

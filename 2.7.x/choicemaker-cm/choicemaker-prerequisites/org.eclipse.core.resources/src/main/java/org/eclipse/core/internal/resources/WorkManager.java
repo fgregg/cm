@@ -152,7 +152,7 @@ public int getPreparedOperationDepth() {
 }
 private WorkspaceLock getWorkspaceLock() throws CoreException {
 	if (workspaceLock == null)
-		workspaceLock = workspaceLock = new WorkspaceLock(workspace);
+		workspaceLock = new WorkspaceLock(workspace);
 	return workspaceLock;
 }
 /**

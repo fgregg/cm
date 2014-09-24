@@ -19,11 +19,12 @@ import java.util.Random;
 import java.util.GregorianCalendar;
 
 public class UniversalUniqueIdentifier implements java.io.Serializable {
+	private static final long serialVersionUID = 271L;
 
 	/* INSTANCE FIELDS =============================================== */
 
 	private byte[] fBits = new byte[BYTES_SIZE];
-	private boolean fReadOnly = false;
+	//private boolean fReadOnly = false;
 
 	/* NON-FINAL PRIVATE STATIC FIELDS =============================== */
 
@@ -44,7 +45,7 @@ public class UniversalUniqueIdentifier implements java.io.Serializable {
 
 	public static final int BYTES_SIZE = 16;
 	public static final byte[] UNDEFINED_UUID_BYTES = new byte[16];
-	private static final BigInteger HUNDRED_NANOS_PER_MILLI = BigInteger.valueOf(10000L);
+	//private static final BigInteger HUNDRED_NANOS_PER_MILLI = BigInteger.valueOf(10000L);
 	public static final int MAX_CLOCK_SEQUENCE = 0x4000;
 	public static final int MAX_CLOCK_ADJUSTMENT = 0x7FFF;
 	public static final int TIME_FIELD_START = 0;
@@ -344,20 +345,20 @@ protected void setNode(byte[] bytes) {
 	for(int index=0; index < NODE_ADDRESS_BYTE_SIZE; index ++)
 		fBits[index + NODE_ADDRESS_START] = bytes[index];
 }
-private int setTimestamp(int timestamp) {
-	int value = timestamp;
-	int version;
-	int timeHigh;
-	
-	for(int index=TIME_FIELD_START; index < TIME_FIELD_STOP; index++) {
-		fBits[index] = (byte)(value & BYTE_MASK);
-		value >>>= ShiftByte;
-	}
-	version = fBits[TIME_HIGH_AND_VERSION] & HIGH_NIBBLE_MASK;
-	timeHigh = value & LOW_NIBBLE_MASK;
-	fBits[TIME_HIGH_AND_VERSION] = (byte) (timeHigh | version);
-	return timestamp;
-}
+//private int setTimestamp(int timestamp) {
+//	int value = timestamp;
+//	int version;
+//	int timeHigh;
+//	
+//	for(int index=TIME_FIELD_START; index < TIME_FIELD_STOP; index++) {
+//		fBits[index] = (byte)(value & BYTE_MASK);
+//		value >>>= ShiftByte;
+//	}
+//	version = fBits[TIME_HIGH_AND_VERSION] & HIGH_NIBBLE_MASK;
+//	timeHigh = value & LOW_NIBBLE_MASK;
+//	fBits[TIME_HIGH_AND_VERSION] = (byte) (timeHigh | version);
+//	return timestamp;
+//}
 private void setTimestamp(BigInteger timestamp) {
 	BigInteger value = timestamp;
 	BigInteger bigByte = BigInteger.valueOf(256L);

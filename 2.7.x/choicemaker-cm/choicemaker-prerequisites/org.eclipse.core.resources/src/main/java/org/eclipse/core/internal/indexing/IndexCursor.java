@@ -19,12 +19,6 @@ public class IndexCursor {
 	private boolean entryRemoved;
 
 	/**
-	 * Default constructor for an IndexCursor.
-	 */
-	private IndexCursor() {
-		super();
-	}
-	/**
 	 * Constructor for an IndexCursor.  Cursors should only be constructed
 	 * by the index during an open operation.
 	 */

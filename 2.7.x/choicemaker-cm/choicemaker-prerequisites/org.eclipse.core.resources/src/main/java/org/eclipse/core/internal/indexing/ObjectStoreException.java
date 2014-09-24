@@ -13,6 +13,7 @@ package org.eclipse.core.internal.indexing;
 import org.eclipse.core.internal.utils.Policy;
 
 public class ObjectStoreException extends StoreException {
+	private static final long serialVersionUID = 271L;
 
 	public final static int GenericFailure              = 0;
 	public final static int InternalFailure             = 1;

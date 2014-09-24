@@ -14,6 +14,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 
 public abstract class StoreException extends Exception {
+	private static final long serialVersionUID = 1L;
 	protected Throwable wrappedException;
 
 public StoreException(String message) {
