@@ -14,7 +14,7 @@
   <groupId>com.choicemaker.cmit</groupId>
   <artifactId>cm-analyzer-ce-it</artifactId>
 
-  <name>ChoiceMaker Analyzer IT</name>
+  <name>Integration Test: ChoiceMaker Analyzer, Part 1</name>
   <description><![CDATA[
   Integration test for the zip distribution of CM Analyzer, Community Edition.
   ]]></description>
