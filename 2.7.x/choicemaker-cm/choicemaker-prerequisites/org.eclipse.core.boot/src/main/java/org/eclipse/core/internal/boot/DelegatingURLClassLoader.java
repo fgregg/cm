@@ -71,7 +71,7 @@ public abstract class DelegatingURLClassLoader extends URLClassLoader {
 	
 	public static final String PLUGIN = "plugin"; //$NON-NLS-1$
 
-	private static String[] JAR_VARIANTS = buildJarVariants();
+	//private static String[] JAR_VARIANTS = buildJarVariants();
 	private static String[] LIBRARY_VARIANTS = buildLibraryVariants();
 
 	// DelegateLoader. Represents a single class loader this loader delegates to.
@@ -108,6 +108,7 @@ public abstract class DelegatingURLClassLoader extends URLClassLoader {
 
 	// unchecked DelegatingLoaderException
 	protected static class DelegatingLoaderException extends RuntimeException {
+		private static final long serialVersionUID = 271L;
 		Exception e = null;
 
 		public DelegatingLoaderException() {
@@ -152,22 +153,22 @@ public abstract class DelegatingURLClassLoader extends URLClassLoader {
 		}
 	}
 
-private static String[] buildJarVariants() {
-	ArrayList result = new ArrayList();
-	
-	result.add("ws/" + InternalBootLoader.getWS() + "/"); //$NON-NLS-1$ //$NON-NLS-2$
-	result.add("os/" + InternalBootLoader.getOS() + "/" + InternalBootLoader.getOSArch() + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	result.add("os/" + InternalBootLoader.getOS() + "/"); //$NON-NLS-1$ //$NON-NLS-2$
-	String nl = InternalBootLoader.getNL();
-	nl = nl.replace('_', '/');
-	while (nl.length() > 0) {
-		result.add("nl/" + nl + "/"); //$NON-NLS-1$ //$NON-NLS-2$
-		int i = nl.lastIndexOf('/'); //$NON-NLS-1$
-		nl = (i < 0) ? "" : nl.substring(0, i); //$NON-NLS-1$
-	}
-	result.add(""); //$NON-NLS-1$
-	return (String[])result.toArray(new String[result.size()]);
-}
+//private static String[] buildJarVariants() {
+//	ArrayList result = new ArrayList();
+//	
+//	result.add("ws/" + InternalBootLoader.getWS() + "/"); //$NON-NLS-1$ //$NON-NLS-2$
+//	result.add("os/" + InternalBootLoader.getOS() + "/" + InternalBootLoader.getOSArch() + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+//	result.add("os/" + InternalBootLoader.getOS() + "/"); //$NON-NLS-1$ //$NON-NLS-2$
+//	String nl = InternalBootLoader.getNL();
+//	nl = nl.replace('_', '/');
+//	while (nl.length() > 0) {
+//		result.add("nl/" + nl + "/"); //$NON-NLS-1$ //$NON-NLS-2$
+//		int i = nl.lastIndexOf('/'); //$NON-NLS-1$
+//		nl = (i < 0) ? "" : nl.substring(0, i); //$NON-NLS-1$
+//	}
+//	result.add(""); //$NON-NLS-1$
+//	return (String[])result.toArray(new String[result.size()]);
+//}
 
 private static String[] buildLibraryVariants() {
 	ArrayList result = new ArrayList();

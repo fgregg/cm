@@ -21,22 +21,22 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 	private static PlatformConfiguration currentPlatformConfiguration = null;
 
 	private URL configLocation;
-	private URL rootLocation;
+	//private URL rootLocation;
 	private HashMap sites;
 	private HashMap externalLinkSites; // used to restore prior link site state
 	private HashMap cfgdFeatures;
 	private HashMap bootPlugins;
 	private String defaultFeature;
-	private long lastChangeStamp;
+	//private long lastChangeStamp;
 	private long changeStamp;
 	private boolean changeStampIsValid = false;
 	private long lastFeaturesChangeStamp;
 	private long featuresChangeStamp;
 	private boolean featuresChangeStampIsValid = false;
-	private long lastPluginsChangeStamp;
+	//private long lastPluginsChangeStamp;
 	private long pluginsChangeStamp;
 	private boolean pluginsChangeStampIsValid = false;
-	private boolean featureChangesConfigured = false;
+	//private boolean featureChangesConfigured = false;
 	private boolean transientConfig = false;
 	private File cfgLockFile;
 	private RandomAccessFile cfgLockFileRAF;
@@ -56,7 +56,7 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 	static boolean DEBUG = false;
 
 	private static final String BOOT_XML = "boot.xml"; //$NON-NLS-1$
-	private static final String BOOT_PLUGIN_ID = "org.eclipse.core.boot"; //$NON-NLS-1$
+	//private static final String BOOT_PLUGIN_ID = "org.eclipse.core.boot"; //$NON-NLS-1$
 	private static final String RUNTIME_PLUGIN_ID = "org.eclipse.core.runtime"; //$NON-NLS-1$
 	private static final String XML_PLUGIN_ID = "org.apache.xerces"; //$NON-NLS-1$
 
@@ -141,7 +141,7 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 		private ArrayList features;
 		private ArrayList plugins;
 		private PlatformConfiguration parent;
-		private long lastChangeStamp;
+		//private long lastChangeStamp;
 		private long changeStamp;
 		private boolean changeStampIsValid = false;
 		private long lastFeaturesChangeStamp;
@@ -442,7 +442,7 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 
 		private synchronized void refresh() {
 			// reset computed values. Will be updated on next access.
-			lastChangeStamp = changeStamp;
+			//lastChangeStamp = changeStamp;
 			lastFeaturesChangeStamp = featuresChangeStamp;
 			lastPluginsChangeStamp = pluginsChangeStamp;
 			changeStampIsValid = false;
@@ -1230,9 +1230,9 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 			 ((SiteEntry) sites[i]).refresh();
 		}
 		// reset configuration entry.
-		lastChangeStamp = changeStamp;
+		//lastChangeStamp = changeStamp;
 		lastFeaturesChangeStamp = featuresChangeStamp;
-		lastPluginsChangeStamp = pluginsChangeStamp;
+		//lastPluginsChangeStamp = pluginsChangeStamp;
 		changeStampIsValid = false;
 		featuresChangeStampIsValid = false;
 		pluginsChangeStampIsValid = false;
@@ -1393,7 +1393,7 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 	}
 
 	private synchronized void initializeCurrent(URL url, String metaPath, boolean createRootSite) throws IOException {
-		// FIXME: commented out for now. Remove if not needed.
+		// commented out for now. Remove if not needed.
 		//boolean concurrentUse = false;
 
 		if (cmdInitialize) {
@@ -1402,7 +1402,7 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 			// Force the configuration to be saved in the install location.
 			// Allow an existing configuration to be re-initialized.
 			url = new URL(BootLoader.getInstallURL(), CONFIG_FILE); // if we fail here, return exception
-			// FIXME: commented out for now. Remove if not needed. 
+			// commented out for now. Remove if not needed. 
 			// I left the call to #getConfigurationLock in just in case
 			// calling it has useful side effect. If not, then it can be removed too.
 			//concurrentUse = getConfigurationLock(url);
@@ -1423,7 +1423,7 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 			// in specified location
 
 			// check concurrent use lock
-			// FIXME: might not need this method call.
+			// might not need this method call.
 			getConfigurationLock(url);
 
 			// try loading the configuration
@@ -1457,7 +1457,7 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 			URL cfigURL = new URL("file", null, 0, metaPath + CONFIG_FILE); // if we fail here, return exception //$NON-NLS-1$
 
 			// check concurrent use lock
-			// FIXME: might not need this method call
+			// might not need this method call
 			getConfigurationLock(cfigURL);
 
 			// if we can load it, use it
@@ -1953,13 +1953,13 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 		}
 
 		String stamp = loadAttribute(props, CFG_STAMP, null);
-		if (stamp != null) {
-			try {
-				lastChangeStamp = Long.parseLong(stamp);
-			} catch (NumberFormatException e) {
-				// ignore bad attribute ...
-			}
-		}
+//		if (stamp != null) {
+//			try {
+//				lastChangeStamp = Long.parseLong(stamp);
+//			} catch (NumberFormatException e) {
+//				// ignore bad attribute ...
+//			}
+//		}
 
 		stamp = loadAttribute(props, CFG_FEATURE_STAMP, null);
 		if (stamp != null) {
@@ -1971,13 +1971,13 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 		}
 
 		stamp = loadAttribute(props, CFG_PLUGIN_STAMP, null);
-		if (stamp != null) {
-			try {
-				lastPluginsChangeStamp = Long.parseLong(stamp);
-			} catch (NumberFormatException e) {
-				// ignore bad attribute ...
-			}
-		}
+//		if (stamp != null) {
+//			try {
+//				lastPluginsChangeStamp = Long.parseLong(stamp);
+//			} catch (NumberFormatException e) {
+//				// ignore bad attribute ...
+//			}
+//		}
 
 		// load bootstrap entries
 		String[] ids = getBootstrapPluginIdentifiers();
@@ -2082,13 +2082,13 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 		SiteEntry site = (SiteEntry) createSiteEntry(url, sp);
 
 		String stamp = loadAttribute(props, name + "." + CFG_STAMP, null); //$NON-NLS-1$
-		if (stamp != null) {
-			try {
-				site.lastChangeStamp = Long.parseLong(stamp);
-			} catch (NumberFormatException e) {
-				// ignore bad attribute ...
-			}
-		}
+//		if (stamp != null) {
+//			try {
+//				site.lastChangeStamp = Long.parseLong(stamp);
+//			} catch (NumberFormatException e) {
+//				// ignore bad attribute ...
+//			}
+//		}
 
 		stamp = loadAttribute(props, name + "." + CFG_FEATURE_STAMP, null); //$NON-NLS-1$
 		if (stamp != null) {
@@ -2829,18 +2829,18 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 		return -1;
 	}
 
-	private static String[] stringListToArray(String prop, String separator) {
-		if (prop == null || prop.trim().equals("")) //$NON-NLS-1$
-			return new String[0];
-		ArrayList list = new ArrayList();
-		StringTokenizer tokens = new StringTokenizer(prop, separator);
-		while (tokens.hasMoreTokens()) {
-			String token = tokens.nextToken().trim();
-			if (!token.equals("")) //$NON-NLS-1$
-				list.add(token);
-		}
-		return list.isEmpty() ? new String[0] : (String[]) list.toArray(new String[0]);
-	}
+//	private static String[] stringListToArray(String prop, String separator) {
+//		if (prop == null || prop.trim().equals("")) //$NON-NLS-1$
+//			return new String[0];
+//		ArrayList list = new ArrayList();
+//		StringTokenizer tokens = new StringTokenizer(prop, separator);
+//		while (tokens.hasMoreTokens()) {
+//			String token = tokens.nextToken().trim();
+//			if (!token.equals("")) //$NON-NLS-1$
+//				list.add(token);
+//		}
+//		return list.isEmpty() ? new String[0] : (String[]) list.toArray(new String[0]);
+//	}
 
 	private static boolean supportsDetection(URL url) {
 		String protocol = url.getProtocol();

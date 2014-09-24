@@ -265,29 +265,29 @@ protected URL resolve() throws IOException {
 	throw new IOException();
 }
 
-private String resolvePath(String spec) {
-	if (spec.length() == 0 || spec.charAt(0) != '$')
-		return spec;
-	int i = spec.indexOf('/', 1);
-	String first = ""; //$NON-NLS-1$
-	String rest = ""; //$NON-NLS-1$
-	if (i == -1)
-		first = spec;
-	else {	
-		first = spec.substring(0, i);
-		rest = spec.substring(i);
-	}
-	if (first.equalsIgnoreCase("$ws$")) //$NON-NLS-1$
-		return "ws/" + InternalBootLoader.getWS() + rest; //$NON-NLS-1$
-	if (first.equalsIgnoreCase("$os$")) //$NON-NLS-1$
-		return "os/" + InternalBootLoader.getOS() + rest; //$NON-NLS-1$
-	if (first.equalsIgnoreCase("$nl$")) { //$NON-NLS-1$
-		String nl = InternalBootLoader.getNL();
-		nl = nl.replace('_', '/');
-		return "nl/" + nl + rest; //$NON-NLS-1$
-	}
-	return spec;
-}
+//private String resolvePath(String spec) {
+//	if (spec.length() == 0 || spec.charAt(0) != '$')
+//		return spec;
+//	int i = spec.indexOf('/', 1);
+//	String first = ""; //$NON-NLS-1$
+//	String rest = ""; //$NON-NLS-1$
+//	if (i == -1)
+//		first = spec;
+//	else {	
+//		first = spec.substring(0, i);
+//		rest = spec.substring(i);
+//	}
+//	if (first.equalsIgnoreCase("$ws$")) //$NON-NLS-1$
+//		return "ws/" + InternalBootLoader.getWS() + rest; //$NON-NLS-1$
+//	if (first.equalsIgnoreCase("$os$")) //$NON-NLS-1$
+//		return "os/" + InternalBootLoader.getOS() + rest; //$NON-NLS-1$
+//	if (first.equalsIgnoreCase("$nl$")) { //$NON-NLS-1$
+//		String nl = InternalBootLoader.getNL();
+//		nl = nl.replace('_', '/');
+//		return "nl/" + nl + rest; //$NON-NLS-1$
+//	}
+//	return spec;
+//}
 
 protected String getId(String spec) {
 	int i = spec.lastIndexOf('_');
@@ -322,7 +322,7 @@ private boolean shouldCache(boolean asLocal) {
 	if (asLocal) return true;
 	
 	// for now cache all files
-	// XXX: add cache policy support
+	// should add cache policy support
 	return true;
 }
 static void shutdown() {

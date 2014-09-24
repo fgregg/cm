@@ -12,6 +12,7 @@ package org.eclipse.core.internal.boot;
 
 import java.io.*;
 import java.util.*;
+
 import org.eclipse.core.boot.BootLoader;
 
 /**
@@ -22,7 +23,7 @@ import org.eclipse.core.boot.BootLoader;
 public class ClassloaderStats {
 	private String id;
 	private long loadingTime; // time spent loading classes
-	private int failureCount = 0; // number of classes requested but that we fail to provide
+	//private int failureCount = 0; // number of classes requested but that we fail to provide
 	private Map classes = new HashMap(20); // classes loaded by the plugin	(key: class name, value: ClassStats) 
 	private ArrayList bundles = new ArrayList(2); // bundles loaded
 
@@ -60,6 +61,7 @@ public class ClassloaderStats {
 			InputStream input = new FileInputStream(filterFile);
 			System.out.println("  Loaded."); //$NON-NLS-1$
 			Properties filters = new Properties() {
+				private static final long serialVersionUID = 271L;
 				public Object put(Object key, Object value) {
 					addFilters((String) key, (String) value);
 					return null;
@@ -158,7 +160,7 @@ public class ClassloaderStats {
 	private void endLoadClass(String name, boolean success) {
 		ClassStats current = (ClassStats) classStack.pop();
 		if (!success) {
-			failureCount++;
+			//failureCount++;
 			return;
 		}
 		if (current.getLoadOrder() >= 0)
