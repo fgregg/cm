@@ -52,16 +52,16 @@ public class Main {
 		for (ProbabilityModelConfiguration pmc : models) {
 
 			final ImmutableProbabilityModel ipm = pmc.getProbabilityModel();
-			
+
 			String cluesetName = null;
-			String schemaName = null;
+			// String schemaName = null;
 			String modelName = null;
 			String cluesetSignature = null;
 			String schemaSignature = null;
 			String modelSignature = null;
 			if (ipm != null) {
 				cluesetName = ipm.getClueSetName();
-				schemaName = ipm.getSchemaName();
+				// schemaName = ipm.getSchemaName();
 				modelName = ipm.getModelName();
 				cluesetSignature = ipm.getClueSetSignature();
 				schemaSignature = ipm.getSchemaSignature();
