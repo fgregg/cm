@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="person-matching-models"
+   name="Person-Matching Plugin Models"
+   version="2.7.1"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="models.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+   </requires>
+
+   <extension
+         point="com.choicemaker.cm.core.model">
+      <modelConfiguration
+            id="person1"
+            name="Simple person-matching model #1"
+            file="etc/models/SimplePerson.model"/>
+      <modelConfiguration
+            id="person2"
+            name="Simple person-matching model #2"
+            file="etc/models/SimplePerson.model"/>
+            file="etc/models/SimplePerson2.model"/>
+   </extension>
+
+   <extension
+         point="com.choicemaker.cm.core.modelConfiguration">
+      <modelConfiguration
+            id="model1Config1"
+            name="Oracle Configuration for Model #1"
+            file="etc/models/Model1Config1.xml"/>
+      <modelConfiguration
+            id="model1Config2"
+            name="SqlServer configuration for Model #1"
+            file="etc/models/Model1Config2.xml"/>
+      <modelConfiguration
+            id="model2Config1"
+            name="Oracle Configuration for Model #2"
+            name="model2Config1"
+            file="etc/models/Model2Config1.xml"/>
+      <modelConfiguration
+            id="model2Config2"
+            name="SqlServer configuration for Model #2"
+            name="model2Config2"
+            file="etc/models/Model2Config2.xml"/>
+   </extension>
+
+</plugin>

@@ -34,15 +34,25 @@
           </execution>
         </executions>
       </plugin>
+<!-- -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>com.choicemaker.cm</groupId>
+            <artifactId>choicemaker-assembly</artifactId>
+            <version>2.7.1-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <id>prj-assembly</id>
             <phase>package</phase>
             <configuration>
-              <descriptor>prj-assembly.xml</descriptor>
+              <descriptorRefs>
+                <descriptorRef>cm-model-assembly</descriptorRef>
+              </descriptorRefs>
             </configuration>
             <goals>
               <goal>single</goal>
@@ -50,17 +60,117 @@
           </execution>
         </executions>
       </plugin>
+<!-- -->
+			<plugin>
+				<groupId>com.choicemaker.fake</groupId>
+				<artifactId>mymojo-maven-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>generate-test-3</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.compiler</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.core</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.io.db.base</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.io.xml.base</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.matching.cfg</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.matching.en</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.matching.en.au</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>com.choicemaker.cm</groupId>
+						<artifactId>com.choicemaker.cm.matching.en.us</artifactId>
+						<version>2.7.1-SNAPSHOT</version>
+					</dependency>
+				</dependencies>
+			</plugin>
     </plugins>
   </build>
 
   <dependencies>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.core</artifactId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
+      <artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.en.us</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.urm.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

@@ -7,9 +7,9 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker-cm</artifactId>
+    <artifactId>choicemaker-base</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <relativePath>../choicemaker-base/pom.xml</relativePath>
   </parent>
 
   <artifactId>model_plugins</artifactId>
@@ -25,13 +25,50 @@
   ]]>
   </description>
 
-  <modules>
-    <module>simple-person-plugin</module>
-  </modules>
+  <scm>
+    <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url>
+  </scm>
+
+  <issueManagement>
+    <url>http://sourceforge.net/projects/oscmt/support</url>
+  </issueManagement>
+
+  <properties>
+    <project.build.sourceEncoding>
+      UTF-8</project.build.sourceEncoding>
+
+    <!-- other plugin versions -->
+    <version.compiler.plugin>2.3.1</version.compiler.plugin>
+
+    <!-- maven-compiler-plugin -->
+    <maven.compiler.version>1.7</maven.compiler.version>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.7</maven.compiler.source>
+  </properties>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/eclipse2</directory>
+        <targetPath>META-INF/plugins</targetPath>
+      </resource>
+    </resources>
+
     <plugins>
 
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.compiler.plugin}</version><!--$NO-MVN-MAN-VER$-->
+        <configuration>
+          <compilerVersion>
+            ${maven.compiler.version}</compilerVersion>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
@@ -42,6 +79,31 @@
 
     </plugins>
   </build>
+
+  <modules>
+    <module>simple-person-plugin</module>
+  </modules>
+
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+      <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>ChoiceMaker developer</role>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <contributors>
+    <contributor>
+      <name>Andrew Borthwick</name>
+      <roles>
+        <role>ChoiceMaker founder</role>
+      </roles>
+    </contributor>
+  </contributors>
 
 </project>
 

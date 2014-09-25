@@ -1,0 +1,58 @@
+<!--
+Differences from Model1Config1:
+
+(*) A different model
+    namely, "model2" instead of "model1"
+
+Note that models are specified by extension id.
+-->
+<cmModelConfiguration>
+  <model id="person-matching-models.person2" />
+  <datasources>
+    <staging dsName="MyOracleDatasource">
+      <sql>
+        <![CDATA[
+select person_id as id from person where deduped="N"
+        ]]>
+      </sql>
+    </staging>
+    <master dsName="MyOracleDatasource">
+      <sql>
+        <![CDATA[
+select person_id as id from person where deduped="Y"
+        ]]>
+      </sql>
+    </master>
+  </datasources>
+  <databaseConfiguration name="default" />
+  <blockingConfiguration name="default" />
+  <matching>
+    <thresholds differ="0.2" match="0.8" />
+    <singleRecordMatching>
+      <limitPerBlockingSet>50</limitPerBlockingSet>
+      <singleTableBlockingSetGraceLimit>100
+      </singleTableBlockingSetGraceLimit>
+      <limitSingleBlockingSet>200</limitSingleBlockingSet>
+    </singleRecordMatching>
+    <batchRecordMatching>
+      <batchThreshold>1000</batchThreshold>
+      <maxChunkFiles>500</maxChunkFiles>
+      <maxChunkSize>250000</maxChunkSize>
+      <maxBlockSize>50</maxBlockSize>
+      <maxOversized>1000</maxOversized>
+      <minFields>5</minFields>
+      <maxMatchSize>800000</maxMatchSize>
+    </batchRecordMatching>
+  </matching>
+  <transitivity enabled="true">
+    <graphPropType>BCM</graphPropType>
+    <analysisResultFormat>SORT_BY_HOLD_GROUP</analysisResultFormat>
+    <scoreType>NO_NOTE</scoreType>
+  </transitivity>
+  <properties>
+    <property name="someProperty1" value="someValue" />
+    <property name="someProperty2" value="250000" />
+    <property name="someProperty9" value="3.14" />
+  </properties>
+</cmModelConfiguration>
+
