@@ -55,7 +55,7 @@
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${version.compiler.plugin}</version>
+        <version>${version.compiler.plugin}</version><!--$NO-MVN-MAN-VER$-->
         <configuration>
           <compilerVersion>
             ${maven.compiler.version}</compilerVersion>
