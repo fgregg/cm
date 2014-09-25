@@ -14,7 +14,8 @@ http://www.eclipse.org/legal/epl-v10.html
 Contributors:
     ChoiceMaker LLC - initial API and implementation
 
-A model configuration consists of the following:
+A configuration for Universal Record Matching (URM) is an extension
+of a configuration for transitivity analysis. It includes:
 
 (*) A trained model, specified as the name of a com.choicemaker.cm.core.model
     extension.
@@ -34,13 +35,16 @@ A model configuration consists of the following:
 
 (*) The name of a database configuration defined by the model
  
-(*) Matching configuration parameters
+(*) OABA configuration parameters
     Single-record matching parameters
     Batch-record matching parameters
 
 (*) Transitivity analysis parameters
     A flag that indicates whether transitivity analysis is performed
     Parameters that control how transitivity analysis is performed
+
+(*) Online configuration parameters
+    TBD
 ]]>
       </xs:documentation>
     </xs:annotation>
@@ -50,7 +54,8 @@ A model configuration consists of the following:
           <xs:complexType>
             <xs:simpleContent>
               <xs:extension base="xs:string">
-                <xs:attribute type="xs:string" name="name" />
+                <xs:attribute type="xs:string" name="id" />
+                <xs:attribute type="xs:string" name="version" />
               </xs:extension>
             </xs:simpleContent>
           </xs:complexType>

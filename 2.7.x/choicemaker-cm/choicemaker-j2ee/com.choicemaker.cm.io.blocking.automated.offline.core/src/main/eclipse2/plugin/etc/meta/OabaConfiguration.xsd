@@ -1,0 +1,169 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="cmModelConfiguration">
+    <xs:annotation>
+      <xs:documentation>
+<![CDATA[
+Copyright (c) 2014 ChoiceMaker LLC and others.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+
+Contributors:
+    ChoiceMaker LLC - initial API and implementation
+
+A configuration of the Offline Automated Blocking Algorithm (OABA)
+is an extension of a ModelConfiguration. An OABA configuration
+consists of the following:
+
+(*) A trained model, specified as the name of a com.choicemaker.cm.core.model
+    extension.
+ 
+(*) Model configuration parameters
+    The name of a database configuration
+    The name of a blocking configuration
+ 
+(*) Datasource configuration parameters
+    The name of a DataSource for connecting to a staging database
+    A SQL selection statement for pulling records from the staging database
+ 
+    The name of a DataSource for connecting to a master database
+    A SQL selection statement for pulling records from the master database
+ 
+(*) The name of a blocking configuration defined by the model
+
+(*) The name of a database configuration defined by the model
+ 
+(*) OABA configuration parameters
+    Single-record matching parameters
+    Batch-record matching parameters
+]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="model">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="id" />
+                <xs:attribute type="xs:string" name="version" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="datasources">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="staging">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="sql" />
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="dsName" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="master">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="sql" />
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="dsName" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="databaseConfiguration">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="name" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="blockingConfiguration">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="name" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="matching">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="thresholds">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:float" name="differ" />
+                      <xs:attribute type="xs:float" name="match" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="singleRecordMatching">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:byte" name="limitPerBlockingSet" />
+                    <xs:element type="xs:float"
+                      name="singleTableBlockingSetGraceLimit" />
+                    <xs:element type="xs:short" name="limitSingleBlockingSet" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="batchRecordMatching">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:short" name="batchThreshold" />
+                    <xs:element type="xs:short" name="maxChunkFiles" />
+                    <xs:element type="xs:int" name="maxChunkSize" />
+                    <xs:element type="xs:byte" name="maxBlockSize" />
+                    <xs:element type="xs:short" name="maxOversized" />
+                    <xs:element type="xs:byte" name="minFields" />
+                    <xs:element type="xs:int" name="maxMatchSize" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="transitivity">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="graphPropType" />
+              <xs:element type="xs:string" name="analysisResultFormat" />
+              <xs:element type="xs:string" name="scoreType" />
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="enabled" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="properties">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="property" maxOccurs="unbounded"
+                minOccurs="0"
+              >
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="pname"
+                        use="optional" />
+                      <xs:attribute type="xs:string" name="pvalue"
+                        use="optional" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
