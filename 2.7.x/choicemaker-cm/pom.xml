@@ -58,7 +58,6 @@
     <module>choicemaker-modeling</module>
     <module>choicemaker-swing</module>
     <module>choicemaker-j2ee</module>
-    <module>model_projects</module>
     <module>model_plugins</module>
     <module>choicemaker-ce</module>
   </modules>
