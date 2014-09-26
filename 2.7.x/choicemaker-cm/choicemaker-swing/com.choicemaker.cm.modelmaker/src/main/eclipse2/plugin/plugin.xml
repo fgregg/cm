@@ -23,6 +23,7 @@
       <import plugin="com.choicemaker.cm.matching.geo"/>
       <import plugin="com.wcohen.ss.eclipse"/>
       <import plugin="com.choicemaker.cm.module"/>
+      <import plugin="com.choicemaker.e2"/>
    </requires>
 
 
@@ -37,6 +38,15 @@
    <extension
          id="ModelMaker"
          point="com.choicemaker.e2.applications">
+      <application>
+         <run
+               class="com.choicemaker.cm.modelmaker.gui.ModelMaker">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="ModelMakerStd"
+         point="org.eclipse.core.runtime.applications">
       <application>
          <run
                class="com.choicemaker.cm.modelmaker.gui.ModelMaker">

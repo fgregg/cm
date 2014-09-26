@@ -11,6 +11,7 @@
       </library>
    </runtime>
    <requires>
+      <import plugin="com.choicemaker.e2"/>
       <import plugin="com.choicemaker.cm.core"/>
    </requires>
 

@@ -12,6 +12,7 @@
       <library name="lib/"/>
    </runtime>
    <requires>
+      <import plugin="com.choicemaker.e2"/>
       <import plugin="org.apache.ant"/>
       <import plugin="org.jdom" export="true"/>
    </requires>

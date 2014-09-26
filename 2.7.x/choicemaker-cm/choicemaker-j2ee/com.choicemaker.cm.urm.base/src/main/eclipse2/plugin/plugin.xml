@@ -9,4 +9,8 @@
       <library name="urm-base.jar"/>
    </runtime>
 
+   <requires>
+      <import plugin="com.choicemaker.e2"/>
+   </requires>
+
 </plugin>
