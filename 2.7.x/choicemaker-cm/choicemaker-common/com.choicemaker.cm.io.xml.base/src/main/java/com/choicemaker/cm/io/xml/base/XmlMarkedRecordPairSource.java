@@ -47,7 +47,6 @@ public class XmlMarkedRecordPairSource
 	extends XMLFilterImpl
 	implements RecordHandler, Runnable, MarkedRecordPairSource {
 	private static Logger logger = Logger.getLogger(XmlMarkedRecordPairSource.class.getName());
-	private final String READER = "org.apache.xerces.parsers.SAXParser";
 	private final int BUF_SIZE = 1000;
 	private String name;
 
@@ -157,7 +156,7 @@ public class XmlMarkedRecordPairSource
 	public void run() {
 		InputStream is = this.inputStream;
 		try {
-			XMLReader reader = XmlParserFactory.createXMLReader(READER);
+			XMLReader reader = XmlParserFactory.createXMLReader();
 			reader.setContentHandler(this);
 			if (is == null) {
 				is = new FileInputStream(new File(xmlFileName).getAbsoluteFile());

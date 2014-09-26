@@ -35,7 +35,6 @@ import com.choicemaker.cm.core.Constants;
  */
 public class ReportToDelim extends DefaultHandler {
 	private static Logger logger = Logger.getLogger(ReportToDelim.class.getName());
-	private final String READER = "org.apache.xerces.parsers.SAXParser";
 
 	private String inputFile;
 	private String outputFile;
@@ -54,7 +53,7 @@ public class ReportToDelim extends DefaultHandler {
 		try {
 			w = new FileWriter(outputFile);
 			w.write("differThreshold,matchThreshold,maximumMatches,modelName,startTime,duration,queryType,numberReturnedByBlocking" + Constants.LINE_SEPARATOR);
-			XMLReader reader = XMLReaderFactory.createXMLReader(READER);
+			XMLReader reader = XMLReaderFactory.createXMLReader();
 			reader.setContentHandler(this);
 			FileInputStream fs = new FileInputStream(new File(inputFile).getAbsoluteFile());
 			reader.parse(new InputSource(new BufferedInputStream(fs)));

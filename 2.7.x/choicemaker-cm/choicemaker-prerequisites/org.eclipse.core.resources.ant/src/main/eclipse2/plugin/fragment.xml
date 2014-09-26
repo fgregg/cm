@@ -7,9 +7,7 @@
   plugin-id="org.eclipse.core.resources"
   plugin-version="2.1.1">
 
-  <requires>
-    <import plugin="org.apache.xerces"/>
-  </requires>
+  <requires/>
 
   <runtime>
     <library name="resources-ant.jar">

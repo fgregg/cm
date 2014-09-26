@@ -40,7 +40,6 @@ import com.choicemaker.util.FileUtilities;
 public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Runnable, RecordSource {
 	private static Logger logger = Logger.getLogger(XmlRecordSource.class.getName());
 	public static String FORCED_CLOSE = "forcedClose";
-	private final String READER = "org.apache.xerces.parsers.SAXParser";
 	private final int BUF_SIZE = 1000;
 	private String name;
 	private String fileName;
@@ -115,7 +114,7 @@ public class XmlRecordSource extends XMLFilterImpl implements RecordHandler, Run
 	public void run() {
 		FileInputStream fs = null;
 		try {
-			XMLReader reader = XmlParserFactory.createXMLReader(READER);
+			XMLReader reader = XmlParserFactory.createXMLReader();
 			reader.setContentHandler(this);
 			fs = new FileInputStream(new File(xmlFileName).getAbsoluteFile());
 			reader.parse(new InputSource(new BufferedInputStream(fs)));

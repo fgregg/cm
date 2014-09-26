@@ -41,8 +41,6 @@ import com.choicemaker.cm.matching.cfg.SymbolFactory;
  */
 public class ParsedDataReader extends DefaultHandler implements Runnable {
 	
-	private static String READER = "org.apache.xerces.parsers.SAXParser";
-	
 	// Parsing variables
 	
 	private Reader reader;
@@ -97,7 +95,7 @@ public class ParsedDataReader extends DefaultHandler implements Runnable {
 	
 	public void run() {
 		try {
-			XMLReader xmlReader = XmlParserFactory.createXMLReader(READER);
+			XMLReader xmlReader = XmlParserFactory.createXMLReader();
 			xmlReader.setContentHandler(this);
 			xmlReader.parse(new InputSource(new BufferedReader(reader)));
 		} catch (SAXException ex) {

@@ -28,7 +28,6 @@ import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
  * @version  $Revision: 1.2 $ $Date: 2010/03/28 09:18:16 $
  */
 public class XmlSingleRecordReader implements RecordHandler {
-	private final String READER = "org.apache.xerces.parsers.SAXParser";
 	private String profile;
 	private IProbabilityModel model;
 	private Record record;
@@ -44,7 +43,7 @@ public class XmlSingleRecordReader implements RecordHandler {
 	}
 	
 	private Record getRecord() throws SAXException {
-		XMLReader reader = XmlParserFactory.createXMLReader(READER);
+		XMLReader reader = XmlParserFactory.createXMLReader();
 		XmlReader handler = ((XmlAccessor) model.getAccessor()).getXmlReader();
 		reader.setContentHandler(handler);
 		handler.open(this);

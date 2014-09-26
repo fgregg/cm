@@ -80,9 +80,9 @@ public final class InternalPlatform {
 	private static final String PLUGIN_CUSTOMIZATION_FILE_NAME = PLUGIN_CUSTOMIZATION_BASE_NAME + ".ini"; //$NON-NLS-1$
 
 	// default plugin data
-	private static final String PI_XML = "org.apache.xerces"; //$NON-NLS-1$
+	// private static final String PI_XML = "org.apache.xerces"; //$NON-NLS-1$
 //	private static final String PLUGINSDIR = "plugins/"; //$NON-NLS-1$
-	private static final String XML_LOCATION = "plugins/" + PI_XML + "/"; //$NON-NLS-1$ //$NON-NLS-2$
+	// private static final String XML_LOCATION = "plugins/" + PI_XML + "/"; //$NON-NLS-1$ //$NON-NLS-2$
 	
 	// execution options
 	private static final String OPTION_DEBUG = Platform.PI_RUNTIME + "/debug"; //$NON-NLS-1$
@@ -138,12 +138,12 @@ private static void activateDefaultPlugins() throws CoreException {
 	descriptor.setPluginClassLoader(loader);
 	descriptor.getPlugin();
 
-	descriptor = (PluginDescriptor) registry.getPluginDescriptor(PI_XML, xmlClassLoader.getPluginDescriptor().getVersionIdentifier());
-	descriptor.activateDefaultPlugins(xmlClassLoader);
-	xmlClassLoader.setPackagePrefixes(PluginClassLoader.initializePrefixes(descriptor, xmlClassLoader.getPrefixId()));
-	descriptor.setPluginClassLoader(xmlClassLoader);
-	xmlClassLoader.setPluginDescriptor(descriptor);
-	descriptor.getPlugin();
+	// descriptor = (PluginDescriptor) registry.getPluginDescriptor(PI_XML, xmlClassLoader.getPluginDescriptor().getVersionIdentifier());
+	// descriptor.activateDefaultPlugins(xmlClassLoader);
+	// xmlClassLoader.setPackagePrefixes(PluginClassLoader.initializePrefixes(descriptor, xmlClassLoader.getPrefixId()));
+	// descriptor.setPluginClassLoader(xmlClassLoader);
+	// xmlClassLoader.setPluginDescriptor(descriptor);
+	// descriptor.getPlugin();
 }
 /**
  * @see Platform
@@ -234,45 +234,45 @@ private static synchronized void createLockFile() throws CoreException {
 	}
 }
 
-/**
- * Creates and remembers a spoofed up class loader which loads the
- * classes from a predefined XML plugin.
- */
-private static void createXMLClassLoader() {
-	// create a plugin descriptor which is sufficient to be able to create
-	// the class loader through the normal channels.
-	Factory factory = new InternalFactory(null);
-	PluginDescriptor descriptor = (PluginDescriptor) factory.createPluginDescriptor();	
-	descriptor.setEnabled(true);
-	descriptor.setId(PI_XML);
-	PlatformConfiguration config = InternalBootLoader.getCurrentPlatformConfiguration();
-	PlatformConfiguration.BootDescriptor bd = config.getPluginBootDescriptor(PI_XML);
-	descriptor.setVersion(bd.getVersion());
-	try {
-		URL url = bd.getPluginDirectoryURL();
-		if (url == null)
-			url = new URL(BootLoader.getInstallURL(), XML_LOCATION);
-		descriptor.setLocation(url.toExternalForm());
-	} catch (MalformedURLException e) {
-		// ISSUE: What to do when this fails.  It's pretty serious
-		e.printStackTrace();
-	}
-
-	ArrayList libList = new ArrayList();
-	String[] libs = bd.getLibraries();
-	for (int i=0; i<libs.length; i++) {
-		LibraryModel lib = factory.createLibrary();
-		lib.setName(libs[i]);
-		lib.setExports(new String[] { "*" }); //$NON-NLS-1$
-		libList.add(lib);
-	}
-	descriptor.setRuntime((LibraryModel[]) libList.toArray(new LibraryModel[0]));
-
-	// use the fake plugin descriptor to create the desired class loader.
-	// Since this class loader will be used before the plugin registry is installed,
-	// ensure that the URLs on its class path are raw as opposed to eclipse:
-	xmlClassLoader = (PluginClassLoader) descriptor.getPluginClassLoader(false);
-}
+// /**
+//  * Creates and remembers a spoofed up class loader which loads the
+//  * classes from a predefined XML plugin.
+//  */
+// private static void createXMLClassLoader() {
+// 	// create a plugin descriptor which is sufficient to be able to create
+// 	// the class loader through the normal channels.
+// 	Factory factory = new InternalFactory(null);
+// 	PluginDescriptor descriptor = (PluginDescriptor) factory.createPluginDescriptor();	
+// 	descriptor.setEnabled(true);
+// 	descriptor.setId(PI_XML);
+// 	PlatformConfiguration config = InternalBootLoader.getCurrentPlatformConfiguration();
+// 	PlatformConfiguration.BootDescriptor bd = config.getPluginBootDescriptor(PI_XML);
+// 	descriptor.setVersion(bd.getVersion());
+// 	try {
+// 		URL url = bd.getPluginDirectoryURL();
+// 		if (url == null)
+// 			url = new URL(BootLoader.getInstallURL(), XML_LOCATION);
+// 		descriptor.setLocation(url.toExternalForm());
+// 	} catch (MalformedURLException e) {
+// 		// ISSUE: What to do when this fails.  It's pretty serious
+// 		e.printStackTrace();
+// 	}
+// 
+// 	ArrayList libList = new ArrayList();
+// 	String[] libs = bd.getLibraries();
+// 	for (int i=0; i<libs.length; i++) {
+// 		LibraryModel lib = factory.createLibrary();
+// 		lib.setName(libs[i]);
+// 		lib.setExports(new String[] { "*" }); //$NON-NLS-1$
+// 		libList.add(lib);
+// 	}
+// 	descriptor.setRuntime((LibraryModel[]) libList.toArray(new LibraryModel[0]));
+// 
+// 	// use the fake plugin descriptor to create the desired class loader.
+// 	// Since this class loader will be used before the plugin registry is installed,
+// 	// ensure that the URLs on its class path are raw as opposed to eclipse:
+// 	xmlClassLoader = (PluginClassLoader) descriptor.getPluginClassLoader(false);
+// }
 /**
  * @see Platform
  */
@@ -680,7 +680,7 @@ public static void loaderStartup(URL[] pluginPath, String locationString, Proper
 	createLockFile();
 	adapterManager = new AdapterManager();
 	loadOptions(bootOptions);
-	createXMLClassLoader();
+	// createXMLClassLoader();
 	MultiStatus problems = loadRegistry(pluginPath);
 	initialized = true;
 	// can't register url handlers until after the plugin registry is loaded
