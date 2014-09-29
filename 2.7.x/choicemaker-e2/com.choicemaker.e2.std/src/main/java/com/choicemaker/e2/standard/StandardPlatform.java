@@ -17,20 +17,20 @@ import com.choicemaker.e2.std.PlatformRunnableAdapter;
 import com.choicemaker.e2.std.PluginRegistryAdapter;
 
 /**
- * A singleton implementation that uses an installable delegate to implement
- * IPlatform methods. In general, a delegate should be installed only once
- * in an application context, and this class encourages this restriction by
- * using a {@link #INSTALLABLE_PLUGIN_DISCOVERY System property} to specify the
- * delegate type. If the property is not set, a {@link #getDefaultInstance()
- * default plugin-discovery} is used.
+ * A singleton implementation that uses the standard Eclipse 2 Platform
+ * singleton to implement CMPlatform methods.
  *
  * @author rphall
  *
  */
 public final class StandardPlatform implements CMPlatform {
+
+	private static final Logger logger = Logger
+			.getLogger(StandardPlatform.class.getName());
 	
-	private static final Logger logger = Logger.getLogger(StandardPlatform.class.getName());
-	
+	private static final String SOURCE_CLASS = StandardPlatform.class
+			.getSimpleName();
+
 	public static final String ATTRIBUTE_EXEC_EXTENSION = "run"; //$NON-NLS-1$
 
 	public CMPluginRegistry getPluginRegistry() {
@@ -55,7 +55,9 @@ public final class StandardPlatform implements CMPlatform {
 								.createExecutableExtension(ATTRIBUTE_EXEC_EXTENSION);
 					retVal = PlatformRunnableAdapter.convert(ipr);
 				} catch (CoreException e) {
-					String msg = "Error getting runnable: " + applicationName + ": " + e.toString();
+					String msg =
+						"Error getting runnable: " + applicationName + ": "
+								+ e.toString();
 					logger.severe(msg);
 					retVal = null;
 				}
@@ -66,14 +68,23 @@ public final class StandardPlatform implements CMPlatform {
 	}
 
 	public String getPluginDirectory(String id, String version) {
-//		return PLUGIN_BASE_DIR + "/" + id.replace('.', '_') + "_" + version.replace('.', '_') + "/";
+		// return PLUGIN_BASE_DIR + "/" + id.replace('.', '_') + "_" +
+		// version.replace('.', '_') + "/";
 		throw new Error("not yet implemented");
 	}
 
 	public URL getPluginDescriptorUrl(String id, String version,
 			String descriptorFile) {
-//		return classLoader.getResource(getPluginDirectory(id, version) + descriptorFile);
+		// return classLoader.getResource(getPluginDirectory(id, version) +
+		// descriptorFile);
 		throw new Error("not yet implemented");
+	}
+
+	public static void init() {
+		final String METHOD = "init";
+		logger.entering(SOURCE_CLASS, METHOD);
+		logger.warning("not implmented");
+		logger.exiting(SOURCE_CLASS, METHOD);
 	}
 
 }
