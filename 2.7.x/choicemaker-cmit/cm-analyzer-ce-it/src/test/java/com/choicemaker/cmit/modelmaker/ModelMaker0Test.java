@@ -1,20 +1,31 @@
 package com.choicemaker.cmit.modelmaker;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.junit.BeforeClass;
+
 import com.choicemaker.cmit.util.Eclipse2BootLoader;
 import com.choicemaker.cmit.util.Eclipse2Utils;
+import com.choicemaker.cmit.util.Find;
+import com.choicemaker.cmit.util.Find.Finder;
+import com.choicemaker.e2.platform.InstallablePlatform;
+import com.choicemaker.e2.plugin.InstallablePluginDiscovery;
+import com.choicemaker.e2.standard.StandardPlatform;
+import com.choicemaker.e2.std.plugin.StandardPluginDiscovery;
 
-public class ModelMakerTest extends TestCase {
+public class ModelMaker0Test extends TestCase {
 
 	public static final int WAIT_HACK_5_SECONDS = 1000 * 5;
 
@@ -28,21 +39,9 @@ public class ModelMakerTest extends TestCase {
 	public static final String PLUGIN_DIRECTORY = ECLIPSE_APPLICATION_DIRECTORY
 			+ RESOURCE_NAME_SEPARATOR + "plugins";
 
-	public static final String BOOT_PLUGIN = "org.eclipse.core.boot";
-
-	public static final String BOOT_PLUGIN_STEM = BOOT_PLUGIN + "_";
-
-	// FIXME Note trailing '.' because of Maven packaging error
-	public static final String BOOT_PLUGIN_VERSION = "2.1.1.";
-
-	public static final String BOOT_PLUGIN_DIRECTORY = BOOT_PLUGIN_STEM
-			+ BOOT_PLUGIN_VERSION;
+	public static final String BOOT_PLUGIN_PATTERN = "org.eclipse.core.boot*";
 
 	public static final String BOOT_PLUGIN_JAR = "boot.jar";
-
-	public static final String BOOT_PLUGIN_JAR_PATH = PLUGIN_DIRECTORY
-			+ RESOURCE_NAME_SEPARATOR + BOOT_PLUGIN_DIRECTORY
-			+ RESOURCE_NAME_SEPARATOR + BOOT_PLUGIN_JAR;
 
 	public static final String EXAMPLE_DIRECTORY =
 		ECLIPSE_APPLICATION_DIRECTORY + RESOURCE_NAME_SEPARATOR
@@ -64,11 +63,79 @@ public class ModelMakerTest extends TestCase {
 	private static final String FQCN_MODELMAKER =
 		"com.choicemaker.cm.modelmaker.gui.ModelMaker";
 	private static final String APP_PLUGIN_ID =
-		"com.choicemaker.cm.modelmaker.ModelMaker";
+		"com.choicemaker.cm.modelmaker.ModelMakerStd";
+	
+	/** @see http://links.rph.cx/1r1vyFo */
+	public static void configureEclipseConsoleLogging() {
+//		Logger topLogger = java.util.logging.Logger.getLogger("");
+//		Handler consoleHandler = null;
+//		for (Handler handler : topLogger.getHandlers()) {
+//			if (handler instanceof ConsoleHandler) {
+//				// found the console handler
+//				consoleHandler = handler;
+//				break;
+//			}
+//		}
+//		if (consoleHandler == null) {
+//			consoleHandler = new ConsoleHandler();
+//			topLogger.addHandler(consoleHandler);
+//		}
+//		consoleHandler.setLevel(java.util.logging.Level.FINEST);
+	}
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		installStandardPlatform();
+		configureEclipseConsoleLogging();
+	}
+
+	public static void installStandardPlatform() {
+		StandardPlatform.init();
+		String pn = InstallablePlatform.INSTALLABLE_PLATFORM_DISCOVERY;
+		String pv = StandardPlatform.class.getName();
+		System.setProperty(pn, pv);
+		pn = InstallablePluginDiscovery.INSTALLABLE_PLUGIN_DISCOVERY;
+		pv = StandardPluginDiscovery.class.getName();
+		System.setProperty(pn, pv);
+//		pn = com.choicemaker.cm.core.configure.InstallableConfigurator.;
+//		pv = StandardPluginDiscovery.class.getName();
+//		System.setProperty(pn, pv);
+	}
+
+	public void assertStandardPlatform() {
+		String pv =
+			System.getProperty(InstallablePlatform.INSTALLABLE_PLATFORM_DISCOVERY);
+		assertTrue(StandardPlatform.class.getName().equals(pv));
+	}
+
+	public static URL getBootJarUrl() throws IOException {
+		Finder finder = new Find.Finder(BOOT_PLUGIN_JAR);
+		URI uri = new File(".").toURI();
+		Path startingDir = Paths.get(uri);
+		Files.walkFileTree(startingDir, finder);
+		List<Path> found = finder.done();
+		/*
+		if (found.size() != 1) {
+			throw new IllegalStateException("none/multiple boot plugins: "
+					+ found.toString());
+		}
+		startingDir = found.get(0);
+		finder = new Find.Finder(BOOT_PLUGIN_JAR);
+		Files.walkFileTree(startingDir, finder);
+		found = finder.done();
+		*/
+		if (found.size() != 1) {
+			throw new IllegalStateException("none/multiple boot jars: "
+					+ found.toString());
+		}
+		Path p = startingDir.resolve(found.get(0));
+		URL retVal = p.toUri().toURL();
+		return retVal;
+	}
 
 	public static URL getJarUrl(String path) throws URISyntaxException,
 			MalformedURLException {
-		URL retVal = ModelMakerTest.class.getResource(path);
+		URL retVal = ModelMaker0Test.class.getResource(path);
 		return retVal;
 	}
 
@@ -88,7 +155,7 @@ public class ModelMakerTest extends TestCase {
 	}
 
 	public static String[] getModelMakerRunArgs() throws URISyntaxException {
-		URL configURL = ModelMakerTest.class.getResource(CONFIGURATION_PATH);
+		URL configURL = ModelMaker0Test.class.getResource(CONFIGURATION_PATH);
 		URI configURI = configURL.toURI();
 		File configFile = new File(configURI);
 		assertTrue(configFile.exists());
@@ -184,7 +251,7 @@ public class ModelMakerTest extends TestCase {
 		System.out.println("setUp() new ContextClassLoader: " + cl.toString());
 
 		// Dynamically load the BootLoader class/singleton
-		URL bootURL = getJarUrl(BOOT_PLUGIN_JAR_PATH);
+		URL bootURL = getBootJarUrl();
 		this.bootLoader = new Eclipse2BootLoader(bootURL).getBootLoaderClass();
 
 		// Eclipse startup parameters
@@ -202,7 +269,7 @@ public class ModelMakerTest extends TestCase {
 
 		// Prepare, but do not display, the ModelMaker GUI
 		String[] args1 = getModelMakerRunArgs();
-		startupModelMaker(ModelMakerTest.this.modelMaker, args1);
+		startupModelMaker(ModelMaker0Test.this.modelMaker, args1);
 		System.out.println("ModelMaker GUI prepared (but not displayed)");
 
 		System.out.println("setUp() complete");
