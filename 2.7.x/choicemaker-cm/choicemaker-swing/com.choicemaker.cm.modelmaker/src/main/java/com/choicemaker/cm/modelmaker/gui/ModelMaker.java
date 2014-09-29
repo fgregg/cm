@@ -43,6 +43,8 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.EventListenerList;
 
+import org.eclipse.core.boot.IPlatformRunnable;
+
 import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.analyzer.filter.RuleFilterCondition;
@@ -117,7 +119,7 @@ import com.choicemaker.util.IntArrayList;
  * @author S. Yoakum-Stover
  * @version $Revision: 1.3 $ $Date: 2010/03/29 12:38:18 $
  */
-public class ModelMaker extends JFrame implements CMPlatformRunnable {
+public class ModelMaker extends JFrame implements CMPlatformRunnable, IPlatformRunnable {
 
 	private static final long serialVersionUID = 1L;
 
