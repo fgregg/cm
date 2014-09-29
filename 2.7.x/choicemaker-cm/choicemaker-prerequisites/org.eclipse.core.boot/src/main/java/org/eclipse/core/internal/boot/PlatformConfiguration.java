@@ -41,7 +41,7 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 	private File cfgLockFile;
 	private RandomAccessFile cfgLockFileRAF;
 	private BootDescriptor runtimeDescriptor;
-	private BootDescriptor xmlDescriptor;
+	// private BootDescriptor xmlDescriptor;
 
 	private static String cmdConfiguration = null;
 	private static String cmdFeature = null;
@@ -58,7 +58,7 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 	private static final String BOOT_XML = "boot.xml"; //$NON-NLS-1$
 	//private static final String BOOT_PLUGIN_ID = "org.eclipse.core.boot"; //$NON-NLS-1$
 	private static final String RUNTIME_PLUGIN_ID = "org.eclipse.core.runtime"; //$NON-NLS-1$
-	private static final String XML_PLUGIN_ID = "org.apache.xerces"; //$NON-NLS-1$
+	// private static final String XML_PLUGIN_ID = "org.apache.xerces"; //$NON-NLS-1$
 
 	private static final String ECLIPSE = "eclipse"; //$NON-NLS-1$
 	private static final String PLUGINS = "plugins"; //$NON-NLS-1$
@@ -1328,8 +1328,8 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 
 		if (RUNTIME_PLUGIN_ID.equals(id))
 			return runtimeDescriptor;
-		else if (XML_PLUGIN_ID.equals(id))
-			return xmlDescriptor;
+		// else if (XML_PLUGIN_ID.equals(id))
+			// return xmlDescriptor;
 		else
 			return null;
 	}
@@ -2267,15 +2267,15 @@ public class PlatformConfiguration implements IPlatformConfiguration {
 		runtimeDescriptor = createPluginBootDescriptor(runtimePluginPath);
 
 		// determine the xml plugin for the selected runtime
-		HashMap xmlImport = getImport(runtimePluginPath, XML_PLUGIN_ID);
+		// HashMap xmlImport = getImport(runtimePluginPath, XML_PLUGIN_ID);
 
 		// locate xml plugin matching the import from runtime plugin
-		URL xmlPluginPath = getPluginPath(xmlImport);
-		if (xmlPluginPath == null)
-			throw new RuntimeException(Policy.bind("error.xerces")); //$NON-NLS-1$
+		// URL xmlPluginPath = getPluginPath(xmlImport);
+		// if (xmlPluginPath == null)
+			// throw new RuntimeException(Policy.bind("error.xerces")); //$NON-NLS-1$
 
 		// get boot descriptor for xml plugin
-		xmlDescriptor = createPluginBootDescriptor(xmlPluginPath);
+		// xmlDescriptor = createPluginBootDescriptor(xmlPluginPath);
 	}
 
 	private HashMap getRuntimeImport() {

@@ -51,7 +51,6 @@ public class EmbeddedPluginDiscoveryTest {
 	 * <li>com.wcohen.ss</li>
 	 * <li>org.apache.ant</li>
 	 * <li>org....</li>
-	 * <li>org.apache.xerces</li>
 	 * <li>org.eclipse.core.boot</li>
 	 * <li>org.eclipse...</li>
 	 * <li>org.jdom</li>
