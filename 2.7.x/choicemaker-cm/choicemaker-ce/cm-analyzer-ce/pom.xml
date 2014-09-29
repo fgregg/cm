@@ -465,6 +465,12 @@ END: C-E Exclusion -->
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
     </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
   </dependencies>
 
 </project>
