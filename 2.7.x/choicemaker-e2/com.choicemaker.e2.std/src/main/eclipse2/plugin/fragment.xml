@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin
+<fragment
   name="E2 Standard Platform"
   id="com.choicemaker.e2.std"
   version="2.7.1"
-  provider-name="ChoiceMaker LLC">
+  provider-name="ChoiceMaker LLC"
+  plugin-id="com.choicemaker.e2"
+  plugin-version="2.7.1">
 
   <runtime>
     <library name="e2std.jar">
@@ -12,10 +14,8 @@
   </runtime>
 
   <requires>
-    <import plugin="com.choicemaker.cm.core" />
-    <import plugin="com.choicemaker.e2" />
     <import plugin="org.eclipse.core.boot" />
     <import plugin="org.eclipse.core.runtime" />
   </requires>
 
-</plugin>
+</fragment>
