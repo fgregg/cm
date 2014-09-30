@@ -21,6 +21,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <eclipse.application.dir>${project.build.testOutputDirectory}/eclipse.application.dir</eclipse.application.dir>
     <eclipse.application.examples.dir>${eclipse.application.dir}/examples</eclipse.application.examples.dir>
     <eclipse.application.plugins.dir>${eclipse.application.dir}/plugins</eclipse.application.plugins.dir>
@@ -48,7 +49,7 @@
         <executions>
           <execution>
             <id>plugins</id>
-            <phase>process-test-resources</phase>
+            <phase>pre-integration-test</phase>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
@@ -60,7 +61,7 @@
           </execution>
           <execution>
             <id>e2-standard-platform</id>
-            <phase>process-test-resources</phase>
+            <phase>pre-integration-test</phase>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
@@ -73,7 +74,7 @@
           </execution>
           <execution>
             <id>examples</id>
-            <phase>process-test-resources</phase>
+            <phase>pre-integration-test</phase>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
@@ -85,46 +86,19 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-    		<!-- CM-8: Maven Build Lifecycle Problems -->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>
-                      org.apache.maven.plugins
-                    </groupId>
-                    <artifactId>
-                      maven-dependency-plugin
-                    </artifactId>
-                    <versionRange>
-                      [2.8,)
-                    </versionRange>
-                    <goals>
-                      <goal>
-                        unpack-dependencies
-                      </goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <execute>
-                      <runOnIncremental>true</runOnIncremental>
-                    </execute>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
   <dependencies>

@@ -69,7 +69,7 @@
     <plugin.maven-dependency.version>2.8</plugin.maven-dependency.version>
     <plugin.maven-deploy.version>2.8.1</plugin.maven-deploy.version>
     <plugin.maven-enforcer.version>1.0.1</plugin.maven-enforcer.version>
-    <plugin.maven-failsafe.version>2.12</plugin.maven-failsafe.version>
+    <plugin.maven-failsafe.version>2.17</plugin.maven-failsafe.version>
     <plugin.maven-help.version>2.2</plugin.maven-help.version>
     <plugin.maven-jar.version>2.4</plugin.maven-jar.version>
     <plugin.maven-javadoc.version>2.9.1</plugin.maven-javadoc.version>
@@ -199,6 +199,12 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${plugin.maven-surefire.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${plugin.maven-failsafe.version}</version>
         </plugin>
 
         <plugin>

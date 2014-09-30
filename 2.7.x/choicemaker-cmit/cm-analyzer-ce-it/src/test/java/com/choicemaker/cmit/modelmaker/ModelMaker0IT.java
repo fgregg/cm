@@ -28,7 +28,7 @@ import com.choicemaker.e2.plugin.InstallablePluginDiscovery;
 import com.choicemaker.e2.standard.StandardPlatform;
 import com.choicemaker.e2.std.plugin.StandardPluginDiscovery;
 
-public class ModelMaker0Test {
+public class ModelMaker0IT {
 
 	public static final int WAIT_HACK_5_SECONDS = 1000 * 5;
 
@@ -138,7 +138,7 @@ public class ModelMaker0Test {
 
 	public static URL getJarUrl(String path) throws URISyntaxException,
 			MalformedURLException {
-		URL retVal = ModelMaker0Test.class.getResource(path);
+		URL retVal = ModelMaker0IT.class.getResource(path);
 		return retVal;
 	}
 
@@ -158,7 +158,7 @@ public class ModelMaker0Test {
 	}
 
 	public static String[] getModelMakerRunArgs() throws URISyntaxException {
-		URL configURL = ModelMaker0Test.class.getResource(CONFIGURATION_PATH);
+		URL configURL = ModelMaker0IT.class.getResource(CONFIGURATION_PATH);
 		URI configURI = configURL.toURI();
 		File configFile = new File(configURI);
 		assertTrue(configFile.exists());
@@ -274,7 +274,7 @@ public class ModelMaker0Test {
 
 		// Prepare, but do not display, the ModelMaker GUI
 		String[] args1 = getModelMakerRunArgs();
-		startupModelMaker(ModelMaker0Test.this.modelMaker, args1);
+		startupModelMaker(ModelMaker0IT.this.modelMaker, args1);
 		System.out.println("ModelMaker GUI prepared (but not displayed)");
 
 		System.out.println("setUp() complete");
