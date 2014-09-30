@@ -66,7 +66,7 @@
             </goals>
             <configuration>
               <classifier>eclipse2prj</classifier>
-              <includeArtifactIds>com.choicemaker.e2.std,com.choicemaker.cm.modelmaker.std</includeArtifactIds>
+              <includeArtifactIds>com.choicemaker.e2.std</includeArtifactIds>
               <excludeTransitive>true</excludeTransitive>
               <outputDirectory>${eclipse.application.plugins.dir}</outputDirectory>
             </configuration>
