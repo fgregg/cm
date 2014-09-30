@@ -11,7 +11,7 @@ import com.choicemaker.e2.CMPluginRegistry;
  * A singleton implementation that uses an installable delegate to implement
  * CMPlatform methods. In general, a delegate should be installed only once
  * in an application context, and this class encourages this restriction by
- * using a {@link #INSTALLABLE_PLATFORM_DISCOVERY System property} to specify the
+ * using a {@link #INSTALLABLE_PLATFORM System property} to specify the
  * delegate type. If the property is not set, a {@link #getDefaultInstance()
  * default plugin-discovery} is used.
  *
@@ -24,7 +24,7 @@ public final class InstallablePlatform implements CMPlatform {
 			.getLogger(InstallablePlatform.class.getName());
 
 	/** Property name */
-	public static final String INSTALLABLE_PLATFORM_DISCOVERY =
+	public static final String INSTALLABLE_PLATFORM =
 		"cmInstallablePlatform";
 
 	/**
@@ -66,7 +66,7 @@ public final class InstallablePlatform implements CMPlatform {
 	CMPlatform getDelegate() {
 		if (delegate == null) {
 			String msgPrefix = "Installing plugin discovery: ";
-			String fqcn = System.getProperty(INSTALLABLE_PLATFORM_DISCOVERY);
+			String fqcn = System.getProperty(INSTALLABLE_PLATFORM);
 			try {
 				if (fqcn != null) {
 					logger.info(msgPrefix + fqcn);

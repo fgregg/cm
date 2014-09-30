@@ -12,13 +12,13 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>com.choicemaker.cm.modelmaker</artifactId>
+  <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker ModelMaker App</name>
+  <name>ChoiceMaker ModelMaker App, Standard E2 Platform</name>
 
   <properties>
-    <eclipse.plugin.runtime.library.name>modelmaker.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>modelmakersrc.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.runtime.library.name>mmstd.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.src.zip.name>mmstdsrc.zip</eclipse.plugin.src.zip.name>
   </properties>
 
   <build>
@@ -93,59 +93,11 @@
   <dependencies>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
+      <artifactId>org.eclipse.core.boot</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.compiler</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.docs</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.gui.utils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.en</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.module</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.wcohen.ss.eclipse</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.e2</groupId>
-      <artifactId>com.choicemaker.e2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jfree</groupId>
-      <artifactId>jcommon</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jfree</groupId>
-      <artifactId>jfreechart</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.help</groupId>
-      <artifactId>javahelp</artifactId>
+      <artifactId>com.choicemaker.cm.modelmaker</artifactId>
     </dependency>
   </dependencies>
 

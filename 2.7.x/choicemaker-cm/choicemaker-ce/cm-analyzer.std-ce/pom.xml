@@ -12,12 +12,13 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>cm-analyzer-ce</artifactId>
+  <artifactId>cm-analyzer.std-ce</artifactId>
   <packaging>pom</packaging>
 
-  <name>CM Analyzer, Community Edition</name>
+  <name>CM Analyzer, Community Edition, Std Platform</name>
   <description><![CDATA[
-  Zip distribution of CM Analyzer, Community Edition.
+  Zip distribution of CM Analyzer, Community Edition, for the
+  standard Eclipse 2 platform.
   ]]>
   </description>
 
@@ -359,6 +360,12 @@ END: C-E Exclusion -->
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.module</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
@@ -468,6 +475,12 @@ END: C-E Exclusion -->
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.std</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
     </dependency>

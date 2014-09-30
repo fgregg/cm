@@ -19,7 +19,7 @@ public class EmbeddedExtensionPointTest {
 
 	@BeforeClass
 	public static void configureEmbeddedPlatform() {
-		String pn = InstallablePlatform.INSTALLABLE_PLATFORM_DISCOVERY;
+		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
 		String pv = EmbeddedPlatform.class.getName();
 		System.setProperty(pn, pv);
 	}

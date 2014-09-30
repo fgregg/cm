@@ -64,7 +64,7 @@ public class ModelMaker0IT {
 	// Copied from ModelMaker to avoid linking to that class
 	private static final int EXIT_OK = 0;
 	private static final String FQCN_MODELMAKER =
-		"com.choicemaker.cm.modelmaker.gui.ModelMaker";
+		"com.choicemaker.cm.modelmaker.gui.ModelMakerStd";
 	private static final String APP_PLUGIN_ID =
 		"com.choicemaker.cm.modelmaker.ModelMakerStd";
 	
@@ -94,7 +94,7 @@ public class ModelMaker0IT {
 
 	public static void installStandardPlatform() {
 		StandardPlatform.init();
-		String pn = InstallablePlatform.INSTALLABLE_PLATFORM_DISCOVERY;
+		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
 		String pv = StandardPlatform.class.getName();
 		System.setProperty(pn, pv);
 		pn = InstallablePluginDiscovery.INSTALLABLE_PLUGIN_DISCOVERY;
@@ -107,7 +107,7 @@ public class ModelMaker0IT {
 
 	public void assertStandardPlatform() {
 		String pv =
-			System.getProperty(InstallablePlatform.INSTALLABLE_PLATFORM_DISCOVERY);
+			System.getProperty(InstallablePlatform.INSTALLABLE_PLATFORM);
 		assertTrue(StandardPlatform.class.getName().equals(pv));
 	}
 

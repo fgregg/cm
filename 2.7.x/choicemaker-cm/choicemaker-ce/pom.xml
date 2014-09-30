@@ -23,6 +23,7 @@
 
   <modules>
     <module>cm-analyzer-ce</module>
+    <module>cm-analyzer.std-ce</module>
     <module>cm-util-apps-ce</module>
   </modules>
 

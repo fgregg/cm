@@ -32,7 +32,7 @@ public class EjbPlatformBean implements EjbPlatform {
 		embeddedPlatform = new EmbeddedPlatform();
 		
 		// Configure the InstallablePlatform for consistency
-		String pn = InstallablePlatform.INSTALLABLE_PLATFORM_DISCOVERY;
+		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
 		String pv = EmbeddedPlatform.class.getName();
 		System.setProperty(pn, pv);
 	}

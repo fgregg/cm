@@ -35,6 +35,7 @@
     <module>com.choicemaker.cm.ml.me.gui</module>
     <module>com.choicemaker.cm.mmdevtools</module>
     <module>com.choicemaker.cm.modelmaker</module>
+    <module>com.choicemaker.cm.modelmaker.std</module>
     <module>com.choicemaker.cm.module</module>
   </modules>
 

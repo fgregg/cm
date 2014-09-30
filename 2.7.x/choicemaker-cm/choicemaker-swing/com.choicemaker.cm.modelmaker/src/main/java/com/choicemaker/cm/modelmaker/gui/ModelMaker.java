@@ -43,14 +43,11 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.EventListenerList;
 
-import org.eclipse.core.boot.IPlatformRunnable;
-
 import com.choicemaker.cm.analyzer.filter.BooleanFilterCondition;
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.analyzer.filter.RuleFilterCondition;
 import com.choicemaker.cm.compiler.gen.ant.CallAnt;
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
-//import com.choicemaker.cm.core.base.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Decision;
@@ -119,7 +116,7 @@ import com.choicemaker.util.IntArrayList;
  * @author S. Yoakum-Stover
  * @version $Revision: 1.3 $ $Date: 2010/03/29 12:38:18 $
  */
-public class ModelMaker extends JFrame implements CMPlatformRunnable, IPlatformRunnable {
+public class ModelMaker extends JFrame implements CMPlatformRunnable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -138,13 +135,13 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable, IPlatformR
 	private boolean doWait = true;
 	private int returnCode = EXIT_ERROR;
 
-	private boolean isWait() {
+	protected boolean isWait() {
 		synchronized(statusSynchronization) {
 			return doWait;
 		}
 	}
 
-	private void setWait(boolean doWait) {
+	protected void setWait(boolean doWait) {
 		synchronized(statusSynchronization) {
 			this.doWait = doWait;
 		}
@@ -162,13 +159,13 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable, IPlatformR
 		}
 	}
 
-	private int getReturnCode() {
+	protected int getReturnCode() {
 		synchronized(statusSynchronization) {
 			return returnCode;
 		}
 	}
 	
-	private void setReturnCode(int returnCode) {
+	protected void setReturnCode(int returnCode) {
 		if (returnCode != EXIT_OK && returnCode != EXIT_ERROR) {
 			logger.warning("Ignoring invalid return code: " + returnCode
 					+ "; settting error code instead: " + EXIT_ERROR);
@@ -474,7 +471,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable, IPlatformR
 	 * The usual stuff that a JFrame needs in order to be
 	 * displayed.
 	 */
-	private void display() {
+	protected void display() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		Dimension dim = getToolkit().getScreenSize();

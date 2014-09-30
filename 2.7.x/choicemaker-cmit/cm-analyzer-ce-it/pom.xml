@@ -16,7 +16,7 @@
 
   <name>Integration Test: ChoiceMaker Analyzer, Part 1</name>
   <description><![CDATA[
-  Integration test for the zip distribution of CM Analyzer, Community Edition.
+  Integration test for the standard-E2 version of CM Analyzer, Community Edition.
   ]]></description>
 
   <properties>
@@ -33,10 +33,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-					<!-- verbose>true</verbose -->
-          <verbose>false</verbose>
-					<!-- fork>true</fork -->
-          <fork>false</fork>
           <compilerVersion>1.7</compilerVersion>
           <source>1.7</source>
           <target>1.7</target>
@@ -67,7 +63,7 @@
             </goals>
             <configuration>
               <classifier>eclipse2prj</classifier>
-              <includeArtifactIds>com.choicemaker.e2.std</includeArtifactIds>
+              <includeArtifactIds>com.choicemaker.e2.std,com.choicemaker.cm.modelmaker.std</includeArtifactIds>
               <excludeTransitive>true</excludeTransitive>
               <outputDirectory>${eclipse.application.plugins.dir}</outputDirectory>
             </configuration>
