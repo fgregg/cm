@@ -23,6 +23,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <eclipse.application.dir>${project.build.testOutputDirectory}/eclipse.application.dir</eclipse.application.dir>
     <eclipse.application.examples.dir>${eclipse.application.dir}/examples</eclipse.application.examples.dir>
+    <eclipse.application.plugins.dir>${eclipse.application.dir}/plugins</eclipse.application.plugins.dir>
   </properties>
 
   <build>
@@ -52,10 +53,22 @@
               <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <includeArtifactIds>com.choicemaker.cm</includeArtifactIds>
               <includeArtifactIds>cm-analyzer-ce</includeArtifactIds>
               <excludeTransitive>true</excludeTransitive>
               <outputDirectory>${eclipse.application.dir}</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>e2-standard-platform</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <classifier>eclipse2prj</classifier>
+              <includeArtifactIds>com.choicemaker.e2.std,com.choicemaker.cm.modelmaker.std</includeArtifactIds>
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>${eclipse.application.plugins.dir}</outputDirectory>
             </configuration>
           </execution>
           <execution>
@@ -65,7 +78,6 @@
               <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <includeArtifactIds>com.choicemaker.cm</includeArtifactIds>
               <includeArtifactIds>simple_person_matching</includeArtifactIds>
               <excludeTransitive>true</excludeTransitive>
               <outputDirectory>${eclipse.application.examples.dir}</outputDirectory>
@@ -103,7 +115,7 @@
                   </pluginExecutionFilter>
                   <action>
                     <execute>
-                      <runOnIncremental>false</runOnIncremental>
+                      <runOnIncremental>true</runOnIncremental>
                     </execute>
                   </action>
                 </pluginExecution>
@@ -121,12 +133,19 @@
       <artifactId>com.choicemaker.e2</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.choicemaker.e2it</groupId>
+      <artifactId>com.choicemaker.e2it</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.std</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.e2it</groupId>
-      <artifactId>com.choicemaker.e2it</artifactId>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.std</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
     </dependency>
 
     <dependency>
@@ -150,8 +169,10 @@
       <artifactId>com.choicemaker.cm.modelmaker</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.e2</groupId>
-      <artifactId>com.choicemaker.e2</artifactId>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

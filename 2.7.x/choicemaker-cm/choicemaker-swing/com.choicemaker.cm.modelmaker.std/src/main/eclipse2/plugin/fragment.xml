@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.modelmaker.std"
+   name="Modelmaker Plug-in, Standard E2 Fragment"
+   version="2.5.0"
+   provider-name="ChoiceMaker LLC"
+   plugin-id="com.choicemaker.cm.modelmaker"
+   plugin-version="2.5.0">
+
+   <requires>
+      <import plugin="com.choicemaker.e2.std"/>
+   </requires>
+
+</plugin>

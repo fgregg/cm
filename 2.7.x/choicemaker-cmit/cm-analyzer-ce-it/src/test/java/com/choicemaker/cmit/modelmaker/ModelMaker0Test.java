@@ -1,5 +1,7 @@
 package com.choicemaker.cmit.modelmaker;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -12,9 +14,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import com.choicemaker.cmit.util.Eclipse2BootLoader;
 import com.choicemaker.cmit.util.Eclipse2Utils;
@@ -25,7 +28,7 @@ import com.choicemaker.e2.plugin.InstallablePluginDiscovery;
 import com.choicemaker.e2.standard.StandardPlatform;
 import com.choicemaker.e2.std.plugin.StandardPluginDiscovery;
 
-public class ModelMaker0Test extends TestCase {
+public class ModelMaker0Test {
 
 	public static final int WAIT_HACK_5_SECONDS = 1000 * 5;
 
@@ -214,12 +217,14 @@ public class ModelMaker0Test extends TestCase {
 
 	static Object tearDownModelMaker(final Object modelMaker, int exitCode)
 			throws Exception {
-		assert modelMaker != null;
-		Class<?>[] parameterTypes = new Class<?>[] { int.class };
-		Class<?> mmClass = modelMaker.getClass();
-		Method m = mmClass.getMethod("programExit", parameterTypes);
-		Object[] parameters = new Object[] { Integer.valueOf(exitCode) };
-		Object retVal = m.invoke(modelMaker, parameters);
+		Object retVal = null;
+		if (modelMaker != null) {
+			Class<?>[] parameterTypes = new Class<?>[] { int.class };
+			Class<?> mmClass = modelMaker.getClass();
+			Method m = mmClass.getMethod("programExit", parameterTypes);
+			Object[] parameters = new Object[] { Integer.valueOf(exitCode) };
+			retVal = m.invoke(modelMaker, parameters);
+		}
 		return retVal;
 	}
 
@@ -235,10 +240,10 @@ public class ModelMaker0Test extends TestCase {
 	private ClassLoader initialClassLoader;
 	private Object modelMaker;
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 
 		System.out.println("Starting setUp()");
-		super.setUp();
 
 		// Set up a restricted class path in the current thread context
 		assertTrue(this.initialClassLoader == null);
@@ -275,9 +280,9 @@ public class ModelMaker0Test extends TestCase {
 		System.out.println("setUp() complete");
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		System.out.println("Starting tearDown()");
-		super.tearDown();
 
 		Object rc = tearDownModelMaker(this.modelMaker, EXIT_OK);
 		System.out.println("ModelMaker.programExit() return code: " + rc);
@@ -288,6 +293,7 @@ public class ModelMaker0Test extends TestCase {
 		System.out.println("tearDown() complete");
 	}
 
+	@Test
 	public void testModelMakerIsReady() throws Exception {
 		System.out.println("testModelMakerIsReady");
 		System.out.println("starting test");

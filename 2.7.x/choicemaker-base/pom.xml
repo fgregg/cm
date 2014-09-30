@@ -466,6 +466,13 @@
         <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.choicemaker.e2</groupId>
+        <artifactId>com.choicemaker.e2.std</artifactId>
+        <version>${choicemaker.current.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
         <groupId>com.choicemaker.e2it</groupId>
         <artifactId>com.choicemaker.e2it</artifactId>
         <version>${choicemaker.current.version}</version>
@@ -718,6 +725,13 @@
         <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.modelmaker</artifactId>
         <version>${choicemaker.current.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.modelmaker.std</artifactId>
+        <version>${choicemaker.current.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>

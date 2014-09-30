@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+  name="E2 Standard Platform"
+  id="com.choicemaker.e2.std"
+  version="2.7.1"
+  provider-name="ChoiceMaker LLC">
+
+  <runtime>
+    <library name="e2std.jar">
+      <export name="*"/>
+    </library>
+  </runtime>
+
+  <requires>
+    <import plugin="com.choicemaker.cm.core" />
+    <import plugin="com.choicemaker.e2" />
+    <import plugin="org.eclipse.core.boot" />
+    <import plugin="org.eclipse.core.runtime" />
+  </requires>
+
+</plugin>
