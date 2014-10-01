@@ -8,7 +8,7 @@
   <baseDirectory>${project.artifactId}_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.qualifier}</baseDirectory>
   <fileSets>
     <fileSet>
-    <directory>src/main/resources</directory>
+    <directory>src/main/resources/simple_person_matching</directory>
     <outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>
