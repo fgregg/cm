@@ -1,6 +1,7 @@
 package com.choicemaker.cmit.modelmaker;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,6 +31,8 @@ import com.choicemaker.e2.standard.StandardPlatform;
 import com.choicemaker.e2.std.plugin.StandardPluginDiscovery;
 
 public class ModelMaker0IT {
+	
+	private static final Logger logger = Logger.getLogger(ModelMaker0IT.class.getName());
 
 	public static final int WAIT_HACK_5_SECONDS = 1000 * 5;
 
@@ -50,7 +54,7 @@ public class ModelMaker0IT {
 		ECLIPSE_APPLICATION_DIRECTORY + RESOURCE_NAME_SEPARATOR
 				+ "examples/simple_person_matching";
 
-	public static final String CONFIGURATION_FILE = "project.xml";
+	public static final String CONFIGURATION_FILE = "analyzer-configuration.xml";
 
 	public static final String CONFIGURATION_PATH = EXAMPLE_DIRECTORY
 			+ RESOURCE_NAME_SEPARATOR + CONFIGURATION_FILE;
@@ -159,10 +163,16 @@ public class ModelMaker0IT {
 
 	public static String[] getModelMakerRunArgs() throws URISyntaxException {
 		URL configURL = ModelMaker0IT.class.getResource(CONFIGURATION_PATH);
+		if (configURL == null) {
+			String msg = "Invalid configuration path: " + CONFIGURATION_PATH;
+			logger.severe(msg);
+			fail(msg);
+		}
+		logger.info("configURL: " + configURL.toString());
 		URI configURI = configURL.toURI();
 		File configFile = new File(configURI);
-		assertTrue(configFile.exists());
-		assertTrue(configFile.canRead());
+		assertTrue(configFile.toString() + " doesn't exist", configFile.exists());
+		assertTrue(configFile.toString() + " isn't readable", configFile.canRead());
 		String configPath = configFile.getAbsolutePath();
 		String[] retVal = new String[] {
 				CONFIGURATION_ARG, configPath };
