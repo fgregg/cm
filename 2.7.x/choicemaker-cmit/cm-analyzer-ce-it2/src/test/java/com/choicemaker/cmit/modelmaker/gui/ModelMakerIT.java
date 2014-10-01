@@ -22,7 +22,7 @@ import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.e2.platform.InstallablePlatform;
 
-public class ModelMakerTest {
+public class ModelMakerIT {
 
 	public static final String MM_PLUGIN_ID = "com.choicemaker.cm.modelmaker";
 
@@ -103,6 +103,8 @@ public class ModelMakerTest {
 		Set<Extension> retVal = new HashSet<>();
 		retVal.add(new Extension(uid("ModelMaker"),
 				"com.choicemaker.e2.applications"));
+		retVal.add(new Extension(uid("ModelMakerStd"),
+				"org.eclipse.runtime.applications"));
 		retVal.add(new Extension(uid("AllBlocker"),
 				"com.choicemaker.cm.modelmaker.matcherBlockingToolkit"));
 		retVal.add(new Extension(uid("NoMachineLearningGui"),
@@ -123,14 +125,14 @@ public class ModelMakerTest {
 	}
 
 	public static void installEmbeddedPlatform() {
-		String pn = InstallablePlatform.INSTALLABLE_PLATFORM_DISCOVERY;
+		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
 		String pv = EmbeddedPlatform.class.getName();
 		System.setProperty(pn, pv);
 	}
 
 	public void assertEmbeddedPlatform() {
 		String pv =
-			System.getProperty(InstallablePlatform.INSTALLABLE_PLATFORM_DISCOVERY);
+			System.getProperty(InstallablePlatform.INSTALLABLE_PLATFORM);
 		assertTrue(EmbeddedPlatform.class.getName().equals(pv));
 	}
 

@@ -22,6 +22,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
   <build>
@@ -37,8 +38,16 @@
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.17</version><!--$NO-MVN-MAN-VER$-->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -55,6 +64,11 @@
     <dependency>
       <groupId>com.choicemaker.e2it</groupId>
       <artifactId>com.choicemaker.e2it</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>org.eclipse.core.boot</artifactId>
     </dependency>
 
     <dependency>
