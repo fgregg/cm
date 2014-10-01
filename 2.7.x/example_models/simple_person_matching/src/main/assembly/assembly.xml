@@ -1,0 +1,15 @@
+<assembly>
+  <id>distribution</id>
+  <formats>
+    <format>zip</format>
+    <format>tar.gz</format>
+  </formats>
+  <includeBaseDirectory>true</includeBaseDirectory>
+  <baseDirectory>${project.artifactId}_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.qualifier}</baseDirectory>
+  <fileSets>
+    <fileSet>
+    <directory>src/main/resources</directory>
+    <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../choicemaker-base/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>example_models</artifactId>
+  <packaging>pom</packaging>
+
+  <name>Examples of ChoiceMaker Record Matching Models</name>
+
+  <scm>
+    <url>http://sourceforge.net/p/oscmt/cm/ci/master/tree/2.7.x/</url>
+  </scm>
+
+  <issueManagement>
+    <url>http://sourceforge.net/projects/oscmt/support</url>
+  </issueManagement>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>${javadocs.skip}</skip>
+          <skipDeploy>${javadocs.skip}</skipDeploy>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <modules>
+    <module>simple_person_matching</module>
+  </modules>
+
+  <developers>
+    <developer>
+      <id>rphall</id>
+      <name>Rick Hall</name>
+      <url>http://sourceforge.net/users/rphall</url>
+      <roles>
+        <role>ChoiceMaker developer</role>
+        <role>Eclipse/Maven packaging</role>
+      </roles>
+    </developer>
+  </developers>
+
+</project>
