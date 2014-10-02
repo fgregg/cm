@@ -29,7 +29,6 @@ com_choicemaker_eclipse_runtime_1_0_0/plugin.xml
 javax_sql_2_0_0/plugin.xml
 org_apache_ant_1_5_3/plugin.xml
 org_apache_bcel_5_0_0/plugin.xml
-org_apache_log4j_1_2_8/plugin.xml
 org_eclipse_ant_core_2_1_3/plugin.xml
 org_eclipse_core_resources_2_1_1/plugin.xml
 org_eclipse_core_runtime_2_1_1/plugin.xml
