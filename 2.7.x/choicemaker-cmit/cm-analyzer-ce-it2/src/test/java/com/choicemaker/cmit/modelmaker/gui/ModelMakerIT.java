@@ -103,8 +103,6 @@ public class ModelMakerIT {
 		Set<Extension> retVal = new HashSet<>();
 		retVal.add(new Extension(uid("ModelMaker"),
 				"com.choicemaker.e2.applications"));
-		retVal.add(new Extension(uid("ModelMakerStd"),
-				"org.eclipse.runtime.applications"));
 		retVal.add(new Extension(uid("AllBlocker"),
 				"com.choicemaker.cm.modelmaker.matcherBlockingToolkit"));
 		retVal.add(new Extension(uid("NoMachineLearningGui"),

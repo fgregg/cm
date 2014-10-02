@@ -57,7 +57,7 @@ public class Platform {
 	public static final String PLUGIN_DESCRIPTOR_FILE = "plugin.xml"; //$NON-NLS-1$
 	public static final String FRAGMENT_DESCRIPTOR_FILE = "fragment.xml"; //$NON-NLS-1$
 
-	private static final String EXECUTABLE_PROPERTY_NAME = "run"; //$NON-NLS-1$
+	public static final String EXECUTABLE_PROPERTY_NAME = "run"; //$NON-NLS-1$
 
 	/**
 	 * The simple identifier constant (value "<code>applications</code>") of the
@@ -90,13 +90,21 @@ public class Platform {
 		init();
 	}
 
+	public static boolean isInitialized() {
+		return initialized;
+	}
+
+	public static boolean isReady() {
+		return isReady;
+	}
+
 	public static IPluginRegistry getPluginRegistry() {
 		return registry;
 	}
 
 	public static synchronized void init() {
-		if (!initialized) {
-			assert isReady == false;
+		if (!isInitialized()) {
+			assert isReady() == false;
 			boolean maybeReady = true;
 
 			MultiStatus problems =
@@ -177,15 +185,15 @@ public class Platform {
 					}
 				}
 			}
-			isReady = maybeReady;
-			if (isReady) {
+			Platform.isReady = maybeReady;
+			if (isReady()) {
 				String msg = "(embedded) Platform: READY";
 				logger.info(msg);
 			} else {
 				String msg = "(embedded) Platform: NOT READY";
 				logger.severe(msg);
 			}
-			initialized = true;
+			Platform.initialized = true;
 		}
 	}
 
@@ -219,7 +227,7 @@ public class Platform {
 	}
 
 	private static URL[] getPluginPaths() {
-		assert !initialized;
+		assert !isInitialized();
 		ClassLoader classLoader = Platform.class.getClassLoader();
 		logger.fine("Platform classLoader: " + classLoader + "("
 				+ classLoader.getClass().getName() + ": "
@@ -248,9 +256,9 @@ public class Platform {
 	 * @see BootLoader
 	 */
 	public static IPlatformRunnable loaderGetRunnable(String applicationName) {
-		assert initialized;
+		assert isInitialized();
 		IPlatformRunnable retVal = null;
-		if (!isReady) {
+		if (!isReady()) {
 			String msg = "(embedded) Platform: NOT READY";
 			logger.severe(msg);
 			assert retVal == null ;

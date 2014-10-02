@@ -23,6 +23,9 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <eclipse.application.dir>${project.build.testOutputDirectory}/eclipse.application.dir</eclipse.application.dir>
+    <eclipse.application.examples.dir>${eclipse.application.dir}/examples</eclipse.application.examples.dir>
+    <!-- <eclipse.application.examples.dir>${project.build.testOutputDirectory}</eclipse.application.examples.dir> -->
   </properties>
 
   <build>
@@ -36,6 +39,24 @@
           <target>1.7</target>
           <compilerArgument>-g</compilerArgument>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>examples</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>simple_person_matching</includeArtifactIds>
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>${eclipse.application.examples.dir}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -64,6 +85,11 @@
     <dependency>
       <groupId>com.choicemaker.e2it</groupId>
       <artifactId>com.choicemaker.e2it</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>simple_person_matching</artifactId>
     </dependency>
 
     <dependency>

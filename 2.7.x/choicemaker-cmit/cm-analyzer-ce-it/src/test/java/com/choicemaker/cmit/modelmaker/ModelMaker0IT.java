@@ -34,8 +34,6 @@ public class ModelMaker0IT {
 	
 	private static final Logger logger = Logger.getLogger(ModelMaker0IT.class.getName());
 
-	public static final int WAIT_HACK_5_SECONDS = 1000 * 5;
-
 	private static final String RESOURCE_ROOT = "/";
 
 	private static final String RESOURCE_NAME_SEPARATOR = "/";
@@ -43,10 +41,10 @@ public class ModelMaker0IT {
 	public static final String ECLIPSE_APPLICATION_DIRECTORY = RESOURCE_ROOT
 			+ "eclipse.application.dir";
 
-	public static final String PLUGIN_DIRECTORY = ECLIPSE_APPLICATION_DIRECTORY
-			+ RESOURCE_NAME_SEPARATOR + "plugins";
+//	public static final String PLUGIN_DIRECTORY = ECLIPSE_APPLICATION_DIRECTORY
+//			+ RESOURCE_NAME_SEPARATOR + "plugins";
 
-	public static final String BOOT_PLUGIN_PATTERN = "org.eclipse.core.boot*";
+//	public static final String BOOT_PLUGIN_PATTERN = "org.eclipse.core.boot*";
 
 	public static final String BOOT_PLUGIN_JAR = "boot.jar";
 
@@ -121,16 +119,6 @@ public class ModelMaker0IT {
 		Path startingDir = Paths.get(uri);
 		Files.walkFileTree(startingDir, finder);
 		List<Path> found = finder.done();
-		/*
-		if (found.size() != 1) {
-			throw new IllegalStateException("none/multiple boot plugins: "
-					+ found.toString());
-		}
-		startingDir = found.get(0);
-		finder = new Find.Finder(BOOT_PLUGIN_JAR);
-		Files.walkFileTree(startingDir, finder);
-		found = finder.done();
-		*/
 		if (found.size() != 1) {
 			throw new IllegalStateException("none/multiple boot jars: "
 					+ found.toString());
