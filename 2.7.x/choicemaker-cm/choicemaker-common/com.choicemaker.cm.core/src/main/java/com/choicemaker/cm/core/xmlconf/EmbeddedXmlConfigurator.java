@@ -63,8 +63,6 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 
 	public static final String EMBEDDED_FILENAME = "META-INF/project.xml";
 
-	public static final String DEFAULT_LOG4J_CONF = "j2ee";
-
 	private static EmbeddedXmlConfigurator instance = new EmbeddedXmlConfigurator();
 
 	private XmlConfigurator delegate = XmlConfigurator.getInstance();
@@ -203,7 +201,6 @@ public class EmbeddedXmlConfigurator implements ChoiceMakerConfigurator, ChoiceM
 //		delegate.fileName = EMBEDDED_FILENAME;
 //		readConfigurationFileFromResource();
 //		delegate.setWorkingDir();
-//		Log4jXmlConf.configIfPresent(DEFAULT_LOG4J_CONF);
 //		initClassLoader();
 //		initReloadClassPath();
 //		delegate.initializeModules(delegate.getCore().getChildren("module"), delegate.classLoader);

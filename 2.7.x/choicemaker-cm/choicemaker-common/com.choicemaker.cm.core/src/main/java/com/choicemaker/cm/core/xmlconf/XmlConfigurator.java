@@ -550,7 +550,6 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 		this.classpath =
 			initializeClassPath(getWorkingDirectory(), getDocument());
 
-		// Log4jXmlConf.config(logConfName);
 		if (logConfName != null && !logConfName.trim().isEmpty()) {
 			logger.warning("Ignoring log configuration name: " + logConfName);
 
