@@ -367,7 +367,7 @@ public class BlockingSetFactory {
 			// rphall 2008-06-27
 			//
 			// The emptySet flag is used to track whether the first
-			// possibleSubset is being considered. Not incidently, the
+			// possibleSubset is being considered. Not coincidently, the
 			// first possibleSubset is the "empty" blocking set (with
 			// no blocking values). The emptySet flag should be renamed
 			// and moved into the loop over oversized blocking sets for better
