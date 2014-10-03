@@ -24,6 +24,7 @@ import com.choicemaker.cm.transitivity.core.MatchEdgeProperty;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({"rawtypes"})
 public class MatchBiconnectedIterator extends GenericIterator {
 
 	public static final String NAME = "BCM";

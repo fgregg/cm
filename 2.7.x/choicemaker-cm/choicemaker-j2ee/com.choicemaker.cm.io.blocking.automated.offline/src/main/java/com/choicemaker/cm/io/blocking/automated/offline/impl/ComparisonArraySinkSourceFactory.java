@@ -22,6 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySou
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class ComparisonArraySinkSourceFactory implements IComparisonArraySinkSourceFactory {
 
 	private String fileDir;

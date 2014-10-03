@@ -46,6 +46,7 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  * 
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class BlockDedupService4 {
 	
 	private static final Logger log = Logger.getLogger(BlockDedupService4.class.getName());

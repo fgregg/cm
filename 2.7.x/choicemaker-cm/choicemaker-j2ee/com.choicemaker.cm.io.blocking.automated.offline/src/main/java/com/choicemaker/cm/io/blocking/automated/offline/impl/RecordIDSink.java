@@ -20,6 +20,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class RecordIDSink extends BaseFileSink implements IRecordIDSink {
 
 	protected int idType = 0;

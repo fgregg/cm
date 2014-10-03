@@ -24,6 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ComparisonTreeSource extends BaseFileSource implements IComparisonTreeSource {
 
 	

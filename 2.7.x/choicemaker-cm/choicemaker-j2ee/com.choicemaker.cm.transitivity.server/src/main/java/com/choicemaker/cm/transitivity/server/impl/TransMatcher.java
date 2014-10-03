@@ -45,6 +45,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class TransMatcher extends Matcher2  {
 
 	private static final long serialVersionUID = 1L;

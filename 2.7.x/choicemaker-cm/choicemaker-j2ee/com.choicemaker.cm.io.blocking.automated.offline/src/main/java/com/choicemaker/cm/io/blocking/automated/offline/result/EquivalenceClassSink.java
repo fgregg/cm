@@ -25,6 +25,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class EquivalenceClassSink {
 
 

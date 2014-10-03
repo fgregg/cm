@@ -21,6 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class ComparisonTreeSinkSourceFactory implements IComparisonTreeSinkSourceFactory {
 
 

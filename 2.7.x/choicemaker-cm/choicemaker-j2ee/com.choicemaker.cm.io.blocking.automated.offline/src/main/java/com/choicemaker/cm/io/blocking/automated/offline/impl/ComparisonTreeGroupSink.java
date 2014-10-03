@@ -23,6 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ComparisonTreeGroupSink implements IComparisonTreeSink {
 
 	//This is the array of round robin sinks.

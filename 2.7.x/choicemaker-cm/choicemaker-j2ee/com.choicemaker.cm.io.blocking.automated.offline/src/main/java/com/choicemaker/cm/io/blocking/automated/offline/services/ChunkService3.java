@@ -49,6 +49,7 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ChunkService3 {
 	
 	private static final String DELIM = "|";

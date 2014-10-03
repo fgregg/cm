@@ -46,6 +46,7 @@ import com.choicemaker.util.IntArrayList;
  * then the master record source.
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RecValService {
 
 	private static final Logger log = Logger.getLogger(RecValService.class.getName());

@@ -25,6 +25,7 @@ import com.choicemaker.util.IntArrayList;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class InMemorySetIterator {
 	
 	private static final Logger log = Logger.getLogger(InMemorySetIterator.class.getName());

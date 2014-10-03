@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  * 3.	sort and merge all the files into 1. 
  * 
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MatchDedupService2 {
 	
 	private static final Logger log = Logger.getLogger(MatchDedupService2.class.getName());

@@ -24,6 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFac
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class BlocksSpliter {
 	
 	private ArrayList sinks;

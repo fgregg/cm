@@ -29,9 +29,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
  * 100 files for 100 possible sizes.
  * 
  * @author pcheung
- *
- * 
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class BlocksSpliterMap {
 
 	//this stores all the block sinks 

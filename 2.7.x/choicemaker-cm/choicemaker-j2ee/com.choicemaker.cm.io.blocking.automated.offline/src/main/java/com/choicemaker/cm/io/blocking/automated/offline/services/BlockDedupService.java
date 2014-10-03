@@ -35,6 +35,7 @@ import com.choicemaker.util.LongArrayList;
  * of block B in file 11, it would not know. 
  * 
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class BlockDedupService {
 	
 	private static final Logger log = Logger.getLogger(BlockDedupService.class.getName());

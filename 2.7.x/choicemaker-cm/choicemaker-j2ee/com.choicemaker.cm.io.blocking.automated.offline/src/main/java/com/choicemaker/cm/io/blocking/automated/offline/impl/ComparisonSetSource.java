@@ -19,6 +19,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class ComparisonSetSource implements IComparisonSetSource {
 	
 	private IComparisonArraySource source;

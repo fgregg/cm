@@ -44,6 +44,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MatchDedupOA
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class TransMatchDedup extends MatchDedupOABA2 {
 
 	private static final long serialVersionUID = 1L;

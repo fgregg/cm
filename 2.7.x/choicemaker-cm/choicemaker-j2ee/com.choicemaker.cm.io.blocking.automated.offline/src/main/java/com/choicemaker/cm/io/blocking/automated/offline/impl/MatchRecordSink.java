@@ -27,6 +27,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class MatchRecordSink extends BaseFileSink implements IMatchRecordSink {
 
 	

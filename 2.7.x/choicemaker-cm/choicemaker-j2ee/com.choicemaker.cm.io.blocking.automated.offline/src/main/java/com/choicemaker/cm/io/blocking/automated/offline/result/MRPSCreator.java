@@ -53,6 +53,7 @@ import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
  * @author pcheung (initial version)
  * @author rphall (limited memory version)
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MRPSCreator {
 
 	private static final Logger log = Logger.getLogger(MRPSCreator.class.getName());

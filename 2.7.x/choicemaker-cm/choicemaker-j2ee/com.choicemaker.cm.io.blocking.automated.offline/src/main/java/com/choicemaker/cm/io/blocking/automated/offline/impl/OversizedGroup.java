@@ -26,6 +26,7 @@ import com.choicemaker.util.IntArrayList;
  * This object hides the detail list of oversized sinks from rest of the program and treats them as one.
  * It breaks the oversized blocks into files with the same max column number.
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class OversizedGroup implements IOversizedGroup {
 
 	int numColumn;

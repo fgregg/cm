@@ -24,6 +24,7 @@ import com.choicemaker.cm.transitivity.core.SimpleConnectedProperty;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({"rawtypes"})
 public class MatchConnectedIterator extends GenericIterator {
 
 	public static final String NAME = "CM";

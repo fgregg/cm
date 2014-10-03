@@ -28,6 +28,7 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class OversizedRemover {
 
 	private IBlockSource source;

@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
@@ -29,6 +28,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class TreeTransformer implements ITransformer {
 
 	private IRecordIDTranslator2 translator;

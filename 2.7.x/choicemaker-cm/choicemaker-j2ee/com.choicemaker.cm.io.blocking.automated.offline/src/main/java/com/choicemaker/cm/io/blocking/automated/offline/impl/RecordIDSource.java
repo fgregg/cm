@@ -22,6 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RecordIDSource extends BaseFileSource implements IRecordIDSource {
 
 	protected int dataType;

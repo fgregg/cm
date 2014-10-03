@@ -21,6 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySin
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ComparisonArrayGroupSink implements IComparisonArraySink {
 
 	//This is the array of round robin sinks.

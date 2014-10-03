@@ -58,6 +58,7 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({"rawtypes"})
 public class TransitivityServiceBean implements SessionBean {
 
 

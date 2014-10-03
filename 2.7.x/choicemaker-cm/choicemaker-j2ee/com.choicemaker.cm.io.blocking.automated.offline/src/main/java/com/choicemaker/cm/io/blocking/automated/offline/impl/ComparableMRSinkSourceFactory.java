@@ -24,6 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSo
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ComparableMRSinkSourceFactory 	implements IComparableSinkSourceFactory {
 	
 	private IMatchRecord2SinkSourceFactory factory;

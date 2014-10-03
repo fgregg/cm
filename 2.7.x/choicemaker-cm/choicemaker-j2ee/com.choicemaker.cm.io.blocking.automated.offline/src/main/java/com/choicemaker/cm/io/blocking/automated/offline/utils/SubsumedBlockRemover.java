@@ -28,7 +28,7 @@ import com.choicemaker.util.LongArrayList;
 /**
  * @author Adam Winkel
  */
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SubsumedBlockRemover {
 
 	public static final Comparator BLOCK_SET_SIZE_ORDER = new Comparator() {

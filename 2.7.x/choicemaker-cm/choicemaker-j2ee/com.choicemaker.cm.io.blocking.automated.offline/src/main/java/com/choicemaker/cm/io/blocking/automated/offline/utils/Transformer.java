@@ -30,6 +30,7 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Transformer implements ITransformer{
 	
 	private IRecordIDTranslator2 translator;

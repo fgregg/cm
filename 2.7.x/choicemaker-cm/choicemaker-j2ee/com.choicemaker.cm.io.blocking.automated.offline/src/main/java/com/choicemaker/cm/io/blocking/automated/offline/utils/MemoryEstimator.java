@@ -23,6 +23,7 @@ import com.choicemaker.cm.core.RecordSource;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MemoryEstimator {
 
 	private static final Logger log = Logger.getLogger(MemoryEstimator.class.getName());

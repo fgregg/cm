@@ -21,6 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSinkSourceFa
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class ComparablePairSinkSourceFactory implements IComparableSinkSourceFactory {
 
 	private IPairIDSinkSourceFactory factory;

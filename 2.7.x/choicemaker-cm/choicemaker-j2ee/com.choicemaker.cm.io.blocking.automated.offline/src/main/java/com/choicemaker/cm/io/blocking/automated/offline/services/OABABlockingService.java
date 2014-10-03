@@ -40,6 +40,7 @@ import com.choicemaker.util.LongArrayList;
  *
  * This service blocks by 1 column then trims the oversized blocks.
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class OABABlockingService {
 
 	private static final Logger log = Logger.getLogger(OABABlockingService.class.getName());

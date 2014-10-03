@@ -24,6 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SuffixTreeSource extends BaseFileSource implements ISuffixTreeSource {
 
 	private SuffixTreeNode nextTree = null;

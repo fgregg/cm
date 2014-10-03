@@ -34,6 +34,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class GenericDedupService {
 	
 	private static final Logger log = Logger.getLogger(GenericDedupService.class.getName());

@@ -22,6 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class MatchRecord2SinkSourceFactory implements IMatchRecord2SinkSourceFactory {
 
 	private String fileDir;

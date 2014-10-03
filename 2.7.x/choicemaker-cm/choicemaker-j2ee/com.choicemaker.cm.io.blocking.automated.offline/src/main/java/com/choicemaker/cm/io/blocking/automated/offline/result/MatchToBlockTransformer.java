@@ -36,6 +36,7 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MatchToBlockTransformer {
 
 	private static final Logger log = Logger.getLogger(MatchToBlockTransformer.class.getName());

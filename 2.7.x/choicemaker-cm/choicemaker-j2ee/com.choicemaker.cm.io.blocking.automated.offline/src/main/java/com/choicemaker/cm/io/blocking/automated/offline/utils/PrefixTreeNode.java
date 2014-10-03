@@ -38,7 +38,7 @@ import java.util.Comparator;
  * 
  * @author Put Cheung.  Based on the SuffixTreeNode by A Winkel.
  */
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class PrefixTreeNode {
 
 	/**

@@ -26,6 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Size2MatchProducer {
 	
 	private IMatchRecord2Source originalSource;

@@ -21,6 +21,7 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class ValidatorBase implements IValidatorBase, Serializable {
 
 	/* As of 2010-03-10 */

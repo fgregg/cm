@@ -44,6 +44,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MatchingService3 {
 
 	private static final Logger log = Logger.getLogger(MatchingService3.class.getName());

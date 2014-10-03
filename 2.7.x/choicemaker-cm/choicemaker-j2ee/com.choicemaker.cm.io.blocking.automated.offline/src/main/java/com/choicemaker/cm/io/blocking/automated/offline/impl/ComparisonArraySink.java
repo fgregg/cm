@@ -24,6 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySin
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class ComparisonArraySink extends BaseFileSink implements IComparisonArraySink {
 	
 	public ComparisonArraySink (String fileName, int type) {

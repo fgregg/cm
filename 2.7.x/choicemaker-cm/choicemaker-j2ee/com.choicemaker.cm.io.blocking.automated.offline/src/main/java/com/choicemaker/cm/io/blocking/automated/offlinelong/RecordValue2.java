@@ -28,6 +28,7 @@ import com.choicemaker.util.IntArrayList;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RecordValue2 {
 
 

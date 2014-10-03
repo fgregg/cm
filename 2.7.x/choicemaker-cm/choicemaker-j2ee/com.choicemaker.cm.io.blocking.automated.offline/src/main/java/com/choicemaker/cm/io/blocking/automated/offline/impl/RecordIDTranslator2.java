@@ -23,6 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 	
 

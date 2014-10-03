@@ -27,6 +27,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class MatchRecord2CompositeSource implements IMatchRecord2Source {
 
 	private static final Logger log = Logger.getLogger(MatchRecord2CompositeSource.class.getName());

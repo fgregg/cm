@@ -40,6 +40,7 @@ import com.choicemaker.util.LongArrayList;
  * 2. Remove exact duplicate oversized blocks.
  * 3. Remove subset
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class OversizedDedupService {
 
 	private static final Logger log = Logger.getLogger(OversizedDedupService.class.getName());

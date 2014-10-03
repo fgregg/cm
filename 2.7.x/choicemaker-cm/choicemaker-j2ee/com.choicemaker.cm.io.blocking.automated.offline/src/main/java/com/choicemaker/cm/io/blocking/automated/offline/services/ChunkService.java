@@ -41,6 +41,7 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ChunkService {
 	
 	private static final Logger log = Logger.getLogger(ChunkService.class.getName());

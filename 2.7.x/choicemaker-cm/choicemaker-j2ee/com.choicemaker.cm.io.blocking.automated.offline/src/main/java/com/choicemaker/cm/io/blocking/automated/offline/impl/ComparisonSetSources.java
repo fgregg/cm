@@ -22,6 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ComparisonSetSources implements IComparisonSetSources {
 	private ComparisonArraySinkSourceFactory sFactory;
 	private IComparisonArraySource next;

@@ -54,6 +54,7 @@ import com.choicemaker.util.IntArrayList;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RecValService3 {
 
 	private static final Logger log = Logger.getLogger(RecValService3.class.getName());

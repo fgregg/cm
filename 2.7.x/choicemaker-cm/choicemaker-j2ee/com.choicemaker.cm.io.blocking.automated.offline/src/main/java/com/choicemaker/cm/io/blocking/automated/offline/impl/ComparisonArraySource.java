@@ -24,6 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySou
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ComparisonArraySource extends BaseFileSource implements IComparisonArraySource {
 
 	private ComparisonArray nextGroup;

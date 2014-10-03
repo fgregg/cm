@@ -23,6 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public class ComparisonTreeSink extends BaseFileSink implements IComparisonTreeSink {
 
 	/** This constructor creates a String ComparisonTreeSink with the given file name.
