@@ -56,10 +56,10 @@ Plugins are resolved and loaded at startup by the Eclipse plugin framework.
 2.4	 Logging<br>
 <a name="wp9002187"> </a></div>
 <p >
-ChoiceMaker uses log4j (The Apache Jakarta Project 2002b) for logging. The logging section may contain multiple log4j configurations with different names. The desired logging configuration can be chosen at startup. See the log4j documentation for details of the log4j:configuration element.
+ChoiceMaker uses java.util.logging (part of the Java JRE since 1.4) for logging. Logging is configured externally via a logging.properties file and a System property set on the command line, <code>-Djava.util.logging.config.file=/path/to/logging/file/logging.properties</code>.
 <a name="wp9002188"> </a></p>
 <p >
-ChoiceMaker Server J2EE uses the logging configuration called, j2ee. In case the application server itself contains log4j and initializes it, the attribute init can be set to false.
+ChoiceMaker Server J2EE uses whatever logging configuration is configured for the application by the application server.
 <a name="wp9002189"> </a></p>
 <div style="color: #000000;  font-size: 14pt; font-style: normal; font-weight: bold; margin-bottom: 3pt; margin-left: 36pt; margin-right: 0pt; margin-top: 12pt; text-align: justify; text-decoration: none; text-indent: -36pt; text-transform: none; vertical-align: baseline">
 2.5	 Reporting <br>

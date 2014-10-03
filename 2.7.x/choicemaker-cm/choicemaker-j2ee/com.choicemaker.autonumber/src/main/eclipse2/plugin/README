@@ -12,7 +12,7 @@ plugin is used within. There are several minor modifications to the orginal pack
      to "com.choicemaker.autonumber," in order to avoid name conflicts
       when used within the JBoss app server.
 
- (2) log4j is used in place of jboss logging
+ (2) java.util.logging is used in place of jboss logging
  
  (3) The JNDI name in the java:comp/env namespace has been changed
      to java:comp/env/ejb/entity/AutoNumber

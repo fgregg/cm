@@ -71,7 +71,6 @@
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/com.oracle.jdbc" type="4"/>
 <item elementID="=org.apache.ant" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.jdom" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=org.apache.log4j" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.core.boot" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.core.launcher" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.core.resources.ant" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>

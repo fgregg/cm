@@ -10,7 +10,6 @@ APP_DIR="`dirname "$0"`"
 LAUNCHER="org.eclipse.core.launcher.Main"
 STARTUP_JAR="$APP_DIR/startup.jar"
 APP="com.choicemaker.cm.util.app.ProductionModelsJarBuilderApp"
-LOG4J="log4j.properties"
 WORKSPACE="/tmp"
 
 #XCP="/usr/java/j2sdk1.4.2_19/jre/lib/charsets.jar"
@@ -71,7 +70,6 @@ if [[ $# > 2 ]]; then
 fi
 
 CMD="$JAVA $JAVA_OPTS \\
-      -Dlog4j.configuration=$LOG4J \\
       -cp \"$STARTUP_JAR\" \"$LAUNCHER\" \\
       -data $WORKSPACE \\
       -noupdate \\
