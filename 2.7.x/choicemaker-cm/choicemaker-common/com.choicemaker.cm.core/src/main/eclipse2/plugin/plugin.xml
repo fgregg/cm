@@ -17,18 +17,19 @@
       <import plugin="org.jdom" export="true"/>
    </requires>
 
-   <extension-point id="mrpsReader" name="MRPS Reader" schema="schema/mrpsReader.exsd"/>
+   <extension-point id="accessor" name="Accessor" schema="schema/accessor.exsd"/>
+   <extension-point id="commandLineArgument" name="Command Line Argument" schema="schema/commandLineArgument.exsd"/>
+   <extension-point id="fileMrpsReader" name="File-based Mrps Reader" schema="schema/fileMrpsReader.exsd"/>
    <extension-point id="generatorPlugin" name="Generator Plugin" schema="schema/generatorPlugin.exsd"/>
    <extension-point id="machineLearner" name="Machine Learner" schema="schema/machineLearner.exsd"/>
-   <extension-point id="rsReader" name="RecordSource Reader" schema="schema/rsReader.exsd"/>
-   <extension-point id="rsSerializer" name="RecordSource Serializer" schema="schema/rsSerializer.exsd"/>
-   <extension-point id="commandLineArgument" name="Command Line Argument" schema="schema/commandLineArgument.exsd"/>
-   <extension-point id="namedResource" name="Named Resource" schema="schema/namedResource.exsd"/>
-   <extension-point id="fileMrpsReader" name="File-based Mrps Reader" schema="schema/fileMrpsReader.exsd"/>
    <extension-point id="matchCandidate" name="Match Candidate" schema="schema/matchCandidate.exsd"/>
+   <extension-point id="modelConfiguration" name="Model Configuration" schema="schema/modelConfiguration.exsd"/>
+   <extension-point id="mrpsReader" name="MRPS Reader" schema="schema/mrpsReader.exsd"/>
+   <extension-point id="namedResource" name="Named Resource" schema="schema/namedResource.exsd"/>
    <extension-point id="objectGenerator" name="Object Generator" schema="schema/objectGenerator.exsd"/>
    <extension-point id="reporter" name="Reporter" schema="schema/reporter.exsd"/>
-   <extension-point id="accessor" name="Accessor" schema="schema/accessor.exsd"/>
+   <extension-point id="rsReader" name="RecordSource Reader" schema="schema/rsReader.exsd"/>
+   <extension-point id="rsSerializer" name="RecordSource Serializer" schema="schema/rsSerializer.exsd"/>
 
    <extension
          id="none"
