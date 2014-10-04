@@ -101,11 +101,17 @@ public final class InstallablePluginDiscovery implements PluginDiscovery {
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 * */
-	public void install(PluginDiscovery delegate) {
-		if (delegate == null) {
+	public void install(PluginDiscovery newDelegate) {
+		if (newDelegate == null) {
 			throw new IllegalArgumentException("null delegate");
 		}
-		this.delegate = delegate;
+		if (this.delegate != null) {
+			String msg =
+				"Replacing an installed delegate (" + this.delegate
+						+ ") with a new delegate (" + newDelegate + ")";
+			logger.warning(msg);
+		}
+		this.delegate = newDelegate;
 	}
 
 	/**

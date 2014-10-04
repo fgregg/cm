@@ -1,17 +1,24 @@
-package com.choicemaker.cmit.modelmaker.gui;
+package com.choicemaker.e2.utils;
 
 import com.choicemaker.e2.CMExtension;
 
-class Extension {
+/**
+ * A utility class used in testing the extensions declared by a plugin. Aside
+ * from this narrow purpose, this limited class isn't likely to be useful
+ * elsewhere.
+ * 
+ * @author rphall
+ */
+public class ExtensionDeclaration {
 	public final String extensionId;
 	public final String extensionPoint;
 
-	public Extension(String id, String pt) {
+	public ExtensionDeclaration(String id, String pt) {
 		this.extensionId = id;
 		this.extensionPoint = pt;
 	}
 
-	public Extension(CMExtension cme) {
+	public ExtensionDeclaration(CMExtension cme) {
 		this.extensionId = cme.getUniqueIdentifier();
 		this.extensionPoint = cme.getExtensionPointUniqueIdentifier();
 	}
@@ -26,8 +33,7 @@ class Extension {
 		result =
 			prime
 					* result
-					+ ((extensionPoint == null) ? 0 : extensionPoint
-							.hashCode());
+					+ ((extensionPoint == null) ? 0 : extensionPoint.hashCode());
 		return result;
 	}
 
@@ -42,7 +48,7 @@ class Extension {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		Extension other = (Extension) obj;
+		ExtensionDeclaration other = (ExtensionDeclaration) obj;
 		if (extensionId == null) {
 			if (other.extensionId != null) {
 				return false;
@@ -62,7 +68,7 @@ class Extension {
 
 	@Override
 	public String toString() {
-		return "Extension [extensionId=" + extensionId
+		return "ExtensionDeclaration [extensionId=" + extensionId
 				+ ", extensionPoint=" + extensionPoint + "]";
 	}
 }

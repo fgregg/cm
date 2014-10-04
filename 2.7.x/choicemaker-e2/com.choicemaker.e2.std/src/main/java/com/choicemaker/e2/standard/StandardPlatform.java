@@ -13,12 +13,18 @@ import org.eclipse.core.runtime.Platform;
 import com.choicemaker.e2.CMPlatform;
 import com.choicemaker.e2.CMPlatformRunnable;
 import com.choicemaker.e2.CMPluginRegistry;
+import com.choicemaker.e2.platform.InstallablePlatform;
+import com.choicemaker.e2.plugin.InstallablePluginDiscovery;
 import com.choicemaker.e2.std.PlatformRunnableAdapter;
 import com.choicemaker.e2.std.PluginRegistryAdapter;
+import com.choicemaker.e2.std.plugin.StandardPluginDiscovery;
 
 /**
- * A singleton implementation that uses the standard Eclipse 2 Platform
- * singleton to implement CMPlatform methods.
+ * An implementation of CMPlatform that uses the standard Eclipse 2 Platform
+ * singleton to implement CMPlatform methods. To avoid tight-coupling to this
+ * particular implementation, don't use it directly, but rather
+ * {@link #install() install} it as a delegate to the
+ * {@link #InstallablePlatform} class.
  *
  * @author rphall
  *
@@ -27,9 +33,6 @@ public final class StandardPlatform implements CMPlatform {
 
 	private static final Logger logger = Logger
 			.getLogger(StandardPlatform.class.getName());
-	
-	private static final String SOURCE_CLASS = StandardPlatform.class
-			.getSimpleName();
 
 	public static final String ATTRIBUTE_EXEC_EXTENSION = "run"; //$NON-NLS-1$
 
@@ -80,11 +83,36 @@ public final class StandardPlatform implements CMPlatform {
 		throw new Error("not yet implemented");
 	}
 
-	public static void init() {
-		final String METHOD = "init";
-		logger.entering(SOURCE_CLASS, METHOD);
-		logger.warning("not implmented");
-		logger.exiting(SOURCE_CLASS, METHOD);
+	/**
+	 * The well-known instance of this class.
+	 * 
+	 * @see #getInstance()
+	 */
+	private static final StandardPlatform theInstance = new StandardPlatform();
+
+	/**
+	 * Returns a well-known instance of this class. While there's nothing to
+	 * prevent many instances of this class from being created, and there's
+	 * little harm in doing so, there's also no point. Hence this method for
+	 * getting
+	 */
+	public static StandardPlatform getInstance() {
+		return theInstance;
+	}
+
+	public static void install() {
+		// Set the System properties for consistency
+		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
+		final String platformFQCN = StandardPlatform.class.getName();
+		System.setProperty(pn, platformFQCN);
+		pn = InstallablePluginDiscovery.INSTALLABLE_PLUGIN_DISCOVERY;
+		final String pdFQCN = StandardPluginDiscovery.class.getName();
+		System.setProperty(pn, pdFQCN);
+
+		// Install the well-known instance of this class and its usual method
+		// of plugin discovery
+		InstallablePlatform.getInstance().install(getInstance());
+		InstallablePluginDiscovery.getInstance().install(pdFQCN);
 	}
 
 }

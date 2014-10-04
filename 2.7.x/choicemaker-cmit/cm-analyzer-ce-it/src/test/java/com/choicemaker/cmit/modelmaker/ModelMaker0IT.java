@@ -25,10 +25,7 @@ import com.choicemaker.cmit.util.Eclipse2BootLoader;
 import com.choicemaker.cmit.util.Eclipse2Utils;
 import com.choicemaker.cmit.util.Find;
 import com.choicemaker.cmit.util.Find.Finder;
-import com.choicemaker.e2.platform.InstallablePlatform;
-import com.choicemaker.e2.plugin.InstallablePluginDiscovery;
 import com.choicemaker.e2.standard.StandardPlatform;
-import com.choicemaker.e2.std.plugin.StandardPluginDiscovery;
 
 public class ModelMaker0IT {
 	
@@ -90,27 +87,8 @@ public class ModelMaker0IT {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		installStandardPlatform();
+		StandardPlatform.install();
 		configureEclipseConsoleLogging();
-	}
-
-	public static void installStandardPlatform() {
-		StandardPlatform.init();
-		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
-		String pv = StandardPlatform.class.getName();
-		System.setProperty(pn, pv);
-		pn = InstallablePluginDiscovery.INSTALLABLE_PLUGIN_DISCOVERY;
-		pv = StandardPluginDiscovery.class.getName();
-		System.setProperty(pn, pv);
-//		pn = com.choicemaker.cm.core.configure.InstallableConfigurator.;
-//		pv = StandardPluginDiscovery.class.getName();
-//		System.setProperty(pn, pv);
-	}
-
-	public void assertStandardPlatform() {
-		String pv =
-			System.getProperty(InstallablePlatform.INSTALLABLE_PLATFORM);
-		assertTrue(StandardPlatform.class.getName().equals(pv));
 	}
 
 	public static URL getBootJarUrl() throws IOException {

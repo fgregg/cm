@@ -7,25 +7,27 @@ import com.choicemaker.e2.CMPlatform;
 import com.choicemaker.e2.CMPlatformRunnable;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.mbd.PluginRegistryAdapter;
+import com.choicemaker.e2.mbd.plugin.EmbeddedPluginDiscovery;
 import com.choicemaker.e2.mbd.runtime.CoreException;
 import com.choicemaker.e2.mbd.runtime.IConfigurationElement;
 import com.choicemaker.e2.mbd.runtime.IExtension;
 import com.choicemaker.e2.mbd.runtime.Platform;
+import com.choicemaker.e2.platform.InstallablePlatform;
+import com.choicemaker.e2.plugin.InstallablePluginDiscovery;
 
 /**
- * A singleton implementation that uses an installable delegate to implement
- * IPlatform methods. In general, a delegate should be installed only once in an
- * application context, and this class encourages this restriction by using a
- * {@link #INSTALLABLE_PLUGIN_DISCOVERY System property} to specify the delegate
- * type. If the property is not set, a {@link #getDefaultInstance() default
- * plugin-discovery} is used.
+ * An implementation of CMPlatform suitable for "embedded" use as plain-old Java
+ * library. To avoid tight-coupling to this particular implementation, don't use
+ * it directly, but rather {@link #install() install} it as a delegate to the
+ * {@link #InstallablePlatform} class.
  *
  * @author rphall
  *
  */
 public final class EmbeddedPlatform implements CMPlatform {
-	
-	private static final Logger logger = Logger.getLogger(EmbeddedPlatform.class.getName());
+
+	private static final Logger logger = Logger
+			.getLogger(EmbeddedPlatform.class.getName());
 
 	public CMPluginRegistry getPluginRegistry() {
 		return PluginRegistryAdapter.convert(Platform.getPluginRegistry());
@@ -37,7 +39,7 @@ public final class EmbeddedPlatform implements CMPlatform {
 		if (!Platform.isReady()) {
 			String msg = "(embedded) Platform: NOT READY";
 			logger.severe(msg);
-			assert retVal == null ;
+			assert retVal == null;
 		} else {
 			IExtension extension =
 				Platform.getPluginRegistry().getExtension(Platform.PI_RUNTIME,
@@ -47,7 +49,7 @@ public final class EmbeddedPlatform implements CMPlatform {
 					"(embedded) Platform: no executable extension for '"
 							+ applicationName + "'";
 				logger.severe(msg);
-				assert retVal == null ;
+				assert retVal == null;
 			} else {
 				IConfigurationElement[] configs =
 					extension.getConfigurationElements();
@@ -56,7 +58,7 @@ public final class EmbeddedPlatform implements CMPlatform {
 						"(embedded) Platform: no configured elements for '"
 								+ applicationName + "'";
 					logger.severe(msg);
-					assert retVal == null ;
+					assert retVal == null;
 				}
 				try {
 					if (configs.length > 1) {
@@ -99,6 +101,38 @@ public final class EmbeddedPlatform implements CMPlatform {
 	public URL getPluginDescriptorUrl(String id, String version,
 			String descriptorFile) {
 		throw new Error("not implemented");
+	}
+
+	/**
+	 * The well-known instance of this class.
+	 * 
+	 * @see #getInstance()
+	 */
+	private static final EmbeddedPlatform theInstance = new EmbeddedPlatform();
+
+	/**
+	 * Returns a well-known instance of this class. While there's nothing to
+	 * prevent many instances of this class from being created, and there's
+	 * little harm in doing so, there's also no point. Hence this method for
+	 * getting
+	 */
+	public static EmbeddedPlatform getInstance() {
+		return theInstance;
+	}
+
+	public static void install() {
+		// Set the System properties for consistency
+		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
+		final String platformFQCN = EmbeddedPlatform.class.getName();
+		System.setProperty(pn, platformFQCN);
+		pn = InstallablePluginDiscovery.INSTALLABLE_PLUGIN_DISCOVERY;
+		final String pdFQCN = EmbeddedPluginDiscovery.class.getName();
+		System.setProperty(pn, pdFQCN);
+
+		// Install the well-known instance of this class and its usual method
+		// of plugin discovery
+		InstallablePlatform.getInstance().install(EmbeddedPlatform.getInstance());
+		InstallablePluginDiscovery.getInstance().install(pdFQCN);
 	}
 
 }

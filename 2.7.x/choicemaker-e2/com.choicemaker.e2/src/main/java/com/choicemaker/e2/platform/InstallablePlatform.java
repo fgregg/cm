@@ -9,12 +9,16 @@ import com.choicemaker.e2.CMPluginRegistry;
 
 /**
  * A singleton implementation that uses an installable delegate to implement
- * CMPlatform methods. In general, a delegate should be installed only once
- * in an application context, and this class encourages this restriction by
- * using a {@link #INSTALLABLE_PLATFORM System property} to specify the
- * delegate type. If the property is not set, a {@link #getDefaultInstance()
- * default plugin-discovery} is used.
+ * CMPlatform methods. In general, a delegate should be installed only once in
+ * an application context, and this class encourages this practice by using a
+ * {@link #INSTALLABLE_PLATFORM System property} to specify the delegate type.
+ * If the property is not set, a {@link #getDefaultInstance() default platform}
+ * is used. Currently, the default platform is the {@link #DoNothingPlatform},
+ * which is unlikely to be at all useful.
  *
+ * @see com.choicemaker.e2.embed.EmbeddedPlatform
+ * @see com.choicemaker.e2.standard.StandardPlatform
+ * 
  * @author rphall
  *
  */
@@ -24,38 +28,35 @@ public final class InstallablePlatform implements CMPlatform {
 			.getLogger(InstallablePlatform.class.getName());
 
 	/** Property name */
-	public static final String INSTALLABLE_PLATFORM =
-		"cmInstallablePlatform";
+	public static final String INSTALLABLE_PLATFORM = "cmInstallablePlatform";
 
 	/**
-	 * The default instance is a {@link EmbeddedPlatform basic
-	 * implementation}.
+	 * The default instance is a {@link EmbeddedPlatform basic implementation}.
 	 */
 	static final CMPlatform getDefaultInstance() {
 		return new DoNothingPlatform();
 	}
 
-	/** The singleton instance of this plugin-discovery */
-	private static InstallablePlatform singleton =
-		new InstallablePlatform();
+	/** The singleton instance of this platform */
+	private static InstallablePlatform singleton = new InstallablePlatform();
 
-	/** A method that returns the plugin-discovery singleton */
+	/** A method that returns the platform singleton */
 	public static InstallablePlatform getInstance() {
 		assert singleton != null;
 		return singleton;
 	}
 
 	/**
-	 * The delegate used by the plugin-discovery singleton to implement the
-	 * Platform interface.
+	 * The delegate used by the platform singleton to implement the Platform
+	 * interface.
 	 */
 	private CMPlatform delegate;
 
 	/**
 	 * If a delegate hasn't been set, this method looks up a System property to
-	 * determine which type of plugin-discovery to set and then sets it. If the
-	 * property exists but the specified plugin-discovery type can not be set,
-	 * throws an IllegalStateException. If the property doesn't exist, sets the
+	 * determine which type of platform to set and then sets it. If the property
+	 * exists but the specified platform type can not be set, throws an
+	 * IllegalStateException. If the property doesn't exist, sets the
 	 * {@link #getDefaultInstance() default type}. If the default type can not
 	 * be set -- for example, if the default type is misconfigured -- throws a
 	 * IllegalStateException.
@@ -65,7 +66,7 @@ public final class InstallablePlatform implements CMPlatform {
 	 */
 	CMPlatform getDelegate() {
 		if (delegate == null) {
-			String msgPrefix = "Installing plugin discovery: ";
+			String msgPrefix = "Installing platform: ";
 			String fqcn = System.getProperty(INSTALLABLE_PLATFORM);
 			try {
 				if (fqcn != null) {
@@ -87,8 +88,14 @@ public final class InstallablePlatform implements CMPlatform {
 		return delegate;
 	}
 
-	private void setDelegate(CMPlatform delegate) {
-		this.delegate = delegate;
+	private void setDelegate(CMPlatform newDelegate) {
+		if (this.delegate != null) {
+			String msg =
+				"Replacing an installed delegate (" + this.delegate
+						+ ") with a new delegate (" + newDelegate + ")";
+			logger.warning(msg);
+		}
+		this.delegate = newDelegate;
 	}
 
 	/** For testing only; otherwise treat as private */
@@ -96,21 +103,21 @@ public final class InstallablePlatform implements CMPlatform {
 	}
 
 	/**
-	 * Sets the plugin-discovery delegate explicitly.
+	 * Sets the platform delegate explicitly.
 	 *
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
 	 * */
-	public void install(CMPlatform delegate) {
-		if (delegate == null) {
+	public void install(CMPlatform newDelegate) {
+		if (newDelegate == null) {
 			throw new IllegalArgumentException("null delegate");
 		}
-		this.setDelegate(delegate);
+		this.setDelegate(newDelegate);
 	}
 
 	/**
-	 * An alternative method for setting a plugin-discovery delegate using a
-	 * FQCN plugin-discovery name.
+	 * An alternative method for setting a platform delegate using a FQCN class
+	 * name.
 	 *
 	 * @throws IllegalArgumentException
 	 *             if the delegate can not be updated.
@@ -118,9 +125,9 @@ public final class InstallablePlatform implements CMPlatform {
 	public void install(String fqcn) {
 		if (fqcn == null || fqcn.trim().isEmpty()) {
 			throw new IllegalArgumentException(
-					"null or blank class name for plugin discovery");
+					"null or blank class name for platform");
 		}
-		final String msgPrefix = "Installing plugin discovery: ";
+		final String msgPrefix = "Installing platform: ";
 		try {
 			Class<?> c = Class.forName(fqcn);
 			CMPlatform instance = (CMPlatform) c.newInstance();
@@ -146,7 +153,8 @@ public final class InstallablePlatform implements CMPlatform {
 
 	public URL getPluginDescriptorUrl(String id, String version,
 			String descriptorFile) {
-		return getDelegate().getPluginDescriptorUrl(id, version, descriptorFile);
+		return getDelegate()
+				.getPluginDescriptorUrl(id, version, descriptorFile);
 	}
 
 }

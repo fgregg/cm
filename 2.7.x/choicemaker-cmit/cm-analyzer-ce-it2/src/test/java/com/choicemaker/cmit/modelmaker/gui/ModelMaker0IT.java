@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.e2.CMPlatformRunnable;
+import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.e2.platform.InstallablePlatform;
 
 public class ModelMaker0IT {
@@ -22,7 +23,7 @@ public class ModelMaker0IT {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		ModelMakerUtils.installEmbeddedPlatform();
+		EmbeddedPlatform.install();
 	}
 
 	private ModelMaker modelMaker;

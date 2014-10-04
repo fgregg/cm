@@ -14,8 +14,10 @@ import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.CMExtensionPoint;
 import com.choicemaker.e2.CMPlatform;
 import com.choicemaker.e2.CMPlatformRunnable;
+import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.e2.platform.InstallablePlatform;
+import com.choicemaker.e2.utils.ExtensionDeclaration;
 
 public class ModelMakerIT {
 
@@ -23,31 +25,28 @@ public class ModelMakerIT {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		ModelMakerUtils.installEmbeddedPlatform();
-		ModelMakerUtils.configureEclipseConsoleLogging();
+		EmbeddedPlatform.install();
 	}
 
 	@Test
 	public void testModelMakerExtensions() {
-		ModelMakerUtils.assertEmbeddedPlatform();
-
-		Set<Extension> expected = ModelMakerUtils.getExpectedExtensions();
+		Set<ExtensionDeclaration> expected =
+			ModelMakerUtils.getExpectedExtensions();
 		CMExtension[] exts = CMPlatformUtils.getPluginExtensions(MM_PLUGIN_ID);
 		assertTrue(exts != null);
 		assertTrue(exts.length == expected.size());
-		Set<Extension> computed = new HashSet<>();
+		Set<ExtensionDeclaration> computed = new HashSet<>();
 		for (CMExtension ext : exts) {
-			computed.add(new Extension(ext));
+			computed.add(new ExtensionDeclaration(ext));
 		}
 		assertTrue(computed.containsAll(expected));
 	}
 
 	@Test
 	public void testModelMakerExtensionPoints() {
-		ModelMakerUtils.assertEmbeddedPlatform();
-
 		Set<String> expected = ModelMakerUtils.getExpectedExtensionPoints();
-		CMExtensionPoint[] pts = CMPlatformUtils.getPluginExtensionPoints(MM_PLUGIN_ID);
+		CMExtensionPoint[] pts =
+			CMPlatformUtils.getPluginExtensionPoints(MM_PLUGIN_ID);
 		assertTrue(pts != null);
 		assertTrue(pts.length == expected.size());
 		Set<String> computed = new HashSet<>();
@@ -59,7 +58,6 @@ public class ModelMakerIT {
 
 	@Test
 	public void testMain() {
-		ModelMakerUtils.assertEmbeddedPlatform();
 		try {
 			String[] args = ModelMakerUtils.getModelMakerRunArgs();
 			ModelMaker.main(args);
@@ -70,7 +68,6 @@ public class ModelMakerIT {
 
 	@Test
 	public void testRunObject() {
-		ModelMakerUtils.assertEmbeddedPlatform();
 		CMPlatform cmp = InstallablePlatform.getInstance();
 
 		final String extensionId = "com.choicemaker.cm.modelmaker.ModelMaker";

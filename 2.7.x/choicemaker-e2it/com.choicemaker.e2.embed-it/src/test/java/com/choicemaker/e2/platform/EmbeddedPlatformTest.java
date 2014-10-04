@@ -19,9 +19,7 @@ public class EmbeddedPlatformTest {
 	
 	@BeforeClass
 	public static void configureEmbeddedPlatform() {
-		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
-		String pv = EmbeddedPlatform.class.getName();
-		System.setProperty(pn, pv);
+		EmbeddedPlatform.install();
 	}
 
 	@Test

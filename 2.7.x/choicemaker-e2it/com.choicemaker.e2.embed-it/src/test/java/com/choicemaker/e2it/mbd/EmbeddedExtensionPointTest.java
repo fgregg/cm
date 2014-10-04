@@ -8,7 +8,6 @@ import org.junit.Test;
 import com.choicemaker.e2.CMPlatform;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
-import com.choicemaker.e2.platform.InstallablePlatform;
 import com.choicemaker.e2it.ExtensionPointTest;
 
 public class EmbeddedExtensionPointTest {
@@ -19,9 +18,7 @@ public class EmbeddedExtensionPointTest {
 
 	@BeforeClass
 	public static void configureEmbeddedPlatform() {
-		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
-		String pv = EmbeddedPlatform.class.getName();
-		System.setProperty(pn, pv);
+		EmbeddedPlatform.install();
 	}
 
 	public CMPluginRegistry getPluginRegistry() {
