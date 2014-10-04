@@ -38,6 +38,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ModelAttributeNames;
 import com.choicemaker.cm.core.ModelConfigurationException;
+import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.ProbabilityModel;
@@ -122,7 +123,8 @@ public class ProbabilityModelsXmlConf {
 	public static IProbabilityModel readModel(
 		String fileName,
 		ICompiler compiler,
-		Writer w)
+		Writer w,
+		boolean allowCompile)
 		throws ModelConfigurationException {
 		// Preconditions checked by called to overloaded readModel(..)
 		try {
@@ -130,7 +132,8 @@ public class ProbabilityModelsXmlConf {
 				fileName,
 				new FileInputStream(new File(fileName).getAbsoluteFile()),
 				compiler,
-				w);
+				w,
+				allowCompile);
 		} catch (FileNotFoundException ex) {
 			throw new ModelConfigurationException("Internal error: "
 					+ ex.toString(), ex);
@@ -141,14 +144,17 @@ public class ProbabilityModelsXmlConf {
 		String fileName,
 		InputStream is,
 		ICompiler compiler,
-		Writer statusOutput)
+		Writer statusOutput,
+		boolean allowCompile)
 		throws ModelConfigurationException {
-		return readModel(fileName, is, compiler, statusOutput, null);
+		return readModel(fileName, is, compiler, statusOutput, null,
+				allowCompile);
 	}
 
 	public static IProbabilityModel readModel(String fileName, InputStream is,
 			ICompiler compiler, Writer statusOutput,
-			ClassLoader customClassLoader) throws ModelConfigurationException {
+			ClassLoader customClassLoader, boolean allowCompile)
+			throws ModelConfigurationException {
 
 		// Preconditions
 		if (is == null) {
@@ -204,17 +210,24 @@ public class ProbabilityModelsXmlConf {
 			antCommand = "";
 		String accessorName =
 			m.getAttributeValue(ModelAttributeNames.AN_ACCESSOR_CLASS);
+		if (accessorName == null || accessorName.trim().isEmpty()) {
+			throw new ModelConfigurationException("model does not define an accessor name");
+		}
 		Accessor accessor = null;
+
+		ClassLoader classLoader = customClassLoader;
+		if (classLoader == null || XmlConfigurator.getInstance().isReload()) {
+			try {
+				classLoader = XmlConfigurator.getInstance().reload();
+			} catch (XmlConfException e) {
+				throw new ModelConfigurationException(e.toString(), e);
+			}
+		}
+		logger.fine("classLoader == " + customClassLoader);
 
 		IProbabilityModel retVal = null;
 		try {
-			ClassLoader classLoader = customClassLoader;
-			if (classLoader == null) {
-				classLoader = XmlConfigurator.getInstance().reload();
-			}
-			logger.fine("classLoader == " + customClassLoader);
-
-			if (classLoader instanceof URLClassLoader) {
+			if (allowCompile && classLoader instanceof URLClassLoader) {
 				String resourcePath = accessorName.replace('.', '/') + ".class";
 				URL resourceUrl =
 					((URLClassLoader) classLoader).findResource(resourcePath);
@@ -233,8 +246,18 @@ public class ProbabilityModelsXmlConf {
 					}
 				}
 			}
+			if (classLoader == null) {
+				throw new ModelConfigurationException("no class loader defined");
+			}
 			accessor = PMManager.createAccessor(accessorName, classLoader);
+			if (accessor == null) {
+				throw new ModelConfigurationException(
+						"unable to create an accessor (" + accessorName + ")");
+			}
 			ClueDesc[] clueDesc = accessor.getClueSet().getClueDesc();
+			if (clueDesc == null) {
+				throw new ModelConfigurationException("no clue descriptors");
+			}
 			Map cm = new HashMap();
 			for (int i = 0; i < clueDesc.length; ++i) {
 				cm.put(clueDesc[i].getName(), new Integer(i));
@@ -308,10 +331,13 @@ public class ProbabilityModelsXmlConf {
 		return null;
 	}
 
-	public static void loadProductionProbabilityModels(
-		ICompiler compiler,
-		boolean fromResource)
+	public static void loadProductionProbabilityModels(ICompiler compiler)
 		throws ModelConfigurationException {
+		loadProductionProbabilityModels(compiler, false);
+	}
+
+	public static void loadProductionProbabilityModels(ICompiler compiler,
+			boolean fromResource) throws ModelConfigurationException {
 
 		// Precondition
 		if (compiler == null) {
@@ -320,7 +346,8 @@ public class ProbabilityModelsXmlConf {
 
 		logger.info("loadProductionProbabilityModels");
 		Element x =
-			XmlConfigurator.getInstance().getCore().getChild("productionProbabilityModels");
+			XmlConfigurator.getInstance().getCore()
+					.getChild("productionProbabilityModels");
 		if (x != null) {
 			List l = x.getChildren("model");
 			Iterator i = l.iterator();
@@ -330,34 +357,33 @@ public class ProbabilityModelsXmlConf {
 				String fileName = e.getAttributeValue("file");
 
 				IProbabilityModel m;
+				final boolean allowRecompile = !fromResource;
 				if (fromResource) {
-					m =
-						readModel(
-							null,
-							ProbabilityModelsXmlConf
-								.class
-								.getClassLoader()
-								.getResourceAsStream(
-								"META-INF/" + fileName),
-							compiler,
-							new StringWriter());
+					InputStream is =
+						ProbabilityModelsXmlConf.class.getClassLoader()
+								.getResourceAsStream("META-INF/" + fileName);
+					m = readModel(null, is, compiler, new StringWriter(), allowRecompile);
 				} else {
-					m = readModel(fileName, compiler, new StringWriter());
+					m = readModel(fileName, compiler, new StringWriter(), allowRecompile);
 				}
 				
-				assert m != null;
-				assert m instanceof MutableProbabilityModel;
-				((MutableProbabilityModel)m).setModelName(name);
+				if (name != null) {
+					String modelName = name.trim();
+					if (!modelName.isEmpty()) {
+						assert m instanceof MutableProbabilityModel;
+						((MutableProbabilityModel) m).setModelName(modelName);
+					}
+				}
 
 				List props = e.getChildren("property");
 				Iterator iProps = props.iterator();
 				while (iProps.hasNext()) {
 					Element p = (Element) iProps.next();
-					m.properties().put(
-						p.getAttributeValue("name").intern(),
-						p.getAttributeValue("value").intern());
+					String key = p.getAttributeValue("name").intern();
+					String value = p.getAttributeValue("value").intern();
+					m.properties().put(key,value);
 				}
-				logger.info("Loaded probability model: " + name);
+
 				PMManager.addModel(m);
 			}
 		} else {
@@ -365,8 +391,4 @@ public class ProbabilityModelsXmlConf {
 		}
 	}
 
-	public static void loadProductionProbabilityModels(ICompiler compiler)
-		throws ModelConfigurationException {
-		loadProductionProbabilityModels(compiler, false);
-	}
 }

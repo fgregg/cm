@@ -18,7 +18,7 @@
          id="Model1"
          point="com.choicemaker.cm.core.modelConfiguration">
       <modelConfiguration
-         model="etc/models/SimplePerson1.model"
+         model="etc/models/SimplePerson.model"
          databaseConfiguration="default"
          blockingConfiguration="defaultAutomated"/>
    </extension>

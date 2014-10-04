@@ -81,7 +81,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	Document document;
 	ClassLoader classLoader;
 	URL[] reloadClassPath;
-	boolean reload;
+	private boolean reload;
 	ClassLoader reloadClassLoader;
 	String fileName;
 
@@ -297,7 +297,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 
 	public ClassLoader reload() throws XmlConfException {
 		ClassLoader retVal;
-		if (!reload && reloadClassLoader != null) {
+		if (!isReload() && reloadClassLoader != null) {
 			retVal = reloadClassLoader;
 		} else {
 			retVal = new PpsClassLoader(reloadClassPath, getClassLoader());
@@ -534,7 +534,7 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 
 		initializeInstallableComponents();
 
-		this.reload = reload;
+		this.setReload(reload);
 		this.fileName = new File(fn).getAbsolutePath();
 		this.document = ConfigurationUtils.readConfigurationFile(fileName);
 
@@ -589,6 +589,14 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 
 	public String getPackagedCodeRoot() {
 		return getCodeRoot() + File.separator + PACKAGES_DIRECTORY;
+	}
+
+	boolean isReload() {
+		return reload;
+	}
+
+	private void setReload(boolean reload) {
+		this.reload = reload;
 	}
 
 }

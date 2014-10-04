@@ -123,12 +123,20 @@ public class E2Exception extends Exception {
 	}
 
 	public E2Exception(String message) {
+		super(message);
+		this.status = message == null ? null : new Status(message);
 	}
 
 	public E2Exception(Throwable cause) {
+		super(cause);
+		if (cause != null && cause.getMessage() != null) {
+			this.status = new Status(cause.getMessage());
+		}
 	}
 
 	public E2Exception(String message, Throwable cause) {
+		super(message, cause);
+		this.status = message == null ? null : new Status(message);
 	}
 
 	/**
@@ -139,7 +147,7 @@ public class E2Exception extends Exception {
 	 *            the status object to be associated with this exception
 	 */
 	public E2Exception(CMStatus status) {
-		this(status.getMessage());
+		super(status == null ? "" : status.getMessage());
 		this.status = status;
 	}
 

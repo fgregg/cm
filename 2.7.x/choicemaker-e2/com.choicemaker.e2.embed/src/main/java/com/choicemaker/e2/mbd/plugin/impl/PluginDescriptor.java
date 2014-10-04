@@ -202,21 +202,22 @@ public IExtension[] getExtensions() {
  * @see IPluginDescriptor
  */
 public URL getInstallURL() {
+//	try {
+//		URL pluginXmlUrl = Platform.getPluginDescriptorUrl(getId(), getVersion(), Platform.PLUGIN_DESCRIPTOR_FILE);
+//		return new URL(pluginXmlUrl, "./");
+//	} catch (MalformedURLException e) {
+//		throw new IllegalStateException(); // unchecked
+//	}
+	return getInstallURLInternal();
+}
+public URL getInstallURLInternal() {
+	String url = getLocation();
 	try {
-		URL pluginXmlUrl = Platform.getPluginDescriptorUrl(getId(), getVersion(), Platform.PLUGIN_DESCRIPTOR_FILE);
-		return new URL(pluginXmlUrl, "./");
+		return new URL(url);
 	} catch (MalformedURLException e) {
 		throw new IllegalStateException(); // unchecked
 	}
 }
-//public URL getInstallURLInternal() {
-//	String url = getLocation();
-//	try {
-//		return PlatformURLFactory.createURL(url);
-//	} catch (MalformedURLException e) {
-//		throw new IllegalStateException(); // unchecked
-//	}
-//}
 /**
  * @see IPluginDescriptor
  */

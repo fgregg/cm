@@ -19,16 +19,16 @@ import com.choicemaker.cm.core.ProbabilityModelSpecification;
 
 /**
  * A placeholder for objects that require, but don't use, a compiler.
- * (There's a lot of these objects in the J2EE projects.) Both
- * <code>compile</code> methods throw a RuntimeException ("not implemented").
+ * (There's a lot of these objects in the J2EE projects.) Most
+ * methods throw a <code>CompilerException</code>.
  *
  * @author rphall
  */
-final class DoNothingCompiler implements ICompiler {
+public final class DoNothingCompiler implements ICompiler {
 
 	static final ICompiler instance = new DoNothingCompiler();
 
-	private DoNothingCompiler() {}
+	public DoNothingCompiler() {}
 
 	public int generateJavaCode(CompilationArguments arguments,
 			Writer statusOutput) throws CompilerException {

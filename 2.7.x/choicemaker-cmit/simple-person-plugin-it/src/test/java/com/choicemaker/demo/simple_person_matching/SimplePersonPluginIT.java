@@ -1,19 +1,12 @@
 package com.choicemaker.demo.simple_person_matching;
 
-import static com.choicemaker.cm.core.PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -27,9 +20,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.DoNothingCompiler;
 import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.configure.ConfigurationManager;
 import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
-import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.CMPluginDescriptor;
@@ -37,17 +28,9 @@ import com.choicemaker.e2.embed.EmbeddedPlatform;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.e2.utils.ExtensionDeclaration;
 
-public class SimplePersonPluginTest {
-
-	private static final Logger logger = Logger
-			.getLogger(SimplePersonPluginTest.class.getName());
-
-	/** Location as a resource */
-	private static final String CHOICEMAKER_CONFIGURATION =
-		"choicemaker-configuration.xml";
-
-	private static final String TEMP_FILE_PREFIX = "SimplePersonPluginTest_";
-	private static final String TEMP_FILE_SUFFIX = ".xml";
+public class SimplePersonPluginIT {
+	
+	private static final Logger logger = Logger.getLogger(SimplePersonPluginIT.class.getName());
 
 	private static final String AN_MODEL_FILE = "model";
 	private static final String AN_DATABASE_CONFIGURATION =
@@ -58,43 +41,15 @@ public class SimplePersonPluginTest {
 	private static final String EXPECTED_DATABASE_CONFIG = "default";
 	private static final String EXPECTED_BLOCKING_CONFIG = "defaultAutomated";
 
-	/**
-	 * This test requires a filtered version of a configuration file, which is
-	 * placed by a Maven build at target/test-classes. However, to avoid
-	 * hard-coding that path (which can be changed in the POM configuration),
-	 * this method looks for the configuration file as a resource using the
-	 * class loader of this test; creates a temporary file at a known location;
-	 * and dumps this content of the configuration file (resource) into the
-	 * known location.
-	 * 
-	 * @return a non-null file with the content of the configuration file.
-	 * @throws IOException
-	 */
-	public static Path getFilteredConfiguration() throws IOException {
-		ClassLoader cl = SimplePersonPluginTest.class.getClassLoader();
-		InputStream is = cl.getResourceAsStream(CHOICEMAKER_CONFIGURATION);
-		File f = File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX);
-		URI targetURI = f.toURI();
-		f.delete();
-		Path retVal = Paths.get(targetURI);
-		Files.copy(is, retVal);
-		return retVal;
-	}
-
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		EmbeddedPlatform.install();
-		String pn = INSTALLABLE_CHOICEMAKER_CONFIGURATOR;
-		String pv = XmlConfigurator.class.getName();
-		System.setProperty(pn, pv);
-		final boolean useReload = true;
-		final boolean initGui = false;
-		final String absFilePath =
-			getFilteredConfiguration().toFile().getAbsolutePath();
-		ConfigurationManager.getInstance()
-				.init(absFilePath, useReload, initGui);
 	}
 
+	/**
+	 * Copied from the JUnit test for the simple-person-plugin. This
+	 * test could be removed since it should already have been passed.
+	 */
 	@Test
 	public void testSimplePersonPluginExtensions() {
 		Set<ExtensionDeclaration> expected = getExpectedExtensions();
@@ -109,10 +64,10 @@ public class SimplePersonPluginTest {
 	}
 
 	/**
-	 * This test must be run as an integration test -- that is, after packaging
-	 * -- because it requires ClueMaker models to be copied to the META-INF
-	 * directory tree. This copying occurs as a part of packaging (currently via
-	 * the Maven Assembly Plugin).
+	 * This test must be run as an integration test -- that is, after
+	 * packaging -- because it requires ClueMaker models to be copied
+	 * to the META-INF directory tree. This copying occurs as a part
+	 * of packaging (currently via the Maven Assembly Plugin).
 	 */
 	@Test
 	public void testLoadSimplePersonModels() {
@@ -141,48 +96,43 @@ public class SimplePersonPluginTest {
 
 			URL modelURL = null;
 			try {
-				modelURL = new URL(installURL, modelFile);
+				modelURL = new URL(installURL,modelFile);
 			} catch (MalformedURLException e) {
-				String msg =
-					"Failed to create URL from the plugin installURL ("
-							+ installURL + ") and the model path (" + modelFile
-							+ "): " + e.toString();
+				String msg = "Failed to create URL from the plugin installURL (" +
+			installURL + ") and the model path (" + modelFile + "): " + e.toString();
 				fail(msg);
 			}
 			assertTrue(modelURL != null);
 
 			// Read in the model
 			final ICompiler compiler = new DoNothingCompiler();
-			final ClassLoader cl = SimplePersonPluginTest.class.getClassLoader();
 			IProbabilityModel pm = null;
 			try {
 				final InputStream is = modelURL.openStream();
 				final StringWriter compilerMessages = new StringWriter();
 				final boolean allowCompile = false;
 				pm =
-					ProbabilityModelsXmlConf.readModel(modelFile, is, compiler,
-							compilerMessages, cl, allowCompile);
+					ProbabilityModelsXmlConf.readModel(null, is, compiler,
+							compilerMessages, allowCompile);
 				logger.fine("Compiler messages: " + compilerMessages.toString());
 				pm.setModelFilePath(modelFile);
 			} catch (Exception e) {
-				String msg =
-					"Failed to load a model from the plugin installURL ("
-							+ installURL + ") and the model path (" + modelFile
-							+ "): " + e.toString();
+				String msg = "Failed to load a model from the plugin installURL (" +
+			installURL + ") and the model path (" + modelFile + "): " + e.toString();
 				fail(msg);
 			}
 			assertTrue(pm != null);
-
+			
 			// Check that some stuff is computed correctly
 			final String computedModelPath = pm.getModelFilePath();
 			assertTrue(modelFile.equals(computedModelPath));
-			final Map<?, ?> computedModelProperties = pm.properties();
+			final Map<?,?> computedModelProperties = pm.properties();
 			assertTrue(computedModelProperties != null);
 			assertTrue(computedModelProperties.isEmpty());
 
 			// Register the model with the Probability Model Manager
 			PMManager.addModel(pm);
-
+	
 			// Check that the model is registered. This also checks that
 			// the model name is set correctly.
 			final String computedModelName = pm.getModelName();

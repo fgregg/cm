@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+    <core>
+        <reload>
+            <classpath>${project.build.testOutputDirectory}</classpath>
+        </reload>
+        <!-- generator codeRoot="etc/models/gen"/> -->
+    </core>
+</conf>
