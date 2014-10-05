@@ -68,6 +68,10 @@
       <artifactId>com.choicemaker.e2.embed</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.jboss.spec.javax.annotation</groupId>
       <artifactId>jboss-annotations-api_1.1_spec</artifactId>
       <scope>provided</scope>
