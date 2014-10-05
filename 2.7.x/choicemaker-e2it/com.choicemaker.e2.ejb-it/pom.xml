@@ -67,20 +67,21 @@
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2</artifactId>
-          </dependency>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.embed</artifactId>
-          </dependency>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2.ejb</artifactId>
-            <scope>test</scope>
+      <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>com.choicemaker.e2it</groupId>
       <artifactId>com.choicemaker.e2it</artifactId>
-            <scope>test</scope>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
