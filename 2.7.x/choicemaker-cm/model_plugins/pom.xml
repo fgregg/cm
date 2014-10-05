@@ -82,6 +82,7 @@
 
   <modules>
     <module>simple-person-plugin</module>
+    <module>simple-person-plugin-tests</module>
   </modules>
 
   <developers>

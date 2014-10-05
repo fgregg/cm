@@ -14,116 +14,125 @@ import com.choicemaker.e2.CMPluginRegistry;
 
 public class CMPlatformUtils {
 
-	private static final Logger log = Logger.getLogger(CMPlatformUtils.class.getName());
+	private static final Logger logger = Logger.getLogger(CMPlatformUtils.class
+			.getName());
 	private static final String SIMPLE_CLASS_NAME = CMPlatformUtils.class
 			.getSimpleName();
 
 	public static CMPluginRegistry getPluginRegistry() {
 		// final String METHOD = "getPluginRegistry";
-		// log.entering(SIMPLE_CLASS_NAME, METHOD);
+		// logger.entering(SIMPLE_CLASS_NAME, METHOD);
 		CMPlatform platform = InstallablePlatform.getInstance();
 		CMPluginRegistry retVal = platform.getPluginRegistry();
-		// log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		// logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
 
 	public static CMPluginDescriptor[] getPluginDescriptors() {
 		final String METHOD = "getPluginDecriptors";
-		log.entering(SIMPLE_CLASS_NAME, METHOD);
+		logger.entering(SIMPLE_CLASS_NAME, METHOD);
 		CMPluginRegistry registry = getPluginRegistry();
 		CMPluginDescriptor[] retVal = registry.getPluginDescriptors();
-		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
-	
+
 	public static CMPluginDescriptor getPluginDescriptor(String pluginId) {
 		final String METHOD = "getPluginDescriptor";
-		log.entering(SIMPLE_CLASS_NAME, METHOD, pluginId);
+		logger.entering(SIMPLE_CLASS_NAME, METHOD, pluginId);
 		CMPluginRegistry registry = getPluginRegistry();
 		CMPluginDescriptor retVal = registry.getPluginDescriptor(pluginId);
-		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
 
 	/** Returns the extensions implemented by the specified plugin */
 	public static CMExtension[] getPluginExtensions(String pluginId) {
 		final String METHOD = "getPluginDescriptor";
-		log.entering(SIMPLE_CLASS_NAME, METHOD, pluginId);
+		logger.entering(SIMPLE_CLASS_NAME, METHOD, pluginId);
 		CMPluginDescriptor plugin = getPluginDescriptor(pluginId);
-		CMExtension[] retVal = plugin.getExtensions();
-		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		CMExtension[] retVal;
+		if (plugin == null) {
+			logger.severe("no plugin found for: " + pluginId);
+			retVal = new CMExtension[0];
+		} else {
+			retVal = plugin.getExtensions();
+		}
+		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
 
 	/** Returns the extension points defined by the specified plugin */
 	public static CMExtensionPoint[] getPluginExtensionPoints(String pluginId) {
 		final String METHOD = "getPluginDescriptor";
-		log.entering(SIMPLE_CLASS_NAME, METHOD, pluginId);
+		logger.entering(SIMPLE_CLASS_NAME, METHOD, pluginId);
 		CMPluginDescriptor plugin = getPluginDescriptor(pluginId);
 		CMExtensionPoint[] retVal = plugin.getExtensionPoints();
-		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
 
 	public static ClassLoader[] getPluginClassLoaders() {
 		final String METHOD = "getPluginClassLoaders";
-		log.entering(SIMPLE_CLASS_NAME, METHOD);
+		logger.entering(SIMPLE_CLASS_NAME, METHOD);
 		List<ClassLoader> loaders = new LinkedList<>();
 		CMPluginDescriptor[] plugins = getPluginDescriptors();
 		for (CMPluginDescriptor plugin : plugins) {
-			log.fine("Adding classloader for: " + plugin.getUniqueIdentifier());
+			logger.fine("Adding classloader for: "
+					+ plugin.getUniqueIdentifier());
 			ClassLoader loader = plugin.getPluginClassLoader();
 			loaders.add(loader);
 		}
 		ClassLoader[] retVal = new ClassLoader[loaders.size()];
 		retVal = (ClassLoader[]) loaders.toArray(retVal);
-		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
 
 	public static URL[] getPluginClassPaths() {
 		final String METHOD = "getPluginClassPaths";
-		log.entering(SIMPLE_CLASS_NAME, METHOD);
+		logger.entering(SIMPLE_CLASS_NAME, METHOD);
 		List<URL> urls = new LinkedList<>();
 		ClassLoader[] loaders = getPluginClassLoaders();
 		for (ClassLoader loader : loaders) {
 			if (loader instanceof URLClassLoader) {
 				URL[] ucp = ((URLClassLoader) loader).getURLs();
 				for (URL url : ucp) {
-					log.fine(url.toString());
+					logger.fine(url.toString());
 					urls.add(url);
 				}
 			} else {
-				log.warning("Skipping non-URLClassLoader: " + loader.toString());
+				logger.warning("Skipping non-URLClassLoader: "
+						+ loader.toString());
 			}
 		}
 		URL[] retVal = new URL[urls.size()];
 		retVal = (URL[]) urls.toArray(retVal);
-		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
 
 	public static CMExtensionPoint getExtensionPoint(String extPt) {
 		final String METHOD = "getExtensionPoint";
-		log.entering(SIMPLE_CLASS_NAME, METHOD, extPt);
+		logger.entering(SIMPLE_CLASS_NAME, METHOD, extPt);
 		CMExtensionPoint retVal = getPluginRegistry().getExtensionPoint(extPt);
-		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
 
 	public static CMExtension[] getExtensions(String extPt) {
 		final String METHOD = "getExtensions";
-		log.entering(SIMPLE_CLASS_NAME, METHOD, extPt);
+		logger.entering(SIMPLE_CLASS_NAME, METHOD, extPt);
 		CMExtension[] retVal = getExtensionPoint(extPt).getExtensions();
-		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
 
 	public static CMExtension getExtension(String extPt, String extId) {
 		final String METHOD = "getExtensions";
-		log.entering(SIMPLE_CLASS_NAME, METHOD, extPt + "/" + extId );
-		CMExtension retVal = getPluginRegistry().getExtension(extPt,extId);
-		log.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
+		logger.entering(SIMPLE_CLASS_NAME, METHOD, extPt + "/" + extId);
+		CMExtension retVal = getPluginRegistry().getExtension(extPt, extId);
+		logger.exiting(SIMPLE_CLASS_NAME, METHOD, retVal);
 		return retVal;
 	}
 
