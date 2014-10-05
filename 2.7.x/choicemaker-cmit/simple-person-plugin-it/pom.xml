@@ -7,21 +7,27 @@
 
   <parent>
     <groupId>com.choicemaker.cm</groupId>
-    <artifactId>choicemaker</artifactId>
+    <artifactId>choicemaker-base</artifactId>
     <version>2.7.1-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
+    <relativePath>../../choicemaker-base/pom.xml</relativePath>
   </parent>
 
   <artifactId>simple-person-plugin-it</artifactId>
-  <name>Integration Test for Simple Person Matching</name>
+  <name>Integration Test: Simple Person Matching (EJB)</name>
   <packaging>jar</packaging>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- JBoss dependency versions -->
+    <version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
+    <version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
+    <version.org.jboss.spec.jboss.javaee.7.0>1.0.0.Final</version.org.jboss.spec.jboss.javaee.7.0>
+    <version.wildfly>8.1.0.Final</version.wildfly>
+    <!-- other plugin versions -->
+    <version.ejb.plugin>2.3</version.ejb.plugin>
   </properties>
-  
+
   <build>
-  <plugins>
+    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -32,174 +38,244 @@
           <compilerArgument>-g</compilerArgument>
         </configuration>
       </plugin>
-  </plugins>
+      <plugin>
+        <groupId>org.jboss.as.plugins</groupId>
+        <artifactId>jboss-as-maven-plugin</artifactId>
+        <version>
+        ${version.org.jboss.as.plugins.maven.plugin}</version>
+        <configuration>
+          <filename>${project.build.finalName}.jar</filename>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
-  <dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jboss.spec</groupId>
+        <artifactId>jboss-javaee-7.0</artifactId>
+        <version>
+        ${version.org.jboss.spec.jboss.javaee.7.0}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.arquillian</groupId>
+        <artifactId>arquillian-bom</artifactId>
+        <version>1.1.2.Final</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
+  <dependencies>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>simple-person-plugin</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>com.choicemaker.e2</groupId>
-      <artifactId>com.choicemaker.e2.embed</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>simple-person-plugin-tests</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.embed</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.ejb</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.spec.javax.transaction</groupId>
+      <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.annotation</groupId>
+      <artifactId>jboss-annotations-api_1.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.ejb</groupId>
+      <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.protocol</groupId>
+      <artifactId>arquillian-protocol-servlet</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly</groupId>
+      <artifactId>wildfly-arquillian-container-remote</artifactId>
+      <version>8.1.0.Final</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <!-- <version>7.0</version> -->
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.wildfly</groupId>
+      <artifactId>wildfly-jms-client-bom</artifactId>
+      <version>${version.wildfly}</version>
+      <type>pom</type>
+    </dependency>
+
+    <!--
+    ARQUILLIAN DEPENDENCIES
+    These dependencies are used in testing, but must have 'compile' scope (the
+    default) so that they are loaded as dependencies in the Arquillian test.
+    See DeploymentUtils.createTestDependencies(String).
+    -->
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.exact.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.db.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.cfg</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.matching.en.us.train</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.gen</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.geo</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.intl</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>
       com.choicemaker.cm.matching.wfst.eclipse</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.urm.base</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.util.app</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.sun.tools</artifactId>
-      <version>1.7.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.wcohen.ss</artifactId>
-      <version>2.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>jakarta-oro</artifactId>
-      <version>2.0.1</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.ant</artifactId>
-      <version>1.5.3</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.apache.bcel</artifactId>
-      <version>5.0.0</version>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.jdom</artifactId>
-      <version>0.9.0</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
