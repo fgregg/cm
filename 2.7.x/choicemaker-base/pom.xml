@@ -1304,7 +1304,7 @@ END: C-E Exclusion -->
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>simple-person-plugin-testing</artifactId>
+        <artifactId>simple-person-plugin-tests</artifactId>
         <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
