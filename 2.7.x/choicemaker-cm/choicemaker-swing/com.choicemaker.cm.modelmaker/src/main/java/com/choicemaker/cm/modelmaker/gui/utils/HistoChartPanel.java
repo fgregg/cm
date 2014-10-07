@@ -76,9 +76,12 @@ public class HistoChartPanel extends ChartPanel {
 				CategoryPlot p = (CategoryPlot) chart.getPlot();
 				Axis oldAxis = p.getRangeAxis();
 				if (logYScale.isSelected()) {
-					p.setRangeAxis(
+					LogarithmicAxis yAxis = 
 						new LogarithmicAxis(
-							ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs")));
+								ChoiceMakerCoreMessages.m
+										.formatMessage("train.gui.modelmaker.panel.histogram.cm.numpairs"));
+					yAxis.setStrictValuesFlag(false);
+					p.setRangeAxis(yAxis);
 				} else {
 					p.setRangeAxis(
 						new NumberAxis(
