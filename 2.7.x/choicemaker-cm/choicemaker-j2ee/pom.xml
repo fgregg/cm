@@ -27,7 +27,6 @@
     <module>com.choicemaker.cm.io.blocking.automated.offline</module>
     <module>com.choicemaker.cm.io.blocking.automated.offline.core</module>
     <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>
-    <module>com.choicemaker.cm.reviewmaker.base</module>
     <module>com.choicemaker.cm.server.core</module>
     <module>com.choicemaker.cm.transitivity</module>
     <module>com.choicemaker.cm.transitivity.core</module>
