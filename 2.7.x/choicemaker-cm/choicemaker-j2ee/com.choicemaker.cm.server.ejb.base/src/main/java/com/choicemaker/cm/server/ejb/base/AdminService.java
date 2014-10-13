@@ -15,7 +15,7 @@ import java.security.AccessControlException;
 
 import javax.ejb.EJBObject;
 
-import com.choicemaker.cm.server.base.DatabaseException;
+import com.choicemaker.cm.server.core.DatabaseException;
 
 /**
  * ChoiceMaker admin interface.

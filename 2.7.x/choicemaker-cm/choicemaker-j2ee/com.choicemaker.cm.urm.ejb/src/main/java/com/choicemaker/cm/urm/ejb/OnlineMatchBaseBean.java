@@ -46,8 +46,8 @@ import com.choicemaker.cm.io.blocking.automated.base.UnderspecifiedQueryExceptio
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.xml.base.XmlSingleRecordWriter;
-import com.choicemaker.cm.server.base.DatabaseException;
-import com.choicemaker.cm.server.ejb.impl.CountsUpdate;
+import com.choicemaker.cm.server.core.DatabaseException;
+import com.choicemaker.cm.server.util.CountsUpdate;
 import com.choicemaker.cm.urm.adaptor.tocmcore.UrmRecordBuilder;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.Decision3;

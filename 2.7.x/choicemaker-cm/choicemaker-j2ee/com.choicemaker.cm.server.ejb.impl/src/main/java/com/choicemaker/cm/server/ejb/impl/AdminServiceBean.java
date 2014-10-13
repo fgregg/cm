@@ -22,7 +22,9 @@ import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
-import com.choicemaker.cm.server.base.DatabaseException;
+import com.choicemaker.cm.server.core.DatabaseException;
+import com.choicemaker.cm.server.util.CountsUpdate;
+import com.choicemaker.cm.server.util.NameServiceLookup;
 
 /**
  * Comment

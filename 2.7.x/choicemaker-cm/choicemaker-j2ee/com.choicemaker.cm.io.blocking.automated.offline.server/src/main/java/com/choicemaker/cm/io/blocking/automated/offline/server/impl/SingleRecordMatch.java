@@ -59,7 +59,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.MatchingService
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService2;
-import com.choicemaker.cm.server.ejb.impl.CountsUpdate;
+import com.choicemaker.cm.server.util.CountsUpdate;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 

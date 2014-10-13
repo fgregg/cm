@@ -125,6 +125,10 @@
       <artifactId>com.choicemaker.cm.server.base</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.server.core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <scope>provided</scope>

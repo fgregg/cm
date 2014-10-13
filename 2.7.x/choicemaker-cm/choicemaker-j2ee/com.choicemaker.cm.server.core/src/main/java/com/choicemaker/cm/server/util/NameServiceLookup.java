@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.server.ejb.impl;
+package com.choicemaker.cm.server.util;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;

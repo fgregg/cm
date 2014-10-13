@@ -1080,39 +1080,8 @@ END: C-E Exclusion -->
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.server.base</artifactId>
+        <artifactId>com.choicemaker.cm.server.core</artifactId>
         <version>${choicemaker.current.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.server.base</artifactId>
-        <version>${choicemaker.current.version}</version>
-        <classifier>eclipse2prj</classifier>
-        <type>zip</type>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.server.ejb.base</artifactId>
-        <version>${choicemaker.current.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.server.ejb.base</artifactId>
-        <version>${choicemaker.current.version}</version>
-        <classifier>eclipse2prj</classifier>
-        <type>zip</type>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
-        <version>${choicemaker.current.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.choicemaker.cm</groupId>
-        <artifactId>com.choicemaker.cm.server.ejb.impl</artifactId>
-        <version>${choicemaker.current.version}</version>
-        <classifier>eclipse2prj</classifier>
-        <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>

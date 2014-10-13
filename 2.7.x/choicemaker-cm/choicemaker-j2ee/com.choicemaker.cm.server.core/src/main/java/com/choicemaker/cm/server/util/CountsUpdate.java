@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.server.ejb.impl;
+package com.choicemaker.cm.server.util;
 
 import java.rmi.RemoteException;
 import java.sql.Connection;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
-import com.choicemaker.cm.server.base.DatabaseException;
+import com.choicemaker.cm.server.core.DatabaseException;
 
 /**
  * Comment

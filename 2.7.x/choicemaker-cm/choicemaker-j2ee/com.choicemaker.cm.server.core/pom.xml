@@ -12,26 +12,17 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>com.choicemaker.cm.transitivity.server</artifactId>
+  <artifactId>com.choicemaker.cm.server.core</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Offline Matching (Transitivity Server)</name>
+  <name>ChoiceMaker Server (Base)</name>
 
   <properties>
-    <eclipse.plugin.runtime.library.name>transitivity-server.jar</eclipse.plugin.runtime.library.name>
-    <eclipse.plugin.src.zip.name>transitivity-serversrc.zip</eclipse.plugin.src.zip.name>
+    <eclipse.plugin.runtime.library.name>core.jar</eclipse.plugin.runtime.library.name>
+    <eclipse.plugin.src.zip.name>coresrc.zip</eclipse.plugin.src.zip.name>
   </properties>
 
   <build>
     <plugins>
-
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -128,40 +119,6 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.server.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.transitivity</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.transitivity.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>javax.persistence</artifactId>
-      <version>2.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 

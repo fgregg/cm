@@ -8,39 +8,41 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.server.base;
+package com.choicemaker.cm.server.core;
 
 /**
- * Thrown when a database access problem prohibits ChoiceMaker from fulfilling a request. 
+ * Thrown when a Model is invalid, e.g., wrong XML representation.
  *
  * @author   Martin Buechi
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:13 $
  */
-public class DatabaseException extends Exception {
+public class InvalidModelException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Constructs a <code>DatabaseException</code> with no detail message.
+	 * Constructs an <code>InvalidModelException</code> with no detail message.
 	 */
-	public DatabaseException() { }
-
+	public InvalidModelException() {
+		super();
+	}
+	
 	/**
-	 * Constructs a <code>DatabaseException</code> with the specified detail message.
+	 * Constructs a <code>InvalidModelException</code> with the specified detail message.
 	 * 
 	 * @param   message  The detail message.
 	 */
-	public DatabaseException(String message) {
+	public InvalidModelException(String message) {
 		super(message);
 	}
 
 	/**
-	 * Constructs a <code>DatabaseException</code> with the specified detail message and cause.
+	 * Constructs a <code>InvalidModelException</code> with the specified detail message and cause.
 	 * 
 	 * @param   message  The detail message.
 	 * @param   cause  The cause.
 	 */
-	public DatabaseException(String message, Throwable cause) {
+	public InvalidModelException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }
