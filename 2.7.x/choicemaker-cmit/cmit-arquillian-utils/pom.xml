@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.choicemaker.cm</groupId>
+    <artifactId>choicemaker-base</artifactId>
+    <version>2.7.1-SNAPSHOT</version>
+    <relativePath>../../choicemaker-base/pom.xml</relativePath>
+  </parent>
+
+  <groupId>com.choicemaker.cmit</groupId>
+  <artifactId>cmit-arquillian-utils</artifactId>
+  <name>Integration Test: Arquillian Utilities</name>
+  <packaging>jar</packaging>
+
+  <properties>
+    <!-- JBoss dependency versions -->
+    <version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
+    <version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
+    <version.org.jboss.spec.jboss.javaee.7.0>1.0.0.Final</version.org.jboss.spec.jboss.javaee.7.0>
+    <version.wildfly>8.1.0.Final</version.wildfly>
+    <!-- other plugin versions -->
+    <version.ejb.plugin>2.3</version.ejb.plugin>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <compilerVersion>1.7</compilerVersion>
+          <source>1.7</source>
+          <target>1.7</target>
+          <compilerArgument>-g</compilerArgument>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jboss.arquillian</groupId>
+        <artifactId>arquillian-bom</artifactId>
+        <version>1.1.2.Final</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>

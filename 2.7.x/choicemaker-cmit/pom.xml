@@ -19,7 +19,9 @@
   <modules>
     <module>cm-analyzer-ce-it</module>
     <module>cm-analyzer-ce-it2</module>
+    <module>cmit-arquillian-utils</module>
     <module>simple-person-plugin-it</module>
+    <module>cm-server-oaba-it</module>
   </modules>
 
 </project>

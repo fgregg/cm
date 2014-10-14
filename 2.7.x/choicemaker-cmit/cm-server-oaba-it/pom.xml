@@ -13,8 +13,8 @@
   </parent>
 
   <groupId>com.choicemaker.cmit</groupId>
-  <artifactId>simple-person-plugin-it</artifactId>
-  <name>Integration Test: Simple Person Matching (EJB)</name>
+  <artifactId>cmit-server-oaba-it</artifactId>
+  <name>Integration Test: Offline Auto Block Algo (OABA)</name>
   <packaging>jar</packaging>
 
   <properties>
