@@ -73,25 +73,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>simple-person-plugin</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>simple-person-plugin-tests</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.e2</groupId>
-      <artifactId>com.choicemaker.e2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.e2</groupId>
-      <artifactId>com.choicemaker.e2.embed</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.e2</groupId>
-      <artifactId>com.choicemaker.e2.ejb</artifactId>
-      <scope>test</scope>
+      <groupId>com.choicemaker.cmit</groupId>
+      <artifactId>cmit-arquillian-utils</artifactId>
     </dependency>
 
     <dependency>
@@ -160,11 +143,23 @@
     -->
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.autonumber</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -180,11 +175,6 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.xml.base</artifactId>
     </dependency>
     <dependency>
@@ -193,21 +183,19 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.matching.en</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.en.au</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>
-      com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
+      <artifactId>com.choicemaker.cm.matching.en.us.ny.nyc</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>
-      com.choicemaker.cm.matching.en.us.train</artifactId>
+      <artifactId>com.choicemaker.cm.matching.en.us.train</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.en</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -223,16 +211,19 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.matching.wfst.eclipse</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.matching.wfst</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>
-      com.choicemaker.cm.matching.wfst.eclipse</artifactId>
+      <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.ml.me.base</artifactId>
+      <artifactId>com.choicemaker.cm.server.core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -241,6 +232,10 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.util.app</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.validation.eclipse</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
@@ -265,6 +260,36 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.jdom</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>simple-person-plugin</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.ejb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2.embed</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.e2</groupId>
+      <artifactId>com.choicemaker.e2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+      <version>2.1.0</version>
     </dependency>
   </dependencies>
 
