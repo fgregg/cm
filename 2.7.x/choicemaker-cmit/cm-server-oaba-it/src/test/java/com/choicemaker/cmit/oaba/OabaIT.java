@@ -1,12 +1,16 @@
 package com.choicemaker.cmit.oaba;
 
+import static com.choicemaker.cmit.oaba.util.OabaUtils.DEPENDENCIES_POM;
+import static com.choicemaker.cmit.oaba.util.OabaUtils.EJB_MAVEN_COORDINATES;
+import static com.choicemaker.cmit.oaba.util.OabaUtils.PROJECT_POM;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -16,27 +20,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cmit.utils.DeploymentUtils;
-import com.choicemaker.e2.ejb.EjbPlatform;
 
 @RunWith(Arquillian.class)
 public class OabaIT {
-
-	private static final String MAVEN_COORDINATE_SEPARATOR = ":";
-
-	static final String PROJECT_POM = "pom.xml";
-
-	static final String DEPENDENCIES_POM = PROJECT_POM;
-
-	static final String EJB_MAVEN_GROUPID = "com.choicemaker.cm";
-
-	static final String EJB_MAVEN_ARTIFACTID = "com.choicemaker.e2.ejb";
-
-	static final String EJB_MAVEN_VERSION = "2.7.1-SNAPSHOT";
-
-	static final String EJB_MAVEN_COORDINATES = new StringBuilder()
-			.append(EJB_MAVEN_GROUPID).append(MAVEN_COORDINATE_SEPARATOR)
-			.append(EJB_MAVEN_ARTIFACTID).append(MAVEN_COORDINATE_SEPARATOR)
-			.append(EJB_MAVEN_VERSION).toString();
 
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
@@ -53,12 +39,12 @@ public class OabaIT {
 		return retVal;
 	}
 
-	@EJB
-	EjbPlatform e2service;
+	@PersistenceContext(unitName = "oaba")
+	private EntityManager em;
 
 	@Test
-	public void testEclipse2Service() {
-		assertTrue(e2service != null);
+	public void testEntityManager() {
+		assertTrue(em != null);
 	}
 
 }

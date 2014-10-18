@@ -48,6 +48,18 @@
           <filename>${project.build.finalName}.jar</filename>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -64,7 +76,7 @@
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>1.1.2.Final</version>
+        <version>1.1.4.Final</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -155,11 +167,15 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.io.blocking.automated.offline</artifactId>
+      <artifactId>com.choicemaker.cm.io.blocking.automated.offline.server</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
