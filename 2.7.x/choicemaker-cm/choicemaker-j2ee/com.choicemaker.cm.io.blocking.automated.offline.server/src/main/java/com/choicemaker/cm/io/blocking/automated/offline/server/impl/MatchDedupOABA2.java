@@ -149,13 +149,9 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
-			try {
-				log.severe(e.toString());
-				if (batchJob != null)
-					batchJob.markAsFailed();
-			} catch (RemoteException e1) {
-				log.severe(e1.toString());
-			}
+			log.severe(e.toString());
+			if (batchJob != null)
+				batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
 		}

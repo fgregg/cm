@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
@@ -33,8 +34,8 @@ import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJobHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParametersHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
@@ -70,7 +71,6 @@ public class Single implements Serializable {
 
 	// ENC Entity Bean names
 	private static final String URM_JOB = "java:comp/env/ejb/UrmJob";
-	private static final String BATCH_JOB = "java:comp/env/ejb/BatchJob";
 	private static final String TRANSITIVITY_JOB =
 		"java:comp/env/ejb/TransitivityJob";
 	private static final String CMS_JOB =
@@ -101,8 +101,8 @@ public class Single implements Serializable {
 		"com.choicemaker.cm.core.beanMatchCandidate";
 	*/
 
-	// ChoiceMaker parameters (FIXME? should be properties?)
-	public static final String CURRENT_VERSION = "2.5.0";
+	// ChoiceMaker parameters
+	public static final String CURRENT_VERSION = "2.7.1";
 	public static final int DEFAULT_MAX_DB_COLLECTION_CHUNK_SIZE = 100000;
 
 	// Cached EJB remote proxies
@@ -112,7 +112,6 @@ public class Single implements Serializable {
 
 	// Cached EJB home proxies
 	private transient UrmJobHome urmJobHome = null;
-	private transient BatchJobHome batchJobHome = null;
 	private transient TransitivityJobHome transJobHome = null;
 	private transient CmsJobHome cmsJobHome = null;
 	private transient UrmStepJobHome urmStepJobHome = null;
@@ -446,9 +445,8 @@ public class Single implements Serializable {
 				switch (si) {
 					case BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX :
 						{
-							BatchJob bj =
-								Single.getInst().findBatchJobById(stepJobId);
-							bj.remove();
+							BatchJob job = findBatchJobById(stepJobId);
+							EJBConfiguration.getInstance().deleteBatchJob(job);
 						}
 						break;
 					case BatchMatchAnalyzerBean.TRANS_OABA_STEP_INDEX :
@@ -466,7 +464,6 @@ public class Single implements Serializable {
 						}
 						break;
 					default :
-						//TODO:
 						log.severe(
 							"invalid step job index "
 								+ si
@@ -493,30 +490,14 @@ public class Single implements Serializable {
 		}
 	}
 
-	public BatchJob findBatchJobById(long id)
-		throws ConfigException, CmRuntimeException {
-		try {
-			if (batchJobHome == null) {
-				Context ctx = getInitialContext();
-				Object homeRef = ctx.lookup(BATCH_JOB);
-				batchJobHome =
-					(BatchJobHome) PortableRemoteObject.narrow(
-						homeRef,
-						BatchJobHome.class);
-			}
-			return batchJobHome.findByPrimaryKey(new Long(id));
-		} catch (ClassCastException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		} catch (RemoteException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
+	public BatchJob findBatchJobById(long id) {
+		BatchJob retVal = EJBConfiguration.getInstance().findBatchJobById(id);
+		return retVal;
+	}
+
+	public void deleteBatchJob(BatchJob job) {
+		if (job != null) {
+			EJBConfiguration.getInstance().deleteBatchJob(job);
 		}
 	}
 
@@ -538,43 +519,15 @@ public class Single implements Serializable {
 		try {
 			BatchParametersHome home = getBatchParamsHome();
 			return home.findByPrimaryKey(new Long(id));
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
 		}
 	}
 
-	public Collection getBatchJobList()
-		throws ConfigException, CmRuntimeException {
-		try {
-			if (batchJobHome == null) {
-				Context ctx = getInitialContext();
-				Object homeRef = ctx.lookup(BATCH_JOB);
-				batchJobHome =
-					(BatchJobHome) PortableRemoteObject.narrow(
-						homeRef,
-						BatchJobHome.class);
-			}
-			return batchJobHome.findAll();
-		} catch (ClassCastException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		} catch (RemoteException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		}
+	public Collection getBatchJobList() {
+		List jobs = EJBConfiguration.getInstance().findAllBatchJobs();
+		return jobs;
 	}
 
 	public TransitivityJob findTransJobById(long id)

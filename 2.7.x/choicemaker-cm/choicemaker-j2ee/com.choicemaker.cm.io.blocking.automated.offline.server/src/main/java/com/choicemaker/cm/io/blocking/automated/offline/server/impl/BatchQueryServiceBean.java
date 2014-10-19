@@ -81,7 +81,7 @@ public class BatchQueryServiceBean implements SessionBean {
 		batchJob.setDescription(stageModelName + ":" + masterModelName);
 		batchJob.markAsQueued();
 
-		long id = batchJob.getId().longValue();
+		long id = batchJob.getId();
 
 		batchJob.setTransactionId(batchJob.getId());
 
@@ -122,7 +122,7 @@ public class BatchQueryServiceBean implements SessionBean {
 		batchJob.markAsQueued();
 		batchJob.setTransactionId(new Long (transactionId));
 
-		long id = batchJob.getId().longValue();
+		long id = batchJob.getId();
 
 		//set the parameters
 		BatchParameters batchParams = configuration.createBatchParameters(id);
@@ -185,7 +185,7 @@ public class BatchQueryServiceBean implements SessionBean {
 
 		//set status as done, so it won't continue during the next run
 		if (cleanStatus) {
-			batchJob.setDescription(BatchJob.CLEAR);
+			batchJob.setDescription(BatchJob.STATUS_CLEAR);
 		}
 
 		return 0;
@@ -197,8 +197,8 @@ public class BatchQueryServiceBean implements SessionBean {
 		BatchJob batchJob = configuration.findBatchJobById(jobID);
 
 		BatchJobStatus status = new BatchJobStatus (
-			batchJob.getId().longValue(),
-			batchJob.getTransactionId().longValue(),
+			batchJob.getId(),
+			batchJob.getTransactionId(),
 			batchJob.getDescription(),
 			batchJob.getStatus(),
 			batchJob.getStarted(),
@@ -242,7 +242,7 @@ public class BatchQueryServiceBean implements SessionBean {
 		BatchJob job = configuration.findBatchJobById(jobID);
 
 		if (!job.getStarted().equals(BatchJob.STATUS_COMPLETED) &&
-			!job.getDescription().equals(BatchJob.CLEAR)) {
+			!job.getDescription().equals(BatchJob.STATUS_CLEAR)) {
 
 			//change aborted to started
 			job.markAsReStarted();

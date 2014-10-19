@@ -10,295 +10,436 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.ejb.CreateException;
-import javax.ejb.EntityBean;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyTemporal;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+import javax.persistence.TemporalType;
 
-import com.choicemaker.autonumber.AutoNumberFactory;
+import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJobHome;
 
 /**
- * A BatchJobBean tracks the progress of a (long-running) batch
+ * A BatchJobBean tracks the progress of a (long-running) offline blocking
  * process. A successful request goes through a sequence of states: NEW, QUEUED,
- * STARTED, and COMPLETED. A request may be aborted at any point, in which
- * case it goes through the ABORT_REQUESTED and the ABORT states.</p>
+ * STARTED, and COMPLETED. A request may be aborted at any point, in which case
+ * it goes through the ABORT_REQUESTED and the ABORT states.</p>
  *
  * A long-running process should provide some indication that it is making
- * progress. Since the process is handling a finite array of records, it
- * should be able to estimate the number of records completed. It can provide
- * this estimate as a fraction between 0.00 and 1.00 (inclusive) by updating
- * the getFractionComplete() fild.</p>
- *
+ * progress. It can provide this estimate as a fraction between 0 and 100
+ * (inclusive) by updating the getFractionComplete() field.</p>
  * 
+ * @author pcheung (original version)
+ * @author rphall (migrated to JPA 2.0)
+ *
  */
-public abstract class BatchJobBean implements EntityBean {
+@NamedQuery(name = "batchJobFindAll",
+		query = "Select job from BatchJobBean job")
+@Entity
+@Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_BATCHJOB")
+public class BatchJobBean implements IControl, Serializable, BatchJob {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 271L;
 
 	private static Logger log = Logger.getLogger(BatchJobBean.class.getName());
 
-	/**
-	 * These status values are copied from
-	 * com.choicemaker.demo.batch.ejb.base.BatchJob
-	 * to avoid importing the ejb interface package
-	 * into the implementation package.
-	 */
-	static String STATUS_NEW = "NEW";
-	static String STATUS_QUEUED = "QUEUED";
-	static String STATUS_STARTED = "STARTED";
-	static String STATUS_COMPLETED = "COMPLETED";
-	static String STATUS_ABORT_REQUESTED = "ABORT_REQUESTED";
-	static String STATUS_ABORTED = "ABORTED";
-	static String STATUS_FAILED = "FAILED";
+	public static final String TABLE_DISCRIMINATOR = "OABA";
 
-//	private EntityContext ctx;
+	public static enum NamedQuery {
+		FIND_ALL("batchJobFindAll");
+		public final String name;
 
-	// CMP fields
-
-	/** For CMP only */
-	public abstract void setId(Long id);
-	public abstract Long getId();
-
-	/** For CMP only */
-	public abstract void setExternalId(String externalId);
-	public abstract String getExternalId();
-
-	/** For CMP only */
-	public abstract void setTransactionId(Long id);
-	public abstract Long getTransactionId();
-
-	/** For CMP only */
-	public abstract void setType(String type);
-	public abstract String getType();
-	
-	/** For CMP only */
-	public abstract void setDescription(String description);
-	public abstract String getDescription();
-
-	/** For CMP only; use markAsXxx() methods instead */
-	public abstract void setStatus(String status);
-	public abstract String getStatus();
-
-	/** For CMP only: use updateFractionCompleted(float) instead */
-	public abstract void setFractionComplete(int i);
-	public abstract int getFractionComplete();
-
-	/** For CMP only */
-	public abstract void setRequested(Date date);
-	public abstract Date getRequested();
-
-	/** For CMP only; use markAsQueued() method instead */
-	public abstract void setQueued(Date queued);
-	public abstract Date getQueued();
-
-	/** For CMP only; use markAsStarted() method instead */
-	public abstract void setStarted(Date started);
-	public abstract Date getStarted();
-
-	/** For CMP only; use markAsUpdated() method instead */
-	public abstract void setUpdated(Date updated);
-	public abstract Date getUpdated();
-
-	/** For CMP only; use markAsCompleted() method instead */
-	public abstract void setCompleted(Date completed);
-	public abstract Date getCompleted();
-	
-	/** For CMP only; use markAsFailed() method instead */
-	public abstract void setFailed(Date completed);
-	public abstract Date getFailed();	
-
-	/** For CMP only; use markAsAbortRequested() method instead */
-	public abstract void setAbortRequested(Date abortRequested);
-	public abstract Date getAbortRequested();
-
-	/** For CMP only; use markAsAborted() method instead */
-	public abstract void setAborted(Date aborted);
-	public abstract Date getAborted();
-
-	// Business methods
-
-	public void markAsQueued() {
-		if (BatchJob.STATUS_NEW.equals(getStatus())) {
-			setQueued(new Date());
-			setStatus(STATUS_QUEUED);
-		} else {
-			String msg =
-				getId()
-					+ ", '"
-					+ getExternalId()
-					+ "': markAsQueued ignored (status == '"
-					+ getStatus()
-					+ "'";
-			log.warning(msg);
+		NamedQuery(String name) {
+			this.name = name;
 		}
 	}
 
-	public void markAsStarted() {
-		if (BatchJob.STATUS_QUEUED.equals(getStatus())) {
-			setStarted(new Date());
-			setStatus(STATUS_STARTED);
-		} else {
-			String msg =
-				getId()
-					+ ", '"
-					+ getExternalId()
-					+ "': markAsQueued ignored (status == '"
-					+ getStatus()
-					+ "'";
-			log.warning(msg);
-		}
+	private final static Set<String> validStatus = new HashSet<>();
+	static {
+		validStatus.add(STATUS_NEW);
+		validStatus.add(STATUS_QUEUED);
+		validStatus.add(STATUS_STARTED);
+		validStatus.add(STATUS_COMPLETED);
+		validStatus.add(STATUS_FAILED);
+		validStatus.add(STATUS_ABORT_REQUESTED);
+		validStatus.add(STATUS_ABORTED);
+		validStatus.add(STATUS_CLEAR);
 	}
 
-	/** This method is called when the job is restarted.  This method doesn't check id the
-	 * status is current queued.
-	 *
-	 */
-	public void markAsReStarted() {
-		setStarted(new Date());
-		setStatus(STATUS_STARTED);
+	/** Default value for non-persistent batch jobs */
+	private static final long INVALID_BATCHJOB_ID = 0;
+
+	static boolean isInvalidBatchJobId(long id) {
+		return id == INVALID_BATCHJOB_ID;
 	}
 
-	public void updateFractionCompleted(int fractionCompleted) {
-
-		if (fractionCompleted < 0 || fractionCompleted > 100) {
-			String msg =
-				"invalid fractionCompleted == '" + fractionCompleted + "'";
-			throw new IllegalArgumentException(msg);
+	static boolean isNonPersistent(BatchJob batchJob) {
+		boolean retVal = true;
+		if (batchJob != null) {
+			retVal = isInvalidBatchJobId(batchJob.getId());
 		}
-
-		if (BatchJob.STATUS_STARTED.equals(getStatus())) {
-			setFractionComplete(fractionCompleted);
-			setUpdated(new Date());
-		} else {
-			String msg =
-				getId()
-					+ ", '"
-					+ getExternalId()
-					+ "': updateFractionCompleted ignored (status == '"
-					+ getStatus()
-					+ "'";
-			log.warning(msg);
-		}
-
-		return;
-	} // updateFractionCompleted(float)
-
-	public void markAsCompleted() {
-		if (BatchJob.STATUS_STARTED.equals(getStatus())) {
-			setFractionComplete(100);
-			Date date = new Date();
-			setUpdated(date);
-			setCompleted(date);
-			setStatus(STATUS_COMPLETED);
-			
-			//publish status
-			//publishStatus ();
-			
-		} else {
-			String msg =
-				getId()
-					+ ", '"
-					+ getExternalId()
-					+ "': markAsCompleted ignored (status == '"
-					+ getStatus()
-					+ "'";
-			log.warning(msg);
-		}
-	}
-	
-	public void markAsFailed() {
-		if (BatchJob.STATUS_STARTED.equals(getStatus())) {
-			Date date = new Date();
-			setUpdated(date);
-			setFailed(date);
-			setStatus(STATUS_FAILED);
-		} else {
-			String msg = getId() + ", '" + getExternalId() + 
-				"': markAsFailed ignored (status == '" + getStatus() + "'";
-			log.warning(msg);
-		}
-	}
-
-	public void markAsAbortRequested() {
-		if ((!STATUS_COMPLETED.equals(getStatus()))
-			&& (!STATUS_FAILED.equals(getStatus()))
-			&& (!STATUS_ABORTED.equals(getStatus()))) {
-			setAbortRequested(new Date());
-			setStatus(STATUS_ABORT_REQUESTED);
-		}
-		return;
-	} // markAsAbortRequested
-
-	public void markAsAborted() {
-		if ((!STATUS_COMPLETED.equals(getStatus()))
-			&& (!STATUS_FAILED.equals(getStatus()))
-			&& (!STATUS_ABORTED.equals(getStatus()))) {
-
-			if (!BatchJob.STATUS_ABORT_REQUESTED.equals(getStatus())) {
-				markAsAbortRequested();
-			}
-			setAborted(new Date());
-			setStatus(STATUS_ABORTED);
-	
-		}
-		return;
-	}
-
-
-	public boolean shouldStop () {
-		if (getStatus().equals(STATUS_ABORT_REQUESTED) || getStatus().equals(STATUS_ABORTED)) return true;
-		else return false;
-	}
-
-
-	public Long ejbCreate(String externalId) throws CreateException {
-		Integer nextId = AutoNumberFactory.getNextInteger(BatchJobHome.AUTONUMBER_IDENTIFIER);
-		Long longId = new Long(nextId.longValue());
-		setId(longId);
-		setExternalId(externalId);
-		setStatus(BatchJob.STATUS_NEW);
-		setRequested(new Date());
-		return null;
-	}
-
-	public void ejbPostCreate(String externalId) { }
-
-	public Long ejbCreate(String externalId, String type) throws CreateException {
-		Long retVal = ejbCreate(externalId);
-		setType(type);
 		return retVal;
 	}
 
-	public void ejbPostCreate(String externalId, String type) { }
+	// -- Instance data
 
-	// EJB callbacks
+	@Id
+	@Column(name = "ID")
+	@TableGenerator(name = "OABA_BATCHJOB", table = "CMT_SEQUENCE",
+			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+			pkColumnValue = "OABA_BATCHJOB")
+	@GeneratedValue(strategy = GenerationType.TABLE,
+			generator = "OABA_BATCHJOB")
+	private long id;
 
-//	public void setEntityContext(EntityContext context) {
-//		ctx = context;
-//	}
-//
-//	public void unsetEntityContext() {
-//		ctx = null;
-//	}
+	@Column(name = "EXTERNAL_ID")
+	private String externalId;
 
-	public void ejbActivate() {
+	@Column(name = "TRANSACTION_ID")
+	private long transactionId;
+
+	@Column(name = "TYPE")
+	private final String type = TABLE_DISCRIMINATOR;
+
+	@Column(name = "DESCRIPTION")
+	private String description;
+
+	@Column(name = "FRACTION_COMPLETE")
+	private int percentageComplete;
+
+	@Column(name = "STATUS")
+	private String status;
+
+	@ElementCollection
+	@MapKeyColumn(name = "TIMESTAMP")
+	@MapKeyTemporal(TemporalType.TIMESTAMP)
+	@Column(name = "STATUS")
+	@CollectionTable(name = "CMT_OABA_BATCHJOB_AUDIT",
+			joinColumns = @JoinColumn(name = "BATCHJOB_ID"))
+	private Map<Date, String> audit = new HashMap<>();
+
+	// -- Construction
+
+	protected BatchJobBean() {
+		this(null);
 	}
 
-	public void ejbPassivate() {
+	public BatchJobBean(String externalId) {
+		setExternalId(externalId);
+		setStatus(STATUS_NEW);
 	}
 
-	public void ejbRemove() {
-		log.fine("Removing " + getExternalId());
+	// -- Accessors
+
+	@Override
+	public long getId() {
+		return id;
 	}
 
-	public void ejbStore() {
+	@Override
+	public String getExternalId() {
+		return externalId;
 	}
 
-	public void ejbLoad() {
+	@Override
+	public long getTransactionId() {
+		return transactionId;
 	}
 
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public int getFractionComplete() {
+		return percentageComplete;
+	}
+
+	@Override
+	public String getStatus() {
+		return status;
+	}
+
+	@Override
+	public String getType() {
+		return type;
+	}
+
+	public Date getTimeStamp(String status) {
+		return this.mostRecentTimestamp(status);
+	}
+
+	/** Backwards compatibility */
+	protected Date mostRecentTimestamp(String status) {
+		// This could be replaced with a named, parameterized query
+		Date retVal = null;
+		if (status != null) {
+			for (Map.Entry<Date, String> e : audit.entrySet()) {
+				if (status.equals(e.getValue())) {
+					if (retVal == null || retVal.compareTo(e.getKey()) < 0) {
+						retVal = e.getKey();
+					}
+				}
+			}
+		}
+		return retVal;
+	}
+
+	@Override
+	public Date getRequested() {
+		return mostRecentTimestamp(STATUS_NEW);
+	}
+
+	@Override
+	public Date getQueued() {
+		return mostRecentTimestamp(STATUS_QUEUED);
+	}
+
+	@Override
+	public Date getStarted() {
+		return mostRecentTimestamp(STATUS_STARTED);
+	}
+
+	@Override
+	public Date getCompleted() {
+		return mostRecentTimestamp(STATUS_COMPLETED);
+	}
+
+	@Override
+	public Date getFailed() {
+		return mostRecentTimestamp(STATUS_FAILED);
+	}
+
+	@Override
+	public Date getAbortRequested() {
+		return mostRecentTimestamp(STATUS_ABORT_REQUESTED);
+	}
+
+	@Override
+	public Date getAborted() {
+		return mostRecentTimestamp(STATUS_ABORTED);
+	}
+
+	// -- Job Control
+
+	public boolean shouldStop() {
+		if (getStatus().equals(STATUS_ABORT_REQUESTED)
+				|| getStatus().equals(STATUS_ABORTED))
+			return true;
+		else
+			return false;
+	}
+
+	// -- Field modifiers
+
+	@Override
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
+	}
+
+	@Override
+	public void setTransactionId(long transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setFractionComplete(int percentage) {
+		if (percentage < MIN_PERCENTAGE_COMPLETED
+				|| percentage > MAX_PERCENTAGE_COMPLETED) {
+			throw new IllegalArgumentException("invalid percentage: "
+					+ percentage);
+		}
+		this.percentageComplete = percentage;
+		// Update the timestamp, indirectly
+		setStatus(getStatus());
+	}
+
+	private void logTransition(String newStatus) {
+		String msg =
+			getId() + ", '" + getExternalId() + "': transitioning from "
+					+ getStatus() + " to " + newStatus;
+		log.warning(msg);
+	}
+
+	private void logIgnoredTransition(String transition) {
+		String msg =
+			getId() + ", '" + getExternalId() + "': " + transition
+					+ " ignored (status == '" + getStatus() + "'";
+		log.warning(msg);
+	}
+
+	@Override
+	public void setStatus(String newStatus) {
+		if (newStatus == null || !validStatus.contains(newStatus)) {
+			throw new IllegalArgumentException("Invalid status: " + newStatus);
+		}
+		this.status = newStatus;
+		setTimeStamp(newStatus, new Date());
+	}
+
+	// Should be invoked only by setStatus(STATUS)
+	protected void setTimeStamp(String status, Date date) {
+		this.audit.put(date, status);
+	}
+
+	// -- State machine
+
+	private static Map<String, Set<String>> allowedTransitions =
+		new HashMap<>();
+	static {
+		Set<String> allowed = new HashSet<>();
+		allowed.add(STATUS_QUEUED);
+		allowed.add(STATUS_ABORT_REQUESTED);
+		allowed.add(STATUS_ABORTED);
+		allowedTransitions.put(STATUS_NEW, allowed);
+		allowed = new HashSet<>();
+		allowed.add(STATUS_QUEUED);
+		allowed.add(STATUS_ABORT_REQUESTED);
+		allowed.add(STATUS_ABORTED);
+		allowedTransitions.put(STATUS_NEW, allowed);
+		allowed = new HashSet<>();
+		allowed.add(STATUS_STARTED);
+		allowed.add(STATUS_ABORT_REQUESTED);
+		allowed.add(STATUS_ABORTED);
+		allowedTransitions.put(STATUS_QUEUED, allowed);
+		allowed = new HashSet<>();
+		allowed.add(STATUS_STARTED);
+		allowed.add(STATUS_COMPLETED);
+		allowed.add(STATUS_FAILED);
+		allowed.add(STATUS_ABORT_REQUESTED);
+		allowed.add(STATUS_ABORTED);
+		allowedTransitions.put(STATUS_STARTED, allowed);
+		allowed = new HashSet<>();
+		allowed.add(STATUS_ABORTED);
+		allowedTransitions.put(STATUS_ABORT_REQUESTED, allowed);
+		// Terminal transitions (unless re-queued/re-started)
+		allowed = new HashSet<>();
+		allowedTransitions.put(STATUS_COMPLETED, allowed);
+		allowed = new HashSet<>();
+		allowedTransitions.put(STATUS_FAILED, allowed);
+		allowed = new HashSet<>();
+		allowedTransitions.put(STATUS_ABORTED, allowed);
+		allowed = new HashSet<>();
+		allowedTransitions.put(STATUS_CLEAR, allowed);
+	}
+
+	public static boolean isAllowedTransition(String current, String next) {
+		if (current == null || next == null) {
+			throw new IllegalArgumentException("null status");
+		}
+		Set<String> allowed = allowedTransitions.get(current);
+		assert allowed != null;
+		boolean retVal = allowed.contains(next);
+		return retVal;
+	}
+
+	@Override
+	public void updateFractionCompleted(int percentageCompleted) {
+		if (percentageCompleted < MIN_PERCENTAGE_COMPLETED || MAX_PERCENTAGE_COMPLETED > 100) {
+			String msg =
+				"invalid percentageCompleted == '" + percentageCompleted + "'";
+			throw new IllegalArgumentException(msg);
+		}
+		if (isAllowedTransition(getStatus(), STATUS_STARTED)) {
+			logTransition(STATUS_STARTED);
+			setStatus(STATUS_STARTED);
+		} else {
+			logIgnoredTransition("updatePercentageCompleted");
+		}
+	}
+
+	@Override
+	public void markAsQueued() {
+		if (isAllowedTransition(getStatus(), STATUS_QUEUED)) {
+			logTransition(STATUS_QUEUED);
+			setStatus(STATUS_QUEUED);
+		} else {
+			logIgnoredTransition("markAsQueued");
+		}
+	}
+
+	@Override
+	public void markAsStarted() {
+		if (isAllowedTransition(getStatus(), STATUS_STARTED)) {
+			logTransition(STATUS_QUEUED);
+			setFractionComplete(MIN_PERCENTAGE_COMPLETED);
+			setStatus(STATUS_STARTED);
+		} else {
+			logIgnoredTransition("markAsStarted");
+		}
+	}
+
+	@Override
+	public void markAsReStarted() {
+		setFractionComplete(MIN_PERCENTAGE_COMPLETED);
+		setStatus(STATUS_QUEUED);
+	}
+
+	@Override
+	public void markAsCompleted() {
+		if (isAllowedTransition(getStatus(), STATUS_COMPLETED)) {
+			logTransition(STATUS_COMPLETED);
+			setFractionComplete(MAX_PERCENTAGE_COMPLETED);
+			setStatus(STATUS_COMPLETED);
+		} else {
+			logIgnoredTransition("markAsCompleted");
+		}
+	}
+
+	@Override
+	public void markAsFailed() {
+		if (isAllowedTransition(getStatus(), STATUS_FAILED)) {
+			logTransition(STATUS_FAILED);
+			setStatus(STATUS_FAILED);
+		} else {
+			logIgnoredTransition("markAsFailed");
+		}
+	}
+
+	@Override
+	public void markAsAbortRequested() {
+		if (isAllowedTransition(getStatus(), STATUS_ABORT_REQUESTED)) {
+			logTransition(STATUS_ABORT_REQUESTED);
+			setStatus(STATUS_ABORT_REQUESTED);
+		} else {
+			logIgnoredTransition("markAsAbortRequested");
+		}
+	}
+
+	@Override
+	public void markAsAborted() {
+		if (isAllowedTransition(getStatus(), STATUS_ABORTED)) {
+			if (!STATUS_ABORT_REQUESTED.equals(getStatus())) {
+				markAsAbortRequested();
+			}
+			logTransition(STATUS_ABORTED);
+			setStatus(STATUS_ABORTED);
+		} else {
+			logIgnoredTransition("markAsAborted");
+		}
+	}
+	
 } // BatchJobBean
 

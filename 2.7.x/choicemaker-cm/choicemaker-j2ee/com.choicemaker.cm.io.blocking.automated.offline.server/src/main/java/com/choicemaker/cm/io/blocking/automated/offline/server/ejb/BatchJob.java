@@ -10,10 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
-import java.rmi.RemoteException;
 import java.util.Date;
-
-import javax.ejb.EJBObject;
 
 import com.choicemaker.cm.core.IControl;
 
@@ -21,112 +18,98 @@ import com.choicemaker.cm.core.IControl;
  * @author rphall
  *
  */
-public interface BatchJob extends EJBObject, IControl{
+public interface BatchJob extends IControl {
 
-	public static String STATUS_NEW = "NEW";
-	public static String STATUS_QUEUED = "QUEUED";
-	public static String STATUS_STARTED = "STARTED";
-	public static String STATUS_COMPLETED = "COMPLETED";
-	public static String STATUS_FAILED = "FAILED";
-	public static String STATUS_ABORT_REQUESTED = "ABORT_REQUESTED";
-	public static String STATUS_ABORTED = "ABORTED";
-	public static String CLEAR = "CLEAR";
+	String DEFAULT_EJB_REF_NAME = "ejb/BatchJob";
+	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
+	String AUTONUMBER_IDENTIFIER = "OabaBatchJobID";
 
-	// CMP fields
-	/** For CMP only */
-	void setId(Long id) throws RemoteException;
-	Long getId() throws RemoteException;
+	int MIN_PERCENTAGE_COMPLETED = 0;
+	int MAX_PERCENTAGE_COMPLETED = 100;
 
-	/** For CMP only */
-	void setExternalId(String externalId) throws RemoteException;
-	String getExternalId() throws RemoteException;
+	String STATUS_NEW = "NEW";
+	String STATUS_QUEUED = "QUEUED";
+	String STATUS_STARTED = "STARTED";
+	String STATUS_COMPLETED = "COMPLETED";
+	String STATUS_FAILED = "FAILED";
+	String STATUS_ABORT_REQUESTED = "ABORT_REQUESTED";
+	String STATUS_ABORTED = "ABORTED";
+	String STATUS_CLEAR = "STATUS_CLEAR";
 
-	/** For CMP only */
-	void setTransactionId(Long id) throws RemoteException;
-	Long getTransactionId() throws RemoteException;
+	// -- Accessors
 
-	/** For CMP only */
-	void setType(String type) throws RemoteException;
-	String getType() throws RemoteException;
-	
-	/** For CMP only */
-	void setDescription(String description) throws RemoteException;
-	String getDescription() throws RemoteException;
+	long getId();
 
-	/** For CMP only; use markAsXxx() methods instead */
-	void setStatus(String status) throws RemoteException;
-	String getStatus() throws RemoteException;
+	String getExternalId();
 
-	/** For CMP only: use updateFractionCompleted(float) instead */
-	void setFractionComplete(int i) throws RemoteException;
-	int getFractionComplete() throws RemoteException;
+	long getTransactionId();
 
-	/** For CMP only */
-	void setRequested(Date date) throws RemoteException;
-	Date getRequested() throws RemoteException;
+	String getType();
 
-	/** For CMP only; use markAsQueued() method instead */
-	void setQueued(Date queued) throws RemoteException;
-	Date getQueued() throws RemoteException;
+	String getDescription();
 
-	/** For CMP only; use markAsStarted() method instead */
-	void setStarted(Date started) throws RemoteException;
-	Date getStarted() throws RemoteException;
+	String getStatus();
 
-	/** For CMP only; use markAsUpdated() method instead */
-	void setUpdated(Date updated) throws RemoteException;
-	Date getUpdated() throws RemoteException;
+	int getFractionComplete();
 
-	/** For CMP only; use markAsCompleted() method instead */
-	void setCompleted(Date completed) throws RemoteException;
-	Date getCompleted() throws RemoteException;
+	Date getRequested();
 
-	/** For CMP only; use markAsFailed() method instead */
-	void setFailed(Date failed) throws RemoteException;
-	Date getFailed() throws RemoteException;
+	Date getQueued();
 
-	/** For CMP only; use markAsAbortRequested() method instead */
-	void setAbortRequested(Date abortRequested) throws RemoteException;
-	Date getAbortRequested() throws RemoteException;
+	Date getStarted();
 
-	/** For CMP only; use markAsAborted() method instead */
-	void setAborted(Date aborted) throws RemoteException;
-	Date getAborted() throws RemoteException;
-	
-	// State machine
+	Date getCompleted();
 
-	void markAsQueued() throws RemoteException;
+	Date getFailed();
 
-	void markAsStarted() throws RemoteException;
+	Date getAbortRequested();
 
+	Date getAborted();
 
-	/** This method is called when the job is restarted.  This method doesn't check id the
-	 * status is current queued.
-	 *
+	// -- Modifiers
+
+	void setExternalId(String externalId);
+
+	void setTransactionId(long id);
+
+	void setDescription(String description);
+
+	/** Use markAsXxx() methods instead */
+	void setStatus(String status);
+
+	/** Use updateFractionCompleted(float) instead */
+	void setFractionComplete(int i);
+
+	// -- State machine
+
+	void markAsQueued();
+
+	void markAsStarted();
+
+	/**
+	 * This method is called when the job is restarted. This method doesn't
+	 * check id the status is current queued.
 	 */
-	void markAsReStarted() throws RemoteException;
+	void markAsReStarted();
 
-	void markAsCompleted() throws RemoteException;
+	void markAsCompleted();
 
-	void markAsFailed() throws RemoteException;
+	void markAsFailed();
 
-	void markAsAbortRequested() throws RemoteException;
+	void markAsAbortRequested();
 
-	void markAsAborted() throws RemoteException;
+	void markAsAborted();
 
-	// Business method(s)
-		
+	// -- Business methods
+
 	/**
 	 * This operation has effect only if job status is STARTED.
-	 * @param fractionCompleted an non-negative fraction not greater than 1.0f
+	 * 
+	 * @param fractionCompleted
+	 *            an non-negative integer between 0 and 100
 	 */
-	void updateFractionCompleted(int fractionCompleted)
-		throws RemoteException;
+	void updateFractionCompleted(int fractionCompleted);
 
+	public boolean shouldStop();
 
-	public boolean shouldStop ();
-
-		
 } // BatchJob
-
-

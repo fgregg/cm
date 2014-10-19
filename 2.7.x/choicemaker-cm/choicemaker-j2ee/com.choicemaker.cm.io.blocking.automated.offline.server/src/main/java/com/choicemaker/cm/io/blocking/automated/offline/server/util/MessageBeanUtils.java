@@ -43,7 +43,7 @@ public class MessageBeanUtils {
 		
 		batchJob.markAsAborted();
 					
-		if (batchJob.getDescription().equals(BatchJob.CLEAR)) {
+		if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
 			status.setStatus (IStatus.DONE_PROGRAM);
 				
 			log.info("Removing Temporary directory.");

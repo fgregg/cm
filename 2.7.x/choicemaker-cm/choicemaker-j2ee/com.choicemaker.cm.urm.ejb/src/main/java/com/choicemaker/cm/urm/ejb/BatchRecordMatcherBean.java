@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.FinderException;
-import javax.ejb.RemoveException;
 import javax.jms.JMSException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -289,49 +288,33 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 		BatchJob batchJob;
 		while (jobIter.hasNext()) {
 			batchJob = (BatchJob) jobIter.next();
-			res[ind++] = batchJob.getId().longValue(); 
+			res[ind++] = batchJob.getId(); 
 		}
 		log.fine(">>getJobList");
 		return res;
 	}
+
 	/**
-	 * Cleans serialized data related to the process with the give job ID (including the file with matching results).
+	 * Cleans serialized data and database entries related to the process with
+	 * the give job ID (including the file with matching results)
 	 * 
-	 * @param   jobID		Job ID.
-	 * @return  Job ID.
-	 * @throws  RemoteException
-	*/	
-	public boolean					cleanJob (
-										long jobID
-									)
-									throws	ArgumentException,
-											CmRuntimeException,
-											ConfigException, 
-											RemoteException
-		
-	{
+	 * @param jobID
+	 *            Job ID.
+	 * @return true if the serialized data was removed successfully (the job
+	 * itself is removed regardless)
+	 * @throws RemoteException
+	 */
+	public boolean cleanJob(long jobID) throws CmRuntimeException {
 		try {
 			BatchQueryService qs = Single.getInst().getBatchQueryService();
 			boolean ret = qs.removeDir(jobID);
 			BatchJob bj = Single.getInst().findBatchJobById(jobID);
-			bj.remove();
+			Single.getInst().deleteBatchJob(bj);
 			return ret;
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (CreateException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
+		} catch (Exception e) {
 			log.severe(e.toString());
 			throw new CmRuntimeException(e.toString());
-		} catch (RemoveException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		}	
+		}
 	}
 
 	public Iterator	getResultIter(RefRecordCollection rc)

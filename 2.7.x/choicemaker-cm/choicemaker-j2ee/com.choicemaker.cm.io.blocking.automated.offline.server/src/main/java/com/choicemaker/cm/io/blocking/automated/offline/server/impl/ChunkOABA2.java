@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
 import javax.ejb.EJBException;
@@ -177,11 +176,7 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 		} catch (BlockingException e) {
 			log.severe(e.toString());
 			assert batchJob != null;
-			try {
-				batchJob.markAsFailed();
-			} catch (RemoteException e1) {
-				log.severe(e1.toString());
-			}
+			batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
 			e.printStackTrace();

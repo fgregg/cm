@@ -14,6 +14,7 @@ import com.choicemaker.cm.persist0.BatchParametersBean.NamedQuery;
 
 @Stateless
 public class BatchParametersController {
+
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 

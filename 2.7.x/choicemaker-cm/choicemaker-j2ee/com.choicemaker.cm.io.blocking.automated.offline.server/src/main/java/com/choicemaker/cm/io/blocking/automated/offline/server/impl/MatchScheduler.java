@@ -182,11 +182,8 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (BlockingException e) {
-			try {
-				if (batchJob != null) batchJob.markAsFailed();
-			} catch (RemoteException e1) {
-				log.severe(e1.toString());
-			}
+			if (batchJob != null)
+				batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
 		}
@@ -215,7 +212,7 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			batchJob.markAsAborted();
 					
-			if (batchJob.getDescription().equals(BatchJob.CLEAR)) {
+			if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
 				status.setStatus (IStatus.DONE_PROGRAM);
 				oabaConfig.removeTempDir();
 			}

@@ -52,7 +52,7 @@ public class BatchQueryListener extends WorkflowControlListener{
 								CmRuntimeException,SQLException,CreateException,ArgumentException,ModelException {
 
 		BatchJob batchJob = Single.getInst().findBatchJobById(batchJobId);
-		long urmJobId = batchJob.getTransactionId().longValue();
+		long urmJobId = batchJob.getTransactionId();
 		return urmJobId;
 	}
 			

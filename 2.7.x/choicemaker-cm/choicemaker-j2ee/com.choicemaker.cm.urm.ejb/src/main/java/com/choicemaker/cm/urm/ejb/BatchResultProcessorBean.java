@@ -130,15 +130,8 @@ public class BatchResultProcessorBean implements SessionBean {
 		log.fine("<<startResultToMrpsConversion");
 		long batchJobId = -1;
 		
-		BatchJob bj = null;
-		try {
-			bj = Single.getInst().findBatchJobById(jobId);
-			batchJobId = bj.getId().longValue();
-		} catch (ConfigException e1) {
-			log.fine(e1.toString());
-		} catch (CmRuntimeException e1) {
-			log.fine(e1.toString());
-		}
+		BatchJob bj = Single.getInst().findBatchJobById(jobId);
+		batchJobId = bj.getId();
 		
 		if(batchJobId == -1){		
 			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(jobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					

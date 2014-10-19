@@ -50,7 +50,7 @@ public class TransOabaListener extends WorkflowControlListener{
 
 //		TransitivityJob job = Single.getInst().findTransJobById(jobId);
 		BatchJob job = Single.getInst().findBatchJobById(jobId);
-		long urmJobId = job.getTransactionId().longValue();		
+		long urmJobId = job.getTransactionId();		
 
 		return urmJobId;
 	}

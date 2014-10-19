@@ -179,11 +179,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 		} catch (BlockingException e) {
 			log.severe(e.toString());
 			assert batchJob != null;
-			try {
-				batchJob.markAsFailed();
-			} catch (RemoteException e1) {
-				log.severe(e1.toString());
-			}
+			batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
 		}

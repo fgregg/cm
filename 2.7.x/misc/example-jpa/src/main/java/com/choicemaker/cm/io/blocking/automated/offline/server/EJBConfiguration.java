@@ -35,7 +35,6 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 
 
 /**
@@ -541,7 +540,7 @@ public class EJBConfiguration implements Serializable {
 //		return retVal;
 	}
 
-	public TransitivityJob findTransitivityJobById(long id)
+	public /* TransitivityJob */ Object findTransitivityJobById(long id)
 			throws RemoteException, FinderException, NamingException {
 		throw new Error("not yet implemented");
 //		TransitivityJobHome home = getTransitivityJobHome();
@@ -569,7 +568,7 @@ public class EJBConfiguration implements Serializable {
 	 * @param jobId
 	 * @return TransitivityJob
 	 */
-	public TransitivityJob getTransitivityJob(long jobId)
+	public /* TransitivityJob */ Object getTransitivityJob(long jobId)
 			throws RemoteException, CreateException, NamingException,
 			SQLException {
 		throw new Error("not yet implemented");

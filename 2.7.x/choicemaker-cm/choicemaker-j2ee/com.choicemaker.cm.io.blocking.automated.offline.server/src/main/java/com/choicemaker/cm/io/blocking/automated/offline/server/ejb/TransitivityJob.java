@@ -30,7 +30,7 @@ public interface TransitivityJob extends EJBObject, IControl {
 	public static String STATUS_FAILED = "FAILED";
 	public static String STATUS_ABORT_REQUESTED = "ABORT_REQUESTED";
 	public static String STATUS_ABORTED = "ABORTED";
-	public static String CLEAR = "CLEAR";
+	public static String CLEAR = "STATUS_CLEAR";
 
 	// CMP fields
 	/** For CMP only */
