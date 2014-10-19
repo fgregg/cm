@@ -19,7 +19,7 @@ public class EJBConfigurationIT {
 //	public static EnterpriseArchive createEarArchive() {
 //		List<Class<?>> testClasses = new ArrayList<>();
 //		testClasses.add(EJBConfigurationIT.class);
-//		testClasses.add(OabaUtils.class);
+//		testClasses.add(OabaConstants.class);
 //
 //		JavaArchive ejb =
 //			DeploymentUtils.createEjbJar(PROJECT_POM, EJB_MAVEN_COORDINATES,
