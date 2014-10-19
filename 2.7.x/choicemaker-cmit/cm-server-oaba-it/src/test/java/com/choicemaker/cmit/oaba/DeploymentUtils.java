@@ -122,7 +122,7 @@ public class DeploymentUtils {
 	 *            otherwise, the JAR will be added a library JAR.
 	 * @return
 	 */
-	public static Archive<?> createEAR(JavaArchive tests, File[] libs,
+	public static EnterpriseArchive createEAR(JavaArchive tests, File[] libs,
 			boolean testsAsEjbModule) {
 		EnterpriseArchive retVal = ShrinkWrap.create(EnterpriseArchive.class);
 		retVal.addAsLibraries(libs);
@@ -150,7 +150,7 @@ public class DeploymentUtils {
 	 * @param testsAsEjbModule
 	 * @return
 	 */
-	public static Archive<?> createEAR(String mavenCoordinates,
+	public static EnterpriseArchive createEAR(String mavenCoordinates,
 			boolean testsAsEjbModule) {
 		PomEquippedResolveStage pom = resolvePom(DEFAULT_POM_FILE);
 		File[] libs = resolveDependencies(pom);
@@ -158,7 +158,7 @@ public class DeploymentUtils {
 			createJAR(pom, mavenCoordinates, DEFAULT_MODULE_NAME,
 					DEFAULT_TEST_CLASSES_PATH,
 					DEFAULT_PATH_TO_PERSISTENCE_CONFIG, DEFAULT_HAS_BEANS);
-		Archive<?> retVal = createEAR(tests, libs, testsAsEjbModule);
+		EnterpriseArchive retVal = createEAR(tests, libs, testsAsEjbModule);
 		return retVal;
 	}
 

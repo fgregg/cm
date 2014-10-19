@@ -1,22 +1,40 @@
-package com.choicemaker.cmit.oaba.server.data;
+package com.choicemaker.cmit.oaba;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import static com.choicemaker.cmit.oaba.DeploymentUtils.DEFAULT_HAS_BEANS;
+import static com.choicemaker.cmit.oaba.DeploymentUtils.DEFAULT_MODULE_NAME;
+import static com.choicemaker.cmit.oaba.DeploymentUtils.DEFAULT_POM_FILE;
+import static com.choicemaker.cmit.oaba.DeploymentUtils.DEFAULT_TEST_CLASSES_PATH;
+import static com.choicemaker.cmit.oaba.DeploymentUtils.createJAR;
+import static com.choicemaker.cmit.oaba.DeploymentUtils.resolveDependencies;
+import static com.choicemaker.cmit.oaba.DeploymentUtils.resolvePom;
+import static com.choicemaker.cmit.oaba.util.OabaConstants.CURRENT_MAVEN_COORDINATES;
+import static com.choicemaker.cmit.oaba.util.OabaConstants.PERSISTENCE_CONFIGURATION;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-//@RunWith(Arquillian.class)
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
+
+@RunWith(Arquillian.class)
 public class EJBConfigurationIT {
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
+	public static final boolean TESTS_AS_EJB_MODULE = false;
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-//	@Deployment
-//	public static EnterpriseArchive createEarArchive() {
+	@Deployment
+	public static EnterpriseArchive createEarArchive() {
 //		List<Class<?>> testClasses = new ArrayList<>();
 //		testClasses.add(EJBConfigurationIT.class);
 //		testClasses.add(OabaConstants.class);
@@ -29,6 +47,23 @@ public class EJBConfigurationIT {
 //
 //		EnterpriseArchive retVal = DeploymentUtils.createEarArchive(ejb, deps);
 //		return retVal;
+		PomEquippedResolveStage pom = resolvePom(DEFAULT_POM_FILE);
+		File[] libs = resolveDependencies(pom);
+		JavaArchive tests =
+			createJAR(pom, CURRENT_MAVEN_COORDINATES, DEFAULT_MODULE_NAME,
+					DEFAULT_TEST_CLASSES_PATH,
+					PERSISTENCE_CONFIGURATION, DEFAULT_HAS_BEANS);
+		EnterpriseArchive retVal =
+			DeploymentUtils.createEAR(tests, libs, TESTS_AS_EJB_MODULE);
+		return retVal;
+	}
+
+//	@BeforeClass
+//	public static void setUpBeforeClass() throws Exception {
+//	}
+
+//	@AfterClass
+//	public static void tearDownAfterClass() throws Exception {
 //	}
 
 //	private EJBConfiguration ejbc;
@@ -38,7 +73,7 @@ public class EJBConfigurationIT {
 //		this.ejbc = EJBConfiguration.getInstance();
 //		assertTrue(this.ejbc != null);
 //	}
-//
+
 //	@After
 //	public void tearDown() throws Exception {
 //		this.ejbc = null;
@@ -46,24 +81,24 @@ public class EJBConfigurationIT {
 	
 	@Test
 	public void testEBJConfiguration() {
-//		assertTrue(ejbc != null);
+		assertTrue(EJBConfiguration.getInstance() != null);
 	}
 
-//	@Test
-//	public void testGetEntityManager() {
-//		EntityManager em = ejbc.getEntityManager();
-//		assertTrue(em != null);
-//	}
-//
-//	@Test
-//	public void testGetInitialContext() {
-//		try {
-//			Context ic = ejbc.getInitialContext();
-//			assertTrue(ic != null);
-//		} catch (NamingException e) {
-//			fail(e.toString());
-//		}
-//	}
+	@Test
+	public void testGetEntityManager() {
+		EntityManager em = EJBConfiguration.getInstance().getEntityManager();
+		assertTrue(em != null);
+	}
+
+	@Test
+	public void testGetInitialContext() {
+		try {
+			Context ic = EJBConfiguration.getInstance().getInitialContext();
+			assertTrue(ic != null);
+		} catch (NamingException e) {
+			fail(e.toString());
+		}
+	}
 
 	/*
 	 * @Test public void testGetTopicConnectionFactory() {
@@ -131,30 +166,30 @@ public class EJBConfigurationIT {
 //	@Test
 //	public void testCreateFindRemove() {
 //		// Count existing jobs
-//		final int initialCount = ejbc.findAllBatchJobs().size();
+//		final int initialCount = EJBConfiguration.getInstance().findAllBatchJobs().size();
 //
 //		// Create a job
 //		final String extId = "EXT ID: " + new Date().toString();
-//		BatchJob job = ejbc.createBatchJob(extId);
+//		BatchJob job = EJBConfiguration.getInstance().createBatchJob(extId);
 //		assertTrue(job != null);
 //		assertTrue(job.getId() != 0);
 //
 //		// Recount the jobs
-//		final int intermediateCount = ejbc.findAllBatchJobs().size();
+//		final int intermediateCount = EJBConfiguration.getInstance().findAllBatchJobs().size();
 //		assertTrue(intermediateCount == initialCount + 1);
 //
 //		// Find the job
-//		BatchJob job2 = ejbc.findBatchJobById(job.getId());
+//		BatchJob job2 = EJBConfiguration.getInstance().findBatchJobById(job.getId());
 //		assertTrue(job.getId() == job2.getId());
 //		assertTrue(job.equals(job2));
 //
 //		// Delete the job
-//		ejbc.deleteBatchJob(job2);
-//		BatchJob job3 = ejbc.findBatchJobById(job.getId());
+//		EJBConfiguration.getInstance().deleteBatchJob(job2);
+//		BatchJob job3 = EJBConfiguration.getInstance().findBatchJobById(job.getId());
 //		assertTrue(job3 == null);
 //
 //		// Check that the number of existing jobs equals the initial count
-//		assertTrue(initialCount == ejbc.findAllBatchJobs().size());
+//		assertTrue(initialCount == EJBConfiguration.getInstance().findAllBatchJobs().size());
 //	}
 
 	/*
