@@ -15,6 +15,9 @@ import java.util.logging.Logger;
 
 import org.eclipse.core.boot.IPlatformRunnable;
 
+import com.choicemaker.e2.platform.InstallablePlatform;
+import com.choicemaker.e2.plugin.InstallablePluginDiscovery;
+
 /**
  * A wrapper around ModelMaker that adapts it as an IPlatformRunnable
  * instance.
@@ -28,6 +31,29 @@ public class ModelMakerStd extends ModelMaker implements IPlatformRunnable {
 	public static Logger logger = Logger.getLogger(ModelMakerStd.class.getName());
 	
 	public static String PLUGIN_APPLICATION_ID = "com.choicemaker.cm.modelmaker.ModelMakerStd";
+
+  protected static String STANDARD_PLATFORM =
+    "com.choicemaker.e2.standard.StandardPlatform";
+
+  protected static String STANDARD_PLUGIN_DISCOVERY =
+    "com.choicemaker.e2.std.plugin.StandardPluginDiscovery";
+
+	/**
+	 * Calls the {@link ModelMaker#_setEclipse2ConfigurationProperties()
+	 * parent method}, then configures System properties that specify
+	 * the standard Eclipse 2 platform and plugin discovery classes.
+	 */
+	protected void _setEclipse2ConfigurationProperties() {
+		super._setEclipse2ConfigurationProperties();
+
+		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
+		String pv = STANDARD_PLATFORM;
+		System.setProperty(pn,pv);
+		
+		pn = InstallablePluginDiscovery.INSTALLABLE_PLUGIN_DISCOVERY;
+		pv = STANDARD_PLUGIN_DISCOVERY;
+		System.setProperty(pn,pv);
+	}
 
 	/**
 	 * Displays the GUI of an instance; waits for user input; and tears down the

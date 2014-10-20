@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# 2013-08-01 rphall
-# Bash script to start ProductionModelsJarBuilder 
-# Tweak the JAVA variable to point at a 1.4.2 JDK or JRE.
-# Later or earlier JVM's won't work.
+# 2014-10-20 rphall
+# Bash script to start CM Analyzer as a plain old Java application.
+# Tweak the JAVA variable to point at a 1.7 JRE or JDK.
+# Earlier JVMs won't work, and later JVMs haven't been tested.
 # See http://java.sun.com/products/archive
 #
 APP_DIR="`dirname "$0"`"
@@ -13,6 +13,7 @@ APP="com.choicemaker.cm.modelmaker.ModelMaker"
 WORKSPACE="/tmp/cm-analyzer_runtime_workspace"
 
 # Java command
+#JAVA="/usr/java/jdk1.7.0_55/bin/java"
 JAVA=/usr/bin/java
 
 # Recommended memory allocations

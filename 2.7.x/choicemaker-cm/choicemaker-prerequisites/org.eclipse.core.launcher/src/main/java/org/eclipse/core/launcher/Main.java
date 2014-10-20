@@ -379,7 +379,12 @@ private String[] getArrayFromList(String prop) {
  */
 public Class getBootLoader(URL[] path) throws Exception {
 	URLClassLoader loader = new URLClassLoader(path, null);
-	return loader.loadClass(BOOTLOADER);
+	// 2014-10-20 rphall: Fixed a potential resource leak
+	// return loader.loadClass(BOOTLOADER);
+	Class retVal = loader.loadClass(BOOTLOADER);
+	loader.close();
+	loader = null;
+	return retVal;
 }
 /**
  * Returns the <code>URL</code>-based class path describing where the boot classes

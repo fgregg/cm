@@ -1496,7 +1496,16 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	public static void processLicenseFile() {
 		// 2009-07-06 rphall
 		// Removed license validation for open-source release
-	} // processLicenseFile()
+	}
+
+	/**
+	 * An overrideable version of {@link #processLicenseFile() the static method
+	 * processLicenseFile()}, invoked during ModelMaker {@link #startup(Object)
+	 * startup}.
+	 */
+	protected void _processLicenseFile() {
+		processLicenseFile();
+	}
 
 	private static String CONF_ARG = "-conf";
 	private static String LOG_ARG = CompilationArguments.LOGGING_CONFIGURATION_NAME;
@@ -1552,6 +1561,15 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	}
 
 	/**
+	 * An overrideable version of {@link #setEclipse2ConfigurationProperties()
+	 * the static method setEclipse2ConfigurationProperties()}, invoked during
+	 * ModelMaker {@link #startup(Object) startup}.
+	 */
+	protected void _setEclipse2ConfigurationProperties() {
+		setEclipse2ConfigurationProperties();
+	}
+
+	/**
 	 * Performs all initializations for an instance to that it is ready to
 	 * {@link run(Object) run}.
 	 * 
@@ -1567,8 +1585,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			args = (String[]) args2;
 		}
 		// defineFrameLookAndFeel();
-		processLicenseFile();
-		setEclipse2ConfigurationProperties();
+		_processLicenseFile();
+		_setEclipse2ConfigurationProperties();
 
 		// Must skip unknown arguments, since this method will be passed
 		// (unknown) Eclipse arguments as well as ModelMaker arguments
