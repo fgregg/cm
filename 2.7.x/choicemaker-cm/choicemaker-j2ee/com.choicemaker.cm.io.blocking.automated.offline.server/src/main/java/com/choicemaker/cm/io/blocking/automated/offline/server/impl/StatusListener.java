@@ -18,6 +18,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 
 /**
@@ -46,6 +48,9 @@ public class StatusListener implements MessageDrivenBean, MessageListener {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(StatusListener.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + StatusListener.class.getName());
+
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
 

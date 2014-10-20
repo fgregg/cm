@@ -20,6 +20,7 @@ import javax.ejb.CreateException;
 import javax.ejb.FinderException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
@@ -54,6 +55,9 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 		log = Logger.getLogger(BatchMatchAnalyzerBean.class.getName());
 	}
 	
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
+
 	public BatchMatchAnalyzerBean() {
 		super();
 	}
@@ -187,7 +191,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 			if(stepJobId != JobStatus.UNDEFINED_ID){
 				switch(stepIndex){
 					case BATCH_MATCH_STEP_INDEX :{
-						BatchJob bj = Single.getInst().findBatchJobById(stepJobId);
+						BatchJob bj = Single.getInst().findBatchJobById(em, stepJobId);
 						stepStatus = bj.getStatus();
 						if( js.getStatus().equals(JobStatus.STATUS_COMPLETED))
 							js.setFinishDate(bj.getCompleted());
@@ -258,7 +262,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 
 			BatchQueryService qs = Single.getInst().getBatchQueryService();
 			boolean ret = qs.removeDir(batchJobId);
-			Single.getInst().removeUrmJob(urmJobId);
+			Single.getInst().removeUrmJob(em, urmJobId);
 			return ret;
 		} catch (NamingException e) {
 			log.severe(e.toString());

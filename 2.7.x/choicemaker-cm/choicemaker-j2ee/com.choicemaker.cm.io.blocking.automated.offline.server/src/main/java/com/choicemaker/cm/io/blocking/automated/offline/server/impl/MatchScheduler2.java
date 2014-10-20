@@ -25,6 +25,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -70,9 +72,9 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 	private static final Logger log = Logger.getLogger(MatchScheduler2.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MatchScheduler2.class.getName());
 	
-	/** This should be greater or equal to the number of instances of the Matcher Bean.
-	 * 
-	 */
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
+
 	private transient MessageDrivenContext mdc = null;
 	protected transient EJBConfiguration configuration = null;
 	protected transient OABAConfiguration oabaConfig = null;
@@ -187,7 +189,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 							inHMLookUp = new long [numProcessors];
 						}
 					
-						batchJob = configuration.findBatchJobById(data.jobID);
+						batchJob = configuration.findBatchJobById(em, data.jobID);
 					
 						//start matching
 						startMatch ();
@@ -237,7 +239,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 		FinderException, XmlConfException, BlockingException, NamingException, JMSException {
 		
 		oabaConfig = new OABAConfiguration (d.stageModelName, d.jobID);
-		BatchJob batchJob = configuration.findBatchJobById(d.jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, d.jobID);
 		data = new StartData (d);
 		IStatus status = configuration.getStatusLog(data);
 
@@ -334,7 +336,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 		
 		//init values
 		IStatus status = configuration.getStatusLog(data);
-		BatchJob batchJob = configuration.findBatchJobById(data.jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, data.jobID);
 		
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			MessageBeanUtils.stopJob (batchJob, status, oabaConfig);

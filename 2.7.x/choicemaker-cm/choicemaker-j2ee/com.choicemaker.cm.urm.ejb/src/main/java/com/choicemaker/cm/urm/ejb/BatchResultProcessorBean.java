@@ -21,6 +21,7 @@ import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.Queue;
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
@@ -47,6 +48,9 @@ public class BatchResultProcessorBean implements SessionBean {
 	protected static Logger log = Logger.getLogger(BatchResultProcessorBean.class.getName());
 	
 	public final static String JMS_MRPS_PROCESSOR_QUEUE = "java:comp/env/jms/mrpsProcessorQueue";
+
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
 
 	protected transient SessionContext sessionContext;
 	protected static boolean initialized = false;
@@ -130,14 +134,14 @@ public class BatchResultProcessorBean implements SessionBean {
 		log.fine("<<startResultToMrpsConversion");
 		long batchJobId = -1;
 		
-		BatchJob bj = Single.getInst().findBatchJobById(jobId);
+		BatchJob bj = Single.getInst().findBatchJobById(em, jobId);
 		batchJobId = bj.getId();
 		
 		if(batchJobId == -1){		
 			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(jobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					
 			batchJobId  = batchStep.getStepJobId().longValue();		
 			log.fine("batch job jd = "+batchJobId);		
-			bj  = Single.getInst().findBatchJobById(batchJobId);
+			bj  = Single.getInst().findBatchJobById(em, batchJobId);
 		}
 				
 		CmsJob oj = Single.getInst().createCmsJob(externalId, JobStatus.UNDEFINED_ID);

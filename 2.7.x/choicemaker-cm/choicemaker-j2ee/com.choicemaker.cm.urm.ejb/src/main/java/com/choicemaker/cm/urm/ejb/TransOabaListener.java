@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.ejb.CreateException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
@@ -36,6 +37,9 @@ public class TransOabaListener extends WorkflowControlListener{
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(TransOabaListener.class.getName());
 
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
+
 	/**
 	 * Constructor, which is public and takes no arguments.
 	 */
@@ -49,7 +53,7 @@ public class TransOabaListener extends WorkflowControlListener{
 								CmRuntimeException,SQLException,CreateException,ArgumentException,ModelException {
 
 //		TransitivityJob job = Single.getInst().findTransJobById(jobId);
-		BatchJob job = Single.getInst().findBatchJobById(jobId);
+		BatchJob job = Single.getInst().findBatchJobById(em,jobId);
 		long urmJobId = job.getTransactionId();		
 
 		return urmJobId;

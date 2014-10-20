@@ -30,6 +30,7 @@ import javax.jms.TopicConnectionFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
@@ -424,8 +425,11 @@ public class Single implements Serializable {
 		return usj;
 	}
 
-	public void removeUrmJob(long urmJobId)
+	public void removeUrmJob(EntityManager em, long urmJobId)
 		throws ConfigException, CmRuntimeException {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
 		UrmJob uj = findUrmJobById(urmJobId);
 		Collection col = Single.getInst().findStepJobsByUrmId(urmJobId);
 		Iterator it = col.iterator();
@@ -445,8 +449,8 @@ public class Single implements Serializable {
 				switch (si) {
 					case BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX :
 						{
-							BatchJob job = findBatchJobById(stepJobId);
-							EJBConfiguration.getInstance().deleteBatchJob(job);
+							BatchJob job = findBatchJobById(em, stepJobId);
+							EJBConfiguration.getInstance().deleteBatchJob(em, job);
 						}
 						break;
 					case BatchMatchAnalyzerBean.TRANS_OABA_STEP_INDEX :
@@ -490,14 +494,18 @@ public class Single implements Serializable {
 		}
 	}
 
-	public BatchJob findBatchJobById(long id) {
-		BatchJob retVal = EJBConfiguration.getInstance().findBatchJobById(id);
+	public BatchJob findBatchJobById(EntityManager em, long id) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		BatchJob retVal =
+			EJBConfiguration.getInstance().findBatchJobById(em, id);
 		return retVal;
 	}
 
-	public void deleteBatchJob(BatchJob job) {
+	public void deleteBatchJob(EntityManager em, BatchJob job) {
 		if (job != null) {
-			EJBConfiguration.getInstance().deleteBatchJob(job);
+			EJBConfiguration.getInstance().deleteBatchJob(em, job);
 		}
 	}
 
@@ -525,8 +533,11 @@ public class Single implements Serializable {
 		}
 	}
 
-	public Collection getBatchJobList() {
-		List jobs = EJBConfiguration.getInstance().findAllBatchJobs();
+	public Collection getBatchJobList(EntityManager em) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		List jobs = EJBConfiguration.getInstance().findAllBatchJobs(em);
 		return jobs;
 	}
 

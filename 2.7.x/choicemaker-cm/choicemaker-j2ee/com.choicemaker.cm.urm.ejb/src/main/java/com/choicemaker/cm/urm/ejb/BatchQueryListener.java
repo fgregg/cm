@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.ejb.CreateException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAService;
@@ -37,6 +38,9 @@ public class BatchQueryListener extends WorkflowControlListener{
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(BatchQueryListener.class.getName());
 
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
+
 	/**
 	 * Constructor, which is public and takes no arguments.
 	 */
@@ -46,12 +50,11 @@ public class BatchQueryListener extends WorkflowControlListener{
 	
 	protected boolean isAbortCheckRequired() {return true;}
 
-
 	protected long getUrmJobId(long batchJobId) 
 								throws NamingException,RemoteException,JMSException,ConfigException,
 								CmRuntimeException,SQLException,CreateException,ArgumentException,ModelException {
 
-		BatchJob batchJob = Single.getInst().findBatchJobById(batchJobId);
+		BatchJob batchJob = Single.getInst().findBatchJobById(em, batchJobId);
 		long urmJobId = batchJob.getTransactionId();
 		return urmJobId;
 	}

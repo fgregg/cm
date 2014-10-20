@@ -24,6 +24,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
@@ -52,6 +54,9 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(MatchDedupOABA.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MatchDedupOABA.class.getName());
+
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
@@ -97,7 +102,7 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
-				batchJob = configuration.findBatchJobById(data.jobID);
+				batchJob = configuration.findBatchJobById(em, data.jobID);
 
 				//init values
 				// 2014-04-24 rphall: Commented out unused local variable.

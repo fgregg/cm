@@ -29,6 +29,8 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -68,6 +70,9 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 	private static final Logger log = Logger.getLogger(MatchDedupOABA2.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatchDedupOABA2.class.getName());
+
+	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
 
 	protected transient MessageDrivenContext mdc;
 	protected transient EJBConfiguration configuration;
@@ -172,7 +177,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 			BlockingException, NamingException, JMSException {
 
 		MatchWriterData d = (MatchWriterData) o;
-		batchJob = configuration.findBatchJobById(d.jobID);
+		batchJob = configuration.findBatchJobById(em, d.jobID);
 
 		// init values
 		ImmutableProbabilityModel stageModel =
@@ -220,7 +225,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 			FinderException, BlockingException, NamingException, JMSException {
 
 		data = (StartData) o;
-		batchJob = configuration.findBatchJobById(data.jobID);
+		batchJob = configuration.findBatchJobById(em, data.jobID);
 
 		// init values
 		ImmutableProbabilityModel stageModel =

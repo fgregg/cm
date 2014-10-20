@@ -23,6 +23,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
@@ -47,6 +49,9 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(MatcherTest.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MatcherTest.class.getName());
+
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
 	protected transient EJBConfiguration configuration = null;
@@ -117,7 +122,7 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 					log.fine("Matcher In onMessage " + data.ind + " " + data.treeInd);
 
 					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
-					batchJob = configuration.findBatchJobById(data.jobID);
+					batchJob = configuration.findBatchJobById(em, data.jobID);
 					IStatus status = configuration.getStatusLog(data);
 
 					if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {

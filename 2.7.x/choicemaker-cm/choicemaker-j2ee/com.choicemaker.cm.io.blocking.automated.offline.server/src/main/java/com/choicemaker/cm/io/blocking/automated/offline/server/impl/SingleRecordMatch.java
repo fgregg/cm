@@ -22,6 +22,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
@@ -85,6 +87,9 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 	public static final String MATCH_CANDIDATE =
 		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
 
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
+
 	private transient MessageDrivenContext mdc = null;
 	private EJBConfiguration configuration = null;
 
@@ -129,7 +134,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 				OABAConfiguration oabaConfig =
 					new OABAConfiguration(data.stageModelName, data.jobID);
 
-				BatchJob batchJob = configuration.findBatchJobById(data.jobID);
+				BatchJob batchJob = configuration.findBatchJobById(em, data.jobID);
 
 				// final file
 				IMatchRecord2Sink mSink =

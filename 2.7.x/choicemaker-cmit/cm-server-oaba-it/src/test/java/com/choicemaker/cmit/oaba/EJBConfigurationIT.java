@@ -13,20 +13,26 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.util.Date;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 
 @RunWith(Arquillian.class)
 public class EJBConfigurationIT {
@@ -35,18 +41,6 @@ public class EJBConfigurationIT {
 
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-//		List<Class<?>> testClasses = new ArrayList<>();
-//		testClasses.add(EJBConfigurationIT.class);
-//		testClasses.add(OabaConstants.class);
-//
-//		JavaArchive ejb =
-//			DeploymentUtils.createEjbJar(PROJECT_POM, EJB_MAVEN_COORDINATES,
-//					testClasses, PERSISTENCE_CONFIGURATION);
-//
-//		File[] deps = DeploymentUtils.createTestDependencies(DEPENDENCIES_POM);
-//
-//		EnterpriseArchive retVal = DeploymentUtils.createEarArchive(ejb, deps);
-//		return retVal;
 		PomEquippedResolveStage pom = resolvePom(DEFAULT_POM_FILE);
 		File[] libs = resolveDependencies(pom);
 		JavaArchive tests =
@@ -58,42 +52,39 @@ public class EJBConfigurationIT {
 		return retVal;
 	}
 
-//	@BeforeClass
-//	public static void setUpBeforeClass() throws Exception {
-//	}
+//	@BeforeClass public static void setUpBeforeClass() throws Exception {}
+//	@AfterClass public static void tearDownAfterClass() throws Exception {}
 
-//	@AfterClass
-//	public static void tearDownAfterClass() throws Exception {
-//	}
+	@Before
+	public void setUp() throws Exception {
+		this.ejbc = EJBConfiguration.getInstance();
+		assertTrue(this.ejbc != null);
+	}
 
-//	private EJBConfiguration ejbc;
-
-//	@Before
-//	public void setUp() throws Exception {
-//		this.ejbc = EJBConfiguration.getInstance();
-//		assertTrue(this.ejbc != null);
-//	}
-
-//	@After
-//	public void tearDown() throws Exception {
-//		this.ejbc = null;
-//	}
+	@After
+	public void tearDown() throws Exception {
+		this.ejbc = null;
+	}
 	
+	@PersistenceUnit(unitName = "oaba-local")
+	private EntityManagerFactory emf;
+
+	private EJBConfiguration ejbc;
+
 	@Test
 	public void testEBJConfiguration() {
-		assertTrue(EJBConfiguration.getInstance() != null);
+		assertTrue(ejbc != null);
 	}
 
 	@Test
 	public void testGetEntityManager() {
-		EntityManager em = EJBConfiguration.getInstance().getEntityManager();
-		assertTrue(em != null);
+		assertTrue(emf != null);
 	}
 
 	@Test
 	public void testGetInitialContext() {
 		try {
-			Context ic = EJBConfiguration.getInstance().getInitialContext();
+			Context ic = ejbc.getInitialContext();
 			assertTrue(ic != null);
 		} catch (NamingException e) {
 			fail(e.toString());
@@ -163,34 +154,41 @@ public class EJBConfigurationIT {
 	 * @Test public void testSendMessage() { fail("Not yet implemented"); }
 	 */
 
-//	@Test
-//	public void testCreateFindRemove() {
-//		// Count existing jobs
-//		final int initialCount = EJBConfiguration.getInstance().findAllBatchJobs().size();
-//
-//		// Create a job
-//		final String extId = "EXT ID: " + new Date().toString();
-//		BatchJob job = EJBConfiguration.getInstance().createBatchJob(extId);
-//		assertTrue(job != null);
-//		assertTrue(job.getId() != 0);
-//
-//		// Recount the jobs
-//		final int intermediateCount = EJBConfiguration.getInstance().findAllBatchJobs().size();
-//		assertTrue(intermediateCount == initialCount + 1);
-//
-//		// Find the job
-//		BatchJob job2 = EJBConfiguration.getInstance().findBatchJobById(job.getId());
-//		assertTrue(job.getId() == job2.getId());
-//		assertTrue(job.equals(job2));
-//
-//		// Delete the job
-//		EJBConfiguration.getInstance().deleteBatchJob(job2);
-//		BatchJob job3 = EJBConfiguration.getInstance().findBatchJobById(job.getId());
-//		assertTrue(job3 == null);
-//
-//		// Check that the number of existing jobs equals the initial count
-//		assertTrue(initialCount == EJBConfiguration.getInstance().findAllBatchJobs().size());
-//	}
+	@Test
+	public void testCreateFindRemove() {
+		final EntityManager em = emf.createEntityManager();
+		assertTrue(em != null);
+		em.getTransaction().begin();
+
+		// Count existing jobs
+		final int initialCount = ejbc.findAllBatchJobs(em).size();
+
+		// Create a job
+		final String extId = "EXT ID: " + new Date().toString();
+		BatchJob job = ejbc.createBatchJob(em, extId);
+		assertTrue(job != null);
+		assertTrue(job.getId() != 0);
+
+		// Recount the jobs
+		final int intermediateCount = ejbc.findAllBatchJobs(em).size();
+		assertTrue(intermediateCount == initialCount + 1);
+
+		// Find the job
+		BatchJob job2 = ejbc.findBatchJobById(em, job.getId());
+		assertTrue(job.getId() == job2.getId());
+		assertTrue(job.equals(job2));
+
+		// Delete the job
+		ejbc.deleteBatchJob(em, job2);
+		BatchJob job3 = ejbc.findBatchJobById(em, job.getId());
+		assertTrue(job3 == null);
+
+		// Check that the number of existing jobs equals the initial count
+		assertTrue(initialCount == ejbc.findAllBatchJobs(em).size());
+
+		em.getTransaction().commit();
+		em.close();
+	}
 
 	/*
 	 * @Test public void testCreateStatusLog() { fail("Not yet implemented"); }

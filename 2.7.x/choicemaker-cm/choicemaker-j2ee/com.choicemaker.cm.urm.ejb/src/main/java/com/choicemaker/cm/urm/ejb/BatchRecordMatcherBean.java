@@ -22,6 +22,7 @@ import javax.jms.JMSException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
@@ -56,6 +57,9 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 		log = Logger.getLogger(BatchRecordMatcherBean.class.getName());
 	}
 	
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
+
 	public BatchRecordMatcherBean() {
 		super();
 	}
@@ -281,7 +285,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 	{
 		long[] res;
 		log.fine("<<getJobList");
-		Collection jobColl = Single.getInst().getBatchJobList();
+		Collection jobColl = Single.getInst().getBatchJobList(em);
 		res = new long[jobColl.size()];
 		Iterator jobIter = jobColl.iterator();
 		int ind = 0;
@@ -308,8 +312,8 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 		try {
 			BatchQueryService qs = Single.getInst().getBatchQueryService();
 			boolean ret = qs.removeDir(jobID);
-			BatchJob bj = Single.getInst().findBatchJobById(jobID);
-			Single.getInst().deleteBatchJob(bj);
+			BatchJob bj = Single.getInst().findBatchJobById(em, jobID);
+			Single.getInst().deleteBatchJob(em, bj);
 			return ret;
 		} catch (Exception e) {
 			log.severe(e.toString());

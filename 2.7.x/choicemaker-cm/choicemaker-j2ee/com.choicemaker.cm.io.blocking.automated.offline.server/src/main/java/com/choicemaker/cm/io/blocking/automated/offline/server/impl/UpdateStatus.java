@@ -18,6 +18,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
@@ -35,6 +37,9 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(UpdateStatus.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + UpdateStatus.class.getName());
+
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
 	private EJBConfiguration configuration = null;
@@ -75,7 +80,7 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 				
 				log.fine("Starting to update job ID: " + data.jobID + " " + data.percentComplete);
 
-				final BatchJob job = this.configuration.findBatchJobById(data.jobID);
+				final BatchJob job = this.configuration.findBatchJobById(em, data.jobID);
 				
 				if (data.percentComplete == 0) job.markAsStarted();
 				else if (data.percentComplete == 100) job.markAsCompleted();

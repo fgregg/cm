@@ -20,6 +20,8 @@ import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -51,6 +53,8 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 	private static final Logger log = Logger.getLogger(TransMatchDedup.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransMatchDedup.class.getName());
 
+	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
 
 	/* (non-Javadoc)
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
@@ -100,7 +104,7 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 		log.fine("in handleMerge");
 
 		StartData d = (StartData) o;
-		batchJob = configuration.findBatchJobById(d.jobID);
+		batchJob = configuration.findBatchJobById(em, d.jobID);
 
 		//init values
 		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(d.stageModelName);

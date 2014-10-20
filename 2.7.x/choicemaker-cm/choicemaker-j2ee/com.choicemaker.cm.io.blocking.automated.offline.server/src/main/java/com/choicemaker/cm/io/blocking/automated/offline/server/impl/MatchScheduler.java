@@ -23,6 +23,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -58,9 +60,9 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 	private static final Logger log = Logger.getLogger(MatchScheduler.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MatchScheduler.class.getName());
 	
-	/** This should be greater or equal to the number of instances of the Matcher Bean.
-	 * 
-	 */
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
+
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
 	private transient OABAConfiguration oabaConfig = null;
@@ -137,7 +139,7 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 						timeWriting = 0;
 					}
 					
-					batchJob = configuration.findBatchJobById(data.jobID);
+					batchJob = configuration.findBatchJobById(em, data.jobID);
 					
 					//start matching
 					startMatch (data);
@@ -207,7 +209,7 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 		
 		//init values
 		IStatus status = configuration.getStatusLog(data);
-		BatchJob batchJob = configuration.findBatchJobById(data.jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, data.jobID);
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			batchJob.markAsAborted();

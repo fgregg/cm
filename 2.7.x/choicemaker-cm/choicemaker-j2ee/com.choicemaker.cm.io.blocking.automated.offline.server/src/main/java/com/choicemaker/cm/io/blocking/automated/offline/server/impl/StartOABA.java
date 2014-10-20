@@ -22,6 +22,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -49,6 +51,9 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(StartOABA.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + StartOABA.class.getName());
+
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
@@ -96,7 +101,7 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
 
-				batchJob = configuration.findBatchJobById(data.jobID);
+				batchJob = configuration.findBatchJobById(em, data.jobID);
 				//update status to mark as start
 				batchJob.markAsStarted();
 

@@ -33,7 +33,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
@@ -110,9 +109,9 @@ public class EJBConfiguration implements Serializable {
 
 	// -- END Enterprise Naming Context
 	
-	// Injected references
-	@PersistenceContext(unitName = "oaba")
-	private EntityManager em;
+//	// Injected references
+//	@PersistenceContext(unitName = "oaba")
+//	private EntityManager em;
 
 	// Cached EJB home proxies
 	private transient BatchParametersHome batchParamsHome;
@@ -166,12 +165,6 @@ public class EJBConfiguration implements Serializable {
 		return config;
 	}
 	
-	/** TESTING ONLY: Returns the EntityManager used by this instance. */
-	public EntityManager getEntityManager() {
-		assert em != null;
-		return em;
-	}
-
 	/** Returns the initial naming context */
 	public Context getInitialContext() throws NamingException {
 		if (ctx == null) {
@@ -477,9 +470,12 @@ public class EJBConfiguration implements Serializable {
 	}
 
 	/** A convenience method that creates a new BatchJob record */
-	public BatchJob createBatchJob(String externalId) {
+	public BatchJob createBatchJob(EntityManager em, String externalId) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
 		BatchJob retVal = new BatchJobBean(externalId);
-		getEntityManager().persist(retVal);
+		em.persist(retVal);
 		return retVal;
 	}
 
@@ -512,12 +508,18 @@ public class EJBConfiguration implements Serializable {
 	 * @throws FinderException
 	 * @throws NamingException
 	 */
-	public BatchJob findBatchJobById(long id) {
-		BatchJobBean retVal = getEntityManager().find(BatchJobBean.class, id);
+	public BatchJob findBatchJobById(EntityManager em, long id) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		BatchJobBean retVal = em.find(BatchJobBean.class, id);
 		return retVal;
 	}
 	
-	public List<? extends BatchJob> findAllBatchJobs() {
+	public List<? extends BatchJob> findAllBatchJobs(EntityManager em) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
 		Query query = em.createNamedQuery(BatchJobBean.NamedQuery.FIND_ALL.name);
 		@SuppressWarnings("unchecked")
 		List<BatchJobBean> entries = query.getResultList();
@@ -527,18 +529,21 @@ public class EJBConfiguration implements Serializable {
 		return entries;
 	}
 	
-	public void deleteBatchJob(BatchJob job) {
+	public void deleteBatchJob(EntityManager em, BatchJob job) {
 		if (job == null) {
 			log.finest("Ignoring null batch job");
 		} else if (!(job instanceof BatchJobBean)) {
 			String msg = "Not yet implemented for " + job.getClass().getName();
 			throw new IllegalArgumentException(msg);
 		} else {
-			deleteBatchJob((BatchJobBean) job);
+			deleteBatchJob(em, (BatchJobBean) job);
 		}
 	}
 	
-	public void deleteBatchJob(BatchJobBean job) {
+	public void deleteBatchJob(EntityManager em, BatchJobBean job) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
 		if (job == null) {
 			log.finest("Ignoring null batch job");
 		} else if (job.getId() == 0) {

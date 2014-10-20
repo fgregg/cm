@@ -25,6 +25,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.Decision;
@@ -79,6 +81,9 @@ public class Matcher2<T extends Comparable<? super T>> implements
 			+ Matcher2.class.getName());
 
 	protected static final int INTERVAL = 50000;
+
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
 	protected transient EJBConfiguration configuration = null;
@@ -154,7 +159,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 					oabaConfig =
 						new OABAConfiguration(data.stageModelName, data.jobID);
-					batchJob = configuration.findBatchJobById(data.jobID);
+					batchJob = configuration.findBatchJobById(em, data.jobID);
 					IStatus status = configuration.getStatusLog(data);
 
 					if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob

@@ -23,6 +23,8 @@ import javax.ejb.SessionContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
@@ -45,6 +47,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
  */
 @SuppressWarnings("rawtypes")
 public class BatchQueryServiceBean implements SessionBean {
+
+	@PersistenceContext (unitName = "oaba")
+	EntityManager em;
+
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger(BatchQueryServiceBean.class.getName());
@@ -77,7 +83,7 @@ public class BatchQueryServiceBean implements SessionBean {
 
 		log.fine("starting startBatch...");
 
-		BatchJob batchJob = configuration.createBatchJob(externalID);
+		BatchJob batchJob = configuration.createBatchJob(em,externalID);
 		batchJob.setDescription(stageModelName + ":" + masterModelName);
 		batchJob.markAsQueued();
 
@@ -117,7 +123,7 @@ public class BatchQueryServiceBean implements SessionBean {
 		boolean runTransitivity)
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
 
-		BatchJob batchJob = configuration.createBatchJob(externalID);
+		BatchJob batchJob = configuration.createBatchJob(em,externalID);
 		batchJob.setDescription(stageModelName + ":" + masterModelName);
 		batchJob.markAsQueued();
 		batchJob.setTransactionId(new Long (transactionId));
@@ -180,7 +186,7 @@ public class BatchQueryServiceBean implements SessionBean {
 	 */
 	private int abortBatch(long jobID, boolean cleanStatus) throws RemoteException, CreateException, NamingException, JMSException, FinderException {
 		log.info("aborting job " + jobID + " " + cleanStatus);
-		BatchJob batchJob = configuration.findBatchJobById(jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, jobID);
 		batchJob.markAsAbortRequested();
 
 		//set status as done, so it won't continue during the next run
@@ -194,7 +200,7 @@ public class BatchQueryServiceBean implements SessionBean {
 
 
 	public BatchJobStatus getStatus (long jobID) throws RemoteException, CreateException, NamingException, JMSException, FinderException {
-		BatchJob batchJob = configuration.findBatchJobById(jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, jobID);
 
 		BatchJobStatus status = new BatchJobStatus (
 			batchJob.getId(),
@@ -210,7 +216,7 @@ public class BatchQueryServiceBean implements SessionBean {
 
 
 	public String checkStatus (long jobID) throws RemoteException, CreateException, NamingException, JMSException, FinderException {
-		BatchJob batchJob = configuration.findBatchJobById(jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, jobID);
 		return batchJob.getStatus();
 	}
 
@@ -239,7 +245,7 @@ public class BatchQueryServiceBean implements SessionBean {
 	public int resumeJob ( long jobID)
 	throws RemoteException, CreateException, NamingException, JMSException, FinderException {
 		int ret = 1;
-		BatchJob job = configuration.findBatchJobById(jobID);
+		BatchJob job = configuration.findBatchJobById(em, jobID);
 
 		if (!job.getStarted().equals(BatchJob.STATUS_COMPLETED) &&
 			!job.getDescription().equals(BatchJob.STATUS_CLEAR)) {
@@ -289,7 +295,7 @@ public class BatchQueryServiceBean implements SessionBean {
 		MatchListSource mls = null;
 
 		//check to make sure the job is completed
-		BatchJob batchJob = configuration.findBatchJobById(jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, jobID);
 		if (!batchJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
 			throw new IllegalStateException ("The job has not completed.");
 		} else {
@@ -308,7 +314,7 @@ public class BatchQueryServiceBean implements SessionBean {
 		MatchRecord2Source mrs = null;
 
 		//check to make sure the job is completed
-		BatchJob batchJob = configuration.findBatchJobById(jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, jobID);
 		if (!batchJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
 			throw new IllegalStateException ("The job has not completed.");
 		} else {
