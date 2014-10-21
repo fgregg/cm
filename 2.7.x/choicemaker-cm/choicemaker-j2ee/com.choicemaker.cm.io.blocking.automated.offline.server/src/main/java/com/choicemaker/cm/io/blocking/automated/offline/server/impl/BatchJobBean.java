@@ -450,5 +450,111 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		}
 	}
 	
+	// -- Identity
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		if (id == 0) {
+			result = hashCode0();
+		} else {
+			result = prime * result + (int) (id ^ (id >>> 32));
+		}
+		return result;
+	}
+
+	/**
+	 * Hashcode for instances with id == 0
+	 */
+	protected int hashCode0() {
+		final int prime = 31;
+		int result = 1;
+		result =
+			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
+		result = prime * result + percentageComplete;
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result =
+			prime * result + (int) (transactionId ^ (transactionId >>> 32));
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		BatchJobBean other = (BatchJobBean) obj;
+		if (id != other.id) {
+			return false;
+		}
+		if (id == 0) {
+			return equals0(other);
+		}
+		return true;
+	}
+
+	/**
+	 * Equality test for instances with id == 0
+	 */
+	protected boolean equals0(BatchJobBean other) {
+		if (this == other) {
+			return true;
+		}
+		if (other == null) {
+			return false;
+		}
+		/*
+		 * if (description == null) { if (other.description != null) { return
+		 * false; } } else if (!description.equals(other.description)) { return
+		 * false; }
+		 */
+		if (externalId == null) {
+			if (other.externalId != null) {
+				return false;
+			}
+		} else if (!externalId.equals(other.externalId)) {
+			return false;
+		}
+		/*
+		 * if (audit == null) { if (other.audit != null) { return false; } }
+		 * else if (!audit.equals(other.audit)) { return false; }
+		 */
+		if (percentageComplete != other.percentageComplete) {
+			return false;
+		}
+		if (status == null) {
+			if (other.status != null) {
+				return false;
+			}
+		} else if (!status.equals(other.status)) {
+			return false;
+		}
+		if (transactionId != other.transactionId) {
+			return false;
+		}
+		if (type == null) {
+			if (other.type != null) {
+				return false;
+			}
+		} else if (!type.equals(other.type)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BatchJobBean [" + id + "/" + externalId + "/" + status
+				+ "]";
+	}
+
 } // BatchJobBean
 
