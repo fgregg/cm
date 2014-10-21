@@ -42,10 +42,10 @@ import com.choicemaker.cmit.utils.DeploymentUtils;
 @RunWith(Arquillian.class)
 public class BatchJobBeanIT {
 
-	public static final boolean TESTS_AS_EJB_MODULE = false;
+	public static final boolean TESTS_AS_EJB_MODULE = true;
 
 	@Deployment
-	public static EnterpriseArchive createEarArchive2() {
+	public static EnterpriseArchive createEarArchive() {
 		PomEquippedResolveStage pom = resolvePom(DEFAULT_POM_FILE);
 		File[] libs = resolveDependencies(pom);
 		JavaArchive tests =

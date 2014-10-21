@@ -33,16 +33,16 @@ import com.choicemaker.cmit.utils.DeploymentUtils;
 @RunWith(Arquillian.class)
 public class BatchParametersBeanIT {
 
-	public static final boolean TESTS_AS_EJB_MODULE = false;
+	public static final boolean TESTS_AS_EJB_MODULE = true;
 
 	@Deployment
-	public static EnterpriseArchive createEarArchive2() {
+	public static EnterpriseArchive createEarArchive() {
 		PomEquippedResolveStage pom = resolvePom(DEFAULT_POM_FILE);
 		File[] libs = resolveDependencies(pom);
 		JavaArchive tests =
 			createJAR(pom, CURRENT_MAVEN_COORDINATES, DEFAULT_MODULE_NAME,
-					DEFAULT_TEST_CLASSES_PATH,
-					PERSISTENCE_CONFIGURATION, DEFAULT_HAS_BEANS);
+					DEFAULT_TEST_CLASSES_PATH, PERSISTENCE_CONFIGURATION,
+					DEFAULT_HAS_BEANS);
 		EnterpriseArchive retVal =
 			DeploymentUtils.createEAR(tests, libs, TESTS_AS_EJB_MODULE);
 		return retVal;
@@ -70,8 +70,7 @@ public class BatchParametersBeanIT {
 
 	@Test
 	public void testConstruction() {
-		BatchJobBean job =
-			new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		assertTrue(job.getId() == params.getId());
@@ -83,8 +82,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params
-		BatchJobBean job =
-			new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		assertTrue(params.getId() == job.getId());
@@ -105,7 +103,8 @@ public class BatchParametersBeanIT {
 		assertTrue(batchParameters3 == null);
 
 		// Check that the number of existing jobs equals the initial count
-		assertTrue(initialCount == prmController.findAll().size());
+		final int finalCount = prmController.findAll().size();
+		assertTrue(initialCount == finalCount);
 	}
 
 	@Test
@@ -113,8 +112,7 @@ public class BatchParametersBeanIT {
 		// Count existing jobs
 		final int initialCount = prmController.findAll().size();
 
-		BatchJobBean job =
-			new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		prmController.save(params);
@@ -133,7 +131,8 @@ public class BatchParametersBeanIT {
 		assertTrue(highThreshold == batchParameters2.getHighThreshold());
 		prmController.delete(batchParameters2);
 
-		assertTrue(initialCount == prmController.findAll().size());
+		final int finalCount = prmController.findAll().size();
+		assertTrue(initialCount == finalCount);
 	}
 
 	@Test
@@ -184,8 +183,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job =
-			new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final String v1 = new Date().toString();
@@ -205,7 +203,8 @@ public class BatchParametersBeanIT {
 
 		// Remove the params and check the number of remaining entries
 		prmController.delete(params);
-		assertTrue(initialCount == prmController.findAll().size());
+		final int finalCount = prmController.findAll().size();
+		assertTrue(initialCount == finalCount);
 	}
 
 	@Test
@@ -214,8 +213,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job =
-			new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final String v1 = new Date().toString();
@@ -235,7 +233,8 @@ public class BatchParametersBeanIT {
 
 		// Remove the params and check the number of remaining entries
 		prmController.delete(params);
-		assertTrue(initialCount == prmController.findAll().size());
+		final int finalCount = prmController.findAll().size();
+		assertTrue(initialCount == finalCount);
 	}
 
 	@Test
@@ -244,8 +243,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job =
-			new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final int v1 = random.nextInt();
@@ -265,7 +263,8 @@ public class BatchParametersBeanIT {
 
 		// Remove the params and the number of remaining entries
 		prmController.delete(params);
-		assertTrue(initialCount == prmController.findAll().size());
+		final int finalCount = prmController.findAll().size();
+		assertTrue(initialCount == finalCount);
 	}
 
 	@Test
@@ -274,8 +273,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job =
-			new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final float v1 = getRandomThreshold();
@@ -295,7 +293,8 @@ public class BatchParametersBeanIT {
 
 		// Remove the params and the number of remaining entries
 		prmController.delete(params);
-		assertTrue(initialCount == prmController.findAll().size());
+		final int finalCount = prmController.findAll().size();
+		assertTrue(initialCount == finalCount);
 	}
 
 	@Test
@@ -304,8 +303,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job =
-			new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
 		job = jobController.save(job);
 		BatchParametersBean params = new BatchParametersBean(job);
 		final float v1 = getRandomThreshold();
@@ -325,7 +323,8 @@ public class BatchParametersBeanIT {
 
 		// Remove the params and the number of remaining entries
 		prmController.delete(params);
-		assertTrue(initialCount == prmController.findAll().size());
+		final int finalCount = prmController.findAll().size();
+		assertTrue(initialCount == finalCount);
 	}
 
 	// @Test

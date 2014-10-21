@@ -122,8 +122,8 @@ public class TransitivityOABAServiceBean implements SessionBean {
 			data.staging = batchParams.getStageRs();
 			data.stageModelName = batchParams.getStageModel();
 			data.masterModelName = batchParams.getMasterModel();
-			data.low = batchParams.getLowThreshold().floatValue();
-			data.high = batchParams.getHighThreshold().floatValue();
+			data.low = batchParams.getLowThreshold();
+			data.high = batchParams.getHighThreshold();
 			data.runTransitivity = false; //this means it's not a continuation from OABA.
 
 			sendToTransitivity (data);

@@ -10,107 +10,278 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import java.rmi.RemoteException;
+import java.io.Serializable;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.EntityBean;
-import javax.ejb.EntityContext;
-import javax.ejb.RemoveException;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 
 /**
- * @author pcheung
+ * @author pcheung (original version)
+ * @author rphall (migrated to JPA 2.0)
  *
  */
-public abstract class BatchParametersBean implements EntityBean {
+@NamedQuery(name = "batchParametersFindAll",
+		query = "Select params from BatchParametersBean params")
+@Entity
+@Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_BATCH_PARAMS")
+public class BatchParametersBean implements Serializable, BatchParameters {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 271L;
 
-	/** For CMP only */
-	public abstract void setId(Long id);
-	public abstract Long getId();
+	public static enum NamedQuery {
+		FIND_ALL("batchParametersFindAll");
+		public final String name;
 
-	/** For CMP only */
-	public abstract void setStageModel(String stageModel);
-	public abstract String getStageModel();
-
-	/** For CMP only */
-	public abstract void setMasterModel(String masterModel);
-	public abstract String getMasterModel();
-
-	/** For CMP only */
-	public abstract void setMaxSingle(Integer ms);
-	public abstract Integer getMaxSingle();
-	
-	/** For CMP only */
-	public abstract void setLowThreshold(Float low);
-	public abstract Float getLowThreshold();
-
-	/** For CMP only */
-	public abstract void setHighThreshold(Float low);
-	public abstract Float getHighThreshold();
-	
-	/** For CMP only */
-	public abstract void setStageRs(SerialRecordSource rs);
-	public abstract SerialRecordSource getStageRs();
-	
-	/** For CMP only */
-	public abstract void setMasterRs(SerialRecordSource rs);
-	public abstract SerialRecordSource getMasterRs();
-
-	public Long ejbCreate(long id) throws CreateException {
-		Long longId = new Long(id);
-		setId(longId);
-		return longId;
+		NamedQuery(String name) {
+			this.name = name;
+		}
 	}
 
-	public void ejbPostCreate(long id) { }
+	/** Default value when no jobId is assigned */
+	public static final long INVALID_JOBID = 0;
 
+	@Id
+	@Column(name = "ID")
+//	@TableGenerator(name = "OABA_BATCHPARAMS", table = "CMT_SEQUENCE",
+//			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+//			pkColumnValue = "OABA_BATCHPARAMS")
+//	@GeneratedValue(strategy = GenerationType.TABLE,
+//			generator = "OABA_BATCHPARAMS")
+	private long id;
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.EntityBean#ejbActivate()
-	 */
-	public void ejbActivate() throws EJBException, RemoteException {
+	@Column(name = "STAGE_MODEL")
+	private String stageModel;
+
+	@Column(name = "MASTER_MODEL")
+	private String masterModel;
+
+	@Column(name = "MAX_SINGLE")
+	private int maxSingle;
+
+	@Column(name = "LOW_THRESHOLD")
+	private float lowThreshold;
+
+	@Column(name = "HIGH_THRESHOLD")
+	private float highThreshold;
+
+	@Transient
+	private SerialRecordSource stageRs;
+
+	@Transient
+	private SerialRecordSource masterRs;
+
+	protected BatchParametersBean() {
+		this(INVALID_JOBID);
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.EntityBean#ejbLoad()
-	 */
-	public void ejbLoad() throws EJBException, RemoteException {
+	protected BatchParametersBean(long jobId) {
+		this.id = jobId;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.EntityBean#ejbPassivate()
-	 */
-	public void ejbPassivate() throws EJBException, RemoteException {
+	public BatchParametersBean(BatchJob batchJob) {
+		this(batchJob.getId());
+		if (BatchJobBean.isNonPersistent(batchJob)) {
+			throw new IllegalArgumentException("non-persistent batch job");
+		}
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.EntityBean#ejbRemove()
-	 */
-	public void ejbRemove()
-		throws RemoveException, EJBException, RemoteException {
+	@Override
+	public long getId() {
+		return id;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.EntityBean#ejbStore()
-	 */
-	public void ejbStore() throws EJBException, RemoteException {
+	@Override
+	public String getStageModel() {
+		return stageModel;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.EntityBean#setEntityContext(javax.ejb.EntityContext)
-	 */
-	public void setEntityContext(EntityContext arg0)
-		throws EJBException, RemoteException {
+	@Override
+	public void setStageModel(String stageModel) {
+		this.stageModel = stageModel;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.EntityBean#unsetEntityContext()
+	@Override
+	public String getMasterModel() {
+		return masterModel;
+	}
+
+	@Override
+	public void setMasterModel(String masterModel) {
+		this.masterModel = masterModel;
+	}
+
+	@Override
+	public int getMaxSingle() {
+		return maxSingle;
+	}
+
+	@Override
+	public void setMaxSingle(int maxSingle) {
+		this.maxSingle = maxSingle;
+	}
+
+	@Override
+	public float getLowThreshold() {
+		return lowThreshold;
+	}
+
+	@Override
+	public void setLowThreshold(float lowThreshold) {
+		this.lowThreshold = lowThreshold;
+	}
+
+	@Override
+	public float getHighThreshold() {
+		return highThreshold;
+	}
+
+	@Override
+	public void setHighThreshold(float highThreshold) {
+		this.highThreshold = highThreshold;
+	}
+
+	@Override
+	public SerialRecordSource getStageRs() {
+		return stageRs;
+	}
+
+	@Override
+	public void setStageRs(SerialRecordSource stageRs) {
+		this.stageRs = stageRs;
+	}
+
+	@Override
+	public SerialRecordSource getMasterRs() {
+		return masterRs;
+	}
+
+	@Override
+	public void setMasterRs(SerialRecordSource masterRs) {
+		this.masterRs = masterRs;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		if (id == 0) {
+			result = hashCode0();
+		} else {
+			result = prime * result + (int) (id ^ (id >>> 32));
+		}
+		return result;
+	}
+
+	/**
+	 * Hashcode for instances with id == 0
 	 */
-	public void unsetEntityContext() throws EJBException, RemoteException {
+	protected int hashCode0() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(highThreshold);
+		result = prime * result + Float.floatToIntBits(lowThreshold);
+		result =
+			prime * result
+					+ ((masterModel == null) ? 0 : masterModel.hashCode());
+		result =
+			prime * result + ((masterRs == null) ? 0 : masterRs.hashCode());
+		result = prime * result + maxSingle;
+		result =
+			prime * result + ((stageModel == null) ? 0 : stageModel.hashCode());
+		result = prime * result + ((stageRs == null) ? 0 : stageRs.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		BatchParametersBean other = (BatchParametersBean) obj;
+		if (id != other.id) {
+			return false;
+		}
+		if (id == 0) {
+			return equals0(other);
+		}
+		return true;
+	}
+
+	/**
+	 * Equality test for instances with id == 0
+	 */
+	protected boolean equals0(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		BatchParametersBean other = (BatchParametersBean) obj;
+		if (Float.floatToIntBits(highThreshold) != Float
+				.floatToIntBits(other.highThreshold)) {
+			return false;
+		}
+		if (Float.floatToIntBits(lowThreshold) != Float
+				.floatToIntBits(other.lowThreshold)) {
+			return false;
+		}
+		if (masterModel == null) {
+			if (other.masterModel != null) {
+				return false;
+			}
+		} else if (!masterModel.equals(other.masterModel)) {
+			return false;
+		}
+		if (masterRs == null) {
+			if (other.masterRs != null) {
+				return false;
+			}
+		} else if (!masterRs.equals(other.masterRs)) {
+			return false;
+		}
+		if (maxSingle != other.maxSingle) {
+			return false;
+		}
+		if (stageModel == null) {
+			if (other.stageModel != null) {
+				return false;
+			}
+		} else if (!stageModel.equals(other.stageModel)) {
+			return false;
+		}
+		if (stageRs == null) {
+			if (other.stageRs != null) {
+				return false;
+			}
+		} else if (!stageRs.equals(other.stageRs)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BatchParametersBean [id=" + id + ", model=" + stageModel
+				+ ", lowThreshold=" + lowThreshold + ", highThreshold="
+				+ highThreshold + "]";
 	}
 
 }

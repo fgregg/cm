@@ -11,9 +11,9 @@
     <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
 
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean</class>
     <!--
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchParametersBean</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean</class>
 
     <class>com.choicemaker.cm.persist0.BatchJobBean</class>

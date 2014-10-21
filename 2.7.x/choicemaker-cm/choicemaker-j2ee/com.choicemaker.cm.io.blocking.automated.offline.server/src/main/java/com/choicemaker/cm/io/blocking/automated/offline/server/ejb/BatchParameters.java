@@ -10,50 +10,37 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
-import java.rmi.RemoteException;
-
-import javax.ejb.EJBObject;
-
 import com.choicemaker.cm.core.SerialRecordSource;
 
 /**
  * @author pcheung
  *
  */
-public interface BatchParameters extends EJBObject {
+public interface BatchParameters {
 
-	// CMP fields
-	/** For CMP only */
-	void setId(Long id) throws RemoteException;
-	Long getId() throws RemoteException;
+//	void setId(long id);
+	long getId();
 
-	/** For CMP only */
-	void setStageModel(String stageModel) throws RemoteException;
-	String getStageModel() throws RemoteException;
+	void setStageModel(String stageModel);
+	String getStageModel();
 
-	/** For CMP only */
-	void setMasterModel(String masterModel) throws RemoteException;
-	String getMasterModel() throws RemoteException;
+	void setMasterModel(String masterModel);
+	String getMasterModel();
 
-	/** For CMP only */
-	void setMaxSingle(Integer ms) throws RemoteException;
-	Integer getMaxSingle() throws RemoteException;
+	void setMaxSingle(int ms);
+	int getMaxSingle();
 	
-	/** For CMP only */
-	void setLowThreshold(Float low) throws RemoteException;
-	Float getLowThreshold() throws RemoteException;
+	void setLowThreshold(float low);
+	float getLowThreshold();
 
-	/** For CMP only */
-	void setHighThreshold(Float low) throws RemoteException;
-	Float getHighThreshold() throws RemoteException;
+	void setHighThreshold(float low);
+	float getHighThreshold();
 	
-	/** For CMP only */
-	void setStageRs(SerialRecordSource rs) throws RemoteException;
-	SerialRecordSource getStageRs() throws RemoteException;
+	void setStageRs(SerialRecordSource rs);
+	SerialRecordSource getStageRs();
 	
-	/** For CMP only */
-	void setMasterRs(SerialRecordSource rs) throws RemoteException;
-	SerialRecordSource getMasterRs() throws RemoteException;
+	void setMasterRs(SerialRecordSource rs);
+	SerialRecordSource getMasterRs();
 	
 
 }
