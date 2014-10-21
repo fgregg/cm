@@ -42,9 +42,6 @@ import com.choicemaker.cmit.utils.DeploymentUtils;
 @RunWith(Arquillian.class)
 public class BatchJobBeanIT {
 
-//	private static final Logger logger = Logger
-//			.getLogger(BatchJobBeanIT.class.getName());
-
 	public static final boolean TESTS_AS_EJB_MODULE = false;
 
 	@Deployment
@@ -59,22 +56,6 @@ public class BatchJobBeanIT {
 			DeploymentUtils.createEAR(tests, libs, TESTS_AS_EJB_MODULE);
 		return retVal;
 	}
-
-//	@Deployment
-//	public static EnterpriseArchive createEarArchive() {
-//		List<Class<?>> testClasses = new ArrayList<>();
-//		testClasses.add(BatchJobBeanIT.class);
-//		testClasses.add(BatchJobController.class);
-//
-//		JavaArchive ejb =
-//			DeploymentUtils.createEjbJar(PROJECT_POM, EJB_MAVEN_COORDINATES,
-//					testClasses, PERSISTENCE_CONFIGURATION);
-//
-//		File[] deps = DeploymentUtils.createTestDependencies(PROJECT_POM);
-//
-//		EnterpriseArchive retVal = DeploymentUtils.createEarArchive(ejb, deps);
-//		return retVal;
-//	}
 
 	public static final int MAX_TEST_ITERATIONS = 10;
 	
