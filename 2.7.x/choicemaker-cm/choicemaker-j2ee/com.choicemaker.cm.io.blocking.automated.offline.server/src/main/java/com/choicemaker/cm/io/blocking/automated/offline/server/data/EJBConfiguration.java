@@ -479,6 +479,16 @@ public class EJBConfiguration implements Serializable {
 		return retVal;
 	}
 
+	/** A convenience method that creates a new BatchJob record */
+	public BatchJob createBatchJob(EntityManager em, String externalId, long transactionId) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		BatchJob retVal = new BatchJobBean(externalId, transactionId);
+		em.persist(retVal);
+		return retVal;
+	}
+
 	public StatusLog createStatusLog(long id) throws RemoteException, CreateException, NamingException{
 		Context ctx = getInitialContext();
 		Object homeRef = ctx.lookup(EJB_STATUS_LOG);

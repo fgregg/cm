@@ -77,7 +77,6 @@ public interface BatchJob extends IControl {
 	/** Use markAsXxx() methods instead */
 	void setStatus(String status);
 
-	/** Use updateFractionCompleted(float) instead */
 	void setFractionComplete(int i);
 
 	// -- State machine
@@ -101,14 +100,6 @@ public interface BatchJob extends IControl {
 	void markAsAborted();
 
 	// -- Business methods
-
-	/**
-	 * This operation has effect only if job status is STARTED.
-	 * 
-	 * @param fractionCompleted
-	 *            an non-negative integer between 0 and 100
-	 */
-	void updateFractionCompleted(int fractionCompleted);
 
 	public boolean shouldStop();
 

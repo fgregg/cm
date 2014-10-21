@@ -31,8 +31,6 @@ public class BatchJobStatus implements Serializable {
 	protected Date finishDate;
 
 	public BatchJobStatus() {
-		// 2014-04-24 rphall: Commented out unused local variable.
-//		String str = new java.sql.Timestamp(startDate.getTime() ).toString();
 	}
 
 	public BatchJobStatus(long jobId, long transactionId,

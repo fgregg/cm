@@ -26,6 +26,12 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cmit.utils.DeploymentUtils;
 
+/**
+ * Trivial tests -- but useful for checking that Arquillian is configured
+ * properly for the other, more comprehensive tests in this module.
+ *
+ * @author rphall
+ */
 @RunWith(Arquillian.class)
 public class OabaIT {
 

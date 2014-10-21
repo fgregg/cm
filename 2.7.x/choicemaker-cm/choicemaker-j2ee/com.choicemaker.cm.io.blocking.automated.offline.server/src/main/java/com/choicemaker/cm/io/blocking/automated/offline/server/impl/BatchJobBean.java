@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.persistence.CollectionTable;
@@ -60,8 +61,6 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	private static Logger log = Logger.getLogger(BatchJobBean.class.getName());
 
-	public static final String TABLE_DISCRIMINATOR = "OABA";
-
 	public static enum NamedQuery {
 		FIND_ALL("batchJobFindAll");
 		public final String name;
@@ -90,12 +89,19 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		return id == INVALID_BATCHJOB_ID;
 	}
 
+	public static final String DEFAULT_TABLE_DISCRIMINATOR = "OABA";
+
 	static boolean isNonPersistent(BatchJob batchJob) {
 		boolean retVal = true;
 		if (batchJob != null) {
 			retVal = isInvalidBatchJobId(batchJob.getId());
 		}
 		return retVal;
+	}
+
+	public static long randomTransactionId() {
+		String uuid = UUID.randomUUID().toString();
+		return uuid.hashCode();
 	}
 
 	// -- Instance data
@@ -115,8 +121,9 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	@Column(name = "TRANSACTION_ID")
 	private long transactionId;
 
+	/** Pseudo final value -- not changed after construction */
 	@Column(name = "TYPE")
-	private final String type = TABLE_DISCRIMINATOR;
+	private String type = DEFAULT_TABLE_DISCRIMINATOR;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -138,11 +145,28 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	// -- Construction
 
 	protected BatchJobBean() {
-		this(null);
+		this(null, randomTransactionId(), DEFAULT_TABLE_DISCRIMINATOR);
 	}
 
 	public BatchJobBean(String externalId) {
+		this(externalId, randomTransactionId(), DEFAULT_TABLE_DISCRIMINATOR);
+	}
+
+	public BatchJobBean(String externalId, long transactionId) {
+		this(externalId, transactionId, DEFAULT_TABLE_DISCRIMINATOR);
+	}
+
+	protected BatchJobBean(String externalId, long transactionId, final String type) {
+		if (type == null) {
+			throw new IllegalArgumentException("null type");
+		}
+		final String trimmed = type.trim();
+		if (trimmed.isEmpty()) {
+			throw new IllegalArgumentException("blank type");
+		}
+		this.type = trimmed;
 		setExternalId(externalId);
+		setTransactionId(transactionId);
 		setStatus(STATUS_NEW);
 	}
 
@@ -268,8 +292,8 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	public void setFractionComplete(int percentage) {
 		if (percentage < MIN_PERCENTAGE_COMPLETED
 				|| percentage > MAX_PERCENTAGE_COMPLETED) {
-			throw new IllegalArgumentException("invalid percentage: "
-					+ percentage);
+			String msg = "invalid percentage: " + percentage;
+			throw new IllegalArgumentException(msg);
 		}
 		this.percentageComplete = percentage;
 		// Update the timestamp, indirectly
@@ -353,21 +377,6 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		assert allowed != null;
 		boolean retVal = allowed.contains(next);
 		return retVal;
-	}
-
-	@Override
-	public void updateFractionCompleted(int percentageCompleted) {
-		if (percentageCompleted < MIN_PERCENTAGE_COMPLETED || MAX_PERCENTAGE_COMPLETED > 100) {
-			String msg =
-				"invalid percentageCompleted == '" + percentageCompleted + "'";
-			throw new IllegalArgumentException(msg);
-		}
-		if (isAllowedTransition(getStatus(), STATUS_STARTED)) {
-			logTransition(STATUS_STARTED);
-			setStatus(STATUS_STARTED);
-		} else {
-			logIgnoredTransition("updatePercentageCompleted");
-		}
 	}
 
 	@Override

@@ -89,8 +89,6 @@ public class BatchQueryServiceBean implements SessionBean {
 
 		long id = batchJob.getId();
 
-		batchJob.setTransactionId(batchJob.getId());
-
 		//create a new current status EJB
 		configuration.createNewStatusLog(id);
 
@@ -123,10 +121,10 @@ public class BatchQueryServiceBean implements SessionBean {
 		boolean runTransitivity)
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
 
-		BatchJob batchJob = configuration.createBatchJob(em,externalID);
+		BatchJob batchJob =
+			configuration.createBatchJob(em, externalID, transactionId);
 		batchJob.setDescription(stageModelName + ":" + masterModelName);
 		batchJob.markAsQueued();
-		batchJob.setTransactionId(new Long (transactionId));
 
 		long id = batchJob.getId();
 
