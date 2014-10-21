@@ -1,14 +1,14 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cmit.oaba.DeploymentUtils.DEFAULT_HAS_BEANS;
-import static com.choicemaker.cmit.oaba.DeploymentUtils.DEFAULT_MODULE_NAME;
-import static com.choicemaker.cmit.oaba.DeploymentUtils.DEFAULT_POM_FILE;
-import static com.choicemaker.cmit.oaba.DeploymentUtils.DEFAULT_TEST_CLASSES_PATH;
-import static com.choicemaker.cmit.oaba.DeploymentUtils.createJAR;
-import static com.choicemaker.cmit.oaba.DeploymentUtils.resolveDependencies;
-import static com.choicemaker.cmit.oaba.DeploymentUtils.resolvePom;
 import static com.choicemaker.cmit.oaba.util.OabaConstants.CURRENT_MAVEN_COORDINATES;
 import static com.choicemaker.cmit.oaba.util.OabaConstants.PERSISTENCE_CONFIGURATION;
+import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_HAS_BEANS;
+import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_MODULE_NAME;
+import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_POM_FILE;
+import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_TEST_CLASSES_PATH;
+import static com.choicemaker.cmit.utils.DeploymentUtils.createJAR;
+import static com.choicemaker.cmit.utils.DeploymentUtils.resolveDependencies;
+import static com.choicemaker.cmit.utils.DeploymentUtils.resolvePom;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cmit.utils.DeploymentUtils;
 
 @RunWith(Arquillian.class)
 public class EJBConfigurationIT {
