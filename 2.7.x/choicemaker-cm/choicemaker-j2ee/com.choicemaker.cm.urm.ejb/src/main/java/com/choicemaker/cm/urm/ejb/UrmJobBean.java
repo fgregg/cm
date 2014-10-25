@@ -236,10 +236,8 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 	}	
 	
 	public JobStatus getJobStatus(){
-		JobStatus js = new JobStatus (	getId().longValue(),
-										getStatus(),
-										getStartDate(),
-										getFinishDate());
+		JobStatus js =
+			new JobStatus(getId().longValue(), getStatus(), getStartDate());
 		js.setAbortRequestDate(this.getAbortRequestDate());
 		js.setErrorDescription("");//TODO
 		js.setStepId(-1);//TODO

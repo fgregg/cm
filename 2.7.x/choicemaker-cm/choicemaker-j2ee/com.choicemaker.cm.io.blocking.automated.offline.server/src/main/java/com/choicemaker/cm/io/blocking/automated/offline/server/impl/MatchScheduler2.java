@@ -189,7 +189,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 							inHMLookUp = new long [numProcessors];
 						}
 					
-						batchJob = configuration.findBatchJobById(em, data.jobID);
+						batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 					
 						//start matching
 						startMatch ();
@@ -239,7 +239,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 		FinderException, XmlConfException, BlockingException, NamingException, JMSException {
 		
 		oabaConfig = new OABAConfiguration (d.stageModelName, d.jobID);
-		BatchJob batchJob = configuration.findBatchJobById(em, d.jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, d.jobID);
 		data = new StartData (d);
 		IStatus status = configuration.getStatusLog(data);
 
@@ -336,7 +336,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 		
 		//init values
 		IStatus status = configuration.getStatusLog(data);
-		BatchJob batchJob = configuration.findBatchJobById(em, data.jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 		
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			MessageBeanUtils.stopJob (batchJob, status, oabaConfig);
@@ -483,9 +483,6 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 	
 
 	/** This method sends the message to the matcher bean.
-	 * 
-	 * @param data
-	 * @throws NamingException
 	 */
 	protected void sendToMatcher (StartData sd) throws NamingException, JMSException{
 		Queue queue = configuration.getMatcherMessageQueue();

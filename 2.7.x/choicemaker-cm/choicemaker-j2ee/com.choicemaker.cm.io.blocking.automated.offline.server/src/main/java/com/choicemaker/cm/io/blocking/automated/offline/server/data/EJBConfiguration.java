@@ -44,9 +44,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.StatusLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.StatusLogHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.StatusLogWrapper;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJobHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
 
 /**
  * This object contains method to get JMS and EJB objects from the J2EE server.
@@ -68,8 +68,7 @@ public class EJBConfiguration implements Serializable {
 
 	// ENC Entity Bean names
 	public final static String EJB_BATCH_JOB = BatchJob.DEFAULT_JNDI_COMP_NAME;
-	public final static String EJB_BATCH_PARAMS = BatchParametersHome.DEFAULT_JNDI_COMP_NAME;
-	public final static String EJB_TRANSITIVITY_JOB = TransitivityJobHome.DEFAULT_JNDI_COMP_NAME;
+	public final static String EJB_BATCH_PARAMS = BatchParameters.DEFAULT_JNDI_COMP_NAME;
 	public final static String EJB_STATUS_LOG = StatusLogHome.DEFAULT_JNDI_COMP_NAME;
 
 	// ENC Connection Factory names
@@ -115,7 +114,6 @@ public class EJBConfiguration implements Serializable {
 
 	// Cached EJB home proxies
 	private transient BatchParametersHome batchParamsHome;
-	private transient TransitivityJobHome transJobHome;
 	private transient StatusLogHome statusLogHome;
 
 	// Cached connection factories
@@ -201,8 +199,6 @@ public class EJBConfiguration implements Serializable {
 	 * Don't not specify the prefix java:comp/env/
 	 *
 	 * @param jndiQueueName - like jms/sQueue
-	 * @return
-	 * @throws NamingException
 	 */
 	private Queue getMessageQueue(String jndiQueueName) throws NamingException {
 		if (jndiQueueName == null || jndiQueueName.length() == 0) {
@@ -215,10 +211,6 @@ public class EJBConfiguration implements Serializable {
 
 	/** This looks up a queue factory on the EJB server.
 	 * Don't not specify the prefix java:comp/env/
-	 *
-	 * @param jndiQueueName - like jms/sQueue
-	 * @return
-	 * @throws NamingException
 	 */
 	private QueueConnectionFactory getMessageQueueFactory (String factoryName) throws NamingException {
 		if (factoryName == null || factoryName.length() == 0) {
@@ -479,16 +471,6 @@ public class EJBConfiguration implements Serializable {
 		return retVal;
 	}
 
-	/** A convenience method that creates a new BatchJob record */
-	public BatchJob createBatchJob(EntityManager em, String externalId, long transactionId) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
-		BatchJob retVal = new BatchJobBean(externalId, transactionId);
-		em.persist(retVal);
-		return retVal;
-	}
-
 	public StatusLog createStatusLog(long id) throws RemoteException, CreateException, NamingException{
 		Context ctx = getInitialContext();
 		Object homeRef = ctx.lookup(EJB_STATUS_LOG);
@@ -510,19 +492,15 @@ public class EJBConfiguration implements Serializable {
 		return retVal;
 	}
 
-	/** This returns a BatchJob for the given job id.
-	 *
-	 * @param id
-	 * @return BatchJob
-	 * @throws RemoteException
-	 * @throws FinderException
-	 * @throws NamingException
-	 */
-	public BatchJob findBatchJobById(EntityManager em, long id) {
+	/** This returns a BatchJob (or a sub-class) for the given job id */
+	public BatchJob findBatchJobById(EntityManager em, Class<? extends BatchJob> c, long id) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		BatchJobBean retVal = em.find(BatchJobBean.class, id);
+		if (c == null) {
+			throw new IllegalArgumentException("null class");
+		}
+		BatchJob retVal = em.find(c, id);
 		return retVal;
 	}
 	
@@ -530,7 +508,7 @@ public class EJBConfiguration implements Serializable {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		Query query = em.createNamedQuery(BatchJobBean.NamedQuery.FIND_ALL.name);
+		Query query = em.createNamedQuery(BatchJobJPA.QN_BATCHJOB_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<BatchJobBean> entries = query.getResultList();
 		if (entries == null) {
@@ -542,71 +520,26 @@ public class EJBConfiguration implements Serializable {
 	public void deleteBatchJob(EntityManager em, BatchJob job) {
 		if (job == null) {
 			log.finest("Ignoring null batch job");
-		} else if (!(job instanceof BatchJobBean)) {
-			String msg = "Not yet implemented for " + job.getClass().getName();
-			throw new IllegalArgumentException(msg);
+		} else if (!BatchJobBean.isPersistent(job)) {
+			log.fine("Ignoring non-persistent batch job: " + job.getId());
 		} else {
-			deleteBatchJob(em, (BatchJobBean) job);
+			Class<? extends BatchJob> c = job.getClass();
+			BatchJob dbEntry = em.find(c, job.getId());
+			if (dbEntry == null) {
+				// The batch job isn't in the database
+				log.warning("Unable to find batch job: " + job.getId());
+			}  else {
+				job = em.merge(job);
+				em.remove(job);
+			}
 		}
 	}
 	
-	public void deleteBatchJob(EntityManager em, BatchJobBean job) {
+	public BatchParameters findBatchParamsById(EntityManager em, long id) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		if (job == null) {
-			log.finest("Ignoring null batch job");
-		} else if (job.getId() == 0) {
-			log.finest("Ignoring non-persistent batch job");
-		} else {
-			job = em.merge(job);
-			// for (CMP_AuditEvent e : batchJob.getTimeStamps()) {
-			// em.remove(e);
-			// }
-			em.remove(job);
-			em.flush();
-		}
-	}
-
-	public BatchParameters findBatchParamsById(long id) throws RemoteException, FinderException, NamingException {
-		BatchParametersHome home = getBatchParamsHome();
-		BatchParameters retVal = home.findByPrimaryKey(new Long(id));
-		return retVal;
-	}
-
-	public TransitivityJob findTransitivityJobById(long id)
-		throws RemoteException, FinderException, NamingException {
-		TransitivityJobHome home = getTransitivityJobHome();
-		TransitivityJob retVal = home.findByPrimaryKey(new Long(id));
-		return retVal;
-	}
-
-	private TransitivityJob createTransitivityJob(long id)
-		throws RemoteException, CreateException, NamingException, SQLException {
-		Context ctx = getInitialContext();
-		Object homeRef = ctx.lookup(EJB_TRANSITIVITY_JOB);
-		TransitivityJobHome transJobHome = (TransitivityJobHome) PortableRemoteObject.narrow
-			(homeRef,TransitivityJobHome.class);
-		TransitivityJob retVal =  transJobHome.create (id);
-		return retVal;
-	}
-
-	/** This method attempts to find the TransitivityJob bean of the given jobID.
-	 * If it can't find it, it'll create one.
-	 *
-	 * @param jobId
-	 * @return TransitivityJob
-	 */
-	public TransitivityJob getTransitivityJob (long jobId)
-		throws RemoteException, CreateException, NamingException, SQLException{
-
-		TransitivityJob retVal = null;
-		try {
-			retVal = findTransitivityJobById(jobId);
-		} catch (FinderException e) {
-			retVal = createTransitivityJob (jobId);
-		}
-
+		BatchParameters retVal = em.find(BatchParametersBean.class, id);
 		return retVal;
 	}
 
@@ -633,17 +566,6 @@ public class EJBConfiguration implements Serializable {
 					homeRef, BatchParametersHome.class);
 		}
 		return this.batchParamsHome;
-	}
-
-	private TransitivityJobHome getTransitivityJobHome() throws NamingException {
-		if (this.transJobHome == null) {
-			Context ctx = getInitialContext();
-			Object homeRef = ctx.lookup(EJB_TRANSITIVITY_JOB);
-			this.transJobHome =
-				(TransitivityJobHome) PortableRemoteObject.narrow(
-					homeRef, TransitivityJobHome.class);
-		}
-		return this.transJobHome;
 	}
 
 	private StatusLogHome getStatusLogHome() throws NamingException {

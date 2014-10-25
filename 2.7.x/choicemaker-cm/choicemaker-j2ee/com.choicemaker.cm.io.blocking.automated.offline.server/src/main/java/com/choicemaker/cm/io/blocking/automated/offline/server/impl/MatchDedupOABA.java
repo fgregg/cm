@@ -102,7 +102,7 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
-				batchJob = configuration.findBatchJobById(em, data.jobID);
+				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 				//init values
 				// 2014-04-24 rphall: Commented out unused local variable.

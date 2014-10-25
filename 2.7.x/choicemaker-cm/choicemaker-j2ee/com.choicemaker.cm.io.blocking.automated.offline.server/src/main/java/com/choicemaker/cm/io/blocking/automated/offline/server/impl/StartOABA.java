@@ -101,7 +101,7 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
 
-				batchJob = configuration.findBatchJobById(em, data.jobID);
+				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 				//update status to mark as start
 				batchJob.markAsStarted();
 

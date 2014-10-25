@@ -37,7 +37,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MatchDedupOABA2;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 
 /**
  * This match dedup bean is used by the Transitivity Engine.  It dedups the temporary
@@ -104,7 +106,7 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 		log.fine("in handleMerge");
 
 		StartData d = (StartData) o;
-		batchJob = configuration.findBatchJobById(em, d.jobID);
+		batchJob = configuration.findBatchJobById(em, BatchJobBean.class, d.jobID);
 
 		//init values
 		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(d.stageModelName);
@@ -223,7 +225,10 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 		log.info ("final output " + finalSink.getInfo());
 
 		try {
-			TransitivityJob transJob = configuration.getTransitivityJob(d.jobID);
+			BatchJob transJob =
+				configuration.findBatchJobById(em, TransitivityJobBean.class,
+						d.jobID);
+			assert transJob instanceof TransitivityJob;
 			transJob.setDescription(finalSink.getInfo());
 		} catch (Exception e) {
 			log.severe(e.toString());

@@ -30,6 +30,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2Composi
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -110,8 +111,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 			JobStatus js = new JobStatus (
 								batchJob.getJobId(),
 								batchJob.getStatus(),
-								batchJob.getStartDate(),
-								batchJob.getFinishDate());
+								batchJob.getStatusDate());
 			js.setAbortRequestDate(null);
 			js.setErrorDescription("");//TODO
 			js.setStepId(-1);//TODO
@@ -312,7 +312,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 		try {
 			BatchQueryService qs = Single.getInst().getBatchQueryService();
 			boolean ret = qs.removeDir(jobID);
-			BatchJob bj = Single.getInst().findBatchJobById(em, jobID);
+			BatchJob bj = Single.getInst().findBatchJobById(em, BatchJobBean.class, jobID);
 			Single.getInst().deleteBatchJob(em, bj);
 			return ret;
 		} catch (Exception e) {

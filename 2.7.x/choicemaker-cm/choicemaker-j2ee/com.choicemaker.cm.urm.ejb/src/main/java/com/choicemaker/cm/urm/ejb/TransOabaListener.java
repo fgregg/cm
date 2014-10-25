@@ -20,6 +20,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -53,7 +54,7 @@ public class TransOabaListener extends WorkflowControlListener{
 								CmRuntimeException,SQLException,CreateException,ArgumentException,ModelException {
 
 //		TransitivityJob job = Single.getInst().findTransJobById(jobId);
-		BatchJob job = Single.getInst().findBatchJobById(em,jobId);
+		BatchJob job = Single.getInst().findBatchJobById(em,BatchJobBean.class, jobId);
 
 		// FIXME HACK (stuffing a URM job id into a transaction id)
 		// Possible fix:

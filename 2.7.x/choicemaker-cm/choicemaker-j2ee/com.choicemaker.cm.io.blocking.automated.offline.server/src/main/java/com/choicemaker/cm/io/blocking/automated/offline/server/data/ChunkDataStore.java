@@ -41,8 +41,6 @@ public class ChunkDataStore {
 
 	/**
 	 * This gets the single instance object.
-	 *
-	 * @return
 	 */
 	public static ChunkDataStore getInstance() {
 		if (dataStore == null)
@@ -65,7 +63,6 @@ public class ChunkDataStore {
 	 *            - maximum chunk size
 	 * @param control
 	 *            - control object
-	 * @throws BlockingException
 	 */
 	public void init(RecordSource stageSource,
 			ImmutableProbabilityModel stageModel, RecordSource masterSource,
@@ -119,9 +116,6 @@ public class ChunkDataStore {
 
 	/**
 	 * This method returns the staging record with the given id.
-	 *
-	 * @param id
-	 * @return
 	 */
 	public Object getStage(Object id) {
 		return stageMap.get(id);
@@ -129,9 +123,6 @@ public class ChunkDataStore {
 
 	/**
 	 * This method returns the master record with the given id.
-	 *
-	 * @param id
-	 * @return
 	 */
 	public Object getMaster(Object id) {
 		return masterMap.get(id);

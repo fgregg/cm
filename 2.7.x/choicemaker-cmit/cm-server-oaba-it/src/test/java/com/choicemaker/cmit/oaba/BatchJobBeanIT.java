@@ -202,36 +202,6 @@ public class BatchJobBeanIT {
 		assertTrue(initialCount == jobs.size());
 	}
 
-//	@Test
-//	public void testNoNullStatusTimestamp() {
-//		int countNullStatus = 0;
-//		int countNullTimestamp = 0;
-//		int count = 0;
-//		for (BatchJob job : controller.findAll()) {
-//			++count;
-//			String batchJobStatus = job.getStatus();
-//			if (batchJobStatus == null) {
-//				logger.severe(job.getId() + ": " + count + ": null status");
-//				++countNullStatus;
-//			}
-//			Date ts = job.getTimeStamp(batchJobStatus);
-//			if (ts == null) {
-//				String msg =
-//					job.getId() + ": " + count
-//							+ ": null timestamp for status '" + batchJobStatus
-//							+ "'";
-//				logger.severe(msg);
-//				++countNullTimestamp;
-//			}
-//		}
-//		if ((countNullStatus) != 0) {
-//			fail("Null status: " + countNullStatus + " out of " + count);
-//		}
-//		if ((countNullTimestamp) != 0) {
-//			fail("Null timestamp: " + countNullTimestamp + " out of " + count);
-//		}
-//	}
-
 	@Test
 	public void testExternalId() {
 		// Count existing jobs
@@ -289,34 +259,6 @@ public class BatchJobBeanIT {
 	}
 
 	@Test
-	public void testType() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
-
-		// Create a job and set a value
-		BatchJobBean job =
-			new BatchJobBean("EXT ID: " + new Date().toString());
-		assertTrue(BatchJobBean.DEFAULT_TABLE_DISCRIMINATOR
-				.equals(job.getType()));
-
-		// Save the job
-		final long id1 = controller.save(job).getId();
-		assertTrue(initialCount + 1 == controller.findAll().size());
-		job = null;
-
-		// Get the job
-		job = controller.find(id1);
-
-		// Check the value
-		assertTrue(BatchJobBean.DEFAULT_TABLE_DISCRIMINATOR
-				.equals(job.getType()));
-
-		// Remove the job and the number of remaining jobs
-		controller.delete(job);
-		assertTrue(initialCount == controller.findAll().size());
-	}
-
-	@Test
 	public void testDescription() {
 		// Count existing jobs
 		final int initialCount = controller.findAll().size();
@@ -324,8 +266,10 @@ public class BatchJobBeanIT {
 		// Create a job and set a value
 		BatchJobBean job =
 			new BatchJobBean("EXT ID: " + new Date().toString());
-		final String v1 = new Date().toString();
-		job.setDescription(v1);
+		assertTrue(job.getDescription() == null);
+		final String description = "Description: " + new Date().toString();
+		job.setDescription(description);
+		assertTrue(description.equals(job.getDescription()));
 
 		// Save the job
 		final long id1 = controller.save(job).getId();
@@ -336,8 +280,7 @@ public class BatchJobBeanIT {
 		job = controller.find(id1);
 
 		// Check the value
-		final String v2 = job.getDescription();
-		assertTrue(v1.equals(v2));
+		assertTrue(description.equals(job.getDescription()));
 
 		// Remove the job and the number of remaining jobs
 		controller.delete(job);
@@ -419,9 +362,8 @@ public class BatchJobBeanIT {
 	public void testEqualsHashCode() {
 		// Create two generic jobs and verify equality
 		String exId = "EXT ID: " + new Date().toString();
-		long trID = BatchJobBean.randomTransactionId();
-		BatchJobBean job1 = new BatchJobBean(exId, trID);
-		BatchJobBean job2 = new BatchJobBean(exId, trID);
+		BatchJobBean job1 = new BatchJobBean(exId);
+		BatchJobBean job2 = new BatchJobBean(job1);
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
 

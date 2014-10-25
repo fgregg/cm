@@ -24,9 +24,6 @@ import javax.ejb.FinderException;
  *
  */
 public interface TransitivityJobHome extends EJBHome {
-  String DEFAULT_EJB_REF_NAME = "ejb/TransitivityJob";
-  String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
-
 	TransitivityJob create(long jobId) throws RemoteException, CreateException;
 
 	TransitivityJob findByPrimaryKey(Long id) throws RemoteException, FinderException;

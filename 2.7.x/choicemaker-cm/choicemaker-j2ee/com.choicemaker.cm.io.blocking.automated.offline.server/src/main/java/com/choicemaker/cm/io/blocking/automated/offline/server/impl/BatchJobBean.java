@@ -19,8 +19,16 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import javax.jms.ObjectMessage;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicPublisher;
+import javax.jms.TopicSession;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,42 +43,44 @@ import javax.persistence.TableGenerator;
 import javax.persistence.TemporalType;
 
 import com.choicemaker.cm.core.IControl;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 
 /**
- * A BatchJobBean tracks the progress of a (long-running) offline blocking
- * process. A successful request goes through a sequence of states: NEW, QUEUED,
- * STARTED, and COMPLETED. A request may be aborted at any point, in which case
- * it goes through the ABORT_REQUESTED and the ABORT states.</p>
- *
+ * This class tracks the progress of a (long-running) offline matching process.
+ * It also serves as the base class of other types of long-running jobs.
+ * <p>
+ * A successful batch job goes through a sequence of states: NEW, QUEUED,
+ * STARTED, and COMPLETED. If processing fails in one of these stages, the job
+ * state is marked as FAILED. A request may be aborted at any point, in which
+ * case it goes through the ABORT_REQUESTED and the ABORT states.
+ * </p>
+ * <p>
  * A long-running process should provide some indication that it is making
- * progress. It can provide this estimate as a fraction between 0 and 100
- * (inclusive) by updating the getFractionComplete() field.</p>
+ * progress. This class provides this estimate as a fraction between 0 and 100
+ * (inclusive) by updating the {@link #setFractionComplete(int) fraction
+ * complete} field.
+ * </p>
  * 
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)
  *
  */
-@NamedQuery(name = "batchJobFindAll",
-		query = "Select job from BatchJobBean job")
+@NamedQuery(name = BatchJobJPA.QN_BATCHJOB_FIND_ALL,
+		query = BatchJobJPA.EQL_BATCHJOB_FIND_ALL)
 @Entity
-@Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_BATCHJOB")
+@Table(/* schema = "CHOICEMAKER", */name = BatchJobJPA.TABLE_NAME)
+@DiscriminatorColumn(name = BatchJobJPA.DISCRIMINATOR_COLUMN,
+		discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue(BatchJobJPA.DISCRIMINATOR_VALUE)
 public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	private static final long serialVersionUID = 271L;
 
 	private static Logger log = Logger.getLogger(BatchJobBean.class.getName());
 
-	public static enum NamedQuery {
-		FIND_ALL("batchJobFindAll");
-		public final String name;
-
-		NamedQuery(String name) {
-			this.name = name;
-		}
-	}
-
-	private final static Set<String> validStatus = new HashSet<>();
+	protected final static Set<String> validStatus = new HashSet<>();
 	static {
 		validStatus.add(STATUS_NEW);
 		validStatus.add(STATUS_QUEUED);
@@ -82,19 +92,22 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		validStatus.add(STATUS_CLEAR);
 	}
 
-	/** Default value for non-persistent batch jobs */
-	private static final long INVALID_BATCHJOB_ID = 0;
-
-	static boolean isInvalidBatchJobId(long id) {
-		return id == INVALID_BATCHJOB_ID;
+	protected static boolean isInvalidBatchJobId(long id) {
+		return id == BatchJob.INVALID_BATCHJOB_ID;
 	}
 
-	public static final String DEFAULT_TABLE_DISCRIMINATOR = "OABA";
+	public static boolean isPersistent(BatchJob batchJob) {
+		boolean retVal = false;
+		if (batchJob != null) {
+			retVal = !isInvalidBatchJobId(batchJob.getId());
+		}
+		return retVal;
+	}
 
-	static boolean isNonPersistent(BatchJob batchJob) {
+	public static boolean isTopLevelJob(BatchJob batchJob) {
 		boolean retVal = true;
 		if (batchJob != null) {
-			retVal = isInvalidBatchJobId(batchJob.getId());
+			retVal = isInvalidBatchJobId(batchJob.getBatchParentId());
 		}
 		return retVal;
 	}
@@ -107,84 +120,103 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	// -- Instance data
 
 	@Id
-	@Column(name = "ID")
+	@Column(name = BatchJobJPA.CN_ID)
 	@TableGenerator(name = "OABA_BATCHJOB", table = "CMT_SEQUENCE",
 			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
 			pkColumnValue = "OABA_BATCHJOB")
 	@GeneratedValue(strategy = GenerationType.TABLE,
 			generator = "OABA_BATCHJOB")
 	private long id;
+	
+	/**
+	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some other
+	 * BatchJobBean
+	 */
+	@Column(name = BatchJobJPA.CN_BPARENT_ID)
+	private final long bparentId;
 
-	@Column(name = "EXTERNAL_ID")
+	/**
+	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some
+	 * UrmJobBean
+	 */
+	@Column(name = BatchJobJPA.CN_URM_ID)
+	private final long urmId;
+
+	@Column(name = BatchJobJPA.CN_TRANSACTION_ID)
+	private final long transactionId;
+
+	@Column(name = BatchJobJPA.CN_EXTERNAL_ID)
 	private String externalId;
 
-	@Column(name = "TRANSACTION_ID")
-	private long transactionId;
-
-	/** Pseudo final value -- not changed after construction */
-	@Column(name = "TYPE")
-	private String type = DEFAULT_TABLE_DISCRIMINATOR;
-
-	@Column(name = "DESCRIPTION")
+	@Column(name = BatchJobJPA.CN_DESCRIPTION)
 	private String description;
 
-	@Column(name = "FRACTION_COMPLETE")
+	@Column(name = BatchJobJPA.CN_FRACTION_COMPLETE)
 	private int percentageComplete;
 
-	@Column(name = "STATUS")
+	@Column(name = BatchJobJPA.CN_STATUS)
 	private String status;
 
 	@ElementCollection
-	@MapKeyColumn(name = "TIMESTAMP")
+	@MapKeyColumn(name = BatchJobJPA.CN_TIMESTAMP)
 	@MapKeyTemporal(TemporalType.TIMESTAMP)
-	@Column(name = "STATUS")
-	@CollectionTable(name = "CMT_OABA_BATCHJOB_AUDIT",
-			joinColumns = @JoinColumn(name = "BATCHJOB_ID"))
+	@Column(name = BatchJobJPA.CN_STATUS)
+	@CollectionTable(name = BatchJobJPA.AUDIT_TABLE_NAME,
+			joinColumns = @JoinColumn(name = BatchJobJPA.CN_AUDIT_JOIN))
 	private Map<Date, String> audit = new HashMap<>();
 
 	// -- Construction
 
 	protected BatchJobBean() {
-		this(null, randomTransactionId(), DEFAULT_TABLE_DISCRIMINATOR);
+		this(null, randomTransactionId(), INVALID_BATCHJOB_ID, INVALID_URMJOB_ID);
 	}
 
 	public BatchJobBean(String externalId) {
-		this(externalId, randomTransactionId(), DEFAULT_TABLE_DISCRIMINATOR);
+		this(externalId, randomTransactionId(), INVALID_BATCHJOB_ID, INVALID_URMJOB_ID);
 	}
 
-	public BatchJobBean(String externalId, long transactionId) {
-		this(externalId, transactionId, DEFAULT_TABLE_DISCRIMINATOR);
+	public BatchJobBean(BatchJob job) {
+		this(job.getExternalId(), job.getTransactionId(), job.getBatchParentId(), job.getUrmId());
+		this.setDescription(job.getDescription());
+		this.setFractionComplete(job.getFractionComplete());
+		this.setStatus(job.getStatus());
+		Date ts = job.getTimeStamp(job.getStatus());
+		this.setTimeStamp(job.getStatus(), ts);
 	}
 
-	protected BatchJobBean(String externalId, long transactionId, final String type) {
-		if (type == null) {
-			throw new IllegalArgumentException("null type");
-		}
-		final String trimmed = type.trim();
-		if (trimmed.isEmpty()) {
-			throw new IllegalArgumentException("blank type");
-		}
-		this.type = trimmed;
+	protected BatchJobBean(String externalId, long tid, long bpid, long urmid) {
+		this.transactionId = tid;
+		this.bparentId = bpid;
+		this.urmId = urmid;
 		setExternalId(externalId);
-		setTransactionId(transactionId);
 		setStatus(STATUS_NEW);
 	}
 
 	// -- Accessors
-
+	
 	@Override
 	public long getId() {
 		return id;
 	}
 
 	@Override
-	public String getExternalId() {
-		return externalId;
+	public long getBatchParentId() {
+		return this.bparentId;
+	}
+
+	@Override
+	public long getUrmId() {
+		return this.urmId;
 	}
 
 	@Override
 	public long getTransactionId() {
 		return transactionId;
+	}
+
+	@Override
+	public String getExternalId() {
+		return externalId;
 	}
 
 	@Override
@@ -203,10 +235,6 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public String getType() {
-		return type;
-	}
-
 	public Date getTimeStamp(String status) {
 		return this.mostRecentTimestamp(status);
 	}
@@ -280,11 +308,6 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	@Override
-	public void setTransactionId(long transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -321,6 +344,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		}
 		this.status = newStatus;
 		setTimeStamp(newStatus, new Date());
+		publishStatus();
 	}
 
 	// Should be invoked only by setStatus(STATUS)
@@ -450,13 +474,54 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		}
 	}
 	
+	// -- Messaging
+
+	/**
+	 * This method publishes the status of a job to a topic queue.
+	 */
+	protected void publishStatus(){
+		TopicConnection conn = null;
+		TopicSession session = null;
+		try {
+			conn = EJBConfiguration.getInstance().getTopicConnectionFactory().createTopicConnection();
+			session = conn.createTopicSession(false,  TopicSession.AUTO_ACKNOWLEDGE);
+			conn.start();
+			Topic topic = EJBConfiguration.getInstance().getTransStatusTopic();
+			TopicPublisher pub = session.createPublisher(topic);
+			BatchJobStatus jobStatus = new BatchJobStatus(this);
+			ObjectMessage notifMsg = session.createObjectMessage(jobStatus);
+			pub.publish(notifMsg);
+			pub.close();
+		}
+		catch (Exception e) {
+			log.severe(e.toString());
+		} 
+		finally {
+			if (session != null) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					log.severe(e.toString());
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					log.severe(e.toString());
+				}
+			}
+		}
+		log.fine("...finished published status");
+	}
+
 	// -- Identity
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		if (id == 0) {
+		if (isInvalidBatchJobId(id)) {
 			result = hashCode0();
 		} else {
 			result = prime * result + (int) (id ^ (id >>> 32));
@@ -465,7 +530,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	/**
-	 * Hashcode for instances with id == 0
+	 * Hashcode for instances with id == 0 (non-persistent/invalid id)
 	 */
 	protected int hashCode0() {
 		final int prime = 31;
@@ -475,8 +540,11 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		result = prime * result + percentageComplete;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result =
+				prime * result + (int) (bparentId ^ (bparentId >>> 32));
+		result =
 			prime * result + (int) (transactionId ^ (transactionId >>> 32));
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result =
+			prime * result + BatchJobJPA.DISCRIMINATOR_VALUE.hashCode();
 		return result;
 	}
 
@@ -488,6 +556,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		if (obj == null) {
 			return false;
 		}
+		// Implicitly checks Discriminator type
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
@@ -495,14 +564,14 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		if (id != other.id) {
 			return false;
 		}
-		if (id == 0) {
+		if (isInvalidBatchJobId(id)) {
 			return equals0(other);
 		}
 		return true;
 	}
 
 	/**
-	 * Equality test for instances with id == 0
+	 * Equality test for instances with id == 0 (non-persistent/invalid id)
 	 */
 	protected boolean equals0(BatchJobBean other) {
 		if (this == other) {
@@ -537,16 +606,14 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		} else if (!status.equals(other.status)) {
 			return false;
 		}
+		if (bparentId != other.bparentId) {
+			return false;
+		}
 		if (transactionId != other.transactionId) {
 			return false;
 		}
-		if (type == null) {
-			if (other.type != null) {
-				return false;
-			}
-		} else if (!type.equals(other.type)) {
-			return false;
-		}
+		// Discriminator type is implicitly checked by comparing
+		// this.getClass() and other.getClass()
 		return true;
 	}
 

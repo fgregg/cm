@@ -25,6 +25,7 @@ import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
@@ -134,14 +135,14 @@ public class BatchResultProcessorBean implements SessionBean {
 		log.fine("<<startResultToMrpsConversion");
 		long batchJobId = -1;
 		
-		BatchJob bj = Single.getInst().findBatchJobById(em, jobId);
+		BatchJob bj = Single.getInst().findBatchJobById(em, BatchJobBean.class, jobId);
 		batchJobId = bj.getId();
 		
 		if(batchJobId == -1){		
 			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(jobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					
 			batchJobId  = batchStep.getStepJobId().longValue();		
 			log.fine("batch job jd = "+batchJobId);		
-			bj  = Single.getInst().findBatchJobById(em, batchJobId);
+			bj  = Single.getInst().findBatchJobById(em, BatchJobBean.class, batchJobId);
 		}
 				
 		CmsJob oj = Single.getInst().createCmsJob(externalId, JobStatus.UNDEFINED_ID);

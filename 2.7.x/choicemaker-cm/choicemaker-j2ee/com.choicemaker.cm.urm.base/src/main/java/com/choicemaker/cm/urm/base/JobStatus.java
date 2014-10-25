@@ -39,8 +39,7 @@ public class JobStatus implements Serializable {
 	protected String trackingId;
 	protected long stepId;
 	protected String status;
-	protected Date startDate;
-	protected Date finishDate;
+	protected Date statusDate;
 	protected Date abortRequestDate;
 	protected int fractionComplete;
 	
@@ -49,73 +48,36 @@ public class JobStatus implements Serializable {
 	
 	protected String errorDescription;
 
-	/**
-	 * 
-	 */
 	public JobStatus() {
 	
 	}
 	
-	public JobStatus(   long 	jobId,						
-						String 	status, 
-						Date 		startDate,
-						Date 		finishDate) {
-							
+	public JobStatus(long jobId, String status, Date startDate) {
+
 		this.jobId = jobId;
-		this.status = status; 
-		this.startDate = startDate;
-		this.finishDate = finishDate;
+		this.status = status;
+		this.statusDate = startDate;
 	}
 
-
-	/**
-	 * @return
-	 */
 	public long getJobId() {
 		return jobId;
 	}
 
-	/**
-	 * @return
-	 */
-	public Date getStartDate() {
-		return startDate;
+	public Date getStatusDate() {
+		return statusDate;
 	}
 
-	/**
-	 * @return
-	 */
 	public String getStatus() {
 		return status;
 	}
 
 
-	/**
-	 * @return
-	 */
 	public String getStepDescription() {
 		return stepDescription;
 	}
 
-	/**
-	 * @return
-	 */
-	public Date getFinishDate() {
-		return finishDate;
-	}
-
-	/**
-	 * @param string
-	 */
 	public void setStepDescription(String string) {
 		stepDescription = string;
-	}
-
-	/**
-	 * @param date
-	 */
-	public void setFinishDate(Date date) {
-		finishDate = date;
 	}
 
 	/**
@@ -125,100 +87,58 @@ public class JobStatus implements Serializable {
 		jobId = l;
 	}
 
-	/**
-	 * @param date
-	 */
 	public void setStartDate(Date date) {
-		startDate = date;
+		statusDate = date;
 	}
 
-	/**
-	 * @param string
-	 */
 	public void setStatus(String string) {
 		status = string;
 	}
 
-	/**
-	 * @return
-	 */
 	public Date getAbortRequestDate() {
 		return abortRequestDate;
 	}
 
-	/**
-	 * @return
-	 */
 	public String getErrorDescription() {
 		return errorDescription;
 	}
 
-	/**
-	 * @return
-	 */
 	public long getStepId() {
 		return stepId;
 	}
 
-	/**
-	 * @return
-	 */
 	public Date getStepStartDate() {
 		return stepStartDate;
 	}
 
-	/**
-	 * @param date
-	 */
 	public void setAbortRequestDate(Date date) {
 		abortRequestDate = date;
 	}
 
-	/**
-	 * @param string
-	 */
 	public void setErrorDescription(String string) {
 		errorDescription = string;
 	}
 
-	/**
-	 * @param l
-	 */
 	public void setStepId(long l) {
 		stepId = l;
 	}
 
-	/**
-	 * @param date
-	 */
 	public void setStepStartDate(Date date) {
 		stepStartDate = date;
 	}
 
-	/**
-	 * @return
-	 */
 	public int getFractionComplete() {
 		return fractionComplete;
 	}
 
-	/**
-	 * @param string
-	 */
 	public void setFractionComplete(int fc) {
 		fractionComplete = fc;
 	}
 
-	/**
-	 * @return
-	 */
 	public String getTrackingId() {
 		return trackingId;
 	}
 
-	/**
-	 * @param string
-	 */
 	public void setTrackingId(String string) {
 		trackingId = string;
 	}

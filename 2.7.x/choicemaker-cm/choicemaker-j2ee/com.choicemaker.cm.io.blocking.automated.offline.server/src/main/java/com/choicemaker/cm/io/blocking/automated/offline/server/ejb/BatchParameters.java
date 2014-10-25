@@ -18,29 +18,37 @@ import com.choicemaker.cm.core.SerialRecordSource;
  */
 public interface BatchParameters {
 
-//	void setId(long id);
+	String DEFAULT_EJB_REF_NAME = "ejb/BatchParameters";
+	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
+
 	long getId();
 
 	void setStageModel(String stageModel);
+
 	String getStageModel();
 
 	void setMasterModel(String masterModel);
+
 	String getMasterModel();
 
 	void setMaxSingle(int ms);
+
 	int getMaxSingle();
-	
+
 	void setLowThreshold(float low);
+
 	float getLowThreshold();
 
 	void setHighThreshold(float low);
+
 	float getHighThreshold();
-	
+
 	void setStageRs(SerialRecordSource rs);
+
 	SerialRecordSource getStageRs();
-	
+
 	void setMasterRs(SerialRecordSource rs);
+
 	SerialRecordSource getMasterRs();
-	
 
 }

@@ -43,6 +43,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQuerySer
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryServiceHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJobHome;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAService;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAServiceHome;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
@@ -449,15 +451,19 @@ public class Single implements Serializable {
 				switch (si) {
 					case BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX :
 						{
-							BatchJob job = findBatchJobById(em, stepJobId);
-							EJBConfiguration.getInstance().deleteBatchJob(em, job);
+							BatchJob job = findBatchJobById(em, BatchJobBean.class, stepJobId);
+							if (job != null) {
+								EJBConfiguration.getInstance().deleteBatchJob(em, job);
+							}
 						}
 						break;
 					case BatchMatchAnalyzerBean.TRANS_OABA_STEP_INDEX :
 						{
-							TransitivityJob tj =
-								Single.getInst().findTransJobById(stepJobId);
-							tj.remove();
+							BatchJob job = findBatchJobById(em, TransitivityJobBean.class, stepJobId);
+							assert job instanceof TransitivityJob ;
+							if (job != null) {
+								EJBConfiguration.getInstance().deleteBatchJob(em, job);
+							}
 						}
 						break;
 					case BatchMatchAnalyzerBean.TRANS_SERIAL_STEP_INDEX :
@@ -494,12 +500,9 @@ public class Single implements Serializable {
 		}
 	}
 
-	public BatchJob findBatchJobById(EntityManager em, long id) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
+	public BatchJob findBatchJobById(EntityManager em, Class c, long id) {
 		BatchJob retVal =
-			EJBConfiguration.getInstance().findBatchJobById(em, id);
+			EJBConfiguration.getInstance().findBatchJobById(em, c, id);
 		return retVal;
 	}
 

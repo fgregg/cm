@@ -22,8 +22,6 @@ import javax.ejb.FinderException;
  *
  */
 public interface BatchParametersHome extends EJBHome {
-  String DEFAULT_EJB_REF_NAME = "ejb/BatchParameters";
-  String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
 
 	BatchParameters create(long id) throws RemoteException, CreateException;
 

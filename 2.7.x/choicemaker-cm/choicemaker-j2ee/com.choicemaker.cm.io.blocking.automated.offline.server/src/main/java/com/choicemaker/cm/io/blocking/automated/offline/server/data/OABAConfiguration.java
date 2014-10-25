@@ -191,9 +191,6 @@ public class OABAConfiguration implements Serializable {
 	
 	
 	/** This is used by the parallelization code.  It creates many tree files for each chunk.
-	 * 
-	 * @param stageType
-	 * @return
 	 */
 	public ComparisonTreeGroupSinkSourceFactory getComparisonTreeGroupFactory (int stageType, int num) {
 		return new ComparisonTreeGroupSinkSourceFactory
@@ -207,9 +204,6 @@ public class OABAConfiguration implements Serializable {
 	}
 
 	/** This is used by the parallelization code.  It creates many array files for each chunk.
-	 * 
-	 * @param stageType
-	 * @return
 	 */
 	public ComparisonArrayGroupSinkSourceFactory getComparisonArrayGroupFactoryOS (int num) {
 		return new ComparisonArrayGroupSinkSourceFactory
@@ -259,7 +253,6 @@ public class OABAConfiguration implements Serializable {
 	 * This returns the source handle to the OABA result.
 	 * 
 	 * @param id - the job id of the OABA job
-	 * @return
 	 */
 	public IMatchRecord2Source getCompositeMatchSource (long id) {
 		String fileName = getFileDir () + "match_" + Long.toString(id);
@@ -322,8 +315,6 @@ public class OABAConfiguration implements Serializable {
 
 
 	/** Block factory for transitivity
-	 * 
-	 * @return
 	 */
 	public BlockSinkSourceFactory getTransitivityBlockFactory () { 
 		return new BlockSinkSourceFactory (getFileDir(), "transBlocks", "dat");

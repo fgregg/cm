@@ -18,10 +18,12 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 
 
 /**
@@ -38,6 +40,9 @@ public class UpdateTransitivityStatus implements MessageDrivenBean, MessageListe
 
 	private transient MessageDrivenContext mdc = null;
 	private EJBConfiguration configuration = null;
+
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
 
 	public UpdateTransitivityStatus() {
 //	log.fine("constuctor");
@@ -75,11 +80,18 @@ public class UpdateTransitivityStatus implements MessageDrivenBean, MessageListe
 				
 				log.fine("Starting to update job ID: " + data.jobID + " " + data.percentComplete);
 
-				final TransitivityJob job = this.configuration.getTransitivityJob(data.jobID);
+				final TransitivityJob job = (TransitivityJob) configuration.findBatchJobById(em, TransitivityJobBean.class, data.jobID);
 				
-				if (data.percentComplete == 0) job.markAsStarted();
-				else if (data.percentComplete == 100) job.markAsCompleted();
-				else job.updateFractionCompleted( data.percentComplete );
+				if (data.percentComplete == 0) {
+					job.markAsStarted();
+				}
+				else if (data.percentComplete == 100) {
+					job.markAsCompleted();
+				}
+				else {
+					job.markAsStarted();
+					job.setFractionComplete( data.percentComplete );
+				}
 
 			} else {
 				log.warning("wrong type: " + inMessage.getClass().getName());

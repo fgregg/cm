@@ -122,7 +122,7 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 					log.fine("Matcher In onMessage " + data.ind + " " + data.treeInd);
 
 					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
-					batchJob = configuration.findBatchJobById(em, data.jobID);
+					batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 					IStatus status = configuration.getStatusLog(data);
 
 					if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {

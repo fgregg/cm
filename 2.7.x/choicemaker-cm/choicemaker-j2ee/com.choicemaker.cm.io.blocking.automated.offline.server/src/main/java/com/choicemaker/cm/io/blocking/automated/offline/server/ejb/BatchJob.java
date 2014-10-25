@@ -19,14 +19,26 @@ import com.choicemaker.cm.core.IControl;
  *
  */
 public interface BatchJob extends IControl {
+	
+	// -- Default identifier values
 
-	String DEFAULT_EJB_REF_NAME = "ejb/BatchJob";
-	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
-	String AUTONUMBER_IDENTIFIER = "OabaBatchJobID";
+	/** Default id value for non-persistent batch jobs */
+	long INVALID_BATCHJOB_ID = 0;
 
+	/** Default value of batchParentId for top-level jobs */
+	long NO_BATCH_PARENT = INVALID_BATCHJOB_ID;
+
+	/** Default URM job id for batch jobs not controlled by a URM job */
+	long INVALID_URMJOB_ID = INVALID_BATCHJOB_ID;
+	
+	// -- Status
+
+	/** Minimum valid value for fractionComplete (inclusive) */
 	int MIN_PERCENTAGE_COMPLETED = 0;
+	
+	/** Maximum valid value for fractionComplete (inclusive) */
 	int MAX_PERCENTAGE_COMPLETED = 100;
-
+	
 	String STATUS_NEW = "NEW";
 	String STATUS_QUEUED = "QUEUED";
 	String STATUS_STARTED = "STARTED";
@@ -36,19 +48,28 @@ public interface BatchJob extends IControl {
 	String STATUS_ABORTED = "ABORTED";
 	String STATUS_CLEAR = "STATUS_CLEAR";
 
+	// -- Deprecated constants
+
+	String DEFAULT_EJB_REF_NAME = "ejb/BatchJob";
+	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
+
 	// -- Accessors
 
 	long getId();
 
-	String getExternalId();
+	long getBatchParentId();
+	
+	long getUrmId();
 
 	long getTransactionId();
 
-	String getType();
+	String getExternalId();
 
 	String getDescription();
 
 	String getStatus();
+
+	Date getTimeStamp(String status);
 
 	int getFractionComplete();
 
@@ -70,8 +91,6 @@ public interface BatchJob extends IControl {
 
 	void setExternalId(String externalId);
 
-	void setTransactionId(long id);
-
 	void setDescription(String description);
 
 	/** Use markAsXxx() methods instead */
@@ -87,7 +106,7 @@ public interface BatchJob extends IControl {
 
 	/**
 	 * This method is called when the job is restarted. This method doesn't
-	 * check id the status is current queued.
+	 * check if the status is currently queued.
 	 */
 	void markAsReStarted();
 
@@ -101,6 +120,6 @@ public interface BatchJob extends IControl {
 
 	// -- Business methods
 
-	public boolean shouldStop();
+	boolean shouldStop();
 
 } // BatchJob

@@ -10,7 +10,7 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean.NamedQuery;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA;
 
 /**
  * Currently, the OABA server doesn't define any Enterprise Java bean whose sole
@@ -45,7 +45,7 @@ public class BatchJobController {
 	}
 
 	public List<BatchJobBean> findAll() {
-		Query query = em.createNamedQuery(NamedQuery.FIND_ALL.name);
+		Query query = em.createNamedQuery(BatchJobJPA.QN_BATCHJOB_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<BatchJobBean> entries = query.getResultList();
 		if (entries == null) {

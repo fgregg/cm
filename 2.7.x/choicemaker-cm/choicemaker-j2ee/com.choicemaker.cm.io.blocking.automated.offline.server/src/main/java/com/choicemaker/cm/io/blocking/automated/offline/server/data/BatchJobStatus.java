@@ -13,8 +13,10 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+
 /**
- * This object tells the status of the job id.
+ * The status of a batch job
  *
  * @author pcheung
  *
@@ -23,73 +25,62 @@ public class BatchJobStatus implements Serializable {
 
 	static final long serialVersionUID = 8006471060836073376L;
 
-	protected long jobId;
-	protected long transactionId;
-	protected String description;
-	protected String status;
-	protected Date startDate;
-	protected Date finishDate;
+	private final long jobId;
+	private final long bparentId;
+	private final long urmId;
+	private final long transactionId;
+	private final String externalId;
+	private final String description;
+	private final int fractionComplete;
+	private final String status;
+	private final Date statusDate;
 
-	public BatchJobStatus() {
-	}
-
-	public BatchJobStatus(long jobId, long transactionId,
-		String desc, String status, Date startDate, Date finishDate) {
-
-		setJobId(jobId);
-		setTransactionId (transactionId);
-		setDescription(desc);
-		setStatus(status);
-		setStartDate(startDate);
-		setFinishDate(finishDate);
+	public BatchJobStatus(BatchJob job) {
+		this.jobId = job.getId();
+		this.bparentId = job.getBatchParentId();
+		this.urmId = job.getUrmId();
+		this.transactionId = job.getTransactionId();
+		this.externalId = job.getExternalId();
+		this.description = job.getDescription();
+		this.fractionComplete = job.getFractionComplete();
+		this.status = job.getStatus();
+		this.statusDate = job.getTimeStamp(this.status);
 	}
 
 	public long getJobId() {
 		return jobId;
 	}
 
-	public void setJobId(long jobId) {
-		this.jobId = jobId;
-	}
-
 	public String getDescription() {
 		return description;
-	}
-
-	public void setDescription(String desc) {
-		this.description = desc;
 	}
 
 	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public Date getStatusDate() {
+		return statusDate;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	long getBatchParentId() {
+		return bparentId;
 	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getFinishDate() {
-		return finishDate;
-	}
-
-	public void setFinishDate(Date finishDate) {
-		this.finishDate = finishDate;
+	
+	long getUrmId() {
+		return urmId;
 	}
 
 	public long getTransactionId () {
 		return transactionId;
 	}
 
-	public void setTransactionId (long l) {
-		transactionId = l;
+	String getExternalId() {
+		return externalId;
+	}
+
+	int getFractionComplete() {
+		return fractionComplete;
 	}
 
 }

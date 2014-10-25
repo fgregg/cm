@@ -28,28 +28,19 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
  * @author rphall (migrated to JPA 2.0)
  *
  */
-@NamedQuery(name = "batchParametersFindAll",
-		query = "Select params from BatchParametersBean params")
+@NamedQuery(name = BatchParametersJPA.QN_BATCHPARAMETERS_FIND_ALL,
+		query = BatchParametersJPA.EQL_BATCHJOB_FIND_ALL)
 @Entity
-@Table(/* schema = "CHOICEMAKER", */name = "CMT_OABA_BATCH_PARAMS")
+@Table(/* schema = "CHOICEMAKER", */name = BatchParametersJPA.TABLE_NAME)
 public class BatchParametersBean implements Serializable, BatchParameters {
 
 	private static final long serialVersionUID = 271L;
-
-	public static enum NamedQuery {
-		FIND_ALL("batchParametersFindAll");
-		public final String name;
-
-		NamedQuery(String name) {
-			this.name = name;
-		}
-	}
 
 	/** Default value when no jobId is assigned */
 	public static final long INVALID_JOBID = 0;
 
 	@Id
-	@Column(name = "ID")
+	@Column(name = BatchParametersJPA.CN_ID)
 //	@TableGenerator(name = "OABA_BATCHPARAMS", table = "CMT_SEQUENCE",
 //			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
 //			pkColumnValue = "OABA_BATCHPARAMS")
@@ -57,19 +48,19 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 //			generator = "OABA_BATCHPARAMS")
 	private long id;
 
-	@Column(name = "STAGE_MODEL")
+	@Column(name = BatchParametersJPA.CN_STAGE_MODEL)
 	private String stageModel;
 
-	@Column(name = "MASTER_MODEL")
+	@Column(name = BatchParametersJPA.CN_MASTER_MODEL)
 	private String masterModel;
 
-	@Column(name = "MAX_SINGLE")
+	@Column(name = BatchParametersJPA.CN_MAX_SINGLE)
 	private int maxSingle;
 
-	@Column(name = "LOW_THRESHOLD")
+	@Column(name = BatchParametersJPA.CN_LOW_THRESHOLD)
 	private float lowThreshold;
 
-	@Column(name = "HIGH_THRESHOLD")
+	@Column(name = BatchParametersJPA.CN_HIGH_THRESHOLD)
 	private float highThreshold;
 
 	@Transient
@@ -88,7 +79,7 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 
 	public BatchParametersBean(BatchJob batchJob) {
 		this(batchJob.getId());
-		if (BatchJobBean.isNonPersistent(batchJob)) {
+		if (!BatchJobBean.isPersistent(batchJob)) {
 			throw new IllegalArgumentException("non-persistent batch job");
 		}
 	}

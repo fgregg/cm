@@ -9,8 +9,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean.NamedQuery;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA;
 
 /**
  * An EJB used to test BatchParameter beans within container-defined
@@ -41,7 +41,8 @@ public class BatchParametersController {
 	}
 
 	public List<BatchParametersBean> findAll() {
-		Query query = em.createNamedQuery(NamedQuery.FIND_ALL.name);
+		Query query =
+			em.createNamedQuery(BatchParametersJPA.QN_BATCHPARAMETERS_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<BatchParametersBean> entries = query.getResultList();
 		if (entries == null) {

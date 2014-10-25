@@ -165,19 +165,12 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 
 	/**
 	 * This method handles merging individual processor match files.
-	 * 
-	 * @param o
-	 * @throws FinderException
-	 * @throws RemoteException
-	 * @throws BlockingException
-	 * @throws NamingException
-	 * @throws JMSException
 	 */
 	private void handleMerge(Object o) throws FinderException, RemoteException,
 			BlockingException, NamingException, JMSException {
 
 		MatchWriterData d = (MatchWriterData) o;
-		batchJob = configuration.findBatchJobById(em, d.jobID);
+		batchJob = configuration.findBatchJobById(em, BatchJobBean.class, d.jobID);
 
 		// init values
 		ImmutableProbabilityModel stageModel =
@@ -213,19 +206,12 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 	/**
 	 * This method sends messages to MatchDedupEach to dedup individual match
 	 * files.
-	 * 
-	 * @param o
-	 * @throws RemoteException
-	 * @throws FinderException
-	 * @throws BlockingException
-	 * @throws NamingException
-	 * @throws JMSException
 	 */
 	private void handleDedupEach(Object o) throws RemoteException,
 			FinderException, BlockingException, NamingException, JMSException {
 
 		data = (StartData) o;
-		batchJob = configuration.findBatchJobById(em, data.jobID);
+		batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 		// init values
 		ImmutableProbabilityModel stageModel =
@@ -300,10 +286,6 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 
 	/**
 	 * This method sends a message to the UpdateStatus message bean.
-	 * 
-	 * @param jobID
-	 * @param percentComplete
-	 * @throws NamingException
 	 */
 	protected void sendToUpdateStatus(long jobID, int percentComplete)
 			throws NamingException, JMSException {
@@ -319,11 +301,6 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 	/**
 	 * This sends the message to multiple beans to dedup each of the match temp
 	 * file created by the processors.
-	 * 
-	 * @param jobID
-	 * @param percentComplete
-	 * @throws NamingException
-	 * @throws JMSException
 	 */
 	protected void sendToMatchDedupEach(StartData d) throws NamingException,
 			JMSException {
@@ -340,8 +317,6 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 
 	/**
 	 * This method publishes the status to a topic queue.
-	 * 
-	 * @param status
 	 */
 	private void publishStatus(long id) {
 		TopicConnection conn = null;

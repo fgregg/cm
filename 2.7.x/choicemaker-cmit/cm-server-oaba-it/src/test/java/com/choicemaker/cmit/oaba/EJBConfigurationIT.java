@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cmit.utils.DeploymentUtils;
 
 @RunWith(Arquillian.class)
@@ -175,13 +176,13 @@ public class EJBConfigurationIT {
 		assertTrue(intermediateCount == initialCount + 1);
 
 		// Find the job
-		BatchJob job2 = ejbc.findBatchJobById(em, job.getId());
+		BatchJob job2 = ejbc.findBatchJobById(em, BatchJobBean.class, job.getId());
 		assertTrue(job.getId() == job2.getId());
 		assertTrue(job.equals(job2));
 
 		// Delete the job
 		ejbc.deleteBatchJob(em, job2);
-		BatchJob job3 = ejbc.findBatchJobById(em, job.getId());
+		BatchJob job3 = ejbc.findBatchJobById(em, BatchJobBean.class, job.getId());
 		assertTrue(job3 == null);
 
 		// Check that the number of existing jobs equals the initial count

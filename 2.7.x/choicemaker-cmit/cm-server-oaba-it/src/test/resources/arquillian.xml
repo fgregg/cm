@@ -5,70 +5,14 @@
         http://jboss.org/schema/arquillian
         http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
 
-    <!-- Uncomment the <defaultProtocol/> element to instruct Arquillian to execute tests using the Servlet protocol.
-         By default the JBoss AS 7 adapters use the JMX protocol -->
     <defaultProtocol type="Servlet 3.0"/>
-    <!--
-    -->
-
-    <!-- Uncomment the <engine> element to instruct Arquillian to write the archives for each test to the target location
-         on disk before deploying them to the server. -->
     <engine>
         <property name="deploymentExportPath">target/deployments</property>
     </engine>
-    <!--
-    -->
-
-    <container qualifier="glassfish-remote" default="false" >
-        <configuration>
-            <property name="adminUser">admin</property>
-            <property name="adminPassword">123456</property>
-        </configuration>
-    </container>
- 
-    <container qualifier="jbossas-managed" default="false">
-        <configuration>
-            <property name="jbossHome">target/jboss-as-7.1.1.Final</property>
-            <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=128m -Xverify:none -XX:+UseFastAccessorMethods</property>
-            <!--
-            <property name="javaVmArguments">
-                -Xmx512m -XX:MaxPermSize=128m
-                -Xverify:none -XX:+UseFastAccessorMethods
-                -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y
-            </property>
-            -->
-            <property name="outputToConsole">true</property>
-        </configuration>
-    </container>
-
-    <container qualifier="jbossas-remote" default="false">
-        <configuration>
-            <!--
-            <property name="jbossHome">target/jboss-as-7.1.1.Final</property>
-            <property name="javaVmArguments">
-                -Xmx512m -XX:MaxPermSize=128m
-                -Xverify:none -XX:+UseFastAccessorMethods
-            </property>
-            <property name="javaVmArguments">
-                -Xmx512m -XX:MaxPermSize=128m
-                -Xverify:none -XX:+UseFastAccessorMethods
-                -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y
-            </property>
-            <property name="outputToConsole">true</property>
-            -->
-        </configuration>
-    </container>
 
     <container qualifier="jboss-wildfly-remote" default="false">
         <configuration>
             <!--
-            <property name="javaVmArguments">
-                -Xmx512m -XX:MaxPermSize=128m -Xverify:none -XX:+UseFastAccessorMethods
-            </property>
-            <property name="javaVmArguments">
-                -Xmx512m -XX:MaxPermSize=128m -Xverify:none -XX:+UseFastAccessorMethods
-                -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y
-            </property>
             <property name="outputToConsole">true</property>
             <property name="jbossHome">target/jboss-as-7.1.1.Final</property>
             -->

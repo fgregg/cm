@@ -23,6 +23,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -44,6 +45,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfigur
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 
@@ -67,6 +69,8 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 	private transient OABAConfiguration oabaConfig;
 	private StartData data;
 
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
 
 	public void ejbCreate() {
 		try {
@@ -105,14 +109,14 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 				Object o = msg.getObject();
 
 				data = (StartData) o;
-				transJob = configuration.getTransitivityJob(data.jobID);
+				transJob = (TransitivityJob) configuration.findBatchJobById(em, TransitivityJobBean.class, data.jobID);
 				transJob.markAsStarted();
 				transJob.setModel(data.stageModelName);
 				transJob.setDiffer(data.low);
 				transJob.setMatch(data.high);
 				transJob.setDescription("");
 
-				data.jobID = transJob.getId().intValue();
+				data.jobID = transJob.getId();
 
 				oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 
@@ -128,11 +132,7 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 		} catch (Exception e) {
 			log.severe(e.toString());
 			mdc.setRollbackOnly();
-			try {
-				if (transJob != null) transJob.markAsFailed();
-			} catch (RemoteException e1) {
-				log.severe(e1.toString());
-			}
+			if (transJob != null) transJob.markAsFailed();
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}

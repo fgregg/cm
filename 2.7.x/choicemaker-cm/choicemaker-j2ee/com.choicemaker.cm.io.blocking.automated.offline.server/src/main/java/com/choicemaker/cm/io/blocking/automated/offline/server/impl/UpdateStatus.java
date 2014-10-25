@@ -80,7 +80,7 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 				
 				log.fine("Starting to update job ID: " + data.jobID + " " + data.percentComplete);
 
-				final BatchJob job = this.configuration.findBatchJobById(em, data.jobID);
+				final BatchJob job = this.configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 				
 				if (data.percentComplete == 0) {
 					job.markAsStarted();

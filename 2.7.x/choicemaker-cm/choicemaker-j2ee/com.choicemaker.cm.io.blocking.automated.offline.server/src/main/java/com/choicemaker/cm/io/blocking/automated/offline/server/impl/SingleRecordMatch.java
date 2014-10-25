@@ -134,7 +134,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 				OABAConfiguration oabaConfig =
 					new OABAConfiguration(data.stageModelName, data.jobID);
 
-				BatchJob batchJob = configuration.findBatchJobById(em, data.jobID);
+				BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 				// final file
 				IMatchRecord2Sink mSink =

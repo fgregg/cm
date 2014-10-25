@@ -25,6 +25,7 @@ import javax.persistence.EntityManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -167,76 +168,58 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 	/**
 	 * Retrieves the status of the matching process with the give job ID.
 	 * 
-	 * @param   jobID		Job ID.
-	 * @return  Job status.
-	 * @throws  RemoteException
-	 */	
-	public JobStatus 			getJobStatus (
-									long jobID)
-								throws	
-										ArgumentException,
-										ConfigException,
-										CmRuntimeException, 
-										RemoteException
-	{	
+	 * @param jobID
+	 *            Job ID.
+	 * @return Job status.
+	 * @throws RemoteException
+	 */
+	public JobStatus getJobStatus(long jobID) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
 		log.fine("<<getJobStatus");
-			UrmJob urmJob = Single.getInst().findUrmJobById(jobID);
-			JobStatus js = urmJob.getJobStatus();
-			if( !urmJob.isAbortRequested() && !urmJob.isStarted()  ){//isStarted actually menas is running
-				return js;
+		UrmJob urmJob = Single.getInst().findUrmJobById(jobID);
+		JobStatus js = urmJob.getJobStatus();
+		if (!urmJob.isAbortRequested() && !urmJob.isStarted()) {
+			return js;
+		}
+		long stepJobId = urmJob.getCurStepJobId().longValue();
+		int stepIndex = (int) urmJob.getCurStepIndex().longValue();
+		String stepStatus = "";
+		if (stepJobId != JobStatus.UNDEFINED_ID) {
+			switch (stepIndex) {
+			case BATCH_MATCH_STEP_INDEX:
+				BatchJob bj =
+					Single.getInst().findBatchJobById(em, BatchJobBean.class,
+							stepJobId);
+				stepStatus = bj.getStatus();
+				break;
+			case TRANS_OABA_STEP_INDEX:
+				TransitivityJob tj =
+					Single.getInst().findTransJobById(stepJobId);
+				stepStatus = tj.getStatus();
+				break;
+			case TRANS_SERIAL_STEP_INDEX:
+				CmsJob cj = Single.getInst().findCmsJobById(stepJobId);
+				stepStatus = cj.getStatus();
+				break;
+			default:
+				log.info("unknown step index " + stepIndex);
 			}
-			long stepJobId  = urmJob.getCurStepJobId().longValue();
-			int stepIndex = (int)urmJob.getCurStepIndex().longValue();
-			String stepStatus = "";	
-			if(stepJobId != JobStatus.UNDEFINED_ID){
-				switch(stepIndex){
-					case BATCH_MATCH_STEP_INDEX :{
-						BatchJob bj = Single.getInst().findBatchJobById(em, stepJobId);
-						stepStatus = bj.getStatus();
-						if( js.getStatus().equals(JobStatus.STATUS_COMPLETED))
-							js.setFinishDate(bj.getCompleted());
-						else if( js.getStatus().equals(JobStatus.STATUS_FAILED))
-							js.setFinishDate(bj.getFailed());	
-						else if( js.getStatus().equals(JobStatus.STATUS_ABORTED))
-							js.setFinishDate(bj.getAborted());		
-					}
-					break; 
-					case TRANS_OABA_STEP_INDEX:{
-						TransitivityJob tj = Single.getInst().findTransJobById(stepJobId);
-						stepStatus = tj.getStatus();
-						if( js.getStatus().equals(JobStatus.STATUS_COMPLETED))
-							js.setFinishDate(tj.getCompleted());
-						else if( js.getStatus().equals(JobStatus.STATUS_FAILED))
-							js.setFinishDate(tj.getFailed());	
-						else if( js.getStatus().equals(JobStatus.STATUS_ABORTED))
-							js.setFinishDate(tj.getAborted());	
-					}
-					break;
-					case TRANS_SERIAL_STEP_INDEX:{
-						CmsJob cj = Single.getInst().findCmsJobById(stepJobId);
-						stepStatus = cj.getStatus();
-						if( js.getStatus().equals(JobStatus.STATUS_COMPLETED) ||
-						    js.getStatus().equals(JobStatus.STATUS_FAILED) ||
-							js.getStatus().equals(JobStatus.STATUS_ABORTED))
-							js.setFinishDate(cj.getFinishDate());
-					}
-					break;
-					default:
-						log.info("unknown step index "+stepIndex);
-				}
-				js.setStepDescription(urmJob.getStepDescription()+" "+stepStatus);
-				if(urmJob.isAbortRequested() && stepStatus.equals(JobStatus.STATUS_ABORTED) ){
-					urmJob.markAsAborted();
-					urmJob.setStepDescription(js.getStepDescription());
-				}					
-				if(urmJob.isStarted() && stepStatus.equals(JobStatus.STATUS_FAILED)){
-					urmJob.markAsFailed();
-					urmJob.setStepDescription(js.getStepDescription());
-				}
-						
-			}	
-			log.fine(">>getJobStatus");	
-			return js;					
+			js.setStepDescription(urmJob.getStepDescription() + " "
+					+ stepStatus);
+			if (urmJob.isAbortRequested()
+					&& stepStatus.equals(JobStatus.STATUS_ABORTED)) {
+				urmJob.markAsAborted();
+				urmJob.setStepDescription(js.getStepDescription());
+			}
+			if (urmJob.isStarted()
+					&& stepStatus.equals(JobStatus.STATUS_FAILED)) {
+				urmJob.markAsFailed();
+				urmJob.setStepDescription(js.getStepDescription());
+			}
+
+		}
+		log.fine(">>getJobStatus");
+		return js;
 	}
 
 	/**

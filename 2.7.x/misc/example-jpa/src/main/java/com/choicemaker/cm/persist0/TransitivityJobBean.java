@@ -29,7 +29,6 @@ import javax.persistence.NamedQuery;
  *
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)
- *
  */
 @NamedQuery(name = "transitivityFindAll",
 		query = "Select job from TransitivityJobBean job")

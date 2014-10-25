@@ -103,7 +103,7 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
 
-				batchJob = configuration.findBatchJobById(em, data.jobID);
+				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 				//init values
 				IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);

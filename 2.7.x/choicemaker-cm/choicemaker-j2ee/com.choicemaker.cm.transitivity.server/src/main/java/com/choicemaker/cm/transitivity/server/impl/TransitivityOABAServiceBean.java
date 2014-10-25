@@ -23,13 +23,16 @@ import javax.jms.JMSException;
 import javax.jms.Queue;
 //import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.server.data.TransitivityJobStatus;
@@ -46,6 +49,9 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger(TransitivityOABAServiceBean.class.getName());
+
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
 
 //	private transient SessionContext sessionContext;
 	private transient EJBConfiguration configuration = null;
@@ -114,7 +120,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 		try {
 
-			BatchParameters batchParams = configuration.findBatchParamsById(jobID);
+			BatchParameters batchParams = configuration.findBatchParamsById(em, jobID);
 
 			StartData data = new StartData();
 			data.jobID = jobID;
@@ -152,10 +158,11 @@ public class TransitivityOABAServiceBean implements SessionBean {
 		JMSException, FinderException, RemoteException, CreateException,
 		NamingException, SQLException {
 
-		TransitivityJob transJob = configuration.findTransitivityJobById(jobID);
+		BatchJob transJob = configuration.findBatchJobById(em, TransitivityJobBean.class, jobID);
+		assert transJob instanceof TransitivityJob;
 
 		TransitivityJobStatus status = new TransitivityJobStatus (
-			transJob.getId().longValue(),
+			transJob.getId(),
 			transJob.getStatus(),
 			transJob.getStarted(),
 			transJob.getCompleted()
@@ -179,25 +186,17 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	public TransitivityResult getTransitivityResult (long jobID, boolean compact) throws
 		RemoteException, FinderException, NamingException, TransitivityException {
 
-		TransitivityJob transJob = configuration.findTransitivityJobById(jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, TransitivityJobBean.class, jobID);
+		assert batchJob instanceof TransitivityJob;
+		TransitivityJob transJob = (TransitivityJob) batchJob;
 		if (!transJob.getStatus().equals(TransitivityJob.STATUS_COMPLETED))
 			throw new TransitivityException ("Job " + jobID + " is not complete.");
 
 		log.info("file source " + transJob.getDescription());
 
-		// OLD
-		//MatchRecord2Source mrs = new MatchRecord2Source (transJob.getDescription(),
-		//	Constants.STRING);
-
-		//NEW
 		MatchRecord2CompositeSource mrs = new MatchRecord2CompositeSource (
 			transJob.getDescription());
 
-		//OLD
-		//CompositeEntityBuilder ceb = new CompositeEntityBuilder (mrs);
-		//Iterator it = ceb.getCompositeEntities();
-
-		//NEW
 		CompositeEntitySource ces = new CompositeEntitySource (mrs);
 		CompositeEntityIterator it = new CompositeEntityIterator (ces);
 

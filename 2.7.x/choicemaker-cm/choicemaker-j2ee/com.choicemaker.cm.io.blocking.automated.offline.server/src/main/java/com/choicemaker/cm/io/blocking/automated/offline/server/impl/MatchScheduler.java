@@ -48,7 +48,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
  * It listens for done messages from the matchers bean and when every chunk is done, it
  * calls the MatchDedup bean.
  * 
- * @@deprecated
+ * @deprecated
  * 
  * @author pcheung
  *
@@ -139,7 +139,7 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 						timeWriting = 0;
 					}
 					
-					batchJob = configuration.findBatchJobById(em, data.jobID);
+					batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 					
 					//start matching
 					startMatch (data);
@@ -209,7 +209,7 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 		
 		//init values
 		IStatus status = configuration.getStatusLog(data);
-		BatchJob batchJob = configuration.findBatchJobById(em, data.jobID);
+		BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			batchJob.markAsAborted();

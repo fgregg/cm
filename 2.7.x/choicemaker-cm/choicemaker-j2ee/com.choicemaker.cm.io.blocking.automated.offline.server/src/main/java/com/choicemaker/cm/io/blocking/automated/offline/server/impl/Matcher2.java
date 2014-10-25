@@ -159,7 +159,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 					oabaConfig =
 						new OABAConfiguration(data.stageModelName, data.jobID);
-					batchJob = configuration.findBatchJobById(em, data.jobID);
+					batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 					IStatus status = configuration.getStatusLog(data);
 
 					if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob
@@ -270,14 +270,6 @@ public class Matcher2<T extends Comparable<? super T>> implements
 	/**
 	 * This method handles the comparisons of a IComparisonSet. It returns an
 	 * ArrayList of MatchRecord2 produced by this IComparisonSet.
-	 *
-	 * @param cSet
-	 * @param batchJob
-	 * @param dataStore
-	 * @param stageModel
-	 * @return
-	 * @throws RemoteException
-	 * @throws BlockingException
 	 */
 	protected List<MatchRecord2> handleComparisonSet(IComparisonSet cSet,
 			BatchJob batchJob, ChunkDataStore dataStore,
@@ -317,9 +309,6 @@ public class Matcher2<T extends Comparable<? super T>> implements
 	// /** This method returns true if the ComparisonPair contains a record we
 	// are interested
 	// * in.
-	// *
-	// * @param p
-	// * @return
 	// */
 	// private boolean isDebug (ComparisonPair p) {
 	// Long l1 = new Long (1926738);
@@ -375,11 +364,6 @@ public class Matcher2<T extends Comparable<? super T>> implements
 	 *
 	 * @param num
 	 *            - number of processors
-	 * @param chunkId
-	 *            - chunk id
-	 * @param treeId
-	 *            - tree id
-	 * @return
 	 */
 	protected IComparisonSetSource getSource(int num, int maxBlockSize)
 			throws BlockingException {
@@ -420,9 +404,6 @@ public class Matcher2<T extends Comparable<? super T>> implements
 	 * corresponding to this matcher bean.
 	 *
 	 * @param matches
-	 * @param ind
-	 * @param maxMatch
-	 * @throws BlockingException
 	 */
 	protected void writeMatches(List<MatchRecord2> matches)
 			throws BlockingException {
@@ -438,9 +419,6 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 	/**
 	 * This method sends the message to the match result write bean.
-	 *
-	 * @param data
-	 * @throws NamingException
 	 */
 	protected void sendToMatchScheduler(MatchWriterData data)
 			throws NamingException, JMSException {
@@ -450,19 +428,12 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 	/**
 	 * This method compares two records and returns a MatchRecord2 object.
-	 *
-	 * @param clueSet
-	 * @param enabledClues
-	 * @param evaluator
 	 * @param q
 	 *            - first record
 	 * @param m
 	 *            - second record
 	 * @param isStage
 	 *            - indicates if the second record is staging or master
-	 * @param low
-	 * @param high
-	 * @return
 	 */
 	protected MatchRecord2 compareRecords(Record q, Record m, boolean isStage,
 			ImmutableProbabilityModel model) {
@@ -524,8 +495,6 @@ public class Matcher2<T extends Comparable<? super T>> implements
 
 	/**
 	 * This returns an unique id for each instance of the object.
-	 *
-	 * @return
 	 */
 	public String getID() {
 		String str = this.toString();
