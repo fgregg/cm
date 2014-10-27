@@ -1,5 +1,16 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+/**
+ * Java Persistence API (JPA) for BatchJob beans.<br/>
+ * Prefixes:
+ * <ul>
+ * <li>JPQL -- Java Persistence Query Language</li>
+ * <li>QN -- Query Name</li>
+ * <li>CN -- Column Name</li>
+ * </ul>
+ * 
+ * @author rphall
+ */
 public interface BatchJobJPA {
 
 	/** Name of the table that persists batch job data */
@@ -11,10 +22,12 @@ public interface BatchJobJPA {
 	/** Name of the column used to distinguish between batch jobs and sub-types */
 	String DISCRIMINATOR_COLUMN = "TYPE";
 
-	/** Value of the discriminator column used to mark BatchJob types (and not sub-types) */
+	/**
+	 * Value of the discriminator column used to mark BatchJob types (and not
+	 * sub-types)
+	 */
 	String DISCRIMINATOR_VALUE = "OABA";
 
-	// -- Column names
 	String CN_ID = "ID";
 	String CN_BPARENT_ID = "BPARENT_ID";
 	String CN_URM_ID = "URM_ID";
@@ -26,12 +39,10 @@ public interface BatchJobJPA {
 	String CN_TIMESTAMP = "TIMESTAMP";
 	String CN_AUDIT_JOIN = "BATCHJOB_ID";
 
-	/** Name of a query that finds all persistent batch job instances */
-	String QN_BATCHJOB_FIND_ALL =
-			"batchJobFindAll";
+	/** Name of the query that finds all persistent batch job instances */
+	String QN_BATCHJOB_FIND_ALL = "batchJobFindAll";
 
-	/** EQL statement used to find all persistent batch job instances */
-	String EQL_BATCHJOB_FIND_ALL =
-			"Select job from BatchJobBean job";
+	/** JPQL used to implement {@link #QN_BATCHJOB_FIND_ALL} */
+	String EQL_BATCHJOB_FIND_ALL = "Select job from BatchJobBean job";
 
 }

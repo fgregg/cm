@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
@@ -27,14 +28,23 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJ
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)
  */
+@NamedQueries({
 @NamedQuery(name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL,
-		query = TransitivityJobJPA.EQL_TRANSITIVITY_FIND_ALL)
+		query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL),
+@NamedQuery(name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID,
+		query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID)
+})
 @Entity
-@DiscriminatorValue(value = TransitivityJobJPA.DEFAULT_TABLE_DISCRIMINATOR)
+@DiscriminatorValue(value = TransitivityJobJPA.DISCRIMINATOR_VALUE)
 public class TransitivityJobBean extends BatchJobBean implements
 		TransitivityJob {
 
 	private static final long serialVersionUID = 271L;
+
+	/** Required by JPA; do not invoke directly */
+	protected TransitivityJobBean() {
+		super();
+	}
 
 	public TransitivityJobBean(BatchJob parent) {
 		this(parent, parent.getExternalId(), parent.getTransactionId(), parent
@@ -47,7 +57,7 @@ public class TransitivityJobBean extends BatchJobBean implements
 
 	protected TransitivityJobBean(BatchJob parent, String externalId, long tid,
 			long urmid) {
-		super(externalId, tid, parent.getBatchParentId(), urmid);
+		super(externalId, tid, parent.getId(), urmid);
 		if (!BatchJobBean.isPersistent(parent)) {
 			throw new IllegalArgumentException(
 					"non-persistent parent batch job");

@@ -29,7 +29,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
  *
  */
 @NamedQuery(name = BatchParametersJPA.QN_BATCHPARAMETERS_FIND_ALL,
-		query = BatchParametersJPA.EQL_BATCHJOB_FIND_ALL)
+		query = BatchParametersJPA.JPQL_BATCHJOB_FIND_ALL)
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = BatchParametersJPA.TABLE_NAME)
 public class BatchParametersBean implements Serializable, BatchParameters {

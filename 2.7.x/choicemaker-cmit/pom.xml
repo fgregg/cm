@@ -22,6 +22,7 @@
     <module>cmit-arquillian-utils</module>
     <module>simple-person-plugin-it</module>
     <module>cm-server-oaba-it</module>
+    <module>cm-server-transitivity-it</module>
   </modules>
 
 </project>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+>
+
+  <persistence-unit name="oaba" transaction-type="JTA">
+
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+    <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
+
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean</class>
+    <!--
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean</class>
+
+    <class>com.choicemaker.cm.persist0.BatchJobBean</class>
+    <class>com.choicemaker.cm.persist0.CMP_AuditEvent</class>
+    <class>com.choicemaker.cm.persist0.OfflineMatchingBean</class>
+    <class>com.choicemaker.cm.persist0.OfflineMatchingAuditEvent</class>
+    <class>com.choicemaker.cm.persist0.TransitivityJobBean</class>
+    <class>com.choicemaker.cm.persist0.TransitivityJobAuditEvent</class>
+    <class>com.choicemaker.cm.persist0.CMP_ModelBean</class>
+    <class>com.choicemaker.cm.persist0.BatchParametersBean</class>
+    <class>com.choicemaker.cm.persist0.StatusLogBean</class>
+    -->
+
+    <properties>
+      <property name="eclipselink.target-server" value="JBoss" />
+
+      <!--  property name="eclipselink.ddl-generation" value="create-tables" / -->
+      <!--  property name="eclipselink.ddl-generation" value="drop-and-create-tables" / -->
+      <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+
+      <property name="eclipselink.ddl-generation.output-mode" value="both" />
+
+      <property name="eclipselink.logging.logger" value="ServerLogger" />
+      <property name="eclipselink.logging.level.sql" value="FINE" />
+      <property name="eclipselink.logging.parameters" value="true" />
+    </properties>
+  </persistence-unit>
+
+  <persistence-unit name="oaba-local" transaction-type="RESOURCE_LOCAL">
+
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+    <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
+    <non-jta-data-source>jboss/datasources/DefaultDS0</non-jta-data-source>
+
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean</class>
+    <!--
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchParametersBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean</class>
+
+    <class>com.choicemaker.cm.persist0.BatchJobBean</class>
+    <class>com.choicemaker.cm.persist0.CMP_AuditEvent</class>
+    <class>com.choicemaker.cm.persist0.OfflineMatchingBean</class>
+    <class>com.choicemaker.cm.persist0.OfflineMatchingAuditEvent</class>
+    <class>com.choicemaker.cm.persist0.TransitivityJobBean</class>
+    <class>com.choicemaker.cm.persist0.TransitivityJobAuditEvent</class>
+    <class>com.choicemaker.cm.persist0.CMP_ModelBean</class>
+    <class>com.choicemaker.cm.persist0.BatchParametersBean</class>
+    <class>com.choicemaker.cm.persist0.StatusLogBean</class>
+    -->
+
+    <properties>
+      <property name="eclipselink.target-server" value="JBoss" />
+
+      <!--  property name="eclipselink.ddl-generation" value="create-tables" / -->
+      <!--  property name="eclipselink.ddl-generation" value="drop-and-create-tables" / -->
+      <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+
+      <property name="eclipselink.ddl-generation.output-mode" value="both" />
+
+      <property name="eclipselink.logging.logger" value="ServerLogger" />
+      <property name="eclipselink.logging.level.sql" value="FINE" />
+      <property name="eclipselink.logging.parameters" value="true" />
+    </properties>
+  </persistence-unit>
+
+</persistence>
+
