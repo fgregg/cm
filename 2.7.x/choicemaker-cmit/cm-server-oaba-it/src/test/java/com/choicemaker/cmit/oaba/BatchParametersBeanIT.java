@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
 import com.choicemaker.cmit.utils.DeploymentUtils;
 
@@ -57,23 +56,11 @@ public class BatchParametersBeanIT {
 	}
 
 	@EJB
-	protected BatchJobController jobController;
-
-	@EJB
 	protected BatchParametersController prmController;
 
 	@Test
 	public void testBatchParametersController() {
-		assertTrue(jobController != null);
 		assertTrue(prmController != null);
-	}
-
-	@Test
-	public void testConstruction() {
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
-		job = jobController.save(job);
-		BatchParametersBean params = new BatchParametersBean(job);
-		assertTrue(job.getId() == params.getId());
 	}
 
 	@Test
@@ -82,10 +69,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
-		job = jobController.save(job);
-		BatchParametersBean params = new BatchParametersBean(job);
-		assertTrue(params.getId() == job.getId());
+		BatchParametersBean params = new BatchParametersBean();
 
 		// Save the params
 		prmController.save(params);
@@ -112,9 +96,7 @@ public class BatchParametersBeanIT {
 		// Count existing jobs
 		final int initialCount = prmController.findAll().size();
 
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
-		job = jobController.save(job);
-		BatchParametersBean params = new BatchParametersBean(job);
+		BatchParametersBean params = new BatchParametersBean();
 		prmController.save(params);
 		assertTrue(params.getId() != 0);
 		final long id = params.getId();
@@ -138,19 +120,16 @@ public class BatchParametersBeanIT {
 	@Test
 	public void testEqualsHashCode() {
 		// Create two generic parameter sets and verify equality
-		BatchJobBean job1 =
-			new BatchJobBean("EXT ID: " + new Date().toString());
-		jobController.save(job1);
-		BatchParametersBean params1 = new BatchParametersBean(job1);
-		BatchParametersBean params2 = new BatchParametersBean(job1);
+		BatchParametersBean params1 = new BatchParametersBean();
+		BatchParametersBean params2 = new BatchParametersBean();
 		assertTrue(params1.equals(params2));
 		assertTrue(params1.hashCode() == params2.hashCode());
 
-		// Change something on one of the parameter sets and verify equality
+		// Change something on one of the parameter sets and verify inequality
 		params1.setLowThreshold(getRandomThreshold());
 		assertTrue(params1.getLowThreshold() != params2.getLowThreshold());
-		assertTrue(params1.equals(params2));
-		assertTrue(params1.hashCode() == params2.hashCode());
+		assertTrue(!params1.equals(params2));
+		assertTrue(params1.hashCode() != params2.hashCode());
 
 		// // Restore equality
 		// params2.setLowThreshold(params1.getLowThreshold());
@@ -183,9 +162,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
-		job = jobController.save(job);
-		BatchParametersBean params = new BatchParametersBean(job);
+		BatchParametersBean params = new BatchParametersBean();
 		final String v1 = new Date().toString();
 		params.setStageModel(v1);
 
@@ -213,9 +190,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
-		job = jobController.save(job);
-		BatchParametersBean params = new BatchParametersBean(job);
+		BatchParametersBean params = new BatchParametersBean();
 		final String v1 = new Date().toString();
 		params.setMasterModel(v1);
 
@@ -243,9 +218,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
-		job = jobController.save(job);
-		BatchParametersBean params = new BatchParametersBean(job);
+		BatchParametersBean params = new BatchParametersBean();
 		final int v1 = random.nextInt();
 		params.setMaxSingle(v1);
 
@@ -273,9 +246,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
-		job = jobController.save(job);
-		BatchParametersBean params = new BatchParametersBean(job);
+		BatchParametersBean params = new BatchParametersBean();
 		final float v1 = getRandomThreshold();
 		params.setLowThreshold(v1);
 
@@ -303,9 +274,7 @@ public class BatchParametersBeanIT {
 		final int initialCount = prmController.findAll().size();
 
 		// Create a params and set a value
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
-		job = jobController.save(job);
-		BatchParametersBean params = new BatchParametersBean(job);
+		BatchParametersBean params = new BatchParametersBean();
 		final float v1 = getRandomThreshold();
 		params.setHighThreshold(v1);
 

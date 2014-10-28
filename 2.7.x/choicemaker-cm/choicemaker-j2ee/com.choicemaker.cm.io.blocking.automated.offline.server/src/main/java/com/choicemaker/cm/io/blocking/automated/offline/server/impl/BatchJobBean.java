@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.*;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,13 +69,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
  * @author rphall (migrated to JPA 2.0)
  *
  */
-@NamedQuery(name = BatchJobJPA.QN_BATCHJOB_FIND_ALL,
-		query = BatchJobJPA.EQL_BATCHJOB_FIND_ALL)
+@NamedQuery(name = QN_BATCHJOB_FIND_ALL,
+		query = EQL_BATCHJOB_FIND_ALL)
 @Entity
-@Table(/* schema = "CHOICEMAKER", */name = BatchJobJPA.TABLE_NAME)
-@DiscriminatorColumn(name = BatchJobJPA.DISCRIMINATOR_COLUMN,
+@Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
+@DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue(BatchJobJPA.DISCRIMINATOR_VALUE)
+@DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	private static final long serialVersionUID = 271L;
@@ -120,49 +122,50 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	// -- Instance data
 
 	@Id
-	@Column(name = BatchJobJPA.CN_ID)
-	@TableGenerator(name = "OABA_BATCHJOB", table = "CMT_SEQUENCE",
-			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-			pkColumnValue = "OABA_BATCHJOB")
+	@Column(name = CN_ID)
+	@TableGenerator(name = ID_GENERATOR_NAME, table = ID_GENERATOR_TABLE,
+			pkColumnName = ID_GENERATOR_PK_COLUMN_NAME,
+			valueColumnName = ID_GENERATOR_VALUE_COLUMN_NAME,
+			pkColumnValue = ID_GENERATOR_PK_COLUMN_VALUE)
 	@GeneratedValue(strategy = GenerationType.TABLE,
-			generator = "OABA_BATCHJOB")
+			generator = ID_GENERATOR_NAME)
 	private long id;
 	
 	/**
 	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some other
 	 * BatchJobBean
 	 */
-	@Column(name = BatchJobJPA.CN_BPARENT_ID)
+	@Column(name = CN_BPARENT_ID)
 	private final long bparentId;
 
 	/**
 	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some
 	 * UrmJobBean
 	 */
-	@Column(name = BatchJobJPA.CN_URM_ID)
+	@Column(name = CN_URM_ID)
 	private final long urmId;
 
-	@Column(name = BatchJobJPA.CN_TRANSACTION_ID)
+	@Column(name = CN_TRANSACTION_ID)
 	private final long transactionId;
 
-	@Column(name = BatchJobJPA.CN_EXTERNAL_ID)
+	@Column(name = CN_EXTERNAL_ID)
 	private String externalId;
 
-	@Column(name = BatchJobJPA.CN_DESCRIPTION)
+	@Column(name = CN_DESCRIPTION)
 	private String description;
 
-	@Column(name = BatchJobJPA.CN_FRACTION_COMPLETE)
+	@Column(name = CN_FRACTION_COMPLETE)
 	private int percentageComplete;
 
-	@Column(name = BatchJobJPA.CN_STATUS)
+	@Column(name = CN_STATUS)
 	private String status;
 
 	@ElementCollection
-	@MapKeyColumn(name = BatchJobJPA.CN_TIMESTAMP)
+	@MapKeyColumn(name = CN_TIMESTAMP)
 	@MapKeyTemporal(TemporalType.TIMESTAMP)
-	@Column(name = BatchJobJPA.CN_STATUS)
-	@CollectionTable(name = BatchJobJPA.AUDIT_TABLE_NAME,
-			joinColumns = @JoinColumn(name = BatchJobJPA.CN_AUDIT_JOIN))
+	@Column(name = CN_STATUS)
+	@CollectionTable(name = AUDIT_TABLE_NAME,
+			joinColumns = @JoinColumn(name = CN_AUDIT_JOIN))
 	private Map<Date, String> audit = new HashMap<>();
 
 	// -- Construction
@@ -544,7 +547,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		result =
 			prime * result + (int) (transactionId ^ (transactionId >>> 32));
 		result =
-			prime * result + BatchJobJPA.DISCRIMINATOR_VALUE.hashCode();
+			prime * result + DISCRIMINATOR_VALUE.hashCode();
 		return result;
 	}
 

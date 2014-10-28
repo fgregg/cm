@@ -10,17 +10,21 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA.*;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
 import com.choicemaker.cm.core.SerialRecordSource;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 
 /**
@@ -41,11 +45,12 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 
 	@Id
 	@Column(name = BatchParametersJPA.CN_ID)
-//	@TableGenerator(name = "OABA_BATCHPARAMS", table = "CMT_SEQUENCE",
-//			pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-//			pkColumnValue = "OABA_BATCHPARAMS")
-//	@GeneratedValue(strategy = GenerationType.TABLE,
-//			generator = "OABA_BATCHPARAMS")
+	@TableGenerator(name = ID_GENERATOR_NAME, table = ID_GENERATOR_TABLE,
+			pkColumnName = ID_GENERATOR_PK_COLUMN_NAME,
+			valueColumnName = ID_GENERATOR_VALUE_COLUMN_NAME,
+			pkColumnValue = ID_GENERATOR_PK_COLUMN_VALUE)
+	@GeneratedValue(strategy = GenerationType.TABLE,
+			generator = ID_GENERATOR_NAME)
 	private long id;
 
 	@Column(name = BatchParametersJPA.CN_STAGE_MODEL)
@@ -69,19 +74,17 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	@Transient
 	private SerialRecordSource masterRs;
 
-	protected BatchParametersBean() {
-		this(INVALID_JOBID);
+	public BatchParametersBean() {
 	}
 
-	protected BatchParametersBean(long jobId) {
-		this.id = jobId;
-	}
-
-	public BatchParametersBean(BatchJob batchJob) {
-		this(batchJob.getId());
-		if (!BatchJobBean.isPersistent(batchJob)) {
-			throw new IllegalArgumentException("non-persistent batch job");
-		}
+	public BatchParametersBean(BatchParameters bp) {
+		this.stageModel = bp.getStageModel();
+		this.masterModel = bp.getMasterModel();
+		this.maxSingle = bp.getMaxSingle();
+		this.lowThreshold = bp.getLowThreshold();
+		this.highThreshold = bp.getHighThreshold();
+		this.stageRs = bp.getStageRs();
+		this.masterRs = bp.getMasterRs();
 	}
 
 	@Override

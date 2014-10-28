@@ -23,6 +23,16 @@ public interface BatchParametersJPA {
 	String CN_STAGE_RS = "STAGE_RS";
 	String CN_MASTER_RS = "MASTER_RS";
 
+	String ID_GENERATOR_NAME = "OABA_BATCHPARAMS";
+
+	String ID_GENERATOR_TABLE = BatchJobJPA.ID_GENERATOR_TABLE;
+
+	String ID_GENERATOR_PK_COLUMN_NAME = BatchJobJPA.ID_GENERATOR_PK_COLUMN_NAME;
+
+	String ID_GENERATOR_PK_COLUMN_VALUE = "OABA_BATCHPARAMS";
+
+	String ID_GENERATOR_VALUE_COLUMN_NAME = BatchJobJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+
 	/**
 	 * Name of the query that finds all persistent batch parameter instances
 	 */
