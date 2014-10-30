@@ -59,6 +59,8 @@ public interface BatchJob extends IControl {
 
 	long getBatchParentId();
 	
+	long getBatchParametersId();
+	
 	long getUrmId();
 
 	long getTransactionId();
@@ -88,8 +90,6 @@ public interface BatchJob extends IControl {
 	Date getAborted();
 
 	// -- Modifiers
-
-	void setExternalId(String externalId);
 
 	void setDescription(String description);
 

@@ -48,6 +48,7 @@ import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 
 /**
  * This class tracks the progress of a (long-running) offline matching process.
@@ -131,12 +132,21 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 			generator = ID_GENERATOR_NAME)
 	private long id;
 	
+	@Column(name = CN_TYPE)
+	private final String type;
+
 	/**
 	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some other
 	 * BatchJobBean
 	 */
 	@Column(name = CN_BPARENT_ID)
 	private final long bparentId;
+
+	/**
+	 * References the persistent id of some BatchParametersBean instance
+	 */
+	@Column(name = CN_BPARAMS_ID)
+	private final long bparamsId;
 
 	/**
 	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some
@@ -149,7 +159,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	private final long transactionId;
 
 	@Column(name = CN_EXTERNAL_ID)
-	private String externalId;
+	private final String externalId;
 
 	@Column(name = CN_DESCRIPTION)
 	private String description;
@@ -187,11 +197,25 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		this.setTimeStamp(job.getStatus(), ts);
 	}
 
+	// FIXME REMOVE this construction (illegal bparamsId)
 	protected BatchJobBean(String externalId, long tid, long bpid, long urmid) {
+		this(BatchJobJPA.DISCRIMINATOR_VALUE,BatchParameters.INVALID_PARAMSID, externalId, tid, bpid, urmid);
+	}
+
+	protected BatchJobBean(String type, long paramsid, String externalId, long tid, long bpid, long urmid) {
+		if (type == null) {
+			 throw new IllegalArgumentException("null type");
+		}
+		type = type.trim();
+		if (type.isEmpty()) {
+			 throw new IllegalArgumentException("blank type");
+		}
+		this.type = type;
+		this.bparamsId = paramsid;
 		this.transactionId = tid;
+		this.externalId = externalId;
 		this.bparentId = bpid;
 		this.urmId = urmid;
-		setExternalId(externalId);
 		setStatus(STATUS_NEW);
 	}
 
@@ -205,6 +229,11 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	@Override
 	public long getBatchParentId() {
 		return this.bparentId;
+	}
+
+	@Override
+	public long getBatchParametersId() {
+		return bparamsId;
 	}
 
 	@Override
@@ -304,11 +333,6 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	// -- Field modifiers
-
-	@Override
-	public void setExternalId(String externalId) {
-		this.externalId = externalId;
-	}
 
 	@Override
 	public void setDescription(String description) {

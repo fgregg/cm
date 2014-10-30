@@ -91,16 +91,14 @@ public class BatchQueryServiceBean implements SessionBean {
 		//create a new current status EJB
 		configuration.createNewStatusLog(id);
 
-		//set the parameters
-		BatchParameters batchParams = configuration.createBatchParameters(id);
-		batchParams.setHighThreshold(new Float(highThreshold));
-		batchParams.setLowThreshold(new Float(lowThreshold));
-		batchParams.setMaxSingle(new Integer(maxSingle));
-		batchParams.setStageModel(stageModelName);
-		batchParams.setMasterModel(masterModelName);
+		// set the parameters
+		BatchParameters batchParams =
+			new BatchParametersBean(stageModelName, maxSingle, lowThreshold,
+					highThreshold, staging, master
 
-		batchParams.setMasterRs(master);
-		batchParams.setStageRs(staging);
+			);
+		em.persist(batchParams);
+		assert BatchParametersBean.isPersistent(batchParams);
 
 		//create a new current status EJB
 		configuration.createNewStatusLog(id);

@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 
 /**
@@ -46,18 +47,24 @@ public class TransitivityJobBean extends BatchJobBean implements
 		super();
 	}
 
-	public TransitivityJobBean(BatchJob parent) {
-		this(parent, parent.getExternalId(), parent.getTransactionId(), parent
+	public TransitivityJobBean(BatchParameters params, BatchJob parent) {
+		this(params, parent, parent.getExternalId(), parent.getTransactionId(),
+				parent.getUrmId());
+	}
+
+	public TransitivityJobBean(BatchParameters params, BatchJob parent,
+			String externalId) {
+		this(params, parent, externalId, randomTransactionId(), parent
 				.getUrmId());
 	}
 
-	public TransitivityJobBean(BatchJob parent, String externalId) {
-		this(parent, externalId, randomTransactionId(), parent.getUrmId());
-	}
-
-	protected TransitivityJobBean(BatchJob parent, String externalId, long tid,
-			long urmid) {
-		super(externalId, tid, parent.getId(), urmid);
+	protected TransitivityJobBean(BatchParameters params, BatchJob parent,
+			String externalId, long tid, long urmid) {
+		super(TransitivityJobJPA.DISCRIMINATOR_VALUE, params.getId(), externalId, tid, parent.getId(), urmid);
+		if (!BatchParametersBean.isPersistent(params)) {
+			throw new IllegalArgumentException(
+					"non-persistent batch parameters");
+		}
 		if (!BatchJobBean.isPersistent(parent)) {
 			throw new IllegalArgumentException(
 					"non-persistent parent batch job");

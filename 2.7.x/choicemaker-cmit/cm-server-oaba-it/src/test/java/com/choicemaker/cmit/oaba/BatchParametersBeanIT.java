@@ -22,12 +22,16 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
 import com.choicemaker.cmit.utils.DeploymentUtils;
+import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
 public class BatchParametersBeanIT {
@@ -58,6 +62,29 @@ public class BatchParametersBeanIT {
 	@EJB
 	protected BatchParametersController prmController;
 
+	private int initialBatchParamsCount;
+	private int initialBatchJobCount;
+	private int initialCount;
+
+	@Before
+	public void setUp() {
+		initialBatchParamsCount = prmController.findAllBatchParameters().size();
+		initialBatchJobCount = prmController.findAllBatchJobs().size();
+		initialCount = prmController.findAllTransitivityJobs().size();
+	}
+
+	@After
+	public void tearDown() {
+		int finalBatchParamsCount = prmController.findAllBatchParameters().size();
+		assertTrue(initialBatchParamsCount == finalBatchParamsCount);
+
+		int finalBatchJobCount = prmController.findAllBatchJobs().size();
+		assertTrue(initialBatchJobCount == finalBatchJobCount);
+
+		int finalTransJobCount = prmController.findAllTransitivityJobs().size();
+		assertTrue(initialCount == finalTransJobCount);
+	}
+
 	@Test
 	public void testBatchParametersController() {
 		assertTrue(prmController != null);
@@ -65,11 +92,12 @@ public class BatchParametersBeanIT {
 
 	@Test
 	public void testPersistFindRemove() {
-		// Count existing jobs
-		final int initialCount = prmController.findAll().size();
+		final String METHOD = "XXX";
+		TestEntities te = new TestEntities();
 
 		// Create a params
-		BatchParametersBean params = new BatchParametersBean();
+		BatchParametersBean params =
+			prmController.createBatchParameters(METHOD, te);
 
 		// Save the params
 		prmController.save(params);
@@ -85,225 +113,111 @@ public class BatchParametersBeanIT {
 		prmController.delete(batchParameters2);
 		BatchParameters batchParameters3 = prmController.find(params.getId());
 		assertTrue(batchParameters3 == null);
-
-		// Check that the number of existing jobs equals the initial count
-		final int finalCount = prmController.findAll().size();
-		assertTrue(initialCount == finalCount);
-	}
-
-	@Test
-	public void testMerge() {
-		// Count existing jobs
-		final int initialCount = prmController.findAll().size();
-
-		BatchParametersBean params = new BatchParametersBean();
-		prmController.save(params);
-		assertTrue(params.getId() != 0);
-		final long id = params.getId();
-		prmController.detach(params);
-
-		assertTrue(params.getHighThreshold() == 0f);
-		final float highThreshold = getRandomThreshold();
-		params.setHighThreshold(highThreshold);
-		prmController.save(params);
-
-		params = null;
-		BatchParametersBean batchParameters2 = prmController.find(id);
-		assertTrue(id == batchParameters2.getId());
-		assertTrue(highThreshold == batchParameters2.getHighThreshold());
-		prmController.delete(batchParameters2);
-
-		final int finalCount = prmController.findAll().size();
-		assertTrue(initialCount == finalCount);
 	}
 
 	@Test
 	public void testEqualsHashCode() {
-		// Create two generic parameter sets and verify equality
-		BatchParametersBean params1 = new BatchParametersBean();
-		BatchParametersBean params2 = new BatchParametersBean();
-		assertTrue(params1.equals(params2));
-		assertTrue(params1.hashCode() == params2.hashCode());
+		final String METHOD = "XXX";
+		TestEntities te = new TestEntities();
 
-		// Change something on one of the parameter sets and verify inequality
-		params1.setLowThreshold(getRandomThreshold());
-		assertTrue(params1.getLowThreshold() != params2.getLowThreshold());
+		// Create two generic parameter sets, only one of which is persistent,
+		// and verify inequality
+		BatchParametersBean params1 = prmController.createBatchParameters(METHOD,te);
+		BatchParametersBean params2 = new BatchParametersBean(params1);
+		te.add(params2);
 		assertTrue(!params1.equals(params2));
 		assertTrue(params1.hashCode() != params2.hashCode());
-
-		// // Restore equality
-		// params2.setLowThreshold(params1.getLowThreshold());
-		// assertTrue(params1.equals(params2));
-		// assertTrue(params1.hashCode() == params2.hashCode());
-		//
-		// // Verify non-persistent parameters is not equal to persistent
-		// // parameters
-		// params1 = prmController.save(params1);
-		// assertTrue(!params1.equals(params2));
-		// assertTrue(params1.hashCode() != params2.hashCode());
-		//
-		// // Verify that equality of persisted parameter sets is set only by
-		// // persistence id
-		// prmController.detach(params1);
-		// params2 = prmController.find(params1.getId());
-		// prmController.detach(params2);
-		// assertTrue(params1.equals(params2));
-		// assertTrue(params1.hashCode() == params2.hashCode());
-		//
-		// params1.setLowThreshold(getRandomThreshold());
-		// assertTrue(params1.getLowThreshold() != params2.getLowThreshold());
-		// assertTrue(params1.equals(params2));
-		// assertTrue(params1.hashCode() == params2.hashCode());
 	}
 
 	@Test
 	public void testStageModel() {
-		// Count existing jobs
-		final int initialCount = prmController.findAll().size();
+		final String METHOD = "XXX";
+		TestEntities te = new TestEntities();
 
 		// Create a params and set a value
-		BatchParametersBean params = new BatchParametersBean();
-		final String v1 = new Date().toString();
-		params.setStageModel(v1);
+		BatchParametersBean template = prmController.createBatchParameters(METHOD,te);
+		final String v1 = prmController.createRandomModelConfigurationName(METHOD);
+		BatchParametersBean params = new BatchParametersBean(
+				v1,
+				template.getMaxSingle(),
+				template.getLowThreshold(),
+				template.getHighThreshold(),
+				template.getStageRs(),
+				template.getMasterRs()
+				);
+		te.add(params);
 
 		// Save the params
 		final long id1 = prmController.save(params).getId();
-		assertTrue(initialCount + 1 == prmController.findAll().size());
-		params = null;
 
-		// Retrieve the params
+		// Get the params
+		params = null;
 		params = prmController.find(id1);
 
 		// Check the value
-		final String v2 = params.getStageModel();
-		assertTrue(v1.equals(v2));
-
-		// Remove the params and check the number of remaining entries
-		prmController.delete(params);
-		final int finalCount = prmController.findAll().size();
-		assertTrue(initialCount == finalCount);
-	}
-
-	@Test
-	public void testMasterModel() {
-		// Count existing jobs
-		final int initialCount = prmController.findAll().size();
-
-		// Create a params and set a value
-		BatchParametersBean params = new BatchParametersBean();
-		final String v1 = new Date().toString();
-		params.setMasterModel(v1);
-
-		// Save the params
-		final long id1 = prmController.save(params).getId();
-		assertTrue(initialCount + 1 == prmController.findAll().size());
-		params = null;
-
-		// Retrieve the params
-		params = prmController.find(id1);
-
-		// Check the value
-		final String v2 = params.getMasterModel();
-		assertTrue(v1.equals(v2));
-
-		// Remove the params and check the number of remaining entries
-		prmController.delete(params);
-		final int finalCount = prmController.findAll().size();
-		assertTrue(initialCount == finalCount);
+		assertTrue(v1.equals(params.getStageModel()));
+		assertTrue(v1.equals(params.getMasterModel()));
+		assertTrue(v1.equals(params.getModelConfigurationName()));
 	}
 
 	@Test
 	public void testMaxSingle() {
-		// Count existing jobs
-		final int initialCount = prmController.findAll().size();
+		final String METHOD = "XXX";
+		TestEntities te = new TestEntities();
 
-		// Create a params and set a value
-		BatchParametersBean params = new BatchParametersBean();
+		// Create parameters with a known value
+		BatchParametersBean template = prmController.createBatchParameters(METHOD,te);
 		final int v1 = random.nextInt();
-		params.setMaxSingle(v1);
+		BatchParametersBean params = new BatchParametersBean(
+				template.getModelConfigurationName(),
+				v1,
+				template.getLowThreshold(),
+				template.getHighThreshold(),
+				template.getStageRs(),
+				template.getMasterRs()
+				);
+		te.add(params);
 
 		// Save the params
 		final long id1 = prmController.save(params).getId();
-		assertTrue(initialCount + 1 == prmController.findAll().size());
-		params = null;
 
 		// Get the params
+		params = null;
 		params = prmController.find(id1);
 
 		// Check the value
 		final int v2 = params.getMaxSingle();
 		assertTrue(v1 == v2);
-
-		// Remove the params and the number of remaining entries
-		prmController.delete(params);
-		final int finalCount = prmController.findAll().size();
-		assertTrue(initialCount == finalCount);
 	}
 
 	@Test
-	public void testLowThreshold() {
-		// Count existing jobs
-		final int initialCount = prmController.findAll().size();
+	public void testThresholds() {
+		final String METHOD = "XXX";
+		TestEntities te = new TestEntities();
 
-		// Create a params and set a value
-		BatchParametersBean params = new BatchParametersBean();
-		final float v1 = getRandomThreshold();
-		params.setLowThreshold(v1);
-
-		// Save the params
-		final long id1 = prmController.save(params).getId();
-		assertTrue(initialCount + 1 == prmController.findAll().size());
-		params = null;
-
-		// Get the params
-		params = prmController.find(id1);
-
-		// Check the value
-		final float v2 = params.getLowThreshold();
-		assertTrue(v1 == v2);
-
-		// Remove the params and the number of remaining entries
-		prmController.delete(params);
-		final int finalCount = prmController.findAll().size();
-		assertTrue(initialCount == finalCount);
-	}
-
-	@Test
-	public void testHighThreshold() {
-		// Count existing jobs
-		final int initialCount = prmController.findAll().size();
-
-		// Create a params and set a value
-		BatchParametersBean params = new BatchParametersBean();
-		final float v1 = getRandomThreshold();
-		params.setHighThreshold(v1);
+		// Create parameters with known values
+		BatchParametersBean template = prmController.createBatchParameters(METHOD,te);
+		final Thresholds t = prmController.createRandomThresholds();
+		BatchParametersBean params = new BatchParametersBean(
+				template.getModelConfigurationName(),
+				template.getMaxSingle(),
+				t.getDifferThreshold(),
+				t.getMatchThreshold(),
+				template.getStageRs(),
+				template.getMasterRs()
+				);
+		te.add(params);
 
 		// Save the params
 		final long id1 = prmController.save(params).getId();
-		assertTrue(initialCount + 1 == prmController.findAll().size());
-		params = null;
 
 		// Get the params
+		params = null;
 		params = prmController.find(id1);
 
 		// Check the value
-		final float v2 = params.getHighThreshold();
-		assertTrue(v1 == v2);
-
-		// Remove the params and the number of remaining entries
-		prmController.delete(params);
-		final int finalCount = prmController.findAll().size();
-		assertTrue(initialCount == finalCount);
+		assertTrue(t.getDifferThreshold() == params.getLowThreshold());
+		assertTrue(t.getMatchThreshold() == params.getHighThreshold());
 	}
-
-	// @Test
-	// public void testStageRs() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// public void testMasterRs() {
-	// fail("Not yet implemented");
-	// }
 
 }

@@ -10,9 +10,14 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA.ID_GENERATOR_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA.ID_GENERATOR_PK_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA.ID_GENERATOR_PK_COLUMN_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA.ID_GENERATOR_TABLE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,8 +45,28 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 
 	private static final long serialVersionUID = 271L;
 
-	/** Default value when no jobId is assigned */
-	public static final long INVALID_JOBID = 0;
+	private static final Logger logger = Logger
+			.getLogger(BatchParametersBean.class.getName());
+
+	protected static String INVALID_MODEL_CONFIG_NAME = null;
+
+	protected static int INVALID_MAX_SINGLE = -1;
+
+	protected static float INVALID_THRESHOLD = -1f;
+
+	protected static SerialRecordSource INVALID_RECORD_SOURCE = null;
+
+	protected static boolean isInvalidBatchParamsId(long id) {
+		return id == BatchParameters.INVALID_PARAMSID;
+	}
+
+	public static boolean isPersistent(BatchParameters params) {
+		boolean retVal = false;
+		if (params != null) {
+			retVal = !isInvalidBatchParamsId(params.getId());
+		}
+		return retVal;
+	}
 
 	@Id
 	@Column(name = BatchParametersJPA.CN_ID)
@@ -54,32 +79,56 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	private long id;
 
 	@Column(name = BatchParametersJPA.CN_STAGE_MODEL)
-	private String stageModel;
+	private final String stageModel;
 
 	@Column(name = BatchParametersJPA.CN_MASTER_MODEL)
-	private String masterModel;
+	private final String masterModel;
 
 	@Column(name = BatchParametersJPA.CN_MAX_SINGLE)
-	private int maxSingle;
+	private final int maxSingle;
 
 	@Column(name = BatchParametersJPA.CN_LOW_THRESHOLD)
-	private float lowThreshold;
+	private final float lowThreshold;
 
 	@Column(name = BatchParametersJPA.CN_HIGH_THRESHOLD)
-	private float highThreshold;
+	private final float highThreshold;
 
 	@Transient
-	private SerialRecordSource stageRs;
+	private final SerialRecordSource stageRs;
 
 	@Transient
-	private SerialRecordSource masterRs;
+	private final SerialRecordSource masterRs;
 
-	public BatchParametersBean() {
+	/** Required by JPA; do not invoke directly */
+	protected BatchParametersBean() {
+		this(INVALID_MODEL_CONFIG_NAME, INVALID_MAX_SINGLE, INVALID_THRESHOLD,
+				INVALID_THRESHOLD, INVALID_RECORD_SOURCE, INVALID_RECORD_SOURCE);
+	}
+
+	public BatchParametersBean(String modelConfigurationName, int maxSingle,
+			float lowThreshold, float highThreshold,
+			SerialRecordSource stageRs, SerialRecordSource masterRs) {
+
+		this.stageModel = modelConfigurationName;
+		this.masterModel = null;
+		this.maxSingle = maxSingle;
+		this.lowThreshold = lowThreshold;
+		this.highThreshold = highThreshold;
+		this.stageRs = stageRs;
+		this.masterRs = masterRs;
 	}
 
 	public BatchParametersBean(BatchParameters bp) {
-		this.stageModel = bp.getStageModel();
-		this.masterModel = bp.getMasterModel();
+		this.stageModel = bp.getModelConfigurationName();
+		if (bp instanceof BatchParametersBean) {
+			this.masterModel = ((BatchParametersBean)bp).masterModel;
+			if (masterModel != null) {
+				logger.warning("non-null masterModel value: '" + masterModel + "'");
+			}
+		} else {
+			logger.warning("masterModel value may not be correct");
+			this.masterModel = null;
+		}
 		this.maxSingle = bp.getMaxSingle();
 		this.lowThreshold = bp.getLowThreshold();
 		this.highThreshold = bp.getHighThreshold();
@@ -93,23 +142,20 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	}
 
 	@Override
-	public String getStageModel() {
+	public String getModelConfigurationName() {
 		return stageModel;
 	}
 
 	@Override
-	public void setStageModel(String stageModel) {
-		this.stageModel = stageModel;
+	@Deprecated
+	public String getStageModel() {
+		return getModelConfigurationName();
 	}
 
 	@Override
+	@Deprecated
 	public String getMasterModel() {
-		return masterModel;
-	}
-
-	@Override
-	public void setMasterModel(String masterModel) {
-		this.masterModel = masterModel;
+		return getModelConfigurationName();
 	}
 
 	@Override
@@ -118,18 +164,8 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	}
 
 	@Override
-	public void setMaxSingle(int maxSingle) {
-		this.maxSingle = maxSingle;
-	}
-
-	@Override
 	public float getLowThreshold() {
 		return lowThreshold;
-	}
-
-	@Override
-	public void setLowThreshold(float lowThreshold) {
-		this.lowThreshold = lowThreshold;
 	}
 
 	@Override
@@ -138,28 +174,13 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	}
 
 	@Override
-	public void setHighThreshold(float highThreshold) {
-		this.highThreshold = highThreshold;
-	}
-
-	@Override
 	public SerialRecordSource getStageRs() {
 		return stageRs;
 	}
 
 	@Override
-	public void setStageRs(SerialRecordSource stageRs) {
-		this.stageRs = stageRs;
-	}
-
-	@Override
 	public SerialRecordSource getMasterRs() {
 		return masterRs;
-	}
-
-	@Override
-	public void setMasterRs(SerialRecordSource masterRs) {
-		this.masterRs = masterRs;
 	}
 
 	@Override
@@ -182,9 +203,9 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 		int result = 1;
 		result = prime * result + Float.floatToIntBits(highThreshold);
 		result = prime * result + Float.floatToIntBits(lowThreshold);
-		result =
-			prime * result
-					+ ((masterModel == null) ? 0 : masterModel.hashCode());
+		// result =
+		// prime * result
+		// + ((masterModel == null) ? 0 : masterModel.hashCode());
 		result =
 			prime * result + ((masterRs == null) ? 0 : masterRs.hashCode());
 		result = prime * result + maxSingle;
@@ -237,13 +258,13 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 				.floatToIntBits(other.lowThreshold)) {
 			return false;
 		}
-		if (masterModel == null) {
-			if (other.masterModel != null) {
-				return false;
-			}
-		} else if (!masterModel.equals(other.masterModel)) {
-			return false;
-		}
+		// if (masterModel == null) {
+		// if (other.masterModel != null) {
+		// return false;
+		// }
+		// } else if (!masterModel.equals(other.masterModel)) {
+		// return false;
+		// }
 		if (masterRs == null) {
 			if (other.masterRs != null) {
 				return false;

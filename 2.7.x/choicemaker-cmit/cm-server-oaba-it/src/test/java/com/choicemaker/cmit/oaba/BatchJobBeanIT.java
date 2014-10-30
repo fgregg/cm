@@ -135,32 +135,6 @@ public class BatchJobBeanIT {
 	}
 
 	@Test
-	public void testMerge() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
-
-		final String externalId = "EXT ID: " + new Date().toString();
-		BatchJobBean job = new BatchJobBean(externalId);
-		controller.save(job);
-		assertTrue(job.getId() != 0);
-		final long id = job.getId();
-		controller.detach(job);
-
-		assertTrue(externalId.equals(job.getExternalId()));
-		final String externalId2 = "external test id";
-		job.setExternalId(externalId2);
-		controller.save(job);
-
-		job = null;
-		BatchJobBean batchJob2 = controller.find(id);
-		assertTrue(id == batchJob2.getId());
-		assertTrue(externalId2.equals(batchJob2.getExternalId()));
-		controller.delete(batchJob2);
-
-		assertTrue(initialCount == controller.findAll().size());
-	}
-
-	@Test
 	public void testFindAll() {
 		// Count existing jobs
 		final int initialCount = controller.findAll().size();
@@ -211,21 +185,21 @@ public class BatchJobBeanIT {
 		final int initialCount = controller.findAll().size();
 
 		// Create a job and set a value
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
-		final String v1 = new Date().toString();
-		job.setExternalId(v1);
+		String extId = "EXT ID: " + new Date().toString();
+		BatchJobBean job = new BatchJobBean(extId);
+		assertTrue(extId.equals(job.getExternalId()));
 
 		// Save the job
 		final long id1 = controller.save(job).getId();
 		assertTrue(initialCount + 1 == controller.findAll().size());
-		job = null;
 
 		// Retrieve the job
+		job = null;
 		job = controller.find(id1);
 
 		// Check the value
 		final String v2 = job.getExternalId();
-		assertTrue(v1.equals(v2));
+		assertTrue(extId.equals(v2));
 
 		// Remove the job and the number of remaining jobs
 		controller.delete(job);
@@ -259,8 +233,12 @@ public class BatchJobBeanIT {
 		assertTrue(initialCount == controller.findAll().size());
 	}
 
+	/**
+	 * Tests get/setDescription and merging a detached entity with an existing
+	 * database entry
+	 */
 	@Test
-	public void testDescription() {
+	public void testMergeDescription() {
 		// Count existing jobs
 		final int initialCount = controller.findAll().size();
 
@@ -274,13 +252,20 @@ public class BatchJobBeanIT {
 		// Save the job
 		final long id1 = controller.save(job).getId();
 		assertTrue(initialCount + 1 == controller.findAll().size());
-		job = null;
+
+		// Detach the job and modify the description
+		controller.detach(job);
+		assertTrue(description.equals(job.getDescription()));
+		final String description2 = "Description 2: " + new Date().toString();
+		job.setDescription(description2);
+		controller.save(job);
 
 		// Get the job
+		job = null;
 		job = controller.find(id1);
 
 		// Check the value
-		assertTrue(description.equals(job.getDescription()));
+		assertTrue(description2.equals(job.getDescription()));
 
 		// Remove the job and the number of remaining jobs
 		controller.delete(job);

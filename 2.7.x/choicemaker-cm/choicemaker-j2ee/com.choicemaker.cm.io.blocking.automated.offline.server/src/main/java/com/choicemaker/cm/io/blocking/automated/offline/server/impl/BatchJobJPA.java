@@ -37,8 +37,18 @@ public interface BatchJobJPA {
 	 */
 	String CN_ID = "ID";
 
+	/**
+	 * Descriminator column
+	 * 
+	 * @see #DISCRIMINATOR_COLUMN
+	 */
+	String CN_TYPE = DISCRIMINATOR_COLUMN;
+
 	/** Optional link to predecessor batch job */
 	String CN_BPARENT_ID = "BPARENT_ID";
+
+	/** Required link to the id of some persistent instance of batch parameters */
+	String CN_BPARAMS_ID = "BPARAMS_ID";
 
 	/** Optional link to an owing URM job */
 	String CN_URM_ID = "URM_ID";

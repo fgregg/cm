@@ -40,7 +40,6 @@ import javax.sql.DataSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParametersHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.StatusLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.StatusLogHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.StatusLogWrapper;
@@ -113,7 +112,7 @@ public class EJBConfiguration implements Serializable {
 //	private EntityManager em;
 
 	// Cached EJB home proxies
-	private transient BatchParametersHome batchParamsHome;
+//	private transient BatchParametersHome batchParamsHome;
 	private transient StatusLogHome statusLogHome;
 
 	// Cached connection factories
@@ -479,12 +478,12 @@ public class EJBConfiguration implements Serializable {
 		return retVal;
 	}
 
-	public BatchParameters createBatchParameters (long id)
-		throws RemoteException, CreateException, NamingException, SQLException {
-		BatchParametersHome batchParamHome = getBatchParamsHome();
-		BatchParameters retVal = batchParamHome.create (id);
-    return retVal;
-	}
+//	public BatchParameters createBatchParameters (long id)
+//		throws RemoteException, CreateException, NamingException, SQLException {
+//		BatchParametersHome batchParamHome = getBatchParamsHome();
+//		BatchParameters retVal = batchParamHome.create (id);
+//    return retVal;
+//	}
 
 	public Connection getConnection () throws RemoteException, CreateException, NamingException, SQLException {
 		getDataSource ();
@@ -557,16 +556,16 @@ public class EJBConfiguration implements Serializable {
 		return this.ds;
 	}
 
-	private BatchParametersHome getBatchParamsHome() throws NamingException {
-		if (this.batchParamsHome == null) {
-			Context ctx = getInitialContext();
-			Object homeRef = ctx.lookup(EJB_BATCH_PARAMS);
-			this.batchParamsHome =
-				(BatchParametersHome) PortableRemoteObject.narrow(
-					homeRef, BatchParametersHome.class);
-		}
-		return this.batchParamsHome;
-	}
+//	private BatchParametersHome getBatchParamsHome() throws NamingException {
+//		if (this.batchParamsHome == null) {
+//			Context ctx = getInitialContext();
+//			Object homeRef = ctx.lookup(EJB_BATCH_PARAMS);
+//			this.batchParamsHome =
+//				(BatchParametersHome) PortableRemoteObject.narrow(
+//					homeRef, BatchParametersHome.class);
+//		}
+//		return this.batchParamsHome;
+//	}
 
 	private StatusLogHome getStatusLogHome() throws NamingException {
 		if (this.statusLogHome == null) {
