@@ -61,12 +61,7 @@ public class BatchJobBeanIT {
 		return retVal;
 	}
 
-	// There's a 'race' condition on slow machines that may be avoided
-	// by keeping the number of loop iterations low.
-	// See blog posting http://links.rph.cx/ZWGCYD
-	//
-	// public static final int MAX_TEST_ITERATIONS = 10;
-	public static final int MAX_TEST_ITERATIONS = 1;
+	public static final int MAX_TEST_ITERATIONS = 10;
 
 	private static final String[] _statusValues =
 		new String[] {
