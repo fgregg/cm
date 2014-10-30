@@ -64,13 +64,13 @@ public class BatchParametersBeanIT {
 
 	private int initialBatchParamsCount;
 	private int initialBatchJobCount;
-	private int initialCount;
+//	private int initialTransitivityJobCount;
 
 	@Before
 	public void setUp() {
 		initialBatchParamsCount = prmController.findAllBatchParameters().size();
 		initialBatchJobCount = prmController.findAllBatchJobs().size();
-		initialCount = prmController.findAllTransitivityJobs().size();
+//		initialTransitivityJobCount = prmController.findAllTransitivityJobs().size();
 	}
 
 	@After
@@ -80,9 +80,9 @@ public class BatchParametersBeanIT {
 
 		int finalBatchJobCount = prmController.findAllBatchJobs().size();
 		assertTrue(initialBatchJobCount == finalBatchJobCount);
-
-		int finalTransJobCount = prmController.findAllTransitivityJobs().size();
-		assertTrue(initialCount == finalTransJobCount);
+//
+//		int finalTransJobCount = prmController.findAllTransitivityJobs().size();
+//		assertTrue(initialTransitivityJobCount == finalTransJobCount);
 	}
 
 	@Test

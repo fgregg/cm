@@ -82,16 +82,7 @@ public class BatchQueryServiceBean implements SessionBean {
 
 		log.fine("starting startBatch...");
 
-		BatchJob batchJob = configuration.createBatchJob(em,externalID);
-		batchJob.setDescription(stageModelName + ":" + masterModelName);
-		batchJob.markAsQueued();
-
-		long id = batchJob.getId();
-
-		//create a new current status EJB
-		configuration.createNewStatusLog(id);
-
-		// set the parameters
+		// Create the parameters for a new batch job
 		BatchParameters batchParams =
 			new BatchParametersBean(stageModelName, maxSingle, lowThreshold,
 					highThreshold, staging, master
@@ -99,6 +90,16 @@ public class BatchQueryServiceBean implements SessionBean {
 			);
 		em.persist(batchParams);
 		assert BatchParametersBean.isPersistent(batchParams);
+
+		// Create the batch job
+		BatchJob batchJob = configuration.createBatchJob(em, batchParams, externalID);
+		batchJob.setDescription(stageModelName + ":" + masterModelName);
+		batchJob.markAsQueued();
+
+		long id = batchJob.getId();
+
+		//create a new current status EJB
+		configuration.createNewStatusLog(id);
 
 		//create a new current status EJB
 		configuration.createNewStatusLog(id);

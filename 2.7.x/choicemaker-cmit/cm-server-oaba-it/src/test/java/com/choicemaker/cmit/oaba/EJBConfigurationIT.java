@@ -33,8 +33,11 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cmit.utils.DeploymentUtils;
+import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
 public class EJBConfigurationIT {
@@ -57,22 +60,40 @@ public class EJBConfigurationIT {
 //	@BeforeClass public static void setUpBeforeClass() throws Exception {}
 //	@AfterClass public static void tearDownAfterClass() throws Exception {}
 
+	@PersistenceUnit(unitName = "oaba-local")
+	private EntityManagerFactory emf;
+
+	private EJBConfiguration ejbc;
+	private int initialBatchParamsCount;
+	private int initialBatchJobCount;
+	private int initialCount;
+
 	@Before
 	public void setUp() throws Exception {
 		this.ejbc = EJBConfiguration.getInstance();
 		assertTrue(this.ejbc != null);
+
+		final EntityManager em = emf.createEntityManager();
+		initialBatchParamsCount = EntityManagerUtils.findAllBatchParameters(em).size();
+		initialBatchJobCount = EntityManagerUtils.findAllBatchJobs(em).size();
+		initialCount = EntityManagerUtils.findAllTransitivityJobs(em).size();
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		this.ejbc = null;
+		
+		final EntityManager em = emf.createEntityManager();
+		int finalBatchParamsCount = EntityManagerUtils.findAllBatchParameters(em).size();
+		assertTrue(initialBatchParamsCount == finalBatchParamsCount);
+
+		int finalBatchJobCount = EntityManagerUtils.findAllBatchJobs(em).size();
+		assertTrue(initialBatchJobCount == finalBatchJobCount);
+
+		int finalTransJobCount = EntityManagerUtils.findAllTransitivityJobs(em).size();
+		assertTrue(initialCount == finalTransJobCount);
 	}
 	
-	@PersistenceUnit(unitName = "oaba-local")
-	private EntityManagerFactory emf;
-
-	private EJBConfiguration ejbc;
-
 	@Test
 	public void testEBJConfiguration() {
 		assertTrue(ejbc != null);
@@ -158,6 +179,8 @@ public class EJBConfigurationIT {
 
 	@Test
 	public void testCreateFindRemove() {
+		final String METHOD = "testCreateFindRemove";
+		final TestEntities te = new TestEntities();
 		final EntityManager em = emf.createEntityManager();
 		assertTrue(em != null);
 		em.getTransaction().begin();
@@ -166,8 +189,9 @@ public class EJBConfigurationIT {
 		final int initialCount = ejbc.findAllBatchJobs(em).size();
 
 		// Create a job
+		final BatchParameters params = EntityManagerUtils.createPersistentBatchParameters(em, METHOD, te);
 		final String extId = "EXT ID: " + new Date().toString();
-		BatchJob job = ejbc.createBatchJob(em, extId);
+		BatchJob job = ejbc.createBatchJob(em, params, extId);
 		assertTrue(job != null);
 		assertTrue(job.getId() != 0);
 

@@ -10,7 +10,30 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters.INVALID_PARAMSID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.AUDIT_TABLE_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_AUDIT_JOIN;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_BPARAMS_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_BPARENT_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_DESCRIPTION;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_EXTERNAL_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_FRACTION_COMPLETE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_STATUS;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_TIMESTAMP;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_TRANSACTION_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_TYPE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_URM_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.DISCRIMINATOR_COLUMN;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.EQL_BATCHJOB_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.ID_GENERATOR_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.ID_GENERATOR_PK_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.ID_GENERATOR_PK_COLUMN_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.ID_GENERATOR_TABLE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.QN_BATCHJOB_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.TABLE_NAME;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,11 +44,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import javax.jms.ObjectMessage;
-import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicPublisher;
-import javax.jms.TopicSession;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -45,8 +63,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.TemporalType;
 
 import com.choicemaker.cm.core.IControl;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 
@@ -70,8 +86,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
  * @author rphall (migrated to JPA 2.0)
  *
  */
-@NamedQuery(name = QN_BATCHJOB_FIND_ALL,
-		query = EQL_BATCHJOB_FIND_ALL)
+@NamedQuery(name = QN_BATCHJOB_FIND_ALL, query = EQL_BATCHJOB_FIND_ALL)
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
@@ -131,7 +146,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	@GeneratedValue(strategy = GenerationType.TABLE,
 			generator = ID_GENERATOR_NAME)
 	private long id;
-	
+
 	@Column(name = CN_TYPE)
 	private final String type;
 
@@ -174,22 +189,26 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	@MapKeyColumn(name = CN_TIMESTAMP)
 	@MapKeyTemporal(TemporalType.TIMESTAMP)
 	@Column(name = CN_STATUS)
-	@CollectionTable(name = AUDIT_TABLE_NAME,
-			joinColumns = @JoinColumn(name = CN_AUDIT_JOIN))
+	@CollectionTable(name = AUDIT_TABLE_NAME, joinColumns = @JoinColumn(
+			name = CN_AUDIT_JOIN))
 	private Map<Date, String> audit = new HashMap<>();
 
 	// -- Construction
 
 	protected BatchJobBean() {
-		this(null, randomTransactionId(), INVALID_BATCHJOB_ID, INVALID_URMJOB_ID);
+		this(BatchJobJPA.DISCRIMINATOR_VALUE, INVALID_PARAMSID, null,
+				randomTransactionId(), INVALID_BATCHJOB_ID, INVALID_URMJOB_ID);
 	}
 
-	public BatchJobBean(String externalId) {
-		this(externalId, randomTransactionId(), INVALID_BATCHJOB_ID, INVALID_URMJOB_ID);
+	public BatchJobBean(BatchParameters params, String externalId) {
+		this(BatchJobJPA.DISCRIMINATOR_VALUE, params.getId(), externalId,
+				randomTransactionId(), INVALID_BATCHJOB_ID, INVALID_URMJOB_ID);
 	}
 
-	public BatchJobBean(BatchJob job) {
-		this(job.getExternalId(), job.getTransactionId(), job.getBatchParentId(), job.getUrmId());
+	public BatchJobBean(BatchJob job, String externalId) {
+		this(BatchJobJPA.DISCRIMINATOR_VALUE, job.getBatchParametersId(),
+				externalId, job.getTransactionId(), job.getBatchParentId(), job
+						.getUrmId());
 		this.setDescription(job.getDescription());
 		this.setFractionComplete(job.getFractionComplete());
 		this.setStatus(job.getStatus());
@@ -197,19 +216,29 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		this.setTimeStamp(job.getStatus(), ts);
 	}
 
-	// FIXME REMOVE this construction (illegal bparamsId)
-	protected BatchJobBean(String externalId, long tid, long bpid, long urmid) {
-		this(BatchJobJPA.DISCRIMINATOR_VALUE,BatchParameters.INVALID_PARAMSID, externalId, tid, bpid, urmid);
+	public BatchJobBean(BatchParameters params, BatchJob job, String externalId) {
+		this(BatchJobJPA.DISCRIMINATOR_VALUE, job.getBatchParametersId(),
+				externalId, job.getTransactionId(), job.getBatchParentId(), job
+						.getUrmId());
+		this.setDescription(job.getDescription());
+		this.setFractionComplete(job.getFractionComplete());
+		this.setStatus(job.getStatus());
+		Date ts = job.getTimeStamp(job.getStatus());
+		this.setTimeStamp(job.getStatus(), ts);
 	}
 
-	protected BatchJobBean(String type, long paramsid, String externalId, long tid, long bpid, long urmid) {
+	protected BatchJobBean(String type, long paramsid, String externalId,
+			long tid, long bpid, long urmid) {
 		if (type == null) {
-			 throw new IllegalArgumentException("null type");
+			throw new IllegalArgumentException("null type");
 		}
 		type = type.trim();
 		if (type.isEmpty()) {
-			 throw new IllegalArgumentException("blank type");
+			throw new IllegalArgumentException("blank type");
 		}
+//		if (BatchParametersBean.isInvalidBatchParamsId(paramsid)) {
+//			throw new IllegalArgumentException("non-persistent batch parameters");
+//		}
 		this.type = type;
 		this.bparamsId = paramsid;
 		this.transactionId = tid;
@@ -220,7 +249,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 	}
 
 	// -- Accessors
-	
+
 	@Override
 	public long getId() {
 		return id;
@@ -500,18 +529,22 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 			logIgnoredTransition("markAsAborted");
 		}
 	}
-	
+
 	// -- Messaging
 
 	/**
 	 * This method publishes the status of a job to a topic queue.
 	 */
-	protected void publishStatus(){
+	protected void publishStatus() {
+/* FIXME RESTOREME
 		TopicConnection conn = null;
 		TopicSession session = null;
 		try {
-			conn = EJBConfiguration.getInstance().getTopicConnectionFactory().createTopicConnection();
-			session = conn.createTopicSession(false,  TopicSession.AUTO_ACKNOWLEDGE);
+			conn =
+				EJBConfiguration.getInstance().getTopicConnectionFactory()
+						.createTopicConnection();
+			session =
+				conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
 			conn.start();
 			Topic topic = EJBConfiguration.getInstance().getTransStatusTopic();
 			TopicPublisher pub = session.createPublisher(topic);
@@ -519,11 +552,9 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 			ObjectMessage notifMsg = session.createObjectMessage(jobStatus);
 			pub.publish(notifMsg);
 			pub.close();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.severe(e.toString());
-		} 
-		finally {
+		} finally {
 			if (session != null) {
 				try {
 					session.close();
@@ -540,6 +571,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 			}
 		}
 		log.fine("...finished published status");
+*/
 	}
 
 	// -- Identity
@@ -566,12 +598,10 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
 		result = prime * result + percentageComplete;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result =
-				prime * result + (int) (bparentId ^ (bparentId >>> 32));
+		result = prime * result + (int) (bparentId ^ (bparentId >>> 32));
 		result =
 			prime * result + (int) (transactionId ^ (transactionId >>> 32));
-		result =
-			prime * result + DISCRIMINATOR_VALUE.hashCode();
+		result = prime * result + DISCRIMINATOR_VALUE.hashCode();
 		return result;
 	}
 
@@ -646,8 +676,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 
 	@Override
 	public String toString() {
-		return "BatchJobBean [" + id + "/" + externalId + "/" + status
-				+ "]";
+		return "BatchJobBean [" + id + "/" + externalId + "/" + status + "]";
 	}
 
 } // BatchJobBean

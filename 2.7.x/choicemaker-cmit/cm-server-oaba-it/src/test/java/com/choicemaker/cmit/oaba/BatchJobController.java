@@ -11,6 +11,9 @@ import javax.persistence.Query;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
+import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.TestEntities;
 
 /**
  * Currently, the OABA server doesn't define any Enterprise Java bean whose sole
@@ -29,6 +32,14 @@ public class BatchJobController {
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
+
+	public BatchJobBean createEphemeralBatchJob(String tag, TestEntities te) {
+		return EntityManagerUtils.createEphemeralBatchJob(em, tag, te);
+	}
+
+	public BatchJobBean createEphemeralBatchJob(TestEntities te, String extId) {
+		return EntityManagerUtils.createEphemeralBatchJob(em, te, extId);
+	}
 
 	public BatchJobBean save(BatchJobBean batchJob) {
 		if (batchJob.getId() == 0) {
@@ -52,6 +63,14 @@ public class BatchJobController {
 			entries = new ArrayList<BatchJobBean>();
 		}
 		return entries;
+	}
+
+	public List<BatchParametersBean> findAllBatchParameters() {
+		return EntityManagerUtils.findAllBatchParameters(em);
+	}
+
+	public List<BatchJobBean> findAllBatchJobs() {
+		return EntityManagerUtils.findAllBatchJobs(em);
 	}
 
 	public void delete(BatchJobBean batchJob) {

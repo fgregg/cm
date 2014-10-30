@@ -47,6 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJ
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
+import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
@@ -123,10 +124,10 @@ public class TransitivityJobBeanIT {
 		final String METHOD = "testConstruction";
 		final TestEntities te = new TestEntities();
 
-		BatchJobBean batchJob = controller.createBatchJobBean(METHOD, te);
+		BatchJobBean batchJob = controller.createPersistentBatchJobBean(METHOD, te);
 		final Date now = new Date();
 		TransitivityJobBean job =
-			controller.createTransitivityJob(METHOD, te, batchJob);
+			controller.createEphemeralTransitivityJob(METHOD, te, batchJob);
 		final Date now2 = new Date();
 
 		// Check that primary hasn't been set
@@ -156,7 +157,7 @@ public class TransitivityJobBeanIT {
 		final TestEntities te = new TestEntities();
 
 		// Create a job
-		TransitivityJobBean job = controller.createTransitivityJob(METHOD, te);
+		TransitivityJobBean job = controller.createEphemeralTransitivityJob(METHOD, te);
 		assertTrue(job.getId() == 0);
 
 		// Save the job
@@ -164,7 +165,7 @@ public class TransitivityJobBeanIT {
 		assertTrue(job.getId() != 0);
 
 		// Find the job
-		TransitivityJobBean batchJob2 = controller.find(job.getId());
+		TransitivityJobBean batchJob2 = controller.findTransitivityJob(job.getId());
 		assertTrue(job.getId() == batchJob2.getId());
 		assertTrue(job.equals(batchJob2));
 
@@ -172,7 +173,7 @@ public class TransitivityJobBeanIT {
 		controller.removeTestEntities(te);
 
 		// Delete the job
-		TransitivityJob batchJob3 = controller.find(job.getId());
+		TransitivityJob batchJob3 = controller.findTransitivityJob(job.getId());
 		assertTrue(batchJob3 == null);
 	}
 
@@ -185,7 +186,7 @@ public class TransitivityJobBeanIT {
 		final String METHOD = "testMerge";
 		final TestEntities te = new TestEntities();
 
-		TransitivityJobBean job = controller.createTransitivityJob(METHOD, te);
+		TransitivityJobBean job = controller.createEphemeralTransitivityJob(METHOD, te);
 		assertTrue(null == job.getDescription());
 		final String description = "some job description";
 		job.setDescription(description);
@@ -196,7 +197,7 @@ public class TransitivityJobBeanIT {
 		controller.detach(job);
 
 		job = null;
-		TransitivityJobBean job2 = controller.find(id);
+		TransitivityJobBean job2 = controller.findTransitivityJob(id);
 		assertTrue(id == job2.getId());
 		assertTrue(description.equals(job2.getDescription()));
 
@@ -206,7 +207,7 @@ public class TransitivityJobBeanIT {
 		controller.save(job2);
 
 		job2 = null;
-		TransitivityJobBean job3 = controller.find(id);
+		TransitivityJobBean job3 = controller.findTransitivityJob(id);
 		assertTrue(id == job3.getId());
 		assertTrue(description2.equals(job3.getDescription()));
 
@@ -222,7 +223,7 @@ public class TransitivityJobBeanIT {
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a job
 			TransitivityJobBean job =
-				controller.createTransitivityJob(METHOD, te);
+				controller.createEphemeralTransitivityJob(METHOD, te);
 			controller.save(job);
 			long id = job.getId();
 			assertTrue(!jobIds.contains(id));
@@ -254,13 +255,13 @@ public class TransitivityJobBeanIT {
 		final String METHOD = "testFindAllByParentId";
 		final TestEntities te = new TestEntities();
 
-		final BatchJobBean batchJob = controller.createBatchJobBean(METHOD, te);
+		final BatchJobBean batchJob = controller.createPersistentBatchJobBean(METHOD, te);
 		final long batchJobId = batchJob.getId();
 		Set<Long> jobIds = new HashSet<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a job
 			TransitivityJobBean job =
-				controller.createTransitivityJob(METHOD, te, batchJob);
+				controller.createEphemeralTransitivityJob(METHOD, te, batchJob);
 			controller.save(job);
 			final long id = job.getId();
 			assertTrue(!jobIds.contains(id));
@@ -326,7 +327,7 @@ public class TransitivityJobBeanIT {
 		Date before = new Date();
 
 		// 1. Create a job and mark it as running (a.k.a. 'STARTED')
-		TransitivityJobBean job = controller.createTransitivityJob(METHOD, te);
+		TransitivityJobBean job = controller.createEphemeralTransitivityJob(METHOD, te);
 		job.markAsQueued();
 		job.markAsStarted();
 
@@ -366,7 +367,7 @@ public class TransitivityJobBeanIT {
 			// Retrieve the job and re-check the percentage, status and
 			// timestamp
 			job = null;
-			job = controller.find(id1);
+			job = controller.findTransitivityJob(id1);
 			assertTrue(job != null);
 			assertTrue(job.getFractionComplete() == v1);
 			assertTrue(job.getStatus().equals(sts));
@@ -382,12 +383,12 @@ public class TransitivityJobBeanIT {
 		final TestEntities te = new TestEntities();
 
 		// Create two generic jobs and verify equality
-		String extId = controller.createExternalId(METHOD);
-		final BatchJobBean batchJob = controller.createBatchJobBean(METHOD, te);
+		String extId = EntityManagerUtils.createExternalId(METHOD);
+		final BatchJobBean batchJob = controller.createPersistentBatchJobBean(METHOD, te);
 		TransitivityJobBean job1 =
-			controller.createTransitivityJob(te, batchJob, extId);
+			controller.createEphemeralTransitivityJob(te, batchJob, extId);
 		TransitivityJobBean job2 =
-			controller.createTransitivityJob(te, batchJob, extId);
+			controller.createEphemeralTransitivityJob(te, batchJob, extId);
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
 
@@ -409,7 +410,7 @@ public class TransitivityJobBeanIT {
 
 		// Verify that equality of persisted jobs is set only by persistence id
 		controller.detach(job1);
-		job2 = controller.find(job1.getId());
+		job2 = controller.findTransitivityJob(job1.getId());
 		controller.detach(job2);
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
@@ -428,7 +429,7 @@ public class TransitivityJobBeanIT {
 
 		// 1. Create a job and check the status
 		Date before = new Date();
-		TransitivityJobBean job = controller.createTransitivityJob(METHOD, te);
+		TransitivityJobBean job = controller.createEphemeralTransitivityJob(METHOD, te);
 		Date after = new Date();
 
 		// Check the status and timestamp
@@ -521,7 +522,7 @@ public class TransitivityJobBeanIT {
 
 		for (String sts : _statusValues) {
 			TransitivityJobBean job =
-				controller.createTransitivityJob(METHOD, te);
+				controller.createEphemeralTransitivityJob(METHOD, te);
 			assertTrue(BatchJob.STATUS_NEW.equals(job.getStatus()));
 			job.setStatus(sts);
 			assertTrue(sts.equals(job.getStatus()));
@@ -531,7 +532,7 @@ public class TransitivityJobBeanIT {
 			job = null;
 
 			// Retrieve the job
-			job = controller.find(id1);
+			job = controller.findTransitivityJob(id1);
 
 			// Check the value
 			assertTrue(sts.equals(job.getStatus()));
@@ -548,7 +549,7 @@ public class TransitivityJobBeanIT {
 		final TestEntities te = new TestEntities();
 
 		final Date before = new Date();
-		TransitivityJobBean job = controller.createTransitivityJob(METHOD, te);
+		TransitivityJobBean job = controller.createEphemeralTransitivityJob(METHOD, te);
 		final Date after = new Date();
 		job.setStatus(sts);
 
@@ -564,7 +565,7 @@ public class TransitivityJobBeanIT {
 
 		// Find the job and verify the expected status and timestamp
 		job = null;
-		job = controller.find(id);
+		job = controller.findTransitivityJob(id);
 		assertTrue(sts.equals(job.getStatus()));
 		assertTrue(d.equals(job.getTimeStamp(sts)));
 

@@ -30,11 +30,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJ
  * @author rphall (migrated to JPA 2.0)
  */
 @NamedQueries({
-@NamedQuery(name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL,
-		query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL),
-@NamedQuery(name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID,
-		query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID)
-})
+		@NamedQuery(name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL,
+				query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL),
+		@NamedQuery(
+				name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID,
+				query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID) })
 @Entity
 @DiscriminatorValue(value = TransitivityJobJPA.DISCRIMINATOR_VALUE)
 public class TransitivityJobBean extends BatchJobBean implements
@@ -60,7 +60,8 @@ public class TransitivityJobBean extends BatchJobBean implements
 
 	protected TransitivityJobBean(BatchParameters params, BatchJob parent,
 			String externalId, long tid, long urmid) {
-		super(TransitivityJobJPA.DISCRIMINATOR_VALUE, params.getId(), externalId, tid, parent.getId(), urmid);
+		super(TransitivityJobJPA.DISCRIMINATOR_VALUE, params.getId(),
+				externalId, tid, parent.getId(), urmid);
 		if (!BatchParametersBean.isPersistent(params)) {
 			throw new IllegalArgumentException(
 					"non-persistent batch parameters");

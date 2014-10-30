@@ -17,8 +17,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobJPA;
 import com.choicemaker.cmit.utils.TestEntities;
 
 /**
@@ -139,16 +137,16 @@ public class BatchParametersController {
 			return entries;
 	}
 
-	public List<TransitivityJobBean> findAllTransitivityJobs() {
-		Query query =
-			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL);
-		@SuppressWarnings("unchecked")
-		List<TransitivityJobBean> entries = query.getResultList();
-		if (entries == null) {
-			entries = new ArrayList<TransitivityJobBean>();
-		}
-		return entries;
-	}
+//	public List<TransitivityJobBean> findAllTransitivityJobs() {
+//		Query query =
+//			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL);
+//		@SuppressWarnings("unchecked")
+//		List<TransitivityJobBean> entries = query.getResultList();
+//		if (entries == null) {
+//			entries = new ArrayList<TransitivityJobBean>();
+//		}
+//		return entries;
+//	}
 
 	public void removeTestEntities(TestEntities te) {
 		if (te == null) {

@@ -32,12 +32,16 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cmit.utils.DeploymentUtils;
+import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
 public class BatchJobBeanIT {
@@ -73,15 +77,34 @@ public class BatchJobBeanIT {
 	private static final String[] _nonterminal = new String[] {
 			STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_ABORT_REQUESTED };
 
+	@EJB
+	protected BatchJobController controller;
+
+	private final Random random = new Random(new Date().getTime());
+
+	private int initialBatchParamsCount;
+	private int initialBatchJobCount;
+//	private int initialTransitivityJobCount;
+
 	private String getRandomNonTerminalStatus() {
 		int i = random.nextInt(_nonterminal.length);
 		return _nonterminal[i];
 	}
 
-	private final Random random = new Random(new Date().getTime());
+	@Before
+	public void setUp() {
+		initialBatchParamsCount = controller.findAllBatchParameters().size();
+		initialBatchJobCount = controller.findAllBatchJobs().size();
+	}
 
-	@EJB
-	protected BatchJobController controller;
+	@After
+	public void tearDown() {
+		int finalBatchParamsCount = controller.findAllBatchParameters().size();
+		assertTrue(initialBatchParamsCount == finalBatchParamsCount);
+
+		int finalBatchJobCount = controller.findAllBatchJobs().size();
+		assertTrue(initialBatchJobCount == finalBatchJobCount);
+	}
 
 	@Test
 	public void testBatchJobController() {
@@ -90,8 +113,11 @@ public class BatchJobBeanIT {
 
 	@Test
 	public void testConstruction() {
+		final String METHOD = "testConstruction";
+		final TestEntities te = new TestEntities();
+
 		Date now = new Date();
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 		Date now2 = new Date();
 
 		assertTrue(0 == job.getId());
@@ -109,11 +135,11 @@ public class BatchJobBeanIT {
 
 	@Test
 	public void testPersistFindRemove() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
+		final String METHOD = "testPersistFindRemove";
+		final TestEntities te = new TestEntities();
 
 		// Create a job
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 		assertTrue(job.getId() == 0);
 
 		// Save the job
@@ -129,21 +155,17 @@ public class BatchJobBeanIT {
 		controller.delete(batchJob2);
 		BatchJob batchJob3 = controller.find(job.getId());
 		assertTrue(batchJob3 == null);
-
-		// Check that the number of existing jobs equals the initial count
-		assertTrue(initialCount == controller.findAll().size());
 	}
 
 	@Test
 	public void testFindAll() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
+		final String METHOD = "testFindAll";
+		final TestEntities te = new TestEntities();
 
 		List<Long> jobIds = new LinkedList<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a job
-			BatchJobBean job =
-				new BatchJobBean("EXT ID: " + new Date().toString());
+			BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 			assertTrue(job.getId() == 0);
 			controller.save(job);
 			final long id = job.getId();
@@ -154,7 +176,6 @@ public class BatchJobBeanIT {
 		// Verify the number of jobs has increased
 		List<BatchJobBean> jobs = controller.findAll();
 		assertTrue(jobs != null);
-		assertTrue(initialCount + MAX_TEST_ITERATIONS == jobs.size());
 
 		// Find the jobs
 		boolean isFound = false;
@@ -167,31 +188,20 @@ public class BatchJobBeanIT {
 			}
 			assertTrue(isFound);
 		}
-
-		// Remove the job
-		for (long id : jobIds) {
-			BatchJobBean job = controller.find(id);
-			controller.delete(job);
-		}
-
-		jobs = controller.findAll();
-		assertTrue(jobs != null);
-		assertTrue(initialCount == jobs.size());
 	}
 
 	@Test
 	public void testExternalId() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
+		final String METHOD = "testExternalId";
+		final TestEntities te = new TestEntities();
 
 		// Create a job and set a value
-		String extId = "EXT ID: " + new Date().toString();
-		BatchJobBean job = new BatchJobBean(extId);
+		String extId = EntityManagerUtils.createExternalId(METHOD);
+		BatchJobBean job = controller.createEphemeralBatchJob(te, extId);
 		assertTrue(extId.equals(job.getExternalId()));
 
 		// Save the job
 		final long id1 = controller.save(job).getId();
-		assertTrue(initialCount + 1 == controller.findAll().size());
 
 		// Retrieve the job
 		job = null;
@@ -200,25 +210,20 @@ public class BatchJobBeanIT {
 		// Check the value
 		final String v2 = job.getExternalId();
 		assertTrue(extId.equals(v2));
-
-		// Remove the job and the number of remaining jobs
-		controller.delete(job);
-		assertTrue(initialCount == controller.findAll().size());
 	}
 
 	@Test
 	public void testTransactionId() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
+		final String METHOD = "testTransactionId";
+		final TestEntities te = new TestEntities();
 
 		// Create a job and set a value
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 		final long v1 = random.nextLong();
 		job.setDescription("" + v1);
 
 		// Save the job
 		final long id1 = controller.save(job).getId();
-		assertTrue(initialCount + 1 == controller.findAll().size());
 		job = null;
 
 		// Get the job
@@ -227,10 +232,6 @@ public class BatchJobBeanIT {
 		// Check the value
 		final long v2 = Long.parseLong(job.getDescription());
 		assertTrue(v1 == v2);
-
-		// Remove the job and the number of remaining jobs
-		controller.delete(job);
-		assertTrue(initialCount == controller.findAll().size());
 	}
 
 	/**
@@ -239,11 +240,11 @@ public class BatchJobBeanIT {
 	 */
 	@Test
 	public void testMergeDescription() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
+		final String METHOD = "testMergeDescription";
+		final TestEntities te = new TestEntities();
 
 		// Create a job and set a value
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 		assertTrue(job.getDescription() == null);
 		final String description = "Description: " + new Date().toString();
 		job.setDescription(description);
@@ -251,7 +252,6 @@ public class BatchJobBeanIT {
 
 		// Save the job
 		final long id1 = controller.save(job).getId();
-		assertTrue(initialCount + 1 == controller.findAll().size());
 
 		// Detach the job and modify the description
 		controller.detach(job);
@@ -266,22 +266,18 @@ public class BatchJobBeanIT {
 
 		// Check the value
 		assertTrue(description2.equals(job.getDescription()));
-
-		// Remove the job and the number of remaining jobs
-		controller.delete(job);
-		assertTrue(initialCount == controller.findAll().size());
 	}
 
 	@Test
 	public void testPercentageComplete() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
+		final String METHOD = "testPercentageComplete";
+		final TestEntities te = new TestEntities();
 
 		// Record a timestamp before a transition is made
 		Date before = new Date();
 
 		// 1. Create a job and check the percentage complete
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 
 		// Record a timestamp after a transition is made
 		Date after = new Date();
@@ -318,7 +314,6 @@ public class BatchJobBeanIT {
 
 			// Save the job
 			final long id1 = controller.save(job).getId();
-			assertTrue(initialCount + 1 == controller.findAll().size());
 			job = null;
 
 			// Retrieve the job
@@ -338,16 +333,21 @@ public class BatchJobBeanIT {
 			// Remove the job and the number of remaining jobs
 			controller.delete(job);
 		}
-
-		assertTrue(initialCount == controller.findAll().size());
 	}
 
 	@Test
 	public void testEqualsHashCode() {
-		// Create two generic jobs and verify equality
-		String exId = "EXT ID: " + new Date().toString();
-		BatchJobBean job1 = new BatchJobBean(exId);
-		BatchJobBean job2 = new BatchJobBean(job1);
+		final String METHOD = "testEqualsHashCode";
+		final TestEntities te = new TestEntities();
+
+		// Create two ephemeral jobs
+		String exId = EntityManagerUtils.createExternalId(METHOD);
+		BatchJobBean job1 = controller.createEphemeralBatchJob(te, exId);
+		assertTrue(te.contains(job1));
+		BatchJobBean job2 = new BatchJobBean(job1, job1.getExternalId());
+		te.add(job2);
+
+		//  Verify equality of ephemeral instances
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
 
@@ -382,14 +382,14 @@ public class BatchJobBeanIT {
 
 	@Test
 	public void testStateMachineMainSequence() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
+		final String METHOD = "testStateMachineMainSequence";
+		final TestEntities te = new TestEntities();
 
 		// Record a timestamp before a transition is made
 		Date before = new Date();
 
 		// 1. Create a job and check the status
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 		// controller.save(job);
 
 		// Record a timestamp after a transition is made
@@ -448,26 +448,20 @@ public class BatchJobBeanIT {
 		assertTrue(job.getStatus().equals(STATUS_COMPLETED));
 		job.markAsAbortRequested();
 		assertTrue(job.getStatus().equals(STATUS_COMPLETED));
-
-		// Remove the job and the number of remaining jobs
-		controller.delete(job);
-		assertTrue(initialCount == controller.findAll().size());
 	}
 
 	@Test
 	public void testStatus() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
+		final String METHOD = "testStatus";
+		final TestEntities te = new TestEntities();
 
 		for (String sts : _statusValues) {
-			BatchJobBean job =
-				new BatchJobBean("EXT ID: " + new Date().toString());
+			BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 			job.setStatus(sts);
 			assertTrue(sts.equals(job.getStatus()));
 
 			// Save the job
 			final long id1 = controller.save(job).getId();
-			assertTrue(initialCount + 1 == controller.findAll().size());
 			job = null;
 
 			// Retrieve the job
@@ -478,18 +472,15 @@ public class BatchJobBeanIT {
 
 			// Remove the job and the number of remaining jobs
 			controller.delete(job);
-			assertTrue(initialCount == controller.findAll().size());
 		}
 
 		for (String sts : _statusValues) {
-			BatchJobBean job =
-				new BatchJobBean("EXT ID: " + new Date().toString());
+			BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 			job.setStatus(sts);
 			assertTrue(sts.equals(job.getStatus()));
 
 			// Save the job
 			final long id1 = controller.save(job).getId();
-			assertTrue(initialCount + 1 == controller.findAll().size());
 			job = null;
 
 			// Retrieve the job
@@ -497,21 +488,18 @@ public class BatchJobBeanIT {
 
 			// Check the value
 			assertTrue(sts.equals(job.getStatus()));
-
-			// Remove the job and the number of remaining jobs
-			controller.delete(job);
-			assertTrue(initialCount == controller.findAll().size());
 		}
-
-		assertTrue(initialCount == controller.findAll().size());
 	}
 
 	public void testTimestamp(String sts) {
+		final String METHOD = "testTimestamp";
+		final TestEntities te = new TestEntities();
+
 		// Record a timestamp before status is set
 		final Date now = new Date();
 
 		// Set the status
-		BatchJobBean job = new BatchJobBean("EXT ID: " + new Date().toString());
+		BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 		job.setStatus(sts);
 
 		// Record a timestamp after the status is set
@@ -542,14 +530,9 @@ public class BatchJobBeanIT {
 
 	@Test
 	public void testTimestamps() {
-		// Count existing jobs
-		final int initialCount = controller.findAll().size();
-
 		for (String sts : _statusValues) {
 			testTimestamp(sts);
 		}
-
-		assertTrue(initialCount == controller.findAll().size());
 	}
 
 }

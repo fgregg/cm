@@ -461,11 +461,11 @@ public class EJBConfiguration implements Serializable {
 	}
 
 	/** A convenience method that creates a new BatchJob record */
-	public BatchJob createBatchJob(EntityManager em, String externalId) {
+	public BatchJob createBatchJob(EntityManager em, BatchParameters params, String externalId) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		BatchJob retVal = new BatchJobBean(externalId);
+		BatchJob retVal = new BatchJobBean(params, externalId);
 		em.persist(retVal);
 		return retVal;
 	}
