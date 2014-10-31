@@ -38,7 +38,7 @@ public interface BatchJobJPA {
 	String CN_ID = "ID";
 
 	/**
-	 * Descriminator column
+	 * Discriminator column
 	 * 
 	 * @see #DISCRIMINATOR_COLUMN
 	 */
