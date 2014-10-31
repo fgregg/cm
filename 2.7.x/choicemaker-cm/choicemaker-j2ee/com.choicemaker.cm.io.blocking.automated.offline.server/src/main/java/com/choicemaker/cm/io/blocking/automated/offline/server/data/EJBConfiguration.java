@@ -27,8 +27,8 @@ import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
-import javax.jms.Topic;
-import javax.jms.TopicConnectionFactory;
+//import javax.jms.Topic;
+//import javax.jms.TopicConnectionFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -72,11 +72,11 @@ public class EJBConfiguration implements Serializable {
 
 	// ENC Connection Factory names
 	public final static String JMS_QUEUE_FACTORY = "jms/QueueConnectionFactory";
-	public final static String JMS_TOPIC_CONNECTION_FACTORY = "jms/TopicConnectionFactory";
+//	public final static String JMS_TOPIC_CONNECTION_FACTORY = "jms/TopicConnectionFactory";
 
 	// ENC Topic names
-	public final static String JMS_STATUS_TOPIC = "jms/statusTopic";
-	public final static String JMS_TRANS_STATUS_TOPIC = "jms/transStatusTopic";
+//	public final static String JMS_STATUS_TOPIC = "jms/statusTopic";
+//	public final static String JMS_TRANS_STATUS_TOPIC = "jms/transStatusTopic";
 
 	// ENC Queue names
 	public final static String JMS_START_QUEUE = "jms/startQueue";
@@ -117,7 +117,7 @@ public class EJBConfiguration implements Serializable {
 
 	// Cached connection factories
 	private transient QueueConnectionFactory queueConnectionFactory;
-	private transient TopicConnectionFactory topicConnectionFactory;
+//	private transient TopicConnectionFactory topicConnectionFactory;
 	
 	// Cached queues
 	private transient Queue startMessageQueue;
@@ -142,8 +142,8 @@ public class EJBConfiguration implements Serializable {
 	private transient Queue transMatchDedupEachMessageQueue;
 
 	// Cached topics
-	private transient Topic statusTopic;
-	private transient Topic transStatusTopic;
+//	private transient Topic statusTopic;
+//	private transient Topic transStatusTopic;
 	
 	// Cached data sources
 	private transient DataSource ds;
@@ -170,29 +170,29 @@ public class EJBConfiguration implements Serializable {
 		return ctx;
 	}
 
-	public TopicConnectionFactory getTopicConnectionFactory()throws NamingException {
-		if (topicConnectionFactory == null) {
-			Context ctx = getInitialContext();
-			topicConnectionFactory =(TopicConnectionFactory) ctx.lookup(ENV_BASE + JMS_TOPIC_CONNECTION_FACTORY);
-		}
-		return topicConnectionFactory;
-	} // getTopicConnectionFactory()
+//	public TopicConnectionFactory getTopicConnectionFactory()throws NamingException {
+//		if (topicConnectionFactory == null) {
+//			Context ctx = getInitialContext();
+//			topicConnectionFactory =(TopicConnectionFactory) ctx.lookup(ENV_BASE + JMS_TOPIC_CONNECTION_FACTORY);
+//		}
+//		return topicConnectionFactory;
+//	} // getTopicConnectionFactory()
 
-	public Topic getStatusTopic() throws NamingException {
-		if (statusTopic == null) {
-			Context ctx = getInitialContext();
-			statusTopic = (Topic) ctx.lookup(ENV_BASE + JMS_STATUS_TOPIC);
-		}
-		return statusTopic;
-	} //getStatusTopic()
+//	public Topic getStatusTopic() throws NamingException {
+//		if (statusTopic == null) {
+//			Context ctx = getInitialContext();
+//			statusTopic = (Topic) ctx.lookup(ENV_BASE + JMS_STATUS_TOPIC);
+//		}
+//		return statusTopic;
+//	} //getStatusTopic()
 
-	public Topic getTransStatusTopic() throws NamingException {
-		if (transStatusTopic == null) {
-			Context ctx = getInitialContext();
-			transStatusTopic = (Topic) ctx.lookup(ENV_BASE + JMS_TRANS_STATUS_TOPIC);
-		}
-		return transStatusTopic;
-	} //gettransStatusTopic()
+//	public Topic getTransStatusTopic() throws NamingException {
+//		if (transStatusTopic == null) {
+//			Context ctx = getInitialContext();
+//			transStatusTopic = (Topic) ctx.lookup(ENV_BASE + JMS_TRANS_STATUS_TOPIC);
+//		}
+//		return transStatusTopic;
+//	} //gettransStatusTopic()
 
 	/** This looks up a queue on the EJB server.
 	 * Don't not specify the prefix java:comp/env/

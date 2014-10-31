@@ -44,6 +44,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+//import javax.jms.ObjectMessage;
+//import javax.jms.Topic;
+//import javax.jms.TopicConnection;
+//import javax.jms.TopicPublisher;
+//import javax.jms.TopicSession;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -63,6 +68,8 @@ import javax.persistence.TableGenerator;
 import javax.persistence.TemporalType;
 
 import com.choicemaker.cm.core.IControl;
+//import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;
+//import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 
@@ -400,7 +407,7 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		}
 		this.status = newStatus;
 		setTimeStamp(newStatus, new Date());
-		publishStatus();
+//		publishStatus();
 	}
 
 	// Should be invoked only by setStatus(STATUS)
@@ -530,49 +537,47 @@ public class BatchJobBean implements IControl, Serializable, BatchJob {
 		}
 	}
 
-	// -- Messaging
-
-	/**
-	 * This method publishes the status of a job to a topic queue.
-	 */
-	protected void publishStatus() {
-/* FIXME RESTOREME
-		TopicConnection conn = null;
-		TopicSession session = null;
-		try {
-			conn =
-				EJBConfiguration.getInstance().getTopicConnectionFactory()
-						.createTopicConnection();
-			session =
-				conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-			conn.start();
-			Topic topic = EJBConfiguration.getInstance().getTransStatusTopic();
-			TopicPublisher pub = session.createPublisher(topic);
-			BatchJobStatus jobStatus = new BatchJobStatus(this);
-			ObjectMessage notifMsg = session.createObjectMessage(jobStatus);
-			pub.publish(notifMsg);
-			pub.close();
-		} catch (Exception e) {
-			log.severe(e.toString());
-		} finally {
-			if (session != null) {
-				try {
-					session.close();
-				} catch (Exception e) {
-					log.severe(e.toString());
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (Exception e) {
-					log.severe(e.toString());
-				}
-			}
-		}
-		log.fine("...finished published status");
-*/
-	}
+//	// -- Messaging
+//
+//	/**
+//	 * This method publishes the status of a job to a topic queue.
+//	 */
+//	protected void publishStatus() {
+//		TopicConnection conn = null;
+//		TopicSession session = null;
+//		try {
+//			conn =
+//				EJBConfiguration.getInstance().getTopicConnectionFactory()
+//						.createTopicConnection();
+//			session =
+//				conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
+//			conn.start();
+//			Topic topic = EJBConfiguration.getInstance().getTransStatusTopic();
+//			TopicPublisher pub = session.createPublisher(topic);
+//			BatchJobStatus jobStatus = new BatchJobStatus(this);
+//			ObjectMessage notifMsg = session.createObjectMessage(jobStatus);
+//			pub.publish(notifMsg);
+//			pub.close();
+//		} catch (Exception e) {
+//			log.severe(e.toString());
+//		} finally {
+//			if (session != null) {
+//				try {
+//					session.close();
+//				} catch (Exception e) {
+//					log.severe(e.toString());
+//				}
+//			}
+//			if (conn != null) {
+//				try {
+//					conn.close();
+//				} catch (Exception e) {
+//					log.severe(e.toString());
+//				}
+//			}
+//		}
+//		log.fine("...finished published status");
+//	}
 
 	// -- Identity
 

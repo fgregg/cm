@@ -24,10 +24,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicPublisher;
-import javax.jms.TopicSession;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -194,7 +190,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 			// mark as done
 			sendToUpdateStatus(d.jobID, 100);
 			status.setStatus(IStatus.DONE_PROGRAM);
-			publishStatus(d.jobID);
+//			publishStatus(d.jobID);
 
 			// send to transitivity
 			log.info("runTransitivity " + d.runTransitivity);
@@ -315,44 +311,45 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 		log.info("Sending to TE");
 	}
 
-	/**
-	 * This method publishes the status to a topic queue.
-	 */
-	private void publishStatus(long id) {
-		TopicConnection conn = null;
-		TopicSession session = null;
-		try {
-			conn =
-				EJBConfiguration.getInstance().getTopicConnectionFactory()
-						.createTopicConnection();
-			session =
-				conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-			conn.start();
-			Topic topic = EJBConfiguration.getInstance().getStatusTopic();
-			TopicPublisher pub = session.createPublisher(topic);
-			ObjectMessage notifMsg = session.createObjectMessage(new Long(id));
-			pub.publish(notifMsg);
-			pub.close();
-			// conn.stop();
-		} catch (Exception e) {
-			log.severe(e.toString());
-		} finally {
-			if (session != null) {
-				try {
-					session.close();
-				} catch (Exception e) {
-					log.severe(e.toString());
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (Exception e) {
-					log.severe(e.toString());
-				}
-			}
-		}
-		log.fine("...finished published status");
-	}
+//	/**
+//	 * This method publishes the status to a topic queue.
+//	 * However, 
+//	 */
+//	private void publishStatus(long id) {
+//		TopicConnection conn = null;
+//		TopicSession session = null;
+//		try {
+//			conn =
+//				EJBConfiguration.getInstance().getTopicConnectionFactory()
+//						.createTopicConnection();
+//			session =
+//				conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
+//			conn.start();
+//			Topic topic = EJBConfiguration.getInstance().getStatusTopic();
+//			TopicPublisher pub = session.createPublisher(topic);
+//			ObjectMessage notifMsg = session.createObjectMessage(new Long(id));
+//			pub.publish(notifMsg);
+//			pub.close();
+//			// conn.stop();
+//		} catch (Exception e) {
+//			log.severe(e.toString());
+//		} finally {
+//			if (session != null) {
+//				try {
+//					session.close();
+//				} catch (Exception e) {
+//					log.severe(e.toString());
+//				}
+//			}
+//			if (conn != null) {
+//				try {
+//					conn.close();
+//				} catch (Exception e) {
+//					log.severe(e.toString());
+//				}
+//			}
+//		}
+//		log.fine("...finished published status");
+//	}
 
 }
