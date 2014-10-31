@@ -42,7 +42,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryServiceHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJobHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAService;
@@ -74,8 +73,8 @@ public class Single implements Serializable {
 
 	// ENC Entity Bean names
 	private static final String URM_JOB = "java:comp/env/ejb/UrmJob";
-	private static final String TRANSITIVITY_JOB =
-		"java:comp/env/ejb/TransitivityJob";
+//	private static final String TRANSITIVITY_JOB =
+//		"java:comp/env/ejb/TransitivityJob";
 	private static final String CMS_JOB =
 		"java:comp/env/ejb/UrmSerializationJob";
 	private static final String URM_STEP_JOB = "java:comp/env/ejb/UrmStepJob";
@@ -115,7 +114,7 @@ public class Single implements Serializable {
 
 	// Cached EJB home proxies
 	private transient UrmJobHome urmJobHome = null;
-	private transient TransitivityJobHome transJobHome = null;
+//	private transient TransitivityJobHome transJobHome = null;
 	private transient CmsJobHome cmsJobHome = null;
 	private transient UrmStepJobHome urmStepJobHome = null;
 	private transient BatchParametersHome batchParamsHome = null;
@@ -544,31 +543,16 @@ public class Single implements Serializable {
 		return jobs;
 	}
 
-	public TransitivityJob findTransJobById(long id)
-		throws ConfigException, CmRuntimeException {
-		try {
-			if (transJobHome == null) {
-				Context ctx = getInitialContext();
-				Object homeRef = ctx.lookup(TRANSITIVITY_JOB);
-				transJobHome =
-					(TransitivityJobHome) PortableRemoteObject.narrow(
-						homeRef,
-						TransitivityJobHome.class);
-			}
-			return transJobHome.findByPrimaryKey(new Long(id));
-		} catch (ClassCastException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		} catch (RemoteException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
+	public TransitivityJob findTransJobById(EntityManager em,
+			Class c, long id) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
 		}
+		if (c == null) {
+			throw new IllegalArgumentException("null class");
+		}
+		TransitivityJob retVal = (TransitivityJob) em.find(c, Long.valueOf(id));
+		return retVal;
 	}
 
 	/** This looks up a queue factory on the EJB server.

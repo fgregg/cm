@@ -27,9 +27,11 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.naming.Context;
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.server.util.ClusteringIteratorFactory;
 import com.choicemaker.cm.transitivity.util.CompositeEntityIterator;
@@ -50,6 +52,9 @@ public class TransSerializerMsgBean
 	private static final Logger log =
 		Logger.getLogger(TransSerializerMsgBean.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransSerializerMsgBean.class.getName());
+
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
 
 	/**
 	 * Constructor, which is public and takes no arguments.
@@ -109,7 +114,7 @@ public class TransSerializerMsgBean
 			}
 
 			TransitivityJob trJob =
-				Single.getInst().findTransJobById(tsd.batchId);
+				Single.getInst().findTransJobById(em, TransitivityJobBean.class, tsd.batchId);
 			if (!trJob.getStatus().equals(TransitivityJob.STATUS_COMPLETED)) {
 				log.severe(
 					"transitivity job " + tsd.batchId + " is not complete");

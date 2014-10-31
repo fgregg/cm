@@ -51,6 +51,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParamet
  * This object contains method to get JMS and EJB objects from the J2EE server.
  *
  * @author pcheung
+ * @author rphall (migration to EJB3)
  *
  */
 public class EJBConfiguration implements Serializable {

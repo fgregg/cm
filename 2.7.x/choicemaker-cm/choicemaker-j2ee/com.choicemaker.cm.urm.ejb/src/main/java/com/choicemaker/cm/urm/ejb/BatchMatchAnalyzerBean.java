@@ -26,6 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -37,8 +38,6 @@ import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.cm.urm.exceptions.ModelException;
 import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
-
-
 
 /**
  * @author emoussikaev
@@ -164,7 +163,6 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 //		log.info ("send To TransitivityBean ");
 //	}
 
-
 	/**
 	 * Retrieves the status of the matching process with the give job ID.
 	 * 
@@ -194,7 +192,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 				break;
 			case TRANS_OABA_STEP_INDEX:
 				TransitivityJob tj =
-					Single.getInst().findTransJobById(stepJobId);
+					Single.getInst().findTransJobById(em, TransitivityJobBean.class, stepJobId);
 				stepStatus = tj.getStatus();
 				break;
 			case TRANS_SERIAL_STEP_INDEX:
@@ -290,7 +288,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 				throw new ArgumentException("job "+jobID+" is not completed");
 			
 			UrmStepJob stepJob = Single.getInst().findStepJobByUrmAndIndex(jobID,TRANS_OABA_STEP_INDEX);
-			TransitivityJob trJob = Single.getInst().findTransJobById(stepJob.getStepJobId().longValue());
+			TransitivityJob trJob = Single.getInst().findTransJobById(em, TransitivityJobBean.class, stepJob.getStepJobId().longValue());
 				
 			String fileName = trJob.getDescription();
 			fileName  = fileName.substring(0,fileName.lastIndexOf("."));
@@ -420,7 +418,6 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 		throw new CmRuntimeException("method is not implemented");
 	}
 
-
 	public long[] 		getJobList()
 						throws	ArgumentException,
 								ConfigException,
@@ -456,7 +453,6 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 		//return null;//TODO:implememnt
 		throw new CmRuntimeException("method is not implemented");							
 	}
-							
 
 	public Iterator	getResultIterator(
 							long jobId,
@@ -478,13 +474,6 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 	}											
 
 }
-
-
-
-
-
-
-
 
 /*
  * 
