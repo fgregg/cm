@@ -28,7 +28,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -112,7 +112,7 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 
 				//get the status
 //				Status status = data.status;
-				IStatus status = configuration.getStatusLog(data);
+				OabaProcessing status = configuration.getProcessingLog(em, data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					MessageBeanUtils.stopJob (batchJob, status, oabaConfig);

@@ -34,18 +34,17 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.StatusLog;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.StatusLogHome;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.StatusLogWrapper;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchJobProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA;
 
 /**
  * This object contains method to get JMS and EJB objects from the J2EE server.
@@ -69,7 +68,7 @@ public class EJBConfiguration implements Serializable {
 	// ENC Entity Bean names
 	public final static String EJB_BATCH_JOB = BatchJob.DEFAULT_JNDI_COMP_NAME;
 	public final static String EJB_BATCH_PARAMS = BatchParameters.DEFAULT_JNDI_COMP_NAME;
-	public final static String EJB_STATUS_LOG = StatusLogHome.DEFAULT_JNDI_COMP_NAME;
+	public final static String EJB_STATUS_LOG = OabaBatchJobProcessing.DEFAULT_JNDI_COMP_NAME;
 
 	// ENC Connection Factory names
 	public final static String JMS_QUEUE_FACTORY = "jms/QueueConnectionFactory";
@@ -114,7 +113,7 @@ public class EJBConfiguration implements Serializable {
 
 	// Cached EJB home proxies
 //	private transient BatchParametersHome batchParamsHome;
-	private transient StatusLogHome statusLogHome;
+//	private transient StatusLogHome statusLogHome;
 
 	// Cached connection factories
 	private transient QueueConnectionFactory queueConnectionFactory;
@@ -471,14 +470,6 @@ public class EJBConfiguration implements Serializable {
 		return retVal;
 	}
 
-	public StatusLog createStatusLog(long id) throws RemoteException, CreateException, NamingException{
-		Context ctx = getInitialContext();
-		Object homeRef = ctx.lookup(EJB_STATUS_LOG);
-		StatusLogHome statusLogHome = (StatusLogHome) PortableRemoteObject.narrow(homeRef,StatusLogHome.class);
-		StatusLog retVal = statusLogHome.create (id);
-		return retVal;
-	}
-
 //	public BatchParameters createBatchParameters (long id)
 //		throws RemoteException, CreateException, NamingException, SQLException {
 //		BatchParametersHome batchParamHome = getBatchParamsHome();
@@ -543,12 +534,6 @@ public class EJBConfiguration implements Serializable {
 		return retVal;
 	}
 
-	public StatusLog findStatusLogById(long id) throws RemoteException, FinderException, NamingException {
-		StatusLogHome home = getStatusLogHome();
-		StatusLog retVal = home.findByPrimaryKey(new Long(id));
-		return retVal;
-	}
-
 	public DataSource getDataSource () throws RemoteException, CreateException, NamingException, SQLException {
 		if (this.ds == null) {
 			Context ctx = getInitialContext();
@@ -568,31 +553,72 @@ public class EJBConfiguration implements Serializable {
 //		return this.batchParamsHome;
 //	}
 
-	private StatusLogHome getStatusLogHome() throws NamingException {
-		if (this.statusLogHome == null) {
-			Context ctx = getInitialContext();
-			Object homeRef = ctx.lookup(EJB_STATUS_LOG);
-			this.statusLogHome = (StatusLogHome) PortableRemoteObject.narrow(
-				homeRef, StatusLogHome.class);
+//	private StatusLogHome getStatusLogHome() throws NamingException {
+//		if (this.statusLogHome == null) {
+//			Context ctx = getInitialContext();
+//			Object homeRef = ctx.lookup(EJB_STATUS_LOG);
+//			this.statusLogHome = (StatusLogHome) PortableRemoteObject.narrow(
+//				homeRef, StatusLogHome.class);
+//		}
+//		return this.statusLogHome;
+//	}
+
+	public OabaBatchJobProcessing createProcessingLog(EntityManager em,
+			long jobId) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
 		}
-		return this.statusLogHome;
-	}
+		List<OabaBatchJobProcessingBean> entries =
+			findProcessingLogsByJobId(em, jobId);
+		assert entries == null || entries.size() <= 1;
 
-	public IStatus getStatusLog (StartData data) throws RemoteException, FinderException, NamingException {
-		StatusLog statusLog = findStatusLogById (data.jobID);
-		StatusLogWrapper retVal = new StatusLogWrapper (statusLog);
+		OabaBatchJobProcessing retVal;
+		if (entries == null || entries.size() == 0) {
+			retVal = new OabaBatchJobProcessingBean(jobId);
+			em.persist(retVal);
+		} else {
+			retVal = entries.get(0);
+		}
 		return retVal;
 	}
 
-	public IStatus getStatusLog (long jobID) throws RemoteException, FinderException, NamingException {
-		StatusLog statusLog = findStatusLogById (jobID);
-		StatusLogWrapper retVal = new StatusLogWrapper (statusLog);
+	private List<OabaBatchJobProcessingBean> findProcessingLogsByJobId(EntityManager em, long id) {
+		Query query = em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_BY_JOBID);
+		query.setParameter(
+				OabaProcessingJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID,
+				id);
+		@SuppressWarnings("unchecked")
+		List<OabaBatchJobProcessingBean> entries = query.getResultList();
+		if (entries != null && entries.size() > 1) {
+			throw new IllegalStateException("multiple processing entries for job id: " + id);
+		}
+		return entries;
+	}
+
+	public OabaBatchJobProcessing findProcessingLogByJobId(EntityManager em, long id) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		if (BatchJobBean.INVALID_BATCHJOB_ID == id) {
+			throw new IllegalArgumentException("non-persistent job id: " + id);
+		}
+		List<OabaBatchJobProcessingBean> entries = findProcessingLogsByJobId(em,id);
+		if (entries == null || entries.size() == 0) {
+			throw new IllegalStateException("no processing entries for job id: " + id);
+		}
+		assert entries.size() == 1 ;
+		OabaBatchJobProcessing retVal = entries.get(0);
 		return retVal;
 	}
 
-	public void createNewStatusLog (long id) throws RemoteException, CreateException, NamingException {
-		StatusLog statusLog = createStatusLog(id);
-		statusLog.setStatusId(new Integer (0));
+	public OabaProcessing getProcessingLog (EntityManager em, StartData data) throws RemoteException, FinderException, NamingException {
+		OabaBatchJobProcessing retVal = findProcessingLogByJobId (em, data.jobID);
+		return retVal;
+	}
+
+	public OabaProcessing getProcessingLog (EntityManager em, long jobID) throws RemoteException, FinderException, NamingException {
+		OabaBatchJobProcessing retVal = findProcessingLogByJobId (em, jobID);
+		return retVal;
 	}
 
 } // EJBConfiguration

@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.services;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIDTranslator;
 
 /**
@@ -31,7 +31,7 @@ public class ReverseTranslateService {
 	private IBlockSource osSource;
 	private IBlockSink osSink;
 	
-	private IStatus status;
+	private OabaProcessing status;
 	
 	private long time; //this keeps track of time
 
@@ -46,7 +46,7 @@ public class ReverseTranslateService {
 	 */
 	public ReverseTranslateService (RecordIDTranslator translator, 
 		IBlockSource bSource, IBlockSink bSink,
-		IBlockSource osSource, IBlockSink osSink, IStatus status) {
+		IBlockSource osSource, IBlockSink osSink, OabaProcessing status) {
 			
 		this.translator = translator;
 		this.bSink = bSink;
@@ -74,20 +74,20 @@ public class ReverseTranslateService {
 
 //		System.out.println ("runService: " + status.getStatus());
 
-		if (status.getStatus() >= IStatus.DONE_REVERSE_TRANSLATE_OVERSIZED) {
+		if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_REVERSE_TRANSLATE_OVERSIZED) {
 			//do nothing
-		} else if (status.getStatus() == IStatus.DONE_DEDUP_OVERSIZED) {
+		} else if (status.getCurrentProcessingEvent() == OabaProcessing.DONE_DEDUP_OVERSIZED) {
 			//reverse translate block and oversized
 			reverseTranslate (bSource, bSink);
-			status.setStatus( IStatus.DONE_REVERSE_TRANSLATE_BLOCK);
+			status.setCurrentProcessingEvent( OabaProcessing.DONE_REVERSE_TRANSLATE_BLOCK);
 
 			reverseTranslate (osSource, osSink);
-			status.setStatus( IStatus.DONE_REVERSE_TRANSLATE_OVERSIZED);
+			status.setCurrentProcessingEvent( OabaProcessing.DONE_REVERSE_TRANSLATE_OVERSIZED);
 			
-		} else if (status.getStatus() == IStatus.DONE_REVERSE_TRANSLATE_BLOCK) {
+		} else if (status.getCurrentProcessingEvent() == OabaProcessing.DONE_REVERSE_TRANSLATE_BLOCK) {
 			//reverse translate oversized
 			reverseTranslate (osSource, osSink);
-			status.setStatus( IStatus.DONE_REVERSE_TRANSLATE_OVERSIZED);
+			status.setCurrentProcessingEvent( OabaProcessing.DONE_REVERSE_TRANSLATE_OVERSIZED);
 
 		}
 		time = System.currentTimeMillis() - time;

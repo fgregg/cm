@@ -38,7 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
@@ -169,8 +169,8 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 
 					countMessages = 0;
 					
-					IStatus status = configuration.getStatusLog(data);
-					if (status.getStatus() >= IStatus.DONE_MATCHING_DATA) {
+					OabaProcessing status = configuration.getProcessingLog(em, data);
+					if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_MATCHING_DATA) {
 						//matching is already done, so go on to the next step.
 						nextSteps ();
 					} else {
@@ -241,7 +241,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 		oabaConfig = new OABAConfiguration (d.stageModelName, d.jobID);
 		BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, d.jobID);
 		data = new StartData (d);
-		IStatus status = configuration.getStatusLog(data);
+		OabaProcessing status = configuration.getProcessingLog(em, data);
 
 		//keeping track of messages sent and received.
 		countMessages --;
@@ -270,7 +270,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 				String temp = Integer.toString(data.numChunks) + DELIM
 					+ Integer.toString(data.numRegularChunks) + DELIM + 
 					Integer.toString(currentChunk);
-				status.setStatus(IStatus.MATCHING_DATA, temp);
+				status.setCurrentProcessingEvent(OabaProcessing.MATCHING_DATA, temp);
 				
 				log.info("Chunk " + d.ind + " is done.");
 						
@@ -280,7 +280,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 					startChunk (currentChunk, batchJob);
 				} else {
 					//all the chunks are done
-					status.setStatus(IStatus.DONE_MATCHING_DATA);
+					status.setCurrentProcessingEvent(OabaProcessing.DONE_MATCHING_DATA);
 
 					log.info("total comparisons: " + numCompares + " total matches: " + numMatches);
 					timeStart = System.currentTimeMillis() - timeStart;
@@ -335,7 +335,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 		JMSException, XmlConfException {
 		
 		//init values
-		IStatus status = configuration.getStatusLog(data);
+		OabaProcessing status = configuration.getProcessingLog(em, data);
 		BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 		
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
@@ -343,7 +343,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 			
 		} else {
 			currentChunk = 0;
-			if (status.getStatus() == IStatus.MATCHING_DATA ) {
+			if (status.getCurrentProcessingEvent() == OabaProcessing.MATCHING_DATA ) {
 				currentChunk = recover (status) + 1;
 				log.info("recovering from " + currentChunk);
 			}
@@ -371,7 +371,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 	}
 	
 	
-	private int recover (IStatus status) throws BlockingException {
+	private int recover (OabaProcessing status) throws BlockingException {
 		StringTokenizer stk = new StringTokenizer (status.getAdditionalInfo(), DELIM);
 		data.numChunks = Integer.parseInt(stk.nextToken());
 		data.numRegularChunks = Integer.parseInt(stk.nextToken());

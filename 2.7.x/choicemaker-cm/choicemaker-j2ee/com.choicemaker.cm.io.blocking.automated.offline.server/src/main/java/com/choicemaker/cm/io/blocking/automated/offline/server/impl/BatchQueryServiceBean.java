@@ -99,10 +99,7 @@ public class BatchQueryServiceBean implements SessionBean {
 		long id = batchJob.getId();
 
 		//create a new current status EJB
-		configuration.createNewStatusLog(id);
-
-		//create a new current status EJB
-		configuration.createNewStatusLog(id);
+		configuration.createProcessingLog(em, id);
 
 		sendToStartOABA (id, staging, master, stageModelName, masterModelName,
 			lowThreshold, highThreshold, maxSingle, runTransitivity );

@@ -13,6 +13,8 @@ package com.choicemaker.cm.urm.ejb;
 import java.rmi.RemoteException;
 import java.util.Properties;
 
+import javax.persistence.EntityManager;
+
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.SerialRecordSource;
@@ -93,12 +95,15 @@ public class MrpsRequest implements IMrpsRequest {
 		}
 	}
 
-	private BatchParameters getBatchParameters()
+	private BatchParameters getBatchParameters(EntityManager em)
 		throws CmRuntimeException, ConfigException {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
 		BatchParameters retVal = this.batchParameters;
 		if (retVal == null) {
 			this.batchParameters =
-				Single.getInst().findBatchParamsById(
+				Single.getInst().findBatchParamsById(em,
 					this.oabaJobId.longValue());
 			retVal = this.batchParameters;
 		}
@@ -109,9 +114,9 @@ public class MrpsRequest implements IMrpsRequest {
 		return retVal;
 	}
 
-	private String getStagingModelName()
+	private String getStagingModelName(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
-		BatchParameters bp = getBatchParameters();
+		BatchParameters bp = getBatchParameters(em);
 		String retVal = bp.getStageModel();
 		// Postcondition
 		if (retVal == null) {
@@ -120,11 +125,11 @@ public class MrpsRequest implements IMrpsRequest {
 		return retVal;
 	}
 
-	public IProbabilityModel getStagingModel()
+	public IProbabilityModel getStagingModel(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
 		IProbabilityModel retVal = this.stagingModel;
 		if (retVal == null) {
-			BatchParameters bp = getBatchParameters();
+			BatchParameters bp = getBatchParameters(em);
 			String stagingModelName = bp.getStageModel();
 			this.stagingModel = PMManager.getModelInstance(stagingModelName);
 			retVal = this.stagingModel;
@@ -154,7 +159,7 @@ public class MrpsRequest implements IMrpsRequest {
 	/**
 	 * @return a non-null instance of MarkedRecordPairSink
 	 */
-	public MarkedRecordPairSink getMarkedRecordPairSink()
+	public MarkedRecordPairSink getMarkedRecordPairSink(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
 		MarkedRecordPairSink retVal = this.mrps;
 		if (retVal == null) {
@@ -163,7 +168,7 @@ public class MrpsRequest implements IMrpsRequest {
 				new XmlMarkedRecordPairSink(
 					this.mrpsFilename,
 					xmlFilename,
-					this.getStagingModel());
+					this.getStagingModel(em));
 			retVal = this.mrps;
 		}
 		// Postcondition
@@ -197,11 +202,11 @@ public class MrpsRequest implements IMrpsRequest {
 	/**
 	 * @return a non-null instance of IMatchRecord2Source
 	 */
-	public IMatchRecord2Source getMatchPairs()
+	public IMatchRecord2Source getMatchPairs(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
 		IMatchRecord2Source retVal = this.matchPairs;
 		if (retVal == null) {
-			String stagingModelName = this.getStagingModelName();
+			String stagingModelName = this.getStagingModelName(em);
 			OABAConfiguration config =
 				new OABAConfiguration(
 					stagingModelName,
@@ -220,11 +225,11 @@ public class MrpsRequest implements IMrpsRequest {
 	/**
 	 * @return
 	 */
-	public SerialRecordSource getRsMaster()
+	public SerialRecordSource getRsMaster(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
 		SerialRecordSource retVal = this.rsMaster;
 		if (retVal == null) {
-			BatchParameters bp = getBatchParameters();
+			BatchParameters bp = getBatchParameters(em);
 			this.rsMaster = bp.getMasterRs();
 			retVal = this.rsMaster;
 		}
@@ -235,11 +240,11 @@ public class MrpsRequest implements IMrpsRequest {
 	/**
 	 * @return
 	 */
-	public SerialRecordSource getRsStage()
+	public SerialRecordSource getRsStage(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
 		SerialRecordSource retVal = this.rsStaging;
 		if (retVal == null) {
-			BatchParameters bp = getBatchParameters();
+			BatchParameters bp = getBatchParameters(em);
 			this.rsStaging = bp.getStageRs();
 			retVal = this.rsStaging;
 		}

@@ -19,7 +19,5 @@ import javax.ejb.EJBHome;
  * @author pcheung
  */
 public interface BatchQueryServiceHome extends EJBHome {
-  String DEFAULT_EJB_REF_NAME = "ejb/BatchQueryService";
-  String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
-	BatchQueryService create() throws CreateException, RemoteException;
+  BatchQueryService create() throws CreateException, RemoteException;
 }

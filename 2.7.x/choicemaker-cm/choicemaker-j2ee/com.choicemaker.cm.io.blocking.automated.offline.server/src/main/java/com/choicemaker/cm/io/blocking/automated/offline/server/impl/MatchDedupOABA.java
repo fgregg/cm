@@ -31,7 +31,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -109,13 +109,13 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 				// Any side effects?
 //				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
 				oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
-				IStatus status = configuration.getStatusLog(data);
+				OabaProcessing status = configuration.getProcessingLog(em, data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					batchJob.markAsAborted();
 
 					if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-						status.setStatus (IStatus.DONE_PROGRAM);
+						status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
 						oabaConfig.removeTempDir();
 					}
 				} else {
@@ -148,7 +148,7 @@ public class MatchDedupOABA implements MessageDrivenBean, MessageListener {
 
 					//mark as done
 					sendToUpdateStatus (data.jobID, 100);
-					status.setStatus( IStatus.DONE_PROGRAM);
+					status.setCurrentProcessingEvent( OabaProcessing.DONE_PROGRAM);
 
 				}
 

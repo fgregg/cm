@@ -29,7 +29,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -53,7 +53,7 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + StartOABA.class.getName());
 
 	@PersistenceContext (unitName = "oaba")
-	EntityManager em;
+	private EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
@@ -117,7 +117,7 @@ public class StartOABA implements MessageDrivenBean, MessageListener {
 
 
 				//get the status
-				IStatus status = configuration.getStatusLog(data);
+				OabaProcessing status = configuration.getProcessingLog(em, data);
 
 				log.info(data.jobID + " " + data.stageModelName + " " + data.masterModelName + " " + data.low +
 					" " + data.high  + " " + data.runTransitivity);

@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 
@@ -38,13 +38,13 @@ public class MessageBeanUtils {
 	 * @throws RemoteException
 	 * @throws BlockingException
 	 */
-	public static void stopJob (BatchJob batchJob, IStatus status, 
+	public static void stopJob (BatchJob batchJob, OabaProcessing status, 
 		OABAConfiguration oabaConfig) throws RemoteException, BlockingException {
 		
 		batchJob.markAsAborted();
 					
 		if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-			status.setStatus (IStatus.DONE_PROGRAM);
+			status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
 				
 			log.info("Removing Temporary directory.");
 			oabaConfig.removeTempDir();

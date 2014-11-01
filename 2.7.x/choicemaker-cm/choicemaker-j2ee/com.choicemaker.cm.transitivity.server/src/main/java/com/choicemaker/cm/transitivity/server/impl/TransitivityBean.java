@@ -35,7 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSo
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
@@ -203,8 +203,8 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 			oabaConfig.getComparisonArrayGroupFactoryOS(numProcessors));
 
 		//set the correct status for chunk could run.
-		IStatus status = configuration.getStatusLog(data);
-		status.setStatus(IStatus.DONE_DEDUP_OVERSIZED);
+		OabaProcessing status = configuration.getProcessingLog(em, data);
+		status.setCurrentProcessingEvent(OabaProcessing.DONE_DEDUP_OVERSIZED);
 
 		ChunkService3 chunkService = new ChunkService3 (
 			source2,

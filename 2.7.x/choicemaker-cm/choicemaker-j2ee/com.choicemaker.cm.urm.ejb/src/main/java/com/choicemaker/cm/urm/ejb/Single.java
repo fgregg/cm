@@ -38,7 +38,7 @@ import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParametersHome;
+//import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParametersHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryServiceHome;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
@@ -78,8 +78,8 @@ public class Single implements Serializable {
 	private static final String CMS_JOB =
 		"java:comp/env/ejb/UrmSerializationJob";
 	private static final String URM_STEP_JOB = "java:comp/env/ejb/UrmStepJob";
-	private static final String EJB_BATCH_PARAMS =
-		"java:comp/env/ejb/BatchParameters";
+//	private static final String EJB_BATCH_PARAMS =
+//		"java:comp/env/ejb/BatchParameters";
 
 	// ENC Connection Factory names
 	public final static String ENC_JNDI_TOPIC_CONNECTION_FACTORY =
@@ -117,7 +117,7 @@ public class Single implements Serializable {
 //	private transient TransitivityJobHome transJobHome = null;
 	private transient CmsJobHome cmsJobHome = null;
 	private transient UrmStepJobHome urmStepJobHome = null;
-	private transient BatchParametersHome batchParamsHome = null;
+//	private transient BatchParametersHome batchParamsHome = null;
 
 	// Cached connection factories
 	private transient TopicConnectionFactory topicConnectionFactory;
@@ -511,28 +511,24 @@ public class Single implements Serializable {
 		}
 	}
 
-	private BatchParametersHome getBatchParamsHome() throws NamingException {
-		if (batchParamsHome == null) {
-			Context ctx = getInitialContext();
+//	private BatchParametersHome getBatchParamsHome() throws NamingException {
+//		if (batchParamsHome == null) {
+//			Context ctx = getInitialContext();
+//
+//			Object homeRef = ctx.lookup(EJB_BATCH_PARAMS);
+//			batchParamsHome =
+//				(BatchParametersHome) PortableRemoteObject.narrow(
+//					homeRef,
+//					BatchParametersHome.class);
+//		}
+//		return batchParamsHome;
+//	}
 
-			Object homeRef = ctx.lookup(EJB_BATCH_PARAMS);
-			batchParamsHome =
-				(BatchParametersHome) PortableRemoteObject.narrow(
-					homeRef,
-					BatchParametersHome.class);
-		}
-		return batchParamsHome;
-	}
-
-	public BatchParameters findBatchParamsById(long id)
-		throws CmRuntimeException, ConfigException {
-		try {
-			BatchParametersHome home = getBatchParamsHome();
-			return home.findByPrimaryKey(new Long(id));
-		} catch (Exception e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		}
+	public BatchParameters findBatchParamsById(EntityManager em, long id)
+			throws CmRuntimeException, ConfigException {
+		BatchParameters retVal =
+			EJBConfiguration.getInstance().findBatchParamsById(em, id);
+		return retVal;
 	}
 
 	public Collection getBatchJobList(EntityManager em) {

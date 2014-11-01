@@ -20,7 +20,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
@@ -47,7 +47,7 @@ public class MatchDedupService3 {
 	private IMatchRecord2Source mSource;
 	private IMatchRecord2Sink mSink;
 	private IMatchRecord2SinkSourceFactory mFactory;
-	private IStatus status;
+	private OabaProcessing status;
 //	private int max;
 	
 	private int numBefore = 0; //this counts the number of input matches
@@ -61,7 +61,7 @@ public class MatchDedupService3 {
 
 	
 	public MatchDedupService3 (IMatchRecord2Source mSource, IMatchRecord2Sink mSink,
-		IMatchRecord2SinkSourceFactory mFactory, int max, IStatus status, IControl control) {
+		IMatchRecord2SinkSourceFactory mFactory, int max, OabaProcessing status, IControl control) {
 		
 		this.mSource = mSource;
 		this.mSink = mSink;
@@ -79,10 +79,10 @@ public class MatchDedupService3 {
 	public void runService () throws BlockingException {
 		time = System.currentTimeMillis();
 		
-		if (status.getStatus() >= IStatus.DONE_DEDUP_MATCHES ) {
+		if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_DEDUP_MATCHES ) {
 			//do nothing
 			
-		} else if (status.getStatus() == IStatus.DONE_MATCHING_DATA) {
+		} else if (status.getCurrentProcessingEvent() == OabaProcessing.DONE_MATCHING_DATA) {
 				
 			//start writing out dedup
 			log.info ("start writing to temp match files");
@@ -99,7 +99,7 @@ public class MatchDedupService3 {
 			log.info ("total matches before " + numBefore);
 			log.info ("total matches after " + numAfter);
 
-			status.setStatus( IStatus.DONE_DEDUP_MATCHES );
+			status.setCurrentProcessingEvent( OabaProcessing.DONE_DEDUP_MATCHES );
 		}
 		
 		time = System.currentTimeMillis() - time;

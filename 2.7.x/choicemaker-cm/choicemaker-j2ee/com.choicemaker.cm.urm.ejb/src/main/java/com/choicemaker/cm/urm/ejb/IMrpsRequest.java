@@ -14,6 +14,8 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Properties;
 
+import javax.persistence.EntityManager;
+
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.SerialRecordSource;
@@ -28,7 +30,7 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
  */
 public interface IMrpsRequest extends Serializable, Cloneable {
 
-	public abstract MarkedRecordPairSink getMarkedRecordPairSink()
+	public abstract MarkedRecordPairSink getMarkedRecordPairSink(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException;
 
 	public abstract String getExternalId();
@@ -37,16 +39,16 @@ public interface IMrpsRequest extends Serializable, Cloneable {
 
 	public abstract Long getOabaJobId();
 
-	public abstract IMatchRecord2Source getMatchPairs()
+	public abstract IMatchRecord2Source getMatchPairs(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException;
 
-	public abstract SerialRecordSource getRsMaster()
+	public abstract SerialRecordSource getRsMaster(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException;
 
-	public abstract SerialRecordSource getRsStage()
+	public abstract SerialRecordSource getRsStage(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException;
 		
-	public IProbabilityModel getStagingModel()
+	public IProbabilityModel getStagingModel(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException;
 		
 	// From the Configurable interface

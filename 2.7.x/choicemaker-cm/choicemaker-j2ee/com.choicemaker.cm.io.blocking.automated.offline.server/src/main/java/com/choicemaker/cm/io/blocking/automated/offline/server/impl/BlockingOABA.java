@@ -28,7 +28,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
@@ -102,7 +102,7 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
 				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 //				Status status = data.status;
-				IStatus status = configuration.getStatusLog(data);
+				OabaProcessing status = configuration.getProcessingLog(em, data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					MessageBeanUtils.stopJob (batchJob, status, oabaConfig);

@@ -31,6 +31,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStat
 @SuppressWarnings("rawtypes")
 public interface BatchQueryService extends EJBObject {
 
+	String DEFAULT_EJB_REF_NAME = "ejb/BatchQueryService";
+	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
+
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm. The OABA
 	 * doesn't compare two master records. It compares two staging records or a

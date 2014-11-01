@@ -10,16 +10,16 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
-
 /**
- * This interface defines how to store and get status information.
+ * This interface the processing steps of the Offline Automated Blocking
+ * Algorithm (OABA).
  * 
  * @author pcheung
- *
+ * @author rphall (renamed from IStatus to OabaProcessing)
  */
-public interface IStatus {
+public interface OabaProcessing {
 
+	// Ordered event ids
 	public static final int INIT = 0;
 	public static final int CREATE_REC_VAL = 10;
 	public static final int DONE_REC_VAL = 20;
@@ -35,54 +35,42 @@ public interface IStatus {
 	public static final int DONE_DEDUP_OVERSIZED = 120;
 	public static final int DONE_REVERSE_TRANSLATE_BLOCK = 130;
 	public static final int DONE_REVERSE_TRANSLATE_OVERSIZED = 140;
-	
+
 	public static final int CREATE_CHUNK_IDS = 150;
 	public static final int CREATE_CHUNK_OVERSIZED_IDS = 160;
 	public static final int DONE_CREATE_CHUNK_IDS = 170;
 	public static final int DONE_CREATE_CHUNK_DATA = 180;
-	
+
 	public static final int ALLOCATE_CHUNKS = 190;
 	public static final int DONE_ALLOCATE_CHUNKS = 200;
 	public static final int MATCHING_DATA = 210;
 	public static final int DONE_MATCHING_DATA = 220;
-	
+
 	public static final int OUTPUT_DEDUP_MATCHES = 230;
 	public static final int MERGE_DEDUP_MATCHES = 240;
 	public static final int DONE_DEDUP_MATCHES = 250;
 	public static final int DONE_PROGRAM = 260;
-	
+
 	public static final char DELIMIT = ':';
 
+	/**
+	 * This methods gets the current processing step
+	 */
+	public int getCurrentProcessingEvent();
 
-	/** This method sets the current status.
-	 * 
-	 * @param stat
-	 * @throws BlockingException
+	/**
+	 * This method sets the current processing step with null additional info.
 	 */
-	public void setStatus (int stat) throws BlockingException;
-	
-	
-	/** This methods gets the current status.
-	 * 
-	 * @return int - gets the current status
-	 * @throws BlockingException
+	public void setCurrentProcessingEvent(int stat);
+
+	/**
+	 * This method sets the current processing step with additional info.
 	 */
-	public int getStatus () throws BlockingException;
-	
-	
-	/** This method sets the current status with additional info.
-	 * 
-	 * @param stat
-	 * @param info
-	 * @throws BlockingException
+	public void setCurrentProcessingEvent(int stat, String info);
+
+	/**
+	 * This method gets the additional info associated with this processing
+	 * step.
 	 */
-	public void setStatus (int stat, String info) throws BlockingException;
-	
-	
-	/** This method gets the additional info assoicated with this status.
-	 * 
-	 * @return String - additional info.
-	 * @throws BlockingException
-	 */
-	public String getAdditionalInfo () throws BlockingException;
+	public String getAdditionalInfo();
 }

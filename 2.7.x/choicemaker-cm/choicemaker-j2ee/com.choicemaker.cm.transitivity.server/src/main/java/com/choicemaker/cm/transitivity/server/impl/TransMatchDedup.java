@@ -29,7 +29,7 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
@@ -111,7 +111,7 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 		//init values
 		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(d.stageModelName);
 		oabaConfig = new OABAConfiguration (d.stageModelName, d.jobID);
-		IStatus status = configuration.getStatusLog(d.jobID);
+		OabaProcessing status = configuration.getProcessingLog(em, d.jobID);
 
 		//get the number of processors
 		String temp = (String) stageModel.properties().get("numProcessors");
@@ -122,7 +122,7 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 
 		//mark as done
 		sendToUpdateTransStatus (d.jobID, 100);
-		status.setStatus( IStatus.DONE_PROGRAM);
+		status.setCurrentProcessingEvent( OabaProcessing.DONE_PROGRAM);
 
 	}
 

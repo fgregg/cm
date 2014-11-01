@@ -88,7 +88,7 @@ public class StartData implements Serializable {
 
 		this.maxCountSingle = data.maxCountSingle;
 		this.validator = data.validator;
-		this.status = data.status;
+		
 		this.staging = data.staging;
 		this.master = data.master;
 	}

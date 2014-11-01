@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.util.Date;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
@@ -58,10 +60,29 @@ public class TransitivityJobBean extends BatchJobBean implements
 				.getUrmId());
 	}
 
+	public TransitivityJobBean(TransitivityJobBean job, String externalId) {
+		this(job.getBatchParametersId(), job.getBatchParentId(), 
+				externalId, job.getTransactionId(), job
+						.getUrmId());
+		this.setDescription(job.getDescription());
+		this.setFractionComplete(job.getFractionComplete());
+		this.setStatus(job.getStatus());
+		Date ts = job.getTimeStamp(job.getStatus());
+		this.setTimeStamp(job.getStatus(), ts);
+	}
+
+	/**
+	 * Used by public, non-copy constructors
+	 * @param params must be persistent
+	 * @param parent must be persistent
+	 * @param externalId may be null
+	 * @param tid may be invalid/non-persistent
+	 * @param urmid may be invalid/non-persistent
+	 */
 	protected TransitivityJobBean(BatchParameters params, BatchJob parent,
 			String externalId, long tid, long urmid) {
-		super(TransitivityJobJPA.DISCRIMINATOR_VALUE, params.getId(),
-				externalId, tid, parent.getId(), urmid);
+		this(params.getId(), parent.getId(), 
+				externalId, tid, urmid);
 		if (!BatchParametersBean.isPersistent(params)) {
 			throw new IllegalArgumentException(
 					"non-persistent batch parameters");
@@ -72,6 +93,20 @@ public class TransitivityJobBean extends BatchJobBean implements
 		}
 	}
 
+	/**
+	 * Used by copy constructor
+	 * @param paramsId may be invalid/non-persistent
+	 * @param parentId may be invalid/non-persistent
+	 * @param externalId may be invalid/non-persistent
+	 * @param tid may be invalid/non-persistent
+	 * @param urmid may be invalid/non-persistent
+	 */
+	protected TransitivityJobBean(long paramsId, long parentId,
+			String externalId, long tid, long urmid) {
+		super(TransitivityJobJPA.DISCRIMINATOR_VALUE, paramsId,
+				externalId, tid, parentId, urmid);
+	}
+	
 	@Override
 	public String getModel() {
 		throw new Error("not implemented");

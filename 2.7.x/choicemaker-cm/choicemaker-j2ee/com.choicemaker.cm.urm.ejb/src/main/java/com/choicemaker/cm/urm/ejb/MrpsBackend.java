@@ -19,6 +19,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.analyzer.filter.DefaultPairFilter;
 import com.choicemaker.cm.analyzer.filter.Filter;
@@ -56,6 +57,9 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(TransSerializerMsgBean.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MrpsBackend.class.getName());
+
+//	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
 
@@ -107,15 +111,15 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 					control = MRPSCreator.NO_CONTROL;
 					IMatchRecord2Filter preFilter = getPreFilter(p);
 					Filter postFilter = getPostFilter(p);
-					IProbabilityModel model = request.getStagingModel();
+					IProbabilityModel model = request.getStagingModel(em);
 					PairSampler sampler = getPairSampler(model,p);
 					
 					MRPSCreator mrpsCreator =
 						new MRPSCreator(
-							request.getMatchPairs(),
-							request.getRsStage(),
-							request.getRsMaster(),
-							request.getMarkedRecordPairSink(),
+							request.getMatchPairs(em),
+							request.getRsStage(em),
+							request.getRsMaster(em),
+							request.getMarkedRecordPairSink(em),
 							batchSize,
 							control,
 							preFilter,

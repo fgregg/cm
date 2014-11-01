@@ -387,8 +387,11 @@ public class TransitivityJobBeanIT {
 		final BatchJobBean batchJob = controller.createPersistentBatchJobBean(METHOD, te);
 		TransitivityJobBean job1 =
 			controller.createEphemeralTransitivityJob(te, batchJob, extId);
-		TransitivityJobBean job2 =
-			controller.createEphemeralTransitivityJob(te, batchJob, extId);
+		assertTrue(te.contains(job1));
+		TransitivityJobBean job2 = new TransitivityJobBean(job1, job1.getExternalId());
+		te.add(job2);
+
+		//  Verify equality of ephemeral instances
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
 

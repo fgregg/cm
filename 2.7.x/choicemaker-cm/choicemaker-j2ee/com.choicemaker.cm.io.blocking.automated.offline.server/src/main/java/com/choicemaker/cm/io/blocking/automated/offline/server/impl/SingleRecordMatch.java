@@ -43,7 +43,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
@@ -182,7 +182,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		IProbabilityModel stageModel =
 			PMManager.getModelInstance(data.stageModelName);
 
-		IStatus status = configuration.getStatusLog(data);
+		OabaProcessing status = configuration.getProcessingLog(em, data);
 
 		RecordIDTranslator2 translator =
 			new RecordIDTranslator2(oabaConfig.getTransIDFactory());

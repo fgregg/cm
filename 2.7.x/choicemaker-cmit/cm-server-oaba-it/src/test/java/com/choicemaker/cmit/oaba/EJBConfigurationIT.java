@@ -14,6 +14,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -31,9 +32,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchJobProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cmit.utils.DeploymentUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
@@ -41,6 +44,8 @@ import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
 public class EJBConfigurationIT {
+
+	private static final Logger logger = Logger.getLogger(EJBConfigurationIT.class.getName());
 
 	public static final boolean TESTS_AS_EJB_MODULE = false;
 
@@ -50,15 +55,15 @@ public class EJBConfigurationIT {
 		File[] libs = resolveDependencies(pom);
 		JavaArchive tests =
 			createJAR(pom, CURRENT_MAVEN_COORDINATES, DEFAULT_MODULE_NAME,
-					DEFAULT_TEST_CLASSES_PATH,
-					PERSISTENCE_CONFIGURATION, DEFAULT_HAS_BEANS);
+					DEFAULT_TEST_CLASSES_PATH, PERSISTENCE_CONFIGURATION,
+					DEFAULT_HAS_BEANS);
 		EnterpriseArchive retVal =
 			DeploymentUtils.createEAR(tests, libs, TESTS_AS_EJB_MODULE);
 		return retVal;
 	}
 
-//	@BeforeClass public static void setUpBeforeClass() throws Exception {}
-//	@AfterClass public static void tearDownAfterClass() throws Exception {}
+	// @BeforeClass public static void setUpBeforeClass() throws Exception {}
+	// @AfterClass public static void tearDownAfterClass() throws Exception {}
 
 	@PersistenceUnit(unitName = "oaba-local")
 	private EntityManagerFactory emf;
@@ -66,46 +71,79 @@ public class EJBConfigurationIT {
 	private EJBConfiguration ejbc;
 	private int initialBatchParamsCount;
 	private int initialBatchJobCount;
-	private int initialCount;
+	private int initialTransitivityJobCount;
+	private int initialOabaProcessingCount;
+	private boolean setupOK;
 
 	@Before
 	public void setUp() throws Exception {
-		this.ejbc = EJBConfiguration.getInstance();
-		assertTrue(this.ejbc != null);
+		System.out.println("setUp");
+		setupOK = true;
+		try {
+			this.ejbc = EJBConfiguration.getInstance();
+			assertTrue(this.ejbc != null);
 
-		final EntityManager em = emf.createEntityManager();
-		initialBatchParamsCount = EntityManagerUtils.findAllBatchParameters(em).size();
-		initialBatchJobCount = EntityManagerUtils.findAllBatchJobs(em).size();
-		initialCount = EntityManagerUtils.findAllTransitivityJobs(em).size();
+			final EntityManager em = emf.createEntityManager();
+			initialBatchParamsCount =
+				EntityManagerUtils.findAllBatchParameters(em).size();
+			initialBatchJobCount =
+				EntityManagerUtils.findAllBatchJobs(em).size();
+			initialTransitivityJobCount =
+				EntityManagerUtils.findAllTransitivityJobs(em).size();
+			initialOabaProcessingCount =
+				EntityManagerUtils.findAllOabaProcessing(em).size();
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			setupOK = false;
+		}
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		System.out.println("tearDown");
 		this.ejbc = null;
-		
-		final EntityManager em = emf.createEntityManager();
-		int finalBatchParamsCount = EntityManagerUtils.findAllBatchParameters(em).size();
-		assertTrue(initialBatchParamsCount == finalBatchParamsCount);
 
-		int finalBatchJobCount = EntityManagerUtils.findAllBatchJobs(em).size();
-		assertTrue(initialBatchJobCount == finalBatchJobCount);
+		try {
+			final EntityManager em = emf.createEntityManager();
+			int finalBatchParamsCount =
+				EntityManagerUtils.findAllBatchParameters(em).size();
+			assertTrue(initialBatchParamsCount == finalBatchParamsCount);
 
-		int finalTransJobCount = EntityManagerUtils.findAllTransitivityJobs(em).size();
-		assertTrue(initialCount == finalTransJobCount);
+			int finalBatchJobCount = EntityManagerUtils.findAllBatchJobs(em).size();
+			assertTrue(initialBatchJobCount == finalBatchJobCount);
+
+			int finalTransJobCount =
+				EntityManagerUtils.findAllTransitivityJobs(em).size();
+			assertTrue(initialTransitivityJobCount == finalTransJobCount);
+
+			int finalOabaProcessingCount =
+				EntityManagerUtils.findAllOabaProcessing(em).size();
+			assertTrue(initialOabaProcessingCount == finalOabaProcessingCount);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+		} catch (AssertionError x) {
+			logger.severe(x.toString());
+		}
 	}
-	
+
 	@Test
 	public void testEBJConfiguration() {
+		assertTrue(setupOK);
+		System.out.println("testEBJConfiguration");
 		assertTrue(ejbc != null);
 	}
 
 	@Test
 	public void testGetEntityManager() {
+		assertTrue(setupOK);
+		System.out.println("testGetEntityManager");
 		assertTrue(emf != null);
 	}
 
 	@Test
 	public void testGetInitialContext() {
+		assertTrue(setupOK);
+		System.out.println("testGetInitialContext");
 		try {
 			Context ic = ejbc.getInitialContext();
 			assertTrue(ic != null);
@@ -178,7 +216,9 @@ public class EJBConfigurationIT {
 	 */
 
 	@Test
-	public void testCreateFindRemove() {
+	public void testCreateFindRemoveBatchJob() {
+		assertTrue(setupOK);
+		System.out.println("testCreateFindRemoveBatchJob");
 		final String METHOD = "testCreateFindRemove";
 		final TestEntities te = new TestEntities();
 		final EntityManager em = emf.createEntityManager();
@@ -189,7 +229,8 @@ public class EJBConfigurationIT {
 		final int initialCount = ejbc.findAllBatchJobs(em).size();
 
 		// Create a job
-		final BatchParameters params = EntityManagerUtils.createPersistentBatchParameters(em, METHOD, te);
+		final BatchParameters params =
+			EntityManagerUtils.createPersistentBatchParameters(em, METHOD, te);
 		final String extId = "EXT ID: " + new Date().toString();
 		BatchJob job = ejbc.createBatchJob(em, params, extId);
 		assertTrue(job != null);
@@ -200,25 +241,26 @@ public class EJBConfigurationIT {
 		assertTrue(intermediateCount == initialCount + 1);
 
 		// Find the job
-		BatchJob job2 = ejbc.findBatchJobById(em, BatchJobBean.class, job.getId());
+		BatchJob job2 =
+			ejbc.findBatchJobById(em, BatchJobBean.class, job.getId());
 		assertTrue(job.getId() == job2.getId());
 		assertTrue(job.equals(job2));
 
 		// Delete the job
 		ejbc.deleteBatchJob(em, job2);
-		BatchJob job3 = ejbc.findBatchJobById(em, BatchJobBean.class, job.getId());
+		BatchJob job3 =
+			ejbc.findBatchJobById(em, BatchJobBean.class, job.getId());
 		assertTrue(job3 == null);
 
 		// Check that the number of existing jobs equals the initial count
 		assertTrue(initialCount == ejbc.findAllBatchJobs(em).size());
 
+		EntityManagerUtils.removeTestEntities(em, te);
 		em.getTransaction().commit();
 		em.close();
 	}
 
 	/*
-	 * @Test public void testCreateStatusLog() { fail("Not yet implemented"); }
-	 * 
 	 * @Test public void testCreateBatchParameters() {
 	 * fail("Not yet implemented"); }
 	 * 
@@ -233,18 +275,140 @@ public class EJBConfigurationIT {
 	 * @Test public void testGetTransitivityJob() { fail("Not yet implemented");
 	 * }
 	 * 
-	 * @Test public void testFindStatusLogById() { fail("Not yet implemented");
-	 * }
-	 * 
 	 * @Test public void testGetDataSource() { fail("Not yet implemented"); }
-	 * 
-	 * @Test public void testGetStatusLogStartData() {
-	 * fail("Not yet implemented"); }
-	 * 
-	 * @Test public void testGetStatusLogLong() { fail("Not yet implemented"); }
-	 * 
-	 * @Test public void testCreateNewStatusLog() { fail("Not yet implemented");
-	 * }
 	 */
+
+	@Test
+	public void testProcessingLog() {
+		assertTrue(setupOK);
+		System.out.println("testProcessingLog");
+		final String METHOD = "testCreateFindRemove";
+		EntityManager em = null;
+		
+		try {
+			em = emf.createEntityManager();
+
+			final TestEntities te = new TestEntities();
+			assertTrue(em != null);
+			em.getTransaction().begin();
+
+			// Create a new processing entry
+			BatchJob job =
+				EntityManagerUtils.createPersistentBatchJobBean(em, METHOD, te);
+			Date before = new Date();
+			OabaBatchJobProcessing objp = ejbc.createProcessingLog(em, job.getId());
+			te.add(objp);
+			Date after = new Date();
+
+			assertTrue(OabaBatchJobProcessing.INVALID_ID != objp.getId());
+
+			Date ts = objp.getTimestamp();
+			assertTrue(before.compareTo(ts) <= 0);
+			assertTrue(after.compareTo(ts) >= 0);
+
+			assertTrue(job.getId() == objp.getJobId());
+			assertTrue(OabaProcessing.INIT == objp.getCurrentProcessingEvent());
+			assertTrue(null == objp.getAdditionalInfo());
+
+			// Set the status and additional info of the entry
+			final String info0 = "nonsense0";
+			before = new Date();
+			objp.setCurrentProcessingEvent(OabaProcessing.ALLOCATE_CHUNKS, info0);
+			after = new Date();
+
+			ts = objp.getTimestamp();
+			assertTrue(before.compareTo(ts) <= 0);
+			assertTrue(after.compareTo(ts) >= 0);
+
+			assertTrue(job.getId() == objp.getJobId());
+			assertTrue(OabaProcessing.ALLOCATE_CHUNKS == objp
+					.getCurrentProcessingEvent());
+			assertTrue(info0 == objp.getAdditionalInfo());
+
+			// Change the status and additional info
+			before = new Date();
+			objp.setCurrentProcessingEvent(OabaProcessing.BLOCK_BY_ONE_COLUMN);
+			after = new Date();
+
+			ts = objp.getTimestamp();
+			assertTrue(before.compareTo(ts) <= 0);
+			assertTrue(after.compareTo(ts) >= 0);
+
+			assertTrue(job.getId() == objp.getJobId());
+			assertTrue(OabaProcessing.BLOCK_BY_ONE_COLUMN == objp
+					.getCurrentProcessingEvent());
+			assertTrue(null == objp.getAdditionalInfo());
+
+			// Change the status and additional info yet again
+			final String info1 = "nonsense1";
+			before = new Date();
+			objp.setCurrentProcessingEvent(OabaProcessing.CREATE_CHUNK_IDS, info1);
+			after = new Date();
+
+			ts = objp.getTimestamp();
+			assertTrue(before.compareTo(ts) <= 0);
+			assertTrue(after.compareTo(ts) >= 0);
+
+			assertTrue(job.getId() == objp.getJobId());
+			assertTrue(OabaProcessing.CREATE_CHUNK_IDS == objp
+					.getCurrentProcessingEvent());
+			assertTrue(info1 == objp.getAdditionalInfo());
+
+			// Commit the transaction
+			em.getTransaction().commit();
+			objp = null;
+
+			// Verify the processing entry was preserved
+			em.getTransaction().begin();
+			objp = ejbc.findProcessingLogByJobId(em, job.getId());
+			assertTrue(objp != null);
+
+			ts = objp.getTimestamp();
+			assertTrue(before.compareTo(ts) <= 0);
+			assertTrue(after.compareTo(ts) >= 0);
+
+			assertTrue(job.getId() == objp.getJobId());
+			assertTrue(OabaProcessing.CREATE_CHUNK_IDS == objp
+					.getCurrentProcessingEvent());
+			assertTrue(info1 == objp.getAdditionalInfo());
+
+			// Commit the transaction
+			em.getTransaction().commit();
+
+			// Verify a second entry is not created
+			em.getTransaction().begin();
+			final long id = objp.getId();
+			objp = null;
+			objp = ejbc.createProcessingLog(em, job.getId());
+			assertTrue(objp != null);
+			assertTrue(id == objp.getId());
+
+			ts = objp.getTimestamp();
+			assertTrue(before.compareTo(ts) <= 0);
+			assertTrue(after.compareTo(ts) >= 0);
+
+			assertTrue(job.getId() == objp.getJobId());
+			assertTrue(OabaProcessing.CREATE_CHUNK_IDS == objp
+					.getCurrentProcessingEvent());
+			assertTrue(info1 == objp.getAdditionalInfo());
+
+			// Clean up
+			EntityManagerUtils.removeTestEntities(em, te);
+			em.getTransaction().commit();
+			em.close();			
+		} catch(Exception x) {
+			logger.severe(x.toString());
+		} finally {
+			if (em != null ) {
+				try {
+					if (em.isOpen()) {
+						em.close();
+					}
+				} catch (Exception e) {
+					logger.severe(e.toString());
+				}
+			}
+		}
+	}
 
 }

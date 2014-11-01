@@ -28,7 +28,7 @@ import com.choicemaker.cm.io.blocking.automated.base.DbField;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIDTranslator;
 import com.choicemaker.util.IntArrayList;
@@ -65,7 +65,7 @@ public class RecValService {
 	//	this is the input record id to internal id translator
 	private RecordIDTranslator translator;
 
-	private IStatus status;
+	private OabaProcessing status;
 
 	private String blockName;
 	private String dbConf;
@@ -86,7 +86,7 @@ public class RecValService {
 	 */
 	public RecValService (RecordSource stage, RecordSource master, IProbabilityModel model,
 		IRecValSinkSourceFactory rvFactory, RecordIDTranslator translator,
-		String blockName, String dbConf, IStatus status) {
+		String blockName, String dbConf, OabaProcessing status) {
 
 		this.stage = stage;
 		this.master = master;
@@ -131,30 +131,30 @@ public class RecValService {
 	public void runService () throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getStatus() >= IStatus.DONE_REC_VAL &&
-			status.getStatus() < IStatus.DONE_REVERSE_TRANSLATE_OVERSIZED ) {
+		if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_REC_VAL &&
+			status.getCurrentProcessingEvent() < OabaProcessing.DONE_REVERSE_TRANSLATE_OVERSIZED ) {
 
 			log.info ("recover rec,val files and translator");
 			//need to initialize
 			init ();
 
-		} else if (status.getStatus() < IStatus.CREATE_REC_VAL) {
+		} else if (status.getCurrentProcessingEvent() < OabaProcessing.CREATE_REC_VAL) {
 			log.info ("Creating new rec,val files");
 
 			//create the rec_id, val_id files
-			status.setStatus( IStatus.CREATE_REC_VAL);
+			status.setCurrentProcessingEvent( OabaProcessing.CREATE_REC_VAL);
 
 			createFiles ();
 
-			status.setStatus( IStatus.DONE_REC_VAL);
+			status.setCurrentProcessingEvent( OabaProcessing.DONE_REC_VAL);
 
-		} else if (status.getStatus() == IStatus.CREATE_REC_VAL) {
+		} else if (status.getCurrentProcessingEvent() == OabaProcessing.CREATE_REC_VAL) {
 			log.info ("Trying to recover rec,val files");
 
 			//started to created, but not done, so we need to recover
-			status.setStatus( IStatus.CREATE_REC_VAL);
+			status.setCurrentProcessingEvent( OabaProcessing.CREATE_REC_VAL);
 			recoverFiles ();
-			status.setStatus( IStatus.DONE_REC_VAL);
+			status.setCurrentProcessingEvent( OabaProcessing.DONE_REC_VAL);
 		}
 		time = System.currentTimeMillis() - time;
 	}

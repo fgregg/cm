@@ -43,7 +43,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
@@ -160,7 +160,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 					oabaConfig =
 						new OABAConfiguration(data.stageModelName, data.jobID);
 					batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
-					IStatus status = configuration.getStatusLog(data);
+					OabaProcessing status = configuration.getProcessingLog(em, data);
 
 					if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob
 							.getStatus())) {

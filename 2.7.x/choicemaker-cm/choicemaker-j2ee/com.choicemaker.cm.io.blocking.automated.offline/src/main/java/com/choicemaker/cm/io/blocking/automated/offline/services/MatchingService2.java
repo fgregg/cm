@@ -23,7 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
@@ -47,7 +47,7 @@ public class MatchingService2 {
 	private float low;
 	private float high;
 	private int maxBlockSize;
-	private IStatus status;
+	private OabaProcessing status;
 	
 	private int numChunks;
 
@@ -87,7 +87,7 @@ public class MatchingService2 {
 		IComparisonArraySinkSourceFactory cgFactory,
 		IProbabilityModel stageModel, IProbabilityModel masterModel, 
 		IMatchRecord2Sink mSink, IBlockMatcher2 matcher,
-		float low, float high, int maxBlockSize, IStatus status) {
+		float low, float high, int maxBlockSize, OabaProcessing status) {
 		
 		this.stageFactory = stageFactory;
 		this.masterFactory = masterFactory;
@@ -112,11 +112,11 @@ public class MatchingService2 {
 	public void runService () throws BlockingException, XmlConfException {
 		time = System.currentTimeMillis();
 		
-		if (status.getStatus() >= IStatus.DONE_MATCHING_DATA ) {
+		if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_MATCHING_DATA ) {
 			//do nothing
 			
-		} else if (status.getStatus() >= IStatus.DONE_CREATE_CHUNK_DATA  && 
-			status.getStatus() <= IStatus.DONE_ALLOCATE_CHUNKS ) {
+		} else if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_CREATE_CHUNK_DATA  && 
+			status.getCurrentProcessingEvent() <= OabaProcessing.DONE_ALLOCATE_CHUNKS ) {
 	
 			numChunks = Integer.parseInt( status.getAdditionalInfo() );
 
@@ -127,10 +127,10 @@ public class MatchingService2 {
 			
 			startMatching (0);
 			
-		} else if (status.getStatus() == IStatus.MATCHING_DATA ) {
+		} else if (status.getCurrentProcessingEvent() == OabaProcessing.MATCHING_DATA ) {
 			//recovery mode
 			String temp =  status.getAdditionalInfo();
-			int ind = temp.indexOf( IStatus.DELIMIT);
+			int ind = temp.indexOf( OabaProcessing.DELIMIT);
 			numChunks = Integer.parseInt( temp.substring(0,ind) );
 			int startPoint = Integer.parseInt( temp.substring(ind + 1)) + 1;
 			
@@ -211,8 +211,8 @@ public class MatchingService2 {
 			
 
 			//log the status
-			String temp = Integer.toString(numChunks) + IStatus.DELIMIT + Integer.toString(i);
-			status.setStatus( IStatus.MATCHING_DATA, temp );
+			String temp = Integer.toString(numChunks) + OabaProcessing.DELIMIT + Integer.toString(i);
+			status.setCurrentProcessingEvent( OabaProcessing.MATCHING_DATA, temp );
 
 			//clean up
 			stage = null;
@@ -228,7 +228,7 @@ public class MatchingService2 {
 		double cps = 1000.0 * numCompares / (inReadHM + inHandleBlocks + inWriteMatches);
 		log.info ("comparisons per second " + cps );
 
-		status.setStatus( IStatus.DONE_MATCHING_DATA);
+		status.setCurrentProcessingEvent( OabaProcessing.DONE_MATCHING_DATA);
 
 		//cleanup
 		stageFactory.removeAllSinks();

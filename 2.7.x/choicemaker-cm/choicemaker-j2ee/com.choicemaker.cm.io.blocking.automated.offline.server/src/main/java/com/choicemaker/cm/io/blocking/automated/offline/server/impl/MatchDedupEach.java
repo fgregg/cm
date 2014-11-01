@@ -31,7 +31,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
@@ -119,14 +119,14 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 					PMManager.getModelInstance(data.stageModelName);
 				oabaConfig =
 					new OABAConfiguration(data.stageModelName, data.jobID);
-				IStatus status = configuration.getStatusLog(data);
+				OabaProcessing status = configuration.getProcessingLog(em, data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED
 						.equals(batchJob.getStatus())) {
 					MessageBeanUtils.stopJob(batchJob, status, oabaConfig);
 
 				} else {
-					if (status.getStatus() != IStatus.MERGE_DEDUP_MATCHES) {
+					if (status.getCurrentProcessingEvent() != OabaProcessing.MERGE_DEDUP_MATCHES) {
 						// max number of match in a temp file
 						String temp =
 							(String) stageModel.properties()

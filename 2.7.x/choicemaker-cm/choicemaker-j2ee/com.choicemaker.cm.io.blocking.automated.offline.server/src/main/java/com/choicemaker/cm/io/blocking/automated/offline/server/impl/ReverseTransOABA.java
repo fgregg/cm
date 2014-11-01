@@ -24,8 +24,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
@@ -101,13 +100,13 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 //				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
 				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 //				Status status = data.status;
-				IStatus status = configuration.getStatusLog(data);
+				OabaProcessing status = configuration.getProcessingLog(em, data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					batchJob.markAsAborted();
 
 					if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-						status.setStatus (IStatus.DONE_PROGRAM);
+						status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
 						oabaConfig.removeTempDir();
 					}
 				} else {
@@ -140,7 +139,7 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 					rtService.runService();
 					log.info( "Done reverse translate " + rtService.getTimeElapsed());
 
-					if (status.getStatus() <= IStatus.DONE_REVERSE_TRANSLATE_OVERSIZED) {
+					if (status.getStatus() <= OabaProcessing.DONE_REVERSE_TRANSLATE_OVERSIZED) {
 						//write block statistics
 						source = bFactory.getSource(bSink);
 
@@ -161,10 +160,6 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 		} catch (JMSException e) {
 			log.severe(e.toString());
 			mdc.setRollbackOnly();
-		} catch (BlockingException e) {
-			log.severe(e.toString());
-			assert batchJob != null;
-			batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
 		}

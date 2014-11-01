@@ -33,7 +33,7 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonSetOSSources;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeSetSources;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -83,7 +83,6 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 	
 	private long timeStart;
 	private long timeWriting;
-
 
 	public void ejbCreate() {
 		log.fine("starting ejbCreate...");
@@ -157,8 +156,8 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 
 					//no more chunk, so everything is done, call match dedup
 					if (countMessages == 0) {
-						IStatus status = configuration.getStatusLog(data.jobID);
-						status.setStatus( IStatus.DONE_MATCHING_DATA);
+						OabaProcessing status = configuration.getProcessingLog(em, data.jobID);
+						status.setCurrentProcessingEvent( OabaProcessing.DONE_MATCHING_DATA);
 
 						log.info("total comparisons: " + numCompares + " total matches: " + numMatches);
 						timeStart = System.currentTimeMillis() - timeStart;
@@ -208,14 +207,14 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 		RemoteException, FinderException, BlockingException, NamingException, JMSException {
 		
 		//init values
-		IStatus status = configuration.getStatusLog(data);
+		OabaProcessing status = configuration.getProcessingLog(em, data);
 		BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			batchJob.markAsAborted();
 					
 			if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-				status.setStatus (IStatus.DONE_PROGRAM);
+				status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
 				oabaConfig.removeTempDir();
 			}
 		} else {

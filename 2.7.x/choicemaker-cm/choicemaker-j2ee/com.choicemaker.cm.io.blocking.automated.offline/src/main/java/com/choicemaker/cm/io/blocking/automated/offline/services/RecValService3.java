@@ -31,7 +31,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
@@ -80,7 +80,7 @@ public class RecValService3 {
 	//	this is the input record id to internal id translator
 	private IRecordIDTranslator2 translator;
 
-	private IStatus status;
+	private OabaProcessing status;
 
 	//This stores if stage record id is Integer, Long, or string
 	private boolean firstStage = true;
@@ -111,7 +111,7 @@ public class RecValService3 {
 	public RecValService3 (RecordSource stage, RecordSource master, IProbabilityModel stageModel,
 		IProbabilityModel masterModel,
 		IRecValSinkSourceFactory rvFactory, IRecordIDTranslator2 translator,
-		IStatus status, IControl control) {
+		OabaProcessing status, IControl control) {
 
 		this.stage = stage;
 		this.master = master;
@@ -182,21 +182,21 @@ public class RecValService3 {
 	public void runService () throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getStatus() >= IStatus.DONE_REC_VAL) {
+		if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_REC_VAL) {
 
 			log.info ("recover rec,val files and translator");
 			//need to initialize
 			init ();
 
-		} else if (status.getStatus() < IStatus.DONE_REC_VAL) {
+		} else if (status.getCurrentProcessingEvent() < OabaProcessing.DONE_REC_VAL) {
 			log.info ("Creating new rec,val files");
 
 			//create the rec_id, val_id files
-			status.setStatus( IStatus.CREATE_REC_VAL);
+			status.setCurrentProcessingEvent( OabaProcessing.CREATE_REC_VAL);
 
 			createFiles ();
 
-			if (!stop) status.setStatus( IStatus.DONE_REC_VAL);
+			if (!stop) status.setCurrentProcessingEvent( OabaProcessing.DONE_REC_VAL);
 
 		}
 		time = System.currentTimeMillis() - time;

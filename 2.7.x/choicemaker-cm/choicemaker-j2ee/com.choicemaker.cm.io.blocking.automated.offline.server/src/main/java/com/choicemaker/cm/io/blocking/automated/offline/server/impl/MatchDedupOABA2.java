@@ -34,7 +34,7 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -172,13 +172,13 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 		ImmutableProbabilityModel stageModel =
 			PMManager.getModelInstance(d.stageModelName);
 		oabaConfig = new OABAConfiguration(d.stageModelName, d.jobID);
-		IStatus status = configuration.getStatusLog(d.jobID);
+		OabaProcessing status = configuration.getProcessingLog(em,d.jobID);
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			MessageBeanUtils.stopJob(batchJob, status, oabaConfig);
 
 		} else {
-			status.setStatus(IStatus.MERGE_DEDUP_MATCHES);
+			status.setCurrentProcessingEvent(OabaProcessing.MERGE_DEDUP_MATCHES);
 
 			// get the number of processors
 			String temp = (String) stageModel.properties().get("numProcessors");
@@ -189,7 +189,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 
 			// mark as done
 			sendToUpdateStatus(d.jobID, 100);
-			status.setStatus(IStatus.DONE_PROGRAM);
+			status.setCurrentProcessingEvent(OabaProcessing.DONE_PROGRAM);
 //			publishStatus(d.jobID);
 
 			// send to transitivity
@@ -213,7 +213,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 		ImmutableProbabilityModel stageModel =
 			PMManager.getModelInstance(data.stageModelName);
 		oabaConfig = new OABAConfiguration(data.stageModelName, data.jobID);
-		IStatus status = configuration.getStatusLog(data);
+		OabaProcessing status = configuration.getProcessingLog(em,data);
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 			MessageBeanUtils.stopJob(batchJob, status, oabaConfig);

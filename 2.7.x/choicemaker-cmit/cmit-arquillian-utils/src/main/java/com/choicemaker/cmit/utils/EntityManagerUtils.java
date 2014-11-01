@@ -16,6 +16,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobJPA;
 
@@ -286,6 +288,18 @@ public class EntityManagerUtils {
 		List<TransitivityJobBean> entries = query.getResultList();
 		if (entries == null) {
 			entries = new ArrayList<TransitivityJobBean>();
+		}
+		return entries;
+	}
+
+	public static List<OabaBatchJobProcessingBean> findAllOabaProcessing (
+			EntityManager em) {
+		Query query =
+			em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_ALL);
+		@SuppressWarnings("unchecked")
+		List<OabaBatchJobProcessingBean> entries = query.getResultList();
+		if (entries == null) {
+			entries = new ArrayList<OabaBatchJobProcessingBean>();
 		}
 		return entries;
 	}

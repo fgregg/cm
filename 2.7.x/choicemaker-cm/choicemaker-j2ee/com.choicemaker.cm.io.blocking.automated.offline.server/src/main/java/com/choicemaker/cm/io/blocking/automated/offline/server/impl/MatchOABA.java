@@ -29,7 +29,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonSetOSSources;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeSetSources;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -107,13 +107,13 @@ public class MatchOABA implements MessageDrivenBean, MessageListener {
 				IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
 				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 //				Status status = data.status;
-				IStatus status = configuration.getStatusLog(data);
+				OabaProcessing status = configuration.getProcessingLog(em, data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					batchJob.markAsAborted();
 
 					if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-						status.setStatus (IStatus.DONE_PROGRAM);
+						status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
 						oabaConfig.removeTempDir();
 					}
 				} else {

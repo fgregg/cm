@@ -19,7 +19,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- * This is the EJB implemenation of the OABA IStatus interface.
+ * This is the EJB implemenation of the OABA OabaProcessing interface.
  * 
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)

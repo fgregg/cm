@@ -27,7 +27,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
@@ -123,7 +123,7 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 
 					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
 					batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
-					IStatus status = configuration.getStatusLog(data);
+					OabaProcessing status = configuration.getProcessingLog(em, data);
 
 					if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
 						MessageBeanUtils.stopJob (batchJob, status, oabaConfig);
