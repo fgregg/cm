@@ -8,8 +8,8 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJ
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob.STATUS_NEW;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob.STATUS_QUEUED;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob.STATUS_STARTED;
-import static com.choicemaker.cmit.transitivity.util.TransitivityConstants.CURRENT_MAVEN_COORDINATES;
-import static com.choicemaker.cmit.transitivity.util.TransitivityConstants.PERSISTENCE_CONFIGURATION;
+import static com.choicemaker.cmit.oaba.util.OabaConstants.PERSISTENCE_CONFIGURATION;
+import static com.choicemaker.cmit.oaba.util.OabaConstants.CURRENT_MAVEN_COORDINATES;
 import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_HAS_BEANS;
 import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_MODULE_NAME;
 import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_POM_FILE;
