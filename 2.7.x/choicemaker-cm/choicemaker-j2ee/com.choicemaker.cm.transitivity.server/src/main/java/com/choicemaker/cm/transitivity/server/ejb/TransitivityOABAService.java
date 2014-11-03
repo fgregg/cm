@@ -42,7 +42,7 @@ public interface TransitivityOABAService extends EJBObject {
 //	 * @param master - master record source
 //	 * @param lowThreshold - probability under which a pair is considered "differ".
 //	 * @param highThreshold - probability above which a pair is considered "match".
-//	 * @param stageModelName - probability accessProvider of the stage record source.
+//	 * @param modelConfigurationName - probability accessProvider of the stage record source.
 //	 * @param masterModelName - probability accessProvider of the master record source.
 //	 * @return int - the transitivity job id.
 //	 * @throws RemoteException
@@ -57,7 +57,7 @@ public interface TransitivityOABAService extends EJBObject {
 //		ISerializableRecordSource master, 
 //		float lowThreshold, 
 //		float highThreshold, 
-//		String stageModelName, String masterModelName)
+//		String modelConfigurationName, String masterModelName)
 //		throws RemoteException, CreateException, NamingException, JMSException, SQLException;
 //*/
 

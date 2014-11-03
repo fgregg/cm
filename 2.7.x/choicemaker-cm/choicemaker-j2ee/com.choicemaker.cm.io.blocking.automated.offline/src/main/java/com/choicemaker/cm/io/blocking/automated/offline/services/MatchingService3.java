@@ -53,8 +53,7 @@ public class MatchingService3 {
 
 	private IChunkDataSinkSourceFactory stageFactory;
 	private IChunkDataSinkSourceFactory masterFactory;
-	private IProbabilityModel stageModel;
-	private IProbabilityModel masterModel;
+	private IProbabilityModel model;
 	private IComparisonSetSources sources;
 	private IComparisonSetSources Osources;
 
@@ -92,8 +91,7 @@ public class MatchingService3 {
 	 * @param masterFactory - factory containing info on how to get master chunk data files
 	 * @param sources - source of comparison sets for regular blocks
 	 * @param Osources - source of comparison sets for oversized blocks
-	 * @param stageModel - probability accessProvider of the staging records
-	 * @param masterModel - probability accessProvider of the master records
+	 * @param model - probability accessProvider of the staging records
 	 * @param mSink - matching pair sink
 	 * @param low - differ threshold
 	 * @param high - match threshold
@@ -101,20 +99,17 @@ public class MatchingService3 {
 	 * @param maxBlockSize - maximum size of a regular block.  blocks of size > maxBlockSize is an
 	 * 		oversized block.
 	 */
-	public MatchingService3 (IChunkDataSinkSourceFactory stageFactory,
-		IChunkDataSinkSourceFactory masterFactory,
-		IComparisonSetSources sources,
-		IComparisonSetSources Osources,
-		IProbabilityModel stageModel, IProbabilityModel masterModel,
-		IMatchRecord2Sink mSink,
-		float low, float high, int maxBlockSize, OabaProcessing status) {
+	public MatchingService3(IChunkDataSinkSourceFactory stageFactory,
+			IChunkDataSinkSourceFactory masterFactory,
+			IComparisonSetSources sources, IComparisonSetSources Osources,
+			IProbabilityModel model, IMatchRecord2Sink mSink, float low,
+			float high, int maxBlockSize, OabaProcessing status) {
 
 		this.stageFactory = stageFactory;
 		this.masterFactory = masterFactory;
 		this.sources = sources;
 		this.Osources = Osources;
-		this.stageModel = stageModel;
-		this.masterModel = masterModel;
+		this.model = model;
 		this.mSink = mSink;
 
 		this.low = low;
@@ -124,9 +119,9 @@ public class MatchingService3 {
 		this.status = status;
 
 		//set up the clues and evaluators.
-		this.evaluator = stageModel.getEvaluator();
-		this.clueSet = stageModel.getClueSet();
-		this.enabledClues = stageModel.getCluesToEvaluate();
+		this.evaluator = model.getEvaluator();
+		this.clueSet = model.getClueSet();
+		this.enabledClues = model.getCluesToEvaluate();
 
 	}
 
@@ -234,8 +229,8 @@ public class MatchingService3 {
 			MemoryEstimator.writeMem();
 
 			//get the records into memory
-			HashMap stageMap = getRecords (stage, stageModel);
-			HashMap masterMap = getRecords (master, masterModel);
+			HashMap stageMap = getRecords (stage, model);
+			HashMap masterMap = getRecords (master, model);
 
 			ArrayList buffer = new ArrayList ();
 
@@ -408,7 +403,7 @@ public class MatchingService3 {
 
 			// 2009-08-17 rphall
 			// BUG FIX? clue notes added here
-			final String noteInfo = MatchRecord2.getNotesAsDelimitedString(activeClues,this.stageModel);
+			final String noteInfo = MatchRecord2.getNotesAsDelimitedString(activeClues,this.model);
 			if (decision == Decision.MATCH) {
 				mr = new MatchRecord2 (i1, i2, source, matchProbability, MatchRecord2.MATCH,noteInfo);
 			} else if (decision == Decision.DIFFER) {

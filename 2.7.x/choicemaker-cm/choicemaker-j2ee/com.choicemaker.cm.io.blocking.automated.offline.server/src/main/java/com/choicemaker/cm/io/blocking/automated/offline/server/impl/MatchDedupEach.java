@@ -116,9 +116,9 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 
 				// init values
 				ImmutableProbabilityModel stageModel =
-					PMManager.getModelInstance(data.stageModelName);
+					PMManager.getModelInstance(data.modelConfigurationName);
 				oabaConfig =
-					new OABAConfiguration(data.stageModelName, data.jobID);
+					new OABAConfiguration(data.modelConfigurationName, data.jobID);
 				OabaProcessing status = configuration.getProcessingLog(em, data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED

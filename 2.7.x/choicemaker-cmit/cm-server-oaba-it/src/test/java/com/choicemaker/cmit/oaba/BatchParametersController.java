@@ -76,11 +76,12 @@ public class BatchParametersController {
 			throw new IllegalArgumentException("null test entities");
 		}
 		Thresholds thresholds = createRandomThresholds();
+		final boolean runTransitivity = false;
 		BatchParametersBean retVal =
 			new BatchParametersBean(createRandomModelConfigurationName(tag),
 					random.nextInt(MAX_MAX_SINGLE),
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), null, null);
+					thresholds.getMatchThreshold(), null, null, runTransitivity);
 		em.persist(retVal);
 		te.add(retVal);
 		return retVal;

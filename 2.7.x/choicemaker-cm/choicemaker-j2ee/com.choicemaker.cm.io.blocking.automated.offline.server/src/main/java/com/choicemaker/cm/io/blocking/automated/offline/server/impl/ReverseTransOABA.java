@@ -98,7 +98,7 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 				// 2014-04-24 rphall: Commented out unused local variable.
 				// Any side effects?
 //				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
-				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+				OABAConfiguration oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 //				Status status = data.status;
 				OabaProcessing status = configuration.getProcessingLog(em, data);
 
@@ -106,7 +106,7 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 					batchJob.markAsAborted();
 
 					if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-						status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
+						status.setCurrentProcessingEvent (OabaProcessing.DONE_OABA);
 						oabaConfig.removeTempDir();
 					}
 				} else {

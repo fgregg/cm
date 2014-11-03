@@ -19,7 +19,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  */
 public interface OabaProcessing {
 
-	// Ordered event ids
+	// -- Ordered event ids used by OABA matching
+
 	public static final int INIT = 0;
 	public static final int CREATE_REC_VAL = 10;
 	public static final int DONE_REC_VAL = 20;
@@ -49,7 +50,15 @@ public interface OabaProcessing {
 	public static final int OUTPUT_DEDUP_MATCHES = 230;
 	public static final int MERGE_DEDUP_MATCHES = 240;
 	public static final int DONE_DEDUP_MATCHES = 250;
-	public static final int DONE_PROGRAM = 260;
+	public static final int DONE_OABA = 260;
+	
+	// -- Ordered events used by transitivity analysis
+	
+	public static final int DONE_TRANS_DEDUP_OVERSIZED = DONE_DEDUP_OVERSIZED;
+	public static final int DONE_TRANSANALYSIS = DONE_OABA;
+	
+	
+	// -- Other manifest constants
 
 	public static final char DELIMIT = ':';
 

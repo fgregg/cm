@@ -526,11 +526,21 @@ public class EJBConfiguration implements Serializable {
 		}
 	}
 	
-	public BatchParameters findBatchParamsById(EntityManager em, long id) {
+//	public BatchParameters findBatchParamsById(EntityManager em, long id) {
+//		if (em == null) {
+//			throw new IllegalArgumentException("null entity manager");
+//		}
+//		BatchParameters retVal = em.find(BatchParametersBean.class, id);
+//		return retVal;
+//	}
+
+	public BatchParameters findBatchParamsByJobId(EntityManager em, long jobId) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		BatchParameters retVal = em.find(BatchParametersBean.class, id);
+		BatchJob job = em.find(BatchJobBean.class, jobId);
+		long paramsId = job.getBatchParametersId();
+		BatchParameters retVal = em.find(BatchParametersBean.class, paramsId);
 		return retVal;
 	}
 

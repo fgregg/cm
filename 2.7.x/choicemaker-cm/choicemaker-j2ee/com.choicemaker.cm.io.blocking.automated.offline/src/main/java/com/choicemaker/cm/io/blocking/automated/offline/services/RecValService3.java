@@ -61,8 +61,7 @@ public class RecValService3 {
 
 	private RecordSource master;
 	private RecordSource stage;
-	private IProbabilityModel stageModel;
-	private IProbabilityModel masterModel;
+	private IProbabilityModel model;
 
 	private static final int OUTPUT_INTERVAL = 100000;
 
@@ -96,27 +95,33 @@ public class RecValService3 {
 	private long time; //this keeps track of time
 
 
-	/** This constructor take these parameters:
-	 *
-	 * @param stage - stage record source of the data
-	 * @param master - master record source of the data.  This can be null.
-	 * @param accessProvider - probability accessProvider of the data
-	 * @param rvFactory - factory to get RecValSinks
-	 * @param translator - record ID to internal id translator
-	 * @param blockName - blocking configuration name in the schema
-	 * @param dbConf - db configuration in the schema
-	 * @param status - current status of the system
-	 * @param control - a mechanism to get out of a long running loop
+	/**
+	 * This constructor take these parameters:
+	 * 
+	 * @param stage
+	 *            - stage record source of the data
+	 * @param master
+	 *            - master record source of the data. This can be null.
+	 * @param modelConfigurationName
+	 *            - the name of a model configuration
+	 * @param rvFactory
+	 *            - factory to get RecValSinks
+	 * @param translator
+	 *            - record ID to internal id translator
+	 * @param status
+	 *            - current status of the system
+	 * @param control
+	 *            - a mechanism to get out of a long running loop
 	 */
-	public RecValService3 (RecordSource stage, RecordSource master, IProbabilityModel stageModel,
-		IProbabilityModel masterModel,
-		IRecValSinkSourceFactory rvFactory, IRecordIDTranslator2 translator,
-		OabaProcessing status, IControl control) {
+	public RecValService3(RecordSource stage, RecordSource master,
+			IProbabilityModel modelConfigurationName,
+			IRecValSinkSourceFactory rvFactory,
+			IRecordIDTranslator2 translator, OabaProcessing status,
+			IControl control) {
 
 		this.stage = stage;
 		this.master = master;
-		this.stageModel = stageModel;
-		this.masterModel = masterModel;
+		this.model = modelConfigurationName;
 		this.translator = translator;
 		this.rvFactory = rvFactory;
 		this.status = status;
@@ -124,9 +129,9 @@ public class RecValService3 {
 
 		this.stop = false;
 
-		BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
-		String blockName = (String) stageModel.properties().get("blockingConfiguration");
-		String dbConf = (String) stageModel.properties().get("dbConfiguration");
+		BlockingAccessor ba = (BlockingAccessor) modelConfigurationName.getAccessor();
+		String blockName = (String) modelConfigurationName.properties().get("blockingConfiguration");
+		String dbConf = (String) modelConfigurationName.properties().get("dbConfiguration");
 
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
 		BlockingField[] bfs = bc.blockingFields;
@@ -224,7 +229,7 @@ public class RecValService3 {
 		try {
 			//need to get record if type of stage and master
 			if (stage != null) {
-				stage.setModel(stageModel);
+				stage.setModel(model);
 				stage.open();
 				if (stage.hasNext()) {
 					Record r = stage.getNext();
@@ -235,7 +240,6 @@ public class RecValService3 {
 			}
 
 			if (master != null) {
-				master.setModel(masterModel);
 				master.open();
 //				if (master.hasNext()) {
 //					Record r = master.getNext();
@@ -274,12 +278,12 @@ public class RecValService3 {
 
 			//write the stage record source
 			if (stage != null) {
-				stage.setModel(stageModel);
+				stage.setModel(model);
 				stage.open();  // FIXME! try { stage.open(); ... } finally{ stage.close(); }
 
-				String blockName = (String) stageModel.properties().get("blockingConfiguration");
-				String dbConf = (String) stageModel.properties().get("dbConfiguration");
-				BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
+				String blockName = (String) model.properties().get("blockingConfiguration");
+				String dbConf = (String) model.properties().get("dbConfiguration");
+				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
 				while (stage.hasNext() && !stop) {
@@ -290,7 +294,7 @@ public class RecValService3 {
 
 					stop = ControlChecker.checkStop (control, count);
 
-					writeRecord (r, stageModel);
+					writeRecord (r, model);
 
 					//This checks the id type
 					if (firstStage) {
@@ -310,12 +314,11 @@ public class RecValService3 {
 			if (master != null) {
 				translator.split();
 
-				master.setModel(masterModel);
 				master.open(); // FIXME! try { master.open(); ... } finally{ master.close(); }
 
-				String blockName = (String) masterModel.properties().get("blockingConfiguration");
-				String dbConf = (String) masterModel.properties().get("dbConfiguration");
-				BlockingAccessor ba = (BlockingAccessor) masterModel.getAccessor();
+				String blockName = (String) model.properties().get("blockingConfiguration");
+				String dbConf = (String) model.properties().get("dbConfiguration");
+				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
 				// 2014-04-24 rphall: Commented out unused local variable.
@@ -328,7 +331,7 @@ public class RecValService3 {
 
 					stop = ControlChecker.checkStop (control, count);
 
-					writeRecord (r, masterModel);
+					writeRecord (r, model);
 
 					//This checks the id type
 					if (firstMaster) {

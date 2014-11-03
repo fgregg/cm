@@ -11,11 +11,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
@@ -49,14 +44,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.SuffixTreeSource;
 @SuppressWarnings("rawtypes")
 public class OABAConfiguration implements Serializable {
 
-	/* As of 2010-03-10 */
-	static final long serialVersionUID = -6103842299302698576L;
+	static final long serialVersionUID = 271;
 
 	//maximum size of a file to 1.5 GB
 	public static final long MAX_FILE_SIZE = 1500000000;
 	
-	private static final String STATUS_FILE_NAME = "cmt_status.txt"; 
-	private static final String DATA_FILE_NAME = "cmt_data.dat"; 
+//	private static final String STATUS_FILE_NAME = "cmt_status.txt"; 
+//	private static final String DATA_FILE_NAME = "cmt_data.dat"; 
 
 	private String fileDir;
 	private String modelName;
@@ -281,23 +275,23 @@ public class OABAConfiguration implements Serializable {
 	}
 
 	
-	public String getStatusFile () {
-		return getFileDir () + STATUS_FILE_NAME;
-	}
+//	public String getStatusFile () {
+//		return getFileDir () + STATUS_FILE_NAME;
+//	}
 	
 	
-	public void saveStartData (StartData data) throws IOException {
-		ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream (getFileDir() + DATA_FILE_NAME));
-		oos.writeObject(data);
-		oos.close();
-	}
+//	public void saveStartData (StartData data) throws IOException {
+//		ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream (getFileDir() + DATA_FILE_NAME));
+//		oos.writeObject(data);
+//		oos.close();
+//	}
 
-	public StartData getStartData () throws IOException, ClassNotFoundException {
-		ObjectInputStream ois = new ObjectInputStream (new FileInputStream (getFileDir() + DATA_FILE_NAME));
-		StartData data = (StartData) ois.readObject ();
-		ois.close();
-		return data;
-	}
+//	public StartData getStartData () throws IOException, ClassNotFoundException {
+//		ObjectInputStream ois = new ObjectInputStream (new FileInputStream (getFileDir() + DATA_FILE_NAME));
+//		StartData data = (StartData) ois.readObject ();
+//		ois.close();
+//		return data;
+//	}
 	
 	
 	/** This method removes the temporary storage directory used by this job id.

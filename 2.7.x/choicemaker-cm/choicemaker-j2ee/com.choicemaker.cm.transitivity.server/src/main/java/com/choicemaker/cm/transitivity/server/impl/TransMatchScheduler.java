@@ -63,7 +63,7 @@ public class TransMatchScheduler extends MatchScheduler2 {
 	protected void cleanUp () throws XmlConfException, BlockingException {
 		log.fine("cleanUp");
 
-		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
+		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);				
 		//get the number of processors
 		String temp = (String) stageModel.properties().get("numProcessors");
 		int numProcessors = Integer.parseInt(temp);

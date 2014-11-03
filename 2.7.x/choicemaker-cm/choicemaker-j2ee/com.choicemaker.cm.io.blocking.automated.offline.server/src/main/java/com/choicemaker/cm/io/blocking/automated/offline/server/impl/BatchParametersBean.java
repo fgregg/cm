@@ -24,10 +24,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
-import javax.persistence.Transient;
 
 import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
@@ -37,8 +37,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
  * @author rphall (migrated to JPA 2.0)
  *
  */
+@NamedQueries({
 @NamedQuery(name = BatchParametersJPA.QN_BATCHPARAMETERS_FIND_ALL,
-		query = BatchParametersJPA.JPQL_BATCHJOB_FIND_ALL)
+		query = BatchParametersJPA.JPQL_BATCHJOB_FIND_ALL),
+//		@NamedQuery(name = BatchParametersJPA.QN_BATCHPARAMETERS_FIND_BY_JOB_ID,
+//		query = BatchParametersJPA.JPQL_BATCHPARAMETERS_FIND_BY_JOB_ID),
+})
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = BatchParametersJPA.TABLE_NAME)
 public class BatchParametersBean implements Serializable, BatchParameters {
@@ -48,13 +52,15 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	private static final Logger logger = Logger
 			.getLogger(BatchParametersBean.class.getName());
 
-	protected static String INVALID_MODEL_CONFIG_NAME = null;
+	protected static final String INVALID_MODEL_CONFIG_NAME = null;
 
-	protected static int INVALID_MAX_SINGLE = -1;
+	protected static final int INVALID_MAX_SINGLE = -1;
 
-	protected static float INVALID_THRESHOLD = -1f;
+	protected static final float INVALID_THRESHOLD = -1f;
 
-	protected static SerialRecordSource INVALID_RECORD_SOURCE = null;
+	protected static final SerialRecordSource INVALID_RECORD_SOURCE = null;
+	
+	protected static final boolean DEFAULT_TRANSITIVITY = false;
 
 	protected static boolean isInvalidBatchParamsId(long id) {
 		return id == BatchParameters.INVALID_PARAMSID;
@@ -79,7 +85,7 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	private long id;
 
 	@Column(name = BatchParametersJPA.CN_STAGE_MODEL)
-	private final String stageModel;
+	private final String modelConfigName;
 
 	@Column(name = BatchParametersJPA.CN_MASTER_MODEL)
 	private final String masterModel;
@@ -93,33 +99,39 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	@Column(name = BatchParametersJPA.CN_HIGH_THRESHOLD)
 	private final float highThreshold;
 
-	@Transient
+	@Column(name = BatchParametersJPA.CN_STAGE_RS)
 	private final SerialRecordSource stageRs;
 
-	@Transient
+	@Column(name = BatchParametersJPA.CN_MASTER_RS)
 	private final SerialRecordSource masterRs;
+
+	@Column(name = BatchParametersJPA.CN_TRANSITIVITY)
+	private final boolean transitivity;
 
 	/** Required by JPA; do not invoke directly */
 	protected BatchParametersBean() {
 		this(INVALID_MODEL_CONFIG_NAME, INVALID_MAX_SINGLE, INVALID_THRESHOLD,
-				INVALID_THRESHOLD, INVALID_RECORD_SOURCE, INVALID_RECORD_SOURCE);
+				INVALID_THRESHOLD, INVALID_RECORD_SOURCE,
+				INVALID_RECORD_SOURCE, DEFAULT_TRANSITIVITY);
 	}
 
 	public BatchParametersBean(String modelConfigurationName, int maxSingle,
 			float lowThreshold, float highThreshold,
-			SerialRecordSource stageRs, SerialRecordSource masterRs) {
+			SerialRecordSource stageRs, SerialRecordSource masterRs,
+			boolean runTransitivity) {
 
-		this.stageModel = modelConfigurationName;
+		this.modelConfigName = modelConfigurationName;
 		this.masterModel = null;
 		this.maxSingle = maxSingle;
 		this.lowThreshold = lowThreshold;
 		this.highThreshold = highThreshold;
 		this.stageRs = stageRs;
 		this.masterRs = masterRs;
+		this.transitivity = runTransitivity;
 	}
 
 	public BatchParametersBean(BatchParameters bp) {
-		this.stageModel = bp.getModelConfigurationName();
+		this.modelConfigName = bp.getModelConfigurationName();
 		if (bp instanceof BatchParametersBean) {
 			this.masterModel = ((BatchParametersBean)bp).masterModel;
 			if (masterModel != null) {
@@ -134,6 +146,7 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 		this.highThreshold = bp.getHighThreshold();
 		this.stageRs = bp.getStageRs();
 		this.masterRs = bp.getMasterRs();
+		this.transitivity = bp.getTransitivity();
 	}
 
 	@Override
@@ -143,17 +156,15 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 
 	@Override
 	public String getModelConfigurationName() {
-		return stageModel;
+		return modelConfigName;
 	}
 
 	@Override
-	@Deprecated
 	public String getStageModel() {
 		return getModelConfigurationName();
 	}
 
 	@Override
-	@Deprecated
 	public String getMasterModel() {
 		return getModelConfigurationName();
 	}
@@ -182,6 +193,11 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	public SerialRecordSource getMasterRs() {
 		return masterRs;
 	}
+	
+	@Override
+	public boolean getTransitivity() {
+		return transitivity;
+	}
 
 	@Override
 	public int hashCode() {
@@ -203,15 +219,13 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 		int result = 1;
 		result = prime * result + Float.floatToIntBits(highThreshold);
 		result = prime * result + Float.floatToIntBits(lowThreshold);
-		// result =
-		// prime * result
-		// + ((masterModel == null) ? 0 : masterModel.hashCode());
 		result =
 			prime * result + ((masterRs == null) ? 0 : masterRs.hashCode());
 		result = prime * result + maxSingle;
 		result =
-			prime * result + ((stageModel == null) ? 0 : stageModel.hashCode());
+			prime * result + ((modelConfigName == null) ? 0 : modelConfigName.hashCode());
 		result = prime * result + ((stageRs == null) ? 0 : stageRs.hashCode());
+		result = prime * result + (transitivity ? 1231 : 1237);
 		return result;
 	}
 
@@ -275,11 +289,11 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 		if (maxSingle != other.maxSingle) {
 			return false;
 		}
-		if (stageModel == null) {
-			if (other.stageModel != null) {
+		if (modelConfigName == null) {
+			if (other.modelConfigName != null) {
 				return false;
 			}
-		} else if (!stageModel.equals(other.stageModel)) {
+		} else if (!modelConfigName.equals(other.modelConfigName)) {
 			return false;
 		}
 		if (stageRs == null) {
@@ -289,12 +303,15 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 		} else if (!stageRs.equals(other.stageRs)) {
 			return false;
 		}
+		if (transitivity != other.transitivity) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "BatchParametersBean [id=" + id + ", model=" + stageModel
+		return "BatchParametersBean [id=" + id + ", model=" + modelConfigName
 				+ ", lowThreshold=" + lowThreshold + ", highThreshold="
 				+ highThreshold + "]";
 	}

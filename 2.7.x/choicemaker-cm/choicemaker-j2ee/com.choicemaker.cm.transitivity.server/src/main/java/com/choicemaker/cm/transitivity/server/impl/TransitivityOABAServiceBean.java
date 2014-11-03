@@ -26,12 +26,14 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
@@ -70,7 +72,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	 * @param master - master record source
 	 * @param lowThreshold - probability under which a pair is considered "differ".
 	 * @param highThreshold - probability above which a pair is considered "match".
-	 * @param stageModelName - probability accessProvider of the stage record source.
+	 * @param modelConfigurationName - probability accessProvider of the stage record source.
 	 * @param masterModelName - probability accessProvider of the master record source.
 	 * @return int - the transitivity job id.
 	 * @throws RemoteException
@@ -85,7 +87,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 		ISerializableRecordSource master,
 		float lowThreshold,
 		float highThreshold,
-		String stageModelName, String masterModelName)
+		String modelConfigurationName, String masterModelName)
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
 
 		try {
@@ -93,7 +95,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 			data.jobID = jobID;
 			data.master = master;
 			data.staging = staging;
-			data.stageModelName = stageModelName;
+			data.stageModelName = modelConfigurationName;
 			data.masterModelName = masterModelName;
 			data.low = lowThreshold;
 			data.high = highThreshold;
@@ -112,26 +114,32 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	/**
  	* This method starts the transitivity engine.
  	* WARNINGS:
- 	*  1. only call this after the OABA has finished.
- 	*  2. use the same OAB jobID.
+ 	*  1. use the jobID of the OABA batch job for which the transitivity
+ 	*  analysis should be performed.
+ 	*  2. only call this after the OABA has finished.
 	 */
 	public long startTransitivity (long jobID)
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
 
 		try {
 
-			BatchParameters batchParams = configuration.findBatchParamsById(em, jobID);
+			BatchParameters batchParams = configuration.findBatchParamsByJobId(em, jobID);
+			BatchJob batchJob = em.find(BatchJobBean.class, jobID);
+			TransitivityJob job = new TransitivityJobBean(batchParams, batchJob);
+			em.persist(job);
+			final long retVal = job.getId();
 
-			StartData data = new StartData();
-			data.jobID = jobID;
-			data.master = batchParams.getMasterRs();
-			data.staging = batchParams.getStageRs();
-			data.stageModelName = batchParams.getStageModel();
-			data.masterModelName = batchParams.getMasterModel();
-			data.low = batchParams.getLowThreshold();
-			data.high = batchParams.getHighThreshold();
-			data.runTransitivity = false; //this means it's not a continuation from OABA.
+			// Create a new processing entry
+			OabaProcessing processing =
+				configuration.createProcessingLog(em, retVal);
 
+			// Log the job info
+			log.fine("BatchJob: " + batchJob.toString());
+			log.fine("BatchParameters: " + batchParams.toString());
+			log.fine("Processing entry: " + processing.toString());
+			log.fine("TransitivityJob: " + job.toString());
+
+			StartData data = new StartData(retVal);
 			sendToTransitivity (data);
 
 		} catch (Exception e) {

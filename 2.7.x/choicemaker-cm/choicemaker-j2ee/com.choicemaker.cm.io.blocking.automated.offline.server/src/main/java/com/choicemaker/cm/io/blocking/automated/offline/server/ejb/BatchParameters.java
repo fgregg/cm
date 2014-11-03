@@ -28,10 +28,8 @@ public interface BatchParameters {
 
 	String getModelConfigurationName();
 
-	@Deprecated
 	String getStageModel();
 
-	@Deprecated
 	String getMasterModel();
 
 	int getMaxSingle();
@@ -43,5 +41,7 @@ public interface BatchParameters {
 	SerialRecordSource getStageRs();
 
 	SerialRecordSource getMasterRs();
+
+	boolean getTransitivity();
 
 }

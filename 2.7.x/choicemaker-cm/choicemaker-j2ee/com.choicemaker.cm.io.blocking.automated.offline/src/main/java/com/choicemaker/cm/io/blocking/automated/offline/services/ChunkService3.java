@@ -60,8 +60,7 @@ public class ChunkService3 {
 	private IIDSetSource osSource;
 	private RecordSource stage;
 	private RecordSource master;
-	private IProbabilityModel stageModel;
-	private IProbabilityModel masterModel;
+	private IProbabilityModel model;
 	
 	// these two variables are used to stop the program in the middle 
 	private IControl control;
@@ -118,7 +117,7 @@ public class ChunkService3 {
 	 */	
 	public ChunkService3 (IIDSetSource bSource, IIDSetSource osSource, RecordSource stage, 
 		RecordSource master,
-		IProbabilityModel stageModel, IProbabilityModel masterModel,
+		IProbabilityModel model,
 		IChunkRecordIDSinkSourceFactory recIDFactory, IChunkDataSinkSourceFactory stageSinkFactory,
 		IChunkDataSinkSourceFactory masterSinkFactory,
 		int splitIndex,
@@ -129,8 +128,7 @@ public class ChunkService3 {
 		this.osSource = osSource;
 		this.stage = stage;
 		this.master = master;
-		this.stageModel = stageModel;
-		this.masterModel = masterModel;
+		this.model = model;
 		this.transformer = transformer;
 		this.transformerO = transformerO;
 		this.recIDFactory = recIDFactory;
@@ -271,11 +269,11 @@ public class ChunkService3 {
 			
 			if (numChunks <= maxFiles) {
 				end = numChunks;
-				createDataFiles (start, end, crSources, stageRecordSinks, 0, ind, stage, stageModel);
+				createDataFiles (start, end, crSources, stageRecordSinks, 0, ind, stage, model);
 				
 				if (master != null) {
 					createDataFiles (start, end, crSources, masterRecordSinks, splitIndex, ind, 
-					master, masterModel);
+					master, model);
 				} else {
 					openMaster (masterRecordSinks);
 				}
@@ -283,11 +281,11 @@ public class ChunkService3 {
 			} else {
 				while (start < numChunks) {
 					createDataFiles (start, end, crSources, stageRecordSinks, 0,
-					ind, stage, stageModel);
+					ind, stage, model);
 					
 					if (master != null) {
 						createDataFiles (start, end, crSources, masterRecordSinks, splitIndex, ind, 
-						master, masterModel);
+						master, model);
 					} else {
 						openMaster (masterRecordSinks);
 					}

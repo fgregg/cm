@@ -89,9 +89,27 @@ public class EntityManagerUtils {
 		return retVal;
 	}
 
-	/** Creates an ephemeral instance of BatchParametersBean */
+	/** Creates an ephemeral instance of BatchParametersBean.  The
+	 * <code>runTransitivity</code> field of the returned instance is set to false.*/
 	public static BatchParametersBean createEphemeralBatchParameters(
 			String tag, TestEntities te) {
+		if (te == null) {
+			throw new IllegalArgumentException("null test entities");
+		}
+		final boolean runTransitivity = false;
+		Thresholds thresholds = createRandomThresholds();
+		BatchParametersBean retVal =
+			new BatchParametersBean(createRandomModelConfigurationName(tag),
+					random.nextInt(MAX_MAX_SINGLE),
+					thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), null, null, runTransitivity);
+		te.add(retVal);
+		return retVal;
+	}
+
+	/** Creates an ephemeral instance of BatchParametersBean */
+	public static BatchParametersBean createEphemeralBatchParameters(
+			String tag, TestEntities te, boolean runTransitivity) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -100,8 +118,25 @@ public class EntityManagerUtils {
 			new BatchParametersBean(createRandomModelConfigurationName(tag),
 					random.nextInt(MAX_MAX_SINGLE),
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), null, null);
+					thresholds.getMatchThreshold(), null, null, runTransitivity);
 		te.add(retVal);
+		return retVal;
+	}
+
+	/**
+	 * Creates a persistent instance of BatchParametersBean An externalId for
+	 * the returned BatchJob is synthesized using the specified tag. The
+	 * <code>runTransitivity</code> field of the returned instance is set to false.
+	 */
+	public static BatchParametersBean createPersistentBatchParameters(
+			EntityManager em, String tag, TestEntities te) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		final boolean runTransitivity = false;
+		BatchParametersBean retVal =
+			createEphemeralBatchParameters(tag, te, runTransitivity);
+		em.persist(retVal);
 		return retVal;
 	}
 
@@ -110,11 +145,13 @@ public class EntityManagerUtils {
 	 * the returned BatchJob is synthesized using the specified tag.
 	 */
 	public static BatchParametersBean createPersistentBatchParameters(
-			EntityManager em, String tag, TestEntities te) {
+			EntityManager em, String tag, TestEntities te,
+			boolean runTransitivity) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		BatchParametersBean retVal = createEphemeralBatchParameters(tag, te);
+		BatchParametersBean retVal =
+			createEphemeralBatchParameters(tag, te, runTransitivity);
 		em.persist(retVal);
 		return retVal;
 	}
@@ -123,17 +160,17 @@ public class EntityManagerUtils {
 	 * Creates an ephemeral instance of BatchParametersBean. An externalId for
 	 * the returned BatchJob is synthesized using the specified tag.
 	 */
-	public static BatchJobBean createEphemeralBatchJob(
-			EntityManager em, String tag, TestEntities te) {
-		return createEphemeralBatchJob(em,te,createExternalId(tag));
+	public static BatchJobBean createEphemeralBatchJob(EntityManager em,
+			String tag, TestEntities te) {
+		return createEphemeralBatchJob(em, te, createExternalId(tag));
 	}
 
 	/**
 	 * Creates an ephemeral instance of BatchParametersBean. The specified
 	 * externalId is assigned without alteration to the returned BatchJob.
 	 */
-	public static BatchJobBean createEphemeralBatchJob(
-			EntityManager em, TestEntities te, String extId) {
+	public static BatchJobBean createEphemeralBatchJob(EntityManager em,
+			TestEntities te, String extId) {
 		final String METHOD = "createEphemeralBatchJob";
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
@@ -292,7 +329,7 @@ public class EntityManagerUtils {
 		return entries;
 	}
 
-	public static List<OabaBatchJobProcessingBean> findAllOabaProcessing (
+	public static List<OabaBatchJobProcessingBean> findAllOabaProcessing(
 			EntityManager em) {
 		Query query =
 			em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_ALL);

@@ -74,14 +74,14 @@ public interface OabaProcessingJPA {
 	String QN_OABAPROCESSING_FIND_ALL = "oabaProcessingFindAll";
 
 	/** JPQL used to implement {@link #QN_OABAPROCESSING_FIND_ALL} */
-	String EQL_OABAPROCESSING_FIND_ALL =
+	String JPQL_OABAPROCESSING_FIND_ALL =
 		"Select o from OabaBatchJobProcessingBean o";
 
 	/** Name of the query that finds all persistent status entries */
 	String QN_OABAPROCESSING_FIND_BY_JOBID = "oabaProcessingFindByJobId";
 
-	/** JPQL used to implement {@link #QN_OABAPROCESSING_FIND_ALL} */
-	String EQL_OABAPROCESSING_FIND_BY_JOBID =
+	/** JPQL used to implement {@link #QN_OABAPROCESSING_FIND_BY_JOBID} */
+	String JPQL_OABAPROCESSING_FIND_BY_JOBID =
 		"Select o from OabaBatchJobProcessingBean o where o.jobId = :jobId";
 
 	/**

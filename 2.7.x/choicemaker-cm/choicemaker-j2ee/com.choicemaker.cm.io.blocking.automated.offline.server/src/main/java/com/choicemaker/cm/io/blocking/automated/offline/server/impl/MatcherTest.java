@@ -121,7 +121,7 @@ public class MatcherTest implements MessageDrivenBean, MessageListener {
 
 					log.fine("Matcher In onMessage " + data.ind + " " + data.treeInd);
 
-					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+					oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 					batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 					OabaProcessing status = configuration.getProcessingLog(em, data);
 

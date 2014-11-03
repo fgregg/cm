@@ -102,9 +102,8 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 				//init values
-				IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
-				IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
-				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+				IProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);
+				OABAConfiguration oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 
 				//get the status
 //				Status status = data.status;
@@ -114,7 +113,7 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 					batchJob.markAsAborted();
 
 					if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-						status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
+						status.setCurrentProcessingEvent (OabaProcessing.DONE_OABA);
 						oabaConfig.removeTempDir();
 					}
 				} else {
@@ -165,16 +164,15 @@ public class ChunkOABA implements MessageDrivenBean, MessageListener {
 					Transformer transformerO = new Transformer (translator,
 						oabaConfig.getComparisonArrayFactoryOS());
 
-					ChunkService3 chunkService = new ChunkService3 (
-						oabaConfig.getTreeSetSource(),
-						source2,
-						data.staging, data.master,
-						stageModel, masterModel,
-						oabaConfig.getChunkIDFactory(),
-						oabaConfig.getStageDataFactory(), oabaConfig.getMasterDataFactory(),
-						translator.getSplitIndex(),
-						tTransformer, transformerO, maxChunk, maxChunkFiles,
-						status, batchJob );
+					ChunkService3 chunkService =
+						new ChunkService3(oabaConfig.getTreeSetSource(),
+								source2, data.staging, data.master, stageModel,
+								oabaConfig.getChunkIDFactory(),
+								oabaConfig.getStageDataFactory(),
+								oabaConfig.getMasterDataFactory(),
+								translator.getSplitIndex(), tTransformer,
+								transformerO, maxChunk, maxChunkFiles, status,
+								batchJob);
 					chunkService.runService();
 					log.info( "Number of chunks " + chunkService.getNumChunks());
 					log.info( "Done creating chunks " + chunkService.getTimeElapsed());

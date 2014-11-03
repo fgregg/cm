@@ -106,9 +106,8 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 				//init values
-				IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
-				IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
-				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+				IProbabilityModel model = PMManager.getModelInstance(data.modelConfigurationName);
+				OABAConfiguration oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 
 				//get the status
 //				Status status = data.status;
@@ -118,15 +117,15 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 					MessageBeanUtils.stopJob (batchJob, status, oabaConfig);
 
 				} else {
-					String temp = (String) stageModel.properties().get("maxChunkSize");
+					String temp = (String) model.properties().get("maxChunkSize");
 					int maxChunk = Integer.parseInt(temp);
 
 					//get the number of processors
-					temp = (String) stageModel.properties().get("numProcessors");
+					temp = (String) model.properties().get("numProcessors");
 					int numProcessors = Integer.parseInt(temp);
 
 					//get the maximum number of chunk files
-					temp = (String) stageModel.properties().get("maxChunkFiles");
+					temp = (String) model.properties().get("maxChunkFiles");
 					int maxChunkFiles = Integer.parseInt(temp);
 
 					RecordIDTranslator2 translator = new RecordIDTranslator2 (oabaConfig.getTransIDFactory());
@@ -147,16 +146,15 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 					Transformer transformerO = new Transformer (translator,
 						oabaConfig.getComparisonArrayGroupFactoryOS(numProcessors));
 
-					ChunkService3 chunkService = new ChunkService3 (
-						oabaConfig.getTreeSetSource(),
-						source2,
-						data.staging, data.master,
-						stageModel, masterModel,
-						oabaConfig.getChunkIDFactory(),
-						oabaConfig.getStageDataFactory(), oabaConfig.getMasterDataFactory(),
-						translator.getSplitIndex(),
-						tTransformer, transformerO, maxChunk, maxChunkFiles,
-						status, batchJob );
+					ChunkService3 chunkService =
+						new ChunkService3(oabaConfig.getTreeSetSource(),
+								source2, data.staging, data.master, model,
+								oabaConfig.getChunkIDFactory(),
+								oabaConfig.getStageDataFactory(),
+								oabaConfig.getMasterDataFactory(),
+								translator.getSplitIndex(), tTransformer,
+								transformerO, maxChunk, maxChunkFiles, status,
+								batchJob);
 					chunkService.runService();
 					log.info( "Number of chunks " + chunkService.getNumChunks());
 					log.info( "Done creating chunks " + chunkService.getTimeElapsed());

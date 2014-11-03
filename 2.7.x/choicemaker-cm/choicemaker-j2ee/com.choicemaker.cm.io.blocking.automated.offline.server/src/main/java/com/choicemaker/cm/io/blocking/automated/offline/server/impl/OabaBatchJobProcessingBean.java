@@ -42,9 +42,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchJobP
  */
 @NamedQueries({
 		@NamedQuery(name = QN_OABAPROCESSING_FIND_ALL,
-				query = EQL_OABAPROCESSING_FIND_ALL),
+				query = JPQL_OABAPROCESSING_FIND_ALL),
 		@NamedQuery(name = QN_OABAPROCESSING_FIND_BY_JOBID,
-				query = EQL_OABAPROCESSING_FIND_BY_JOBID) })
+				query = JPQL_OABAPROCESSING_FIND_BY_JOBID) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,

@@ -84,10 +84,11 @@ public interface BatchBase extends EJBObject {
 	public boolean 					resumeJob(
 									long jobID 
 								)
-								throws	ArgumentException,
-										ConfigException,
-										CmRuntimeException, 
-										RemoteException;
+//								throws	ArgumentException,
+//										ConfigException,
+//										CmRuntimeException, 
+//										RemoteException
+										;
 
 
 	/**

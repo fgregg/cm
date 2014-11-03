@@ -24,57 +24,62 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
  */
 public class StartData implements Serializable {
 
-	/* As of 2010-03-10 */
-	static final long serialVersionUID = -5889842975920462082L;
+	static final long serialVersionUID = 271;
 
-	public long jobID;
+	public final long jobID;
+
 	public int numBlockFields;
 	public int numChunks;
 	public int numRegularChunks;
-	
-	//If the number of staging records is below this threshold, single record match is used.
-	public int maxCountSingle;
-	
-	//indicates the type of staging record id
-	public int stageType;
-	
-	//indicates the type of master record id
-	public int masterType;
-	
-	public float low;
-	public float high;
-	public SerialRecordSource staging;
-	public SerialRecordSource master;
-	public String stageModelName;
-	public String masterModelName;
 
-//	public String dbConf;
-//	public String blockingConf;
+	// indicates the type of staging record id
+	public int stageType;
+
+	// indicates the type of master record id
+	public int masterType;
 
 	public ValidatorBase validator;
-	public Status status;
-	
-	//transitivity flag
-	public boolean runTransitivity;
 
 	/**
-	 *  This tells matcher which chunk to process.
+	 * This tells matcher which chunk to process.
 	 */
 	public int ind;
-	//the ith tree/array file of the chunk
+	// the ith tree/array file of the chunk
 	public int treeInd;
-	
-	
-	//default constructor
-	public StartData () {
+
+	@Deprecated
+	public final int maxCountSingle;
+	@Deprecated
+	public final float low;
+	@Deprecated
+	public final float high;
+	@Deprecated
+	public final SerialRecordSource staging;
+	@Deprecated
+	public final SerialRecordSource master;
+	@Deprecated
+	public final String modelConfigurationName;
+	@Deprecated
+	public Status status;
+	@Deprecated
+	public final boolean runTransitivity;
+
+	// constructor
+	public StartData(long jobId) {
+		this.jobID = jobId;
+		this.maxCountSingle = -1;
+		this.low = -1f;
+		this.high = -1f;
+		this.staging = null;
+		this.master = null;
+		this.modelConfigurationName = null;
+		this.runTransitivity = false;
 	}
-	
-	
-	//copying contructor
-	public StartData (StartData data) {
+
+	// copy constructor
+	public StartData(StartData data) {
 		this.jobID = data.jobID;
-		this.stageModelName = data.stageModelName;
-		this.masterModelName = data.masterModelName;
+		this.modelConfigurationName = data.modelConfigurationName;
 		this.ind = data.ind;
 		this.status = data.status;
 		this.stageType = data.stageType;
@@ -85,20 +90,16 @@ public class StartData implements Serializable {
 		this.treeInd = data.treeInd;
 		this.numRegularChunks = data.numRegularChunks;
 		this.runTransitivity = data.runTransitivity;
-
 		this.maxCountSingle = data.maxCountSingle;
 		this.validator = data.validator;
-		
 		this.staging = data.staging;
 		this.master = data.master;
 	}
 
-
-	//create MatchWriterData from StartData
-	public StartData (MatchWriterData data) {
+	// create MatchWriterData from StartData
+	public StartData(MatchWriterData data) {
 		this.jobID = data.jobID;
-		this.stageModelName = data.stageModelName;
-		this.masterModelName = data.masterModelName;
+		this.modelConfigurationName = data.modelConfigurationName;
 		this.ind = data.ind;
 		this.status = data.status;
 		this.stageType = data.stageType;
@@ -111,6 +112,7 @@ public class StartData implements Serializable {
 		this.staging = data.staging;
 		this.master = data.master;
 		this.runTransitivity = data.runTransitivity;
+		this.maxCountSingle = -1;
 	}
 
 }

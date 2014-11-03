@@ -158,7 +158,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 							+ data.ind + " " + data.treeInd);
 
 					oabaConfig =
-						new OABAConfiguration(data.stageModelName, data.jobID);
+						new OABAConfiguration(data.modelConfigurationName, data.jobID);
 					batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 					OabaProcessing status = configuration.getProcessingLog(em, data);
 
@@ -196,7 +196,7 @@ public class Matcher2<T extends Comparable<? super T>> implements
 			JMSException {
 
 		IProbabilityModel stageModel =
-			PMManager.getModelInstance(data.stageModelName);
+			PMManager.getModelInstance(data.modelConfigurationName);
 		// 2014-04-24 rphall: Commented out unused local variable.
 		// ImmutableProbabilityModel masterModel =
 		// PMManager.getModelInstance(data.masterModelName);

@@ -108,17 +108,13 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				Object o = msg.getObject();
 
-				data = (StartData) o;
-				transJob = (TransitivityJob) configuration.findBatchJobById(em, TransitivityJobBean.class, data.jobID);
+				StartData d = (StartData) o;
+				transJob = (TransitivityJob) configuration.findBatchJobById(em, TransitivityJobBean.class, d.jobID);
 				transJob.markAsStarted();
-				transJob.setModel(data.stageModelName);
-				transJob.setDiffer(data.low);
-				transJob.setMatch(data.high);
-				transJob.setDescription("");
 
-				data.jobID = transJob.getId();
+				data = new StartData(transJob.getId());
 
-				oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+				oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 
 				// clean up
 				removeOldFiles ();
@@ -179,8 +175,7 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 		IBlockSource bSource = oabaConfig.getTransitivityBlockFactory().getSource(bSink);
 		IDSetSource source2 = new IDSetSource (bSource);
 
-		IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
-		IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
+		IProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);
 		String temp = (String) stageModel.properties().get("maxChunkSize");
 		int maxChunk = Integer.parseInt(temp);
 
@@ -204,17 +199,15 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 
 		//set the correct status for chunk could run.
 		OabaProcessing status = configuration.getProcessingLog(em, data);
-		status.setCurrentProcessingEvent(OabaProcessing.DONE_DEDUP_OVERSIZED);
+		status.setCurrentProcessingEvent(OabaProcessing.DONE_TRANS_DEDUP_OVERSIZED);
 
-		ChunkService3 chunkService = new ChunkService3 (
-			source2,
-			null,
-			data.staging, data.master,
-			stageModel, masterModel,
-			oabaConfig.getChunkIDFactory(),
-			oabaConfig.getStageDataFactory(), oabaConfig.getMasterDataFactory(),
-			translator.getSplitIndex(),
-			transformerO, null, maxChunk, numFiles, status, transJob );
+		ChunkService3 chunkService =
+			new ChunkService3(source2, null, data.staging, data.master,
+					stageModel, oabaConfig.getChunkIDFactory(),
+					oabaConfig.getStageDataFactory(),
+					oabaConfig.getMasterDataFactory(),
+					translator.getSplitIndex(), transformerO, null, maxChunk,
+					numFiles, status, transJob);
 		chunkService.runService();
 
 		data.numChunks = chunkService.getNumChunks();

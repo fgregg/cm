@@ -53,7 +53,7 @@ public class ChunkDataStore {
 	 *
 	 * @param stageSource
 	 *            - staging record source
-	 * @param stageModel
+	 * @param model
 	 *            - staging accessProvider
 	 * @param masterSource
 	 *            - master record source
@@ -64,14 +64,13 @@ public class ChunkDataStore {
 	 * @param control
 	 *            - control object
 	 */
-	public void init(RecordSource stageSource,
-			ImmutableProbabilityModel stageModel, RecordSource masterSource,
-			ImmutableProbabilityModel masterModel, int maxChunkSize,
-			IControl control) throws BlockingException {
+	public void init(RecordSource stageSource, ImmutableProbabilityModel model,
+			RecordSource masterSource, int maxChunkSize, IControl control)
+			throws BlockingException {
 
-		stageMap = readMap(stageSource, stageModel, maxChunkSize + 10, control);
+		stageMap = readMap(stageSource, model, maxChunkSize + 10, control);
 		masterMap =
-			readMap(masterSource, masterModel, maxChunkSize + 10, control);
+			readMap(masterSource, model, maxChunkSize + 10, control);
 	}
 
 	private static Map<Object, Record> readMap(RecordSource rs,

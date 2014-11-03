@@ -58,6 +58,9 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 //	@PersistenceContext (unitName = "oaba")
 	private EntityManager em;
 
+//	@EJB
+	private BatchQueryService batchQuery;
+
 	public BatchMatchAnalyzerBean() {
 		super();
 	}
@@ -240,9 +243,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 			UrmStepJob batchStep = Single.getInst().findStepJobByUrmAndIndex(urmJobId,BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX);					
 			long batchJobId  = batchStep.getStepJobId().longValue();		
 			log.fine("batch job jd = "+batchJobId);
-
-			BatchQueryService qs = Single.getInst().getBatchQueryService();
-			boolean ret = qs.removeDir(batchJobId);
+			boolean ret = batchQuery.removeDir(batchJobId);
 			Single.getInst().removeUrmJob(em, urmJobId);
 			return ret;
 		} catch (NamingException e) {

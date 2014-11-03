@@ -124,7 +124,7 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 				
 				if (o instanceof StartData) {
 					StartData data = (StartData) o;
-					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+					oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 					
 					if (data.jobID != currentJobID) {
 						//reset counters
@@ -145,7 +145,7 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 					
 				} else if (o instanceof MatchWriterData) {
 					MatchWriterData data = (MatchWriterData) o;
-					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+					oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 					
 					//getting informed that a segment is done
 					countMessages --;
@@ -214,7 +214,7 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 			batchJob.markAsAborted();
 					
 			if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-				status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
+				status.setCurrentProcessingEvent (OabaProcessing.DONE_OABA);
 				oabaConfig.removeTempDir();
 			}
 		} else {
@@ -235,7 +235,7 @@ public class MatchScheduler implements MessageDrivenBean, MessageListener {
 	 *
 	 */
 	private void cleanUp (MatchWriterData data) throws XmlConfException, BlockingException {
-		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
+		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);				
 		//max block size					
 		String temp = (String) stageModel.properties().get("maxBlockSize");
 		int maxBlockSize = Integer.parseInt(temp);

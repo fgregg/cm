@@ -25,16 +25,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 @SuppressWarnings("rawtypes")
 public class MatchWriterData implements Serializable {
 
-	/* As of 2010-03-10 */
-	static final long serialVersionUID = 9096483901953216037L;
+	static final long serialVersionUID = 271;
 
-	public long jobID;
-
-	public String stageModelName;
-	public String masterModelName;
-	
-	public SerialRecordSource staging;
-	public SerialRecordSource master;
+	public final long jobID;
 
 	/** The chunk id */
 	public int ind;
@@ -45,20 +38,12 @@ public class MatchWriterData implements Serializable {
 	public int numChunks;
 	public int numRegularChunks;
 	
-	public Status status;
-	
 	/** Indicates the type of staging record id */
 	public int stageType;
 	
 	/** Indicates the type of master record id */
 	public int masterType;
 	
-	public float low;
-	public float high;
-	
-	/** Transitivity flag */
-	public boolean runTransitivity;
-
 	//keep track of total comparison and matches
 	public boolean doneMatch;
 	public int numCompares;
@@ -72,14 +57,38 @@ public class MatchWriterData implements Serializable {
 	/** Matches to be written */
 	public List<MatchRecord2> matches;
 	
-	public MatchWriterData () {
+	@Deprecated
+	public final int maxCountSingle;
+	@Deprecated
+	public final float low;
+	@Deprecated
+	public final float high;
+	@Deprecated
+	public final SerialRecordSource staging;
+	@Deprecated
+	public final SerialRecordSource master;
+	@Deprecated
+	public final String modelConfigurationName;
+	@Deprecated
+	public Status status;
+	@Deprecated
+	public final boolean runTransitivity;
+
+	public MatchWriterData (long jobId) {
+		this.jobID = jobId;
+		this.maxCountSingle = -1;
+		this.low = -1f;
+		this.high = -1f;
+		this.staging = null;
+		this.master = null;
+		this.modelConfigurationName = null;
+		this.runTransitivity = false;
 	}
 	
 	/** Constructs MatchWriterData from StartData */
 	public MatchWriterData (StartData data) {
 		this.jobID = data.jobID;
-		this.stageModelName = data.stageModelName;
-		this.masterModelName = data.masterModelName;
+		this.modelConfigurationName = data.modelConfigurationName;
 		this.ind = data.ind;
 		this.status = data.status;
 		this.stageType = data.stageType;
@@ -92,6 +101,7 @@ public class MatchWriterData implements Serializable {
 		this.staging = data.staging;
 		this.master = data.master;
 		this.runTransitivity = data.runTransitivity;
+		this.maxCountSingle = data.maxCountSingle;
 	}
 	
 }

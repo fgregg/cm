@@ -21,17 +21,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import javax.ejb.FinderException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-import javax.jms.JMSException;
-import javax.naming.NamingException;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.SerialRecordSource;
@@ -47,9 +43,6 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
 import com.choicemaker.cm.urm.exceptions.ModelException;
 import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 
-
-
-
 /**
  * @author emoussikaev
  * @version Revision: 2.5  Date: Jul 15, 2005 3:41:42 PM
@@ -61,9 +54,10 @@ public class BatchMatchBaseBean implements SessionBean {
 	protected static Logger log;
 	protected static boolean initialized = false;
 	protected transient SessionContext sessionContext;	
-	/**
-	 * 
-	 */
+
+//	@EJB
+	private BatchQueryService batchQuery;
+
 	public BatchMatchBaseBean() {
 		super();
 	}
@@ -107,7 +101,6 @@ public class BatchMatchBaseBean implements SessionBean {
 			this.sessionContext = sessionContext;
 	}
 
-
 	protected long 	startBatchQueryService(
 											IRecordCollection qRs, 
 											RefRecordCollection mRs,
@@ -119,7 +112,7 @@ public class BatchMatchBaseBean implements SessionBean {
 											UrmJob uj) 
 							throws
 									RecordCollectionException,
-									ArgumentException,
+//									ArgumentException,
 									ConfigException,
 									ModelException,
 									CmRuntimeException, 
@@ -140,45 +133,21 @@ public class BatchMatchBaseBean implements SessionBean {
 			mRs.accept(rcb);
 			master =  rcb.getResultRecordSource();
 		}
-		int transactionId = -1;
+		
+//		int transactionId = -1;
 		if(uj != null){		
 			uj.setQueryRs(staging);
 			uj.setMasterRs(master);
-			transactionId = uj.getId().intValue();
+//			transactionId = uj.getId().intValue();
 			uj.markAsMatching();
 		}
-		long id;
-		try {
-			BatchQueryService qs = Single.getInst().getBatchQueryService();		
-			id = qs.startOABA(
-					externalId,
-					transactionId,
-					staging,
-					master,
-					differThreshold,
-					matchThreshold,
-					modelName,
-					modelName,
-					maxSingle,
-					false);	
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (CreateException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (SQLException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		}
-		log.fine (">> startBatchQueryService");
-		return id;
-	
-	}
 
+		final long retVal =
+			batchQuery.startOABA(externalId, staging, master, differThreshold,
+					matchThreshold, modelName, maxSingle, false);
+		log.fine(">> startBatchQueryService");
+		return retVal;
+	}
 
 	/**
 	 * Aborts the matching process with the given job ID.
@@ -188,36 +157,10 @@ public class BatchMatchBaseBean implements SessionBean {
 	 * @return  Job ID.
 	 * @throws  RemoteException
 	 */	
-	public boolean 					abortBatchJob(
-									long jobId 
-								)
-								throws	ArgumentException,
-										ConfigException,
-										CmRuntimeException, 
-										RemoteException
-
-	{
-		try {
-			BatchQueryService qs = Single.getInst().getBatchQueryService();
-			return qs.abortJob(jobId) == 0;
-			} catch (NamingException e) {
-				log.severe(e.toString());
-				throw new ConfigException(e.toString());
-			} catch (CreateException e) {
-				log.severe(e.toString());
-				throw new ConfigException(e.toString());
-			} catch (JMSException e) {
-				log.severe(e.toString());
-				throw new ConfigException(e.toString());
-			} catch (FinderException e) {
-				log.severe(e.toString());
-				throw new CmRuntimeException(e.toString());
-			}		
+	public boolean abortBatchJob(long jobId) {
+		return batchQuery.abortJob(jobId) == 0;
 	}
 
-
-			
-		
 	/**
 	 * Copies the matching result  
 	 * 

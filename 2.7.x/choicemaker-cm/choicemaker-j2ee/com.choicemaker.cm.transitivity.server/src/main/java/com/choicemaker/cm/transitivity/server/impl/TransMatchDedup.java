@@ -109,8 +109,8 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 		batchJob = configuration.findBatchJobById(em, BatchJobBean.class, d.jobID);
 
 		//init values
-		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(d.stageModelName);
-		oabaConfig = new OABAConfiguration (d.stageModelName, d.jobID);
+		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(d.modelConfigurationName);
+		oabaConfig = new OABAConfiguration (d.modelConfigurationName, d.jobID);
 		OabaProcessing status = configuration.getProcessingLog(em, d.jobID);
 
 		//get the number of processors
@@ -122,7 +122,7 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 
 		//mark as done
 		sendToUpdateTransStatus (d.jobID, 100);
-		status.setCurrentProcessingEvent( OabaProcessing.DONE_PROGRAM);
+		status.setCurrentProcessingEvent( OabaProcessing.DONE_TRANSANALYSIS);
 
 	}
 

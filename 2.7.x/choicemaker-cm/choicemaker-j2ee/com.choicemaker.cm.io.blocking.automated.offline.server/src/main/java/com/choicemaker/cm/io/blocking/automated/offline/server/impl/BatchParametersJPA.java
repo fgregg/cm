@@ -22,6 +22,7 @@ public interface BatchParametersJPA {
 	String CN_HIGH_THRESHOLD = "HIGH_THRESHOLD";
 	String CN_STAGE_RS = "STAGE_RS";
 	String CN_MASTER_RS = "MASTER_RS";
+	String CN_TRANSITIVITY = "TRANSIVITIY";
 
 	String ID_GENERATOR_NAME = "OABA_BATCHPARAMS";
 
@@ -32,7 +33,7 @@ public interface BatchParametersJPA {
 	String ID_GENERATOR_PK_COLUMN_VALUE = "OABA_BATCHPARAMS";
 
 	String ID_GENERATOR_VALUE_COLUMN_NAME = BatchJobJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
-
+	
 	/**
 	 * Name of the query that finds all persistent batch parameter instances
 	 */
@@ -42,5 +43,22 @@ public interface BatchParametersJPA {
 	/** JPQL used to implement {@link #QN_BATCHPARAMETERS_FIND_ALL} */
 	String JPQL_BATCHJOB_FIND_ALL =
 			"Select params from BatchParametersBean params";
+
+//	/**
+//	 * Name of the query that finds the parameters associated with a particular
+//	 * BatchJob
+//	 */
+//	String QN_BATCHPARAMETERS_FIND_BY_JOB_ID =
+//			"batchParametersFindByJobId";
+//
+//	/** JPQL used to implement {@link #QN_BATCHPARAMETERS_FIND_ALL} */
+//	String JPQL_BATCHPARAMETERS_FIND_BY_JOB_ID =
+//			"Select p from BatchParametersBean p where p.jobId = :jobId";
+//
+//	/**
+//	 * Name of the parameter used to specify the jobId parameter of
+//	 * {@link #JPQL_BATCHPARAMETERS_FIND_BY_JOB_ID}
+//	 */
+//	String PN_BATCHPARAMETERS_FIND_BY_JOBID_JOBID = "jobId";
 
 }

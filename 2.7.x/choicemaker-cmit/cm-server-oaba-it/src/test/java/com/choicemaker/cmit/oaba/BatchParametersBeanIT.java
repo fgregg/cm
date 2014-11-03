@@ -143,7 +143,8 @@ public class BatchParametersBeanIT {
 				template.getLowThreshold(),
 				template.getHighThreshold(),
 				template.getStageRs(),
-				template.getMasterRs()
+				template.getMasterRs(),
+				template.getTransitivity()
 				);
 		te.add(params);
 
@@ -174,7 +175,8 @@ public class BatchParametersBeanIT {
 				template.getLowThreshold(),
 				template.getHighThreshold(),
 				template.getStageRs(),
-				template.getMasterRs()
+				template.getMasterRs(),
+				template.getTransitivity()
 				);
 		te.add(params);
 
@@ -204,7 +206,8 @@ public class BatchParametersBeanIT {
 				t.getDifferThreshold(),
 				t.getMatchThreshold(),
 				template.getStageRs(),
-				template.getMasterRs()
+				template.getMasterRs(),
+				template.getTransitivity()
 				);
 		te.add(params);
 

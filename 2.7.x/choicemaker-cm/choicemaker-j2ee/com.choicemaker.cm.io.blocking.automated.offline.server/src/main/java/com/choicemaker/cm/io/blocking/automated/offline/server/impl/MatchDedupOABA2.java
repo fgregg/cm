@@ -43,6 +43,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfigur
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
@@ -170,8 +172,8 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 
 		// init values
 		ImmutableProbabilityModel stageModel =
-			PMManager.getModelInstance(d.stageModelName);
-		oabaConfig = new OABAConfiguration(d.stageModelName, d.jobID);
+			PMManager.getModelInstance(d.modelConfigurationName);
+		oabaConfig = new OABAConfiguration(d.modelConfigurationName, d.jobID);
 		OabaProcessing status = configuration.getProcessingLog(em,d.jobID);
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
@@ -189,14 +191,37 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 
 			// mark as done
 			sendToUpdateStatus(d.jobID, 100);
-			status.setCurrentProcessingEvent(OabaProcessing.DONE_PROGRAM);
+			status.setCurrentProcessingEvent(OabaProcessing.DONE_OABA);
 //			publishStatus(d.jobID);
 
 			// send to transitivity
 			log.info("runTransitivity " + d.runTransitivity);
-			if (d.runTransitivity)
-				sendToTransitivity(new StartData(d));
+			if (d.runTransitivity) {
+				StartData startTransivityData = createStartDataForTransitivityAnalysis(d.jobID);
+				sendToTransitivity(startTransivityData);
+			}
 		}
+	}
+	
+	StartData createStartDataForTransitivityAnalysis(long batchJobId) {
+		BatchParameters batchParams = configuration.findBatchParamsByJobId(em, batchJobId);
+		BatchJob batchJob = em.find(BatchJobBean.class, batchJobId);
+		TransitivityJob job = new TransitivityJobBean(batchParams, batchJob);
+		em.persist(job);
+		final long transJobId = job.getId();
+
+		// Create a new processing entry
+		OabaProcessing processing =
+			configuration.createProcessingLog(em, transJobId);
+
+		// Log the job info
+		log.fine("BatchJob: " + batchJob.toString());
+		log.fine("BatchParameters: " + batchParams.toString());
+		log.fine("Processing entry: " + processing.toString());
+		log.fine("TransitivityJob: " + job.toString());
+
+		StartData retVal = new StartData(transJobId);
+		return retVal;
 	}
 
 	/**
@@ -211,8 +236,8 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 
 		// init values
 		ImmutableProbabilityModel stageModel =
-			PMManager.getModelInstance(data.stageModelName);
-		oabaConfig = new OABAConfiguration(data.stageModelName, data.jobID);
+			PMManager.getModelInstance(data.modelConfigurationName);
+		oabaConfig = new OABAConfiguration(data.modelConfigurationName, data.jobID);
 		OabaProcessing status = configuration.getProcessingLog(em,data);
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {

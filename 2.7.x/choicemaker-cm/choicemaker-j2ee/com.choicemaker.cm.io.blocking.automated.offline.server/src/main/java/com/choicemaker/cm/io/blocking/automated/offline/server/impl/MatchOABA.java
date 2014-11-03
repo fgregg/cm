@@ -103,9 +103,8 @@ public class MatchOABA implements MessageDrivenBean, MessageListener {
 				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 				//init values
-				IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
-				IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
-				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+				IProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);
+				OABAConfiguration oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 //				Status status = data.status;
 				OabaProcessing status = configuration.getProcessingLog(em, data);
 
@@ -113,7 +112,7 @@ public class MatchOABA implements MessageDrivenBean, MessageListener {
 					batchJob.markAsAborted();
 
 					if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-						status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
+						status.setCurrentProcessingEvent (OabaProcessing.DONE_OABA);
 						oabaConfig.removeTempDir();
 					}
 				} else {
@@ -147,12 +146,11 @@ public class MatchOABA implements MessageDrivenBean, MessageListener {
 					ComparisonSetOSSources sourcesO = new ComparisonSetOSSources (
 						oabaConfig.getComparisonArrayFactoryOS(), maxBlock);
 
-					MatchingService3 matchingService = new MatchingService3 (
-						oabaConfig.getStageDataFactory(),
-						oabaConfig.getMasterDataFactory(),
-						sources, sourcesO,
-						stageModel, masterModel, mSink, data.low,
-						data.high, maxBlock, status);
+					MatchingService3 matchingService =
+						new MatchingService3(oabaConfig.getStageDataFactory(),
+								oabaConfig.getMasterDataFactory(), sources,
+								sourcesO, stageModel, mSink, data.low,
+								data.high, maxBlock, status);
 					matchingService.runService();
 					log.info( "Done matching " + matchingService.getTimeElapsed());
 

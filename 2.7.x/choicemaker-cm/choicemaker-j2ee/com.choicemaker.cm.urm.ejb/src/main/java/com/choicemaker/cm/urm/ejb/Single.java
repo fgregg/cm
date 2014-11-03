@@ -39,8 +39,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfigura
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 //import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParametersHome;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryServiceHome;
+//import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
@@ -64,8 +63,8 @@ public class Single implements Serializable {
 	// -- Enterprise Naming Context
 
 	// ENC Session Bean names
-	private static final String BATCH_QUERY_SERVICE =
-		"java:comp/env/ejb/BatchQueryService";
+//	private static final String BATCH_QUERY_SERVICE =
+//		"java:comp/env/ejb/BatchQueryService";
 	private static final String TRANSITIVITY_OABA_SERVICE =
 		"java:comp/env/ejb/TransitivityOABAService";
 	private static final String TRANSITIVITY_SERIALIZER =
@@ -108,7 +107,7 @@ public class Single implements Serializable {
 	public static final int DEFAULT_MAX_DB_COLLECTION_CHUNK_SIZE = 100000;
 
 	// Cached EJB remote proxies
-	private transient BatchQueryService batchQueryService = null;
+//	private transient BatchQueryService batchQueryService = null;
 	private transient TransitivityOABAService transOABAService = null;
 	private transient TransSerializer transSerializer = null;
 
@@ -148,33 +147,6 @@ public class Single implements Serializable {
 			this.initContext = new InitialContext();
 		}
 		return this.initContext;
-	}
-	public BatchQueryService getBatchQueryService()
-		throws ConfigException, CmRuntimeException {
-		if (batchQueryService == null) {
-			try {
-				Context ctx = getInitialContext(); //naming ex
-				Object homeRef = ctx.lookup(BATCH_QUERY_SERVICE);
-				BatchQueryServiceHome batchQueryServiceHome =
-					(BatchQueryServiceHome) PortableRemoteObject.narrow(
-						homeRef,
-						BatchQueryServiceHome.class);
-				batchQueryService = batchQueryServiceHome.create();
-			} catch (ClassCastException e) {
-				log.severe(e.toString());
-				throw new CmRuntimeException(e.toString());
-			} catch (RemoteException e) {
-				log.severe(e.toString());
-				throw new CmRuntimeException(e.toString());
-			} catch (NamingException e) {
-				log.severe(e.toString());
-				throw new ConfigException(e.toString());
-			} catch (CreateException e) {
-				log.severe(e.toString());
-				throw new ConfigException(e.toString());
-			}
-		}
-		return batchQueryService;
 	}
 
 	public TransitivityOABAService getTransitivityOABAService()
@@ -527,7 +499,7 @@ public class Single implements Serializable {
 	public BatchParameters findBatchParamsById(EntityManager em, long id)
 			throws CmRuntimeException, ConfigException {
 		BatchParameters retVal =
-			EJBConfiguration.getInstance().findBatchParamsById(em, id);
+			EJBConfiguration.getInstance().findBatchParamsByJobId(em, id);
 		return retVal;
 	}
 

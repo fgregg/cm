@@ -132,7 +132,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 						+ data.maxCountSingle);
 
 				OABAConfiguration oabaConfig =
-					new OABAConfiguration(data.stageModelName, data.jobID);
+					new OABAConfiguration(data.modelConfigurationName, data.jobID);
 
 				BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
@@ -180,7 +180,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 			IMatchRecord2Sink mSinkFinal, BatchJob batchJob) throws Exception {
 
 		IProbabilityModel stageModel =
-			PMManager.getModelInstance(data.stageModelName);
+			PMManager.getModelInstance(data.modelConfigurationName);
 
 		OabaProcessing status = configuration.getProcessingLog(em, data);
 
@@ -317,11 +317,11 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 			throws Exception {
 
 		IProbabilityModel model =
-			PMManager.getModelInstance(data.masterModelName);
+			PMManager.getModelInstance(data.modelConfigurationName);
 		if (model == null) {
 			log.severe("Invalid probability accessProvider: "
-					+ data.masterModelName);
-			throw new BlockingException(data.masterModelName);
+					+ data.modelConfigurationName);
+			throw new BlockingException(data.modelConfigurationName);
 		}
 
 		new CountsUpdate().cacheCounts(configuration.getDataSource());

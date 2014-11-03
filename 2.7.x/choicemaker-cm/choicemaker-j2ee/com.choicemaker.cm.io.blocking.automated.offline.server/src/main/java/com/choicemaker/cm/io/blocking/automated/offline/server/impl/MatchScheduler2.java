@@ -157,10 +157,10 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 				
 				if (o instanceof StartData) {
 					data = (StartData) o;
-					oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+					oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 					
 					//get the number of processors
-					ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
+					ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);				
 					String temp = (String) stageModel.properties().get("numProcessors");
 					numProcessors = Integer.parseInt(temp);
 
@@ -238,7 +238,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 		throws RemoteException, 
 		FinderException, XmlConfException, BlockingException, NamingException, JMSException {
 		
-		oabaConfig = new OABAConfiguration (d.stageModelName, d.jobID);
+		oabaConfig = new OABAConfiguration (d.modelConfigurationName, d.jobID);
 		BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, d.jobID);
 		data = new StartData (d);
 		OabaProcessing status = configuration.getProcessingLog(em, data);
@@ -406,8 +406,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 
 		log.fine("startChunk " + ind);
 			
-		IProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
-		IProbabilityModel masterModel = PMManager.getModelInstance(data.masterModelName);
+		IProbabilityModel model = PMManager.getModelInstance(data.modelConfigurationName);				
 		
 		//call to garbage collection
 		long t = System.currentTimeMillis();
@@ -419,7 +418,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 
 		//read in the data;
 		t = System.currentTimeMillis();
-		dataStore.init(stageRS[ind], stageModel, masterRS[ind], masterModel, 
+		dataStore.init(stageRS[ind], model, masterRS[ind], 
 			maxChunkSize, batchJob);
 
 		t = System.currentTimeMillis() - t;
@@ -447,7 +446,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 	protected void cleanUp () throws XmlConfException, BlockingException {
 		log.info("cleanUp");
 
-		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);				
+		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);				
 		//get the number of processors
 		String temp = (String) stageModel.properties().get("numProcessors");
 		int numProcessors = Integer.parseInt(temp);

@@ -61,6 +61,9 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 //	@PersistenceContext (unitName = "oaba")
 	private EntityManager em;
 
+//	@EJB
+	private BatchQueryService batchQuery;
+
 	public BatchRecordMatcherBean() {
 		super();
 	}
@@ -106,8 +109,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 	{
 			
 		try {
-			BatchQueryService qs = Single.getInst().getBatchQueryService();			
-			BatchJobStatus batchJob = qs.getStatus(jobID);	
+			BatchJobStatus batchJob = batchQuery.getStatus(jobID);	
 			JobStatus js = new JobStatus (
 								batchJob.getJobId(),
 								batchJob.getStatus(),
@@ -147,8 +149,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 							RemoteException		
 	{
 		try {
-			BatchQueryService qs = Single.getInst().getBatchQueryService();			
-			BatchJobStatus status = qs.getStatus(jobID);	
+			BatchJobStatus status = batchQuery.getStatus(jobID);	
 			if (!status.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
 				throw new ArgumentException ("The job has not completed.");
 			} 
@@ -209,71 +210,32 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 		}
 	}
 	
-	public boolean 					abortJob(
-									long jobId 
-								)
-								throws	ArgumentException,
-										ConfigException,
-										CmRuntimeException, 
-										RemoteException
-
-	{
+	public boolean abortJob(long jobId) {
 		return abortBatchJob(jobId);
 	}
 
-	public boolean 					suspendJob(
-									long jobId 
-								)
-								throws	ArgumentException,
-										ConfigException,
-										CmRuntimeException, 
-										RemoteException
-
-	{
-		try {
-		BatchQueryService qs = Single.getInst().getBatchQueryService();
-		return qs.suspendJob(jobId) == 0;
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (CreateException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		}	
+	public boolean suspendJob(long jobId) {
+		return batchQuery.suspendJob(jobId) == 0;
 	}
 
-	public boolean 					resumeJob(
-									long jobId 
-								)
-								throws	ArgumentException,
-										ConfigException,
-										CmRuntimeException, 
-										RemoteException
-
-	{
-		try {
-			//TODO talk with Put regarding modelname parameter
-			BatchQueryService qs = Single.getInst().getBatchQueryService();
-			return (qs.resumeJob(jobId)==1);
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (CreateException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		}	
+	public boolean resumeJob(long jobId) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
+		// try {
+		// TODO talk with Put regarding modelname parameter
+		return (batchQuery.resumeJob(jobId) == 1);
+		// } catch (NamingException e) {
+		// log.severe(e.toString());
+		// throw new ConfigException(e.toString());
+		// } catch (CreateException e) {
+		// log.severe(e.toString());
+		// throw new ConfigException(e.toString());
+		// } catch (JMSException e) {
+		// log.severe(e.toString());
+		// throw new ConfigException(e.toString());
+		// } catch (FinderException e) {
+		// log.severe(e.toString());
+		// throw new CmRuntimeException(e.toString());
+		// }
 	}
 
 	public long[] 		getJobList()
@@ -310,8 +272,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 	 */
 	public boolean cleanJob(long jobID) throws CmRuntimeException {
 		try {
-			BatchQueryService qs = Single.getInst().getBatchQueryService();
-			boolean ret = qs.removeDir(jobID);
+			boolean ret = batchQuery.removeDir(jobID);
 			BatchJob bj = Single.getInst().findBatchJobById(em, BatchJobBean.class, jobID);
 			Single.getInst().deleteBatchJob(em, bj);
 			return ret;

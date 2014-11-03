@@ -44,7 +44,7 @@ public class MessageBeanUtils {
 		batchJob.markAsAborted();
 					
 		if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-			status.setCurrentProcessingEvent (OabaProcessing.DONE_PROGRAM);
+			status.setCurrentProcessingEvent (OabaProcessing.DONE_OABA);
 				
 			log.info("Removing Temporary directory.");
 			oabaConfig.removeTempDir();

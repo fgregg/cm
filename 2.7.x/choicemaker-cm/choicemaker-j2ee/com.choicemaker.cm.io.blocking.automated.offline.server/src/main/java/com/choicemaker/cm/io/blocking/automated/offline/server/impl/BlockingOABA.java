@@ -99,8 +99,8 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
 
 				//init values
-				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.stageModelName);
-				OABAConfiguration oabaConfig = new OABAConfiguration (data.stageModelName, data.jobID);
+				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);
+				OABAConfiguration oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
 //				Status status = data.status;
 				OabaProcessing status = configuration.getProcessingLog(em, data);
 
