@@ -106,6 +106,12 @@ public class EjbExtensionPointTest {
 	}
 
 	@Test
+	public void testComChoicemakerCmCoreModelConfiguration() {
+		CMPluginRegistry registry = getPluginRegistry();
+		ExtensionPointTest.testComChoicemakerCmCoreModelConfiguration(registry);
+	}
+
+	@Test
 	public void testComChoicemakerCmCoreMrpsReader() {
 		CMPluginRegistry registry = getPluginRegistry();
 		ExtensionPointTest.testComChoicemakerCmCoreMrpsReader(registry);

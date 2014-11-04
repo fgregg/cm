@@ -6,6 +6,7 @@ import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_FILEMRPS
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_GENERATORPLUGIN;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MACHINELEARNER;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
+import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MODELCONFIGURATION;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MRPSREADER;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_NAMEDRESOURCE;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_OBJECTGENERATOR;
@@ -90,6 +91,14 @@ public class ExtensionPointTest {
 		assertTrue(registry != null);
 		CMExtensionPoint ep =
 			registry.getExtensionPoint(CM_CORE_MATCHCANDIDATE);
+		assertTrue(ep != null);
+	}
+
+	public static void testComChoicemakerCmCoreModelConfiguration(
+			CMPluginRegistry registry) {
+		assertTrue(registry != null);
+		CMExtensionPoint ep =
+			registry.getExtensionPoint(CM_CORE_MODELCONFIGURATION);
 		assertTrue(ep != null);
 	}
 
