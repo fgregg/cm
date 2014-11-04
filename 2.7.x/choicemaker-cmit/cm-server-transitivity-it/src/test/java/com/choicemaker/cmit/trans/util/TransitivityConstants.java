@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.transitivity.util;
+package com.choicemaker.cmit.trans.util;
 
 public class TransitivityConstants {
 
