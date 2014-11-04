@@ -245,9 +245,9 @@ public class BatchQueryServiceBeanIT {
 		String STAGING = tag == null ? "STAGING" : tag + "_STAGING";
 		String MASTER = tag == null ? "MASTER" : tag + "_MASTER";
 		final SerialRecordSource staging =
-			EntityManagerUtils.createSerialRecordSource(STAGING);
+			EntityManagerUtils.createFakeSerialRecordSource(STAGING);
 		final SerialRecordSource master =
-			EntityManagerUtils.createSerialRecordSource(MASTER);
+			EntityManagerUtils.createFakeSerialRecordSource(MASTER);
 		final Thresholds thresholds =
 			EntityManagerUtils.createRandomThresholds();
 		final String modelConfigName = UUID.randomUUID().toString();

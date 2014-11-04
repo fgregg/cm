@@ -94,7 +94,7 @@ public class EntityManagerUtils {
 		return retVal;
 	}
 
-	public static SerialRecordSource createSerialRecordSource(String tag) {
+	public static SerialRecordSource createFakeSerialRecordSource(String tag) {
 		return new FakeSerialRecordSource(tag);
 	}
 

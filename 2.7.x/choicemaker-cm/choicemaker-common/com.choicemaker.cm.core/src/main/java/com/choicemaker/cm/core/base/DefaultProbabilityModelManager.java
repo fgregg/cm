@@ -24,22 +24,28 @@ import com.choicemaker.util.Precondition;
 
 /**
  * Creates and manages a collection of IProbabilityModel instances.
+ * <br/><br/> 
+ * FIXME this class should be installable (or a Service Provider Implementation
+ * or a plugin) so that a persistent manager could be specified as the active
+ * manager.
+ * 
  * @author Martin Buechi (initial implementation of ProbabilityModel)
  * @author S. Yoakum-Stover (initial implementation of ProbabilityModel)
  * @author rphall (Refactored from PMManager and previously ProbabilityModel)
- * @version $Revision: 1.2 $ $Date: 2013/02/23 19:57:50 $
+ * 
  */
 public class DefaultProbabilityModelManager implements IProbabilityModelManager {
 
-	private DefaultProbabilityModelManager() {}
-	
+	private DefaultProbabilityModelManager() {
+	}
+
 	private static final Object _instanceSynch = new Object();
-	
+
 	private static DefaultProbabilityModelManager _instance = null;
-	
+
 	public static IProbabilityModelManager getInstance() {
 		if (_instance == null) {
-			synchronized(_instanceSynch) {
+			synchronized (_instanceSynch) {
 				if (_instance == null) {
 					_instance = new DefaultProbabilityModelManager();
 				}
@@ -47,29 +53,23 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 		}
 		return _instance;
 	}
-	
+
 	private final Map models = new HashMap();
 	private Reporter[] reporters = new Reporter[0];
-
-//	private static final String CLUES_TO_EVALUATE = ImmutableProbabilityModel.CLUES_TO_EVALUATE;
-//
-//	private static final String MACHINE_LEARNER = ImmutableProbabilityModel.MACHINE_LEARNER;
-//
-//	private static final String MACHINE_LEARNER_PROPERTY =
-//		ImmutableProbabilityModel.MACHINE_LEARNER_PROPERTY;
-//
-//	private static final String NAME = ImmutableProbabilityModel.NAME;
 
 	/**
 	 * Adds a probability model to the collection of configured models.
 	 *
-	 * @param   model  The probability model.
+	 * @param model
+	 *            The probability model.
 	 */
 	public void addModel(IProbabilityModel model) {
 		models.put(model.getModelName(), model);
 	}
 
-	public Accessor createAccessor(String className, ClassLoader cl) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public Accessor createAccessor(String className, ClassLoader cl)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
 		Class accessorClass = Class.forName(className, true, cl);
 		return (Accessor) accessorClass.newInstance();
 	}
@@ -77,7 +77,7 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 	/**
 	 * Returns the specified probability model.
 	 *
-	 * @return  The specified probability model.
+	 * @return The specified probability model.
 	 */
 	public IProbabilityModel getModelInstance(String name) {
 		return (IProbabilityModel) models.get(name);
@@ -86,12 +86,12 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 	/**
 	 * Returns the specified probability model.
 	 *
-	 * @return  The specified probability model.
+	 * @return The specified probability model.
 	 */
 	public ImmutableProbabilityModel getImmutableModelInstance(String name) {
 		return (ImmutableProbabilityModel) models.get(name);
 	}
-	
+
 	public Map models() {
 		Map retVal = Collections.unmodifiableMap(models);
 		return retVal;
@@ -99,24 +99,25 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 
 	public IProbabilityModel[] getModels() {
 		Collection coll = models.values();
-		return (IProbabilityModel[]) coll.toArray(new IProbabilityModel[coll.size()]);
+		return (IProbabilityModel[]) coll.toArray(new IProbabilityModel[coll
+				.size()]);
 	}
 
 	public void setGlobalReporters(Reporter[] rs) {
-		Precondition.assertNonNullArgument("null reporter array",rs);
-		for (int i=0; i<rs.length; i++) {
-			Precondition.assertNonNullArgument("null reporter[" + i + "]",rs[i]);
+		Precondition.assertNonNullArgument("null reporter array", rs);
+		for (int i = 0; i < rs.length; i++) {
+			Precondition.assertNonNullArgument("null reporter[" + i + "]",
+					rs[i]);
 		}
 		Reporter[] copy = new Reporter[rs.length];
-		System.arraycopy(rs,0,copy,0,rs.length);
+		System.arraycopy(rs, 0, copy, 0, rs.length);
 		reporters = copy;
 	}
 
 	public Reporter[] getGlobalReporters() {
 		Reporter[] retVal = new Reporter[this.reporters.length];
-		System.arraycopy(this.reporters,0,retVal,0,this.reporters.length);
+		System.arraycopy(this.reporters, 0, retVal, 0, this.reporters.length);
 		return retVal;
 	}
 
 }
-

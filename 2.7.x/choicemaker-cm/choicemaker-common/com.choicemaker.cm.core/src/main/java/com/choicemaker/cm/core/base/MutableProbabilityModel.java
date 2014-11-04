@@ -235,13 +235,13 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	}
 
 	/**
-	 * Returns the modelName of the Accessor class.
+	 * Returns the name of the Accessor class.
 	 *
 	 * Note: this is not the same as getAccessor().getClass().getName()
-	 * because getAccessor() returns a dynamic proxy, so the class modelName
+	 * because getAccessor() returns a dynamic proxy, so the class name
 	 * is something like $Proxy0.
 	 *
-	 * @return The modelName of the accessor class.
+	 * @return The name of the accessor class.
 	 */
 	public String getAccessorClassName() {
 		return accessorClassName;
@@ -303,9 +303,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	}
 
 	/**
-	 * Returns the file modelName of the probability model.
+	 * Returns the file name of the probability model.
 	 *
-	 * @return   The file modelName of the probability model.
+	 * @return   The file name of the probability model.
 	 */
 	public String getModelFilePath() {
 		return modelFilePath;
@@ -332,9 +332,9 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	}
 
 	/**
-	 * Returns the modelName of the probability model.
+	 * Returns the model name of the probability model.
 	 *
-	 * @return   The modelName of the probability model.
+	 * @return   The model name of the probability model.
 	 */
 	public String getModelName() {
 		return modelName;
@@ -566,11 +566,11 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	 * Sets the path to the probability model weights file (*.model)
 	 * 
 	 * If this model is in the collection of probability models, the
-	 * {@link #getModelName() modelName configuration name} that it is
+	 * {@link #getModelName() model configuration name} that is
 	 * associated with in the collection is not changed.
 	 * 
 	 * @param modelFilePath
-	 *            The new modelName.
+	 *            The new file path.
 	 */
 	public void setModelFilePath(String filePath) {
 		this.modelFilePath = filePath;

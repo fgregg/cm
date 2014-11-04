@@ -23,6 +23,8 @@ public interface ChoiceMakerExtensionPoint {
 		"com.choicemaker.cm.core.matchCandidate";
 	public static final String CM_CORE_MRPSREADER =
 		"com.choicemaker.cm.core.mrpsReader";
+	public static final String CM_CORE_MODELCONFIGURATION =
+			"com.choicemaker.cm.core.modelConfiguration";
 	public static final String CM_CORE_NAMEDRESOURCE =
 		"com.choicemaker.cm.core.namedResource";
 	public static final String CM_CORE_OBJECTGENERATOR =
