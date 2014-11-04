@@ -53,6 +53,16 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchJobP
 public class OabaBatchJobProcessingBean implements OabaBatchJobProcessing, Serializable {
 
 	private static final long serialVersionUID = 271L;
+	
+	public static final long INVALID_OABAPROCESSING_ID = 0;
+
+	public static boolean isPersistent(OabaBatchJobProcessing p) {
+		boolean retVal = false;
+		if (p != null && p.getId() != INVALID_OABAPROCESSING_ID) {
+			retVal = true;
+		}
+		return retVal;
+	}
 
 	// -- Instance data
 

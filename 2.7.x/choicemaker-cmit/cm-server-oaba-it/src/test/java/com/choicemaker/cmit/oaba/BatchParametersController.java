@@ -17,6 +17,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA;
+import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
 
 /**
@@ -31,8 +32,6 @@ public class BatchParametersController {
 
 	private static final String DEFAULT_MODEL_NAME = "FakeModelConfig";
 	private static final String UNDERSCORE = "_";
-	private static final int MAX_MAX_SINGLE = 1000;
-
 	private transient Random random;
 
 	@PostConstruct
@@ -79,7 +78,7 @@ public class BatchParametersController {
 		final boolean runTransitivity = false;
 		BatchParametersBean retVal =
 			new BatchParametersBean(createRandomModelConfigurationName(tag),
-					random.nextInt(MAX_MAX_SINGLE),
+					random.nextInt(EntityManagerUtils.MAX_MAX_SINGLE),
 					thresholds.getDifferThreshold(),
 					thresholds.getMatchThreshold(), null, null, runTransitivity);
 		em.persist(retVal);

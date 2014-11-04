@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
@@ -23,30 +24,34 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.Transitivity
 
 public class EntityManagerUtils {
 
+	public static final int MAX_MAX_SINGLE = 1000;
+
 	private EntityManagerUtils() {
 	}
 
 	private static final Logger logger = Logger
 			.getLogger(EntityManagerUtils.class.getName());
 
-	private static final String DEFAULT_TAG = "Random external id";
+	private static final String DEFAULT_EXTERNALID_TAG = "Random external id";
 	private static final String DEFAULT_MODEL_NAME = "FakeModelConfig";
+	static final String DEFAULT_RECORDSOURCE_TAG = "Random record source";
 	private static final String COLON = ":";
 	private static final String SPACE = " ";
 	private static final String UNDERSCORE = "_";
-	private static final String TAG_DELIMITER = ": ";
-	private static final int MAX_MAX_SINGLE = 1000;
+	static final String TAG_DELIMITER = ": ";
+	static final String PREFIX_FAKE_RECORDSOURCE = "FAKE_RECORDSOURCE_";
+	static final String PREFIX_FAKE_RECORDSOURCE_FILE = "FAKE_RECORDSOURCE_FILE_";
 
 	private static final Random random = new Random();
 
 	/** Synthesizes an externalId using the specified tag which may be null */
 	public static String createExternalId(String tag) {
 		if (tag == null) {
-			tag = DEFAULT_TAG;
+			tag = DEFAULT_EXTERNALID_TAG;
 		}
 		tag = tag.trim();
 		if (tag.isEmpty()) {
-			tag = DEFAULT_TAG;
+			tag = DEFAULT_EXTERNALID_TAG;
 		}
 		StringBuilder sb = new StringBuilder(tag);
 		if (tag.endsWith(COLON)) {
@@ -87,6 +92,10 @@ public class EntityManagerUtils {
 		float high = low + f * highRange;
 		Thresholds retVal = new Thresholds(low, high);
 		return retVal;
+	}
+
+	public static SerialRecordSource createSerialRecordSource(String tag) {
+		return new FakeSerialRecordSource(tag);
 	}
 
 	/** Creates an ephemeral instance of BatchParametersBean.  The
@@ -359,5 +368,4 @@ public class EntityManagerUtils {
 	public static void detach(EntityManager em, TransitivityJob job) {
 		em.detach(job);
 	}
-
 }

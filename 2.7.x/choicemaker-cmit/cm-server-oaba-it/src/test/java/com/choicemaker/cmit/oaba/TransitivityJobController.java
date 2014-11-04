@@ -10,6 +10,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
@@ -90,6 +91,10 @@ public class TransitivityJobController {
 
 	public List<TransitivityJobBean> findAllByParentId(long batchJobId) {
 		return EntityManagerUtils.findAllByParentId(em, batchJobId);
+	}
+
+	public List<OabaBatchJobProcessingBean> findAllOabaProcessing() {
+		return EntityManagerUtils.findAllOabaProcessing(em);
 	}
 
 	public void detach(TransitivityJob job) {

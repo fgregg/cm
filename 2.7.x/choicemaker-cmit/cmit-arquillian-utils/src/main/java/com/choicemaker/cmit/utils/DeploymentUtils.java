@@ -54,7 +54,6 @@ public class DeploymentUtils {
 	 * 
 	 * @param pom
 	 *            a non-null pom object
-	 * @return
 	 */
 	public static File[] resolveDependencies(PomEquippedResolveStage pom) {
 		File[] retVal =

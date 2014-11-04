@@ -2,8 +2,10 @@ package com.choicemaker.cmit.utils;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
@@ -22,6 +24,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.Transitivity
  * @author rphall
  */
 public class TestEntities {
+
+	private static final Logger logger = Logger.getLogger(TestEntities.class
+			.getName());
 
 	private Set<BatchJob> batchJobs = new LinkedHashSet<>();
 	private Set<TransitivityJob> transitivityJobs = new LinkedHashSet<>();
@@ -84,74 +89,110 @@ public class TestEntities {
 		return retVal;
 	}
 
-//	public int countAllBatchJobs() {
-//		return batchJobs.size();
-//	}
-//
-//	public int countPersistentBatchJobs() {
-//		int count = 0;
-//		for (BatchJob job : batchJobs) {
-//			if (BatchJobBean.isPersistent(job)) {
-//				++count;
-//			}
-//		}
-//		return count;
-//	}
-//
-//	public int countPersistentTransitivityJobs() {
-//		int count = 0;
-//		for (TransitivityJob job : transitivityJobs) {
-//			if (TransitivityJobBean.isPersistent(job)) {
-//				++count;
-//			}
-//		}
-//		return count;
-//	}
-//
-//	public int countPersistentBatchParameters() {
-//		int count = 0;
-//		for (BatchParameters job : batchParameters) {
-//			if (BatchParametersBean.isPersistent(job)) {
-//				++count;
-//			}
-//		}
-//		return count;
-//	}
+	public void removePersistentObjects(EntityManager em) /* throws Exception */{
+		try {
+			removePersistentObjects(em, null);
+		} catch (Exception e) {
+			logger.severe(e.toString());
+			throw new RuntimeException(e.toString());
+		}
+	}
 
-	public void removePersistentObjects(EntityManager em) {
+	public void removePersistentObjects(EntityManager em, UserTransaction utx)
+			throws Exception {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
 		for (BatchJob job : batchJobs) {
 			if (BatchJobBean.isPersistent(job)) {
+				boolean usingUtx = false;
+				if (utx != null) {
+					utx.begin();
+					usingUtx = true;
+				}
 				BatchJobBean refresh = em.find(BatchJobBean.class, job.getId());
 				if (refresh != null) {
-					em.remove(refresh);
+					em.merge(refresh);
+					boolean isManaged = em.contains(refresh);
+					if (!isManaged) {
+						logger.warning("BatchJob " + refresh.getId() + " is not managed");
+					} else {
+						em.remove(refresh);
+					}
+				}
+				if (usingUtx) {
+					utx.commit();
 				}
 			}
 		}
 		for (TransitivityJob job : transitivityJobs) {
 			if (TransitivityJobBean.isPersistent(job)) {
-				TransitivityJobBean refresh = em.find(TransitivityJobBean.class, job.getId());
+				boolean usingUtx = false;
+				if (utx != null) {
+					utx.begin();
+					usingUtx = true;
+				}
+				TransitivityJobBean refresh =
+					em.find(TransitivityJobBean.class, job.getId());
 				if (refresh != null) {
-					em.remove(refresh);
+					em.merge(refresh);
+					boolean isManaged = em.contains(refresh);
+					if (!isManaged) {
+						logger.warning("TransitivityJob " + refresh.getId() + " is not managed");
+					} else {
+						em.remove(refresh);
+					}
+				}
+				if (usingUtx) {
+					utx.commit();
 				}
 			}
 		}
 		for (BatchParameters params : batchParameters) {
 			if (BatchParametersBean.isPersistent(params)) {
-				BatchParametersBean refresh = em.find(BatchParametersBean.class, params.getId());
+				boolean usingUtx = false;
+				if (utx != null) {
+					utx.begin();
+					usingUtx = true;
+				}
+				BatchParametersBean refresh =
+					em.find(BatchParametersBean.class, params.getId());
 				if (refresh != null) {
-					em.remove(refresh);
+					em.merge(refresh);
+					boolean isManaged = em.contains(refresh);
+					if (!isManaged) {
+						logger.warning("BatchParameters " + refresh.getId() + " is not managed");
+					} else {
+						em.remove(refresh);
+					}
+				}
+				if (usingUtx) {
+					utx.commit();
 				}
 			}
 		}
 		for (OabaBatchJobProcessing p : oabaProcessing) {
-			OabaBatchJobProcessingBean refresh = em.find(OabaBatchJobProcessingBean.class, p.getId());
-			if (refresh != null) {
-				em.remove(refresh);
+			if (OabaBatchJobProcessingBean.isPersistent(p)) {
+				boolean usingUtx = false;
+				if (utx != null) {
+					utx.begin();
+					usingUtx = true;
+				}
+				OabaBatchJobProcessingBean refresh =
+					em.find(OabaBatchJobProcessingBean.class, p.getId());
+				if (refresh != null) {
+					em.merge(refresh);
+					boolean isManaged = em.contains(refresh);
+					if (!isManaged) {
+						logger.warning("OabaBatchJobProcessing " + refresh.getId() + " is not managed");
+					} else {
+						em.remove(refresh);
+					}
+				}
+				if (usingUtx) {
+					utx.commit();
+				}
 			}
 		}
 	}
-
 }
