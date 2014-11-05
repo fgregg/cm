@@ -23,6 +23,22 @@ import com.choicemaker.cm.core.report.Report;
  * @version $Revision: 1.1 $ $Date: 2010/03/24 17:00:57 $
  */
 public interface ImmutableProbabilityModel {
+	
+	/**
+	 * Name of a required property that specifies a named database configuration
+	 * in the record-layout schema of the model.
+	 * 
+	 * @see #properties()
+	 */
+	String PN_DATABASE_CONFIGURATION = "dbConfiguration";
+	
+	/**
+	 * Name of a required property that specifies a named blocking configuration
+	 * in the record-layout schema of the model.
+	 * 
+	 * @see #properties()
+	 */
+	String PN_BLOCKING_CONFIGURATION = "blockingConfiguration";
 
 	String CLUES_TO_EVALUATE = "cluesToEvaluate";
 
