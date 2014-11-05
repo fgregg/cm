@@ -41,10 +41,10 @@ public final class SimplePersonPluginTesting {
 			.getLogger(SimplePersonPluginTesting.class.getName());
 
 	public static final String AN_BLOCKING_CONFIGURATION =
-		"blockingConfiguration";
+		ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION;
 
 	public static final String AN_DATABASE_CONFIGURATION =
-		"databaseConfiguration";
+		ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION;
 
 	public static final String AN_MODEL_FILE = "model";
 

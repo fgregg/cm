@@ -259,7 +259,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 
 			model = getProbabilityModel(modelName);
 			String modelDbrName =
-				(String) model.properties().get("dbConfiguration");
+				(String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
 			if (!modelDbrName.equals(masterCollection.getName()))
 				throw new RecordCollectionException("dbConfig should match accessProvider dbConfig attribute");
 
@@ -303,7 +303,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 
 			String dbConfigName = masterCollection.getName();
 			String blockingConfigName =
-				(String) model.properties().get("blockingConfiguration");
+				(String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
 			recordSource =
 				new Blocker2(
 					databaseAccessor,

@@ -130,8 +130,8 @@ public class RecValService3 {
 		this.stop = false;
 
 		BlockingAccessor ba = (BlockingAccessor) modelConfigurationName.getAccessor();
-		String blockName = (String) modelConfigurationName.properties().get("blockingConfiguration");
-		String dbConf = (String) modelConfigurationName.properties().get("dbConfiguration");
+		String blockName = (String) modelConfigurationName.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
+		String dbConf = (String) modelConfigurationName.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
 
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
 		BlockingField[] bfs = bc.blockingFields;
@@ -281,8 +281,8 @@ public class RecValService3 {
 				stage.setModel(model);
 				stage.open();  // FIXME! try { stage.open(); ... } finally{ stage.close(); }
 
-				String blockName = (String) model.properties().get("blockingConfiguration");
-				String dbConf = (String) model.properties().get("dbConfiguration");
+				String blockName = (String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
+				String dbConf = (String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
@@ -316,8 +316,8 @@ public class RecValService3 {
 
 				master.open(); // FIXME! try { master.open(); ... } finally{ master.close(); }
 
-				String blockName = (String) model.properties().get("blockingConfiguration");
-				String dbConf = (String) model.properties().get("dbConfiguration");
+				String blockName = (String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
+				String dbConf = (String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 

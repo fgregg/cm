@@ -116,8 +116,8 @@ public class RecValService2 {
 //		this.dbConf = dbConf;
 
 		BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
-		String blockName = (String) stageModel.properties().get("blockingConfiguration");
-		String dbConf = (String) stageModel.properties().get("dbConfiguration");
+		String blockName = (String) stageModel.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
+		String dbConf = (String) stageModel.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
 
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
 		BlockingField[] bfs = bc.blockingFields;
@@ -248,8 +248,8 @@ public class RecValService2 {
 				stage.setModel(stageModel);
 				stage.open();
 
-				String blockName = (String) stageModel.properties().get("blockingConfiguration");
-				String dbConf = (String) stageModel.properties().get("dbConfiguration");
+				String blockName = (String) stageModel.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
+				String dbConf = (String) stageModel.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
 				BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
@@ -284,8 +284,8 @@ public class RecValService2 {
 				master.setModel(masterModel);
 				master.open();
 
-				String blockName = (String) masterModel.properties().get("blockingConfiguration");
-				String dbConf = (String) masterModel.properties().get("dbConfiguration");
+				String blockName = (String) masterModel.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
+				String dbConf = (String) masterModel.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
 				BlockingAccessor ba = (BlockingAccessor) masterModel.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
@@ -331,8 +331,8 @@ public class RecValService2 {
 	 */
 	private void writeRecord (Record r, ImmutableProbabilityModel model) throws BlockingException {
 /*
-		String blockName = (String) stageModel.properties.get("blockingConfiguration");
-		String dbConf = (String) stageModel.properties.get("dbConfiguration");
+		String blockName = (String) stageModel.properties.get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
+		String dbConf = (String) stageModel.properties.get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
 		BlockingAccessor ba = (BlockingAccessor) accessProvider.getAccessor();
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
 */
