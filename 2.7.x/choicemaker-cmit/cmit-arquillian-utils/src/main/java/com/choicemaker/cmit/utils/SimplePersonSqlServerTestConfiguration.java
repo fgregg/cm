@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
@@ -23,7 +21,6 @@ import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.db.base.ISerializableDbRecordSource;
 import com.choicemaker.e2.CMPluginRegistry;
-import com.choicemaker.e2.ejb.EjbPlatform;
 
 public class SimplePersonSqlServerTestConfiguration implements
 		WellKnownTestConfiguration {
@@ -33,12 +30,12 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	public static final String DEFAULT_DATASOURCE_JNDI_NAME =
 		"/choicemaker/urm/jdbc/ChoiceMakerBlocking";
-	
+
 	public static final String DEFAULT_STAGING_SQL =
-			"SELECT RECORD_ID AS ID FROM SIMPLE_PERSON WHERE TYPE='S'";
+		"SELECT RECORD_ID AS ID FROM SIMPLE_PERSON WHERE TYPE='S'";
 
 	public static final String DEFAULT_MASTER_SQL =
-			"SELECT RECORD_ID AS ID FROM SIMPLE_PERSON WHERE TYPE='M'";
+		"SELECT RECORD_ID AS ID FROM SIMPLE_PERSON WHERE TYPE='M'";
 
 	public static final String DEFAULT_MODEL_CONFIGURATION_ID =
 		"com.choicemaker.cm.simplePersonMatching.Model1";
@@ -61,32 +58,31 @@ public class SimplePersonSqlServerTestConfiguration implements
 	private final boolean runTransitivityAnalysis;
 	private final List<String> invalidConditions = new LinkedList<>();
 
-	@EJB
-	private EjbPlatform e2service;
-
 	private boolean isInitialized;
 	private boolean isValid;
 
+	// private CMPluginRegistry pluginRegistry;
 	private ImmutableProbabilityModel model;
 	private SerialRecordSource staging;
 	private SerialRecordSource master;
 
 	public SimplePersonSqlServerTestConfiguration() {
-		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL, DEFAULT_MODEL_CONFIGURATION_ID,
+		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_STAGING_SQL,
+				DEFAULT_MASTER_SQL, DEFAULT_MODEL_CONFIGURATION_ID,
 				DEFAULT_THRESHOLDS, DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
 				DEFAULT_TRANSITIVITY_ANALYSIS);
 	}
 
 	public SimplePersonSqlServerTestConfiguration(boolean runTransitivity) {
-		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL, DEFAULT_MODEL_CONFIGURATION_ID,
+		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_STAGING_SQL,
+				DEFAULT_MASTER_SQL, DEFAULT_MODEL_CONFIGURATION_ID,
 				DEFAULT_THRESHOLDS, DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
 				runTransitivity);
 	}
 
 	public SimplePersonSqlServerTestConfiguration(String dsJndiName,
-			String stagingSQL, String masterSQL,
-			String mci, ImmutableThresholds t, int maxSingle,
-			boolean runTransitivity) {
+			String stagingSQL, String masterSQL, String mci,
+			ImmutableThresholds t, int maxSingle, boolean runTransitivity) {
 		if (dsJndiName == null || dsJndiName.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank JNDI name for data source");
@@ -127,22 +123,32 @@ public class SimplePersonSqlServerTestConfiguration implements
 	 * One-time initialization. If initialization fails, the instance is left in
 	 * an invalid state.
 	 */
-	@PostConstruct
-	protected void initialize() {
+	// @PostConstruct
+	public void initialize(CMPluginRegistry registry) {
 		// Standard messages
-		final String NULL_PLATFORM = "null e2service";
+		// final String NULL_PLATFORM = "null e2service";
+		final String NULL_REGISTRY = "null plugin registry";
 		final String NULL_MODEL = "null model";
 		final String NULL_STAGING = "null staging record source";
 		final String NULL_MASTER = "null master record source";
 
 		if (!isInitialized) {
-			if (this.e2service == null) {
+			if (registry == null) {
 				isValid = false;
-				invalidConditions.add(NULL_PLATFORM);
+				// invalidConditions.add(NULL_PLATFORM);
+				invalidConditions.add(NULL_REGISTRY);
 				invalidConditions.add(NULL_MODEL);
 				invalidConditions.add(NULL_STAGING);
 				invalidConditions.add(NULL_MASTER);
 			} else {
+				// this.pluginRegistry = e2service.getPluginRegistry();
+				// if (pluginRegistry == null) {
+				// isValid = false;
+				// invalidConditions.add(NULL_REGISTRY);
+				// invalidConditions.add(NULL_MODEL);
+				// invalidConditions.add(NULL_STAGING);
+				// invalidConditions.add(NULL_MASTER);
+				// } else {
 				this.model = lookupModelByPluginId(modelConfigurationId);
 				if (model == null) {
 					isValid = false;
@@ -171,6 +177,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 						invalidConditions.add(e.toString());
 					}
 				}
+				// }
 			}
 		}
 		isInitialized = true;
@@ -230,11 +237,6 @@ public class SimplePersonSqlServerTestConfiguration implements
 	@Override
 	public boolean getTransitivityAnalysisFlag() {
 		return runTransitivityAnalysis;
-	}
-
-	public CMPluginRegistry getPluginRegistry() {
-		CMPluginRegistry retVal = e2service.getPluginRegistry();
-		return retVal;
 	}
 
 	private ImmutableProbabilityModel lookupModelByPluginId(
