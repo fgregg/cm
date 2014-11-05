@@ -30,7 +30,7 @@ public interface ImmutableProbabilityModel {
 	 * 
 	 * @see #properties()
 	 */
-	String PN_DATABASE_CONFIGURATION = "dbConfiguration";
+	String PN_DATABASE_CONFIGURATION = "databaseConfiguration";
 	
 	/**
 	 * Name of a required property that specifies a named blocking configuration

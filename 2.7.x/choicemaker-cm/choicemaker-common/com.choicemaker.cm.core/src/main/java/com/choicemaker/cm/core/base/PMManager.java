@@ -11,6 +11,7 @@
 package com.choicemaker.cm.core.base;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -26,6 +27,8 @@ import com.choicemaker.cm.core.report.Reporter;
  * @version $Revision: 1.2 $ $Date: 2013/02/23 19:57:50 $
  */
 public class PMManager {
+	
+	private static final Logger logger = Logger.getLogger(PMManager.class.getName());
 	
 	// FIXME eventually, the default probability model manager should be configurable
 	private static IProbabilityModelManager defaultManager = DefaultProbabilityModelManager.getInstance();
@@ -47,7 +50,12 @@ public class PMManager {
 	}
 
 	public static IProbabilityModel getModelInstance(String name) {
-		return defaultManager.getModelInstance(name);
+		IProbabilityModel retVal = defaultManager.getModelInstance(name);
+		if (retVal == null) {
+			String msg = "No model corresponding to '" + name + "'";
+			logger.warning(msg);
+		}
+		return retVal;
 	}
 
 	public static ImmutableProbabilityModel getImmutableModelInstance(String name) {
