@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.db.sqlserver"
+   name="MS SqlServer DB Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="sqlserver.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.compiler"/>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
+      <import plugin="com.choicemaker.cm.io.composite.base"/>
+   </requires>
+
+
+   <extension
+         id="SqlDbObjectMaker"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="com.choicemaker.cm.core.objectGenerator">
+      <generator
+            description="SQL Server Custom Objects (DDL)"
+            class="com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker">
+      </generator>
+   </extension>
+   <extension
+         id="sqlServer"
+         name="sqlServer"
+         point="com.choicemaker.cm.io.blocking.automated.base.databaseAccessor">
+      <databaseAccessor
+            class="com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAccessor">
+      </databaseAccessor>
+   </extension>
+   <extension
+         id="sqlServerDatabaseAccessor"
+         name="sqlServerDatabaseAccessor"
+         point="com.choicemaker.cm.io.blocking.automated.base.databaseAccessor">
+      <databaseAccessor
+            class="com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAccessor">
+      </databaseAccessor>
+   </extension>
+   <extension
+         id="sqlServerDatabaseAbstraction"
+         name="sqlServerDatabaseAbstraction"
+         point="com.choicemaker.cm.io.blocking.automated.base.databaseAbstraction">
+      <databaseAbstraction
+            class="com.choicemaker.cm.io.db.sqlserver.blocking.SqlDatabaseAbstraction">
+      </databaseAbstraction>
+   </extension>
+   <extension
+         id="sqlServerRsReader"
+         point="com.choicemaker.cm.core.rsReader">
+      <handler
+            name="SQL Server"
+            class="com.choicemaker.cm.io.db.sqlserver.xmlconf.SqlServerRecordSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.db.sqlserver.SqlServerRecordSource">
+      </handler>
+   </extension>
+   <extension
+         id="sqlServerMrpsReader"
+         point="com.choicemaker.cm.core.mrpsReader">
+      <handler
+            name="SQL Server"
+            class="com.choicemaker.cm.io.db.sqlserver.xmlconf.SqlServerMarkedRecordPairSourceXmlConf"
+            handledClass="com.choicemaker.cm.io.db.sqlserver.SqlServerMarkedRecordPairSource">
+      </handler>
+   </extension>
+
+</plugin>

@@ -1,0 +1,7 @@
+2014-11-06 rphall
+
+This plug-in requires a JDBC driver from Microsoft Corporation.
+
+Recommended version: 4.0.2206
+http://http://msdn.microsoft.com/sqlserver/
+
