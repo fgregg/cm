@@ -10,7 +10,11 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.rmi.RemoteException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -56,7 +60,7 @@ public class BatchQueryServiceBean implements BatchQueryService {
 	private static final long serialVersionUID = 271L;
 	private static final String SOURCE_CLASS = BatchQueryServiceBean.class
 			.getSimpleName();
-	private static final Logger log = Logger
+	private static final Logger logger = Logger
 			.getLogger(BatchQueryServiceBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
@@ -79,28 +83,105 @@ public class BatchQueryServiceBean implements BatchQueryService {
 		this.configuration = EJBConfiguration.getInstance();
 	}
 
+	/**
+	 * Validates parameters to
+	 * {@link #startOABAStage(String, SerialRecordSource, float, float, String, int, boolean)
+	 * startOABAStage}
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if any parameter is invalid
+	 */
+	public static void validateStartParameters(String externalID,
+			SerialRecordSource staging, float lowThreshold,
+			float highThreshold, String modelConfigurationName, int maxSingle,
+			boolean runTransitivity) {
+
+		// Create an empty list of invalid parameters
+		List<String> validityErrors = new LinkedList<>();
+		assert validityErrors.isEmpty();
+
+		if (staging == null) {
+			validityErrors.add("null staging record source");
+		}
+		if (lowThreshold < 0f || lowThreshold > 1.0f) {
+			validityErrors.add("invalid DIFFER threshold: " + lowThreshold);
+		}
+		if (highThreshold < lowThreshold) {
+			validityErrors.add("MATCH threshold (" + highThreshold
+					+ ") less than DIFFER threshold (" + lowThreshold + ")");
+		}
+		if (highThreshold > 1.0f) {
+			validityErrors.add("invalid MATCH threshold: " + highThreshold);
+		}
+		if (modelConfigurationName == null
+				|| modelConfigurationName.trim().isEmpty()) {
+			validityErrors.add("null or blank model configuration name");
+		}
+		if (maxSingle < 0) {
+			validityErrors.add("invalid threshold for single record matching: "
+					+ maxSingle);
+		}
+
+		if (!validityErrors.isEmpty()) {
+			String msg =
+				"Invalid parameters to BatchQueryService.startOABA: "
+						+ validityErrors.toString();
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
+		}
+	}
+
+	protected void validateAndLogStartParameters(String externalID,
+			SerialRecordSource staging, SerialRecordSource master,
+			float lowThreshold, float highThreshold,
+			String modelConfigurationId, int maxSingle, boolean runTransitivity) {
+
+		validateStartParameters(externalID, staging, lowThreshold,
+				highThreshold, modelConfigurationId, maxSingle, runTransitivity);
+
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		if (master == null) {
+			pw.println("Deduping a single record source");
+		} else {
+			pw.println("Matching a staging source against a master source");
+		}
+		pw.println("External id: " + externalID);
+		pw.println("Staging record source: " + staging);
+		pw.println("Master record source: " + master);
+		pw.println("DIFFER threshold: " + lowThreshold);
+		pw.println("MATCH threshold: " + highThreshold);
+		pw.println("Model configuration id: " + modelConfigurationId);
+		pw.println("Threshold for batched-record blocking: " + maxSingle);
+		pw.println("Run transitivity analysis? "
+				+ (runTransitivity ? "YES" : "NO"));
+		String msg = sw.toString();
+		logger.info(msg);
+	}
+
 	@Override
 	public long startOABAStage(String externalID, SerialRecordSource staging,
 			float lowThreshold, float highThreshold,
-			String modelConfigurationName, int maxSingle,
-			boolean runTransitivity) {
+			String modelConfigurationId, int maxSingle, boolean runTransitivity) {
 		return startOABA(externalID, staging, null, lowThreshold,
-				highThreshold, modelConfigurationName, maxSingle,
-				runTransitivity);
+				highThreshold, modelConfigurationId, maxSingle, runTransitivity);
 	}
 
 	@Override
 	public long startOABA(String externalID, SerialRecordSource staging,
 			SerialRecordSource master, float lowThreshold, float highThreshold,
-			String modelConfigurationName, int maxSingle,
-			boolean runTransitivity) {
+			String modelConfigurationId, int maxSingle, boolean runTransitivity) {
+
+		validateAndLogStartParameters(externalID, staging, master,
+				lowThreshold, highThreshold, modelConfigurationId, maxSingle,
+				runTransitivity);
 
 		final String METHOD = "startOABA";
-		log.entering(SOURCE_CLASS, METHOD);
+		logger.entering(SOURCE_CLASS, METHOD);
 
 		// Save the job parameters
 		final BatchParameters batchParams =
-			new BatchParametersBean(modelConfigurationName, maxSingle,
+			new BatchParametersBean(modelConfigurationId, maxSingle,
 					lowThreshold, highThreshold, staging, master,
 					runTransitivity);
 		em.persist(batchParams);
@@ -116,15 +197,15 @@ public class BatchQueryServiceBean implements BatchQueryService {
 			configuration.createProcessingLog(em, retVal);
 
 		// Log the job info
-		log.fine("BatchJob: " + batchJob.toString());
-		log.fine("BatchParameters: " + batchParams.toString());
-		log.fine("Processing entry: " + processing.toString());
+		logger.fine("BatchJob: " + batchJob.toString());
+		logger.fine("BatchParameters: " + batchParams.toString());
+		logger.fine("Processing entry: " + processing.toString());
 
 		// Mark the job as queued and start processing by the StartOABA EJB
 		batchJob.markAsQueued();
 		sendToStartOABA(retVal);
 
-		log.exiting(SOURCE_CLASS, METHOD, retVal);
+		logger.exiting(SOURCE_CLASS, METHOD, retVal);
 		return retVal;
 	}
 
@@ -142,7 +223,7 @@ public class BatchQueryServiceBean implements BatchQueryService {
 	 *
 	 */
 	private int abortBatch(long jobID, boolean cleanStatus) {
-		log.info("aborting job " + jobID + " " + cleanStatus);
+		logger.info("aborting job " + jobID + " " + cleanStatus);
 		BatchJob batchJob =
 			configuration.findBatchJobById(em, BatchJobBean.class, jobID);
 		batchJob.markAsAbortRequested();
@@ -197,7 +278,7 @@ public class BatchQueryServiceBean implements BatchQueryService {
 			sendToStartOABA(jobID);
 
 		} else {
-			log.warning("Could not resume job " + jobID);
+			logger.warning("Could not resume job " + jobID);
 			ret = -1;
 		}
 
@@ -258,17 +339,18 @@ public class BatchQueryServiceBean implements BatchQueryService {
 	/**
 	 * This method sends a message to the StartOABA message bean.
 	 *
-	 * @param jobID the id of the job to be processed
+	 * @param jobID
+	 *            the id of the job to be processed
 	 */
 	private void sendToStartOABA(long jobID) {
 		StartData data = new StartData(jobID);
 		ObjectMessage message = context.createObjectMessage(data);
 		JMSProducer sender = context.createProducer();
-		log.finest(queueInfo("Sending: ", queue, data));
+		logger.finest(queueInfo("Sending: ", queue, data));
 		sender.send(queue, message);
-		log.finest(queueInfo("Sent: ", queue, data));
+		logger.finest(queueInfo("Sent: ", queue, data));
 	}
-	
+
 	private static String queueInfo(String tag, Queue q, StartData d) {
 		String queueName;
 		try {
