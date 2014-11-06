@@ -9,17 +9,12 @@
       <library name="oracle.jar">
          <export name="*"/>
       </library>
-      <!--
-      <library name="lib/classes12.jar">
-         <export name="*"/>
-      </library>
-      -->
    </runtime>
    <requires>
-      <import plugin="com.choicemaker.cm.io.db.base"/>
-      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.compiler"/>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
    </requires>
 
 
