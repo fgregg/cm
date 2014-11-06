@@ -16,12 +16,11 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
 import oracle.jdbc.pool.OracleConnectionCacheImpl;
-
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.db.oracle.xmlconf.OraConnectionCacheXmlConf;
@@ -33,7 +32,8 @@ import com.choicemaker.cm.io.db.oracle.xmlconf.OraConnectionCacheXmlConf;
  * @version   $Revision: 1.1 $ $Date: 2010/01/28 02:02:10 $
  */
 public class WatchdogConnectionCache extends Thread implements DataSource {
-	private static Logger logger = Logger.getLogger(WatchdogConnectionCache.class.getName());
+	private static Logger logger = Logger
+			.getLogger(WatchdogConnectionCache.class.getName());
 	private String name;
 	private OracleConnectionCacheImpl cc;
 	private LinkedList connections = new LinkedList();
@@ -96,7 +96,7 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 		try {
 			cc.close();
 		} catch (SQLException ex) {
-			logger.severe("Closing connection cache.", ex);
+			logger.severe("Closing connection cache: " + ex.toString());
 		}
 	}
 
@@ -131,7 +131,7 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 					}
 				}
 			} catch (InterruptedException ex) {
-				logger.warning("Watchdog", ex);
+				logger.warning("Watchdog error: " + ex.toString());
 			}
 		}
 	}
@@ -171,7 +171,7 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 			try {
 				b.close();
 			} catch (SQLException ex) {
-				logger.severe("Error closing.", ex);
+				logger.severe("Error closing: " + ex.toString());
 			}
 			logger.info("Completed closing.");
 		}
@@ -185,7 +185,7 @@ public class WatchdogConnectionCache extends Thread implements DataSource {
 				cc = (OracleConnectionCacheImpl) OraConnectionCacheXmlConf.getConnectionCache(name);
 				tmp.close();
 			} catch (Exception ex) {
-				logger.severe("Replacing connection cache.", ex);
+				logger.severe("Replacing connection cache: " + ex.toString());
 			}
 		}
 	}

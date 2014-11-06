@@ -18,12 +18,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.core.boot.IPlatformRunnable;
-
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.util.CommandLineArguments;
@@ -34,13 +33,14 @@ import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbField;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.DbView;
+import com.choicemaker.e2.CMPlatformRunnable;
 
 /**
  *
  * @author    
  * @version   $Revision: 1.2 $ $Date: 2013/02/23 19:50:05 $
  */
-public class DbDbObjectMaker implements IPlatformRunnable, ObjectMaker {
+public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	private static final int SINGLE = 0;
 	private static final int SINGLE_UNION = 1;
 	private static final int MULTI = 2;

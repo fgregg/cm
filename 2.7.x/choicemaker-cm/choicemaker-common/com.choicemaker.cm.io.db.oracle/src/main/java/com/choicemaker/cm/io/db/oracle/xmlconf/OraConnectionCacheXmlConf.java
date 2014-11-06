@@ -15,11 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 import oracle.jdbc.pool.OracleConnectionCache;
 import oracle.jdbc.pool.OracleConnectionCacheImpl;
 
-import java.util.logging.Logger;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.XmlConfException;
@@ -33,7 +33,8 @@ import com.choicemaker.cm.io.db.base.DataSources;
  * @version   $Revision: 1.1 $ $Date: 2010/01/28 02:02:09 $
  */
 public class OraConnectionCacheXmlConf {
-	private static Logger logger = Logger.getLogger(OraConnectionCacheXmlConf.class.getName());
+	private static Logger logger = Logger
+			.getLogger(OraConnectionCacheXmlConf.class.getName());
 
 	private static Map caches = new TreeMap();
 
@@ -44,7 +45,7 @@ public class OraConnectionCacheXmlConf {
 				DataSources.addDataSource(l[i], getConnectionCache(l[i]));
 			}
 		} catch (Exception ex) {
-			logger.severe("", ex);
+			logger.severe(ex.toString());
 		}
 	}
 

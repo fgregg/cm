@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -12,36 +12,36 @@ package com.choicemaker.cm.io.db.oracle;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import java.util.logging.Logger;
-
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.IncompleteSpecificationException;
-import com.choicemaker.cm.io.db.base.DbRecordSource;
-import com.choicemaker.cm.io.db.base.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.AbstractRecordSourceSerializer;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.io.db.base.DbRecordSource;
+import com.choicemaker.cm.io.db.base.ISerializableDbRecordSource;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 /**
  * This is a wrapper object around Oracle DbRecordSource and it can be serialized, because it
  * stores string values with which to create the DbRecordSource.
- * 
+ *
  * @author pcheung (initial version implemented as SerialRecordSource)
  * @author rphall (rewrote to ISerializableRecordSource)
  *
  */
 public class OracleSerializableRecordSource implements ISerializableDbRecordSource {
-	
-	private static final Logger log = Logger.getLogger(OracleSerializableRecordSource.class.getName());
+
+	private static final Logger log = Logger
+			.getLogger(OracleSerializableRecordSource.class.getName());
 
 	// 2010-03-12 rphall
 	// Serial version UID unchanged.
@@ -67,11 +67,11 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 	private String modelName;
 	private String dbConfig;
 	private String sqlQuery;
-	
+
 	private transient DbRecordSource sqlRS;
 	private transient DataSource ds;
 	private transient ImmutableProbabilityModel model;
-	
+
 	public OracleSerializableRecordSource(
 		String dsJNDIName,
 		String modelName,
@@ -83,8 +83,8 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 		this.dbConfig = dbConfig;
 		this.sqlQuery = sqlQuery;
 	}
-	
-	
+
+
 	private DataSource getDataSource () {
 		try {
 			if (ds == null) {
@@ -92,11 +92,11 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 				ds = (DataSource) ctx.lookup (dsJNDIName);
 			}
 		} catch (NamingException ex) {
-			log.severe(ex.toString(), ex);
+			log.severe(ex.toString());
 		}
 		return ds;
 	}
-	
+
 	private DbRecordSource getRS () {
 		if (sqlRS == null) {
 			sqlRS = new DbRecordSource ();
@@ -104,19 +104,19 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 			sqlRS.setModel(getModel ());
 			sqlRS.setConf(getDbConfig());
 			sqlRS.setSelection(getSqlQuery());
-			
+
 			log.fine("dbConfig: " + getDbConfig() + " sql: " + getSqlQuery());
 		}
 		return sqlRS;
 	}
-	
+
 	public ImmutableProbabilityModel getModel () {
 		if (model == null) {
 			model = PMManager.getModelInstance(getModelName());
 		}
 		return model;
 	}
-	
+
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.RecordSource#getNext()
@@ -191,7 +191,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 	public String getFileName() {
 		return getRS().getFileName();
 	}
-	
+
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -263,7 +263,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 	}
 
 	public void  setProperties(Properties properties) throws IncompleteSpecificationException {
-		
+
 		Precondition.assertNonNullArgument("null properties",properties);
 
 		String s = properties.getProperty(PN_DATABASE_CONFIG);
@@ -332,7 +332,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 	public String getSqlQuery() {
 		return sqlQuery;
 	}
-	
+
 	public String toXML() {
 		String retVal = AbstractRecordSourceSerializer.toXML(this);
 		return retVal;
