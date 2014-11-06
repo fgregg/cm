@@ -31,8 +31,9 @@ import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
 /**
- * This is a wrapper object around Oracle DbRecordSource and it can be serialized, because it
- * stores string values with which to create the DbRecordSource.
+ * This is a wrapper object around Oracle DbRecordSource and it can be
+ * serialized, because it stores string values with which to create the
+ * DbRecordSource.
  *
  * @author pcheung (initial version implemented as SerialRecordSource)
  * @author rphall (rewrote to ISerializableRecordSource)
@@ -43,25 +44,7 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 	private static final Logger log = Logger
 			.getLogger(OracleSerializableRecordSource.class.getName());
 
-	// 2010-03-12 rphall
-	// Serial version UID unchanged.
-	//
-	// There were various changes that affect the value of
-	// serialVersionUID that would be calculated by the JDK
-	// serialver tool:
-	// (*) Same fields, but now some are declared final
-	// (*) The interface implemented by this class changed
-	// (*) New methods were added
-	// However, because the field types, number and order did not
-	// change, previously serialized data from the old class version
-	// should readable by the new class version.
-	//
-	// Before 2010-03-10, serialver would otherwise return
-	// static final long serialVersionUID = 1659993220770055037L;
-	// As of 2010-03-12, serialver would otherwise return
-	// static final long serialVersionUID = 7186538778968134791L;
-	//
-	static final long serialVersionUID = 1659993220770055037L;
+	static final long serialVersionUID = 271L;
 
 	private String dsJNDIName;
 	private String modelName;

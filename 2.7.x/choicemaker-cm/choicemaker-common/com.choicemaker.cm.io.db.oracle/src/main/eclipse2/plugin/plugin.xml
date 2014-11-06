@@ -12,7 +12,6 @@
    </runtime>
    <requires>
       <import plugin="com.choicemaker.cm.core"/>
-      <import plugin="com.choicemaker.cm.compiler"/>
       <import plugin="com.choicemaker.cm.io.db.base"/>
       <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
    </requires>
@@ -49,6 +48,14 @@
       <databaseAbstraction
             class="com.choicemaker.cm.io.db.oracle.blocking.OraDatabaseAbstraction">
       </databaseAbstraction>
+   </extension>
+   <extension
+         id="oracleRecordSourceSerializer"
+         name="Oracle Record-Source Serializer"
+         point="com.choicemaker.cm.core.rsSerializer">
+      <serializer
+            class="com.choicemaker.cm.io.db.oracle.OracleRecordSourceSerializer">
+      </serializer>
    </extension>
 
 </plugin>
