@@ -47,5 +47,4 @@ org_eclipse_ant_core_2_1_1/plugin.xml
 org_eclipse_core_boot_2_1_1/plugin.xml
 org_eclipse_core_resources_2_1_1/plugin.xml
 org_eclipse_core_runtime_2_1_1/plugin.xml
-org_jboss_autonumber_3_2_3/plugin.xml
 org_jdom_0_9_0/plugin.xml

@@ -42,7 +42,6 @@ public class ExampleData {
 				"com_choicemaker_cm_report_db_2_5_0/plugin.xml",
 				"org_apache_ant_1_5_3/plugin.xml",
 				"org_apache_bcel_5_0_0/plugin.xml",
-				"org_jboss_autonumber_3_2_3/plugin.xml",
 				"org_jdom_0_9_0/plugin.xml",
 				"org_eclipse_ant_core_2_1_3/plugin.xml",
 				"com_choicemaker_cm_ml_me_base_2_5_0/plugin.xml",
@@ -110,7 +109,6 @@ public class ExampleData {
 				"org_eclipse_core_boot_2_1_1/plugin.xml",
 				"org_eclipse_core_resources_2_1_1/plugin.xml",
 				"org_eclipse_core_runtime_2_1_1/plugin.xml",
-				"org_jboss_autonumber_3_2_3/plugin.xml",
 				"org_jdom_0_9_0/plugin.xml" };
 	static {
 		Arrays.sort(_expected_2);
@@ -167,7 +165,6 @@ public class ExampleData {
 				"org_eclipse_core_boot_2_1_1/plugin.xml",
 				"org_eclipse_core_resources_2_1_1/plugin.xml",
 				"org_eclipse_core_runtime_2_1_1/plugin.xml",
-				"org_jboss_autonumber_3_2_3/plugin.xml",
 				"org_jdom_0_9_0/plugin.xml" };
 	static {
 		Arrays.sort(_expected_3);

@@ -26,7 +26,6 @@
       <import plugin="com.choicemaker.cm.analyzer.base"/>
       <import plugin="com.choicemaker.cm.urm.adaptor"/>
       <import plugin="com.choicemaker.cm.io.flatfile.base"/>
-      <import plugin="com.choicemaker.autonumber"/>
       <import plugin="org.jboss.j2ee"/>
       <import plugin="com.choicemaker.cm.urm.base"/>
    </requires>
