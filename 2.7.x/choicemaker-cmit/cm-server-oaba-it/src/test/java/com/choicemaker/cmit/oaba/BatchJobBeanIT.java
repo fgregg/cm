@@ -18,14 +18,20 @@ import static com.choicemaker.cmit.utils.DeploymentUtils.createJAR;
 import static com.choicemaker.cmit.utils.DeploymentUtils.resolveDependencies;
 import static com.choicemaker.cmit.utils.DeploymentUtils.resolvePom;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -45,6 +51,9 @@ import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
 public class BatchJobBeanIT {
+
+	private static final Logger logger = Logger
+			.getLogger(BatchJobBeanIT.class.getName());
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
@@ -71,6 +80,12 @@ public class BatchJobBeanIT {
 
 	private static final String[] _nonterminal = new String[] {
 			STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_ABORT_REQUESTED };
+
+	@Resource
+	UserTransaction utx;
+
+	@PersistenceContext(unitName = "oaba")
+	EntityManager em;
 
 	@EJB
 	protected BatchJobController controller;
@@ -126,6 +141,13 @@ public class BatchJobBeanIT {
 
 		Date d2 = job.getTimeStamp(STATUS_NEW);
 		assertTrue(d.equals(d2));
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -150,6 +172,13 @@ public class BatchJobBeanIT {
 		controller.delete(batchJob2);
 		BatchJob batchJob3 = controller.find(job.getId());
 		assertTrue(batchJob3 == null);
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -163,6 +192,7 @@ public class BatchJobBeanIT {
 			BatchJobBean job = controller.createEphemeralBatchJob(METHOD, te);
 			assertTrue(job.getId() == 0);
 			controller.save(job);
+			te.add(job);
 			final long id = job.getId();
 			assertTrue(id != 0);
 			jobIds.add(id);
@@ -183,6 +213,13 @@ public class BatchJobBeanIT {
 			}
 			assertTrue(isFound);
 		}
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -197,6 +234,7 @@ public class BatchJobBeanIT {
 
 		// Save the job
 		final long id1 = controller.save(job).getId();
+		te.add(job);
 
 		// Retrieve the job
 		job = null;
@@ -205,6 +243,13 @@ public class BatchJobBeanIT {
 		// Check the value
 		final String v2 = job.getExternalId();
 		assertTrue(extId.equals(v2));
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -219,6 +264,7 @@ public class BatchJobBeanIT {
 
 		// Save the job
 		final long id1 = controller.save(job).getId();
+		te.add(job);
 		job = null;
 
 		// Get the job
@@ -227,6 +273,13 @@ public class BatchJobBeanIT {
 		// Check the value
 		final long v2 = Long.parseLong(job.getDescription());
 		assertTrue(v1 == v2);
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	/**
@@ -247,6 +300,7 @@ public class BatchJobBeanIT {
 
 		// Save the job
 		final long id1 = controller.save(job).getId();
+		te.add(job);
 
 		// Detach the job and modify the description
 		controller.detach(job);
@@ -261,6 +315,13 @@ public class BatchJobBeanIT {
 
 		// Check the value
 		assertTrue(description2.equals(job.getDescription()));
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -328,6 +389,13 @@ public class BatchJobBeanIT {
 			// Remove the job and the number of remaining jobs
 			controller.delete(job);
 		}
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -373,6 +441,13 @@ public class BatchJobBeanIT {
 		assertTrue(job1.getFractionComplete() != job2.getFractionComplete());
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -443,6 +518,13 @@ public class BatchJobBeanIT {
 		assertTrue(job.getStatus().equals(STATUS_COMPLETED));
 		job.markAsAbortRequested();
 		assertTrue(job.getStatus().equals(STATUS_COMPLETED));
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -476,6 +558,7 @@ public class BatchJobBeanIT {
 
 			// Save the job
 			final long id1 = controller.save(job).getId();
+			te.add(job);
 			job = null;
 
 			// Retrieve the job
@@ -483,6 +566,13 @@ public class BatchJobBeanIT {
 
 			// Check the value
 			assertTrue(sts.equals(job.getStatus()));
+		}
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
 		}
 	}
 
@@ -521,6 +611,13 @@ public class BatchJobBeanIT {
 
 		// Clean up the test DB
 		controller.delete(job);
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test

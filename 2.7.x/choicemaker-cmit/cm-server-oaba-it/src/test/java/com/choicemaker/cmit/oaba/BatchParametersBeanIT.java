@@ -10,12 +10,18 @@ import static com.choicemaker.cmit.utils.DeploymentUtils.createJAR;
 import static com.choicemaker.cmit.utils.DeploymentUtils.resolveDependencies;
 import static com.choicemaker.cmit.utils.DeploymentUtils.resolvePom;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.Date;
 import java.util.Random;
+import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -35,6 +41,9 @@ import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
 public class BatchParametersBeanIT {
+
+	private static final Logger logger = Logger
+			.getLogger(BatchParametersBeanIT.class.getName());
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
@@ -58,6 +67,12 @@ public class BatchParametersBeanIT {
 	protected float getRandomThreshold() {
 		return random.nextFloat();
 	}
+
+	@Resource
+	UserTransaction utx;
+
+	@PersistenceContext(unitName = "oaba")
+	EntityManager em;
 
 	@EJB
 	protected BatchParametersController prmController;
@@ -127,6 +142,13 @@ public class BatchParametersBeanIT {
 		te.add(params2);
 		assertTrue(!params1.equals(params2));
 		assertTrue(params1.hashCode() != params2.hashCode());
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -159,6 +181,13 @@ public class BatchParametersBeanIT {
 		assertTrue(v1.equals(params.getStageModel()));
 		assertTrue(v1.equals(params.getMasterModel()));
 		assertTrue(v1.equals(params.getModelConfigurationName()));
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -167,17 +196,14 @@ public class BatchParametersBeanIT {
 		TestEntities te = new TestEntities();
 
 		// Create parameters with a known value
-		BatchParametersBean template = prmController.createBatchParameters(METHOD,te);
+		BatchParametersBean template =
+			prmController.createBatchParameters(METHOD, te);
 		final int v1 = random.nextInt();
-		BatchParametersBean params = new BatchParametersBean(
-				template.getModelConfigurationName(),
-				v1,
-				template.getLowThreshold(),
-				template.getHighThreshold(),
-				template.getStageRs(),
-				template.getMasterRs(),
-				template.getTransitivity()
-				);
+		BatchParametersBean params =
+			new BatchParametersBean(template.getModelConfigurationName(), v1,
+					template.getLowThreshold(), template.getHighThreshold(),
+					template.getStageRs(), template.getMasterRs(),
+					template.getTransitivity());
 		te.add(params);
 
 		// Save the params
@@ -190,6 +216,13 @@ public class BatchParametersBeanIT {
 		// Check the value
 		final int v2 = params.getMaxSingle();
 		assertTrue(v1 == v2);
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
@@ -221,6 +254,13 @@ public class BatchParametersBeanIT {
 		// Check the value
 		assertTrue(t.getDifferThreshold() == params.getLowThreshold());
 		assertTrue(t.getMatchThreshold() == params.getHighThreshold());
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 }
