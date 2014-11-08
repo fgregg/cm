@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 
 /**
  * @author pcheung
@@ -38,9 +38,9 @@ public interface BatchParameters {
 
 	float getHighThreshold();
 
-	SerialRecordSource getStageRs();
+	SerializableRecordSource getStageRs();
 
-	SerialRecordSource getMasterRs();
+	SerializableRecordSource getMasterRs();
 
 	boolean getTransitivity();
 

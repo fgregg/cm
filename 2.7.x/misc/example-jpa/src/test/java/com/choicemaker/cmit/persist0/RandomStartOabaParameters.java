@@ -3,7 +3,7 @@ package com.choicemaker.cmit.persist0;
 import java.util.Date;
 import java.util.Random;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 
 public class RandomStartOabaParameters {
 
@@ -31,8 +31,8 @@ public class RandomStartOabaParameters {
 
 	private long jobID;
 	public final String externalID;
-	public final SerialRecordSource staging;
-	public final SerialRecordSource master;
+	public final SerializableRecordSource staging;
+	public final SerializableRecordSource master;
 	public final float lowThreshold;
 	public final float highThreshold;
 	public final String stageModelName;

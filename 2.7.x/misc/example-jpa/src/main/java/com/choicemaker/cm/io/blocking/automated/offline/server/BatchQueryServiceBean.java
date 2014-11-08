@@ -29,7 +29,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
 
@@ -58,7 +58,7 @@ public class BatchQueryServiceBean implements Serializable {
 	@Inject
 	protected JMSContext context;
 
-	public long startOABAStage(String externalID, SerialRecordSource staging,
+	public long startOABAStage(String externalID, SerializableRecordSource staging,
 			float lowThreshold, float highThreshold, String stageModelName,
 			int maxSingle) throws JMSException {
 
@@ -66,8 +66,8 @@ public class BatchQueryServiceBean implements Serializable {
 				highThreshold, stageModelName, null, maxSingle, false);
 	}
 
-	public long startOABA(String externalID, SerialRecordSource staging,
-			SerialRecordSource master, float lowThreshold, float highThreshold,
+	public long startOABA(String externalID, SerializableRecordSource staging,
+			SerializableRecordSource master, float lowThreshold, float highThreshold,
 			String stageModelName, String masterModelName, int maxSingle)
 			throws JMSException {
 
@@ -76,8 +76,8 @@ public class BatchQueryServiceBean implements Serializable {
 				false);
 	}
 
-	public long startOABA(String externalID, SerialRecordSource staging,
-			SerialRecordSource master, float lowThreshold, float highThreshold,
+	public long startOABA(String externalID, SerializableRecordSource staging,
+			SerializableRecordSource master, float lowThreshold, float highThreshold,
 			String stageModelName, String masterModelName, int maxSingle,
 			boolean runTransitivity) throws JMSException {
 
@@ -87,7 +87,7 @@ public class BatchQueryServiceBean implements Serializable {
 	}
 
 	public long startOABA(String externalID, Long transactionId,
-			SerialRecordSource staging, SerialRecordSource master,
+			SerializableRecordSource staging, SerializableRecordSource master,
 			float lowThreshold, float highThreshold, String stageModelName,
 			String masterModelName, int maxSingle, boolean runTransitivity)
 			throws JMSException {
@@ -313,7 +313,7 @@ public class BatchQueryServiceBean implements Serializable {
 	}
 
 	public static StartData createStartData(long jobID,
-			SerialRecordSource staging, SerialRecordSource master,
+			SerializableRecordSource staging, SerializableRecordSource master,
 			String stageModelName, String masterModelName, float low,
 			float high, int maxSingle, boolean runTransitivity) {
 
@@ -336,8 +336,8 @@ public class BatchQueryServiceBean implements Serializable {
 	 * 
 	 * @throws JMSException
 	 */
-	protected void sendToStartOABA(long jobID, SerialRecordSource staging,
-			SerialRecordSource master, String stageModelName,
+	protected void sendToStartOABA(long jobID, SerializableRecordSource staging,
+			SerializableRecordSource master, String stageModelName,
 			String masterModelName, float low, float high, int maxSingle,
 			boolean runTransitivity) throws JMSException {
 

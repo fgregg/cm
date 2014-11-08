@@ -8,23 +8,26 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.db.base;
+package com.choicemaker.cm.core;
 
-import com.choicemaker.cm.core.ISerializableRecordSource;
 
 
 /**
- * A DbRecordSource that can be serialized. Implementors should define
- * a nullity constructor and a one-parameter constructor that takes
- * a Properties object. Most serializable database record sources require
- * at least 4 properties to be configured before they are used:<ul>
+ * A DbRecordSource that can be serialized. Implementors should define a nullity
+ * constructor and a one-parameter constructor that takes a Properties object.
+ * Most serializable database record sources require at least 4 properties to be
+ * configured before they are used:
+ * <ul>
  * <li/>{@link #PN_DATABASE_CONFIG dbConfig}
  * <li/>{@link #PN_DATASOURCE_JNDI_NAME dsJndiName}
  * <li/>{@line #PN_MODEL_NAME modelName}
- * <li/>{@link #PN_SQL_QUERY sqlQuery}</ul>
- * The parameterized constructor for a subclass should throw
- * a IncompleteSpecificationException if the specified set of
- * properties is incomplete:<pre>
+ * <li/>{@link #PN_SQL_QUERY sqlQuery}
+ * </ul>
+ * The parameterized constructor for a subclass should throw a
+ * IncompleteSpecificationException if the specified set of properties is
+ * incomplete:
+ * 
+ * <pre>
  * public SomeSubClass implements ISerializableRecordSource {
  *     public SomeSubClass() {}
  *     public SomeSubClass(Properties p)
@@ -34,6 +37,7 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
  *     // ... other methods
  * }
  * </pre>
+ * 
  * @author rphall
  *
  */

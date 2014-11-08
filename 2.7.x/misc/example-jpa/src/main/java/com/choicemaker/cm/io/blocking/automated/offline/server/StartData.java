@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 
@@ -42,8 +42,8 @@ public class StartData implements Serializable {
 	
 	public float low;
 	public float high;
-	public SerialRecordSource staging;
-	public SerialRecordSource master;
+	public SerializableRecordSource staging;
+	public SerializableRecordSource master;
 	public String stageModelName;
 	public String masterModelName;
 

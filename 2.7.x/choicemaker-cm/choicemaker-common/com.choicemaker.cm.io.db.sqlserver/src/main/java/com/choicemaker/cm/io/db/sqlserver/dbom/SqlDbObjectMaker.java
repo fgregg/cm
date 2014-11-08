@@ -18,48 +18,52 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.StringTokenizer;
 
+import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.compiler.ICompiler;
+import com.choicemaker.cm.core.util.CommandLineArguments;
 import com.choicemaker.cm.core.util.ObjectMaker;
+import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
+import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbField;
 import com.choicemaker.cm.io.db.base.DbReader;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.base.DbView;
+import com.choicemaker.e2.CMPlatformRunnable;
 
 /**
  *
  * @author    
  * @version   $Revision: 1.9.100.3 $ $Date: 2010/03/16 13:07:26 $
  */
-public class SqlDbObjectMaker implements ObjectMaker /* IPlatformRunnable */ {
+public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 
-	// FIXME remove these methods or move them to a test or application class
-	// that isn't part of this plugin, so that this plugin (which is used by
-	// CM Server) doesn't require the compiler plugin
-//	public Object run(Object args) throws Exception {
-//		CommandLineArguments cla = new CommandLineArguments();
-//		cla.addExtensions();
-//		cla.addArgument("-output");
-//		cla.enter((String[])args);
-//		main(new String[] {cla.getArgument("-conf"), cla.getArgument("-log"), cla.getArgument("-output")});
-//		return null;
-//	}
-//	
-//	public static void main(String[] args) throws Exception {
-//		XmlConfigurator.init(args[0], args[1], false, false);
-//
-//		CompilerFactory factory = CompilerFactory.getInstance ();
-//		ICompiler compiler = factory.getDefaultCompiler();
-//
-//		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler);
-//		Writer w = new FileWriter(args[2]);
-//		processAllModels(w, true);
-//		w.close();
-//	}
+	public Object run(Object args) throws Exception {
+		CommandLineArguments cla = new CommandLineArguments();
+		cla.addExtensions();
+		cla.addArgument("-output");
+		cla.enter((String[])args);
+		main(new String[] {cla.getArgument("-conf"), cla.getArgument("-log"), cla.getArgument("-output")});
+		return null;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		XmlConfigurator.getInstance().init(args[0], args[1], false, false);
+
+		// TODO FIXME replace default compiler with configurable compiler
+		CompilerFactory factory = CompilerFactory.getInstance ();
+		ICompiler compiler = factory.getDefaultCompiler();
+
+		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler);
+		Writer w = new FileWriter(args[2]);
+		processAllModels(w, true);
+		w.close();
+	}
 	
 	public void generateObjects(File outDir) throws IOException {
 		File outFile = new File(outDir, "SqlServer_Custom_Objects.txt").getAbsoluteFile();

@@ -15,10 +15,14 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
+import javax.jms.JMSProducer;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -68,6 +72,18 @@ public class StartOABA implements MessageListener, Serializable {
 	private transient MessageDrivenContext mdc = null;
 	private transient EJBConfiguration configuration = null;
 
+	@Resource(lookup = "java:/choicemaker/urm/jms/blockQueue")
+	private Queue blockQueue;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
+	private Queue updateQueue;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/singleMatchQueue")
+	private Queue singleMatchQueue;
+
+	@Inject
+	JMSContext jmsContext;
+
 	@PostConstruct
 	public void init() {
 		this.configuration = EJBConfiguration.getInstance();
@@ -92,32 +108,41 @@ public class StartOABA implements MessageListener, Serializable {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
 
+				final long jobId = data.jobID;
 				batchJob =
 					configuration.findBatchJobById(em, BatchJobBean.class,
-							data.jobID);
+							jobId);
 				// update status to mark as start
 				batchJob.markAsStarted();
 
-				BatchParameters params = configuration.findBatchParamsByJobId(em, batchJob.getId());
+				BatchParameters params =
+					configuration.findBatchParamsByJobId(em, batchJob.getId());
+				final String modelConfigId = params.getModelConfigurationName();
 				IProbabilityModel stageModel =
-					PMManager.getModelInstance(params.getModelConfigurationName());
+					PMManager.getModelInstance(modelConfigId);
+				if (stageModel == null) {
+					String s =
+						"No model corresponding to '" + modelConfigId + "'";
+					log.severe(s);
+					throw new IllegalArgumentException(s);
+				}
 				OABAConfiguration oabaConfig =
-					new OABAConfiguration(data.modelConfigurationName,
-							data.jobID);
+					new OABAConfiguration(params.getModelConfigurationName(),
+							jobId);
 
 				// get the status
 				OabaProcessing status =
-					configuration.getProcessingLog(em, data);
+					configuration.getProcessingLog(em, jobId);
 
-				log.info(data.jobID + " " + data.modelConfigurationName + " "
-						+ data.low + " "
-						+ data.high + " " + data.runTransitivity);
-				log.info(data.staging + " " + data.master);
+				log.info(jobId + " " + params.getModelConfigurationName() + " "
+						+ params.getLowThreshold() + " "
+						+ params.getHighThreshold() + " " + params.getTransitivity());
+				log.info(params.getStageRs() + " " + params.getMasterRs());
 
 				// check to see if there are a lot of records in stage.
 				// if not use single record matching instead of batch.
-				if (!isMoreThanThreshold(data.staging, stageModel,
-						data.maxCountSingle)) {
+				if (!isMoreThanThreshold(params.getStageRs(), stageModel,
+						params.getMaxSingle())) {
 					log.info("Using single record matching");
 					sendToSingleRecordMatching(data);
 
@@ -129,15 +154,15 @@ public class StartOABA implements MessageListener, Serializable {
 
 					// create rec_id, val_id files
 					RecValService3 rvService =
-						new RecValService3(data.staging, data.master,
+						new RecValService3(params.getStageRs(), params.getMasterRs(),
 								stageModel,
 								oabaConfig.getRecValFactory(), translator,
 								status, batchJob);
 					rvService.runService();
 
+					// FIXME move these parameters to a persistent operational object
 					data.stageType = rvService.getStageType();
 					data.masterType = rvService.getMasterType();
-
 					data.numBlockFields = rvService.getNumBlockingFields();
 
 					log.info("Done creating rec_id, val_id files: "
@@ -147,9 +172,10 @@ public class StartOABA implements MessageListener, Serializable {
 					// Validator validator = new Validator (true, translator);
 					ValidatorBase validator =
 						new ValidatorBase(true, translator);
+					// FIXME move this parameter to a persistent operational object
 					data.validator = validator;
 
-					sendToUpdateStatus(data.jobID, 10);
+					sendToUpdateStatus(jobId, 10);
 					sendToBlocking(data);
 				}
 
@@ -226,13 +252,15 @@ public class StartOABA implements MessageListener, Serializable {
 	 */
 	private void sendToUpdateStatus(long jobID, int percentComplete)
 			throws NamingException, JMSException {
-		Queue queue = configuration.getUpdateMessageQueue();
-
 		UpdateData data = new UpdateData();
 		data.jobID = jobID;
 		data.percentComplete = percentComplete;
 
-		configuration.sendMessage(queue, data);
+		ObjectMessage message = jmsContext.createObjectMessage(data);
+		JMSProducer sender = jmsContext.createProducer();
+		log.finest(queueInfo("Sending: ", updateQueue, data));
+		sender.send(updateQueue, message);
+		log.finest(queueInfo("Sent: ", updateQueue, data));
 	}
 
 	/**
@@ -243,8 +271,11 @@ public class StartOABA implements MessageListener, Serializable {
 	 */
 	private void sendToBlocking(StartData data) throws NamingException,
 			JMSException {
-		Queue queue = configuration.getBlockingMessageQueue();
-		configuration.sendMessage(queue, data);
+		ObjectMessage message = jmsContext.createObjectMessage(data);
+		JMSProducer sender = jmsContext.createProducer();
+		log.finest(queueInfo("Sending: ", blockQueue, data));
+		sender.send(blockQueue, message);
+		log.finest(queueInfo("Sent: ", blockQueue, data));
 	}
 
 	/**
@@ -255,8 +286,24 @@ public class StartOABA implements MessageListener, Serializable {
 	 */
 	private void sendToSingleRecordMatching(StartData data)
 			throws NamingException, JMSException {
-		Queue queue = configuration.getSingleMatchMessageQueue();
-		configuration.sendMessage(queue, data);
+		ObjectMessage message = jmsContext.createObjectMessage(data);
+		JMSProducer sender = jmsContext.createProducer();
+		log.finest(queueInfo("Sending: ", singleMatchQueue, data));
+		sender.send(singleMatchQueue, message);
+		log.finest(queueInfo("Sent: ", singleMatchQueue, data));
+	}
+
+	private static String queueInfo(String tag, Queue q, Object d) {
+		String queueName;
+		try {
+			queueName = q.getQueueName();
+		} catch (JMSException x) {
+			queueName = "unknown";
+		}
+		StringBuilder sb =
+			new StringBuilder(tag).append("queue: '").append(queueName)
+					.append("', data: '").append(d).append("'");
+		return sb.toString();
 	}
 
 }

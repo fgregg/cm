@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server;
 import java.io.Serializable;
 import java.util.List;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 
@@ -32,8 +32,8 @@ public class MatchWriterData implements Serializable {
 	public String stageModelName;
 	public String masterModelName;
 	
-	public SerialRecordSource staging;
-	public SerialRecordSource master;
+	public SerializableRecordSource staging;
+	public SerializableRecordSource master;
 
 	/** The chunk id */
 	public int ind;

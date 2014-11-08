@@ -26,12 +26,12 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.configure.xml.NotFoundException;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurablesRegistry;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
-import com.choicemaker.cm.server.core.DatabaseException;
 import com.choicemaker.cm.server.util.CountsUpdate;
 import com.choicemaker.cm.urm.IUpdateDerivedFields;
 import com.choicemaker.cm.urm.base.DbRecordCollection;

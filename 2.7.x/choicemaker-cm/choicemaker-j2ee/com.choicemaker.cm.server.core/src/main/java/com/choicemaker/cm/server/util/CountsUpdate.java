@@ -17,8 +17,8 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
-import com.choicemaker.cm.server.core.DatabaseException;
 
 /**
  * Comment

@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
-//import org.jboss.varia.autonumber.AutoNumberFactory;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -19,8 +18,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
 
-import com.choicemaker.autonumber.AutoNumberFactory;
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -86,11 +84,11 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 	public abstract void setGroupMatchType(String id);
 	public abstract String getGroupMatchType();
 
-	public abstract void setQueryRs(SerialRecordSource rs);
-	public abstract SerialRecordSource getQueryRs();
+	public abstract void setQueryRs(SerializableRecordSource rs);
+	public abstract SerializableRecordSource getQueryRs();
 	
-	public abstract void setMasterRs(SerialRecordSource rs);
-	public abstract SerialRecordSource getMasterRs();
+	public abstract void setMasterRs(SerializableRecordSource rs);
+	public abstract SerializableRecordSource getMasterRs();
 	
 	public abstract void setLowerThreshold(Float lth);
 	public abstract Float getLowerThreshold();
@@ -249,15 +247,16 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 	}
 
 	public Long ejbCreate(String externalId) throws CreateException {
-		Integer nextId = AutoNumberFactory.getNextInteger(UrmJobHome.AUTONUMBER_IDENTIFIER);
-		Long batchId = new Long(nextId.longValue());
-		this.setId(batchId);
-		this.setExternalId(externalId);
-		this.setCurStepIndex(UNDEFINED_STEP_INDEX);
-		this.setCurStepJobId(JobStatus.UNDEFINED_ID_OBJECT);
-		setStatus(JobStatus.STATUS_NEW);
-		log.info("Created new ChoiceMaker Server Job"+batchId);
-		return batchId;
+		throw new Error("no longer implemented");
+//		Integer nextId = ...
+//		Long batchId = new Long(nextId.longValue());
+//		this.setId(batchId);
+//		this.setExternalId(externalId);
+//		this.setCurStepIndex(UNDEFINED_STEP_INDEX);
+//		this.setCurStepJobId(JobStatus.UNDEFINED_ID_OBJECT);
+//		setStatus(JobStatus.STATUS_NEW);
+//		log.info("Created new ChoiceMaker Server Job"+batchId);
+//		return batchId;
 	}
 	
 	public void ejbPostCreate(String externalId) {

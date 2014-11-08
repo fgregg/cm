@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.PMManager;
 
@@ -25,14 +25,16 @@ import com.choicemaker.cm.core.base.PMManager;
  * @author pcheung
  *
  */
-public class SQLServerSerialRecordSource implements SerialRecordSource {
+public class SQLServerSerializableCompositeRecordSource implements SerializableRecordSource {
 	
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger.getLogger(SQLServerSerialRecordSource.class.getName());
+	private static final Logger log = Logger
+			.getLogger(SQLServerSerializableCompositeRecordSource.class
+					.getName());
 
 	private String dsJNDIName;
-	private String dsMapName;
+//	private String dsMapName;
 	private String modelName;
 	private String dbConfig;
 	private String sqlQuery;
@@ -42,12 +44,36 @@ public class SQLServerSerialRecordSource implements SerialRecordSource {
 	private transient DataSource ds;
 	private transient ImmutableProbabilityModel model;
 	
-	
-	public SQLServerSerialRecordSource (String dsJNDIName, String dsMapName, String modelName,
+	public SQLServerSerializableCompositeRecordSource (String dsJNDIName, String modelName,
+			String dbConfig, String sqlQuery, int maxCompositeSize) {
+		this(dsJNDIName, null, modelName, dbConfig, sqlQuery, maxCompositeSize);
+	}
+
+	/**
+	 * An obsolete constructor with an unused parameter, <code>dsMapName</code>
+	 * 
+	 * @param dsJNDIName
+	 *            JNDI name of a configured data source
+	 * @param dsMapName
+	 *            unused, may be null.
+	 * @param modelName
+	 *            Name of a configured model
+	 * @param dbConfig
+	 *            Name of a database configuration defined by the model
+	 * @param sqlQuery
+	 *            A SQL query that selects record IDs from the data source; e.g.
+	 * 
+	 *            <pre>
+	 * SELECT record_id AS ID FROM records
+	 * </pre>
+	 * @param maxCompositeSize
+	 *            used to construct {@link SqlServerCompositeRecordSource}
+	 */
+	public SQLServerSerializableCompositeRecordSource (String dsJNDIName, String dsMapName, String modelName,
 		String dbConfig, String sqlQuery, int maxCompositeSize) {
 		
 		this.dsJNDIName = dsJNDIName;
-		this.dsMapName = dsMapName;
+//		this.dsMapName = dsMapName;
 		this.modelName = modelName;
 		this.dbConfig = dbConfig;
 		this.sqlQuery = sqlQuery;
@@ -71,14 +97,6 @@ public class SQLServerSerialRecordSource implements SerialRecordSource {
 		if (sqlRS == null) {
 			sqlRS = new SqlServerCompositeRecordSource (getDataSource(), getModel(), sqlQuery, 
 			dbConfig, maxCompositeSize);
-
-/*			
-			sqlRS.setDataSource(dsMapName, getDataSource ());
-			sqlRS.setModel(getModel ());
-			sqlRS.setDbConfiguration(dbConfig);
-			sqlRS.setIdsQuery(sqlQuery);
-*/
-
 		}
 		return sqlRS;
 	}
@@ -164,13 +182,13 @@ public class SQLServerSerialRecordSource implements SerialRecordSource {
 
 
 	public boolean equals (Object o) {
-		if (o instanceof SQLServerSerialRecordSource) {
-			SQLServerSerialRecordSource rs = (SQLServerSerialRecordSource) o;
+		if (o instanceof SQLServerSerializableCompositeRecordSource) {
+			SQLServerSerializableCompositeRecordSource rs = (SQLServerSerializableCompositeRecordSource) o;
 			return rs.dbConfig.equals(this.dbConfig) && 
 				rs.dsJNDIName.equals(this.dsJNDIName) &&
 				rs.modelName.equals(this.modelName) &&
 				rs.sqlQuery.equals(this.sqlQuery) &&
-				rs.dsMapName.equals(this.dsMapName) &&
+//				rs.dsMapName.equals(this.dsMapName) &&
 				rs.maxCompositeSize == this.maxCompositeSize;
 		} else {
 			return false;

@@ -16,12 +16,9 @@
       <import plugin="com.choicemaker.cm.core"/>
       <import plugin="com.choicemaker.cm.io.db.base"/>
       <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
-      <import plugin="com.choicemaker.cm.server.base"/>
-      <import plugin="com.choicemaker.cm.server.ejb.impl"/>
       <import plugin="com.choicemaker.cm.io.xml.base"/>
       <import plugin="com.choicemaker.cm.io.flatfile.base"/>
       <import plugin="com.choicemaker.cm.io.blocking.automated.offline.core"/>
-      <import plugin="com.choicemaker.autonumber"/>
       <import plugin="org.jboss.j2ee"/>
    </requires>
 

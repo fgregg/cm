@@ -1,6 +1,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 
 public interface BatchParameters {
 
@@ -34,12 +34,12 @@ public interface BatchParameters {
 
 	void setHighThreshold(float highThreshold);
 
-	SerialRecordSource getStageRs();
+	SerializableRecordSource getStageRs();
 
-	void setStageRs(SerialRecordSource stageRs);
+	void setStageRs(SerializableRecordSource stageRs);
 
-	SerialRecordSource getMasterRs();
+	SerializableRecordSource getMasterRs();
 
-	void setMasterRs(SerialRecordSource masterRs);
+	void setMasterRs(SerializableRecordSource masterRs);
 
 }

@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.server.core;
+package com.choicemaker.cm.core;
 
 /**
  * Thrown when a Model is invalid, e.g., wrong XML representation.

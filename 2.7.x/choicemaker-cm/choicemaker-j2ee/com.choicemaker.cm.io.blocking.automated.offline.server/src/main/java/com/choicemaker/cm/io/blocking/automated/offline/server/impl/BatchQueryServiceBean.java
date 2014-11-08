@@ -33,7 +33,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
@@ -85,14 +85,14 @@ public class BatchQueryServiceBean implements BatchQueryService {
 
 	/**
 	 * Validates parameters to
-	 * {@link #startOABAStage(String, SerialRecordSource, float, float, String, int, boolean)
+	 * {@link #startOABAStage(String, SerializableRecordSource, float, float, String, int, boolean)
 	 * startOABAStage}
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if any parameter is invalid
 	 */
 	public static void validateStartParameters(String externalID,
-			SerialRecordSource staging, float lowThreshold,
+			SerializableRecordSource staging, float lowThreshold,
 			float highThreshold, String modelConfigurationName, int maxSingle,
 			boolean runTransitivity) {
 
@@ -132,7 +132,7 @@ public class BatchQueryServiceBean implements BatchQueryService {
 	}
 
 	protected void validateAndLogStartParameters(String externalID,
-			SerialRecordSource staging, SerialRecordSource master,
+			SerializableRecordSource staging, SerializableRecordSource master,
 			float lowThreshold, float highThreshold,
 			String modelConfigurationId, int maxSingle, boolean runTransitivity) {
 
@@ -160,7 +160,7 @@ public class BatchQueryServiceBean implements BatchQueryService {
 	}
 
 	@Override
-	public long startOABAStage(String externalID, SerialRecordSource staging,
+	public long startOABAStage(String externalID, SerializableRecordSource staging,
 			float lowThreshold, float highThreshold,
 			String modelConfigurationId, int maxSingle, boolean runTransitivity) {
 		return startOABA(externalID, staging, null, lowThreshold,
@@ -168,8 +168,8 @@ public class BatchQueryServiceBean implements BatchQueryService {
 	}
 
 	@Override
-	public long startOABA(String externalID, SerialRecordSource staging,
-			SerialRecordSource master, float lowThreshold, float highThreshold,
+	public long startOABA(String externalID, SerializableRecordSource staging,
+			SerializableRecordSource master, float lowThreshold, float highThreshold,
 			String modelConfigurationId, int maxSingle, boolean runTransitivity) {
 
 		validateAndLogStartParameters(externalID, staging, master,

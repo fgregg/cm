@@ -47,13 +47,13 @@ public class RecValSinkSourceFactory implements IRecValSinkSourceFactory{
 		this.ext = ext;
 	}
 	
-	/** This creates the next sink in seqence. It creates a binary file, and no append.  */
+	/** This creates the next sink in sequence. It creates a binary file, and no append.  */
 	public IRecValSink getNextSink () throws BlockingException {
 		indSink ++;
 		return new RecValSink (fileDir + baseName + indSink + "." + ext, TYPE);
 	}
 	
-	/** This creates the next source in seqence. It creates a binary file.  */
+	/** This creates the next source in sequence. It creates a binary file.  */
 	public IRecValSource getNextSource () throws BlockingException {
 		indSource ++;
 		return new RecValSource (fileDir + baseName + indSource + "." + ext, TYPE);

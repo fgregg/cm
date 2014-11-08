@@ -19,7 +19,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 
 /**
  * @author pcheung (original version)
@@ -71,10 +71,10 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	private float highThreshold;
 
 	@Transient
-	private SerialRecordSource stageRs;
+	private SerializableRecordSource stageRs;
 
 	@Transient
-	private SerialRecordSource masterRs;
+	private SerializableRecordSource masterRs;
 
 	protected BatchParametersBean() {
 		this(INVALID_JOBID);
@@ -235,7 +235,7 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	 * #getStageRs()
 	 */
 	@Override
-	public SerialRecordSource getStageRs() {
+	public SerializableRecordSource getStageRs() {
 		return stageRs;
 	}
 
@@ -244,10 +244,10 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	 * 
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
-	 * #setStageRs(com.choicemaker.cm.core.SerialRecordSource)
+	 * #setStageRs(com.choicemaker.cm.core.SerializableRecordSource)
 	 */
 	@Override
-	public void setStageRs(SerialRecordSource stageRs) {
+	public void setStageRs(SerializableRecordSource stageRs) {
 		this.stageRs = stageRs;
 	}
 
@@ -259,7 +259,7 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	 * #getMasterRs()
 	 */
 	@Override
-	public SerialRecordSource getMasterRs() {
+	public SerializableRecordSource getMasterRs() {
 		return masterRs;
 	}
 
@@ -268,10 +268,10 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	 * 
 	 * @see
 	 * com.choicemaker.cm.io.blocking.automated.offline.server.BatchParameters
-	 * #setMasterRs(com.choicemaker.cm.core.SerialRecordSource)
+	 * #setMasterRs(com.choicemaker.cm.core.SerializableRecordSource)
 	 */
 	@Override
-	public void setMasterRs(SerialRecordSource masterRs) {
+	public void setMasterRs(SerializableRecordSource masterRs) {
 		this.masterRs = masterRs;
 	}
 

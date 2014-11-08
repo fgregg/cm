@@ -29,7 +29,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 
 /**
@@ -58,7 +58,7 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 
 	protected static final float INVALID_THRESHOLD = -1f;
 
-	protected static final SerialRecordSource INVALID_RECORD_SOURCE = null;
+	protected static final SerializableRecordSource INVALID_RECORD_SOURCE = null;
 	
 	protected static final boolean DEFAULT_TRANSITIVITY = false;
 
@@ -100,10 +100,10 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	private final float highThreshold;
 
 	@Column(name = BatchParametersJPA.CN_STAGE_RS)
-	private final SerialRecordSource stageRs;
+	private final SerializableRecordSource stageRs;
 
 	@Column(name = BatchParametersJPA.CN_MASTER_RS)
-	private final SerialRecordSource masterRs;
+	private final SerializableRecordSource masterRs;
 
 	@Column(name = BatchParametersJPA.CN_TRANSITIVITY)
 	private final boolean transitivity;
@@ -117,7 +117,7 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 
 	public BatchParametersBean(String modelConfigurationName, int maxSingle,
 			float lowThreshold, float highThreshold,
-			SerialRecordSource stageRs, SerialRecordSource masterRs,
+			SerializableRecordSource stageRs, SerializableRecordSource masterRs,
 			boolean runTransitivity) {
 
 		this.modelConfigName = modelConfigurationName;
@@ -185,12 +185,12 @@ public class BatchParametersBean implements Serializable, BatchParameters {
 	}
 
 	@Override
-	public SerialRecordSource getStageRs() {
+	public SerializableRecordSource getStageRs() {
 		return stageRs;
 	}
 
 	@Override
-	public SerialRecordSource getMasterRs() {
+	public SerializableRecordSource getMasterRs() {
 		return masterRs;
 	}
 	

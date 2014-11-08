@@ -19,6 +19,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.IncompleteSpecificationException;
 import com.choicemaker.cm.core.Record;
@@ -26,7 +27,6 @@ import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.AbstractRecordSourceSerializer;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.db.base.DbRecordSource;
-import com.choicemaker.cm.io.db.base.ISerializableDbRecordSource;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
@@ -35,11 +35,12 @@ import com.choicemaker.util.StringUtils;
  * serialized, because it stores string values with which to create the
  * DbRecordSource.
  *
- * @author pcheung (initial version implemented as SerialRecordSource)
+ * @author pcheung (initial version implemented as SerializableRecordSource)
  * @author rphall (rewrote to ISerializableRecordSource)
  *
  */
-public class OracleSerializableRecordSource implements ISerializableDbRecordSource {
+public class OracleSerializableRecordSource implements
+		ISerializableDbRecordSource {
 
 	private static final Logger log = Logger
 			.getLogger(OracleSerializableRecordSource.class.getName());
@@ -196,7 +197,8 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		OracleSerializableRecordSource other = (OracleSerializableRecordSource) obj;
+		OracleSerializableRecordSource other =
+			(OracleSerializableRecordSource) obj;
 		if (getDbConfig() == null) {
 			if (other.getDbConfig() != null)
 				return false;
@@ -226,7 +228,8 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 	 */
 	public boolean equals_00 (Object o) {
 		if (o instanceof OracleSerializableRecordSource) {
-			OracleSerializableRecordSource rs = (OracleSerializableRecordSource) o;
+			OracleSerializableRecordSource rs =
+				(OracleSerializableRecordSource) o;
 			return rs.getDbConfig().equals(this.getDbConfig())
 				&& rs.getDsJNDIName().equals(this.getDsJNDIName())
 				&& rs.getModelName().equals(this.getModelName())
@@ -245,7 +248,8 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 		return retVal;
 	}
 
-	public void  setProperties(Properties properties) throws IncompleteSpecificationException {
+	public void setProperties(Properties properties)
+			throws IncompleteSpecificationException {
 
 		Precondition.assertNonNullArgument("null properties",properties);
 
@@ -287,7 +291,9 @@ public class OracleSerializableRecordSource implements ISerializableDbRecordSour
 				sqlRS.close();
 			}
 		} catch (Exception x) {
-			String msg = "Unable to close " + (sqlRS == null ? "record source" : sqlRS.getName());
+			String msg =
+				"Unable to close "
+						+ (sqlRS == null ? "record source" : sqlRS.getName());
 			log.warning(msg);
 		} finally {
 			sqlRS = null;

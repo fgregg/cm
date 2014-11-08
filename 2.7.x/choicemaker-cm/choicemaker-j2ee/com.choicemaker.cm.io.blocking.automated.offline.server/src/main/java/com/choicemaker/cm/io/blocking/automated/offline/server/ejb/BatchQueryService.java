@@ -20,7 +20,7 @@ import javax.ejb.Remote;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;
@@ -57,7 +57,7 @@ public interface BatchQueryService extends Serializable {
 	 * @return long - id of this job
 	 */
 	public long startOABAStage(String externalID,
-			SerialRecordSource recordSource, float lowThreshold,
+			SerializableRecordSource recordSource, float lowThreshold,
 			float highThreshold, String modelConfigurationName, int maxSingle,
 			boolean runTransitivity);
 
@@ -89,8 +89,8 @@ public interface BatchQueryService extends Serializable {
 	 * @return long - id of this job
 	 * @throws SQLException
 	 */
-	public long startOABA(String externalID, SerialRecordSource staging,
-			SerialRecordSource master, float lowThreshold, float highThreshold,
+	public long startOABA(String externalID, SerializableRecordSource staging,
+			SerializableRecordSource master, float lowThreshold, float highThreshold,
 			String modelConfigurationName, int maxSingle,
 			boolean runTransitivity);
 

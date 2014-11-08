@@ -30,7 +30,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
@@ -126,8 +126,8 @@ public class BatchMatchBaseBean implements SessionBean {
 		}
 		SerialRecordSourceBuilder	rcb = new SerialRecordSourceBuilder(model,true);
 		qRs.accept(rcb);
-		SerialRecordSource staging = rcb.getResultRecordSource();
-		SerialRecordSource master = null;
+		SerializableRecordSource staging = rcb.getResultRecordSource();
+		SerializableRecordSource master = null;
 		if(mRs != null){
 			rcb.setCheckEmpty(false);
 			mRs.accept(rcb);

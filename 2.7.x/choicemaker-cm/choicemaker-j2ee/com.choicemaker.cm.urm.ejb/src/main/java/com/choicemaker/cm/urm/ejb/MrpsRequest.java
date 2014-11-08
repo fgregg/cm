@@ -17,7 +17,7 @@ import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
@@ -47,8 +47,8 @@ public class MrpsRequest implements IMrpsRequest {
 	private transient BatchParameters batchParameters = null;
 	private transient IProbabilityModel stagingModel = null;
 	private transient IMatchRecord2Source matchPairs = null;
-	private transient SerialRecordSource rsStaging = null;
-	private transient SerialRecordSource rsMaster = null;
+	private transient SerializableRecordSource rsStaging = null;
+	private transient SerializableRecordSource rsMaster = null;
 	private transient MarkedRecordPairSink mrps = null;
 
 	/**
@@ -225,9 +225,9 @@ public class MrpsRequest implements IMrpsRequest {
 	/**
 	 * @return
 	 */
-	public SerialRecordSource getRsMaster(EntityManager em)
+	public SerializableRecordSource getRsMaster(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
-		SerialRecordSource retVal = this.rsMaster;
+		SerializableRecordSource retVal = this.rsMaster;
 		if (retVal == null) {
 			BatchParameters bp = getBatchParameters(em);
 			this.rsMaster = bp.getMasterRs();
@@ -240,9 +240,9 @@ public class MrpsRequest implements IMrpsRequest {
 	/**
 	 * @return
 	 */
-	public SerialRecordSource getRsStage(EntityManager em)
+	public SerializableRecordSource getRsStage(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
-		SerialRecordSource retVal = this.rsStaging;
+		SerializableRecordSource retVal = this.rsStaging;
 		if (retVal == null) {
 			BatchParameters bp = getBatchParameters(em);
 			this.rsStaging = bp.getStageRs();

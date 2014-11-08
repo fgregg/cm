@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
@@ -37,7 +37,7 @@ import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
  * @author pcheung
  *
  */
-public class FlatFileSerialRecordSource implements SerialRecordSource {
+public class FlatFileSerialRecordSource implements SerializableRecordSource {
 
 	private static final long serialVersionUID = 1L;
 

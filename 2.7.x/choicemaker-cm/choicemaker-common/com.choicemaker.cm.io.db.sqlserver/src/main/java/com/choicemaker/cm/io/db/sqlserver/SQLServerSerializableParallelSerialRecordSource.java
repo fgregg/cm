@@ -13,13 +13,13 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.IncompleteSpecificationException;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.base.AbstractRecordSourceSerializer;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.db.base.ISerializableDbRecordSource;
 import com.choicemaker.util.Precondition;
 import com.choicemaker.util.StringUtils;
 
@@ -28,20 +28,25 @@ import com.choicemaker.util.StringUtils;
  * serialized, because it stores string values with which to create the
  * SqlServerRecordSource.
  * 
- * This is faster than SQLServerSerialRecordSource because it uses
+ * This is faster than SQLServerSerializableCompositeRecordSource because it uses
  * DbParallelReader instead of DbSerialReader.
  * 
  * @author pcheung
  *
  */
-public class SQLServerOptimizedSerialRecordSource implements ISerializableDbRecordSource {
+public class SQLServerSerializableParallelSerialRecordSource implements
+		ISerializableDbRecordSource {
 	
 	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger.getLogger(SQLServerOptimizedSerialRecordSource.class.getName());
+	private static final Logger log = Logger
+			.getLogger(SQLServerSerializableParallelSerialRecordSource.class.getName());
+	
+	protected static final String DEFAULT_DS_MAP_NAME = null;
+	protected static final int DEFAULT_MAX_COMPOSITE_SIZE = 0;
 
 	private String dsJNDIName;
-	private String dsMapName;
+//	private String dsMapName;
 	private String modelName;
 	private String dbConfig;
 	private String sqlQuery;
@@ -50,15 +55,72 @@ public class SQLServerOptimizedSerialRecordSource implements ISerializableDbReco
 	private transient DataSource ds;
 	private transient ImmutableProbabilityModel model;
 
-	public SQLServerOptimizedSerialRecordSource(String dsJNDIName,
+	/**
+	 * Constructs a serializable version of {@link SqlServerParallelRecordSource}.
+	 * 
+	 * @param dsJNDIName
+	 *            JNDI name of a configured data source
+	 * @param modelName
+	 *            Name of a configured model
+	 * @param dbConfig
+	 *            Name of a database configuration defined by the model
+	 * @param sqlQuery
+	 *            A SQL query that selects record IDs from the datasource; e.g.
+	 * 
+	 *            <pre>
+	 * SELECT record_id AS ID FROM records
+	 * </pre>
+	 */
+	public SQLServerSerializableParallelSerialRecordSource(String dsJNDIName,
+			String modelName, String dbConfig, String sqlQuery) {
+		this(dsJNDIName, DEFAULT_DS_MAP_NAME, modelName, dbConfig, sqlQuery,
+				DEFAULT_MAX_COMPOSITE_SIZE);
+	}
+
+	/**
+	 * A constructor with unused parameters but the same signature as
+	 * {@link SQLServerSerializableCompositeRecordSource#SQLServerSerialRecordSource(String, String, String, String, String, int)
+	 * SQLServerSerializableCompositeRecordSource}
+	 * 
+	 * @param dsJNDIName
+	 *            JNDI name of a configured data source
+	 * @param dsMapName
+	 *            unused, may be null.
+	 * @param modelName
+	 *            Name of a configured model
+	 * @param dbConfig
+	 *            Name of a database configuration defined by the model
+	 * @param sqlQuery
+	 *            A SQL query that selects record IDs from the datasource; e.g.
+	 * 
+	 *            <pre>
+	 * SELECT record_id AS ID FROM records
+	 * </pre>
+	 * @param maxCompositeSize
+	 *            unused
+	 */
+	public SQLServerSerializableParallelSerialRecordSource(String dsJNDIName,
 			String dsMapName, String modelName, String dbConfig,
 			String sqlQuery, int maxCompositeSize) {
 
+		validateString(dsJNDIName, "null or blank JNDI name for data source");
+		validateString(modelName, "null or blank model configuration name");
+		validateString(dbConfig,
+				"null or blank database configuration for model");
+		validateString(sqlQuery,
+				"null or blank SQL to select records from data source");
+
 		this.dsJNDIName = dsJNDIName;
-		this.dsMapName = dsMapName;
+//		this.dsMapName = dsMapName;
 		this.modelName = modelName;
 		this.dbConfig = dbConfig;
 		this.sqlQuery = sqlQuery;
+	}
+	
+	private static void validateString(String s, String msg) {
+		if (s == null || s.trim().length() == 0) {
+			throw new IllegalArgumentException(msg);
+		}
 	}
 
 	private DataSource getDataSource () {
@@ -161,13 +223,14 @@ public class SQLServerOptimizedSerialRecordSource implements ISerializableDbReco
 	}
 
 	public boolean equals (Object o) {
-		if (o instanceof SQLServerOptimizedSerialRecordSource) {
-			SQLServerOptimizedSerialRecordSource rs = (SQLServerOptimizedSerialRecordSource) o;
-			return rs.dbConfig.equals(this.dbConfig) && 
-				rs.dsJNDIName.equals(this.dsJNDIName) &&
-				rs.modelName.equals(this.modelName) &&
-				rs.getSqlQuery().equals(this.getSqlQuery()) &&
-				rs.dsMapName.equals(this.dsMapName);
+		if (o instanceof SQLServerSerializableParallelSerialRecordSource) {
+			SQLServerSerializableParallelSerialRecordSource rs =
+				(SQLServerSerializableParallelSerialRecordSource) o;
+			return rs.dbConfig.equals(this.dbConfig)
+					&& rs.dsJNDIName.equals(this.dsJNDIName)
+					&& rs.modelName.equals(this.modelName)
+					&& rs.getSqlQuery().equals(this.getSqlQuery());
+			// && rs.dsMapName.equals(this.dsMapName);
 		} else {
 			return false;
 		}
@@ -202,7 +265,8 @@ public class SQLServerOptimizedSerialRecordSource implements ISerializableDbReco
 		return retVal;
 	}
 
-	public void  setProperties(Properties properties) throws IncompleteSpecificationException {
+	public void setProperties(Properties properties)
+			throws IncompleteSpecificationException {
 
 		Precondition.assertNonNullArgument("null properties",properties);
 
@@ -244,7 +308,9 @@ public class SQLServerOptimizedSerialRecordSource implements ISerializableDbReco
 				sqlRS.close();
 			}
 		} catch (Exception x) {
-			String msg = "Unable to close " + (sqlRS == null ? "record source" : sqlRS.getName());
+			String msg =
+				"Unable to close "
+						+ (sqlRS == null ? "record source" : sqlRS.getName());
 			log.warning(msg);
 		} finally {
 			sqlRS = null;

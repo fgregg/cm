@@ -1,25 +1,16 @@
 package com.choicemaker.cmit.utils;
 
-import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
 import com.choicemaker.cm.core.IProbabilityModelManager;
-import com.choicemaker.cm.core.IRecordSourceSerializationRegistry;
-import com.choicemaker.cm.core.IRecordSourceSerializer;
+import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.SerialRecordSource;
 import com.choicemaker.cm.core.base.DefaultProbabilityModelManager;
-import com.choicemaker.cm.core.base.DefaultRecordSourceSerializationRegistry;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.io.db.base.ISerializableDbRecordSource;
+import com.choicemaker.cm.io.db.sqlserver.SQLServerSerializableParallelSerialRecordSource;
 import com.choicemaker.e2.CMPluginRegistry;
 
 public class SimplePersonSqlServerTestConfiguration implements
@@ -29,13 +20,14 @@ public class SimplePersonSqlServerTestConfiguration implements
 			.getLogger(SimplePersonSqlServerTestConfiguration.class.getName());
 
 	public static final String DEFAULT_DATASOURCE_JNDI_NAME =
-		"/choicemaker/urm/jdbc/ChoiceMakerBlocking";
+		// "/choicemaker/urm/jdbc/ChoiceMakerBlocking";
+		"/choicemaker/urm/jdbc/ChoiceMakerEjb";
 
 	public static final String DEFAULT_STAGING_SQL =
-		"SELECT RECORD_ID AS ID FROM SIMPLE_PERSON WHERE TYPE='S'";
+		"SELECT RECORD_ID AS ID FROM PERSON WHERE LINKAGE_ROLE='S'";
 
 	public static final String DEFAULT_MASTER_SQL =
-		"SELECT RECORD_ID AS ID FROM SIMPLE_PERSON WHERE TYPE='M'";
+		"SELECT RECORD_ID AS ID FROM PERSON WHERE LINKAGE_ROLE='M'";
 
 	public static final String DEFAULT_MODEL_CONFIGURATION_ID =
 		"com.choicemaker.cm.simplePersonMatching.Model1";
@@ -43,7 +35,8 @@ public class SimplePersonSqlServerTestConfiguration implements
 	public static final ImmutableThresholds DEFAULT_THRESHOLDS =
 		new Thresholds(0.20f, 0.80f);
 
-	public static final int DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD = 1000;
+	/** Always do batch matching */
+	public static final int DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD = 0;
 
 	public static final boolean DEFAULT_TRANSITIVITY_ANALYSIS = true;
 
@@ -63,8 +56,8 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	// private CMPluginRegistry pluginRegistry;
 	private ImmutableProbabilityModel model;
-	private SerialRecordSource staging;
-	private SerialRecordSource master;
+	private ISerializableDbRecordSource staging;
+	private ISerializableDbRecordSource master;
 
 	public SimplePersonSqlServerTestConfiguration() {
 		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_STAGING_SQL,
@@ -120,35 +113,28 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	/**
-	 * One-time initialization. If initialization fails, the instance is left in
-	 * an invalid state.
+	 * One-time initialization.
+	 * 
+	 * @throws IllegalStateException
+	 *             if initialization fails
 	 */
 	// @PostConstruct
 	public void initialize(CMPluginRegistry registry) {
 		// Standard messages
-		// final String NULL_PLATFORM = "null e2service";
 		final String NULL_REGISTRY = "null plugin registry";
 		final String NULL_MODEL = "null model";
 		final String NULL_STAGING = "null staging record source";
 		final String NULL_MASTER = "null master record source";
 
 		if (!isInitialized) {
+			isValid = true;
 			if (registry == null) {
 				isValid = false;
-				// invalidConditions.add(NULL_PLATFORM);
 				invalidConditions.add(NULL_REGISTRY);
 				invalidConditions.add(NULL_MODEL);
 				invalidConditions.add(NULL_STAGING);
 				invalidConditions.add(NULL_MASTER);
 			} else {
-				// this.pluginRegistry = e2service.getPluginRegistry();
-				// if (pluginRegistry == null) {
-				// isValid = false;
-				// invalidConditions.add(NULL_REGISTRY);
-				// invalidConditions.add(NULL_MODEL);
-				// invalidConditions.add(NULL_STAGING);
-				// invalidConditions.add(NULL_MASTER);
-				// } else {
 				this.model = lookupModelByPluginId(modelConfigurationId);
 				if (model == null) {
 					isValid = false;
@@ -157,7 +143,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 					invalidConditions.add(NULL_MASTER);
 				} else {
 					try {
-						this.staging = synthesizeStagingRecordSource(model);
+						this.staging = createStagingRecordSource(model);
 						if (staging == null) {
 							isValid = false;
 							invalidConditions.add(NULL_STAGING);
@@ -167,7 +153,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 						invalidConditions.add(e.toString());
 					}
 					try {
-						this.master = synthesizeMasterRecordSource(model);
+						this.master = createMasterRecordSource(model);
 						if (master == null) {
 							isValid = false;
 							invalidConditions.add(NULL_MASTER);
@@ -177,8 +163,12 @@ public class SimplePersonSqlServerTestConfiguration implements
 						invalidConditions.add(e.toString());
 					}
 				}
-				// }
 			}
+		}
+		if (!invalidConditions.isEmpty()) {
+			String msg = "Initialization failed: " + invalidConditions;
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
 		}
 		isInitialized = true;
 	}
@@ -208,13 +198,13 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	@Override
-	public SerialRecordSource getStagingRecordSource() {
+	public ISerializableDbRecordSource getStagingRecordSource() {
 		invariant();
 		return staging;
 	}
 
 	@Override
-	public SerialRecordSource getMasterRecordSource() {
+	public ISerializableDbRecordSource getMasterRecordSource() {
 		invariant();
 		return master;
 	}
@@ -248,53 +238,27 @@ public class SimplePersonSqlServerTestConfiguration implements
 		return retVal;
 	}
 
-	private static SerialRecordSource synthesizeRecordSource(
+	private static ISerializableDbRecordSource createRecordSource(
 			ImmutableProbabilityModel model, String dsJndiName, String sql)
 			throws Exception {
-		Context jndiContext = new InitialContext();
-		DataSource ds = (DataSource) jndiContext.lookup(dsJndiName);
-		Connection conn = ds.getConnection();
-		String connUrl = conn.getMetaData().getURL();
-		logger.fine("DB connection URL: " + connUrl);
-		conn.close();
 
-		// Configure the record source buffer size, dbConfig name and model name
-		final String bufferSize = Integer.toString(DEFAULT_RECORD_BUFFER_SIZE);
 		final String dbConfig =
 			(String) model.properties().get(
 					ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
-		final String modelName = model.getModelName();
-
-		// Create a serializable record source
-		IRecordSourceSerializationRegistry registry2 =
-			DefaultRecordSourceSerializationRegistry.getInstance();
-		IRecordSourceSerializer serializer =
-			registry2.getRecordSourceSerializer(connUrl);
-		Properties properties = new Properties();
-		properties
-				.setProperty(
-						ISerializableDbRecordSource.PN_DATASOURCE_JNDI_NAME,
-						dsJndiName);
-		properties.setProperty(ISerializableDbRecordSource.PN_MODEL_NAME,
-				modelName);
-		properties.setProperty(ISerializableDbRecordSource.PN_DATABASE_CONFIG,
-				dbConfig);
-		properties.setProperty(ISerializableDbRecordSource.PN_SQL_QUERY, sql);
-		properties.setProperty(ISerializableDbRecordSource.PN_BUFFER_SIZE,
-				bufferSize);
-		SerialRecordSource retVal =
-			serializer.getSerializableRecordSource(properties);
+		ISerializableDbRecordSource retVal =
+			new SQLServerSerializableParallelSerialRecordSource(dsJndiName,
+					model.getModelName(), dbConfig, sql);
 		return retVal;
 	}
 
-	private SerialRecordSource synthesizeStagingRecordSource(
+	private ISerializableDbRecordSource createStagingRecordSource(
 			ImmutableProbabilityModel model) throws Exception {
-		return synthesizeRecordSource(model, dataSourceJndiName, stagingSQL);
+		return createRecordSource(model, dataSourceJndiName, stagingSQL);
 	}
 
-	private SerialRecordSource synthesizeMasterRecordSource(
+	private ISerializableDbRecordSource createMasterRecordSource(
 			ImmutableProbabilityModel model) throws Exception {
-		return synthesizeRecordSource(model, dataSourceJndiName, masterSQL);
+		return createRecordSource(model, dataSourceJndiName, masterSQL);
 	}
 
 }

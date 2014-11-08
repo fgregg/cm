@@ -10,13 +10,14 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 
+import static com.choicemaker.util.SystemPropertyUtils.FILE_SEPARATOR;
+import static com.choicemaker.util.SystemPropertyUtils.JAVA_IO_TMPDIR;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
@@ -53,23 +54,34 @@ public class OABAConfiguration implements Serializable {
 //	private static final String DATA_FILE_NAME = "cmt_data.dat"; 
 
 	private String fileDir;
-	private String modelName;
+//	private String modelName;
 	private long jobID;
 	
 	private transient IProbabilityModel model;
 	private static final Logger logger =
 			Logger.getLogger(OABAConfiguration.class.getName());
 
+	/**
+	 * Constructs a helper instance for the current batch job
+	 * @param jobID the identifier of the current OABA batch (or transitivity) job
+	 */
+	public OABAConfiguration (long jobID) {
+		this(null, jobID);
+	}
+
+	/**
+	 * Constructs a helper instance for the current batch job
+	 * @param modelName not used, may be null
+	 * @param jobID the identifier of the current OABA batch (or transitivity) job
+	 */
 	public OABAConfiguration (String modelName, long jobID) {
-		this.modelName = modelName;
 		this.jobID = jobID;
 	}
-	
-	
-	private ImmutableProbabilityModel getModel () {
-		if (model == null) model = PMManager.getModelInstance(modelName);
-		return model;
-	}
+
+//	private ImmutableProbabilityModel getModel () {
+//		if (model == null) model = PMManager.getModelInstance(modelName);
+//		return model;
+//	}
 	
 	/**
 	 * Returns the directory on disk that will be used to write files used by the batch job.
@@ -91,14 +103,25 @@ public class OABAConfiguration implements Serializable {
 	 */
 	public String getFileDir () {
 		if (fileDir == null) {
-			fileDir = (String) getModel().properties().get("fileDir") + System.getProperty("file.separator")+
-			"job" + Long.toString(jobID) + System.getProperty("file.separator");
-			logger.info("Working directory for ChoiceMaker Jobs is '" + fileDir + "'");
+			final String SEP = System.getProperty(FILE_SEPARATOR);
+			final String TMP = System.getProperty(JAVA_IO_TMPDIR);
+			final String JOB = "job";
+
+			// FIXME make this configurable outside of model properties
+			// final String p = (String) getModel().properties().get("fileDir");
+			final String parentDir = TMP;
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(parentDir).append(SEP);
+			sb.append(JOB).append(jobID).append(SEP);
+			fileDir = sb.toString();
+			logger.info("Working directory for ChoiceMaker Job " + jobID
+					+ " is '" + fileDir + "'");
 			File f = new File (fileDir);
 			if (!f.exists()) {
 				f.mkdir();
 			}
-		} 
+		}
 		return fileDir;
 	}
 	
@@ -182,16 +205,14 @@ public class OABAConfiguration implements Serializable {
 		return new ComparisonTreeSinkSourceFactory
 			(getFileDir(), "compareTree", "txt", stageType);
 	}
-	
-	
+
 	/** This is used by the parallelization code.  It creates many tree files for each chunk.
 	 */
 	public ComparisonTreeGroupSinkSourceFactory getComparisonTreeGroupFactory (int stageType, int num) {
 		return new ComparisonTreeGroupSinkSourceFactory
 			(getFileDir(), "compareTreeGroup", "txt", num, stageType);
 	}
-	
-	
+
 	public ComparisonArraySinkSourceFactory getComparisonArrayFactoryOS () {
 		return new ComparisonArraySinkSourceFactory
 			(getFileDir(), "compareArrayO", "dat");
@@ -252,8 +273,7 @@ public class OABAConfiguration implements Serializable {
 		String fileName = getFileDir () + "match_" + Long.toString(id);
 		return new MatchRecord2CompositeSource (fileName,"txt");
 	}
-	
-	
+
 	public MatchRecord2SinkSourceFactory getSet2MatchFactory () {
 		return new MatchRecord2SinkSourceFactory (getFileDir(), "twomatch", "txt");
 	}
@@ -262,24 +282,20 @@ public class OABAConfiguration implements Serializable {
 	//	return new MatchRecord2SinkSourceFactory (getFileDir(), "transMatch", "txt");
 	//}
 
-
 	public IMatchRecord2Sink getCompositeTransMatchSink (long id) {
 		String fileName = getFileDir () + "transMatch_" + Long.toString(id);
 		return new MatchRecord2CompositeSink (fileName,"txt",MAX_FILE_SIZE);
 	}
-
 
 	public IMatchRecord2Source getCompositeTransMatchSource (long id) {
 		String fileName = getFileDir () + "transMatch_" + Long.toString(id);
 		return new MatchRecord2CompositeSource (fileName,"txt");
 	}
 
-	
 //	public String getStatusFile () {
 //		return getFileDir () + STATUS_FILE_NAME;
 //	}
-	
-	
+
 //	public void saveStartData (StartData data) throws IOException {
 //		ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream (getFileDir() + DATA_FILE_NAME));
 //		oos.writeObject(data);
@@ -292,8 +308,7 @@ public class OABAConfiguration implements Serializable {
 //		ois.close();
 //		return data;
 //	}
-	
-	
+
 	/** This method removes the temporary storage directory used by this job id.
 	 * 
 	 * @return boolean - true means it was a success
@@ -306,7 +321,6 @@ public class OABAConfiguration implements Serializable {
 		}
 		return f.delete();
 	}
-
 
 	/** Block factory for transitivity
 	 */

@@ -8,41 +8,39 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.server.core;
+package com.choicemaker.cm.core;
 
 /**
- * Thrown when the profile is not specific enough to perform first-pass matching (blocking). E.g., when
- * specifying only the gender in querying a large database.
+ * Thrown when a database access problem prohibits ChoiceMaker from fulfilling a request. 
  *
  * @author   Martin Buechi
  * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:13 $
  */
-public class UnderspecifiedProfileException extends Exception {
+public class DatabaseException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Constructs an <code>UnderspecifiedProfileException</code> with no detail message.
+	 * Constructs a <code>DatabaseException</code> with no detail message.
 	 */
-	public UnderspecifiedProfileException() { }
+	public DatabaseException() { }
 
 	/**
-	 * Constructs a <code>UnderspecifiedProfileException</code> with the specified detail message.
+	 * Constructs a <code>DatabaseException</code> with the specified detail message.
 	 * 
 	 * @param   message  The detail message.
 	 */
-	public UnderspecifiedProfileException(String message) {
+	public DatabaseException(String message) {
 		super(message);
 	}
 
 	/**
-	 * Constructs a <code>UnderspecifiedProfileException</code> with the specified detail message and cause.
+	 * Constructs a <code>DatabaseException</code> with the specified detail message and cause.
 	 * 
 	 * @param   message  The detail message.
 	 * @param   cause  The cause.
 	 */
-	public UnderspecifiedProfileException(String message, Throwable cause) {
+	public DatabaseException(String message, Throwable cause) {
 		super(message, cause);
 	}
-
 }

@@ -18,7 +18,7 @@ import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -42,10 +42,10 @@ public interface IMrpsRequest extends Serializable, Cloneable {
 	public abstract IMatchRecord2Source getMatchPairs(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException;
 
-	public abstract SerialRecordSource getRsMaster(EntityManager em)
+	public abstract SerializableRecordSource getRsMaster(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException;
 
-	public abstract SerialRecordSource getRsStage(EntityManager em)
+	public abstract SerializableRecordSource getRsStage(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException;
 		
 	public IProbabilityModel getStagingModel(EntityManager em)

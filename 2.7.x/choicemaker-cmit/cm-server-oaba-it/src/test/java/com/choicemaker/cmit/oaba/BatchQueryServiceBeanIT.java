@@ -45,7 +45,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -244,9 +244,9 @@ public class BatchQueryServiceBeanIT {
 		}
 		String STAGING = tag == null ? "STAGING" : tag + "_STAGING";
 		String MASTER = tag == null ? "MASTER" : tag + "_MASTER";
-		final SerialRecordSource staging =
+		final SerializableRecordSource staging =
 			EntityManagerUtils.createFakeSerialRecordSource(STAGING);
-		final SerialRecordSource master =
+		final SerializableRecordSource master =
 			EntityManagerUtils.createFakeSerialRecordSource(MASTER);
 		final Thresholds thresholds =
 			EntityManagerUtils.createRandomThresholds();

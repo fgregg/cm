@@ -5,10 +5,10 @@ import java.util.UUID;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.Sink;
 
-public class FakeSerialRecordSource implements SerialRecordSource {
+public class FakeSerialRecordSource implements SerializableRecordSource {
 
 	private static final long serialVersionUID = 271L;
 

@@ -29,10 +29,10 @@ import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
  */
 public class SqlServerRecordSource implements RecordSource {
 	
-	private static final Logger logger = Logger.getLogger(SqlServerRecordSource.class.getName());
+	private static final Logger logger = Logger
+			.getLogger(SqlServerRecordSource.class.getName());
 
 	private String fileName;
-
 	private ImmutableProbabilityModel model;
 	private String dbConfiguration;
 	private String idsQuery;
@@ -41,14 +41,14 @@ public class SqlServerRecordSource implements RecordSource {
 	private DataSource ds;
 	private Connection connection;
 	private Statement stmt;
-	
 	private DbReaderSequential dbr;
 	
 	public SqlServerRecordSource() {
-		// do nothing...
 	}
 	
-	public SqlServerRecordSource(String fileName, ImmutableProbabilityModel model, String dsName, String dbConfiguration, String idsQuery) {
+	public SqlServerRecordSource(String fileName,
+			ImmutableProbabilityModel model, String dsName,
+			String dbConfiguration, String idsQuery) {
 		this.model = model;
 		setDataSourceName(dsName);
 		this.dbConfiguration = dbConfiguration;
@@ -100,9 +100,10 @@ public class SqlServerRecordSource implements RecordSource {
 				connection = null;
 			}
 		} catch (SQLException ex) {
-			throw new IOException("Problem closing the statement or connection.", ex);
+			throw new IOException(
+					"Problem closing the statement or connection.", ex);
 		} finally {
-			//free the memory from dbr
+			// free the memory from dbr
 			dbr = null;
 		}
 	}
@@ -182,7 +183,8 @@ public class SqlServerRecordSource implements RecordSource {
 	
 	private String createQuery() {
 		StringBuffer b = new StringBuffer(16000);
-		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")" + Constants.LINE_SEPARATOR);
+		b.append("DECLARE @ids TABLE (id " + dbr.getMasterIdType() + ")"
+				+ Constants.LINE_SEPARATOR);
 		b.append("INSERT INTO @ids " + idsQuery + Constants.LINE_SEPARATOR);
 		b.append(SqlDbObjectMaker.getMultiQuery(model, dbConfiguration));
 		return b.toString();

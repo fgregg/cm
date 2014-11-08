@@ -25,7 +25,8 @@ import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.util.NameUtils;
 
 /**
- * Oracle record source.
+ * Oracle record source. This implementation assumes that various stored
+ * procedures, written in PL/SQL, are installed in the target database.
  * <p>
  * FIXME: rename and move this Oracle-specific implementation
  * to the com.choicemaker.cm.io.db.oracle package
@@ -35,7 +36,8 @@ import com.choicemaker.cm.core.util.NameUtils;
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 22:36:54 $
  */
 public class DbRecordSource implements RecordSource {
-	private static Logger logger = Logger.getLogger(DbRecordSource.class.getName());
+	private static Logger logger = Logger.getLogger(DbRecordSource.class
+			.getName());
 	private static final int CURSOR = -10;
 
 	// Properties
@@ -66,7 +68,8 @@ public class DbRecordSource implements RecordSource {
 	/**
 	 * Constructor.
 	 */
-	public DbRecordSource(String fileName, String dataSourceName, ImmutableProbabilityModel model, String conf, String selection) {
+	public DbRecordSource(String fileName, String dataSourceName,
+			ImmutableProbabilityModel model, String conf, String selection) {
 		setFileName(fileName);
 		setDataSourceName(dataSourceName);
 		setModel(model);
@@ -97,8 +100,10 @@ public class DbRecordSource implements RecordSource {
 			boolean _debugSql = false;
 			if (_debugSql) {
 				try {
-					CallableStatement _stmt =
-						conn.prepareCall("begin DBMS_DEBUG_JDWP.CONNECT_TCP( '127.0.0.1', 4000 ); end;");
+					String s =
+						"begin DBMS_DEBUG_JDWP.CONNECT_TCP( '127.0.0.1', 4000 ); end;";
+					logger.fine(s);
+					CallableStatement _stmt = conn.prepareCall(s);
 					_stmt.execute();
 					_stmt.close();
 				} catch (Exception _x) {

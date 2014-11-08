@@ -16,8 +16,6 @@ import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
 
-import com.choicemaker.autonumber.AutoNumberFactory;
-
 /**
  * A BatchJobBean tracks the progress of a (long-running) batch
  * process. A successful request goes through a sequence of states: NEW, QUEUED,
@@ -62,13 +60,14 @@ public abstract class UrmStepJobBean implements EntityBean {
 
 
 	public Long ejbCreate(Long urmJobId, Long stepIndex) throws CreateException {
-		Integer nextId = AutoNumberFactory.getNextInteger(UrmStepJobHome.AUTONUMBER_IDENTIFIER);
-		Long batchId = new Long(nextId.longValue());
-		setId(batchId);
-		setUrmJobId(urmJobId);
-		setStepIndex(stepIndex);
-		log.info("Created new ChoiceMaker Server Job"+batchId);
-		return batchId;
+		throw new Error("no longer implemented");
+//		Integer nextId = ...
+//		Long batchId = new Long(nextId.longValue());
+//		setId(batchId);
+//		setUrmJobId(urmJobId);
+//		setStepIndex(stepIndex);
+//		log.info("Created new ChoiceMaker Server Job"+batchId);
+//		return batchId;
 	}
 	
 	public void ejbPostCreate(Long urmJobId, Long stepIndex) {

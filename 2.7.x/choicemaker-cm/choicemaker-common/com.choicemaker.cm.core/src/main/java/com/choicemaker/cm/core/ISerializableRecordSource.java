@@ -10,24 +10,26 @@
  */
 package com.choicemaker.cm.core;
 
-import java.io.Serializable;
 import java.util.Properties;
 
 
 /**
- * A RecordSource that can be serialized.
- * All serializable record sources require at least a
- * model name to be specified to be configured before they are used.
- * See {@link #setProperties(Properties)}.
- * Extensions of this interface define additional, type-specific
- * property names:<ul>
- * <li/>{@link com.choicemaker.cm.io.db.base.ISerializableDbRecordSource Database record sources}
- * <li/>{@link com.choicemaker.cm.core.io.db.base.ISerializableFileBasedRecordSource File-based record sources}
+ * A RecordSource that can be serialized. All serializable record sources
+ * require at least a model name to be specified to be configured before they
+ * are used. See {@link #setProperties(Properties)}. Extensions of this
+ * interface define additional, type-specific property names:
+ * <ul>
+ * <li/>{@link com.choicemaker.cm.io.db.base.ISerializableDbRecordSource
+ * Database record sources}
+ * <li/>
+ * {@link com.choicemaker.cm.core.io.db.base.ISerializableFileBasedRecordSource
+ * File-based record sources}
  * </ul>
+ * 
  * @author rphall
  *
  */
-public interface ISerializableRecordSource extends Serializable, RecordSource, SerialRecordSource {
+public interface ISerializableRecordSource extends SerializableRecordSource {
 	
 	/**
 	 * The name of the property that specifies the probability model name,

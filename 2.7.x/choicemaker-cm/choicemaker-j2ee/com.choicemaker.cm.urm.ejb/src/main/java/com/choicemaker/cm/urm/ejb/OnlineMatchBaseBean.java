@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
+import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -46,7 +47,6 @@ import com.choicemaker.cm.io.blocking.automated.base.UnderspecifiedQueryExceptio
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.xml.base.XmlSingleRecordWriter;
-import com.choicemaker.cm.server.core.DatabaseException;
 import com.choicemaker.cm.server.util.CountsUpdate;
 import com.choicemaker.cm.urm.adaptor.tocmcore.UrmRecordBuilder;
 import com.choicemaker.cm.urm.base.DbRecordCollection;

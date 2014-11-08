@@ -31,8 +31,8 @@ import com.choicemaker.cm.io.db.base.DbView;
  */
 public class SqlServerParallelRecordSource implements RecordSource {
 
-	private static Logger logger = Logger.getLogger(SqlServerParallelRecordSource.class.getName());
-
+	private static Logger logger = Logger
+			.getLogger(SqlServerParallelRecordSource.class.getName());
 
 	private String fileName;
 
@@ -51,12 +51,14 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	private static final String DATA_VIEW = "DATAVIEW_1001";
 	
 	public SqlServerParallelRecordSource() {
-		// do nothing...
 	}
 	
-	public SqlServerParallelRecordSource(String fileName, ImmutableProbabilityModel model, String dsName, String dbConfiguration, String idsQuery) {
+	public SqlServerParallelRecordSource(String fileName,
+			ImmutableProbabilityModel model, String dsName,
+			String dbConfiguration, String idsQuery) {
 		
-		logger.fine("Constructor: " + fileName + " " + model + " " + dsName + " " + dbConfiguration + " " + idsQuery);
+		logger.fine("Constructor: " + fileName + " " + model + " " + dsName
+				+ " " + dbConfiguration + " " + idsQuery);
 		
 		this.model = model;
 		setDataSourceName(dsName);
@@ -66,7 +68,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 
 	public void open() throws IOException {
 		
-		if (!isValidQuery()) throw new IOException ("idsQuery must contain ' AS ID '.");
+		if (!isValidQuery())
+			throw new IOException("idsQuery must contain ' AS ID '.");
 		
 		DbAccessor accessor = (DbAccessor) model.getAccessor();
 		dbr = accessor.getDbReaderParallel(dbConfiguration);
@@ -74,7 +77,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		try {
 			if (connection == null) {
 				connection = ds.getConnection();
-				connection.setAutoCommit(true);
+//				connection.setAutoCommit(true);
 			}
 			//connection.setReadOnly(true);
 			
@@ -93,12 +96,12 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			throw new IOException(ex.toString(), ex);
 		}
 	}
-	
-	
+
 	private void createView (Connection conn) throws SQLException {
 		Statement view = conn.createStatement();
-		String s = "IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '" + DATA_VIEW +
-		"') DROP VIEW " + DATA_VIEW;
+		String s =
+			"IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
+					+ DATA_VIEW + "') DROP VIEW " + DATA_VIEW;
 		logger.fine(s);
 		view.execute(s);
 		
@@ -110,15 +113,22 @@ public class SqlServerParallelRecordSource implements RecordSource {
 	
 	private void dropView (Connection conn) throws SQLException {
 		Statement view = conn.createStatement();
-		view.execute("IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '" + DATA_VIEW +
-		 "') DROP VIEW " + DATA_VIEW);
+		String s =
+			"IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
+					+ DATA_VIEW + "') DROP VIEW " + DATA_VIEW;
+		logger.fine(s);
+		view.execute(s);
 		view.close();
 	}
-	
 
-	
-	/** This method checks to make sure the idsQuery is valid.  It must contain "as id".
-	 * For example, "select distinct TAP_CORPORATE_ID as ID from CORPORATE where primary_name like 'A%'"
+	/**
+	 * This method checks to make sure the idsQuery is valid. It must contain
+	 * "as id". For example,
+	 * 
+	 * <pre>
+	 * select distinct TAP_CORPORATE_ID as ID
+	 *   from CORPORATE where primary_name like 'A%'
+	 * </pre>
 	 * 
 	 * @return
 	 */
@@ -126,12 +136,11 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		if (idsQuery.toUpperCase().indexOf(" AS ID ") == -1) return false;
 		else return true;
 	}
-	
-	
-	
+
 	private void getResultSets () throws SQLException {
 		Accessor accessor = model.getAccessor();
-		String viewBase = "vw_cmt_" + accessor.getSchemaName() + "_r_" + dbConfiguration;
+		String viewBase =
+			"vw_cmt_" + accessor.getSchemaName() + "_r_" + dbConfiguration;
 		DbView[] views = dbr.getViews();
 		String masterId = dbr.getMasterId();
 		
@@ -170,8 +179,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 			logger.fine("Executed query " + i);		
 		}		
 	}
-	
-	
+
 	private static String getOrderBy(DbView v) {
 		StringBuffer ob = new StringBuffer();
 		for (int j = 0; j < v.orderBy.length; ++j) {
@@ -181,7 +189,6 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		}
 		return ob.toString();
 	}
-	
 
 	public boolean hasNext() throws IOException {
 		return dbr.hasNext();
@@ -197,7 +204,6 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		return r;
 	}
 
-
 	public void close() throws IOException {
 		try {
 			int s = selects.length;
@@ -205,8 +211,7 @@ public class SqlServerParallelRecordSource implements RecordSource {
 				selects[i].close();
 				results[i].close();
 			}
-			
-			
+
 			dropView (connection);
 			
 			if (ds != null) {
@@ -214,7 +219,8 @@ public class SqlServerParallelRecordSource implements RecordSource {
 				connection = null;
 			}
 		} catch (SQLException ex) {
-			throw new IOException("Problem closing the statement or connection.", ex);
+			throw new IOException(
+					"Problem closing the statement or connection.", ex);
 		} finally {
 			dbr = null;
 		}

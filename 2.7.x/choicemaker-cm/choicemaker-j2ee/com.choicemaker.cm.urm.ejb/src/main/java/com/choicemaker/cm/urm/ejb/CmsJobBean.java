@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
-//import org.jboss.varia.autonumber.AutoNumberFactory;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -18,7 +17,6 @@ import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
 
-import com.choicemaker.autonumber.AutoNumberFactory;
 import com.choicemaker.cm.urm.base.JobStatus;
 
 
@@ -158,15 +156,16 @@ public abstract class CmsJobBean implements EntityBean {
 	}
 
 	public Long ejbCreate(String externalId, long transId) throws CreateException {
-		Integer nextId = AutoNumberFactory.getNextInteger(CmsJobHome.AUTONUMBER_IDENTIFIER);
-		Long batchId = new Long(nextId.longValue());
-		setId(batchId);
-		setExternalId(externalId);
-		setTransactionId(new Long(transId));
-		setStatus(JobStatus.STATUS_NEW);
-		setFractionComplete(0);
-		log.info("Created new ChoiceMaker Server Job"+batchId);
-		return batchId;
+		throw new Error("no longer implemented");
+//		Integer nextId = ...
+//		Long batchId = new Long(nextId.longValue());
+//		setId(batchId);
+//		setExternalId(externalId);
+//		setTransactionId(new Long(transId));
+//		setStatus(JobStatus.STATUS_NEW);
+//		setFractionComplete(0);
+//		log.info("Created new ChoiceMaker Server Job"+batchId);
+//		return batchId;
 	}
 	
 	public void ejbPostCreate(String externalId, long transId) {

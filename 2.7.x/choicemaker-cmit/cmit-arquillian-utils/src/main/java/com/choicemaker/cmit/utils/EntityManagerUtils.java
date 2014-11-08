@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
@@ -94,7 +94,7 @@ public class EntityManagerUtils {
 		return retVal;
 	}
 
-	public static SerialRecordSource createFakeSerialRecordSource(String tag) {
+	public static SerializableRecordSource createFakeSerialRecordSource(String tag) {
 		return new FakeSerialRecordSource(tag);
 	}
 

@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 import java.io.Serializable;
 import java.util.List;
 
-import com.choicemaker.cm.core.SerialRecordSource;
+import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 
@@ -64,9 +64,9 @@ public class MatchWriterData implements Serializable {
 	@Deprecated
 	public final float high;
 	@Deprecated
-	public final SerialRecordSource staging;
+	public final SerializableRecordSource staging;
 	@Deprecated
-	public final SerialRecordSource master;
+	public final SerializableRecordSource master;
 	@Deprecated
 	public final String modelConfigurationName;
 	@Deprecated

@@ -16,8 +16,6 @@
       <import plugin="com.choicemaker.cm.io.blocking.automated.offline"/>
       <import plugin="com.choicemaker.cm.transitivity.core"/>
       <import plugin="com.choicemaker.cm.transitivity"/>
-      <import plugin="com.choicemaker.cm.server.base"/>
-      <import plugin="com.choicemaker.cm.server.ejb.impl"/>
       <import plugin="com.choicemaker.cm.server.ejb.base"/>
       <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
       <!-- import plugin="org.jboss.j2ee"/ -->

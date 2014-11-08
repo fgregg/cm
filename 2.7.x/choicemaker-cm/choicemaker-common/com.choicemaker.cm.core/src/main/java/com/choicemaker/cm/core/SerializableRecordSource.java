@@ -21,6 +21,5 @@ import java.io.Serializable;
  * @author pcheung
  * @see ISerializableRecordSource (preferred).
  */
-public interface SerialRecordSource extends Serializable, RecordSource {
-
+public interface SerializableRecordSource extends Serializable, RecordSource {
 }
