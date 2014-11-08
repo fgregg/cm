@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
@@ -33,6 +34,10 @@ import com.choicemaker.e2.mbd.runtime.model.PluginModel;
 import com.choicemaker.e2.mbd.runtime.model.PluginRegistryModel;
 
 public class RegistryLoader {
+
+	private static final Logger logger =
+		Logger.getLogger(RegistryLoader.class.getName());
+
 	private Factory factory;
 
 	// debug support
@@ -44,9 +49,14 @@ private RegistryLoader(Factory factory, boolean debug) {
 	this.debug = debug;
 	this.factory = factory;
 }
+private void trace(String msg) {
+	long thisTick = System.currentTimeMillis();
+	logger.finer("RegistryLoader: " + msg + " [+"+ (thisTick - lastTick) + "ms]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	lastTick = thisTick;
+}
 private void debug(String msg) {
 	long thisTick = System.currentTimeMillis();
-	System.out.println("RegistryLoader: " + msg + " [+"+ (thisTick - lastTick) + "ms]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	logger.fine("RegistryLoader: " + msg + " [+"+ (thisTick - lastTick) + "ms]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	lastTick = thisTick;
 }
 private String[] getPathMembers(URL path) {
@@ -54,8 +64,6 @@ private String[] getPathMembers(URL path) {
 	String protocol = path.getProtocol();
 	if (protocol.equals("file")) { //$NON-NLS-1$
 		list = (new File(path.getFile())).list();
-//	} else {
-//		// attempt to read URL and see if we got html dir page
 	}
 	return list == null ? new String[0] : list;
 }
@@ -68,12 +76,7 @@ private boolean parseProblem(String message) {
 	return true;
 }
 private PluginRegistryModel parseRegistry(URL[] pluginPath) {
-//	long startTick = System.currentTimeMillis();
 	PluginRegistryModel result = processManifestFiles(pluginPath);
-//	if (InternalPlatform.DEBUG) {
-//		long endTick = System.currentTimeMillis();
-//		debug("Parsed Registry: " + (endTick - startTick) + "ms"); //$NON-NLS-1$ //$NON-NLS-2$
-//	}
 	return result;
 }
 public static PluginRegistryModel parseRegistry(URL[] pluginPath, Factory factory, boolean debug) {
@@ -130,13 +133,13 @@ private void processPluginPathEntry(PluginRegistryModel registry, URL location) 
 				// Skip bad URLs
 			}
 			if (debug)
-				debug(found ? "Processed - " : "Processed (not found) - " + members[j]); //$NON-NLS-1$ //$NON-NLS-2$
+				trace(found ? "Processed - " : "Processed (not found) - " + members[j]); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	} else {
 		// specific file entry - load the given file
 		boolean found = processPluginPathFile(registry, location);
 		if (debug)
-			debug(found ? "Processed - " : "Processed (not found) - " + location); //$NON-NLS-1$ //$NON-NLS-2$
+			trace(found ? "Processed - " : "Processed (not found) - " + location); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }
 /**
@@ -177,7 +180,6 @@ private boolean processPluginPathFile(PluginRegistryModel registry, URL location
 	url = url.substring(0, 1 + url.lastIndexOf('/'));
 	entry.setRegistry(registry);
 	entry.setLocation(url);
-//	InternalPlatform.addLastModifiedTime(location.getFile(), new File(location.getFile()).lastModified());
 	return true;
 }
 private String getQualifiedVersion(PluginModel entry, URL base) {

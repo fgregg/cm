@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.choicemaker.e2.mbd.runtime.IExtensionPoint;
 import com.choicemaker.e2.mbd.runtime.IStatus;
@@ -38,6 +39,9 @@ import com.choicemaker.e2.mbd.runtime.model.PluginRegistryModel;
 
 @SuppressWarnings({"rawtypes", "unused", "unchecked"})
 public class RegistryResolver {
+
+	private static final Logger logger =
+		Logger.getLogger(RegistryResolver.class.getName());
 
 	private Map idmap;
 	private PluginRegistryModel reg;
@@ -650,18 +654,17 @@ private void addPrerequisites(PluginPrerequisiteModel[] prerequisites, PluginDes
 	System.arraycopy(prerequisites, 0, result, listLength, reqLength); 
 	plugin.setRequires(result);
 }
+private void trace(String s) {
+	logger.finer("Registry Resolve: "+s); //$NON-NLS-1$
+}
 private void debug(String s) {
-	System.out.println("Registry Resolve: "+s); //$NON-NLS-1$
+	logger.fine("Registry Resolve: "+s); //$NON-NLS-1$
 }
 private void error(String message) {
 	Status error = new Status(IStatus.WARNING, Platform.PI_RUNTIME, Platform.PARSE_PROBLEM, message, null);
 	status.add(error);
-//	if (InternalPlatform.DEBUG && DEBUG_RESOLVE)
-//		System.out.println(error.toString());
 }
 private void information(String message) {
-//	if (InternalPlatform.DEBUG && DEBUG_RESOLVE)
-//		System.out.println(message);
 }
 public IExtensionPoint getExtensionPoint(PluginDescriptorModel plugin, String extensionPointId) {
 	if (extensionPointId == null)
@@ -983,7 +986,7 @@ private Cookie resolveNode(String child, PluginDescriptorModel parent, PluginPre
 	// We are trying to resolve for the plugin descriptor with id 'child'.
 
 	if (DEBUG_RESOLVE)
-		debug("PUSH> " + child); //$NON-NLS-1$
+		trace("PUSH> " + child); //$NON-NLS-1$
 
 	if (cookie == null)
 		cookie = new Cookie();
@@ -1002,7 +1005,7 @@ private Cookie resolveNode(String child, PluginDescriptorModel parent, PluginPre
 		if (parent != null)
 			error(Policy.bind("parse.prereqDisabled", new String[] { parent.getId(), child })); //$NON-NLS-1$
 		if (DEBUG_RESOLVE)
-			debug("<POP  " + child + " not found"); //$NON-NLS-1$ //$NON-NLS-2$
+			trace("<POP  " + child + " not found"); //$NON-NLS-1$ //$NON-NLS-2$
 		cookie.isOk(false);
 		return cookie;
 	}
@@ -1025,7 +1028,7 @@ private Cookie resolveNode(String child, PluginDescriptorModel parent, PluginPre
 				String message = Policy.bind("parse.unsatisfiedPrereq", parent.getId(), child); //$NON-NLS-1$
 				error(message);
 				if (DEBUG_RESOLVE)
-					debug("<POP  " + child + " unable to satisfy constraint"); //$NON-NLS-1$ //$NON-NLS-2$
+					trace("<POP  " + child + " unable to satisfy constraint"); //$NON-NLS-1$ //$NON-NLS-2$
 				cookie.isOk(false);
 				return cookie;
 			}
@@ -1040,7 +1043,7 @@ private Cookie resolveNode(String child, PluginDescriptorModel parent, PluginPre
 					String message = Policy.bind("parse.prereqLoop", parent.getId(), child); //$NON-NLS-1$
 					error(message);
 					if (DEBUG_RESOLVE)
-						debug("<POP  " + child + " prerequisite loop"); //$NON-NLS-1$ //$NON-NLS-2$
+						trace("<POP  " + child + " prerequisite loop"); //$NON-NLS-1$ //$NON-NLS-2$
 					cookie.isOk(false);
 					return cookie;
 				}
@@ -1051,7 +1054,7 @@ private Cookie resolveNode(String child, PluginDescriptorModel parent, PluginPre
 		childPd = ix.getMatchingDescriptorFor(currentConstraint);
 		if (childPd == null) {
 			if (DEBUG_RESOLVE)
-				debug("<POP  " + child + " not found (missing descriptor entry)"); //$NON-NLS-1$ //$NON-NLS-2$
+				trace("<POP  " + child + " not found (missing descriptor entry)"); //$NON-NLS-1$ //$NON-NLS-2$
 			cookie.isOk(false);
 			return cookie;
 		}
@@ -1060,7 +1063,7 @@ private Cookie resolveNode(String child, PluginDescriptorModel parent, PluginPre
 	// check to see if subtree is already resolved
 	if (ix.isResolvedFor(currentConstraint)) {
 		if (DEBUG_RESOLVE)
-			debug("<POP  " + child + " already resolved"); //$NON-NLS-1$ //$NON-NLS-2$
+			trace("<POP  " + child + " already resolved"); //$NON-NLS-1$ //$NON-NLS-2$
 		return cookie;
 	}
 
@@ -1098,13 +1101,13 @@ private Cookie resolveNode(String child, PluginDescriptorModel parent, PluginPre
 			error(Policy.bind("parse.prereqDisabled", parent.getId(), child)); //$NON-NLS-1$
 		childPd.setEnabled(false);
 		if (DEBUG_RESOLVE)
-			debug("<POP  " + child + " failed to resolve subtree"); //$NON-NLS-1$ //$NON-NLS-2$
+			trace("<POP  " + child + " failed to resolve subtree"); //$NON-NLS-1$ //$NON-NLS-2$
 		return cookie;
 	} else {
 		// we're done
 		ix.isResolvedFor(currentConstraint, true);
 		if (DEBUG_RESOLVE)
-			debug("<POP  " + child + " " + getVersionIdentifier(childPd)); //$NON-NLS-1$ //$NON-NLS-2$
+			trace("<POP  " + child + " " + getVersionIdentifier(childPd)); //$NON-NLS-1$ //$NON-NLS-2$
 		return cookie;
 	}
 }

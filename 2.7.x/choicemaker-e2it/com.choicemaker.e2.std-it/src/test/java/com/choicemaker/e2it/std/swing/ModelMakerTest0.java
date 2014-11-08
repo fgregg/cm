@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Logging;
 
 import junit.framework.TestCase;
 
@@ -15,6 +16,9 @@ import com.choicemaker.e2it.std.Eclipse2BootLoader;
 import com.choicemaker.e2it.std.Eclipse2Utils;
 
 public class ModelMakerTest0 extends TestCase {
+
+	private static final Logger logger =
+		Logger.getLogger(ModelMakerTest0.class.getName());
 
 	private static final String RESOURCE_ROOT = "/";
 
@@ -117,7 +121,7 @@ public class ModelMakerTest0 extends TestCase {
 		Method m = bootLoader.getMethod("getRunnable", parameterTypes);
 		Object[] parameters = new Object[] { APP_PLUGIN_ID };
 		Object retVal = m.invoke(null, parameters);
-		System.out.println("BootLoader.getRunnable() return code: " + retVal);
+		logger.fine("BootLoader.getRunnable() return code: " + retVal);
 		return retVal;
 	}
 
@@ -168,18 +172,18 @@ public class ModelMakerTest0 extends TestCase {
 
 	protected void setUp() throws Exception {
 
-		System.out.println("Starting setUp()");
+		logger.fine("Starting setUp()");
 		super.setUp();
 
 		// Set up a restricted class path in the current thread context
 		assertTrue(this.initialClassLoader == null);
 		this.initialClassLoader =
 			Thread.currentThread().getContextClassLoader();
-		System.out.println("setUp() initialClassLoader: "
+		logger.fine("setUp() initialClassLoader: "
 				+ this.initialClassLoader.toString());
 		ClassLoader cl = Eclipse2Utils.getSystemClassLoader();
 		Thread.currentThread().setContextClassLoader(cl);
-		System.out.println("setUp() new ContextClassLoader: " + cl.toString());
+		logger.fine("setUp() new ContextClassLoader: " + cl.toString());
 
 		// Dynamically load the BootLoader class/singleton
 		URL bootURL = getJarUrl(BOOT_PLUGIN_JAR_PATH);
@@ -193,7 +197,7 @@ public class ModelMakerTest0 extends TestCase {
 		// Start Eclipse
 		Object rc =
 			startEclipse(this.bootLoader, installURL, WORKSPACE, args0, handler);
-		System.out.println("Eclipse startup return code: " + rc);
+		logger.fine("Eclipse startup return code: " + rc);
 
 		// Instantiate ModelMaker
 		this.modelMaker = instantiateModelMaker(this.bootLoader);
@@ -201,31 +205,31 @@ public class ModelMakerTest0 extends TestCase {
 		// Prepare, but do not display, the ModelMaker GUI
 		String[] args1 = getModelMakerRunArgs();
 		startupModelMaker(ModelMakerTest0.this.modelMaker, args1);
-		System.out.println("ModelMaker GUI prepared (but not displayed)");
+		logger.fine("ModelMaker GUI prepared (but not displayed)");
 
-		System.out.println("setUp() complete");
+		logger.fine("setUp() complete");
 	}
 
 	protected void tearDown() throws Exception {
-		System.out.println("Starting tearDown()");
+		logger.fine("Starting tearDown()");
 		super.tearDown();
 
 		Object rc = tearDownModelMaker(this.modelMaker, EXIT_OK);
-		System.out.println("ModelMaker.programExit() return code: " + rc);
+		logger.fine("ModelMaker.programExit() return code: " + rc);
 
 		shutdownEclipse(this.bootLoader);
-		System.out.println("BootLoader.shutdown() returned");
+		logger.fine("BootLoader.shutdown() returned");
 
-		System.out.println("tearDown() complete");
+		logger.fine("tearDown() complete");
 	}
 
 	public void testModelMakerIsReady() throws Exception {
-		System.out.println("testModelMakerIsReady");
-		System.out.println("starting test");
+		logger.fine("testModelMakerIsReady");
+		logger.fine("starting test");
 		assertTrue(this.modelMaker != null);
 		assertTrue(FQCN_MODELMAKER.equals(this.modelMaker.getClass().getName()));
 		assertTrue(isModelMakerReady(this.modelMaker));
-		System.out.println("test completed");
+		logger.fine("test completed");
 	}
 
 }

@@ -28,8 +28,8 @@ import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_PL
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_PLUGGABLEMENUITEM;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_RSREADERGUI;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_MODELMAKER_TOOLMENUITEM;
-import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_SERVER_BASE_BOUNDOBJECT;
-import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_SERVER_BASE_INITIALIZER;
+//import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_SERVER_BASE_BOUNDOBJECT;
+//import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_SERVER_BASE_INITIALIZER;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_URM_UPDATEDERIVEDFIELDS;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_VALIDATION_ECLIPSE_AGGREGATEVALIDATOR;
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_VALIDATION_ECLIPSE_SETBASEDVALIDATOR;
@@ -270,6 +270,7 @@ public class ExtensionPointTest {
 		assertTrue(ep != null);
 	}
 
+  /*
 	public static void testComChoicemakerCmServerBaseBoundObject(
 			CMPluginRegistry registry) {
 		assertTrue(registry != null);
@@ -285,6 +286,7 @@ public class ExtensionPointTest {
 			registry.getExtensionPoint(CM_SERVER_BASE_INITIALIZER);
 		assertTrue(ep != null);
 	}
+  */
 
 	public static void testComChoicemakerCmUrmUpdateDerivedFields(
 			CMPluginRegistry registry) {

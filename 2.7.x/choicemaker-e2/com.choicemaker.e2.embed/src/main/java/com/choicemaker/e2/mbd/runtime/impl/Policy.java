@@ -16,9 +16,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 public class Policy {
-//	private static String bundleName = "org.eclipse.core.internal.runtime.messages";//$NON-NLS-1$
+
+	private static final Logger logger =
+		Logger.getLogger(Policy.class.getName());
+
 	private static String bundleName = "com.choicemaker.e2.mbd.runtime.impl.messages";//$NON-NLS-1$
 	private static ResourceBundle bundle = ResourceBundle.getBundle(bundleName, Locale.getDefault());
 
@@ -62,25 +66,6 @@ public static String bind(String id, String[] bindings) {
 		return message;
 	return MessageFormat.format(message, (Object[])bindings);
 }
-//public static IProgressMonitor monitorFor(IProgressMonitor monitor) {
-//	if (monitor == null)
-//		return new NullProgressMonitor();
-//	return monitor;
-//}
-//public static IProgressMonitor subMonitorFor(IProgressMonitor monitor, int ticks) {
-//	if (monitor == null)
-//		return new NullProgressMonitor();
-//	if (monitor instanceof NullProgressMonitor)
-//		return monitor;
-//	return new SubProgressMonitor(monitor, ticks);
-//}
-//public static IProgressMonitor subMonitorFor(IProgressMonitor monitor, int ticks, int style) {
-//	if (monitor == null)
-//		return new NullProgressMonitor();
-//	if (monitor instanceof NullProgressMonitor)
-//		return monitor;
-//	return new SubProgressMonitor(monitor, ticks, style);
-//}
 /**
  * Print a debug message to the console. If the given boolean is <code>true</code> then
  * pre-pend the message with the current date.
@@ -88,6 +73,6 @@ public static String bind(String id, String[] bindings) {
 public static void debug(boolean includeDate, String message) {
 	if (includeDate) 
 		message = new Date(System.currentTimeMillis()).toString() + " - "+ message; //$NON-NLS-1$
-	System.out.println(message);
+	logger.fine(message);
 }
 }

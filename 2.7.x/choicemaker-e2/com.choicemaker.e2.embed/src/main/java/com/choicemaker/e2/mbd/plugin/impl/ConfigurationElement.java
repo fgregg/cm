@@ -13,6 +13,7 @@ package com.choicemaker.e2.mbd.plugin.impl;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.logging.Logger;
 
 import com.choicemaker.e2.mbd.runtime.CoreException;
 import com.choicemaker.e2.mbd.runtime.IConfigurationElement;
@@ -26,6 +27,10 @@ import com.choicemaker.e2.mbd.runtime.model.ConfigurationElementModel;
 import com.choicemaker.e2.mbd.runtime.model.ConfigurationPropertyModel;
 
 public class ConfigurationElement extends ConfigurationElementModel implements IConfigurationElement {
+
+	private static final Logger logger =
+		Logger.getLogger(ConfigurationElementModel.class.getName());
+
   public ConfigurationElement()
   {
 	super();
@@ -181,8 +186,6 @@ public String getValue() {
 	return localized;
 }
 private void logError(IStatus status) {
-//	InternalPlatform.getRuntimePlugin().getLog().log(status);
-//	if (InternalPlatform.DEBUG)
-//		System.out.println(status.getMessage());
+	logger.severe(status.getMessage());
 }
 }

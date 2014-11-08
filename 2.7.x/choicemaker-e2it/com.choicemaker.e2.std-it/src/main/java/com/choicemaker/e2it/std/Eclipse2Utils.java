@@ -5,8 +5,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Logging;
 
 public class Eclipse2Utils {
+
+	private static final Logger logger =
+		Logger.getLogger(Eclipse2Utils.class.getName());
 
 	private Eclipse2Utils() {
 	}
@@ -17,11 +21,11 @@ public class Eclipse2Utils {
 		ClassLoader parent = retVal.getParent();
 		while (parent != null) {
 			retVal = parent;
-				System.out.println("getSystemBootLoader() " + ": " + retVal.toString());
+			logger.fine("getSystemBootLoader() " + ": " + retVal.toString());
 			parent = retVal.getParent();
 		}
 
-		System.out.println("getSystemBootLoader() returning "
+		logger.fine("getSystemBootLoader() returning "
 				+ ": " + retVal.toString());
 		return retVal;
 	}

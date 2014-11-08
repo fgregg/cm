@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.choicemaker.e2.mbd.runtime.model;
 
+import java.util.logging.Logger;
+
 import com.choicemaker.e2.mbd.runtime.IStatus;
 import com.choicemaker.e2.mbd.runtime.MultiStatus;
 
@@ -22,6 +24,10 @@ import com.choicemaker.e2.mbd.runtime.MultiStatus;
  */
 
 public class Factory {
+
+	private static final Logger logger =
+		Logger.getLogger(Factory.class.getName());
+
 	private MultiStatus status;
 /**
  * Creates a factory which can be used to create plug-in model objects.
@@ -129,8 +135,7 @@ public URLModel createURL() {
  */
 public void error(IStatus error) {
 	status.add(error);
-//	if (InternalPlatform.DEBUG && InternalPlatform.DEBUG_PLUGINS)
-//		System.out.println(error.toString());
+	logger.severe(error.toString());
 }
 /**
  * Returns all of the status objects logged thus far by this factory.

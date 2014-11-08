@@ -466,15 +466,16 @@ private void internalDoPluginActivation() throws CoreException {
 	String errorMsg;
 	// load the runtime class
 	String pluginClassName = getPluginClass();
+	final String loggedName;
 	Class<?> runtimeClass = null;
 	if (pluginClassName == null || pluginClassName.equals("")) { //$NON-NLS-1$
 		runtimeClass = DefaultPlugin.class;
+		loggedName = runtimeClass.getSimpleName();
 	} else {
+		loggedName = pluginClassName;
 		// FIXME externalize message
 		errorMsg = "Ignoring customized plugin class: " + pluginClassName;
 		logger.warning(errorMsg);
-		// runtimeClass =
-		// getPluginClassLoader(true).loadClass(pluginClassName);
 		runtimeClass = DefaultPlugin.class;
 	}
 
@@ -485,7 +486,7 @@ private void internalDoPluginActivation() throws CoreException {
 			runtimeClass
 					.getConstructor(new Class[] { IPluginDescriptor.class });
 	} catch (NoSuchMethodException eNoConstructor) {
-		errorMsg = Policy.bind("plugin.instantiateClassError", getId(), pluginClassName ); //$NON-NLS-1$
+		errorMsg = Policy.bind("plugin.instantiateClassError", getId(), loggedName ); //$NON-NLS-1$
 		throwException(errorMsg, eNoConstructor);
 	}
 
@@ -494,19 +495,19 @@ private void internalDoPluginActivation() throws CoreException {
 		pluginObject =
 			(Plugin) construct.newInstance(new Object[] { this });
 	} catch (ClassCastException e) {
-		errorMsg = Policy.bind("plugin.notPluginClass", pluginClassName); //$NON-NLS-1$
+		errorMsg = Policy.bind("plugin.notPluginClass", loggedName); //$NON-NLS-1$
 		throwException(errorMsg, e);
 	} catch (Exception e) {
 		errorMsg =
 			Policy.bind(
-					"plugin.instantiateClassError", getId(), pluginClassName); //$NON-NLS-1$
+					"plugin.instantiateClassError", getId(), loggedName); //$NON-NLS-1$
 		throwException(errorMsg, e);
 	}
 
 	// skip startup()
 	// FIXME externalize message
-	errorMsg = "Skipping startup: " + pluginClassName;
-	logger.fine(errorMsg);
+	errorMsg = "Skipping startup: " + loggedName;
+	logger.finest(errorMsg);
 }
 
 /**

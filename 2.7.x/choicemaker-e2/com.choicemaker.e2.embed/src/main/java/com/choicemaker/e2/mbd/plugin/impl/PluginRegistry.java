@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.choicemaker.e2.mbd.runtime.IConfigurationElement;
 import com.choicemaker.e2.mbd.runtime.IExtension;
@@ -27,6 +28,7 @@ import com.choicemaker.e2.mbd.runtime.IStatus;
 import com.choicemaker.e2.mbd.runtime.Plugin;
 import com.choicemaker.e2.mbd.runtime.PluginVersionIdentifier;
 import com.choicemaker.e2.mbd.runtime.impl.InternalPlatform;
+import com.choicemaker.e2.mbd.runtime.model.ConfigurationPropertyModel;
 import com.choicemaker.e2.mbd.runtime.model.ExtensionPointModel;
 import com.choicemaker.e2.mbd.runtime.model.PluginDescriptorModel;
 import com.choicemaker.e2.mbd.runtime.model.PluginPrerequisiteModel;
@@ -34,23 +36,12 @@ import com.choicemaker.e2.mbd.runtime.model.PluginRegistryModel;
 
 public class PluginRegistry extends PluginRegistryModel implements IPluginRegistry {
 
-//	private static final String URL_PROTOCOL_FILE = "file"; //$NON-NLS-1$
-//	private static final String F_DEBUG_REGISTRY = ".debugregistry"; //$NON-NLS-1$
-
-	// lifecycle events
-//	private static final int STARTUP = 0;
-//	private static final int SHUTDOWN = 1;
-	
-//	// the registry keeps a reference to the cache reader for lazily loading extensions
-//	private RegistryCacheReader registryCacheReader;
-//	final private File registryCacheFile;
-	
-	//indicates if the registry cache needs to be rewritten
-//	private boolean cacheDirty = false;
+	private static final Logger logger =
+		Logger.getLogger(PluginRegistryModel.class.getName());
 
 public PluginRegistry() {
-//	this.registryCacheFile = null; // InternalPlatform.getMetaArea().getRegistryPath().toFile();
 }  
+
 /**
  * Iterate over the plug-ins in this registry.  Plug-ins are visited in dependent order.  That is, 
  * a plug-in, A, which requires another plug-in, B, is visited before its dependents (i.e., A is 
@@ -211,82 +202,13 @@ public IPluginDescriptor[] getPluginDescriptors(String plugin) {
 	return result;
 }
 void logError(IStatus status) {
-//	InternalPlatform.getRuntimePlugin().getLog().log(status);
-//	if (InternalPlatform.DEBUG)
-//		System.out.println(status.getMessage());
+	logger.severe(status.getMessage());
 }
 public void saveRegistry() throws IOException {
-//	IPath path = InternalPlatform.getMetaArea().getRegistryPath();
-//	if (!cacheDirty && path.toFile().exists()) {
-//		// The registry cache file exists.  Assume it is fine and
-//		// we don't need to re-write it.
-//		return;
-//	}
-//	if(PlatformURLFactory.isUseWorkspace()) {
-//	DataOutputStream output = null;
-//	//write to a temp file first, because the old registry cache file may still 
-//	//be in use for lazy loading of extensions
-//	java.io.File tempFile = new java.io.File(path.toOSString().concat(".tmp"));
-//	try {
-//		output = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(tempFile)));
-//	} catch (IOException ioe) {
-//		String message = Policy.bind("meta.unableToCreateCache"); //$NON-NLS-1$
-//		IStatus status = new Status(IStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, ioe);
-//		logError(status);
-//		return;
-//	}
-//	try {
-//		long start = System.currentTimeMillis();
-//		RegistryCacheWriter cacheWriter = new RegistryCacheWriter();
-//		cacheWriter.writePluginRegistry(this, output);
-//		output.close();
-//		//now move the temp file to the real location
-//		java.io.File realFile = path.toFile();
-//		realFile.delete();
-//		tempFile.renameTo(realFile);
-//		if (InternalPlatform.DEBUG)
-//			System.out.println("Wrote registry: " + (System.currentTimeMillis() - start) + "ms"); //$NON-NLS-1$ //$NON-NLS-2$
-//	} finally {
-//		output.close();
-//	}
-//	}
 }
 public void flushRegistry() {
-//	IPath path = InternalPlatform.getMetaArea().getRegistryPath();
-//	IPath tempPath = InternalPlatform.getMetaArea().getBackupFilePathFor(path);
-//	path.toFile().delete();
-//	tempPath.toFile().delete();
 }
-//public void debugRegistry(String filename) {
-//	Path path = new Path(filename);
-//	path = (Path)path.makeAbsolute();
-//	if (!path.isValidPath(path.toOSString())) {
-//		String message = Policy.bind("meta.invalidRegDebug", path.toOSString()); //$NON-NLS-1$
-//		IStatus status = new Status(IStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, null);
-//		logError(status);
-//		return;
-//	}
-//		
-//	try {
-//		FileOutputStream fs = new FileOutputStream(path.toOSString());
-//		PrintWriter w = new PrintWriter(fs);
-//		try {
-//			RegistryWriter regWriter = new RegistryWriter();
-//			System.out.println(Policy.bind("meta.infoRegDebug", path.toOSString())); //$NON-NLS-1$
-//			regWriter.writePluginRegistry(this, w, 0);
-//			w.flush();
-//		} finally {
-//			w.close();
-//		}
-//	} catch (IOException ioe) {
-//		String message = Policy.bind("meta.unableToCreateRegDebug", path.toOSString()); //$NON-NLS-1$
-//		IStatus status = new Status(IStatus.ERROR, Platform.PI_RUNTIME, Platform.PLUGIN_ERROR, message, ioe);
-//		logError(status);
-//	}
-//}
 public void flushDebugRegistry() {
-//	IPath path = InternalPlatform.getMetaArea().getLocation().append(F_DEBUG_REGISTRY);
-//	path.toFile().delete();
 }
 public void shutdown(IProgressMonitor progress) {
 	shutdownPlugins();
@@ -302,16 +224,7 @@ private void shutdownPlugins() {
 						return;
 					try {
 						Plugin plugin = descriptor.getPlugin();
-//						long time = 0L;
-//						if (InternalPlatform.DEBUG_SHUTDOWN) {
-//							time = System.currentTimeMillis();
-//							System.out.println("Shutting down plugin: " + plugin.getDescriptor().getUniqueIdentifier()); //$NON-NLS-1$
-//						}
 						plugin.shutdown();
-//						if (InternalPlatform.DEBUG_SHUTDOWN) {
-//							time = System.currentTimeMillis() - time;
-//							System.out.println("Finished plugin shutdown for " + plugin.getDescriptor().getUniqueIdentifier() + " time: " + time + "ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-//						}
 					} finally {
 						((PluginDescriptor) descriptor).doPluginDeactivation();
 					}
@@ -326,44 +239,9 @@ private void shutdownPlugins() {
 	accept(visitor, true);
 }
 public void startup(IProgressMonitor progress) {}
-///**
-// * Loads an extension model's sub-elements.
-// */
-//final void loadConfigurationElements(Extension extension) {
-//	DataInputStream input = null;	
-//	try {
-//		input = new DataInputStream(new BufferedInputStream(new FileInputStream(registryCacheFile)));
-//		input.skipBytes(extension.getSubElementsCacheOffset());					
-//		ConfigurationElementModel[] subElements = this.registryCacheReader.readSubElements(input, extension, false);
-//		extension.setSubElements(subElements);
-//		extension.setFullyLoaded(true);
-//		// to force the just loaded sub-elements to be read-only as their parent
-//		if (extension.isReadOnly())
-//			extension.markReadOnly();
-//	} catch (IOException e) {
-//		// an I/O failure would keep the extension elements unloaded
-//		//TO DO: log this exception?
-////		if (InternalPlatform.DEBUG)
-////			e.printStackTrace();
-//	} catch (RegistryCacheReader.InvalidRegistryCacheException e) {
-//		// it has already been checked by RegistryCacheLazyReader - shouldn't happen
-////		if (InternalPlatform.DEBUG)
-////			e.printStackTrace();		
-//	} finally {
-//		try {
-//			if (input != null)
-//				input.close();
-//		} catch (IOException ioe) {
-//		}
-//	}
-//}
 /**
  * Indicates that the registry cache is dirty and should be rewritten on shutdown.
  */
 public void setCacheDirty() {
-//	cacheDirty = true;
 }
-//void setCacheReader(RegistryCacheReader registryCacheReader) {
-//	this.registryCacheReader = registryCacheReader;
-//}
 }
