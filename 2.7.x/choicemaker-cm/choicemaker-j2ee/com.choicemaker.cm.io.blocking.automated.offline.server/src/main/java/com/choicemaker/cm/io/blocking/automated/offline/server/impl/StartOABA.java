@@ -175,7 +175,7 @@ public class StartOABA implements MessageListener, Serializable {
 					// FIXME move this parameter to a persistent operational object
 					data.validator = validator;
 
-					sendToUpdateStatus(jobId, 10);
+					sendToUpdateStatus(jobId, OabaProcessing.PCT_DONE_REC_VAL);
 					sendToBlocking(data);
 				}
 

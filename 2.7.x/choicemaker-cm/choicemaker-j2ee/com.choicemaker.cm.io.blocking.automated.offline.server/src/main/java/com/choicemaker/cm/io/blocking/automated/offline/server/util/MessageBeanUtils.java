@@ -43,10 +43,9 @@ public class MessageBeanUtils {
 		OABAConfiguration oabaConfig) throws RemoteException, BlockingException {
 		
 		batchJob.markAsAborted();
-					
+		// FIXME description used to hold operational parameter
 		if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
 			status.setCurrentProcessingEvent (OabaEvent.DONE_OABA);
-				
 			log.info("Removing Temporary directory.");
 			oabaConfig.removeTempDir();
 		}

@@ -198,14 +198,6 @@ public class StartOabaIT {
 	@EJB
 	protected TransitivityJobController controller;
 
-	// FAILS
-	// @Resource(lookup = "NONSENSEchoicemaker/urm/jms/blockQueue")
-	// @Resource(lookup = "nonsense/urm/jms/blockQueue")
-	// @Resource(lookup = "nonsense/urm/jms/blockQueue")
-	// WORKS
-	// @Resource(lookup = "java:jboss/exported/choicemaker/urm/jms/blockQueue")
-	// @Resource(lookup = "/choicemaker/urm/jms/blockQueue")
-	// CURRENT
 	@Resource(lookup = "choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
 
