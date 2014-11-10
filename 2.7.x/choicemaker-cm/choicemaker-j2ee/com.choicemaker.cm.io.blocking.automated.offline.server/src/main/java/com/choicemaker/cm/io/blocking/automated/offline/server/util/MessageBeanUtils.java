@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 
@@ -44,7 +45,7 @@ public class MessageBeanUtils {
 		batchJob.markAsAborted();
 					
 		if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-			status.setCurrentProcessingEvent (OabaProcessing.DONE_OABA);
+			status.setCurrentProcessingEvent (OabaEvent.DONE_OABA);
 				
 			log.info("Removing Temporary directory.");
 			oabaConfig.removeTempDir();

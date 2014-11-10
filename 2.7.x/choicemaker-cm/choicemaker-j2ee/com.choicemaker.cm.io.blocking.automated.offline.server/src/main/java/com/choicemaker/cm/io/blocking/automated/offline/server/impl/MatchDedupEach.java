@@ -126,7 +126,7 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 					MessageBeanUtils.stopJob(batchJob, status, oabaConfig);
 
 				} else {
-					if (status.getCurrentProcessingEvent() != OabaProcessing.MERGE_DEDUP_MATCHES) {
+					if (status.getCurrentProcessingEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
 						// max number of match in a temp file
 						String temp =
 							(String) stageModel.properties()

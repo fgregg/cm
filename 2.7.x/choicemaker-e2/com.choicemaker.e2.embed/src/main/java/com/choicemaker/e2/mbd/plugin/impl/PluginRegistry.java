@@ -28,7 +28,7 @@ import com.choicemaker.e2.mbd.runtime.IStatus;
 import com.choicemaker.e2.mbd.runtime.Plugin;
 import com.choicemaker.e2.mbd.runtime.PluginVersionIdentifier;
 import com.choicemaker.e2.mbd.runtime.impl.InternalPlatform;
-import com.choicemaker.e2.mbd.runtime.model.ConfigurationPropertyModel;
+//import com.choicemaker.e2.mbd.runtime.model.ConfigurationPropertyModel;
 import com.choicemaker.e2.mbd.runtime.model.ExtensionPointModel;
 import com.choicemaker.e2.mbd.runtime.model.PluginDescriptorModel;
 import com.choicemaker.e2.mbd.runtime.model.PluginPrerequisiteModel;

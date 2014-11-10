@@ -78,19 +78,19 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (UpdateData) msg.getObject();
 				
-				log.fine("Starting to update job ID: " + data.jobID + " " + data.percentComplete);
+				log.fine("Starting to update job ID: " + data.getJobID() + " " + data.getPercentComplete());
 
-				final BatchJob job = this.configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
+				final BatchJob job = this.configuration.findBatchJobById(em, BatchJobBean.class, data.getJobID());
 				
-				if (data.percentComplete == 0) {
+				if (data.getPercentComplete() == 0) {
 					job.markAsStarted();
 				}
-				else if (data.percentComplete == 100) {
+				else if (data.getPercentComplete() == 100) {
 					job.markAsCompleted();
 				}
 				else {
 					job.markAsStarted();
-					job.setFractionComplete( data.percentComplete );
+					job.setFractionComplete( data.getPercentComplete() );
 				}
 
 			} else {

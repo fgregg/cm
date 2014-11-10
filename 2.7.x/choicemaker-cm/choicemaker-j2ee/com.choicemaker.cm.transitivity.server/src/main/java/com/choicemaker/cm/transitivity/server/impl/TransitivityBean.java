@@ -36,6 +36,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
@@ -199,7 +201,11 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 
 		//set the correct status for chunk could run.
 		OabaProcessing status = configuration.getProcessingLog(em, data);
-		status.setCurrentProcessingEvent(OabaProcessing.DONE_TRANS_DEDUP_OVERSIZED);
+//		status.setCurrentProcessingEvent(TransEvent.EVT_DONE_TRANS_DEDUP_OVERSIZED);
+		// HACK
+		assert TransEvent.DONE_TRANS_DEDUP_OVERSIZED.eventId == OabaEvent.DONE_DEDUP_OVERSIZED.eventId ;
+		status.setCurrentProcessingEvent(OabaEvent.DONE_DEDUP_OVERSIZED);
+		// END HACK
 
 		ChunkService3 chunkService =
 			new ChunkService3(source2, null, data.staging, data.master,
@@ -256,13 +262,8 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 	 */
 	private void sendToUpdateTransStatus (long jobID, int percentComplete) throws NamingException, JMSException {
 		Queue queue = configuration.getUpdateTransMessageQueue();
-
-		UpdateData data = new UpdateData();
-		data.jobID = jobID;
-		data.percentComplete = percentComplete;
-
+		UpdateData data = new UpdateData(jobID, percentComplete);
 		log.info ("send to updateTransQueue " + jobID + " " + percentComplete);
-
 		configuration.sendMessage(queue, data);
 	}
 

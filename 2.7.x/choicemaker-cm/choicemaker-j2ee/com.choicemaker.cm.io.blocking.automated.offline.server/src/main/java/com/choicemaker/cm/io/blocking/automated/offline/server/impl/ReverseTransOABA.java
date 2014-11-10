@@ -25,6 +25,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
@@ -106,7 +107,7 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 					batchJob.markAsAborted();
 
 					if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-						status.setCurrentProcessingEvent (OabaProcessing.DONE_OABA);
+						status.setCurrentProcessingEvent (OabaEvent.DONE_OABA);
 						oabaConfig.removeTempDir();
 					}
 				} else {
@@ -139,7 +140,7 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 					rtService.runService();
 					log.info( "Done reverse translate " + rtService.getTimeElapsed());
 
-					if (status.getStatus() <= OabaProcessing.DONE_REVERSE_TRANSLATE_OVERSIZED) {
+					if (status.getStatus() <= OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED) {
 						//write block statistics
 						source = bFactory.getSource(bSink);
 
@@ -176,11 +177,7 @@ public class ReverseTransOABA implements MessageDrivenBean, MessageListener {
 	private void sendToUpdateStatus (long jobID, int percentComplete) throws NamingException {
 
 		Queue queue = configuration.getUpdateMessageQueue();
-
-		UpdateData data = new UpdateData();
-		data.jobID = jobID;
-		data.percentComplete = percentComplete;
-
+		UpdateData data = new UpdateData(jobID, percentComplete);
 		configuration.sendMessage(queue, data);
 	}
 

@@ -394,13 +394,8 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 	 */
 	private void sendToUpdateStatus(long jobID, int percentComplete)
 			throws NamingException {
-
 		Queue queue = configuration.getUpdateMessageQueue();
-
-		UpdateData data = new UpdateData();
-		data.jobID = jobID;
-		data.percentComplete = percentComplete;
-
+		UpdateData data = new UpdateData(jobID, percentComplete);
 		configuration.sendMessage(queue, data);
 	}
 

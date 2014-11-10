@@ -32,6 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
@@ -187,21 +188,21 @@ public class RecValService3 {
 	public void runService () throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_REC_VAL) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_REC_VAL) {
 
 			log.info ("recover rec,val files and translator");
 			//need to initialize
 			init ();
 
-		} else if (status.getCurrentProcessingEvent() < OabaProcessing.DONE_REC_VAL) {
+		} else if (status.getCurrentProcessingEventId() < OabaProcessing.EVT_DONE_REC_VAL) {
 			log.info ("Creating new rec,val files");
 
 			//create the rec_id, val_id files
-			status.setCurrentProcessingEvent( OabaProcessing.CREATE_REC_VAL);
+			status.setCurrentProcessingEvent( OabaEvent.CREATE_REC_VAL);
 
 			createFiles ();
 
-			if (!stop) status.setCurrentProcessingEvent( OabaProcessing.DONE_REC_VAL);
+			if (!stop) status.setCurrentProcessingEvent( OabaEvent.DONE_REC_VAL);
 
 		}
 		time = System.currentTimeMillis() - time;

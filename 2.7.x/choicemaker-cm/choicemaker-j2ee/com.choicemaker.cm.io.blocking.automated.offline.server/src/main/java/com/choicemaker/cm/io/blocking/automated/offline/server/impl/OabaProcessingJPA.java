@@ -47,7 +47,7 @@ public interface OabaProcessingJPA {
 	 * {@link com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing
 	 * OabaProcessing}
 	 */
-	String CN_STATUS_ID = "EVENT_ID";
+	String CN_EVENT_ID = "EVENT_ID";
 
 	/**
 	 * Free-form information.

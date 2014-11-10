@@ -78,19 +78,19 @@ public class UpdateTransitivityStatus implements MessageDrivenBean, MessageListe
 				msg = (ObjectMessage) inMessage;
 				data = (UpdateData) msg.getObject();
 				
-				log.fine("Starting to update job ID: " + data.jobID + " " + data.percentComplete);
+				log.fine("Starting to update job ID: " + data.getJobID() + " " + data.getPercentComplete());
 
-				final TransitivityJob job = (TransitivityJob) configuration.findBatchJobById(em, TransitivityJobBean.class, data.jobID);
+				final TransitivityJob job = (TransitivityJob) configuration.findBatchJobById(em, TransitivityJobBean.class, data.getJobID());
 				
-				if (data.percentComplete == 0) {
+				if (data.getPercentComplete() == 0) {
 					job.markAsStarted();
 				}
-				else if (data.percentComplete == 100) {
+				else if (data.getPercentComplete() == 100) {
 					job.markAsCompleted();
 				}
 				else {
 					job.markAsStarted();
-					job.setFractionComplete( data.percentComplete );
+					job.setFractionComplete( data.getPercentComplete() );
 				}
 
 			} else {

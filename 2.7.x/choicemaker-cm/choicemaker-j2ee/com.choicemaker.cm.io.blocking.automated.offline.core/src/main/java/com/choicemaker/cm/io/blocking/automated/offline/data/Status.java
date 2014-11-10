@@ -18,6 +18,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 /**
  * This class used to store the current processing stage of the OABA in a file,
  * which was used if a job need to be recovered.
+ * 
  * @deprecated Store status in the database
  */
 @Deprecated
@@ -25,47 +26,69 @@ public class Status implements Serializable, OabaProcessing {
 
 	static final long serialVersionUID = 271;
 
-	private int currentEvent;
+	private OabaEvent currentEvent;
 
 	private String info;
 
-	/** This sets the current event.
+	public Status() {
+		this.currentEvent = OabaEvent.INIT;
+	}
+
+	/**
+	 * This sets the current event.
 	 * 
 	 * @param stat
 	 * @throws IOException
 	 */
-	public void setCurrentProcessingEvent (int event) {
+	@Override
+	public void setCurrentProcessingEvent(OabaEvent event) {
 		setCurrentProcessingEvent(event, null);
 	}
 
-	public void setCurrentProcessingEvent (int event, String info) {
+	@Override
+	public void setCurrentProcessingEvent(OabaEvent event, String info) {
+		if (event == null) {
+			throw new IllegalArgumentException("null event");
+		}
 		currentEvent = event;
 		this.info = info;
-		writeStatus (info);
+		writeStatus(info);
 	}
 
-	/** This gets the current status.
+	/**
+	 * This gets the current status.
 	 * 
 	 * @return int - returns the current status code.
 	 */
-	public int getCurrentProcessingEvent () {
-		return currentEvent;
-	}
-	
-	public String toString () {
-		return Integer.toString(currentEvent);
+	@Override
+	public int getCurrentProcessingEventId() {
+		return currentEvent.eventId;
 	}
 
-	/** This method returns any additional info that is associated with this status.
+	@Override
+	public OabaEvent getCurrentProcessingEventObject() {
+		return currentEvent;
+	}
+
+	@Override
+	public String toString() {
+		return "Status [currentEvent=" + currentEvent + ", info=" + info + "]";
+	}
+
+	/**
+	 * This method returns any additional info that is associated with this
+	 * status.
 	 * 
-	 * @return String - This contains additional info associated with this status.
+	 * @return String - This contains additional info associated with this
+	 *         status.
 	 */
-	public String getAdditionalInfo () {
+	@Override
+	public String getAdditionalInfo() {
 		return info;
 	}
 
-	private void writeStatus (String info) {
+	private void writeStatus(String info) {
 		throw new Error("no longer implemented -- store status in the database");
 	}
-	
+
 }

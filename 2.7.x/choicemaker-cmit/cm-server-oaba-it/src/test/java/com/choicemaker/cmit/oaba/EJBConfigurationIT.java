@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
@@ -307,13 +308,13 @@ public class EJBConfigurationIT {
 			assertTrue(after.compareTo(ts) >= 0);
 
 			assertTrue(job.getId() == objp.getJobId());
-			assertTrue(OabaProcessing.INIT == objp.getCurrentProcessingEvent());
+			assertTrue(OabaProcessing.EVT_INIT == objp.getCurrentProcessingEventId());
 			assertTrue(null == objp.getAdditionalInfo());
 
 			// Set the status and additional info of the entry
 			final String info0 = "nonsense0";
 			before = new Date();
-			objp.setCurrentProcessingEvent(OabaProcessing.ALLOCATE_CHUNKS, info0);
+			objp.setCurrentProcessingEvent(OabaEvent.ALLOCATE_CHUNKS, info0);
 			after = new Date();
 
 			ts = objp.getTimestamp();
@@ -321,13 +322,13 @@ public class EJBConfigurationIT {
 			assertTrue(after.compareTo(ts) >= 0);
 
 			assertTrue(job.getId() == objp.getJobId());
-			assertTrue(OabaProcessing.ALLOCATE_CHUNKS == objp
-					.getCurrentProcessingEvent());
+			assertTrue(OabaProcessing.EVT_ALLOCATE_CHUNKS == objp
+					.getCurrentProcessingEventId());
 			assertTrue(info0 == objp.getAdditionalInfo());
 
 			// Change the status and additional info
 			before = new Date();
-			objp.setCurrentProcessingEvent(OabaProcessing.BLOCK_BY_ONE_COLUMN);
+			objp.setCurrentProcessingEvent(OabaEvent.BLOCK_BY_ONE_COLUMN);
 			after = new Date();
 
 			ts = objp.getTimestamp();
@@ -335,14 +336,14 @@ public class EJBConfigurationIT {
 			assertTrue(after.compareTo(ts) >= 0);
 
 			assertTrue(job.getId() == objp.getJobId());
-			assertTrue(OabaProcessing.BLOCK_BY_ONE_COLUMN == objp
-					.getCurrentProcessingEvent());
+			assertTrue(OabaProcessing.EVT_BLOCK_BY_ONE_COLUMN == objp
+					.getCurrentProcessingEventId());
 			assertTrue(null == objp.getAdditionalInfo());
 
 			// Change the status and additional info yet again
 			final String info1 = "nonsense1";
 			before = new Date();
-			objp.setCurrentProcessingEvent(OabaProcessing.CREATE_CHUNK_IDS, info1);
+			objp.setCurrentProcessingEvent(OabaEvent.CREATE_CHUNK_IDS, info1);
 			after = new Date();
 
 			ts = objp.getTimestamp();
@@ -350,8 +351,8 @@ public class EJBConfigurationIT {
 			assertTrue(after.compareTo(ts) >= 0);
 
 			assertTrue(job.getId() == objp.getJobId());
-			assertTrue(OabaProcessing.CREATE_CHUNK_IDS == objp
-					.getCurrentProcessingEvent());
+			assertTrue(OabaProcessing.EVT_CREATE_CHUNK_IDS == objp
+					.getCurrentProcessingEventId());
 			assertTrue(info1 == objp.getAdditionalInfo());
 
 			// Commit the transaction
@@ -368,8 +369,8 @@ public class EJBConfigurationIT {
 			assertTrue(after.compareTo(ts) >= 0);
 
 			assertTrue(job.getId() == objp.getJobId());
-			assertTrue(OabaProcessing.CREATE_CHUNK_IDS == objp
-					.getCurrentProcessingEvent());
+			assertTrue(OabaProcessing.EVT_CREATE_CHUNK_IDS == objp
+					.getCurrentProcessingEventId());
 			assertTrue(info1 == objp.getAdditionalInfo());
 
 			// Commit the transaction
@@ -388,8 +389,8 @@ public class EJBConfigurationIT {
 			assertTrue(after.compareTo(ts) >= 0);
 
 			assertTrue(job.getId() == objp.getJobId());
-			assertTrue(OabaProcessing.CREATE_CHUNK_IDS == objp
-					.getCurrentProcessingEvent());
+			assertTrue(OabaProcessing.EVT_CREATE_CHUNK_IDS == objp
+					.getCurrentProcessingEventId());
 			assertTrue(info1 == objp.getAdditionalInfo());
 
 			// Clean up

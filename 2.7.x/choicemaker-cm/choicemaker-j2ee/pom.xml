@@ -23,6 +23,7 @@
   </description>
 
   <modules>
+    <module>com.choicemaker.cm.io.blocking.automated.offline</module>
     <module>com.choicemaker.cm.io.blocking.automated.offline.core</module>
     <module>com.choicemaker.cm.io.blocking.automated.offline.server</module>
     <module>com.choicemaker.cm.server.core</module>

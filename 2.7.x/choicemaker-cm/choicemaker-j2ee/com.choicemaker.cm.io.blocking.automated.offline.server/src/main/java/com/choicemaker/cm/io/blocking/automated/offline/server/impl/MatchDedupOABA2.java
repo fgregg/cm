@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -180,7 +181,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 			MessageBeanUtils.stopJob(batchJob, status, oabaConfig);
 
 		} else {
-			status.setCurrentProcessingEvent(OabaProcessing.MERGE_DEDUP_MATCHES);
+			status.setCurrentProcessingEvent(OabaEvent.MERGE_DEDUP_MATCHES);
 
 			// get the number of processors
 			String temp = (String) stageModel.properties().get("numProcessors");
@@ -191,7 +192,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 
 			// mark as done
 			sendToUpdateStatus(d.jobID, 100);
-			status.setCurrentProcessingEvent(OabaProcessing.DONE_OABA);
+			status.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 //			publishStatus(d.jobID);
 
 			// send to transitivity
@@ -311,11 +312,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 	protected void sendToUpdateStatus(long jobID, int percentComplete)
 			throws NamingException, JMSException {
 		Queue queue = configuration.getUpdateMessageQueue();
-
-		UpdateData data = new UpdateData();
-		data.jobID = jobID;
-		data.percentComplete = percentComplete;
-
+		UpdateData data = new UpdateData(jobID, percentComplete);
 		configuration.sendMessage(queue, data);
 	}
 

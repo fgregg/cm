@@ -41,4 +41,5 @@ public interface OabaBatchJobProcessing extends OabaProcessing {
 
 	@Deprecated
 	long getVersion();
+
 }

@@ -119,13 +119,8 @@ public class TransMatchScheduler extends MatchScheduler2 {
 	 */
 	protected void sendToUpdateStatus (long jobID, int percentComplete) throws NamingException, JMSException {
 		Queue queue = configuration.getUpdateTransMessageQueue();
-
-		UpdateData data = new UpdateData();
-		data.jobID = jobID;
-		data.percentComplete = percentComplete;
-		
+		UpdateData data = new UpdateData(jobID, percentComplete);
 		log.info ("send to updateTransQueue " + jobID + " " + percentComplete);
-		
 		configuration.sendMessage(queue, data);
 	} 
 

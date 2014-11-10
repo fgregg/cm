@@ -142,6 +142,11 @@
 
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
+      <artifactId>simple_person_matching</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.analyzer.base</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>

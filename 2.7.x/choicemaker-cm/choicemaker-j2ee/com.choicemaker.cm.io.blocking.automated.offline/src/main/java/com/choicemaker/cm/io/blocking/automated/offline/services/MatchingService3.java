@@ -31,6 +31,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
@@ -133,11 +134,11 @@ public class MatchingService3 {
 	public void runService () throws BlockingException, XmlConfException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_MATCHING_DATA ) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA ) {
 			//do nothing
 
-		} else if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_CREATE_CHUNK_DATA  &&
-			status.getCurrentProcessingEvent() <= OabaProcessing.DONE_ALLOCATE_CHUNKS ) {
+		} else if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA  &&
+			status.getCurrentProcessingEventId() <= OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS ) {
 
 			numChunks = Integer.parseInt( status.getAdditionalInfo() );
 
@@ -149,7 +150,7 @@ public class MatchingService3 {
 			startMatching (0);
 			mSink.close();
 
-		} else if (status.getCurrentProcessingEvent() == OabaProcessing.MATCHING_DATA ) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_MATCHING_DATA ) {
 			//recovery mode
 			String temp =  status.getAdditionalInfo();
 			int ind = temp.indexOf( OabaProcessing.DELIMIT);
@@ -299,7 +300,7 @@ public class MatchingService3 {
 
 			//log the status
 			String temp = Integer.toString(numChunks) + OabaProcessing.DELIMIT + Integer.toString(i);
-			status.setCurrentProcessingEvent( OabaProcessing.MATCHING_DATA, temp );
+			status.setCurrentProcessingEvent( OabaEvent.MATCHING_DATA, temp );
 
 			source.close();
 
@@ -324,7 +325,7 @@ public class MatchingService3 {
 		sources.cleanUp();
 		Osources.cleanUp();
 
-		status.setCurrentProcessingEvent( OabaProcessing.DONE_MATCHING_DATA);
+		status.setCurrentProcessingEvent( OabaEvent.DONE_MATCHING_DATA);
 	}
 
 

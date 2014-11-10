@@ -1,5 +1,6 @@
 package com.choicemaker.cmit.oaba;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_REC_VAL;
 import static com.choicemaker.cmit.oaba.util.OabaConstants.CURRENT_MAVEN_COORDINATES;
 import static com.choicemaker.cmit.oaba.util.OabaConstants.PERSISTENCE_CONFIGURATION;
 import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_HAS_BEANS;
@@ -18,7 +19,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,6 +47,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
@@ -197,14 +198,14 @@ public class StartOabaIT {
 	@EJB
 	protected TransitivityJobController controller;
 
-// FAILS
-//	@Resource(lookup = "NONSENSEchoicemaker/urm/jms/blockQueue")
-//	@Resource(lookup = "nonsense/urm/jms/blockQueue")
-//	@Resource(lookup = "nonsense/urm/jms/blockQueue")
-//	WORKS
-//	@Resource(lookup = "java:jboss/exported/choicemaker/urm/jms/blockQueue")
-//	@Resource(lookup = "/choicemaker/urm/jms/blockQueue")
-//	CURRENT
+	// FAILS
+	// @Resource(lookup = "NONSENSEchoicemaker/urm/jms/blockQueue")
+	// @Resource(lookup = "nonsense/urm/jms/blockQueue")
+	// @Resource(lookup = "nonsense/urm/jms/blockQueue")
+	// WORKS
+	// @Resource(lookup = "java:jboss/exported/choicemaker/urm/jms/blockQueue")
+	// @Resource(lookup = "/choicemaker/urm/jms/blockQueue")
+	// CURRENT
 	@Resource(lookup = "choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
 
@@ -276,15 +277,6 @@ public class StartOabaIT {
 		}
 		logExiting(METHOD);
 	}
-
-	// @Test
-	// public void testHello() {
-	// System.out.println("HELLO ORIG");
-	// assertTrue(setupOK);
-	// for (int i=0; i<10; i++) {
-	// System.out.println("HELLO ORIG " + i);
-	// }
-	// }
 
 	@Test
 	@InSequence(1)
@@ -373,11 +365,15 @@ public class StartOabaIT {
 	public void clearUpdateQueue() {
 		assertTrue(setupOK);
 		JMSConsumer consumer = jmsContext.createConsumer(updateQueue);
-		UpdateData updateData = null;
+		Object o = null;
+//		UpdateData updateData = null;
 		do {
-			updateData = receiveUpdateData(consumer);
-			logger.finest(queueInfo("Clearing: ", updateQueue, updateData));
-		} while (updateData != null);
+			o = receiveUpdateData(consumer);
+			logger.finest(queueInfo("Clearing: ", updateQueue, o));
+			if (o != null && !(o instanceof UpdateData)) {
+				logger.severe("Wrong message type on update queue: " + o == null ? null : o.getClass().getName());
+			}
+		} while (o != null);
 	}
 
 	@Test
@@ -399,48 +395,98 @@ public class StartOabaIT {
 		String TEST = "testStartOABALinkage";
 		logEntering(TEST);
 
-		TestEntities te = new TestEntities();
 		final String externalID = EntityManagerUtils.createExternalId(TEST);
 		final SimplePersonSqlServerTestConfiguration c =
 			new SimplePersonSqlServerTestConfiguration();
-		c.initialize(e2service.getPluginRegistry());
+		c.initialize(this.e2service.getPluginRegistry());
+
+		final BatchParameters bp =
+				new BatchParametersBean(c.getModelConfigurationName(),
+						c.getSingleRecordMatchingThreshold(), c.getThresholds()
+								.getDifferThreshold(), c.getThresholds()
+								.getMatchThreshold(), c.getStagingRecordSource(),
+						c.getMasterRecordSource(), c.getTransitivityAnalysisFlag());
+		testStartOABA(TEST, externalID, bp);
+
+		logExiting(TEST);
+	}
+
+	@Test
+	@InSequence(6)
+	public void testStartOABAStage() {
+		assertTrue(setupOK);
+		String TEST = "testStartOABAStage";
+		logEntering(TEST);
+
+		final String externalID = EntityManagerUtils.createExternalId(TEST);
+		final SimplePersonSqlServerTestConfiguration c =
+			new SimplePersonSqlServerTestConfiguration();
+		c.initialize(this.e2service.getPluginRegistry());
+
+		// The master record source should must be null in this set of batch
+		// parameters in order to test the startOABAStage(..) method
+		final ISerializableDbRecordSource MASTER = null;
 		final BatchParameters bp =
 			new BatchParametersBean(c.getModelConfigurationName(),
 					c.getSingleRecordMatchingThreshold(), c.getThresholds()
 							.getDifferThreshold(), c.getThresholds()
 							.getMatchThreshold(), c.getStagingRecordSource(),
-					c.getMasterRecordSource(), c.getTransitivityAnalysisFlag());
-		logger.info(TEST + ": invoking BatchQueryService.startOABA");
-		long jobId =
-			batchQuery.startOABA(externalID, bp.getStageRs(), bp.getMasterRs(),
-					bp.getLowThreshold(), bp.getHighThreshold(),
-					bp.getModelConfigurationName(), bp.getMaxSingle(),
-					bp.getTransitivity());
-		logger.info(TEST + ": returned from BatchQueryService.startOABA");
-		assertTrue(BatchParametersBean.INVALID_PARAMSID != jobId);
+							MASTER, c.getTransitivityAnalysisFlag());
+		testStartOABA(TEST, externalID, bp);
+
+		logExiting(TEST);
+	}
+
+	public void testStartOABA(final String tag, final String externalId,
+			final BatchParameters bp) {
+
+		if (externalId == null || bp == null) {
+			throw new IllegalArgumentException("null argument");
+		}
+
+		TestEntities te = new TestEntities();
+
+		final long jobId;
+		if (bp.getMasterRs() == null) {
+			logger.info(tag + ": invoking BatchQueryService.startOABAStage");
+			jobId =
+				batchQuery.startOABAStage(externalId, bp.getStageRs(),
+						bp.getLowThreshold(), bp.getHighThreshold(),
+						bp.getModelConfigurationName(), bp.getMaxSingle(),
+						bp.getTransitivity());
+			logger.info(tag + ": returned from BatchQueryService.startOABA");
+		} else {
+			logger.info(tag + ": invoking BatchQueryService.startOABAStage");
+			jobId =
+				batchQuery.startOABA(externalId, bp.getStageRs(),
+						bp.getMasterRs(), bp.getLowThreshold(),
+						bp.getHighThreshold(), bp.getModelConfigurationName(),
+						bp.getMaxSingle(), bp.getTransitivity());
+			logger.info(tag + ": returned from BatchQueryService.startOABA");
+		}
+		assertTrue(BatchJobBean.INVALID_BATCHJOB_ID != jobId);
 		BatchJob batchJob = em.find(BatchJobBean.class, jobId);
 		assertTrue(batchJob != null);
 		te.add(batchJob);
-		assertTrue(externalID != null
-				&& externalID.equals(batchJob.getExternalId()));
+		assertTrue(externalId != null
+				&& externalId.equals(batchJob.getExternalId()));
 
-		logger.info("Checking blockQueue");
-		JMSConsumer consumer = jmsContext.createConsumer(blockQueue);
-		StartData startData = receiveStartData(consumer, LONG_TIMEOUT_MILLIS);
-		logger.info(queueInfo("Received from: ", blockQueue, startData));
-		if (startData == null) {
-			fail("did not receive start data");
-		}
-		assertTrue(startData.jobID == jobId);
-
+		// Find the persistent BatchParameters object created by the call to
+		// BatchQueryService.startOABA...
 		BatchParameters params =
 			EJBConfiguration.getInstance().findBatchParamsByJobId(em, jobId);
-		assertTrue(params != null);
 		te.add(params);
+
+		// Validate that the job parameters are correct
+		assertTrue(params != null);
 		assertTrue(params.getLowThreshold() == bp.getLowThreshold());
 		assertTrue(params.getHighThreshold() == bp.getHighThreshold());
-		assertTrue(params.getMasterRs() != null
-				&& params.getMasterRs().equals(bp.getMasterRs()));
+		if (bp.getMasterRs() == null) {
+			assertTrue(params.getMasterRs() == null);
+		} else {
+			assertTrue(params.getMasterRs() != null
+					&& params.getMasterRs().equals(bp.getMasterRs()));
+		}
 		assertTrue(params.getStageRs() != null
 				&& params.getStageRs().equals(bp.getStageRs()));
 		assertTrue(params.getModelConfigurationName() != null
@@ -449,11 +495,45 @@ public class StartOabaIT {
 		assertTrue(params.getMaxSingle() == bp.getMaxSingle());
 		assertTrue(params.getTransitivity() == bp.getTransitivity());
 
+		// Check that the startOABA method completed and sent out a message
+		// on the blocking queue
+		logger.info("Checking blockQueue");
+		JMSConsumer consumer = jmsContext.createConsumer(blockQueue);
+		StartData startData = receiveStartData(consumer, LONG_TIMEOUT_MILLIS);
+		logger.info(queueInfo("Received from: ", blockQueue, startData));
+		if (startData == null) {
+			fail("did not receive data from blocking queue");
+		}
+		assertTrue(startData.jobID == jobId);
+
+		// Find the persistent OabaProcessing object updated by the StartOABA
+		// message driven bean
 		OabaBatchJobProcessing processingEntry =
 			EJBConfiguration.getInstance().findProcessingLogByJobId(em, jobId);
-		assertTrue(processingEntry != null);
-		assertTrue(processingEntry.getCurrentProcessingEvent() == OabaProcessing.DONE_REC_VAL);
 		te.add(processingEntry);
+
+		// Validate that OabaProcessing entry is correct for this stage
+//		em.getEntityManagerFactory().getCache().evictAll();
+		assertTrue(processingEntry != null);
+		assertTrue(processingEntry.getCurrentProcessingEventId() == EVT_DONE_REC_VAL);
+
+		// Check that the startOABA method sent out a message on the update
+		// queue
+		logger.info("Checking updateQueue");
+		consumer = jmsContext.createConsumer(updateQueue);
+		Object o = 
+				receiveUpdateData(consumer, SHORT_TIMEOUT_MILLIS);
+		logger.info(queueInfo("Received from: ", blockQueue, o));
+		if (o == null) {
+			fail("did not receive data from update queue");
+		}
+		if (!(o instanceof UpdateData)) {
+			fail("Received wrong type from update queue: " + o == null ? null
+					: o.getClass().getName());
+		}
+		UpdateData updateData = (UpdateData) o;
+		assertTrue(updateData.getJobID() == jobId);
+		assertTrue(updateData.getPercentComplete() == OabaProcessing.PCT_DONE_REC_VAL);
 
 		try {
 			te.removePersistentObjects(em, utx);
@@ -462,107 +542,7 @@ public class StartOabaIT {
 			fail(x.toString());
 		}
 
-		logExiting(TEST);
-	}
-
-	// @Test
-	// @InSequence(6)
-	// public void testStartOABAStage() {
-	// assertTrue(setupOK);
-	// String TEST = "testStartOABAStage";
-	// TestEntities te = new TestEntities();
-	// final String externalID = EntityManagerUtils.createExternalId(TEST);
-	// final SimplePersonSqlServerTestConfiguration c =
-	// new SimplePersonSqlServerTestConfiguration();
-	// c.initialize(this.e2service.getPluginRegistry());
-	//
-	// // The master record source should must be null in this set of batch
-	// // parameters since it will be compared against the parameters created
-	// // by the startOABAStage, which will create another set of parameters
-	// // (in which the master records is automatically set to null)
-	// final SerializableRecordSource MASTER_SOURCE = null;
-	// final BatchParameters bp =
-	// new BatchParametersBean(c.getModelConfigurationName(),
-	// c.getSingleRecordMatchingThreshold(), c.getThresholds()
-	// .getDifferThreshold(), c.getThresholds()
-	// .getMatchThreshold(), c.getStagingRecordSource(),
-	// MASTER_SOURCE, c.getTransitivityAnalysisFlag());
-	//
-	// long jobId =
-	// batchQuery.startOABAStage(externalID, bp.getStageRs(),
-	// bp.getLowThreshold(), bp.getHighThreshold(),
-	// bp.getModelConfigurationName(), bp.getMaxSingle(),
-	// bp.getTransitivity());
-	// assertTrue(BatchParametersBean.INVALID_PARAMSID != jobId);
-	// BatchJob batchJob = em.find(BatchJobBean.class, jobId);
-	// assertTrue(batchJob != null);
-	// te.add(batchJob);
-	// assertTrue(externalID != null
-	// && externalID.equals(batchJob.getExternalId()));
-	//
-	// StartData startData = receiveBlockData();
-	// if (startData == null) {
-	// fail("did not receive start data");
-	// }
-	// assertTrue(startData.jobID == jobId);
-	//
-	// BatchParameters params =
-	// EJBConfiguration.getInstance().findBatchParamsByJobId(em, jobId);
-	// assertTrue(params != null);
-	// assertTrue(params != null);
-	// te.add(params);
-	// assertTrue(params.getLowThreshold() == bp.getLowThreshold());
-	// assertTrue(params.getHighThreshold() == bp.getHighThreshold());
-	// // assertTrue(params.getMasterRs() != null &&
-	// // params.getMasterRs().equals(bp.getMasterRs()));
-	// assertTrue(params.getStageRs() != null
-	// && params.getStageRs().equals(bp.getStageRs()));
-	// assertTrue(params.getModelConfigurationName() != null
-	// && params.getModelConfigurationName().equals(
-	// bp.getModelConfigurationName()));
-	// assertTrue(params.getMaxSingle() == bp.getMaxSingle());
-	// assertTrue(params.getTransitivity() == bp.getTransitivity());
-	//
-	// OabaBatchJobProcessing processingEntry =
-	// EJBConfiguration.getInstance().findProcessingLogByJobId(em, jobId);
-	// assertTrue(processingEntry != null);
-	// assertTrue(processingEntry.getCurrentProcessingEvent() ==
-	// OabaProcessing.INIT);
-	// te.add(processingEntry);
-	//
-	// try {
-	// te.removePersistentObjects(em, utx);
-	// } catch (Exception x) {
-	// logger.severe(x.toString());
-	// fail(x.toString());
-	// }
-	// }
-
-	static class CallableStartData implements Callable<StartData> {
-		private final JMSConsumer consumer;
-		private final long timeOut;
-
-		public CallableStartData(JMSConsumer c, long to) {
-			if (c == null) {
-				throw new IllegalArgumentException("null consumer");
-			}
-			if (to < 0) {
-				throw new IllegalArgumentException("negative timeout: " + to);
-			}
-			this.consumer = c;
-			this.timeOut = to;
-		}
-
-		public StartData call() {
-			StartData retVal = null;
-			try {
-				retVal = consumer.receiveBody(StartData.class, timeOut);
-			} catch (Exception x) {
-				fail(x.toString());
-			}
-			return retVal;
-		}
-
+		logExiting(tag);
 	}
 
 	public StartData receiveStartData(JMSConsumer consumer) {
@@ -573,13 +553,6 @@ public class StartOabaIT {
 		final String METHOD = "receiveStartData(" + timeOut + ")";
 		logEntering(METHOD);
 		StartData retVal = null;
-		// CallableStartData csd = new CallableStartData(consumer, timeOut);
-		// Future<StartData> fsd = executor.submit(csd);
-		// try {
-		// retVal = fsd.get();
-		// } catch (InterruptedException | ExecutionException x) {
-		// fail(x.toString());
-		// }
 		try {
 			retVal = consumer.receiveBody(StartData.class, timeOut);
 		} catch (Exception x) {
@@ -589,19 +562,22 @@ public class StartOabaIT {
 		return retVal;
 	}
 
-	public UpdateData receiveUpdateData(JMSConsumer consumer) {
+//	public UpdateData receiveUpdateData(JMSConsumer consumer) {
+	public Object receiveUpdateData(JMSConsumer consumer) {
 		return receiveUpdateData(consumer, SHORT_TIMEOUT_MILLIS);
 	}
 
-	public UpdateData receiveUpdateData(JMSConsumer consumer, long timeOut) {
+//	public UpdateData receiveUpdateData(JMSConsumer consumer, long timeOut) {
+	public Object receiveUpdateData(JMSConsumer consumer, long timeOut) {
 		final String METHOD = "receiveUpdateData(" + timeOut + ")";
 		logEntering(METHOD);
 		if (consumer == null) {
 			throw new IllegalArgumentException("null consumer");
 		}
-		UpdateData retVal = null;
+//		UpdateData retVal = null;
+		Object retVal = null;
 		try {
-			retVal = consumer.receiveBody(UpdateData.class, timeOut);
+			retVal = consumer.receiveBody(Object.class, timeOut);
 		} catch (Exception x) {
 			fail(x.toString());
 		}

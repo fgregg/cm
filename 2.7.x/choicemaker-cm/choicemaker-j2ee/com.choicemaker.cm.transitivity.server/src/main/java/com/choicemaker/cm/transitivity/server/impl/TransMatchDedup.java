@@ -30,6 +30,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
@@ -122,7 +124,11 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 
 		//mark as done
 		sendToUpdateTransStatus (d.jobID, 100);
-		status.setCurrentProcessingEvent( OabaProcessing.DONE_TRANSANALYSIS);
+//		status.setCurrentProcessingEvent( OabaEvent.DONE_TRANSANALYSIS);
+		// HACK
+		assert OabaEvent.DONE_OABA.eventId == TransEvent.DONE_TRANSANALYSIS.eventId;
+		status.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
+		// END HACK
 
 	}
 
@@ -135,11 +141,7 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 	 */
 	protected void sendToUpdateTransStatus (long jobID, int percentComplete) throws NamingException, JMSException {
 		Queue queue = configuration.getUpdateTransMessageQueue();
-
-		UpdateData data = new UpdateData();
-		data.jobID = jobID;
-		data.percentComplete = percentComplete;
-
+		UpdateData data = new UpdateData(jobID, percentComplete);
 		configuration.sendMessage(queue, data);
 	}
 

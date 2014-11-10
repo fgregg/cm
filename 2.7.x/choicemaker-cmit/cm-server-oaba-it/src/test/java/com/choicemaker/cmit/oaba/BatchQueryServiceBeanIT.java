@@ -306,7 +306,7 @@ public class BatchQueryServiceBeanIT {
 		OabaBatchJobProcessing processingEntry =
 			EJBConfiguration.getInstance().findProcessingLogByJobId(em, jobId);
 		assertTrue(processingEntry != null);
-		assertTrue(processingEntry.getCurrentProcessingEvent() == OabaProcessing.INIT);
+		assertTrue(processingEntry.getCurrentProcessingEventId() == OabaProcessing.EVT_INIT);
 		te.add(processingEntry);
 
 		try {
@@ -363,7 +363,7 @@ public class BatchQueryServiceBeanIT {
 		OabaBatchJobProcessing processingEntry =
 			EJBConfiguration.getInstance().findProcessingLogByJobId(em, jobId);
 		assertTrue(processingEntry != null);
-		assertTrue(processingEntry.getCurrentProcessingEvent() == OabaProcessing.INIT);
+		assertTrue(processingEntry.getCurrentProcessingEventId() == OabaProcessing.EVT_INIT);
 		te.add(processingEntry);
 
 		try {

@@ -21,6 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
@@ -79,10 +80,10 @@ public class MatchDedupService3 {
 	public void runService () throws BlockingException {
 		time = System.currentTimeMillis();
 		
-		if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_DEDUP_MATCHES ) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_DEDUP_MATCHES ) {
 			//do nothing
 			
-		} else if (status.getCurrentProcessingEvent() == OabaProcessing.DONE_MATCHING_DATA) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_MATCHING_DATA) {
 				
 			//start writing out dedup
 			log.info ("start writing to temp match files");
@@ -99,7 +100,7 @@ public class MatchDedupService3 {
 			log.info ("total matches before " + numBefore);
 			log.info ("total matches after " + numAfter);
 
-			status.setCurrentProcessingEvent( OabaProcessing.DONE_DEDUP_MATCHES );
+			status.setCurrentProcessingEvent( OabaEvent.DONE_DEDUP_MATCHES );
 		}
 		
 		time = System.currentTimeMillis() - time;

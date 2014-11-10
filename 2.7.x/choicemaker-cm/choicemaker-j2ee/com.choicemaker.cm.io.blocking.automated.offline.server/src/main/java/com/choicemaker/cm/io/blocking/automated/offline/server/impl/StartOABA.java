@@ -252,10 +252,7 @@ public class StartOABA implements MessageListener, Serializable {
 	 */
 	private void sendToUpdateStatus(long jobID, int percentComplete)
 			throws NamingException, JMSException {
-		UpdateData data = new UpdateData();
-		data.jobID = jobID;
-		data.percentComplete = percentComplete;
-
+		UpdateData data = new UpdateData(jobID, percentComplete);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
 		JMSProducer sender = jmsContext.createProducer();
 		log.finest(queueInfo("Sending: ", updateQueue, data));

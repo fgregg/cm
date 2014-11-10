@@ -39,6 +39,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySou
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
@@ -170,7 +171,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 					countMessages = 0;
 					
 					OabaProcessing status = configuration.getProcessingLog(em, data);
-					if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_MATCHING_DATA) {
+					if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
 						//matching is already done, so go on to the next step.
 						nextSteps ();
 					} else {
@@ -270,7 +271,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 				String temp = Integer.toString(data.numChunks) + DELIM
 					+ Integer.toString(data.numRegularChunks) + DELIM + 
 					Integer.toString(currentChunk);
-				status.setCurrentProcessingEvent(OabaProcessing.MATCHING_DATA, temp);
+				status.setCurrentProcessingEvent(OabaEvent.MATCHING_DATA, temp);
 				
 				log.info("Chunk " + d.ind + " is done.");
 						
@@ -280,7 +281,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 					startChunk (currentChunk, batchJob);
 				} else {
 					//all the chunks are done
-					status.setCurrentProcessingEvent(OabaProcessing.DONE_MATCHING_DATA);
+					status.setCurrentProcessingEvent(OabaEvent.DONE_MATCHING_DATA);
 
 					log.info("total comparisons: " + numCompares + " total matches: " + numMatches);
 					timeStart = System.currentTimeMillis() - timeStart;
@@ -343,7 +344,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 			
 		} else {
 			currentChunk = 0;
-			if (status.getCurrentProcessingEvent() == OabaProcessing.MATCHING_DATA ) {
+			if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_MATCHING_DATA ) {
 				currentChunk = recover (status) + 1;
 				log.info("recovering from " + currentChunk);
 			}
@@ -501,11 +502,7 @@ public class MatchScheduler2 implements MessageDrivenBean, MessageListener {
 	 */
 	protected void sendToUpdateStatus (long jobID, int percentComplete) throws NamingException, JMSException {
 		Queue queue = configuration.getUpdateMessageQueue();
-
-		UpdateData data = new UpdateData();
-		data.jobID = jobID;
-		data.percentComplete = percentComplete;
-		
+		UpdateData data = new UpdateData(jobID, percentComplete);
 		configuration.sendMessage(queue, data);
 	} 
 

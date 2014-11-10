@@ -30,6 +30,7 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonSetOSSources;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeSetSources;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -112,7 +113,7 @@ public class MatchOABA implements MessageDrivenBean, MessageListener {
 					batchJob.markAsAborted();
 
 					if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-						status.setCurrentProcessingEvent (OabaProcessing.DONE_OABA);
+						status.setCurrentProcessingEvent (OabaEvent.DONE_OABA);
 						oabaConfig.removeTempDir();
 					}
 				} else {
@@ -189,11 +190,7 @@ public class MatchOABA implements MessageDrivenBean, MessageListener {
 	 */
 	private void sendToUpdateStatus (long jobID, int percentComplete) throws NamingException, JMSException {
 		Queue queue = configuration.getUpdateMessageQueue();
-
-		UpdateData data = new UpdateData();
-		data.jobID = jobID;
-		data.percentComplete = percentComplete;
-
+		UpdateData data = new UpdateData(jobID, percentComplete);
 		configuration.sendMessage(queue, data);
 	}
 

@@ -10,7 +10,25 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.CN_EVENT_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.CN_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.CN_INFO;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.CN_JOB_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.CN_TIMESTAMP;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.CN_TYPE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.CN_VERSION;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.DISCRIMINATOR_COLUMN;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.ID_GENERATOR_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.ID_GENERATOR_PK_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.ID_GENERATOR_PK_COLUMN_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.ID_GENERATOR_TABLE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.JPQL_OABAPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.JPQL_OABAPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.QN_OABAPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.QN_OABAPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.TABLE_NAME;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,9 +48,10 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+//import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchJobProcessing;
+
 
 /**
  * This is the EJB implementation of the OABA OabaProcessing interface.
@@ -82,7 +101,7 @@ public class OabaBatchJobProcessingBean implements OabaBatchJobProcessing, Seria
 	@Column(name = CN_JOB_ID)
 	private final long jobId;
 	
-	@Column(name = CN_STATUS_ID)
+	@Column(name = CN_EVENT_ID)
 	private int eventId;
 	
 	@Column(name = CN_INFO)
@@ -105,18 +124,19 @@ public class OabaBatchJobProcessingBean implements OabaBatchJobProcessing, Seria
 	}
 
 	public OabaBatchJobProcessingBean(long jobId) {
-		this(OabaProcessingJPA.DISCRIMINATOR_VALUE, jobId, OabaProcessing.INIT, null, VERSION);
+		this(OabaProcessingJPA.DISCRIMINATOR_VALUE, jobId,
+				OabaEvent.INIT, null, VERSION);
 	}
 
 	public OabaBatchJobProcessingBean(BatchJob job) {
-		this(OabaProcessingJPA.DISCRIMINATOR_VALUE, job.getId(), OabaProcessing.INIT, null, VERSION);
+		this(OabaProcessingJPA.DISCRIMINATOR_VALUE, job.getId(), OabaEvent.INIT, null, VERSION);
 	}
 
-	public OabaBatchJobProcessingBean(BatchJob job, OabaProcessing status, String info) {
-		this(OabaProcessingJPA.DISCRIMINATOR_VALUE, job.getId(), status.getCurrentProcessingEvent(), info, VERSION);
+	public OabaBatchJobProcessingBean(BatchJob job, OabaEvent status, String info) {
+		this(OabaProcessingJPA.DISCRIMINATOR_VALUE, job.getId(), status, info, VERSION);
 	}
 
-	protected OabaBatchJobProcessingBean(String type, long jobId, int statusId, String info,
+	protected OabaBatchJobProcessingBean(String type, long jobId, OabaEvent event, String info,
 			long version) {
 		if (type == null) {
 			throw new IllegalArgumentException("null type");
@@ -128,27 +148,43 @@ public class OabaBatchJobProcessingBean implements OabaBatchJobProcessing, Seria
 		if (BatchJobBean.isInvalidBatchJobId(jobId)) {
 			throw new IllegalArgumentException("non-persistent job id: " + jobId);
 		}
+		if (event == null) {
+			throw new IllegalArgumentException("null event");
+		}
+
 		this.type = type;
 		this.jobId = jobId;
-		this.eventId = statusId;
+		this.eventId = event.eventId;
 		this.info = info;
 		this.version = version;
 		this.timestamp = new Date();
 	}
 
 	@Override
-	public int getCurrentProcessingEvent() {
+	public int getCurrentProcessingEventId() {
 		return eventId;
 	}
 
 	@Override
-	public void setCurrentProcessingEvent(int stat) {
+	public OabaEvent getCurrentProcessingEventObject() {
+		OabaEvent retVal = OabaProcessingUtil.getOabaEvent(this.eventId);
+		if (retVal == null) {
+			throw new IllegalStateException("invalid OABA processing event id: " + this.eventId);
+		}
+		return retVal;
+	}
+
+	@Override
+	public void setCurrentProcessingEvent(OabaEvent stat) {
 		setCurrentProcessingEvent(stat,null);
 	}
 
 	@Override
-	public void setCurrentProcessingEvent(int stat, String info) {
-		this.eventId = stat;
+	public void setCurrentProcessingEvent(OabaEvent stat, String info) {
+		if (stat == null) {
+			throw new IllegalArgumentException("null event");
+		}
+		this.eventId = stat.eventId;
 		this.info = info;
 		this.timestamp = new Date();
 	}

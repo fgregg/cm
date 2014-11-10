@@ -24,6 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySin
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
@@ -112,11 +113,11 @@ public class MatchingService2 {
 	public void runService () throws BlockingException, XmlConfException {
 		time = System.currentTimeMillis();
 		
-		if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_MATCHING_DATA ) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA ) {
 			//do nothing
 			
-		} else if (status.getCurrentProcessingEvent() >= OabaProcessing.DONE_CREATE_CHUNK_DATA  && 
-			status.getCurrentProcessingEvent() <= OabaProcessing.DONE_ALLOCATE_CHUNKS ) {
+		} else if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA  && 
+			status.getCurrentProcessingEventId() <= OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS ) {
 	
 			numChunks = Integer.parseInt( status.getAdditionalInfo() );
 
@@ -127,7 +128,7 @@ public class MatchingService2 {
 			
 			startMatching (0);
 			
-		} else if (status.getCurrentProcessingEvent() == OabaProcessing.MATCHING_DATA ) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_MATCHING_DATA ) {
 			//recovery mode
 			String temp =  status.getAdditionalInfo();
 			int ind = temp.indexOf( OabaProcessing.DELIMIT);
@@ -212,7 +213,7 @@ public class MatchingService2 {
 
 			//log the status
 			String temp = Integer.toString(numChunks) + OabaProcessing.DELIMIT + Integer.toString(i);
-			status.setCurrentProcessingEvent( OabaProcessing.MATCHING_DATA, temp );
+			status.setCurrentProcessingEvent( OabaEvent.MATCHING_DATA, temp );
 
 			//clean up
 			stage = null;
@@ -228,7 +229,7 @@ public class MatchingService2 {
 		double cps = 1000.0 * numCompares / (inReadHM + inHandleBlocks + inWriteMatches);
 		log.info ("comparisons per second " + cps );
 
-		status.setCurrentProcessingEvent( OabaProcessing.DONE_MATCHING_DATA);
+		status.setCurrentProcessingEvent( OabaEvent.DONE_MATCHING_DATA);
 
 		//cleanup
 		stageFactory.removeAllSinks();

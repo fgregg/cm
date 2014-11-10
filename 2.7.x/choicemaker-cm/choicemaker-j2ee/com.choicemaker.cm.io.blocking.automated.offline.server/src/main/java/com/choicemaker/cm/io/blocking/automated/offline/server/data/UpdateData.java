@@ -20,10 +20,22 @@ import java.io.Serializable;
  */
 public class UpdateData implements Serializable {
 
-	/* As of 2010-03-10 */
-	static final long serialVersionUID = -4267683410613907029L;
+	static final long serialVersionUID = 271;
 
-	public long jobID;
-	public int percentComplete;
-	public int OABAStatus;
+	private final long jobID;
+	private final int percentComplete;
+	
+	public UpdateData(long jobId, int percentComplete) {
+		this.jobID = jobId;
+		this.percentComplete = percentComplete;
+	}
+
+	public long getJobID() {
+		return jobID;
+	}
+
+	public int getPercentComplete() {
+		return percentComplete;
+	}
+
 }
