@@ -22,6 +22,11 @@ public class DefaultServerConfigurationBean {
 	@Column(name = CN_SERVERCONFIG)
 	private long serverConfigurationId;
 
+	protected DefaultServerConfigurationBean() {
+		this.hostName = null;
+		this.serverConfigurationId = -1;
+	}
+	
 	public DefaultServerConfigurationBean(String hostName, long serverConfigId) {
 		if (hostName == null || hostName.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank host name");
