@@ -14,11 +14,9 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.Serve
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.ID_GENERATOR_TABLE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.JPQL_SERVERCONFIG_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.JPQL_SERVERCONFIG_FIND_ANY_HOST;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.JPQL_SERVERCONFIG_FIND_BY_HOSTNAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.JPQL_SERVERCONFIG_FIND_BY_NAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.QN_SERVERCONFIG_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.QN_SERVERCONFIG_FIND_ANY_HOST;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_HOSTNAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_NAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.TABLE_NAME;
@@ -49,8 +47,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 				query = JPQL_SERVERCONFIG_FIND_BY_HOSTNAME),
 		@NamedQuery(name = QN_SERVERCONFIG_FIND_BY_NAME,
 				query = JPQL_SERVERCONFIG_FIND_BY_NAME),
-		@NamedQuery(name = QN_SERVERCONFIG_FIND_ANY_HOST,
-				query = JPQL_SERVERCONFIG_FIND_ANY_HOST) })
+//		@NamedQuery(name = QN_SERVERCONFIG_FIND_ANY_HOST,
+//				query = JPQL_SERVERCONFIG_FIND_ANY_HOST)
+		})
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 public class ServerConfigurationBean implements MutableServerConfiguration {
@@ -73,7 +72,7 @@ public class ServerConfigurationBean implements MutableServerConfiguration {
 	private long id;
 
 	@Column(name = CN_CONFIGNAME)
-	private String configurationName;
+	private String name;
 
 	@Column(name = CN_UUID)
 	private final String uuid;
@@ -99,7 +98,7 @@ public class ServerConfigurationBean implements MutableServerConfiguration {
 
 	public ServerConfigurationBean(ServerConfiguration sc) {
 		this.uuid = UUID.randomUUID().toString();
-		this.configurationName =
+		this.name =
 			ServerConfigurationManagerBean.computeUniqueGenericName();
 		File f = sc.getWorkingDirectoryLocation();
 		if (f == null) {
@@ -120,7 +119,7 @@ public class ServerConfigurationBean implements MutableServerConfiguration {
 
 	@Override
 	public String getName() {
-		return configurationName;
+		return name;
 	}
 
 	@Override
@@ -174,11 +173,11 @@ public class ServerConfigurationBean implements MutableServerConfiguration {
 			return false;
 		}
 		ServerConfigurationBean other = (ServerConfigurationBean) obj;
-		if (configurationName == null) {
-			if (other.configurationName != null) {
+		if (name == null) {
+			if (other.name != null) {
 				return false;
 			}
-		} else if (!configurationName.equals(other.configurationName)) {
+		} else if (!name.equals(other.name)) {
 			return false;
 		}
 		if (fileURI == null) {
@@ -209,8 +208,8 @@ public class ServerConfigurationBean implements MutableServerConfiguration {
 
 	@Override
 	public String toString() {
-		return "ServerConfigurationBean [id=" + id + ", configurationName="
-				+ configurationName + ", uuid=" + uuid + "]";
+		return "ServerConfigurationBean [id=" + id + ", name="
+				+ name + ", uuid=" + uuid + "]";
 	}
 
 	@Override
@@ -218,7 +217,7 @@ public class ServerConfigurationBean implements MutableServerConfiguration {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank name");
 		}
-		this.configurationName = name.trim();
+		this.name = name.trim();
 	}
 
 	@Override

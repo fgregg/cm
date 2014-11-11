@@ -1,5 +1,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
@@ -16,6 +17,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DuplicateServ
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationManager;
+import com.choicemaker.util.SystemPropertyUtils;
 
 @Stateless
 public class ServerConfigurationManagerBean implements
@@ -69,6 +71,12 @@ public class ServerConfigurationManagerBean implements
 		String retVal = GENERIC_NAME_PREFIX + UUID.randomUUID().toString();
 		return retVal;
 	}
+	
+	public static File computeGenericLocation() {
+		String home = System.getProperty(SystemPropertyUtils.USER_HOME);
+		File retVal = new File(home);
+		return retVal;
+	}
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -83,7 +91,7 @@ public class ServerConfigurationManagerBean implements
 	@Override
 	public ServerConfiguration findServerConfigurationByName(String configName) {
 		Query query =
-			em.createQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_NAME);
+			em.createNamedQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_NAME);
 		query.setParameter(
 				ServerConfigurationJPA.PN_SERVERCONFIG_FIND_BY_NAME_P1,
 				configName);
@@ -107,7 +115,7 @@ public class ServerConfigurationManagerBean implements
 	@Override
 	public List<ServerConfiguration> findAllServerConfigurations() {
 		Query query =
-			em.createQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_ALL);
+			em.createNamedQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<ServerConfigurationBean> beans = query.getResultList();
 		List<ServerConfiguration> retVal = new LinkedList<>();
@@ -137,7 +145,7 @@ public class ServerConfigurationManagerBean implements
 	protected List<ServerConfiguration> findServerConfigurationsByHostNameStrict(
 			String hostName) {
 		Query query =
-			em.createQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_HOSTNAME);
+			em.createNamedQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_HOSTNAME);
 		query.setParameter(
 				ServerConfigurationJPA.PN_SERVERCONFIG_FIND_BY_HOSTNAME_P1,
 				hostName);
@@ -151,15 +159,7 @@ public class ServerConfigurationManagerBean implements
 	}
 
 	protected List<ServerConfiguration> findServerConfigurationsForAnyHost() {
-		Query query =
-			em.createQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_ANY_HOST);
-		@SuppressWarnings("unchecked")
-		List<ServerConfigurationBean> beans = query.getResultList();
-		List<ServerConfiguration> retVal = new LinkedList<>();
-		if (beans != null) {
-			retVal.addAll(beans);
-		}
-		return retVal;
+		return findServerConfigurationsByHostNameStrict(ServerConfiguration.ANY_HOST);
 	}
 
 	@Override
@@ -170,6 +170,7 @@ public class ServerConfigurationManagerBean implements
 		retVal.setMaxChoiceMakerThreads(computeAvailableProcessors());
 		retVal.setMaxOabaChunkFileCount(DEFAULT_MAX_CHUNK_COUNT);
 		retVal.setMaxOabaChunkFileRecords(DEFAULT_MAX_CHUNK_SIZE);
+		retVal.setWorkingDirectoryLocation(computeGenericLocation());
 		return retVal;
 	}
 
