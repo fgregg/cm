@@ -47,7 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfig
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationManagerBean;
 
 @RunWith(Arquillian.class)
-public class ServerConfigurationManagerBeanTest {
+public class ServerConfigurationManagerBeanIT {
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
@@ -104,10 +104,10 @@ public class ServerConfigurationManagerBeanTest {
 	}
 
 	public static final String LOG_SOURCE =
-		ServerConfigurationManagerBeanTest.class.getSimpleName();
+		ServerConfigurationManagerBeanIT.class.getSimpleName();
 
 	private static final Logger logger = Logger
-			.getLogger(ServerConfigurationManagerBeanTest.class.getName());
+			.getLogger(ServerConfigurationManagerBeanIT.class.getName());
 
 	/**
 	 * Workaround for logger.entering(String,String) not showing up in JBOSS
