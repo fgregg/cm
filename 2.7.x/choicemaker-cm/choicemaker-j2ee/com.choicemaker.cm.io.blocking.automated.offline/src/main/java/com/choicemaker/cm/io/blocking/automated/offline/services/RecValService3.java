@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -62,7 +61,7 @@ public class RecValService3 {
 
 	private RecordSource master;
 	private RecordSource stage;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 
 	private static final int OUTPUT_INTERVAL = 100000;
 
@@ -115,7 +114,7 @@ public class RecValService3 {
 	 *            - a mechanism to get out of a long running loop
 	 */
 	public RecValService3(RecordSource stage, RecordSource master,
-			IProbabilityModel modelConfigurationName,
+			ImmutableProbabilityModel modelConfigurationName,
 			IRecValSinkSourceFactory rvFactory,
 			IRecordIDTranslator2 translator, OabaProcessing status,
 			IControl control) {
@@ -131,8 +130,8 @@ public class RecValService3 {
 		this.stop = false;
 
 		BlockingAccessor ba = (BlockingAccessor) modelConfigurationName.getAccessor();
-		String blockName = (String) modelConfigurationName.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
-		String dbConf = (String) modelConfigurationName.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+		String blockName = model.getBlockingConfigurationName();
+		String dbConf = model.getDatabaseConfigurationName();
 
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
 		BlockingField[] bfs = bc.blockingFields;

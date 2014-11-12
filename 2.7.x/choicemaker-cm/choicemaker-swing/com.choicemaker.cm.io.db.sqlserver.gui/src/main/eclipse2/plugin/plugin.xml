@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.choicemaker.cm.io.db.sqlserver.gui"
+   name="Gui Plug-in"
+   version="2.5.0"
+   provider-name="ChoiceMaker">
+
+   <runtime>
+      <library name="gui.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="com.choicemaker.cm.modelmaker"/>
+      <import plugin="com.choicemaker.cm.io.db.sqlserver"/>
+      <import plugin="com.choicemaker.cm.io.blocking.automated.base"/>
+      <import plugin="com.choicemaker.cm.io.db.base"/>
+      <import plugin="com.choicemaker.cm.core"/>
+      <import plugin="com.choicemaker.cm.gui.utils"/>
+      <!-- import plugin="com.choicemaker.cm.compiler"/ -->
+   </requires>
+
+
+   <extension
+         point="com.choicemaker.cm.modelmaker.toolMenuItem">
+      <action
+            class="com.choicemaker.cm.io.db.sqlserver.gui.SqlServerUtilsAction">
+         <action
+               class="com.choicemaker.cm.io.db.sqlserver.gui.SqlServerUtilsAction$SqlServerPairViewerAction">
+         </action>
+         <action
+               class="com.choicemaker.cm.io.db.sqlserver.gui.SqlServerUtilsAction$SqlServerIdSearchAction">
+         </action>
+      </action>
+   </extension>
+   <extension
+         id="sqlServerRsReaderGui"
+         name="sqlServerRsReaderGui"
+         point="com.choicemaker.cm.modelmaker.rsReaderGui">
+      <gui
+            hasSink="false"
+            name="SQL Server"
+            class="com.choicemaker.cm.io.db.sqlserver.gui.SqlServerRecordSourceGuiFactory"
+            handledClass="com.choicemaker.cm.io.db.sqlserver.SqlServerRecordSource">
+      </gui>
+   </extension>
+
+</plugin>

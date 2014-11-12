@@ -1,5 +1,7 @@
 package com.choicemaker.e2.embed;
 
+import static com.choicemaker.e2.platform.InstallablePlatform.INSTALLABLE_PLATFORM;
+
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -122,7 +124,7 @@ public final class EmbeddedPlatform implements CMPlatform {
 
 	public static void install() {
 		// Set the System properties for consistency
-		String pn = InstallablePlatform.INSTALLABLE_PLATFORM;
+		String pn = INSTALLABLE_PLATFORM;
 		final String platformFQCN = EmbeddedPlatform.class.getName();
 		System.setProperty(pn, platformFQCN);
 		pn = InstallablePluginDiscovery.INSTALLABLE_PLUGIN_DISCOVERY;

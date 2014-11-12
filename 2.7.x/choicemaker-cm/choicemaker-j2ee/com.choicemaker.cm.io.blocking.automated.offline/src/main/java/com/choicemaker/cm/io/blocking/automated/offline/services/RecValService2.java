@@ -17,7 +17,6 @@ import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -58,8 +57,7 @@ public class RecValService2 {
 
 	private RecordSource master;
 	private RecordSource stage;
-	private IProbabilityModel stageModel;
-	private IProbabilityModel masterModel;
+	private ImmutableProbabilityModel model;
 
 	private IRecValSink [] sinks;
 	private int numBlockFields;
@@ -100,15 +98,15 @@ public class RecValService2 {
 	 * @param dbConf - db configuration in the schema
 	 * @param status - current status of the system
 	 */
-	public RecValService2 (RecordSource stage, RecordSource master, IProbabilityModel stageModel,
-		IProbabilityModel masterModel,
-		IRecValSinkSourceFactory rvFactory, IRecordIDTranslator2 translator,
-		OabaProcessing status) {
+	public RecValService2(RecordSource stage, RecordSource master,
+			ImmutableProbabilityModel model,
+			ImmutableProbabilityModel unusedMasterModel,
+			IRecValSinkSourceFactory rvFactory,
+			IRecordIDTranslator2 translator, OabaProcessing status) {
 
 		this.stage = stage;
 		this.master = master;
-		this.stageModel = stageModel;
-		this.masterModel = masterModel;
+		this.model = model;
 		this.translator = translator;
 		this.rvFactory = rvFactory;
 		this.status = status;
@@ -116,9 +114,9 @@ public class RecValService2 {
 //		this.blockName = blockName;
 //		this.dbConf = dbConf;
 
-		BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
-		String blockName = (String) stageModel.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
-		String dbConf = (String) stageModel.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
+		String blockName = model.getBlockingConfigurationName();
+		String dbConf = model.getDatabaseConfigurationName();
 
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
 		BlockingField[] bfs = bc.blockingFields;
@@ -246,12 +244,12 @@ public class RecValService2 {
 
 			//write the stage record source
 			if (stage != null) {
-				stage.setModel(stageModel);
+				stage.setModel(model);
 				stage.open();
 
-				String blockName = (String) stageModel.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
-				String dbConf = (String) stageModel.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
-				BlockingAccessor ba = (BlockingAccessor) stageModel.getAccessor();
+				String blockName = model.getBlockingConfigurationName();
+				String dbConf = model.getDatabaseConfigurationName();
+				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
 				while (stage.hasNext()) {
@@ -262,7 +260,7 @@ public class RecValService2 {
 
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
 
-					writeRecord (r, stageModel);
+					writeRecord (r, model);
 
 					//This checks the id type
 					if (firstStage) {
@@ -282,12 +280,12 @@ public class RecValService2 {
 			if (master != null) {
 				translator.split();
 
-				master.setModel(masterModel);
+				master.setModel(model);
 				master.open();
 
-				String blockName = (String) masterModel.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
-				String dbConf = (String) masterModel.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
-				BlockingAccessor ba = (BlockingAccessor) masterModel.getAccessor();
+				String blockName = model.getBlockingConfigurationName();
+				String dbConf = model.getDatabaseConfigurationName();
+				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
 				// 2014-04-24 rphall: Commented out unused local variable.
@@ -300,7 +298,7 @@ public class RecValService2 {
 
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
 
-					writeRecord (r, masterModel);
+					writeRecord (r, model);
 
 					//This checks the id type
 					if (firstMaster) {
@@ -331,12 +329,7 @@ public class RecValService2 {
 	 *
 	 */
 	private void writeRecord (Record r, ImmutableProbabilityModel model) throws BlockingException {
-/*
-		String blockName = (String) stageModel.properties.get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
-		String dbConf = (String) stageModel.properties.get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
-		BlockingAccessor ba = (BlockingAccessor) accessProvider.getAccessor();
-		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
-*/
+
 		Object O = r.getId();
 		int internal = translator.translate((Comparable) O);
 
@@ -426,7 +419,7 @@ public class RecValService2 {
 		try {
 			//first recover the stage
 			if (stage != null) {
-				stage.setModel(stageModel);
+				stage.setModel(model);
 				stage.open();
 				// 2014-04-24 rphall: Commented out unused local variable.
 //				long lastID = Long.MIN_VALUE;
@@ -437,7 +430,7 @@ public class RecValService2 {
 					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
 
 					if (count > maxCount) {
-						writeRecord (r, stageModel);
+						writeRecord (r, model);
 						count2 ++;
 					}
 				} // end while
@@ -451,18 +444,16 @@ public class RecValService2 {
 				//tell the translator to split
 				if (count2 > 0) translator.split();
 
-				master.setModel(masterModel);
+				master.setModel(model);
 				master.open();
-				// 2014-04-24 rphall: Commented out unused local variable.
-//				long lastID = Long.MIN_VALUE;
 				while (master.hasNext()) {
 					count ++;
 					Record r = master.getNext();
-
-					if (count % INTERVAL == 0) MemoryEstimator.writeMem ();
-
+					if (count % INTERVAL == 0) {
+						MemoryEstimator.writeMem ();
+					}
 					if (count > maxCount) {
-						writeRecord (r, masterModel);
+						writeRecord (r, model);
 						count2 ++;
 					}
 				} // end while

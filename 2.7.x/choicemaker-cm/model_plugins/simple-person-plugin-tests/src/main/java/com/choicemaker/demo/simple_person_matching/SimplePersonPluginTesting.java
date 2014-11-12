@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ProbabilityModelConfiguration;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.DoNothingCompiler;
 import com.choicemaker.cm.core.compiler.ICompiler;
@@ -39,12 +40,6 @@ public final class SimplePersonPluginTesting {
 
 	private static final Logger logger = Logger
 			.getLogger(SimplePersonPluginTesting.class.getName());
-
-	public static final String AN_BLOCKING_CONFIGURATION =
-		ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION;
-
-	public static final String AN_DATABASE_CONFIGURATION =
-		ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION;
 
 	public static final String AN_MODEL_FILE = "model";
 
@@ -84,10 +79,10 @@ public final class SimplePersonPluginTesting {
 			assertTrue(attributeNames != null);
 			assertTrue(attributeNames.length == 3);
 			String dbConfiguration =
-				cmce.getAttribute(AN_DATABASE_CONFIGURATION);
+				cmce.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION);
 			assertTrue(EXPECTED_DATABASE_CONFIG.equals(dbConfiguration));
 			String blockingConfig =
-				cmce.getAttribute(AN_BLOCKING_CONFIGURATION);
+				cmce.getAttribute(ProbabilityModelConfiguration.AN_BLOCKING_CONFIGURATION);
 			assertTrue(EXPECTED_BLOCKING_CONFIG.equals(blockingConfig));
 			String modelFile = cmce.getAttribute(AN_MODEL_FILE);
 			assertTrue(modelFile != null);

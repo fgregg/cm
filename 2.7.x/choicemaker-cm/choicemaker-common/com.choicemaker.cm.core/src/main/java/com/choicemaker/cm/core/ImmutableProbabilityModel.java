@@ -24,22 +24,6 @@ import com.choicemaker.cm.core.report.Report;
  */
 public interface ImmutableProbabilityModel {
 	
-	/**
-	 * Name of a required property that specifies a named database configuration
-	 * in the record-layout schema of the model.
-	 * 
-	 * @see #properties()
-	 */
-	String PN_DATABASE_CONFIGURATION = "databaseConfiguration";
-	
-	/**
-	 * Name of a required property that specifies a named blocking configuration
-	 * in the record-layout schema of the model.
-	 * 
-	 * @see #properties()
-	 */
-	String PN_BLOCKING_CONFIGURATION = "blockingConfiguration";
-
 	String CLUES_TO_EVALUATE = "cluesToEvaluate";
 
 	String MACHINE_LEARNER = "machineLearner";
@@ -94,6 +78,24 @@ public interface ImmutableProbabilityModel {
 	 * @deprecated
 	 */
 	String getAntCommand();
+	
+	/**
+	 * When a model configuration is loaded as a plugin extension, this method
+	 * returns the name of the blocking configuration that is specified for the
+	 * configuration. When a model is loaded outside of a plugin, there will be
+	 * no (single) blocking specified, although its schema will may define
+	 * several, so this method will throw an IllegalStateException.<br/>
+	 * <br/>
+	 * In practice, only CM Server expects to deal with model configurations in
+	 * which a blocking configuration has been set, and CM Server uses only
+	 * models configurations that are loaded as plugin extensions.<br/>
+	 * <br/>
+	 * FIXME: this method should move to {@link ProbabilityModelConfiguration}
+	 * 
+	 * @see ProbabilityModelConfiguration
+	 * @see #getDatabaseConfigurationName()
+	 */
+	String getBlockingConfigurationName();
 
 	/**
 	 * Returns the file path of the ClueMaker file that defines the ClueSet of
@@ -137,6 +139,24 @@ public interface ImmutableProbabilityModel {
 	boolean[] getCluesToEvaluate();
 
 	String getClueText(int clueNum) throws IOException;
+
+	/**
+	 * When a model configuration is loaded as a plugin extension, this method
+	 * returns the name of the database configuration that is specified for the
+	 * configuration. When a model is loaded outside of a plugin, there will be
+	 * no (single) database specified, although its schema will may define
+	 * several, so this method will throw an IllegalStateException.<br/>
+	 * <br/>
+	 * In practice, only CM Server expects to deal with model configurations in
+	 * which a database configuration has been set, and CM Server uses only
+	 * models configurations that are loaded as plugin extensions.<br/>
+	 * <br/>
+	 * FIXME: this method should move to {@link ProbabilityModelConfiguration}
+	 * 
+	 * @see ProbabilityModelConfiguration
+	 * @see #getBlockingConfigurationName()
+	 */
+	String getDatabaseConfigurationName();
 
 	int getDecisionDomainSize();
 
@@ -248,6 +268,10 @@ public interface ImmutableProbabilityModel {
 
 	int numTrainCluesToEvaluate();
 
+	/**
+	 * This method is going away in version 2.8
+	 * @deprecated
+	 */
 	Map properties();
 
 	void removePropertyChangeListener(PropertyChangeListener l);

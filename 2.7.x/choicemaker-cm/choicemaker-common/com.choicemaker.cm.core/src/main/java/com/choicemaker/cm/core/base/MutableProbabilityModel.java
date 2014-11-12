@@ -700,5 +700,21 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		return e == null ? "" : e.getSignature();
 	}
 
+	public String getBlockingConfigurationName() {
+		String retVal = (String) properties().get(PN_BLOCKING_CONFIGURATION);
+		if (retVal == null) {
+			throw new IllegalStateException("Blocking configuration has not been set.");
+		}
+		return retVal;
+	}
+
+	public String getDatabaseConfigurationName() {
+		String retVal = (String) properties().get(PN_DATABASE_CONFIGURATION);
+		if (retVal == null) {
+			throw new IllegalStateException("Database configuration has not been set.");
+		}
+		return retVal;
+	}
+
 }
 

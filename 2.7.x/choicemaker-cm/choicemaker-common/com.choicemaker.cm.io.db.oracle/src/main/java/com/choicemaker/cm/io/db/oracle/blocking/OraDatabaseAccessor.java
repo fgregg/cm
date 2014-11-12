@@ -117,7 +117,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			endSession = (String) model.properties().get("endSession");
 		}
 		Accessor acc = model.getAccessor();
-		String dbrName = (String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+		String dbrName = model.getDatabaseConfigurationName();
 		dbr = ((DbAccessor) acc).getDbReaderParallel(dbrName);
 		String query = getQuery(blocker,dbr);
 		

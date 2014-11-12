@@ -461,8 +461,8 @@ public class DbbCountsCreator {
 				}
 				for (int i = 0; i < models.length; ++i) {
 					ImmutableProbabilityModel model = models[i];
-					String bcName = (String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
-					String dn = (String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+					String bcName = model.getBlockingConfigurationName();
+					String dn = model.getDatabaseConfigurationName();
 					logger.fine("Using blocking configuration: " + bcName);
 					BlockingConfiguration bc = ((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(bcName, dn);
 					String bcClassName = bc.getClass().getName();
@@ -543,8 +543,8 @@ public class DbbCountsCreator {
 		int numConfigurations = 0;
 		for (int i = 0; i < len; ++i) {
 			ImmutableProbabilityModel model = models[i];
-			String bcName = (String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
-			String dn = (String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+			String bcName = model.getBlockingConfigurationName();
+			String dn = model.getDatabaseConfigurationName();
 			BlockingConfiguration bc = ((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(bcName, dn);
 			int j = 0;
 			// AWKWARD, BRITTLE CODE 2009-08-21 rphall

@@ -2,6 +2,6 @@ project_oracle_local.xml
 .project
 .classpath
 .settings
-target
-target-??
-tmp
+/target
+/target-??
+/tmp

@@ -1,0 +1,9 @@
+/target
+*.BAK-??
+.*.swp
+*.class
+*.jar
+*.war
+*.ear
+bin
+temp.folder

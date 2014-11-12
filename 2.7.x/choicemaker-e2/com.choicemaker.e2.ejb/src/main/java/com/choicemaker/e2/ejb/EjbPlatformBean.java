@@ -1,6 +1,8 @@
 package com.choicemaker.e2.ejb;
 
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MODELCONFIGURATION;
+import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_BLOCKING_CONFIGURATION;
+import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION;
 import static com.choicemaker.cm.core.PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR;
 
 import java.io.File;
@@ -15,7 +17,6 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.base.DefaultProbabilityModelManager;
 import com.choicemaker.cm.core.base.MutableProbabilityModel;
@@ -55,7 +56,6 @@ public class EjbPlatformBean implements EjbPlatform {
 		loadModelPlugins();
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void loadModelPlugins() {
 		CMExtension[] extensions =
 			CMPlatformUtils.getExtensions(CM_CORE_MODELCONFIGURATION);
@@ -64,13 +64,9 @@ public class EjbPlatformBean implements EjbPlatform {
 			CMConfigurationElement[] els = ext.getConfigurationElements();
 			for (CMConfigurationElement el : els) {
 				final String KEY_FILE = "model";
-				final String KEY_DATABASE_CONFIG =
-					ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION;
-				final String KEY_BLOCKING_CONFIG =
-					ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION;
 				String file = el.getAttribute(KEY_FILE);
-				String databaseConfig = el.getAttribute(KEY_DATABASE_CONFIG);
-				String blockingConfig = el.getAttribute(KEY_BLOCKING_CONFIG);
+				String databaseConfig = el.getAttribute(AN_DATABASE_CONFIGURATION);
+				String blockingConfig = el.getAttribute(AN_BLOCKING_CONFIGURATION);
 				try {
 					final String fileName = new File(file).getName();
 					final URL rUrl = new URL(pUrl, file);
@@ -84,11 +80,12 @@ public class EjbPlatformBean implements EjbPlatform {
 					IProbabilityModel model =
 						ProbabilityModelsXmlConf.readModel(fileName, is,
 								compiler, compilerMessages, cl, allowCompile);
-					model.properties().put(KEY_DATABASE_CONFIG, databaseConfig);
-					model.properties().put(KEY_BLOCKING_CONFIG, blockingConfig);
 					// HACK
 					assert model instanceof MutableProbabilityModel;
-					((MutableProbabilityModel)model).setModelName(ext.getUniqueIdentifier());
+					MutableProbabilityModel mpm = (MutableProbabilityModel) model;
+					mpm.setDatabaseConfigurationName(databaseConfig);
+					mpm.setBlockingConfigurationName(blockingConfig);
+					mpm.setModelName(ext.getUniqueIdentifier());
 					// END HACK
 					DefaultProbabilityModelManager.getInstance()
 							.addModel(model);

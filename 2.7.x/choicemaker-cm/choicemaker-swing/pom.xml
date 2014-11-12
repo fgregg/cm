@@ -30,6 +30,7 @@
     <module>com.choicemaker.cm.io.blocking.exact.gui</module>
     <module>com.choicemaker.cm.io.composite.gui</module>
     <module>com.choicemaker.cm.io.db.gui</module>
+    <module>com.choicemaker.cm.io.db.sqlserver.gui</module>
     <module>com.choicemaker.cm.io.flatfile.gui</module>
     <module>com.choicemaker.cm.io.xml.gui</module>
     <module>com.choicemaker.cm.ml.me.gui</module>

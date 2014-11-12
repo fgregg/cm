@@ -74,13 +74,13 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		Iterator iModels = PMManager.models().values().iterator();
 		while (iModels.hasNext()) {
 			IProbabilityModel model = (IProbabilityModel) iModels.next();
-			String key = model.getAccessor().getSchemaName() + "|" + model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+			String key = model.getAccessor().getSchemaName() + "|" + model.getDatabaseConfigurationName();
 			if (alreadyHandledRetrieval.add(key)) {
 				createRetrievalObjects(model, w);
 			}
 			key = model.getAccessor().getSchemaName() + "|" 
-				+ model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION) + "|"
-				+ model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+				+ model.getBlockingConfigurationName() + "|"
+				+ model.getDatabaseConfigurationName();
 			if (alreadyHandledBlocking.add(key)) {
 				createBlockingObjects(model, w);
 			}
@@ -89,8 +89,8 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	}
 
 	private static void createBlockingObjects(IProbabilityModel model, Writer w) throws IOException {
-		String dbConfiguration = (String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
-		String blockingConfiguration = (String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
+		String dbConfiguration = model.getDatabaseConfigurationName();
+		String blockingConfiguration = model.getBlockingConfigurationName();
 		Accessor accessor = model.getAccessor();
 		if (dbConfiguration != null && blockingConfiguration != null && accessor instanceof DbAccessor) {
 			String config = accessor.getSchemaName() + ":b:" + blockingConfiguration + ":" + dbConfiguration;
@@ -107,7 +107,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	}
 
 	private static void createRetrievalObjects(IProbabilityModel model, Writer w) throws IOException {
-		String dbConfiguration = (String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+		String dbConfiguration = model.getDatabaseConfigurationName();
 		if (dbConfiguration != null) {
 			Accessor accessor = model.getAccessor();
 			if (accessor instanceof DbAccessor) {

@@ -89,8 +89,8 @@ public class Blocker implements AutomatedBlocker {
 			singleTableBlockingSetGraceLimit,
 			limitSingleBlockingSet,
 			(CountSource) model.properties().get("countSource"),
-			(String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION),
-			(String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION));
+			model.getDatabaseConfiguration(),
+			model.getBlockingConfiguration());
 	}
 
 	public Blocker(
