@@ -10,10 +10,12 @@ import javax.transaction.UserTransaction;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchJobProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 
 /**
@@ -32,6 +34,7 @@ public class TestEntities {
 	private Set<TransitivityJob> transitivityJobs = new LinkedHashSet<>();
 	private Set<BatchParameters> batchParameters = new LinkedHashSet<>();
 	private Set<OabaBatchJobProcessing> oabaProcessing = new LinkedHashSet<>();
+	private Set<ServerConfiguration> serverConfigs = new LinkedHashSet<>();
 
 	public void add(BatchJob job) {
 		if (job != null) {
@@ -54,6 +57,12 @@ public class TestEntities {
 	public void add(OabaBatchJobProcessing p) {
 		if (p != null) {
 			oabaProcessing.add(p);
+		}
+	}
+
+	public void add(ServerConfiguration sc) {
+		if (sc != null) {
+			serverConfigs.add(sc);
 		}
 	}
 
@@ -89,6 +98,14 @@ public class TestEntities {
 		return retVal;
 	}
 
+	public boolean contains(ServerConfiguration sc) {
+		boolean retVal = false;
+		if (sc != null) {
+			retVal = serverConfigs.contains(sc);
+		}
+		return retVal;
+	}
+
 	public void removePersistentObjects(EntityManager em) /* throws Exception */{
 		try {
 			removePersistentObjects(em, null);
@@ -115,7 +132,8 @@ public class TestEntities {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
 					if (!isManaged) {
-						logger.warning("BatchJob " + refresh.getId() + " is not managed");
+						logger.warning("BatchJob " + refresh.getId()
+								+ " is not managed");
 					} else {
 						em.remove(refresh);
 					}
@@ -138,7 +156,8 @@ public class TestEntities {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
 					if (!isManaged) {
-						logger.warning("TransitivityJob " + refresh.getId() + " is not managed");
+						logger.warning("TransitivityJob " + refresh.getId()
+								+ " is not managed");
 					} else {
 						em.remove(refresh);
 					}
@@ -161,7 +180,8 @@ public class TestEntities {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
 					if (!isManaged) {
-						logger.warning("BatchParameters " + refresh.getId() + " is not managed");
+						logger.warning("BatchParameters " + refresh.getId()
+								+ " is not managed");
 					} else {
 						em.remove(refresh);
 					}
@@ -184,7 +204,32 @@ public class TestEntities {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
 					if (!isManaged) {
-						logger.warning("OabaBatchJobProcessing " + refresh.getId() + " is not managed");
+						logger.warning("OabaBatchJobProcessing "
+								+ refresh.getId() + " is not managed");
+					} else {
+						em.remove(refresh);
+					}
+				}
+				if (usingUtx) {
+					utx.commit();
+				}
+			}
+		}
+		for (ServerConfiguration sc : serverConfigs) {
+			if (ServerConfigurationBean.isPersistent(sc)) {
+				boolean usingUtx = false;
+				if (utx != null) {
+					utx.begin();
+					usingUtx = true;
+				}
+				ServerConfigurationBean refresh =
+					em.find(ServerConfigurationBean.class, sc.getId());
+				if (refresh != null) {
+					em.merge(refresh);
+					boolean isManaged = em.contains(refresh);
+					if (!isManaged) {
+						logger.warning("ServerConfiguration "
+								+ refresh.getId() + " is not managed");
 					} else {
 						em.remove(refresh);
 					}

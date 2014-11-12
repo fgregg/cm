@@ -41,10 +41,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DuplicateServerConfigurationNameException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationManagerBean;
+import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
 public class ServerConfigurationManagerBeanIT {
@@ -253,22 +256,103 @@ public class ServerConfigurationManagerBeanIT {
 				.getMaxOabaChunkFileRecords());
 	}
 
-//	@Test
-//	@InSequence(50)
-//	public void testPersistFindRemove() {
-//		assertTrue(setupOK);
-//		fail("Not yet implemented");
-//
-//	}
-//
-//	@Test
-//	@InSequence(100)
-//	public void testFindAllServerConfigurations() {
-//		assertTrue(setupOK);
-//		fail("Not yet implemented");
-//
-//	}
-//
+	@Test
+	@InSequence(50)
+	public void testPersistFindRemove() {
+		assertTrue(setupOK);
+		final String METHOD = "testPersistFindRemove";
+		logEntering(METHOD);
+		final TestEntities te = new TestEntities();
+		
+		// Create a configuration
+		final MutableServerConfiguration msc = scm.computeGenericConfiguration();
+		assertTrue(msc.getId() == ServerConfigurationBean.NON_PERSISTENT_ID);
+		assertTrue(!ServerConfigurationBean.isPersistent(msc));
+		
+		// Save the configuration
+		long id = ServerConfigurationBean.NON_PERSISTENT_ID;
+		try {
+			ServerConfiguration sc = null;
+			sc = scm.save(msc);
+			te.add(sc);
+			assertTrue(sc != null);
+			id = sc.getId();
+			assertTrue(ServerConfigurationBean.isPersistent(sc));
+
+			assertTrue(ServerConfigurationBean.equalsIgnoreIdUuid(msc, sc));
+		} catch (DuplicateServerConfigurationNameException e) {
+			fail(e.toString());
+		}
+		assertTrue(id != ServerConfigurationBean.NON_PERSISTENT_ID);
+		final long scID = id;
+		
+		// Find the configuration
+		ServerConfiguration sc = null;
+		sc = scm.find(scID);
+		assertTrue(sc != null);
+		assertTrue(sc.getId() == scID);
+		assertTrue(ServerConfigurationBean.equalsIgnoreIdUuid(msc, sc));
+		
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
+		logExiting(METHOD);
+	}
+
+	@Test
+	@InSequence(100)
+	public void testFindAllServerConfigurations() {
+		assertTrue(setupOK);
+
+		final String METHOD = "testFindAll";
+		logEntering(METHOD);
+		final TestEntities te = new TestEntities();
+
+		List<Long> scIds = new LinkedList<>();
+		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
+			// Create and save a server configuration
+			MutableServerConfiguration msc = scm.computeGenericConfiguration();
+			assertTrue(msc.getId() == 0);
+			ServerConfiguration sc = null;
+			try {
+				sc = scm.save(msc);
+			} catch (DuplicateServerConfigurationNameException e) {
+				fail(e.toString());
+			}
+			te.add(sc);
+			final long id = sc.getId();
+			assertTrue(id != 0);
+			scIds.add(id);
+		}
+
+		// Verify the number of server configurations has increased
+		List<ServerConfiguration> serverConfigs = scm.findAllServerConfigurations();
+		assertTrue(serverConfigs != null);
+
+		// Find the server configurations
+		boolean isFound = false;
+		for (long scId : scIds) {
+			for (ServerConfiguration sc : serverConfigs) {
+				if (scId == sc.getId()) {
+					isFound = true;
+					break;
+				}
+			}
+			assertTrue(isFound);
+		}
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
+		logExiting(METHOD);
+	}
+
 //	@Test
 //	@InSequence(100)
 //	public void testFindServerConfigurationsByHostNameString() {

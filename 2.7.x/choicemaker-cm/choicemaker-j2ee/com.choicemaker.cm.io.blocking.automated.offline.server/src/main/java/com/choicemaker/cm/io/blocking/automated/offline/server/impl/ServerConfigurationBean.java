@@ -47,17 +47,29 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 				query = JPQL_SERVERCONFIG_FIND_BY_HOSTNAME),
 		@NamedQuery(name = QN_SERVERCONFIG_FIND_BY_NAME,
 				query = JPQL_SERVERCONFIG_FIND_BY_NAME),
-//		@NamedQuery(name = QN_SERVERCONFIG_FIND_ANY_HOST,
-//				query = JPQL_SERVERCONFIG_FIND_ANY_HOST)
-		})
+// @NamedQuery(name = QN_SERVERCONFIG_FIND_ANY_HOST,
+// query = JPQL_SERVERCONFIG_FIND_ANY_HOST)
+})
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 public class ServerConfigurationBean implements MutableServerConfiguration {
 
 	private static final Logger logger = Logger
 			.getLogger(ServerConfigurationBean.class.getName());
-	
+
 	public static long NON_PERSISTENT_ID = 0;
+
+	protected static boolean isNonPersistentId(long id) {
+		return id == NON_PERSISTENT_ID;
+	}
+
+	public static boolean isPersistent(ServerConfiguration sc) {
+		boolean retVal = false;
+		if (sc != null) {
+			retVal = !isNonPersistentId(sc.getId());
+		}
+		return retVal;
+	}
 
 	// -- Instance data
 
@@ -98,8 +110,7 @@ public class ServerConfigurationBean implements MutableServerConfiguration {
 
 	public ServerConfigurationBean(ServerConfiguration sc) {
 		this.uuid = UUID.randomUUID().toString();
-		this.name =
-			ServerConfigurationManagerBean.computeUniqueGenericName();
+		this.name = ServerConfigurationManagerBean.computeUniqueGenericName();
 		File f = sc.getWorkingDirectoryLocation();
 		if (f == null) {
 			throw new IllegalArgumentException("null working directory");
@@ -111,7 +122,7 @@ public class ServerConfigurationBean implements MutableServerConfiguration {
 		this.maxChunkSize = sc.getMaxOabaChunkFileRecords();
 		this.maxThreads = sc.getMaxChoiceMakerThreads();
 	}
-	
+
 	@Override
 	public long getId() {
 		return id;
@@ -148,68 +159,100 @@ public class ServerConfigurationBean implements MutableServerConfiguration {
 	}
 
 	@Override
+	public boolean isWorkingDirectoryLocationValid() {
+		boolean retVal = false;
+		try {
+			File f = new File(new URI(fileURI));
+				if (f != null && f.exists() && f.isDirectory() && f.canWrite() && f.canRead()) {
+					retVal = true;
+				}
+		} catch (Exception x) {
+			String msg =
+				"Invalid file location: " + fileURI + ": " + x.toString();
+			logger.warning(msg);
+			assert retVal == false;
+		}
+		return retVal;
+	}
+
+	@Override
+	public String getWorkingDirectoryLocationUriString() {
+		return fileURI;
+	}
+
+	@Override
 	public File getWorkingDirectoryLocation() {
 		File retVal = null;
-		try {
-			retVal = new File(new URI(fileURI));
-		} catch (URISyntaxException e) {
-			String msg =
-				"Invalid file location: " + fileURI + ": " + e.toString();
-			logger.severe(msg);
-			new IllegalStateException(msg);
+		if (fileURI != null) {
+			try {
+				retVal = new File(new URI(fileURI));
+			} catch (URISyntaxException e) {
+				String msg =
+					"Invalid file location: " + fileURI + ": " + e.toString();
+				logger.severe(msg);
+				new IllegalStateException(msg);
+				// assert retVal == null;
+			}
 		}
 		assert retVal != null;
 		return retVal;
 	}
 
-	public boolean equalsIgnoreIdUuid(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		ServerConfigurationBean other = (ServerConfigurationBean) obj;
-		if (name == null) {
-			if (other.name != null) {
-				return false;
+	public static boolean equalsIgnoreIdUuid(ServerConfiguration sc1,
+			ServerConfiguration sc2) {
+		boolean retVal = false;
+		check: if (sc1 != null && sc2 != null) {
+			if (sc1 == sc2) {
+				retVal = true;
+				break check;
 			}
-		} else if (!name.equals(other.name)) {
-			return false;
-		}
-		if (fileURI == null) {
-			if (other.fileURI != null) {
-				return false;
+			if (sc1.getName() == null) {
+				if (sc2.getName() != null) {
+					break check;
+				}
+			} else if (!sc1.getName().equals(sc2.getName())) {
+				break check;
 			}
-		} else if (!fileURI.equals(other.fileURI)) {
-			return false;
-		}
-		if (hostName == null) {
-			if (other.hostName != null) {
-				return false;
+			if (sc1.getHostName() == null) {
+				if (sc2.getHostName() != null) {
+					break check;
+				}
+			} else if (!sc1.getHostName().equals(sc2.getHostName())) {
+				break check;
 			}
-		} else if (!hostName.equals(other.hostName)) {
-			return false;
-		}
-		if (maxChunkCount != other.maxChunkCount) {
-			return false;
-		}
-		if (maxChunkSize != other.maxChunkSize) {
-			return false;
-		}
-		if (maxThreads != other.maxThreads) {
-			return false;
-		}
-		return true;
+			if (sc1.getWorkingDirectoryLocationUriString() == null) {
+				if (sc2.getWorkingDirectoryLocationUriString() != null) {
+					break check;
+				}
+			} else if (!sc1.getWorkingDirectoryLocationUriString().equals(
+					sc2.getWorkingDirectoryLocationUriString())) {
+				break check;
+			}
+			if (sc1.getMaxOabaChunkFileCount() != sc2
+					.getMaxOabaChunkFileCount()) {
+				break check;
+			}
+			if (sc1.getMaxOabaChunkFileRecords() != sc2
+					.getMaxOabaChunkFileRecords()) {
+				break check;
+			}
+			if (sc1.getMaxChoiceMakerThreads() != sc2
+					.getMaxChoiceMakerThreads()) {
+				break check;
+			}
+			retVal = true;
+		} // end check
+		return retVal;
+	}
+
+	public boolean equalsIgnoreIdUuid(ServerConfiguration sc2) {
+		return equalsIgnoreIdUuid(this, sc2);
 	}
 
 	@Override
 	public String toString() {
-		return "ServerConfigurationBean [id=" + id + ", name="
-				+ name + ", uuid=" + uuid + "]";
+		return "ServerConfigurationBean [id=" + id + ", name=" + name
+				+ ", uuid=" + uuid + "]";
 	}
 
 	@Override
