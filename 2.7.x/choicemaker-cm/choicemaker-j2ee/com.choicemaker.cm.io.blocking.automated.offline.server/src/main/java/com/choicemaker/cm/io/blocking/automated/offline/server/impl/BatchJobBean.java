@@ -26,7 +26,7 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.Batch
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.CN_URM_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.DISCRIMINATOR_COLUMN;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.DISCRIMINATOR_VALUE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.EQL_BATCHJOB_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.JPQL_BATCHJOB_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.ID_GENERATOR_NAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.ID_GENERATOR_PK_COLUMN_NAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA.ID_GENERATOR_PK_COLUMN_VALUE;
@@ -93,7 +93,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParamete
  * @author rphall (migrated to JPA 2.0)
  *
  */
-@NamedQuery(name = QN_BATCHJOB_FIND_ALL, query = EQL_BATCHJOB_FIND_ALL)
+@NamedQuery(name = QN_BATCHJOB_FIND_ALL, query = JPQL_BATCHJOB_FIND_ALL)
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,

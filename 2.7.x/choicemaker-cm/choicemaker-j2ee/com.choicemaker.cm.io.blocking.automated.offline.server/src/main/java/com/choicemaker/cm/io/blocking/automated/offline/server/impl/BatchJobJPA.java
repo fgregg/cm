@@ -103,6 +103,6 @@ public interface BatchJobJPA {
 	String QN_BATCHJOB_FIND_ALL = "batchJobFindAll";
 
 	/** JPQL used to implement {@link #QN_BATCHJOB_FIND_ALL} */
-	String EQL_BATCHJOB_FIND_ALL = "Select job from BatchJobBean job";
+	String JPQL_BATCHJOB_FIND_ALL = "Select job from BatchJobBean job";
 
 }

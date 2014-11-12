@@ -14,6 +14,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
@@ -35,6 +36,8 @@ public class TestEntities {
 	private Set<BatchParameters> batchParameters = new LinkedHashSet<>();
 	private Set<OabaBatchJobProcessing> oabaProcessing = new LinkedHashSet<>();
 	private Set<ServerConfiguration> serverConfigs = new LinkedHashSet<>();
+	private Set<DefaultServerConfigurationBean> defaultConfigs =
+		new LinkedHashSet<>();
 
 	public void add(BatchJob job) {
 		if (job != null) {
@@ -63,6 +66,12 @@ public class TestEntities {
 	public void add(ServerConfiguration sc) {
 		if (sc != null) {
 			serverConfigs.add(sc);
+		}
+	}
+
+	public void add(DefaultServerConfigurationBean dscb) {
+		if (dscb != null) {
+			defaultConfigs.add(dscb);
 		}
 	}
 
@@ -102,6 +111,14 @@ public class TestEntities {
 		boolean retVal = false;
 		if (sc != null) {
 			retVal = serverConfigs.contains(sc);
+		}
+		return retVal;
+	}
+
+	public boolean contains(DefaultServerConfigurationBean dscb) {
+		boolean retVal = false;
+		if (dscb != null) {
+			retVal = batchJobs.contains(dscb);
 		}
 		return retVal;
 	}
@@ -228,8 +245,8 @@ public class TestEntities {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
 					if (!isManaged) {
-						logger.warning("ServerConfiguration "
-								+ refresh.getId() + " is not managed");
+						logger.warning("ServerConfiguration " + refresh.getId()
+								+ " is not managed");
 					} else {
 						em.remove(refresh);
 					}
@@ -237,6 +254,28 @@ public class TestEntities {
 				if (usingUtx) {
 					utx.commit();
 				}
+			}
+		}
+		for (DefaultServerConfigurationBean dscb : defaultConfigs) {
+			boolean usingUtx = false;
+			if (utx != null) {
+				utx.begin();
+				usingUtx = true;
+			}
+			DefaultServerConfigurationBean refresh =
+				em.find(DefaultServerConfigurationBean.class, dscb.getHostName());
+			if (refresh != null) {
+				em.merge(refresh);
+				boolean isManaged = em.contains(refresh);
+				if (!isManaged) {
+					logger.warning("BatchJob " + refresh.getHostName()
+							+ " is not managed");
+				} else {
+					em.remove(refresh);
+				}
+			}
+			if (usingUtx) {
+				utx.commit();
 			}
 		}
 	}

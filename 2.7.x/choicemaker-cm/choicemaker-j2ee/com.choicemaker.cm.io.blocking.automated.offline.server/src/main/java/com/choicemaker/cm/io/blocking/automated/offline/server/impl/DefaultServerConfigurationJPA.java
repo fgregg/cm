@@ -9,4 +9,9 @@ public interface DefaultServerConfigurationJPA {
 
 	String CN_HOSTNAME = "HOST_NAME";
 
+	String QN_DSC_FIND_ALL = "defaultServerConfigFindAll";
+
+	String JPQL_DSC_FIND_ALL =
+		"Select dscb from DefaultServerConfigurationBean dscb";
+
 }

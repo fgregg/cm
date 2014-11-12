@@ -2,6 +2,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
 import java.util.List;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationBean;
+
 /**
  * Manages a database of server configurations.
  * 
@@ -164,5 +166,7 @@ public interface ServerConfigurationManager {
 	 */
 	ServerConfiguration getDefaultConfiguration(String hostName,
 			boolean computeFallback);
+
+	List<DefaultServerConfigurationBean> findAllDefaultServerConfigurations();
 
 }

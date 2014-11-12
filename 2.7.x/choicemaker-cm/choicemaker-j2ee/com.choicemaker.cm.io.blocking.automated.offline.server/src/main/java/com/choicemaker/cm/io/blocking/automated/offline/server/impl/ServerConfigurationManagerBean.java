@@ -295,14 +295,6 @@ public class ServerConfigurationManagerBean implements
 		}
 		if (retVal == null && computeFallback) {
 			MutableServerConfiguration mutable = computeGenericConfiguration();
-			if (!host.equals(mutable.getHostName())) {
-				String msg =
-					"Possible mismatch between the host name '"
-							+ host
-							+ "' and the host name of the fallback configuration '"
-							+ mutable.getHostName() + "'";
-				logger.warning(msg);
-			}
 			mutable.setHostName(host);
 			try {
 				retVal = save(mutable);
@@ -320,4 +312,14 @@ public class ServerConfigurationManagerBean implements
 		}
 		return retVal;
 	}
+
+	@Override
+	public List<DefaultServerConfigurationBean> findAllDefaultServerConfigurations() {
+		Query query =
+			em.createNamedQuery(DefaultServerConfigurationJPA.QN_DSC_FIND_ALL);
+		@SuppressWarnings("unchecked")
+		List<DefaultServerConfigurationBean> retVal = query.getResultList();
+		return retVal;
+	}
+
 }
