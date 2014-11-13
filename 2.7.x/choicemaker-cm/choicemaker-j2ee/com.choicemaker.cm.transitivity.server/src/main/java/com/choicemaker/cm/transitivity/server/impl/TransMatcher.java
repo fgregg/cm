@@ -15,28 +15,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.jms.JMSException;
+import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.MessageDriven;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.Queue;
-import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonPair;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.Matcher2;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractMatcher;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
 /**
@@ -46,71 +51,41 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class TransMatcher extends Matcher2  {
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
+public class TransMatcher extends AbstractMatcher  {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 271L;
 	private static final Logger log = Logger.getLogger(TransMatcher.class.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
+			+ TransMatcher.class.getName());
 
-	/** This method sends the message to the match result write bean.
-	 * 
-	 * @param data
-	 * @throws NamingException
-	 */
-	protected void sendToMatchScheduler (MatchWriterData data) throws NamingException, JMSException{
-		Queue queue = configuration.getTransMatchSchedulerMessageQueue();
-		configuration.sendMessage(queue, data);
-	} 
+	private static final int INTERVAL = 50000;
 
+	@PersistenceContext (unitName = "oaba")
+	private EntityManager em;
 
-	/** This method returns the correct tree/array file for this chunk.
-	 * 
-	 * @param num - number of processors
-	 * @param chunkId - chunk id
-	 * @param treeId - tree id
-	 * @return
-	 */
-	protected IComparisonSetSource getSource (int num, int maxBlockSize) throws BlockingException {
-		if (data.ind < data.numRegularChunks) {
-			//this should never happen
-			throw new BlockingException ("Found regular chunks in Tranvitivity Engine");
-			
-		} else {
-			//oversized
-			int i = data.ind - data.numRegularChunks;
-			ComparisonArrayGroupSinkSourceFactory factoryOS =
-				oabaConfig.getComparisonArrayGroupFactoryOS(num);
-			IComparisonArraySource sourceOS = factoryOS.getSource(i, data.treeInd);
-			if (sourceOS.exists()) {
-				IComparisonSetSource setSource = new ComparisonSetSource (sourceOS);
-				return setSource;
-			} else {
-				throw new BlockingException ("Could not get source " + sourceOS.getInfo ());
-			}
-		}
-	}
+//	@Resource
+//	private MessageDrivenContext mdc;
 
+	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
+	private Queue transMatchSchedulerQueue;
 
-	protected void setHighLow () {
-		//set low to 0.0 so we get the prob of non matches
-		low = data.low;
-		
-		high = data.high;			
-	}
+	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
+	private Queue updateQueue;
 
+//	@Resource(lookup = "java:/choicemaker/urm/jms/yyyQueue")
+//	private Queue yyyQueue;
 
-	/** This method handles the comparisons of a IComparisonSet.  It returns an 
-	 * ArrayList of MatchRecord2 produced by this IComparisonSet.  
-	 * 
-	 * @param cSet
-	 * @param batchJob
-	 * @param dataStore
-	 * @param stageModel
-	 * @return
-	 * @throws RemoteException
-	 * @throws BlockingException
-	 */
+	@Inject
+	JMSContext jmsContext;
+
+	@Override
 	protected List handleComparisonSet (IComparisonSet cSet, BatchJob batchJob, 
-		ChunkDataStore dataStore, IProbabilityModel stageModel) 
+		ChunkDataStore dataStore, IProbabilityModel stageModel, ImmutableThresholds t) 
 		throws RemoteException, BlockingException {
 			
 		boolean stop = batchJob.shouldStop();
@@ -136,7 +111,7 @@ public class TransMatcher extends Matcher2  {
 				throw new BlockingException ("id1 = id2");								
 			}
 
-			match = compareRecords (q, m, p.isStage, stageModel);
+			match = compareRecords (q, m, p.isStage, stageModel, t);
 			if (match != null) {
 				matches.add(match);
 			}
@@ -152,20 +127,10 @@ public class TransMatcher extends Matcher2  {
 		return matches;
 	}
 
-
-	/** This method writes the matches of a IComparisonSet to thre file 
-	 * corresponding to this matcher bean.
-	 * 
-	 * For TE, we have to write a separator MatchRecord2 to delimit the blocks, which will
-	 * make building CompositeEntity a lot faster.
-	 * 
-	 * @param matches
-	 * @param ind
-	 * @param maxMatch
-	 * @throws BlockingException
-	 */
-	protected void writeMatches (ArrayList matches) throws BlockingException {
+	@Override
+	protected void writeMatches (StartData data, List<MatchRecord2> matches) throws BlockingException {
 		//first figure out the correct file for this processor
+		OABAConfiguration oabaConfig = new OABAConfiguration(data.jobID);
 		IMatchRecord2Sink mSink = oabaConfig.getMatchChunkFactory().getSink(data.treeInd);
 		IComparableSink sink =  new ComparableMRSink (mSink);
 		
@@ -180,6 +145,27 @@ public class TransMatcher extends Matcher2  {
 		
 		sink.close();
 		
+	}
+
+	@Override
+	protected void sendToScheduler(MatchWriterData data) {
+		MessageBeanUtils.sendMatchWriterData(data, jmsContext,
+				transMatchSchedulerQueue, log);
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return log;
+	}
+
+	@Override
+	protected Logger getJMSTrace() {
+		return jmsTrace;
+	}
+
+	@Override
+	protected EntityManager getEntityManager() {
+		return em;
 	}
 
 }

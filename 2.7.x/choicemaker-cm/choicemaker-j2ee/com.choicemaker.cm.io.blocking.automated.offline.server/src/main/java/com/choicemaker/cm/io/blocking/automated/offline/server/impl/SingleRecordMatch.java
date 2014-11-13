@@ -10,12 +10,17 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.logging.Logger;
 
-import javax.ejb.MessageDrivenBean;
+import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -52,8 +57,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchDedupService2;
@@ -75,9 +81,14 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/singleMatchQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
+public class SingleRecordMatch implements MessageListener, Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 271L;
 	private static final Logger log = Logger.getLogger(SingleRecordMatch.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ SingleRecordMatch.class.getName());
@@ -88,67 +99,55 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
 
 	@PersistenceContext (unitName = "oaba")
-	EntityManager em;
+	private EntityManager em;
 
-	private transient MessageDrivenContext mdc = null;
-	private EJBConfiguration configuration = null;
+	@Resource
+	private MessageDrivenContext mdc;
 
-	// private transient QueueConnection connection = null;
+	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
+	private Queue updateQueue;
 
-	public SingleRecordMatch() {
-		// log.fine("constuctor");
-	}
-
-	public void setMessageDrivenContext(MessageDrivenContext mdc) {
-		// log.fine("setMessageDrivenContext()");
-		this.mdc = mdc;
-	}
-
-	public void ejbCreate() {
-		// log.fine("starting ejbCreate...");
-		try {
-			this.configuration = EJBConfiguration.getInstance();
-
-		} catch (Exception e) {
-			log.severe(e.toString());
-		}
-		// log.fine("...finished ejbCreate");
-	}
+	@Inject
+	JMSContext jmsContext;
 
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		StartData data;
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
 
 		try {
 
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
+				final long jobId = data.jobID;
+				BatchJob batchJob =
+					configuration.findBatchJobById(em, BatchJobBean.class,
+							jobId);
+				BatchParameters params =
+					configuration.findBatchParamsByJobId(em, jobId);
+				OABAConfiguration oabaConfig =
+					new OABAConfiguration(jobId);
 
 				long t = System.currentTimeMillis();
 
 				log.info("Starting Sinlge Record Match with maxSingle = "
-						+ data.maxCountSingle);
-
-				OABAConfiguration oabaConfig =
-					new OABAConfiguration(data.modelConfigurationName, data.jobID);
-
-				BatchJob batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
+						+ params.getMaxSingle());
 
 				// final file
 				IMatchRecord2Sink mSink =
-					oabaConfig.getCompositeMatchSink(data.jobID);
+					oabaConfig.getCompositeMatchSink(jobId);
 
 				// run OABA on the staging data set.
-				handleStageBatch(data, oabaConfig, mSink, batchJob);
+				handleStageBatch(data, oabaConfig, mSink, batchJob, params);
 
 				log.info("Time in dedup stage "
 						+ (System.currentTimeMillis() - t));
 				t = System.currentTimeMillis();
 
 				// run single record match between stage and master.
-				handleSingleMatching(data, oabaConfig, mSink);
+				handleSingleMatching(data, oabaConfig, mSink, params);
 
 				log.info("Time in single matching "
 						+ (System.currentTimeMillis() - t));
@@ -177,12 +176,18 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 	 * @param data
 	 */
 	private void handleStageBatch(StartData data, OABAConfiguration oabaConfig,
-			IMatchRecord2Sink mSinkFinal, BatchJob batchJob) throws Exception {
+			IMatchRecord2Sink mSinkFinal, BatchJob batchJob,
+			BatchParameters params) throws Exception {
 
+		final long jobId = data.jobID;
+		final String modelConfigId = params.getModelConfigurationName();
+		oabaConfig = new OABAConfiguration(jobId);
 		IProbabilityModel stageModel =
-			PMManager.getModelInstance(data.modelConfigurationName);
+			PMManager.getModelInstance(modelConfigId);
 
-		OabaProcessing status = configuration.getProcessingLog(em, data);
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OabaProcessing processingEntry =
+			configuration.getProcessingLog(em, data);
 
 		RecordIDTranslator2 translator =
 			new RecordIDTranslator2(oabaConfig.getTransIDFactory());
@@ -205,8 +210,8 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 		// create rec_id, val_id files
 		RecValService2 rvService =
-			new RecValService2(data.staging, null, stageModel, null,
-					oabaConfig.getRecValFactory(), translator, status);
+			new RecValService2(params.getStageRs(), null, stageModel, null,
+					oabaConfig.getRecValFactory(), translator, processingEntry);
 		rvService.runService();
 		data.numBlockFields = rvService.getNumBlockingFields();
 
@@ -226,7 +231,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 			new OABABlockingService(maxBlock, bGroup,
 					oabaConfig.getOversizedGroupFactory(), osSpecial, null,
 					oabaConfig.getRecValFactory(), data.numBlockFields,
-					data.validator, status, batchJob, minFields, maxOversized);
+					data.validator, processingEntry, batchJob, minFields, maxOversized);
 		blockingService.runService();
 		log.info("Done blocking " + blockingService.getTimeElapsed());
 		log.info("Num Blocks " + blockingService.getNumBlocks());
@@ -234,7 +239,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		// start block dedup
 		IBlockSink bSink = oabaConfig.getBlockFactory().getNextSink();
 		BlockDedupService dedupService =
-			new BlockDedupService(bGroup, bSink, maxBlock, status);
+			new BlockDedupService(bGroup, bSink, maxBlock, processingEntry);
 		dedupService.runService();
 		log.info("Done block dedup " + dedupService.getTimeElapsed());
 		log.info("Num Blocks Before " + dedupService.getNumBlocksIn());
@@ -246,7 +251,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 		OversizedDedupService osDedupService =
 			new OversizedDedupService(osSource, osDedup,
-					oabaConfig.getOversizedTempFactory(), status, batchJob);
+					oabaConfig.getOversizedTempFactory(), processingEntry, batchJob);
 		osDedupService.runService();
 		log.info("Done oversized dedup " + osDedupService.getTimeElapsed());
 		log.info("Num OS Before " + osDedupService.getNumBlocksIn());
@@ -264,11 +269,11 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 		// create chunks
 		ChunkService2 chunkService =
-			new ChunkService2(source, source2, data.staging, null, stageModel,
+			new ChunkService2(source, source2, params.getStageRs(), null, stageModel,
 					null, translator, oabaConfig.getChunkIDFactory(),
 					oabaConfig.getStageDataFactory(),
 					oabaConfig.getMasterDataFactory(),
-					oabaConfig.getCGFactory(), maxChunk, status);
+					oabaConfig.getCGFactory(), maxChunk, processingEntry);
 
 		chunkService.runService();
 		log.info("Number of chunks " + chunkService.getNumChunks());
@@ -290,7 +295,8 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 			new MatchingService2(oabaConfig.getStageDataFactory(),
 					oabaConfig.getMasterDataFactory(),
 					oabaConfig.getCGFactory(), stageModel, null, mSink,
-					matcher, data.low, data.high, maxBlock, status);
+					matcher, params.getLowThreshold(),
+					params.getHighThreshold(), maxBlock, processingEntry);
 		matchingService.runService();
 		log.info("Done matching " + matchingService.getTimeElapsed());
 
@@ -299,7 +305,7 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 
 		MatchDedupService2 mDedupService =
 			new MatchDedupService2(mSource, mSinkFinal, mFactory, maxMatch,
-					status);
+					processingEntry);
 		mDedupService.runService();
 		log.info("Done match dedup " + mDedupService.getTimeElapsed());
 	}
@@ -313,17 +319,19 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 	 * @throws Exception
 	 */
 	private void handleSingleMatching(StartData data,
-			OABAConfiguration oabaConfig, IMatchRecord2Sink mSinkFinal)
-			throws Exception {
+			OABAConfiguration oabaConfig, IMatchRecord2Sink mSinkFinal,
+			BatchParameters params) throws Exception {
 
+		final String modelConfigId = params.getModelConfigurationName();
 		IProbabilityModel model =
-			PMManager.getModelInstance(data.modelConfigurationName);
+			PMManager.getModelInstance(modelConfigId);
 		if (model == null) {
-			log.severe("Invalid probability accessProvider: "
-					+ data.modelConfigurationName);
-			throw new BlockingException(data.modelConfigurationName);
+			String msg = "Invalid probability accessProvider: " + modelConfigId;
+			log.severe(msg);
+			throw new BlockingException(msg);
 		}
 
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
 		new CountsUpdate().cacheCounts(configuration.getDataSource());
 
 		RecordDecisionMaker dm = new RecordDecisionMaker();
@@ -336,8 +344,9 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		databaseAccessor.setCondition("");
 		databaseAccessor.setDataSource(configuration.getDataSource());
 
-		RecordSource stage = data.staging;
-		stage.setModel(model);
+		RecordSource stage = params.getStageRs();
+		assert stage.getModel() == model;
+//		stage.setModel(model);
 
 		try {
 			stage.open();
@@ -357,12 +366,12 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 				log.fine(q.getId() + " " + rs + " " + model);
 
 				SortedSet<Match> s =
-					dm.getMatches(q, rs, model, data.low, data.high);
+					dm.getMatches(q, rs, model, params.getLowThreshold(), params.getHighThreshold());
 				Iterator<Match> iS = s.iterator();
 				while (iS.hasNext()) {
 					Match match = iS.next();
 					char type = 'M';
-					if (match.probability < data.high)
+					if (match.probability < params.getHighThreshold())
 						type = 'H';
 					final String noteInfo =
 						MatchRecord2.getNotesAsDelimitedString(match.ac, model);
@@ -385,22 +394,10 @@ public class SingleRecordMatch implements MessageDrivenBean, MessageListener {
 		sendToUpdateStatus(data.jobID, 100);
 	}
 
-	/**
-	 * This method sends a message to the UpdateStatus message bean.
-	 *
-	 * @param jobID
-	 * @param percentComplete
-	 * @throws NamingException
-	 */
 	private void sendToUpdateStatus(long jobID, int percentComplete)
 			throws NamingException {
-		Queue queue = configuration.getUpdateMessageQueue();
-		UpdateData data = new UpdateData(jobID, percentComplete);
-		configuration.sendMessage(queue, data);
-	}
-
-	public void ejbRemove() {
-		// log.fine("ejbRemove()");
+		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
+				updateQueue, log);
 	}
 
 }

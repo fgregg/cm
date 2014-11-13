@@ -10,15 +10,18 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.ejb.EJBException;
+import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
 import javax.ejb.FinderException;
-import javax.ejb.MessageDrivenBean;
-import javax.ejb.MessageDrivenContext;
+import javax.ejb.MessageDriven;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -42,7 +45,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfigura
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
@@ -63,54 +65,43 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
  *
  */
 @SuppressWarnings("rawtypes")
-public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
+// Singleton: maxSession = 1 (JBoss only)
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "maxSession",
+				propertyValue = "1"), // Singleton (JBoss only)
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/matchDedupQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
+public class MatchDedupOABA2 implements MessageListener, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(MatchDedupOABA2.class.getName());
+	private static final long serialVersionUID = 271L;
+	private static final Logger log = Logger.getLogger(MatchDedupOABA2.class
+			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatchDedupOABA2.class.getName());
 
-	@PersistenceContext (unitName = "oaba")
+	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-	protected transient MessageDrivenContext mdc;
-	protected transient EJBConfiguration configuration;
-	protected transient OABAConfiguration oabaConfig;
-	// private transient QueueConnection connection;
-	protected transient BatchJob batchJob;
+//	@Resource
+//	private MessageDrivenContext mdc;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
+	private Queue updateQueue;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/transitivityQueue")
+	private Queue transitivityQueue;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupEachQueue")
+	private Queue matchDedupEachQueue;
+
+	@Inject
+	private JMSContext jmsContext;
 
 	// This counts the number of messages sent to MatchDedupEach and number of
-	// done messages got back.
+	// done messages got back. Requires a Singleton message driven bean
 	private int countMessages;
-
-	private StartData data;
-
-	public void ejbCreate() {
-		try {
-			this.configuration = EJBConfiguration.getInstance();
-		} catch (Exception e) {
-			log.severe(e.toString());
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.ejb.MessageDrivenBean#ejbRemove()
-	 */
-	public void ejbRemove() throws EJBException {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.ejb.MessageDrivenBean#setMessageDrivenContext(javax.ejb.
-	 * MessageDrivenContext)
-	 */
-	public void setMessageDrivenContext(MessageDrivenContext mdc)
-			throws EJBException {
-		this.mdc = mdc;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -120,9 +111,11 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
 
 		log.fine("MatchDedupOABA2 In onMessage");
 
+		BatchJob batchJob = null;
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
@@ -132,32 +125,48 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 					// coming in from MatchScheduler2
 					// need to dedup each of the temp files from the processors
 					countMessages = 0;
-					handleDedupEach(o);
+					StartData data = (StartData) o;
+					long jobId = data.jobID;
+					batchJob =
+						configuration.findBatchJobById(em, BatchJobBean.class,
+								jobId);
+					handleDedupEach(data, batchJob);
 
 				} else if (o instanceof MatchWriterData) {
 					// coming in from MatchDedupEach
 					// need to merge the deduped temp files when all the
-					// proceesors are done
-
+					// processors are done
+					MatchWriterData data = (MatchWriterData) o;
+					long jobId = data.jobID;
+					batchJob =
+						configuration.findBatchJobById(em, BatchJobBean.class,
+								jobId);
 					countMessages--;
 					if (countMessages == 0) {
-						handleMerge(o);
+						handleMerge(data);
 					}
+
+				} else {
+					log.warning("wrong message body: " + o.getClass().getName());
 				}
 
 			} else {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			mdc.setRollbackOnly();
-		} catch (BlockingException e) {
-			log.severe(e.toString());
-			if (batchJob != null)
-				batchJob.markAsFailed();
+//		} catch (JMSException e) {
+//			log.severe(e.toString());
+//			mdc.setRollbackOnly();
+//		} catch (BlockingException e) {
+//			log.severe(e.toString());
+//			if (batchJob != null)
+//				batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
+			if (batchJob != null) {
+				batchJob.markAsFailed();
+			}
+//			mdc.setRollbackOnly();
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -165,46 +174,62 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 	/**
 	 * This method handles merging individual processor match files.
 	 */
-	private void handleMerge(Object o) throws FinderException, RemoteException,
-			BlockingException, NamingException, JMSException {
+	private void handleMerge(final MatchWriterData d) throws BlockingException {
 
-		MatchWriterData d = (MatchWriterData) o;
-		batchJob = configuration.findBatchJobById(em, BatchJobBean.class, d.jobID);
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		final long jobId = d.jobID;
+		BatchJob batchJob =
+			configuration.findBatchJobById(em, BatchJobBean.class, d.jobID);
+		OABAConfiguration oabaConfig = new OABAConfiguration(jobId);
 
 		// init values
+		BatchParameters params =
+			configuration.findBatchParamsByJobId(em, batchJob.getId());
+		final String modelConfigId = params.getModelConfigurationName();
 		ImmutableProbabilityModel stageModel =
-			PMManager.getModelInstance(d.modelConfigurationName);
-		oabaConfig = new OABAConfiguration(d.modelConfigurationName, d.jobID);
-		OabaProcessing status = configuration.getProcessingLog(em,d.jobID);
+			PMManager.getModelInstance(modelConfigId);
+		if (stageModel == null) {
+			String s = "No model corresponding to '" + modelConfigId + "'";
+			log.severe(s);
+			throw new IllegalArgumentException(s);
+		}
+		oabaConfig =
+			new OABAConfiguration(params.getModelConfigurationName(), jobId);
+
+		// get the status
+		OabaProcessing processingEntry =
+			configuration.getProcessingLog(em, d.jobID);
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
-			MessageBeanUtils.stopJob(batchJob, status, oabaConfig);
+			MessageBeanUtils.stopJob(batchJob, processingEntry, oabaConfig);
 
 		} else {
-			status.setCurrentProcessingEvent(OabaEvent.MERGE_DEDUP_MATCHES);
+			processingEntry.setCurrentProcessingEvent(OabaEvent.MERGE_DEDUP_MATCHES);
 
 			// get the number of processors
 			String temp = (String) stageModel.properties().get("numProcessors");
 			int numProcessors = Integer.parseInt(temp);
 
 			// now merge them all together
-			mergeMatches(numProcessors, data.jobID, batchJob);
+			mergeMatches(numProcessors, jobId, batchJob);
 
 			// mark as done
 			sendToUpdateStatus(d.jobID, 100);
-			status.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
+			processingEntry.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 //			publishStatus(d.jobID);
 
 			// send to transitivity
-			log.info("runTransitivity " + d.runTransitivity);
-			if (d.runTransitivity) {
+			log.info("runTransitivity " + params.getTransitivity());
+			if (params.getTransitivity()) {
 				StartData startTransivityData = createStartDataForTransitivityAnalysis(d.jobID);
 				sendToTransitivity(startTransivityData);
 			}
 		}
 	}
 	
-	StartData createStartDataForTransitivityAnalysis(long batchJobId) {
+	private StartData createStartDataForTransitivityAnalysis(
+			final long batchJobId) {
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
 		BatchParameters batchParams = configuration.findBatchParamsByJobId(em, batchJobId);
 		BatchJob batchJob = em.find(BatchJobBean.class, batchJobId);
 		TransitivityJob job = new TransitivityJobBean(batchParams, batchJob);
@@ -229,20 +254,33 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 	 * This method sends messages to MatchDedupEach to dedup individual match
 	 * files.
 	 */
-	private void handleDedupEach(Object o) throws RemoteException,
-			FinderException, BlockingException, NamingException, JMSException {
+	private void handleDedupEach(final StartData data, final BatchJob batchJob)
+			throws RemoteException, FinderException, BlockingException,
+			NamingException, JMSException {
 
-		data = (StartData) o;
-		batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		final long jobId = batchJob.getId();
+		OABAConfiguration oabaConfig = new OABAConfiguration(jobId);
 
 		// init values
+		BatchParameters params =
+			configuration.findBatchParamsByJobId(em, batchJob.getId());
+		final String modelConfigId = params.getModelConfigurationName();
 		ImmutableProbabilityModel stageModel =
-			PMManager.getModelInstance(data.modelConfigurationName);
-		oabaConfig = new OABAConfiguration(data.modelConfigurationName, data.jobID);
-		OabaProcessing status = configuration.getProcessingLog(em,data);
+			PMManager.getModelInstance(modelConfigId);
+		if (stageModel == null) {
+			String s = "No model corresponding to '" + modelConfigId + "'";
+			log.severe(s);
+			throw new IllegalArgumentException(s);
+		}
+		oabaConfig =
+			new OABAConfiguration(params.getModelConfigurationName(), jobId);
+
+		OabaProcessing processingEntry =
+			configuration.getProcessingLog(em, jobId);
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
-			MessageBeanUtils.stopJob(batchJob, status, oabaConfig);
+			MessageBeanUtils.stopJob(batchJob, processingEntry, oabaConfig);
 
 		} else {
 			// get the number of processors
@@ -272,11 +310,12 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 	 * 
 	 *
 	 */
-	private void mergeMatches(int num, long jobID, BatchJob batchJob)
-			throws BlockingException, RemoteException {
+	private void mergeMatches(final int num, final long jobId,
+			final BatchJob batchJob) throws BlockingException {
 
 		long t = System.currentTimeMillis();
 
+		OABAConfiguration oabaConfig = new OABAConfiguration(jobId);
 		IMatchRecord2SinkSourceFactory factory =
 			oabaConfig.getMatchTempFactory();
 		List<IComparableSink> tempSinks = new ArrayList<>();
@@ -290,7 +329,7 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 			log.info("merging file " + sink.getInfo());
 		}
 
-		IMatchRecord2Sink mSink = oabaConfig.getCompositeMatchSink(jobID);
+		IMatchRecord2Sink mSink = oabaConfig.getCompositeMatchSink(jobId);
 		IComparableSink sink = new ComparableMRSink(mSink);
 
 		ComparableMRSinkSourceFactory mFactory =
@@ -306,72 +345,17 @@ public class MatchDedupOABA2 implements MessageDrivenBean, MessageListener {
 		log.info("Time in merge dedup " + t);
 	}
 
-	/**
-	 * This method sends a message to the UpdateStatus message bean.
-	 */
-	protected void sendToUpdateStatus(long jobID, int percentComplete)
-			throws NamingException, JMSException {
-		Queue queue = configuration.getUpdateMessageQueue();
-		UpdateData data = new UpdateData(jobID, percentComplete);
-		configuration.sendMessage(queue, data);
+	private void sendToUpdateStatus(long jobID, int percentComplete) {
+		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
+				updateQueue, log);
 	}
 
-	/**
-	 * This sends the message to multiple beans to dedup each of the match temp
-	 * file created by the processors.
-	 */
-	protected void sendToMatchDedupEach(StartData d) throws NamingException,
-			JMSException {
-		Queue queue = configuration.getMatchDedupEachMessageQueue();
-		configuration.sendMessage(queue, d);
+	private void sendToMatchDedupEach(StartData d) {
+		MessageBeanUtils.sendStartData(d, jmsContext, matchDedupEachQueue, log);
 	}
 
-	private void sendToTransitivity(StartData d) throws NamingException,
-			JMSException {
-		Queue queue = configuration.getTransitivityMessageQueue();
-		configuration.sendMessage(queue, d);
-		log.info("Sending to TE");
+	private void sendToTransitivity(StartData d) {
+		MessageBeanUtils.sendStartData(d, jmsContext, transitivityQueue, log);
 	}
-
-//	/**
-//	 * This method publishes the status to a topic queue.
-//	 * However, 
-//	 */
-//	private void publishStatus(long id) {
-//		TopicConnection conn = null;
-//		TopicSession session = null;
-//		try {
-//			conn =
-//				EJBConfiguration.getInstance().getTopicConnectionFactory()
-//						.createTopicConnection();
-//			session =
-//				conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-//			conn.start();
-//			Topic topic = EJBConfiguration.getInstance().getStatusTopic();
-//			TopicPublisher pub = session.createPublisher(topic);
-//			ObjectMessage notifMsg = session.createObjectMessage(new Long(id));
-//			pub.publish(notifMsg);
-//			pub.close();
-//			// conn.stop();
-//		} catch (Exception e) {
-//			log.severe(e.toString());
-//		} finally {
-//			if (session != null) {
-//				try {
-//					session.close();
-//				} catch (Exception e) {
-//					log.severe(e.toString());
-//				}
-//			}
-//			if (conn != null) {
-//				try {
-//					conn.close();
-//				} catch (Exception e) {
-//					log.severe(e.toString());
-//				}
-//			}
-//		}
-//		log.fine("...finished published status");
-//	}
 
 }

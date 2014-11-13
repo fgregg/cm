@@ -10,13 +10,20 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
 import javax.ejb.FinderException;
+import javax.ejb.MessageDriven;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
@@ -34,66 +41,98 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.Oaba
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MatchDedupOABA2;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 /**
- * This match dedup bean is used by the Transitivity Engine.  It dedups the temporary
- * match results and merge them with the orginal OABA results.
+ * This match dedup bean is used by the Transitivity Engine. It dedups the
+ * temporary match results and merge them with the orginal OABA results.
  *
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-public class TransMatchDedup extends MatchDedupOABA2 {
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
+//Singleton: maxSession = 1 (JBoss only)
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "maxSession",
+				propertyValue = "1"),
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
+public class TransMatchDedup implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(TransMatchDedup.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransMatchDedup.class.getName());
+	private static final Logger log = Logger.getLogger(TransMatchDedup.class
+			.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
+			+ TransMatchDedup.class.getName());
 
-	@PersistenceContext (unitName = "oaba")
+	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-	/* (non-Javadoc)
+//	@Resource
+//	protected MessageDrivenContext mdc;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/updateTransQueue")
+	private Queue updateTransQueue;
+
+	@Inject
+	protected JMSContext jmsContext;
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
 	 */
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
 
 		log.fine("MatchDedupOABA2 In onMessage");
 
+		BatchJob batchJob = null;
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				Object o = msg.getObject();
 
-				handleMerge(o);
+				if (o instanceof MatchWriterData) {
+					MatchWriterData data = (MatchWriterData) o;
+					long jobId = data.jobID;
+					batchJob =
+						configuration.findBatchJobById(em, BatchJobBean.class,
+								jobId);
+						handleMerge(batchJob);
+				} else {
+					log.warning("wrong message body: " + o.getClass().getName());
+				}
+
 			} else {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			mdc.setRollbackOnly();
-		} catch (BlockingException e) {
-			log.severe(e.toString());
-			if (batchJob != null)
-				batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
+			if (batchJob != null) {
+				batchJob.markAsFailed();
+			}
+//			mdc.setRollbackOnly();
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-
-	/** This method handles merging individual processor match files.
+	/**
+	 * This method handles merging individual processor match files.
 	 *
 	 * @param o
 	 * @throws FinderException
@@ -102,87 +141,81 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
-	protected void handleMerge (Object o)
-		throws FinderException, RemoteException, BlockingException, NamingException, JMSException {
+	private void handleMerge(final BatchJob batchJob) throws BlockingException {
 
 		log.fine("in handleMerge");
 
-		StartData d = (StartData) o;
-		batchJob = configuration.findBatchJobById(em, BatchJobBean.class, d.jobID);
+		final long jobId = batchJob.getId();
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		BatchParameters params =
+			configuration.findBatchParamsByJobId(em, jobId);
 
-		//init values
-		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(d.modelConfigurationName);
-		oabaConfig = new OABAConfiguration (d.modelConfigurationName, d.jobID);
-		OabaProcessing status = configuration.getProcessingLog(em, d.jobID);
+		// init values
+		final String modelConfigId = params.getModelConfigurationName();
+		ImmutableProbabilityModel stageModel =
+			PMManager.getModelInstance(modelConfigId);
+		OabaProcessing processingEntry =
+			configuration.getProcessingLog(em, jobId);
 
-		//get the number of processors
+		// get the number of processors
 		String temp = (String) stageModel.properties().get("numProcessors");
 		int numProcessors = Integer.parseInt(temp);
 
-		//now merge them all together
-		mergeMatches (numProcessors, d.jobID, batchJob, d);
+		// now merge them all together
+		mergeMatches(numProcessors, batchJob);
 
-		//mark as done
-		sendToUpdateTransStatus (d.jobID, 100);
-//		status.setCurrentProcessingEvent( OabaEvent.DONE_TRANSANALYSIS);
+		// mark as done
+		sendToUpdateTransStatus(jobId,
+				OabaProcessing.PCT_DONE_TRANSANALYSIS);
+		// status.setCurrentProcessingEvent( OabaEvent.DONE_TRANSANALYSIS);
 		// HACK
 		assert OabaEvent.DONE_OABA.eventId == TransEvent.DONE_TRANSANALYSIS.eventId;
-		status.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
+		processingEntry.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 		// END HACK
 
 	}
 
-
-	/** This method sends a message to the UpdateStatus message bean.
-	 *
-	 * @param jobID
-	 * @param percentComplete
-	 * @throws NamingException
-	 */
-	protected void sendToUpdateTransStatus (long jobID, int percentComplete) throws NamingException, JMSException {
-		Queue queue = configuration.getUpdateTransMessageQueue();
-		UpdateData data = new UpdateData(jobID, percentComplete);
-		configuration.sendMessage(queue, data);
-	}
-
-
-	/** This method does the following:
-	 * 1.	concat all the MatchRecord2 files from the processors.
-	 * 2.	Merge in the size 2 equivalence classes MatchRecord2's.
+	/**
+	 * This method does the following: 1. concat all the MatchRecord2 files from
+	 * the processors. 2. Merge in the size 2 equivalence classes
+	 * MatchRecord2's.
 	 *
 	 * The output file contains MatchRecord2 with separator records.
 	 *
 	 */
-	protected void mergeMatches (int num, long jobID, BatchJob batchJob, StartData d)
-		throws BlockingException, RemoteException {
+	protected void mergeMatches(final int num,
+			final BatchJob batchJob) throws BlockingException {
 
-		// 2014-04-24 rphall: Commented out unused local variable.
-//		long t = System.currentTimeMillis();
+		final long jobID = batchJob.getId();
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OABAConfiguration oabaConfig = new OABAConfiguration(jobID);
 
-		//final sink
-		IMatchRecord2Sink finalSink = oabaConfig.getCompositeTransMatchSink(jobID);
+		// final sink
+		IMatchRecord2Sink finalSink =
+			oabaConfig.getCompositeTransMatchSink(jobID);
 
-		IMatchRecord2SinkSourceFactory factory = oabaConfig.getMatchChunkFactory();
-		ArrayList tempSinks = new ArrayList ();
+		IMatchRecord2SinkSourceFactory factory =
+			oabaConfig.getMatchChunkFactory();
+		ArrayList tempSinks = new ArrayList();
 
-		//the match files start with 1, not 0.
-		for (int i=1; i<= num; i++) {
+		// the match files start with 1, not 0.
+		for (int i = 1; i <= num; i++) {
 			IMatchRecord2Sink mSink = factory.getSink(i);
 			tempSinks.add(mSink);
 
-			log.info ("concatenating file " + mSink.getInfo());
+			log.info("concatenating file " + mSink.getInfo());
 		}
 
-		//concat all the other chunk MatchRecord2 sinks.
+		// concat all the other chunk MatchRecord2 sinks.
 		finalSink.append();
 		Comparable C = null;
 
-		for (int i=0; i<tempSinks.size(); i++) {
+		for (int i = 0; i < tempSinks.size(); i++) {
 			IMatchRecord2Sink mSink = (IMatchRecord2Sink) tempSinks.get(i);
 
 			IMatchRecord2Source mSource = factory.getSource(mSink);
 			if (mSource.exists()) {
-				mSource.open ();
+				mSource.open();
 				while (mSource.hasNext()) {
 					MatchRecord2 mr = mSource.getNext();
 					finalSink.writeMatch(mr);
@@ -191,23 +224,25 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 						C = mr.getRecordID1();
 					}
 				}
-				mSource.close ();
+				mSource.close();
 
-				//clean up
+				// clean up
 				mSource.remove();
-			} //end if
+			} // end if
 		}
 
-		//finally concat the size two EC file
-		IMatchRecord2Source mSource = oabaConfig.getSet2MatchFactory().getNextSource();
+		// finally concat the size two EC file
+		IMatchRecord2Source mSource =
+			oabaConfig.getSet2MatchFactory().getNextSource();
 		MatchRecord2 separator = null;
-		if (C != null) separator = MatchRecord2Factory.getSeparator(C);
+		if (C != null)
+			separator = MatchRecord2Factory.getSeparator(C);
 
 		if (mSource.exists()) {
 			mSource.open();
-			int i =0;
+			int i = 0;
 			while (mSource.hasNext()) {
-				i ++;
+				i++;
 				MatchRecord2 mr = mSource.getNext();
 				if (C == null) {
 					C = mr.getRecordID1();
@@ -224,12 +259,12 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 
 		finalSink.close();
 
-		log.info ("final output " + finalSink.getInfo());
+		log.info("final output " + finalSink.getInfo());
 
 		try {
 			BatchJob transJob =
 				configuration.findBatchJobById(em, TransitivityJobBean.class,
-						d.jobID);
+						jobID);
 			assert transJob instanceof TransitivityJob;
 			transJob.setDescription(finalSink.getInfo());
 		} catch (Exception e) {
@@ -237,5 +272,9 @@ public class TransMatchDedup extends MatchDedupOABA2 {
 		}
 	}
 
+	protected void sendToUpdateTransStatus(long jobID, int percentComplete) {
+		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
+				updateTransQueue, log);
+	}
 
 }

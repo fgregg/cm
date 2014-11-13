@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -22,12 +21,10 @@ import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
-import javax.jms.JMSProducer;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -41,9 +38,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 
 /**
@@ -69,8 +66,8 @@ public class StartOABA implements MessageListener, Serializable {
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-	private transient MessageDrivenContext mdc = null;
-	private transient EJBConfiguration configuration = null;
+	@Resource
+	private MessageDrivenContext mdc;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
@@ -84,11 +81,6 @@ public class StartOABA implements MessageListener, Serializable {
 	@Inject
 	JMSContext jmsContext;
 
-	@PostConstruct
-	public void init() {
-		this.configuration = EJBConfiguration.getInstance();
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -99,6 +91,7 @@ public class StartOABA implements MessageListener, Serializable {
 		ObjectMessage msg = null;
 		StartData data = null;
 		BatchJob batchJob = null;
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
 
 		log.info("StartOABA In onMessage");
 
@@ -136,7 +129,8 @@ public class StartOABA implements MessageListener, Serializable {
 
 				log.info(jobId + " " + params.getModelConfigurationName() + " "
 						+ params.getLowThreshold() + " "
-						+ params.getHighThreshold() + " " + params.getTransitivity());
+						+ params.getHighThreshold() + " "
+						+ params.getTransitivity());
 				log.info(params.getStageRs() + " " + params.getMasterRs());
 
 				// check to see if there are a lot of records in stage.
@@ -154,8 +148,8 @@ public class StartOABA implements MessageListener, Serializable {
 
 					// create rec_id, val_id files
 					RecValService3 rvService =
-						new RecValService3(params.getStageRs(), params.getMasterRs(),
-								stageModel,
+						new RecValService3(params.getStageRs(),
+								params.getMasterRs(), stageModel,
 								oabaConfig.getRecValFactory(), translator,
 								status, batchJob);
 					rvService.runService();
@@ -243,64 +237,17 @@ public class StartOABA implements MessageListener, Serializable {
 		return ret;
 	}
 
-	/**
-	 * This method sends a message to the UpdateStatus message bean.
-	 *
-	 * @param jobID
-	 * @param percentComplete
-	 * @throws NamingException
-	 */
-	private void sendToUpdateStatus(long jobID, int percentComplete)
-			throws NamingException, JMSException {
-		UpdateData data = new UpdateData(jobID, percentComplete);
-		ObjectMessage message = jmsContext.createObjectMessage(data);
-		JMSProducer sender = jmsContext.createProducer();
-		log.finest(queueInfo("Sending: ", updateQueue, data));
-		sender.send(updateQueue, message);
-		log.finest(queueInfo("Sent: ", updateQueue, data));
+	private void sendToUpdateStatus(long jobID, int percentComplete) {
+		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
+				updateQueue, log);
 	}
 
-	/**
-	 * This method sends a message to the BlockingOABA message bean.
-	 *
-	 * @param data
-	 * @throws NamingException
-	 */
-	private void sendToBlocking(StartData data) throws NamingException,
-			JMSException {
-		ObjectMessage message = jmsContext.createObjectMessage(data);
-		JMSProducer sender = jmsContext.createProducer();
-		log.finest(queueInfo("Sending: ", blockQueue, data));
-		sender.send(blockQueue, message);
-		log.finest(queueInfo("Sent: ", blockQueue, data));
+	private void sendToBlocking(StartData data) {
+		MessageBeanUtils.sendStartData(data, jmsContext, blockQueue, log);
 	}
 
-	/**
-	 * This method sends a message to the BlockingOABA message bean.
-	 *
-	 * @param data
-	 * @throws NamingException
-	 */
-	private void sendToSingleRecordMatching(StartData data)
-			throws NamingException, JMSException {
-		ObjectMessage message = jmsContext.createObjectMessage(data);
-		JMSProducer sender = jmsContext.createProducer();
-		log.finest(queueInfo("Sending: ", singleMatchQueue, data));
-		sender.send(singleMatchQueue, message);
-		log.finest(queueInfo("Sent: ", singleMatchQueue, data));
-	}
-
-	private static String queueInfo(String tag, Queue q, Object d) {
-		String queueName;
-		try {
-			queueName = q.getQueueName();
-		} catch (JMSException x) {
-			queueName = "unknown";
-		}
-		StringBuilder sb =
-			new StringBuilder(tag).append("queue: '").append(queueName)
-					.append("', data: '").append(d).append("'");
-		return sb.toString();
+	private void sendToSingleRecordMatching(StartData data) {
+		MessageBeanUtils.sendStartData(data, jmsContext, singleMatchQueue, log);
 	}
 
 }

@@ -10,12 +10,12 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
 import javax.ejb.EJBException;
 import javax.ejb.FinderException;
-import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -46,6 +46,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfigura
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
@@ -59,7 +60,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
  *
  */
 @SuppressWarnings({"rawtypes"})
-public class TransitivityBean implements MessageDrivenBean, MessageListener {
+public class TransitivityBean implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(TransitivityBean.class.getName());
@@ -111,17 +112,19 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 				Object o = msg.getObject();
 
 				StartData d = (StartData) o;
-				transJob = (TransitivityJob) configuration.findBatchJobById(em, TransitivityJobBean.class, d.jobID);
+				final long jobId = d.jobID;
+				transJob = (TransitivityJob) configuration.findBatchJobById(em, TransitivityJobBean.class, jobId);
 				transJob.markAsStarted();
+				BatchParameters params = null; // FIXME
 
 				data = new StartData(transJob.getId());
 
-				oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
+				oabaConfig = new OABAConfiguration (data.jobID);
 
 				// clean up
 				removeOldFiles ();
 
-				createChunks ();
+				createChunks (params);
 
 			} else {
 				log.warning("wrong type: " + inMessage.getClass().getName());
@@ -141,7 +144,7 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 	 * It then calls ChunkService3 to create chunks.
 	 *
 	 */
-	private void createChunks ()
+	private void createChunks (BatchParameters params)
 		throws RemoteException, FinderException, XmlConfException, BlockingException, NamingException, JMSException {
 
 		//get the match record source
@@ -177,7 +180,8 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 		IBlockSource bSource = oabaConfig.getTransitivityBlockFactory().getSource(bSink);
 		IDSetSource source2 = new IDSetSource (bSource);
 
-		IProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);
+		final String modelConfigId = params.getModelConfigurationName();
+		IProbabilityModel stageModel = PMManager.getModelInstance(modelConfigId);
 		String temp = (String) stageModel.properties().get("maxChunkSize");
 		int maxChunk = Integer.parseInt(temp);
 
@@ -208,7 +212,7 @@ public class TransitivityBean implements MessageDrivenBean, MessageListener {
 		// END HACK
 
 		ChunkService3 chunkService =
-			new ChunkService3(source2, null, data.staging, data.master,
+			new ChunkService3(source2, null, params.getStageRs(), params.getMasterRs(),
 					stageModel, oabaConfig.getChunkIDFactory(),
 					oabaConfig.getStageDataFactory(),
 					oabaConfig.getMasterDataFactory(),

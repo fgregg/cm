@@ -10,22 +10,25 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
-import javax.ejb.EJBException;
-import javax.ejb.MessageDrivenBean;
+import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
@@ -40,6 +43,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterD
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
@@ -51,50 +55,30 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
  *
  */
 @SuppressWarnings("rawtypes")
-public class MatchDedupEach implements MessageDrivenBean, MessageListener {
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/matchDedupEachQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
+public class MatchDedupEach implements MessageListener, Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 271L;
 	private static final Logger log = Logger.getLogger(MatchDedupEach.class
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatchDedupEach.class.getName());
 
 	@PersistenceContext (unitName = "oaba")
-	EntityManager em;
+	private EntityManager em;
 
-	private transient MessageDrivenContext mdc = null;
-	protected transient EJBConfiguration configuration = null;
-	private transient OABAConfiguration oabaConfig = null;
-	// private transient QueueConnection connection = null;
+	@Resource
+	private MessageDrivenContext mdc;
 
-	private StartData data;
+	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
+	private Queue matchDedupQueue;
 
-	public void ejbCreate() {
-		try {
-			this.configuration = EJBConfiguration.getInstance();
-		} catch (Exception e) {
-			log.severe(e.toString());
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.ejb.MessageDrivenBean#ejbRemove()
-	 */
-	public void ejbRemove() throws EJBException {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.ejb.MessageDrivenBean#setMessageDrivenContext(javax.ejb.
-	 * MessageDrivenContext)
-	 */
-	public void setMessageDrivenContext(MessageDrivenContext mdc)
-			throws EJBException {
-		this.mdc = mdc;
-	}
+	@Inject
+	private JMSContext jmsContext;
 
 	/*
 	 * (non-Javadoc)
@@ -105,28 +89,44 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
 
 		log.fine("MatchDedupEach In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (StartData) msg.getObject();
-				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
+				StartData data = (StartData) msg.getObject();
+
+				final long jobId = data.jobID;
+				batchJob =
+					configuration.findBatchJobById(em, BatchJobBean.class,
+							data.jobID);
 
 				// init values
-				ImmutableProbabilityModel stageModel =
-					PMManager.getModelInstance(data.modelConfigurationName);
-				oabaConfig =
-					new OABAConfiguration(data.modelConfigurationName, data.jobID);
-				OabaProcessing status = configuration.getProcessingLog(em, data);
+				BatchParameters params =
+					configuration.findBatchParamsByJobId(em, batchJob.getId());
+				final String modelConfigId = params.getModelConfigurationName();
+				IProbabilityModel stageModel =
+					PMManager.getModelInstance(modelConfigId);
+				if (stageModel == null) {
+					String s =
+						"No model corresponding to '" + modelConfigId + "'";
+					log.severe(s);
+					throw new IllegalArgumentException(s);
+				}
+				OABAConfiguration oabaConfig = new OABAConfiguration(jobId);
+
+				// get the status
+				OabaProcessing processingEntry =
+					configuration.getProcessingLog(em, data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED
 						.equals(batchJob.getStatus())) {
-					MessageBeanUtils.stopJob(batchJob, status, oabaConfig);
+					MessageBeanUtils.stopJob(batchJob, processingEntry, oabaConfig);
 
 				} else {
-					if (status.getCurrentProcessingEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
+					if (processingEntry.getCurrentProcessingEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
 						// max number of match in a temp file
 						String temp =
 							(String) stageModel.properties()
@@ -171,6 +171,7 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 	private void dedupEach(int num, int maxMatches, BatchJob batchJob)
 			throws BlockingException {
 		long t = System.currentTimeMillis();
+		OABAConfiguration oabaConfig = new OABAConfiguration(batchJob.getId());
 		IMatchRecord2Sink mSink =
 			oabaConfig.getMatchChunkFactory().getSink(num);
 		IMatchRecord2Source mSource =
@@ -206,10 +207,8 @@ public class MatchDedupEach implements MessageDrivenBean, MessageListener {
 		log.info("Time in dedup each " + t);
 	}
 
-	protected void sendToMatchDedupOABA2(MatchWriterData d)
-			throws NamingException, JMSException {
-		Queue queue = configuration.getMatchDedupMessageQueue();
-		configuration.sendMessage(queue, d);
+	private void sendToMatchDedupOABA2(MatchWriterData d) {
+		MessageBeanUtils.sendMatchWriterData(d, jmsContext, matchDedupQueue, log);
 	}
 
 }

@@ -974,9 +974,12 @@ private void resolveFragments() {
 			continue;
 		seen.add(fragment.getId());
 		PluginDescriptorModel plugin = reg.getPlugin(fragment.getPluginId(), fragment.getPluginVersion());
-		if (plugin == null)
-			// XXX log something here?
+		if (plugin == null) {
+			// 2014-11-12 rphall debug logging added
+			String s = "Missing plugin for fragment. Fragment: " + fragment.getId() + ", Plugin: " + fragment.getPluginId() + ", Plugin version: " + fragment.getPluginVersion();
+			debug(s);
 			continue;
+		}
 		resolvePluginFragments(plugin);
 	}
 }

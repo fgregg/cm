@@ -10,11 +10,15 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
-import javax.ejb.EJBException;
-import javax.ejb.MessageDrivenBean;
+import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -34,8 +38,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
@@ -50,42 +54,31 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
  * @author pcheung
  *
  */
-public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/chunkQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
+public class ChunkOABA2 implements MessageListener, Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 271L;
 	private static final Logger log = Logger.getLogger(ChunkOABA2.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + ChunkOABA2.class.getName());
 
 	@PersistenceContext (unitName = "oaba")
-	EntityManager em;
+	private EntityManager em;
 
-	private transient MessageDrivenContext mdc = null;
-	private transient EJBConfiguration configuration = null;
-//	private transient OABAConfiguration oabaConfig = null;
+	@Resource
+	private MessageDrivenContext mdc;
 
-	public void ejbCreate() {
-//	log.fine("starting ejbCreate...");
-		try {
-			this.configuration = EJBConfiguration.getInstance();
-		} catch (Exception e) {
-			log.severe(e.toString());
-		}
-//	log.fine("...finished ejbCreate");
-	}
+	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
+	private Queue matchSchedulerQueue;
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.MessageDrivenBean#ejbRemove()
-	 */
-	public void ejbRemove() throws EJBException {
-	}
+	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
+	private Queue updateQueue;
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.MessageDrivenBean#setMessageDrivenContext(javax.ejb.MessageDrivenContext)
-	 */
-	public void setMessageDrivenContext(MessageDrivenContext mdc)
-		throws EJBException {
-			this.mdc = mdc;
-	}
+	@Inject
+	private JMSContext jmsContext;
 
 	/* (non-Javadoc)
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
@@ -95,6 +88,7 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 		ObjectMessage msg = null;
 		StartData data = null;
 		BatchJob batchJob = null;
+		EJBConfiguration configuration = EJBConfiguration.getInstance();
 
 		log.fine("ChunkOABA In onMessage");
 
@@ -103,18 +97,33 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
 
-				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
+				final long jobId = data.jobID;
+				batchJob =
+					configuration.findBatchJobById(em, BatchJobBean.class,
+							data.jobID);
 
-				//init values
-				IProbabilityModel model = PMManager.getModelInstance(data.modelConfigurationName);
-				OABAConfiguration oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
+				// init values
+				BatchParameters params =
+					configuration.findBatchParamsByJobId(em, batchJob.getId());
+				final String modelConfigId = params.getModelConfigurationName();
+				IProbabilityModel model =
+					PMManager.getModelInstance(modelConfigId);
+				if (model == null) {
+					String s =
+						"No model corresponding to '" + modelConfigId + "'";
+					log.severe(s);
+					throw new IllegalArgumentException(s);
+				}
+				OABAConfiguration oabaConfig =
+					new OABAConfiguration(params.getModelConfigurationName(),
+							jobId);
 
-				//get the status
-//				Status status = data.status;
-				OabaProcessing status = configuration.getProcessingLog(em, data);
+				// get the status
+				OabaProcessing processingEntry =
+					configuration.getProcessingLog(em, data);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
-					MessageBeanUtils.stopJob (batchJob, status, oabaConfig);
+					MessageBeanUtils.stopJob (batchJob, processingEntry, oabaConfig);
 
 				} else {
 					String temp = (String) model.properties().get("maxChunkSize");
@@ -148,12 +157,13 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 
 					ChunkService3 chunkService =
 						new ChunkService3(oabaConfig.getTreeSetSource(),
-								source2, data.staging, data.master, model,
+								source2, params.getStageRs(),
+								params.getMasterRs(), model,
 								oabaConfig.getChunkIDFactory(),
 								oabaConfig.getStageDataFactory(),
 								oabaConfig.getMasterDataFactory(),
 								translator.getSplitIndex(), tTransformer,
-								transformerO, maxChunk, maxChunkFiles, status,
+								transformerO, maxChunk, maxChunkFiles, processingEntry,
 								batchJob);
 					chunkService.runService();
 					log.info( "Number of chunks " + chunkService.getNumChunks());
@@ -188,33 +198,13 @@ public class ChunkOABA2 implements MessageDrivenBean, MessageListener {
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-
-	/** This method sends a message to the UpdateStatus message bean.
-	 *
-	 * @param jobID
-	 * @param percentComplete
-	 * @throws NamingException
-	 */
 	private void sendToUpdateStatus (long jobID, int percentComplete) throws NamingException, JMSException {
-		Queue queue = configuration.getUpdateMessageQueue();
-		UpdateData data = new UpdateData(jobID, percentComplete);
-		configuration.sendMessage(queue, data);
+		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
+				updateQueue, log);
 	}
 
-
-	/** This method sends a message to the DedupOABA message bean.
-	 *
-	 * @param request
-	 * @throws NamingException
-	 */
 	private void sendToMatch (StartData data) throws NamingException, JMSException{
-//		Queue queue = configuration.getMatchingMessageQueue();
-		Queue queue = configuration.getMatchSchedulerMessageQueue();
-
-		log.info("queue " + queue.getQueueName());
-
-		configuration.sendMessage(queue, data);
+		MessageBeanUtils.sendStartData(data, jmsContext, matchSchedulerQueue, log);
 	}
-
 
 }

@@ -59,6 +59,6 @@ public interface BatchParametersJPA {
 //	 * Name of the parameter used to specify the jobId parameter of
 //	 * {@link #JPQL_BATCHPARAMETERS_FIND_BY_JOB_ID}
 //	 */
-//	String PN_BATCHPARAMETERS_FIND_BY_JOBID_JOBID = "jobId";
+//	String PN_BATCHPARAMETERS_FIND_BY_JOBID_P1 = "jobId";
 
 }

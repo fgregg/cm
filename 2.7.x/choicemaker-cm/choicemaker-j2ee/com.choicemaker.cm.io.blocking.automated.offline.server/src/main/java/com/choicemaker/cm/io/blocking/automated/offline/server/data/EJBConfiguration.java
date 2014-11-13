@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
-import javax.ejb.FinderException;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
@@ -107,14 +106,6 @@ public class EJBConfiguration implements Serializable {
 
 	// -- END Enterprise Naming Context
 	
-//	// Injected references
-//	@PersistenceContext(unitName = "oaba")
-//	private EntityManager em;
-
-	// Cached EJB home proxies
-//	private transient BatchParametersHome batchParamsHome;
-//	private transient StatusLogHome statusLogHome;
-
 	// Cached connection factories
 	private transient QueueConnectionFactory queueConnectionFactory;
 //	private transient TopicConnectionFactory topicConnectionFactory;
@@ -592,7 +583,8 @@ public class EJBConfiguration implements Serializable {
 		return retVal;
 	}
 
-	private List<OabaBatchJobProcessingBean> findProcessingLogsByJobId(EntityManager em, long id) {
+	private List<OabaBatchJobProcessingBean> findProcessingLogsByJobId(
+			EntityManager em, long id) {
 		Query query = em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_BY_JOBID);
 		query.setParameter(
 				OabaProcessingJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID,
@@ -621,13 +613,14 @@ public class EJBConfiguration implements Serializable {
 		return retVal;
 	}
 
-	public OabaProcessing getProcessingLog (EntityManager em, StartData data) throws RemoteException, FinderException, NamingException {
-		OabaBatchJobProcessing retVal = findProcessingLogByJobId (em, data.jobID);
+	public OabaProcessing getProcessingLog(EntityManager em, StartData data) {
+		OabaBatchJobProcessing retVal =
+			findProcessingLogByJobId(em, data.jobID);
 		return retVal;
 	}
 
-	public OabaProcessing getProcessingLog (EntityManager em, long jobID) throws RemoteException, FinderException, NamingException {
-		OabaBatchJobProcessing retVal = findProcessingLogByJobId (em, jobID);
+	public OabaProcessing getProcessingLog(EntityManager em, long jobID) {
+		OabaBatchJobProcessing retVal = findProcessingLogByJobId(em, jobID);
 		return retVal;
 	}
 

@@ -21,7 +21,6 @@ import java.util.Set;
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
@@ -73,7 +72,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		Set alreadyHandledBlocking = new HashSet();
 		Iterator iModels = PMManager.models().values().iterator();
 		while (iModels.hasNext()) {
-			IProbabilityModel model = (IProbabilityModel) iModels.next();
+			ImmutableProbabilityModel model = (ImmutableProbabilityModel) iModels.next();
 			String key = model.getAccessor().getSchemaName() + "|" + model.getDatabaseConfigurationName();
 			if (alreadyHandledRetrieval.add(key)) {
 				createRetrievalObjects(model, w);
@@ -88,7 +87,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		w.close();
 	}
 
-	private static void createBlockingObjects(IProbabilityModel model, Writer w) throws IOException {
+	private static void createBlockingObjects(ImmutableProbabilityModel model, Writer w) throws IOException {
 		String dbConfiguration = model.getDatabaseConfigurationName();
 		String blockingConfiguration = model.getBlockingConfigurationName();
 		Accessor accessor = model.getAccessor();
@@ -106,7 +105,7 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		}
 	}
 
-	private static void createRetrievalObjects(IProbabilityModel model, Writer w) throws IOException {
+	private static void createRetrievalObjects(ImmutableProbabilityModel model, Writer w) throws IOException {
 		String dbConfiguration = model.getDatabaseConfigurationName();
 		if (dbConfiguration != null) {
 			Accessor accessor = model.getAccessor();

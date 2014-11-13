@@ -10,11 +10,15 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
-import javax.ejb.EJBException;
-import javax.ejb.MessageDrivenBean;
+import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -25,7 +29,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
+//import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
@@ -33,8 +38,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
 
@@ -44,43 +49,37 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingSer
  * @author pcheung
  *
  */
-public class BlockingOABA implements MessageDrivenBean, MessageListener {
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/blockQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
+public class BlockingOABA implements MessageListener, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(BlockingOABA.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + BlockingOABA.class.getName());
+	private static final long serialVersionUID = 271L;
+	private static final Logger log = Logger.getLogger(BlockingOABA.class
+			.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
+			+ BlockingOABA.class.getName());
 
-	@PersistenceContext (unitName = "oaba")
-	EntityManager em;
+	@PersistenceContext(unitName = "oaba")
+	private EntityManager em;
 
-	private transient MessageDrivenContext mdc = null;
-	private transient EJBConfiguration configuration = null;
+	@Resource
+	private MessageDrivenContext mdc;
 
-	public void ejbCreate() {
-//	log.fine("starting ejbCreate...");
-		try {
-			this.configuration = EJBConfiguration.getInstance();
-		} catch (Exception e) {
-			log.severe(e.toString());
-		}
-//	log.fine("...finished ejbCreate");
-	}
+	@Resource(lookup = "java:/choicemaker/urm/jms/dedupQueue")
+	private Queue dedupQueue;
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.MessageDrivenBean#ejbRemove()
-	 */
-	public void ejbRemove() throws EJBException {
-	}
+	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
+	private Queue updateQueue;
 
-	/* (non-Javadoc)
-	 * @see javax.ejb.MessageDrivenBean#setMessageDrivenContext(javax.ejb.MessageDrivenContext)
-	 */
-	public void setMessageDrivenContext(MessageDrivenContext mdc)
-		throws EJBException {
-			this.mdc = mdc;
-	}
+	@Inject
+	JMSContext jmsContext;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
 	 */
 	public void onMessage(Message inMessage) {
@@ -88,6 +87,7 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 		ObjectMessage msg = null;
 		StartData data = null;
 		BatchJob batchJob = null;
+		final EJBConfiguration configuration = EJBConfiguration.getInstance();
 
 		log.info("BlockingOABA In onMessage");
 
@@ -96,20 +96,40 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (StartData) msg.getObject();
 
-				batchJob = configuration.findBatchJobById(em, BatchJobBean.class, data.jobID);
+				final long jobId = data.jobID;
+				batchJob =
+					configuration.findBatchJobById(em, BatchJobBean.class,
+							jobId);
 
-				//init values
-				ImmutableProbabilityModel stageModel = PMManager.getModelInstance(data.modelConfigurationName);
-				OABAConfiguration oabaConfig = new OABAConfiguration (data.modelConfigurationName, data.jobID);
-//				Status status = data.status;
-				OabaProcessing status = configuration.getProcessingLog(em, data);
+				// init values
+				BatchParameters params =
+					configuration.findBatchParamsByJobId(em, batchJob.getId());
+				final String modelConfigId = params.getModelConfigurationName();
+				IProbabilityModel stageModel =
+					PMManager.getModelInstance(modelConfigId);
+				if (stageModel == null) {
+					String s =
+						"No model corresponding to '" + modelConfigId + "'";
+					log.severe(s);
+					throw new IllegalArgumentException(s);
+				}
+				OABAConfiguration oabaConfig =
+					new OABAConfiguration(params.getModelConfigurationName(),
+							jobId);
+				OabaProcessing processingEntry =
+					configuration.getProcessingLog(em, jobId);
 
-				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
-					MessageBeanUtils.stopJob (batchJob, status, oabaConfig);
+				if (BatchJob.STATUS_ABORT_REQUESTED
+						.equals(batchJob.getStatus())) {
+					MessageBeanUtils.stopJob(batchJob, processingEntry,
+							oabaConfig);
 
 				} else {
 
-					String temp = (String) stageModel.properties().get("maxBlockSize");
+					// FIXME move operational properties from the model to a
+					// new, persistent BatchOperationalParams object
+					String temp =
+						(String) stageModel.properties().get("maxBlockSize");
 					int maxBlock = Integer.parseInt(temp);
 
 					temp = (String) stageModel.properties().get("maxOversized");
@@ -118,29 +138,36 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 					temp = (String) stageModel.properties().get("minFields");
 					int minFields = Integer.parseInt(temp);
 
-					//using BlockGroup to speed up dedup later
-					BlockGroup bGroup = new BlockGroup (oabaConfig.getBlockGroupFactory(), maxBlock);
+					// using BlockGroup to speed up dedup later
+					BlockGroup bGroup =
+						new BlockGroup(oabaConfig.getBlockGroupFactory(),
+								maxBlock);
 
-					IBlockSink osSpecial =  oabaConfig.getOversizedFactory().getNextSink();
+					IBlockSink osSpecial =
+						oabaConfig.getOversizedFactory().getNextSink();
 
-					//Start blocking
-					OABABlockingService blockingService = new OABABlockingService (maxBlock, bGroup,
-						oabaConfig.getOversizedGroupFactory(),
-						osSpecial, null, oabaConfig.getRecValFactory(), data.numBlockFields,
-						data.validator, status, batchJob, minFields, maxOversized);
+					// Start blocking
+					OABABlockingService blockingService =
+						new OABABlockingService(maxBlock, bGroup,
+								oabaConfig.getOversizedGroupFactory(),
+								osSpecial, null, oabaConfig.getRecValFactory(),
+								data.numBlockFields, data.validator,
+								processingEntry, batchJob, minFields,
+								maxOversized);
 					blockingService.runService();
-					log.info ("num Blocks " + blockingService.getNumBlocks());
-					log.info ("num OS " + blockingService.getNumOversized());
 
-					log.info("Done Blocking: " + blockingService.getTimeElapsed() );
+					log.info("num Blocks " + blockingService.getNumBlocks());
+					log.info("num OS " + blockingService.getNumOversized());
+					log.info("Done Blocking: "
+							+ blockingService.getTimeElapsed());
 
-					//clean up
+					// clean up
 					blockingService = null;
 					System.gc();
 
-					sendToUpdateStatus (data.jobID, 20);
-
-					sendToDedup (data);
+					sendToUpdateStatus(data.jobID,
+							OabaProcessing.PCT_DONE_OVERSIZED_TRIMMING);
+					sendToDedup(data);
 
 				}
 
@@ -162,29 +189,13 @@ public class BlockingOABA implements MessageDrivenBean, MessageListener {
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-
-	/** This method sends a message to the UpdateStatus message bean.
-	 *
-	 * @param jobID
-	 * @param percentComplete
-	 * @throws NamingException
-	 */
-	private void sendToUpdateStatus (long jobID, int percentComplete) throws NamingException, JMSException {
-		Queue queue = configuration.getUpdateMessageQueue();
-		UpdateData data = new UpdateData(jobID, percentComplete);
-		configuration.sendMessage(queue, data);
+	private void sendToUpdateStatus(long jobID, int percentComplete) {
+		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext, updateQueue, log);
 	}
 
-
-	/** This method sends a message to the DedupOABA message bean.
-	 *
-	 * @param request
-	 * @throws NamingException
-	 */
-	private void sendToDedup (StartData data) throws NamingException, JMSException{
-		Queue queue = configuration.getDedupMessageQueue();
-		configuration.sendMessage(queue, data);
+	private void sendToDedup(StartData data) throws NamingException,
+			JMSException {
+		MessageBeanUtils.sendStartData(data, jmsContext, dedupQueue, log);
 	}
-
 
 }

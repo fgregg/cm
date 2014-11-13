@@ -106,6 +106,13 @@ public class MutableProbabilityModelStub0 implements IProbabilityModel {
 	}
 
 	@Override
+	public String getBlockingConfigurationName() {
+		log.entering(CLASSNAME, "getBlockingConfigurationName");
+		log.exiting(CLASSNAME, "getBlockingConfigurationName", null);
+		return null;
+	}
+
+	@Override
 	public String getClueFilePath() {
 		log.entering(CLASSNAME, "getClueFilePath");
 		log.exiting(CLASSNAME, "getClueFilePath", null);
@@ -144,6 +151,13 @@ public class MutableProbabilityModelStub0 implements IProbabilityModel {
 	public String getClueText(int clueNum) throws IOException {
 		log.entering(CLASSNAME, "getClueText", clueNum);
 		log.exiting(CLASSNAME, "getClueText", null);
+		return null;
+	}
+
+	@Override
+	public String getDatabaseConfigurationName() {
+		log.entering(CLASSNAME, "getDatabaseConfigurationName");
+		log.exiting(CLASSNAME, "getDatabaseConfigurationName", null);
 		return null;
 	}
 
