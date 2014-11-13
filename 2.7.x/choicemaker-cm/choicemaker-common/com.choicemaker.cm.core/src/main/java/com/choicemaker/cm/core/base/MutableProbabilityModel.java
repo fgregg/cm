@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.swing.event.SwingPropertyChangeSupport;
 
@@ -29,10 +30,6 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Decision;
-//import org.eclipse.core.runtime.IConfigurationElement;
-//import org.eclipse.core.runtime.IExtension;
-//import org.eclipse.core.runtime.IPluginDescriptor;
-//import org.eclipse.core.runtime.Platform;
 import com.choicemaker.cm.core.Descriptor;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
@@ -65,12 +62,17 @@ import com.choicemaker.util.FileUtilities;
  * @see PMManager
  */
 public class MutableProbabilityModel implements IProbabilityModel {
+	
+	private static final Logger logger = Logger
+			.getLogger(MutableProbabilityModel.class.getName());
 
 	private Accessor acc;
 	private String accessorClassName;
+	String blockingConfigurationName;
 	private String clueFilePath;
 	private File clueFile;
 	private boolean[] cluesToEvaluate;
+	String databaseConfigurationName;
 	private int decisionDomainSize;
 	private boolean enableAllCluesBeforeTraining;
 	private boolean enableAllRulesBeforeTraining;
@@ -80,11 +82,13 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	private String modelName;
 	private String modelFilePath;
 	private boolean multiPropertyChange;
-	private Hashtable properties;
 	private boolean trainedWithHolds;
 	private String trainingSource;
 	private String userName;
-	
+
+	/** @deprecated */
+	private Hashtable properties;
+
 	/** @deprecated */
 	private String antCommand;
 
@@ -701,19 +705,33 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	}
 
 	public String getBlockingConfigurationName() {
-		String retVal = (String) properties().get(PN_BLOCKING_CONFIGURATION);
+		String retVal = blockingConfigurationName;
 		if (retVal == null) {
-			throw new IllegalStateException("Blocking configuration has not been set.");
+			logger.warning("Blocking configuration has not been set.");
 		}
 		return retVal;
 	}
 
 	public String getDatabaseConfigurationName() {
-		String retVal = (String) properties().get(PN_DATABASE_CONFIGURATION);
+		String retVal = databaseConfigurationName;
 		if (retVal == null) {
 			throw new IllegalStateException("Database configuration has not been set.");
 		}
 		return retVal;
+	}
+
+	public void setDatabaseConfigurationName(String dbc) {
+		if (dbc == null || dbc.trim().isEmpty()) {
+			logger.warning("null or blank database configuration");
+		}
+		this.databaseConfigurationName = dbc;
+	}
+
+	public void setBlockingConfigurationName(String bc) {
+		if (bc == null || bc.trim().isEmpty()) {
+			throw new IllegalArgumentException("null or blank blocking configuration");
+		}
+		this.blockingConfigurationName = bc;
 	}
 
 }

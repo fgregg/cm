@@ -55,7 +55,7 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 			throw new IllegalArgumentException("Unable to find needed numeric blocking property for model");
 		}
 		this.dbConfiguration = model.getDatabaseConfigurationName();
-		this.blockingConfiguration = model.getBlockingConfiguration();
+		this.blockingConfiguration = model.getBlockingConfigurationName();
 		
 		if (dbConfiguration == null || blockingConfiguration == null) {
 			throw new IllegalArgumentException("Unable to find dbConfiguration or blockingConfiguration property for model");

@@ -242,9 +242,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 			ImmutableProbabilityModel model, String dsJndiName, String sql)
 			throws Exception {
 
-		final String dbConfig =
-			(String) model.properties().get(
-					ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+		final String dbConfig = model.getDatabaseConfigurationName();
 		ISerializableDbRecordSource retVal =
 			new SQLServerSerializableParallelSerialRecordSource(dsJndiName,
 					model.getModelName(), dbConfig, sql);

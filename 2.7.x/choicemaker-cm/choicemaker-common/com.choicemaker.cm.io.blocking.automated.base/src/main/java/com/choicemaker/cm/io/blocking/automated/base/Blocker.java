@@ -89,8 +89,8 @@ public class Blocker implements AutomatedBlocker {
 			singleTableBlockingSetGraceLimit,
 			limitSingleBlockingSet,
 			(CountSource) model.properties().get("countSource"),
-			model.getDatabaseConfiguration(),
-			model.getBlockingConfiguration());
+			model.getDatabaseConfigurationName(),
+			model.getBlockingConfigurationName());
 	}
 
 	public Blocker(

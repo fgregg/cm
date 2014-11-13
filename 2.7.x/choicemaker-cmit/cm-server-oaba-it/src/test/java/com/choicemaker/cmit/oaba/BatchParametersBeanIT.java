@@ -107,7 +107,7 @@ public class BatchParametersBeanIT {
 
 	@Test
 	public void testPersistFindRemove() {
-		final String METHOD = "XXX";
+		final String METHOD = "testPersistFindRemove";
 		TestEntities te = new TestEntities();
 
 		// Create a params
@@ -132,7 +132,7 @@ public class BatchParametersBeanIT {
 
 	@Test
 	public void testEqualsHashCode() {
-		final String METHOD = "XXX";
+		final String METHOD = "testEqualsHashCode";
 		TestEntities te = new TestEntities();
 
 		// Create two generic parameter sets, only one of which is persistent,
@@ -153,7 +153,7 @@ public class BatchParametersBeanIT {
 
 	@Test
 	public void testStageModel() {
-		final String METHOD = "XXX";
+		final String METHOD = "testStageModel";
 		TestEntities te = new TestEntities();
 
 		// Create a params and set a value
@@ -192,7 +192,7 @@ public class BatchParametersBeanIT {
 
 	@Test
 	public void testMaxSingle() {
-		final String METHOD = "XXX";
+		final String METHOD = "testMaxSingle";
 		TestEntities te = new TestEntities();
 
 		// Create parameters with a known value
@@ -227,7 +227,7 @@ public class BatchParametersBeanIT {
 
 	@Test
 	public void testThresholds() {
-		final String METHOD = "XXX";
+		final String METHOD = "testThresholds";
 		TestEntities te = new TestEntities();
 
 		// Create parameters with known values

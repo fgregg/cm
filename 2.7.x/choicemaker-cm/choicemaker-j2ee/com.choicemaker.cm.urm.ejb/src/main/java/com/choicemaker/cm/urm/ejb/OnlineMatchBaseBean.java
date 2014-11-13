@@ -37,7 +37,6 @@ import com.choicemaker.cm.core.base.RecordDecisionMaker;
 import com.choicemaker.cm.core.report.ErrorReporter;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.cm.core.report.ReporterPlugin;
-import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSetReporter;
@@ -81,7 +80,6 @@ public class OnlineMatchBaseBean implements SessionBean {
 	private static final long serialVersionUID = 1L;
 	protected transient SessionContext sessionContext;
 	protected static Logger log = Logger.getLogger(OnlineMatchBaseBean.class.getName());
-	protected static boolean initialized = false;
 
 	/**
 	 * Now a flag for whether counts have been cached in memory.
@@ -136,16 +134,6 @@ public class OnlineMatchBaseBean implements SessionBean {
 	}
 
 	public void ejbCreate() throws CreateException, RemoteException {
-		try {
-			if (!initialized) {
-				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
-				initialized = true;
-			}
-		} catch (Exception ex) {
-			log.severe(ex.toString());
-			throw new CreateException(ex.toString());
-		}
-
 	} // ejbCreate()
 
 	/* (non-Javadoc)
@@ -258,8 +246,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			}
 
 			model = getProbabilityModel(modelName);
-			String modelDbrName =
-				(String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+			String modelDbrName = model.getDatabaseConfigurationName();
 			if (!modelDbrName.equals(masterCollection.getName()))
 				throw new RecordCollectionException("dbConfig should match accessProvider dbConfig attribute");
 
@@ -302,8 +289,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			}
 
 			String dbConfigName = masterCollection.getName();
-			String blockingConfigName =
-				(String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
+			String blockingConfigName = model.getBlockingConfigurationName();
 			recordSource =
 				new Blocker2(
 					databaseAccessor,

@@ -94,7 +94,6 @@ public class RecValService3 {
 
 	private long time; //this keeps track of time
 
-
 	/**
 	 * This constructor take these parameters:
 	 * 
@@ -114,14 +113,14 @@ public class RecValService3 {
 	 *            - a mechanism to get out of a long running loop
 	 */
 	public RecValService3(RecordSource stage, RecordSource master,
-			ImmutableProbabilityModel modelConfigurationName,
+			ImmutableProbabilityModel model,
 			IRecValSinkSourceFactory rvFactory,
 			IRecordIDTranslator2 translator, OabaProcessing status,
 			IControl control) {
 
 		this.stage = stage;
 		this.master = master;
-		this.model = modelConfigurationName;
+		this.model = model;
 		this.translator = translator;
 		this.rvFactory = rvFactory;
 		this.status = status;
@@ -129,9 +128,9 @@ public class RecValService3 {
 
 		this.stop = false;
 
-		BlockingAccessor ba = (BlockingAccessor) modelConfigurationName.getAccessor();
-		String blockName = model.getBlockingConfigurationName();
-		String dbConf = model.getDatabaseConfigurationName();
+		BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
+		String blockName = this.model.getBlockingConfigurationName();
+		String dbConf = this.model.getDatabaseConfigurationName();
 
 		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
 		BlockingField[] bfs = bc.blockingFields;
@@ -145,16 +144,13 @@ public class RecValService3 {
 		this.numBlockFields = countFields (bfs);
 	}
 
-
 	/** This method returns the time it takes to run the runService method.
 	 *
 	 * @return long - returns the time (in milliseconds) it took to run this service.
 	 */
 	public long getTimeElapsed () { return time; }
 
-
 	public int getNumBlockingFields () { return numBlockFields; }
-
 
 	/** This returns the type of stage record id.  It is one of the three:
 	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
@@ -167,7 +163,6 @@ public class RecValService3 {
 		return stageType;
 	}
 
-
 	/** This returns the type of master record id.  It is one of the three:
 	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
 	 *
@@ -178,7 +173,6 @@ public class RecValService3 {
 	public int getMasterType () {
 		return stageType;
 	}
-
 
 	/** This method runs the service.
 	 *
@@ -207,7 +201,6 @@ public class RecValService3 {
 		time = System.currentTimeMillis() - time;
 	}
 
-
 	/** This method sets up the sinks array for future use.
 	 *
 	 *
@@ -224,7 +217,6 @@ public class RecValService3 {
 
 		translator.recover();
 		translator.close();
-
 
 		try {
 			//need to get record if type of stage and master
@@ -255,7 +247,6 @@ public class RecValService3 {
 
 	}
 
-
 	/**
 	 * This method creates the files from scratch.
 	 *
@@ -272,7 +263,6 @@ public class RecValService3 {
 
 		translator.open();
 
-
 		try {
 			Record r;
 
@@ -281,8 +271,8 @@ public class RecValService3 {
 				stage.setModel(model);
 				stage.open();  // FIXME! try { stage.open(); ... } finally{ stage.close(); }
 
-				String blockName = (String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
-				String dbConf = (String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+				String blockName = model.getBlockingConfigurationName();
+				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
@@ -309,15 +299,14 @@ public class RecValService3 {
 
 			log.info(count + " stage records read");
 
-
 			//write the master record source
 			if (master != null) {
 				translator.split();
 
 				master.open(); // FIXME! try { master.open(); ... } finally{ master.close(); }
 
-				String blockName = (String) model.properties().get(ImmutableProbabilityModel.PN_BLOCKING_CONFIGURATION);
-				String dbConf = (String) model.properties().get(ImmutableProbabilityModel.PN_DATABASE_CONFIGURATION);
+				String blockName = model.getBlockingConfigurationName();
+				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
@@ -356,7 +345,6 @@ public class RecValService3 {
 		translator.close();
 
 	}
-
 
 	/** This method writes 1 record's rec_id and val_id.
 	 *
@@ -405,7 +393,6 @@ public class RecValService3 {
 		}
 	}
 
-
 	/** This counts the number of distinct db fields used in the blocking.
 	 *
 	 * @param bfs - array of BlockingFields
@@ -425,6 +412,5 @@ public class RecValService3 {
 
 		return set.size();
 	}
-
 
 }

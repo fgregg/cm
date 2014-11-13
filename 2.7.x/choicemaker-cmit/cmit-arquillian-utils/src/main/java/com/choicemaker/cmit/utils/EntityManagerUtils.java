@@ -319,11 +319,11 @@ public class EntityManagerUtils {
 	public static List<BatchJobBean> findAllBatchJobs(EntityManager em) {
 		Query query = em.createNamedQuery(BatchJobJPA.QN_BATCHJOB_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<BatchJobBean> entries = query.getResultList();
-		if (entries == null) {
-			entries = new ArrayList<BatchJobBean>();
+		List<BatchJobBean> retVal = query.getResultList();
+		if (retVal == null) {
+			retVal = new ArrayList<BatchJobBean>();
 		}
-		return entries;
+		return retVal;
 	}
 
 	public static List<TransitivityJobBean> findAllTransitivityJobs(
@@ -331,11 +331,11 @@ public class EntityManagerUtils {
 		Query query =
 			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<TransitivityJobBean> entries = query.getResultList();
-		if (entries == null) {
-			entries = new ArrayList<TransitivityJobBean>();
+		List<TransitivityJobBean> retVal = query.getResultList();
+		if (retVal == null) {
+			retVal = new ArrayList<TransitivityJobBean>();
 		}
-		return entries;
+		return retVal;
 	}
 
 	public static List<OabaBatchJobProcessingBean> findAllOabaProcessing(
@@ -343,11 +343,11 @@ public class EntityManagerUtils {
 		Query query =
 			em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<OabaBatchJobProcessingBean> entries = query.getResultList();
-		if (entries == null) {
-			entries = new ArrayList<OabaBatchJobProcessingBean>();
+		List<OabaBatchJobProcessingBean> retVal = query.getResultList();
+		if (retVal == null) {
+			retVal = new ArrayList<OabaBatchJobProcessingBean>();
 		}
-		return entries;
+		return retVal;
 	}
 
 	public static List<TransitivityJobBean> findAllByParentId(EntityManager em,
@@ -358,11 +358,11 @@ public class EntityManagerUtils {
 				TransitivityJobJPA.PN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID_BPARENTID,
 				batchJobId);
 		@SuppressWarnings("unchecked")
-		List<TransitivityJobBean> entries = query.getResultList();
-		if (entries == null) {
-			entries = new ArrayList<TransitivityJobBean>();
+		List<TransitivityJobBean> retVal = query.getResultList();
+		if (retVal == null) {
+			retVal = new ArrayList<TransitivityJobBean>();
 		}
-		return entries;
+		return retVal;
 	}
 
 	public static void detach(EntityManager em, TransitivityJob job) {
