@@ -23,7 +23,6 @@ import javax.ejb.SessionContext;
 import javax.jms.Queue;
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -54,7 +53,6 @@ public class BatchResultProcessorBean implements SessionBean {
 	private EntityManager em;
 
 	protected transient SessionContext sessionContext;
-	protected static boolean initialized = false;
 		
 	public BatchResultProcessorBean() {
 		super();
@@ -78,16 +76,6 @@ public class BatchResultProcessorBean implements SessionBean {
 	}
 	
 	public void ejbCreate() throws CreateException, RemoteException {
-		try {
-			if (!initialized) {
-				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
-				initialized = true;
-			}
-		} catch (Exception ex) {
-			log.severe(ex.toString());
-			throw new CreateException(ex.toString());
-		}
-
 	} // ejbCreate()
 
 	/* (non-Javadoc)

@@ -25,7 +25,6 @@ import javax.jms.Queue;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
@@ -57,9 +56,6 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 //	private transient SessionContext sessionContext;
 	private transient EJBConfiguration configuration = null;
-
-	private static boolean initialized = false;
-
 
 	/**
 	 * This method starts the transitivity engine.
@@ -269,12 +265,6 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 			this.configuration = EJBConfiguration.getInstance();
 
-			if (!initialized) {
-//				ICompiler compiler = DoNothingCompiler.instance;
-//				XmlConfigurator.embeddedInit(compiler);
-				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
-				initialized = true;
-			}
 		} catch (Exception ex) {
 			log.severe(ex.toString());
 			throw new CreateException(ex.getMessage());

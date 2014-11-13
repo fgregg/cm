@@ -32,7 +32,6 @@ import javax.ejb.SessionContext;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
@@ -52,7 +51,6 @@ public class BatchMatchBaseBean implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
 	protected static Logger log;
-	protected static boolean initialized = false;
 	protected transient SessionContext sessionContext;	
 
 //	@EJB
@@ -76,16 +74,6 @@ public class BatchMatchBaseBean implements SessionBean {
 	}
 	
 	public void ejbCreate() throws CreateException, RemoteException {
-		try {
-			if (!initialized) {
-				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
-				initialized = true;
-			}
-		} catch (Exception ex) {
-			log.severe(ex.toString());
-			throw new CreateException(ex.toString());
-		}
-
 	} // ejbCreate()
 
 	/* (non-Javadoc)

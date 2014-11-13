@@ -31,7 +31,6 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.configure.xml.NotFoundException;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurablesRegistry;
-import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.server.util.CountsUpdate;
 import com.choicemaker.cm.urm.IUpdateDerivedFields;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
@@ -47,8 +46,6 @@ import com.choicemaker.util.Precondition;
  */
 public class CmServerAdminBean implements SessionBean {
 	private static final long serialVersionUID = 1L;
-
-	protected static boolean initialized = false;
 
 	private static final Logger log = Logger.getLogger(CmServerAdminBean.class.getName());
 	SessionContext sc = null;
@@ -67,17 +64,6 @@ public class CmServerAdminBean implements SessionBean {
 	 * Instantiates and configures the EJB.
 	 */
 	public void ejbCreate() throws CreateException, RemoteException {
-		log.fine("starting ejbCreate...");
-		try {
-			if (!initialized) {
-				EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
-				initialized = true;
-			}
-		} catch (Exception ex) {
-			log.severe(ex.toString());
-			throw new CreateException(ex.toString());
-		}
-		log.fine("...finished ejbCreate");
 	} // ejbCreate()
 
 	/* (non-Javadoc)

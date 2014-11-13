@@ -37,7 +37,6 @@ import com.choicemaker.cm.core.base.BeanMatchCandidate;
 import com.choicemaker.cm.core.base.MatchCandidate;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
-import com.choicemaker.cm.core.xmlconf.EmbeddedXmlConfigurator;
 import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
@@ -223,23 +222,7 @@ public class TransitivityServiceBean implements SessionBean {
 
 	private static synchronized void init(DataSource dataSource) throws XmlConfException, RemoteException, DatabaseException {
 		if (!inited) {
-//			ICompiler compiler = DoNothingCompiler.instance;
-//			XmlConfigurator.embeddedInit(compiler);
-			EmbeddedXmlConfigurator.getInstance().embeddedInit(null);
-			// BUG 2009-08-21 rphall
-			// The following code can cause unnecessary recalculations of counts
-			// that are persistent in a database. For example, if CM Server is
-			// restarted, this will update counts that are already valid in the DB.
-			// Recalculating counts can be quite slow for large databases; e.g.
-			// 30 minutes for a 4.3M record database.
-			//
-			// It is really not the responsibility of this service to update counts.
-			// That responsibility belongs to an administrative service.
-			//new CountsUpdate().updateCounts(dataSource, true);
-			// END BUG
-			// BUG FIX 2009-08-21 rphall
 			new CountsUpdate().cacheCounts(dataSource);
-			// END BUGFIX
 			inited = true;
 		}
 	}
