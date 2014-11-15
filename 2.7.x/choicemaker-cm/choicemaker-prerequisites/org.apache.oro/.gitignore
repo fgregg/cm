@@ -1,9 +1,0 @@
-bin
-target
-jakarta-oro-2.0.1.jar
-/target
-.project
-.classpath
-.settings
-target-??
-*.BAK-??
