@@ -91,7 +91,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	// maxchunk
 	protected int maxChunkSize;
 
-	public final void onMessage(Message inMessage) {
+	public /* final */ void onMessage(Message inMessage) {
 		getJMSTrace().info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;

@@ -75,7 +75,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	// number of comparisons made
 	protected int compares;
 
-	public final void onMessage(Message inMessage) {
+	public /* final */ void onMessage(Message inMessage) {
 		getJMSTrace().info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		BatchJob batchJob = null;
