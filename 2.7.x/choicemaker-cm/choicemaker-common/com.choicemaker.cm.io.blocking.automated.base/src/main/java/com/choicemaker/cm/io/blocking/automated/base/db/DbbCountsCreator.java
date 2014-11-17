@@ -36,9 +36,8 @@ import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
- *
- * @author    
- * @version   $Revision: 1.2 $ $Date: 2010/03/24 21:39:04 $
+ * Database Blocking Counts Creator
+ * @author    mbuechi
  */
 public class DbbCountsCreator {
 	private static Logger logger = Logger.getLogger(DbbCountsCreator.class.getName());
