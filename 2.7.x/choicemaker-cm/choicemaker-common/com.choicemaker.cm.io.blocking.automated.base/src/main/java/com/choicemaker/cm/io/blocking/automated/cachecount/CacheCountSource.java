@@ -41,12 +41,12 @@ public class CacheCountSource implements CountSource {
 				bv.count = mainTableSize;
 			} else {
 				CountField f = counts[fieldNum];
-				bv.tableSize = f.tableSize;
-				Integer count = (Integer) f.m.get(bv.value);
+				bv.tableSize = f.getTableSize();
+				Integer count = f.getCountForValue(bv.value);
 				if (count != null) {
 					bv.count = count.intValue();
 				} else {
-					bv.count = f.defaultCount;
+					bv.count = f.getDefaultCount();
 				}
 			}
 		}

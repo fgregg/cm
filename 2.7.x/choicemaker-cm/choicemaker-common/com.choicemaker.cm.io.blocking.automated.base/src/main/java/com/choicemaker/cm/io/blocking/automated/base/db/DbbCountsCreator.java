@@ -447,7 +447,7 @@ public class DbbCountsCreator {
 								logger.fine(query);
 								rs = stmt.executeQuery(query);
 								while (rs.next()) {
-									f.m.put(rs.getString(1), CountField.getInteger(rs.getInt(2)));
+									f.putValueCount(rs.getString(1), CountField.getInteger(rs.getInt(2)));
 								}
 								rs.close();
 							} else {
@@ -511,7 +511,7 @@ public class DbbCountsCreator {
 		Iterator iCountFields = countFields.iterator();
 		while (iCountFields.hasNext()) {
 			CountField cf = (CountField) iCountFields.next();
-			if (column.equals(cf.column) && view.equals(cf.view) && uniqueId.equals(cf.uniqueId)) {
+			if (column.equals(cf.getColumn()) && view.equals(cf.getView()) && uniqueId.equals(cf.getUniqueId())) {
 				return cf;
 			}
 		}

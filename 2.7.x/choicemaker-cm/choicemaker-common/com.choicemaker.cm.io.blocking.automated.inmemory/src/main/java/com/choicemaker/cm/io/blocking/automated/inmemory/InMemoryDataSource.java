@@ -125,7 +125,7 @@ public class InMemoryDataSource {
 			dbf.name,
 			dbf.table.name,
 			dbf.table.uniqueId);
-		cf.m = biggerThanDefault;
+		cf.putAll(biggerThanDefault);
 
 		return cf;
 	}
