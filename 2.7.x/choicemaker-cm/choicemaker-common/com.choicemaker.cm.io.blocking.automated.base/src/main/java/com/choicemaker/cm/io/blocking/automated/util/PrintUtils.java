@@ -15,18 +15,18 @@ import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
+import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 
 public class PrintUtils {
 
 	private PrintUtils() {}
 
-	public static void logBlockingValue(Logger logger, String msg, BlockingValue bv) {
+	public static void logBlockingValue(Logger logger, String msg, IBlockingValue bv) {
 		logBlockingValue(logger, Level.FINE, msg, bv);
 	}
 
-	public static void logBlockingValue(Logger logger, Level level, String msg, BlockingValue bv) {
+	public static void logBlockingValue(Logger logger, Level level, String msg, IBlockingValue bv) {
 		// Precondition
 		if (logger == null) {
 			throw new IllegalArgumentException("null logger");
@@ -46,7 +46,7 @@ public class PrintUtils {
 		}
 	}
 
-	public static void printBlockingValue(PrintWriter pw, BlockingValue bv) {
+	public static void printBlockingValue(PrintWriter pw, IBlockingValue bv) {
 		// Precondition
 		if (pw == null) {
 			throw new IllegalArgumentException("null PrintWriter");
@@ -57,24 +57,24 @@ public class PrintUtils {
 		} else {
 			pw.print(
 				"[value "
-					+ bv.value
+					+ bv.getValue()
 					+ " count "
-					+ bv.count
+					+ bv.getCount()
 					+ " "
-					+ bv.blockingField.dbField.name
+					+ bv.getBlockingField().getDbField().getName()
 					+ " "
-					+ bv.blockingField.dbField.table.name
+					+ bv.getBlockingField().getDbField().getTable().getName()
 					+ " "
-					+ bv.tableSize
+					+ bv.getTableSize()
 					+ "]");
 		}
 	}
 
-	public static void logBlockingSet(Logger logger, String msg, BlockingSet b) {
+	public static void logBlockingSet(Logger logger, String msg, IBlockingSet b) {
 		logBlockingSet(logger, Level.FINE, msg, b);
 	}
 
-	public static void logBlockingSet(Logger logger, Level level, String msg, BlockingSet b) {
+	public static void logBlockingSet(Logger logger, Level level, String msg, IBlockingSet b) {
 		// Precondition
 		if (logger == null) {
 			throw new IllegalArgumentException("null logger");
@@ -96,7 +96,7 @@ public class PrintUtils {
 
 	public static void printBlockingSet(
 		PrintWriter pw,
-		BlockingSet b) {
+		IBlockingSet b) {
 		if (b == null) {
 			pw.print("[null]");
 		} else {
@@ -106,7 +106,7 @@ public class PrintUtils {
 					+ " table: "
 					+ b.getNumTables()
 					+ " values: { ");
-			BlockingValue[] bvs = b.getBlockingValues();
+			IBlockingValue[] bvs = b.getBlockingValues();
 			for (int j = 0; j < bvs.length; j++) {
 				printBlockingValue(pw, bvs[j]);
 				pw.print(" ");

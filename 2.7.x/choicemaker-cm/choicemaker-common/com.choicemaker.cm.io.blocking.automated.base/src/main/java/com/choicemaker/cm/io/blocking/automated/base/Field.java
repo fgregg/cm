@@ -10,18 +10,38 @@
  */
 package com.choicemaker.cm.io.blocking.automated.base;
 
+import java.io.Serializable;
+
+import com.choicemaker.cm.io.blocking.automated.IField;
+
 /**
  *
- * @author    
+ * @author    mbuechi
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
  */
-public class Field {
+public abstract class Field implements Serializable, IField {
+	
+	private static final long serialVersionUID = 271;
+
 	protected static final Field[] N_FIELD = new Field[0];
 	protected static final Field[][] NN_FIELD = new Field[0][0];
 
-	public Field[][] illegalCombinations;
+	private final IField[][] illegalCombinations;
 
-	protected Field(Field[][] illegalCombinations) {
-		this.illegalCombinations = illegalCombinations;
+	protected Field(IField[][] illegalCombos) {
+		this.illegalCombinations = illegalCombos;
 	}
+
+	@Override
+	public IField[][] getIllegalCombinations() {
+		IField[][] retVal;
+		if (illegalCombinations == null) {
+			retVal = NN_FIELD;
+		} else {
+			retVal = illegalCombinations;
+		}
+		assert retVal != null;
+		return retVal;
+	}
+
 }

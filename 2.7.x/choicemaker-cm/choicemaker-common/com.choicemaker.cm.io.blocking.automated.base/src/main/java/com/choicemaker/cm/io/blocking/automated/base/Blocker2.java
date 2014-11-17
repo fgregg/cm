@@ -18,6 +18,12 @@ import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
+import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
+import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
 
 /**
  * Creates blockingSets (using a BlockingSetFactory) and provides
@@ -61,14 +67,14 @@ public class Blocker2 implements AutomatedBlocker {
 	}
 
 	private final ImmutableProbabilityModel model;
-	private final BlockingConfiguration blockingConfiguration;
+	private final IBlockingConfiguration blockingConfiguration;
 	private final DatabaseAccessor databaseAccessor;
 	private final CountSource countSource;
 	private final Record q;
 	private final int limitPerBlockingSet;
 	private final int singleTableBlockingSetGraceLimit;
 	private final int limitSingleBlockingSet;
-	private List blockingSets;
+	private List<IBlockingSet> blockingSets;
 	private int numberOfRecordsRetrieved;
 	private String name;
 
@@ -248,16 +254,17 @@ public class Blocker2 implements AutomatedBlocker {
 					this.getCountSource(),
 					this.getBlockingConfiguration());
 			sanityCheck.open();
-			List newBlockingSets = this.getBlockingSets();
-			List oldBlockingSets = sanityCheck.getBlockingSets();
+			List<IBlockingSet> newBlockingSets = this.getBlockingSets();
+			@SuppressWarnings("unchecked")
+			List<IBlockingSet> oldBlockingSets = sanityCheck.getBlockingSets();
 			if (newBlockingSets.size() != oldBlockingSets.size()) {
 				throw new IllegalStateException("Different sizes of blocking set collections");
 			}
 			for (int i = 0; i < newBlockingSets.size(); i++) {
-				BlockingSet newBlockingSet =
-					(BlockingSet) newBlockingSets.get(i);
-				BlockingSet oldBlockingSet =
-					(BlockingSet) oldBlockingSets.get(i);
+				IBlockingSet newBlockingSet =
+					(IBlockingSet) newBlockingSets.get(i);
+				IBlockingSet oldBlockingSet =
+					(IBlockingSet) oldBlockingSets.get(i);
 				if (newBlockingSet == null && oldBlockingSet != null) {
 					throw new IllegalStateException(
 						"Blocking sets " + i + " are different");
@@ -278,7 +285,7 @@ public class Blocker2 implements AutomatedBlocker {
 		return (BlockingAccessor) model.getAccessor();
 	}
 
-	public List getBlockingSets() {
+	public List<IBlockingSet> getBlockingSets() {
 		return blockingSets;
 	}
 
@@ -327,7 +334,7 @@ public class Blocker2 implements AutomatedBlocker {
 		this.name = name;
 	}
 
-	public BlockingConfiguration getBlockingConfiguration() {
+	public IBlockingConfiguration getBlockingConfiguration() {
 		return blockingConfiguration;
 	}
 

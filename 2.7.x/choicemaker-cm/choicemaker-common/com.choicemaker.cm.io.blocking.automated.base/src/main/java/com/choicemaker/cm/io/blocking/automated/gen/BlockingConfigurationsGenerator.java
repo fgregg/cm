@@ -38,9 +38,10 @@ public class BlockingConfigurationsGenerator implements GeneratorPlugin {
 	}
 
 	private BlockingConfigurationGenerator[] addConfigurations(IGenerator g) throws IOException, GenException {
-		List confList = new ArrayList();
-		List blockingDefs = GeneratorHelper.getGlobalExts(g.getRootElement(), BlockingTags.BLOCKING);
-		Iterator iBlockingDefs = blockingDefs.iterator();
+		List<BlockingConfigurationGenerator> confList = new ArrayList<>();
+		@SuppressWarnings("unchecked")
+		List<Element> blockingDefs = GeneratorHelper.getGlobalExts(g.getRootElement(), BlockingTags.BLOCKING);
+		Iterator<Element> iBlockingDefs = blockingDefs.iterator();
 		while (iBlockingDefs.hasNext()) {
 			Element d = (Element) iBlockingDefs.next();
 			String dbConf = d.getAttributeValue(BlockingTags.DB_CONF);

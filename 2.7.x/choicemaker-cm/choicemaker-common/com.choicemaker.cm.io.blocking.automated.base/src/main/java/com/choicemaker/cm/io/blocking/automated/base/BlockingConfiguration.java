@@ -10,92 +10,122 @@
  */
 package com.choicemaker.cm.io.blocking.automated.base;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.IBlockingField;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
+import com.choicemaker.cm.io.blocking.automated.IDbField;
+import com.choicemaker.cm.io.blocking.automated.IDbTable;
+import com.choicemaker.cm.io.blocking.automated.IQueryField;
 
 /**
  *
  * @author    
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
  */
-public abstract class BlockingConfiguration {
-	protected String name;
-	public DbTable[] dbTables;
-	public DbField[] dbFields;
-	public BlockingField[] blockingFields;
+public abstract class BlockingConfiguration implements IBlockingConfiguration,
+	Serializable {
+	
+	private static final long serialVersionUID = 271;
 
-	private ArrayList[] values;
+	public String name;
+	public IDbTable[] dbTables;
+	public IDbField[] dbFields;
+	public IBlockingField[] blockingFields;
 
-	public abstract BlockingValue[] createBlockingValues(Record q);
+	private ArrayList<IBlockingValue>[] values;
 
+	public abstract IBlockingValue[] createBlockingValues(Record q);
+
+	@SuppressWarnings("unchecked")
 	protected void init(int numFields) {
 		values = new ArrayList[numFields];
 		for (int i = 0; i < numFields; ++i)
-			values[i] = new ArrayList();
+			values[i] = new ArrayList<>();
 	}
 
-	protected BlockingValue[] unionValues() {
+	protected IBlockingValue[] unionValues() {
 		int size = 0;
 		for (int i = 0; i < values.length; ++i) {
 			size += values[i].size();
 		}
-		BlockingValue[] res = new BlockingValue[size];
+		IBlockingValue[] res = new IBlockingValue[size];
 		int out = 0;
 		for (int i = 0; i < values.length; ++i) {
-			ArrayList l = values[i];
+			ArrayList<IBlockingValue> l = values[i];
 			int s = l.size();
 			for (int j = 0; j < s; ++j) {
-				res[out++] = (BlockingValue) l.get(j);
+				res[out++] = (IBlockingValue) l.get(j);
 			}
 		}
 		values = null;
 		return res;
 	}
 
-	protected BlockingValue addField(int index, String value, BlockingValue[] thisBase) {
+	protected IBlockingValue addField(int index, String value,
+			IBlockingValue[] thisBase) {
 		BlockingValue res;
 		value = value.intern();
-		ArrayList l = values[index];
+		ArrayList<IBlockingValue> l = values[index];
 		int size = l.size();
 		int i = 0;
-		while (i < size && ((BlockingValue) l.get(i)).value != value) {
+		while (i < size && ((IBlockingValue) l.get(i)).getValue() != value) {
 			++i;
 		}
 		if (i == size) {
 			if (thisBase == null) {
-				res = new BlockingValue(blockingFields[index], value);
+				res = new BlockingValue(getBlockingFields()[index], value);
 			} else {
-				res = new BlockingValue(blockingFields[index], value, new BlockingValue[][] { thisBase });
+				res =
+					new BlockingValue(getBlockingFields()[index], value,
+							new IBlockingValue[][] { thisBase });
 			}
 			l.add(res);
 		} else {
 			res = (BlockingValue) l.get(i);
 			if (thisBase != null) {
-				int len = res.base.length;
-				BlockingValue[][] newBase = new BlockingValue[len + 1][];
-				System.arraycopy(res.base, 0, newBase, 0, len);
+				int len = res.getBase().length;
+				IBlockingValue[][] newBase = new IBlockingValue[len + 1][];
+				System.arraycopy(res.getBase(), 0, newBase, 0, len);
 				newBase[len] = thisBase;
-				res.base = newBase;
+				res.setBase(newBase);
 			}
-		}
-		
+		}		
 
 		return res;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 	
+	@Override
+	public IDbTable[] getDbTables() {
+		return dbTables;
+	}
+
+	@Override
+	public IDbField[] getDbFields() {
+		return dbFields;
+	}
+
+	@Override
+	public IBlockingField[] getBlockingFields() {
+		return blockingFields;
+	}
+
 	public static class DbConfiguration {
 		public String name;
-		public QueryField[] qfs;
-		public DbTable[] dbts;
-		public DbField[] dbfs;
-		public BlockingField[] bfs;
+		public IQueryField[] qfs;
+		public IDbTable[] dbts;
+		public IDbField[] dbfs;
+		public IBlockingField[] bfs;
 		
-		public DbConfiguration(String name, QueryField[] qfs, DbTable[] dbts, DbField[] dbfs, BlockingField[] bfs) {
+		public DbConfiguration(String name, IQueryField[] qfs, IDbTable[] dbts, IDbField[] dbfs, IBlockingField[] bfs) {
 			this.name = name;
 			this.qfs = qfs;
 			this.dbts = dbts;

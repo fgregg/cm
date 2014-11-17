@@ -10,11 +10,11 @@
  */
 package com.choicemaker.cm.io.blocking.automated.cachecount;
 
-import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
-import com.choicemaker.cm.io.blocking.automated.base.CountField;
-import com.choicemaker.cm.io.blocking.automated.base.CountSource;
+import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.IBlockingField;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
+import com.choicemaker.cm.io.blocking.automated.ICountField;
 
 /**
  *
@@ -23,30 +23,30 @@ import com.choicemaker.cm.io.blocking.automated.base.CountSource;
  */
 public class CacheCountSource implements CountSource {
 	private int mainTableSize;
-	private CountField[] counts;
+	private ICountField[] counts;
 
-	public CacheCountSource(int mainTableSize, CountField[] counts) {
+	public CacheCountSource(int mainTableSize, ICountField[] counts) {
 		this.mainTableSize = mainTableSize;
 		this.counts = counts;
 	}
 
-	public long setCounts(BlockingConfiguration configuration, BlockingValue[] blockingValues) {
+	public long setCounts(IBlockingConfiguration configuration, IBlockingValue[] blockingValues) {
 		for (int i = 0; i < blockingValues.length; ++i) {
-			BlockingValue bv = blockingValues[i];
-			BlockingField bf = bv.blockingField;
-			int fieldNum = bf.dbField.number;
+			IBlockingValue bv = blockingValues[i];
+			IBlockingField bf = bv.getBlockingField();
+			int fieldNum = bf.getDbField().getNumber();
 			if (fieldNum >= counts.length) {
 				// conservative assumptions
-				bv.tableSize = mainTableSize;
-				bv.count = mainTableSize;
+				bv.setTableSize(mainTableSize);
+				bv.setCount(mainTableSize);
 			} else {
-				CountField f = counts[fieldNum];
-				bv.tableSize = f.getTableSize();
-				Integer count = f.getCountForValue(bv.value);
+				ICountField f = counts[fieldNum];
+				bv.setTableSize(f.getTableSize());
+				Integer count = f.getCountForValue(bv.getValue());
 				if (count != null) {
-					bv.count = count.intValue();
+					bv.setCount(count.intValue());
 				} else {
-					bv.count = f.getDefaultCount();
+					bv.setCount(f.getDefaultCount());
 				}
 			}
 		}

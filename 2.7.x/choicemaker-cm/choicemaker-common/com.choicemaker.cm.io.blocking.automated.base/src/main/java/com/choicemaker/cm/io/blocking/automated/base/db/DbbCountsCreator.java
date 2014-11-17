@@ -25,10 +25,12 @@ import java.util.logging.Logger;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.ICountField;
+import com.choicemaker.cm.io.blocking.automated.IDbField;
+import com.choicemaker.cm.io.blocking.automated.IDbTable;
 import com.choicemaker.cm.io.blocking.automated.base.CountField;
-import com.choicemaker.cm.io.blocking.automated.base.DbField;
 import com.choicemaker.cm.io.blocking.automated.base.DbTable;
 import com.choicemaker.cm.io.blocking.automated.cachecount.CacheCountSource;
 import com.choicemaker.e2.CMConfigurationElement;
@@ -45,7 +47,7 @@ public class DbbCountsCreator {
 	// BUG 2009-08-21 rphall
 	// If the "models" instance data is whacked (see below),
 	// this data member should be whacked.
-	private BlockingConfiguration[] blockingConfigurations;
+	private IBlockingConfiguration[] blockingConfigurations;
 	// END BUG
 	// BUG 2009-08-21 rphall
 	// This data member is sometimes hidden (see the create method) and
@@ -71,7 +73,7 @@ public class DbbCountsCreator {
 	// an instance (the other public constructors know how to compensate
 	// for this defiency, but other clients couldn't compenstate)
 	//public DbbCountsCreator(Connection connection, BlockingConfiguration[] blockingConfigurations) throws SQLException {
-	private DbbCountsCreator(Connection connection, BlockingConfiguration[] blockingConfigurations) throws SQLException {
+	private DbbCountsCreator(Connection connection, IBlockingConfiguration[] blockingConfigurations) throws SQLException {
 		// BUG 2009-08-21 rphall
 		// This constructor never sets the "models" instance member,
 		// which causes the "setCacheCountSources()" method to
@@ -103,45 +105,45 @@ public class DbbCountsCreator {
 		try {
 			stmt = connection.createStatement();
 			for (int i = 0; i < blockingConfigurations.length; ++i) {
-				BlockingConfiguration bc = blockingConfigurations[i];
+				IBlockingConfiguration bc = blockingConfigurations[i];
 				String name = bc.getName();
 				String query = "DELETE FROM TB_CMT_COUNT_CONFIG_FIELDS WHERE config = \'" + name + "\'";
 				logger.fine(query);
 				stmt.execute(query);
-				for (int j = 0; j < bc.dbFields.length; ++j) {
-					DbField df = bc.dbFields[j];
+				for (int j = 0; j < bc.getDbFields().length; ++j) {
+					IDbField df = bc.getDbFields()[j];
 					query =
 						"INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES("
 							+ "'"
 							+ name
 							+ "',"
 							+ "'"
-							+ df.table.name
+							+ df.getTable().getName()
 							+ "',"
 							+ "'"
-							+ df.name
+							+ df.getName()
 							+ "',"
 							+ "'"
-							+ df.table.uniqueId
+							+ df.getTable().getUniqueId()
 							+ "',"
-							+ df.defaultCount
+							+ df.getDefaultCount()
 							+ ")";
 					logger.fine(query);
 					stmt.execute(query);
 				}
-				for (int j = 0; j < bc.dbTables.length; ++j) {
-					DbTable dt = bc.dbTables[j];
+				for (int j = 0; j < bc.getDbTables().length; ++j) {
+					IDbTable dt = bc.getDbTables()[j];
 					query =
 						"INSERT INTO TB_CMT_COUNT_CONFIG_FIELDS VALUES("
 							+ "'"
 							+ name
 							+ "',"
 							+ "'"
-							+ dt.name
+							+ dt.getName()
 							+ "',"
 							+ "null,"
 							+ "'"
-							+ dt.uniqueId
+							+ dt.getUniqueId()
 							+ "',"
 							+ "null)";
 					logger.fine(query);
@@ -175,14 +177,14 @@ public class DbbCountsCreator {
 			logger.fine(query);
 			rs = stmt.executeQuery(query);
 			// Some JDBC drivers don't support multiple statements or result sets on a single connection.
-			ArrayList l = new ArrayList();
+			ArrayList<String> l = new ArrayList<>();
 			while (rs.next()) {
 				for (int i = 1; i <= 4; ++i) {
 					l.add(rs.getString(i));
 				}
 			}
 			rs.close();
-			Iterator iL = l.iterator();
+			Iterator<String> iL = l.iterator();
 			while (iL.hasNext()) {
 				
 				//fixed by PC on 2/22/05
@@ -333,14 +335,14 @@ public class DbbCountsCreator {
 			stmt.execute(delete);
 			logger.fine(query);
 			ResultSet rs = stmt.executeQuery(query);
-			List l = new ArrayList();
+			List<String> l = new ArrayList<>();
 			while (rs.next()) {
 				for (int i = 1; i <= 5; ++i) {
 					l.add(rs.getString(i));
 				}
 			}
 			rs.close();
-			Iterator iL = l.iterator();
+			Iterator<String> iL = l.iterator();
 			while (iL.hasNext()) {
 				String fieldId = (String) iL.next();
 				String table = (String) iL.next();
@@ -414,21 +416,21 @@ public class DbbCountsCreator {
 			Statement stmt = null;
 			try {
 				stmt = connection.createStatement();
-				List countFields = new ArrayList();
-				Map tableSizes = readTableSizes(stmt);
+				List<CountField> countFields = new ArrayList<>();
+				Map<DbTable,Integer> tableSizes = readTableSizes(stmt);
 				CacheCountSource[] ccs = new CacheCountSource[blockingConfigurations.length];
 				for (int i = 0; i < blockingConfigurations.length; ++i) {
-					BlockingConfiguration bc = blockingConfigurations[i];
-					CountField[] bcCountFields = new CountField[bc.dbFields.length];
-					for (int j = 0; j < bc.dbFields.length; ++j) {
-						DbField dbf = bc.dbFields[j];
+					IBlockingConfiguration bc = blockingConfigurations[i];
+					ICountField[] bcCountFields = new ICountField[bc.getDbFields().length];
+					for (int j = 0; j < bc.getDbFields().length; ++j) {
+						IDbField dbf = bc.getDbFields()[j];
 						CountField f = find(countFields, dbf);
 						if (f == null) { // read in
-							String column = dbf.name;
-							String view = dbf.table.name;
-							String uniqueId = dbf.table.uniqueId;
-							int tableSize = getTableSize(tableSizes, dbf.table);
-							f = new CountField(100, dbf.defaultCount, tableSize, column, view, uniqueId);
+							String column = dbf.getName();
+							String view = dbf.getTable().getName();
+							String uniqueId = dbf.getTable().getUniqueId();
+							int tableSize = getTableSize(tableSizes, dbf.getTable());
+							f = new CountField(100, dbf.getDefaultCount(), tableSize, column, view, uniqueId);
 							countFields.add(f);
 							String query =
 								"SELECT FieldId FROM TB_CMT_COUNT_FIELDS WHERE ViewName = '"
@@ -456,14 +458,14 @@ public class DbbCountsCreator {
 						}
 						bcCountFields[j] = f;
 					}
-					ccs[i] = new CacheCountSource(getTableSize(tableSizes, bc.dbTables[0]), bcCountFields);
+					ccs[i] = new CacheCountSource(getTableSize(tableSizes, bc.getDbTables()[0]), bcCountFields);
 				}
 				for (int i = 0; i < models.length; ++i) {
 					ImmutableProbabilityModel model = models[i];
 					String bcName = model.getBlockingConfigurationName();
 					String dn = model.getDatabaseConfigurationName();
 					logger.fine("Using blocking configuration: " + bcName);
-					BlockingConfiguration bc = ((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(bcName, dn);
+					IBlockingConfiguration bc = ((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(bcName, dn);
 					String bcClassName = bc.getClass().getName();
 					int j = 0;
 					// AWKWARD, BRITTLE CODE 2009-08-21 rphall
@@ -487,9 +489,9 @@ public class DbbCountsCreator {
 		}
 	}
 
-	private Map readTableSizes(Statement stmt) throws SQLException {
+	private Map<DbTable,Integer> readTableSizes(Statement stmt) throws SQLException {
 		logger.fine("readTableSizes");
-		Map l = new HashMap();
+		Map<DbTable,Integer> l = new HashMap<>();
 		String query = "SELECT ViewName, MasterId, Count FROM TB_CMT_COUNT_FIELDS f, TB_CMT_COUNTS c " + "WHERE f.FieldId = c.FieldId AND f.ColumnName IS NULL";
 		logger.fine(query);
 		ResultSet rs = stmt.executeQuery(query);
@@ -499,19 +501,20 @@ public class DbbCountsCreator {
 		return l;
 	}
 
-	private int getTableSize(Map tableSizes, DbTable dbt) {
+	private int getTableSize(Map<DbTable,Integer> tableSizes, IDbTable dbt) {
 		Integer s = (Integer) tableSizes.get(dbt);
 		return s.intValue();
 	}
 
-	private CountField find(List countFields, DbField dbf) {
-		String column = dbf.name;
-		String view = dbf.table.name;
-		String uniqueId = dbf.table.uniqueId;
-		Iterator iCountFields = countFields.iterator();
+	private CountField find(List<CountField> countFields, IDbField dbf) {
+		String column = dbf.getName();
+		String view = dbf.getTable().getName();
+		String uniqueId = dbf.getTable().getUniqueId();
+		Iterator<CountField> iCountFields = countFields.iterator();
 		while (iCountFields.hasNext()) {
 			CountField cf = (CountField) iCountFields.next();
-			if (column.equals(cf.getColumn()) && view.equals(cf.getView()) && uniqueId.equals(cf.getUniqueId())) {
+			if (column.equals(cf.getColumn()) && view.equals(cf.getView())
+					&& uniqueId.equals(cf.getUniqueId())) {
 				return cf;
 			}
 		}
@@ -536,15 +539,15 @@ public class DbbCountsCreator {
 		connection.close();
 	}
 
-	private static BlockingConfiguration[] getBlockingConfigurations(IProbabilityModel[] models) {
+	private static IBlockingConfiguration[] getBlockingConfigurations(IProbabilityModel[] models) {
 		int len = models.length;
-		BlockingConfiguration[] bcs = new BlockingConfiguration[len];
+		IBlockingConfiguration[] bcs = new IBlockingConfiguration[len];
 		int numConfigurations = 0;
 		for (int i = 0; i < len; ++i) {
 			ImmutableProbabilityModel model = models[i];
 			String bcName = model.getBlockingConfigurationName();
 			String dn = model.getDatabaseConfigurationName();
-			BlockingConfiguration bc = ((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(bcName, dn);
+			IBlockingConfiguration bc = ((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(bcName, dn);
 			int j = 0;
 			// AWKWARD, BRITTLE CODE 2009-08-21 rphall
 			// Just use a Map of models to blockingConfigurations!
@@ -556,7 +559,7 @@ public class DbbCountsCreator {
 			}
 			// END AWKWARD, BRITTLE CODE
 		}
-		BlockingConfiguration[] res = new BlockingConfiguration[numConfigurations];
+		IBlockingConfiguration[] res = new IBlockingConfiguration[numConfigurations];
 		System.arraycopy(bcs, 0, res, 0, numConfigurations);
 		return res;
 	}

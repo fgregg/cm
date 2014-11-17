@@ -32,7 +32,7 @@
          name="blockingAccessor"
          point="com.choicemaker.cm.core.accessor">
       <accessor
-            class="com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor">
+            class="com.choicemaker.cm.io.blocking.automated.BlockingAccessor">
       </accessor>
    </extension>
 

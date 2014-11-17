@@ -8,18 +8,21 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.base;
+package com.choicemaker.cm.io.blocking.automated;
 
 import java.io.IOException;
 
 /**
  *
- * @author    
- * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
+ * @author
+ * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
  */
 public interface CountsCreator {
 	int getMainTableSize() throws IOException;
-	CountField getField(int index) throws IOException;
-	CountField[] getFields() throws IOException;
+
+	ICountField getField(int index) throws IOException;
+
+	ICountField[] getFields() throws IOException;
+
 	void close() throws IOException;
 }

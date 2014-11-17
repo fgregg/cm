@@ -16,8 +16,8 @@ import java.util.Iterator;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
+import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
+import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 
 /**
  * @author ajwinkel

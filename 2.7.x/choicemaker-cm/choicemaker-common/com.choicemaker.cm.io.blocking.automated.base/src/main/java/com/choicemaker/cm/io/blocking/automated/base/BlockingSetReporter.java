@@ -15,6 +15,9 @@ import java.util.Iterator;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.report.ReporterPlugin;
 import com.choicemaker.cm.core.util.XmlOutput;
+import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
+import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 
 /**
  * Description
@@ -32,16 +35,16 @@ public class BlockingSetReporter implements ReporterPlugin {
 	public void report(StringBuffer b, boolean newLines) {
 		b.append("<blocking>");
 		if(newLines) b.append(Constants.LINE_SEPARATOR);
-		Iterator iBlockingSets = blocker.getBlockingSets().iterator();
+		Iterator<IBlockingSet> iBlockingSets = blocker.getBlockingSets().iterator();
 		while (iBlockingSets.hasNext()) {
-			BlockingSet bs = (BlockingSet) iBlockingSets.next();
+			IBlockingSet bs = (IBlockingSet) iBlockingSets.next();
 			b.append("<bs ec=\"").append(bs.getExpectedCount()).append("\">");
 			if(newLines) b.append(Constants.LINE_SEPARATOR);			
 			int size = bs.numFields();
 			for (int j = 0; j < size; ++j) {
-				BlockingValue bv = bs.getBlockingValue(j);
-				b.append("<bv n=\"").append(bv.blockingField.number);
-				b.append("\" v=\"").append(XmlOutput.escapeAttributeEntities(bv.value)).append("\"/>");
+				IBlockingValue bv = bs.getBlockingValue(j);
+				b.append("<bv n=\"").append(bv.getBlockingField().getNumber());
+				b.append("\" v=\"").append(XmlOutput.escapeAttributeEntities(bv.getValue())).append("\"/>");
 				if(newLines) b.append(Constants.LINE_SEPARATOR);
 			}
 			b.append("</bs>");

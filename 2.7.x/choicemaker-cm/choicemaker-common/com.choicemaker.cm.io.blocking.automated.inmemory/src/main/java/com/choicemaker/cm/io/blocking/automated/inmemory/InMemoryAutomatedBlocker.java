@@ -19,12 +19,12 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
-import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
+import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
+import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
+import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
-import com.choicemaker.cm.io.blocking.automated.base.CountSource;
-import com.choicemaker.cm.io.blocking.automated.base.UnderspecifiedQueryException;
 
 /**
  * @author ajwinkel
@@ -78,7 +78,7 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 	
 	public void init(List records) {
 		// the blocking configuration
-		BlockingConfiguration bc = 
+		IBlockingConfiguration bc = 
 			((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(blockingConfiguration, dbConfiguration);
 
 		// the data source

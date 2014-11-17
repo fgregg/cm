@@ -10,15 +10,22 @@
  */
 package com.choicemaker.cm.io.blocking.automated.base;
 
+import java.io.Serializable;
+
+import com.choicemaker.cm.io.blocking.automated.IDbTable;
+
 /**
  *
  * @author    Martin Buechi
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
  */
-public class DbTable {
-	public final String name;
-	public final int num;
-	public final String uniqueId;
+public class DbTable implements Serializable, IDbTable {
+	
+	private static final long serialVersionUID = 271;
+
+	private final String name;
+	private final int num;
+	private final String uniqueId;
 
 	public DbTable(String name, int num, String uniqueId) {
 		this.name = name;
@@ -26,17 +33,33 @@ public class DbTable {
 		this.uniqueId = uniqueId;
 	}
 
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public int getNum() {
+		return num;
+	}
+
+	@Override
+	public String getUniqueId() {
+		return uniqueId;
+	}
+
 	public boolean equals(Object o) {
 		if (o instanceof DbTable) {
-			DbTable ot = (DbTable) o;
+			IDbTable ot = (IDbTable) o;
 			// don't compare num
-			return name.equals(ot.name) && uniqueId.equals(ot.uniqueId);
+			return getName().equals(ot.getName()) && getUniqueId().equals(ot.getUniqueId());
 		} else {
 			return false;
 		}
 	}
 
 	public int hashCode() {
-		return name.hashCode() + uniqueId.hashCode();
+		return getName().hashCode() + getUniqueId().hashCode();
 	}
+
 }

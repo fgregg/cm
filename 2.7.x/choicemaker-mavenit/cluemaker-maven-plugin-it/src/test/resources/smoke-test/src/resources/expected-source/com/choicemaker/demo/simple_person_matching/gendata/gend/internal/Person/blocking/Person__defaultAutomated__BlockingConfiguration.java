@@ -4,6 +4,7 @@ import java.util.logging.*;
 import java.util.*;
 import com.choicemaker.cm.core.*;
 import com.choicemaker.cm.core.base.*;
+import com.choicemaker.cm.io.blocking.automated.*;
 import com.choicemaker.cm.io.blocking.automated.base.*;
 import com.choicemaker.demo.simple_person_matching.gendata.gend.internal.Person.*;
 import java.util.Date;
@@ -22,7 +23,7 @@ dbFields = dbConfigurations[dbConfIndex].dbfs;
 blockingFields = dbConfigurations[dbConfIndex].bfs;
 name = dbConfigurations[dbConfIndex].name;
 }
-public BlockingValue[] createBlockingValues(Record q) {
+public IBlockingValue[] createBlockingValues(Record q) {
 init(NUM_BLOCKING_FIELDS);
 addPersonImpl((PersonImpl)q);
 return unionValues();
@@ -79,14 +80,14 @@ new BlockingField(7, qfs[7], dbfs[7], "")
 dbConfigurations[0] = new DbConfiguration("Person:b:defaultAutomated:default", qfs, dbts, dbfs, bfs);
 };
 private static final int NUM_BLOCKING_FIELDS = 8;
-private BlockingValue __l0;
-private BlockingValue __l1;
-private BlockingValue __l2;
-private BlockingValue __l3;
-private BlockingValue __l4;
-private BlockingValue __l5;
-private BlockingValue __l6;
-private BlockingValue __l7;
+private IBlockingValue __l0;
+private IBlockingValue __l1;
+private IBlockingValue __l2;
+private IBlockingValue __l3;
+private IBlockingValue __l4;
+private IBlockingValue __l5;
+private IBlockingValue __l6;
+private IBlockingValue __l7;
 static {
 }
 }

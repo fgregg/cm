@@ -20,11 +20,11 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
-import com.choicemaker.cm.io.blocking.automated.base.DbField;
+import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.IBlockingField;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
+import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
@@ -66,7 +66,7 @@ public class RecValService2 {
 
 	private static int INTERVAL = 100000;
 
-	private BlockingConfiguration bc;
+	private IBlockingConfiguration bc;
 
 	//	this is the input record id to internal id translator
 	private IRecordIDTranslator2 translator;
@@ -118,13 +118,13 @@ public class RecValService2 {
 		String blockName = model.getBlockingConfigurationName();
 		String dbConf = model.getDatabaseConfigurationName();
 
-		BlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
-		BlockingField[] bfs = bc.blockingFields;
+		IBlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
+		IBlockingField[] bfs = bc.getBlockingFields();
 
 		//print blocking info
 		for (int i=0; i< bfs.length; i ++) {
-			DbField field = bfs[i].dbField;
-			log.info("i " + i + " field " + field.name + " number " + field.number );
+			IDbField field = bfs[i].getDbField();
+			log.info("i " + i + " field " + field.getName() + " number " + field.getNumber() );
 		}
 
 		this.numBlockFields = countFields (bfs);
@@ -336,19 +336,19 @@ public class RecValService2 {
 		HashSet seen = new HashSet(); //stores field value it has seen
 		Hashtable values = new Hashtable ();  //stores values per field
 
-		BlockingValue[] bvs = bc.createBlockingValues(r);
+		IBlockingValue[] bvs = bc.createBlockingValues(r);
 
 		//loop over the blocking value for this record
 		for (int j=0; j < bvs.length; j++) {
-			BlockingValue bv = bvs[j];
-			BlockingField bf = bv.blockingField;
+			IBlockingValue bv = bvs[j];
+			IBlockingField bf = bv.getBlockingField();
 
-			Integer C = new Integer (bf.dbField.number);
+			Integer C = new Integer (bf.getDbField().getNumber());
 
 //			System.out.println (bf.number + " " + bv.value + " " + bf.dbField.number + " " + bf.dbField.name);
 
-			String val = new String (bv.value);
-			String key = bf.dbField.number + val;
+			String val = new String (bv.getValue());
+			String key = bf.getDbField().getNumber() + val;
 
 			if (!seen.contains(key)) {
 				seen.add(key);
@@ -477,12 +477,12 @@ public class RecValService2 {
 	 * @param bfs - array of BlockingFields
 	 * @return
 	 */
-	private int countFields (BlockingField[] bfs) {
+	private int countFields (IBlockingField[] bfs) {
 		HashSet set = new HashSet();
 
 		for (int i=0; i<bfs.length; i++) {
-			DbField field = bfs[i].dbField;
-			Integer I = new Integer (field.number);
+			IDbField field = bfs[i].getDbField();
+			Integer I = new Integer (field.getNumber());
 
 			if (!set.contains(I)) {
 				set.add(I);

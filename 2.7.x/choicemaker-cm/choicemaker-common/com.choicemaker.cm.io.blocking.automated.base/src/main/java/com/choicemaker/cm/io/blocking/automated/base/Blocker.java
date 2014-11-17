@@ -20,6 +20,18 @@ import java.util.logging.Logger;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
+import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
+import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.IBlockingField;
+import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
+import com.choicemaker.cm.io.blocking.automated.IDbField;
+import com.choicemaker.cm.io.blocking.automated.IField;
+import com.choicemaker.cm.io.blocking.automated.IQueryField;
+import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
 import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
 
 /**
@@ -28,6 +40,8 @@ import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
  * @deprecated Returns sometimes erroneous blockingSets;
  * use {@link Blocker2} instead.
  */
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class Blocker implements AutomatedBlocker {
 	public static final String LIMIT_PER_BLOCKING_SET = "limitPerBlockingSet";
 	public static final String LIMIT_SINGLE_BLOCKING_SET = "limitSingleBlockingSet";
@@ -37,7 +51,7 @@ public class Blocker implements AutomatedBlocker {
 	private CountSource countSource;
 	private DatabaseAccessor databaseAccessor;
 	private ImmutableProbabilityModel model;
-	private BlockingConfiguration blockingConfiguration;
+	private IBlockingConfiguration blockingConfiguration;
 	private Record q;
 	private int limitPerBlockingSet;
 	private int singleTableBlockingSetGraceLimit;
@@ -125,7 +139,7 @@ public class Blocker implements AutomatedBlocker {
 		int singleTableBlockingSetGraceLimit,
 		int limitSingleBlockingSet,
 		CountSource countSource,
-		BlockingConfiguration blockingConfiguration) {
+		IBlockingConfiguration blockingConfiguration) {
 		this.databaseAccessor = databaseAccessor;
 		this.model = model;
 		// 2014-04-24 rphall: Commented out unused local variable
@@ -142,14 +156,15 @@ public class Blocker implements AutomatedBlocker {
 
 	public void open() throws IOException {
 		numberOfRecordsRetrieved = 0;
-		BlockingValue[] blockingValues = blockingConfiguration.createBlockingValues(getQueryRecord());
+		IBlockingValue[] blockingValues =
+			blockingConfiguration.createBlockingValues(getQueryRecord());
 
 		long mainTableSize = getCountSource().setCounts(blockingConfiguration, blockingValues);
 
 		logger.fine("blockingValues numberOfRecordsRetrieved: " + blockingValues.length);
 
 		for (int i=0; i<blockingValues.length; i++) {
-			logger.fine(blockingValues[i].value + " " + blockingValues[i].count + " " + blockingValues[i].blockingField.dbField.name);
+			logger.fine(blockingValues[i].getValue() + " " + blockingValues[i].getCount() + " " + blockingValues[i].getBlockingField().getDbField().getName());
 		}
 
 		Arrays.sort(blockingValues);
@@ -165,7 +180,7 @@ public class Blocker implements AutomatedBlocker {
 		logger.fine("Starting to form blocking sets...");
 		for (int i = 0; i < blockingValues.length; ++i) {
 
-			BlockingValue bv = blockingValues[i];
+			IBlockingValue bv = blockingValues[i];
 			PrintUtils.logBlockingValue(logger,"Blocking value " + i + " ", bv);
 
 			boolean emptySet = true;
@@ -224,10 +239,10 @@ public class Blocker implements AutomatedBlocker {
 				"No blocking sets were formed yet. Looking for best possible subset of blocking values...");
 			Iterator iPossibleSubsets = possibleSubsets.iterator();
 			iPossibleSubsets.next(); // skip empty set
-			BlockingSet best = null;
+			IBlockingSet best = null;
 			long bestCount = Long.MIN_VALUE;
 			while (iPossibleSubsets.hasNext()) {
-				BlockingSet bs = (BlockingSet) iPossibleSubsets.next();
+				IBlockingSet bs = (IBlockingSet) iPossibleSubsets.next();
 				long count = bs.getExpectedCount();
 				if (count < getLimitSingleBlockingSet() && count > bestCount) {
 					best = bs;
@@ -247,7 +262,7 @@ public class Blocker implements AutomatedBlocker {
 
 		logger.fine("Listing final blocking sets...");
 		for (int i = 0; i < getBlockingSets().size(); i++) {
-			BlockingSet b = (BlockingSet) getBlockingSets().get(i);
+			IBlockingSet b = (IBlockingSet) getBlockingSets().get(i);
 			PrintUtils.logBlockingSet(logger,"Blocking set " + i + " ", b);
 		}
 		logger.fine("...Finished listing final blocking sets");
@@ -255,36 +270,36 @@ public class Blocker implements AutomatedBlocker {
 		getDatabaseAccessor().open(this);
 	}
 
-	private boolean valid(BlockingValue bv, BlockingSet bs) {
-		BlockingField bf = bv.blockingField;
-		QueryField qf = bf.queryField;
-		DbField dbf = bf.dbField;
+	private boolean valid(IBlockingValue bv, BlockingSet bs) {
+		IBlockingField bf = bv.getBlockingField();
+		IQueryField qf = bf.getQueryField();
+		IDbField dbf = bf.getDbField();
 
 		int size = bs.numFields();
 		for (int i = 0; i < size; ++i) {
-			BlockingValue cbv = bs.getBlockingValue(i);
-			BlockingField cbf = cbv.blockingField;
+			IBlockingValue cbv = bs.getBlockingValue(i);
+			IBlockingField cbf = cbv.getBlockingField();
 
 			// multiple use of same DbField (implied by multiple use of same BlockingField)
-			if (dbf == cbf.dbField) {
+			if (dbf == cbf.getDbField()) {
 				logger.fine("invalid BlockingValue for BlockingSet: multiple use of same DbField");
 				return false;
 			}
 			// multiple use of same QueryField
-			if (qf == cbf.queryField) {
+			if (qf == cbf.getQueryField()) {
 				logger.fine("invalid BlockingValue for BlockingSet: multiple use of same QueryField");
 				return false;
 			}
 			// illegal combinations
-			if (illegalCombination(bs, bf.illegalCombinations)) {
+			if (illegalCombination(bs, bf.getIllegalCombinations())) {
 				logger.fine("invalid BlockingValue for BlockingSet: Illegal BlockingField combination");
 				return false;
 			}
-			if (illegalCombination(bs, qf.illegalCombinations)) {
+			if (illegalCombination(bs, qf.getIllegalCombinations())) {
 				logger.fine("invalid BlockingValue for BlockingSet: Illegal QueryField combination");
 				return false;
 			}
-			if (illegalCombination(bs, dbf.illegalCombinations)) {
+			if (illegalCombination(bs, dbf.getIllegalCombinations())) {
 				logger.fine("invalid BlockingValue for BlockingSet: Illegal DbField combination");
 				return false;
 			}
@@ -292,9 +307,9 @@ public class Blocker implements AutomatedBlocker {
 		return true;
 	}
 
-	private boolean illegalCombination(BlockingSet bs, Field[][] illegalCombinations) {
+	private boolean illegalCombination(BlockingSet bs, IField[][] illegalCombinations) {
 		for (int i = 0; i < illegalCombinations.length; ++i) {
-			Field[] ic = illegalCombinations[i];
+			IField[] ic = illegalCombinations[i];
 			int j = 0;
 			while (j < ic.length && bs.containsField(ic[j])) {
 				++j;
@@ -368,7 +383,7 @@ public class Blocker implements AutomatedBlocker {
 		return databaseAccessor;
 	}
 
-	public BlockingConfiguration getBlockingConfiguration() {
+	public IBlockingConfiguration getBlockingConfiguration() {
 		return blockingConfiguration;
 	}
 

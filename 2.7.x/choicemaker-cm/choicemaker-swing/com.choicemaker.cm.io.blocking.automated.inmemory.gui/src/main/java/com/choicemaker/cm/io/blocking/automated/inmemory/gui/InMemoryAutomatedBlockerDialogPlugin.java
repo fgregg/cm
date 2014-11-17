@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor;
+import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
 import com.choicemaker.cm.io.blocking.automated.inmemory.InMemoryAutomatedBlocker;
 //import com.choicemaker.cm.io.blocking.automated.inmemory.InMemoryDataSource;
 import com.choicemaker.cm.io.db.base.DbAccessor;

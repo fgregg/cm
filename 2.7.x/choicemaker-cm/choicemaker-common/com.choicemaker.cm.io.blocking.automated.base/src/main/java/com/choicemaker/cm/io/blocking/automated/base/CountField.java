@@ -12,9 +12,10 @@ package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.choicemaker.cm.io.blocking.automated.ICountField;
 
 /**
  *
@@ -22,7 +23,7 @@ import java.util.Map.Entry;
  * @author    rphall (CM 2.7 revision)
  */
 
-public class CountField implements Serializable {
+public class CountField implements Serializable, ICountField {
 	
 	private static final long serialVersionUID = 271;
 
@@ -44,17 +45,17 @@ public class CountField implements Serializable {
 
 	private final int defaultCount;
 	private final int tableSize;
-	private final Map/*<String,Integer*/ m;
+	private final Map<String,Integer> m;
 	private final String column;
 	private final String view;
 	private final String uniqueId;
 
 	public CountField(int mapSize, int defaultCount, int tableSize, String column, String view, String uniqueId) {
 		if (mapSize > 1) {
-			m = new HashMap(mapSize);
+			m = new HashMap<>(mapSize);
 			
 		} else {
-			m = new HashMap();
+			m = new HashMap<>();
 		}
 		this.defaultCount = defaultCount;
 		this.tableSize = tableSize;
@@ -67,19 +68,19 @@ public class CountField implements Serializable {
 		this(mapSize, defaultCount, tableSize, null, null, null);
 	}
 	
+	@Override
 	public void putValueCount(String value, Integer count) {
 		if (value != null && count != null) {
 			m.put(value, count);
 		}
 	}
 	
-	public void putAll(Map/*<String,Integer>*/ m) {
+	@Override
+	public void putAll(Map<String,Integer> m) {
 		if (m != null) {
-			// FIXME replace this by m.putAll(..) when migrating to Java 1.5+
-			for (Iterator itE = m.entrySet().iterator(); itE.hasNext(); ) {
-				Entry entry = (Entry) itE.next();
-				Object value = entry.getKey();
-				Object count = entry.getValue(); 
+			for (Entry<String,Integer> entry : m.entrySet()) {
+				String value = entry.getKey();
+				Integer count = entry.getValue(); 
 				if (value != null && count != null) {
 					if (!(value instanceof String) || !(count instanceof Integer)) {
 						String msg = "Invalid entry: " + value + "/" + count;
@@ -91,6 +92,7 @@ public class CountField implements Serializable {
 		}
 	}
 
+	@Override
 	public Integer getCountForValue(String value) {
 		Integer retVal = null;
 		if (value != null) {
@@ -99,22 +101,27 @@ public class CountField implements Serializable {
 		return retVal;
 	}
 
+	@Override
 	public int getDefaultCount() {
 		return defaultCount;
 	}
 
+	@Override
 	public int getTableSize() {
 		return tableSize;
 	}
 
+	@Override
 	public String getColumn() {
 		return column;
 	}
 
+	@Override
 	public String getView() {
 		return view;
 	}
 
+	@Override
 	public String getUniqueId() {
 		return uniqueId;
 	}

@@ -30,12 +30,13 @@ import oracle.jdbc.driver.OracleTypes;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingSet.GroupTable;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
-import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
+import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
+import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
+import com.choicemaker.cm.io.blocking.automated.IBlockingField;
+import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
+import com.choicemaker.cm.io.blocking.automated.IDbField;
+import com.choicemaker.cm.io.blocking.automated.IGroupTable;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.db.base.Index;
@@ -304,9 +305,9 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 		String masterId = null;
 		Iterator iBlockingSets = blocker.getBlockingSets().iterator();
 		while (iBlockingSets.hasNext()) {
-			BlockingSet bs = (BlockingSet) iBlockingSets.next();
+			IBlockingSet bs = (IBlockingSet) iBlockingSets.next();
 			if (firstBlockingSet) {
-				masterId = bs.getTable(0).table.uniqueId;
+				masterId = bs.getTable(0).getTable().getUniqueId();
 				firstBlockingSet = false;
 			} else {
 				b.append(BS_SEP);
@@ -322,8 +323,8 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				if (j != 0) {
 					b.append(",");
 				}
-				BlockingSet.GroupTable gt = bs.getTable(j);
-				b.append(gt.table.name).append(" v").append(gt.number);
+				IGroupTable gt = bs.getTable(j);
+				b.append(gt.getTable().getName()).append(" v").append(gt.getNumber());
 			}
 			b.append(TB_VAL_SEP);
 			int numValues = bs.numFields();
@@ -331,14 +332,14 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 				if (j != 0) {
 					b.append(" AND ");
 				}
-				BlockingValue bv = bs.getBlockingValue(j);
-				BlockingField bf = bv.blockingField;
-				com.choicemaker.cm.io.blocking.automated.base.DbField dbf = bf.dbField;
-				b.append("v").append(bs.getGroupTable(bf).number).append(".").append(dbf.name).append("=");
-				if (mustQuote(bf.dbField.type)) {
-					b.append("'" + escape(bv.value) + "'");
+				IBlockingValue bv = bs.getBlockingValue(j);
+				IBlockingField bf = bv.getBlockingField();
+				IDbField dbf = bf.getDbField();
+				b.append("v").append(bs.getGroupTable(bf).getNumber()).append(".").append(dbf.getName()).append("=");
+				if (mustQuote(bf.getDbField().getType())) {
+					b.append("'" + escape(bv.getValue()) + "'");
 				} else {
-					b.append(escape(bv.value));
+					b.append(escape(bv.getValue()));
 				}
 			}
 		}
@@ -346,7 +347,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 	}
 
 	// Public for testing
-	public static String getHints(BlockingSet bs, DbReaderParallel dbr) {
+	public static String getHints(IBlockingSet bs, DbReaderParallel dbr) {
 		
 		// Preconditions
 		if (bs == null || dbr == null) {
@@ -359,13 +360,13 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 			StringBuffer joins = null;
 			Map indices = dbr.getIndices();
 			for (int i = 0; i < numTables; ++i) {
-				GroupTable gt = bs.getTable(i);
-				BlockingValue[] bvs = bs.getBlockingValues(gt);
-				Map tableIndices = (Map)indices.get(gt.table.name);
+				IGroupTable gt = bs.getTable(i);
+				IBlockingValue[] bvs = bs.getBlockingValues(gt);
+				Map tableIndices = (Map)indices.get(gt.getTable().getName());
 				if (bvs.length > 1 && tableIndices != null) {
 					String[] fields = new String[bvs.length];
 					for (int j = 0; j < fields.length; j++) {
-						fields[j] = bvs[j].blockingField.dbField.name;
+						fields[j] = bvs[j].getBlockingField().getDbField().getName();
 					}
 					Arrays.sort(fields);
 					StringBuffer rep = new StringBuffer(fields.length * 32);
@@ -377,7 +378,7 @@ public class OraDatabaseAccessor implements DatabaseAccessor {
 					if(uis != null && uis.length > 1) {
 						if(joins == null) joins = new StringBuffer(127);
 						joins.append("index_join(v");
-						joins.append(gt.number);
+						joins.append(gt.getNumber());
 						joins.append(' ');
 						joins.append(uis[0].getName());
 						for(int j = 1; j < uis.length; ++j) {

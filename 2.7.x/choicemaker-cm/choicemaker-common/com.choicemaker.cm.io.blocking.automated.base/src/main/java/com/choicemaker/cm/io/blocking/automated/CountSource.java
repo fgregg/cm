@@ -8,16 +8,16 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.base;
+package com.choicemaker.cm.io.blocking.automated;
 
 import java.io.IOException;
 
-
 /**
  *
- * @author    
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:31:31 $
+ * @author
+ * @version $Revision: 1.2 $ $Date: 2010/03/28 09:31:31 $
  */
 public interface CountSource {
-	long setCounts(BlockingConfiguration configuration, BlockingValue[] blockingValues) throws IOException;
+	long setCounts(IBlockingConfiguration configuration,
+			IBlockingValue[] blockingValues) throws IOException;
 }

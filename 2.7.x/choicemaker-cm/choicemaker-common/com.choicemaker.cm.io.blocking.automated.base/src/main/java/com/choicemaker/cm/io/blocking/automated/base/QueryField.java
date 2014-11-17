@@ -10,17 +10,24 @@
  */
 package com.choicemaker.cm.io.blocking.automated.base;
 
+import com.choicemaker.cm.io.blocking.automated.IField;
+import com.choicemaker.cm.io.blocking.automated.IQueryField;
+
 /**
- *
- * @author    
+ * A field on a query record, which is compared against {@link DbField master}
+ * records to find matches.
+ * @author    mbuechi
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:47 $
  */
-public class QueryField extends Field {
+public class QueryField extends Field implements IQueryField {
+	
+	private static final long serialVersionUID = 271;
+
 	public QueryField() {
 		this(NN_FIELD);
 	}
 
-	public QueryField(Field[][] illegalCombinations) {
+	public QueryField(IField[][] illegalCombinations) {
 		super(illegalCombinations);
 	}
 }

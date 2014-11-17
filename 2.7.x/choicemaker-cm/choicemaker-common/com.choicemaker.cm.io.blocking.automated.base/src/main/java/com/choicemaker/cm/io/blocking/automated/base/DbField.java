@@ -10,19 +10,27 @@
  */
 package com.choicemaker.cm.io.blocking.automated.base;
 
+import com.choicemaker.cm.io.blocking.automated.IDbField;
+import com.choicemaker.cm.io.blocking.automated.IDbTable;
+import com.choicemaker.cm.io.blocking.automated.IField;
+
 /**
- *
- * @author    
+ * A field on a master record, against which query record are compared.
+ * 
+ * @author    mbuechi
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:31:50 $
  */
-public class DbField extends Field {
-	public final int number;
-	public final String name;
-	public final String type;
-	public final DbTable table;
-	public final int defaultCount;
+public class DbField extends Field implements IDbField {
+	
+	private static final long serialVersionUID = 271;
 
-	public DbField(int number, String name, String type, DbTable table, int defaultCount) {
+	private final int number;
+	private final String name;
+	private final String type;
+	private final IDbTable table;
+	private final int defaultCount;
+
+	public DbField(int number, String name, String type, IDbTable table, int defaultCount) {
 		this(number, name, type, table, defaultCount, NN_FIELD);
 	}
 
@@ -30,9 +38,9 @@ public class DbField extends Field {
 		int number,
 		String name,
 		String type,
-		DbTable table,
+		IDbTable table,
 		int defaultCount,
-		Field[][] illegalCombinations) {
+		IField[][] illegalCombinations) {
 		super(illegalCombinations);
 		this.number = number;
 		this.name = name;
@@ -41,40 +49,65 @@ public class DbField extends Field {
 		this.defaultCount = defaultCount;
 	}
 	
+	@Override
+	public int getNumber() {
+		return number;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String getType() {
+		return type;
+	}
+
+	@Override
+	public IDbTable getTable() {
+		return table;
+	}
+
+	@Override
+	public int getDefaultCount() {
+		return defaultCount;
+	}
+
 	public boolean equals(Object o) {
 		boolean retVal = false;
 		if (o instanceof DbField) {
-			DbField that = (DbField) o;
-			retVal = this.number == that.number;
-			if (retVal && this.name == null) {
-				retVal = that.name == null;
+			IDbField that = (IDbField) o;
+			retVal = this.getNumber() == that.getNumber();
+			if (retVal && this.getName() == null) {
+				retVal = that.getName() == null;
 			} else if (retVal) {
-				retVal = this.name.equals(that.name);
+				retVal = this.getName().equals(that.getName());
 			}
-			if (retVal && this.type == null) {
-				retVal = that.type == null;
+			if (retVal && this.getType() == null) {
+				retVal = that.getType() == null;
 			} else if (retVal) {
-				retVal = this.type.equals(that.type);
+				retVal = this.getType().equals(that.getType());
 			}
-			if (retVal && this.table == null) {
-				retVal = this.table == null;
+			if (retVal && this.getTable() == null) {
+				retVal = this.getTable() == null;
 			} else if (retVal) {
-				retVal = this.table.equals(that.table);
+				retVal = this.getTable().equals(that.getTable());
 			}
 		}
 		return retVal;
 	}
 	
 	public int hashCode() {
-		int retVal = number;
-		if (name != null) {
-			retVal += name.hashCode();
+		int retVal = getNumber();
+		if (getName() != null) {
+			retVal += getName().hashCode();
 		}
-		if (type != null) {
-			retVal += type.hashCode();
+		if (getType() != null) {
+			retVal += getType().hashCode();
 		}
-		if (table != null) {
-			retVal += table.hashCode();
+		if (getTable() != null) {
+			retVal += getTable().hashCode();
 		}
 		return retVal;
 	}

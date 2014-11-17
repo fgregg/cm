@@ -19,13 +19,14 @@ import java.util.Iterator;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
-import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
-import com.choicemaker.cm.io.blocking.automated.base.DbField;
-import com.choicemaker.cm.io.blocking.automated.base.DbTable;
+import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
+import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
+import com.choicemaker.cm.io.blocking.automated.IBlockingField;
+import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
+import com.choicemaker.cm.io.blocking.automated.IDbField;
+import com.choicemaker.cm.io.blocking.automated.IDbTable;
+import com.choicemaker.cm.io.blocking.automated.IGroupTable;
 
 /**
  *
@@ -51,7 +52,7 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 		throw new CloneNotSupportedException("not yet implemented");
 	}
 
-	private int getActualCount(BlockingSet bs) {
+	private int getActualCount(IBlockingSet bs) {
 		if (connection == null) {
 			return -1;
 		}
@@ -62,28 +63,28 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 			String uniqueId = null;
 			int numTables = bs.getNumTables();
 			for(int i = 0; i < numTables; ++i) {
-				BlockingSet.GroupTable gt = bs.getTable(i);
-				String alias = " v" + gt.table.num + gt.group;
+				IGroupTable gt = bs.getTable(i);
+				String alias = " v" + gt.getTable().getNum() + gt.getGroup();
 				if (join == null) {
 					join = alias;
-					uniqueId = gt.table.uniqueId;
+					uniqueId = gt.getTable().getUniqueId();
 				} else {
 					from.append(", ");
 					if (where.length() > 0)
 						where.append(" and ");
 					where.append(join + "." + uniqueId + " = " + alias + "." + uniqueId);
 				}
-				from.append(gt.table.name + alias);
+				from.append(gt.getTable().getName() + alias);
 			}
 			int numValues = bs.numFields();
 			for(int i = 0; i < numValues; ++i) {
-				BlockingValue bv = bs.getBlockingValue(i);
-				BlockingField bf = bv.blockingField;
-				DbField dbf = bf.dbField;
-				DbTable dbt = dbf.table;
+				IBlockingValue bv = bs.getBlockingValue(i);
+				IBlockingField bf = bv.getBlockingField();
+				IDbField dbf = bf.getDbField();
+				IDbTable dbt = dbf.getTable();
 				if (where.length() > 0)
 					where.append(" and ");
-				where.append("v" + dbt.num + bf.group + "." + dbf.name + " = '" + bv.value + "'");
+				where.append("v" + dbt.getNum() + bf.getGroup() + "." + dbf.getName() + " = '" + bv.getValue() + "'");
 			}
 			String query = "SELECT COUNT(DISTINCT " + join + "." + uniqueId + ") FROM " + from + " where " + where;
 			Statement stmt = connection.createStatement();
@@ -100,31 +101,31 @@ public class TestDatabaseAccessor implements DatabaseAccessor {
 
 	public void open(AutomatedBlocker blocker) throws IOException {
 		System.out.println("=============== open");
-		Iterator iBlockingSets = blocker.getBlockingSets().iterator();
+		Iterator<IBlockingSet> iBlockingSets = blocker.getBlockingSets().iterator();
 		int i = 0;
 		while (iBlockingSets.hasNext()) {
-			BlockingSet bs = (BlockingSet) iBlockingSets.next();
+			IBlockingSet bs = (IBlockingSet) iBlockingSets.next();
 
 			System.out.println(
 				"------------- Blocking Set " + i + ": " + bs.getExpectedCount() + " : " + getActualCount(bs));
 			int numValues = bs.numFields();
 			for(int j = 0; j < numValues; ++j) {
-				BlockingValue bv = bs.getBlockingValue(i);
-				BlockingField bf = bv.blockingField;
-				DbField dbf = bf.dbField;
+				IBlockingValue bv = bs.getBlockingValue(i);
+				IBlockingField bf = bv.getBlockingField();
+				IDbField dbf = bf.getDbField();
 				System.out.println(
 					"bf: "
-						+ bf.number
+						+ bf.getNumber()
 						+ ", table: "
-						+ dbf.table.name
+						+ dbf.getTable().getName()
 						+ ", field: "
-						+ dbf.name
+						+ dbf.getName()
 						+ ", val: "
-						+ bv.value
+						+ bv.getValue()
 						+ ", count: "
-						+ bv.count
+						+ bv.getCount()
 						+ ", table size: "
-						+ bv.tableSize);
+						+ bv.getTableSize());
 			}
 			++i;
 		}

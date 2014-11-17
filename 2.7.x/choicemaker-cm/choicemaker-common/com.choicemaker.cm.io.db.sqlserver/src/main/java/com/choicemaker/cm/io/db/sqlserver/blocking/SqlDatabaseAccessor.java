@@ -23,11 +23,13 @@ import javax.sql.DataSource;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.base.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingField;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
-import com.choicemaker.cm.io.blocking.automated.base.DatabaseAccessor;
+import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
+import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
+import com.choicemaker.cm.io.blocking.automated.IBlockingField;
+import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
+import com.choicemaker.cm.io.blocking.automated.IDbField;
+import com.choicemaker.cm.io.blocking.automated.IGroupTable;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderSequential;
 import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
@@ -154,14 +156,14 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 			b.append("v0." + id);
 			//b.append(id);
 			b.append(" FROM ");
-			BlockingSet bs = (BlockingSet) blocker.getBlockingSets().get(i);
+			IBlockingSet bs = (IBlockingSet) blocker.getBlockingSets().get(i);
 			int numViews = bs.getNumTables();
 			for (int j = 0; j < numViews; ++j) {
 				if (j > 0) {
 					b.append(",");
 				}
-				BlockingSet.GroupTable gt = bs.getTable(j);
-				b.append(gt.table.name).append(" v").append(gt.number);
+				IGroupTable gt = bs.getTable(j);
+				b.append(gt.getTable().getName()).append(" v").append(gt.getNumber());
 			}
 			b.append(" WHERE ");
 			int numValues = bs.numFields();
@@ -169,23 +171,23 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 				if (j > 0) {
 					b.append(" AND ");
 				}
-				BlockingValue bv = bs.getBlockingValue(j);
-				BlockingField bf = bv.blockingField;
-				com.choicemaker.cm.io.blocking.automated.base.DbField dbf = bf.dbField;
-				b.append("v").append(bs.getGroupTable(bf).number).append(".").append(dbf.name).append("=");
-				if (mustQuote(bf.dbField.type)) {
-					b.append("'" + escape(bv.value) + "'");
+				IBlockingValue bv = bs.getBlockingValue(j);
+				IBlockingField bf = bv.getBlockingField();
+				IDbField dbf = bf.getDbField();
+				b.append("v").append(bs.getGroupTable(bf).getNumber()).append(".").append(dbf.getName()).append("=");
+				if (mustQuote(bf.getDbField().getType())) {
+					b.append("'" + escape(bv.getValue()) + "'");
 				} else {
-					b.append(escape(bv.value));
+					b.append(escape(bv.getValue()));
 				}
 			}
 			if (numViews > 1) {
-				BlockingSet.GroupTable gt0 = bs.getTable(0);
-				String g0 = " AND v" + gt0.number + "." + id + "=";
+				IGroupTable gt0 = bs.getTable(0);
+				String g0 = " AND v" + gt0.getNumber() + "." + id + "=";
 				for (int j = 1; j < numViews; ++j) {
-					BlockingSet.GroupTable gt = bs.getTable(j);
+					IGroupTable gt = bs.getTable(j);
 					b.append(g0);
-					b.append("v" + gt.number + "." + id);
+					b.append("v" + gt.getNumber() + "." + id);
 				}
 			}
 		}

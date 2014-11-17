@@ -18,12 +18,13 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingConfiguration;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingSet;
-import com.choicemaker.cm.io.blocking.automated.base.BlockingValue;
+import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
+import com.choicemaker.cm.io.blocking.automated.ICountField;
+import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.base.CountField;
-import com.choicemaker.cm.io.blocking.automated.base.CountSource;
-import com.choicemaker.cm.io.blocking.automated.base.DbField;
 import com.choicemaker.cm.io.blocking.automated.cachecount.CacheCountSource;
 import com.choicemaker.util.IntArrayList;
 
@@ -33,13 +34,13 @@ import com.choicemaker.util.IntArrayList;
  */
 public class InMemoryDataSource {
 
-	protected BlockingConfiguration bc;
+	protected IBlockingConfiguration bc;
 
 	protected int numBlockingFields;
 	protected HashMap[] fieldMaps;
 	protected List recordList;
 
-	public InMemoryDataSource(BlockingConfiguration bc) {
+	public InMemoryDataSource(IBlockingConfiguration bc) {
 		this.bc = bc;
 	}
 
@@ -48,7 +49,7 @@ public class InMemoryDataSource {
 	//
 
 	public void init(List records) {
-		numBlockingFields = bc.blockingFields.length;
+		numBlockingFields = bc.getBlockingFields().length;
 
 		fieldMaps = new HashMap[numBlockingFields];
 		for (int i = 0; i < fieldMaps.length; i++) {
@@ -59,11 +60,11 @@ public class InMemoryDataSource {
 		int len = recordList.size();
 		for (int recordIndex = 0; recordIndex < len; recordIndex++) {
 			Record r = (Record)recordList.get(recordIndex);
-			BlockingValue[] bvs = bc.createBlockingValues(r);
+			IBlockingValue[] bvs = bc.createBlockingValues(r);
 
 			for (int j = 0; j < bvs.length; j++) {
-				String value = bvs[j].value;
-				put(recordIndex, bvs[j].blockingField.dbField.number, value);
+				String value = bvs[j].getValue();
+				put(recordIndex, bvs[j].getBlockingField().getDbField().getNumber(), value);
 			}
 		}
 	}
@@ -87,8 +88,8 @@ public class InMemoryDataSource {
 		// 2014-04-24 rphall: Commented out unused local variables.
 //		int mainTableSize = recordList.size();
 
-		int numFields = bc.dbFields.length;
-		CountField[] countFields = new CountField[numFields];
+		int numFields = bc.getDbFields().length;
+		ICountField[] countFields = new ICountField[numFields];
 		for (int i = 0; i < numFields; i++) {
 			countFields[i] = createCountField(i);
 		}
@@ -96,17 +97,17 @@ public class InMemoryDataSource {
 		return new CacheCountSource(recordList.size(), countFields);
 	}
 
-	private CountField createCountField(int index) {
-		DbField dbf = bc.dbFields[index];
+	private ICountField createCountField(int index) {
+		IDbField dbf = bc.getDbFields()[index];
 
 		// get the  {field value} --> {set of record indices} map
 		// for the corresponding field.
-		int fieldNum = dbf.number;
+		int fieldNum = dbf.getNumber();
 		HashMap fieldMap = fieldMaps[fieldNum];
 
 		// create a counts map for those values that occur more
 		// than dbf.default times
-		int defaultCount = dbf.defaultCount;
+		int defaultCount = dbf.getDefaultCount();
 		HashMap biggerThanDefault = new HashMap();
 		for (Iterator it = fieldMap.entrySet().iterator(); it.hasNext(); ) {
 			Map.Entry entry = (Map.Entry)it.next();
@@ -118,13 +119,13 @@ public class InMemoryDataSource {
 		}
 
 		// create a CountField object to represent our results
-		CountField cf = new CountField(
+		ICountField cf = new CountField(
 			2, // initial size of cf.m (which is replaced in the next line anyway anyway).
 			defaultCount,
 			fieldMap.size(),
-			dbf.name,
-			dbf.table.name,
-			dbf.table.uniqueId);
+			dbf.getName(),
+			dbf.getTable().getName(),
+			dbf.getTable().getUniqueId());
 		cf.putAll(biggerThanDefault);
 
 		return cf;
@@ -141,7 +142,7 @@ public class InMemoryDataSource {
 	public Iterator select(List blockingSets, int start) {
 		IntIterator[] its = new IntIterator[blockingSets.size()];
 		for (int i = 0; i < its.length; i++) {
-			its[i] = createIndexIterator((BlockingSet)blockingSets.get(i), start);
+			its[i] = createIndexIterator((IBlockingSet)blockingSets.get(i), start);
 		}
 
 		IntIterator union = createUnionIntIterator(its);
@@ -154,13 +155,13 @@ public class InMemoryDataSource {
 
 	private static final IntIterator[] ZERO_INT_ITERATOR = new IntIterator[0];
 
-	private IntIterator createIndexIterator(BlockingSet bs, int start) {
-		BlockingValue[] bvs = bs.getBlockingValues();
+	private IntIterator createIndexIterator(IBlockingSet bs, int start) {
+		IBlockingValue[] bvs = bs.getBlockingValues();
 
 		List lists = new ArrayList(bvs.length);
 		for (int i = 0; i < bvs.length; i++) {
-			int fieldNum = bvs[i].blockingField.dbField.number;
-			String fieldVal = bvs[i].value;
+			int fieldNum = bvs[i].getBlockingField().getDbField().getNumber();
+			String fieldVal = bvs[i].getValue();
 
 			IntArrayList ial = (IntArrayList) fieldMaps[fieldNum].get(fieldVal);
 			if (ial != null) {

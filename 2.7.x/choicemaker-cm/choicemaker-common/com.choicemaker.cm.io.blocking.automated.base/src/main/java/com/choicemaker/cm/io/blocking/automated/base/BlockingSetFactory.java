@@ -24,6 +24,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Record;
+import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
+import com.choicemaker.cm.io.blocking.automated.IBlockingField;
+import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
+import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
+import com.choicemaker.cm.io.blocking.automated.IDbField;
+import com.choicemaker.cm.io.blocking.automated.IField;
+import com.choicemaker.cm.io.blocking.automated.IQueryField;
+import com.choicemaker.cm.io.blocking.automated.IncompleteBlockingSetsException;
+import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
 import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
 
 /**
@@ -130,8 +140,8 @@ public class BlockingSetFactory {
 	 * because of a system error that prevents the count source from
 	 * being accessed.
 	 */
-	public static List createBlockingSets(
-		BlockingConfiguration bc,
+	public static List<IBlockingSet> createBlockingSets(
+		IBlockingConfiguration bc,
 		Record q,
 		int limitPerBlockingSet,
 		int singleTableBlockingSetGraceLimit,
@@ -142,7 +152,7 @@ public class BlockingSetFactory {
 			UnderspecifiedQueryException,
 			IOException {
 
-		BlockingValue[] blockingValues = bc.createBlockingValues(q);
+		IBlockingValue[] blockingValues = bc.createBlockingValues(q);
 		long mainTableSize = countSource.setCounts(bc, blockingValues);
 
 		return createBlockingSetsInternal_1(
@@ -165,8 +175,8 @@ public class BlockingSetFactory {
 	 * for explanations of the limit parameters, return value, and possible
 	 * exceptions.
 	 */
-	public static List createBlockingSetsInternal_1(
-		BlockingValue[] blockingValues,
+	public static List<IBlockingSet> createBlockingSetsInternal_1(
+		IBlockingValue[] blockingValues,
 		long mainTableSize,
 		int limitPerBlockingSet,
 		int singleTableBlockingSetGraceLimit,
@@ -174,7 +184,7 @@ public class BlockingSetFactory {
 		throws IncompleteBlockingSetsException, UnderspecifiedQueryException {
 
 		// The list of blocking sets that will be returned
-		final List blockingSets = new ArrayList(64);
+		final List<IBlockingSet> blockingSets = new ArrayList<>(64);
 
 		// A list of blocking values that would have been used,
 		// if they hadn't been discarded by the
@@ -182,10 +192,10 @@ public class BlockingSetFactory {
 		// This list is referenced at the end of this method
 		// as part of a check to see if an IncompleteBlockingSets
 		// exception should be thrown.
-		final Set notUsedBecauseOfOptimization = new HashSet();
+		final Set<IBlockingValue> notUsedBecauseOfOptimization = new HashSet<>();
 
 		// Initialize (oversized) blocking sets with an empty blocking set
-		List oversized = new ArrayList(256);
+		List<IBlockingSet> oversized = new ArrayList<>(256);
 		oversized.add(new BlockingSet(mainTableSize));
 		createBlockingSetsInternal_2(
 			blockingValues,
@@ -199,13 +209,12 @@ public class BlockingSetFactory {
 		if (blockingSets.isEmpty()) {
 			logger.fine(
 				"No blocking sets were formed yet. Looking for best possible subset of blocking values...");
-			Iterator iPossibleSubsets = oversized.iterator();
+			Iterator<IBlockingSet> iPossibleSubsets = oversized.iterator();
 			iPossibleSubsets.next(); // skip empty set
-			BlockingSet best = null;
+			IBlockingSet best = null;
 			long bestCount = Long.MIN_VALUE;
 			while (iPossibleSubsets.hasNext()) {
-				BlockingSet currentSubset =
-					(BlockingSet) iPossibleSubsets.next();
+				IBlockingSet currentSubset = iPossibleSubsets.next();
 				long count = currentSubset.getExpectedCount();
 				if (count < limitSingleBlockingSet && count > bestCount) {
 					best = currentSubset;
@@ -227,7 +236,7 @@ public class BlockingSetFactory {
 		// rphall 2008-06-27
 		// Fixes a bug with deceptive collections of blockingSets that
 		// omit some blocking values (or their bases).
-		BlockingValue[] missingBlockingValues =
+		IBlockingValue[] missingBlockingValues =
 			findBlockingValuesMissingFromBlockingSets(
 				blockingValues,
 				blockingSets,
@@ -256,7 +265,7 @@ public class BlockingSetFactory {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Listing final blocking sets...");
 			for (int i = 0; i < blockingSets.size(); i++) {
-				BlockingSet b = (BlockingSet) blockingSets.get(i);
+				IBlockingSet b = (IBlockingSet) blockingSets.get(i);
 				PrintUtils.logBlockingSet(
 					logger,
 					Level.INFO,
@@ -334,13 +343,13 @@ public class BlockingSetFactory {
 	 * singleTableBlockingSetGraceLimit optimization.
 	 */
 	public static void createBlockingSetsInternal_2(
-		BlockingValue[] blockingValues,
+		IBlockingValue[] blockingValues,
 		int limitPerBlockingSet,
 		int singleTableBlockingSetGraceLimit,
 		int limitSingleBlockingSet,
-		List blockingSets,
-		List oversized,
-		Set notUsedBecauseOfOptimization) {
+		List<IBlockingSet> blockingSets,
+		List<IBlockingSet> oversized,
+		Set<IBlockingValue> notUsedBecauseOfOptimization) {
 
 		// Sort the blockingValues by increasing count
 		Arrays.sort(blockingValues);
@@ -358,7 +367,7 @@ public class BlockingSetFactory {
 		logger.fine("Starting to form blocking sets...");
 		for (int i = 0; i < blockingValues.length; ++i) {
 
-			BlockingValue bv = blockingValues[i];
+			IBlockingValue bv = blockingValues[i];
 			PrintUtils.logBlockingValue(
 				logger,
 				"Blocking value " + i + " ",
@@ -392,7 +401,7 @@ public class BlockingSetFactory {
 			int size = oversized.size();
 			for (int j = 0; j < size; ++j) {
 
-				BlockingSet currentSubset = (BlockingSet) oversized.get(j);
+				IBlockingSet currentSubset = (IBlockingSet) oversized.get(j);
 				PrintUtils.logBlockingSet(
 					logger,
 					"Refining blocking set " + j + " ",
@@ -400,7 +409,7 @@ public class BlockingSetFactory {
 
 				if (currentSubset != null && valid(bv, currentSubset)) {
 
-					BlockingSet candidate = new BlockingSet(currentSubset, bv);
+					IBlockingSet candidate = new BlockingSet(currentSubset, bv);
 					PrintUtils.logBlockingSet(
 						logger,
 						"Candidate blocking set ",
@@ -497,46 +506,46 @@ public class BlockingSetFactory {
 
 	}
 
-	static boolean valid(BlockingValue bv, BlockingSet bs) {
-		BlockingField bf = bv.blockingField;
-		QueryField qf = bf.queryField;
-		DbField dbf = bf.dbField;
+	static boolean valid(IBlockingValue bv, IBlockingSet bs) {
+		IBlockingField bf = bv.getBlockingField();
+		IQueryField qf = bf.getQueryField();
+		IDbField dbf = bf.getDbField();
 
 		boolean retVal = true;
 		int size = bs.numFields();
 		for (int i = 0; i < size; ++i) {
 
-			BlockingValue cbv = bs.getBlockingValue(i);
-			BlockingField cbf = cbv.blockingField;
+			IBlockingValue cbv = bs.getBlockingValue(i);
+			IBlockingField cbf = cbv.getBlockingField();
 
 			// multiple use of same DbField (implied by multiple use of same BlockingField)
-			if (dbf == cbf.dbField) {
+			if (dbf == cbf.getDbField()) {
 				logger.fine(
 					"invalid BlockingValue for BlockingSet: multiple use of same DbField");
 				retVal = false;
 				break;
 			}
 			// multiple use of same QueryField
-			if (qf == cbf.queryField) {
+			if (qf == cbf.getQueryField()) {
 				logger.fine(
 					"invalid BlockingValue for BlockingSet: multiple use of same QueryField");
 				retVal = false;
 				break;
 			}
 			// illegal combinations
-			if (illegalCombination(bs, bf.illegalCombinations)) {
+			if (illegalCombination(bs, bf.getIllegalCombinations())) {
 				logger.fine(
 					"invalid BlockingValue for BlockingSet: Illegal BlockingField combination");
 				retVal = false;
 				break;
 			}
-			if (illegalCombination(bs, qf.illegalCombinations)) {
+			if (illegalCombination(bs, qf.getIllegalCombinations())) {
 				logger.fine(
 					"invalid BlockingValue for BlockingSet: Illegal QueryField combination");
 				retVal = false;
 				break;
 			}
-			if (illegalCombination(bs, dbf.illegalCombinations)) {
+			if (illegalCombination(bs, dbf.getIllegalCombinations())) {
 				logger.fine(
 					"invalid BlockingValue for BlockingSet: Illegal DbField combination");
 				retVal = false;
@@ -547,11 +556,11 @@ public class BlockingSetFactory {
 	}
 
 	static boolean illegalCombination(
-		BlockingSet bs,
-		Field[][] illegalCombinations) {
+		IBlockingSet bs,
+		IField[][] illegalCombinations) {
 		boolean retVal = false;
 		for (int i = 0; i < illegalCombinations.length; ++i) {
-			Field[] ic = illegalCombinations[i];
+			IField[] ic = illegalCombinations[i];
 			int j = 0;
 			while (j < ic.length && bs.containsField(ic[j])) {
 				++j;
@@ -564,15 +573,13 @@ public class BlockingSetFactory {
 		return retVal;
 	}
 
-	static void addToBlockingSets(List blockingSets, BlockingSet candidate) {
+	static void addToBlockingSets(List<IBlockingSet> blockingSets, IBlockingSet candidate) {
 		boolean isCandidateAlreadyInBlockingSet = false;
-		Iterator iBlockingSets = blockingSets.iterator();
-		while (iBlockingSets.hasNext()) {
-			BlockingSet currentBlockingSet = (BlockingSet) iBlockingSets.next();
+		for (IBlockingSet currentBlockingSet : blockingSets) {
 			if (candidate.returnsSupersetOf(currentBlockingSet)) {
 				logger.fine(
 					"Candidate blocking set is a superset of an existing blocking set");
-				iBlockingSets.remove();
+				blockingSets.remove(currentBlockingSet);
 			} else if (currentBlockingSet.returnsSupersetOf(candidate)) {
 				logger.fine(
 					"Candidate blocking set is a subset of an existing blocking set");
@@ -589,10 +596,10 @@ public class BlockingSetFactory {
 	 * Finds the blocking values (or their derived values) that are
 	 * missing from some list of blocking sets
 	 */
-	static BlockingValue[] findBlockingValuesMissingFromBlockingSets(
-		BlockingValue[] blockingValues,
-		List blockingSets,
-		Set notUsedBecauseOfOptimization)
+	static IBlockingValue[] findBlockingValuesMissingFromBlockingSets(
+		IBlockingValue[] blockingValues,
+		List<IBlockingSet> blockingSets,
+		Set<IBlockingValue> notUsedBecauseOfOptimization)
 		throws IncompleteBlockingSetsException {
 
 		// This routine handles blockingValues that have complex bases;
@@ -620,10 +627,10 @@ public class BlockingSetFactory {
 		// missing.
 
 		// A set that doesn't shrink
-		Set allBlockingValues = new HashSet();
+		Set<IBlockingValue> allBlockingValues = new HashSet<>();
 
 		// A set that shrinks (FIXME Are iterators over this set dicey?)
-		Set missingBlockingValues = new HashSet();
+		Set<IBlockingValue> missingBlockingValues = new HashSet<>();
 
 		// Iniitialize allBlockingValues and missingBlockingValues
 		for (int i = 0; i < blockingValues.length; i++) {
@@ -633,14 +640,14 @@ public class BlockingSetFactory {
 
 		// Remove a blocking value (and its bases) from the set of missing values
 		// if the value was optimized away
-		for (Iterator iter = allBlockingValues.iterator();
+		for (Iterator<IBlockingValue> iter = allBlockingValues.iterator();
 			missingBlockingValues.size() > 0 && iter.hasNext();
 			) {
-			BlockingValue valueToCheck = (BlockingValue) iter.next();
+			IBlockingValue valueToCheck = (IBlockingValue) iter.next();
 			if (missingBlockingValues.contains(valueToCheck)
 				&& notUsedBecauseOfOptimization.contains(valueToCheck)) {
 				missingBlockingValues.remove(valueToCheck);
-				BlockingValue[][] base = valueToCheck.base;
+				IBlockingValue[][] base = valueToCheck.getBase();
 				for (int r = 0;
 					missingBlockingValues.size() > 0 && r < base.length;
 					r++) {
@@ -658,13 +665,13 @@ public class BlockingSetFactory {
 		for (int i = 0;
 			missingBlockingValues.size() > 0 && i < blockingSets.size();
 			i++) {
-			BlockingSet b = (BlockingSet) blockingSets.get(i);
-			BlockingValue[] bv = b.getBlockingValues();
+			IBlockingSet b = (IBlockingSet) blockingSets.get(i);
+			IBlockingValue[] bv = b.getBlockingValues();
 			for (int j = 0;
 				missingBlockingValues.size() > 0 && j < bv.length;
 				j++) {
 				missingBlockingValues.remove(bv[j]);
-				BlockingValue[][] base = bv[j].base;
+				IBlockingValue[][] base = bv[j].getBase();
 				for (int r = 0;
 					missingBlockingValues.size() > 0 && r < base.length;
 					r++) {
@@ -684,20 +691,20 @@ public class BlockingSetFactory {
 			logger.fine(msg);
 		}
 
-		BlockingValue[] retVal =
-			(BlockingValue[]) missingBlockingValues.toArray(
-				new BlockingValue[missingBlockingValues.size()]);
+		IBlockingValue[] retVal =
+			(IBlockingValue[]) missingBlockingValues.toArray(
+				new IBlockingValue[missingBlockingValues.size()]);
 		return retVal;
 	}
 
-	private static String prettyPrintMissingBlockingValues(Collection missingBlockingValues) {
-		BlockingValue[] array =
-			(BlockingValue[]) missingBlockingValues.toArray(
-				new BlockingValue[0]);
+	private static String prettyPrintMissingBlockingValues(Collection<IBlockingValue> missingBlockingValues) {
+		IBlockingValue[] array =
+			(IBlockingValue[]) missingBlockingValues.toArray(
+				new IBlockingValue[0]);
 		return prettyPrintMissingBlockingValues(array);
 	}
 
-	private static String prettyPrintMissingBlockingValues(BlockingValue[] missingBlockingValues) {
+	private static String prettyPrintMissingBlockingValues(IBlockingValue[] missingBlockingValues) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		pw.print("Missing blocking values: { ");

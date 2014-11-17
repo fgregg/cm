@@ -29,7 +29,7 @@ public class BlockingGenerator implements GeneratorPlugin {
 	public void generate(IGenerator g) throws GenException {
 		filesAdded = false;
 		g.addAccessorImport("import com.choicemaker.cm.io.blocking.automated.base.*;" + Constants.LINE_SEPARATOR);
-		g.addAccessorImplements(", com.choicemaker.cm.io.blocking.automated.base.BlockingAccessor");
+		g.addAccessorImplements(", com.choicemaker.cm.io.blocking.automated.BlockingAccessor");
 		String directoryName = g.getSourceCodePackageRoot() + File.separator + "blocking";
 		new File(directoryName).mkdir();
 		BlockingConfigurationsGenerator.instance.generate(g);
