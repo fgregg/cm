@@ -7,15 +7,20 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
+import com.choicemaker.cm.io.blocking.automated.AbaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchJobProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 
@@ -38,6 +43,9 @@ public class TestEntities {
 	private Set<ServerConfiguration> serverConfigs = new LinkedHashSet<>();
 	private Set<DefaultServerConfigurationBean> defaultConfigs =
 		new LinkedHashSet<>();
+	private Set<AbaSettings> abaSettings = new LinkedHashSet<>();
+	private Set<OabaSettings> oabaSettings = new LinkedHashSet<>();
+	private Set<DefaultSettingsBean> defaultSettings = new LinkedHashSet<>();
 
 	public void add(BatchJob job) {
 		if (job != null) {
@@ -72,6 +80,24 @@ public class TestEntities {
 	public void add(DefaultServerConfigurationBean dscb) {
 		if (dscb != null) {
 			defaultConfigs.add(dscb);
+		}
+	}
+
+	public void add(AbaSettings aba) {
+		if (aba != null) {
+			abaSettings.add(aba);
+		}
+	}
+
+	public void add(OabaSettings oaba) {
+		if (oaba != null) {
+			oabaSettings.add(oaba);
+		}
+	}
+
+	public void add(DefaultSettingsBean dsb) {
+		if (dsb != null) {
+			defaultSettings.add(dsb);
 		}
 	}
 
@@ -123,7 +149,31 @@ public class TestEntities {
 		return retVal;
 	}
 
-	public void removePersistentObjects(EntityManager em) /* throws Exception */{
+	public boolean contains(AbaSettings aba) {
+		boolean retVal = false;
+		if (aba != null) {
+			retVal = abaSettings.contains(aba);
+		}
+		return retVal;
+	}
+
+	public boolean contains(OabaSettings oaba) {
+		boolean retVal = false;
+		if (oaba != null) {
+			retVal = oabaSettings.contains(oaba);
+		}
+		return retVal;
+	}
+
+	public boolean contains(DefaultSettingsBean dsb) {
+		boolean retVal = false;
+		if (dsb != null) {
+			retVal = defaultSettings.contains(dsb);
+		}
+		return retVal;
+	}
+
+	public void removePersistentObjects(EntityManager em) {
 		try {
 			removePersistentObjects(em, null);
 		} catch (Exception e) {
@@ -263,12 +313,84 @@ public class TestEntities {
 				usingUtx = true;
 			}
 			DefaultServerConfigurationBean refresh =
-				em.find(DefaultServerConfigurationBean.class, dscb.getHostName());
+				em.find(DefaultServerConfigurationBean.class,
+						dscb.getHostName());
 			if (refresh != null) {
 				em.merge(refresh);
 				boolean isManaged = em.contains(refresh);
 				if (!isManaged) {
-					logger.warning("BatchJob " + refresh.getHostName()
+					logger.warning("Default server configuration " + refresh.getHostName()
+							+ " is not managed");
+				} else {
+					em.remove(refresh);
+				}
+			}
+			if (usingUtx) {
+				utx.commit();
+			}
+		}
+		for (AbaSettings aba : abaSettings) {
+			if (AbaSettingsBean.isPersistent(aba)) {
+				boolean usingUtx = false;
+				if (utx != null) {
+					utx.begin();
+					usingUtx = true;
+				}
+				AbaSettingsBean refresh =
+					em.find(AbaSettingsBean.class, aba.getId());
+				if (refresh != null) {
+					em.merge(refresh);
+					boolean isManaged = em.contains(refresh);
+					if (!isManaged) {
+						logger.warning("AbaSettings " + refresh.getId()
+								+ " is not managed");
+					} else {
+						em.remove(refresh);
+					}
+				}
+				if (usingUtx) {
+					utx.commit();
+				}
+			}
+		}
+		for (OabaSettings oaba : oabaSettings) {
+			if (OabaSettingsBean.isPersistent(oaba)) {
+				boolean usingUtx = false;
+				if (utx != null) {
+					utx.begin();
+					usingUtx = true;
+				}
+				OabaSettingsBean refresh =
+					em.find(OabaSettingsBean.class, oaba.getId());
+				if (refresh != null) {
+					em.merge(refresh);
+					boolean isManaged = em.contains(refresh);
+					if (!isManaged) {
+						logger.warning("OabaSettings " + refresh.getId()
+								+ " is not managed");
+					} else {
+						em.remove(refresh);
+					}
+				}
+				if (usingUtx) {
+					utx.commit();
+				}
+			}
+		}
+		for (DefaultSettingsBean dscb : defaultSettings) {
+			boolean usingUtx = false;
+			if (utx != null) {
+				utx.begin();
+				usingUtx = true;
+			}
+			DefaultSettingsBean refresh =
+				em.find(DefaultSettingsBean.class,
+						dscb.getPrimaryKey());
+			if (refresh != null) {
+				em.merge(refresh);
+				boolean isManaged = em.contains(refresh);
+				if (!isManaged) {
+					logger.warning("Default settings " + refresh.getPrimaryKey()
 							+ " is not managed");
 				} else {
 					em.remove(refresh);
