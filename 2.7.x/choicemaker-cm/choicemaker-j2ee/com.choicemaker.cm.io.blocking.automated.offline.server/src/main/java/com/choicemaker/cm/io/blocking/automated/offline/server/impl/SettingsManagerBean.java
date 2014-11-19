@@ -95,7 +95,7 @@ public class SettingsManagerBean implements SettingsManager {
 	}
 
 	@Override
-	public AbaSettings setDefaultAbaConfiguration(
+	public DefaultSettingsBean setDefaultAbaConfiguration(
 			ImmutableProbabilityModel model, String databaseConfiguration,
 			String blockingConfiguration, AbaSettings settings) {
 		if (settings == null) {
@@ -109,31 +109,33 @@ public class SettingsManagerBean implements SettingsManager {
 					blockingConfiguration);
 
 		// Remove the existing default if it is different
-		AbaSettings retVal = null;
+		AbaSettings aba = null;
 		DefaultSettingsBean old = em.find(DefaultSettingsBean.class, pk);
 		if (old != null) {
-			retVal = findAbaSettings(old.getSettingsId());
-			if (!settings.equals(retVal)) {
-				retVal = null;
+			aba = findAbaSettings(old.getSettingsId());
+			if (!settings.equals(aba)) {
+				aba = null;
 				em.remove(old);
 			}
 		}
 
 		// Conditionally save the specified settings as the new default
-		if (retVal == null) {
-			retVal = save(settings);
-			DefaultSettingsBean bean =
-				new DefaultSettingsBean(pk, retVal.getId());
-			em.persist(bean);
+		DefaultSettingsBean retVal = null;
+		if (aba == null) {
+			aba = save(settings);
+			retVal =
+				new DefaultSettingsBean(pk, aba.getId());
+			em.persist(retVal);
 		}
 		assert retVal != null;
-		assert retVal.getId() != OabaSettingsBean.NONPERSISTENT_ABA_SETTINGS_ID;
+		assert aba != null;
+		assert aba.getId() != OabaSettingsBean.NONPERSISTENT_ABA_SETTINGS_ID;
 
 		return retVal;
 	}
 
 	@Override
-	public OabaSettings setDefaultOabaConfiguration(
+	public DefaultSettingsBean setDefaultOabaConfiguration(
 			ImmutableProbabilityModel model, String databaseConfiguration,
 			String blockingConfiguration, OabaSettings settings) {
 		if (settings == null) {
@@ -147,25 +149,27 @@ public class SettingsManagerBean implements SettingsManager {
 					blockingConfiguration);
 
 		// Remove the existing default if it is different
-		OabaSettings retVal = null;
+		OabaSettings oaba = null;
 		DefaultSettingsBean old = em.find(DefaultSettingsBean.class, pk);
 		if (old != null) {
-			retVal = findOabaSettings(old.getSettingsId());
-			if (!settings.equals(retVal)) {
-				retVal = null;
+			oaba = findOabaSettings(old.getSettingsId());
+			if (!settings.equals(oaba)) {
+				oaba = null;
 				em.remove(old);
 			}
 		}
 
 		// Conditionally save the specified settings as the new default
-		if (retVal == null) {
-			retVal = save(settings);
-			DefaultSettingsBean bean =
-				new DefaultSettingsBean(pk, retVal.getId());
-			em.persist(bean);
+		DefaultSettingsBean retVal = null;
+		if (oaba == null) {
+			oaba = save(settings);
+			retVal =
+				new DefaultSettingsBean(pk, oaba.getId());
+			em.persist(retVal);
 		}
 		assert retVal != null;
-		assert retVal.getId() != OabaSettingsBean.NONPERSISTENT_ABA_SETTINGS_ID;
+		assert oaba != null;
+		assert oaba.getId() != OabaSettingsBean.NONPERSISTENT_ABA_SETTINGS_ID;
 
 		return retVal;
 	}

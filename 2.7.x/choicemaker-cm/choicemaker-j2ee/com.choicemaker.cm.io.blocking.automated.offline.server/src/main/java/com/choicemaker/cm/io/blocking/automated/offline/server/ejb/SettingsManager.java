@@ -22,11 +22,11 @@ public interface SettingsManager {
 
 	OabaSettings findOabaSettings(long id);
 
-	AbaSettings setDefaultAbaConfiguration(
+	DefaultSettingsBean setDefaultAbaConfiguration(
 			ImmutableProbabilityModel model, String databaseConfiguration,
 			String blockingConfiguration, AbaSettings aba);
 
-	OabaSettings setDefaultOabaConfiguration(ImmutableProbabilityModel model,
+	DefaultSettingsBean setDefaultOabaConfiguration(ImmutableProbabilityModel model,
 			String databaseConfiguration, String blockingConfiguration,
 			OabaSettings oaba);
 

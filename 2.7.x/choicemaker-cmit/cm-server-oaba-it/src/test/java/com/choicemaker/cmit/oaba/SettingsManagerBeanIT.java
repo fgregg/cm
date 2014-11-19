@@ -47,6 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.AbaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsBean;
 import com.choicemaker.cmit.utils.MutableProbabilityModelStub;
 import com.choicemaker.cmit.utils.TestEntities;
@@ -335,21 +336,26 @@ public class SettingsManagerBeanIT {
 		mpm.blockingConfigurationName = b0;
 		final AbaSettings aba0 = scm.findDefaultAbaSettings(mpm, d0, b0);
 		assertTrue(aba0 == null);
-		
+
 		// Create random ABA settings, save them and set them as a default
 		final AbaSettings aba1 = randomAbaSettings();
 		te.add(aba1);
 		final AbaSettings aba2 = scm.save(aba1);
 		te.add(aba2);
-		scm.setDefaultAbaConfiguration(mpm, d0, b0, aba2);
-		
+		final DefaultSettingsBean dsb2 =
+			scm.setDefaultAbaConfiguration(mpm, d0, b0, aba2);
+		te.add(dsb2);
+
 		// Retrieve the default and check the settings
 		final AbaSettings aba3 = scm.findDefaultAbaSettings(mpm, d0, b0);
 		te.add(aba3);
 		assertTrue(aba3 != null);
-		assertTrue(aba3.getLimitPerBlockingSet() == aba1.getLimitPerBlockingSet());
-		assertTrue(aba3.getLimitSingleBlockingSet() == aba1.getLimitSingleBlockingSet());
-		assertTrue(aba3.getSingleTableBlockingSetGraceLimit() == aba1.getSingleTableBlockingSetGraceLimit());
+		assertTrue(aba3.getLimitPerBlockingSet() == aba1
+				.getLimitPerBlockingSet());
+		assertTrue(aba3.getLimitSingleBlockingSet() == aba1
+				.getLimitSingleBlockingSet());
+		assertTrue(aba3.getSingleTableBlockingSetGraceLimit() == aba1
+				.getSingleTableBlockingSetGraceLimit());
 
 		// Clean up the database
 		try {
@@ -377,21 +383,26 @@ public class SettingsManagerBeanIT {
 		mpm.blockingConfigurationName = b0;
 		final OabaSettings oaba0 = scm.findDefaultOabaSettings(mpm, d0, b0);
 		assertTrue(oaba0 == null);
-		
+
 		// Create random OABA settings, save them and set them as a default
 		final OabaSettings oaba1 = randomOabaSettings();
 		te.add(oaba1);
 		final OabaSettings oaba2 = scm.save(oaba1);
 		te.add(oaba2);
-		scm.setDefaultOabaConfiguration(mpm, d0, b0, oaba2);
-		
+		final DefaultSettingsBean dsb2 =
+			scm.setDefaultOabaConfiguration(mpm, d0, b0, oaba2);
+		te.add(dsb2);
+
 		// Retrieve the default and check the settings
 		final OabaSettings oaba3 = scm.findDefaultOabaSettings(mpm, d0, b0);
 		te.add(oaba3);
 		assertTrue(oaba3 != null);
-		assertTrue(oaba3.getLimitPerBlockingSet() == oaba1.getLimitPerBlockingSet());
-		assertTrue(oaba3.getLimitSingleBlockingSet() == oaba1.getLimitSingleBlockingSet());
-		assertTrue(oaba3.getSingleTableBlockingSetGraceLimit() == oaba1.getSingleTableBlockingSetGraceLimit());
+		assertTrue(oaba3.getLimitPerBlockingSet() == oaba1
+				.getLimitPerBlockingSet());
+		assertTrue(oaba3.getLimitSingleBlockingSet() == oaba1
+				.getLimitSingleBlockingSet());
+		assertTrue(oaba3.getSingleTableBlockingSetGraceLimit() == oaba1
+				.getSingleTableBlockingSetGraceLimit());
 		assertTrue(oaba3.getMaxBlockSize() == oaba1.getMaxBlockSize());
 		assertTrue(oaba3.getMaxChunkSize() == oaba1.getMaxChunkSize());
 		assertTrue(oaba3.getMaxOversized() == oaba1.getMaxOversized());
@@ -407,5 +418,5 @@ public class SettingsManagerBeanIT {
 		}
 		logExiting(METHOD);
 	}
-	
+
 }
