@@ -1,6 +1,8 @@
 package com.choicemaker.cm.io.blocking.automated;
 
-public interface IBlockingSet {
+import java.io.Serializable;
+
+public interface IBlockingSet extends Serializable {
 
 	int numFields();
 

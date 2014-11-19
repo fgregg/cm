@@ -1,6 +1,8 @@
 package com.choicemaker.cm.io.blocking.automated;
 
-public interface IBlockingValue extends Cloneable {
+import java.io.Serializable;
+
+public interface IBlockingValue extends Cloneable, Serializable {
 
 	public Object clone();
 

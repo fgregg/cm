@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated;
 
+import java.io.Serializable;
+
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 
 /**
@@ -20,10 +22,16 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
  * in their interface makes it clear that their value rarely change and are
  * typically reused between many matching jobs.
  * 
+ * @see com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultAbaSettingsBean
+ * 
  * @author rphall
  *
  */
-public interface AutomatedBlockingSettings {
+public interface AbaSettings extends Serializable {
+
+	int DEFAULT_LIMIT_PER_BLOCKING_SET = 50;
+	int DEFAULT_LIMIT_SINGLE_BLOCKING_SET = 100;
+	int DEFAULT_SINGLE_TABLE_GRACE_LIMIT = 200;
 
 	/** Default id value for non-persistent settings */
 	long NONPERSISTENT_ABA_SETTINGS_ID = 0;
@@ -34,5 +42,23 @@ public interface AutomatedBlockingSettings {
 	 * persistent.
 	 */
 	long getId();
+
+	/**
+	 * The maximum of size of a blocking set before it must be refined by
+	 * qualifying it with additional blocking values.
+	 */
+	int getLimitPerBlockingSet();
+
+	/**
+	 * A special exemption to the {@link #getLimitPerBlockingSet() general limit
+	 * on blocking set size}
+	 */
+	int getLimitSingleBlockingSet();
+
+	/**
+	 * Another special exemption to the {@link #getLimitPerBlockingSet() general
+	 * limit on blocking set size}
+	 */
+	int getSingleTableBlockingSetGraceLimit();
 
 }

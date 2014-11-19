@@ -1,6 +1,8 @@
 package com.choicemaker.cm.io.blocking.automated;
 
-public interface IField {
+import java.io.Serializable;
+
+public interface IField extends Serializable {
 
 	IField[][] getIllegalCombinations();
 
