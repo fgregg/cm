@@ -16,6 +16,9 @@
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsBean</class>
     <!--
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
     -->
@@ -42,6 +45,9 @@
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsBean</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsBean</class>
 
     <properties>
       <property name="eclipselink.target-server" value="JBoss" />

@@ -175,7 +175,7 @@ public class SettingsManagerBean implements SettingsManager {
 			String databaseConfiguration, String blockingConfiguration) {
 		final DefaultSettingsPK pk =
 			new DefaultSettingsPK(model.getModelName(),
-					OabaSettingsJPA.DISCRIMINATOR_VALUE, databaseConfiguration,
+					AbaSettingsJPA.DISCRIMINATOR_VALUE, databaseConfiguration,
 					blockingConfiguration);
 		DefaultSettingsBean dsb = em.find(DefaultSettingsBean.class, pk);
 		AbaSettings retVal = null;

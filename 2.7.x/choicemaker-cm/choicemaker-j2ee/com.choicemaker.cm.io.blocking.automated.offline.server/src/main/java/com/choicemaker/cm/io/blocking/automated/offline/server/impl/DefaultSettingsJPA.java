@@ -19,11 +19,11 @@ public interface DefaultSettingsJPA {
 	String QN_DSET_FIND_ALL_ABA = "defaultSettingsFindAllAba";
 
 	String JPQL_DSET_FIND_ALL_ABA =
-		"Select dsb from DefaultSettingsBean dsb where dsb.type = 'ABA'";
+		"Select dsb from DefaultSettingsBean dsb where dsb.key.type = 'ABA'";
 
 	String QN_DSET_FIND_ALL_OABA = "defaultSettingsFindAllOaba";
 
 	String JPQL_DSET_FIND_ALL_OABA =
-		"Select dsb from DefaultSettingsBean dsb where dsb.type = 'OABA'";
+		"Select dsb from DefaultSettingsBean dsb where dsb.key.type = 'OABA'";
 
 }
