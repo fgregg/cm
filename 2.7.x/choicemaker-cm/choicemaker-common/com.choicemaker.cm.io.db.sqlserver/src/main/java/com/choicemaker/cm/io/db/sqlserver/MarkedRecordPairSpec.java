@@ -28,5 +28,10 @@ public class MarkedRecordPairSpec {
 	public Decision getDecision() {
 		return d;
 	}
+
+	public String toString() {
+		return "MarkedRecordPairSpec [qId=" + qId + ", mId=" + mId + ", d=" + d
+				+ "]";
+	}
 	
 }

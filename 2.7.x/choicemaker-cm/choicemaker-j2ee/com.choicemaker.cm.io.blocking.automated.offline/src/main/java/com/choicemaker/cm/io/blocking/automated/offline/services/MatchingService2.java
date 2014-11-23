@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher2;
@@ -41,8 +41,8 @@ public class MatchingService2 {
 	private IChunkDataSinkSourceFactory stageFactory;
 	private IChunkDataSinkSourceFactory masterFactory;
 	private IComparisonArraySinkSourceFactory cgFactory;
-	private IProbabilityModel stageModel;
-	private IProbabilityModel masterModel;
+	private ImmutableProbabilityModel stageModel;
+	private ImmutableProbabilityModel masterModel;
 	private IMatchRecord2Sink mSink;
 	private IBlockMatcher2 matcher;
 	private float low;
@@ -83,12 +83,13 @@ public class MatchingService2 {
 	 * @param maxBlockSize - maximum size of a regular block.  blocks of size > maxBlockSize is an
 	 * 		oversized block.
 	 */
-	public MatchingService2 (IChunkDataSinkSourceFactory stageFactory, 
-		IChunkDataSinkSourceFactory masterFactory, 
-		IComparisonArraySinkSourceFactory cgFactory,
-		IProbabilityModel stageModel, IProbabilityModel masterModel, 
-		IMatchRecord2Sink mSink, IBlockMatcher2 matcher,
-		float low, float high, int maxBlockSize, OabaProcessing status) {
+	public MatchingService2(IChunkDataSinkSourceFactory stageFactory,
+			IChunkDataSinkSourceFactory masterFactory,
+			IComparisonArraySinkSourceFactory cgFactory,
+			ImmutableProbabilityModel stageModel,
+			ImmutableProbabilityModel masterModel, IMatchRecord2Sink mSink,
+			IBlockMatcher2 matcher, float low, float high, int maxBlockSize,
+			OabaProcessing status) {
 		
 		this.stageFactory = stageFactory;
 		this.masterFactory = masterFactory;
@@ -190,7 +191,8 @@ public class MatchingService2 {
 			log.info ("matching " + cgSource.getInfo());
 			MemoryEstimator.writeMem();
 			
-			matcher.matchBlocks(cgSource, stageModel, masterModel, stage, master, mSink, true, low, high, maxBlockSize);
+			matcher.matchBlocks(cgSource, stageModel, masterModel, stage,
+					master, mSink, true, low, high, maxBlockSize);
 			
 			int b = matcher.getNumBlocks();
 			int c = matcher.getNumComparesMade();

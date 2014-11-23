@@ -31,6 +31,9 @@ import com.choicemaker.cm.transitivity.server.data.TransitivityJobStatus;
  */
 public interface TransitivityOABAService extends EJBObject {
 	
+	  String DEFAULT_EJB_REF_NAME = "ejb/TransitivityOABAService";
+	  String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
+
 //	/**
 //	 * This method starts the transitivity engine.  
 //	 * WARNINGS: 

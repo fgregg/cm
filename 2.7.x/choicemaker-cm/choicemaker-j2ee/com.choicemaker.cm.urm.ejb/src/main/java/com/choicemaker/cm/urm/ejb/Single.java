@@ -34,17 +34,16 @@ import javax.persistence.EntityManager;
 import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-//import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParametersHome;
-//import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAService;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAServiceHome;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
@@ -64,9 +63,9 @@ public class Single implements Serializable {
 
 	// ENC Session Bean names
 //	private static final String BATCH_QUERY_SERVICE =
-//		"java:comp/env/ejb/BatchQueryService";
-	private static final String TRANSITIVITY_OABA_SERVICE =
-		"java:comp/env/ejb/TransitivityOABAService";
+//		"java:comp/env/ejb/OabaService";
+//	private static final String TRANSITIVITY_OABA_SERVICE =
+//		"java:comp/env/ejb/TransitivityOABAService";
 	private static final String TRANSITIVITY_SERIALIZER =
 		"java:comp/env/ejb/TransSerializer";
 
@@ -78,7 +77,7 @@ public class Single implements Serializable {
 		"java:comp/env/ejb/UrmSerializationJob";
 	private static final String URM_STEP_JOB = "java:comp/env/ejb/UrmStepJob";
 //	private static final String EJB_BATCH_PARAMS =
-//		"java:comp/env/ejb/BatchParameters";
+//		"java:comp/env/ejb/TransitivityParameters";
 
 	// ENC Connection Factory names
 	public final static String ENC_JNDI_TOPIC_CONNECTION_FACTORY =
@@ -107,7 +106,7 @@ public class Single implements Serializable {
 	public static final int DEFAULT_MAX_DB_COLLECTION_CHUNK_SIZE = 100000;
 
 	// Cached EJB remote proxies
-//	private transient BatchQueryService batchQueryService = null;
+//	private transient OabaService batchQueryService = null;
 	private transient TransitivityOABAService transOABAService = null;
 	private transient TransSerializer transSerializer = null;
 
@@ -125,15 +124,16 @@ public class Single implements Serializable {
 	// Cached JNDI context
 	private transient InitialContext initContext = null;
 
+	// @EBJ
+	OabaJobControllerBean oabaJobControllerBean;
+
 	// Singleton instance
-	private static Single me = null;
+	private static Single me = new Single();
 
 	private Single() {
 	}
 
 	public static Single getInst() {
-		if (me == null)
-			me = new Single();
 		return me;
 	}
 
@@ -152,27 +152,28 @@ public class Single implements Serializable {
 	public TransitivityOABAService getTransitivityOABAService()
 		throws ConfigException, CmRuntimeException {
 		if (transOABAService == null) {
-			try {
-				Context ctx = getInitialContext(); //naming ex
-				Object homeRef = ctx.lookup(TRANSITIVITY_OABA_SERVICE);
-				TransitivityOABAServiceHome trServiceHome =
-					(TransitivityOABAServiceHome) PortableRemoteObject.narrow(
-						homeRef,
-						TransitivityOABAServiceHome.class);
-				transOABAService = trServiceHome.create();
-			} catch (ClassCastException e) {
-				log.severe(e.toString());
-				throw new CmRuntimeException(e.toString());
-			} catch (RemoteException e) {
-				log.severe(e.toString());
-				throw new CmRuntimeException(e.toString());
-			} catch (NamingException e) {
-				log.severe(e.toString());
-				throw new ConfigException(e.toString());
-			} catch (CreateException e) {
-				log.severe(e.toString());
-				throw new ConfigException(e.toString());
-			}
+			throw new Error("not yet implemented");
+//			try {
+//				Context ctx = getInitialContext(); //naming ex
+//				Object homeRef = ctx.lookup(TRANSITIVITY_OABA_SERVICE);
+//				TransitivityOABAServiceHome trServiceHome =
+//					(TransitivityOABAServiceHome) PortableRemoteObject.narrow(
+//						homeRef,
+//						TransitivityOABAServiceHome.class);
+//				transOABAService = trServiceHome.create();
+//			} catch (ClassCastException e) {
+//				log.severe(e.toString());
+//				throw new CmRuntimeException(e.toString());
+//			} catch (RemoteException e) {
+//				log.severe(e.toString());
+//				throw new CmRuntimeException(e.toString());
+//			} catch (NamingException e) {
+//				log.severe(e.toString());
+//				throw new ConfigException(e.toString());
+//			} catch (CreateException e) {
+//				log.severe(e.toString());
+//				throw new ConfigException(e.toString());
+//			}
 		}
 		return transOABAService;
 	}
@@ -422,26 +423,27 @@ public class Single implements Serializable {
 				switch (si) {
 					case BatchMatchAnalyzerBean.BATCH_MATCH_STEP_INDEX :
 						{
-							BatchJob job = findBatchJobById(em, BatchJobBean.class, stepJobId);
+							BatchJob job = findBatchJobById(em, OabaJobEntity.class, stepJobId);
 							if (job != null) {
-								EJBConfiguration.getInstance().deleteBatchJob(em, job);
+								oabaJobControllerBean.delete(job);
 							}
 						}
 						break;
 					case BatchMatchAnalyzerBean.TRANS_OABA_STEP_INDEX :
 						{
-							BatchJob job = findBatchJobById(em, TransitivityJobBean.class, stepJobId);
+							BatchJob job = findBatchJobById(em, TransitivityJobEntity.class, stepJobId);
 							assert job instanceof TransitivityJob ;
 							if (job != null) {
-								EJBConfiguration.getInstance().deleteBatchJob(em, job);
+								oabaJobControllerBean.delete(job);
 							}
 						}
 						break;
 					case BatchMatchAnalyzerBean.TRANS_SERIAL_STEP_INDEX :
 						{
-							CmsJob cj =
-								Single.getInst().findCmsJobById(stepJobId);
-							cj.remove();
+					CmsJobBean cj =
+						(CmsJobBean) em.find(CmsJobBean.class,
+								Long.valueOf(stepJobId));
+					em.remove(cj);
 						}
 						break;
 					default :
@@ -472,15 +474,12 @@ public class Single implements Serializable {
 	}
 
 	public BatchJob findBatchJobById(EntityManager em, Class c, long id) {
-		BatchJob retVal =
-			EJBConfiguration.getInstance().findBatchJobById(em, c, id);
+		BatchJob retVal = (BatchJob) em.find(OabaJobEntity.class, Long.valueOf(id));
 		return retVal;
 	}
 
 	public void deleteBatchJob(EntityManager em, BatchJob job) {
-		if (job != null) {
-			EJBConfiguration.getInstance().deleteBatchJob(em, job);
-		}
+		oabaJobControllerBean.delete(job);
 	}
 
 //	private BatchParametersHome getBatchParamsHome() throws NamingException {
@@ -496,10 +495,14 @@ public class Single implements Serializable {
 //		return batchParamsHome;
 //	}
 
-	public BatchParameters findBatchParamsById(EntityManager em, long id)
+	public OabaParameters findBatchParamsById(EntityManager em, long id)
 			throws CmRuntimeException, ConfigException {
-		BatchParameters retVal =
-			EJBConfiguration.getInstance().findBatchParamsByJobId(em, id);
+		OabaJob oabaJob =
+			(OabaJob) em.find(OabaJobEntity.class, Long.valueOf(id));
+		long paramsId = oabaJob.getParametersId();
+		OabaParameters retVal =
+			(OabaParameters) em.find(OabaParametersEntity.class,
+					Long.valueOf(paramsId));
 		return retVal;
 	}
 
@@ -507,7 +510,7 @@ public class Single implements Serializable {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		List jobs = EJBConfiguration.getInstance().findAllBatchJobs(em);
+		List jobs = oabaJobControllerBean.findAll();
 		return jobs;
 	}
 

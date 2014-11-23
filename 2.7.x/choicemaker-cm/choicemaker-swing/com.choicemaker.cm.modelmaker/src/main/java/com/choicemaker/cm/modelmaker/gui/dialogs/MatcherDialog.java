@@ -141,8 +141,8 @@ public class MatcherDialog extends JDialog implements Enable {
 	private final boolean default_isFiltered = true;
 //	private final boolean[] default_filters =
 //		new boolean[] { default_isFiltered, default_isFiltered, default_isFiltered };
-	private final float default_probablityLowerBound = ImmutableThresholds.MIN_VALUE;
-	private final float default_probablityUpperBound = ImmutableThresholds.MAX_VALUE;
+	private final float default_probablityLowerBound = (float) ImmutableThresholds.MIN_VALUE;
+	private final float default_probablityUpperBound = (float) ImmutableThresholds.MAX_VALUE;
 
 	private void loadItems() {
 		Preferences prefs = Preferences.userNodeForPackage(MatcherDialog.class);

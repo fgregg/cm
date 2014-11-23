@@ -17,15 +17,41 @@ package com.choicemaker.cm.core.base;
  */
 public class ImmutableThresholds implements Cloneable {
 
-	public static final float MAX_VALUE = 1.01f;
-
-	public static final float MIN_VALUE = 0.0f;
-
 	public static final float PRECISION = 0.000001f;
+	
+	public static final double MAX_VALUE = 1.00f;
 
-	private float differThreshold;
+	public static final double MIN_VALUE = 0.0f;
 
-	private float matchThreshold;
+	/**
+	 * Checks that both thresholds are valid, and that the low threshold
+	 * is not greater than the high threshold. If any of these constraints
+	 * are violated, an IllegalArgumentException is thrown.
+	 * @param lowThreshold
+	 * @param highThreshold
+	 * @throws IllegalArgumentException if:<ul>
+	 * <li/> {@link #differThreshold differThreshold} is greater than {@link #MAX_VALUE MAX_VALUE}
+	 * <li/> {@link #differThreshold differThreshold} is less than {@link #MIN_VALUE MIN_VALUE}
+	 * <li/> {@link #matchThreshold matchThreshold} is greater than {@link #MAX_VALUE MAX_VALUE}
+	 * <li/> {@link #matchThreshold matchThreshold} is less than {@link #MIN_VALUE MIN_VALUE}
+	 * <li/> {@link #differThreshold differThreshold} is greater than {@link #matchThreshold matchThreshold}
+	 * </ul>
+	 */
+	public static void validate(double lowThreshold, double highThreshold) {
+		if (lowThreshold > MAX_VALUE || lowThreshold < MIN_VALUE
+				|| highThreshold > MAX_VALUE || highThreshold < MIN_VALUE
+				|| lowThreshold > highThreshold) {
+			String msg =
+				"The low threshold '" + lowThreshold
+						+ "' or the high threshold '" + highThreshold
+						+ "' violates the Threshold constraints";
+			throw new IllegalArgumentException(msg);
+		}
+	}
+
+	private double differThreshold;
+
+	private double matchThreshold;
 
 	/**
 	 * Enforces {@link #invariant()}
@@ -33,6 +59,10 @@ public class ImmutableThresholds implements Cloneable {
 	 * @param mt the match threshold
 	 */
 	public ImmutableThresholds(float dt, float mt) {
+		this((double)dt, (double)mt);
+	}
+	
+	protected ImmutableThresholds(double dt, double mt) {
 		this.differThreshold = dt;
 		this.matchThreshold = mt;
 		// Fail fast
@@ -90,7 +120,7 @@ public class ImmutableThresholds implements Cloneable {
 	 * @return value of differThreshold.
 	 */
 	public float getDifferThreshold() {
-		return differThreshold;
+		return (float) differThreshold;
 	}
 
 	/**
@@ -98,7 +128,7 @@ public class ImmutableThresholds implements Cloneable {
 	 * @return value of matchThreshold.
 	 */
 	public float getMatchThreshold() {
-		return matchThreshold;
+		return (float) matchThreshold;
 	}
 
 	public Thresholds getMutableCopy() {
@@ -122,21 +152,13 @@ public class ImmutableThresholds implements Cloneable {
 	 * </ul>
 	 */
 	public void invariant() {
-		String msg =
-			"differThreshold '"
-				+ differThreshold
-				+ "' or matchThreshold '"
-				+ matchThreshold
-				+ "' violates the Thresholds invariant";
-		if (this.getDifferThreshold() > MAX_VALUE) {
-			throw new IllegalStateException(msg);
-		} else if (this.differThreshold < MIN_VALUE) {
-			throw new IllegalStateException(msg);
-		} else if (this.matchThreshold > MAX_VALUE) {
-			throw new IllegalStateException(msg);
-		} else if (this.matchThreshold < MIN_VALUE) {
-			throw new IllegalStateException(msg);
-		} else if (this.differThreshold > this.matchThreshold) {
+		if (differThreshold > MAX_VALUE || differThreshold < MIN_VALUE
+				|| matchThreshold > MAX_VALUE || matchThreshold < MIN_VALUE
+				|| differThreshold > matchThreshold) {
+			String msg =
+				"differThreshold '" + differThreshold + "' or matchThreshold '"
+						+ matchThreshold
+						+ "' violates the Thresholds invariant";
 			throw new IllegalStateException(msg);
 		}
 	}
@@ -145,7 +167,7 @@ public class ImmutableThresholds implements Cloneable {
 	 * Enforces {@link #invariant()}
 	 * @param v
 	 */
-	protected void setDifferThreshold(float v) {
+	protected void setDifferThreshold(double v) {
 		differThreshold = v;
 		// Fail fast
 		invariant();
@@ -155,7 +177,7 @@ public class ImmutableThresholds implements Cloneable {
 	 * Enforces {@link #invariant()}
 	 * @param v  Value to assign to matchThreshold.
 	 */
-	protected void setMatchThreshold(float v) {
+	protected void setMatchThreshold(double v) {
 		matchThreshold = v;
 		// Fail fast
 		invariant();

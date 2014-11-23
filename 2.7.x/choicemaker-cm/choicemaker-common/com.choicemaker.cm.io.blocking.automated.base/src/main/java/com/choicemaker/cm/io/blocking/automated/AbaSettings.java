@@ -29,6 +29,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
  */
 public interface AbaSettings extends Serializable {
 
+	int DEFAULT_MAX_SINGLE = 0;
 	int DEFAULT_LIMIT_PER_BLOCKING_SET = 50;
 	int DEFAULT_LIMIT_SINGLE_BLOCKING_SET = 100;
 	int DEFAULT_SINGLE_TABLE_GRACE_LIMIT = 200;

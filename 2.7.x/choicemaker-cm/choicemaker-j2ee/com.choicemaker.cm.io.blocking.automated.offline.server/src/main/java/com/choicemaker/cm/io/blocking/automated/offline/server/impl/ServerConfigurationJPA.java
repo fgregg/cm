@@ -2,7 +2,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 
 /**
- * Java Persistence API (JPA) for BatchJob beans.<br/>
+ * Java Persistence API (JPA) for OabaJob beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>
@@ -51,9 +51,9 @@ public interface ServerConfigurationJPA {
 	/** Name of the query that finds all persistent server configurations */
 	String QN_SERVERCONFIG_FIND_ALL = "serverConfigFindAll";
 
-	/** JPQL used to implement {@link #QN_BATCHJOB_FIND_ALL} */
+	/** JPQL used to implement {@link #QN_OABAJOB_FIND_ALL} */
 	String JPQL_SERVERCONFIG_FIND_ALL =
-		"Select sc from ServerConfigurationBean sc";
+		"Select sc from ServerConfigurationEntity sc";
 
 	/**
 	 * Name of the query that finds all persistent server configurations with a
@@ -61,9 +61,9 @@ public interface ServerConfigurationJPA {
 	 */
 	String QN_SERVERCONFIG_FIND_BY_HOSTNAME = "serverConfigFindByHostName";
 
-	/** JPQL used to implement {@link #QN_BATCHJOB_FIND_ALL} */
+	/** JPQL used to implement {@link #QN_OABAJOB_FIND_ALL} */
 	String JPQL_SERVERCONFIG_FIND_BY_HOSTNAME =
-		"Select sc from ServerConfigurationBean sc where sc.hostName = :hostName";
+		"Select sc from ServerConfigurationEntity sc where sc.hostName = :hostName";
 
 	/**
 	 * Name of the parameter used to specify the hostName of
@@ -79,7 +79,7 @@ public interface ServerConfigurationJPA {
 
 	/** JPQL used to implement {@link #QN_SERVERCONFIG_FIND_BY_NAME} */
 	String JPQL_SERVERCONFIG_FIND_BY_NAME =
-		"Select sc from ServerConfigurationBean sc where sc.name = :name";
+		"Select sc from ServerConfigurationEntity sc where sc.name = :name";
 
 	/**
 	 * Name of the parameter used to specify the name of
@@ -95,7 +95,7 @@ public interface ServerConfigurationJPA {
 //
 //	/** JPQL used to implement {@link #QN_SERVERCONFIG_FIND_ANY_HOST} */
 //	String JPQL_SERVERCONFIG_FIND_ANY_HOST =
-//		"Select sc from ServerConfigurationBean sc where sc.name = '"
+//		"Select sc from ServerConfigurationEntity sc where sc.name = '"
 //				+ ServerConfiguration.ANY_HOST + "'";
 
 }

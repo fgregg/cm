@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 
 /**
@@ -40,12 +40,12 @@ public interface IBlockMatcher2<T extends Comparable<T>> {
 	 * @param match - match threshold
 	 * @param maxBlockSize - maximum block size
 	 */
-	public void matchBlocks (IComparisonArraySource<T> cgSource, IProbabilityModel stageModel, 
-		IProbabilityModel masterModel, 
-		RecordSource stage, RecordSource master, IMatchRecord2Sink<T> mSink, 
-		boolean append, float differ, float match, 
-		int maxBlockSize) throws BlockingException;
-		
+	public void matchBlocks(IComparisonArraySource<T> cgSource,
+			ImmutableProbabilityModel stageModel,
+			ImmutableProbabilityModel masterModel, RecordSource stage,
+			RecordSource master, IMatchRecord2Sink<T> mSink, boolean append,
+			float differ, float match, int maxBlockSize)
+			throws BlockingException;		
 	
 	/** This returns the number of comparisons made.  This is reset in the matchBlocks method.
 	 * 

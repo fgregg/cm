@@ -33,6 +33,9 @@ import com.choicemaker.cm.transitivity.core.TransitivityResult;
  */
 public interface TransitivityService extends EJBObject {
 
+	  String DEFAULT_EJB_REF_NAME = "ejb/TransitivityService";
+	  String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
+
 	/**
 	 * Finds matches and possible matches.
 	 * 

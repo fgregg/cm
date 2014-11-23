@@ -32,7 +32,8 @@ import javax.ejb.SessionContext;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.base.TextRefRecordCollection;
@@ -54,7 +55,7 @@ public class BatchMatchBaseBean implements SessionBean {
 	protected transient SessionContext sessionContext;	
 
 //	@EJB
-	private BatchQueryService batchQuery;
+	private OabaService batchQuery;
 
 	public BatchMatchBaseBean() {
 		super();
@@ -104,7 +105,7 @@ public class BatchMatchBaseBean implements SessionBean {
 									ConfigException,
 									ModelException,
 									CmRuntimeException, 
-									RemoteException
+									RemoteException, ServerConfigurationException
 	{	//TODO: check input parameters
 		log.fine("<< startBatchQueryService...");
 		IProbabilityModel model = PMManager.getModelInstance(modelName);
@@ -130,11 +131,12 @@ public class BatchMatchBaseBean implements SessionBean {
 			uj.markAsMatching();
 		}
 
-		final long retVal =
-			batchQuery.startOABA(externalId, staging, master, differThreshold,
-					matchThreshold, modelName, maxSingle, false);
-		log.fine(">> startBatchQueryService");
-		return retVal;
+		throw new Error("not yet implemented");
+//		final long retVal =
+//			batchQuery.startOABA(externalId, staging, master, differThreshold,
+//					matchThreshold, modelName, maxSingle, false);
+//		log.fine(">> startBatchQueryService");
+//		return retVal;
 	}
 
 	/**

@@ -17,30 +17,28 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonPair;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractMatcher;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
@@ -65,11 +63,17 @@ public class TransMatcher extends AbstractMatcher  {
 
 	private static final int INTERVAL = 50000;
 
-	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
+	@EJB
+	private OabaJobControllerBean jobController;
 
-//	@Resource
-//	private MessageDrivenContext mdc;
+	@EJB
+	private SettingsController settingsController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+	
+	@EJB
+	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
 	private Queue transMatchSchedulerQueue;
@@ -77,18 +81,30 @@ public class TransMatcher extends AbstractMatcher  {
 	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
 	private Queue updateQueue;
 
-//	@Resource(lookup = "java:/choicemaker/urm/jms/yyyQueue")
-//	private Queue yyyQueue;
-
 	@Inject
 	JMSContext jmsContext;
 
 	@Override
-	protected List handleComparisonSet (IComparisonSet cSet, BatchJob batchJob, 
+	protected OabaJobControllerBean getJobController() {
+		return jobController;
+	}
+
+	@Override
+	protected OabaParametersControllerBean getParametersController() {
+		return paramsController;
+	}
+
+	@Override
+	protected OabaProcessingControllerBean getProcessingController() {
+		return processingController;
+	}
+
+	@Override
+	protected List handleComparisonSet (IComparisonSet cSet, OabaJob oabaJob, 
 		ChunkDataStore dataStore, IProbabilityModel stageModel, ImmutableThresholds t) 
 		throws RemoteException, BlockingException {
 			
-		boolean stop = batchJob.shouldStop();
+		boolean stop = oabaJob.shouldStop();
 		ComparisonPair p;
 		Record q, m;
 		MatchRecord2 match;
@@ -100,7 +116,7 @@ public class TransMatcher extends AbstractMatcher  {
 			
 			compares ++;
 
-			stop = ControlChecker.checkStop (batchJob, compares, INTERVAL);
+			stop = ControlChecker.checkStop (oabaJob, compares, INTERVAL);
 
 			q = getQ(dataStore, p);
 			m = getM(dataStore, p);
@@ -128,27 +144,27 @@ public class TransMatcher extends AbstractMatcher  {
 	}
 
 	@Override
-	protected void writeMatches (StartData data, List<MatchRecord2> matches) throws BlockingException {
+	protected void writeMatches (OabaJobMessage data, List<MatchRecord2> matches) throws BlockingException {
 		//first figure out the correct file for this processor
-		OABAConfiguration oabaConfig = new OABAConfiguration(data.jobID);
-		IMatchRecord2Sink mSink = oabaConfig.getMatchChunkFactory().getSink(data.treeInd);
-		IComparableSink sink =  new ComparableMRSink (mSink);
-		
-		//write matches to this file.
-		sink.append();
-		sink.writeComparables(matches.iterator());
-		
-		//write the separator
-		MatchRecord2 mr = (MatchRecord2) matches.get(0);
-		mr = MatchRecord2Factory.getSeparator(mr.getRecordID1());
-		sink.writeComparable(mr);
-		
-		sink.close();
-		
+		throw new Error("not yet implemented");
+//		OabaFileUtils oabaConfig = new OabaFileUtils(data.jobID);
+//		IMatchRecord2Sink mSink = oabaConfig.getMatchChunkFactory().getSink(data.treeInd);
+//		IComparableSink sink =  new ComparableMRSink (mSink);
+//		
+//		//write matches to this file.
+//		sink.append();
+//		sink.writeComparables(matches.iterator());
+//		
+//		//write the separator
+//		MatchRecord2 mr = (MatchRecord2) matches.get(0);
+//		mr = MatchRecord2Factory.getSeparator(mr.getRecordID1());
+//		sink.writeComparable(mr);
+//		
+//		sink.close();
 	}
 
 	@Override
-	protected void sendToScheduler(MatchWriterData data) {
+	protected void sendToScheduler(MatchWriterMessage data) {
 		MessageBeanUtils.sendMatchWriterData(data, jmsContext,
 				transMatchSchedulerQueue, log);
 	}
@@ -161,11 +177,6 @@ public class TransMatcher extends AbstractMatcher  {
 	@Override
 	protected Logger getJMSTrace() {
 		return jmsTrace;
-	}
-
-	@Override
-	protected EntityManager getEntityManager() {
-		return em;
 	}
 
 }

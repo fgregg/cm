@@ -24,7 +24,7 @@ import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 /**
- * A BatchJobBean tracks the progress of a (long-running) batch
+ * A OabaJobEntity tracks the progress of a (long-running) batch
  * process. A successful request goes through a sequence of states: NEW, QUEUED,
  * STARTED, and COMPLETED. A request may be aborted at any point, in which
  * case it goes through the ABORT_REQUESTED and the ABORT states.</p>

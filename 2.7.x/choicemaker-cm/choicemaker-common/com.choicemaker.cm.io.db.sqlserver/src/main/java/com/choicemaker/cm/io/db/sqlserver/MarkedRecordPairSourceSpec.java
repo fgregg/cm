@@ -15,7 +15,6 @@ import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 
-
 class MarkedRecordPairSourceSpec {
 	private List spec;
 	public MarkedRecordPairSourceSpec() {
@@ -75,6 +74,10 @@ class MarkedRecordPairSourceSpec {
 		}
 		
 		return pairs;
+	}
+
+	public String toString() {
+		return "MarkedRecordPairSourceSpec [spec=" + spec + "]";
 	}
 	
 }

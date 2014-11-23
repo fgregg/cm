@@ -30,9 +30,9 @@ import javax.naming.Context;
 import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 import com.choicemaker.cm.transitivity.server.util.ClusteringIteratorFactory;
 import com.choicemaker.cm.transitivity.util.CompositeEntityIterator;
 import com.choicemaker.cm.transitivity.util.CompositeEntitySource;
@@ -114,7 +114,7 @@ public class TransSerializerMsgBean
 			}
 
 			TransitivityJob trJob =
-				Single.getInst().findTransJobById(em, TransitivityJobBean.class, tsd.batchId);
+				Single.getInst().findTransJobById(em, TransitivityJobEntity.class, tsd.batchId);
 			if (!trJob.getStatus().equals(TransitivityJob.STATUS_COMPLETED)) {
 				log.severe(
 					"transitivity job " + tsd.batchId + " is not complete");

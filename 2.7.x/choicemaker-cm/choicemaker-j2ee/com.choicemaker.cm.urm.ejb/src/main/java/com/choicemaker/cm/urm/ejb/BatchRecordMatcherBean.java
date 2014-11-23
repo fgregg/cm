@@ -25,12 +25,12 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -62,7 +62,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 	private EntityManager em;
 
 //	@EJB
-	private BatchQueryService batchQuery;
+	private OabaService batchQuery;
 
 	public BatchRecordMatcherBean() {
 		super();
@@ -86,17 +86,18 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 	{
 		log.fine("<< startMatching...");
 //		TODO: check input parameters
-		long id = startBatchQueryService(
-					qRs,
-					mRs,
-					modelName,
-					differThreshold,
-					matchThreshold,
-					maxSingle,
-					externalId,
-					null);	
-		log.fine (">> startMatching");
-		return id;
+		throw new Error("not yet implemented");
+//		long id = startBatchQueryService(
+//					qRs,
+//					mRs,
+//					modelName,
+//					differThreshold,
+//					matchThreshold,
+//					maxSingle,
+//					externalId,
+//					null);	
+//		log.fine (">> startMatching");
+//		return id;
 	}
 	
 	public JobStatus 			getJobStatus (
@@ -251,10 +252,10 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 		res = new long[jobColl.size()];
 		Iterator jobIter = jobColl.iterator();
 		int ind = 0;
-		BatchJob batchJob;
+		BatchJob oabaJob;
 		while (jobIter.hasNext()) {
-			batchJob = (BatchJob) jobIter.next();
-			res[ind++] = batchJob.getId(); 
+			oabaJob = (BatchJob) jobIter.next();
+			res[ind++] = oabaJob.getId(); 
 		}
 		log.fine(">>getJobList");
 		return res;
@@ -273,7 +274,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 	public boolean cleanJob(long jobID) throws CmRuntimeException {
 		try {
 			boolean ret = batchQuery.removeDir(jobID);
-			BatchJob bj = Single.getInst().findBatchJobById(em, BatchJobBean.class, jobID);
+			BatchJob bj = Single.getInst().findBatchJobById(em, OabaJobEntity.class, jobID);
 			Single.getInst().deleteBatchJob(em, bj);
 			return ret;
 		} catch (Exception e) {

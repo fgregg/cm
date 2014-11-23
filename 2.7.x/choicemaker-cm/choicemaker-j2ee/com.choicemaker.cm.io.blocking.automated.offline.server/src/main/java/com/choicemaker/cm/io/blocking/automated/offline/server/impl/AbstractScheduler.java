@@ -22,7 +22,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -34,12 +33,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
@@ -56,7 +54,11 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	
 	protected abstract Logger getJMSTrace();
 	
-	protected abstract EntityManager getEntityManager();
+	protected abstract OabaJobControllerBean getJobController();
+	
+	protected abstract OabaParametersControllerBean getParametersController();
+	
+	protected abstract OabaProcessingControllerBean getProcessingController();
 
 	protected RecordSource[] stageRS = null;
 	protected RecordSource[] masterRS = null;
@@ -94,8 +96,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	public /* final */ void onMessage(Message inMessage) {
 		getJMSTrace().info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		BatchJob batchJob = null;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OabaJob oabaJob = null;
 
 		getLogger().fine("MatchScheduler2 In onMessage");
 
@@ -104,18 +105,16 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 				msg = (ObjectMessage) inMessage;
 				Object o = msg.getObject();
 
-				if (o instanceof StartData) {
-					final StartData sd = (StartData) o;
+				if (o instanceof OabaJobMessage) {
+					final OabaJobMessage sd = (OabaJobMessage) o;
 
 					// get the number of processors
 					final long jobId = sd.jobID;
-					batchJob =
-						configuration.findBatchJobById(getEntityManager(), BatchJobBean.class,
-								jobId);
+					oabaJob = getJobController().find(jobId);
 
 					// init values
-					BatchParameters params =
-						configuration.findBatchParamsByJobId(getEntityManager(), jobId);
+					OabaParameters params =
+						getParametersController().findBatchParamsByJobId(jobId);
 					final String modelConfigId =
 						params.getModelConfigurationName();
 					ImmutableProbabilityModel stageModel =
@@ -130,7 +129,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 					countMessages = 0;
 
 					OabaProcessing status =
-						configuration.getProcessingLog(getEntityManager(), sd);
+						getProcessingController().getProcessingLog(sd);
 					if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
 						// matching is already done, so go on to the next step.
 						nextSteps(sd);
@@ -154,8 +153,8 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 						startMatch(sd);
 					}
 
-				} else if (o instanceof MatchWriterData) {
-					final MatchWriterData mwd = (MatchWriterData) o;
+				} else if (o instanceof MatchWriterMessage) {
+					final MatchWriterMessage mwd = (MatchWriterMessage) o;
 					handleNextChunk(mwd);
 				}
 
@@ -165,8 +164,8 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 		} catch (Exception e) {
 			getLogger().severe(e.toString());
-			if (batchJob != null) {
-				batchJob.markAsFailed();
+			if (oabaJob != null) {
+				oabaJob.markAsFailed();
 			}
 //			mdc.setRollbackOnly();
 		}
@@ -189,23 +188,21 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
-	protected final void handleNextChunk(MatchWriterData mwd)
+	protected final void handleNextChunk(MatchWriterMessage mwd)
 			throws BlockingException {
 
-		OABAConfiguration oabaConfig = new OABAConfiguration(mwd.jobID);
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
-		BatchJob batchJob =
-			configuration.findBatchJobById(getEntityManager(), BatchJobBean.class, mwd.jobID);
-		StartData sd = new StartData(mwd);
-		OabaProcessing status = configuration.getProcessingLog(getEntityManager(), sd);
+		final long jobId = mwd.jobID;
+		OabaJob oabaJob = getJobController().find(jobId);
+		OabaJobMessage sd = new OabaJobMessage(mwd);
+		OabaProcessing status = getProcessingController().findProcessingLogByJobId(jobId);
 
 		// keeping track of messages sent and received.
 		countMessages--;
 
-		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
-			MessageBeanUtils.stopJob(batchJob, status, oabaConfig);
+		if (OabaJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+			MessageBeanUtils.stopJob(oabaJob, status);
 
-		} else if (!BatchJob.STATUS_ABORTED.equals(batchJob.getStatus())) {
+		} else if (!OabaJob.STATUS_ABORTED.equals(oabaJob.getStatus())) {
 			// if there are multiple processors, we have don't do anything for
 			// STATUS_ABORTED.
 
@@ -266,7 +263,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	/**
 	 * This method is called when all the chunks are done.
 	 */
-	protected final void nextSteps(final StartData sd) throws BlockingException {
+	protected final void nextSteps(final OabaJobMessage sd) throws BlockingException {
 		cleanUp(sd);
 		sendToUpdateStatus(sd.jobID, 90);
 		sendToMatchDebup(sd);
@@ -275,18 +272,16 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	/**
 	 * This method sends the different chunks to different beans.
 	 */
-	protected final void startMatch(final StartData sd) throws RemoteException, FinderException,
+	protected final void startMatch(final OabaJobMessage sd) throws RemoteException, FinderException,
 			BlockingException, NamingException, JMSException, XmlConfException {
 
 		// init values
-		OABAConfiguration oabaConfig = new OABAConfiguration(sd.jobID);
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
-		OabaProcessing status = configuration.getProcessingLog(getEntityManager(), sd);
-		BatchJob batchJob =
-			configuration.findBatchJobById(getEntityManager(), BatchJobBean.class, sd.jobID);
+		final long jobId = sd.jobID;
+		OabaJob oabaJob = getJobController().find(jobId);
+		OabaProcessing status = getProcessingController().findProcessingLogByJobId(jobId);
 
-		if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
-			MessageBeanUtils.stopJob(batchJob, status, oabaConfig);
+		if (OabaJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+			MessageBeanUtils.stopJob(oabaJob, status);
 
 		} else {
 			currentChunk = 0;
@@ -296,10 +291,13 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 			}
 
 			// set up the record source arrays.
+			OabaParameters oabaParams = getParametersController().findBatchParamsByJobId(jobId);
+			String modelName = oabaParams.getModelConfigurationName();
+			ImmutableProbabilityModel ipm = PMManager.getImmutableModelInstance(modelName);
 			IChunkDataSinkSourceFactory stageFactory =
-				oabaConfig.getStageDataFactory();
+				OabaFileUtils.getStageDataFactory(oabaJob,ipm);
 			IChunkDataSinkSourceFactory masterFactory =
-				oabaConfig.getMasterDataFactory();
+					OabaFileUtils.getMasterDataFactory(oabaJob,ipm);
 
 			stageRS = new RecordSource[sd.numChunks];
 			masterRS = new RecordSource[sd.numChunks];
@@ -319,7 +317,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		}
 	}
 
-	protected final int recover(StartData sd, OabaProcessing status) throws BlockingException {
+	protected final int recover(OabaJobMessage sd, OabaProcessing status) throws BlockingException {
 		StringTokenizer stk =
 			new StringTokenizer(status.getAdditionalInfo(), DELIM);
 		sd.numChunks = Integer.parseInt(stk.nextToken());
@@ -332,15 +330,16 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	 * graphs are size 2 or 0.
 	 * 
 	 */
-	protected final void noChunk(final StartData sd) throws XmlConfException, BlockingException,
+	protected final void noChunk(final OabaJobMessage sd) throws XmlConfException, BlockingException,
 			NamingException, JMSException {
+		final long jobId = sd.jobID;
+		OabaJob oabaJob = getJobController().find(jobId);
 
 		// This is because tree ids start with 1 and not 0.
-		OABAConfiguration oabaConfig = new OABAConfiguration(sd.jobID);
 		for (int i = 1; i <= numProcessors; i++) {
 			@SuppressWarnings("rawtypes")
 			IMatchRecord2Sink mSink =
-				oabaConfig.getMatchChunkFactory().getSink(i);
+					OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(i);
 			mSink.open();
 			mSink.close();
 			getLogger().fine("creating " + mSink.getInfo());
@@ -353,17 +352,14 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	 * This method sends messages out to matchers beans to work on the current
 	 * chunk.
 	 */
-	protected final void startChunk(final StartData sd, int currentChunk) throws BlockingException {
+	protected final void startChunk(final OabaJobMessage sd, int currentChunk) throws BlockingException {
 
 		getLogger().fine("startChunk " + currentChunk);
 
 		final long jobId = sd.jobID;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
-		BatchJob batchJob =
-				configuration.findBatchJobById(getEntityManager(), BatchJobBean.class,
-						jobId);
-		BatchParameters params =
-			configuration.findBatchParamsByJobId(getEntityManager(), jobId);
+		OabaJob oabaJob = getJobController().find(jobId);
+		OabaParameters params =
+			getParametersController().findBatchParamsByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
 		ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
@@ -379,7 +375,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		// read in the data;
 		t = System.currentTimeMillis();
 		dataStore.init(stageRS[currentChunk], model, masterRS[currentChunk], maxChunkSize,
-				batchJob);
+				oabaJob);
 
 		t = System.currentTimeMillis() - t;
 		this.timeReadData += t;
@@ -391,19 +387,19 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 		// This is because tree ids start with 1 and not 0.
 		for (int i = 1; i <= numProcessors; i++) {
-			StartData sd2 = new StartData(sd);
+			OabaJobMessage sd2 = new OabaJobMessage(sd);
 			sd.treeInd = i;
 			countMessages++;
 			sendToMatcher(sd2);
 		}
 	}
 
-	protected abstract void cleanUp(StartData sd) throws BlockingException;
+	protected abstract void cleanUp(OabaJobMessage sd) throws BlockingException;
 
-	protected abstract void sendToMatcher(StartData sd);
+	protected abstract void sendToMatcher(OabaJobMessage sd);
 
 	protected abstract void sendToUpdateStatus(long jobID, int percentComplete);
 
-	protected abstract void sendToMatchDebup(StartData sd);
+	protected abstract void sendToMatchDebup(OabaJobMessage sd);
 
 }

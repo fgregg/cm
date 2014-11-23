@@ -10,15 +10,15 @@ import static com.choicemaker.cmit.utils.DeploymentUtils.createEAR;
 import static com.choicemaker.cmit.utils.DeploymentUtils.createJAR;
 import static com.choicemaker.cmit.utils.DeploymentUtils.resolveDependencies;
 import static com.choicemaker.cmit.utils.DeploymentUtils.resolvePom;
-import static com.choicemaker.cmit.utils.EntityManagerUtils.MAX_MAX_SINGLE;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -45,30 +45,49 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.batch.impl.BatchJobJPA;
 import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchJobProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.StartOABA;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.TestEntities;
+import com.choicemaker.e2.ejb.EjbPlatform;
 
 @RunWith(Arquillian.class)
 public class BatchQueryServiceBeanIT {
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
-	public static final String REGEX_OABA_SERVER =
-		"com.choicemaker.cm.io.blocking.automated.offline.server.*.jar";
+	public static final String REGEX_EJB_DEPENDENCIES =
+			"com.choicemaker.cm.io.blocking.automated.offline.server.*.jar"
+					+ "|com.choicemaker.e2.ejb.*.jar";
 
 	public static final long QUEUE_RECEIVE_TIMEOUT = 1000;
+
+	public static final String[] removedPaths() {
+		Class<?>[] removedClasses = new Class<?>[] { StartOABA.class };
+		Set<String> removedPaths = new LinkedHashSet<>();
+		for (Class<?> c : removedClasses) {
+			String path = "/" + c.getName().replace('.', '/') + ".class";
+			removedPaths.add(path);
+		}
+		String[] retVal = removedPaths.toArray(new String[removedPaths.size()]);
+		return retVal;
+	}
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
@@ -82,21 +101,19 @@ public class BatchQueryServiceBeanIT {
 		File[] libs = resolveDependencies(pom);
 
 		// Filter the OABA server JAR from the dependencies
-		final Pattern p = Pattern.compile(REGEX_OABA_SERVER);
-		File oabaServerJAR = null;
+		final Pattern p = Pattern.compile(REGEX_EJB_DEPENDENCIES);
+
+		Set<File> ejbJARs = new LinkedHashSet<>();
 		List<File> filteredLibs = new LinkedList<>();
 		for (File lib : libs) {
 			String name = lib.getName();
 			Matcher m = p.matcher(name);
 			if (m.matches()) {
-				if (oabaServerJAR == null) {
-					oabaServerJAR = lib;
-				} else {
-					String firstPath = oabaServerJAR.getAbsolutePath();
-					String secondPath = lib.getAbsolutePath();
-					throw new RuntimeException(
-							"multiple OABA server JAR files: " + firstPath
-									+ ", " + secondPath);
+				boolean isAdded = ejbJARs.add(lib);
+				if (!isAdded) {
+					String path = lib.getAbsolutePath();
+					throw new RuntimeException("failed to add (duplicate?): "
+							+ path);
 				}
 			} else {
 				filteredLibs.add(lib);
@@ -104,19 +121,23 @@ public class BatchQueryServiceBeanIT {
 		}
 		File[] libs2 = filteredLibs.toArray(new File[filteredLibs.size()]);
 
-		// Filter the BatchParamtersBean class from the oaba Server JAR
-		final String path =
-			"/" + StartOABA.class.getName().replace('.', '/') + ".class";
-		JavaArchive filteredOabaServerJAR =
-			ShrinkWrap.createFromZipFile(JavaArchive.class, oabaServerJAR);
-		filteredOabaServerJAR.delete(path);
-
 		JavaArchive tests =
 			createJAR(pom, CURRENT_MAVEN_COORDINATES, DEFAULT_MODULE_NAME,
 					DEFAULT_TEST_CLASSES_PATH, PERSISTENCE_CONFIGURATION,
 					DEFAULT_HAS_BEANS);
-		EnterpriseArchive retVal = createEAR(tests, libs2, TESTS_AS_EJB_MODULE);
-		retVal.addAsModule(filteredOabaServerJAR);
+		final EnterpriseArchive retVal =
+			createEAR(tests, libs2, TESTS_AS_EJB_MODULE);
+
+		// Filter the targeted paths from the EJB JARs
+		for (File ejb : ejbJARs) {
+			JavaArchive filteredEJB =
+				ShrinkWrap.createFromZipFile(JavaArchive.class, ejb);
+			for (String path : removedPaths()) {
+				filteredEJB.delete(path);
+			}
+			retVal.addAsModule(filteredEJB);
+		}
+
 		return retVal;
 	}
 
@@ -130,10 +151,28 @@ public class BatchQueryServiceBeanIT {
 	EntityManager em;
 
 	@EJB
-	protected BatchQueryService batchQuery;
+	private OabaJobControllerBean jobController;
+	
+	@EJB
+	private OabaParametersControllerBean paramsController;
 
 	@EJB
-	protected TransitivityJobController controller;
+	private SettingsController settingsController;
+
+	@EJB
+	private ServerConfigurationController serverController;
+
+	@EJB
+	private OabaProcessingControllerBean processingController;
+
+	@EJB
+	EjbPlatform e2service;
+
+	@EJB
+	protected OabaService batchQuery;
+
+	@EJB
+	protected TestController controller;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/startQueue")
 	private Queue startQueue;
@@ -141,11 +180,10 @@ public class BatchQueryServiceBeanIT {
 	@Inject
 	JMSContext jmsContext;
 
-	private final Random random = new Random(new Date().getTime());
+//	private final Random random = new Random(new Date().getTime());
 
 	private int initialBatchParamsCount;
 	private int initialBatchJobCount;
-	private int initialTransitivityJobCount;
 	private int initialOabaProcessingCount;
 	private boolean setupOK;
 
@@ -154,10 +192,8 @@ public class BatchQueryServiceBeanIT {
 		setupOK = true;
 		try {
 			initialBatchParamsCount =
-				controller.findAllBatchParameters().size();
-			initialBatchJobCount = controller.findAllBatchJobs().size();
-			initialTransitivityJobCount =
-				controller.findAllTransitivityJobs().size();
+				controller.findAllOabaParameters().size();
+			initialBatchJobCount = controller.findAllOabaJobs().size();
 			initialOabaProcessingCount =
 				controller.findAllOabaProcessing().size();
 		} catch (Exception x) {
@@ -171,15 +207,11 @@ public class BatchQueryServiceBeanIT {
 		try {
 
 			int finalBatchParamsCount =
-				controller.findAllBatchParameters().size();
+				controller.findAllOabaParameters().size();
 			assertTrue(initialBatchParamsCount == finalBatchParamsCount);
 
-			int finalBatchJobCount = controller.findAllBatchJobs().size();
+			int finalBatchJobCount = controller.findAllOabaJobs().size();
 			assertTrue(initialBatchJobCount == finalBatchJobCount);
-
-			int finalTransJobCount =
-				controller.findAllTransitivityJobs().size();
-			assertTrue(initialTransitivityJobCount == finalTransJobCount);
 
 			int finalOabaProcessingCount =
 				controller.findAllOabaProcessing().size();
@@ -231,13 +263,13 @@ public class BatchQueryServiceBeanIT {
 	@InSequence(4)
 	public void clearStartQueue() {
 		assertTrue(setupOK);
-		StartData startData = null;
+		OabaJobMessage oabaJobMessage = null;
 		do {
-			startData = receiveStartData();
-		} while (startData != null);
+			oabaJobMessage = receiveStartData();
+		} while (oabaJobMessage != null);
 	}
 
-	public static BatchParameters createRandomStartData(Random random,
+	public static OabaParameters createRandomStartData(Random random,
 			String tag) {
 		if (random == null) {
 			random = new Random();
@@ -251,44 +283,51 @@ public class BatchQueryServiceBeanIT {
 		final Thresholds thresholds =
 			EntityManagerUtils.createRandomThresholds();
 		final String modelConfigName = UUID.randomUUID().toString();
-		final int maxSingle = random.nextInt(MAX_MAX_SINGLE);
-		final boolean runTransitivity = random.nextBoolean();
-		BatchParameters retVal =
-			new BatchParametersBean(modelConfigName, maxSingle,
+		OabaParameters retVal =
+			new OabaParametersEntity(modelConfigName,
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), staging, master,
-					runTransitivity);
+					thresholds.getMatchThreshold(), staging, master);
 		return retVal;
 	}
 
 	@Test
 	@InSequence(5)
-	public void testStartOABALinkage() {
+	public void testStartLinkage()
+			throws ServerConfigurationException {
 		assertTrue(setupOK);
 		String TEST = "testStartOABALinkage";
 		TestEntities te = new TestEntities();
-		final String externalID = EntityManagerUtils.createExternalId(TEST);
-		final BatchParameters bp = createRandomStartData(random, TEST);
-		long jobId =
-			batchQuery.startOABA(externalID, bp.getStageRs(), bp.getMasterRs(),
-					bp.getLowThreshold(), bp.getHighThreshold(),
-					bp.getModelConfigurationName(), bp.getMaxSingle(),
-					bp.getTransitivity());
-		assertTrue(BatchParametersBean.INVALID_PARAMSID != jobId);
-		BatchJob batchJob = em.find(BatchJobBean.class, jobId);
-		assertTrue(batchJob != null);
-		te.add(batchJob);
-		assertTrue(externalID != null
-				&& externalID.equals(batchJob.getExternalId()));
 
-		StartData startData = receiveStartData();
-		if (startData == null) {
+		final String externalID = EntityManagerUtils.createExternalId(TEST);
+		final SimplePersonSqlServerTestConfiguration c =
+			new SimplePersonSqlServerTestConfiguration();
+		c.initialize(this.e2service.getPluginRegistry());
+
+		final OabaParameters bp =
+			new OabaParametersEntity(c.getModelConfigurationName(), c
+					.getThresholds().getDifferThreshold(), c.getThresholds()
+					.getMatchThreshold(), c.getStagingRecordSource(),
+					c.getMasterRecordSource());
+		
+		final long jobId =
+			batchQuery.startLinkage(externalID, bp.getStageRs(), bp.getMasterRs(),
+					bp.getLowThreshold(), bp.getHighThreshold(),
+					bp.getModelConfigurationName());
+		assertTrue(BatchJobJPA.INVALID_ID != jobId);
+
+		OabaJob oabaJob = jobController.find(jobId);
+		assertTrue(oabaJob != null);
+		te.add(oabaJob);
+		assertTrue(externalID != null
+				&& externalID.equals(oabaJob.getExternalId()));
+
+		OabaJobMessage oabaJobMessage = receiveStartData();
+		if (oabaJobMessage == null) {
 			fail("did not receive start data");
 		}
-		assertTrue(startData.jobID == jobId);
+		assertTrue(oabaJobMessage.jobID == jobId);
 
-		BatchParameters params =
-			EJBConfiguration.getInstance().findBatchParamsByJobId(em, jobId);
+		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
 		assertTrue(params != null);
 		te.add(params);
 		assertTrue(params.getLowThreshold() == bp.getLowThreshold());
@@ -300,11 +339,9 @@ public class BatchQueryServiceBeanIT {
 		assertTrue(params.getModelConfigurationName() != null
 				&& params.getModelConfigurationName().equals(
 						bp.getModelConfigurationName()));
-		assertTrue(params.getMaxSingle() == bp.getMaxSingle());
-		assertTrue(params.getTransitivity() == bp.getTransitivity());
 
-		OabaBatchJobProcessing processingEntry =
-			EJBConfiguration.getInstance().findProcessingLogByJobId(em, jobId);
+		OabaJobProcessing processingEntry =
+			processingController.findProcessingLogByJobId(jobId);
 		assertTrue(processingEntry != null);
 		assertTrue(processingEntry.getCurrentProcessingEventId() == OabaProcessing.EVT_INIT);
 		te.add(processingEntry);
@@ -319,32 +356,42 @@ public class BatchQueryServiceBeanIT {
 
 	@Test
 	@InSequence(6)
-	public void testStartOABAStage() {
+	public void testStartDeduplication()
+			throws ServerConfigurationException {
 		assertTrue(setupOK);
 		String TEST = "testStartOABAStage";
 		TestEntities te = new TestEntities();
+		
 		final String externalID = EntityManagerUtils.createExternalId(TEST);
-		final BatchParameters bp = createRandomStartData(random, TEST);
-		long jobId =
-			batchQuery.startOABAStage(externalID, bp.getStageRs(),
-					bp.getLowThreshold(), bp.getHighThreshold(),
-					bp.getModelConfigurationName(), bp.getMaxSingle(),
-					bp.getTransitivity());
-		assertTrue(BatchParametersBean.INVALID_PARAMSID != jobId);
-		BatchJob batchJob = em.find(BatchJobBean.class, jobId);
-		assertTrue(batchJob != null);
-		te.add(batchJob);
-		assertTrue(externalID != null
-				&& externalID.equals(batchJob.getExternalId()));
+		final SimplePersonSqlServerTestConfiguration c =
+			new SimplePersonSqlServerTestConfiguration();
+		c.initialize(this.e2service.getPluginRegistry());
 
-		StartData startData = receiveStartData();
-		if (startData == null) {
+		final OabaParameters bp =
+			new OabaParametersEntity(c.getModelConfigurationName(), c
+					.getThresholds().getDifferThreshold(), c.getThresholds()
+					.getMatchThreshold(), c.getStagingRecordSource(),
+					c.getMasterRecordSource());
+		
+		final long jobId =
+			batchQuery.startDeduplication(externalID, bp.getStageRs(),
+					bp.getLowThreshold(), bp.getHighThreshold(),
+					bp.getModelConfigurationName());
+		assertTrue(BatchJobJPA.INVALID_ID != jobId);
+
+		OabaJob oabaJob = jobController.find(jobId);
+		assertTrue(oabaJob != null);
+		te.add(oabaJob);
+		assertTrue(externalID != null
+				&& externalID.equals(oabaJob.getExternalId()));
+
+		OabaJobMessage oabaJobMessage = receiveStartData();
+		if (oabaJobMessage == null) {
 			fail("did not receive start data");
 		}
-		assertTrue(startData.jobID == jobId);
+		assertTrue(oabaJobMessage.jobID == jobId);
 
-		BatchParameters params =
-			EJBConfiguration.getInstance().findBatchParamsByJobId(em, jobId);
+		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
 		assertTrue(params != null);
 		assertTrue(params != null);
 		te.add(params);
@@ -357,11 +404,9 @@ public class BatchQueryServiceBeanIT {
 		assertTrue(params.getModelConfigurationName() != null
 				&& params.getModelConfigurationName().equals(
 						bp.getModelConfigurationName()));
-		assertTrue(params.getMaxSingle() == bp.getMaxSingle());
-		assertTrue(params.getTransitivity() == bp.getTransitivity());
 
-		OabaBatchJobProcessing processingEntry =
-			EJBConfiguration.getInstance().findProcessingLogByJobId(em, jobId);
+		OabaJobProcessing processingEntry =
+			processingController.findProcessingLogByJobId(jobId);
 		assertTrue(processingEntry != null);
 		assertTrue(processingEntry.getCurrentProcessingEventId() == OabaProcessing.EVT_INIT);
 		te.add(processingEntry);
@@ -374,12 +419,12 @@ public class BatchQueryServiceBeanIT {
 		}
 	}
 
-	public StartData receiveStartData() {
-		StartData retVal = null;
+	public OabaJobMessage receiveStartData() {
+		OabaJobMessage retVal = null;
 		try {
 			retVal =
 				jmsContext.createConsumer(startQueue).receiveBody(
-						StartData.class, QUEUE_RECEIVE_TIMEOUT);
+						OabaJobMessage.class, QUEUE_RECEIVE_TIMEOUT);
 		} catch (Exception x) {
 			fail(x.toString());
 		}

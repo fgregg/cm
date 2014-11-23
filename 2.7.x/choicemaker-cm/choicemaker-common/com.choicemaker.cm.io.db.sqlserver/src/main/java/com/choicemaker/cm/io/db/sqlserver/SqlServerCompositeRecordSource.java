@@ -406,4 +406,11 @@ public class SqlServerCompositeRecordSource implements RecordSource {
 		return b.toString();
 	}
 
+	public String toString() {
+		return "SqlServerCompositeRecordSource [model=" + model
+				+ ", dbConfiguration=" + dbConfiguration + ", idsQuery="
+				+ idsQuery + ", dsName=" + dsName + ", maxSize=" + maxSize
+				+ "]";
+	}
+
 }

@@ -15,8 +15,8 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -25,21 +25,19 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
@@ -65,11 +63,17 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 	private static final Logger log = Logger.getLogger(ChunkOABA2.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + ChunkOABA2.class.getName());
 
-	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
+	@EJB
+	private OabaJobControllerBean jobController;
 
-	@Resource
-	private MessageDrivenContext mdc;
+	@EJB
+	private SettingsController settingsController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+	
+	@EJB
+	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
@@ -86,25 +90,20 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		StartData data = null;
-		BatchJob batchJob = null;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OabaJobMessage data = null;
+		OabaJob oabaJob = null;
 
 		log.fine("ChunkOABA In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (StartData) msg.getObject();
+				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				batchJob =
-					configuration.findBatchJobById(em, BatchJobBean.class,
-							data.jobID);
-
-				// init values
-				BatchParameters params =
-					configuration.findBatchParamsByJobId(em, batchJob.getId());
+				oabaJob = jobController.find(jobId);
+				OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
+				OabaProcessing processingEntry = processingController.findProcessingLogByJobId(jobId);
 				final String modelConfigId = params.getModelConfigurationName();
 				IProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
@@ -114,16 +113,9 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}
-				OABAConfiguration oabaConfig =
-					new OABAConfiguration(params.getModelConfigurationName(),
-							jobId);
 
-				// get the status
-				OabaProcessing processingEntry =
-					configuration.getProcessingLog(em, data);
-
-				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
-					MessageBeanUtils.stopJob (batchJob, processingEntry, oabaConfig);
+				if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+					MessageBeanUtils.stopJob (oabaJob, processingEntry);
 
 				} else {
 					String temp = (String) model.properties().get("maxChunkSize");
@@ -137,34 +129,34 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 					temp = (String) model.properties().get("maxChunkFiles");
 					int maxChunkFiles = Integer.parseInt(temp);
 
-					RecordIDTranslator2 translator = new RecordIDTranslator2 (oabaConfig.getTransIDFactory());
+					RecordIDTranslator2 translator = new RecordIDTranslator2 (OabaFileUtils.getTransIDFactory(oabaJob));
 					//recover the translator
 					translator.recover();
 					translator.close();
 
 					//create the os block source.
-					IBlockSinkSourceFactory osFactory = oabaConfig.getOversizedFactory();
+					IBlockSinkSourceFactory osFactory = OabaFileUtils.getOversizedFactory(oabaJob);
 					osFactory.getNextSource(); //the deduped OS file is file 2.
 					IDSetSource source2 = new IDSetSource (osFactory.getNextSource());
 
 					//create the tree transformer.
 					TreeTransformer tTransformer = new TreeTransformer (translator,
-						oabaConfig.getComparisonTreeGroupFactory(data.stageType, numProcessors));
+							OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, data.stageType, numProcessors));
 
 					//create the oversized block transformer
 					Transformer transformerO = new Transformer (translator,
-						oabaConfig.getComparisonArrayGroupFactoryOS(numProcessors));
+							OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob, numProcessors));
 
 					ChunkService3 chunkService =
-						new ChunkService3(oabaConfig.getTreeSetSource(),
+						new ChunkService3(OabaFileUtils.getTreeSetSource(oabaJob),
 								source2, params.getStageRs(),
 								params.getMasterRs(), model,
-								oabaConfig.getChunkIDFactory(),
-								oabaConfig.getStageDataFactory(),
-								oabaConfig.getMasterDataFactory(),
+								OabaFileUtils.getChunkIDFactory(oabaJob),
+								OabaFileUtils.getStageDataFactory(oabaJob, model),
+								OabaFileUtils.getMasterDataFactory(oabaJob, model),
 								translator.getSplitIndex(), tTransformer,
 								transformerO, maxChunk, maxChunkFiles, processingEntry,
-								batchJob);
+								oabaJob);
 					chunkService.runService();
 					log.info( "Number of chunks " + chunkService.getNumChunks());
 					log.info( "Done creating chunks " + chunkService.getTimeElapsed());
@@ -183,18 +175,12 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			mdc.setRollbackOnly();
-		} catch (BlockingException e) {
-			log.severe(e.toString());
-			assert batchJob != null;
-			batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
-			e.printStackTrace();
+			if (oabaJob != null) {
+				oabaJob.markAsFailed();
+			}
 		}
-
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
@@ -203,7 +189,7 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 				updateQueue, log);
 	}
 
-	private void sendToMatch (StartData data) throws NamingException, JMSException{
+	private void sendToMatch (OabaJobMessage data) throws NamingException, JMSException{
 		MessageBeanUtils.sendStartData(data, jmsContext, matchSchedulerQueue, log);
 	}
 

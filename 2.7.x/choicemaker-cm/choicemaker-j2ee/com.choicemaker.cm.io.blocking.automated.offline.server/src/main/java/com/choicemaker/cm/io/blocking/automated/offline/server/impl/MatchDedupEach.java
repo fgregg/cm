@@ -15,18 +15,16 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -38,12 +36,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
@@ -68,11 +66,17 @@ public class MatchDedupEach implements MessageListener, Serializable {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatchDedupEach.class.getName());
 
-	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
+	@EJB
+	private OabaJobControllerBean jobController;
 
-	@Resource
-	private MessageDrivenContext mdc;
+	@EJB
+	private SettingsController settingsController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+	
+	@EJB
+	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
@@ -88,57 +92,46 @@ public class MatchDedupEach implements MessageListener, Serializable {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		BatchJob batchJob = null;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OabaJob oabaJob = null;
 
 		log.fine("MatchDedupEach In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				StartData data = (StartData) msg.getObject();
+				OabaJobMessage data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				batchJob =
-					configuration.findBatchJobById(em, BatchJobBean.class,
-							data.jobID);
-
-				// init values
-				BatchParameters params =
-					configuration.findBatchParamsByJobId(em, batchJob.getId());
+				oabaJob = jobController.find(jobId);
+				OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
+				OabaProcessing processingEntry = processingController.findProcessingLogByJobId(jobId);
 				final String modelConfigId = params.getModelConfigurationName();
-				IProbabilityModel stageModel =
+				IProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
-				if (stageModel == null) {
+				if (model == null) {
 					String s =
 						"No model corresponding to '" + modelConfigId + "'";
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}
-				OABAConfiguration oabaConfig = new OABAConfiguration(jobId);
-
-				// get the status
-				OabaProcessing processingEntry =
-					configuration.getProcessingLog(em, data);
-
 				if (BatchJob.STATUS_ABORT_REQUESTED
-						.equals(batchJob.getStatus())) {
-					MessageBeanUtils.stopJob(batchJob, processingEntry, oabaConfig);
+						.equals(oabaJob.getStatus())) {
+					MessageBeanUtils.stopJob(oabaJob, processingEntry);
 
 				} else {
 					if (processingEntry.getCurrentProcessingEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
 						// max number of match in a temp file
 						String temp =
-							(String) stageModel.properties()
+							(String) model.properties()
 									.get("maxMatchSize");
 						int maxMatches = Integer.parseInt(temp);
 
 						// dedup a temp file
-						dedupEach(data.ind, maxMatches, batchJob);
+						dedupEach(data.ind, maxMatches, oabaJob);
 					}
 
 					// send the message back to MatchDedupOABA2
-					MatchWriterData d = new MatchWriterData(data);
+					MatchWriterMessage d = new MatchWriterMessage(data);
 					sendToMatchDedupOABA2(d);
 				}
 
@@ -146,15 +139,11 @@ public class MatchDedupEach implements MessageListener, Serializable {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			mdc.setRollbackOnly();
-		} catch (BlockingException e) {
-			log.severe(e.toString());
-			assert batchJob != null;
-			batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
+			if (oabaJob != null) {
+				oabaJob.markAsFailed();
+			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -168,30 +157,29 @@ public class MatchDedupEach implements MessageListener, Serializable {
 	 *            - maximum number of matches to hold in memory
 	 * @throws OABABlockingException
 	 */
-	private void dedupEach(int num, int maxMatches, BatchJob batchJob)
+	private void dedupEach(int num, int maxMatches, OabaJob oabaJob)
 			throws BlockingException {
 		long t = System.currentTimeMillis();
-		OABAConfiguration oabaConfig = new OABAConfiguration(batchJob.getId());
 		IMatchRecord2Sink mSink =
-			oabaConfig.getMatchChunkFactory().getSink(num);
+			OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(num);
 		IMatchRecord2Source mSource =
-			oabaConfig.getMatchChunkFactory().getSource(mSink);
+			OabaFileUtils.getMatchChunkFactory(oabaJob).getSource(mSink);
 		ComparableMRSource source = new ComparableMRSource(mSource);
 
-		mSink = oabaConfig.getMatchTempFactory().getSink(num);
+		mSink = OabaFileUtils.getMatchTempFactory(oabaJob).getSink(num);
 		IComparableSink sink = new ComparableMRSink(mSink);
 
 		log.info("source " + mSource.getInfo() + " sink " + mSink.getInfo());
 
 		IMatchRecord2SinkSourceFactory factory =
-			oabaConfig.getMatchTempFactory(num);
+			OabaFileUtils.getMatchTempFactory(oabaJob, num);
 		ComparableMRSinkSourceFactory mFactory =
 			new ComparableMRSinkSourceFactory(factory);
 
 		if (source.exists()) {
 			GenericDedupService service =
 				new GenericDedupService(source, sink, mFactory, maxMatches,
-						batchJob);
+						oabaJob);
 			service.runDedup();
 			int before = service.getNumBefore();
 			int after = service.getNumAfter();
@@ -207,7 +195,7 @@ public class MatchDedupEach implements MessageListener, Serializable {
 		log.info("Time in dedup each " + t);
 	}
 
-	private void sendToMatchDedupOABA2(MatchWriterData d) {
+	private void sendToMatchDedupOABA2(MatchWriterMessage d) {
 		MessageBeanUtils.sendMatchWriterData(d, jmsContext, matchDedupQueue, log);
 	}
 

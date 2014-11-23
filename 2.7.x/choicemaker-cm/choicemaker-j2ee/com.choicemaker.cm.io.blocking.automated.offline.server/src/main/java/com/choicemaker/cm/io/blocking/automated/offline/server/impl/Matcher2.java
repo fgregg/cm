@@ -17,12 +17,11 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -35,10 +34,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
@@ -69,11 +69,17 @@ public class Matcher2 extends AbstractMatcher {
 
 	private static final int INTERVAL = 50000;
 
-	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
+	@EJB
+	private OabaJobControllerBean jobController;
 
-//	@Resource
-//	private MessageDrivenContext mdc;
+	@EJB
+	private SettingsController settingsController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+	
+	@EJB
+	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
@@ -81,19 +87,31 @@ public class Matcher2 extends AbstractMatcher {
 	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
 	private Queue updateQueue;
 
-//	@Resource(lookup = "java:/choicemaker/urm/jms/yyyQueue")
-//	private Queue yyyQueue;
-
 	@Inject
 	JMSContext jmsContext;
 
 	@Override
+	protected OabaJobControllerBean getJobController() {
+		return jobController;
+	}
+
+	@Override
+	protected OabaParametersControllerBean getParametersController() {
+		return paramsController;
+	}
+
+	@Override
+	protected OabaProcessingControllerBean getProcessingController() {
+		return processingController;
+	}
+
+	@Override
 	protected List<MatchRecord2> handleComparisonSet(IComparisonSet cSet,
-			BatchJob batchJob, ChunkDataStore dataStore,
+			OabaJob oabaJob, ChunkDataStore dataStore,
 			IProbabilityModel stageModel, ImmutableThresholds t)
 			throws RemoteException, BlockingException {
 
-		boolean stop = batchJob.shouldStop();
+		boolean stop = oabaJob.shouldStop();
 		ComparisonPair p;
 		Record q, m;
 		MatchRecord2 match;
@@ -104,7 +122,7 @@ public class Matcher2 extends AbstractMatcher {
 			p = cSet.getNextPair();
 			compares++;
 
-			stop = ControlChecker.checkStop(batchJob, compares, INTERVAL);
+			stop = ControlChecker.checkStop(oabaJob, compares, INTERVAL);
 
 			q = getQ(dataStore, p);
 			m = getM(dataStore, p);
@@ -130,13 +148,16 @@ public class Matcher2 extends AbstractMatcher {
 	 * @param matches
 	 */
 	@Override
-	protected void writeMatches(StartData data, List<MatchRecord2> matches)
+	protected void writeMatches(OabaJobMessage data, List<MatchRecord2> matches)
 			throws BlockingException {
+
 		// first figure out the correct file for this processor
-		OABAConfiguration oabaConfig = new OABAConfiguration(data.jobID);
+		final long jobId = data.jobID;
+		OabaJob oabaJob = getJobController().find(jobId);
 		IMatchRecord2Sink mSink =
-			oabaConfig.getMatchChunkFactory().getSink(data.treeInd);
+			OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(data.treeInd);
 		IComparableSink sink = new ComparableMRSink(mSink);
+
 		// write matches to this file.
 		sink.append();
 		sink.writeComparables(matches.iterator());
@@ -163,12 +184,7 @@ public class Matcher2 extends AbstractMatcher {
 	}
 
 	@Override
-	protected EntityManager getEntityManager() {
-		return em;
-	}
-
-	@Override
-	protected void sendToScheduler(MatchWriterData data) {
+	protected void sendToScheduler(MatchWriterMessage data) {
 		MessageBeanUtils.sendMatchWriterData(data, jmsContext,
 				matchSchedulerQueue, getLogger());
 	}

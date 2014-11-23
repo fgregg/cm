@@ -156,4 +156,9 @@ public class RecordReader implements RecordSource {
 	public String getFileName() {
 		throw new UnsupportedOperationException();
 	}
+
+	public String toString() {
+		return "RecordReader [model=" + model + ", condition=" + condition
+				+ ", name=" + name + "]";
+	}
 }

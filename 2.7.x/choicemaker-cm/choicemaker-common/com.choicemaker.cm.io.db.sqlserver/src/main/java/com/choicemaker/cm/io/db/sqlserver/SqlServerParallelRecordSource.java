@@ -299,4 +299,10 @@ public class SqlServerParallelRecordSource implements RecordSource {
 		return fileName;
 	}
 
+	public String toString() {
+		return "SqlServerParallelRecordSource [fileName=" + fileName
+				+ ", model=" + model + ", dbConfiguration=" + dbConfiguration
+				+ ", idsQuery=" + idsQuery + ", dsName=" + dsName + "]";
+	}
+
 }

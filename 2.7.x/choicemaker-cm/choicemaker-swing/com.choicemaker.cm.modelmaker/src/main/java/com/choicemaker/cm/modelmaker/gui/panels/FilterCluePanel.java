@@ -69,8 +69,8 @@ public class FilterCluePanel extends JPanel {
 	private boolean includeHumanDecision;
 	private JCheckBox checked;
 
-	private final float default_probabilityLowerBound = ImmutableThresholds.MIN_VALUE;
-	private final float default_probabilityUpperBound = ImmutableThresholds.MAX_VALUE;
+	private final float default_probabilityLowerBound = (float) ImmutableThresholds.MIN_VALUE;
+	private final float default_probabilityUpperBound = (float) ImmutableThresholds.MAX_VALUE;
 
 	public FilterCluePanel(ModelMaker parent, ListeningMarkedRecordPairFilter filter) {
 		this(parent, filter, true);
