@@ -1,13 +1,5 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.batch.BatchJob.STATUS_ABORTED;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_ABORT_REQUESTED;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_CLEAR;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_COMPLETED;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_FAILED;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_NEW;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_QUEUED;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_STARTED;
 import static com.choicemaker.cmit.trans.util.TransitivityConstants.CURRENT_MAVEN_COORDINATES;
 import static com.choicemaker.cmit.trans.util.TransitivityConstants.PERSISTENCE_CONFIGURATION;
 import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_HAS_BEANS;
@@ -22,8 +14,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Date;
-import java.util.Random;
-import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 
@@ -57,16 +47,16 @@ public class TransitivityJobEntityIT {
 		return retVal;
 	}
 
-	private static final Logger logger = Logger
-			.getLogger(TransitivityJobEntityIT.class.getName());
-
-	public static final int MAX_TEST_ITERATIONS = 10;
-
-	private static final String[] _statusValues =
-		new String[] {
-				STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_COMPLETED,
-				STATUS_FAILED, STATUS_ABORT_REQUESTED, STATUS_ABORTED,
-				STATUS_CLEAR };
+//	private static final Logger logger = Logger
+//			.getLogger(TransitivityJobEntityIT.class.getName());
+//
+//	public static final int MAX_TEST_ITERATIONS = 10;
+//
+//	private static final String[] _statusValues =
+//		new String[] {
+//				STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_COMPLETED,
+//				STATUS_FAILED, STATUS_ABORT_REQUESTED, STATUS_ABORTED,
+//				STATUS_CLEAR };
 
 	// private static final String[] _nonterminal = new String[] {
 	// STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_ABORT_REQUESTED };
@@ -76,14 +66,14 @@ public class TransitivityJobEntityIT {
 	// return _nonterminal[i];
 	// }
 
-	private final Random random = new Random(new Date().getTime());
+//	private final Random random = new Random(new Date().getTime());
 
 	@EJB
 	protected TransitivityJobController controller;
 
-	private int initialOabaParamsCount;
-	private int initialOabaJobCount;
-	private int initialCount;
+//	private int initialOabaParamsCount;
+//	private int initialOabaJobCount;
+//	private int initialCount;
 
 	@Before
 	public void setUp() {

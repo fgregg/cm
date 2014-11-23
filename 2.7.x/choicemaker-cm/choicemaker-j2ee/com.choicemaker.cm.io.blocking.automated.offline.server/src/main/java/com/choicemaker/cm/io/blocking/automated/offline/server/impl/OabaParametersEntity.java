@@ -110,6 +110,12 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 
 	public OabaParametersEntity(String modelConfigurationName,
 			float lowThreshold, float highThreshold,
+			SerializableRecordSource stageRs) {
+		this(modelConfigurationName, lowThreshold, highThreshold, stageRs, null);
+	}
+
+	public OabaParametersEntity(String modelConfigurationName,
+			float lowThreshold, float highThreshold,
 			SerializableRecordSource stageRs, SerializableRecordSource masterRs) {
 		
 		if (modelConfigurationName == null || modelConfigurationName.trim().isEmpty()) {

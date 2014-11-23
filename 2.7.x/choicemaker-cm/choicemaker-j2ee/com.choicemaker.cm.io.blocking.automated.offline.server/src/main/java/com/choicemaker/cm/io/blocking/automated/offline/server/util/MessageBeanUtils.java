@@ -86,9 +86,9 @@ public class MessageBeanUtils {
 		OabaUpdateMessage data = new OabaUpdateMessage(jobID, percentComplete);
 		ObjectMessage message = jmsCtx.createObjectMessage(data);
 		JMSProducer sender = jmsCtx.createProducer();
-		log.finest(MessageBeanUtils.queueInfo("Sending", q, data));
+		log.info(MessageBeanUtils.queueInfo("Sending", q, data));
 		sender.send(q, message);
-		log.finest(MessageBeanUtils.queueInfo("Sent", q, data));
+		log.info(MessageBeanUtils.queueInfo("Sent", q, data));
 	}
 
 	/**
@@ -113,9 +113,9 @@ public class MessageBeanUtils {
 		}
 		ObjectMessage message = jmsCtx.createObjectMessage(data);
 		JMSProducer sender = jmsCtx.createProducer();
-		log.finest(MessageBeanUtils.queueInfo("Sending", q, data));
+		log.info(MessageBeanUtils.queueInfo("Sending", q, data));
 		sender.send(q, message);
-		log.finest(MessageBeanUtils.queueInfo("Sent", q, data));
+		log.info(MessageBeanUtils.queueInfo("Sent", q, data));
 	}
 
 	public static void sendMatchWriterData(MatchWriterMessage data,
@@ -125,9 +125,9 @@ public class MessageBeanUtils {
 		}
 		ObjectMessage message = jmsCtx.createObjectMessage(data);
 		JMSProducer sender = jmsCtx.createProducer();
-		log.finest(MessageBeanUtils.queueInfo("Sending", q, data));
+		log.info(MessageBeanUtils.queueInfo("Sending", q, data));
 		sender.send(q, message);
-		log.finest(MessageBeanUtils.queueInfo("Sent", q, data));
+		log.info(MessageBeanUtils.queueInfo("Sent", q, data));
 	}
 
 	public static String queueInfo(String tag, Queue q, Object d) {

@@ -75,4 +75,9 @@ public class OabaJobMessage implements Serializable {
 		this.numRegularChunks = data.numRegularChunks;
 	}
 
+	@Override
+	public String toString() {
+		return "OabaJobMessage [jobID=" + jobID + "]";
+	}
+
 }

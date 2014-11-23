@@ -21,14 +21,11 @@ import javax.ejb.CreateException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 
 /**
  * This object contains method to get JMS and EJB objects from the J2EE server.
@@ -107,16 +104,6 @@ public class EJBConfiguration implements Serializable {
 	public Connection getConnection () throws RemoteException, CreateException, NamingException, SQLException {
 		getDataSource ();
 		Connection retVal = ds.getConnection();
-		return retVal;
-	}
-
-	public OabaParameters findBatchParamsByJobId(EntityManager em, long jobId) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
-		OabaJob job = em.find(OabaJobEntity.class, jobId);
-		long paramsId = job.getParametersId();
-		OabaParameters retVal = em.find(OabaParametersEntity.class, paramsId);
 		return retVal;
 	}
 

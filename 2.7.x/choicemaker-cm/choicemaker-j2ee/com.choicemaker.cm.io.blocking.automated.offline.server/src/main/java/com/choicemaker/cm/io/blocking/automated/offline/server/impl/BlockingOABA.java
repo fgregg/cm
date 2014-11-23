@@ -38,6 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
@@ -105,10 +106,17 @@ public class BlockingOABA implements MessageListener, Serializable {
 
 				final long jobId = data.jobID;
 				oabaJob = jobController.find(jobId);
-
-				// init values
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
+				OabaSettings oabaSettings =
+						settingsController.findOabaSettingsByJobId(jobId);
+				OabaProcessing processingEntry =
+						processingController.findProcessingLogByJobId(jobId);
+				if (oabaJob == null || params == null || oabaSettings == null) {
+					String s = "Unable to find a job, parameters or settings for " + jobId;
+					log.severe(s);
+					throw new IllegalArgumentException(s);
+				}
 				final String modelConfigId = params.getModelConfigurationName();
 				IProbabilityModel stageModel =
 					PMManager.getModelInstance(modelConfigId);
@@ -118,8 +126,6 @@ public class BlockingOABA implements MessageListener, Serializable {
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}
-				OabaProcessing processingEntry =
-					processingController.findProcessingLogByJobId(jobId);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED
 						.equals(oabaJob.getStatus())) {
@@ -127,27 +133,17 @@ public class BlockingOABA implements MessageListener, Serializable {
 
 				} else {
 
-					// FIXME move operational properties from the model to a
-					// new, persistent BatchOperationalParams object
-					String temp =
-						(String) stageModel.properties().get("maxBlockSize");
-					int maxBlock = Integer.parseInt(temp);
-
-					temp = (String) stageModel.properties().get("maxOversized");
-					int maxOversized = Integer.parseInt(temp);
-
-					temp = (String) stageModel.properties().get("minFields");
-					int minFields = Integer.parseInt(temp);
-
-					// using BlockGroup to speed up dedup later
-					BlockGroup bGroup =
-						new BlockGroup(OabaFileUtils.getBlockGroupFactory(oabaJob),
-								maxBlock);
-
-					IBlockSink osSpecial =
-							OabaFileUtils.getOversizedFactory(oabaJob).getNextSink();
-
 					// Start blocking
+					final int maxBlock = oabaSettings.getMaxBlockSize();
+					final int maxOversized = oabaSettings.getMaxOversized();
+					final int minFields = oabaSettings.getMinFields();
+					final BlockGroup bGroup =
+						new BlockGroup(
+								OabaFileUtils.getBlockGroupFactory(oabaJob),
+								maxBlock);
+					final IBlockSink osSpecial =
+						OabaFileUtils.getOversizedFactory(oabaJob)
+								.getNextSink();
 					OABABlockingService blockingService =
 						new OABABlockingService(maxBlock, bGroup, OabaFileUtils
 								.getOversizedGroupFactory(oabaJob), osSpecial,

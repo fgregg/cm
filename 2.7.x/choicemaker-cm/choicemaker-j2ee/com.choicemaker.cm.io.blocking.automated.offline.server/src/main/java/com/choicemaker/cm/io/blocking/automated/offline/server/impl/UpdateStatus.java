@@ -60,7 +60,8 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (OabaUpdateMessage) msg.getObject();
 
-				log.fine("Starting to update job ID: " + data.getJobID() + " "
+				log.info("Updating job " + data.getJobID()
+						+ " setting percent complete to "
 						+ data.getPercentComplete());
 
 				final BatchJob job =

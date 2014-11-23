@@ -108,11 +108,19 @@ public class StartOABA implements MessageListener, Serializable {
 
 				final long jobId = data.jobID;
 				oabaJob = jobController.find(jobId);
-				// update status to mark as start
-				oabaJob.markAsStarted();
-
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
+				OabaSettings oabaSettings =
+					settingsController.findOabaSettingsByJobId(jobId);
+				OabaProcessing processingEntry =
+					processingController.findProcessingLogByJobId(jobId);
+				if (oabaJob == null || params == null || oabaSettings == null) {
+					String s =
+						"Unable to find a job, parameters or settings for "
+								+ jobId;
+					log.severe(s);
+					throw new IllegalArgumentException(s);
+				}
 				final String modelConfigId = params.getModelConfigurationName();
 				IProbabilityModel stageModel =
 					PMManager.getModelInstance(modelConfigId);
@@ -123,10 +131,10 @@ public class StartOABA implements MessageListener, Serializable {
 					throw new IllegalArgumentException(s);
 				}
 
-				// get the status
-				OabaProcessing status =
-					processingController.findProcessingLogByJobId(jobId);
+				// update status to mark as start
+				oabaJob.markAsStarted();
 
+				// FIXME better logging
 				log.info(jobId + " " + params.getModelConfigurationName() + " "
 						+ params.getLowThreshold() + " "
 						+ params.getHighThreshold());
@@ -135,9 +143,6 @@ public class StartOABA implements MessageListener, Serializable {
 				// check to see if there are a lot of records in stage.
 				// if not use single record matching instead of batch.
 				log.info("Checking whether to use single- or batched-record blocking...");
-				OabaSettings oabaSettings =
-					settingsController.findOabaSettingsByJobId(jobId);
-				log.info("OABASettings: " + oabaSettings); 
 				log.info("OabaSettings maxSingle: " + oabaSettings.getMaxSingle());
 				if (!isMoreThanThreshold(params.getStageRs(), stageModel,
 						oabaSettings.getMaxSingle())) {
@@ -158,7 +163,7 @@ public class StartOABA implements MessageListener, Serializable {
 					RecValService3 rvService =
 						new RecValService3(params.getStageRs(),
 								params.getMasterRs(), stageModel,
-								recvalFactory, translator, status, oabaJob);
+								recvalFactory, translator, processingEntry, oabaJob);
 					rvService.runService();
 
 					// FIXME move these parameters to a persistent operational
