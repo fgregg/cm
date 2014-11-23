@@ -20,23 +20,18 @@ import javax.ejb.FinderException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.jms.JMSException;
-import javax.jms.Queue;
 //import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.server.data.TransitivityJobStatus;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParameters;
 import com.choicemaker.cm.transitivity.server.util.MatchBiconnectedIterator;
 import com.choicemaker.cm.transitivity.util.CompositeEntityIterator;
 import com.choicemaker.cm.transitivity.util.CompositeEntitySource;
@@ -51,11 +46,14 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 	private static final Logger log = Logger.getLogger(TransitivityOABAServiceBean.class.getName());
 
-//	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
-
-//	private transient SessionContext sessionContext;
-	private transient EJBConfiguration configuration = null;
+//	@EJB
+	TransitivityJobControllerBean jobController;
+	
+//	@EJB
+	TransitivityParametersControllerBean paramsController;
+	
+//	@EJB
+	OabaProcessingControllerBean processingController;
 
 	/**
 	 * This method starts the transitivity engine.
@@ -87,7 +85,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
 
 		try {
-			StartData data = new StartData();
+			TransitivityJobData data = new TransitivityJobData();
 			data.jobID = jobID;
 			data.master = master;
 			data.staging = staging;
@@ -119,23 +117,22 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 		try {
 
-			BatchParameters batchParams = configuration.findBatchParamsByJobId(em, jobID);
-			BatchJob batchJob = em.find(BatchJobBean.class, jobID);
-			TransitivityJob job = new TransitivityJobBean(batchParams, batchJob);
-			em.persist(job);
-			final long retVal = job.getId();
+			TransitivityParameters batchParams = paramsController.findTransitivityParamsByJobId(jobID);
+			TransitivityJob transitivityJob = jobController.findTransitivityJob(jobID);
+//			TransitivityJob job = new TransitivityJobEntity(batchParams, transitivityJob);
+//			em.persist(job);
+			final long retVal = transitivityJob.getId();
 
 			// Create a new processing entry
-			OabaProcessing processing =
-				configuration.createProcessingLog(em, retVal);
+			OabaProcessing processing = processingController.findProcessingLogByJobId(retVal);
 
 			// Log the job info
-			log.fine("BatchJob: " + batchJob.toString());
-			log.fine("BatchParameters: " + batchParams.toString());
+			log.fine("TransitivityJob: " + transitivityJob.toString());
+			log.fine("TransitivityParameters: " + batchParams.toString());
 			log.fine("Processing entry: " + processing.toString());
-			log.fine("TransitivityJob: " + job.toString());
+			log.fine("TransitivityJob: " + transitivityJob.toString());
 
-			StartData data = new StartData(retVal);
+			OabaJobMessage data = new OabaJobMessage(retVal);
 			sendToTransitivity (data);
 
 		} catch (Exception e) {
@@ -162,9 +159,7 @@ public class TransitivityOABAServiceBean implements SessionBean {
 		JMSException, FinderException, RemoteException, CreateException,
 		NamingException, SQLException {
 
-		BatchJob transJob = configuration.findBatchJobById(em, TransitivityJobBean.class, jobID);
-		assert transJob instanceof TransitivityJob;
-
+		TransitivityJob transJob = jobController.findTransitivityJob(jobID);
 		TransitivityJobStatus status = new TransitivityJobStatus (
 			transJob.getId(),
 			transJob.getStatus(),
@@ -190,9 +185,8 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	public TransitivityResult getTransitivityResult (long jobID, boolean compact) throws
 		RemoteException, FinderException, NamingException, TransitivityException {
 
-		BatchJob batchJob = configuration.findBatchJobById(em, TransitivityJobBean.class, jobID);
-		assert batchJob instanceof TransitivityJob;
-		TransitivityJob transJob = (TransitivityJob) batchJob;
+		TransitivityJob transitivityJob = jobController.findTransitivityJob(jobID);
+		TransitivityJob transJob = (TransitivityJob) transitivityJob;
 		if (!transJob.getStatus().equals(TransitivityJob.STATUS_COMPLETED))
 			throw new TransitivityException ("Job " + jobID + " is not complete.");
 
@@ -226,9 +220,10 @@ public class TransitivityOABAServiceBean implements SessionBean {
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
-	private void sendToTransitivity (StartData d) throws NamingException, JMSException {
-		Queue queue = configuration.getTransitivityMessageQueue();
-		configuration.sendMessage(queue, d);
+	private void sendToTransitivity (OabaJobMessage d) throws NamingException, JMSException {
+		throw new Error("not yet re-implemented");
+//		Queue queue = configuration.getTransitivityMessageQueue();
+//		configuration.sendMessage(queue, d);
 	}
 
 
@@ -259,16 +254,16 @@ public class TransitivityOABAServiceBean implements SessionBean {
 
 
 	public void ejbCreate() throws CreateException {
-		try {
-			// 2014-04-24 rphall: Commented out unused local variable.
-//			InitialContext ic = new InitialContext();
-
-			this.configuration = EJBConfiguration.getInstance();
-
-		} catch (Exception ex) {
-			log.severe(ex.toString());
-			throw new CreateException(ex.getMessage());
-		}
+//		try {
+//			// 2014-04-24 rphall: Commented out unused local variable.
+////			InitialContext ic = new InitialContext();
+//
+//			this.configuration = EJBConfiguration.getInstance();
+//
+//		} catch (Exception ex) {
+//			log.severe(ex.toString());
+//			throw new CreateException(ex.getMessage());
+//		}
 
 	} // ejbCreate()
 

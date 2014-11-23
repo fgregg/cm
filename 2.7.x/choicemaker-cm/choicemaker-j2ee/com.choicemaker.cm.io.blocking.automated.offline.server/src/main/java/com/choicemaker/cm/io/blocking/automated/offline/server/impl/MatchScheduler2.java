@@ -14,25 +14,25 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 /**
@@ -62,8 +62,17 @@ public class MatchScheduler2 extends AbstractScheduler {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatchScheduler2.class.getName());
 
-	@PersistenceContext(unitName = "oaba")
-	private EntityManager em;
+	@EJB
+	private OabaJobControllerBean jobController;
+
+	@EJB
+	private SettingsController settingsController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+	
+	@EJB
+	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
@@ -77,35 +86,55 @@ public class MatchScheduler2 extends AbstractScheduler {
 	@Inject
 	private JMSContext jmsContext;
 
+	@Override
+	protected OabaJobControllerBean getJobController() {
+		return jobController;
+	}
+
+	@Override
+	protected OabaParametersControllerBean getParametersController() {
+		return paramsController;
+	}
+
+	@Override
+	protected OabaProcessingControllerBean getProcessingController() {
+		return processingController;
+	}
+
 	/**
 	 * This method cleans up the chunk files.
 	 */
-	protected void cleanUp(StartData data) throws BlockingException {
+	protected void cleanUp(OabaJobMessage data) throws BlockingException {
 		log.info("cleanUp");
 
 		final long jobId = data.jobID;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
-		BatchParameters params =
-			configuration.findBatchParamsByJobId(em, jobId);
+		OabaJob oabaJob = getJobController().find(jobId);
+		OabaParameters params = getParametersController().findBatchParamsByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
-		ImmutableProbabilityModel stageModel =
+		IProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
+		if (model == null) {
+			String s =
+				"No model corresponding to '" + modelConfigId + "'";
+			log.severe(s);
+			throw new IllegalArgumentException(s);
+		}
+
 		// get the number of processors
-		String temp = (String) stageModel.properties().get("numProcessors");
+		String temp = (String) model.properties().get("numProcessors");
 		int numProcessors = Integer.parseInt(temp);
 
 		// remove the data
-		OABAConfiguration oabaConfig = new OABAConfiguration(jobId);
 		IChunkDataSinkSourceFactory stageFactory =
-			oabaConfig.getStageDataFactory();
+			OabaFileUtils.getStageDataFactory(oabaJob, model);
 		IChunkDataSinkSourceFactory masterFactory =
-			oabaConfig.getMasterDataFactory();
+			OabaFileUtils.getMasterDataFactory(oabaJob, model);
 		stageFactory.removeAllSinks(data.numChunks);
 		masterFactory.removeAllSinks(data.numChunks);
 
 		// remove the trees
 		ComparisonTreeGroupSinkSourceFactory factory =
-			oabaConfig.getComparisonTreeGroupFactory(data.stageType,
+			OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, data.stageType,
 					numProcessors);
 		for (int i = 0; i < data.numRegularChunks; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
@@ -118,7 +147,7 @@ public class MatchScheduler2 extends AbstractScheduler {
 
 		// remove the oversized array files
 		ComparisonArrayGroupSinkSourceFactory factoryOS =
-			oabaConfig.getComparisonArrayGroupFactoryOS(numProcessors);
+			OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob, numProcessors);
 		for (int i = 0; i < numOS; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
 				IComparisonArraySource sourceOS = factoryOS.getSource(i, j);
@@ -127,7 +156,7 @@ public class MatchScheduler2 extends AbstractScheduler {
 		}
 	}
 
-	protected void sendToMatcher(StartData sd) {
+	protected void sendToMatcher(OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, matcherQueue, log);
 	}
 
@@ -137,7 +166,7 @@ public class MatchScheduler2 extends AbstractScheduler {
 	}
 
 	@Override
-	protected void sendToMatchDebup(StartData sd) {
+	protected void sendToMatchDebup(OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, matchDedupQueue, log);
 	}
 
@@ -149,11 +178,6 @@ public class MatchScheduler2 extends AbstractScheduler {
 	@Override
 	protected Logger getJMSTrace() {
 		return jmsTrace;
-	}
-
-	@Override
-	protected EntityManager getEntityManager() {
-		return em;
 	}
 
 }

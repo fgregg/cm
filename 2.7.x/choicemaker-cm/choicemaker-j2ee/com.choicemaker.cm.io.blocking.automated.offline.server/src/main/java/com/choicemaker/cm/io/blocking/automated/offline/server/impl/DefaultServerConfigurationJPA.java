@@ -12,6 +12,6 @@ public interface DefaultServerConfigurationJPA {
 	String QN_DSC_FIND_ALL = "defaultServerConfigFindAll";
 
 	String JPQL_DSC_FIND_ALL =
-		"Select dscb from DefaultServerConfigurationBean dscb";
+		"Select dscb from DefaultServerConfigurationEntity dscb";
 
 }

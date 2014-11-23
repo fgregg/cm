@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 
 import javax.jms.JMSConsumer;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 
 /**
  * A Utility class, currently unused, for sending a message to a queue. Useage:
@@ -14,7 +14,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
  * <pre>
  * JMSConsumer = jmsContext.createConsumer(blockQueue);
  * CallableStartData csd = new CallableStartData(consumer, timeOut);
- * Future&lt;StartData&gt; fsd = executor.submit(csd);
+ * Future&lt;OabaJobMessage&gt; fsd = executor.submit(csd);
  * try {
  * 	retVal = fsd.get();
  * } catch (InterruptedException | ExecutionException x) {
@@ -25,7 +25,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
  * @author rphall
  *
  */
-class CallableStartData implements Callable<StartData> {
+class CallableStartData implements Callable<OabaJobMessage> {
 	private final JMSConsumer consumer;
 	private final long timeOut;
 
@@ -40,10 +40,10 @@ class CallableStartData implements Callable<StartData> {
 		this.timeOut = to;
 	}
 
-	public StartData call() {
-		StartData retVal = null;
+	public OabaJobMessage call() {
+		OabaJobMessage retVal = null;
 		try {
-			retVal = consumer.receiveBody(StartData.class, timeOut);
+			retVal = consumer.receiveBody(OabaJobMessage.class, timeOut);
 		} catch (Exception x) {
 			fail(x.toString());
 		}

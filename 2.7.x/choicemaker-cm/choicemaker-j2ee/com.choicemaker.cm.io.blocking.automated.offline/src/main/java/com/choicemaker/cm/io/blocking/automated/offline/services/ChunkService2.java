@@ -17,7 +17,7 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
@@ -56,8 +56,8 @@ public class ChunkService2 {
 	private IBlockSource osSource;
 	private RecordSource stage;
 	private RecordSource master;
-	private IProbabilityModel stageModel;
-	private IProbabilityModel masterModel;
+	private ImmutableProbabilityModel stageModel;
+	private ImmutableProbabilityModel masterModel;
 	private IRecordIDTranslator2 translator;
 	private IChunkRecordIDSinkSourceFactory recIDFactory;
 	
@@ -97,7 +97,7 @@ public class ChunkService2 {
 	 * @param status - status of the system
 	 */	
 	public ChunkService2 (IBlockSource bSource, IBlockSource osSource, RecordSource stage, RecordSource master,
-		IProbabilityModel stageModel, IProbabilityModel masterModel,
+		ImmutableProbabilityModel stageModel, ImmutableProbabilityModel masterModel,
 		IRecordIDTranslator2 translator,
 		IChunkRecordIDSinkSourceFactory recIDFactory, IChunkDataSinkSourceFactory stageSinkFactory,
 		IChunkDataSinkSourceFactory masterSinkFactory,
@@ -305,9 +305,10 @@ public class ChunkService2 {
 	 * 
 	 *
 	 */
-	private void createDataFile (RecordSource rs, IProbabilityModel model, 
-		long [] ind, IChunkRecordIDSource [] crSources,
-		RecordSink [] recordSinks, int startNum) throws BlockingException, XmlConfException {
+	private void createDataFile(RecordSource rs,
+			ImmutableProbabilityModel model, long[] ind,
+			IChunkRecordIDSource[] crSources, RecordSink[] recordSinks,
+			int startNum) throws BlockingException, XmlConfException {
 
 		try {
 			//open data file for reading.
@@ -320,18 +321,6 @@ public class ChunkService2 {
 			//read each source record and check each of the files.
 			while (rs.hasNext()) {
 				Record r = rs.getNext();
-
-/*					
-				Object O = r.getId();
-				long recID = 0;
-				if (O.getClass().equals( java.lang.Long.class )) {
-					Long L = (Long) r.getId();
-					recID = L.longValue();
-				} else if (O.getClass().equals( java.lang.Integer.class )) {
-					recID = ((Integer) r.getId()).longValue ();
-				}
-*/				
-				
 				
 				//for each chunk data file, check if this record belongs there.
 				for (int i =0; i< numChunks; i++) {

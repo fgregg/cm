@@ -19,8 +19,8 @@ import javax.jms.JMSException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAService;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
@@ -54,15 +54,15 @@ public class BatchQueryListener extends WorkflowControlListener{
 	protected long getUrmJobId(long batchJobId) 
 								throws NamingException,RemoteException,JMSException,ConfigException,
 								CmRuntimeException,SQLException,CreateException,ArgumentException,ModelException {
-		BatchJob batchJob = Single.getInst().findBatchJobById(em, BatchJobBean.class, batchJobId);
+		BatchJob oabaJob = Single.getInst().findBatchJobById(em, OabaJobEntity.class, batchJobId);
 
 		// FIXME HACK (stuffing a URM job id into a transaction id)
 		// Possible fix:
-		// * Introduce a URM transaction id that uses the BatchJob transaction
+		// * Introduce a URM transaction id that uses the OabaJob transaction
 		//   identifier field
 		// * Look up or create the URM job identifier using the usual JPA
 		//   methods
-		long urmJobId = batchJob.getTransactionId();
+		long urmJobId = oabaJob.getTransactionId();
 		// END FIXME
 
 		return urmJobId;

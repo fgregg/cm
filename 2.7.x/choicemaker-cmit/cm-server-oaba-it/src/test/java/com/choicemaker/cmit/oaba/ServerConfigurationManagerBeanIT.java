@@ -42,13 +42,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DuplicateServerConfigurationNameException;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationManager;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationManagerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
@@ -137,7 +137,7 @@ public class ServerConfigurationManagerBeanIT {
 	EntityManager em;
 
 	@EJB
-	protected ServerConfigurationManager scm;
+	protected ServerConfigurationController scm;
 
 	private int initialServerConfigCount;
 	private int initialDefaultServerConfigCount;
@@ -209,7 +209,7 @@ public class ServerConfigurationManagerBeanIT {
 	@InSequence(10)
 	public void testComputeAvailableProcessors() {
 		assertTrue(setupOK);
-		int count = ServerConfigurationManagerBean.computeAvailableProcessors();
+		int count = ServerConfigurationControllerBean.computeAvailableProcessors();
 		assertTrue(count > -1);
 	}
 
@@ -217,7 +217,7 @@ public class ServerConfigurationManagerBeanIT {
 	@InSequence(10)
 	public void testComputeHostName() {
 		assertTrue(setupOK);
-		String name = ServerConfigurationManagerBean.computeHostName();
+		String name = ServerConfigurationControllerBean.computeHostName();
 		assertTrue(name != null && !name.trim().isEmpty());
 	}
 
@@ -228,7 +228,7 @@ public class ServerConfigurationManagerBeanIT {
 		Set<String> uniqueNames = new HashSet<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			String name =
-				ServerConfigurationManagerBean.computeUniqueGenericName();
+				ServerConfigurationControllerBean.computeUniqueGenericName();
 			uniqueNames.add(name);
 		}
 		assertTrue(uniqueNames.size() == MAX_TEST_ITERATIONS);
@@ -239,13 +239,13 @@ public class ServerConfigurationManagerBeanIT {
 	public void testComputeGenericConfiguration() {
 		assertTrue(setupOK);
 		MutableServerConfiguration msc = scm.computeGenericConfiguration();
-		assertTrue(msc.getId() == ServerConfigurationBean.NON_PERSISTENT_ID);
+		assertTrue(msc.getId() == ServerConfigurationEntity.NON_PERSISTENT_ID);
 		assertTrue(msc.getHostName().equals(
-				ServerConfigurationManagerBean.computeHostName()));
-		assertTrue(msc.getMaxChoiceMakerThreads() == ServerConfigurationManagerBean
+				ServerConfigurationControllerBean.computeHostName()));
+		assertTrue(msc.getMaxChoiceMakerThreads() == ServerConfigurationControllerBean
 				.computeAvailableProcessors());
-		assertTrue(msc.getMaxOabaChunkFileCount() == ServerConfigurationManagerBean.DEFAULT_MAX_CHUNK_COUNT);
-		assertTrue(msc.getMaxOabaChunkFileRecords() == ServerConfigurationManagerBean.DEFAULT_MAX_CHUNK_SIZE);
+		assertTrue(msc.getMaxOabaChunkFileCount() == ServerConfigurationControllerBean.DEFAULT_MAX_CHUNK_COUNT);
+		assertTrue(msc.getMaxOabaChunkFileRecords() == ServerConfigurationControllerBean.DEFAULT_MAX_CHUNK_SIZE);
 	}
 
 	@Test
@@ -277,24 +277,24 @@ public class ServerConfigurationManagerBeanIT {
 		// Create a configuration
 		final MutableServerConfiguration msc =
 			scm.computeGenericConfiguration();
-		assertTrue(msc.getId() == ServerConfigurationBean.NON_PERSISTENT_ID);
-		assertTrue(!ServerConfigurationBean.isPersistent(msc));
+		assertTrue(msc.getId() == ServerConfigurationEntity.NON_PERSISTENT_ID);
+		assertTrue(!ServerConfigurationEntity.isPersistent(msc));
 
 		// Save the configuration
-		long id = ServerConfigurationBean.NON_PERSISTENT_ID;
+		long id = ServerConfigurationEntity.NON_PERSISTENT_ID;
 		try {
 			ServerConfiguration sc = null;
 			sc = scm.save(msc);
 			te.add(sc);
 			assertTrue(sc != null);
 			id = sc.getId();
-			assertTrue(ServerConfigurationBean.isPersistent(sc));
+			assertTrue(ServerConfigurationEntity.isPersistent(sc));
 
-			assertTrue(ServerConfigurationBean.equalsIgnoreIdUuid(msc, sc));
-		} catch (DuplicateServerConfigurationNameException e) {
+			assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(msc, sc));
+		} catch (ServerConfigurationException e) {
 			fail(e.toString());
 		}
-		assertTrue(id != ServerConfigurationBean.NON_PERSISTENT_ID);
+		assertTrue(id != ServerConfigurationEntity.NON_PERSISTENT_ID);
 		final long scID = id;
 
 		// Find the configuration
@@ -302,7 +302,7 @@ public class ServerConfigurationManagerBeanIT {
 		sc = scm.find(scID);
 		assertTrue(sc != null);
 		assertTrue(sc.getId() == scID);
-		assertTrue(ServerConfigurationBean.equalsIgnoreIdUuid(msc, sc));
+		assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(msc, sc));
 
 		try {
 			te.removePersistentObjects(em, utx);
@@ -329,7 +329,7 @@ public class ServerConfigurationManagerBeanIT {
 			ServerConfiguration sc = null;
 			try {
 				sc = scm.save(msc);
-			} catch (DuplicateServerConfigurationNameException e) {
+			} catch (ServerConfigurationException e) {
 				fail(e.toString());
 			}
 			te.add(sc);
@@ -404,9 +404,9 @@ public class ServerConfigurationManagerBeanIT {
 			final ServerConfiguration sc1 =
 				scm.getDefaultConfiguration(fakeHost1, computeFallback);
 			assertTrue(sc1 != null);
-			assertTrue(ServerConfigurationBean.isPersistent(sc1));
+			assertTrue(ServerConfigurationEntity.isPersistent(sc1));
 			te.add(sc1);
-			te.add(new DefaultServerConfigurationBean(fakeHost1, sc1.getId()));
+			te.add(new DefaultServerConfigurationEntity(fakeHost1, sc1.getId()));
 
 			// Verify that the no-param method works like the
 			// getDefaultConfiguration(fakeHost, true) method
@@ -416,7 +416,7 @@ public class ServerConfigurationManagerBeanIT {
 			// Verify that the two defaults are the same persistent object
 			assertTrue(sc1.getId() == sc2.getId());
 			assertTrue(sc1.getUUID().equals(sc2.getUUID()));
-			assertTrue(ServerConfigurationBean.equalsIgnoreIdUuid(sc1, sc2));
+			assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(sc1, sc2));
 
 			// Verify that one persistent configuration now exists for the fake
 			// host
@@ -444,7 +444,7 @@ public class ServerConfigurationManagerBeanIT {
 			assertTrue(sc4 != null);
 			assertTrue(sc3.getId() == sc4.getId());
 			assertTrue(sc3.getUUID().equals(sc4.getUUID()));
-			assertTrue(ServerConfigurationBean.equalsIgnoreIdUuid(sc3, sc4));
+			assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(sc3, sc4));
 
 			// Add another server configuration and verify that with two
 			// persistent configurations, neither of which has been specified
@@ -464,15 +464,15 @@ public class ServerConfigurationManagerBeanIT {
 
 			// Set the first configuration as the default and retrieve it
 			scm.setDefaultConfiguration(fakeHost3, sc3);
-			te.add(new DefaultServerConfigurationBean(fakeHost3, sc3.getId()));
+			te.add(new DefaultServerConfigurationEntity(fakeHost3, sc3.getId()));
 			final ServerConfiguration sc7 =
 				scm.getDefaultConfiguration(fakeHost3, computeFallback);
 			assertTrue(sc7 != null);
 			assertTrue(sc3.getId() == sc7.getId());
 			assertTrue(sc3.getUUID().equals(sc7.getUUID()));
-			assertTrue(ServerConfigurationBean.equalsIgnoreIdUuid(sc3, sc7));
+			assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(sc3, sc7));
 
-		} catch (DuplicateServerConfigurationNameException e) {
+		} catch (ServerConfigurationException e) {
 			fail(e.toString());
 		} finally {
 			try {

@@ -1,7 +1,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 /**
- * Java Persistence API (JPA) for OabaBatchJobProcessing beans.<br/>
+ * Java Persistence API (JPA) for OabaJobProcessing beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>
@@ -20,7 +20,7 @@ public interface OabaProcessingJPA {
 	String DISCRIMINATOR_COLUMN = "JOB_TYPE";
 
 	/**
-	 * Value of the discriminator column used to mark OabaBatchJobProcessing
+	 * Value of the discriminator column used to mark OabaJobProcessing
 	 * types (and not sub-types)
 	 */
 	String DISCRIMINATOR_VALUE = "OABA";
@@ -75,14 +75,14 @@ public interface OabaProcessingJPA {
 
 	/** JPQL used to implement {@link #QN_OABAPROCESSING_FIND_ALL} */
 	String JPQL_OABAPROCESSING_FIND_ALL =
-		"Select o from OabaBatchJobProcessingBean o";
+		"Select o from OabaProcessingEntity o";
 
 	/** Name of the query that finds all persistent status entries */
 	String QN_OABAPROCESSING_FIND_BY_JOBID = "oabaProcessingFindByJobId";
 
 	/** JPQL used to implement {@link #QN_OABAPROCESSING_FIND_BY_JOBID} */
 	String JPQL_OABAPROCESSING_FIND_BY_JOBID =
-		"Select o from OabaBatchJobProcessingBean o where o.jobId = :jobId";
+		"Select o from OabaProcessingEntity o where o.jobId = :jobId";
 
 	/**
 	 * Name of the parameter used to specify the jobId parameter of

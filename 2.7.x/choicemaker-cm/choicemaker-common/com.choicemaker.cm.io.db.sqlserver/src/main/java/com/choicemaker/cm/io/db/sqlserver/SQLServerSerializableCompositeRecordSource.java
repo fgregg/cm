@@ -195,5 +195,12 @@ public class SQLServerSerializableCompositeRecordSource implements SerializableR
 		}
 	}
 
+	public String toString() {
+		return "SQLServerSerializableCompositeRecordSource [dsJNDIName="
+				+ dsJNDIName + ", modelName=" + modelName + ", dbConfig="
+				+ dbConfig + ", sqlQuery=" + sqlQuery + ", maxCompositeSize="
+				+ maxCompositeSize + "]";
+	}
+
 
 }

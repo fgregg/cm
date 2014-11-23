@@ -17,22 +17,19 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.Match;
@@ -55,10 +52,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
@@ -98,11 +97,17 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 	public static final String MATCH_CANDIDATE =
 		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
 
-	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
+	@EJB
+	private OabaJobControllerBean jobController;
 
-	@Resource
-	private MessageDrivenContext mdc;
+	@EJB
+	private SettingsController settingsController;
+
+	@EJB
+	OabaParametersControllerBean paramsController;
+	
+	@EJB
+	OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
 	private Queue updateQueue;
@@ -113,61 +118,55 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		StartData data;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OabaJobMessage data;
+		OabaJob oabaJob = null;
 
 		try {
 
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (StartData) msg.getObject();
+				data = (OabaJobMessage) msg.getObject();
 				final long jobId = data.jobID;
-				BatchJob batchJob =
-					configuration.findBatchJobById(em, BatchJobBean.class,
-							jobId);
-				BatchParameters params =
-					configuration.findBatchParamsByJobId(em, jobId);
-				OABAConfiguration oabaConfig =
-					new OABAConfiguration(jobId);
+				oabaJob = jobController.find(jobId);
+				OabaParameters params =
+					paramsController.findBatchParamsByJobId(jobId);
+				OabaSettings settings =
+					settingsController.findOabaSettingsByJobId(jobId);				
 
 				long t = System.currentTimeMillis();
-
-				log.info("Starting Sinlge Record Match with maxSingle = "
-						+ params.getMaxSingle());
+					log.info("Starting Sinlge Record Match with maxSingle = "
+							+ settings.getMaxSingle());
 
 				// final file
 				IMatchRecord2Sink mSink =
-					oabaConfig.getCompositeMatchSink(jobId);
+						OabaFileUtils.getCompositeMatchSink(oabaJob);
 
 				// run OABA on the staging data set.
-				handleStageBatch(data, oabaConfig, mSink, batchJob, params);
+				handleStageBatch(data, mSink, oabaJob, params);
 
 				log.info("Time in dedup stage "
 						+ (System.currentTimeMillis() - t));
 				t = System.currentTimeMillis();
 
 				// run single record match between stage and master.
-				handleSingleMatching(data, oabaConfig, mSink, params);
+				handleSingleMatching(data, mSink, params);
 
 				log.info("Time in single matching "
 						+ (System.currentTimeMillis() - t));
 
-				batchJob.setDescription(mSink.getInfo());
+				oabaJob.setDescription(mSink.getInfo());
 
 			} else {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			mdc.setRollbackOnly();
 		} catch (Exception e) {
 			log.severe(e.toString());
-			e.printStackTrace();
+			if (oabaJob != null) {
+				oabaJob.markAsFailed();
+			}
 		}
-
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
-		return;
 	} // onMessage(Message)
 
 	/**
@@ -175,22 +174,20 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 	 *
 	 * @param data
 	 */
-	private void handleStageBatch(StartData data, OABAConfiguration oabaConfig,
-			IMatchRecord2Sink mSinkFinal, BatchJob batchJob,
-			BatchParameters params) throws Exception {
+	private void handleStageBatch(OabaJobMessage data,
+			IMatchRecord2Sink mSinkFinal, OabaJob oabaJob, OabaParameters params)
+			throws Exception {
 
 		final long jobId = data.jobID;
 		final String modelConfigId = params.getModelConfigurationName();
-		oabaConfig = new OABAConfiguration(jobId);
-		IProbabilityModel stageModel =
+		ImmutableProbabilityModel stageModel =
 			PMManager.getModelInstance(modelConfigId);
 
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
 		OabaProcessing processingEntry =
-			configuration.getProcessingLog(em, data);
+			processingController.findProcessingLogByJobId(jobId);
 
 		RecordIDTranslator2 translator =
-			new RecordIDTranslator2(oabaConfig.getTransIDFactory());
+			new RecordIDTranslator2(OabaFileUtils.getTransIDFactory(oabaJob));
 
 		// OABA parameters
 		String temp = (String) stageModel.properties().get("maxBlockSize");
@@ -211,7 +208,8 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		// create rec_id, val_id files
 		RecValService2 rvService =
 			new RecValService2(params.getStageRs(), null, stageModel, null,
-					oabaConfig.getRecValFactory(), translator, processingEntry);
+					OabaFileUtils.getRecValFactory(oabaJob), translator,
+					processingEntry);
 		rvService.runService();
 		data.numBlockFields = rvService.getNumBlockingFields();
 
@@ -221,23 +219,23 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		// blocking
 		// using BlockGroup to speed up dedup later
 		BlockGroup bGroup =
-			new BlockGroup(oabaConfig.getBlockGroupFactory(), maxBlock);
-
-		IBlockSinkSourceFactory osFactory = oabaConfig.getOversizedFactory();
+			new BlockGroup(OabaFileUtils.getBlockGroupFactory(oabaJob), maxBlock);
+		IBlockSinkSourceFactory osFactory = OabaFileUtils.getOversizedFactory(oabaJob);
 		IBlockSink osSpecial = osFactory.getNextSink();
 
 		// Start blocking
 		OABABlockingService blockingService =
 			new OABABlockingService(maxBlock, bGroup,
-					oabaConfig.getOversizedGroupFactory(), osSpecial, null,
-					oabaConfig.getRecValFactory(), data.numBlockFields,
-					data.validator, processingEntry, batchJob, minFields, maxOversized);
+					OabaFileUtils.getOversizedGroupFactory(oabaJob), osSpecial,
+					null, OabaFileUtils.getRecValFactory(oabaJob),
+					data.numBlockFields, data.validator, processingEntry,
+					oabaJob, minFields, maxOversized);
 		blockingService.runService();
 		log.info("Done blocking " + blockingService.getTimeElapsed());
 		log.info("Num Blocks " + blockingService.getNumBlocks());
 
 		// start block dedup
-		IBlockSink bSink = oabaConfig.getBlockFactory().getNextSink();
+		IBlockSink bSink = OabaFileUtils.getBlockFactory(oabaJob).getNextSink();
 		BlockDedupService dedupService =
 			new BlockDedupService(bGroup, bSink, maxBlock, processingEntry);
 		dedupService.runService();
@@ -251,7 +249,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 
 		OversizedDedupService osDedupService =
 			new OversizedDedupService(osSource, osDedup,
-					oabaConfig.getOversizedTempFactory(), processingEntry, batchJob);
+					OabaFileUtils.getOversizedTempFactory(oabaJob), processingEntry, oabaJob);
 		osDedupService.runService();
 		log.info("Done oversized dedup " + osDedupService.getTimeElapsed());
 		log.info("Num OS Before " + osDedupService.getNumBlocksIn());
@@ -260,7 +258,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		sendToUpdateStatus(data.jobID, 30);
 
 		// create the proper block source
-		IBlockSinkSourceFactory bFactory = oabaConfig.getBlockFactory();
+		IBlockSinkSourceFactory bFactory = OabaFileUtils.getBlockFactory(oabaJob);
 		bSink = bFactory.getNextSink();
 		IBlockSource source = bFactory.getSource(bSink);
 
@@ -268,13 +266,16 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		IBlockSource source2 = osFactory.getSource(osDedup);
 
 		// create chunks
+		ImmutableProbabilityModel model =
+			PMManager.getModelInstance(modelConfigId);
 		ChunkService2 chunkService =
-			new ChunkService2(source, source2, params.getStageRs(), null, stageModel,
-					null, translator, oabaConfig.getChunkIDFactory(),
-					oabaConfig.getStageDataFactory(),
-					oabaConfig.getMasterDataFactory(),
-					oabaConfig.getCGFactory(), maxChunk, processingEntry);
-
+			new ChunkService2(source, source2, params.getStageRs(), null,
+					stageModel, null, translator,
+					OabaFileUtils.getChunkIDFactory(oabaJob),
+					OabaFileUtils.getStageDataFactory(oabaJob, model),
+					OabaFileUtils.getMasterDataFactory(oabaJob, model),
+					OabaFileUtils.getCGFactory(oabaJob), maxChunk,
+					processingEntry);
 		chunkService.runService();
 		log.info("Number of chunks " + chunkService.getNumChunks());
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
@@ -285,17 +286,17 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 
 		// match sink
 		IMatchRecord2SinkSourceFactory mFactory =
-			oabaConfig.getMatchTempFactory();
+			OabaFileUtils.getMatchTempFactory(oabaJob);
 		IMatchRecord2Sink mSink = mFactory.getNextSink();
 
 		// matcher is the code that does the matching.
 		BlockMatcher2 matcher = new BlockMatcher2();
 
 		MatchingService2 matchingService =
-			new MatchingService2(oabaConfig.getStageDataFactory(),
-					oabaConfig.getMasterDataFactory(),
-					oabaConfig.getCGFactory(), stageModel, null, mSink,
-					matcher, params.getLowThreshold(),
+			new MatchingService2(OabaFileUtils.getStageDataFactory(oabaJob,
+					model), OabaFileUtils.getMasterDataFactory(oabaJob, model),
+					OabaFileUtils.getCGFactory(oabaJob), stageModel, null,
+					mSink, matcher, params.getLowThreshold(),
 					params.getHighThreshold(), maxBlock, processingEntry);
 		matchingService.runService();
 		log.info("Done matching " + matchingService.getTimeElapsed());
@@ -318,12 +319,12 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 	 * @param data
 	 * @throws Exception
 	 */
-	private void handleSingleMatching(StartData data,
-			OABAConfiguration oabaConfig, IMatchRecord2Sink mSinkFinal,
-			BatchParameters params) throws Exception {
+	private void handleSingleMatching(OabaJobMessage data,
+			IMatchRecord2Sink mSinkFinal, OabaParameters params)
+			throws Exception {
 
 		final String modelConfigId = params.getModelConfigurationName();
-		IProbabilityModel model =
+		ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
 		if (model == null) {
 			String msg = "Invalid probability accessProvider: " + modelConfigId;

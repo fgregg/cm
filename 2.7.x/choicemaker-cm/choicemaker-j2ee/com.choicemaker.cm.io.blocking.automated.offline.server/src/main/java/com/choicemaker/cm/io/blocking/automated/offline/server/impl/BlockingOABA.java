@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
@@ -25,21 +26,19 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.IProbabilityModel;
 //import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
 
@@ -62,8 +61,17 @@ public class BlockingOABA implements MessageListener, Serializable {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ BlockingOABA.class.getName());
 
-	@PersistenceContext(unitName = "oaba")
-	private EntityManager em;
+	@EJB
+	private OabaJobControllerBean jobController;
+
+	@EJB
+	private SettingsController settingsController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+	
+	@EJB
+	private OabaProcessingControllerBean processingController;
 
 	@Resource
 	private MessageDrivenContext mdc;
@@ -85,25 +93,22 @@ public class BlockingOABA implements MessageListener, Serializable {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		StartData data = null;
-		BatchJob batchJob = null;
-		final EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OabaJobMessage data = null;
+		OabaJob oabaJob = null;
 
 		log.info("BlockingOABA In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (StartData) msg.getObject();
+				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				batchJob =
-					configuration.findBatchJobById(em, BatchJobBean.class,
-							jobId);
+				oabaJob = jobController.find(jobId);
 
 				// init values
-				BatchParameters params =
-					configuration.findBatchParamsByJobId(em, batchJob.getId());
+				OabaParameters params =
+					paramsController.findBatchParamsByJobId(jobId);
 				final String modelConfigId = params.getModelConfigurationName();
 				IProbabilityModel stageModel =
 					PMManager.getModelInstance(modelConfigId);
@@ -113,16 +118,12 @@ public class BlockingOABA implements MessageListener, Serializable {
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}
-				OABAConfiguration oabaConfig =
-					new OABAConfiguration(params.getModelConfigurationName(),
-							jobId);
 				OabaProcessing processingEntry =
-					configuration.getProcessingLog(em, jobId);
+					processingController.findProcessingLogByJobId(jobId);
 
 				if (BatchJob.STATUS_ABORT_REQUESTED
-						.equals(batchJob.getStatus())) {
-					MessageBeanUtils.stopJob(batchJob, processingEntry,
-							oabaConfig);
+						.equals(oabaJob.getStatus())) {
+					MessageBeanUtils.stopJob(oabaJob, processingEntry);
 
 				} else {
 
@@ -140,19 +141,19 @@ public class BlockingOABA implements MessageListener, Serializable {
 
 					// using BlockGroup to speed up dedup later
 					BlockGroup bGroup =
-						new BlockGroup(oabaConfig.getBlockGroupFactory(),
+						new BlockGroup(OabaFileUtils.getBlockGroupFactory(oabaJob),
 								maxBlock);
 
 					IBlockSink osSpecial =
-						oabaConfig.getOversizedFactory().getNextSink();
+							OabaFileUtils.getOversizedFactory(oabaJob).getNextSink();
 
 					// Start blocking
 					OABABlockingService blockingService =
-						new OABABlockingService(maxBlock, bGroup,
-								oabaConfig.getOversizedGroupFactory(),
-								osSpecial, null, oabaConfig.getRecValFactory(),
+						new OABABlockingService(maxBlock, bGroup, OabaFileUtils
+								.getOversizedGroupFactory(oabaJob), osSpecial,
+								null, OabaFileUtils.getRecValFactory(oabaJob),
 								data.numBlockFields, data.validator,
-								processingEntry, batchJob, minFields,
+								processingEntry, oabaJob, minFields,
 								maxOversized);
 					blockingService.runService();
 
@@ -175,17 +176,12 @@ public class BlockingOABA implements MessageListener, Serializable {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			mdc.setRollbackOnly();
-		} catch (BlockingException e) {
-			assert batchJob != null;
-			batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
-			e.printStackTrace();
+			if (oabaJob != null) {
+				oabaJob.markAsFailed();
+			}
 		}
-
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
@@ -193,7 +189,7 @@ public class BlockingOABA implements MessageListener, Serializable {
 		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext, updateQueue, log);
 	}
 
-	private void sendToDedup(StartData data) throws NamingException,
+	private void sendToDedup(OabaJobMessage data) throws NamingException,
 			JMSException {
 		MessageBeanUtils.sendStartData(data, jmsContext, dedupQueue, log);
 	}

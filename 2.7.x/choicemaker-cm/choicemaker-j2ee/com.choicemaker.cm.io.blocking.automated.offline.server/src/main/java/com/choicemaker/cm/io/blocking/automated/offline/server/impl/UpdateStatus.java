@@ -21,10 +21,8 @@ import javax.jms.ObjectMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
 
 /**
  * This message bean updates the status of the current job.
@@ -42,10 +40,8 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 	EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
-	private EJBConfiguration configuration = null;
 
 	public UpdateStatus() {
-//	log.fine("constuctor");
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
@@ -53,44 +49,30 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 		this.mdc = mdc;
 	}
 
-
-	public void ejbCreate() {
-//	log.fine("starting ejbCreate...");
-		try {
-			this.configuration = EJBConfiguration.getInstance();
-			
-		} catch (Exception e) {
-	  log.severe(e.toString());
-		}
-//	log.fine("...finished ejbCreate");
-	}
-
-	
-	
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		UpdateData data;
+		OabaUpdateMessage data;
 
 		try {
 
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (UpdateData) msg.getObject();
-				
-				log.fine("Starting to update job ID: " + data.getJobID() + " " + data.getPercentComplete());
+				data = (OabaUpdateMessage) msg.getObject();
 
-				final BatchJob job = this.configuration.findBatchJobById(em, BatchJobBean.class, data.getJobID());
-				
+				log.fine("Starting to update job ID: " + data.getJobID() + " "
+						+ data.getPercentComplete());
+
+				final BatchJob job =
+					em.find(OabaJobEntity.class, data.getJobID());
+
 				if (data.getPercentComplete() == 0) {
 					job.markAsStarted();
-				}
-				else if (data.getPercentComplete() == 100) {
+				} else if (data.getPercentComplete() == 100) {
 					job.markAsCompleted();
-				}
-				else {
+				} else {
 					job.markAsStarted();
-					job.setFractionComplete( data.getPercentComplete() );
+					job.setFractionComplete(data.getPercentComplete());
 				}
 
 			} else {
@@ -108,11 +90,9 @@ public class UpdateStatus implements MessageDrivenBean, MessageListener {
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 		return;
 	} // onMessage(Message)
-	
-	
+
 	public void ejbRemove() {
 //		log.fine("ejbRemove()");
 	}
-	
 
 }

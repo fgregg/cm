@@ -37,6 +37,6 @@ public interface AbaSettingsJPA {
 	 String QN_ABA_FIND_ALL = "abaSettingsFindAll";
 	
 	 /** JPQL used to implement {@link #QN_ABA_FIND_ALL} */
-	 String JPQL_ABA_FIND_ALL = "Select aba from AbaSettingsBean aba";
+	 String JPQL_ABA_FIND_ALL = "Select aba from AbaSettingsEntity aba";
 
 }

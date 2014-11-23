@@ -22,11 +22,12 @@ import javax.jms.JMSException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchQueryService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
@@ -59,7 +60,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 	private EntityManager em;
 
 //	@EJB
-	private BatchQueryService batchQuery;
+	private OabaService batchQuery;
 
 	public BatchMatchAnalyzerBean() {
 		super();
@@ -81,7 +82,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 							ConfigException,
 							ModelException,
 							CmRuntimeException, 
-							RemoteException
+							RemoteException, ServerConfigurationException
 	{
 		log.fine("<< startMatching...");
 		UrmJob uj = Single.getInst().createUrmJob(externalId);
@@ -124,7 +125,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 		//TODO implement
 		//TODO: check input parameters
 //		try {
-//			BatchQueryService qs = Single.getInst().getBatchQueryService();			
+//			OabaService qs = Single.getInst().getBatchQueryService();			
 //			BatchJobStatus batchJob = qs.getStatus(jobId);
 //			if(!batchJob.getStatus().equals("COMPLETED"))
 //				throw new 	ArgumentException("job doesn't have a complete status");
@@ -133,7 +134,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 //			uj.setSerializationType(s.toString());
 //			uj.markAsMatching();
 //					 	
-//			StartData data = new StartData();
+//			TransitivityJobData data = new TransitivityJobData();
 //			data.jobID = jobId;
 //			data.stageModelName = modelName;
 //			data.low = differThreshold;
@@ -160,7 +161,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 		return jobId;
 	 }
 	 
-//	private void sendToTransitivity (StartData d) throws ConfigException, CmRuntimeException  {
+//	private void sendToTransitivity (TransitivityJobData d) throws ConfigException, CmRuntimeException  {
 //		Queue queue = Single.getInst().getTransitivityMessageQueue();
 //		Single.getInst().sendMessage(queue, d);
 //		log.info ("send To TransitivityBean ");
@@ -189,13 +190,13 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 			switch (stepIndex) {
 			case BATCH_MATCH_STEP_INDEX:
 				BatchJob bj =
-					Single.getInst().findBatchJobById(em, BatchJobBean.class,
+					Single.getInst().findBatchJobById(em, OabaJobEntity.class,
 							stepJobId);
 				stepStatus = bj.getStatus();
 				break;
 			case TRANS_OABA_STEP_INDEX:
 				TransitivityJob tj =
-					Single.getInst().findTransJobById(em, TransitivityJobBean.class, stepJobId);
+					Single.getInst().findTransJobById(em, TransitivityJobEntity.class, stepJobId);
 				stepStatus = tj.getStatus();
 				break;
 			case TRANS_SERIAL_STEP_INDEX:
@@ -289,7 +290,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 				throw new ArgumentException("job "+jobID+" is not completed");
 			
 			UrmStepJob stepJob = Single.getInst().findStepJobByUrmAndIndex(jobID,TRANS_OABA_STEP_INDEX);
-			TransitivityJob trJob = Single.getInst().findTransJobById(em, TransitivityJobBean.class, stepJob.getStepJobId().longValue());
+			TransitivityJob trJob = Single.getInst().findTransJobById(em, TransitivityJobEntity.class, stepJob.getStepJobId().longValue());
 				
 			String fileName = trJob.getDescription();
 			fileName  = fileName.substring(0,fileName.lastIndexOf("."));

@@ -165,4 +165,11 @@ public class PiecewiseSqlServerRecordSource implements RecordSource {
 		throw new UnsupportedOperationException("No reason for you to be calling this...");
 	}
 
+	public String toString() {
+		return "PiecewiseSqlServerRecordSource [model=" + model
+				+ ", dbConfiguration=" + dbConfiguration + ", tableName="
+				+ tableName + ", rsId=" + rsId + ", currentPiece="
+				+ currentPiece + ", recordsRead=" + recordsRead + "]";
+	}
+
 }

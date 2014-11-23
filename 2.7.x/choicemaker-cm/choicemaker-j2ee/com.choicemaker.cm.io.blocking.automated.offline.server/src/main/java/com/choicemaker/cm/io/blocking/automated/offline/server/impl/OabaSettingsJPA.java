@@ -31,6 +31,6 @@ public interface OabaSettingsJPA {
 	 String QN_OABA_FIND_ALL = "oabaSettingsFindAll";
 	
 	 /** JPQL used to implement {@link #QN_OABA_FIND_ALL} */
-	 String JPQL_OABA_FIND_ALL = "Select oaba from OabaSettingsBean oaba";
+	 String JPQL_OABA_FIND_ALL = "Select oaba from OabaSettingsEntity oaba";
 
 }

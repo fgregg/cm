@@ -322,4 +322,10 @@ public class SQLServerSerializableParallelSerialRecordSource implements
 		return retVal;
 	}
 
+	public String toString() {
+		return "SQLServerSerializableParallelSerialRecordSource [dsJNDIName="
+				+ dsJNDIName + ", modelName=" + modelName + ", dbConfig="
+				+ dbConfig + ", sqlQuery=" + sqlQuery + "]";
+	}
+
 }

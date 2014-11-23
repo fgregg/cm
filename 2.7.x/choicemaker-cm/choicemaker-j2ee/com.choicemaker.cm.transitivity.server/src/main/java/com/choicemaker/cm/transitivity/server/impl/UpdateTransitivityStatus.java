@@ -20,11 +20,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
-
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
  * This message bean updates the status of the current Transitivity job.
@@ -39,7 +36,6 @@ public class UpdateTransitivityStatus implements MessageDrivenBean, MessageListe
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + UpdateTransitivityStatus.class.getName());
 
 	private transient MessageDrivenContext mdc = null;
-	private EJBConfiguration configuration = null;
 
 //	@PersistenceContext (unitName = "oaba")
 	private EntityManager em;
@@ -53,34 +49,21 @@ public class UpdateTransitivityStatus implements MessageDrivenBean, MessageListe
 		this.mdc = mdc;
 	}
 
-
-	public void ejbCreate() {
-//	log.fine("starting ejbCreate...");
-		try {
-			this.configuration = EJBConfiguration.getInstance();
-			
-		} catch (Exception e) {
-	  log.severe(e.toString());
-		}
-//	log.fine("...finished ejbCreate");
-	}
-
-	
-	
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		UpdateData data;
+		OabaUpdateMessage data;
 
 		try {
 
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (UpdateData) msg.getObject();
+				data = (OabaUpdateMessage) msg.getObject();
 				
 				log.fine("Starting to update job ID: " + data.getJobID() + " " + data.getPercentComplete());
 
-				final TransitivityJob job = (TransitivityJob) configuration.findBatchJobById(em, TransitivityJobBean.class, data.getJobID());
+				//(TransitivityJob) configuration.findBatchJobById(em, TransitivityJobEntity.class, data.getJobID());
+				final TransitivityJob job = em.find(TransitivityJobEntity.class, data.getJobID());
 				
 				if (data.getPercentComplete() == 0) {
 					job.markAsStarted();
@@ -108,11 +91,9 @@ public class UpdateTransitivityStatus implements MessageDrivenBean, MessageListe
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 		return;
 	} // onMessage(Message)
-	
-	
+
 	public void ejbRemove() {
 //		log.fine("ejbRemove()");
 	}
-	
 
 }

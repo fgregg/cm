@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -61,7 +60,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 	private long inWriteMatches = 0;
 	
 	//debug
-//	private static IProbabilityModel stageModel;
+//	private static ImmutableProbabilityModel stageModel;
 	
 	//default constructor
 	public BlockMatcher2 () {
@@ -99,7 +98,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher#matchBlocks(com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource, com.choicemaker.cm.core.base.ProbabilityModel, com.choicemaker.cm.core.base.RecordSource, com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSink, float, float, int)
 	 */
 	public void matchBlocks(
-		IComparisonArraySource cgSource, IProbabilityModel stageModel, IProbabilityModel masterModel,
+		IComparisonArraySource cgSource, ImmutableProbabilityModel stageModel, ImmutableProbabilityModel masterModel,
 		RecordSource stage, RecordSource master, 
 		IMatchRecord2Sink mSink,
 		boolean append, 
@@ -508,7 +507,7 @@ public class BlockMatcher2 implements IBlockMatcher2 {
 	 * @param accessProvider - ProbabilityModel
 	 * @return
 	 */
-	private static HashMap getRecords (RecordSource rs, IProbabilityModel model) throws BlockingException {
+	private static HashMap getRecords (RecordSource rs, ImmutableProbabilityModel model) throws BlockingException {
 		HashMap records = new HashMap ();
 		
 		try {

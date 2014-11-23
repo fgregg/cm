@@ -1,5 +1,14 @@
 package com.choicemaker.cmit.utils;
 
+import static com.choicemaker.cm.io.blocking.automated.AbaSettings.DEFAULT_LIMIT_PER_BLOCKING_SET;
+import static com.choicemaker.cm.io.blocking.automated.AbaSettings.DEFAULT_LIMIT_SINGLE_BLOCKING_SET;
+import static com.choicemaker.cm.io.blocking.automated.AbaSettings.DEFAULT_SINGLE_TABLE_GRACE_LIMIT;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_INTERVAL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_OVERSIZED;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MIN_FIELDS;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,16 +20,20 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobJPA;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
+import com.choicemaker.cm.transitivity.server.impl.TransitivitySettingsEntity;
 
 public class EntityManagerUtils {
 
@@ -98,127 +111,216 @@ public class EntityManagerUtils {
 		return new FakeSerialRecordSource(tag);
 	}
 
-	/** Creates an ephemeral instance of BatchParametersBean.  The
-	 * <code>runTransitivity</code> field of the returned instance is set to false.*/
-	public static BatchParametersBean createEphemeralBatchParameters(
+	/** Creates an ephemeral instance of OabaParametersEntity */
+	public static OabaParametersEntity createEphemeralOabaParameters(
 			String tag, TestEntities te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
-		final boolean runTransitivity = false;
 		Thresholds thresholds = createRandomThresholds();
-		BatchParametersBean retVal =
-			new BatchParametersBean(createRandomModelConfigurationName(tag),
-					random.nextInt(MAX_MAX_SINGLE),
-					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), null, null, runTransitivity);
-		te.add(retVal);
-		return retVal;
-	}
-
-	/** Creates an ephemeral instance of BatchParametersBean */
-	public static BatchParametersBean createEphemeralBatchParameters(
-			String tag, TestEntities te, boolean runTransitivity) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
+		SerializableRecordSource stage = createFakeSerialRecordSource(tag);
+		SerializableRecordSource master;
+		if (random.nextBoolean()) {
+			master = createFakeSerialRecordSource(tag);
+		} else {
+			master = null;
 		}
-		Thresholds thresholds = createRandomThresholds();
-		BatchParametersBean retVal =
-			new BatchParametersBean(createRandomModelConfigurationName(tag),
-					random.nextInt(MAX_MAX_SINGLE),
+//		File workingDir = ServerConfigurationControllerBean.computeGenericLocation();
+		OabaParametersEntity retVal =
+			new OabaParametersEntity(createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), null, null, runTransitivity);
+					thresholds.getMatchThreshold(), stage, master);
 		te.add(retVal);
 		return retVal;
 	}
 
 	/**
-	 * Creates a persistent instance of BatchParametersBean An externalId for
-	 * the returned BatchJob is synthesized using the specified tag. The
-	 * <code>runTransitivity</code> field of the returned instance is set to false.
+	 * Creates a persistent instance of OabaParametersEntity An externalId for
+	 * the returned OabaJob is synthesized using the specified tag.
 	 */
-	public static BatchParametersBean createPersistentBatchParameters(
+	public static OabaParametersEntity createPersistentOabaParameters(
 			EntityManager em, String tag, TestEntities te) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		final boolean runTransitivity = false;
-		BatchParametersBean retVal =
-			createEphemeralBatchParameters(tag, te, runTransitivity);
+		OabaParametersEntity retVal =
+			createEphemeralOabaParameters(tag, te);
 		em.persist(retVal);
 		return retVal;
 	}
 
+	/** Creates an ephemeral instance of OabaSettingsEntity */
+	public static OabaSettingsEntity createEphemeralOabaSettings(
+			String tag, TestEntities te) {
+		if (te == null) {
+			throw new IllegalArgumentException("null test entities");
+		}
+		int limPerBlockingSet = random.nextInt(DEFAULT_LIMIT_PER_BLOCKING_SET);
+		int limSingleBlockingSet = random.nextInt(DEFAULT_LIMIT_SINGLE_BLOCKING_SET);
+		int singleTableGraceLimit = random.nextInt(DEFAULT_SINGLE_TABLE_GRACE_LIMIT);
+		int maxSingle = random.nextInt(MAX_MAX_SINGLE);
+		int maxBlockSize = random.nextInt(DEFAULT_MAX_BLOCKSIZE);
+		int maxChunkSize = random.nextInt(DEFAULT_MAX_CHUNKSIZE);
+		int maxOversized = random.nextInt(DEFAULT_MAX_OVERSIZED);
+		int minFields = random.nextInt(DEFAULT_MIN_FIELDS);
+		int interval = random.nextInt(DEFAULT_INTERVAL);
+		OabaSettingsEntity retVal =
+		new OabaSettingsEntity(limPerBlockingSet, limSingleBlockingSet,
+				singleTableGraceLimit, maxSingle, maxBlockSize,
+				maxChunkSize, maxOversized, minFields, interval);
+		te.add(retVal);
+		return retVal;
+	}
+
 	/**
-	 * Creates a persistent instance of BatchParametersBean An externalId for
-	 * the returned BatchJob is synthesized using the specified tag.
+	 * Creates a persistent instance of OabaSettingsEntity An externalId for
+	 * the returned OabaJob is synthesized using the specified tag.
 	 */
-	public static BatchParametersBean createPersistentBatchParameters(
-			EntityManager em, String tag, TestEntities te,
-			boolean runTransitivity) {
+	public static OabaSettingsEntity createPersistentOabaSettings(
+			EntityManager em, String tag, TestEntities te) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		BatchParametersBean retVal =
-			createEphemeralBatchParameters(tag, te, runTransitivity);
+		OabaSettingsEntity retVal =
+			createEphemeralOabaSettings(tag, te);
 		em.persist(retVal);
 		return retVal;
 	}
 
-	/**
-	 * Creates an ephemeral instance of BatchParametersBean. An externalId for
-	 * the returned BatchJob is synthesized using the specified tag.
-	 */
-	public static BatchJobBean createEphemeralBatchJob(EntityManager em,
+	/** Creates an ephemeral instance of TransitivityParametersEntity */
+	public static TransitivityParametersEntity createEphemeralTransitivityParameters(
 			String tag, TestEntities te) {
-		return createEphemeralBatchJob(em, te, createExternalId(tag));
-	}
-
-	/**
-	 * Creates an ephemeral instance of BatchParametersBean. The specified
-	 * externalId is assigned without alteration to the returned BatchJob.
-	 */
-	public static BatchJobBean createEphemeralBatchJob(EntityManager em,
-			TestEntities te, String extId) {
-		final String METHOD = "createEphemeralBatchJob";
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
-		BatchParametersBean params =
-			createPersistentBatchParameters(em, METHOD, te);
-		BatchJobBean retVal = new BatchJobBean(params, extId);
+		Thresholds thresholds = createRandomThresholds();
+		SerializableRecordSource stage = createFakeSerialRecordSource(tag);
+		SerializableRecordSource master;
+		if (random.nextBoolean()) {
+			master = createFakeSerialRecordSource(tag);
+		} else {
+			master = null;
+		}
+//		File workingDir = ServerConfigurationControllerBean.computeGenericLocation();
+		TransitivityParametersEntity retVal =
+			new TransitivityParametersEntity(createRandomModelConfigurationName(tag),
+					thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), stage, master);
 		te.add(retVal);
 		return retVal;
 	}
 
 	/**
-	 * Creates a persistent instance of BatchParametersBean. An externalId for
-	 * the returned BatchJob is synthesized using the specified tag.
+	 * Creates a persistent instance of TransitivityParametersEntity An externalId for
+	 * the returned TransitivityJob is synthesized using the specified tag.
 	 */
-	public static BatchJobBean createPersistentBatchJobBean(EntityManager em,
+	public static TransitivityParametersEntity createPersistentTransitivityParameters(
+			EntityManager em, String tag, TestEntities te) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		TransitivityParametersEntity retVal =
+			createEphemeralTransitivityParameters(tag, te);
+		em.persist(retVal);
+		return retVal;
+	}
+
+	/** Creates an ephemeral instance of TransitivitySettingsEntity */
+	public static TransitivitySettingsEntity createEphemeralTransitivitySettings(
 			String tag, TestEntities te) {
-		return createPersistentBatchJobBean(em, te, createExternalId(tag));
+		if (te == null) {
+			throw new IllegalArgumentException("null test entities");
+		}
+		Thresholds thresholds = createRandomThresholds();
+		SerializableRecordSource stage = createFakeSerialRecordSource(tag);
+		SerializableRecordSource master;
+		if (random.nextBoolean()) {
+			master = createFakeSerialRecordSource(tag);
+		} else {
+			master = null;
+		}
+//		File workingDir = ServerConfigurationControllerBean.computeGenericLocation();
+		TransitivitySettingsEntity retVal =
+			new TransitivitySettingsEntity(createRandomModelConfigurationName(tag),
+					thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), stage, master);
+		te.add(retVal);
+		return retVal;
 	}
 
 	/**
-	 * Creates a persistent instance of BatchParametersBean. The specified
-	 * externalId is assigned without alteration to the returned BatchJob.
+	 * Creates a persistent instance of TransitivitySettingsEntity An externalId for
+	 * the returned TransitivityJob is synthesized using the specified tag.
 	 */
-	public static BatchJobBean createPersistentBatchJobBean(EntityManager em,
+	public static TransitivitySettingsEntity createPersistentTransitivitySettings(
+			EntityManager em, String tag, TestEntities te) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		TransitivitySettingsEntity retVal =
+			createEphemeralTransitivitySettings(tag, te);
+		em.persist(retVal);
+		return retVal;
+	}
+
+	/**
+	 * Creates an ephemeral instance of OabaParametersEntity. An externalId for
+	 * the returned OabaJob is synthesized using the specified tag.
+	 */
+	public static OabaJobEntity createEphemeralOabaJob(EntityManager em,
+			String tag, TestEntities te) {
+		return createEphemeralOabaJob(em, te, createExternalId(tag));
+	}
+
+	/**
+	 * Creates an ephemeral instance of OabaParametersEntity. The specified
+	 * externalId is assigned without alteration to the returned OabaJob.
+	 */
+	public static OabaJobEntity createEphemeralOabaJob(EntityManager em,
+			TestEntities te, String extId) {
+		final String METHOD = "createEphemeralOabaJob";
+		if (te == null) {
+			throw new IllegalArgumentException("null test entities");
+		}
+		OabaParametersEntity params =
+			createPersistentOabaParameters(em, METHOD, te);
+		OabaSettingsEntity settings =
+			createPersistentOabaSettings(em, METHOD, te);
+		OabaJobEntity retVal = new OabaJobEntity(params, settings, extId);
+		te.add(retVal);
+		return retVal;
+	}
+
+	/**
+	 * Creates a persistent instance of OabaParametersEntity. An externalId for
+	 * the returned OabaJob is synthesized using the specified tag.
+	 */
+	public static OabaJobEntity createPersistentOabaJobBean(EntityManager em,
+			String tag, TestEntities te) {
+		return createPersistentOabaJobBean(em, te, createExternalId(tag));
+	}
+
+	/**
+	 * Creates a persistent instance of OabaParametersEntity. The specified
+	 * externalId is assigned without alteration to the returned OabaJob.
+	 */
+	public static OabaJobEntity createPersistentOabaJobBean(EntityManager em,
 			TestEntities te, String extId) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
-		BatchParametersBean params =
-			createPersistentBatchParameters(em, null, te);
-		BatchJobBean retVal = new BatchJobBean(params, extId);
+		OabaParametersEntity params =
+			createPersistentOabaParameters(em, null, te);
+		OabaSettingsEntity settings =
+			createPersistentOabaSettings(em, null, te);
+		OabaJobEntity retVal = new OabaJobEntity(params, settings, extId);
 		em.persist(retVal);
 		te.add(retVal);
 		return retVal;
 	}
 
-	public static TransitivityJobBean createEphemeralTransitivityJob(
-			EntityManager em, String tag, TestEntities te, BatchJob job) {
+	public static TransitivityJobEntity createEphemeralTransitivityJob(
+			EntityManager em, String tag, TestEntities te, OabaJob job) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -231,8 +333,8 @@ public class EntityManagerUtils {
 			te.add(job);
 		}
 		String extId = createExternalId(tag);
-		BatchParametersBean params =
-			em.find(BatchParametersBean.class, job.getBatchParametersId());
+		OabaParametersEntity params =
+			em.find(OabaParametersEntity.class, job.getParametersId());
 		if (params == null) {
 			throw new IllegalArgumentException("non-persistent parameters");
 		}
@@ -241,28 +343,28 @@ public class EntityManagerUtils {
 					+ "' to test entities that will be removed from database");
 			te.add(params);
 		}
-		TransitivityJobBean retVal =
-			new TransitivityJobBean(params, job, extId);
+		TransitivityJobEntity retVal =
+			new TransitivityJobEntity(params, job, extId);
 		te.add(retVal);
 		return retVal;
 	}
 
-	public static TransitivityJobBean createEphemeralTransitivityJob(
+	public static TransitivityJobEntity createEphemeralTransitivityJob(
 			EntityManager em, String tag, TestEntities te) {
-		BatchParametersBean params =
-			createPersistentBatchParameters(em, tag, te);
-		BatchJobBean job = createPersistentBatchJobBean(em, tag, te);
-		TransitivityJobBean retVal = new TransitivityJobBean(params, job);
+		OabaParametersEntity params =
+			createPersistentOabaParameters(em, tag, te);
+		OabaJobEntity job = createPersistentOabaJobBean(em, tag, te);
+		TransitivityJobEntity retVal = new TransitivityJobEntity(params, job);
 		te.add(retVal);
 		return retVal;
 	}
 
-	public static TransitivityJobBean createEphemeralTransitivityJob(
-			EntityManager em, TestEntities te, BatchJob job, String extId) {
-		BatchParametersBean params =
-			createPersistentBatchParameters(em, null, te);
-		TransitivityJobBean retVal =
-			new TransitivityJobBean(params, job, extId);
+	public static TransitivityJobEntity createEphemeralTransitivityJob(
+			EntityManager em, TestEntities te, OabaJob job, String extId) {
+		OabaParametersEntity params =
+			createPersistentOabaParameters(em, null, te);
+		TransitivityJobEntity retVal =
+			new TransitivityJobEntity(params, job, extId);
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -277,8 +379,8 @@ public class EntityManagerUtils {
 		te.removePersistentObjects(em);
 	}
 
-	public static TransitivityJobBean save(EntityManager em,
-			TransitivityJobBean job) {
+	public static TransitivityJob save(EntityManager em,
+			TransitivityJob job) {
 		if (job.getId() == 0) {
 			em.persist(job);
 		} else {
@@ -287,70 +389,70 @@ public class EntityManagerUtils {
 		return job;
 	}
 
-	public static BatchParametersBean findBatchParameters(EntityManager em,
+	public static OabaParametersEntity findOabaParameters(EntityManager em,
 			long id) {
-		BatchParametersBean job = em.find(BatchParametersBean.class, id);
+		OabaParametersEntity job = em.find(OabaParametersEntity.class, id);
 		return job;
 	}
 
-	public static BatchJobBean findBatchJob(EntityManager em, long id) {
-		BatchJobBean job = em.find(BatchJobBean.class, id);
+	public static OabaJobEntity findOabaJob(EntityManager em, long id) {
+		OabaJobEntity job = em.find(OabaJobEntity.class, id);
 		return job;
 	}
 
-	public static TransitivityJobBean findTransitivityJob(EntityManager em,
+	public static TransitivityJobEntity findTransitivityJob(EntityManager em,
 			long id) {
-		TransitivityJobBean job = em.find(TransitivityJobBean.class, id);
+		TransitivityJobEntity job = em.find(TransitivityJobEntity.class, id);
 		return job;
 	}
 
-	public static List<BatchParametersBean> findAllBatchParameters(
+	public static List<OabaParameters> findAllOabaParameters(
 			EntityManager em) {
 		Query query =
-			em.createNamedQuery(BatchParametersJPA.QN_BATCHPARAMETERS_FIND_ALL);
+			em.createNamedQuery(OabaParametersJPA.QN_BATCHPARAMETERS_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<BatchParametersBean> entries = query.getResultList();
+		List<OabaParameters> entries = query.getResultList();
 		if (entries == null) {
-			entries = new ArrayList<BatchParametersBean>();
+			entries = new ArrayList<OabaParameters>();
 		}
 		return entries;
 	}
 
-	public static List<BatchJobBean> findAllBatchJobs(EntityManager em) {
-		Query query = em.createNamedQuery(BatchJobJPA.QN_BATCHJOB_FIND_ALL);
+	public static List<OabaJobEntity> findAllOabaJobs(EntityManager em) {
+		Query query = em.createNamedQuery(OabaJobJPA.QN_OABAJOB_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<BatchJobBean> retVal = query.getResultList();
+		List<OabaJobEntity> retVal = query.getResultList();
 		if (retVal == null) {
-			retVal = new ArrayList<BatchJobBean>();
+			retVal = new ArrayList<OabaJobEntity>();
 		}
 		return retVal;
 	}
 
-	public static List<TransitivityJobBean> findAllTransitivityJobs(
+	public static List<TransitivityJob> findAllTransitivityJobs(
 			EntityManager em) {
 		Query query =
 			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<TransitivityJobBean> retVal = query.getResultList();
+		List<TransitivityJob> retVal = query.getResultList();
 		if (retVal == null) {
-			retVal = new ArrayList<TransitivityJobBean>();
+			retVal = new ArrayList<TransitivityJob>();
 		}
 		return retVal;
 	}
 
-	public static List<OabaBatchJobProcessingBean> findAllOabaProcessing(
+	public static List<OabaProcessing> findAllOabaProcessing(
 			EntityManager em) {
 		Query query =
 			em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<OabaBatchJobProcessingBean> retVal = query.getResultList();
+		List<OabaProcessing> retVal = query.getResultList();
 		if (retVal == null) {
-			retVal = new ArrayList<OabaBatchJobProcessingBean>();
+			retVal = new ArrayList<OabaProcessing>();
 		}
 		return retVal;
 	}
 
-	public static List<TransitivityJobBean> findAllByParentId(EntityManager em,
+	public static List<TransitivityJob> findAllByParentId(EntityManager em,
 			long batchJobId) {
 		Query query =
 			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID);
@@ -358,9 +460,9 @@ public class EntityManagerUtils {
 				TransitivityJobJPA.PN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID_BPARENTID,
 				batchJobId);
 		@SuppressWarnings("unchecked")
-		List<TransitivityJobBean> retVal = query.getResultList();
+		List<TransitivityJob> retVal = query.getResultList();
 		if (retVal == null) {
-			retVal = new ArrayList<TransitivityJobBean>();
+			retVal = new ArrayList<TransitivityJob>();
 		}
 		return retVal;
 	}

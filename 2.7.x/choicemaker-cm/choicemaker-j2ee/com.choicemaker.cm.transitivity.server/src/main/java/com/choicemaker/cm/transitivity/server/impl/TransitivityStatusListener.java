@@ -26,14 +26,14 @@ import javax.jms.ObjectMessage;
  * (the sleep interval is independent of the element value -- for example, the
  * array may be initialized to all zeros.)</p>
  * <p>
- * As the process progresses, it keeps track of its work via a BatchJob record.
+ * As the process progresses, it keeps track of its work via a OabaJob record.
  * When it first receives a batch requested, the process marks the record as
  * started. After every 10 iterations, the process updates the fraction of the
  * job which has been completed. When the job is finished successfully, the
  * process marks the record as completed.</p>
  * <p>
  * The process may be stopped before completion by marking the marking the
- * BatchJob record as 'ABORT_REQUESTED'. The next time the process tries to
+ * OabaJob record as 'ABORT_REQUESTED'. The next time the process tries to
  * update the record, it will stop further processing and mark the record as
  * aborted. In this case, the fraction of work actually completed may be higher
  * than the amount recorded by the process.

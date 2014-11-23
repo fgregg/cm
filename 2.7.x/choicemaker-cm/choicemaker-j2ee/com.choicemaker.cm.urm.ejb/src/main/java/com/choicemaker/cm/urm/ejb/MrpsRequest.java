@@ -20,8 +20,7 @@ import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -44,7 +43,7 @@ public class MrpsRequest implements IMrpsRequest {
 	private final String mrpsFilename;
 	private final MrpsRequestConfiguration configuration;
 
-	private transient BatchParameters batchParameters = null;
+	private transient OabaParameters oabaParameters = null;
 	private transient IProbabilityModel stagingModel = null;
 	private transient IMatchRecord2Source matchPairs = null;
 	private transient SerializableRecordSource rsStaging = null;
@@ -95,17 +94,17 @@ public class MrpsRequest implements IMrpsRequest {
 		}
 	}
 
-	private BatchParameters getBatchParameters(EntityManager em)
+	private OabaParameters getBatchParameters(EntityManager em)
 		throws CmRuntimeException, ConfigException {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		BatchParameters retVal = this.batchParameters;
+		OabaParameters retVal = this.oabaParameters;
 		if (retVal == null) {
-			this.batchParameters =
+			this.oabaParameters =
 				Single.getInst().findBatchParamsById(em,
 					this.oabaJobId.longValue());
-			retVal = this.batchParameters;
+			retVal = this.oabaParameters;
 		}
 		// Postcondition
 		if (retVal == null) {
@@ -114,22 +113,22 @@ public class MrpsRequest implements IMrpsRequest {
 		return retVal;
 	}
 
-	private String getStagingModelName(EntityManager em)
-		throws CmRuntimeException, ConfigException, RemoteException {
-		BatchParameters bp = getBatchParameters(em);
-		String retVal = bp.getStageModel();
-		// Postcondition
-		if (retVal == null) {
-			throw new IllegalStateException("null staging accessProvider name");
-		}
-		return retVal;
-	}
+//	private String getStagingModelName(EntityManager em)
+//		throws CmRuntimeException, ConfigException, RemoteException {
+//		OabaParameters bp = getBatchParameters(em);
+//		String retVal = bp.getStageModel();
+//		// Postcondition
+//		if (retVal == null) {
+//			throw new IllegalStateException("null staging accessProvider name");
+//		}
+//		return retVal;
+//	}
 
 	public IProbabilityModel getStagingModel(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
 		IProbabilityModel retVal = this.stagingModel;
 		if (retVal == null) {
-			BatchParameters bp = getBatchParameters(em);
+			OabaParameters bp = getBatchParameters(em);
 			String stagingModelName = bp.getStageModel();
 			this.stagingModel = PMManager.getModelInstance(stagingModelName);
 			retVal = this.stagingModel;
@@ -206,18 +205,15 @@ public class MrpsRequest implements IMrpsRequest {
 		throws CmRuntimeException, ConfigException, RemoteException {
 		IMatchRecord2Source retVal = this.matchPairs;
 		if (retVal == null) {
-			String stagingModelName = this.getStagingModelName(em);
-			OABAConfiguration config =
-				new OABAConfiguration(
-					stagingModelName,
-					this.oabaJobId.longValue());
-			this.matchPairs =
-				config.getCompositeMatchSource(this.oabaJobId.longValue());
-			retVal = this.matchPairs;
-		}
-		// Postcondition
-		if (retVal == null) {
-			throw new IllegalStateException("null match pairs");
+			throw new Error("not yet implemented");
+//			String stagingModelName = this.getStagingModelName(em);
+//			this.matchPairs =
+//					OabaFileUtils.getCompositeMatchSource(this.oabaJobId.longValue());
+//			retVal = this.matchPairs;
+//		}
+//		// Postcondition
+//		if (retVal == null) {
+//			throw new IllegalStateException("null match pairs");
 		}
 		return retVal;
 	}
@@ -229,7 +225,7 @@ public class MrpsRequest implements IMrpsRequest {
 		throws CmRuntimeException, ConfigException, RemoteException {
 		SerializableRecordSource retVal = this.rsMaster;
 		if (retVal == null) {
-			BatchParameters bp = getBatchParameters(em);
+			OabaParameters bp = getBatchParameters(em);
 			this.rsMaster = bp.getMasterRs();
 			retVal = this.rsMaster;
 		}
@@ -244,7 +240,7 @@ public class MrpsRequest implements IMrpsRequest {
 		throws CmRuntimeException, ConfigException, RemoteException {
 		SerializableRecordSource retVal = this.rsStaging;
 		if (retVal == null) {
-			BatchParameters bp = getBatchParameters(em);
+			OabaParameters bp = getBatchParameters(em);
 			this.rsStaging = bp.getStageRs();
 			retVal = this.rsStaging;
 		}

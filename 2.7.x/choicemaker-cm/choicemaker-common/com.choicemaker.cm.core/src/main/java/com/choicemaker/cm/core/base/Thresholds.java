@@ -12,6 +12,7 @@ package com.choicemaker.cm.core.base;
 
 /**
  * Mutable match and differ thresholds.
+ * 
  * @author Martin Buechi
  * @author rphall
  * @version $Revision: 1.2 $ $Date: 2010/03/27 21:35:15 $
@@ -19,11 +20,15 @@ package com.choicemaker.cm.core.base;
 public class Thresholds extends ImmutableThresholds implements Cloneable {
 
 	public Thresholds(float differThreshold, float matchThreshold) {
-		super(MIN_VALUE,MAX_VALUE);
-		this.setDifferThreshold(differThreshold);
-		this.setMatchThreshold(matchThreshold);
+		this((double) differThreshold, (double) matchThreshold);
 	}
-	
+
+	protected Thresholds(double dt, double mt) {
+		super(MIN_VALUE, MAX_VALUE);
+		this.setDifferThreshold(dt);
+		this.setMatchThreshold(mt);
+	}
+
 	public Thresholds(ImmutableThresholds imt) {
 		super(imt);
 	}
@@ -35,28 +40,35 @@ public class Thresholds extends ImmutableThresholds implements Cloneable {
 
 	/**
 	 * Sets the value of differThreshold in a forgivng manner.
-	 * <em>This method is different than the method for {@link IThresholds#setDifferThreshold(float)}:</em><ul>
-	 * <li/> If the specified value is less than
-	 * {@link IThresholds#MIN_VALUE MIN_VALUE}
-	 * then the specified threshold is set to <code>MIN_VALUE</code>.
-	 * <li/> If the specified value is greater than
-	 * {@link IThresholds#MAX_VALUE MAX_VALUE}
-	 * then the specified threshold is set to <code>MAX_VALUE</code>.
-	 * <li/> If the specified value is greater than {@link IThresholds#getMatchThreshold() getMatchThreshold()}
-	 * then the match threshold is {@link IThresholds#setMatchThreshold(float) reset}
-	 * to the specified value.
-	 * <li/> The differ threshold is {@link IThresholds#setDifferThreshold(float) set} to the specified value.
+	 * <em>This method is different than the method for {@link IThresholds#setDifferThreshold(float)}:</em>
+	 * <ul>
+	 * <li/>If the specified value is less than {@link IThresholds#MIN_VALUE
+	 * MIN_VALUE} then the specified threshold is set to <code>MIN_VALUE</code>.
+	 * <li/>If the specified value is greater than {@link IThresholds#MAX_VALUE
+	 * MAX_VALUE} then the specified threshold is set to <code>MAX_VALUE</code>.
+	 * <li/>If the specified value is greater than
+	 * {@link IThresholds#getMatchThreshold() getMatchThreshold()} then the
+	 * match threshold is {@link IThresholds#setMatchThreshold(float) reset} to
+	 * the specified value.
+	 * <li/>The differ threshold is
+	 * {@link IThresholds#setDifferThreshold(float) set} to the specified value.
 	 * </ul>
-	 * @param v  Value to assign to differThreshold.
+	 * 
+	 * @param v
+	 *            Value to assign to differThreshold.
 	 */
 	public void setDifferThreshold(float v) {
+		setDifferThreshold((double) v);
+	}
+
+	protected void setDifferThreshold(double v) {
 		super.invariant();
-		if (v <ImmutableThresholds.MIN_VALUE) {
-			v =ImmutableThresholds.MIN_VALUE;
+		if (v < ImmutableThresholds.MIN_VALUE) {
+			v = ImmutableThresholds.MIN_VALUE;
 		} else if (v > ImmutableThresholds.MAX_VALUE) {
 			v = ImmutableThresholds.MAX_VALUE;
 		}
-		if ( getMatchThreshold() < v ) {
+		if (getMatchThreshold() < v) {
 			super.setMatchThreshold(v);
 		}
 		super.setDifferThreshold(v);
@@ -65,33 +77,40 @@ public class Thresholds extends ImmutableThresholds implements Cloneable {
 
 	/**
 	 * Sets the value of matchThreshold.
-	 * <em>This method is different than the method for {@link IThresholds#setMatchThreshold(float)}:</em><ul>
-	 * <li/> If the specified value is greater than
-	 * {@link IThresholds#MAX_VALUE MAX_VALUE}
-	 * then the specified threshold is set to <code>MAX_VALUE</code>.
-	 * <li/> If the specified value is less than
-	 * {@link IThresholds#MIN_VALUE MIN_VALUE}
-	 * then the specified threshold is set to <code>MIN_VALUE</code>
-	 * <li/> If the specified value is less than {@link IThresholds#getDifferThreshold() getDifferThreshold()}
-	 * then the differ threshold is {@link IThresholds#setDifferThreshold(float) reset}
+	 * <em>This method is different than the method for {@link IThresholds#setMatchThreshold(float)}:</em>
+	 * <ul>
+	 * <li/>If the specified value is greater than {@link IThresholds#MAX_VALUE
+	 * MAX_VALUE} then the specified threshold is set to <code>MAX_VALUE</code>.
+	 * <li/>If the specified value is less than {@link IThresholds#MIN_VALUE
+	 * MIN_VALUE} then the specified threshold is set to <code>MIN_VALUE</code>
+	 * <li/>If the specified value is less than
+	 * {@link IThresholds#getDifferThreshold() getDifferThreshold()} then the
+	 * differ threshold is {@link IThresholds#setDifferThreshold(float) reset}
 	 * to the specified value.
-	 * <li/> The match threshold is {@link IThresholds#setMatchThreshold(float) set} to the specified value.
+	 * <li/>The match threshold is {@link IThresholds#setMatchThreshold(float)
+	 * set} to the specified value.
 	 * </ul>
-	 * @param v  Value to assign to matchThreshold.
+	 * 
+	 * @param v
+	 *            Value to assign to matchThreshold.
 	 */
 	public void setMatchThreshold(float v) {
+		setMatchThreshold((double) v);
+	}
+
+	protected void setMatchThreshold(double v) {
 		super.invariant();
-		if (v <ImmutableThresholds.MIN_VALUE) {
-			v =ImmutableThresholds.MIN_VALUE;
+		if (v < ImmutableThresholds.MIN_VALUE) {
+			v = ImmutableThresholds.MIN_VALUE;
 		} else if (v > ImmutableThresholds.MAX_VALUE) {
 			v = ImmutableThresholds.MAX_VALUE;
 		}
-		if ( getDifferThreshold() > v ) {
+		if (getDifferThreshold() > v) {
 			this.setDifferThreshold(v);
 		}
 		super.setMatchThreshold(v);
 		super.invariant();
+
 	}
 
 }
-

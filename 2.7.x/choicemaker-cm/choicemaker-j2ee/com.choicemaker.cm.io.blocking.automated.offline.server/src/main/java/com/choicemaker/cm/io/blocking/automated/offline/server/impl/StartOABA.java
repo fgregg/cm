@@ -16,30 +16,30 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 
@@ -63,11 +63,17 @@ public class StartOABA implements MessageListener, Serializable {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ StartOABA.class.getName());
 
-	@PersistenceContext(unitName = "oaba")
-	private EntityManager em;
+	@EJB
+	private OabaJobControllerBean jobController;
 
-	@Resource
-	private MessageDrivenContext mdc;
+	@EJB
+	private SettingsController settingsController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+	
+	@EJB
+	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
@@ -89,9 +95,8 @@ public class StartOABA implements MessageListener, Serializable {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		StartData data = null;
-		BatchJob batchJob = null;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OabaJobMessage data = null;
+		OabaJob oabaJob = null;
 
 		log.info("StartOABA In onMessage");
 
@@ -99,17 +104,15 @@ public class StartOABA implements MessageListener, Serializable {
 
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (StartData) msg.getObject();
+				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				batchJob =
-					configuration.findBatchJobById(em, BatchJobBean.class,
-							jobId);
+				oabaJob = jobController.find(jobId);
 				// update status to mark as start
-				batchJob.markAsStarted();
+				oabaJob.markAsStarted();
 
-				BatchParameters params =
-					configuration.findBatchParamsByJobId(em, batchJob.getId());
+				OabaParameters params =
+					paramsController.findBatchParamsByJobId(jobId);
 				final String modelConfigId = params.getModelConfigurationName();
 				IProbabilityModel stageModel =
 					PMManager.getModelInstance(modelConfigId);
@@ -119,42 +122,47 @@ public class StartOABA implements MessageListener, Serializable {
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}
-				OABAConfiguration oabaConfig =
-					new OABAConfiguration(params.getModelConfigurationName(),
-							jobId);
 
 				// get the status
 				OabaProcessing status =
-					configuration.getProcessingLog(em, jobId);
+					processingController.findProcessingLogByJobId(jobId);
 
 				log.info(jobId + " " + params.getModelConfigurationName() + " "
 						+ params.getLowThreshold() + " "
-						+ params.getHighThreshold() + " "
-						+ params.getTransitivity());
+						+ params.getHighThreshold());
 				log.info(params.getStageRs() + " " + params.getMasterRs());
 
 				// check to see if there are a lot of records in stage.
 				// if not use single record matching instead of batch.
+				log.info("Checking whether to use single- or batched-record blocking...");
+				OabaSettings oabaSettings =
+					settingsController.findOabaSettingsByJobId(jobId);
+				log.info("OABASettings: " + oabaSettings); 
+				log.info("OabaSettings maxSingle: " + oabaSettings.getMaxSingle());
 				if (!isMoreThanThreshold(params.getStageRs(), stageModel,
-						params.getMaxSingle())) {
+						oabaSettings.getMaxSingle())) {
 					log.info("Using single record matching");
 					sendToSingleRecordMatching(data);
 
 				} else {
 					log.info("Using batch record matching");
 
+					RecordIDSinkSourceFactory idFactory =
+						OabaFileUtils.getTransIDFactory(oabaJob);
 					RecordIDTranslator2 translator =
-						new RecordIDTranslator2(oabaConfig.getTransIDFactory());
+						new RecordIDTranslator2(idFactory);
 
 					// create rec_id, val_id files
+					RecValSinkSourceFactory recvalFactory =
+						OabaFileUtils.getRecValFactory(oabaJob);
 					RecValService3 rvService =
 						new RecValService3(params.getStageRs(),
 								params.getMasterRs(), stageModel,
-								oabaConfig.getRecValFactory(), translator,
-								status, batchJob);
+								recvalFactory, translator, status, oabaJob);
 					rvService.runService();
 
-					// FIXME move these parameters to a persistent operational object
+					// FIXME move these parameters to a persistent operational
+					// object
 					data.stageType = rvService.getStageType();
 					data.masterType = rvService.getMasterType();
 					data.numBlockFields = rvService.getNumBlockingFields();
@@ -166,7 +174,8 @@ public class StartOABA implements MessageListener, Serializable {
 					// Validator validator = new Validator (true, translator);
 					ValidatorBase validator =
 						new ValidatorBase(true, translator);
-					// FIXME move this parameter to a persistent operational object
+					// FIXME move this parameter to a persistent operational
+					// object
 					data.validator = validator;
 
 					sendToUpdateStatus(jobId, OabaProcessing.PCT_DONE_REC_VAL);
@@ -177,13 +186,10 @@ public class StartOABA implements MessageListener, Serializable {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			mdc.setRollbackOnly();
 		} catch (Exception e) {
 			log.severe(e.toString());
-			if (batchJob != null) {
-				batchJob.markAsFailed();
+			if (oabaJob != null) {
+				oabaJob.markAsFailed();
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
@@ -205,36 +211,53 @@ public class StartOABA implements MessageListener, Serializable {
 	 */
 	private boolean isMoreThanThreshold(RecordSource rs,
 			IProbabilityModel model, int threshold) throws BlockingException {
-
-		if (threshold == 0)
-			return true;
-
-		boolean ret = false;
-
-		log.info("Checking if moreThanThreshold " + threshold);
-
-		try {
-			rs.setModel(model);
-			rs.open();
-			int count = 1;
-
-			while (count <= threshold && rs.hasNext()) {
-				// 2014-04-24 rphall: Commented out unused local variable.
-				/* Record r = */
-				rs.getNext();
-				count++;
-			}
-
-			if (rs.hasNext())
-				ret = true;
-
-			rs.close();
-
-		} catch (IOException ex) {
-			throw new BlockingException(ex.toString(), ex);
+		
+		// Preconditions need to be checked on this method, even though it is
+		// private, because the arguments haven't been validated before it
+		// is invoked. The arguments are derived from a persistent object,
+		// BatchParameters, which may have been saved with invalid fields.
+		if (model == null) {
+			throw new IllegalArgumentException("null model");
+		}
+		if (rs == null) {
+			throw new IllegalArgumentException("null record source");
 		}
 
-		return ret;
+		boolean retVal = false;
+		log.info("Checking if the number of records is more than the maxSingle threshold: "
+				+ threshold);
+		if (threshold <= 0) {
+			log.info("The threshold shortcuts further checking");
+			retVal = true;
+		} else {
+			log.info("Record source: " + rs);
+			log.info("Model: " + model);
+			try {
+				rs.setModel(model);
+				rs.open();
+				int count = 1;
+				while (count <= threshold && rs.hasNext()) {
+					rs.getNext();
+					count++;
+				}
+				if (rs.hasNext()) {
+					++count;
+					log.info("Number of records: " + count + "+");
+					retVal = true;
+				} else {
+					log.info("Number of records: " + count);
+				}
+				rs.close();
+			} catch (IOException ex) {
+				throw new BlockingException(ex.toString(), ex);
+			}
+		}
+		String msg =
+			"The number of records " + (retVal ? "exceeds" : "does not exceed")
+					+ " the maxSingle threshold: " + threshold;
+		log.info(msg);
+
+		return retVal;
 	}
 
 	private void sendToUpdateStatus(long jobID, int percentComplete) {
@@ -242,11 +265,11 @@ public class StartOABA implements MessageListener, Serializable {
 				updateQueue, log);
 	}
 
-	private void sendToBlocking(StartData data) {
+	private void sendToBlocking(OabaJobMessage data) {
 		MessageBeanUtils.sendStartData(data, jmsContext, blockQueue, log);
 	}
 
-	private void sendToSingleRecordMatching(StartData data) {
+	private void sendToSingleRecordMatching(OabaJobMessage data) {
 		MessageBeanUtils.sendStartData(data, jmsContext, singleMatchQueue, log);
 	}
 

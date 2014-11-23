@@ -19,14 +19,14 @@ import javax.jms.JMSProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.UpdateData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
 
 /**
  * This object contains common message bean utilities such as cancelling an OABA
@@ -44,24 +44,22 @@ public class MessageBeanUtils {
 	public static final String UNKNOWN_QUEUE = "unknown queue";
 
 	/**
-	 * This method stops the BatchJob by setting the status to aborted, and
+	 * This method stops the OabaJob by setting the status to aborted, and
 	 * removes the temporary directory for the job.
 	 * 
-	 * @param batchJob
+	 * @param oabaJob
 	 * @param status
 	 * @param oabaConfig
 	 * @throws RemoteException
 	 * @throws BlockingException
 	 */
-	public static void stopJob(BatchJob batchJob, OabaProcessing status,
-			OABAConfiguration oabaConfig) {
-
-		batchJob.markAsAborted();
+	public static void stopJob(BatchJob oabaJob, OabaProcessing status) {
+		oabaJob.markAsAborted();
 		// FIXME description used to hold operational parameter
-		if (batchJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
+		if (oabaJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
 			status.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 			log0.info("Removing Temporary directory.");
-			oabaConfig.removeTempDir();
+			OabaFileUtils.removeTempDir(oabaJob);
 		}
 	}
 
@@ -85,7 +83,7 @@ public class MessageBeanUtils {
 		if (jmsCtx == null || q == null || log == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-		UpdateData data = new UpdateData(jobID, percentComplete);
+		OabaUpdateMessage data = new OabaUpdateMessage(jobID, percentComplete);
 		ObjectMessage message = jmsCtx.createObjectMessage(data);
 		JMSProducer sender = jmsCtx.createProducer();
 		log.finest(MessageBeanUtils.queueInfo("Sending", q, data));
@@ -94,7 +92,7 @@ public class MessageBeanUtils {
 	}
 
 	/**
-	 * This method sends StartData to a message bean.
+	 * This method sends OabaJobMessage to a message bean.
 	 * 
 	 * @param jobID
 	 *            must be a valid batch job id
@@ -104,11 +102,11 @@ public class MessageBeanUtils {
 	 *            a non-null JMSContext
 	 * @param q
 	 *            must be queue on which the associated message listener
-	 *            can process StartData
+	 *            can process OabaJobMessage
 	 * @param log
 	 *            must be a non-null Logger instance
 	 */
-	public static void sendStartData(StartData data,
+	public static void sendStartData(OabaJobMessage data,
 			JMSContext jmsCtx, Queue q, Logger log) {
 		if (data == null || jmsCtx == null || q == null || log == null) {
 			throw new IllegalArgumentException("null argument");
@@ -120,7 +118,7 @@ public class MessageBeanUtils {
 		log.finest(MessageBeanUtils.queueInfo("Sent", q, data));
 	}
 
-	public static void sendMatchWriterData(MatchWriterData data,
+	public static void sendMatchWriterData(MatchWriterMessage data,
 			JMSContext jmsCtx, Queue q, Logger log) {
 		if (data == null || jmsCtx == null || q == null || log == null) {
 			throw new IllegalArgumentException("null argument");

@@ -327,4 +327,11 @@ public class OracleSerializableRecordSource implements
 		return retVal;
 	}
 
+
+	public String toString() {
+		return "OracleSerializableRecordSource [dsJNDIName=" + dsJNDIName
+				+ ", modelName=" + modelName + ", dbConfig=" + dbConfig
+				+ ", sqlQuery=" + sqlQuery + "]";
+	}
+
 }

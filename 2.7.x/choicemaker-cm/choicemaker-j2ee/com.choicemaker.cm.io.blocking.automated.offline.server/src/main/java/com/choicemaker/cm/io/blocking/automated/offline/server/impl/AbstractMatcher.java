@@ -21,8 +21,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -44,12 +44,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonSetOSSour
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 /**
@@ -66,7 +65,11 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	
 	protected abstract Logger getJMSTrace();
 	
-	protected abstract EntityManager getEntityManager();
+	protected abstract OabaJobControllerBean getJobController();
+	
+	protected abstract OabaParametersControllerBean getParametersController();
+	
+	protected abstract OabaProcessingControllerBean getProcessingController();
 
 	// These two tracker are set only in log debug mode
 	private long inHMLookup;
@@ -78,38 +81,31 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	public /* final */ void onMessage(Message inMessage) {
 		getJMSTrace().info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		BatchJob batchJob = null;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OabaJob oabaJob = null;
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				Object o = msg.getObject();
 
-				if (o instanceof StartData) {
+				if (o instanceof OabaJobMessage) {
 					// start matching
-					StartData data = ((StartData) o);
+					OabaJobMessage data = ((OabaJobMessage) o);
 					final long jobId = data.jobID;
 
 					getLogger().fine("Matcher2 In onMessage " + data.jobID + " "
 							+ data.ind + " " + data.treeInd);
 
-					batchJob =
-						configuration.findBatchJobById(getEntityManager(), BatchJobBean.class,
-								jobId);
-					BatchParameters params =
-						configuration.findBatchParamsByJobId(getEntityManager(), jobId);
-					OABAConfiguration oabaConfig = new OABAConfiguration(jobId);
-					OabaProcessing processingEntry =
-						configuration.getProcessingLog(getEntityManager(), jobId);
+					oabaJob = getJobController().find(jobId);
+					OabaParameters params = getParametersController().findBatchParamsByJobId(jobId);
+					OabaProcessing processingEntry = getProcessingController().findProcessingLogByJobId(jobId);
 
-					if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob
+					if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob
 							.getStatus())) {
-						MessageBeanUtils.stopJob(batchJob, processingEntry,
-								oabaConfig);
+						MessageBeanUtils.stopJob(oabaJob, processingEntry);
 
 					} else {
-						handleMatching(data, batchJob, params);
+						handleMatching(data, oabaJob, params);
 					}
 
 				} else {
@@ -122,16 +118,16 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 		} catch (Exception e) {
 			getLogger().severe(e.toString());
-			if (batchJob != null) {
-				batchJob.markAsFailed();
+			if (oabaJob != null) {
+				oabaJob.markAsFailed();
 			}
 //			mdc.setRollbackOnly();
 		}
 		getJMSTrace().info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-	protected final void handleMatching(StartData data, final BatchJob batchJob,
-			final BatchParameters params) throws BlockingException,
+	protected final void handleMatching(OabaJobMessage data, final OabaJob oabaJob,
+			final OabaParameters params) throws BlockingException,
 			RemoteException, NamingException, JMSException {
 
 		final String modelConfigId = params.getModelConfigurationName();
@@ -177,7 +173,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 				sets++;
 				IComparisonSet cSet = source.getNextSet();
 				List<MatchRecord2> matches =
-					handleComparisonSet(cSet, batchJob, dataStore, stageModel, t);
+					handleComparisonSet(cSet, oabaJob, dataStore, stageModel, t);
 				numMatches += matches.size();
 				writeMatches(data, matches);
 			}
@@ -188,7 +184,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		getLogger().info("Chunk: " + data.ind + "_" + data.treeInd + ", sets: " + sets
 				+ ", compares: " + compares + ", matches: " + numMatches);
 
-		MatchWriterData mwd = new MatchWriterData(data);
+		MatchWriterMessage mwd = new MatchWriterMessage(data);
 		mwd.numCompares = compares;
 		// FIXME
 		mwd.timeWriting = 0;
@@ -205,7 +201,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	 * ArrayList of MatchRecord2 produced by this IComparisonSet.
 	 */
 	protected abstract List<MatchRecord2> handleComparisonSet(IComparisonSet cSet,
-			BatchJob batchJob, ChunkDataStore dataStore,
+			OabaJob oabaJob, ChunkDataStore dataStore,
 			IProbabilityModel stageModel, ImmutableThresholds t)
 			throws RemoteException, BlockingException;
 
@@ -249,13 +245,13 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	 * @param num
 	 *            - number of processors
 	 */
-	protected final IComparisonSetSource getSource(StartData data, int num,
+	protected final IComparisonSetSource getSource(OabaJobMessage data, int num,
 			int maxBlockSize) throws BlockingException {
-		OABAConfiguration oabaConfig = new OABAConfiguration(data.jobID);
+		OabaJob job = getJobController().find(data.jobID);
 		if (data.ind < data.numRegularChunks) {
 			// regular
 			ComparisonTreeGroupSinkSourceFactory factory =
-				oabaConfig.getComparisonTreeGroupFactory(data.stageType, num);
+					OabaFileUtils.getComparisonTreeGroupFactory(job, data.stageType, num);
 			IComparisonTreeSource source =
 				factory.getSource(data.ind, data.treeInd);
 			if (source.exists()) {
@@ -270,7 +266,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			// oversized
 			int i = data.ind - data.numRegularChunks;
 			ComparisonArrayGroupSinkSourceFactory factoryOS =
-				oabaConfig.getComparisonArrayGroupFactoryOS(num);
+					OabaFileUtils.getComparisonArrayGroupFactoryOS(job, num);
 			IComparisonArraySource sourceOS =
 				factoryOS.getSource(i, data.treeInd);
 			if (sourceOS.exists()) {
@@ -290,7 +286,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	 *
 	 * @param matches
 	 */
-	protected abstract void writeMatches(StartData data, List<MatchRecord2> matches)
+	protected abstract void writeMatches(OabaJobMessage data, List<MatchRecord2> matches)
 			throws BlockingException;
 
 	/**
@@ -372,6 +368,6 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		return str.substring(i + 1);
 	}
 
-	protected abstract void sendToScheduler(MatchWriterData data);
+	protected abstract void sendToScheduler(MatchWriterMessage data);
 
 }

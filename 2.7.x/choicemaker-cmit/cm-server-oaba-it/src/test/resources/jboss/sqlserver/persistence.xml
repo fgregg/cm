@@ -10,16 +10,17 @@
 
     <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
 
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsBean</class>
+    <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
     <!--
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
     -->
 
@@ -39,15 +40,19 @@
 
     <non-jta-data-source>jboss/datasources/DefaultDS0</non-jta-data-source>
 
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsBean</class>
+    <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
+    <!--
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
+    -->
 
     <properties>
       <property name="eclipselink.target-server" value="JBoss" />

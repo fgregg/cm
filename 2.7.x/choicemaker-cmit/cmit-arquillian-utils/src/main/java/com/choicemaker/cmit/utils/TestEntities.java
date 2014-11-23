@@ -7,22 +7,23 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.AbaSettings;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchJobProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaBatchJobProcessingBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 
 /**
  * Lists of objects created during a test. Provides a convenient way of cleaning
@@ -36,20 +37,20 @@ public class TestEntities {
 	private static final Logger logger = Logger.getLogger(TestEntities.class
 			.getName());
 
-	private Set<BatchJob> batchJobs = new LinkedHashSet<>();
+	private Set<OabaJob> oabaJobs = new LinkedHashSet<>();
 	private Set<TransitivityJob> transitivityJobs = new LinkedHashSet<>();
-	private Set<BatchParameters> batchParameters = new LinkedHashSet<>();
-	private Set<OabaBatchJobProcessing> oabaProcessing = new LinkedHashSet<>();
+	private Set<OabaParameters> oabaParameters = new LinkedHashSet<>();
+	private Set<OabaJobProcessing> oabaProcessing = new LinkedHashSet<>();
 	private Set<ServerConfiguration> serverConfigs = new LinkedHashSet<>();
-	private Set<DefaultServerConfigurationBean> defaultConfigs =
+	private Set<DefaultServerConfigurationEntity> defaultConfigs =
 		new LinkedHashSet<>();
 	private Set<AbaSettings> abaSettings = new LinkedHashSet<>();
 	private Set<OabaSettings> oabaSettings = new LinkedHashSet<>();
-	private Set<DefaultSettingsBean> defaultSettings = new LinkedHashSet<>();
+	private Set<DefaultSettingsEntity> defaultSettings = new LinkedHashSet<>();
 
-	public void add(BatchJob job) {
+	public void add(OabaJob job) {
 		if (job != null) {
-			batchJobs.add(job);
+			oabaJobs.add(job);
 		}
 	}
 
@@ -59,13 +60,13 @@ public class TestEntities {
 		}
 	}
 
-	public void add(BatchParameters params) {
+	public void add(OabaParameters params) {
 		if (params != null) {
-			batchParameters.add(params);
+			oabaParameters.add(params);
 		}
 	}
 
-	public void add(OabaBatchJobProcessing p) {
+	public void add(OabaJobProcessing p) {
 		if (p != null) {
 			oabaProcessing.add(p);
 		}
@@ -77,7 +78,7 @@ public class TestEntities {
 		}
 	}
 
-	public void add(DefaultServerConfigurationBean dscb) {
+	public void add(DefaultServerConfigurationEntity dscb) {
 		if (dscb != null) {
 			defaultConfigs.add(dscb);
 		}
@@ -95,7 +96,7 @@ public class TestEntities {
 		}
 	}
 
-	public void add(DefaultSettingsBean dsb) {
+	public void add(DefaultSettingsEntity dsb) {
 		if (dsb != null) {
 			defaultSettings.add(dsb);
 		}
@@ -104,7 +105,7 @@ public class TestEntities {
 	public boolean contains(BatchJob job) {
 		boolean retVal = false;
 		if (job != null) {
-			retVal = batchJobs.contains(job);
+			retVal = oabaJobs.contains(job);
 		}
 		return retVal;
 	}
@@ -117,18 +118,18 @@ public class TestEntities {
 		return retVal;
 	}
 
-	public boolean contains(BatchParameters params) {
+	public boolean contains(OabaParameters params) {
 		boolean retVal = false;
 		if (params != null) {
-			retVal = batchParameters.contains(params);
+			retVal = oabaParameters.contains(params);
 		}
 		return retVal;
 	}
 
-	public boolean contains(OabaBatchJobProcessing p) {
+	public boolean contains(OabaJobProcessing p) {
 		boolean retVal = false;
 		if (p != null) {
-			retVal = batchParameters.contains(p);
+			retVal = oabaParameters.contains(p);
 		}
 		return retVal;
 	}
@@ -141,10 +142,10 @@ public class TestEntities {
 		return retVal;
 	}
 
-	public boolean contains(DefaultServerConfigurationBean dscb) {
+	public boolean contains(DefaultServerConfigurationEntity dscb) {
 		boolean retVal = false;
 		if (dscb != null) {
-			retVal = batchJobs.contains(dscb);
+			retVal = oabaJobs.contains(dscb);
 		}
 		return retVal;
 	}
@@ -165,7 +166,7 @@ public class TestEntities {
 		return retVal;
 	}
 
-	public boolean contains(DefaultSettingsBean dsb) {
+	public boolean contains(DefaultSettingsEntity dsb) {
 		boolean retVal = false;
 		if (dsb != null) {
 			retVal = defaultSettings.contains(dsb);
@@ -187,19 +188,19 @@ public class TestEntities {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		for (BatchJob job : batchJobs) {
-			if (BatchJobBean.isPersistent(job)) {
+		for (BatchJob job : oabaJobs) {
+			if (OabaJobEntity.isPersistent(job)) {
 				boolean usingUtx = false;
 				if (utx != null) {
 					utx.begin();
 					usingUtx = true;
 				}
-				BatchJobBean refresh = em.find(BatchJobBean.class, job.getId());
+				OabaJobEntity refresh = em.find(OabaJobEntity.class, job.getId());
 				if (refresh != null) {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
 					if (!isManaged) {
-						logger.warning("BatchJob " + refresh.getId()
+						logger.warning("OabaJob " + refresh.getId()
 								+ " is not managed");
 					} else {
 						em.remove(refresh);
@@ -211,14 +212,14 @@ public class TestEntities {
 			}
 		}
 		for (TransitivityJob job : transitivityJobs) {
-			if (TransitivityJobBean.isPersistent(job)) {
+			if (TransitivityJobEntity.isPersistent(job)) {
 				boolean usingUtx = false;
 				if (utx != null) {
 					utx.begin();
 					usingUtx = true;
 				}
-				TransitivityJobBean refresh =
-					em.find(TransitivityJobBean.class, job.getId());
+				TransitivityJobEntity refresh =
+					em.find(TransitivityJobEntity.class, job.getId());
 				if (refresh != null) {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
@@ -234,20 +235,20 @@ public class TestEntities {
 				}
 			}
 		}
-		for (BatchParameters params : batchParameters) {
-			if (BatchParametersBean.isPersistent(params)) {
+		for (OabaParameters params : oabaParameters) {
+			if (OabaParametersEntity.isPersistent(params)) {
 				boolean usingUtx = false;
 				if (utx != null) {
 					utx.begin();
 					usingUtx = true;
 				}
-				BatchParametersBean refresh =
-					em.find(BatchParametersBean.class, params.getId());
+				OabaParametersEntity refresh =
+					em.find(OabaParametersEntity.class, params.getId());
 				if (refresh != null) {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
 					if (!isManaged) {
-						logger.warning("BatchParameters " + refresh.getId()
+						logger.warning("OabaParameters " + refresh.getId()
 								+ " is not managed");
 					} else {
 						em.remove(refresh);
@@ -258,20 +259,20 @@ public class TestEntities {
 				}
 			}
 		}
-		for (OabaBatchJobProcessing p : oabaProcessing) {
-			if (OabaBatchJobProcessingBean.isPersistent(p)) {
+		for (OabaJobProcessing p : oabaProcessing) {
+			if (OabaProcessingEntity.isPersistent(p)) {
 				boolean usingUtx = false;
 				if (utx != null) {
 					utx.begin();
 					usingUtx = true;
 				}
-				OabaBatchJobProcessingBean refresh =
-					em.find(OabaBatchJobProcessingBean.class, p.getId());
+				OabaProcessingEntity refresh =
+					em.find(OabaProcessingEntity.class, p.getId());
 				if (refresh != null) {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
 					if (!isManaged) {
-						logger.warning("OabaBatchJobProcessing "
+						logger.warning("OabaJobProcessing "
 								+ refresh.getId() + " is not managed");
 					} else {
 						em.remove(refresh);
@@ -283,14 +284,14 @@ public class TestEntities {
 			}
 		}
 		for (ServerConfiguration sc : serverConfigs) {
-			if (ServerConfigurationBean.isPersistent(sc)) {
+			if (ServerConfigurationEntity.isPersistent(sc)) {
 				boolean usingUtx = false;
 				if (utx != null) {
 					utx.begin();
 					usingUtx = true;
 				}
-				ServerConfigurationBean refresh =
-					em.find(ServerConfigurationBean.class, sc.getId());
+				ServerConfigurationEntity refresh =
+					em.find(ServerConfigurationEntity.class, sc.getId());
 				if (refresh != null) {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
@@ -306,14 +307,14 @@ public class TestEntities {
 				}
 			}
 		}
-		for (DefaultServerConfigurationBean dscb : defaultConfigs) {
+		for (DefaultServerConfigurationEntity dscb : defaultConfigs) {
 			boolean usingUtx = false;
 			if (utx != null) {
 				utx.begin();
 				usingUtx = true;
 			}
-			DefaultServerConfigurationBean refresh =
-				em.find(DefaultServerConfigurationBean.class,
+			DefaultServerConfigurationEntity refresh =
+				em.find(DefaultServerConfigurationEntity.class,
 						dscb.getHostName());
 			if (refresh != null) {
 				em.merge(refresh);
@@ -330,14 +331,14 @@ public class TestEntities {
 			}
 		}
 		for (AbaSettings aba : abaSettings) {
-			if (AbaSettingsBean.isPersistent(aba)) {
+			if (AbaSettingsEntity.isPersistent(aba)) {
 				boolean usingUtx = false;
 				if (utx != null) {
 					utx.begin();
 					usingUtx = true;
 				}
-				AbaSettingsBean refresh =
-					em.find(AbaSettingsBean.class, aba.getId());
+				AbaSettingsEntity refresh =
+					em.find(AbaSettingsEntity.class, aba.getId());
 				if (refresh != null) {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
@@ -354,14 +355,14 @@ public class TestEntities {
 			}
 		}
 		for (OabaSettings oaba : oabaSettings) {
-			if (OabaSettingsBean.isPersistent(oaba)) {
+			if (OabaSettingsEntity.isPersistent(oaba)) {
 				boolean usingUtx = false;
 				if (utx != null) {
 					utx.begin();
 					usingUtx = true;
 				}
-				OabaSettingsBean refresh =
-					em.find(OabaSettingsBean.class, oaba.getId());
+				OabaSettingsEntity refresh =
+					em.find(OabaSettingsEntity.class, oaba.getId());
 				if (refresh != null) {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
@@ -377,14 +378,14 @@ public class TestEntities {
 				}
 			}
 		}
-		for (DefaultSettingsBean dscb : defaultSettings) {
+		for (DefaultSettingsEntity dscb : defaultSettings) {
 			boolean usingUtx = false;
 			if (utx != null) {
 				utx.begin();
 				usingUtx = true;
 			}
-			DefaultSettingsBean refresh =
-				em.find(DefaultSettingsBean.class,
+			DefaultSettingsEntity refresh =
+				em.find(DefaultSettingsEntity.class,
 						dscb.getPrimaryKey());
 			if (refresh != null) {
 				em.merge(refresh);

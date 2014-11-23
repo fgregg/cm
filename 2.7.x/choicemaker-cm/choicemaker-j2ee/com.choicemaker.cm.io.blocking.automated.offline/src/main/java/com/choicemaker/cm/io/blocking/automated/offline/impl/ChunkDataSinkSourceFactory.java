@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
@@ -34,18 +34,16 @@ public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 
 	private String fileDir;
 	private String baseName;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 	private int ind = 0;
 	private int indSource = 0;
 	private ArrayList removeFiles = new ArrayList ();
 	
-	
-	public ChunkDataSinkSourceFactory (String fileDir, String baseName, IProbabilityModel model) {
+	public ChunkDataSinkSourceFactory (String fileDir, String baseName, ImmutableProbabilityModel model) {
 		this.fileDir = fileDir;
 		this.baseName = baseName;
 		this.model = model;
 	}
-	
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkFactory#getNextSink()
@@ -114,7 +112,6 @@ public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 			f.delete();
 		}
 	}
-
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory#removeAllSinks(int)

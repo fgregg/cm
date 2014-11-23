@@ -190,4 +190,10 @@ public class SqlServerRecordSource implements RecordSource {
 		return b.toString();
 	}
 
+	public String toString() {
+		return "SqlServerRecordSource [fileName=" + fileName + ", model="
+				+ model + ", dbConfiguration=" + dbConfiguration
+				+ ", idsQuery=" + idsQuery + ", dsName=" + dsName + "]";
+	}
+
 }

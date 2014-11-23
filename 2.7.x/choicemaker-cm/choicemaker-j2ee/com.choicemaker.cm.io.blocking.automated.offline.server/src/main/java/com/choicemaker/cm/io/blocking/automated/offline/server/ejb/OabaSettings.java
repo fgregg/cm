@@ -21,7 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.AbaSettings;
  * particular model. In a J2EE environment, OABA statistics are cached in memory
  * by an EJB singleton service.
  * 
- * @see com.choicemaker.cm.io.blocking.automated.base.db.OabaSettingsBean
+ * @see com.choicemaker.cm.io.blocking.automated.base.db.OabaSettingsEntity
  * 
  * @author rphall
  *
@@ -69,5 +69,7 @@ public interface OabaSettings extends AbaSettings {
 	 * processing should be discontinued.
 	 */
 	int getInterval();
+
+	int getMaxSingle();
 
 }

@@ -15,19 +15,16 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
@@ -35,11 +32,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFac
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.StartData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService4;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
@@ -63,11 +60,17 @@ public class DedupOABA implements MessageListener, Serializable {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ DedupOABA.class.getName());
 
-	@PersistenceContext(unitName = "oaba")
-	private EntityManager em;
+	@EJB
+	private OabaJobControllerBean jobController;
 
-	@Resource
-	private MessageDrivenContext mdc;
+	@EJB
+	private SettingsController settingsController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+	
+	@EJB
+	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
 	private Queue updateQueue;
@@ -84,59 +87,47 @@ public class DedupOABA implements MessageListener, Serializable {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		StartData data = null;
-		BatchJob batchJob = null;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
+		OabaJobMessage data = null;
+		OabaJob oabaJob = null;
 
 		log.info("DedupOABA In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (StartData) msg.getObject();
+				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				batchJob =
-					configuration.findBatchJobById(em, BatchJobBean.class,
-							data.jobID);
-
-				//init values
-				BatchParameters params =
-					configuration.findBatchParamsByJobId(em, batchJob.getId());
+				oabaJob = jobController.find(jobId);
+				OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
+				OabaProcessing processingEntry = processingController.findProcessingLogByJobId(jobId);
 				final String modelConfigId = params.getModelConfigurationName();
-				IProbabilityModel stageModel =
+				IProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
-				if (stageModel == null) {
+				if (model == null) {
 					String s =
 						"No model corresponding to '" + modelConfigId + "'";
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}
-				OABAConfiguration oabaConfig =
-					new OABAConfiguration(params.getModelConfigurationName(),
-							jobId);
 
-				// get the status
-				OabaProcessing processingEntry =
-					configuration.getProcessingLog(em, data);
-
-				if (BatchJob.STATUS_ABORT_REQUESTED.equals(batchJob.getStatus())) {
-					MessageBeanUtils.stopJob (batchJob, processingEntry, oabaConfig);
+				if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+					MessageBeanUtils.stopJob (oabaJob, processingEntry);
 
 				} else {
-					String temp = (String) stageModel.properties().get("maxBlockSize");
+					String temp = (String) model.properties().get("maxBlockSize");
 					int maxBlock = Integer.parseInt(temp);
 
-					temp = (String) stageModel.properties().get("interval");
+					temp = (String) model.properties().get("interval");
 					int interval = Integer.parseInt(temp);
 
 					//using BlockGroup to speed up dedup later
-					BlockGroup bGroup = new BlockGroup (oabaConfig.getBlockGroupFactory(), maxBlock);
+					BlockGroup bGroup = new BlockGroup (OabaFileUtils.getBlockGroupFactory(oabaJob), maxBlock);
 					BlockDedupService4 dedupService = new BlockDedupService4 (bGroup,
-						oabaConfig.getBigBlocksSinkSourceFactory(),
-						oabaConfig.getTempBlocksSinkSourceFactory(),
-						oabaConfig.getSuffixTreeSink(),
-						maxBlock, processingEntry, batchJob, interval);
+						OabaFileUtils.getBigBlocksSinkSourceFactory(oabaJob),
+						OabaFileUtils.getTempBlocksSinkSourceFactory(oabaJob),
+						OabaFileUtils.getSuffixTreeSink(oabaJob),
+						maxBlock, processingEntry, oabaJob, interval);
 					dedupService.runService();
 					log.info( "Done block dedup " + dedupService.getTimeElapsed());
 					log.info ("Blocks In " + dedupService.getNumBlocksIn());
@@ -145,15 +136,15 @@ public class DedupOABA implements MessageListener, Serializable {
 
 
 					//start oversized dedup
-					IBlockSinkSourceFactory osFactory = oabaConfig.getOversizedFactory();
+					IBlockSinkSourceFactory osFactory = OabaFileUtils.getOversizedFactory(oabaJob);
 					IBlockSink osSpecial = osFactory.getNextSink();
 					IBlockSource osSource = osFactory.getSource(osSpecial);
 					IBlockSink osDedup = osFactory.getNextSink();
 
 					OversizedDedupService osDedupService =
 						new OversizedDedupService (osSource, osDedup,
-						oabaConfig.getOversizedTempFactory(),
-						processingEntry, batchJob);
+						OabaFileUtils.getOversizedTempFactory(oabaJob),
+						processingEntry, oabaJob);
 					osDedupService.runService();
 					log.info( "Done oversized dedup " + osDedupService.getTimeElapsed());
 					log.info ("Num OS Before " + osDedupService.getNumBlocksIn());
@@ -168,18 +159,12 @@ public class DedupOABA implements MessageListener, Serializable {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			mdc.setRollbackOnly();
-		} catch (BlockingException e) {
-			log.severe(e.toString());
-			assert batchJob != null;
-			batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
-			e.printStackTrace();
+			if (oabaJob != null) {
+				oabaJob.markAsFailed();
+			}
 		}
-
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
@@ -199,7 +184,7 @@ public class DedupOABA implements MessageListener, Serializable {
 	 *
 	 * @param request
 	 */
-	private void sendToChunk (StartData data) {
+	private void sendToChunk (OabaJobMessage data) {
 		MessageBeanUtils.sendStartData(data, jmsContext, chunkQueue, log);
 	}
 

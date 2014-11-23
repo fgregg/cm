@@ -10,33 +10,24 @@
 
     <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
 
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchParametersBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean</class>
+    <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
     <!--
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean</class>
-
-    <class>com.choicemaker.cm.persist0.BatchJobBean</class>
-    <class>com.choicemaker.cm.persist0.CMP_AuditEvent</class>
-    <class>com.choicemaker.cm.persist0.OfflineMatchingBean</class>
-    <class>com.choicemaker.cm.persist0.OfflineMatchingAuditEvent</class>
-    <class>com.choicemaker.cm.persist0.TransitivityJobBean</class>
-    <class>com.choicemaker.cm.persist0.TransitivityJobAuditEvent</class>
-    <class>com.choicemaker.cm.persist0.CMP_ModelBean</class>
-    <class>com.choicemaker.cm.persist0.BatchParametersBean</class>
-    <class>com.choicemaker.cm.persist0.StatusLogBean</class>
     -->
 
     <properties>
       <property name="eclipselink.target-server" value="JBoss" />
-
-      <!--  property name="eclipselink.ddl-generation" value="create-tables" / -->
-      <!--  property name="eclipselink.ddl-generation" value="drop-and-create-tables" / -->
       <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
-
       <property name="eclipselink.ddl-generation.output-mode" value="both" />
-
       <property name="eclipselink.logging.logger" value="ServerLogger" />
       <property name="eclipselink.logging.level.sql" value="FINE" />
       <property name="eclipselink.logging.parameters" value="true" />
@@ -47,35 +38,26 @@
 
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
-    <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
     <non-jta-data-source>jboss/datasources/DefaultDS0</non-jta-data-source>
 
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean</class>
+    <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
     <!--
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchParametersBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean</class>
-
-    <class>com.choicemaker.cm.persist0.BatchJobBean</class>
-    <class>com.choicemaker.cm.persist0.CMP_AuditEvent</class>
-    <class>com.choicemaker.cm.persist0.OfflineMatchingBean</class>
-    <class>com.choicemaker.cm.persist0.OfflineMatchingAuditEvent</class>
-    <class>com.choicemaker.cm.persist0.TransitivityJobBean</class>
-    <class>com.choicemaker.cm.persist0.TransitivityJobAuditEvent</class>
-    <class>com.choicemaker.cm.persist0.CMP_ModelBean</class>
-    <class>com.choicemaker.cm.persist0.BatchParametersBean</class>
-    <class>com.choicemaker.cm.persist0.StatusLogBean</class>
     -->
 
     <properties>
       <property name="eclipselink.target-server" value="JBoss" />
-
-      <!--  property name="eclipselink.ddl-generation" value="create-tables" / -->
-      <!--  property name="eclipselink.ddl-generation" value="drop-and-create-tables" / -->
       <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
-
       <property name="eclipselink.ddl-generation.output-mode" value="both" />
-
       <property name="eclipselink.logging.logger" value="ServerLogger" />
       <property name="eclipselink.logging.level.sql" value="FINE" />
       <property name="eclipselink.logging.parameters" value="true" />

@@ -12,11 +12,11 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.FinderException;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
@@ -30,26 +30,19 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterData;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OABAConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.BatchParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.TransitivityJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BatchJobBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
  * This match dedup bean is used by the Transitivity Engine. It dedups the
@@ -58,8 +51,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanU
  * @author pcheung
  *
  */
-@SuppressWarnings({
-		"rawtypes", "unchecked" })
+//@SuppressWarnings({
+//		"rawtypes", "unchecked" })
 //Singleton: maxSession = 1 (JBoss only)
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "maxSession",
@@ -75,9 +68,18 @@ public class TransMatchDedup implements MessageListener, Serializable {
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ TransMatchDedup.class.getName());
-
+	
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
+	
+	@EJB
+	TransitivityJobControllerBean jobController;
+
+	@EJB
+	OabaParametersControllerBean paramsController;
+
+	@EJB
+	OabaProcessingControllerBean processingController;
 
 //	@Resource
 //	protected MessageDrivenContext mdc;
@@ -96,23 +98,20 @@ public class TransMatchDedup implements MessageListener, Serializable {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
 
 		log.fine("MatchDedupOABA2 In onMessage");
 
-		BatchJob batchJob = null;
+		TransitivityJob batchJob = null;
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
 				Object o = msg.getObject();
 
-				if (o instanceof MatchWriterData) {
-					MatchWriterData data = (MatchWriterData) o;
+				if (o instanceof MatchWriterMessage) {
+					MatchWriterMessage data = (MatchWriterMessage) o;
 					long jobId = data.jobID;
-					batchJob =
-						configuration.findBatchJobById(em, BatchJobBean.class,
-								jobId);
-						handleMerge(batchJob);
+					batchJob = jobController.findTransitivityJob(jobId);
+					handleMerge(batchJob);
 				} else {
 					log.warning("wrong message body: " + o.getClass().getName());
 				}
@@ -141,28 +140,26 @@ public class TransMatchDedup implements MessageListener, Serializable {
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
-	private void handleMerge(final BatchJob batchJob) throws BlockingException {
+	private void handleMerge(final BatchJob oabaJob) throws BlockingException {
 
 		log.fine("in handleMerge");
 
-		final long jobId = batchJob.getId();
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
-		BatchParameters params =
-			configuration.findBatchParamsByJobId(em, jobId);
+		final long jobId = oabaJob.getId();
+		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
 
 		// init values
 		final String modelConfigId = params.getModelConfigurationName();
 		ImmutableProbabilityModel stageModel =
 			PMManager.getModelInstance(modelConfigId);
 		OabaProcessing processingEntry =
-			configuration.getProcessingLog(em, jobId);
+			processingController.findProcessingLogByJobId(jobId);
 
 		// get the number of processors
 		String temp = (String) stageModel.properties().get("numProcessors");
 		int numProcessors = Integer.parseInt(temp);
 
 		// now merge them all together
-		mergeMatches(numProcessors, batchJob);
+		mergeMatches(numProcessors, oabaJob);
 
 		// mark as done
 		sendToUpdateTransStatus(jobId,
@@ -184,92 +181,89 @@ public class TransMatchDedup implements MessageListener, Serializable {
 	 *
 	 */
 	protected void mergeMatches(final int num,
-			final BatchJob batchJob) throws BlockingException {
+			final BatchJob oabaJob) throws BlockingException {
 
-		final long jobID = batchJob.getId();
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
-		OABAConfiguration oabaConfig = new OABAConfiguration(jobID);
-
-		// final sink
-		IMatchRecord2Sink finalSink =
-			oabaConfig.getCompositeTransMatchSink(jobID);
-
-		IMatchRecord2SinkSourceFactory factory =
-			oabaConfig.getMatchChunkFactory();
-		ArrayList tempSinks = new ArrayList();
-
-		// the match files start with 1, not 0.
-		for (int i = 1; i <= num; i++) {
-			IMatchRecord2Sink mSink = factory.getSink(i);
-			tempSinks.add(mSink);
-
-			log.info("concatenating file " + mSink.getInfo());
-		}
-
-		// concat all the other chunk MatchRecord2 sinks.
-		finalSink.append();
-		Comparable C = null;
-
-		for (int i = 0; i < tempSinks.size(); i++) {
-			IMatchRecord2Sink mSink = (IMatchRecord2Sink) tempSinks.get(i);
-
-			IMatchRecord2Source mSource = factory.getSource(mSink);
-			if (mSource.exists()) {
-				mSource.open();
-				while (mSource.hasNext()) {
-					MatchRecord2 mr = mSource.getNext();
-					finalSink.writeMatch(mr);
-
-					if (C == null) {
-						C = mr.getRecordID1();
-					}
-				}
-				mSource.close();
-
-				// clean up
-				mSource.remove();
-			} // end if
-		}
-
-		// finally concat the size two EC file
-		IMatchRecord2Source mSource =
-			oabaConfig.getSet2MatchFactory().getNextSource();
-		MatchRecord2 separator = null;
-		if (C != null)
-			separator = MatchRecord2Factory.getSeparator(C);
-
-		if (mSource.exists()) {
-			mSource.open();
-			int i = 0;
-			while (mSource.hasNext()) {
-				i++;
-				MatchRecord2 mr = mSource.getNext();
-				if (C == null) {
-					C = mr.getRecordID1();
-					separator = MatchRecord2Factory.getSeparator(C);
-				}
-				finalSink.writeMatch(mr);
-				finalSink.writeMatch(separator);
-			}
-			mSource.close();
-			log.info("Num of size 2s read in " + i);
-
-			mSource.remove();
-		}
-
-		finalSink.close();
-
-		log.info("final output " + finalSink.getInfo());
-
-		try {
-			BatchJob transJob =
-				configuration.findBatchJobById(em, TransitivityJobBean.class,
-						jobID);
-			assert transJob instanceof TransitivityJob;
-			transJob.setDescription(finalSink.getInfo());
-		} catch (Exception e) {
-			log.severe(e.toString());
-		}
+		throw new Error("not yet implemented");
+//		final long jobID = oabaJob.getId();
+//		OabaFileUtils oabaConfig = new OabaFileUtils(jobID);
+//
+//		// final sink
+//		IMatchRecord2Sink finalSink =
+//			oabaConfig.getCompositeTransMatchSink(jobID);
+//
+//		IMatchRecord2SinkSourceFactory factory =
+//			oabaConfig.getMatchChunkFactory();
+//		ArrayList tempSinks = new ArrayList();
+//
+//		// the match files start with 1, not 0.
+//		for (int i = 1; i <= num; i++) {
+//			IMatchRecord2Sink mSink = factory.getSink(i);
+//			tempSinks.add(mSink);
+//
+//			log.info("concatenating file " + mSink.getInfo());
+//		}
+//
+//		// concat all the other chunk MatchRecord2 sinks.
+//		finalSink.append();
+//		Comparable C = null;
+//
+//		for (int i = 0; i < tempSinks.size(); i++) {
+//			IMatchRecord2Sink mSink = (IMatchRecord2Sink) tempSinks.get(i);
+//
+//			IMatchRecord2Source mSource = factory.getSource(mSink);
+//			if (mSource.exists()) {
+//				mSource.open();
+//				while (mSource.hasNext()) {
+//					MatchRecord2 mr = mSource.getNext();
+//					finalSink.writeMatch(mr);
+//
+//					if (C == null) {
+//						C = mr.getRecordID1();
+//					}
+//				}
+//				mSource.close();
+//
+//				// clean up
+//				mSource.remove();
+//			} // end if
+//		}
+//
+//		// finally concat the size two EC file
+//		IMatchRecord2Source mSource =
+//			oabaConfig.getSet2MatchFactory().getNextSource();
+//		MatchRecord2 separator = null;
+//		if (C != null)
+//			separator = MatchRecord2Factory.getSeparator(C);
+//
+//		if (mSource.exists()) {
+//			mSource.open();
+//			int i = 0;
+//			while (mSource.hasNext()) {
+//				i++;
+//				MatchRecord2 mr = mSource.getNext();
+//				if (C == null) {
+//					C = mr.getRecordID1();
+//					separator = MatchRecord2Factory.getSeparator(C);
+//				}
+//				finalSink.writeMatch(mr);
+//				finalSink.writeMatch(separator);
+//			}
+//			mSource.close();
+//			log.info("Num of size 2s read in " + i);
+//
+//			mSource.remove();
+//		}
+//
+//		finalSink.close();
+//
+//		log.info("final output " + finalSink.getInfo());
+//
+//		try {
+//			TransitivityJob transJob = em.find(TransitivityJobEntity.class, jobID);
+//			transJob.setDescription(finalSink.getInfo());
+//		} catch (Exception e) {
+//			log.severe(e.toString());
+//		}
 	}
 
 	protected void sendToUpdateTransStatus(long jobID, int percentComplete) {

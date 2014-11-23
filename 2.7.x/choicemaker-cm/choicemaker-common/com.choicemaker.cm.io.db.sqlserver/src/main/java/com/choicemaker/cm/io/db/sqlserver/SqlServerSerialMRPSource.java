@@ -244,5 +244,11 @@ public class SqlServerSerialMRPSource implements MarkedRecordPairSource, Seriali
 	public Sink getSink() {
 		throw new UnsupportedOperationException();
 	}
+
+	public String toString() {
+		return "SqlServerSerialMRPSource [dsName=" + dsName + ", modelName="
+				+ modelName + ", dbConfiguration=" + dbConfiguration
+				+ ", mrpsQuery=" + mrpsQuery + "]";
+	}
 	
 }
