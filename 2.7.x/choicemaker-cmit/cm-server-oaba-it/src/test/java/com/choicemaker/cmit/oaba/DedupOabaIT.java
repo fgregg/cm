@@ -448,7 +448,8 @@ public class DedupOabaIT {
 		// on the blocking queue
 		logger.info("Checking chunkQueue");
 		JMSConsumer consumer = jmsContext.createConsumer(chunkQueue);
-		OabaJobMessage startData = receiveStartData(consumer, VERY_LONG_TIMEOUT_MILLIS);
+		CallableOabaJobMessage cojm = new CallableOabaJobMessage(consumer, VERY_LONG_TIMEOUT_MILLIS);
+		OabaJobMessage startData = cojm.call();
 		logger.info(JmsUtils.queueInfo("Received from: ", chunkQueue, startData));
 		if (startData == null) {
 			fail("did not receive data from chunk queue");
