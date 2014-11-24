@@ -3,34 +3,16 @@ package com.choicemaker.cmit.oaba;
 import static com.choicemaker.cm.batch.BatchJob.INVALID_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OVERSIZED_TRIMMING;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OVERSIZED_TRIMMING;
-import static com.choicemaker.cmit.oaba.util.OabaConstants.CURRENT_MAVEN_COORDINATES;
-import static com.choicemaker.cmit.oaba.util.OabaConstants.PERSISTENCE_CONFIGURATION;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_HAS_BEANS;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_MODULE_NAME;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_POM_FILE;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_TEST_CLASSES_PATH;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createEAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createJAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolveDependencies;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolvePom;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,10 +21,7 @@ import javax.transaction.UserTransaction;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +43,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 //import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatch;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatus;
+import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.TestEntities;
 import com.choicemaker.e2.ejb.EjbPlatform;
@@ -74,28 +55,11 @@ public class BlockOabaIT {
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
-	public static final String REGEX_EJB_DEPENDENCIES =
-		"com.choicemaker.cm.io.blocking.automated.offline.server.*.jar"
-				+ "|com.choicemaker.e2.ejb.*.jar";
-
 	/** A short time-out for receiving messages (1 sec) */
 	public static final long SHORT_TIMEOUT_MILLIS = 1000;
 
 	/** A long time-out for receiving messages (10 sec) */
 	public static final long LONG_TIMEOUT_MILLIS = 20000;
-
-	public static final String[] removedPaths() {
-		Class<?>[] removedClasses =
-			new Class<?>[] {
-				DedupOABA.class, UpdateStatus.class };
-		Set<String> removedPaths = new LinkedHashSet<>();
-		for (Class<?> c : removedClasses) {
-			String path = "/" + c.getName().replace('.', '/') + ".class";
-			removedPaths.add(path);
-		}
-		String[] retVal = removedPaths.toArray(new String[removedPaths.size()]);
-		return retVal;
-	}
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
@@ -104,60 +68,9 @@ public class BlockOabaIT {
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		PomEquippedResolveStage pom = resolvePom(DEFAULT_POM_FILE);
-
-		File[] libs = resolveDependencies(pom);
-
-		// Filter the OABA server and E2Plaform JARs from the dependencies
-		final Pattern p = Pattern.compile(REGEX_EJB_DEPENDENCIES);
-		Set<File> ejbJARs = new LinkedHashSet<>();
-		List<File> filteredLibs = new LinkedList<>();
-		for (File lib : libs) {
-			String name = lib.getName();
-			Matcher m = p.matcher(name);
-			if (m.matches()) {
-				boolean isAdded = ejbJARs.add(lib);
-				if (!isAdded) {
-					String path = lib.getAbsolutePath();
-					throw new RuntimeException("failed to add (duplicate?): "
-							+ path);
-				}
-			} else {
-				filteredLibs.add(lib);
-			}
-		}
-		File[] libs2 = filteredLibs.toArray(new File[filteredLibs.size()]);
-
-		JavaArchive tests =
-			createJAR(pom, CURRENT_MAVEN_COORDINATES, DEFAULT_MODULE_NAME,
-					DEFAULT_TEST_CLASSES_PATH, PERSISTENCE_CONFIGURATION,
-					DEFAULT_HAS_BEANS);
-		EnterpriseArchive retVal = createEAR(tests, libs2, TESTS_AS_EJB_MODULE);
-
-		// Filter the targeted paths from the EJB JARs
-		for (File ejb : ejbJARs) {
-			JavaArchive filteredEJB =
-				ShrinkWrap.createFromZipFile(JavaArchive.class, ejb);
-			for (String path : removedPaths()) {
-				filteredEJB.delete(path);
-			}
-			retVal.addAsModule(filteredEJB);
-		}
-
-		return retVal;
-	}
-
-	private static String queueInfo(String tag, Queue q, Object d) {
-		String queueName;
-		try {
-			queueName = q.getQueueName();
-		} catch (JMSException x) {
-			queueName = "unknown";
-		}
-		StringBuilder sb =
-			new StringBuilder(tag).append("queue: '").append(queueName)
-					.append("', data: '").append(d).append("'");
-		return sb.toString();
+		Class<?>[] removedClasses = { DedupOABA.class, UpdateStatus.class };
+		return OabaDeploymentUtils.createEarArchive(removedClasses,
+				TESTS_AS_EJB_MODULE);
 	}
 
 	public static final String LOG_SOURCE = BlockOabaIT.class.getSimpleName();
@@ -345,7 +258,7 @@ public class BlockOabaIT {
 		OabaJobMessage startData = null;
 		do {
 			startData = receiveStartData(consumer);
-			logger.finest(queueInfo("Clearing: ", blockQueue, startData));
+			logger.info(JmsUtils.queueInfo("Clearing: ", blockQueue, startData));
 		} while (startData != null);
 	}
 
@@ -369,7 +282,7 @@ public class BlockOabaIT {
 		OabaUpdateMessage updateMessage = null;
 		do {
 			updateMessage = receiveUpdateMessage(consumer);
-			logger.finest(queueInfo("Clearing: ", updateQueue, updateMessage));
+			logger.info(JmsUtils.queueInfo("Clearing: ", updateQueue, updateMessage));
 		} while (updateMessage != null);
 	}
 
@@ -381,7 +294,7 @@ public class BlockOabaIT {
 		OabaJobMessage startData = null;
 		do {
 			startData = receiveStartData(consumer);
-			logger.finest(queueInfo("Clearing: ", singleMatchQueue, startData));
+			logger.info(JmsUtils.queueInfo("Clearing: ", singleMatchQueue, startData));
 		} while (startData != null);
 	}
 
@@ -393,7 +306,7 @@ public class BlockOabaIT {
 		OabaJobMessage startData = null;
 		do {
 			startData = receiveStartData(consumer);
-			logger.finest(queueInfo("Clearing: ", dedupQueue, startData));
+			logger.info(JmsUtils.queueInfo("Clearing: ", dedupQueue, startData));
 		} while (startData != null);
 	}
 
@@ -509,7 +422,7 @@ public class BlockOabaIT {
 		logger.info("Checking blockQueue");
 		JMSConsumer consumer = jmsContext.createConsumer(dedupQueue);
 		OabaJobMessage startData = receiveStartData(consumer, LONG_TIMEOUT_MILLIS);
-		logger.info(queueInfo("Received from: ", dedupQueue, startData));
+		logger.info(JmsUtils.queueInfo("Received from: ", dedupQueue, startData));
 		if (startData == null) {
 			fail("did not receive data from dedup queue");
 		}
@@ -594,7 +507,7 @@ public class BlockOabaIT {
 		} catch (Exception x) {
 			fail(x.toString());
 		}
-		logger.info(queueInfo("Received from: ", updateQueue, o));
+		logger.info(JmsUtils.queueInfo("Received from: ", updateQueue, o));
 		if (o != null && !(o instanceof OabaUpdateMessage)) {
 			fail("Received wrong type from update queue: "
 					+ o.getClass().getName());

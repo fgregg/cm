@@ -28,7 +28,7 @@ import javax.jms.Queue;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 //import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
@@ -118,9 +118,9 @@ public class BlockingOABA implements MessageListener, Serializable {
 					throw new IllegalArgumentException(s);
 				}
 				final String modelConfigId = params.getModelConfigurationName();
-				IProbabilityModel stageModel =
+				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
-				if (stageModel == null) {
+				if (model == null) {
 					String s =
 						"No model corresponding to '" + modelConfigId + "'";
 					log.severe(s);

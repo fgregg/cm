@@ -5,31 +5,14 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSe
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_OVERSIZED;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MIN_FIELDS;
-import static com.choicemaker.cmit.oaba.util.OabaConstants.CURRENT_MAVEN_COORDINATES;
-import static com.choicemaker.cmit.oaba.util.OabaConstants.PERSISTENCE_CONFIGURATION;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_HAS_BEANS;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_MODULE_NAME;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_POM_FILE;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_TEST_CLASSES_PATH;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createEAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createJAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolveDependencies;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolvePom;
 import static com.choicemaker.cmit.utils.EntityManagerUtils.MAX_MAX_SINGLE;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -40,10 +23,7 @@ import javax.transaction.UserTransaction;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
+import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.MutableProbabilityModelStub;
 import com.choicemaker.cmit.utils.TestEntities;
 
@@ -62,10 +43,6 @@ import com.choicemaker.cmit.utils.TestEntities;
 public class SettingsControllerBeanIT {
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
-
-	public static final String REGEX_EJB_DEPENDENCIES =
-		"com.choicemaker.cm.io.blocking.automated.offline.server.*.jar"
-				+ "|com.choicemaker.e2.ejb.*.jar";
 
 	protected static Random random = new Random(new Date().getTime());
 
@@ -99,45 +76,9 @@ public class SettingsControllerBeanIT {
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		PomEquippedResolveStage pom = resolvePom(DEFAULT_POM_FILE);
-
-		File[] libs = resolveDependencies(pom);
-
-		// Filter the OABA server and E2Plaform JARs from the dependencies;
-		// they will be added as modules.
-		final Pattern p = Pattern.compile(REGEX_EJB_DEPENDENCIES);
-		Set<File> ejbJARs = new LinkedHashSet<>();
-		List<File> filteredLibs = new LinkedList<>();
-		for (File lib : libs) {
-			String name = lib.getName();
-			Matcher m = p.matcher(name);
-			if (m.matches()) {
-				boolean isAdded = ejbJARs.add(lib);
-				if (!isAdded) {
-					String path = lib.getAbsolutePath();
-					throw new RuntimeException("failed to add (duplicate?): "
-							+ path);
-				}
-			} else {
-				filteredLibs.add(lib);
-			}
-		}
-		File[] libs2 = filteredLibs.toArray(new File[filteredLibs.size()]);
-
-		JavaArchive tests =
-			createJAR(pom, CURRENT_MAVEN_COORDINATES, DEFAULT_MODULE_NAME,
-					DEFAULT_TEST_CLASSES_PATH, PERSISTENCE_CONFIGURATION,
-					DEFAULT_HAS_BEANS);
-		EnterpriseArchive retVal = createEAR(tests, libs2, TESTS_AS_EJB_MODULE);
-
-		// Filter the targeted paths from the EJB JARs
-		for (File ejb : ejbJARs) {
-			JavaArchive module =
-				ShrinkWrap.createFromZipFile(JavaArchive.class, ejb);
-			retVal.addAsModule(module);
-		}
-
-		return retVal;
+		Class<?>[] removedClasses = null;
+		return OabaDeploymentUtils.createEarArchive(removedClasses,
+				TESTS_AS_EJB_MODULE);
 	}
 
 	public static final String LOG_SOURCE = SettingsControllerBeanIT.class

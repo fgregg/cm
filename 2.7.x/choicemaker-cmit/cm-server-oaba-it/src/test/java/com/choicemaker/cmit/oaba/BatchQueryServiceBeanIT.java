@@ -1,28 +1,11 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cmit.oaba.util.OabaConstants.CURRENT_MAVEN_COORDINATES;
-import static com.choicemaker.cmit.oaba.util.OabaConstants.PERSISTENCE_CONFIGURATION;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_HAS_BEANS;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_MODULE_NAME;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_POM_FILE;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_TEST_CLASSES_PATH;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createEAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createJAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolveDependencies;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolvePom;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -36,10 +19,7 @@ import javax.transaction.UserTransaction;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.StartOABA;
+import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.TestEntities;
@@ -72,22 +53,7 @@ public class BatchQueryServiceBeanIT {
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
-	public static final String REGEX_EJB_DEPENDENCIES =
-			"com.choicemaker.cm.io.blocking.automated.offline.server.*.jar"
-					+ "|com.choicemaker.e2.ejb.*.jar";
-
 	public static final long QUEUE_RECEIVE_TIMEOUT = 1000;
-
-	public static final String[] removedPaths() {
-		Class<?>[] removedClasses = new Class<?>[] { StartOABA.class };
-		Set<String> removedPaths = new LinkedHashSet<>();
-		for (Class<?> c : removedClasses) {
-			String path = "/" + c.getName().replace('.', '/') + ".class";
-			removedPaths.add(path);
-		}
-		String[] retVal = removedPaths.toArray(new String[removedPaths.size()]);
-		return retVal;
-	}
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
@@ -96,49 +62,9 @@ public class BatchQueryServiceBeanIT {
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		PomEquippedResolveStage pom = resolvePom(DEFAULT_POM_FILE);
-
-		File[] libs = resolveDependencies(pom);
-
-		// Filter the OABA server JAR from the dependencies
-		final Pattern p = Pattern.compile(REGEX_EJB_DEPENDENCIES);
-
-		Set<File> ejbJARs = new LinkedHashSet<>();
-		List<File> filteredLibs = new LinkedList<>();
-		for (File lib : libs) {
-			String name = lib.getName();
-			Matcher m = p.matcher(name);
-			if (m.matches()) {
-				boolean isAdded = ejbJARs.add(lib);
-				if (!isAdded) {
-					String path = lib.getAbsolutePath();
-					throw new RuntimeException("failed to add (duplicate?): "
-							+ path);
-				}
-			} else {
-				filteredLibs.add(lib);
-			}
-		}
-		File[] libs2 = filteredLibs.toArray(new File[filteredLibs.size()]);
-
-		JavaArchive tests =
-			createJAR(pom, CURRENT_MAVEN_COORDINATES, DEFAULT_MODULE_NAME,
-					DEFAULT_TEST_CLASSES_PATH, PERSISTENCE_CONFIGURATION,
-					DEFAULT_HAS_BEANS);
-		final EnterpriseArchive retVal =
-			createEAR(tests, libs2, TESTS_AS_EJB_MODULE);
-
-		// Filter the targeted paths from the EJB JARs
-		for (File ejb : ejbJARs) {
-			JavaArchive filteredEJB =
-				ShrinkWrap.createFromZipFile(JavaArchive.class, ejb);
-			for (String path : removedPaths()) {
-				filteredEJB.delete(path);
-			}
-			retVal.addAsModule(filteredEJB);
-		}
-
-		return retVal;
+		Class<?>[] removedClasses = { StartOABA.class };
+		return OabaDeploymentUtils.createEarArchive(removedClasses,
+				TESTS_AS_EJB_MODULE);
 	}
 
 	private static final Logger logger = Logger

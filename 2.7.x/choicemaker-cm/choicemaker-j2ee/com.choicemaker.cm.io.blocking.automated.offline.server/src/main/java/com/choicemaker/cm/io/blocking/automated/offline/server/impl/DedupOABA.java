@@ -25,7 +25,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
@@ -36,6 +36,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService4;
@@ -99,10 +100,19 @@ public class DedupOABA implements MessageListener, Serializable {
 
 				final long jobId = data.jobID;
 				oabaJob = jobController.find(jobId);
-				OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
-				OabaProcessing processingEntry = processingController.findProcessingLogByJobId(jobId);
+				OabaParameters params =
+					paramsController.findBatchParamsByJobId(jobId);
+				OabaSettings oabaSettings =
+						settingsController.findOabaSettingsByJobId(jobId);
+				OabaProcessing processingEntry =
+						processingController.findProcessingLogByJobId(jobId);
+				if (oabaJob == null || params == null || oabaSettings == null) {
+					String s = "Unable to find a job, parameters or settings for " + jobId;
+					log.severe(s);
+					throw new IllegalArgumentException(s);
+				}
 				final String modelConfigId = params.getModelConfigurationName();
-				IProbabilityModel model =
+				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
 				if (model == null) {
 					String s =
@@ -115,31 +125,37 @@ public class DedupOABA implements MessageListener, Serializable {
 					MessageBeanUtils.stopJob (oabaJob, processingEntry);
 
 				} else {
-					String temp = (String) model.properties().get("maxBlockSize");
-					int maxBlock = Integer.parseInt(temp);
-
-					temp = (String) model.properties().get("interval");
-					int interval = Integer.parseInt(temp);
-
-					//using BlockGroup to speed up dedup later
-					BlockGroup bGroup = new BlockGroup (OabaFileUtils.getBlockGroupFactory(oabaJob), maxBlock);
-					BlockDedupService4 dedupService = new BlockDedupService4 (bGroup,
-						OabaFileUtils.getBigBlocksSinkSourceFactory(oabaJob),
-						OabaFileUtils.getTempBlocksSinkSourceFactory(oabaJob),
-						OabaFileUtils.getSuffixTreeSink(oabaJob),
-						maxBlock, processingEntry, oabaJob, interval);
+					
+					// Handle regular blocking sets
+					final int maxBlock = oabaSettings.getMaxBlockSize();
+					final int interval = oabaSettings.getInterval();
+					final BlockGroup bGroup =
+							new BlockGroup(
+									OabaFileUtils.getBlockGroupFactory(oabaJob),
+									maxBlock);
+					BlockDedupService4 dedupService =
+						new BlockDedupService4(
+								bGroup,
+								OabaFileUtils
+										.getBigBlocksSinkSourceFactory(oabaJob),
+								OabaFileUtils
+										.getTempBlocksSinkSourceFactory(oabaJob),
+								OabaFileUtils.getSuffixTreeSink(oabaJob),
+								maxBlock, processingEntry, oabaJob, interval);
 					dedupService.runService();
 					log.info( "Done block dedup " + dedupService.getTimeElapsed());
 					log.info ("Blocks In " + dedupService.getNumBlocksIn());
 					log.info ("Blocks Out " + dedupService.getNumBlocksOut());
 					log.info ("Tree Out " + dedupService.getNumTreesOut());
 
-
-					//start oversized dedup
-					IBlockSinkSourceFactory osFactory = OabaFileUtils.getOversizedFactory(oabaJob);
-					IBlockSink osSpecial = osFactory.getNextSink();
-					IBlockSource osSource = osFactory.getSource(osSpecial);
-					IBlockSink osDedup = osFactory.getNextSink();
+					// Handle oversized blocking sets
+					final IBlockSink osSpecial =
+							OabaFileUtils.getOversizedFactory(oabaJob)
+									.getNextSink();
+					final IBlockSinkSourceFactory osFactory =
+						OabaFileUtils.getOversizedFactory(oabaJob);
+					final IBlockSource osSource = osFactory.getSource(osSpecial);
+					final IBlockSink osDedup = osFactory.getNextSink();
 
 					OversizedDedupService osDedupService =
 						new OversizedDedupService (osSource, osDedup,

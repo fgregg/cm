@@ -68,9 +68,9 @@ public class OabaFileUtils implements Serializable {
 
 	public static final String DEFAULT_PREFIX = "job";
 
-	public static final int ROLLOVER = 10000;
+	public static final int ROLLOVER = 100000;
 
-	public static final String FMT = "0000";
+	public static final String FMT = "00000";
 	
 	protected static final String FILE_SEPARATOR = System.getProperty(SystemPropertyUtils.FILE_SEPARATOR);
 
@@ -194,6 +194,9 @@ public class OabaFileUtils implements Serializable {
 		}
 		File d = job.getWorkingDirectory();
 		String retVal = d.getAbsolutePath();
+		if (!retVal.endsWith(FILE_SEPARATOR)) {
+			retVal += FILE_SEPARATOR;
+		}
 		return retVal;
 	}
 
@@ -324,9 +327,7 @@ public class OabaFileUtils implements Serializable {
 
 	protected static String getTreeFilePath(BatchJob job) {
 		String wd = getWorkingDir(job);
-		if (!wd.endsWith(FILE_SEPARATOR)) {
-			wd += FILE_SEPARATOR;
-		}
+		assert wd.endsWith(FILE_SEPARATOR);
 		String retVal = wd + FILENAME_TREE_STORE;
 		return retVal;
 	}
@@ -433,9 +434,7 @@ public class OabaFileUtils implements Serializable {
 
 	protected static String getCompositeMatchFileName(BatchJob job) {
 		String wd = getWorkingDir(job);
-		if (!wd.endsWith(FILE_SEPARATOR)) {
-			wd += FILE_SEPARATOR;
-		}
+		assert wd.endsWith(FILE_SEPARATOR);
 		String id = formatJobId(job.getId());
 		String retVal = wd + BASENAME_MATCH_STORE_INDEXED + id;
 		return retVal;
@@ -463,9 +462,7 @@ public class OabaFileUtils implements Serializable {
 
 	protected static String getCompositeTransMatchFileName(BatchJob job) {
 		String wd = getWorkingDir(job);
-		if (!wd.endsWith(FILE_SEPARATOR)) {
-			wd += FILE_SEPARATOR;
-		}
+		assert wd.endsWith(FILE_SEPARATOR);
 		String id = formatJobId(job.getId());
 		String retVal = wd + BASENAME_TRANSMATCH_STORE_INDEXED + id;
 		return retVal;
