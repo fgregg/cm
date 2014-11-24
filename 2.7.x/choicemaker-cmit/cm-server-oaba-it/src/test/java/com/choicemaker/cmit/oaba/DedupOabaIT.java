@@ -59,8 +59,11 @@ public class DedupOabaIT {
 	/** A short time-out for receiving messages (1 sec) */
 	public static final long SHORT_TIMEOUT_MILLIS = 1000;
 
-	/** A long time-out for receiving messages (10 sec) */
+	/** A long time-out for receiving messages (20 sec) */
 	public static final long LONG_TIMEOUT_MILLIS = 20000;
+
+	/** A very long time-out for receiving messages (5 min) */
+	public static final long VERY_LONG_TIMEOUT_MILLIS = 300000;
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
@@ -445,7 +448,7 @@ public class DedupOabaIT {
 		// on the blocking queue
 		logger.info("Checking chunkQueue");
 		JMSConsumer consumer = jmsContext.createConsumer(chunkQueue);
-		OabaJobMessage startData = receiveStartData(consumer, LONG_TIMEOUT_MILLIS);
+		OabaJobMessage startData = receiveStartData(consumer, VERY_LONG_TIMEOUT_MILLIS);
 		logger.info(JmsUtils.queueInfo("Received from: ", chunkQueue, startData));
 		if (startData == null) {
 			fail("did not receive data from chunk queue");
