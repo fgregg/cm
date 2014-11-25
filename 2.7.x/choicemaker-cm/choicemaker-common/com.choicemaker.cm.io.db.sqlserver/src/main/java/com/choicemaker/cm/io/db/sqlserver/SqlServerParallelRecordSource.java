@@ -219,8 +219,10 @@ public class SqlServerParallelRecordSource implements RecordSource {
 				connection = null;
 			}
 		} catch (SQLException ex) {
-			throw new IOException(
-					"Problem closing the statement or connection.", ex);
+			String msg =
+				"Problem closing the statement or connection." + ex.toString();
+			logger.severe(msg);
+			throw new IOException(msg, ex);
 		} finally {
 			dbr = null;
 		}

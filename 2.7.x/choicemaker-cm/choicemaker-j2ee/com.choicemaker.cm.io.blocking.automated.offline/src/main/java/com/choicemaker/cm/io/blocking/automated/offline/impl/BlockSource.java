@@ -219,5 +219,11 @@ public class BlockSource extends BaseFileSource implements IBlockSource{
 		return retVal;
 	}
 
+	@Override
+	public String toString() {
+		return "BlockSource [count=" + count + ", type=" + type + ", fileName="
+				+ fileName + "]";
+	}
+
 
 }

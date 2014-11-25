@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_OVERSIZED;
+
 import java.io.Serializable;
 import java.util.logging.Logger;
 
@@ -166,7 +168,7 @@ public class DedupOABA implements MessageListener, Serializable {
 					log.info ("Num OS Before " + osDedupService.getNumBlocksIn());
 					log.info ("Num OS After Exact " + osDedupService.getNumAfterExact());
 					log.info ("Num OS Done " + osDedupService.getNumBlocksOut());
-					sendToUpdateStatus (data.jobID, 30);
+					sendToUpdateStatus (data.jobID, PCT_DONE_DEDUP_OVERSIZED);
 
 					sendToChunk (data);
 				}

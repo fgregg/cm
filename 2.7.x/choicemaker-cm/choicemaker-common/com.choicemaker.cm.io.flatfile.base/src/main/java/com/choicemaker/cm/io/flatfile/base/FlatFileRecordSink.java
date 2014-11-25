@@ -133,7 +133,6 @@ public class FlatFileRecordSink implements RecordSink {
 				outFile[i] = o;
 				ws[i] = w;
 			}
-			w.close();
 		}
 	}
 

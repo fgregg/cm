@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_MATCHING_DATA;
+
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.StringTokenizer;
@@ -265,7 +267,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	 */
 	protected final void nextSteps(final OabaJobMessage sd) throws BlockingException {
 		cleanUp(sd);
-		sendToUpdateStatus(sd.jobID, 90);
+		sendToUpdateStatus(sd.jobID, PCT_DONE_MATCHING_DATA);
 		sendToMatchDebup(sd);
 	}
 

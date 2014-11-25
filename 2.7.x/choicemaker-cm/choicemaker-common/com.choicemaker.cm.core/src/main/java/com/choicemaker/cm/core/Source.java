@@ -18,7 +18,7 @@ import java.io.IOException;
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 18:15:26 $
  */
 
-public interface Source {
+public interface Source extends AutoCloseable {
 	/**
 	 * Opens the source for retrieving data.
 	 *

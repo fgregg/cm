@@ -18,7 +18,7 @@ import java.io.IOException;
  * @version   $Revision: 1.2 $ $Date: 2010/03/24 20:54:54 $
  */
 
-public interface Sink {
+public interface Sink extends AutoCloseable {
 	/**
 	 * Opens the sink for writing data.
 	 *

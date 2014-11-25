@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_CREATE_CHUNK_DATA;
+
 import java.io.Serializable;
 import java.util.logging.Logger;
 
@@ -162,7 +164,7 @@ public class ChunkOABA implements MessageListener, Serializable {
 
 					data.numChunks = chunkService.getNumChunks();
 
-					sendToUpdateStatus (data.jobID, 50);
+					sendToUpdateStatus (data.jobID, PCT_DONE_CREATE_CHUNK_DATA);
 					sendToMatch (data);
 				}
 

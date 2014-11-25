@@ -8,15 +8,17 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.util.SystemPropertyUtils;
 
 @Stateless
@@ -82,6 +84,9 @@ public class ServerConfigurationControllerBean implements
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
+
+	@EJB
+	private OabaJobControllerBean jobController;
 
 	@Override
 	public ServerConfiguration find(long id) {
@@ -166,7 +171,13 @@ public class ServerConfigurationControllerBean implements
 
 	@Override
 	public ServerConfiguration findServerConfigurationByJobId(long jobId) {
-		throw new Error("not yet implemented");
+		ServerConfiguration retVal = null;
+		OabaJob oabaJob = jobController.find(jobId);
+		if (oabaJob != null) {
+			long serverId = oabaJob.getServerId();
+			retVal = find(serverId);
+		}
+		return retVal;
 	}
 
 	@Override

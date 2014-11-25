@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_CREATE_CHUNK_DATA;
+
 import java.io.Serializable;
 import java.util.logging.Logger;
 
@@ -137,16 +139,22 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 					int maxChunk = oabaSettings.getMaxChunkSize();
 					int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 					int maxChunkFiles = serverConfig.getMaxOabaChunkFileCount();
+					log.info("Maximum chunk size: " + maxChunk);
+					log.info("Number of processors: " + numProcessors);
+					log.info("Maximum chunk files: " + maxChunkFiles);
 
 					RecordIDTranslator2 translator = new RecordIDTranslator2 (OabaFileUtils.getTransIDFactory(oabaJob));
 					//recover the translator
 					translator.recover();
 					translator.close();
+					log.info("Record translator: " + translator);
 
 					//create the os block source.
 					final IBlockSinkSourceFactory osFactory = OabaFileUtils.getOversizedFactory(oabaJob);
+					log.info("Oversized factory: " + osFactory);
 					osFactory.getNextSource(); //the deduped OS file is file 2.
 					final IDSetSource source2 = new IDSetSource (osFactory.getNextSource());
+					log.info("Deduped oversized source: " + source2);
 
 					//create the tree transformer.
 					final TreeTransformer tTransformer = new TreeTransformer (translator,
@@ -168,8 +176,10 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 										model), translator.getSplitIndex(),
 								tTransformer, transformerO, maxChunk,
 								maxChunkFiles, processingEntry, oabaJob);
+					log.info("Chunk service: " + chunkService);
 					chunkService.runService();
 					log.info( "Number of chunks " + chunkService.getNumChunks());
+					log.info( "Number of regular chunks " + chunkService.getNumRegularChunks());
 					log.info( "Done creating chunks " + chunkService.getTimeElapsed());
 
 					//transitivity needs the translator
@@ -178,7 +188,7 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 					data.numChunks = chunkService.getNumChunks();
 					data.numRegularChunks = chunkService.getNumRegularChunks();
 
-					sendToUpdateStatus (data.jobID, 50);
+					sendToUpdateStatus (data.jobID, PCT_DONE_CREATE_CHUNK_DATA);
 					sendToMatch (data);
 				}
 

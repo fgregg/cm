@@ -10,6 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_OVERSIZED;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
+
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -255,7 +258,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		log.info("Num OS Before " + osDedupService.getNumBlocksIn());
 		log.info("Num OS After Exact " + osDedupService.getNumAfterExact());
 		log.info("Num OS Done " + osDedupService.getNumBlocksOut());
-		sendToUpdateStatus(data.jobID, 30);
+		sendToUpdateStatus(data.jobID, PCT_DONE_DEDUP_OVERSIZED);
 
 		// create the proper block source
 		IBlockSinkSourceFactory bFactory = OabaFileUtils.getBlockFactory(oabaJob);
@@ -392,7 +395,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		}
 
 		// mark as done
-		sendToUpdateStatus(data.jobID, 100);
+		sendToUpdateStatus(data.jobID, PCT_DONE_OABA);
 	}
 
 	private void sendToUpdateStatus(long jobID, int percentComplete)

@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
+
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -203,7 +205,7 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 			mergeMatches(numProcessors, jobId, oabaJob);
 
 			// mark as done
-			sendToUpdateStatus(d.jobID, 100);
+			sendToUpdateStatus(d.jobID, PCT_DONE_OABA);
 			processingEntry.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 //			publishStatus(d.jobID);
 

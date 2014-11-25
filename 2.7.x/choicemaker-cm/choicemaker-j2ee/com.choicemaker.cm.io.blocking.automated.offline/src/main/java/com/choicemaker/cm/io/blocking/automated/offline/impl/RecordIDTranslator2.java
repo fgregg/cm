@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -293,6 +294,15 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 	 */
 	public ArrayList getList2 () {
 		return list2;
+	}
+
+
+	@Override
+	public String toString() {
+		return "RecordIDTranslator2 [dataType=" + dataType + ", range1="
+				+ Arrays.toString(range1) + ", range2="
+				+ Arrays.toString(range2) + ", currentIndex=" + currentIndex
+				+ ", splitIndex=" + splitIndex + "]";
 	}
 
 }

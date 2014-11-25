@@ -102,4 +102,11 @@ public class BlockSinkSourceFactory implements IBlockSinkSourceFactory, Serializ
 		f.delete();
 	}
 
+	@Override
+	public String toString() {
+		return "BlockSinkSourceFactory [fileDir=" + fileDir + ", baseName="
+				+ baseName + ", ext=" + ext + ", indSink=" + indSink
+				+ ", indSource=" + indSource + "]";
+	}
+
 }

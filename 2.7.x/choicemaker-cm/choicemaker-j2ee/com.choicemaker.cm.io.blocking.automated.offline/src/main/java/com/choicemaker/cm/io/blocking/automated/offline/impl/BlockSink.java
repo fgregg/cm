@@ -100,6 +100,13 @@ public class BlockSink extends BaseFileSink implements IBlockSink {
 		}
 		
 	}
+
+
+	@Override
+	public String toString() {
+		return "BlockSink [count=" + count + ", type=" + type + ", fileName="
+				+ fileName + "]";
+	}
 	
 	
 
