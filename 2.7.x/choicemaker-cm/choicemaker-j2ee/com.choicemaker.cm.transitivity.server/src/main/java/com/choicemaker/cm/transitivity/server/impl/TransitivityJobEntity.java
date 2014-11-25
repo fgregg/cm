@@ -18,6 +18,7 @@ import javax.persistence.NamedQuery;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
@@ -53,22 +54,23 @@ public class TransitivityJobEntity extends OabaJobEntity implements
 	}
 
 	public TransitivityJobEntity(TransitivityParameters params,
-			TransitivitySettings settings, OabaJob parent, String externalId) {
+			TransitivitySettings settings, ServerConfiguration sc, OabaJob parent, String externalId) {
 		this(TransitivityJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings
-				.getId(), externalId, randomTransactionId(), parent.getId(),
+				.getId(), sc.getId(), externalId, randomTransactionId(), parent.getId(),
 				INVALID_ID);
 	}
 	
 	public TransitivityJobEntity(TransitivityJob o) {
 		this(TransitivityJobJPA.DISCRIMINATOR_VALUE, o.getParametersId(), o
-				.getSettingsId(), o.getExternalId(), o.getTransactionId(), o
+				.getSettingsId(), o.getServerId(), o.getExternalId(), o.getTransactionId(), o
 				.getBatchParentId(), o.getUrmId());
 		this.workingDirectory = o.getWorkingDirectory().getAbsolutePath();
 	}
 
 	protected TransitivityJobEntity(String type, long paramsId, long settingsId,
+			long serverId, 
 			String externalId, long tid, long parentId, long urmid) {
-		super(type, paramsId, settingsId, externalId, tid, parentId, urmid);
+		super(type, paramsId, settingsId, serverId, externalId, tid, parentId, urmid);
 	}
 	
 	public TransitivityJobEntity(OabaParametersEntity params, OabaJob job,

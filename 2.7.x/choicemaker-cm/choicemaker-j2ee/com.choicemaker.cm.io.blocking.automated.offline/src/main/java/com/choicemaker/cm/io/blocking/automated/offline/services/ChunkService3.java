@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
@@ -61,7 +61,7 @@ public class ChunkService3 {
 	private IIDSetSource osSource;
 	private RecordSource stage;
 	private RecordSource master;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 	
 	// these two variables are used to stop the program in the middle 
 	private IControl control;
@@ -116,14 +116,14 @@ public class ChunkService3 {
 	 * @param maxFiles - maximum number of files to open.
 	 * @param status - status of the system
 	 */	
-	public ChunkService3 (IIDSetSource bSource, IIDSetSource osSource, RecordSource stage, 
-		RecordSource master,
-		IProbabilityModel model,
-		IChunkRecordIDSinkSourceFactory recIDFactory, IChunkDataSinkSourceFactory stageSinkFactory,
-		IChunkDataSinkSourceFactory masterSinkFactory,
-		int splitIndex,
-		ITransformer transformer, ITransformer transformerO, int maxChunkSize, 
-		int maxFiles, OabaProcessing status, IControl control) {
+	public ChunkService3(IIDSetSource bSource, IIDSetSource osSource,
+			RecordSource stage, RecordSource master, ImmutableProbabilityModel model,
+			IChunkRecordIDSinkSourceFactory recIDFactory,
+			IChunkDataSinkSourceFactory stageSinkFactory,
+			IChunkDataSinkSourceFactory masterSinkFactory, int splitIndex,
+			ITransformer transformer, ITransformer transformerO,
+			int maxChunkSize, int maxFiles, OabaProcessing status,
+			IControl control) {
 			
 		this.bSource = bSource;
 		this.osSource = osSource;
@@ -344,14 +344,14 @@ public class ChunkService3 {
 	 * @param recordSinks - The record sink to which to write the data.
 	 * @param ind - The array the contains the current chunk record id.
 	 * @param rs - record source
-	 * @param accessProvider - IProbabilityModel of the record source.
+	 * @param accessProvider - ImmutableProbabilityModel of the record source.
 	 * @throws BlockingException
 	 * @throws XmlConfException
 	 * @throws IOException
 	 */
 	private void createDataFiles (int start, int end, IChunkRecordIDSource [] crSources,
 		RecordSink [] recordSinks, int offset,
-		long [] ind, RecordSource rs, IProbabilityModel model) 
+		long [] ind, RecordSource rs, ImmutableProbabilityModel model) 
 		throws BlockingException, XmlConfException, IOException {
 			
 		log.fine ("starting " + start + " ending " + end);
@@ -391,7 +391,7 @@ public class ChunkService3 {
 	 * @throws BlockingException
 	 * @throws XmlConfException
 	 */
-	private void createDataFile (RecordSource rs, IProbabilityModel model, 
+	private void createDataFile (RecordSource rs, ImmutableProbabilityModel model, 
 		int start, int end, int offset,
 		long [] ind, IChunkRecordIDSource [] crSources,
 		RecordSink [] recordSinks) throws BlockingException, XmlConfException {

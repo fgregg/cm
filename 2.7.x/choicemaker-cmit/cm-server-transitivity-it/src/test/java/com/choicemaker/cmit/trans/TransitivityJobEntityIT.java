@@ -1,18 +1,7 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cmit.trans.util.TransitivityConstants.CURRENT_MAVEN_COORDINATES;
-import static com.choicemaker.cmit.trans.util.TransitivityConstants.PERSISTENCE_CONFIGURATION;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_HAS_BEANS;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_MODULE_NAME;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_POM_FILE;
-import static com.choicemaker.cmit.utils.DeploymentUtils.DEFAULT_TEST_CLASSES_PATH;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createEAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.createJAR;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolveDependencies;
-import static com.choicemaker.cmit.utils.DeploymentUtils.resolvePom;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.util.Date;
 
 import javax.ejb.EJB;
@@ -20,14 +9,13 @@ import javax.ejb.EJB;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
@@ -37,14 +25,9 @@ public class TransitivityJobEntityIT {
 
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		PomEquippedResolveStage pom = resolvePom(DEFAULT_POM_FILE);
-		File[] libs = resolveDependencies(pom);
-		JavaArchive tests =
-			createJAR(pom, CURRENT_MAVEN_COORDINATES, DEFAULT_MODULE_NAME,
-					DEFAULT_TEST_CLASSES_PATH, PERSISTENCE_CONFIGURATION,
-					DEFAULT_HAS_BEANS);
-		EnterpriseArchive retVal = createEAR(tests, libs, TESTS_AS_EJB_MODULE);
-		return retVal;
+		Class<?>[] removedClasses = null;
+		return TransitivityDeploymentUtils.createEarArchive(removedClasses,
+				TESTS_AS_EJB_MODULE);
 	}
 
 //	private static final Logger logger = Logger

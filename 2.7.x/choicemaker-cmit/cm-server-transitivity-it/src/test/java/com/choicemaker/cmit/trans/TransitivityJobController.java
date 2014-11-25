@@ -2,6 +2,7 @@ package com.choicemaker.cmit.trans;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,7 +10,10 @@ import javax.persistence.PersistenceContext;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
@@ -27,6 +31,19 @@ public class TransitivityJobController {
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
+	@EJB
+	private ServerConfigurationController serverController;
+
+	public ServerConfiguration getDefaultServerConfiguration() {
+		String hostName = ServerConfigurationControllerBean.computeHostName();
+		final boolean computeFallback = true;
+		ServerConfiguration retVal =
+			serverController.getDefaultConfiguration(hostName, computeFallback);
+		assert retVal != null;
+		assert retVal.getId() != ServerConfigurationControllerBean.INVALID_ID;
+		return retVal;
+	}
+	
 	public OabaParameters createPersistentOabaParameters(String tag, TestEntities te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
@@ -47,7 +64,8 @@ public class TransitivityJobController {
 	 * OabaJob
 	 */
 	public OabaJob createPersistentOabaJobBean(TestEntities te, String extId) {
-		return EntityManagerUtils.createPersistentOabaJobBean(em, te, extId);
+		ServerConfiguration sc = getDefaultServerConfiguration();
+		return EntityManagerUtils.createPersistentOabaJobBean(sc, em, te, extId);
 	}
 
 	public TransitivityJob createEphemeralTransitivityJob(String tag,
@@ -56,7 +74,8 @@ public class TransitivityJobController {
 	}
 
 	public TransitivityJob createEphemeralTransitivityJob(String tag, TestEntities te) {
-		return EntityManagerUtils.createEphemeralTransitivityJob(em, tag, te);
+		ServerConfiguration sc = getDefaultServerConfiguration();
+		return EntityManagerUtils.createEphemeralTransitivityJob(sc, em, tag, te);
 	}
 
 	public TransitivityJob createEphemeralTransitivityJob(TestEntities te,

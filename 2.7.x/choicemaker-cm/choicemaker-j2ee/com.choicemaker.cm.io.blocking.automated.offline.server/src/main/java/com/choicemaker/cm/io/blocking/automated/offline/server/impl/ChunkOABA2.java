@@ -27,7 +27,7 @@ import javax.jms.Queue;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
@@ -37,6 +37,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
@@ -75,6 +78,9 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 	@EJB
 	private OabaProcessingControllerBean processingController;
 
+	@EJB
+	private ServerConfigurationController serverController;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
 
@@ -102,10 +108,20 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 
 				final long jobId = data.jobID;
 				oabaJob = jobController.find(jobId);
-				OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
-				OabaProcessing processingEntry = processingController.findProcessingLogByJobId(jobId);
+				OabaParameters params =
+					paramsController.findBatchParamsByJobId(jobId);
+				OabaSettings oabaSettings =
+						settingsController.findOabaSettingsByJobId(jobId);
+				OabaProcessing processingEntry =
+						processingController.findProcessingLogByJobId(jobId);
+				ServerConfiguration serverConfig = serverController.findServerConfigurationByJobId(jobId);
+				if (oabaJob == null || params == null || oabaSettings == null || serverConfig == null) {
+					String s = "Unable to find a job, parameters, settings or server configuration for " + jobId;
+					log.severe(s);
+					throw new IllegalArgumentException(s);
+				}
 				final String modelConfigId = params.getModelConfigurationName();
-				IProbabilityModel model =
+				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
 				if (model == null) {
 					String s =
@@ -118,16 +134,9 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 					MessageBeanUtils.stopJob (oabaJob, processingEntry);
 
 				} else {
-					String temp = (String) model.properties().get("maxChunkSize");
-					int maxChunk = Integer.parseInt(temp);
-
-					//get the number of processors
-					temp = (String) model.properties().get("numProcessors");
-					int numProcessors = Integer.parseInt(temp);
-
-					//get the maximum number of chunk files
-					temp = (String) model.properties().get("maxChunkFiles");
-					int maxChunkFiles = Integer.parseInt(temp);
+					int maxChunk = oabaSettings.getMaxChunkSize();
+					int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+					int maxChunkFiles = serverConfig.getMaxOabaChunkFileCount();
 
 					RecordIDTranslator2 translator = new RecordIDTranslator2 (OabaFileUtils.getTransIDFactory(oabaJob));
 					//recover the translator
@@ -135,28 +144,30 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 					translator.close();
 
 					//create the os block source.
-					IBlockSinkSourceFactory osFactory = OabaFileUtils.getOversizedFactory(oabaJob);
+					final IBlockSinkSourceFactory osFactory = OabaFileUtils.getOversizedFactory(oabaJob);
 					osFactory.getNextSource(); //the deduped OS file is file 2.
-					IDSetSource source2 = new IDSetSource (osFactory.getNextSource());
+					final IDSetSource source2 = new IDSetSource (osFactory.getNextSource());
 
 					//create the tree transformer.
-					TreeTransformer tTransformer = new TreeTransformer (translator,
+					final TreeTransformer tTransformer = new TreeTransformer (translator,
 							OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, data.stageType, numProcessors));
 
 					//create the oversized block transformer
-					Transformer transformerO = new Transformer (translator,
+					final Transformer transformerO = new Transformer (translator,
 							OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob, numProcessors));
 
 					ChunkService3 chunkService =
-						new ChunkService3(OabaFileUtils.getTreeSetSource(oabaJob),
+						new ChunkService3(
+								OabaFileUtils.getTreeSetSource(oabaJob),
 								source2, params.getStageRs(),
 								params.getMasterRs(), model,
 								OabaFileUtils.getChunkIDFactory(oabaJob),
-								OabaFileUtils.getStageDataFactory(oabaJob, model),
-								OabaFileUtils.getMasterDataFactory(oabaJob, model),
-								translator.getSplitIndex(), tTransformer,
-								transformerO, maxChunk, maxChunkFiles, processingEntry,
-								oabaJob);
+								OabaFileUtils.getStageDataFactory(oabaJob,
+										model),
+								OabaFileUtils.getMasterDataFactory(oabaJob,
+										model), translator.getSplitIndex(),
+								tTransformer, transformerO, maxChunk,
+								maxChunkFiles, processingEntry, oabaJob);
 					chunkService.runService();
 					log.info( "Number of chunks " + chunkService.getNumChunks());
 					log.info( "Done creating chunks " + chunkService.getTimeElapsed());

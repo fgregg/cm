@@ -92,7 +92,7 @@ public class OabaJobControllerBean {
 		settingsController.save(settings);
 		serverManager.save(sc);
 		
-		OabaJobEntity retVal = new OabaJobEntity(params, settings, externalID);		
+		OabaJobEntity retVal = new OabaJobEntity(params, settings, sc, externalID);		
 		em.persist(retVal);
 		assert OabaJobEntity.isPersistent(retVal);
 

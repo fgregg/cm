@@ -169,4 +169,6 @@ public interface ServerConfigurationController {
 
 	List<DefaultServerConfigurationEntity> findAllDefaultServerConfigurations();
 
+	ServerConfiguration findServerConfigurationByJobId(long jobId);
+
 }

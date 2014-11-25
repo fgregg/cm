@@ -8,6 +8,7 @@ import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_EXTERNAL_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_FRACTION_COMPLETE;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_PARAMS_ID;
+import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_SERVER_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_SETTINGS_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_STATUS;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_TIMESTAMP;
@@ -173,6 +174,12 @@ public abstract class BatchJobEntity implements BatchJob {
 	protected final long settingsId;
 
 	/**
+	 * References the persistent id of some server configuration
+	 */
+	@Column(name = CN_SERVER_ID)
+	protected final long serverId;
+
+	/**
 	 * {@link OabaJob#INVALID_BATCHJOB_ID} or references the id of some
 	 * UrmJobBean
 	 */
@@ -223,6 +230,11 @@ public abstract class BatchJobEntity implements BatchJob {
 	// Override is not declared here
 	public long getSettingsId() {
 		return settingsId;
+	}
+
+	// Override is not declared here
+	public long getServerId() {
+		return serverId;
 	}
 
 	@Override
@@ -395,7 +407,7 @@ public abstract class BatchJobEntity implements BatchJob {
 	}
 
 	protected BatchJobEntity() {
-		this(DISCRIMINATOR_VALUE, INVALID_ID, INVALID_ID, null,
+		this(DISCRIMINATOR_VALUE, INVALID_ID, INVALID_ID, INVALID_ID, null,
 				randomTransactionId(), INVALID_ID, INVALID_ID);
 	}
 
@@ -404,7 +416,7 @@ public abstract class BatchJobEntity implements BatchJob {
 	 * Subclasses must implement a method to set the working directory
 	 * to a valid value after construction.
 	 */
-	protected BatchJobEntity(String type, long paramsid, long settingsId, String externalId,
+	protected BatchJobEntity(String type, long paramsid, long settingsId, long serverId, String externalId,
 			long tid, long bpid, long urmid) {
 		if (type == null) {
 			throw new IllegalArgumentException("null type");
@@ -416,6 +428,7 @@ public abstract class BatchJobEntity implements BatchJob {
 		this.type = type;
 		this.paramsId = paramsid;
 		this.settingsId = settingsId;
+		this.serverId = serverId;
 		this.transactionId = tid;
 		this.externalId = externalId;
 		this.bparentId = bpid;

@@ -12,7 +12,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.DISCRIMINATOR_COLUMN;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.TABLE_NAME;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA.JPQL_OABAJOB_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA.QN_OABAJOB_FIND_ALL;
 
 import java.io.File;
@@ -37,6 +38,7 @@ import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 
 /**
  * This class tracks the progress of a (long-running) offline matching process.
@@ -87,31 +89,25 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 	 * @param externalId optional; may be null
 	 */
 	public OabaJobEntity(OabaParameters params, OabaSettings settings,
-			String externalId) {
-		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(),
+			ServerConfiguration serverConfig, String externalId) {
+		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(), serverConfig.getId(),
 				externalId, randomTransactionId(), INVALID_ID,
 				INVALID_ID);
 	}
 
 	public OabaJobEntity(OabaJob o) {
 		this(OabaJobJPA.DISCRIMINATOR_VALUE, o.getParametersId(), o
-				.getSettingsId(), o.getExternalId(), o.getTransactionId(), o
+				.getSettingsId(), o.getServerId(), o.getExternalId(), o.getTransactionId(), o
 				.getBatchParentId(), o.getUrmId());
 		File owd = o.getWorkingDirectory();
 		this.workingDirectory = owd == null ? null : owd.getAbsolutePath();
 	}
 
-	protected OabaJobEntity(String type, long paramsid, long settingsId,
+	protected OabaJobEntity(String type, long paramsid, long settingsId, long serverId,
 			String externalId, long tid, long bpid, long urmid) {
-		super(type, paramsid, settingsId, externalId, tid, bpid, urmid);
+		super(type, paramsid, settingsId, serverId, externalId, tid, bpid, urmid);
 	}
 
-	// -- Accessors
-
-	// -- Job Control
-
-	// -- Field modifiers
-	
 	void setWorkingDirectory(File workingDir) {
 		final String wd = workingDir == null ? "null" : workingDir.toString();
 		if (workingDir == null || !workingDir.exists()
@@ -129,10 +125,6 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 		}
 		this.workingDirectory = workingDir.getAbsolutePath();
 	}
-
-	// -- State machine
-
-	// -- Identity
 
 } // OabaJobEntity
 

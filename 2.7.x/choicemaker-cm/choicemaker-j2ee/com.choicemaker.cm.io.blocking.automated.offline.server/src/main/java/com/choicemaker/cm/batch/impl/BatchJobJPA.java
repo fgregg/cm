@@ -39,7 +39,7 @@ public interface BatchJobJPA {
 	/** Internally defined transaction id that links several related batch jobs */
 	String CN_TRANSACTION_ID = "TRANSACTION_ID";
 	
-	/** Externally defined transcation id that links several related batch jobs */
+	/** Externally defined transaction id that links several related batch jobs */
 	String CN_EXTERNAL_ID = "EXTERNAL_ID";
 	
 	/** Required link to the id of some persistent instance of parameters */
@@ -47,6 +47,9 @@ public interface BatchJobJPA {
 
 	/** Required link to the id of some persistent instance of settings */
 	String CN_SETTINGS_ID = "SETTINGS_ID";
+	
+	/** Required link to the id of some persistent server configuration */
+	String CN_SERVER_ID = "SERVER_ID";
 	
 	/** Optional link to an owning URM job */
 	String CN_URM_ID = "URM_ID";

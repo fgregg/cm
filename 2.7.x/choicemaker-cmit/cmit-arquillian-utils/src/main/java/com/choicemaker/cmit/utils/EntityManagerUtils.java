@@ -23,6 +23,7 @@ import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
@@ -267,17 +268,17 @@ public class EntityManagerUtils {
 	 * Creates an ephemeral instance of OabaParametersEntity. An externalId for
 	 * the returned OabaJob is synthesized using the specified tag.
 	 */
-	public static OabaJobEntity createEphemeralOabaJob(EntityManager em,
-			String tag, TestEntities te) {
-		return createEphemeralOabaJob(em, te, createExternalId(tag));
+	public static OabaJobEntity createEphemeralOabaJob(ServerConfiguration sc,
+			EntityManager em, String tag, TestEntities te) {
+		return createEphemeralOabaJob(sc, em, te, createExternalId(tag));
 	}
 
 	/**
 	 * Creates an ephemeral instance of OabaParametersEntity. The specified
 	 * externalId is assigned without alteration to the returned OabaJob.
 	 */
-	public static OabaJobEntity createEphemeralOabaJob(EntityManager em,
-			TestEntities te, String extId) {
+	public static OabaJobEntity createEphemeralOabaJob(ServerConfiguration sc,
+			EntityManager em, TestEntities te, String extId) {
 		final String METHOD = "createEphemeralOabaJob";
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
@@ -286,7 +287,7 @@ public class EntityManagerUtils {
 			createPersistentOabaParameters(em, METHOD, te);
 		OabaSettingsEntity settings =
 			createPersistentOabaSettings(em, METHOD, te);
-		OabaJobEntity retVal = new OabaJobEntity(params, settings, extId);
+		OabaJobEntity retVal = new OabaJobEntity(params, settings, sc, extId);
 		te.add(retVal);
 		return retVal;
 	}
@@ -295,17 +296,19 @@ public class EntityManagerUtils {
 	 * Creates a persistent instance of OabaParametersEntity. An externalId for
 	 * the returned OabaJob is synthesized using the specified tag.
 	 */
-	public static OabaJobEntity createPersistentOabaJobBean(EntityManager em,
-			String tag, TestEntities te) {
-		return createPersistentOabaJobBean(em, te, createExternalId(tag));
+	public static OabaJobEntity createPersistentOabaJobBean(
+			ServerConfiguration sc, EntityManager em, String tag,
+			TestEntities te) {
+		return createPersistentOabaJobBean(sc, em, te, createExternalId(tag));
 	}
 
 	/**
 	 * Creates a persistent instance of OabaParametersEntity. The specified
 	 * externalId is assigned without alteration to the returned OabaJob.
 	 */
-	public static OabaJobEntity createPersistentOabaJobBean(EntityManager em,
-			TestEntities te, String extId) {
+	public static OabaJobEntity createPersistentOabaJobBean(
+			ServerConfiguration sc, EntityManager em, TestEntities te,
+			String extId) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -313,7 +316,7 @@ public class EntityManagerUtils {
 			createPersistentOabaParameters(em, null, te);
 		OabaSettingsEntity settings =
 			createPersistentOabaSettings(em, null, te);
-		OabaJobEntity retVal = new OabaJobEntity(params, settings, extId);
+		OabaJobEntity retVal = new OabaJobEntity(params, settings, sc, extId);
 		em.persist(retVal);
 		te.add(retVal);
 		return retVal;
@@ -350,10 +353,11 @@ public class EntityManagerUtils {
 	}
 
 	public static TransitivityJobEntity createEphemeralTransitivityJob(
-			EntityManager em, String tag, TestEntities te) {
+			ServerConfiguration sc, EntityManager em, String tag,
+			TestEntities te) {
 		OabaParametersEntity params =
 			createPersistentOabaParameters(em, tag, te);
-		OabaJobEntity job = createPersistentOabaJobBean(em, tag, te);
+		OabaJobEntity job = createPersistentOabaJobBean(sc, em, tag, te);
 		TransitivityJobEntity retVal = new TransitivityJobEntity(params, job);
 		te.add(retVal);
 		return retVal;

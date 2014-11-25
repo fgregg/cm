@@ -9,7 +9,10 @@ import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
 
@@ -24,16 +27,31 @@ public class OabaJobController2 {
 	
 	@EJB
 	private OabaJobControllerBean oabaController;
+	
+	@EJB
+	private ServerConfigurationController serverController;
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
+	public ServerConfiguration getDefaultServerConfiguration() {
+		String hostName = ServerConfigurationControllerBean.computeHostName();
+		final boolean computeFallback = true;
+		ServerConfiguration retVal =
+			serverController.getDefaultConfiguration(hostName, computeFallback);
+		assert retVal != null;
+		assert retVal.getId() != ServerConfigurationControllerBean.INVALID_ID;
+		return retVal;
+	}
+	
 	public OabaJob createEphemeralOabaJob(String tag, TestEntities te) {
-		return EntityManagerUtils.createEphemeralOabaJob(em, tag, te);
+		ServerConfiguration sc = getDefaultServerConfiguration();
+		return EntityManagerUtils.createEphemeralOabaJob(sc, em, tag, te);
 	}
 
 	public OabaJob createEphemeralOabaJob(TestEntities te, String extId) {
-		return EntityManagerUtils.createEphemeralOabaJob(em, te, extId);
+		ServerConfiguration sc = getDefaultServerConfiguration();
+		return EntityManagerUtils.createEphemeralOabaJob(sc, em, te, extId);
 	}
 
 	public OabaJob save(OabaJob batchJob) {

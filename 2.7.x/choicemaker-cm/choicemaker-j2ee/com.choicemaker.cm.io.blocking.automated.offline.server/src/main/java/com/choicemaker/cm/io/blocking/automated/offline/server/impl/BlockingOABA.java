@@ -17,7 +17,6 @@ import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -73,9 +72,6 @@ public class BlockingOABA implements MessageListener, Serializable {
 	
 	@EJB
 	private OabaProcessingControllerBean processingController;
-
-	@Resource
-	private MessageDrivenContext mdc;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/dedupQueue")
 	private Queue dedupQueue;

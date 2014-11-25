@@ -29,6 +29,8 @@ public class ServerConfigurationControllerBean implements
 	protected static final String GENERIC_NAME_PREFIX = "GENERIC_";
 
 	protected static final String UNKNOWN_HOSTNAME = "UKNOWN";
+	
+	public static final long INVALID_ID = 0;
 
 	public static final int DEFAULT_MAX_CHUNK_SIZE = 1000000;
 
@@ -160,6 +162,11 @@ public class ServerConfigurationControllerBean implements
 
 	protected List<ServerConfiguration> findServerConfigurationsForAnyHost() {
 		return findServerConfigurationsByHostNameStrict(ServerConfiguration.ANY_HOST);
+	}
+
+	@Override
+	public ServerConfiguration findServerConfigurationByJobId(long jobId) {
+		throw new Error("not yet implemented");
 	}
 
 	@Override

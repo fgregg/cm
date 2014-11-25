@@ -27,6 +27,8 @@ public interface OabaJob extends BatchJob {
 	
 	long getSettingsId();
 	
+	long getServerId();
+	
 	long getUrmId();
 
 } // OabaJob
