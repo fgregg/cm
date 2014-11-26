@@ -31,6 +31,7 @@ public interface OabaSettings extends AbaSettings {
 	int DEFAULT_MAX_BLOCKSIZE = 100;
 	int DEFAULT_MAX_CHUNKSIZE = 100000;
 	int DEFAULT_MAX_OVERSIZED = 1000;
+	int DEFAULT_MAX_MATCHES = 500000;
 	int DEFAULT_MIN_FIELDS = 3;
 	int DEFAULT_INTERVAL = 100;
 
@@ -55,6 +56,13 @@ public interface OabaSettings extends AbaSettings {
 	 * met, the blocking set is discarded.
 	 */
 	int getMaxOversized();
+	
+	/**
+	 * The maximum number of matches to package into an indexed pair-wise result file.
+	 * After the maximum is reached, a new indexed file is started with an
+	 * index incremented by 1 (one).
+	 */
+	int getMaxMatches();
 
 	/**
 	 * The minimum number of fields from which an oversized blocking set must be

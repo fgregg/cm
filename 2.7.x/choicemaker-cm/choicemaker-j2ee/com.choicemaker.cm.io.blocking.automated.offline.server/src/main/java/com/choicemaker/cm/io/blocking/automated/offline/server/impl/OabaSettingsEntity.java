@@ -3,6 +3,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA.CN_INTERVAL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA.CN_MAX_BLOCKSIZE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA.CN_MAX_CHUNKSIZE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA.CN_MAX_MATCHES;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA.CN_MAX_OVERSIZE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA.CN_MIN_FIELDS;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA.DISCRIMINATOR_VALUE;
@@ -37,7 +38,10 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 
 	@Column(name = CN_MAX_OVERSIZE)
 	private final int maxOversized;
-
+	
+	@Column(name = CN_MAX_MATCHES)
+	private final int maxMatches;
+	
 	@Column(name = CN_MIN_FIELDS)
 	private final int minFields;
 
@@ -60,44 +64,49 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 	 * </ul>
 	 */
 	public OabaSettingsEntity() {
-		this(DEFAULT_LIMIT_PER_BLOCKING_SET,
-				DEFAULT_LIMIT_SINGLE_BLOCKING_SET,
-				DEFAULT_SINGLE_TABLE_GRACE_LIMIT, DEFAULT_MAX_SINGLE, DEFAULT_MAX_BLOCKSIZE,
-				DEFAULT_MAX_CHUNKSIZE, DEFAULT_MAX_OVERSIZED,
-				DEFAULT_MIN_FIELDS, DEFAULT_INTERVAL);
+		this(DEFAULT_LIMIT_PER_BLOCKING_SET, DEFAULT_LIMIT_SINGLE_BLOCKING_SET,
+				DEFAULT_SINGLE_TABLE_GRACE_LIMIT, DEFAULT_MAX_SINGLE,
+				DEFAULT_MAX_BLOCKSIZE, DEFAULT_MAX_CHUNKSIZE,
+				DEFAULT_MAX_MATCHES, DEFAULT_MAX_OVERSIZED, DEFAULT_MIN_FIELDS,
+				DEFAULT_INTERVAL);
 	}
 
 	public OabaSettingsEntity(AbaSettings aba) {
 		this(aba.getLimitPerBlockingSet(), aba.getLimitSingleBlockingSet(), aba
 				.getSingleTableBlockingSetGraceLimit(), DEFAULT_MAX_SINGLE,
 				DEFAULT_MAX_BLOCKSIZE, DEFAULT_MAX_CHUNKSIZE,
-				DEFAULT_MAX_OVERSIZED, DEFAULT_MIN_FIELDS, DEFAULT_INTERVAL);
+				DEFAULT_MAX_MATCHES, DEFAULT_MAX_OVERSIZED, DEFAULT_MIN_FIELDS,
+				DEFAULT_INTERVAL);
 	}
 
 	public OabaSettingsEntity(AbaSettings aba, int maxSingle, int maxBlockSize,
-			int maxChunkSize, int maxOversized, int minFields, int interval) {
+			int maxChunkSize, int maxMatches, int maxOversized, int minFields,
+			int interval) {
 		this(aba.getLimitPerBlockingSet(), aba.getLimitSingleBlockingSet(), aba
 				.getSingleTableBlockingSetGraceLimit(), maxSingle,
-				maxBlockSize, maxChunkSize, maxOversized, minFields, interval);
+				maxBlockSize, maxChunkSize, maxMatches, maxOversized,
+				minFields, interval);
 	}
 
 	public OabaSettingsEntity(OabaSettings oaba) {
 		this((AbaSettings) oaba, oaba.getMaxSingle(), oaba.getMaxBlockSize(),
-				oaba.getMaxChunkSize(), oaba.getMaxOversized(), oaba
-						.getMinFields(), oaba.getInterval());
+				oaba.getMaxChunkSize(), oaba.getMaxMatches(), oaba
+						.getMaxOversized(), oaba.getMinFields(), oaba
+						.getInterval());
 	}
 
 	public OabaSettingsEntity(int limPerBlockingSet, int limSingleBlockingSet,
 			int singleTableGraceLimit, int maxSingle, int maxBlockSize,
-			int maxChunkSize, int maxOversized, int minFields, int interval) {
+			int maxChunkSize, int maxMatches, int maxOversized, int minFields,
+			int interval) {
 		this(limPerBlockingSet, limSingleBlockingSet, singleTableGraceLimit,
-				maxSingle, maxBlockSize, maxChunkSize, maxOversized, minFields,
-				interval, DISCRIMINATOR_VALUE);
+				maxSingle, maxBlockSize, maxChunkSize, maxMatches,
+				maxOversized, minFields, interval, DISCRIMINATOR_VALUE);
 	}
 
 	protected OabaSettingsEntity(int limPerBlockingSet, int limSingleBlockingSet,
 			int singleTableGraceLimit, int maxSingle, int maxBlockSize,
-			int maxChunkSize, int maxOversized, int minFields, int interval,
+			int maxChunkSize, int maxMatches, int maxOversized, int minFields, int interval,
 			String type) {
 		super(limPerBlockingSet, limSingleBlockingSet, singleTableGraceLimit,
 				type);
@@ -111,6 +120,10 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 		if (maxChunkSize < 0) {
 			throw new IllegalArgumentException("invalid maxChunkSize"
 					+ maxChunkSize);
+		}
+		if (maxMatches < 0) {
+			throw new IllegalArgumentException("invalid maxMatches: "
+					+ maxOversized);
 		}
 		if (maxOversized < 0) {
 			throw new IllegalArgumentException("invalid maxOversized: "
@@ -126,6 +139,7 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 		this.maxSingle = maxSingle;
 		this.maxBlockSize = maxBlockSize;
 		this.maxChunkSize = maxChunkSize;
+		this.maxMatches = maxMatches;
 		this.maxOversized = maxOversized;
 		this.minFields = minFields;
 		this.interval = interval;
@@ -146,6 +160,11 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 	@Override
 	public int getMaxChunkSize() {
 		return maxChunkSize;
+	}
+
+	@Override
+	public int getMaxMatches() {
+		return maxMatches;
 	}
 
 	@Override
@@ -172,6 +191,7 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 		result = prime * result + interval;
 		result = prime * result + maxBlockSize;
 		result = prime * result + maxChunkSize;
+		result = prime * result + maxMatches;
 		result = prime * result + maxOversized;
 		result = prime * result + minFields;
 		return result;
@@ -198,6 +218,9 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 		if (maxChunkSize != other.maxChunkSize) {
 			return false;
 		}
+		if (maxMatches != other.maxMatches) {
+			return false;
+		}
 		if (maxOversized != other.maxOversized) {
 			return false;
 		}
@@ -211,8 +234,9 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 	public String toString() {
 		return "OabaSettingsEntity [id=" + getId() + ", maxSingle=" + maxSingle
 				+ ", maxBlockSize=" + maxBlockSize + ", maxChunkSize="
-				+ maxChunkSize + ", maxOversized=" + maxOversized
-				+ ", minFields=" + minFields + ", interval=" + interval + "]";
+				+ maxChunkSize + ", maxMatches=" + maxMatches
+				+ ", maxOversized=" + maxOversized + ", minFields=" + minFields
+				+ ", interval=" + interval + "]";
 	}
 
 }

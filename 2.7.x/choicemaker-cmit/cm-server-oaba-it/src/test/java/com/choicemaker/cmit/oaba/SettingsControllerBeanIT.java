@@ -3,6 +3,7 @@ package com.choicemaker.cmit.oaba;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_INTERVAL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_MATCHES;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_OVERSIZED;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MIN_FIELDS;
 import static com.choicemaker.cmit.utils.EntityManagerUtils.MAX_MAX_SINGLE;
@@ -61,6 +62,7 @@ public class SettingsControllerBeanIT {
 					random.nextInt(MAX_MAX_SINGLE),
 					random.nextInt(DEFAULT_MAX_BLOCKSIZE),
 					random.nextInt(DEFAULT_MAX_CHUNKSIZE),
+					random.nextInt(DEFAULT_MAX_MATCHES),
 					random.nextInt(DEFAULT_MAX_OVERSIZED),
 					random.nextInt(DEFAULT_MIN_FIELDS),
 					random.nextInt(DEFAULT_INTERVAL));

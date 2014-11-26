@@ -34,7 +34,7 @@ import javax.naming.NamingException;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
@@ -46,7 +46,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSou
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
@@ -93,6 +96,9 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 	@EJB
 	private OabaProcessingControllerBean processingController;
 
+	@EJB
+	private ServerConfigurationController serverController;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
 	private Queue updateQueue;
 
@@ -120,7 +126,7 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 
 		log.fine("MatchDedupOABA2 In onMessage");
 
-		BatchJob oabaJob = null;
+		OabaJob oabaJob = null;
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
@@ -178,83 +184,15 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 	private void handleMerge(final MatchWriterMessage d) throws BlockingException {
 
 		final long jobId = d.jobID;
-		BatchJob oabaJob = jobController.find(jobId);
-
-		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
-		OabaProcessing processingEntry =
-			processingController.findProcessingLogByJobId(jobId);
+		final OabaJob oabaJob = jobController.find(jobId);
+		final OabaParameters params =
+			paramsController.findBatchParamsByJobId(jobId);
+		final ServerConfiguration serverConfig =
+			serverController.findServerConfigurationByJobId(jobId);
+		final OabaProcessing processingEntry =
+				processingController.findProcessingLogByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
-		IProbabilityModel model = PMManager.getModelInstance(modelConfigId);
-		if (model == null) {
-			String s = "No model corresponding to '" + modelConfigId + "'";
-			log.severe(s);
-			throw new IllegalArgumentException(s);
-		}
-
-		if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
-			MessageBeanUtils.stopJob(oabaJob, processingEntry);
-
-		} else {
-			processingEntry.setCurrentProcessingEvent(OabaEvent.MERGE_DEDUP_MATCHES);
-
-			// get the number of processors
-			String temp = (String) model.properties().get("numProcessors");
-			int numProcessors = Integer.parseInt(temp);
-
-			// now merge them all together
-			mergeMatches(numProcessors, jobId, oabaJob);
-
-			// mark as done
-			sendToUpdateStatus(d.jobID, PCT_DONE_OABA);
-			processingEntry.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
-//			publishStatus(d.jobID);
-
-//			// send to transitivity
-//			log.info("runTransitivity " + params.getTransitivity());
-//			if (params.getTransitivity()) {
-//				throw new Error("no longer implemented");
-////				OabaJobMessage startTransivityData = createStartDataForTransitivityAnalysis(d.jobID);
-////				sendToTransitivity(startTransivityData);
-//			}
-		}
-	}
-	
-//	private OabaJobMessage createStartDataForTransitivityAnalysis(
-//			final long batchJobId) {
-//		EJBConfiguration configuration = EJBConfiguration.getInstance();
-//		OabaParameters batchParams = configuration.findBatchParamsByJobId(em, batchJobId);
-//		OabaJob batchJob = em.find(OabaJobEntity.class, batchJobId);
-//		TransitivityJob job = new TransitivityJobBean(batchParams, batchJob);
-//		em.persist(job);
-//		final long transJobId = job.getId();
-//
-//		// Create a new processing entry
-//		OabaProcessing processing =
-//			configuration.createProcessingLog(em, transJobId);
-//
-//		// Log the job info
-//		log.fine("OabaJob: " + batchJob.toString());
-//		log.fine("OabaParameters: " + batchParams.toString());
-//		log.fine("Processing entry: " + processing.toString());
-//		log.fine("TransitivityJob: " + job.toString());
-//
-//		OabaJobMessage retVal = new OabaJobMessage(transJobId);
-//		return retVal;
-//	}
-
-	/**
-	 * This method sends messages to MatchDedupEach to dedup individual match
-	 * files.
-	 */
-	private void handleDedupEach(final OabaJobMessage data, final BatchJob oabaJob)
-			throws RemoteException, FinderException, BlockingException,
-			NamingException, JMSException {
-
-		final long jobId = oabaJob.getId();
-		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
-		OabaProcessing processingEntry = processingController.findProcessingLogByJobId(jobId);
-		final String modelConfigId = params.getModelConfigurationName();
-		IProbabilityModel model =
+		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
 		if (model == null) {
 			String s =
@@ -262,33 +200,65 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 			log.severe(s);
 			throw new IllegalArgumentException(s);
 		}
+		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
 		if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
 			MessageBeanUtils.stopJob(oabaJob, processingEntry);
 
 		} else {
-			// get the number of processors
-			String temp = (String) model.properties().get("numProcessors");
-			int numProcessors = Integer.parseInt(temp);
+			processingEntry.setCurrentProcessingEvent(OabaEvent.MERGE_DEDUP_MATCHES);
+			mergeMatches(numProcessors, jobId, oabaJob);
 
-			// the match files start with 1, not 0.
+			// mark as done
+			sendToUpdateStatus(d.jobID, PCT_DONE_OABA);
+			processingEntry.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
+//			publishStatus(d.jobID);
+		}
+	}
+	
+	/**
+	 * This method sends messages to MatchDedupEach to dedup individual match
+	 * files.
+	 */
+	private void handleDedupEach(final OabaJobMessage data, final OabaJob oabaJob)
+			throws RemoteException, FinderException, BlockingException,
+			NamingException, JMSException {
+
+		final long jobId = oabaJob.getId();
+		final OabaParameters params =
+			paramsController.findBatchParamsByJobId(jobId);
+		final ServerConfiguration serverConfig =
+			serverController.findServerConfigurationByJobId(jobId);
+		final OabaProcessing processingEntry =
+				processingController.findProcessingLogByJobId(jobId);
+		final String modelConfigId = params.getModelConfigurationName();
+		final ImmutableProbabilityModel model =
+			PMManager.getModelInstance(modelConfigId);
+		if (model == null) {
+			String s =
+				"No model corresponding to '" + modelConfigId + "'";
+			log.severe(s);
+			throw new IllegalArgumentException(s);
+		}
+		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+
+		if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+			MessageBeanUtils.stopJob(oabaJob, processingEntry);
+
+		} else {
+			countMessages = numProcessors;
 			for (int i = 1; i <= numProcessors; i++) {
 				// send to parallelized match dedup each bean
 				OabaJobMessage d2 = new OabaJobMessage(data);
 				d2.ind = i;
 				sendToMatchDedupEach(d2);
 			}
-
-			countMessages = numProcessors;
-
 		} // end if aborted
 	}
 
 	/**
 	 * This method merges all the sorted and dedups matches files from the
 	 * previous step.
-	 * 
-	 *
 	 */
 	private void mergeMatches(final int num, final long jobId,
 			final BatchJob oabaJob) throws BlockingException {
@@ -304,7 +274,6 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 			IMatchRecord2Sink mSink = factory.getSink(i);
 			IComparableSink sink = new ComparableMRSink(mSink);
 			tempSinks.add(sink);
-
 			log.info("merging file " + sink.getInfo());
 		}
 
@@ -334,9 +303,5 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 	private void sendToMatchDedupEach(OabaJobMessage d) {
 		MessageBeanUtils.sendStartData(d, jmsContext, matchDedupEachQueue, log);
 	}
-
-//	private void sendToTransitivity(OabaJobMessage d) {
-//		MessageBeanUtils.sendStartData(d, jmsContext, transitivityQueue, log);
-//	}
 
 }

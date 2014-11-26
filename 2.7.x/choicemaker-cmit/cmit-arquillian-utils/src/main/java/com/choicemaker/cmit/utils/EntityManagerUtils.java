@@ -6,6 +6,7 @@ import static com.choicemaker.cm.io.blocking.automated.AbaSettings.DEFAULT_SINGL
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_INTERVAL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_MATCHES;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_OVERSIZED;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MIN_FIELDS;
 
@@ -162,12 +163,13 @@ public class EntityManagerUtils {
 		int maxSingle = random.nextInt(MAX_MAX_SINGLE);
 		int maxBlockSize = random.nextInt(DEFAULT_MAX_BLOCKSIZE);
 		int maxChunkSize = random.nextInt(DEFAULT_MAX_CHUNKSIZE);
+		int maxMatches = random.nextInt(DEFAULT_MAX_MATCHES);
 		int maxOversized = random.nextInt(DEFAULT_MAX_OVERSIZED);
 		int minFields = random.nextInt(DEFAULT_MIN_FIELDS);
 		int interval = random.nextInt(DEFAULT_INTERVAL);
 		OabaSettingsEntity retVal =
 		new OabaSettingsEntity(limPerBlockingSet, limSingleBlockingSet,
-				singleTableGraceLimit, maxSingle, maxBlockSize,
+				singleTableGraceLimit, maxSingle, maxBlockSize, maxMatches,
 				maxChunkSize, maxOversized, minFields, interval);
 		te.add(retVal);
 		return retVal;

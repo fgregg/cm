@@ -25,6 +25,11 @@ public class TransitivitySettingsEntity implements TransitivitySettings {
 	}
 
 	@Override
+	public int getMaxMatches() {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
 	public int getMaxOversized() {
 		throw new Error("not yet implemented");
 	}

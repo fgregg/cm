@@ -41,6 +41,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
@@ -103,10 +104,12 @@ public class MatchDedupEach implements MessageListener, Serializable {
 
 				final long jobId = data.jobID;
 				oabaJob = jobController.find(jobId);
-				OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
-				OabaProcessing processingEntry = processingController.findProcessingLogByJobId(jobId);
+				final OabaParameters params =
+					paramsController.findBatchParamsByJobId(jobId);
+				final OabaProcessing processingEntry =
+					processingController.findProcessingLogByJobId(jobId);
 				final String modelConfigId = params.getModelConfigurationName();
-				IProbabilityModel model =
+				final IProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
 				if (model == null) {
 					String s =
@@ -114,23 +117,18 @@ public class MatchDedupEach implements MessageListener, Serializable {
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}
+				final OabaSettings settings =
+					settingsController.findOabaSettingsByJobId(jobId);
+				
 				if (BatchJob.STATUS_ABORT_REQUESTED
 						.equals(oabaJob.getStatus())) {
 					MessageBeanUtils.stopJob(oabaJob, processingEntry);
 
 				} else {
 					if (processingEntry.getCurrentProcessingEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
-						// max number of match in a temp file
-						String temp =
-							(String) model.properties()
-									.get("maxMatchSize");
-						int maxMatches = Integer.parseInt(temp);
-
-						// dedup a temp file
+						int maxMatches = settings.getMaxMatches();
 						dedupEach(data.ind, maxMatches, oabaJob);
 					}
-
-					// send the message back to MatchDedupOABA2
 					MatchWriterMessage d = new MatchWriterMessage(data);
 					sendToMatchDedupOABA2(d);
 				}
