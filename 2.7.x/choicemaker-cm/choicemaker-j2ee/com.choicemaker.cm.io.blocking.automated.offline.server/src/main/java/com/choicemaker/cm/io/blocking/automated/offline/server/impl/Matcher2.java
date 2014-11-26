@@ -38,6 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterM
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
@@ -81,6 +82,9 @@ public class Matcher2 extends AbstractMatcher {
 	@EJB
 	private OabaProcessingControllerBean processingController;
 
+	@EJB
+	private ServerConfigurationController serverController;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
 
@@ -103,6 +107,16 @@ public class Matcher2 extends AbstractMatcher {
 	@Override
 	protected OabaProcessingControllerBean getProcessingController() {
 		return processingController;
+	}
+
+	@Override
+	protected ServerConfigurationController getServerController() {
+		return serverController; 
+	}
+
+	@Override
+	protected SettingsController getSettingsController() {
+		return settingsController;
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import javax.jms.Queue;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractScheduler;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
@@ -63,6 +64,9 @@ public class TransMatchScheduler extends AbstractScheduler {
 	@EJB
 	private OabaProcessingControllerBean processingController;
 
+	@EJB
+	private ServerConfigurationController serverController;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchDedupQueue")
 	private Queue transMatchDedupQueue;
 
@@ -88,6 +92,26 @@ public class TransMatchScheduler extends AbstractScheduler {
 	@Override
 	protected OabaProcessingControllerBean getProcessingController() {
 		return processingController;
+	}
+
+	@Override
+	protected ServerConfigurationController getServerController() {
+		return serverController; 
+	}
+
+	@Override
+	protected SettingsController getSettingsController() {
+    return settingsController;
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return log;
+	}
+
+	@Override
+	protected Logger getJMSTrace() {
+		return jmsTrace;
 	}
 
 	@Override
@@ -138,16 +162,6 @@ public class TransMatchScheduler extends AbstractScheduler {
 	protected void sendToUpdateStatus (long jobID, int percentComplete) {
 		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
 				updateTransQueue, log);
-	}
-
-	@Override
-	protected Logger getLogger() {
-		return log;
-	}
-
-	@Override
-	protected Logger getJMSTrace() {
-		return jmsTrace;
 	}
 
 }

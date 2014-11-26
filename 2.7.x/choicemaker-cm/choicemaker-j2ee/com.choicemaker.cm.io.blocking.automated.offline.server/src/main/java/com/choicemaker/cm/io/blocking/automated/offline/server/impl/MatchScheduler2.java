@@ -32,6 +32,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
@@ -74,6 +76,9 @@ public class MatchScheduler2 extends AbstractScheduler {
 	@EJB
 	private OabaProcessingControllerBean processingController;
 
+	@EJB
+	private ServerConfigurationController serverController;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
 
@@ -101,15 +106,39 @@ public class MatchScheduler2 extends AbstractScheduler {
 		return processingController;
 	}
 
+	@Override
+	protected ServerConfigurationController getServerController() {
+		return serverController; 
+	}
+
+	@Override
+	protected SettingsController getSettingsController() {
+    return settingsController;
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return log;
+	}
+
+	@Override
+	protected Logger getJMSTrace() {
+		return jmsTrace;
+	}
+
 	/**
 	 * This method cleans up the chunk files.
 	 */
+	@Override
 	protected void cleanUp(OabaJobMessage data) throws BlockingException {
 		log.info("cleanUp");
 
 		final long jobId = data.jobID;
 		OabaJob oabaJob = getJobController().find(jobId);
-		OabaParameters params = getParametersController().findBatchParamsByJobId(jobId);
+		OabaParameters params =
+			getParametersController().findBatchParamsByJobId(jobId);
+		ServerConfiguration serverConfig =
+			getServerController().findServerConfigurationByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
 		IProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
@@ -120,9 +149,7 @@ public class MatchScheduler2 extends AbstractScheduler {
 			throw new IllegalArgumentException(s);
 		}
 
-		// get the number of processors
-		String temp = (String) model.properties().get("numProcessors");
-		int numProcessors = Integer.parseInt(temp);
+		int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
 		// remove the data
 		IChunkDataSinkSourceFactory stageFactory =
@@ -156,10 +183,12 @@ public class MatchScheduler2 extends AbstractScheduler {
 		}
 	}
 
+	@Override
 	protected void sendToMatcher(OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, matcherQueue, log);
 	}
 
+	@Override
 	protected void sendToUpdateStatus(long jobID, int percentComplete) {
 		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
 				updateQueue, log);
@@ -168,16 +197,6 @@ public class MatchScheduler2 extends AbstractScheduler {
 	@Override
 	protected void sendToMatchDebup(OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, matchDedupQueue, log);
-	}
-
-	@Override
-	protected Logger getLogger() {
-		return log;
-	}
-
-	@Override
-	protected Logger getJMSTrace() {
-		return jmsTrace;
 	}
 
 }

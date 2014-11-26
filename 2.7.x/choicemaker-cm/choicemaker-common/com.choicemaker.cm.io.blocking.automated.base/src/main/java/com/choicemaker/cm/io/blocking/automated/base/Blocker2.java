@@ -243,37 +243,37 @@ public class Blocker2 implements AutomatedBlocker {
 		}
 
 		if (clone != null) {
-			Blocker sanityCheck =
-				new Blocker(
-					clone,
-					this.getModel(),
-					this.getQueryRecord(),
-					this.getLimitPerBlockingSet(),
-					this.getSingleTableBlockingSetGraceLimit(),
-					this.getLimitSingleBlockingSet(),
-					this.getCountSource(),
-					this.getBlockingConfiguration());
-			sanityCheck.open();
-			List<IBlockingSet> newBlockingSets = this.getBlockingSets();
-			@SuppressWarnings("unchecked")
-			List<IBlockingSet> oldBlockingSets = sanityCheck.getBlockingSets();
-			if (newBlockingSets.size() != oldBlockingSets.size()) {
-				throw new IllegalStateException("Different sizes of blocking set collections");
-			}
-			for (int i = 0; i < newBlockingSets.size(); i++) {
-				IBlockingSet newBlockingSet =
-					(IBlockingSet) newBlockingSets.get(i);
-				IBlockingSet oldBlockingSet =
-					(IBlockingSet) oldBlockingSets.get(i);
-				if (newBlockingSet == null && oldBlockingSet != null) {
+			try (Blocker sanityCheck =
+				new Blocker(clone, getModel(), getQueryRecord(),
+						getLimitPerBlockingSet(),
+						getSingleTableBlockingSetGraceLimit(),
+						getLimitSingleBlockingSet(), getCountSource(),
+						getBlockingConfiguration())) {
+				sanityCheck.open();
+				List<IBlockingSet> newBlockingSets = this.getBlockingSets();
+				@SuppressWarnings("unchecked")
+				List<IBlockingSet> oldBlockingSets =
+					sanityCheck.getBlockingSets();
+				if (newBlockingSets.size() != oldBlockingSets.size()) {
 					throw new IllegalStateException(
-						"Blocking sets " + i + " are different");
-				} else if (newBlockingSet != null && !newBlockingSet.equals(oldBlockingSet)) {
-					throw new IllegalStateException(
-						"Blocking sets " + i + " are different");
+							"Different sizes of blocking set collections");
 				}
+				for (int i = 0; i < newBlockingSets.size(); i++) {
+					IBlockingSet newBlockingSet =
+						(IBlockingSet) newBlockingSets.get(i);
+					IBlockingSet oldBlockingSet =
+						(IBlockingSet) oldBlockingSets.get(i);
+					if (newBlockingSet == null && oldBlockingSet != null) {
+						throw new IllegalStateException("Blocking sets " + i
+								+ " are different");
+					} else if (newBlockingSet != null
+							&& !newBlockingSet.equals(oldBlockingSet)) {
+						throw new IllegalStateException("Blocking sets " + i
+								+ " are different");
+					}
+				}
+				sanityCheck.close();
 			}
-			sanityCheck.close();
 		} // if clone
 	} // end doSanityCheck()
 

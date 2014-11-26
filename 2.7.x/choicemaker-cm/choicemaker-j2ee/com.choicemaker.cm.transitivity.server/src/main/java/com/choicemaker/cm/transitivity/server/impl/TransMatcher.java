@@ -34,6 +34,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataSto
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractMatcher;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
@@ -70,6 +71,9 @@ public class TransMatcher extends AbstractMatcher  {
 	private SettingsController settingsController;
 
 	@EJB
+	private ServerConfigurationController serverController;
+
+	@EJB
 	private OabaParametersControllerBean paramsController;
 	
 	@EJB
@@ -97,6 +101,26 @@ public class TransMatcher extends AbstractMatcher  {
 	@Override
 	protected OabaProcessingControllerBean getProcessingController() {
 		return processingController;
+	}
+
+	@Override
+	protected ServerConfigurationController getServerController() {
+		return serverController; 
+	}
+
+	@Override
+	protected SettingsController getSettingsController() {
+		return settingsController;
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return log;
+	}
+
+	@Override
+	protected Logger getJMSTrace() {
+		return jmsTrace;
 	}
 
 	@Override
@@ -167,16 +191,6 @@ public class TransMatcher extends AbstractMatcher  {
 	protected void sendToScheduler(MatchWriterMessage data) {
 		MessageBeanUtils.sendMatchWriterData(data, jmsContext,
 				transMatchSchedulerQueue, log);
-	}
-
-	@Override
-	protected Logger getLogger() {
-		return log;
-	}
-
-	@Override
-	protected Logger getJMSTrace() {
-		return jmsTrace;
 	}
 
 }

@@ -49,6 +49,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 /**
@@ -70,6 +74,10 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	protected abstract OabaParametersControllerBean getParametersController();
 	
 	protected abstract OabaProcessingControllerBean getProcessingController();
+
+	protected abstract ServerConfigurationController getServerController();
+	
+	protected abstract SettingsController getSettingsController();
 
 	// These two tracker are set only in log debug mode
 	private long inHMLookup;
@@ -93,19 +101,39 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					OabaJobMessage data = ((OabaJobMessage) o);
 					final long jobId = data.jobID;
 
+					oabaJob = getJobController().find(jobId);
+					final OabaParameters params =
+						getParametersController().findBatchParamsByJobId(jobId);
+					final OabaProcessing processingEntry =
+							getProcessingController().findProcessingLogByJobId(
+									jobId);
+					final OabaSettings oabaSettings =
+							getSettingsController().findOabaSettingsByJobId(jobId);
+					final ServerConfiguration serverConfig = getServerController().findServerConfigurationByJobId(jobId);
+					if (oabaJob == null || params == null || oabaSettings == null || serverConfig == null) {
+						String s = "Unable to find a job, parameters, settings or server configuration for " + jobId;
+						getLogger().severe(s);
+						throw new IllegalArgumentException(s);
+					}
+					final String modelConfigId = params.getModelConfigurationName();
+					ImmutableProbabilityModel model =
+						PMManager.getModelInstance(modelConfigId);
+					if (model == null) {
+						String s =
+							"No model corresponding to '" + modelConfigId + "'";
+						getLogger().severe(s);
+						throw new IllegalArgumentException(s);
+					}
+					
 					getLogger().fine("Matcher2 In onMessage " + data.jobID + " "
 							+ data.ind + " " + data.treeInd);
-
-					oabaJob = getJobController().find(jobId);
-					OabaParameters params = getParametersController().findBatchParamsByJobId(jobId);
-					OabaProcessing processingEntry = getProcessingController().findProcessingLogByJobId(jobId);
 
 					if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob
 							.getStatus())) {
 						MessageBeanUtils.stopJob(oabaJob, processingEntry);
 
 					} else {
-						handleMatching(data, oabaJob, params);
+						handleMatching(data, oabaJob, params, oabaSettings, serverConfig);
 					}
 
 				} else {
@@ -126,9 +154,11 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		getJMSTrace().info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-	protected final void handleMatching(OabaJobMessage data, final OabaJob oabaJob,
-			final OabaParameters params) throws BlockingException,
-			RemoteException, NamingException, JMSException {
+	protected final void handleMatching(OabaJobMessage data,
+			final OabaJob oabaJob, final OabaParameters params,
+			OabaSettings settings, ServerConfiguration serverConfig)
+			throws BlockingException, RemoteException, NamingException,
+			JMSException {
 
 		final String modelConfigId = params.getModelConfigurationName();
 		final IProbabilityModel stageModel =
@@ -136,21 +166,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		final ImmutableThresholds t =
 			new ImmutableThresholds(params.getLowThreshold(),
 					params.getHighThreshold());
-
-		// FIXME
-//		String temp = (String) stageModel.properties().get("numProcessors");
-//		int numProcessors = Integer.parseInt(temp);
-		int numProcessors = -1;
-
-//		temp = (String) stageModel.properties().get("maxMatchSize");
-		// 2014-04-24 rphall: Commented out unused local variable.
-		// int maxMatch = Integer.parseInt(temp);
-
-		// FIXME
-		// max block size
-//		temp = (String) stageModel.properties().get("maxBlockSize");
-//		int maxBlock = Integer.parseInt(temp);
-		int maxBlock = -1;
+		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+		final int maxBlock = settings.getMaxBlockSize();
 
 		// get the data store
 		ChunkDataStore dataStore = ChunkDataStore.getInstance();
@@ -245,13 +262,14 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	 * @param num
 	 *            - number of processors
 	 */
-	protected final IComparisonSetSource getSource(OabaJobMessage data, int num,
-			int maxBlockSize) throws BlockingException {
+	protected final IComparisonSetSource getSource(OabaJobMessage data,
+			int num, int maxBlockSize) throws BlockingException {
 		OabaJob job = getJobController().find(data.jobID);
 		if (data.ind < data.numRegularChunks) {
 			// regular
 			ComparisonTreeGroupSinkSourceFactory factory =
-					OabaFileUtils.getComparisonTreeGroupFactory(job, data.stageType, num);
+				OabaFileUtils.getComparisonTreeGroupFactory(job,
+						data.stageType, num);
 			IComparisonTreeSource source =
 				factory.getSource(data.ind, data.treeInd);
 			if (source.exists()) {
@@ -259,14 +277,14 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					new ComparisonTreeSetSource(source);
 				return setSource;
 			} else {
-				throw new BlockingException("Could not get source "
+				throw new BlockingException("Could not get regular source "
 						+ source.getInfo());
 			}
 		} else {
 			// oversized
 			int i = data.ind - data.numRegularChunks;
 			ComparisonArrayGroupSinkSourceFactory factoryOS =
-					OabaFileUtils.getComparisonArrayGroupFactoryOS(job, num);
+				OabaFileUtils.getComparisonArrayGroupFactoryOS(job, num);
 			IComparisonArraySource sourceOS =
 				factoryOS.getSource(i, data.treeInd);
 			if (sourceOS.exists()) {
@@ -274,7 +292,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					new ComparisonSetOSSource(sourceOS, maxBlockSize);
 				return setSource;
 			} else {
-				throw new BlockingException("Could not get source "
+				throw new BlockingException("Could not get oversized source "
 						+ sourceOS.getInfo());
 			}
 		}

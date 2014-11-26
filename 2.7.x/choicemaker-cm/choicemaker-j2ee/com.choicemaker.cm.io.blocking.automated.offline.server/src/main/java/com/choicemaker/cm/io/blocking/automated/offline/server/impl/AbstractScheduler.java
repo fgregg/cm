@@ -40,6 +40,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
@@ -61,6 +65,10 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	protected abstract OabaParametersControllerBean getParametersController();
 	
 	protected abstract OabaProcessingControllerBean getProcessingController();
+	
+	protected abstract ServerConfigurationController getServerController();
+	
+	protected abstract SettingsController getSettingsController();
 
 	protected RecordSource[] stageRS = null;
 	protected RecordSource[] masterRS = null;
@@ -109,26 +117,33 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 				if (o instanceof OabaJobMessage) {
 					final OabaJobMessage sd = (OabaJobMessage) o;
-
-					// get the number of processors
 					final long jobId = sd.jobID;
 					oabaJob = getJobController().find(jobId);
-
-					// init values
 					OabaParameters params =
 						getParametersController().findBatchParamsByJobId(jobId);
-					final String modelConfigId =
-						params.getModelConfigurationName();
-					ImmutableProbabilityModel stageModel =
+					OabaSettings oabaSettings =
+							getSettingsController().findOabaSettingsByJobId(jobId);
+					ServerConfiguration serverConfig = getServerController().findServerConfigurationByJobId(jobId);
+					if (oabaJob == null || params == null || oabaSettings == null || serverConfig == null) {
+						String s = "Unable to find a job, parameters, settings or server configuration for " + jobId;
+						getLogger().severe(s);
+						throw new IllegalArgumentException(s);
+					}
+					final String modelConfigId = params.getModelConfigurationName();
+					ImmutableProbabilityModel model =
 						PMManager.getModelInstance(modelConfigId);
-					String temp =
-						(String) stageModel.properties().get("numProcessors");
-					numProcessors = Integer.parseInt(temp);
-
-					temp = (String) stageModel.properties().get("maxChunkSize");
-					maxChunkSize = Integer.parseInt(temp);
+					if (model == null) {
+						String s =
+							"No model corresponding to '" + modelConfigId + "'";
+						getLogger().severe(s);
+						throw new IllegalArgumentException(s);
+					}
 
 					countMessages = 0;
+					maxChunkSize = oabaSettings.getMaxChunkSize();
+					numProcessors = serverConfig.getMaxChoiceMakerThreads();
+					getLogger().info("Maximum chunk size: " + maxChunkSize);
+					getLogger().info("Number of processors: " + numProcessors);
 
 					OabaProcessing status =
 						getProcessingController().getProcessingLog(sd);
@@ -274,13 +289,15 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	/**
 	 * This method sends the different chunks to different beans.
 	 */
-	protected final void startMatch(final OabaJobMessage sd) throws RemoteException, FinderException,
-			BlockingException, NamingException, JMSException, XmlConfException {
+	protected final void startMatch(final OabaJobMessage sd)
+			throws RemoteException, FinderException, BlockingException,
+			NamingException, JMSException, XmlConfException {
 
 		// init values
 		final long jobId = sd.jobID;
 		OabaJob oabaJob = getJobController().find(jobId);
-		OabaProcessing status = getProcessingController().findProcessingLogByJobId(jobId);
+		OabaProcessing status =
+			getProcessingController().findProcessingLogByJobId(jobId);
 
 		if (OabaJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
 			MessageBeanUtils.stopJob(oabaJob, status);
@@ -293,13 +310,15 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 			}
 
 			// set up the record source arrays.
-			OabaParameters oabaParams = getParametersController().findBatchParamsByJobId(jobId);
+			OabaParameters oabaParams =
+				getParametersController().findBatchParamsByJobId(jobId);
 			String modelName = oabaParams.getModelConfigurationName();
-			ImmutableProbabilityModel ipm = PMManager.getImmutableModelInstance(modelName);
+			ImmutableProbabilityModel ipm =
+				PMManager.getImmutableModelInstance(modelName);
 			IChunkDataSinkSourceFactory stageFactory =
-				OabaFileUtils.getStageDataFactory(oabaJob,ipm);
+				OabaFileUtils.getStageDataFactory(oabaJob, ipm);
 			IChunkDataSinkSourceFactory masterFactory =
-					OabaFileUtils.getMasterDataFactory(oabaJob,ipm);
+				OabaFileUtils.getMasterDataFactory(oabaJob, ipm);
 
 			stageRS = new RecordSource[sd.numChunks];
 			masterRS = new RecordSource[sd.numChunks];
@@ -390,7 +409,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		// This is because tree ids start with 1 and not 0.
 		for (int i = 1; i <= numProcessors; i++) {
 			OabaJobMessage sd2 = new OabaJobMessage(sd);
-			sd.treeInd = i;
+			sd2.treeInd = i;
 			countMessages++;
 			sendToMatcher(sd2);
 		}

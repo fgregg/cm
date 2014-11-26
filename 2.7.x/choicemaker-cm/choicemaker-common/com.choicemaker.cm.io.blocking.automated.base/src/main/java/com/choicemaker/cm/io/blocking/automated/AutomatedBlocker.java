@@ -22,6 +22,7 @@ import com.choicemaker.cm.core.RecordSource;
  * @author rphall
  */
 public interface AutomatedBlocker extends RecordSource {
+
 	List<IBlockingSet> getBlockingSets();
 
 	int getNumberOfRecordsRetrieved();
