@@ -44,7 +44,7 @@ public class GenericDedupService {
 	private IComparableSource cSource;
 	private IComparableSink cSink;
 	private IComparableSinkSourceFactory cFactory;
-	private int max;
+	private int maxMatches;
 	
 	private ArrayList tempSinks = new ArrayList (); //list of temporary sinks
 	
@@ -60,12 +60,12 @@ public class GenericDedupService {
 
 	
 	/** This constructor takes in the source with dups, a sink to store the dedup Comparables,
-	 * and a factory to generate temp sinks.  max is the maximum size of the TreeSet.
+	 * and a factory to generate temp sinks.  maxMatches is the maximum size of the TreeSet.
 	 * 
 	 * @param mSource
 	 * @param mSink
 	 * @param mFactory
-	 * @param max
+	 * @param maxMatches
 	 * @param status
 	 */
 	public GenericDedupService (IComparableSource cSource, IComparableSink cSink,
@@ -74,11 +74,10 @@ public class GenericDedupService {
 		this.cSource = cSource;
 		this.cSink = cSink;
 		this.cFactory = cFactory;
-		this.max = max;
+		this.maxMatches = max;
 		this.control = control;
 		stop = false;
 	}
-	
 	
 	public int getNumBefore () {return numBefore;}
 	public int getNumAfter () {return numAfter;}
@@ -86,7 +85,6 @@ public class GenericDedupService {
 	
 	/**
 	 * This performs the deduping of cSource.
-	 *
 	 */
 	public void runDedup () throws BlockingException {
 		time = System.currentTimeMillis();
@@ -94,10 +92,10 @@ public class GenericDedupService {
 		
 		//special case of nothing to do
 		if (numBefore == 0) {
-			int max = tempSinks.size();
+			int countSinks = tempSinks.size();
 
 			//remove the temporary sinks
-			for (int i = 0; i<max; i++) {
+			for (int i = 0; i<countSinks; i++) {
 				IComparableSink tempSink = (IComparableSink) tempSinks.get(i);
 				log.fine("removing " + tempSink.getInfo());
 				tempSink.remove();
@@ -149,7 +147,7 @@ public class GenericDedupService {
 			if (!matches.contains(c)) {
 				matches.add(c);
 
-				if (numBefore % INTERVAL == 0 && isFull (matches.size(), max) ) {
+				if (numBefore % INTERVAL == 0 && isFull (matches.size(), maxMatches) ) {
 					log.fine ("writing out " + matches.size());
 					MemoryEstimator.writeMem();
 
@@ -397,7 +395,7 @@ public class GenericDedupService {
 	/** This method checks to see if the system is running out of memory
 	 * 
 	 * @param size - size of the hash set
-	 * @param max - maximum allowable size of the hash set, or if 0, check to see if 70% of the
+	 * @param maxMatches - maximum allowable size of the hash set, or if 0, check to see if 70% of the
 	 * 	system memory is being used.
 	 * @return
 	 */
