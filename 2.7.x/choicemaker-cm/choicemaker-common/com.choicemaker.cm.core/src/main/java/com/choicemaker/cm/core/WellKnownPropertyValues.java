@@ -7,6 +7,11 @@ package com.choicemaker.cm.core;
  * this interface.
  */
 public interface WellKnownPropertyValues {
+	
+	/**
+	 * Specifies an embedded version of the ChoiceMaker E2 platform.
+	 */
+	public static final String E2_EMBEDDED_PLATFORM = "com.choicemaker.e2.embed.EmbeddedPlatform";
 
 	/**
 	 * Specifies a basic version of the ChoiceMaker compiler appropriate for
