@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.modelmaker.gui;
 
+// import static com.choicemaker.cm.core.PropertyNames.*;
+
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -1519,19 +1521,28 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 	 */
 	protected static void setPojoConfigurationProperties() {
 		// Install a ChoiceMaker configurator
-		System.setProperty(
-				PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR,
-				WellKnownPropertyValues.LIST_BACKED_CONFIGURATOR);
+		String pv =
+			System.getProperty(PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR);
+		if (pv == null) {
+			System.setProperty(
+					PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR,
+					WellKnownPropertyValues.LIST_BACKED_CONFIGURATOR);
+		}
 
 		// Configure the compiler
+		pv = System.getProperty(PropertyNames.INSTALLABLE_COMPILER); {
 		System.setProperty(
 				PropertyNames.INSTALLABLE_COMPILER,
 				WellKnownPropertyValues.BASIC_COMPILER);
+		}
 
 		// Configure a factory for generator plugins used by the compiler
-		System.setProperty(
-				PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
-				WellKnownPropertyValues.ECLIPSE2_GENERATOR_PLUGIN_FACTORY);
+		pv = System.getProperty(PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY);
+		if (pv == null) {
+			System.setProperty(
+					PropertyNames.INSTALLABLE_GENERATOR_PLUGIN_FACTORY,
+					WellKnownPropertyValues.ECLIPSE2_GENERATOR_PLUGIN_FACTORY);
+		}
 	}
 
 	/**
