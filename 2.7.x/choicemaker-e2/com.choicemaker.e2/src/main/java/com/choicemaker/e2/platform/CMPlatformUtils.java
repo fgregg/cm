@@ -78,7 +78,7 @@ public class CMPlatformUtils {
 		List<ClassLoader> loaders = new LinkedList<>();
 		CMPluginDescriptor[] plugins = getPluginDescriptors();
 		for (CMPluginDescriptor plugin : plugins) {
-			logger.fine("Adding classloader for: "
+			logger.finer("Adding classloader for: "
 					+ plugin.getUniqueIdentifier());
 			ClassLoader loader = plugin.getPluginClassLoader();
 			loaders.add(loader);
@@ -98,7 +98,7 @@ public class CMPlatformUtils {
 			if (loader instanceof URLClassLoader) {
 				URL[] ucp = ((URLClassLoader) loader).getURLs();
 				for (URL url : ucp) {
-					logger.fine(url.toString());
+					logger.finer(url.toString());
 					urls.add(url);
 				}
 			} else {

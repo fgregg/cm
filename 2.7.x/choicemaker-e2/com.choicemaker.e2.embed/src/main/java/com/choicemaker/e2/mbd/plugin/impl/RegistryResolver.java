@@ -655,7 +655,7 @@ private void addPrerequisites(PluginPrerequisiteModel[] prerequisites, PluginDes
 	plugin.setRequires(result);
 }
 private void trace(String s) {
-	logger.finer("Registry Resolve: "+s); //$NON-NLS-1$
+	logger.finest("Registry Resolve: "+s); //$NON-NLS-1$
 }
 private void debug(String s) {
 	logger.fine("Registry Resolve: "+s); //$NON-NLS-1$

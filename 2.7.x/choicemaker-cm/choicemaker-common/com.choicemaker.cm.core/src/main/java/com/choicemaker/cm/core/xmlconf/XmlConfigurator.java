@@ -342,14 +342,14 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 							+ "'");
 					break;
 				} catch (ClassNotFoundException ex) {
-					if (log.isLoggable(Level.FINE)) {
-						log.fine("Class '" + name + "' not found by '"
+					if (log.isLoggable(Level.FINEST)) {
+						log.finest("Class '" + name + "' not found by '"
 								+ parents[i] + "'; search continuing...");
 					}
 				}
 			}
 			if (c == null) {
-				log.fine("Class '"
+				log.finer("Class '"
 						+ name
 						+ "' not found by plugin classloaders; search continuing with parent URLClassLoader.");
 				c = super.findClass(name);
