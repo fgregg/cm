@@ -32,10 +32,12 @@
       <name>Apache BCEL project</name>
       <url>http://commons.apache.org/bcel/</url>
     </contributor>
+<!-- Jakarta ORO is no longer required, not even for testing
     <contributor>
       <name>Apache ORO project</name>
       <url>http://jakarta.apache.org/oro/</url>
     </contributor>
+-->
     <contributor>
       <name>Eclipse Project</name>
       <url>http://www.eclipse.org/</url>

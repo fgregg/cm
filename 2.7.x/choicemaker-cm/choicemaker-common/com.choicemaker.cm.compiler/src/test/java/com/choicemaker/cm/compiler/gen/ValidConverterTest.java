@@ -83,8 +83,8 @@ public class ValidConverterTest extends TestCase {
 			assertTrue(input != null);
 			final String expectedOutput = normalize((String) e.getValue());
 			assertTrue(expectedOutput != null);
-			String oldOutput = normalize(Perl5ValidConverter.convertValids(input));
-			assertTrue(expectedOutput.equals(oldOutput));
+//			String oldOutput = normalize(Perl5ValidConverter.convertValids(input));
+//			assertTrue(expectedOutput.equals(oldOutput));
 			String newOutput = normalize(ValidConverter.convertValids(input));
 			assertTrue(expectedOutput.equals(newOutput));
 		}
