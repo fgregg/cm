@@ -20,7 +20,7 @@
    <extension
          point="com.choicemaker.cm.modelmaker.matcherBlockingToolkit">
       <toolkit
-            name="%gui.name"
+            name="Automated Blocking"
             class="com.choicemaker.cm.io.blocking.automated.inmemory.gui.InMemoryAutomatedBlockerToolkit">
       </toolkit>
    </extension>

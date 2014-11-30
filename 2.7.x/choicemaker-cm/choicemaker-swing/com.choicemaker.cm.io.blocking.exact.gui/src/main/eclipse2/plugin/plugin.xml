@@ -21,7 +21,7 @@
          name="exactBlockerToolkit"
          point="com.choicemaker.cm.modelmaker.matcherBlockingToolkit">
       <toolkit
-            name="%gui.name"
+            name="Exact Blocking"
             class="com.choicemaker.cm.io.blocking.exact.gui.matcher.ExactBlockerToolkit">
       </toolkit>
    </extension>

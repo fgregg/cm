@@ -20,7 +20,7 @@
          name="meMlTrainGui"
          point="com.choicemaker.cm.modelmaker.mlTrainGuiPlugin">
       <gui
-            name="%gui.name"
+            name="Maximum Entropy"
             class="com.choicemaker.cm.ml.me.gui.MeGuiFactory"
             handledClass="com.choicemaker.cm.ml.me.base.MaximumEntropy">
       </gui>
