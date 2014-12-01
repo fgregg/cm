@@ -126,4 +126,10 @@ public class CountField implements Serializable, ICountField {
 		return uniqueId;
 	}
 
+	@Override
+	public String toString() {
+		return "CountField [tableSize=" + tableSize + ", column=" + column
+				+ ", view=" + view + ", uniqueId=" + uniqueId + "]";
+	}
+
 }

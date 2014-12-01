@@ -104,4 +104,10 @@ public class BlockingField extends Field implements IBlockingField {
 		return retVal;
 	}
 
+	@Override
+	public String toString() {
+		return "BlockingField [number=" + number + ", queryField=" + queryField
+				+ ", dbField=" + dbField + "]";
+	}
+
 }

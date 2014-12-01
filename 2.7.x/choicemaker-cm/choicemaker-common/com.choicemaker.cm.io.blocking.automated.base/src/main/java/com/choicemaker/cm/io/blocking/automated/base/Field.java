@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import com.choicemaker.cm.io.blocking.automated.IField;
 
@@ -42,6 +43,12 @@ public abstract class Field implements Serializable, IField {
 		}
 		assert retVal != null;
 		return retVal;
+	}
+
+	@Override
+	public String toString() {
+		return "Field [illegalCombinations="
+				+ Arrays.toString(illegalCombinations) + "]";
 	}
 
 }

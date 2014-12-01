@@ -55,13 +55,6 @@ public class BlockingSetFactory {
 	 * class require significant initialization that makes it difficult to test.)
 	 */
 
-	// Unused manifest constants.
-	// (This is probably the wrong place to define these constants, anyway.)
-	//
-	// public static final String LIMIT_PER_BLOCKING_SET = "limitPerBlockingSet";
-	// public static final String LIMIT_SINGLE_BLOCKING_SET =
-	//	"limitSingleBlockingSet";
-
 	/**
 	 * The name of a system property that can be set to "true" to allow
 	 * incomplete blocking sets to be returned from

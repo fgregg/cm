@@ -62,4 +62,10 @@ public class DbTable implements Serializable, IDbTable {
 		return getName().hashCode() + getUniqueId().hashCode();
 	}
 
+	@Override
+	public String toString() {
+		return "DbTable [name=" + name + ", num=" + num + ", uniqueId="
+				+ uniqueId + "]";
+	}
+
 }

@@ -333,5 +333,12 @@ public class BlockingSet implements Serializable, IBlockingSet {
 		return retVal;
 	}
 
+	@Override
+	public String toString() {
+		return "BlockingSet [mainTableSize=" + mainTableSize
+				+ ", blockingValues=" + blockingValues + ", tables=" + tables
+				+ ", expectedCount=" + expectedCount + "]";
+	}
+
 }
 

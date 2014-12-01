@@ -193,4 +193,10 @@ public class BlockingValue implements Comparable<IBlockingValue>, Cloneable,
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "BlockingValue [blockingField=" + blockingField + ", value="
+				+ value + "]";
+	}
+
 }

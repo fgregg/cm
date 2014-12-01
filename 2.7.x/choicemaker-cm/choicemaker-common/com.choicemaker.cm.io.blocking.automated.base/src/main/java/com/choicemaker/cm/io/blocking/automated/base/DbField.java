@@ -111,5 +111,12 @@ public class DbField extends Field implements IDbField {
 		}
 		return retVal;
 	}
+
+	@Override
+	public String toString() {
+		return "DbField [number=" + number + ", name=" + name + ", type="
+				+ type + ", table=" + table + ", defaultCount=" + defaultCount
+				+ "]";
+	}
 	
 }

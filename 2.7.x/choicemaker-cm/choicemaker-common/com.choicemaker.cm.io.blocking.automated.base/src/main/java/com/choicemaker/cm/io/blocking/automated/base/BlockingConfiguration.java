@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.base;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
@@ -118,6 +119,15 @@ public abstract class BlockingConfiguration implements IBlockingConfiguration,
 		return blockingFields;
 	}
 
+	@Override
+	public String toString() {
+		return "BlockingConfiguration [name=" + name + ", dbTables="
+				+ Arrays.toString(dbTables) + ", dbFields="
+				+ Arrays.toString(dbFields) + ", blockingFields="
+				+ Arrays.toString(blockingFields) + ", values="
+				+ Arrays.toString(values) + "]";
+	}
+
 	public static class DbConfiguration {
 		public String name;
 		public IQueryField[] qfs;
@@ -131,6 +141,14 @@ public abstract class BlockingConfiguration implements IBlockingConfiguration,
 			this.dbts = dbts;
 			this.dbfs = dbfs;
 			this.bfs = bfs;
+		}
+
+		@Override
+		public String toString() {
+			return "DbConfiguration [name=" + name + ", qfs="
+					+ Arrays.toString(qfs) + ", dbts=" + Arrays.toString(dbts)
+					+ ", dbfs=" + Arrays.toString(dbfs) + ", bfs="
+					+ Arrays.toString(bfs) + "]";
 		}	
 	}
 }
