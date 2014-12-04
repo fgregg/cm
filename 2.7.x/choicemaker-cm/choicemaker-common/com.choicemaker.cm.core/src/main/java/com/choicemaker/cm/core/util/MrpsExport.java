@@ -111,7 +111,7 @@ public class MrpsExport {
 			throw new IllegalArgumentException("null or blank field delimiter");
 		}
 
-		DecimalFormat df = new DecimalFormat("##0.0000");
+		DecimalFormat df = new DecimalFormat("##0.00000000");
 		int numClues = -1;
 		if (acPolicy == AC_BIT_VECTOR) {
 			numClues =
