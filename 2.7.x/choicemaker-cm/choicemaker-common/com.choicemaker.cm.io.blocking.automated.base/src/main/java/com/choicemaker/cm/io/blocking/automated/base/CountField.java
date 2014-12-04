@@ -45,17 +45,17 @@ public class CountField implements Serializable, ICountField {
 
 	private final int defaultCount;
 	private final int tableSize;
-	private final Map<String,Integer> m;
+	private final Map<String,Integer> valueCount;
 	private final String column;
 	private final String view;
 	private final String uniqueId;
 
 	public CountField(int mapSize, int defaultCount, int tableSize, String column, String view, String uniqueId) {
 		if (mapSize > 1) {
-			m = new HashMap<>(mapSize);
+			valueCount = new HashMap<>(mapSize);
 			
 		} else {
-			m = new HashMap<>();
+			valueCount = new HashMap<>();
 		}
 		this.defaultCount = defaultCount;
 		this.tableSize = tableSize;
@@ -71,7 +71,7 @@ public class CountField implements Serializable, ICountField {
 	@Override
 	public void putValueCount(String value, Integer count) {
 		if (value != null && count != null) {
-			m.put(value, count);
+			valueCount.put(value, count);
 		}
 	}
 	
@@ -86,7 +86,7 @@ public class CountField implements Serializable, ICountField {
 						String msg = "Invalid entry: " + value + "/" + count;
 						throw new IllegalArgumentException(msg);
 					}
-					m.put(value, count);
+					this.valueCount.put(value, count);
 				}
 			}
 		}
@@ -96,7 +96,7 @@ public class CountField implements Serializable, ICountField {
 	public Integer getCountForValue(String value) {
 		Integer retVal = null;
 		if (value != null) {
-			retVal = (Integer) m.get(value);
+			retVal = (Integer) valueCount.get(value);
 		}
 		return retVal;
 	}
