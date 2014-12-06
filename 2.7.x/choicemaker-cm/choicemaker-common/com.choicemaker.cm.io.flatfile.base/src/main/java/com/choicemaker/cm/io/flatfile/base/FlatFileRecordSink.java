@@ -122,16 +122,22 @@ public class FlatFileRecordSink implements RecordSink {
 		ws = new Writer[n];
 		if (multiFile) {
 			for (int i = 1; i < n; ++i) {
-				FileOutputStream o = new FileOutputStream(new File(fileNamePrefix + typeNames[i] + fileNameSuffix).getAbsoluteFile());
+				String fileName =
+					fileNamePrefix + typeNames[i] + fileNameSuffix;
+				FileOutputStream o =
+					new FileOutputStream(new File(fileName).getAbsoluteFile());
 				outFile[i] = o;
 				ws[i] = new OutputStreamWriter(new BufferedOutputStream(o));
 			}
 		} else {
-			FileOutputStream o = new FileOutputStream(new File(fileNamePrefix + typeNames[0] + fileNameSuffix).getAbsoluteFile());
-			Writer w = new OutputStreamWriter(new BufferedOutputStream(o));
+			String fileName = fileNamePrefix + typeNames[0] + fileNameSuffix;
+			FileOutputStream o =
+				new FileOutputStream(new File(fileName).getAbsoluteFile());
+			BufferedOutputStream bos = new BufferedOutputStream(o);
+//			Writer w = new OutputStreamWriter(bos);
 			for (int i = 0; i < n; ++i) {
 				outFile[i] = o;
-				ws[i] = w;
+				ws[i] = new OutputStreamWriter(bos);
 			}
 		}
 	}

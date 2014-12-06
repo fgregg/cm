@@ -119,6 +119,9 @@ public abstract class CompositeSource implements Source {
 				s = ((Source) sources.get(curSource));
 				s.open();
 			} else {
+				if (s != null) {
+					s.close();
+				}
 				s = null;
 			}
 		}
