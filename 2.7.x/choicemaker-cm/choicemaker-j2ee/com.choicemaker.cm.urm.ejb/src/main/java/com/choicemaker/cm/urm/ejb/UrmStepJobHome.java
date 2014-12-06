@@ -17,6 +17,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 import javax.ejb.FinderException;
 
+@SuppressWarnings({"rawtypes"})
 public interface UrmStepJobHome extends EJBHome {
 	String DEFAULT_EJB_REF_NAME = "ejb/UrmStepJob";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;

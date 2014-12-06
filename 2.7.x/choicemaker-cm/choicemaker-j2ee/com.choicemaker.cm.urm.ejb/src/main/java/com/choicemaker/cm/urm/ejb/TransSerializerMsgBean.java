@@ -45,6 +45,7 @@ import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 /**
  * @version  $Revision: 1.3 $ $Date: 2010/10/21 17:42:26 $
  */
+@SuppressWarnings({"rawtypes"})
 public class TransSerializerMsgBean
 	implements MessageDrivenBean, MessageListener {
 

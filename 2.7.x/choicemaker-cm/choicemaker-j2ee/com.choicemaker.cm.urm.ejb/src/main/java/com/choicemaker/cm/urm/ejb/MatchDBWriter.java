@@ -31,6 +31,7 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  *
  * This object writes the de-dup match result file to the database.
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MatchDBWriter {
 	
 	private static final Logger log = Logger.getLogger(MatchDBWriter.class.getName());

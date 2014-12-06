@@ -42,6 +42,7 @@ import com.choicemaker.cm.urm.exceptions.UrmUnderspecifiedQueryException;
  * @version Revision: 2.5  Date: Jul 15, 2005 3:40:43 PM
  * @see
  */
+@SuppressWarnings({"rawtypes"})
 public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 	
 	private static final long serialVersionUID = 1L;

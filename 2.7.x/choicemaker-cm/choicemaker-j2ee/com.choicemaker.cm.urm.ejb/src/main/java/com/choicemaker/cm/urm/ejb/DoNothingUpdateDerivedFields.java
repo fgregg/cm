@@ -27,6 +27,7 @@ import com.choicemaker.cm.urm.exceptions.UrmIncompleteSpecificationException;
  * @author rphall
  * @version $Revision: 1.2 $ $Date: 2010/10/27 22:19:50 $
  */
+@SuppressWarnings({"rawtypes"})
 public class DoNothingUpdateDerivedFields extends AbstractUpdateDerivedFields {
 
 	private static final long serialVersionUID = 1L;

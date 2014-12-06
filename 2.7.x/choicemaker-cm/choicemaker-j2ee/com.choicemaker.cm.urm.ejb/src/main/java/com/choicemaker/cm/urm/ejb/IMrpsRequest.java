@@ -28,6 +28,7 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
  * the back-end processing of an MRPS job.
  * @see MrpsBackend
  */
+@SuppressWarnings({"rawtypes"})
 public interface IMrpsRequest extends Serializable, Cloneable {
 
 	public abstract MarkedRecordPairSink getMarkedRecordPairSink(EntityManager em)

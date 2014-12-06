@@ -29,6 +29,7 @@ import java.util.logging.Logger;
  * @author rphall
  * @version $Revision: 1.1 $ $Date: 2010/03/25 00:17:22 $
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MrpsRequestConfiguration implements IMrpsRequestConfiguration,
 		Cloneable {
 

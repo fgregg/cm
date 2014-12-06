@@ -5,6 +5,7 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings({"rawtypes"})
 public class MrpsRequestConfigurationTest extends TestCase {
 
 	private static String[] EXPECTED_PROPERTY_NAMES = new String[] {

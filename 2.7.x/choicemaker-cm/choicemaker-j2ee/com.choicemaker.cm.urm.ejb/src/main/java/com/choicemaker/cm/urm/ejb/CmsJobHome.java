@@ -20,6 +20,7 @@ import javax.ejb.FinderException;
 /**
  * Represents a ChoiceMaker serialization job
  */
+@SuppressWarnings({"rawtypes"})
 public interface CmsJobHome extends EJBHome {
 	String DEFAULT_EJB_REF_NAME = "ejb/UrmSerializationJob";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;

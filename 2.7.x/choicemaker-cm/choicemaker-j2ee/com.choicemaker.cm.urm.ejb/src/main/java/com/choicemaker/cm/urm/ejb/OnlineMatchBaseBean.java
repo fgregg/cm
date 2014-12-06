@@ -75,6 +75,7 @@ import com.choicemaker.util.StringUtils;
  * @version Revision: 2.5  Date: Sep 29, 2005 3:27:49 PM
  * @see
  */
+@SuppressWarnings({"rawtypes"})
 public class OnlineMatchBaseBean implements SessionBean {
 
 	private static final long serialVersionUID = 1L;

@@ -52,6 +52,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.result.MRPSCreator;
  * @version $Revision: 1.3 $ $Date: 2010/10/21 17:41:21 $
  * @author rphall
  */
+@SuppressWarnings({"rawtypes"})
 public class MrpsBackend implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;

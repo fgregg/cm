@@ -31,6 +31,7 @@ import com.choicemaker.util.StringUtils;
  * the back-end processing of an MRPS job.
  * @see MrpsBackend
  */
+@SuppressWarnings({"rawtypes"})
 public class MrpsRequest implements IMrpsRequest {
 
 	private static final long serialVersionUID = 1L;

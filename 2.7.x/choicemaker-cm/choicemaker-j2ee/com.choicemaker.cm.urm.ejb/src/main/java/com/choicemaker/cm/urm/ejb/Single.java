@@ -50,8 +50,8 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
 /**
  * @author emoussikaev
  * @version Revision: 2.5  Date: Aug 8, 2005 12:23:46 PM
- * @see
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Single implements Serializable {
 
 	private static final Logger log = Logger.getLogger(Single.class.getName());

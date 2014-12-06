@@ -45,6 +45,7 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * @version Revision: 2.5  Date: Jul 15, 2005 3:41:42 PM
  * @see
  */
+@SuppressWarnings({"rawtypes"})
 public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 
 	private static final long serialVersionUID = 1L;
