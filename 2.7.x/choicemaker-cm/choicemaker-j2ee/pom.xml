@@ -31,8 +31,9 @@
     <module>com.choicemaker.cm.transitivity.core</module>
     <module>com.choicemaker.cm.transitivity.server</module>
     <module>com.choicemaker.cm.urm</module>
-    <module>com.choicemaker.cm.urm.base</module>
     <module>com.choicemaker.cm.urm.adaptor</module>
+    <module>com.choicemaker.cm.urm.base</module>
+    <module>com.choicemaker.cm.urm.config</module>
     <module>com.choicemaker.cm.urm.ejb</module>
   </modules>
 
