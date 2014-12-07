@@ -1,0 +1,360 @@
+/*
+ * RecordMatcher.java       Revision: 2.5  Date: Jun 28, 2005 9:41:18 AM 
+ *
+ * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
+ * 48 Wall Street, 11th Floor, New York, NY 10005
+ * All rights reserved.
+ *
+ * This software is the confidential and proprietary information of
+ * ChoiceMaker Technologies Inc. ("Confidential Information").
+ */
+package com.choicemaker.cm.urm.cmcherel;
+
+import java.rmi.RemoteException;
+import java.util.Iterator;
+import java.util.Properties;
+
+import com.choicemaker.cm.urm.base.IRecordCollection;
+import com.choicemaker.cm.urm.base.RefRecordCollection;
+import com.choicemaker.cm.urm.exceptions.ArgumentException;
+import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
+import com.choicemaker.cm.urm.exceptions.ConfigException;
+import com.choicemaker.cm.urm.exceptions.ModelException;
+import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
+
+/**
+ * Allows a client application to match specified record collections and execute further match
+ * result transitivity analysis in a batch (asynchronous) mode.
+ * <p>
+ * The below example demonstrates how the <code>startMatchAndAnalysis</code> would be invoked within the client application. 
+ * <p>
+ * <pre>
+ * InitialContext initialContext = new InitialContext();
+ * Object queryHomeRef = initialContext.lookup("java:comp/env/ejb/BatchMatchAnalyzer");
+ * BatchMatchAnalyzerHome qsh = (BatchMatchAnalyzerHome)PortableRemoteObject.narrow(queryHomeRef, BatchMatchAnalyzerHome.class);
+ * BatchMatchAnalyzer qs = qsh.create();
+ * 					 
+ * TextRefRecordCollection qRc = new TextRefRecordCollection("file:///c:/data/queryData.xml", new XmlTextFormat());
+ *          
+ * DbRecordCollection mRc = new DbRecordCollection("services:jndi://java:/OABADS","cmt");
+ *          
+ *         					
+ * long l = qs.startMatchAndAnalysis(
+ *                                   qRc, 
+ *                                   mRc,
+ *					 			     confName, 
+ * 								     "Test tracking ID"); 
+ * 						
+ * System.out.println ("Match Anaysis Service created job with ID = " + l);				
+ * </pre>
+ * Method <code>startMatching</code> stars matching process and returns immediately with the 
+ * identifier of the started job. Using this identifier the client application can check the job status
+ * as it shown below.
+ * <pre>
+ * JobStatus st = qs.getJobStatus(l);	
+ * </pre>
+ * Once the job is completed the result file can be copied to the specified URL or can be traversed using the 
+ * iterator.
+ * <pre>
+ * </pre>		
+ * <p>
+ * The result consists of connected record sets. There three possible formats that defines the way the result will be serialized: XML, SORT_BY_HOLD_GROUP, SORT_BY_RECORD_ID. 
+ * For more details see the overview of the match result transitivity analysis in the API overview.
+ * 
+ * <p>
+ * 
+ *  
+ * @author emoussikaev
+ * @version Revision: 2.5  Date: Jun 28, 2005 2:40:13 PM
+ * @see
+ */
+public interface BatchMatchAnalyzer extends BatchBase {
+	
+
+	/**
+	 * As the first step starts record matchig process (the same as <code>startMatch</code> call). 
+	 * After this step is completed groips records into connected record sets based on the match/hold connections betweeen records.
+	 * For each connected record set it applies the same analysis as online getCompositeMatchCandidates method identifing
+	 * linked record sets.
+	 * The result is serialized into a file according the <code>serializationFormat</code> defined in the configuration.
+	 * <p> 
+	 * 
+	 * @param   qRc  		query record collection.
+	 * @param   mRc  		master record collection. 
+	 * @param	confName	the name of the configuration that stores the matching process parameters.
+	 * @param   trackinglId an arbitrary string that is stored and may be used for later reporting.
+	 * 
+	 * @return  Job ID of the matching job.
+	 * 
+	 * @throws RecordCollectionException
+	 * @throws ArgumentException
+	 * @throws ConfigException
+	 * @throws ModelException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+	long 	startMatchAndAnalysis(
+							IRecordCollection qRc, 
+							RefRecordCollection mRc,
+							String confName, 
+							String trackingId) 
+					throws
+							RecordCollectionException,
+							ArgumentException,
+							ConfigException,
+							ModelException,
+							CmRuntimeException, 
+							RemoteException;
+
+
+	/**
+	 * As the first step starts record matchig process (the same as <code>startMatch</code> call). 
+	 * After this step is completed groips records into connected record sets based on the match/hold connections betweeen records.
+	 * For each connected record set it applies the same analysis as online getCompositeMatchCandidates method identifing
+	 * linked record sets.
+	 * The result is serialized into a file according the <code>serializationFormat</code> defined in the named configuration.
+	 * <p> 
+	 *
+	 * @param  qRc  		query record collection.
+	 * @param  mRc  		master record collection. 
+	 * @param  confName	the name of the configuration that stores the matching process parameters.
+	 * @param  overrideProps set of matching process parameters that replace the parameters defined by the named configuration
+	 * @param  trackinglId an arbitrary string that is stored and may be used for later reporting.
+	 * 
+	 * @return  Job ID of the matching job.
+	 * 
+	 * @throws RecordCollectionException
+	 * @throws ArgumentException
+	 * @throws ConfigException
+	 * @throws ModelException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+	long 	startMatchAndAnalysis(
+							IRecordCollection qRc, 
+							RefRecordCollection mRc,
+							String confName, 
+							CmConfiguration overrideProps,
+							String trackingId) 
+					throws
+							RecordCollectionException,
+							ArgumentException,
+							ConfigException,
+							ModelException,
+							CmRuntimeException, 
+							RemoteException;
+
+
+	/**
+	 * As the first step starts record matchig process (the same as <code>startMatch</code> call). 
+	 * After this step is completed groips records into connected record sets based on the match/hold connections betweeen records.
+	 * For each connected record set it applies the same analysis as online getCompositeMatchCandidates method identifing
+	 * linked record sets.
+	 * The result is serialized into a file according the <code>serializationFormat</code> defined in the named configuration.
+	 * <p> 
+	 *
+	 * @param  qRc  		query record collection.
+	 * @param  mRc  		master record collection. 
+	 * @param  confName	the name of the configuration that stores the matching process parameters.
+	 * @param  overrideProps set of matching process parameters that replace the parameters defined by the named configuration
+	 * @param  trackinglId an arbitrary string that is stored and may be used for later reporting.
+	 * 
+	 * @return  Job ID of the matching job.
+	 * 
+	 * @throws RecordCollectionException
+	 * @throws ArgumentException
+	 * @throws ConfigException
+	 * @throws ModelException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+	long 	startMatchAndAnalysis(
+							IRecordCollection qRc, 
+							RefRecordCollection mRc,
+							RefRecordCollection resRc,
+							String confName, 
+							CmConfiguration overrideProps,
+							String trackingId) 
+					throws
+							RecordCollectionException,
+							ArgumentException,
+							ConfigException,
+							ModelException,
+							CmRuntimeException, 
+							RemoteException;
+	
+	/**
+	 * Works the same way as <code>startMatchAndAnalysis's</code> second step.  
+	 * The job with <code>jobId</code> should be completed otherwise his method throws an exception. 
+	 * The result is serialized into a file according the <code>serializationFormat</code> defined in the named configuration.
+	 * <p> 
+	 * 
+	 * @param jobId   the identifier of the job which result should be taken as input of the analysis process.
+     * @param	confName	the name of the configuration that stores the matching process parameters.   
+	 * @param trackingId an arbitrary string that is stored and may be used for later reporting.
+	 * 
+	 * @return long Job ID of the matching job.	 
+	 * 
+	 * @throws ModelException
+	 * @throws ConfigException
+	 * @throws ArgumentException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+	long 	startAnalysis(
+						long  jobId,
+						String confName, 
+						String trackingId) 
+					throws
+						ModelException, 	
+						ConfigException,
+						ArgumentException,
+						CmRuntimeException, 
+						RemoteException;
+						
+	/**
+	 * Works the same way as <code>startMatchAndAnalysis's</code> second step.  
+	 * The job with <code>jobId</code> should be completed otherwise his method throws an exception. 
+	 * The result is serialized into a file according the <code>serializationFormat</code> defined in the named configuration.
+	 * <p> 
+	 * 
+	 * @param jobId   the identifier of the job which result should be taken as input of the analysis process.
+	 * @param confName	the name of the configuration that stores the matching process parameters.  
+	 * @param  overrideProps set of matching process parameters that replace the parameters defined by the named configuration  
+	 * @param trackingId an arbitrary string that is stored and may be used for later reporting.
+	 * 
+	 * @return long Job ID of the matching job.	 
+	 * 
+	 * @throws ModelException
+	 * @throws ConfigException
+	 * @throws ArgumentException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+	long 	startAnalysis(
+						long  jobId,
+						String confName, 
+						CmConfiguration overrideProps,
+						String trackingId) 
+					throws
+						ModelException, 	
+						ConfigException,
+						ArgumentException,
+						CmRuntimeException, 
+						RemoteException;						
+
+	/**
+	 * Returns an iterator that allows to traverse the result
+	 * of the match analysis stored in a record collection <code>rc</code>.
+\	 * <p> 
+	 * Developers should be aware that URM API is a remote API and using iterators against the data
+	 * located on the remote computer might be very inefficient. The better performance can be archived by
+	 * copying the results first to a client application local computer and iterating then against the local data.
+	 * 
+	 * @param rc record collection with the data that will be traversed
+	 * @param props parameters that define the format of the data returned by the iterator  
+	 * 	 
+	 * @return iterator
+	 * 
+	 * @throws RecordCollectionException
+	 * @throws ArgumentException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+
+	Iterator	getResultIterator(
+						RefRecordCollection rc,
+						Properties props)
+					throws
+						RecordCollectionException,
+						ArgumentException,
+						CmRuntimeException, 
+						RemoteException;
+	/**
+	 * Returns an iterator that allows to traverse the result of the job with <code>jobId</code> identifier
+	 * started by <code>startMatchAndAnalysis</code> (or<code>startAnalysis</code>) method.
+	 * <p> 
+	 * Developers should be aware that URM API is a remote API and using iterators against the data
+	 * located on the remote computer might be very inefficient. The better performance can be archived by
+	 * copying the results first to a client application local computer and iterating then against the local data.
+	 * 
+	 * @param jobId job identifier
+	 * @param props parameters that define the format of the data returned by the iterator
+	 *  
+	 * @return iterator
+	 * 
+	 * @throws RecordCollectionException
+	 * @throws ArgumentException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+	Iterator	getResultIterator(
+						long jobId,
+						Properties props)
+					throws
+						RecordCollectionException,
+						ArgumentException,
+						CmRuntimeException, 
+						RemoteException;
+
+	/**
+	 * <code>Returns the list of all (started, completed, failed and aborted) match-and-analysys jobs. 
+	 * <p>
+	 * @return list of jobs
+	 * @throws ArgumentException
+	 * @throws ConfigException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+	long[] 		getMatchAndAnalysisJobList()
+							throws	ArgumentException,
+									ConfigException,
+									CmRuntimeException, 
+									RemoteException;
+
+	/**
+	 * <code>Returns the list of all (started, completed, failed and aborted) analysis jobs. 
+	 * <p>
+	* @return array of job IDs
+	 * @throws ArgumentException
+	 * @throws ConfigException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+	long[] 		getAnalysisJobList()
+							throws	ArgumentException,
+									ConfigException,
+									CmRuntimeException, 
+									RemoteException;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

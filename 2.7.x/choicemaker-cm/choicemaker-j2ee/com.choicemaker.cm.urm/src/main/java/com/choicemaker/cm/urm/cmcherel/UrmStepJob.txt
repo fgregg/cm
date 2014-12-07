@@ -1,0 +1,117 @@
+/*
+ * Created on Feb 20, 2004
+ *
+ * To change the template for this generated file go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ */
+package com.choicemaker.cm.urm.cmcherel;
+
+import java.rmi.RemoteException;
+import java.util.Date;
+
+import javax.ejb.EJBObject;
+
+public interface UrmStepJob extends EJBObject {
+
+//	static String STATUS_NEW = "NEW";
+//	static String STATUS_STARTED = "STARTED";
+//	static String STATUS_FAILED = "FAILED";
+//	static String STATUS_COMPLETED = "COMPLETED";
+//	static String STATUS_ABORT_REQUESTED = "ABORT_REQUESTED";
+//	static String STATUS_ABORTED = "ABORTED";
+
+	// CMP fields
+	/** For CMP only */
+	void setId(Long id) throws RemoteException;
+	Long getId() throws RemoteException;
+	/** For CMP only */
+	void setTransactionId(Long transactionId) throws RemoteException;
+	Long getTransactionId() throws RemoteException;	
+	/** For CMP only */
+	void setExternalId(String externalId) throws RemoteException;
+	String getExternalId() throws RemoteException;
+	/** For CMP only; */
+	void setStatus(String status) throws RemoteException;
+	String getStatus() throws RemoteException;
+
+	void setType(String type)throws RemoteException;
+	String getType()throws RemoteException;	
+		
+	void setDescription(String descr)throws RemoteException;
+	String getDescription()throws RemoteException;
+	
+	void setErrorDescription(String error)throws RemoteException;
+	String getErrorDescription()throws RemoteException;
+
+	void setStartDate(Date d)throws RemoteException;
+	Date getStartDate()throws RemoteException;
+
+	void setFinishDate(Date completed) throws RemoteException;
+	Date getFinishDate() throws RemoteException;
+
+	void setAbortRequestDate(Date abortRequested) throws RemoteException;
+	Date getAbortRequestDate() throws RemoteException;
+	
+	void setFractionComplete(int i) throws RemoteException;
+	int getFractionComplete() throws RemoteException;
+
+// Business methods
+
+	void markAsStarted() throws RemoteException;
+	void markAsCompleted() throws RemoteException;
+	void markAsFailed() throws RemoteException;
+	void markAsAbortRequested() throws RemoteException;
+	void markAsAborted() throws RemoteException;
+
+	boolean isAbortRequested() throws RemoteException;
+	
+	void updateStepInfo(int fractionComplete) throws RemoteException;
+	
+} // BatchJob
+
+/*
+ * $Log: UrmStepJob.java,v $
+ * Revision 1.1.2.1  2007/01/29 16:34:58  jdickinson
+ * Merge
+ *
+ * Revision 1.3  2006/10/02 15:37:52  pcheung
+ * merged with multiStepJob branch
+ *
+ * Revision 1.1.2.1.22.1  2006/08/18 18:06:28  emoussikaev
+ * multi step job framework
+ *
+ * Revision 1.1.2.2  2006/01/17 22:26:56  emoussikaev
+ * Abort, getStatus for analysis and MRPS conversion are added
+ *
+ * Revision 1.1.2.1  2006/01/06 21:02:26  emoussikaev
+ * urm workflow control is added
+ *
+ * Revision 1.1.2.2  2006/01/04 14:30:01  emoussikaev
+ * Full Transitivity Analysis and Serialization
+ *
+ * Revision 1.1.2.1  2005/12/29 22:32:31  emoussikaev
+ * working progress
+ *
+ * Revision 1.1  2005/12/14 17:39:50  emoussikaev
+ * transitivity analysis with result serialization is added
+ *
+ * Revision 1.3  2005/11/29 22:30:07  emoussikaev
+ * prepare for branch
+ *
+ * Revision 1.2  2005/10/31 15:22:26  emoussikaev
+ * DOH delivery 1/11
+ *
+ * Revision 1.1  2005/10/21 21:32:39  emoussikaev
+ * initial check in
+ *
+ * Revision 1.2  2005/05/06 16:15:56  emoussikaev
+ * initial check in
+ *
+ * Revision 1.1  2005/04/22 17:29:32  emoussikaev
+ * Initial check in
+ *
+ * Revision 1.1  2004/03/02 09:46:16  rphall
+ * Initial version: compiled, tested, debugged.
+ *
+ */
+

@@ -1,0 +1,89 @@
+/*
+ * Created on Feb 20, 2004
+ *
+ * To change the template for this generated file go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ */
+package com.choicemaker.cm.urm.cmcherel;
+
+import java.rmi.RemoteException;
+import java.util.Date;
+
+import javax.ejb.EJBObject;
+
+public interface UrmStepDescr extends EJBObject {
+
+	// CMP fields
+	void setId(Long id) throws RemoteException;
+	Long getId() throws RemoteException;
+	
+	void setStepIndex(Long stepIndex) throws RemoteException;
+	Long getStepIndex() throws RemoteException;	
+
+	void setStepJobId(Long stepJobId) throws RemoteException;
+	Long getStepJobId() throws RemoteException;	
+	
+	void setUrmJobId(Long urmJobId) throws RemoteException;
+	Long getUrmJobId() throws RemoteException;
+	
+	void 	setStepType(String stepType) throws RemoteException;
+	String 	getStepType() throws RemoteException;
+	
+	void setStepStartDate(Date d)throws RemoteException;
+	Date getStepStartDate()throws RemoteException;
+
+// Business methods
+
+
+	
+} // BatchJob
+
+/*
+ * $Log: UrmStepDescr.java,v $
+ * Revision 1.1.2.1  2007/01/29 16:34:58  jdickinson
+ * Merge
+ *
+ * Revision 1.2  2006/10/02 15:37:52  pcheung
+ * merged with multiStepJob branch
+ *
+ * Revision 1.1.2.1  2006/08/18 18:06:28  emoussikaev
+ * multi step job framework
+ *
+ * Revision 1.1.2.1  2006/01/17 22:26:56  emoussikaev
+ * Abort, getStatus for analysis and MRPS conversion are added
+ *
+ * Revision 1.1  2006/01/12 20:59:15  emoussikaev
+ * copyResult, status and abort are implemented
+ *
+ * Revision 1.2  2006/01/04 19:52:05  emoussikaev
+ * merge with Elmer Changes
+ *
+ * Revision 1.1.2.2  2006/01/04 14:30:01  emoussikaev
+ * Full Transitivity Analysis and Serialization
+ *
+ * Revision 1.1.2.1  2005/12/29 22:32:31  emoussikaev
+ * working progress
+ *
+ * Revision 1.1  2005/12/14 17:39:50  emoussikaev
+ * transitivity analysis with result serialization is added
+ *
+ * Revision 1.3  2005/11/29 22:30:07  emoussikaev
+ * prepare for branch
+ *
+ * Revision 1.2  2005/10/31 15:22:26  emoussikaev
+ * DOH delivery 1/11
+ *
+ * Revision 1.1  2005/10/21 21:32:39  emoussikaev
+ * initial check in
+ *
+ * Revision 1.2  2005/05/06 16:15:56  emoussikaev
+ * initial check in
+ *
+ * Revision 1.1  2005/04/22 17:29:32  emoussikaev
+ * Initial check in
+ *
+ * Revision 1.1  2004/03/02 09:46:16  rphall
+ * Initial version: compiled, tested, debugged.
+ *
+ */
+

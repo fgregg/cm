@@ -1,0 +1,128 @@
+/*
+ * Created on Dec 1, 2006
+ *
+ * To change the template for this generated file go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ */
+package com.choicemaker.cm.urm.cmcherel;
+
+import java.rmi.RemoteException;
+
+import javax.ejb.EJBObject;
+
+import com.choicemaker.cm.urm.base.EvaluatedRecord;
+import com.choicemaker.cm.urm.base.EvaluatedRecordPair;
+import com.choicemaker.cm.urm.base.ISingleRecord;
+import com.choicemaker.cm.urm.base.MatchScore;
+import com.choicemaker.cm.urm.exceptions.ArgumentException;
+import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
+import com.choicemaker.cm.urm.exceptions.ConfigException;
+import com.choicemaker.cm.urm.exceptions.RecordException;
+
+/**
+ * Allows a client application to archive matched records and decisions to a ChoiceMaker report facility.   
+ * 
+ *
+ * @author emoussikaev
+ * @version Revision: 2.5  Date: Nov 1, 2005 2:18:24 PM
+ * @see
+ */
+
+public interface Archivarius extends EJBObject {
+
+	/**
+	 * Archives a pair of <code>queryRecord,masterRecord</code> together with the decision from <code>matchScore</code>
+	 * <p>  
+	 * @param queryRecord query record of the matched pair
+	 * @param masterRecord master record of the matched pair
+	 * @param matchScore matched score that contains the decision and probabilility   
+	 * @param configurationName name of the configuration that was used to mactch records
+	 * @param overrideProps override properties that were used to mactch records
+	 * @param externalIdentifier in identifier for the tracking purposes 
+	 * 
+	 * @throws ArgumentException
+	 * @throws RecordException
+	 * @throws ConfigException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+	void writeDecision(
+		ISingleRecord queryRecord,
+		ISingleRecord masterRecord,
+		MatchScore matchScore,
+		String configurationName,
+		CmConfiguration overrideProps,
+		String externalIdentifier)
+		throws
+			ArgumentException,
+			RecordException,
+			ConfigException,
+			CmRuntimeException,
+			RemoteException;
+	/**
+	 * Archives pairs of <code>queryRecord,record</code> for each <code>record</code> from <code>evaluatedRecords</code> array.
+	 * The correspondednt decisions and probabilities are taken from <code>evaluatedRecords</code>.
+	 * <p>  
+	 * @param queryRecord query record of the matched pairs
+	 * @param evaluatedRecords an array that provides master records of the matched pairs and the match scores   
+	 * @param configurationName name of the configuration that was used to mactch records
+	 * @param overrideProps override properties that were used to mactch records
+	 * @param externalIdentifier in identifier for the tracking purposes 
+	 * 
+	 * @throws ArgumentException
+	 * @throws RecordException
+	 * @throws ConfigException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+
+	void writeDecisions(
+		ISingleRecord queryRecord,
+		EvaluatedRecord[] evaluatedRecords,
+		String configurationName,
+		CmConfiguration overrideProps,
+		String externalIdentifier)
+		throws
+			ArgumentException,
+			RecordException,
+			ConfigException,
+			CmRuntimeException,
+			RemoteException;
+	/**
+	 * Archives record pairs and decisions from the <code>evaluatedPairs</code> array.
+	 * <p>  
+	 * @param evaluatedPairs an array of the matched pairs and the decisions.   
+	 * @param configurationName name of the configuration that was used to mactch records
+	 * @param overrideProps override properties that were used to mactch records
+	 * @param externalIdentifier in identifier for the tracking purposes 
+	 * 
+	 * @throws ArgumentException
+	 * @throws RecordException
+	 * @throws ConfigException
+	 * @throws CmRuntimeException
+	 * @throws RemoteException
+	 */
+
+	void writeDecisions(
+		EvaluatedRecordPair[] evaluatedPairs,
+		String configurationName,
+		CmConfiguration overrideProps,
+		String externalIdentifier)
+		throws
+			ArgumentException,
+			RecordException,
+			ConfigException,
+			CmRuntimeException,
+			RemoteException;
+	/**
+	 * Returns the version of the interface implementation.
+	 * <p> 
+	 * 
+	 * @param context reserved
+	 * @return version
+	 * @throws RemoteException
+	 */
+	String getVersion(Object context) throws RemoteException;
+			
+			
+}

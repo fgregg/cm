@@ -1,0 +1,17 @@
+/*
+ * Created on Jan 26, 2007
+ */
+package com.choicemaker.cm.urm.cmcherel;
+
+import java.rmi.RemoteException;
+
+import javax.ejb.EJBObject;
+
+/**
+ * @author jdickinson
+ */
+public interface CmServerUtils extends EJBObject {
+
+	public void resetQueue() throws RemoteException;
+
+}
