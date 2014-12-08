@@ -1,12 +1,12 @@
 /*
- * RecordMatcher.java       Revision: 2.5  Date: Jun 28, 2005 9:41:18 AM 
- *
- * Copyright (c) 2001 ChoiceMaker Technologies, Inc.
- * 48 Wall Street, 11th Floor, New York, NY 10005
- * All rights reserved.
- *
- * This software is the confidential and proprietary information of
- * ChoiceMaker Technologies Inc. ("Confidential Information").
+ * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License
+ * v1.0 which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
 package com.choicemaker.cm.urm.cmcherel;
 
@@ -15,9 +15,12 @@ import java.rmi.RemoteException;
 import javax.ejb.EJBObject;
 
 import com.choicemaker.cm.urm.base.JobStatus;
+import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
+import com.choicemaker.cm.urm.exceptions.ModelException;
+import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 
 /**
  * 
@@ -71,8 +74,12 @@ public interface BatchBase extends EJBObject {
 	 * @throws CmRuntimeException
 	 * @throws RemoteException
 	 */
-	public boolean resumeJob(long jobID) throws ArgumentException,
-			ConfigException, CmRuntimeException, RemoteException;
+	public boolean resumeJob(long jobID)
+	// throws ArgumentException,
+	// ConfigException,
+	// CmRuntimeException,
+	// RemoteException
+	;
 
 	/**
 	 * Cleans serialized data related to the give job ID (including the file
