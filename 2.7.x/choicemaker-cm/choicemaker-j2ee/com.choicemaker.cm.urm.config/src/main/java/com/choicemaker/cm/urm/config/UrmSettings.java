@@ -9,13 +9,13 @@ import java.io.Serializable;
 /**
  * @author emoussikaev
  */
-public interface ICmConfiguration extends Serializable {
+public interface UrmSettings extends Serializable {
 
 	AnalysisResultFormat getAnalysisResultFormat();
 
 	Float getDifferThreshold();
 
-	GraphProperty getGraphPropType();
+	IGraphProperty getGraphPropType();
 
 	Integer getLimitPerBlockingSet();
 
@@ -43,7 +43,7 @@ public interface ICmConfiguration extends Serializable {
 
 	void setDifferThreshold(Float float1);
 
-	void setGraphPropType(GraphProperty property);
+	void setGraphPropType(IGraphProperty property);
 
 	void setLimitPerBlockingSet(Integer integer);
 

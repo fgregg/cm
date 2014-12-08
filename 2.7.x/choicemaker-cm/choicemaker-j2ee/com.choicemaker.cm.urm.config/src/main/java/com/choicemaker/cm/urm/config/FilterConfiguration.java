@@ -14,6 +14,7 @@ public class FilterConfiguration implements IFilterConfiguration {
 
 	static final long serialVersionUID = 271L;
 
+	@SuppressWarnings("rawtypes")
 	protected Hashtable props = new Hashtable();
 
 	/**
@@ -94,9 +95,11 @@ public class FilterConfiguration implements IFilterConfiguration {
 	public FilterConfiguration() {
 	}
 
+	@SuppressWarnings("rawtypes")
 	public FilterConfiguration(FilterConfiguration cmConf1) {
-		if (cmConf1 != null)
+		if (cmConf1 != null) {
 			this.props = (Hashtable) cmConf1.props.clone();
+		}
 	}
 
 	public Integer getBatchSize() {
@@ -135,38 +138,47 @@ public class FilterConfiguration implements IFilterConfiguration {
 		return (Boolean) props.get(PN_USE_DEFAULT_PAIR_SAMPLER);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setBatchSize(Integer integer) {
 		props.put(PN_BATCH_SIZE, integer);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setDefaultPrefilterFromPercentage(Float integer) {
 		props.put(PN_DEFAULT_PREFILTER_FROM_PERCENTAGE, integer);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setDefaultPrefilterToPercentage(Float integer) {
 		props.put(PN_DEFAULT_PREFILTER_TO_PERCENTAGE, integer);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setDefaultPostfilterFromPercentage(Float integer) {
 		props.put(PN_DEFAULT_POSTFILTER_FROM_PERCENTAGE, integer);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setDefaultPostfilterToPercentage(Float integer) {
 		props.put(PN_DEFAULT_POSTFILTER_TO_PERCENTAGE, integer);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setDefaultPairSamplerSize(Integer integer) {
 		props.put(PN_DEFAULT_PAIR_SAMPLER_SIZE, integer);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setUseDefaultPrefilter(Boolean boolean1) {
 		props.put(PN_USE_DEFAULT_PREFILTER, boolean1);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setUseDefaultPostfilter(Boolean boolean1) {
 		props.put(PN_USE_DEFAULT_POSTFILTER, boolean1);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setUseDefaultPairSampler(Boolean boolean1) {
 		props.put(PN_USE_DEFAULT_PAIR_SAMPLER, boolean1);
 	}

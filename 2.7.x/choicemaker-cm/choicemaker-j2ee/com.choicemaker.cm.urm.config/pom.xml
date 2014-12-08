@@ -24,6 +24,14 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+      
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
@@ -112,6 +120,7 @@
   </build>
 
   <dependencies>
+    <!--
     <dependency>
       <groupId>com.choicemaker.e2</groupId>
       <artifactId>com.choicemaker.e2</artifactId>
@@ -124,6 +133,7 @@
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.jdom</artifactId>
     </dependency>
+    -->
   </dependencies>
 
 </project>

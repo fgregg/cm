@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.urm.config;
 
-import java.io.ObjectStreamException;
 
 /**
  * A type that defines how the result of the batch analysis will be organized
@@ -27,100 +26,38 @@ import java.io.ObjectStreamException;
  * @author emoussikaev
  * @version Revision: 2.5 Date: Nov 1, 2005 12:00:14 PM
  */
-public class AnalysisResultFormat implements java.io.Serializable {
+public enum AnalysisResultFormat {
 
-	private static final long serialVersionUID = 271L;
+	// These file extensions must be kept synchronized with
+	// com.choicemaker.cm.transitivity.core.TransitivitySortType
+	// (Do not import TransitivitySortType, to keep this module independent
+	// of the transitivity core module.)
+	XML("xml"), SORT_BY_HOLD_GROUP("H3L"), SORT_BY_RECORD_ID("R3L");
 
-	private String value;
+	private final String fileExtension;
+	private final String displayName;
 
-	/**
-	 * Constructs a <code>ClrFormatType</code>
-	 * <p>
-	 * 
-	 * @param value
-	 */
-	public AnalysisResultFormat(String value) {
-		super();
-		this.value = value;
+	AnalysisResultFormat(String ext) {
+		this(ext, null);
 	}
 
-	public static final AnalysisResultFormat XML = new AnalysisResultFormat(
-			"XML");
-	public static final AnalysisResultFormat SORT_BY_HOLD_GROUP =
-		new AnalysisResultFormat("SORT_BY_HOLD_GROUP"); // pre-order (prefix
-														// traversal) a node is
-														// visited before
-														// children
-	public static final AnalysisResultFormat SORT_BY_RECORD_ID =
-		new AnalysisResultFormat("SORT_BY_RECORD_ID");// post-order (postfix
-														// traversal) a node is
-														// visited after
-														// children
+	AnalysisResultFormat(String ext, String ds) {
+		assert ext != null && ext.equals(ext.trim()) && !ext.isEmpty() ;
+		assert ds == null || (ds.equals(ds.trim()) && !ds.isEmpty()) ;
+		this.fileExtension = ext;
+		this.displayName = ds;
+	}
 
 	public String toString() {
-		return value;
+		return name();
 	}
 
 	public String getFileExtension() {
-		if (this.equals(XML)) {
-			return "XML";
-		} else if (this.equals(SORT_BY_HOLD_GROUP)) {
-			return "H3L";
-		} else if (this.equals(SORT_BY_RECORD_ID)) {
-			return "R3L";
-		} else {
-			return "unknown";
-		}
+		return fileExtension;
 	}
 
 	public String getDisplayName() {
-		if (this.equals(XML)) {
-			return "XML";
-		} else if (this.equals(SORT_BY_HOLD_GROUP)) {
-			return "SORT_BY_HOLD_GROUP";
-		} else if (this.equals(SORT_BY_RECORD_ID)) {
-			return "SORT_BY_RECORD_ID";
-		} else {
-			return "unknown";
-		}
-	}
-
-	public static AnalysisResultFormat valueOf(String name) {
-		name = name.intern();
-		if (XML.value.equals(name)) {
-			return XML;
-		} else if (SORT_BY_HOLD_GROUP.value.equals(name)) {
-			return SORT_BY_HOLD_GROUP;
-		} else if (SORT_BY_RECORD_ID.value.equals(name)) {
-			return SORT_BY_RECORD_ID;
-		} else {
-			throw new IllegalArgumentException(name
-					+ " is not a valid AnalysisResultFormat.");
-		}
-	}
-
-	private static int nextOrdinal = 0;
-	private final int ordinal = nextOrdinal++;
-	private static final AnalysisResultFormat[] VALUES = {
-			XML, SORT_BY_HOLD_GROUP, SORT_BY_RECORD_ID };
-
-	Object readResolve() throws ObjectStreamException {
-		return VALUES[ordinal];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	public boolean equals(Object obj) {
-		boolean retVal = false;
-		if (obj != null && obj instanceof AnalysisResultFormat) {
-			AnalysisResultFormat arf1 = this;
-			AnalysisResultFormat arf2 = (AnalysisResultFormat) obj;
-			retVal = arf1.value.equals(arf2.value);
-		}
-		return retVal;
+		return displayName == null ? name() : displayName;
 	}
 
 }

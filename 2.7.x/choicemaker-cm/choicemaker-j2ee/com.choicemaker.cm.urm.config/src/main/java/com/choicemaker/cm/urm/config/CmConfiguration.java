@@ -10,7 +10,7 @@ import java.util.Hashtable;
  * @author emoussikaev
  *
  */
-public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
+public class CmConfiguration implements UrmSettings, UrmSettings2 {
 
 	static final long serialVersionUID = 271L;
 
@@ -33,14 +33,17 @@ public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
 
 	protected static final String PN_IS_STAGING_TO_MASTER = "isStagingToMaster";
 
+	@SuppressWarnings("rawtypes")
 	protected Hashtable props = new Hashtable();
 
 	public CmConfiguration() {
 	}
 
+	@SuppressWarnings("rawtypes")
 	public CmConfiguration(CmConfiguration cmConf1) {
-		if (cmConf1 != null)
+		if (cmConf1 != null) {
 			this.props = (Hashtable) cmConf1.props.clone();
+		}
 	}
 
 	public Integer getMaxSingle() {
@@ -67,42 +70,50 @@ public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
 		return (Float) props.get(PN_DIFFER_THRESHOLD);
 	}
 
-	public GraphProperty getGraphPropType() {
-		return (GraphProperty) props.get(PN_GRAPH_PROP_TYPE);
+	public IGraphProperty getGraphPropType() {
+		return (IGraphProperty) props.get(PN_GRAPH_PROP_TYPE);
 	}
 
 	public Float getMatchThreshold() {
 		return (Float) props.get(PN_MATCH_THRESHOLD);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setMaxSingle(Integer integer) {
 		props.put(PN_MAX_SINGLE, integer);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setModelName(String string) {
 		props.put(PN_MODEL_NAME, string);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setMustIncludeQuery(Boolean boolean1) {
 		props.put(PN_MUST_INCLUDE_QUERY, boolean1);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setRecordType(RecordType type) {
 		props.put(PN_RECORD_TYPE, type);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setScoreType(ScoreType type) {
 		props.put(PN_SCORE_TYPE, type);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setDifferThreshold(Float float1) {
 		props.put(PN_DIFFER_THRESHOLD, float1);
 	}
 
-	public void setGraphPropType(GraphProperty property) {
+	@SuppressWarnings("unchecked")
+	public void setGraphPropType(IGraphProperty property) {
 		props.put(PN_GRAPH_PROP_TYPE, property);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setMatchThreshold(Float float1) {
 		props.put(PN_MATCH_THRESHOLD, float1);
 	}
@@ -111,6 +122,7 @@ public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
 		return (AnalysisResultFormat) props.get(PN_ANALYSIS_RESULT_FORMAT);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setAnalysisResultFormat(AnalysisResultFormat format) {
 		props.put(PN_ANALYSIS_RESULT_FORMAT, format);
 	}
@@ -119,6 +131,7 @@ public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
 		return (Integer) props.get(PN_MAX_NUM_MATCHES);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setMaxNumMatches(Integer integer) {
 		props.put(PN_MAX_NUM_MATCHES, integer);
 	}
@@ -127,6 +140,7 @@ public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
 		return (Integer) props.get(PN_LIMIT_PER_BLOCKING_SET);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setLimitPerBlockingSet(Integer integer) {
 		props.put(PN_LIMIT_PER_BLOCKING_SET, integer);
 	}
@@ -135,6 +149,7 @@ public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
 		return (Integer) props.get(PN_MAX_BLOCK_SIZE);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setMaxBlockSize(Integer integer) {
 		props.put(PN_MAX_BLOCK_SIZE, integer);
 	}
@@ -143,6 +158,7 @@ public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
 		return (Integer) props.get(PN_MAX_OVERSIZED);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setMaxOversized(Integer integer) {
 		props.put(PN_MAX_OVERSIZED, integer);
 	}
@@ -151,6 +167,7 @@ public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
 		return (Integer) props.get(PN_MIN_FIELDS);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setMinFields(Integer integer) {
 		props.put(PN_MIN_FIELDS, integer);
 	}
@@ -204,6 +221,7 @@ public class CmConfiguration implements ICmConfiguration, ICmConfiguration2 {
 	 * @param boolean1
 	 *            true to set staging-to-master matching.
 	 */
+	@SuppressWarnings("unchecked")
 	public void setStagingToMasterMatching(Boolean boolean1) {
 		if (boolean1 == null) {
 			boolean1 = Boolean.TRUE;

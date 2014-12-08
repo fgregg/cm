@@ -11,14 +11,14 @@
 package com.choicemaker.cm.urm.config;
 
 /**
- * Extends the ICmConfiguration interface to add new properties. Ideally, the
- * ICmConfiguration interface would be broken up into functional subgroups:
+ * Extends the UrmSettings interface to add new properties. Ideally, the
+ * UrmSettings interface would be broken up into functional subgroups:
  * pair-wise matching, group-wise matching (a.k.a. transitivity analysis),
  * realtime matching, offline matching and so on.
  * 
  * @author rphall
  */
-public interface ICmConfiguration2 extends ICmConfiguration {
+public interface UrmSettings2 extends UrmSettings {
 
 	/**
 	 * Returns whether offline matching is actually linkage of two master
