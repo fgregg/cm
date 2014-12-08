@@ -28,6 +28,7 @@ import com.choicemaker.cm.io.blocking.automated.AbaSettings;
  */
 public interface OabaSettings extends AbaSettings {
 
+	int DEFAULT_MAX_SINGLE = 0;
 	int DEFAULT_MAX_BLOCKSIZE = 100;
 	int DEFAULT_MAX_CHUNKSIZE = 100000;
 	int DEFAULT_MAX_OVERSIZED = 1000;
