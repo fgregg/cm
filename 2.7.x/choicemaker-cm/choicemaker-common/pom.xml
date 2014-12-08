@@ -23,6 +23,7 @@
   </description>
 
   <modules>
+    <module>com.choicemaker.cm.args</module>
     <module>com.choicemaker.cm.core</module>
     <module>com.choicemaker.cm.analyzer.base</module>
     <module>com.choicemaker.cm.io.blocking.automated.base</module>
