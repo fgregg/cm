@@ -10,11 +10,8 @@
  */
 package com.choicemaker.cm.args;
 
-import java.io.Serializable;
-
 /**
- * @author pcheung
- *
+ * @author rphall
  */
 public interface OabaParameters {
 
@@ -24,7 +21,7 @@ public interface OabaParameters {
 	long getId();
 
 	String getModelConfigurationName();
-	
+
 	OabaJobType getOabaJobType();
 
 	String getStageModel();
@@ -35,10 +32,8 @@ public interface OabaParameters {
 
 	float getHighThreshold();
 
-	/** Returns a <code>SerializableRecordSource</code> for staging records */
-	Serializable getStageRs();
+	PersistableRecordSource getStageRs();
 
-	/** Returns a <code>SerializableRecordSource</code> for master records */
-	Serializable getMasterRs();
-	
+	PersistableRecordSource getMasterRs();
+
 }
