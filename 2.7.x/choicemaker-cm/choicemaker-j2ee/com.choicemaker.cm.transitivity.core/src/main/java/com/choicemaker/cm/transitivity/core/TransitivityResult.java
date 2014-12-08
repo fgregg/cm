@@ -20,6 +20,7 @@ import java.util.Iterator;
  *
  * ChoiceMaker Technologies Inc.
  */
+@SuppressWarnings("rawtypes")
 public class TransitivityResult {
 
 	/**	

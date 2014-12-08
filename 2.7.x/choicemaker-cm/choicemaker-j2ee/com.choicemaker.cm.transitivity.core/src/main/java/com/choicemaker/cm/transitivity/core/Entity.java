@@ -20,6 +20,7 @@ import java.util.List;
  *
  * ChoiceMaker Technologies Inc.
  */
+@SuppressWarnings({"rawtypes", "unchecked" })
 public class Entity implements INode {
 	
 	private Integer marking;

@@ -33,6 +33,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityException;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class GraphAnalyzer {
 	
 	private CompositeEntity graph;

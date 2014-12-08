@@ -30,6 +30,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityException;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class CEFromLinksBuilder {
 
 	/* Map of Node ID to CompositeEntity.  

@@ -23,6 +23,7 @@ import java.util.Set;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({"rawtypes", "unchecked" })
 public class SimpleConnectedProperty implements SubGraphProperty {
 
 	/* (non-Javadoc)

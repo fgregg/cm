@@ -32,6 +32,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityException;
  * @author pcheung
  *
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class CompositeEntityBuilder {
 
 	/* Map of record ID to CompositeEntity.  

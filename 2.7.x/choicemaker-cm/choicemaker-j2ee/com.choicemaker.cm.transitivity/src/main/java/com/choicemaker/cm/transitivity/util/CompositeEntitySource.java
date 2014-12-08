@@ -27,6 +27,7 @@ import com.choicemaker.cm.transitivity.core.CompositeEntity;
  * @author pcheung
  *
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class CompositeEntitySource implements ISource{
 
 	private IMatchRecord2Source source;

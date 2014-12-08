@@ -23,6 +23,7 @@ import java.util.logging.Logger;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({"rawtypes", "unchecked" })
 public class BiConnectedProperty implements SubGraphProperty {
 
 	private static final Logger log = Logger.getLogger(BiConnectedProperty.class.getName());

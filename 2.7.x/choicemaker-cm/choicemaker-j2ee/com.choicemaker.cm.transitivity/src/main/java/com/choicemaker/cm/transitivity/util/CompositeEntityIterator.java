@@ -21,6 +21,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
+@SuppressWarnings({ "rawtypes" })
 public class CompositeEntityIterator implements Iterator {
 	
 	private static final Logger log = Logger.getLogger(CompositeEntityIterator.class.getName());

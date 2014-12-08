@@ -15,6 +15,7 @@ package com.choicemaker.cm.transitivity.util;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class RecordID implements Comparable {
 	
 	public Comparable recordId;

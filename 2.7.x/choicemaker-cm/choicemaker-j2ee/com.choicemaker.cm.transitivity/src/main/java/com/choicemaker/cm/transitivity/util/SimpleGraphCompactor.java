@@ -29,6 +29,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityException;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class SimpleGraphCompactor implements GraphCompactor {
 	
 	//this is a map of marking to compacted nodes

@@ -22,6 +22,7 @@ import java.util.TreeSet;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({"rawtypes", "unchecked" })
 public class ConnectedProperty implements SubGraphProperty {
 	
 

@@ -30,6 +30,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityException;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class CEFromMatchCandidatesBuilder extends CEFromMatchesBuilder{
 
 	private static Logger logger = Logger.getLogger(CEFromMatchCandidatesBuilder.class.getName());

@@ -19,6 +19,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({"rawtypes" })
 public class MatchHoldEdgeProperty implements EdgeProperty {
 	
 	private static MatchHoldEdgeProperty property;

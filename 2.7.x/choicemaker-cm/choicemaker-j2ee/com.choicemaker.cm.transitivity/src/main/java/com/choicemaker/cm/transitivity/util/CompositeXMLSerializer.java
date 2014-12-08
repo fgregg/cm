@@ -12,102 +12,120 @@ package com.choicemaker.cm.transitivity.util;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Iterator;
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
+import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerializer;
 
 /**
- * This is an enhanced version of XMLSerializer.  It splits the output into several 
- * files each smaller than the given parameter.
+ * This is an enhanced version of XMLSerializer. It splits the output into
+ * several files each smaller than the given parameter.
  * 
  * @author pcheung
  *
  */
-public class CompositeXMLSerializer extends XMLSerializer {
+@SuppressWarnings({ "rawtypes" })
+public class CompositeXMLSerializer extends XMLSerializer implements
+		TransitivityResultCompositeSerializer {
+	
+	private static final long serialVersionUID = 271L;
 
-	private static final Logger log = Logger.getLogger(CompositeXMLSerializer.class.getName());
+	public static final String DEFAULT_FILE_EXTENSION = "xml";
 
-	//This defines how often to check the file size.
+	/** Defines the output file size is checked */
 	private static final int INTERVAL = 2000;
-	
 
-	//This counts the number of files.
+	/** The one-based index of the current output file */
 	private int currentFile;
-	
-	//This is the maximum size a file can have.
-	private int maxFileSize;
-	
-	private String fileBase;
-	private String fileExt;
 
+	/** An extension appended to the base name of the output file */
+	private final String fileExt;
 
-	/** This constructor takes these parameters:
-	 * 
-	 * @param tr - Transitivity Result that has the graphs
-	 * @param fileBase - base name for the output files
-	 * @param fileExt - extension for the output files
-	 * @param maxFileSize - the maximum size of each file.
+	public CompositeXMLSerializer() {
+		this(DEFAULT_FILE_EXTENSION);
+	}
+	
+	/**
+	 * @param fileExt
+	 *            - extension for the output files
 	 */
-	public CompositeXMLSerializer (TransitivityResult tr, String fileBase, 
-		String fileExt, int maxFileSize) {
-			
-		currentFile = 1;
-		
-		this.result = tr;
-		this.maxFileSize = maxFileSize;
-		this.fileExt = fileExt;
-		this.fileBase = fileBase;
-
-		try {
-			writer = new FileWriter (
-				FileUtils.getFileName(fileBase, fileExt, currentFile), false);
-		} catch (IOException e) {
-			log.severe(e.toString());
+	public CompositeXMLSerializer(String fileExt) {
+		if (fileExt == null || !fileExt.equals(fileExt.trim())
+				|| fileExt.isEmpty()) {
+			String msg = "Invalid file extension: '" + fileExt + "'";
+			throw new IllegalArgumentException(msg);
 		}
+		currentFile = 1;
+		this.fileExt = fileExt;
 	}
 
-
-	/** This method serializes the result to the writer.
+	/**
+	 * Serializes a transitivity result to a writer
 	 * 
-	 *
+	 * @param result
+	 *            a non-null transitivity result
+	 * @param fileBase
+	 *            The name stem of an output file, excluding any index,
+	 *            extension or qualifying path
+	 * @param maxFileSize
+	 *            the approximate maximum number of records in an output file
+	 * @throws IOException
 	 */
-	public void serialize () throws IOException {
-		writeHeader ();
-		
+	public void serialize(TransitivityResult result, String fileBase,
+			int maxFileSize) throws IOException {
+		if (result == null) {
+			throw new IllegalArgumentException("null transivity result");
+		}
+		if (fileBase == null || !fileBase.equals(fileBase.trim())
+				|| fileBase.isEmpty()) {
+			String msg = "Invalid file name stem: '" + fileBase + "'";
+			throw new IllegalArgumentException(msg);
+		}
+		if (maxFileSize < 1) {
+			String msg = "Invalid max file size: " + maxFileSize;
+			throw new IllegalArgumentException(msg);
+		}
+
+		Writer writer =
+			new FileWriter(
+					FileUtils.getFileName(fileBase, fileExt, currentFile),
+					false);
+
+		writeHeader(result, writer);
+
 		int count = 0;
-		
 		Iterator it = result.getNodes();
 		while (it.hasNext()) {
-			StringBuffer sb = new StringBuffer ();
-			
+			StringBuffer sb = new StringBuffer();
+
 			CompositeEntity ce = (CompositeEntity) it.next();
 
-			sb.append(writeCompositeEntity (ce));
+			sb.append(writeCompositeEntity(ce, writer));
 			sb.append(NEW_LINE);
 			writer.write(sb.toString());
-			
-			count ++;
+
+			count++;
 			if (count % INTERVAL == 0) {
 				writer.flush();
-				if (FileUtils.isFull(fileBase, fileExt, currentFile, maxFileSize)) {
-					writeFooter();
+				if (FileUtils.isFull(fileBase, fileExt, currentFile,
+						maxFileSize)) {
+					writeFooter(writer);
 					writer.close();
-					
-					currentFile ++;
-					writer = new FileWriter (
-						FileUtils.getFileName(fileBase, fileExt, currentFile), false);
-					writeHeader ();
+
+					currentFile++;
+					writer =
+						new FileWriter(FileUtils.getFileName(fileBase, fileExt,
+								currentFile), false);
+					writeHeader(result, writer);
 				}
 			}
 		}
-		
-		writeFooter ();
 
+		writeFooter(writer);
 		writer.flush();
 		writer.close();
 	}
-
 
 }

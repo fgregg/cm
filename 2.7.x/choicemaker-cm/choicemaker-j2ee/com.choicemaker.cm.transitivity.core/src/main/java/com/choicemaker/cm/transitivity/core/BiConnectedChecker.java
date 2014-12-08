@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  *
  * ChoiceMaker Technologies Inc.
  */
+@SuppressWarnings({"rawtypes", "unchecked" })
 public class BiConnectedChecker {
 	
 	private static final Logger log = Logger.getLogger(BiConnectedChecker.class.getName());

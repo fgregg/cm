@@ -26,6 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  *
  * ChoiceMaker Technologies Inc.
  */
+@SuppressWarnings({"rawtypes", "unchecked" })
 public class CompositeEntity implements INode {
 	
 	private Integer marking;

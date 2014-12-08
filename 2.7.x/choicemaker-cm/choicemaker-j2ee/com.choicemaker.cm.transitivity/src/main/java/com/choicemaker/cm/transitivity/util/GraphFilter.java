@@ -25,6 +25,7 @@ import com.choicemaker.cm.transitivity.core.Link;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({ "rawtypes" })
 public class GraphFilter {
 
 	private static GraphFilter filter = null;

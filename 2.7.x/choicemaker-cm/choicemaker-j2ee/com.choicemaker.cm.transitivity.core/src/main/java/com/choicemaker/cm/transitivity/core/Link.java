@@ -19,6 +19,7 @@ import java.util.ArrayList;
  *
  * ChoiceMaker Technologies Inc.
  */
+@SuppressWarnings({"rawtypes" })
 public class Link {
 
 	private INode node1;

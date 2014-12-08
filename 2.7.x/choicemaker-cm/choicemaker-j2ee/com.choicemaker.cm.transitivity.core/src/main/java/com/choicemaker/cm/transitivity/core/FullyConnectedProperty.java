@@ -20,6 +20,7 @@ import java.util.List;
  *
  * ChoiceMaker Technologies, Inc.
  */
+@SuppressWarnings({"rawtypes" })
 public class FullyConnectedProperty implements SubGraphProperty {
 
 	/* (non-Javadoc)
