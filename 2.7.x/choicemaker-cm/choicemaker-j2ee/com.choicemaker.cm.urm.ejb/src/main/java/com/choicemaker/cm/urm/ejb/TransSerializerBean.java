@@ -98,14 +98,14 @@ public class TransSerializerBean implements SessionBean {
 		log.fine("<<startSerialization");
 		CmsJob oj = Single.getInst().createCmsJob(externalId, transactionId);
 		oj.markAsStarted();
-		TransSerializeData tsd = new TransSerializeData();
-		tsd.ownId = oj.getId().longValue();
-		tsd.batchId = batchJobId;
-		tsd.transId = transactionId;
-		tsd.externalId = externalId;
-		tsd.groupMatchType = groupMatchType;
-		tsd.serializationType = serializationType; 
-		
+		TransSerializeData tsd = new TransSerializeData(
+				externalId,
+				transactionId,
+				batchJobId,
+				oj.getId().longValue(),
+				groupMatchType,
+				serializationType
+				);
 		sendToSerializer(tsd);
 		log.fine (">>startSerialization");
 		return tsd.ownId;		

@@ -28,12 +28,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
-import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.base.TextRefRecordCollection;
+import com.choicemaker.cm.urm.config.AnalysisResultFormat;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
