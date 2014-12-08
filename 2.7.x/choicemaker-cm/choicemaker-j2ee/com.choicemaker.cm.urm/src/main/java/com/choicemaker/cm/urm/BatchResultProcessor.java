@@ -11,10 +11,9 @@
 package com.choicemaker.cm.urm;
 
 import java.rmi.RemoteException;
-import java.util.Properties;
 
-import javax.ejb.EJBObject;
-
+import com.choicemaker.cm.urm.base.RefRecordCollection;
+import com.choicemaker.cm.urm.config.IFilterConfiguration;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -30,25 +29,17 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * 
  * @author emoussikaev
  */
-public interface BatchResultProcessor extends EJBObject {
+public interface BatchResultProcessor extends BatchBase {
 
 	/**
-	 * Starts the conversion of the result of the matching job with the
-	 * identifier <code>jobId</code> into MRPS format. The conversion is an
-	 * asynchronous process. It converts data in a batches of the size
-	 * <code>batchSize</code>
-	 * <p>
+	 * Starts the process of copyinf of the match job results into the specified records collection  
 	 * 
-	 * @param jobId
-	 *            matching job identifier
-	 * @param batchSize
-	 *            conversion batch size
-	 * @param mrpsFilename
-	 *            target file name
-	 * @param trackingId
-	 *            an arbitrary string that is stored and may be used for later
-	 *            reporting.
-	 * @return conversion job ID
+	 * @param   processedJobId		Job ID.
+	 * @param	resRc		Record collection to serialize matching result.
+	 * @param   trackingId an arbitrary string that is stored and may be used for later reporting. 
+	 *
+	 * @return  copy job ID
+	 *  
 	 * @throws ModelException
 	 * @throws RecordCollectionException
 	 * @throws ConfigException
@@ -56,10 +47,17 @@ public interface BatchResultProcessor extends EJBObject {
 	 * @throws CmRuntimeException
 	 * @throws RemoteException
 	 */
-	public long startResultToMrpsConversion(long jobId, String mrpsFilename,
-			String trackingId) throws ModelException,
-			RecordCollectionException, ConfigException, ArgumentException,
-			CmRuntimeException, RemoteException;
+	public long startResultCopy(
+		long processedJobId,
+		RefRecordCollection resRc,
+		String trackingId)
+		throws
+			ModelException,
+			RecordCollectionException,
+			ConfigException,
+			ArgumentException,
+			CmRuntimeException,
+			RemoteException;
 
 	/**
 	 * Starts the conversion of the result of the matching job with the
@@ -67,20 +65,13 @@ public interface BatchResultProcessor extends EJBObject {
 	 * asynchronous process. It converts data in a batches of the size
 	 * <code>batchSize</code>
 	 * <p>
+	 * @param processedJobId  job identifier
+	 * @param mrpsUrl target location URL 
+	 * @param overrideProps set of MRPS generation parameters that replace the parameters defined by the named configuration
+	 * @param trackingId an arbitrary string that is stored and may be used for later reporting.
 	 * 
-	 * @param jobId
-	 *            matching job identifier
-	 * @param batchSize
-	 *            conversion batch size
-	 * @param mrpsFilename
-	 *            target file name
-	 * @param trackingId
-	 *            an arbitrary string that is stored and may be used for later
-	 *            reporting.
-	 * @param optional
-	 *            configuration parameters specified by
-	 *            {@link MrpsRequestConfiguration}
 	 * @return conversion job ID
+	 * 
 	 * @throws ModelException
 	 * @throws RecordCollectionException
 	 * @throws ConfigException
@@ -88,37 +79,47 @@ public interface BatchResultProcessor extends EJBObject {
 	 * @throws CmRuntimeException
 	 * @throws RemoteException
 	 */
-	public long startResultToMrpsConversion(long jobId, String mrpsFilename,
-			String trackingId, Properties optional) throws ModelException,
-			RecordCollectionException, ConfigException, ArgumentException,
-			CmRuntimeException, RemoteException;
+	public long startMrpsGeneration(
+		long processedJobId,
+		String mrpsUrl,
+		String filterConfName,
+		IFilterConfiguration overrideFilterConfig,
+		String trackingId
+		)
+		throws
+			ModelException,
+			RecordCollectionException,
+			ConfigException,
+			ArgumentException,
+			CmRuntimeException,
+			RemoteException;
 
 	/**
-	 * Aborts the conversion job with the given identifier.
+	 * <code>Returns the list of all (started, completed, failed and aborted) copy jobs. 
+	 * <p>
+	 * @return array of job ids
 	 * 
-	 * @param jobID
-	 *            Job ID.
-	 * 
-	 * @return true if job is aborted; false if job is already completed,
-	 *         aborted or failed.
 	 * @throws ArgumentException
 	 * @throws ConfigException
 	 * @throws CmRuntimeException
 	 * @throws RemoteException
 	 */
-	public boolean abortJob(long jobId) throws ArgumentException,
-			ConfigException, CmRuntimeException, RemoteException;
+	public long[] getResultCopyJobList()
+		throws
+			ArgumentException, ConfigException, CmRuntimeException, RemoteException;
 
 	/**
-	 * Returns the version of the interface implementation.
+	 * <code>Returns the list of all (started, completed, failed and aborted) MRPS generation jobs. 
 	 * <p>
+	 * @return array of job ids
 	 * 
-	 * @param context
-	 *            reserved
-	 * @return version
+	 * @throws ArgumentException
+	 * @throws ConfigException
+	 * @throws CmRuntimeException
 	 * @throws RemoteException
 	 */
-
-	public String getVersion(Object context) throws RemoteException;
+	public long[] getMrpsGenerationJobList()
+		throws
+			ArgumentException, ConfigException, CmRuntimeException, RemoteException;
 
 }

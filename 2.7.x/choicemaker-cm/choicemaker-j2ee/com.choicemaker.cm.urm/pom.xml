@@ -24,6 +24,14 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+      
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
@@ -115,6 +123,10 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.urm.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.urm.config</artifactId>
     </dependency>
     <dependency>
       <groupId>javax</groupId>

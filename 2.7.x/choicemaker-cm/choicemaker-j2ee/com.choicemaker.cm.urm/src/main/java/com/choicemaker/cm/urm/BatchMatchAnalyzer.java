@@ -13,10 +13,10 @@ package com.choicemaker.cm.urm;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 
-import com.choicemaker.cm.urm.base.AnalysisResultFormat;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
+import com.choicemaker.cm.urm.config.AnalysisResultFormat;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -204,7 +204,8 @@ public interface BatchMatchAnalyzer extends BatchBase {
 	 * @throws CmRuntimeException
 	 * @throws RemoteException
 	 */
-
+	// FIXME remove this method
+	@SuppressWarnings("rawtypes")
 	public Iterator getResultIterator(RefRecordCollection rc,
 			AnalysisResultFormat s) throws RecordCollectionException,
 			ArgumentException, CmRuntimeException, RemoteException;
@@ -235,6 +236,8 @@ public interface BatchMatchAnalyzer extends BatchBase {
 	 * @throws CmRuntimeException
 	 * @throws RemoteException
 	 */
+	// FIXME remove this method
+	@SuppressWarnings("rawtypes")
 	public Iterator getResultIterator(long jobId, AnalysisResultFormat s)
 			throws RecordCollectionException, ArgumentException,
 			CmRuntimeException, RemoteException;

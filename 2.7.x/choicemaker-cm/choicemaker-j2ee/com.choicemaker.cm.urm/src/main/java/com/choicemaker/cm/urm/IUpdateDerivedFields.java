@@ -153,6 +153,7 @@ public interface IUpdateDerivedFields {
 	 * @throws IOException
 	 *             If a communication problem occurs.
 	 */
+	@SuppressWarnings("rawtypes")
 	int updateDerivedFields(DataSource dataSource, Comparable id)
 			throws SQLException, IOException;
 

@@ -15,12 +15,9 @@ import java.rmi.RemoteException;
 import javax.ejb.EJBObject;
 
 import com.choicemaker.cm.urm.base.JobStatus;
-import com.choicemaker.cm.urm.base.RefRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
-import com.choicemaker.cm.urm.exceptions.ModelException;
-import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
 
 /**
  * 
@@ -109,39 +106,6 @@ public interface BatchBase extends EJBObject {
 	 */
 	public JobStatus getJobStatus(long jobID) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException;
-
-	/**
-	 * Copies the matching result to the specified record collection. It
-	 * overwrites files that already exist.
-	 * <p>
-	 * In case if ChoiceMaker Server is configured to handle large files the
-	 * chunk identifiers (_1, _2, ...) could be added to the file name.
-	 * 
-	 * @param jobID
-	 *            Job ID.
-	 * @param resRc
-	 *            Record collection to serialize matching result.
-	 * @throws ArgumentException
-	 * @throws ConfigException
-	 * @throws CmRuntimeException
-	 * @throws RemoteException
-	 */
-	public void copyResult(long jobId, RefRecordCollection resRc)
-			throws ModelException, RecordCollectionException, ConfigException,
-			ArgumentException, CmRuntimeException, RemoteException;
-
-	/**
-	 * <code>Returns the list of all (started, completed, failed and aborted) jobs. 
-	 * <p>
-	 * 
-	 * @return list of jobs
-	 * @throws ArgumentException
-	 * @throws ConfigException
-	 * @throws CmRuntimeException
-	 * @throws RemoteException
-	 */
-	public long[] getJobList() throws ArgumentException, ConfigException,
-			CmRuntimeException, RemoteException;
 
 	/**
 	 * Returns the version of the interface implementation.

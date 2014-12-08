@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
+import com.choicemaker.cm.urm.config.UrmSettings2;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -78,19 +79,24 @@ import com.choicemaker.cm.urm.exceptions.RecordCollectionException;
  * <p>
  * The result consists of the evaluated record pairs that are stored in the
  * following format
- * <p>
- * <code>&lt;f1, id1, f2, id2, p, d, l></code> where <code>f1</code> is the
- * format of the first (query) record ID, <code>id1</code> is the query record
- * ID <code>f2</code> is the format of the second (query or master) record ID,
- * <code>id2</code> is the master record ID, <code>p</code> is the probability
- * of match, <code>d</code> is the decision (M - match, H - hold, D - differ),
- * <code>l</code> is the location of the second record (S - query record
- * collection, D - master record collection)
  * 
+ * <pre>
+ * &lt;f1, id1, f2, id2, p, d, l&gt;
+ * </pre>
+ * 
+ * where
+ * <ul>
+ * <li><code>f1</code> is the format of the first (query) record ID</li>
+ * <li><code>id1</code> is the query record ID</li>
+ * <li><code>f2</code> is the format of the second (query or master) record ID</li>
+ * <li><code>id2</code> is the master record ID</li>
+ * <li><code>p</code> is the probability of match</li>
+ * <li><code>d</code> is the decision (M - match, H - hold, D - differ)</li>
+ * <li><code>l</code> is the location of the second record (S - query record
+ * collection, D - master record collection)
+ * </ul>
  *
  * @author emoussikaev
- * @version Revision: 2.5 Date: Nov 1, 2005 2:18:24 PM
- * @see
  */
 public interface BatchRecordMatcher extends BatchBase {
 
@@ -98,42 +104,26 @@ public interface BatchRecordMatcher extends BatchBase {
 	 * Finds all pairs of records with the first element from the query record
 	 * collection qRc and the second element from the master record collection
 	 * mRc or query record collection qRc evaluated as MATCH or HOLD. This is an
-	 * asynchronous method that returns immidiately after the matching process
-	 * was started.
-	 * <p>
-	 * 
-	 * @param qRc
-	 *            the query record collection.
-	 * @param mRc
-	 *            the master record collection.
-	 * @param modelName
-	 *            the name of the probability model.
-	 * @param differThreshold
-	 *            matching probability below this threshold constitutes the
-	 *            differ.
-	 * @param matchThreshold
-	 *            matching probability above this threshold constitutes the
-	 *            match.
-	 * @param maxSingle
-	 *            the number of staging records below which single record
-	 *            matching is used. If set to 0, OABA is used.
-	 * @param trackingId
-	 *            an arbitrary string that is stored and may be used for later
-	 *            reporting.
-	 * 
-	 * @return Job ID of the matching job.
-	 * 
-	 * @throws ModelException
-	 * @throws RecordCollectionException
-	 * @throws ConfigException
-	 * @throws ArgumentException
-	 * @throws CmRuntimeException
-	 * @throws RemoteException
+	 * asynchronous method that returns immediately after the matching process
+	 * is started.
 	 */
-	public long startMatching(IRecordCollection qRc, RefRecordCollection mRc,
+	long startMatching(IRecordCollection qRc, RefRecordCollection mRc,
 			String modelName, float differThreshold, float matchThreshold,
 			int maxSingle, String trackingId) throws ModelException,
 			RecordCollectionException, ConfigException, ArgumentException,
+			CmRuntimeException, RemoteException;
+
+	long startMatching(IRecordCollection qRc, RefRecordCollection mRc,
+			String confName, String trackingId) throws ModelException,
+			RecordCollectionException, ConfigException, ArgumentException,
+			CmRuntimeException, RemoteException;
+
+	long startMatching(IRecordCollection qRc, RefRecordCollection mRc,
+			String confName, UrmSettings2 overrideProps, String trackingId)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException;
+
+	long[] getJobList() throws ArgumentException, ConfigException,
 			CmRuntimeException, RemoteException;
 
 	/**
@@ -156,6 +146,8 @@ public interface BatchRecordMatcher extends BatchBase {
 	 * @throws CmRuntimeException
 	 * @throws RemoteException
 	 */
+	// FIXME remove this method
+	@SuppressWarnings("rawtypes")
 	public Iterator getResultIter(RefRecordCollection rc)
 			throws RecordCollectionException, ArgumentException,
 			CmRuntimeException, RemoteException;
@@ -179,6 +171,8 @@ public interface BatchRecordMatcher extends BatchBase {
 	 * @throws CmRuntimeException
 	 * @throws RemoteException
 	 */
+	// FIXME remove this method
+	@SuppressWarnings("rawtypes")
 	public Iterator getResultIter(long jobId) throws RecordCollectionException,
 			ArgumentException, CmRuntimeException, RemoteException;
 
