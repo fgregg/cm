@@ -1,6 +1,13 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA.CN_SETTINGS_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA.JPQL_DSET_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA.JPQL_DSET_FIND_ALL_ABA;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA.JPQL_DSET_FIND_ALL_OABA;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA.QN_DSET_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA.QN_DSET_FIND_ALL_ABA;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA.QN_DSET_FIND_ALL_OABA;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsJPA.TABLE_NAME;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;

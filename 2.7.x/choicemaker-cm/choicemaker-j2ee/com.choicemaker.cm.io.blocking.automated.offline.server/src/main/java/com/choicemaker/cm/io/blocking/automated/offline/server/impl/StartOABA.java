@@ -25,8 +25,11 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
@@ -37,9 +40,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 
@@ -126,7 +128,7 @@ public class StartOABA implements MessageListener, Serializable {
 					PMManager.getModelInstance(modelConfigId);
 				if (stageModel == null) {
 					String s =
-						"No model corresponding to '" + modelConfigId + "'";
+						"No modelId corresponding to '" + modelConfigId + "'";
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}
@@ -144,7 +146,11 @@ public class StartOABA implements MessageListener, Serializable {
 				// if not use single record matching instead of batch.
 				log.info("Checking whether to use single- or batched-record blocking...");
 				log.info("OabaSettings maxSingle: " + oabaSettings.getMaxSingle());
-				if (!isMoreThanThreshold(params.getStageRs(), stageModel,
+				final ISerializableRecordSource staging =
+						DatabaseUtils.getRecordSource(params.getStageRs());
+				final ISerializableRecordSource master =
+						DatabaseUtils.getRecordSource(params.getMasterRs());
+				if (!isMoreThanThreshold(staging, stageModel,
 						oabaSettings.getMaxSingle())) {
 					log.info("Using single record matching");
 					sendToSingleRecordMatching(data);
@@ -161,9 +167,9 @@ public class StartOABA implements MessageListener, Serializable {
 					RecValSinkSourceFactory recvalFactory =
 						OabaFileUtils.getRecValFactory(oabaJob);
 					RecValService3 rvService =
-						new RecValService3(params.getStageRs(),
-								params.getMasterRs(), stageModel,
-								recvalFactory, translator, processingEntry, oabaJob);
+						new RecValService3(staging, master, stageModel,
+								recvalFactory, translator, processingEntry,
+								oabaJob);
 					rvService.runService();
 
 					// FIXME move these parameters to a persistent operational
@@ -222,7 +228,7 @@ public class StartOABA implements MessageListener, Serializable {
 		// is invoked. The arguments are derived from a persistent object,
 		// BatchParameters, which may have been saved with invalid fields.
 		if (model == null) {
-			throw new IllegalArgumentException("null model");
+			throw new IllegalArgumentException("null modelId");
 		}
 		if (rs == null) {
 			throw new IllegalArgumentException("null record source");

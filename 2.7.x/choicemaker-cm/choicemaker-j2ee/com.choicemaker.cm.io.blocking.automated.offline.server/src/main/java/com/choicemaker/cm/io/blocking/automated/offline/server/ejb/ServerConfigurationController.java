@@ -2,6 +2,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
 import java.util.List;
 
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity;
 
 /**

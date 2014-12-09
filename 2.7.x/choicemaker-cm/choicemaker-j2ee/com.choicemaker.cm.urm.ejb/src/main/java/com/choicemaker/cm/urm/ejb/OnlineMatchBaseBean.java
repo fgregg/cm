@@ -88,15 +88,15 @@ public class OnlineMatchBaseBean implements SessionBean {
 	protected static boolean isCountsUpdated = false;
 
 	/**
-	 * Returns the model that has the specified name.
+	 * Returns the modelId that has the specified name.
 	 * @exception IllegalArgumentException if the specified name is null
-	 * @exception ModelException if a model with the specified name
+	 * @exception ModelException if a modelId with the specified name
 	 * does not exist
 	 */
 	IProbabilityModel getProbabilityModel(String modelName)
 		throws ModelException {
 		if (modelName == null) {
-			throw new IllegalArgumentException("null model name");
+			throw new IllegalArgumentException("null modelId name");
 		}
 		IProbabilityModel retVal = PMManager.getModelInstance(modelName);
 		if (retVal == null) {
@@ -516,14 +516,14 @@ public class OnlineMatchBaseBean implements SessionBean {
 	}
 
 	/**
-	 * @throws IllegalArgumentException if model is null
+	 * @throws IllegalArgumentException if modelId is null
 	 */
 	MatchScore getMatchScore(
 		ScoreType st,
 		Match match,
 		ImmutableProbabilityModel model) {
 		if (model == null) {
-			throw new IllegalArgumentException("null model");
+			throw new IllegalArgumentException("null modelId");
 		}
 		MatchScore ms;
 		String note = "";
@@ -541,14 +541,14 @@ public class OnlineMatchBaseBean implements SessionBean {
 	}
 
 	/**
-	 * @throws IllegalArgumentException if model is null
+	 * @throws IllegalArgumentException if modelId is null
 	 */
 	ISingleRecord getSingleRecord(
 		EvalRecordFormat resultFormat,
 		Match match,
 		ImmutableProbabilityModel model) {
 		if (model == null) {
-			throw new IllegalArgumentException("null model");
+			throw new IllegalArgumentException("null modelId");
 		}
 		ISingleRecord resRecord;
 		if (resultFormat.getRecordType() == RecordType.HOLDER) {
@@ -563,14 +563,14 @@ public class OnlineMatchBaseBean implements SessionBean {
 	}
 
 	/**
-	 * @throws IllegalArgumentException if model is null
+	 * @throws IllegalArgumentException if modelId is null
 	 */
 	EvaluatedRecord getEvaluatedRecord(
 		EvalRecordFormat resultFormat,
 		Match match,
 		IProbabilityModel model) {
 		if (model == null) {
-			throw new IllegalArgumentException("null model");
+			throw new IllegalArgumentException("null modelId");
 		}
 		return new EvaluatedRecord(
 			getSingleRecord(resultFormat, match, model),

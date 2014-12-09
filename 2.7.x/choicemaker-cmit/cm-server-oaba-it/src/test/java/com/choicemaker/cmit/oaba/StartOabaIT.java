@@ -26,13 +26,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.core.ISerializableDbRecordSource;
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaTaskType;
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -325,7 +326,7 @@ public class StartOabaIT {
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
 					.getMatchThreshold(), c.getStagingRecordSource(),
-					c.getMasterRecordSource());
+					c.getMasterRecordSource(), c.getOabaTask());
 		testStartLinkage(TEST, externalID, bp);
 
 		logExiting(TEST);
@@ -346,11 +347,13 @@ public class StartOabaIT {
 
 		// The master record source should must be null in this set of batch
 		// parameters in order to test the startOABAStage(..) method
-		final ISerializableDbRecordSource MASTER = null;
+		final PersistableRecordSource MASTER = null;
+		final OabaTaskType TASK = OabaTaskType.STAGING_DEDUPLICATION;
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), c.getStagingRecordSource(), MASTER);
+					.getMatchThreshold(), c.getStagingRecordSource(), MASTER,
+					TASK);
 		testStartLinkage(TEST, externalID, bp);
 
 		logExiting(TEST);

@@ -26,6 +26,7 @@ public interface BatchJobJPA {
 	 * @see #ID_GENERATOR_NAME
 	 */
 	String CN_ID = "ID";
+
 	/**
 	 * Discriminator column
 	 * 

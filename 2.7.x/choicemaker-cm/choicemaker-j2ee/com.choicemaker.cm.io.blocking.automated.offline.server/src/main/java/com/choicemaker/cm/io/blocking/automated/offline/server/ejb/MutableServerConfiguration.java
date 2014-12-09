@@ -2,6 +2,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
 import java.io.File;
 
+import com.choicemaker.cm.args.ServerConfiguration;
+
 public interface MutableServerConfiguration extends ServerConfiguration {
 
 	/**

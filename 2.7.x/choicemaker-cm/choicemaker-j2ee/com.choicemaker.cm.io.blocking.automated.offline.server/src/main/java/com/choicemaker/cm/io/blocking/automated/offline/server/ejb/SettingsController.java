@@ -2,8 +2,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
 import java.util.List;
 
+import com.choicemaker.cm.args.AbaSettings;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.io.blocking.automated.AbaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
 
 /**

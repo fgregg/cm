@@ -38,7 +38,7 @@ package com.choicemaker.cm.args;
  * within, the sources.
  * </p>
  */
-public enum OabaJobType {
+public enum OabaTaskType {
 
 	STAGING_DEDUPLICATION, STAGING_TO_MASTER_LINKAGE, MASTER_TO_MASTER_LINKAGE;
 

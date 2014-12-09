@@ -30,10 +30,14 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.OabaTaskType;
+import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
@@ -43,11 +47,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 //import javax.naming.InitialContext;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
@@ -135,7 +136,7 @@ public class OabaServiceBean implements OabaService {
 
 	/**
 	 * Validates parameters to
-	 * {@link #startOABAStage(String, SerializableRecordSource, float, float, String, int, boolean)
+	 * {@link #startOABAStage(String, PersistableRecordSource, float, float, String, int, boolean)
 	 * startOABAStage}
 	 * 
 	 * @throws IllegalArgumentException
@@ -169,7 +170,7 @@ public class OabaServiceBean implements OabaService {
 			}
 			if (bp.getModelConfigurationName() == null
 					|| bp.getModelConfigurationName().trim().isEmpty()) {
-				validityErrors.add("null or blank model configuration name");
+				validityErrors.add("null or blank modelId configuration name");
 			}
 
 		}
@@ -203,7 +204,7 @@ public class OabaServiceBean implements OabaService {
 	@Override
 	@Deprecated
 	public long startDeduplication(String externalID,
-			SerializableRecordSource staging, float lowThreshold,
+			PersistableRecordSource staging, float lowThreshold,
 			float highThreshold, String modelConfigurationId)
 			throws ServerConfigurationException {
 		return startLinkage(externalID, staging, null, lowThreshold,
@@ -211,25 +212,24 @@ public class OabaServiceBean implements OabaService {
 	}
 
 	@Override
-	public long startDeduplication(String externalID,
-			OabaParameters batchParams, OabaSettings oabaSettings,
-			ServerConfiguration serverConfiguration)
+	public long startDeduplication(String externalID, OabaParameters bp,
+			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
-		if (batchParams == null) {
+		if (bp == null) {
 			throw new IllegalArgumentException("null batch parameters");
 		}
 
 		OabaParameters submittedParams;
-		if (batchParams.getMasterRs() == null) {
-			submittedParams = batchParams;
+		if (bp.getMasterRs() == null
+				&& OabaTaskType.STAGING_DEDUPLICATION == bp.getOabaTaskType()) {
+			submittedParams = bp;
 		} else {
-			final SerializableRecordSource NULL_MASTER_RS = null;
+			final PersistableRecordSource NULL_MASTER_RS = null;
 			submittedParams =
-				new OabaParametersEntity(
-						batchParams.getModelConfigurationName(),
-						batchParams.getLowThreshold(),
-						batchParams.getHighThreshold(),
-						batchParams.getStageRs(), NULL_MASTER_RS);
+				new OabaParametersEntity(bp.getModelConfigurationName(),
+						bp.getLowThreshold(), bp.getHighThreshold(),
+						bp.getStageRs(), NULL_MASTER_RS,
+						OabaTaskType.STAGING_DEDUPLICATION);
 		}
 		assert submittedParams.getMasterRs() == null;
 
@@ -240,7 +240,7 @@ public class OabaServiceBean implements OabaService {
 	@Override
 	@Deprecated
 	public long startLinkage(String externalID,
-			SerializableRecordSource staging, SerializableRecordSource master,
+			PersistableRecordSource staging, PersistableRecordSource master,
 			float lowThreshold, float highThreshold, String modelConfigurationId)
 			throws ServerConfigurationException {
 
@@ -248,9 +248,12 @@ public class OabaServiceBean implements OabaService {
 		logger.entering(SOURCE_CLASS, METHOD);
 
 		// Create the job parameters for this job
+		OabaTaskType task =
+			master == null ? OabaTaskType.STAGING_DEDUPLICATION
+					: OabaTaskType.STAGING_TO_MASTER_LINKAGE;
 		final OabaParameters batchParams =
 			new OabaParametersEntity(modelConfigurationId, lowThreshold,
-					highThreshold, staging, master);
+					highThreshold, staging, master, task);
 
 		// Get the default OABA settings, ignoring the maxSingle value.
 		// If no default settings exist, create them using the maxSingle value.

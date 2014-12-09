@@ -28,7 +28,11 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
@@ -38,11 +42,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
@@ -127,7 +129,7 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 					PMManager.getModelInstance(modelConfigId);
 				if (model == null) {
 					String s =
-						"No model corresponding to '" + modelConfigId + "'";
+						"No modelId corresponding to '" + modelConfigId + "'";
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}
@@ -164,11 +166,14 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 					final Transformer transformerO = new Transformer (translator,
 							OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob, numProcessors));
 
+					ISerializableRecordSource staging =
+						DatabaseUtils.getRecordSource(params.getStageRs());
+					ISerializableRecordSource master =
+						DatabaseUtils.getRecordSource(params.getMasterRs());
 					ChunkService3 chunkService =
 						new ChunkService3(
 								OabaFileUtils.getTreeSetSource(oabaJob),
-								source2, params.getStageRs(),
-								params.getMasterRs(), model,
+								source2, staging, master, model,
 								OabaFileUtils.getChunkIDFactory(oabaJob),
 								OabaFileUtils.getStageDataFactory(oabaJob,
 										model),

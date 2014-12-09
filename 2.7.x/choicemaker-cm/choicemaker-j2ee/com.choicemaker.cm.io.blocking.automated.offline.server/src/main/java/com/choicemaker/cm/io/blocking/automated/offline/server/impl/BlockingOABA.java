@@ -26,6 +26,8 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 //import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -36,8 +38,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
@@ -118,7 +118,7 @@ public class BlockingOABA implements MessageListener, Serializable {
 					PMManager.getModelInstance(modelConfigId);
 				if (model == null) {
 					String s =
-						"No model corresponding to '" + modelConfigId + "'";
+						"No modelId corresponding to '" + modelConfigId + "'";
 					log.severe(s);
 					throw new IllegalArgumentException(s);
 				}

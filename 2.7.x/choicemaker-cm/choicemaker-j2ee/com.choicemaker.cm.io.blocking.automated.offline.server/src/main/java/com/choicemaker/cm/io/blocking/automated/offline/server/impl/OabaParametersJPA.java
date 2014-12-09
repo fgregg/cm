@@ -17,13 +17,15 @@ public interface OabaParametersJPA {
 	String TABLE_NAME = "CMT_OABA_BATCH_PARAMS";
 
 	String CN_ID = "ID";
-	String CN_STAGE_MODEL = "STAGE_MODEL";
-	String CN_MASTER_MODEL = "MASTER_MODEL";
+	String CN_MODEL = "MODEL";
 	String CN_MAX_SINGLE = "MAX_SINGLE";
 	String CN_LOW_THRESHOLD = "LOW_THRESHOLD";
 	String CN_HIGH_THRESHOLD = "HIGH_THRESHOLD";
-	String CN_STAGE_RS = "STAGE_RS";
-	String CN_MASTER_RS = "MASTER_RS";
+	String CN_STAGE_RS = "STAGE_ID";
+	String CN_STAGE_RS_TYPE = "STAGE_TYPE";
+	String CN_MASTER_RS = "MASTER_ID";
+	String CN_MASTER_RS_TYPE = "MASTER_TYPE";
+	String CN_TASK = "TASK";
 
 	String ID_GENERATOR_NAME = "OABA_BATCHPARAMS";
 
@@ -42,24 +44,7 @@ public interface OabaParametersJPA {
 			"batchParametersFindAll";
 
 	/** JPQL used to implement {@link #QN_BATCHPARAMETERS_FIND_ALL} */
-	String JPQL_BATCHJOB_FIND_ALL =
+	String JPQL_BATCHPARAMETERS_FIND_ALL =
 			"Select params from OabaParametersEntity params";
-
-//	/**
-//	 * Name of the query that finds the parameters associated with a particular
-//	 * OabaJob
-//	 */
-//	String QN_BATCHPARAMETERS_FIND_BY_JOB_ID =
-//			"batchParametersFindByJobId";
-//
-//	/** JPQL used to implement {@link #QN_BATCHPARAMETERS_FIND_ALL} */
-//	String JPQL_BATCHPARAMETERS_FIND_BY_JOB_ID =
-//			"Select p from OabaParametersEntity p where p.jobId = :jobId";
-//
-//	/**
-//	 * Name of the parameter used to specify the jobId parameter of
-//	 * {@link #JPQL_BATCHPARAMETERS_FIND_BY_JOB_ID}
-//	 */
-//	String PN_BATCHPARAMETERS_FIND_BY_JOBID_P1 = "jobId";
 
 }

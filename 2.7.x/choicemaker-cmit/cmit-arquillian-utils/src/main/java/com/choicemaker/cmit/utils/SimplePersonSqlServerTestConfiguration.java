@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.OabaTaskType;
+import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.core.IProbabilityModelManager;
 import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -18,16 +21,24 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	private static Logger logger = Logger
 			.getLogger(SimplePersonSqlServerTestConfiguration.class.getName());
+	
+	public static final String RECORD_SOURCE_CLASS_NAME =
+			"com.choicemaker.cm.io.db.sqlserver.SqlServerParallelRecordSource";
 
 	public static final String DEFAULT_DATASOURCE_JNDI_NAME =
 		// "/choicemaker/urm/jdbc/ChoiceMakerBlocking";
 		"/choicemaker/urm/jdbc/ChoiceMakerEjb";
+
+	public static final String DEFAULT_DATABASE_CONFIGURATION = "default";
 
 	public static final String DEFAULT_STAGING_SQL =
 		"SELECT RECORD_ID AS ID FROM PERSON WHERE LINKAGE_ROLE='S'";
 
 	public static final String DEFAULT_MASTER_SQL =
 		"SELECT RECORD_ID AS ID FROM PERSON WHERE LINKAGE_ROLE='M'";
+	
+	public static final OabaTaskType DEFAULT_OABA_TASK =
+		OabaTaskType.STAGING_TO_MASTER_LINKAGE;
 
 	public static final String DEFAULT_MODEL_CONFIGURATION_ID =
 		"com.choicemaker.cm.simplePersonMatching.Model1";
@@ -43,8 +54,10 @@ public class SimplePersonSqlServerTestConfiguration implements
 	public static final int DEFAULT_RECORD_BUFFER_SIZE = 100000;
 
 	private final String dataSourceJndiName;
+	private final String databaseConfiguration;
 	private final String stagingSQL;
 	private final String masterSQL;
+	private final OabaTaskType task;
 	private final String modelConfigurationId;
 	private final ImmutableThresholds thresholds;
 	private final int maxSingle;
@@ -60,25 +73,31 @@ public class SimplePersonSqlServerTestConfiguration implements
 	private ISerializableDbRecordSource master;
 
 	public SimplePersonSqlServerTestConfiguration() {
-		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_STAGING_SQL,
-				DEFAULT_MASTER_SQL, DEFAULT_MODEL_CONFIGURATION_ID,
+		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION, DEFAULT_STAGING_SQL,
+				DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK, DEFAULT_MODEL_CONFIGURATION_ID,
 				DEFAULT_THRESHOLDS, DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
 				DEFAULT_TRANSITIVITY_ANALYSIS);
 	}
 
 	public SimplePersonSqlServerTestConfiguration(boolean runTransitivity) {
-		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_STAGING_SQL,
-				DEFAULT_MASTER_SQL, DEFAULT_MODEL_CONFIGURATION_ID,
+		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION, DEFAULT_STAGING_SQL,
+				DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK, DEFAULT_MODEL_CONFIGURATION_ID,
 				DEFAULT_THRESHOLDS, DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
 				runTransitivity);
 	}
 
 	public SimplePersonSqlServerTestConfiguration(String dsJndiName,
-			String stagingSQL, String masterSQL, String mci,
+			String dbConfig,
+			String stagingSQL, String masterSQL, OabaTaskType task, String mci,
 			ImmutableThresholds t, int maxSingle, boolean runTransitivity) {
 		if (dsJndiName == null || dsJndiName.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank JNDI name for data source");
+
+		}
+		if (dbConfig == null || dbConfig.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"null or blank database configuration");
 
 		}
 		if (stagingSQL == null || stagingSQL.trim().isEmpty()) {
@@ -91,9 +110,12 @@ public class SimplePersonSqlServerTestConfiguration implements
 					"null or blank SQL for master source");
 
 		}
+		if (task == null) {
+			throw new IllegalArgumentException("null task type");
+		}
 		if (mci == null || mci.trim().isEmpty()) {
 			throw new IllegalArgumentException(
-					"null or blank model configuratian id");
+					"null or blank modelId configuratian id");
 		}
 		if (t == null) {
 			throw new IllegalArgumentException("null thresolds");
@@ -103,8 +125,10 @@ public class SimplePersonSqlServerTestConfiguration implements
 					"negative single-record matching threshold: " + maxSingle);
 		}
 		this.dataSourceJndiName = dsJndiName;
+		this.databaseConfiguration = dbConfig;
 		this.stagingSQL = stagingSQL;
 		this.masterSQL = masterSQL;
+		this.task = task;
 		this.modelConfigurationId = mci;
 		this.thresholds = t;
 		this.maxSingle = maxSingle;
@@ -122,7 +146,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 	public void initialize(CMPluginRegistry registry) {
 		// Standard messages
 		final String NULL_REGISTRY = "null plugin registry";
-		final String NULL_MODEL = "null model";
+		final String NULL_MODEL = "null modelId";
 		final String NULL_STAGING = "null staging record source";
 		final String NULL_MASTER = "null master record source";
 
@@ -197,16 +221,115 @@ public class SimplePersonSqlServerTestConfiguration implements
 		return isValid;
 	}
 
+	public String getDatabaseConfiguration() {
+		return databaseConfiguration;
+	}
+
 	@Override
-	public ISerializableDbRecordSource getStagingRecordSource() {
+	public ISerializableDbRecordSource getSerializableStagingRecordSource() {
 		invariant();
 		return staging;
 	}
 
 	@Override
-	public ISerializableDbRecordSource getMasterRecordSource() {
+	public ISerializableDbRecordSource getSerializableMasterRecordSource() {
 		invariant();
 		return master;
+	}
+
+	@Override
+	public PersistableRecordSource getStagingRecordSource() {
+		invariant();
+		return new PersistableSqlRecordSource() {
+
+			private static final long serialVersionUID = 271L;
+
+			@Override
+			public long getId() {
+				return 0;
+			}
+
+			@Override
+			public String getType() {
+				return PersistableSqlRecordSource.TYPE;
+			}
+
+			@Override
+			public String getClassName() {
+				return RECORD_SOURCE_CLASS_NAME;
+			}
+
+			@Override
+			public String getDataSource() {
+				return DEFAULT_DATASOURCE_JNDI_NAME;
+			}
+
+			@Override
+			public String getSqlSelectStatement() {
+				return DEFAULT_STAGING_SQL;
+			}
+
+			@Override
+			public String getModelId() {
+				return DEFAULT_MODEL_CONFIGURATION_ID;
+			}
+
+			@Override
+			public String getDatabaseConfiguration() {
+				return DEFAULT_DATABASE_CONFIGURATION;
+			}
+			
+		};
+	}
+
+	@Override
+	public PersistableRecordSource getMasterRecordSource() {
+		invariant();
+		return new PersistableSqlRecordSource() {
+
+			private static final long serialVersionUID = 271L;
+
+			@Override
+			public long getId() {
+				return 0;
+			}
+
+			@Override
+			public String getType() {
+				return PersistableSqlRecordSource.TYPE;
+			}
+
+			@Override
+			public String getClassName() {
+				return RECORD_SOURCE_CLASS_NAME;
+			}
+
+			@Override
+			public String getDataSource() {
+				return DEFAULT_DATASOURCE_JNDI_NAME;
+			}
+
+			@Override
+			public String getSqlSelectStatement() {
+				return DEFAULT_MASTER_SQL;
+			}
+
+			@Override
+			public String getModelId() {
+				return DEFAULT_MODEL_CONFIGURATION_ID;
+			}
+
+			@Override
+			public String getDatabaseConfiguration() {
+				return DEFAULT_DATABASE_CONFIGURATION;
+			}
+			
+		};
+	}
+
+	@Override
+	public OabaTaskType getOabaTask() {
+		return task;
 	}
 
 	@Override
@@ -239,10 +362,9 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	private static ISerializableDbRecordSource createRecordSource(
-			ImmutableProbabilityModel model, String dsJndiName, String sql)
+			ImmutableProbabilityModel model, String dsJndiName, String dbConfig, String sql)
 			throws Exception {
 
-		final String dbConfig = model.getDatabaseConfigurationName();
 		ISerializableDbRecordSource retVal =
 			new SQLServerSerializableParallelSerialRecordSource(dsJndiName,
 					model.getModelName(), dbConfig, sql);
@@ -251,12 +373,14 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	private ISerializableDbRecordSource createStagingRecordSource(
 			ImmutableProbabilityModel model) throws Exception {
-		return createRecordSource(model, dataSourceJndiName, stagingSQL);
+		return createRecordSource(model, dataSourceJndiName,
+				databaseConfiguration, stagingSQL);
 	}
 
 	private ISerializableDbRecordSource createMasterRecordSource(
 			ImmutableProbabilityModel model) throws Exception {
-		return createRecordSource(model, dataSourceJndiName, masterSQL);
+		return createRecordSource(model, dataSourceJndiName,
+				databaseConfiguration, masterSQL);
 	}
 
 }

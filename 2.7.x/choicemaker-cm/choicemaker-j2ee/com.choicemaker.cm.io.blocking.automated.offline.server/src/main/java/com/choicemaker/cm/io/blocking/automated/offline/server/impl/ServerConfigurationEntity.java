@@ -37,8 +37,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 
 @NamedQueries({
 		@NamedQuery(name = QN_SERVERCONFIG_FIND_ALL,

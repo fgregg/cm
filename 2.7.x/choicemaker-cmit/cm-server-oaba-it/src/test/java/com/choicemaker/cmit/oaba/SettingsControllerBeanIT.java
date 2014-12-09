@@ -1,11 +1,11 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_INTERVAL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_MATCHES;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MIN_FIELDS;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_INTERVAL;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_MATCHES;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_OVERSIZED;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MIN_FIELDS;
 import static com.choicemaker.cmit.utils.EntityManagerUtils.MAX_MAX_SINGLE;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -30,8 +30,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.io.blocking.automated.AbaSettings;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
+import com.choicemaker.cm.args.AbaSettings;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
@@ -277,7 +277,7 @@ public class SettingsControllerBeanIT {
 		logEntering(METHOD);
 		final TestEntities te = new TestEntities();
 
-		// Verify that no default is returned for a non-existent model
+		// Verify that no default is returned for a non-existent modelId
 		// with non-existent database and blocking configurations
 		MutableProbabilityModelStub mpm = new MutableProbabilityModelStub();
 		final String d0 = randomString();
@@ -324,7 +324,7 @@ public class SettingsControllerBeanIT {
 		logEntering(METHOD);
 		final TestEntities te = new TestEntities();
 
-		// Verify that no default is returned for a non-existent model
+		// Verify that no default is returned for a non-existent modelId
 		// with non-existent datoabase and blocking configurations
 		MutableProbabilityModelStub mpm = new MutableProbabilityModelStub();
 		final String d0 = randomString();

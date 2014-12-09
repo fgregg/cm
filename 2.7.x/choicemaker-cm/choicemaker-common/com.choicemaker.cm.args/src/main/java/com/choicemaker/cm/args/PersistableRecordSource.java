@@ -1,6 +1,10 @@
 package com.choicemaker.cm.args;
 
-public interface PersistableRecordSource {
+import java.io.Serializable;
+
+public interface PersistableRecordSource extends Serializable {
+	
+	long NONPERSISTENT_ID = 0;
 	
 	long getId();
 	

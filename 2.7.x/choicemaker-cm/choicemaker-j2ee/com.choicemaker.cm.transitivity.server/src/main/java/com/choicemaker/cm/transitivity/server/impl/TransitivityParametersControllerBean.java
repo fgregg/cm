@@ -10,9 +10,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityParameters;
 
 /**
  * An EJB used to test TransitivityParameter beans within container-defined
@@ -71,7 +71,7 @@ public class TransitivityParametersControllerBean extends
 		return transitivityParameters;
 	}
 
-	public TransitivityParameters find(long id) {
+	public TransitivityParameters findTransitivityParameters(long id) {
 		TransitivityParametersEntity transitivityParameters =
 			em.find(TransitivityParametersEntity.class, id);
 		return transitivityParameters;
@@ -82,7 +82,7 @@ public class TransitivityParametersControllerBean extends
 		TransitivityJob oabaJob = jobController.findTransitivityJob(jobId);
 		if (oabaJob != null) {
 			long paramsId = oabaJob.getParametersId();
-			retVal = find(paramsId);
+			retVal = findTransitivityParameters(paramsId);
 		}
 		return retVal;
 	}

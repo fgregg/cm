@@ -20,6 +20,8 @@ import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -31,8 +33,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroup
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
@@ -144,7 +144,7 @@ public class MatchScheduler2 extends AbstractScheduler {
 			PMManager.getModelInstance(modelConfigId);
 		if (model == null) {
 			String s =
-				"No model corresponding to '" + modelConfigId + "'";
+				"No modelId corresponding to '" + modelConfigId + "'";
 			log.severe(s);
 			throw new IllegalArgumentException(s);
 		}

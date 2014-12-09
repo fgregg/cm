@@ -19,8 +19,11 @@ import javax.ejb.Remote;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
 
@@ -58,7 +61,7 @@ public interface OabaService extends Serializable {
 	 *             {@link #startDeduplication(String, OabaParameters, OabaSettings, ServerConfiguration)}
 	 */
 	public long startDeduplication(String externalID,
-			SerializableRecordSource recordSource, float lowThreshold,
+			PersistableRecordSource recordSource, float lowThreshold,
 			float highThreshold, String modelConfigurationName)
 			throws ServerConfigurationException;
 
@@ -96,8 +99,8 @@ public interface OabaService extends Serializable {
 	 * @deprecated see
 	 *             {@link #startLinkage(String, OabaParameters, OabaSettings, ServerConfiguration)}
 	 */
-	public long startLinkage(String externalID, SerializableRecordSource staging,
-			SerializableRecordSource master, float lowThreshold,
+	public long startLinkage(String externalID, PersistableRecordSource staging,
+			PersistableRecordSource master, float lowThreshold,
 			float highThreshold, String modelConfigurationName)
 			throws ServerConfigurationException;
 

@@ -23,8 +23,10 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
@@ -42,9 +44,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTrans
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
@@ -191,9 +193,13 @@ public class TransitivityBean implements MessageListener, Serializable {
 		status.setCurrentProcessingEvent(OabaEvent.DONE_DEDUP_OVERSIZED);
 		// END HACK
 
+		ISerializableRecordSource staging =
+			DatabaseUtils.getRecordSource(params.getStageRs());
+		ISerializableRecordSource master =
+			DatabaseUtils.getRecordSource(params.getMasterRs());
 		ChunkService3 chunkService =
-			new ChunkService3(source2, null, params.getStageRs(), params.getMasterRs(),
-					model, OabaFileUtils.getChunkIDFactory(transJob),
+			new ChunkService3(source2, null, staging, master, model,
+					OabaFileUtils.getChunkIDFactory(transJob),
 					OabaFileUtils.getStageDataFactory(transJob, model),
 					OabaFileUtils.getMasterDataFactory(transJob, model),
 					translator.getSplitIndex(), transformerO, null, maxChunk,

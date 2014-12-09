@@ -1,14 +1,14 @@
 package com.choicemaker.cmit.utils;
 
-import static com.choicemaker.cm.io.blocking.automated.AbaSettings.DEFAULT_LIMIT_PER_BLOCKING_SET;
-import static com.choicemaker.cm.io.blocking.automated.AbaSettings.DEFAULT_LIMIT_SINGLE_BLOCKING_SET;
-import static com.choicemaker.cm.io.blocking.automated.AbaSettings.DEFAULT_SINGLE_TABLE_GRACE_LIMIT;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_INTERVAL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_MATCHES;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MAX_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings.DEFAULT_MIN_FIELDS;
+import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_PER_BLOCKING_SET;
+import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_SINGLE_BLOCKING_SET;
+import static com.choicemaker.cm.args.AbaSettings.DEFAULT_SINGLE_TABLE_GRACE_LIMIT;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_INTERVAL;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_MATCHES;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_OVERSIZED;
+import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MIN_FIELDS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +19,14 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaTaskType;
+import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
@@ -80,7 +82,7 @@ public class EntityManagerUtils {
 	}
 
 	/**
-	 * Synthesizes the name of a fake model configuration using the specified
+	 * Synthesizes the name of a fake modelId configuration using the specified
 	 * tag which may be null
 	 */
 	public static String createRandomModelConfigurationName(String tag) {
@@ -109,7 +111,49 @@ public class EntityManagerUtils {
 		return retVal;
 	}
 
-	public static SerializableRecordSource createFakeSerialRecordSource(String tag) {
+	public static OabaTaskType createRandomOabaTask() {
+		OabaTaskType retVal;
+		int i = random.nextInt(3);
+		switch (i) {
+		case 0:
+			retVal = OabaTaskType.STAGING_DEDUPLICATION;
+			break;
+		case 1:
+			retVal = OabaTaskType.STAGING_TO_MASTER_LINKAGE;
+			break;
+		case 2:
+			retVal = OabaTaskType.MASTER_TO_MASTER_LINKAGE;
+			break;
+		default:
+			throw new Error("not possible");
+		}
+		return retVal;
+	}
+
+	public static PersistableRecordSource createFakePersistableRecordSource(
+			String tag, OabaTaskType task) {
+		PersistableRecordSource retVal;
+		switch(task) {
+		case STAGING_DEDUPLICATION:
+			retVal = null;
+			break;
+		case STAGING_TO_MASTER_LINKAGE:
+		case MASTER_TO_MASTER_LINKAGE:
+			retVal = createFakePersistableRecordSource(tag);
+			break;
+		default:
+			throw new Error("invalid task type: " + task);
+		}
+		return retVal;
+	}
+
+	public static PersistableRecordSource createFakePersistableRecordSource(
+			String tag) {
+		return new FakePersistableRecordSource(tag);
+	}
+
+	public static SerializableRecordSource createFakeSerialRecordSource(
+			String tag) {
 		return new FakeSerialRecordSource(tag);
 	}
 
@@ -120,18 +164,14 @@ public class EntityManagerUtils {
 			throw new IllegalArgumentException("null test entities");
 		}
 		Thresholds thresholds = createRandomThresholds();
-		SerializableRecordSource stage = createFakeSerialRecordSource(tag);
-		SerializableRecordSource master;
-		if (random.nextBoolean()) {
-			master = createFakeSerialRecordSource(tag);
-		} else {
-			master = null;
-		}
-//		File workingDir = ServerConfigurationControllerBean.computeGenericLocation();
+		PersistableRecordSource stage = createFakePersistableRecordSource(tag);
+		OabaTaskType task = createRandomOabaTask();
+		PersistableRecordSource master =
+			createFakePersistableRecordSource(tag, task);
 		OabaParametersEntity retVal =
 			new OabaParametersEntity(createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master);
+					thresholds.getMatchThreshold(), stage, master, task);
 		te.add(retVal);
 		return retVal;
 	}

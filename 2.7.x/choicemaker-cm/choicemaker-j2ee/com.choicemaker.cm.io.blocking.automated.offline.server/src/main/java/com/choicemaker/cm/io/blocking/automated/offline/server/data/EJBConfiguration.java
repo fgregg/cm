@@ -23,9 +23,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 
 /**
  * This object contains method to get JMS and EJB objects from the J2EE server.

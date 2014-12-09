@@ -141,7 +141,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 	public void visit(DbRecordCollection rc) throws RecordCollectionException {
 		resRs = null;
 	  if(rc != null){
-		// Configure the query determined by the model configuration
+		// Configure the query determined by the modelId configuration
 		DbAccessor accessor = (DbAccessor) model.getAccessor();
 		DbReaderSequential dbr = accessor.getDbReaderSequential(rc.getName());
 		String schemaName = dbr.getName();
@@ -177,7 +177,7 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 			log.fine("DB connection URL: "+connUrl);
 			conn.close();
 		
-			// Configure the record source buffer size, dbConfig name and model name
+			// Configure the record source buffer size, dbConfig name and modelId name
 			Integer bufferSize = rc.getBufferSize();
 			final int nonnullBufferSize = (bufferSize != null)? bufferSize.intValue():
 												DbRecordCollection.DEFAULT_REC_COLLETION_BUFFER_SIZE;

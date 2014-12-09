@@ -30,8 +30,11 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
+import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -58,9 +61,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfigura
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
@@ -209,8 +211,10 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		int maxMatch = Integer.parseInt(temp);
 
 		// create rec_id, val_id files
+		ISerializableRecordSource staging =
+				DatabaseUtils.getRecordSource(params.getStageRs());
 		RecValService2 rvService =
-			new RecValService2(params.getStageRs(), null, stageModel, null,
+			new RecValService2(staging, null, stageModel, null,
 					OabaFileUtils.getRecValFactory(oabaJob), translator,
 					processingEntry);
 		rvService.runService();
@@ -271,8 +275,10 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		// create chunks
 		ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
+		ISerializableRecordSource stagingRs =
+				DatabaseUtils.getRecordSource(params.getStageRs());
 		ChunkService2 chunkService =
-			new ChunkService2(source, source2, params.getStageRs(), null,
+			new ChunkService2(source, source2, stagingRs, null,
 					stageModel, null, translator,
 					OabaFileUtils.getChunkIDFactory(oabaJob),
 					OabaFileUtils.getStageDataFactory(oabaJob, model),
@@ -348,9 +354,9 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		databaseAccessor.setCondition("");
 		databaseAccessor.setDataSource(configuration.getDataSource());
 
-		RecordSource stage = params.getStageRs();
+		RecordSource stage = DatabaseUtils.getRecordSource(params.getStageRs());
 		assert stage.getModel() == model;
-//		stage.setModel(model);
+//		stage.setModel(modelId);
 
 		try {
 			stage.open();

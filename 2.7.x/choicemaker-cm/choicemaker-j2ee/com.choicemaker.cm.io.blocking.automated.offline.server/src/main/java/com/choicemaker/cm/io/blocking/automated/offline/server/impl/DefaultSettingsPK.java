@@ -26,16 +26,16 @@ public class DefaultSettingsPK {
 	 * Constructs a primary key for an entry in the defaults table
 	 * 
 	 * @param m
-	 *            a non-null model
+	 *            a non-null modelId
 	 * @param t
 	 *            a valid discriminator value; see for example
 	 *            {@link AbaSettingsJPA#DISCRIMINATOR_VALUE} or
 	 *            {@link OabaSettingsJPA#DISCRIMINATOR_VALUE}
 	 * @param d
-	 *            a valid database configuration name, as specified by the model
+	 *            a valid database configuration name, as specified by the modelId
 	 *            schema
 	 * @param b
-	 *            a valid blocking configuration name, as specified by the model
+	 *            a valid blocking configuration name, as specified by the modelId
 	 *            schema
 	 */
 	public DefaultSettingsPK(String m, String t, String d, String b) {
@@ -135,7 +135,7 @@ public class DefaultSettingsPK {
 
 	@Override
 	public String toString() {
-		return "DefaultSettingsPK [model=" + model + ", type=" + type
+		return "DefaultSettingsPK [modelId=" + model + ", type=" + type
 				+ ", dbConfig=" + databaseConfiguration + ", blkConfig="
 				+ blockingConfiguration + "]";
 	}

@@ -31,14 +31,14 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.core.IControl;
 //import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;
 //import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 
 /**
  * This class tracks the progress of a (long-running) offline matching process.

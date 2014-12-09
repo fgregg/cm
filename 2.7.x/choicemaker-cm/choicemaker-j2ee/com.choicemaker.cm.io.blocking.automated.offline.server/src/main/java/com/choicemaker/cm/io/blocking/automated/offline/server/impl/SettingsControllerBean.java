@@ -9,17 +9,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.args.AbaSettings;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.io.blocking.automated.AbaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 
 @Stateless
 public class SettingsControllerBean implements SettingsController {
 
 	private static final Logger logger = Logger
-			.getLogger(ServerConfigurationEntity.class.getName());
+			.getLogger(SettingsControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -212,7 +212,7 @@ public class SettingsControllerBean implements SettingsController {
 	@Override
 	public AbaSettings findDefaultAbaSettings(ImmutableProbabilityModel model) {
 		if (model == null) {
-			throw new IllegalArgumentException("null model");
+			throw new IllegalArgumentException("null modelId");
 		}
 		return findDefaultAbaSettings(model.getModelName(),
 				model.getDatabaseConfigurationName(),

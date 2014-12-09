@@ -7,8 +7,12 @@ public interface PersistableSqlRecordSource extends
 
 	String getClassName();
 
-	String getDataSourceName();
+	String getDataSource();
 
 	String getSqlSelectStatement();
+	
+	String getModelId();
+	
+	String getDatabaseConfiguration();
 
 }

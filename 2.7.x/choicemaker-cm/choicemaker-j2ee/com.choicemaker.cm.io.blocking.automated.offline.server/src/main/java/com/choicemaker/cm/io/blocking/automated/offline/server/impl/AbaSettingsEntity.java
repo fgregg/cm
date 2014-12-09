@@ -12,9 +12,9 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSe
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA.ID_GENERATOR_PK_COLUMN_VALUE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA.ID_GENERATOR_TABLE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA.TABLE_NAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA.JPQL_ABA_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA.QN_ABA_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA.TABLE_NAME;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -28,7 +28,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
-import com.choicemaker.cm.io.blocking.automated.AbaSettings;
+import com.choicemaker.cm.args.AbaSettings;
 
 /**
  * Persistent ABA settings.

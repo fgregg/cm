@@ -25,14 +25,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaTaskType;
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.batch.impl.BatchJobJPA;
-import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -202,17 +203,18 @@ public class BatchQueryServiceBeanIT {
 		}
 		String STAGING = tag == null ? "STAGING" : tag + "_STAGING";
 		String MASTER = tag == null ? "MASTER" : tag + "_MASTER";
-		final SerializableRecordSource staging =
-			EntityManagerUtils.createFakeSerialRecordSource(STAGING);
-		final SerializableRecordSource master =
-			EntityManagerUtils.createFakeSerialRecordSource(MASTER);
+		final PersistableRecordSource staging =
+			EntityManagerUtils.createFakePersistableRecordSource(STAGING);
+		final OabaTaskType task = EntityManagerUtils.createRandomOabaTask();
+		final PersistableRecordSource master =
+			EntityManagerUtils.createFakePersistableRecordSource(MASTER, task);
 		final Thresholds thresholds =
 			EntityManagerUtils.createRandomThresholds();
 		final String modelConfigName = UUID.randomUUID().toString();
 		OabaParameters retVal =
 			new OabaParametersEntity(modelConfigName,
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), staging, master);
+					thresholds.getMatchThreshold(), staging, master, task);
 		return retVal;
 	}
 
@@ -233,7 +235,7 @@ public class BatchQueryServiceBeanIT {
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
 					.getMatchThreshold(), c.getStagingRecordSource(),
-					c.getMasterRecordSource());
+					c.getMasterRecordSource(), c.getOabaTask());
 		
 		final long jobId =
 			batchQuery.startLinkage(externalID, bp.getStageRs(), bp.getMasterRs(),
@@ -297,7 +299,7 @@ public class BatchQueryServiceBeanIT {
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
 					.getMatchThreshold(), c.getStagingRecordSource(),
-					c.getMasterRecordSource());
+					c.getMasterRecordSource(), c.getOabaTask());
 		
 		final long jobId =
 			batchQuery.startDeduplication(externalID, bp.getStageRs(),

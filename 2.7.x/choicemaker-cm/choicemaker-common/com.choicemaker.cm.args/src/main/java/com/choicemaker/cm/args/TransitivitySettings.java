@@ -8,9 +8,8 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.transitivity.server.ejb;
+package com.choicemaker.cm.args;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
 
 /**
  * Settings for Transitivity Analysis are analysis

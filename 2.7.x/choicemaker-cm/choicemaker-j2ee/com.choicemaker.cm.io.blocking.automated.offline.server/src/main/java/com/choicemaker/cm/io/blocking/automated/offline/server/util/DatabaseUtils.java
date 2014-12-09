@@ -10,13 +10,11 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.util.ConnectionUtils;
+import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.PersistableRecordSourceControllerBean;
 
 /**
  * @author pcheung
@@ -26,68 +24,19 @@ public class DatabaseUtils {
 	
 	private static final Logger logger = Logger.getLogger(DatabaseUtils.class.getName());
 	
-	
-	/** This method gets the next number in the job id sequence.
-	 * 
-	 * @param conn - database connection
-	 * @return next job id
-	 */
-	public static int getNextID (Connection conn) {
-		int ret = 0;
-		Statement  stmt = null;
-
-		try {
-			conn.setAutoCommit(false);
-
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("select cmt_seq_job_id.nextval from dual");
-			rs.next();
-			ret = rs.getInt(1);
-			
-			ConnectionUtils.tryToCommitConnection(conn);
-			ConnectionUtils.tryToCloseResultSet(rs);
-			ConnectionUtils.tryToCloseStatement(stmt);
-			
-		} catch (Exception ex) {
-			logger.severe(ex.toString());
+	public static ISerializableRecordSource getRecordSource(
+			PersistableRecordSourceControllerBean controller,
+			PersistableRecordSource prs) {
+		if (controller == null) {
+			throw new IllegalArgumentException("null controller");
 		}
-		
-		return ret;
-	}
-	
-
-	/** This method gets the next number in the job id sequence.
-	 * 
-	 * @param conn - database connection
-	 * @return next job id
-	 */
-	public static int getNextIdSqlServer (Connection conn) {
-		int ret = 0;
-		Statement  stmt = null;
-
-		try {
-			conn.setAutoCommit(false);
-
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("select id from cmt_sequence");
-			rs.next();
-			ret = rs.getInt(1);
-			
-			int i = stmt.executeUpdate("update cmt_sequence set id = id + 1");
-			
-			if (i != 1) throw new SQLException ("Could not update cmt_sequence");
-			
-			ConnectionUtils.tryToCommitConnection(conn);
-			ConnectionUtils.tryToCloseResultSet(rs);
-			ConnectionUtils.tryToCloseStatement(stmt);
-			
-		} catch (Exception ex) {
-			logger.severe(ex.toString());
+		ISerializableRecordSource retVal = null;
+		if (prs == null) {
+			logger.warning("null persistable record source");
+		} else {
+//			retVal = controller.
 		}
-		
-		return ret;
+		return retVal;
 	}
-
-
 
 }

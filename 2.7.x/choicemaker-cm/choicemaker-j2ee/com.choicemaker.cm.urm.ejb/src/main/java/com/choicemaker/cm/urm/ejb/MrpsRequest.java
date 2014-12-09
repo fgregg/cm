@@ -15,12 +15,13 @@ import java.util.Properties;
 
 import javax.persistence.EntityManager;
 
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -227,7 +228,7 @@ public class MrpsRequest implements IMrpsRequest {
 		SerializableRecordSource retVal = this.rsMaster;
 		if (retVal == null) {
 			OabaParameters bp = getBatchParameters(em);
-			this.rsMaster = bp.getMasterRs();
+			this.rsMaster = DatabaseUtils.getRecordSource(bp.getMasterRs());
 			retVal = this.rsMaster;
 		}
 		// Postcondition: master record source may be null
@@ -242,7 +243,7 @@ public class MrpsRequest implements IMrpsRequest {
 		SerializableRecordSource retVal = this.rsStaging;
 		if (retVal == null) {
 			OabaParameters bp = getBatchParameters(em);
-			this.rsStaging = bp.getStageRs();
+			this.rsStaging = DatabaseUtils.getRecordSource(bp.getStageRs());
 			retVal = this.rsStaging;
 		}
 		// Postcondition -- staging record source may be null?

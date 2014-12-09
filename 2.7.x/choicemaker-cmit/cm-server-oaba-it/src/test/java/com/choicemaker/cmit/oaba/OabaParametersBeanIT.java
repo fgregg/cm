@@ -21,8 +21,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.TestEntities;
@@ -146,7 +146,8 @@ public class OabaParametersBeanIT {
 				template.getLowThreshold(),
 				template.getHighThreshold(),
 				template.getStageRs(),
-				template.getMasterRs()
+				template.getMasterRs(),
+				template.getOabaTaskType()
 				);
 		te.add(params);
 
@@ -183,7 +184,8 @@ public class OabaParametersBeanIT {
 				t.getDifferThreshold(),
 				t.getMatchThreshold(),
 				template.getStageRs(),
-				template.getMasterRs()
+				template.getMasterRs(),
+				template.getOabaTaskType()
 				);
 		te.add(params);
 

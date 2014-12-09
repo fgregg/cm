@@ -18,11 +18,13 @@ public interface OabaParameters {
 	String DEFAULT_EJB_REF_NAME = "ejb/OabaParameters";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
 
+	long NONPERSISTENT_ID = 0;
+
 	long getId();
 
 	String getModelConfigurationName();
 
-	OabaJobType getOabaJobType();
+	OabaTaskType getOabaTaskType();
 
 	String getStageModel();
 
@@ -34,6 +36,14 @@ public interface OabaParameters {
 
 	PersistableRecordSource getStageRs();
 
+	long getStageRsId();
+
+	String getStageRsType();
+
 	PersistableRecordSource getMasterRs();
+
+	long getMasterRsId();
+
+	String getMasterRsType();
 
 }

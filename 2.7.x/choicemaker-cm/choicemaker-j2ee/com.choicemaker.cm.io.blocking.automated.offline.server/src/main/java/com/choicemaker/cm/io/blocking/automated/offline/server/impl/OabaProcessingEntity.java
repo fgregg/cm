@@ -48,10 +48,10 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
+import com.choicemaker.cm.batch.BatchJob;
 //import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
 
 
 /**

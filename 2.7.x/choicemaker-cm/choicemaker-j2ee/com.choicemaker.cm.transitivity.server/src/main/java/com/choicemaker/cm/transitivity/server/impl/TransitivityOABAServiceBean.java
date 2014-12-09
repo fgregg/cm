@@ -23,6 +23,7 @@ import javax.jms.JMSException;
 //import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
@@ -31,7 +32,6 @@ import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.server.data.TransitivityJobStatus;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityParameters;
 import com.choicemaker.cm.transitivity.server.util.MatchBiconnectedIterator;
 import com.choicemaker.cm.transitivity.util.CompositeEntityIterator;
 import com.choicemaker.cm.transitivity.util.CompositeEntitySource;

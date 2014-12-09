@@ -15,8 +15,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 
-import com.choicemaker.cm.io.blocking.automated.AbaSettings;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettings;
+import com.choicemaker.cm.args.AbaSettings;
+import com.choicemaker.cm.args.OabaSettings;
 
 @NamedQuery(name = QN_OABA_FIND_ALL, query = JPQL_OABA_FIND_ALL)
 @Entity

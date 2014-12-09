@@ -22,6 +22,7 @@ import java.nio.file.attribute.PosixFilePermissions;
 import java.text.DecimalFormat;
 import java.util.Set;
 
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
@@ -41,7 +42,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFac
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.SuffixTreeSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.SuffixTreeSource;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfiguration;
 import com.choicemaker.util.SystemPropertyUtils;
 
 /**
@@ -222,7 +222,7 @@ public class OabaFileUtils implements Serializable {
 	public static ChunkDataSinkSourceFactory getStageDataFactory(BatchJob job,
 			ImmutableProbabilityModel model) {
 		if (model == null) {
-			throw new IllegalArgumentException("null model");
+			throw new IllegalArgumentException("null modelId");
 		}
 		String wd = getWorkingDir(job);
 		return new ChunkDataSinkSourceFactory(wd, BASENAME_CHUNKSTAGE_ROW_STORE, model);
@@ -233,7 +233,7 @@ public class OabaFileUtils implements Serializable {
 	public static ChunkDataSinkSourceFactory getMasterDataFactory(BatchJob job,
 			ImmutableProbabilityModel model) {
 		if (model == null) {
-			throw new IllegalArgumentException("null model");
+			throw new IllegalArgumentException("null modelId");
 		}
 		String wd = getWorkingDir(job);
 		return new ChunkDataSinkSourceFactory(wd, BASENAME_CHUNKMASTER_ROW_STORE, model);

@@ -114,7 +114,7 @@ public class TransitivityServiceBean implements SessionBean {
 		}
 		// 2014-04-24 rphall: Commented out unused local variable
 		// Any side effects?
-//		Accessor accessor = model.getAccessor();
+//		Accessor accessor = modelId.getAccessor();
 		Record q = profile.getRecord(model);
 		RecordDecisionMaker dm = new RecordDecisionMaker();
 		DatabaseAccessor databaseAccessor;

@@ -110,7 +110,7 @@ public class CmServerAdminBean implements SessionBean {
 		return retVal;
 	}
 
-	/** Returns the updator specified by the model */
+	/** Returns the updator specified by the modelId */
 	public static IUpdateDerivedFields getUpdator(String modelName)
 		throws ModelException, ConfigException {
 		IProbabilityModel model = PMManager.getModelInstance(modelName);
@@ -151,7 +151,7 @@ public class CmServerAdminBean implements SessionBean {
 		String probabilityModel,
 		DbRecordCollection rc)
 		throws ConfigException, RecordCollectionException, ModelException, RemoteException {
-		Precondition.assertNonNullArgument("null model", probabilityModel);
+		Precondition.assertNonNullArgument("null modelId", probabilityModel);
 		Precondition.assertNonNullArgument("null record collection", rc);
 		try {
 			DataSource ds = getDataSource(rc);
@@ -172,7 +172,7 @@ public class CmServerAdminBean implements SessionBean {
 		String probabilityModel,
 		DbRecordCollection rc)
 		throws ConfigException, RecordCollectionException, ModelException, RemoteException {
-		Precondition.assertNonNullArgument("null model", probabilityModel);
+		Precondition.assertNonNullArgument("null modelId", probabilityModel);
 		Precondition.assertNonNullArgument("null record collection", rc);
 		try {
 			DataSource ds = getDataSource(rc);

@@ -10,10 +10,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.core.SerializableRecordSource;
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaTaskType;
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
@@ -45,7 +46,7 @@ public class OabaParametersController2 {
 	OabaJobControllerBean jobController;
 
 	/**
-	 * Synthesizes the name of a fake model configuration using the specified
+	 * Synthesizes the name of a fake modelId configuration using the specified
 	 * tag which may be null
 	 */
 	public String createRandomModelConfigurationName(String tag) {
@@ -81,12 +82,15 @@ public class OabaParametersController2 {
 			throw new IllegalArgumentException("null test entities");
 		}
 		Thresholds thresholds = createRandomThresholds();
-		SerializableRecordSource stage = EntityManagerUtils.createFakeSerialRecordSource(tag);
-		SerializableRecordSource master = EntityManagerUtils.createFakeSerialRecordSource(tag);
+		PersistableRecordSource stage =
+			EntityManagerUtils.createFakePersistableRecordSource(tag);
+		OabaTaskType task = EntityManagerUtils.createRandomOabaTask();
+		PersistableRecordSource master =
+			EntityManagerUtils.createFakePersistableRecordSource(tag, task);
 		OabaParametersEntity retVal =
 			new OabaParametersEntity(createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master);
+					thresholds.getMatchThreshold(), stage, master, task);
 		paramsController.save(retVal);
 		te.add(retVal);
 		return retVal;

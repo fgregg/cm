@@ -1,7 +1,7 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
+import com.choicemaker.cm.args.TransitivitySettings;
 import com.choicemaker.cm.core.SerializableRecordSource;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivitySettings;
 
 public class TransitivitySettingsEntity implements TransitivitySettings {
 
