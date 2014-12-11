@@ -12,8 +12,6 @@ package com.choicemaker.cm.urm;
 
 import java.rmi.RemoteException;
 
-import javax.ejb.EJBObject;
-
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
@@ -21,15 +19,14 @@ import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 /**
  * 
- * The base class for the batch match and batch analysis session beans. Contains
+ * Common operations of the batch match and batch analysis session beans. Contains
  * functionality related to the job management such as checking status, abort,
  * resume, etc.
  * 
  * @author emoussikaev
  * @version Revision: 2.5 Date: Jun 28, 2005 2:40:13 PM
- * @see
  */
-public interface BatchBase extends EJBObject {
+public interface BatchBase {
 
 	/**
 	 * Aborts the job with the given job ID.

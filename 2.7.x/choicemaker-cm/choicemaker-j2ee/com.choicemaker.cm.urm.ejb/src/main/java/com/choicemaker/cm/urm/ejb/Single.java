@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
+import javax.ejb.EJB;
 import javax.ejb.FinderException;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
@@ -124,7 +125,7 @@ public class Single implements Serializable {
 	// Cached JNDI context
 	private transient InitialContext initContext = null;
 
-	// @EBJ
+	@EJB
 	OabaJobControllerBean oabaJobControllerBean;
 
 	// Singleton instance

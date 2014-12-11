@@ -30,6 +30,7 @@ import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
@@ -83,7 +84,7 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 		return retVal;
 	}
 
-	// @PersistenceContext (unitName = "oaba")
+	@PersistenceContext (unitName = "oaba")
 	private EntityManager em;
 
 	/**

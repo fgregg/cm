@@ -13,6 +13,7 @@ package com.choicemaker.cm.urm.ejb;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
 import javax.jms.JMSException;
@@ -20,6 +21,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.analyzer.filter.DefaultPairFilter;
 import com.choicemaker.cm.analyzer.filter.Filter;
@@ -45,10 +47,10 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 	private static final Logger log = Logger.getLogger(MrpsBackend.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + MrpsBackend.class.getName());
 
-//	@PersistenceContext (unitName = "oaba")
+	@PersistenceContext (unitName = "oaba")
 	private EntityManager em;
 
-	// @EJB
+	@EJB
 	private PersistableRecordSourceController rsController;
 
 	private transient MessageDrivenContext mdc = null;
