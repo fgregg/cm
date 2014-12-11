@@ -13,6 +13,9 @@ package com.choicemaker.cm.transitivity.server.impl;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
+import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
@@ -33,14 +36,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessi
  * @author pcheung
  *
  */
-//@SuppressWarnings({"rawtypes"})
-//@MessageDriven(activationConfig = {
-//		@ActivationConfigProperty(propertyName = "maxSession",
-//				propertyValue = "1"), // Singleton (JBoss only)
-//		@ActivationConfigProperty(propertyName = "destinationLookup",
-//				propertyValue = "java:/choicemaker/urm/jms/transMatchSchedulerQueue"),
-//		@ActivationConfigProperty(propertyName = "destinationType",
-//				propertyValue = "javax.jms.Queue") })
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "maxSession",
+				propertyValue = "1"), // Singleton (JBoss only)
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/transMatchSchedulerQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
 public class TransMatchScheduler extends AbstractScheduler {
 
 	private static final long serialVersionUID = 1L;
@@ -49,19 +51,19 @@ public class TransMatchScheduler extends AbstractScheduler {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ TransMatchScheduler.class.getName());
 
-	// @EJB
+	@EJB
 	private OabaJobControllerBean jobController;
 
-	// @EJB
+	@EJB
 	private SettingsController settingsController;
 
-	// @EJB
+	@EJB
 	private OabaParametersControllerBean paramsController;
 	
-	// @EJB
+	@EJB
 	private OabaProcessingControllerBean processingController;
 
-	// @EJB
+	@EJB
 	private ServerConfigurationController serverController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchDedupQueue")

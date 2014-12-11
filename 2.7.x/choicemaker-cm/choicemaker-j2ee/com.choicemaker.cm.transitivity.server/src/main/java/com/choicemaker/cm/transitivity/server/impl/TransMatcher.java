@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
@@ -47,11 +49,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-//@MessageDriven(activationConfig = {
-//		@ActivationConfigProperty(propertyName = "destinationLookup",
-//				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
-//		@ActivationConfigProperty(propertyName = "destinationType",
-//				propertyValue = "javax.jms.Queue") })
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
 public class TransMatcher extends AbstractMatcher  {
 
 	private static final long serialVersionUID = 271L;

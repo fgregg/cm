@@ -15,7 +15,9 @@ import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
 import javax.ejb.FinderException;
+import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -46,16 +48,14 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
  * @author pcheung
  *
  */
-//@SuppressWarnings({
-//		"rawtypes", "unchecked" })
 //Singleton: maxSession = 1 (JBoss only)
-//@MessageDriven(activationConfig = {
-//		@ActivationConfigProperty(propertyName = "maxSession",
-//				propertyValue = "1"),
-//		@ActivationConfigProperty(propertyName = "destinationLookup",
-//				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
-//		@ActivationConfigProperty(propertyName = "destinationType",
-//				propertyValue = "javax.jms.Queue") })
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "maxSession",
+				propertyValue = "1"),
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
 public class TransMatchDedup implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
