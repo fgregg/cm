@@ -21,6 +21,8 @@ package com.choicemaker.cm.matching.gen;
  */
 
 public class EditDistance2 {
+	
+	public static final int DISTANCE_LIMIT = Integer.MAX_VALUE - 1;
 
 	/**
 	 * Computes the modified edit distance between two strings.
@@ -34,27 +36,30 @@ public class EditDistance2 {
 	 * @param  s           The first string.
 	 * @param  t           The second string.
 	 * @param  maxDistance The maximum distance. Must be <code>&gt; 0</code> and
-	 *           <code>&lt; Integer.MAX_VALUE</code>.
+	 *           <code>&le; DISTANCE_LIMIT</code>.
 	 * @return the minimum edit distance between <code>s</code> and <code>t</code>
-	 * @throws IllegalArgumentException if one of the Strings is <code>null</code>
-	 * or the maxDistance is not positive. 
+	 * @throws IllegalArgumentException if the maxDistance is not positive or
+	 * is greater than {@link #DISTANCE_LIMIT}
 	 */
 	public static int editDistance2(String s, String t, int maxDistance) {
 		
-		if (s == null || t == null) {
-			throw new IllegalArgumentException("null string");
+		if (maxDistance < 1 || maxDistance > DISTANCE_LIMIT) {
+			throw new IllegalArgumentException("invalid maximum distance: "
+					+ maxDistance);
 		}
-		if (maxDistance < 1) {
-			throw new IllegalArgumentException("non-positive distance");
+
+		final int MAX_RETURN = maxDistance + 1;
+		if (s == null || t == null) {
+			return MAX_RETURN;
 		}
 
 		int m = s.length();
 		int n = t.length();
 		if (m == 0) {
-			return Math.min(maxDistance + 1, n);
+			return Math.min(MAX_RETURN, n);
 		}
 		if (n == 0) {
-			return Math.min(maxDistance + 1, m);
+			return Math.min(MAX_RETURN, m);
 		}
 
 		// BUG rphall 2008-12-18
@@ -86,19 +91,19 @@ public class EditDistance2 {
 		}
 		// END BUG
 
-		return Math.min(maxDistance + 1, d[m][n]);
+		return Math.min(MAX_RETURN, d[m][n]);
 	}
 
 	/**
 	 * Computes the modified edit distance between two strings.
 	 *
-	 * This is equivalent to <code>editDistance(s, t, Integer.MAX_VALUE - 1)</code>.
+	 * This is equivalent to <code>editDistance(s, t, DISTANCE_LIMIT)</code>.
 	 *
 	 * @param  s           The first string.
 	 * @param  t           The second string.
 	 * @return the minimum edit distance between <code>a</code> and <code>b</code> 
 	 */
 	public static int editDistance2(String s, String t) {
-		return editDistance2(s, t, Integer.MAX_VALUE - 1);
+		return editDistance2(s, t, DISTANCE_LIMIT);
 	}
 }

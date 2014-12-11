@@ -22,6 +22,9 @@ package com.choicemaker.cm.matching.en;
  * @version   $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:03:01 $
  */
 public class Jaro {
+
+	public static final float MIN_RETURN = 0.0f;
+
 	private static boolean numb(char c) {
 		return (c >= '0') && (c <= '9');
 	}
@@ -141,8 +144,8 @@ public class Jaro {
 	 * @param checkForNumbers Check for numbers in data; if number is present in either the
 	 *              ying or the yang string and the strings do not match, then 0.0
 	 *              is returned, else the calculated weight is returned.
-	 * @return the Jaro similarity between a and b
-	 * @throws NullPointerException if one or both strings are <code>null</code>.
+	 * @return the Jaro similarity between a and b, or {@link #MIN_RETURN}
+	 * if one or both strings are <code>null</code>.
 	 */
 	public static float jaro(
 		String ying,
@@ -150,6 +153,11 @@ public class Jaro {
 		boolean higherScoreForLongStrings,
 		boolean convertToUpper,
 		boolean checkForNumbers) {
+
+		if (ying == null || yang == null) {
+			return MIN_RETURN;
+		}
+
 		int y_length = Math.min(ying.length(), yang.length());
 
 		float weight, Num_sim;
@@ -384,8 +392,8 @@ public class Jaro {
 	 * @param checkForNumbers Check for numbers in data; if number is present in either the
 	 *              ying or the yang string and the strings do not match, then 0.0
 	 *              is returned, else the calculated weight is returned.
-	 * @return the Jaro similarity between a and b
-	 * @throws NullPointerException if one or both strings are <code>null</code>.
+	 * @return the Jaro similarity between a and b, or {@link #MIN_RETURN}
+	 * if one or both strings are <code>null</code>.
 	 */
 	public static float jaroClassic(
 		String ying,
@@ -393,6 +401,11 @@ public class Jaro {
 		boolean higherScoreForLongStrings,
 		boolean convertToUpper,
 		boolean checkForNumbers) {
+
+		if (ying == null || yang == null) {
+			return MIN_RETURN;
+		}
+
 		int y_length = Math.min(ying.length(), yang.length());
 
 		float weight, Num_sim;
