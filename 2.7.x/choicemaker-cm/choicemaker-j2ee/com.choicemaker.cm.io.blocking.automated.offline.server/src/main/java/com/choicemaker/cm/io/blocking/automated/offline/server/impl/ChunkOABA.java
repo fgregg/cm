@@ -39,14 +39,14 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
 
 /**
- * This bean handles the creation of chunks, including chunk data files and their corresponding block files.
+ * This bean handles the creation of chunks, including chunk data files and
+ * their corresponding block files.
  *
  * @author pcheung
  *
@@ -55,20 +55,22 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
 public class ChunkOABA implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(ChunkOABA.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + ChunkOABA.class.getName());
+	private static final Logger log = Logger.getLogger(ChunkOABA.class
+			.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
+			+ ChunkOABA.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
-	
+
 	@EJB
 	private OabaProcessingControllerBean processingController;
-	
+
 	@EJB
-	private PersistableRecordSourceControllerBean rsController;
+	private PersistableRecordSourceController rsController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
@@ -79,7 +81,9 @@ public class ChunkOABA implements MessageListener, Serializable {
 	@Inject
 	private JMSContext jmsContext;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
 	 */
 	public void onMessage(Message inMessage) {
@@ -97,8 +101,10 @@ public class ChunkOABA implements MessageListener, Serializable {
 
 				final long jobId = data.jobID;
 				oabaJob = jobController.find(jobId);
-				OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
-				OabaProcessing processingEntry = processingController.findProcessingLogByJobId(jobId);
+				OabaParameters params =
+					paramsController.findBatchParamsByJobId(jobId);
+				OabaProcessing processingEntry =
+					processingController.findProcessingLogByJobId(jobId);
 				final String modelConfigId = params.getModelConfigurationName();
 				IProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
@@ -113,14 +119,16 @@ public class ChunkOABA implements MessageListener, Serializable {
 					oabaJob.markAsAborted();
 
 					if (oabaJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
-						processingEntry.setCurrentProcessingEvent (OabaEvent.DONE_OABA);
+						processingEntry
+								.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 						OabaFileUtils.removeTempDir(oabaJob);
 					}
 				} else {
-					String temp = (String) model.properties().get("maxChunkSize");
+					String temp =
+						(String) model.properties().get("maxChunkSize");
 					int maxChunk = Integer.parseInt(temp);
 
-					//get the maximum number of chunk files
+					// get the maximum number of chunk files
 					temp = (String) model.properties().get("maxChunkFiles");
 					int maxChunkFiles = Integer.parseInt(temp);
 
@@ -147,12 +155,13 @@ public class ChunkOABA implements MessageListener, Serializable {
 					// create the oversized block transformer
 					Transformer transformerO =
 						new Transformer(translator,
-								OabaFileUtils.getComparisonArrayFactoryOS(oabaJob));
+								OabaFileUtils
+										.getComparisonArrayFactoryOS(oabaJob));
 
 					ISerializableRecordSource staging =
-						DatabaseUtils.getRecordSource(params.getStageRs());
+						rsController.getStageRs(params);
 					ISerializableRecordSource master =
-						DatabaseUtils.getRecordSource(params.getMasterRs());
+						rsController.getMasterRs(params);
 					ChunkService3 chunkService =
 						new ChunkService3(
 								OabaFileUtils.getTreeSetSource(oabaJob),
@@ -165,15 +174,16 @@ public class ChunkOABA implements MessageListener, Serializable {
 								tTransformer, transformerO, maxChunk,
 								maxChunkFiles, processingEntry, oabaJob);
 					chunkService.runService();
-					log.info( "Number of chunks " + chunkService.getNumChunks());
-					log.info( "Done creating chunks " + chunkService.getTimeElapsed());
+					log.info("Number of chunks " + chunkService.getNumChunks());
+					log.info("Done creating chunks "
+							+ chunkService.getTimeElapsed());
 
 					translator.cleanUp();
 
 					data.numChunks = chunkService.getNumChunks();
 
-					sendToUpdateStatus (data.jobID, PCT_DONE_CREATE_CHUNK_DATA);
-					sendToMatch (data);
+					sendToUpdateStatus(data.jobID, PCT_DONE_CREATE_CHUNK_DATA);
+					sendToMatch(data);
 				}
 
 			} else {
@@ -189,14 +199,15 @@ public class ChunkOABA implements MessageListener, Serializable {
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-	private void sendToUpdateStatus (long jobID, int percentComplete) {
+	private void sendToUpdateStatus(long jobID, int percentComplete) {
 		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
 				updateQueue, log);
 	}
 
-	private void sendToMatch (OabaJobMessage data) throws NamingException, JMSException{
-		MessageBeanUtils.sendStartData(data, jmsContext, matchSchedulerQueue, log);
+	private void sendToMatch(OabaJobMessage data) throws NamingException,
+			JMSException {
+		MessageBeanUtils.sendStartData(data, jmsContext, matchSchedulerQueue,
+				log);
 	}
-
 
 }

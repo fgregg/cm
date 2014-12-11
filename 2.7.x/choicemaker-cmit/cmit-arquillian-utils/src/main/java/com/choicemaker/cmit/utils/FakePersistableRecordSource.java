@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.choicemaker.cm.args.PersistableRecordSource;
 
 public class FakePersistableRecordSource implements PersistableRecordSource {
-	
+
 	public static final String TYPE = "FAKE";
 
 	private static final long serialVersionUID = 271L;

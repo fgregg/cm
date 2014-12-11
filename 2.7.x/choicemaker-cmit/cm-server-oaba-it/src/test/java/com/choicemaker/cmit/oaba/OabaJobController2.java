@@ -24,10 +24,10 @@ import com.choicemaker.cmit.utils.TestEntities;
  */
 @Stateless
 public class OabaJobController2 {
-	
+
 	@EJB
 	private OabaJobControllerBean oabaController;
-	
+
 	@EJB
 	private ServerConfigurationController serverController;
 
@@ -43,7 +43,7 @@ public class OabaJobController2 {
 		assert retVal.getId() != ServerConfigurationControllerBean.INVALID_ID;
 		return retVal;
 	}
-	
+
 	public OabaJob createEphemeralOabaJob(String tag, TestEntities te) {
 		ServerConfiguration sc = getDefaultServerConfiguration();
 		return EntityManagerUtils.createEphemeralOabaJob(sc, em, tag, te);

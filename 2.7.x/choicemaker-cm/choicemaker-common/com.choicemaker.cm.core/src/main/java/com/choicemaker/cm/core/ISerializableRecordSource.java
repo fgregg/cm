@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.core;
 
+import java.io.Serializable;
 import java.util.Properties;
 
 
@@ -29,7 +30,7 @@ import java.util.Properties;
  * @author rphall
  *
  */
-public interface ISerializableRecordSource extends SerializableRecordSource {
+public interface ISerializableRecordSource extends Serializable, RecordSource {
 	
 	/**
 	 * The name of the property that specifies the probability model name,

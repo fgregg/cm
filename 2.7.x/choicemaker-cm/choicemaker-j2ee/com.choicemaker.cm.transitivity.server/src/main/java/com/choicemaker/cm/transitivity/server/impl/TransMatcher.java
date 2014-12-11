@@ -16,9 +16,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
-import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
@@ -37,10 +34,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractMatcher;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
 /**
@@ -50,11 +47,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-@MessageDriven(activationConfig = {
-		@ActivationConfigProperty(propertyName = "destinationLookup",
-				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
-		@ActivationConfigProperty(propertyName = "destinationType",
-				propertyValue = "javax.jms.Queue") })
+//@MessageDriven(activationConfig = {
+//		@ActivationConfigProperty(propertyName = "destinationLookup",
+//				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
+//		@ActivationConfigProperty(propertyName = "destinationType",
+//				propertyValue = "javax.jms.Queue") })
 public class TransMatcher extends AbstractMatcher  {
 
 	private static final long serialVersionUID = 271L;
@@ -64,19 +61,19 @@ public class TransMatcher extends AbstractMatcher  {
 
 	private static final int INTERVAL = 50000;
 
-	@EJB
+	// @EJB
 	private OabaJobControllerBean jobController;
 
-	@EJB
+	// @EJB
 	private SettingsController settingsController;
 
-	@EJB
+	// @EJB
 	private ServerConfigurationController serverController;
 
-	@EJB
+	// @EJB
 	private OabaParametersControllerBean paramsController;
 	
-	@EJB
+	// @EJB
 	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")

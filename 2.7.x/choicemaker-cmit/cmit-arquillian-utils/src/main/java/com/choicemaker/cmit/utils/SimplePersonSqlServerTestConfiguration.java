@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.args.OabaTaskType;
+import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.core.IProbabilityModelManager;
@@ -21,12 +21,12 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	private static Logger logger = Logger
 			.getLogger(SimplePersonSqlServerTestConfiguration.class.getName());
-	
+
 	public static final String RECORD_SOURCE_CLASS_NAME =
-			"com.choicemaker.cm.io.db.sqlserver.SqlServerParallelRecordSource";
+		"com.choicemaker.cm.io.db.sqlserver.SQLServerSerializableParallelSerialRecordSource";
 
 	public static final String DEFAULT_DATASOURCE_JNDI_NAME =
-		// "/choicemaker/urm/jdbc/ChoiceMakerBlocking";
+	// "/choicemaker/urm/jdbc/ChoiceMakerBlocking";
 		"/choicemaker/urm/jdbc/ChoiceMakerEjb";
 
 	public static final String DEFAULT_DATABASE_CONFIGURATION = "default";
@@ -36,9 +36,9 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	public static final String DEFAULT_MASTER_SQL =
 		"SELECT RECORD_ID AS ID FROM PERSON WHERE LINKAGE_ROLE='M'";
-	
-	public static final OabaTaskType DEFAULT_OABA_TASK =
-		OabaTaskType.STAGING_TO_MASTER_LINKAGE;
+
+	public static final OabaLinkageType DEFAULT_OABA_TASK =
+		OabaLinkageType.STAGING_TO_MASTER_LINKAGE;
 
 	public static final String DEFAULT_MODEL_CONFIGURATION_ID =
 		"com.choicemaker.cm.simplePersonMatching.Model1";
@@ -57,7 +57,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 	private final String databaseConfiguration;
 	private final String stagingSQL;
 	private final String masterSQL;
-	private final OabaTaskType task;
+	private final OabaLinkageType task;
 	private final String modelConfigurationId;
 	private final ImmutableThresholds thresholds;
 	private final int maxSingle;
@@ -73,23 +73,24 @@ public class SimplePersonSqlServerTestConfiguration implements
 	private ISerializableDbRecordSource master;
 
 	public SimplePersonSqlServerTestConfiguration() {
-		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION, DEFAULT_STAGING_SQL,
-				DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK, DEFAULT_MODEL_CONFIGURATION_ID,
-				DEFAULT_THRESHOLDS, DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
+		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION,
+				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK,
+				DEFAULT_MODEL_CONFIGURATION_ID, DEFAULT_THRESHOLDS,
+				DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
 				DEFAULT_TRANSITIVITY_ANALYSIS);
 	}
 
 	public SimplePersonSqlServerTestConfiguration(boolean runTransitivity) {
-		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION, DEFAULT_STAGING_SQL,
-				DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK, DEFAULT_MODEL_CONFIGURATION_ID,
-				DEFAULT_THRESHOLDS, DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
-				runTransitivity);
+		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION,
+				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK,
+				DEFAULT_MODEL_CONFIGURATION_ID, DEFAULT_THRESHOLDS,
+				DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD, runTransitivity);
 	}
 
 	public SimplePersonSqlServerTestConfiguration(String dsJndiName,
-			String dbConfig,
-			String stagingSQL, String masterSQL, OabaTaskType task, String mci,
-			ImmutableThresholds t, int maxSingle, boolean runTransitivity) {
+			String dbConfig, String stagingSQL, String masterSQL,
+			OabaLinkageType task, String mci, ImmutableThresholds t,
+			int maxSingle, boolean runTransitivity) {
 		if (dsJndiName == null || dsJndiName.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank JNDI name for data source");
@@ -278,7 +279,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 			public String getDatabaseConfiguration() {
 				return DEFAULT_DATABASE_CONFIGURATION;
 			}
-			
+
 		};
 	}
 
@@ -323,12 +324,12 @@ public class SimplePersonSqlServerTestConfiguration implements
 			public String getDatabaseConfiguration() {
 				return DEFAULT_DATABASE_CONFIGURATION;
 			}
-			
+
 		};
 	}
 
 	@Override
-	public OabaTaskType getOabaTask() {
+	public OabaLinkageType getOabaTask() {
 		return task;
 	}
 
@@ -362,8 +363,8 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	private static ISerializableDbRecordSource createRecordSource(
-			ImmutableProbabilityModel model, String dsJndiName, String dbConfig, String sql)
-			throws Exception {
+			ImmutableProbabilityModel model, String dsJndiName,
+			String dbConfig, String sql) throws Exception {
 
 		ISerializableDbRecordSource retVal =
 			new SQLServerSerializableParallelSerialRecordSource(dsJndiName,

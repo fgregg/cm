@@ -19,11 +19,11 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaTaskType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.core.SerializableRecordSource;
+import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
@@ -57,7 +57,8 @@ public class EntityManagerUtils {
 	private static final String UNDERSCORE = "_";
 	static final String TAG_DELIMITER = ": ";
 	static final String PREFIX_FAKE_RECORDSOURCE = "FAKE_RECORDSOURCE_";
-	static final String PREFIX_FAKE_RECORDSOURCE_FILE = "FAKE_RECORDSOURCE_FILE_";
+	static final String PREFIX_FAKE_RECORDSOURCE_FILE =
+		"FAKE_RECORDSOURCE_FILE_";
 
 	private static final Random random = new Random();
 
@@ -111,18 +112,18 @@ public class EntityManagerUtils {
 		return retVal;
 	}
 
-	public static OabaTaskType createRandomOabaTask() {
-		OabaTaskType retVal;
+	public static OabaLinkageType createRandomOabaTask() {
+		OabaLinkageType retVal;
 		int i = random.nextInt(3);
 		switch (i) {
 		case 0:
-			retVal = OabaTaskType.STAGING_DEDUPLICATION;
+			retVal = OabaLinkageType.STAGING_DEDUPLICATION;
 			break;
 		case 1:
-			retVal = OabaTaskType.STAGING_TO_MASTER_LINKAGE;
+			retVal = OabaLinkageType.STAGING_TO_MASTER_LINKAGE;
 			break;
 		case 2:
-			retVal = OabaTaskType.MASTER_TO_MASTER_LINKAGE;
+			retVal = OabaLinkageType.MASTER_TO_MASTER_LINKAGE;
 			break;
 		default:
 			throw new Error("not possible");
@@ -131,9 +132,9 @@ public class EntityManagerUtils {
 	}
 
 	public static PersistableRecordSource createFakePersistableRecordSource(
-			String tag, OabaTaskType task) {
+			String tag, OabaLinkageType task) {
 		PersistableRecordSource retVal;
-		switch(task) {
+		switch (task) {
 		case STAGING_DEDUPLICATION:
 			retVal = null;
 			break;
@@ -152,7 +153,7 @@ public class EntityManagerUtils {
 		return new FakePersistableRecordSource(tag);
 	}
 
-	public static SerializableRecordSource createFakeSerialRecordSource(
+	public static ISerializableRecordSource createFakeSerialRecordSource(
 			String tag) {
 		return new FakeSerialRecordSource(tag);
 	}
@@ -165,7 +166,7 @@ public class EntityManagerUtils {
 		}
 		Thresholds thresholds = createRandomThresholds();
 		PersistableRecordSource stage = createFakePersistableRecordSource(tag);
-		OabaTaskType task = createRandomOabaTask();
+		OabaLinkageType task = createRandomOabaTask();
 		PersistableRecordSource master =
 			createFakePersistableRecordSource(tag, task);
 		OabaParametersEntity retVal =
@@ -185,21 +186,22 @@ public class EntityManagerUtils {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		OabaParametersEntity retVal =
-			createEphemeralOabaParameters(tag, te);
+		OabaParametersEntity retVal = createEphemeralOabaParameters(tag, te);
 		em.persist(retVal);
 		return retVal;
 	}
 
 	/** Creates an ephemeral instance of OabaSettingsEntity */
-	public static OabaSettingsEntity createEphemeralOabaSettings(
-			String tag, TestEntities te) {
+	public static OabaSettingsEntity createEphemeralOabaSettings(String tag,
+			TestEntities te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
 		int limPerBlockingSet = random.nextInt(DEFAULT_LIMIT_PER_BLOCKING_SET);
-		int limSingleBlockingSet = random.nextInt(DEFAULT_LIMIT_SINGLE_BLOCKING_SET);
-		int singleTableGraceLimit = random.nextInt(DEFAULT_SINGLE_TABLE_GRACE_LIMIT);
+		int limSingleBlockingSet =
+			random.nextInt(DEFAULT_LIMIT_SINGLE_BLOCKING_SET);
+		int singleTableGraceLimit =
+			random.nextInt(DEFAULT_SINGLE_TABLE_GRACE_LIMIT);
 		int maxSingle = random.nextInt(MAX_MAX_SINGLE);
 		int maxBlockSize = random.nextInt(DEFAULT_MAX_BLOCKSIZE);
 		int maxChunkSize = random.nextInt(DEFAULT_MAX_CHUNKSIZE);
@@ -208,24 +210,23 @@ public class EntityManagerUtils {
 		int minFields = random.nextInt(DEFAULT_MIN_FIELDS);
 		int interval = random.nextInt(DEFAULT_INTERVAL);
 		OabaSettingsEntity retVal =
-		new OabaSettingsEntity(limPerBlockingSet, limSingleBlockingSet,
-				singleTableGraceLimit, maxSingle, maxBlockSize, maxMatches,
-				maxChunkSize, maxOversized, minFields, interval);
+			new OabaSettingsEntity(limPerBlockingSet, limSingleBlockingSet,
+					singleTableGraceLimit, maxSingle, maxBlockSize, maxMatches,
+					maxChunkSize, maxOversized, minFields, interval);
 		te.add(retVal);
 		return retVal;
 	}
 
 	/**
-	 * Creates a persistent instance of OabaSettingsEntity An externalId for
-	 * the returned OabaJob is synthesized using the specified tag.
+	 * Creates a persistent instance of OabaSettingsEntity An externalId for the
+	 * returned OabaJob is synthesized using the specified tag.
 	 */
 	public static OabaSettingsEntity createPersistentOabaSettings(
 			EntityManager em, String tag, TestEntities te) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		OabaSettingsEntity retVal =
-			createEphemeralOabaSettings(tag, te);
+		OabaSettingsEntity retVal = createEphemeralOabaSettings(tag, te);
 		em.persist(retVal);
 		return retVal;
 	}
@@ -237,16 +238,18 @@ public class EntityManagerUtils {
 			throw new IllegalArgumentException("null test entities");
 		}
 		Thresholds thresholds = createRandomThresholds();
-		SerializableRecordSource stage = createFakeSerialRecordSource(tag);
-		SerializableRecordSource master;
+		ISerializableRecordSource stage = createFakeSerialRecordSource(tag);
+		ISerializableRecordSource master;
 		if (random.nextBoolean()) {
 			master = createFakeSerialRecordSource(tag);
 		} else {
 			master = null;
 		}
-//		File workingDir = ServerConfigurationControllerBean.computeGenericLocation();
+		// File workingDir =
+		// ServerConfigurationControllerBean.computeGenericLocation();
 		TransitivityParametersEntity retVal =
-			new TransitivityParametersEntity(createRandomModelConfigurationName(tag),
+			new TransitivityParametersEntity(
+					createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
 					thresholds.getMatchThreshold(), stage, master);
 		te.add(retVal);
@@ -254,8 +257,9 @@ public class EntityManagerUtils {
 	}
 
 	/**
-	 * Creates a persistent instance of TransitivityParametersEntity An externalId for
-	 * the returned TransitivityJob is synthesized using the specified tag.
+	 * Creates a persistent instance of TransitivityParametersEntity An
+	 * externalId for the returned TransitivityJob is synthesized using the
+	 * specified tag.
 	 */
 	public static TransitivityParametersEntity createPersistentTransitivityParameters(
 			EntityManager em, String tag, TestEntities te) {
@@ -275,16 +279,18 @@ public class EntityManagerUtils {
 			throw new IllegalArgumentException("null test entities");
 		}
 		Thresholds thresholds = createRandomThresholds();
-		SerializableRecordSource stage = createFakeSerialRecordSource(tag);
-		SerializableRecordSource master;
+		ISerializableRecordSource stage = createFakeSerialRecordSource(tag);
+		ISerializableRecordSource master;
 		if (random.nextBoolean()) {
 			master = createFakeSerialRecordSource(tag);
 		} else {
 			master = null;
 		}
-//		File workingDir = ServerConfigurationControllerBean.computeGenericLocation();
+		// File workingDir =
+		// ServerConfigurationControllerBean.computeGenericLocation();
 		TransitivitySettingsEntity retVal =
-			new TransitivitySettingsEntity(createRandomModelConfigurationName(tag),
+			new TransitivitySettingsEntity(
+					createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
 					thresholds.getMatchThreshold(), stage, master);
 		te.add(retVal);
@@ -292,8 +298,8 @@ public class EntityManagerUtils {
 	}
 
 	/**
-	 * Creates a persistent instance of TransitivitySettingsEntity An externalId for
-	 * the returned TransitivityJob is synthesized using the specified tag.
+	 * Creates a persistent instance of TransitivitySettingsEntity An externalId
+	 * for the returned TransitivityJob is synthesized using the specified tag.
 	 */
 	public static TransitivitySettingsEntity createPersistentTransitivitySettings(
 			EntityManager em, String tag, TestEntities te) {
@@ -425,8 +431,7 @@ public class EntityManagerUtils {
 		te.removePersistentObjects(em);
 	}
 
-	public static TransitivityJob save(EntityManager em,
-			TransitivityJob job) {
+	public static TransitivityJob save(EntityManager em, TransitivityJob job) {
 		if (job.getId() == 0) {
 			em.persist(job);
 		} else {
@@ -452,8 +457,7 @@ public class EntityManagerUtils {
 		return job;
 	}
 
-	public static List<OabaParameters> findAllOabaParameters(
-			EntityManager em) {
+	public static List<OabaParameters> findAllOabaParameters(EntityManager em) {
 		Query query =
 			em.createNamedQuery(OabaParametersJPA.QN_BATCHPARAMETERS_FIND_ALL);
 		@SuppressWarnings("unchecked")
@@ -474,8 +478,7 @@ public class EntityManagerUtils {
 		return retVal;
 	}
 
-	public static List<TransitivityJob> findAllTransitivityJobs(
-			EntityManager em) {
+	public static List<TransitivityJob> findAllTransitivityJobs(EntityManager em) {
 		Query query =
 			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL);
 		@SuppressWarnings("unchecked")
@@ -486,8 +489,7 @@ public class EntityManagerUtils {
 		return retVal;
 	}
 
-	public static List<OabaProcessing> findAllOabaProcessing(
-			EntityManager em) {
+	public static List<OabaProcessing> findAllOabaProcessing(EntityManager em) {
 		Query query =
 			em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")

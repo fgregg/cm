@@ -1,7 +1,7 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
 import com.choicemaker.cm.args.TransitivitySettings;
-import com.choicemaker.cm.core.SerializableRecordSource;
+import com.choicemaker.cm.core.ISerializableRecordSource;
 
 public class TransitivitySettingsEntity implements TransitivitySettings {
 
@@ -9,8 +9,8 @@ public class TransitivitySettingsEntity implements TransitivitySettings {
 
 	public TransitivitySettingsEntity(
 			String createRandomModelConfigurationName, float differThreshold,
-			float matchThreshold, SerializableRecordSource stage,
-			SerializableRecordSource master) {
+			float matchThreshold, ISerializableRecordSource stage,
+			ISerializableRecordSource master) {
 		throw new Error("not yet implemented");
 	}
 

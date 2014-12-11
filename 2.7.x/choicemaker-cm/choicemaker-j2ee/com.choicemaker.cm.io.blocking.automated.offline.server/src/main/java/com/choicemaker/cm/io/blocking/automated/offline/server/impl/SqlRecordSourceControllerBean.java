@@ -1,7 +1,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -10,11 +9,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 
 @Stateless
-public class SqlRecordSourceControllerBean {
+public class SqlRecordSourceControllerBean /* implements
+		PersistableRecordSourceController */ {
 
 	private static final Logger logger = Logger
 			.getLogger(SqlRecordSourceControllerBean.class.getName());
@@ -22,37 +23,51 @@ public class SqlRecordSourceControllerBean {
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-//	@EJB
-//	private OabaJobControllerBean jobController;
-
-	public PersistableSqlRecordSource save(final PersistableSqlRecordSource psrs) {
-		if (psrs == null) {
+	// @Override
+	public PersistableSqlRecordSource save(final PersistableRecordSource rs) {
+		if (rs == null) {
 			throw new IllegalArgumentException("null settings");
 		}
-		// Have the settings already been persisted?
-		final long settingsId = psrs.getId();
+		if (!(rs instanceof PersistableSqlRecordSource)) {
+			throw new IllegalArgumentException("invalid type: "
+					+ rs.getClass().getName());
+		}
+		final String type = rs.getType();
+		assert PersistableSqlRecordSource.TYPE.equals(type);
+
+		// Has the record source already been persisted?
+		final long rsId = rs.getId();
 		SqlRecordSourceEntity retVal = null;
-		if (SqlRecordSourceEntity.NONPERSISTENT_ID != settingsId) {
-			// Settings appear to be persistent -- check them against the DB
-			retVal = findInternal(settingsId);
+		if (PersistableRecordSource.NONPERSISTENT_ID != rsId) {
+			// The record source appears to be persistent -- check the DB
+			retVal = findInternal(rsId);
 			if (retVal == null) {
-				String msg = "The specified settings (" + settingsId + ") are missing in the DB. "
-						+ "A new copy will be persisted.";
+				String msg =
+					"The specified record source (" + rsId
+							+ ") is missing in the DB. "
+							+ "A new copy will be persisted.";
 				logger.warning(msg);
 				retVal = null;
-			} else if (!retVal.equals(psrs)) {
-				String msg = "The specified settings (" + settingsId + ") are different in the DB. "
-						+ "The DB values will be used instead of the specified values.";
+			} else if (!retVal.equals(rs)) {
+				String msg =
+					"The specified record source (" + rsId
+							+ ") is different in the DB. The DB copy will be "
+							+ "used instead of the specified record source.";
 				logger.warning(msg);
 			}
 		}
+
+		// Conditionally save the record to the DB
 		if (retVal == null) {
 			// Save the specified settings to the DB
+			PersistableSqlRecordSource psrs = (PersistableSqlRecordSource) rs;
 			retVal = new SqlRecordSourceEntity(psrs);
 			assert retVal.getId() == SqlRecordSourceEntity.NONPERSISTENT_ID;
 			em.persist(retVal);
 			assert retVal.getId() != SqlRecordSourceEntity.NONPERSISTENT_ID;
-			String msg = "The specified settings were persisted in the database with settings id = " + retVal.getId();
+			String msg =
+				"The record source is persistent in the database with id = "
+						+ retVal.getId();
 			logger.info(msg);
 		}
 		assert retVal != null;
@@ -60,40 +75,45 @@ public class SqlRecordSourceControllerBean {
 		return retVal;
 	}
 
-	public PersistableSqlRecordSource find(long id) {
-		return findInternal(id);
+	// @Override
+	public PersistableSqlRecordSource find(Long id, String type) {
+		PersistableSqlRecordSource retVal = null;
+		if (id != null && PersistableSqlRecordSource.TYPE.equals(type)) {
+			retVal = findInternal(id.longValue());
+		}
+		return retVal;
 	}
 
 	protected SqlRecordSourceEntity findInternal(long id) {
 		return em.find(SqlRecordSourceEntity.class, id);
 	}
 
-	public ISerializableRecordSource getRecordSource(
-			PersistableSqlRecordSource psrs) throws ClassNotFoundException,
-			NoSuchMethodException, SecurityException, InstantiationException,
-			IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, ClassCastException {
+	// @Override
+	public ISerializableRecordSource getRecordSource(Long rsId, String type)
+			throws Exception {
 		ISerializableRecordSource retVal = null;
-		if (psrs == null) {
-			logger.warning("null persistable record source");
-		} else {
-			Class<?> c = Class.forName(psrs.getClassName());
-			Constructor<?> ctor =
-				c.getConstructor(String.class, String.class, String.class,
-						String.class);
-			retVal =
-				(ISerializableRecordSource) ctor.newInstance(
-						psrs.getDataSource(), psrs.getModelId(),
-						psrs.getDatabaseConfiguration(),
-						psrs.getSqlSelectStatement());
+		if (rsId != null && PersistableSqlRecordSource.TYPE.equals(type)) {
+			PersistableSqlRecordSource psrs = findInternal(rsId.longValue());
+			if (psrs != null) {
+				Class<?> c = Class.forName(psrs.getClassName());
+				Constructor<?> ctor =
+					c.getConstructor(String.class, String.class, String.class,
+							String.class);
+				retVal =
+					(ISerializableRecordSource) ctor.newInstance(
+							psrs.getDataSource(), psrs.getModelId(),
+							psrs.getDatabaseConfiguration(),
+							psrs.getSqlSelectStatement());
+			}
 		}
 		return retVal;
 	}
 
-	public List<PersistableSqlRecordSource> findAll() {
+	// @Override
+	public List<PersistableRecordSource> findAll() {
 		Query query = em.createNamedQuery(SqlRecordSourceJPA.QN_SQLRS_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<PersistableSqlRecordSource> retVal = query.getResultList();
+		List<PersistableRecordSource> retVal = query.getResultList();
 		return retVal;
 	}
 

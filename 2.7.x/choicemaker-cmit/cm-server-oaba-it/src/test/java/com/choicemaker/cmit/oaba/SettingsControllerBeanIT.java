@@ -89,22 +89,6 @@ public class SettingsControllerBeanIT {
 	private static final Logger logger = Logger
 			.getLogger(SettingsControllerBeanIT.class.getName());
 
-	/**
-	 * Workaround for logger.entering(String,String) not showing up in JBOSS
-	 * server log
-	 */
-	private static void logEntering(String method) {
-		logger.info("Entering " + LOG_SOURCE + "." + method);
-	}
-
-	/**
-	 * Workaround for logger.exiting(String,String) not showing up in JBOSS
-	 * server log
-	 */
-	private static void logExiting(String method) {
-		logger.info("Exiting " + LOG_SOURCE + "." + method);
-	}
-
 	@Resource
 	private UserTransaction utx;
 
@@ -123,7 +107,7 @@ public class SettingsControllerBeanIT {
 	@Before
 	public void setUp() throws Exception {
 		final String METHOD = "setUp";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		setupOK = true;
 		try {
 			initialAbaSettingsCount = sm.findAllAbaSettings().size();
@@ -136,13 +120,13 @@ public class SettingsControllerBeanIT {
 			logger.severe(x.toString());
 			setupOK = false;
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		final String METHOD = "tearDown";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		try {
 
 			final int finalAbaSettingsCount = sm.findAllAbaSettings().size();
@@ -175,7 +159,7 @@ public class SettingsControllerBeanIT {
 		} catch (AssertionError x) {
 			logger.severe(x.toString());
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
@@ -197,7 +181,7 @@ public class SettingsControllerBeanIT {
 	public void testPersistFindRemoveAba() {
 		assertTrue(setupOK);
 		final String METHOD = "testPersistFindRemove";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		final TestEntities te = new TestEntities();
 
 		// Create a configuration
@@ -228,7 +212,7 @@ public class SettingsControllerBeanIT {
 			logger.severe(x.toString());
 			fail(x.toString());
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
@@ -236,7 +220,7 @@ public class SettingsControllerBeanIT {
 	public void testPersistFindRemoveOaba() {
 		assertTrue(setupOK);
 		final String METHOD = "testPersistFindRemove";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		final TestEntities te = new TestEntities();
 
 		// Create a configuration
@@ -267,14 +251,14 @@ public class SettingsControllerBeanIT {
 			logger.severe(x.toString());
 			fail(x.toString());
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
 	public void testSetGetDefaultAbaConfiguration() {
 		assertTrue(setupOK);
 		final String METHOD = "testSetGetDefaultConfigurationString";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		final TestEntities te = new TestEntities();
 
 		// Verify that no default is returned for a non-existent modelId
@@ -314,14 +298,14 @@ public class SettingsControllerBeanIT {
 			logger.severe(x.toString());
 			fail(x.toString());
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
 	public void testSetGetDefaultOabaConfiguration() {
 		assertTrue(setupOK);
 		final String METHOD = "testSetGetDefaultConfigurationString";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		final TestEntities te = new TestEntities();
 
 		// Verify that no default is returned for a non-existent modelId
@@ -366,42 +350,42 @@ public class SettingsControllerBeanIT {
 			logger.severe(x.toString());
 			fail(x.toString());
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
-//	@Test
-//	public void testMaxSingle() {
-//		final String METHOD = "testMaxSingle";
-//		TestEntities te = new TestEntities();
-//
-//		// Create parameters with a known value
-//		OabaParametersEntity template =
-//			prmController.createBatchParameters(METHOD, te);
-//		final int v1 = random.nextInt();
-//		OabaParametersEntity params =
-//			new OabaParametersEntity(template.getModelConfigurationName(), v1,
-//					template.getLowThreshold(), template.getHighThreshold(),
-//					template.getStageRs(), template.getMasterRs(),
-//					template.getTransitivity());
-//		te.add(params);
-//
-//		// Save the params
-//		final long id1 = prmController.save(params).getId();
-//
-//		// Get the params
-//		params = null;
-//		params = prmController.find(id1);
-//
-//		// Check the value
-//		final int v2 = params.getMaxSingle();
-//		assertTrue(v1 == v2);
-//
-//		try {
-//			te.removePersistentObjects(em, utx);
-//		} catch (Exception x) {
-//			logger.severe(x.toString());
-//			fail(x.toString());
-//		}
-//	}
+	// @Test
+	// public void testMaxSingle() {
+	// final String METHOD = "testMaxSingle";
+	// TestEntities te = new TestEntities();
+	//
+	// // Create parameters with a known value
+	// OabaParametersEntity template =
+	// prmController.createBatchParameters(METHOD, te);
+	// final int v1 = random.nextInt();
+	// OabaParametersEntity params =
+	// new OabaParametersEntity(template.getModelConfigurationName(), v1,
+	// template.getLowThreshold(), template.getHighThreshold(),
+	// template.getStageRs(), template.getMasterRs(),
+	// template.getTransitivity());
+	// te.add(params);
+	//
+	// // Save the params
+	// final long id1 = prmController.save(params).getId();
+	//
+	// // Get the params
+	// params = null;
+	// params = prmController.find(id1);
+	//
+	// // Check the value
+	// final int v2 = params.getMaxSingle();
+	// assertTrue(v1 == v2);
+	//
+	// try {
+	// te.removePersistentObjects(em, utx);
+	// } catch (Exception x) {
+	// logger.severe(x.toString());
+	// fail(x.toString());
+	// }
+	// }
 
 }

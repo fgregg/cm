@@ -25,23 +25,26 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaTaskType;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.impl.BatchJobJPA;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.LocalOabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.StartOABA;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
@@ -79,7 +82,7 @@ public class BatchQueryServiceBeanIT {
 
 	@EJB
 	private OabaJobControllerBean jobController;
-	
+
 	@EJB
 	private OabaParametersControllerBean paramsController;
 
@@ -96,7 +99,7 @@ public class BatchQueryServiceBeanIT {
 	EjbPlatform e2service;
 
 	@EJB
-	protected OabaService batchQuery;
+	protected LocalOabaService batchQuery;
 
 	@EJB
 	protected TestController controller;
@@ -107,8 +110,6 @@ public class BatchQueryServiceBeanIT {
 	@Inject
 	JMSContext jmsContext;
 
-//	private final Random random = new Random(new Date().getTime());
-
 	private int initialBatchParamsCount;
 	private int initialBatchJobCount;
 	private int initialOabaProcessingCount;
@@ -118,8 +119,7 @@ public class BatchQueryServiceBeanIT {
 	public void setUp() {
 		setupOK = true;
 		try {
-			initialBatchParamsCount =
-				controller.findAllOabaParameters().size();
+			initialBatchParamsCount = controller.findAllOabaParameters().size();
 			initialBatchJobCount = controller.findAllOabaJobs().size();
 			initialOabaProcessingCount =
 				controller.findAllOabaProcessing().size();
@@ -196,8 +196,7 @@ public class BatchQueryServiceBeanIT {
 		} while (oabaJobMessage != null);
 	}
 
-	public static OabaParameters createRandomStartData(Random random,
-			String tag) {
+	public static OabaParameters createRandomStartData(Random random, String tag) {
 		if (random == null) {
 			random = new Random();
 		}
@@ -205,7 +204,7 @@ public class BatchQueryServiceBeanIT {
 		String MASTER = tag == null ? "MASTER" : tag + "_MASTER";
 		final PersistableRecordSource staging =
 			EntityManagerUtils.createFakePersistableRecordSource(STAGING);
-		final OabaTaskType task = EntityManagerUtils.createRandomOabaTask();
+		final OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		final PersistableRecordSource master =
 			EntityManagerUtils.createFakePersistableRecordSource(MASTER, task);
 		final Thresholds thresholds =
@@ -220,8 +219,7 @@ public class BatchQueryServiceBeanIT {
 
 	@Test
 	@InSequence(5)
-	public void testStartLinkage()
-			throws ServerConfigurationException {
+	public void testStartLinkage() throws ServerConfigurationException {
 		assertTrue(setupOK);
 		String TEST = "testStartOABALinkage";
 		TestEntities te = new TestEntities();
@@ -231,16 +229,20 @@ public class BatchQueryServiceBeanIT {
 			new SimplePersonSqlServerTestConfiguration();
 		c.initialize(this.e2service.getPluginRegistry());
 
-		final OabaParameters bp =
+		final OabaParametersEntity bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
 					.getMatchThreshold(), c.getStagingRecordSource(),
 					c.getMasterRecordSource(), c.getOabaTask());
-		
+		final OabaSettings oabaSettings =
+			OabaUtils.getDefaultOabaSettings(settingsController,
+					bp.getStageModel());
+		final ServerConfiguration serverConfiguration =
+			OabaUtils.getDefaultServerConfiguration(serverController);
+
 		final long jobId =
-			batchQuery.startLinkage(externalID, bp.getStageRs(), bp.getMasterRs(),
-					bp.getLowThreshold(), bp.getHighThreshold(),
-					bp.getModelConfigurationName());
+			batchQuery.startLinkage(externalID, bp, oabaSettings,
+					serverConfiguration);
 		assertTrue(BatchJobJPA.INVALID_ID != jobId);
 
 		OabaJob oabaJob = jobController.find(jobId);
@@ -260,10 +262,13 @@ public class BatchQueryServiceBeanIT {
 		te.add(params);
 		assertTrue(params.getLowThreshold() == bp.getLowThreshold());
 		assertTrue(params.getHighThreshold() == bp.getHighThreshold());
-		assertTrue(params.getMasterRs() != null
-				&& params.getMasterRs().equals(bp.getMasterRs()));
-		assertTrue(params.getStageRs() != null
-				&& params.getStageRs().equals(bp.getStageRs()));
+		assertTrue(params.getMasterRsId() != null
+				&& params.getMasterRsId().equals(bp.getMasterRsId()));
+		assertTrue(params.getMasterRsType() != null
+				&& params.getMasterRsType().equals(bp.getMasterRsType()));
+		assertTrue(params.getStageRsId() == bp.getStageRsId());
+		assertTrue(params.getStageRsType() != null
+				&& params.getStageRsType().equals(bp.getStageRsType()));
 		assertTrue(params.getModelConfigurationName() != null
 				&& params.getModelConfigurationName().equals(
 						bp.getModelConfigurationName()));
@@ -284,12 +289,11 @@ public class BatchQueryServiceBeanIT {
 
 	@Test
 	@InSequence(6)
-	public void testStartDeduplication()
-			throws ServerConfigurationException {
+	public void testStartDeduplication() throws ServerConfigurationException {
 		assertTrue(setupOK);
 		String TEST = "testStartOABAStage";
 		TestEntities te = new TestEntities();
-		
+
 		final String externalID = EntityManagerUtils.createExternalId(TEST);
 		final SimplePersonSqlServerTestConfiguration c =
 			new SimplePersonSqlServerTestConfiguration();
@@ -300,11 +304,15 @@ public class BatchQueryServiceBeanIT {
 					.getThresholds().getDifferThreshold(), c.getThresholds()
 					.getMatchThreshold(), c.getStagingRecordSource(),
 					c.getMasterRecordSource(), c.getOabaTask());
-		
+		final OabaSettings oabaSettings =
+			OabaUtils.getDefaultOabaSettings(settingsController,
+					bp.getStageModel());
+		final ServerConfiguration serverConfiguration =
+			OabaUtils.getDefaultServerConfiguration(serverController);
+
 		final long jobId =
-			batchQuery.startDeduplication(externalID, bp.getStageRs(),
-					bp.getLowThreshold(), bp.getHighThreshold(),
-					bp.getModelConfigurationName());
+			batchQuery.startDeduplication(externalID, bp, oabaSettings,
+					serverConfiguration);
 		assertTrue(BatchJobJPA.INVALID_ID != jobId);
 
 		OabaJob oabaJob = jobController.find(jobId);
@@ -325,10 +333,13 @@ public class BatchQueryServiceBeanIT {
 		te.add(params);
 		assertTrue(params.getLowThreshold() == bp.getLowThreshold());
 		assertTrue(params.getHighThreshold() == bp.getHighThreshold());
-		// assertTrue(params.getMasterRs() != null &&
-		// params.getMasterRs().equals(bp.getMasterRs()));
-		assertTrue(params.getStageRs() != null
-				&& params.getStageRs().equals(bp.getStageRs()));
+		// assertTrue(params.getMasterRsId() != null
+		// && params.getMasterRsId().equals(bp.getMasterRsId()));
+		// assertTrue(params.getMasterRsType() != null
+		// && params.getMasterRsType().equals(bp.getMasterRsType()));
+		assertTrue(params.getStageRsId() == bp.getStageRsId());
+		assertTrue(params.getStageRsType() != null
+				&& params.getStageRsType().equals(bp.getStageRsType()));
 		assertTrue(params.getModelConfigurationName() != null
 				&& params.getModelConfigurationName().equals(
 						bp.getModelConfigurationName()));

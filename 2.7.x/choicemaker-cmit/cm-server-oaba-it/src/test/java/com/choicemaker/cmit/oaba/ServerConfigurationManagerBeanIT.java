@@ -58,22 +58,6 @@ public class ServerConfigurationManagerBeanIT {
 	private static final Logger logger = Logger
 			.getLogger(ServerConfigurationManagerBeanIT.class.getName());
 
-	/**
-	 * Workaround for logger.entering(String,String) not showing up in JBOSS
-	 * server log
-	 */
-	private static void logEntering(String method) {
-		logger.info("Entering " + LOG_SOURCE + "." + method);
-	}
-
-	/**
-	 * Workaround for logger.exiting(String,String) not showing up in JBOSS
-	 * server log
-	 */
-	private static void logExiting(String method) {
-		logger.info("Exiting " + LOG_SOURCE + "." + method);
-	}
-
 	@Resource
 	UserTransaction utx;
 
@@ -90,22 +74,23 @@ public class ServerConfigurationManagerBeanIT {
 	@Before
 	public void setUp() throws Exception {
 		final String METHOD = "setUp";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		setupOK = true;
 		try {
 			initialServerConfigCount = scm.findAllServerConfigurations().size();
-			initialDefaultServerConfigCount = scm.findAllDefaultServerConfigurations().size();
+			initialDefaultServerConfigCount =
+				scm.findAllDefaultServerConfigurations().size();
 		} catch (Exception x) {
 			logger.severe(x.toString());
 			setupOK = false;
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		final String METHOD = "tearDown";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		try {
 
 			int finalServerConfigCount =
@@ -115,17 +100,19 @@ public class ServerConfigurationManagerBeanIT {
 					initialServerConfigCount == finalServerConfigCount);
 
 			int finalDefaultServerConfigCount =
-					scm.findAllDefaultServerConfigurations().size();
-				alert = "initialDefaultServerConfigCount != finalDefaultServerConfigCount";
-				assertTrue(alert,
-						initialDefaultServerConfigCount == finalDefaultServerConfigCount);
+				scm.findAllDefaultServerConfigurations().size();
+			alert =
+				"initialDefaultServerConfigCount != finalDefaultServerConfigCount";
+			assertTrue(
+					alert,
+					initialDefaultServerConfigCount == finalDefaultServerConfigCount);
 
 		} catch (Exception x) {
 			logger.severe(x.toString());
 		} catch (AssertionError x) {
 			logger.severe(x.toString());
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
@@ -153,7 +140,8 @@ public class ServerConfigurationManagerBeanIT {
 	@InSequence(10)
 	public void testComputeAvailableProcessors() {
 		assertTrue(setupOK);
-		int count = ServerConfigurationControllerBean.computeAvailableProcessors();
+		int count =
+			ServerConfigurationControllerBean.computeAvailableProcessors();
 		assertTrue(count > -1);
 	}
 
@@ -215,7 +203,7 @@ public class ServerConfigurationManagerBeanIT {
 	public void testPersistFindRemove() {
 		assertTrue(setupOK);
 		final String METHOD = "testPersistFindRemove";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		final TestEntities te = new TestEntities();
 
 		// Create a configuration
@@ -254,7 +242,7 @@ public class ServerConfigurationManagerBeanIT {
 			logger.severe(x.toString());
 			fail(x.toString());
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
@@ -262,7 +250,7 @@ public class ServerConfigurationManagerBeanIT {
 	public void testFindAllServerConfigurations() {
 		assertTrue(setupOK);
 		final String METHOD = "testFindAllServerConfigurations";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		final TestEntities te = new TestEntities();
 
 		List<Long> scIds = new LinkedList<>();
@@ -305,7 +293,7 @@ public class ServerConfigurationManagerBeanIT {
 			logger.severe(x.toString());
 			fail(x.toString());
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	// @Test
@@ -337,7 +325,7 @@ public class ServerConfigurationManagerBeanIT {
 	public void testSetGetDefaultConfigurationString() {
 		assertTrue(setupOK);
 		final String METHOD = "testSetGetDefaultConfigurationString";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		final TestEntities te = new TestEntities();
 
 		try {
@@ -427,7 +415,7 @@ public class ServerConfigurationManagerBeanIT {
 			}
 		}
 
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	// @Test

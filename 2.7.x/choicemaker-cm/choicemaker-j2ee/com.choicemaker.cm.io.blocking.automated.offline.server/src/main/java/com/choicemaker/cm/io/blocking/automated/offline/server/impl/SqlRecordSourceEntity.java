@@ -1,45 +1,33 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_CLASSNAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_DATASOURCE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_DBCONFIG;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_MODEL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.CN_SQL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.JPQL_SQLRS_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.QN_SQLRS_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceJPA.TABLE_NAME;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 
 @NamedQuery(name = QN_SQLRS_FIND_ALL, query = JPQL_SQLRS_FIND_ALL)
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
-@DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
-		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class SqlRecordSourceEntity implements PersistableSqlRecordSource {
+public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
+		PersistableSqlRecordSource {
 
 	private static final long serialVersionUID = 271L;
 
 	// -- Instance data
-
-	@Id
-	@Column(name = CN_ID)
-	@TableGenerator(name = ID_GENERATOR_NAME, table = ID_GENERATOR_TABLE,
-			pkColumnName = ID_GENERATOR_PK_COLUMN_NAME,
-			valueColumnName = ID_GENERATOR_VALUE_COLUMN_NAME,
-			pkColumnValue = ID_GENERATOR_PK_COLUMN_VALUE)
-	@GeneratedValue(strategy = GenerationType.TABLE,
-			generator = ID_GENERATOR_NAME)
-	protected long id;
-
-	@Column(name = CN_TYPE)
-	protected final String type;
 
 	@Column(name = CN_CLASSNAME)
 	protected final String className;
@@ -60,7 +48,7 @@ public class SqlRecordSourceEntity implements PersistableSqlRecordSource {
 
 	/** Required by JPA */
 	protected SqlRecordSourceEntity() {
-		this.type = null;
+		super(TYPE);
 		this.className = null;
 		this.dataSource = null;
 		this.modelId = null;
@@ -75,6 +63,7 @@ public class SqlRecordSourceEntity implements PersistableSqlRecordSource {
 
 	public SqlRecordSourceEntity(String className, String dataSource,
 			String model, String sql, String dbConfig) {
+		super(TYPE);
 		
 		if (className == null || !className.equals(className.trim())
 				|| className.isEmpty()) {
@@ -100,7 +89,6 @@ public class SqlRecordSourceEntity implements PersistableSqlRecordSource {
 			throw new IllegalArgumentException(msg);
 		}
 		
-		this.type = TYPE;
 		this.className = className;
 		this.dataSource = dataSource;
 		this.modelId = model;
@@ -109,16 +97,6 @@ public class SqlRecordSourceEntity implements PersistableSqlRecordSource {
 	}
 
 	// -- Accessors
-
-	@Override
-	public long getId() {
-		return id;
-	}
-
-	@Override
-	public String getType() {
-		return type;
-	}
 
 	@Override
 	public String getClassName() {
@@ -250,7 +228,7 @@ public class SqlRecordSourceEntity implements PersistableSqlRecordSource {
 
 	@Override
 	public String toString() {
-		return "SqlRecordSourceEntity [getId()=" + getId()
+		return "SqlRecordSource [getId()=" + getId()
 				+ ", getDataSourceName()=" + getDataSource()
 				+ ", getSqlSelectStatement()=" + getSqlSelectStatement() + "]";
 	}

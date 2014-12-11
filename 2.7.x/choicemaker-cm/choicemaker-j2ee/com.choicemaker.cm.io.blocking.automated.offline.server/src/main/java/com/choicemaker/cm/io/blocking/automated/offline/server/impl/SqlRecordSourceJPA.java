@@ -1,8 +1,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
-import com.choicemaker.cm.batch.impl.BatchJobJPA;
-
 
 /**
  * Java Persistence API (JPA) for OabaJob beans.<br/>
@@ -15,13 +13,10 @@ import com.choicemaker.cm.batch.impl.BatchJobJPA;
  * 
  * @author rphall
  */
-public interface SqlRecordSourceJPA extends BatchJobJPA {
+public interface SqlRecordSourceJPA extends BaseRecordSourceJPA {
 
 	/** Name of the table that persists batch job data */
 	String TABLE_NAME = "CMT_SQL_RECORDSOURCE";
-
-	/** Name of the column used to distinguish between batch jobs and sub-types */
-	String DISCRIMINATOR_COLUMN = "TYPE";
 
 	/**
 	 * Value of the discriminator column used to mark OabaJob types (and not
@@ -29,20 +24,6 @@ public interface SqlRecordSourceJPA extends BatchJobJPA {
 	 */
 	String DISCRIMINATOR_VALUE = PersistableSqlRecordSource.TYPE;
 
-	/**
-	 * Generated id column.
-	 * 
-	 * @see #ID_GENERATOR_NAME
-	 */
-	String CN_ID = "ID";
-
-	/**
-	 * Discriminator column
-	 * 
-	 * @see #DISCRIMINATOR_COLUMN
-	 */
-	String CN_TYPE = DISCRIMINATOR_COLUMN;
-	
 	String CN_CLASSNAME = "CLASS";
 
 	String CN_DATASOURCE = "DATA_SOURCE";

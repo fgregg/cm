@@ -2,10 +2,9 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.IGraphProperty;
-import com.choicemaker.cm.args.OabaTaskType;
-import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.core.SerializableRecordSource;
+import com.choicemaker.cm.core.ISerializableRecordSource;
 
 public class TransitivityParametersEntity implements TransitivityParameters {
 
@@ -23,8 +22,8 @@ public class TransitivityParametersEntity implements TransitivityParameters {
 
 	public TransitivityParametersEntity(
 			String createRandomModelConfigurationName, float differThreshold,
-			float matchThreshold, SerializableRecordSource stage,
-			SerializableRecordSource master) {
+			float matchThreshold, ISerializableRecordSource stage,
+			ISerializableRecordSource master) {
 		throw new Error("not yet implemented");
 	}
 
@@ -59,17 +58,7 @@ public class TransitivityParametersEntity implements TransitivityParameters {
 	}
 
 	@Override
-	public PersistableRecordSource getStageRs() {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public PersistableRecordSource getMasterRs() {
-		throw new Error("not yet implemented");
-	}
-
-	@Override
-	public OabaTaskType getOabaTaskType() {
+	public OabaLinkageType getOabaLinkageType() {
 		// TODO Auto-generated method stub
 		throw new Error("not yet implemented");
 	}
@@ -99,7 +88,7 @@ public class TransitivityParametersEntity implements TransitivityParameters {
 	}
 
 	@Override
-	public long getMasterRsId() {
+	public Long getMasterRsId() {
 		// TODO Auto-generated method stub
 		throw new Error("not yet implemented");
 	}

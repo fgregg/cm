@@ -16,12 +16,12 @@ import java.util.Properties;
 import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -48,8 +48,8 @@ public class MrpsRequest implements IMrpsRequest {
 	private transient OabaParameters oabaParameters = null;
 	private transient IProbabilityModel stagingModel = null;
 	private transient IMatchRecord2Source matchPairs = null;
-	private transient SerializableRecordSource rsStaging = null;
-	private transient SerializableRecordSource rsMaster = null;
+	private transient PersistableRecordSource rsStaging = null;
+	private transient PersistableRecordSource rsMaster = null;
 	private transient MarkedRecordPairSink mrps = null;
 
 	/**
@@ -220,30 +220,30 @@ public class MrpsRequest implements IMrpsRequest {
 		return retVal;
 	}
 
-	/**
-	 * @return
-	 */
-	public SerializableRecordSource getRsMaster(EntityManager em)
-		throws CmRuntimeException, ConfigException, RemoteException {
-		SerializableRecordSource retVal = this.rsMaster;
+	public PersistableRecordSource getRsMaster(EntityManager em,
+			PersistableRecordSourceController prsc) throws CmRuntimeException,
+			ConfigException, RemoteException {
+		PersistableRecordSource retVal = this.rsMaster;
 		if (retVal == null) {
 			OabaParameters bp = getBatchParameters(em);
-			this.rsMaster = DatabaseUtils.getRecordSource(bp.getMasterRs());
+			long rsId = bp.getMasterRsId();
+			String rsType = bp.getMasterRsType();
+			this.rsMaster = prsc.find(rsId,rsType);
 			retVal = this.rsMaster;
 		}
 		// Postcondition: master record source may be null
 		return retVal;
 	}
 
-	/**
-	 * @return
-	 */
-	public SerializableRecordSource getRsStage(EntityManager em)
-		throws CmRuntimeException, ConfigException, RemoteException {
-		SerializableRecordSource retVal = this.rsStaging;
+	public PersistableRecordSource getRsStage(EntityManager em,
+			PersistableRecordSourceController prsc) throws CmRuntimeException,
+			ConfigException, RemoteException {
+		PersistableRecordSource retVal = this.rsStaging;
 		if (retVal == null) {
 			OabaParameters bp = getBatchParameters(em);
-			this.rsStaging = DatabaseUtils.getRecordSource(bp.getStageRs());
+			long rsId = bp.getMasterRsId();
+			String rsType = bp.getMasterRsType();
+			this.rsStaging = prsc.find(rsId,rsType);;
 			retVal = this.rsStaging;
 		}
 		// Postcondition -- staging record source may be null?

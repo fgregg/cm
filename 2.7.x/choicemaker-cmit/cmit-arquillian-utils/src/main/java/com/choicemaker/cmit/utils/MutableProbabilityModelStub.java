@@ -52,7 +52,7 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	public String databaseConfigurationName;
 	public String modelFilePath;
 	public String trainingSource;
-	
+
 	public MutableProbabilityModelStub() {
 		log.exiting(CLASSNAME, "ctor");
 	}
@@ -109,7 +109,8 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 
 	@Override
 	public String getBlockingConfigurationName() {
-		log.exiting(CLASSNAME, "getBlockingConfigurationName", blockingConfigurationName);
+		log.exiting(CLASSNAME, "getBlockingConfigurationName",
+				blockingConfigurationName);
 		return blockingConfigurationName;
 	}
 
@@ -152,7 +153,8 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 
 	@Override
 	public String getDatabaseConfigurationName() {
-		log.exiting(CLASSNAME, "getDatabaseConfigurationName", databaseConfigurationName);
+		log.exiting(CLASSNAME, "getDatabaseConfigurationName",
+				databaseConfigurationName);
 		return databaseConfigurationName;
 	}
 

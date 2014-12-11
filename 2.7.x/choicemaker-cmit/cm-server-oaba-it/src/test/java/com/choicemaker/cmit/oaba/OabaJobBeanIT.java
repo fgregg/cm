@@ -41,8 +41,8 @@ import com.choicemaker.cmit.utils.TestEntities;
 @RunWith(Arquillian.class)
 public class OabaJobBeanIT {
 
-	private static final Logger logger = Logger
-			.getLogger(OabaJobBeanIT.class.getName());
+	private static final Logger logger = Logger.getLogger(OabaJobBeanIT.class
+			.getName());
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
@@ -77,7 +77,8 @@ public class OabaJobBeanIT {
 
 	private int initialOabaParamsCount;
 	private int initialOabaJobCount;
-//	private int initialTransitivityJobCount;
+
+	// private int initialTransitivityJobCount;
 
 	private String getRandomNonTerminalStatus() {
 		int i = random.nextInt(_nonterminal.length);
@@ -393,7 +394,7 @@ public class OabaJobBeanIT {
 		OabaJob job2 = new OabaJobEntity(job1);
 		te.add(job2);
 
-		//  Verify equality of ephemeral instances
+		// Verify equality of ephemeral instances
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
 

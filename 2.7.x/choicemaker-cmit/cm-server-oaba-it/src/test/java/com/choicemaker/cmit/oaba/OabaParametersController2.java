@@ -10,8 +10,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaTaskType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
@@ -22,11 +22,10 @@ import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
 
 /**
- * Effectively extends {@link OabaParametersControllerBean} by adding some methods
- * useful for testing.
- * An EJB used to test BatchParameter beans within container-defined
- * transactions; see {@link OabaJobController2} as an example of a similar
- * controller.
+ * Effectively extends {@link OabaParametersControllerBean} by adding some
+ * methods useful for testing. An EJB used to test BatchParameter beans within
+ * container-defined transactions; see {@link OabaJobController2} as an example
+ * of a similar controller.
  * 
  * @author rphall
  */
@@ -35,7 +34,7 @@ public class OabaParametersController2 {
 
 	private static final String DEFAULT_MODEL_NAME = "FakeModelConfig";
 	private static final String UNDERSCORE = "_";
-	
+
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
@@ -84,7 +83,7 @@ public class OabaParametersController2 {
 		Thresholds thresholds = createRandomThresholds();
 		PersistableRecordSource stage =
 			EntityManagerUtils.createFakePersistableRecordSource(tag);
-		OabaTaskType task = EntityManagerUtils.createRandomOabaTask();
+		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		PersistableRecordSource master =
 			EntityManagerUtils.createFakePersistableRecordSource(tag, task);
 		OabaParametersEntity retVal =

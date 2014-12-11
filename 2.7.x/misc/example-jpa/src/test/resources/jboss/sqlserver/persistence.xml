@@ -11,21 +11,21 @@
     <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
 
     <!--
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchParametersBean</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.StatusLogBean</class>
+    <class>com.choicemaker.demo.oaba0.BatchJobBean</class>
+    <class>com.choicemaker.demo.oaba0.BatchJobAuditEvent</class>
+    <class>com.choicemaker.demo.oaba0.BatchParametersBean</class>
+    <class>com.choicemaker.demo.oaba0.StatusLogBean</class>
     -->
 
-    <class>com.choicemaker.cm.persist0.BatchJobBean</class>
-    <class>com.choicemaker.cm.persist0.CMP_AuditEvent</class>
-    <class>com.choicemaker.cm.persist0.OfflineMatchingBean</class>
-    <class>com.choicemaker.cm.persist0.OfflineMatchingAuditEvent</class>
-    <class>com.choicemaker.cm.persist0.TransitivityJobBean</class>
-    <class>com.choicemaker.cm.persist0.TransitivityJobAuditEvent</class>
-    <class>com.choicemaker.cm.persist0.CMP_ModelBean</class>
-    <class>com.choicemaker.cm.persist0.BatchParametersBean</class>
-    <class>com.choicemaker.cm.persist0.StatusLogBean</class>
+    <class>com.choicemaker.demo.persist0.BatchJobBean</class>
+    <class>com.choicemaker.demo.persist0.CMP_AuditEvent</class>
+    <class>com.choicemaker.demo.persist0.OfflineMatchingBean</class>
+    <class>com.choicemaker.demo.persist0.OfflineMatchingAuditEvent</class>
+    <class>com.choicemaker.demo.persist0.TransitivityJobBean</class>
+    <class>com.choicemaker.demo.persist0.TransitivityJobAuditEvent</class>
+    <class>com.choicemaker.demo.persist0.CMP_ModelBean</class>
+    <class>com.choicemaker.demo.persist0.BatchParametersBean</class>
+    <class>com.choicemaker.demo.persist0.StatusLogBean</class>
 
     <properties>
       <property name="eclipselink.target-server" value="JBoss" />

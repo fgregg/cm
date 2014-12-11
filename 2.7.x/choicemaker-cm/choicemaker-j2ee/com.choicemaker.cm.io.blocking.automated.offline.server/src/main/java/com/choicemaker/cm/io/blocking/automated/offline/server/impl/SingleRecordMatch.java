@@ -61,9 +61,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfigura
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchDedupService2;
@@ -113,6 +112,9 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 	
 	@EJB
 	OabaProcessingControllerBean processingController;
+
+//	@EJB
+	private PersistableRecordSourceController rsController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
 	private Queue updateQueue;
@@ -212,7 +214,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 
 		// create rec_id, val_id files
 		ISerializableRecordSource staging =
-				DatabaseUtils.getRecordSource(params.getStageRs());
+				rsController.getStageRs(params);
 		RecValService2 rvService =
 			new RecValService2(staging, null, stageModel, null,
 					OabaFileUtils.getRecValFactory(oabaJob), translator,
@@ -276,7 +278,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
 		ISerializableRecordSource stagingRs =
-				DatabaseUtils.getRecordSource(params.getStageRs());
+				rsController.getStageRs(params);
 		ChunkService2 chunkService =
 			new ChunkService2(source, source2, stagingRs, null,
 					stageModel, null, translator,
@@ -354,7 +356,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 		databaseAccessor.setCondition("");
 		databaseAccessor.setDataSource(configuration.getDataSource());
 
-		RecordSource stage = DatabaseUtils.getRecordSource(params.getStageRs());
+		RecordSource stage = rsController.getStageRs(params);
 		assert stage.getModel() == model;
 //		stage.setModel(modelId);
 

@@ -15,13 +15,11 @@ import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
 import javax.ejb.FinderException;
-import javax.ejb.Remote;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
@@ -31,7 +29,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
  * @author pcheung
  *
  */
-@Remote
+//@Remote
 @SuppressWarnings("rawtypes")
 public interface OabaService extends Serializable {
 
@@ -57,14 +55,7 @@ public interface OabaService extends Serializable {
 	 *            - The number of staging records below which single record
 	 *            matching is used. If set to 0, OABA is used.
 	 * @return long - id of this job
-	 * @deprecated see
-	 *             {@link #startDeduplication(String, OabaParameters, OabaSettings, ServerConfiguration)}
 	 */
-	public long startDeduplication(String externalID,
-			PersistableRecordSource recordSource, float lowThreshold,
-			float highThreshold, String modelConfigurationName)
-			throws ServerConfigurationException;
-
 	public long startDeduplication(String externalID, OabaParameters batchParams,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException;
@@ -96,14 +87,7 @@ public interface OabaService extends Serializable {
 	 *            when OABA completes.
 	 * @return long - id of this job
 	 * @throws ServerConfigurationException
-	 * @deprecated see
-	 *             {@link #startLinkage(String, OabaParameters, OabaSettings, ServerConfiguration)}
 	 */
-	public long startLinkage(String externalID, PersistableRecordSource staging,
-			PersistableRecordSource master, float lowThreshold,
-			float highThreshold, String modelConfigurationName)
-			throws ServerConfigurationException;
-
 	public long startLinkage(String externalID, OabaParameters batchParams,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException;

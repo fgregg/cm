@@ -30,15 +30,13 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.args.OabaTaskType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
@@ -49,6 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 //import javax.naming.InitialContext;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
@@ -84,6 +83,9 @@ public class OabaServiceBean implements OabaService {
 	@EJB
 	private OabaProcessingControllerBean processingController;
 
+	@EJB
+	private PersistableRecordSourceController rsController;
+
 	@Resource(name = "jms/startQueue",
 			lookup = "java:/choicemaker/urm/jms/startQueue")
 	private Queue queue;
@@ -101,13 +103,22 @@ public class OabaServiceBean implements OabaService {
 		if (bp == null) {
 			pw.println("null batch parameters");
 		} else {
-			if (bp.getMasterRs() == null) {
-				pw.println("Deduping a single record source");
+			final OabaLinkageType task = bp.getOabaLinkageType();
+			pw.println("Linkage task: " + task);
+			if (task == OabaLinkageType.STAGING_DEDUPLICATION) {
+				pw.println("Deduplicating a single record source");
+				pw.println("Staging record source: " + bp.getStageRsId());
+			} else if (task == OabaLinkageType.STAGING_TO_MASTER_LINKAGE) {
+				pw.println("Linking a staging source to a master source");
+				pw.println("Staging record source: " + bp.getStageRsId());
+				pw.println("Master record source: " + bp.getMasterRsId());
+			} else if (task == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
+				pw.println("Linking a master source to a master source");
+				pw.println("Master record source: " + bp.getStageRsId());
+				pw.println("Master record source: " + bp.getMasterRsId());
 			} else {
-				pw.println("Matching a staging source against a master source");
+				throw new IllegalArgumentException("unexpected task type: " + task);
 			}
-			pw.println("Staging record source: " + bp.getStageRs());
-			pw.println("Master record source: " + bp.getMasterRs());
 			pw.println("DIFFER threshold: " + bp.getLowThreshold());
 			pw.println("MATCH threshold: " + bp.getHighThreshold());
 			pw.println("Model configuration id: "
@@ -152,8 +163,21 @@ public class OabaServiceBean implements OabaService {
 		if (bp == null) {
 			validityErrors.add("null batch parameters");
 		} else {
-			if (bp.getStageRs() == null) {
-				validityErrors.add("null staging record source");
+			OabaLinkageType type = bp.getOabaLinkageType();
+			if (type == null) {
+				validityErrors.add("null task type");
+			}
+			if (bp.getStageRsType() == null) {
+				validityErrors.add("null staging source type");
+			}
+			if (OabaLinkageType.STAGING_DEDUPLICATION == type) {
+				if (bp.getMasterRsId() != null || bp.getMasterRsType() != null) {
+					validityErrors.add("non-null master source parameter for a de-duplication task");
+				}
+			} else {
+				if (bp.getMasterRsId() == null || bp.getMasterRsType() == null) {
+					validityErrors.add("null master source parameter for a linkage task");
+				}
 			}
 			if (bp.getLowThreshold() < 0f || bp.getLowThreshold() > 1.0f) {
 				validityErrors.add("invalid DIFFER threshold: "
@@ -202,16 +226,6 @@ public class OabaServiceBean implements OabaService {
 	}
 
 	@Override
-	@Deprecated
-	public long startDeduplication(String externalID,
-			PersistableRecordSource staging, float lowThreshold,
-			float highThreshold, String modelConfigurationId)
-			throws ServerConfigurationException {
-		return startLinkage(externalID, staging, null, lowThreshold,
-				highThreshold, modelConfigurationId);
-	}
-
-	@Override
 	public long startDeduplication(String externalID, OabaParameters bp,
 			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
@@ -220,61 +234,20 @@ public class OabaServiceBean implements OabaService {
 		}
 
 		OabaParameters submittedParams;
-		if (bp.getMasterRs() == null
-				&& OabaTaskType.STAGING_DEDUPLICATION == bp.getOabaTaskType()) {
+		final OabaLinkageType task = bp.getOabaLinkageType();
+		if (bp.getMasterRsId() == null && bp.getMasterRsType() == null
+				&& OabaLinkageType.STAGING_DEDUPLICATION == task) {
 			submittedParams = bp;
 		} else {
-			final PersistableRecordSource NULL_MASTER_RS = null;
 			submittedParams =
 				new OabaParametersEntity(bp.getModelConfigurationName(),
 						bp.getLowThreshold(), bp.getHighThreshold(),
-						bp.getStageRs(), NULL_MASTER_RS,
-						OabaTaskType.STAGING_DEDUPLICATION);
+						bp.getStageRsId(), bp.getStageRsType(), null, null,
+						OabaLinkageType.STAGING_DEDUPLICATION);
 		}
-		assert submittedParams.getMasterRs() == null;
 
 		return startLinkage(externalID, submittedParams, oabaSettings,
 				serverConfiguration);
-	}
-
-	@Override
-	@Deprecated
-	public long startLinkage(String externalID,
-			PersistableRecordSource staging, PersistableRecordSource master,
-			float lowThreshold, float highThreshold, String modelConfigurationId)
-			throws ServerConfigurationException {
-
-		final String METHOD = "startOABA";
-		logger.entering(SOURCE_CLASS, METHOD);
-
-		// Create the job parameters for this job
-		OabaTaskType task =
-			master == null ? OabaTaskType.STAGING_DEDUPLICATION
-					: OabaTaskType.STAGING_TO_MASTER_LINKAGE;
-		final OabaParameters batchParams =
-			new OabaParametersEntity(modelConfigurationId, lowThreshold,
-					highThreshold, staging, master, task);
-
-		// Get the default OABA settings, ignoring the maxSingle value.
-		// If no default settings exist, create them using the maxSingle value.
-		ImmutableProbabilityModel model =
-			PMManager.getImmutableModelInstance(modelConfigurationId);
-		OabaSettings oabaSettings =
-			settingsController.findDefaultOabaSettings(model);
-		if (oabaSettings == null) {
-			// Creates generic settings and saves them
-			oabaSettings = new OabaSettingsEntity();
-			oabaSettings = settingsController.save(oabaSettings);
-		}
-
-		// Get the default server configuration for this host (or guess at it)
-		final String hostName =
-			ServerConfigurationControllerBean.computeHostName();
-		final boolean computeFallback = true;
-		ServerConfiguration sc =
-			serverController.getDefaultConfiguration(hostName, computeFallback);
-
-		return startLinkage(externalID, batchParams, oabaSettings, sc);
 	}
 
 	@Override

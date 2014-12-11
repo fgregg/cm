@@ -27,8 +27,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaTaskType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 
@@ -48,15 +48,9 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	// private static final Logger logger = Logger
 	// .getLogger(OabaParametersEntity.class.getName());
 
-	protected static final String INVALID_NAME = null;
-
 	protected static final int INVALID_MAX_SINGLE = -1;
 
 	protected static final float INVALID_THRESHOLD = -1f;
-
-	protected static final String INVALID_RS_TYPE = null;
-
-	protected static final String INVALID_TASK = null;
 
 	protected static boolean isInvalidBatchParamsId(long id) {
 		return id == NONPERSISTENT_ID;
@@ -96,7 +90,7 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	private final String stageRsType;
 
 	@Column(name = OabaParametersJPA.CN_MASTER_RS)
-	private final long masterRsId;
+	private final Long masterRsId;
 
 	/*
 	 * The <code>masterRsType</code> field acts as a flag. If it is null, then
@@ -113,43 +107,73 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 
 	/** Required by JPA; do not invoke directly */
 	protected OabaParametersEntity() {
-		this.modelConfigName = INVALID_NAME;
+		this.modelConfigName = null;
 		this.lowThreshold = INVALID_THRESHOLD;
 		this.highThreshold = INVALID_THRESHOLD;
 		this.stageRsId = NONPERSISTENT_ID;
-		this.stageRsType = INVALID_RS_TYPE;
-		this.masterRsId = NONPERSISTENT_ID;
-		this.masterRsType = INVALID_RS_TYPE;
-		this.task = INVALID_TASK;
+		this.stageRsType = null;
+		this.masterRsId = null;
+		this.masterRsType = null;
+		this.task = null;
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
 			float lowThreshold, float highThreshold,
 			PersistableRecordSource stageRs) {
 		this(modelConfigurationName, lowThreshold, highThreshold, stageRs,
-				null, OabaTaskType.STAGING_DEDUPLICATION);
+				null, OabaLinkageType.STAGING_DEDUPLICATION);
 	}
 
 	public OabaParametersEntity(OabaParameters bp) {
 		this(bp.getModelConfigurationName(), bp.getLowThreshold(), bp
-				.getHighThreshold(), bp.getStageRs(), bp.getMasterRs(), bp
-				.getOabaTaskType());
+				.getHighThreshold(), bp.getStageRsId(), bp.getStageRsType(), bp
+				.getMasterRsId(), bp.getMasterRsType(), bp.getOabaLinkageType());
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
 			float lowThreshold, float highThreshold,
 			PersistableRecordSource stageRs, PersistableRecordSource masterRs,
-			OabaTaskType taskType) {
+			OabaLinkageType taskType) {
+		this(modelConfigurationName, lowThreshold, highThreshold, stageRs
+				.getId(), stageRs.getType(), masterRs == null ? null : masterRs
+				.getId(), masterRs == null ? null : masterRs.getType(),
+				taskType);
+	}
+
+	/**
+	 * 
+	 * @param modelConfigurationName
+	 *            model configuration name
+	 * @param lowThreshold
+	 *            differ threshold
+	 * @param highThreshold
+	 *            match threshold
+	 * @param sId
+	 *            persistence id of the staging record source
+	 * @param sType
+	 *            the type of the staging record source (FlatFile, XML, DB)
+	 * @param mId
+	 *            the persistence id of the master record. Must be null if the
+	 *            <code>taskType</code> is STAGING_DEDUPLICATION; otherwise must
+	 *            be non-null.
+	 * @param mType
+	 *            the type of the master record source. Must be null if the
+	 *            <code>taskType</code> is STAGING_DEDUPLICATION; otherwise must
+	 *            be non-null.
+	 * @param taskType
+	 *            the record matching task: duplication of a staging source;
+	 *            linkage of a staging source to a master source; or linkage of
+	 *            two master sources.
+	 */
+	public OabaParametersEntity(String modelConfigurationName,
+			float lowThreshold, float highThreshold, long sId, String sType,
+			Long mId, String mType, OabaLinkageType taskType) {
 
 		if (modelConfigurationName == null
 				|| modelConfigurationName.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank modelId");
 		}
 		Thresholds.validate(lowThreshold, highThreshold);
-		if (stageRs == null) {
-			throw new IllegalArgumentException("null staging source");
-		}
-		final String sType = stageRs.getType();
 		if (sType == null || !sType.equals(sType.trim()) || sType.isEmpty()) {
 			throw new IllegalArgumentException("invalid stage RS type: "
 					+ sType);
@@ -157,23 +181,43 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 		if (taskType == null) {
 			throw new IllegalArgumentException("null task type");
 		}
-		if (taskType != OabaTaskType.STAGING_DEDUPLICATION && masterRs == null) {
-			throw new IllegalArgumentException(
-					"null master source (taskType is '" + taskType + "')");
-		}
-		final long mId = masterRs == null ? NONPERSISTENT_ID : masterRs.getId();
-		final String mType = masterRs == null ? null : masterRs.getType();
-		if (masterRs != null) {
+
+		// The masterRsId, masterRsType and taskType must be consistent.
+		// If the task type is STAGING_DEDUPLICATION, then the masterRsId
+		// and the masterRsType must be null. Otherwise, the masterRsId and
+		// the masterRsType must be non-null.
+		if (taskType == OabaLinkageType.STAGING_DEDUPLICATION) {
+			if (mId != null) {
+				String msg =
+					"non-null master source id '" + mId + "' (taskType is '"
+							+ taskType + "')";
+				throw new IllegalArgumentException(msg);
+			}
+			if (mType != null) {
+				String msg =
+					"non-null master source type '" + mType
+							+ "' (taskType is '" + taskType + "')";
+				throw new IllegalArgumentException(msg);
+			}
+		} else {
+			if (mId == null) {
+				String msg =
+					"null master source id '" + mId + "' (taskType is '"
+							+ taskType + "')";
+				throw new IllegalArgumentException(msg);
+			}
 			if (mType == null || !mType.equals(mType.trim()) || mType.isEmpty()) {
-				throw new IllegalArgumentException("invalid master RS type: "
-						+ mType);
+				String msg =
+					"invalid master source type '" + mType + "' (taskType is '"
+							+ taskType + "')";
+				throw new IllegalArgumentException(msg);
 			}
 		}
 
 		this.modelConfigName = modelConfigurationName.trim();
 		this.lowThreshold = lowThreshold;
 		this.highThreshold = highThreshold;
-		this.stageRsId = stageRs.getId();
+		this.stageRsId = sId;
 		this.stageRsType = sType;
 		this.masterRsId = mId;
 		this.masterRsType = mType;
@@ -211,14 +255,6 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	}
 
 	@Override
-	public PersistableRecordSource getStageRs() {
-		assert getStageRsType() != null;
-		PersistableRecordSource retVal =
-			new EmbeddableRecordSource(getStageRsId(), getStageRsType());
-		return retVal;
-	}
-
-	@Override
 	public long getStageRsId() {
 		return stageRsId;
 	}
@@ -229,17 +265,7 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	}
 
 	@Override
-	public PersistableRecordSource getMasterRs() {
-		PersistableRecordSource retVal = null;
-		if (getMasterRsType() != null) {
-			retVal =
-				new EmbeddableRecordSource(getMasterRsId(), getMasterRsType());
-		}
-		return retVal;
-	}
-
-	@Override
-	public long getMasterRsId() {
+	public Long getMasterRsId() {
 		return masterRsId;
 	}
 
@@ -249,8 +275,8 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	}
 
 	@Override
-	public OabaTaskType getOabaTaskType() {
-		return OabaTaskType.valueOf(this.task);
+	public OabaLinkageType getOabaLinkageType() {
+		return OabaLinkageType.valueOf(this.task);
 	}
 
 	// -- Identity
@@ -269,22 +295,22 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	protected int hashCode0() {
 		final int prime = 31;
 		int result = 1;
+
 		result = prime * result + Float.floatToIntBits(highThreshold);
 		result = prime * result + Float.floatToIntBits(lowThreshold);
-		result = prime * result + (int) (masterRsId ^ (masterRsId >>> 32));
-		result =
-			prime * result
+		result = prime * result
+					+ ((masterRsId == null) ? 0
+							: (int) (masterRsId ^ (masterRsId >>> 32)));
+		result = prime * result
 					+ ((masterRsType == null) ? 0 : masterRsType.hashCode());
-		result =
-			prime
-					* result
+		result = prime * result
 					+ ((modelConfigName == null) ? 0 : modelConfigName
 							.hashCode());
 		result = prime * result + (int) (stageRsId ^ (stageRsId >>> 32));
-		result =
-			prime * result
+		result = prime * result
 					+ ((stageRsType == null) ? 0 : stageRsType.hashCode());
 		result = prime * result + ((task == null) ? 0 : task.hashCode());
+
 		return result;
 	}
 

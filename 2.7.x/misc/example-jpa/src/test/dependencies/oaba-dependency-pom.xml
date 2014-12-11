@@ -25,7 +25,7 @@
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
-      <artifactId>com.choicemaker.cm.persist0</artifactId>
+      <artifactId>com.choicemaker.demo.persist0</artifactId>
       <version>2.7.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>

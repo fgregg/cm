@@ -42,10 +42,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
@@ -84,6 +83,9 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 
 	@EJB
 	private ServerConfigurationController serverController;
+
+	@EJB
+	private PersistableRecordSourceController rsController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
@@ -167,9 +169,9 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 							OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob, numProcessors));
 
 					ISerializableRecordSource staging =
-						DatabaseUtils.getRecordSource(params.getStageRs());
+						rsController.getStageRs(params);
 					ISerializableRecordSource master =
-						DatabaseUtils.getRecordSource(params.getMasterRs());
+						rsController.getMasterRs(params);
 					ChunkService3 chunkService =
 						new ChunkService3(
 								OabaFileUtils.getTreeSetSource(oabaJob),

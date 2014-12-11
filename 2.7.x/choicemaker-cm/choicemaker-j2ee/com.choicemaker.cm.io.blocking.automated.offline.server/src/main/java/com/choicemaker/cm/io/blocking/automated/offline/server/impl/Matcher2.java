@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -40,7 +41,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
 /**
@@ -141,17 +141,51 @@ public class Matcher2 extends AbstractMatcher {
 			q = getQ(dataStore, p);
 			m = getM(dataStore, p);
 
-			// major problem if this happens
+			// Log severe problems
+			boolean skipPair = false;
 			if (p.getId1().equals(p.getId2()) && p.isStage) {
-				getLogger().severe("id1 = id2: " + p.getId1().toString());
-				throw new BlockingException("id1 = id2");
+				// Should never happen
+				skipPair = true;				
+				String msg = "id1 = id2: " + p.getId1();
+				getLogger().severe(msg);
 			}
 
+			
+			// Skip a pair if a record is not
+			// in this particular comparison set
+			Level DETAILS = Level.FINER;
+			boolean isLoggable = getLogger().isLoggable(DETAILS);
+			if (q == null) {
+				skipPair = true;
+				if (isLoggable) {
+					String msg = "Missing record: " + p.getId1();
+					getLogger().log(DETAILS, msg);
+				}
+			}
+			if (m == null) {
+				skipPair = true;				
+				if (isLoggable) {
+					String msg = "Missing record: " + p.getId2();
+					getLogger().log(DETAILS, msg);
+				}
+			}
+			if (skipPair) {
+				if (isLoggable) {
+					String msg = "Skipped pair: " + p;
+					getLogger().log(DETAILS, msg);
+				}
+				continue;
+			}
+
+			// If a pair isn't skipped, compute whether it is a MATCH or HOLD,
+			// and if so, add it to the collections of matches. (DIFFER
+			// decisions are returned as null.)
 			match = compareRecords(q, m, p.isStage, stageModel, t);
 			if (match != null) {
 				matches.add(match);
 			}
 		}
+
 		return matches;
 	}
 

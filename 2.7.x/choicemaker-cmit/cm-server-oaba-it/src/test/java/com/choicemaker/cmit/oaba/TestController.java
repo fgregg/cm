@@ -42,8 +42,9 @@ public class TestController {
 		assert retVal.getId() != ServerConfigurationControllerBean.INVALID_ID;
 		return retVal;
 	}
-	
-	public OabaParameters createPersistentOabaParameters(String tag, TestEntities te) {
+
+	public OabaParameters createPersistentOabaParameters(String tag,
+			TestEntities te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -51,11 +52,12 @@ public class TestController {
 	}
 
 	/**
-	 * An externalId for the returned OabaJob is synthesized using the
-	 * specified tag
+	 * An externalId for the returned OabaJob is synthesized using the specified
+	 * tag
 	 */
 	public OabaJob createPersistentOabaJobBean(String tag, TestEntities te) {
-		return createPersistentOabaJobBean(te, EntityManagerUtils.createExternalId(tag));
+		return createPersistentOabaJobBean(te,
+				EntityManagerUtils.createExternalId(tag));
 	}
 
 	/**
@@ -64,7 +66,8 @@ public class TestController {
 	 */
 	public OabaJob createPersistentOabaJobBean(TestEntities te, String extId) {
 		ServerConfiguration sc = getDefaultServerConfiguration();
-		return EntityManagerUtils.createPersistentOabaJobBean(sc, em, te, extId);
+		return EntityManagerUtils
+				.createPersistentOabaJobBean(sc, em, te, extId);
 	}
 
 	public void removeTestEntities(TestEntities te) {

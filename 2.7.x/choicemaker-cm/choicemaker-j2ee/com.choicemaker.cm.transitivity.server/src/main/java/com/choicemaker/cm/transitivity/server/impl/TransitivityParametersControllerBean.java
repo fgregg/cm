@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.TransitivityParameters;
@@ -21,17 +18,17 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
  * 
  * @author rphall
  */
-@Stateless
+// @Stateless
 public class TransitivityParametersControllerBean extends
 		OabaParametersControllerBean {
 
 	private static final Logger logger = Logger
 			.getLogger(TransitivityParametersControllerBean.class.getName());
 
-	@PersistenceContext(unitName = "oaba")
+	// @PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 	
-	@EJB
+	// @EJB
 	private TransitivityJobControllerBean jobController;
 
 	protected TransitivityParametersEntity getBean(TransitivityParameters transitivityParameters) {

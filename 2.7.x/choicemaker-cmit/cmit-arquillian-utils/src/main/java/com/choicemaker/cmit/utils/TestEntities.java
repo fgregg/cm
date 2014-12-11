@@ -195,7 +195,8 @@ public class TestEntities {
 					utx.begin();
 					usingUtx = true;
 				}
-				OabaJobEntity refresh = em.find(OabaJobEntity.class, job.getId());
+				OabaJobEntity refresh =
+					em.find(OabaJobEntity.class, job.getId());
 				if (refresh != null) {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
@@ -272,8 +273,8 @@ public class TestEntities {
 					em.merge(refresh);
 					boolean isManaged = em.contains(refresh);
 					if (!isManaged) {
-						logger.warning("OabaJobProcessing "
-								+ refresh.getId() + " is not managed");
+						logger.warning("OabaJobProcessing " + refresh.getId()
+								+ " is not managed");
 					} else {
 						em.remove(refresh);
 					}
@@ -320,8 +321,8 @@ public class TestEntities {
 				em.merge(refresh);
 				boolean isManaged = em.contains(refresh);
 				if (!isManaged) {
-					logger.warning("Default server configuration " + refresh.getHostName()
-							+ " is not managed");
+					logger.warning("Default server configuration "
+							+ refresh.getHostName() + " is not managed");
 				} else {
 					em.remove(refresh);
 				}
@@ -385,14 +386,13 @@ public class TestEntities {
 				usingUtx = true;
 			}
 			DefaultSettingsEntity refresh =
-				em.find(DefaultSettingsEntity.class,
-						dscb.getPrimaryKey());
+				em.find(DefaultSettingsEntity.class, dscb.getPrimaryKey());
 			if (refresh != null) {
 				em.merge(refresh);
 				boolean isManaged = em.contains(refresh);
 				if (!isManaged) {
-					logger.warning("Default settings " + refresh.getPrimaryKey()
-							+ " is not managed");
+					logger.warning("Default settings "
+							+ refresh.getPrimaryKey() + " is not managed");
 				} else {
 					em.remove(refresh);
 				}

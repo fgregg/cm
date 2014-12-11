@@ -61,25 +61,29 @@ public class OabaParametersBeanIT {
 
 	private int initialOabaParamsCount;
 	private int initialOabaJobCount;
-//	private int initialTransitivityJobCount;
+
+	// private int initialTransitivityJobCount;
 
 	@Before
 	public void setUp() {
 		initialOabaParamsCount = prmController.findAllBatchParameters().size();
 		initialOabaJobCount = prmController.findAllBatchJobs().size();
-//		initialTransitivityJobCount = prmController.findAllTransitivityJobs().size();
+		// initialTransitivityJobCount =
+		// prmController.findAllTransitivityJobs().size();
 	}
 
 	@After
 	public void tearDown() {
-		int finalBatchParamsCount = prmController.findAllBatchParameters().size();
+		int finalBatchParamsCount =
+			prmController.findAllBatchParameters().size();
 		assertTrue(initialOabaParamsCount == finalBatchParamsCount);
 
 		int finalBatchJobCount = prmController.findAllBatchJobs().size();
 		assertTrue(initialOabaJobCount == finalBatchJobCount);
-//
-//		int finalTransJobCount = prmController.findAllTransitivityJobs().size();
-//		assertTrue(initialTransitivityJobCount == finalTransJobCount);
+		//
+		// int finalTransJobCount =
+		// prmController.findAllTransitivityJobs().size();
+		// assertTrue(initialTransitivityJobCount == finalTransJobCount);
 	}
 
 	@Test
@@ -101,8 +105,7 @@ public class OabaParametersBeanIT {
 		assertTrue(params.getId() != 0);
 
 		// Find the params
-		OabaParameters batchParameters2 =
-			prmController.find(params.getId());
+		OabaParameters batchParameters2 = prmController.find(params.getId());
 		assertTrue(params.getId() == batchParameters2.getId());
 		assertTrue(params.equals(batchParameters2));
 
@@ -119,7 +122,8 @@ public class OabaParametersBeanIT {
 
 		// Create two generic parameter sets, only one of which is persistent,
 		// and verify inequality
-		OabaParametersEntity params1 = prmController.createBatchParameters(METHOD,te);
+		OabaParametersEntity params1 =
+			prmController.createBatchParameters(METHOD, te);
 		OabaParametersEntity params2 = new OabaParametersEntity(params1);
 		te.add(params2);
 		assertTrue(!params1.equals(params2));
@@ -139,16 +143,15 @@ public class OabaParametersBeanIT {
 		TestEntities te = new TestEntities();
 
 		// Create a params and set a value
-		OabaParametersEntity template = prmController.createBatchParameters(METHOD,te);
-		final String v1 = prmController.createRandomModelConfigurationName(METHOD);
-		OabaParameters params = new OabaParametersEntity(
-				v1,
-				template.getLowThreshold(),
-				template.getHighThreshold(),
-				template.getStageRs(),
-				template.getMasterRs(),
-				template.getOabaTaskType()
-				);
+		OabaParametersEntity template =
+			prmController.createBatchParameters(METHOD, te);
+		final String v1 =
+			prmController.createRandomModelConfigurationName(METHOD);
+		OabaParameters params =
+			new OabaParametersEntity(v1, template.getLowThreshold(),
+					template.getHighThreshold(), template.getStageRsId(),
+					template.getStageRsType(), template.getMasterRsId(),
+					template.getMasterRsType(), template.getOabaLinkageType());
 		te.add(params);
 
 		// Save the params
@@ -177,16 +180,15 @@ public class OabaParametersBeanIT {
 		TestEntities te = new TestEntities();
 
 		// Create parameters with known values
-		OabaParametersEntity template = prmController.createBatchParameters(METHOD,te);
+		OabaParametersEntity template =
+			prmController.createBatchParameters(METHOD, te);
 		final Thresholds t = prmController.createRandomThresholds();
-		OabaParameters params = new OabaParametersEntity(
-				template.getModelConfigurationName(),
-				t.getDifferThreshold(),
-				t.getMatchThreshold(),
-				template.getStageRs(),
-				template.getMasterRs(),
-				template.getOabaTaskType()
-				);
+		OabaParameters params =
+			new OabaParametersEntity(template.getModelConfigurationName(),
+					t.getDifferThreshold(), t.getMatchThreshold(),
+					template.getStageRsId(), template.getStageRsType(),
+					template.getMasterRsId(), template.getMasterRsType(),
+					template.getOabaLinkageType());
 		te.add(params);
 
 		// Save the params

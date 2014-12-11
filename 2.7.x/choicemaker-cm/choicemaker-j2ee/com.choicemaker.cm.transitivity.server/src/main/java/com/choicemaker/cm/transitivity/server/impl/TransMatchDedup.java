@@ -15,10 +15,7 @@ import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
 import javax.ejb.FinderException;
-import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -27,8 +24,6 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.BatchJob;
@@ -39,9 +34,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
@@ -54,13 +49,13 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 //@SuppressWarnings({
 //		"rawtypes", "unchecked" })
 //Singleton: maxSession = 1 (JBoss only)
-@MessageDriven(activationConfig = {
-		@ActivationConfigProperty(propertyName = "maxSession",
-				propertyValue = "1"),
-		@ActivationConfigProperty(propertyName = "destinationLookup",
-				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
-		@ActivationConfigProperty(propertyName = "destinationType",
-				propertyValue = "javax.jms.Queue") })
+//@MessageDriven(activationConfig = {
+//		@ActivationConfigProperty(propertyName = "maxSession",
+//				propertyValue = "1"),
+//		@ActivationConfigProperty(propertyName = "destinationLookup",
+//				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
+//		@ActivationConfigProperty(propertyName = "destinationType",
+//				propertyValue = "javax.jms.Queue") })
 public class TransMatchDedup implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -69,16 +64,16 @@ public class TransMatchDedup implements MessageListener, Serializable {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ TransMatchDedup.class.getName());
 	
-	@PersistenceContext(unitName = "oaba")
-	private EntityManager em;
+	// @PersistenceContext(unitName = "oaba")
+//	private EntityManager em;
 	
-	@EJB
+	// @EJB
 	TransitivityJobControllerBean jobController;
 
-	@EJB
+	// @EJB
 	OabaParametersControllerBean paramsController;
 
-	@EJB
+	// @EJB
 	OabaProcessingControllerBean processingController;
 
 //	@Resource

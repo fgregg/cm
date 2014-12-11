@@ -1,14 +1,18 @@
 package com.choicemaker.cmit.utils;
 
 import java.io.IOException;
+import java.util.Properties;
 import java.util.UUID;
 
+import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.Sink;
 
-public class FakeSerialRecordSource implements SerializableRecordSource {
+public class FakeSerialRecordSource implements ISerializableRecordSource {
+
+	public static final String PN_NAME = "name";
+	public static final String PN_FILENAME = "fileName";
 
 	private static final long serialVersionUID = 271L;
 
@@ -155,4 +159,23 @@ public class FakeSerialRecordSource implements SerializableRecordSource {
 	public String toString() {
 		return "FakeSerialRecordSource [name=" + name + "]";
 	}
+
+	@Override
+	public Properties getProperties() {
+		Properties retVal = new Properties();
+		retVal.setProperty(PN_NAME, name);
+		retVal.setProperty(PN_FILENAME, fileName);
+		return retVal;
+	}
+
+	@Override
+	public void setProperties(Properties properties) {
+	}
+
+	@Override
+	public String toXML() {
+		return "<fakeSerialRecordSource name=\"" + name + "\" fileName=\""
+				+ fileName + "\" />";
+	}
+
 }

@@ -18,7 +18,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
 
-import com.choicemaker.cm.core.SerializableRecordSource;
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -84,11 +84,11 @@ public abstract class UrmJobBean implements EntityBean {//extends CmsJobBean {
 	public abstract void setGroupMatchType(String id);
 	public abstract String getGroupMatchType();
 
-	public abstract void setQueryRs(SerializableRecordSource rs);
-	public abstract SerializableRecordSource getQueryRs();
+	public abstract void setQueryRs(PersistableRecordSource rs);
+	public abstract PersistableRecordSource getQueryRs();
 	
-	public abstract void setMasterRs(SerializableRecordSource rs);
-	public abstract SerializableRecordSource getMasterRs();
+	public abstract void setMasterRs(PersistableRecordSource rs);
+	public abstract PersistableRecordSource getMasterRs();
 	
 	public abstract void setLowerThreshold(Float lth);
 	public abstract Float getLowerThreshold();

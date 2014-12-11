@@ -1,8 +1,9 @@
 package com.choicemaker.cm.args;
 
 import java.io.File;
+import java.io.Serializable;
 
-public interface ServerConfiguration {
+public interface ServerConfiguration extends Serializable {
 
 	/**
 	 * A special value for the {@link #getHostName() hostName} field that

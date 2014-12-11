@@ -40,9 +40,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 
 /**
@@ -76,6 +75,9 @@ public class StartOABA implements MessageListener, Serializable {
 	
 	@EJB
 	private OabaProcessingControllerBean processingController;
+
+	@EJB
+	private PersistableRecordSourceController rsController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
@@ -136,20 +138,24 @@ public class StartOABA implements MessageListener, Serializable {
 				// update status to mark as start
 				oabaJob.markAsStarted();
 
-				// FIXME better logging
-				log.info(jobId + " " + params.getModelConfigurationName() + " "
-						+ params.getLowThreshold() + " "
-						+ params.getHighThreshold());
-				log.info(params.getStageRs() + " " + params.getMasterRs());
+				log.info("Job id: " + jobId);
+				log.info("Model configuration: " + params.getModelConfigurationName());
+				log.info("Differ threshold: " + params.getLowThreshold());
+				log.info("Match threshold: " + params.getHighThreshold());
+				log.info("Staging record source id: " + params.getStageRsId());
+				log.info("Staging record source type: " + params.getStageRsType());
+				log.info("Master record source id: " + params.getMasterRsId());
+				log.info("Master record source type: " + params.getMasterRsType());
+				log.info("Linkage type: " + params.getOabaLinkageType());
 
 				// check to see if there are a lot of records in stage.
 				// if not use single record matching instead of batch.
 				log.info("Checking whether to use single- or batched-record blocking...");
 				log.info("OabaSettings maxSingle: " + oabaSettings.getMaxSingle());
 				final ISerializableRecordSource staging =
-						DatabaseUtils.getRecordSource(params.getStageRs());
-				final ISerializableRecordSource master =
-						DatabaseUtils.getRecordSource(params.getMasterRs());
+						rsController.getStageRs(params);
+					final ISerializableRecordSource master =
+						rsController.getMasterRs(params);
 				if (!isMoreThanThreshold(staging, stageModel,
 						oabaSettings.getMaxSingle())) {
 					log.info("Using single record matching");
@@ -172,8 +178,7 @@ public class StartOABA implements MessageListener, Serializable {
 								oabaJob);
 					rvService.runService();
 
-					// FIXME move these parameters to a persistent operational
-					// object
+					// FIXME move these parameters to a persistent object
 					data.stageType = rvService.getStageType();
 					data.masterType = rvService.getMasterType();
 					data.numBlockFields = rvService.getNumBlockingFields();

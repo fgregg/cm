@@ -10,11 +10,6 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.args.TransitivitySettings;
@@ -35,14 +30,14 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)
  */
-@NamedQueries({
-		@NamedQuery(name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL,
-				query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL),
-		@NamedQuery(
-				name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID,
-				query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID) })
-@Entity
-@DiscriminatorValue(value = TransitivityJobJPA.DISCRIMINATOR_VALUE)
+// @NamedQueries({
+//		@NamedQuery(name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL,
+//				query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL),
+//		@NamedQuery(
+//				name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID,
+//				query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID) })
+//@Entity
+//@DiscriminatorValue(value = TransitivityJobJPA.DISCRIMINATOR_VALUE)
 public class TransitivityJobEntity extends OabaJobEntity implements
 		TransitivityJob {
 

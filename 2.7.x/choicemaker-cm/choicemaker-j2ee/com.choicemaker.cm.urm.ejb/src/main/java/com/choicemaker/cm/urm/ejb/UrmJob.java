@@ -15,7 +15,7 @@ import java.util.Date;
 
 import javax.ejb.EJBObject;
 
-import com.choicemaker.cm.core.SerializableRecordSource;
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -42,11 +42,11 @@ public interface UrmJob extends EJBObject {//CmsJob {
 	void setCurStepIndex(Long index) throws RemoteException;
 	Long getCurStepIndex() throws RemoteException;    
 
-	void setQueryRs(SerializableRecordSource rs) throws RemoteException;
-	SerializableRecordSource getQueryRs() throws RemoteException;
+	void setQueryRs(PersistableRecordSource rs) throws RemoteException;
+	PersistableRecordSource getQueryRs() throws RemoteException;
 	
-	void setMasterRs(SerializableRecordSource rs) throws RemoteException;
-	SerializableRecordSource getMasterRs() throws RemoteException;	
+	void setMasterRs(PersistableRecordSource rs) throws RemoteException;
+	PersistableRecordSource getMasterRs() throws RemoteException;	
 	
 	void setSerializationType(String id)throws RemoteException;
 	String getSerializationType()throws RemoteException;

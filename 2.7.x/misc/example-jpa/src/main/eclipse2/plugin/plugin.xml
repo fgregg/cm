@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
-   id="com.choicemaker.cm.io.blocking.automated.offline.server"
+   id="com.choicemaker.demo.oaba0"
    name="Server Plug-in"
    version="2.5.0"
    provider-name="CHOICEMAKER"

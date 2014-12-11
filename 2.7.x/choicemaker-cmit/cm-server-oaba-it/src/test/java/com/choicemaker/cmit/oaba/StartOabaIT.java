@@ -1,8 +1,8 @@
 package com.choicemaker.cmit.oaba;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_REC_VAL;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_REC_VAL;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.logging.Logger;
 
@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
-import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
 import javax.persistence.EntityManager;
@@ -27,30 +26,27 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaTaskType;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BlockingOABA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatch;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatus;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
+import com.choicemaker.cmit.utils.OabaTestUtils;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
-import com.choicemaker.cmit.utils.TestEntities;
 import com.choicemaker.e2.ejb.EjbPlatform;
 
 @RunWith(Arquillian.class)
@@ -58,11 +54,10 @@ public class StartOabaIT {
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
-	/** A short time-out for receiving messages (1 sec) */
-	public static final long SHORT_TIMEOUT_MILLIS = 1000;
+	public static final String LOG_SOURCE = StartOabaIT.class.getSimpleName();
 
-	/** A long time-out for receiving messages (10 sec) */
-	public static final long LONG_TIMEOUT_MILLIS = 20000;
+	private static final Logger logger = Logger.getLogger(StartOabaIT.class
+			.getName());
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
@@ -80,27 +75,6 @@ public class StartOabaIT {
 				TESTS_AS_EJB_MODULE);
 	}
 
-	public static final String LOG_SOURCE = StartOabaIT.class.getSimpleName();
-
-	private static final Logger logger = Logger.getLogger(StartOabaIT.class
-			.getName());
-
-	/**
-	 * Workaround for logger.entering(String,String) not showing up in JBOSS
-	 * server log
-	 */
-	private static void logEntering(String method) {
-		logger.info("Entering " + LOG_SOURCE + "." + method);
-	}
-
-	/**
-	 * Workaround for logger.exiting(String,String) not showing up in JBOSS
-	 * server log
-	 */
-	private static void logExiting(String method) {
-		logger.info("Exiting " + LOG_SOURCE + "." + method);
-	}
-
 	@Resource(name = "DefaultManagedExecutorService")
 	ManagedExecutorService executor;
 
@@ -115,7 +89,7 @@ public class StartOabaIT {
 
 	@EJB
 	private OabaJobControllerBean jobController;
-	
+
 	@EJB
 	private OabaParametersControllerBean paramsController;
 
@@ -133,6 +107,9 @@ public class StartOabaIT {
 
 	@EJB
 	protected TestController controller;
+
+	@EJB
+	protected PersistableRecordSourceController rsController;
 
 	@Resource(lookup = "choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
@@ -154,11 +131,10 @@ public class StartOabaIT {
 	@Before
 	public void setUp() {
 		final String METHOD = "setUp";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		setupOK = true;
 		try {
-			initialOabaParamsCount =
-				controller.findAllOabaParameters().size();
+			initialOabaParamsCount = controller.findAllOabaParameters().size();
 			initialOabaJobCount = controller.findAllOabaJobs().size();
 			initialOabaProcessingCount =
 				controller.findAllOabaProcessing().size();
@@ -166,13 +142,13 @@ public class StartOabaIT {
 			logger.severe(x.toString());
 			setupOK = false;
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@After
 	public void tearDown() {
 		final String METHOD = "tearDown";
-		logEntering(METHOD);
+		logger.entering(LOG_SOURCE, METHOD);
 		try {
 
 			int finalOabaParamsCount =
@@ -195,76 +171,22 @@ public class StartOabaIT {
 		} catch (AssertionError x) {
 			logger.severe(x.toString());
 		}
-		logExiting(METHOD);
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
 	@InSequence(1)
-	public void testEntityManager() {
+	public void testPrequisites() {
 		assertTrue(setupOK);
 		assertTrue(em != null);
-	}
-
-	@Test
-	@InSequence(1)
-	public void testManagedExecutor() {
-		assertTrue(setupOK);
 		assertTrue(executor != null);
-	}
-
-	@Test
-	@InSequence(1)
-	public void testUserTransaction() {
-		assertTrue(setupOK);
 		assertTrue(utx != null);
-	}
-
-	@Test
-	@InSequence(1)
-	public void testE2Service() {
-		assertTrue(setupOK);
 		assertTrue(e2service != null);
-	}
-
-	@Test
-	@InSequence(1)
-	public void testBatchQuery() {
-		assertTrue(setupOK);
 		assertTrue(batchQuery != null);
-	}
-
-	@Test
-	@InSequence(1)
-	public void testTransitivityController() {
-		assertTrue(setupOK);
 		assertTrue(controller != null);
-	}
-
-	@Test
-	@InSequence(2)
-	public void testBlockQueue() {
-		assertTrue(setupOK);
 		assertTrue(blockQueue != null);
-	}
-
-	@Test
-	@InSequence(2)
-	public void testUpdateQueue() {
-		assertTrue(setupOK);
 		assertTrue(updateQueue != null);
-	}
-
-	@Test
-	@InSequence(2)
-	public void testSingleMatchQueue() {
-		assertTrue(setupOK);
 		assertTrue(singleMatchQueue != null);
-	}
-
-	@Test
-	@InSequence(3)
-	public void testJmsContext() {
-		assertTrue(setupOK);
 		assertTrue(jmsContext != null);
 	}
 
@@ -272,235 +194,93 @@ public class StartOabaIT {
 	@InSequence(4)
 	public void clearBlockQueue() {
 		assertTrue(setupOK);
-		JMSConsumer consumer = jmsContext.createConsumer(blockQueue);
-		OabaJobMessage oabaJobMessage = null;
-		do {
-			oabaJobMessage = receiveStartData(consumer);
-			logger.finest(JmsUtils.queueInfo("Clearing: ", blockQueue, oabaJobMessage));
-		} while (oabaJobMessage != null);
-	}
 
-	@Test
-	@InSequence(4)
-	public void clearUpdateQueue() {
-		assertTrue(setupOK);
-		JMSConsumer consumer = jmsContext.createConsumer(updateQueue);
-		Object o = null;
-		// OabaUpdateMessage updateData = null;
-		do {
-			o = receiveUpdateData(consumer);
-			logger.finest(JmsUtils.queueInfo("Clearing: ", updateQueue, o));
-			if (o != null && !(o instanceof OabaUpdateMessage)) {
-				logger.severe("Wrong message type on update queue: " + o == null ? null
-						: o.getClass().getName());
-			}
-		} while (o != null);
-	}
+		JmsUtils.clearStartDataFromQueue(LOG_SOURCE, jmsContext, blockQueue);
+		JmsUtils.clearStartDataFromQueue(LOG_SOURCE, jmsContext,
+				singleMatchQueue);
 
-	@Test
-	@InSequence(4)
-	public void clearSingleMatchQueue() {
-		assertTrue(setupOK);
-		JMSConsumer consumer = jmsContext.createConsumer(singleMatchQueue);
-		OabaJobMessage oabaJobMessage = null;
-		do {
-			oabaJobMessage = receiveStartData(consumer);
-			logger.finest(JmsUtils.queueInfo("Clearing: ", singleMatchQueue, oabaJobMessage));
-		} while (oabaJobMessage != null);
+		JmsUtils.clearUpdateDataFromQueue(LOG_SOURCE, jmsContext, updateQueue);
+
 	}
 
 	@Test
 	@InSequence(5)
-	public void testStartDeduplication()
-			throws ServerConfigurationException {
+	public void testStartLinkage() throws ServerConfigurationException {
 		assertTrue(setupOK);
 		String TEST = "testStartOABALinkage";
-		logEntering(TEST);
+		logger.entering(LOG_SOURCE, TEST);
 
 		final String externalID = EntityManagerUtils.createExternalId(TEST);
 		final SimplePersonSqlServerTestConfiguration c =
 			new SimplePersonSqlServerTestConfiguration();
 		c.initialize(this.e2service.getPluginRegistry());
 
+		PersistableRecordSource prs = c.getStagingRecordSource();
+		assertTrue(prs != null);
+		assertTrue(prs.getId() == PersistableRecordSource.NONPERSISTENT_ID);
+		final PersistableRecordSource staging = rsController.save(prs);
+		assertTrue(staging.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+		prs = c.getMasterRecordSource();
+		assertTrue(prs != null);
+		assertTrue(prs.getId() == PersistableRecordSource.NONPERSISTENT_ID);
+		final PersistableRecordSource master = rsController.save(prs);
+		assertTrue(master.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), c.getStagingRecordSource(),
-					c.getMasterRecordSource(), c.getOabaTask());
-		testStartLinkage(TEST, externalID, bp);
+					.getMatchThreshold(), staging, master, c.getOabaTask());
 
-		logExiting(TEST);
+		final OabaSettings oabaSettings =
+			OabaUtils.getDefaultOabaSettings(settingsController,
+					bp.getStageModel());
+		final ServerConfiguration serverConfiguration =
+			OabaUtils.getDefaultServerConfiguration(serverController);
+
+		OabaTestUtils.testIntermediateOabaProcessing(LOG_SOURCE, TEST,
+				externalID, bp, oabaSettings, serverConfiguration, batchQuery,
+				jobController, paramsController, processingController,
+				jmsContext, blockQueue, updateQueue, em, utx, EVT_DONE_REC_VAL,
+				PCT_DONE_REC_VAL);
+
+		logger.exiting(LOG_SOURCE, TEST);
 	}
 
 	@Test
 	@InSequence(6)
-	public void testStartLinkage()
-			throws ServerConfigurationException {
+	public void testStartDeduplication() throws ServerConfigurationException {
 		assertTrue(setupOK);
 		String TEST = "testStartOABAStage";
-		logEntering(TEST);
+		logger.entering(LOG_SOURCE, TEST);
 
 		final String externalID = EntityManagerUtils.createExternalId(TEST);
 		final SimplePersonSqlServerTestConfiguration c =
 			new SimplePersonSqlServerTestConfiguration();
 		c.initialize(this.e2service.getPluginRegistry());
 
-		// The master record source should must be null in this set of batch
-		// parameters in order to test the startOABAStage(..) method
-		final PersistableRecordSource MASTER = null;
-		final OabaTaskType TASK = OabaTaskType.STAGING_DEDUPLICATION;
+		PersistableRecordSource prs = c.getStagingRecordSource();
+		assertTrue(prs != null);
+		assertTrue(prs.getId() == PersistableRecordSource.NONPERSISTENT_ID);
+		final PersistableRecordSource staging = rsController.save(prs);
+		assertTrue(staging.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), c.getStagingRecordSource(), MASTER,
-					TASK);
-		testStartLinkage(TEST, externalID, bp);
+					.getMatchThreshold(), staging);
+		final OabaSettings oabaSettings =
+			OabaUtils.getDefaultOabaSettings(settingsController,
+					bp.getStageModel());
+		final ServerConfiguration serverConfiguration =
+			OabaUtils.getDefaultServerConfiguration(serverController);
 
-		logExiting(TEST);
-	}
+		OabaTestUtils.testIntermediateOabaProcessing(LOG_SOURCE, TEST,
+				externalID, bp, oabaSettings, serverConfiguration, batchQuery,
+				jobController, paramsController, processingController,
+				jmsContext, blockQueue, updateQueue, em, utx, EVT_DONE_REC_VAL,
+				PCT_DONE_REC_VAL);
 
-	public void testStartLinkage(final String tag, final String externalId,
-			final OabaParameters bp)
-			throws ServerConfigurationException {
-
-		if (externalId == null || bp == null) {
-			throw new IllegalArgumentException("null argument");
-		}
-
-		TestEntities te = new TestEntities();
-
-		final long jobId;
-		if (bp.getMasterRs() == null) {
-			logger.info(tag + ": invoking OabaService.startDeduplication");
-			jobId =
-				batchQuery.startDeduplication(externalId, bp.getStageRs(),
-						bp.getLowThreshold(), bp.getHighThreshold(),
-						bp.getModelConfigurationName());
-			logger.info(tag + ": returned from OabaService.startDeduplication");
-
-		} else {
-			logger.info(tag + ": invoking OabaService.startLinkage");
-			jobId =
-				batchQuery.startLinkage(externalId, bp.getStageRs(),
-						bp.getMasterRs(), bp.getLowThreshold(),
-						bp.getHighThreshold(), bp.getModelConfigurationName());
-			logger.info(tag + ": returned from OabaService.startLinkage");
-		}
-		assertTrue(OabaJobEntity.INVALID_ID != jobId);
-		OabaJob oabaJob = jobController.find(jobId);
-		assertTrue(oabaJob != null);
-		te.add(oabaJob);
-		assertTrue(externalId != null
-				&& externalId.equals(oabaJob.getExternalId()));
-
-		// Find the persistent OabaParameters object created by the call to
-		// OabaService.startOABA...
-		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
-		te.add(params);
-
-		// Validate that the job parameters are correct
-		assertTrue(params != null);
-		assertTrue(params.getLowThreshold() == bp.getLowThreshold());
-		assertTrue(params.getHighThreshold() == bp.getHighThreshold());
-		if (bp.getMasterRs() == null) {
-			assertTrue(params.getMasterRs() == null);
-		} else {
-			assertTrue(params.getMasterRs() != null
-					&& params.getMasterRs().equals(bp.getMasterRs()));
-		}
-		assertTrue(params.getStageRs() != null
-				&& params.getStageRs().equals(bp.getStageRs()));
-		assertTrue(params.getModelConfigurationName() != null
-				&& params.getModelConfigurationName().equals(
-						bp.getModelConfigurationName()));
-
-		// Check that the startOABA method completed and sent out a message
-		// on the blocking queue
-		logger.info("Checking blockQueue");
-		JMSConsumer consumer = jmsContext.createConsumer(blockQueue);
-		OabaJobMessage oabaJobMessage = receiveStartData(consumer, LONG_TIMEOUT_MILLIS);
-		logger.info(JmsUtils.queueInfo("Received from: ", blockQueue, oabaJobMessage));
-		if (oabaJobMessage == null) {
-			fail("did not receive data from blocking queue");
-		}
-		assertTrue(oabaJobMessage.jobID == jobId);
-
-		// Find the persistent OabaProcessing object updated by the StartOABA
-		// message driven bean
-		OabaJobProcessing processingEntry =
-			processingController.findProcessingLogByJobId(jobId);
-		te.add(processingEntry);
-
-		// Validate that OabaProcessing entry is correct for this stage
-		// em.getEntityManagerFactory().getCache().evictAll();
-		assertTrue(processingEntry != null);
-		assertTrue(processingEntry.getCurrentProcessingEventId() == EVT_DONE_REC_VAL);
-
-		// Check that the startOABA method sent out a message on the update
-		// queue
-		logger.info("Checking updateQueue");
-		consumer = jmsContext.createConsumer(updateQueue);
-		Object o = receiveUpdateData(consumer, SHORT_TIMEOUT_MILLIS);
-		logger.info(JmsUtils.queueInfo("Received from: ", blockQueue, o));
-		if (o == null) {
-			fail("did not receive data from update queue");
-		}
-		if (!(o instanceof OabaUpdateMessage)) {
-			fail("Received wrong type from update queue: " + o == null ? null
-					: o.getClass().getName());
-		}
-		OabaUpdateMessage oabaUpdateMessage = (OabaUpdateMessage) o;
-		assertTrue(oabaUpdateMessage.getJobID() == jobId);
-		assertTrue(oabaUpdateMessage.getPercentComplete() == OabaProcessing.PCT_DONE_REC_VAL);
-
-		try {
-			te.removePersistentObjects(em, utx);
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			fail(x.toString());
-		}
-
-		logExiting(tag);
-	}
-
-	public OabaJobMessage receiveStartData(JMSConsumer consumer) {
-		return receiveStartData(consumer, SHORT_TIMEOUT_MILLIS);
-	}
-
-	public OabaJobMessage receiveStartData(JMSConsumer consumer, long timeOut) {
-		final String METHOD = "receiveStartData(" + timeOut + ")";
-		logEntering(METHOD);
-		OabaJobMessage retVal = null;
-		try {
-			retVal = consumer.receiveBody(OabaJobMessage.class, timeOut);
-		} catch (Exception x) {
-			fail(x.toString());
-		}
-		logExiting(METHOD);
-		return retVal;
-	}
-
-	// public OabaUpdateMessage receiveUpdateData(JMSConsumer consumer) {
-	public Object receiveUpdateData(JMSConsumer consumer) {
-		return receiveUpdateData(consumer, SHORT_TIMEOUT_MILLIS);
-	}
-
-	// public OabaUpdateMessage receiveUpdateData(JMSConsumer consumer, long timeOut) {
-	public Object receiveUpdateData(JMSConsumer consumer, long timeOut) {
-		final String METHOD = "receiveUpdateData(" + timeOut + ")";
-		logEntering(METHOD);
-		if (consumer == null) {
-			throw new IllegalArgumentException("null consumer");
-		}
-		// OabaUpdateMessage retVal = null;
-		Object retVal = null;
-		try {
-			retVal = consumer.receiveBody(Object.class, timeOut);
-		} catch (Exception x) {
-			fail(x.toString());
-		}
-		logExiting(METHOD);
-		return retVal;
+		logger.exiting(LOG_SOURCE, TEST);
 	}
 
 }

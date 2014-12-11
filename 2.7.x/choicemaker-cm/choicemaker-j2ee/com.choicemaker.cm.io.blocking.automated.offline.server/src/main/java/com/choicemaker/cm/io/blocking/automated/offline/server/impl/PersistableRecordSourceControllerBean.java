@@ -1,5 +1,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
@@ -8,14 +10,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaTaskType;
 import com.choicemaker.cm.args.PersistableFlatFileRecordSource;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.args.PersistableXmlRecordSource;
+import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 
 @Stateless
-public class PersistableRecordSourceControllerBean {
+public class PersistableRecordSourceControllerBean implements
+		PersistableRecordSourceController {
 
 	private static final Logger logger = Logger
 			.getLogger(PersistableRecordSourceControllerBean.class.getName());
@@ -32,6 +36,28 @@ public class PersistableRecordSourceControllerBean {
 	@EJB
 	private SqlRecordSourceControllerBean sqlRsController;
 
+	public ISerializableRecordSource getStageRs(OabaParameters params)
+			throws Exception {
+		ISerializableRecordSource retVal = null;
+		if (params != null) {
+			retVal =
+				getRecordSource(params.getStageRsId(), params.getStageRsType());
+		}
+		return retVal;
+	}
+
+	public ISerializableRecordSource getMasterRs(OabaParameters params)
+			throws Exception {
+		ISerializableRecordSource retVal = null;
+		if (params != null) {
+			retVal =
+				getRecordSource(params.getMasterRsId(),
+						params.getMasterRsType());
+		}
+		return retVal;
+	}
+
+	// @Override
 	public PersistableRecordSource save(final PersistableRecordSource psrs) {
 		if (psrs == null) {
 			throw new IllegalArgumentException("null settings");
@@ -44,66 +70,59 @@ public class PersistableRecordSourceControllerBean {
 				(PersistableSqlRecordSource) psrs;
 			retVal = sqlRsController.save(sqlRs);
 		} else if (PersistableFlatFileRecordSource.TYPE.equals(type)) {
-			throw new Error("not yet implemented for record source type: '" + type + "'");
+			throw new Error("not yet implemented for record source type: '"
+					+ type + "'");
 		} else if (PersistableXmlRecordSource.TYPE.equals(type)) {
-			throw new Error("not yet implemented for record source type: '" + type + "'");
+			throw new Error("not yet implemented for record source type: '"
+					+ type + "'");
 		} else {
-			throw new IllegalStateException("unknown record source type: '" + type + "'");
+			throw new IllegalStateException("unknown record source type: '"
+					+ type + "'");
 		}
 		assert retVal != null;
 		return retVal;
 	}
 
-	public PersistableRecordSource findStagingRecordSource(long rsId, String type) {
+	// @Override
+	public PersistableRecordSource find(Long id, String type) {
 		PersistableRecordSource retVal = null;
-		if (rsId == PersistableRecordSource.NONPERSISTENT_ID) {
-			logger.info("non-persistent record source id; returning null");
-		} else if (type == null) {
-			logger.info("null record source type; returning null");
-		} else {
-			type = type.trim().toUpperCase();
-			if (type.isEmpty()) {
-				logger.info("blank record source type; returning null");
-			}
-			if (PersistableSqlRecordSource.TYPE.equals(type)) {
-				retVal = sqlRsController.find(rsId);
-			} else if (PersistableFlatFileRecordSource.TYPE.equals(type)) {
-				throw new Error("not yet implemented for record source type: '" + type + "'");
-			} else if (PersistableXmlRecordSource.TYPE.equals(type)) {
-				throw new Error("not yet implemented for record source type: '" + type + "'");
-			} else {
-				throw new IllegalStateException("unknown record source type: '" + type + "'");
+		if (id != null) {
+			// The typical case will be a SQL record source, so check it first
+			retVal = sqlRsController.find(id, type);
+			if (retVal == null) {
+				// Here's where flatfile and XML sources would be checked
+				logger.warning("Skipping flatfile and XML record sources");
 			}
 			if (retVal == null) {
-				String msg = "Missing persistent record source: " + rsId + "/" + type;
-				logger.warning(msg);
+				logger.warning("Record source " + id + " not found");
 			}
 		}
 		return retVal;
 	}
 
-	public ISerializableRecordSource findRecordSource(PersistableRecordSource prs) {
-		PersistableRecordSource
-		if (psr == null) {
-			throw new IllegalArgumentException("null persistable record source");
-		}
-		findRecordSource
-		assert rsId != PersistableRecordSource.NONPERSISTENT_ID;
-		PersistableRecordSource retVal = null;
-		if (PersistableSqlRecordSource.TYPE.equals(type)) {
-			retVal = sqlRsController.find(rsId);
-		} else if (PersistableFlatFileRecordSource.TYPE.equals(type)) {
-			throw new Error("not yet implemented for record source type: '" + type + "'");
-		} else if (PersistableXmlRecordSource.TYPE.equals(type)) {
-			throw new Error("not yet implemented for record source type: '" + type + "'");
-		} else {
-			throw new IllegalStateException("unknown record source type: '" + type + "'");
+	// @Override
+	public ISerializableRecordSource getRecordSource(Long id, String type)
+			throws Exception {
+		// The usual case will be a SQL record source, so check this first
+		ISerializableRecordSource retVal =
+			sqlRsController.getRecordSource(id, type);
+		if (retVal == null) {
+			// Here's where flatfile and XML record sources should be checked
+			logger.warning("Skipping flatfile and XML record sources");
 		}
 		if (retVal == null) {
-			String msg = "Missing persistent record source: " + rsId + "/" + type;
-			logger.warning(msg);
+			logger.warning("Record source " + id + " not found");
 		}
 		return retVal;
+	}
+
+	// @Override
+	public List<PersistableRecordSource> findAll() {
+		List<PersistableRecordSource> retVal = new ArrayList<>();
+		retVal.addAll(sqlRsController.findAll());
+		// Here's where flatfile and XML record sources should be added
+		logger.warning("Skipping flatfile and XML record sources");
+		return null;
 	}
 
 }

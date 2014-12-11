@@ -11,11 +11,9 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
-import javax.ejb.FinderException;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -27,7 +25,6 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ISerializableRecordSource;
-import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
@@ -44,9 +41,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTrans
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.DatabaseUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
@@ -81,6 +78,9 @@ public class TransitivityBean implements MessageListener, Serializable {
 	
 //	@EJB
 	private OabaProcessingControllerBean processingController;
+
+//	@EJB
+	private PersistableRecordSourceController rsController;
 
 	/* (non-Javadoc)
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
@@ -126,7 +126,7 @@ public class TransitivityBean implements MessageListener, Serializable {
 	 *
 	 */
 	private void createChunks (TransitivityJob transJob, OabaParameters params)
-		throws RemoteException, FinderException, XmlConfException, BlockingException, NamingException, JMSException {
+		throws Exception {
 
 		//get the match record source
 		IMatchRecord2Source mSource = OabaFileUtils.getCompositeMatchSource (transJob);
@@ -194,9 +194,9 @@ public class TransitivityBean implements MessageListener, Serializable {
 		// END HACK
 
 		ISerializableRecordSource staging =
-			DatabaseUtils.getRecordSource(params.getStageRs());
-		ISerializableRecordSource master =
-			DatabaseUtils.getRecordSource(params.getMasterRs());
+				rsController.getStageRs(params);
+			ISerializableRecordSource master =
+				rsController.getMasterRs(params);
 		ChunkService3 chunkService =
 			new ChunkService3(source2, null, staging, master, model,
 					OabaFileUtils.getChunkIDFactory(transJob),

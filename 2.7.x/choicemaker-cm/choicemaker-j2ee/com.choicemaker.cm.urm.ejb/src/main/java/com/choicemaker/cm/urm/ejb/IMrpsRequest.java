@@ -16,44 +16,48 @@ import java.util.Properties;
 
 import javax.persistence.EntityManager;
 
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
-import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 /**
- * An MrpsRequest contains the information necessary to start
- * the back-end processing of an MRPS job.
+ * An MrpsRequest contains the information necessary to start the back-end
+ * processing of an MRPS job.
+ * 
  * @see MrpsBackend
  */
-@SuppressWarnings({"rawtypes"})
-public interface IMrpsRequest extends Serializable, Cloneable {
+@SuppressWarnings({ "rawtypes" })
+interface IMrpsRequest extends Serializable, Cloneable {
 
-	public abstract MarkedRecordPairSink getMarkedRecordPairSink(EntityManager em)
-		throws CmRuntimeException, ConfigException, RemoteException;
+	MarkedRecordPairSink getMarkedRecordPairSink(EntityManager em)
+			throws CmRuntimeException, ConfigException, RemoteException;
 
-	public abstract String getExternalId();
+	String getExternalId();
 
-	public abstract Long getMrpsConvJobId();
+	Long getMrpsConvJobId();
 
-	public abstract Long getOabaJobId();
+	Long getOabaJobId();
 
-	public abstract IMatchRecord2Source getMatchPairs(EntityManager em)
-		throws CmRuntimeException, ConfigException, RemoteException;
+	IMatchRecord2Source getMatchPairs(EntityManager em)
+			throws CmRuntimeException, ConfigException, RemoteException;
 
-	public abstract SerializableRecordSource getRsMaster(EntityManager em)
-		throws CmRuntimeException, ConfigException, RemoteException;
+	PersistableRecordSource getRsMaster(EntityManager em,
+			PersistableRecordSourceController prsc)
+			throws CmRuntimeException, ConfigException, RemoteException;
 
-	public abstract SerializableRecordSource getRsStage(EntityManager em)
-		throws CmRuntimeException, ConfigException, RemoteException;
-		
-	public IProbabilityModel getStagingModel(EntityManager em)
-		throws CmRuntimeException, ConfigException, RemoteException;
-		
+	PersistableRecordSource getRsStage(EntityManager em,
+			PersistableRecordSourceController prsc)
+			throws CmRuntimeException, ConfigException, RemoteException;
+
+	IProbabilityModel getStagingModel(EntityManager em)
+			throws CmRuntimeException, ConfigException, RemoteException;
+
 	// From the Configurable interface
-		
+
 	/** Returns all the properties specified by this object */
 	Properties getProperties();
 
@@ -61,4 +65,3 @@ public interface IMrpsRequest extends Serializable, Cloneable {
 	void setProperties(Properties p);
 
 }
-

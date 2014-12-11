@@ -24,7 +24,7 @@ public interface OabaParameters {
 
 	String getModelConfigurationName();
 
-	OabaTaskType getOabaTaskType();
+	OabaLinkageType getOabaLinkageType();
 
 	String getStageModel();
 
@@ -34,16 +34,16 @@ public interface OabaParameters {
 
 	float getHighThreshold();
 
-	PersistableRecordSource getStageRs();
-
+	/** The staging record source (and its id) is never null */
 	long getStageRsId();
 
+	/** The staging record source (and its type) is never null */
 	String getStageRsType();
 
-	PersistableRecordSource getMasterRs();
+	/** The master record source (and its id) may be null */
+	Long getMasterRsId();
 
-	long getMasterRsId();
-
+	/** The master record source (and its type) may be null */
 	String getMasterRsType();
 
 }

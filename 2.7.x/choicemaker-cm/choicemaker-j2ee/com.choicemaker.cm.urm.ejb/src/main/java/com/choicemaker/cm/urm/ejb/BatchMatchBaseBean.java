@@ -30,7 +30,6 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
 import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.SerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -113,30 +112,32 @@ public class BatchMatchBaseBean implements SessionBean {
 			log.severe("Invalid probability accessProvider: " + modelName);
 			throw new ModelException("Invalid probability accessProvider: " + modelName);
 		}
-		SerialRecordSourceBuilder	rcb = new SerialRecordSourceBuilder(model,true);
-		qRs.accept(rcb);
-		SerializableRecordSource staging = rcb.getResultRecordSource();
-		SerializableRecordSource master = null;
-		if(mRs != null){
-			rcb.setCheckEmpty(false);
-			mRs.accept(rcb);
-			master =  rcb.getResultRecordSource();
-		}
-		
-//		int transactionId = -1;
-		if(uj != null){		
-			uj.setQueryRs(staging);
-			uj.setMasterRs(master);
-//			transactionId = uj.getId().intValue();
-			uj.markAsMatching();
-		}
-
+		// TODO FIXME not yet re-implemented
 		throw new Error("not yet implemented");
-//		final long retVal =
-//			batchQuery.startOABA(externalId, staging, master, differThreshold,
-//					matchThreshold, modelName, maxSingle, false);
-//		log.fine(">> startBatchQueryService");
-//		return retVal;
+//		SerialRecordSourceBuilder	rcb = new SerialRecordSourceBuilder(model,true);
+//		qRs.accept(rcb);
+//		PersistableRecordSource staging = rcb.getResultRecordSource();
+//		PersistableRecordSource master = null;
+//		if(mRs != null){
+//			rcb.setCheckEmpty(false);
+//			mRs.accept(rcb);
+//			master =  rcb.getResultRecordSource();
+//		}
+//		
+////		int transactionId = -1;
+//		if(uj != null){		
+//			uj.setQueryRs(staging);
+//			uj.setMasterRs(master);
+////			transactionId = uj.getId().intValue();
+//			uj.markAsMatching();
+//		}
+//
+//		throw new Error("not yet implemented");
+////		final long retVal =
+////			batchQuery.startOABA(externalId, staging, master, differThreshold,
+////					matchThreshold, modelName, maxSingle, false);
+////		log.fine(">> startBatchQueryService");
+////		return retVal;
 	}
 
 	/**

@@ -54,6 +54,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServer
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 public class ServerConfigurationEntity implements MutableServerConfiguration {
 
+	private static final long serialVersionUID = 271L;
+
 	private static final Logger logger = Logger
 			.getLogger(ServerConfigurationEntity.class.getName());
 
