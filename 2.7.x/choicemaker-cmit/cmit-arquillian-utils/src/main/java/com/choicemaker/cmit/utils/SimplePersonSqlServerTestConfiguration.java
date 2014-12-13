@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
+
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
@@ -143,7 +145,8 @@ public class SimplePersonSqlServerTestConfiguration implements
 	 * @throws IllegalStateException
 	 *             if initialization fails
 	 */
-	// @PostConstruct
+	@PostConstruct
+	@Override
 	public void initialize(CMPluginRegistry registry) {
 		// Standard messages
 		final String NULL_REGISTRY = "null plugin registry";

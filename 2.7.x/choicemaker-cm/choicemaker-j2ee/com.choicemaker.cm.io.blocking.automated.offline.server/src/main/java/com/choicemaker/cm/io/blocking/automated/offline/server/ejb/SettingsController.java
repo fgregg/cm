@@ -2,6 +2,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
 import java.util.List;
 
+import javax.ejb.Local;
+
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -13,6 +15,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSetti
  * @author rphall
  *
  */
+@Local
 public interface SettingsController {
 
 	AbaSettings save(AbaSettings settings);

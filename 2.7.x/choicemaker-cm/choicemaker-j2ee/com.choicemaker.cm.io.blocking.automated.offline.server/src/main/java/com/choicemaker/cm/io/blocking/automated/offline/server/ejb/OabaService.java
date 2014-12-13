@@ -15,6 +15,7 @@ import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
 import javax.ejb.FinderException;
+import javax.ejb.Local;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
@@ -29,7 +30,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
  * @author pcheung
  *
  */
-//@Remote
+@Local
 @SuppressWarnings("rawtypes")
 public interface OabaService extends Serializable {
 

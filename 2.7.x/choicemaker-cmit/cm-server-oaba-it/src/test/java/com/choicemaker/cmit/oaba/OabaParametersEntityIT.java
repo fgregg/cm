@@ -23,15 +23,17 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
+import com.choicemaker.cmit.oaba.util.OabaTestController;
 import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
-public class OabaParametersBeanIT {
+public class OabaParametersEntityIT {
 
 	private static final Logger logger = Logger
-			.getLogger(OabaParametersBeanIT.class.getName());
+			.getLogger(OabaParametersEntityIT.class.getName());
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
@@ -57,38 +59,36 @@ public class OabaParametersBeanIT {
 	EntityManager em;
 
 	@EJB
-	protected OabaParametersController2 prmController;
+	protected OabaParametersControllerBean paramsController;
+
+	@EJB
+	protected OabaTestController oabaTestController;
 
 	private int initialOabaParamsCount;
 	private int initialOabaJobCount;
 
-	// private int initialTransitivityJobCount;
-
 	@Before
 	public void setUp() {
-		initialOabaParamsCount = prmController.findAllBatchParameters().size();
-		initialOabaJobCount = prmController.findAllBatchJobs().size();
-		// initialTransitivityJobCount =
-		// prmController.findAllTransitivityJobs().size();
+		initialOabaParamsCount = oabaTestController.findAllOabaParameters().size();
+		initialOabaJobCount = oabaTestController.findAllOabaJobs().size();
 	}
 
 	@After
 	public void tearDown() {
 		int finalBatchParamsCount =
-			prmController.findAllBatchParameters().size();
+				oabaTestController.findAllOabaParameters().size();
 		assertTrue(initialOabaParamsCount == finalBatchParamsCount);
 
-		int finalBatchJobCount = prmController.findAllBatchJobs().size();
+		int finalBatchJobCount = oabaTestController.findAllOabaJobs().size();
 		assertTrue(initialOabaJobCount == finalBatchJobCount);
-		//
-		// int finalTransJobCount =
-		// prmController.findAllTransitivityJobs().size();
-		// assertTrue(initialTransitivityJobCount == finalTransJobCount);
 	}
 
 	@Test
-	public void testBatchParametersController() {
-		assertTrue(prmController != null);
+	public void testPrerequisites() {
+		assertTrue(em != null);
+		assertTrue(utx != null);
+		assertTrue(paramsController != null);
+		assertTrue(oabaTestController != null);
 	}
 
 	@Test
@@ -98,20 +98,20 @@ public class OabaParametersBeanIT {
 
 		// Create a params
 		OabaParametersEntity params =
-			prmController.createBatchParameters(METHOD, te);
+			oabaTestController.createBatchParameters(METHOD, te);
 
 		// Save the params
-		prmController.save(params);
+		paramsController.save(params);
 		assertTrue(params.getId() != 0);
 
 		// Find the params
-		OabaParameters batchParameters2 = prmController.find(params.getId());
+		OabaParameters batchParameters2 = paramsController.find(params.getId());
 		assertTrue(params.getId() == batchParameters2.getId());
 		assertTrue(params.equals(batchParameters2));
 
 		// Delete the params
-		prmController.delete(batchParameters2);
-		OabaParameters batchParameters3 = prmController.find(params.getId());
+		paramsController.delete(batchParameters2);
+		OabaParameters batchParameters3 = paramsController.find(params.getId());
 		assertTrue(batchParameters3 == null);
 	}
 
@@ -123,7 +123,7 @@ public class OabaParametersBeanIT {
 		// Create two generic parameter sets, only one of which is persistent,
 		// and verify inequality
 		OabaParametersEntity params1 =
-			prmController.createBatchParameters(METHOD, te);
+			oabaTestController.createBatchParameters(METHOD, te);
 		OabaParametersEntity params2 = new OabaParametersEntity(params1);
 		te.add(params2);
 		assertTrue(!params1.equals(params2));
@@ -144,9 +144,9 @@ public class OabaParametersBeanIT {
 
 		// Create a params and set a value
 		OabaParametersEntity template =
-			prmController.createBatchParameters(METHOD, te);
+			oabaTestController.createBatchParameters(METHOD, te);
 		final String v1 =
-			prmController.createRandomModelConfigurationName(METHOD);
+			oabaTestController.createRandomModelConfigurationName(METHOD);
 		OabaParameters params =
 			new OabaParametersEntity(v1, template.getLowThreshold(),
 					template.getHighThreshold(), template.getStageRsId(),
@@ -155,11 +155,11 @@ public class OabaParametersBeanIT {
 		te.add(params);
 
 		// Save the params
-		final long id1 = prmController.save(params).getId();
+		final long id1 = paramsController.save(params).getId();
 
 		// Get the params
 		params = null;
-		params = prmController.find(id1);
+		params = paramsController.find(id1);
 
 		// Check the value
 		assertTrue(v1.equals(params.getStageModel()));
@@ -181,8 +181,8 @@ public class OabaParametersBeanIT {
 
 		// Create parameters with known values
 		OabaParametersEntity template =
-			prmController.createBatchParameters(METHOD, te);
-		final Thresholds t = prmController.createRandomThresholds();
+			oabaTestController.createBatchParameters(METHOD, te);
+		final Thresholds t = oabaTestController.createRandomThresholds();
 		OabaParameters params =
 			new OabaParametersEntity(template.getModelConfigurationName(),
 					t.getDifferThreshold(), t.getMatchThreshold(),
@@ -192,11 +192,11 @@ public class OabaParametersBeanIT {
 		te.add(params);
 
 		// Save the params
-		final long id1 = prmController.save(params).getId();
+		final long id1 = paramsController.save(params).getId();
 
 		// Get the params
 		params = null;
-		params = prmController.find(id1);
+		params = paramsController.find(id1);
 
 		// Check the value
 		assertTrue(t.getDifferThreshold() == params.getLowThreshold());

@@ -6,7 +6,6 @@ import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
 import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_MATCHES;
 import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_OVERSIZED;
 import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MIN_FIELDS;
-import static com.choicemaker.cmit.utils.EntityManagerUtils.MAX_MAX_SINGLE;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -42,6 +41,8 @@ import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
 public class SettingsControllerBeanIT {
+
+	public static final int MAX_MAX_SINGLE = 1000;
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 

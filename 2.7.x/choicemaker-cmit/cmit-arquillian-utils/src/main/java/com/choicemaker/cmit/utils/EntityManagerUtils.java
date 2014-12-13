@@ -1,14 +1,14 @@
 package com.choicemaker.cmit.utils;
 
-import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_PER_BLOCKING_SET;
-import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_SINGLE_BLOCKING_SET;
-import static com.choicemaker.cm.args.AbaSettings.DEFAULT_SINGLE_TABLE_GRACE_LIMIT;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_INTERVAL;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_MATCHES;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_OVERSIZED;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MIN_FIELDS;
+// FIXME import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_PER_BLOCKING_SET;
+// FIXME import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_SINGLE_BLOCKING_SET;
+// FIXME import static com.choicemaker.cm.args.AbaSettings.DEFAULT_SINGLE_TABLE_GRACE_LIMIT;
+// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_INTERVAL;
+// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
+// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
+// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_MATCHES;
+// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_OVERSIZED;
+// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MIN_FIELDS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
+// FIXME import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA;
@@ -40,8 +40,6 @@ import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 import com.choicemaker.cm.transitivity.server.impl.TransitivitySettingsEntity;
 
 public class EntityManagerUtils {
-
-	public static final int MAX_MAX_SINGLE = 1000;
 
 	private EntityManagerUtils() {
 	}
@@ -158,79 +156,6 @@ public class EntityManagerUtils {
 		return new FakeSerialRecordSource(tag);
 	}
 
-	/** Creates an ephemeral instance of OabaParametersEntity */
-	public static OabaParametersEntity createEphemeralOabaParameters(
-			String tag, TestEntities te) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		Thresholds thresholds = createRandomThresholds();
-		PersistableRecordSource stage = createFakePersistableRecordSource(tag);
-		OabaLinkageType task = createRandomOabaTask();
-		PersistableRecordSource master =
-			createFakePersistableRecordSource(tag, task);
-		OabaParametersEntity retVal =
-			new OabaParametersEntity(createRandomModelConfigurationName(tag),
-					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master, task);
-		te.add(retVal);
-		return retVal;
-	}
-
-	/**
-	 * Creates a persistent instance of OabaParametersEntity An externalId for
-	 * the returned OabaJob is synthesized using the specified tag.
-	 */
-	public static OabaParametersEntity createPersistentOabaParameters(
-			EntityManager em, String tag, TestEntities te) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
-		OabaParametersEntity retVal = createEphemeralOabaParameters(tag, te);
-		em.persist(retVal);
-		return retVal;
-	}
-
-	/** Creates an ephemeral instance of OabaSettingsEntity */
-	public static OabaSettingsEntity createEphemeralOabaSettings(String tag,
-			TestEntities te) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		int limPerBlockingSet = random.nextInt(DEFAULT_LIMIT_PER_BLOCKING_SET);
-		int limSingleBlockingSet =
-			random.nextInt(DEFAULT_LIMIT_SINGLE_BLOCKING_SET);
-		int singleTableGraceLimit =
-			random.nextInt(DEFAULT_SINGLE_TABLE_GRACE_LIMIT);
-		int maxSingle = random.nextInt(MAX_MAX_SINGLE);
-		int maxBlockSize = random.nextInt(DEFAULT_MAX_BLOCKSIZE);
-		int maxChunkSize = random.nextInt(DEFAULT_MAX_CHUNKSIZE);
-		int maxMatches = random.nextInt(DEFAULT_MAX_MATCHES);
-		int maxOversized = random.nextInt(DEFAULT_MAX_OVERSIZED);
-		int minFields = random.nextInt(DEFAULT_MIN_FIELDS);
-		int interval = random.nextInt(DEFAULT_INTERVAL);
-		OabaSettingsEntity retVal =
-			new OabaSettingsEntity(limPerBlockingSet, limSingleBlockingSet,
-					singleTableGraceLimit, maxSingle, maxBlockSize, maxMatches,
-					maxChunkSize, maxOversized, minFields, interval);
-		te.add(retVal);
-		return retVal;
-	}
-
-	/**
-	 * Creates a persistent instance of OabaSettingsEntity An externalId for the
-	 * returned OabaJob is synthesized using the specified tag.
-	 */
-	public static OabaSettingsEntity createPersistentOabaSettings(
-			EntityManager em, String tag, TestEntities te) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
-		OabaSettingsEntity retVal = createEphemeralOabaSettings(tag, te);
-		em.persist(retVal);
-		return retVal;
-	}
-
 	/** Creates an ephemeral instance of TransitivityParametersEntity */
 	public static TransitivityParametersEntity createEphemeralTransitivityParameters(
 			String tag, TestEntities te) {
@@ -312,64 +237,6 @@ public class EntityManagerUtils {
 		return retVal;
 	}
 
-	/**
-	 * Creates an ephemeral instance of OabaParametersEntity. An externalId for
-	 * the returned OabaJob is synthesized using the specified tag.
-	 */
-	public static OabaJobEntity createEphemeralOabaJob(ServerConfiguration sc,
-			EntityManager em, String tag, TestEntities te) {
-		return createEphemeralOabaJob(sc, em, te, createExternalId(tag));
-	}
-
-	/**
-	 * Creates an ephemeral instance of OabaParametersEntity. The specified
-	 * externalId is assigned without alteration to the returned OabaJob.
-	 */
-	public static OabaJobEntity createEphemeralOabaJob(ServerConfiguration sc,
-			EntityManager em, TestEntities te, String extId) {
-		final String METHOD = "createEphemeralOabaJob";
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		OabaParametersEntity params =
-			createPersistentOabaParameters(em, METHOD, te);
-		OabaSettingsEntity settings =
-			createPersistentOabaSettings(em, METHOD, te);
-		OabaJobEntity retVal = new OabaJobEntity(params, settings, sc, extId);
-		te.add(retVal);
-		return retVal;
-	}
-
-	/**
-	 * Creates a persistent instance of OabaParametersEntity. An externalId for
-	 * the returned OabaJob is synthesized using the specified tag.
-	 */
-	public static OabaJobEntity createPersistentOabaJobBean(
-			ServerConfiguration sc, EntityManager em, String tag,
-			TestEntities te) {
-		return createPersistentOabaJobBean(sc, em, te, createExternalId(tag));
-	}
-
-	/**
-	 * Creates a persistent instance of OabaParametersEntity. The specified
-	 * externalId is assigned without alteration to the returned OabaJob.
-	 */
-	public static OabaJobEntity createPersistentOabaJobBean(
-			ServerConfiguration sc, EntityManager em, TestEntities te,
-			String extId) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		OabaParametersEntity params =
-			createPersistentOabaParameters(em, null, te);
-		OabaSettingsEntity settings =
-			createPersistentOabaSettings(em, null, te);
-		OabaJobEntity retVal = new OabaJobEntity(params, settings, sc, extId);
-		em.persist(retVal);
-		te.add(retVal);
-		return retVal;
-	}
-
 	public static TransitivityJobEntity createEphemeralTransitivityJob(
 			EntityManager em, String tag, TestEntities te, OabaJob job) {
 		if (te == null) {
@@ -403,25 +270,27 @@ public class EntityManagerUtils {
 	public static TransitivityJobEntity createEphemeralTransitivityJob(
 			ServerConfiguration sc, EntityManager em, String tag,
 			TestEntities te) {
-		OabaParametersEntity params =
-			createPersistentOabaParameters(em, tag, te);
-		OabaJobEntity job = createPersistentOabaJobBean(sc, em, tag, te);
-		TransitivityJobEntity retVal = new TransitivityJobEntity(params, job);
-		te.add(retVal);
-		return retVal;
+		throw new Error("not yet implemented");
+//		OabaParametersEntity params =
+//			createPersistentOabaParameters(em, tag, te);
+//		OabaJobEntity job = createPersistentOabaJobBean(sc, em, tag, te);
+//		TransitivityJobEntity retVal = new TransitivityJobEntity(params, job);
+//		te.add(retVal);
+//		return retVal;
 	}
 
 	public static TransitivityJobEntity createEphemeralTransitivityJob(
 			EntityManager em, TestEntities te, OabaJob job, String extId) {
-		OabaParametersEntity params =
-			createPersistentOabaParameters(em, null, te);
-		TransitivityJobEntity retVal =
-			new TransitivityJobEntity(params, job, extId);
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		te.add(retVal);
-		return retVal;
+		throw new Error("not yet implemented");
+//		OabaParametersEntity params =
+//			createPersistentOabaParameters(em, null, te);
+//		TransitivityJobEntity retVal =
+//			new TransitivityJobEntity(params, job, extId);
+//		if (te == null) {
+//			throw new IllegalArgumentException("null test entities");
+//		}
+//		te.add(retVal);
+//		return retVal;
 	}
 
 	public static void removeTestEntities(EntityManager em, TestEntities te) {
@@ -468,12 +337,12 @@ public class EntityManagerUtils {
 		return entries;
 	}
 
-	public static List<OabaJobEntity> findAllOabaJobs(EntityManager em) {
+	public static List<OabaJob> findAllOabaJobs(EntityManager em) {
 		Query query = em.createNamedQuery(OabaJobJPA.QN_OABAJOB_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<OabaJobEntity> retVal = query.getResultList();
+		List<OabaJob> retVal = query.getResultList();
 		if (retVal == null) {
-			retVal = new ArrayList<OabaJobEntity>();
+			retVal = new ArrayList<OabaJob>();
 		}
 		return retVal;
 	}

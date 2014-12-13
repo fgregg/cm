@@ -2,6 +2,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
 import java.util.List;
 
+import javax.ejb.Local;
+
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity;
 
@@ -11,6 +13,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServe
  * @author rphall
  *
  */
+@Local
 public interface ServerConfigurationController {
 
 	ServerConfiguration find(long id);

@@ -4,6 +4,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
+import com.choicemaker.e2.CMPluginRegistry;
 
 public interface WellKnownTestConfiguration {
 
@@ -24,5 +25,8 @@ public interface WellKnownTestConfiguration {
 	int getSingleRecordMatchingThreshold();
 
 	boolean getTransitivityAnalysisFlag();
+
+	/** Post-construction method */
+	void initialize(CMPluginRegistry registry);
 
 }

@@ -12,7 +12,6 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
@@ -48,7 +47,8 @@ public class TransitivityJobController {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
-		return EntityManagerUtils.createPersistentOabaParameters(em, tag, te);
+		throw new Error("not yet implemented");
+//		return EntityManagerUtils.createPersistentOabaParameters(em, tag, te);
 	}
 
 	/**
@@ -64,8 +64,9 @@ public class TransitivityJobController {
 	 * OabaJob
 	 */
 	public OabaJob createPersistentOabaJobBean(TestEntities te, String extId) {
-		ServerConfiguration sc = getDefaultServerConfiguration();
-		return EntityManagerUtils.createPersistentOabaJobBean(sc, em, te, extId);
+		throw new Error("not yet implemented");
+//		ServerConfiguration sc = getDefaultServerConfiguration();
+//		return EntityManagerUtils.createPersistentOabaJobBean(sc, em, te, extId);
 	}
 
 	public TransitivityJob createEphemeralTransitivityJob(String tag,
@@ -99,7 +100,7 @@ public class TransitivityJobController {
 		return EntityManagerUtils.findAllOabaParameters(em);
 	}
 
-	public List<OabaJobEntity> findAllOabaJobs() {
+	public List<OabaJob> findAllOabaJobs() {
 		return EntityManagerUtils.findAllOabaJobs(em);
 	}
 

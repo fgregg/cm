@@ -2,7 +2,9 @@ package com.choicemaker.cmit.utils;
 
 import static com.choicemaker.cm.batch.BatchJob.INVALID_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OABA;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_INIT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_INIT;
 import static com.choicemaker.cmit.utils.JmsUtils.VERY_LONG_TIMEOUT_MILLIS;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -34,6 +36,33 @@ public class OabaTestUtils {
 	private static final Logger logger = Logger.getLogger(OabaTestUtils.class
 			.getName());
 
+	/**
+	 * @deprecated use <code>testOabaProcessing</code> instead
+	 */
+	public static void testInitialOabaProcessing(final String LOG_SOURCE,
+			final String tag, final String externalId, final OabaParameters bp,
+			final OabaSettings oabaSettings,
+			final ServerConfiguration serverConfiguration,
+			final OabaService batchQuery,
+			final OabaJobControllerBean jobController,
+			final OabaParametersControllerBean paramsController,
+			final OabaProcessingControllerBean processingController,
+			final JMSContext jmsContext, final Queue listeningQueue,
+			final Queue updateQueue, final EntityManager em,
+			final UserTransaction utx) {
+		logger.entering(LOG_SOURCE, tag);
+		final int expectedEventId = EVT_INIT;
+		final int expectPercentDone = PCT_INIT;
+		testOabaProcessing(LOG_SOURCE, tag, externalId, bp, oabaSettings,
+				serverConfiguration, batchQuery, jobController,
+				paramsController, processingController, jmsContext,
+				listeningQueue, updateQueue, em, utx, expectedEventId,
+				expectPercentDone, OabaProcessingPhase.INITIAL);
+	}
+
+	/**
+	 * @deprecated use <code>testOabaProcessing</code> instead
+	 */
 	public static void testIntermediateOabaProcessing(final String LOG_SOURCE,
 			final String tag, final String externalId, final OabaParameters bp,
 			final OabaSettings oabaSettings,
@@ -47,14 +76,16 @@ public class OabaTestUtils {
 			final UserTransaction utx, final int expectedEventId,
 			final int expectPercentDone) {
 		logger.entering(LOG_SOURCE, tag);
-		final boolean isIntermediate = true;
 		testOabaProcessing(LOG_SOURCE, tag, externalId, bp, oabaSettings,
 				serverConfiguration, batchQuery, jobController,
 				paramsController, processingController, jmsContext,
 				listeningQueue, updateQueue, em, utx, expectedEventId,
-				expectPercentDone, isIntermediate);
+				expectPercentDone, OabaProcessingPhase.INTERMEDIATE);
 	}
 
+	/**
+	 * @deprecated use <code>testOabaProcessing</code> instead
+	 */
 	public static void testFinalOabaProcessing(final String LOG_SOURCE,
 			final String tag, final String externalId, final OabaParameters bp,
 			final OabaSettings oabaSettings,
@@ -68,15 +99,14 @@ public class OabaTestUtils {
 		logger.entering(LOG_SOURCE, tag);
 		final int expectedEventId = EVT_DONE_OABA;
 		final int expectPercentDone = PCT_DONE_OABA;
-		final boolean isIntermediate = false;
 		testOabaProcessing(LOG_SOURCE, tag, externalId, bp, oabaSettings,
 				serverConfiguration, batchQuery, jobController,
 				paramsController, processingController, jmsContext, null,
 				updateQueue, em, utx, expectedEventId, expectPercentDone,
-				isIntermediate);
+				OabaProcessingPhase.FINAL);
 	}
 
-	protected static void testOabaProcessing(final String LOG_SOURCE,
+	public static void testOabaProcessing(final String LOG_SOURCE,
 			final String tag, final String externalId, final OabaParameters bp,
 			final OabaSettings oabaSettings,
 			final ServerConfiguration serverConfiguration,
@@ -87,30 +117,23 @@ public class OabaTestUtils {
 			final JMSContext jmsContext, final Queue listeningQueue,
 			final Queue updateQueue, final EntityManager em,
 			final UserTransaction utx, final int expectedEventId,
-			final int expectPercentDone, final boolean isIntermediate) {
+			final int expectPercentDone, final OabaProcessingPhase oabaPhase) {
 		logger.entering(LOG_SOURCE, tag);
 
-		if (isIntermediate && listeningQueue == null) {
-			throw new IllegalArgumentException(
-					"intermediate result queue is null");
-		} else if (!isIntermediate && listeningQueue != null) {
-			String msg =
-				"Ignoring intermediate result queue -- "
-						+ "final results expected from update queue";
-			logger.warning(msg);
-		}
-		final boolean isFinal = !isIntermediate;
-		assert (isIntermediate && listeningQueue != null) || isFinal;
-
+		// Preconditions
 		if (externalId == null || bp == null || LOG_SOURCE == null
 				|| tag == null || oabaSettings == null
 				|| serverConfiguration == null || batchQuery == null
 				|| jobController == null || paramsController == null
 				|| processingController == null || jmsContext == null
-				|| updateQueue == null || em == null || utx == null) {
+				|| updateQueue == null || em == null || utx == null
+				|| oabaPhase == null) {
 			throw new IllegalArgumentException("null argument");
 		}
+		validateQueues(oabaPhase, listeningQueue, updateQueue);
 
+		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
+		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
 		final boolean isDeduplication =
 			OabaLinkageType.STAGING_DEDUPLICATION == bp.getOabaLinkageType();
 
@@ -177,8 +200,8 @@ public class OabaTestUtils {
 				&& params.getModelConfigurationName().equals(
 						bp.getModelConfigurationName()));
 
-		if (isIntermediate) {
-			// Check that intermediate processing completed and sent out a
+		if (isIntermediateExpected) {
+			// Check that OABA processing completed and sent out a
 			// message on the intermediate result queue
 			assert listeningQueue != null;
 			String listeningQueueName;
@@ -198,25 +221,23 @@ public class OabaTestUtils {
 				fail("did not receive data from " + listeningQueueName);
 			}
 			assertTrue(startData.jobID == jobId);
-
-			// Check that intermediate processing sent out an expected status
+		}
+		if (isUpdateExpected) {
+			// Check that OABA processing sent out an expected status
 			// on the update queue
 			logger.info("Checking updateQueue");
-			OabaUpdateMessage updateMessage =
-				JmsUtils.receiveLatestUpdateMessage(LOG_SOURCE, jmsContext,
-						updateQueue, JmsUtils.SHORT_TIMEOUT_MILLIS);
-			assertTrue(updateMessage != null);
-			assertTrue(updateMessage.getJobID() == jobId);
-			assertTrue(updateMessage.getPercentComplete() == expectPercentDone);
-
-		} else {
-			// Check that linkage completed and sent out a termination message
-			// on the update queue
-			assert isFinal;
-			logger.info("Checking updateQueue");
-			OabaUpdateMessage updateMessage =
-				JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
-						updateQueue, VERY_LONG_TIMEOUT_MILLIS);
+			OabaUpdateMessage updateMessage = null;
+			if (oabaPhase == OabaProcessingPhase.INTERMEDIATE) {
+				updateMessage =
+					JmsUtils.receiveLatestUpdateMessage(LOG_SOURCE, jmsContext,
+							updateQueue, JmsUtils.SHORT_TIMEOUT_MILLIS);
+			} else if (oabaPhase == OabaProcessingPhase.FINAL) {
+				updateMessage =
+					JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
+							updateQueue, VERY_LONG_TIMEOUT_MILLIS);
+			} else {
+				throw new Error("unexpected phase: " + oabaPhase);
+			}
 			assertTrue(updateMessage != null);
 			assertTrue(updateMessage.getJobID() == jobId);
 			assertTrue(updateMessage.getPercentComplete() == expectPercentDone);
@@ -239,6 +260,49 @@ public class OabaTestUtils {
 		}
 
 		logger.exiting(LOG_SOURCE, tag);
+	}
+
+	public static void validateQueues(OabaProcessingPhase oabaPhase,
+			Queue listeningQueue, Queue updateQueue) {
+		if (oabaPhase == null) {
+			throw new IllegalArgumentException("null OABA processing phase");
+		}
+		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
+		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
+		if (isIntermediateExpected && !isUpdateExpected) {
+			if (listeningQueue == null) {
+				throw new IllegalArgumentException(
+						"intermediate-result queue is null");
+			}
+			if (updateQueue != null) {
+				String msg =
+					"Ignoring update queue -- results expected only "
+							+ "from intermediate-result queue";
+				logger.warning(msg);
+			}
+		} else if (isIntermediateExpected && isUpdateExpected) {
+			if (listeningQueue == null) {
+				throw new IllegalArgumentException(
+						"intermediate-result queue is null");
+			}
+			if (updateQueue == null) {
+				throw new IllegalArgumentException("update queue is null");
+			}
+		} else if (!isIntermediateExpected && isUpdateExpected) {
+			if (listeningQueue != null) {
+				String msg =
+					"Ignoring intermediate-result queue -- "
+							+ "final results expected from update queue";
+				logger.warning(msg);
+			}
+			if (updateQueue == null) {
+				throw new IllegalArgumentException("update queue is null");
+			}
+		} else {
+			String msg =
+				"unexpected: !isIntermediateExpected && !isUpdateExpected";
+			throw new Error(msg);
+		}
 	}
 
 	private OabaTestUtils() {
