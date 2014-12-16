@@ -39,7 +39,7 @@ public interface BatchJobJPA {
 	
 	/** Internally defined transaction id that links several related batch jobs */
 	String CN_TRANSACTION_ID = "TRANSACTION_ID";
-	
+
 	/** Externally defined transaction id that links several related batch jobs */
 	String CN_EXTERNAL_ID = "EXTERNAL_ID";
 	
@@ -55,8 +55,11 @@ public interface BatchJobJPA {
 	/** Optional link to an owning URM job */
 	String CN_URM_ID = "URM_ID";
 
-	/** Flag indicating whether the results of a job are estimated or fully computed */
-	String CN_RIGOR = "URM_ID";
+	/**
+	 * Flag indicating whether the results of a job are estimated or fully
+	 * computed
+	 */
+	String CN_RIGOR = "RIGOR";
 
 	/** Optional job description */
 	String CN_DESCRIPTION = "DESCRIPTION";
