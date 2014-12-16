@@ -50,7 +50,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
 /**
@@ -87,7 +87,7 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 	private OabaJobControllerBean jobController;
 
 	@EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	@EJB
 	private OabaParametersControllerBean paramsController;

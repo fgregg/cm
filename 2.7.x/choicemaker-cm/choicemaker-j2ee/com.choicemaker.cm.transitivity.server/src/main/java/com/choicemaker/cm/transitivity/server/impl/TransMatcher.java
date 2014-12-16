@@ -34,7 +34,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterM
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractMatcher;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
@@ -67,7 +67,7 @@ public class TransMatcher extends AbstractMatcher  {
 	private OabaJobControllerBean jobController;
 
 	// @EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	// @EJB
 	private ServerConfigurationController serverController;
@@ -108,8 +108,8 @@ public class TransMatcher extends AbstractMatcher  {
 	}
 
 	@Override
-	protected SettingsController getSettingsController() {
-		return settingsController;
+	protected OabaSettingsController getSettingsController() {
+		return oabaSettingsController;
 	}
 
 	@Override

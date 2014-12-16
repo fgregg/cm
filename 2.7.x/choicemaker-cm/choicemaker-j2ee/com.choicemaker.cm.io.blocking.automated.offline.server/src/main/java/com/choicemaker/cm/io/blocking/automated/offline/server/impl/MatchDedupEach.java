@@ -42,7 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterM
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
 /**
@@ -70,7 +70,7 @@ public class MatchDedupEach implements MessageListener, Serializable {
 	private OabaJobControllerBean jobController;
 
 	@EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
@@ -117,7 +117,7 @@ public class MatchDedupEach implements MessageListener, Serializable {
 					throw new IllegalArgumentException(s);
 				}
 				final OabaSettings settings =
-					settingsController.findOabaSettingsByJobId(jobId);
+					oabaSettingsController.findOabaSettingsByJobId(jobId);
 				
 				if (BatchJob.STATUS_ABORT_REQUESTED
 						.equals(oabaJob.getStatus())) {

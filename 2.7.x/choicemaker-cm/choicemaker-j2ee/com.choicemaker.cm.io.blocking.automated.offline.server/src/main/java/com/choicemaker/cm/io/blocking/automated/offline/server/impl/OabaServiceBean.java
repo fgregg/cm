@@ -50,7 +50,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 
 /**
  * @author pcheung
@@ -75,7 +75,7 @@ public class OabaServiceBean implements OabaService {
 	private OabaParametersControllerBean paramsController;
 
 	@EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	@EJB
 	private ServerConfigurationController serverController;

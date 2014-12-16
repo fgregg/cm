@@ -34,7 +34,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 
 /**
  * This bean delegates the different chunks to different matcher message beans.
@@ -67,7 +67,7 @@ public class MatchScheduler2 extends AbstractScheduler {
 	private OabaJobControllerBean jobController;
 
 	@EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
@@ -111,8 +111,8 @@ public class MatchScheduler2 extends AbstractScheduler {
 	}
 
 	@Override
-	protected SettingsController getSettingsController() {
-    return settingsController;
+	protected OabaSettingsController getSettingsController() {
+    return oabaSettingsController;
 	}
 
 	@Override

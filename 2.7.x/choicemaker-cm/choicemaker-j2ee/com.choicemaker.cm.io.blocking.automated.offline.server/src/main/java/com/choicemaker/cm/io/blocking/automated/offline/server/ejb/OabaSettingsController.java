@@ -16,7 +16,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSetti
  *
  */
 @Local
-public interface SettingsController {
+public interface OabaSettingsController {
 
 	AbaSettings save(AbaSettings settings);
 

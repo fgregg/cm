@@ -31,7 +31,7 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
@@ -97,7 +97,7 @@ public class SettingsControllerBeanIT {
 	private EntityManager em;
 
 	@EJB
-	private SettingsController sm;
+	private OabaSettingsController sm;
 
 	private int initialAbaSettingsCount;
 	private int initialDefaultAbaSettingsCount;

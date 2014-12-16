@@ -52,7 +52,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 
 /**
  * Common functionality of {@link Matcher2} and {@link TransMatcher}.
@@ -76,7 +76,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	protected abstract ServerConfigurationController getServerController();
 	
-	protected abstract SettingsController getSettingsController();
+	protected abstract OabaSettingsController getSettingsController();
 
 	// These two tracker are set only in log debug mode
 	private long inHMLookup;

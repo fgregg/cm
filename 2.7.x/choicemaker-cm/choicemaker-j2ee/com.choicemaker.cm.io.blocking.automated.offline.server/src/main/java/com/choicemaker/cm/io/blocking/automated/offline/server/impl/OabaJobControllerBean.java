@@ -20,7 +20,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 
 /**
  * A stateless EJB used to manager the persistence of OabaJobEntity instances.
@@ -39,7 +39,7 @@ public class OabaJobControllerBean {
 	private OabaParametersControllerBean paramsController;
 
 	@EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	@EJB
 	private ServerConfigurationController serverManager;
@@ -82,7 +82,7 @@ public class OabaJobControllerBean {
 
 		// Save the parameters
 		paramsController.save(params);
-		settingsController.save(settings);
+		oabaSettingsController.save(settings);
 		serverManager.save(sc);
 		
 		OabaJobEntity retVal = new OabaJobEntity(params, settings, sc, externalID);		

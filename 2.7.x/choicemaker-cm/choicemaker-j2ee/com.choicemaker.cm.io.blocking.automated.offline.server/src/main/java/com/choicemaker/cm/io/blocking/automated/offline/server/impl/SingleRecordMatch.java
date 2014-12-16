@@ -62,7 +62,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchDedupService2;
@@ -105,7 +105,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 	private OabaJobControllerBean jobController;
 
 	@EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	@EJB
 	OabaParametersControllerBean paramsController;
@@ -138,7 +138,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings settings =
-					settingsController.findOabaSettingsByJobId(jobId);				
+					oabaSettingsController.findOabaSettingsByJobId(jobId);				
 
 				long t = System.currentTimeMillis();
 					log.info("Starting Sinlge Record Match with maxSingle = "

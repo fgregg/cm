@@ -39,7 +39,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService4;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
 
@@ -66,7 +66,7 @@ public class DedupOABA implements MessageListener, Serializable {
 	private OabaJobControllerBean jobController;
 
 	@EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
@@ -104,7 +104,7 @@ public class DedupOABA implements MessageListener, Serializable {
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =
-						settingsController.findOabaSettingsByJobId(jobId);
+						oabaSettingsController.findOabaSettingsByJobId(jobId);
 				OabaProcessing processingEntry =
 						processingController.findProcessingLogByJobId(jobId);
 				if (oabaJob == null || params == null || oabaSettings == null) {

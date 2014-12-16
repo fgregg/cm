@@ -43,7 +43,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
@@ -67,7 +67,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	
 	protected abstract ServerConfigurationController getServerController();
 	
-	protected abstract SettingsController getSettingsController();
+	protected abstract OabaSettingsController getSettingsController();
 
 	protected RecordSource[] stageRS = null;
 	protected RecordSource[] masterRS = null;

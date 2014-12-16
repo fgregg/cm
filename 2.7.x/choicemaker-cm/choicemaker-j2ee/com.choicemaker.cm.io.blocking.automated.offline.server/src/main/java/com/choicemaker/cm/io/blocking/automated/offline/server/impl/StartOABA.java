@@ -41,7 +41,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 
 /**
@@ -68,7 +68,7 @@ public class StartOABA implements MessageListener, Serializable {
 	private OabaJobControllerBean jobController;
 
 	@EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
@@ -115,7 +115,7 @@ public class StartOABA implements MessageListener, Serializable {
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =
-					settingsController.findOabaSettingsByJobId(jobId);
+					oabaSettingsController.findOabaSettingsByJobId(jobId);
 				OabaProcessing processingEntry =
 					processingController.findProcessingLogByJobId(jobId);
 				if (oabaJob == null || params == null || oabaSettings == null) {

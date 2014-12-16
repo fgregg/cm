@@ -13,13 +13,13 @@ import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 
 @Stateless
-public class SettingsControllerBean implements SettingsController {
+public class OabaSettingsControllerBean implements OabaSettingsController {
 
 	private static final Logger logger = Logger
-			.getLogger(SettingsControllerBean.class.getName());
+			.getLogger(OabaSettingsControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;

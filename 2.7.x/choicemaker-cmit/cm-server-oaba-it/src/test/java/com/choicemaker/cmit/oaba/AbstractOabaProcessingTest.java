@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
@@ -81,7 +81,7 @@ public abstract class AbstractOabaProcessingTest<T extends WellKnownTestConfigur
 	private OabaParametersControllerBean paramsController;
 
 	@EJB
-	private SettingsController settingsController;
+	private OabaSettingsController oabaSettingsController;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -438,8 +438,8 @@ public abstract class AbstractOabaProcessingTest<T extends WellKnownTestConfigur
 	}
 
 	@Override
-	public final SettingsController getSettingsController() {
-		return settingsController;
+	public final OabaSettingsController getSettingsController() {
+		return oabaSettingsController;
 	}
 
 	@Override
