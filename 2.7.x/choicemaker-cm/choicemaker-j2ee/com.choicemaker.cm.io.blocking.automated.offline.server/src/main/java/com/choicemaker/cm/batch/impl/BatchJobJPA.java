@@ -55,6 +55,9 @@ public interface BatchJobJPA {
 	/** Optional link to an owning URM job */
 	String CN_URM_ID = "URM_ID";
 
+	/** Flag indicating whether the results of a job are estimated or fully computed */
+	String CN_RIGOR = "URM_ID";
+
 	/** Optional job description */
 	String CN_DESCRIPTION = "DESCRIPTION";
 	

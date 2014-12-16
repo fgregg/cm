@@ -17,6 +17,8 @@ public interface BatchJob extends IControl, Serializable {
 	/** Maximum valid value for fractionComplete (inclusive) */
 	int MAX_PERCENTAGE_COMPLETED = 100;
 
+	BatchJobRigor DEFAULT_RIGOR = BatchJobRigor.COMPUTED;
+
 	String STATUS_NEW = "NEW";
 	String STATUS_QUEUED = "QUEUED";
 	String STATUS_STARTED = "STARTED";
@@ -29,12 +31,20 @@ public interface BatchJob extends IControl, Serializable {
 	long getId();
 
 	long getBatchParentId();
-	
+
 	long getUrmId();
 
 	long getTransactionId();
 
 	String getExternalId();
+
+	/**
+	 * Indicates whether the results of a batch job have been (in the case of a
+	 * completed job) or will be (in the case of a running job)
+	 * {@link BatchJobRigor#ESTIMATED estimated} or
+	 * {@link BatchJobRigor#COMPUTED computed}.
+	 */
+	BatchJobRigor getBatchJobRigor();
 
 	String getDescription();
 

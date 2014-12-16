@@ -8,6 +8,7 @@ import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_EXTERNAL_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_FRACTION_COMPLETE;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_PARAMS_ID;
+import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_RIGOR;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_SERVER_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_SETTINGS_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_STATUS;
@@ -51,6 +52,7 @@ import javax.persistence.TableGenerator;
 import javax.persistence.TemporalType;
 
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 
@@ -59,7 +61,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntit
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public abstract class BatchJobEntity implements BatchJob {
+public /* abstract */ class BatchJobEntity implements BatchJob {
 
 	private static final long serialVersionUID = 271L;
 
@@ -195,6 +197,9 @@ public abstract class BatchJobEntity implements BatchJob {
 	@Column(name = CN_WORKING_DIRECTORY)
 	protected String workingDirectory;
 
+	@Column(name = CN_RIGOR)
+	protected char rigor;
+
 	@Column(name = CN_DESCRIPTION)
 	protected String description;
 
@@ -250,6 +255,11 @@ public abstract class BatchJobEntity implements BatchJob {
 	@Override
 	public String getExternalId() {
 		return externalId;
+	}
+
+	@Override
+	public BatchJobRigor getBatchJobRigor() {
+		return BatchJobRigor.valueOf(this.rigor);
 	}
 
 	@Override
@@ -408,7 +418,7 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	protected BatchJobEntity() {
 		this(DISCRIMINATOR_VALUE, INVALID_ID, INVALID_ID, INVALID_ID, null,
-				randomTransactionId(), INVALID_ID, INVALID_ID);
+				randomTransactionId(), INVALID_ID, INVALID_ID, DEFAULT_RIGOR);
 	}
 
 	/**
@@ -418,12 +428,26 @@ public abstract class BatchJobEntity implements BatchJob {
 	 */
 	protected BatchJobEntity(String type, long paramsid, long settingsId, long serverId, String externalId,
 			long tid, long bpid, long urmid) {
+		this(type, paramsid, settingsId, serverId, externalId,
+			tid, bpid, urmid, DEFAULT_RIGOR);
+	}
+
+	/**
+	 * Constructs an invalid BatchJobEntity with a null working directory.
+	 * Subclasses must implement a method to set the working directory
+	 * to a valid value after construction.
+	 */
+	protected BatchJobEntity(String type, long paramsid, long settingsId, long serverId, String externalId,
+			long tid, long bpid, long urmid, BatchJobRigor bjr) {
 		if (type == null) {
 			throw new IllegalArgumentException("null type");
 		}
 		type = type.trim();
 		if (type.isEmpty()) {
 			throw new IllegalArgumentException("blank type");
+		}
+		if (bjr == null) {
+			throw new IllegalArgumentException("null batch-job rigor");
 		}
 		this.type = type;
 		this.paramsId = paramsid;
@@ -433,6 +457,7 @@ public abstract class BatchJobEntity implements BatchJob {
 		this.externalId = externalId;
 		this.bparentId = bpid;
 		this.urmId = urmid;
+		this.rigor = bjr.symbol;
 		setStatus(STATUS_NEW);
 	}
 
