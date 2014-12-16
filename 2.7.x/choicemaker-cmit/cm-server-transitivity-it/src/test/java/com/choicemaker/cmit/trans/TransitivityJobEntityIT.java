@@ -15,7 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityJobControllerBean;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
+import com.choicemaker.cmit.trans.util.TransitivityTestController;
 import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
@@ -52,7 +54,10 @@ public class TransitivityJobEntityIT {
 //	private final Random random = new Random(new Date().getTime());
 
 	@EJB
-	protected TransitivityJobController controller;
+	protected TransitivityJobControllerBean tjController;
+
+	@EJB
+	protected TransitivityTestController testController;
 
 //	private int initialOabaParamsCount;
 //	private int initialOabaJobCount;
@@ -60,26 +65,26 @@ public class TransitivityJobEntityIT {
 
 	@Before
 	public void setUp() {
-//		initialOabaParamsCount = controller.findAllOabaParameters().size();
-//		initialOabaJobCount = controller.findAllOabaJobs().size();
-//		initialCount = controller.findAllTransitivityJobs().size();
+//		initialOabaParamsCount = tjController.findAllOabaParameters().size();
+//		initialOabaJobCount = tjController.findAllOabaJobs().size();
+//		initialCount = tjController.findAllTransitivityJobs().size();
 	}
 
 	@After
 	public void tearDown() {
-//		int finalOabaParamsCount = controller.findAllOabaParameters().size();
+//		int finalOabaParamsCount = tjController.findAllOabaParameters().size();
 //		assertTrue(initialOabaParamsCount == finalOabaParamsCount);
 //
-//		int finalOabaJobCount = controller.findAllOabaJobs().size();
+//		int finalOabaJobCount = tjController.findAllOabaJobs().size();
 //		assertTrue(initialOabaJobCount == finalOabaJobCount);
 //
-//		int finalTransJobCount = controller.findAllTransitivityJobs().size();
+//		int finalTransJobCount = tjController.findAllTransitivityJobs().size();
 //		assertTrue(initialCount == finalTransJobCount);
 	}
 
 	@Test
 	public void testTransitivityJobController() {
-		assertTrue(controller != null);
+		assertTrue(tjController != null);
 	}
 
 	@Test
@@ -87,10 +92,10 @@ public class TransitivityJobEntityIT {
 //		final String METHOD = "testConstruction";
 //		final TestEntities te = new TestEntities();
 //
-//		OabaJob batchJob = controller.createPersistentOabaJobBean(METHOD, te);
+//		OabaJob batchJob = tjController.createPersistentOabaJobBean(METHOD, te);
 //		final Date now = new Date();
 //		TransitivityJob job =
-//			controller.createEphemeralTransitivityJob(METHOD, te, batchJob);
+//			tjController.createEphemeralTransitivityJob(METHOD, te, batchJob);
 //		final Date now2 = new Date();
 //
 //		// Check that primary hasn't been set
@@ -111,7 +116,7 @@ public class TransitivityJobEntityIT {
 //		Date d = job.getRequested();
 //		assertTrue(d2.equals(d));
 //
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 	}
 
 	@Test
@@ -120,23 +125,23 @@ public class TransitivityJobEntityIT {
 //		final TestEntities te = new TestEntities();
 //
 //		// Create a job
-//		TransitivityJob job = controller.createEphemeralTransitivityJob(METHOD, te);
+//		TransitivityJob job = tjController.createEphemeralTransitivityJob(METHOD, te);
 //		assertTrue(job.getId() == 0);
 //
 //		// Save the job
-//		controller.save(job);
+//		tjController.save(job);
 //		assertTrue(job.getId() != 0);
 //
 //		// Find the job
-//		TransitivityJob batchJob2 = controller.findTransitivityJob(job.getId());
+//		TransitivityJob batchJob2 = tjController.findTransitivityJob(job.getId());
 //		assertTrue(job.getId() == batchJob2.getId());
 //		assertTrue(job.equals(batchJob2));
 //
 //		// Remove test entities from database
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 //
 //		// Delete the job
-//		TransitivityJob batchJob3 = controller.findTransitivityJob(job.getId());
+//		TransitivityJob batchJob3 = tjController.findTransitivityJob(job.getId());
 //		assertTrue(batchJob3 == null);
 	}
 
@@ -149,32 +154,32 @@ public class TransitivityJobEntityIT {
 //		final String METHOD = "testMerge";
 //		final TestEntities te = new TestEntities();
 //
-//		TransitivityJob job = controller.createEphemeralTransitivityJob(METHOD, te);
+//		TransitivityJob job = tjController.createEphemeralTransitivityJob(METHOD, te);
 //		assertTrue(null == job.getDescription());
 //		final String description = "some job description";
 //		job.setDescription(description);
 //		assertTrue(description.equals(job.getDescription()));
 //
-//		controller.save(job);
+//		tjController.save(job);
 //		final long id = job.getId();
-//		controller.detach(job);
+//		tjController.detach(job);
 //
 //		job = null;
-//		TransitivityJob job2 = controller.findTransitivityJob(id);
+//		TransitivityJob job2 = tjController.findTransitivityJob(id);
 //		assertTrue(id == job2.getId());
 //		assertTrue(description.equals(job2.getDescription()));
 //
 //		final String description2 = "some new job description";
 //		assertTrue(!description2.equals(description));
 //		job2.setDescription(description2);
-//		controller.save(job2);
+//		tjController.save(job2);
 //
 //		job2 = null;
-//		TransitivityJob job3 = controller.findTransitivityJob(id);
+//		TransitivityJob job3 = tjController.findTransitivityJob(id);
 //		assertTrue(id == job3.getId());
 //		assertTrue(description2.equals(job3.getDescription()));
 //
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 	}
 
 	@Test
@@ -186,15 +191,15 @@ public class TransitivityJobEntityIT {
 //		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 //			// Create and save a job
 //			TransitivityJob job =
-//				controller.createEphemeralTransitivityJob(METHOD, te);
-//			controller.save(job);
+//				tjController.createEphemeralTransitivityJob(METHOD, te);
+//			tjController.save(job);
 //			long id = job.getId();
 //			assertTrue(!jobIds.contains(id));
 //			jobIds.add(id);
 //		}
 //
 //		// Verify the number of jobs has increased
-//		List<TransitivityJob> jobs = controller.findAllTransitivityJobs();
+//		List<TransitivityJob> jobs = tjController.findAllTransitivityJobs();
 //		assertTrue(jobs != null);
 //		assertTrue(initialCount + MAX_TEST_ITERATIONS == jobs.size());
 //
@@ -210,7 +215,7 @@ public class TransitivityJobEntityIT {
 //			assertTrue(isFound);
 //		}
 //
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 	}
 
 	@Test
@@ -218,33 +223,33 @@ public class TransitivityJobEntityIT {
 //		final String METHOD = "testFindAllByParentId";
 //		final TestEntities te = new TestEntities();
 //
-//		final OabaJob batchJob = controller.createPersistentOabaJobBean(METHOD, te);
+//		final OabaJob batchJob = tjController.createPersistentOabaJobBean(METHOD, te);
 //		final long batchJobId = batchJob.getId();
 //		Set<Long> jobIds = new HashSet<>();
 //		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 //			// Create and save a job
 //			TransitivityJob job =
-//				controller.createEphemeralTransitivityJob(METHOD, te, batchJob);
-//			controller.save(job);
+//				tjController.createEphemeralTransitivityJob(METHOD, te, batchJob);
+//			tjController.save(job);
 //			final long id = job.getId();
 //			assertTrue(!jobIds.contains(id));
 //			jobIds.add(id);
 //		}
 //
 //		// Verify the number of jobs has increased
-//		List<TransitivityJob> jobs = controller.findAllTransitivityJobs();
+//		List<TransitivityJob> jobs = tjController.findAllTransitivityJobs();
 //		assertTrue(jobs != null);
 //		assertTrue(initialCount + MAX_TEST_ITERATIONS == jobs.size());
 //
 //		// Find the jobs by querying
-//		jobs = controller.findAllByParentId(batchJobId);
+//		jobs = tjController.findAllByParentId(batchJobId);
 //		assertTrue(jobs != null);
 //		assertTrue(jobs.size() == jobIds.size());
 //		for (TransitivityJob job : jobs) {
 //			assertTrue(jobIds.contains(job.getId()));
 //		}
 //
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 	}
 
 	@Test
@@ -254,7 +259,7 @@ public class TransitivityJobEntityIT {
 //		int countNullStatus = 0;
 //		int countNullTimestamp = 0;
 //		int count = 0;
-//		for (TransitivityJob job : controller.findAllTransitivityJobs()) {
+//		for (TransitivityJob job : tjController.findAllTransitivityJobs()) {
 //			++count;
 //			String batchJobStatus = job.getStatus();
 //			if (batchJobStatus == null) {
@@ -278,7 +283,7 @@ public class TransitivityJobEntityIT {
 //			fail("Null timestamp: " + countNullTimestamp + " out of " + count);
 //		}
 //
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 	}
 
 	@Test
@@ -290,7 +295,7 @@ public class TransitivityJobEntityIT {
 //		Date before = new Date();
 //
 //		// 1. Create a job and mark it as running (a.k.a. 'STARTED')
-//		TransitivityJob job = controller.createEphemeralTransitivityJob(METHOD, te);
+//		TransitivityJob job = tjController.createEphemeralTransitivityJob(METHOD, te);
 //		job.markAsQueued();
 //		job.markAsStarted();
 //
@@ -325,19 +330,19 @@ public class TransitivityJobEntityIT {
 //			assertTrue(after.compareTo(d3) >= 0);
 //
 //			// Save the job
-//			final long id1 = controller.save(job).getId();
+//			final long id1 = tjController.save(job).getId();
 //
 //			// Retrieve the job and re-check the percentage, status and
 //			// timestamp
 //			job = null;
-//			job = controller.findTransitivityJob(id1);
+//			job = tjController.findTransitivityJob(id1);
 //			assertTrue(job != null);
 //			assertTrue(job.getFractionComplete() == v1);
 //			assertTrue(job.getStatus().equals(sts));
 //			assertTrue(job.getTimeStamp(sts).equals(d3));
 //		}
 //
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 	}
 
 	@Test
@@ -347,9 +352,9 @@ public class TransitivityJobEntityIT {
 //
 //		// Create two generic jobs and verify equality
 //		String extId = EntityManagerUtils.createExternalId(METHOD);
-//		final OabaJob batchJob = controller.createPersistentOabaJobBean(METHOD, te);
+//		final OabaJob batchJob = tjController.createPersistentOabaJobBean(METHOD, te);
 //		TransitivityJob job1 =
-//			controller.createEphemeralTransitivityJob(te, batchJob, extId);
+//			tjController.createEphemeralTransitivityJob(te, batchJob, extId);
 //		assertTrue(te.contains(job1));
 //		TransitivityJob job2 = new TransitivityJobEntity(job1);
 //		te.add(job2);
@@ -370,14 +375,14 @@ public class TransitivityJobEntityIT {
 //		assertTrue(job1.hashCode() == job2.hashCode());
 //
 //		// Verify a non-persistent job is not equal to a persistent job
-//		job1 = controller.save(job1);
+//		job1 = tjController.save(job1);
 //		assertTrue(!job1.equals(job2));
 //		assertTrue(job1.hashCode() != job2.hashCode());
 //
 //		// Verify that equality of persisted jobs is set only by persistence id
-//		controller.detach(job1);
-//		job2 = controller.findTransitivityJob(job1.getId());
-//		controller.detach(job2);
+//		tjController.detach(job1);
+//		job2 = tjController.findTransitivityJob(job1.getId());
+//		tjController.detach(job2);
 //		assertTrue(job1.equals(job2));
 //		assertTrue(job1.hashCode() == job2.hashCode());
 //
@@ -385,7 +390,7 @@ public class TransitivityJobEntityIT {
 //		assertTrue(job1.getFractionComplete() != job2.getFractionComplete());
 //		assertTrue(job1.equals(job2));
 //		assertTrue(job1.hashCode() == job2.hashCode());
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 	}
 
 	@Test
@@ -395,7 +400,7 @@ public class TransitivityJobEntityIT {
 //
 //		// 1. Create a job and check the status
 //		Date before = new Date();
-//		TransitivityJob job = controller.createEphemeralTransitivityJob(METHOD, te);
+//		TransitivityJob job = tjController.createEphemeralTransitivityJob(METHOD, te);
 //		Date after = new Date();
 //
 //		// Check the status and timestamp
@@ -478,7 +483,7 @@ public class TransitivityJobEntityIT {
 //		assertTrue(job.getStatus().equals(STATUS_COMPLETED));
 //		assertTrue(job.getTimeStamp(job.getStatus()).equals(d));
 //
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 	}
 
 	@Test
@@ -488,23 +493,23 @@ public class TransitivityJobEntityIT {
 //
 //		for (String sts : _statusValues) {
 //			TransitivityJob job =
-//				controller.createEphemeralTransitivityJob(METHOD, te);
+//				tjController.createEphemeralTransitivityJob(METHOD, te);
 //			assertTrue(BatchJob.STATUS_NEW.equals(job.getStatus()));
 //			job.setStatus(sts);
 //			assertTrue(sts.equals(job.getStatus()));
 //
 //			// Save the job
-//			final long id1 = controller.save(job).getId();
+//			final long id1 = tjController.save(job).getId();
 //			job = null;
 //
 //			// Retrieve the job
-//			job = controller.findTransitivityJob(id1);
+//			job = tjController.findTransitivityJob(id1);
 //
 //			// Check the value
 //			assertTrue(sts.equals(job.getStatus()));
 //		}
 //
-//		controller.removeTestEntities(te);
+//		tjController.removeTestEntities(te);
 	}
 
 	public void testTimestamp(final String sts) {
@@ -515,7 +520,7 @@ public class TransitivityJobEntityIT {
 		final TestEntities te = new TestEntities();
 
 		final Date before = new Date();
-		TransitivityJob job = controller.createEphemeralTransitivityJob(METHOD, te);
+		TransitivityJob job = createEphemeralTransitivityJob(METHOD, te);
 		final Date after = new Date();
 		job.setStatus(sts);
 
@@ -527,15 +532,26 @@ public class TransitivityJobEntityIT {
 		assertTrue(d.compareTo(after) <= 0);
 
 		// Save the job
-		final long id = controller.save(job).getId();
+		final long id = save(job).getId();
 
 		// Find the job and verify the expected status and timestamp
 		job = null;
-		job = controller.findTransitivityJob(id);
+		job = tjController.findTransitivityJob(id);
 		assertTrue(sts.equals(job.getStatus()));
 		assertTrue(d.equals(job.getTimeStamp(sts)));
 
-		controller.removeTestEntities(te);
+		testController.removeTestEntities(te);
+	}
+
+	protected TransitivityJob save(TransitivityJob job) {
+		// TODO stub
+		throw new Error("not yet implemented");
+	}
+
+	protected TransitivityJob createEphemeralTransitivityJob(String tag,
+			TestEntities te) {
+		// TODO stub
+		throw new Error("not yet implemented");
 	}
 
 	@Test

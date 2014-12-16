@@ -71,7 +71,7 @@ public class TransitivityBean implements MessageListener, Serializable {
 	private TransitivityJobControllerBean jobController;
 
 //	@EJB
-//	private SettingsController settingsController;
+//	private OabaSettingsController settingsController;
 
 //	@EJB
 	private OabaParametersControllerBean paramsController;
