@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.args;
 
-
 /**
  * A type that defines how the result of the batch analysis will be organized
  * for output:
@@ -42,8 +41,8 @@ public enum AnalysisResultFormat {
 	}
 
 	AnalysisResultFormat(String ext, String ds) {
-		assert ext != null && ext.equals(ext.trim()) && !ext.isEmpty() ;
-		assert ds == null || (ds.equals(ds.trim()) && !ds.isEmpty()) ;
+		assert ext != null && ext.equals(ext.trim()) && !ext.isEmpty();
+		assert ds == null || (ds.equals(ds.trim()) && !ds.isEmpty());
 		this.fileExtension = ext;
 		this.displayName = ds;
 	}
@@ -58,6 +57,31 @@ public enum AnalysisResultFormat {
 
 	public String getDisplayName() {
 		return displayName == null ? name() : displayName;
+	}
+
+	/**
+	 * @return may be null if <code>ext</code> is null
+	 * @throws IllegalArgumentException
+	 *             if <code>ext</code> is not recognized
+	 */
+	public static AnalysisResultFormat fromFileExtension(String ext) {
+		AnalysisResultFormat retVal = null;
+		if (ext != null) {
+			ext = ext.trim();
+			if (XML.getFileExtension().equalsIgnoreCase(ext)) {
+				retVal = XML;
+			} else if (SORT_BY_HOLD_GROUP.getFileExtension().equalsIgnoreCase(
+					ext)) {
+				retVal = SORT_BY_HOLD_GROUP;
+			} else if (SORT_BY_RECORD_ID.getFileExtension().equalsIgnoreCase(
+					ext)) {
+				retVal = SORT_BY_RECORD_ID;
+			} else {
+				String msg = "invalid argument: '" + ext + "'";
+				throw new IllegalArgumentException(msg);
+			}
+		}
+		return retVal;
 	}
 
 }
