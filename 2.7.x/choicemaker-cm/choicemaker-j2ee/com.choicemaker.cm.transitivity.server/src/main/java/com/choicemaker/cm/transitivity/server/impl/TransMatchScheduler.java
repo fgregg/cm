@@ -18,12 +18,13 @@ import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
+import javax.jms.MessageListener;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractScheduler;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
@@ -43,7 +44,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessi
 				propertyValue = "java:/choicemaker/urm/jms/transMatchSchedulerQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class TransMatchScheduler extends AbstractScheduler {
+public class TransMatchScheduler extends AbstractScheduler implements MessageListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger

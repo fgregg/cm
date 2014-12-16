@@ -20,6 +20,7 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
+import javax.jms.MessageListener;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.core.BlockingException;
@@ -54,7 +55,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class TransMatcher extends AbstractMatcher  {
+public class TransMatcher extends AbstractMatcher  implements MessageListener {
 
 	private static final long serialVersionUID = 271L;
 	private static final Logger log = Logger.getLogger(TransMatcher.class.getName());

@@ -1,8 +1,8 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -13,11 +13,9 @@ import javax.persistence.Query;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
@@ -85,26 +83,28 @@ public class TransitivityJobControllerBean {
 		oabaSettingsController.save(settings);
 		serverManager.save(sc);
 		
-		TransitivityJobEntity retVal = new TransitivityJobEntity(params, settings, sc, externalID);		
-		em.persist(retVal);
-		assert TransitivityJobEntity.isPersistent(retVal);
-
-		// Create a new processing entry
-		OabaProcessing processing =
-			processingController.createPersistentProcessingLogForBatchJob(retVal);
-
-		// Create the working directory
-		File workingDir = OabaFileUtils.createWorkingDirectory(sc, retVal);
-		retVal.setWorkingDirectory(workingDir);
-		
-		// Log the job info
-		logger.info("Oaba job: " + retVal.toString());
-		logger.info("Oaba parameters: " + params.toString());
-		logger.info("Oaba settings: " + settings.toString());
-		logger.info("Server configuration: " + sc.toString());
-		logger.info("Processing entry: " + processing.toString());
-
-		return retVal;
+		// FIXME not yet re-implemented
+		throw new Error("not yet implemented");
+//		TransitivityJobEntity retVal = new TransitivityJobEntity(params, settings, sc, externalID);		
+//		em.persist(retVal);
+//		assert TransitivityJobEntity.isPersistent(retVal);
+//
+//		// Create a new processing entry
+//		OabaProcessing processing =
+//			processingController.createPersistentProcessingLogForBatchJob(retVal);
+//
+//		// Create the working directory
+//		File workingDir = OabaFileUtils.createWorkingDirectory(sc, retVal);
+//		retVal.setWorkingDirectory(workingDir);
+//		
+//		// Log the job info
+//		logger.info("Oaba job: " + retVal.toString());
+//		logger.info("Oaba parameters: " + params.toString());
+//		logger.info("Oaba settings: " + settings.toString());
+//		logger.info("Server configuration: " + sc.toString());
+//		logger.info("Processing entry: " + processing.toString());
+//
+//		return retVal;
 	}
 
 	public TransitivityJobEntity save(TransitivityJobEntity job) {

@@ -13,7 +13,7 @@ package com.choicemaker.cm.transitivity.server.ejb;
 import java.rmi.RemoteException;
 import java.security.AccessControlException;
 
-import javax.ejb.EJBObject;
+import javax.ejb.Local;
 
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.InvalidModelException;
@@ -31,7 +31,8 @@ import com.choicemaker.cm.transitivity.core.TransitivityResult;
  *
  * ChoiceMaker Technologies, Inc.
  */
-public interface TransitivityService extends EJBObject {
+@Local
+public interface TransitivityService {
 
 	  String DEFAULT_EJB_REF_NAME = "ejb/TransitivityService";
 	  String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;

@@ -14,14 +14,14 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 import javax.ejb.CreateException;
-import javax.ejb.EJBObject;
 import javax.ejb.FinderException;
+import javax.ejb.Local;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
-import com.choicemaker.cm.transitivity.server.data.TransitivityJobStatus;
 
 /**This session bean allows the user to start, query, and get result from the TE.  It is
  * to be used with the OABA.
@@ -29,7 +29,8 @@ import com.choicemaker.cm.transitivity.server.data.TransitivityJobStatus;
  * @author pcheung
  *
  */
-public interface TransitivityOABAService extends EJBObject {
+@Local
+public interface TransitivityOABAService {
 	
 	  String DEFAULT_EJB_REF_NAME = "ejb/TransitivityOABAService";
 	  String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
@@ -77,14 +78,14 @@ public interface TransitivityOABAService extends EJBObject {
 	/** This method queries the current status of the TE job.
 	 * 
 	 * @param jobID
-	 * @return TransitivityJobStatus
+	 * @return BatchJobStatus
 	 * @throws RemoteException
 	 * @throws CreateException
 	 * @throws NamingException
 	 * @throws JMSException
 	 * @throws FinderException
 	 */
-	public TransitivityJobStatus getStatus (long jobID) throws 
+	public BatchJobStatus getStatus (long jobID) throws 
 		JMSException, FinderException, RemoteException, CreateException, 
 		NamingException, SQLException;
 
