@@ -23,14 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SettingsController;
 
 /**
- * Currently, the OABA server doesn't define any Enterprise Java bean whose sole
- * job is to persist OabaJob instances. However, some OABA EJBs do use the
- * OabaProcessingControllerBean help class to manage job persistence. For these EJBs,
- * persistence is always done within a container-defined transaction. Since the
- * OabaProcessingControllerBean class is not an EJB, direct tests of this class must use
- * local transactions. This controller class allows one to test OabaJob
- * persistence under container-managed transactions, separately from whatever
- * else in going on OABA-defined EJBs.
+ * A stateless EJB used to manager the persistence of OabaJobEntity instances.
  * 
  * @author rphall
  */
