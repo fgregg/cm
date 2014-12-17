@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -500,7 +500,7 @@ public class Single implements Serializable {
 			throws CmRuntimeException, ConfigException {
 		OabaJob oabaJob =
 			(OabaJob) em.find(OabaJobEntity.class, Long.valueOf(id));
-		long paramsId = oabaJob.getParametersId();
+		long paramsId = oabaJob.getOabaParametersId();
 		OabaParameters retVal =
 			(OabaParameters) em.find(OabaParametersEntity.class,
 					Long.valueOf(paramsId));
@@ -529,7 +529,7 @@ public class Single implements Serializable {
 
 	/** This looks up a queue factory on the EJB server.
 	 * Don't not specify the prefix java:comp/env/
-	 * 
+	 *
 	 * @param jndiQueueName - like jms/sQueue
 	 * @return
 	 * @throws NamingException
@@ -570,7 +570,7 @@ public class Single implements Serializable {
 	}
 
 	/** Looks up a queue on the EJB server.
-	 * 
+	 *
 	 * @param jndiQueueName - like jms/sQueue
 	 * @return
 	 * @throws NamingException

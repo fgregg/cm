@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License
  * v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
@@ -19,11 +19,6 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJ
 import java.io.File;
 import java.io.Serializable;
 
-//import javax.jms.ObjectMessage;
-//import javax.jms.Topic;
-//import javax.jms.TopicConnection;
-//import javax.jms.TopicPublisher;
-//import javax.jms.TopicSession;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
@@ -34,10 +29,9 @@ import javax.persistence.Table;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.core.IControl;
-//import com.choicemaker.cm.io.blocking.automated.offline.server.data.BatchJobStatus;
-//import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 /**
@@ -55,7 +49,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
  * (inclusive) by updating the {@link #setFractionComplete(int) fraction
  * complete} field.
  * </p>
- * 
+ *
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)
  *
@@ -81,31 +75,61 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 	}
 
 	/**
-	 * Creates an isolated OabaJob entity without any of the required ancillary
-	 * objects. The preferred  method for creating an OabaJob entity is via
-	 * the {@link OabaJobControllerBean}
-	 * @param params non-null
-	 * @param settings non-null
-	 * @param externalId optional; may be null
+	 * Creates an isolated OabaJob entity with {@link BatchJob#DEFAULT_RIGOR
+	 * default rigor} but without any required, ancillary objects. The
+	 * preferred method for creating an OabaJob entity is via the
+	 * {@link OabaJobControllerBean}
+	 *
+	 * @param params
+	 *            non-null
+	 * @param settings
+	 *            non-null
+	 * @param externalId
+	 *            optional; may be null
 	 */
 	public OabaJobEntity(OabaParameters params, OabaSettings settings,
 			ServerConfiguration serverConfig, String externalId) {
-		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(), serverConfig.getId(),
-				externalId, randomTransactionId(), INVALID_ID,
-				INVALID_ID);
+		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(),
+				serverConfig.getId(), externalId, randomTransactionId(),
+				INVALID_ID, INVALID_ID, DEFAULT_RIGOR);
+	}
+
+	/**
+	 * Creates an isolated OabaJob entity without any required, ancillary
+	 * objects. The preferred method for creating an OabaJob entity is via the
+	 * {@link OabaJobControllerBean}
+	 * 
+	 * @param params
+	 *            non-null
+	 * @param settings
+	 *            non-null
+	 * @param externalId
+	 *            optional; may be null
+	 * @param bjr
+	 *            required; must not be null
+	 */
+	public OabaJobEntity(OabaParameters params, OabaSettings settings,
+			ServerConfiguration serverConfig, String externalId,
+			BatchJobRigor bjr) {
+		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(),
+				serverConfig.getId(), externalId, randomTransactionId(),
+				INVALID_ID, INVALID_ID, bjr);
 	}
 
 	public OabaJobEntity(OabaJob o) {
-		this(OabaJobJPA.DISCRIMINATOR_VALUE, o.getParametersId(), o
-				.getSettingsId(), o.getServerId(), o.getExternalId(), o.getTransactionId(), o
-				.getBatchParentId(), o.getUrmId());
+		this(OabaJobJPA.DISCRIMINATOR_VALUE, o.getOabaParametersId(), o
+				.getOabaSettingsId(), o.getServerId(), o.getExternalId(), o
+				.getTransactionId(), o.getBatchParentId(), o.getUrmId(), o
+				.getBatchJobRigor());
 		File owd = o.getWorkingDirectory();
 		this.workingDirectory = owd == null ? null : owd.getAbsolutePath();
 	}
 
-	protected OabaJobEntity(String type, long paramsid, long settingsId, long serverId,
-			String externalId, long tid, long bpid, long urmid) {
-		super(type, paramsid, settingsId, serverId, externalId, tid, bpid, urmid);
+	protected OabaJobEntity(String type, long paramsid, long settingsId,
+			long serverId, String externalId, long tid, long bpid, long urmid,
+			BatchJobRigor bjr) {
+		super(type, paramsid, settingsId, serverId, externalId, tid, bpid,
+				urmid, bjr);
 	}
 
 	void setWorkingDirectory(File workingDir) {
@@ -124,6 +148,11 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 			throw new IllegalArgumentException(msg);
 		}
 		this.workingDirectory = workingDir.getAbsolutePath();
+	}
+
+	@Override
+	public long getOabaParametersId() {
+		return super.getParametersId();
 	}
 
 } // OabaJobEntity

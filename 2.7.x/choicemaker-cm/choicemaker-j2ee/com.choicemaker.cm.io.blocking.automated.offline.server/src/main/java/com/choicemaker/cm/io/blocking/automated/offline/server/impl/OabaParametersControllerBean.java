@@ -17,7 +17,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
  * An EJB used to test BatchParameter beans within container-defined
  * transactions; see {@link OabaJobControllerBean} as an example of a similar
  * controller.
- * 
+ *
  * @author rphall
  */
 @Stateless
@@ -28,7 +28,7 @@ public class OabaParametersControllerBean {
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
-	
+
 	@EJB
 	private OabaJobControllerBean jobController;
 
@@ -79,7 +79,7 @@ public class OabaParametersControllerBean {
 		OabaParameters retVal = null;
 		OabaJob oabaJob = jobController.find(jobId);
 		if (oabaJob != null) {
-			long paramsId = oabaJob.getParametersId();
+			long paramsId = oabaJob.getOabaParametersId();
 			retVal = find(paramsId);
 		}
 		return retVal;

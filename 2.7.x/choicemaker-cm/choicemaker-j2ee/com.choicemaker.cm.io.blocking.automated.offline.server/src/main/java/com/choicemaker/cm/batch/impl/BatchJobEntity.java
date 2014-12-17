@@ -61,7 +61,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntit
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public /* abstract */ class BatchJobEntity implements BatchJob {
+public abstract class BatchJobEntity implements BatchJob {
 
 	private static final long serialVersionUID = 271L;
 
@@ -233,7 +233,7 @@ public /* abstract */ class BatchJobEntity implements BatchJob {
 	}
 
 	// Override is not declared here
-	public long getSettingsId() {
+	public long getOabaSettingsId() {
 		return settingsId;
 	}
 
@@ -272,18 +272,6 @@ public /* abstract */ class BatchJobEntity implements BatchJob {
 		File retVal = null;
 		if (workingDirectory != null) {
 			retVal = new File(workingDirectory);
-//			if (!retVal.exists() || !retVal.isDirectory()) {
-//				String msg =
-//					"Working directory '" + workingDirectory
-//							+ "' does not exist, or is not a directory";
-//				throw new IllegalStateException(msg);
-//			}
-//			if (!retVal.canRead() || !retVal.canWrite()) {
-//				String msg =
-//					"Working directory '" + workingDirectory
-//							+ "' is not readable or not writeable";
-//				throw new IllegalStateException(msg);
-//			}
 		}
 		return retVal;
 	}
@@ -423,22 +411,12 @@ public /* abstract */ class BatchJobEntity implements BatchJob {
 
 	/**
 	 * Constructs an invalid BatchJobEntity with a null working directory.
-	 * Subclasses must implement a method to set the working directory
-	 * to a valid value after construction.
+	 * Subclasses must implement a method to set the working directory to a
+	 * valid value after construction.
 	 */
-	protected BatchJobEntity(String type, long paramsid, long settingsId, long serverId, String externalId,
-			long tid, long bpid, long urmid) {
-		this(type, paramsid, settingsId, serverId, externalId,
-			tid, bpid, urmid, DEFAULT_RIGOR);
-	}
-
-	/**
-	 * Constructs an invalid BatchJobEntity with a null working directory.
-	 * Subclasses must implement a method to set the working directory
-	 * to a valid value after construction.
-	 */
-	protected BatchJobEntity(String type, long paramsid, long settingsId, long serverId, String externalId,
-			long tid, long bpid, long urmid, BatchJobRigor bjr) {
+	protected BatchJobEntity(String type, long paramsid, long settingsId,
+			long serverId, String externalId, long tid, long bpid, long urmid,
+			BatchJobRigor bjr) {
 		if (type == null) {
 			throw new IllegalArgumentException("null type");
 		}
@@ -593,11 +571,6 @@ public /* abstract */ class BatchJobEntity implements BatchJob {
 		if (other == null) {
 			return false;
 		}
-		/*
-		 * if (description == null) { if (other.description != null) { return
-		 * false; } } else if (!description.equals(other.description)) { return
-		 * false; }
-		 */
 		if (externalId == null) {
 			if (other.externalId != null) {
 				return false;
@@ -605,10 +578,6 @@ public /* abstract */ class BatchJobEntity implements BatchJob {
 		} else if (!externalId.equals(other.externalId)) {
 			return false;
 		}
-		/*
-		 * if (audit == null) { if (other.audit != null) { return false; } }
-		 * else if (!audit.equals(other.audit)) { return false; }
-		 */
 		if (percentageComplete != other.percentageComplete) {
 			return false;
 		}
@@ -625,14 +594,12 @@ public /* abstract */ class BatchJobEntity implements BatchJob {
 		if (transactionId != other.transactionId) {
 			return false;
 		}
-		// Discriminator type is implicitly checked by comparing
-		// this.getClass() and other.getClass()
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "OabaJobEntity [" + id + "/" + externalId + "/" + status + "]";
+		return "BatchJobEntity [" + id + "/" + externalId + "/" + status + "]";
 	}
 
 }

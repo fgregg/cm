@@ -39,13 +39,18 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 			// Settings appear to be persistent -- check them against the DB
 			retVal = findAbaSettingsInternal(settingsId);
 			if (retVal == null) {
-				String msg = "The specified settings (" + settingsId + ") are missing in the DB. "
-						+ "A new copy will be persisted.";
+				String msg =
+					"The specified settings (" + settingsId
+							+ ") are missing in the DB. "
+							+ "A new copy will be persisted.";
 				logger.warning(msg);
 				retVal = null;
 			} else if (!retVal.equals(settings)) {
-				String msg = "The specified settings (" + settingsId + ") are different in the DB. "
-						+ "The DB values will be used instead of the specified values.";
+				String msg =
+					"The specified settings ("
+							+ settingsId
+							+ ") are different in the DB. "
+							+ "The DB values will be used instead of the specified values.";
 				logger.warning(msg);
 			}
 		}
@@ -55,7 +60,9 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 			assert retVal.getId() == AbaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
 			em.persist(retVal);
 			assert retVal.getId() != OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
-			String msg = "The specified settings were persisted in the database with settings id = " + retVal.getId();
+			String msg =
+				"The specified settings were persisted in the database with settings id = "
+						+ retVal.getId();
 			logger.info(msg);
 		}
 		assert retVal != null;
@@ -76,13 +83,18 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 			// Settings appear to be persistent -- check them against the DB
 			retVal = findOabaSettingsInternal(settingsId);
 			if (retVal == null) {
-				String msg = "The specified settings (" + settingsId + ") are missing in the DB. "
-						+ "A new copy will be persisted.";
+				String msg =
+					"The specified settings (" + settingsId
+							+ ") are missing in the DB. "
+							+ "A new copy will be persisted.";
 				logger.warning(msg);
 				retVal = null;
 			} else if (!retVal.equals(settings)) {
-				String msg = "The specified settings (" + settingsId + ") are different in the DB. "
-						+ "The DB values will be used instead of the specified values.";
+				String msg =
+					"The specified settings ("
+							+ settingsId
+							+ ") are different in the DB. "
+							+ "The DB values will be used instead of the specified values.";
 				logger.warning(msg);
 			}
 		}
@@ -92,7 +104,9 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 			assert retVal.getId() == OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
 			em.persist(retVal);
 			assert retVal.getId() != OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
-			String msg = "The specified settings were persisted in the database with settings id = " + retVal.getId();
+			String msg =
+				"The specified settings were persisted in the database with settings id = "
+						+ retVal.getId();
 			logger.info(msg);
 		}
 		assert retVal != null;
@@ -123,7 +137,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		OabaSettings retVal = null;
 		OabaJob oabaJob = jobController.find(jobId);
 		if (oabaJob != null) {
-			long settingsId = oabaJob.getSettingsId();
+			long settingsId = oabaJob.getOabaSettingsId();
 			retVal = findOabaSettings(settingsId);
 		}
 		return retVal;
@@ -158,8 +172,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		DefaultSettingsEntity retVal = null;
 		if (aba == null) {
 			aba = save(settings);
-			retVal =
-				new DefaultSettingsEntity(pk, aba.getId());
+			retVal = new DefaultSettingsEntity(pk, aba.getId());
 			em.persist(retVal);
 		}
 		assert retVal != null;
@@ -198,8 +211,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		DefaultSettingsEntity retVal = null;
 		if (oaba == null) {
 			oaba = save(settings);
-			retVal =
-				new DefaultSettingsEntity(pk, oaba.getId());
+			retVal = new DefaultSettingsEntity(pk, oaba.getId());
 			em.persist(retVal);
 		}
 		assert retVal != null;
@@ -223,27 +235,26 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 	public AbaSettings findDefaultAbaSettings(String modelConfigurationId,
 			String databaseConfiguration, String blockingConfiguration) {
 		final DefaultSettingsPK pk =
-				new DefaultSettingsPK(modelConfigurationId,
-						AbaSettingsJPA.DISCRIMINATOR_VALUE, databaseConfiguration,
-						blockingConfiguration);
-			DefaultSettingsEntity dsb = em.find(DefaultSettingsEntity.class, pk);
-			AbaSettings retVal = null;
-			if (dsb != null) {
-				final long settingsId = dsb.getSettingsId();
-				retVal = findAbaSettings(settingsId);
-				if (retVal == null) {
-					String msg =
-						"Invalid settings identifier for " + pk.toString() + ": "
-								+ settingsId;
-					logger.severe(msg);
-				}
+			new DefaultSettingsPK(modelConfigurationId,
+					AbaSettingsJPA.DISCRIMINATOR_VALUE, databaseConfiguration,
+					blockingConfiguration);
+		DefaultSettingsEntity dsb = em.find(DefaultSettingsEntity.class, pk);
+		AbaSettings retVal = null;
+		if (dsb != null) {
+			final long settingsId = dsb.getSettingsId();
+			retVal = findAbaSettings(settingsId);
+			if (retVal == null) {
+				String msg =
+					"Invalid settings identifier for " + pk.toString() + ": "
+							+ settingsId;
+				logger.severe(msg);
 			}
-			return retVal;
+		}
+		return retVal;
 	}
 
 	@Override
-	public OabaSettings findDefaultOabaSettings(
-			ImmutableProbabilityModel model) {
+	public OabaSettings findDefaultOabaSettings(ImmutableProbabilityModel model) {
 		return findDefaultOabaSettings(model.getModelName(),
 				model.getDatabaseConfigurationName(),
 				model.getBlockingConfigurationName());
@@ -253,22 +264,22 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 	public OabaSettings findDefaultOabaSettings(String modelConfigurationId,
 			String databaseConfiguration, String blockingConfiguration) {
 		final DefaultSettingsPK pk =
-				new DefaultSettingsPK(modelConfigurationId,
-						OabaSettingsJPA.DISCRIMINATOR_VALUE, databaseConfiguration,
-						blockingConfiguration);
-			DefaultSettingsEntity dsb = em.find(DefaultSettingsEntity.class, pk);
-			OabaSettings retVal = null;
-			if (dsb != null) {
-				final long settingsId = dsb.getSettingsId();
-				retVal = findOabaSettings(settingsId);
-				if (retVal == null) {
-					String msg =
-						"Invalid settings identifier for " + pk.toString() + ": "
-								+ settingsId;
-					logger.severe(msg);
-				}
+			new DefaultSettingsPK(modelConfigurationId,
+					OabaSettingsJPA.DISCRIMINATOR_VALUE, databaseConfiguration,
+					blockingConfiguration);
+		DefaultSettingsEntity dsb = em.find(DefaultSettingsEntity.class, pk);
+		OabaSettings retVal = null;
+		if (dsb != null) {
+			final long settingsId = dsb.getSettingsId();
+			retVal = findOabaSettings(settingsId);
+			if (retVal == null) {
+				String msg =
+					"Invalid settings identifier for " + pk.toString() + ": "
+							+ settingsId;
+				logger.severe(msg);
 			}
-			return retVal;
+		}
+		return retVal;
 	}
 
 	@Override
