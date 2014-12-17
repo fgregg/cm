@@ -3,8 +3,10 @@ package com.choicemaker.cmit.trans;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.Random;
 
 import javax.ejb.EJB;
+import javax.persistence.EntityManager;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -14,14 +16,25 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobControllerBean;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
+import com.choicemaker.cm.transitivity.server.impl.TransitivitySettingsEntity;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.trans.util.TransitivityTestController;
+import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
 public class TransitivityJobEntityIT {
+	
+//	private static final Logger logger = Logger
+//			.getLogger(TransitivityJobEntityIT.class.getName());
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
@@ -59,20 +72,22 @@ public class TransitivityJobEntityIT {
 	@EJB
 	protected TransitivityTestController testController;
 
+	private final Random random = new Random(new Date().getTime());
+
 //	private int initialOabaParamsCount;
 //	private int initialOabaJobCount;
 //	private int initialCount;
 
 	@Before
 	public void setUp() {
-//		initialOabaParamsCount = tjController.findAllOabaParameters().size();
+//		initialOabaParamsCount = tjController.findAllTransitivityParameters().size();
 //		initialOabaJobCount = tjController.findAllOabaJobs().size();
 //		initialCount = tjController.findAllTransitivityJobs().size();
 	}
 
 	@After
 	public void tearDown() {
-//		int finalOabaParamsCount = tjController.findAllOabaParameters().size();
+//		int finalOabaParamsCount = tjController.findAllTransitivityParameters().size();
 //		assertTrue(initialOabaParamsCount == finalOabaParamsCount);
 //
 //		int finalOabaJobCount = tjController.findAllOabaJobs().size();
@@ -555,10 +570,148 @@ public class TransitivityJobEntityIT {
 	}
 
 	@Test
-	public void testTimestamps() {
+	protected void testTimestamps() {
 //		for (String sts : _statusValues) {
 //			testTimestamp(sts);
 //		}
+	}
+
+	/** Creates an ephemeral instance of TransitivityParametersEntity */
+	protected TransitivityParametersEntity
+	createEphemeralTransitivityParameters(
+			String tag, TestEntities te) {
+		if (te == null) {
+			throw new IllegalArgumentException("null test entities");
+		}
+		Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
+		ISerializableRecordSource stage = EntityManagerUtils.createFakeSerialRecordSource(tag);
+		ISerializableRecordSource master;
+		if (random.nextBoolean()) {
+			master = EntityManagerUtils.createFakeSerialRecordSource(tag);
+		} else {
+			master = null;
+		}
+		// File workingDir =
+		// ServerConfigurationControllerBean.computeGenericLocation();
+		TransitivityParametersEntity retVal =
+			new TransitivityParametersEntity(
+					EntityManagerUtils.createRandomModelConfigurationName(tag),
+					thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), stage, master);
+		te.add(retVal);
+		return retVal;
+	}
+
+	/**
+	 * Creates a persistent instance of TransitivityParametersEntity An
+	 * externalId for the returned TransitivityJob is synthesized using the
+	 * specified tag.
+	 */
+	protected TransitivityParametersEntity createPersistentTransitivityParameters(
+			EntityManager em, String tag, TestEntities te) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		TransitivityParametersEntity retVal =
+			createEphemeralTransitivityParameters(tag, te);
+		em.persist(retVal);
+		return retVal;
+	}
+
+	/** Creates an ephemeral instance of TransitivitySettingsEntity */
+	protected TransitivitySettingsEntity createEphemeralTransitivitySettings(
+			String tag, TestEntities te) {
+		if (te == null) {
+			throw new IllegalArgumentException("null test entities");
+		}
+		Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
+		ISerializableRecordSource stage = EntityManagerUtils.createFakeSerialRecordSource(tag);
+		ISerializableRecordSource master;
+		if (random.nextBoolean()) {
+			master = EntityManagerUtils.createFakeSerialRecordSource(tag);
+		} else {
+			master = null;
+		}
+		// File workingDir =
+		// ServerConfigurationControllerBean.computeGenericLocation();
+		TransitivitySettingsEntity retVal =
+			new TransitivitySettingsEntity(
+					EntityManagerUtils.createRandomModelConfigurationName(tag),
+					thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), stage, master);
+		te.add(retVal);
+		return retVal;
+	}
+
+	/**
+	 * Creates a persistent instance of TransitivitySettingsEntity An externalId
+	 * for the returned TransitivityJob is synthesized using the specified tag.
+	 */
+	protected TransitivitySettingsEntity createPersistentTransitivitySettings(
+			EntityManager em, String tag, TestEntities te) {
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		TransitivitySettingsEntity retVal =
+			createEphemeralTransitivitySettings(tag, te);
+		em.persist(retVal);
+		return retVal;
+	}
+
+//	protected TransitivityJobEntity createEphemeralTransitivityJob(
+//			EntityManager em, String tag, TestEntities te, OabaJob job) {
+//		if (te == null) {
+//			throw new IllegalArgumentException("null test entities");
+//		}
+//		if (job == null) {
+//			throw new IllegalArgumentException("null batch job");
+//		}
+//		if (!te.contains(job)) {
+//			logger.warning("Adding batchJob '" + job
+//					+ "' to test entities that will be removed from database");
+//			te.add(job);
+//		}
+//		String extId = EntityManagerUtils.createExternalId(tag);
+//		TransitivityParametersEntity params =
+//			em.find(TransitivityParametersEntity.class, job.getTransitivityParametersId());
+//		if (params == null) {
+//			throw new IllegalArgumentException("non-persistent parameters");
+//		}
+//		if (!te.contains(params)) {
+//			logger.warning("Adding batchJob '" + job
+//					+ "' to test entities that will be removed from database");
+//			te.add(params);
+//		}
+//		TransitivityJobEntity retVal =
+//			new TransitivityJobEntity(params, job, extId);
+//		te.add((TransitivityJob)retVal);
+//		return retVal;
+//	}
+
+	protected TransitivityJobEntity createEphemeralTransitivityJob(
+			ServerConfiguration sc, EntityManager em, String tag,
+			TestEntities te) {
+		throw new Error("not yet implemented");
+//		TransitivityParametersEntity params =
+//			createPersistentTransitivityParameters(em, tag, te);
+//		OabaJobEntity job = createPersistentOabaJobBean(sc, em, tag, te);
+//		TransitivityJobEntity retVal = new TransitivityJobEntity(params, job);
+//		te.add(retVal);
+//		return retVal;
+	}
+
+	protected TransitivityJobEntity createEphemeralTransitivityJob(
+			EntityManager em, TestEntities te, OabaJob job, String extId) {
+		throw new Error("not yet implemented");
+//		TransitivityParametersEntity params =
+//			createPersistentTransitivityParameters(em, null, te);
+//		TransitivityJobEntity retVal =
+//			new TransitivityJobEntity(params, job, extId);
+//		if (te == null) {
+//			throw new IllegalArgumentException("null test entities");
+//		}
+//		te.add(retVal);
+//		return retVal;
 	}
 
 }

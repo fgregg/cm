@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -22,7 +21,6 @@ import javax.persistence.Query;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
@@ -32,20 +30,17 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA;
-// FIXME import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
-import com.choicemaker.cm.transitivity.server.impl.TransitivitySettingsEntity;
 
 public class EntityManagerUtils {
 
 	private EntityManagerUtils() {
 	}
 
-	private static final Logger logger = Logger
-			.getLogger(EntityManagerUtils.class.getName());
+//	private static final Logger logger = Logger
+//			.getLogger(EntityManagerUtils.class.getName());
 
 	private static final String DEFAULT_EXTERNALID_TAG = "Random external id";
 	private static final String DEFAULT_MODEL_NAME = "FakeModelConfig";
@@ -154,143 +149,6 @@ public class EntityManagerUtils {
 	public static ISerializableRecordSource createFakeSerialRecordSource(
 			String tag) {
 		return new FakeSerialRecordSource(tag);
-	}
-
-	/** Creates an ephemeral instance of TransitivityParametersEntity */
-	public static TransitivityParametersEntity createEphemeralTransitivityParameters(
-			String tag, TestEntities te) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		Thresholds thresholds = createRandomThresholds();
-		ISerializableRecordSource stage = createFakeSerialRecordSource(tag);
-		ISerializableRecordSource master;
-		if (random.nextBoolean()) {
-			master = createFakeSerialRecordSource(tag);
-		} else {
-			master = null;
-		}
-		// File workingDir =
-		// ServerConfigurationControllerBean.computeGenericLocation();
-		TransitivityParametersEntity retVal =
-			new TransitivityParametersEntity(
-					createRandomModelConfigurationName(tag),
-					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master);
-		te.add(retVal);
-		return retVal;
-	}
-
-	/**
-	 * Creates a persistent instance of TransitivityParametersEntity An
-	 * externalId for the returned TransitivityJob is synthesized using the
-	 * specified tag.
-	 */
-	public static TransitivityParametersEntity createPersistentTransitivityParameters(
-			EntityManager em, String tag, TestEntities te) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
-		TransitivityParametersEntity retVal =
-			createEphemeralTransitivityParameters(tag, te);
-		em.persist(retVal);
-		return retVal;
-	}
-
-	/** Creates an ephemeral instance of TransitivitySettingsEntity */
-	public static TransitivitySettingsEntity createEphemeralTransitivitySettings(
-			String tag, TestEntities te) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		Thresholds thresholds = createRandomThresholds();
-		ISerializableRecordSource stage = createFakeSerialRecordSource(tag);
-		ISerializableRecordSource master;
-		if (random.nextBoolean()) {
-			master = createFakeSerialRecordSource(tag);
-		} else {
-			master = null;
-		}
-		// File workingDir =
-		// ServerConfigurationControllerBean.computeGenericLocation();
-		TransitivitySettingsEntity retVal =
-			new TransitivitySettingsEntity(
-					createRandomModelConfigurationName(tag),
-					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master);
-		te.add(retVal);
-		return retVal;
-	}
-
-	/**
-	 * Creates a persistent instance of TransitivitySettingsEntity An externalId
-	 * for the returned TransitivityJob is synthesized using the specified tag.
-	 */
-	public static TransitivitySettingsEntity createPersistentTransitivitySettings(
-			EntityManager em, String tag, TestEntities te) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
-		TransitivitySettingsEntity retVal =
-			createEphemeralTransitivitySettings(tag, te);
-		em.persist(retVal);
-		return retVal;
-	}
-
-	public static TransitivityJobEntity createEphemeralTransitivityJob(
-			EntityManager em, String tag, TestEntities te, OabaJob job) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		if (job == null) {
-			throw new IllegalArgumentException("null batch job");
-		}
-		if (!te.contains(job)) {
-			logger.warning("Adding batchJob '" + job
-					+ "' to test entities that will be removed from database");
-			te.add(job);
-		}
-		String extId = createExternalId(tag);
-		OabaParametersEntity params =
-			em.find(OabaParametersEntity.class, job.getParametersId());
-		if (params == null) {
-			throw new IllegalArgumentException("non-persistent parameters");
-		}
-		if (!te.contains(params)) {
-			logger.warning("Adding batchJob '" + job
-					+ "' to test entities that will be removed from database");
-			te.add(params);
-		}
-		TransitivityJobEntity retVal =
-			new TransitivityJobEntity(params, job, extId);
-		te.add(retVal);
-		return retVal;
-	}
-
-	public static TransitivityJobEntity createEphemeralTransitivityJob(
-			ServerConfiguration sc, EntityManager em, String tag,
-			TestEntities te) {
-		throw new Error("not yet implemented");
-//		OabaParametersEntity params =
-//			createPersistentOabaParameters(em, tag, te);
-//		OabaJobEntity job = createPersistentOabaJobBean(sc, em, tag, te);
-//		TransitivityJobEntity retVal = new TransitivityJobEntity(params, job);
-//		te.add(retVal);
-//		return retVal;
-	}
-
-	public static TransitivityJobEntity createEphemeralTransitivityJob(
-			EntityManager em, TestEntities te, OabaJob job, String extId) {
-		throw new Error("not yet implemented");
-//		OabaParametersEntity params =
-//			createPersistentOabaParameters(em, null, te);
-//		TransitivityJobEntity retVal =
-//			new TransitivityJobEntity(params, job, extId);
-//		if (te == null) {
-//			throw new IllegalArgumentException("null test entities");
-//		}
-//		te.add(retVal);
-//		return retVal;
 	}
 
 	public static void removeTestEntities(EntityManager em, TestEntities te) {

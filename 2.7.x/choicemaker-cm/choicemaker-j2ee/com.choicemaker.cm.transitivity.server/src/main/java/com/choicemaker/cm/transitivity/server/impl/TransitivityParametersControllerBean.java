@@ -81,7 +81,7 @@ public class TransitivityParametersControllerBean extends
 		TransitivityParameters retVal = null;
 		TransitivityJob oabaJob = jobController.findTransitivityJob(jobId);
 		if (oabaJob != null) {
-			long paramsId = oabaJob.getParametersId();
+			long paramsId = oabaJob.getTransitivityParametersId();
 			retVal = findTransitivityParameters(paramsId);
 		}
 		return retVal;

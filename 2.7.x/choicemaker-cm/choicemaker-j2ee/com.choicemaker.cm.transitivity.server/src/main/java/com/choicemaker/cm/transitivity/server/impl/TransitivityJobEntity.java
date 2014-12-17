@@ -19,18 +19,18 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.args.TransitivitySettings;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
  * A TransitivityJobEntity is a type of OabaJob that tracks the progress of a
  * (long-running) transitivity analysis process. Transitivity jobs use the match
  * results of an OABA OabaJob, so a transitivity job is always associated with
- * exactly one OABA OabaJob. The id of the OABA OabaJob is tracked by the
- * value of the {@link #getBatchParentId() transaction parent id} field.
+ * exactly one OABA OabaJob. The id of the OABA OabaJob is tracked by the value
+ * of the {@link #getBatchParentId() transaction parent id} field.
  *
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)
@@ -54,36 +54,48 @@ public class TransitivityJobEntity extends OabaJobEntity implements
 	}
 
 	public TransitivityJobEntity(TransitivityParameters params,
-			TransitivitySettings settings, ServerConfiguration sc, OabaJob parent, String externalId) {
+			TransitivitySettings settings, ServerConfiguration sc,
+			OabaJob parent, String externalId) {
 		this(TransitivityJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings
-				.getId(), sc.getId(), externalId, randomTransactionId(), parent.getId(),
-				INVALID_ID);
+				.getId(), sc.getId(), externalId, randomTransactionId(), parent
+				.getId(), INVALID_ID, BatchJob.DEFAULT_RIGOR);
 	}
-	
+
+	public TransitivityJobEntity(TransitivityParameters params,
+			TransitivitySettings settings, ServerConfiguration sc,
+			OabaJob parent, String externalId, BatchJobRigor bjr) {
+		this(TransitivityJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings
+				.getId(), sc.getId(), externalId, randomTransactionId(), parent
+				.getId(), INVALID_ID, bjr);
+	}
+
 	public TransitivityJobEntity(TransitivityJob o) {
-		this(TransitivityJobJPA.DISCRIMINATOR_VALUE, o.getParametersId(), o
-				.getSettingsId(), o.getServerId(), o.getExternalId(), o.getTransactionId(), o
-				.getBatchParentId(), o.getUrmId());
+		this(TransitivityJobJPA.DISCRIMINATOR_VALUE, o
+				.getTransitivityParametersId(), o.getTransitivitySettingsId(),
+				o.getServerId(), o.getExternalId(), o.getTransactionId(), o
+						.getBatchParentId(), o.getUrmId(), o.getBatchJobRigor());
 		this.workingDirectory = o.getWorkingDirectory().getAbsolutePath();
 	}
 
-	protected TransitivityJobEntity(String type, long paramsId, long settingsId,
-			long serverId, 
-			String externalId, long tid, long parentId, long urmid) {
-		super(type, paramsId, settingsId, serverId, externalId, tid, parentId, urmid);
+	protected TransitivityJobEntity(String type, long paramsId,
+			long settingsId, long serverId, String externalId, long tid,
+			long parentId, long urmid, BatchJobRigor bjr) {
+		super(type, paramsId, settingsId, serverId, externalId, tid, parentId,
+				urmid, bjr);
 	}
-	
-	public TransitivityJobEntity(OabaParametersEntity params, OabaJob job,
-			String extId) {
+
+	public TransitivityJobEntity(TransitivityParametersEntity params,
+			OabaJob job, String extId) {
 		throw new Error("not implemented");
 	}
 
-	public TransitivityJobEntity(OabaParametersEntity params, BatchJobEntity job) {
+	public TransitivityJobEntity(TransitivityParametersEntity params,
+			BatchJobEntity job) {
 		throw new Error("not implemented");
 	}
 
-	public TransitivityJobEntity(OabaParametersEntity params, BatchJob job,
-			String extId) {
+	public TransitivityJobEntity(TransitivityParametersEntity params,
+			BatchJob job, String extId) {
 		throw new Error("not implemented");
 	}
 
@@ -94,26 +106,25 @@ public class TransitivityJobEntity extends OabaJobEntity implements
 
 	@Override
 	public float getDiffer() {
+		// TODO
 		throw new Error("not implemented");
 	}
 
 	@Override
 	public float getMatch() {
+		// TODO
 		throw new Error("not implemented");
 	}
 
 	@Override
-	public void setModel(String stageModelName) {
+	public long getTransitivityParametersId() {
+		// TODO
 		throw new Error("not implemented");
 	}
 
 	@Override
-	public void setMatch(float high) {
-		throw new Error("not implemented");
-	}
-
-	@Override
-	public void setDiffer(float low) {
+	public long getTransitivitySettingsId() {
+		// TODO
 		throw new Error("not implemented");
 	}
 

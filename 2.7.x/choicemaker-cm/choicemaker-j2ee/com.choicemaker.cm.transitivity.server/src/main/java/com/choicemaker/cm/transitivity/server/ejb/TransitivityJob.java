@@ -10,30 +10,35 @@
  */
 package com.choicemaker.cm.transitivity.server.ejb;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.batch.BatchJob;
 
 /**
- * @author pcheung
- *
+ * @author rphall
  */
-public interface TransitivityJob extends OabaJob {
-	
-	// -- Deprecated constants
+public interface TransitivityJob extends BatchJob {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/TransitivityJob";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
 
+	// -- Accessors
+
+	long getTransitivityParametersId();
+
+	long getTransitivitySettingsId();
+
+	long getServerId();
+
+	long getUrmId();
+
+	// -- Deprecated methods
+
 	@Deprecated
 	String getModel();
+
 	@Deprecated
 	float getDiffer();
+
 	@Deprecated
 	float getMatch();
-	@Deprecated
-	void setModel(String stageModelName);
-	@Deprecated
-	void setMatch(float high);
-	@Deprecated
-	void setDiffer(float low);
 
 }
