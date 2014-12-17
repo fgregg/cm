@@ -570,7 +570,7 @@ public class TransitivityJobEntityIT {
 	}
 
 	@Test
-	protected void testTimestamps() {
+	public void testTimestamps() {
 //		for (String sts : _statusValues) {
 //			testTimestamp(sts);
 //		}

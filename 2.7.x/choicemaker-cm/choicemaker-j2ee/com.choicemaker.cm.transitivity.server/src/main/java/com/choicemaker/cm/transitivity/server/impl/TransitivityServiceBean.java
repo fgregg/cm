@@ -10,231 +10,223 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
-import java.security.AccessControlException;
-import java.util.Iterator;
-import java.util.SortedSet;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+import javax.ejb.FinderException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-import javax.sql.DataSource;
+import javax.jms.JMSException;
+//import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
-import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
-import com.choicemaker.cm.core.DatabaseException;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.InvalidModelException;
-import com.choicemaker.cm.core.InvalidProfileException;
-import com.choicemaker.cm.core.Profile;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.UnderspecifiedProfileException;
-import com.choicemaker.cm.core.XmlConfException;
-//import com.choicemaker.cm.core.base.Accessor;
-import com.choicemaker.cm.core.base.BeanMatchCandidate;
-import com.choicemaker.cm.core.base.MatchCandidate;
-import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.core.base.RecordDecisionMaker;
-import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
-import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
-import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
-import com.choicemaker.cm.server.util.CountsUpdate;
-import com.choicemaker.cm.server.util.NameServiceLookup;
+import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
-import com.choicemaker.cm.transitivity.server.util.MatchBiconnectedIterator;
-import com.choicemaker.cm.transitivity.util.CEFromMatchCandidatesBuilder;
-import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
-import com.choicemaker.e2.CMExtension;
-import com.choicemaker.e2.platform.CMPlatformUtils;
-
+import com.choicemaker.cm.transitivity.server.data.TransitivityJobStatus;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.util.CompositeEntityIterator;
+import com.choicemaker.cm.transitivity.util.CompositeEntitySource;
 
 /**
  * @author pcheung
  *
- * ChoiceMaker Technologies, Inc.
  */
-@SuppressWarnings({"rawtypes"})
 public class TransitivityServiceBean implements SessionBean {
-
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(TransitivityServiceBean.class.getName());
+	private static final Logger log = Logger.getLogger(TransitivityServiceBean.class.getName());
 
-	public static final String DATABASE_ACCESSOR = ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
-	public static final String BLOCKING_SOURCE = "java:comp/env/jdbc/blockingSource";
+//	@EJB
+	TransitivityJobControllerBean jobController;
+	
+//	@EJB
+	TransitivityParametersControllerBean paramsController;
+	
+//	@EJB
+	OabaProcessingControllerBean processingController;
 
-	private transient DataSource blockingSource;
-	private static boolean inited;
-	private NameServiceLookup nameServiceLookup = new NameServiceLookup();
-
-
-	/** This method finds the matches and the cluster for the input record.
+	/**
+	 * This method starts the transitivity engine.
+	 * WARNINGS:
+	 *  1. only call this after the OABA has finished.
+	 *  2. use the same parameters as the OABA.
 	 *
-	 * @param profile - Profile containing the input record
-	 * @param constraint - constraint
-	 * @param probabilityModel - name of the probability accessProvider
-	 * @param differThreshold - differ threshold
-	 * @param matchThreshold - match threshold
-	 * @param maxNumMatches - maximum number of matches to return
-	 * @param returnDataFormat - return format
-	 * @param purpose - string purpose identifier
-	 * @return TransitivityResult
-	 * @throws AccessControlException
-	 * @throws InvalidProfileException
+	 * @param jobID - job id of the OABA job
+	 * @param staging - staging record source
+	 * @param master - master record source
+	 * @param lowThreshold - probability under which a pair is considered "differ".
+	 * @param highThreshold - probability above which a pair is considered "match".
+	 * @param modelConfigurationName - probability accessProvider of the stage record source.
+	 * @param masterModelName - probability accessProvider of the master record source.
+	 * @return int - the transitivity job id.
 	 * @throws RemoteException
-	 * @throws InvalidModelException
-	 * @throws UnderspecifiedProfileException
-	 * @throws DatabaseException
+	 * @throws CreateException
+	 * @throws NamingException
+	 * @throws JMSException
+	 * @throws SQLException
 	 */
-	public TransitivityResult findClusters(
-		Profile profile,
-		Object constraint,
-		String probabilityModel,
-		float differThreshold,
-		float matchThreshold,
-		int maxNumMatches,
-		String returnDataFormat,
-		String purpose,
-		boolean compact)
-		throws AccessControlException, InvalidProfileException, RemoteException,
-		InvalidModelException, UnderspecifiedProfileException, DatabaseException {
+/*
+	public long startTransitivity (long jobID,
+		ISerializableRecordSource staging,
+		ISerializableRecordSource master,
+		float lowThreshold,
+		float highThreshold,
+		String modelConfigurationName, String masterModelName)
+		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
 
-		logger.info("starting findCluster");
-
-
-		IProbabilityModel model = PMManager.getModelInstance(probabilityModel);
-		if (model == null) {
-			logger.severe("Invalid probability accessProvider: " + probabilityModel);
-			throw new InvalidModelException(probabilityModel);
-		}
-		// 2014-04-24 rphall: Commented out unused local variable
-		// Any side effects?
-//		Accessor accessor = modelId.getAccessor();
-		Record q = profile.getRecord(model);
-		RecordDecisionMaker dm = new RecordDecisionMaker();
-		DatabaseAccessor databaseAccessor;
 		try {
-			CMExtension dbaExt = CMPlatformUtils.getExtension(DATABASE_ACCESSOR, (String) model.properties().get(DATABASE_ACCESSOR));
-			databaseAccessor = (DatabaseAccessor) dbaExt.getConfigurationElements()[0].createExecutableExtension("class");
-			databaseAccessor.setCondition(constraint);
-			databaseAccessor.setDataSource(blockingSource);
-		} catch (Exception ex) {
-			throw new InvalidModelException(ex.toString());
+			TransitivityJobData data = new TransitivityJobData();
+			data.jobID = jobID;
+			data.master = master;
+			data.staging = staging;
+			data.stageModelName = modelConfigurationName;
+			data.masterModelName = masterModelName;
+			data.low = lowThreshold;
+			data.high = highThreshold;
+			data.runTransitivity = false; //this means it's not a continuation from OABA.
+
+			sendToTransitivity (data);
+
+		} catch (Exception e) {
+			log.severe(e.toString());
 		}
-		SortedSet s;
-		AutomatedBlocker rs = new Blocker2(databaseAccessor, model, q);
+
+		return jobID;
+	}
+*/
+
+	/**
+ 	* This method starts the transitivity engine.
+ 	* WARNINGS:
+ 	*  1. use the jobID of the OABA batch job for which the transitivity
+ 	*  analysis should be performed.
+ 	*  2. only call this after the OABA has finished.
+	 */
+	public long startTransitivity (long jobID)
+		throws RemoteException, CreateException, NamingException, JMSException, SQLException {
+
 		try {
-			s = dm.getMatches(q, rs, model, differThreshold, matchThreshold);
-		} catch (UnderspecifiedQueryException ex) {
-			logger.warning(ex.toString());
-			throw new UnderspecifiedProfileException("", ex);
-		} catch (IOException ex) {
-			logger.severe("Database error: " + ex);
-			throw new DatabaseException("", ex);
+
+			TransitivityParameters batchParams = paramsController.findTransitivityParamsByJobId(jobID);
+			TransitivityJob transitivityJob = jobController.findTransitivityJob(jobID);
+//			TransitivityJob job = new TransitivityJobEntity(batchParams, transitivityJob);
+//			em.persist(job);
+			final long retVal = transitivityJob.getId();
+
+			// Create a new processing entry
+			OabaProcessing processing = processingController.findProcessingLogByJobId(retVal);
+
+			// Log the job info
+			log.fine("TransitivityJob: " + transitivityJob.toString());
+			log.fine("TransitivityParameters: " + batchParams.toString());
+			log.fine("Processing entry: " + processing.toString());
+			log.fine("TransitivityJob: " + transitivityJob.toString());
+
+			OabaJobMessage data = new OabaJobMessage(retVal);
+			sendToTransitivity (data);
+
+		} catch (Exception e) {
+			log.severe(e.toString());
 		}
 
-		TransitivityResult tr = null;
-		try {
-			Iterator ces = getCompositeEntities (q, s, probabilityModel, differThreshold,
-				matchThreshold);
-
-			if (compact) {
-				tr = new TransitivityResult (probabilityModel, differThreshold,
-					matchThreshold, new MatchBiconnectedIterator(ces));
-			} else {
-				tr = new TransitivityResult (probabilityModel, differThreshold,
-					matchThreshold, ces);
-			}
-		} catch (TransitivityException e) {
-			logger.severe(e.toString());
-		}
-
-		return tr;
+		return jobID;
 	}
 
 
-	/** This method takes the output of findMatches and runs the match result through the
-	 * Transitivity Engine.
+
+	/** This gets the TE status.
 	 *
-	 * @param profile - contains the query record
-	 * @param candidates - match candidates to the query record
-	 * @param modelName - probability accessProvider name
-	 * @param differThreshold - differ threshold
-	 * @param matchThreshold - match threshold
-	 * @param compact - set this to true if you want the CompositeEntity in the
-	 * 			TransitivityResult to be compacted before returning.
-	 * @return A TransitivityResult object
-	 * @throws   RemoteException  If a communication problem occurs.
-	 * @throws InvalidProfileException
+	 * @param jobID
+	 * @return TransitivityJobtatus
+	 * @throws JMSException
+	 * @throws FinderException
+	 * @throws RemoteException
+	 * @throws CreateException
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
+	public TransitivityJobStatus getStatus (long jobID) throws
+		JMSException, FinderException, RemoteException, CreateException,
+		NamingException, SQLException {
+
+		TransitivityJob transJob = jobController.findTransitivityJob(jobID);
+		TransitivityJobStatus status = new TransitivityJobStatus (
+			transJob.getId(),
+			transJob.getStatus(),
+			transJob.getStarted(),
+			transJob.getCompleted()
+		);
+
+		return status;
+	}
+
+
+
+	/** This method returns the TransitivityResult to the client.
+	 *
+	 * @param jobID - TE job id
+	 * @param compact - true if you want the graphs be compacted first
+	 * @return TransitivityResult
+	 * @throws RemoteException
+	 * @throws FinderException
+	 * @throws NamingException
 	 * @throws TransitivityException
-	 * @throws InvalidModelException  if the accessProvider does not exist or is not properly configured.
 	 */
-	public TransitivityResult findClusters(
-		Profile profile,
-		MatchCandidate[] candidates,
-		String modelName,
-		float differThreshold,
-		float matchThreshold,
-		boolean compact) throws
-		RemoteException, InvalidProfileException, TransitivityException, InvalidModelException {
+	public TransitivityResult getTransitivityResult (long jobID, boolean compact) throws
+		RemoteException, FinderException, NamingException, TransitivityException {
 
-		BeanMatchCandidate [] bCandidates = new BeanMatchCandidate [candidates.length];
-		for (int i=0; i<candidates.length; i++) {
-			bCandidates[i] = (BeanMatchCandidate) candidates[i];
-		}
+		TransitivityJob transitivityJob = jobController.findTransitivityJob(jobID);
+		TransitivityJob transJob = (TransitivityJob) transitivityJob;
+		if (!transJob.getStatus().equals(TransitivityJob.STATUS_COMPLETED))
+			throw new TransitivityException ("Job " + jobID + " is not complete.");
 
-		CEFromMatchCandidatesBuilder ceb = new CEFromMatchCandidatesBuilder
-			(profile, bCandidates, modelName, differThreshold, matchThreshold);
+		log.info("file source " + transJob.getDescription());
 
-		TransitivityResult tr = null;
-		if (compact) {
-			tr = new TransitivityResult (modelName, differThreshold,
-				matchThreshold, new MatchBiconnectedIterator(ceb.getCompositeEntities()));
-		} else {
-			tr = new TransitivityResult (modelName, differThreshold,
-				matchThreshold, ceb.getCompositeEntities());
-		}
+		MatchRecord2CompositeSource mrs = new MatchRecord2CompositeSource (
+			transJob.getDescription());
 
-		return tr;
+		CompositeEntitySource ces = new CompositeEntitySource (mrs);
+		@SuppressWarnings("unused")
+		CompositeEntityIterator it = new CompositeEntityIterator (ces);
+
+		@SuppressWarnings("unused")
+		TransitivityResult ret = null;
+		// TODO FIXME not yet re-implemented
+		throw new Error("not yet implemented");
+//		if (compact) {
+//			MatchBiconnectedIterator ci = new MatchBiconnectedIterator (it);
+//			ret = new TransitivityResult
+//				(transJob.getModel(), transJob.getDiffer(), transJob.getMatch(),
+//				ci);
+//		} else {
+//			ret = new TransitivityResult
+//				(transJob.getModel(), transJob.getDiffer(), transJob.getMatch(),
+//				it);
+//		}
+//
+//		return ret;
 	}
 
 
-	/** This takes in a set of Matches and returns an Iterator of CompositeEntity.
+	/** This method puts the request on the Transitivity Engine's message queue.
 	 *
-	 * @param s
-	 * @return
+	 * @param d
+	 * @throws NamingException
+	 * @throws JMSException
 	 */
-	private Iterator getCompositeEntities (Record q, SortedSet s, String modelName,
-		float low, float high) throws TransitivityException {
-
-		CEFromMatchesBuilder builder = new CEFromMatchesBuilder (q, s.iterator(),
-			modelName, low, high);
-
-		return builder.getCompositeEntities();
-	}
-
-
-
-	private static synchronized void init(DataSource dataSource) throws XmlConfException, RemoteException, DatabaseException {
-		if (!inited) {
-			new CountsUpdate().cacheCounts(dataSource);
-			inited = true;
-		}
-	}
-
-	public void ejbCreate() throws CreateException {
-		try {
-			blockingSource = (DataSource) nameServiceLookup.lookup(BLOCKING_SOURCE, DataSource.class);
-			init(blockingSource);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new CreateException(ex.toString());
-		}
+	private void sendToTransitivity (OabaJobMessage d) throws NamingException, JMSException {
+		throw new Error("not yet re-implemented");
+//		Queue queue = configuration.getTransitivityMessageQueue();
+//		configuration.sendMessage(queue, d);
 	}
 
 
@@ -259,7 +251,24 @@ public class TransitivityServiceBean implements SessionBean {
 	/* (non-Javadoc)
 	 * @see javax.ejb.SessionBean#setSessionContext(javax.ejb.SessionContext)
 	 */
-	public void setSessionContext(SessionContext arg0) throws EJBException, RemoteException {
+	public void setSessionContext(SessionContext sessionContext) throws EJBException, RemoteException {
+//		this.sessionContext = sessionContext;
 	}
+
+
+	public void ejbCreate() throws CreateException {
+//		try {
+//			// 2014-04-24 rphall: Commented out unused local variable.
+////			InitialContext ic = new InitialContext();
+//
+//			this.configuration = EJBConfiguration.getInstance();
+//
+//		} catch (Exception ex) {
+//			log.severe(ex.toString());
+//			throw new CreateException(ex.getMessage());
+//		}
+
+	} // ejbCreate()
+
 
 }

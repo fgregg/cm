@@ -33,7 +33,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
-import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerializer;
 import com.choicemaker.cm.transitivity.core.TransitivitySortType;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
@@ -110,6 +109,7 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 			return;
 		}
 
+		@SuppressWarnings("unused")
 		Iterator compactedCeIter;
 		CmsJob ownJob = null;
 		ObjectMessage msg = (ObjectMessage) inMessage;
@@ -153,6 +153,7 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 			ownJob.updateStepInfo(20);
 
 			String matchResultFileName = trJob.getDescription();
+			@SuppressWarnings("unused")
 			String analysisResultFileName =
 				matchResultFileName.substring(0,
 						matchResultFileName.lastIndexOf("."))
@@ -178,16 +179,18 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 				return;
 			}
 
-			TransitivityResult tr =
-				new TransitivityResult(trJob.getModel(), trJob.getDiffer(),
-						trJob.getMatch(), compactedCeIter);
-
-			ownJob.updateStepInfo(40);
-			log.fine("serialize to " + tsd.serializationType + "format");
-
-			TransitivityResultCompositeSerializer sr =
-				getTransitivityResultSerializer(tsd.serializationType);
-			sr.serialize(tr, analysisResultFileName, DEFAULT_MAX_RECORD_COUNT);
+			// TODO FIXME not yet re-implemented
+			throw new Error("not yet implemented");
+//			TransitivityResult tr =
+//				new TransitivityResult(trJob.getModel(), trJob.getDiffer(),
+//						trJob.getMatch(), compactedCeIter);
+//
+//			ownJob.updateStepInfo(40);
+//			log.fine("serialize to " + tsd.serializationType + "format");
+//
+//			TransitivityResultCompositeSerializer sr =
+//				getTransitivityResultSerializer(tsd.serializationType);
+//			sr.serialize(tr, analysisResultFileName, DEFAULT_MAX_RECORD_COUNT);
 
 		} catch (Exception e) {
 			log.severe(e.toString());
@@ -199,22 +202,25 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 			}
 			return;
 		}
-		publishStatus(new Long(tsd.ownId));
-		try {
-			if (ownJob != null)
-				ownJob.markAsCompleted();
-		} catch (RemoteException e1) {
-			log.severe(e1.toString());
-		}
-		log.fine(">>> onMessage");
-		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
-		return;
+		// TODO FIXME not yet re-implemented
+//		throw new Error("not yet implemented");
+//		publishStatus(new Long(tsd.ownId));
+//		try {
+//			if (ownJob != null)
+//				ownJob.markAsCompleted();
+//		} catch (RemoteException e1) {
+//			log.severe(e1.toString());
+//		}
+//		log.fine(">>> onMessage");
+//		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+//		return;
 	} // onMessage(Message)
 
 	public void ejbRemove() {
 		log.fine("ejbRemove()");
 	}
 
+	@SuppressWarnings("unused")
 	private void publishStatus(Long ownId) {
 		TopicConnection conn = null;
 		TopicSession session = null;

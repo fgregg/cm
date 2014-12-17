@@ -21,38 +21,22 @@ import javax.jms.ObjectMessage;
 
 
 /**
- * A toy example of a long-running backend process. The process accepts an
- * array of integers and for each integer in the array, it sleeps 0.5 seconds
- * (the sleep interval is independent of the element value -- for example, the
- * array may be initialized to all zeros.)</p>
- * <p>
- * As the process progresses, it keeps track of its work via a OabaJob record.
- * When it first receives a batch requested, the process marks the record as
- * started. After every 10 iterations, the process updates the fraction of the
- * job which has been completed. When the job is finished successfully, the
- * process marks the record as completed.</p>
- * <p>
- * The process may be stopped before completion by marking the marking the
- * OabaJob record as 'ABORT_REQUESTED'. The next time the process tries to
- * update the record, it will stop further processing and mark the record as
- * aborted. In this case, the fraction of work actually completed may be higher
- * than the amount recorded by the process.
  * 
  * @version $Revision: 1.3 $ $Date: 2010/10/21 17:40:37 $
  * @author rphall
  */
-public class TransitivityStatusListener implements MessageDrivenBean, MessageListener {
+public class TransitivityStatusListenerMDB implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(TransitivityStatusListener.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransitivityStatusListener.class.getName());
+	private static final Logger log = Logger.getLogger(TransitivityStatusListenerMDB.class.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransitivityStatusListenerMDB.class.getName());
 
 	private transient MessageDrivenContext mdc = null;
 
 	/**
 	 * Constructor, which is public and takes no arguments.
 	 */
-	public TransitivityStatusListener() {
+	public TransitivityStatusListenerMDB() {
     	log.fine("constructor");
 	}
 
@@ -96,5 +80,5 @@ public class TransitivityStatusListener implements MessageDrivenBean, MessageLis
 		log.fine("ejbRemove()");
 	}
 
-} // TransitivityStatusListener
+} // TransitivityStatusListenerMDB
 

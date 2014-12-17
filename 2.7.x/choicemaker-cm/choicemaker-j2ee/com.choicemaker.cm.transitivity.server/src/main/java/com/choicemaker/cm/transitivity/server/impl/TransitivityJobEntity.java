@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import java.io.File;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
@@ -22,7 +24,6 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
@@ -43,7 +44,7 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 				query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID) })
 @Entity
 @DiscriminatorValue(value = TransitivityJobJPA.DISCRIMINATOR_VALUE)
-public class TransitivityJobEntity extends OabaJobEntity implements
+public class TransitivityJobEntity extends BatchJobEntity implements
 		TransitivityJob {
 
 	private static final long serialVersionUID = 271L;
@@ -99,33 +100,32 @@ public class TransitivityJobEntity extends OabaJobEntity implements
 		throw new Error("not implemented");
 	}
 
-	@Override
-	public String getModel() {
-		throw new Error("not implemented");
-	}
-
-	@Override
-	public float getDiffer() {
-		// TODO
-		throw new Error("not implemented");
-	}
-
-	@Override
-	public float getMatch() {
-		// TODO
-		throw new Error("not implemented");
+	void setWorkingDirectory(File workingDir) {
+		final String wd = workingDir == null ? "null" : workingDir.toString();
+		if (workingDir == null || !workingDir.exists()
+				|| !workingDir.isDirectory()) {
+			String msg =
+				"Working directory '" + wd
+						+ "' is null, does not exist, or is not a directory";
+			throw new IllegalArgumentException(msg);
+		}
+		if (!workingDir.canRead() || !workingDir.canWrite()) {
+			String msg =
+				"Working directory '" + wd
+						+ "' is not readable or not writeable";
+			throw new IllegalArgumentException(msg);
+		}
+		this.workingDirectory = workingDir.getAbsolutePath();
 	}
 
 	@Override
 	public long getTransitivityParametersId() {
-		// TODO
-		throw new Error("not implemented");
+		return super.getParametersId();
 	}
 
 	@Override
 	public long getTransitivitySettingsId() {
-		// TODO
-		throw new Error("not implemented");
+		return super.getSettingsId();
 	}
 
 } // TransitivityJobEntity

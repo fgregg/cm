@@ -44,7 +44,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessi
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
 /**
- * This is the Matcher for the Transitivity Engine.  It is called by TransMatchScheduler.
+ * This is the Matcher for the Transitivity Engine.  It is called by TransMatchSchedulerMDB.
  * 
  * @author pcheung
  *
@@ -55,12 +55,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class TransMatcher extends AbstractMatcher  implements MessageListener {
+public class TransMatcherMDB extends AbstractMatcher  implements MessageListener {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(TransMatcher.class.getName());
+	private static final Logger log = Logger.getLogger(TransMatcherMDB.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ TransMatcher.class.getName());
+			+ TransMatcherMDB.class.getName());
 
 	private static final int INTERVAL = 50000;
 
@@ -161,7 +161,7 @@ public class TransMatcher extends AbstractMatcher  implements MessageListener {
 		if (matches.size()==0) {
 			log.severe("No matches found for this comparison set.");
 			log.severe("Set: " + cSet.writeDebug());
-			throw new IllegalStateException ("Invalid comparison set in TransMatcher");
+			throw new IllegalStateException ("Invalid comparison set in TransMatcherMDB");
 		}
 		
 		return matches;

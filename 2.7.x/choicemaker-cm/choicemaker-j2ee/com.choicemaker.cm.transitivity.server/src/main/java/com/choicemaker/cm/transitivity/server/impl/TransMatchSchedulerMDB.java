@@ -44,13 +44,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessi
 				propertyValue = "java:/choicemaker/urm/jms/transMatchSchedulerQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class TransMatchScheduler extends AbstractScheduler implements MessageListener {
+public class TransMatchSchedulerMDB extends AbstractScheduler implements MessageListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger
-			.getLogger(TransMatchScheduler.class.getName());
+			.getLogger(TransMatchSchedulerMDB.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ TransMatchScheduler.class.getName());
+			+ TransMatchSchedulerMDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;

@@ -11,99 +11,103 @@
 package com.choicemaker.cm.transitivity.server.ejb;
 
 import java.rmi.RemoteException;
-import java.security.AccessControlException;
+import java.sql.SQLException;
 
+import javax.ejb.CreateException;
+import javax.ejb.FinderException;
 import javax.ejb.Local;
+import javax.jms.JMSException;
+import javax.naming.NamingException;
 
-import com.choicemaker.cm.core.DatabaseException;
-import com.choicemaker.cm.core.InvalidModelException;
-import com.choicemaker.cm.core.InvalidProfileException;
-import com.choicemaker.cm.core.Profile;
-import com.choicemaker.cm.core.UnderspecifiedProfileException;
-import com.choicemaker.cm.core.base.MatchCandidate;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 
 /**
- * This session bean starts TE for online matching.
+ * This session bean allows the user to start, query, and get result from the
+ * TE. It is to be used with the OABA.
  * 
  * @author pcheung
  *
- * ChoiceMaker Technologies, Inc.
  */
 @Local
 public interface TransitivityService {
 
-	  String DEFAULT_EJB_REF_NAME = "ejb/TransitivityService";
-	  String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
+	String DEFAULT_EJB_REF_NAME = "ejb/TransitivityService";
+	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
+
+	// /**
+	// * This method starts the transitivity engine.
+	// * WARNINGS:
+	// * 1. only call this after the OABA has finished.
+	// * 2. use the same parameters as the OABA.
+	// *
+	// * @param jobID - job id of the OABA job
+	// * @param staging - staging record source
+	// * @param master - master record source
+	// * @param lowThreshold - probability under which a pair is considered
+	// "differ".
+	// * @param highThreshold - probability above which a pair is considered
+	// "match".
+	// * @param modelConfigurationName - probability accessProvider of the stage
+	// record source.
+	// * @param masterModelName - probability accessProvider of the master
+	// record source.
+	// * @return int - the transitivity job id.
+	// * @throws RemoteException
+	// * @throws CreateException
+	// * @throws NamingException
+	// * @throws JMSException
+	// * @throws SQLException
+	// */
+	// /*
+	// public long startTransitivity (long jobID,
+	// ISerializableRecordSource staging,
+	// ISerializableRecordSource master,
+	// float lowThreshold,
+	// float highThreshold,
+	// String modelConfigurationName, String masterModelName)
+	// throws RemoteException, CreateException, NamingException, JMSException,
+	// SQLException;
+	// */
 
 	/**
-	 * Finds matches and possible matches.
-	 * 
-	 * @param   profile  The query profile. E.g., looking for 'JIM SMITH'.
-	 * @param   constraint  Constraints on records to return. The actual semantics and syntax is implementation dependent.
-	 *            A typical example is to query only for records in certain states, e.g., active.
-	 * @param   probabilityModel  The name of the probability accessProvider to use. By convention, "" denotes the default accessProvider.
-	 * @param   differThreshold  The differ threshold.
-	 *             The value must satisfy <code>0 &lt; differThreshold &lt;=
-	 *             highProbabilityThreshold</code>.
-	 * @param    matchThreshold  The match threshold. See above for explanation and constraints.
-	 * @param    maxNumMatches The maximum number of matches that ChoiceMaker may return.
-	 *             See also <code>UnderspecifiedProfileException</code> below.
-	 * @param    returnDataFormat  The format in which to return the actual record data, e.g., XML or bean. No
-	 *             data is returned if <code>returnDataFormat</code> is <code>null</code> or an unknown value.
-	 * @param    purpose  An arbitrary string that is stored and may be used for
-	 *             later reporting.
-	 * @param	 compact - set this to true if you want the CompositeEntity in the
-	 * 				TransitivityResult to be compacted before returning. 
-	 * @return   A TransitivityResult object
-	 * @throws    UnderspecifiedProfileException  If the profile is not specific enough (e.g., all JIMs in NYC)
-	 *             to perform blocking given <code>maxNumMatches</code>.
-	 * @throws   InvalidModelException  if the accessProvider does not exist or is not properly configured.
-	 * @throws   InvalidProfileException  if <code>profile</code> does not adhere to above.
-	 * @throws   IllegalArgumentException if the specified probability accessProvider specified does not exist or the
-	 *             values of <code>differThreshold</code> and <code>matchThreshold</code> don't satisfy the constraints.
-	 * @throws   DatabaseException If a database error prevents ChoiceMaker from fulfilling the request.
-	 * @throws   AccessControlException  If authentication or authorization fails.
-	 * @throws   RemoteException  If a communication problem occurs.
+	 * This method starts the transitivity engine. WARNINGS: 1. only call this
+	 * after the OABA has finished. 2. use the same OAB jobID.
 	 */
-	public TransitivityResult findClusters(
-		Profile profile,
-		Object constraint,
-		String probabilityModel,
-		float differThreshold,
-		float matchThreshold,
-		int maxNumMatches,
-		String returnDataFormat,
-		String purpose,
-		boolean compact)
-		throws AccessControlException, InvalidProfileException, RemoteException, 
-		InvalidModelException, UnderspecifiedProfileException, DatabaseException;
-		
-	
-	/** This method takes the output of findMatches and runs the match result through the
-	 * Transitivity Engine.
+	public long startTransitivity(long jobID) throws RemoteException,
+			CreateException, NamingException, JMSException, SQLException;
+
+	/**
+	 * This method queries the current status of the TE job.
 	 * 
-	 * @param profile - contains the query record
-	 * @param candidates - match candidates to the query record
-	 * @param modelName - probability accessProvider name
-	 * @param differThreshold - differ threshold
-	 * @param matchThreshold - match threshold
-	 * @param compact - set this to true if you want the CompositeEntity in the
-	 * 			TransitivityResult to be compacted before returning. 
-	 * @return A TransitivityResult object
-	 * @throws   RemoteException  If a communication problem occurs.
-	 * @throws InvalidProfileException
+	 * @param jobID
+	 * @return BatchJobStatus
+	 * @throws RemoteException
+	 * @throws CreateException
+	 * @throws NamingException
+	 * @throws JMSException
+	 * @throws FinderException
+	 */
+	public BatchJobStatus getStatus(long jobID) throws JMSException,
+			FinderException, RemoteException, CreateException, NamingException,
+			SQLException;
+
+	/**
+	 * This method returns the TransitivityResult to the client.
+	 * 
+	 * @param jobID
+	 *            - TE job id
+	 * @param compact
+	 *            - true if you want the graphs be compacted first
+	 * @return TransitivityResult
+	 * @throws RemoteException
+	 * @throws FinderException
+	 * @throws NamingException
 	 * @throws TransitivityException
-	 * @throws InvalidModelException  if the accessProvider does not exist or is not properly configured.
 	 */
-	public TransitivityResult findClusters(
-		Profile profile,
-		MatchCandidate[] candidates,
-		String modelName,
-		float differThreshold,
-		float matchThreshold,
-		boolean compact) throws 
-		RemoteException, InvalidProfileException, TransitivityException, InvalidModelException;
+	public TransitivityResult getTransitivityResult(long jobID, boolean compact)
+			throws RemoteException, FinderException, NamingException,
+			TransitivityException;
 
 }

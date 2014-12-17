@@ -21,7 +21,7 @@ import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityOABAService;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -82,7 +82,7 @@ public class BatchQueryListener extends WorkflowControlListener{
 						
 		urmJob.markAsTransOABA();
 
-		TransitivityOABAService ts = Single.getInst().getTransitivityOABAService();
+		TransitivityService ts = Single.getInst().getTransitivityOABAService();
 		
 		if( urmJob.markAbortedIfRequested())
 			throw new JobAlreadyAbortedException();

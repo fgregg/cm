@@ -165,7 +165,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 //	private void sendToTransitivity (TransitivityJobData d) throws ConfigException, CmRuntimeException  {
 //		Queue queue = Single.getInst().getTransitivityMessageQueue();
 //		Single.getInst().sendMessage(queue, d);
-//		log.info ("send To TransitivityBean ");
+//		log.info ("send To StartTransitivityMDB ");
 //	}
 
 	/**

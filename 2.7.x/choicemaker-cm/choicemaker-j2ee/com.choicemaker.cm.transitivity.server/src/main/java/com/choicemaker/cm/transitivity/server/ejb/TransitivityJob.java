@@ -30,15 +30,4 @@ public interface TransitivityJob extends BatchJob {
 
 	long getUrmId();
 
-	// -- Deprecated methods
-
-	@Deprecated
-	String getModel();
-
-	@Deprecated
-	float getDiffer();
-
-	@Deprecated
-	float getMatch();
-
 }

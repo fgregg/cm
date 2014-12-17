@@ -56,13 +56,13 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class TransMatchDedup implements MessageListener, Serializable {
+public class TransMatchDedupMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(TransMatchDedup.class
+	private static final Logger log = Logger.getLogger(TransMatchDedupMDB.class
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ TransMatchDedup.class.getName());
+			+ TransMatchDedupMDB.class.getName());
 	
 	// @PersistenceContext(unitName = "oaba")
 //	private EntityManager em;
@@ -94,7 +94,7 @@ public class TransMatchDedup implements MessageListener, Serializable {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 
-		log.fine("MatchDedupOABA2 In onMessage");
+		log.fine("MatchDedupMDB In onMessage");
 
 		TransitivityJob batchJob = null;
 		try {

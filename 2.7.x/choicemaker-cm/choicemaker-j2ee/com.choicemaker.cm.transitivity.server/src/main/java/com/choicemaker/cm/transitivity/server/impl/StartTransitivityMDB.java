@@ -61,11 +61,11 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 				propertyValue = "java:/choicemaker/urm/jms/transitivityQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class TransitivityBean implements MessageListener, Serializable {
+public class StartTransitivityMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(TransitivityBean.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransitivityBean.class.getName());
+	private static final Logger log = Logger.getLogger(StartTransitivityMDB.class.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + StartTransitivityMDB.class.getName());
 
 //	@EJB
 	private TransitivityJobControllerBean jobController;
@@ -90,7 +90,7 @@ public class TransitivityBean implements MessageListener, Serializable {
 		ObjectMessage msg = null;
 		TransitivityJob transJob = null;
 
-		log.fine("TransitivityBean In onMessage");
+		log.fine("StartTransitivityMDB In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -244,7 +244,7 @@ public class TransitivityBean implements MessageListener, Serializable {
 	}
 
 
-	/** This method sends a message to the UpdateStatus message bean.
+	/** This method sends a message to the UpdateStatusMDB message bean.
 	 *
 	 * @param jobID
 	 * @param percentComplete
