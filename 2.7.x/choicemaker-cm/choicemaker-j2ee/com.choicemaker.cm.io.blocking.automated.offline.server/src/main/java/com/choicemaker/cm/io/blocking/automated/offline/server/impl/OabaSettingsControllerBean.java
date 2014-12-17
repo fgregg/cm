@@ -135,7 +135,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 	@Override
 	public OabaSettings findOabaSettingsByJobId(long jobId) {
 		OabaSettings retVal = null;
-		OabaJob oabaJob = jobController.find(jobId);
+		OabaJob oabaJob = jobController.findOabaJob(jobId);
 		if (oabaJob != null) {
 			long settingsId = oabaJob.getOabaSettingsId();
 			retVal = findOabaSettings(settingsId);

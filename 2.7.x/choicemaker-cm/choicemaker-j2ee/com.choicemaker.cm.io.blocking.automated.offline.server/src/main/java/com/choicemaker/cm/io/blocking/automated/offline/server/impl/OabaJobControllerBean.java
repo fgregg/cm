@@ -15,22 +15,24 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 
 /**
- * A stateless EJB used to manager the persistence of OabaJobEntity instances.
+ * A stateless EJB used to manage the persistence of OabaJobEntity instances.
  * 
  * @author rphall
  */
 @Stateless
 public class OabaJobControllerBean {
-	
-	private static final Logger logger = Logger.getLogger(OabaJobControllerBean.class.getName());
+
+	private static final Logger logger = Logger
+			.getLogger(OabaJobControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -46,9 +48,6 @@ public class OabaJobControllerBean {
 
 	@EJB
 	private OabaProcessingControllerBean processingController;
-	
-//	@Resource
-//	UserTransaction utx;
 
 	protected OabaJobEntity getBean(OabaJob oabaJob) {
 		OabaJobEntity retVal = null;
@@ -60,7 +59,8 @@ public class OabaJobControllerBean {
 				if (OabaJobEntity.isPersistent(oabaJob)) {
 					retVal = em.find(OabaJobEntity.class, jobId);
 					if (retVal == null) {
-						String msg = "Unable to find persistent OABA job: " + jobId;
+						String msg =
+							"Unable to find persistent OABA job: " + jobId;
 						logger.warning(msg);
 					}
 				}
@@ -72,9 +72,9 @@ public class OabaJobControllerBean {
 		return retVal;
 	}
 
-	public OabaJob createPersistentBatchJob(String externalID,
-			OabaParameters params, OabaSettings settings,
-			ServerConfiguration sc) throws ServerConfigurationException {
+	public OabaJob createPersistentOabaJob(String externalID,
+			OabaParameters params, OabaSettings settings, ServerConfiguration sc)
+			throws ServerConfigurationException {
 
 		if (params == null || settings == null || sc == null) {
 			throw new IllegalArgumentException("null argument");
@@ -84,19 +84,21 @@ public class OabaJobControllerBean {
 		paramsController.save(params);
 		oabaSettingsController.save(settings);
 		serverManager.save(sc);
-		
-		OabaJobEntity retVal = new OabaJobEntity(params, settings, sc, externalID);		
+
+		OabaJobEntity retVal =
+			new OabaJobEntity(params, settings, sc, externalID);
 		em.persist(retVal);
 		assert OabaJobEntity.isPersistent(retVal);
 
 		// Create a new processing entry
 		OabaProcessing processing =
-			processingController.createPersistentProcessingLogForBatchJob(retVal);
+			processingController
+					.createPersistentProcessingLogForBatchJob(retVal);
 
 		// Create the working directory
 		File workingDir = OabaFileUtils.createWorkingDirectory(sc, retVal);
 		retVal.setWorkingDirectory(workingDir);
-		
+
 		// Log the job info
 		logger.info("Oaba job: " + retVal.toString());
 		logger.info("Oaba parameters: " + params.toString());
@@ -111,16 +113,19 @@ public class OabaJobControllerBean {
 		return save(getBean(batchJob));
 	}
 
-	public OabaJobEntity save(OabaJobEntity batchJob) {
-		if (batchJob.getId() == 0) {
-			em.persist(batchJob);
-		} else {
-			batchJob = em.merge(batchJob);
+	public OabaJobEntity save(OabaJobEntity job) {
+		if (job == null) {
+			throw new IllegalArgumentException("null job");
 		}
-		return batchJob;
+		if (job.getId() == 0) {
+			em.persist(job);
+		} else {
+			job = em.merge(job);
+		}
+		return job;
 	}
 
-	public OabaJob find(long id) {
+	public OabaJob findOabaJob(long id) {
 		OabaJobEntity batchJob = em.find(OabaJobEntity.class, id);
 		return batchJob;
 	}
@@ -128,15 +133,15 @@ public class OabaJobControllerBean {
 	public List<OabaJob> findAll() {
 		Query query = em.createNamedQuery(OabaJobJPA.QN_OABAJOB_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<OabaJob> entries = query.getResultList();
-		if (entries == null) {
-			entries = new ArrayList<OabaJob>();
+		List<OabaJob> retVal = query.getResultList();
+		if (retVal == null) {
+			retVal = new ArrayList<OabaJob>();
 		}
-		return entries;
+		return retVal;
 	}
-	
-	public void delete(BatchJob oabaJob) {
-		if (OabaJobEntity.isPersistent(oabaJob)) {
+
+	public void delete(OabaJob oabaJob) {
+		if (BatchJobEntity.isPersistent(oabaJob)) {
 			OabaJobEntity bean = em.find(OabaJobEntity.class, oabaJob.getId());
 			delete(bean);
 		}

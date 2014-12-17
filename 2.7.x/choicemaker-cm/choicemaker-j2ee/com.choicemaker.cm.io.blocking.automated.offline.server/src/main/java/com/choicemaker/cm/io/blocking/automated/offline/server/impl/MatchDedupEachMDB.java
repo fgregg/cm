@@ -47,7 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
 
 /**
  * This bean dedups the temporary match file produces by a processor. It is
- * called by MatchDedupOABA2 and it calls it back when it is done.
+ * called by MatchDedupMDB and it calls it back when it is done.
  *
  * @author pcheung
  *
@@ -58,13 +58,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
 				propertyValue = "java:/choicemaker/urm/jms/matchDedupEachQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class MatchDedupEach implements MessageListener, Serializable {
+public class MatchDedupEachMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(MatchDedupEach.class
+	private static final Logger log = Logger.getLogger(MatchDedupEachMDB.class
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ MatchDedupEach.class.getName());
+			+ MatchDedupEachMDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
@@ -94,7 +94,7 @@ public class MatchDedupEach implements MessageListener, Serializable {
 		ObjectMessage msg = null;
 		OabaJob oabaJob = null;
 
-		log.fine("MatchDedupEach In onMessage");
+		log.fine("MatchDedupEachMDB In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -102,7 +102,7 @@ public class MatchDedupEach implements MessageListener, Serializable {
 				OabaJobMessage data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				oabaJob = jobController.find(jobId);
+				oabaJob = jobController.findOabaJob(jobId);
 				final OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				final OabaProcessing processingEntry =

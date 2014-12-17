@@ -172,7 +172,7 @@ public class ServerConfigurationControllerBean implements
 	@Override
 	public ServerConfiguration findServerConfigurationByJobId(long jobId) {
 		ServerConfiguration retVal = null;
-		OabaJob oabaJob = jobController.find(jobId);
+		OabaJob oabaJob = jobController.findOabaJob(jobId);
 		if (oabaJob != null) {
 			long serverId = oabaJob.getServerId();
 			retVal = find(serverId);

@@ -42,7 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsC
  * done, it calls the MatchDedup bean.
  * 
  * This version reads in one chunk at a time and splits the trees for processing
- * by different Matcher2 beans.
+ * by different MatcherMDB beans.
  * 
  * @author pcheung
  *
@@ -55,13 +55,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsC
 				propertyValue = "java:/choicemaker/urm/jms/matchSchedulerQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class MatchScheduler2 extends AbstractScheduler {
+public class MatchSchedulerMDB extends AbstractScheduler {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(MatchScheduler2.class
+	private static final Logger log = Logger.getLogger(MatchSchedulerMDB.class
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ MatchScheduler2.class.getName());
+			+ MatchSchedulerMDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
@@ -133,7 +133,7 @@ public class MatchScheduler2 extends AbstractScheduler {
 		log.info("cleanUp");
 
 		final long jobId = data.jobID;
-		OabaJob oabaJob = getJobController().find(jobId);
+		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 		OabaParameters params =
 			getParametersController().findBatchParamsByJobId(jobId);
 		ServerConfiguration serverConfig =

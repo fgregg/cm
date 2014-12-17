@@ -12,9 +12,9 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BlockingOABA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatch;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BlockingMDB;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -33,7 +33,7 @@ public class StartOabaIT extends
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
-	 * BlockingOABA, SingleRecordMatch and UpdateStatus message beans. This
+	 * BlockingMDB, SingleRecordMatchMDB and UpdateStatusMDB message beans. This
 	 * allows other classes to attach to the block, singleRecordMatch and
 	 * updateStatus queues for testing.
 	 */
@@ -41,8 +41,8 @@ public class StartOabaIT extends
 	public static EnterpriseArchive createEarArchive() {
 		Class<?>[] removedClasses =
 			new Class<?>[] {
-					BlockingOABA.class, SingleRecordMatch.class,
-					UpdateStatus.class };
+					BlockingMDB.class, SingleRecordMatchMDB.class,
+					UpdateStatusMDB.class };
 		return OabaDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}

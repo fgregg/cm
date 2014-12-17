@@ -77,7 +77,7 @@ public class OabaParametersControllerBean {
 
 	public OabaParameters findBatchParamsByJobId(long jobId) {
 		OabaParameters retVal = null;
-		OabaJob oabaJob = jobController.find(jobId);
+		OabaJob oabaJob = jobController.findOabaJob(jobId);
 		if (oabaJob != null) {
 			long paramsId = oabaJob.getOabaParametersId();
 			retVal = find(paramsId);

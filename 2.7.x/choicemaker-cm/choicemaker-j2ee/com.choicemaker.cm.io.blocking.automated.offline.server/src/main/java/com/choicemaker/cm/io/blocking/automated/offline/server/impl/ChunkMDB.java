@@ -52,13 +52,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
  *
  */
 @Deprecated
-public class ChunkOABA implements MessageListener, Serializable {
+public class ChunkMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(ChunkOABA.class
+	private static final Logger log = Logger.getLogger(ChunkMDB.class
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ ChunkOABA.class.getName());
+			+ ChunkMDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
@@ -92,7 +92,7 @@ public class ChunkOABA implements MessageListener, Serializable {
 		OabaJobMessage data = null;
 		OabaJob oabaJob = null;
 
-		log.info("ChunkOABA In onMessage");
+		log.info("ChunkMDB In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -100,7 +100,7 @@ public class ChunkOABA implements MessageListener, Serializable {
 				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				oabaJob = jobController.find(jobId);
+				oabaJob = jobController.findOabaJob(jobId);
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaProcessing processingEntry =

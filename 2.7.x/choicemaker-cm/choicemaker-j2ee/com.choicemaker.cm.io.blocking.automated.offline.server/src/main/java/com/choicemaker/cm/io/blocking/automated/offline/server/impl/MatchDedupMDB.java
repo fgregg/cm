@@ -75,13 +75,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
 				propertyValue = "java:/choicemaker/urm/jms/matchDedupQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class MatchDedupOABA2 implements MessageListener, Serializable {
+public class MatchDedupMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(MatchDedupOABA2.class
+	private static final Logger log = Logger.getLogger(MatchDedupMDB.class
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ MatchDedupOABA2.class.getName());
+			+ MatchDedupMDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
@@ -110,7 +110,7 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 	@Inject
 	private JMSContext jmsContext;
 
-	// This counts the number of messages sent to MatchDedupEach and number of
+	// This counts the number of messages sent to MatchDedupEachMDB and number of
 	// done messages got back. Requires a Singleton message driven bean
 	private int countMessages;
 
@@ -123,7 +123,7 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 
-		log.fine("MatchDedupOABA2 In onMessage");
+		log.fine("MatchDedupMDB In onMessage");
 
 		OabaJob oabaJob = null;
 		try {
@@ -132,21 +132,21 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 				Object o = msg.getObject();
 
 				if (o instanceof OabaJobMessage) {
-					// coming in from MatchScheduler2
+					// coming in from MatchSchedulerMDB
 					// need to dedup each of the temp files from the processors
 					countMessages = 0;
 					OabaJobMessage data = (OabaJobMessage) o;
 					long jobId = data.jobID;
-					oabaJob = jobController.find(jobId);
+					oabaJob = jobController.findOabaJob(jobId);
 					handleDedupEach(data, oabaJob);
 
 				} else if (o instanceof MatchWriterMessage) {
-					// coming in from MatchDedupEach
+					// coming in from MatchDedupEachMDB
 					// need to merge the deduped temp files when all the
 					// processors are done
 					MatchWriterMessage data = (MatchWriterMessage) o;
 					long jobId = data.jobID;
-					oabaJob = jobController.find(jobId);
+					oabaJob = jobController.findOabaJob(jobId);
 					countMessages--;
 					if (countMessages == 0) {
 						handleMerge(data);
@@ -183,7 +183,7 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 	private void handleMerge(final MatchWriterMessage d) throws BlockingException {
 
 		final long jobId = d.jobID;
-		final OabaJob oabaJob = jobController.find(jobId);
+		final OabaJob oabaJob = jobController.findOabaJob(jobId);
 		final OabaParameters params =
 			paramsController.findBatchParamsByJobId(jobId);
 		final ServerConfiguration serverConfig =
@@ -216,7 +216,7 @@ public class MatchDedupOABA2 implements MessageListener, Serializable {
 	}
 	
 	/**
-	 * This method sends messages to MatchDedupEach to dedup individual match
+	 * This method sends messages to MatchDedupEachMDB to dedup individual match
 	 * files.
 	 */
 	private void handleDedupEach(final OabaJobMessage data, final OabaJob oabaJob)

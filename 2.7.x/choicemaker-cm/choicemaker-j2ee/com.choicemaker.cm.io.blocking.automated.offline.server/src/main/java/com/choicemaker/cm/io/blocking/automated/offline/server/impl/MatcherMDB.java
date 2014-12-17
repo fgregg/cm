@@ -61,12 +61,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 				propertyValue = "java:/choicemaker/urm/jms/matcherQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class Matcher2 extends AbstractMatcher {
+public class MatcherMDB extends AbstractMatcher {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(Matcher2.class.getName());
+	private static final Logger log = Logger.getLogger(MatcherMDB.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ Matcher2.class.getName());
+			+ MatcherMDB.class.getName());
 
 	private static final int INTERVAL = 50000;
 
@@ -201,7 +201,7 @@ public class Matcher2 extends AbstractMatcher {
 
 		// first figure out the correct file for this processor
 		final long jobId = data.jobID;
-		OabaJob oabaJob = getJobController().find(jobId);
+		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 		IMatchRecord2Sink mSink =
 			OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(data.treeInd);
 		IComparableSink sink = new ComparableMRSink(mSink);

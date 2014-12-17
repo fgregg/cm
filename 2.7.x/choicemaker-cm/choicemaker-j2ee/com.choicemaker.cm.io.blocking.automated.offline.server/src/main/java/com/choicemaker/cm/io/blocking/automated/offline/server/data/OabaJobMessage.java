@@ -17,7 +17,7 @@ import java.io.Serializable;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 
 /**
- * This is the data object that gets passed to the StartOABA message bean.
+ * This is the data object that gets passed to the StartOabaMDB message bean.
  * 
  * @author pcheung
  *

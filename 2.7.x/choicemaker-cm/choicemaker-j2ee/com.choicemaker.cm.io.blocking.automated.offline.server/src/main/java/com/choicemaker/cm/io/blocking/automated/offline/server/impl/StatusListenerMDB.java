@@ -31,11 +31,11 @@ import javax.persistence.PersistenceContext;
 				propertyValue = "java:/choicemaker/urm/jms/statusTopic"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Topic") })
-public class StatusListener implements MessageListener, Serializable {
+public class StatusListenerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(StatusListener.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + StatusListener.class.getName());
+	private static final Logger log = Logger.getLogger(StatusListenerMDB.class.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + StatusListenerMDB.class.getName());
 
 	@PersistenceContext (unitName = "oaba")
 	private EntityManager em;
@@ -72,5 +72,5 @@ public class StatusListener implements MessageListener, Serializable {
     return;
 	} // onMessage(Message)
 
-} // StatusListener
+} // StatusListenerMDB
 

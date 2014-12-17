@@ -89,12 +89,12 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
 				propertyValue = "java:/choicemaker/urm/jms/singleMatchQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class SingleRecordMatch implements MessageListener, Serializable {
+public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(SingleRecordMatch.class.getName());
+	private static final Logger log = Logger.getLogger(SingleRecordMatchMDB.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ SingleRecordMatch.class.getName());
+			+ SingleRecordMatchMDB.class.getName());
 
 	public static final String DATABASE_ACCESSOR =
 		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
@@ -134,7 +134,7 @@ public class SingleRecordMatch implements MessageListener, Serializable {
 				msg = (ObjectMessage) inMessage;
 				data = (OabaJobMessage) msg.getObject();
 				final long jobId = data.jobID;
-				oabaJob = jobController.find(jobId);
+				oabaJob = jobController.findOabaJob(jobId);
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings settings =

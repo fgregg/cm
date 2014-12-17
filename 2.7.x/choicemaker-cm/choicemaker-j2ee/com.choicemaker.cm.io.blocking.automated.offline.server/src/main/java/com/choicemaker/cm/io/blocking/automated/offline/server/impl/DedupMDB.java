@@ -54,13 +54,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupS
 				propertyValue = "java:/choicemaker/urm/jms/dedupQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class DedupOABA implements MessageListener, Serializable {
+public class DedupMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(DedupOABA.class
+	private static final Logger log = Logger.getLogger(DedupMDB.class
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ DedupOABA.class.getName());
+			+ DedupMDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
@@ -92,7 +92,7 @@ public class DedupOABA implements MessageListener, Serializable {
 		OabaJobMessage data = null;
 		OabaJob oabaJob = null;
 
-		log.info("DedupOABA In onMessage");
+		log.info("DedupMDB In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -100,7 +100,7 @@ public class DedupOABA implements MessageListener, Serializable {
 				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				oabaJob = jobController.find(jobId);
+				oabaJob = jobController.findOabaJob(jobId);
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =
@@ -186,7 +186,7 @@ public class DedupOABA implements MessageListener, Serializable {
 	}
 
 
-	/** This method sends a message to the UpdateStatus message bean.
+	/** This method sends a message to the UpdateStatusMDB message bean.
 	 *
 	 * @param jobID
 	 * @param percentComplete
@@ -197,7 +197,7 @@ public class DedupOABA implements MessageListener, Serializable {
 	}
 
 
-	/** This method sends a message to the DedupOABA message bean.
+	/** This method sends a message to the DedupMDB message bean.
 	 *
 	 * @param request
 	 */

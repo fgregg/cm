@@ -265,12 +265,12 @@ public class OabaServiceBean implements OabaService {
 
 		// Create and persist the job and its associated objects
 		BatchJob oabaJob =
-			jobController.createPersistentBatchJob(externalID, batchParams,
+			jobController.createPersistentOabaJob(externalID, batchParams,
 					oabaSettings, serverConfiguration);
 		final long retVal = oabaJob.getId();
 		assert OabaJobEntity.INVALID_ID != retVal;
 
-		// Mark the job as queued and start processing by the StartOABA EJB
+		// Mark the job as queued and start processing by the StartOabaMDB EJB
 		oabaJob.markAsQueued();
 		sendToStartOABA(retVal);
 
@@ -293,7 +293,7 @@ public class OabaServiceBean implements OabaService {
 	 */
 	private int abortBatch(long jobID, boolean cleanStatus) {
 		logger.info("aborting job " + jobID + " " + cleanStatus);
-		OabaJob oabaJob = jobController.find(jobID);
+		OabaJob oabaJob = jobController.findOabaJob(jobID);
 		if (oabaJob == null) {
 			String msg = "No OABA job found: " + jobID;
 			logger.warning(msg);
@@ -310,19 +310,19 @@ public class OabaServiceBean implements OabaService {
 	}
 
 	public BatchJobStatus getStatus(long jobID) {
-		OabaJob oabaJob = jobController.find(jobID);
+		OabaJob oabaJob = jobController.findOabaJob(jobID);
 		BatchJobStatus status = new BatchJobStatus(oabaJob);
 		return status;
 	}
 
 	public String checkStatus(long jobID) {
-		BatchJob oabaJob = jobController.find(jobID);
+		BatchJob oabaJob = jobController.findOabaJob(jobID);
 		return oabaJob.getStatus();
 	}
 
 	public boolean removeDir(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
-		OabaJob job = jobController.find(jobID);
+		OabaJob job = jobController.findOabaJob(jobID);
 		return OabaFileUtils.removeTempDir(job);
 	}
 
@@ -335,7 +335,7 @@ public class OabaServiceBean implements OabaService {
 	 */
 	public int resumeJob(long jobID) {
 		int ret = 1;
-		OabaJob job = jobController.find(jobID);
+		OabaJob job = jobController.findOabaJob(jobID);
 		if (!job.getStarted().equals(BatchJob.STATUS_COMPLETED)
 				&& !job.getDescription().equals(BatchJob.STATUS_CLEAR)) {
 
@@ -368,7 +368,7 @@ public class OabaServiceBean implements OabaService {
 		MatchListSource mls = null;
 
 		// check to make sure the job is completed
-		OabaJob oabaJob = jobController.find(jobID);
+		OabaJob oabaJob = jobController.findOabaJob(jobID);
 		if (!oabaJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
@@ -388,7 +388,7 @@ public class OabaServiceBean implements OabaService {
 		MatchRecord2Source mrs = null;
 
 		// check to make sure the job is completed
-		OabaJob oabaJob = jobController.find(jobID);
+		OabaJob oabaJob = jobController.findOabaJob(jobID);
 		if (!oabaJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
@@ -400,7 +400,7 @@ public class OabaServiceBean implements OabaService {
 	}
 
 	/**
-	 * This method sends a message to the StartOABA message bean.
+	 * This method sends a message to the StartOabaMDB message bean.
 	 *
 	 * @param jobID
 	 *            the id of the job to be processed

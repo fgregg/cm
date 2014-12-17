@@ -12,9 +12,9 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ChunkOABA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ChunkOABA2;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ChunkMDB;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.Chunk2MDB;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -33,13 +33,13 @@ public class DedupOabaIT extends
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
-	 * ChunkOABA* and UpdateStatus message beans. This allows other classes to
+	 * ChunkMDB* and UpdateStatusMDB message beans. This allows other classes to
 	 * attach to the chunkQueue and update queues for testing.
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
 		Class<?>[] removedClasses = {
-				ChunkOABA.class, ChunkOABA2.class, UpdateStatus.class };
+				ChunkMDB.class, Chunk2MDB.class, UpdateStatusMDB.class };
 		return OabaDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}

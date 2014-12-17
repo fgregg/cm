@@ -63,11 +63,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
 				propertyValue = "java:/choicemaker/urm/jms/chunkQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class ChunkOABA2 implements MessageListener, Serializable {
+public class Chunk2MDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(ChunkOABA2.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + ChunkOABA2.class.getName());
+	private static final Logger log = Logger.getLogger(Chunk2MDB.class.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + Chunk2MDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
@@ -105,7 +105,7 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 		OabaJobMessage data = null;
 		OabaJob oabaJob = null;
 
-		log.fine("ChunkOABA In onMessage");
+		log.fine("ChunkMDB In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -113,7 +113,7 @@ public class ChunkOABA2 implements MessageListener, Serializable {
 				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				oabaJob = jobController.find(jobId);
+				oabaJob = jobController.findOabaJob(jobId);
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =

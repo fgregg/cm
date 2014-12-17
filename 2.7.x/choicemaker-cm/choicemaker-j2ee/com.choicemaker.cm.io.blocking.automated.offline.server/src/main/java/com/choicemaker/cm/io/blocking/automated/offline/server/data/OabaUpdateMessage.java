@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 import java.io.Serializable;
 
 /**
- * This is the data object that gets passed to the UpdateStatus message bean.
+ * This is the data object that gets passed to the UpdateStatusMDB message bean.
  * 
  * @author pcheung
  *

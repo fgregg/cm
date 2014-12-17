@@ -169,7 +169,7 @@ public class OabaTestUtils {
 			fail(e.toString());
 		}
 		assertTrue(INVALID_ID != jobId);
-		OabaJob batchJob = jobController.find(jobId);
+		OabaJob batchJob = jobController.findOabaJob(jobId);
 		assertTrue(batchJob != null);
 		te.add(batchJob);
 		assertTrue(externalId != null

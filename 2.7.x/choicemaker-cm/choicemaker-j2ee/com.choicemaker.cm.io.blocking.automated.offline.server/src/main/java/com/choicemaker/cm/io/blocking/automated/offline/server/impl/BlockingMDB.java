@@ -52,13 +52,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingSer
 				propertyValue = "java:/choicemaker/urm/jms/blockQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class BlockingOABA implements MessageListener, Serializable {
+public class BlockingMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(BlockingOABA.class
+	private static final Logger log = Logger.getLogger(BlockingMDB.class
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ BlockingOABA.class.getName());
+			+ BlockingMDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
@@ -92,7 +92,7 @@ public class BlockingOABA implements MessageListener, Serializable {
 		OabaJobMessage data = null;
 		OabaJob oabaJob = null;
 
-		log.info("BlockingOABA In onMessage");
+		log.info("BlockingMDB In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -100,7 +100,7 @@ public class BlockingOABA implements MessageListener, Serializable {
 				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				oabaJob = jobController.find(jobId);
+				oabaJob = jobController.findOabaJob(jobId);
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =

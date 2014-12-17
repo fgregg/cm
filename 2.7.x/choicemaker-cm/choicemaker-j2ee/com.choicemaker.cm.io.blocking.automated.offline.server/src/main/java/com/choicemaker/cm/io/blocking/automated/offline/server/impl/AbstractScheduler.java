@@ -107,7 +107,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		ObjectMessage msg = null;
 		OabaJob oabaJob = null;
 
-		getLogger().fine("MatchScheduler2 In onMessage");
+		getLogger().fine("MatchSchedulerMDB In onMessage");
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -117,7 +117,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 				if (o instanceof OabaJobMessage) {
 					final OabaJobMessage sd = (OabaJobMessage) o;
 					final long jobId = sd.jobID;
-					oabaJob = getJobController().find(jobId);
+					oabaJob = getJobController().findOabaJob(jobId);
 					OabaParameters params =
 						getParametersController().findBatchParamsByJobId(jobId);
 					OabaSettings oabaSettings =
@@ -208,7 +208,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 			throws BlockingException {
 
 		final long jobId = mwd.jobID;
-		OabaJob oabaJob = getJobController().find(jobId);
+		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 		OabaJobMessage sd = new OabaJobMessage(mwd);
 		OabaProcessing status = getProcessingController().findProcessingLogByJobId(jobId);
 
@@ -294,7 +294,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 		// init values
 		final long jobId = sd.jobID;
-		OabaJob oabaJob = getJobController().find(jobId);
+		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 		OabaProcessing status =
 			getProcessingController().findProcessingLogByJobId(jobId);
 
@@ -353,7 +353,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	protected final void noChunk(final OabaJobMessage sd) throws XmlConfException, BlockingException,
 			NamingException, JMSException {
 		final long jobId = sd.jobID;
-		OabaJob oabaJob = getJobController().find(jobId);
+		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 
 		// This is because tree ids start with 1 and not 0.
 		for (int i = 1; i <= numProcessors; i++) {
@@ -377,7 +377,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		getLogger().fine("startChunk " + currentChunk);
 
 		final long jobId = sd.jobID;
-		OabaJob oabaJob = getJobController().find(jobId);
+		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 		OabaParameters params =
 			getParametersController().findBatchParamsByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();

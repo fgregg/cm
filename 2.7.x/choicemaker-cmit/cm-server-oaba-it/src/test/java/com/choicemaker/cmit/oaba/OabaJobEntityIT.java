@@ -179,13 +179,13 @@ public class OabaJobEntityIT {
 		assertTrue(job.getId() != 0);
 
 		// Find the job
-		OabaJob batchJob2 = oabaController.find(job.getId());
+		OabaJob batchJob2 = oabaController.findOabaJob(job.getId());
 		assertTrue(job.getId() == batchJob2.getId());
 		assertTrue(job.equals(batchJob2));
 
 		// Delete the job
 		oabaController.delete(batchJob2);
-		OabaJob batchJob3 = oabaController.find(job.getId());
+		OabaJob batchJob3 = oabaController.findOabaJob(job.getId());
 		assertTrue(batchJob3 == null);
 
 		try {
@@ -253,7 +253,7 @@ public class OabaJobEntityIT {
 
 		// Retrieve the job
 		job = null;
-		job = oabaController.find(id1);
+		job = oabaController.findOabaJob(id1);
 
 		// Check the value
 		final String v2 = job.getExternalId();
@@ -283,7 +283,7 @@ public class OabaJobEntityIT {
 		job = null;
 
 		// Get the job
-		job = oabaController.find(id1);
+		job = oabaController.findOabaJob(id1);
 
 		// Check the value
 		final long v2 = Long.parseLong(job.getDescription());
@@ -326,7 +326,7 @@ public class OabaJobEntityIT {
 
 		// Get the job
 		job = null;
-		job = oabaController.find(id1);
+		job = oabaController.findOabaJob(id1);
 
 		// Check the value
 		assertTrue(description2.equals(job.getDescription()));
@@ -388,7 +388,7 @@ public class OabaJobEntityIT {
 			job = null;
 
 			// Retrieve the job
-			job = oabaController.find(id1);
+			job = oabaController.findOabaJob(id1);
 
 			// Re-check the percentage, status and timestamp
 			v2 = job.getFractionComplete();
@@ -447,7 +447,7 @@ public class OabaJobEntityIT {
 
 		// Verify that equality of persisted jobs is set only by persistence id
 		oabaController.detach(job1);
-		job2 = oabaController.find(job1.getId());
+		job2 = oabaController.findOabaJob(job1.getId());
 		oabaController.detach(job2);
 		assertTrue(job1.equals(job2));
 		assertTrue(job1.hashCode() == job2.hashCode());
@@ -557,7 +557,7 @@ public class OabaJobEntityIT {
 			job = null;
 
 			// Retrieve the job
-			job = oabaController.find(id1);
+			job = oabaController.findOabaJob(id1);
 
 			// Check the value
 			assertTrue(sts.equals(job.getStatus()));
@@ -577,7 +577,7 @@ public class OabaJobEntityIT {
 			job = null;
 
 			// Retrieve the job
-			job = oabaController.find(id1);
+			job = oabaController.findOabaJob(id1);
 
 			// Check the value
 			assertTrue(sts.equals(job.getStatus()));
@@ -620,7 +620,7 @@ public class OabaJobEntityIT {
 
 		// Find the job and verify the expected status and timestamp
 		job = null;
-		job = oabaController.find(id);
+		job = oabaController.findOabaJob(id);
 		assertTrue(batchJobStatus.equals(job.getStatus()));
 		assertTrue(ts.equals(job.getTimeStamp(sts)));
 

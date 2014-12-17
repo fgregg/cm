@@ -30,18 +30,18 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMe
  * @author pcheung
  *
  */
-public class UpdateStatus implements MessageDrivenBean, MessageListener {
+public class UpdateStatusMDB implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(UpdateStatus.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + UpdateStatus.class.getName());
+	private static final Logger log = Logger.getLogger(UpdateStatusMDB.class.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + UpdateStatusMDB.class.getName());
 
 	@PersistenceContext (unitName = "oaba")
 	EntityManager em;
 
 	private transient MessageDrivenContext mdc = null;
 
-	public UpdateStatus() {
+	public UpdateStatusMDB() {
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {

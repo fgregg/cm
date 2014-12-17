@@ -64,7 +64,7 @@ public class MessageBeanUtils {
 	}
 
 	/**
-	 * This method sends a message to the UpdateStatus message bean.
+	 * This method sends a message to the UpdateStatusMDB message bean.
 	 * 
 	 * @param jobID
 	 *            must be a valid batch job id

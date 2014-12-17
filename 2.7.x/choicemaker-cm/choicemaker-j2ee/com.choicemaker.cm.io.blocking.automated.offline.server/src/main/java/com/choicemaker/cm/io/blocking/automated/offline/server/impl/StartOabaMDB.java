@@ -56,13 +56,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 				propertyValue = "java:/choicemaker/urm/jms/startQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class StartOABA implements MessageListener, Serializable {
+public class StartOabaMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(StartOABA.class
+	private static final Logger log = Logger.getLogger(StartOabaMDB.class
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ StartOABA.class.getName());
+			+ StartOabaMDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
@@ -102,7 +102,7 @@ public class StartOABA implements MessageListener, Serializable {
 		OabaJobMessage data = null;
 		OabaJob oabaJob = null;
 
-		log.info("StartOABA In onMessage");
+		log.info("StartOabaMDB In onMessage");
 
 		try {
 
@@ -111,7 +111,7 @@ public class StartOABA implements MessageListener, Serializable {
 				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				oabaJob = jobController.find(jobId);
+				oabaJob = jobController.findOabaJob(jobId);
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =

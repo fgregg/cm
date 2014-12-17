@@ -233,7 +233,7 @@ public abstract class BatchJobEntity implements BatchJob {
 	}
 
 	// Override is not declared here
-	public long getOabaSettingsId() {
+	public long getSettingsId() {
 		return settingsId;
 	}
 

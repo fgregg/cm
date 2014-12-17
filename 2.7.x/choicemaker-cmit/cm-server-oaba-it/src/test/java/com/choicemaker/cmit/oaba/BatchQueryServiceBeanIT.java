@@ -12,7 +12,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.StartOABA;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.StartOabaMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -31,12 +31,12 @@ public class BatchQueryServiceBeanIT extends
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
-	 * StartOABA message bean. This allows another class to attach to the
+	 * StartOabaMDB message bean. This allows another class to attach to the
 	 * startQueue for testing.
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		Class<?>[] removedClasses = { StartOABA.class };
+		Class<?>[] removedClasses = { StartOabaMDB.class };
 		return OabaDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}

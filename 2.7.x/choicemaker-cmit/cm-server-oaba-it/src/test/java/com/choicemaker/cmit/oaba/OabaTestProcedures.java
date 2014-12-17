@@ -12,7 +12,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaUtils;
-//import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatch;
+//import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.OabaTestUtils;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;

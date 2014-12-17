@@ -55,7 +55,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 
 /**
- * Common functionality of {@link Matcher2} and {@link TransMatcher}.
+ * Common functionality of {@link MatcherMDB} and {@link TransMatcher}.
  */
 @SuppressWarnings("rawtypes")
 public abstract class AbstractMatcher implements MessageListener, Serializable {
@@ -100,7 +100,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					OabaJobMessage data = ((OabaJobMessage) o);
 					final long jobId = data.jobID;
 
-					oabaJob = getJobController().find(jobId);
+					oabaJob = getJobController().findOabaJob(jobId);
 					final OabaParameters params =
 						getParametersController().findBatchParamsByJobId(jobId);
 					final OabaProcessing processingEntry =
@@ -124,7 +124,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 						throw new IllegalArgumentException(s);
 					}
 					
-					getLogger().fine("Matcher2 In onMessage " + data.jobID + " "
+					getLogger().fine("MatcherMDB In onMessage " + data.jobID + " "
 							+ data.ind + " " + data.treeInd);
 
 					if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob
@@ -263,7 +263,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	 */
 	protected final IComparisonSetSource getSource(OabaJobMessage data,
 			int num, int maxBlockSize) throws BlockingException {
-		OabaJob job = getJobController().find(data.jobID);
+		OabaJob job = getJobController().findOabaJob(data.jobID);
 		if (data.ind < data.numRegularChunks) {
 			// regular
 			ComparisonTreeGroupSinkSourceFactory factory =
