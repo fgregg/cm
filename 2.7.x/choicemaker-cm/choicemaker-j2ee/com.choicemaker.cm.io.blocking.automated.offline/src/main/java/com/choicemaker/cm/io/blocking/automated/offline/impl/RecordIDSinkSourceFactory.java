@@ -22,6 +22,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
  * @author pcheung
  *
  */
+@SuppressWarnings({
+	"rawtypes"})
 public class RecordIDSinkSourceFactory implements IRecordIDSinkSourceFactory {
 	
 	private static final int TYPE = Constants.STRING;
@@ -105,7 +107,7 @@ public class RecordIDSinkSourceFactory implements IRecordIDSinkSourceFactory {
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSinkSourceFactory#removeSource(com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource)
 	 */
 	public void removeSource(IRecordIDSource source) throws BlockingException {
-		source.remove();
+		source.delete();
 	}
 
 }

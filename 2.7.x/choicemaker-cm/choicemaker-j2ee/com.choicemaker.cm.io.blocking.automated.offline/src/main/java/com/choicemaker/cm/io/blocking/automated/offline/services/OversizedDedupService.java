@@ -332,7 +332,7 @@ public class OversizedDedupService {
 		writeUnsubsumed3(subsumedBlockSets, osSink);
 
 		spliter.removeAll();
-		osSource.remove();
+		osSource.delete();
 
 		status.setCurrentProcessingEvent( OabaEvent.DONE_DEDUP_OVERSIZED);
 	}

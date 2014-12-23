@@ -19,13 +19,15 @@ import com.choicemaker.util.IntArrayList;
  * @author pcheung
  *
  */
-public interface IRecValSource extends ISource {
+public interface IRecValSource extends ISource<Long> {
 
 	/** Gets the next RecordID. */
 	public long getNextRecID () throws BlockingException;
 	
-	/** Gets the next stacked values corresponding to the recID.  Always call getNextRecID
-	 * and getNextValues in conjunction. */
+	/**
+	 * Gets the next stacked values corresponding to the recID. Always call
+	 * getNextRecID and getNextValues in conjunction.
+	 */
 	public IntArrayList getNextValues () throws BlockingException;
 	
 	/** True is this source exists and not null. */

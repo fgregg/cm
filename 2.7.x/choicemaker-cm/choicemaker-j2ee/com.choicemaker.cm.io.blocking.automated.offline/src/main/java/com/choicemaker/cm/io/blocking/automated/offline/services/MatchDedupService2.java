@@ -246,7 +246,7 @@ public class MatchDedupService2 {
 			status.setCurrentProcessingEvent( OabaEvent.DONE_DEDUP_MATCHES );
 
 			//clean up none dedup file
-			mSource.remove();
+			mSource.delete();
 
 			return;
 		} 
@@ -304,11 +304,11 @@ public class MatchDedupService2 {
 		//close all files
 		for (int i=0; i< numFiles; i++) {
 			sources[i].close();
-			sources[i].remove();
+			sources[i].delete();
 		}
 		
 		//remove source
-		mSource.remove();
+		mSource.delete();
 		
 	}
 

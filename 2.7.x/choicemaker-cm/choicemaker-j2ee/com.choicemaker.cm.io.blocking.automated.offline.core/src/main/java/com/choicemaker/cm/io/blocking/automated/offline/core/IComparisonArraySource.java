@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
+
 
 /**
  * This interface handles the reading of ComparisonGroups.
@@ -18,10 +18,10 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IComparisonArraySource<T extends Comparable<T>> extends ISource {
+public interface IComparisonArraySource<T extends Comparable<T>> extends ISource<ComparisonArray<T>> {
 
 	/** Gets the next ComparisonGroup. */
-	public ComparisonArray<T> getNext () throws BlockingException;
+	public ComparisonArray<T> getNext ();
 	
 	/** Returns the number of ComparisonGroup read so far. */
 	public int getCount ();

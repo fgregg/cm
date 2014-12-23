@@ -104,7 +104,7 @@ public class ComparisonTreeSinkSourceFactory implements IComparisonTreeSinkSourc
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#removeSource(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource)
 	 */
 	public void removeSource(IComparisonTreeSource source) throws BlockingException {
-		source.remove();
+		source.delete();
 	}
 
 }

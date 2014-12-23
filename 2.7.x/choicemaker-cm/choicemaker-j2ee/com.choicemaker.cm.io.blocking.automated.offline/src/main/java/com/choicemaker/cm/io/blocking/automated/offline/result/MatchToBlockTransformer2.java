@@ -29,18 +29,21 @@ import com.choicemaker.util.IntArrayList;
 import com.choicemaker.util.LongArrayList;
 
 /**
- * This object reads in an IMatchRecord2Source, creates equivalence classes, and outputs them
- * as blocks to a IBlockSink.  It filters out the hold pairs.
+ * This object reads in an IMatchRecord2Source, creates equivalence classes, and
+ * outputs them as blocks to a IBlockSink. It filters out the hold pairs.
  * <p>
- * NOTE: (rphall 2008-07-24)<ul>
+ * NOTE: (rphall 2008-07-24)
+ * <ul>
  * <li>MatchToBlockTransformer2 does NOT appear to filter out hold pairs.</li>
- * <li>The deprecrecated predecessor, MatchToBlockTransformer,
- * explicitly does NOT filter out hold pairs.</li></ul>
+ * <li>The deprecrecated predecessor, MatchToBlockTransformer, explicitly does
+ * NOT filter out hold pairs.</li>
+ * </ul>
  * ENDNOTE
  * </p>
- * In this version, we use SetJoiner instead of EquivalenceClassBuilder.  SetJoiner is faster and
- * more efficient, but it only works on ids that are sequential.  We have to use the
- * translator to map record ids into internal ids.
+ * In this version, we use SetJoiner instead of EquivalenceClassBuilder.
+ * SetJoiner is faster and more efficient, but it only works on ids that are
+ * sequential. We have to use the translator to map record ids into internal
+ * ids.
  *
  * @author pcheung
  *
@@ -197,10 +200,13 @@ public class MatchToBlockTransformer2 {
 	}
 
 
-	/** This method reads the MatchRecord2 source with internal ids and groups the
-	 * ids into related sets.  It returns a int [] indicating the set to which an id belongs.
+	/**
+	 * This method reads the MatchRecord2 source with internal ids and groups
+	 * the ids into related sets. It returns a int [] indicating the set to
+	 * which an id belongs.
 	 *
-	 * @param sink - sink containing MatchRecord2 with internal ids
+	 * @param sink
+	 *            - sink containing MatchRecord2 with internal ids
 	 * @return int [] - this indicated the set to which the id belongs
 	 * @throws BlockingException
 	 */

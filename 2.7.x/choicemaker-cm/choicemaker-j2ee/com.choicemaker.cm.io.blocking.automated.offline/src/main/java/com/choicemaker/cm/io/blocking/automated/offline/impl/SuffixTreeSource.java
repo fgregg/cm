@@ -25,7 +25,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class SuffixTreeSource extends BaseFileSource implements ISuffixTreeSource {
+public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements ISuffixTreeSource {
 
 	private SuffixTreeNode nextTree = null;
 
@@ -38,6 +38,9 @@ public class SuffixTreeSource extends BaseFileSource implements ISuffixTreeSourc
 		init (fileName, Constants.STRING);
 	}
 
+	public SuffixTreeNode next() throws BlockingException {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSource#getNext()

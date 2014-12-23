@@ -28,9 +28,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class MatchRecord2Source
-	extends BaseFileSource
-	implements IMatchRecord2Source {
+public class MatchRecord2Source<T extends Comparable<T>>
+	extends BaseFileSource<MatchRecord2<T>>
+	implements IMatchRecord2Source<T> {
 
 	private MatchRecord2 next = null;
 
@@ -49,8 +49,8 @@ public class MatchRecord2Source
 	 * @return MatchRecord2
 	 * @throws OABABlockingException
 	 */
-	private MatchRecord2 readNext() throws EOFException, IOException {
-		MatchRecord2 retVal = null;
+	private MatchRecord2<T> readNext() throws EOFException, IOException {
+		MatchRecord2<T> retVal = null;
 
 		if (type == Constants.STRING) {
 			retVal = readMatchRecord(br);
@@ -182,11 +182,15 @@ public class MatchRecord2Source
 		return c;
 	}
 
+	public MatchRecord2<T> next() {
+		return getNext();
+	}
+
 	/** This method gets the next MatchRecord2 from the source.  You should call
 	 * hasNext () to check if there is any more elements before calling getNext ().
 	 * 
 	 */
-	public MatchRecord2 getNext() {
+	public MatchRecord2<T> getNext() {
 		if (this.next == null) {
 			try {
 				this.next = readNext();

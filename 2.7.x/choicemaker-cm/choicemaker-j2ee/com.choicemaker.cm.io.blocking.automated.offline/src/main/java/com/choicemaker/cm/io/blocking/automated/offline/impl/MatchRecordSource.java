@@ -25,7 +25,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
  * @author pcheung
  *
  */
-public class MatchRecordSource extends BaseFileSource implements IMatchRecordSource {
+public class MatchRecordSource extends BaseFileSource<IMatchRecord> implements IMatchRecordSource {
 
 	private IMatchRecord next;
 
@@ -94,6 +94,9 @@ public class MatchRecordSource extends BaseFileSource implements IMatchRecordSou
 		return ret;
 	}
 	
+	public IMatchRecord next() {
+		return getNext();
+	}
 	
 	public IMatchRecord getNext () {
 		return next;

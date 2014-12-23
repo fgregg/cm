@@ -29,7 +29,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ISource;
  * @author pcheung
  *
  */
-public abstract class BaseFileSource implements ISource {
+public abstract class BaseFileSource<T> implements ISource<T> {
 
 	protected DataInputStream dis = null;
 	protected BufferedReader br = null;
@@ -103,7 +103,7 @@ public abstract class BaseFileSource implements ISource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
+	public void delete() throws BlockingException {
 		File file = new File (fileName);
 		file.delete();
 	}

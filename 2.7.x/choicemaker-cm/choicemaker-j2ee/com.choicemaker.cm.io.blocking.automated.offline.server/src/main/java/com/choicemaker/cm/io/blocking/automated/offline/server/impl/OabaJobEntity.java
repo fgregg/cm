@@ -10,8 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.batch.impl.BatchJobJPA.DISCRIMINATOR_COLUMN;
-import static com.choicemaker.cm.batch.impl.BatchJobJPA.TABLE_NAME;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA.DISCRIMINATOR_VALUE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA.JPQL_OABAJOB_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA.QN_OABAJOB_FIND_ALL;
@@ -19,16 +17,14 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJ
 import java.io.File;
 import java.io.Serializable;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.core.IControl;
@@ -56,23 +52,18 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
  */
 @NamedQuery(name = QN_OABAJOB_FIND_ALL, query = JPQL_OABAJOB_FIND_ALL)
 @Entity
-@Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
-@DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
-		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class OabaJobEntity extends BatchJobEntity implements IControl,
 		Serializable, OabaJob {
 
 	private static final long serialVersionUID = 271L;
 
-	// -- Instance data
-
-	// -- Construction
-
 	/** Required by JPA; do not invoke directly */
 	protected OabaJobEntity() {
 		super();
 	}
+
+	// -- Constructors
 
 	/**
 	 * Creates an isolated OabaJob entity with {@link BatchJob#DEFAULT_RIGOR
@@ -149,6 +140,8 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 		}
 		this.workingDirectory = workingDir.getAbsolutePath();
 	}
+
+	// -- Accessors
 
 	@Override
 	public long getOabaParametersId() {

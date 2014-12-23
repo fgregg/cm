@@ -243,7 +243,7 @@ public class OabaServiceBean implements OabaService {
 				new OabaParametersEntity(bp.getModelConfigurationName(),
 						bp.getLowThreshold(), bp.getHighThreshold(),
 						bp.getStageRsId(), bp.getStageRsType(), null, null,
-						OabaLinkageType.STAGING_DEDUPLICATION);
+						OabaLinkageType.STAGING_DEDUPLICATION, null, null);
 		}
 
 		return startLinkage(externalID, submittedParams, oabaSettings,

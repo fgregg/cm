@@ -22,7 +22,7 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
-public class BlockSet implements Serializable, IIDSet{
+public class BlockSet implements Serializable, IIDSet {
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = 4684611552672342011L;

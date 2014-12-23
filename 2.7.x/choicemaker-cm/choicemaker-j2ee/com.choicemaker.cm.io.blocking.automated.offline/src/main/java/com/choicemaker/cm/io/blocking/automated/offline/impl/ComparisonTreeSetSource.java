@@ -21,7 +21,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class ComparisonTreeSetSource implements IComparisonSetSource {
+// public class ComparisonSetSource<T extends Comparable<T>> implements
+// IComparisonSetSource<T> {
+
+public class ComparisonTreeSetSource<T extends Comparable<T>> implements IComparisonSetSource<T> {
 
 	private IComparisonTreeSource source;
 	
@@ -29,12 +32,15 @@ public class ComparisonTreeSetSource implements IComparisonSetSource {
 		this.source = source;
 	}
 
-
+	@Override
+	public IComparisonSet<T> next() {
+		return getNextSet();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource#getNextSet()
 	 */
-	public IComparisonSet getNextSet() throws BlockingException {
+	public IComparisonSet getNextSet() {
 		return new ComparisonTreeSet(source.getNext());
 	}
 
@@ -76,8 +82,8 @@ public class ComparisonTreeSetSource implements IComparisonSetSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
-		source.remove();
+	public void delete() throws BlockingException {
+		source.delete();
 	}
 
 }

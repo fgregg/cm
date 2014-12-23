@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class ComparisonSetOSSource implements IComparisonSetSource {
+public class ComparisonSetOSSource<T extends Comparable<T>> implements IComparisonSetSource<T> {
 	
 	private IComparisonArraySource source;
 	private int maxBlockSize;
@@ -32,10 +32,15 @@ public class ComparisonSetOSSource implements IComparisonSetSource {
 		this.maxBlockSize = maxBlockSize;
 	}
 
+	@Override
+	public IComparisonSet<T> next() {
+		return getNextSet();
+	}
+
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource#getNext()
 	 */
-	public IComparisonSet getNextSet() throws BlockingException {
+	public IComparisonSet<T> getNextSet() {
 		return new ComparisonArrayOS (source.getNext(), maxBlockSize);
 	}
 
@@ -77,8 +82,8 @@ public class ComparisonSetOSSource implements IComparisonSetSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
-		source.remove();
+	public void delete() throws BlockingException {
+		source.delete();
 	}
 
 }

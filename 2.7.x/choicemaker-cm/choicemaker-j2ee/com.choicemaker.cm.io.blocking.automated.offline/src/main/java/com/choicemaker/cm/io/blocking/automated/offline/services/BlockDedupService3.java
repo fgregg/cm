@@ -250,7 +250,7 @@ public class BlockDedupService3 {
 				//reset
 				subsumedBlockSets = new IntArrayList();
 				log.fine( ("removing " + source.getInfo()));
-				source.remove();
+				source.delete();
 			}
 
 /*

@@ -428,7 +428,7 @@ public class OABABlockingService {
 	private void cleanUp () throws BlockingException {
 		//now delete the files
 		for (int i=0; i < rvSources.length; i++) {
-			if (rvSources[i] != null) rvSources[i].remove();
+			if (rvSources[i] != null) rvSources[i].delete();
 		}
 	}
 

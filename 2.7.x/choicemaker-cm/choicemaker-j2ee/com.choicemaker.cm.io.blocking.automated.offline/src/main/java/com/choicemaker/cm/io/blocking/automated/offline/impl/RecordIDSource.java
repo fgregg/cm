@@ -22,21 +22,26 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-public class RecordIDSource extends BaseFileSource implements IRecordIDSource {
+@SuppressWarnings({"unchecked"})
+public class RecordIDSource<T extends Comparable<T>> extends BaseFileSource<T>
+		implements IRecordIDSource<T> {
 
 	protected int dataType;
-	protected Comparable nextID;
+	protected T nextID;
 	private boolean isFirst = true;
 
 	public RecordIDSource (String fileName, int type) {
 		init (fileName, type);
 	}
+	
+	public T next() {
+		return getNextID();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource#getNextID()
 	 */
-	public Comparable getNextID() throws BlockingException {
+	public T getNextID() {
 		if (this.nextID == null) {
 			try {
 				this.nextID = readNext();
@@ -48,7 +53,7 @@ public class RecordIDSource extends BaseFileSource implements IRecordIDSource {
 					"BlockingException: " + x.getMessage());
 			}
 		}
-		Comparable retVal = this.nextID;
+		T retVal = this.nextID;
 		count ++;
 		
 		this.nextID = null;
@@ -57,8 +62,8 @@ public class RecordIDSource extends BaseFileSource implements IRecordIDSource {
 	}
 	
 	
-	private Comparable readNext () throws EOFException, IOException {
-		Comparable ret = null;
+	private T readNext () throws EOFException, IOException {
+		T ret = null;
 		
 		if (type == Constants.STRING) {
 			String str;
@@ -74,11 +79,11 @@ public class RecordIDSource extends BaseFileSource implements IRecordIDSource {
 				
 			if (str != null && !str.equals("")) {
 				if (dataType == Constants.TYPE_INTEGER) {
-					ret = new Integer (str);
+					ret = (T) new Integer (str);
 				} else if (dataType == Constants.TYPE_LONG) {
-					ret = new Long (str);
+					ret = (T) new Long (str);
 				} else if (dataType == Constants.TYPE_STRING) {
-					ret = str;
+					ret = (T) str;
 				}
 			} else {
 				throw new EOFException ();
@@ -92,17 +97,17 @@ public class RecordIDSource extends BaseFileSource implements IRecordIDSource {
 				
 			if (dataType == Constants.TYPE_INTEGER) {
 				int i = dis.readInt();
-				ret = new Integer (i);
+				ret = (T) new Integer (i);
 			} else if (dataType == Constants.TYPE_LONG) {
 				long l = dis.readLong();
-				ret = new Long (l);
+				ret = (T) new Long (l);
 			} else if (dataType == Constants.TYPE_STRING) {
 				int size = dis.readInt();
 				char[] data = new char[size];
 				for (int i=0; i< size; i++) {
 					data[i] = dis.readChar();
 				}
-				ret = new String (data);
+				ret = (T) new String (data);
 			}
 		}
 		return ret;

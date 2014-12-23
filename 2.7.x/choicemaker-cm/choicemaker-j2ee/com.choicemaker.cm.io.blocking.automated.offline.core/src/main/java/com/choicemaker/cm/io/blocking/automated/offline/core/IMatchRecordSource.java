@@ -19,7 +19,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
  * @author pcheung
  *
  */
-public interface IMatchRecordSource extends ISource {
+public interface IMatchRecordSource extends ISource<IMatchRecord> {
 	
 	/** Gets the next MatchRecord. */
 	public IMatchRecord getNext () throws BlockingException;

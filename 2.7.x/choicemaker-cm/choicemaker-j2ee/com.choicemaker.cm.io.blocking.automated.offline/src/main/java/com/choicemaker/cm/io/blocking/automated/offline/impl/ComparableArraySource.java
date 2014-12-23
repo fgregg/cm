@@ -16,27 +16,31 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
 
 /**
- * This wrapper takes an ArrayList of Comparables and makes it look like a IComparableSource
+ * This wrapper takes a List of Comparables and makes it look like a IComparableSource
  * 
  * @author pcheung
  *
  */
-@SuppressWarnings("rawtypes")
-public class ComparableArraySource implements IComparableSource {
+public class ComparableArraySource<T extends Comparable<T>> implements IComparableSource<T> {
 
-	private List list;
+	private List<T> list;
 	private int ind = 0;
 	
-	public ComparableArraySource (List list) {
+	public ComparableArraySource (List<T> list) {
 		this.list = list;
 	}
 
 
+	@Override
+	public T next() {
+		return getNext();
+	}
+
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource#getNext()
 	 */
-	public Comparable getNext() throws BlockingException {
-		Comparable c = (Comparable) list.get(ind);
+	public T getNext() {
+		T c = list.get(ind);
 		ind ++;
 		return c;
 	}
@@ -87,8 +91,9 @@ public class ComparableArraySource implements IComparableSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
+	public void delete() throws BlockingException {
 		list = null;
 	}
+
 
 }

@@ -23,7 +23,7 @@ import com.choicemaker.util.IntArrayList;
  * @author pcheung
  *
  */
-public class RecValSource extends BaseFileSource implements IRecValSource {
+public class RecValSource extends BaseFileSource<Long> implements IRecValSource {
 	
 	private long nextRecID;
 	private IntArrayList nextValues;
@@ -97,6 +97,9 @@ public class RecValSource extends BaseFileSource implements IRecValSource {
 		return ret;
 	}
 
+	public Long next() {
+		return getNextRecID();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#getNextRecID()

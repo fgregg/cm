@@ -21,7 +21,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IBlockSource extends ISource {
+public interface IBlockSource extends ISource<BlockSet> {
 	
 	/** Gets the next BlockSet. */
 	public BlockSet getNext () throws BlockingException;

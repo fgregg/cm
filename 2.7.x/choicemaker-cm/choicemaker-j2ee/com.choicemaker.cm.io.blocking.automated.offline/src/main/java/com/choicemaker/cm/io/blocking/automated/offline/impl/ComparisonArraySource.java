@@ -24,20 +24,25 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySou
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-public class ComparisonArraySource extends BaseFileSource implements IComparisonArraySource {
+//@SuppressWarnings({"rawtypes", "unchecked"})
+public class ComparisonArraySource<T extends Comparable<T>> extends
+		BaseFileSource<ComparisonArray<T>> implements IComparisonArraySource<T> {
 
-	private ComparisonArray nextGroup;
+	private ComparisonArray<T> nextGroup;
 
 	public ComparisonArraySource (String fileName, int type) {
 		init (fileName, type);
 	}
 
+	@Override
+	public ComparisonArray<T> next() {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSource#getNext()
 	 */
-	public ComparisonArray getNext() throws BlockingException {
+	public ComparisonArray<T> getNext() {
 		if (this.nextGroup == null) {
 			try {
 				this.nextGroup = readNext();
@@ -49,7 +54,7 @@ public class ComparisonArraySource extends BaseFileSource implements IComparison
 					"OABABlockingException: " + x.getMessage());
 			}
 		}
-		ComparisonArray retVal = this.nextGroup;
+		ComparisonArray<T> retVal = this.nextGroup;
 		count ++;
 		this.nextGroup = null;
 
@@ -57,12 +62,14 @@ public class ComparisonArraySource extends BaseFileSource implements IComparison
 	}
 	
 	
-	private ArrayList readArray (int dataType) throws IOException {
+	@SuppressWarnings("unchecked")
+	private ArrayList<T> readArray (int dataType) throws IOException {
 		//read the number of records
 		String str = br.readLine();
 		int size = Integer.parseInt(str);
 		
-		ArrayList list = new ArrayList (size);
+		@SuppressWarnings("rawtypes")
+		ArrayList list = new ArrayList<>(size);
 		for (int i=0; i<size; i++) {
 			str = br.readLine();
 			
@@ -81,10 +88,12 @@ public class ComparisonArraySource extends BaseFileSource implements IComparison
 	}
 
 
-	private ArrayList readArrayBinary (int dataType) throws IOException {
+	@SuppressWarnings("unchecked")
+	private ArrayList<T> readArrayBinary (int dataType) throws IOException {
 		//read the number of records
 		int size = dis.readInt();
 		
+		@SuppressWarnings("rawtypes")
 		ArrayList list = new ArrayList (size);
 		for (int i=0; i<size; i++) {
 			if (dataType == Constants.TYPE_INTEGER) {
@@ -109,8 +118,8 @@ public class ComparisonArraySource extends BaseFileSource implements IComparison
 	}
 	
 	
-	private ComparisonArray readNext () throws EOFException, IOException {
-		ComparisonArray ret = null;
+	private ComparisonArray<T> readNext () throws EOFException, IOException {
+		ComparisonArray<T> ret = null;
 		
 		if (type == Constants.STRING) {
 			String str;
@@ -123,16 +132,16 @@ public class ComparisonArraySource extends BaseFileSource implements IComparison
 			int stageType = Integer.parseInt(str);
 				
 			//read the staging array
-			ArrayList stage = readArray (stageType);
+			ArrayList<T> stage = (ArrayList<T>) readArray (stageType);
 				
 			//read the master id type
 			str = br.readLine();
 			int masterType = Integer.parseInt(str);
 				
 			//read the staging array
-			ArrayList master = readArray (masterType);
+			ArrayList<T> master = (ArrayList<T>) readArray (masterType);
 				
-			ret = new ComparisonArray (stage, master, stageType, masterType);								
+			ret = new ComparisonArray<T>(stage, master, stageType, masterType);								
 
 		} else if (type == Constants.BINARY) {
 
@@ -140,15 +149,15 @@ public class ComparisonArraySource extends BaseFileSource implements IComparison
 			int stageType = dis.readInt();
 				
 			//read the staging array
-			ArrayList stage = readArrayBinary (stageType);
+			ArrayList<T> stage = readArrayBinary (stageType);
 
 			//read the data type for master record
 			int masterType = dis.readInt();
 				
 			//read the master array
-			ArrayList master = readArrayBinary (masterType);
+			ArrayList<T> master = readArrayBinary (masterType);
 
-			ret = new ComparisonArray (stage, master, stageType, masterType);				
+			ret = new ComparisonArray<T>(stage, master, stageType, masterType);				
 
 		}
 		return ret;

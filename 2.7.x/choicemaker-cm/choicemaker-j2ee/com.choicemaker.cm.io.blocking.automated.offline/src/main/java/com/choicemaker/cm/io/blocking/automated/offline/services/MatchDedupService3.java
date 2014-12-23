@@ -40,7 +40,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
  * This version calls the GenericDedupService to handle the work. 
  * 
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MatchDedupService3 {
 	
 	private static final Logger log = Logger.getLogger(MatchDedupService3.class.getName());

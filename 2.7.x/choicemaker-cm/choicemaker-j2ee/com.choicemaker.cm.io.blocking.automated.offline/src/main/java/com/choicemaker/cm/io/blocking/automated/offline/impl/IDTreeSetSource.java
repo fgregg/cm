@@ -28,6 +28,9 @@ public class IDTreeSetSource implements IIDSetSource {
 		this.bSource = bSource;
 	}
 	
+	public IIDSet next() throws BlockingException {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource#getNext()
@@ -74,8 +77,8 @@ public class IDTreeSetSource implements IIDSetSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
-		bSource.remove();
+	public void delete() throws BlockingException {
+		bSource.delete();
 	}
 
 }

@@ -23,18 +23,22 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
  * @author pcheung
  *
  */
-public class PairIDSource extends BaseFileSource implements IPairIDSource {
+public class PairIDSource extends BaseFileSource<PairID> implements IPairIDSource {
 
 	private PairID p;
 
 	public PairIDSource (String fileName, int type) {
 		init (fileName, type);
 	}
+	
+	public PairID next() {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSource#getNext()
 	 */
-	public PairID getNext() throws BlockingException {
+	public PairID getNext() {
 		return p;
 	}
 

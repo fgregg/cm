@@ -81,7 +81,7 @@ public class RecValDBFactory implements IRecValSinkSourceFactory {
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory#removeSource(com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource)
 	 */
 	public void removeSource(IRecValSource source) throws BlockingException {
-		source.remove();
+		source.delete();
 	}
 
 	/* (non-Javadoc)

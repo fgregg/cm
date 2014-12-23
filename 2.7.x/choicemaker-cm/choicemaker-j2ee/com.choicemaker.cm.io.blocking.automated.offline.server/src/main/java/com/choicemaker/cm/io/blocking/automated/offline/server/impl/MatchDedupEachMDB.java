@@ -52,7 +52,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
  * @author pcheung
  *
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/matchDedupEachQueue"),

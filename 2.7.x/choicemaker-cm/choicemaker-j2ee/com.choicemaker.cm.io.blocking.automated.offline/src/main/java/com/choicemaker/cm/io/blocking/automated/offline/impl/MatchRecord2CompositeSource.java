@@ -28,7 +28,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  *
  */
 @SuppressWarnings({"rawtypes"})
-public class MatchRecord2CompositeSource implements IMatchRecord2Source {
+public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
+		IMatchRecord2Source<T> {
 
 	private static final Logger log = Logger.getLogger(MatchRecord2CompositeSource.class.getName());
 	
@@ -36,7 +37,7 @@ public class MatchRecord2CompositeSource implements IMatchRecord2Source {
 	private String fileExt;
 	private int numFiles;
 	private int currentInd;
-	private IMatchRecord2Source currentSource;
+	private IMatchRecord2Source<T> currentSource;
 	private int count = 0;
 	
 	private String info;
@@ -70,13 +71,15 @@ public class MatchRecord2CompositeSource implements IMatchRecord2Source {
 	}
 	
 	
-	/** This method takes in the file base and file extension for MatchRecord2 sources.
-	 * By default, we asssume the input is a set of files, but if they don't exist, we
-	 * check to see if it represents a single file. 
+	/**
+	 * This method takes in the file base and file extension for MatchRecord2
+	 * sources. By default, we assume the input is a set of files, but if they
+	 * don't exist, we check to see if it represents a single file.
 	 * 
 	 * @param fileBase
 	 * @param fileExt
 	 */
+	@SuppressWarnings("unchecked")
 	private void init (String fileBase, String fileExt) {
 		this.fileBase = fileBase;
 		this.fileExt = fileExt;
@@ -131,11 +134,14 @@ public class MatchRecord2CompositeSource implements IMatchRecord2Source {
 		return fileBase + "_" + fileNum + "." + fileExt;
 	}
 	
+	public MatchRecord2<T> next() {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source#getNext()
 	 */
-	public MatchRecord2 getNext() throws BlockingException {
+	public MatchRecord2<T> getNext() {
 		count ++;
 		return currentSource.getNext();
 	}
@@ -170,6 +176,7 @@ public class MatchRecord2CompositeSource implements IMatchRecord2Source {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean hasNext() throws BlockingException {
 		boolean ret = false;
 		if (currentSource.hasNext()) {
@@ -207,11 +214,11 @@ public class MatchRecord2CompositeSource implements IMatchRecord2Source {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
+	public void delete() throws BlockingException {
 		for (int i=1; i<= numFiles; i++) {
 			MatchRecord2Source mrs = new MatchRecord2Source (getFileName(i), 
 				Constants.STRING);
-			mrs.remove();
+			mrs.delete();
 			log.fine("removing " + mrs.getInfo());
 		}
 	}

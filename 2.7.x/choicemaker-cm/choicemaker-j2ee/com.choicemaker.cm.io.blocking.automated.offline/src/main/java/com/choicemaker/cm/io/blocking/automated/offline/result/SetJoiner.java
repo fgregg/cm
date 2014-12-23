@@ -52,11 +52,14 @@ public class SetJoiner {
 	
 	
 		
-	/** This method tells the objects that i and j are related.  It will merge the sets 
-	 * containing i and j.  It uses the smallest id in the set as the root.
+	/**
+	 * This method tells the objects that i and j are related. It will merge the
+	 * sets containing i and j. It uses the smallest id in the set as the root.
 	 * 
-	 * @param i - i is related to j
-	 * @param j - j is related to i
+	 * @param i
+	 *            - i is related to j
+	 * @param j
+	 *            - j is related to i
 	 */
 	public void union (int i, int j) {
 		//System.out.println (i + " " + j);
@@ -80,12 +83,12 @@ public class SetJoiner {
 	
 	
 	/**
-	 * This method assigns each element to its ultimate root and returns the array containing 
-	 * all the roots.
+	 * This method assigns each element to its ultimate root and returns the
+	 * array containing all the roots.
 	 * 
-	 * If 1 is the root of 5 and 5 is the root of 10, then rootArray[1] == 1, 
-	 * rootArray[5] == 1, and rootArray[10] == 1.  Note that the smallest id is always the
-	 * ultimate root.
+	 * If 1 is the root of 5 and 5 is the root of 10, then rootArray[1] == 1,
+	 * rootArray[5] == 1, and rootArray[10] == 1. Note that the smallest id is
+	 * always the ultimate root.
 	 * 
 	 * Only call this method when you are done with all the unions.
 	 * 

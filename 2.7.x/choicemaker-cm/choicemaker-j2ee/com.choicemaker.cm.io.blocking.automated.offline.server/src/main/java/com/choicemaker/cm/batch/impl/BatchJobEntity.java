@@ -217,6 +217,15 @@ public abstract class BatchJobEntity implements BatchJob {
 			name = CN_AUDIT_JOIN))
 	protected Map<Date, String> audit = new HashMap<>();
 
+	private static final String[] _statusValues =
+	new String[] {
+			STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_COMPLETED,
+			STATUS_FAILED, STATUS_ABORT_REQUESTED, STATUS_ABORTED,
+			STATUS_CLEAR };
+
+	private static final String[] _nonterminal = new String[] {
+	STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_ABORT_REQUESTED };
+
 	@Override
 	public long getId() {
 		return id;
@@ -600,6 +609,18 @@ public abstract class BatchJobEntity implements BatchJob {
 	@Override
 	public String toString() {
 		return "BatchJobEntity [" + id + "/" + externalId + "/" + status + "]";
+	}
+
+	public static String[] getStatusValues() {
+		String[] retVal = new String[_statusValues.length];
+		System.arraycopy(_statusValues, 0, retVal, 0, retVal.length);
+		return retVal;
+	}
+
+	public static String[] getNonTerminalStatusValues() {
+		String[] retVal = new String[_nonterminal.length];
+		System.arraycopy(_nonterminal, 0, retVal, 0, retVal.length);
+		return retVal;
 	}
 
 }

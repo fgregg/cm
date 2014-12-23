@@ -30,7 +30,7 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
-public class BlockSource extends BaseFileSource implements IBlockSource{
+public class BlockSource extends BaseFileSource<BlockSet> implements IBlockSource {
 
 	private BlockSet nextBS;
 
@@ -106,14 +106,14 @@ public class BlockSource extends BaseFileSource implements IBlockSource{
 
 
 
-	public boolean hasNext () throws BlockingException {
+	public boolean hasNext () {
 		if (this.nextBS == null) {
 			try {
 				this.nextBS = readNext();
 			} catch (EOFException x) {
 				this.nextBS = null;
 			} catch (IOException ex) {
-				throw new BlockingException (ex.toString());
+				throw new IllegalStateException (ex.toString());
 			}
 		}
 		return this.nextBS != null;
@@ -200,16 +200,17 @@ public class BlockSource extends BaseFileSource implements IBlockSource{
 		return oversized;
 	}
 
+	@Override
+	public BlockSet next() {
+		return getNext();
+	}
+
 	public BlockSet getNext () {
 		if (this.nextBS == null) {
 			try {
 				this.nextBS = readNext();
-			} catch (EOFException x) {
-				throw new NoSuchElementException(
-					"EOFException: " + x.getMessage());
 			} catch (IOException x) {
-				throw new NoSuchElementException(
-					"OABABlockingException: " + x.getMessage());
+				throw new NoSuchElementException(x.toString());
 			}
 		}
 		BlockSet retVal = this.nextBS;
@@ -224,6 +225,5 @@ public class BlockSource extends BaseFileSource implements IBlockSource{
 		return "BlockSource [count=" + count + ", type=" + type + ", fileName="
 				+ fileName + "]";
 	}
-
 
 }

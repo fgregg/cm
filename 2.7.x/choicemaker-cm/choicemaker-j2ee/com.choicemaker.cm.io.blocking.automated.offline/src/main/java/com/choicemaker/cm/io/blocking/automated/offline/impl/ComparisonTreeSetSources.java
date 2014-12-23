@@ -55,7 +55,7 @@ public class ComparisonTreeSetSources implements IComparisonSetSources {
 	public void cleanUp() throws BlockingException {
 		for (int i=0; i<sources.size(); i++) {
 			next = (IComparisonTreeSource) sources.get(i);
-			next.remove();
+			next.delete();
 		}
 	}
 

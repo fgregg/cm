@@ -10,16 +10,15 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
 
 /**
  * @author pcheung
  *
  */
-public interface IPairIDSource extends ISource {
+public interface IPairIDSource extends ISource<PairID> {
 
 	/** Gets the next PairID. */
-	public PairID getNext () throws BlockingException;
+	public PairID getNext ();
 
 	/** Returns the number of PairID read so far. */
 	public int getCount ();

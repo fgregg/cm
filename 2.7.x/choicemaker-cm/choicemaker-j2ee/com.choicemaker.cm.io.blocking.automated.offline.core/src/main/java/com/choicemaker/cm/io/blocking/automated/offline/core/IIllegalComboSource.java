@@ -17,6 +17,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IllegalComboPair;
  * @author pcheung
  *
  */
+@SuppressWarnings({"rawtypes"})
 public interface IIllegalComboSource extends ISource {
 
 	/** Gets the next illegal combo pair. */

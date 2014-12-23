@@ -143,11 +143,11 @@ public class MatchRecord2<T extends Comparable<T>> implements
 		return ret;
 	}
 
-	public Comparable<?> getRecordID1() {
+	public T getRecordID1() {
 		return recordID1;
 	}
 
-	public Comparable<?> getRecordID2() {
+	public T getRecordID2() {
 		return recordID2;
 	}
 

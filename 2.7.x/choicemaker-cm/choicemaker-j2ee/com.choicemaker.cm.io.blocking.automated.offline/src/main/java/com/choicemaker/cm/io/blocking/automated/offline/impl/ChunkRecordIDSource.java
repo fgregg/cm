@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSourc
  * @author pcheung
  *
  */
-public class ChunkRecordIDSource extends BaseFileSource implements IChunkRecordIDSource {
+public class ChunkRecordIDSource extends BaseFileSource<Long> implements IChunkRecordIDSource {
 
 	private long nextRecID;
 	
@@ -85,19 +85,21 @@ public class ChunkRecordIDSource extends BaseFileSource implements IChunkRecordI
 	}
 
 
+	@Override
+	public Long next() {
+		return getNext();
+	}
+
+
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRowSource#getNext()
 	 */
-	public long getNext() throws BlockingException {
+	public long getNext() {
 		if (this.used) {
 			try {
 				this.nextRecID = readNext();
-			} catch (EOFException x) {
-				throw new NoSuchElementException(
-					"EOFException: " + x.getMessage());
 			} catch (IOException x) {
-				throw new NoSuchElementException(
-					"IOFException: " + x.getMessage());
+				throw new NoSuchElementException(x.toString());
 			}
 		}
 		this.used = true;

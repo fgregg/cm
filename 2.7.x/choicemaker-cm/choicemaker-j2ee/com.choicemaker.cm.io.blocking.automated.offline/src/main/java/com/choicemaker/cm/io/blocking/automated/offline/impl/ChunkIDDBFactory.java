@@ -103,7 +103,7 @@ public class ChunkIDDBFactory implements IChunkRecordIDSinkSourceFactory {
 	 */
 	public void removeSource(IChunkRecordIDSource source)
 		throws BlockingException {
-		source.remove();
+		source.delete();
 	}
 
 }

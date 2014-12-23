@@ -101,7 +101,7 @@ public class ComparisonArraySinkSourceFactory implements IComparisonArraySinkSou
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#removeSource(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSource)
 	 */
 	public void removeSource(IComparisonArraySource source) throws BlockingException {
-		source.remove();
+		source.delete();
 	}
 
 }

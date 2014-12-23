@@ -237,7 +237,7 @@ public class MatchingService2 {
 		stageFactory.removeAllSinks();
 		masterFactory.removeAllSinks();
 		for (int i=0; i<numChunks; i++) {
-			((IComparisonArraySource) cgSources.get(i)).remove();
+			((IComparisonArraySource) cgSources.get(i)).delete();
 		}
 	}
 

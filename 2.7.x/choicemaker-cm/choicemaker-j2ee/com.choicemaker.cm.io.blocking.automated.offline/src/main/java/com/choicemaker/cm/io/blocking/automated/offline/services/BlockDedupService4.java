@@ -277,7 +277,7 @@ public class BlockDedupService4 {
 				//reset and free memory
 				subsumedBlockSets = new IntArrayList();
 				log.fine( ("removing " + source.getInfo()));
-				source.remove();
+				source.delete();
 				root = null;
 				System.gc();
 			}

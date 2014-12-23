@@ -165,7 +165,7 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 		for (int i = 0; i < data.numRegularChunks; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
 				IComparisonTreeSource source = factory.getSource(i, j);
-				source.remove();
+				source.delete();
 			}
 		}
 
@@ -177,7 +177,7 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 		for (int i = 0; i < numOS; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
 				IComparisonArraySource sourceOS = factoryOS.getSource(i, j);
-				sourceOS.remove();
+				sourceOS.delete();
 			}
 		}
 	}

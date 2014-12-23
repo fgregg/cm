@@ -13,10 +13,18 @@ import com.choicemaker.cm.batch.impl.BatchJobJPA;
  */
 public interface OabaParametersJPA {
 
+	/** Default value when no jobId is assigned */
+	public static final long INVALID_ID = 0;
+
 	/** Name of the table that persists batch job data */
 	String TABLE_NAME = "CMT_OABA_BATCH_PARAMS";
 
+	String DISCRIMINATOR_COLUMN = "TYPE";
+
+	String DISCRIMINATOR_VALUE = "OABA";
+
 	String CN_ID = "ID";
+	String CN_TYPE = DISCRIMINATOR_COLUMN;
 	String CN_MODEL = "MODEL";
 	String CN_MAX_SINGLE = "MAX_SINGLE";
 	String CN_LOW_THRESHOLD = "LOW_THRESHOLD";
@@ -26,6 +34,12 @@ public interface OabaParametersJPA {
 	String CN_MASTER_RS = "MASTER_ID";
 	String CN_MASTER_RS_TYPE = "MASTER_TYPE";
 	String CN_TASK = "TASK";
+
+	/** Used by TransitivityParametersEntity */
+	String CN_FORMAT = "FORMAT";
+
+	/** Used by TransitivityParametersEntity */
+	String CN_GRAPH = "GRAPH";
 
 	String ID_GENERATOR_NAME = "OABA_BATCHPARAMS";
 

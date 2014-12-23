@@ -16,22 +16,30 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource;
 
 /**
+ * FIXME what values does this class add? Can it be eliminated?
+ *
  * @author pcheung
  *
  */
 @SuppressWarnings({"rawtypes"})
-public class ComparisonSetSource implements IComparisonSetSource {
+public class ComparisonSetSource<T extends Comparable<T>> implements
+		IComparisonSetSource<T> {
 	
-	private IComparisonArraySource source;
+	private IComparisonArraySource<T> source;
 	
-	public ComparisonSetSource (IComparisonArraySource source) {
+	public ComparisonSetSource (IComparisonArraySource<T> source) {
 		this.source = source;
+	}
+
+	@Override
+	public IComparisonSet next() {
+		return getNextSet();
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource#getNext()
 	 */
-	public IComparisonSet getNextSet() throws BlockingException {
+	public IComparisonSet<T> getNextSet() {
 		return source.getNext();
 	}
 
@@ -73,8 +81,8 @@ public class ComparisonSetSource implements IComparisonSetSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
-		source.remove();
+	public void delete() throws BlockingException {
+		source.delete();
 	}
 
 }

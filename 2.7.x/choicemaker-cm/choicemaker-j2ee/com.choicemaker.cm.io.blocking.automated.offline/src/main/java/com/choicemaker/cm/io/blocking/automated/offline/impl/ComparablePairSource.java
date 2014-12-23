@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
 
 /**
  * This wrapper object takes IPairIDSource and makes it look like a IComparableSource.
@@ -20,8 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSource;
  * @author pcheung
  *
  */
-@SuppressWarnings("rawtypes")
-public class ComparablePairSource implements IComparableSource {
+public class ComparablePairSource implements IComparableSource<PairID> {
 
 	private IPairIDSource source;
 	
@@ -29,12 +29,12 @@ public class ComparablePairSource implements IComparableSource {
 		this.source = source;
 	}
 
+	@Override
+	public PairID next() {
+		return getNext();
+	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource#getNext()
-	 */
-	public Comparable getNext() throws BlockingException {
+	public PairID getNext() {
 		return source.getNext();
 	}
 
@@ -83,8 +83,8 @@ public class ComparablePairSource implements IComparableSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
-		source.remove();
+	public void delete() throws BlockingException {
+		source.delete();
 	}
 
 }

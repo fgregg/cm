@@ -75,11 +75,15 @@ public class ChunkIDDBSource implements IChunkRecordIDSource {
 		}
 	}
 
+	@Override
+	public Long next() {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource#getNext()
 	 */
-	public long getNext() throws BlockingException {
+	public long getNext() {
 		return nextID;
 	}
 
@@ -142,7 +146,7 @@ public class ChunkIDDBSource implements IChunkRecordIDSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
+	public void delete() throws BlockingException {
 		try {
 			conn = ds.getConnection();
 			//check to see if there is any data on the table for this group.
@@ -157,5 +161,6 @@ public class ChunkIDDBSource implements IChunkRecordIDSource {
 			throw new BlockingException ( ex.toString() );
 		}
 	}
+
 
 }

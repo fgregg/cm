@@ -22,12 +22,14 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource;
 public class IDSetSource implements IIDSetSource {
 	
 	private IBlockSource bSource;
-//	private IIDSet next;
 	
 	public IDSetSource (IBlockSource bSource) {
 		this.bSource = bSource;
 	}
 	
+	public IIDSet next() throws BlockingException {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource#getNext()
@@ -74,8 +76,8 @@ public class IDSetSource implements IIDSetSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
-		bSource.remove();
+	public void delete() throws BlockingException {
+		bSource.delete();
 	}
 
 }

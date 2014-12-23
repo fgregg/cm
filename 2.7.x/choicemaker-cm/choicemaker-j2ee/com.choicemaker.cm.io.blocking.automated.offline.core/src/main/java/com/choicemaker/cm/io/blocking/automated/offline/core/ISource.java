@@ -14,29 +14,31 @@ import com.choicemaker.cm.core.BlockingException;
 
 /**
  * A Source is an interface designed for reading data.
- *   
+ * 
  * @author pcheung
  *
  */
-public interface ISource {
+public interface ISource<T> {
 
 	/** True is this source file exists and not null. */
-	public boolean exists ();
-	
+	boolean exists();
+
 	/** Opens and initializes the source for reading. */
-	public void open () throws BlockingException;
+	void open() throws BlockingException;
 
 	/** True if there is more data in the source. */
-	public boolean hasNext () throws BlockingException;
-	
+	boolean hasNext() throws BlockingException;
+
+	/** Returns the next datum from the source */
+	T next() throws BlockingException;
+
 	/** Closes the source. */
-	public void close () throws BlockingException;
+	void close() throws BlockingException;
 
 	/** Gets the file name or other pertinent information if it is not a file. */
-	public String getInfo ();
+	String getInfo();
 
 	/** This method cleans up resources and removes the source. */
-	public void remove () throws BlockingException;
-
+	void delete() throws BlockingException;
 
 }

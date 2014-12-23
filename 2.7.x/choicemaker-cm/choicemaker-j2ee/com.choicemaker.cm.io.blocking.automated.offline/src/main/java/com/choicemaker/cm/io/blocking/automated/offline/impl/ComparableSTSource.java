@@ -26,8 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.SuffixTreeUtils;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-public class ComparableSTSource implements IComparableSource {
+public class ComparableSTSource implements IComparableSource<PairID> {
 
 	private ISuffixTreeSource source;
 	private int count = 0;
@@ -39,11 +38,15 @@ public class ComparableSTSource implements IComparableSource {
 		this.source = source;
 	}
 
+	@Override
+	public PairID next() {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource#getNext()
 	 */
-	public Comparable getNext() throws BlockingException {
+	public PairID getNext() {
 		PairID p = (PairID) pairs.get(ind);
 		ind++;
 		return p;
@@ -116,8 +119,8 @@ public class ComparableSTSource implements IComparableSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
-		source.remove();
+	public void delete() throws BlockingException {
+		source.delete();
 	}
 
 }

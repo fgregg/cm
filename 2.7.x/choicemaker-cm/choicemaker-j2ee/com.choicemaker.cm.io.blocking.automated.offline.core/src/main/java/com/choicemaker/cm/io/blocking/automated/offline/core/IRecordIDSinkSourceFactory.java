@@ -18,6 +18,8 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
+@SuppressWarnings({
+	"rawtypes"})
 public interface IRecordIDSinkSourceFactory {
 
 	/** Gets the next IRecordIDSink in the sequence. */

@@ -24,17 +24,17 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-public class ComparisonTreeSource extends BaseFileSource implements IComparisonTreeSource {
+//@SuppressWarnings({"rawtypes", "unchecked"})
+public class ComparisonTreeSource<T extends Comparable<T>> extends BaseFileSource<ComparisonTreeNode<T>> implements IComparisonTreeSource<T> {
 
 	
-	private ComparisonTreeNode nextTree = null;
+	private ComparisonTreeNode<T> nextTree = null;
 	
 	//this indicates if the Record ID is a int, long, or string.
 	private int dataType;
 	
 
-	/** This contructor creates a string source with the given name.
+	/** This constructor creates a string source with the given name.
 	 * 
 	 * @param fileName
 	 */
@@ -43,13 +43,15 @@ public class ComparisonTreeSource extends BaseFileSource implements IComparisonT
 		init (fileName, Constants.STRING);
 	}
 
-	
-	
+	@Override
+	public ComparisonTreeNode<T> next() {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource#getNext()
 	 */
-	public ComparisonTreeNode getNext() throws BlockingException {
+	public ComparisonTreeNode<T> getNext() {
 		if (this.nextTree == null) {
 			try {
 				this.nextTree = readNext();
@@ -61,7 +63,7 @@ public class ComparisonTreeSource extends BaseFileSource implements IComparisonT
 					"OABABlockingException: " + x.getMessage());
 			}
 		}
-		ComparisonTreeNode retVal = this.nextTree;
+		ComparisonTreeNode<T> retVal = this.nextTree;
 		count ++;
 		this.nextTree = null;
 
@@ -69,21 +71,20 @@ public class ComparisonTreeSource extends BaseFileSource implements IComparisonT
 	}
 
 
-	private ComparisonTreeNode readNext () throws EOFException, IOException {
-		ComparisonTreeNode ret = null;
+	@SuppressWarnings("unchecked")
+	private ComparisonTreeNode<T> readNext () throws EOFException, IOException {
+		ComparisonTreeNode<T> ret = null;
 		
 		String str = br.readLine();
 		if (str == null || str.equals("")) throw new EOFException ();
-		
-		//log.info("str " + str);
-			
+
 		int ind = 0;
 		int size = str.length();
 			
 		ret = ComparisonTreeNode.createRootNode();
 
 		//setting up the stack
-		Stack stack = new Stack ();
+		Stack<ComparisonTreeNode<T>> stack = new Stack<>();
 		stack.push(ret);
 
 		while (ind < size) {
@@ -91,22 +92,22 @@ public class ComparisonTreeSource extends BaseFileSource implements IComparisonT
 				int i = getNextMarker (str, ind, size);
 				char stageOrMaster = str.charAt(ind+1);
 					
-				Comparable c = null;
+				T c = null;
 					
 				if (dataType == Constants.TYPE_LONG) {
-					c = new Long (str.substring(ind+3,i));
+					c = (T) new Long (str.substring(ind+3,i));
 				} else if (dataType == Constants.TYPE_INTEGER) {
-					c = new Integer (str.substring(ind+3,i));
+					c = (T) new Integer (str.substring(ind+3,i));
 				} else if (dataType == Constants.TYPE_STRING) {
-					c = str.substring(ind+3,i);
+					c = (T) str.substring(ind+3,i);
 				} else {
 					throw new IllegalArgumentException("Unknown DataType: " + dataType);
 				}
 					
-				ComparisonTreeNode kid = null;
+				ComparisonTreeNode<T> kid = null;
 					
 				//use peek here because we don't want to remove from the stack.
-				ComparisonTreeNode parent = (ComparisonTreeNode) stack.peek();
+				ComparisonTreeNode<T> parent = stack.peek();
 					
 				if (str.charAt(i) == Constants.CLOSE_NODE) {
 					//leaf

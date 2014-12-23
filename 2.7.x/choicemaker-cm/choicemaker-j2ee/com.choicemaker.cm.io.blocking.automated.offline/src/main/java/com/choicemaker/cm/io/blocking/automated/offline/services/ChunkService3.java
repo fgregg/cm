@@ -284,10 +284,10 @@ public class ChunkService3 {
 			IChunkRecordIDSource[] crSources =
 				new IChunkRecordIDSource[numChunks];
 
-			// each a record sink for each stage file we are handling.
+			// record sinks for the stage file we are handling, one per chunk
 			RecordSink[] stageRecordSinks = new RecordSink[numChunks];
 
-			// each a record sink for each master file we are handling.
+			// record sinks for the master file we are handling, one per chunk
 			RecordSink[] masterRecordSinks = new RecordSink[numChunks];
 
 			// the current record id of the chunk file
@@ -652,7 +652,7 @@ public class ChunkService3 {
 
 		// cleanup
 		if (!keepFiles)
-			source.remove();
+			source.delete();
 
 		transformer.close();
 

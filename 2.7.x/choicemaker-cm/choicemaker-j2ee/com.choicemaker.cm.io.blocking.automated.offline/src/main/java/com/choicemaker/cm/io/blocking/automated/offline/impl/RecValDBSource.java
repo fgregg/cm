@@ -23,7 +23,6 @@ import com.choicemaker.util.IntArrayList;
 
 /**
  * @author pcheung
- *
  */
 public class RecValDBSource implements IRecValSource {
 
@@ -81,12 +80,14 @@ public class RecValDBSource implements IRecValSource {
 		}
 	}
 
-
+	public Long next() {
+		return getNextRecID();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#getNextRecID()
 	 */
-	public long getNextRecID() throws BlockingException {
+	public long getNextRecID() {
 		return nextRecID;
 	}
 
@@ -189,7 +190,7 @@ public class RecValDBSource implements IRecValSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
+	public void delete() throws BlockingException {
 		try {
 			conn = ds.getConnection();
 			//check to see if there is any data on the table for this group.

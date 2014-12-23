@@ -46,7 +46,7 @@ public class ComparisonSetSources implements IComparisonSetSources {
 	public void cleanUp() throws BlockingException {
 		for (int i=0; i<sources.size(); i++) {
 			next = (IComparisonArraySource) sources.get(i);
-			next.remove();
+			next.delete();
 		}
 	}
 

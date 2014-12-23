@@ -18,7 +18,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IChunkRecordIDSource extends ISource{
+public interface IChunkRecordIDSource extends ISource<Long> {
 
 	/** This gets the next chunk record id.
 	 * 

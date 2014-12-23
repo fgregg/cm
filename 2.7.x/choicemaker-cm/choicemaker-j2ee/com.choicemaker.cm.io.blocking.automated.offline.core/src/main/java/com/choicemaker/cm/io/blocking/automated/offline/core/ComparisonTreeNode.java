@@ -20,8 +20,7 @@ import java.util.List;
  */
 public class ComparisonTreeNode<T extends Comparable<T>> implements Serializable {
 
-	/* As of 2010-03-10 */
-	static final long serialVersionUID = -8258266551802037565L;
+	static final long serialVersionUID = 271;
 
 	public static final char STAGE = 'S';
 	public static final char MASTER = 'M';

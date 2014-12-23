@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
  * This wrapper object takes MatchRecord2Source and makes it look like a IComparableSource.
@@ -20,19 +21,23 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
  * @author pcheung
  *
  */
-@SuppressWarnings("rawtypes")
-public class ComparableMRSource implements IComparableSource {
+public class ComparableMRSource<T extends Comparable<T>> implements IComparableSource<MatchRecord2<T>> {
 	
-	private IMatchRecord2Source source;
+	private IMatchRecord2Source<T> source;
 	
-	public ComparableMRSource (IMatchRecord2Source source) {
+	public ComparableMRSource (IMatchRecord2Source<T> source) {
 		this.source = source;
+	}
+
+	@Override
+	public MatchRecord2<T> next() {
+		return getNext();
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource#getNext()
 	 */
-	public Comparable getNext() throws BlockingException {
+	public MatchRecord2<T> getNext() {
 		return source.getNext();
 	}
 
@@ -81,8 +86,8 @@ public class ComparableMRSource implements IComparableSource {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
-		source.remove();
+	public void delete() throws BlockingException {
+		source.delete();
 	}
 
 }

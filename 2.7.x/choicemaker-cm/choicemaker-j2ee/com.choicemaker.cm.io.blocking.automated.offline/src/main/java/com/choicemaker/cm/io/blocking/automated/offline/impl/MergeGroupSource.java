@@ -25,7 +25,8 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  * @deprecated
  */
-public class MergeGroupSource 	extends BaseFileSource 	implements IMergeGroupSource {
+public class MergeGroupSource extends BaseFileSource<IMergeGroup> implements
+		IMergeGroupSource {
 	
 	private MergeGroup mg;
 
@@ -33,6 +34,9 @@ public class MergeGroupSource 	extends BaseFileSource 	implements IMergeGroupSou
 		super.init(fileName, type);
 	}
 
+	public IMergeGroup next() throws BlockingException {
+		return getNext();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IMergeGroupSource#getNext()

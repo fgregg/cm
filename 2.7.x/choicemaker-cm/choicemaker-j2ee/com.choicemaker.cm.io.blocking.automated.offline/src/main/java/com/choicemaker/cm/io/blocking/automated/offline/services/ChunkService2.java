@@ -477,7 +477,7 @@ public class ChunkService2 {
 		//cleanup
 		cOut.close();
 		source.close ();
-		source.remove();
+		source.delete();
 		
 		//If this source has nothing, remove it from the ArrayList
 		if (countAll == 0) {

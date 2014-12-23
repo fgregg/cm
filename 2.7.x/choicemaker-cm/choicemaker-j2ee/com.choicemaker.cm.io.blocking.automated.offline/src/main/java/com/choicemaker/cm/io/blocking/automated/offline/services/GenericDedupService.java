@@ -102,7 +102,7 @@ public class GenericDedupService {
 			}
 			
 			log.fine("removing " + cSource.getInfo());
-			cSource.remove();
+			cSource.delete();
 			
 			//create a blank output file
 			log.fine("creating " + cSink.getInfo());
@@ -114,7 +114,7 @@ public class GenericDedupService {
 			if (i > 0) numAfter = i;
 			
 			//remove the source
-			cSource.remove();
+			cSource.delete();
 		}
 		
 		time = System.currentTimeMillis() - time;
@@ -259,7 +259,7 @@ public class GenericDedupService {
 		//close and remove all files
 		for (int i=0; i< numFiles; i++) {
 			sources[i].close();
-			if (delete) sources[i].remove();
+			if (delete) sources[i].delete();
 		}
 		
 		return num;

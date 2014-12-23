@@ -17,7 +17,8 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface ISuffixTreeSource extends ISource {
+public interface ISuffixTreeSource extends
+		ISource<SuffixTreeNode> {
 
 	/** This returns the next SuffixTree in the source.  Make sure you call hasNext before calling
 	 * this method.

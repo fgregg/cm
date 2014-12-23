@@ -18,7 +18,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IMergeGroupSource extends ISource {
+public interface IMergeGroupSource extends ISource<IMergeGroup> {
 
 	/** Gets the next MatchRecord. */
 	public IMergeGroup getNext () throws BlockingException;

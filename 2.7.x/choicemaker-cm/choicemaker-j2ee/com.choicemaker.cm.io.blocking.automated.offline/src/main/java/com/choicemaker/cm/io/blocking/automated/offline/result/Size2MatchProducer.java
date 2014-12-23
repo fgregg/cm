@@ -85,10 +85,13 @@ public class Size2MatchProducer {
 	
 	
 	
-	/** This method writes all MatchRecord2 source that are in the ids TreeSet out to the
-	 * MatchRecord2 sink.  It returns the number of MatchRecord2 written out.
+	/**
+	 * This method writes all MatchRecord2 source that are in the ids TreeSet
+	 * out to the MatchRecord2 sink. It returns the number of MatchRecord2
+	 * written out.
 	 * 
-	 * @param ids - TreeSet containing record ids of size 2 equivalence classes. 
+	 * @param ids
+	 *            - TreeSet containing record ids of size 2 equivalence classes.
 	 * @return int - numbers of MatchRecord2 written out.
 	 * @throws BlockingException
 	 */

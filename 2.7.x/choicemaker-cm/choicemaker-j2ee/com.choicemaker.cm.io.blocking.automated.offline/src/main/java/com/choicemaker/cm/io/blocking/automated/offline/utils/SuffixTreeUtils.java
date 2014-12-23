@@ -81,8 +81,8 @@ public class SuffixTreeUtils {
 	 * @param root
 	 * @return
 	 */
-	public static ArrayList getPairs (SuffixTreeNode root) {
-		ArrayList pairs = new ArrayList ();
+	public static ArrayList<PairID> getPairs (SuffixTreeNode root) {
+		ArrayList<PairID> pairs = new ArrayList<>();
 		
 		//there should only be one node
 		SuffixTreeNode kid = (SuffixTreeNode) root.getAllChildren().get(0);
@@ -94,7 +94,8 @@ public class SuffixTreeUtils {
 	}
 
 
-	private static void getCompares (SuffixTreeNode node, Stack stack, ArrayList pairs) {
+	private static void getCompares(SuffixTreeNode node, Stack stack,
+			ArrayList<PairID> pairs) {
 		if (!stack.empty()) {
 			//compare this to everything in the stack
 			for (int i=0; i<stack.size(); i++) {

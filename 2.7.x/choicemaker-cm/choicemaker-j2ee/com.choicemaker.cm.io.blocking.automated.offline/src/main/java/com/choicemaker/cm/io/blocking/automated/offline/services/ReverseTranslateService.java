@@ -99,7 +99,7 @@ public class ReverseTranslateService {
 //		System.out.println ("translating from " + source.getInfo() + " to " + sink.getInfo());
 		
 		translator.reverseTranslate(source, sink);
-		source.remove();
+		source.delete();
 	}
 	
 	

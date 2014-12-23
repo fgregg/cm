@@ -10,15 +10,14 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_NAME;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_PK_COLUMN_NAME;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_PK_COLUMN_VALUE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_TABLE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.*;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,7 +39,10 @@ import com.choicemaker.cm.core.base.Thresholds;
 @NamedQuery(name = OabaParametersJPA.QN_BATCHPARAMETERS_FIND_ALL,
 		query = OabaParametersJPA.JPQL_BATCHPARAMETERS_FIND_ALL)
 @Entity
-@Table(/* schema = "CHOICEMAKER", */name = OabaParametersJPA.TABLE_NAME)
+@Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
+@DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
+		discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class OabaParametersEntity implements Serializable, OabaParameters {
 
 	private static final long serialVersionUID = 271L;
@@ -104,6 +106,12 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 
 	@Column(name = OabaParametersJPA.CN_TASK)
 	private final String task;
+	
+	@Column(name = CN_FORMAT)
+	protected final String format;
+
+	@Column(name = CN_GRAPH)
+	protected final String graph;
 
 	/** Required by JPA; do not invoke directly */
 	protected OabaParametersEntity() {
@@ -115,6 +123,8 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 		this.masterRsId = null;
 		this.masterRsType = null;
 		this.task = null;
+		this.format = null;
+		this.graph = null;
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
@@ -127,7 +137,8 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	public OabaParametersEntity(OabaParameters bp) {
 		this(bp.getModelConfigurationName(), bp.getLowThreshold(), bp
 				.getHighThreshold(), bp.getStageRsId(), bp.getStageRsType(), bp
-				.getMasterRsId(), bp.getMasterRsType(), bp.getOabaLinkageType());
+				.getMasterRsId(), bp.getMasterRsType(), bp.getOabaLinkageType(),
+				null, null);
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
@@ -137,7 +148,7 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 		this(modelConfigurationName, lowThreshold, highThreshold, stageRs
 				.getId(), stageRs.getType(), masterRs == null ? null : masterRs
 				.getId(), masterRs == null ? null : masterRs.getType(),
-				taskType);
+				taskType, null, null);
 	}
 
 	/**
@@ -168,6 +179,22 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	public OabaParametersEntity(String modelConfigurationName,
 			float lowThreshold, float highThreshold, long sId, String sType,
 			Long mId, String mType, OabaLinkageType taskType) {
+		this(modelConfigurationName, lowThreshold, highThreshold, sId, sType,
+				mId, mType, taskType, null, null);
+	}
+
+	/**
+	 * @param format
+	 *            Used by the constructor for TransitivityParametersEntity;
+	 *            otherwise should be null.
+	 * @param graph
+	 *            Used by the constructor for TransitivityParametersEntity;
+	 *            otherwise should be null.
+	 */
+	protected OabaParametersEntity(String modelConfigurationName,
+			float lowThreshold, float highThreshold, long sId, String sType,
+			Long mId, String mType, OabaLinkageType taskType, String format,
+			String graph) {
 
 		if (modelConfigurationName == null
 				|| modelConfigurationName.trim().isEmpty()) {
@@ -222,6 +249,8 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 		this.masterRsId = mId;
 		this.masterRsType = mType;
 		this.task = taskType.name();
+		this.format = format;
+		this.graph = graph;
 	}
 
 	@Override
@@ -234,11 +263,13 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 		return modelConfigName;
 	}
 
+	@Deprecated
 	@Override
 	public String getStageModel() {
 		return getModelConfigurationName();
 	}
 
+	@Deprecated
 	@Override
 	public String getMasterModel() {
 		return getModelConfigurationName();
