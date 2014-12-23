@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.*;
 
 import java.io.Serializable;
@@ -76,6 +77,9 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 			generator = ID_GENERATOR_NAME)
 	private long id;
 
+	@Column(name = CN_TYPE)
+	protected final String type;
+
 	@Column(name = OabaParametersJPA.CN_MODEL)
 	private final String modelConfigName;
 
@@ -115,6 +119,7 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 
 	/** Required by JPA; do not invoke directly */
 	protected OabaParametersEntity() {
+		this.type = DISCRIMINATOR_VALUE;
 		this.modelConfigName = null;
 		this.lowThreshold = INVALID_THRESHOLD;
 		this.highThreshold = INVALID_THRESHOLD;
@@ -135,20 +140,21 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	}
 
 	public OabaParametersEntity(OabaParameters bp) {
-		this(bp.getModelConfigurationName(), bp.getLowThreshold(), bp
-				.getHighThreshold(), bp.getStageRsId(), bp.getStageRsType(), bp
-				.getMasterRsId(), bp.getMasterRsType(), bp.getOabaLinkageType(),
-				null, null);
+		this(DISCRIMINATOR_VALUE, bp.getModelConfigurationName(), bp
+				.getLowThreshold(), bp.getHighThreshold(), bp.getStageRsId(),
+				bp.getStageRsType(), bp.getMasterRsId(), bp.getMasterRsType(),
+				bp.getOabaLinkageType(), null, null);
 	}
 
 	public OabaParametersEntity(String modelConfigurationName,
 			float lowThreshold, float highThreshold,
 			PersistableRecordSource stageRs, PersistableRecordSource masterRs,
 			OabaLinkageType taskType) {
-		this(modelConfigurationName, lowThreshold, highThreshold, stageRs
-				.getId(), stageRs.getType(), masterRs == null ? null : masterRs
-				.getId(), masterRs == null ? null : masterRs.getType(),
-				taskType, null, null);
+		this(DISCRIMINATOR_VALUE, modelConfigurationName, lowThreshold,
+				highThreshold, stageRs.getId(), stageRs.getType(),
+				masterRs == null ? null : masterRs.getId(),
+				masterRs == null ? null : masterRs.getType(), taskType, null,
+				null);
 	}
 
 	/**
@@ -179,8 +185,8 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	public OabaParametersEntity(String modelConfigurationName,
 			float lowThreshold, float highThreshold, long sId, String sType,
 			Long mId, String mType, OabaLinkageType taskType) {
-		this(modelConfigurationName, lowThreshold, highThreshold, sId, sType,
-				mId, mType, taskType, null, null);
+		this(DISCRIMINATOR_VALUE, modelConfigurationName, lowThreshold,
+				highThreshold, sId, sType, mId, mType, taskType, null, null);
 	}
 
 	/**
@@ -191,11 +197,14 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	 *            Used by the constructor for TransitivityParametersEntity;
 	 *            otherwise should be null.
 	 */
-	protected OabaParametersEntity(String modelConfigurationName,
+	protected OabaParametersEntity(String type, String modelConfigurationName,
 			float lowThreshold, float highThreshold, long sId, String sType,
 			Long mId, String mType, OabaLinkageType taskType, String format,
 			String graph) {
 
+		if (type == null || type.trim().isEmpty()) {
+			throw new IllegalArgumentException("null or blank type");
+		}
 		if (modelConfigurationName == null
 				|| modelConfigurationName.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank modelId");
@@ -211,8 +220,12 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 
 		// The masterRsId, masterRsType and taskType must be consistent.
 		// If the task type is STAGING_DEDUPLICATION, then the masterRsId
-		// and the masterRsType must be null. Otherwise, the masterRsId and
-		// the masterRsType must be non-null.
+		// and the masterRsType must be null.
+		// If the type is STAGING_TO_MASTER_LINKAGE or MASTER_TO_MASTER_LINKAGE,
+		// then the masterRsId and the masterRsType must be non-null.
+		// If the type is TRANSITIVITY_ANALYSIS, the masterRsId and the
+		// masterRsType must be consistent with one another, but they are
+		// otherwise unconstrained.
 		if (taskType == OabaLinkageType.STAGING_DEDUPLICATION) {
 			if (mId != null) {
 				String msg =
@@ -226,7 +239,8 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 							+ "' (taskType is '" + taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
-		} else {
+		} else if (taskType == OabaLinkageType.STAGING_TO_MASTER_LINKAGE
+				|| taskType == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
 			if (mId == null) {
 				String msg =
 					"null master source id '" + mId + "' (taskType is '"
@@ -239,8 +253,19 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 							+ taskType + "')";
 				throw new IllegalArgumentException(msg);
 			}
+		} else {
+			assert taskType == OabaLinkageType.TRANSITIVITY_ANALYSIS;
+			if ((mType == null && mId != null)
+					|| (mType != null && mId == null)) {
+				String msg =
+					"inconsistent master source id '" + mId
+							+ "' and master source type '" + mType
+							+ "' (taskType is '" + taskType + "')";
+				throw new IllegalArgumentException(msg);
+			}
 		}
 
+		this.type = type;
 		this.modelConfigName = modelConfigurationName.trim();
 		this.lowThreshold = lowThreshold;
 		this.highThreshold = highThreshold;

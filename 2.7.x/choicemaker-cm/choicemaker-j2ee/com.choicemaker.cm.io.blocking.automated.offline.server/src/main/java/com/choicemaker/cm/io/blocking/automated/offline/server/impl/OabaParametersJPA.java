@@ -55,7 +55,7 @@ public interface OabaParametersJPA {
 	 * Name of the query that finds all persistent batch parameter instances
 	 */
 	String QN_BATCHPARAMETERS_FIND_ALL =
-			"batchParametersFindAll";
+			"oabaParametersFindAll";
 
 	/** JPQL used to implement {@link #QN_BATCHPARAMETERS_FIND_ALL} */
 	String JPQL_BATCHPARAMETERS_FIND_ALL =

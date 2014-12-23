@@ -1,5 +1,13 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.JPQL_TRANSPARAMS_FIND_ALL;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.QN_TRANSPARAMS_FIND_ALL;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.IGraphProperty;
 import com.choicemaker.cm.args.OabaLinkageType;
@@ -7,6 +15,9 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 
+@NamedQuery(name = QN_TRANSPARAMS_FIND_ALL, query = JPQL_TRANSPARAMS_FIND_ALL)
+@Entity
+@DiscriminatorValue(value = DISCRIMINATOR_VALUE)
 public class TransitivityParametersEntity extends OabaParametersEntity
 		implements TransitivityParameters {
 
@@ -31,10 +42,12 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 			float differThreshold, float matchThreshold,
 			PersistableRecordSource stage, PersistableRecordSource master,
 			AnalysisResultFormat format, String graphPropertyName) {
-		super(modelConfigurationName, differThreshold, matchThreshold, stage
-				.getId(), stage.getType(), master == null ? null : master.getId(),
-				master == null ? null : master.getType(),
-						OabaLinkageType.TRANSITIVITY_ANALYSIS, format == null ? null : format.name(), graphPropertyName);
+		super(DISCRIMINATOR_VALUE, modelConfigurationName, differThreshold,
+				matchThreshold, stage.getId(), stage.getType(),
+				master == null ? null : master.getId(), master == null ? null
+						: master.getType(),
+				OabaLinkageType.TRANSITIVITY_ANALYSIS, format == null ? null
+						: format.name(), graphPropertyName);
 		if (format == null) {
 			throw new IllegalArgumentException("null analysis-result format");
 		}
@@ -44,12 +57,13 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 	}
 
 	public TransitivityParametersEntity(TransitivityParameters tp) {
-		super(tp.getModelConfigurationName(), tp.getLowThreshold(), tp
-				.getHighThreshold(), tp.getStageRsId(), tp.getStageRsType(), tp
-				.getMasterRsId(), tp.getMasterRsType(), OabaLinkageType.TRANSITIVITY_ANALYSIS, tp
-				.getAnalysisResultFormat() == null ? null : tp
-						.getAnalysisResultFormat().name(), tp.getGraphProperty()
-				.getName());
+		super(DISCRIMINATOR_VALUE, tp.getModelConfigurationName(), tp
+				.getLowThreshold(), tp.getHighThreshold(), tp.getStageRsId(),
+				tp.getStageRsType(), tp.getMasterRsId(), tp.getMasterRsType(),
+				OabaLinkageType.TRANSITIVITY_ANALYSIS, tp
+						.getAnalysisResultFormat() == null ? null : tp
+						.getAnalysisResultFormat().name(), tp
+						.getGraphProperty().getName());
 		if (tp.getAnalysisResultFormat() == null) {
 			throw new IllegalArgumentException("null analysis-result format");
 		}

@@ -7,6 +7,10 @@ public interface TransitivityParametersJPA extends OabaParametersJPA {
 	/** Hides {@link OabaParametersJPA#DISCRIMINATOR_VALUE} */
 	String DISCRIMINATOR_VALUE = "TRANSITIVITY";
 
-	public static final String QN_TRANSPARAMS_FIND_ALL = null;
+	public static final String QN_TRANSPARAMS_FIND_ALL = "transParametersFindAll";
+
+	/** JPQL used to implement {@link #QN_TRANSPARAMS_FIND_ALL} */
+	String JPQL_TRANSPARAMS_FIND_ALL =
+			"Select params from TransitivityParametersEntity params";
 
 }
