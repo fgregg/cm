@@ -26,8 +26,10 @@ public interface OabaParameters {
 
 	OabaLinkageType getOabaLinkageType();
 
+	@Deprecated
 	String getStageModel();
 
+	@Deprecated
 	String getMasterModel();
 
 	float getLowThreshold();
