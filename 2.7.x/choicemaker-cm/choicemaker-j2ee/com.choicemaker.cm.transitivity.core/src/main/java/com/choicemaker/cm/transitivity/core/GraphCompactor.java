@@ -18,7 +18,7 @@ package com.choicemaker.cm.transitivity.core;
  *
  * ChoiceMaker Technologies, Inc.
  */
-public interface GraphCompactor {
+public interface GraphCompactor<T extends Comparable<T>> {
 
 	/** This method takes a graph with markings and compact those nodes and
 	 * edges.
@@ -26,6 +26,6 @@ public interface GraphCompactor {
 	 * @param ce
 	 * @return CompositeEntity - the compacted graph
 	 */
-	public CompositeEntity compact (CompositeEntity ce) throws TransitivityException;
+	public CompositeEntity<T> compact (CompositeEntity<T> ce) throws TransitivityException;
 
 }

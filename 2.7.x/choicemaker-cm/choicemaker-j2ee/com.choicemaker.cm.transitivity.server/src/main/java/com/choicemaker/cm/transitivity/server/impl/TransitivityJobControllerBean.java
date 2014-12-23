@@ -13,7 +13,6 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.args.TransitivitySettings;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
@@ -23,7 +22,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivitySettingsController;
 
 /**
  * A stateless EJB used to manage the persistence of TransitivityJobEntity
@@ -42,9 +40,6 @@ public class TransitivityJobControllerBean {
 
 	@EJB
 	private TransitivityParametersControllerBean paramsController;
-
-	@EJB
-	private TransitivitySettingsController oabaSettingsController;
 
 	@EJB
 	private ServerConfigurationController serverManager;
@@ -76,11 +71,11 @@ public class TransitivityJobControllerBean {
 	}
 
 	public TransitivityJob createPersistentTransitivityJob(String externalID,
-			TransitivityParameters params, TransitivitySettings settings,
+			TransitivityParameters params,
 			ServerConfiguration sc, OabaJob oabaJob)
 			throws ServerConfigurationException {
 
-		if (params == null || settings == null || sc == null || oabaJob == null) {
+		if (params == null || sc == null || oabaJob == null) {
 			throw new IllegalArgumentException("null argument");
 		}
 
@@ -96,11 +91,10 @@ public class TransitivityJobControllerBean {
 
 		// Save the parameters
 		paramsController.save(params);
-		oabaSettingsController.save(settings);
 		serverManager.save(sc);
 
 		TransitivityJobEntity retVal =
-			new TransitivityJobEntity(params, settings, sc, oabaJob, externalID);
+			new TransitivityJobEntity(params, sc, oabaJob, externalID);
 		em.persist(retVal);
 		assert TransitivityJobEntity.isPersistent(retVal);
 
@@ -117,7 +111,6 @@ public class TransitivityJobControllerBean {
 		logger.info("Transitivity job: " + retVal.toString());
 		logger.info("Transitivity OABA job: " + oabaJob.toString());
 		logger.info("Transitivity parameters: " + params.toString());
-		logger.info("Transitivity settings: " + settings.toString());
 		logger.info("Server configuration: " + sc.toString());
 		logger.info("Processing entry: " + processing.toString());
 

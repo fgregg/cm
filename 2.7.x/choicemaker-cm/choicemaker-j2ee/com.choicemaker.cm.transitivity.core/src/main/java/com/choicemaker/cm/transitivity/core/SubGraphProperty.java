@@ -17,13 +17,13 @@ package com.choicemaker.cm.transitivity.core;
  *
  * ChoiceMaker Technologies, Inc.
  */
-public interface SubGraphProperty {
+public interface SubGraphProperty<T extends Comparable<T>> {
 	
 	/** This method returns true if the give graph has this property.
 	 * 
 	 * @param ce
 	 * @return boolean.
 	 */
-	public boolean hasProperty (CompositeEntity ce);
+	public boolean hasProperty (CompositeEntity<T> ce);
 	
 }

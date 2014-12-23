@@ -18,28 +18,30 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2Factory
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 
 /**
- * This object takes a IMatchRecord2Source that contains separator objects and 
+ * This object takes a IMatchRecord2Source that contains separator objects and
  * returns one CompositeEntity at a time.
  * 
- * This is more efficient that CompositeEntityBuilder, because it doesn't need to do
- * set union/find.  It relies on the separator to know when a CompositeEntity is complete.
+ * This is more efficient that CompositeEntityBuilder, because it doesn't need
+ * to do set union/find. It relies on the separator to know when a
+ * CompositeEntity is complete.
  * 
  * @author pcheung
  *
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
-public class CompositeEntitySource implements ISource{
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
+public class CompositeEntitySource<T extends Comparable<T>> implements
+		ISource<CompositeEntity<T>> {
 
-	private IMatchRecord2Source source;
-	private MatchRecord2 separator = null;
-	
-	private CompositeEntity nextCE = null;
-	
+	private IMatchRecord2Source<T> source;
+	private MatchRecord2<T> separator = null;
+
+	private CompositeEntity<T> nextCE = null;
+
 	private int count;
-	
-	
 
-	/** This constructor takes in a IMatchRecord2Source from which to build
+	/**
+	 * This constructor takes in a IMatchRecord2Source from which to build
 	 * CompositeEntities.
 	 * 
 	 * @param source
@@ -47,29 +49,19 @@ public class CompositeEntitySource implements ISource{
 	public CompositeEntitySource(IMatchRecord2Source source) {
 		this.source = source;
 	}
-	
-	
-	public void open () throws BlockingException {
+
+	public void open() throws BlockingException {
 		source.open();
 	}
-	
-	
-	public void close () throws BlockingException {
+
+	public void close() throws BlockingException {
 		source.close();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#exists()
-	 */
 	public boolean exists() {
 		return source.exists();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
-	 */
 	public boolean hasNext() throws BlockingException {
 		if (this.nextCE == null) {
 			this.nextCE = readNext();
@@ -77,13 +69,11 @@ public class CompositeEntitySource implements ISource{
 		return this.nextCE != null;
 	}
 	
-	
-	/** This method gets the next CompositeEntity from the source.
-	 * 
-	 * @return
-	 * @throws BlockingException
-	 */
-	public CompositeEntity getNext () throws BlockingException {
+	public CompositeEntity<T> next() throws BlockingException {
+		return getNext();
+	}
+
+	public CompositeEntity<T> getNext() throws BlockingException {
 		if (this.nextCE == null) {
 			this.nextCE = readNext();
 		}
@@ -92,64 +82,65 @@ public class CompositeEntitySource implements ISource{
 
 		return ce;
 	}
-	
-	
+
 	/**
-	 * This method reads the next CompositeEntity from the IMatchRecord2.  A Composite
-	 * Entity is consists of the set of MatchRecord2 between the separators.
+	 * This method reads the next CompositeEntity from the IMatchRecord2. A
+	 * Composite Entity is consists of the set of MatchRecord2 between the
+	 * separators.
 	 * 
 	 * @return CompositeEntity
 	 * @throws BlockingException
 	 */
-	private CompositeEntity readNext () throws BlockingException {
-		CompositeEntity ce = new CompositeEntity (new Integer (count));
-		
+	private CompositeEntity readNext() throws BlockingException {
+		CompositeEntity ce = new CompositeEntity(new Integer(count));
+
 		boolean stop = false;
-		
+
 		while (source.hasNext() && !stop) {
 			MatchRecord2 mr = source.getNext();
-			
+
 			if (separator == null) {
 				Comparable c = mr.getRecordID1();
-				separator = MatchRecord2Factory.getSeparator (c);
+				separator = (MatchRecord2<T>) MatchRecord2Factory.getSeparator(c);
 			}
-			
+
 			if (!mr.equals(separator)) {
 				ce.addMatchRecord(mr);
 			} else {
 				stop = true;
 			}
 		}
-		
-		if (ce.getAllLinks().size() == 0) ce = null;
 
-		count ++;
-				
+		if (ce.getAllLinks().size() == 0)
+			ce = null;
+
+		count++;
+
 		return ce;
 	}
-	
-	
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
 	 */
 	public String getInfo() {
 		return source.getInfo();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
-	public void remove() throws BlockingException {
-		source.remove();
+	public void delete() throws BlockingException {
+		source.delete();
 	}
 
-
-	public int getCount () {
-		return count ++;
+	public int getCount() {
+		return count++;
 	}
-
 
 }

@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.transitivity.core;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,16 +20,13 @@ import java.util.List;
  *
  * ChoiceMaker Technologies Inc.
  */
-@SuppressWarnings({"rawtypes", "unchecked" })
-public class Entity implements INode {
+public class Entity<T extends Comparable<T>> implements INode<T> {
 	
 	private Integer marking;
+	private final T recordID;
+	private final char type;
 	
-	private Comparable recordID;
-	
-	private char type;
-	
-	public Entity (Comparable ID, char type) {
+	public Entity (T ID, char type) {
 		recordID = ID;
 		this.type = type;
 	}
@@ -38,7 +35,7 @@ public class Entity implements INode {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#getNodeId()
 	 */
-	public Comparable getNodeId() {
+	public T getNodeId() {
 		return recordID;
 	}
 
@@ -52,20 +49,18 @@ public class Entity implements INode {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.transitivity.core.INode#getChildren()
 	 */
-	public List getChildren() {
-		return new ArrayList ();
+	public List<INode<T>> getChildren() {
+		return Collections.emptyList();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(Object o) {
+	@SuppressWarnings("unchecked")
+	@Override
+	public int compareTo(INode<T> o) {
 		if (o instanceof Entity) {
+			@SuppressWarnings("rawtypes")
 			Entity e = (Entity) o;
-			
 			if (type == e.type) {
-				return this.recordID.compareTo(e.recordID);
+				return this.recordID.compareTo((T) e.recordID);
 			} else {
 				
 				if (type == STAGE_TYPE) return -1;
@@ -76,19 +71,49 @@ public class Entity implements INode {
 		}
 	}
 
-	public boolean equals(Object o) {
-		if (o instanceof Entity) {
-			Entity e = (Entity) o;
-			
-			if (type != e.type) return false;
-			else return this.recordID.equals(e.recordID);		
-		} else {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((marking == null) ? 0 : marking.hashCode());
+		result =
+			prime * result + ((recordID == null) ? 0 : recordID.hashCode());
+		result = prime * result + type;
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
 			return false;
 		}
-	}
-	
-	public int hashCode() {
-		return recordID.hashCode();
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		@SuppressWarnings("rawtypes")
+		Entity other = (Entity) obj;
+		if (marking == null) {
+			if (other.marking != null) {
+				return false;
+			}
+		} else if (!marking.equals(other.marking)) {
+			return false;
+		}
+		if (recordID == null) {
+			if (other.recordID != null) {
+				return false;
+			}
+		} else if (!recordID.equals(other.recordID)) {
+			return false;
+		}
+		if (type != other.type) {
+			return false;
+		}
+		return true;
 	}
 
 

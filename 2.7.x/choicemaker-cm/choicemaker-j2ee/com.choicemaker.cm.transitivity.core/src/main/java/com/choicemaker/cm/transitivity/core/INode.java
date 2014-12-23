@@ -22,18 +22,14 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  *
  * ChoiceMaker Technologies Inc.
  */
-@SuppressWarnings({"rawtypes" })
-public interface INode extends Comparable{
+public interface INode<T extends Comparable<T>> extends Comparable<INode<T>> {
 	
 	public static final char STAGE_TYPE = MatchRecord2.STAGE_SOURCE; //'S'
 	public static final char MASTER_TYPE = MatchRecord2.MASTER_SOURCE; //'D'
 	public static final char COMPOSIT_TYPE = 'C';
 
-	/** This returns the id of this node.
-	 * 
-	 * @return Comparable
-	 */
-	public Comparable getNodeId ();
+	/** This returns the id of this node */
+	public T getNodeId ();
 	
 	
 	/** This returns the type of this node.  It is either a COMPOSITE_TYPE,
@@ -56,22 +52,16 @@ public interface INode extends Comparable{
 	
 	
 	/** This method returns the marking of this node. 
-	 * 
-	 * @return Integer
 	 */
 	public Integer getMarking ();
 	
 	
 	/** This returns true if this node is a CompositeEntity.
-	 *  
-	 * @return boolean
 	 */
 	public boolean hasChildren ();
 	
-	/** This returns a list of children of this node.  Or a list of 0 elements.
-	 * 
-	 * @return List of INode
+	/** This returns a list of children of this node or a list of 0 elements.
 	 */
-	public List getChildren ();
+	public List<INode<T>> getChildren ();
 	
 }

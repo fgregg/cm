@@ -35,7 +35,7 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
@@ -102,8 +102,8 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 				msg = (ObjectMessage) inMessage;
 				Object o = msg.getObject();
 
-				if (o instanceof MatchWriterMessage) {
-					MatchWriterMessage data = (MatchWriterMessage) o;
+				if (o instanceof OabaJobMessage) {
+					OabaJobMessage data = (OabaJobMessage) o;
 					long jobId = data.jobID;
 					batchJob = jobController.findTransitivityJob(jobId);
 					handleMerge(batchJob);

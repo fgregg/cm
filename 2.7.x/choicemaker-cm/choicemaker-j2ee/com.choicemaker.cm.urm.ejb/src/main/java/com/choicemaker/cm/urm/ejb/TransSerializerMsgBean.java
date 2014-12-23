@@ -109,8 +109,6 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 			return;
 		}
 
-		@SuppressWarnings("unused")
-		Iterator compactedCeIter;
 		CmsJob ownJob = null;
 		ObjectMessage msg = (ObjectMessage) inMessage;
 		TransSerializeData tsd;
@@ -171,8 +169,10 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 			String name = tsd.groupMatchType;
 			ClusteringIteratorFactory f =
 				ClusteringIteratorFactory.getInstance();
+			@SuppressWarnings("unused")
+			Iterator clusteringIterator;
 			try {
-				compactedCeIter = f.createClusteringIterator(name, ceIter);
+				clusteringIterator = f.createClusteringIterator(name, ceIter);
 			} catch (Exception x) {
 				log.severe("Unable to create clustering iterator: " + x);
 				ownJob.markAsFailed();
@@ -183,7 +183,7 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 			throw new Error("not yet implemented");
 //			TransitivityResult tr =
 //				new TransitivityResult(trJob.getModel(), trJob.getDiffer(),
-//						trJob.getMatch(), compactedCeIter);
+//						trJob.getMatch(), clusteringIterator);
 //
 //			ownJob.updateStepInfo(40);
 //			log.fine("serialize to " + tsd.serializationType + "format");

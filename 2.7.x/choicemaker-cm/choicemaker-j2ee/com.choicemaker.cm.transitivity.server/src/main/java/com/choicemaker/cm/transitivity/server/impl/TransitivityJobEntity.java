@@ -10,6 +10,12 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID;
+
 import java.io.File;
 
 import javax.persistence.DiscriminatorValue;
@@ -19,7 +25,6 @@ import javax.persistence.NamedQuery;
 
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.args.TransitivitySettings;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
@@ -37,13 +42,12 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
  * @author rphall (migrated to JPA 2.0)
  */
 @NamedQueries({
-		@NamedQuery(name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL,
-				query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL),
-		@NamedQuery(
-				name = TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID,
-				query = TransitivityJobJPA.JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID) })
+		@NamedQuery(name = QN_TRANSITIVITY_FIND_ALL,
+				query = JPQL_TRANSITIVITY_FIND_ALL),
+		@NamedQuery(name = QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID,
+				query = JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID) })
 @Entity
-@DiscriminatorValue(value = TransitivityJobJPA.DISCRIMINATOR_VALUE)
+@DiscriminatorValue(value = DISCRIMINATOR_VALUE)
 public class TransitivityJobEntity extends BatchJobEntity implements
 		TransitivityJob {
 
@@ -54,25 +58,25 @@ public class TransitivityJobEntity extends BatchJobEntity implements
 		super();
 	}
 
+	// -- Constructors
+
 	public TransitivityJobEntity(TransitivityParameters params,
-			TransitivitySettings settings, ServerConfiguration sc,
-			OabaJob parent, String externalId) {
-		this(TransitivityJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings
-				.getId(), sc.getId(), externalId, randomTransactionId(), parent
-				.getId(), INVALID_ID, BatchJob.DEFAULT_RIGOR);
+			ServerConfiguration sc, OabaJob parent, String externalId) {
+		this(DISCRIMINATOR_VALUE, params.getId(), INVALID_ID, sc.getId(),
+				externalId, randomTransactionId(), parent.getId(), INVALID_ID,
+				BatchJob.DEFAULT_RIGOR);
 	}
 
 	public TransitivityJobEntity(TransitivityParameters params,
-			TransitivitySettings settings, ServerConfiguration sc,
-			OabaJob parent, String externalId, BatchJobRigor bjr) {
-		this(TransitivityJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings
-				.getId(), sc.getId(), externalId, randomTransactionId(), parent
-				.getId(), INVALID_ID, bjr);
+			ServerConfiguration sc, OabaJob parent, String externalId,
+			BatchJobRigor bjr) {
+		this(DISCRIMINATOR_VALUE, params.getId(), INVALID_ID, sc.getId(),
+				externalId, randomTransactionId(), parent.getId(), INVALID_ID,
+				bjr);
 	}
 
 	public TransitivityJobEntity(TransitivityJob o) {
-		this(TransitivityJobJPA.DISCRIMINATOR_VALUE, o
-				.getTransitivityParametersId(), o.getTransitivitySettingsId(),
+		this(DISCRIMINATOR_VALUE, o.getTransitivityParametersId(), INVALID_ID,
 				o.getServerId(), o.getExternalId(), o.getTransactionId(), o
 						.getBatchParentId(), o.getUrmId(), o.getBatchJobRigor());
 		this.workingDirectory = o.getWorkingDirectory().getAbsolutePath();
@@ -83,21 +87,6 @@ public class TransitivityJobEntity extends BatchJobEntity implements
 			long parentId, long urmid, BatchJobRigor bjr) {
 		super(type, paramsId, settingsId, serverId, externalId, tid, parentId,
 				urmid, bjr);
-	}
-
-	public TransitivityJobEntity(TransitivityParametersEntity params,
-			OabaJob job, String extId) {
-		throw new Error("not implemented");
-	}
-
-	public TransitivityJobEntity(TransitivityParametersEntity params,
-			BatchJobEntity job) {
-		throw new Error("not implemented");
-	}
-
-	public TransitivityJobEntity(TransitivityParametersEntity params,
-			BatchJob job, String extId) {
-		throw new Error("not implemented");
 	}
 
 	void setWorkingDirectory(File workingDir) {
@@ -118,14 +107,11 @@ public class TransitivityJobEntity extends BatchJobEntity implements
 		this.workingDirectory = workingDir.getAbsolutePath();
 	}
 
+	// -- Accessors
+
 	@Override
 	public long getTransitivityParametersId() {
 		return super.getParametersId();
-	}
-
-	@Override
-	public long getTransitivitySettingsId() {
-		return super.getSettingsId();
 	}
 
 } // TransitivityJobEntity

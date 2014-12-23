@@ -149,8 +149,9 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		log.fine("Number of records: " + numRecords);
 
 		//build a MatchRecord2Sink for all pairs belonging to the size 2 sets.
-		Size2MatchProducer producer = new Size2MatchProducer(mSource,
-			idFactory.getSource (idSink), OabaFileUtils.getSet2MatchFactory(transJob).getNextSink());
+		Size2MatchProducer producer =
+			new Size2MatchProducer(mSource, idFactory.getSource(idSink),
+					OabaFileUtils.getSet2MatchFactory(transJob).getNextSink());
 		int twos = producer.process();
 		log.info("number of size 2 EC: " + twos);
 
@@ -235,7 +236,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 				OabaFileUtils.getCompositeTransMatchSource(transJob);
 			if (finalSource.exists()) {
 				log.info("removing old transMatch files: " + finalSource.getInfo());
-				finalSource.remove();
+				finalSource.delete();
 			}
 		} catch (IllegalArgumentException e) {
 			//this is expected if the source was never created.

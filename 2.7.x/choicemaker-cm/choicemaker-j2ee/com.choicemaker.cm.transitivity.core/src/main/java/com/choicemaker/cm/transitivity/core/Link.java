@@ -10,7 +10,11 @@
  */
 package com.choicemaker.cm.transitivity.core;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
  * This represents a link between two nodes on a graph.
@@ -20,15 +24,15 @@ import java.util.ArrayList;
  * ChoiceMaker Technologies Inc.
  */
 @SuppressWarnings({"rawtypes" })
-public class Link {
+public class Link<T extends Comparable<T>> {
 
-	private INode node1;
-	private INode node2;
+	private INode<T> node1;
+	private INode<T> node2;
 	
 	/* This list contains all the MatchRecord2 objects that make up this Link.
 	 * 
 	 */
-	private ArrayList matchRecords = new ArrayList ();
+	private List<MatchRecord2<T>> matchRecords;
 
 
 	/** This constructor takes in node1, node2, and a list of MatchRecord2.
@@ -37,10 +41,11 @@ public class Link {
 	 * @param node2
 	 * @param mrs
 	 */
-	public Link (INode node1, INode node2, ArrayList mrs) {
+	public Link (INode<T> node1, INode<T> node2, List<MatchRecord2<T>> mrs) {
 		this.node1 = node1;
 		this.node2 = node2;
-		this.matchRecords = mrs;
+		this.matchRecords = new LinkedList<>();
+		this.matchRecords.addAll(mrs);
 	}
 	
 
@@ -66,8 +71,8 @@ public class Link {
 	 * 
 	 * @return ArrayList of MatchRecord2
 	 */
-	public ArrayList getLinkDefinition () {
-		return matchRecords;
+	public List<MatchRecord2<T>> getLinkDefinition () {
+		return Collections.unmodifiableList(matchRecords);
 	}
 
 }

@@ -24,8 +24,6 @@ public interface TransitivityJob extends BatchJob {
 
 	long getTransitivityParametersId();
 
-	long getTransitivitySettingsId();
-
 	long getServerId();
 
 	long getUrmId();

@@ -30,7 +30,7 @@ import com.choicemaker.cm.transitivity.util.SimpleGraphCompactor;
  *
  * ChoiceMaker Technologies, Inc.
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class GenericIterator implements Iterator {
 
 	private static final Logger log = Logger.getLogger(GenericIterator.class.getName());

@@ -1,5 +1,6 @@
 package com.choicemaker.cmit.trans.util;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -106,62 +107,6 @@ public class TransitivityTestController {
 		return retVal;
 	}
 
-//	public OabaParameters createPersistentOabaParameters(String tag,
-//			TestEntities te) {
-//		if (te == null) {
-//			throw new IllegalArgumentException("null test entities");
-//		}
-//		return EntityManagerUtils.createPersistentOabaParameters(em, tag, te);
-//	}
-//
-//	/**
-//	 * An externalId for the returned OabaJob is synthesized using the specified
-//	 * tag
-//	 */
-//	public OabaJob createPersistentOabaJobBean(String tag, TestEntities te) {
-//		return createPersistentOabaJobBean(te,
-//				EntityManagerUtils.createExternalId(tag));
-//	}
-//
-//	/**
-//	 * The specified externalId is assigned without alteration to the returned
-//	 * OabaJob
-//	 */
-//	public OabaJob createPersistentOabaJobBean(TestEntities te, String extId) {
-//		ServerConfiguration sc = getDefaultServerConfiguration();
-//		return createPersistentOabaJobBean(sc, em, te, extId);
-//	}
-//
-//	/**
-//	 * Creates a persistent instance of OabaParametersEntity. An externalId for
-//	 * the returned OabaJob is synthesized using the specified tag.
-//	 */
-//	public static OabaJobEntity createPersistentOabaJobBean(
-//			ServerConfiguration sc, EntityManager em, String tag,
-//			TestEntities te) {
-//		return createPersistentOabaJobBean(sc, em, te, EntityManagerUtils.createExternalId(tag));
-//	}
-//
-//	/**
-//	 * Creates a persistent instance of OabaParametersEntity. The specified
-//	 * externalId is assigned without alteration to the returned OabaJob.
-//	 */
-//	public static OabaJobEntity createPersistentOabaJobBean(
-//			ServerConfiguration sc, EntityManager em, TestEntities te,
-//			String extId) {
-//		if (te == null) {
-//			throw new IllegalArgumentException("null test entities");
-//		}
-//		OabaParametersEntity params = EntityManagerUtils.
-//			createPersistentOabaParameters(em, null, te);
-//		OabaSettingsEntity settings = EntityManagerUtils.
-//			createPersistentOabaSettings(em, null, te);
-//		OabaJobEntity retVal = new OabaJobEntity(params, settings, sc, extId);
-//		em.persist(retVal);
-//		te.add(retVal);
-//		return retVal;
-//	}
-
 	public void removeTestEntities(TestEntities te) {
 		EntityManagerUtils.removeTestEntities(em, te);
 	}
@@ -176,6 +121,18 @@ public class TransitivityTestController {
 
 	public List<OabaProcessing> findAllOabaProcessing() {
 		return EntityManagerUtils.findAllOabaProcessing(em);
+	}
+
+	public List<OabaJob> findAllTransitivityJobs() {
+		// TODO FIXME not yet implemented
+//		throw new Error("not yet implemented");
+		return Collections.emptyList();
+	}
+
+	public List<OabaJob> findAllTransitivityParameters() {
+		// TODO FIXME not yet implemented
+//		throw new Error("not yet implemented");
+		return Collections.emptyList();
 	}
 
 }

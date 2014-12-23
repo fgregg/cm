@@ -39,6 +39,8 @@ import com.choicemaker.cm.transitivity.util.CompositeEntitySource;
  * @author pcheung
  *
  */
+@SuppressWarnings({
+	"rawtypes"})
 public class TransitivityServiceBean implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
@@ -54,7 +56,7 @@ public class TransitivityServiceBean implements SessionBean {
 //	@EJB
 	OabaProcessingControllerBean processingController;
 
-	/**
+	/* *
 	 * This method starts the transitivity engine.
 	 * WARNINGS:
 	 *  1. only call this after the OABA has finished.

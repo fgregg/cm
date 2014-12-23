@@ -34,10 +34,9 @@ public class FullyConnectedProperty implements SubGraphProperty {
 		for (int i=0; i<links.size(); i++) {
 			Link l = (Link) links.get(i);
 			List mrs = l.getLinkDefinition();
-			
 			e += mrs.size();
 		}
-		
+
 		n = n*(n-1)/2;
 		if (e == n) return true;
 		else return false;

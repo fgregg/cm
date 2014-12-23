@@ -65,7 +65,9 @@ public class BiConnectedChecker {
 			List l2 = link.getLinkDefinition();
 			for (int j=0; j<l2.size(); j++) {
 				MatchRecord2 mr = (MatchRecord2) l2.get(j);
-				if (mr.getMatchType() == MatchRecord2.MATCH) matchOnly.addMatchRecord(mr);
+				if (mr.getMatchType() == MatchRecord2.MATCH) {
+					matchOnly.addMatchRecord(mr);
+				}
 			}
 		}
 	}

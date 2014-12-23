@@ -18,56 +18,53 @@ import com.choicemaker.cm.transitivity.core.EdgeProperty;
 import com.choicemaker.cm.transitivity.core.Link;
 
 /**
- * This object takes in a graph (CompositeEntity) and an EdgeProperty
- * and returns a graph satisfying that EdgeProperty.
+ * This object takes in a graph (CompositeEntity) and an EdgeProperty and
+ * returns a graph satisfying that EdgeProperty.
  * 
  * @author pcheung
  *
- * ChoiceMaker Technologies, Inc.
+ *         ChoiceMaker Technologies, Inc.
  */
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class GraphFilter {
 
-	private static GraphFilter filter = null;
+	private static GraphFilter filter = new GraphFilter();
 
-	/**
-	 * Private constructor, use getInstance instead.
-	 *
-	 */
-	private GraphFilter () {
+	private GraphFilter() {
 	}
-	
-	
-	public static GraphFilter getInstance () {
-		if (filter ==  null) filter = new GraphFilter ();
+
+	public static GraphFilter getInstance() {
 		return filter;
 	}
-	
-	
-	/** This method returns a graph where the edges statisfy the given
+
+	/**
+	 * This method returns a graph where the edges satisfy the given
 	 * EdgeProperty.
 	 * 
-	 * @param ce - input graph
-	 * @param ep - property which the edges need to satisfy
+	 * @param ce
+	 *            - input graph
+	 * @param ep
+	 *            - property which the edges need to satisfy
 	 * @return CompositeEnity - new graph.
 	 */
-	public CompositeEntity filter (CompositeEntity ce, EdgeProperty ep) {
+	public <T extends Comparable<T>> CompositeEntity<T> filter(
+			CompositeEntity<T> ce, EdgeProperty ep) {
 		UniqueSequence seq = UniqueSequence.getInstance();
-		CompositeEntity ret = new CompositeEntity (seq.getNextInteger());
-		
-		//get all the links
+		CompositeEntity<T> ret = new CompositeEntity(seq.getNextInteger());
+
+		// get all the links
 		List links = ce.getAllLinks();
-		for (int i=0; i<links.size(); i++) {
+		for (int i = 0; i < links.size(); i++) {
 			Link link = (Link) links.get(i);
 			List mrs = link.getLinkDefinition();
-			for (int j=0; j<mrs.size(); j++) {
+			for (int j = 0; j < mrs.size(); j++) {
 				MatchRecord2 mr = (MatchRecord2) mrs.get(j);
-				
-				//add the matchs that meets the property to the return object
-				if (ep.hasProperty(mr)) ret.addMatchRecord(mr);
+				if (ep.hasProperty(mr)) {
+					ret.addMatchRecord(mr);
+				}
 			}
 		}
-		
+
 		return ret;
 	}
 

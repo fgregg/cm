@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 @SuppressWarnings({"rawtypes"})
 public class ClusteringIteratorFactory {
 
-	private static final Logger log = Logger.getLogger(GenericIterator.class.getName());
+	private static final Logger log = Logger.getLogger(ClusteringIteratorFactory.class.getName());
 	
 	private static ClusteringIteratorFactory instance = null;
 	private static Object instanceSynch = new Object();
@@ -56,7 +56,7 @@ public class ClusteringIteratorFactory {
 
 		Iterator retVal = null;
 
-		// Replace by lookup in a plugin registry (or replace factroy by dependency injection)
+		// Replace by lookup in a plugin registry (or replace factory by dependency injection)
 		if(name.equals(MatchBiconnectedIterator.NAME)) {
 			retVal = new MatchBiconnectedIterator(ceIter);
 		} else if ( name.equals(MatchFullyConnectedIterator.NAME) ) {
