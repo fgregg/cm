@@ -116,106 +116,106 @@ public class TransitivityJobEntityIT {
 
 	@Test
 	public void testConstruction() {
-//		final String METHOD = "testConstruction";
-//		final TestEntities te = new TestEntities();
-//
-//		OabaJob oabaJob = createEphemeralOabaJob(te, METHOD, true);
-//		final Date now = new Date();
-//		TransitivityJob job = createEphemeralTransitivityJob(te, METHOD, true);
-//		final Date now2 = new Date();
-//
-//		assertTrue(0 == job.getId());
-//		assertTrue(job.getBatchParentId() == oabaJob.getId());
-//
-//		assertTrue(STATUS_NEW.equals(job.getStatus()));
-//
-//		Date d = job.getRequested();
-//		assertTrue(d != null);
-//		assertTrue(now.compareTo(d) <= 0);
-//		assertTrue(d.compareTo(now2) <= 0);
-//
-//		Date d2 = job.getTimeStamp(STATUS_NEW);
-//		assertTrue(d.equals(d2));
-//
-//		try {
-//			te.removePersistentObjects(em, utx);
-//		} catch (Exception x) {
-//			logger.severe(x.toString());
-//			fail(x.toString());
-//		}
+		final String METHOD = "testConstruction";
+		final TestEntities te = new TestEntities();
+
+		OabaJob oabaJob = createEphemeralOabaJob(te, METHOD, true);
+		final Date now = new Date();
+		TransitivityJob job = createEphemeralTransitivityJob(te, METHOD, true);
+		final Date now2 = new Date();
+
+		assertTrue(0 == job.getId());
+		assertTrue(job.getBatchParentId() == oabaJob.getId());
+
+		assertTrue(STATUS_NEW.equals(job.getStatus()));
+
+		Date d = job.getRequested();
+		assertTrue(d != null);
+		assertTrue(now.compareTo(d) <= 0);
+		assertTrue(d.compareTo(now2) <= 0);
+
+		Date d2 = job.getTimeStamp(STATUS_NEW);
+		assertTrue(d.equals(d2));
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
 	public void testPersistFindRemove() {
-//		final String METHOD = "testPersistFindRemove";
-//		final TestEntities te = new TestEntities();
-//
-//		// Create a job
-//		TransitivityJob job = createEphemeralTransitivityJob(te, METHOD, true);
-//		assertTrue(job.getId() == 0);
-//
-//		// Save the job
-//		transController.save(job);
-//		assertTrue(job.getId() != 0);
-//
-//		// Find the job
-//		TransitivityJob transJob2 =
-//			transController.findTransitivityJob(job.getId());
-//		assertTrue(job.getId() == transJob2.getId());
-//		assertTrue(job.equals(transJob2));
-//
-//		// Delete the job
-//		transController.delete(transJob2);
-//		TransitivityJob batchJob3 =
-//			transController.findTransitivityJob(job.getId());
-//		assertTrue(batchJob3 == null);
-//
-//		try {
-//			te.removePersistentObjects(em, utx);
-//		} catch (Exception x) {
-//			logger.severe(x.toString());
-//			fail(x.toString());
-//		}
+		final String METHOD = "testPersistFindRemove";
+		final TestEntities te = new TestEntities();
+
+		// Create a job
+		TransitivityJob job = createEphemeralTransitivityJob(te, METHOD, true);
+		assertTrue(job.getId() == 0);
+
+		// Save the job
+		transController.save(job);
+		assertTrue(job.getId() != 0);
+
+		// Find the job
+		TransitivityJob transJob2 =
+			transController.findTransitivityJob(job.getId());
+		assertTrue(job.getId() == transJob2.getId());
+		assertTrue(job.equals(transJob2));
+
+		// Delete the job
+		transController.delete(transJob2);
+		TransitivityJob batchJob3 =
+			transController.findTransitivityJob(job.getId());
+		assertTrue(batchJob3 == null);
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	@Test
 	public void testFindAll() {
-//		final String METHOD = "testFindAll";
-//		final TestEntities te = new TestEntities();
-//
-//		List<Long> jobIds = new LinkedList<>();
-//		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
-//			// Create and save a job
-//			TransitivityJob job =
-//				createEphemeralTransitivityJob(te, METHOD, true);
-//			transController.save(job);
-//			long id = job.getId();
-//			assertTrue(!jobIds.contains(id));
-//			jobIds.add(id);
-//		}
-//
-//		// Verify the number of jobs has increased
-//		List<TransitivityJob> jobs = transController.findAllTransitivityJobs();
-//		assertTrue(jobs != null);
-//
-//		// Find the jobs
-//		boolean isFound = false;
-//		for (long jobId : jobIds) {
-//			for (TransitivityJob job : jobs) {
-//				if (jobId == job.getId()) {
-//					isFound = true;
-//					break;
-//				}
-//			}
-//			assertTrue(isFound);
-//		}
-//
-//		try {
-//			te.removePersistentObjects(em, utx);
-//		} catch (Exception x) {
-//			logger.severe(x.toString());
-//			fail(x.toString());
-//		}
+		final String METHOD = "testFindAll";
+		final TestEntities te = new TestEntities();
+
+		List<Long> jobIds = new LinkedList<>();
+		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
+			// Create and save a job
+			TransitivityJob job =
+				createEphemeralTransitivityJob(te, METHOD, true);
+			transController.save(job);
+			long id = job.getId();
+			assertTrue(!jobIds.contains(id));
+			jobIds.add(id);
+		}
+
+		// Verify the number of jobs has increased
+		List<TransitivityJob> jobs = transController.findAllTransitivityJobs();
+		assertTrue(jobs != null);
+
+		// Find the jobs
+		boolean isFound = false;
+		for (long jobId : jobIds) {
+			for (TransitivityJob job : jobs) {
+				if (jobId == job.getId()) {
+					isFound = true;
+					break;
+				}
+			}
+			assertTrue(isFound);
+		}
+
+		try {
+			te.removePersistentObjects(em, utx);
+		} catch (Exception x) {
+			logger.severe(x.toString());
+			fail(x.toString());
+		}
 	}
 
 	protected TransitivityJob createEphemeralTransitivityJob(TestEntities te,

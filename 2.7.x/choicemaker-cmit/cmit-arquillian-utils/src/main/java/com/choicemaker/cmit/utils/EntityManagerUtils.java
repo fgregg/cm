@@ -133,6 +133,7 @@ public class EntityManagerUtils {
 			break;
 		case STAGING_TO_MASTER_LINKAGE:
 		case MASTER_TO_MASTER_LINKAGE:
+		case TRANSITIVITY_ANALYSIS:
 			retVal = createFakePersistableRecordSource(tag);
 			break;
 		default:

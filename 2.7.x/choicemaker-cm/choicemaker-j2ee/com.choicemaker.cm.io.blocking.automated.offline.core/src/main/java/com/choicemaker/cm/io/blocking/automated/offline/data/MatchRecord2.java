@@ -28,7 +28,7 @@ public class MatchRecord2<T extends Comparable<T>> implements
 		Comparable<MatchRecord2<T>>, Serializable {
 
 	/* As of 2010-03-10 */
-	static final long serialVersionUID = -3108962876276009775L;
+	static final long serialVersionUID = 271;
 
 	public static final char MATCH = 'M';
 	public static final char DIFFER = 'D';

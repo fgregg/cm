@@ -216,7 +216,7 @@ public class BatchJobUtils {
 		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		PersistableRecordSource master =
 				EntityManagerUtils.createFakePersistableRecordSource(tag, task);
-		TransitivityParametersEntity retVal = null;
+		TransitivityParametersEntity retVal =
 			new TransitivityParametersEntity(
 					EntityManagerUtils.createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
