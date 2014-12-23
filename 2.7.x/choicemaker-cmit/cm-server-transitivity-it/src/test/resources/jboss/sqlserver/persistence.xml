@@ -19,8 +19,8 @@
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityParametersEntity</class>
+    <class>com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity</class>
+    <class>com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity</class>
     <!--
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
     -->
@@ -50,8 +50,8 @@
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityParametersEntity</class>
+    <class>com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity</class>
+    <class>com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity</class>
     <!--
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
     -->
