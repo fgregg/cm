@@ -1,19 +1,6 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_PER_BLOCKING_SET;
-import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_SINGLE_BLOCKING_SET;
-import static com.choicemaker.cm.args.AbaSettings.DEFAULT_SINGLE_TABLE_GRACE_LIMIT;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_INTERVAL;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_MATCHES;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_OVERSIZED;
-import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MIN_FIELDS;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_ABORTED;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_ABORT_REQUESTED;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_CLEAR;
 import static com.choicemaker.cm.batch.BatchJob.STATUS_COMPLETED;
-import static com.choicemaker.cm.batch.BatchJob.STATUS_FAILED;
 import static com.choicemaker.cm.batch.BatchJob.STATUS_NEW;
 import static com.choicemaker.cm.batch.BatchJob.STATUS_QUEUED;
 import static com.choicemaker.cm.batch.BatchJob.STATUS_STARTED;
@@ -40,20 +27,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.args.OabaLinkageType;
-import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.oaba.util.OabaTestController;
+import com.choicemaker.cmit.utils.BatchJobUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
 
@@ -72,18 +55,9 @@ public class OabaJobEntityIT {
 				TESTS_AS_EJB_MODULE);
 	}
 
-	public static final int MAX_MAX_SINGLE = 1000;
+	public static final int MAX_SINGLE_LIMIT = 1000;
 
 	public static final int MAX_TEST_ITERATIONS = 10;
-
-	private static final String[] _statusValues =
-		new String[] {
-				STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_COMPLETED,
-				STATUS_FAILED, STATUS_ABORT_REQUESTED, STATUS_ABORTED,
-				STATUS_CLEAR };
-
-	private static final String[] _nonterminal = new String[] {
-			STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_ABORT_REQUESTED };
 
 	@Resource
 	UserTransaction utx;
@@ -98,33 +72,27 @@ public class OabaJobEntityIT {
 	private ServerConfigurationController serverController;
 
 	@EJB
-	protected OabaTestController oabaTestController;
+	protected OabaTestController testController;
+
+	private int initialOabaJobCount;
+	private int initialOabaParamsCount;
 
 	private final Random random = new Random(new Date().getTime());
 
-	private int initialOabaParamsCount;
-	private int initialOabaJobCount;
-
-	// private int initialTransitivityJobCount;
-
-	private String getRandomNonTerminalStatus() {
-		int i = random.nextInt(_nonterminal.length);
-		return _nonterminal[i];
-	}
-
 	@Before
 	public void setUp() {
-		initialOabaParamsCount = oabaTestController.findAllOabaParameters().size();
-		initialOabaJobCount = oabaTestController.findAllOabaJobs().size();
+		initialOabaJobCount = testController.findAllOabaJobs().size();
+		initialOabaParamsCount = testController.findAllOabaParameters().size();
 	}
 
 	@After
 	public void tearDown() {
-		int finalOabaParamsCount = oabaTestController.findAllOabaParameters().size();
-		assertTrue(initialOabaParamsCount == finalOabaParamsCount);
-
-		int finalOabaJobCount = oabaTestController.findAllOabaJobs().size();
+		int finalOabaJobCount = testController.findAllOabaJobs().size();
 		assertTrue(initialOabaJobCount == finalOabaJobCount);
+
+		int finalOabaParamsCount =
+			testController.findAllOabaParameters().size();
+		assertTrue(initialOabaParamsCount == finalOabaParamsCount);
 	}
 
 	@Test
@@ -133,7 +101,7 @@ public class OabaJobEntityIT {
 		assertTrue(utx != null);
 		assertTrue(oabaController != null);
 		assertTrue(serverController != null);
-		assertTrue(oabaTestController != null);
+		assertTrue(testController != null);
 	}
 
 	@Test
@@ -142,7 +110,7 @@ public class OabaJobEntityIT {
 		final TestEntities te = new TestEntities();
 
 		Date now = new Date();
-		OabaJob job = createEphemeralOabaJob(METHOD, te);
+		OabaJob job = createEphemeralOabaJob(te, METHOD, true);
 		Date now2 = new Date();
 
 		assertTrue(0 == job.getId());
@@ -171,7 +139,7 @@ public class OabaJobEntityIT {
 		final TestEntities te = new TestEntities();
 
 		// Create a job
-		OabaJob job = createEphemeralOabaJob(METHOD, te);
+		OabaJob job = createEphemeralOabaJob(te, METHOD, true);
 		assertTrue(job.getId() == 0);
 
 		// Save the job
@@ -204,7 +172,7 @@ public class OabaJobEntityIT {
 		List<Long> jobIds = new LinkedList<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a job
-			OabaJob job = createEphemeralOabaJob(METHOD, te);
+			OabaJob job = createEphemeralOabaJob(te, METHOD, true);
 			assertTrue(job.getId() == 0);
 			oabaController.save(job);
 			te.add(job);
@@ -244,7 +212,8 @@ public class OabaJobEntityIT {
 
 		// Create a job and set a value
 		String extId = EntityManagerUtils.createExternalId(METHOD);
-		OabaJob job = createEphemeralOabaJob(te, extId);
+		boolean isTag = false;
+		OabaJob job = createEphemeralOabaJob(te, extId, isTag);
 		assertTrue(extId.equals(job.getExternalId()));
 
 		// Save the job
@@ -273,7 +242,7 @@ public class OabaJobEntityIT {
 		final TestEntities te = new TestEntities();
 
 		// Create a job and set a value
-		OabaJob job = createEphemeralOabaJob(METHOD, te);
+		OabaJob job = createEphemeralOabaJob(te, METHOD, true);
 		final long v1 = random.nextLong();
 		job.setDescription("" + v1);
 
@@ -307,7 +276,7 @@ public class OabaJobEntityIT {
 		final TestEntities te = new TestEntities();
 
 		// Create a job and set a value
-		OabaJob job = createEphemeralOabaJob(METHOD, te);
+		OabaJob job = createEphemeralOabaJob(te, METHOD, true);
 		assertTrue(job.getDescription() == null);
 		final String description = "Description: " + new Date().toString();
 		job.setDescription(description);
@@ -348,7 +317,7 @@ public class OabaJobEntityIT {
 		Date before = new Date();
 
 		// 1. Create a job and check the percentage complete
-		OabaJob job = createEphemeralOabaJob(METHOD, te);
+		OabaJob job = createEphemeralOabaJob(te, METHOD, true);
 
 		// Record a timestamp after a transition is made
 		Date after = new Date();
@@ -364,7 +333,7 @@ public class OabaJobEntityIT {
 
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 
-			final String sts = getRandomNonTerminalStatus();
+			final String sts = BatchJobUtils.getRandomNonTerminalStatus();
 			final int v1 =
 				random.nextInt(BatchJob.MAX_PERCENTAGE_COMPLETED + 1);
 			job.setStatus(sts);
@@ -420,7 +389,8 @@ public class OabaJobEntityIT {
 
 		// Create two ephemeral jobs
 		String exId = EntityManagerUtils.createExternalId(METHOD);
-		OabaJob job1 = createEphemeralOabaJob(te, exId);
+		boolean isTag = false;
+		OabaJob job1 = createEphemeralOabaJob(te, exId, isTag);
 		assertTrue(te.contains(job1));
 		OabaJob job2 = new OabaJobEntity(job1);
 		te.add(job2);
@@ -474,8 +444,8 @@ public class OabaJobEntityIT {
 		Date before = new Date();
 
 		// 1. Create a job and check the status
-		OabaJob job = createEphemeralOabaJob(METHOD, te);
-		// oabaTestController.save(job);
+		OabaJob job = createEphemeralOabaJob(te, METHOD, true);
+		// testController.save(job);
 
 		// Record a timestamp after a transition is made
 		Date after = new Date();
@@ -498,7 +468,7 @@ public class OabaJobEntityIT {
 		// 2. Queue the job
 		job.markAsQueued();
 		assertTrue(job.getStatus().equals(STATUS_QUEUED));
-		// oabaTestController.save(job);
+		// testController.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsCompleted();
@@ -507,24 +477,24 @@ public class OabaJobEntityIT {
 		// 3. Start the job
 		job.markAsStarted();
 		assertTrue(job.getStatus().equals(STATUS_STARTED));
-		// oabaTestController.save(job);
+		// testController.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();
 		assertTrue(job.getStatus().equals(STATUS_STARTED));
-		// oabaTestController.save(job);
+		// testController.save(job);
 
 		// 4. Update the percentage complete
 		job.setFractionComplete(random
 				.nextInt(BatchJob.MAX_PERCENTAGE_COMPLETED + 1));
 		assertTrue(job.getStatus().equals(STATUS_STARTED));
-		// oabaTestController.save(job);
+		// testController.save(job);
 
 		// 5. Mark the job as completed
 		job.markAsCompleted();
 		assertTrue(job.getStatus().equals(STATUS_COMPLETED));
 		assertTrue(job.getFractionComplete() == BatchJob.MAX_PERCENTAGE_COMPLETED);
-		// oabaTestController.save(job);
+		// testController.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();
@@ -547,8 +517,8 @@ public class OabaJobEntityIT {
 		final String METHOD = "testStatus";
 		final TestEntities te = new TestEntities();
 
-		for (String sts : _statusValues) {
-			OabaJob job = createEphemeralOabaJob(METHOD, te);
+		for (String sts : BatchJobEntity.getStatusValues()) {
+			OabaJob job = createEphemeralOabaJob(te, METHOD, true);
 			job.setStatus(sts);
 			assertTrue(sts.equals(job.getStatus()));
 
@@ -566,8 +536,8 @@ public class OabaJobEntityIT {
 			oabaController.delete(job);
 		}
 
-		for (String sts : _statusValues) {
-			OabaJob job = createEphemeralOabaJob(METHOD, te);
+		for (String sts : BatchJobEntity.getStatusValues()) {
+			OabaJob job = createEphemeralOabaJob(te, METHOD, true);
 			job.setStatus(sts);
 			assertTrue(sts.equals(job.getStatus()));
 
@@ -599,7 +569,7 @@ public class OabaJobEntityIT {
 		final Date now = new Date();
 
 		// Set the status
-		OabaJob job = createEphemeralOabaJob(METHOD, te);
+		OabaJob job = createEphemeralOabaJob(te, METHOD, true);
 		job.setStatus(sts);
 
 		// Record a timestamp after the status is set
@@ -637,148 +607,20 @@ public class OabaJobEntityIT {
 
 	@Test
 	public void testTimestamps() {
-		for (String sts : _statusValues) {
+		for (String sts : BatchJobEntity.getStatusValues()) {
 			testTimestamp(sts);
 		}
 	}
 
-	public OabaJob createEphemeralOabaJob(String tag, TestEntities te) {
+	protected OabaJob createEphemeralOabaJob(TestEntities te, String tag,
+			boolean isTag) {
 		ServerConfiguration sc = getDefaultServerConfiguration();
-		OabaJob retVal = null;
-		try {
-			utx.begin();
-			retVal = createEphemeralOabaJob(sc, em, tag, te);
-			utx.commit();
-		} catch (Exception x) {
-			fail(x.toString());
-		}
-		assertTrue(retVal != null);
-		return retVal;
+		return BatchJobUtils.createEphemeralOabaJob(MAX_SINGLE_LIMIT, utx, sc,
+				em, te, tag, isTag);
 	}
 
-	public OabaJob createEphemeralOabaJob(TestEntities te, String extId) {
-		ServerConfiguration sc = getDefaultServerConfiguration();
-		OabaJob retVal = null;
-		try {
-			utx.begin();
-			retVal = createEphemeralOabaJob(sc, em, te, extId);
-			utx.commit();
-		} catch (Exception x) {
-			fail(x.toString());
-		}
-		assertTrue(retVal != null);
-		return retVal;
-	}
-
-	public ServerConfiguration getDefaultServerConfiguration() {
-		String hostName = ServerConfigurationControllerBean.computeHostName();
-		final boolean computeFallback = true;
-		ServerConfiguration retVal =
-			serverController.getDefaultConfiguration(hostName, computeFallback);
-		assert retVal != null;
-		assert retVal.getId() != ServerConfigurationControllerBean.INVALID_ID;
-		return retVal;
-	}
-
-	/**
-	 * Creates an ephemeral instance of OabaParametersEntity. An externalId for
-	 * the returned OabaJob is synthesized using the specified tag.
-	 */
-	protected OabaJobEntity createEphemeralOabaJob(ServerConfiguration sc,
-			EntityManager em, String tag, TestEntities te) {
-		return createEphemeralOabaJob(sc, em, te, EntityManagerUtils.createExternalId(tag));
-	}
-
-	/**
-	 * Creates an ephemeral instance of OabaParametersEntity. The specified
-	 * externalId is assigned without alteration to the returned OabaJob.
-	 */
-	protected OabaJobEntity createEphemeralOabaJob(ServerConfiguration sc,
-			EntityManager em, TestEntities te, String extId) {
-		final String METHOD = "createEphemeralOabaJob";
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		OabaParametersEntity params =
-			createPersistentOabaParameters(em, METHOD, te);
-		OabaSettingsEntity settings =
-			createPersistentOabaSettings(em, METHOD, te);
-		OabaJobEntity retVal = new OabaJobEntity(params, settings, sc, extId);
-		te.add(retVal);
-		return retVal;
-	}
-
-	/** Creates an ephemeral instance of OabaParametersEntity */
-	public OabaParametersEntity createEphemeralOabaParameters(
-			String tag, TestEntities te) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
-		PersistableRecordSource stage = EntityManagerUtils.createFakePersistableRecordSource(tag);
-		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
-		PersistableRecordSource master =
-				EntityManagerUtils.createFakePersistableRecordSource(tag, task);
-		OabaParametersEntity retVal =
-			new OabaParametersEntity(EntityManagerUtils.createRandomModelConfigurationName(tag),
-					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master, task);
-		te.add(retVal);
-		return retVal;
-	}
-
-	/**
-	 * Creates a persistent instance of OabaParametersEntity An externalId for
-	 * the returned OabaJob is synthesized using the specified tag.
-	 */
-	public OabaParametersEntity createPersistentOabaParameters(
-			EntityManager em, String tag, TestEntities te) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
-		OabaParametersEntity retVal = createEphemeralOabaParameters(tag, te);
-		em.persist(retVal);
-		return retVal;
-	}
-
-	/** Creates an ephemeral instance of OabaSettingsEntity */
-	public OabaSettingsEntity createEphemeralOabaSettings(String tag,
-			TestEntities te) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		int limPerBlockingSet = random.nextInt(DEFAULT_LIMIT_PER_BLOCKING_SET);
-		int limSingleBlockingSet =
-			random.nextInt(DEFAULT_LIMIT_SINGLE_BLOCKING_SET);
-		int singleTableGraceLimit =
-			random.nextInt(DEFAULT_SINGLE_TABLE_GRACE_LIMIT);
-		int maxSingle = random.nextInt(MAX_MAX_SINGLE);
-		int maxBlockSize = random.nextInt(DEFAULT_MAX_BLOCKSIZE);
-		int maxChunkSize = random.nextInt(DEFAULT_MAX_CHUNKSIZE);
-		int maxMatches = random.nextInt(DEFAULT_MAX_MATCHES);
-		int maxOversized = random.nextInt(DEFAULT_MAX_OVERSIZED);
-		int minFields = random.nextInt(DEFAULT_MIN_FIELDS);
-		int interval = random.nextInt(DEFAULT_INTERVAL);
-		OabaSettingsEntity retVal =
-			new OabaSettingsEntity(limPerBlockingSet, limSingleBlockingSet,
-					singleTableGraceLimit, maxSingle, maxBlockSize, maxMatches,
-					maxChunkSize, maxOversized, minFields, interval);
-		te.add(retVal);
-		return retVal;
-	}
-
-	/**
-	 * Creates a persistent instance of OabaSettingsEntity An externalId for the
-	 * returned OabaJob is synthesized using the specified tag.
-	 */
-	public OabaSettingsEntity createPersistentOabaSettings(
-			EntityManager em, String tag, TestEntities te) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
-		OabaSettingsEntity retVal = createEphemeralOabaSettings(tag, te);
-		em.persist(retVal);
-		return retVal;
+	protected ServerConfiguration getDefaultServerConfiguration() {
+		return BatchJobUtils.getDefaultServerConfiguration(serverController);
 	}
 
 }
