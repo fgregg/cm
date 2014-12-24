@@ -274,14 +274,14 @@ public abstract class AbstractOabaProcessingTest<T extends WellKnownTestConfigur
 	@Test
 	@InSequence(3)
 	@Override
-	public final void testStartLinkage() throws ServerConfigurationException {
+	public final void testLinkage() throws ServerConfigurationException {
 		OabaTestProcedures.testLinkageProcessing(this);
 	}
 	
 	@Test
 	@InSequence(4)
 	@Override
-	public final void testStartDeduplication() throws ServerConfigurationException {
+	public final void testDeduplication() throws ServerConfigurationException {
 		OabaTestProcedures.testDeduplicationProcessing(this);
 	}
 	

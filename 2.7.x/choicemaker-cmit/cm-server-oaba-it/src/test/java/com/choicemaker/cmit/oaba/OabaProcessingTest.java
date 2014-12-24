@@ -77,7 +77,7 @@ public interface OabaProcessingTest<T extends WellKnownTestConfiguration> {
 	 * }
 	 * </pre>
 	 */
-	void testStartLinkage() throws ServerConfigurationException;
+	void testLinkage() throws ServerConfigurationException;
 
 	/**
 	 * Call back from {@link
@@ -95,7 +95,7 @@ public interface OabaProcessingTest<T extends WellKnownTestConfiguration> {
 	 * }
 	 * </pre>
 	 */
-	void testStartDeduplication() throws ServerConfigurationException;
+	void testDeduplication() throws ServerConfigurationException;
 
 	/**
 	 * Call back from {@link
