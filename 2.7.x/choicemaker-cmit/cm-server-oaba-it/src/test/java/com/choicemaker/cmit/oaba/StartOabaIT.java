@@ -16,6 +16,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BlockingMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
+import com.choicemaker.cmit.utils.AbstractOabaProcessingTest;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 

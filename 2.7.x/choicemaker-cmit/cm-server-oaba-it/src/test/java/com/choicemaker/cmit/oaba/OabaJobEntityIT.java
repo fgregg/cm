@@ -35,9 +35,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.oaba.util.OabaTestController;
 import com.choicemaker.cmit.utils.BatchJobUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.OabaTestController;
 import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
@@ -72,7 +72,7 @@ public class OabaJobEntityIT {
 	private ServerConfigurationController serverController;
 
 	@EJB
-	protected OabaTestController testController;
+	protected OabaTestController oabaTestController;
 
 	private int initialOabaJobCount;
 	private int initialOabaParamsCount;
@@ -81,17 +81,17 @@ public class OabaJobEntityIT {
 
 	@Before
 	public void setUp() {
-		initialOabaJobCount = testController.findAllOabaJobs().size();
-		initialOabaParamsCount = testController.findAllOabaParameters().size();
+		initialOabaJobCount = oabaTestController.findAllOabaJobs().size();
+		initialOabaParamsCount = oabaTestController.findAllOabaParameters().size();
 	}
 
 	@After
 	public void tearDown() {
-		int finalOabaJobCount = testController.findAllOabaJobs().size();
+		int finalOabaJobCount = oabaTestController.findAllOabaJobs().size();
 		assertTrue(initialOabaJobCount == finalOabaJobCount);
 
 		int finalOabaParamsCount =
-			testController.findAllOabaParameters().size();
+			oabaTestController.findAllOabaParameters().size();
 		assertTrue(initialOabaParamsCount == finalOabaParamsCount);
 	}
 
@@ -101,7 +101,7 @@ public class OabaJobEntityIT {
 		assertTrue(utx != null);
 		assertTrue(oabaController != null);
 		assertTrue(serverController != null);
-		assertTrue(testController != null);
+		assertTrue(oabaTestController != null);
 	}
 
 	@Test
@@ -445,7 +445,7 @@ public class OabaJobEntityIT {
 
 		// 1. Create a job and check the status
 		OabaJob job = createEphemeralOabaJob(te, METHOD, true);
-		// testController.save(job);
+		// oabaTestController.save(job);
 
 		// Record a timestamp after a transition is made
 		Date after = new Date();
@@ -468,7 +468,7 @@ public class OabaJobEntityIT {
 		// 2. Queue the job
 		job.markAsQueued();
 		assertTrue(job.getStatus().equals(STATUS_QUEUED));
-		// testController.save(job);
+		// oabaTestController.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsCompleted();
@@ -477,24 +477,24 @@ public class OabaJobEntityIT {
 		// 3. Start the job
 		job.markAsStarted();
 		assertTrue(job.getStatus().equals(STATUS_STARTED));
-		// testController.save(job);
+		// oabaTestController.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();
 		assertTrue(job.getStatus().equals(STATUS_STARTED));
-		// testController.save(job);
+		// oabaTestController.save(job);
 
 		// 4. Update the percentage complete
 		job.setFractionComplete(random
 				.nextInt(BatchJob.MAX_PERCENTAGE_COMPLETED + 1));
 		assertTrue(job.getStatus().equals(STATUS_STARTED));
-		// testController.save(job);
+		// oabaTestController.save(job);
 
 		// 5. Mark the job as completed
 		job.markAsCompleted();
 		assertTrue(job.getStatus().equals(STATUS_COMPLETED));
 		assertTrue(job.getFractionComplete() == BatchJob.MAX_PERCENTAGE_COMPLETED);
-		// testController.save(job);
+		// oabaTestController.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();

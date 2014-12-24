@@ -26,7 +26,7 @@ import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.oaba.util.OabaTestController;
+import com.choicemaker.cmit.utils.OabaTestController;
 import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)
@@ -62,24 +62,24 @@ public class OabaParametersEntityIT {
 	protected OabaParametersControllerBean paramsController;
 
 	@EJB
-	protected OabaTestController oabaTestController;
+	protected OabaTestController oabaTestControllerBean;
 
 	private int initialOabaParamsCount;
 	private int initialOabaJobCount;
 
 	@Before
 	public void setUp() {
-		initialOabaParamsCount = oabaTestController.findAllOabaParameters().size();
-		initialOabaJobCount = oabaTestController.findAllOabaJobs().size();
+		initialOabaParamsCount = oabaTestControllerBean.findAllOabaParameters().size();
+		initialOabaJobCount = oabaTestControllerBean.findAllOabaJobs().size();
 	}
 
 	@After
 	public void tearDown() {
 		int finalBatchParamsCount =
-				oabaTestController.findAllOabaParameters().size();
+				oabaTestControllerBean.findAllOabaParameters().size();
 		assertTrue(initialOabaParamsCount == finalBatchParamsCount);
 
-		int finalBatchJobCount = oabaTestController.findAllOabaJobs().size();
+		int finalBatchJobCount = oabaTestControllerBean.findAllOabaJobs().size();
 		assertTrue(initialOabaJobCount == finalBatchJobCount);
 	}
 
@@ -88,7 +88,7 @@ public class OabaParametersEntityIT {
 		assertTrue(em != null);
 		assertTrue(utx != null);
 		assertTrue(paramsController != null);
-		assertTrue(oabaTestController != null);
+		assertTrue(oabaTestControllerBean != null);
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class OabaParametersEntityIT {
 
 		// Create a params
 		OabaParametersEntity params =
-			oabaTestController.createBatchParameters(METHOD, te);
+			oabaTestControllerBean.createBatchParameters(METHOD, te);
 
 		// Save the params
 		paramsController.save(params);
@@ -123,7 +123,7 @@ public class OabaParametersEntityIT {
 		// Create two generic parameter sets, only one of which is persistent,
 		// and verify inequality
 		OabaParametersEntity params1 =
-			oabaTestController.createBatchParameters(METHOD, te);
+			oabaTestControllerBean.createBatchParameters(METHOD, te);
 		OabaParametersEntity params2 = new OabaParametersEntity(params1);
 		te.add(params2);
 		assertTrue(!params1.equals(params2));
@@ -144,9 +144,9 @@ public class OabaParametersEntityIT {
 
 		// Create a params and set a value
 		OabaParametersEntity template =
-			oabaTestController.createBatchParameters(METHOD, te);
+			oabaTestControllerBean.createBatchParameters(METHOD, te);
 		final String v1 =
-			oabaTestController.createRandomModelConfigurationName(METHOD);
+			oabaTestControllerBean.createRandomModelConfigurationName(METHOD);
 		OabaParameters params =
 			new OabaParametersEntity(v1, template.getLowThreshold(),
 					template.getHighThreshold(), template.getStageRsId(),
@@ -181,8 +181,8 @@ public class OabaParametersEntityIT {
 
 		// Create parameters with known values
 		OabaParametersEntity template =
-			oabaTestController.createBatchParameters(METHOD, te);
-		final Thresholds t = oabaTestController.createRandomThresholds();
+			oabaTestControllerBean.createBatchParameters(METHOD, te);
+		final Thresholds t = oabaTestControllerBean.createRandomThresholds();
 		OabaParameters params =
 			new OabaParametersEntity(template.getModelConfigurationName(),
 					t.getDifferThreshold(), t.getMatchThreshold(),

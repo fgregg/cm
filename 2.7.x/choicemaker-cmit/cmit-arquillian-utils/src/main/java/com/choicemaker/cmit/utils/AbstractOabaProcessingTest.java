@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.oaba;
+package com.choicemaker.cmit.utils;
 
 import static org.junit.Assert.assertTrue;
 
@@ -19,17 +19,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
-import com.choicemaker.cmit.oaba.util.OabaTestController;
-import com.choicemaker.cmit.utils.JmsUtils;
-import com.choicemaker.cmit.utils.OabaProcessingPhase;
-import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
 

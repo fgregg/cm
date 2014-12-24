@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.oaba;
+package com.choicemaker.cmit.utils;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -13,9 +13,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaUtils;
 //import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
-import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.OabaTestUtils;
-import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 
 public class OabaTestProcedures {

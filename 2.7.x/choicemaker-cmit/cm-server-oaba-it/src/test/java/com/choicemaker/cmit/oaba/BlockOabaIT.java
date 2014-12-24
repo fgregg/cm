@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DedupMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
+import com.choicemaker.cmit.utils.AbstractOabaProcessingTest;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 

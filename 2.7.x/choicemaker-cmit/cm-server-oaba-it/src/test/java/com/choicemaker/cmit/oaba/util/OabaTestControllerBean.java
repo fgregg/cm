@@ -22,6 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.OabaTestController;
 import com.choicemaker.cmit.utils.TestEntities;
 
 /**
@@ -31,7 +32,7 @@ import com.choicemaker.cmit.utils.TestEntities;
  * @author rphall
  */
 @Stateless
-public class OabaTestController {
+public class OabaTestControllerBean implements OabaTestController {
 
 	private static final String DEFAULT_MODEL_NAME = "FakeModelConfig";
 	private static final String UNDERSCORE = "_";
@@ -49,6 +50,7 @@ public class OabaTestController {
 	 * Synthesizes the name of a fake modelId configuration using the specified
 	 * tag which may be null
 	 */
+	@Override
 	public String createRandomModelConfigurationName(String tag) {
 		if (tag == null) {
 			tag = DEFAULT_MODEL_NAME;
@@ -66,6 +68,7 @@ public class OabaTestController {
 		return retVal;
 	}
 
+	@Override
 	public Thresholds createRandomThresholds() {
 		Random random = new Random(new Date().getTime());
 		float low = random.nextFloat();
@@ -76,6 +79,7 @@ public class OabaTestController {
 		return retVal;
 	}
 
+	@Override
 	public OabaParametersEntity createBatchParameters(String tag,
 			TestEntities te) {
 		if (te == null) {
@@ -96,6 +100,7 @@ public class OabaTestController {
 		return retVal;
 	}
 
+	@Override
 	public ServerConfiguration getDefaultServerConfiguration() {
 		String hostName = ServerConfigurationControllerBean.computeHostName();
 		final boolean computeFallback = true;
@@ -162,18 +167,22 @@ public class OabaTestController {
 //		return retVal;
 //	}
 
+	@Override
 	public void removeTestEntities(TestEntities te) {
 		EntityManagerUtils.removeTestEntities(em, te);
 	}
 
+	@Override
 	public List<OabaParameters> findAllOabaParameters() {
 		return EntityManagerUtils.findAllOabaParameters(em);
 	}
 
+	@Override
 	public List<OabaJob> findAllOabaJobs() {
 		return EntityManagerUtils.findAllOabaJobs(em);
 	}
 
+	@Override
 	public List<OabaProcessing> findAllOabaProcessing() {
 		return EntityManagerUtils.findAllOabaProcessing(em);
 	}
