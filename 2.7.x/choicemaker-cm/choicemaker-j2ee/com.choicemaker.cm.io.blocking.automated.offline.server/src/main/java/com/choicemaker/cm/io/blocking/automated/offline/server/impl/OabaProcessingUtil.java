@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransitivityEvent;
 
 class OabaProcessingUtil {
 
@@ -96,63 +96,63 @@ class OabaProcessingUtil {
 		assert mapOabaIdEvent.keySet().size() == OabaEvent.values().length;
 	}
 
-	private static Map<Integer, TransEvent> mapTransIdEvent = new HashMap<>();
+	private static Map<Integer, TransitivityEvent> mapTransIdEvent = new HashMap<>();
 
 	static {
-		mapTransIdEvent.put(EVT_INIT, TransEvent.INIT);
-		mapTransIdEvent.put(EVT_CREATE_REC_VAL, TransEvent.CREATE_REC_VAL);
-		mapTransIdEvent.put(EVT_DONE_REC_VAL, TransEvent.DONE_REC_VAL);
+		mapTransIdEvent.put(EVT_INIT, TransitivityEvent.INIT);
+		mapTransIdEvent.put(EVT_CREATE_REC_VAL, TransitivityEvent.CREATE_REC_VAL);
+		mapTransIdEvent.put(EVT_DONE_REC_VAL, TransitivityEvent.DONE_REC_VAL);
 		mapTransIdEvent.put(EVT_BLOCK_BY_ONE_COLUMN,
-				TransEvent.BLOCK_BY_ONE_COLUMN);
+				TransitivityEvent.BLOCK_BY_ONE_COLUMN);
 		mapTransIdEvent.put(EVT_DONE_BLOCK_BY_ONE_COLUMN,
-				TransEvent.DONE_BLOCK_BY_ONE_COLUMN);
+				TransitivityEvent.DONE_BLOCK_BY_ONE_COLUMN);
 		mapTransIdEvent.put(EVT_OVERSIZED_TRIMMING,
-				TransEvent.OVERSIZED_TRIMMING);
+				TransitivityEvent.OVERSIZED_TRIMMING);
 		mapTransIdEvent.put(EVT_DONE_OVERSIZED_TRIMMING,
-				TransEvent.DONE_OVERSIZED_TRIMMING);
-		mapTransIdEvent.put(EVT_DEDUP_BLOCKS, TransEvent.DEDUP_BLOCKS);
+				TransitivityEvent.DONE_OVERSIZED_TRIMMING);
+		mapTransIdEvent.put(EVT_DEDUP_BLOCKS, TransitivityEvent.DEDUP_BLOCKS);
 		mapTransIdEvent
-				.put(EVT_DONE_DEDUP_BLOCKS, TransEvent.DONE_DEDUP_BLOCKS);
+				.put(EVT_DONE_DEDUP_BLOCKS, TransitivityEvent.DONE_DEDUP_BLOCKS);
 		mapTransIdEvent.put(EVT_DEDUP_OVERSIZED_EXACT,
-				TransEvent.DEDUP_OVERSIZED_EXACT);
+				TransitivityEvent.DEDUP_OVERSIZED_EXACT);
 		mapTransIdEvent.put(EVT_DONE_DEDUP_OVERSIZED_EXACT,
-				TransEvent.DONE_DEDUP_OVERSIZED_EXACT);
-		mapTransIdEvent.put(EVT_DEDUP_OVERSIZED, TransEvent.DEDUP_OVERSIZED);
+				TransitivityEvent.DONE_DEDUP_OVERSIZED_EXACT);
+		mapTransIdEvent.put(EVT_DEDUP_OVERSIZED, TransitivityEvent.DEDUP_OVERSIZED);
 		mapTransIdEvent.put(EVT_DONE_TRANS_DEDUP_OVERSIZED,
-				TransEvent.DONE_TRANS_DEDUP_OVERSIZED);
+				TransitivityEvent.DONE_TRANS_DEDUP_OVERSIZED);
 		mapTransIdEvent.put(EVT_DONE_REVERSE_TRANSLATE_BLOCK,
-				TransEvent.DONE_REVERSE_TRANSLATE_BLOCK);
+				TransitivityEvent.DONE_REVERSE_TRANSLATE_BLOCK);
 		mapTransIdEvent.put(EVT_DONE_REVERSE_TRANSLATE_OVERSIZED,
-				TransEvent.DONE_REVERSE_TRANSLATE_OVERSIZED);
+				TransitivityEvent.DONE_REVERSE_TRANSLATE_OVERSIZED);
 
-		mapTransIdEvent.put(EVT_CREATE_CHUNK_IDS, TransEvent.CREATE_CHUNK_IDS);
+		mapTransIdEvent.put(EVT_CREATE_CHUNK_IDS, TransitivityEvent.CREATE_CHUNK_IDS);
 		mapTransIdEvent.put(EVT_CREATE_CHUNK_OVERSIZED_IDS,
-				TransEvent.CREATE_CHUNK_OVERSIZED_IDS);
+				TransitivityEvent.CREATE_CHUNK_OVERSIZED_IDS);
 		mapTransIdEvent.put(EVT_DONE_CREATE_CHUNK_IDS,
-				TransEvent.DONE_CREATE_CHUNK_IDS);
+				TransitivityEvent.DONE_CREATE_CHUNK_IDS);
 		mapTransIdEvent.put(EVT_DONE_CREATE_CHUNK_DATA,
-				TransEvent.DONE_CREATE_CHUNK_DATA);
+				TransitivityEvent.DONE_CREATE_CHUNK_DATA);
 
-		mapTransIdEvent.put(EVT_ALLOCATE_CHUNKS, TransEvent.ALLOCATE_CHUNKS);
+		mapTransIdEvent.put(EVT_ALLOCATE_CHUNKS, TransitivityEvent.ALLOCATE_CHUNKS);
 		mapTransIdEvent.put(EVT_DONE_ALLOCATE_CHUNKS,
-				TransEvent.DONE_ALLOCATE_CHUNKS);
-		mapTransIdEvent.put(EVT_MATCHING_DATA, TransEvent.MATCHING_DATA);
+				TransitivityEvent.DONE_ALLOCATE_CHUNKS);
+		mapTransIdEvent.put(EVT_MATCHING_DATA, TransitivityEvent.MATCHING_DATA);
 		mapTransIdEvent.put(EVT_DONE_MATCHING_DATA,
-				TransEvent.DONE_MATCHING_DATA);
+				TransitivityEvent.DONE_MATCHING_DATA);
 		mapTransIdEvent.put(EVT_OUTPUT_DEDUP_MATCHES,
-				TransEvent.OUTPUT_DEDUP_MATCHES);
+				TransitivityEvent.OUTPUT_DEDUP_MATCHES);
 		mapTransIdEvent.put(EVT_MERGE_DEDUP_MATCHES,
-				TransEvent.MERGE_DEDUP_MATCHES);
+				TransitivityEvent.MERGE_DEDUP_MATCHES);
 		mapTransIdEvent.put(EVT_DONE_DEDUP_MATCHES,
-				TransEvent.DONE_DEDUP_MATCHES);
+				TransitivityEvent.DONE_DEDUP_MATCHES);
 		mapTransIdEvent.put(EVT_DONE_TRANSANALYSIS,
-				TransEvent.DONE_TRANSANALYSIS);
+				TransitivityEvent.DONE_TRANSANALYSIS);
 
 		// Check that there were no duplicate event ids
-		assert mapTransIdEvent.keySet().size() == TransEvent.values().length;
+		assert mapTransIdEvent.keySet().size() == TransitivityEvent.values().length;
 	}
 
-	public static TransEvent getTransEvent(int evtId) {
+	public static TransitivityEvent getTransEvent(int evtId) {
 		return mapTransIdEvent.get(evtId);
 	}
 
