@@ -14,21 +14,21 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MatchDedupMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
+import com.choicemaker.cmit.AbstractOabaMdbTest;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.utils.AbstractOabaProcessingTest;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 
 @RunWith(Arquillian.class)
-public class MatchSchedulerIT extends
-		AbstractOabaProcessingTest<SimplePersonSqlServerTestConfiguration> {
+public class MatchSchedulerMdbIT extends
+		AbstractOabaMdbTest<SimplePersonSqlServerTestConfiguration> {
 
-	private static final Logger logger = Logger.getLogger(MatchSchedulerIT.class
+	private static final Logger logger = Logger.getLogger(MatchSchedulerMdbIT.class
 			.getName());
 
 	private static final boolean TESTS_AS_EJB_MODULE = true;
 
-	private final static String LOG_SOURCE = MatchSchedulerIT.class
+	private final static String LOG_SOURCE = MatchSchedulerMdbIT.class
 			.getSimpleName();
 
 	/**
@@ -44,7 +44,7 @@ public class MatchSchedulerIT extends
 				TESTS_AS_EJB_MODULE);
 	}
 
-	public MatchSchedulerIT() {
+	public MatchSchedulerMdbIT() {
 		super(LOG_SOURCE, logger, EVT_DONE_MATCHING_DATA,
 				PCT_DONE_MATCHING_DATA,
 				SimplePersonSqlServerTestConfiguration.class,
