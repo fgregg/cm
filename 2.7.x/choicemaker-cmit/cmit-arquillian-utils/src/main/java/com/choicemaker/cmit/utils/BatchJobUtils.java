@@ -221,7 +221,7 @@ public class BatchJobUtils {
 					EntityManagerUtils.createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
 					thresholds.getMatchThreshold(), stage, master);
-		te.add(retVal);
+		te.add((TransitivityParameters)retVal);
 		return retVal;
 	}
 

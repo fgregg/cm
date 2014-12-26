@@ -13,12 +13,12 @@ import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 
 /**
  * Lists of objects created during a test. Provides a convenient way of cleaning
@@ -52,7 +52,7 @@ public class TestEntities {
 		add((Object) params);
 	}
 
-	public void add(TransitivityParametersEntity tp) {
+	public void add(TransitivityParameters tp) {
 		add((Object) tp);
 	}
 
