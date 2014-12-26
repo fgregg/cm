@@ -22,6 +22,8 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.Serve
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationJPA.TABLE_NAME;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
@@ -70,6 +72,20 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 		if (sc != null) {
 			retVal = !isNonPersistentId(sc.getId());
 		}
+		return retVal;
+	}
+
+	public static String dump(ServerConfiguration sc) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		
+		if (sc == null) {
+			pw.println("null server configuration");
+		} else {
+			// FIXME better logging
+			pw.println(sc.toString());
+		}
+		String retVal = sw.toString();
 		return retVal;
 	}
 
