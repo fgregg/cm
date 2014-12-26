@@ -13,21 +13,21 @@ import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.StartOabaMDB;
+import com.choicemaker.cmit.AbstractOabaMdbTest;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.utils.AbstractOabaProcessingTest;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 
 @RunWith(Arquillian.class)
-public class BatchQueryServiceBeanIT extends
-		AbstractOabaProcessingTest<SimplePersonSqlServerTestConfiguration> {
+public class OabaServiceBeanIT extends
+		AbstractOabaMdbTest<SimplePersonSqlServerTestConfiguration> {
 
 	private static final Logger logger = Logger
-			.getLogger(BatchQueryServiceBeanIT.class.getName());
+			.getLogger(OabaServiceBeanIT.class.getName());
 
 	private static final boolean TESTS_AS_EJB_MODULE = true;
 
-	private final static String LOG_SOURCE = BatchQueryServiceBeanIT.class
+	private final static String LOG_SOURCE = OabaServiceBeanIT.class
 			.getSimpleName();
 
 	/**
@@ -42,7 +42,7 @@ public class BatchQueryServiceBeanIT extends
 				TESTS_AS_EJB_MODULE);
 	}
 
-	public BatchQueryServiceBeanIT() {
+	public OabaServiceBeanIT() {
 		super(LOG_SOURCE, logger, EVT_INIT, PCT_INIT,
 				SimplePersonSqlServerTestConfiguration.class,
 				OabaProcessingPhase.INITIAL);
