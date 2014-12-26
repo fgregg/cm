@@ -25,8 +25,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
-import javax.jms.JMSProducer;
-import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
@@ -47,10 +45,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 //import javax.naming.InitialContext;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 
 /**
  * @author pcheung
@@ -60,7 +55,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsC
 @SuppressWarnings("rawtypes")
 public class OabaServiceBean implements OabaService {
 
-	private static final long serialVersionUID = 271L;
+//	private static final long serialVersionUID = 271L;
 
 	private static final String SOURCE_CLASS = OabaServiceBean.class
 			.getSimpleName();
@@ -71,21 +66,6 @@ public class OabaServiceBean implements OabaService {
 	@EJB
 	private OabaJobControllerBean jobController;
 	
-	@EJB
-	private OabaParametersControllerBean paramsController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private ServerConfigurationController serverController;
-
-	@EJB
-	private OabaProcessingControllerBean processingController;
-
-	@EJB
-	private PersistableRecordSourceController rsController;
-
 	@Resource(name = "jms/startQueue",
 			lookup = "java:/choicemaker/urm/jms/startQueue")
 	private Queue queue;
@@ -95,52 +75,12 @@ public class OabaServiceBean implements OabaService {
 
 	protected static void logStartParameters(String externalID,
 			OabaParameters bp, OabaSettings oaba, ServerConfiguration sc) {
-
 		final StringWriter sw = new StringWriter();
 		final PrintWriter pw = new PrintWriter(sw);
-
 		pw.println("External id: " + externalID);
-		if (bp == null) {
-			pw.println("null batch parameters");
-		} else {
-			final OabaLinkageType task = bp.getOabaLinkageType();
-			pw.println("Linkage task: " + task);
-			if (task == OabaLinkageType.STAGING_DEDUPLICATION) {
-				pw.println("Deduplicating a single record source");
-				pw.println("Staging record source: " + bp.getStageRsId());
-			} else if (task == OabaLinkageType.STAGING_TO_MASTER_LINKAGE) {
-				pw.println("Linking a staging source to a master source");
-				pw.println("Staging record source: " + bp.getStageRsId());
-				pw.println("Master record source: " + bp.getMasterRsId());
-			} else if (task == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
-				pw.println("Linking a master source to a master source");
-				pw.println("Master record source: " + bp.getStageRsId());
-				pw.println("Master record source: " + bp.getMasterRsId());
-			} else {
-				throw new IllegalArgumentException("unexpected task type: " + task);
-			}
-			pw.println("DIFFER threshold: " + bp.getLowThreshold());
-			pw.println("MATCH threshold: " + bp.getHighThreshold());
-			pw.println("Model configuration id: "
-					+ bp.getModelConfigurationName());
-		}
-
-		if (oaba == null) {
-			pw.println("null OABA settings");
-		} else {
-			// FIXME better logging
-			pw.println("Threshold for batched-record blocking: "
-					+ oaba.getMaxSingle());
-			pw.println(oaba.toString());
-		}
-
-		if (sc == null) {
-			pw.println("null server configuration");
-		} else {
-			// FIXME better logging
-			pw.println(sc.toString());
-		}
-
+		pw.println(OabaParametersEntity.dump(bp));
+		pw.println(OabaSettingsEntity.dump(oaba));
+		pw.println(ServerConfigurationEntity.dump(sc));
 		String msg = sw.toString();
 		logger.info(msg);
 	}
@@ -407,24 +347,7 @@ public class OabaServiceBean implements OabaService {
 	 */
 	private void sendToStartOABA(long jobID) {
 		OabaJobMessage data = new OabaJobMessage(jobID);
-		ObjectMessage message = context.createObjectMessage(data);
-		JMSProducer sender = context.createProducer();
-		logger.finest(queueInfo("Sending: ", queue, data));
-		sender.send(queue, message);
-		logger.finest(queueInfo("Sent: ", queue, data));
-	}
-
-	private static String queueInfo(String tag, Queue q, OabaJobMessage d) {
-		String queueName;
-		try {
-			queueName = q.getQueueName();
-		} catch (JMSException x) {
-			queueName = "unknown";
-		}
-		StringBuilder sb =
-			new StringBuilder(tag).append("queue: '").append(queueName)
-					.append("', data: '").append(d).append("'");
-		return sb.toString();
+		MessageBeanUtils.sendStartData(data, context, queue, logger);
 	}
 
 }
