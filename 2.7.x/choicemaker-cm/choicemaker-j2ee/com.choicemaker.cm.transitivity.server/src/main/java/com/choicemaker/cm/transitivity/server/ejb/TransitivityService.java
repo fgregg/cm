@@ -10,18 +10,13 @@
  */
 package com.choicemaker.cm.transitivity.server.ejb;
 
-import java.rmi.RemoteException;
-import java.sql.SQLException;
-
-import javax.ejb.CreateException;
-import javax.ejb.FinderException;
 import javax.ejb.Local;
-import javax.jms.JMSException;
-import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.transitivity.core.TransitivityException;
-import com.choicemaker.cm.transitivity.core.TransitivityResult;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 
 /**
  * This session bean allows the user to start, query, and get result from the
@@ -36,78 +31,24 @@ public interface TransitivityService {
 	String DEFAULT_EJB_REF_NAME = "ejb/TransitivityService";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
 
-	// /**
-	// * This method starts the transitivity engine.
-	// * WARNINGS:
-	// * 1. only call this after the OABA has finished.
-	// * 2. use the same parameters as the OABA.
-	// *
-	// * @param jobID - job id of the OABA job
-	// * @param staging - staging record source
-	// * @param master - master record source
-	// * @param lowThreshold - probability under which a pair is considered
-	// "differ".
-	// * @param highThreshold - probability above which a pair is considered
-	// "match".
-	// * @param modelConfigurationName - probability accessProvider of the stage
-	// record source.
-	// * @param masterModelName - probability accessProvider of the master
-	// record source.
-	// * @return int - the transitivity job id.
-	// * @throws RemoteException
-	// * @throws CreateException
-	// * @throws NamingException
-	// * @throws JMSException
-	// * @throws SQLException
-	// */
-	// /*
-	// public long startTransitivity (long jobID,
-	// ISerializableRecordSource staging,
-	// ISerializableRecordSource master,
-	// float lowThreshold,
-	// float highThreshold,
-	// String modelConfigurationName, String masterModelName)
-	// throws RemoteException, CreateException, NamingException, JMSException,
-	// SQLException;
-	// */
-
 	/**
-	 * This method starts the transitivity engine. WARNINGS: 1. only call this
-	 * after the OABA has finished. 2. use the same OAB jobID.
+	 * This method starts transitivity analysis of the specified OABA job. The
+	 * OABA job must have completed successfully.
+	 * 
+	 * @throws ServerConfigurationException
 	 */
-	public long startTransitivity(long jobID) throws RemoteException,
-			CreateException, NamingException, JMSException, SQLException;
+	public long startTransitivity(String externalID,
+			TransitivityParameters batchParams, OabaJob oabaJob,
+			ServerConfiguration serverConfiguration)
+			throws ServerConfigurationException;
 
 	/**
-	 * This method queries the current status of the TE job.
+	 * This method queries the current status of a transitivity job.
 	 * 
 	 * @param jobID
+	 *            the id of the transitivity job
 	 * @return BatchJobStatus
-	 * @throws RemoteException
-	 * @throws CreateException
-	 * @throws NamingException
-	 * @throws JMSException
-	 * @throws FinderException
 	 */
-	public BatchJobStatus getStatus(long jobID) throws JMSException,
-			FinderException, RemoteException, CreateException, NamingException,
-			SQLException;
-
-	/**
-	 * This method returns the TransitivityResult to the client.
-	 * 
-	 * @param jobID
-	 *            - TE job id
-	 * @param compact
-	 *            - true if you want the graphs be compacted first
-	 * @return TransitivityResult
-	 * @throws RemoteException
-	 * @throws FinderException
-	 * @throws NamingException
-	 * @throws TransitivityException
-	 */
-	public TransitivityResult getTransitivityResult(long jobID, boolean compact)
-			throws RemoteException, FinderException, NamingException,
-			TransitivityException;
+	public BatchJobStatus getStatus(long jobID);
 
 }
