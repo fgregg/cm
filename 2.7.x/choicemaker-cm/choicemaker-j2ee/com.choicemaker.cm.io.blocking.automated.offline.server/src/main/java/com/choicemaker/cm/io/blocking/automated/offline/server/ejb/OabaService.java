@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
-import java.io.Serializable;
 import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
@@ -32,7 +31,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
  */
 @Local
 @SuppressWarnings("rawtypes")
-public interface OabaService extends Serializable {
+public interface OabaService {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/OabaService";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
