@@ -10,19 +10,18 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
-import javax.ejb.MessageDrivenBean;
-import javax.ejb.MessageDrivenContext;
-import javax.jms.JMSException;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
+import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 /**
  * This message bean updates the status of the current job.
@@ -30,29 +29,30 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMe
  * @author pcheung
  *
  */
-public class UpdateStatusMDB implements MessageDrivenBean, MessageListener {
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "destinationLookup",
+				propertyValue = "java:/choicemaker/urm/jms/updateQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType",
+				propertyValue = "javax.jms.Queue") })
+public class UpdateStatusMDB implements MessageListener, Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 271L;
 	private static final Logger log = Logger.getLogger(UpdateStatusMDB.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + UpdateStatusMDB.class.getName());
 
-	@PersistenceContext (unitName = "oaba")
-	EntityManager em;
-
-	private transient MessageDrivenContext mdc = null;
+	@EJB
+	private OabaJobControllerBean jobController;
 
 	public UpdateStatusMDB() {
-	}
-
-	public void setMessageDrivenContext(MessageDrivenContext mdc) {
-//		log.fine("setMessageDrivenContext()");
-		this.mdc = mdc;
 	}
 
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		OabaUpdateMessage data;
+		OabaJob oabaJob = null;
+
+		log.info("UpdateStatusMDB In onMessage");
 
 		try {
 
@@ -60,40 +60,34 @@ public class UpdateStatusMDB implements MessageDrivenBean, MessageListener {
 				msg = (ObjectMessage) inMessage;
 				data = (OabaUpdateMessage) msg.getObject();
 
+				final long jobId = data.getJobID();
+				oabaJob = jobController.findOabaJob(jobId);
+				oabaJob.setFractionComplete(data.getPercentComplete());
+//				if (data.getPercentComplete() == 0) {
+//					job.markAsStarted();
+//				} else if (data.getPercentComplete() == 100) {
+//					job.markAsCompleted();
+//				} else {
+//					job.markAsStarted();
+//					job.setFractionComplete(data.getPercentComplete());
+//				}
+
 				log.info("Updating job " + data.getJobID()
 						+ " setting percent complete to "
 						+ data.getPercentComplete());
-
-				final BatchJob job =
-					em.find(OabaJobEntity.class, data.getJobID());
-
-				if (data.getPercentComplete() == 0) {
-					job.markAsStarted();
-				} else if (data.getPercentComplete() == 100) {
-					job.markAsCompleted();
-				} else {
-					job.markAsStarted();
-					job.setFractionComplete(data.getPercentComplete());
-				}
 
 			} else {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			mdc.setRollbackOnly();
 		} catch (Exception e) {
 			log.severe(e.toString());
-			e.printStackTrace();
+			if (oabaJob != null) {
+				oabaJob.markAsFailed();
+			}
 		}
-
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 		return;
-	} // onMessage(Message)
-
-	public void ejbRemove() {
-//		log.fine("ejbRemove()");
 	}
 
 }
