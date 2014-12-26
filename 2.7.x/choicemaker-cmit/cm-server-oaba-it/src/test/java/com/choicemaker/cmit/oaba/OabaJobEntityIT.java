@@ -34,10 +34,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
+import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchJobUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.OabaTestController;
 import com.choicemaker.cmit.utils.TestEntities;
 
 @RunWith(Arquillian.class)

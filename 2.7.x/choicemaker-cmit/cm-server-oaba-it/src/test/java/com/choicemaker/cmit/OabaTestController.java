@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.utils;
+package com.choicemaker.cmit;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
+import com.choicemaker.cmit.utils.TestEntities;
 
 @Local
 public interface OabaTestController {

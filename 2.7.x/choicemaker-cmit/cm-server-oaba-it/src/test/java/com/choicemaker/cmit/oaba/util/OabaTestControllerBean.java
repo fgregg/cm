@@ -21,8 +21,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
+import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.OabaTestController;
 import com.choicemaker.cmit.utils.TestEntities;
 
 /**
