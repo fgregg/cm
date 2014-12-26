@@ -72,7 +72,7 @@ public class TransitivityJobControllerBean {
 
 	public TransitivityJob createPersistentTransitivityJob(String externalID,
 			TransitivityParameters params,
-			ServerConfiguration sc, OabaJob oabaJob)
+			OabaJob oabaJob, ServerConfiguration sc)
 			throws ServerConfigurationException {
 
 		if (params == null || sc == null || oabaJob == null) {
