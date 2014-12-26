@@ -154,7 +154,7 @@ public interface OabaProcessing {
 
 	};
 
-	public static enum TransEvent {
+	public static enum TransitivityEvent {
 		INIT(EVT_INIT, PCT_INIT),
 		CREATE_REC_VAL(EVT_CREATE_REC_VAL, PCT_CREATE_REC_VAL),
 		DONE_REC_VAL(EVT_DONE_REC_VAL, PCT_DONE_REC_VAL),
@@ -202,7 +202,7 @@ public interface OabaProcessing {
 		public final int eventId;
 		public final int percentComplete;
 
-		TransEvent(int evtId, int pct) {
+		TransitivityEvent(int evtId, int pct) {
 			if (pct < 0 || pct > 100) {
 				throw new IllegalArgumentException("invalid percentage: " + pct);
 			}
