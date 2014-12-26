@@ -15,6 +15,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
@@ -22,6 +23,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
 
@@ -32,7 +35,8 @@ import com.choicemaker.cmit.utils.TestEntities;
  * @author rphall
  */
 @Stateless
-public class TransitivityTestController {
+public class TransitivityTestControllerBean implements
+		TransitivityTestController {
 
 	private static final String DEFAULT_MODEL_NAME = "FakeModelConfig";
 	private static final String UNDERSCORE = "_";
@@ -77,7 +81,7 @@ public class TransitivityTestController {
 		return retVal;
 	}
 
-	public OabaParametersEntity createBatchParameters(String tag,
+	public OabaParametersEntity createOabaParameters(String tag,
 			TestEntities te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
@@ -123,13 +127,13 @@ public class TransitivityTestController {
 		return EntityManagerUtils.findAllOabaProcessing(em);
 	}
 
-	public List<OabaJob> findAllTransitivityJobs() {
+	public List<TransitivityJob> findAllTransitivityJobs() {
 		// TODO FIXME not yet implemented
 //		throw new Error("not yet implemented");
 		return Collections.emptyList();
 	}
 
-	public List<OabaJob> findAllTransitivityParameters() {
+	public List<TransitivityParameters> findAllTransitivityParameters() {
 		// TODO FIXME not yet implemented
 //		throw new Error("not yet implemented");
 		return Collections.emptyList();

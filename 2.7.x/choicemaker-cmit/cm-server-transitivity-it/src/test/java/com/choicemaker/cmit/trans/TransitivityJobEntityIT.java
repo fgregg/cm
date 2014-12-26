@@ -29,8 +29,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobControllerBean;
+import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
-import com.choicemaker.cmit.trans.util.TransitivityTestController;
 import com.choicemaker.cmit.utils.BatchJobUtils;
 import com.choicemaker.cmit.utils.TestEntities;
 
