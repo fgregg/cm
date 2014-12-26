@@ -34,7 +34,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransitivityEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
@@ -161,7 +161,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 				OabaProcessing.PCT_DONE_TRANSANALYSIS);
 		// status.setCurrentProcessingEvent( OabaEvent.DONE_TRANSANALYSIS);
 		// HACK
-		assert OabaEvent.DONE_OABA.eventId == TransEvent.DONE_TRANSANALYSIS.eventId;
+		assert OabaEvent.DONE_OABA.eventId == TransitivityEvent.DONE_TRANSANALYSIS.eventId;
 		processingEntry.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 		// END HACK
 
