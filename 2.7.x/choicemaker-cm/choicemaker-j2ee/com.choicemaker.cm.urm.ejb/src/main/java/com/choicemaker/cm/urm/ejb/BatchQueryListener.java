@@ -17,11 +17,7 @@ import java.util.logging.Logger;
 import javax.ejb.CreateException;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -40,7 +36,7 @@ public class BatchQueryListener extends WorkflowControlListener{
 	private static final Logger log = Logger.getLogger(BatchQueryListener.class.getName());
 
 //	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
+//	private EntityManager em;
 
 	/**
 	 * Constructor, which is public and takes no arguments.
@@ -54,18 +50,20 @@ public class BatchQueryListener extends WorkflowControlListener{
 	protected long getUrmJobId(long batchJobId) 
 								throws NamingException,RemoteException,JMSException,ConfigException,
 								CmRuntimeException,SQLException,CreateException,ArgumentException,ModelException {
-		BatchJob oabaJob = Single.getInst().findBatchJobById(em, OabaJobEntity.class, batchJobId);
-
-		// FIXME HACK (stuffing a URM job id into a transaction id)
-		// Possible fix:
-		// * Introduce a URM transaction id that uses the OabaJob transaction
-		//   identifier field
-		// * Look up or create the URM job identifier using the usual JPA
-		//   methods
-		long urmJobId = oabaJob.getTransactionId();
-		// END FIXME
-
-		return urmJobId;
+		// This method needs to be replaced
+		throw new Error("not yet re-implemented");
+//		BatchJob oabaJob = Single.getInst().findBatchJobById(em, OabaJobEntity.class, batchJobId);
+//
+//		// FIXME HACK (stuffing a URM job id into a transaction id)
+//		// Possible fix:
+//		// * Introduce a URM transaction id that uses the OabaJob transaction
+//		//   identifier field
+//		// * Look up or create the URM job identifier using the usual JPA
+//		//   methods
+//		long urmJobId = oabaJob.getTransactionId();
+//		// END FIXME
+//
+//		return urmJobId;
 	}
 			
 	protected long startStep(UrmJob urmJob, long prevStepId) 
@@ -79,17 +77,19 @@ public class BatchQueryListener extends WorkflowControlListener{
 									CreateException
 									//,ArgumentException,ModelException 
 									{
-						
-		urmJob.markAsTransOABA();
 
-		TransitivityService ts = Single.getInst().getTransitivityOABAService();
-		
-		if( urmJob.markAbortedIfRequested())
-			throw new JobAlreadyAbortedException();
-			
-		long tid = ts.startTransitivity(prevStepId);
-		log.fine("transitivity preprocessing is started");
-		return tid;
+		// This method needs to be replaced
+		throw new Error("not yet re-implemented");
+//		urmJob.markAsTransOABA();
+//
+//		TransitivityService ts = Single.getInst().getTransitivityOABAService();
+//		
+//		if( urmJob.markAbortedIfRequested())
+//			throw new JobAlreadyAbortedException();
+//			
+//		long tid = ts.startTransitivity(prevStepId);
+//		log.fine("transitivity preprocessing is started");
+//		return tid;
 	} 
 	
 	public void abortJobStep(long id) throws ConfigException, CmRuntimeException {
