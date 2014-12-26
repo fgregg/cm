@@ -1,5 +1,6 @@
 package com.choicemaker.cmit.utils;
 
+import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.ISerializableDbRecordSource;
@@ -25,6 +26,10 @@ public interface WellKnownTestConfiguration {
 	int getSingleRecordMatchingThreshold();
 
 	boolean getTransitivityAnalysisFlag();
+
+	AnalysisResultFormat getTransitivityResultFormat();
+
+	String getTransitivityGraphProperty();
 
 	/** Post-construction method */
 	void initialize(CMPluginRegistry registry);

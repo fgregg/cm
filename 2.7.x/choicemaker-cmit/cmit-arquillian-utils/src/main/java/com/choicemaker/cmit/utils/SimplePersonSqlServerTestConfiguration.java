@@ -1,9 +1,12 @@
 package com.choicemaker.cmit.utils;
 
+import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_SCM;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
@@ -51,6 +54,11 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	public static final boolean DEFAULT_TRANSITIVITY_ANALYSIS = true;
 
+	public static final AnalysisResultFormat DEFAULT_TRANSITIVITY_RESULT_FORMAT =
+		AnalysisResultFormat.SORT_BY_HOLD_GROUP;
+
+	public static final String DEFAULT_TRANSITIVITY_GRAPH_PROPERTY = GPN_SCM;
+
 	public static final int DEFAULT_RECORD_BUFFER_SIZE = 100000;
 
 	private final String dataSourceJndiName;
@@ -62,6 +70,8 @@ public class SimplePersonSqlServerTestConfiguration implements
 	private final ImmutableThresholds thresholds;
 	private final int maxSingle;
 	private final boolean runTransitivityAnalysis;
+	private final AnalysisResultFormat transitivityResultFormat;
+	private final String transitivityGraphProperty;
 	private final List<String> invalidConditions = new LinkedList<>();
 
 	private boolean isInitialized;
@@ -77,20 +87,25 @@ public class SimplePersonSqlServerTestConfiguration implements
 				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK,
 				DEFAULT_MODEL_CONFIGURATION_ID, DEFAULT_THRESHOLDS,
 				DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
-				DEFAULT_TRANSITIVITY_ANALYSIS);
+				DEFAULT_TRANSITIVITY_ANALYSIS,
+				DEFAULT_TRANSITIVITY_RESULT_FORMAT,
+				DEFAULT_TRANSITIVITY_GRAPH_PROPERTY);
 	}
 
 	public SimplePersonSqlServerTestConfiguration(boolean runTransitivity) {
 		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION,
 				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK,
 				DEFAULT_MODEL_CONFIGURATION_ID, DEFAULT_THRESHOLDS,
-				DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD, runTransitivity);
+				DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD, runTransitivity,
+				DEFAULT_TRANSITIVITY_RESULT_FORMAT,
+				DEFAULT_TRANSITIVITY_GRAPH_PROPERTY);
 	}
 
 	public SimplePersonSqlServerTestConfiguration(String dsJndiName,
 			String dbConfig, String stagingSQL, String masterSQL,
 			OabaLinkageType task, String mci, ImmutableThresholds t,
-			int maxSingle, boolean runTransitivity) {
+			int maxSingle, boolean runTransitivity, AnalysisResultFormat arf,
+			String gpn) {
 		if (dsJndiName == null || dsJndiName.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank JNDI name for data source");
@@ -125,6 +140,14 @@ public class SimplePersonSqlServerTestConfiguration implements
 			throw new IllegalArgumentException(
 					"negative single-record matching threshold: " + maxSingle);
 		}
+		if (arf == null) {
+			throw new IllegalArgumentException(
+					"null transitivity result format");
+		}
+		if (gpn == null || gpn.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"null or blank transitivity graph property");
+		}
 		this.dataSourceJndiName = dsJndiName;
 		this.databaseConfiguration = dbConfig;
 		this.stagingSQL = stagingSQL;
@@ -134,6 +157,8 @@ public class SimplePersonSqlServerTestConfiguration implements
 		this.thresholds = t;
 		this.maxSingle = maxSingle;
 		this.runTransitivityAnalysis = runTransitivity;
+		this.transitivityResultFormat = arf;
+		this.transitivityGraphProperty = gpn;
 		assert isInitialized == false;
 	}
 
@@ -351,6 +376,16 @@ public class SimplePersonSqlServerTestConfiguration implements
 	@Override
 	public boolean getTransitivityAnalysisFlag() {
 		return runTransitivityAnalysis;
+	}
+
+	@Override
+	public AnalysisResultFormat getTransitivityResultFormat() {
+		return transitivityResultFormat;
+	}
+
+	@Override
+	public String getTransitivityGraphProperty() {
+		return transitivityGraphProperty;
 	}
 
 	private ImmutableProbabilityModel lookupModelByPluginId(
