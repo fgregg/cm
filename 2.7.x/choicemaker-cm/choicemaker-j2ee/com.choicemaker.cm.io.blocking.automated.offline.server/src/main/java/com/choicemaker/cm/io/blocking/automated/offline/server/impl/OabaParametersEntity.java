@@ -11,9 +11,20 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_TYPE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_FORMAT;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_GRAPH;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.DISCRIMINATOR_COLUMN;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_PK_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_PK_COLUMN_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_TABLE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.TABLE_NAME;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -64,6 +75,38 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 		if (params != null) {
 			retVal = !isInvalidBatchParamsId(params.getId());
 		}
+		return retVal;
+	}
+	
+	public static String dump(OabaParameters bp) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		
+		if (bp == null) {
+			pw.println("null batch parameters");
+		} else {
+			final OabaLinkageType task = bp.getOabaLinkageType();
+			pw.println("Linkage task: " + task);
+			if (task == OabaLinkageType.STAGING_DEDUPLICATION) {
+				pw.println("Deduplicating a single record source");
+				pw.println("Staging record source: " + bp.getStageRsId());
+			} else if (task == OabaLinkageType.STAGING_TO_MASTER_LINKAGE) {
+				pw.println("Linking a staging source to a master source");
+				pw.println("Staging record source: " + bp.getStageRsId());
+				pw.println("Master record source: " + bp.getMasterRsId());
+			} else if (task == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
+				pw.println("Linking a master source to a master source");
+				pw.println("Master record source: " + bp.getStageRsId());
+				pw.println("Master record source: " + bp.getMasterRsId());
+			} else {
+				throw new IllegalArgumentException("unexpected task type: " + task);
+			}
+			pw.println("DIFFER threshold: " + bp.getLowThreshold());
+			pw.println("MATCH threshold: " + bp.getHighThreshold());
+			pw.println("Model configuration id: "
+					+ bp.getModelConfigurationName());
+		}
+		String retVal = sw.toString();
 		return retVal;
 	}
 

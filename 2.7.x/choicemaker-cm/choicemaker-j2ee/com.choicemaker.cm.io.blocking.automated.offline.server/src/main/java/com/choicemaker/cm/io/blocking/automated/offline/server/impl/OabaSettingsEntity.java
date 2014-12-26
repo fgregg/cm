@@ -10,6 +10,9 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaS
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA.JPQL_OABA_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA.QN_OABA_FIND_ALL;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -24,6 +27,22 @@ import com.choicemaker.cm.args.OabaSettings;
 public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSettings {
 
 	private static final long serialVersionUID = 271L;
+	
+	public static String dump(OabaSettings oaba) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		
+		if (oaba == null) {
+			pw.println("null OABA settings");
+		} else {
+			// FIXME better logging
+			pw.println("Threshold for batched-record blocking: "
+					+ oaba.getMaxSingle());
+			pw.println(oaba.toString());
+		}
+		String retVal = sw.toString();
+		return retVal;
+	}
 
 	// -- Instance data
 

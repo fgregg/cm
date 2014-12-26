@@ -15,7 +15,9 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJ
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA.QN_OABAJOB_FIND_ALL;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -61,6 +63,17 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 	/** Required by JPA; do not invoke directly */
 	protected OabaJobEntity() {
 		super();
+	}
+	
+	public static String dump(OabaJob job) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		pw.println("OabaJob id: " + job.getId());
+		pw.println("OabaJob extId: " + job.getExternalId());
+		pw.println("OabaJob description: " + job.getDescription());
+		pw.println("OabaJob rigor: " + job.getBatchJobRigor());
+		String retVal = sw.toString();
+		return retVal;
 	}
 
 	// -- Constructors
