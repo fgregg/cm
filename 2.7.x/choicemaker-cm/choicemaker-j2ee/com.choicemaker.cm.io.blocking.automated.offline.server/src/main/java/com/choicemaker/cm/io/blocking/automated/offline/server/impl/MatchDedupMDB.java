@@ -209,6 +209,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			mergeMatches(numProcessors, jobId, oabaJob);
 
 			// mark as done
+			oabaJob.markAsCompleted();
 			sendToUpdateStatus(d.jobID, PCT_DONE_OABA);
 			processingEntry.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 //			publishStatus(d.jobID);
