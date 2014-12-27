@@ -18,6 +18,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
@@ -33,17 +38,17 @@ import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
 
 public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> {
-	
+
 	// -- Read-write instance data
 
 	private int initialOabaParamsCount;
-	
+
 	private int initialOabaJobCount;
 
 	private int initialOabaProcessingCount;
 
 	private boolean setupOK;
-	
+
 	/**
 	 * A read-only member that is lazily initialized by
 	 * {@link #getTestConfiguration()}
@@ -53,15 +58,15 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	// -- Immutable, constructed instance data
 
 	private final String sourceName;
-	
+
 	private final Logger logger;
 
 	private final int eventId;
 
 	private final int percentComplete;
-	
+
 	private final Class<T> configurationClass;
-	
+
 	private final OabaProcessingPhase oabaPhase;
 
 	// -- Read-only, injected instance data
@@ -110,7 +115,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	@Resource(lookup = "choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
-	
+
 	@Resource(lookup = "choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
 
@@ -130,17 +135,17 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	private JMSContext jmsContext;
 
 	// -- Constructor
-	
+
 	@Inject
 	public AbstractOabaMdbTest(String n, Logger g, int evtId, int pct,
-			Class<T> configurationClass,
-			OabaProcessingPhase oabaPhase
-			) {
+			Class<T> configurationClass, OabaProcessingPhase oabaPhase) {
 		if (n == null || n.isEmpty() || g == null || oabaPhase == null) {
 			throw new IllegalArgumentException("invalid argument");
 		}
-		if (!OabaMdbTestProcedures.isValidConfigurationClass(configurationClass)) {
-			throw new IllegalArgumentException("invalid configuration class: " + configurationClass);
+		if (!OabaMdbTestProcedures
+				.isValidConfigurationClass(configurationClass)) {
+			throw new IllegalArgumentException("invalid configuration class: "
+					+ configurationClass);
 		}
 		this.sourceName = n;
 		this.logger = g;
@@ -149,14 +154,14 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		this.configurationClass = configurationClass;
 		this.oabaPhase = oabaPhase;
 	}
-	
+
 	// -- Abstract methods
 
 	public abstract Queue getResultQueue();
 
-	public abstract boolean isWorkingDirectoryCorrectAfterLinkageProcessing();
-
-	public abstract boolean isWorkingDirectoryCorrectAfterDeduplicationProcessing() ;
+	public abstract boolean isWorkingDirectoryCorrectAfterProcessing(
+			OabaLinkageType linkage, OabaJob batchJob, OabaParameters bp,
+			OabaSettings oabaSettings, ServerConfiguration serverConfiguration);
 
 	// -- Template methods
 
@@ -275,15 +280,15 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	public final void testLinkage() throws ServerConfigurationException {
 		OabaMdbTestProcedures.testLinkageProcessing(this);
 	}
-	
+
 	@Test
 	@InSequence(4)
 	public final void testDeduplication() throws ServerConfigurationException {
 		OabaMdbTestProcedures.testDeduplicationProcessing(this);
 	}
-	
+
 	// -- Modifiers
-	
+
 	public final void setInitialOabaJobCount(int value) {
 		this.initialOabaJobCount = value;
 	}
@@ -322,13 +327,12 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return configurationClass;
 	}
 
-	public final T getTestConfiguration() {
+	public final T getTestConfiguration(OabaLinkageType type) {
 		if (testConfiguration == null) {
-			Class<T> c =
-				getTestConfigurationClass();
+			Class<T> c = getTestConfigurationClass();
 			CMPluginRegistry r = getE2service().getPluginRegistry();
 			testConfiguration =
-				OabaMdbTestProcedures.createTestConfiguration(c, r);
+				OabaMdbTestProcedures.createTestConfiguration(c, type, r);
 		}
 		assert testConfiguration != null;
 		return testConfiguration;
@@ -425,7 +429,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	public final OabaTestController getTestController() {
 		return oabaTestController;
 	}
-	
+
 	public final Queue getTransitivityQueue() {
 		return transitivityQueue;
 	}
