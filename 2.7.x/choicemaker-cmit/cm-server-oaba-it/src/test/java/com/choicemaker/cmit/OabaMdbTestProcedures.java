@@ -37,7 +37,7 @@ import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 
 public class OabaMdbTestProcedures {
-	
+
 	private static final Logger logger = Logger
 			.getLogger(OabaMdbTestProcedures.class.getName());
 
@@ -50,7 +50,7 @@ public class OabaMdbTestProcedures {
 	}
 
 	public static <T extends WellKnownTestConfiguration> T createTestConfiguration(
-			Class<T> c, CMPluginRegistry registry) {
+			Class<T> c, OabaLinkageType task, CMPluginRegistry registry) {
 
 		if (!isValidConfigurationClass(c)) {
 			String msg = "invalid configuration class: " + c;
@@ -64,7 +64,7 @@ public class OabaMdbTestProcedures {
 		try {
 			Class<T> cWKTC = (Class<T>) c;
 			retVal = cWKTC.newInstance();
-			retVal.initialize(registry);
+			retVal.initialize(task, registry);
 		} catch (Exception x) {
 			fail(x.toString());
 		}
@@ -77,49 +77,14 @@ public class OabaMdbTestProcedures {
 		if (test == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-		
+
 		assertTrue(test.isSetupOK());
 		String TEST = "testStartOABALinkage";
 		test.getLogger().entering(test.getSourceName(), TEST);
 
 		final String externalID = EntityManagerUtils.createExternalId(TEST);
-		final WellKnownTestConfiguration c = test.getTestConfiguration();
-
-		PersistableRecordSource prs = c.getStagingRecordSource();
-		assertTrue(prs != null);
-		assertTrue(prs.getId() == PersistableRecordSource.NONPERSISTENT_ID);
-		final PersistableRecordSource staging =
-			test.getRecordSourceController().save(prs);
-		assertTrue(staging.getId() != PersistableRecordSource.NONPERSISTENT_ID);
-		prs = c.getMasterRecordSource();
-		assertTrue(prs != null);
-		assertTrue(prs.getId() == PersistableRecordSource.NONPERSISTENT_ID);
-		final PersistableRecordSource master =
-			test.getRecordSourceController().save(prs);
-		assertTrue(master.getId() != PersistableRecordSource.NONPERSISTENT_ID);
-		final OabaParameters bp =
-			new OabaParametersEntity(c.getModelConfigurationName(), c
-					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), staging, master, c.getOabaTask());
-		final OabaSettings oabaSettings =
-			OabaUtils.getDefaultOabaSettings(test.getSettingsController(),
-					bp.getStageModel());
-		final ServerConfiguration serverConfiguration =
-			OabaUtils.getDefaultServerConfiguration(test
-					.getServerController());
-
-		final Queue resultQueue = test.getResultQueue();
-		final int expectedEventId = test.getResultEventId();
-		final int expectedCompletion = test.getResultPercentComplete();
-
-		testOabaProcessing(test.getSourceName(),
-				TEST, externalID, bp, oabaSettings, serverConfiguration,
-				test.getOabaService(), test.getJobController(),
-				test.getParamsController(),
-				test.getProcessingController(), test.getJmsContext(),
-				resultQueue, test.getUpdateQueue(), test.getEm(),
-				test.getUtx(), expectedEventId, expectedCompletion,
-				test.getOabaProcessingPhase());
+		testOabaProcessing(OabaLinkageType.STAGING_TO_MASTER_LINKAGE, TEST,
+				test, externalID);
 
 		test.getLogger().exiting(test.getSourceName(), TEST);
 	}
@@ -135,79 +100,64 @@ public class OabaMdbTestProcedures {
 		test.getLogger().entering(test.getSourceName(), TEST);
 
 		final String externalID = EntityManagerUtils.createExternalId(TEST);
-		final WellKnownTestConfiguration c = test.getTestConfiguration();
-
-		PersistableRecordSource prs = c.getStagingRecordSource();
-		assertTrue(prs != null);
-		assertTrue(prs.getId() == PersistableRecordSource.NONPERSISTENT_ID);
-		final PersistableRecordSource staging =
-			test.getRecordSourceController().save(prs);
-		assertTrue(staging.getId() != PersistableRecordSource.NONPERSISTENT_ID);
-
-		final OabaParameters bp =
-			new OabaParametersEntity(c.getModelConfigurationName(), c
-					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), staging);
-		final OabaSettings oabaSettings =
-			OabaUtils.getDefaultOabaSettings(test.getSettingsController(),
-					bp.getStageModel());
-		final ServerConfiguration serverConfiguration =
-			OabaUtils.getDefaultServerConfiguration(test
-					.getServerController());
-
-		final Queue resultQueue = test.getResultQueue();
-		final int expectedEventId = test.getResultEventId();
-		final int expectedCompletion = test.getResultPercentComplete();
-
-		testOabaProcessing(test.getSourceName(),
-				TEST, externalID, bp, oabaSettings, serverConfiguration,
-				test.getOabaService(), test.getJobController(),
-				test.getParamsController(),
-				test.getProcessingController(), test.getJmsContext(),
-				resultQueue, test.getUpdateQueue(), test.getEm(),
-				test.getUtx(), expectedEventId, expectedCompletion,
-				test.getOabaProcessingPhase());
+		testOabaProcessing(OabaLinkageType.STAGING_DEDUPLICATION, TEST, test,
+				externalID);
 
 		test.getLogger().exiting(test.getSourceName(), TEST);
 	}
 
-	protected static void testOabaProcessing(final String LOG_SOURCE,
-			final String tag, final String externalId, final OabaParameters bp,
-			final OabaSettings oabaSettings,
-			final ServerConfiguration serverConfiguration,
-			final OabaService batchQuery,
-			final OabaJobControllerBean jobController,
-			final OabaParametersControllerBean paramsController,
-			final OabaProcessingControllerBean processingController,
-			final JMSContext jmsContext, final Queue listeningQueue,
-			final Queue updateQueue, final EntityManager em,
-			final UserTransaction utx, final int expectedEventId,
-			final int expectPercentDone, final OabaProcessingPhase oabaPhase) {
-		logger.entering(LOG_SOURCE, tag);
-	
+	protected static <T extends WellKnownTestConfiguration> void testOabaProcessing(
+			final OabaLinkageType linkage, final String tag,
+			final AbstractOabaMdbTest<T> test, final String externalId) {
+
 		// Preconditions
-		if (externalId == null || bp == null || LOG_SOURCE == null
-				|| tag == null || oabaSettings == null
-				|| serverConfiguration == null || batchQuery == null
-				|| jobController == null || paramsController == null
-				|| processingController == null || jmsContext == null
-				|| updateQueue == null || em == null || utx == null
-				|| oabaPhase == null) {
+		if (linkage == null || tag == null || test == null
+				|| externalId == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-		validateQueues(oabaPhase, listeningQueue, updateQueue);
-	
+
+		final String LOG_SOURCE = test.getSourceName();
+		logger.entering(LOG_SOURCE, tag);
+
+		final OabaProcessingPhase oabaPhase = test.getOabaProcessingPhase();
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
-		final boolean isDeduplication =
-			OabaLinkageType.STAGING_DEDUPLICATION == bp.getOabaLinkageType();
-	
-		TestEntities te = new TestEntities();
+		final Queue listeningQueue = test.getResultQueue();
+		final Queue updateQueue = test.getUpdateQueue();
+		validateQueues(oabaPhase, listeningQueue, updateQueue);
+
+		final WellKnownTestConfiguration c = test.getTestConfiguration(linkage);
+
+		final PersistableRecordSource staging =
+			test.getRecordSourceController().save(c.getStagingRecordSource());
+		assertTrue(staging.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+
+		final PersistableRecordSource master;
+		if (OabaLinkageType.STAGING_DEDUPLICATION == linkage) {
+			master = null;
+		} else {
+			master =
+				test.getRecordSourceController()
+						.save(c.getMasterRecordSource());
+			assertTrue(master.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+		}
+
+		final OabaSettings oabaSettings =
+			OabaUtils.getDefaultOabaSettings(test.getSettingsController(),
+					c.getModelConfigurationName());
+		final ServerConfiguration serverConfiguration =
+			OabaUtils.getDefaultServerConfiguration(test.getServerController());
+
+		final TestEntities te = new TestEntities();
+		final OabaParameters bp =
+			new OabaParametersEntity(c.getModelConfigurationName(), c
+					.getThresholds().getDifferThreshold(), c.getThresholds()
+					.getMatchThreshold(), staging, master, c.getOabaTask());
 		te.add(bp);
-	
+
+		final OabaService batchQuery = test.getOabaService();
 		long jobId = INVALID_ID;
 		try {
-			final OabaLinkageType linkage = bp.getOabaLinkageType();
 			switch (linkage) {
 			case STAGING_DEDUPLICATION:
 				logger.info(tag
@@ -233,23 +183,27 @@ public class OabaMdbTestProcedures {
 		} catch (ServerConfigurationException e) {
 			fail(e.toString());
 		}
+
+		final OabaJobControllerBean jobController = test.getJobController();
 		assertTrue(INVALID_ID != jobId);
 		OabaJob batchJob = jobController.findOabaJob(jobId);
 		assertTrue(batchJob != null);
 		te.add(batchJob);
 		assertTrue(externalId != null
 				&& externalId.equals(batchJob.getExternalId()));
-	
+
 		// Find the persistent OabaParameters object created by the call to
 		// BatchQueryService.startLinkage...
+		final OabaParametersControllerBean paramsController =
+			test.getParamsController();
 		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
 		te.add(params);
-	
+
 		// Validate that the job parameters are correct
 		assertTrue(params != null);
 		assertTrue(params.getLowThreshold() == bp.getLowThreshold());
 		assertTrue(params.getHighThreshold() == bp.getHighThreshold());
-		if (isDeduplication) {
+		if (OabaLinkageType.STAGING_DEDUPLICATION == linkage) {
 			assertTrue(params.getMasterRsId() == null);
 			assertTrue(params.getMasterRsType() == null);
 		} else {
@@ -264,7 +218,8 @@ public class OabaMdbTestProcedures {
 		assertTrue(params.getModelConfigurationName() != null
 				&& params.getModelConfigurationName().equals(
 						bp.getModelConfigurationName()));
-	
+
+		final JMSContext jmsContext = test.getJmsContext();
 		if (isIntermediateExpected) {
 			// Check that OABA processing completed and sent out a
 			// message on the intermediate result queue
@@ -305,25 +260,36 @@ public class OabaMdbTestProcedures {
 			}
 			assertTrue(updateMessage != null);
 			assertTrue(updateMessage.getJobID() == jobId);
+			final int expectPercentDone = test.getResultPercentComplete();
 			assertTrue(updateMessage.getPercentComplete() == expectPercentDone);
 		}
-	
+
 		// Find the entry in the processing history updated by the OABA
+		final OabaProcessingControllerBean processingController =
+			test.getProcessingController();
 		OabaJobProcessing processingEntry =
 			processingController.findProcessingLogByJobId(jobId);
 		te.add(processingEntry);
-	
+
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);
+		final int expectedEventId = test.getResultEventId();
 		assertTrue(processingEntry.getCurrentProcessingEventId() == expectedEventId);
-	
+
+		// Check that the working directory contains what it should
+		assertTrue(test.isWorkingDirectoryCorrectAfterProcessing(linkage,
+				batchJob, bp, oabaSettings, serverConfiguration));
+
+		// Clean up
 		try {
+			final EntityManager em = test.getEm();
+			final UserTransaction utx = test.getUtx();
 			te.removePersistentObjects(em, utx);
 		} catch (Exception x) {
 			logger.severe(x.toString());
 			fail(x.toString());
 		}
-	
+
 		logger.exiting(LOG_SOURCE, tag);
 	}
 
