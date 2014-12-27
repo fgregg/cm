@@ -9,6 +9,7 @@ import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
+import javax.jms.Topic;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
@@ -81,6 +82,24 @@ public class JmsUtils {
 			logger.info(queueInfo("Clearing: ", queue, startData));
 		} while (startData != null);
 		logger.info(queueInfo("Messages cleared: " + count + " ", queue));
+	}
+
+	public static void clearNotificationsFromTopic(String LOG_SOURCE,
+			JMSContext jmsContext, Topic statusTopic) {
+		throw new Error("not yet implemented");
+//		JMSConsumer consumer = jmsContext.createConsumer(updateQueue);
+//		int count = 0;
+//		OabaUpdateMessage updateMessage = null;
+//		do {
+//			updateMessage =
+//				receiveUpdateMessage(LOG_SOURCE, consumer, updateQueue,
+//						SHORT_TIMEOUT_MILLIS);
+//			if (updateMessage != null) {
+//				++count;
+//			}
+//			logger.info(queueInfo("Clearing: ", updateQueue, updateMessage));
+//		} while (updateMessage != null);
+//		logger.info(queueInfo("Messages cleared: " + count + " ", updateQueue));
 	}
 
 	public static void clearUpdateDataFromQueue(String LOG_SOURCE,
