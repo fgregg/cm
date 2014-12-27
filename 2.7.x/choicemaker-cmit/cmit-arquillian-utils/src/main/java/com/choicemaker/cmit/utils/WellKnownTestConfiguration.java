@@ -4,34 +4,39 @@ import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.ISerializableDbRecordSource;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
 import com.choicemaker.e2.CMPluginRegistry;
 
 public interface WellKnownTestConfiguration {
 
-	PersistableRecordSource getStagingRecordSource();
-
-	ISerializableDbRecordSource getSerializableStagingRecordSource();
+	String getDatabaseConfiguration();
 
 	PersistableRecordSource getMasterRecordSource();
+
+	ImmutableProbabilityModel getModel();
+
+	String getModelConfigurationName();
 
 	OabaLinkageType getOabaTask();
 
 	ISerializableDbRecordSource getSerializableMasterRecordSource();
 
-	ImmutableThresholds getThresholds();
-
-	String getModelConfigurationName();
+	ISerializableDbRecordSource getSerializableStagingRecordSource();
 
 	int getSingleRecordMatchingThreshold();
 
-	boolean getTransitivityAnalysisFlag();
+	PersistableRecordSource getStagingRecordSource();
 
-	AnalysisResultFormat getTransitivityResultFormat();
+	ImmutableThresholds getThresholds();
+
+	boolean getTransitivityAnalysisFlag();
 
 	String getTransitivityGraphProperty();
 
+	AnalysisResultFormat getTransitivityResultFormat();
+
 	/** Post-construction method */
-	void initialize(CMPluginRegistry registry);
+	void initialize(OabaLinkageType type, CMPluginRegistry registry);
 
 }
