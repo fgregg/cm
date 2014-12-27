@@ -3,7 +3,6 @@ package com.choicemaker.cmit;
 import static com.choicemaker.cm.batch.BatchJob.INVALID_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OABA;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
-import static com.choicemaker.cmit.utils.JmsUtils.VERY_LONG_TIMEOUT_MILLIS;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -12,6 +11,7 @@ import java.util.logging.Logger;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
+import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
@@ -60,7 +60,7 @@ public class TransitivityMdbTestProcedures {
 	}
 
 	public static <T extends WellKnownTestConfiguration> T createTestConfiguration(
-			Class<T> c, CMPluginRegistry registry) {
+			Class<T> c, OabaLinkageType linkage, CMPluginRegistry registry) {
 
 		if (!isValidConfigurationClass(c)) {
 			String msg = "invalid configuration class: " + c;
@@ -74,7 +74,7 @@ public class TransitivityMdbTestProcedures {
 		try {
 			Class<T> cWKTC = (Class<T>) c;
 			retVal = cWKTC.newInstance();
-			retVal.initialize(registry);
+			retVal.initialize(linkage, registry);
 		} catch (Exception x) {
 			fail(x.toString());
 		}
@@ -82,12 +82,43 @@ public class TransitivityMdbTestProcedures {
 		return retVal;
 	}
 
-	public static <T extends WellKnownTestConfiguration> void testTransitivityProcessing(
-			AbstractTransitivityMdbTest<T> test)
-			throws ServerConfigurationException {
+	public static <T extends WellKnownTestConfiguration> void testLinkageTransitivity(
+			AbstractTransitivityMdbTest<T> test) throws ServerConfigurationException {
 		if (test == null) {
 			throw new IllegalArgumentException("null argument");
 		}
+		
+		assertTrue(test.isSetupOK());
+		String TEST = "testStartOABALinkage";
+		test.getLogger().entering(test.getSourceName(), TEST);
+
+		final String externalID = EntityManagerUtils.createExternalId(TEST);
+		testTransitivityProcessing(OabaLinkageType.STAGING_TO_MASTER_LINKAGE,
+				TEST, test, externalID);
+
+		test.getLogger().exiting(test.getSourceName(), TEST);
+	}
+
+	public static <T extends WellKnownTestConfiguration> void testDeduplicationTransitivity(
+			AbstractTransitivityMdbTest<T> test) throws ServerConfigurationException {
+		if (test == null) {
+			throw new IllegalArgumentException("null argument");
+		}
+
+		assertTrue(test.isSetupOK());
+		String TEST = "testStartOABAStage";
+		test.getLogger().entering(test.getSourceName(), TEST);
+
+		final String externalID = EntityManagerUtils.createExternalId(TEST);
+		testTransitivityProcessing(OabaLinkageType.STAGING_DEDUPLICATION,
+				TEST, test, externalID);
+
+		test.getLogger().exiting(test.getSourceName(), TEST);
+	}
+
+	protected static <T extends WellKnownTestConfiguration> void testTransitivityProcessing(
+			final OabaLinkageType linkage, final String tag,
+			final AbstractTransitivityMdbTest<T> test, final String externalId) {
 		
 		assertTrue(test.isSetupOK());
 		String TEST = "testTransitivityProcessing";
@@ -95,7 +126,7 @@ public class TransitivityMdbTestProcedures {
 
 		// Compute the OABA job that will be used in transitivity analysis
 		final String externalID = EntityManagerUtils.createExternalId(TEST);
-		final WellKnownTestConfiguration c = test.getTestConfiguration();
+		final WellKnownTestConfiguration c = test.getTestConfiguration(linkage);
 		final PersistableRecordSource staging =
 			test.getRecordSourceController().save(c.getStagingRecordSource());
 		final PersistableRecordSource master =
@@ -111,11 +142,12 @@ public class TransitivityMdbTestProcedures {
 			OabaUtils.getDefaultServerConfiguration(test
 					.getServerController());
 		final OabaService oabaService = test.getOabaService();
+		final Topic oabaStatusTopicFIXME = null;
 		final OabaJob oabaJob =
 				doOabaProcessing(test.getSourceName(), TEST, externalID, bp,
 						oabaSettings, serverConfiguration, oabaService,
 						test.getJobController(), test.getProcessingController(),
-						test.getJmsContext(), test.getUpdateTransQueue());
+						test.getJmsContext(), oabaStatusTopicFIXME);
 
 		// Set up the parameters for transitivity-analysis test
 		final AnalysisResultFormat format = c.getTransitivityResultFormat();
@@ -132,7 +164,7 @@ public class TransitivityMdbTestProcedures {
 				test.getTransitivityService(), test.getJobController(),
 				test.getParamsController(),
 				test.getProcessingController(), test.getJmsContext(),
-				resultQueue, test.getUpdateTransQueue(), test.getEm(),
+				resultQueue, test.getTransitivityStatusTopic(), test.getEm(),
 				test.getUtx(), expectedEventId, expectedCompletion,
 				test.getOabaProcessingPhase());
 
@@ -148,7 +180,7 @@ public class TransitivityMdbTestProcedures {
 			final OabaParametersControllerBean paramsController,
 			final OabaProcessingControllerBean processingController,
 			final JMSContext jmsContext, final Queue listeningQueue,
-			final Queue updateQueue, final EntityManager em,
+			final Topic transStatusUpdate, final EntityManager em,
 			final UserTransaction utx, final int expectedEventId,
 			final int expectPercentDone, final OabaProcessingPhase oabaPhase) {
 		logger.entering(LOG_SOURCE, tag);
@@ -159,14 +191,14 @@ public class TransitivityMdbTestProcedures {
 				|| serverConfiguration == null || transitivityService == null
 				|| jobController == null || paramsController == null
 				|| processingController == null || jmsContext == null
-				|| updateQueue == null || em == null || utx == null
+				|| transStatusUpdate == null || em == null || utx == null
 				|| oabaPhase == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-		validateQueues(oabaPhase, listeningQueue, updateQueue);
+		validateQueue(oabaPhase, listeningQueue);
 	
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
-		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
+//		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
 		final boolean isDeduplication =
 			OabaLinkageType.STAGING_DEDUPLICATION == bp.getOabaLinkageType();
 	
@@ -246,26 +278,27 @@ public class TransitivityMdbTestProcedures {
 			}
 			assertTrue(startData.jobID == jobId);
 		}
-		if (isUpdateExpected) {
-			// Check that OABA processing sent out an expected status
-			// on the update queue
-			logger.info("Checking updateQueue");
-			OabaUpdateMessage updateMessage = null;
-			if (oabaPhase == OabaProcessingPhase.INTERMEDIATE) {
-				updateMessage =
-					JmsUtils.receiveLatestUpdateMessage(LOG_SOURCE, jmsContext,
-							updateQueue, JmsUtils.SHORT_TIMEOUT_MILLIS);
-			} else if (oabaPhase == OabaProcessingPhase.FINAL) {
-				updateMessage =
-					JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
-							updateQueue, VERY_LONG_TIMEOUT_MILLIS);
-			} else {
-				throw new Error("unexpected phase: " + oabaPhase);
-			}
-			assertTrue(updateMessage != null);
-			assertTrue(updateMessage.getJobID() == jobId);
-			assertTrue(updateMessage.getPercentComplete() == expectPercentDone);
+
+		// Check that OABA processing sent out an expected status
+		// on the status topic
+		logger.info("Checking updateQueue");
+		OabaUpdateMessage updateMessage = null;
+		if (oabaPhase == OabaProcessingPhase.INTERMEDIATE) {
+			// FIXME
+//			updateMessage =
+//				JmsUtils.receiveLatestUpdateMessage(LOG_SOURCE, jmsContext,
+//						updateQueue, JmsUtils.SHORT_TIMEOUT_MILLIS);
+		} else if (oabaPhase == OabaProcessingPhase.FINAL) {
+			// FIXME
+//			updateMessage =
+//				JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
+//						updateQueue, VERY_LONG_TIMEOUT_MILLIS);
+		} else {
+			throw new Error("unexpected phase: " + oabaPhase);
 		}
+		assertTrue(updateMessage != null);
+		assertTrue(updateMessage.getJobID() == jobId);
+		assertTrue(updateMessage.getPercentComplete() == expectPercentDone);
 	
 		// Find the entry in the processing history updated by the OABA
 		OabaJobProcessing processingEntry =
@@ -284,6 +317,12 @@ public class TransitivityMdbTestProcedures {
 		}
 	
 		logger.exiting(LOG_SOURCE, tag);
+	}
+
+	private static void validateQueue(OabaProcessingPhase oabaPhase,
+			Queue listeningQueue) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public static void validateQueues(OabaProcessingPhase oabaPhase,
@@ -337,7 +376,7 @@ public class TransitivityMdbTestProcedures {
 			final OabaJobControllerBean jobController,
 			final OabaProcessingControllerBean processingController,
 			final JMSContext jmsContext,
-			final Queue updateQueue) {
+			final Topic statusTopic) {
 		logger.entering(LOG_SOURCE, tag);
 	
 		// Preconditions
@@ -345,7 +384,7 @@ public class TransitivityMdbTestProcedures {
 				|| tag == null || oabaSettings == null
 				|| serverConfiguration == null || batchQuery == null
 				|| jobController == null || processingController == null
-				|| jmsContext == null || updateQueue == null) {
+				|| jmsContext == null || statusTopic == null) {
 			throw new IllegalArgumentException("null argument");
 		}
 	
@@ -383,9 +422,10 @@ public class TransitivityMdbTestProcedures {
 		// on the update queue
 		logger.info("Checking updateQueue");
 		OabaUpdateMessage updateMessage = null;
-			updateMessage =
-				JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
-						updateQueue, VERY_LONG_TIMEOUT_MILLIS);
+		// FIXME
+//			updateMessage =
+//				JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
+//						statusTopic, VERY_LONG_TIMEOUT_MILLIS);
 		assertTrue(updateMessage != null);
 		assertTrue(updateMessage.getJobID() == jobId);
 		assertTrue(updateMessage.getPercentComplete() == PCT_DONE_OABA);
