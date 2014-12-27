@@ -65,26 +65,24 @@ public class SimplePersonSqlServerTestConfiguration implements
 	private final String databaseConfiguration;
 	private final String stagingSQL;
 	private final String masterSQL;
-	private final OabaLinkageType task;
 	private final String modelConfigurationId;
 	private final ImmutableThresholds thresholds;
 	private final int maxSingle;
 	private final boolean runTransitivityAnalysis;
 	private final AnalysisResultFormat transitivityResultFormat;
 	private final String transitivityGraphProperty;
-	private final List<String> invalidConditions = new LinkedList<>();
 
+	// Read-only values that are set once during initialization
 	private boolean isInitialized;
 	private boolean isValid;
-
-	// private CMPluginRegistry pluginRegistry;
+	private OabaLinkageType task;
 	private ImmutableProbabilityModel model;
 	private ISerializableDbRecordSource staging;
 	private ISerializableDbRecordSource master;
 
 	public SimplePersonSqlServerTestConfiguration() {
 		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION,
-				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK,
+				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL,
 				DEFAULT_MODEL_CONFIGURATION_ID, DEFAULT_THRESHOLDS,
 				DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD,
 				DEFAULT_TRANSITIVITY_ANALYSIS,
@@ -94,7 +92,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	public SimplePersonSqlServerTestConfiguration(boolean runTransitivity) {
 		this(DEFAULT_DATASOURCE_JNDI_NAME, DEFAULT_DATABASE_CONFIGURATION,
-				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL, DEFAULT_OABA_TASK,
+				DEFAULT_STAGING_SQL, DEFAULT_MASTER_SQL,
 				DEFAULT_MODEL_CONFIGURATION_ID, DEFAULT_THRESHOLDS,
 				DEFAULT_SINGLE_RECORD_MATCHING_THRESHOLD, runTransitivity,
 				DEFAULT_TRANSITIVITY_RESULT_FORMAT,
@@ -103,7 +101,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	public SimplePersonSqlServerTestConfiguration(String dsJndiName,
 			String dbConfig, String stagingSQL, String masterSQL,
-			OabaLinkageType task, String mci, ImmutableThresholds t,
+			String mci, ImmutableThresholds t,
 			int maxSingle, boolean runTransitivity, AnalysisResultFormat arf,
 			String gpn) {
 		if (dsJndiName == null || dsJndiName.trim().isEmpty()) {
@@ -125,9 +123,6 @@ public class SimplePersonSqlServerTestConfiguration implements
 			throw new IllegalArgumentException(
 					"null or blank SQL for master source");
 
-		}
-		if (task == null) {
-			throw new IllegalArgumentException("null task type");
 		}
 		if (mci == null || mci.trim().isEmpty()) {
 			throw new IllegalArgumentException(
@@ -152,7 +147,6 @@ public class SimplePersonSqlServerTestConfiguration implements
 		this.databaseConfiguration = dbConfig;
 		this.stagingSQL = stagingSQL;
 		this.masterSQL = masterSQL;
-		this.task = task;
 		this.modelConfigurationId = mci;
 		this.thresholds = t;
 		this.maxSingle = maxSingle;
@@ -163,64 +157,85 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	/**
-	 * One-time initialization.
+	 * One-time initialization that sets:<ul>
+	 * <li>the linkage type</li>
+	 * <li>the probability model</li>
+	 * <li>the staging record source</li>
+	 * <li>the master record source</li>
+	 * </ul>
 	 * 
+	 * @throws IllegalArgumentException if either constructor argument is null
 	 * @throws IllegalStateException
 	 *             if initialization fails
 	 */
 	@Override
-	public void initialize(CMPluginRegistry registry) {
+	public void initialize(OabaLinkageType task, CMPluginRegistry registry) {
 		// Standard messages
+		final String NULL_LINKAGE = "null linkage task";
 		final String NULL_REGISTRY = "null plugin registry";
 		final String NULL_MODEL = "null modelId";
 		final String NULL_STAGING = "null staging record source";
 		final String NULL_MASTER = "null master record source";
 
 		if (!isInitialized) {
+			final List<String> invalidConditions = new LinkedList<>();
+			// Check preconditions
 			isValid = true;
+			if (task == null) {
+				isValid = false;
+				invalidConditions.add(NULL_LINKAGE);
+			} else {
+				this.task = task;
+			}
 			if (registry == null) {
 				isValid = false;
 				invalidConditions.add(NULL_REGISTRY);
+			}
+			if (!invalidConditions.isEmpty()) {
+				String msg = "Initialization failed: " + invalidConditions;
+				logger.severe(msg);
+				throw new IllegalArgumentException(msg);
+			}
+
+			// Check state
+			this.model = lookupModelByPluginId(modelConfigurationId);
+			if (getModel() == null) {
+				isValid = false;
 				invalidConditions.add(NULL_MODEL);
 				invalidConditions.add(NULL_STAGING);
 				invalidConditions.add(NULL_MASTER);
 			} else {
-				this.model = lookupModelByPluginId(modelConfigurationId);
-				if (model == null) {
+				try {
+					this.staging = createStagingRecordSource(getModel());
+					if (staging == null) {
+						isValid = false;
+						invalidConditions.add(NULL_STAGING);
+					}
+				} catch (Exception e) {
 					isValid = false;
-					invalidConditions.add(NULL_MODEL);
-					invalidConditions.add(NULL_STAGING);
-					invalidConditions.add(NULL_MASTER);
-				} else {
-					try {
-						this.staging = createStagingRecordSource(model);
-						if (staging == null) {
-							isValid = false;
-							invalidConditions.add(NULL_STAGING);
-						}
-					} catch (Exception e) {
+					invalidConditions.add(e.toString());
+				}
+				try {
+					this.master = createMasterRecordSource(getModel());
+					if (master == null) {
 						isValid = false;
-						invalidConditions.add(e.toString());
+						invalidConditions.add(NULL_MASTER);
 					}
-					try {
-						this.master = createMasterRecordSource(model);
-						if (master == null) {
-							isValid = false;
-							invalidConditions.add(NULL_MASTER);
-						}
-					} catch (Exception e) {
-						isValid = false;
-						invalidConditions.add(e.toString());
-					}
+				} catch (Exception e) {
+					isValid = false;
+					invalidConditions.add(e.toString());
 				}
 			}
+			if (!invalidConditions.isEmpty()) {
+				String msg = "Initialization failed: " + invalidConditions;
+				logger.severe(msg);
+				throw new IllegalStateException(msg);
+			}
+			
+			// Mark as initialized
+			isInitialized = true;
 		}
-		if (!invalidConditions.isEmpty()) {
-			String msg = "Initialization failed: " + invalidConditions;
-			logger.severe(msg);
-			throw new IllegalStateException(msg);
-		}
-		isInitialized = true;
+		assert isInitialized;
 	}
 
 	/**
@@ -230,12 +245,11 @@ public class SimplePersonSqlServerTestConfiguration implements
 	 *             if the instance is not initialized or is not in a valid state
 	 */
 	protected void invariant() {
-		if (!isInitialized) {
+		if (!isInitialized()) {
 			throw new IllegalStateException("not initialized");
 		}
-		if (!isValid) {
-			throw new IllegalStateException("invalid state: "
-					+ this.invalidConditions);
+		if (!isValid()) {
+			throw new IllegalStateException("invalid state");
 		}
 	}
 
@@ -245,10 +259,6 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	public boolean isValid() {
 		return isValid;
-	}
-
-	public String getDatabaseConfiguration() {
-		return databaseConfiguration;
 	}
 
 	@Override
@@ -355,7 +365,18 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 	@Override
 	public OabaLinkageType getOabaTask() {
+		invariant();
 		return task;
+	}
+
+	@Override
+	public ImmutableProbabilityModel getModel() {
+		return model;
+	}
+
+	@Override
+	public String getDatabaseConfiguration() {
+		return databaseConfiguration;
 	}
 
 	@Override
