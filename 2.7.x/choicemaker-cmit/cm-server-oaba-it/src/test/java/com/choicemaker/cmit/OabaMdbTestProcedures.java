@@ -1,7 +1,6 @@
 package com.choicemaker.cmit;
 
 import static com.choicemaker.cm.batch.BatchJob.INVALID_ID;
-import static com.choicemaker.cmit.utils.JmsUtils.VERY_LONG_TIMEOUT_MILLIS;
 import static com.choicemaker.cmit.utils.JmsUtils.LONG_TIMEOUT_MILLIS;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
