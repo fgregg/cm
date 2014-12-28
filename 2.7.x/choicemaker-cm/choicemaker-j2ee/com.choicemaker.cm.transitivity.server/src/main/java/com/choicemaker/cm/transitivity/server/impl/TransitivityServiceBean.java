@@ -29,7 +29,6 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -129,7 +128,7 @@ public class TransitivityServiceBean implements TransitivityService {
 	}
 
 	@Override
-	public BatchJobStatus getStatus(long jobID) {
+	public TransitivityJob getTransitivityJob(long jobId) {
 		// TODO FIXME not yet re-implemented
 		throw new Error("not yet implemented");
 		//

@@ -5,7 +5,6 @@ import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_AUDIT_JOIN;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_BPARENT_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_DESCRIPTION;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_EXTERNAL_ID;
-import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_FRACTION_COMPLETE;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_PARAMS_ID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_RIGOR;
@@ -29,6 +28,8 @@ import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -53,6 +54,7 @@ import javax.persistence.TemporalType;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 
@@ -67,55 +69,44 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	private static Logger log = Logger.getLogger(OabaJobEntity.class.getName());
 
-	private static final Set<String> validStatus = new HashSet<>();
-	static {
-		validStatus.add(STATUS_NEW);
-		validStatus.add(STATUS_QUEUED);
-		validStatus.add(STATUS_STARTED);
-		validStatus.add(STATUS_COMPLETED);
-		validStatus.add(STATUS_FAILED);
-		validStatus.add(STATUS_ABORT_REQUESTED);
-		validStatus.add(STATUS_ABORTED);
-		validStatus.add(STATUS_CLEAR);
-	}
-
-	private static Map<String, Set<String>> allowedTransitions =
+	private static Map<BatchJobStatus, Set<BatchJobStatus>> allowedTransitions =
 		new HashMap<>();
 	static {
-		Set<String> allowed = new HashSet<>();
-		allowed.add(STATUS_QUEUED);
-		allowed.add(STATUS_ABORT_REQUESTED);
-		allowed.add(STATUS_ABORTED);
-		allowedTransitions.put(STATUS_NEW, allowed);
+		// FIXME use EnumSet
+		Set<BatchJobStatus> allowed = new HashSet<>();
+		allowed.add(BatchJobStatus.QUEUED);
+		allowed.add(BatchJobStatus.ABORT_REQUESTED);
+		allowed.add(BatchJobStatus.ABORTED);
+		allowedTransitions.put(BatchJobStatus.NEW, allowed);
 		allowed = new HashSet<>();
-		allowed.add(STATUS_QUEUED);
-		allowed.add(STATUS_ABORT_REQUESTED);
-		allowed.add(STATUS_ABORTED);
-		allowedTransitions.put(STATUS_NEW, allowed);
+		allowed.add(BatchJobStatus.QUEUED);
+		allowed.add(BatchJobStatus.ABORT_REQUESTED);
+		allowed.add(BatchJobStatus.ABORTED);
+		allowedTransitions.put(BatchJobStatus.NEW, allowed);
 		allowed = new HashSet<>();
-		allowed.add(STATUS_STARTED);
-		allowed.add(STATUS_ABORT_REQUESTED);
-		allowed.add(STATUS_ABORTED);
-		allowedTransitions.put(STATUS_QUEUED, allowed);
+		allowed.add(BatchJobStatus.STARTED);
+		allowed.add(BatchJobStatus.ABORT_REQUESTED);
+		allowed.add(BatchJobStatus.ABORTED);
+		allowedTransitions.put(BatchJobStatus.QUEUED, allowed);
 		allowed = new HashSet<>();
-		allowed.add(STATUS_STARTED);
-		allowed.add(STATUS_COMPLETED);
-		allowed.add(STATUS_FAILED);
-		allowed.add(STATUS_ABORT_REQUESTED);
-		allowed.add(STATUS_ABORTED);
-		allowedTransitions.put(STATUS_STARTED, allowed);
+		allowed.add(BatchJobStatus.STARTED);
+		allowed.add(BatchJobStatus.COMPLETED);
+		allowed.add(BatchJobStatus.FAILED);
+		allowed.add(BatchJobStatus.ABORT_REQUESTED);
+		allowed.add(BatchJobStatus.ABORTED);
+		allowedTransitions.put(BatchJobStatus.STARTED, allowed);
 		allowed = new HashSet<>();
-		allowed.add(STATUS_ABORTED);
-		allowedTransitions.put(STATUS_ABORT_REQUESTED, allowed);
+		allowed.add(BatchJobStatus.ABORTED);
+		allowedTransitions.put(BatchJobStatus.ABORT_REQUESTED, allowed);
 		// Terminal transitions (unless re-queued/re-started)
 		allowed = new HashSet<>();
-		allowedTransitions.put(STATUS_COMPLETED, allowed);
+		allowedTransitions.put(BatchJobStatus.COMPLETED, allowed);
 		allowed = new HashSet<>();
-		allowedTransitions.put(STATUS_FAILED, allowed);
+		allowedTransitions.put(BatchJobStatus.FAILED, allowed);
 		allowed = new HashSet<>();
-		allowedTransitions.put(STATUS_ABORTED, allowed);
-		allowed = new HashSet<>();
-		allowedTransitions.put(STATUS_CLEAR, allowed);
+		allowedTransitions.put(BatchJobStatus.ABORTED, allowed);
+//		allowed = new HashSet<>();
+//		allowedTransitions.put(MAGIC_DESCRIPTION_CLEAR, allowed);
 	}
 
 	public static boolean isInvalidBatchJobId(long id) {
@@ -203,8 +194,8 @@ public abstract class BatchJobEntity implements BatchJob {
 	@Column(name = CN_DESCRIPTION)
 	protected String description;
 
-	@Column(name = CN_FRACTION_COMPLETE)
-	protected int percentageComplete;
+//	@Column(name = CN_FRACTION_COMPLETE)
+//	protected int percentageComplete;
 
 	@Column(name = CN_STATUS)
 	protected String status;
@@ -217,14 +208,10 @@ public abstract class BatchJobEntity implements BatchJob {
 			name = CN_AUDIT_JOIN))
 	protected Map<Date, String> audit = new HashMap<>();
 
-	private static final String[] _statusValues =
-	new String[] {
-			STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_COMPLETED,
-			STATUS_FAILED, STATUS_ABORT_REQUESTED, STATUS_ABORTED,
-			STATUS_CLEAR };
-
 	private static final String[] _nonterminal = new String[] {
-	STATUS_NEW, STATUS_QUEUED, STATUS_STARTED, STATUS_ABORT_REQUESTED };
+			BatchJobStatus.NEW.name(), BatchJobStatus.QUEUED.name(),
+			BatchJobStatus.STARTED.name(),
+			BatchJobStatus.ABORT_REQUESTED.name() };
 
 	@Override
 	public long getId() {
@@ -285,28 +272,28 @@ public abstract class BatchJobEntity implements BatchJob {
 		return retVal;
 	}
 
+//	@Override
+//	public int getFractionComplete() {
+//		return percentageComplete;
+//	}
+
 	@Override
-	public int getFractionComplete() {
-		return percentageComplete;
+	public BatchJobStatus getStatus() {
+		return BatchJobStatus.valueOf(status);
 	}
 
 	@Override
-	public String getStatus() {
-		return status;
-	}
-
-	@Override
-	public Date getTimeStamp(String status) {
+	public Date getTimeStamp(BatchJobStatus status) {
 		return this.mostRecentTimestamp(status);
 	}
 
 	/** Backwards compatibility */
-	protected Date mostRecentTimestamp(String status) {
+	protected Date mostRecentTimestamp(BatchJobStatus status) {
 		// This could be replaced with a named, parameterized query
 		Date retVal = null;
 		if (status != null) {
 			for (Map.Entry<Date, String> e : audit.entrySet()) {
-				if (status.equals(e.getValue())) {
+				if (status.name().equals(e.getValue())) {
 					if (retVal == null || retVal.compareTo(e.getKey()) < 0) {
 						retVal = e.getKey();
 					}
@@ -318,42 +305,42 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	@Override
 	public Date getRequested() {
-		return mostRecentTimestamp(STATUS_NEW);
+		return mostRecentTimestamp(BatchJobStatus.NEW);
 	}
 
 	@Override
 	public Date getQueued() {
-		return mostRecentTimestamp(STATUS_QUEUED);
+		return mostRecentTimestamp(BatchJobStatus.QUEUED);
 	}
 
 	@Override
 	public Date getStarted() {
-		return mostRecentTimestamp(STATUS_STARTED);
+		return mostRecentTimestamp(BatchJobStatus.STARTED);
 	}
 
 	@Override
 	public Date getCompleted() {
-		return mostRecentTimestamp(STATUS_COMPLETED);
+		return mostRecentTimestamp(BatchJobStatus.COMPLETED);
 	}
 
 	@Override
 	public Date getFailed() {
-		return mostRecentTimestamp(STATUS_FAILED);
+		return mostRecentTimestamp(BatchJobStatus.FAILED);
 	}
 
 	@Override
 	public Date getAbortRequested() {
-		return mostRecentTimestamp(STATUS_ABORT_REQUESTED);
+		return mostRecentTimestamp(BatchJobStatus.ABORT_REQUESTED);
 	}
 
 	@Override
 	public Date getAborted() {
-		return mostRecentTimestamp(STATUS_ABORTED);
+		return mostRecentTimestamp(BatchJobStatus.ABORTED);
 	}
 
 	public boolean shouldStop() {
-		if (getStatus().equals(STATUS_ABORT_REQUESTED)
-				|| getStatus().equals(STATUS_ABORTED))
+		if (getStatus().equals(BatchJobStatus.ABORT_REQUESTED)
+				|| getStatus().equals(BatchJobStatus.ABORTED))
 			return true;
 		else
 			return false;
@@ -364,18 +351,18 @@ public abstract class BatchJobEntity implements BatchJob {
 		this.description = description;
 	}
 
-	public void setFractionComplete(int percentage) {
-		if (percentage < MIN_PERCENTAGE_COMPLETED
-				|| percentage > MAX_PERCENTAGE_COMPLETED) {
-			String msg = "invalid percentage: " + percentage;
-			throw new IllegalArgumentException(msg);
-		}
-		this.percentageComplete = percentage;
-		// Update the timestamp, indirectly
-		setStatus(getStatus());
-	}
+//	public void setFractionComplete(int percentage) {
+//		if (percentage < MIN_PERCENTAGE_COMPLETED
+//				|| percentage > MAX_PERCENTAGE_COMPLETED) {
+//			String msg = "invalid percentage: " + percentage;
+//			throw new IllegalArgumentException(msg);
+//		}
+////		this.percentageComplete = percentage;
+//		// Update the timestamp, indirectly
+//		setStatus(getStatus());
+//	}
 
-	protected void logTransition(String newStatus) {
+	protected void logTransition(BatchJobStatus newStatus) {
 		String msg =
 			getId() + ", '" + getExternalId() + "': transitioning from "
 					+ getStatus() + " to " + newStatus;
@@ -389,25 +376,24 @@ public abstract class BatchJobEntity implements BatchJob {
 		log.warning(msg);
 	}
 
-	@Override
-	public void setStatus(String newStatus) {
-		if (newStatus == null || !validStatus.contains(newStatus)) {
-			throw new IllegalArgumentException("Invalid status: " + newStatus);
+	/** For testing only; use markAsXxx() methods instead */
+	public void setStatus(BatchJobStatus newStatus) {
+		if (newStatus == null) {
+			throw new IllegalArgumentException("null status");
 		}
-		this.status = newStatus;
-		setTimeStamp(newStatus, new Date());
-		// publishStatus();
+		this.status = newStatus.name();
+		setTimeStamp(this.status, new Date());
 	}
 
 	protected void setTimeStamp(String status, Date date) {
 		this.audit.put(date, status);
 	}
 
-	public static boolean isAllowedTransition(String current, String next) {
+	public static boolean isAllowedTransition(BatchJobStatus current, BatchJobStatus next) {
 		if (current == null || next == null) {
 			throw new IllegalArgumentException("null status");
 		}
-		Set<String> allowed = allowedTransitions.get(current);
+		Set<BatchJobStatus> allowed = allowedTransitions.get(current);
 		assert allowed != null;
 		boolean retVal = allowed.contains(next);
 		return retVal;
@@ -445,14 +431,14 @@ public abstract class BatchJobEntity implements BatchJob {
 		this.bparentId = bpid;
 		this.urmId = urmid;
 		this.rigor = bjr.symbol;
-		setStatus(STATUS_NEW);
+		setStatus(BatchJobStatus.NEW);
 	}
 
 	@Override
 	public void markAsQueued() {
-		if (isAllowedTransition(getStatus(), STATUS_QUEUED)) {
-			logTransition(STATUS_QUEUED);
-			setStatus(STATUS_QUEUED);
+		if (isAllowedTransition(getStatus(), BatchJobStatus.QUEUED)) {
+			logTransition(BatchJobStatus.QUEUED);
+			setStatus(BatchJobStatus.QUEUED);
 		} else {
 			logIgnoredTransition("markAsQueued");
 		}
@@ -460,10 +446,10 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	@Override
 	public void markAsStarted() {
-		if (isAllowedTransition(getStatus(), STATUS_STARTED)) {
-			logTransition(STATUS_QUEUED);
-			setFractionComplete(MIN_PERCENTAGE_COMPLETED);
-			setStatus(STATUS_STARTED);
+		if (isAllowedTransition(getStatus(), BatchJobStatus.STARTED)) {
+			logTransition(BatchJobStatus.QUEUED);
+//			setFractionComplete(MIN_PERCENTAGE_COMPLETED);
+			setStatus(BatchJobStatus.STARTED);
 		} else {
 			logIgnoredTransition("markAsStarted");
 		}
@@ -471,16 +457,16 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	@Override
 	public void markAsReStarted() {
-		setFractionComplete(MIN_PERCENTAGE_COMPLETED);
-		setStatus(STATUS_QUEUED);
+//		setFractionComplete(MIN_PERCENTAGE_COMPLETED);
+		setStatus(BatchJobStatus.QUEUED);
 	}
 
 	@Override
 	public void markAsCompleted() {
-		if (isAllowedTransition(getStatus(), STATUS_COMPLETED)) {
-			logTransition(STATUS_COMPLETED);
-			setFractionComplete(MAX_PERCENTAGE_COMPLETED);
-			setStatus(STATUS_COMPLETED);
+		if (isAllowedTransition(getStatus(), BatchJobStatus.COMPLETED)) {
+			logTransition(BatchJobStatus.COMPLETED);
+//			setFractionComplete(MAX_PERCENTAGE_COMPLETED);
+			setStatus(BatchJobStatus.COMPLETED);
 		} else {
 			logIgnoredTransition("markAsCompleted");
 		}
@@ -488,9 +474,9 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	@Override
 	public void markAsFailed() {
-		if (isAllowedTransition(getStatus(), STATUS_FAILED)) {
-			logTransition(STATUS_FAILED);
-			setStatus(STATUS_FAILED);
+		if (isAllowedTransition(getStatus(), BatchJobStatus.FAILED)) {
+			logTransition(BatchJobStatus.FAILED);
+			setStatus(BatchJobStatus.FAILED);
 		} else {
 			logIgnoredTransition("markAsFailed");
 		}
@@ -498,9 +484,9 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	@Override
 	public void markAsAbortRequested() {
-		if (isAllowedTransition(getStatus(), STATUS_ABORT_REQUESTED)) {
-			logTransition(STATUS_ABORT_REQUESTED);
-			setStatus(STATUS_ABORT_REQUESTED);
+		if (isAllowedTransition(getStatus(), BatchJobStatus.ABORT_REQUESTED)) {
+			logTransition(BatchJobStatus.ABORT_REQUESTED);
+			setStatus(BatchJobStatus.ABORT_REQUESTED);
 		} else {
 			logIgnoredTransition("markAsAbortRequested");
 		}
@@ -508,12 +494,12 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	@Override
 	public void markAsAborted() {
-		if (isAllowedTransition(getStatus(), STATUS_ABORTED)) {
-			if (!STATUS_ABORT_REQUESTED.equals(getStatus())) {
+		if (isAllowedTransition(getStatus(), BatchJobStatus.ABORTED)) {
+			if (!BatchJobStatus.ABORT_REQUESTED.equals(getStatus())) {
 				markAsAbortRequested();
 			}
-			logTransition(STATUS_ABORTED);
-			setStatus(STATUS_ABORTED);
+			logTransition(BatchJobStatus.ABORTED);
+			setStatus(BatchJobStatus.ABORTED);
 		} else {
 			logIgnoredTransition("markAsAborted");
 		}
@@ -539,7 +525,7 @@ public abstract class BatchJobEntity implements BatchJob {
 		int result = 1;
 		result =
 			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
-		result = prime * result + percentageComplete;
+//		result = prime * result + percentageComplete;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + (int) (bparentId ^ (bparentId >>> 32));
 		result =
@@ -587,9 +573,9 @@ public abstract class BatchJobEntity implements BatchJob {
 		} else if (!externalId.equals(other.externalId)) {
 			return false;
 		}
-		if (percentageComplete != other.percentageComplete) {
-			return false;
-		}
+//		if (percentageComplete != other.percentageComplete) {
+//			return false;
+//		}
 		if (status == null) {
 			if (other.status != null) {
 				return false;
@@ -612,8 +598,11 @@ public abstract class BatchJobEntity implements BatchJob {
 	}
 
 	public static String[] getStatusValues() {
-		String[] retVal = new String[_statusValues.length];
-		System.arraycopy(_statusValues, 0, retVal, 0, retVal.length);
+		List<String> ls = new LinkedList<>();
+		for (BatchJobStatus sts : BatchJobStatus.values()) {
+			ls.add(sts.name());
+		}
+		String[] retVal = ls.toArray(new String[ls.size()]);
 		return retVal;
 	}
 

@@ -4,8 +4,8 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 
 public class OabaUtils {
 

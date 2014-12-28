@@ -56,7 +56,7 @@ public class MessageBeanUtils {
 	public static void stopJob(BatchJob oabaJob, OabaProcessing status) {
 		oabaJob.markAsAborted();
 		// FIXME description used to hold operational parameter
-		if (oabaJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
+		if (oabaJob.getDescription().equals(BatchJob.MAGIC_DESCRIPTION_CLEAR)) {
 			status.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 			log0.info("Removing Temporary directory.");
 			OabaFileUtils.removeTempDir(oabaJob);

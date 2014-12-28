@@ -21,7 +21,6 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
 
@@ -106,12 +105,12 @@ public interface OabaService {
 	public int abortJob(long jobID);
 
 	/**
-	 * This method attemps to suspend a job. Suspended jobs are recoverable
+	 * This method attempts to suspend a job. Suspended jobs are recoverable
 	 * 
 	 * @param jobID
 	 *            - This is the unique job id created by the Choicemaker Batch
 	 *            system.
-	 * @return 0 means attemp to abort was successful. -1 means cannot abort
+	 * @return 0 means attempt to abort was successful. -1 means cannot abort
 	 *         either because the job is already done, already aborted, or
 	 *         another error.
 	 * 
@@ -121,18 +120,17 @@ public interface OabaService {
 	/**
 	 * This method queries the status of a given job.
 	 * 
-	 * @param jobID
+	 * @param jobId
 	 *            This is the unique job id created by the ChoiceMaker Batch
 	 *            system.
 	 * @return a com.choicemaker.cm.custom.nysed.server.generic.BatchJobStatus
 	 *         object. This object has getStatus (), getStartDate (), and
 	 *         getFinishDate () methods.
 	 */
-	public BatchJobStatus getStatus(long jobID) throws RemoteException,
-			CreateException, NamingException, JMSException, FinderException;
+	public OabaJob getOabaJob(long jobId);
 
 	/**
-	 * This method is similar to getStatus, except that it only returns the
+	 * This method is similar to getOabaJob, except that it only returns the
 	 * status as an int.
 	 * 
 	 * @param jobID
@@ -140,8 +138,7 @@ public interface OabaService {
 	 *            system.
 	 * @return status.
 	 */
-	public String checkStatus(long jobID) throws RemoteException,
-			CreateException, NamingException, JMSException, FinderException;
+	public String checkStatus(long jobID);
 
 	/**
 	 * This method returns the MatchCandidate List Source for the job ID.

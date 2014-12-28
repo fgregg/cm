@@ -14,7 +14,6 @@ import javax.ejb.Local;
 
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 
@@ -42,13 +41,6 @@ public interface TransitivityService {
 			ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException;
 
-	/**
-	 * This method queries the current status of a transitivity job.
-	 * 
-	 * @param jobID
-	 *            the id of the transitivity job
-	 * @return BatchJobStatus
-	 */
-	public BatchJobStatus getStatus(long jobID);
+	public TransitivityJob getTransitivityJob(long jobId);
 
 }

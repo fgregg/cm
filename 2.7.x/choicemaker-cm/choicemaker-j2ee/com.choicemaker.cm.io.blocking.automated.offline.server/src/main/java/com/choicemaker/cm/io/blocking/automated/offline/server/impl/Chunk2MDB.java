@@ -31,7 +31,7 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -42,9 +42,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
@@ -136,7 +136,7 @@ public class Chunk2MDB implements MessageListener, Serializable {
 					throw new IllegalArgumentException(s);
 				}
 
-				if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+				if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
 					MessageBeanUtils.stopJob (oabaJob, processingEntry);
 
 				} else {

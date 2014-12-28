@@ -26,7 +26,7 @@ import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -119,7 +119,7 @@ public class MatchDedupEachMDB implements MessageListener, Serializable {
 				final OabaSettings settings =
 					oabaSettingsController.findOabaSettingsByJobId(jobId);
 				
-				if (BatchJob.STATUS_ABORT_REQUESTED
+				if (BatchJobStatus.ABORT_REQUESTED
 						.equals(oabaJob.getStatus())) {
 					MessageBeanUtils.stopJob(oabaJob, processingEntry);
 

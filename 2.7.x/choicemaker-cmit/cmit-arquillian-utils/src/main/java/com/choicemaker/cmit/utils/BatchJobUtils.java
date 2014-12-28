@@ -46,7 +46,7 @@ public class BatchJobUtils {
 	 * OabaJob is synthesized using the specified String; otherwise, the String
 	 * is used as an externalId without alteration.
 	 */
-	public static OabaJob createEphemeralOabaJob(int maxSingleLimit,
+	public static OabaJobEntity createEphemeralOabaJobEntity(int maxSingleLimit,
 			UserTransaction utx, ServerConfiguration sc, EntityManager em,
 			TestEntities te, String s, boolean isTag) {
 		final String METHOD = "createEphemeralOabaJob";

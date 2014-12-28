@@ -28,7 +28,7 @@ import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 //import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -122,7 +122,7 @@ public class BlockingMDB implements MessageListener, Serializable {
 					throw new IllegalArgumentException(s);
 				}
 
-				if (BatchJob.STATUS_ABORT_REQUESTED
+				if (BatchJobStatus.ABORT_REQUESTED
 						.equals(oabaJob.getStatus())) {
 					MessageBeanUtils.stopJob(oabaJob, processingEntry);
 

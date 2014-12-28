@@ -1,6 +1,5 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.batch.BatchJob.STATUS_NEW;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -24,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
@@ -127,14 +127,14 @@ public class TransitivityJobEntityIT {
 		assertTrue(0 == job.getId());
 		assertTrue(job.getBatchParentId() == oabaJob.getId());
 
-		assertTrue(STATUS_NEW.equals(job.getStatus()));
+		assertTrue(BatchJobStatus.NEW.equals(job.getStatus()));
 
 		Date d = job.getRequested();
 		assertTrue(d != null);
 		assertTrue(now.compareTo(d) <= 0);
 		assertTrue(d.compareTo(now2) <= 0);
 
-		Date d2 = job.getTimeStamp(STATUS_NEW);
+		Date d2 = job.getTimeStamp(BatchJobStatus.NEW);
 		assertTrue(d.equals(d2));
 
 		try {
@@ -229,7 +229,7 @@ public class TransitivityJobEntityIT {
 	protected OabaJob createEphemeralOabaJob(TestEntities te, String tag,
 			boolean isTag) {
 		ServerConfiguration sc = getDefaultServerConfiguration();
-		return BatchJobUtils.createEphemeralOabaJob(MAX_SINGLE_LIMIT, utx, sc,
+		return BatchJobUtils.createEphemeralOabaJobEntity(MAX_SINGLE_LIMIT, utx, sc,
 				em, te, tag, isTag);
 	}
 

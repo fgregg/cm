@@ -19,14 +19,8 @@ public interface BatchJob extends IControl, Serializable {
 
 	BatchJobRigor DEFAULT_RIGOR = BatchJobRigor.COMPUTED;
 
-	String STATUS_NEW = "NEW";
-	String STATUS_QUEUED = "QUEUED";
-	String STATUS_STARTED = "STARTED";
-	String STATUS_COMPLETED = "COMPLETED";
-	String STATUS_FAILED = "FAILED";
-	String STATUS_ABORT_REQUESTED = "ABORT_REQUESTED";
-	String STATUS_ABORTED = "ABORTED";
-	String STATUS_CLEAR = "STATUS_CLEAR";
+	// A HACK
+	String MAGIC_DESCRIPTION_CLEAR = "MAGIC_DESCRIPTION_CLEAR";
 
 	long getId();
 
@@ -49,18 +43,18 @@ public interface BatchJob extends IControl, Serializable {
 	String getDescription();
 
 	/**
-	 * Returns the working directory of this job. This directory is accessible
-	 * from the server(s) on which this job is processed and in the case of
-	 * multiple servers, the directory represents the same physical location
-	 * across all the servers.
+	 * Returns the working directory of this job. This directory should be
+	 * accessible from the server(s) on which this job is processed and in the
+	 * case of multiple servers, the directory should represent the same
+	 * physical location across all the servers.
 	 */
 	File getWorkingDirectory();
 
-	String getStatus();
+	BatchJobStatus getStatus();
 
-	Date getTimeStamp(String status);
+	Date getTimeStamp(BatchJobStatus status);
 
-	int getFractionComplete();
+//	int getFractionComplete();
 
 	Date getRequested();
 
@@ -78,10 +72,10 @@ public interface BatchJob extends IControl, Serializable {
 
 	void setDescription(String description);
 
-	/** Use markAsXxx() methods instead */
-	void setStatus(String status);
+//	/** Use markAsXxx() methods instead */
+//	void setStatus(String status);
 
-	void setFractionComplete(int i);
+//	void setFractionComplete(int i);
 
 	void markAsQueued();
 

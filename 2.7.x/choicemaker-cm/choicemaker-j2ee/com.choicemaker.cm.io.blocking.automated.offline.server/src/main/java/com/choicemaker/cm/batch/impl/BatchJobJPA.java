@@ -88,7 +88,7 @@ public interface BatchJobJPA {
 	 * <li>{@link OabaJob#STATUS_FAILED}</li>
 	 * <li>{@link OabaJob#STATUS_ABORT_REQUESTED}</li>
 	 * <li>{@link OabaJob#STATUS_ABORTED}</li>
-	 * <li>{@link OabaJob#STATUS_CLEAR}</li>
+	 * <li>{@link OabaJob#MAGIC_DESCRIPTION_CLEAR}</li>
 	 * </ul>
 	 */
 	String CN_STATUS = "STATUS";

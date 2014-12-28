@@ -28,6 +28,7 @@ import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
@@ -115,10 +116,10 @@ public class ChunkMDB implements MessageListener, Serializable {
 					throw new IllegalArgumentException(s);
 				}
 
-				if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+				if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
 					oabaJob.markAsAborted();
 
-					if (oabaJob.getDescription().equals(BatchJob.STATUS_CLEAR)) {
+					if (oabaJob.getDescription().equals(BatchJob.MAGIC_DESCRIPTION_CLEAR)) {
 						processingEntry
 								.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
 						OabaFileUtils.removeTempDir(oabaJob);

@@ -16,9 +16,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
-import javax.ejb.CreateException;
-import javax.ejb.FinderException;
-import javax.jms.JMSException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -29,6 +26,7 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
@@ -101,114 +99,73 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 //		return id;
 	}
 	
-	public JobStatus 			getJobStatus (
-									long jobID)
-								throws	
-										ArgumentException,
-										ConfigException,
-										CmRuntimeException, 
-										RemoteException
-	{
-			
-		try {
-			BatchJobStatus batchJob = batchQuery.getStatus(jobID);	
-			JobStatus js = new JobStatus (
-								batchJob.getJobId(),
-								batchJob.getStatus(),
-								batchJob.getStatusDate());
-			js.setAbortRequestDate(null);
-			js.setErrorDescription("");//TODO
-			js.setStepId(-1);//TODO
-			js.setFractionComplete(10);//TODO
-			js.setStepDescription("");
-			js.setStepStartDate(null);//TODO
-			js.setTrackingId("");	
+	public JobStatus getJobStatus(long jobID) throws ArgumentException,
+			ConfigException, CmRuntimeException, RemoteException {
 
-			return js;					
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (CreateException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		}
+		OabaJob batchJob = batchQuery.getOabaJob(jobID);
+		JobStatus js =
+			new JobStatus(batchJob.getId(), batchJob.getStatus().name(),
+					batchJob.getTimeStamp(batchJob.getStatus()));
+		js.setAbortRequestDate(null);
+		js.setErrorDescription("");// TODO
+		js.setStepId(-1);// TODO
+		js.setFractionComplete(10);// TODO
+		js.setStepDescription("");
+		js.setStepStartDate(null);// TODO
+		js.setTrackingId("");
+
+		return js;
 	}
 
-	public void 	copyResult (	long jobID,
-									RefRecordCollection resRc)
-					throws
-							ModelException, 	
-							RecordCollectionException,
-							ConfigException,
-							ArgumentException,
-							CmRuntimeException, 
-							RemoteException		
-	{
+	public void copyResult(long jobID, RefRecordCollection resRc)
+			throws ModelException, RecordCollectionException, ConfigException,
+			ArgumentException, CmRuntimeException, RemoteException {
 		try {
-			BatchJobStatus status = batchQuery.getStatus(jobID);	
-			if (!status.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
-				throw new ArgumentException ("The job has not completed.");
-			} 
-			else {
-				String descr = status.getDescription();
+			OabaJob job = batchQuery.getOabaJob(jobID);
+			if (!job.getStatus().equals(BatchJobStatus.COMPLETED)) {
+				throw new ArgumentException("The job has not completed.");
+			} else {
+				String descr = job.getDescription();
 				int extBegin = descr.lastIndexOf(".");
-				String fileName  = descr.substring(0,extBegin);
-				String ext  = descr.substring(extBegin+1);			
-				
-				if(resRc instanceof DbRecordCollection){
-					String urlString = resRc.getUrl();
-					DbRecordCollection dbRc = (DbRecordCollection)resRc;
-					Context ctx = new InitialContext();
-					DataSource ds = (DataSource) ctx.lookup (urlString);
-				
-					IMatchRecord2Source mr2s =
-						new MatchRecord2CompositeSource (fileName, ext);
+				String fileName = descr.substring(0, extBegin);
+				String ext = descr.substring(extBegin + 1);
 
-					MatchDBWriter dbw = new MatchDBWriter (mr2s, ds, dbRc.getName(), jobID);
+				if (resRc instanceof DbRecordCollection) {
+					String urlString = resRc.getUrl();
+					DbRecordCollection dbRc = (DbRecordCollection) resRc;
+					Context ctx = new InitialContext();
+					DataSource ds = (DataSource) ctx.lookup(urlString);
+
+					IMatchRecord2Source mr2s =
+						new MatchRecord2CompositeSource(fileName, ext);
+
+					MatchDBWriter dbw =
+						new MatchDBWriter(mr2s, ds, dbRc.getName(), jobID);
 					dbw.writeToDB();
-				}
-				else if(resRc instanceof TextRefRecordCollection){
-					
+				} else if (resRc instanceof TextRefRecordCollection) {
+
 					String dirName;
 					int slashInd = fileName.lastIndexOf("\\");
-					if(slashInd ==-1)
+					if (slashInd == -1)
 						slashInd = fileName.lastIndexOf("/");
-					if(slashInd ==-1) {
+					if (slashInd == -1) {
 						dirName = ".";
-					} 
-					else {
-						dirName = fileName.substring(0,slashInd+1);
-						fileName = fileName.substring(slashInd+1);
+					} else {
+						dirName = fileName.substring(0, slashInd + 1);
+						fileName = fileName.substring(slashInd + 1);
 					}
-					log.fine("("+dirName+")("+fileName+")("+ext+")");	
-					
-					copyResultFromFile(dirName,fileName, ext,(TextRefRecordCollection)resRc);
-				}
-				else
-					throw new RecordCollectionException("unknown record collection class");								
+					log.fine("(" + dirName + ")(" + fileName + ")(" + ext + ")");
+
+					copyResultFromFile(dirName, fileName, ext,
+							(TextRefRecordCollection) resRc);
+				} else
+					throw new RecordCollectionException(
+							"unknown record collection class");
 			}
-			
-		} catch (NamingException e) {
+
+		} catch (NamingException | IOException e) {
 			log.severe(e.toString());
 			throw new ConfigException(e.toString());
-		} catch (CreateException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (JMSException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (FinderException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		} catch (IOException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
 		}
 	}
 	

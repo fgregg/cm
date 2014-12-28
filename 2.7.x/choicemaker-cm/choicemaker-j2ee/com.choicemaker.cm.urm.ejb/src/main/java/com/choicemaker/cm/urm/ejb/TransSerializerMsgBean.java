@@ -32,6 +32,7 @@ import javax.naming.Context;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerializer;
 import com.choicemaker.cm.transitivity.core.TransitivitySortType;
@@ -142,7 +143,7 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 			TransitivityJob trJob =
 				Single.getInst().findTransJobById(em,
 						TransitivityJobEntity.class, tsd.batchId);
-			if (!trJob.getStatus().equals(TransitivityJob.STATUS_COMPLETED)) {
+			if (!trJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
 				log.severe("transitivity job " + tsd.batchId
 						+ " is not complete");
 				ownJob.markAsFailed();

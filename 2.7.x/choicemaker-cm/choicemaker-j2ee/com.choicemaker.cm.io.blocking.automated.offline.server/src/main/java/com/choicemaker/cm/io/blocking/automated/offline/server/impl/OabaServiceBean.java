@@ -242,22 +242,21 @@ public class OabaServiceBean implements OabaService {
 			// FIXME HACK!
 			// set status as done, so it won't continue during the next run
 			if (cleanStatus) {
-				oabaJob.setDescription(BatchJob.STATUS_CLEAR);
+				oabaJob.setDescription(BatchJob.MAGIC_DESCRIPTION_CLEAR);
 			}
 			// END FIXME
 		}
 		return 0;
 	}
 
-	public BatchJobStatus getStatus(long jobID) {
-		OabaJob oabaJob = jobController.findOabaJob(jobID);
-		BatchJobStatus status = new BatchJobStatus(oabaJob);
-		return status;
+	public OabaJob getOabaJob(long jobId) {
+		OabaJob oabaJob = jobController.findOabaJob(jobId);
+		return oabaJob;
 	}
 
 	public String checkStatus(long jobID) {
 		BatchJob oabaJob = jobController.findOabaJob(jobID);
-		return oabaJob.getStatus();
+		return oabaJob.getStatus().name();
 	}
 
 	public boolean removeDir(long jobID) throws RemoteException,
@@ -276,8 +275,8 @@ public class OabaServiceBean implements OabaService {
 	public int resumeJob(long jobID) {
 		int ret = 1;
 		OabaJob job = jobController.findOabaJob(jobID);
-		if (!job.getStarted().equals(BatchJob.STATUS_COMPLETED)
-				&& !job.getDescription().equals(BatchJob.STATUS_CLEAR)) {
+		if (!job.getStarted().equals(BatchJobStatus.COMPLETED)
+				&& !job.getDescription().equals(BatchJob.MAGIC_DESCRIPTION_CLEAR)) {
 
 			job.markAsReStarted();
 			sendToStartOABA(jobID);
@@ -309,7 +308,7 @@ public class OabaServiceBean implements OabaService {
 
 		// check to make sure the job is completed
 		OabaJob oabaJob = jobController.findOabaJob(jobID);
-		if (!oabaJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
+		if (!oabaJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
 			String fileName = oabaJob.getDescription();
@@ -329,7 +328,7 @@ public class OabaServiceBean implements OabaService {
 
 		// check to make sure the job is completed
 		OabaJob oabaJob = jobController.findOabaJob(jobID);
-		if (!oabaJob.getStatus().equals(BatchJob.STATUS_COMPLETED)) {
+		if (!oabaJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
 			String fileName = oabaJob.getDescription();

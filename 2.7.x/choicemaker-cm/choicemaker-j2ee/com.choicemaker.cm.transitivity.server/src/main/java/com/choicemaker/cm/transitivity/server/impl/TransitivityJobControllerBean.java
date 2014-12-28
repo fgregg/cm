@@ -13,7 +13,7 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
@@ -83,8 +83,8 @@ public class TransitivityJobControllerBean {
 		if (!BatchJobEntity.isPersistent(oabaJob)) {
 			throw new IllegalArgumentException("non-persistent OABA job");
 		}
-		String oabaStatus = oabaJob.getStatus();
-		if (BatchJob.STATUS_COMPLETED != oabaStatus) {
+		BatchJobStatus oabaStatus = oabaJob.getStatus();
+		if (BatchJobStatus.COMPLETED != oabaStatus) {
 			String msg = "invalid OABA job status: " + oabaStatus;
 			throw new IllegalArgumentException(msg);
 		}

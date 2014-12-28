@@ -35,6 +35,7 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -49,8 +50,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterM
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
 /**
@@ -148,6 +149,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 					long jobId = data.jobID;
 					oabaJob = jobController.findOabaJob(jobId);
 					countMessages--;
+					log.info("outstanding messages: " + countMessages);
 					if (countMessages == 0) {
 						handleMerge(data);
 					}
@@ -201,7 +203,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		}
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
-		if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+		if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
 			MessageBeanUtils.stopJob(oabaJob, processingEntry);
 
 		} else {
@@ -242,7 +244,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		}
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
-		if (BatchJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+		if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
 			MessageBeanUtils.stopJob(oabaJob, processingEntry);
 
 		} else {
@@ -252,6 +254,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 				OabaJobMessage d2 = new OabaJobMessage(data);
 				d2.ind = i;
 				sendToMatchDedupEach(d2);
+				log.info("outstanding messages: " + i);
 			}
 		} // end if aborted
 	}

@@ -33,8 +33,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroup
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 
 /**
  * This bean delegates the different chunks to different matcher message beans.

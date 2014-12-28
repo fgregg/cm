@@ -73,7 +73,7 @@ public class UpdateTransitivityStatusMDB implements MessageDrivenBean, MessageLi
 				}
 				else {
 					job.markAsStarted();
-					job.setFractionComplete( data.getPercentComplete() );
+//					job.setFractionComplete( data.getPercentComplete() );
 				}
 
 			} else {

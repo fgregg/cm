@@ -62,7 +62,7 @@ public class UpdateStatusMDB implements MessageListener, Serializable {
 
 				final long jobId = data.getJobID();
 				oabaJob = jobController.findOabaJob(jobId);
-				oabaJob.setFractionComplete(data.getPercentComplete());
+//				oabaJob.setFractionComplete(data.getPercentComplete());
 //				if (data.getPercentComplete() == 0) {
 //					job.markAsStarted();
 //				} else if (data.getPercentComplete() == 100) {

@@ -28,6 +28,7 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
@@ -42,8 +43,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterM
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
@@ -214,11 +215,12 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 		// keeping track of messages sent and received.
 		countMessages--;
+		getLogger().info("outstanding messages: " + countMessages);
 
-		if (OabaJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+		if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
 			MessageBeanUtils.stopJob(oabaJob, status);
 
-		} else if (!OabaJob.STATUS_ABORTED.equals(oabaJob.getStatus())) {
+		} else if (BatchJobStatus.ABORTED != oabaJob.getStatus()) {
 			// if there are multiple processors, we have don't do anything for
 			// STATUS_ABORTED.
 
@@ -298,7 +300,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		OabaProcessing status =
 			getProcessingController().findProcessingLogByJobId(jobId);
 
-		if (OabaJob.STATUS_ABORT_REQUESTED.equals(oabaJob.getStatus())) {
+		if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
 			MessageBeanUtils.stopJob(oabaJob, status);
 
 		} else {
@@ -411,6 +413,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 			sd2.treeInd = i;
 			countMessages++;
 			sendToMatcher(sd2);
+			getLogger().info("outstanding messages: " + countMessages);
 		}
 	}
 
