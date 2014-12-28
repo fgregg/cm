@@ -15,7 +15,6 @@ import java.util.List;
 
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
-import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 
 /**
  * @author pcheung
@@ -43,8 +42,6 @@ public class MatchWriterData implements Serializable {
 	
 	public int numChunks;
 	public int numRegularChunks;
-	
-	public Status status;
 	
 	/** Indicates the type of staging record id */
 	public int stageType;
@@ -81,7 +78,6 @@ public class MatchWriterData implements Serializable {
 		this.stageModelName = data.stageModelName;
 		this.masterModelName = data.masterModelName;
 		this.ind = data.ind;
-		this.status = data.status;
 		this.stageType = data.stageType;
 		this.masterType = data.masterType;
 		this.high = data.high;

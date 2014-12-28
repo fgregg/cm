@@ -13,7 +13,6 @@ package com.choicemaker.demo.oaba0;
 import java.io.Serializable;
 
 import com.choicemaker.cm.core.ISerializableRecordSource;
-import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 
 /**
@@ -51,7 +50,6 @@ public class StartData implements Serializable {
 //	public String blockingConf;
 
 	public ValidatorBase validator;
-	public Status status;
 	
 	//transitivity flag
 	public boolean runTransitivity;
@@ -75,7 +73,6 @@ public class StartData implements Serializable {
 		this.stageModelName = data.stageModelName;
 		this.masterModelName = data.masterModelName;
 		this.ind = data.ind;
-		this.status = data.status;
 		this.stageType = data.stageType;
 		this.masterType = data.masterType;
 		this.high = data.high;
@@ -87,7 +84,6 @@ public class StartData implements Serializable {
 
 		this.maxCountSingle = data.maxCountSingle;
 		this.validator = data.validator;
-		this.status = data.status;
 		this.staging = data.staging;
 		this.master = data.master;
 	}
@@ -99,7 +95,6 @@ public class StartData implements Serializable {
 		this.stageModelName = data.stageModelName;
 		this.masterModelName = data.masterModelName;
 		this.ind = data.ind;
-		this.status = data.status;
 		this.stageType = data.stageType;
 		this.masterType = data.masterType;
 		this.high = data.high;
