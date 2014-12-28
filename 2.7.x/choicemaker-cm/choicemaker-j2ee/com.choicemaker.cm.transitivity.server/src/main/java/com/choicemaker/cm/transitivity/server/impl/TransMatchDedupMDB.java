@@ -34,11 +34,11 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.TransitivityEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
+import com.choicemaker.cm.transitivity.core.TransitivityProcessing.TransitivityEvent;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
