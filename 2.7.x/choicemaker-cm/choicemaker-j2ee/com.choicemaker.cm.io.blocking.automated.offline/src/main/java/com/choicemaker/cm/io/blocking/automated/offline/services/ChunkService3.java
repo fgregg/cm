@@ -424,7 +424,7 @@ public class ChunkService3 {
 			log.finer("opening chunk record source[" + i + "]");
 			crSources[i].open();
 			if (crSources[i].hasNext()) {
-				ind[i] = crSources[i].getNext();
+				ind[i] = crSources[i].next();
 				log.finer("starting record index of chunk source[" + i + "]: "
 						+ ind[i]);
 			} else {
@@ -509,7 +509,7 @@ public class ChunkService3 {
 				for (int i = start; i < end; i++) {
 					// make sure the ind[i] is in the same range
 					while (ind[i] < count && crSources[i].hasNext()) {
-						ind[i] = crSources[i].getNext();
+						ind[i] = crSources[i].next();
 					}
 
 					if (ind[i] == count) {
@@ -517,7 +517,7 @@ public class ChunkService3 {
 							"writing record[" + count + "] to sink[" + i + "]";
 						recordSinks[i].put(r);
 						if (crSources[i].hasNext()) {
-							ind[i] = crSources[i].getNext();
+							ind[i] = crSources[i].next();
 						}
 					}
 				}
@@ -567,7 +567,7 @@ public class ChunkService3 {
 
 		// skipping
 		while ((count < skip) && (source.hasNext())) {
-			source.getNext();
+			source.next();
 			count++;
 		}
 
@@ -579,7 +579,7 @@ public class ChunkService3 {
 
 			stop = ControlChecker.checkStop(control, countAll);
 
-			IIDSet bs = source.getNext();
+			IIDSet bs = source.next();
 			LongArrayList block = bs.getRecordIDs();
 
 			// add to the set of distinct record ids

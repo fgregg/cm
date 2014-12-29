@@ -134,16 +134,9 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 		return fileBase + "_" + fileNum + "." + fileExt;
 	}
 	
-	public MatchRecord2<T> next() {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source#getNext()
-	 */
-	public MatchRecord2<T> getNext() {
+	public MatchRecord2<T> next() throws BlockingException {
 		count ++;
-		return currentSource.getNext();
+		return currentSource.next();
 	}
 
 	/* (non-Javadoc)

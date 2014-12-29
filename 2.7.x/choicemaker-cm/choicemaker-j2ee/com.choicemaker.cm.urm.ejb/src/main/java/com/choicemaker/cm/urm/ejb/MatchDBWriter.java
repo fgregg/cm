@@ -78,7 +78,7 @@ public class MatchDBWriter {
 			int count = 0;
 				
 			while (mSource.hasNext()) {
-				MatchRecord2 mr = (MatchRecord2) mSource.getNext();
+				MatchRecord2 mr = (MatchRecord2) mSource.next();
 				matches.add(mr);
 					
 				count ++;

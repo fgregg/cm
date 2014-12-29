@@ -491,7 +491,7 @@ public class OABABlockingService {
 			IBlockSource source = osg.getSource(i);
 			source.open();
 			while (source.hasNext()) {
-				source.getNext();
+				source.next();
 				ret ++;
 			}
 			source.close();
@@ -713,7 +713,7 @@ public class OABABlockingService {
 
 					stop = ControlChecker.checkStop (control, ++c);
 
-					BlockSet bs = osSource.getNext();
+					BlockSet bs = osSource.next();
 
 					//returns hashmap of value, IntArrayList
 					HashMap matching = findMatching (bs, records);

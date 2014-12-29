@@ -30,15 +30,8 @@ public class ComparableMRSource<T extends Comparable<T>> implements IComparableS
 	}
 
 	@Override
-	public MatchRecord2<T> next() {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource#getNext()
-	 */
-	public MatchRecord2<T> getNext() {
-		return source.getNext();
+	public MatchRecord2<T> next() throws BlockingException {
+		return source.next();
 	}
 
 	/* (non-Javadoc)

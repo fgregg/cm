@@ -40,10 +40,12 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
@@ -67,7 +69,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupSer
  * @author pcheung
  *
  */
-@SuppressWarnings("rawtypes")
 // Singleton: maxSession = 1 (JBoss only)
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "maxSession",
@@ -263,28 +264,30 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	 * This method merges all the sorted and dedups matches files from the
 	 * previous step.
 	 */
-	private void mergeMatches(final int num, final long jobId,
+	private <T extends Comparable<T>> void mergeMatches(final int num, final long jobId,
 			final BatchJob oabaJob) throws BlockingException {
 
 		long t = System.currentTimeMillis();
 
-		IMatchRecord2SinkSourceFactory factory =
+		@SuppressWarnings("unchecked")
+		IMatchRecord2SinkSourceFactory<T> factory =
 			OabaFileUtils.getMatchTempFactory(oabaJob);
-		List<IComparableSink> tempSinks = new ArrayList<>();
+		List<IComparableSink<MatchRecord2<T>>> tempSinks = new ArrayList<>();
 
 		// the match files start with 1, not 0.
 		for (int i = 1; i <= num; i++) {
-			IMatchRecord2Sink mSink = factory.getSink(i);
-			IComparableSink sink = new ComparableMRSink(mSink);
+			IMatchRecord2Sink<T> mSink = factory.getSink(i);
+			IComparableSink<MatchRecord2<T>> sink = new ComparableMRSink<T>(mSink);
 			tempSinks.add(sink);
 			log.info("merging file " + sink.getInfo());
 		}
 
-		IMatchRecord2Sink mSink = OabaFileUtils.getCompositeMatchSink(oabaJob);
-		IComparableSink sink = new ComparableMRSink(mSink);
+		@SuppressWarnings("unchecked")
+		IMatchRecord2Sink<T> mSink = OabaFileUtils.getCompositeMatchSink(oabaJob);
+		IComparableSink<MatchRecord2<T>> sink = new ComparableMRSink<T>(mSink);
 
-		ComparableMRSinkSourceFactory mFactory =
-			new ComparableMRSinkSourceFactory(factory);
+		IComparableSinkSourceFactory<MatchRecord2<T>> mFactory =
+			new ComparableMRSinkSourceFactory<T>(factory);
 
 		int i = GenericDedupService.mergeFiles(tempSinks, sink, mFactory, true);
 

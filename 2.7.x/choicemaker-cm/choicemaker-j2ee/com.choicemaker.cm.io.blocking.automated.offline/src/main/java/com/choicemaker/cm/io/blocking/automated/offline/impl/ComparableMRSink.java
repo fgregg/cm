@@ -23,28 +23,26 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-public class ComparableMRSink implements IComparableSink {
+public class ComparableMRSink<T extends Comparable<T>> implements IComparableSink<MatchRecord2<T>> {
+
+	private IMatchRecord2Sink<T> sink;
 	
-	private IMatchRecord2Sink sink;
-	
-	public ComparableMRSink (IMatchRecord2Sink sink) {
+	public ComparableMRSink (IMatchRecord2Sink<T> sink) {
 		this.sink = sink;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink#writeComparables(java.util.Iterator)
 	 */
-	public void writeComparables(Iterator it) throws BlockingException {
+	public void writeComparables(Iterator<MatchRecord2<T>> it) throws BlockingException {
 		sink.writeMatches(it);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink#writeComparable(java.lang.Comparable)
 	 */
-	public void writeComparable(Comparable C) throws BlockingException {
-		if (C instanceof MatchRecord2) sink.writeMatch((MatchRecord2)C);
-		else throw new BlockingException ("Invalid class " + C.getClass());
+	public void writeComparable(MatchRecord2<T> C) throws BlockingException {
+		sink.writeMatch(C);
 	}
 
 	/* (non-Javadoc)

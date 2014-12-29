@@ -75,7 +75,7 @@ public class Size2MatchProducer {
 		idSource.open();
 		
 		while (idSource.hasNext()) {
-			Comparable C = idSource.getNextID();
+			Comparable C = (Comparable) idSource.next();
 			ids.add(C);
 		}
 		
@@ -102,7 +102,7 @@ public class Size2MatchProducer {
 		int count = 0;
 		
 		while (originalSource.hasNext()) {
-			MatchRecord2 mr = originalSource.getNext();
+			MatchRecord2 mr = (MatchRecord2) originalSource.next();
 			
 			if (ids.contains(mr.getRecordID1())) {
 				mSink.writeMatch(mr);

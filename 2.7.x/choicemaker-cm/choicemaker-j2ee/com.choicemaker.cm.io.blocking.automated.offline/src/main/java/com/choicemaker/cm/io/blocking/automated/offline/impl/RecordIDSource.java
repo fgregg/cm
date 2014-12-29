@@ -35,13 +35,6 @@ public class RecordIDSource<T extends Comparable<T>> extends BaseFileSource<T>
 	}
 	
 	public T next() {
-		return getNextID();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource#getNextID()
-	 */
-	public T getNextID() {
 		if (this.nextID == null) {
 			try {
 				this.nextID = readNext();

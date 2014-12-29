@@ -183,14 +183,6 @@ public class MatchRecord2Source<T extends Comparable<T>>
 	}
 
 	public MatchRecord2<T> next() {
-		return getNext();
-	}
-
-	/** This method gets the next MatchRecord2 from the source.  You should call
-	 * hasNext () to check if there is any more elements before calling getNext ().
-	 * 
-	 */
-	public MatchRecord2<T> getNext() {
 		if (this.next == null) {
 			try {
 				this.next = readNext();

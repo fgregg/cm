@@ -140,7 +140,7 @@ public class SubsumedBlockRemover {
 
 				while (source.hasNext()) {
 //					count ++;
-					BlockSet blockSet = source.getNext();
+					BlockSet blockSet = source.next();
 
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
@@ -212,7 +212,7 @@ public void removeSubsumedSafe2() throws BlockingException {
 
 			while (source.hasNext()) {
 //				count ++;
-				BlockSet blockSet = source.getNext();
+				BlockSet blockSet = source.next();
 
 				LongArrayList recordIds = blockSet.getRecordIDs();
 
@@ -276,7 +276,7 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 			srcI.open();
 
 			while (srcI.hasNext()) {
-				BlockSet bs = srcI.getNext();
+				BlockSet bs = srcI.next();
 
 				if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {
 					ind ++;
@@ -329,7 +329,7 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 				srcI.open();
 
 				while (srcI.hasNext()) {
-					BlockSet bs = srcI.getNext();
+					BlockSet bs = srcI.next();
 
 //					if (subsumedBlockSets.size() > 0 && counter == subsumedBlockSets.get(ind)) {
 					if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {
@@ -385,7 +385,7 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 
 		while (ibs.hasNext()) {
 			numBlocksIn ++;
-			BlockSet bs = ibs.getNext();
+			BlockSet bs = ibs.next();
 			// 2014-04-24 rphall: Commented out unused local variable.
 //			int n = bs.getRecordIDs().size();
 

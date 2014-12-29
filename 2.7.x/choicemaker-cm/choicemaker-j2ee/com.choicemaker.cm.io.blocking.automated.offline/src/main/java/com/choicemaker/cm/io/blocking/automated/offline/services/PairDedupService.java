@@ -69,7 +69,8 @@ public class PairDedupService {
 			ComparablePairSinkSourceFactory (factory);
 			
 		SimpleControl control = new SimpleControl ();
-		GenericDedupService service = new GenericDedupService (stSource, pSink, pFactory, max, control);
+		GenericDedupService service =
+			new GenericDedupService(stSource, pSink, pFactory, max, control);
 		service.runDedup();
 		
 		time = service.getTime();

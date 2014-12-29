@@ -151,7 +151,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 			while (source.hasNext()) {
 				currentIndex ++;
 				
-				Comparable o = source.getNextID ();
+				Comparable o = (Comparable) source.next ();
 				setMinMax (o, range1);
 			}
 			source.close();
@@ -166,7 +166,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 			while (source.hasNext()) {
 				currentIndex ++;
 
-				Comparable o = source.getNextID ();
+				Comparable o = (Comparable) source.next ();
 				setMinMax (o, range2);
 			}
 			source.close();
@@ -239,7 +239,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 			source1.open();
 			
 			while (source1.hasNext()) {
-				list1.add(source1.getNextID());
+				list1.add(source1.next());
 			}
 		
 			source1.close();
@@ -251,7 +251,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 				source2.open();
 		
 				while (source2.hasNext()) {
-					list2.add(source2.getNextID());
+					list2.add(source2.next());
 				}
 		
 				source2.close();

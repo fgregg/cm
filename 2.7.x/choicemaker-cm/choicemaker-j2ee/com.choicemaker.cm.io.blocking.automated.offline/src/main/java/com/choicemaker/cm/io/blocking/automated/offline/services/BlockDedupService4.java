@@ -361,7 +361,7 @@ public class BlockDedupService4 {
 					
 					numBlocksIn ++;
 					
-					BlockSet blockSet = source.getNext();
+					BlockSet blockSet = source.next();
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
 					checkForSubsets(root, recordIds, 0, subsumedBlockSets);
@@ -407,7 +407,7 @@ public class BlockDedupService4 {
 			stop = ControlChecker.checkStop (control, ++c);
 					
 
-			BlockSet blockSet = bSource.getNext();
+			BlockSet blockSet = bSource.next();
 			LongArrayList recordIds = blockSet.getRecordIDs();
 			SuffixTreeUtils.addBlockSet(root, recordIds, count);
 			count ++;
@@ -442,7 +442,7 @@ public class BlockDedupService4 {
 			while (bigSource.hasNext() && !stop) {
 				stop = ControlChecker.checkStop (control, ++c);
 				
-				BlockSet bs = bigSource.getNext();
+				BlockSet bs = bigSource.next();
 				
 				LongArrayList recordIds = bs.getRecordIDs();
 
@@ -484,7 +484,7 @@ public class BlockDedupService4 {
 				while (srcI.hasNext() && !stop) {
 					stop = ControlChecker.checkStop (control, ++c);
 
-					BlockSet bs = srcI.getNext();
+					BlockSet bs = srcI.next();
 				
 					//don't write anything in subsumedBlocks
 					if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {

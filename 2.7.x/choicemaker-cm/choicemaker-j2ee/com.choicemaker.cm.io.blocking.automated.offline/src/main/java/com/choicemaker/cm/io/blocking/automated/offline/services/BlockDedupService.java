@@ -158,7 +158,7 @@ public class BlockDedupService {
 				while (source.hasNext()) {
 					numBlocksIn ++;
 					
-					BlockSet blockSet = source.getNext();
+					BlockSet blockSet = source.next();
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
 					checkForSubsets(root, recordIds, blockSetId, 0, subsumedBlockSets);
@@ -224,7 +224,7 @@ public class BlockDedupService {
 				srcI.open();
 			
 				while (srcI.hasNext()) {
-					BlockSet bs = srcI.getNext();
+					BlockSet bs = srcI.next();
 				
 					//don't write anything in subsumedBlocks
 					if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {

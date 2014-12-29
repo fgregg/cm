@@ -32,13 +32,6 @@ public class PairIDSource extends BaseFileSource<PairID> implements IPairIDSourc
 	}
 	
 	public PairID next() {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSource#getNext()
-	 */
-	public PairID getNext() {
 		return p;
 	}
 

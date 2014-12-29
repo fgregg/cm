@@ -38,14 +38,7 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements 
 		init (fileName, Constants.STRING);
 	}
 
-	public SuffixTreeNode next() throws BlockingException {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSource#getNext()
-	 */
-	public SuffixTreeNode getNext() throws BlockingException {
+	public SuffixTreeNode next() {
 		if (this.nextTree == null) {
 			try {
 				this.nextTree = readNext();

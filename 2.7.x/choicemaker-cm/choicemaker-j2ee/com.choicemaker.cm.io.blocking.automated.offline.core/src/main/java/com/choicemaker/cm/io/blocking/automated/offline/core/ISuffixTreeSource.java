@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
 
 /** This is a source from which to get SuffixTreeNode objects.
  * 
@@ -19,14 +18,6 @@ import com.choicemaker.cm.core.BlockingException;
  */
 public interface ISuffixTreeSource extends
 		ISource<SuffixTreeNode> {
-
-	/** This returns the next SuffixTree in the source.  Make sure you call hasNext before calling
-	 * this method.
-	 * 
-	 * @return SuffixTreeNode
-	 * @throws OABABlockingException
-	 */
-	public SuffixTreeNode getNext () throws BlockingException;
 
 	/** Returns the number of Suffix Tree read so far.
 	 * 

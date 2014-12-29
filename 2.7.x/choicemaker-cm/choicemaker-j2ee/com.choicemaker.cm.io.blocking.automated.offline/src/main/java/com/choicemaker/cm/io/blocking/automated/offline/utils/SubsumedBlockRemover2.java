@@ -102,7 +102,7 @@ public void removeSubsumedSafe2() throws BlockingException {
 				
 			while (source.hasNext()) {
 				numBlocksIn ++;
-				BlockSet blockSet = source.getNext();
+				BlockSet blockSet = source.next();
 				
 				LongArrayList recordIds = blockSet.getRecordIDs();
 
@@ -165,7 +165,7 @@ private void writeUnsubsumed4(IntArrayList subsumedBlockSets, IBlockSink sink, A
 			srcI.open();
 			
 			while (srcI.hasNext()) {
-				BlockSet bs = srcI.getNext();
+				BlockSet bs = srcI.next();
 				
 				if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {
 					ind ++;

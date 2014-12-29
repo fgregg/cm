@@ -71,7 +71,7 @@ public class MatchListSource {
 			ret = true;
 		} else {
 			if (matchSource.hasNext()) {
-				record = matchSource.getNext();
+				record = matchSource.next();
 				if (record.getRecordID1() < lastID) {
 					throw new BlockingException ("IMatchSource is not sorted " + record.getRecordID1() + 
 						" " + lastID);
@@ -85,7 +85,7 @@ public class MatchListSource {
 		}
 		
 		while (!stop && matchSource.hasNext()) {
-			record = matchSource.getNext();
+			record = matchSource.next();
 			if (record.getRecordID1() < lastID) {
 				throw new BlockingException ("IMatchSource is not sorted " + record.getRecordID1() + 
 					" " + lastID);

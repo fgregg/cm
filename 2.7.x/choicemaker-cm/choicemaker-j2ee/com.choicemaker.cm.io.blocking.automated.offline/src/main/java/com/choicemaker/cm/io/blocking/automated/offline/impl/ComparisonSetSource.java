@@ -21,7 +21,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
 public class ComparisonSetSource<T extends Comparable<T>> implements
 		IComparisonSetSource<T> {
 	
@@ -32,15 +31,8 @@ public class ComparisonSetSource<T extends Comparable<T>> implements
 	}
 
 	@Override
-	public IComparisonSet next() {
-		return getNextSet();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource#getNext()
-	 */
-	public IComparisonSet<T> getNextSet() {
-		return source.getNext();
+	public IComparisonSet<T> next() throws BlockingException {
+		return source.next();
 	}
 
 	/* (non-Javadoc)

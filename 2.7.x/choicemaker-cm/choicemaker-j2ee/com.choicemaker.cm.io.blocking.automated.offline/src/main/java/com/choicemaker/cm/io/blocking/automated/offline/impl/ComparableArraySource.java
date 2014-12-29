@@ -33,13 +33,6 @@ public class ComparableArraySource<T extends Comparable<T>> implements IComparab
 
 	@Override
 	public T next() {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource#getNext()
-	 */
-	public T getNext() {
 		T c = list.get(ind);
 		ind ++;
 		return c;

@@ -21,9 +21,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 public interface IMatchRecord2Source<T extends Comparable<T>> extends
 		ISource<MatchRecord2<T>> {
 	
-	/** Gets the next MatchRecord2. */
-	public MatchRecord2<T> getNext ();
-	
 	/** Returns the number of MatchRecords read so far. */
 	public int getCount ();
 

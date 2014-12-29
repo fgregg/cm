@@ -87,14 +87,6 @@ public class ChunkRecordIDSource extends BaseFileSource<Long> implements IChunkR
 
 	@Override
 	public Long next() {
-		return getNext();
-	}
-
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRowSource#getNext()
-	 */
-	public long getNext() {
 		if (this.used) {
 			try {
 				this.nextRecID = readNext();

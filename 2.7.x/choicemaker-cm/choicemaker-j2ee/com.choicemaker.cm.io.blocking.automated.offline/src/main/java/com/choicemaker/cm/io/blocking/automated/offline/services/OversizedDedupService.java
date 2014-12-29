@@ -169,7 +169,7 @@ public class OversizedDedupService {
 		HashSet sizes = new HashSet ();
 		osSource.open();
 		while (osSource.hasNext() && !stop) {
-			BlockSet bs = osSource.getNext();
+			BlockSet bs = osSource.next();
 			Integer I = new Integer (bs.getRecordIDs().size());
 
 			if (!sizes.contains(I)) sizes.add(I);
@@ -200,7 +200,7 @@ public class OversizedDedupService {
 		osSource.open();
 
 		while (osSource.hasNext() && !stop) {
-			BlockSet bs = osSource.getNext();
+			BlockSet bs = osSource.next();
 			// 2014-04-24 rphall: Commented out unused local variable.
 			// Any side effects?
 			/* LongArrayList recordIds = */
@@ -241,7 +241,7 @@ public class OversizedDedupService {
 
 				while (sources[i].hasNext() && !stop) {
 
-					BlockSet blockSet = sources[i].getNext();
+					BlockSet blockSet = sources[i].next();
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
 					Long L = new Long (getSum(recordIds));
@@ -310,7 +310,7 @@ public class OversizedDedupService {
 				sources[i].open();
 
 				while (sources[i].hasNext() && !stop) {
-					BlockSet blockSet = sources[i].getNext();
+					BlockSet blockSet = sources[i].next();
 
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
@@ -365,7 +365,7 @@ public class OversizedDedupService {
 //			System.out.println (i + " " + srcI.getInfo() + " " + numBlocksOut);
 
 			while (srcI.hasNext()) {
-				BlockSet bs = srcI.getNext();
+				BlockSet bs = srcI.next();
 
 				if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {
 					ind ++;

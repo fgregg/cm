@@ -258,7 +258,7 @@ public class ChunkService {
 				crSources[i].open();
 				
 				if (crSources[i].hasNext()) {
-					ind[i] = crSources[i].getNext();
+					ind[i] = crSources[i].next();
 				}
 
 				recordSinks[i] = sinkFactory.getNextSink();
@@ -275,7 +275,7 @@ public class ChunkService {
 					crSources[i].close();
 					crSources[i].open();
 				
-					if (crSources[i].hasNext()) ind[i] = crSources[i].getNext();
+					if (crSources[i].hasNext()) ind[i] = crSources[i].next();
 				}			
 
 				//next write the master data out
@@ -332,12 +332,12 @@ public class ChunkService {
 				for (int i =0; i< numChunks; i++) {
 					//make sure the ind[i] is in the same range
 					while (ind[i] < recID && crSources[i].hasNext()) {
-						ind[i] = crSources[i].getNext();
+						ind[i] = crSources[i].next();
 					}
 
 					if (ind[i] == recID) {
 						recordSinks[i].put(r);
-						if (crSources[i].hasNext()) ind[i] = crSources[i].getNext();
+						if (crSources[i].hasNext()) ind[i] = crSources[i].next();
 					
 					} 
 				}
@@ -380,7 +380,7 @@ public class ChunkService {
 		
 		//skipping
 		while ((count < skip) && (source.hasNext()))  {
-			source.getNext();
+			source.next();
 			count ++;
 		}
 
@@ -390,7 +390,7 @@ public class ChunkService {
 //			totalBlocks ++;
 			countAll ++;
 			
-			BlockSet bs = source.getNext();
+			BlockSet bs = source.next();
 			LongArrayList block = bs.getRecordIDs();
 			bOut.writeBlock(bs); //write out to the smaller block sink
 

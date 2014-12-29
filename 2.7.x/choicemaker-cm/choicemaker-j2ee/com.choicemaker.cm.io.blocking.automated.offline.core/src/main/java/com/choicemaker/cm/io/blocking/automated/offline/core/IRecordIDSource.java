@@ -20,13 +20,6 @@ import com.choicemaker.cm.core.BlockingException;
  */
 public interface IRecordIDSource<T extends Comparable<T>> extends ISource<T> {
 	
-	/** This method returns the next record ID.
-	 * 
-	 * @return Object - next record ID.
-	 */
-	public T getNextID () throws BlockingException;
-	
-	
 	/** This returns the object type of the record ID.  See IRecordIDSink.
 	 * 
 	 * @return int - Object type of record ID

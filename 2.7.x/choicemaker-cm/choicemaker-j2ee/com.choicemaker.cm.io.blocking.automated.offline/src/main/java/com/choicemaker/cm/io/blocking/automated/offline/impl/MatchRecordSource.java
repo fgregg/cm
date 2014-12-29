@@ -95,10 +95,6 @@ public class MatchRecordSource extends BaseFileSource<IMatchRecord> implements I
 	}
 	
 	public IMatchRecord next() {
-		return getNext();
-	}
-	
-	public IMatchRecord getNext () {
 		return next;
 	}
 	

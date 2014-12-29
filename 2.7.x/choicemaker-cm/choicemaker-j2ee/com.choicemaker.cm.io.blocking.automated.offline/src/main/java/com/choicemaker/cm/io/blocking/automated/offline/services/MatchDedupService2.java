@@ -171,11 +171,11 @@ public class MatchDedupService2 {
 		//skipping
 		for (int i=0; i< skip; i++) {
 			mSource.hasNext();
-			mSource.getNext ();
+			mSource.next ();
 		}
 
 		while (mSource.hasNext()) {
-			MatchRecord2 mr = mSource.getNext();
+			MatchRecord2 mr = (MatchRecord2) mSource.next();
 			numBefore ++;
 			
 			if (!matches.contains(mr)) {
@@ -261,7 +261,7 @@ public class MatchDedupService2 {
 			sources[i].open();
 			
 			if (sources[i].hasNext()) {
-				records[i] = sources[i].getNext();
+				records[i] = (MatchRecord2) sources[i].next();
 			} else {
 				records[i] = null;
 			}
@@ -281,17 +281,24 @@ public class MatchDedupService2 {
 				for (int i=0; i < numFiles; i ++) {
 					if (i != idx) {
 						if (records[i] != null) {
-							if (records[i].equals (records[idx]) ) {
-								if (sources[i].hasNext()) records[i] = sources[i].getNext();
-								else records[i] = null;
+							if (records[i].equals(records[idx])) {
+								if (sources[i].hasNext())
+									records[i] =
+										(MatchRecord2) sources[i].next();
+								else
+									records[i] = null;
 							}
 						}
 					}
 				} //end for
 
 				//get the next record			
-				if (sources[idx].hasNext()) records[idx] = sources[idx].getNext();
-				else records[idx] = null;
+				if (sources[idx].hasNext()) {
+					records[idx] = (MatchRecord2) sources[idx].next();
+				}
+				else {
+					records[idx] = null;
+				}
 			}
 		} //end while
 		

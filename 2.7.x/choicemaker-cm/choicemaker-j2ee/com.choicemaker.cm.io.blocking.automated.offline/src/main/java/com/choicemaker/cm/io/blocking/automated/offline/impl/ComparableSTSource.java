@@ -40,13 +40,6 @@ public class ComparableSTSource implements IComparableSource<PairID> {
 
 	@Override
 	public PairID next() {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource#getNext()
-	 */
-	public PairID getNext() {
 		PairID p = (PairID) pairs.get(ind);
 		ind++;
 		return p;
@@ -81,7 +74,7 @@ public class ComparableSTSource implements IComparableSource<PairID> {
 		
 		if (pairs == null) {
 			if (source.hasNext()) {
-				SuffixTreeNode root = source.getNext();
+				SuffixTreeNode root = source.next();
 				pairs = SuffixTreeUtils.getPairs (root);
 				ret = true;
 				ind = 0;
@@ -91,7 +84,7 @@ public class ComparableSTSource implements IComparableSource<PairID> {
 			else {
 				//get the next tree
 				if (source.hasNext()) {
-					SuffixTreeNode root = source.getNext();
+					SuffixTreeNode root = source.next();
 					pairs = SuffixTreeUtils.getPairs (root);
 					ret = true;
 					ind = 0;

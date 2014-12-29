@@ -80,7 +80,7 @@ public class MatchToBlockTransformer {
 		mSource.open();
 
 		while (mSource.hasNext()) {
-			MatchRecord2 mr = mSource.getNext();
+			MatchRecord2 mr = (MatchRecord2) mSource.next();
 			if (!stageIDs.containsKey( mr.getRecordID1())) stageIDs.put(mr.getRecordID1(), null);
 
 			if (mr.getRecord2Source() == MatchRecord2.STAGE_SOURCE) {
@@ -137,7 +137,7 @@ public class MatchToBlockTransformer {
 			while (mSource.hasNext()) {
 //				count ++;
 
-				MatchRecord2 mr = mSource.getNext();
+				MatchRecord2 mr = (MatchRecord2) mSource.next();
 
 				//if (mr.getMatchType() == MatchRecord2.MATCH) {
 					Long l1 = (Long) stageIDs.get(mr.getRecordID1());

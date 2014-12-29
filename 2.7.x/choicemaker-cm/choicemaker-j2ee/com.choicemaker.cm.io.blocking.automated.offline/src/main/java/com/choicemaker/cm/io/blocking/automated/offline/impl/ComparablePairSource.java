@@ -30,12 +30,8 @@ public class ComparablePairSource implements IComparableSource<PairID> {
 	}
 
 	@Override
-	public PairID next() {
-		return getNext();
-	}
-
-	public PairID getNext() {
-		return source.getNext();
+	public PairID next() throws BlockingException {
+		return source.next();
 	}
 
 	/* (non-Javadoc)

@@ -244,7 +244,7 @@ public class MatchingService3 {
 			while (source.hasNext()) {
 
 				//get the next tree or array
-				IComparisonSet cSet = source.getNextSet();
+				IComparisonSet cSet = (IComparisonSet) source.next();
 
 				while (cSet.hasNextPair()) {
 					ComparisonPair p = cSet.getNextPair();

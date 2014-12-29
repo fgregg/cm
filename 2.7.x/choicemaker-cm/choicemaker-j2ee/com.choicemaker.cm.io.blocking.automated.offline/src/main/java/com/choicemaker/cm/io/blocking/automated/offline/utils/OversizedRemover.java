@@ -89,7 +89,7 @@ public class OversizedRemover {
 		int max=0;
 
 		while (source.hasNext()) {
-			BlockSet bs = source.getNext();
+			BlockSet bs = source.next();
 			int i = bs.getRecordIDs().size();
 
 			if (i> max) max = i;
@@ -130,7 +130,7 @@ public class OversizedRemover {
 
 				while (source.hasNext()) {
 
-					BlockSet blockSet = source.getNext();
+					BlockSet blockSet = source.next();
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
 					Long L = new Long (getSum(recordIds));
@@ -216,7 +216,7 @@ public class OversizedRemover {
 		ibs.open();
 
 		while (ibs.hasNext()) {
-			BlockSet bs = ibs.getNext();
+			BlockSet bs = ibs.next();
 			// 2014-04-24 rphall: Commented out unused local variable.
 //			int n = bs.getRecordIDs().size();
 

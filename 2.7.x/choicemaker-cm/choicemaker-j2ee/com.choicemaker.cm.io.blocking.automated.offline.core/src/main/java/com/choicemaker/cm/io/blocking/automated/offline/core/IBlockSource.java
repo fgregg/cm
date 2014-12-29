@@ -23,10 +23,6 @@ import com.choicemaker.cm.core.BlockingException;
  */
 public interface IBlockSource extends ISource<BlockSet> {
 	
-	/** Gets the next BlockSet. */
-	public BlockSet getNext () throws BlockingException;
-	
-	
 	/** This method returns true if there is another block that is blocked by the
 	 * given number of fields and the given maximum column.
 	 * 
@@ -46,8 +42,8 @@ public interface IBlockSource extends ISource<BlockSet> {
 	public List<BlockSet> readOversizedInt (int fields, int col) throws BlockingException;
 	
 	
-	/** Returns the total number of oversized blocks in this source. */
-	public int count () throws BlockingException;
+	/** Returns the number of blocks read so far */
+	public int getCount ();
 	
 	
 	/** Skips n BlockSets. */

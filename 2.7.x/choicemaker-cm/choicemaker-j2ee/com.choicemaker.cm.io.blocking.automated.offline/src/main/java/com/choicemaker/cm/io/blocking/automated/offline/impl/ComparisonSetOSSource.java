@@ -21,27 +21,20 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
 public class ComparisonSetOSSource<T extends Comparable<T>> implements IComparisonSetSource<T> {
 	
-	private IComparisonArraySource source;
+	private IComparisonArraySource<T> source;
 	private int maxBlockSize;
 	
-	public ComparisonSetOSSource (IComparisonArraySource source, int maxBlockSize) {
+	public ComparisonSetOSSource(IComparisonArraySource<T> source,
+			int maxBlockSize) {
 		this.source = source;
 		this.maxBlockSize = maxBlockSize;
 	}
 
 	@Override
-	public IComparisonSet<T> next() {
-		return getNextSet();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource#getNext()
-	 */
-	public IComparisonSet<T> getNextSet() {
-		return new ComparisonArrayOS (source.getNext(), maxBlockSize);
+	public IComparisonSet<T> next() throws BlockingException {
+		return new ComparisonArrayOS<T>(source.next(), maxBlockSize);
 	}
 
 	/* (non-Javadoc)

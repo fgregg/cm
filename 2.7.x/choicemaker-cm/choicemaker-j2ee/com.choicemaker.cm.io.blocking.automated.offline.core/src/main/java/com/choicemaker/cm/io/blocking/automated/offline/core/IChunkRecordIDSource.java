@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
 
 /**
  * This interface handles reading recordIDs that belong in a chunk.
@@ -19,12 +18,4 @@ import com.choicemaker.cm.core.BlockingException;
  *
  */
 public interface IChunkRecordIDSource extends ISource<Long> {
-
-	/** This gets the next chunk record id.
-	 * 
-	 * @return long - the next chunk record id.
-	 * @throws BlockingException
-	 */
-	public long getNext () throws BlockingException;
-	
 }

@@ -17,9 +17,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  */
 public interface IPairIDSource extends ISource<PairID> {
 
-	/** Gets the next PairID. */
-	public PairID getNext ();
-
 	/** Returns the number of PairID read so far. */
 	public int getCount ();
 

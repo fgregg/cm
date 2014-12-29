@@ -50,25 +50,30 @@ public class CompositeEntitySource<T extends Comparable<T>> implements
 		this.source = source;
 	}
 
+	@Override
 	public void open() throws BlockingException {
 		source.open();
 	}
 
+	@Override
 	public void close() throws BlockingException {
 		source.close();
 	}
 
+	@Override
 	public boolean exists() {
 		return source.exists();
 	}
 
+	@Override
 	public boolean hasNext() throws BlockingException {
 		if (this.nextCE == null) {
 			this.nextCE = readNext();
 		}
 		return this.nextCE != null;
 	}
-	
+
+	@Override
 	public CompositeEntity<T> next() throws BlockingException {
 		return getNext();
 	}
@@ -97,11 +102,12 @@ public class CompositeEntitySource<T extends Comparable<T>> implements
 		boolean stop = false;
 
 		while (source.hasNext() && !stop) {
-			MatchRecord2 mr = source.getNext();
+			MatchRecord2 mr = source.next();
 
 			if (separator == null) {
 				Comparable c = mr.getRecordID1();
-				separator = (MatchRecord2<T>) MatchRecord2Factory.getSeparator(c);
+				separator =
+					(MatchRecord2<T>) MatchRecord2Factory.getSeparator(c);
 			}
 
 			if (!mr.equals(separator)) {
@@ -119,28 +125,18 @@ public class CompositeEntitySource<T extends Comparable<T>> implements
 		return ce;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
-	 */
+	@Override
 	public String getInfo() {
 		return source.getInfo();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
-	 */
+	@Override
 	public void delete() throws BlockingException {
 		source.delete();
 	}
 
 	public int getCount() {
-		return count++;
+		return count;
 	}
 
 }

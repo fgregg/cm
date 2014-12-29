@@ -75,7 +75,7 @@ public class OversizedSubsetRemover {
 		HashSet sizes = new HashSet ();
 		source.open();
 		while (source.hasNext()) {
-			BlockSet bs = source.getNext();
+			BlockSet bs = source.next();
 			Integer I = new Integer (bs.getRecordIDs().size());
 
 			if (!sizes.contains(I)) sizes.add(I);
@@ -125,7 +125,7 @@ public class OversizedSubsetRemover {
 				source.open();
 
 				while (source.hasNext()) {
-					BlockSet blockSet = source.getNext();
+					BlockSet blockSet = source.next();
 
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
@@ -165,7 +165,7 @@ public class OversizedSubsetRemover {
 		ibs.open();
 
 		while (ibs.hasNext()) {
-			BlockSet bs = ibs.getNext();
+			BlockSet bs = ibs.next();
 			// 2014-04-24 rphall: Commented out unused local variable.
 //			int n = bs.getRecordIDs().size();
 
@@ -209,7 +209,7 @@ public class OversizedSubsetRemover {
 			srcI.open();
 
 			while (srcI.hasNext()) {
-				BlockSet bs = srcI.getNext();
+				BlockSet bs = srcI.next();
 
 //				if (subsumedBlockSets.size() > 0 && counter == subsumedBlockSets.get(ind)) {
 				if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {

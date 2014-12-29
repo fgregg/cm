@@ -10,15 +10,10 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
 
 /**
  * @author pcheung
  *
  */
 public interface IIDSetSource extends ISource<IIDSet> {
-
-	/** Gets the next IIDSet. */
-	public IIDSet getNext () throws BlockingException;
-
 }

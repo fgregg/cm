@@ -36,13 +36,6 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 
 	@Override
 	public ComparisonArray<T> next() {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSource#getNext()
-	 */
-	public ComparisonArray<T> getNext() {
 		if (this.nextGroup == null) {
 			try {
 				this.nextGroup = readNext();

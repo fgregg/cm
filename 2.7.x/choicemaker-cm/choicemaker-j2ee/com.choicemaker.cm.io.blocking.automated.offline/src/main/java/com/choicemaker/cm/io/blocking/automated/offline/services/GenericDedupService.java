@@ -139,7 +139,7 @@ public class GenericDedupService {
 		log.fine("Reading from " + cSource.getInfo() + " writing to " + tempSink.getInfo());
 
 		while (cSource.hasNext() && !stop) {
-			Comparable c = cSource.getNext();
+			Comparable<?> c = (Comparable<?>) cSource.next();
 			numBefore ++;
 			
 			stop = ControlChecker.checkStop (control, numBefore);
@@ -216,7 +216,7 @@ public class GenericDedupService {
 			sources[i].open();
 			
 			if (sources[i].hasNext()) {
-				comps[i] = sources[i].getNext();
+				comps[i] = (Comparable) sources[i].next();
 			} else {
 				comps[i] = null;
 			}
@@ -239,7 +239,7 @@ public class GenericDedupService {
 					if (i != idx) {
 						if (comps[i] != null) {
 							if (comps[i].equals (comps[idx]) ) {
-								if (sources[i].hasNext()) comps[i] = sources[i].getNext();
+								if (sources[i].hasNext()) comps[i] = (Comparable) sources[i].next();
 								else comps[i] = null;
 							}
 						}
@@ -247,7 +247,7 @@ public class GenericDedupService {
 				} //end for
 
 				//get the next record			
-				if (sources[idx].hasNext()) comps[idx] = sources[idx].getNext();
+				if (sources[idx].hasNext()) comps[idx] = (Comparable) sources[idx].next();
 				else comps[idx] = null;
 			}
 		} //end while
@@ -273,7 +273,7 @@ public class GenericDedupService {
 		IComparableSource source = cFactory.getSource(snk);
 		source.open();
 		while (source.hasNext()) {
-			source.getNext();
+			source.next();
 			i ++;
 		}
 		source.close();
@@ -305,7 +305,7 @@ public class GenericDedupService {
 		Comparable nextComp = getNextComp (dups);
 		
 		while (source.hasNext()) {
-			Comparable c = source.getNext();
+			Comparable c = (Comparable) source.next();
 			
 			if (nextComp != null) {
 				//get the next dup that is at least as great as the current object.
@@ -343,7 +343,7 @@ public class GenericDedupService {
 	private static Comparable getNextComp (IComparableSource dups) throws BlockingException {
 		Comparable nextComp = null;
 		if (dups.hasNext()) {
-			nextComp = dups.getNext();
+			nextComp = (Comparable) dups.next();
 		}
 		return nextComp;
 	}
@@ -356,7 +356,7 @@ public class GenericDedupService {
 		Comparable nextComp = null;
 		boolean stop = false;
 		while (!stop && dups.hasNext()) {
-			nextComp = dups.getNext();
+			nextComp = (Comparable) dups.next();
 			if (c.compareTo(nextComp) != 1) stop = true;
 		}
 		return nextComp;

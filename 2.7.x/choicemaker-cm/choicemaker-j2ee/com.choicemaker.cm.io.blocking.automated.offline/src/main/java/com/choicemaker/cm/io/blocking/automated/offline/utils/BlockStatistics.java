@@ -120,7 +120,7 @@ public class BlockStatistics {
 		bs.open();
 		
 		while (bs.hasNext()) {
-			compute (bs.getNext());
+			compute (bs.next());
 		}
 		
 		avg = totalElements * 1.0f / totalBlocks;
@@ -151,7 +151,7 @@ public class BlockStatistics {
 		sink.open();
 		
 		while (bs.hasNext()) {
-			BlockSet bSet = bs.getNext ();
+			BlockSet bSet = bs.next ();
 				
 			compute (bSet);
 

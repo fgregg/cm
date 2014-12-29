@@ -83,7 +83,7 @@ public class CompositeEntityBuilder {
 				source.open();
 
 				while (source.hasNext()) {
-					MatchRecord2 mr = source.getNext();
+					MatchRecord2 mr = (MatchRecord2) source.next();
 					link (mr);
 				}
 		

@@ -20,9 +20,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 public interface IComparisonTreeSource<T extends Comparable<T>> extends
 		ISource<ComparisonTreeNode<T>> {
 
-	/** Gets the next ComparisonTree. */
-	public ComparisonTreeNode<T> getNext ();
-	
 	/** Returns the number of ComparisonTree read so far. */
 	public int getCount ();
 

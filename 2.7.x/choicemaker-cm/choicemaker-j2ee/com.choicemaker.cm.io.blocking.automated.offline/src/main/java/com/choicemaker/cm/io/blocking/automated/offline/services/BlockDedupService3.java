@@ -325,7 +325,7 @@ public class BlockDedupService3 {
 				while (source.hasNext()) {
 					numBlocksIn ++;
 
-					BlockSet blockSet = source.getNext();
+					BlockSet blockSet = source.next();
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
 					checkForSubsets(root, recordIds, 0, subsumedBlockSets);
@@ -366,7 +366,7 @@ public class BlockDedupService3 {
 
 		int count = 0;
 		while (bSource.hasNext()) {
-			BlockSet blockSet = bSource.getNext();
+			BlockSet blockSet = bSource.next();
 			LongArrayList recordIds = blockSet.getRecordIDs();
 			SuffixTreeUtils.addBlockSet(root, recordIds, count);
 			count ++;
@@ -397,7 +397,7 @@ public class BlockDedupService3 {
 			bigSource.open();
 
 			while (bigSource.hasNext()) {
-				BlockSet bs = bigSource.getNext();
+				BlockSet bs = bigSource.next();
 
 				LongArrayList recordIds = bs.getRecordIDs();
 
@@ -435,7 +435,7 @@ public class BlockDedupService3 {
 				srcI.open();
 
 				while (srcI.hasNext()) {
-					BlockSet bs = srcI.getNext();
+					BlockSet bs = srcI.next();
 
 					//don't write anything in subsumedBlocks
 					if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {
@@ -489,7 +489,7 @@ public class BlockDedupService3 {
 				srcI.open();
 
 				while (srcI.hasNext()) {
-					BlockSet bs = srcI.getNext();
+					BlockSet bs = srcI.next();
 
 					//don't write anything in subsumedBlocks
 					if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {

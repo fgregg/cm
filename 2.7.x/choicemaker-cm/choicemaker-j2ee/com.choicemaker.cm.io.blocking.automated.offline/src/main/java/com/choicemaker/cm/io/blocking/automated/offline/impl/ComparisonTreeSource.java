@@ -45,13 +45,6 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends BaseFileSourc
 
 	@Override
 	public ComparisonTreeNode<T> next() {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource#getNext()
-	 */
-	public ComparisonTreeNode<T> getNext() {
 		if (this.nextTree == null) {
 			try {
 				this.nextTree = readNext();

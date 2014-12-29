@@ -187,7 +187,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			source.open();
 			while (source.hasNext()) {
 				sets++;
-				IComparisonSet cSet = source.getNextSet();
+				IComparisonSet cSet = (IComparisonSet) source.next();
 				List<MatchRecord2> matches =
 					handleComparisonSet(cSet, oabaJob, dataStore, stageModel, t);
 				numMatches += matches.size();
@@ -272,6 +272,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			IComparisonTreeSource source =
 				factory.getSource(data.ind, data.treeInd);
 			if (source.exists()) {
+				@SuppressWarnings("unchecked")
 				IComparisonSetSource setSource =
 					new ComparisonTreeSetSource(source);
 				return setSource;
@@ -287,6 +288,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			IComparisonArraySource sourceOS =
 				factoryOS.getSource(i, data.treeInd);
 			if (sourceOS.exists()) {
+				@SuppressWarnings("unchecked")
 				IComparisonSetSource setSource =
 					new ComparisonSetOSSource(sourceOS, maxBlockSize);
 				return setSource;

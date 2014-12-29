@@ -20,28 +20,18 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-// public class ComparisonSetSource<T extends Comparable<T>> implements
-// IComparisonSetSource<T> {
+public class ComparisonTreeSetSource<T extends Comparable<T>> implements
+		IComparisonSetSource<T> {
 
-public class ComparisonTreeSetSource<T extends Comparable<T>> implements IComparisonSetSource<T> {
-
-	private IComparisonTreeSource source;
+	private IComparisonTreeSource<T> source;
 	
-	public ComparisonTreeSetSource (IComparisonTreeSource source) {
+	public ComparisonTreeSetSource (IComparisonTreeSource<T> source) {
 		this.source = source;
 	}
 
 	@Override
-	public IComparisonSet<T> next() {
-		return getNextSet();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource#getNextSet()
-	 */
-	public IComparisonSet getNextSet() {
-		return new ComparisonTreeSet(source.getNext());
+	public IComparisonSet<T> next() throws BlockingException {
+		return new ComparisonTreeSet<T>(source.next());
 	}
 
 	/* (non-Javadoc)

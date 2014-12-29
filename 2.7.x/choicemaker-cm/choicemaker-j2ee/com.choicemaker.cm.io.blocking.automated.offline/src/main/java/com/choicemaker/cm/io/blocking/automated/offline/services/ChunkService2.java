@@ -249,7 +249,7 @@ public class ChunkService2 {
 				crSources[i].open();
 				
 				if (crSources[i].hasNext()) {
-					ind[i] = crSources[i].getNext();
+					ind[i] = crSources[i].next();
 				}
 
 				recordSinks[i] = stageSinkFactory.getNextSink();
@@ -275,7 +275,7 @@ public class ChunkService2 {
 					crSources[i].close();
 					crSources[i].open();
 				
-					if (crSources[i].hasNext()) ind[i] = crSources[i].getNext();
+					if (crSources[i].hasNext()) ind[i] = crSources[i].next();
 				}			
 
 				//next write the master data out
@@ -326,12 +326,12 @@ public class ChunkService2 {
 				for (int i =0; i< numChunks; i++) {
 					//make sure the ind[i] is in the same range
 					while (ind[i] < count && crSources[i].hasNext()) {
-						ind[i] = crSources[i].getNext();
+						ind[i] = crSources[i].next();
 					}
 
 					if (ind[i] == count) {
 						recordSinks[i].put(r);
-						if (crSources[i].hasNext()) ind[i] = crSources[i].getNext();
+						if (crSources[i].hasNext()) ind[i] = crSources[i].next();
 					
 					} 
 				}
@@ -379,7 +379,7 @@ public class ChunkService2 {
 		
 		//skipping
 		while ((count < skip) && (source.hasNext()))  {
-			source.getNext();
+			source.next();
 			count ++;
 		}
 
@@ -389,7 +389,7 @@ public class ChunkService2 {
 //			totalBlocks ++;
 			countAll ++;
 			
-			BlockSet bs = source.getNext();
+			BlockSet bs = source.next();
 			LongArrayList block = bs.getRecordIDs();
 			
 			//set up comparison group

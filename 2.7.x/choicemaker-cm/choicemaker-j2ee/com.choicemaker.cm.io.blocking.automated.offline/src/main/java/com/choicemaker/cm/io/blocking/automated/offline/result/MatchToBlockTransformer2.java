@@ -164,7 +164,7 @@ public class MatchToBlockTransformer2 {
 		//now write out the translated MatchRecord2
 		MatchRecord2 mr = null;
 		while (mSource.hasNext()) {
-			mr = mSource.getNext();
+			mr = (MatchRecord2) mSource.next();
 
 			Integer I1 = (Integer) stageIDs.get(mr.getRecordID1());
 			Integer I2 = null;
@@ -217,7 +217,7 @@ public class MatchToBlockTransformer2 {
 
 		source.open();
 		while (source.hasNext()) {
-			MatchRecord2 mr = source.getNext();
+			MatchRecord2 mr = (MatchRecord2) source.next();
 			Integer I1 = (Integer) mr.getRecordID1();
 			Integer I2 = (Integer) mr.getRecordID2();
 			setJoiner.union(I1.intValue(), I2.intValue());

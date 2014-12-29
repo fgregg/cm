@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
 
 /**
@@ -20,9 +19,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
  *
  */
 public interface IMatchRecordSource extends ISource<IMatchRecord> {
-	
-	/** Gets the next MatchRecord. */
-	public IMatchRecord getNext () throws BlockingException;
 	
 	/** Returns the number of MatchRecords read so far. */
 	public int getCount ();

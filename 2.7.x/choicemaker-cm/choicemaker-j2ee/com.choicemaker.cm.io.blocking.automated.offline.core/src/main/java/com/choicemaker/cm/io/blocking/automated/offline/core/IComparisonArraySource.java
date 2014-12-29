@@ -20,9 +20,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  */
 public interface IComparisonArraySource<T extends Comparable<T>> extends ISource<ComparisonArray<T>> {
 
-	/** Gets the next ComparisonGroup. */
-	public ComparisonArray<T> getNext ();
-	
 	/** Returns the number of ComparisonGroup read so far. */
 	public int getCount ();
 

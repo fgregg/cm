@@ -23,8 +23,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISource;
 
 /**
- * This is a generic file based implementation of ISource.
- * Each descendant must implement hasNext and getNext, and call init.
+ * This is a generic file based implementation of ISource. Each descendant must
+ * implement hasNext and getNext, and call init.
  * 
  * @author pcheung
  *
@@ -38,87 +38,81 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	protected String fileName;
 	protected boolean exists;
 
-
-	/** The descendants should call this method in their constructor.
+	/**
+	 * The descendants should call this method in their constructor.
 	 * 
-	 * @param fileName - file name of the sink
-	 * @param type - indicates whether the file is a string or binary file.
+	 * @param fileName
+	 *            - file name of the sink
+	 * @param type
+	 *            - indicates whether the file is a string or binary file.
 	 */
-	public void init (String fileName, int type) {
+	public void init(String fileName, int type) {
 		this.type = type;
 		this.fileName = fileName;
-		File file = new File (fileName);
+		File file = new File(fileName);
 		exists = file.exists();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#exists()
-	 */
+	@Override
 	public boolean exists() {
 		return exists;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#open()
-	 */
+	@Override
 	public void open() throws BlockingException {
 		try {
-			if (type == Constants.STRING) br = new BufferedReader (new FileReader(fileName));
-			else if (type == Constants.BINARY) dis = new DataInputStream (new FileInputStream (fileName));
+			if (type == Constants.STRING)
+				br = new BufferedReader(new FileReader(fileName));
+			else if (type == Constants.BINARY)
+				dis = new DataInputStream(new FileInputStream(fileName));
 		} catch (FileNotFoundException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
 	 */
+	@Override
 	public void close() throws BlockingException {
 		try {
-			if (type == Constants.STRING) br.close();
-			else if (type == Constants.BINARY) dis.close();
+			if (type == Constants.STRING)
+				br.close();
+			else if (type == Constants.BINARY)
+				dis.close();
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
-	 */
 	public int getCount() {
 		return count;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
-	 */
+	@Override
 	public String getInfo() {
 		return fileName;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
-	 */
+	@Override
 	public void delete() throws BlockingException {
-		File file = new File (fileName);
+		File file = new File(fileName);
 		file.delete();
 	}
-	
-	
-	/** This returns the location in the string str where charAt == key and
-	 * location >= start.
-	 * Returns -1 if no such location.
+
+	/**
+	 * This returns the location in the string str where charAt == key and
+	 * location >= start. Returns -1 if no such location.
 	 * 
 	 * @param str
 	 * @param key
 	 * @param start
 	 * @return
 	 */
-	protected int getNextLocation (String str, char key, int start) {
+	protected int getNextLocation(String str, char key, int start) {
 		int ret = -1;
 		int i = start;
 		int size = str.length();
@@ -131,9 +125,8 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 				i++;
 			}
 		}
-		
+
 		return ret;
 	}
-
 
 }

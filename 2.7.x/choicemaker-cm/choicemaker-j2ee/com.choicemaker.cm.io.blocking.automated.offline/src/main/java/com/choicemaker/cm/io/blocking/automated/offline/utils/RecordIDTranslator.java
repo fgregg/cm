@@ -114,7 +114,7 @@ public class RecordIDTranslator {
 			while (source.hasNext()) {
 				currentIndex ++;
 				
-				long id = source.getNext();
+				long id = source.next();
 				if (id < range1[0]) range1[0] = id;
 				if (id > range1[1]) range1[1] = id;
 			}
@@ -130,7 +130,7 @@ public class RecordIDTranslator {
 			while (source.hasNext()) {
 				currentIndex ++;
 
-				long id = source.getNext();
+				long id = source.next();
 				if (id < range2[0]) range2[0] = id;
 				if (id > range2[1]) range2[1] = id;
 			}
@@ -200,7 +200,7 @@ public class RecordIDTranslator {
 			source1.open();
 		
 			while (source1.hasNext()) {
-				list1.add(source1.getNext());
+				list1.add(source1.next());
 			}
 		
 			source1.close();
@@ -212,7 +212,7 @@ public class RecordIDTranslator {
 				source2.open();
 		
 				while (source2.hasNext()) {
-					list2.add(source2.getNext());
+					list2.add(source2.next());
 				}
 		
 				source2.close();
@@ -259,7 +259,7 @@ public class RecordIDTranslator {
 		bSink.open();
 		
 		while (bSource.hasNext ()) {
-			BlockSet bs = bSource.getNext();
+			BlockSet bs = bSource.next();
 			LongArrayList list = bs.getRecordIDs();
 			for (int i=0; i<list.size(); i++) {
 				list.set(i, reverseLookup((int) list.get(i)) );

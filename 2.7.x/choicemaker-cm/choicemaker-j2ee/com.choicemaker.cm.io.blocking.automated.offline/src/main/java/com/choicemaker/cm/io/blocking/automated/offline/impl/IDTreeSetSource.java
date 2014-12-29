@@ -29,14 +29,7 @@ public class IDTreeSetSource implements IIDSetSource {
 	}
 	
 	public IIDSet next() throws BlockingException {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource#getNext()
-	 */
-	public IIDSet getNext() throws BlockingException {
-		return bSource.getNext();
+		return bSource.next();
 	}
 
 	/* (non-Javadoc)

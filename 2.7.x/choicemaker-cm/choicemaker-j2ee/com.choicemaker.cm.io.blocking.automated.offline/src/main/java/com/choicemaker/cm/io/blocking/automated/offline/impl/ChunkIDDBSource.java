@@ -77,13 +77,6 @@ public class ChunkIDDBSource implements IChunkRecordIDSource {
 
 	@Override
 	public Long next() {
-		return getNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource#getNext()
-	 */
-	public long getNext() {
 		return nextID;
 	}
 

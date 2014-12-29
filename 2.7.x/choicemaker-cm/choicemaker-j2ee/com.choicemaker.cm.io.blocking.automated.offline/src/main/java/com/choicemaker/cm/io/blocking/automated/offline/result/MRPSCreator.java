@@ -469,7 +469,7 @@ public class MRPSCreator {
 				throw new ControlException("Aborted in getPairsAndIds");
 			}
 
-			mr = mrSource.getNext();
+			mr = (MatchRecord2) mrSource.next();
 			id1 = mr.getRecordID1();
 			id2 = mr.getRecordID2();
 			source = mr.getRecord2Source();
