@@ -32,7 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.Oaba
 import com.choicemaker.cm.io.blocking.automated.offline.impl.OversizedGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
-import com.choicemaker.cm.io.blocking.automated.offlinelong.RecordValue2;
+import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordValue2;
 import com.choicemaker.util.IntArrayList;
 import com.choicemaker.util.LongArrayList;
 

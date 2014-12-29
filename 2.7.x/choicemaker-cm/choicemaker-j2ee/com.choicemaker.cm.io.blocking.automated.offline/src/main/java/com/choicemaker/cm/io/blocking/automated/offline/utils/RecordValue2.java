@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offlinelong;
+package com.choicemaker.cm.io.blocking.automated.offline.utils;
 
 import java.util.ArrayList;
 
@@ -16,14 +16,15 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
 import com.choicemaker.util.IntArrayList;
 
-/**This object takes a IRecValSource and creates a ArrayList storing the record ids and
- * IntArrayList of value ids.
+/**
+ * This object takes a IRecValSource and creates a ArrayList storing the record
+ * ids and IntArrayList of value ids.
  *
- * The critical change to this code is that it uses IntArrayList instead of Integer
- * as map value and ArrayList value to handle stacking.
+ * The critical change to this code is that it uses IntArrayList instead of
+ * Integer as map value and ArrayList value to handle stacking.
  *
- * This version uses the input record id to internal translator, therefor we could use an
- * array instead of hashMap;
+ * This version uses the input record id to internal translator, therefore we
+ * could use an array instead of hashMap;
  *
  * @author pcheung
  *
@@ -68,7 +69,8 @@ public class RecordValue2 {
 	 * @param fileName
 	 * @return ArrayList - array containing rec_id, val_id pairs.
 	 */
-	public static ArrayList readColumnList (IRecValSource rvSource) throws BlockingException{
+	public static ArrayList readColumnList(IRecValSource rvSource)
+			throws BlockingException {
 		ArrayList list = new ArrayList (1000);
 
 		// 2014-04-24 rphall: Commented out unused local variables.
