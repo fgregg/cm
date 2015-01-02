@@ -35,7 +35,7 @@ public class OabaProcessingControllerBean {
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-	public List<OabaProcessingLogEntry> findProcessingLogEntriessByJobId(long id) {
+	public List<OabaProcessingLogEntry> findProcessingLogEntriesByJobId(long id) {
 		Query query =
 			em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_BY_JOBID);
 		query.setParameter(
