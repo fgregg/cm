@@ -113,16 +113,14 @@ public class OabaJobEventLog implements OabaEventLog {
 		return retVal;
 	}
 
-	private static String createOrderingDetailMesssage(String summary,
+	private String createOrderingDetailMesssage(String summary,
 			OabaProcessingEvent e1, OabaProcessingEvent e2) {
 		final String INDENT = "   ";
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		Date d1 = e1.getEventTimestamp();
-		Date d2 = e2.getEventTimestamp();
 		pw.println(summary);
-		pw.println(INDENT + "Most recent: " + d1 + " (" + e1.getId() + ")");
-		pw.println(INDENT + " Subsequent: " + d2 + " (" + e2.getId() + ")");
+		pw.println(INDENT + "Most recent: " + e1.getOabaEvent() + " " +  e1);
+		pw.println(INDENT + " Subsequent: " + e2.getOabaEvent() + " " +  e2);
 		return sw.toString();
 	}
 
@@ -147,12 +145,13 @@ public class OabaJobEventLog implements OabaEventLog {
 
 	@Override
 	public void setCurrentOabaEvent(OabaEvent event) {
-		OabaProcessingLogEntry ope = new OabaProcessingLogEntry(oabaJob, event);
-		em.persist(ope);
+		setCurrentOabaEvent(event, null);
 	}
 
 	@Override
 	public void setCurrentOabaEvent(OabaEvent event, String info) {
+		logger.info("OABA processing event: " + event + " (job "
+				+ this.oabaJob.getId() + ")");
 		OabaProcessingLogEntry ope =
 			new OabaProcessingLogEntry(oabaJob, event, info);
 		em.persist(ope);
