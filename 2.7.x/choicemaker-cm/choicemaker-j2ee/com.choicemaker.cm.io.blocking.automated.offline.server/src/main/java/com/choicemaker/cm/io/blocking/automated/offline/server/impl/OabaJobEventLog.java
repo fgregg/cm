@@ -26,11 +26,37 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
  */
 public class OabaJobEventLog implements OabaEventLog {
 
-	/** Turns on or off redundant order-by checking */
-	private static final boolean DEBUG = true;
-
 	private static final Logger logger = Logger.getLogger(OabaJobEventLog.class
 			.getName());
+
+	/**
+	 * The name of a system property that can be set to "true" to turn on
+	 * redundant order-by checking.
+	 */
+	public static final String PN_OABA_EVENT_ORDERBY_DEBUGGING =
+		"OabaEventLogOrderByDebugging";
+
+	// Don't use this directly; use isOrderByDebuggingRequested() instead
+	private static Boolean _isOrderByDebuggingRequested = null;
+
+	/**
+	 * Checks the system property {@link #PN_SANITY_CHECK}
+	 * and caches the result
+	 */
+	protected static boolean isOrderByDebuggingRequested() {
+		if (_isOrderByDebuggingRequested == null) {
+			String pn = PN_OABA_EVENT_ORDERBY_DEBUGGING;
+			String defaultValue = Boolean.FALSE.toString();
+			String value =
+				System.getProperty(pn,defaultValue);
+			_isOrderByDebuggingRequested = Boolean.valueOf(value);
+		}
+		boolean retVal = _isOrderByDebuggingRequested.booleanValue();
+		if (retVal) {
+			logger.info("OabaEventLog order-by debugging is enabled");
+		}
+		return retVal;
+	}
 
 	private final EntityManager em;
 
@@ -59,7 +85,7 @@ public class OabaJobEventLog implements OabaEventLog {
 		} else {
 			retVal = entries.get(0);
 			final Date mostRecent = retVal.getEventTimestamp();
-			if (DEBUG) {
+			if (isOrderByDebuggingRequested()) {
 				if (entries.size() > 1) {
 					for (int i = 1; i < entries.size(); i++) {
 						final OabaProcessingEvent e2 = entries.get(i);
