@@ -117,7 +117,7 @@ public class SystemPropertyUtils {
 	/**
 	 * Sets a System property.
 	 * 
-	 * @param if true, forces the property to be set, even if the property has
+	 * @param force if true, forces the property to be set, even if the property has
 	 *        already been set to another value. If false, the property is set
 	 *        only if it hasn't already been set.
 	 */
