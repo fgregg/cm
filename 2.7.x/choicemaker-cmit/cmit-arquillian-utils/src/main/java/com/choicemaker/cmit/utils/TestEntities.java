@@ -32,6 +32,35 @@ public class TestEntities {
 	private static final Logger logger = Logger.getLogger(TestEntities.class
 			.getName());
 
+	/**
+	 * The name of a system property that can be set to "true" to enable
+	 * retention of DB objects created during testing.
+	 */
+	public static final String PN_CMIT_RETAIN_TEST_OBJECTS =
+		"CMIT_RetainTestObjects";
+
+	// Don't use this directly; use isTestObjectRetentionRequested() instead
+	private static Boolean _isOrderByDebuggingRequested = null;
+
+	/**
+	 * Checks the system property {@link #PN_SANITY_CHECK}
+	 * and caches the result
+	 */
+	protected static boolean isTestObjectRetentionRequested() {
+		if (_isOrderByDebuggingRequested == null) {
+			String pn = PN_CMIT_RETAIN_TEST_OBJECTS;
+			String defaultValue = Boolean.FALSE.toString();
+			String value =
+				System.getProperty(pn,defaultValue);
+			_isOrderByDebuggingRequested = Boolean.valueOf(value);
+		}
+		boolean retVal = _isOrderByDebuggingRequested.booleanValue();
+		if (retVal) {
+			logger.info("OabaEventLog order-by debugging is enabled");
+		}
+		return retVal;
+	}
+
 	private Set<Object> objects = new LinkedHashSet<>();
 
 	protected void add(Object o) {
@@ -102,40 +131,47 @@ public class TestEntities {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		for (Object o : objects) {
-			final Long oId = getId(o);
-			if (oId != null) {
-				final Class<?> c = o.getClass();
-				if (oId != 0) {
-					boolean usingUtx = false;
-					if (utx != null) {
-						utx.begin();
-						usingUtx = true;
-					}
-					Object refresh = em.find(c, oId);
-					if (refresh != null) {
-						em.merge(refresh);
-						boolean isManaged = em.contains(refresh);
-						if (!isManaged) {
-							String typeName = o.getClass().getSimpleName();
-							logger.warning(typeName + " " + oId
-									+ " is not managed");
-						} else {
-							em.remove(refresh);
+		if (!isTestObjectRetentionRequested()) {
+			String msg = "Retaining objects created during testing";
+			logger.warning(msg);
+		} else {
+			String msg = "Removing objects created during testing";
+			logger.info(msg);
+			for (Object o : objects) {
+				final Long oId = getId(o);
+				if (oId != null) {
+					final Class<?> c = o.getClass();
+					if (oId != 0) {
+						boolean usingUtx = false;
+						if (utx != null) {
+							utx.begin();
+							usingUtx = true;
+						}
+						Object refresh = em.find(c, oId);
+						if (refresh != null) {
+							em.merge(refresh);
+							boolean isManaged = em.contains(refresh);
+							if (!isManaged) {
+								String typeName = o.getClass().getSimpleName();
+								logger.warning(typeName + " " + oId
+										+ " is not managed");
+							} else {
+								em.remove(refresh);
+							}
+						}
+						if (usingUtx) {
+							utx.commit();
 						}
 					}
-					if (usingUtx) {
-						utx.commit();
+				} else {
+					try {
+						// utx.begin();
+						em.merge(o);
+						em.remove(o);
+						// utx.commit();
+					} catch (Exception x) {
+						logger.warning(x.toString());
 					}
-				}
-			} else {
-				try {
-					// utx.begin();
-					em.merge(o);
-					em.remove(o);
-					// utx.commit();
-				} catch (Exception x) {
-					logger.warning(x.toString());
 				}
 			}
 		}
