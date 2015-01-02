@@ -40,21 +40,21 @@ public class TestEntities {
 		"CMIT_RetainTestObjects";
 
 	// Don't use this directly; use isTestObjectRetentionRequested() instead
-	private static Boolean _isOrderByDebuggingRequested = null;
+	private static Boolean _isTestObjectRetentionRequested = null;
 
 	/**
 	 * Checks the system property {@link #PN_SANITY_CHECK}
 	 * and caches the result
 	 */
-	protected static boolean isTestObjectRetentionRequested() {
-		if (_isOrderByDebuggingRequested == null) {
+	public static boolean isTestObjectRetentionRequested() {
+		if (_isTestObjectRetentionRequested == null) {
 			String pn = PN_CMIT_RETAIN_TEST_OBJECTS;
 			String defaultValue = Boolean.FALSE.toString();
 			String value =
 				System.getProperty(pn,defaultValue);
-			_isOrderByDebuggingRequested = Boolean.valueOf(value);
+			_isTestObjectRetentionRequested = Boolean.valueOf(value);
 		}
-		boolean retVal = _isOrderByDebuggingRequested.booleanValue();
+		boolean retVal = _isTestObjectRetentionRequested.booleanValue();
 		if (retVal) {
 			logger.info("OabaEventLog order-by debugging is enabled");
 		}
@@ -131,7 +131,7 @@ public class TestEntities {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		if (!isTestObjectRetentionRequested()) {
+		if (isTestObjectRetentionRequested()) {
 			String msg = "Retaining objects created during testing";
 			logger.warning(msg);
 		} else {

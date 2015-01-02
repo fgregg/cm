@@ -33,6 +33,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
+import com.choicemaker.cmit.utils.TestEntities;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
@@ -193,28 +194,32 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	public final void tearDown() {
 		String METHOD = "tearDown";
 		getLogger().entering(getSourceName(), METHOD);
-		try {
+		if (!TestEntities.isTestObjectRetentionRequested()) {
+			logger.info("Checking final object counts");
+			try {
+				int finalOabaParamsCount =
+					getTestController().findAllOabaParameters().size();
+				String alert = "initialOabaParamsCount != finalOabaParamsCount";
+				assertTrue(alert, initialOabaParamsCount == finalOabaParamsCount);
 
-			int finalOabaParamsCount =
-				getTestController().findAllOabaParameters().size();
-			String alert = "initialOabaParamsCount != finalOabaParamsCount";
-			assertTrue(alert, initialOabaParamsCount == finalOabaParamsCount);
+				int finalOabaJobCount =
+					getTestController().findAllOabaJobs().size();
+				alert = "initialOabaJobCount != finalOabaJobCount";
+				assertTrue(alert, initialOabaJobCount == finalOabaJobCount);
 
-			int finalOabaJobCount =
-				getTestController().findAllOabaJobs().size();
-			alert = "initialOabaJobCount != finalOabaJobCount";
-			assertTrue(alert, initialOabaJobCount == finalOabaJobCount);
+				int finalOabaProcessingCount =
+					getTestController().findAllOabaProcessing().size();
+				alert = "initialOabaProcessingCount != finalOabaProcessingCount";
+				assertTrue(alert,
+						initialOabaProcessingCount == finalOabaProcessingCount);
 
-			int finalOabaProcessingCount =
-				getTestController().findAllOabaProcessing().size();
-			alert = "initialOabaProcessingCount != finalOabaProcessingCount";
-			assertTrue(alert,
-					initialOabaProcessingCount == finalOabaProcessingCount);
-
-		} catch (Exception x) {
-			getLogger().severe(x.toString());
-		} catch (AssertionError x) {
-			getLogger().severe(x.toString());
+			} catch (Exception x) {
+				getLogger().severe(x.toString());
+			} catch (AssertionError x) {
+				getLogger().severe(x.toString());
+			}
+		} else {
+			logger.info("Skipping check of final object counts");
 		}
 		getLogger().exiting(getSourceName(), METHOD);
 	}
