@@ -30,8 +30,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
 
@@ -71,7 +72,7 @@ public class RecValService2 {
 	//	this is the input record id to internal id translator
 	private IRecordIDTranslator2 translator;
 
-	private OabaProcessing status;
+	private OabaEventLog status;
 
 	//This stores if stage record id is Integer, Long, or string
 	private boolean firstStage = true;
@@ -102,7 +103,7 @@ public class RecValService2 {
 			ImmutableProbabilityModel model,
 			ImmutableProbabilityModel unusedMasterModel,
 			IRecValSinkSourceFactory rvFactory,
-			IRecordIDTranslator2 translator, OabaProcessing status) {
+			IRecordIDTranslator2 translator, OabaEventLog status) {
 
 		this.stage = stage;
 		this.master = master;
@@ -174,30 +175,30 @@ public class RecValService2 {
 	public void runService () throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_REC_VAL &&
-			status.getCurrentProcessingEventId() < OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED ) {
+		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_REC_VAL &&
+			status.getCurrentOabaEventId() < OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED ) {
 
 			log.info ("recover rec,val files and translator");
 			//need to initialize
 			init ();
 
-		} else if (status.getCurrentProcessingEventId() < OabaProcessing.EVT_CREATE_REC_VAL) {
+		} else if (status.getCurrentOabaEventId() < OabaProcessing.EVT_CREATE_REC_VAL) {
 			log.info ("Creating new rec,val files");
 
 			//create the rec_id, val_id files
-			status.setCurrentProcessingEvent( OabaEvent.CREATE_REC_VAL);
+			status.setCurrentOabaEvent( OabaEvent.CREATE_REC_VAL);
 
 			createFiles ();
 
-			status.setCurrentProcessingEvent( OabaEvent.DONE_REC_VAL);
+			status.setCurrentOabaEvent( OabaEvent.DONE_REC_VAL);
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_REC_VAL) {
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_CREATE_REC_VAL) {
 			log.info ("Trying to recover rec,val files");
 
 			//started to created, but not done, so we need to recover
-			status.setCurrentProcessingEvent( OabaEvent.CREATE_REC_VAL);
+			status.setCurrentOabaEvent( OabaEvent.CREATE_REC_VAL);
 			recoverFiles ();
-			status.setCurrentProcessingEvent( OabaEvent.DONE_REC_VAL);
+			status.setCurrentOabaEvent( OabaEvent.DONE_REC_VAL);
 		}
 		time = System.currentTimeMillis() - time;
 	}

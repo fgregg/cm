@@ -105,8 +105,6 @@ public abstract class BatchJobEntity implements BatchJob {
 		allowedTransitions.put(BatchJobStatus.FAILED, allowed);
 		allowed = new HashSet<>();
 		allowedTransitions.put(BatchJobStatus.ABORTED, allowed);
-//		allowed = new HashSet<>();
-//		allowedTransitions.put(MAGIC_DESCRIPTION_CLEAR, allowed);
 	}
 
 	public static boolean isInvalidBatchJobId(long id) {
@@ -194,9 +192,6 @@ public abstract class BatchJobEntity implements BatchJob {
 	@Column(name = CN_DESCRIPTION)
 	protected String description;
 
-//	@Column(name = CN_FRACTION_COMPLETE)
-//	protected int percentageComplete;
-
 	@Column(name = CN_STATUS)
 	protected String status;
 
@@ -272,11 +267,6 @@ public abstract class BatchJobEntity implements BatchJob {
 		return retVal;
 	}
 
-//	@Override
-//	public int getFractionComplete() {
-//		return percentageComplete;
-//	}
-
 	@Override
 	public BatchJobStatus getStatus() {
 		return BatchJobStatus.valueOf(status);
@@ -350,17 +340,6 @@ public abstract class BatchJobEntity implements BatchJob {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-//	public void setFractionComplete(int percentage) {
-//		if (percentage < MIN_PERCENTAGE_COMPLETED
-//				|| percentage > MAX_PERCENTAGE_COMPLETED) {
-//			String msg = "invalid percentage: " + percentage;
-//			throw new IllegalArgumentException(msg);
-//		}
-////		this.percentageComplete = percentage;
-//		// Update the timestamp, indirectly
-//		setStatus(getStatus());
-//	}
 
 	protected void logTransition(BatchJobStatus newStatus) {
 		String msg =
@@ -448,7 +427,6 @@ public abstract class BatchJobEntity implements BatchJob {
 	public void markAsStarted() {
 		if (isAllowedTransition(getStatus(), BatchJobStatus.STARTED)) {
 			logTransition(BatchJobStatus.QUEUED);
-//			setFractionComplete(MIN_PERCENTAGE_COMPLETED);
 			setStatus(BatchJobStatus.STARTED);
 		} else {
 			logIgnoredTransition("markAsStarted");
@@ -457,7 +435,6 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	@Override
 	public void markAsReStarted() {
-//		setFractionComplete(MIN_PERCENTAGE_COMPLETED);
 		setStatus(BatchJobStatus.QUEUED);
 	}
 
@@ -465,7 +442,6 @@ public abstract class BatchJobEntity implements BatchJob {
 	public void markAsCompleted() {
 		if (isAllowedTransition(getStatus(), BatchJobStatus.COMPLETED)) {
 			logTransition(BatchJobStatus.COMPLETED);
-//			setFractionComplete(MAX_PERCENTAGE_COMPLETED);
 			setStatus(BatchJobStatus.COMPLETED);
 		} else {
 			logIgnoredTransition("markAsCompleted");
@@ -525,7 +501,6 @@ public abstract class BatchJobEntity implements BatchJob {
 		int result = 1;
 		result =
 			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
-//		result = prime * result + percentageComplete;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + (int) (bparentId ^ (bparentId >>> 32));
 		result =
@@ -573,9 +548,6 @@ public abstract class BatchJobEntity implements BatchJob {
 		} else if (!externalId.equals(other.externalId)) {
 			return false;
 		}
-//		if (percentageComplete != other.percentageComplete) {
-//			return false;
-//		}
 		if (status == null) {
 			if (other.status != null) {
 				return false;

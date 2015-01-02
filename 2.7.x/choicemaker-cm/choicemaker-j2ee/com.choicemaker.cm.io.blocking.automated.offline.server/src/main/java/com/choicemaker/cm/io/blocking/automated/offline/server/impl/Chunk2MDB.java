@@ -10,9 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_CREATE_CHUNK_DATA;
-
 import java.io.Serializable;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -36,7 +35,8 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
@@ -118,8 +118,8 @@ public class Chunk2MDB implements MessageListener, Serializable {
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =
 						oabaSettingsController.findOabaSettingsByJobId(jobId);
-				OabaProcessing processingEntry =
-						processingController.findProcessingLogByJobId(jobId);
+				OabaEventLog processingLog =
+						processingController.getProcessingLog(oabaJob);
 				ServerConfiguration serverConfig = serverController.findServerConfigurationByJobId(jobId);
 				if (oabaJob == null || params == null || oabaSettings == null || serverConfig == null) {
 					String s = "Unable to find a job, parameters, settings or server configuration for " + jobId;
@@ -137,7 +137,7 @@ public class Chunk2MDB implements MessageListener, Serializable {
 				}
 
 				if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
-					MessageBeanUtils.stopJob (oabaJob, processingEntry);
+					MessageBeanUtils.stopJob (oabaJob, processingLog);
 
 				} else {
 					int maxChunk = oabaSettings.getMaxChunkSize();
@@ -182,7 +182,7 @@ public class Chunk2MDB implements MessageListener, Serializable {
 								OabaFileUtils.getMasterDataFactory(oabaJob,
 										model), translator.getSplitIndex(),
 								tTransformer, transformerO, maxChunk,
-								maxChunkFiles, processingEntry, oabaJob);
+								maxChunkFiles, processingLog, oabaJob);
 					log.info("Chunk service: " + chunkService);
 					chunkService.runService();
 					log.info( "Number of chunks " + chunkService.getNumChunks());
@@ -195,7 +195,8 @@ public class Chunk2MDB implements MessageListener, Serializable {
 					data.numChunks = chunkService.getNumChunks();
 					data.numRegularChunks = chunkService.getNumRegularChunks();
 
-					sendToUpdateStatus (data.jobID, PCT_DONE_CREATE_CHUNK_DATA);
+					sendToUpdateStatus(oabaJob,
+							OabaEvent.DONE_CREATE_CHUNK_DATA, new Date(), null);
 					sendToMatch (data);
 				}
 
@@ -212,9 +213,9 @@ public class Chunk2MDB implements MessageListener, Serializable {
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-	private void sendToUpdateStatus (long jobID, int percentComplete) throws NamingException, JMSException {
-		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
-				updateQueue, log);
+	private void sendToUpdateStatus(OabaJob job, OabaEvent event, Date timestamp,
+			String info) {
+		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info, jmsContext, updateQueue, log);
 	}
 
 	private void sendToMatch (OabaJobMessage data) throws NamingException, JMSException{

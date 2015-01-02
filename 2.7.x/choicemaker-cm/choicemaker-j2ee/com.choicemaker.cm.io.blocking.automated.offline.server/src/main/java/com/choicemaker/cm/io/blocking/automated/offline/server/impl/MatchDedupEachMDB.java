@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
@@ -105,8 +106,8 @@ public class MatchDedupEachMDB implements MessageListener, Serializable {
 				oabaJob = jobController.findOabaJob(jobId);
 				final OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
-				final OabaProcessing processingEntry =
-					processingController.findProcessingLogByJobId(jobId);
+				final OabaEventLog processingEntry =
+					processingController.getProcessingLog(oabaJob);
 				final String modelConfigId = params.getModelConfigurationName();
 				final IProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
@@ -124,7 +125,7 @@ public class MatchDedupEachMDB implements MessageListener, Serializable {
 					MessageBeanUtils.stopJob(oabaJob, processingEntry);
 
 				} else {
-					if (processingEntry.getCurrentProcessingEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
+					if (processingEntry.getCurrentOabaEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
 						int maxMatches = settings.getMaxMatches();
 						dedupEach(data.ind, maxMatches, oabaJob);
 					}

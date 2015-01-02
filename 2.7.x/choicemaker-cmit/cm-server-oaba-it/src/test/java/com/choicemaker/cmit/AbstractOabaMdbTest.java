@@ -63,7 +63,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	private final int eventId;
 
-	private final int percentComplete;
+	private final float percentComplete;
 
 	private final Class<T> configurationClass;
 
@@ -137,7 +137,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	// -- Constructor
 
 	@Inject
-	public AbstractOabaMdbTest(String n, Logger g, int evtId, int pct,
+	public AbstractOabaMdbTest(String n, Logger g, int evtId, float pct,
 			Class<T> configurationClass, OabaProcessingPhase oabaPhase) {
 		if (n == null || n.isEmpty() || g == null || oabaPhase == null) {
 			throw new IllegalArgumentException("invalid argument");
@@ -402,7 +402,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return eventId;
 	}
 
-	public final int getResultPercentComplete() {
+	public final float getResultPercentComplete() {
 		return percentComplete;
 	}
 

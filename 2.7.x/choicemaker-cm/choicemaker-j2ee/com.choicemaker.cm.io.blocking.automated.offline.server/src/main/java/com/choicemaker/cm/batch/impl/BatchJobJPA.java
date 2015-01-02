@@ -15,10 +15,7 @@ public interface BatchJobJPA {
 	 * None should be marked if sub-classes are set up correctly with their own
 	 * discriminator values.
 	 */
-	String DISCRIMINATOR_VALUE = "OABA";
-
-	/** Default value when no jobId is assigned */
-	public static final long INVALID_ID = 0;
+	String DISCRIMINATOR_VALUE = "BATCH";
 
 	/**
 	 * Generated id column.

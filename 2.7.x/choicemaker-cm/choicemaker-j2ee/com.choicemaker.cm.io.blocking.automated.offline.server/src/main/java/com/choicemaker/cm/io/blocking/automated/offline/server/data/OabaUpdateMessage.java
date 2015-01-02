@@ -10,68 +10,49 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 
-import java.io.Serializable;
+import java.util.Date;
+
+import com.choicemaker.cm.batch.BatchProcessingNotification;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA;
 
 /**
  * This is the data object that gets passed to the UpdateStatusMDB message bean.
  * 
- * @author pcheung
+ * @author pcheung (original version)
+ * @rphall rewrote as subclass of BatchProcessingNotification
  *
  */
-public class OabaUpdateMessage implements Serializable {
+public class OabaUpdateMessage extends BatchProcessingNotification {
 
 	static final long serialVersionUID = 271;
 
-	private final long jobID;
-	private final int percentComplete;
-	
-	public OabaUpdateMessage(long jobId, int percentComplete) {
-		this.jobID = jobId;
-		this.percentComplete = percentComplete;
+	public OabaUpdateMessage(OabaJob job, OabaEvent event, Date timestamp) {
+		this(job, event, timestamp, null);
 	}
 
+	public OabaUpdateMessage(OabaJob job, OabaEvent event, Date timestamp,
+			String info) {
+		super(job.getId(), OabaJobJPA.DISCRIMINATOR_VALUE, job.getStatus()
+				.name(), event.percentComplete, event.eventId,
+				OabaProcessingJPA.DISCRIMINATOR_VALUE, timestamp, info);
+	}
+
+	/**
+	 * @deprecated use {@link #getJobId()}
+	 */
 	public long getJobID() {
-		return jobID;
+		return getJobId();
 	}
 
-	public int getPercentComplete() {
-		return percentComplete;
-	}
+	/**
+	 * @deprecated use {@link #getJobPercentComplete()
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (jobID ^ (jobID >>> 32));
-		result = prime * result + percentComplete;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		OabaUpdateMessage other = (OabaUpdateMessage) obj;
-		if (jobID != other.jobID) {
-			return false;
-		}
-		if (percentComplete != other.percentComplete) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "OabaUpdateMessage [jobID=" + jobID + ", percentComplete="
-				+ percentComplete + "]";
+	 */
+	public float getPercentComplete() {
+		return getJobPercentComplete();
 	}
 
 }

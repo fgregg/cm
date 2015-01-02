@@ -183,9 +183,9 @@ public class JmsUtils {
 				receiveUpdateMessage(LOG_SOURCE, consumer, updateQueue, timeOut);
 			if (msg != null) {
 				retVal = msg;
-			}
-			if (msg.getPercentComplete() == PCT_DONE_OABA) {
-				break;
+				if (msg.getPercentComplete() == PCT_DONE_OABA) {
+					break;
+				}
 			}
 		} while (msg != null);
 		logger.exiting(LOG_SOURCE, METHOD);

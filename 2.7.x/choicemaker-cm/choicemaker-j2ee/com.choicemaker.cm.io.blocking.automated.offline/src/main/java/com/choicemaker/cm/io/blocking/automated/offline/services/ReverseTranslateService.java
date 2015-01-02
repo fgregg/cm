@@ -13,8 +13,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.services;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIDTranslator;
 
 /**
@@ -32,7 +33,7 @@ public class ReverseTranslateService {
 	private IBlockSource osSource;
 	private IBlockSink osSink;
 	
-	private OabaProcessing status;
+	private OabaEventLog status;
 	
 	private long time; //this keeps track of time
 
@@ -47,7 +48,7 @@ public class ReverseTranslateService {
 	 */
 	public ReverseTranslateService (RecordIDTranslator translator, 
 		IBlockSource bSource, IBlockSink bSink,
-		IBlockSource osSource, IBlockSink osSink, OabaProcessing status) {
+		IBlockSource osSource, IBlockSink osSink, OabaEventLog status) {
 			
 		this.translator = translator;
 		this.bSink = bSink;
@@ -75,20 +76,20 @@ public class ReverseTranslateService {
 
 //		System.out.println ("runService: " + status.getStatus());
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED) {
+		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED) {
 			//do nothing
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED) {
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED) {
 			//reverse translate block and oversized
 			reverseTranslate (bSource, bSink);
-			status.setCurrentProcessingEvent( OabaEvent.DONE_REVERSE_TRANSLATE_BLOCK);
+			status.setCurrentOabaEvent( OabaEvent.DONE_REVERSE_TRANSLATE_BLOCK);
 
 			reverseTranslate (osSource, osSink);
-			status.setCurrentProcessingEvent( OabaEvent.DONE_REVERSE_TRANSLATE_OVERSIZED);
+			status.setCurrentOabaEvent( OabaEvent.DONE_REVERSE_TRANSLATE_OVERSIZED);
 			
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_BLOCK) {
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_BLOCK) {
 			//reverse translate oversized
 			reverseTranslate (osSource, osSink);
-			status.setCurrentProcessingEvent( OabaEvent.DONE_REVERSE_TRANSLATE_OVERSIZED);
+			status.setCurrentOabaEvent( OabaEvent.DONE_REVERSE_TRANSLATE_OVERSIZED);
 
 		}
 		time = System.currentTimeMillis() - time;

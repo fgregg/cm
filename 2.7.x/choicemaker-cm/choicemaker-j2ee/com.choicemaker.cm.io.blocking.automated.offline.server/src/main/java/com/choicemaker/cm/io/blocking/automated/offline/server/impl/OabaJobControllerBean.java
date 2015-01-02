@@ -16,7 +16,8 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -90,10 +91,11 @@ public class OabaJobControllerBean {
 		em.persist(retVal);
 		assert OabaJobEntity.isPersistent(retVal);
 
-		// Create a new processing entry
-		OabaProcessing processing =
-			processingController
-					.createPersistentProcessingLogForBatchJob(retVal);
+		// Create a new processing log and the first entry in the log
+		OabaEventLog processingLog = processingController.getProcessingLog(retVal);
+		processingLog.setCurrentOabaEvent(OabaEvent.INIT);
+		OabaEvent currentProcessingEvent = processingLog.getCurrentOabaEvent();
+		assert currentProcessingEvent == OabaEvent.INIT;
 
 		// Create the working directory
 		File workingDir = OabaFileUtils.createWorkingDirectory(sc, retVal);
@@ -104,7 +106,8 @@ public class OabaJobControllerBean {
 		logger.info("Oaba parameters: " + params.toString());
 		logger.info("Oaba settings: " + settings.toString());
 		logger.info("Server configuration: " + sc.toString());
-		logger.info("Processing entry: " + processing.toString());
+		logger.info("Processing log: " + processingLog.toString());
+		logger.info("Current processing event: " + currentProcessingEvent);
 
 		return retVal;
 	}

@@ -18,8 +18,9 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
@@ -52,7 +53,7 @@ public class BlockDedupService {
 	//maximum block size
 //	private int maxBlockSize;
 	
-	private OabaProcessing status;
+	private OabaEventLog status;
 	
 	private int numBlocksIn = 0;
 	private int numBlocksOut = 0;
@@ -67,7 +68,7 @@ public class BlockDedupService {
 	 * @param bSink - output BlockSink containing deduped blocks
 	 * @param maxBlockSize - maximum size of the blocks
 	 */
-	public BlockDedupService (BlockGroup bGroup, IBlockSink bSink, int maxBlockSize, OabaProcessing status) {
+	public BlockDedupService (BlockGroup bGroup, IBlockSink bSink, int maxBlockSize, OabaEventLog status) {
 		this.bGroup = bGroup;
 		this.bSink = bSink;
 //		this.maxBlockSize = maxBlockSize;
@@ -88,10 +89,10 @@ public class BlockDedupService {
 		
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_DEDUP_BLOCKS ) {
+		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_DEDUP_BLOCKS ) {
 			//do nothing here
 			
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_OVERSIZED_TRIMMING ) {
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_OVERSIZED_TRIMMING ) {
 			//start deduping the blocks
 			log.info("starting to dedup blocks");
 
@@ -102,9 +103,9 @@ public class BlockDedupService {
 			
 			bSink.close();
 			
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DEDUP_BLOCKS) {
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DEDUP_BLOCKS) {
 			//the +1 is needed because we need to start with the next file
-			int startPoint = Integer.parseInt( status.getAdditionalInfo() ) + 1;
+			int startPoint = Integer.parseInt( status.getCurrentOabaEventInfo() ) + 1;
 			
 			//start recovery
 			log.info("starting dedup recovery, starting point: " + startPoint);
@@ -180,7 +181,7 @@ public class BlockDedupService {
 					//write out
 					writeUnsubsumed4(subsumedBlockSets, bSink, sources);
 					
-					status.setCurrentProcessingEvent(OabaEvent.DEDUP_BLOCKS, Integer.toString(i) );
+					status.setCurrentOabaEvent(OabaEvent.DEDUP_BLOCKS, Integer.toString(i) );
 					
 					
 					//reset
@@ -199,7 +200,7 @@ public class BlockDedupService {
 
 		}
 
-		status.setCurrentProcessingEvent(OabaEvent.DONE_DEDUP_BLOCKS);
+		status.setCurrentOabaEvent(OabaEvent.DONE_DEDUP_BLOCKS);
 		log.info("Number of reset " + numReset);
 		
 		//clean up

@@ -32,8 +32,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSo
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
@@ -187,11 +187,12 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 
 		//set the correct status for chunk could run.
 		final long jobId = transJob.getId();
-		OabaProcessing status = processingController.findProcessingLogByJobId(jobId);
+		// FIXME null transJob, wrong log type
+		OabaEventLog status = processingController.getProcessingLog(null);
 //		status.setCurrentProcessingEvent(TransitivityEvent.EVT_DONE_TRANS_DEDUP_OVERSIZED);
 		// HACK
 		assert TransitivityEvent.DONE_TRANS_DEDUP_OVERSIZED.eventId == OabaEvent.DONE_DEDUP_OVERSIZED.eventId ;
-		status.setCurrentProcessingEvent(OabaEvent.DONE_DEDUP_OVERSIZED);
+		status.setCurrentOabaEvent(OabaEvent.DONE_DEDUP_OVERSIZED);
 		// END HACK
 
 		ISerializableRecordSource staging =

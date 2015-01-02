@@ -10,9 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_OVERSIZED;
-
 import java.io.Serializable;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -34,7 +33,8 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
@@ -105,8 +105,8 @@ public class DedupMDB implements MessageListener, Serializable {
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =
 						oabaSettingsController.findOabaSettingsByJobId(jobId);
-				OabaProcessing processingEntry =
-						processingController.findProcessingLogByJobId(jobId);
+				OabaEventLog processingLog =
+						processingController.getProcessingLog(oabaJob);
 				if (oabaJob == null || params == null || oabaSettings == null) {
 					String s = "Unable to find a job, parameters or settings for " + jobId;
 					log.severe(s);
@@ -123,7 +123,7 @@ public class DedupMDB implements MessageListener, Serializable {
 				}
 
 				if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
-					MessageBeanUtils.stopJob (oabaJob, processingEntry);
+					MessageBeanUtils.stopJob (oabaJob, processingLog);
 
 				} else {
 					
@@ -142,7 +142,7 @@ public class DedupMDB implements MessageListener, Serializable {
 								OabaFileUtils
 										.getTempBlocksSinkSourceFactory(oabaJob),
 								OabaFileUtils.getSuffixTreeSink(oabaJob),
-								maxBlock, processingEntry, oabaJob, interval);
+								maxBlock, processingLog, oabaJob, interval);
 					dedupService.runService();
 					log.info( "Done block dedup " + dedupService.getTimeElapsed());
 					log.info ("Blocks In " + dedupService.getNumBlocksIn());
@@ -161,14 +161,15 @@ public class DedupMDB implements MessageListener, Serializable {
 					OversizedDedupService osDedupService =
 						new OversizedDedupService (osSource, osDedup,
 						OabaFileUtils.getOversizedTempFactory(oabaJob),
-						processingEntry, oabaJob);
+						processingLog, oabaJob);
 					osDedupService.runService();
 					log.info( "Done oversized dedup " + osDedupService.getTimeElapsed());
 					log.info ("Num OS Before " + osDedupService.getNumBlocksIn());
 					log.info ("Num OS After Exact " + osDedupService.getNumAfterExact());
 					log.info ("Num OS Done " + osDedupService.getNumBlocksOut());
-					sendToUpdateStatus (data.jobID, PCT_DONE_DEDUP_OVERSIZED);
 
+					sendToUpdateStatus(oabaJob, OabaEvent.DONE_DEDUP_OVERSIZED,
+							new Date(), null);
 					sendToChunk (data);
 				}
 
@@ -185,25 +186,14 @@ public class DedupMDB implements MessageListener, Serializable {
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-
-	/** This method sends a message to the UpdateStatusMDB message bean.
-	 *
-	 * @param jobID
-	 * @param percentComplete
-	 */
-	private void sendToUpdateStatus (long jobID, int percentComplete) {
-		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
-				updateQueue, log);
+	private void sendToUpdateStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info) {
+		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
+				jmsContext, updateQueue, log);
 	}
 
-
-	/** This method sends a message to the DedupMDB message bean.
-	 *
-	 * @param request
-	 */
-	private void sendToChunk (OabaJobMessage data) {
+	private void sendToChunk(OabaJobMessage data) {
 		MessageBeanUtils.sendStartData(data, jmsContext, chunkQueue, log);
 	}
-
 
 }

@@ -15,7 +15,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
@@ -99,9 +99,8 @@ public class TransitivityJobControllerBean {
 		assert TransitivityJobEntity.isPersistent(retVal);
 
 		// Create a new processing entry
-		OabaProcessing processing =
-			processingController
-					.createPersistentProcessingLogForBatchJob(retVal);
+		// FIXME null transJob, wrong log type
+		OabaEventLog processing = processingController.getProcessingLog(null);
 
 		// Create the working directory
 		File workingDir = OabaFileUtils.createWorkingDirectory(sc, retVal);

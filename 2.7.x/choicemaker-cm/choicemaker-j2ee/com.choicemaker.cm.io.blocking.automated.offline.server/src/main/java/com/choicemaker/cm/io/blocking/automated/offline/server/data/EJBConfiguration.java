@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 
 /**
  * This object contains method to get JMS and EJB objects from the J2EE server.
@@ -48,7 +48,7 @@ public class EJBConfiguration implements Serializable {
 	// ENC Entity Bean names
 	public final static String EJB_BATCH_JOB = OabaJob.DEFAULT_JNDI_COMP_NAME;
 	public final static String EJB_BATCH_PARAMS = OabaParameters.DEFAULT_JNDI_COMP_NAME;
-	public final static String EJB_STATUS_LOG = OabaJobProcessing.DEFAULT_JNDI_COMP_NAME;
+	public final static String EJB_STATUS_LOG = OabaProcessingEvent.DEFAULT_JNDI_COMP_NAME;
 
 	// ENC Connection Factory names
 	public final static String JMS_QUEUE_FACTORY = "jms/QueueConnectionFactory";

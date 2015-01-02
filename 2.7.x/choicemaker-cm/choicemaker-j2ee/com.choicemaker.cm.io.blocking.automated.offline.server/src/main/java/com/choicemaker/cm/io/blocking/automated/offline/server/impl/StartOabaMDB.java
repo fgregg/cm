@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -32,7 +33,8 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
@@ -116,8 +118,8 @@ public class StartOabaMDB implements MessageListener, Serializable {
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =
 					oabaSettingsController.findOabaSettingsByJobId(jobId);
-				OabaProcessing processingEntry =
-					processingController.findProcessingLogByJobId(jobId);
+				OabaEventLog processingEntry =
+					processingController.getProcessingLog(oabaJob);
 				if (oabaJob == null || params == null || oabaSettings == null) {
 					String s =
 						"Unable to find a job, parameters or settings for "
@@ -194,7 +196,8 @@ public class StartOabaMDB implements MessageListener, Serializable {
 					// object
 					data.validator = validator;
 
-					sendToUpdateStatus(jobId, OabaProcessing.PCT_DONE_REC_VAL);
+					sendToUpdateStatus(oabaJob, OabaEvent.DONE_REC_VAL,
+							new Date(), null);
 					sendToBlocking(data);
 				}
 
@@ -276,9 +279,10 @@ public class StartOabaMDB implements MessageListener, Serializable {
 		return retVal;
 	}
 
-	private void sendToUpdateStatus(long jobID, int percentComplete) {
-		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
-				updateQueue, log);
+	private void sendToUpdateStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info) {
+		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
+				jmsContext, updateQueue, log);
 	}
 
 	private void sendToBlocking(OabaJobMessage data) {

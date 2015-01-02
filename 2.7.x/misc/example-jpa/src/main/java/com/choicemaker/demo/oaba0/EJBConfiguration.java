@@ -34,7 +34,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 
 
 /**
@@ -644,7 +644,7 @@ public class EJBConfiguration implements Serializable {
 //		return this.statusLogHome;
 //	}
 
-	public OabaProcessing getStatusLog(StartData data) throws RemoteException,
+	public OabaEventLog getStatusLog(StartData data) throws RemoteException,
 			FinderException, NamingException {
 		throw new Error("not yet implemented");
 //		StatusLog statusLog = findStatusLogById(data.jobID);
@@ -652,7 +652,7 @@ public class EJBConfiguration implements Serializable {
 //		return retVal;
 	}
 
-	public OabaProcessing getStatusLog(long jobID) throws RemoteException,
+	public OabaEventLog getStatusLog(long jobID) throws RemoteException,
 			FinderException, NamingException {
 		throw new Error("not yet implemented");
 //		StatusLog statusLog = findStatusLogById(jobID);

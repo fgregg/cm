@@ -15,7 +15,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
@@ -56,7 +56,7 @@ public class TestEntities {
 		add((Object) tp);
 	}
 
-	public void add(OabaJobProcessing p) {
+	public void add(OabaProcessingEvent p) {
 		add((Object) p);
 	}
 

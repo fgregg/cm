@@ -22,10 +22,10 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
@@ -156,7 +156,7 @@ public class TransitivityMdbTestProcedures {
 				new TransitivityParametersEntity(bp, format, graphPropertyName);
 		final Queue resultQueue = test.getResultQueue();
 		final int expectedEventId = test.getResultEventId();
-		final int expectedCompletion = test.getResultPercentComplete();
+		final float expectedCompletion = test.getResultPercentComplete();
 
 		// Do the test
 		testTransitivityProcessing(test.getSourceName(),
@@ -182,7 +182,7 @@ public class TransitivityMdbTestProcedures {
 			final JMSContext jmsContext, final Queue listeningQueue,
 			final Topic transStatusUpdate, final EntityManager em,
 			final UserTransaction utx, final int expectedEventId,
-			final int expectPercentDone, final OabaProcessingPhase oabaPhase) {
+			final float expectPercentDone, final OabaProcessingPhase oabaPhase) {
 		logger.entering(LOG_SOURCE, tag);
 	
 		// Preconditions
@@ -301,13 +301,13 @@ public class TransitivityMdbTestProcedures {
 		assertTrue(updateMessage.getPercentComplete() == expectPercentDone);
 	
 		// Find the entry in the processing history updated by the OABA
-		OabaJobProcessing processingEntry =
-			processingController.findProcessingLogByJobId(jobId);
-		te.add(processingEntry);
+		OabaEventLog processingEntry =
+			processingController.getProcessingLog(batchJob);
+//		te.add(processingEntry);
 	
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);
-		assertTrue(processingEntry.getCurrentProcessingEventId() == expectedEventId);
+		assertTrue(processingEntry.getCurrentOabaEventId() == expectedEventId);
 	
 		try {
 			te.removePersistentObjects(em, utx);
@@ -431,10 +431,10 @@ public class TransitivityMdbTestProcedures {
 		assertTrue(updateMessage.getPercentComplete() == PCT_DONE_OABA);
 	
 		// Find the entry in the processing history updated by the OABA
-		OabaJobProcessing processingEntry =
-			processingController.findProcessingLogByJobId(jobId);
+		OabaEventLog processingEntry =
+			processingController.getProcessingLog(batchJob);
 		assertTrue(processingEntry != null);
-		assertTrue(processingEntry.getCurrentProcessingEventId() == EVT_DONE_OABA);
+		assertTrue(processingEntry.getCurrentOabaEventId() == EVT_DONE_OABA);
 	
 		return batchJob;
 	}

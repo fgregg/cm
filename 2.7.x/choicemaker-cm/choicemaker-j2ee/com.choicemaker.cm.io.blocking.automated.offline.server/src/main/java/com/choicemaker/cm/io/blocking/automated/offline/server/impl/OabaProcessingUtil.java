@@ -31,7 +31,7 @@ import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessi
 import java.util.HashMap;
 import java.util.Map;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 
 class OabaProcessingUtil {
 

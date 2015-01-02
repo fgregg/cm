@@ -10,10 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
-
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.logging.Logger;
@@ -28,7 +26,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -51,7 +48,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
@@ -156,7 +154,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 				t = System.currentTimeMillis();
 
 				// run single record match between stage and master.
-				handleSingleMatching(data, mSink, params);
+				handleSingleMatching(data, mSink, oabaJob, params);
 
 				log.info("Time in single matching "
 						+ (System.currentTimeMillis() - t));
@@ -185,13 +183,13 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 			IMatchRecord2Sink mSinkFinal, OabaJob oabaJob, OabaParameters params)
 			throws Exception {
 
-		final long jobId = data.jobID;
+//		final long jobId = data.jobID;
 		final String modelConfigId = params.getModelConfigurationName();
 		ImmutableProbabilityModel stageModel =
 			PMManager.getModelInstance(modelConfigId);
 
-		OabaProcessing processingEntry =
-			processingController.findProcessingLogByJobId(jobId);
+		OabaEventLog processingEntry =
+			processingController.getProcessingLog(oabaJob);
 
 		RecordIDTranslator2 translator =
 			new RecordIDTranslator2(OabaFileUtils.getTransIDFactory(oabaJob));
@@ -264,7 +262,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 		log.info("Num OS Before " + osDedupService.getNumBlocksIn());
 		log.info("Num OS After Exact " + osDedupService.getNumAfterExact());
 		log.info("Num OS Done " + osDedupService.getNumBlocksOut());
-		sendToUpdateStatus(data.jobID, PCT_DONE_DEDUP_OVERSIZED);
+		sendToUpdateStatus(oabaJob, OabaEvent.DONE_DEDUP_OVERSIZED, new Date(), null);
 
 		// create the proper block source
 		IBlockSinkSourceFactory bFactory = OabaFileUtils.getBlockFactory(oabaJob);
@@ -331,7 +329,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 	 * @throws Exception
 	 */
 	private void handleSingleMatching(OabaJobMessage data,
-			IMatchRecord2Sink mSinkFinal, OabaParameters params)
+			IMatchRecord2Sink mSinkFinal, OabaJob oabaJob, OabaParameters params)
 			throws Exception {
 
 		final String modelConfigId = params.getModelConfigurationName();
@@ -403,13 +401,13 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 		}
 
 		// mark as done
-		sendToUpdateStatus(data.jobID, PCT_DONE_OABA);
+		sendToUpdateStatus(oabaJob, OabaEvent.DONE_OABA, new Date(), null);
 	}
 
-	private void sendToUpdateStatus(long jobID, int percentComplete)
-			throws NamingException {
-		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
-				updateQueue, log);
+	private void sendToUpdateStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info) {
+		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
+				jmsContext, updateQueue, log);
 	}
 
 }

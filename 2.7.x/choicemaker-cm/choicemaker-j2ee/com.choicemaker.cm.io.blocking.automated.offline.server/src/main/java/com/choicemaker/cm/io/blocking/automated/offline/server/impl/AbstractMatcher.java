@@ -40,7 +40,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySou
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonSetOSSource;
@@ -103,9 +103,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					oabaJob = getJobController().findOabaJob(jobId);
 					final OabaParameters params =
 						getParametersController().findBatchParamsByJobId(jobId);
-					final OabaProcessing processingEntry =
-							getProcessingController().findProcessingLogByJobId(
-									jobId);
+					final OabaEventLog processingLog =
+							getProcessingController().getProcessingLog(oabaJob);
 					final OabaSettings oabaSettings =
 							getSettingsController().findOabaSettingsByJobId(jobId);
 					final ServerConfiguration serverConfig = getServerController().findServerConfigurationByJobId(jobId);
@@ -129,7 +128,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 					if (BatchJobStatus.ABORT_REQUESTED == oabaJob
 							.getStatus()) {
-						MessageBeanUtils.stopJob(oabaJob, processingEntry);
+						MessageBeanUtils.stopJob(oabaJob, processingLog);
 
 					} else {
 						handleMatching(data, oabaJob, params, oabaSettings, serverConfig);

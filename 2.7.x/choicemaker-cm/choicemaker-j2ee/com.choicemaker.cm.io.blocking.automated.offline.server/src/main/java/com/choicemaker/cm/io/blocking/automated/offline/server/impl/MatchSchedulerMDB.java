@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -28,6 +29,7 @@ import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
@@ -129,11 +131,11 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	 * This method cleans up the chunk files.
 	 */
 	@Override
-	protected void cleanUp(OabaJobMessage data) throws BlockingException {
+	protected void cleanUp(OabaJob oabaJob, OabaJobMessage sd)
+			throws BlockingException {
 		log.info("cleanUp");
 
-		final long jobId = data.jobID;
-		OabaJob oabaJob = getJobController().findOabaJob(jobId);
+		final long jobId = oabaJob.getId();
 		OabaParameters params =
 			getParametersController().findBatchParamsByJobId(jobId);
 		ServerConfiguration serverConfig =
@@ -155,21 +157,21 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 			OabaFileUtils.getStageDataFactory(oabaJob, model);
 		IChunkDataSinkSourceFactory masterFactory =
 			OabaFileUtils.getMasterDataFactory(oabaJob, model);
-		stageFactory.removeAllSinks(data.numChunks);
-		masterFactory.removeAllSinks(data.numChunks);
+		stageFactory.removeAllSinks(sd.numChunks);
+		masterFactory.removeAllSinks(sd.numChunks);
 
 		// remove the trees
 		ComparisonTreeGroupSinkSourceFactory factory =
-			OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, data.stageType,
+			OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, sd.stageType,
 					numProcessors);
-		for (int i = 0; i < data.numRegularChunks; i++) {
+		for (int i = 0; i < sd.numRegularChunks; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
 				IComparisonTreeSource source = factory.getSource(i, j);
 				source.delete();
 			}
 		}
 
-		int numOS = data.numChunks - data.numRegularChunks;
+		int numOS = sd.numChunks - sd.numRegularChunks;
 
 		// remove the oversized array files
 		ComparisonArrayGroupSinkSourceFactory factoryOS =
@@ -188,13 +190,14 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	}
 
 	@Override
-	protected void sendToUpdateStatus(long jobID, int percentComplete) {
-		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
-				updateQueue, log);
+	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info) {
+		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
+				jmsContext, updateQueue, log);
 	}
 
 	@Override
-	protected void sendToMatchDebup(OabaJobMessage sd) {
+	protected void sendToMatchDebup(OabaJob job, OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, matchDedupQueue, log);
 	}
 

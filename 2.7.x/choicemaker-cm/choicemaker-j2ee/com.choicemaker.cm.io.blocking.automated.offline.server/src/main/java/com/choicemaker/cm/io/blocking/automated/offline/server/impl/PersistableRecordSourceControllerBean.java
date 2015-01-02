@@ -103,15 +103,27 @@ public class PersistableRecordSourceControllerBean implements
 	@Override
 	public ISerializableRecordSource getRecordSource(Long id, String type)
 			throws Exception {
-		// The usual case will be a SQL record source, so check this first
-		ISerializableRecordSource retVal =
-			sqlRsController.getRecordSource(id, type);
-		if (retVal == null) {
-			// Here's where flatfile and XML record sources should be checked
-			logger.warning("Skipping flatfile and XML record sources");
-		}
-		if (retVal == null) {
-			logger.warning("Record source " + id + " not found");
+		ISerializableRecordSource retVal;
+		if (id != null) {
+			if (type == null) {
+				throw new IllegalArgumentException("null type for id '" + id
+						+ "'");
+			}
+			// FIXME replace hard-coded decision tree with plugins
+			//
+			// The usual case will be a SQL record source, so check this first
+			retVal =
+				sqlRsController.getRecordSource(id, type);
+			if (retVal == null) {
+				// Here's where flatfile and XML record sources should be checked
+				logger.warning("Skipping flatfile and XML record sources");
+			}
+			if (retVal == null) {
+				logger.warning("Record source " + id + " not found");
+			}
+		} else {
+			retVal = null;
+			logger.fine("returning null record source for null id");
 		}
 		return retVal;
 	}

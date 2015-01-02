@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -22,7 +23,9 @@ import javax.jms.MessageListener;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractScheduler;
@@ -115,7 +118,7 @@ public class TransMatchSchedulerMDB extends AbstractScheduler implements Message
 	}
 
 	@Override
-	protected void cleanUp (OabaJobMessage sd) throws BlockingException {
+	protected void cleanUp (OabaJob job, OabaJobMessage sd) throws BlockingException {
 		log.fine("cleanUp");
 
 		throw new Error("not yet implemented");
@@ -151,17 +154,21 @@ public class TransMatchSchedulerMDB extends AbstractScheduler implements Message
 //		}
 	}
 
-	protected void sendToMatchDebup (OabaJobMessage sd) {
+	@Override
+	protected void sendToMatchDebup (OabaJob job, OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, transMatchDedupQueue, log);
 	} 
 
+	@Override
 	protected void sendToMatcher (OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, transMatcherQueue, log);
 	} 
 
-	protected void sendToUpdateStatus (long jobID, int percentComplete) {
-		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
-				updateTransQueue, log);
+	@Override
+	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info) {
+		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
+				jmsContext, updateTransQueue, log);
 	}
 
 }

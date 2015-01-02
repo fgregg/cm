@@ -12,6 +12,7 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -32,13 +33,13 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
-import com.choicemaker.cm.transitivity.core.TransitivityProcessing.TransitivityEvent;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
@@ -146,8 +147,10 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 		final String modelConfigId = params.getModelConfigurationName();
 		ImmutableProbabilityModel stageModel =
 			PMManager.getModelInstance(modelConfigId);
-		OabaProcessing processingEntry =
-			processingController.findProcessingLogByJobId(jobId);
+		// FIXME null transJob, wrong log type
+		@SuppressWarnings("unused")
+		OabaEventLog processingEntry =
+			processingController.getProcessingLog(null);
 
 		// get the number of processors
 		String temp = (String) stageModel.properties().get("numProcessors");
@@ -157,13 +160,14 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 		mergeMatches(numProcessors, oabaJob);
 
 		// mark as done
-		sendToUpdateTransStatus(jobId,
-				OabaProcessing.PCT_DONE_TRANSANALYSIS);
-		// status.setCurrentProcessingEvent( OabaEvent.DONE_TRANSANALYSIS);
-		// HACK
-		assert OabaEvent.DONE_OABA.eventId == TransitivityEvent.DONE_TRANSANALYSIS.eventId;
-		processingEntry.setCurrentProcessingEvent(OabaEvent.DONE_OABA);
-		// END HACK
+		throw new Error("not yet re-implemented");
+//		sendToUpdateTransStatus(jobId,
+//				TransitivityProcessing.PCT_DONE_TRANSANALYSIS);
+//		// status.setCurrentProcessingEvent( OabaEvent.DONE_TRANSANALYSIS);
+//		// HACK
+//		assert OabaEvent.DONE_OABA.eventId == TransitivityEvent.DONE_TRANSANALYSIS.eventId;
+//		processingEntry.setCurrentOabaEvent(OabaEvent.DONE_OABA);
+//		// END HACK
 
 	}
 
@@ -261,9 +265,11 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 //		}
 	}
 
-	protected void sendToUpdateTransStatus(long jobID, int percentComplete) {
-		MessageBeanUtils.sendUpdateStatus(jobID, percentComplete, jmsContext,
-				updateTransQueue, log);
+//	@Override
+	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info) {
+		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
+				jmsContext, updateTransQueue, log);
 	}
 
 }

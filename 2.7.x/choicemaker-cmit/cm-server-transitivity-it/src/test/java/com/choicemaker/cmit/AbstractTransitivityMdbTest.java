@@ -65,7 +65,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	private final int eventId;
 
-	private final int percentComplete;
+	private final float percentComplete;
 	
 	private final Class<T> configurationClass;
 	
@@ -142,7 +142,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	// -- Constructor
 	
 	@Inject
-	public AbstractTransitivityMdbTest(String n, Logger g, int evtId, int pct,
+	public AbstractTransitivityMdbTest(String n, Logger g, int evtId, float pct,
 			Class<T> configurationClass,
 			OabaProcessingPhase oabaPhase
 			) {
@@ -414,7 +414,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return eventId;
 	}
 
-	public final int getResultPercentComplete() {
+	public final float getResultPercentComplete() {
 		return percentComplete;
 	}
 

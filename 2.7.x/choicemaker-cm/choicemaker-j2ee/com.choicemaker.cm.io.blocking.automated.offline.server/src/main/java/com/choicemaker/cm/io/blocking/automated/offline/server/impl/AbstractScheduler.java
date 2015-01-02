@@ -10,10 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_MATCHING_DATA;
-
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,8 +35,9 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
@@ -145,11 +145,11 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 					getLogger().info("Maximum chunk size: " + maxChunkSize);
 					getLogger().info("Number of processors: " + numProcessors);
 
-					OabaProcessing status =
-						getProcessingController().getProcessingLog(sd);
-					if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
+					OabaEventLog processingLog =
+						getProcessingController().getProcessingLog(oabaJob);
+					if (processingLog.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
 						// matching is already done, so go on to the next step.
-						nextSteps(sd);
+						nextSteps(oabaJob, sd);
 					} else {
 						if (sd.jobID != currentJobID) {
 							// reset counters
@@ -211,7 +211,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		final long jobId = mwd.jobID;
 		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 		OabaJobMessage sd = new OabaJobMessage(mwd);
-		OabaProcessing status = getProcessingController().findProcessingLogByJobId(jobId);
+		OabaEventLog status = getProcessingController().getProcessingLog(oabaJob);
 
 		// keeping track of messages sent and received.
 		countMessages--;
@@ -243,7 +243,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 					Integer.toString(sd.numChunks) + DELIM
 							+ Integer.toString(sd.numRegularChunks) + DELIM
 							+ Integer.toString(currentChunk);
-				status.setCurrentProcessingEvent(OabaEvent.MATCHING_DATA, temp);
+				status.setCurrentOabaEvent(OabaEvent.MATCHING_DATA, temp);
 
 				getLogger().info("Chunk " + mwd.ind + " is done.");
 
@@ -253,7 +253,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 					startChunk(sd, currentChunk);
 				} else {
 					// all the chunks are done
-					status.setCurrentProcessingEvent(OabaEvent.DONE_MATCHING_DATA);
+					status.setCurrentOabaEvent(OabaEvent.DONE_MATCHING_DATA);
 
 					getLogger().info("total comparisons: " + numCompares
 							+ " total matches: " + numMatches);
@@ -272,7 +272,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 						}
 					}
 
-					nextSteps(sd);
+					nextSteps(oabaJob, sd);
 				}
 			} // end countMessages == 0
 		} // end if abort requested
@@ -281,10 +281,10 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	/**
 	 * This method is called when all the chunks are done.
 	 */
-	protected final void nextSteps(final OabaJobMessage sd) throws BlockingException {
-		cleanUp(sd);
-		sendToUpdateStatus(sd.jobID, PCT_DONE_MATCHING_DATA);
-		sendToMatchDebup(sd);
+	protected final void nextSteps(final OabaJob job, OabaJobMessage sd) throws BlockingException {
+		cleanUp(job, sd);
+		sendToUpdateStatus(job, OabaEvent.DONE_MATCHING_DATA, new Date(), null);
+		sendToMatchDebup(job, sd);
 	}
 
 	/**
@@ -297,16 +297,16 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		// init values
 		final long jobId = sd.jobID;
 		OabaJob oabaJob = getJobController().findOabaJob(jobId);
-		OabaProcessing status =
-			getProcessingController().findProcessingLogByJobId(jobId);
+		OabaEventLog processingLog =
+			getProcessingController().getProcessingLog(oabaJob);
 
 		if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
-			MessageBeanUtils.stopJob(oabaJob, status);
+			MessageBeanUtils.stopJob(oabaJob, processingLog);
 
 		} else {
 			currentChunk = 0;
-			if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_MATCHING_DATA) {
-				currentChunk = recover(sd, status) + 1;
+			if (processingLog.getCurrentOabaEventId() == OabaProcessing.EVT_MATCHING_DATA) {
+				currentChunk = recover(sd, processingLog) + 1;
 				getLogger().info("recovering from " + currentChunk);
 			}
 
@@ -339,9 +339,9 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		}
 	}
 
-	protected final int recover(OabaJobMessage sd, OabaProcessing status) throws BlockingException {
+	protected final int recover(OabaJobMessage sd, OabaEventLog status) throws BlockingException {
 		StringTokenizer stk =
-			new StringTokenizer(status.getAdditionalInfo(), DELIM);
+			new StringTokenizer(status.getCurrentOabaEventInfo(), DELIM);
 		sd.numChunks = Integer.parseInt(stk.nextToken());
 		sd.numRegularChunks = Integer.parseInt(stk.nextToken());
 		return Integer.parseInt(stk.nextToken());
@@ -367,7 +367,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 			getLogger().fine("creating " + mSink.getInfo());
 		}
 
-		nextSteps(sd);
+		nextSteps(oabaJob, sd);
 	}
 
 	/**
@@ -417,12 +417,13 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		}
 	}
 
-	protected abstract void cleanUp(OabaJobMessage sd) throws BlockingException;
+	protected abstract void cleanUp(OabaJob job, OabaJobMessage sd) throws BlockingException;
 
 	protected abstract void sendToMatcher(OabaJobMessage sd);
 
-	protected abstract void sendToUpdateStatus(long jobID, int percentComplete);
+	protected abstract void sendToUpdateStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info);
 
-	protected abstract void sendToMatchDebup(OabaJobMessage sd);
+	protected abstract void sendToMatchDebup(OabaJob job, OabaJobMessage sd);
 
 }

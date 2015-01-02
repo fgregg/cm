@@ -1,7 +1,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 /**
- * Java Persistence API (JPA) for OabaJobProcessing beans.<br/>
+ * Java Persistence API (JPA) for OabaProcessingEvent beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>
@@ -20,7 +20,7 @@ public interface OabaProcessingJPA {
 	String DISCRIMINATOR_COLUMN = "JOB_TYPE";
 
 	/**
-	 * Value of the discriminator column used to mark OabaJobProcessing
+	 * Value of the discriminator column used to mark OabaProcessingEvent
 	 * types (and not sub-types)
 	 */
 	String DISCRIMINATOR_VALUE = "OABA";
@@ -55,9 +55,6 @@ public interface OabaProcessingJPA {
 	// FIXME: this column sometimes stores operational parameters
 	String CN_INFO = "INFO";
 
-	/** Unused versioning */
-	String CN_VERSION = "VERSION";
-
 	String CN_TIMESTAMP = "TIMESTAMP";
 
 	String ID_GENERATOR_NAME = "OABA_PROCESSING";
@@ -75,14 +72,18 @@ public interface OabaProcessingJPA {
 
 	/** JPQL used to implement {@link #QN_OABAPROCESSING_FIND_ALL} */
 	String JPQL_OABAPROCESSING_FIND_ALL =
-		"Select o from OabaProcessingEntity o";
+		"Select o from OabaProcessingLogEntry o";
 
-	/** Name of the query that finds all persistent status entries */
+	/**
+	 * Name of the query that finds all persistent status entries for a
+	 * particular OABA job, ordered by descending timestamp
+	 */
 	String QN_OABAPROCESSING_FIND_BY_JOBID = "oabaProcessingFindByJobId";
 
 	/** JPQL used to implement {@link #QN_OABAPROCESSING_FIND_BY_JOBID} */
 	String JPQL_OABAPROCESSING_FIND_BY_JOBID =
-		"Select o from OabaProcessingEntity o where o.jobId = :jobId";
+		"SELECT o FROM OabaProcessingLogEntry o WHERE o.jobId = :jobId "
+				+ "ORDER BY o.eventTimestamp DESC, o.id DESC";
 
 	/**
 	 * Name of the parameter used to specify the jobId parameter of

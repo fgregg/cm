@@ -24,8 +24,9 @@ import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.BlocksSpliterMap;
@@ -56,7 +57,7 @@ public class OversizedDedupService {
 
 	private BlockSinkSourceFactory osFactory;
 
-	private OabaProcessing status;
+	private OabaEventLog status;
 
 	//this splitter has 1 file for a range of block sizes
 	private BlocksSpliterMap spliter;
@@ -76,7 +77,7 @@ public class OversizedDedupService {
 	 * @param status - status of the system.
 	 */
 	public OversizedDedupService (IBlockSource osSource, IBlockSink osSink,
-		BlockSinkSourceFactory osFactory, OabaProcessing status, IControl control) {
+		BlockSinkSourceFactory osFactory, OabaEventLog status, IControl control) {
 
 		this.osFactory = osFactory;
 		this.osSink = osSink;
@@ -102,10 +103,10 @@ public class OversizedDedupService {
 	public void runService () throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_DEDUP_OVERSIZED ) {
+		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_DEDUP_OVERSIZED ) {
 			//do nothing here
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_DEDUP_BLOCKS ) {
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_DEDUP_BLOCKS ) {
 			//start from beginning
 			splitOversized ();
 
@@ -113,9 +114,9 @@ public class OversizedDedupService {
 
 			removeSubsumed (0);
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DEDUP_OVERSIZED_EXACT ) {
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DEDUP_OVERSIZED_EXACT ) {
 			//recovering dedup oversized exact
-			String temp =  status.getAdditionalInfo();
+			String temp =  status.getCurrentOabaEventInfo();
 			int ind = temp.indexOf( OabaProcessing.DELIMIT);
 			int s = Integer.parseInt( temp.substring(0,ind) );
 			int startPoint = Integer.parseInt( temp.substring(ind + 1) );
@@ -127,18 +128,18 @@ public class OversizedDedupService {
 
 			removeSubsumed (0);
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED_EXACT ) {
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED_EXACT ) {
 			//start from dedup subsumed
-			int s = Integer.parseInt( status.getAdditionalInfo() );
+			int s = Integer.parseInt( status.getCurrentOabaEventInfo() );
 
 			log.info("Recovering from remove subsumed " + s);
 			recoverSpliter (s);
 
 			removeSubsumed (0);
 
-		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DEDUP_OVERSIZED ) {
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DEDUP_OVERSIZED ) {
 			//recovering dedup subsumed oversized
-			int s = Integer.parseInt( status.getAdditionalInfo() );
+			int s = Integer.parseInt( status.getCurrentOabaEventInfo() );
 
 			log.info("Recovering from subsumed removal " + s );
 			recoverSpliter (s);
@@ -234,7 +235,7 @@ public class OversizedDedupService {
 //			System.out.println (i + " " + sources[i].getInfo());
 
 			String temp = Integer.toString(s) + OabaProcessing.DELIMIT + Integer.toString(i);
-			status.setCurrentProcessingEvent(OabaEvent.DEDUP_OVERSIZED_EXACT, temp);
+			status.setCurrentOabaEvent(OabaEvent.DEDUP_OVERSIZED_EXACT, temp);
 
 			if (sources[i].exists()) {
 				sources[i].open();
@@ -281,9 +282,9 @@ public class OversizedDedupService {
 
 		} //end for i
 
-		status.setCurrentProcessingEvent( OabaEvent.DONE_DEDUP_OVERSIZED_EXACT, Integer.toString(s) );
+		status.setCurrentOabaEvent( OabaEvent.DONE_DEDUP_OVERSIZED_EXACT, Integer.toString(s) );
 
-		status.setCurrentProcessingEvent( OabaEvent.DEDUP_OVERSIZED, Integer.toString(s) );
+		status.setCurrentOabaEvent( OabaEvent.DEDUP_OVERSIZED, Integer.toString(s) );
 
 //		if (true) throw new RuntimeException ("test fail");
 
@@ -334,7 +335,7 @@ public class OversizedDedupService {
 		spliter.removeAll();
 		osSource.delete();
 
-		status.setCurrentProcessingEvent( OabaEvent.DONE_DEDUP_OVERSIZED);
+		status.setCurrentOabaEvent( OabaEvent.DONE_DEDUP_OVERSIZED);
 	}
 
 

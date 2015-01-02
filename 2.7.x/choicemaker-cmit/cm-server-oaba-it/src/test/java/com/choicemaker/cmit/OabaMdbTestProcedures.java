@@ -18,10 +18,10 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
@@ -186,11 +186,11 @@ public class OabaMdbTestProcedures {
 
 		final OabaJobControllerBean jobController = test.getJobController();
 		assertTrue(INVALID_ID != jobId);
-		OabaJob batchJob = jobController.findOabaJob(jobId);
-		assertTrue(batchJob != null);
-		te.add(batchJob);
+		OabaJob oabaJob = jobController.findOabaJob(jobId);
+		assertTrue(oabaJob != null);
+		te.add(oabaJob);
 		assertTrue(externalId != null
-				&& externalId.equals(batchJob.getExternalId()));
+				&& externalId.equals(oabaJob.getExternalId()));
 
 		// Find the persistent OabaParameters object created by the call to
 		// BatchQueryService.startLinkage...
@@ -262,25 +262,25 @@ public class OabaMdbTestProcedures {
 			}
 			assertTrue(updateMessage != null);
 			assertTrue(updateMessage.getJobID() == jobId);
-			final int expectPercentDone = test.getResultPercentComplete();
+			final float expectPercentDone = test.getResultPercentComplete();
 			assertTrue(updateMessage.getPercentComplete() == expectPercentDone);
 		}
 
 		// Find the entry in the processing history updated by the OABA
 		final OabaProcessingControllerBean processingController =
 			test.getProcessingController();
-		OabaJobProcessing processingEntry =
-			processingController.findProcessingLogByJobId(jobId);
-		te.add(processingEntry);
+		OabaEventLog processingEntry =
+			processingController.getProcessingLog(oabaJob);
+//		te.add(processingEntry);
 
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);
 		final int expectedEventId = test.getResultEventId();
-		assertTrue(processingEntry.getCurrentProcessingEventId() == expectedEventId);
+		assertTrue(processingEntry.getCurrentOabaEventId() == expectedEventId);
 
 		// Check that the working directory contains what it should
 		assertTrue(test.isWorkingDirectoryCorrectAfterProcessing(linkage,
-				batchJob, bp, oabaSettings, serverConfiguration));
+				oabaJob, bp, oabaSettings, serverConfiguration));
 
 		// Clean up
 		try {
