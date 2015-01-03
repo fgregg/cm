@@ -65,7 +65,6 @@ public class EJBConfiguration implements Serializable {
 	public final static String JMS_CHUNK_QUEUE = "jms/chunkQueue";
 	public final static String JMS_MATCH_QUEUE = "jms/matchQueue";
 	public final static String JMS_MATCH_DEDUP_QUEUE = "jms/matchDedupQueue";
-	public final static String JMS_UPDATE_QUEUE = "jms/updateQueue";
 	public final static String JMS_UPDATE_TRANSITIVITY_QUEUE = "jms/updateTransQueue";
 	public final static String JMS_SINGLE_MATCH_QUEUE = "jms/singleMatchQueue";
 	public final static String JMS_TRANSITIVITY_QUEUE = "jms/transitivityQueue";

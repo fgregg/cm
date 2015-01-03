@@ -83,9 +83,6 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")
 	private Queue matcherQueue;
 

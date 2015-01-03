@@ -18,16 +18,12 @@ import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
-
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 /**
  * This message bean updates the status of the current job.
  * 
  * @author pcheung
- *
+ * @deprecated use StatusListenerMDB or listen on 'status' Topic
  */
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
@@ -48,46 +44,10 @@ public class UpdateStatusMDB implements MessageListener, Serializable {
 
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
-		ObjectMessage msg = null;
-		OabaUpdateMessage data;
-		OabaJob oabaJob = null;
 
-		log.info("UpdateStatusMDB In onMessage");
+		log.warning("Received message from deprecated updateQueue: " + inMessage);
 
-		try {
-
-			if (inMessage instanceof ObjectMessage) {
-				msg = (ObjectMessage) inMessage;
-				data = (OabaUpdateMessage) msg.getObject();
-
-				final long jobId = data.getJobID();
-				oabaJob = jobController.findOabaJob(jobId);
-//				oabaJob.setFractionComplete(data.getPercentComplete());
-//				if (data.getPercentComplete() == 0) {
-//					job.markAsStarted();
-//				} else if (data.getPercentComplete() == 100) {
-//					job.markAsCompleted();
-//				} else {
-//					job.markAsStarted();
-//					job.setFractionComplete(data.getPercentComplete());
-//				}
-
-				log.info("Updating job " + data.getJobID()
-						+ " setting percent complete to "
-						+ data.getPercentComplete());
-
-			} else {
-				log.warning("wrong type: " + inMessage.getClass().getName());
-			}
-
-		} catch (Exception e) {
-			log.severe(e.toString());
-			if (oabaJob != null) {
-				oabaJob.markAsFailed();
-			}
-		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
-		return;
 	}
 
 }

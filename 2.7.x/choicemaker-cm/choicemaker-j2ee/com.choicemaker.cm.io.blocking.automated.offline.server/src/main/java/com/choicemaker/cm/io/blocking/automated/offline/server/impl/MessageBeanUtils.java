@@ -17,6 +17,7 @@ import javax.jms.JMSException;
 import javax.jms.JMSProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
+import javax.jms.Topic;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
@@ -39,6 +40,7 @@ public class MessageBeanUtils {
 
 	public static final String DEFAULT_TAG = "UNKNOWN SOURCE";
 	public static final String UNKNOWN_QUEUE = "unknown queue";
+	public static final String UNKNOWN_TOPIC = "unknown topic";
 
 	/**
 	 * This method stops the OabaJob by setting the status to aborted, and
@@ -79,7 +81,7 @@ public class MessageBeanUtils {
 	}
 
 	public static String queueInfo(String tag, Queue q, Object d) {
-		if (q == null || d == null) {
+		if (q == null) {
 			throw new IllegalArgumentException("null argument");
 		}
 		if (tag == null || tag.trim().isEmpty()) {
@@ -93,6 +95,25 @@ public class MessageBeanUtils {
 		}
 		StringBuilder sb = new StringBuilder(tag).append(" ");
 		sb.append("queue: '").append(queueName).append("'");
+		sb.append(", data: '").append(d).append("'");
+		return sb.toString();
+	}
+
+	public static String topicInfo(String tag, Topic t, Object d) {
+		if (t == null) {
+			throw new IllegalArgumentException("null argument");
+		}
+		if (tag == null || tag.trim().isEmpty()) {
+			tag = DEFAULT_TAG;
+		}
+		String topicName;
+		try {
+			topicName = t.getTopicName();
+		} catch (JMSException x) {
+			topicName = UNKNOWN_TOPIC;
+		}
+		StringBuilder sb = new StringBuilder(tag).append(" ");
+		sb.append("topic: '").append(topicName).append("'");
 		sb.append(", data: '").append(d).append("'");
 		return sb.toString();
 	}

@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
@@ -25,7 +24,6 @@ import javax.jms.JMSContext;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -116,9 +114,6 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 //	@EJB
 	private PersistableRecordSourceController rsController;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
 
 	@Inject
 	JMSContext jmsContext;

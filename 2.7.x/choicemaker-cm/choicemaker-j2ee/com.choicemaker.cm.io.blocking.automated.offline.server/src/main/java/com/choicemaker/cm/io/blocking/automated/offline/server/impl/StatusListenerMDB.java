@@ -13,18 +13,13 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.MessageDrivenContext;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
+import com.choicemaker.cm.batch.BatchProcessingNotification;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
@@ -34,43 +29,37 @@ import javax.persistence.PersistenceContext;
 public class StatusListenerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(StatusListenerMDB.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + StatusListenerMDB.class.getName());
-
-	@PersistenceContext (unitName = "oaba")
-	private EntityManager em;
-
-	@Resource
-	private MessageDrivenContext mdc;
-
-	@Inject
-	JMSContext jmsContext;
+	private static final Logger log = Logger.getLogger(StatusListenerMDB.class
+			.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
+			+ StatusListenerMDB.class.getName());
 
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		
+
 		log.fine("starting onMessage...");
 		try {
-		 if (inMessage instanceof ObjectMessage) {
-			msg = (ObjectMessage) inMessage;
-			Long L  =  (Long) msg.getObject();
-    		log.info("received status change notification :" + L.toString());
-		 }
-		 else
-		 	log.fine("received unexpected notification ...");
-		} catch (JMSException e) {
-      		log.severe(e.toString());
-			mdc.setRollbackOnly();
+			if (inMessage instanceof ObjectMessage) {
+				msg = (ObjectMessage) inMessage;
+				Object o = msg.getObject();
+				if (o instanceof BatchProcessingNotification) {
+					BatchProcessingNotification bpn =
+						(BatchProcessingNotification) o;
+					log.info("received batch processing notification; " + bpn);
+				} else {
+					log.warning("received unexpected object message: " + o);
+				}
+			} else
+				log.warning("received unexpected message: " + inMessage);
 		} catch (Exception e) {
-      		log.severe(e.toString());
-			e.printStackTrace();
+			log.severe(e.toString());
 		}
 
-    log.fine("... finished onMessage");
+		log.fine("... finished onMessage");
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
-    return;
-	} // onMessage(Message)
+		return;
+	}
 
 } // StatusListenerMDB
 

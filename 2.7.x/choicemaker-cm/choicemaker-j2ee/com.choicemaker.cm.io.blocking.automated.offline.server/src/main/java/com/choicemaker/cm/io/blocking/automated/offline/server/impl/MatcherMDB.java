@@ -88,9 +88,6 @@ public class MatcherMDB extends AbstractMatcher {
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
-
 	@Inject
 	JMSContext jmsContext;
 
