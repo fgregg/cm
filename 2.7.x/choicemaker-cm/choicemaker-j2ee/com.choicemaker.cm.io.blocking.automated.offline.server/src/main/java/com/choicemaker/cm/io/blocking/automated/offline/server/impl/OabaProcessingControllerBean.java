@@ -20,14 +20,14 @@ import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.JMSProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
+import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 /**
@@ -49,8 +49,8 @@ public class OabaProcessingControllerBean {
 	@Inject
 	private JMSContext jmsContext;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private  Queue updateQueue;
+	@Resource(lookup = "java:/choicemaker/urm/jms/statusTopic")
+	private Topic oabaStatusTopic;
 
 	public List<OabaProcessingLogEntry> findProcessingLogEntriesByJobId(long id) {
 		Query query =
@@ -63,7 +63,7 @@ public class OabaProcessingControllerBean {
 	}
 
 	public OabaEventLog getProcessingLog(OabaJob job) {
-		return new OabaJobEventLog(em, job);
+		return new OabaJobEventLog(job, this);
 	}
 
 	/**
@@ -80,16 +80,19 @@ public class OabaProcessingControllerBean {
 		if (timestamp == null) {
 			throw new IllegalArgumentException("null timestamp");
 		}
-		if (jmsContext == null || updateQueue == null) {
+		if (jmsContext == null || oabaStatusTopic == null) {
 			throw new IllegalStateException("null JMS instance data");
 		}
-		OabaUpdateMessage data =
-			new OabaUpdateMessage(job, event, timestamp, info);
+		OabaProcessingLogEntry ope =
+			new OabaProcessingLogEntry(job, event, info);
+		em.persist(ope);
+		OabaNotification data =
+			new OabaNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
 		JMSProducer sender = jmsContext.createProducer();
-		logger.info(MessageBeanUtils.queueInfo("Sending", updateQueue, data));
-		sender.send(updateQueue, message);
-		logger.info(MessageBeanUtils.queueInfo("Sent", updateQueue, data));
+		logger.info(MessageBeanUtils.topicInfo("Sending", oabaStatusTopic, data));
+		sender.send(oabaStatusTopic, message);
+		logger.info(MessageBeanUtils.topicInfo("Sent", oabaStatusTopic, data));
 	}
 
 }

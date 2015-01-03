@@ -1,16 +1,10 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.QN_OABAPROCESSING_FIND_BY_JOBID;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
@@ -40,15 +34,13 @@ public class OabaJobEventLog implements OabaEventLog {
 	private static Boolean _isOrderByDebuggingRequested = null;
 
 	/**
-	 * Checks the system property {@link #PN_SANITY_CHECK}
-	 * and caches the result
+	 * Checks the system property {@link #PN_SANITY_CHECK} and caches the result
 	 */
 	protected static boolean isOrderByDebuggingRequested() {
 		if (_isOrderByDebuggingRequested == null) {
 			String pn = PN_OABA_EVENT_ORDERBY_DEBUGGING;
 			String defaultValue = Boolean.FALSE.toString();
-			String value =
-				System.getProperty(pn,defaultValue);
+			String value = System.getProperty(pn, defaultValue);
 			_isOrderByDebuggingRequested = Boolean.valueOf(value);
 		}
 		boolean retVal = _isOrderByDebuggingRequested.booleanValue();
@@ -58,34 +50,31 @@ public class OabaJobEventLog implements OabaEventLog {
 		return retVal;
 	}
 
-	private final EntityManager em;
-
 	private final OabaJob oabaJob;
+	private final OabaProcessingControllerBean processingController;
 
-	public OabaJobEventLog(EntityManager em, OabaJob job) {
-		if (em == null) {
-			throw new IllegalArgumentException("null entity manager");
-		}
+	public OabaJobEventLog(OabaJob job,
+			OabaProcessingControllerBean processingController) {
 		if (job == null || !OabaJobEntity.isPersistent(job)) {
 			throw new IllegalArgumentException("invalid OABA job: " + job);
 		}
-		this.em = em;
+		if (processingController == null) {
+			throw new IllegalArgumentException("null processing controller");
+		}
 		this.oabaJob = job;
+		this.processingController = processingController;
 	}
 
 	protected OabaProcessingEvent getCurrentOabaProcessingEvent() {
-		Query query = em.createNamedQuery(QN_OABAPROCESSING_FIND_BY_JOBID);
-		query.setParameter(PN_OABAPROCESSING_FIND_BY_JOBID_JOBID,
-				oabaJob.getId());
-		@SuppressWarnings("unchecked")
-		List<OabaProcessingLogEntry> entries = query.getResultList();
+		List<OabaProcessingLogEntry> entries =
+		processingController.findProcessingLogEntriesByJobId(oabaJob.getId());
 		final OabaProcessingEvent retVal;
 		if (entries.isEmpty()) {
 			retVal = null;
 		} else {
 			retVal = entries.get(0);
-			final Date mostRecent = retVal.getEventTimestamp();
 			if (isOrderByDebuggingRequested()) {
+				final Date mostRecent = retVal.getEventTimestamp();
 				if (entries.size() > 1) {
 					for (int i = 1; i < entries.size(); i++) {
 						final OabaProcessingEvent e2 = entries.get(i);
@@ -119,8 +108,8 @@ public class OabaJobEventLog implements OabaEventLog {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		pw.println(summary);
-		pw.println(INDENT + "Most recent: " + e1.getOabaEvent() + " " +  e1);
-		pw.println(INDENT + " Subsequent: " + e2.getOabaEvent() + " " +  e2);
+		pw.println(INDENT + "Most recent: " + e1.getOabaEvent() + " " + e1);
+		pw.println(INDENT + " Subsequent: " + e2.getOabaEvent() + " " + e2);
 		return sw.toString();
 	}
 
@@ -152,9 +141,8 @@ public class OabaJobEventLog implements OabaEventLog {
 	public void setCurrentOabaEvent(OabaEvent event, String info) {
 		logger.info("OABA processing event: " + event + " (job "
 				+ this.oabaJob.getId() + ")");
-		OabaProcessingLogEntry ope =
-			new OabaProcessingLogEntry(oabaJob, event, info);
-		em.persist(ope);
+		processingController.updateOabaProcessingStatus(oabaJob, event,
+				new Date(), info);
 	}
 
 	@Override
