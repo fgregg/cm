@@ -42,6 +42,9 @@ public class TransitivityJobEntityIT {
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
+	private final static String LOG_SOURCE = TransitivityJobEntityIT.class
+			.getSimpleName();
+
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
 		Class<?>[] removedClasses = null;
@@ -88,20 +91,27 @@ public class TransitivityJobEntityIT {
 
 	@After
 	public void tearDown() {
-		int finalOabaJobCount = testController.findAllOabaJobs().size();
-		assertTrue(initialOabaJobCount == finalOabaJobCount);
+		String METHOD = "tearDown";
+		logger.entering(LOG_SOURCE, METHOD);
+		if (!TestEntities.isTestObjectRetentionRequested()) {
+			int finalOabaJobCount = testController.findAllOabaJobs().size();
+			assertTrue(initialOabaJobCount == finalOabaJobCount);
 
-		int finalOabaParamsCount =
-			testController.findAllOabaParameters().size();
-		assertTrue(initialOabaParamsCount == finalOabaParamsCount);
+			int finalOabaParamsCount =
+				testController.findAllOabaParameters().size();
+			assertTrue(initialOabaParamsCount == finalOabaParamsCount);
 
-		int finalTransitivityParamsCount =
-			testController.findAllTransitivityParameters().size();
-		assertTrue(initialTransitivityParamsCount == finalTransitivityParamsCount);
+			int finalTransitivityParamsCount =
+				testController.findAllTransitivityParameters().size();
+			assertTrue(initialTransitivityParamsCount == finalTransitivityParamsCount);
 
-		int finalTransitivityJobCount =
-			testController.findAllTransitivityJobs().size();
-		assertTrue(initialTransitivityJobCount == finalTransitivityJobCount);
+			int finalTransitivityJobCount =
+				testController.findAllTransitivityJobs().size();
+			assertTrue(initialTransitivityJobCount == finalTransitivityJobCount);
+		} else {
+			logger.info("Skipping check of final object counts");
+		}
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
