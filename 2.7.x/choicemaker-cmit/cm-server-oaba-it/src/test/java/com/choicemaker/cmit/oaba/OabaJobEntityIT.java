@@ -43,6 +43,9 @@ public class OabaJobEntityIT {
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
+	private final static String LOG_SOURCE = OabaJobEntityIT.class
+			.getSimpleName();
+
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
 		Class<?>[] removedClasses = null;
@@ -82,12 +85,19 @@ public class OabaJobEntityIT {
 
 	@After
 	public void tearDown() {
-		int finalOabaJobCount = oabaTestController.findAllOabaJobs().size();
-		assertTrue(initialOabaJobCount == finalOabaJobCount);
+		String METHOD = "tearDown";
+		logger.entering(LOG_SOURCE, METHOD);
+		if (!TestEntities.isTestObjectRetentionRequested()) {
+			int finalOabaJobCount = oabaTestController.findAllOabaJobs().size();
+			assertTrue(initialOabaJobCount == finalOabaJobCount);
 
-		int finalOabaParamsCount =
-			oabaTestController.findAllOabaParameters().size();
-		assertTrue(initialOabaParamsCount == finalOabaParamsCount);
+			int finalOabaParamsCount =
+				oabaTestController.findAllOabaParameters().size();
+			assertTrue(initialOabaParamsCount == finalOabaParamsCount);
+		} else {
+			logger.info("Skipping check of final object counts");
+		}
+		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test

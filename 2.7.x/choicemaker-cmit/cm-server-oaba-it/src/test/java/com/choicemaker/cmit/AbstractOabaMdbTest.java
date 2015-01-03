@@ -195,7 +195,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		String METHOD = "tearDown";
 		getLogger().entering(getSourceName(), METHOD);
 		if (!TestEntities.isTestObjectRetentionRequested()) {
-			logger.info("Checking final object counts");
+			getLogger().info("Checking final object counts");
 			try {
 				int finalOabaParamsCount =
 					getTestController().findAllOabaParameters().size();
@@ -219,7 +219,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 				getLogger().severe(x.toString());
 			}
 		} else {
-			logger.info("Skipping check of final object counts");
+			getLogger().info("Skipping check of final object counts");
 		}
 		getLogger().exiting(getSourceName(), METHOD);
 	}
