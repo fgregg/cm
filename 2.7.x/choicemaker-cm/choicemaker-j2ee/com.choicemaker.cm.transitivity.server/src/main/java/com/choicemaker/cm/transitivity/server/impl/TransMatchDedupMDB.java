@@ -37,7 +37,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
@@ -268,8 +267,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 //	@Override
 	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
-				jmsContext, updateTransQueue, log);
+		processingController.updateOabaProcessingStatus(job, event, timestamp, info);
 	}
 
 }

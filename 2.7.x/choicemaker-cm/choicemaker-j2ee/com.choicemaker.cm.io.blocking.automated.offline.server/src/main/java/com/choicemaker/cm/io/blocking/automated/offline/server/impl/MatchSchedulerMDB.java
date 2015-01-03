@@ -192,8 +192,8 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	@Override
 	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
-				jmsContext, updateQueue, log);
+		processingController.updateOabaProcessingStatus(job, event, timestamp,
+				info);
 	}
 
 	@Override

@@ -99,9 +99,6 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	@EJB
 	private ServerConfigurationController serverController;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/transitivityQueue")
 	private Queue transitivityQueue;
 
@@ -294,8 +291,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 	private void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
-				jmsContext, updateQueue, log);
+		processingController.updateOabaProcessingStatus(job, event, timestamp,
+				info);
 	}
 
 	private void sendToMatchDedupEach(OabaJobMessage d) {

@@ -14,14 +14,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -78,10 +76,6 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 		return jmsContext;
 	}
 
-	// No accessor since this member is going away
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
-
 	// -- Accessors
 
 	protected final OabaJobControllerBean getJobController() {
@@ -114,33 +108,34 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 		getJmsTrace().info(
 				"Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		OabaJobMessage data = null;
+		OabaJobMessage oabaMsg = null;
 		OabaJob oabaJob = null;
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (OabaJobMessage) msg.getObject();
+				oabaMsg = (OabaJobMessage) msg.getObject();
 
-				final long jobId = data.jobID;
-				oabaJob = jobController.findOabaJob(jobId);
-				OabaParameters params =
-					paramsController.findBatchParamsByJobId(jobId);
+				final long jobId = oabaMsg.jobID;
+				oabaJob = getJobController().findOabaJob(jobId);
+				OabaParameters oabaParams =
+					getParametersController().findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =
-					oabaSettingsController.findOabaSettingsByJobId(jobId);
+					getSettingsController().findOabaSettingsByJobId(jobId);
 				OabaEventLog processingLog =
-					processingController.getProcessingLog(oabaJob);
+					getProcessingController().getProcessingLog(oabaJob);
 				ServerConfiguration serverConfig =
-					serverController.findServerConfigurationByJobId(jobId);
-				if (oabaJob == null || params == null || oabaSettings == null
-						|| serverConfig == null) {
+					getServerController().findServerConfigurationByJobId(jobId);
+				if (oabaJob == null || oabaParams == null
+						|| oabaSettings == null || serverConfig == null) {
 					String s =
 						"Unable to find a job, parameters, settings or server configuration for "
 								+ jobId;
 					getLogger().severe(s);
 					throw new IllegalStateException(s);
 				}
-				final String modelConfigId = params.getModelConfigurationName();
+				final String modelConfigId =
+					oabaParams.getModelConfigurationName();
 				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
 				if (model == null) {
@@ -153,11 +148,11 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
 					abortProcessing(oabaJob, processingLog);
 				} else {
-					processOabaMessage(data, oabaJob, params, oabaSettings,
-							processingLog, serverConfig, model);
-					sendToUpdateStatus(oabaJob, getCompletionEvent(),
+					processOabaMessage(oabaMsg, oabaJob, oabaParams,
+							oabaSettings, processingLog, serverConfig, model);
+					updateOabaProcessingStatus(oabaJob, getCompletionEvent(),
 							new Date(), null);
-					notifyProcessingCompleted(data);
+					notifyProcessingCompleted(oabaMsg);
 				}
 
 			} else {
@@ -179,10 +174,10 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 		MessageBeanUtils.stopJob(oabaJob, processingLog);
 	}
 
-	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
+	protected void updateOabaProcessingStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
-				jmsContext, updateQueue, getLogger());
+		getProcessingController().updateOabaProcessingStatus(job, event,
+				timestamp, info);
 	}
 
 	// -- Abstract call-back methods

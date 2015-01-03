@@ -189,7 +189,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					// object
 					data.validator = validator;
 
-					sendToUpdateStatus(oabaJob, OabaEvent.DONE_REC_VAL,
+					updateOabaProcessingStatus(oabaJob, OabaEvent.DONE_REC_VAL,
 							new Date(), null);
 					sendToBlocking(data);
 				}

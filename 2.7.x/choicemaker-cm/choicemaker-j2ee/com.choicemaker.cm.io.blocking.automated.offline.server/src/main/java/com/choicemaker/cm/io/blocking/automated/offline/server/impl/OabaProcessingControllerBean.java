@@ -10,30 +10,47 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
+import javax.jms.JMSProducer;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 /**
- * This object contains method to get JMS and EJB objects from the J2EE server.
+ * This stateless EJB provides OABA, job-specific processing logs and a
+ * stand-alone methods for creating and finding log entries.
  *
  * @author pcheung
  * @author rphall (migration to EJB3)
- *
  */
 @Stateless
 public class OabaProcessingControllerBean {
-
-//	static final long serialVersionUID = 271;
+	
+	private static final Logger logger = Logger
+			.getLogger(OabaProcessingControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
+
+	@Inject
+	private JMSContext jmsContext;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
+	private  Queue updateQueue;
 
 	public List<OabaProcessingLogEntry> findProcessingLogEntriesByJobId(long id) {
 		Query query =
@@ -46,7 +63,33 @@ public class OabaProcessingControllerBean {
 	}
 
 	public OabaEventLog getProcessingLog(OabaJob job) {
-		return new OabaJobEventLog(em,job);
+		return new OabaJobEventLog(em, job);
+	}
+
+	/**
+	 * This method sends a message to the UpdateStatusMDB message bean.
+	 */
+	public void updateOabaProcessingStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info) {
+		if (job == null || !OabaJobEntity.isPersistent(job)) {
+			throw new IllegalArgumentException("invalid OABA job");
+		}
+		if (event == null) {
+			throw new IllegalArgumentException("null event");
+		}
+		if (timestamp == null) {
+			throw new IllegalArgumentException("null timestamp");
+		}
+		if (jmsContext == null || updateQueue == null) {
+			throw new IllegalStateException("null JMS instance data");
+		}
+		OabaUpdateMessage data =
+			new OabaUpdateMessage(job, event, timestamp, info);
+		ObjectMessage message = jmsContext.createObjectMessage(data);
+		JMSProducer sender = jmsContext.createProducer();
+		logger.info(MessageBeanUtils.queueInfo("Sending", updateQueue, data));
+		sender.send(updateQueue, message);
+		logger.info(MessageBeanUtils.queueInfo("Sent", updateQueue, data));
 	}
 
 }

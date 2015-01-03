@@ -10,8 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import java.rmi.RemoteException;
-import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.jms.JMSContext;
@@ -21,18 +19,15 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 /**
- * This object contains common message bean utilities such as cancelling an OABA
- * job.
+ * This object contains common message bean utilities such as canceling an OABA
+ * job or sending various types of JMS messages.
  * 
  * @author pcheung
  *
@@ -48,12 +43,6 @@ public class MessageBeanUtils {
 	/**
 	 * This method stops the OabaJob by setting the status to aborted, and
 	 * removes the temporary directory for the job.
-	 * 
-	 * @param oabaJob
-	 * @param status
-	 * @param oabaConfig
-	 * @throws RemoteException
-	 * @throws BlockingException
 	 */
 	public static void stopJob(BatchJob oabaJob, OabaEventLog status) {
 		oabaJob.markAsAborted();
@@ -65,46 +54,6 @@ public class MessageBeanUtils {
 		}
 	}
 
-	/**
-	 * This method sends a message to the UpdateStatusMDB message bean.
-	 * @param jmsCtx
-	 *            a non-null JMSContext
-	 * @param q
-	 *            must be queue specified by the JNDI name
-	 *            'choicemaker/urm/jms/updateQueue'
-	 * @param log
-	 *            must be a non-null Logger instance
-	 */
-	public static void sendUpdateStatus(OabaJob job, OabaEvent event,
-			Date timestamp, String info, JMSContext jmsCtx, Queue q, Logger log) {
-		if (job == null || event == null || timestamp == null || jmsCtx == null
-				|| q == null || log == null) {
-			throw new IllegalArgumentException("null argument");
-		}
-		OabaUpdateMessage data =
-			new OabaUpdateMessage(job, event, timestamp, info);
-		ObjectMessage message = jmsCtx.createObjectMessage(data);
-		JMSProducer sender = jmsCtx.createProducer();
-		log.info(MessageBeanUtils.queueInfo("Sending", q, data));
-		sender.send(q, message);
-		log.info(MessageBeanUtils.queueInfo("Sent", q, data));
-	}
-
-	/**
-	 * This method sends OabaJobMessage to a message bean.
-	 * 
-	 * @param jobID
-	 *            must be a valid batch job id
-	 * @param percentComplete
-	 *            a integer between 0 and 100
-	 * @param jmsCtx
-	 *            a non-null JMSContext
-	 * @param q
-	 *            must be queue on which the associated message listener can
-	 *            process OabaJobMessage
-	 * @param log
-	 *            must be a non-null Logger instance
-	 */
 	public static void sendStartData(OabaJobMessage data, JMSContext jmsCtx,
 			Queue q, Logger log) {
 		if (data == null || jmsCtx == null || q == null || log == null) {

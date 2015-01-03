@@ -167,8 +167,8 @@ public class TransMatchSchedulerMDB extends AbstractScheduler implements Message
 	@Override
 	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
-				jmsContext, updateTransQueue, log);
+		getProcessingController().updateOabaProcessingStatus(job, event,
+				timestamp, info);
 	}
 
 }

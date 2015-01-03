@@ -146,7 +146,7 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
+	protected void updateOabaProcessingStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
 		assert event == null;
 	}
