@@ -10,32 +10,26 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import java.io.Serializable;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
@@ -43,111 +37,52 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterM
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
 /**
- * This bean dedups the temporary match file produces by a processor. It is
- * called by MatchDedupMDB and it calls it back when it is done.
+ * This bean deduplicates the temporary match file produced by a processor. It
+ * is called by MatchDedupMDB and it calls it back when it is done.
  *
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-@MessageDriven(activationConfig = {
-		@ActivationConfigProperty(propertyName = "destinationLookup",
-				propertyValue = "java:/choicemaker/urm/jms/matchDedupEachQueue"),
-		@ActivationConfigProperty(propertyName = "destinationType",
-				propertyValue = "javax.jms.Queue") })
-public class MatchDedupEachMDB implements MessageListener, Serializable {
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
+@MessageDriven(
+		activationConfig = {
+				@ActivationConfigProperty(
+						propertyName = "destinationLookup",
+						propertyValue = "java:/choicemaker/urm/jms/matchDedupEachQueue"),
+				@ActivationConfigProperty(propertyName = "destinationType",
+						propertyValue = "javax.jms.Queue") })
+public class MatchDedupEachMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
+
 	private static final Logger log = Logger.getLogger(MatchDedupEachMDB.class
 			.getName());
+
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatchDedupEachMDB.class.getName());
-
-	@EJB
-	private OabaJobControllerBean jobController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersControllerBean paramsController;
-	
-	@EJB
-	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
 
-	@Inject
-	private JMSContext jmsContext;
+	@Override
+	protected void processOabaMessage(OabaJobMessage data, OabaJob oabaJob,
+			OabaParameters params, OabaSettings oabaSettings,
+			OabaEventLog processingLog, ServerConfiguration serverConfig,
+			ImmutableProbabilityModel model) throws BlockingException {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
-	 */
-	public void onMessage(Message inMessage) {
-		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
-		ObjectMessage msg = null;
-		OabaJob oabaJob = null;
-
-		log.fine("MatchDedupEachMDB In onMessage");
-
-		try {
-			if (inMessage instanceof ObjectMessage) {
-				msg = (ObjectMessage) inMessage;
-				OabaJobMessage data = (OabaJobMessage) msg.getObject();
-
-				final long jobId = data.jobID;
-				oabaJob = jobController.findOabaJob(jobId);
-				final OabaParameters params =
-					paramsController.findBatchParamsByJobId(jobId);
-				final OabaEventLog processingEntry =
-					processingController.getProcessingLog(oabaJob);
-				final String modelConfigId = params.getModelConfigurationName();
-				final IProbabilityModel model =
-					PMManager.getModelInstance(modelConfigId);
-				if (model == null) {
-					String s =
-						"No modelId corresponding to '" + modelConfigId + "'";
-					log.severe(s);
-					throw new IllegalArgumentException(s);
-				}
-				final OabaSettings settings =
-					oabaSettingsController.findOabaSettingsByJobId(jobId);
-				
-				if (BatchJobStatus.ABORT_REQUESTED
-						.equals(oabaJob.getStatus())) {
-					MessageBeanUtils.stopJob(oabaJob, processingEntry);
-
-				} else {
-					if (processingEntry.getCurrentOabaEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
-						int maxMatches = settings.getMaxMatches();
-						dedupEach(data.ind, maxMatches, oabaJob);
-					}
-					MatchWriterMessage d = new MatchWriterMessage(data);
-					sendToMatchDedupOABA2(d);
-				}
-
-			} else {
-				log.warning("wrong type: " + inMessage.getClass().getName());
-			}
-
-		} catch (Exception e) {
-			log.severe(e.toString());
-			if (oabaJob != null) {
-				oabaJob.markAsFailed();
-			}
+		if (processingLog.getCurrentOabaEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
+			int maxMatches = oabaSettings.getMaxMatches();
+			dedupEach(data.ind, maxMatches, oabaJob);
 		}
-		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+
 	}
 
 	/**
-	 * This method dedups the Nth match temp file.
+	 * This method deduplicates the Nth temporary match file.
 	 *
 	 * @param num
 	 *            - The Nth match temp file
@@ -193,8 +128,34 @@ public class MatchDedupEachMDB implements MessageListener, Serializable {
 		log.info("Time in dedup each " + t);
 	}
 
-	private void sendToMatchDedupOABA2(MatchWriterMessage d) {
-		MessageBeanUtils.sendMatchWriterData(d, jmsContext, matchDedupQueue, log);
+	@Override
+	protected Logger getLogger() {
+		return log;
+	}
+
+	@Override
+	protected Logger getJmsTrace() {
+		return jmsTrace;
+	}
+
+	@Override
+	protected OabaEvent getCompletionEvent() {
+		// Used only during invocation of sendToUpdateStatus(..),
+		// which does nothing in this class
+		return null;
+	}
+
+	@Override
+	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info) {
+		assert event == null;
+	}
+
+	@Override
+	protected void notifyProcessingCompleted(OabaJobMessage data) {
+		MatchWriterMessage d = new MatchWriterMessage(data);
+		MessageBeanUtils.sendMatchWriterData(d, getJmsContext(),
+				matchDedupQueue, getLogger());
 	}
 
 }

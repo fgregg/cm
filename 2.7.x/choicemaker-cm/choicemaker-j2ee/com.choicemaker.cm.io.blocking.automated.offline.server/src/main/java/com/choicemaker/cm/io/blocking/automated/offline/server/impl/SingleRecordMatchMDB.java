@@ -90,12 +90,15 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
 public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
+	
 	private static final Logger log = Logger.getLogger(SingleRecordMatchMDB.class.getName());
+
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ SingleRecordMatchMDB.class.getName());
 
 	public static final String DATABASE_ACCESSOR =
 		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
+
 	public static final String MATCH_CANDIDATE =
 		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
 

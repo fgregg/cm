@@ -10,30 +10,19 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
@@ -42,18 +31,16 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
 
 /**
- * This bean handles the creation of chunks, including chunk data files and their corresponding block files.
+ * This bean handles the creation of chunks, including chunk data files and
+ * their corresponding block files.
  *
- * In this version, a chunk has multiple tree or array files so mutiple beans are process the
- * same chunk at the same time.
+ * In this version, a chunk has multiple tree or array files so mutiple beans
+ * are process the same chunk at the same time.
  *
  * @author pcheung
  *
@@ -63,163 +50,110 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
 				propertyValue = "java:/choicemaker/urm/jms/chunkQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class Chunk2MDB implements MessageListener, Serializable {
+public class Chunk2MDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(Chunk2MDB.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + Chunk2MDB.class.getName());
 
-	@EJB
-	private OabaJobControllerBean jobController;
+	private static final Logger log = Logger.getLogger(Chunk2MDB.class
+			.getName());
 
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersControllerBean paramsController;
-	
-	@EJB
-	private OabaProcessingControllerBean processingController;
-
-	@EJB
-	private ServerConfigurationController serverController;
-
-	@EJB
-	private PersistableRecordSourceController rsController;
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
+			+ Chunk2MDB.class.getName());
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
+	@Override
+	protected void processOabaMessage(OabaJobMessage data, OabaJob oabaJob,
+			OabaParameters params, OabaSettings oabaSettings,
+			OabaEventLog processingLog, ServerConfiguration serverConfig,
+			ImmutableProbabilityModel model) throws BlockingException {
 
-	@Inject
-	private JMSContext jmsContext;
+		final int maxChunk = oabaSettings.getMaxChunkSize();
+		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+		final int maxChunkFiles = serverConfig.getMaxOabaChunkFileCount();
+		log.info("Maximum chunk size: " + maxChunk);
+		log.info("Number of processors: " + numProcessors);
+		log.info("Maximum chunk files: " + maxChunkFiles);
 
-	/* (non-Javadoc)
-	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
-	 */
-	public void onMessage(Message inMessage) {
-		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
-		ObjectMessage msg = null;
-		OabaJobMessage data = null;
-		OabaJob oabaJob = null;
+		RecordIDTranslator2 translator =
+			new RecordIDTranslator2(OabaFileUtils.getTransIDFactory(oabaJob));
+		// recover the translator
+		translator.recover();
+		translator.close();
+		log.info("Record translator: " + translator);
 
-		log.fine("ChunkMDB In onMessage");
+		// create the os block source.
+		final IBlockSinkSourceFactory osFactory =
+			OabaFileUtils.getOversizedFactory(oabaJob);
+		log.info("Oversized factory: " + osFactory);
+		osFactory.getNextSource(); // the deduped OS file is file 2.
+		final IDSetSource source2 = new IDSetSource(osFactory.getNextSource());
+		log.info("Deduped oversized source: " + source2);
 
+		// create the tree transformer.
+		final TreeTransformer tTransformer =
+			new TreeTransformer(translator,
+					OabaFileUtils.getComparisonTreeGroupFactory(oabaJob,
+							data.stageType, numProcessors));
+
+		// create the transformer for over-sized blocks
+		final Transformer transformerO =
+			new Transformer(translator,
+					OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob,
+							numProcessors));
+
+		ISerializableRecordSource staging = null;
+		ISerializableRecordSource master = null;
 		try {
-			if (inMessage instanceof ObjectMessage) {
-				msg = (ObjectMessage) inMessage;
-				data = (OabaJobMessage) msg.getObject();
-
-				final long jobId = data.jobID;
-				oabaJob = jobController.findOabaJob(jobId);
-				OabaParameters params =
-					paramsController.findBatchParamsByJobId(jobId);
-				OabaSettings oabaSettings =
-						oabaSettingsController.findOabaSettingsByJobId(jobId);
-				OabaEventLog processingLog =
-						processingController.getProcessingLog(oabaJob);
-				ServerConfiguration serverConfig = serverController.findServerConfigurationByJobId(jobId);
-				if (oabaJob == null || params == null || oabaSettings == null || serverConfig == null) {
-					String s = "Unable to find a job, parameters, settings or server configuration for " + jobId;
-					log.severe(s);
-					throw new IllegalArgumentException(s);
-				}
-				final String modelConfigId = params.getModelConfigurationName();
-				ImmutableProbabilityModel model =
-					PMManager.getModelInstance(modelConfigId);
-				if (model == null) {
-					String s =
-						"No modelId corresponding to '" + modelConfigId + "'";
-					log.severe(s);
-					throw new IllegalArgumentException(s);
-				}
-
-				if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
-					MessageBeanUtils.stopJob (oabaJob, processingLog);
-
-				} else {
-					int maxChunk = oabaSettings.getMaxChunkSize();
-					int numProcessors = serverConfig.getMaxChoiceMakerThreads();
-					int maxChunkFiles = serverConfig.getMaxOabaChunkFileCount();
-					log.info("Maximum chunk size: " + maxChunk);
-					log.info("Number of processors: " + numProcessors);
-					log.info("Maximum chunk files: " + maxChunkFiles);
-
-					RecordIDTranslator2 translator = new RecordIDTranslator2 (OabaFileUtils.getTransIDFactory(oabaJob));
-					//recover the translator
-					translator.recover();
-					translator.close();
-					log.info("Record translator: " + translator);
-
-					//create the os block source.
-					final IBlockSinkSourceFactory osFactory = OabaFileUtils.getOversizedFactory(oabaJob);
-					log.info("Oversized factory: " + osFactory);
-					osFactory.getNextSource(); //the deduped OS file is file 2.
-					final IDSetSource source2 = new IDSetSource (osFactory.getNextSource());
-					log.info("Deduped oversized source: " + source2);
-
-					//create the tree transformer.
-					final TreeTransformer tTransformer = new TreeTransformer (translator,
-							OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, data.stageType, numProcessors));
-
-					//create the oversized block transformer
-					final Transformer transformerO = new Transformer (translator,
-							OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob, numProcessors));
-
-					ISerializableRecordSource staging =
-						rsController.getStageRs(params);
-					ISerializableRecordSource master =
-						rsController.getMasterRs(params);
-					ChunkService3 chunkService =
-						new ChunkService3(
-								OabaFileUtils.getTreeSetSource(oabaJob),
-								source2, staging, master, model,
-								OabaFileUtils.getChunkIDFactory(oabaJob),
-								OabaFileUtils.getStageDataFactory(oabaJob,
-										model),
-								OabaFileUtils.getMasterDataFactory(oabaJob,
-										model), translator.getSplitIndex(),
-								tTransformer, transformerO, maxChunk,
-								maxChunkFiles, processingLog, oabaJob);
-					log.info("Chunk service: " + chunkService);
-					chunkService.runService();
-					log.info( "Number of chunks " + chunkService.getNumChunks());
-					log.info( "Number of regular chunks " + chunkService.getNumRegularChunks());
-					log.info( "Done creating chunks " + chunkService.getTimeElapsed());
-
-					//transitivity needs the translator
-					//translator.cleanUp();
-
-					data.numChunks = chunkService.getNumChunks();
-					data.numRegularChunks = chunkService.getNumRegularChunks();
-
-					sendToUpdateStatus(oabaJob,
-							OabaEvent.DONE_CREATE_CHUNK_DATA, new Date(), null);
-					sendToMatch (data);
-				}
-
-			} else {
-				log.warning("wrong type: " + inMessage.getClass().getName());
-			}
-
+			staging = getRecordSourceController().getStageRs(params);
+			master = getRecordSourceController().getMasterRs(params);
 		} catch (Exception e) {
-			log.severe(e.toString());
-			if (oabaJob != null) {
-				oabaJob.markAsFailed();
-			}
+			throw new BlockingException(e.toString());
 		}
-		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+		assert staging != null;
+
+		ChunkService3 chunkService =
+			new ChunkService3(OabaFileUtils.getTreeSetSource(oabaJob), source2,
+					staging, master, model,
+					OabaFileUtils.getChunkIDFactory(oabaJob),
+					OabaFileUtils.getStageDataFactory(oabaJob, model),
+					OabaFileUtils.getMasterDataFactory(oabaJob, model),
+					translator.getSplitIndex(), tTransformer, transformerO,
+					maxChunk, maxChunkFiles, processingLog, oabaJob);
+		log.info("Chunk service: " + chunkService);
+		chunkService.runService();
+		log.info("Number of chunks " + chunkService.getNumChunks());
+		log.info("Number of regular chunks "
+				+ chunkService.getNumRegularChunks());
+		log.info("Done creating chunks " + chunkService.getTimeElapsed());
+
+		// transitivity needs the translator
+		// translator.cleanUp();
+
+		data.numChunks = chunkService.getNumChunks();
+		data.numRegularChunks = chunkService.getNumRegularChunks();
 	}
 
-	private void sendToUpdateStatus(OabaJob job, OabaEvent event, Date timestamp,
-			String info) {
-		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info, jmsContext, updateQueue, log);
+	@Override
+	protected Logger getLogger() {
+		return log;
 	}
 
-	private void sendToMatch (OabaJobMessage data) throws NamingException, JMSException{
-		MessageBeanUtils.sendStartData(data, jmsContext, matchSchedulerQueue, log);
+	@Override
+	protected Logger getJmsTrace() {
+		return jmsTrace;
+	}
+
+	@Override
+	protected OabaEvent getCompletionEvent() {
+		return OabaEvent.DONE_CREATE_CHUNK_DATA;
+	}
+
+	@Override
+	protected void notifyProcessingCompleted(OabaJobMessage data) {
+		MessageBeanUtils.sendStartData(data, getJmsContext(),
+				matchSchedulerQueue, getLogger());
 	}
 
 }

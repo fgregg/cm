@@ -11,26 +11,23 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
 import javax.jms.Message;
-import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
@@ -42,8 +39,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 
 /**
@@ -58,53 +53,29 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 				propertyValue = "java:/choicemaker/urm/jms/startQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class StartOabaMDB implements MessageListener, Serializable {
+public class StartOabaMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
+
 	private static final Logger log = Logger.getLogger(StartOabaMDB.class
 			.getName());
+
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ StartOabaMDB.class.getName());
-
-	@EJB
-	private OabaJobControllerBean jobController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersControllerBean paramsController;
-	
-	@EJB
-	private OabaProcessingControllerBean processingController;
-
-	@EJB
-	private PersistableRecordSourceController rsController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/blockQueue")
 	private Queue blockQueue;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/singleMatchQueue")
 	private Queue singleMatchQueue;
 
-	@Inject
-	JMSContext jmsContext;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
-	 */
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		OabaJobMessage data = null;
 		OabaJob oabaJob = null;
 
-		log.info("StartOabaMDB In onMessage");
+		getLogger().info("StartOabaMDB In onMessage");
 
 		try {
 
@@ -113,18 +84,18 @@ public class StartOabaMDB implements MessageListener, Serializable {
 				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				oabaJob = jobController.findOabaJob(jobId);
+				oabaJob = getJobController().findOabaJob(jobId);
 				OabaParameters params =
-					paramsController.findBatchParamsByJobId(jobId);
+					getParametersController().findBatchParamsByJobId(jobId);
 				OabaSettings oabaSettings =
-					oabaSettingsController.findOabaSettingsByJobId(jobId);
+					getSettingsController().findOabaSettingsByJobId(jobId);
 				OabaEventLog processingEntry =
-					processingController.getProcessingLog(oabaJob);
+					getProcessingController().getProcessingLog(oabaJob);
 				if (oabaJob == null || params == null || oabaSettings == null) {
 					String s =
 						"Unable to find a job, parameters or settings for "
 								+ jobId;
-					log.severe(s);
+					getLogger().severe(s);
 					throw new IllegalArgumentException(s);
 				}
 				final String modelConfigId = params.getModelConfigurationName();
@@ -133,38 +104,59 @@ public class StartOabaMDB implements MessageListener, Serializable {
 				if (stageModel == null) {
 					String s =
 						"No modelId corresponding to '" + modelConfigId + "'";
-					log.severe(s);
+					getLogger().severe(s);
 					throw new IllegalArgumentException(s);
 				}
 
 				// update status to mark as start
 				oabaJob.markAsStarted();
 
-				log.info("Job id: " + jobId);
-				log.info("Model configuration: " + params.getModelConfigurationName());
-				log.info("Differ threshold: " + params.getLowThreshold());
-				log.info("Match threshold: " + params.getHighThreshold());
-				log.info("Staging record source id: " + params.getStageRsId());
-				log.info("Staging record source type: " + params.getStageRsType());
-				log.info("Master record source id: " + params.getMasterRsId());
-				log.info("Master record source type: " + params.getMasterRsType());
-				log.info("Linkage type: " + params.getOabaLinkageType());
+				getLogger().info("Job id: " + jobId);
+				getLogger().info(
+						"Model configuration: "
+								+ params.getModelConfigurationName());
+				getLogger().info(
+						"Differ threshold: " + params.getLowThreshold());
+				getLogger().info(
+						"Match threshold: " + params.getHighThreshold());
+				getLogger().info(
+						"Staging record source id: " + params.getStageRsId());
+				getLogger().info(
+						"Staging record source type: "
+								+ params.getStageRsType());
+				getLogger().info(
+						"Master record source id: " + params.getMasterRsId());
+				getLogger().info(
+						"Master record source type: "
+								+ params.getMasterRsType());
+				getLogger()
+						.info("Linkage type: " + params.getOabaLinkageType());
 
 				// check to see if there are a lot of records in stage.
 				// if not use single record matching instead of batch.
-				log.info("Checking whether to use single- or batched-record blocking...");
-				log.info("OabaSettings maxSingle: " + oabaSettings.getMaxSingle());
-				final ISerializableRecordSource staging =
-						rsController.getStageRs(params);
-					final ISerializableRecordSource master =
-						rsController.getMasterRs(params);
+				getLogger()
+						.info("Checking whether to use single- or batched-record blocking...");
+				getLogger().info(
+						"OabaSettings maxSingle: "
+								+ oabaSettings.getMaxSingle());
+
+				ISerializableRecordSource staging = null;
+				ISerializableRecordSource master = null;
+				try {
+					staging = getRecordSourceController().getStageRs(params);
+					master = getRecordSourceController().getMasterRs(params);
+				} catch (Exception e) {
+					throw new BlockingException(e.toString());
+				}
+				assert staging != null;
+
 				if (!isMoreThanThreshold(staging, stageModel,
 						oabaSettings.getMaxSingle())) {
-					log.info("Using single record matching");
+					getLogger().info("Using single record matching");
 					sendToSingleRecordMatching(data);
 
 				} else {
-					log.info("Using batch record matching");
+					getLogger().info("Using batch record matching");
 
 					RecordIDSinkSourceFactory idFactory =
 						OabaFileUtils.getTransIDFactory(oabaJob);
@@ -185,8 +177,9 @@ public class StartOabaMDB implements MessageListener, Serializable {
 					data.masterType = rvService.getMasterType();
 					data.numBlockFields = rvService.getNumBlockingFields();
 
-					log.info("Done creating rec_id, val_id files: "
-							+ rvService.getTimeElapsed());
+					getLogger().info(
+							"Done creating rec_id, val_id files: "
+									+ rvService.getTimeElapsed());
 
 					// create the validator after rvService
 					// Validator validator = new Validator (true, translator);
@@ -202,11 +195,12 @@ public class StartOabaMDB implements MessageListener, Serializable {
 				}
 
 			} else {
-				log.warning("wrong type: " + inMessage.getClass().getName());
+				getLogger().warning(
+						"wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (Exception e) {
-			log.severe(e.toString());
+			getLogger().severe(e.toString());
 			if (oabaJob != null) {
 				oabaJob.markAsFailed();
 			}
@@ -230,7 +224,7 @@ public class StartOabaMDB implements MessageListener, Serializable {
 	 */
 	private boolean isMoreThanThreshold(RecordSource rs,
 			IProbabilityModel model, int threshold) throws BlockingException {
-		
+
 		// Preconditions need to be checked on this method, even though it is
 		// private, because the arguments haven't been validated before it
 		// is invoked. The arguments are derived from a persistent object,
@@ -243,14 +237,15 @@ public class StartOabaMDB implements MessageListener, Serializable {
 		}
 
 		boolean retVal = false;
-		log.info("Checking if the number of records is more than the maxSingle threshold: "
-				+ threshold);
+		getLogger().info(
+				"Checking if the number of records is more than the maxSingle threshold: "
+						+ threshold);
 		if (threshold <= 0) {
-			log.info("The threshold shortcuts further checking");
+			getLogger().info("The threshold shortcuts further checking");
 			retVal = true;
 		} else {
-			log.info("Record source: " + rs);
-			log.info("Model: " + model);
+			getLogger().info("Record source: " + rs);
+			getLogger().info("Model: " + model);
 			try {
 				rs.setModel(model);
 				rs.open();
@@ -261,10 +256,10 @@ public class StartOabaMDB implements MessageListener, Serializable {
 				}
 				if (rs.hasNext()) {
 					++count;
-					log.info("Number of records: " + count + "+");
+					getLogger().info("Number of records: " + count + "+");
 					retVal = true;
 				} else {
-					log.info("Number of records: " + count);
+					getLogger().info("Number of records: " + count);
 				}
 				rs.close();
 			} catch (IOException ex) {
@@ -274,23 +269,49 @@ public class StartOabaMDB implements MessageListener, Serializable {
 		String msg =
 			"The number of records " + (retVal ? "exceeds" : "does not exceed")
 					+ " the maxSingle threshold: " + threshold;
-		log.info(msg);
+		getLogger().info(msg);
 
 		return retVal;
 	}
 
-	private void sendToUpdateStatus(OabaJob job, OabaEvent event,
-			Date timestamp, String info) {
-		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info,
-				jmsContext, updateQueue, log);
-	}
-
 	private void sendToBlocking(OabaJobMessage data) {
-		MessageBeanUtils.sendStartData(data, jmsContext, blockQueue, log);
+		MessageBeanUtils.sendStartData(data, getJmsContext(), blockQueue,
+				getLogger());
 	}
 
 	private void sendToSingleRecordMatching(OabaJobMessage data) {
-		MessageBeanUtils.sendStartData(data, jmsContext, singleMatchQueue, log);
+		MessageBeanUtils.sendStartData(data, getJmsContext(), singleMatchQueue,
+				getLogger());
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return log;
+	}
+
+	@Override
+	protected Logger getJmsTrace() {
+		return jmsTrace;
+	}
+
+	@Override
+	protected void processOabaMessage(OabaJobMessage data, OabaJob oabaJob,
+			OabaParameters params, OabaSettings oabaSettings,
+			OabaEventLog processingLog, ServerConfiguration serverConfig,
+			ImmutableProbabilityModel model) throws BlockingException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected OabaEvent getCompletionEvent() {
+		return OabaEvent.DONE_REC_VAL;
+	}
+
+	@Override
+	protected void notifyProcessingCompleted(OabaJobMessage data) {
+		// Does nothing in this class. Instead, notifications are
+		// sent via sendToSingleRecordMatching(..) and sendToBlocking(..)
 	}
 
 }

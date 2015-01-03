@@ -10,29 +10,19 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-//import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
@@ -40,13 +30,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
 
+//import com.choicemaker.cm.core.ImmutableProbabilityModel;
+
 /**
- * This message bean performs the OABA blocking and oversized trimming.
+ * This message bean performs OABA blocking and trimming of over-sized blocks.
  *
- * @author pcheung
+ * @author pcheung (Original implementation)
+ * @author rphall (Migration to EJB3)
  *
  */
 @MessageDriven(activationConfig = {
@@ -54,138 +46,76 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingSer
 				propertyValue = "java:/choicemaker/urm/jms/blockQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class BlockingMDB implements MessageListener, Serializable {
+public class BlockingMDB extends AbstractOabaMDB {
 
 	private static final long serialVersionUID = 271L;
+
 	private static final Logger log = Logger.getLogger(BlockingMDB.class
 			.getName());
+
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ BlockingMDB.class.getName());
-
-	@EJB
-	private OabaJobControllerBean jobController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersControllerBean paramsController;
-	
-	@EJB
-	private OabaProcessingControllerBean processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/dedupQueue")
 	private Queue dedupQueue;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
+	@Override
+	protected void processOabaMessage(OabaJobMessage data, OabaJob oabaJob,
+			OabaParameters params, OabaSettings oabaSettings,
+			OabaEventLog processingLog, ServerConfiguration serverConfig,
+			ImmutableProbabilityModel model) throws BlockingException {
 
-	@Inject
-	JMSContext jmsContext;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
-	 */
-	public void onMessage(Message inMessage) {
-		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
-		ObjectMessage msg = null;
-		OabaJobMessage data = null;
-		OabaJob oabaJob = null;
-
-		log.info("BlockingMDB In onMessage");
-
+		// Start blocking
+		final int maxBlock = oabaSettings.getMaxBlockSize();
+		final int maxOversized = oabaSettings.getMaxOversized();
+		final int minFields = oabaSettings.getMinFields();
+		final BlockGroup bGroup =
+			new BlockGroup(OabaFileUtils.getBlockGroupFactory(oabaJob),
+					maxBlock);
+		final IBlockSink osSpecial =
+			OabaFileUtils.getOversizedFactory(oabaJob).getNextSink();
+		OABABlockingService blockingService;
 		try {
-			if (inMessage instanceof ObjectMessage) {
-				msg = (ObjectMessage) inMessage;
-				data = (OabaJobMessage) msg.getObject();
-
-				final long jobId = data.jobID;
-				oabaJob = jobController.findOabaJob(jobId);
-				OabaParameters params =
-					paramsController.findBatchParamsByJobId(jobId);
-				OabaSettings oabaSettings =
-						oabaSettingsController.findOabaSettingsByJobId(jobId);
-				OabaEventLog processingLog =
-						processingController.getProcessingLog(oabaJob);
-				if (oabaJob == null || params == null || oabaSettings == null) {
-					String s = "Unable to find a job, parameters or settings for " + jobId;
-					log.severe(s);
-					throw new IllegalArgumentException(s);
-				}
-				final String modelConfigId = params.getModelConfigurationName();
-				ImmutableProbabilityModel model =
-					PMManager.getModelInstance(modelConfigId);
-				if (model == null) {
-					String s =
-						"No modelId corresponding to '" + modelConfigId + "'";
-					log.severe(s);
-					throw new IllegalArgumentException(s);
-				}
-
-				if (BatchJobStatus.ABORT_REQUESTED
-						.equals(oabaJob.getStatus())) {
-					MessageBeanUtils.stopJob(oabaJob, processingLog);
-
-				} else {
-
-					// Start blocking
-					final int maxBlock = oabaSettings.getMaxBlockSize();
-					final int maxOversized = oabaSettings.getMaxOversized();
-					final int minFields = oabaSettings.getMinFields();
-					final BlockGroup bGroup =
-						new BlockGroup(
-								OabaFileUtils.getBlockGroupFactory(oabaJob),
-								maxBlock);
-					final IBlockSink osSpecial =
-						OabaFileUtils.getOversizedFactory(oabaJob)
-								.getNextSink();
-					OABABlockingService blockingService =
-						new OABABlockingService(maxBlock, bGroup, OabaFileUtils
-								.getOversizedGroupFactory(oabaJob), osSpecial,
-								null, OabaFileUtils.getRecValFactory(oabaJob),
-								data.numBlockFields, data.validator,
-								processingLog, oabaJob, minFields,
-								maxOversized);
-					blockingService.runService();
-
-					log.info("num Blocks " + blockingService.getNumBlocks());
-					log.info("num OS " + blockingService.getNumOversized());
-					log.info("Done Blocking: "
-							+ blockingService.getTimeElapsed());
-
-					// clean up
-					blockingService = null;
-					System.gc();
-
-					sendToUpdateStatus(oabaJob,
-							OabaEvent.DONE_OVERSIZED_TRIMMING, new Date(), null);
-					sendToDedup(data);
-
-				}
-
-			} else {
-				log.warning("wrong type: " + inMessage.getClass().getName());
-			}
-
-		} catch (Exception e) {
-			log.severe(e.toString());
-			if (oabaJob != null) {
-				oabaJob.markAsFailed();
-			}
+			blockingService =
+				new OABABlockingService(maxBlock, bGroup,
+						OabaFileUtils.getOversizedGroupFactory(oabaJob),
+						osSpecial, null,
+						OabaFileUtils.getRecValFactory(oabaJob),
+						data.numBlockFields, data.validator, processingLog,
+						oabaJob, minFields, maxOversized);
+		} catch (IOException e) {
+			throw new BlockingException(e.getMessage(), e);
 		}
-		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+		blockingService.runService();
+
+		log.info("num Blocks " + blockingService.getNumBlocks());
+		log.info("num OS " + blockingService.getNumOversized());
+		log.info("Done Blocking: " + blockingService.getTimeElapsed());
+
+		// clean up
+		blockingService = null;
+		System.gc();
 	}
 
-	private void sendToUpdateStatus(OabaJob job, OabaEvent event, Date timestamp,
-			String info) {
-		MessageBeanUtils.sendUpdateStatus(job, event, timestamp, info, jmsContext, updateQueue, log);
+	@Override
+	protected Logger getLogger() {
+		return log;
 	}
 
-	private void sendToDedup(OabaJobMessage data) throws NamingException,
-			JMSException {
-		MessageBeanUtils.sendStartData(data, jmsContext, dedupQueue, log);
+	@Override
+	protected Logger getJmsTrace() {
+		return jmsTrace;
+	}
+
+	@Override
+	protected void notifyProcessingCompleted(OabaJobMessage data) {
+		MessageBeanUtils.sendStartData(data, getJmsContext(), dedupQueue,
+				getLogger());
+	}
+
+	@Override
+	protected OabaEvent getCompletionEvent() {
+		return OabaEvent.DONE_OVERSIZED_TRIMMING;
 	}
 
 }

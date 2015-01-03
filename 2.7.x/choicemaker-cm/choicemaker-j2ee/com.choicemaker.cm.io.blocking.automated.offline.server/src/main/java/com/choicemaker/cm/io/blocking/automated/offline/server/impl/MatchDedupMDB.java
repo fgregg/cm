@@ -162,19 +162,11 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 				log.warning("wrong type: " + inMessage.getClass().getName());
 			}
 
-//		} catch (JMSException e) {
-//			log.severe(e.toString());
-//			mdc.setRollbackOnly();
-//		} catch (BlockingException e) {
-//			log.severe(e.toString());
-//			if (batchJob != null)
-//				batchJob.markAsFailed();
 		} catch (Exception e) {
 			log.severe(e.toString());
 			if (oabaJob != null) {
 				oabaJob.markAsFailed();
 			}
-//			mdc.setRollbackOnly();
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
