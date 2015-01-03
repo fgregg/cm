@@ -224,31 +224,50 @@ public class GenericDedupService {
 		
 		cSink.open();
 
+		Comparable previous = null;
 		int num = 0;
 		boolean stop = false;
 		while (!stop) {
 			int idx = findMin (comps, numFiles);
 			
-			if (idx == -1) stop = true;
+			if (idx == -1) {
+				stop = true;
+			}
 			else {
-				cSink.writeComparable( comps[idx] );
+				final Comparable current = comps[idx];
+				if (current == null) {
+					log.severe("Current comparable is null");
+				} else if (previous != null && current.compareTo(previous) == 0) {
+					String msg ="Current comparable (" + current.toString() + ") is equivalent to previous (" + previous.toString() + ")";
+					log.warning(msg);
+				}
+				cSink.writeComparable( current );
+				previous = current;
 				num ++;
 				
 				//remove the same match from other sources
 				for (int i=0; i < numFiles; i ++) {
 					if (i != idx) {
 						if (comps[i] != null) {
-							if (comps[i].equals (comps[idx]) ) {
-								if (sources[i].hasNext()) comps[i] = (Comparable) sources[i].next();
-								else comps[i] = null;
+							if (comps[i].equals (current) ) {
+								if (sources[i].hasNext()) {
+									comps[i] = (Comparable) sources[i].next();
+								}
+								else {
+									comps[i] = null;
+								}
 							}
 						}
 					}
 				} //end for
 
 				//get the next record			
-				if (sources[idx].hasNext()) comps[idx] = (Comparable) sources[idx].next();
-				else comps[idx] = null;
+				if (sources[idx].hasNext()) {
+					comps[idx] = (Comparable) sources[idx].next();
+				}
+				else {
+					comps[idx] = null;
+				}
 			}
 		} //end while
 
@@ -259,7 +278,9 @@ public class GenericDedupService {
 		//close and remove all files
 		for (int i=0; i< numFiles; i++) {
 			sources[i].close();
-			if (delete) sources[i].delete();
+			if (delete) {
+				sources[i].delete();
+			}
 		}
 		
 		return num;
@@ -281,8 +302,9 @@ public class GenericDedupService {
 	}
 	
 	
-	/** This method compares source to dups and write all rows in source that do not exist
-	 * in dups to cSink.
+	/**
+	 * This method compares source to dups and write all rows in source that do
+	 * not exist in dups to cSink.
 	 * 
 	 * It returns the number of rows written to cSink.
 	 * 
