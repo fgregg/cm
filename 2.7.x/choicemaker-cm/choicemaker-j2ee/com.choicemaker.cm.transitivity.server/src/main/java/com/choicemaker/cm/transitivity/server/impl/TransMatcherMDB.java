@@ -82,9 +82,6 @@ public class TransMatcherMDB extends AbstractMatcher  implements MessageListener
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
 	private Queue transMatchSchedulerQueue;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
-
 	@Inject
 	JMSContext jmsContext;
 

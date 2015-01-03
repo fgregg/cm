@@ -255,7 +255,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 	private void sendToUpdateTransStatus (long jobID, int percentComplete) throws NamingException, JMSException {
 		throw new Error("not yet re-implemented");
 //		Queue queue = configuration.getUpdateTransMessageQueue();
-//		OabaUpdateMessage data = new OabaUpdateMessage(jobID, percentComplete);
+//		OabaNotification data = new OabaNotification(jobID, percentComplete);
 //		log.info ("send to updateTransQueue " + jobID + " " + percentComplete);
 //		configuration.sendMessage(queue, data);
 	}

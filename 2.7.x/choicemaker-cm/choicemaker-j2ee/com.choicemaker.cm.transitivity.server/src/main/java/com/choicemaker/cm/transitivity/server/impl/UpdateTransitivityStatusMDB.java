@@ -20,7 +20,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
@@ -52,28 +52,29 @@ public class UpdateTransitivityStatusMDB implements MessageDrivenBean, MessageLi
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		OabaUpdateMessage data;
+		OabaNotification data;
 
 		try {
 
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
-				data = (OabaUpdateMessage) msg.getObject();
-				
-				log.fine("Starting to update job ID: " + data.getJobID() + " " + data.getPercentComplete());
+				data = (OabaNotification) msg.getObject();
 
-				//(TransitivityJob) configuration.findBatchJobById(em, TransitivityJobEntity.class, data.getJobID());
-				final TransitivityJob job = em.find(TransitivityJobEntity.class, data.getJobID());
-				
-				if (data.getPercentComplete() == 0) {
+				log.fine("Starting to update job ID: " + data.getJobId() + " "
+						+ data.getJobPercentComplete());
+
+				// (TransitivityJob) configuration.findBatchJobById(em,
+				// TransitivityJobEntity.class, data.getJobID());
+				final TransitivityJob job =
+					em.find(TransitivityJobEntity.class, data.getJobId());
+
+				if (data.getJobPercentComplete() == 0) {
 					job.markAsStarted();
-				}
-				else if (data.getPercentComplete() == 100) {
+				} else if (data.getJobPercentComplete() == 100) {
 					job.markAsCompleted();
-				}
-				else {
+				} else {
 					job.markAsStarted();
-//					job.setFractionComplete( data.getPercentComplete() );
+					// job.setFractionComplete( data.getPercentComplete() );
 				}
 
 			} else {
