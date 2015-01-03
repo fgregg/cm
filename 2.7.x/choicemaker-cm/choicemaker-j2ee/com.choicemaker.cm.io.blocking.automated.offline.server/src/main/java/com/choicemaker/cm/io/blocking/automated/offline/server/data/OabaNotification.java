@@ -15,6 +15,7 @@ import java.util.Date;
 import com.choicemaker.cm.batch.BatchProcessingNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA;
 
@@ -35,9 +36,16 @@ public class OabaNotification extends BatchProcessingNotification {
 
 	public OabaNotification(OabaJob job, OabaEvent event, Date timestamp,
 			String info) {
-		super(job.getId(), OabaJobJPA.DISCRIMINATOR_VALUE, job.getStatus()
-				.name(), event.percentComplete, event.eventId,
+		super(job.getId(), OabaJobJPA.DISCRIMINATOR_VALUE,
+				event.percentComplete, event.eventId,
 				OabaProcessingJPA.DISCRIMINATOR_VALUE, timestamp, info);
+	}
+
+	public OabaNotification(OabaProcessingEvent ope) {
+		super(ope.getJobId(), OabaJobJPA.DISCRIMINATOR_VALUE, ope
+				.getFractionComplete(), ope.getEventId(),
+				OabaProcessingJPA.DISCRIMINATOR_VALUE, ope.getEventTimestamp(),
+				ope.getEventInfo());
 	}
 
 }
