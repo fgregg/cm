@@ -84,17 +84,17 @@ public abstract class BatchJobEntity implements BatchJob {
 		allowed.add(BatchJobStatus.ABORTED);
 		allowedTransitions.put(BatchJobStatus.NEW, allowed);
 		allowed = new HashSet<>();
-		allowed.add(BatchJobStatus.STARTED);
+		allowed.add(BatchJobStatus.PROCESSING);
 		allowed.add(BatchJobStatus.ABORT_REQUESTED);
 		allowed.add(BatchJobStatus.ABORTED);
 		allowedTransitions.put(BatchJobStatus.QUEUED, allowed);
 		allowed = new HashSet<>();
-		allowed.add(BatchJobStatus.STARTED);
+		allowed.add(BatchJobStatus.PROCESSING);
 		allowed.add(BatchJobStatus.COMPLETED);
 		allowed.add(BatchJobStatus.FAILED);
 		allowed.add(BatchJobStatus.ABORT_REQUESTED);
 		allowed.add(BatchJobStatus.ABORTED);
-		allowedTransitions.put(BatchJobStatus.STARTED, allowed);
+		allowedTransitions.put(BatchJobStatus.PROCESSING, allowed);
 		allowed = new HashSet<>();
 		allowed.add(BatchJobStatus.ABORTED);
 		allowedTransitions.put(BatchJobStatus.ABORT_REQUESTED, allowed);
@@ -205,7 +205,7 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	private static final String[] _nonterminal = new String[] {
 			BatchJobStatus.NEW.name(), BatchJobStatus.QUEUED.name(),
-			BatchJobStatus.STARTED.name(),
+			BatchJobStatus.PROCESSING.name(),
 			BatchJobStatus.ABORT_REQUESTED.name() };
 
 	@Override
@@ -305,7 +305,7 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	@Override
 	public Date getStarted() {
-		return mostRecentTimestamp(BatchJobStatus.STARTED);
+		return mostRecentTimestamp(BatchJobStatus.PROCESSING);
 	}
 
 	@Override
@@ -425,9 +425,9 @@ public abstract class BatchJobEntity implements BatchJob {
 
 	@Override
 	public void markAsStarted() {
-		if (isAllowedTransition(getStatus(), BatchJobStatus.STARTED)) {
+		if (isAllowedTransition(getStatus(), BatchJobStatus.PROCESSING)) {
 			logTransition(BatchJobStatus.QUEUED);
-			setStatus(BatchJobStatus.STARTED);
+			setStatus(BatchJobStatus.PROCESSING);
 		} else {
 			logIgnoredTransition("markAsStarted");
 		}

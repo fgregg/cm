@@ -481,18 +481,18 @@ public class OabaJobEntityIT {
 
 		// 3. Start the job
 		job.markAsStarted();
-		assertTrue(job.getStatus().equals(BatchJobStatus.STARTED));
+		assertTrue(job.getStatus().equals(BatchJobStatus.PROCESSING));
 		// oabaTestController.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();
-		assertTrue(job.getStatus().equals(BatchJobStatus.STARTED));
+		assertTrue(job.getStatus().equals(BatchJobStatus.PROCESSING));
 		// oabaTestController.save(job);
 
 //		// 4. Update the percentage complete
 //		job.setFractionComplete(random
 //				.nextInt(BatchJob.MAX_PERCENTAGE_COMPLETED + 1));
-//		assertTrue(job.getStatus().equals(BatchJobStatus.STARTED));
+//		assertTrue(job.getStatus().equals(BatchJobStatus.PROCESSING));
 //		// oabaTestController.save(job);
 
 		// 5. Mark the job as completed

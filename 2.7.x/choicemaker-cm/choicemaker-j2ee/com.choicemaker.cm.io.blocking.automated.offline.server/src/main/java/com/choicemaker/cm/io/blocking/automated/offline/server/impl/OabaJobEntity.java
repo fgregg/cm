@@ -37,7 +37,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
  * It also serves as the base class of other types of long-running jobs.
  * <p>
  * A successful batch job goes through a sequence of states: NEW, QUEUED,
- * STARTED, and COMPLETED. If processing fails in one of these stages, the job
+ * PROCESSING, and COMPLETED. If processing fails in one of these stages, the job
  * state is marked as FAILED. A request may be aborted at any point, in which
  * case it goes through the ABORT_REQUESTED and the ABORT states.
  * </p>
