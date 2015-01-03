@@ -13,7 +13,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.XmlConfException;
 
 /**
  * This Object handles creating RecordSink to put chunk data.
@@ -24,13 +23,13 @@ import com.choicemaker.cm.core.XmlConfException;
 public interface IChunkDataSinkSourceFactory {
 
 	/** Gets the next record sink. */	
-	public RecordSink getNextSink () throws XmlConfException;
+	public RecordSink getNextSink () throws BlockingException;
 	
 	/** Gets the number of sequence sinks created. */
 	public int getNumSink ();
 
 	/** Gets the next record source. This only returns a source from a previously created sink. */	
-	public RecordSource getNextSource() throws XmlConfException;
+	public RecordSource getNextSource() throws BlockingException;
 	
 	/** Gets the number of sequence source created. */
 	public int getNumSource ();

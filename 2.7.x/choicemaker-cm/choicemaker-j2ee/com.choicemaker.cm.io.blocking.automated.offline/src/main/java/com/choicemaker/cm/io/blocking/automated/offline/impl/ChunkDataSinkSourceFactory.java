@@ -12,7 +12,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -30,7 +29,7 @@ import com.choicemaker.cm.io.flatfile.base.FlatFileRecordSource;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 	
-	private static final Logger log = Logger.getLogger(ChunkDataSinkSourceFactory.class.getName());
+//	private static final Logger log = Logger.getLogger(ChunkDataSinkSourceFactory.class.getName());
 
 	private String fileDir;
 	private String baseName;
@@ -48,7 +47,7 @@ public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkFactory#getNextSink()
 	 */
-	public RecordSink getNextSink() throws XmlConfException{
+	public RecordSink getNextSink() throws BlockingException {
 		//create sink
 		ind ++;
 		String rsDescriptorName = fileDir + baseName + ind + ".rs";
@@ -63,7 +62,11 @@ public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 			".txt", false, false, false, '|', true, model);
 		RecordSink sink  = (RecordSink)tmpRs.getSink();
 		removeFiles.add(dataFile + ".txt");
-		RecordSourceXmlConf.add(tmpRs);
+		try {
+			RecordSourceXmlConf.add(tmpRs);
+		} catch (XmlConfException e) {
+			throw new BlockingException(e.getMessage(), e);
+		}
 		
 		return sink;
 	}
@@ -76,24 +79,16 @@ public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 	}
 
 	/** Gets the next record source. This only returns a source from a previously created sink. */	
-	public RecordSource getNextSource() throws XmlConfException{
+	public RecordSource getNextSource() throws BlockingException{
 		RecordSource rs = null;
 		try {
-			String str = "";
-//			if (indSource <= ind - 1) {
-				indSource ++;
-
-				File f = new File (fileDir + baseName + indSource + ".rs");
-				str = f.toURL().toString();
-				
-				rs = RecordSourceXmlConf.getRecordSource(str);
-//			} else {
-//				throw new XmlConfException ("No such file " + str);
-//			}
+			indSource++;
+			File f = new File(fileDir + baseName + indSource + ".rs");
+			String str = f.toURL().toString();
+			rs = RecordSourceXmlConf.getRecordSource(str);
 		} catch (Exception ex) {
-			log.severe (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
-		
 		return rs;
 	}
 	
