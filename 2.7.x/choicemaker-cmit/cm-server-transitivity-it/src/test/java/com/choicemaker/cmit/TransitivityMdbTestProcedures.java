@@ -24,7 +24,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -282,7 +282,7 @@ public class TransitivityMdbTestProcedures {
 		// Check that OABA processing sent out an expected status
 		// on the status topic
 		logger.info("Checking updateQueue");
-		OabaUpdateMessage updateMessage = null;
+		OabaNotification updateMessage = null;
 		if (oabaPhase == OabaProcessingPhase.INTERMEDIATE) {
 			// FIXME
 //			updateMessage =
@@ -297,8 +297,8 @@ public class TransitivityMdbTestProcedures {
 			throw new Error("unexpected phase: " + oabaPhase);
 		}
 		assertTrue(updateMessage != null);
-		assertTrue(updateMessage.getJobID() == jobId);
-		assertTrue(updateMessage.getPercentComplete() == expectPercentDone);
+		assertTrue(updateMessage.getJobId() == jobId);
+		assertTrue(updateMessage.getJobPercentComplete() == expectPercentDone);
 	
 		// Find the entry in the processing history updated by the OABA
 		OabaEventLog processingEntry =
@@ -421,14 +421,14 @@ public class TransitivityMdbTestProcedures {
 		// Check that OABA processing sent out an expected status
 		// on the update queue
 		logger.info("Checking updateQueue");
-		OabaUpdateMessage updateMessage = null;
+		OabaNotification updateMessage = null;
 		// FIXME
 //			updateMessage =
 //				JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
 //						statusTopic, VERY_LONG_TIMEOUT_MILLIS);
 		assertTrue(updateMessage != null);
-		assertTrue(updateMessage.getJobID() == jobId);
-		assertTrue(updateMessage.getPercentComplete() == PCT_DONE_OABA);
+		assertTrue(updateMessage.getJobId() == jobId);
+		assertTrue(updateMessage.getJobPercentComplete() == PCT_DONE_OABA);
 	
 		// Find the entry in the processing history updated by the OABA
 		OabaEventLog processingEntry =

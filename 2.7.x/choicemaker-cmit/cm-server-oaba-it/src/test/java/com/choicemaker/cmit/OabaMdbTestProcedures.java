@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
+import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
@@ -20,7 +21,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -123,8 +124,8 @@ public class OabaMdbTestProcedures {
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
 		final Queue listeningQueue = test.getResultQueue();
-		final Queue updateQueue = test.getUpdateQueue();
-		validateQueues(oabaPhase, listeningQueue, updateQueue);
+		final Topic oabaStatusTopic = test.getOabaStatusTopic();
+		validateDestinations(oabaPhase, listeningQueue, oabaStatusTopic);
 
 		final WellKnownTestConfiguration c = test.getTestConfiguration(linkage);
 
@@ -245,25 +246,27 @@ public class OabaMdbTestProcedures {
 		if (isUpdateExpected) {
 			// Check that OABA processing sent out an expected status
 			// on the update queue
-			logger.info("Checking updateQueue");
-			OabaUpdateMessage updateMessage = null;
-			if (oabaPhase == OabaProcessingPhase.INTERMEDIATE) {
-				updateMessage =
-					JmsUtils.receiveLatestUpdateMessage(LOG_SOURCE, jmsContext,
-							updateQueue, JmsUtils.SHORT_TIMEOUT_MILLIS);
+			logger.info("Checking oabaStatusTopic");
+			OabaNotification oabaNotification = null;
+			if (oabaPhase == OabaProcessingPhase.INTERMEDIATE
+					|| oabaPhase == OabaProcessingPhase.INITIAL) {
+				oabaNotification =
+					JmsUtils.receiveLatestOabaNotification(oabaJob, LOG_SOURCE,
+							jmsContext, oabaStatusTopic,
+							JmsUtils.SHORT_TIMEOUT_MILLIS);
 			} else if (oabaPhase == OabaProcessingPhase.FINAL) {
-				updateMessage =
-//					JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
-//							updateQueue, VERY_LONG_TIMEOUT_MILLIS);
-					JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
-							updateQueue, LONG_TIMEOUT_MILLIS);
+				oabaNotification =
+				// JmsUtils.receiveFinalOabaNotification(LOG_SOURCE, jmsContext,
+				// oabaStatusTopic, VERY_LONG_TIMEOUT_MILLIS);
+					JmsUtils.receiveFinalOabaNotification(oabaJob, LOG_SOURCE,
+							jmsContext, oabaStatusTopic, LONG_TIMEOUT_MILLIS);
 			} else {
 				throw new Error("unexpected phase: " + oabaPhase);
 			}
-			assertTrue(updateMessage != null);
-			assertTrue(updateMessage.getJobID() == jobId);
+			assertTrue(oabaNotification != null);
+			assertTrue(oabaNotification.getJobId() == jobId);
 			final float expectPercentDone = test.getResultPercentComplete();
-			assertTrue(updateMessage.getPercentComplete() == expectPercentDone);
+			assertTrue(oabaNotification.getJobPercentComplete() == expectPercentDone);
 		}
 
 		// Find the entry in the processing history updated by the OABA
@@ -271,7 +274,7 @@ public class OabaMdbTestProcedures {
 			test.getProcessingController();
 		OabaEventLog processingEntry =
 			processingController.getProcessingLog(oabaJob);
-//		te.add(processingEntry);
+		// te.add(processingEntry);
 
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);
@@ -295,46 +298,48 @@ public class OabaMdbTestProcedures {
 		logger.exiting(LOG_SOURCE, tag);
 	}
 
-	public static void validateQueues(OabaProcessingPhase oabaPhase,
-			Queue listeningQueue, Queue updateQueue) {
+	public static void validateDestinations(OabaProcessingPhase oabaPhase,
+			Queue listeningQueue, Topic oabaStatusTopic) {
 		if (oabaPhase == null) {
 			throw new IllegalArgumentException("null OABA processing phase");
 		}
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
-		if (isIntermediateExpected && !isUpdateExpected) {
+		assertTrue(isUpdateExpected);
+		if (oabaStatusTopic == null) {
+			throw new IllegalArgumentException("status topic is null");
+		}
+		// /* if (isIntermediateExpected && !isUpdateExpected) {
+		// if (listeningQueue == null) {
+		// throw new IllegalArgumentException(
+		// "intermediate-result queue is null");
+		// }
+		// if (oabaStatusTopic != null) {
+		// String msg =
+		// "Ignoring update queue -- results expected only "
+		// + "from intermediate-result queue";
+		// logger.warning(msg);
+		// }
+		// } else */
+		if (isIntermediateExpected /* && isUpdateExpected */) {
 			if (listeningQueue == null) {
 				throw new IllegalArgumentException(
 						"intermediate-result queue is null");
 			}
-			if (updateQueue != null) {
-				String msg =
-					"Ignoring update queue -- results expected only "
-							+ "from intermediate-result queue";
-				logger.warning(msg);
-			}
-		} else if (isIntermediateExpected && isUpdateExpected) {
-			if (listeningQueue == null) {
-				throw new IllegalArgumentException(
-						"intermediate-result queue is null");
-			}
-			if (updateQueue == null) {
-				throw new IllegalArgumentException("update queue is null");
-			}
-		} else if (!isIntermediateExpected && isUpdateExpected) {
+			// if (oabaStatusTopic == null) {
+			// throw new IllegalArgumentException("status topic is null");
+			// }
+		} else {
+			assertTrue(!isIntermediateExpected /* && isUpdateExpected */);
 			if (listeningQueue != null) {
 				String msg =
 					"Ignoring intermediate-result queue -- "
-							+ "final results expected from update queue";
+							+ "final results expected from status topic";
 				logger.warning(msg);
 			}
-			if (updateQueue == null) {
-				throw new IllegalArgumentException("update queue is null");
-			}
-		} else {
-			String msg =
-				"unexpected: !isIntermediateExpected && !isUpdateExpected";
-			throw new Error(msg);
+			// if (oabaStatusTopic == null) {
+			// throw new IllegalArgumentException("status topic is null");
+			// }
 		}
 	}
 

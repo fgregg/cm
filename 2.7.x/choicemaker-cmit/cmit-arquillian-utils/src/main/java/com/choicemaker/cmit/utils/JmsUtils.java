@@ -7,12 +7,13 @@ import java.util.logging.Logger;
 
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
-import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.Topic;
 
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaUpdateMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 
 public class JmsUtils {
 
@@ -32,40 +33,30 @@ public class JmsUtils {
 	public static final long VERY_LONG_TIMEOUT_MILLIS = 300000;
 
 	public static String queueInfo(String tag, Queue q) {
-		String queueName;
-		try {
-			queueName = q.getQueueName();
-		} catch (JMSException x) {
-			queueName = "unknown";
-		}
-		StringBuilder sb =
-			new StringBuilder(tag).append("queue: '").append(queueName)
-					.append("'");
-		return sb.toString();
+		return MessageBeanUtils.queueInfo(tag, q, null);
 	}
 
 	public static String queueInfo(String tag, Queue q, Object d) {
-		String queueName;
-		try {
-			queueName = q.getQueueName();
-		} catch (JMSException x) {
-			queueName = "unknown";
-		}
-		StringBuilder sb =
-			new StringBuilder(tag).append("queue: '").append(queueName)
-					.append("', data: '").append(d).append("'");
-		return sb.toString();
+		return MessageBeanUtils.queueInfo(tag, q, d);
 	}
 
-	public static String queueInfo(String tag, String queueName, Object d) {
-		if (queueName == null || queueName.trim().isEmpty()) {
-			queueName = "unknown";
-		}
-		StringBuilder sb =
-			new StringBuilder(tag).append("queue: '").append(queueName)
-					.append("', data: '").append(d).append("'");
-		return sb.toString();
+	public static String topicInfo(String tag, Topic q) {
+		return MessageBeanUtils.topicInfo(tag, q, null);
 	}
+
+	public static String topicInfo(String tag, Topic q, Object d) {
+		return MessageBeanUtils.topicInfo(tag, q, d);
+	}
+
+//	public static String queueInfo(String tag, String queueName, Object d) {
+//		if (queueName == null || queueName.trim().isEmpty()) {
+//			queueName = "unknown";
+//		}
+//		StringBuilder sb =
+//			new StringBuilder(tag).append("queue: '").append(queueName)
+//					.append("', data: '").append(d).append("'");
+//		return sb.toString();
+//	}
 
 	public static void clearStartDataFromQueue(String LOG_SOURCE,
 			JMSContext jmsContext, Queue queue) {
@@ -87,36 +78,19 @@ public class JmsUtils {
 	public static void clearNotificationsFromTopic(String LOG_SOURCE,
 			JMSContext jmsContext, Topic statusTopic) {
 		throw new Error("not yet implemented");
-//		JMSConsumer consumer = jmsContext.createConsumer(updateQueue);
+//		JMSConsumer consumer = jmsContext.createConsumer(oabaStatusTopic);
 //		int count = 0;
-//		OabaUpdateMessage updateMessage = null;
+//		OabaNotification updateMessage = null;
 //		do {
 //			updateMessage =
-//				receiveUpdateMessage(LOG_SOURCE, consumer, updateQueue,
+//				receiveOabaNotification(LOG_SOURCE, consumer, oabaStatusTopic,
 //						SHORT_TIMEOUT_MILLIS);
 //			if (updateMessage != null) {
 //				++count;
 //			}
-//			logger.info(queueInfo("Clearing: ", updateQueue, updateMessage));
+//			logger.info(queueInfo("Clearing: ", oabaStatusTopic, updateMessage));
 //		} while (updateMessage != null);
-//		logger.info(queueInfo("Messages cleared: " + count + " ", updateQueue));
-	}
-
-	public static void clearUpdateDataFromQueue(String LOG_SOURCE,
-			JMSContext jmsContext, Queue updateQueue) {
-		JMSConsumer consumer = jmsContext.createConsumer(updateQueue);
-		int count = 0;
-		OabaUpdateMessage updateMessage = null;
-		do {
-			updateMessage =
-				receiveUpdateMessage(LOG_SOURCE, consumer, updateQueue,
-						SHORT_TIMEOUT_MILLIS);
-			if (updateMessage != null) {
-				++count;
-			}
-			logger.info(queueInfo("Clearing: ", updateQueue, updateMessage));
-		} while (updateMessage != null);
-		logger.info(queueInfo("Messages cleared: " + count + " ", updateQueue));
+//		logger.info(queueInfo("Messages cleared: " + count + " ", oabaStatusTopic));
 	}
 
 	public static OabaJobMessage receiveStartData(String LOG_SOURCE,
@@ -145,24 +119,39 @@ public class JmsUtils {
 		return retVal;
 	}
 
-	public static OabaUpdateMessage receiveUpdateMessage(String LOG_SOURCE,
-			JMSContext jmsContext, Queue updateQueue) {
-		return receiveUpdateMessage(LOG_SOURCE, jmsContext, updateQueue,
-				SHORT_TIMEOUT_MILLIS);
-	}
-
-	public static OabaUpdateMessage receiveLatestUpdateMessage(
-			final String LOG_SOURCE, JMSContext jmsContext, Queue updateQueue,
-			long timeOut) {
-		final String METHOD = "receiveLatestUpdateMessage(" + timeOut + ")";
-		logger.entering(LOG_SOURCE, METHOD);
-		JMSConsumer consumer = jmsContext.createConsumer(updateQueue);
-		OabaUpdateMessage retVal = null;
-		OabaUpdateMessage msg = null;
+	public static void clearOabaNotifications(String LOG_SOURCE,
+			JMSContext jmsContext, Topic oabaStatusTopic) {
+		JMSConsumer consumer = jmsContext.createConsumer(oabaStatusTopic);
+		int count = 0;
+		OabaNotification msg = null;
 		do {
 			msg =
-				receiveUpdateMessage(LOG_SOURCE, consumer, updateQueue, timeOut);
+				receiveOabaNotification(LOG_SOURCE, consumer, oabaStatusTopic,
+						SHORT_TIMEOUT_MILLIS);
 			if (msg != null) {
+				++count;
+			}
+			logger.info(topicInfo("Clearing: ", oabaStatusTopic, msg));
+		} while (msg != null);
+		logger.info(topicInfo("Messages cleared: " + count + " ", oabaStatusTopic));
+	}
+
+	public static OabaNotification receiveLatestOabaNotification(
+			OabaJob oabaJob, final String LOG_SOURCE, JMSContext jmsContext,
+			Topic oabaStatusTopic, long timeOut) {
+		final String METHOD = "receiveLatestOabaNotification(" + timeOut + ")";
+		logger.entering(LOG_SOURCE, METHOD);
+		if (oabaJob == null) {
+			throw new IllegalArgumentException(METHOD + ": null OABA job");
+		}
+		JMSConsumer consumer = jmsContext.createConsumer(oabaStatusTopic);
+		OabaNotification retVal = null;
+		OabaNotification msg = null;
+		do {
+			msg =
+				receiveOabaNotification(LOG_SOURCE, consumer, oabaStatusTopic,
+						timeOut);
+			if (msg != null && msg.getJobId() == oabaJob.getId()) {
 				retVal = msg;
 			}
 		} while (msg != null);
@@ -170,42 +159,53 @@ public class JmsUtils {
 		return retVal;
 	}
 
-	public static OabaUpdateMessage receiveFinalUpdateMessage(
-			final String LOG_SOURCE, JMSContext jmsContext, Queue updateQueue,
-			long timeOut) {
-		final String METHOD = "receiveLatestUpdateMessage(" + timeOut + ")";
-		JMSConsumer consumer = jmsContext.createConsumer(updateQueue);
+	public static OabaNotification receiveFinalOabaNotification(
+			OabaJob oabaJob, final String LOG_SOURCE, JMSContext jmsContext,
+			Topic oabaStatusTopic, long timeOut) {
+		final String METHOD = "receiveLatestOabaNotification(" + timeOut + ")";
+		if (oabaJob == null) {
+			throw new IllegalArgumentException(METHOD + ": null OABA job");
+		}
+		JMSConsumer consumer = jmsContext.createConsumer(oabaStatusTopic);
 		logger.entering(LOG_SOURCE, METHOD);
-		OabaUpdateMessage retVal = null;
-		OabaUpdateMessage msg = null;
+		OabaNotification retVal = null;
+		OabaNotification msg = null;
 		do {
 			msg =
-				receiveUpdateMessage(LOG_SOURCE, consumer, updateQueue, timeOut);
-			if (msg != null) {
+				receiveOabaNotification(LOG_SOURCE, consumer, oabaStatusTopic,
+						timeOut);
+			if (msg != null && msg.getJobId() == oabaJob.getId()
+					&& msg.getJobPercentComplete() == PCT_DONE_OABA) {
 				retVal = msg;
-				if (msg.getPercentComplete() == PCT_DONE_OABA) {
-					break;
-				}
+				break;
 			}
 		} while (msg != null);
 		logger.exiting(LOG_SOURCE, METHOD);
 		return retVal;
 	}
 
-	public static OabaUpdateMessage receiveUpdateMessage(
-			final String LOG_SOURCE, JMSContext jmsContext, Queue updateQueue,
-			long timeOut) {
-		JMSConsumer consumer = jmsContext.createConsumer(updateQueue);
-		return receiveUpdateMessage(LOG_SOURCE, consumer, updateQueue, timeOut);
+	public static OabaNotification receiveOabaNotification(
+			final String LOG_SOURCE, JMSContext jmsContext,
+			Topic oabaStatusTopic, long timeOut) {
+		final String METHOD = "receiveLatestOabaNotification(" + timeOut + ")";
+		if (jmsContext == null || oabaStatusTopic == null) {
+			throw new IllegalArgumentException(METHOD + ": null OABA job");
+		}
+		JMSConsumer consumer = jmsContext.createConsumer(oabaStatusTopic);
+		return receiveOabaNotification(LOG_SOURCE, consumer, oabaStatusTopic,
+				timeOut);
 	}
 
-	protected static OabaUpdateMessage receiveUpdateMessage(
-			final String LOG_SOURCE, JMSConsumer consumer, Queue updateQueue,
-			long timeOut) {
-		final String METHOD = "receiveUpdateMessage(" + timeOut + ")";
+	protected static OabaNotification receiveOabaNotification(
+			final String LOG_SOURCE, JMSConsumer consumer,
+			Topic oabaStatusTopic, long timeOut) {
+		final String METHOD = "receiveOabaNotification(" + timeOut + ")";
 		logger.entering(LOG_SOURCE, METHOD);
+		if (oabaStatusTopic == null) {
+			throw new IllegalArgumentException(METHOD + ": null status topic");
+		}
 		if (consumer == null) {
-			throw new IllegalArgumentException("null consumer");
+			throw new IllegalArgumentException(METHOD + ": null consumer");
 		}
 		Object o = null;
 		try {
@@ -213,12 +213,12 @@ public class JmsUtils {
 		} catch (Exception x) {
 			fail(x.toString());
 		}
-		logger.info(queueInfo("Received from: ", "updateQueue", o));
-		if (o != null && !(o instanceof OabaUpdateMessage)) {
-			fail("Received wrong type from update queue: "
+		logger.info(topicInfo("Received from: ", oabaStatusTopic, o));
+		if (o != null && !(o instanceof OabaNotification)) {
+			fail("Received wrong type from status topic: "
 					+ o.getClass().getName());
 		}
-		OabaUpdateMessage retVal = (OabaUpdateMessage) o;
+		OabaNotification retVal = (OabaNotification) o;
 		logger.exiting(LOG_SOURCE, METHOD);
 		return retVal;
 	}

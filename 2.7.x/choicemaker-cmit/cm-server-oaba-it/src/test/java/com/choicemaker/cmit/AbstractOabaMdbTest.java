@@ -9,6 +9,7 @@ import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
+import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
@@ -120,6 +121,9 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	@Resource(lookup = "choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
 
+	@Resource(lookup = "java:/choicemaker/urm/jms/statusTopic")
+	private Topic oabaStatusTopic;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/singleMatchQueue")
 	private Queue singleMatchQueue;
 
@@ -128,9 +132,6 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transitivityQueue")
 	private Queue transitivityQueue;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateQueue")
-	private Queue updateQueue;
 
 	@Inject
 	private JMSContext jmsContext;
@@ -239,6 +240,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		assertTrue(getLogger() != null);
 		assertTrue(getMatchDedupQueue() != null);
 		assertTrue(getMatchSchedulerQueue() != null);
+		assertTrue(getOabaStatusTopic() != null);
 		assertTrue(getParamsController() != null);
 		assertTrue(getProcessingController() != null);
 		assertTrue(getServerController() != null);
@@ -247,7 +249,6 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		assertTrue(getSourceName() != null);
 		assertTrue(getStartQueue() != null);
 		assertTrue(getTestController() != null);
-		assertTrue(getUpdateQueue() != null);
 		assertTrue(getUtx() != null);
 
 		assertTrue(getTransitivityQueue() != null);
@@ -255,7 +256,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	@Test
 	@InSequence(2)
-	public final void clearQueues() {
+	public final void clearDestinations() {
 		assertTrue(setupOK);
 
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
@@ -276,8 +277,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
 				getTransitivityQueue());
 
-		JmsUtils.clearUpdateDataFromQueue(getSourceName(), getJmsContext(),
-				getUpdateQueue());
+		JmsUtils.clearOabaNotifications(getSourceName(), getJmsContext(),
+				getOabaStatusTopic());
 	}
 
 	@Test
@@ -391,6 +392,10 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return matchSchedulerQueue;
 	}
 
+	public final Topic getOabaStatusTopic() {
+		return oabaStatusTopic;
+	}
+
 	public final OabaParametersControllerBean getParamsController() {
 		return paramsController;
 	}
@@ -437,10 +442,6 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	public final Queue getTransitivityQueue() {
 		return transitivityQueue;
-	}
-
-	public final Queue getUpdateQueue() {
-		return updateQueue;
 	}
 
 	public final UserTransaction getUtx() {

@@ -25,34 +25,19 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessi
  * @rphall rewrote as subclass of BatchProcessingNotification
  *
  */
-public class OabaUpdateMessage extends BatchProcessingNotification {
+public class OabaNotification extends BatchProcessingNotification {
 
 	static final long serialVersionUID = 271;
 
-	public OabaUpdateMessage(OabaJob job, OabaEvent event, Date timestamp) {
+	public OabaNotification(OabaJob job, OabaEvent event, Date timestamp) {
 		this(job, event, timestamp, null);
 	}
 
-	public OabaUpdateMessage(OabaJob job, OabaEvent event, Date timestamp,
+	public OabaNotification(OabaJob job, OabaEvent event, Date timestamp,
 			String info) {
 		super(job.getId(), OabaJobJPA.DISCRIMINATOR_VALUE, job.getStatus()
 				.name(), event.percentComplete, event.eventId,
 				OabaProcessingJPA.DISCRIMINATOR_VALUE, timestamp, info);
-	}
-
-	/**
-	 * @deprecated use {@link #getJobId()}
-	 */
-	public long getJobID() {
-		return getJobId();
-	}
-
-	/**
-	 * @deprecated use {@link #getJobPercentComplete()
-
-	 */
-	public float getPercentComplete() {
-		return getJobPercentComplete();
 	}
 
 }
