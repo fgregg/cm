@@ -192,7 +192,7 @@ public class ChunkService3 {
 	 * 
 	 * @throws IOException
 	 */
-	public void runService() throws XmlConfException, BlockingException {
+	public void runService() throws BlockingException {
 
 		final String METHOD = "runService()";
 		log.entering(SOURCE, METHOD);
@@ -279,7 +279,7 @@ public class ChunkService3 {
 	 * @throws IOException
 	 * @throws XmlConfException
 	 */
-	private void createDataFiles() throws BlockingException, XmlConfException {
+	private void createDataFiles() throws BlockingException {
 		try {
 			// list of rows files to handle. The rows files is already sorted.
 			IChunkRecordIDSource[] crSources =
@@ -407,8 +407,7 @@ public class ChunkService3 {
 	private void createDataFiles(int start, int end,
 			IChunkRecordIDSource[] crSources, RecordSink[] recordSinks,
 			int offset, long[] ind, RecordSource rs,
-			ImmutableProbabilityModel model) throws BlockingException,
-			XmlConfException, IOException {
+			ImmutableProbabilityModel model) throws BlockingException {
 
 		log.fine("starting " + start + " ending " + end);
 		final String METHOD = "createDataFiles(..)";
@@ -432,7 +431,11 @@ public class ChunkService3 {
 				log.severe("missing record indices for chunk source[" + i + "]");
 			}
 			log.finer("opening record sink[" + i + "]");
-			recordSinks[i].open();
+			try {
+				recordSinks[i].open();
+			} catch (IOException e) {
+				throw new BlockingException(e.getMessage(),e);
+			}
 		} // end for
 
 		createDataFile(rs, model, start, end, offset, ind, crSources,
@@ -440,10 +443,17 @@ public class ChunkService3 {
 
 		// close sinks and sources
 		for (int i = start; i < end; i++) {
+			// close the chunk data sink
 			log.finer("closing record sink[" + i + "]");
-			recordSinks[i].close(); // close the chunk data sinks
+			try {
+				recordSinks[i].close();
+			} catch (IOException e) {
+				log.warning(e.toString());
+			}
+
+			// close the record id source
 			log.finer("closing chunk record source[" + i + "]");
-			crSources[i].close(); // close the record id sources
+			crSources[i].close();
 		}
 
 	}
@@ -475,8 +485,7 @@ public class ChunkService3 {
 	private void createDataFile(RecordSource rs,
 			ImmutableProbabilityModel model, int start, int end, int offset,
 			long[] ind, IChunkRecordIDSource[] crSources,
-			RecordSink[] recordSinks) throws BlockingException,
-			XmlConfException {
+			RecordSink[] recordSinks) throws BlockingException {
 
 		final String METHOD = "createDataFile(..)";
 		log.entering(SOURCE, METHOD, new Object[] {
