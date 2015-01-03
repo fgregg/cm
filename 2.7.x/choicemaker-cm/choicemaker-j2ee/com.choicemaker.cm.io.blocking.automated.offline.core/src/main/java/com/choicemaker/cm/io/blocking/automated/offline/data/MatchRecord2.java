@@ -194,7 +194,13 @@ public class MatchRecord2<T extends Comparable<T>> implements
 							assert matchType == mr.matchType;
 							assert ret == 0;
 
-							if (notes.compareTo(mr.notes) < 0)
+							if (notes == null && mr.notes == null)
+								ret = 0;
+							else if (notes == null && mr.notes != null)
+								ret = -1;
+							else if (notes != null && mr.notes == null)
+								ret = 1;
+							else if (notes.compareTo(mr.notes) < 0)
 								ret = -1;
 							else if (notes.compareTo(mr.notes) > 0)
 								ret = 1;
