@@ -345,7 +345,11 @@ public abstract class BatchJobEntity implements BatchJob {
 		String msg =
 			getId() + ", '" + getExternalId() + "': transitioning from "
 					+ getStatus() + " to " + newStatus;
-		log.warning(msg);
+		if (newStatus != null && newStatus.equals(getStatus())) {
+			log.warning("UNNECESSARY TRANSITION: " + msg);
+		} else {
+			log.info(msg);
+		}
 	}
 
 	protected void logIgnoredTransition(String transition) {
