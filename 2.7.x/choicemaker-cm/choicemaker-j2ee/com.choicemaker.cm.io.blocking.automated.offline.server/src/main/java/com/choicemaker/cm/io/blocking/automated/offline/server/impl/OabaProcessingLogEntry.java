@@ -26,7 +26,6 @@ import com.choicemaker.cm.batch.impl.BatchProcessingLogEntry;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 
-
 /**
  * This is the EJB implementation of the OABA OabaProcessing interface.
  * 
@@ -46,7 +45,7 @@ public class OabaProcessingLogEntry extends BatchProcessingLogEntry implements
 	private static final long serialVersionUID = 271L;
 
 	// -- Construction
-	
+
 	/** Required by JPA; do not invoke directly */
 	protected OabaProcessingLogEntry() {
 		super();
@@ -57,13 +56,14 @@ public class OabaProcessingLogEntry extends BatchProcessingLogEntry implements
 	}
 
 	public OabaProcessingLogEntry(BatchJob job, OabaEvent event, String info) {
-		super(job.getId(), OabaProcessingJPA.DISCRIMINATOR_VALUE, event.eventId, event.percentComplete, info);
+		super(job.getId(), OabaProcessingJPA.DISCRIMINATOR_VALUE, event.name(),
+				event.eventId, event.percentComplete, info);
 	}
 
 	@Override
 	public OabaEvent getOabaEvent() {
-		int eventId = this.getEventId();
-		OabaEvent retVal = OabaEvent.getOabaEvent(eventId);
+		OabaEvent retVal = OabaEvent.valueOf(this.getEventName());
+		assert retVal != null;
 		return retVal;
 	}
 

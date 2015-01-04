@@ -1,6 +1,5 @@
 package com.choicemaker.cm.batch.impl;
 
-
 public interface BatchProcessingJPA {
 
 	/** Name of the table that persists batch job data */
@@ -22,7 +21,7 @@ public interface BatchProcessingJPA {
 	 * @see #ID_GENERATOR_NAME
 	 */
 	String CN_ID = "ID";
-	
+
 	/** Required link to a persistent batch job */
 	String CN_JOB_ID = "JOB_ID";
 
@@ -32,9 +31,12 @@ public interface BatchProcessingJPA {
 	 * @see #DISCRIMINATOR_COLUMN
 	 */
 	String CN_EVENT_TYPE = DISCRIMINATOR_COLUMN;
-	
-	/** Optional link to predecessor batch job */
-	String CN_EVENT_ID = "EVENT_ID";
+
+	/** The name of an event */
+	String CN_EVENT_NAME = "EVENT_NAME";
+
+	/** An ordinal indicating the order of an event with respect to other events */
+	String CN_EVENT_SEQNUM = "EVENT_SEQNUM";
 
 	/**
 	 * Estimate of the amount of processing already complete, between 0.0 and

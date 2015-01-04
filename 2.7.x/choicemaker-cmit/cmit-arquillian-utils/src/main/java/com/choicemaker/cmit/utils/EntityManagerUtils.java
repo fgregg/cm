@@ -39,8 +39,8 @@ public class EntityManagerUtils {
 	private EntityManagerUtils() {
 	}
 
-//	private static final Logger logger = Logger
-//			.getLogger(EntityManagerUtils.class.getName());
+	// private static final Logger logger = Logger
+	// .getLogger(EntityManagerUtils.class.getName());
 
 	private static final String DEFAULT_EXTERNALID_TAG = "Random external id";
 	private static final String DEFAULT_MODEL_NAME = "FakeModelConfig";

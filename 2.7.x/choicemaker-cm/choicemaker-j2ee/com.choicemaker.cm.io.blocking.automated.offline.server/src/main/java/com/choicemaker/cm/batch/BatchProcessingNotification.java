@@ -25,9 +25,9 @@ public abstract class BatchProcessingNotification implements Serializable {
 
 	private final long jobId;
 	private final String jobType;
-//	private final String jobStatus;
 	private final float jobPercentComplete;
 	private final String eventType;
+	private final String eventName;
 	private final long eventId;
 	private final Date eventTimestamp;
 	private final String info;
@@ -39,10 +39,6 @@ public abstract class BatchProcessingNotification implements Serializable {
 	public String getJobType() {
 		return jobType;
 	}
-
-//	public String getJobStatus() {
-//		return jobStatus;
-//	}
 
 	public float getJobPercentComplete() {
 		return jobPercentComplete;
@@ -56,6 +52,10 @@ public abstract class BatchProcessingNotification implements Serializable {
 		return eventType;
 	}
 
+	public String getEventName() {
+		return eventName;
+	}
+
 	public Date getEventTimestamp() {
 		return eventTimestamp;
 	}
@@ -65,21 +65,21 @@ public abstract class BatchProcessingNotification implements Serializable {
 	}
 
 	protected BatchProcessingNotification(long jobId, String jobType,
-			/*String jobStatus,*/ float percentComplete, long eventId,
-			String eventType, Date timestamp) {
-		this(jobId, jobType, /*jobStatus,*/ percentComplete, eventId, eventType,
+			float percentComplete, long eventId, String eventType,
+			String eventName, Date timestamp) {
+		this(jobId, jobType, percentComplete, eventId, eventType, eventName,
 				timestamp, null);
 	}
 
 	protected BatchProcessingNotification(long jobId, String jobType,
-			/*String jobStatus,*/ float percentComplete, long eventId,
-			String eventType, Date timestamp, String info) {
+			float percentComplete, long eventId, String eventType,
+			String eventName, Date timestamp, String info) {
 		this.jobId = jobId;
 		this.jobType = jobType;
-//		this.jobStatus = jobStatus;
 		this.jobPercentComplete = percentComplete;
 		this.eventId = eventId;
 		this.eventType = eventType;
+		this.eventName = eventName;
 		this.eventTimestamp = timestamp;
 		this.info = info;
 	}
@@ -95,11 +95,11 @@ public abstract class BatchProcessingNotification implements Serializable {
 					+ ((eventTimestamp == null) ? 0 : eventTimestamp.hashCode());
 		result =
 			prime * result + ((eventType == null) ? 0 : eventType.hashCode());
+		result =
+			prime * result + ((eventName == null) ? 0 : eventName.hashCode());
 		result = prime * result + ((info == null) ? 0 : info.hashCode());
 		result = prime * result + (int) (jobId ^ (jobId >>> 32));
 		result = prime * result + Float.floatToIntBits(jobPercentComplete);
-//		result =
-//			prime * result + ((jobStatus == null) ? 0 : jobStatus.hashCode());
 		result = prime * result + ((jobType == null) ? 0 : jobType.hashCode());
 		return result;
 	}
@@ -133,6 +133,13 @@ public abstract class BatchProcessingNotification implements Serializable {
 		} else if (!eventType.equals(other.eventType)) {
 			return false;
 		}
+		if (eventName == null) {
+			if (other.eventName != null) {
+				return false;
+			}
+		} else if (!eventName.equals(other.eventName)) {
+			return false;
+		}
 		if (info == null) {
 			if (other.info != null) {
 				return false;
@@ -147,13 +154,6 @@ public abstract class BatchProcessingNotification implements Serializable {
 				.floatToIntBits(other.jobPercentComplete)) {
 			return false;
 		}
-//		if (jobStatus == null) {
-//			if (other.jobStatus != null) {
-//				return false;
-//			}
-//		} else if (!jobStatus.equals(other.jobStatus)) {
-//			return false;
-//		}
 		if (jobType == null) {
 			if (other.jobType != null) {
 				return false;
@@ -167,9 +167,9 @@ public abstract class BatchProcessingNotification implements Serializable {
 	@Override
 	public String toString() {
 		return "BatchProcessingNotification [jobId=" + jobId + ", jobType="
-				+ jobType /*+ ", jobStatus=" + jobStatus*/
-				+ ", jobPercentComplete=" + jobPercentComplete + ", eventType="
-				+ eventType + ", eventId=" + eventId + ", eventTimestamp="
+				+ jobType + ", jobPercentComplete=" + jobPercentComplete
+				+ ", eventType=" + eventType + ", eventName=" + eventName
+				+ ", eventSequenceNumber=" + eventId + ", eventTimestamp="
 				+ eventTimestamp + ", info=" + info + "]";
 	}
 

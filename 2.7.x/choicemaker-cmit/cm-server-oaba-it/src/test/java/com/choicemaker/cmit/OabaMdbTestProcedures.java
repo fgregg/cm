@@ -2,6 +2,7 @@ package com.choicemaker.cmit;
 
 import static com.choicemaker.cm.batch.BatchJob.INVALID_ID;
 import static com.choicemaker.cmit.utils.JmsUtils.LONG_TIMEOUT_MILLIS;
+import static com.choicemaker.cmit.utils.JmsUtils.SHORT_TIMEOUT_MILLIS;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -166,8 +167,8 @@ public class OabaMdbTestProcedures {
 				jobId =
 					batchQuery.startDeduplication(externalId, bp, oabaSettings,
 							serverConfiguration);
-				logger.info(tag
-						+ ": returned from BatchQueryService.startDeduplication");
+				logger.info(tag + ": returned jobId '" + jobId
+						+ "' from BatchQueryService.startDeduplication");
 				break;
 			case STAGING_TO_MASTER_LINKAGE:
 			case MASTER_TO_MASTER_LINKAGE:
@@ -175,8 +176,8 @@ public class OabaMdbTestProcedures {
 				jobId =
 					batchQuery.startLinkage(externalId, bp, oabaSettings,
 							serverConfiguration);
-				logger.info(tag
-						+ ": returned from BatchQueryService.startLinkage");
+				logger.info(tag + ": returned jobId '" + jobId
+						+ "' from BatchQueryService.startLinkage");
 				break;
 			default:
 				fail("Unexpected linkage type: " + linkage);
@@ -235,7 +236,7 @@ public class OabaMdbTestProcedures {
 			logger.info("Checking " + listeningQueueName);
 			OabaJobMessage startData =
 				JmsUtils.receiveStartData(LOG_SOURCE, jmsContext,
-						listeningQueue, JmsUtils.LONG_TIMEOUT_MILLIS);
+						listeningQueue, LONG_TIMEOUT_MILLIS);
 			logger.info(JmsUtils.queueInfo("Received from: ", listeningQueue,
 					startData));
 			if (startData == null) {
@@ -252,7 +253,7 @@ public class OabaMdbTestProcedures {
 					|| oabaPhase == OabaProcessingPhase.INITIAL) {
 				oabaNotification =
 					JmsUtils.receiveLatestOabaNotification(oabaJob, LOG_SOURCE,
-							statusListener, JmsUtils.SHORT_TIMEOUT_MILLIS);
+							statusListener, SHORT_TIMEOUT_MILLIS);
 			} else if (oabaPhase == OabaProcessingPhase.FINAL) {
 				oabaNotification =
 				// JmsUtils.receiveFinalOabaNotification(LOG_SOURCE, jmsContext,
@@ -298,36 +299,18 @@ public class OabaMdbTestProcedures {
 	}
 
 	public static void validateDestinations(OabaProcessingPhase oabaPhase,
-			Queue listeningQueue /*, Topic oabaStatusTopic */) {
+			Queue listeningQueue) {
 		if (oabaPhase == null) {
 			throw new IllegalArgumentException("null OABA processing phase");
 		}
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
 		assertTrue(isUpdateExpected);
-//		if (oabaStatusTopic == null) {
-//			throw new IllegalArgumentException("status topic is null");
-//		}
-		// /* if (isIntermediateExpected && !isUpdateExpected) {
-		// if (listeningQueue == null) {
-		// throw new IllegalArgumentException(
-		// "intermediate-result queue is null");
-		// }
-		// if (oabaStatusTopic != null) {
-		// String msg =
-		// "Ignoring update queue -- results expected only "
-		// + "from intermediate-result queue";
-		// logger.warning(msg);
-		// }
-		// } else */
 		if (isIntermediateExpected /* && isUpdateExpected */) {
 			if (listeningQueue == null) {
 				throw new IllegalArgumentException(
 						"intermediate-result queue is null");
 			}
-			// if (oabaStatusTopic == null) {
-			// throw new IllegalArgumentException("status topic is null");
-			// }
 		} else {
 			assertTrue(!isIntermediateExpected /* && isUpdateExpected */);
 			if (listeningQueue != null) {
@@ -336,9 +319,6 @@ public class OabaMdbTestProcedures {
 							+ "final results expected from status topic";
 				logger.warning(msg);
 			}
-			// if (oabaStatusTopic == null) {
-			// throw new IllegalArgumentException("status topic is null");
-			// }
 		}
 	}
 

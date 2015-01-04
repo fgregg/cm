@@ -71,7 +71,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	private final Class<T> configurationClass;
 
 	private final OabaProcessingPhase oabaPhase;
-	
+
 	private JMSConsumer oabaStatusConsumer;
 
 	// -- Read-only, injected instance data
@@ -175,7 +175,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		final String METHOD = "setUp";
 		getLogger().entering(getSourceName(), METHOD);
 		setupOK = true;
-		
+
 		try {
 			getLogger().info("Creating an OABA status listener");
 			this.oabaStatusConsumer =
@@ -207,7 +207,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	public final void tearDown() {
 		String METHOD = "tearDown";
 		getLogger().entering(getSourceName(), METHOD);
-		
+
 		getLogger().info("Closing the OABA status listener");
 		this.getOabaStatusConsumer().close();
 
@@ -217,7 +217,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 				int finalOabaParamsCount =
 					getTestController().findAllOabaParameters().size();
 				String alert = "initialOabaParamsCount != finalOabaParamsCount";
-				assertTrue(alert, initialOabaParamsCount == finalOabaParamsCount);
+				assertTrue(alert,
+						initialOabaParamsCount == finalOabaParamsCount);
 
 				int finalOabaJobCount =
 					getTestController().findAllOabaJobs().size();
@@ -226,7 +227,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 				int finalOabaProcessingCount =
 					getTestController().findAllOabaProcessing().size();
-				alert = "initialOabaProcessingCount != finalOabaProcessingCount";
+				alert =
+					"initialOabaProcessingCount != finalOabaProcessingCount";
 				assertTrue(alert,
 						initialOabaProcessingCount == finalOabaProcessingCount);
 

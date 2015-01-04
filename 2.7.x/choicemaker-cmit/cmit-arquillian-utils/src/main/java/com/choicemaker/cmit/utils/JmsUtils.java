@@ -28,7 +28,7 @@ public class JmsUtils {
 
 	/**
 	 * A very long, rather desperate time-out for receiving messages from
-	 * possibly delayed (or more likely, dead) processes (5 minutes)
+	 * possibly delayed -- or more likely, dead -- processes (5 minutes)
 	 */
 	public static final long VERY_LONG_TIMEOUT_MILLIS = 300000;
 
@@ -48,16 +48,6 @@ public class JmsUtils {
 		return MessageBeanUtils.topicInfo(tag, q, d);
 	}
 
-	// public static String queueInfo(String tag, String queueName, Object d) {
-	// if (queueName == null || queueName.trim().isEmpty()) {
-	// queueName = "unknown";
-	// }
-	// StringBuilder sb =
-	// new StringBuilder(tag).append("queue: '").append(queueName)
-	// .append("', data: '").append(d).append("'");
-	// return sb.toString();
-	// }
-
 	public static void clearStartDataFromQueue(String LOG_SOURCE,
 			JMSContext jmsContext, Queue queue) {
 		JMSConsumer consumer = jmsContext.createConsumer(queue);
@@ -73,25 +63,6 @@ public class JmsUtils {
 			logger.info(queueInfo("Clearing: ", queue, startData));
 		} while (startData != null);
 		logger.info(queueInfo("Messages cleared: " + count + " ", queue));
-	}
-
-	public static void clearNotificationsFromTopic(String LOG_SOURCE,
-			JMSContext jmsContext, Topic statusTopic) {
-		throw new Error("not yet implemented");
-		// JMSConsumer consumer = jmsContext.createConsumer(oabaStatusTopic);
-		// int count = 0;
-		// OabaNotification updateMessage = null;
-		// do {
-		// updateMessage =
-		// receiveOabaNotification(LOG_SOURCE, consumer, oabaStatusTopic,
-		// SHORT_TIMEOUT_MILLIS);
-		// if (updateMessage != null) {
-		// ++count;
-		// }
-		// logger.info(queueInfo("Clearing: ", oabaStatusTopic, updateMessage));
-		// } while (updateMessage != null);
-		// logger.info(queueInfo("Messages cleared: " + count + " ",
-		// oabaStatusTopic));
 	}
 
 	public static OabaJobMessage receiveStartData(String LOG_SOURCE,

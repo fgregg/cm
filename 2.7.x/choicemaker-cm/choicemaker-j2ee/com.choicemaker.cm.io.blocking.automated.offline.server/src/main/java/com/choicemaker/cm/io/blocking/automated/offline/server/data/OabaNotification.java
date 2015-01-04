@@ -38,14 +38,15 @@ public class OabaNotification extends BatchProcessingNotification {
 			String info) {
 		super(job.getId(), OabaJobJPA.DISCRIMINATOR_VALUE,
 				event.percentComplete, event.eventId,
-				OabaProcessingJPA.DISCRIMINATOR_VALUE, timestamp, info);
+				OabaProcessingJPA.DISCRIMINATOR_VALUE, event.name(), timestamp,
+				info);
 	}
 
 	public OabaNotification(OabaProcessingEvent ope) {
 		super(ope.getJobId(), OabaJobJPA.DISCRIMINATOR_VALUE, ope
-				.getFractionComplete(), ope.getEventId(),
-				OabaProcessingJPA.DISCRIMINATOR_VALUE, ope.getEventTimestamp(),
-				ope.getEventInfo());
+				.getFractionComplete(), ope.getEventSequenceNumber(),
+				OabaProcessingJPA.DISCRIMINATOR_VALUE, ope.getEventName(), ope
+						.getEventTimestamp(), ope.getEventInfo());
 	}
 
 }

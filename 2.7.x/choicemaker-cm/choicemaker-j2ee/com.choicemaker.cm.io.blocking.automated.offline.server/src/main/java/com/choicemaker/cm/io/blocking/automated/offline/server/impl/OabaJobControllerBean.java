@@ -6,8 +6,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
+import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -20,6 +26,7 @@ import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -50,6 +57,12 @@ public class OabaJobControllerBean {
 	@EJB
 	private OabaProcessingControllerBean processingController;
 
+	@Inject
+	private JMSContext jmsContext;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/statusTopic")
+	private Topic oabaStatusTopic;
+
 	protected OabaJobEntity getBean(OabaJob oabaJob) {
 		OabaJobEntity retVal = null;
 		if (oabaJob != null) {
@@ -73,6 +86,7 @@ public class OabaJobControllerBean {
 		return retVal;
 	}
 
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public OabaJob createPersistentOabaJob(String externalID,
 			OabaParameters params, OabaSettings settings, ServerConfiguration sc)
 			throws ServerConfigurationException {
@@ -91,11 +105,14 @@ public class OabaJobControllerBean {
 		em.persist(retVal);
 		assert OabaJobEntity.isPersistent(retVal);
 
-		// Create a new entry in the processing log
-		processingController.updateStatusWithNotification(retVal,
-				OabaEvent.INIT, new Date(), null);
-		OabaEvent currentProcessingEvent =
-			processingController.getCurrentOabaEvent(retVal);
+		// Create a new entry in the processing log and check it
+		OabaProcessingControllerBean.updateStatusWithNotification(em,
+				jmsContext, oabaStatusTopic, retVal, OabaEvent.INIT,
+				new Date(), null);
+		OabaProcessingEvent ope =
+			OabaProcessingControllerBean.getCurrentOabaProcessingEvent(em,
+					retVal);
+		OabaEvent currentProcessingEvent = ope.getOabaEvent();
 		assert currentProcessingEvent == OabaEvent.INIT;
 
 		// Create the working directory

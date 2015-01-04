@@ -42,7 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
  */
 @Stateless
 public class OabaProcessingControllerBean {
-	
+
 	private static final Logger logger = Logger
 			.getLogger(OabaProcessingControllerBean.class.getName());
 
@@ -98,11 +98,11 @@ public class OabaProcessingControllerBean {
 		}
 		OabaProcessingEvent ope =
 			updateStatus(em, job, event, new Date(), info);
-		OabaNotification data =
-			new OabaNotification(ope);
+		OabaNotification data = new OabaNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
 		JMSProducer sender = jmsContext.createProducer();
-		logger.info(MessageBeanUtils.topicInfo("Sending", oabaStatusTopic, data));
+		logger.info(MessageBeanUtils
+				.topicInfo("Sending", oabaStatusTopic, data));
 		sender.send(oabaStatusTopic, message);
 		logger.info(MessageBeanUtils.topicInfo("Sent", oabaStatusTopic, data));
 	}
@@ -124,7 +124,8 @@ public class OabaProcessingControllerBean {
 		return retVal;
 	}
 
-	static OabaProcessingEvent getCurrentOabaProcessingEvent(EntityManager em, OabaJob oabaJob) {
+	static OabaProcessingEvent getCurrentOabaProcessingEvent(EntityManager em,
+			OabaJob oabaJob) {
 		List<OabaProcessingLogEntry> entries =
 			OabaProcessingControllerBean.findProcessingLogEntriesByJobId(em,
 					oabaJob.getId());
@@ -143,16 +144,18 @@ public class OabaProcessingControllerBean {
 							String summary =
 								"Invalid OabaProcessingEvent ordering";
 							String msg =
-								OabaProcessingControllerBean.createOrderingDetailMesssage(summary, retVal,
-										e2);
+								OabaProcessingControllerBean
+										.createOrderingDetailMesssage(summary,
+												retVal, e2);
 							logger.severe(msg);
 							throw new IllegalStateException(summary);
 						} else if (mostRecent.compareTo(d2) == 0) {
 							String summary =
 								"Ambiguous OabaProcessingEvent timestamps";
 							String msg =
-								OabaProcessingControllerBean.createOrderingDetailMesssage(summary, retVal,
-										e2);
+								OabaProcessingControllerBean
+										.createOrderingDetailMesssage(summary,
+												retVal, e2);
 							logger.warning(msg);
 						}
 					}
@@ -183,7 +186,7 @@ public class OabaProcessingControllerBean {
 	private Topic oabaStatusTopic;
 
 	public List<OabaProcessingLogEntry> findProcessingLogEntriesByJobId(long id) {
-		return findProcessingLogEntriesByJobId(em,id);
+		return findProcessingLogEntriesByJobId(em, id);
 	}
 
 	public OabaEventLog getProcessingLog(OabaJob job) {
@@ -192,13 +195,13 @@ public class OabaProcessingControllerBean {
 
 	public void updateStatusWithNotification(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		updateStatusWithNotification(em, jmsContext, oabaStatusTopic, job, event,
-				timestamp, info);
+		updateStatusWithNotification(em, jmsContext, oabaStatusTopic, job,
+				event, timestamp, info);
 	}
 
 	public OabaEvent getCurrentOabaEvent(OabaJob oabaJob) {
 		OabaEvent retVal = null;
-		OabaProcessingEvent ope = getCurrentOabaProcessingEvent(em,oabaJob);
+		OabaProcessingEvent ope = getCurrentOabaProcessingEvent(em, oabaJob);
 		if (ope != null) {
 			retVal = ope.getOabaEvent();
 		}

@@ -54,8 +54,11 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 	@Column(name = CN_EVENT_TYPE)
 	protected final String type;
 
-	@Column(name = CN_EVENT_ID)
-	protected final int eventId;
+	@Column(name = CN_EVENT_NAME)
+	protected final String eventName;
+
+	@Column(name = CN_EVENT_SEQNUM)
+	protected final int eventSequenceNumber;
 
 	@Column(name = CN_FRACTION_COMPLETE)
 	protected final float fractionComplete;
@@ -70,22 +73,29 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 	protected BatchProcessingLogEntry() {
 		this.jobId = BatchJob.INVALID_ID;
 		this.type = DISCRIMINATOR_VALUE;
-		this.eventId = INVALID_EVENT_ID;
+		this.eventName = INVALID_EVENT_NAME;
+		this.eventSequenceNumber = INVALID_EVENT_SEQNUM;
 		this.fractionComplete = DEFAULT_FRACTION_COMPLETE;
 		this.eventInfo = DEFAULT_EVENT_INFO;
 		this.eventTimestamp = INVALID_TIMESTAMP;
 	}
 
-	protected BatchProcessingLogEntry(long jobId, String type, int eventId,
-			float fractionComplete, String info) {
+	protected BatchProcessingLogEntry(long jobId, String type, String evtName,
+			int eventSeqNum, float fractionComplete, String info) {
 		if (jobId == BatchJob.INVALID_ID) {
 			throw new IllegalArgumentException("invalid jobId: " + jobId);
 		}
 		if (type == null || !type.equals(type.trim()) || type.isEmpty()) {
 			throw new IllegalArgumentException("invalid type: '" + type + "'");
 		}
-		if (eventId == INVALID_EVENT_ID) {
-			throw new IllegalArgumentException("invalid eventId: " + eventId);
+		if (evtName == null || !evtName.equals(evtName.trim())
+				|| evtName.isEmpty()) {
+			throw new IllegalArgumentException("invalid event name: '"
+					+ evtName + "'");
+		}
+		if (eventSeqNum == INVALID_EVENT_SEQNUM) {
+			throw new IllegalArgumentException("invalid eventSequenceNumber: "
+					+ eventSeqNum);
 		}
 		if (Float.isNaN(fractionComplete)
 				|| fractionComplete < MINIMUM_FRACTION_COMPLETE
@@ -95,7 +105,8 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 		}
 		this.jobId = jobId;
 		this.type = type;
-		this.eventId = eventId;
+		this.eventName = evtName;
+		this.eventSequenceNumber = eventSeqNum;
 		this.fractionComplete = fractionComplete;
 		this.eventInfo = info;
 		this.eventTimestamp = new Date();
@@ -119,10 +130,16 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 		return type;
 	}
 
-	/** Returns the event identifier for this entry */
+	/** Returns the event name for this entry */
 	@Override
-	public int getEventId() {
-		return eventId;
+	public String getEventName() {
+		return eventName;
+	}
+
+	/** Returns the event sequence number for this entry */
+	@Override
+	public int getEventSequenceNumber() {
+		return eventSequenceNumber;
 	}
 
 	/**
@@ -163,16 +180,18 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + eventId;
+		result = prime * result + (int) (jobId ^ (jobId >>> 32));
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result =
-			prime * result + ((eventInfo == null) ? 0 : eventInfo.hashCode());
+			prime * result + ((eventName == null) ? 0 : eventName.hashCode());
+		result = prime * result + eventSequenceNumber;
+		result = prime * result + Float.floatToIntBits(fractionComplete);
 		result =
 			prime
 					* result
 					+ ((eventTimestamp == null) ? 0 : eventTimestamp.hashCode());
-		result = prime * result + Float.floatToIntBits(fractionComplete);
-		result = prime * result + (int) (jobId ^ (jobId >>> 32));
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result =
+			prime * result + ((eventInfo == null) ? 0 : eventInfo.hashCode());
 		return result;
 	}
 
@@ -206,27 +225,6 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 		assert other != null;
 		assert this.id == other.id;
 
-		if (eventId != other.eventId) {
-			return false;
-		}
-		if (eventInfo == null) {
-			if (other.eventInfo != null) {
-				return false;
-			}
-		} else if (!eventInfo.equals(other.eventInfo)) {
-			return false;
-		}
-		if (eventTimestamp == null) {
-			if (other.eventTimestamp != null) {
-				return false;
-			}
-		} else if (!eventTimestamp.equals(other.eventTimestamp)) {
-			return false;
-		}
-		if (Float.floatToIntBits(fractionComplete) != Float
-				.floatToIntBits(other.fractionComplete)) {
-			return false;
-		}
 		if (jobId != other.jobId) {
 			return false;
 		}
@@ -237,13 +235,42 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 		} else if (!type.equals(other.type)) {
 			return false;
 		}
+		if (eventName == null) {
+			if (other.eventName != null) {
+				return false;
+			}
+		} else if (!eventName.equals(other.eventName)) {
+			return false;
+		}
+		if (eventSequenceNumber != other.eventSequenceNumber) {
+			return false;
+		}
+		if (Float.floatToIntBits(fractionComplete) != Float
+				.floatToIntBits(other.fractionComplete)) {
+			return false;
+		}
+		if (eventTimestamp == null) {
+			if (other.eventTimestamp != null) {
+				return false;
+			}
+		} else if (!eventTimestamp.equals(other.eventTimestamp)) {
+			return false;
+		}
+		if (eventInfo == null) {
+			if (other.eventInfo != null) {
+				return false;
+			}
+		} else if (!eventInfo.equals(other.eventInfo)) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "BatchProcessingLogEntry [id=" + id + ", jobId=" + jobId
-				+ ", type=" + type + ", eventId=" + eventId
+				+ ", type=" + type + ", eventName=" + eventName
+				+ ", eventSequenceNumber=" + eventSequenceNumber
 				+ ", fractionComplete=" + fractionComplete + ", eventInfo="
 				+ eventInfo + ", eventTimestamp=" + eventTimestamp + "]";
 	}
