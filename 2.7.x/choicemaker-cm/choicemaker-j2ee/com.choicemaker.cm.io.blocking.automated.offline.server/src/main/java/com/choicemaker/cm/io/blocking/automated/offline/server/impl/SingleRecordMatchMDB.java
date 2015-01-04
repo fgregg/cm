@@ -404,7 +404,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 	private void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		processingController.updateOabaProcessingStatus(job, event, timestamp,
+		processingController.updateStatusWithNotification(job, event, timestamp,
 				info);
 	}
 

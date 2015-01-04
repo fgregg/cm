@@ -1,10 +1,9 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Logger;
+
+import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
@@ -23,94 +22,23 @@ public class OabaJobEventLog implements OabaEventLog {
 	private static final Logger logger = Logger.getLogger(OabaJobEventLog.class
 			.getName());
 
-	/**
-	 * The name of a system property that can be set to "true" to turn on
-	 * redundant order-by checking.
-	 */
-	public static final String PN_OABA_EVENT_ORDERBY_DEBUGGING =
-		"OabaEventLogOrderByDebugging";
-
-	// Don't use this directly; use isOrderByDebuggingRequested() instead
-	private static Boolean _isOrderByDebuggingRequested = null;
-
-	/**
-	 * Checks the system property {@link #PN_SANITY_CHECK} and caches the result
-	 */
-	protected static boolean isOrderByDebuggingRequested() {
-		if (_isOrderByDebuggingRequested == null) {
-			String pn = PN_OABA_EVENT_ORDERBY_DEBUGGING;
-			String defaultValue = Boolean.FALSE.toString();
-			String value = System.getProperty(pn, defaultValue);
-			_isOrderByDebuggingRequested = Boolean.valueOf(value);
-		}
-		boolean retVal = _isOrderByDebuggingRequested.booleanValue();
-		if (retVal) {
-			logger.info("OabaEventLog order-by debugging is enabled");
-		}
-		return retVal;
-	}
-
+	private final EntityManager em;
 	private final OabaJob oabaJob;
-	private final OabaProcessingControllerBean processingController;
 
-	public OabaJobEventLog(OabaJob job,
-			OabaProcessingControllerBean processingController) {
+	public OabaJobEventLog(EntityManager em, OabaJob job) {
+		if (em == null) {
+			throw new IllegalArgumentException("null EntityManager");
+		}
 		if (job == null || !OabaJobEntity.isPersistent(job)) {
 			throw new IllegalArgumentException("invalid OABA job: " + job);
 		}
-		if (processingController == null) {
-			throw new IllegalArgumentException("null processing controller");
-		}
+		this.em = em;
 		this.oabaJob = job;
-		this.processingController = processingController;
 	}
 
 	protected OabaProcessingEvent getCurrentOabaProcessingEvent() {
-		List<OabaProcessingLogEntry> entries =
-		processingController.findProcessingLogEntriesByJobId(oabaJob.getId());
-		final OabaProcessingEvent retVal;
-		if (entries.isEmpty()) {
-			retVal = null;
-		} else {
-			retVal = entries.get(0);
-			if (isOrderByDebuggingRequested()) {
-				final Date mostRecent = retVal.getEventTimestamp();
-				if (entries.size() > 1) {
-					for (int i = 1; i < entries.size(); i++) {
-						final OabaProcessingEvent e2 = entries.get(i);
-						final Date d2 = e2.getEventTimestamp();
-						if (mostRecent.compareTo(d2) < 0) {
-							String summary =
-								"Invalid OabaProcessingEvent ordering";
-							String msg =
-								createOrderingDetailMesssage(summary, retVal,
-										e2);
-							logger.severe(msg);
-							throw new IllegalStateException(summary);
-						} else if (mostRecent.compareTo(d2) == 0) {
-							String summary =
-								"Ambiguous OabaProcessingEvent timestamps";
-							String msg =
-								createOrderingDetailMesssage(summary, retVal,
-										e2);
-							logger.warning(msg);
-						}
-					}
-				}
-			}
-		}
-		return retVal;
-	}
-
-	private String createOrderingDetailMesssage(String summary,
-			OabaProcessingEvent e1, OabaProcessingEvent e2) {
-		final String INDENT = "   ";
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		pw.println(summary);
-		pw.println(INDENT + "Most recent: " + e1.getOabaEvent() + " " + e1);
-		pw.println(INDENT + " Subsequent: " + e2.getOabaEvent() + " " + e2);
-		return sw.toString();
+		return OabaProcessingControllerBean.getCurrentOabaProcessingEvent(em,
+				oabaJob);
 	}
 
 	@Override
@@ -141,7 +69,7 @@ public class OabaJobEventLog implements OabaEventLog {
 	public void setCurrentOabaEvent(OabaEvent event, String info) {
 		logger.info("OABA processing event: " + event + " (job "
 				+ this.oabaJob.getId() + ")");
-		processingController.updateOabaProcessingStatus(oabaJob, event,
+		OabaProcessingControllerBean.updateStatus(em, oabaJob, event,
 				new Date(), info);
 	}
 

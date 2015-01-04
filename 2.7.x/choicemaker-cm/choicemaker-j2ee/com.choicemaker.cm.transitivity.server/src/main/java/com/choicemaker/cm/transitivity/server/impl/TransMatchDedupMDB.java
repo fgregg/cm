@@ -267,7 +267,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 //	@Override
 	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		processingController.updateOabaProcessingStatus(job, event, timestamp, info);
+		processingController.updateStatusWithNotification(job, event, timestamp, info);
 	}
 
 }

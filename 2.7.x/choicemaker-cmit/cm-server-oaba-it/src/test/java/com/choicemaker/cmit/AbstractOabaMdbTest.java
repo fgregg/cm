@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.inject.Inject;
+import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
 import javax.jms.Topic;
@@ -70,6 +71,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	private final Class<T> configurationClass;
 
 	private final OabaProcessingPhase oabaPhase;
+	
+	private JMSConsumer oabaStatusConsumer;
 
 	// -- Read-only, injected instance data
 
@@ -172,17 +175,26 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		final String METHOD = "setUp";
 		getLogger().entering(getSourceName(), METHOD);
 		setupOK = true;
+		
 		try {
-			int initialValue;
+			getLogger().info("Creating an OABA status listener");
+			this.oabaStatusConsumer =
+				getJmsContext().createConsumer(getOabaStatusTopic());
 
-			initialValue = getTestController().findAllOabaParameters().size();
-			setInitialOabaParamsCount(initialValue);
+			getLogger().info("Computing initial counts of persistent objects");
+			int c;
 
-			initialValue = getTestController().findAllOabaJobs().size();
-			setInitialOabaJobCount(initialValue);
+			c = getTestController().findAllOabaParameters().size();
+			getLogger().info("Initial count of OABA parameters: " + c);
+			setInitialOabaParamsCount(c);
 
-			initialValue = getTestController().findAllOabaProcessing().size();
-			setInitialOabaProcessingCount(initialValue);
+			c = getTestController().findAllOabaJobs().size();
+			getLogger().info("Initial count of OABA jobs: " + c);
+			setInitialOabaJobCount(c);
+
+			c = getTestController().findAllOabaProcessing().size();
+			getLogger().info("Initial count of OABA processing entries: " + c);
+			setInitialOabaProcessingCount(c);
 
 		} catch (Exception x) {
 			getLogger().severe(x.toString());
@@ -195,6 +207,10 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	public final void tearDown() {
 		String METHOD = "tearDown";
 		getLogger().entering(getSourceName(), METHOD);
+		
+		getLogger().info("Closing the OABA status listener");
+		this.getOabaStatusConsumer().close();
+
 		if (!TestEntities.isTestObjectRetentionRequested()) {
 			getLogger().info("Checking final object counts");
 			try {
@@ -277,8 +293,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
 				getTransitivityQueue());
 
-		JmsUtils.clearOabaNotifications(getSourceName(), getJmsContext(),
-				getOabaStatusTopic());
+		JmsUtils.clearOabaNotifications(getSourceName(),
+				getOabaStatusConsumer());
 	}
 
 	@Test
@@ -390,6 +406,10 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	public final Queue getMatchSchedulerQueue() {
 		return matchSchedulerQueue;
+	}
+
+	public final JMSConsumer getOabaStatusConsumer() {
+		return oabaStatusConsumer;
 	}
 
 	public final Topic getOabaStatusTopic() {

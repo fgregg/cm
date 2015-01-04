@@ -7,10 +7,10 @@ import static org.junit.Assert.fail;
 
 import java.util.logging.Logger;
 
+import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
-import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
@@ -124,8 +124,8 @@ public class OabaMdbTestProcedures {
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
 		final Queue listeningQueue = test.getResultQueue();
-		final Topic oabaStatusTopic = test.getOabaStatusTopic();
-		validateDestinations(oabaPhase, listeningQueue, oabaStatusTopic);
+		final JMSConsumer statusListener = test.getOabaStatusConsumer();
+		validateDestinations(oabaPhase, listeningQueue);
 
 		final WellKnownTestConfiguration c = test.getTestConfiguration(linkage);
 
@@ -252,14 +252,13 @@ public class OabaMdbTestProcedures {
 					|| oabaPhase == OabaProcessingPhase.INITIAL) {
 				oabaNotification =
 					JmsUtils.receiveLatestOabaNotification(oabaJob, LOG_SOURCE,
-							jmsContext, oabaStatusTopic,
-							JmsUtils.SHORT_TIMEOUT_MILLIS);
+							statusListener, JmsUtils.SHORT_TIMEOUT_MILLIS);
 			} else if (oabaPhase == OabaProcessingPhase.FINAL) {
 				oabaNotification =
 				// JmsUtils.receiveFinalOabaNotification(LOG_SOURCE, jmsContext,
 				// oabaStatusTopic, VERY_LONG_TIMEOUT_MILLIS);
 					JmsUtils.receiveFinalOabaNotification(oabaJob, LOG_SOURCE,
-							jmsContext, oabaStatusTopic, LONG_TIMEOUT_MILLIS);
+							statusListener, LONG_TIMEOUT_MILLIS);
 			} else {
 				throw new Error("unexpected phase: " + oabaPhase);
 			}
@@ -299,16 +298,16 @@ public class OabaMdbTestProcedures {
 	}
 
 	public static void validateDestinations(OabaProcessingPhase oabaPhase,
-			Queue listeningQueue, Topic oabaStatusTopic) {
+			Queue listeningQueue /*, Topic oabaStatusTopic */) {
 		if (oabaPhase == null) {
 			throw new IllegalArgumentException("null OABA processing phase");
 		}
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
 		assertTrue(isUpdateExpected);
-		if (oabaStatusTopic == null) {
-			throw new IllegalArgumentException("status topic is null");
-		}
+//		if (oabaStatusTopic == null) {
+//			throw new IllegalArgumentException("status topic is null");
+//		}
 		// /* if (isIntermediateExpected && !isUpdateExpected) {
 		// if (listeningQueue == null) {
 		// throw new IllegalArgumentException(

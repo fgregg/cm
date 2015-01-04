@@ -189,7 +189,7 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	@Override
 	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		processingController.updateOabaProcessingStatus(job, event, timestamp,
+		processingController.updateStatusWithNotification(job, event, timestamp,
 				info);
 	}
 

@@ -176,7 +176,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	protected void updateOabaProcessingStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		getProcessingController().updateOabaProcessingStatus(job, event,
+		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
 
