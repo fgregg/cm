@@ -56,14 +56,14 @@ public class OabaProcessingControllerBean {
 	// Don't use this directly; use isOrderByDebuggingRequested() instead
 	static Boolean _isOrderByDebuggingRequested = null;
 
-	static List<OabaProcessingLogEntry> findProcessingLogEntriesByJobId(
+	static List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(
 			EntityManager em, long id) {
 		Query query =
-			em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_BY_JOBID);
+			em.createNamedQuery(OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_BY_JOBID);
 		query.setParameter(
-				OabaProcessingJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID, id);
+				OabaProcessingEventJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID, id);
 		@SuppressWarnings("unchecked")
-		List<OabaProcessingLogEntry> entries = query.getResultList();
+		List<OabaProcessingEventEntity> entries = query.getResultList();
 		return entries;
 	}
 
@@ -81,8 +81,8 @@ public class OabaProcessingControllerBean {
 		if (timestamp == null) {
 			throw new IllegalArgumentException("null timestamp");
 		}
-		OabaProcessingLogEntry ope =
-			new OabaProcessingLogEntry(job, event, info);
+		OabaProcessingEventEntity ope =
+			new OabaProcessingEventEntity(job, event, info);
 		em.persist(ope);
 		return ope;
 	}
@@ -126,7 +126,7 @@ public class OabaProcessingControllerBean {
 
 	static OabaProcessingEvent getCurrentOabaProcessingEvent(EntityManager em,
 			OabaJob oabaJob) {
-		List<OabaProcessingLogEntry> entries =
+		List<OabaProcessingEventEntity> entries =
 			OabaProcessingControllerBean.findProcessingLogEntriesByJobId(em,
 					oabaJob.getId());
 		final OabaProcessingEvent retVal;
@@ -185,12 +185,12 @@ public class OabaProcessingControllerBean {
 	@Resource(lookup = "java:/choicemaker/urm/jms/statusTopic")
 	private Topic oabaStatusTopic;
 
-	public List<OabaProcessingLogEntry> findProcessingLogEntriesByJobId(long id) {
+	public List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
 	public OabaEventLog getProcessingLog(OabaJob job) {
-		return new OabaJobEventLog(em, job);
+		return new OabaProcessingLog(em, job);
 	}
 
 	public void updateStatusWithNotification(OabaJob job, OabaEvent event,

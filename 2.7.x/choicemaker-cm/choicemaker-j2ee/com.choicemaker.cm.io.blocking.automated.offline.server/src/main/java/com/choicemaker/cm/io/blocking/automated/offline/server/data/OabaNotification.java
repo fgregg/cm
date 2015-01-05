@@ -17,7 +17,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA;
 
 /**
  * This is the data object that gets passed to the UpdateStatusMDB message bean.
@@ -38,14 +38,14 @@ public class OabaNotification extends BatchProcessingNotification {
 			String info) {
 		super(job.getId(), OabaJobJPA.DISCRIMINATOR_VALUE,
 				event.percentComplete, event.eventId,
-				OabaProcessingJPA.DISCRIMINATOR_VALUE, event.name(), timestamp,
+				OabaProcessingEventJPA.DISCRIMINATOR_VALUE, event.name(), timestamp,
 				info);
 	}
 
 	public OabaNotification(OabaProcessingEvent ope) {
 		super(ope.getJobId(), OabaJobJPA.DISCRIMINATOR_VALUE, ope
 				.getFractionComplete(), ope.getEventSequenceNumber(),
-				OabaProcessingJPA.DISCRIMINATOR_VALUE, ope.getEventName(), ope
+				OabaProcessingEventJPA.DISCRIMINATOR_VALUE, ope.getEventName(), ope
 						.getEventTimestamp(), ope.getEventInfo());
 	}
 

@@ -10,11 +10,11 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.DISCRIMINATOR_VALUE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.JPQL_OABAPROCESSING_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.JPQL_OABAPROCESSING_FIND_BY_JOBID;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.QN_OABAPROCESSING_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA.QN_OABAPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.JPQL_OABAPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.JPQL_OABAPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_BY_JOBID;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -39,7 +39,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
 				query = JPQL_OABAPROCESSING_FIND_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class OabaProcessingLogEntry extends BatchProcessingLogEntry implements
+public class OabaProcessingEventEntity extends BatchProcessingLogEntry implements
 		OabaProcessingEvent {
 
 	private static final long serialVersionUID = 271L;
@@ -47,16 +47,16 @@ public class OabaProcessingLogEntry extends BatchProcessingLogEntry implements
 	// -- Construction
 
 	/** Required by JPA; do not invoke directly */
-	protected OabaProcessingLogEntry() {
+	protected OabaProcessingEventEntity() {
 		super();
 	}
 
-	public OabaProcessingLogEntry(BatchJob job, OabaEvent status) {
+	public OabaProcessingEventEntity(BatchJob job, OabaEvent status) {
 		this(job, status, null);
 	}
 
-	public OabaProcessingLogEntry(BatchJob job, OabaEvent event, String info) {
-		super(job.getId(), OabaProcessingJPA.DISCRIMINATOR_VALUE, event.name(),
+	public OabaProcessingEventEntity(BatchJob job, OabaEvent event, String info) {
+		super(job.getId(), OabaProcessingEventJPA.DISCRIMINATOR_VALUE, event.name(),
 				event.eventId, event.percentComplete, info);
 	}
 

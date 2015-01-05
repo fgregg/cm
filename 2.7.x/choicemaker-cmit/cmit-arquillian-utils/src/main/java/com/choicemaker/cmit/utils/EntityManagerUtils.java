@@ -29,7 +29,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntit
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingJPA;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA;
@@ -219,7 +219,7 @@ public class EntityManagerUtils {
 
 	public static List<OabaProcessing> findAllOabaProcessing(EntityManager em) {
 		Query query =
-			em.createNamedQuery(OabaProcessingJPA.QN_OABAPROCESSING_FIND_ALL);
+			em.createNamedQuery(OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<OabaProcessing> retVal = query.getResultList();
 		if (retVal == null) {

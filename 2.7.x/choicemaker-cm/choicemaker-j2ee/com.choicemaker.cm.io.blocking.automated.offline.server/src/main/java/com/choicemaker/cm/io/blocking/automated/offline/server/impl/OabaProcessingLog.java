@@ -11,21 +11,21 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 
 /**
- * OabaJobEventLog restricts a logging context to a specific OABA job by
+ * OabaProcessingLog restricts a logging context to a specific OABA job by
  * attaching an OABA job identifier to each OabaEvent instance that it records
  * or retrieves.
  *
  * @author rphall
  */
-public class OabaJobEventLog implements OabaEventLog {
+public class OabaProcessingLog implements OabaEventLog {
 
-	private static final Logger logger = Logger.getLogger(OabaJobEventLog.class
+	private static final Logger logger = Logger.getLogger(OabaProcessingLog.class
 			.getName());
 
 	private final EntityManager em;
 	private final OabaJob oabaJob;
 
-	public OabaJobEventLog(EntityManager em, OabaJob job) {
+	public OabaProcessingLog(EntityManager em, OabaJob job) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
@@ -75,7 +75,7 @@ public class OabaJobEventLog implements OabaEventLog {
 
 	@Override
 	public String toString() {
-		return "OabaJobEventLog [jobId=" + oabaJob.getId() + "]";
+		return "OabaProcessingLog [jobId=" + oabaJob.getId() + "]";
 	}
 
 }

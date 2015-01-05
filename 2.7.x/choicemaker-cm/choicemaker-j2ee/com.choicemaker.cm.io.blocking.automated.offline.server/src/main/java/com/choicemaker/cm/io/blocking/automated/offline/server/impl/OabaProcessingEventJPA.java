@@ -11,7 +11,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
  * 
  * @author rphall
  */
-public interface OabaProcessingJPA {
+public interface OabaProcessingEventJPA {
 
 	/** Name of the table that persists batch job data */
 	String TABLE_NAME = "CMT_OABA_PROCESSING";
@@ -72,7 +72,7 @@ public interface OabaProcessingJPA {
 
 	/** JPQL used to implement {@link #QN_OABAPROCESSING_FIND_ALL} */
 	String JPQL_OABAPROCESSING_FIND_ALL =
-		"Select o from OabaProcessingLogEntry o";
+		"Select o from OabaProcessingEventEntity o";
 
 	/**
 	 * Name of the query that finds all persistent status entries for a
@@ -82,7 +82,7 @@ public interface OabaProcessingJPA {
 
 	/** JPQL used to implement {@link #QN_OABAPROCESSING_FIND_BY_JOBID} */
 	String JPQL_OABAPROCESSING_FIND_BY_JOBID =
-		"SELECT o FROM OabaProcessingLogEntry o WHERE o.jobId = :jobId "
+		"SELECT o FROM OabaProcessingEventEntity o WHERE o.jobId = :jobId "
 				+ "ORDER BY o.eventTimestamp DESC, o.id DESC";
 
 	/**

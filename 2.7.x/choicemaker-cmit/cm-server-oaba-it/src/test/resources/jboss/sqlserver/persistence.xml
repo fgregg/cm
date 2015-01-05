@@ -18,7 +18,7 @@
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingLogEntry</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceEntity</class>
@@ -51,7 +51,7 @@
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingLogEntry</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceEntity</class>
