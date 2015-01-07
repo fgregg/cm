@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.util.IntArrayList;
 import com.choicemaker.util.LongArrayList;
@@ -35,17 +35,22 @@ public class BlockSource extends BaseFileSource<BlockSet> implements
 	private BlockSet nextBS;
 
 	public BlockSource(String fileName) {
-		init(fileName, Constants.BINARY);
+		super(fileName, EXTERNAL_DATA_FORMAT.BINARY);
 	}
 
+	@Deprecated
 	public BlockSource(String fileName, int type) {
-		init(fileName, type);
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
+	}
+
+	public BlockSource(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
 	}
 
 	private BlockSet readNext() throws EOFException, IOException {
 		BlockSet ret = new BlockSet();
 
-		if (type == Constants.STRING) {
+		if (type == EXTERNAL_DATA_FORMAT.STRING) {
 			// read the columns
 			String str = br.readLine();
 
@@ -72,7 +77,7 @@ public class BlockSource extends BaseFileSource<BlockSet> implements
 			}
 
 			ret.setRecordIDs(ids);
-		} else if (type == Constants.BINARY) {
+		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 			// first read the number of blocking fields
 			int size = dis.readInt();
 

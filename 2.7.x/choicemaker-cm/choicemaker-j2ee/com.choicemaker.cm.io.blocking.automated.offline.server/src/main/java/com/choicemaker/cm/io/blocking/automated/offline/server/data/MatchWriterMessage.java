@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 import java.io.Serializable;
 import java.util.List;
 
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
@@ -37,10 +38,10 @@ public class MatchWriterMessage implements Serializable {
 	public int numRegularChunks;
 	
 	/** Indicates the type of staging record id */
-	public int stageType;
+	public RECORD_ID_TYPE stageType;
 	
 	/** Indicates the type of master record id */
-	public int masterType;
+	public RECORD_ID_TYPE masterType;
 	
 	//keep track of total comparison and matches
 	public boolean doneMatch;

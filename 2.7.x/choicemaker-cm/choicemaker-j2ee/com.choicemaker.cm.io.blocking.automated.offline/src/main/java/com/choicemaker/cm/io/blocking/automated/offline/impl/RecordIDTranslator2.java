@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
  * @author pcheung
@@ -35,7 +35,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 	private IRecordIDSink sink2;
 	
 	//This is an indicator of the class type of record id.
-	private int dataType;
+	private RECORD_ID_TYPE dataType;
 
 	/** This contains the range of the record ID in sink1.  
 	 * range1[0] is min and range1[1] is max.
@@ -182,13 +182,13 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 
 		//figure out the id type for the first file
 		if (currentIndex == 0) {
-			dataType = Constants.checkType(o);
+			dataType = RECORD_ID_TYPE.fromInstance(o);
 			sink1.setRecordIDType(dataType);
 		}
 		
 		//figure out the id type for the second file
 		if (currentIndex == splitIndex) {
-			dataType = Constants.checkType(o);
+			dataType = RECORD_ID_TYPE.fromInstance(o);
 			sink2.setRecordIDType(dataType);
 		}
 		

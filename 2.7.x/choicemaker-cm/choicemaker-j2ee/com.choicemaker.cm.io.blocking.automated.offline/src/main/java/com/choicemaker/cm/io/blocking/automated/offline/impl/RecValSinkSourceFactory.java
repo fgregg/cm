@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import java.io.File;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
@@ -24,7 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
  */
 public class RecValSinkSourceFactory implements IRecValSinkSourceFactory{
 
-	private static final int TYPE = Constants.STRING;
+	private static final EXTERNAL_DATA_FORMAT TYPE = EXTERNAL_DATA_FORMAT.STRING;
 
 	private String fileDir;
 	private String baseName;

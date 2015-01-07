@@ -24,6 +24,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkRecordIDSinkSourceFactory;
@@ -184,7 +185,7 @@ public class OABAConfiguration implements Serializable {
 		return source;
 	}
 	
-	public ComparisonTreeSinkSourceFactory getComparisonTreeFactory (int stageType) {
+	public ComparisonTreeSinkSourceFactory getComparisonTreeFactory (RECORD_ID_TYPE stageType) {
 		return new ComparisonTreeSinkSourceFactory
 			(getFileDir(), "compareTree", "txt", stageType);
 	}

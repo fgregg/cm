@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
@@ -26,8 +26,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySou
  *
  */
 @SuppressWarnings({"rawtypes"})
-public class ComparisonArrayGroupSinkSourceFactory implements IComparisonArraySinkSourceFactory {
-
+public class ComparisonArrayGroupSinkSourceFactory implements
+		IComparisonArraySinkSourceFactory {
 
 	private String fileDir;
 	private String nameBase;
@@ -35,7 +35,6 @@ public class ComparisonArrayGroupSinkSourceFactory implements IComparisonArraySi
 	private int indSink = 0;
 	private int indSource = 0;
 	private int num;
-
 
 	/** This constructor takes in key parameters to create ComparisonTreeGroupSink or 
 	 * ComparisonTreeGroupSource files as follows:
@@ -71,11 +70,10 @@ public class ComparisonArrayGroupSinkSourceFactory implements IComparisonArraySi
 	 * @param treeId
 	 * @return
 	 */
-	public IComparisonArraySource getSource (int chunkId, int treeId) {
-		return new ComparisonArraySource 
-			(fileDir + nameBase + chunkId + "_" + treeId + "." + ext, Constants.STRING);
+	public IComparisonArraySource getSource(int chunkId, int treeId) {
+		return new ComparisonArraySource(fileDir + nameBase + chunkId + "_"
+				+ treeId + "." + ext, EXTERNAL_DATA_FORMAT.STRING);
 	}
-
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory#getNextSink()

@@ -209,16 +209,16 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	}
 
 	/**
-	 * This method checks to see if the number of records in the RecordSource is
+	 * This method checks to see if the number of records in the RECORD_SOURCE is
 	 * greater than the threshold.
 	 *
 	 * @param rs
-	 *            - RecordSource
+	 *            - RECORD_SOURCE
 	 * @param accessProvider
-	 *            - Probability Model of this RecordSource
+	 *            - Probability Model of this RECORD_SOURCE
 	 * @param threshold
 	 *            - The number of records threshold
-	 * @return boolean - true if the RecordSource contains more than the
+	 * @return boolean - true if the RECORD_SOURCE contains more than the
 	 *         threshold
 	 * @throws OABABlockingException
 	 */

@@ -15,6 +15,7 @@ import java.io.IOException;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.util.IntArrayList;
 import com.choicemaker.util.LongArrayList;
@@ -25,15 +26,18 @@ import com.choicemaker.util.LongArrayList;
  */
 public class BlockSink extends BaseFileSink implements IBlockSink {
 
-
+	@Deprecated
 	public BlockSink (String fileName, int type) {
-		init (fileName, type);
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
+	public BlockSink(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
+	}
 
 	public void writeBlock (BlockSet bs) throws BlockingException {
 		try {
-			if (type == Constants.BINARY) {
+			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 
 				IntArrayList columns = bs.getColumns();
 				int s = columns.size();
@@ -54,7 +58,7 @@ public class BlockSink extends BaseFileSink implements IBlockSink {
 					dos.writeLong( list.get(i));
 				}
 
-			} else if (type == Constants.STRING) {
+			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 				StringBuffer sb = new StringBuffer ();
 				IntArrayList columns = bs.getColumns();
 				int s = columns.size();

@@ -17,12 +17,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISink;
 
 /**
- * This is a generic file based implementation of ISink.
- * Each descendant must call init.
+ * This is a generic file based implementation of ISink. Each descendant must
+ * call init.
  * 
  * @author pcheung
  *
@@ -32,98 +32,113 @@ public abstract class BaseFileSink implements ISink {
 	protected DataOutputStream dos;
 	protected FileWriter fw;
 	protected int count = 0;
-	protected int type;
+	protected EXTERNAL_DATA_FORMAT type;
 	protected String fileName;
 	protected boolean exists;
-	
-	
-	/** The descendants should call this method in their constructor.
+
+	/**
+	 * The descendants should call this method in their constructor.
 	 * 
-	 * @param fileName - file name of the sink
-	 * @param type - indicates whether the file is a string or binary file.
+	 * @param fileName
+	 *            - file name of the sink
+	 * @param type
+	 *            - indicates whether the file is a string or binary file.
 	 */
-	protected void init (String fileName, int type) {
+	protected BaseFileSink(String fileName, EXTERNAL_DATA_FORMAT type) {
+		if (type == null || fileName == null) {
+			throw new IllegalArgumentException("null argument");
+		}
 		this.type = type;
+		assert this.type != null;
 		this.fileName = fileName;
-		File file = new File (fileName);
+		File file = new File(fileName);
 		exists = file.exists();
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#exists()
-	 */
 	public boolean exists() {
 		return exists;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#open()
-	 */
 	public void open() throws BlockingException {
 		try {
-			if (type == Constants.STRING) fw = new FileWriter (fileName, false);
-			else if (type == Constants.BINARY) dos = new DataOutputStream (new FileOutputStream (fileName, false));
+			switch (type) {
+			case STRING:
+				fw = new FileWriter(fileName, false);
+				break;
+			case BINARY:
+				dos =
+					new DataOutputStream(new FileOutputStream(fileName, false));
+				break;
+			default:
+				throw new IllegalArgumentException("invalid type: " + type);
+			}
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#append()
-	 */
 	public void append() throws BlockingException {
 		try {
-			if (type == Constants.STRING) fw = new FileWriter (fileName, true);
-			else if (type == Constants.BINARY) dos = new DataOutputStream (new FileOutputStream (fileName, true));
+			switch (type) {
+			case STRING:
+				fw = new FileWriter(fileName, true);
+				break;
+			case BINARY:
+				dos =
+					new DataOutputStream(new FileOutputStream(fileName, true));
+				break;
+			default:
+				throw new IllegalArgumentException("invalid type: " + type);
+			}
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#close()
-	 */
 	public void close() throws BlockingException {
 		try {
-			if (type == Constants.STRING) fw.close();
-			else if (type == Constants.BINARY) dos.close();
+			switch (type) {
+			case STRING:
+				fw.close();
+				break;
+			case BINARY:
+				dos.close();
+				break;
+			default:
+				throw new IllegalArgumentException("invalid type: " + type);
+			}
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getCount()
-	 */
 	public int getCount() {
 		return count;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getInfo()
-	 */
 	public String getInfo() {
 		return fileName;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#remove()
-	 */
 	public void remove() throws BlockingException {
-		File file = new File (fileName);
+		File file = new File(fileName);
 		file.delete();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#flush()
-	 */
 	public void flush() throws BlockingException {
 		try {
-			if (type == Constants.STRING) fw.flush();
-			else if (type == Constants.BINARY) dos.flush();
+			switch (type) {
+			case STRING:
+				fw.flush();
+				break;
+			case BINARY:
+				dos.flush();
+				break;
+			default:
+				throw new IllegalArgumentException("invalid type: " + type);
+			}
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
 

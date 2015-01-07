@@ -15,6 +15,7 @@ import java.io.IOException;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink;
 
 /**
@@ -23,36 +24,34 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
-public class ComparisonTreeSink extends BaseFileSink implements IComparisonTreeSink {
+@SuppressWarnings({ "rawtypes" })
+public class ComparisonTreeSink extends BaseFileSink implements
+		IComparisonTreeSink {
 
-	/** This constructor creates a String ComparisonTreeSink with the given file name.
-	 * 
-	 * @param fileName
+	/**
+	 * This constructor creates a String ComparisonTreeSink with the given file
+	 * name.
 	 */
-	public ComparisonTreeSink (String fileName) {
-		init (fileName, Constants.STRING);
+	public ComparisonTreeSink(String fileName) {
+		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink#writeComparisonTree(com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonTreeNode)
-	 */
-	public void writeComparisonTree(ComparisonTreeNode tree) throws BlockingException {
+	public void writeComparisonTree(ComparisonTreeNode tree)
+			throws BlockingException {
 		try {
-			if (type == Constants.BINARY) {
-				throw new BlockingException ("BINARY format of SuffixTreeSink is not yet supported");
-			} else if (type == Constants.STRING) {
-				StringBuffer sb = new StringBuffer ();
+			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
+				throw new BlockingException(
+						"BINARY format of SuffixTreeSink is not yet supported");
+			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
+				StringBuffer sb = new StringBuffer();
 				tree.writeTree2(sb);
 				sb.append(Constants.LINE_SEPARATOR);
 				fw.write(sb.toString());
 			}
-			
-			count ++;
-						
+			count++;
+
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 
 	}

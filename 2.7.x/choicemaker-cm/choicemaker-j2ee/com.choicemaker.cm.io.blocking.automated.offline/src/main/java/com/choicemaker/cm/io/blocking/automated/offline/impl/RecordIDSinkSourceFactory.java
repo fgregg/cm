@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
@@ -26,7 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
 	"rawtypes"})
 public class RecordIDSinkSourceFactory implements IRecordIDSinkSourceFactory {
 	
-	private static final int TYPE = Constants.STRING;
+	private static final EXTERNAL_DATA_FORMAT TYPE = EXTERNAL_DATA_FORMAT.STRING;
 
 	private String fileDir;
 	private String nameBase;

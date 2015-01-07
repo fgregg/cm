@@ -14,6 +14,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
  * This object create sinks that are groups of sinks.
@@ -24,20 +25,21 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
-public class ComparisonTreeGroupSinkSourceFactory implements IComparisonTreeSinkSourceFactory {
+@SuppressWarnings({ "rawtypes" })
+public class ComparisonTreeGroupSinkSourceFactory implements
+		IComparisonTreeSinkSourceFactory {
 
 	private String fileDir;
 	private String nameBase;
 	private String ext;
 	private int indSink = 0;
 	private int indSource = 0;
-	private int dataType;
+	private RECORD_ID_TYPE dataType;
 	private int num;
 
-
-	/** This constructor takes in key parameters to create ComparisonTreeGroupSink or 
-	 * ComparisonTreeGroupSource files as follows:
+	/**
+	 * This constructor takes in key parameters to create
+	 * ComparisonTreeGroupSink or ComparisonTreeGroupSource files as follows:
 	 * 
 	 * BASE: fileDir + nameBase + chunkId + "." + ext
 	 * 
@@ -45,23 +47,32 @@ public class ComparisonTreeGroupSinkSourceFactory implements IComparisonTreeSink
 	 * 
 	 * treeId goes from 0 to num.
 	 * 
-	 * @param fileDir
-	 * @param nameBase
-	 * @param ext
-	 * @param num - the number of sinks in a group
-	 * @param dataType - indicates if the record id is LONG, INTEGER, or String.
+	 * @param num
+	 *            - the number of sinks in a group
+	 * @param dataType
+	 *            - indicates if the record id is LONG, INTEGER, or String.
+	 * @deprecated
 	 */
-	public ComparisonTreeGroupSinkSourceFactory 
-		(String fileDir, String nameBase, String ext, int num, int dataType) {
-			
+	public ComparisonTreeGroupSinkSourceFactory(String fileDir,
+			String nameBase, String ext, int num, int dataType) {
+
+		this.fileDir = fileDir;
+		this.nameBase = nameBase;
+		this.ext = ext;
+		this.dataType = RECORD_ID_TYPE.fromSymbol(dataType);
+		this.num = num;
+	}
+
+	public ComparisonTreeGroupSinkSourceFactory(String fileDir,
+			String nameBase, String ext, int num, RECORD_ID_TYPE dataType) {
+
 		this.fileDir = fileDir;
 		this.nameBase = nameBase;
 		this.ext = ext;
 		this.dataType = dataType;
 		this.num = num;
 	}
-	
-	
+
 	/** This method returns the Comparison Tree source for this given chunk and tree ids.
 	 * For example, it returns the file  
 	 * 

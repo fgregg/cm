@@ -17,6 +17,7 @@ import java.util.Stack;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
 
@@ -30,12 +31,12 @@ public class SuffixTreeSource extends BaseFileSource<SuffixTreeNode> implements 
 	private SuffixTreeNode nextTree = null;
 
 
-	/** This contructor creates a string source with the given name.
+	/** This constructor creates a string source with the given name.
 	 * 
 	 * @param fileName
 	 */
 	public SuffixTreeSource (String fileName) {
-		init (fileName, Constants.STRING);
+		super (fileName, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
 	public SuffixTreeNode next() {

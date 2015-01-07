@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
 
@@ -27,10 +27,15 @@ public class PairIDSource extends BaseFileSource<PairID> implements IPairIDSourc
 
 	private PairID p;
 
-	public PairIDSource (String fileName, int type) {
-		init (fileName, type);
+	@Deprecated
+	public PairIDSource(String fileName, int type) {
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
-	
+
+	public PairIDSource(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
+	}
+
 	public PairID next() {
 		return p;
 	}
@@ -42,13 +47,13 @@ public class PairIDSource extends BaseFileSource<PairID> implements IPairIDSourc
 		boolean next = false;
 
 		try{
-			if (type == Constants.BINARY) {
+			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 				long id1 = dis.readLong ();
 				long id2 = dis.readLong ();
 				p = new PairID (id1, id2);
 				next = true;
 
-			} else if (type == Constants.STRING) {
+			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 				String str;
 				
 				//read the pairs

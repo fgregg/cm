@@ -17,8 +17,9 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
@@ -40,8 +41,13 @@ public class MatchRecord2Source<T extends Comparable<T>>
 	 * @param fileName
 	 * @param type
 	 */
+	@Deprecated
 	public MatchRecord2Source(String fileName, int type) {
-		init(fileName, type);
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
+	}
+
+	public MatchRecord2Source(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
 	}
 
 	/** This gets the next available MatchRecord2 from the source.
@@ -52,10 +58,10 @@ public class MatchRecord2Source<T extends Comparable<T>>
 	private MatchRecord2<T> readNext() throws EOFException, IOException {
 		MatchRecord2<T> retVal = null;
 
-		if (type == Constants.STRING) {
+		if (type == EXTERNAL_DATA_FORMAT.STRING) {
 			retVal = readMatchRecord(br);
 
-		} else if (type == Constants.BINARY) {
+		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 
 			Comparable c1 = readIDBinary();
 			Comparable c2 = readIDBinary();
@@ -106,10 +112,12 @@ public class MatchRecord2Source<T extends Comparable<T>>
 		if ((str != null) && (str.length() > 0)) {
 			StringTokenizer st = new StringTokenizer(str);
 
-			int dataType = Integer.parseInt(st.nextToken());
+			int s = Integer.parseInt(st.nextToken());
+			RECORD_ID_TYPE dataType = RECORD_ID_TYPE.fromSymbol(s);
 			Comparable c1 = readIDString(dataType, st.nextToken());
 
-			dataType = Integer.parseInt(st.nextToken());
+			s = Integer.parseInt(st.nextToken());
+			dataType = RECORD_ID_TYPE.fromSymbol(s);
 			Comparable c2 = readIDString(dataType, st.nextToken());
 
 			float f = Float.parseFloat(st.nextToken());
@@ -128,15 +136,15 @@ public class MatchRecord2Source<T extends Comparable<T>>
 		return mr;
 	}
 
-	private static Comparable readIDString(int dataType, String data)
-		throws EOFException, IOException {
+	private static Comparable readIDString(RECORD_ID_TYPE dataType, String data)
+			throws EOFException, IOException {
 		Comparable c = null;
 
-		if (dataType == Constants.TYPE_INTEGER) {
+		if (dataType == RECORD_ID_TYPE.TYPE_INTEGER) {
 			c = new Integer(data);
-		} else if (dataType == Constants.TYPE_LONG) {
+		} else if (dataType == RECORD_ID_TYPE.TYPE_LONG) {
 			c = new Long(data);
-		} else if (dataType == Constants.TYPE_STRING) {
+		} else if (dataType == RECORD_ID_TYPE.TYPE_STRING) {
 			c = data;
 		}
 
@@ -146,13 +154,14 @@ public class MatchRecord2Source<T extends Comparable<T>>
 	private Comparable readIDBinary() throws EOFException, IOException {
 		Comparable c = null;
 
-		int dataType = dis.readInt();
+		int s = dis.readInt();
+		RECORD_ID_TYPE dataType = RECORD_ID_TYPE.fromSymbol(s);
 
-		if (dataType == Constants.TYPE_INTEGER) {
+		if (dataType == RECORD_ID_TYPE.TYPE_INTEGER) {
 			c = new Integer(dis.readInt());
-		} else if (dataType == Constants.TYPE_LONG) {
+		} else if (dataType == RECORD_ID_TYPE.TYPE_LONG) {
 			c = new Long(dis.readLong());
-		} else if (dataType == Constants.TYPE_STRING) {
+		} else if (dataType == RECORD_ID_TYPE.TYPE_STRING) {
 			int size = dis.readInt();
 			char[] data = new char[size];
 			for (int i = 0; i < size; i++) {

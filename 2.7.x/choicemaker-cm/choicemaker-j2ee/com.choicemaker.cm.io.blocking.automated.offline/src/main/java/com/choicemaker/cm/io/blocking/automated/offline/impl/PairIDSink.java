@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
 
@@ -23,8 +24,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
  */
 public class PairIDSink extends BaseFileSink implements IPairIDSink {
 
-	public PairIDSink (String fileName, int type) {
-		init (fileName, type);
+	@Deprecated
+	public PairIDSink(String fileName, int type) {
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
+	}
+
+	public PairIDSink(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
 	}
 
 	/* (non-Javadoc)
@@ -32,16 +38,15 @@ public class PairIDSink extends BaseFileSink implements IPairIDSink {
 	 */
 	public void writePair(PairID p) throws BlockingException {
 		try {
-			if (type == Constants.BINARY) {
+			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 				dos.writeLong(p.getID1());
 				dos.writeLong(p.getID2());
-			} else if (type == Constants.STRING) {
+			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 				fw.write(Long.toString(p.getID1()));
-				fw.write(" ");
+				fw.write(Constants.EXPORT_FIELD_SEPARATOR);
 				fw.write(Long.toString(p.getID2()));
 				fw.write(Constants.LINE_SEPARATOR);
 			}
-			
 			count ++;
 		} catch (IOException ex) {
 			throw new BlockingException (ex.toString());

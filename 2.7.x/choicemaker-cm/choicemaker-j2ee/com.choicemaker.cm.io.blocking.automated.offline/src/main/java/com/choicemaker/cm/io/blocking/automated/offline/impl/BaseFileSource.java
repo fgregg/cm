@@ -19,7 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISource;
 
 /**
@@ -34,9 +34,9 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	protected DataInputStream dis = null;
 	protected BufferedReader br = null;
 	protected int count = 0;
-	protected int type;
-	protected String fileName;
-	protected boolean exists;
+	protected final EXTERNAL_DATA_FORMAT type;
+	protected final String fileName;
+	protected final boolean exists;
 
 	/**
 	 * The descendants should call this method in their constructor.
@@ -46,7 +46,10 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	 * @param type
 	 *            - indicates whether the file is a string or binary file.
 	 */
-	public void init(String fileName, int type) {
+	protected BaseFileSource(String fileName, EXTERNAL_DATA_FORMAT type) {
+		if (type == null || fileName == null) {
+			throw new IllegalArgumentException("null argument");
+		}
 		this.type = type;
 		this.fileName = fileName;
 		File file = new File(fileName);
@@ -61,9 +64,9 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	@Override
 	public void open() throws BlockingException {
 		try {
-			if (type == Constants.STRING)
+			if (type == EXTERNAL_DATA_FORMAT.STRING)
 				br = new BufferedReader(new FileReader(fileName));
-			else if (type == Constants.BINARY)
+			else if (type == EXTERNAL_DATA_FORMAT.BINARY)
 				dis = new DataInputStream(new FileInputStream(fileName));
 		} catch (FileNotFoundException ex) {
 			throw new BlockingException(ex.toString());
@@ -79,9 +82,9 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	@Override
 	public void close() throws BlockingException {
 		try {
-			if (type == Constants.STRING)
+			if (type == EXTERNAL_DATA_FORMAT.STRING)
 				br.close();
-			else if (type == Constants.BINARY)
+			else if (type == EXTERNAL_DATA_FORMAT.BINARY)
 				dis.close();
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());

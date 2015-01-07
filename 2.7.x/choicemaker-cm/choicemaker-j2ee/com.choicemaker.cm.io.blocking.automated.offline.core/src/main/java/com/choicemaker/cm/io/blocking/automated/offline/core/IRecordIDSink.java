@@ -33,6 +33,6 @@ public interface IRecordIDSink extends ISink {
 	 * @param type
 	 * @throws BlockingException
 	 */
-	public void setRecordIDType (int type);
+	public void setRecordIDType (RECORD_ID_TYPE type);
 
 }

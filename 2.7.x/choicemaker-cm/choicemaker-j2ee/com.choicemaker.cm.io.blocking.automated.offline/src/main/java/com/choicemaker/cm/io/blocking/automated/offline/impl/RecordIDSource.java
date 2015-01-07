@@ -15,8 +15,9 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
  * @author pcheung
@@ -26,14 +27,19 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
 public class RecordIDSource<T extends Comparable<T>> extends BaseFileSource<T>
 		implements IRecordIDSource<T> {
 
-	protected int dataType;
+	protected RECORD_ID_TYPE dataType;
 	protected T nextID;
 	private boolean isFirst = true;
 
-	public RecordIDSource (String fileName, int type) {
-		init (fileName, type);
+	@Deprecated
+	public RecordIDSource(String fileName, int type) {
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
-	
+
+	public RecordIDSource(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
+	}
+
 	public T next() {
 		if (this.nextID == null) {
 			try {
@@ -58,43 +64,43 @@ public class RecordIDSource<T extends Comparable<T>> extends BaseFileSource<T>
 	private T readNext () throws EOFException, IOException {
 		T ret = null;
 		
-		if (type == Constants.STRING) {
+		if (type == EXTERNAL_DATA_FORMAT.STRING) {
 			String str;
 				
 			if (isFirst) {
 				str = br.readLine();
 				if (str != null && !str.equals("")) 
-					dataType = Integer.parseInt(str);
+					dataType = RECORD_ID_TYPE.fromSymbol(Integer.parseInt(str));
 				isFirst = false;
 			}
 		
 			str = br.readLine();
 				
 			if (str != null && !str.equals("")) {
-				if (dataType == Constants.TYPE_INTEGER) {
+				if (dataType == RECORD_ID_TYPE.TYPE_INTEGER) {
 					ret = (T) new Integer (str);
-				} else if (dataType == Constants.TYPE_LONG) {
+				} else if (dataType == RECORD_ID_TYPE.TYPE_LONG) {
 					ret = (T) new Long (str);
-				} else if (dataType == Constants.TYPE_STRING) {
+				} else if (dataType == RECORD_ID_TYPE.TYPE_STRING) {
 					ret = (T) str;
 				}
 			} else {
 				throw new EOFException ();
 			}
 				
-		} else if (type == Constants.BINARY) {
+		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 			if (isFirst) {
-				dataType = dis.readInt();
+				dataType = RECORD_ID_TYPE.fromSymbol(dis.readInt());
 				isFirst = false;
 			}
 				
-			if (dataType == Constants.TYPE_INTEGER) {
+			if (dataType == RECORD_ID_TYPE.TYPE_INTEGER) {
 				int i = dis.readInt();
 				ret = (T) new Integer (i);
-			} else if (dataType == Constants.TYPE_LONG) {
+			} else if (dataType == RECORD_ID_TYPE.TYPE_LONG) {
 				long l = dis.readLong();
 				ret = (T) new Long (l);
-			} else if (dataType == Constants.TYPE_STRING) {
+			} else if (dataType == RECORD_ID_TYPE.TYPE_STRING) {
 				int size = dis.readInt();
 				char[] data = new char[size];
 				for (int i=0; i< size; i++) {
@@ -105,19 +111,11 @@ public class RecordIDSource<T extends Comparable<T>> extends BaseFileSource<T>
 		}
 		return ret;
 	}
-	
-	
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource#getType()
-	 */
-	public int getRecordIDType() throws BlockingException {
+	public RECORD_ID_TYPE getRecordIDType() throws BlockingException {
 		return dataType;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
-	 */
 	public boolean hasNext() throws BlockingException {
 		if (this.nextID == null) {
 			try {
@@ -125,12 +123,10 @@ public class RecordIDSource<T extends Comparable<T>> extends BaseFileSource<T>
 			} catch (EOFException x) {
 				this.nextID = null;
 			} catch (IOException x) {
-				throw new BlockingException (x.toString());
+				throw new BlockingException(x.toString());
 			}
 		}
 		return this.nextID != null;
 	}
-
-
 
 }

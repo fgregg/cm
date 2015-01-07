@@ -21,7 +21,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
-public class ComparableMRSource<T extends Comparable<T>> implements IComparableSource<MatchRecord2<T>> {
+public class ComparableMRSource<T extends Comparable<T>> implements
+		IComparableSource<MatchRecord2<T>> {
 	
 	private IMatchRecord2Source<T> source;
 	

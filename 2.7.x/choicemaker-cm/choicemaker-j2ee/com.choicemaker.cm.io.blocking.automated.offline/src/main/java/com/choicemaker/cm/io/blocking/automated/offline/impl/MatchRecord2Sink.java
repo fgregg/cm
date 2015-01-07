@@ -10,15 +10,20 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
-import java.io.FileNotFoundException;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.Constants.EXPORT_FIELD_SEPARATOR;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.Constants.LINE_SEPARATOR;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT.BINARY;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT.STRING;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
@@ -27,64 +32,68 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink {
 
-	
-	/** This creates a new match record sink.  By default it does not append to existing file, but
-	 * overwrites it.
-	 * 
-	 * @param fileName
-	 * @param type
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	/**
+	 * This creates a new match record sink. By default it does not append to
+	 * existing file, but overwrites it.
 	 */
-	public MatchRecord2Sink (String fileName, int type) {
-		init (fileName, type);
+	@Deprecated
+	public MatchRecord2Sink(String fileName, int type) {
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
-	public void writeMatches (List matches) throws BlockingException {
+	public MatchRecord2Sink(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
+	}
+
+	public void writeMatches(List matches) throws BlockingException {
 		int size = matches.size();
-		for (int i=0; i<size; i++) {
+		for (int i = 0; i < size; i++) {
 			MatchRecord2 match = (MatchRecord2) matches.get(i);
-			writeMatch (match);
+			writeMatch(match);
 		}
 	}
-	
-	
-	public void writeMatches (Collection c) throws BlockingException {
+
+	public void writeMatches(Collection c) throws BlockingException {
 		Iterator it = c.iterator();
-		writeMatches (it);
+		writeMatches(it);
 	}
 
-
-	public void writeMatches (Iterator it) throws BlockingException {
+	public void writeMatches(Iterator it) throws BlockingException {
 		while (it.hasNext()) {
 			MatchRecord2 match = (MatchRecord2) it.next();
-			writeMatch (match);
+			writeMatch(match);
 		}
 	}
-		
-	
-	public void writeMatch (MatchRecord2 match) throws BlockingException {
-		try {
-			if (type == Constants.STRING) {
-				
-				fw.write(getOutputString(match));
-				
-			} else if (type == Constants.BINARY) {
-				int dataType = Constants.checkType(match.getRecordID1());
-				dos.writeInt( dataType );
-				writeID (match.getRecordID1(), dataType);
 
-				dataType = Constants.checkType(match.getRecordID2());
-				dos.writeInt( dataType );
-				writeID (match.getRecordID2(), dataType);
-				
+	@SuppressWarnings("unchecked")
+	public void writeMatch(MatchRecord2 match) throws BlockingException {
+		try {
+			if (type == STRING) {
+				fw.write(getOutputString(match));
+			} else {
+				assert type == BINARY;
+				RECORD_ID_TYPE dataType =
+					RECORD_ID_TYPE.fromInstance(match.getRecordID1());
+				final int dataTypeSymbol = dataType.getIntSymbol();
+				dos.writeInt(dataTypeSymbol);
+				writeID(match.getRecordID1(), dataType);
+
+				RECORD_ID_TYPE dataType2 =
+					RECORD_ID_TYPE.fromInstance(match.getRecordID2());
+				if (dataType2 != dataType) {
+					throw new IllegalArgumentException(
+							"Inconsistent record identifiers");
+				}
+				dos.writeInt(dataTypeSymbol);
+				writeID(match.getRecordID2(), dataType);
+
 				dos.writeFloat(match.getProbability());
 				dos.writeChar(match.getMatchType());
 				dos.writeChar(match.getRecord2Source());
-				
+
 				String str = match.getNotes();
 				if (str == null || str.equals("")) {
 					dos.writeInt(0);
@@ -93,76 +102,81 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 					dos.writeChars(str);
 				}
 			}
-			count ++;
+			count++;
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
-	
-	
-	/** This method returns a string representation of MatchRecord2 to get written to a FileWriter.
+
+	/**
+	 * This method returns a string representation of MatchRecord2 to get
+	 * written to a FileWriter.
 	 * 
 	 * @param match
 	 * @return
 	 */
-	public static String getOutputString (MatchRecord2 match) {
-		StringBuffer sb = new StringBuffer ();
-		int dataType = Constants.checkType(match.getRecordID1());
+	public static String getOutputString(MatchRecord2 match) {
+		StringBuffer sb = new StringBuffer();
+		@SuppressWarnings("unchecked")
+		int dataType = RECORD_ID_TYPE.checkType(match.getRecordID1());
 		sb.append(dataType);
-		sb.append(' ');
+		sb.append(EXPORT_FIELD_SEPARATOR);
 		sb.append(match.getRecordID1().toString());
-		sb.append(' ');
+		sb.append(EXPORT_FIELD_SEPARATOR);
 
-		dataType = Constants.checkType(match.getRecordID2());
+		@SuppressWarnings("unchecked")
+		int dataType2 = RECORD_ID_TYPE.checkType(match.getRecordID2());
+		if (dataType2 != dataType) {
+			throw new IllegalArgumentException(
+					"Inconsistent record identifiers");
+		}
 		sb.append(dataType);
-		sb.append(' ');
+		sb.append(EXPORT_FIELD_SEPARATOR);
 		sb.append(match.getRecordID2().toString());
-		sb.append(' ');
-				
+		sb.append(EXPORT_FIELD_SEPARATOR);
+
 		String str = match.getNotes();
-		if (str == null) str =  "";
-		else str = " " + str;
+		if (str == null)
+			str = "";
+		else
+			str = EXPORT_FIELD_SEPARATOR + str;
 
 		sb.append(match.getProbability());
-		sb.append(' ');
+		sb.append(EXPORT_FIELD_SEPARATOR);
 		sb.append(match.getMatchType());
-		sb.append(' ');
+		sb.append(EXPORT_FIELD_SEPARATOR);
 		sb.append(match.getRecord2Source());
 		sb.append(str);
-		sb.append(Constants.LINE_SEPARATOR);
-		
+		sb.append(LINE_SEPARATOR);
+
 		return sb.toString();
 	}
-	
 
-	private void writeID (Comparable c, int dataType) throws IOException {
-		if (type == Constants.STRING) {
-			if (dataType == Constants.TYPE_INTEGER) fw.write( c.toString() + " ");
-			else if (dataType == Constants.TYPE_LONG) fw.write( c.toString() + " ");
-			else if (dataType == Constants.TYPE_STRING) fw.write( c.toString() + " ");
-		} else if (type == Constants.BINARY) {
-			if (dataType == Constants.TYPE_INTEGER) dos.writeInt( ((Integer)c).intValue() ); 
-			else if (dataType == Constants.TYPE_LONG) dos.writeLong( ((Long)c).longValue() ); 
-			else if (dataType == Constants.TYPE_STRING) {
+	private <T extends Comparable<T>> void writeID(T c, RECORD_ID_TYPE dataType)
+			throws IOException {
+		if (type == STRING) {
+			fw.write(c.toString() + EXPORT_FIELD_SEPARATOR);
+		} else {
+			assert type == BINARY;
+			switch (dataType) {
+			case TYPE_INTEGER:
+				dos.writeInt(((Integer) c).intValue());
+				break;
+			case TYPE_LONG:
+				dos.writeLong(((Long) c).longValue());
+				break;
+			case TYPE_STRING: {
 				String S = (String) c;
 				dos.writeInt(S.length());
 				dos.writeChars(S);
-			} 
+			}
+				break;
+			default:
+				assert dataType == null;
+				throw new IllegalArgumentException("invalid data type: "
+						+ dataType);
+			}
 		}
 	}
-
-	
-//	/**
-//	 *  This is only for the text output file.  type == Constants.STRING is assumed.
-//	 * 
-//	 * @param c
-//	 * @param dataType
-//	 * @param sb
-//	 */
-//	private void writeID (Comparable c, int dataType, StringBuffer sb) {
-//		sb.append(c.toString());
-//		sb.append(' ');
-//	}
-
 
 }

@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
 
@@ -23,33 +24,28 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
  */
 public class SuffixTreeSink extends BaseFileSink implements ISuffixTreeSink {
 
-	/** This constructor creates a String SuffixTreeSink with the given file name.
-	 * 
-	 * @param fileName
+	/**
+	 * This constructor creates a String SuffixTreeSink with the given file
+	 * name.
 	 */
-	public SuffixTreeSink (String fileName) {
-		init (fileName, Constants.STRING);
+	public SuffixTreeSink(String fileName) {
+		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSink#writeBlock(com.choicemaker.cm.io.blocking.automated.offline.utils.SuffixTreeNode)
-	 */
 	public void writeSuffixTree(SuffixTreeNode root) throws BlockingException {
 		try {
-			if (type == Constants.BINARY) {
-				throw new BlockingException ("BINARY format of SuffixTreeSink is not yet supported");
-			} else if (type == Constants.STRING) {
-				StringBuffer sb = new StringBuffer ();
+			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
+				throw new BlockingException(
+						"BINARY format of SuffixTreeSink is not yet supported");
+			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
+				StringBuffer sb = new StringBuffer();
 				root.writeSuffixTree2(sb);
 				sb.append(Constants.LINE_SEPARATOR);
 				fw.write(sb.toString());
 			}
-			
-			count ++;
-						
+			count++;
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
 

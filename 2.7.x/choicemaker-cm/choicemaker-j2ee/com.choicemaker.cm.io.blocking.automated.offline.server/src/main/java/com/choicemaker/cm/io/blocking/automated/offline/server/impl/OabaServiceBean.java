@@ -35,7 +35,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2Source;
@@ -313,7 +313,7 @@ public class OabaServiceBean implements OabaService {
 		} else {
 			String fileName = oabaJob.getDescription();
 			MatchRecordSource mrs =
-				new MatchRecordSource(fileName, Constants.STRING);
+				new MatchRecordSource(fileName, EXTERNAL_DATA_FORMAT.STRING);
 			mls = new MatchListSource(mrs);
 		}
 
@@ -332,7 +332,7 @@ public class OabaServiceBean implements OabaService {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
 			String fileName = oabaJob.getDescription();
-			mrs = new MatchRecord2Source(fileName, Constants.STRING);
+			mrs = new MatchRecord2Source(fileName, EXTERNAL_DATA_FORMAT.STRING);
 		}
 
 		return mrs;

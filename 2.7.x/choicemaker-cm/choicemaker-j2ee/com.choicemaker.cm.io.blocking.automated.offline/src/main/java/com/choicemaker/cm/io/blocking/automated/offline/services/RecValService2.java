@@ -25,7 +25,6 @@ import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingField;
 import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 import com.choicemaker.cm.io.blocking.automated.IDbField;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
@@ -33,6 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
 
@@ -266,7 +266,7 @@ public class RecValService2 {
 					//This checks the id type
 					if (firstStage) {
 						Object O = r.getId();
-						stageType = Constants.checkType((Comparable)O);
+						stageType = RECORD_ID_TYPE.checkType((Comparable)O);
 						firstStage = false;
 					}
 

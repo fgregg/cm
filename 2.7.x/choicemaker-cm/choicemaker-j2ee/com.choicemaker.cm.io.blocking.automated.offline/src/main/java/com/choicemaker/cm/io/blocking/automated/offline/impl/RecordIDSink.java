@@ -10,11 +10,17 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.Constants.LINE_SEPARATOR;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_INTEGER;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_LONG;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_STRING;
+
 import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
  * @author pcheung
@@ -23,33 +29,34 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
 @SuppressWarnings({"rawtypes"})
 public class RecordIDSink extends BaseFileSink implements IRecordIDSink {
 
-	protected int idType = 0;
+	protected RECORD_ID_TYPE idType = null;
 
-	public RecordIDSink (String fileName, int type) {
-		init (fileName, type);
+	@Deprecated
+	public RecordIDSink(String fileName, int type) {
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
+	public RecordIDSink(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
+	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink#writeRecordID(java.lang.Object)
-	 */
 	public void writeRecordID(Comparable o) throws BlockingException {
 		try {
-			if (type == Constants.BINARY) {
+			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 				
-				if (count == 0) dos.writeInt(idType);
+				if (count == 0) dos.writeInt(idType.getIntSymbol());
 				
-				if (idType == Constants.TYPE_INTEGER) {
+				if (idType == TYPE_INTEGER) {
 					
 					Integer I = (Integer) o;
 					dos.writeInt(I.intValue());
 					
-				} else if (idType == Constants.TYPE_LONG) {
+				} else if (idType == TYPE_LONG) {
 					
 					Long L = (Long) o;
 					dos.writeLong(L.longValue());
 					
-				} else if (idType == Constants.TYPE_STRING) {
+				} else if (idType == TYPE_STRING) {
 
 					String S = (String) o;
 					dos.writeInt(S.length());
@@ -59,24 +66,24 @@ public class RecordIDSink extends BaseFileSink implements IRecordIDSink {
 					throw new BlockingException ("Please set the recordIDType.");
 				}
 				
-			} else if (type == Constants.STRING) {
+			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 
-				if (count == 0) fw.write (Integer.toString(idType) + Constants.LINE_SEPARATOR);
+				if (count == 0) fw.write (idType.getStringSymbol() + LINE_SEPARATOR);
 
-				if (idType == Constants.TYPE_INTEGER) {
+				if (idType == TYPE_INTEGER) {
 					
 					Integer I = (Integer) o;
-					fw.write(I.toString() + Constants.LINE_SEPARATOR);
+					fw.write(I.toString() + LINE_SEPARATOR);
 					
-				} else if (idType == Constants.TYPE_LONG) {
+				} else if (idType == TYPE_LONG) {
 
 					Long L = (Long) o;
-					fw.write(L.toString() + Constants.LINE_SEPARATOR);
+					fw.write(L.toString() + LINE_SEPARATOR);
 
-				} else if (idType == Constants.TYPE_STRING) {
+				} else if (idType == TYPE_STRING) {
 					
 					String S = (String) o;
-					fw.write(S + Constants.LINE_SEPARATOR);
+					fw.write(S + LINE_SEPARATOR);
 
 				} else {
 					throw new BlockingException ("Please set the recordIDType.");
@@ -94,7 +101,7 @@ public class RecordIDSink extends BaseFileSink implements IRecordIDSink {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink#setRecordIDType(int)
 	 */
-	public void setRecordIDType(int type) {
+	public void setRecordIDType(RECORD_ID_TYPE type) {
 		this.idType = type;
 	}
 

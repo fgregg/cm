@@ -24,6 +24,6 @@ public interface IRecordIDSource<T extends Comparable<T>> extends ISource<T> {
 	 * 
 	 * @return int - Object type of record ID
 	 */
-	public int getRecordIDType() throws BlockingException;
+	public RECORD_ID_TYPE getRecordIDType() throws BlockingException;
 
 }

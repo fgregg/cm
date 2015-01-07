@@ -22,6 +22,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
@@ -78,11 +79,11 @@ public class ChunkMDB extends AbstractOabaMDB {
 		osFactory.getNextSource(); // the deduped OS file is file 2.
 		IDSetSource source2 = new IDSetSource(osFactory.getNextSource());
 
-		// create the tree transformer.
-		TreeTransformer tTransformer =
-			new TreeTransformer(translator,
-					OabaFileUtils.getComparisonTreeFactory(oabaJob,
-							data.stageType));
+		// create the tree transformer
+		@SuppressWarnings("rawtypes")
+		IComparisonTreeSinkSourceFactory ctssf =
+			OabaFileUtils.getComparisonTreeFactory(oabaJob, data.stageType);
+		TreeTransformer tTransformer = new TreeTransformer(translator, ctssf);
 
 		// create the oversized block transformer
 		Transformer transformerO =

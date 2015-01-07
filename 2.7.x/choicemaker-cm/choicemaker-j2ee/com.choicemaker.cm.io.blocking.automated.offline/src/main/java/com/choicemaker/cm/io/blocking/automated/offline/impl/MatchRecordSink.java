@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -18,6 +17,7 @@ import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSink;
 import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
 
@@ -27,66 +27,64 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 public class MatchRecordSink extends BaseFileSink implements IMatchRecordSink {
 
-	
-	/** This creates a new match record sink.  By default it does not append to existing file, but
-	 * overwrites it.
-	 * 
-	 * @param fileName
-	 * @param type
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	/**
+	 * This creates a new match record sink. By default it does not append to
+	 * existing file, but overwrites it.
 	 */
-	public MatchRecordSink (String fileName, int type) {
-		init (fileName, type);
+	@Deprecated
+	public MatchRecordSink(String fileName, int type) {
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
-	public void writeMatches (List matches) throws BlockingException {
-		for (int i=0; i<matches.size(); i++) {
+	public MatchRecordSink(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
+	}
+
+	public void writeMatches(List matches) throws BlockingException {
+		for (int i = 0; i < matches.size(); i++) {
 			IMatchRecord match = (IMatchRecord) matches.get(i);
-			writeMatch (match);
+			writeMatch(match);
 		}
 	}
-	
-	
-	public void writeMatches (Collection c) throws BlockingException {
+
+	public void writeMatches(Collection c) throws BlockingException {
 		Iterator it = c.iterator();
-		writeMatches (it);
+		writeMatches(it);
 	}
 
-
-	public void writeMatches (Iterator it) throws BlockingException {
+	public void writeMatches(Iterator it) throws BlockingException {
 		while (it.hasNext()) {
 			IMatchRecord match = (IMatchRecord) it.next();
-			writeMatch (match);
+			writeMatch(match);
 		}
 	}
-		
-	
-	public void writeMatch (IMatchRecord match) throws BlockingException {
+
+	public void writeMatch(IMatchRecord match) throws BlockingException {
 		try {
-			if (type == Constants.STRING) {
-				fw.write( match.getRecordID1() + " " + match.getRecordID2() + " " + 
-				match.getProbability() + " " + match.getMatchType() + " " + 
-				match.getRecord2Source () + 
-				Constants.LINE_SEPARATOR);
-			} else if (type == Constants.BINARY) {
+			if (type == EXTERNAL_DATA_FORMAT.STRING) {
+				fw.write(match.getRecordID1() + " " + match.getRecordID2()
+						+ " " + match.getProbability() + " "
+						+ match.getMatchType() + " " + match.getRecord2Source()
+						+ Constants.LINE_SEPARATOR);
+			} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 				dos.writeLong(match.getRecordID1());
 				dos.writeLong(match.getRecordID2());
 				dos.writeFloat(match.getProbability());
 				dos.writeChar(match.getMatchType());
 				dos.writeChar(match.getRecord2Source());
 			}
-			count ++;
+			count++;
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
-	
+
 	/**
 	 * NOP for now
+	 * 
 	 * @see com.choicemaker.cm.core.base.Sink#flush()
 	 */
 	public void flush() {

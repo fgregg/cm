@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.*;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -18,7 +20,9 @@ import java.util.Stack;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
  * @author pcheung
@@ -31,16 +35,13 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends BaseFileSourc
 	private ComparisonTreeNode<T> nextTree = null;
 	
 	//this indicates if the Record ID is a int, long, or string.
-	private int dataType;
+	private RECORD_ID_TYPE dataType;
 	
 
-	/** This constructor creates a string source with the given name.
-	 * 
-	 * @param fileName
-	 */
-	public ComparisonTreeSource (String fileName, int dataType) {
+	/** This constructor creates a string source with the given name */
+	public ComparisonTreeSource (String fileName, RECORD_ID_TYPE dataType) {
+		super (fileName, EXTERNAL_DATA_FORMAT.STRING);
 		this.dataType = dataType;
-		init (fileName, Constants.STRING);
 	}
 
 	@Override
@@ -87,11 +88,11 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends BaseFileSourc
 					
 				T c = null;
 					
-				if (dataType == Constants.TYPE_LONG) {
+				if (dataType == TYPE_LONG) {
 					c = (T) new Long (str.substring(ind+3,i));
-				} else if (dataType == Constants.TYPE_INTEGER) {
+				} else if (dataType == TYPE_INTEGER) {
 					c = (T) new Integer (str.substring(ind+3,i));
-				} else if (dataType == Constants.TYPE_STRING) {
+				} else if (dataType == TYPE_STRING) {
 					c = (T) str.substring(ind+3,i);
 				} else {
 					throw new IllegalArgumentException("Unknown DataType: " + dataType);

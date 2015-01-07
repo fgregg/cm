@@ -99,7 +99,7 @@ public class BaseRecordSourceEntity implements PersistableRecordSource {
 
 	@Override
 	public String toString() {
-		return "RecordSource [id=" + id + ", type=" + type + "]";
+		return "RECORD_SOURCE [id=" + id + ", type=" + type + "]";
 	}
 
 }

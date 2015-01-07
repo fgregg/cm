@@ -27,8 +27,8 @@ public class ComparisonArray<T extends Comparable <T>> implements IComparisonSet
 	protected List<T> masterIDs;
 	
 	//the following 2 variables indicate the data type of the record IDs.
-	protected int stagingIDType = 0;
-	protected int masterIDType = 0;
+	protected RECORD_ID_TYPE stagingIDType;
+	protected RECORD_ID_TYPE masterIDType;
 	
 	protected int s1 = 0;
 	protected int s2 = 0;
@@ -48,7 +48,7 @@ public class ComparisonArray<T extends Comparable <T>> implements IComparisonSet
 	 * @param stageType - Type of stage ID, could be Contants.TYPE_LONG, or TYPE_INTEGER or TYPE_STRING
 	 * @param masterType - Type of master ID, could be Contants.TYPE_LONG, or TYPE_INTEGER or TYPE_STRING
 	 */
-	public ComparisonArray (List<T> stageIDs, List<T> masterIDs, int stageType, int masterType) {
+	public ComparisonArray (List<T> stageIDs, List<T> masterIDs, RECORD_ID_TYPE stageType, RECORD_ID_TYPE masterType) {
 		this.stagingIDs = stageIDs;
 		this.masterIDs = masterIDs;
 		this.stagingIDType = stageType;
@@ -91,7 +91,7 @@ public class ComparisonArray<T extends Comparable <T>> implements IComparisonSet
 	 * 
 	 * @return int
 	 */
-	public int getStagingIDsType () {
+	public RECORD_ID_TYPE getStagingIDsType () {
 		return stagingIDType;
 	}
 	
@@ -100,7 +100,7 @@ public class ComparisonArray<T extends Comparable <T>> implements IComparisonSet
 	 * 
 	 * @return int
 	 */
-	public int getMasterIDsType () {
+	public RECORD_ID_TYPE getMasterIDsType () {
 		return masterIDType;
 	}
 	

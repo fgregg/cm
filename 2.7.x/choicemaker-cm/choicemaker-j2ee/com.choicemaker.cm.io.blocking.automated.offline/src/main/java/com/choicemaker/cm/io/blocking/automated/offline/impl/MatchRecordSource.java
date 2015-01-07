@@ -14,7 +14,7 @@ import java.io.EOFException;
 import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
 
@@ -29,11 +29,15 @@ public class MatchRecordSource extends BaseFileSource<IMatchRecord> implements I
 
 	private IMatchRecord next;
 
-
+	@Deprecated
 	public MatchRecordSource (String fileName, int type) {
-		init (fileName, type);
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 	
+	public MatchRecordSource(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
+	}
+
 	
 	/** Always call hasNext before calling getNext ().
 	 * 
@@ -44,7 +48,7 @@ public class MatchRecordSource extends BaseFileSource<IMatchRecord> implements I
 		String str = "";
 		
 		try {
-			if (type == Constants.STRING) {
+			if (type == EXTERNAL_DATA_FORMAT.STRING) {
 				str = br.readLine();
 				
 				if ((str != null) && (str.length() > 0)) {
@@ -72,7 +76,7 @@ public class MatchRecordSource extends BaseFileSource<IMatchRecord> implements I
 					ret = true;
 				}
 
-			} else if (type == Constants.BINARY) {
+			} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 
 				long i1 = dis.readLong();
 				long i2 = dis.readLong();

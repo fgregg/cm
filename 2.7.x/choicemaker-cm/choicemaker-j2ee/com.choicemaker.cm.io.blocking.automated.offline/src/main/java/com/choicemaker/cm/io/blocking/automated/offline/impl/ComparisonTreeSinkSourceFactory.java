@@ -14,6 +14,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
  * This is a file implementation of IComparisonTreeSinkSourceFactory.
@@ -22,15 +23,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  *
  */
 @SuppressWarnings({"rawtypes"})
-public class ComparisonTreeSinkSourceFactory implements IComparisonTreeSinkSourceFactory {
-
+public class ComparisonTreeSinkSourceFactory implements
+		IComparisonTreeSinkSourceFactory {
 
 	private String fileDir;
 	private String nameBase;
 	private String ext;
 	private int indSink = 0;
 	private int indSource = 0;
-	private int dataType;
+	private RECORD_ID_TYPE dataType;
 
 
 	/** This constructor takes in key parameters to create RecordIDSink or RecordIDSource files as follows:
@@ -41,13 +42,13 @@ public class ComparisonTreeSinkSourceFactory implements IComparisonTreeSinkSourc
 	 * @param nameBase
 	 * @param ext
 	 */
-	public ComparisonTreeSinkSourceFactory (String fileDir, String nameBase, String ext, int dataType) {
+	public ComparisonTreeSinkSourceFactory(String fileDir, String nameBase,
+			String ext, RECORD_ID_TYPE dataType) {
 		this.fileDir = fileDir;
 		this.nameBase = nameBase;
 		this.ext = ext;
 		this.dataType = dataType;
 	}
-
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#getNextSink()

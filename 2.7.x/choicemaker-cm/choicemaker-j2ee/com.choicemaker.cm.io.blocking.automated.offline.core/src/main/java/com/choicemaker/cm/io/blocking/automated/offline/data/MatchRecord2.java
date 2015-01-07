@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
 
 import java.io.Serializable;
 
+import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -27,9 +28,9 @@ public class MatchRecord2<T extends Comparable<T>> implements
 
 	static final long serialVersionUID = 271;
 
-	public static final char MATCH = 'M';
-	public static final char DIFFER = 'D';
-	public static final char HOLD = 'H';
+	public static final char MATCH = Decision.MATCH.toSingleChar();
+	public static final char DIFFER = Decision.DIFFER.toSingleChar();
+	public static final char HOLD = Decision.HOLD.toSingleChar();
 
 	public static final char MASTER_SOURCE = 'D';
 	public static final char STAGE_SOURCE = 'S';
@@ -43,7 +44,7 @@ public class MatchRecord2<T extends Comparable<T>> implements
 
 	/**
 	 * This method concatenates the notes into a single string delimited by
-	 * Constants.DELIMITER.
+	 * Constants.EXPORT_NOTE_SEPARATOR.
 	 * 
 	 * @param notes
 	 * @return
@@ -54,7 +55,7 @@ public class MatchRecord2<T extends Comparable<T>> implements
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < notes.length; i++) {
 				sb.append(notes[i]);
-				sb.append(Constants.DELIMITER);
+				sb.append(Constants.EXPORT_NOTE_SEPARATOR);
 			}
 			sb.deleteCharAt(sb.length() - 1);
 			retVal = sb.toString();
@@ -64,7 +65,7 @@ public class MatchRecord2<T extends Comparable<T>> implements
 
 	/**
 	 * This method concatenates the notes into a single string delimited by
-	 * Constants.DELIMITER.
+	 * Constants.EXPORT_NOTE_SEPARATOR.
 	 * 
 	 * @param notes
 	 * @return

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
 import com.choicemaker.util.IntArrayList;
 
@@ -28,20 +28,22 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 	private long nextRecID;
 	private IntArrayList nextValues;
 
-	//this is true if the lastest value read in has been used.
+	//this is true if the latest value read in has been used.
 	private boolean usedID = true;
 
 	public RecValSource (String fileName) {
-		init (fileName, Constants.BINARY);
+		super(fileName, EXTERNAL_DATA_FORMAT.BINARY);
 	}
 	
+	@Deprecated
+	public RecValSource(String fileName, int type) {
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
+	}
 
-	public RecValSource (String fileName, int type) {
-		init (fileName, type);
+	public RecValSource(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
 	}
-	
-	
-	
+
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#hasNext()
 	 */
@@ -63,7 +65,7 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 
 	private long readNext () throws EOFException, IOException {
 		long ret = 0;
-		if (type == Constants.BINARY) {
+		if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 			ret = dis.readLong();
 			
 			int size = dis.readInt();
@@ -75,7 +77,7 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 			
 			nextValues = new IntArrayList (size, data);
 
-		} else if (type == Constants.STRING) {
+		} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 			String str = br.readLine();
 			//if there is a blank line, return false				
 			if (str == null || str.equals("")) throw new EOFException ();

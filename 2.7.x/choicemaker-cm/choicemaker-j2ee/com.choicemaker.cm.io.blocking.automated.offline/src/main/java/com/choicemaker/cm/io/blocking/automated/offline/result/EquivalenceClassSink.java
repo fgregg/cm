@@ -19,80 +19,84 @@ import java.util.Iterator;
 import java.util.SortedSet;
 
 import com.choicemaker.cm.core.util.EquivalenceClass;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 
 /**
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 public class EquivalenceClassSink {
-
 
 	DataOutputStream dos;
 	FileWriter fw;
 	String fileName;
-	
-	int type;
-	int count;  //this counts oversized blocks written.
 
+	EXTERNAL_DATA_FORMAT type;
+	int count; // this counts oversized blocks written.
 
-	public EquivalenceClassSink (String fileName, int type) {
+	@Deprecated
+	public EquivalenceClassSink(String fileName, int type) {
+		this.type = EXTERNAL_DATA_FORMAT.fromSymbol(type);
+		this.fileName = fileName;
+	}
+
+	public EquivalenceClassSink(String fileName, EXTERNAL_DATA_FORMAT type) {
 		this.type = type;
 		this.fileName = fileName;
 	}
-	
-	public void open () throws FileNotFoundException, IOException {
-		if (type == Constants.STRING) fw = new FileWriter (fileName, false);
-		else if (type == Constants.BINARY) dos = new DataOutputStream (new FileOutputStream (fileName, false));
-	}
-	
-	
-	public void close () throws IOException {
-		if (type == Constants.STRING) fw.close();
-		else if (type == Constants.BINARY) dos.close();
-	}
-	
 
-	public int getCount () {
+	public void open() throws FileNotFoundException, IOException {
+		if (type == EXTERNAL_DATA_FORMAT.STRING)
+			fw = new FileWriter(fileName, false);
+		else if (type == EXTERNAL_DATA_FORMAT.BINARY)
+			dos = new DataOutputStream(new FileOutputStream(fileName, false));
+	}
+
+	public void close() throws IOException {
+		if (type == EXTERNAL_DATA_FORMAT.STRING)
+			fw.close();
+		else if (type == EXTERNAL_DATA_FORMAT.BINARY)
+			dos.close();
+	}
+
+	public int getCount() {
 		return count;
 	}
 
 	/** Gets the file name or other pertinent information if it is not a file. */
-	public String getInfo () {
+	public String getInfo() {
 		return fileName;
 	}
 
-	
-	public void writeEquivalenceClass (EquivalenceClass ec) throws IOException {
-		if (type == Constants.BINARY) {
+	public void writeEquivalenceClass(EquivalenceClass ec) throws IOException {
+		if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 
 			SortedSet set = ec.getMemberIds();
 			Iterator it = set.iterator();
 
-			//write the size			
+			// write the size
 			dos.writeLong(set.size());
-			
-			//write the records.
+
+			// write the records.
 			while (it.hasNext()) {
-				Long L = (Long) it.next();			
-				dos.writeLong( L.longValue());
+				Long L = (Long) it.next();
+				dos.writeLong(L.longValue());
 			}
 
-		} else if (type == Constants.STRING) {
+		} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 
 			SortedSet set = ec.getMemberIds();
 			Iterator it = set.iterator();
-			
+
 			while (it.hasNext()) {
-				Long L = (Long) it.next();			
-				fw.write( L.toString() );
+				Long L = (Long) it.next();
+				fw.write(L.toString());
 				fw.write(" ");
 			}
 
 			fw.write("\r\n");
 		}
 	}
-
 
 }

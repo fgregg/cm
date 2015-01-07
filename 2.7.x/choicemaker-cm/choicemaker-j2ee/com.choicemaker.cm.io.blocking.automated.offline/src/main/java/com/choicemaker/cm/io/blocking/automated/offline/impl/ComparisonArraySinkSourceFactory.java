@@ -11,7 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
@@ -51,7 +51,7 @@ public class ComparisonArraySinkSourceFactory implements IComparisonArraySinkSou
 	 */
 	public IComparisonArraySink getNextSink() throws BlockingException {
 		indSink ++;
-		return new ComparisonArraySink (fileDir + nameBase + indSink + "." + ext, Constants.STRING);
+		return new ComparisonArraySink (fileDir + nameBase + indSink + "." + ext, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
 	/* (non-Javadoc)
@@ -59,7 +59,7 @@ public class ComparisonArraySinkSourceFactory implements IComparisonArraySinkSou
 	 */
 	public IComparisonArraySource getNextSource() throws BlockingException {
 		indSource ++;
-		return new ComparisonArraySource (fileDir + nameBase + indSource + "." + ext, Constants.STRING);
+		return new ComparisonArraySource (fileDir + nameBase + indSource + "." + ext, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
 	/* (non-Javadoc)
@@ -80,14 +80,14 @@ public class ComparisonArraySinkSourceFactory implements IComparisonArraySinkSou
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#getSource(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSink)
 	 */
 	public IComparisonArraySource getSource(IComparisonArraySink sink) throws BlockingException {
-			return new ComparisonArraySource (sink.getInfo(), Constants.BINARY);
+			return new ComparisonArraySource (sink.getInfo(), EXTERNAL_DATA_FORMAT.BINARY);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#getSink(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSource)
 	 */
 	public IComparisonArraySink getSink(IComparisonArraySource source) throws BlockingException {
-		return new ComparisonArraySink (source.getInfo(), Constants.BINARY);
+		return new ComparisonArraySink (source.getInfo(), EXTERNAL_DATA_FORMAT.BINARY);
 	}
 
 	/* (non-Javadoc)

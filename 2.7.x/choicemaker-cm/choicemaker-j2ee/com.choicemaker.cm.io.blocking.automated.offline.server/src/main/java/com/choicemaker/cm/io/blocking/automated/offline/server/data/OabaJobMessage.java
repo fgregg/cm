@@ -12,6 +12,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 
 import java.io.Serializable;
 
+
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 //import com.choicemaker.cm.core.SerializableRecordSource;
 //import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
@@ -33,10 +35,10 @@ public class OabaJobMessage implements Serializable {
 	public int numRegularChunks;
 
 	// indicates the type of staging record id
-	public int stageType;
+	public RECORD_ID_TYPE stageType;
 
 	// indicates the type of master record id
-	public int masterType;
+	public RECORD_ID_TYPE masterType;
 
 	public ValidatorBase validator;
 

@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.util.IntArrayList;
 
@@ -23,17 +24,18 @@ import com.choicemaker.util.IntArrayList;
  */
 public class RecValSink extends BaseFileSink implements IRecValSink {
 
-	public RecValSink (String fileName, int type) {
-		init (fileName, type);
+	@Deprecated
+	public RecValSink(String fileName, int type) {
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
+	public RecValSink(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
+	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink#writeRecordValue(long, com.choicemaker.cm.core.util.IntArrayList)
-	 */
 	public void writeRecordValue(long recID, IntArrayList values) throws BlockingException {
 		try {
-			if (type == Constants.BINARY) {
+			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 				dos.writeLong(recID);
 			
 				if (values != null) {
@@ -46,7 +48,7 @@ public class RecValSink extends BaseFileSink implements IRecValSink {
 				} else {
 					dos.writeInt(0);
 				}
-			} else if (type == Constants.STRING) {
+			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 				StringBuffer sb = new StringBuffer ();
 				sb.append(recID);
 				sb.append(' ');

@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
+import com.choicemaker.util.SystemPropertyUtils;
+
 /**
  * This contains constants used by OABA.
  * 
@@ -18,65 +20,23 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  */
 public class Constants {
 
-	//source/sink constants
-	public static final int STRING = 1;
-	public static final int BINARY = 2;
-
-	//data file constants
-//	public static final long NEWLINE = -1;
-//	public static final int NEWLINE = -1;
-
-	//Used by RecordValue	
+	// Used by RecordValue
 	public static final int HASHMAP = 1;
 	public static final int ARRAY = 2;
-	
-	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
+	public static final String LINE_SEPARATOR = System
+			.getProperty(SystemPropertyUtils.LINE_SEPARATOR);
 
-	/** This indicates the beginning of a suffix tree node.
-	 * 
-	 */
+	/** Marks the start of a suffix tree node */
 	public static final char OPEN_NODE = '[';
-	
 
-	/** This indicates the ending of a suffix tree node.
-	 * 
-	 */
+	/** Marks the of a suffix tree node */
 	public static final char CLOSE_NODE = ']';
-	
 
-	/* The following 3 variables indicates the type of the record IDs.
-	 * 
-	 */
-	public static final int TYPE_INTEGER = 1;
-	public static final int TYPE_LONG = 2;
-	public static final int TYPE_STRING = 3;
-	
-	
-	/** This delimits the clues names in MatchResult2.getInfo ().
-	 * 
-	 */
-	public static final char DELIMITER = '|';
-	
-	
-	
-	/** This method checks if the object is an Integer, Long, or String.
-	 * 
-	 * @param o
-	 * @return int - TYPE_INTEGER, or TYPE_LONG, or TYPE_STRING
-	 */
-	public static int checkType (Comparable<?> o) {
-		int ret = 0;
+	/** This delimits the clues names in MatchResult2.getInfo (). */
+	public static final char EXPORT_NOTE_SEPARATOR = '|';
 
-		if (o.getClass() == java.lang.Integer.class) {
-			ret = TYPE_INTEGER;
-		} else if (o.getClass() == java.lang.Long.class) {
-			ret = TYPE_LONG;
-		} else if (o.getClass() == java.lang.String.class) {
-			ret = TYPE_STRING;
-		}
-		
-		return ret;
-	}
+	/** Field delimiter for exporting MatchResult2 results */
+	public static final char EXPORT_FIELD_SEPARATOR = ' ';
 
 }

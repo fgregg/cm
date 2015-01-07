@@ -14,63 +14,61 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
- * This composite source consists of many MatchRecord2Source files.  It takes the base
- * file name and extension and calculates the number of files in the directory.  It
- * reads all the files one at a time and return MatchRecord2 using getNext.
+ * This composite source consists of many MatchRecord2Source files. It takes the
+ * base file name and extension and calculates the number of files in the
+ * directory. It reads all the files one at a time and return MatchRecord2 using
+ * getNext.
  * 
  * 
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 		IMatchRecord2Source<T> {
 
-	private static final Logger log = Logger.getLogger(MatchRecord2CompositeSource.class.getName());
-	
+	private static final Logger log = Logger
+			.getLogger(MatchRecord2CompositeSource.class.getName());
+
 	private String fileBase;
 	private String fileExt;
 	private int numFiles;
 	private int currentInd;
 	private IMatchRecord2Source<T> currentSource;
 	private int count = 0;
-	
+
 	private String info;
-	
-	
+
 	/**
-	 * This constructor takes in a file base and file extension.  All the files
-	 * are of the form:
-	 * [file base]_i.[file ext] - i starts with 1.
+	 * This constructor takes in a file base and file extension. All the files
+	 * are of the form: [file base]_i.[file ext] - i starts with 1.
 	 * 
 	 * @param fileBase
 	 * @param fileExt
 	 */
-	public MatchRecord2CompositeSource (String fileBase, String fileExt) {
-		init (fileBase, fileExt);
+	public MatchRecord2CompositeSource(String fileBase, String fileExt) {
+		init(fileBase, fileExt);
 	}
-	
-	
-	/** This constructor takes in a file name like:
-	 * dir/match_108.txt, and look for a set of files of this form:
-	 * or dir/match_108_*.txt.
-	 * If none are found it looks for dir/match_108.txt.
+
+	/**
+	 * This constructor takes in a file name like: dir/match_108.txt, and look
+	 * for a set of files of this form: or dir/match_108_*.txt. If none are
+	 * found it looks for dir/match_108.txt.
 	 * 
 	 * @param fileName
 	 */
-	public MatchRecord2CompositeSource (String fileName) {
+	public MatchRecord2CompositeSource(String fileName) {
 		int i = fileName.indexOf(".");
 		String base = fileName.substring(0, i);
-		String ext = fileName.substring(i+1);
-		init (base, ext);
+		String ext = fileName.substring(i + 1);
+		init(base, ext);
 	}
-	
-	
+
 	/**
 	 * This method takes in the file base and file extension for MatchRecord2
 	 * sources. By default, we assume the input is a set of files, but if they
@@ -80,95 +78,86 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 	 * @param fileExt
 	 */
 	@SuppressWarnings("unchecked")
-	private void init (String fileBase, String fileExt) {
+	private void init(String fileBase, String fileExt) {
 		this.fileBase = fileBase;
 		this.fileExt = fileExt;
-		numFiles = countFiles ();
-		
-		//special case when the input doesn't represent a set of files.
+		numFiles = countFiles();
+
+		// special case when the input doesn't represent a set of files.
 		if (numFiles == 0) {
 			String fileName = fileBase + "." + fileExt;
-			File f = new File (fileName);
+			File f = new File(fileName);
 
-			if (!f.exists()) throw new IllegalArgumentException ("No files found for " +
-				fileBase + " " + fileExt);
+			if (!f.exists())
+				throw new IllegalArgumentException("No files found for "
+						+ fileBase + " " + fileExt);
 
 			numFiles = 1;
 			currentInd = 1;
-			currentSource = new MatchRecord2Source (fileName, 
-				Constants.STRING);
+			currentSource =
+				new MatchRecord2Source(fileName, EXTERNAL_DATA_FORMAT.STRING);
 			info = fileBase + "." + fileExt;
 		} else {
 			currentInd = 1;
-			currentSource = new MatchRecord2Source (getFileName(currentInd), 
-				Constants.STRING);
+			currentSource =
+				new MatchRecord2Source(getFileName(currentInd),
+						EXTERNAL_DATA_FORMAT.STRING);
 			info = fileBase + "." + fileExt;
 		}
 	}
-	
-	
-	
+
 	/**
-	 * This methods counts the number of files of the form 
-	 * [file base]_i.[file ext].
+	 * This methods counts the number of files of the form [file base]_i.[file
+	 * ext].
 	 * 
 	 * @return
 	 */
-	private int countFiles () {
+	private int countFiles() {
 		int i = 1;
-		File f = new File (getFileName(i)); 
+		File f = new File(getFileName(i));
 		while (f.exists()) {
-			i ++;
-			f = new File (getFileName(i)); 
+			i++;
+			f = new File(getFileName(i));
 		}
 		return i - 1;
 	}
-	
 
-	/** This method produces the file name for the given file number.
+	/**
+	 * This method produces the file name for the given file number.
 	 * 
-	 * @param fileNum - fileNum
+	 * @param fileNum
+	 *            - fileNum
 	 * @return String - fileName
 	 */
-	private String getFileName (int fileNum) {
+	private String getFileName(int fileNum) {
 		return fileBase + "_" + fileNum + "." + fileExt;
 	}
-	
+
 	public MatchRecord2<T> next() throws BlockingException {
-		count ++;
+		count++;
 		return currentSource.next();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source#getCount()
-	 */
 	public int getCount() {
 		return count;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#exists()
-	 */
 	public boolean exists() {
-		if (numFiles > 0) return true;
-		else return false;
+		if (numFiles > 0)
+			return true;
+		else
+			return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#open()
-	 */
 	public void open() throws BlockingException {
-		//need to reset to the first file
+		// need to reset to the first file
 		if (currentInd > 1) {
 			log.info("resetting Composite Source");
-			init (fileBase, fileExt);
-		} 
+			init(fileBase, fileExt);
+		}
 		currentSource.open();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
-	 */
 	@SuppressWarnings("unchecked")
 	public boolean hasNext() throws BlockingException {
 		boolean ret = false;
@@ -177,40 +166,34 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 		} else {
 			if (currentInd < numFiles) {
 				currentSource.close();
-				
-				currentInd ++;
-				currentSource = new MatchRecord2Source (getFileName (currentInd),
-					Constants.STRING);
+
+				currentInd++;
+				currentSource =
+					new MatchRecord2Source(getFileName(currentInd),
+							EXTERNAL_DATA_FORMAT.STRING);
 				currentSource.open();
 
-				if (currentSource.hasNext()) ret = true;
+				if (currentSource.hasNext())
+					ret = true;
 			}
 		}
-		
+
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
-	 */
 	public void close() throws BlockingException {
 		currentSource.close();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
-	 */
 	public String getInfo() {
 		return info;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
-	 */
 	public void delete() throws BlockingException {
-		for (int i=1; i<= numFiles; i++) {
-			MatchRecord2Source mrs = new MatchRecord2Source (getFileName(i), 
-				Constants.STRING);
+		for (int i = 1; i <= numFiles; i++) {
+			MatchRecord2Source mrs =
+				new MatchRecord2Source(getFileName(i),
+						EXTERNAL_DATA_FORMAT.STRING);
 			mrs.delete();
 			log.fine("removing " + mrs.getInfo());
 		}

@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.*;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,8 +19,9 @@ import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
  * @author pcheung
@@ -30,8 +33,13 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 
 	private ComparisonArray<T> nextGroup;
 
-	public ComparisonArraySource (String fileName, int type) {
-		init (fileName, type);
+	@Deprecated
+	public ComparisonArraySource(String fileName, int type) {
+		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
+	}
+
+	public ComparisonArraySource(String fileName, EXTERNAL_DATA_FORMAT type) {
+		super(fileName, type);
 	}
 
 	@Override
@@ -56,7 +64,7 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 	
 	
 	@SuppressWarnings("unchecked")
-	private ArrayList<T> readArray (int dataType) throws IOException {
+	private ArrayList<T> readArray (RECORD_ID_TYPE dataType) throws IOException {
 		//read the number of records
 		String str = br.readLine();
 		int size = Integer.parseInt(str);
@@ -66,13 +74,13 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 		for (int i=0; i<size; i++) {
 			str = br.readLine();
 			
-			if (dataType == Constants.TYPE_INTEGER) {
+			if (dataType == TYPE_INTEGER) {
 				Integer I = new Integer (str);
 				list.add(I);
-			} else if (dataType == Constants.TYPE_LONG) {
+			} else if (dataType == TYPE_LONG) {
 				Long L = new Long (str);
 				list.add(L);
-			} else if (dataType == Constants.TYPE_STRING) {
+			} else if (dataType == TYPE_STRING) {
 				list.add(str);
 			}
 		}
@@ -82,20 +90,20 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 
 
 	@SuppressWarnings("unchecked")
-	private ArrayList<T> readArrayBinary (int dataType) throws IOException {
+	private ArrayList<T> readArrayBinary (RECORD_ID_TYPE dataType) throws IOException {
 		//read the number of records
 		int size = dis.readInt();
 		
 		@SuppressWarnings("rawtypes")
 		ArrayList list = new ArrayList (size);
 		for (int i=0; i<size; i++) {
-			if (dataType == Constants.TYPE_INTEGER) {
+			if (dataType == TYPE_INTEGER) {
 				Integer I = new Integer ( dis.readInt() );
 				list.add(I);
-			} else if (dataType == Constants.TYPE_LONG) {
+			} else if (dataType == TYPE_LONG) {
 				Long L = new Long ( dis.readLong() );
 				list.add(L);
-			} else if (dataType == Constants.TYPE_STRING) {
+			} else if (dataType == TYPE_STRING) {
 				int s = dis.readInt();
 				
 				char[] data = new char[s];
@@ -114,7 +122,7 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 	private ComparisonArray<T> readNext () throws EOFException, IOException {
 		ComparisonArray<T> ret = null;
 		
-		if (type == Constants.STRING) {
+		if (type == EXTERNAL_DATA_FORMAT.STRING) {
 			String str;
 				
 			//read the data type for staging record
@@ -122,30 +130,33 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 				
 			if (str == null) throw new EOFException ();
 				
-			int stageType = Integer.parseInt(str);
+			int i = Integer.parseInt(str);
+			RECORD_ID_TYPE stageType = RECORD_ID_TYPE.fromSymbol(i);
 				
 			//read the staging array
 			ArrayList<T> stage = (ArrayList<T>) readArray (stageType);
 				
 			//read the master id type
 			str = br.readLine();
-			int masterType = Integer.parseInt(str);
+			i = Integer.parseInt(str);
+			RECORD_ID_TYPE masterType = RECORD_ID_TYPE.fromSymbol(i);
 				
 			//read the staging array
 			ArrayList<T> master = (ArrayList<T>) readArray (masterType);
 				
 			ret = new ComparisonArray<T>(stage, master, stageType, masterType);								
 
-		} else if (type == Constants.BINARY) {
+		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 
 			//read the data type for staging record
-			int stageType = dis.readInt();
+			int i = dis.readInt();
+			RECORD_ID_TYPE stageType = RECORD_ID_TYPE.fromSymbol(i);
 				
 			//read the staging array
 			ArrayList<T> stage = readArrayBinary (stageType);
 
-			//read the data type for master record
-			int masterType = dis.readInt();
+			//read the data type for master is.readInt();
+			RECORD_ID_TYPE masterType = RECORD_ID_TYPE.fromSymbol(i);
 				
 			//read the master array
 			ArrayList<T> master = readArrayBinary (masterType);

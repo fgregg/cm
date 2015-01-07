@@ -24,7 +24,6 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
@@ -36,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.util.LongArrayList;
 
 /**This version takes in blocks that contains internal id instead of the record id.
@@ -396,8 +396,8 @@ public class ChunkService2 {
 			//set up comparison group
 			ArrayList stage = new ArrayList ();
 			ArrayList master = new ArrayList ();
-			int stageType = 0;
-			int masterType = 0;
+			RECORD_ID_TYPE stageType = null;
+			RECORD_ID_TYPE masterType = null;
 			
 			//add to the set of distinct record ids
 			for (int i=0; i< block.size(); i++) {
@@ -410,20 +410,22 @@ public class ChunkService2 {
 				Comparable comp = translator.reverseLookup((int) block.get(i) );
 				
 				if (translator.getSplitIndex() == 0) {
-					//only staging record source
-					
-					if (stage.size()== 0) stageType = Constants.checkType(comp);
+					// only staging record source
+					if (stage.size() == 0)
+						stageType = RECORD_ID_TYPE.fromInstance(comp);
 					stage.add(comp);
 
 				} else {
-					//two record sources
+					// two record sources
 					if (block.get(i) < translator.getSplitIndex()) {
-						//stage
-						if (stage.size()== 0) stageType = Constants.checkType(comp);
+						// stage
+						if (stage.size() == 0)
+							stageType = RECORD_ID_TYPE.fromInstance(comp);
 						stage.add(comp);
 					} else {
-						//master
-						if (master.size()== 0) masterType = Constants.checkType(comp);
+						// master
+						if (master.size() == 0)
+							masterType = RECORD_ID_TYPE.fromInstance(comp);
 						master.add(comp);
 					}
 				}

@@ -27,6 +27,7 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ChunkRecordIDSinkSourceFactory;
@@ -335,10 +336,10 @@ public class OabaFileUtils implements Serializable {
 	public static final String BASENAME_COMPARE_TREE_STORE = "compareTree";
 
 	public static ComparisonTreeSinkSourceFactory getComparisonTreeFactory(
-			BatchJob job, int stageType) {
+			BatchJob job, RECORD_ID_TYPE stageType) {
 		String wd = getWorkingDir(job);
-		return new ComparisonTreeSinkSourceFactory(wd, BASENAME_COMPARE_TREE_STORE, TEXT_SUFFIX,
-				stageType);
+		return new ComparisonTreeSinkSourceFactory(wd,
+				BASENAME_COMPARE_TREE_STORE, TEXT_SUFFIX, stageType);
 	}
 
 	public static final String BASENAME_COMPARE_TREE_GROUP_STORE = "compareTreeGroup";
@@ -348,10 +349,10 @@ public class OabaFileUtils implements Serializable {
 	 * each chunk.
 	 */
 	public static ComparisonTreeGroupSinkSourceFactory getComparisonTreeGroupFactory(
-			BatchJob job, int stageType, int num) {
+			BatchJob job, RECORD_ID_TYPE stageType, int num) {
 		String wd = getWorkingDir(job);
-		return new ComparisonTreeGroupSinkSourceFactory(wd, BASENAME_COMPARE_TREE_GROUP_STORE, TEXT_SUFFIX,
-				num, stageType);
+		return new ComparisonTreeGroupSinkSourceFactory(wd,
+				BASENAME_COMPARE_TREE_GROUP_STORE, TEXT_SUFFIX, num, stageType);
 	}
 
 	public static final String BASENAME_COMPARE_ARRAY_STORE = "compareArray_O";

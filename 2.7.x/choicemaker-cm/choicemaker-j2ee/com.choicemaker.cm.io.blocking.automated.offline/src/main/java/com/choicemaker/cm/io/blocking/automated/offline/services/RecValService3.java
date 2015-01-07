@@ -26,13 +26,13 @@ import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingField;
 import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 import com.choicemaker.cm.io.blocking.automated.IDbField;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
@@ -84,7 +84,7 @@ public class RecValService3 {
 
 	//This stores if stage record id is Integer, Long, or string
 	private boolean firstStage = true;
-	private int stageType = -1;
+	private RECORD_ID_TYPE stageType = null;
 
 	//This stores if master record id is Integer, Long, or string
 	private boolean firstMaster = true;
@@ -160,7 +160,7 @@ public class RecValService3 {
 	 *
 	 * @return
 	 */
-	public int getStageType () {
+	public RECORD_ID_TYPE getStageType () {
 		return stageType;
 	}
 
@@ -171,7 +171,7 @@ public class RecValService3 {
 	 *
 	 * @return
 	 */
-	public int getMasterType () {
+	public RECORD_ID_TYPE getMasterType () {
 		return stageType;
 	}
 
@@ -227,7 +227,7 @@ public class RecValService3 {
 				if (stage.hasNext()) {
 					Record r = stage.getNext();
 					Object O = r.getId();
-					stageType = Constants.checkType((Comparable)O);
+					stageType = RECORD_ID_TYPE.fromInstance((Comparable)O);
 				}
 				stage.close();
 			}
@@ -290,7 +290,7 @@ public class RecValService3 {
 					//This checks the id type
 					if (firstStage) {
 						Object O = r.getId();
-						stageType = Constants.checkType((Comparable)O);
+						stageType = RECORD_ID_TYPE.fromInstance((Comparable)O);
 						firstStage = false;
 					}
 
