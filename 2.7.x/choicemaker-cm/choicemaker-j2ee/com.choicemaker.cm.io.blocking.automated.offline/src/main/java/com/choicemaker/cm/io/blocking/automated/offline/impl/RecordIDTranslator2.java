@@ -24,52 +24,55 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class RecordIDTranslator2 implements IRecordIDTranslator2 {
-	
 
 	private IRecordIDSinkSourceFactory rFactory;
 
-	//These two files store the input record id2.  The first id correspond to internal id 0, etc.
+	// These two files store the input record id2. The first id correspond to
+	// internal id 0, etc.
 	private IRecordIDSink sink1;
 	private IRecordIDSink sink2;
-	
-	//This is an indicator of the class type of record id.
+
+	// This is an indicator of the class type of record id.
 	private RECORD_ID_TYPE dataType;
 
-	/** This contains the range of the record ID in sink1.  
-	 * range1[0] is min and range1[1] is max.
+	/**
+	 * This contains the range of the record ID in sink1. range1[0] is min and
+	 * range1[1] is max.
 	 */
-	private Comparable [] range1 = new Comparable [2];
-	
-	/** This contains the range of the record ID in sink2.  
-	 * range2[0] is min and range2[1] is max.
+	private Comparable[] range1 = new Comparable[2];
+
+	/**
+	 * This contains the range of the record ID in sink2. range2[0] is min and
+	 * range2[1] is max.
 	 */
-	private Comparable [] range2 = new Comparable [2];
+	private Comparable[] range2 = new Comparable[2];
 
 	/**
 	 * This contains the mapping from input record id I to internal record id J.
-	 * mapping[J] = I.  J starts from 0.
+	 * mapping[J] = I. J starts from 0.
 	 */
 	private int currentIndex = -1;
-	
+
 	/**
-	 * This is the point at which the second record source record ids start.  if this is 0, it means
-	 * there is only 1 record source.
+	 * This is the point at which the second record source record ids start. if
+	 * this is 0, it means there is only 1 record source.
 	 */
 	private int splitIndex = 0;
 
-	//	indicates whether initReverseTranslation has happened.
-	private boolean initialized = false; 
+	// indicates whether initReverseTranslation has happened.
+	private boolean initialized = false;
 
-	//These two lists are use during reverse translation.
+	// These two lists are use during reverse translation.
 	private ArrayList list1;
 	private ArrayList list2;
 
-
-	public RecordIDTranslator2 (IRecordIDSinkSourceFactory rFactory) throws BlockingException {
+	public RecordIDTranslator2(IRecordIDSinkSourceFactory rFactory)
+			throws BlockingException {
 		this.rFactory = rFactory;
-		
+
 		sink1 = rFactory.getNextSink();
 		sink2 = rFactory.getNextSink();
 
@@ -79,198 +82,185 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 		range2[0] = null;
 		range2[1] = null;
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#getRange1()
-	 */
+	@Override
 	public Comparable[] getRange1() {
 		return range1;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#getRange2()
-	 */
+	@Override
 	public Comparable[] getRange2() {
 		return range2;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#getSplitIndex()
-	 */
+	@Override
 	public int getSplitIndex() {
 		return splitIndex;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#open()
-	 */
+	@Override
 	public void open() throws BlockingException {
 		currentIndex = -1;
 		sink1.open();
-		splitIndex = 0;		
+		splitIndex = 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#split()
-	 */
+	@Override
 	public void split() throws BlockingException {
 		splitIndex = currentIndex + 1;
 		sink1.close();
 		sink2.open();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#close()
-	 */
+	@Override
 	public void close() throws BlockingException {
-		if (splitIndex == 0) sink1.close();
-		else sink2.close();
+		if (splitIndex == 0)
+			sink1.close();
+		else
+			sink2.close();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#cleanUp()
-	 */
+	@Override
 	public void cleanUp() throws BlockingException {
 		list1 = null;
 		list2 = null;
-		
+
 		sink1.remove();
-		if (splitIndex > 0) sink2.remove();
+		if (splitIndex > 0)
+			sink2.remove();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#recover()
-	 */
+	@Override
 	public void recover() throws BlockingException {
 		IRecordIDSource source = rFactory.getSource(sink1);
 		currentIndex = -1;
-		splitIndex = 0;		
+		splitIndex = 0;
 		if (source.exists()) {
 			source.open();
 			while (source.hasNext()) {
-				currentIndex ++;
-				
-				Comparable o = (Comparable) source.next ();
-				setMinMax (o, range1);
+				currentIndex++;
+
+				Comparable o = (Comparable) source.next();
+				setMinMax(o, range1);
 			}
 			source.close();
 			sink1.append();
 		}
-		
+
 		source = rFactory.getSource(sink2);
 		if (source.exists()) {
 			sink1.close();
 			splitIndex = currentIndex + 1;
 			source.open();
 			while (source.hasNext()) {
-				currentIndex ++;
+				currentIndex++;
 
-				Comparable o = (Comparable) source.next ();
-				setMinMax (o, range2);
+				Comparable o = (Comparable) source.next();
+				setMinMax(o, range2);
 			}
 			source.close();
 			sink2.append();
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#translate(java.lang.Object)
-	 */
+	@Override
 	public int translate(Comparable o) throws BlockingException {
-		currentIndex ++;
+		currentIndex++;
 
-		//figure out the id type for the first file
+		// figure out the id type for the first file
 		if (currentIndex == 0) {
 			dataType = RECORD_ID_TYPE.fromInstance(o);
 			sink1.setRecordIDType(dataType);
 		}
-		
-		//figure out the id type for the second file
+
+		// figure out the id type for the second file
 		if (currentIndex == splitIndex) {
 			dataType = RECORD_ID_TYPE.fromInstance(o);
 			sink2.setRecordIDType(dataType);
 		}
-		
+
 		if (splitIndex == 0) {
 			sink1.writeRecordID(o);
-			
-			setMinMax (o, range1);
+
+			setMinMax(o, range1);
 
 		} else {
 			sink2.writeRecordID(o);
 
-			setMinMax (o, range2);
-			
-		} 
-		
+			setMinMax(o, range2);
+
+		}
+
 		return currentIndex;
 	}
-	
-	
-	/** This method compares o to the range.  If o is smaller than range[0], then replace range[0] with o.
-	 * If o is larger than range[1], then replace range[1] with o.
+
+	/**
+	 * This method compares o to the range. If o is smaller than range[0], then
+	 * replace range[0] with o. If o is larger than range[1], then replace
+	 * range[1] with o.
 	 * 
 	 * @param o
 	 * @param range
 	 */
-	private void setMinMax (Comparable o, Comparable [] range) {
-		if (range[0] == null) range[0] = o;
+	private void setMinMax(Comparable o, Comparable[] range) {
+		if (range[0] == null)
+			range[0] = o;
 		else {
-			if (o.compareTo(range[0]) < 0) range[0] = o;
+			if (o.compareTo(range[0]) < 0)
+				range[0] = o;
 		}
-		
-		if (range[1] == null) range[1] = o;
+
+		if (range[1] == null)
+			range[1] = o;
 		else {
-			if (o.compareTo(range[1]) > 0) range[1] = o;
+			if (o.compareTo(range[1]) > 0)
+				range[1] = o;
 		}
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#initReverseTranslation()
-	 */
+	@Override
 	public void initReverseTranslation() throws BlockingException {
 		if (!initialized) {
-			if (splitIndex == 0) list1 = new ArrayList (currentIndex);
-			else list1 = new ArrayList (splitIndex);
-			
+			if (splitIndex == 0)
+				list1 = new ArrayList(currentIndex);
+			else
+				list1 = new ArrayList(splitIndex);
+
 			IRecordIDSource source1 = rFactory.getSource(sink1);
 			source1.open();
-			
+
 			while (source1.hasNext()) {
 				list1.add(source1.next());
 			}
-		
+
 			source1.close();
-		
-			//Read the second source if there is one
+
+			// Read the second source if there is one
 			if (splitIndex > 0) {
-				list2 = new ArrayList (currentIndex - splitIndex + 1);
+				list2 = new ArrayList(currentIndex - splitIndex + 1);
 				IRecordIDSource source2 = rFactory.getSource(sink2);
 				source2.open();
-		
+
 				while (source2.hasNext()) {
 					list2.add(source2.next());
 				}
-		
+
 				source2.close();
 			}
-		
+
 			initialized = true;
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2#reverseLookup(int)
-	 */
+	@Override
 	public Comparable reverseLookup(int internalID) {
 		Comparable o = null;
-		
-		if (splitIndex == 0) o = (Comparable) list1.get(internalID);
+
+		if (splitIndex == 0)
+			o = (Comparable) list1.get(internalID);
 		else {
-			if (internalID < splitIndex) o = (Comparable) list1.get(internalID);
+			if (internalID < splitIndex)
+				o = (Comparable) list1.get(internalID);
 			else {
 				o = (Comparable) list2.get(internalID - splitIndex);
 			}
@@ -278,24 +268,27 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 		return o;
 	}
 
-
-	/** This returns an ArrayList of record IDs from the first source.  Usually, the staging source.
+	/**
+	 * This returns an ArrayList of record IDs from the first source. Usually,
+	 * the staging source.
 	 * 
 	 * @return ArrayList
 	 */
-	public ArrayList getList1 () {
+	@Override
+	public ArrayList getList1() {
 		return list1;
 	}
 
-
-	/** This returns an ArrayList of record IDs from the second source.  Usually, the master source.
+	/**
+	 * This returns an ArrayList of record IDs from the second source. Usually,
+	 * the master source.
 	 * 
 	 * @return ArrayList
 	 */
-	public ArrayList getList2 () {
+	@Override
+	public ArrayList getList2() {
 		return list2;
 	}
-
 
 	@Override
 	public String toString() {

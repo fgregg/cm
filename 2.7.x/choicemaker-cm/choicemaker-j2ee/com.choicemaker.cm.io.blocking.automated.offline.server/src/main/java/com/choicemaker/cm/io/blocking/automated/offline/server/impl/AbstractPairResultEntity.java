@@ -320,7 +320,7 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 
 	@Override
 	public RECORD_SOURCE getRecord2Source() {
-		return RECORD_SOURCE.getRecordSource(record2Source);
+		return RECORD_SOURCE.fromSymbol(record2Source);
 	}
 
 	@Override

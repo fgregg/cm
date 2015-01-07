@@ -57,12 +57,7 @@ public class TreeTransformer implements ITransformer {
 		this.cFactory = cFactory;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer#init()
-	 */
+	@Override
 	public void init() throws BlockingException {
 		final String METHOD = "init()";
 		logger.entering(SOURCE, METHOD);
@@ -72,12 +67,7 @@ public class TreeTransformer implements ITransformer {
 		logger.exiting(SOURCE, METHOD);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer#
-	 * getSplitIndex()
-	 */
+	@Override
 	public int getSplitIndex() {
 		final String METHOD = "getSplitIndex()";
 		int retVal = translator.getSplitIndex();
@@ -85,12 +75,7 @@ public class TreeTransformer implements ITransformer {
 		return retVal;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer#
-	 * useNextSink()
-	 */
+	@Override
 	public void useNextSink() throws BlockingException {
 		final String METHOD = "useNextSink()";
 		logger.entering(SOURCE, METHOD);
@@ -100,13 +85,7 @@ public class TreeTransformer implements ITransformer {
 		logger.exiting(SOURCE, METHOD);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer#close
-	 * ()
-	 */
+	@Override
 	public void close() throws BlockingException {
 		final String METHOD = "close()";
 		logger.entering(SOURCE, METHOD);
@@ -114,13 +93,7 @@ public class TreeTransformer implements ITransformer {
 		logger.exiting(SOURCE, METHOD);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer#transform
-	 * (com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet)
-	 */
+	@Override
 	public void transform(IIDSet bs) throws BlockingException {
 		final String METHOD = "transform(IIDSet)";
 		logger.entering(SOURCE, METHOD, bs);
@@ -185,13 +158,7 @@ public class TreeTransformer implements ITransformer {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer#cleanUp
-	 * ()
-	 */
+	@Override
 	public void cleanUp() throws BlockingException {
 		final String METHOD = "cleanUp()";
 		logger.entering(SOURCE, METHOD);
