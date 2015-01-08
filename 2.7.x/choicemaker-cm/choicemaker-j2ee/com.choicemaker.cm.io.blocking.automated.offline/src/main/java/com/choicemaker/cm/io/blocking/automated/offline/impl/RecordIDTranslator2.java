@@ -31,12 +31,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 		"rawtypes", "unchecked" })
 public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 
-	private IRecordIDSinkSourceFactory rFactory;
+	private final IRecordIDSinkSourceFactory rFactory;
 
-	// These two files store the input record id2. The first id correspond to
-	// internal id 0, etc.
-	private IRecordIDSink sink1;
-	private IRecordIDSink sink2;
+	// These two files store the input record ids. The first record id
+	// corresponds to internal id 0, etc.
+	private final IRecordIDSink sink1;
+	private final IRecordIDSink sink2;
 
 	// This is an indicator of the class type of record id.
 	private RECORD_ID_TYPE dataType;
@@ -74,16 +74,26 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 
 	public RecordIDTranslator2(IRecordIDSinkSourceFactory rFactory)
 			throws BlockingException {
+		if (rFactory == null) {
+			throw new IllegalArgumentException("null factory");
+		}
 		this.rFactory = rFactory;
 
-		sink1 = rFactory.getNextSink();
-		sink2 = rFactory.getNextSink();
+		this.sink1 = rFactory.getNextSink();
+		if (this.sink1 == null) {
+			throw new IllegalStateException("null sink (1)");
+		}
 
-		range1[0] = null;
-		range1[1] = null;
+		this.sink2 = rFactory.getNextSink();
+		if (this.sink2 == null) {
+			throw new IllegalStateException("null sink (2)");
+		}
 
-		range2[0] = null;
-		range2[1] = null;
+		this.range1[0] = null;
+		this.range1[1] = null;
+
+		this.range2[0] = null;
+		this.range2[1] = null;
 	}
 
 	@Override
@@ -99,6 +109,15 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 	@Override
 	public int getSplitIndex() {
 		return splitIndex;
+	}
+
+	@Override
+	public RECORD_ID_TYPE getDataType() {
+		return dataType;
+	}
+
+	protected void setDataType(RECORD_ID_TYPE dataType) {
+		this.dataType = dataType;
 	}
 
 	@Override
@@ -172,14 +191,14 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 
 		// figure out the id type for the first file
 		if (currentIndex == 0) {
-			dataType = RECORD_ID_TYPE.fromInstance(o);
-			sink1.setRecordIDType(dataType);
+			setDataType(RECORD_ID_TYPE.fromInstance(o));
+			sink1.setRecordIDType(getDataType());
 		}
 
 		// figure out the id type for the second file
 		if (currentIndex == splitIndex) {
-			dataType = RECORD_ID_TYPE.fromInstance(o);
-			sink2.setRecordIDType(dataType);
+			setDataType(RECORD_ID_TYPE.fromInstance(o));
+			sink2.setRecordIDType(getDataType());
 		}
 
 		if (splitIndex == 0) {
@@ -295,7 +314,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 
 	@Override
 	public String toString() {
-		return "RecordIDTranslator2 [dataType=" + dataType + ", range1="
+		return "RecordIDTranslator2 [dataType=" + getDataType() + ", range1="
 				+ Arrays.toString(range1) + ", range2="
 				+ Arrays.toString(range2) + ", currentIndex=" + currentIndex
 				+ ", splitIndex=" + splitIndex + "]";

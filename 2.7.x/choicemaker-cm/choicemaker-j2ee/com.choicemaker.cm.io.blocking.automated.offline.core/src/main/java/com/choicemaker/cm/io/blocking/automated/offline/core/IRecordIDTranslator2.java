@@ -113,4 +113,7 @@ public interface IRecordIDTranslator2<T extends Comparable<T>> {
 	 */
 	public List<T> getList2();
 
+	/** Returns the type of record identifier handled by this translator */
+	RECORD_ID_TYPE getDataType();
+
 }
