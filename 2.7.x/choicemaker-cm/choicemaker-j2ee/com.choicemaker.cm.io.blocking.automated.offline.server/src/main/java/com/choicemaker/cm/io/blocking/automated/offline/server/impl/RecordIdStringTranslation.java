@@ -24,7 +24,7 @@ public class RecordIdStringTranslation extends
 	private static final long serialVersionUID = 271L;
 
 	public RecordIdStringTranslation(BatchJob job, String recordId,
-			RECORD_SOURCE_ROLE source, long translatedId) {
+			RECORD_SOURCE_ROLE source, int translatedId) {
 		super(job.getId(), recordId, RECORD_ID_TYPE.TYPE_LONG.getCharSymbol(),
 				source.getCharSymbol(), translatedId);
 	}

@@ -124,7 +124,7 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	private final long jobId;
 
 	@Column(name = CN_TRANSLATED_ID)
-	private final long translatedId;
+	private final int translatedId;
 
 	@Column(name = CN_RECORD_ID)
 	protected final String recordId;
@@ -146,18 +146,18 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	}
 
 	protected AbstractRecordIdTranslationEntity(long jobId, String recordId,
-			char recordType, char recordSource, long translatedId) {
+			char recordType, char recordSource, int translatedId) {
 		assert jobId != BatchJob.INVALID_ID;
 		assert translatedId > INVALID_TRANSLATED_ID;
 		assert recordId != INVALID_RECORD_ID;
 		assert recordType != DV_ABSTRACT.charAt(0);
 		assert recordSource != INVALID_RECORD_SOURCE;
 
-		this.jobId = BatchJob.INVALID_ID;
-		this.translatedId = INVALID_TRANSLATED_ID;
-		this.recordId = INVALID_RECORD_ID;
+		this.jobId = jobId;
+		this.translatedId = translatedId;
+		this.recordId = recordId;
 		this.recordType = recordType;
-		this.recordSource = INVALID_RECORD_SOURCE;
+		this.recordSource = recordSource;
 	}
 
 	// -- Abstract methods
@@ -178,7 +178,7 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	}
 
 	@Override
-	public final long getTranslatedId() {
+	public final int getTranslatedId() {
 		return translatedId;
 	}
 

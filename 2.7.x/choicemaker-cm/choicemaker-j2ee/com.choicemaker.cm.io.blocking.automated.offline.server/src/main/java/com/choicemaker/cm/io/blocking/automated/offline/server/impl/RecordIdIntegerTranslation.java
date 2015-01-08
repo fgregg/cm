@@ -43,7 +43,7 @@ public class RecordIdIntegerTranslation extends
 	}
 
 	public RecordIdIntegerTranslation(BatchJob job, int recordId,
-			RECORD_SOURCE_ROLE source, long translatedId) {
+			RECORD_SOURCE_ROLE source, int translatedId) {
 		super(job.getId(), idToString(recordId), RECORD_ID_TYPE.TYPE_LONG
 				.getCharSymbol(), source.getCharSymbol(), translatedId);
 	}

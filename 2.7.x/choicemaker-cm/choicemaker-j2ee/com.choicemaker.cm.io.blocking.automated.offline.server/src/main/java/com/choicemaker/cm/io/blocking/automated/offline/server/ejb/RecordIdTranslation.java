@@ -9,7 +9,7 @@ public interface RecordIdTranslation<T extends Comparable<T>> extends
 		Serializable, Comparable<RecordIdTranslation<T>> {
 
 	/** Translated identifiers are non-negative */
-	long INVALID_TRANSLATED_ID = -1;
+	int INVALID_TRANSLATED_ID = -1;
 	
 	/** Persistence id */
 	long getId();
@@ -18,7 +18,7 @@ public interface RecordIdTranslation<T extends Comparable<T>> extends
 	long getJobId();
 
 	/** Translated id (job-specific) */
-	long getTranslatedId();
+	int getTranslatedId();
 
 	/** Record id */
 	T getRecordId();

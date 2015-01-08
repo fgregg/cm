@@ -22,7 +22,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
  * A cached collection of translated record identifiers. (Persistent
- * translations are maintained by {@link FIXME}).
+ * translations are maintained by
+ * {@link com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaRecordIdController
+ * OabaRecordIdController}).
  * 
  * @author pcheung
  * @author rphall (Conversion to a cache)

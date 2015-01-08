@@ -1,6 +1,5 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-
 /**
  * Java Persistence API (JPA) for OabaProcessingEvent beans.<br/>
  * Prefixes:
@@ -55,7 +54,7 @@ public interface RecordIdTranslationJPA {
 
 	/** Link to a batch job */
 	String CN_JOB_ID = "JOB_ID";
-	
+
 	/** Record identifier */
 	String CN_RECORD_ID = "RECORD_ID";
 
@@ -75,7 +74,8 @@ public interface RecordIdTranslationJPA {
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDID_FIND_ALL} */
 	String JPQL_TRANSLATEDID_FIND_ALL =
-		"Select o from AbstractRecordIdTranslationEntity o";
+		"SELECT o FROM AbstractRecordIdTranslationEntity o "
+				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
 	 * Name of the query that finds all persistent, abstract translation entries
@@ -85,7 +85,8 @@ public interface RecordIdTranslationJPA {
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDID_FIND_BY_JOBID} */
 	String JPQL_TRANSLATEDID_FIND_BY_JOBID =
-		"SELECT o FROM AbstractRecordIdTranslationEntity o WHERE o.jobId = :jobId";
+		"SELECT o FROM AbstractRecordIdTranslationEntity o "
+				+ "WHERE o.jobId = :jobId ORDER BY o.translatedId";
 
 	/**
 	 * Name of the parameter used to specify the jobId parameter of
@@ -103,7 +104,8 @@ public interface RecordIdTranslationJPA {
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDINTEGERID_FIND_ALL} */
 	String JPQL_TRANSLATEDINTEGERID_FIND_ALL =
-		"Select o from RecordIdIntegerTranslationEntity o";
+		"SELECT o FROM RecordIdIntegerTranslationEntity o "
+				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
 	 * Name of the query that finds all persistent, abstract translation entries
@@ -113,7 +115,8 @@ public interface RecordIdTranslationJPA {
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDINTEGERID_FIND_BY_JOBID} */
 	String JPQL_TRANSLATEDINTEGERID_FIND_BY_JOBID =
-		"SELECT o FROM RecordIdIntegerTranslationEntity o WHERE o.jobId = :jobId";
+		"SELECT o FROM RecordIdIntegerTranslationEntity o "
+				+ "WHERE o.jobId = :jobId ORDER BY o.translatedId";
 
 	/**
 	 * Name of the parameter used to specify the jobId parameter of
@@ -131,7 +134,8 @@ public interface RecordIdTranslationJPA {
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDLONGID_FIND_ALL} */
 	String JPQL_TRANSLATEDLONGID_FIND_ALL =
-		"Select o from RecordIdLongTranslationEntity o";
+		"SELECT o FROM RecordIdLongTranslationEntity o "
+				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
 	 * Name of the query that finds all persistent, abstract translation entries
@@ -141,7 +145,8 @@ public interface RecordIdTranslationJPA {
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDLONGID_FIND_BY_JOBID} */
 	String JPQL_TRANSLATEDLONGID_FIND_BY_JOBID =
-		"SELECT o FROM RecordIdLongTranslationEntity o WHERE o.jobId = :jobId";
+		"SELECT o FROM RecordIdLongTranslationEntity o "
+				+ "WHERE o.jobId = :jobId ORDER BY o.translatedId";
 
 	/**
 	 * Name of the parameter used to specify the jobId parameter of
@@ -159,7 +164,8 @@ public interface RecordIdTranslationJPA {
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDSTRINGID_FIND_ALL} */
 	String JPQL_TRANSLATEDSTRINGID_FIND_ALL =
-		"Select o from RecordIdStringTranslationEntity o";
+		"SELECT o FROM RecordIdStringTranslationEntity o "
+				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
 	 * Name of the query that finds all persistent, abstract translation entries
@@ -169,7 +175,8 @@ public interface RecordIdTranslationJPA {
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDSTRINGID_FIND_BY_JOBID} */
 	String JPQL_TRANSLATEDSTRINGID_FIND_BY_JOBID =
-		"SELECT o FROM RecordIdStringTranslationEntity o WHERE o.jobId = :jobId";
+		"SELECT o FROM RecordIdStringTranslationEntity o "
+				+ "WHERE o.jobId = :jobId ORDER BY o.translatedId";
 
 	/**
 	 * Name of the parameter used to specify the jobId parameter of
