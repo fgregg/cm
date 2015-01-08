@@ -34,7 +34,7 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.filter.DefaultMatchRecord2Filter;
 import com.choicemaker.cm.io.blocking.automated.offline.filter.IMatchRecord2Filter;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MRPSCreator;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 
 /**
  * A long-running backend process that computes Marked Record Pairs.
@@ -51,7 +51,7 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 	private EntityManager em;
 
 	@EJB
-	private PersistableRecordSourceController rsController;
+	private RecordSourceController rsController;
 
 	private transient MessageDrivenContext mdc = null;
 

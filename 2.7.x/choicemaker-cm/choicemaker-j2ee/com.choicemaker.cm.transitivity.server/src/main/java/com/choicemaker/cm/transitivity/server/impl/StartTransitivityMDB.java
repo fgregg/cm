@@ -40,7 +40,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTrans
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
@@ -80,7 +80,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 	private OabaProcessingControllerBean processingController;
 
 //	@EJB
-	private PersistableRecordSourceController rsController;
+	private RecordSourceController rsController;
 
 	/* (non-Javadoc)
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)

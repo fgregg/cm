@@ -15,7 +15,7 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 
 @Stateless
 public class SqlRecordSourceControllerBean /* implements
-		PersistableRecordSourceController */ {
+		RecordSourceController */ {
 
 	private static final Logger logger = Logger
 			.getLogger(SqlRecordSourceControllerBean.class.getName());

@@ -58,7 +58,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtil
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
 import com.choicemaker.cm.io.blocking.automated.offline.services.MatchDedupService2;
@@ -113,7 +113,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 	OabaProcessingControllerBean processingController;
 
 //	@EJB
-	private PersistableRecordSourceController rsController;
+	private RecordSourceController rsController;
 
 	@Inject
 	JMSContext jmsContext;

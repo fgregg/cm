@@ -27,7 +27,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
@@ -104,7 +104,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	private OabaTestController oabaTestController;
 
 	@EJB
-	private PersistableRecordSourceController rsController;
+	private RecordSourceController rsController;
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
@@ -426,7 +426,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return processingController;
 	}
 
-	public final PersistableRecordSourceController getRecordSourceController() {
+	public final RecordSourceController getRecordSourceController() {
 		return rsController;
 	}
 

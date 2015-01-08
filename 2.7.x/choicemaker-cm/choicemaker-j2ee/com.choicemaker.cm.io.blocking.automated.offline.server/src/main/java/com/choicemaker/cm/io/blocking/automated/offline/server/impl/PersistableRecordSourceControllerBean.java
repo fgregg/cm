@@ -15,11 +15,11 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.args.PersistableXmlRecordSource;
 import com.choicemaker.cm.core.ISerializableRecordSource;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 
 @Stateless
 public class PersistableRecordSourceControllerBean implements
-		PersistableRecordSourceController {
+		RecordSourceController {
 
 	private static final Logger logger = Logger
 			.getLogger(PersistableRecordSourceControllerBean.class.getName());

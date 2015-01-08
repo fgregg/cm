@@ -9,7 +9,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 
 @Local
-public interface PersistableRecordSourceController {
+public interface RecordSourceController {
 
 	PersistableRecordSource save(PersistableRecordSource rs);
 

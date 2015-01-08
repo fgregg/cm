@@ -21,8 +21,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
+ * A cached collection of translated record identifiers. (Persistent
+ * translations are maintained by {@link FIXME}).
+ * 
  * @author pcheung
- *
+ * @author rphall (Conversion to a cache)
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })

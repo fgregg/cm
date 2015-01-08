@@ -21,7 +21,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -221,7 +221,7 @@ public class MrpsRequest implements IMrpsRequest {
 	}
 
 	public PersistableRecordSource getRsMaster(EntityManager em,
-			PersistableRecordSourceController prsc) throws CmRuntimeException,
+			RecordSourceController prsc) throws CmRuntimeException,
 			ConfigException, RemoteException {
 		PersistableRecordSource retVal = this.rsMaster;
 		if (retVal == null) {
@@ -236,7 +236,7 @@ public class MrpsRequest implements IMrpsRequest {
 	}
 
 	public PersistableRecordSource getRsStage(EntityManager em,
-			PersistableRecordSourceController prsc) throws CmRuntimeException,
+			RecordSourceController prsc) throws CmRuntimeException,
 			ConfigException, RemoteException {
 		PersistableRecordSource retVal = this.rsStaging;
 		if (retVal == null) {

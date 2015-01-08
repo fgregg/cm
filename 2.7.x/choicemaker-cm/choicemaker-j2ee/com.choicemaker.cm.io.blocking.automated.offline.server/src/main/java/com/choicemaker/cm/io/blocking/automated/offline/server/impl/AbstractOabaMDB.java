@@ -34,7 +34,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 
 /**
@@ -66,7 +66,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	private ServerConfigurationController serverController;
 
 	@EJB
-	private PersistableRecordSourceController rsController;
+	private RecordSourceController rsController;
 
 	// This member will go away, but for now accessible from sub-classes
 	@Inject
@@ -98,7 +98,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 		return serverController;
 	}
 
-	protected final PersistableRecordSourceController getRecordSourceController() {
+	protected final RecordSourceController getRecordSourceController() {
 		return rsController;
 	}
 

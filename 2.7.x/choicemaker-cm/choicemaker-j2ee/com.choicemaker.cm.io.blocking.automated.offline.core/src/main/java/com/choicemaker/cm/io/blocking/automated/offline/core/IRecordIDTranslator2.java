@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.choicemaker.cm.core.BlockingException;
@@ -53,37 +52,28 @@ public interface IRecordIDTranslator2<T extends Comparable<T>> {
 
 	/**
 	 * This method performs initialization.
-	 * 
-	 * @throws BlockingException
 	 */
 	public void open() throws BlockingException;
 
 	/**
 	 * This method tells the objects that source1 is done and it sets the split
 	 * index at where source 2 begins.
-	 * 
 	 */
 	public void split() throws BlockingException;
 
 	/**
 	 * This method closes the file or db depending on the implementation.
-	 * 
-	 * @throws BlockingException
 	 */
 	public void close() throws BlockingException;
 
 	/**
 	 * This method cleans up underlying file or db resources.
-	 * 
-	 * @throws IOException
 	 */
 	public void cleanUp() throws BlockingException;
 
 	/**
 	 * This method attemps to recover the data from a previous run by reading in
 	 * existing sources containing the record ids.
-	 * 
-	 * @throws BlockingException
 	 */
 	public void recover() throws BlockingException;
 
@@ -93,14 +83,11 @@ public interface IRecordIDTranslator2<T extends Comparable<T>> {
 	 * @param o
 	 *            - the record id object (Long, Integer, String)
 	 * @return int - returns internal id for this record id.
-	 * @throws BlockingException
 	 */
 	public int translate(T o) throws BlockingException;
 
 	/**
 	 * This method prepares for reverse translation.
-	 * 
-	 * @throws BlockingException
 	 */
 	public void initReverseTranslation() throws BlockingException;
 
@@ -109,7 +96,6 @@ public interface IRecordIDTranslator2<T extends Comparable<T>> {
 	 * ID. Make sure the method initReverseTranslation is called before this
 	 * method.
 	 * 
-	 * @param internalID
 	 * @return Comparable<?> - the original record ID associated with this
 	 *         internal ID.
 	 */
@@ -118,16 +104,12 @@ public interface IRecordIDTranslator2<T extends Comparable<T>> {
 	/**
 	 * This returns an List of record IDs from the first source. Usually, the
 	 * staging source.
-	 * 
-	 * @return List
 	 */
 	public List<T> getList1();
 
 	/**
 	 * This returns an List of record IDs from the second source. Usually, the
 	 * master source.
-	 * 
-	 * @return List
 	 */
 	public List<T> getList2();
 

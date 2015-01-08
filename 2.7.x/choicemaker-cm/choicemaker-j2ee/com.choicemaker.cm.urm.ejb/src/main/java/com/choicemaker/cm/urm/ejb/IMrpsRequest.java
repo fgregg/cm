@@ -20,7 +20,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.PersistableRecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
 
@@ -46,11 +46,11 @@ interface IMrpsRequest extends Serializable, Cloneable {
 			throws CmRuntimeException, ConfigException, RemoteException;
 
 	PersistableRecordSource getRsMaster(EntityManager em,
-			PersistableRecordSourceController prsc)
+			RecordSourceController prsc)
 			throws CmRuntimeException, ConfigException, RemoteException;
 
 	PersistableRecordSource getRsStage(EntityManager em,
-			PersistableRecordSourceController prsc)
+			RecordSourceController prsc)
 			throws CmRuntimeException, ConfigException, RemoteException;
 
 	IProbabilityModel getStagingModel(EntityManager em)
