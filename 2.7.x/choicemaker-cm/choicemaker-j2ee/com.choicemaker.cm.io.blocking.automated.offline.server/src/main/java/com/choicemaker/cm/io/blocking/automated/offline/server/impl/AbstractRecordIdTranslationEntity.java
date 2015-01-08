@@ -43,7 +43,7 @@ import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdTranslation;
 
 @NamedQueries({
@@ -188,8 +188,8 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	}
 
 	@Override
-	public final RECORD_SOURCE getRecordSource() {
-		return RECORD_SOURCE.fromSymbol(recordSource);
+	public final RECORD_SOURCE_ROLE getRecordSource() {
+		return RECORD_SOURCE_ROLE.fromSymbol(recordSource);
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 
 @NamedQueries({
 		@NamedQuery(name = QN_TRANSLATEDINTEGERID_FIND_ALL,
@@ -43,7 +43,7 @@ public class RecordIdIntegerTranslation extends
 	}
 
 	public RecordIdIntegerTranslation(BatchJob job, int recordId,
-			RECORD_SOURCE source, long translatedId) {
+			RECORD_SOURCE_ROLE source, long translatedId) {
 		super(job.getId(), idToString(recordId), RECORD_ID_TYPE.TYPE_LONG
 				.getCharSymbol(), source.getCharSymbol(), translatedId);
 	}

@@ -9,7 +9,7 @@ import javax.persistence.NamedQuery;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 
 @NamedQueries({
 		@NamedQuery(name = QN_TRANSLATEDSTRINGID_FIND_ALL,
@@ -24,7 +24,7 @@ public class RecordIdStringTranslation extends
 	private static final long serialVersionUID = 271L;
 
 	public RecordIdStringTranslation(BatchJob job, String recordId,
-			RECORD_SOURCE source, long translatedId) {
+			RECORD_SOURCE_ROLE source, long translatedId) {
 		super(job.getId(), recordId, RECORD_ID_TYPE.TYPE_LONG.getCharSymbol(),
 				source.getCharSymbol(), translatedId);
 	}

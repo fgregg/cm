@@ -44,7 +44,7 @@ import javax.persistence.TableGenerator;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaPairResult;
 import com.choicemaker.util.HashUtils;
 
@@ -319,8 +319,8 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 	}
 
 	@Override
-	public RECORD_SOURCE getRecord2Source() {
-		return RECORD_SOURCE.fromSymbol(record2Source);
+	public RECORD_SOURCE_ROLE getRecord2Source() {
+		return RECORD_SOURCE_ROLE.fromSymbol(record2Source);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 import java.io.Serializable;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 
 public interface OabaPairResult<T extends Comparable<T>> extends
 	Serializable {
@@ -21,7 +21,7 @@ public interface OabaPairResult<T extends Comparable<T>> extends
 
 	T getRecord2Id();
 
-	RECORD_SOURCE getRecord2Source();
+	RECORD_SOURCE_ROLE getRecord2Source();
 
 	float getProbability();
 
