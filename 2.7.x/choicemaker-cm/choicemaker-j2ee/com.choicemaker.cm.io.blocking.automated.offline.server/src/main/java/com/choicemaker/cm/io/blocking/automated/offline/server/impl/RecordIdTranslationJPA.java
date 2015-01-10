@@ -20,16 +20,16 @@ public interface RecordIdTranslationJPA {
 	/** Name of the column used to distinguish between pair types */
 	String DISCRIMINATOR_COLUMN = "TYPE";
 
-	/** Default value of the discriminator column used to mark abstract types */
+	/** Discriminator value column used to mark abstract types */
 	String DV_ABSTRACT = "0";
 
-	/** Default value of the discriminator column used to mark integer types */
+	/** Discriminator value column used to mark integer types */
 	String DV_INTEGER = "1";
 
-	/** Default value of the discriminator column used to mark long types */
+	/** Discriminator value column used to mark long types */
 	String DV_LONG = "2";
 
-	/** Default value of the discriminator column used to mark String types */
+	/** Discriminator value column used to mark String types */
 	String DV_STRING = "3";
 
 	String ID_GENERATOR_NAME = "OABA_TRANSLATED_ID";
