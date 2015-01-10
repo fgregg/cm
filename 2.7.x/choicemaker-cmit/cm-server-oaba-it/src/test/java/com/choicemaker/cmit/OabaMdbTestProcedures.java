@@ -24,12 +24,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
@@ -270,7 +270,7 @@ public class OabaMdbTestProcedures {
 		}
 
 		// Find the entry in the processing history updated by the OABA
-		final OabaProcessingControllerBean processingController =
+		final OabaProcessingController processingController =
 			test.getProcessingController();
 		OabaEventLog processingEntry =
 			processingController.getProcessingLog(oabaJob);

@@ -34,13 +34,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataSto
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractMatcher;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
 /**
@@ -77,7 +77,7 @@ public class TransMatcherMDB extends AbstractMatcher  implements MessageListener
 	private OabaParametersControllerBean paramsController;
 	
 	// @EJB
-	private OabaProcessingControllerBean processingController;
+	private OabaProcessingController processingController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
 	private Queue transMatchSchedulerQueue;
@@ -96,7 +96,7 @@ public class TransMatcherMDB extends AbstractMatcher  implements MessageListener
 	}
 
 	@Override
-	protected OabaProcessingControllerBean getProcessingController() {
+	protected OabaProcessingController getProcessingController() {
 		return processingController;
 	}
 

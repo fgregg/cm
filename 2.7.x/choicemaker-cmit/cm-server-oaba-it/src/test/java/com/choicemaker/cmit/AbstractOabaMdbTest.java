@@ -25,6 +25,7 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
@@ -32,7 +33,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.TestEntities;
@@ -95,7 +95,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	private ServerConfigurationController serverController;
 
 	@EJB
-	private OabaProcessingControllerBean processingController;
+	private OabaProcessingController processingController;
 
 	@EJB
 	private OabaService oabaService;
@@ -422,7 +422,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return paramsController;
 	}
 
-	public final OabaProcessingControllerBean getProcessingController() {
+	public final OabaProcessingController getProcessingController() {
 		return processingController;
 	}
 

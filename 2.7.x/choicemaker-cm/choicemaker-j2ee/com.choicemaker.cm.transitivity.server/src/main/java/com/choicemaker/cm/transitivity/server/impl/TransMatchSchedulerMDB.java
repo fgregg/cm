@@ -26,13 +26,13 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractScheduler;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 
 /**
  * This is the match scheduler for the Transitivity Engine.
@@ -65,7 +65,7 @@ public class TransMatchSchedulerMDB extends AbstractScheduler implements Message
 	private OabaParametersControllerBean paramsController;
 	
 	@EJB
-	private OabaProcessingControllerBean processingController;
+	private OabaProcessingController processingController;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -93,7 +93,7 @@ public class TransMatchSchedulerMDB extends AbstractScheduler implements Message
 	}
 
 	@Override
-	protected OabaProcessingControllerBean getProcessingController() {
+	protected OabaProcessingController getProcessingController() {
 		return processingController;
 	}
 

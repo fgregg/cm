@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroup
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 
@@ -75,7 +76,7 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	private OabaParametersControllerBean paramsController;
 	
 	@EJB
-	private OabaProcessingControllerBean processingController;
+	private OabaProcessingController processingController;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -100,7 +101,7 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	}
 
 	@Override
-	protected OabaProcessingControllerBean getProcessingController() {
+	protected OabaProcessingController getProcessingController() {
 		return processingController;
 	}
 

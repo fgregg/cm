@@ -18,9 +18,9 @@ import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
@@ -45,7 +45,7 @@ public class TransitivityJobControllerBean {
 	private ServerConfigurationController serverManager;
 
 	@EJB
-	private OabaProcessingControllerBean processingController;
+	private OabaProcessingController processingController;
 
 	protected TransitivityJobEntity getBean(TransitivityJob oabaJob) {
 		TransitivityJobEntity retVal = null;

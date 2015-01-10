@@ -31,6 +31,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 
 /**
@@ -41,7 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
  * @author rphall (migration to EJB3)
  */
 @Stateless
-public class OabaProcessingControllerBean {
+public class OabaProcessingControllerBean implements OabaProcessingController {
 
 	private static final Logger logger = Logger
 			.getLogger(OabaProcessingControllerBean.class.getName());
@@ -185,20 +186,24 @@ public class OabaProcessingControllerBean {
 	@Resource(lookup = "java:/choicemaker/urm/jms/statusTopic")
 	private Topic oabaStatusTopic;
 
+	@Override
 	public List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
+	@Override
 	public OabaEventLog getProcessingLog(OabaJob job) {
 		return new OabaProcessingLog(em, job);
 	}
 
+	@Override
 	public void updateStatusWithNotification(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
 		updateStatusWithNotification(em, jmsContext, oabaStatusTopic, job,
 				event, timestamp, info);
 	}
 
+	@Override
 	public OabaEvent getCurrentOabaEvent(OabaJob oabaJob) {
 		OabaEvent retVal = null;
 		OabaProcessingEvent ope = getCurrentOabaProcessingEvent(em, oabaJob);

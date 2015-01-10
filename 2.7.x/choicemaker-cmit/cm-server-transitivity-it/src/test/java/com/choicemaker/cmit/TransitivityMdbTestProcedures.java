@@ -26,12 +26,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
@@ -178,7 +178,7 @@ public class TransitivityMdbTestProcedures {
 			final TransitivityService transitivityService,
 			final OabaJobControllerBean jobController,
 			final OabaParametersControllerBean paramsController,
-			final OabaProcessingControllerBean processingController,
+			final OabaProcessingController processingController,
 			final JMSContext jmsContext, final Queue listeningQueue,
 			final Topic transStatusUpdate, final EntityManager em,
 			final UserTransaction utx, final int expectedEventId,
@@ -374,7 +374,7 @@ public class TransitivityMdbTestProcedures {
 			final ServerConfiguration serverConfiguration,
 			final OabaService batchQuery,
 			final OabaJobControllerBean jobController,
-			final OabaProcessingControllerBean processingController,
+			final OabaProcessingController processingController,
 			final JMSContext jmsContext,
 			final Topic statusTopic) {
 		logger.entering(LOG_SOURCE, tag);
