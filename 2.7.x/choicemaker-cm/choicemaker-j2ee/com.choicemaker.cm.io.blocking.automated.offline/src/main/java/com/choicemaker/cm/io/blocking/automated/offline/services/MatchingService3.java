@@ -387,13 +387,13 @@ public class MatchingService3 {
 			float matchProbability = evaluator.getProbability(activeClues);
 			Decision decision = evaluator.getDecision(activeClues, matchProbability, low, high);
 
-			char source = MatchRecord2.MASTER_SOURCE;
+			char source = MatchRecord2.ROLE_MASTER;
 
 			Comparable i1 = q.getId();
 			Comparable i2 = m.getId();
 
 			if (isStage) {
-				source = MatchRecord2.STAGE_SOURCE;
+				source = MatchRecord2.ROLE_STAGING;
 
 				//make sure the smaller id is first
 				if (i1.compareTo(i2) > 0) {

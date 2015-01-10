@@ -113,11 +113,11 @@ public class CompositeEntityBuilder {
 	 * @param mr
 	 */
 	private RecordID getID1 (MatchRecord2 mr) {
-		return new RecordID (mr.getRecordID1 (), MatchRecord2.STAGE_SOURCE);		
+		return new RecordID (mr.getRecordID1 (), MatchRecord2.ROLE_STAGING);
 	}
 
 	private RecordID getID2 (MatchRecord2 mr) {
-		return new RecordID (mr.getRecordID2 (), mr.getRecord2Source());		
+		return new RecordID (mr.getRecordID2 (), mr.getRecord2Role());
 	}
 
 

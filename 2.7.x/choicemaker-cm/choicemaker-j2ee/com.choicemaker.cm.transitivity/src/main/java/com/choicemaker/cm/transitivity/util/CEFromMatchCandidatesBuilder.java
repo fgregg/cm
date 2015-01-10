@@ -104,7 +104,7 @@ public class CEFromMatchCandidatesBuilder extends CEFromMatchesBuilder{
 				final String[] notes = candidates[i].getNotes();
 				final String noteInfo = MatchRecord2.getNotesAsDelimitedString(notes);
 				MatchRecord2 mr = new MatchRecord2 (q.getId(), m.getId(),
-					MatchRecord2.STAGE_SOURCE,
+					MatchRecord2.ROLE_STAGING,
 					candidates[i].getProbability(),
 					translateDecision(candidates[i].getDecision()),noteInfo);
 				// END BUG FIX?

@@ -472,7 +472,7 @@ public class MRPSCreator {
 			mr = (MatchRecord2) mrSource.next();
 			id1 = mr.getRecordID1();
 			id2 = mr.getRecordID2();
-			source = mr.getRecord2Source();
+			source = mr.getRecord2Role();
 			if (preFilter.satisfy(mr)) {
 
 				matchRecords.add(mr);
@@ -482,12 +482,12 @@ public class MRPSCreator {
 					stageIDSet.add(id1);
 				}
 
-				if (source == MatchRecord2.MASTER_SOURCE) {
+				if (source == MatchRecord2.ROLE_MASTER) {
 					//master
 					if (!masterIDSet.contains(id2)) {
 						masterIDSet.add(id2);
 					}
-				} else if (source == MatchRecord2.STAGE_SOURCE) {
+				} else if (source == MatchRecord2.ROLE_STAGING) {
 					//stage
 					if (!stageIDSet.contains(id2)) {
 						stageIDSet.add(id2);
@@ -559,17 +559,17 @@ public class MRPSCreator {
 
 			id1 = mr.getRecordID1();
 			id2 = mr.getRecordID2();
-			source = mr.getRecord2Source();
+			source = mr.getRecord2Role();
 
 			//get record2 1 and 2
 			r1 = (Record) stageMap.get(id1);
-			if (source == MatchRecord2.MASTER_SOURCE) {
+			if (source == MatchRecord2.ROLE_MASTER) {
 				r2 = (Record) masterMap.get(id2);
-			} else if (source == MatchRecord2.STAGE_SOURCE) {
+			} else if (source == MatchRecord2.ROLE_STAGING) {
 				r2 = (Record) stageMap.get(id2);
 			} else {
 				throw new BlockingException(
-					"Invalid record2Source " + mr.getRecord2Source());
+					"Invalid record2Source " + mr.getRecord2Role());
 			}
 
 			//get decision

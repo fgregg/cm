@@ -88,7 +88,7 @@ public class CEFromMatchesBuilder {
 			// 2009-08-17 rphall
 			// BUG FIX? clue notes added here
 			final String noteInfo = MatchRecord2.getNotesAsDelimitedString(m.ac,this.model);
-			MatchRecord2 mr = new MatchRecord2 (q.getId(), m.id, MatchRecord2.STAGE_SOURCE,
+			MatchRecord2 mr = new MatchRecord2 (q.getId(), m.id, MatchRecord2.ROLE_STAGING,
 				m.probability, translateDecision(m.decision),noteInfo);
 			pairs.add(mr);
 			// END BUG FIX?
@@ -144,7 +144,7 @@ public class CEFromMatchesBuilder {
 
 		Decision decision = match.decision;
 		float matchProbability = match.probability;
-		char source = MatchRecord2.STAGE_SOURCE;
+		char source = MatchRecord2.ROLE_STAGING;
 
 		Comparable i1 = r1.getId();
 		Comparable i2 = r2.getId();

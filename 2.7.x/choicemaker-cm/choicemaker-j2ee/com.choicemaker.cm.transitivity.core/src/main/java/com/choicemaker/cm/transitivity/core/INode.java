@@ -24,8 +24,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  */
 public interface INode<T extends Comparable<T>> extends Comparable<INode<T>> {
 	
-	public static final char STAGE_TYPE = MatchRecord2.STAGE_SOURCE; //'S'
-	public static final char MASTER_TYPE = MatchRecord2.MASTER_SOURCE; //'D'
+	public static final char STAGE_TYPE = MatchRecord2.ROLE_STAGING; //'S'
+	public static final char MASTER_TYPE = MatchRecord2.ROLE_MASTER; //'D'
 	public static final char COMPOSIT_TYPE = 'C';
 
 	/** This returns the id of this node */

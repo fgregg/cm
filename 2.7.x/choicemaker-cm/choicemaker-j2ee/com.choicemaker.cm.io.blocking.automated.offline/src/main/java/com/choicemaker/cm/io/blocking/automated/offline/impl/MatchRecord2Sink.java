@@ -92,7 +92,7 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 
 				dos.writeFloat(match.getProbability());
 				dos.writeChar(match.getMatchType());
-				dos.writeChar(match.getRecord2Source());
+				dos.writeChar(match.getRecord2Role());
 
 				String str = match.getNotes();
 				if (str == null || str.equals("")) {
@@ -145,7 +145,7 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 		sb.append(EXPORT_FIELD_SEPARATOR);
 		sb.append(match.getMatchType());
 		sb.append(EXPORT_FIELD_SEPARATOR);
-		sb.append(match.getRecord2Source());
+		sb.append(match.getRecord2Role());
 		sb.append(str);
 		sb.append(LINE_SEPARATOR);
 

@@ -16,6 +16,7 @@ import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 
 /**
  * A MatchRecord has a pair of id's and a match probability on this pair.
@@ -32,8 +33,8 @@ public class MatchRecord2<T extends Comparable<T>> implements
 	public static final char DIFFER = Decision.DIFFER.toSingleChar();
 	public static final char HOLD = Decision.HOLD.toSingleChar();
 
-	public static final char MASTER_SOURCE = 'D';
-	public static final char STAGE_SOURCE = 'S';
+	public static final char ROLE_MASTER = RECORD_SOURCE_ROLE.MASTER.getCharSymbol();
+	public static final char ROLE_STAGING = RECORD_SOURCE_ROLE.STAGING.getCharSymbol();
 
 	private final T recordID1;
 	private final T recordID2;
@@ -78,28 +79,29 @@ public class MatchRecord2<T extends Comparable<T>> implements
 		return retVal;
 	}
 
-	/**
-	 * This constructor takes in these key parameters.
-	 * 
-	 * @param i1
-	 *            - id of the first record. Can be Integer, Long, or String.
-	 * @param i2
-	 *            - id of the second record. Can be Integer, Long, or String.
-	 * @param source
-	 *            - indicates if the second record is from staging or master
-	 * @param f
-	 *            - match probability
-	 * @param type
-	 *            - Match or Hold or Differ
-	 * @param ac
-	 *            - Active clue firings
-	 * @param model
-	 *            - The model used to evaluate this pair
-	 */
-	public MatchRecord2(T i1, T i2, char source, float f, char type,
-			ActiveClues ac, ImmutableProbabilityModel model) {
-		this(i1, i2, source, f, type, getNotesAsDelimitedString(ac, model));
-	}
+// // FIXME REMOVEME UNUSED
+//	/**
+//	 * This constructor takes in these key parameters.
+//	 * 
+//	 * @param i1
+//	 *            - id of the first record. Can be Integer, Long, or String.
+//	 * @param i2
+//	 *            - id of the second record. Can be Integer, Long, or String.
+//	 * @param source
+//	 *            - indicates if the second record is from staging or master
+//	 * @param f
+//	 *            - match probability
+//	 * @param type
+//	 *            - Match or Hold or Differ
+//	 * @param ac
+//	 *            - Active clue firings
+//	 * @param model
+//	 *            - The model used to evaluate this pair
+//	 */
+//	public MatchRecord2(T i1, T i2, char source, float f, char type,
+//			ActiveClues ac, ImmutableProbabilityModel model) {
+//		this(i1, i2, source, f, type, getNotesAsDelimitedString(ac, model));
+//	}
 
 	/**
 	 * This constructor takes in these key parameters.
@@ -144,7 +146,7 @@ public class MatchRecord2<T extends Comparable<T>> implements
 		return matchType;
 	}
 
-	public char getRecord2Source() {
+	public char getRecord2Role() {
 		return record2Source;
 	}
 

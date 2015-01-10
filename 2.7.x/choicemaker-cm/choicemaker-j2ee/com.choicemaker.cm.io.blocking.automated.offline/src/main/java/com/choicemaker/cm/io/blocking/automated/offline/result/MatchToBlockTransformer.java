@@ -83,7 +83,7 @@ public class MatchToBlockTransformer {
 			MatchRecord2 mr = (MatchRecord2) mSource.next();
 			if (!stageIDs.containsKey( mr.getRecordID1())) stageIDs.put(mr.getRecordID1(), null);
 
-			if (mr.getRecord2Source() == MatchRecord2.STAGE_SOURCE) {
+			if (mr.getRecord2Role() == MatchRecord2.ROLE_STAGING) {
 				if (!stageIDs.containsKey( mr.getRecordID2())) stageIDs.put(mr.getRecordID2(), null);
 			} else {
 				if (!masterIDs.containsKey(mr.getRecordID2())) masterIDs.put(mr.getRecordID2(), null);
@@ -143,7 +143,7 @@ public class MatchToBlockTransformer {
 					Long l1 = (Long) stageIDs.get(mr.getRecordID1());
 
 					Long l2 = null;
-					if (mr.getRecord2Source() == MatchRecord2.STAGE_SOURCE) {
+					if (mr.getRecord2Role() == MatchRecord2.ROLE_STAGING) {
 						l2 = (Long) stageIDs.get(mr.getRecordID2());
 					} else {
 						l2 = (Long) masterIDs.get(mr.getRecordID2());

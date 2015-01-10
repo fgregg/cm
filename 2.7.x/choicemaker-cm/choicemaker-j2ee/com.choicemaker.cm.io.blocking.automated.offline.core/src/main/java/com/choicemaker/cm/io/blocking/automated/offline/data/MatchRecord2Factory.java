@@ -33,7 +33,7 @@ public class MatchRecord2Factory {
 		// 2009-08-17 rphall
 		// NO BUG: clue notes are not required for separator records
 		final String noteInfo = null;
-		return new MatchRecord2 (id, id, MatchRecord2.STAGE_SOURCE, 
+		return new MatchRecord2 (id, id, MatchRecord2.ROLE_STAGING, 
 			0.0f, MatchRecord2.DIFFER,noteInfo);
 		// END NO BUG
 	}

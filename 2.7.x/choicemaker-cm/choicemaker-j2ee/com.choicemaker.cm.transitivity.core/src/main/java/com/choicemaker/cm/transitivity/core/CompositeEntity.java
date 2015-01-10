@@ -62,7 +62,7 @@ public class CompositeEntity<T extends Comparable<T>> implements INode<T> {
 		}
 
 		Comparable c2 = mr.getRecordID2();
-		ent = new Entity(c2, mr.getRecord2Source());
+		ent = new Entity(c2, mr.getRecord2Role());
 		Entity ent2 = (Entity) nodes.get(ent);
 		if (ent2 == null) {
 			nodes.put(ent, ent);

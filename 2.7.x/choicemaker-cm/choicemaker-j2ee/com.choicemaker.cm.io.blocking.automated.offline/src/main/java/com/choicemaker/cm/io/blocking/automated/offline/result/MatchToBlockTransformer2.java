@@ -168,7 +168,7 @@ public class MatchToBlockTransformer2 {
 
 			Integer I1 = (Integer) stageIDs.get(mr.getRecordID1());
 			Integer I2 = null;
-			if (mr.getRecord2Source() == MatchRecord2.STAGE_SOURCE) {
+			if (mr.getRecord2Role() == MatchRecord2.ROLE_STAGING) {
 				I2 = (Integer) stageIDs.get(mr.getRecordID2());
 			} else {
 				I2 = (Integer) masterIDs.get(mr.getRecordID2());
@@ -183,7 +183,7 @@ public class MatchToBlockTransformer2 {
 			// 2009-08-17 rphall
 			// BUG FIX? clue notes added here
 			final String noteInfo = mr.getNotes();
-			MatchRecord2 mr2 = new MatchRecord2 (I1, I2, mr.getRecord2Source(),
+			MatchRecord2 mr2 = new MatchRecord2 (I1, I2, mr.getRecord2Role(),
 				mr.getProbability(), mr.getMatchType(),noteInfo);
 			// END BUG FIX?
 

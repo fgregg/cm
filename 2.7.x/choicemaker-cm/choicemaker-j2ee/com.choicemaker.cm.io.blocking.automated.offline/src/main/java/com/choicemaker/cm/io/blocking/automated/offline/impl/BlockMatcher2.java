@@ -619,7 +619,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 			Decision decision =
 				evaluator.getDecision(activeClues, matchProbability, low, high);
 
-			char source = MatchRecord2.MASTER_SOURCE;
+			char source = MatchRecord2.ROLE_MASTER;
 
 			@SuppressWarnings("unchecked")
 			T i1 = (T) q.getId();
@@ -627,9 +627,9 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 			T i2 = (T) m.getId();
 
 			if (isStage) {
-				source = MatchRecord2.STAGE_SOURCE;
+				source = MatchRecord2.ROLE_STAGING;
 
-				// make sure the smaller id is first
+				// make sure the smaller staging id is first
 				if (i1.compareTo(i2) > 0) {
 					T i3 = i1;
 					i1 = i2;
