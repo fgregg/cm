@@ -3,6 +3,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 import java.io.Serializable;
 
 import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 
 public interface OabaPairResult<T extends Comparable<T>> extends
@@ -15,7 +16,7 @@ public interface OabaPairResult<T extends Comparable<T>> extends
 
 	long getJobId();
 
-	Class<T> getRecordIdType();
+	RECORD_ID_TYPE getRecordIdType();
 
 	T getRecord1Id();
 
