@@ -37,6 +37,7 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.io.blocking.automated.offline.OabaProperties;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.filter.IMatchRecord2Filter;
 import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
@@ -460,7 +461,7 @@ public class MRPSCreator {
 		MatchRecord2 mr = null;
 		Comparable id1 = null;
 		Comparable id2 = null;
-		char source = '\0';
+		RECORD_SOURCE_ROLE source = null;
 
 		while (matchRecords.size() < batchSize && mrSource.hasNext()) {
 
@@ -482,12 +483,12 @@ public class MRPSCreator {
 					stageIDSet.add(id1);
 				}
 
-				if (source == MatchRecord2.ROLE_MASTER) {
+				if (source == RECORD_SOURCE_ROLE.MASTER) {
 					//master
 					if (!masterIDSet.contains(id2)) {
 						masterIDSet.add(id2);
 					}
-				} else if (source == MatchRecord2.ROLE_STAGING) {
+				} else if (source == RECORD_SOURCE_ROLE.STAGING) {
 					//stage
 					if (!stageIDSet.contains(id2)) {
 						stageIDSet.add(id2);
@@ -541,7 +542,7 @@ public class MRPSCreator {
 		MatchRecord2 mr;
 		Record r1, r2;
 		Comparable id1, id2;
-		char source;
+		RECORD_SOURCE_ROLE source;
 		Decision decision = null;
 		Date date = new Date(System.currentTimeMillis());
 
@@ -563,9 +564,9 @@ public class MRPSCreator {
 
 			//get record2 1 and 2
 			r1 = (Record) stageMap.get(id1);
-			if (source == MatchRecord2.ROLE_MASTER) {
+			if (source == RECORD_SOURCE_ROLE.MASTER) {
 				r2 = (Record) masterMap.get(id2);
-			} else if (source == MatchRecord2.ROLE_STAGING) {
+			} else if (source == RECORD_SOURCE_ROLE.STAGING) {
 				r2 = (Record) stageMap.get(id2);
 			} else {
 				throw new BlockingException(
@@ -573,9 +574,9 @@ public class MRPSCreator {
 			}
 
 			//get decision
-			if (mr.getMatchType() == MatchRecord2.MATCH) {
+			if (mr.getMatchType() == Decision.MATCH) {
 				decision = Decision.MATCH;
-			} else if (mr.getMatchType() == MatchRecord2.HOLD) {
+			} else if (mr.getMatchType() == Decision.HOLD) {
 				decision = Decision.HOLD;
 			}
 

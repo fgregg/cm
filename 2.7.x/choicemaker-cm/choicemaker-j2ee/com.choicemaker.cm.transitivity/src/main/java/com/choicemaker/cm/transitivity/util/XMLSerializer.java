@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.ConnectedProperty;
@@ -240,9 +241,9 @@ public class XMLSerializer implements TransitivityResultSerializer {
 	}
 
 	private String writeDecision(MatchRecord2 mr) {
-		if (mr.getMatchType() == MatchRecord2.MATCH)
+		if (mr.getMatchType() == Decision.MATCH)
 			return "match";
-		else if (mr.getMatchType() == MatchRecord2.HOLD)
+		else if (mr.getMatchType() == Decision.HOLD)
 			return "hold";
 		else
 			return "error";

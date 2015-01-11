@@ -17,9 +17,11 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
@@ -50,31 +52,26 @@ public class MatchRecord2Source<T extends Comparable<T>>
 		super(fileName, type);
 	}
 
-	/** This gets the next available MatchRecord2 from the source.
-	 * 
-	 * @return MatchRecord2
-	 * @throws OABABlockingException
+	/**
+	 * This gets the next available MatchRecord2 from the source.
 	 */
 	private MatchRecord2<T> readNext() throws EOFException, IOException {
-		MatchRecord2<T> retVal = null;
 
+		MatchRecord2<T> retVal = null;
 		if (type == EXTERNAL_DATA_FORMAT.STRING) {
 			retVal = readMatchRecord(br);
 
 		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
-
 			Comparable c1 = readIDBinary();
 			Comparable c2 = readIDBinary();
-
 			float f = dis.readFloat();
-			char type = dis.readChar();
-			char source = dis.readChar();
-
-			String info = readInfo();
-
-			retVal = new MatchRecord2(c1, c2, source, f, type, info);
+			char cDecision = dis.readChar();
+			Decision d = Decision.valueOf(cDecision);
+			char cRole = dis.readChar();
+			RECORD_SOURCE_ROLE role = RECORD_SOURCE_ROLE.fromSymbol(cRole);
+			String notes = readInfo();
+			retVal = new MatchRecord2(c1, c2, role, f, d, notes);
 		}
-
 
 		return retVal;
 	}
@@ -104,36 +101,39 @@ public class MatchRecord2Source<T extends Comparable<T>>
 	 * @throws IOException
 	 */
 	public static MatchRecord2 readMatchRecord(BufferedReader reader)
-		throws IOException {
-		MatchRecord2 mr = null;
+			throws IOException {
 
 		String str = reader.readLine();
-		
+		MatchRecord2 retVal = null;
 		if ((str != null) && (str.length() > 0)) {
 			StringTokenizer st = new StringTokenizer(str);
 
-			int s = Integer.parseInt(st.nextToken());
-			RECORD_ID_TYPE dataType = RECORD_ID_TYPE.fromSymbol(s);
+			// First record identifier
+			int i = Integer.parseInt(st.nextToken());
+			RECORD_ID_TYPE dataType = RECORD_ID_TYPE.fromSymbol(i);
 			Comparable c1 = readIDString(dataType, st.nextToken());
 
-			s = Integer.parseInt(st.nextToken());
-			dataType = RECORD_ID_TYPE.fromSymbol(s);
+			// Second record identifier
+			i = Integer.parseInt(st.nextToken());
+			assert dataType == RECORD_ID_TYPE.fromSymbol(i);
 			Comparable c2 = readIDString(dataType, st.nextToken());
 
+			// Probability, decision and delimited notes
 			float f = Float.parseFloat(st.nextToken());
+			char c = st.nextToken().charAt(0);
+			Decision d = Decision.valueOf(c);
 
-			char tt = st.nextToken().charAt(0);
+			c = st.nextToken().charAt(0);
+			RECORD_SOURCE_ROLE role = RECORD_SOURCE_ROLE.fromSymbol(c);
 
-			char source = st.nextToken().charAt(0);
-
-			String info = null;
+			String notes = null;
 			if (st.hasMoreTokens()) {
-				info = st.nextToken();
+				notes = st.nextToken();
 			}
 
-			mr = new MatchRecord2(c1, c2, source, f, tt, info);
+			retVal = new MatchRecord2(c1, c2, role, f, d, notes);
 		}
-		return mr;
+		return retVal;
 	}
 
 	private static Comparable readIDString(RECORD_ID_TYPE dataType, String data)

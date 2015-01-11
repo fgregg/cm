@@ -23,6 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
@@ -30,23 +31,14 @@ import com.choicemaker.util.LongArrayList;
 
 /**
  * This object reads in an IMatchRecord2Source, creates equivalence classes, and
- * outputs them as blocks to a IBlockSink. It filters out the hold pairs.
- * <p>
- * NOTE: (rphall 2008-07-24)
- * <ul>
- * <li>MatchToBlockTransformer2 does NOT appear to filter out hold pairs.</li>
- * <li>The deprecrecated predecessor, MatchToBlockTransformer, explicitly does
- * NOT filter out hold pairs.</li>
- * </ul>
- * ENDNOTE
- * </p>
+ * outputs them as blocks to a IBlockSink.
+ * <br/>
  * In this version, we use SetJoiner instead of EquivalenceClassBuilder.
  * SetJoiner is faster and more efficient, but it only works on ids that are
  * sequential. We have to use the translator to map record ids into internal
  * ids.
  *
  * @author pcheung
- *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class MatchToBlockTransformer2 {
@@ -115,11 +107,9 @@ public class MatchToBlockTransformer2 {
 	}
 
 
-	/** This method translates the MatchRecord2 source with record ids into a
+	/**
+	 * This method translates the MatchRecord2 source with record ids into a
 	 * MatchRecord2 sink with internal ids.
-	 *
-	 * @return MatchRecord2Sink - a sink with internal ids
-	 * @throws BlockingException
 	 */
 	private IMatchRecord2Sink translate () throws BlockingException {
 		translator.initReverseTranslation();
@@ -146,7 +136,9 @@ public class MatchToBlockTransformer2 {
 			masterIDs = new HashMap (size);
 			for (int i=0; i< size; i++) {
 				Comparable c = (Comparable) list.get(i);
-				if (!masterIDs.containsKey(c)) masterIDs.put(c, new Integer(i + sizeStage));
+				if (!masterIDs.containsKey(c)) {
+					masterIDs.put(c, new Integer(i + sizeStage));
+				}
 			}
 			numRecords += size;
 		} else {
@@ -162,13 +154,13 @@ public class MatchToBlockTransformer2 {
 		retVal.open();
 
 		//now write out the translated MatchRecord2
-		MatchRecord2 mr = null;
+		MatchRecord2<Integer> mr = null;
 		while (mSource.hasNext()) {
 			mr = (MatchRecord2) mSource.next();
 
 			Integer I1 = (Integer) stageIDs.get(mr.getRecordID1());
 			Integer I2 = null;
-			if (mr.getRecord2Role() == MatchRecord2.ROLE_STAGING) {
+			if (mr.getRecord2Role() == RECORD_SOURCE_ROLE.STAGING) {
 				I2 = (Integer) stageIDs.get(mr.getRecordID2());
 			} else {
 				I2 = (Integer) masterIDs.get(mr.getRecordID2());
@@ -182,7 +174,7 @@ public class MatchToBlockTransformer2 {
 
 			// 2009-08-17 rphall
 			// BUG FIX? clue notes added here
-			final String noteInfo = mr.getNotes();
+			final String noteInfo = mr.getNotesAsDelimitedString();
 			MatchRecord2 mr2 = new MatchRecord2 (I1, I2, mr.getRecord2Role(),
 				mr.getProbability(), mr.getMatchType(),noteInfo);
 			// END BUG FIX?

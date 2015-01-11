@@ -12,7 +12,7 @@ package com.choicemaker.cm.transitivity.core;
 
 import java.util.List;
 
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 
 /**
  * This represents a node in the transitivity graph.  A node could represent an
@@ -24,8 +24,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  */
 public interface INode<T extends Comparable<T>> extends Comparable<INode<T>> {
 	
-	public static final char STAGE_TYPE = MatchRecord2.ROLE_STAGING; //'S'
-	public static final char MASTER_TYPE = MatchRecord2.ROLE_MASTER; //'D'
+	public static final char STAGE_TYPE = RECORD_SOURCE_ROLE.STAGING.getCharSymbol(); //'S'
+	public static final char MASTER_TYPE = RECORD_SOURCE_ROLE.MASTER.getCharSymbol(); //'D'
 	public static final char COMPOSIT_TYPE = 'C';
 
 	/** This returns the id of this node */

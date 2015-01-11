@@ -23,6 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.util.LongArrayList;
 
@@ -83,7 +84,7 @@ public class MatchToBlockTransformer {
 			MatchRecord2 mr = (MatchRecord2) mSource.next();
 			if (!stageIDs.containsKey( mr.getRecordID1())) stageIDs.put(mr.getRecordID1(), null);
 
-			if (mr.getRecord2Role() == MatchRecord2.ROLE_STAGING) {
+			if (mr.getRecord2Role() == RECORD_SOURCE_ROLE.STAGING) {
 				if (!stageIDs.containsKey( mr.getRecordID2())) stageIDs.put(mr.getRecordID2(), null);
 			} else {
 				if (!masterIDs.containsKey(mr.getRecordID2())) masterIDs.put(mr.getRecordID2(), null);
@@ -143,7 +144,7 @@ public class MatchToBlockTransformer {
 					Long l1 = (Long) stageIDs.get(mr.getRecordID1());
 
 					Long l2 = null;
-					if (mr.getRecord2Role() == MatchRecord2.ROLE_STAGING) {
+					if (mr.getRecord2Role() == RECORD_SOURCE_ROLE.STAGING) {
 						l2 = (Long) stageIDs.get(mr.getRecordID2());
 					} else {
 						l2 = (Long) masterIDs.get(mr.getRecordID2());

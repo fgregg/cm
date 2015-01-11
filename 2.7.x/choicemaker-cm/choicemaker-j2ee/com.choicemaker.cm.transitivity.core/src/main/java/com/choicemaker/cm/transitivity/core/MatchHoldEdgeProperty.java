@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.transitivity.core;
 
+import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
@@ -37,8 +38,8 @@ public class MatchHoldEdgeProperty implements EdgeProperty {
 	 * @see com.choicemaker.cm.transitivity.core.EdgeProperty#hasProperty(com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2)
 	 */
 	public boolean hasProperty(MatchRecord2 mr) {
-		if (mr.getMatchType() == MatchRecord2.MATCH || 
-			mr.getMatchType() == MatchRecord2.HOLD) return true;
+		if (mr.getMatchType() == Decision.MATCH || 
+			mr.getMatchType() == Decision.HOLD) return true;
 		else return false;
 	}
 

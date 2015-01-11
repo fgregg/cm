@@ -13,9 +13,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
 import java.io.Serializable;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 
 /**
@@ -27,14 +24,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 public class MatchRecord2<T extends Comparable<T>> implements
 		Comparable<MatchRecord2<T>>, Serializable {
 
-	static final long serialVersionUID = 271;
+	private static final long serialVersionUID = 271;
 
 	public static final char MATCH = Decision.MATCH.toSingleChar();
 	public static final char DIFFER = Decision.DIFFER.toSingleChar();
 	public static final char HOLD = Decision.HOLD.toSingleChar();
 
-	public static final char ROLE_MASTER = RECORD_SOURCE_ROLE.MASTER.getCharSymbol();
-	public static final char ROLE_STAGING = RECORD_SOURCE_ROLE.STAGING.getCharSymbol();
+	// -- Instance data
 
 	private final T recordID1;
 	private final T recordID2;
@@ -43,69 +39,9 @@ public class MatchRecord2<T extends Comparable<T>> implements
 	private final char record2Source;
 	private final String notes;
 
-	/**
-	 * This method concatenates the notes into a single string delimited by
-	 * Constants.EXPORT_NOTE_SEPARATOR.
-	 * 
-	 * @param notes
-	 * @return
-	 */
-	public static String getNotesAsDelimitedString(String[] notes) {
-		String retVal = null;
-		if (notes != null && notes.length > 0) {
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < notes.length; i++) {
-				sb.append(notes[i]);
-				sb.append(Constants.EXPORT_NOTE_SEPARATOR);
-			}
-			sb.deleteCharAt(sb.length() - 1);
-			retVal = sb.toString();
-		}
-		return retVal;
-	}
+	// -- Constructor
 
 	/**
-	 * This method concatenates the notes into a single string delimited by
-	 * Constants.EXPORT_NOTE_SEPARATOR.
-	 * 
-	 * @param notes
-	 * @return
-	 */
-	public static String getNotesAsDelimitedString(ActiveClues ac,
-			ImmutableProbabilityModel model) {
-
-		String[] notes = ac.getNotes(model);
-		String retVal = getNotesAsDelimitedString(notes);
-		return retVal;
-	}
-
-// // FIXME REMOVEME UNUSED
-//	/**
-//	 * This constructor takes in these key parameters.
-//	 * 
-//	 * @param i1
-//	 *            - id of the first record. Can be Integer, Long, or String.
-//	 * @param i2
-//	 *            - id of the second record. Can be Integer, Long, or String.
-//	 * @param source
-//	 *            - indicates if the second record is from staging or master
-//	 * @param f
-//	 *            - match probability
-//	 * @param type
-//	 *            - Match or Hold or Differ
-//	 * @param ac
-//	 *            - Active clue firings
-//	 * @param model
-//	 *            - The model used to evaluate this pair
-//	 */
-//	public MatchRecord2(T i1, T i2, char source, float f, char type,
-//			ActiveClues ac, ImmutableProbabilityModel model) {
-//		this(i1, i2, source, f, type, getNotesAsDelimitedString(ac, model));
-//	}
-
-	/**
-	 * This constructor takes in these key parameters.
-	 * 
 	 * @param i1
 	 *            - id of the first record. Can be Integer, Long, or String.
 	 * @param i2
@@ -120,14 +56,40 @@ public class MatchRecord2<T extends Comparable<T>> implements
 	 *            - delimited String representing any notes on clues fired by
 	 *            this pair.
 	 */
-	public MatchRecord2(T i1, T i2, char source, float f, char type,
-			String notes) {
+	public MatchRecord2(T i1, T i2, RECORD_SOURCE_ROLE source, float f,
+			Decision type, String notes) {
+		if (i1 == null || i2 == null || source == null
+				|| !MatchRecordUtils.isValidProbability(f) || type == null) {
+			throw new IllegalArgumentException("invalid argument");
+		}
 		recordID1 = i1;
 		recordID2 = i2;
-		record2Source = source;
+		record2Source = source.getCharSymbol();
 		probability = f;
-		matchType = type;
+		matchType = type.toSingleChar();
 		this.notes = notes;
+	}
+
+	// -- Accessors
+
+	public Decision getMatchType() {
+		return Decision.valueOf(matchType);
+	}
+
+	public String[] getNotes() {
+		return MatchRecordUtils.notesFromDelimitedString(notes);
+	}
+
+	public String getNotesAsDelimitedString() {
+		return notes;
+	}
+
+	public float getProbability() {
+		return probability;
+	}
+
+	public RECORD_SOURCE_ROLE getRecord2Role() {
+		return RECORD_SOURCE_ROLE.fromSymbol(record2Source);
 	}
 
 	public T getRecordID1() {
@@ -138,21 +100,7 @@ public class MatchRecord2<T extends Comparable<T>> implements
 		return recordID2;
 	}
 
-	public float getProbability() {
-		return probability;
-	}
-
-	public char getMatchType() {
-		return matchType;
-	}
-
-	public char getRecord2Role() {
-		return record2Source;
-	}
-
-	public String getNotes() {
-		return notes;
-	}
+	// -- Identity
 
 	public int compareTo(MatchRecord2<T> mr) {
 		int ret = 0;
@@ -221,21 +169,6 @@ public class MatchRecord2<T extends Comparable<T>> implements
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + matchType;
-		result = prime * result + ((notes == null) ? 0 : notes.hashCode());
-		result = prime * result + Float.floatToIntBits(probability);
-		result = prime * result + record2Source;
-		result =
-			prime * result + ((recordID1 == null) ? 0 : recordID1.hashCode());
-		result =
-			prime * result + ((recordID2 == null) ? 0 : recordID2.hashCode());
-		return result;
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -280,6 +213,21 @@ public class MatchRecord2<T extends Comparable<T>> implements
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + matchType;
+		result = prime * result + ((notes == null) ? 0 : notes.hashCode());
+		result = prime * result + Float.floatToIntBits(probability);
+		result = prime * result + record2Source;
+		result =
+			prime * result + ((recordID1 == null) ? 0 : recordID1.hashCode());
+		result =
+			prime * result + ((recordID2 == null) ? 0 : recordID2.hashCode());
+		return result;
 	}
 
 	@Override

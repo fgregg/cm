@@ -10,32 +10,46 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.data;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE.STAGING;
+import static com.choicemaker.cm.core.Decision.DIFFER;
+
+import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
+
 /**
  * @author pcheung
  *
  */
 public class MatchRecord2Factory {
-	
+
+	public static final Integer DEFAULT_INTEGER_ID = Integer.valueOf(0);
+	public static final Long DEFAULT_LONG_ID = Long.valueOf(0);
+	public static final String DEFAULT_STRING_ID = "@";
+	public static final RECORD_SOURCE_ROLE DEFAULT_ROLE = STAGING;
+	public static final float DEFAULT_PROBABILITY = 0.0f;
+	public static final Decision DEFAULT_DECISION = DIFFER;
+	public static final String DEFAULT_NOTES = null;
+
 	/**
-	 * This method returns a special MatchRecord2 that serves as a separator when
-	 * in the MatchRecord2Source to build CompositeEntities.
-	 * 
-	 * @return
+	 * This method returns a special MatchRecord2 that serves as a separator
+	 * when in the MatchRecord2Source to build CompositeEntities.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static MatchRecord2<?> getSeparator (Comparable<?> C) {
-		Comparable<?> id = null;
-		if (C instanceof Integer) id = new Integer (0);
-		else if (C instanceof Long) id = new Long (0);
-		else if (C instanceof String) id = "@";
-		else throw new IllegalArgumentException ("This id type is not supported: " + C.getClass().getName());
-		
-		// 2009-08-17 rphall
-		// NO BUG: clue notes are not required for separator records
-		final String noteInfo = null;
-		return new MatchRecord2 (id, id, MatchRecord2.ROLE_STAGING, 
-			0.0f, MatchRecord2.DIFFER,noteInfo);
-		// END NO BUG
+	@SuppressWarnings("unchecked")
+	public static <T extends Comparable<T>> MatchRecord2<?> getSeparator(T t) {
+		T id = null;
+		if (t instanceof Integer) {
+			id = (T) DEFAULT_INTEGER_ID;
+		} else if (t instanceof Long) {
+			id = (T) DEFAULT_LONG_ID;
+		} else if (t instanceof String) {
+			id = (T) DEFAULT_STRING_ID;
+		} else {
+			throw new IllegalArgumentException(
+					"This id type is not supported: " + t.getClass().getName());
+		}
+
+		return new MatchRecord2<T>(id, id, DEFAULT_ROLE, DEFAULT_PROBABILITY,
+				DEFAULT_DECISION, DEFAULT_NOTES);
 	}
 
 }

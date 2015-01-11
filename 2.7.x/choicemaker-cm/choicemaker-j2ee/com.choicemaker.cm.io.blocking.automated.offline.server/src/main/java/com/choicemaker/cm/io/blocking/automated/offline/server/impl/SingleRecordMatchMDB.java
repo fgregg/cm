@@ -48,7 +48,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSo
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
@@ -378,15 +380,19 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 					dm.getMatches(q, rs, model, params.getLowThreshold(), params.getHighThreshold());
 				Iterator<Match> iS = s.iterator();
 				while (iS.hasNext()) {
-					Match match = iS.next();
-					char type = 'M';
-					if (match.probability < params.getHighThreshold())
-						type = 'H';
+					Match m = iS.next();
+					// // BUG 2015-01-10 rphall
+					// // FIXME Doesn't handle rules correctly
+					// char type = 'M';
+					// if (match.probability < params.getHighThreshold())
+					// type = 'H';
+					// // END BUG
 					final String noteInfo =
-						MatchRecord2.getNotesAsDelimitedString(match.ac, model);
+						MatchRecordUtils.getNotesAsDelimitedString(m.ac, model);
 					MatchRecord2 mr2 =
-						new MatchRecord2(q.getId(), match.id, 'D',
-								match.probability, type, noteInfo);
+						new MatchRecord2(q.getId(), m.id,
+								RECORD_SOURCE_ROLE.MASTER, m.probability,
+								m.decision, noteInfo);
 
 					// write match candidate to file.
 					mSinkFinal.writeMatch(mr2);

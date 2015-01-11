@@ -131,9 +131,9 @@ public class MatchDBWriter {
 				MatchRecord2 mr = (MatchRecord2) matches.get(j);
 				r1s = mr.getRecordID1().toString();
 				r2s = mr.getRecordID2().toString();
-				secondRecordLocation = Character.toString(mr.getRecord2Role());
+				secondRecordLocation = mr.getRecord2Role().getStringSymbol();
 				prob = mr.getProbability();
-				decision = Character.toString(mr.getMatchType());
+				decision = mr.getMatchType().toString();
 					
 				pstmt.setString(1, jobID);
 				pstmt.setString(2, r1s);

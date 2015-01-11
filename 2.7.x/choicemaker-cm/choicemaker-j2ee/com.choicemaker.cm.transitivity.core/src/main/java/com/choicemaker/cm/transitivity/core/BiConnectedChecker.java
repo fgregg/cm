@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 
@@ -65,7 +66,7 @@ public class BiConnectedChecker {
 			List l2 = link.getLinkDefinition();
 			for (int j=0; j<l2.size(); j++) {
 				MatchRecord2 mr = (MatchRecord2) l2.get(j);
-				if (mr.getMatchType() == MatchRecord2.MATCH) {
+				if (mr.getMatchType() == Decision.MATCH) {
 					matchOnly.addMatchRecord(mr);
 				}
 			}

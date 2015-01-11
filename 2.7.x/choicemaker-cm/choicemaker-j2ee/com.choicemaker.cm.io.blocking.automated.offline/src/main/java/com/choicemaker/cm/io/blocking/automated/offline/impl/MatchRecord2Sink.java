@@ -91,10 +91,10 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 				writeID(match.getRecordID2(), dataType);
 
 				dos.writeFloat(match.getProbability());
-				dos.writeChar(match.getMatchType());
-				dos.writeChar(match.getRecord2Role());
+				dos.writeChar(match.getMatchType().toSingleChar());
+				dos.writeChar(match.getRecord2Role().symbol);
 
-				String str = match.getNotes();
+				String str = match.getNotesAsDelimitedString();
 				if (str == null || str.equals("")) {
 					dos.writeInt(0);
 				} else {
@@ -135,7 +135,7 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 		sb.append(match.getRecordID2().toString());
 		sb.append(EXPORT_FIELD_SEPARATOR);
 
-		String str = match.getNotes();
+		String str = match.getNotesAsDelimitedString();
 		if (str == null)
 			str = "";
 		else
@@ -143,9 +143,9 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 
 		sb.append(match.getProbability());
 		sb.append(EXPORT_FIELD_SEPARATOR);
-		sb.append(match.getMatchType());
+		sb.append(match.getMatchType().toSingleChar());
 		sb.append(EXPORT_FIELD_SEPARATOR);
-		sb.append(match.getRecord2Role());
+		sb.append(match.getRecord2Role().symbol);
 		sb.append(str);
 		sb.append(LINE_SEPARATOR);
 

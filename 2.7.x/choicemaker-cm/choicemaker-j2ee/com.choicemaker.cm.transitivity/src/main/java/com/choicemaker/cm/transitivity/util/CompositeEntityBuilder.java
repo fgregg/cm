@@ -17,6 +17,7 @@ import java.util.TreeSet;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
 import com.choicemaker.cm.transitivity.core.Link;
@@ -50,7 +51,7 @@ public class CompositeEntityBuilder {
 	/** This constructor takes in a IMatchRecord2Source from which to build
 	 * CompositeEntities.
 	 * 
-	 * @param source
+	 * @param role
 	 */
 
 	public CompositeEntityBuilder(IMatchRecord2Source source) {
@@ -108,12 +109,12 @@ public class CompositeEntityBuilder {
 		
 	}
 	
-	/** This returns the first ID of MatchRecord2 with source of STAGE.
+	/** This returns the first ID of MatchRecord2 with role of STAGE.
 	 * 
 	 * @param mr
 	 */
 	private RecordID getID1 (MatchRecord2 mr) {
-		return new RecordID (mr.getRecordID1 (), MatchRecord2.ROLE_STAGING);
+		return new RecordID (mr.getRecordID1 (), RECORD_SOURCE_ROLE.STAGING);
 	}
 
 	private RecordID getID2 (MatchRecord2 mr) {
