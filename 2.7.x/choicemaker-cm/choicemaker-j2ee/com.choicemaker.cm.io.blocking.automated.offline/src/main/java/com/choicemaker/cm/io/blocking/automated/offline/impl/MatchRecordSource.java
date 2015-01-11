@@ -23,7 +23,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
  * This object handles reading MatchRecord objects from a file.
  * 
  * @author pcheung
- *
+ * @deprecated
  */
 public class MatchRecordSource extends BaseFileSource<IMatchRecord> implements IMatchRecordSource {
 

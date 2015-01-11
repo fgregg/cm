@@ -21,7 +21,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSource;
  * This object takes a MatchRecordSource and returns MatchLists.
  * 
  * @author pcheung
- *
+ * @deprecated
  */
 public class MatchListSource {
 	

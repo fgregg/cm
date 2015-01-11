@@ -18,7 +18,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
  * new instances of IMatchRecord.
  * 
  * @author pcheung
- *
+ * @deprecated
  */
 class MatchRecord implements Comparable<IMatchRecord>, IMatchRecord {
 	

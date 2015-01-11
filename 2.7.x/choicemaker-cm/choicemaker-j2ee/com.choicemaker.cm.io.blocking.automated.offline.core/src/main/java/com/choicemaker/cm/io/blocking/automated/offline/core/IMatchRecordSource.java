@@ -16,7 +16,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
  * This is a source that reads MatchRecord.
  * 
  * @author pcheung
- *
+ * @deprecated
  */
 public interface IMatchRecordSource extends ISource<IMatchRecord> {
 	

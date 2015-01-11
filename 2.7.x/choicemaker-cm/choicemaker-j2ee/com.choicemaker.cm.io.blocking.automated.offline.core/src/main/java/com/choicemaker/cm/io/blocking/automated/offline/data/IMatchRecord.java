@@ -4,6 +4,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
  * A MatchRecord has a pair of id's and a match probability on this pair.
  * 
  * @author pcheung
+ * @deprecated
  */
 public interface IMatchRecord extends Comparable<IMatchRecord> {
 
