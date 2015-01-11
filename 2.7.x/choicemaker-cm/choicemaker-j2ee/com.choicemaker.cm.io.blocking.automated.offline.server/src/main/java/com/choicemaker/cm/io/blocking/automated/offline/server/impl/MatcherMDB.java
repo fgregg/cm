@@ -10,39 +10,23 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.base.ImmutableThresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonPair;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
 /**
  * This message bean compares the pairs given to it and sends a list of matches
@@ -69,130 +53,19 @@ public class MatcherMDB extends AbstractMatcher {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatcherMDB.class.getName());
 
-	private static final int INTERVAL = 50000;
-
-	@EJB
-	private OabaJobControllerBean jobController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersControllerBean paramsController;
-	
-	@EJB
-	private OabaProcessingController processingController;
-
-	@EJB
-	private ServerConfigurationController serverController;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
 
-	@Inject
-	JMSContext jmsContext;
-
 	@Override
-	protected OabaJobControllerBean getJobController() {
-		return jobController;
+	protected Logger getLogger() {
+		return log;
 	}
 
 	@Override
-	protected OabaParametersControllerBean getParametersController() {
-		return paramsController;
+	protected Logger getJMSTrace() {
+		return jmsTrace;
 	}
 
-	@Override
-	protected OabaProcessingController getProcessingController() {
-		return processingController;
-	}
-
-	@Override
-	protected ServerConfigurationController getServerController() {
-		return serverController; 
-	}
-
-	@Override
-	protected OabaSettingsController getSettingsController() {
-		return oabaSettingsController;
-	}
-
-	@Override
-	protected List<MatchRecord2> handleComparisonSet(IComparisonSet cSet,
-			OabaJob oabaJob, ChunkDataStore dataStore,
-			IProbabilityModel stageModel, ImmutableThresholds t)
-			throws RemoteException, BlockingException {
-
-		boolean stop = oabaJob.shouldStop();
-		ComparisonPair p;
-		Record q, m;
-		MatchRecord2 match;
-
-		List<MatchRecord2> matches = new ArrayList<>();
-
-		while (cSet.hasNextPair() && !stop) {
-			p = cSet.getNextPair();
-			compares++;
-
-			stop = ControlChecker.checkStop(oabaJob, compares, INTERVAL);
-
-			q = getQ(dataStore, p);
-			m = getM(dataStore, p);
-
-			// Log severe problems
-			boolean skipPair = false;
-			if (p.getId1().equals(p.getId2()) && p.isStage) {
-				// Should never happen
-				skipPair = true;				
-				String msg = "id1 = id2: " + p.getId1();
-				getLogger().severe(msg);
-			}
-
-			
-			// Skip a pair if a record is not
-			// in this particular comparison set
-			Level DETAILS = Level.FINER;
-			boolean isLoggable = getLogger().isLoggable(DETAILS);
-			if (q == null) {
-				skipPair = true;
-				if (isLoggable) {
-					String msg = "Missing record: " + p.getId1();
-					getLogger().log(DETAILS, msg);
-				}
-			}
-			if (m == null) {
-				skipPair = true;				
-				if (isLoggable) {
-					String msg = "Missing record: " + p.getId2();
-					getLogger().log(DETAILS, msg);
-				}
-			}
-			if (skipPair) {
-				if (isLoggable) {
-					String msg = "Skipped pair: " + p;
-					getLogger().log(DETAILS, msg);
-				}
-				continue;
-			}
-
-			// If a pair isn't skipped, compute whether it is a MATCH or HOLD,
-			// and if so, add it to the collections of matches. (DIFFER
-			// decisions are returned as null.)
-			match = compareRecords(q, m, p.isStage, stageModel, t);
-			if (match != null) {
-				matches.add(match);
-			}
-		}
-
-		return matches;
-	}
-
-	/**
-	 * This method writes the matches of a IComparisonSet to the file
-	 * corresponding to this matcher bean.
-	 *
-	 * @param matches
-	 */
 	@Override
 	protected void writeMatches(OabaJobMessage data, List<MatchRecord2> matches)
 			throws BlockingException {
@@ -210,28 +83,9 @@ public class MatcherMDB extends AbstractMatcher {
 		sink.close();
 	}
 
-	/**
-	 * This returns an unique id for each instance of the object.
-	 */
-	public String getID() {
-		String str = this.toString();
-		int i = str.indexOf('@');
-		return str.substring(i + 1);
-	}
-
-	@Override
-	protected Logger getLogger() {
-		return log;
-	}
-
-	@Override
-	protected Logger getJMSTrace() {
-		return jmsTrace;
-	}
-
 	@Override
 	protected void sendToScheduler(MatchWriterMessage data) {
-		MessageBeanUtils.sendMatchWriterData(data, jmsContext,
+		MessageBeanUtils.sendMatchWriterData(data, getJMSContext(),
 				matchSchedulerQueue, getLogger());
 	}
 

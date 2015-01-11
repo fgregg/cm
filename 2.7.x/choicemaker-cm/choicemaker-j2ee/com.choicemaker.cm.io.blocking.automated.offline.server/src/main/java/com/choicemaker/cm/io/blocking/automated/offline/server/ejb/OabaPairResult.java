@@ -30,6 +30,8 @@ public interface OabaPairResult<T extends Comparable<T>> extends
 
 	String[] getNotes();
 
+	String getNotesAsDelimitedString();
+
 	String getPairSHA1();
 
 //	/** TransitivityPairResult */

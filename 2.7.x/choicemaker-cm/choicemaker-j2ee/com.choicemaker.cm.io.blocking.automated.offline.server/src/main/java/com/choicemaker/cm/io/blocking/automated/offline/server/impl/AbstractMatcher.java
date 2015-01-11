@@ -12,10 +12,14 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -27,13 +31,11 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.Decision;
+import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
-import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonPair;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
@@ -42,6 +44,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonSetOSSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
@@ -54,6 +57,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 
 /**
  * Common functionality of {@link MatcherMDB} and {@link TransMatcher}.
@@ -62,32 +66,78 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	
+
 	protected static final int INTERVAL = 50000;
 
 	protected abstract Logger getLogger();
-	
+
 	protected abstract Logger getJMSTrace();
-	
-	protected abstract OabaJobControllerBean getJobController();
-	
-	protected abstract OabaParametersControllerBean getParametersController();
-	
-	protected abstract OabaProcessingController getProcessingController();
 
-	protected abstract ServerConfigurationController getServerController();
-	
-	protected abstract OabaSettingsController getSettingsController();
-
-	// These two tracker are set only in log debug mode
+	// This instance data must be replaced by Entity properties
 	private long inHMLookup;
-	private long inCompare;
-
-	// number of comparisons made
+	protected long inCompare;
 	protected int compares;
 
-	public /* final */ void onMessage(Message inMessage) {
-		getJMSTrace().info("Entering onMessage for " + this.getClass().getName());
+	// -- Injected instance data
+
+	@EJB
+	private OabaJobControllerBean jobController;
+
+	@EJB
+	private OabaSettingsController oabaSettingsController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+
+	@EJB
+	private OabaProcessingController processingController;
+
+	@EJB
+	private ServerConfigurationController serverController;
+
+	@Inject
+	private JMSContext jmsContext;
+
+	// -- Abstract call-back methods
+
+	/** Writes matches to an implicit, on-disk cache */
+	protected abstract void writeMatches(OabaJobMessage data,
+			List<MatchRecord2> matches) throws BlockingException;
+
+	/** Reports completion to the scheduler that uses this matcher */
+	protected abstract void sendToScheduler(MatchWriterMessage data);
+
+	// -- Accessors
+
+	protected OabaJobControllerBean getJobController() {
+		return jobController;
+	}
+
+	protected OabaParametersControllerBean getParametersController() {
+		return paramsController;
+	}
+
+	protected OabaProcessingController getProcessingController() {
+		return processingController;
+	}
+
+	protected ServerConfigurationController getServerController() {
+		return serverController;
+	}
+
+	protected OabaSettingsController getSettingsController() {
+		return oabaSettingsController;
+	}
+
+	protected JMSContext getJMSContext() {
+		return jmsContext;
+	}
+
+	// -- Template methods
+
+	public void onMessage(Message inMessage) {
+		getJMSTrace().info(
+				"Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		OabaJob oabaJob = null;
 
@@ -105,42 +155,52 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					final OabaParameters params =
 						getParametersController().findBatchParamsByJobId(jobId);
 					final OabaEventLog processingLog =
-							getProcessingController().getProcessingLog(oabaJob);
+						getProcessingController().getProcessingLog(oabaJob);
 					final OabaSettings oabaSettings =
-							getSettingsController().findOabaSettingsByJobId(jobId);
-					final ServerConfiguration serverConfig = getServerController().findServerConfigurationByJobId(jobId);
-					if (oabaJob == null || params == null || oabaSettings == null || serverConfig == null) {
-						String s = "Unable to find a job, parameters, settings or server configuration for " + jobId;
+						getSettingsController().findOabaSettingsByJobId(jobId);
+					final ServerConfiguration serverConfig =
+						getServerController().findServerConfigurationByJobId(
+								jobId);
+					if (oabaJob == null || params == null
+							|| oabaSettings == null || serverConfig == null) {
+						String s =
+							"Unable to find a job, parameters, settings or server configuration for "
+									+ jobId;
 						getLogger().severe(s);
 						throw new IllegalArgumentException(s);
 					}
-					final String modelConfigId = params.getModelConfigurationName();
+					final String modelConfigId =
+						params.getModelConfigurationName();
 					ImmutableProbabilityModel model =
 						PMManager.getModelInstance(modelConfigId);
 					if (model == null) {
 						String s =
-							"No modelId corresponding to '" + modelConfigId + "'";
+							"No modelId corresponding to '" + modelConfigId
+									+ "'";
 						getLogger().severe(s);
 						throw new IllegalArgumentException(s);
 					}
-					
-					getLogger().fine("MatcherMDB In onMessage " + data.jobID + " "
-							+ data.ind + " " + data.treeInd);
 
-					if (BatchJobStatus.ABORT_REQUESTED == oabaJob
-							.getStatus()) {
+					getLogger().fine(
+							"MatcherMDB In onMessage " + data.jobID + " "
+									+ data.ind + " " + data.treeInd);
+
+					if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
 						MessageBeanUtils.stopJob(oabaJob, processingLog);
 
 					} else {
-						handleMatching(data, oabaJob, params, oabaSettings, serverConfig);
+						handleMatching(data, oabaJob, params, oabaSettings,
+								serverConfig);
 					}
 
 				} else {
-					getLogger().warning("wrong type: " + inMessage.getClass().getName());
+					getLogger().warning(
+							"wrong type: " + inMessage.getClass().getName());
 				}
 
 			} else {
-				getLogger().warning("wrong type: " + inMessage.getClass().getName());
+				getLogger().warning(
+						"wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (Exception e) {
@@ -148,9 +208,10 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			if (oabaJob != null) {
 				oabaJob.markAsFailed();
 			}
-//			mdc.setRollbackOnly();
+			// mdc.setRollbackOnly();
 		}
-		getJMSTrace().info("Exiting onMessage for " + this.getClass().getName());
+		getJMSTrace()
+				.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
 	protected final void handleMatching(OabaJobMessage data,
@@ -197,8 +258,10 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			source.close();
 		}
 
-		getLogger().info("Chunk: " + data.ind + "_" + data.treeInd + ", sets: " + sets
-				+ ", compares: " + compares + ", matches: " + numMatches);
+		getLogger().info(
+				"Chunk: " + data.ind + "_" + data.treeInd + ", sets: " + sets
+						+ ", compares: " + compares + ", matches: "
+						+ numMatches);
 
 		MatchWriterMessage mwd = new MatchWriterMessage(data);
 		mwd.numCompares = compares;
@@ -213,13 +276,86 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	}
 
 	/**
-	 * This method handles the comparisons of a IComparisonSet. It returns an
-	 * ArrayList of MatchRecord2 produced by this IComparisonSet.
+	 * This method handles the comparisons of a IComparisonSet. It returns a(n
+	 * Array)List of MatchRecord2 produced by this IComparisonSet.
 	 */
-	protected abstract List<MatchRecord2> handleComparisonSet(IComparisonSet cSet,
+	protected final List<MatchRecord2> handleComparisonSet(IComparisonSet cSet,
 			OabaJob oabaJob, ChunkDataStore dataStore,
 			IProbabilityModel stageModel, ImmutableThresholds t)
-			throws RemoteException, BlockingException;
+			throws RemoteException, BlockingException {
+
+		boolean stop = oabaJob.shouldStop();
+		ComparisonPair p;
+		Record q, m;
+		MatchRecord2 match;
+
+		List<MatchRecord2> matches = new ArrayList<>();
+
+		while (cSet.hasNextPair() && !stop) {
+			p = cSet.getNextPair();
+			compares++;
+
+			stop = ControlChecker.checkStop(oabaJob, compares, INTERVAL);
+
+			q = getQ(dataStore, p);
+			m = getM(dataStore, p);
+
+			// Log severe problems
+			boolean skipPair = false;
+			if (p.getId1().equals(p.getId2()) && p.isStage) {
+				// Should never happen
+				skipPair = true;
+				String msg = "id1 = id2: " + p.getId1();
+				getLogger().severe(msg);
+			}
+
+			// Skip a pair if a record is not
+			// in this particular comparison set
+			Level DETAILS = Level.FINER;
+			boolean isLoggable = getLogger().isLoggable(DETAILS);
+			if (q == null) {
+				skipPair = true;
+				if (isLoggable) {
+					String msg = "Missing record: " + p.getId1();
+					getLogger().log(DETAILS, msg);
+				}
+			}
+			if (m == null) {
+				skipPair = true;
+				if (isLoggable) {
+					String msg = "Missing record: " + p.getId2();
+					getLogger().log(DETAILS, msg);
+				}
+			}
+			if (skipPair) {
+				if (isLoggable) {
+					String msg = "Skipped pair: " + p;
+					getLogger().log(DETAILS, msg);
+				}
+				continue;
+			}
+
+			// If a pair isn't skipped, compute whether it is a MATCH or HOLD,
+			// and if so, add it to the collections of matches. (DIFFER
+			// decisions are returned as null.)
+			// Conditionally compute the time spent doing this comparison.
+			long startTime = 0;
+			if (getLogger().isLoggable(Level.FINE)) {
+				startTime = System.currentTimeMillis();
+			}
+			match = compareRecords(q, m, p.isStage, stageModel, t);
+			if (match != null) {
+				matches.add(match);
+			}
+			if (getLogger().isLoggable(Level.FINE)) {
+				startTime = System.currentTimeMillis() - startTime;
+				inCompare += startTime;
+			}
+
+		}
+
+		return matches;
+	}
 
 	protected final Record getQ(ChunkDataStore dataStore, ComparisonPair p) {
 		long t = 0;
@@ -236,7 +372,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		return r;
 	}
 
-	protected final  Record getM(ChunkDataStore dataStore, ComparisonPair p) {
+	protected final Record getM(ChunkDataStore dataStore, ComparisonPair p) {
 		long t = 0;
 		if (getLogger().isLoggable(Level.FINE))
 			t = System.currentTimeMillis();
@@ -300,16 +436,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	}
 
 	/**
-	 * This method writes the matches of a IComparisonSet to the file
-	 * corresponding to this matcher bean.
-	 *
-	 * @param matches
-	 */
-	protected abstract void writeMatches(OabaJobMessage data, List<MatchRecord2> matches)
-			throws BlockingException;
-
-	/**
 	 * This method compares two records and returns a MatchRecord2 object.
+	 * 
 	 * @param q
 	 *            - first record
 	 * @param m
@@ -317,65 +445,16 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	 * @param isStage
 	 *            - indicates if the second record is staging or master
 	 */
-	@SuppressWarnings("unchecked")
-	protected final MatchRecord2 compareRecords(Record q, Record m, boolean isStage,
-			ImmutableProbabilityModel model, ImmutableThresholds t) {
-		long startTime = 0;
-		if (getLogger().isLoggable(Level.FINE))
-			startTime = System.currentTimeMillis();
+	protected final MatchRecord2 compareRecords(Record q, Record m,
+			boolean isStage, ImmutableProbabilityModel model,
+			ImmutableThresholds t) {
 
-		Evaluator evaluator = model.getEvaluator();
-		MatchRecord2 mr = null;
-		if ((q != null) && (m != null)) {
-			Match match =
-				evaluator.getMatch(q, m, t.getDifferThreshold(),
-						t.getMatchThreshold());
-
-			// no match
-			if (match == null)
-				return null;
-			Decision decision = match.decision;
-			float matchProbability = match.probability;
-
-			// char source = 'D';
-			char source = MatchRecord2.ROLE_MASTER;
-
-			Comparable i1 = q.getId();
-			Comparable i2 = m.getId();
-
-			if (isStage) {
-				// source = 'S';
-				source = MatchRecord2.ROLE_STAGING;
-
-				// make sure the smaller id is first
-				if (i1.compareTo(i2) > 0) {
-					Comparable i3 = i1;
-					i1 = i2;
-					i2 = i3;
-				}
-			}
-
-			String noteInfo =
-				MatchRecord2.getNotesAsDelimitedString(match.ac, model);
-			if (decision == Decision.MATCH) {
-				mr =
-					new MatchRecord2(i1, i2, source, matchProbability,
-							MatchRecord2.MATCH, noteInfo);
-			} else if (decision == Decision.DIFFER) {
-			} else if (decision == Decision.HOLD) {
-				mr =
-					new MatchRecord2(i1, i2, source, matchProbability,
-							MatchRecord2.HOLD, noteInfo);
-			}
-
-		}
-
-		if (getLogger().isLoggable(Level.FINE)) {
-			startTime = System.currentTimeMillis() - startTime;
-			inCompare += startTime;
-		}
-
-		return mr;
+		final ClueSet clueSet = model.getClueSet();
+		final boolean[] enabledClues = model.getCluesToEvaluate();
+		final float low = t.getDifferThreshold();
+		final float high = t.getMatchThreshold();
+		return MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q, m,
+				isStage, low, high);
 	}
 
 	/**
@@ -386,7 +465,5 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		int i = str.indexOf('@');
 		return str.substring(i + 1);
 	}
-
-	protected abstract void sendToScheduler(MatchWriterMessage data);
 
 }

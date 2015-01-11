@@ -13,24 +13,24 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 @NamedQueries({
-	@NamedQuery(name = QN_PAIRRESULTINTEGER_FIND_ALL, query = JPQL_PAIRRESULTINTEGER_FIND_ALL),
-	@NamedQuery(name = QN_PAIRRESULTINTEGER_FIND_BY_JOBID,
-			query = JPQL_PAIRRESULTINTEGER_FIND_BY_JOBID) })
+	@NamedQuery(name = QN_PAIRRESULTLONG_FIND_ALL, query = JPQL_PAIRRESULTLONG_FIND_ALL),
+	@NamedQuery(name = QN_PAIRRESULTLONG_FIND_BY_JOBID,
+			query = JPQL_PAIRRESULTLONG_FIND_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DV_ABSTRACT)
-public class OabaPairResultInteger extends AbstractPairResultEntity<Integer> {
+public class OabaPairResultLong extends AbstractPairResultEntity<Long> {
 
 	private static final long serialVersionUID = 271L;
-
-	public static Integer computeIdFromString(String s) {
-		Integer retVal = null;
+	
+	public static Long computeIdFromString(String s) {
+		Long retVal = null;
 		if (s != null && !s.trim().isEmpty()) {
-			retVal = Integer.valueOf(s);
+			retVal = Long.valueOf(s);
 		}
 		return retVal;
 	}
-
-	public static String exportIdToString(Integer id) {
+	
+	public static String exportIdToString(Long id) {
 		String retVal = null;
 		if (id != null) {
 			retVal = id.toString();
@@ -38,8 +38,8 @@ public class OabaPairResultInteger extends AbstractPairResultEntity<Integer> {
 		return retVal;
 	}
 
-	public OabaPairResultInteger(OabaJob job, Integer record1Id,
-			Integer record2Id, RECORD_SOURCE_ROLE record2Role, float p,
+	public OabaPairResultLong(OabaJob job, Long record1Id,
+			Long record2Id, RECORD_SOURCE_ROLE record2Role, float p,
 			Decision d, String[] notes) {
 		super(job.getId(), RECORD_ID_TYPE.TYPE_INTEGER.getCharSymbol(),
 				exportIdToString(record1Id), exportIdToString(record2Id),
@@ -47,12 +47,12 @@ public class OabaPairResultInteger extends AbstractPairResultEntity<Integer> {
 	}
 
 	@Override
-	protected Integer idFromString(String s) {
+	protected Long idFromString(String s) {
 		return computeIdFromString(s);
 	}
 
 	@Override
-	protected String idToString(Integer id) {
+	protected String idToString(Long id) {
 		return exportIdToString(id);
 	}
 

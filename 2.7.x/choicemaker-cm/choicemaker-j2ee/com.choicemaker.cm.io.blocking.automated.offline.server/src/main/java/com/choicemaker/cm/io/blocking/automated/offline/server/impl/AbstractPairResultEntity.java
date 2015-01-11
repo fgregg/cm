@@ -10,26 +10,10 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.Constants.EXPORT_NOTE_SEPARATOR;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_INTEGER;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_LONG;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_STRING;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.CN_ID;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DISCRIMINATOR_COLUMN;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DV_ABSTRACT;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DV_INTEGER;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DV_LONG;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DV_STRING;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_NAME;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_PK_COLUMN_NAME;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_PK_COLUMN_VALUE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_TABLE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.JPQL_PAIR_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.JPQL_PAIR_FIND_BY_JOBID;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.QN_PAIR_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.QN_PAIR_FIND_BY_JOBID;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.TABLE_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.*;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -52,6 +36,7 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaPairResult;
 import com.choicemaker.util.HashUtils;
 
@@ -62,9 +47,9 @@ import com.choicemaker.util.HashUtils;
  *
  */
 @NamedQueries({
-		@NamedQuery(name = QN_PAIR_FIND_ALL, query = JPQL_PAIR_FIND_ALL),
-		@NamedQuery(name = QN_PAIR_FIND_BY_JOBID,
-				query = JPQL_PAIR_FIND_BY_JOBID) })
+		@NamedQuery(name = QN_PAIRRESULT_FIND_ALL, query = JPQL_PAIRRESULT_FIND_ALL),
+		@NamedQuery(name = QN_PAIRRESULT_FIND_BY_JOBID,
+				query = JPQL_PAIRRESULT_FIND_BY_JOBID) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
@@ -83,77 +68,6 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 	public static final char INVALID_RECORD_SOURCE = '\0';
 	public static final float INVALID_PROBABILITY = Float.NaN;
 	public static final char INVALID_DECISION = '\0';
-
-	public static String notesToString(String[] notes) {
-		String retVal = null;
-		if (notes != null) {
-			SortedSet<String> sorted = notesToSortedSet(notes);
-			retVal = notesToString(sorted);
-		}
-		return retVal;
-	}
-
-	protected static SortedSet<String> notesToSortedSet(String[] notes) {
-		SortedSet<String> retVal = new TreeSet<>();
-		if (notes != null) {
-			for (String note : notes) {
-				if (note == null) {
-					continue;
-				}
-				note = note.trim();
-				if (note.isEmpty()) {
-					continue;
-				}
-				retVal.add(note);
-			}
-		}
-		return retVal;
-	}
-
-	protected static String notesToString(SortedSet<String> sorted) {
-		String retVal = null;
-		if (sorted != null && sorted.size() > 0) {
-			StringBuilder sb = new StringBuilder();
-			for (String note : sorted) {
-				assert note != null;
-				assert !note.isEmpty();
-				sb.append(note);
-				sb.append(EXPORT_NOTE_SEPARATOR);
-			}
-			retVal = sb.toString();
-			final int lastIndex = retVal.length() - 1;
-			assert retVal.charAt(lastIndex) == EXPORT_NOTE_SEPARATOR;
-			retVal = retVal.substring(0, lastIndex);
-			if (retVal.length() == 0) {
-				retVal = null;
-			} else {
-				assert retVal.charAt(retVal.length() - 1) != EXPORT_NOTE_SEPARATOR;
-			}
-		} else {
-			assert retVal == null;
-		}
-		return retVal;
-	}
-
-	public static String[] notesFromString(String s) {
-		String[] retVal = null;
-		if (s != null) {
-			s = s.trim();
-			if (!s.isEmpty()) {
-				String regex = "\\\\" + EXPORT_NOTE_SEPARATOR;
-				String[] raw = s.split(regex);
-				SortedSet<String> sorted = notesToSortedSet(raw);
-				if (sorted.size() > 0) {
-					retVal = sorted.toArray(new String[sorted.size()]);
-				} else {
-					assert retVal == null;
-				}
-			} else {
-				assert retVal == null;
-			}
-		}
-		return retVal;
-	}
 
 	/**
 	 * Computes a base-64 SHA1 signature for a pair based on all fields
@@ -229,10 +143,10 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 		return retVal;
 	}
 
-	public static <T extends Comparable<T>> String recordTypeToString(Class<T> c) {
-		RECORD_ID_TYPE rit = RECORD_ID_TYPE.fromClass(c);
-		return rit.getStringSymbol();
-	}
+//	public static <T extends Comparable<T>> String recordTypeToString(Class<T> c) {
+//		RECORD_ID_TYPE rit = RECORD_ID_TYPE.fromClass(c);
+//		return rit.getStringSymbol();
+//	}
 
 	/**
 	 * Checks for consistency between the JPA interface and the RECORD_ID_TYPE
@@ -329,8 +243,8 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 		this.record2Source = record2Source;
 		this.probability = probability;
 		this.decision = decision;
-		SortedSet<String> sortedNotes = notesToSortedSet(notes);
-		this.notes = notesToString(sortedNotes);
+		SortedSet<String> sortedNotes = MatchRecordUtils.notesToSortedSet(notes);
+		this.notes = MatchRecordUtils.notesToString(sortedNotes);
 		this.pairSHA1 =
 			computePairSHA1(recordType, record1Id, record2Id, record2Source,
 					probability, decision, sortedNotes);
@@ -388,7 +302,12 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 
 	@Override
 	public String[] getNotes() {
-		return notesFromString(notes);
+		return MatchRecordUtils.notesFromDelimitedString(notes);
+	}
+
+	@Override
+	public String getNotesAsDelimitedString() {
+		return notes;
 	}
 
 	@Override

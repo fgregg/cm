@@ -17,13 +17,10 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonPair;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
@@ -31,9 +28,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
@@ -53,21 +51,20 @@ public class MatchingService3 {
 
 	private static int BUFFER_SIZE = 1000;
 
-	private IChunkDataSinkSourceFactory stageFactory;
-	private IChunkDataSinkSourceFactory masterFactory;
-	private IProbabilityModel model;
-	private IComparisonSetSources sources;
-	private IComparisonSetSources Osources;
-
-	private IMatchRecord2Sink mSink;
-	private float low;
-	private float high;
-//	private int maxBlockSize;
-	private OabaEventLog status;
-
-	private int numChunks;
+	private final IChunkDataSinkSourceFactory stageFactory;
+	private final IChunkDataSinkSourceFactory masterFactory;
+	private final IProbabilityModel model;
+	private final IComparisonSetSources sources;
+	private final IComparisonSetSources Osources;
+	private final IMatchRecord2Sink mSink;
+	private final float low;
+	private final float high;
+	private final OabaEventLog status;
+	private final ClueSet clueSet;
+	private final boolean[] enabledClues;
 
 	//book keeping
+	private int numChunks;
 	private long numSets = 0;
 	private long compares = 0;
 	private long numMatches = 0;
@@ -79,20 +76,14 @@ public class MatchingService3 {
 	private ArrayList stageSources = new ArrayList ();
 	private ArrayList masterSources = new ArrayList ();
 
-	private long time; //this keeps track of time
-
-
-	private Evaluator evaluator;
-	private ClueSet clueSet;
-	private boolean[] enabledClues;
-
+	private long time;
 
 	/** This constructor takes these parameters:
 	 *
 	 * @param stageFactory - factory containing info on how to get staging chunk data files
 	 * @param masterFactory - factory containing info on how to get master chunk data files
 	 * @param sources - source of comparison sets for regular blocks
-	 * @param Osources - source of comparison sets for oversized blocks
+	 * @param Osources - source of comparison sets for over-sized blocks
 	 * @param model - probability accessProvider of the staging records
 	 * @param mSink - matching pair sink
 	 * @param low - differ threshold
@@ -116,12 +107,10 @@ public class MatchingService3 {
 
 		this.low = low;
 		this.high = high;
-//		this.maxBlockSize = maxBlockSize;
 
 		this.status = status;
 
-		//set up the clues and evaluators.
-		this.evaluator = model.getEvaluator();
+		// Cache the model clues
 		this.clueSet = model.getClueSet();
 		this.enabledClues = model.getCluesToEvaluate();
 
@@ -365,57 +354,23 @@ public class MatchingService3 {
 		return records;
 	}
 
-
-	/** This method compares two records and returns a MatchRecord2 object.
-	 *
-	 * @param clueSet
-	 * @param enabledClues
-	 * @param evaluator
-	 * @param q - first record
-	 * @param m - second record
-	 * @param isStage - indicates if the second record is staging or master
-	 * @param low
-	 * @param high
-	 * @return
+	/**
+	 * This method compares two records and returns a MatchRecord2 object.
+	 * 
+	 * @param q
+	 *            - first record
+	 * @param m
+	 *            - second record
+	 * @param isStage
+	 *            - indicates if the second record is staging or master
 	 */
 	private MatchRecord2 compareRecords (Record q, Record m, boolean isStage) {
-
 		MatchRecord2 mr = null;
-
 		if ((q != null) && (m != null)) {
-			ActiveClues activeClues = clueSet.getActiveClues(q, m, enabledClues);
-			float matchProbability = evaluator.getProbability(activeClues);
-			Decision decision = evaluator.getDecision(activeClues, matchProbability, low, high);
-
-			char source = MatchRecord2.ROLE_MASTER;
-
-			Comparable i1 = q.getId();
-			Comparable i2 = m.getId();
-
-			if (isStage) {
-				source = MatchRecord2.ROLE_STAGING;
-
-				//make sure the smaller id is first
-				if (i1.compareTo(i2) > 0) {
-					Comparable i3 = i1;
-					i1 = i2;
-					i2 = i3;
-				}
-			}
-
-			// 2009-08-17 rphall
-			// BUG FIX? clue notes added here
-			final String noteInfo = MatchRecord2.getNotesAsDelimitedString(activeClues,this.model);
-			if (decision == Decision.MATCH) {
-				mr = new MatchRecord2 (i1, i2, source, matchProbability, MatchRecord2.MATCH,noteInfo);
-			} else if (decision == Decision.DIFFER) {
-			} else if (decision == Decision.HOLD) {
-				mr = new MatchRecord2 (i1, i2, source, matchProbability, MatchRecord2.HOLD,noteInfo);
-			}
-			// END BUG FIX?
-
+			mr =
+				MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q, m,
+						isStage, low, high);
 		}
-
 		return mr;
 	}
 

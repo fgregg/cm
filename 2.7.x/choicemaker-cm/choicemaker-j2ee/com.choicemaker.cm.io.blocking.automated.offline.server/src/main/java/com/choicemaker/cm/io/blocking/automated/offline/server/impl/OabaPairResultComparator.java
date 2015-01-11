@@ -3,6 +3,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import java.util.Comparator;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaPairResult;
 
 public class OabaPairResultComparator<T extends Comparable<T>> implements
@@ -54,9 +55,9 @@ public class OabaPairResultComparator<T extends Comparable<T>> implements
 				retVal = o1.getDecision().compareTo(o2.getDecision());
 			if (retVal == EQUALS) {
 				String notes1 =
-					AbstractPairResultEntity.notesToString(o1.getNotes());
+					MatchRecordUtils.notesToString(o1.getNotes());
 				String notes2 =
-					AbstractPairResultEntity.notesToString(o2.getNotes());
+					MatchRecordUtils.notesToString(o2.getNotes());
 				if (notes1 == null && notes2 != null) {
 					retVal = LESS_THAN;
 				}

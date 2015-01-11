@@ -21,17 +21,15 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
-import com.choicemaker.cm.core.base.ActiveClues;
-import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
+import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 
 /**
  * This object performs the matching of the blocks using the block source and
@@ -237,9 +235,9 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 			for (int j = i + 1; j < stageList.size(); j++) {
 				T c2 = stageList.get(j);
 				Record m = (Record) stage.get(c2);
-
-				if (m == null)
+				if (m == null) {
 					log.severe("m is null " + c2);
+				}
 
 				MatchRecord2<T> mr =
 					compareRecords(clueSet, enabledClues, model, q, m, true,
@@ -271,9 +269,9 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 			for (int j = 0; j < masterList.size(); j++) {
 				T c2 = masterList.get(j);
 				Record m = (Record) master.get(c2);
-
-				if (m == null)
+				if (m == null) {
 					log.severe("master m is null " + c2);
+				}
 
 				MatchRecord2<T> mr =
 					compareRecords(clueSet, enabledClues, model, q, m, false,
@@ -591,71 +589,19 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	/**
 	 * This method compares two records and returns a MatchRecord2 object.
 	 * 
-	 * @param clueSet
-	 * @param enabledClues
-	 * @param model
 	 * @param q
 	 *            - first record
 	 * @param m
 	 *            - second record
 	 * @param isStage
 	 *            - indicates if the second record is staging or master
-	 * @param low
-	 * @param high
-	 * @return
 	 */
 	private MatchRecord2<T> compareRecords(ClueSet clueSet,
 			boolean[] enabledClues, ImmutableProbabilityModel model, Record q,
 			Record m, boolean isStage, float low, float high) {
-
 		this.compares++;
-		MatchRecord2<T> mr = null;
-
-		if ((q != null) && (m != null)) {
-			Evaluator evaluator = model.getEvaluator();
-			ActiveClues activeClues =
-				clueSet.getActiveClues(q, m, enabledClues);
-			float matchProbability = evaluator.getProbability(activeClues);
-			Decision decision =
-				evaluator.getDecision(activeClues, matchProbability, low, high);
-
-			char source = MatchRecord2.ROLE_MASTER;
-
-			@SuppressWarnings("unchecked")
-			T i1 = (T) q.getId();
-			@SuppressWarnings("unchecked")
-			T i2 = (T) m.getId();
-
-			if (isStage) {
-				source = MatchRecord2.ROLE_STAGING;
-
-				// make sure the smaller staging id is first
-				if (i1.compareTo(i2) > 0) {
-					T i3 = i1;
-					i1 = i2;
-					i2 = i3;
-				}
-			}
-
-			// 2009-08-17 rphall
-			// BUG FIX? clue notes added here
-			final String noteInfo =
-				MatchRecord2.getNotesAsDelimitedString(activeClues, model);
-			if (decision == Decision.MATCH) {
-				mr =
-					new MatchRecord2<T>(i1, i2, source, matchProbability,
-							MatchRecord2.MATCH, noteInfo);
-			} else if (decision == Decision.DIFFER) {
-			} else if (decision == Decision.HOLD) {
-				mr =
-					new MatchRecord2<T>(i1, i2, source, matchProbability,
-							MatchRecord2.HOLD, noteInfo);
-			}
-			// END BUG FIX?
-
-		}
-
-		return mr;
+		return MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q, m,
+				isStage, low, high);
 	}
 
 	/**
