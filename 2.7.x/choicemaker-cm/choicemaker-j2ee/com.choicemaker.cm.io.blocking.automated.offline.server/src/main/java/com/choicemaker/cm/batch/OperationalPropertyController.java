@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-
 /**
  * Manages persistent, operational properties.
  * 
@@ -14,13 +12,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntit
 @Local
 public interface OperationalPropertyController {
 
-	void setJobProperty(OabaJobEntity job, String pn, String pv);
+	void setJobProperty(BatchJob job, String pn, String pv);
 
-	String getJobProperty(OabaJobEntity job, String pn);
+	String getJobProperty(BatchJob job, String pn);
 
 	OperationalProperty save(OperationalProperty property);
-
-	OperationalProperty update(OperationalProperty property);
 
 	void remove(OperationalProperty property);
 

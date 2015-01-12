@@ -19,7 +19,6 @@ import javax.persistence.Query;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalProperty;
 import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 
 @Stateless
 public class OperationalPropertyControllerBean implements
@@ -32,7 +31,7 @@ public class OperationalPropertyControllerBean implements
 	private EntityManager em;
 
 	@Override
-	public void setJobProperty(OabaJobEntity job, String pn, String pv) {
+	public void setJobProperty(BatchJob job, String pn, String pv) {
 		if (job == null || pn == null || pv == null) {
 			throw new IllegalArgumentException("null argument");
 		}
@@ -41,7 +40,7 @@ public class OperationalPropertyControllerBean implements
 	}
 
 	@Override
-	public String getJobProperty(OabaJobEntity job, String pn) {
+	public String getJobProperty(BatchJob job, String pn) {
 		OperationalProperty op = find(job, pn);
 		String retVal = op == null ? null : op.getValue();
 		return retVal;
@@ -123,12 +122,6 @@ public class OperationalPropertyControllerBean implements
 		String msg = "Persistent: " + retVal;
 		logger.info(msg);
 		return retVal;
-	}
-
-	@Override
-	public OperationalProperty update(OperationalProperty property) {
-		// TODO Auto-generated method stub
-		throw new Error("not yet implemented");
 	}
 
 	protected OperationalPropertyEntity updateInternal(OperationalProperty p) {
