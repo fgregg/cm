@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+
 import java.io.Serializable;
 import java.util.logging.Logger;
 
@@ -22,6 +24,7 @@ import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ISerializableRecordSource;
@@ -81,6 +84,9 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 
 //	@EJB
 	private RecordSourceController rsController;
+
+//	@EJB
+	private OperationalPropertyController propController;
 
 	/* (non-Javadoc)
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
@@ -209,7 +215,12 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		chunkService.runService();
 
 		OabaJobMessage data = new OabaJobMessage(jobId);
-		data.numChunks = chunkService.getNumChunks();
+
+		final int numChunks = chunkService.getNumChunks();
+		log.info("Number of chunks " + numChunks);
+		propController.setJobProperty(transJob,
+				PN_CHUNK_FILE_COUNT,
+				String.valueOf(numChunks));
 
 		//this is important because in transitivity, there is only OS chunks.
 		data.numRegularChunks = 0;

@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.*;
+
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -76,12 +78,15 @@ public class BlockingMDB extends AbstractOabaMDB {
 			OabaFileUtils.getOversizedFactory(oabaJob).getNextSink();
 		OABABlockingService blockingService;
 		try {
+			final String _numBlockFields =
+				getPropertyController().getJobProperty(oabaJob, PN_BLOCKING_FIELD_COUNT);
+			final int numBlockFields = Integer.valueOf(_numBlockFields);
 			blockingService =
 				new OABABlockingService(maxBlock, bGroup,
 						OabaFileUtils.getOversizedGroupFactory(oabaJob),
 						osSpecial, null,
 						OabaFileUtils.getRecValFactory(oabaJob),
-						data.numBlockFields, data.validator, processingLog,
+						numBlockFields, data.validator, processingLog,
 						oabaJob, minFields, maxOversized);
 		} catch (IOException e) {
 			throw new BlockingException(e.getMessage(), e);

@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -28,6 +30,7 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
@@ -55,6 +58,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 	private static final long serialVersionUID = 271L;
 
+	// FIXME REMOVEME (after operational properties are completed)
 	protected static final String DELIM = "|";
 
 	protected abstract Logger getLogger();
@@ -70,6 +74,8 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	protected abstract ServerConfigurationController getServerController();
 	
 	protected abstract OabaSettingsController getSettingsController();
+	
+	protected abstract OperationalPropertyController getPropertyController();
 
 	protected RecordSource[] stageRS = null;
 	protected RecordSource[] masterRS = null;
@@ -240,8 +246,12 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 			// Go on to the next chunk
 			if (countMessages == 0) {
+				final String _numChunks =
+					getPropertyController().getJobProperty(oabaJob,
+							PN_CHUNK_FILE_COUNT);
+				final int numChunks = Integer.valueOf(_numChunks);
 				String temp =
-					Integer.toString(sd.numChunks) + DELIM
+					Integer.toString(numChunks) + DELIM
 							+ Integer.toString(sd.numRegularChunks) + DELIM
 							+ Integer.toString(currentChunk);
 				status.setCurrentOabaEvent(OabaEvent.MATCHING_DATA, temp);
@@ -250,7 +260,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 				currentChunk++;
 
-				if (currentChunk < mwd.numChunks) {
+				if (currentChunk < numChunks) {
 					startChunk(sd, currentChunk);
 				} else {
 					// all the chunks are done
@@ -307,7 +317,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		} else {
 			currentChunk = 0;
 			if (processingLog.getCurrentOabaEventId() == OabaProcessing.EVT_MATCHING_DATA) {
-				currentChunk = recover(sd, processingLog) + 1;
+				currentChunk = recover(oabaJob, sd, processingLog) + 1;
 				getLogger().info("recovering from " + currentChunk);
 			}
 
@@ -322,15 +332,20 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 			IChunkDataSinkSourceFactory masterFactory =
 				OabaFileUtils.getMasterDataFactory(oabaJob, ipm);
 
-			stageRS = new RecordSource[sd.numChunks];
-			masterRS = new RecordSource[sd.numChunks];
+			final String _numChunks =
+				getPropertyController().getJobProperty(oabaJob,
+						PN_CHUNK_FILE_COUNT);
+			final int numChunks = Integer.valueOf(_numChunks);
 
-			for (int i = 0; i < sd.numChunks; i++) {
+			stageRS = new RecordSource[numChunks];
+			masterRS = new RecordSource[numChunks];
+
+			for (int i = 0; i < numChunks; i++) {
 				stageRS[i] = stageFactory.getNextSource();
 				masterRS[i] = masterFactory.getNextSource();
 			}
 
-			if (sd.numChunks > 0) {
+			if (numChunks > 0) {
 				startChunk(sd, currentChunk);
 			} else {
 				// special case of nothing to do, except to clean up
@@ -340,12 +355,21 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		}
 	}
 
-	protected final int recover(OabaJobMessage sd, OabaEventLog status) throws BlockingException {
+	protected final int recover(OabaJob oabaJob, OabaJobMessage sd,
+			OabaEventLog status) throws BlockingException {
 		StringTokenizer stk =
 			new StringTokenizer(status.getCurrentOabaEventInfo(), DELIM);
-		sd.numChunks = Integer.parseInt(stk.nextToken());
+
+		final int numChunks = Integer.parseInt(stk.nextToken());
+		getLogger().info("Number of chunks " + numChunks);
+		getPropertyController().setJobProperty(oabaJob,
+				PN_CHUNK_FILE_COUNT,
+				String.valueOf(numChunks));
+
 		sd.numRegularChunks = Integer.parseInt(stk.nextToken());
-		return Integer.parseInt(stk.nextToken());
+
+		int currentChunk = Integer.parseInt(stk.nextToken());
+		return currentChunk;
 	}
 
 	/**

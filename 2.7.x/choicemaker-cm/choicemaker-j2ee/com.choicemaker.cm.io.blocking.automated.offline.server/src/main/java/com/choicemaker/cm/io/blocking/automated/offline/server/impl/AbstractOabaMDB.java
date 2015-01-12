@@ -25,6 +25,7 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 //import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -68,6 +69,9 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	@EJB
 	private RecordSourceController rsController;
+	
+	@EJB
+	private OperationalPropertyController propController;
 
 	// This member will go away, but for now accessible from sub-classes
 	@Inject
@@ -101,6 +105,10 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	protected final RecordSourceController getRecordSourceController() {
 		return rsController;
+	}
+
+	protected final OperationalPropertyController getPropertyController() {
+		return propController;
 	}
 
 	// -- Template methods

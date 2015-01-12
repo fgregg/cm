@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_BLOCKING_FIELD_COUNT;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -175,8 +177,11 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					// FIXME move these parameters to a persistent object
 					data.stageType = rvService.getStageType();
 					data.masterType = rvService.getMasterType();
-					data.numBlockFields = rvService.getNumBlockingFields();
-
+					final int numBlockFields = rvService.getNumBlockingFields();
+					getPropertyController().setJobProperty(oabaJob,
+							PN_BLOCKING_FIELD_COUNT,
+							String.valueOf(numBlockFields));
+					
 					getLogger().info(
 							"Done creating rec_id, val_id files: "
 									+ rvService.getTimeElapsed());

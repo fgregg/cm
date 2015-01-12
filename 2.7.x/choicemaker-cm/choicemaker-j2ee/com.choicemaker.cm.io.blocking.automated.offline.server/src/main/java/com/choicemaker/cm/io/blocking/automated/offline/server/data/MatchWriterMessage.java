@@ -18,8 +18,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
  * @author pcheung
- * 
- *
  */
 @SuppressWarnings("rawtypes")
 public class MatchWriterMessage implements Serializable {
@@ -33,42 +31,40 @@ public class MatchWriterMessage implements Serializable {
 
 	/** The ith tree/array file of the chunk */
 	public int treeInd;
-	
-	public int numChunks;
+
 	public int numRegularChunks;
-	
+
 	/** Indicates the type of staging record id */
 	public RECORD_ID_TYPE stageType;
-	
+
 	/** Indicates the type of master record id */
 	public RECORD_ID_TYPE masterType;
-	
-	//keep track of total comparison and matches
+
+	// keep track of total comparison and matches
 	public boolean doneMatch;
 	public int numCompares;
 	public int numMatches;
-	
-	//time keepers
+
+	// time keepers
 	public long timeWriting;
 	public long inLookup;
 	public long inCompare;
-	
+
 	/** Matches to be written */
 	public List<MatchRecord2> matches;
-	
-	public MatchWriterMessage (long jobId) {
+
+	public MatchWriterMessage(long jobId) {
 		this.jobID = jobId;
 	}
-	
+
 	/** Constructs MatchWriterMessage from OabaJobMessage */
-	public MatchWriterMessage (OabaJobMessage data) {
+	public MatchWriterMessage(OabaJobMessage data) {
 		this.jobID = data.jobID;
 		this.ind = data.ind;
 		this.stageType = data.stageType;
 		this.masterType = data.masterType;
-		this.numChunks = data.numChunks;
 		this.treeInd = data.treeInd;
 		this.numRegularChunks = data.numRegularChunks;
 	}
-	
+
 }

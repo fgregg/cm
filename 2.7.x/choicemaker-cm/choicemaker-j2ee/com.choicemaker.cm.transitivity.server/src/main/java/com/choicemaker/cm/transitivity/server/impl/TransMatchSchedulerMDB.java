@@ -22,6 +22,7 @@ import javax.jms.JMSContext;
 import javax.jms.MessageListener;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
@@ -63,12 +64,15 @@ public class TransMatchSchedulerMDB extends AbstractScheduler implements Message
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
-	
+
 	@EJB
 	private OabaProcessingController processingController;
 
 	@EJB
 	private ServerConfigurationController serverController;
+
+	@EJB
+	private OperationalPropertyController propertyController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchDedupQueue")
 	private Queue transMatchDedupQueue;
@@ -99,12 +103,17 @@ public class TransMatchSchedulerMDB extends AbstractScheduler implements Message
 
 	@Override
 	protected ServerConfigurationController getServerController() {
-		return serverController; 
+		return serverController;
 	}
 
 	@Override
 	protected OabaSettingsController getSettingsController() {
-    return oabaSettingsController;
+		return oabaSettingsController;
+	}
+
+	@Override
+	protected OperationalPropertyController getPropertyController() {
+		return propertyController;
 	}
 
 	@Override

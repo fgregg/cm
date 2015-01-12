@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -23,6 +25,7 @@ import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -81,6 +84,9 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	@EJB
 	private ServerConfigurationController serverController;
 
+	@EJB
+	private OperationalPropertyController propertyController;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
 
@@ -113,6 +119,11 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	@Override
 	protected OabaSettingsController getSettingsController() {
     return oabaSettingsController;
+	}
+
+	@Override
+	protected OperationalPropertyController getPropertyController() {
+		return propertyController;
 	}
 
 	@Override
@@ -151,12 +162,16 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 		int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
 		// remove the data
+		final String _numChunks =
+			getPropertyController()
+					.getJobProperty(oabaJob, PN_CHUNK_FILE_COUNT);
+		final int numChunks = Integer.valueOf(_numChunks);
 		IChunkDataSinkSourceFactory stageFactory =
 			OabaFileUtils.getStageDataFactory(oabaJob, model);
 		IChunkDataSinkSourceFactory masterFactory =
 			OabaFileUtils.getMasterDataFactory(oabaJob, model);
-		stageFactory.removeAllSinks(sd.numChunks);
-		masterFactory.removeAllSinks(sd.numChunks);
+		stageFactory.removeAllSinks(numChunks);
+		masterFactory.removeAllSinks(numChunks);
 
 		// remove the trees
 		ComparisonTreeGroupSinkSourceFactory factory =
@@ -169,7 +184,7 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 			}
 		}
 
-		int numOS = sd.numChunks - sd.numRegularChunks;
+		int numOS = numChunks - sd.numRegularChunks;
 
 		// remove the oversized array files
 		ComparisonArrayGroupSinkSourceFactory factoryOS =

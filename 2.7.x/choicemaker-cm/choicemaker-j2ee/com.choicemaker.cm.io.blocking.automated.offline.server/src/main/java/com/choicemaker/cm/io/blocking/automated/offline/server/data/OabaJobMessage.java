@@ -30,8 +30,8 @@ public class OabaJobMessage implements Serializable {
 
 	public final long jobID;
 
-	public int numBlockFields;
-	public int numChunks;
+//	public int numBlockFields;
+//	public int numChunks;
 	public int numRegularChunks;
 
 	// indicates the type of staging record id
@@ -60,7 +60,6 @@ public class OabaJobMessage implements Serializable {
 		this.ind = data.ind;
 		this.stageType = data.stageType;
 		this.masterType = data.masterType;
-		this.numChunks = data.numChunks;
 		this.treeInd = data.treeInd;
 		this.numRegularChunks = data.numRegularChunks;
 		this.validator = data.validator;
@@ -72,7 +71,6 @@ public class OabaJobMessage implements Serializable {
 		this.ind = data.ind;
 		this.stageType = data.stageType;
 		this.masterType = data.masterType;
-		this.numChunks = data.numChunks;
 		this.treeInd = data.treeInd;
 		this.numRegularChunks = data.numRegularChunks;
 	}

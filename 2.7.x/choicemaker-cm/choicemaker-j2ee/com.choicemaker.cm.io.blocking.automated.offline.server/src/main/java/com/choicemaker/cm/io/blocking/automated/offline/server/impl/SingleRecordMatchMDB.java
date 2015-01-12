@@ -10,6 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_BLOCKING_FIELD_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Iterator;
@@ -19,14 +22,13 @@ import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ISerializableRecordSource;
@@ -110,16 +112,19 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	OabaParametersControllerBean paramsController;
+	private OabaParametersControllerBean paramsController;
 	
 	@EJB
-	OabaProcessingController processingController;
+	private OabaProcessingController processingController;
 
-//	@EJB
+	@EJB
 	private RecordSourceController rsController;
 
-	@Inject
-	JMSContext jmsContext;
+	@EJB
+	private OperationalPropertyController propController;
+
+//	@Inject
+//	private JMSContext jmsContext;
 
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
@@ -219,7 +224,10 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 					OabaFileUtils.getRecValFactory(oabaJob), translator,
 					processingEntry);
 		rvService.runService();
-		data.numBlockFields = rvService.getNumBlockingFields();
+		final int numBlockFields = rvService.getNumBlockingFields();
+		propController.setJobProperty(oabaJob,
+				PN_BLOCKING_FIELD_COUNT,
+				String.valueOf(numBlockFields));
 
 		ValidatorBase validator = new ValidatorBase(true, translator);
 		data.validator = validator;
@@ -236,7 +244,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 			new OABABlockingService(maxBlock, bGroup,
 					OabaFileUtils.getOversizedGroupFactory(oabaJob), osSpecial,
 					null, OabaFileUtils.getRecValFactory(oabaJob),
-					data.numBlockFields, data.validator, processingEntry,
+					numBlockFields, data.validator, processingEntry,
 					oabaJob, minFields, maxOversized);
 		blockingService.runService();
 		log.info("Done blocking " + blockingService.getTimeElapsed());
@@ -287,12 +295,15 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 					OabaFileUtils.getCGFactory(oabaJob), maxChunk,
 					processingEntry);
 		chunkService.runService();
-		log.info("Number of chunks " + chunkService.getNumChunks());
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
 		translator.cleanUp();
 
-		data.numChunks = chunkService.getNumChunks();
+		final int numChunks = chunkService.getNumChunks();
+		log.info("Number of chunks " + numChunks);
+		propController.setJobProperty(oabaJob,
+				PN_CHUNK_FILE_COUNT,
+				String.valueOf(numChunks));
 
 		// match sink
 		IMatchRecord2SinkSourceFactory mFactory =
