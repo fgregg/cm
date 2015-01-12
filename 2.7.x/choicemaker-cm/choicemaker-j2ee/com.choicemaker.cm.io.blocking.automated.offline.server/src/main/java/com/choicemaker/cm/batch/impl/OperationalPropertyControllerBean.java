@@ -19,6 +19,7 @@ import javax.persistence.Query;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalProperty;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 
 @Stateless
 public class OperationalPropertyControllerBean implements
@@ -29,6 +30,22 @@ public class OperationalPropertyControllerBean implements
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
+
+	@Override
+	public void setJobProperty(OabaJobEntity job, String pn, String pv) {
+		if (job == null || pn == null || pv == null) {
+			throw new IllegalArgumentException("null argument");
+		}
+		OperationalProperty op = new OperationalPropertyEntity(job, pn, pv);
+		save(op);
+	}
+
+	@Override
+	public String getJobProperty(OabaJobEntity job, String pn) {
+		OperationalProperty op = find(job, pn);
+		String retVal = op == null ? null : op.getValue();
+		return retVal;
+	}
 
 	@Override
 	public OperationalProperty save(OperationalProperty p) {
@@ -50,10 +67,10 @@ public class OperationalPropertyControllerBean implements
 				retVal = null;
 			} else if (!retVal.equals0(p)) {
 				String msg =
-					"The specified property ("
-							+ pid
+					"The specified property (" + p
 							+ ") is different in the DB. "
-							+ "The DB value will be updated to the specified value.";
+							+ "The DB value will be updated from '"
+							+ retVal.getValue() + "' to '" + p.getValue() + "'";
 				logger.info(msg);
 				retVal = updateInternal(p);
 			}
@@ -65,19 +82,19 @@ public class OperationalPropertyControllerBean implements
 					"The specified property (jobId: " + p.getJobId()
 							+ ", name: " + p.getName()
 							+ ") is missing in the DB. "
-							+ "A new copy will be persisted.";
+							+ "A new entry will be created with the value '"
+							+ p.getValue() + "'.";
 				logger.info(msg);
 				retVal = null;
 			} else if (!retVal.equals0(p)) {
 				String msg =
-					"The specified property (jobId: "
-							+ p.getJobId()
-							+ ", name: "
-							+ p.getName()
+					"The specified property (" + p
 							+ ") is different in the DB. "
-							+ "The DB value will be updated to the specified value.";
+							+ "The DB value will be updated from '"
+							+ retVal.getValue() + "' to '" + p.getValue() + "'";
 				logger.info(msg);
-				retVal = updateInternal(p);
+				retVal.updateValue(p.getValue());
+				retVal = updateInternal(retVal);
 			}
 		}
 		if (retVal == null) {
@@ -94,7 +111,12 @@ public class OperationalPropertyControllerBean implements
 		assert p.getId() == INVALID_ID;
 
 		// Save the specified property to the DB
-		OperationalPropertyEntity retVal = new OperationalPropertyEntity(p);
+		OperationalPropertyEntity retVal;
+		if (p instanceof OperationalPropertyEntity) {
+			retVal = (OperationalPropertyEntity) p;
+		} else {
+			retVal = new OperationalPropertyEntity(p);
+		}
 		assert retVal.getId() == INVALID_ID;
 		em.persist(retVal);
 		assert retVal.getId() != INVALID_ID;
@@ -121,23 +143,18 @@ public class OperationalPropertyControllerBean implements
 		logger.finer("New version before merge: " + retVal);
 		em.merge(retVal);
 		logger.finer("New version after merge: " + retVal);
-		em.persist(retVal);
-		logger.finer("DB version after merge: " + retVal);
+		em.flush();
+		logger.finer("DB version after flush: " + retVal);
 		return retVal;
 	}
 
 	@Override
 	public void remove(OperationalProperty property) {
-		if (property != null && property.getId() != INVALID_ID) {
-			OperationalProperty ope = new OperationalPropertyEntity(property);
-			em.remove(ope);
-		}
-	}
-
-	@Override
-	public void remove(OperationalPropertyEntity ope) {
-		if (ope != null && ope.getId() != INVALID_ID) {
-			em.remove(ope);
+		if (property != null) {
+			OperationalPropertyEntity ope = findInternal(property.getId());
+			if (ope != null) {
+				em.remove(ope);
+			}
 		}
 	}
 
@@ -159,10 +176,11 @@ public class OperationalPropertyControllerBean implements
 		if (job == null || !BatchJobEntity.isPersistent(job)) {
 			throw new IllegalArgumentException("invalid job: " + job);
 		}
-		return findInternal(job.getId(),name);
+		return findInternal(job.getId(), name);
 	}
 
-	protected OperationalPropertyEntity findInternal(final long jobId, final String name) {
+	protected OperationalPropertyEntity findInternal(final long jobId,
+			final String name) {
 		if (name == null || !name.equals(name.trim()) || name.isEmpty()) {
 			throw new IllegalArgumentException("invalid property name: '"
 					+ name + "'");
@@ -184,7 +202,10 @@ public class OperationalPropertyControllerBean implements
 			if (beans != null && beans.size() == 1) {
 				retVal = beans.get(0);
 			} else if (beans != null && beans.size() > 1) {
-				String msg = "FIXME";
+				String msg =
+					"Integrity constraint violated: "
+							+ "multiple values for the same job/property-name: "
+							+ beans;
 				throw new IllegalStateException(msg);
 			}
 		}

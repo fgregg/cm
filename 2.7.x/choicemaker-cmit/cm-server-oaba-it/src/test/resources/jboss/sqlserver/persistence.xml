@@ -12,6 +12,7 @@
 
     <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
     <class>com.choicemaker.cm.batch.impl.BatchProcessingLogEntry</class>
+    <class>com.choicemaker.cm.batch.impl.OperationalPropertyEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BaseRecordSourceEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>
@@ -24,7 +25,6 @@
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceEntity</class>
     <!--
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
     -->
 
     <properties>
@@ -45,6 +45,7 @@
 
     <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
     <class>com.choicemaker.cm.batch.impl.BatchProcessingLogEntry</class>
+    <class>com.choicemaker.cm.batch.impl.OperationalPropertyEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BaseRecordSourceEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>

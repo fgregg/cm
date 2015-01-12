@@ -9,27 +9,44 @@ import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.ID_GENERATOR_
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.ID_GENERATOR_PK_COLUMN_VALUE;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.ID_GENERATOR_TABLE;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.JPQL_OPPROP_FINDALL_BY_JOB;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.JPQL_OPPROP_FIND_BY_JOB_PNAME;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FINDALL_BY_JOB;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FIND_BY_JOB_PNAME;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.TABLE_NAME;
 
 import java.util.logging.Logger;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalProperty;
 
+@NamedQueries({
+		@NamedQuery(name = QN_OPPROP_FIND_BY_JOB_PNAME,
+				query = JPQL_OPPROP_FIND_BY_JOB_PNAME),
+		@NamedQuery(name = QN_OPPROP_FINDALL_BY_JOB,
+				query = JPQL_OPPROP_FINDALL_BY_JOB) })
+@Entity
+@Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 public class OperationalPropertyEntity implements OperationalProperty {
-	
+
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = Logger.getLogger(OperationalPropertyEntity.class.getName());
-	
+	private static final Logger logger = Logger
+			.getLogger(OperationalPropertyEntity.class.getName());
+
 	public static final String INVALID_NAME = null;
 	public static final String INVALID_VALUE = null;
-	
+
 	// -- Instance data
 
 	@Id
@@ -44,12 +61,12 @@ public class OperationalPropertyEntity implements OperationalProperty {
 
 	@Column(name = CN_JOB_ID)
 	private final long jobId;
-	
+
 	@Column(name = CN_NAME)
 	private final String name;
-	
+
 	@Column(name = CN_VALUE)
-	private final String value;
+	private String value;
 
 	// -- Constructors
 
@@ -59,36 +76,43 @@ public class OperationalPropertyEntity implements OperationalProperty {
 		this.name = INVALID_NAME;
 		this.value = INVALID_VALUE;
 	}
-	
-	public OperationalPropertyEntity(
-			BatchJob job, final String name, final String value
-			) {
+
+	public OperationalPropertyEntity(BatchJob job, final String pn,
+			final String pv) {
 		if (job == null || !BatchJobEntity.isPersistent(job)) {
 			throw new IllegalArgumentException("invalid job: " + job);
 		}
-		if (name == null || !name.equals(name.trim()) || name.isEmpty()) {
-			throw new IllegalArgumentException("invalid property name: '" + name + "'");
+		if (pn == null || !pn.equals(pn.trim()) || pn.isEmpty()) {
+			throw new IllegalArgumentException("invalid property name: '" + pn
+					+ "'");
 		}
-		if (value == null) {
-			throw new IllegalArgumentException("invalid property value: '"
-					+ value + "'");
+		final String stdName = pn.toUpperCase();
+		if (!pn.equals(stdName)) {
+			logger.warning("Converting property name '" + pn
+					+ "' to upper-case '" + stdName + "'");
 		}
-		
-		final String stdName = name.toUpperCase();
-		if (!name.equals(stdName)) {
-			logger.warning("Converting property name '" + name + "' to upper-case '" + stdName + "'");
-		}
-		if (value.trim().isEmpty()) {
-			logger.warning("Blank value for '" + stdName + "'");
-		}
-		
+
 		this.jobId = job.getId();
 		this.name = stdName;
-		this.value = value;
+		updateValue(pv);
+	}
+
+	// -- Modifiers
+
+	@Override
+	public void updateValue(String s) {
+		if (s == null) {
+			throw new IllegalArgumentException("invalid property value: '"
+					+ s + "'");
+		}
+		if (s.trim().isEmpty()) {
+			logger.warning("Blank value for '" + name + "'");
+		}
+		this.value = s;
 	}
 
 	// -- Accessors
-	
+
 	public OperationalPropertyEntity(OperationalProperty p) {
 		this.id = p.getId();
 		this.jobId = p.getJobId();
@@ -130,8 +154,10 @@ public class OperationalPropertyEntity implements OperationalProperty {
 	protected int hashCode0() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-		result = prime * result + ((getValue() == null) ? 0 : getValue().hashCode());
+		result =
+			prime * result + ((getName() == null) ? 0 : getName().hashCode());
+		result =
+			prime * result + ((getValue() == null) ? 0 : getValue().hashCode());
 		return result;
 	}
 
@@ -181,8 +207,9 @@ public class OperationalPropertyEntity implements OperationalProperty {
 
 	@Override
 	public String toString() {
-		return "OperationalPropertyEntity [id=" + getId() + ", jobId=" + getJobId()
-				+ ", name=" + getName() + ", value=" + getValue() + "]";
+		return "OperationalPropertyEntity [id=" + getId() + ", jobId="
+				+ getJobId() + ", name=" + getName() + ", value=" + getValue()
+				+ "]";
 	}
 
 }

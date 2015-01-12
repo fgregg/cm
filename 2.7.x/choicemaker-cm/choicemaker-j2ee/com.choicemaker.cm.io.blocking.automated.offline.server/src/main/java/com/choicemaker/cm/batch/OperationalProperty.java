@@ -37,4 +37,6 @@ public interface OperationalProperty extends Serializable {
 	/** The property value */
 	String getValue();
 
+	void updateValue(String v);
+
 }
