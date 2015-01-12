@@ -15,9 +15,17 @@ import java.util.Date;
 
 /**
  * This is the data object that gets passed to the UpdateStatusMDB message bean.
+ * It has a subset of the methods found on the BatchProcessingEvent interface.
+ * It is missing the following BatchProcessingEvent methods:
+ * <ul>
+ * <li>long getId()</li>
+ * <li>int getEventSequenceNumber()</li>
+ * <li>String getEventInfo()</li>
+ * <li>float getFractionComplete()</li>
+ * </ul>
  * 
  * @author pcheung
- *
+ * @author rphall
  */
 public abstract class BatchProcessingNotification implements Serializable {
 
