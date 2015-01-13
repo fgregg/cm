@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_BLOCKING_FIELD_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
 
 import java.io.IOException;
 import java.util.Date;
@@ -34,6 +35,7 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
@@ -173,19 +175,20 @@ public class StartOabaMDB extends AbstractOabaMDB {
 								recvalFactory, translator, processingEntry,
 								oabaJob);
 					rvService.runService();
+					getLogger().info(
+							"Done creating rec_id, val_id files: "
+									+ rvService.getTimeElapsed());
 
-					// FIXME move these parameters to a persistent object
-					data.stageType = rvService.getStageType();
-					data.masterType = rvService.getMasterType();
+					final RECORD_ID_TYPE recordIdType =
+						rvService.getStageType();
+					getPropertyController().setJobProperty(oabaJob,
+							PN_RECORD_ID_TYPE, recordIdType.name());
+
 					final int numBlockFields = rvService.getNumBlockingFields();
 					getPropertyController().setJobProperty(oabaJob,
 							PN_BLOCKING_FIELD_COUNT,
 							String.valueOf(numBlockFields));
 					
-					getLogger().info(
-							"Done creating rec_id, val_id files: "
-									+ rvService.getTimeElapsed());
-
 					// create the validator after rvService
 					// Validator validator = new Validator (true, translator);
 					ValidatorBase validator =

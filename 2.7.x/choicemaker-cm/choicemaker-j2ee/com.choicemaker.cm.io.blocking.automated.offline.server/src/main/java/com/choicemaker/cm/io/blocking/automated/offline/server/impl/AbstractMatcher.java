@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CURRENT_CHUNK_INDEX;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.io.Serializable;
@@ -47,6 +48,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
@@ -419,9 +421,13 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 		if (currentChunk < numRegularChunks) {
 			// regular chunks
+			final String _recordIdType =
+				propController.getJobProperty(job, PN_RECORD_ID_TYPE);
+			final RECORD_ID_TYPE recordIdType =
+				RECORD_ID_TYPE.valueOf(_recordIdType);
 			ComparisonTreeGroupSinkSourceFactory factory =
-				OabaFileUtils.getComparisonTreeGroupFactory(job,
-						data.stageType, numProcessors);
+				OabaFileUtils.getComparisonTreeGroupFactory(job, recordIdType,
+						numProcessors);
 			IComparisonTreeSource source =
 				factory.getSource(currentChunk, data.treeIndex);
 			if (source.exists()) {

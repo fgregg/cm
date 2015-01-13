@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
@@ -29,6 +30,7 @@ import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
@@ -95,10 +97,14 @@ public class Chunk2MDB extends AbstractOabaMDB {
 		log.info("Deduped oversized source: " + source2);
 
 		// create the tree transformer.
+		final String _recordIdType =
+			getPropertyController().getJobProperty(oabaJob, PN_RECORD_ID_TYPE);
+		final RECORD_ID_TYPE recordIdType =
+			RECORD_ID_TYPE.valueOf(_recordIdType);
 		final TreeTransformer tTransformer =
 			new TreeTransformer(translator,
 					OabaFileUtils.getComparisonTreeGroupFactory(oabaJob,
-							data.stageType, numProcessors));
+							recordIdType, numProcessors));
 
 		// create the transformer for over-sized blocks
 		final Transformer transformerO =

@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.util.Date;
@@ -34,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
@@ -181,8 +183,12 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 		masterFactory.removeAllSinks(numChunks);
 
 		// remove the trees
+		final String _recordIdType =
+			getPropertyController().getJobProperty(oabaJob, PN_RECORD_ID_TYPE);
+		final RECORD_ID_TYPE recordIdType =
+			RECORD_ID_TYPE.valueOf(_recordIdType);
 		ComparisonTreeGroupSinkSourceFactory factory =
-			OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, sd.stageType,
+			OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, recordIdType,
 					numProcessors);
 		for (int i = 0; i < numRegularChunks; i++) {
 			for (int j = 1; j <= numProcessors; j++) {

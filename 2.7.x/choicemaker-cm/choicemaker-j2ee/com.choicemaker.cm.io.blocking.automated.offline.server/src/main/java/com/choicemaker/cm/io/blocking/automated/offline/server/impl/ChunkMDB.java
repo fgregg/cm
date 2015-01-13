@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
 
 import java.util.logging.Logger;
 
@@ -27,6 +28,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFac
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
@@ -82,9 +84,13 @@ public class ChunkMDB extends AbstractOabaMDB {
 		IDSetSource source2 = new IDSetSource(osFactory.getNextSource());
 
 		// create the tree transformer
+		final String _recordIdType =
+			getPropertyController().getJobProperty(oabaJob, PN_RECORD_ID_TYPE);
+		final RECORD_ID_TYPE recordIdType =
+			RECORD_ID_TYPE.valueOf(_recordIdType);
 		@SuppressWarnings("rawtypes")
 		IComparisonTreeSinkSourceFactory ctssf =
-			OabaFileUtils.getComparisonTreeFactory(oabaJob, data.stageType);
+			OabaFileUtils.getComparisonTreeFactory(oabaJob, recordIdType);
 		TreeTransformer tTransformer = new TreeTransformer(translator, ctssf);
 
 		// create the oversized block transformer

@@ -12,9 +12,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 
 import java.io.Serializable;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-//import com.choicemaker.cm.core.SerializableRecordSource;
-//import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 
 /**
@@ -28,16 +25,6 @@ public class OabaJobMessage implements Serializable {
 	static final long serialVersionUID = 271;
 
 	public final long jobID;
-
-//	public int numBlockFields;
-//	public int numChunks;
-//	public int numRegularChunks;
-
-	// indicates the type of staging record id
-	public RECORD_ID_TYPE stageType;
-
-	// indicates the type of master record id
-	public RECORD_ID_TYPE masterType;
 
 	public ValidatorBase validator;
 
@@ -60,8 +47,6 @@ public class OabaJobMessage implements Serializable {
 	// copy constructor
 	public OabaJobMessage(OabaJobMessage data) {
 		this.jobID = data.jobID;
-		this.stageType = data.stageType;
-		this.masterType = data.masterType;
 		this.processingIndex = data.processingIndex;
 		this.treeIndex = data.treeIndex;
 		this.validator = data.validator;
@@ -70,8 +55,6 @@ public class OabaJobMessage implements Serializable {
 	// create MatchWriterMessage from OabaJobMessage
 	public OabaJobMessage(MatchWriterMessage data) {
 		this.jobID = data.jobID;
-		this.stageType = data.stageType;
-		this.masterType = data.masterType;
 		this.processingIndex = data.processingIndex;
 		this.treeIndex = data.treeIndex;
 	}

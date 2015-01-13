@@ -90,4 +90,22 @@ public interface OabaOperationalPropertyNames {
 //	 */
 //	String PN_PROCESSING_INDEX = "PROCESSING_INDEX";
 
+	/**
+	 * The name of an enum representing the type of the primary key for records
+	 * used in a batch job. The value
+	 * is defined in
+	 * <ul>
+	 * <li>StartOabaMDB</li>
+	 * </ul>
+	 * 
+	 * It is used in
+	 * <ul>
+	 * <li>AbstractMatcher</li>
+	 * <li>ChunkMDB</li>
+	 * <li>Chunk2MDB</li>
+	 * <li>MatchSchedulerMDB</li>
+	 * </ul>
+	 */
+	String PN_RECORD_ID_TYPE = "RECORD_ID_TYPE";
+
 }

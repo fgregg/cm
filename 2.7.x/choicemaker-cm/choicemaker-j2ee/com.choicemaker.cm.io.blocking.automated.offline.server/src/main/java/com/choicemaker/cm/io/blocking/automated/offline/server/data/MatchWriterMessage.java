@@ -13,7 +13,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 import java.io.Serializable;
 import java.util.List;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
@@ -37,12 +36,6 @@ public class MatchWriterMessage implements Serializable {
 	 */
 	public int treeIndex;
 
-	/** Indicates the type of staging record id */
-	public RECORD_ID_TYPE stageType;
-
-	/** Indicates the type of master record id */
-	public RECORD_ID_TYPE masterType;
-
 	// keep track of total comparison and matches
 	public boolean doneMatch;
 	public int numCompares;
@@ -63,8 +56,6 @@ public class MatchWriterMessage implements Serializable {
 	/** Constructs MatchWriterMessage from OabaJobMessage */
 	public MatchWriterMessage(OabaJobMessage data) {
 		this.jobID = data.jobID;
-		this.stageType = data.stageType;
-		this.masterType = data.masterType;
 		this.processingIndex = data.processingIndex;
 		this.treeIndex = data.treeIndex;
 	}
