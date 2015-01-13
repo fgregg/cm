@@ -72,7 +72,7 @@ public interface IRecordIdTranslator2<T extends Comparable<T>> {
 	public void cleanUp() throws BlockingException;
 
 	/**
-	 * This method attemps to recover the data from a previous run by reading in
+	 * This method attempts to recover the data from a previous run by reading in
 	 * existing sources containing the record ids.
 	 */
 	public void recover() throws BlockingException;
