@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CLEAR_RESOURCES;
+
 import java.util.logging.Logger;
 
 import javax.jms.JMSContext;
@@ -20,6 +22,7 @@ import javax.jms.Queue;
 import javax.jms.Topic;
 
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
@@ -46,13 +49,22 @@ public class MessageBeanUtils {
 	 * This method stops the OabaJob by setting the status to aborted, and
 	 * removes the temporary directory for the job.
 	 */
-	public static void stopJob(BatchJob oabaJob, OabaEventLog status) {
+	public static void stopJob(BatchJob oabaJob,
+			OperationalPropertyController propController, OabaEventLog status) {
+
 		oabaJob.markAsAborted();
-		// FIXME description used to hold operational parameter
-		if (oabaJob.getDescription().equals(BatchJob.MAGIC_DESCRIPTION_CLEAR)) {
+
+		final String _clearResources =
+			propController.getJobProperty(oabaJob, PN_CLEAR_RESOURCES);
+		boolean clearResources = Boolean.valueOf(_clearResources);
+
+		if (clearResources) {
+			log0.info("Clearing resources for job " + oabaJob.getId());
 			status.setCurrentOabaEvent(OabaEvent.DONE_OABA);
 			log0.info("Removing Temporary directory.");
 			OabaFileUtils.removeTempDir(oabaJob);
+		} else {
+			log0.info("Retaining resources for job " + oabaJob.getId());
 		}
 	}
 

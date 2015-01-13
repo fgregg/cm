@@ -372,7 +372,8 @@ public abstract class BatchJobEntity implements BatchJob {
 		this.audit.put(date, status);
 	}
 
-	public static boolean isAllowedTransition(BatchJobStatus current, BatchJobStatus next) {
+	public static boolean isAllowedTransition(BatchJobStatus current,
+			BatchJobStatus next) {
 		if (current == null || next == null) {
 			throw new IllegalArgumentException("null status");
 		}

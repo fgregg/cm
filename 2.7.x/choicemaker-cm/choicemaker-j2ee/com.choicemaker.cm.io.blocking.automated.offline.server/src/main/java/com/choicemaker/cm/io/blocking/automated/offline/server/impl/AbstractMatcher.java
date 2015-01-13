@@ -138,6 +138,10 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		return oabaSettingsController;
 	}
 
+	protected OperationalPropertyController getPropertyController() {
+		return propController;
+	}
+
 	protected JMSContext getJMSContext() {
 		return jmsContext;
 	}
@@ -191,7 +195,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 					}
 
 					final String _currentChunk =
-						propController.getJobProperty(oabaJob,
+						getPropertyController().getJobProperty(oabaJob,
 								PN_CURRENT_CHUNK_INDEX);
 					final int currentChunk = Integer.valueOf(_currentChunk);
 					getLogger().fine(
@@ -199,7 +203,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 									+ currentChunk + " " + data.treeIndex);
 
 					if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
-						MessageBeanUtils.stopJob(oabaJob, processingLog);
+						MessageBeanUtils.stopJob(oabaJob,
+								getPropertyController(), processingLog);
 
 					} else {
 						handleMatching(data, oabaJob, params, oabaSettings,
@@ -416,13 +421,13 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		OabaJob job = getJobController().findOabaJob(data.jobID);
 
 		final String _numRegularChunks =
-			propController.getJobProperty(job, PN_REGULAR_CHUNK_FILE_COUNT);
+			getPropertyController().getJobProperty(job, PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		if (currentChunk < numRegularChunks) {
 			// regular chunks
 			final String _recordIdType =
-				propController.getJobProperty(job, PN_RECORD_ID_TYPE);
+				getPropertyController().getJobProperty(job, PN_RECORD_ID_TYPE);
 			final RECORD_ID_TYPE recordIdType =
 				RECORD_ID_TYPE.valueOf(_recordIdType);
 			ComparisonTreeGroupSinkSourceFactory factory =

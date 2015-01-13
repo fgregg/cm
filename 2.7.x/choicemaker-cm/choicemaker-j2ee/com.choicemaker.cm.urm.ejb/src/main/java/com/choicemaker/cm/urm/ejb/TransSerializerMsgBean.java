@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
@@ -33,6 +35,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerializer;
 import com.choicemaker.cm.transitivity.core.TransitivitySortType;
@@ -86,6 +89,9 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 
 	@PersistenceContext (unitName = "oaba")
 	private EntityManager em;
+
+//	@EJB
+	private OperationalPropertyController propController;
 
 	/**
 	 * Constructor, which is public and takes no arguments.
@@ -151,15 +157,19 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 			}
 			ownJob.updateStepInfo(20);
 
-			String matchResultFileName = trJob.getDescription();
+			final String cachedPairsFileName =
+				propController.getJobProperty(trJob,
+						PN_TRANSITIVITY_CACHED_PAIRS_FILE);
+			log.info("Cached transitivity pairs file: " + cachedPairsFileName);
+
 			@SuppressWarnings("unused")
 			String analysisResultFileName =
-				matchResultFileName.substring(0,
-						matchResultFileName.lastIndexOf("."))
+					cachedPairsFileName.substring(0,
+							cachedPairsFileName.lastIndexOf("."))
 						+ "trans_analysis";
 
 			MatchRecord2CompositeSource mrs =
-				new MatchRecord2CompositeSource(matchResultFileName);
+				new MatchRecord2CompositeSource(cachedPairsFileName);
 
 			// TODO: replace by extension point
 			log.fine("create composite entity iterators for "

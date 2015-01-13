@@ -227,7 +227,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		getLogger().info("outstanding messages: " + countMessages);
 
 		if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
-			MessageBeanUtils.stopJob(oabaJob, status);
+			MessageBeanUtils.stopJob(oabaJob, getPropertyController(), status);
 
 		} else if (BatchJobStatus.ABORTED != oabaJob.getStatus()) {
 			// if there are multiple processors, we have don't do anything for
@@ -244,12 +244,12 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 				inCompare[mwd.treeIndex - 1] += mwd.inCompare;
 			}
 
-			final String _lastChunk =
+			final String _latestChunkProcessed =
 				getPropertyController().getJobProperty(oabaJob,
 						PN_CHUNK_FILE_COUNT);
-			final int lastChunk = Integer.valueOf(_lastChunk);
-			getLogger().info("Chunk " + lastChunk + " tree " + mwd.treeIndex + " is done.");
-			assert lastChunk == currentChunk;
+			final int latestChunkProcessed = Integer.valueOf(_latestChunkProcessed);
+			getLogger().info("Chunk " + latestChunkProcessed + " tree " + mwd.treeIndex + " is done.");
+			assert latestChunkProcessed == currentChunk;
 
 			// Go on to the next chunk
 			if (countMessages == 0) {
@@ -269,7 +269,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 							+ Integer.toString(currentChunk);
 				status.setCurrentOabaEvent(OabaEvent.MATCHING_DATA, temp);
 
-				getLogger().info("Chunk " + lastChunk + " is done.");
+				getLogger().info("Chunk " + latestChunkProcessed + " is done.");
 
 				currentChunk++;
 
@@ -325,7 +325,8 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 			getProcessingController().getProcessingLog(oabaJob);
 
 		if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
-			MessageBeanUtils.stopJob(oabaJob, processingLog);
+			MessageBeanUtils.stopJob(oabaJob, getPropertyController(),
+					processingLog);
 
 		} else {
 			currentChunk = 0;

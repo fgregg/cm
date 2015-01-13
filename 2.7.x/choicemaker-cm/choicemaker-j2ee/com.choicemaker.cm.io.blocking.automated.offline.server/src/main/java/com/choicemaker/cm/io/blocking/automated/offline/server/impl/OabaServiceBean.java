@@ -10,6 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CLEAR_RESOURCES;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
@@ -35,6 +38,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
@@ -55,17 +59,20 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 @SuppressWarnings("rawtypes")
 public class OabaServiceBean implements OabaService {
 
-//	private static final long serialVersionUID = 271L;
+	// private static final long serialVersionUID = 271L;
 
 	private static final String SOURCE_CLASS = OabaServiceBean.class
 			.getSimpleName();
 
-	private static final Logger logger = Logger
-			.getLogger(OabaServiceBean.class.getName());
+	private static final Logger logger = Logger.getLogger(OabaServiceBean.class
+			.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
-	
+
+	@EJB
+	private OperationalPropertyController propController;
+
 	@Resource(name = "jms/startQueue",
 			lookup = "java:/choicemaker/urm/jms/startQueue")
 	private Queue queue;
@@ -112,11 +119,13 @@ public class OabaServiceBean implements OabaService {
 			}
 			if (OabaLinkageType.STAGING_DEDUPLICATION == type) {
 				if (bp.getMasterRsId() != null || bp.getMasterRsType() != null) {
-					validityErrors.add("non-null master source parameter for a de-duplication task");
+					validityErrors
+							.add("non-null master source parameter for a de-duplication task");
 				}
 			} else {
 				if (bp.getMasterRsId() == null || bp.getMasterRsType() == null) {
-					validityErrors.add("null master source parameter for a linkage task");
+					validityErrors
+							.add("null master source parameter for a linkage task");
 				}
 			}
 			if (bp.getLowThreshold() < 0f || bp.getLowThreshold() > 1.0f) {
@@ -239,12 +248,8 @@ public class OabaServiceBean implements OabaService {
 			logger.warning(msg);
 		} else {
 			oabaJob.markAsAbortRequested();
-			// FIXME HACK!
-			// set status as done, so it won't continue during the next run
-			if (cleanStatus) {
-				oabaJob.setDescription(BatchJob.MAGIC_DESCRIPTION_CLEAR);
-			}
-			// END FIXME
+			propController.setJobProperty(oabaJob, PN_CLEAR_RESOURCES,
+					String.valueOf(cleanStatus));
 		}
 		return 0;
 	}
@@ -273,13 +278,21 @@ public class OabaServiceBean implements OabaService {
 	 * @return int = 1 if OK, or -1 if failed
 	 */
 	public int resumeJob(long jobID) {
-		int ret = 1;
-		OabaJob job = jobController.findOabaJob(jobID);
-		if (!job.getStarted().equals(BatchJobStatus.COMPLETED)
-				&& !job.getDescription().equals(BatchJob.MAGIC_DESCRIPTION_CLEAR)) {
 
+		OabaJob job = jobController.findOabaJob(jobID);
+
+		final String _clearResources =
+			propController.getJobProperty(job, PN_CLEAR_RESOURCES);
+		boolean clearResources = Boolean.valueOf(_clearResources);
+		
+		boolean isCompleted = job.getStarted().equals(BatchJobStatus.COMPLETED);
+
+		int ret;
+		if (!isCompleted && !clearResources) {
+			logger.info("Resuming job " + jobID);
 			job.markAsReStarted();
 			sendToStartOABA(jobID);
+			ret = 1;
 
 		} else {
 			logger.warning("Could not resume job " + jobID);
@@ -311,9 +324,14 @@ public class OabaServiceBean implements OabaService {
 		if (!oabaJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
-			String fileName = oabaJob.getDescription();
+			final String cachedResultsFileName =
+				propController.getJobProperty(oabaJob,
+						PN_OABA_CACHED_RESULTS_FILE);
+			logger.info("Cached OABA results file: " + cachedResultsFileName);
+
 			MatchRecordSource mrs =
-				new MatchRecordSource(fileName, EXTERNAL_DATA_FORMAT.STRING);
+				new MatchRecordSource(cachedResultsFileName,
+						EXTERNAL_DATA_FORMAT.STRING);
 			mls = new MatchListSource(mrs);
 		}
 
@@ -331,8 +349,13 @@ public class OabaServiceBean implements OabaService {
 		if (!oabaJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
-			String fileName = oabaJob.getDescription();
-			mrs = new MatchRecord2Source(fileName, EXTERNAL_DATA_FORMAT.STRING);
+			final String cachedResultsFileName =
+				propController.getJobProperty(oabaJob,
+						PN_OABA_CACHED_RESULTS_FILE);
+			logger.info("Cached OABA results file: " + cachedResultsFileName);
+			mrs =
+				new MatchRecord2Source(cachedResultsFileName,
+						EXTERNAL_DATA_FORMAT.STRING);
 		}
 
 		return mrs;

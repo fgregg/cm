@@ -75,25 +75,25 @@ public interface OabaOperationalPropertyNames {
 	 */
 	String PN_CURRENT_CHUNK_INDEX = "CURRENT_CHUNK_INDEX";
 
-//	/**
-//	 * An index used to split a task across a set of processing agents that are
-//	 * running in parallel. The value is defined in
-//	 * <ul>
-//	 * <li>AbstractScheduler</li>
-//	 * </ul>
-//	 * 
-//	 * It is used in
-//	 * <ul>
-//	 * <li>AbstractMatcher</li>
-//	 * <li>AbstractScheduler</li>
-//	 * </ul>
-//	 */
-//	String PN_PROCESSING_INDEX = "PROCESSING_INDEX";
+	// /**
+	// * An index used to split a task across a set of processing agents that
+	// are
+	// * running in parallel. The value is defined in
+	// * <ul>
+	// * <li>AbstractScheduler</li>
+	// * </ul>
+	// *
+	// * It is used in
+	// * <ul>
+	// * <li>AbstractMatcher</li>
+	// * <li>AbstractScheduler</li>
+	// * </ul>
+	// */
+	// String PN_PROCESSING_INDEX = "PROCESSING_INDEX";
 
 	/**
 	 * The name of an enum representing the type of the primary key for records
-	 * used in a batch job. The value
-	 * is defined in
+	 * used in a batch job. The value is defined in
 	 * <ul>
 	 * <li>StartOabaMDB</li>
 	 * </ul>
@@ -107,5 +107,56 @@ public interface OabaOperationalPropertyNames {
 	 * </ul>
 	 */
 	String PN_RECORD_ID_TYPE = "RECORD_ID_TYPE";
+
+	/**
+	 * The name of a file storing the cached results of an OABA processing job.
+	 * The value is defined in
+	 * <ul>
+	 * <li>StartOabaMDB</li>
+	 * </ul>
+	 * 
+	 * It is used in OABA and non-OABA classes
+	 * <ul>
+	 * <li>OabaServiceBean (OABA)</li>
+	 * <li>BatchRecordMatcherBean (URM)</li>
+	 * </ul>
+	 */
+	String PN_OABA_CACHED_RESULTS_FILE = "OABA_CACHED_RESULTS";
+
+	/**
+	 * The name of a file storing the cached, pair-wise results of an
+	 * transitivity processing job. The value is defined in
+	 * <ul>
+	 * <li>???</li>
+	 * </ul>
+	 * 
+	 * It is used in transitivity and non-transitivity classes
+	 * <ul>
+	 * <li>TransitivityServiceBean (transitivity)</li>
+	 * <li>BatchMatchAnalyzerBean (URM)</li>
+	 * <li>TransSerializerMsgBean (URM)</li>
+	 * </ul>
+	 */
+	String PN_TRANSITIVITY_CACHED_PAIRS_FILE = "TRANS_CACHED_PAIRS_FILE";
+
+	/**
+	 * A flag used to indicate that a failed or aborted job should clean up
+	 * temporary resources. The value is defined in
+	 * <ul>
+	 * <li>OabaServiceBean</li>
+	 * <li>TransitivityServiceBean</li>
+	 * </ul>
+	 * <p>
+	 * It is used indirectly by various classes via the <code>stopJob</code>
+	 * method of the <code>MessageBeanUtils</code> class.
+	 * </p>
+	 * If the value of this property is a String value that
+	 * <code>Boolean.valueOf(String)</code> interprets as <code>true</code>,
+	 * then the property is considered <em>set</em>. If the property is null
+	 * (i.e. not persistent in the database) or if the value of the property is
+	 * not interpreted as <code>true</code>, then the property is considered
+	 * <em>not set</em>.
+	 */
+	String PN_CLEAR_RESOURCES = "CLEAR_RESOURCES";
 
 }

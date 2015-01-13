@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
+
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -24,6 +26,7 @@ import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
@@ -57,12 +60,15 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 	static {
 		log = Logger.getLogger(BatchMatchAnalyzerBean.class.getName());
 	}
-	
-//	@PersistenceContext (unitName = "oaba")
+
+	// @PersistenceContext (unitName = "oaba")
 	private EntityManager em;
 
-//	@EJB
+	// @EJB
 	private OabaService batchQuery;
+
+	// @EJB
+	private OperationalPropertyController propController;
 
 	public BatchMatchAnalyzerBean() {
 		super();
@@ -293,10 +299,16 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 			
 			UrmStepJob stepJob = Single.getInst().findStepJobByUrmAndIndex(jobID,TRANS_OABA_STEP_INDEX);
 			TransitivityJob trJob = Single.getInst().findTransJobById(em, TransitivityJobEntity.class, stepJob.getStepJobId().longValue());
-				
-			String fileName = trJob.getDescription();
-			fileName  = fileName.substring(0,fileName.lastIndexOf("."));
-			fileName  = fileName+"trans_analysis";
+
+			final String cachedPairsFileName =
+				propController.getJobProperty(trJob,
+						PN_TRANSITIVITY_CACHED_PAIRS_FILE);
+			log.info("Cached transitivity pairs file: " + cachedPairsFileName);
+
+			String fileName =
+				cachedPairsFileName.substring(0,
+						cachedPairsFileName.lastIndexOf("."));
+			fileName = fileName + "trans_analysis";
 			String dirName;
 			int slashInd = fileName.lastIndexOf("\\");
 			if(slashInd ==-1)

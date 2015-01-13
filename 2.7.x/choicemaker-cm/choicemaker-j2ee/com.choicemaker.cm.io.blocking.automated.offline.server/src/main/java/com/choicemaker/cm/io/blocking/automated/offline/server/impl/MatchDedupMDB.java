@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
+
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -99,6 +102,9 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 	@EJB
 	private ServerConfigurationController serverController;
+
+	@EJB
+	private OperationalPropertyController propController;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transitivityQueue")
 	private Queue transitivityQueue;
@@ -194,7 +200,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
 		if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
-			MessageBeanUtils.stopJob(oabaJob, processingEntry);
+			MessageBeanUtils.stopJob(oabaJob, propController, processingEntry);
 
 		} else {
 			processingEntry.setCurrentOabaEvent(OabaEvent.MERGE_DEDUP_MATCHES);
@@ -235,7 +241,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
 		if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
-			MessageBeanUtils.stopJob(oabaJob, processingEntry);
+			MessageBeanUtils.stopJob(oabaJob, propController, processingEntry);
 
 		} else {
 			countMessages = numProcessors;
@@ -253,8 +259,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	 * This method merges all the sorted and dedups matches files from the
 	 * previous step.
 	 */
-	private <T extends Comparable<T>> void mergeMatches(final int num, final long jobId,
-			final BatchJob oabaJob) throws BlockingException {
+	private <T extends Comparable<T>> void mergeMatches(final int num,
+			final long jobId, final BatchJob oabaJob) throws BlockingException {
 
 		long t = System.currentTimeMillis();
 
@@ -266,27 +272,29 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		// the match files start with 1, not 0.
 		for (int i = 1; i <= num; i++) {
 			IMatchRecord2Sink<T> mSink = factory.getSink(i);
-			IComparableSink<MatchRecord2<T>> sink = new ComparableMRSink<T>(mSink);
+			IComparableSink<MatchRecord2<T>> sink =
+				new ComparableMRSink<T>(mSink);
 			tempSinks.add(sink);
 			log.info("merging file " + sink.getInfo());
 		}
 
 		@SuppressWarnings("unchecked")
-		IMatchRecord2Sink<T> mSink = OabaFileUtils.getCompositeMatchSink(oabaJob);
+		IMatchRecord2Sink<T> mSink =
+			OabaFileUtils.getCompositeMatchSink(oabaJob);
 		IComparableSink<MatchRecord2<T>> sink = new ComparableMRSink<T>(mSink);
 
 		IComparableSinkSourceFactory<MatchRecord2<T>> mFactory =
 			new ComparableMRSinkSourceFactory<T>(factory);
 
 		int i = GenericDedupService.mergeFiles(tempSinks, sink, mFactory, true);
-
-		// FIXME HACK
 		log.info("Number of Distinct matches after merge: " + i);
-		oabaJob.setDescription(mSink.getInfo());
-		// END FIXME HACK
+
+		String cachedFileName = mSink.getInfo();
+		log.info("Cached results file: " + cachedFileName);
+		propController.setJobProperty(oabaJob, PN_OABA_CACHED_RESULTS_FILE,
+				cachedFileName);
 
 		t = System.currentTimeMillis() - t;
-
 		log.info("Time in merge dedup " + t);
 	}
 

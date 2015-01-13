@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
+
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -24,6 +26,7 @@ import javax.sql.DataSource;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
@@ -62,6 +65,9 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 
 //	@EJB
 	private OabaService batchQuery;
+
+//	@EJB
+	private OperationalPropertyController propController;
 
 	public BatchRecordMatcherBean() {
 		super();
@@ -125,10 +131,14 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 			if (!job.getStatus().equals(BatchJobStatus.COMPLETED)) {
 				throw new ArgumentException("The job has not completed.");
 			} else {
-				String descr = job.getDescription();
-				int extBegin = descr.lastIndexOf(".");
-				String fileName = descr.substring(0, extBegin);
-				String ext = descr.substring(extBegin + 1);
+				final String cachedResultsFileName =
+					propController.getJobProperty(job,
+							PN_OABA_CACHED_RESULTS_FILE);
+				log.info("Cached OABA results file: " + cachedResultsFileName);
+
+				int extBegin = cachedResultsFileName.lastIndexOf(".");
+				String fileName = cachedResultsFileName.substring(0, extBegin);
+				String ext = cachedResultsFileName.substring(extBegin + 1);
 
 				if (resRc instanceof DbRecordCollection) {
 					String urlString = resRc.getUrl();
@@ -144,6 +154,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 					dbw.writeToDB();
 				} else if (resRc instanceof TextRefRecordCollection) {
 
+					// FIXME HACK use System file separator instead
 					String dirName;
 					int slashInd = fileName.lastIndexOf("\\");
 					if (slashInd == -1)
@@ -155,6 +166,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 						fileName = fileName.substring(slashInd + 1);
 					}
 					log.fine("(" + dirName + ")(" + fileName + ")(" + ext + ")");
+					// END FIXME HACK
 
 					copyResultFromFile(dirName, fileName, ext,
 							(TextRefRecordCollection) resRc);

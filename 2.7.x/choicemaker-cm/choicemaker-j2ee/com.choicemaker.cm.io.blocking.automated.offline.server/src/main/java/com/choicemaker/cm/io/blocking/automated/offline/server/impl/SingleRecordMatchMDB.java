@@ -12,6 +12,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_BLOCKING_FIELD_COUNT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -142,30 +143,31 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 				OabaParameters params =
 					paramsController.findBatchParamsByJobId(jobId);
 				OabaSettings settings =
-					oabaSettingsController.findOabaSettingsByJobId(jobId);				
+					oabaSettingsController.findOabaSettingsByJobId(jobId);
 
-				long t = System.currentTimeMillis();
-					log.info("Starting Sinlge Record Match with maxSingle = "
-							+ settings.getMaxSingle());
+				log.info("Starting Sinlge Record Match with maxSingle = "
+						+ settings.getMaxSingle());
 
 				// final file
 				IMatchRecord2Sink mSink =
-						OabaFileUtils.getCompositeMatchSink(oabaJob);
+					OabaFileUtils.getCompositeMatchSink(oabaJob);
 
 				// run OABA on the staging data set.
+				long t = System.currentTimeMillis();
 				handleStageBatch(data, mSink, oabaJob, params);
-
 				log.info("Time in dedup stage "
 						+ (System.currentTimeMillis() - t));
-				t = System.currentTimeMillis();
 
 				// run single record match between stage and master.
+				t = System.currentTimeMillis();
 				handleSingleMatching(data, mSink, oabaJob, params);
-
 				log.info("Time in single matching "
 						+ (System.currentTimeMillis() - t));
 
-				oabaJob.setDescription(mSink.getInfo());
+				String cachedFileName = mSink.getInfo();
+				log.info("Cached results file: " + cachedFileName);
+				propController.setJobProperty(oabaJob,
+						PN_OABA_CACHED_RESULTS_FILE, cachedFileName);
 
 			} else {
 				log.warning("wrong type: " + inMessage.getClass().getName());

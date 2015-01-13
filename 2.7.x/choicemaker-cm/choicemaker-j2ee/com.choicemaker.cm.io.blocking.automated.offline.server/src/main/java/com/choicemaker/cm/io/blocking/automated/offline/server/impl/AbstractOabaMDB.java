@@ -180,7 +180,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	}
 
 	protected void abortProcessing(OabaJob oabaJob, OabaEventLog processingLog) {
-		MessageBeanUtils.stopJob(oabaJob, processingLog);
+		MessageBeanUtils.stopJob(oabaJob, getPropertyController(), processingLog);
 	}
 
 	protected void updateOabaProcessingStatus(OabaJob job, OabaEvent event,

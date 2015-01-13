@@ -19,9 +19,6 @@ public interface BatchJob extends IControl, Serializable {
 
 	BatchJobRigor DEFAULT_RIGOR = BatchJobRigor.COMPUTED;
 
-	// A HACK
-	String MAGIC_DESCRIPTION_CLEAR = "MAGIC_DESCRIPTION_CLEAR";
-
 	long getId();
 
 	long getBatchParentId();
@@ -54,8 +51,6 @@ public interface BatchJob extends IControl, Serializable {
 
 	Date getTimeStamp(BatchJobStatus status);
 
-//	int getFractionComplete();
-
 	Date getRequested();
 
 	Date getQueued();
@@ -71,11 +66,6 @@ public interface BatchJob extends IControl, Serializable {
 	Date getAborted();
 
 	void setDescription(String description);
-
-//	/** Use markAsXxx() methods instead */
-//	void setStatus(String status);
-
-//	void setFractionComplete(int i);
 
 	void markAsQueued();
 

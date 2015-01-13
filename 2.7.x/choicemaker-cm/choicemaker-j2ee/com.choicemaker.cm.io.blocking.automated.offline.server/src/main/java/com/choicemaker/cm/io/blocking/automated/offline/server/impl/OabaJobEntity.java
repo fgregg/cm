@@ -70,7 +70,7 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 		PrintWriter pw = new PrintWriter(sw);
 		pw.println("OabaJob id: " + job.getId());
 		pw.println("OabaJob extId: " + job.getExternalId());
-		pw.println("OabaJob description: " + job.getDescription());
+// FIXME		pw.println("OabaJob description: " + job.getDescription());
 		pw.println("OabaJob rigor: " + job.getBatchJobRigor());
 		String retVal = sw.toString();
 		return retVal;
