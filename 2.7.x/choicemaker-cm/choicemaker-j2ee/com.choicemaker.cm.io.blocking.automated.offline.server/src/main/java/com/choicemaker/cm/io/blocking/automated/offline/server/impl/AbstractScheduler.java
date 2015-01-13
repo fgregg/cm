@@ -11,6 +11,8 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CURRENT_CHUNK_INDEX;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -237,12 +239,17 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 			// update time trackers
 			if (getLogger().isLoggable(Level.FINE)) {
-				timeWriting[mwd.treeInd - 1] += mwd.timeWriting;
-				inHMLookUp[mwd.treeInd - 1] += mwd.inLookup;
-				inCompare[mwd.treeInd - 1] += mwd.inCompare;
+				timeWriting[mwd.treeIndex - 1] += mwd.timeWriting;
+				inHMLookUp[mwd.treeIndex - 1] += mwd.inLookup;
+				inCompare[mwd.treeIndex - 1] += mwd.inCompare;
 			}
 
-			getLogger().info("Chunk " + mwd.ind + " tree " + mwd.treeInd + " is done.");
+			final String _lastChunk =
+				getPropertyController().getJobProperty(oabaJob,
+						PN_CHUNK_FILE_COUNT);
+			final int lastChunk = Integer.valueOf(_lastChunk);
+			getLogger().info("Chunk " + lastChunk + " tree " + mwd.treeIndex + " is done.");
+			assert lastChunk == currentChunk;
 
 			// Go on to the next chunk
 			if (countMessages == 0) {
@@ -250,13 +257,19 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 					getPropertyController().getJobProperty(oabaJob,
 							PN_CHUNK_FILE_COUNT);
 				final int numChunks = Integer.valueOf(_numChunks);
+
+				final String _numRegularChunks =
+					getPropertyController().getJobProperty(oabaJob,
+							PN_REGULAR_CHUNK_FILE_COUNT);
+				final int numRegularChunks = Integer.valueOf(_numRegularChunks);
+
 				String temp =
 					Integer.toString(numChunks) + DELIM
-							+ Integer.toString(sd.numRegularChunks) + DELIM
+							+ Integer.toString(numRegularChunks) + DELIM
 							+ Integer.toString(currentChunk);
 				status.setCurrentOabaEvent(OabaEvent.MATCHING_DATA, temp);
 
-				getLogger().info("Chunk " + mwd.ind + " is done.");
+				getLogger().info("Chunk " + lastChunk + " is done.");
 
 				currentChunk++;
 
@@ -357,16 +370,19 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 	protected final int recover(OabaJob oabaJob, OabaJobMessage sd,
 			OabaEventLog status) throws BlockingException {
+
 		StringTokenizer stk =
 			new StringTokenizer(status.getCurrentOabaEventInfo(), DELIM);
 
 		final int numChunks = Integer.parseInt(stk.nextToken());
 		getLogger().info("Number of chunks " + numChunks);
-		getPropertyController().setJobProperty(oabaJob,
-				PN_CHUNK_FILE_COUNT,
+		getPropertyController().setJobProperty(oabaJob, PN_CHUNK_FILE_COUNT,
 				String.valueOf(numChunks));
 
-		sd.numRegularChunks = Integer.parseInt(stk.nextToken());
+		final int numRegularChunks = Integer.parseInt(stk.nextToken());
+		getLogger().info("Number of regular chunks " + numChunks);
+		getPropertyController().setJobProperty(oabaJob,
+				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
 
 		int currentChunk = Integer.parseInt(stk.nextToken());
 		return currentChunk;
@@ -399,17 +415,22 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	 * This method sends messages out to matchers beans to work on the current
 	 * chunk.
 	 */
-	protected final void startChunk(final OabaJobMessage sd, int currentChunk) throws BlockingException {
+	protected final void startChunk(final OabaJobMessage sd,
+			final int currentChunk) throws BlockingException {
 
 		getLogger().fine("startChunk " + currentChunk);
 
 		final long jobId = sd.jobID;
-		OabaJob oabaJob = getJobController().findOabaJob(jobId);
-		OabaParameters params =
+		final OabaJob oabaJob = getJobController().findOabaJob(jobId);
+		final OabaParameters params =
 			getParametersController().findBatchParamsByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
-		ImmutableProbabilityModel model =
+		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
+
+		getLogger().info("Current chunk " + currentChunk);
+		getPropertyController().setJobProperty(oabaJob, PN_CURRENT_CHUNK_INDEX,
+				String.valueOf(currentChunk));
 
 		// call to garbage collection
 		long t = System.currentTimeMillis();
@@ -429,13 +450,10 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 		MemoryEstimator.writeMem();
 
-		// send messages to matcher
-		sd.ind = currentChunk;
-
-		// This is because tree ids start with 1 and not 0.
+		// Send messages to matchers. Matcher indices are one-based.
 		for (int i = 1; i <= numProcessors; i++) {
 			OabaJobMessage sd2 = new OabaJobMessage(sd);
-			sd2.treeInd = i;
+			sd2.treeIndex = i;
 			countMessages++;
 			sendToMatcher(sd2);
 			getLogger().info("outstanding messages: " + countMessages);

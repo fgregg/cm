@@ -74,7 +74,7 @@ public class MatcherMDB extends AbstractMatcher {
 		final long jobId = data.jobID;
 		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 		IMatchRecord2Sink mSink =
-			OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(data.treeInd);
+			OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(data.treeIndex);
 		IComparableSink sink = new ComparableMRSink(mSink);
 
 		// write matches to this file.

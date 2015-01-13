@@ -26,13 +26,16 @@ public class MatchWriterMessage implements Serializable {
 
 	public final long jobID;
 
-	/** The chunk id */
-	public int ind;
+	/**
+	 * An index used to split processing across a set of agents that are
+	 * running in parallel.
+	 */
+	int processingIndex;
 
-	/** The ith tree/array file of the chunk */
-	public int treeInd;
-
-	public int numRegularChunks;
+	/**
+	 * An index used to assign a Matcher to set of records within a chunk.
+	 */
+	public int treeIndex;
 
 	/** Indicates the type of staging record id */
 	public RECORD_ID_TYPE stageType;
@@ -60,11 +63,10 @@ public class MatchWriterMessage implements Serializable {
 	/** Constructs MatchWriterMessage from OabaJobMessage */
 	public MatchWriterMessage(OabaJobMessage data) {
 		this.jobID = data.jobID;
-		this.ind = data.ind;
 		this.stageType = data.stageType;
 		this.masterType = data.masterType;
-		this.treeInd = data.treeInd;
-		this.numRegularChunks = data.numRegularChunks;
+		this.processingIndex = data.processingIndex;
+		this.treeIndex = data.treeIndex;
 	}
 
 }

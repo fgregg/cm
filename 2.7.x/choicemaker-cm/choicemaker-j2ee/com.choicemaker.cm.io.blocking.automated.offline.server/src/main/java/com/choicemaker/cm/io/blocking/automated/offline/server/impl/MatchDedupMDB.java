@@ -242,7 +242,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			for (int i = 1; i <= numProcessors; i++) {
 				// send to parallelized match dedup each bean
 				OabaJobMessage d2 = new OabaJobMessage(data);
-				d2.ind = i;
+				d2.processingIndex = i;
 				sendToMatchDedupEach(d2);
 				log.info("outstanding messages: " + i);
 			}

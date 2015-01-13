@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.util.logging.Logger;
 
@@ -125,8 +126,6 @@ public class Chunk2MDB extends AbstractOabaMDB {
 					maxChunk, maxChunkFiles, processingLog, oabaJob);
 		log.info("Chunk service: " + chunkService);
 		chunkService.runService();
-		log.info("Number of regular chunks "
-				+ chunkService.getNumRegularChunks());
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
 		// transitivity needs the translator
@@ -137,7 +136,12 @@ public class Chunk2MDB extends AbstractOabaMDB {
 		getPropertyController().setJobProperty(oabaJob,
 				PN_CHUNK_FILE_COUNT,
 				String.valueOf(numChunks));
-		data.numRegularChunks = chunkService.getNumRegularChunks();
+
+		final int numRegularChunks = chunkService.getNumRegularChunks();
+		log.info("Number of regular chunks " + numRegularChunks);
+		getPropertyController().setJobProperty(oabaJob,
+				PN_REGULAR_CHUNK_FILE_COUNT,
+				String.valueOf(numChunks));
 	}
 
 	@Override

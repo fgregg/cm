@@ -10,6 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CURRENT_CHUNK_INDEX;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.IProbabilityModel;
@@ -94,6 +98,9 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	@EJB
 	private ServerConfigurationController serverController;
+
+	@EJB
+	private OperationalPropertyController propController;
 
 	@Inject
 	private JMSContext jmsContext;
@@ -181,16 +188,20 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 						throw new IllegalArgumentException(s);
 					}
 
+					final String _currentChunk =
+						propController.getJobProperty(oabaJob,
+								PN_CURRENT_CHUNK_INDEX);
+					final int currentChunk = Integer.valueOf(_currentChunk);
 					getLogger().fine(
 							"MatcherMDB In onMessage " + data.jobID + " "
-									+ data.ind + " " + data.treeInd);
+									+ currentChunk + " " + data.treeIndex);
 
 					if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
 						MessageBeanUtils.stopJob(oabaJob, processingLog);
 
 					} else {
 						handleMatching(data, oabaJob, params, oabaSettings,
-								serverConfig);
+								serverConfig, currentChunk);
 					}
 
 				} else {
@@ -216,7 +227,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	protected final void handleMatching(OabaJobMessage data,
 			final OabaJob oabaJob, final OabaParameters params,
-			OabaSettings settings, ServerConfiguration serverConfig)
+			final OabaSettings settings,
+			final ServerConfiguration serverConfig, final int currentChunk)
 			throws BlockingException, RemoteException, NamingException,
 			JMSException {
 
@@ -233,7 +245,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		ChunkDataStore dataStore = ChunkDataStore.getInstance();
 
 		// get the right source
-		IComparisonSetSource source = getSource(data, numProcessors, maxBlock);
+		IComparisonSetSource source =
+			getSource(data, numProcessors, maxBlock, currentChunk);
 
 		getLogger().info(getID() + " matching " + source.getInfo());
 
@@ -259,7 +272,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		}
 
 		getLogger().info(
-				"Chunk: " + data.ind + "_" + data.treeInd + ", sets: " + sets
+				"Chunk: " + currentChunk + "_" + data.treeIndex + ", sets: " + sets
 						+ ", compares: " + compares + ", matches: "
 						+ numMatches);
 
@@ -393,20 +406,24 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	/**
 	 * This method returns the correct tree/array file for this chunk.
-	 *
-	 * @param num
-	 *            - number of processors
 	 */
 	protected final IComparisonSetSource getSource(OabaJobMessage data,
-			int num, int maxBlockSize) throws BlockingException {
+			final int numProcessors, final int maxBlockSize, final int currentChunk)
+			throws BlockingException {
+
 		OabaJob job = getJobController().findOabaJob(data.jobID);
-		if (data.ind < data.numRegularChunks) {
-			// regular
+
+		final String _numRegularChunks =
+			propController.getJobProperty(job, PN_REGULAR_CHUNK_FILE_COUNT);
+		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
+
+		if (currentChunk < numRegularChunks) {
+			// regular chunks
 			ComparisonTreeGroupSinkSourceFactory factory =
 				OabaFileUtils.getComparisonTreeGroupFactory(job,
-						data.stageType, num);
+						data.stageType, numProcessors);
 			IComparisonTreeSource source =
-				factory.getSource(data.ind, data.treeInd);
+				factory.getSource(currentChunk, data.treeIndex);
 			if (source.exists()) {
 				@SuppressWarnings("unchecked")
 				IComparisonSetSource setSource =
@@ -417,12 +434,12 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 						+ source.getInfo());
 			}
 		} else {
-			// oversized
-			int i = data.ind - data.numRegularChunks;
+			// over-sized chunks
+			int i = currentChunk - numRegularChunks;
 			ComparisonArrayGroupSinkSourceFactory factoryOS =
-				OabaFileUtils.getComparisonArrayGroupFactoryOS(job, num);
+				OabaFileUtils.getComparisonArrayGroupFactoryOS(job, numProcessors);
 			IComparisonArraySource sourceOS =
-				factoryOS.getSource(i, data.treeInd);
+				factoryOS.getSource(i, data.treeIndex);
 			if (sourceOS.exists()) {
 				@SuppressWarnings("unchecked")
 				IComparisonSetSource setSource =

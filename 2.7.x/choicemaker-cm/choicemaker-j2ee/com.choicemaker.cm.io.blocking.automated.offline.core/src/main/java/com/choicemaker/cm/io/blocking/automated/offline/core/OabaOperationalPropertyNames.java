@@ -12,8 +12,7 @@ public interface OabaOperationalPropertyNames {
 
 	/**
 	 * The number of blocking fields defined by the matching model used in an
-	 * OABA job.<br/><br/>
-	 * The property is defined in:
+	 * OABA job. The value is defined in
 	 * <ul>
 	 * <li>StartOabaMDB</li>
 	 * <li>SingleRecordMatchMDB</li>
@@ -28,8 +27,8 @@ public interface OabaOperationalPropertyNames {
 	String PN_BLOCKING_FIELD_COUNT = "BLOCKING_FIELD_COUNT";
 
 	/**
-	 * The number of chunk files created by the OABA.<br/><br/>
-	 * The property is defined in:
+	 * The total number of chunk files -- regular and over-sized -- that are
+	 * created by the OABA. The value is defined in
 	 * <ul>
 	 * <li>ChunkMDB</li>
 	 * <li>Chunk2MDB</li>
@@ -44,5 +43,51 @@ public interface OabaOperationalPropertyNames {
 	 * </ul>
 	 */
 	String PN_CHUNK_FILE_COUNT = "CHUNK_FILE_COUNT";
+
+	/**
+	 * The number of regular chunk files created by the OABA. The value is
+	 * defined in
+	 * <ul>
+	 * <li>Chunk2MDB</li>
+	 * </ul>
+	 * 
+	 * It is used in
+	 * <ul>
+	 * <li>AbstractScheduler</li>
+	 * <li>MatchSchedulerMDB</li>
+	 * <li>StartTransitivityMDB</li>
+	 * </ul>
+	 */
+	String PN_REGULAR_CHUNK_FILE_COUNT = "REGULAR_CHUNK_FILE_COUNT";
+
+	/**
+	 * The index of the chunk file that is currently being processed. The value
+	 * is defined in
+	 * <ul>
+	 * <li>AbstractScheduler</li>
+	 * </ul>
+	 * 
+	 * It is used in
+	 * <ul>
+	 * <li>AbstractMatcher</li>
+	 * <li>AbstractScheduler</li>
+	 * </ul>
+	 */
+	String PN_CURRENT_CHUNK_INDEX = "CURRENT_CHUNK_INDEX";
+
+//	/**
+//	 * An index used to split a task across a set of processing agents that are
+//	 * running in parallel. The value is defined in
+//	 * <ul>
+//	 * <li>AbstractScheduler</li>
+//	 * </ul>
+//	 * 
+//	 * It is used in
+//	 * <ul>
+//	 * <li>AbstractMatcher</li>
+//	 * <li>AbstractScheduler</li>
+//	 * </ul>
+//	 */
+//	String PN_PROCESSING_INDEX = "PROCESSING_INDEX";
 
 }

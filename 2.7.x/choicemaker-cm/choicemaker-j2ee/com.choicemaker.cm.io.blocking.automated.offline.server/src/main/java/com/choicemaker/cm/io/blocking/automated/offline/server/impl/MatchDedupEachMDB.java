@@ -76,7 +76,7 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 
 		if (processingLog.getCurrentOabaEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
 			int maxMatches = oabaSettings.getMaxMatches();
-			dedupEach(data.ind, maxMatches, oabaJob);
+			dedupEach(data.processingIndex, maxMatches, oabaJob);
 		}
 
 	}

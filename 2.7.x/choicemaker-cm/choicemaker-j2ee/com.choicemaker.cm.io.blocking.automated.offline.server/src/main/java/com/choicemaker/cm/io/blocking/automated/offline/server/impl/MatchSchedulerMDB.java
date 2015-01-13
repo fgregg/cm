@@ -11,6 +11,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -166,6 +167,12 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 			getPropertyController()
 					.getJobProperty(oabaJob, PN_CHUNK_FILE_COUNT);
 		final int numChunks = Integer.valueOf(_numChunks);
+
+		final String _numRegularChunks =
+			getPropertyController().getJobProperty(oabaJob,
+					PN_REGULAR_CHUNK_FILE_COUNT);
+		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
+
 		IChunkDataSinkSourceFactory stageFactory =
 			OabaFileUtils.getStageDataFactory(oabaJob, model);
 		IChunkDataSinkSourceFactory masterFactory =
@@ -177,14 +184,14 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 		ComparisonTreeGroupSinkSourceFactory factory =
 			OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, sd.stageType,
 					numProcessors);
-		for (int i = 0; i < sd.numRegularChunks; i++) {
+		for (int i = 0; i < numRegularChunks; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
 				IComparisonTreeSource source = factory.getSource(i, j);
 				source.delete();
 			}
 		}
 
-		int numOS = numChunks - sd.numRegularChunks;
+		final int numOS = numChunks - numRegularChunks;
 
 		// remove the oversized array files
 		ComparisonArrayGroupSinkSourceFactory factoryOS =

@@ -11,6 +11,7 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.io.Serializable;
 import java.util.logging.Logger;
@@ -213,8 +214,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 					translator.getSplitIndex(), transformerO, null, maxChunk,
 					numFiles, status, transJob);
 		chunkService.runService();
-
-		OabaJobMessage data = new OabaJobMessage(jobId);
+		log.info( "Done creating chunks " + chunkService.getTimeElapsed());
 
 		final int numChunks = chunkService.getNumChunks();
 		log.info("Number of chunks " + numChunks);
@@ -222,16 +222,17 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 				PN_CHUNK_FILE_COUNT,
 				String.valueOf(numChunks));
 
-		//this is important because in transitivity, there is only OS chunks.
-		data.numRegularChunks = 0;
-
-		log.info( "Number of chunks " + chunkService.getNumChunks());
-		log.info( "Done creating chunks " + chunkService.getTimeElapsed());
+		//this is important because in transitivity, there are only OS chunks.
+		final int numRegularChunks = 0;
+		log.info("Number of regular chunks " + numChunks);
+		propController.setJobProperty(transJob,
+				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
 
 		//clean up translator
 		//translator.cleanUp();
 
-		log.info("send to matcher");
+		log.info("send to transitivity matcher");
+		OabaJobMessage data = new OabaJobMessage(jobId);
 		sendToTransMatch (data);
 		sendToUpdateTransStatus (data.jobID, 30);
 	}

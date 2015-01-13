@@ -12,7 +12,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.data;
 
 import java.io.Serializable;
 
-
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 //import com.choicemaker.cm.core.SerializableRecordSource;
 //import com.choicemaker.cm.io.blocking.automated.offline.data.Status;
@@ -32,7 +31,7 @@ public class OabaJobMessage implements Serializable {
 
 //	public int numBlockFields;
 //	public int numChunks;
-	public int numRegularChunks;
+//	public int numRegularChunks;
 
 	// indicates the type of staging record id
 	public RECORD_ID_TYPE stageType;
@@ -43,11 +42,15 @@ public class OabaJobMessage implements Serializable {
 	public ValidatorBase validator;
 
 	/**
-	 * This tells matcher which chunk to process.
+	 * An index used to split processing across a set of agents that are
+	 * running in parallel.
 	 */
-	public int ind;
-	// the ith tree/array file of the chunk
-	public int treeInd;
+	public int processingIndex;
+
+	/**
+	 * An index used to assign a Matcher to set of records within a chunk.
+	 */
+	public int treeIndex;
 
 	// constructor
 	public OabaJobMessage(long jobId) {
@@ -57,22 +60,20 @@ public class OabaJobMessage implements Serializable {
 	// copy constructor
 	public OabaJobMessage(OabaJobMessage data) {
 		this.jobID = data.jobID;
-		this.ind = data.ind;
 		this.stageType = data.stageType;
 		this.masterType = data.masterType;
-		this.treeInd = data.treeInd;
-		this.numRegularChunks = data.numRegularChunks;
+		this.processingIndex = data.processingIndex;
+		this.treeIndex = data.treeIndex;
 		this.validator = data.validator;
 	}
 
 	// create MatchWriterMessage from OabaJobMessage
 	public OabaJobMessage(MatchWriterMessage data) {
 		this.jobID = data.jobID;
-		this.ind = data.ind;
 		this.stageType = data.stageType;
 		this.masterType = data.masterType;
-		this.treeInd = data.treeInd;
-		this.numRegularChunks = data.numRegularChunks;
+		this.processingIndex = data.processingIndex;
+		this.treeIndex = data.treeIndex;
 	}
 
 	@Override
