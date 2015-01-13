@@ -168,7 +168,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	public IRecordIdTranslator2<?> getRecordIdTranslator(BatchJob job)
 			throws BlockingException {
 		RecordIdSinkSourceFactory idFactory = getTransIDFactory(job);
-		RecordIdTranslator2 translator = new RecordIdTranslator2(idFactory);
+		RecordIdTranslator3 translator = new RecordIdTranslator3(idFactory);
 		return translator;
 	}
 
@@ -180,7 +180,7 @@ public class RecordIdControllerBean implements RecordIdController {
 			throw new IllegalArgumentException("null OABA job");
 		}
 		RecordIdSinkSourceFactory idFactory = getTransIDFactory(job);
-		IRecordIdTranslator2<?> translator = new RecordIdTranslator2(idFactory);
+		IRecordIdTranslator2<?> translator = new RecordIdTranslator3(idFactory);
 
 		// Cleanup any files on disk
 		translator.cleanUp();
