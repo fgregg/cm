@@ -49,7 +49,7 @@ public class MatchRecordUtils {
 				@SuppressWarnings("unchecked")
 				final T qid = (T) q.getId();
 				@SuppressWarnings("unchecked")
-				final T mid = (T) q.getId();
+				final T mid = (T) m.getId();
 				final T i1;
 				final T i2;
 				if (isStage && mid.compareTo(qid) < 0) {
