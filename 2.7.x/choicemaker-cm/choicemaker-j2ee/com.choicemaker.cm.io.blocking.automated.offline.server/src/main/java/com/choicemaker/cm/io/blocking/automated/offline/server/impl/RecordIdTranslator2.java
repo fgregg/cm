@@ -98,12 +98,12 @@ class RecordIdTranslator2 implements IRecordIdTranslator2 {
 		this.range2[1] = null;
 	}
 
-	@Override
+//	@Override
 	public Comparable[] getRange1() {
 		return range1;
 	}
 
-	@Override
+//	@Override
 	public Comparable[] getRange2() {
 		return range2;
 	}
@@ -114,7 +114,7 @@ class RecordIdTranslator2 implements IRecordIdTranslator2 {
 	}
 
 	@Override
-	public RECORD_ID_TYPE getDataType() {
+	public RECORD_ID_TYPE getRecordIdType() {
 		return dataType;
 	}
 
@@ -194,13 +194,13 @@ class RecordIdTranslator2 implements IRecordIdTranslator2 {
 		// figure out the id type for the first file
 		if (currentIndex == 0) {
 			setDataType(RECORD_ID_TYPE.fromInstance(o));
-			sink1.setRecordIDType(getDataType());
+			sink1.setRecordIDType(getRecordIdType());
 		}
 
 		// figure out the id type for the second file
 		if (currentIndex == splitIndex) {
 			setDataType(RECORD_ID_TYPE.fromInstance(o));
-			sink2.setRecordIDType(getDataType());
+			sink2.setRecordIDType(getRecordIdType());
 		}
 
 		if (splitIndex == 0) {
@@ -316,7 +316,7 @@ class RecordIdTranslator2 implements IRecordIdTranslator2 {
 
 	@Override
 	public String toString() {
-		return "RecordIdTranslator2 [dataType=" + getDataType() + ", range1="
+		return "RecordIdTranslator2 [dataType=" + getRecordIdType() + ", range1="
 				+ Arrays.toString(range1) + ", range2="
 				+ Arrays.toString(range2) + ", currentIndex=" + currentIndex
 				+ ", splitIndex=" + splitIndex + "]";

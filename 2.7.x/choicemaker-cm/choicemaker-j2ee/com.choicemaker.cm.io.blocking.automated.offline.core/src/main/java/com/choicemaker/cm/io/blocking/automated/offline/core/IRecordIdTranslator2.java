@@ -25,19 +25,19 @@ import com.choicemaker.cm.core.BlockingException;
  */
 public interface IRecordIdTranslator2<T extends Comparable<T>> {
 
-	/**
-	 * This method returns the range of record ids in the first source.
-	 * 
-	 * @return Comparable[0] is min and Comparable[1] is max
-	 */
-	public T[] getRange1();
-
-	/**
-	 * This method returns the range of record ids in the second source.
-	 * 
-	 * @return Comparable[0] is min and Comparable[1] is max
-	 */
-	public T[] getRange2();
+//	/**
+//	 * This method returns the range of record ids in the first source.
+//	 * 
+//	 * @return Comparable[0] is min and Comparable[1] is max
+//	 */
+//	public T[] getRange1();
+//
+//	/**
+//	 * This method returns the range of record ids in the second source.
+//	 * 
+//	 * @return Comparable[0] is min and Comparable[1] is max
+//	 */
+//	public T[] getRange2();
 
 	/**
 	 * This returns the internal id at which the second source begins. This is 0
@@ -102,18 +102,18 @@ public interface IRecordIdTranslator2<T extends Comparable<T>> {
 	public Comparable<?> reverseLookup(int internalID);
 
 	/**
-	 * This returns an List of record IDs from the first source. Usually, the
+	 * This returns a List of record IDs from the first source. Usually, the
 	 * staging source.
 	 */
 	public List<T> getList1();
 
 	/**
-	 * This returns an List of record IDs from the second source. Usually, the
+	 * This returns a List of record IDs from the second source. Usually, the
 	 * master source.
 	 */
 	public List<T> getList2();
 
 	/** Returns the type of record identifier handled by this translator */
-	RECORD_ID_TYPE getDataType();
+	RECORD_ID_TYPE getRecordIdType();
 
 }

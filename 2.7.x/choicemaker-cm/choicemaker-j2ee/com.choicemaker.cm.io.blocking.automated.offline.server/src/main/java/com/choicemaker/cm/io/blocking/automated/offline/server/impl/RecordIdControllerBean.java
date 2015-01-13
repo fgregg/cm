@@ -259,7 +259,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		translator.initReverseTranslation();
 
 		// Check the data type of the record ids handled by the translator
-		final RECORD_ID_TYPE dataType = translator.getDataType();
+		final RECORD_ID_TYPE dataType = translator.getRecordIdType();
 		if (dataType == null) {
 			String msg =
 				"Invalid translator: null record-id type. "
