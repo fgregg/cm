@@ -103,68 +103,72 @@ public class MatchRecord2<T extends Comparable<T>> implements
 	// -- Identity
 
 	public int compareTo(MatchRecord2<T> mr) {
-		int ret = 0;
+		final int GREATER_THAN = 1;
+		final int LESS_THAN = -1;
+		final int EQUALS = 0;
 
-		if (recordID1.compareTo(mr.recordID1) < 0)
-			ret = -1;
-		else if (recordID1.compareTo(mr.recordID1) > 0)
-			ret = 1;
+		int ret = EQUALS;
+		if (recordID1.compareTo(mr.recordID1) < EQUALS)
+			ret = LESS_THAN;
+		else if (recordID1.compareTo(mr.recordID1) > EQUALS)
+			ret = GREATER_THAN;
 		else {
-			assert recordID1.compareTo(mr.recordID1) == 0;
-			assert ret == 0;
+			assert recordID1.compareTo(mr.recordID1) == EQUALS;
+			assert ret == EQUALS;
 
-			if (recordID2.compareTo(mr.recordID2) < 0)
-				ret = -1;
-			else if (recordID2.compareTo(mr.recordID2) > 0)
-				ret = 1;
+			if (recordID2.compareTo(mr.recordID2) < EQUALS)
+				ret = LESS_THAN;
+			else if (recordID2.compareTo(mr.recordID2) > EQUALS)
+				ret = GREATER_THAN;
 			else {
-				assert recordID2.compareTo(mr.recordID2) == 0;
-				assert ret == 0;
+				assert recordID2.compareTo(mr.recordID2) == EQUALS;
+				assert ret == EQUALS;
 
 				if (record2Source < mr.record2Source)
-					ret = -1;
+					ret = LESS_THAN;
 				else if (record2Source > mr.record2Source)
-					ret = 1;
+					ret = GREATER_THAN;
 				else {
 					assert record2Source == mr.record2Source;
-					assert ret == 0;
+					assert ret == EQUALS;
 
 					if (probability < mr.probability)
-						ret = -1;
+						ret = LESS_THAN;
 					else if (probability > mr.probability)
-						ret = 1;
+						ret = GREATER_THAN;
 					else {
 						assert probability == mr.probability;
-						assert ret == 0;
+						assert ret == EQUALS;
 
 						if (matchType < mr.matchType)
-							ret = -1;
+							ret = LESS_THAN;
 						else if (matchType > mr.matchType)
-							ret = 1;
+							ret = GREATER_THAN;
 						else {
 							assert matchType == mr.matchType;
-							assert ret == 0;
+							assert ret == EQUALS;
 
 							if (notes == null && mr.notes == null)
-								ret = 0;
+								ret = EQUALS;
 							else if (notes == null && mr.notes != null)
-								ret = -1;
+								ret = LESS_THAN;
 							else if (notes != null && mr.notes == null)
-								ret = 1;
-							else if (notes.compareTo(mr.notes) < 0)
-								ret = -1;
-							else if (notes.compareTo(mr.notes) > 0)
-								ret = 1;
+								ret = GREATER_THAN;
+							else if (notes.compareTo(mr.notes) < EQUALS)
+								ret = LESS_THAN;
+							else if (notes.compareTo(mr.notes) > EQUALS)
+								ret = GREATER_THAN;
 							else {
-								assert notes.compareTo(mr.notes) == 0;
-								assert ret == 0;
+								assert notes.compareTo(mr.notes) == EQUALS;
+								assert ret == EQUALS;
 							}
 						}
 					}
 				}
 			}
 		}
-		assert (ret == 0 && this.equals(mr)) || (ret != 0 && !this.equals(mr));
+		assert (ret == EQUALS && this.equals(mr))
+				|| (ret != EQUALS && !this.equals(mr));
 		return ret;
 	}
 
