@@ -20,8 +20,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
@@ -48,8 +48,8 @@ public class MatchToBlockTransformer2 {
 	private IMatchRecord2Source mSource;
 	private IMatchRecord2SinkSourceFactory mFactory;
 	private IBlockSink blockSink;
-	private IRecordIDTranslator2 translator;
-	private IRecordIDSink idSink;
+	private IRecordIdTranslator2 translator;
+	private IRecordIdSink idSink;
 
 	//this is the number of records in the translator file.
 	private int numRecords = 0;
@@ -71,7 +71,7 @@ public class MatchToBlockTransformer2 {
 	 */
 	public MatchToBlockTransformer2 (IMatchRecord2Source mSource,
 		IMatchRecord2SinkSourceFactory mFactory,
-		IRecordIDTranslator2 translator, IBlockSink blockSink, IRecordIDSink idSink) {
+		IRecordIdTranslator2 translator, IBlockSink blockSink, IRecordIdSink idSink) {
 
 		this.mSource = mSource;
 		this.mFactory = mFactory;

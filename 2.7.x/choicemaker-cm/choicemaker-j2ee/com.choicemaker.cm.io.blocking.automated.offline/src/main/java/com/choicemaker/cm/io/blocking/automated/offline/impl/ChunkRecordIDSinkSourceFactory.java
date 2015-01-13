@@ -14,9 +14,9 @@ import java.io.File;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
 
 /**
  * This object handles producing ChunkRowSinks. Given a base file name, it
@@ -26,7 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSourc
  *
  */
 public class ChunkRecordIDSinkSourceFactory implements
-		IChunkRecordIDSinkSourceFactory {
+		IChunkRecordIdSinkSourceFactory {
 
 	private String fileDir;
 	private String chunkBase;
@@ -55,14 +55,14 @@ public class ChunkRecordIDSinkSourceFactory implements
 	 * This creates the next sink in seqence. It creates a binary file, and no
 	 * append.
 	 */
-	public IChunkRecordIDSink getNextSink() throws BlockingException {
+	public IChunkRecordIdSink getNextSink() throws BlockingException {
 		indSink++;
 		return new ChunkRecordIDSink(fileDir + chunkBase + indSink + "." + ext,
 				EXTERNAL_DATA_FORMAT.STRING);
 	}
 
 	/** This creates the next source in seqence. It creates a binary file. */
-	public IChunkRecordIDSource getNextSource() throws BlockingException {
+	public IChunkRecordIdSource getNextSource() throws BlockingException {
 		indSource++;
 		return new ChunkRecordIDSource(fileDir + chunkBase + indSource + "."
 				+ ext, EXTERNAL_DATA_FORMAT.STRING);
@@ -84,24 +84,24 @@ public class ChunkRecordIDSinkSourceFactory implements
 		return indSource;
 	}
 
-	public IChunkRecordIDSource getSource(IChunkRecordIDSink sink)
+	public IChunkRecordIdSource getSource(IChunkRecordIdSink sink)
 			throws BlockingException {
 		return new ChunkRecordIDSource(sink.getInfo(),
 				EXTERNAL_DATA_FORMAT.STRING);
 	}
 
-	public IChunkRecordIDSink getSink(IChunkRecordIDSource source)
+	public IChunkRecordIdSink getSink(IChunkRecordIdSource source)
 			throws BlockingException {
 		return new ChunkRecordIDSink(source.getInfo(),
 				EXTERNAL_DATA_FORMAT.STRING);
 	}
 
-	public void removeSink(IChunkRecordIDSink sink) throws BlockingException {
+	public void removeSink(IChunkRecordIdSink sink) throws BlockingException {
 		File f = new File(sink.getInfo());
 		f.delete();
 	}
 
-	public void removeSource(IChunkRecordIDSource source)
+	public void removeSource(IChunkRecordIdSource source)
 			throws BlockingException {
 		File f = new File(source.getInfo());
 		f.delete();

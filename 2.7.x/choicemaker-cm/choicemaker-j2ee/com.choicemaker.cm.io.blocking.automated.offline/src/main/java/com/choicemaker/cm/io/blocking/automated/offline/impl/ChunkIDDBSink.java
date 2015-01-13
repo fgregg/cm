@@ -18,13 +18,13 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
 
 /**
  * @author pcheung
  *
  */
-public class ChunkIDDBSink implements IChunkRecordIDSink {
+public class ChunkIdDBSink implements IChunkRecordIdSink {
 	
 	public static final String tableName = "CMT_CHUNK_ID";
 	public static final String groupName = "GROUP_ID";
@@ -59,7 +59,7 @@ public class ChunkIDDBSink implements IChunkRecordIDSink {
 	 * @param datasource - DB datasource
 	 * @param groupID - unique identifier for this object.
 	 */
-	public ChunkIDDBSink (DataSource ds, int groupID) throws BlockingException {
+	public ChunkIdDBSink (DataSource ds, int groupID) throws BlockingException {
 		this.ds = ds;
 		this.groupID = groupID;
 		
@@ -84,7 +84,7 @@ public class ChunkIDDBSink implements IChunkRecordIDSink {
 	
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink#writeRecordID(long)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink#writeRecordID(long)
 	 */
 	public void writeRecordID(long recID) throws BlockingException {
 /*		try {

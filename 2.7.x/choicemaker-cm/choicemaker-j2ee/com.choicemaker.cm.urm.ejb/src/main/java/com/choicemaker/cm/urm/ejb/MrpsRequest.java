@@ -210,7 +210,7 @@ public class MrpsRequest implements IMrpsRequest {
 			throw new Error("not yet implemented");
 //			String stagingModelName = this.getStagingModelName(em);
 //			this.matchPairs =
-//					OabaFileUtils.getCompositeMatchSource(this.oabaJobId.longValue());
+//					TransitivityFileUtils.getCompositeMatchSource(this.oabaJobId.longValue());
 //			retVal = this.matchPairs;
 //		}
 //		// Postcondition

@@ -32,7 +32,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
-import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIDTranslator;
+import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIdTranslator;
 import com.choicemaker.util.IntArrayList;
 
 /**
@@ -65,7 +65,7 @@ public class RecValService {
 	private IRecValSinkSourceFactory rvFactory;
 
 	//	this is the input record id to internal id translator
-	private RecordIDTranslator translator;
+	private RecordIdTranslator translator;
 
 	private OabaEventLog status;
 
@@ -87,7 +87,7 @@ public class RecValService {
 	 * @param status - current status of the system
 	 */
 	public RecValService (RecordSource stage, RecordSource master, IProbabilityModel model,
-		IRecValSinkSourceFactory rvFactory, RecordIDTranslator translator,
+		IRecValSinkSourceFactory rvFactory, RecordIdTranslator translator,
 		String blockName, String dbConf, OabaEventLog status) {
 
 		this.stage = stage;

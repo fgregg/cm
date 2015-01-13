@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.server.data;
+package com.choicemaker.cm.transitivity.server.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2Composi
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.SuffixTreeSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.SuffixTreeSource;
 import com.choicemaker.util.SystemPropertyUtils;
@@ -52,7 +51,7 @@ import com.choicemaker.util.SystemPropertyUtils;
  *
  */
 @SuppressWarnings("rawtypes")
-public class OabaFileUtils implements Serializable {
+class TransitivityFileUtils implements Serializable {
 
 	static final long serialVersionUID = 271;
 
@@ -189,7 +188,7 @@ public class OabaFileUtils implements Serializable {
 		return retVal;
 	}
 
-	public static String getWorkingDir(BatchJob job) {
+	/* FIXME KEEP */	public static String getWorkingDir(BatchJob job) {
 		if (job == null) {
 			throw new IllegalArgumentException("null job");
 		}
@@ -201,22 +200,22 @@ public class OabaFileUtils implements Serializable {
 		return retVal;
 	}
 
-	public static final String BASENAME_RECORDID_TRANSLATOR = "translator";
-
-	/**
-	 * This gets the factory that is used to get translator id sink and source.
-	 */
-	public static RecordIDSinkSourceFactory getTransIDFactory(BatchJob job) {
-		String wd = getWorkingDir(job);
-		return new RecordIDSinkSourceFactory(wd, BASENAME_RECORDID_TRANSLATOR, BINARY_SUFFIX);
-	}
-
-	public static final String BASENAME_RECORDID_STORE = "recordID";
-
-	public static RecordIDSinkSourceFactory getRecordIDFactory(BatchJob job) {
-		String wd = getWorkingDir(job);
-		return new RecordIDSinkSourceFactory(wd, BASENAME_RECORDID_STORE, TEXT_SUFFIX);
-	}
+//	public static final String BASENAME_RECORDID_TRANSLATOR = "translator";
+//
+//	/**
+//	 * This gets the factory that is used to get translator id sink and source.
+//	 */
+//	public static RecordIdSinkSourceFactory getTransIDFactory(BatchJob job) {
+//		String wd = getWorkingDir(job);
+//		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_TRANSLATOR, BINARY_SUFFIX);
+//	}
+//
+//	public static final String BASENAME_RECORDID_STORE = "recordID";
+//
+//	public static RecordIdSinkSourceFactory getRecordIDFactory(BatchJob job) {
+//		String wd = getWorkingDir(job);
+//		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE, TEXT_SUFFIX);
+//	}
 
 	public static final String BASENAME_CHUNKSTAGE_ROW_STORE = "chunkstagerow";
 
@@ -390,7 +389,7 @@ public class OabaFileUtils implements Serializable {
 
 	public static final String BASENAME_MATCH_TEMP_STORE = "matchtemp";
 
-	public static MatchRecord2SinkSourceFactory getMatchTempFactory(BatchJob job) {
+/* FIXME KEEP */	public static MatchRecord2SinkSourceFactory getMatchTempFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
 		return new MatchRecord2SinkSourceFactory(wd, BASENAME_MATCH_TEMP_STORE, "txt");
 	}
@@ -454,14 +453,14 @@ public class OabaFileUtils implements Serializable {
 		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX, MAX_FILE_SIZE);
 	}
 
-	public static IMatchRecord2Source getCompositeTransMatchSource(BatchJob job) {
+	/* FIXME KEEP */	public static IMatchRecord2Source getCompositeTransMatchSource(BatchJob job) {
 		String fileName = getCompositeTransMatchFileName(job);
 		return new MatchRecord2CompositeSource(fileName, TEXT_SUFFIX);
 	}
 
-	public static final String BASENAME_TRANSMATCH_STORE_INDEXED = "transMatch_";
+	/* FIXME KEEP */	public static final String BASENAME_TRANSMATCH_STORE_INDEXED = "transMatch_";
 
-	protected static String getCompositeTransMatchFileName(BatchJob job) {
+	/* FIXME KEEP */	protected static String getCompositeTransMatchFileName(BatchJob job) {
 		String wd = getWorkingDir(job);
 		assert wd.endsWith(FILE_SEPARATOR);
 		String id = formatJobId(job.getId());
@@ -492,7 +491,7 @@ public class OabaFileUtils implements Serializable {
 		return new BlockSinkSourceFactory(wd, "transBlocks", "dat");
 	}
 
-	private OabaFileUtils() {
+	private TransitivityFileUtils() {
 	}
 
 }

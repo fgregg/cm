@@ -44,7 +44,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecordSource;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 //import javax.naming.InitialContext;

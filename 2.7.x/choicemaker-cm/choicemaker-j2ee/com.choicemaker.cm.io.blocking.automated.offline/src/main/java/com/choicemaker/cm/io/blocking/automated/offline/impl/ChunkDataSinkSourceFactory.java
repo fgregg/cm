@@ -98,7 +98,7 @@ public class ChunkDataSinkSourceFactory implements IChunkDataSinkSourceFactory {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkFactory#removeSink(com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkFactory#removeSink(com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink)
 	 */
 	public void removeAllSinks () throws BlockingException {
 		for (int i=0; i< removeFiles.size(); i++) {

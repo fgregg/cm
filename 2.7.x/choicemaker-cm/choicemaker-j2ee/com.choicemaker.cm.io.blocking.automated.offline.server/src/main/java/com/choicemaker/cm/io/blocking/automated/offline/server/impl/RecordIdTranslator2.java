@@ -8,16 +8,16 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.impl;
+package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
@@ -31,14 +31,14 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-public class RecordIDTranslator2 implements IRecordIDTranslator2 {
+class RecordIdTranslator2 implements IRecordIdTranslator2 {
 
-	private final IRecordIDSinkSourceFactory rFactory;
+	private final IRecordIdSinkSourceFactory rFactory;
 
 	// These two files store the input record ids. The first record id
 	// corresponds to internal id 0, etc.
-	private final IRecordIDSink sink1;
-	private final IRecordIDSink sink2;
+	private final IRecordIdSink sink1;
+	private final IRecordIdSink sink2;
 
 	// This is an indicator of the class type of record id.
 	private RECORD_ID_TYPE dataType;
@@ -74,7 +74,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 	private ArrayList list1;
 	private ArrayList list2;
 
-	public RecordIDTranslator2(IRecordIDSinkSourceFactory rFactory)
+	RecordIdTranslator2(IRecordIdSinkSourceFactory rFactory)
 			throws BlockingException {
 		if (rFactory == null) {
 			throw new IllegalArgumentException("null factory");
@@ -156,7 +156,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 
 	@Override
 	public void recover() throws BlockingException {
-		IRecordIDSource source = rFactory.getSource(sink1);
+		IRecordIdSource source = rFactory.getSource(sink1);
 		currentIndex = -1;
 		splitIndex = 0;
 		if (source.exists()) {
@@ -250,7 +250,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 			else
 				list1 = new ArrayList(splitIndex);
 
-			IRecordIDSource source1 = rFactory.getSource(sink1);
+			IRecordIdSource source1 = rFactory.getSource(sink1);
 			source1.open();
 
 			while (source1.hasNext()) {
@@ -262,7 +262,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 			// Read the second source if there is one
 			if (splitIndex > 0) {
 				list2 = new ArrayList(currentIndex - splitIndex + 1);
-				IRecordIDSource source2 = rFactory.getSource(sink2);
+				IRecordIdSource source2 = rFactory.getSource(sink2);
 				source2.open();
 
 				while (source2.hasNext()) {
@@ -316,7 +316,7 @@ public class RecordIDTranslator2 implements IRecordIDTranslator2 {
 
 	@Override
 	public String toString() {
-		return "RecordIDTranslator2 [dataType=" + getDataType() + ", range1="
+		return "RecordIdTranslator2 [dataType=" + getDataType() + ", range1="
 				+ Arrays.toString(range1) + ", range2="
 				+ Arrays.toString(range2) + ", currentIndex=" + currentIndex
 				+ ", splitIndex=" + splitIndex + "]";

@@ -16,7 +16,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
-import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIDTranslator;
+import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIdTranslator;
 
 /**
  * @author pcheung
@@ -25,7 +25,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.RecordIDTranslator
  */
 public class ReverseTranslateService {
 
-	private RecordIDTranslator translator;
+	private RecordIdTranslator translator;
 	
 	private IBlockSource bSource;
 	private IBlockSink bSink;
@@ -46,7 +46,7 @@ public class ReverseTranslateService {
 	 * @param osSource - input oversized block source with internal ids
 	 * @param osSink - output oversized block sink with record ids
 	 */
-	public ReverseTranslateService (RecordIDTranslator translator, 
+	public ReverseTranslateService (RecordIdTranslator translator, 
 		IBlockSource bSource, IBlockSink bSink,
 		IBlockSource osSource, IBlockSink osSink, OabaEventLog status) {
 			

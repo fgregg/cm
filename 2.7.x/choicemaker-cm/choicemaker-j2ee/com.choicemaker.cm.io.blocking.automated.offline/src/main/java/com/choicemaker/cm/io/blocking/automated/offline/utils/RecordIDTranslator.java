@@ -16,9 +16,9 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
 import com.choicemaker.util.LongArrayList;
 
 /**
@@ -32,13 +32,13 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
-public class RecordIDTranslator {
+public class RecordIdTranslator {
 	
-	private IChunkRecordIDSinkSourceFactory cFactory;
+	private IChunkRecordIdSinkSourceFactory cFactory;
 	
 	//List of files to store the mapping of input record id to internal record id.
-	private IChunkRecordIDSink sink1;
-	private IChunkRecordIDSink sink2;
+	private IChunkRecordIdSink sink1;
+	private IChunkRecordIdSink sink2;
 	
 	private LongArrayList list1;
 	private LongArrayList list2;
@@ -69,7 +69,7 @@ public class RecordIDTranslator {
 	
 	
 	
-	public RecordIDTranslator (IChunkRecordIDSinkSourceFactory cFactory) throws BlockingException {
+	public RecordIdTranslator (IChunkRecordIdSinkSourceFactory cFactory) throws BlockingException {
 		this.cFactory = cFactory;
 		
 		sink1 = cFactory.getNextSink();
@@ -106,7 +106,7 @@ public class RecordIDTranslator {
 	 * @throws IOException
 	 */
 	public void recover () throws BlockingException {
-		IChunkRecordIDSource source = cFactory.getSource(sink1);
+		IChunkRecordIdSource source = cFactory.getSource(sink1);
 		currentIndex = -1;
 		splitIndex = 0;		
 		if (source.exists()) {
@@ -196,7 +196,7 @@ public class RecordIDTranslator {
 			if (splitIndex == 0) list1 = new LongArrayList (currentIndex);
 			else list1 = new LongArrayList (splitIndex);
 		
-			IChunkRecordIDSource source1 = cFactory.getSource(sink1);
+			IChunkRecordIdSource source1 = cFactory.getSource(sink1);
 			source1.open();
 		
 			while (source1.hasNext()) {
@@ -208,7 +208,7 @@ public class RecordIDTranslator {
 			//Read the second source if there is one
 			if (splitIndex > 0) {
 				list2 = new LongArrayList (currentIndex - splitIndex + 1);
-				IChunkRecordIDSource source2 = cFactory.getSource(sink2);
+				IChunkRecordIdSource source2 = cFactory.getSource(sink2);
 				source2.open();
 		
 				while (source2.hasNext()) {

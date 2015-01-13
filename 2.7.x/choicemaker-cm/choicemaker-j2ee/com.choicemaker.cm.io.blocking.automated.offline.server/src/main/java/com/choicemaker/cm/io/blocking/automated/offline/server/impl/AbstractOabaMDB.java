@@ -36,6 +36,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 
@@ -69,6 +70,9 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	@EJB
 	private RecordSourceController rsController;
+	
+	@EJB
+	private RecordIdController ridController;
 	
 	@EJB
 	private OperationalPropertyController propController;
@@ -105,6 +109,10 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	protected final RecordSourceController getRecordSourceController() {
 		return rsController;
+	}
+	
+	protected final RecordIdController getRecordIdController() {
+		return ridController;
 	}
 
 	protected final OperationalPropertyController getPropertyController() {

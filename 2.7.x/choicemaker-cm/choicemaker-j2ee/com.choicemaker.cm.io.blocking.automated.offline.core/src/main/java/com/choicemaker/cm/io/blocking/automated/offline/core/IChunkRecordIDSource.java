@@ -17,5 +17,5 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  * @author pcheung
  *
  */
-public interface IChunkRecordIDSource extends ISource<Long> {
+public interface IChunkRecordIdSource extends ISource<Long> {
 }

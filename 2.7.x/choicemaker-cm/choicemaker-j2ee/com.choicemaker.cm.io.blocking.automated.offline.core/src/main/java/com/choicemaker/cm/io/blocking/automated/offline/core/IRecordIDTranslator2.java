@@ -23,7 +23,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IRecordIDTranslator2<T extends Comparable<T>> {
+public interface IRecordIdTranslator2<T extends Comparable<T>> {
 
 	/**
 	 * This method returns the range of record ids in the first source.

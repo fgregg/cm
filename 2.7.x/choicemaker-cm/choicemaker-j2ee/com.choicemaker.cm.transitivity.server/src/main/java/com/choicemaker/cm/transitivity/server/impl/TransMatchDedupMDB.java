@@ -183,7 +183,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 
 		throw new Error("not yet implemented");
 //		final long jobID = oabaJob.getId();
-//		OabaFileUtils oabaConfig = new OabaFileUtils(jobID);
+//		TransitivityFileUtils oabaConfig = new TransitivityFileUtils(jobID);
 //
 //		// final sink
 //		IMatchRecord2Sink finalSink =

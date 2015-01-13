@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.impl;
+package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.Constants.LINE_SEPARATOR;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_INTEGER;
@@ -19,24 +19,25 @@ import java.io.IOException;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.BaseFileSink;
 
 /**
  * @author pcheung
  *
  */
 @SuppressWarnings({"rawtypes"})
-public class RecordIDSink extends BaseFileSink implements IRecordIDSink {
+public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 
 	protected RECORD_ID_TYPE idType = null;
 
 	@Deprecated
-	public RecordIDSink(String fileName, int type) {
+	public RecordIdSink(String fileName, int type) {
 		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
-	public RecordIDSink(String fileName, EXTERNAL_DATA_FORMAT type) {
+	public RecordIdSink(String fileName, EXTERNAL_DATA_FORMAT type) {
 		super(fileName, type);
 	}
 
@@ -99,7 +100,7 @@ public class RecordIDSink extends BaseFileSink implements IRecordIDSink {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink#setRecordIDType(int)
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink#setRecordIDType(int)
 	 */
 	public void setRecordIDType(RECORD_ID_TYPE type) {
 		this.idType = type;

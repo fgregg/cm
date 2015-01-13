@@ -43,7 +43,7 @@ public class Validator implements IValidator, Serializable {
 	 * @param isBefore - true if the stage records are before the split Index
 	 * @param splitIndex - the point at which record sources change
 	 */
-	public Validator (boolean isBefore, RecordIDTranslator translator) {
+	public Validator (boolean isBefore, RecordIdTranslator translator) {
 		this.isBefore = isBefore;
 		this.splitIndex = translator.getSplitIndex();
 		

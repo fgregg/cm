@@ -62,7 +62,7 @@ public class TransMatcherMDB extends AbstractMatcher implements MessageListener 
 	protected void writeMatches (OabaJobMessage data, List<MatchRecord2> matches) throws BlockingException {
 		//first figure out the correct file for this processor
 		throw new Error("not yet implemented");
-//		OabaFileUtils oabaConfig = new OabaFileUtils(data.jobID);
+//		TransitivityFileUtils oabaConfig = new TransitivityFileUtils(data.jobID);
 //		IMatchRecord2Sink mSink = oabaConfig.getMatchChunkFactory().getSink(data.treeInd);
 //		IComparableSink sink =  new ComparableMRSink (mSink);
 //		

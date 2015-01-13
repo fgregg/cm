@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import java.io.Serializable;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IValidatorBase;
 import com.choicemaker.util.LongArrayList;
 
@@ -37,9 +37,9 @@ public class ValidatorBase implements IValidatorBase, Serializable {
 	/** This constructor takes these two parameters:
 	 *  
 	 * @param isBefore - true if the stage records are before the split Index
-	 * @param IRecordIDTranslator2 - the record ID to internal id translator
+	 * @param IRecordIdTranslator2 - the record ID to internal id translator
 	 */
-	public ValidatorBase (boolean isBefore, IRecordIDTranslator2 translator) {
+	public ValidatorBase (boolean isBefore, IRecordIdTranslator2 translator) {
 		this.isBefore = isBefore;
 		this.splitIndex = translator.getSplitIndex();
 	}

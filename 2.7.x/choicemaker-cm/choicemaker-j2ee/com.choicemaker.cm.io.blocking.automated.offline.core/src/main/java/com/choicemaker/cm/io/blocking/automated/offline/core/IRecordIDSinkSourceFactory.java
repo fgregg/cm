@@ -13,20 +13,20 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 import com.choicemaker.cm.core.BlockingException;
 
 /**
- * This object handles creating IRecordIDSink and IRecordIDSource.
+ * This object handles creating IRecordIdSink and IRecordIdSource.
  * 
  * @author pcheung
  *
  */
 @SuppressWarnings({
 	"rawtypes"})
-public interface IRecordIDSinkSourceFactory {
+public interface IRecordIdSinkSourceFactory {
 
-	/** Gets the next IRecordIDSink in the sequence. */
-	public IRecordIDSink getNextSink () throws BlockingException;
+	/** Gets the next IRecordIdSink in the sequence. */
+	public IRecordIdSink getNextSink () throws BlockingException;
 	
-	/** Gets the next IRecordIDSource in the sequence. */
-	public IRecordIDSource getNextSource () throws BlockingException;
+	/** Gets the next IRecordIdSource in the sequence. */
+	public IRecordIdSource getNextSource () throws BlockingException;
 	
 	/** Gets the number of sequence sinks created. */
 	public int getNumSink ();
@@ -34,18 +34,18 @@ public interface IRecordIDSinkSourceFactory {
 	/** Gets the number of sequence sources created. */
 	public int getNumSource ();
 	
-	/** Creates an IRecordIDSource for an existing IRecordIDSink. */
-	public IRecordIDSource getSource (IRecordIDSink sink) throws BlockingException;
+	/** Creates an IRecordIdSource for an existing IRecordIdSink. */
+	public IRecordIdSource getSource (IRecordIdSink sink) throws BlockingException;
 
-	/** Creates an IRecordIDSink for an existing IRecordIDSource. */
-	public IRecordIDSink getSink (IRecordIDSource source) throws BlockingException;
+	/** Creates an IRecordIdSink for an existing IRecordIdSource. */
+	public IRecordIdSink getSink (IRecordIdSource source) throws BlockingException;
 
 	/** Removes this sink.
 	 * 
 	 * @param sink
 	 * @throws BlockingException
 	 */
-	public void removeSink (IRecordIDSink sink) throws BlockingException;
+	public void removeSink (IRecordIdSink sink) throws BlockingException;
 
 
 	/** Removes this source.
@@ -53,6 +53,6 @@ public interface IRecordIDSinkSourceFactory {
 	 * @param source
 	 * @throws BlockingException
 	 */
-	public void removeSource (IRecordIDSource source) throws BlockingException;
+	public void removeSource (IRecordIdSource source) throws BlockingException;
 
 }

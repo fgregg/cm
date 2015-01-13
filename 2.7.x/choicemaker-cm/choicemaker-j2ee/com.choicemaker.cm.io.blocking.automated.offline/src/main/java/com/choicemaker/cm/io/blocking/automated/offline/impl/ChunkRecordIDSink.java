@@ -15,14 +15,14 @@ import java.io.IOException;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
 
 /**
  * @author pcheung
  *
  */
 public class ChunkRecordIDSink extends BaseFileSink implements
-		IChunkRecordIDSink {
+		IChunkRecordIdSink {
 
 	@Deprecated
 	public ChunkRecordIDSink(String fileName, int type) {

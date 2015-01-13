@@ -33,14 +33,12 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
@@ -162,10 +160,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				} else {
 					getLogger().info("Using batch record matching");
 
-					RecordIDSinkSourceFactory idFactory =
-						OabaFileUtils.getTransIDFactory(oabaJob);
-					RecordIDTranslator2 translator =
-						new RecordIDTranslator2(idFactory);
+					IRecordIdTranslator2<?> translator =
+						getRecordIdController().getRecordIdTranslator(oabaJob);
 
 					// create rec_id, val_id files
 					RecValSinkSourceFactory recvalFactory =

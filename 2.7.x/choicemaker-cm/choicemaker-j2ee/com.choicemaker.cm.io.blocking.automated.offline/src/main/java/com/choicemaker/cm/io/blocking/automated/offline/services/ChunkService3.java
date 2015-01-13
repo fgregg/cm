@@ -25,9 +25,9 @@ import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer;
@@ -81,7 +81,7 @@ public class ChunkService3 {
 	// transformer for the oversized blocks.
 	private ITransformer transformerO;
 
-	private IChunkRecordIDSinkSourceFactory recIDFactory;
+	private IChunkRecordIdSinkSourceFactory recIDFactory;
 	private IChunkDataSinkSourceFactory stageSinkFactory;
 	private IChunkDataSinkSourceFactory masterSinkFactory;
 
@@ -143,7 +143,7 @@ public class ChunkService3 {
 	public ChunkService3(IIDSetSource bSource, IIDSetSource osSource,
 			RecordSource stage, RecordSource master,
 			ImmutableProbabilityModel model,
-			IChunkRecordIDSinkSourceFactory recIDFactory,
+			IChunkRecordIdSinkSourceFactory recIDFactory,
 			IChunkDataSinkSourceFactory stageSinkFactory,
 			IChunkDataSinkSourceFactory masterSinkFactory, int splitIndex,
 			ITransformer transformer, ITransformer transformerO,
@@ -282,8 +282,8 @@ public class ChunkService3 {
 	private void createDataFiles() throws BlockingException {
 		try {
 			// list of rows files to handle. The rows files is already sorted.
-			IChunkRecordIDSource[] crSources =
-				new IChunkRecordIDSource[numChunks];
+			IChunkRecordIdSource[] crSources =
+				new IChunkRecordIdSource[numChunks];
 
 			// record sinks for the stage file we are handling, one per chunk
 			RecordSink[] stageRecordSinks = new RecordSink[numChunks];
@@ -296,8 +296,8 @@ public class ChunkService3 {
 
 			// set up
 			for (int i = 0; i < numChunks; i++) {
-				IChunkRecordIDSink recSink =
-					(IChunkRecordIDSink) recIDSinks.get(i);
+				IChunkRecordIdSink recSink =
+					(IChunkRecordIdSink) recIDSinks.get(i);
 
 				// read in rows file.
 				crSources[i] = recIDFactory.getSource(recSink);
@@ -352,8 +352,8 @@ public class ChunkService3 {
 				if (!keepFiles) {
 					// remove all the chunk record id files
 					for (int i = 0; i < numChunks; i++) {
-						IChunkRecordIDSink recIDSink =
-							(IChunkRecordIDSink) recIDSinks.get(i);
+						IChunkRecordIdSink recIDSink =
+							(IChunkRecordIdSink) recIDSinks.get(i);
 						recIDSink.remove();
 					}
 				}
@@ -405,7 +405,7 @@ public class ChunkService3 {
 	 * @throws IOException
 	 */
 	private void createDataFiles(int start, int end,
-			IChunkRecordIDSource[] crSources, RecordSink[] recordSinks,
+			IChunkRecordIdSource[] crSources, RecordSink[] recordSinks,
 			int offset, long[] ind, RecordSource rs,
 			ImmutableProbabilityModel model) throws BlockingException {
 
@@ -484,7 +484,7 @@ public class ChunkService3 {
 	 */
 	private void createDataFile(RecordSource rs,
 			ImmutableProbabilityModel model, int start, int end, int offset,
-			long[] ind, IChunkRecordIDSource[] crSources,
+			long[] ind, IChunkRecordIdSource[] crSources,
 			RecordSink[] recordSinks) throws BlockingException {
 
 		final String METHOD = "createDataFile(..)";
@@ -569,7 +569,7 @@ public class ChunkService3 {
 		// this stores the unique recID's in a chunk
 		TreeSet rows = new TreeSet();
 
-		IChunkRecordIDSink recIDSink = recIDFactory.getNextSink();
+		IChunkRecordIdSink recIDSink = recIDFactory.getNextSink();
 		recIDSinks.add(recIDSink);
 
 		int count = 0;
@@ -679,7 +679,7 @@ public class ChunkService3 {
 	 *            - hash set containing the distinct ids
 	 * @throws IOException
 	 */
-	private static void writeChunkRows(IChunkRecordIDSink recSink, TreeSet rows)
+	private static void writeChunkRows(IChunkRecordIdSink recSink, TreeSet rows)
 			throws BlockingException {
 		recSink.open();
 

@@ -26,12 +26,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
@@ -59,8 +59,8 @@ public class ChunkService2 {
 	private RecordSource master;
 	private ImmutableProbabilityModel stageModel;
 	private ImmutableProbabilityModel masterModel;
-	private IRecordIDTranslator2 translator;
-	private IChunkRecordIDSinkSourceFactory recIDFactory;
+	private IRecordIdTranslator2 translator;
+	private IChunkRecordIdSinkSourceFactory recIDFactory;
 	
 	private IChunkDataSinkSourceFactory stageSinkFactory;
 	private IChunkDataSinkSourceFactory masterSinkFactory;
@@ -99,8 +99,8 @@ public class ChunkService2 {
 	 */	
 	public ChunkService2 (IBlockSource bSource, IBlockSource osSource, RecordSource stage, RecordSource master,
 		ImmutableProbabilityModel stageModel, ImmutableProbabilityModel masterModel,
-		IRecordIDTranslator2 translator,
-		IChunkRecordIDSinkSourceFactory recIDFactory, IChunkDataSinkSourceFactory stageSinkFactory,
+		IRecordIdTranslator2 translator,
+		IChunkRecordIdSinkSourceFactory recIDFactory, IChunkDataSinkSourceFactory stageSinkFactory,
 		IChunkDataSinkSourceFactory masterSinkFactory,
 		IComparisonArraySinkSourceFactory cFactory, int maxChunkSize, OabaEventLog status) {
 			
@@ -233,7 +233,7 @@ public class ChunkService2 {
 			numChunks = comparisonSinks.size();
 		
 			//list of rows files to handle.  The rows files is already sorted.
-			IChunkRecordIDSource [] crSources = new IChunkRecordIDSource [numChunks];
+			IChunkRecordIdSource [] crSources = new IChunkRecordIdSource [numChunks];
 				
 			//each a record sink for each rows file we are handling.
 			RecordSink [] recordSinks = new RecordSink [numChunks];
@@ -243,7 +243,7 @@ public class ChunkService2 {
 		
 			//set up	
 			for (int i=0; i < numChunks; i++) {
-				IChunkRecordIDSink recSink = (IChunkRecordIDSink) recIDSinks.get(i);
+				IChunkRecordIdSink recSink = (IChunkRecordIdSink) recIDSinks.get(i);
 				
 				//read in rows file.
 				crSources[i] = recIDFactory.getSource(recSink);
@@ -290,7 +290,7 @@ public class ChunkService2 {
 				recordSinks[i].close();
 				crSources[i].close(); //close the record id sources
 			
-				IChunkRecordIDSink recIDSink = (IChunkRecordIDSink) recIDSinks.get(i);
+				IChunkRecordIdSink recIDSink = (IChunkRecordIdSink) recIDSinks.get(i);
 				recIDSink.remove();
 			}
 			recIDSinks = null;
@@ -308,7 +308,7 @@ public class ChunkService2 {
 	 */
 	private void createDataFile(RecordSource rs,
 			ImmutableProbabilityModel model, long[] ind,
-			IChunkRecordIDSource[] crSources, RecordSink[] recordSinks,
+			IChunkRecordIdSource[] crSources, RecordSink[] recordSinks,
 			int startNum) throws BlockingException, XmlConfException {
 
 		try {
@@ -372,7 +372,7 @@ public class ChunkService2 {
 		comparisonSinks.add(cOut);
 		cOut.open();
 		
-		IChunkRecordIDSink recIDSink = recIDFactory.getNextSink();
+		IChunkRecordIdSink recIDSink = recIDFactory.getNextSink();
 		recIDSinks.add(recIDSink);
 
 		int count = 0;
@@ -497,7 +497,7 @@ public class ChunkService2 {
 	 * @param rows - hash set containing the distinct ids
 	 * @throws IOException
 	 */
-	private static void writeChunkRows (IChunkRecordIDSink recSink, TreeSet rows) throws BlockingException {
+	private static void writeChunkRows (IChunkRecordIdSink recSink, TreeSet rows) throws BlockingException {
 		recSink.open();
 		
 		Iterator it = rows.iterator();

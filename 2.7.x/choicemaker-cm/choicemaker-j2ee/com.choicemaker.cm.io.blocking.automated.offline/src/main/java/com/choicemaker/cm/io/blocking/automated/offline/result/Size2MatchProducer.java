@@ -15,7 +15,7 @@ import java.util.TreeSet;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 
 /**
@@ -30,7 +30,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 public class Size2MatchProducer {
 	
 	private IMatchRecord2Source originalSource;
-	private IRecordIDSource idSource;
+	private IRecordIdSource idSource;
 	private IMatchRecord2Sink mSink;
 	
 	
@@ -44,7 +44,7 @@ public class Size2MatchProducer {
 	 * @param mSink
 	 */
 	public Size2MatchProducer (IMatchRecord2Source originalSource,
-		IRecordIDSource idSource, IMatchRecord2Sink mSink) {
+		IRecordIdSource idSource, IMatchRecord2Sink mSink) {
 			
 		this.originalSource = originalSource;
 		this.idSource = idSource;

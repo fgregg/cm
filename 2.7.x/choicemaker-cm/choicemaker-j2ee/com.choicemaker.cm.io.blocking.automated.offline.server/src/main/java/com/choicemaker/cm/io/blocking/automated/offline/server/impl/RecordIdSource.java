@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.impl;
+package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -16,27 +16,28 @@ import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.BaseFileSource;
 
 /**
  * @author pcheung
  *
  */
 @SuppressWarnings({"unchecked"})
-public class RecordIDSource<T extends Comparable<T>> extends BaseFileSource<T>
-		implements IRecordIDSource<T> {
+public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
+		implements IRecordIdSource<T> {
 
 	protected RECORD_ID_TYPE dataType;
 	protected T nextID;
 	private boolean isFirst = true;
 
 	@Deprecated
-	public RecordIDSource(String fileName, int type) {
+	public RecordIdSource(String fileName, int type) {
 		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
-	public RecordIDSource(String fileName, EXTERNAL_DATA_FORMAT type) {
+	public RecordIdSource(String fileName, EXTERNAL_DATA_FORMAT type) {
 		super(fileName, type);
 	}
 

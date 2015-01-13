@@ -1,7 +1,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 /**
- * Java Persistence API (JPA) for OabaProcessingEvent beans.<br/>
+ * Java Persistence API (JPA) for RecordIdTranslation beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>
@@ -14,22 +14,22 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
  */
 public interface RecordIdTranslationJPA {
 
-	/** Name of the table that persists pair-wise results */
+	/** Name of the table that persists record-id translations */
 	String TABLE_NAME = "CMT_RECORD_ID";
 
-	/** Name of the column used to distinguish between pair types */
+	/** Name of the column used to distinguish between record-id types */
 	String DISCRIMINATOR_COLUMN = "TYPE";
 
-	/** Discriminator value column used to mark abstract types */
+	/** Discriminator value column used to mark abstract record-id types */
 	String DV_ABSTRACT = "0";
 
-	/** Discriminator value column used to mark integer types */
+	/** Discriminator value column used to mark integer record-id types */
 	String DV_INTEGER = "1";
 
-	/** Discriminator value column used to mark long types */
+	/** Discriminator value column used to mark long record-id types */
 	String DV_LONG = "2";
 
-	/** Discriminator value column used to mark String types */
+	/** Discriminator value column used to mark String record-id types */
 	String DV_STRING = "3";
 
 	String ID_GENERATOR_NAME = "OABA_TRANSLATED_ID";

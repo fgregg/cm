@@ -34,17 +34,17 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
@@ -85,6 +85,9 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 
 //	@EJB
 	private RecordSourceController rsController;
+
+//	@EJB
+	private RecordIdController ridController;
 
 //	@EJB
 	private OperationalPropertyController propController;
@@ -136,29 +139,33 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		throws Exception {
 
 		//get the match record source
-		IMatchRecord2Source mSource = OabaFileUtils.getCompositeMatchSource (transJob);
+		IMatchRecord2Source mSource = TransitivityFileUtils.getCompositeMatchSource (transJob);
 
 		//get the transitivity block sink
-		IBlockSink bSink = OabaFileUtils.getTransitivityBlockFactory(transJob).getNextSink();
+		IBlockSink bSink = TransitivityFileUtils.getTransitivityBlockFactory(transJob).getNextSink();
 
 		//recover the translator
-		RecordIDTranslator2 translator = new RecordIDTranslator2 (OabaFileUtils.getTransIDFactory(transJob));
+		IRecordIdTranslator2 translator = ridController.getRecordIdTranslator(transJob);
+				// new RecordIdTranslator2 (TransitivityFileUtils.getTransIDFactory(transJob));
 		translator.recover();
 		translator.close();
 
 		//Create blocks
-		IMatchRecord2SinkSourceFactory mFactory = OabaFileUtils.getMatchTempFactory(transJob);
-		IRecordIDSinkSourceFactory idFactory = OabaFileUtils.getRecordIDFactory(transJob);
-		IRecordIDSink idSink = idFactory.getNextSink();
-		MatchToBlockTransformer2 transformer = new MatchToBlockTransformer2(mSource,
-			mFactory, translator, bSink, idSink);
+		IMatchRecord2SinkSourceFactory mFactory =
+			TransitivityFileUtils.getMatchTempFactory(transJob);
+		IRecordIdSinkSourceFactory idFactory =
+			ridController.getRecordIdSinkSourceFactory(transJob);
+		IRecordIdSink idSink = idFactory.getNextSink();
+		MatchToBlockTransformer2 transformer =
+			new MatchToBlockTransformer2(mSource, mFactory, translator, bSink,
+					idSink);
 		int numRecords = transformer.process();
 		log.fine("Number of records: " + numRecords);
 
 		//build a MatchRecord2Sink for all pairs belonging to the size 2 sets.
 		Size2MatchProducer producer =
 			new Size2MatchProducer(mSource, idFactory.getSource(idSink),
-					OabaFileUtils.getSet2MatchFactory(transJob).getNextSink());
+					TransitivityFileUtils.getSet2MatchFactory(transJob).getNextSink());
 		int twos = producer.process();
 		log.info("number of size 2 EC: " + twos);
 
@@ -166,7 +173,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		idSink.remove();
 
 
-		IBlockSource bSource = OabaFileUtils.getTransitivityBlockFactory(transJob).getSource(bSink);
+		IBlockSource bSource = TransitivityFileUtils.getTransitivityBlockFactory(transJob).getSource(bSink);
 		IDSetSource source2 = new IDSetSource (bSource);
 
 		final String modelConfigId = params.getModelConfigurationName();
@@ -190,7 +197,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 
 		//create the oversized block transformer
 		Transformer transformerO = new Transformer (translator,
-			OabaFileUtils.getComparisonArrayGroupFactoryOS(transJob, numProcessors));
+			TransitivityFileUtils.getComparisonArrayGroupFactoryOS(transJob, numProcessors));
 
 		//set the correct status for chunk could run.
 		final long jobId = transJob.getId();
@@ -208,9 +215,9 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 				rsController.getMasterRs(params);
 		ChunkService3 chunkService =
 			new ChunkService3(source2, null, staging, master, model,
-					OabaFileUtils.getChunkIDFactory(transJob),
-					OabaFileUtils.getStageDataFactory(transJob, model),
-					OabaFileUtils.getMasterDataFactory(transJob, model),
+					TransitivityFileUtils.getChunkIDFactory(transJob),
+					TransitivityFileUtils.getStageDataFactory(transJob, model),
+					TransitivityFileUtils.getMasterDataFactory(transJob, model),
 					translator.getSplitIndex(), transformerO, null, maxChunk,
 					numFiles, status, transJob);
 		chunkService.runService();
@@ -246,7 +253,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		try {
 			//final sink
 			IMatchRecord2Source finalSource =
-				OabaFileUtils.getCompositeTransMatchSource(transJob);
+				TransitivityFileUtils.getCompositeTransMatchSource(transJob);
 			if (finalSource.exists()) {
 				log.info("removing old transMatch files: " + finalSource.getInfo());
 				finalSource.delete();

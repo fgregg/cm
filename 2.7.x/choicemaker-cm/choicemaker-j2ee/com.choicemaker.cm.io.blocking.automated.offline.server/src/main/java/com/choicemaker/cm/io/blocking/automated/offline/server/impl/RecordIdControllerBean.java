@@ -10,26 +10,29 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
-import javax.ejb.Local;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIDTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaRecordIdController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 
-@Local
-public class OabaRecordIdControllerBean implements OabaRecordIdController {
+@Stateless
+public class RecordIdControllerBean implements RecordIdController {
 
 	private static final Logger logger = Logger
-			.getLogger(OabaRecordIdControllerBean.class.getName());
+			.getLogger(RecordIdControllerBean.class.getName());
+
+	public static final String BASENAME_RECORDID_TRANSLATOR = "translator";
+
+	public static final String BASENAME_RECORDID_STORE = "recordID";
 
 	/**
 	 * The index in the {@link #createRecordIdTypeQuery(OabaJob)
@@ -43,7 +46,7 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 	@EJB
 	private OabaJobControllerBean jobController;
 
-	protected String createRecordIdTypeQuery(OabaJob job) {
+	protected String createRecordIdTypeQuery(BatchJob job) {
 		final long jobId = job.getId();
 		StringBuffer b = new StringBuffer();
 		b.append("SELECT ").append(RecordIdTranslationJPA.CN_RECORD_TYPE);
@@ -55,7 +58,7 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 	}
 
 	@Override
-	public RECORD_ID_TYPE getTranslatorType(OabaJob job)
+	public RECORD_ID_TYPE getTranslatorType(BatchJob job)
 			throws BlockingException {
 		if (job == null) {
 			throw new IllegalArgumentException("null OABA job");
@@ -123,8 +126,8 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 		return retVal;
 	}
 
-	protected void restoreIntegerTranslations(OabaJob job,
-			IRecordIDTranslator2<Integer> translator) throws BlockingException {
+	protected void restoreIntegerTranslations(BatchJob job,
+			IRecordIdTranslator2<Integer> translator) throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDINTEGERID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
@@ -141,16 +144,43 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 		}
 	}
 
+	/**
+	 * This gets the factory that is used to get translator id sink and source.
+	 */
+	private static RecordIdSinkSourceFactory getTransIDFactory(BatchJob job) {
+		String wd = OabaFileUtils.getWorkingDir(job);
+		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_TRANSLATOR,
+				OabaFileUtils.BINARY_SUFFIX);
+	}
+
+	private static RecordIdSinkSourceFactory getRecordIDFactory(BatchJob job) {
+		String wd = OabaFileUtils.getWorkingDir(job);
+		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE,
+				OabaFileUtils.TEXT_SUFFIX);
+	}
+
+	@Override
+	public IRecordIdSinkSourceFactory getRecordIdSinkSourceFactory(BatchJob job) {
+		return getRecordIDFactory(job);
+	}
+
+	@Override
+	public IRecordIdTranslator2<?> getRecordIdTranslator(BatchJob job)
+			throws BlockingException {
+		RecordIdSinkSourceFactory idFactory = getTransIDFactory(job);
+		RecordIdTranslator2 translator = new RecordIdTranslator2(idFactory);
+		return translator;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public IRecordIDTranslator2<?> restoreIRecordIDTranslator(OabaJob job)
+	public IRecordIdTranslator2<?> restoreIRecordIdTranslator(BatchJob job)
 			throws BlockingException {
 		if (job == null) {
 			throw new IllegalArgumentException("null OABA job");
 		}
-		RecordIDSinkSourceFactory idFactory =
-			OabaFileUtils.getTransIDFactory(job);
-		IRecordIDTranslator2<?> translator = new RecordIDTranslator2(idFactory);
+		RecordIdSinkSourceFactory idFactory = getTransIDFactory(job);
+		IRecordIdTranslator2<?> translator = new RecordIdTranslator2(idFactory);
 
 		// Cleanup any files on disk
 		translator.cleanUp();
@@ -160,15 +190,15 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 		switch (dataType) {
 		case TYPE_INTEGER:
 			restoreIntegerTranslations(job,
-					(IRecordIDTranslator2<Integer>) translator);
+					(IRecordIdTranslator2<Integer>) translator);
 			break;
 		case TYPE_LONG:
 			restoreLongTranslations(job,
-					(IRecordIDTranslator2<Long>) translator);
+					(IRecordIdTranslator2<Long>) translator);
 			break;
 		case TYPE_STRING:
 			restoreStringTranslations(job,
-					(IRecordIDTranslator2<String>) translator);
+					(IRecordIdTranslator2<String>) translator);
 			break;
 		default:
 			throw new Error("unexpected record source type: " + dataType);
@@ -177,8 +207,8 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 		return translator;
 	}
 
-	protected void restoreLongTranslations(OabaJob job,
-			IRecordIDTranslator2<Long> translator) throws BlockingException {
+	protected void restoreLongTranslations(BatchJob job,
+			IRecordIdTranslator2<Long> translator) throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDLONGID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
@@ -195,8 +225,8 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 		}
 	}
 
-	protected void restoreStringTranslations(OabaJob job,
-			IRecordIDTranslator2<String> translator) throws BlockingException {
+	protected void restoreStringTranslations(BatchJob job,
+			IRecordIdTranslator2<String> translator) throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDSTRINGID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
@@ -214,7 +244,7 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 	}
 
 	@Override
-	public void save(OabaJob job, IRecordIDTranslator2<?> translator)
+	public void save(BatchJob job, IRecordIdTranslator2<?> translator)
 			throws BlockingException {
 		if (job == null || translator == null) {
 			throw new IllegalArgumentException("null argument");
@@ -252,8 +282,8 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 		}
 	}
 
-	protected void saveIntegerTranslations(OabaJob job,
-			IRecordIDTranslator2<?> translator) {
+	protected void saveIntegerTranslations(BatchJob job,
+			IRecordIdTranslator2<?> translator) {
 		int translatedId = 0;
 		Integer recordId = (Integer) translator.reverseLookup(translatedId);
 		while (recordId != null) {
@@ -265,8 +295,8 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 		}
 	}
 
-	protected void saveLongTranslations(OabaJob job,
-			IRecordIDTranslator2<?> translator) {
+	protected void saveLongTranslations(BatchJob job,
+			IRecordIdTranslator2<?> translator) {
 		int translatedId = 0;
 		Long recordId = (Long) translator.reverseLookup(translatedId);
 		while (recordId != null) {
@@ -278,8 +308,8 @@ public class OabaRecordIdControllerBean implements OabaRecordIdController {
 		}
 	}
 
-	protected void saveStringTranslations(OabaJob job,
-			IRecordIDTranslator2<?> translator) {
+	protected void saveStringTranslations(BatchJob job,
+			IRecordIdTranslator2<?> translator) {
 		int translatedId = 0;
 		String recordId = (String) translator.reverseLookup(translatedId);
 		while (recordId != null) {

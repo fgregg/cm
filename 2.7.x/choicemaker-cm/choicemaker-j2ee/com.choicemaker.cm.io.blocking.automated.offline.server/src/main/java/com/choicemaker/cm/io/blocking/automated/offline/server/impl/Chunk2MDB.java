@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.util.logging.Logger;
@@ -28,12 +28,11 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.RecordIDTranslator2;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
@@ -81,8 +80,10 @@ public class Chunk2MDB extends AbstractOabaMDB {
 		log.info("Number of processors: " + numProcessors);
 		log.info("Maximum chunk files: " + maxChunkFiles);
 
-		RecordIDTranslator2 translator =
-			new RecordIDTranslator2(OabaFileUtils.getTransIDFactory(oabaJob));
+		@SuppressWarnings("rawtypes")
+		IRecordIdTranslator2 translator =
+			getRecordIdController().getRecordIdTranslator(oabaJob);
+//			new RecordIdTranslator2(OabaFileUtils.getTransIDFactory(oabaJob));
 		// recover the translator
 		translator.recover();
 		translator.close();

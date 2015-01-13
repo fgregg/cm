@@ -140,7 +140,7 @@ public class TransMatchSchedulerMDB extends AbstractScheduler implements Message
 //		int numProcessors = Integer.parseInt(temp);
 //
 //		//remove the data
-//		OabaFileUtils oabaConfig = new OabaFileUtils(jobId);
+//		TransitivityFileUtils oabaConfig = new TransitivityFileUtils(jobId);
 //		IChunkDataSinkSourceFactory stageFactory = oabaConfig.getStageDataFactory();
 //		IChunkDataSinkSourceFactory masterFactory= oabaConfig.getMasterDataFactory();
 //		stageFactory.removeAllSinks(sd.numChunks);

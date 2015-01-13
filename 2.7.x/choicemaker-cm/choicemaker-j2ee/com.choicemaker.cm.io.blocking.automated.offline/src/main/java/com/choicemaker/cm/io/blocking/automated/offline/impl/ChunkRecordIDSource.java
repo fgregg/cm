@@ -16,14 +16,14 @@ import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
 
 /**
  * @author pcheung
  *
  */
 public class ChunkRecordIDSource extends BaseFileSource<Long> implements
-		IChunkRecordIDSource {
+		IChunkRecordIdSource {
 
 	private long nextRecID;
 

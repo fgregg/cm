@@ -18,9 +18,9 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IRecordIDSource<T extends Comparable<T>> extends ISource<T> {
+public interface IRecordIdSource<T extends Comparable<T>> extends ISource<T> {
 	
-	/** This returns the object type of the record ID.  See IRecordIDSink.
+	/** This returns the object type of the record ID.  See IRecordIdSink.
 	 * 
 	 * @return int - Object type of record ID
 	 */

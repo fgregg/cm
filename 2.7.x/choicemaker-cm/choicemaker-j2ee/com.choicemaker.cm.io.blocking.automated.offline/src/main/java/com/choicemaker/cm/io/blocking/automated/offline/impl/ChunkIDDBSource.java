@@ -18,13 +18,13 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIDSource;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
 
 /**
  * @author pcheung
  *
  */
-public class ChunkIDDBSource implements IChunkRecordIDSource {
+public class ChunkIdDBSource implements IChunkRecordIdSource {
 
 	public static final String tableName = "CMT_CHUNK_ID";
 	public static final String groupName = "GROUP_ID";
@@ -55,7 +55,7 @@ public class ChunkIDDBSource implements IChunkRecordIDSource {
 	 * @param conn - DB connection
 	 * @param groupID - unique identifier for this object.
 	 */
-	public ChunkIDDBSource (DataSource ds, int groupID) throws BlockingException {
+	public ChunkIdDBSource (DataSource ds, int groupID) throws BlockingException {
 		this.ds = ds;
 		this.groupID = groupID;
 		
