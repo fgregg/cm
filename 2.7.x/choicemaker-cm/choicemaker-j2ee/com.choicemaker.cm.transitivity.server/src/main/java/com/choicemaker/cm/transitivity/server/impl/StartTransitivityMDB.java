@@ -36,7 +36,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSo
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
@@ -145,8 +145,8 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		IBlockSink bSink = TransitivityFileUtils.getTransitivityBlockFactory(transJob).getNextSink();
 
 		//recover the translator
-		IRecordIdTranslator2 translator = ridController.getRecordIdTranslator(transJob);
-				// new RecordIdTranslator2 (TransitivityFileUtils.getTransIDFactory(transJob));
+		ImmutableRecordIdTranslator translator =
+			ridController.getImmutableRecordIdTranslator(transJob);
 		translator.recover();
 		translator.close();
 

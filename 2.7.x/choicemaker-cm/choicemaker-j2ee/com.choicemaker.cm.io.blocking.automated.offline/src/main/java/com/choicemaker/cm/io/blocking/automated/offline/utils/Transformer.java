@@ -18,7 +18,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonArray;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.util.LongArrayList;
@@ -33,11 +33,11 @@ import com.choicemaker.util.LongArrayList;
 		"rawtypes", "unchecked" })
 public class Transformer implements ITransformer {
 
-	private IRecordIdTranslator2 translator;
+	private ImmutableRecordIdTranslator translator;
 	private IComparisonArraySinkSourceFactory cFactory;
 	private IComparisonArraySink cOut = null;
 
-	public Transformer(IRecordIdTranslator2 translator,
+	public Transformer(ImmutableRecordIdTranslator translator,
 			IComparisonArraySinkSourceFactory cFactory)
 			throws BlockingException {
 

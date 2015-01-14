@@ -18,7 +18,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
 
@@ -38,7 +38,7 @@ public class TreeTransformer implements ITransformer {
 	protected static final String SOURCE = TreeTransformer.class
 			.getSimpleName();
 
-	private IRecordIdTranslator2 translator;
+	private ImmutableRecordIdTranslator translator;
 	private IComparisonTreeSinkSourceFactory cFactory;
 	private IComparisonTreeSink cOut = null;
 
@@ -50,7 +50,7 @@ public class TreeTransformer implements ITransformer {
 	 * @param cFactory
 	 * @throws BlockingException
 	 */
-	public TreeTransformer(IRecordIdTranslator2 translator,
+	public TreeTransformer(ImmutableRecordIdTranslator translator,
 			IComparisonTreeSinkSourceFactory cFactory) throws BlockingException {
 
 		this.translator = translator;

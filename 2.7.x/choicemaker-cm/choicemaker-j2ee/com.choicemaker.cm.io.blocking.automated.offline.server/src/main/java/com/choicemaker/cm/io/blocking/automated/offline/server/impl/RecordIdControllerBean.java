@@ -18,7 +18,8 @@ import javax.persistence.Query;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
+import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
@@ -45,6 +46,21 @@ public class RecordIdControllerBean implements RecordIdController {
 
 	@EJB
 	private OabaJobControllerBean jobController;
+
+	@Override
+	public ImmutableRecordIdTranslator<?> getImmutableRecordIdTranslator(
+			BatchJob job) throws BlockingException {
+		// FIXME look up, don't create
+		return createMutableRecordIdTranslator(job);
+	}
+
+	@Override
+	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
+			BatchJob job) throws BlockingException {
+		RecordIdSinkSourceFactory idFactory = getTransIDFactory(job);
+		RecordIdTranslator3 retVal = new RecordIdTranslator3(idFactory);
+		return retVal;
+	}
 
 	protected String createRecordIdTypeQuery(BatchJob job) {
 		final long jobId = job.getId();
@@ -127,7 +143,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void restoreIntegerTranslations(BatchJob job,
-			IRecordIdTranslator2<Integer> translator) throws BlockingException {
+			MutableRecordIdTranslator<Integer> translator) throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDINTEGERID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
@@ -164,51 +180,40 @@ public class RecordIdControllerBean implements RecordIdController {
 		return getRecordIDFactory(job);
 	}
 
-	@Override
-	public IRecordIdTranslator2<?> getRecordIdTranslator(BatchJob job)
-			throws BlockingException {
-		RecordIdSinkSourceFactory idFactory = getTransIDFactory(job);
-		RecordIdTranslator3 translator = new RecordIdTranslator3(idFactory);
-		return translator;
-	}
-
 	@SuppressWarnings("unchecked")
-	@Override
-	public IRecordIdTranslator2<?> restoreIRecordIdTranslator(BatchJob job)
+	public MutableRecordIdTranslator<?> restoreIRecordIdTranslator(BatchJob job)
 			throws BlockingException {
 		if (job == null) {
 			throw new IllegalArgumentException("null OABA job");
 		}
 		RecordIdSinkSourceFactory idFactory = getTransIDFactory(job);
-		IRecordIdTranslator2<?> translator = new RecordIdTranslator3(idFactory);
+		RecordIdTranslator3 retVal = new RecordIdTranslator3(idFactory);
 
 		// Cleanup any files on disk
-		translator.cleanUp();
+		retVal.cleanUp();
 
 		RECORD_ID_TYPE dataType = this.getTranslatorType(job);
 		assert dataType != null;
 		switch (dataType) {
 		case TYPE_INTEGER:
 			restoreIntegerTranslations(job,
-					(IRecordIdTranslator2<Integer>) translator);
+					retVal);
 			break;
 		case TYPE_LONG:
-			restoreLongTranslations(job,
-					(IRecordIdTranslator2<Long>) translator);
+			restoreLongTranslations(job,  retVal);
 			break;
 		case TYPE_STRING:
-			restoreStringTranslations(job,
-					(IRecordIdTranslator2<String>) translator);
+			restoreStringTranslations(job,  retVal);
 			break;
 		default:
 			throw new Error("unexpected record source type: " + dataType);
 		}
 
-		return translator;
+		return retVal;
 	}
 
 	protected void restoreLongTranslations(BatchJob job,
-			IRecordIdTranslator2<Long> translator) throws BlockingException {
+			MutableRecordIdTranslator<Long> translator) throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDLONGID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
@@ -226,7 +231,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void restoreStringTranslations(BatchJob job,
-			IRecordIdTranslator2<String> translator) throws BlockingException {
+			MutableRecordIdTranslator<String> translator) throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDSTRINGID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
@@ -244,7 +249,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	@Override
-	public void save(BatchJob job, IRecordIdTranslator2<?> translator)
+	public void save(BatchJob job, MutableRecordIdTranslator<?> translator)
 			throws BlockingException {
 		if (job == null || translator == null) {
 			throw new IllegalArgumentException("null argument");
@@ -283,7 +288,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void saveIntegerTranslations(BatchJob job,
-			IRecordIdTranslator2<?> translator) {
+			MutableRecordIdTranslator<?> translator) {
 		int translatedId = 0;
 		Integer recordId = (Integer) translator.reverseLookup(translatedId);
 		while (recordId != null) {
@@ -296,7 +301,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void saveLongTranslations(BatchJob job,
-			IRecordIdTranslator2<?> translator) {
+			MutableRecordIdTranslator<?> translator) {
 		int translatedId = 0;
 		Long recordId = (Long) translator.reverseLookup(translatedId);
 		while (recordId != null) {
@@ -309,7 +314,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void saveStringTranslations(BatchJob job,
-			IRecordIdTranslator2<?> translator) {
+			MutableRecordIdTranslator<?> translator) {
 		int translatedId = 0;
 		String recordId = (String) translator.reverseLookup(translatedId);
 		while (recordId != null) {

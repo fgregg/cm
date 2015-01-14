@@ -31,7 +31,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSinkS
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
@@ -59,7 +59,7 @@ public class ChunkService2 {
 	private RecordSource master;
 	private ImmutableProbabilityModel stageModel;
 	private ImmutableProbabilityModel masterModel;
-	private IRecordIdTranslator2 translator;
+	private ImmutableRecordIdTranslator translator;
 	private IChunkRecordIdSinkSourceFactory recIDFactory;
 	
 	private IChunkDataSinkSourceFactory stageSinkFactory;
@@ -99,7 +99,7 @@ public class ChunkService2 {
 	 */	
 	public ChunkService2 (IBlockSource bSource, IBlockSource osSource, RecordSource stage, RecordSource master,
 		ImmutableProbabilityModel stageModel, ImmutableProbabilityModel masterModel,
-		IRecordIdTranslator2 translator,
+		ImmutableRecordIdTranslator translator,
 		IChunkRecordIdSinkSourceFactory recIDFactory, IChunkDataSinkSourceFactory stageSinkFactory,
 		IChunkDataSinkSourceFactory masterSinkFactory,
 		IComparisonArraySinkSourceFactory cFactory, int maxChunkSize, OabaEventLog status) {

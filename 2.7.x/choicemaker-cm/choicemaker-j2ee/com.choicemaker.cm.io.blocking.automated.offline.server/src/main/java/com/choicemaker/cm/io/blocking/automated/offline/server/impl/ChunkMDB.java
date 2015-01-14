@@ -26,7 +26,7 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
@@ -70,8 +70,8 @@ public class ChunkMDB extends AbstractOabaMDB {
 		temp = (String) model.properties().get("maxChunkFiles");
 		int maxChunkFiles = Integer.parseInt(temp);
 
-		IRecordIdTranslator2<?> translator =
-				getRecordIdController().getRecordIdTranslator(oabaJob);
+		ImmutableRecordIdTranslator<?> translator =
+				getRecordIdController().getImmutableRecordIdTranslator(oabaJob);
 		translator.recover();
 		translator.close();
 

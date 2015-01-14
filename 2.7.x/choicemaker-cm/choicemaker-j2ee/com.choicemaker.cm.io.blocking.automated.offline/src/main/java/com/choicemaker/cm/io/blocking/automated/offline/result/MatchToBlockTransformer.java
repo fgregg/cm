@@ -22,7 +22,7 @@ import com.choicemaker.cm.core.util.EquivalenceClassBuilder;
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.util.LongArrayList;
@@ -44,7 +44,7 @@ public class MatchToBlockTransformer {
 
 	private IMatchRecord2Source mSource;
 	private IBlockSink blockSink;
-	private IRecordIdTranslator2 translator;
+	private ImmutableRecordIdTranslator translator;
 
 	private HashMap stageIDs;
 	private HashMap masterIDs;
@@ -63,7 +63,7 @@ public class MatchToBlockTransformer {
 	 * @param blockSink - a block sink to store the equivalence classes
 	 */
 	public MatchToBlockTransformer (IMatchRecord2Source mSource,
-		IRecordIdTranslator2 translator, IBlockSink blockSink) {
+		ImmutableRecordIdTranslator translator, IBlockSink blockSink) {
 
 		this.mSource = mSource;
 		this.blockSink = blockSink;

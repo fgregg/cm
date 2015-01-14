@@ -49,7 +49,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
@@ -202,8 +202,8 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 		OabaEventLog processingEntry =
 			processingController.getProcessingLog(oabaJob);
 
-		IRecordIdTranslator2 translator =
-			ridController.getRecordIdTranslator(oabaJob);
+		MutableRecordIdTranslator translator =
+			ridController.createMutableRecordIdTranslator(oabaJob);
 
 		// OABA parameters
 		String temp = (String) stageModel.properties().get("maxBlockSize");

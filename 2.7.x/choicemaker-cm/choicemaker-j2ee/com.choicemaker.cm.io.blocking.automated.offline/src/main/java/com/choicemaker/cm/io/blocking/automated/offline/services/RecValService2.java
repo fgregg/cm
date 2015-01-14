@@ -28,7 +28,7 @@ import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator2;
+import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
@@ -70,7 +70,7 @@ public class RecValService2 {
 	private IBlockingConfiguration bc;
 
 	//	this is the input record id to internal id translator
-	private IRecordIdTranslator2 translator;
+	private MutableRecordIdTranslator translator;
 
 	private OabaEventLog status;
 
@@ -103,7 +103,7 @@ public class RecValService2 {
 			ImmutableProbabilityModel model,
 			ImmutableProbabilityModel unusedMasterModel,
 			IRecValSinkSourceFactory rvFactory,
-			IRecordIdTranslator2 translator, OabaEventLog status) {
+			MutableRecordIdTranslator translator, OabaEventLog status) {
 
 		this.stage = stage;
 		this.master = master;

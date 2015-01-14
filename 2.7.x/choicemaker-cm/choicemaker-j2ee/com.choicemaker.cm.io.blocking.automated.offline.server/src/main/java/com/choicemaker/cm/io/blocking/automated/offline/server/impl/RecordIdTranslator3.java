@@ -22,7 +22,8 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdTranslator3;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
+import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
@@ -35,7 +36,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-public class RecordIdTranslator3 implements IRecordIdTranslator3 {
+public class RecordIdTranslator3 implements MutableRecordIdTranslator {
 
 	/**
 	 * For testing purposes only. Returns a list of map value in the order of
@@ -50,7 +51,8 @@ public class RecordIdTranslator3 implements IRecordIdTranslator3 {
 		ArrayList retVal = null;
 		if (map != null) {
 			retVal = new ArrayList();
-			int expectedKeyValue = IRecordIdTranslator3.MINIMUM_VALID_INDEX - 1;
+			int expectedKeyValue =
+				ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
 			for (Iterator i = map.keySet().iterator(); i.hasNext();) {
 				++expectedKeyValue;
 				Integer key = (Integer) i.next();
@@ -87,7 +89,8 @@ public class RecordIdTranslator3 implements IRecordIdTranslator3 {
 	 * This contains the mapping from input record id I to internal record id J.
 	 * mapping[J] = I. J starts from 0.
 	 */
-	private int currentIndex = IRecordIdTranslator3.MINIMUM_VALID_INDEX - 1;
+	private int currentIndex =
+		ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
 
 	/**
 	 * This is the point at which the second record source record ids start. If
@@ -155,14 +158,12 @@ public class RecordIdTranslator3 implements IRecordIdTranslator3 {
 	public ArrayList getList1() {
 		// API BUG 2011-01-29 rphall
 		// This is a miserable method signature, but it is required for
-		// compatibility with the existing
-		// OABA classes. It implicitly assumes that record indices run from 0 to
-		// some (positive) limit,
-		// with no intervening gaps. That's an OK implementation assumption, but
-		// it shouldn't be
-		// exposed in the API. Instead, there should be a method to write a
-		// translator to a (revised)
-		// IChunkRecordIdSink, which is the only reason this method is needed.
+		// compatibility with the existing OABA classes. It implicitly assumes
+		// that record indices run from 0 to some (positive) limit, with no
+		// intervening gaps. That's an OK implementation assumption, but it
+		// shouldn't be exposed in the API. Instead, there should be a method
+		// to write a translator to a (revised) IChunkRecordIdSink, which is the
+		// only reason this method is needed.
 		ArrayList retVal = sortedMapToList(this.indices_To_Ids1);
 		return retVal;
 	}
@@ -277,7 +278,7 @@ public class RecordIdTranslator3 implements IRecordIdTranslator3 {
 
 	@Override
 	public void open() throws BlockingException {
-		currentIndex = IRecordIdTranslator3.MINIMUM_VALID_INDEX - 1;
+		currentIndex = ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
 		sink1.open();
 		splitIndex = NOT_SPLIT;
 	}
@@ -285,7 +286,7 @@ public class RecordIdTranslator3 implements IRecordIdTranslator3 {
 	@Override
 	public void recover() throws BlockingException {
 		IRecordIdSource source = rFactory.getSource(sink1);
-		currentIndex = IRecordIdTranslator3.MINIMUM_VALID_INDEX - 1;
+		currentIndex = ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
 		splitIndex = NOT_SPLIT;
 		if (source.exists()) {
 			source.open();
@@ -355,7 +356,7 @@ public class RecordIdTranslator3 implements IRecordIdTranslator3 {
 	public int translate(Comparable o) throws BlockingException {
 		int retVal;
 		if (o == null) {
-			retVal = IRecordIdTranslator3.INVALID_INDEX;
+			retVal = ImmutableRecordIdTranslator.INVALID_INDEX;
 			log.warning("translating null record id to an invalid internal index ("
 					+ retVal + ")");
 		} else {

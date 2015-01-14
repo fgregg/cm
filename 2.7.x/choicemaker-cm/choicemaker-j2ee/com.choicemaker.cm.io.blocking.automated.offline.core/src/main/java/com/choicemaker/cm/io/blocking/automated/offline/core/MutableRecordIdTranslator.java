@@ -10,8 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import java.util.List;
-
 import com.choicemaker.cm.core.BlockingException;
 
 /**
@@ -23,32 +21,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface IRecordIdTranslator2<T extends Comparable<T>> {
-
-//	/**
-//	 * This method returns the range of record ids in the first source.
-//	 * 
-//	 * @return Comparable[0] is min and Comparable[1] is max
-//	 */
-//	public T[] getRange1();
-//
-//	/**
-//	 * This method returns the range of record ids in the second source.
-//	 * 
-//	 * @return Comparable[0] is min and Comparable[1] is max
-//	 */
-//	public T[] getRange2();
-
-	/**
-	 * This returns the internal id at which the second source begins. This is 0
-	 * if there is only one source.
-	 * 
-	 * RecordSource1 would have internal id from 0 to splitIndex - 1. And
-	 * RecordSource2 starts from splitIndex.
-	 * 
-	 * @return int - the index that separates the staging and master records.
-	 */
-	public int getSplitIndex();
+public interface MutableRecordIdTranslator<T extends Comparable<T>> extends ImmutableRecordIdTranslator<T> {
 
 	/**
 	 * This method performs initialization.
@@ -90,30 +63,5 @@ public interface IRecordIdTranslator2<T extends Comparable<T>> {
 	 * This method prepares for reverse translation.
 	 */
 	public void initReverseTranslation() throws BlockingException;
-
-	/**
-	 * This method returns the original record ID associated with this internal
-	 * ID. Make sure the method initReverseTranslation is called before this
-	 * method.
-	 * 
-	 * @return Comparable<?> - the original record ID associated with this
-	 *         internal ID.
-	 */
-	public Comparable<?> reverseLookup(int internalID);
-
-	/**
-	 * This returns a List of record IDs from the first source. Usually, the
-	 * staging source.
-	 */
-	public List<T> getList1();
-
-	/**
-	 * This returns a List of record IDs from the second source. Usually, the
-	 * master source.
-	 */
-	public List<T> getList2();
-
-	/** Returns the type of record identifier handled by this translator */
-	RECORD_ID_TYPE getRecordIdType();
 
 }
