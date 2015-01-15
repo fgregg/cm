@@ -152,6 +152,13 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	}
 
 	@Override
+	public Object getCountSource() {
+		log.entering(CLASSNAME, "getCountSource");
+		log.exiting(CLASSNAME, "getCountSource", null);
+		return null;
+	}
+
+	@Override
 	public String getDatabaseConfigurationName() {
 		log.exiting(CLASSNAME, "getDatabaseConfigurationName",
 				databaseConfigurationName);

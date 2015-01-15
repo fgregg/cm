@@ -66,6 +66,13 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	private static final Logger logger = Logger
 			.getLogger(MutableProbabilityModel.class.getName());
 
+	// FIXME REMOVEME HACK
+	private Object countSource;
+	public Object getCountSource() {
+		return countSource;
+	}
+	// END HACK
+
 	private Accessor acc;
 	private String accessorClassName;
 	String blockingConfigurationName;

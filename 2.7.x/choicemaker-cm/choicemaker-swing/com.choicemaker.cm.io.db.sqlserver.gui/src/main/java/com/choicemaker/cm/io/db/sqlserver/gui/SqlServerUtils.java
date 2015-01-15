@@ -90,7 +90,7 @@ public class SqlServerUtils {
 			lastBlockingConfiguration.equals(model.properties().get("blockingConfiguration")) &&
 			lastDbConfiguration != null && 
 			lastDbConfiguration.equals(model.properties().get("dbConfiguration")) &&
-			model.properties().get("countSource") != null) {
+			model.getCountSource() != null) {
 			
 			return;
 		}
