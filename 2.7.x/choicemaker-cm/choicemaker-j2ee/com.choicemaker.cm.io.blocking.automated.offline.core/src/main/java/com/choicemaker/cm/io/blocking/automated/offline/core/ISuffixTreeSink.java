@@ -20,11 +20,12 @@ import com.choicemaker.cm.core.BlockingException;
  */
 public interface ISuffixTreeSink extends ISink {
 
-	/** This method writes the input node all its descendants to the sink.
+	/**
+	 * This method writes the input node all its descendants to the sink.
 	 * 
 	 * @param root
 	 * @throws BlockingException
 	 */
-	public void writeSuffixTree (SuffixTreeNode root) throws BlockingException;
+	public void writeSuffixTree(SuffixTreeNode root) throws BlockingException;
 
 }

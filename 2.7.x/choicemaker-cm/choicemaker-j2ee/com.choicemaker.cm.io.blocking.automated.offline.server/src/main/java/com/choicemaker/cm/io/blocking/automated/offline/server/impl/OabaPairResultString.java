@@ -1,6 +1,10 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DV_ABSTRACT;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.JPQL_PAIRRESULTSTRING_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.JPQL_PAIRRESULTSTRING_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.QN_PAIRRESULTSTRING_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.QN_PAIRRESULTSTRING_FIND_BY_JOBID;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,9 +17,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 @NamedQueries({
-	@NamedQuery(name = QN_PAIRRESULTSTRING_FIND_ALL, query = JPQL_PAIRRESULTSTRING_FIND_ALL),
-	@NamedQuery(name = QN_PAIRRESULTSTRING_FIND_BY_JOBID,
-			query = JPQL_PAIRRESULTSTRING_FIND_BY_JOBID) })
+		@NamedQuery(name = QN_PAIRRESULTSTRING_FIND_ALL,
+				query = JPQL_PAIRRESULTSTRING_FIND_ALL),
+		@NamedQuery(name = QN_PAIRRESULTSTRING_FIND_BY_JOBID,
+				query = JPQL_PAIRRESULTSTRING_FIND_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DV_ABSTRACT)
 public class OabaPairResultString extends AbstractPairResultEntity<String> {

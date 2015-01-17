@@ -70,6 +70,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 * 
 	 * @return
 	 */
+	@Override
 	public long getTimeInReadMaps() {
 		return inReadMaps;
 	}
@@ -81,6 +82,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 * 
 	 * @return
 	 */
+	@Override
 	public long getTimeInHandleBlock() {
 		return inHandleBlock;
 	}
@@ -91,6 +93,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 * 
 	 * @return
 	 */
+	@Override
 	public long getTimeInWriteMatches() {
 		return inWriteMatches;
 	}
@@ -106,6 +109,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSink,
 	 * float, float, int)
 	 */
+	@Override
 	public void matchBlocks(IComparisonArraySource<T> cgSource,
 			ImmutableProbabilityModel stageModel,
 			ImmutableProbabilityModel masterModel, RecordSource stage,
@@ -226,7 +230,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 
 		for (int i = 0; i < stageList.size() - 1; i++) {
 			T c = stageList.get(i);
-			Record q = (Record) stage.get(c);
+			Record q = stage.get(c);
 			if (q == null) {
 				log.severe("q is null " + c);
 			}
@@ -234,7 +238,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 			// compare with all the other staging records.
 			for (int j = i + 1; j < stageList.size(); j++) {
 				T c2 = stageList.get(j);
-				Record m = (Record) stage.get(c2);
+				Record m = stage.get(c2);
 				if (m == null) {
 					log.severe("m is null " + c2);
 				}
@@ -261,14 +265,14 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 		// the masterList
 		for (int i = 0; i < stageList.size(); i++) {
 			T c = stageList.get(i);
-			Record q = (Record) stage.get(c);
+			Record q = stage.get(c);
 			if (q == null) {
 				log.severe("q is null " + c);
 			}
 
 			for (int j = 0; j < masterList.size(); j++) {
 				T c2 = masterList.get(j);
-				Record m = (Record) master.get(c2);
+				Record m = master.get(c2);
 				if (m == null) {
 					log.severe("master m is null " + c2);
 				}
@@ -368,11 +372,11 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 		// perform round robin comparison on S
 		for (int i = 0; i < S.size() - 1; i++) {
 			T c1 = S.get(i);
-			Record q = (Record) stage.get(c1);
+			Record q = stage.get(c1);
 
 			for (int j = i + 1; j < S.size(); j++) {
 				T c2 = S.get(j);
-				Record m = (Record) stage.get(c2);
+				Record m = stage.get(c2);
 
 				log.fine("Round robin s " + c1.toString() + " " + c2.toString());
 
@@ -392,11 +396,11 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 		// for each T stage, compare to all of S
 		for (int i = 0; i < TStage.size(); i++) {
 			T c1 = TStage.get(i);
-			Record q = (Record) stage.get(c1);
+			Record q = stage.get(c1);
 
 			for (int j = 0; j < S.size(); j++) {
 				T c2 = S.get(j);
-				Record m = (Record) stage.get(c2);
+				Record m = stage.get(c2);
 
 				log.fine("TStage with S " + c1.toString() + " " + c2.toString());
 
@@ -414,11 +418,11 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 		// for each T master, compare to all of S
 		for (int i = 0; i < TMaster.size(); i++) {
 			T c1 = TMaster.get(i);
-			Record m = (Record) master.get(c1); // q is always stage record
+			Record m = master.get(c1); // q is always stage record
 
 			for (int j = 0; j < S.size(); j++) {
 				T c2 = S.get(j);
-				Record q = (Record) stage.get(c2);
+				Record q = stage.get(c2);
 
 				log.fine("TMaster with S " + c2.toString() + " "
 						+ c1.toString());
@@ -438,11 +442,11 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 		if (TStage.size() <= 4) {
 			for (int i = 0; i < TMaster.size(); i++) {
 				T c1 = TMaster.get(i);
-				Record m = (Record) master.get(c1);
+				Record m = master.get(c1);
 				// compare all
 				for (int j = 0; j < TStage.size(); j++) {
 					T c2 = TStage.get(j);
-					Record q = (Record) stage.get(c2);
+					Record q = stage.get(c2);
 
 					log.fine("TMaster random " + c2.toString() + " "
 							+ c1.toString());
@@ -457,12 +461,12 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 		} else {
 			for (int i = 0; i < TMaster.size(); i++) {
 				T c1 = TMaster.get(i);
-				Record m = (Record) master.get(c1);
+				Record m = master.get(c1);
 				// compare 4 random
 				int[] ids = getRandomIDs(random, 4, TStage.size());
 				for (int j = 0; j < 4; j++) {
 					T c2 = TStage.get(ids[j]);
-					Record q = (Record) stage.get(c2);
+					Record q = stage.get(c2);
 
 					log.fine("TMaster random " + c2.toString() + " "
 							+ c1.toString());
@@ -485,7 +489,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 			T c1 = TStage.get(i);
 			T c2 = null;
 
-			Record q = (Record) stage.get(c1);
+			Record q = stage.get(c1);
 			Record m = null;
 
 			int n = i + 1;
@@ -493,7 +497,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 				n = 0;
 
 			c2 = TStage.get(n);
-			m = (Record) stage.get(c2);
+			m = stage.get(c2);
 
 			log.fine("TStage random i+1 " + c1.toString() + " " + c2.toString());
 
@@ -516,7 +520,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 
 					if (ids[j] >= TStage.size()) {
 						c2 = TMaster.get(ids[j] - TStage.size());
-						m = (Record) master.get(c2);
+						m = master.get(c2);
 						mr =
 							compareRecords(clueSet, enabledClues, model, q, m,
 									false, low, high);
@@ -525,7 +529,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 								+ c2.toString());
 					} else {
 						c2 = TStage.get(ids[j]);
-						m = (Record) stage.get(c2);
+						m = stage.get(c2);
 						mr =
 							compareRecords(clueSet, enabledClues, model, q, m,
 									true, low, high);
@@ -600,8 +604,8 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 			boolean[] enabledClues, ImmutableProbabilityModel model, Record q,
 			Record m, boolean isStage, float low, float high) {
 		this.compares++;
-		return MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q, m,
-				isStage, low, high);
+		return MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q,
+				m, isStage, low, high);
 	}
 
 	/**
@@ -642,6 +646,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher#
 	 * getComparesMade()
 	 */
+	@Override
 	public int getNumComparesMade() {
 		return this.compares;
 	}
@@ -652,6 +657,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher#
 	 * getMatches()
 	 */
+	@Override
 	public int getNumMatches() {
 		return this.matches;
 	}
@@ -662,6 +668,7 @@ public class BlockMatcher2<T extends Comparable<T>> implements
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IBlockMatcher#
 	 * getNumBlocks()
 	 */
+	@Override
 	public int getNumBlocks() {
 		return this.numBlocks;
 	}

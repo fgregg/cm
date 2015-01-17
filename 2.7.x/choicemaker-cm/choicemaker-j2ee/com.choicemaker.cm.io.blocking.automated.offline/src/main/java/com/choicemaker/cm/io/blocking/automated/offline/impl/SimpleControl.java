@@ -18,9 +18,14 @@ import com.choicemaker.cm.core.IControl;
  */
 public class SimpleControl implements IControl {
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IControl#shouldStop()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IControl#shouldStop
+	 * ()
 	 */
+	@Override
 	public boolean shouldStop() {
 		return false;
 	}

@@ -21,8 +21,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
@@ -30,108 +30,113 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
 /**
  * @author pcheung
  *
- * This service handles the deduping of match record id pairs.  This version uses the MatchRecord2
- * object.
+ *         This service handles the deduping of match record id pairs. This
+ *         version uses the MatchRecord2 object.
  * 
- * The deduping works as follows:
- * 1.	use a tree set to filter out dups
- * 2.	if there are too many pairs, write the hash set to file and empty the set
- * 3.	sort and merge all the files into 1. 
+ *         The deduping works as follows: 1. use a tree set to filter out dups
+ *         2. if there are too many pairs, write the hash set to file and empty
+ *         the set 3. sort and merge all the files into 1.
  * 
- * This version calls the GenericDedupService to handle the work. 
+ *         This version calls the GenericDedupService to handle the work.
  * 
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class MatchDedupService3 {
-	
-	private static final Logger log = Logger.getLogger(MatchDedupService3.class.getName());
+
+	private static final Logger log = Logger.getLogger(MatchDedupService3.class
+			.getName());
 
 	private IMatchRecord2Source mSource;
 	private IMatchRecord2Sink mSink;
 	private IMatchRecord2SinkSourceFactory mFactory;
 	private OabaEventLog status;
-//	private int max;
-	
-	private int numBefore = 0; //this counts the number of input matches
-	private int numAfter = 0; //this counts the number of output matches
-	
-	private long time; //this keeps track of time
+	// private int max;
 
-	// these two variables are used to stop the program in the middle 
+	private int numBefore = 0; // this counts the number of input matches
+	private int numAfter = 0; // this counts the number of output matches
+
+	private long time; // this keeps track of time
+
+	// these two variables are used to stop the program in the middle
 	private IControl control;
-//	private boolean stop;
 
-	
-	public MatchDedupService3 (IMatchRecord2Source mSource, IMatchRecord2Sink mSink,
-		IMatchRecord2SinkSourceFactory mFactory, int max, OabaEventLog status, IControl control) {
-		
+	// private boolean stop;
+
+	public MatchDedupService3(IMatchRecord2Source mSource,
+			IMatchRecord2Sink mSink, IMatchRecord2SinkSourceFactory mFactory,
+			int max, OabaEventLog status, IControl control) {
+
 		this.mSource = mSource;
 		this.mSink = mSink;
 		this.mFactory = mFactory;
 		this.status = status;
-//		this.max = max;
+		// this.max = max;
 		this.control = control;
 	}
-	
-	
-	/** This method runs the service.
+
+	/**
+	 * This method runs the service.
 	 * 
 	 * @throws IOException
 	 */
-	public void runService () throws BlockingException {
+	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
-		
-		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_DEDUP_MATCHES ) {
-			//do nothing
-			
+
+		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_DEDUP_MATCHES) {
+			// do nothing
+
 		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_MATCHING_DATA) {
-				
-			//start writing out dedup
-			log.info ("start writing to temp match files");
-			
-			IComparableSource source = new ComparableMRSource (mSource);
-			IComparableSink sink = new ComparableMRSink (mSink);
-			ComparableMRSinkSourceFactory factory = new ComparableMRSinkSourceFactory (mFactory);
-			
-			GenericDedupService service = new GenericDedupService (source, sink, factory, 500000, control);
+
+			// start writing out dedup
+			log.info("start writing to temp match files");
+
+			IComparableSource source = new ComparableMRSource(mSource);
+			IComparableSink sink = new ComparableMRSink(mSink);
+			ComparableMRSinkSourceFactory factory =
+				new ComparableMRSinkSourceFactory(mFactory);
+
+			GenericDedupService service =
+				new GenericDedupService(source, sink, factory, 500000, control);
 			service.runDedup();
 			numBefore = service.getNumBefore();
 			numAfter = service.getNumAfter();
-			
-			log.info ("total matches before " + numBefore);
-			log.info ("total matches after " + numAfter);
 
-			status.setCurrentOabaEvent( OabaEvent.DONE_DEDUP_MATCHES );
+			log.info("total matches before " + numBefore);
+			log.info("total matches after " + numAfter);
+
+			status.setCurrentOabaEvent(OabaEvent.DONE_DEDUP_MATCHES);
 		}
-		
+
 		time = System.currentTimeMillis() - time;
 	}
-	
-	/** This method returns the time it takes to run the runService method.
+
+	/**
+	 * This method returns the time it takes to run the runService method.
 	 * 
-	 * @return long - returns the time (in milliseconds) it took to run this service.
+	 * @return long - returns the time (in milliseconds) it took to run this
+	 *         service.
 	 */
-	public long getTimeElapsed () { return time; }
+	public long getTimeElapsed() {
+		return time;
+	}
 
-
-
-	/** This returns the number of matches before the dedup.
+	/**
+	 * This returns the number of matches before the dedup.
 	 * 
 	 * @return
 	 */
-	public int getNumBefore () {
+	public int getNumBefore() {
 		return numBefore;
 	}
 
-
-	/** This returns the number of matches after the dedup.
+	/**
+	 * This returns the number of matches after the dedup.
 	 * 
 	 * @return
 	 */
-	public int getNumAfter () {
+	public int getNumAfter() {
 		return numAfter;
 	}
-
-
 
 }

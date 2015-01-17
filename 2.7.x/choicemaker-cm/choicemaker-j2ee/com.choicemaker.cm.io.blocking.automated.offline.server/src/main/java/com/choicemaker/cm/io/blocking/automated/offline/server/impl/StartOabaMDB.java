@@ -72,6 +72,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	@Resource(lookup = "java:/choicemaker/urm/jms/singleMatchQueue")
 	private Queue singleMatchQueue;
 
+	@Override
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
@@ -162,7 +163,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					getLogger().info("Using batch record matching");
 
 					MutableRecordIdTranslator<?> translator =
-						getRecordIdController().createMutableRecordIdTranslator(oabaJob);
+						getRecordIdController()
+								.createMutableRecordIdTranslator(oabaJob);
 
 					// create rec_id, val_id files
 					RecValSinkSourceFactory recvalFactory =
@@ -175,11 +177,11 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					getLogger().info(
 							"Done creating rec_id, val_id files: "
 									+ rvService.getTimeElapsed());
-					
+
 					ImmutableRecordIdTranslator<?> immutableTranslator =
-							translator.toImmutableTranslator();
+						translator.toImmutableTranslator();
 					final RECORD_ID_TYPE recordIdType =
-							immutableTranslator.getRecordIdType();
+						immutableTranslator.getRecordIdType();
 					getPropertyController().setJobProperty(oabaJob,
 							PN_RECORD_ID_TYPE, recordIdType.name());
 
@@ -187,7 +189,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					getPropertyController().setJobProperty(oabaJob,
 							PN_BLOCKING_FIELD_COUNT,
 							String.valueOf(numBlockFields));
-					
+
 					// create the validator after rvService
 					// Validator validator = new Validator (true, translator);
 					ValidatorBase validator =
@@ -216,8 +218,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	}
 
 	/**
-	 * This method checks to see if the number of records in the RECORD_SOURCE_ROLE is
-	 * greater than the threshold.
+	 * This method checks to see if the number of records in the
+	 * RECORD_SOURCE_ROLE is greater than the threshold.
 	 *
 	 * @param rs
 	 *            - RECORD_SOURCE_ROLE

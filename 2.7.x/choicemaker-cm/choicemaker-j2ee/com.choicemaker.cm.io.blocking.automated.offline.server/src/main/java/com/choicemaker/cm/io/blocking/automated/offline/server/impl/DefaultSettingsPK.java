@@ -32,11 +32,11 @@ public class DefaultSettingsPK {
 	 *            {@link AbaSettingsJPA#DISCRIMINATOR_VALUE} or
 	 *            {@link OabaSettingsJPA#DISCRIMINATOR_VALUE}
 	 * @param d
-	 *            a valid database configuration name, as specified by the modelId
-	 *            schema
+	 *            a valid database configuration name, as specified by the
+	 *            modelId schema
 	 * @param b
-	 *            a valid blocking configuration name, as specified by the modelId
-	 *            schema
+	 *            a valid blocking configuration name, as specified by the
+	 *            modelId schema
 	 */
 	public DefaultSettingsPK(String m, String t, String d, String b) {
 		if (m == null || t == null || d == null || b == null) {

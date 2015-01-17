@@ -26,8 +26,8 @@ public class MatchWriterMessage implements Serializable {
 	public final long jobID;
 
 	/**
-	 * An index used to split processing across a set of agents that are
-	 * running in parallel.
+	 * An index used to split processing across a set of agents that are running
+	 * in parallel.
 	 */
 	int processingIndex;
 

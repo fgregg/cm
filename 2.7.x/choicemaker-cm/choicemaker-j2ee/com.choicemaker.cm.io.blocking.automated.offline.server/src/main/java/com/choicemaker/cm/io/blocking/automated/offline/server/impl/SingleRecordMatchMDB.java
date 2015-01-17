@@ -86,7 +86,8 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/singleMatchQueue"),
@@ -95,8 +96,9 @@ import com.choicemaker.e2.platform.CMPlatformUtils;
 public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	
-	private static final Logger log = Logger.getLogger(SingleRecordMatchMDB.class.getName());
+
+	private static final Logger log = Logger
+			.getLogger(SingleRecordMatchMDB.class.getName());
 
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ SingleRecordMatchMDB.class.getName());
@@ -115,7 +117,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
-	
+
 	@EJB
 	private OabaProcessingController processingController;
 
@@ -124,13 +126,14 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 	@EJB
 	private RecordIdController ridController;
-	
+
 	@EJB
 	private OperationalPropertyController propController;
 
-//	@Inject
-//	private JMSContext jmsContext;
+	// @Inject
+	// private JMSContext jmsContext;
 
+	@Override
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
@@ -195,7 +198,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 			IMatchRecord2Sink mSinkFinal, OabaJob oabaJob, OabaParameters params)
 			throws Exception {
 
-//		final long jobId = data.jobID;
+		// final long jobId = data.jobID;
 		final String modelConfigId = params.getModelConfigurationName();
 		ImmutableProbabilityModel stageModel =
 			PMManager.getModelInstance(modelConfigId);
@@ -223,8 +226,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 		int maxMatch = Integer.parseInt(temp);
 
 		// create rec_id, val_id files
-		ISerializableRecordSource staging =
-				rsController.getStageRs(params);
+		ISerializableRecordSource staging = rsController.getStageRs(params);
 		RecValService2 rvService =
 			new RecValService2(staging, null, stageModel, null,
 					OabaFileUtils.getRecValFactory(oabaJob), mutableTranslator,
@@ -242,8 +244,10 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 		// blocking
 		// using BlockGroup to speed up dedup later
 		BlockGroup bGroup =
-			new BlockGroup(OabaFileUtils.getBlockGroupFactory(oabaJob), maxBlock);
-		IBlockSinkSourceFactory osFactory = OabaFileUtils.getOversizedFactory(oabaJob);
+			new BlockGroup(OabaFileUtils.getBlockGroupFactory(oabaJob),
+					maxBlock);
+		IBlockSinkSourceFactory osFactory =
+			OabaFileUtils.getOversizedFactory(oabaJob);
 		IBlockSink osSpecial = osFactory.getNextSink();
 
 		// Start blocking
@@ -251,8 +255,8 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 			new OABABlockingService(maxBlock, bGroup,
 					OabaFileUtils.getOversizedGroupFactory(oabaJob), osSpecial,
 					null, OabaFileUtils.getRecValFactory(oabaJob),
-					numBlockFields, data.validator, processingEntry,
-					oabaJob, minFields, maxOversized);
+					numBlockFields, data.validator, processingEntry, oabaJob,
+					minFields, maxOversized);
 		blockingService.runService();
 		log.info("Done blocking " + blockingService.getTimeElapsed());
 		log.info("Num Blocks " + blockingService.getNumBlocks());
@@ -272,16 +276,19 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 		OversizedDedupService osDedupService =
 			new OversizedDedupService(osSource, osDedup,
-					OabaFileUtils.getOversizedTempFactory(oabaJob), processingEntry, oabaJob);
+					OabaFileUtils.getOversizedTempFactory(oabaJob),
+					processingEntry, oabaJob);
 		osDedupService.runService();
 		log.info("Done oversized dedup " + osDedupService.getTimeElapsed());
 		log.info("Num OS Before " + osDedupService.getNumBlocksIn());
 		log.info("Num OS After Exact " + osDedupService.getNumAfterExact());
 		log.info("Num OS Done " + osDedupService.getNumBlocksOut());
-		sendToUpdateStatus(oabaJob, OabaEvent.DONE_DEDUP_OVERSIZED, new Date(), null);
+		sendToUpdateStatus(oabaJob, OabaEvent.DONE_DEDUP_OVERSIZED, new Date(),
+				null);
 
 		// create the proper block source
-		IBlockSinkSourceFactory bFactory = OabaFileUtils.getBlockFactory(oabaJob);
+		IBlockSinkSourceFactory bFactory =
+			OabaFileUtils.getBlockFactory(oabaJob);
 		bSink = bFactory.getNextSink();
 		IBlockSource source = bFactory.getSource(bSink);
 
@@ -291,11 +298,10 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 		// create chunks
 		ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
-		ISerializableRecordSource stagingRs =
-				rsController.getStageRs(params);
+		ISerializableRecordSource stagingRs = rsController.getStageRs(params);
 		ChunkService2 chunkService =
-			new ChunkService2(source, source2, stagingRs, null,
-					stageModel, null, immutableTranslator,
+			new ChunkService2(source, source2, stagingRs, null, stageModel,
+					null, immutableTranslator,
 					OabaFileUtils.getChunkIDFactory(oabaJob),
 					OabaFileUtils.getStageDataFactory(oabaJob, model),
 					OabaFileUtils.getMasterDataFactory(oabaJob, model),
@@ -308,8 +314,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 		final int numChunks = chunkService.getNumChunks();
 		log.info("Number of chunks " + numChunks);
-		propController.setJobProperty(oabaJob,
-				PN_CHUNK_FILE_COUNT,
+		propController.setJobProperty(oabaJob, PN_CHUNK_FILE_COUNT,
 				String.valueOf(numChunks));
 
 		// match sink
@@ -375,7 +380,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 		RecordSource stage = rsController.getStageRs(params);
 		assert stage.getModel() == model;
-//		stage.setModel(modelId);
+		// stage.setModel(modelId);
 
 		try {
 			stage.open();
@@ -395,7 +400,8 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 				log.fine(q.getId() + " " + rs + " " + model);
 
 				SortedSet<Match> s =
-					dm.getMatches(q, rs, model, params.getLowThreshold(), params.getHighThreshold());
+					dm.getMatches(q, rs, model, params.getLowThreshold(),
+							params.getHighThreshold());
 				Iterator<Match> iS = s.iterator();
 				while (iS.hasNext()) {
 					Match m = iS.next();
@@ -429,8 +435,8 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 	private void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		processingController.updateStatusWithNotification(job, event, timestamp,
-				info);
+		processingController.updateStatusWithNotification(job, event,
+				timestamp, info);
 	}
 
 }

@@ -85,6 +85,7 @@ public interface BatchJob extends IControl, Serializable {
 
 	void markAsAborted();
 
+	@Override
 	boolean shouldStop();
 
 }

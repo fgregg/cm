@@ -25,6 +25,7 @@ import javax.jms.MessageListener;
  * @author pcheung
  * @deprecated use StatusListenerMDB or listen on 'status' Topic
  */
+@Deprecated
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/updateQueue"),
@@ -33,8 +34,10 @@ import javax.jms.MessageListener;
 public class UpdateStatusMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(UpdateStatusMDB.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + UpdateStatusMDB.class.getName());
+	private static final Logger log = Logger.getLogger(UpdateStatusMDB.class
+			.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
+			+ UpdateStatusMDB.class.getName());
 
 	@EJB
 	private OabaJobControllerBean jobController;
@@ -42,10 +45,12 @@ public class UpdateStatusMDB implements MessageListener, Serializable {
 	public UpdateStatusMDB() {
 	}
 
+	@Override
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 
-		log.warning("Received message from deprecated updateQueue: " + inMessage);
+		log.warning("Received message from deprecated updateQueue: "
+				+ inMessage);
 
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}

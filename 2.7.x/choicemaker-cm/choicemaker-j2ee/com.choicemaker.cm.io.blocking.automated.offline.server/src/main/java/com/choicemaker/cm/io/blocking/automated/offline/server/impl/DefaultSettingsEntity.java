@@ -17,10 +17,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @NamedQueries({
-@NamedQuery(name = QN_DSET_FIND_ALL, query = JPQL_DSET_FIND_ALL),
-@NamedQuery(name = QN_DSET_FIND_ALL_ABA, query = JPQL_DSET_FIND_ALL_ABA),
-@NamedQuery(name = QN_DSET_FIND_ALL_OABA, query = JPQL_DSET_FIND_ALL_OABA)
-})
+		@NamedQuery(name = QN_DSET_FIND_ALL, query = JPQL_DSET_FIND_ALL),
+		@NamedQuery(name = QN_DSET_FIND_ALL_ABA, query = JPQL_DSET_FIND_ALL_ABA),
+		@NamedQuery(name = QN_DSET_FIND_ALL_OABA,
+				query = JPQL_DSET_FIND_ALL_OABA) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 public class DefaultSettingsEntity {

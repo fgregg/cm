@@ -4,11 +4,13 @@ import com.choicemaker.cm.batch.impl.BatchJobJPA;
 
 /**
  * Java Persistence API (JPA) for OabaParameters beans.<br/>
- * Prefixes:<ul>
- * <li> JPQL -- Java Persistence Query Language</li>
- * <li> QN -- Query Name</li>
- * <li> CN -- Column Name</li>
+ * Prefixes:
+ * <ul>
+ * <li>JPQL -- Java Persistence Query Language</li>
+ * <li>QN -- Query Name</li>
+ * <li>CN -- Column Name</li>
  * </ul>
+ * 
  * @author rphall
  */
 public interface OabaParametersJPA {
@@ -45,20 +47,21 @@ public interface OabaParametersJPA {
 
 	String ID_GENERATOR_TABLE = BatchJobJPA.ID_GENERATOR_TABLE;
 
-	String ID_GENERATOR_PK_COLUMN_NAME = BatchJobJPA.ID_GENERATOR_PK_COLUMN_NAME;
+	String ID_GENERATOR_PK_COLUMN_NAME =
+		BatchJobJPA.ID_GENERATOR_PK_COLUMN_NAME;
 
 	String ID_GENERATOR_PK_COLUMN_VALUE = "OABA_BATCHPARAMS";
 
-	String ID_GENERATOR_VALUE_COLUMN_NAME = BatchJobJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
-	
+	String ID_GENERATOR_VALUE_COLUMN_NAME =
+		BatchJobJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+
 	/**
 	 * Name of the query that finds all persistent batch parameter instances
 	 */
-	String QN_BATCHPARAMETERS_FIND_ALL =
-			"oabaParametersFindAll";
+	String QN_BATCHPARAMETERS_FIND_ALL = "oabaParametersFindAll";
 
 	/** JPQL used to implement {@link #QN_BATCHPARAMETERS_FIND_ALL} */
 	String JPQL_BATCHPARAMETERS_FIND_ALL =
-			"Select params from OabaParametersEntity params";
+		"Select params from OabaParametersEntity params";
 
 }

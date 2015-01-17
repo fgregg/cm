@@ -18,49 +18,66 @@ import java.util.List;
  * @author pcheung
  *
  */
-public class ComparisonListSet<T extends Comparable<T>> implements IComparisonSet<T> {
-	
+public class ComparisonListSet<T extends Comparable<T>> implements
+		IComparisonSet<T> {
+
 	private static final long serialVersionUID = 1L;
 	private List<ComparisonPair<T>> list;
 	private int ind;
 	private int size;
-	
-	
-	/** This constructor takes in a list of ComparisonPair.
+
+	/**
+	 * This constructor takes in a list of ComparisonPair.
 	 * 
 	 * @param list
 	 */
-	public ComparisonListSet (List<ComparisonPair<T>> list) {
+	public ComparisonListSet(List<ComparisonPair<T>> list) {
 		this.list = list;
 		ind = 0;
-		size = list.size ();
+		size = list.size();
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#hasNextPair()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#
+	 * hasNextPair()
 	 */
+	@Override
 	public boolean hasNextPair() {
-		if (ind < size) return true;
-		else return false;
+		if (ind < size)
+			return true;
+		else
+			return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#getNextPair()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#
+	 * getNextPair()
 	 */
+	@Override
 	public ComparisonPair<T> getNextPair() {
 		ComparisonPair<T> ret = list.get(ind);
-		ind ++;
+		ind++;
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#writeDebug()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#
+	 * writeDebug()
 	 */
+	@Override
 	public String writeDebug() {
-		StringBuffer sb = new StringBuffer ();
+		StringBuffer sb = new StringBuffer();
 		sb.append(Constants.LINE_SEPARATOR);
-		for (int i=0; i<size; i++) {
+		for (int i = 0; i < size; i++) {
 			ComparisonPair<T> p = list.get(i);
 			sb.append('(');
 			sb.append(p.getId1().toString());

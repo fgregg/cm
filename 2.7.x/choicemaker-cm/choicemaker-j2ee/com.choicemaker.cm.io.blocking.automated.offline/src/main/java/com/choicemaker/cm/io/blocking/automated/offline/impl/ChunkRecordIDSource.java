@@ -74,6 +74,7 @@ public class ChunkRecordIDSource extends BaseFileSource<Long> implements
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRowSource
 	 * #hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws BlockingException {
 		if (this.used) {
 			try {

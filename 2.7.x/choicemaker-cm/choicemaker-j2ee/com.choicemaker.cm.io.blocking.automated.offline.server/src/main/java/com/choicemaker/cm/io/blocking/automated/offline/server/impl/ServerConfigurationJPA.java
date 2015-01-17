@@ -1,6 +1,5 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-
 /**
  * Java Persistence API (JPA) for OabaJob beans.<br/>
  * Prefixes:
@@ -87,15 +86,16 @@ public interface ServerConfigurationJPA {
 	 */
 	String PN_SERVERCONFIG_FIND_BY_NAME_P1 = "name";
 
-//	/**
-//	 * Name of the query that finds all persistent server configurations marked
-//	 * by {@link ServerConfiguration#ANY_HOST ANY_HOST}
-//	 */
-//	String QN_SERVERCONFIG_FIND_ANY_HOST = "serverConfigFindAnyHost";
-//
-//	/** JPQL used to implement {@link #QN_SERVERCONFIG_FIND_ANY_HOST} */
-//	String JPQL_SERVERCONFIG_FIND_ANY_HOST =
-//		"Select sc from ServerConfigurationEntity sc where sc.name = '"
-//				+ ServerConfiguration.ANY_HOST + "'";
+	// /**
+	// * Name of the query that finds all persistent server configurations
+	// marked
+	// * by {@link ServerConfiguration#ANY_HOST ANY_HOST}
+	// */
+	// String QN_SERVERCONFIG_FIND_ANY_HOST = "serverConfigFindAnyHost";
+	//
+	// /** JPQL used to implement {@link #QN_SERVERCONFIG_FIND_ANY_HOST} */
+	// String JPQL_SERVERCONFIG_FIND_ANY_HOST =
+	// "Select sc from ServerConfigurationEntity sc where sc.name = '"
+	// + ServerConfiguration.ANY_HOST + "'";
 
 }

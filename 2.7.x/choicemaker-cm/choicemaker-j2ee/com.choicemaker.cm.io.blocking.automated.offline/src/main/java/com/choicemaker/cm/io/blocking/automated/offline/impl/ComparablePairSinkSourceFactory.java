@@ -21,58 +21,89 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSinkSourceFa
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
-public class ComparablePairSinkSourceFactory implements IComparableSinkSourceFactory {
+@SuppressWarnings({ "rawtypes" })
+public class ComparablePairSinkSourceFactory implements
+		IComparableSinkSourceFactory {
 
 	private IPairIDSinkSourceFactory factory;
-	
-	public ComparablePairSinkSourceFactory (IPairIDSinkSourceFactory factory) {
+
+	public ComparablePairSinkSourceFactory(IPairIDSinkSourceFactory factory) {
 		this.factory = factory;
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getNextSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory#getNextSink()
 	 */
+	@Override
 	public IComparableSink getNextSink() throws BlockingException {
-		return new ComparablePairSink (factory.getNextSink());
+		return new ComparablePairSink(factory.getNextSink());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory#getNextSource()
 	 */
+	@Override
 	public IComparableSource getNextSource() throws BlockingException {
-		return new ComparablePairSource (factory.getNextSource());
+		return new ComparablePairSource(factory.getNextSource());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getSource(com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory
+	 * #getSource(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IComparableSink)
 	 */
-	public IComparableSource getSource(IComparableSink sink) throws BlockingException {
+	@Override
+	public IComparableSource getSource(IComparableSink sink)
+			throws BlockingException {
 		IPairIDSink o = (IPairIDSink) sink.getBaseObject();
-		return new ComparablePairSource (factory.getSource(o));
+		return new ComparablePairSource(factory.getSource(o));
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getNumSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory#getNumSink()
 	 */
+	@Override
 	public int getNumSink() {
 		return factory.getNumSink();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#getNumSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory#getNumSource()
 	 */
+	@Override
 	public int getNumSource() {
 		return factory.getNumSource();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSinkSourceFactory#move(com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink, com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparableSinkSourceFactory
+	 * #move(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IComparableSink,
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink)
 	 */
-	public void move(IComparableSink sink1, IComparableSink sink2) throws BlockingException {
-		factory.move((IPairIDSink)sink1.getBaseObject(), 
-			(IPairIDSink)sink2.getBaseObject());
+	@Override
+	public void move(IComparableSink sink1, IComparableSink sink2)
+			throws BlockingException {
+		factory.move((IPairIDSink) sink1.getBaseObject(),
+				(IPairIDSink) sink2.getBaseObject());
 	}
 
 }

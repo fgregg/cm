@@ -64,7 +64,7 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 	public SqlRecordSourceEntity(String className, String dataSource,
 			String model, String sql, String dbConfig) {
 		super(TYPE);
-		
+
 		if (className == null || !className.equals(className.trim())
 				|| className.isEmpty()) {
 			String msg = "invalid class name '" + className + "'";
@@ -88,7 +88,7 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 			String msg = "invalid data configuration name '" + dbConfig + "'";
 			throw new IllegalArgumentException(msg);
 		}
-		
+
 		this.className = className;
 		this.dataSource = dataSource;
 		this.modelId = model;
@@ -139,20 +139,30 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 	protected int hashCode0() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-			+ ((getClassName() == null) ? 0 : getClassName().hashCode());
-		result = prime * result
-			+ ((getDataSource() == null) ? 0 : getDataSource().hashCode());
-		result = prime * result
-			+ ((getDatabaseConfiguration() == null) ? 0
+		result =
+			prime
+					* result
+					+ ((getClassName() == null) ? 0 : getClassName().hashCode());
+		result =
+			prime
+					* result
+					+ ((getDataSource() == null) ? 0 : getDataSource()
+							.hashCode());
+		result =
+			prime
+					* result
+					+ ((getDatabaseConfiguration() == null) ? 0
 							: getDatabaseConfiguration().hashCode());
-		result = prime * result
-			+ ((getModelId() == null) ? 0 : getModelId().hashCode());
-		result = prime * result
-			+ ((getSqlSelectStatement() == null) ? 0
+		result =
+			prime * result
+					+ ((getModelId() == null) ? 0 : getModelId().hashCode());
+		result =
+			prime
+					* result
+					+ ((getSqlSelectStatement() == null) ? 0
 							: getSqlSelectStatement().hashCode());
-		result = prime * result
-			+ ((getType() == null) ? 0 : getType().hashCode());
+		result =
+			prime * result + ((getType() == null) ? 0 : getType().hashCode());
 		return result;
 	}
 
@@ -228,9 +238,9 @@ public class SqlRecordSourceEntity extends BaseRecordSourceEntity implements
 
 	@Override
 	public String toString() {
-		return "SqlRecordSource [getId()=" + getId()
-				+ ", getDataSourceName()=" + getDataSource()
-				+ ", getSqlSelectStatement()=" + getSqlSelectStatement() + "]";
+		return "SqlRecordSource [getId()=" + getId() + ", getDataSourceName()="
+				+ getDataSource() + ", getSqlSelectStatement()="
+				+ getSqlSelectStatement() + "]";
 	}
 
 }

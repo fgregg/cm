@@ -29,58 +29,70 @@ public class PairIDSinkSourceFactory implements IPairIDSinkSourceFactory {
 	private String ext;
 	private int indSink = 0;
 	private int indSource = 0;
-	
+
 	/**
 	 * This constructor takes in key parameters to create rec_id, val_id files
 	 * as follows:
 	 * 
 	 * fileDir + baseName + ind + "." + ext
 	 */
-	public PairIDSinkSourceFactory (String fileDir, String baseName, String ext) {
+	public PairIDSinkSourceFactory(String fileDir, String baseName, String ext) {
 		this.fileDir = fileDir;
 		this.baseName = baseName;
 		this.ext = ext;
 	}
 
+	@Override
 	public IPairIDSink getNextSink() throws BlockingException {
-		indSink ++;
-		return new PairIDSink (fileDir + baseName + indSink + "." + ext, EXTERNAL_DATA_FORMAT.STRING);
+		indSink++;
+		return new PairIDSink(fileDir + baseName + indSink + "." + ext,
+				EXTERNAL_DATA_FORMAT.STRING);
 	}
 
+	@Override
 	public IPairIDSource getNextSource() throws BlockingException {
-		indSource ++;
-		return new PairIDSource (fileDir + baseName + indSource + "." + ext, EXTERNAL_DATA_FORMAT.STRING);
+		indSource++;
+		return new PairIDSource(fileDir + baseName + indSource + "." + ext,
+				EXTERNAL_DATA_FORMAT.STRING);
 	}
 
+	@Override
 	public int getNumSink() {
 		return indSink;
 	}
 
+	@Override
 	public int getNumSource() {
 		return indSource;
 	}
 
+	@Override
 	public IPairIDSource getSource(IPairIDSink sink) throws BlockingException {
-		return new PairIDSource (sink.getInfo(), EXTERNAL_DATA_FORMAT.STRING);
+		return new PairIDSource(sink.getInfo(), EXTERNAL_DATA_FORMAT.STRING);
 	}
 
+	@Override
 	public IPairIDSink getSink(IPairIDSource source) throws BlockingException {
-		return new PairIDSink (source.getInfo(), EXTERNAL_DATA_FORMAT.STRING);
+		return new PairIDSink(source.getInfo(), EXTERNAL_DATA_FORMAT.STRING);
 	}
 
+	@Override
 	public void removeSink(IPairIDSink sink) throws BlockingException {
-		File f = new File (sink.getInfo());
+		File f = new File(sink.getInfo());
 		f.delete();
 	}
 
+	@Override
 	public void removeSource(IPairIDSource source) throws BlockingException {
-		File f = new File (source.getInfo());
+		File f = new File(source.getInfo());
 		f.delete();
 	}
 
-	public void move(IPairIDSink sink1, IPairIDSink sink2) throws BlockingException {
-		File f = new File (sink1.getInfo());
-		File fout = new File (sink2.getInfo());
+	@Override
+	public void move(IPairIDSink sink1, IPairIDSink sink2)
+			throws BlockingException {
+		File f = new File(sink1.getInfo());
+		File fout = new File(sink2.getInfo());
 		fout.delete();
 		f.renameTo(fout);
 		f.delete();

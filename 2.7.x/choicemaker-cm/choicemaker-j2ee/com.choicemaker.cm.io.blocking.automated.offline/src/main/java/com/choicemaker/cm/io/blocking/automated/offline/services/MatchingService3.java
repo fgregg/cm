@@ -37,17 +37,19 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 /**
  * This service object handles the matching of blocks in each chunk.
  *
- * This version is more abstracted and takes in IComparisonSet for regular and oversized blocks.
- * This version doesn't use IBlockMatcher2, because the pair information is captured in
- * IComparisonSetSource.
+ * This version is more abstracted and takes in IComparisonSet for regular and
+ * oversized blocks. This version doesn't use IBlockMatcher2, because the pair
+ * information is captured in IComparisonSetSource.
  *
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class MatchingService3 {
 
-	private static final Logger log = Logger.getLogger(MatchingService3.class.getName());
+	private static final Logger log = Logger.getLogger(MatchingService3.class
+			.getName());
 
 	private static int BUFFER_SIZE = 1000;
 
@@ -63,7 +65,7 @@ public class MatchingService3 {
 	private final ClueSet clueSet;
 	private final boolean[] enabledClues;
 
-	//book keeping
+	// book keeping
 	private int numChunks;
 	private long numSets = 0;
 	private long compares = 0;
@@ -73,24 +75,37 @@ public class MatchingService3 {
 	private long inHandleBlocks = 0;
 	private long inWriteMatches = 0;
 
-	private ArrayList stageSources = new ArrayList ();
-	private ArrayList masterSources = new ArrayList ();
+	private ArrayList stageSources = new ArrayList();
+	private ArrayList masterSources = new ArrayList();
 
 	private long time;
 
-	/** This constructor takes these parameters:
+	/**
+	 * This constructor takes these parameters:
 	 *
-	 * @param stageFactory - factory containing info on how to get staging chunk data files
-	 * @param masterFactory - factory containing info on how to get master chunk data files
-	 * @param sources - source of comparison sets for regular blocks
-	 * @param Osources - source of comparison sets for over-sized blocks
-	 * @param model - probability accessProvider of the staging records
-	 * @param mSink - matching pair sink
-	 * @param low - differ threshold
-	 * @param high - match threshold
-	 * @param validator - determines if a pair for comparison is valid
-	 * @param maxBlockSize - maximum size of a regular block.  blocks of size > maxBlockSize is an
-	 * 		oversized block.
+	 * @param stageFactory
+	 *            - factory containing info on how to get staging chunk data
+	 *            files
+	 * @param masterFactory
+	 *            - factory containing info on how to get master chunk data
+	 *            files
+	 * @param sources
+	 *            - source of comparison sets for regular blocks
+	 * @param Osources
+	 *            - source of comparison sets for over-sized blocks
+	 * @param model
+	 *            - probability accessProvider of the staging records
+	 * @param mSink
+	 *            - matching pair sink
+	 * @param low
+	 *            - differ threshold
+	 * @param high
+	 *            - match threshold
+	 * @param validator
+	 *            - determines if a pair for comparison is valid
+	 * @param maxBlockSize
+	 *            - maximum size of a regular block. blocks of size >
+	 *            maxBlockSize is an oversized block.
 	 */
 	public MatchingService3(IChunkDataSinkSourceFactory stageFactory,
 			IChunkDataSinkSourceFactory masterFactory,
@@ -116,114 +131,129 @@ public class MatchingService3 {
 
 	}
 
-
-	/** This method runs the service.
+	/**
+	 * This method runs the service.
 	 *
 	 * @throws IOException
 	 */
-	public void runService () throws BlockingException, XmlConfException {
+	public void runService() throws BlockingException, XmlConfException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA ) {
-			//do nothing
+		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
+			// do nothing
 
-		} else if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA  &&
-			status.getCurrentOabaEventId() <= OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS ) {
+		} else if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA
+				&& status.getCurrentOabaEventId() <= OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS) {
 
-			numChunks = Integer.parseInt( status.getCurrentOabaEventInfo() );
+			numChunks = Integer.parseInt(status.getCurrentOabaEventInfo());
 
-			//start matching
-			log.info ("start matching, number of chunks " + numChunks);
+			// start matching
+			log.info("start matching, number of chunks " + numChunks);
 
-			init ();
+			init();
 			mSink.open();
-			startMatching (0);
+			startMatching(0);
 			mSink.close();
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_MATCHING_DATA ) {
-			//recovery mode
-			String temp =  status.getCurrentOabaEventInfo();
-			int ind = temp.indexOf( OabaProcessing.DELIMIT);
-			numChunks = Integer.parseInt( temp.substring(0,ind) );
-			int startPoint = Integer.parseInt( temp.substring(ind + 1)) + 1;
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_MATCHING_DATA) {
+			// recovery mode
+			String temp = status.getCurrentOabaEventInfo();
+			int ind = temp.indexOf(OabaProcessing.DELIMIT);
+			numChunks = Integer.parseInt(temp.substring(0, ind));
+			int startPoint = Integer.parseInt(temp.substring(ind + 1)) + 1;
 
-			log.info ("start recovery, chunks " + numChunks + ", starting point " + startPoint);
+			log.info("start recovery, chunks " + numChunks
+					+ ", starting point " + startPoint);
 
-			init ();
+			init();
 			mSink.append();
-			startMatching (startPoint);
+			startMatching(startPoint);
 			mSink.close();
 
 		}
 		time = System.currentTimeMillis() - time;
 	}
 
-
-	/** This method returns the time it takes to run the runService method.
+	/**
+	 * This method returns the time it takes to run the runService method.
 	 *
-	 * @return long - returns the time (in milliseconds) it took to run this service.
+	 * @return long - returns the time (in milliseconds) it took to run this
+	 *         service.
 	 */
-	public long getTimeElapsed () { return time; }
+	public long getTimeElapsed() {
+		return time;
+	}
 
-
-	/** This method performs the initialization
+	/**
+	 * This method performs the initialization
 	 *
 	 *
 	 */
-	private void init () throws XmlConfException, BlockingException {
+	private void init() throws XmlConfException, BlockingException {
 		if (stageFactory.getNumSink() == 0) {
-			//initialize this thing
-			for (int i=0; i< numChunks; i++) {
+			// initialize this thing
+			for (int i = 0; i < numChunks; i++) {
 				stageFactory.getNextSink();
 				masterFactory.getNextSink();
 			}
 		}
-		for (int i=0; i< numChunks; i++) {
+		for (int i = 0; i < numChunks; i++) {
 			stageSources.add(stageFactory.getNextSource());
 			masterSources.add(masterFactory.getNextSource());
 		}
 	}
 
-
-	/** This method starts the matching process.
+	/**
+	 * This method starts the matching process.
 	 *
-	 * @param startPoint - which chunk file to start matching on.
-	*/
-	private void startMatching (int startPoint) throws BlockingException, XmlConfException {
-		//recovering, so skip over the first startPoint files.
-		for (int i=0; i<startPoint; i++) {
+	 * @param startPoint
+	 *            - which chunk file to start matching on.
+	 */
+	private void startMatching(int startPoint) throws BlockingException,
+			XmlConfException {
+		// recovering, so skip over the first startPoint files.
+		for (int i = 0; i < startPoint; i++) {
 			// 2014-04-24 rphall: Commented out unused local variable.
 			// Note: method 'getNextSource()' has side effects
-//			IComparisonSetSource source = null;
-			if (sources.hasNextSource()) /* source = */ sources.getNextSource ();
-			else if (Osources.hasNextSource()) /* source = */ Osources.getNextSource();
-			else throw new BlockingException ("Could not open any comparison set source for chunk " + i);
+			// IComparisonSetSource source = null;
+			if (sources.hasNextSource()) /* source = */
+				sources.getNextSource();
+			else if (Osources.hasNextSource()) /* source = */
+				Osources.getNextSource();
+			else
+				throw new BlockingException(
+						"Could not open any comparison set source for chunk "
+								+ i);
 		}
 
-
-		for (int i=startPoint; i< numChunks; i++) {
+		for (int i = startPoint; i < numChunks; i++) {
 
 			long t = System.currentTimeMillis();
 
 			IComparisonSetSource source = null;
 
-			if (sources.hasNextSource()) source = sources.getNextSource ();
-			else if (Osources.hasNextSource()) source = Osources.getNextSource();
-			else throw new BlockingException ("Could not open any comparison set source for chunk " + i);
+			if (sources.hasNextSource())
+				source = sources.getNextSource();
+			else if (Osources.hasNextSource())
+				source = Osources.getNextSource();
+			else
+				throw new BlockingException(
+						"Could not open any comparison set source for chunk "
+								+ i);
 
 			source.open();
 
 			RecordSource stage = (RecordSource) stageSources.get(i);
 			RecordSource master = (RecordSource) masterSources.get(i);
 
-			log.info ("matching chunk " + i + " " + source.getInfo());
+			log.info("matching chunk " + i + " " + source.getInfo());
 			MemoryEstimator.writeMem();
 
-			//get the records into memory
-			HashMap stageMap = getRecords (stage, model);
-			HashMap masterMap = getRecords (master, model);
+			// get the records into memory
+			HashMap stageMap = getRecords(stage, model);
+			HashMap masterMap = getRecords(master, model);
 
-			ArrayList buffer = new ArrayList ();
+			ArrayList buffer = new ArrayList();
 
 			int b = 0;
 			int c = 0;
@@ -233,7 +263,7 @@ public class MatchingService3 {
 
 			while (source.hasNext()) {
 
-				//get the next tree or array
+				// get the next tree or array
 				IComparisonSet cSet = (IComparisonSet) source.next();
 
 				while (cSet.hasNextPair()) {
@@ -241,35 +271,37 @@ public class MatchingService3 {
 
 					Record q = (Record) stageMap.get(p.getId1());
 					Record m;
-					if (p.isStage) m =  (Record) stageMap.get(p.getId2());
-					else m =  (Record) masterMap.get(p.getId2());
+					if (p.isStage)
+						m = (Record) stageMap.get(p.getId2());
+					else
+						m = (Record) masterMap.get(p.getId2());
 
-					MatchRecord2 match = compareRecords (q, m, p.isStage);
+					MatchRecord2 match = compareRecords(q, m, p.isStage);
 					if (match != null) {
 						n++;
 						buffer.add(match);
 					}
 
-					c ++;
+					c++;
 				}
 
-				//write to match sink
+				// write to match sink
 				if (buffer.size() > BUFFER_SIZE) {
 					long x = System.currentTimeMillis();
 					mSink.writeMatches(buffer);
 					x = System.currentTimeMillis() - x;
 					inWriteMatches += x;
-					buffer = new ArrayList ();
+					buffer = new ArrayList();
 				}
 
-				b ++;
-			} //end while
+				b++;
+			} // end while
 
-			//update timer
+			// update timer
 			y = System.currentTimeMillis() - y;
 			inHandleBlocks += y;
 
-			//one last write on this chunk
+			// one last write on this chunk
 			if (buffer.size() > 0) {
 				long x = System.currentTimeMillis();
 				mSink.writeMatches(buffer);
@@ -282,53 +314,61 @@ public class MatchingService3 {
 			compares += c;
 			numMatches += n;
 
-			log.info ("blocks: " + b + " comparisons: " +  c + " matches: " + n);
+			log.info("blocks: " + b + " comparisons: " + c + " matches: " + n);
 
 			t = System.currentTimeMillis() - t;
 			double cps = 1000.0 * c / t;
-			log.info ("comparisons per second " + cps );
+			log.info("comparisons per second " + cps);
 
-			//log the status
-			String temp = Integer.toString(numChunks) + OabaProcessing.DELIMIT + Integer.toString(i);
-			status.setCurrentOabaEvent( OabaEvent.MATCHING_DATA, temp );
+			// log the status
+			String temp =
+				Integer.toString(numChunks) + OabaProcessing.DELIMIT
+						+ Integer.toString(i);
+			status.setCurrentOabaEvent(OabaEvent.MATCHING_DATA, temp);
 
 			source.close();
 
-			//clean up
+			// clean up
 			stage = null;
 			master = null;
 			source = null;
 
-		} //end for i
+		} // end for i
 
-		log.info ("total sets: " + numSets + " comparisons: " +  compares + " matches: " + numMatches);
-		log.info ("Time in readMaps " + inReadHM);
-		log.info ("Time in handleBlocks " + inHandleBlocks);
-		log.info ("Time in writeMatches " + inWriteMatches);
+		log.info("total sets: " + numSets + " comparisons: " + compares
+				+ " matches: " + numMatches);
+		log.info("Time in readMaps " + inReadHM);
+		log.info("Time in handleBlocks " + inHandleBlocks);
+		log.info("Time in writeMatches " + inWriteMatches);
 
-		double cps = 1000.0 * compares / (inReadHM + inHandleBlocks + inWriteMatches);
-		log.info ("comparisons per second " + cps );
+		double cps =
+			1000.0 * compares / (inReadHM + inHandleBlocks + inWriteMatches);
+		log.info("comparisons per second " + cps);
 
-		//cleanup
+		// cleanup
 		stageFactory.removeAllSinks();
 		masterFactory.removeAllSinks();
 		sources.cleanUp();
 		Osources.cleanUp();
 
-		status.setCurrentOabaEvent( OabaEvent.DONE_MATCHING_DATA);
+		status.setCurrentOabaEvent(OabaEvent.DONE_MATCHING_DATA);
 	}
 
-
-	/** This method gets the data in the RecordSource and puts them into a hash map.
+	/**
+	 * This method gets the data in the RecordSource and puts them into a hash
+	 * map.
 	 *
-	 * @param rs - RecordSource
-	 * @param accessProvider - ProbabilityModel
+	 * @param rs
+	 *            - RecordSource
+	 * @param accessProvider
+	 *            - ProbabilityModel
 	 * @return
 	 */
-	private HashMap getRecords (RecordSource rs, IProbabilityModel model) throws BlockingException {
+	private HashMap getRecords(RecordSource rs, IProbabilityModel model)
+			throws BlockingException {
 		long t = System.currentTimeMillis();
 
-		HashMap records = new HashMap ();
+		HashMap records = new HashMap();
 
 		try {
 			if (rs != null && model != null) {
@@ -346,7 +386,7 @@ public class MatchingService3 {
 				rs.close();
 			}
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 
 		inReadHM += System.currentTimeMillis() - t;
@@ -364,15 +404,14 @@ public class MatchingService3 {
 	 * @param isStage
 	 *            - indicates if the second record is staging or master
 	 */
-	private MatchRecord2 compareRecords (Record q, Record m, boolean isStage) {
+	private MatchRecord2 compareRecords(Record q, Record m, boolean isStage) {
 		MatchRecord2 mr = null;
 		if ((q != null) && (m != null)) {
 			mr =
-				MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q, m,
-						isStage, low, high);
+				MatchRecordUtils.compareRecords(clueSet, enabledClues, model,
+						q, m, isStage, low, high);
 		}
 		return mr;
 	}
-
 
 }

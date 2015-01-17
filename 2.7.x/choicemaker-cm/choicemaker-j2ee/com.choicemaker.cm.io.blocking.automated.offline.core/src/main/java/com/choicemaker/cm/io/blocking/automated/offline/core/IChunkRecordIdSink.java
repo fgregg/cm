@@ -21,6 +21,6 @@ import com.choicemaker.cm.core.BlockingException;
 public interface IChunkRecordIdSink extends ISink {
 
 	/** Writes a recordID to the sink. */
-	public void writeRecordID (long recID) throws BlockingException;
-	
+	public void writeRecordID(long recID) throws BlockingException;
+
 }

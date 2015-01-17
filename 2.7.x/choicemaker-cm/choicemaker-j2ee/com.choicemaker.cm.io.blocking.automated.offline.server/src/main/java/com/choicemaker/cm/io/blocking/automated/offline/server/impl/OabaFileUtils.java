@@ -71,8 +71,9 @@ class OabaFileUtils implements Serializable {
 	public static final int ROLLOVER = 100000;
 
 	public static final String FMT = "00000";
-	
-	protected static final String FILE_SEPARATOR = System.getProperty(SystemPropertyUtils.FILE_SEPARATOR);
+
+	protected static final String FILE_SEPARATOR = System
+			.getProperty(SystemPropertyUtils.FILE_SEPARATOR);
 
 	public static final String BINARY_SUFFIX = "dat";
 
@@ -208,10 +209,12 @@ class OabaFileUtils implements Serializable {
 			throw new IllegalArgumentException("null modelId");
 		}
 		String wd = getWorkingDir(job);
-		return new ChunkDataSinkSourceFactory(wd, BASENAME_CHUNKSTAGE_ROW_STORE, model);
+		return new ChunkDataSinkSourceFactory(wd,
+				BASENAME_CHUNKSTAGE_ROW_STORE, model);
 	}
 
-	public static final String BASENAME_CHUNKMASTER_ROW_STORE = "chunkmasterrow";
+	public static final String BASENAME_CHUNKMASTER_ROW_STORE =
+		"chunkmasterrow";
 
 	public static ChunkDataSinkSourceFactory getMasterDataFactory(BatchJob job,
 			ImmutableProbabilityModel model) {
@@ -219,56 +222,65 @@ class OabaFileUtils implements Serializable {
 			throw new IllegalArgumentException("null modelId");
 		}
 		String wd = getWorkingDir(job);
-		return new ChunkDataSinkSourceFactory(wd, BASENAME_CHUNKMASTER_ROW_STORE, model);
+		return new ChunkDataSinkSourceFactory(wd,
+				BASENAME_CHUNKMASTER_ROW_STORE, model);
 	}
 
 	public static final String BASENAME_COMPAREGROUP_STORE = "compareGroup";
 
 	public static ComparisonArraySinkSourceFactory getCGFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new ComparisonArraySinkSourceFactory(wd, BASENAME_COMPAREGROUP_STORE, BINARY_SUFFIX);
+		return new ComparisonArraySinkSourceFactory(wd,
+				BASENAME_COMPAREGROUP_STORE, BINARY_SUFFIX);
 	}
 
 	public static final String BASENAME_RECVAL_STORE = "btemp";
 
 	public static RecValSinkSourceFactory getRecValFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new RecValSinkSourceFactory(wd, BASENAME_RECVAL_STORE, BINARY_SUFFIX);
+		return new RecValSinkSourceFactory(wd, BASENAME_RECVAL_STORE,
+				BINARY_SUFFIX);
 	}
 
 	public static final String BASENAME_BLOCKGROUP_STORE = "blockGroup";
 
 	public static BlockSinkSourceFactory getBlockGroupFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new BlockSinkSourceFactory(wd, BASENAME_BLOCKGROUP_STORE, BINARY_SUFFIX);
+		return new BlockSinkSourceFactory(wd, BASENAME_BLOCKGROUP_STORE,
+				BINARY_SUFFIX);
 	}
 
 	public static final String BASENAME_BLOCK_STORE = "blocks";
-	
+
 	public static BlockSinkSourceFactory getBlockFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new BlockSinkSourceFactory(wd, BASENAME_BLOCK_STORE, BINARY_SUFFIX);
+		return new BlockSinkSourceFactory(wd, BASENAME_BLOCK_STORE,
+				BINARY_SUFFIX);
 	}
 
 	public static final String BASENAME_OVERSIZED_STORE = "oversized";
-	
+
 	public static BlockSinkSourceFactory getOversizedFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new BlockSinkSourceFactory(wd, BASENAME_OVERSIZED_STORE, BINARY_SUFFIX);
+		return new BlockSinkSourceFactory(wd, BASENAME_OVERSIZED_STORE,
+				BINARY_SUFFIX);
 	}
 
-	public static final String BASENAME_OVERSIZED_GROUP_STORE = "oversizedGroup";
-	
+	public static final String BASENAME_OVERSIZED_GROUP_STORE =
+		"oversizedGroup";
+
 	public static BlockSinkSourceFactory getOversizedGroupFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new BlockSinkSourceFactory(wd, BASENAME_OVERSIZED_GROUP_STORE, BINARY_SUFFIX);
+		return new BlockSinkSourceFactory(wd, BASENAME_OVERSIZED_GROUP_STORE,
+				BINARY_SUFFIX);
 	}
 
 	public static final String BASENAME_OVERSIZED_TEMP_STORE = "oversizedTemp";
-	
+
 	public static BlockSinkSourceFactory getOversizedTempFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new BlockSinkSourceFactory(wd, BASENAME_OVERSIZED_TEMP_STORE, BINARY_SUFFIX);
+		return new BlockSinkSourceFactory(wd, BASENAME_OVERSIZED_TEMP_STORE,
+				BINARY_SUFFIX);
 	}
 
 	public static SuffixTreeSink getSuffixTreeSink(BatchJob job) {
@@ -281,7 +293,8 @@ class OabaFileUtils implements Serializable {
 	public static BlockSinkSourceFactory getBigBlocksSinkSourceFactory(
 			BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new BlockSinkSourceFactory(wd, BASENAME_BIG_BLOCK_STORE, BINARY_SUFFIX);
+		return new BlockSinkSourceFactory(wd, BASENAME_BIG_BLOCK_STORE,
+				BINARY_SUFFIX);
 	}
 
 	public static final String BASENAME_TEMP_BLOCK_STORE = "tempBlocks";
@@ -289,14 +302,16 @@ class OabaFileUtils implements Serializable {
 	public static BlockSinkSourceFactory getTempBlocksSinkSourceFactory(
 			BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new BlockSinkSourceFactory(wd, BASENAME_TEMP_BLOCK_STORE, BINARY_SUFFIX);
+		return new BlockSinkSourceFactory(wd, BASENAME_TEMP_BLOCK_STORE,
+				BINARY_SUFFIX);
 	}
 
 	public static final String BASENAME_CHUNKROW_STORE = "chunkrow";
 
 	public static ChunkRecordIDSinkSourceFactory getChunkIDFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new ChunkRecordIDSinkSourceFactory(wd, BASENAME_CHUNKROW_STORE, BINARY_SUFFIX);
+		return new ChunkRecordIDSinkSourceFactory(wd, BASENAME_CHUNKROW_STORE,
+				BINARY_SUFFIX);
 	}
 
 	public static IDTreeSetSource getTreeSetSource(BatchJob job) {
@@ -305,7 +320,7 @@ class OabaFileUtils implements Serializable {
 		IDTreeSetSource source = new IDTreeSetSource(sSource);
 		return source;
 	}
-	
+
 	public static final String FILENAME_TREE_STORE = "trees.txt";
 
 	protected static String getTreeFilePath(BatchJob job) {
@@ -324,7 +339,8 @@ class OabaFileUtils implements Serializable {
 				BASENAME_COMPARE_TREE_STORE, TEXT_SUFFIX, stageType);
 	}
 
-	public static final String BASENAME_COMPARE_TREE_GROUP_STORE = "compareTreeGroup";
+	public static final String BASENAME_COMPARE_TREE_GROUP_STORE =
+		"compareTreeGroup";
 
 	/**
 	 * This is used by the parallelization code. It creates many tree files for
@@ -342,10 +358,12 @@ class OabaFileUtils implements Serializable {
 	public static ComparisonArraySinkSourceFactory getComparisonArrayFactoryOS(
 			BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new ComparisonArraySinkSourceFactory(wd, BASENAME_COMPARE_ARRAY_STORE, BINARY_SUFFIX);
+		return new ComparisonArraySinkSourceFactory(wd,
+				BASENAME_COMPARE_ARRAY_STORE, BINARY_SUFFIX);
 	}
 
-	public static final String BASENAME_COMPARE_ARRAY_GROUP = "compareArrayGroup_O";
+	public static final String BASENAME_COMPARE_ARRAY_GROUP =
+		"compareArrayGroup_O";
 
 	/**
 	 * This is used by the parallelization code. It creates many array files for
@@ -354,8 +372,8 @@ class OabaFileUtils implements Serializable {
 	public static ComparisonArrayGroupSinkSourceFactory getComparisonArrayGroupFactoryOS(
 			BatchJob job, int num) {
 		String wd = getWorkingDir(job);
-		return new ComparisonArrayGroupSinkSourceFactory(wd, BASENAME_COMPARE_ARRAY_GROUP, BINARY_SUFFIX,
-				num);
+		return new ComparisonArrayGroupSinkSourceFactory(wd,
+				BASENAME_COMPARE_ARRAY_GROUP, BINARY_SUFFIX, num);
 	}
 
 	public static final String BASENAME_MATCHCHUNK_STORE = "matchchunk";
@@ -367,14 +385,16 @@ class OabaFileUtils implements Serializable {
 	public static MatchRecord2SinkSourceFactory getMatchChunkFactory(
 			BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new MatchRecord2SinkSourceFactory(wd, BASENAME_MATCHCHUNK_STORE, "txt");
+		return new MatchRecord2SinkSourceFactory(wd, BASENAME_MATCHCHUNK_STORE,
+				"txt");
 	}
 
 	public static final String BASENAME_MATCH_TEMP_STORE = "matchtemp";
 
 	public static MatchRecord2SinkSourceFactory getMatchTempFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new MatchRecord2SinkSourceFactory(wd, BASENAME_MATCH_TEMP_STORE, "txt");
+		return new MatchRecord2SinkSourceFactory(wd, BASENAME_MATCH_TEMP_STORE,
+				"txt");
 	}
 
 	public static final String BASENAME_MATCH_TEMP_STORE_INDEXED = "matchtemp_";
@@ -383,10 +403,10 @@ class OabaFileUtils implements Serializable {
 			BatchJob job, int i) {
 		String wd = getWorkingDir(job);
 		String str = Integer.toString(i);
-		String fileNameIndexed = BASENAME_MATCH_TEMP_STORE_INDEXED + str  + "_";
+		String fileNameIndexed = BASENAME_MATCH_TEMP_STORE_INDEXED + str + "_";
 		return new MatchRecord2SinkSourceFactory(wd, fileNameIndexed, "txt");
 	}
-	
+
 	/**
 	 * This returns the final sink in which to store the result of the OABA.
 	 * Since this file could be big, we limit the file size to MAX_FILE_SIZE.
@@ -412,7 +432,7 @@ class OabaFileUtils implements Serializable {
 		String fileName = getCompositeMatchFileName(job);
 		return new MatchRecord2CompositeSource(fileName, TEXT_SUFFIX);
 	}
-	
+
 	public static final String BASENAME_MATCH_STORE_INDEXED = "match_";
 
 	protected static String getCompositeMatchFileName(BatchJob job) {
@@ -427,13 +447,15 @@ class OabaFileUtils implements Serializable {
 
 	public static MatchRecord2SinkSourceFactory getSet2MatchFactory(BatchJob job) {
 		String wd = getWorkingDir(job);
-		return new MatchRecord2SinkSourceFactory(wd, BASENAME_TWOMATCH_STORE, TEXT_SUFFIX);
+		return new MatchRecord2SinkSourceFactory(wd, BASENAME_TWOMATCH_STORE,
+				TEXT_SUFFIX);
 	}
 
 	public static IMatchRecord2Sink getCompositeTransMatchSink(BatchJob job,
 			long id) {
 		String fileName = getCompositeTransMatchFileName(job);
-		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX, MAX_FILE_SIZE);
+		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX,
+				MAX_FILE_SIZE);
 	}
 
 	public static IMatchRecord2Source getCompositeTransMatchSource(BatchJob job) {
@@ -441,7 +463,8 @@ class OabaFileUtils implements Serializable {
 		return new MatchRecord2CompositeSource(fileName, TEXT_SUFFIX);
 	}
 
-	public static final String BASENAME_TRANSMATCH_STORE_INDEXED = "transMatch_";
+	public static final String BASENAME_TRANSMATCH_STORE_INDEXED =
+		"transMatch_";
 
 	protected static String getCompositeTransMatchFileName(BatchJob job) {
 		String wd = getWorkingDir(job);

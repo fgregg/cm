@@ -15,14 +15,12 @@ public class ServerConfigurationException extends Exception {
 		super(cause);
 	}
 
-	public ServerConfigurationException(String message,
-			Throwable cause) {
+	public ServerConfigurationException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public ServerConfigurationException(String message,
-			Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
+	public ServerConfigurationException(String message, Throwable cause,
+			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 

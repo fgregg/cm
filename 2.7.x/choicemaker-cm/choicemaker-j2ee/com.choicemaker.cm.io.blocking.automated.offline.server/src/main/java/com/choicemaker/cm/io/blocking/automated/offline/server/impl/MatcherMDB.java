@@ -39,7 +39,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
  * @param <T>
  *            the type of record identifier
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/matcherQueue"),
@@ -48,7 +49,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 public class MatcherMDB extends AbstractMatcher {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(MatcherMDB.class.getName());
+	private static final Logger log = Logger.getLogger(MatcherMDB.class
+			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatcherMDB.class.getName());
 

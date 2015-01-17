@@ -27,81 +27,83 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.BaseFileSink;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 
 	protected RECORD_ID_TYPE idType = null;
-
-	@Deprecated
-	public RecordIdSink(String fileName, int type) {
-		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
-	}
 
 	public RecordIdSink(String fileName, EXTERNAL_DATA_FORMAT type) {
 		super(fileName, type);
 	}
 
+	@Override
 	public void writeRecordID(Comparable o) throws BlockingException {
 		try {
 			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
-				
-				if (count == 0) dos.writeInt(idType.getIntSymbol());
-				
+
+				if (count == 0)
+					dos.writeInt(idType.getIntSymbol());
+
 				if (idType == TYPE_INTEGER) {
-					
+
 					Integer I = (Integer) o;
 					dos.writeInt(I.intValue());
-					
+
 				} else if (idType == TYPE_LONG) {
-					
+
 					Long L = (Long) o;
 					dos.writeLong(L.longValue());
-					
+
 				} else if (idType == TYPE_STRING) {
 
 					String S = (String) o;
 					dos.writeInt(S.length());
 					dos.writeChars(S);
-					
+
 				} else {
-					throw new BlockingException ("Please set the recordIDType.");
+					throw new BlockingException("Please set the recordIDType.");
 				}
-				
+
 			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 
-				if (count == 0) fw.write (idType.getStringSymbol() + LINE_SEPARATOR);
+				if (count == 0)
+					fw.write(idType.getStringSymbol() + LINE_SEPARATOR);
 
 				if (idType == TYPE_INTEGER) {
-					
+
 					Integer I = (Integer) o;
 					fw.write(I.toString() + LINE_SEPARATOR);
-					
+
 				} else if (idType == TYPE_LONG) {
 
 					Long L = (Long) o;
 					fw.write(L.toString() + LINE_SEPARATOR);
 
 				} else if (idType == TYPE_STRING) {
-					
+
 					String S = (String) o;
 					fw.write(S + LINE_SEPARATOR);
 
 				} else {
-					throw new BlockingException ("Please set the recordIDType.");
+					throw new BlockingException("Please set the recordIDType.");
 				}
 
 			}
-			
-			count ++;
-		
+
+			count++;
+
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink#setRecordIDType(int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink#
+	 * setRecordIDType(int)
 	 */
+	@Override
 	public void setRecordIDType(RECORD_ID_TYPE type) {
 		this.idType = type;
 	}

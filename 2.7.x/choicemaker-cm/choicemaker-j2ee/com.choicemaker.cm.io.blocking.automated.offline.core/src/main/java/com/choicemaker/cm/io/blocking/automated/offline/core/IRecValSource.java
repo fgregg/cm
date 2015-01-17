@@ -22,15 +22,16 @@ import com.choicemaker.util.IntArrayList;
 public interface IRecValSource extends ISource<Long> {
 
 	/** Gets the next RecordID. */
-	public long getNextRecID () throws BlockingException;
-	
+	public long getNextRecID() throws BlockingException;
+
 	/**
 	 * Gets the next stacked values corresponding to the recID. Always call
 	 * getNextRecID and getNextValues in conjunction.
 	 */
-	public IntArrayList getNextValues () throws BlockingException;
-	
+	public IntArrayList getNextValues() throws BlockingException;
+
 	/** True is this source exists and not null. */
-	public boolean exists ();
+	@Override
+	public boolean exists();
 
 }

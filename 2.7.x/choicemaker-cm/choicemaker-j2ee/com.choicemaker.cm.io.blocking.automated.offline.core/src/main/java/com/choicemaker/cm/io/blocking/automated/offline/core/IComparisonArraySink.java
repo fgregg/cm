@@ -21,7 +21,7 @@ import com.choicemaker.cm.core.BlockingException;
 public interface IComparisonArraySink<T extends Comparable<T>> extends ISink {
 
 	/** Writes the BlockSet to the sink. */
-	public void writeComparisonArray (ComparisonArray<T> cg) throws BlockingException;
-
+	public void writeComparisonArray(ComparisonArray<T> cg)
+			throws BlockingException;
 
 }

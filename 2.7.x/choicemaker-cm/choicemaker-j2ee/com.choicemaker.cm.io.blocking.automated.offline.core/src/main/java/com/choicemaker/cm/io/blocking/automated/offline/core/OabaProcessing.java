@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-
 /**
  * This interface defines the processing steps of the Offline Automated Blocking
  * Algorithm (OABA).
@@ -55,8 +54,7 @@ public interface OabaProcessing {
 
 	// -- Ordered events used by transitivity analysis
 
-	int EVT_DONE_TRANS_DEDUP_OVERSIZED =
-		EVT_DONE_DEDUP_OVERSIZED;
+	int EVT_DONE_TRANS_DEDUP_OVERSIZED = EVT_DONE_DEDUP_OVERSIZED;
 	int EVT_DONE_TRANSANALYSIS = EVT_DONE_OABA;
 
 	// -- Estimates of the completion status of a job, 0.0 - 1.00

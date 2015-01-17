@@ -24,14 +24,15 @@ import com.choicemaker.cm.args.OabaSettings;
 @NamedQuery(name = QN_OABA_FIND_ALL, query = JPQL_OABA_FIND_ALL)
 @Entity
 @DiscriminatorValue(value = DISCRIMINATOR_VALUE)
-public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSettings {
+public class OabaSettingsEntity extends AbaSettingsEntity implements
+		OabaSettings {
 
 	private static final long serialVersionUID = 271L;
-	
+
 	public static String dump(OabaSettings oaba) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		
+
 		if (oaba == null) {
 			pw.println("null OABA settings");
 		} else {
@@ -57,10 +58,10 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 
 	@Column(name = CN_MAX_OVERSIZE)
 	private final int maxOversized;
-	
+
 	@Column(name = CN_MAX_MATCHES)
 	private final int maxMatches;
-	
+
 	@Column(name = CN_MIN_FIELDS)
 	private final int minFields;
 
@@ -108,10 +109,9 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 	}
 
 	public OabaSettingsEntity(OabaSettings oaba) {
-		this((AbaSettings) oaba, oaba.getMaxSingle(), oaba.getMaxBlockSize(),
-				oaba.getMaxChunkSize(), oaba.getMaxMatches(), oaba
-						.getMaxOversized(), oaba.getMinFields(), oaba
-						.getInterval());
+		this(oaba, oaba.getMaxSingle(), oaba.getMaxBlockSize(), oaba
+				.getMaxChunkSize(), oaba.getMaxMatches(), oaba
+				.getMaxOversized(), oaba.getMinFields(), oaba.getInterval());
 	}
 
 	public OabaSettingsEntity(int limPerBlockingSet, int limSingleBlockingSet,
@@ -123,10 +123,10 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements OabaSetting
 				maxOversized, minFields, interval, DISCRIMINATOR_VALUE);
 	}
 
-	protected OabaSettingsEntity(int limPerBlockingSet, int limSingleBlockingSet,
-			int singleTableGraceLimit, int maxSingle, int maxBlockSize,
-			int maxChunkSize, int maxMatches, int maxOversized, int minFields, int interval,
-			String type) {
+	protected OabaSettingsEntity(int limPerBlockingSet,
+			int limSingleBlockingSet, int singleTableGraceLimit, int maxSingle,
+			int maxBlockSize, int maxChunkSize, int maxMatches,
+			int maxOversized, int minFields, int interval, String type) {
 		super(limPerBlockingSet, limSingleBlockingSet, singleTableGraceLimit,
 				type);
 		if (maxSingle < 0) {

@@ -147,6 +147,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 	// -- Template methods
 
+	@Override
 	public void onMessage(Message inMessage) {
 		getJMSTrace().info(
 				"Entering onMessage for " + this.getClass().getName());
@@ -278,8 +279,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		}
 
 		getLogger().info(
-				"Chunk: " + currentChunk + "_" + data.treeIndex + ", sets: " + sets
-						+ ", compares: " + compares + ", matches: "
+				"Chunk: " + currentChunk + "_" + data.treeIndex + ", sets: "
+						+ sets + ", compares: " + compares + ", matches: "
 						+ numMatches);
 
 		MatchWriterMessage mwd = new MatchWriterMessage(data);
@@ -414,13 +415,14 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	 * This method returns the correct tree/array file for this chunk.
 	 */
 	protected final IComparisonSetSource getSource(OabaJobMessage data,
-			final int numProcessors, final int maxBlockSize, final int currentChunk)
-			throws BlockingException {
+			final int numProcessors, final int maxBlockSize,
+			final int currentChunk) throws BlockingException {
 
 		OabaJob job = getJobController().findOabaJob(data.jobID);
 
 		final String _numRegularChunks =
-			getPropertyController().getJobProperty(job, PN_REGULAR_CHUNK_FILE_COUNT);
+			getPropertyController().getJobProperty(job,
+					PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		if (currentChunk < numRegularChunks) {
@@ -447,7 +449,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			// over-sized chunks
 			int i = currentChunk - numRegularChunks;
 			ComparisonArrayGroupSinkSourceFactory factoryOS =
-				OabaFileUtils.getComparisonArrayGroupFactoryOS(job, numProcessors);
+				OabaFileUtils.getComparisonArrayGroupFactoryOS(job,
+						numProcessors);
 			IComparisonArraySource sourceOS =
 				factoryOS.getSource(i, data.treeIndex);
 			if (sourceOS.exists()) {
@@ -480,8 +483,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		final boolean[] enabledClues = model.getCluesToEvaluate();
 		final float low = t.getDifferThreshold();
 		final float high = t.getMatchThreshold();
-		return MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q, m,
-				isStage, low, high);
+		return MatchRecordUtils.compareRecords(clueSet, enabledClues, model, q,
+				m, isStage, low, high);
 	}
 
 	/**

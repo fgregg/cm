@@ -37,9 +37,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
  * It also serves as the base class of other types of long-running jobs.
  * <p>
  * A successful batch job goes through a sequence of states: NEW, QUEUED,
- * PROCESSING, and COMPLETED. If processing fails in one of these stages, the job
- * state is marked as FAILED. A request may be aborted at any point, in which
- * case it goes through the ABORT_REQUESTED and the ABORT states.
+ * PROCESSING, and COMPLETED. If processing fails in one of these stages, the
+ * job state is marked as FAILED. A request may be aborted at any point, in
+ * which case it goes through the ABORT_REQUESTED and the ABORT states.
  * </p>
  * <p>
  * A long-running process should provide some indication that it is making
@@ -64,13 +64,13 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 	protected OabaJobEntity() {
 		super();
 	}
-	
+
 	public static String dump(OabaJob job) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		pw.println("OabaJob id: " + job.getId());
 		pw.println("OabaJob extId: " + job.getExternalId());
-// FIXME		pw.println("OabaJob description: " + job.getDescription());
+		// FIXME pw.println("OabaJob description: " + job.getDescription());
 		pw.println("OabaJob rigor: " + job.getBatchJobRigor());
 		String retVal = sw.toString();
 		return retVal;

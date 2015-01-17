@@ -27,7 +27,7 @@ import com.choicemaker.util.LongArrayList;
 public class BlockSink extends BaseFileSink implements IBlockSink {
 
 	@Deprecated
-	public BlockSink (String fileName, int type) {
+	public BlockSink(String fileName, int type) {
 		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
 	}
 
@@ -35,83 +35,76 @@ public class BlockSink extends BaseFileSink implements IBlockSink {
 		super(fileName, type);
 	}
 
-	public void writeBlock (BlockSet bs) throws BlockingException {
+	@Override
+	public void writeBlock(BlockSet bs) throws BlockingException {
 		try {
 			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 
 				IntArrayList columns = bs.getColumns();
 				int s = columns.size();
-				//first write size of block values
+				// first write size of block values
 				dos.writeInt(s);
 
-				//second write the blocking field			
-				for (int i=0; i< s; i++) {
-					dos.writeInt(columns.get(i) );
+				// second write the blocking field
+				for (int i = 0; i < s; i++) {
+					dos.writeInt(columns.get(i));
 				}
-			
+
 				LongArrayList list = bs.getRecordIDs();
-				//third write the size of record ids
+				// third write the size of record ids
 				dos.writeInt(list.size());
 
-				//fourth write the ids			
-				for (int i=0; i< list.size(); i++) {
-					dos.writeLong( list.get(i));
+				// fourth write the ids
+				for (int i = 0; i < list.size(); i++) {
+					dos.writeLong(list.get(i));
 				}
 
 			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
-				StringBuffer sb = new StringBuffer ();
+				StringBuffer sb = new StringBuffer();
 				IntArrayList columns = bs.getColumns();
 				int s = columns.size();
-				for (int i=0; i< s; i++) {
+				for (int i = 0; i < s; i++) {
 					sb.append(columns.get(i));
 					sb.append(' ');
 				}
 				sb.append(Constants.LINE_SEPARATOR);
-			
+
 				LongArrayList list = bs.getRecordIDs();
-			
-				for (int i=0; i< list.size(); i++) {
-					sb.append( list.get(i) );
+
+				for (int i = 0; i < list.size(); i++) {
+					sb.append(list.get(i));
 					sb.append(' ');
 				}
 				sb.append(Constants.LINE_SEPARATOR);
 
-				fw.write(sb.toString ());
+				fw.write(sb.toString());
 
-/*
-				LinkedList al = bs.getBlockValues();
-				for (int i=0; i< al.size(); i++) {
-					BlockValue bv = (BlockValue) al.get(i);
-					fw.write( Integer.toString(bv.getColumnID()) );
-					fw.write(" ");
-				}
-				fw.write(Constants.LINE_SEPARATOR);
-			
-				LongArrayList list = bs.getRecordIDs();
-			
-				for (int i=0; i< list.size(); i++) {
-					fw.write( Long.toString(list.get(i)) );
-					fw.write(" ");
-				}
-				fw.write(Constants.LINE_SEPARATOR);
-*/
+				/*
+				 * LinkedList al = bs.getBlockValues(); for (int i=0; i<
+				 * al.size(); i++) { BlockValue bv = (BlockValue) al.get(i);
+				 * fw.write( Integer.toString(bv.getColumnID()) );
+				 * fw.write(" "); } fw.write(Constants.LINE_SEPARATOR);
+				 * 
+				 * LongArrayList list = bs.getRecordIDs();
+				 * 
+				 * for (int i=0; i< list.size(); i++) { fw.write(
+				 * Long.toString(list.get(i)) ); fw.write(" "); }
+				 * fw.write(Constants.LINE_SEPARATOR);
+				 */
 			}
-			
-			count ++;
-		
-		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
-		}
-		
-	}
 
+			count++;
+
+		} catch (IOException ex) {
+			throw new BlockingException(ex.toString());
+		}
+
+	}
 
 	@Override
 	public String toString() {
 		return "BlockSink [count=" + count + ", type=" + type + ", fileName="
 				+ fileName + "]";
 	}
-	
-	
 
 }

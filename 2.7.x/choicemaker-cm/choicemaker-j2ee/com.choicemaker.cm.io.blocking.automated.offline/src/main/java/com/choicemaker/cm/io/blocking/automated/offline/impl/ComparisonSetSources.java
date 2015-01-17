@@ -22,38 +22,52 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class ComparisonSetSources implements IComparisonSetSources {
 	private ComparisonArraySinkSourceFactory sFactory;
 	private IComparisonArraySource next;
-	private ArrayList sources = new ArrayList ();
+	private ArrayList sources = new ArrayList();
 
-	public ComparisonSetSources (ComparisonArraySinkSourceFactory sFactory) {
+	public ComparisonSetSources(ComparisonArraySinkSourceFactory sFactory) {
 		this.sFactory = sFactory;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources#getNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources
+	 * #getNextSource()
 	 */
+	@Override
 	public IComparisonSetSource getNextSource() {
-		return new ComparisonSetSource (next);
+		return new ComparisonSetSource(next);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources#cleanUp()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources
+	 * #cleanUp()
 	 */
+	@Override
 	public void cleanUp() throws BlockingException {
-		for (int i=0; i<sources.size(); i++) {
+		for (int i = 0; i < sources.size(); i++) {
 			next = (IComparisonArraySource) sources.get(i);
 			next.delete();
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources#hasNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources
+	 * #hasNextSource()
 	 */
+	@Override
 	public boolean hasNextSource() throws BlockingException {
 		next = sFactory.getNextSource();
 		sources.add(next);

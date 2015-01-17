@@ -41,6 +41,21 @@ public class RecordIdControllerBean implements RecordIdController {
 	 */
 	protected static final int QUERY_INDEX_RECORD_ID_TYPE = 1;
 
+	/**
+	 * This gets the factory that is used to get translator id sink and source.
+	 */
+	private static RecordIdSinkSourceFactory getTransIDFactory(BatchJob job) {
+		String wd = OabaFileUtils.getWorkingDir(job);
+		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_TRANSLATOR,
+				OabaFileUtils.BINARY_SUFFIX);
+	}
+
+	private static RecordIdSinkSourceFactory getRecordIDFactory(BatchJob job) {
+		String wd = OabaFileUtils.getWorkingDir(job);
+		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE,
+				OabaFileUtils.TEXT_SUFFIX);
+	}
+
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
@@ -146,40 +161,6 @@ public class RecordIdControllerBean implements RecordIdController {
 		return retVal;
 	}
 
-	protected void restoreIntegerTranslations(BatchJob job,
-			MutableRecordIdTranslator<Integer> translator)
-			throws BlockingException {
-		Query query =
-			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDINTEGERID_FIND_BY_JOBID);
-		@SuppressWarnings("unchecked")
-		List<RecordIdIntegerTranslation> rits = query.getResultList();
-		int index = 0;
-		RECORD_SOURCE_ROLE role = RECORD_SOURCE_ROLE.STAGING;
-		for (RecordIdIntegerTranslation rit : rits) {
-			assert rit.getTranslatedId() == index;
-			if (rit.getRecordSource() != role) {
-				translator.split();
-			}
-			translator.translate(rit.getRecordId());
-			++index;
-		}
-	}
-
-	/**
-	 * This gets the factory that is used to get translator id sink and source.
-	 */
-	private static RecordIdSinkSourceFactory getTransIDFactory(BatchJob job) {
-		String wd = OabaFileUtils.getWorkingDir(job);
-		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_TRANSLATOR,
-				OabaFileUtils.BINARY_SUFFIX);
-	}
-
-	private static RecordIdSinkSourceFactory getRecordIDFactory(BatchJob job) {
-		String wd = OabaFileUtils.getWorkingDir(job);
-		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE,
-				OabaFileUtils.TEXT_SUFFIX);
-	}
-
 	@Override
 	public IRecordIdSinkSourceFactory getRecordIdSinkSourceFactory(BatchJob job) {
 		return getRecordIDFactory(job);
@@ -215,6 +196,25 @@ public class RecordIdControllerBean implements RecordIdController {
 		}
 
 		return retVal;
+	}
+
+	protected void restoreIntegerTranslations(BatchJob job,
+			MutableRecordIdTranslator<Integer> translator)
+			throws BlockingException {
+		Query query =
+			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDINTEGERID_FIND_BY_JOBID);
+		@SuppressWarnings("unchecked")
+		List<RecordIdIntegerTranslation> rits = query.getResultList();
+		int index = 0;
+		RECORD_SOURCE_ROLE role = RECORD_SOURCE_ROLE.STAGING;
+		for (RecordIdIntegerTranslation rit : rits) {
+			assert rit.getTranslatedId() == index;
+			if (rit.getRecordSource() != role) {
+				translator.split();
+			}
+			translator.translate(rit.getRecordId());
+			++index;
+		}
 	}
 
 	protected void restoreLongTranslations(BatchJob job,
@@ -265,8 +265,7 @@ public class RecordIdControllerBean implements RecordIdController {
 			String msg = "Unhandled type: " + translator.getClass().getName();
 			throw new IllegalStateException(msg);
 		}
-		ImmutableRecordIdTranslator<?> rit =
-			translator.toImmutableTranslator();
+		ImmutableRecordIdTranslator<?> rit = translator.toImmutableTranslator();
 
 		// Check the data type of the record ids handled by the translator
 		final RECORD_ID_TYPE dataType = rit.getRecordIdType();

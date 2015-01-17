@@ -1,6 +1,5 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-
 public interface DefaultSettingsJPA {
 
 	String TABLE_NAME = "CMT_DEFAULT_SETTINGS";
@@ -13,8 +12,7 @@ public interface DefaultSettingsJPA {
 
 	String QN_DSET_FIND_ALL = "defaultSettingsFindAll";
 
-	String JPQL_DSET_FIND_ALL =
-		"Select dsb from DefaultSettingsEntity dsb";
+	String JPQL_DSET_FIND_ALL = "Select dsb from DefaultSettingsEntity dsb";
 
 	String QN_DSET_FIND_ALL_ABA = "defaultSettingsFindAllAba";
 

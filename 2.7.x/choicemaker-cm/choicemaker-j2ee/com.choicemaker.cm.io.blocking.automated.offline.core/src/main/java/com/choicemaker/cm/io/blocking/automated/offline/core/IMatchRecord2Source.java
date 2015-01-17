@@ -20,8 +20,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  */
 public interface IMatchRecord2Source<T extends Comparable<T>> extends
 		ISource<MatchRecord2<T>> {
-	
+
 	/** Returns the number of MatchRecords read so far. */
-	public int getCount ();
+	public int getCount();
 
 }

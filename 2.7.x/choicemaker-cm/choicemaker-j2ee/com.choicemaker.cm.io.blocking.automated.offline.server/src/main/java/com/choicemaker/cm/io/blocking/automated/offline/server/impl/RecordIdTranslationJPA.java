@@ -81,7 +81,8 @@ public interface RecordIdTranslationJPA {
 	 * Name of the query that finds all persistent, abstract translation entries
 	 * for a particular OABA job (should be none)
 	 */
-	String QN_TRANSLATEDID_FIND_BY_JOBID = "oabaTranslatedAbstractIdFindByJobId";
+	String QN_TRANSLATEDID_FIND_BY_JOBID =
+		"oabaTranslatedAbstractIdFindByJobId";
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDID_FIND_BY_JOBID} */
 	String JPQL_TRANSLATEDID_FIND_BY_JOBID =
@@ -97,7 +98,8 @@ public interface RecordIdTranslationJPA {
 	// -- Queries for translations of integer record ids
 
 	/**
-	 * Name of the query that finds all persistent, Integer id translation entries
+	 * Name of the query that finds all persistent, Integer id translation
+	 * entries
 	 */
 	String QN_TRANSLATEDINTEGERID_FIND_ALL = "oabaTranslatedIntegerIdFindAll";
 
@@ -107,10 +109,11 @@ public interface RecordIdTranslationJPA {
 				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
-	 * Name of the query that finds all persistent, Integer id translation entries
-	 * for a particular OABA job
+	 * Name of the query that finds all persistent, Integer id translation
+	 * entries for a particular OABA job
 	 */
-	String QN_TRANSLATEDINTEGERID_FIND_BY_JOBID = "oabaTranslatedIntegerIdFindByJobId";
+	String QN_TRANSLATEDINTEGERID_FIND_BY_JOBID =
+		"oabaTranslatedIntegerIdFindByJobId";
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDINTEGERID_FIND_BY_JOBID} */
 	String JPQL_TRANSLATEDINTEGERID_FIND_BY_JOBID =
@@ -139,7 +142,8 @@ public interface RecordIdTranslationJPA {
 	 * Name of the query that finds all persistent, Long id translation entries
 	 * for a particular OABA job
 	 */
-	String QN_TRANSLATEDLONGID_FIND_BY_JOBID = "oabaTranslatedLongIdFindByJobId";
+	String QN_TRANSLATEDLONGID_FIND_BY_JOBID =
+		"oabaTranslatedLongIdFindByJobId";
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDLONGID_FIND_BY_JOBID} */
 	String JPQL_TRANSLATEDLONGID_FIND_BY_JOBID =
@@ -155,7 +159,8 @@ public interface RecordIdTranslationJPA {
 	// -- Queries for translations of String record ids
 
 	/**
-	 * Name of the query that finds all persistent, String id translation entries
+	 * Name of the query that finds all persistent, String id translation
+	 * entries
 	 */
 	String QN_TRANSLATEDSTRINGID_FIND_ALL = "oabaTranslatedStringIdFindAll";
 
@@ -165,10 +170,11 @@ public interface RecordIdTranslationJPA {
 				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
-	 * Name of the query that finds all persistent, String id translation entries
-	 * for a particular OABA job
+	 * Name of the query that finds all persistent, String id translation
+	 * entries for a particular OABA job
 	 */
-	String QN_TRANSLATEDSTRINGID_FIND_BY_JOBID = "oabaTranslatedStringIdFindByJobId";
+	String QN_TRANSLATEDSTRINGID_FIND_BY_JOBID =
+		"oabaTranslatedStringIdFindByJobId";
 
 	/** JPQL used to implement {@link #QN_TRANSLATEDSTRINGID_FIND_BY_JOBID} */
 	String JPQL_TRANSLATEDSTRINGID_FIND_BY_JOBID =

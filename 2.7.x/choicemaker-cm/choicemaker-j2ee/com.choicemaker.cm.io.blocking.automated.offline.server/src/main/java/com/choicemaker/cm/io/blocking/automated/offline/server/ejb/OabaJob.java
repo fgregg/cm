@@ -28,6 +28,7 @@ public interface OabaJob extends BatchJob {
 
 	long getServerId();
 
+	@Override
 	long getUrmId();
 
 } // OabaJob

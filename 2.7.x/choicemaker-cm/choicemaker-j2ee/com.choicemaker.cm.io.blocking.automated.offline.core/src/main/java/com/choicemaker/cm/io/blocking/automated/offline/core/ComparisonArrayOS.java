@@ -17,77 +17,78 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 /**
- * This object contains a group of record IDs belonging to a block that need to be compared against
- * all the other record IDs in the group.
+ * This object contains a group of record IDs belonging to a block that need to
+ * be compared against all the other record IDs in the group.
  * 
- * This represents an oversized block.
- * The oversized blocks are compared as follows:
- * 1.	create a random set, S, consisting of maxBlockSize ids from staging.
- * 2.	the rest of the ids from staging go into set T stage.
- * 3.	master ids go into set T master.
- * 4.	perform round robin comparison on S.
- * 5.	for each element in T stage, compare to all in S.
- * 6.	for each element in T master compare to all in S.
- * 7.	for each T master compare with 4 random T stage.
- * 8.	for each T stage record, compare with its i+1 neighbor and 3 random T records
+ * This represents an oversized block. The oversized blocks are compared as
+ * follows: 1. create a random set, S, consisting of maxBlockSize ids from
+ * staging. 2. the rest of the ids from staging go into set T stage. 3. master
+ * ids go into set T master. 4. perform round robin comparison on S. 5. for each
+ * element in T stage, compare to all in S. 6. for each element in T master
+ * compare to all in S. 7. for each T master compare with 4 random T stage. 8.
+ * for each T stage record, compare with its i+1 neighbor and 3 random T records
  * 
  * @author pcheung
  *
  */
-public class ComparisonArrayOS<T extends Comparable<T>> extends ComparisonArray<T> {
-	
+public class ComparisonArrayOS<T extends Comparable<T>> extends
+		ComparisonArray<T> {
+
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(ComparisonArrayOS.class.getName());
+	private static final Logger log = Logger.getLogger(ComparisonArrayOS.class
+			.getName());
 
 	private static final int STEP_4 = 0;
 	private static final int STEP_5 = 1;
 	private static final int STEP_6 = 2;
 	private static final int STEP_7 = 3;
 	private static final int STEP_8 = 4;
-	
-	//this keeps track of in which step of the algorithm we are at.
-	private int step = STEP_4;
-	
-	//This is true if in the step 8, we have already check T stage with its i+1 record.
-	private boolean checkedNext = false;
-	//the is the actual index of i+1
-	private int n; 
 
-	private int maxBlockSize;	
+	// this keeps track of in which step of the algorithm we are at.
+	private int step = STEP_4;
+
+	// This is true if in the step 8, we have already check T stage with its i+1
+	// record.
+	private boolean checkedNext = false;
+	// the is the actual index of i+1
+	private int n;
+
+	private int maxBlockSize;
 	private Random random;
 	private List<T> S = null;
 	private List<T> TStage = null;
-	private int [] randomStage = null;
+	private int[] randomStage = null;
 
-	/** This constructor takes in a ComparisonArray and an integer representing the maximum block size.
+	/**
+	 * This constructor takes in a ComparisonArray and an integer representing
+	 * the maximum block size.
 	 * 
 	 * @param ca
 	 * @param maxBlockSize
 	 */
-	public ComparisonArrayOS (ComparisonArray<T> ca, int maxBlockSize) {
+	public ComparisonArrayOS(ComparisonArray<T> ca, int maxBlockSize) {
 		this.stagingIDs = ca.stagingIDs;
 		this.masterIDs = ca.masterIDs;
 		this.stagingIDType = ca.stagingIDType;
 		this.masterIDType = ca.masterIDType;
 		this.maxBlockSize = maxBlockSize;
-		
-		init ();
+
+		init();
 	}
-	
-	
+
 	/**
 	 * This method builds the S, T stage, and T master lists.
 	 *
 	 */
-	private void init () {
-		//seed the random number generator
+	private void init() {
+		// seed the random number generator
 		int s = stagingIDs.size() + masterIDs.size();
-		random = new Random (s);
+		random = new Random(s);
 
 		log.fine("Random " + s);
 
-		//create the S set
+		// create the S set
 		int sSize;
 		if (stagingIDs.size() <= maxBlockSize) {
 			S = stagingIDs;
@@ -99,99 +100,102 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends ComparisonArray<
 
 			TStage = new ArrayList<T>(stagingIDs.size() - sSize);
 
-			//contains indexes of ids in set S.
-			int [] sids = getRandomIDs (random, maxBlockSize, stagingIDs.size());
+			// contains indexes of ids in set S.
+			int[] sids = getRandomIDs(random, maxBlockSize, stagingIDs.size());
 			int current = 0;
-			for (int i=0; i< stagingIDs.size(); i++) {
+			for (int i = 0; i < stagingIDs.size(); i++) {
 				if (current < maxBlockSize && i == sids[current]) {
-					S.add( stagingIDs.get(i));
-					current ++;
+					S.add(stagingIDs.get(i));
+					current++;
 				} else {
-					TStage.add( stagingIDs.get(i));
+					TStage.add(stagingIDs.get(i));
 				}
 			}
 
 		}
 
-		s1 = S.size ();
+		s1 = S.size();
 
-		//special case of S having 1 element
+		// special case of S having 1 element
 		if (s1 == 1) {
 			step = STEP_6;
 			sID1 = 0;
 			sID2 = 0;
-		} 
+		}
 
+		// if (TStage.size() <= 4) {
+		// } else {
+		// randomStage = getRandomIDs (random, 4, TStage.size ());
+		// }
 
-//		if (TStage.size() <= 4) {
-//		} else {
-//			randomStage = getRandomIDs (random, 4, TStage.size ());
-//		}
-		
-//		debugArray (S);
-//		debugArray (TStage);
+		// debugArray (S);
+		// debugArray (TStage);
 	}
-	
-	/** This method returns a int array of the given size containing random ids from 0 to max.
+
+	/**
+	 * This method returns a int array of the given size containing random ids
+	 * from 0 to max.
 	 * 
-	 * @param size - size of the random array
-	 * @param max - maximum number
+	 * @param size
+	 *            - size of the random array
+	 * @param max
+	 *            - maximum number
 	 * @return
 	 */
-	private static int [] getRandomIDs (Random random, int size, int max) {
-		int [] list = new int [max];
-		int [] list2 = new int [size];
-		
-		for (int i=0; i<max; i++) {
+	private static int[] getRandomIDs(Random random, int size, int max) {
+		int[] list = new int[max];
+		int[] list2 = new int[size];
+
+		for (int i = 0; i < max; i++) {
 			list[i] = i;
 		}
-		
-		for (int i=0; i< size; i++) {
+
+		for (int i = 0; i < size; i++) {
 			int ind = random.nextInt(max - i);
 			list2[i] = list[ind];
-			
-			//remove ind for list
-			for (int j=ind; j < max - i - 1; j ++) {
-				list[j] = list[j+1];
+
+			// remove ind for list
+			for (int j = ind; j < max - i - 1; j++) {
+				list[j] = list[j + 1];
 			}
 		}
-		
-		Arrays.sort( list2);
+
+		Arrays.sort(list2);
 		return list2;
 	}
-	
-	
-	private ComparisonPair<T> readNext () {
+
+	private ComparisonPair<T> readNext() {
 		ComparisonPair<T> ret = null;
 		if (step == STEP_4) {
-			//round robin on S
+			// round robin on S
 			if (sID1 < s1 - 1 && sID2 < s1) {
 				ret = new ComparisonPair<T>();
 				ret.setId1(S.get(sID1));
 				ret.setId2(S.get(sID2));
 				ret.isStage = true;
 
-				log.fine ("Round robin s " + ret.getId1().toString() + " " + ret.getId2().toString());
+				log.fine("Round robin s " + ret.getId1().toString() + " "
+						+ ret.getId2().toString());
 
-				sID2 ++;
+				sID2++;
 				if (sID2 == s1) {
-					sID1 ++;
+					sID1++;
 					sID2 = sID1 + 1;
 					if (sID1 == s1 - 1) {
 						if (TStage.size() > 0) {
 							step = STEP_5;
-							//getting ready for step 5
+							// getting ready for step 5
 							sID1 = 0;
 							sID2 = 0;
 						} else {
 							if (masterIDs.size() > 0) {
 								step = STEP_6;
-								//getting ready for step 6
+								// getting ready for step 6
 								sID1 = 0;
 								sID2 = 0;
 							} else {
 								step = STEP_8;
-								//getting ready for step 8
+								// getting ready for step 8
 								sID1 = 0;
 								sID2 = 0;
 							}
@@ -200,29 +204,30 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends ComparisonArray<
 				}
 			}
 		} else if (step == STEP_5) {
-			//for each in Tstage, compare to S.
+			// for each in Tstage, compare to S.
 			int s2 = TStage.size();
 			if (sID1 < s2 && sID2 < s1) {
 				ret = new ComparisonPair<T>();
 				ret.setId1(TStage.get(sID1));
 				ret.setId2(S.get(sID2));
 				ret.isStage = true;
-					
-				log.fine ("TStage with S " + ret.getId1().toString() + " " + ret.getId2().toString());
+
+				log.fine("TStage with S " + ret.getId1().toString() + " "
+						+ ret.getId2().toString());
 
 				sID2++;
 				if (sID2 == s1) {
-					sID1 ++;
+					sID1++;
 					sID2 = 0;
 					if (sID1 == s2) {
 						if (masterIDs.size() > 0) {
 							step = STEP_6;
-							//getting ready for step 6
+							// getting ready for step 6
 							sID1 = 0;
 							sID2 = 0;
 						} else {
 							step = STEP_8;
-							//getting ready for step 8
+							// getting ready for step 8
 							sID1 = 0;
 							sID2 = 0;
 						}
@@ -230,7 +235,7 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends ComparisonArray<
 				}
 			}
 		} else if (step == STEP_6) {
-			//for each in Tmaster, compare to S.
+			// for each in Tmaster, compare to S.
 			int s2 = masterIDs.size();
 			if (sID1 < s2 && sID2 < s1) {
 				ret = new ComparisonPair<T>();
@@ -238,67 +243,71 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends ComparisonArray<
 				ret.setId2(masterIDs.get(sID1));
 				ret.isStage = false;
 
-				log.fine ("TMaster with S " + ret.getId1().toString() + " " + ret.getId2().toString());
+				log.fine("TMaster with S " + ret.getId1().toString() + " "
+						+ ret.getId2().toString());
 
 				sID2++;
 				if (sID2 == s1) {
-					sID1 ++;
+					sID1++;
 					sID2 = 0;
 					if (sID1 == s2) {
 						step = STEP_7;
-						//getting ready for step 7
+						// getting ready for step 7
 						sID1 = 0;
 						sID2 = 0;
 					}
 				}
 			}
-			
+
 		} else if (step == STEP_7) {
-			//for each in Tmaster, compare to 4 random in Tstage.
+			// for each in Tmaster, compare to 4 random in Tstage.
 			int s1 = TStage.size();
 			int s2 = masterIDs.size();
 			if (s1 <= 4) {
-				//compare with all TStage
+				// compare with all TStage
 				if (sID1 < s2 && sID2 < s1) {
 					ret = new ComparisonPair<T>();
 					ret.setId1(TStage.get(sID2));
 					ret.setId2(masterIDs.get(sID1));
 					ret.isStage = false;
-					
-					log.fine ("TMaster random " + ret.getId1().toString() + " " + ret.getId2().toString());
+
+					log.fine("TMaster random " + ret.getId1().toString() + " "
+							+ ret.getId2().toString());
 
 					sID2++;
 					if (sID2 == s1) {
-						sID1 ++;
+						sID1++;
 						sID2 = 0;
 						if (sID1 == s2) {
 							step = STEP_8;
-							//getting ready for step 8
+							// getting ready for step 8
 							sID1 = 0;
 							sID2 = 0;
 						}
 					}
 				}
 			} else {
-				//compare with 4 random from TStage
-				if (randomStage == null) randomStage = getRandomIDs (random, 4, s1);
-				
+				// compare with 4 random from TStage
+				if (randomStage == null)
+					randomStage = getRandomIDs(random, 4, s1);
+
 				if (sID1 < s2 && sID2 < 4) {
 					ret = new ComparisonPair<T>();
 					ret.setId1(TStage.get(randomStage[sID2]));
 					ret.setId2(masterIDs.get(sID1));
 					ret.isStage = false;
-					
-					log.fine ("TMaster random " + ret.getId1().toString() + " " + ret.getId2().toString());
 
-					sID2 ++;
+					log.fine("TMaster random " + ret.getId1().toString() + " "
+							+ ret.getId2().toString());
+
+					sID2++;
 					if (sID2 == 4) {
-						sID1 ++;
+						sID1++;
 						sID2 = 0;
 						randomStage = null;
 						if (sID1 == s2) {
 							step = STEP_8;
-							//getting ready for step 8
+							// getting ready for step 8
 							sID1 = 0;
 							sID2 = 0;
 							mID1 = 0;
@@ -306,40 +315,44 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends ComparisonArray<
 					}
 				}
 			}
-		}else if (step == STEP_8) {
-			//for each in Tstage, compare to i+1 and 3 random
+		} else if (step == STEP_8) {
+			// for each in Tstage, compare to i+1 and 3 random
 			int s1 = TStage.size();
 			int s2 = masterIDs.size();
-			
+
 			if (sID1 < s1 - 1 && mID1 < 3) {
-//				if (!checkedNext && s1 > 1) {
+				// if (!checkedNext && s1 > 1) {
 				if (!checkedNext) {
 					n = sID1 + 1;
-					if (sID1 ==  s1 - 1) n = 0;
-					
+					if (sID1 == s1 - 1)
+						n = 0;
+
 					ret = new ComparisonPair<T>();
 					ret.setId1(TStage.get(sID1));
 					ret.setId2(TStage.get(n));
 					ret.isStage = true;
-					
-					log.fine ("TStage random i+1 " + ret.getId1().toString() + " " + ret.getId2().toString());
+
+					log.fine("TStage random i+1 " + ret.getId1().toString()
+							+ " " + ret.getId2().toString());
 
 					checkedNext = true;
-					
-					if (s1+s2 <=4) {
-						sID1 ++;
+
+					if (s1 + s2 <= 4) {
+						sID1++;
 						checkedNext = false;
 					}
-					
+
 				} else {
 					if (s1 + s2 > 4) {
-						if (randomStage == null) randomStage = getRandomIDs (random, 5, s1 + s2);
-					
-						if (sID1 == randomStage[sID2] || n == randomStage[sID2]) sID2 ++;
-						
+						if (randomStage == null)
+							randomStage = getRandomIDs(random, 5, s1 + s2);
+
+						if (sID1 == randomStage[sID2] || n == randomStage[sID2])
+							sID2++;
+
 						ret = new ComparisonPair<T>();
 						ret.setId1(TStage.get(sID1));
-						
+
 						if (randomStage[sID2] >= s1) {
 							ret.setId2(masterIDs.get(randomStage[sID2] - s1));
 							ret.isStage = false;
@@ -347,30 +360,35 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends ComparisonArray<
 							ret.setId2(TStage.get(randomStage[sID2]));
 							ret.isStage = true;
 						}
-						
-						log.fine ("TStage random " + ret.getId1().toString() + " " + ret.getId2().toString());
 
-						sID2 ++;
-						mID1 ++;
+						log.fine("TStage random " + ret.getId1().toString()
+								+ " " + ret.getId2().toString());
+
+						sID2++;
+						mID1++;
 						if (mID1 == 3) {
-							sID1 ++;
+							sID1++;
 							sID2 = 0;
 							mID1 = 0;
 							checkedNext = false;
 							randomStage = null;
 						}
-					} //end if s1+s2>4
+					} // end if s1+s2>4
 
 				}
 			}
-		} //end if step
+		} // end if step
 		return ret;
 	}
-		
-	
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#hasNextPair()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#
+	 * hasNextPair()
 	 */
+	@Override
 	public boolean hasNextPair() {
 		if (this.nextPair == null) {
 			this.nextPair = readNext();
@@ -378,10 +396,14 @@ public class ComparisonArrayOS<T extends Comparable<T>> extends ComparisonArray<
 		return this.nextPair != null;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#getNextPair()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet#
+	 * getNextPair()
 	 */
+	@Override
 	public ComparisonPair<T> getNextPair() {
 		if (this.nextPair == null) {
 			this.nextPair = readNext();

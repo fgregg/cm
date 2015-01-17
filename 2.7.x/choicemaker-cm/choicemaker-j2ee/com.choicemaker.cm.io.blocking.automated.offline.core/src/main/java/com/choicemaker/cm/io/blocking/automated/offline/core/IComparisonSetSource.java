@@ -10,10 +10,10 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-
 /**
  * @author pcheung
  *
  */
-public interface IComparisonSetSource<T extends Comparable<T>> extends ISource<IComparisonSet<T>> {
+public interface IComparisonSetSource<T extends Comparable<T>> extends
+		ISource<IComparisonSet<T>> {
 }

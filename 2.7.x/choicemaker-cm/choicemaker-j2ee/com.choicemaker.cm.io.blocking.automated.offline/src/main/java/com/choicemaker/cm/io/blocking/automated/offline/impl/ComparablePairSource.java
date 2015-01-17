@@ -16,7 +16,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
 
 /**
- * This wrapper object takes IPairIDSource and makes it look like a IComparableSource.
+ * This wrapper object takes IPairIDSource and makes it look like a
+ * IComparableSource.
  * 
  * @author pcheung
  *
@@ -24,8 +25,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
 public class ComparablePairSource implements IComparableSource<PairID> {
 
 	private IPairIDSource source;
-	
-	public ComparablePairSource (IPairIDSource source) {
+
+	public ComparablePairSource(IPairIDSource source) {
 		this.source = source;
 	}
 
@@ -34,51 +35,79 @@ public class ComparablePairSource implements IComparableSource<PairID> {
 		return source.next();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource#getCount()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource
+	 * #getCount()
 	 */
+	@Override
 	public int getCount() {
 		return source.getCount();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#exists()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#exists()
 	 */
+	@Override
 	public boolean exists() {
 		return source.exists();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#open()
 	 */
+	@Override
 	public void open() throws BlockingException {
 		source.open();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws BlockingException {
 		return source.hasNext();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
 	 */
+	@Override
 	public void close() throws BlockingException {
 		source.close();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
 	 */
+	@Override
 	public String getInfo() {
 		return source.getInfo();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
+	@Override
 	public void delete() throws BlockingException {
 		source.delete();
 	}

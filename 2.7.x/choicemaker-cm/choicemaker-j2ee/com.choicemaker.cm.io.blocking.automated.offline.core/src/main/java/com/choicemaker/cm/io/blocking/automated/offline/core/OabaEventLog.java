@@ -1,6 +1,5 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-
 public interface OabaEventLog {
 
 	/** This methods gets the most recent processing event */

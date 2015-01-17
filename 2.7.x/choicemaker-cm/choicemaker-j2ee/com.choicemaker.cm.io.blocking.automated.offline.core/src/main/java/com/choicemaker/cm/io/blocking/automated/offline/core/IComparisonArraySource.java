@@ -10,17 +10,16 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-
-
 /**
  * This interface handles the reading of ComparisonGroups.
  * 
  * @author pcheung
  *
  */
-public interface IComparisonArraySource<T extends Comparable<T>> extends ISource<ComparisonArray<T>> {
+public interface IComparisonArraySource<T extends Comparable<T>> extends
+		ISource<ComparisonArray<T>> {
 
 	/** Returns the number of ComparisonGroup read so far. */
-	public int getCount ();
+	public int getCount();
 
 }

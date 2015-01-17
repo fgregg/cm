@@ -46,49 +46,59 @@ import com.choicemaker.cm.io.xml.base.XmlMarkedRecordPairSink;
  * This object takes a IMatchRecord2Source, RecordSource and a
  * MarkedRecordPairSink to create an MRPS file from the matched IDs.
  *
- * It does the following (per processing batch):<ul>
+ * It does the following (per processing batch):
+ * <ul>
  * <li>Builds a hash map of record ids that show up in IMatchRecord2Source</li>
  * <li>Gets the record objects from RecordSource</li>
  * <li>Outputs the records to MarkedRecordPairSink</li>
  * </ul>
+ * 
  * @author pcheung (initial version)
  * @author rphall (limited memory version)
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class MRPSCreator {
 
-	private static final Logger log = Logger.getLogger(MRPSCreator.class.getName());
+	private static final Logger log = Logger.getLogger(MRPSCreator.class
+			.getName());
 
 	private static final int CONTROL_INTERVAL = 1000;
 	private static final int DEBUG_INTERVAL = 10000;
 	private static final String PRETTY_PRINT_INDENT = "   ";
 
 	/**
-	 * The prefix to the name of an insecure, temporary file, created in the user's temporary directory, to which
-	 * intermediate Sampler results are dumped.
+	 * The prefix to the name of an insecure, temporary file, created in the
+	 * user's temporary directory, to which intermediate Sampler results are
+	 * dumped.
 	 */
 	private static final String DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_PREFIX =
 		"SamplerDump";
 
 	/**
-	 * The suffix to the name of an insecure, temporary descriptor file, created in the user's temporary directory, to which
-	 * intermediate Sampler results are dumped.
+	 * The suffix to the name of an insecure, temporary descriptor file, created
+	 * in the user's temporary directory, to which intermediate Sampler results
+	 * are dumped.
 	 */
 	private static final String DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_DESCRIPTOR_SUFFIX =
 		".mrps";
 
 	/**
-	 * The suffix to the name of an insecure, temporary source file, created in the user's temporary directory, to which
-	 * intermediate Sampler results are dumped.
+	 * The suffix to the name of an insecure, temporary source file, created in
+	 * the user's temporary directory, to which intermediate Sampler results are
+	 * dumped.
 	 */
 	private static final String DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_SOURCE_SUFFIX =
 		".xml";
 
 	/**
-	 *  Returns the directory of the MRPS data file, or if that value is not
+	 * Returns the directory of the MRPS data file, or if that value is not
 	 * available, the user's home directory.
-	 * @param mrps the MRPS file for final results
-	 * @return may be null (in which case dumps are written to the user's temp directory)
+	 * 
+	 * @param mrps
+	 *            the MRPS file for final results
+	 * @return may be null (in which case dumps are written to the user's temp
+	 *         directory)
 	 */
 	private static File getSamplerDumpDir(MarkedRecordPairSink mrps) {
 		File retVal = null;
@@ -98,34 +108,33 @@ public class MRPSCreator {
 			retVal = new File(xmlDataFileName).getParentFile();
 		}
 		// 2014-04-24 rphall: Commented out unused local variables.
-//		if (retVal == null) {
-//			String userHome = System.getProperty("user.home");
-//			File userDir = new File(userHome);
-//		}
+		// if (retVal == null) {
+		// String userHome = System.getProperty("user.home");
+		// File userDir = new File(userHome);
+		// }
 		return retVal;
 	}
 
 	/**
-	 * Returns a XmlMarkedRecordPairSink to which intermediate Sampler results are dumped.
+	 * Returns a XmlMarkedRecordPairSink to which intermediate Sampler results
+	 * are dumped.
 	 */
-	private static XmlMarkedRecordPairSink getSamplerDumpFile(File dumpDir, ImmutableProbabilityModel immutableModel)
-		throws IOException {
+	private static XmlMarkedRecordPairSink getSamplerDumpFile(File dumpDir,
+			ImmutableProbabilityModel immutableModel) throws IOException {
 		File descriptor =
 			File.createTempFile(
-				DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_PREFIX,
-				DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_DESCRIPTOR_SUFFIX,
-				dumpDir);
+					DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_PREFIX,
+					DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_DESCRIPTOR_SUFFIX,
+					dumpDir);
 		File source =
 			File.createTempFile(
-				DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_PREFIX,
-				DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_SOURCE_SUFFIX,
-				dumpDir);
+					DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_PREFIX,
+					DPV_RESULT_MRPSCREATOR_SAMPLER_DUMP_FILE_SOURCE_SUFFIX,
+					dumpDir);
 
 		XmlMarkedRecordPairSink retVal =
-			new XmlMarkedRecordPairSink(
-				descriptor.getCanonicalPath(),
-				source.getName(),
-			immutableModel);
+			new XmlMarkedRecordPairSink(descriptor.getCanonicalPath(),
+					source.getName(), immutableModel);
 		return retVal;
 	}
 
@@ -141,6 +150,7 @@ public class MRPSCreator {
 
 	/**
 	 * Don't use directly.
+	 * 
 	 * @see #incrementBatchNum()
 	 * @see #getBatchNum()
 	 */
@@ -148,6 +158,7 @@ public class MRPSCreator {
 
 	/**
 	 * Don't use directly.
+	 * 
 	 * @see #incrementPairCountNum()
 	 * @see #getPairCountNum()
 	 */
@@ -170,11 +181,13 @@ public class MRPSCreator {
 	}
 
 	/**
-	 * An instance of IControl that always returns <code>false</code>
-	 * to <code>shouldStop()</code>
+	 * An instance of IControl that always returns <code>false</code> to
+	 * <code>shouldStop()</code>
+	 * 
 	 * @see com.choicemaker.cm.core.IControl
 	 */
 	public static IControl NO_CONTROL = new IControl() {
+		@Override
 		public boolean shouldStop() {
 			return false;
 		}
@@ -182,57 +195,47 @@ public class MRPSCreator {
 
 	/**
 	 * An instance of Filter that passes all MatchRecord2 pairs
+	 * 
 	 * @see com.choicemaker.cm.analyzer.filter.Filter
 	 */
 	public static IMatchRecord2Filter NO_PRE_FILTER =
 		new IMatchRecord2Filter() {
-		private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
-		public boolean satisfy(MatchRecord2 mr2) {
-			return true;
-		}
-	};
+			@Override
+			public boolean satisfy(MatchRecord2 mr2) {
+				return true;
+			}
+		};
 
 	/**
 	 * An instance of Filter that passes all marked-record pairs
+	 * 
 	 * @see com.choicemaker.cm.analyzer.filter.Filter
 	 */
 	public static Filter NO_POST_FILTER = new Filter() {
 		private static final long serialVersionUID = 1L;
+
+		@Override
 		public boolean satisfy(MutableMarkedRecordPair mrp) {
 			return true;
 		}
+
+		@Override
 		public void resetLimiters() {
 		}
 	};
 
-	public MRPSCreator(
-		IMatchRecord2Source mrSource,
-		RecordSource stageRS,
-		RecordSource masterRS,
-		MarkedRecordPairSink mrps) {
-		this(
-			mrSource,
-			stageRS,
-			masterRS,
-			mrps,
-			Integer.MAX_VALUE,
-			NO_CONTROL,
-			NO_PRE_FILTER,
-			NO_POST_FILTER,
-			null);
+	public MRPSCreator(IMatchRecord2Source mrSource, RecordSource stageRS,
+			RecordSource masterRS, MarkedRecordPairSink mrps) {
+		this(mrSource, stageRS, masterRS, mrps, Integer.MAX_VALUE, NO_CONTROL,
+				NO_PRE_FILTER, NO_POST_FILTER, null);
 	}
 
-	public MRPSCreator(
-		IMatchRecord2Source mrSource,
-		RecordSource stageRS,
-		RecordSource masterRS,
-		MarkedRecordPairSink mrps,
-		int batchSize,
-		IControl control,
-		IMatchRecord2Filter mr2Filter,
-		Filter mrpFilter,
-		PairSampler sampler) {
+	public MRPSCreator(IMatchRecord2Source mrSource, RecordSource stageRS,
+			RecordSource masterRS, MarkedRecordPairSink mrps, int batchSize,
+			IControl control, IMatchRecord2Filter mr2Filter, Filter mrpFilter,
+			PairSampler sampler) {
 
 		this.mrSource = mrSource;
 		this.stageRS = stageRS;
@@ -283,28 +286,16 @@ public class MRPSCreator {
 				List matchRecords = new ArrayList();
 				Set stageIDSet = new HashSet();
 				Set masterIDSet = new HashSet();
-				getPairsAndIds(
-					this.mrSource,
-					this.preFilter,
-					matchRecords,
-					stageIDSet,
-					masterIDSet,
-					this.control,
-					batchSize);
+				getPairsAndIds(this.mrSource, this.preFilter, matchRecords,
+						stageIDSet, masterIDSet, this.control, batchSize);
 				incrementPairCount(matchRecords.size());
 				if (log.isLoggable(Level.INFO)) {
 					log.info("Batch number: " + getBatchNum());
-					log.info(
-						PRETTY_PRINT_INDENT
-							+ "Number of pairs: "
+					log.info(PRETTY_PRINT_INDENT + "Number of pairs: "
 							+ matchRecords.size());
-					log.info(
-						PRETTY_PRINT_INDENT
-							+ "Number of staging ids: "
+					log.info(PRETTY_PRINT_INDENT + "Number of staging ids: "
 							+ stageIDSet.size());
-					log.info(
-						PRETTY_PRINT_INDENT
-							+ "Number of master ids: "
+					log.info(PRETTY_PRINT_INDENT + "Number of master ids: "
 							+ masterIDSet.size());
 				}
 
@@ -319,44 +310,28 @@ public class MRPSCreator {
 				masterIDSet = null;
 
 				Iterator mrIter = matchRecords.iterator();
-				writeMRPS(
-					this.mrps,
-					mrIter,
-					this.postFilter,
-					stageMap,
-					masterMap,
-					this.control,
-					this.sampler);
+				writeMRPS(this.mrps, mrIter, this.postFilter, stageMap,
+						masterMap, this.control, this.sampler);
 
 				if (this.sampler != null && OabaProperties.isSamplerDumped()) {
 					try {
 						File dumpDir = getSamplerDumpDir(mrps);
 						XmlMarkedRecordPairSink dump =
-							getSamplerDumpFile(dumpDir,mrps.getModel());
+							getSamplerDumpFile(dumpDir, mrps.getModel());
 						String descriptor = dump.getName();
 						String xmlData = dump.getXmlFileName();
-						log.info(
-							"Dumping sampler to '"
-								+ descriptor
-								+ "' : '"
-								+ xmlData
-								+ "'...");
+						log.info("Dumping sampler to '" + descriptor + "' : '"
+								+ xmlData + "'...");
 						dump.open();
 						List retainedPairs = this.sampler.getRetainedPairs();
-						for (Iterator i = retainedPairs.iterator();
-							i.hasNext();
-							) {
+						for (Iterator i = retainedPairs.iterator(); i.hasNext();) {
 							MutableMarkedRecordPair mrp =
 								(MutableMarkedRecordPair) i.next();
 							dump.putMarkedRecordPair(mrp);
 						}
 						dump.close();
-						log.info(
-							"...Finished dumping sampler to '"
-								+ descriptor
-								+ "' : '"
-								+ xmlData
-								+ "'");
+						log.info("...Finished dumping sampler to '"
+								+ descriptor + "' : '" + xmlData + "'");
 					} catch (Exception x) {
 						log.warning("Sampler could not be dumped: " + x);
 					}
@@ -386,10 +361,8 @@ public class MRPSCreator {
 						(MutableMarkedRecordPair) i.next();
 					this.mrps.putMarkedRecordPair(mrp);
 					++count;
-					log.info(
-						">>>>>>>>>>>>Adding pair: "
-							+ mrp.getQueryRecord().getId()
-							+ ","
+					log.info(">>>>>>>>>>>>Adding pair: "
+							+ mrp.getQueryRecord().getId() + ","
 							+ mrp.getMatchRecord().getId());
 				}
 				if (log.isLoggable(Level.INFO)) {
@@ -418,25 +391,26 @@ public class MRPSCreator {
 	} // createMRPS()
 
 	/**
-	 * This creates a distinct set of record ids for master and staging
-	 * record sources.
-	 * @param mrSource an already opened source
-	 * @param matchRecords an empty list to hold MatchRecord2 instances
-	 * @param stageIDSet an empty set to hold staging ids
-	 * @param masterIDSet an empty set to hold master ids
-	 * @param batchSize the number of pairs to read from the source
-	 * during this processing step
+	 * This creates a distinct set of record ids for master and staging record
+	 * sources.
+	 * 
+	 * @param mrSource
+	 *            an already opened source
+	 * @param matchRecords
+	 *            an empty list to hold MatchRecord2 instances
+	 * @param stageIDSet
+	 *            an empty set to hold staging ids
+	 * @param masterIDSet
+	 *            an empty set to hold master ids
+	 * @param batchSize
+	 *            the number of pairs to read from the source during this
+	 *            processing step
 	 * @throws BlockingException
 	 */
-	private static void getPairsAndIds(
-		IMatchRecord2Source mrSource,
-		IMatchRecord2Filter preFilter,
-		List matchRecords,
-		Set stageIDSet,
-		Set masterIDSet,
-		IControl control,
-		int batchSize)
-		throws BlockingException, ControlException, RemoteException {
+	private static void getPairsAndIds(IMatchRecord2Source mrSource,
+			IMatchRecord2Filter preFilter, List matchRecords, Set stageIDSet,
+			Set masterIDSet, IControl control, int batchSize)
+			throws BlockingException, ControlException, RemoteException {
 
 		// Preconditions
 		if (mrSource == null) {
@@ -466,7 +440,7 @@ public class MRPSCreator {
 		while (matchRecords.size() < batchSize && mrSource.hasNext()) {
 
 			if (matchRecords.size() % CONTROL_INTERVAL == 0
-				&& control.shouldStop()) {
+					&& control.shouldStop()) {
 				throw new ControlException("Aborted in getPairsAndIds");
 			}
 
@@ -478,24 +452,24 @@ public class MRPSCreator {
 
 				matchRecords.add(mr);
 
-				//add id1, which is always a staging id.
+				// add id1, which is always a staging id.
 				if (!stageIDSet.contains(id1)) {
 					stageIDSet.add(id1);
 				}
 
 				if (source == RECORD_SOURCE_ROLE.MASTER) {
-					//master
+					// master
 					if (!masterIDSet.contains(id2)) {
 						masterIDSet.add(id2);
 					}
 				} else if (source == RECORD_SOURCE_ROLE.STAGING) {
-					//stage
+					// stage
 					if (!stageIDSet.contains(id2)) {
 						stageIDSet.add(id2);
 					}
 				} else {
-					throw new BlockingException(
-						"Invalid record2Source " + source);
+					throw new BlockingException("Invalid record2Source "
+							+ source);
 				}
 
 			} // if preFilter
@@ -503,15 +477,10 @@ public class MRPSCreator {
 
 	}
 
-	private static void writeMRPS(
-		MarkedRecordPairSink mrps,
-		Iterator mrIter,
-		Filter postFilter,
-		Map stageMap,
-		Map masterMap,
-		IControl control,
-		PairSampler sampler)
-		throws BlockingException, ControlException, IOException, RemoteException {
+	private static void writeMRPS(MarkedRecordPairSink mrps, Iterator mrIter,
+			Filter postFilter, Map stageMap, Map masterMap, IControl control,
+			PairSampler sampler) throws BlockingException, ControlException,
+			IOException, RemoteException {
 
 		// Preconditions
 		if (mrps == null) {
@@ -562,18 +531,18 @@ public class MRPSCreator {
 			id2 = mr.getRecordID2();
 			source = mr.getRecord2Role();
 
-			//get record2 1 and 2
+			// get record2 1 and 2
 			r1 = (Record) stageMap.get(id1);
 			if (source == RECORD_SOURCE_ROLE.MASTER) {
 				r2 = (Record) masterMap.get(id2);
 			} else if (source == RECORD_SOURCE_ROLE.STAGING) {
 				r2 = (Record) stageMap.get(id2);
 			} else {
-				throw new BlockingException(
-					"Invalid record2Source " + mr.getRecord2Role());
+				throw new BlockingException("Invalid record2Source "
+						+ mr.getRecord2Role());
 			}
 
-			//get decision
+			// get decision
 			if (mr.getMatchType() == Decision.MATCH) {
 				decision = Decision.MATCH;
 			} else if (mr.getMatchType() == Decision.HOLD) {
@@ -582,14 +551,8 @@ public class MRPSCreator {
 
 			String comment = "" + mr.getProbability();
 			mrp =
-				new MutableMarkedRecordPair(
-					r1,
-					r2,
-					decision,
-					date,
-					"",
-					"",
-					comment);
+				new MutableMarkedRecordPair(r1, r2, decision, date, "", "",
+						comment);
 			if (postFilter.satisfy(mrp)) {
 				if (sampler == null) {
 					mrps.putMarkedRecordPair(mrp);
@@ -602,30 +565,26 @@ public class MRPSCreator {
 		}
 
 		if (sampler == null) {
-			log.info(
-				PRETTY_PRINT_INDENT
-					+ count2
+			log.info(PRETTY_PRINT_INDENT + count2
 					+ " pairs added to the MRPS file.");
 		} else {
-			log.info(
-				PRETTY_PRINT_INDENT + count2 + " pairs added to the sampler.");
+			log.info(PRETTY_PRINT_INDENT + count2
+					+ " pairs added to the sampler.");
 		}
 	}
 
-	/** This method takes in a set of record ids and a records source.
-	 * Each record with id in the set is put on the output hash map.
+	/**
+	 * This method takes in a set of record ids and a records source. Each
+	 * record with id in the set is put on the output hash map.
 	 *
 	 * @param ids
 	 * @param rs
 	 * @return
 	 * @throws BlockingException
 	 */
-	private void readRecords(
-		Map map,
-		Set ids,
-		RecordSource rs,
-		IControl control)
-		throws BlockingException, ControlException, IOException, RemoteException {
+	private void readRecords(Map map, Set ids, RecordSource rs, IControl control)
+			throws BlockingException, ControlException, IOException,
+			RemoteException {
 
 		// Preconditions
 		if (map == null || !map.isEmpty()) {
@@ -649,7 +608,7 @@ public class MRPSCreator {
 		try {
 			Record r = null;
 			Comparable c = null;
-			//int count = 0;
+			// int count = 0;
 			int count2 = 0;
 			final int size = ids.size();
 
@@ -661,7 +620,7 @@ public class MRPSCreator {
 				throw new BlockingException(msg);
 			}
 
-			//while ((count < size) && rs.hasNext()) {
+			// while ((count < size) && rs.hasNext()) {
 			while ((map.size() < size) && rs.hasNext()) {
 
 				if (count2++ % CONTROL_INTERVAL == 0 && control.shouldStop()) {
@@ -673,25 +632,19 @@ public class MRPSCreator {
 				c = r.getId();
 				if (ids.contains(c)) {
 					map.put(c, r);
-					//count++;
+					// count++;
 				}
 
 				if (log.isLoggable(Level.FINE) && count2 % DEBUG_INTERVAL == 0) {
-					log.fine(
-						PRETTY_PRINT_INDENT
-							+ PRETTY_PRINT_INDENT
-							+ count2
-							+ " "
-							+ map.size());
+					log.fine(PRETTY_PRINT_INDENT + PRETTY_PRINT_INDENT + count2
+							+ " " + map.size());
 				}
 			}
 
 			if (map.size() != size)
 				throw new BlockingException(
-					"Could not find all match records in the record source.  Set size = "
-						+ size
-						+ " records found = "
-						+ map.size());
+						"Could not find all match records in the record source.  Set size = "
+								+ size + " records found = " + map.size());
 
 		} finally {
 			try {

@@ -20,13 +20,14 @@ import com.choicemaker.cm.core.BlockingException;
  */
 public interface IComparisonTreeSink<T extends Comparable<T>> extends ISink {
 
-	/** Writes the ComparisonTreeNode to the sink. 
-	 * tree.getRecordId should not be -1.
+	/**
+	 * Writes the ComparisonTreeNode to the sink. tree.getRecordId should not be
+	 * -1.
 	 * 
 	 * @param tree
 	 * @throws BlockingException
 	 */
-	public void writeComparisonTree (ComparisonTreeNode<T> tree) throws BlockingException;
-
+	public void writeComparisonTree(ComparisonTreeNode<T> tree)
+			throws BlockingException;
 
 }

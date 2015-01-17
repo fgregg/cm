@@ -10,8 +10,10 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.*;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.Constants.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.Constants.LINE_SEPARATOR;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_INTEGER;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_LONG;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_STRING;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,6 +48,7 @@ public class ComparisonArraySink extends BaseFileSink implements
 	 * writeComparisonGroup(com.choicemaker.cm.io.blocking.automated.offline.core
 	 * .ComparisonGroup)
 	 */
+	@Override
 	public void writeComparisonArray(ComparisonArray cg)
 			throws BlockingException {
 		try {

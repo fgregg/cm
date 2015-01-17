@@ -22,20 +22,21 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
  * @author pcheung
  *
  */
-@SuppressWarnings({
-	"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
-	
-	private static final EXTERNAL_DATA_FORMAT TYPE = EXTERNAL_DATA_FORMAT.STRING;
+
+	private static final EXTERNAL_DATA_FORMAT TYPE =
+		EXTERNAL_DATA_FORMAT.STRING;
 
 	private String fileDir;
 	private String nameBase;
 	private String ext;
 	private int indSink = 0;
 	private int indSource = 0;
-	
-	
-	/** This constructor takes in key parameters to create RecordIdSink or RecordIdSource files as follows:
+
+	/**
+	 * This constructor takes in key parameters to create RecordIdSink or
+	 * RecordIdSource files as follows:
 	 * 
 	 * fileDir + nameBase + ind + "." + ext
 	 * 
@@ -43,69 +44,109 @@ class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 	 * @param nameBase
 	 * @param ext
 	 */
-	RecordIdSinkSourceFactory (String fileDir, String nameBase, String ext) {
+	RecordIdSinkSourceFactory(String fileDir, String nameBase, String ext) {
 		this.fileDir = fileDir;
 		this.nameBase = nameBase;
 		this.ext = ext;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory#getNextSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IRecordIdSinkSourceFactory#getNextSink()
 	 */
+	@Override
 	public IRecordIdSink getNextSink() throws BlockingException {
-		indSink ++;
-		return new RecordIdSink (fileDir + nameBase + indSink + "." + ext, TYPE);
+		indSink++;
+		return new RecordIdSink(fileDir + nameBase + indSink + "." + ext, TYPE);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory#getNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IRecordIdSinkSourceFactory#getNextSource()
 	 */
+	@Override
 	public IRecordIdSource getNextSource() throws BlockingException {
-		indSource ++;
-		return new RecordIdSource (fileDir + nameBase + indSource + "." + ext, TYPE);
+		indSource++;
+		return new RecordIdSource(fileDir + nameBase + indSource + "." + ext,
+				TYPE);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory#getNumSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IRecordIdSinkSourceFactory#getNumSink()
 	 */
+	@Override
 	public int getNumSink() {
 		return indSink;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory#getNumSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IRecordIdSinkSourceFactory#getNumSource()
 	 */
+	@Override
 	public int getNumSource() {
 		return indSource;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory#getSource(com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IRecordIdSinkSourceFactory
+	 * #getSource(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IRecordIdSink)
 	 */
+	@Override
 	public IRecordIdSource getSource(IRecordIdSink sink)
-		throws BlockingException {
-		return new RecordIdSource (sink.getInfo(), TYPE);
+			throws BlockingException {
+		return new RecordIdSource(sink.getInfo(), TYPE);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory#getSink(com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IRecordIdSinkSourceFactory
+	 * #getSink(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IRecordIdSource)
 	 */
+	@Override
 	public IRecordIdSink getSink(IRecordIdSource source)
-		throws BlockingException {
-		return new RecordIdSink (source.getInfo(), TYPE);
+			throws BlockingException {
+		return new RecordIdSink(source.getInfo(), TYPE);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory#removeSink(com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IRecordIdSinkSourceFactory
+	 * #removeSink(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IRecordIdSink)
 	 */
+	@Override
 	public void removeSink(IRecordIdSink sink) throws BlockingException {
 		sink.remove();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory#removeSource(com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IRecordIdSinkSourceFactory
+	 * #removeSource(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IRecordIdSource)
 	 */
+	@Override
 	public void removeSource(IRecordIdSource source) throws BlockingException {
 		source.delete();
 	}

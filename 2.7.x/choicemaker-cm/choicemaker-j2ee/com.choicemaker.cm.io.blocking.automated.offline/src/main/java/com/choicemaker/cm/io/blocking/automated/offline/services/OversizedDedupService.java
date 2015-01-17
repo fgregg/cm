@@ -25,8 +25,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.SuffixTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.BlocksSpliterMap;
@@ -37,15 +37,17 @@ import com.choicemaker.util.LongArrayList;
 /**
  * @author pcheung
  *
- * This service dedups the oversized blocks.  It does the following:
- * 1. Break the oversized blocks into smaller files.  Each file contains blocks of a given size.
- * 2. Remove exact duplicate oversized blocks.
- * 3. Remove subset
+ *         This service dedups the oversized blocks. It does the following: 1.
+ *         Break the oversized blocks into smaller files. Each file contains
+ *         blocks of a given size. 2. Remove exact duplicate oversized blocks.
+ *         3. Remove subset
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class OversizedDedupService {
 
-	private static final Logger log = Logger.getLogger(OversizedDedupService.class.getName());
+	private static final Logger log = Logger
+			.getLogger(OversizedDedupService.class.getName());
 
 	// these two variables are used to stop the program in the middle
 	private IControl control;
@@ -59,25 +61,30 @@ public class OversizedDedupService {
 
 	private OabaEventLog status;
 
-	//this splitter has 1 file for a range of block sizes
+	// this splitter has 1 file for a range of block sizes
 	private BlocksSpliterMap spliter;
 
 	private int numBlocksIn = 0;
 	private int numAfterExact = 0;
 	private int numBlocksOut = 0;
 
-	private long time; //this keeps track of time
+	private long time; // this keeps track of time
 
-
-	/** This constructor takes these parameters
+	/**
+	 * This constructor takes these parameters
 	 *
-	 * @param osSource - IBlockSource that contains dupliate oversized blocks
-	 * @param osSink - IBlockSink that is going to store deduped oversized blocks
-	 * @param osFactory - IBlockSinkSourceFactory to store temporary files
-	 * @param status - status of the system.
+	 * @param osSource
+	 *            - IBlockSource that contains dupliate oversized blocks
+	 * @param osSink
+	 *            - IBlockSink that is going to store deduped oversized blocks
+	 * @param osFactory
+	 *            - IBlockSinkSourceFactory to store temporary files
+	 * @param status
+	 *            - status of the system.
 	 */
-	public OversizedDedupService (IBlockSource osSource, IBlockSink osSink,
-		BlockSinkSourceFactory osFactory, OabaEventLog status, IControl control) {
+	public OversizedDedupService(IBlockSource osSource, IBlockSink osSink,
+			BlockSinkSourceFactory osFactory, OabaEventLog status,
+			IControl control) {
 
 		this.osFactory = osFactory;
 		this.osSink = osSink;
@@ -88,111 +95,122 @@ public class OversizedDedupService {
 		this.stop = false;
 	}
 
+	public int getNumBlocksIn() {
+		return numBlocksIn;
+	}
 
-	public int getNumBlocksIn () { return numBlocksIn; }
-	public int getNumAfterExact () { return numAfterExact; }
-	public int getNumBlocksOut () { return numBlocksOut; }
+	public int getNumAfterExact() {
+		return numAfterExact;
+	}
 
-	/** This method returns the time it takes to run the runService method.
+	public int getNumBlocksOut() {
+		return numBlocksOut;
+	}
+
+	/**
+	 * This method returns the time it takes to run the runService method.
 	 *
-	 * @return long - returns the time (in milliseconds) it took to run this service.
+	 * @return long - returns the time (in milliseconds) it took to run this
+	 *         service.
 	 */
-	public long getTimeElapsed () { return time; }
+	public long getTimeElapsed() {
+		return time;
+	}
 
-
-	public void runService () throws BlockingException {
+	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_DEDUP_OVERSIZED ) {
-			//do nothing here
+		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_DEDUP_OVERSIZED) {
+			// do nothing here
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_DEDUP_BLOCKS ) {
-			//start from beginning
-			splitOversized ();
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_DEDUP_BLOCKS) {
+			// start from beginning
+			splitOversized();
 
-			removeExact (0);
+			removeExact(0);
 
-			removeSubsumed (0);
+			removeSubsumed(0);
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DEDUP_OVERSIZED_EXACT ) {
-			//recovering dedup oversized exact
-			String temp =  status.getCurrentOabaEventInfo();
-			int ind = temp.indexOf( OabaProcessing.DELIMIT);
-			int s = Integer.parseInt( temp.substring(0,ind) );
-			int startPoint = Integer.parseInt( temp.substring(ind + 1) );
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DEDUP_OVERSIZED_EXACT) {
+			// recovering dedup oversized exact
+			String temp = status.getCurrentOabaEventInfo();
+			int ind = temp.indexOf(OabaProcessing.DELIMIT);
+			int s = Integer.parseInt(temp.substring(0, ind));
+			int startPoint = Integer.parseInt(temp.substring(ind + 1));
 
 			log.info("Recovering from remove exact " + s + " " + startPoint);
-			recoverSpliter (s);
+			recoverSpliter(s);
 
-			removeExact (startPoint);
+			removeExact(startPoint);
 
-			removeSubsumed (0);
+			removeSubsumed(0);
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED_EXACT ) {
-			//start from dedup subsumed
-			int s = Integer.parseInt( status.getCurrentOabaEventInfo() );
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED_EXACT) {
+			// start from dedup subsumed
+			int s = Integer.parseInt(status.getCurrentOabaEventInfo());
 
 			log.info("Recovering from remove subsumed " + s);
-			recoverSpliter (s);
+			recoverSpliter(s);
 
-			removeSubsumed (0);
+			removeSubsumed(0);
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DEDUP_OVERSIZED ) {
-			//recovering dedup subsumed oversized
-			int s = Integer.parseInt( status.getCurrentOabaEventInfo() );
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DEDUP_OVERSIZED) {
+			// recovering dedup subsumed oversized
+			int s = Integer.parseInt(status.getCurrentOabaEventInfo());
 
-			log.info("Recovering from subsumed removal " + s );
-			recoverSpliter (s);
+			log.info("Recovering from subsumed removal " + s);
+			recoverSpliter(s);
 
-			removeSubsumed (0);
+			removeSubsumed(0);
 		}
 		time = System.currentTimeMillis() - time;
 	}
 
-
-	private void recoverSpliter (int s) throws BlockingException {
-		spliter = new BlocksSpliterMap (osFactory);
-		//this is not exact because we really don't have the os block size distribution.
-		//we just need some ordering.
-		for (int i=0; i<s; i++) {
-			spliter.setSize(i,1);
+	private void recoverSpliter(int s) throws BlockingException {
+		spliter = new BlocksSpliterMap(osFactory);
+		// this is not exact because we really don't have the os block size
+		// distribution.
+		// we just need some ordering.
+		for (int i = 0; i < s; i++) {
+			spliter.setSize(i, 1);
 		}
 		spliter.recovery(s);
 	}
 
-
-	/** This method splits the oversized blocks file into smaller chunks.
-	 * Each chunk contains oversized blocks with size in a certain range.
+	/**
+	 * This method splits the oversized blocks file into smaller chunks. Each
+	 * chunk contains oversized blocks with size in a certain range.
 	 *
 	 */
-	private void splitOversized () throws BlockingException {
-		//get a listing of all the oversized block sizes
-		HashSet sizes = new HashSet ();
+	private void splitOversized() throws BlockingException {
+		// get a listing of all the oversized block sizes
+		HashSet sizes = new HashSet();
 		osSource.open();
 		while (osSource.hasNext() && !stop) {
 			BlockSet bs = osSource.next();
-			Integer I = new Integer (bs.getRecordIDs().size());
+			Integer I = new Integer(bs.getRecordIDs().size());
 
-			if (!sizes.contains(I)) sizes.add(I);
+			if (!sizes.contains(I))
+				sizes.add(I);
 		}
 		osSource.close();
 
-		//sort this set
-		int [] sArray = new int [sizes.size()];
+		// sort this set
+		int[] sArray = new int[sizes.size()];
 		Iterator it = sizes.iterator();
-		int i=0;
+		int i = 0;
 		while (it.hasNext() && !stop) {
 			Integer I = (Integer) it.next();
-			sArray [i] = I.intValue();
-			i ++;
+			sArray[i] = I.intValue();
+			i++;
 
-			stop = ControlChecker.checkStop (control, i);
+			stop = ControlChecker.checkStop(control, i);
 		}
-		Arrays.sort (sArray);
+		Arrays.sort(sArray);
 
-		//use map implementation
-		spliter = new BlocksSpliterMap (osFactory);
-		for (i=0; i< sizes.size(); i++) {
+		// use map implementation
+		spliter = new BlocksSpliterMap(osFactory);
+		for (i = 0; i < sizes.size(); i++) {
 			spliter.setSize(sArray[i], 1);
 		}
 
@@ -208,33 +226,37 @@ public class OversizedDedupService {
 			bs.getRecordIDs();
 			spliter.writeToSink(bs);
 
-			numBlocksIn ++;
+			numBlocksIn++;
 
-			stop = ControlChecker.checkStop (control, numBlocksIn);
+			stop = ControlChecker.checkStop(control, numBlocksIn);
 		}
 
 		osSource.close();
 
 	}
 
-
-	/** This method removes the exact blocks
+	/**
+	 * This method removes the exact blocks
 	 *
 	 */
-	private void removeExact (int startPoint) throws BlockingException {
+	private void removeExact(int startPoint) throws BlockingException {
 
-		IBlockSource [] sources = spliter.getSources();
+		IBlockSource[] sources = spliter.getSources();
 		int s = sources.length;
 
-		for (int i=startPoint; i<s && !stop; i++) {
-			stop = ControlChecker.checkStop (control, ControlChecker.CONTROL_INTERVAL);
+		for (int i = startPoint; i < s && !stop; i++) {
+			stop =
+				ControlChecker.checkStop(control,
+						ControlChecker.CONTROL_INTERVAL);
 
-			//hashmap containing sum and block
-			HashMap sumMap = new HashMap ();
+			// hashmap containing sum and block
+			HashMap sumMap = new HashMap();
 
-//			System.out.println (i + " " + sources[i].getInfo());
+			// System.out.println (i + " " + sources[i].getInfo());
 
-			String temp = Integer.toString(s) + OabaProcessing.DELIMIT + Integer.toString(i);
+			String temp =
+				Integer.toString(s) + OabaProcessing.DELIMIT
+						+ Integer.toString(i);
 			status.setCurrentOabaEvent(OabaEvent.DEDUP_OVERSIZED_EXACT, temp);
 
 			if (sources[i].exists()) {
@@ -245,15 +267,15 @@ public class OversizedDedupService {
 					BlockSet blockSet = sources[i].next();
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
-					Long L = new Long (getSum(recordIds));
+					Long L = new Long(getSum(recordIds));
 
 					ArrayList blockList = (ArrayList) sumMap.get(L);
 					if (blockList == null) {
-						blockList = new ArrayList ();
-						blockList.add (blockSet);
-						sumMap.put (L, blockList);
+						blockList = new ArrayList();
+						blockList.add(blockSet);
+						sumMap.put(L, blockList);
 					} else {
-						if (!contain (blockList, recordIds)) {
+						if (!contain(blockList, recordIds)) {
 							blockList.add(blockSet);
 						}
 					}
@@ -262,7 +284,7 @@ public class OversizedDedupService {
 
 				sources[i].close();
 
-				//now write the distinct ones back to the file.
+				// now write the distinct ones back to the file.
 				IBlockSink sink = osFactory.getSink(sources[i]);
 				sink.open();
 				Iterator it = sumMap.values().iterator();
@@ -270,42 +292,43 @@ public class OversizedDedupService {
 				while (it.hasNext()) {
 					ArrayList blockList = (ArrayList) it.next();
 
-					for (int j=0; j<blockList.size(); j++) {
+					for (int j = 0; j < blockList.size(); j++) {
 						BlockSet bs = (BlockSet) blockList.get(j);
 						sink.writeBlock(bs);
-						numAfterExact ++;
+						numAfterExact++;
 					}
 				}
 				sink.close();
 
-			} //end if
+			} // end if
 
-		} //end for i
+		} // end for i
 
-		status.setCurrentOabaEvent( OabaEvent.DONE_DEDUP_OVERSIZED_EXACT, Integer.toString(s) );
+		status.setCurrentOabaEvent(OabaEvent.DONE_DEDUP_OVERSIZED_EXACT,
+				Integer.toString(s));
 
-		status.setCurrentOabaEvent( OabaEvent.DEDUP_OVERSIZED, Integer.toString(s) );
+		status.setCurrentOabaEvent(OabaEvent.DEDUP_OVERSIZED,
+				Integer.toString(s));
 
-//		if (true) throw new RuntimeException ("test fail");
+		// if (true) throw new RuntimeException ("test fail");
 
 	}
 
-
-
-	/** This method removes the subsumed oversized blocks
+	/**
+	 * This method removes the subsumed oversized blocks
 	 *
 	 */
-	private void removeSubsumed (int startPoint) throws BlockingException {
-		//get the split sinks in order of block size
-		IBlockSource [] sources = spliter.getSources();
+	private void removeSubsumed(int startPoint) throws BlockingException {
+		// get the split sinks in order of block size
+		IBlockSource[] sources = spliter.getSources();
 		int s = sources.length;
 
-		//Initialize
+		// Initialize
 		SuffixTreeNode root = SuffixTreeNode.createRootNode();
 		IntArrayList subsumedBlockSets = new IntArrayList();
 		int blockSetId = 0;
 
-		for (int i = startPoint; i< s && !stop; i++) {
+		for (int i = startPoint; i < s && !stop; i++) {
 
 			if (sources[i].exists()) {
 				sources[i].open();
@@ -315,17 +338,18 @@ public class OversizedDedupService {
 
 					LongArrayList recordIds = blockSet.getRecordIDs();
 
-					checkForSubsets(root, recordIds, blockSetId, 0, subsumedBlockSets);
+					checkForSubsets(root, recordIds, blockSetId, 0,
+							subsumedBlockSets);
 					addBlockSet(root, recordIds, blockSetId);
 
-					blockSetId ++;
+					blockSetId++;
 
-					stop = ControlChecker.checkStop (control, blockSetId);
+					stop = ControlChecker.checkStop(control, blockSetId);
 				}
 
 				sources[i].close();
-			} //end if
-		} //end for
+			} // end if
+		} // end for
 
 		root = null;
 
@@ -335,20 +359,22 @@ public class OversizedDedupService {
 		spliter.removeAll();
 		osSource.delete();
 
-		status.setCurrentOabaEvent( OabaEvent.DONE_DEDUP_OVERSIZED);
+		status.setCurrentOabaEvent(OabaEvent.DONE_DEDUP_OVERSIZED);
 	}
 
-
-	/** This is the memory friendly version that uses intermediate files.
-	 * It also bypasses the list of block sets by sorting the subsumed list first.
+	/**
+	 * This is the memory friendly version that uses intermediate files. It also
+	 * bypasses the list of block sets by sorting the subsumed list first.
 	 *
-	 * @param subsumedBlockSets - ids of the subsumed blocks
-	 * @param sink - output sink
+	 * @param subsumedBlockSets
+	 *            - ids of the subsumed blocks
+	 * @param sink
+	 *            - output sink
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private void writeUnsubsumed3(IntArrayList subsumedBlockSets, IBlockSink sink)
-		throws BlockingException {
+	private void writeUnsubsumed3(IntArrayList subsumedBlockSets,
+			IBlockSink sink) throws BlockingException {
 
 		sink.open();
 
@@ -356,122 +382,133 @@ public class OversizedDedupService {
 
 		ArrayList parts = spliter.getSinks();
 
-		int counter = 0; //counter for the blocks read
-		int ind = 0; //current index on subsumedBlockSets
+		int counter = 0; // counter for the blocks read
+		int ind = 0; // current index on subsumedBlockSets
 
 		for (int i = 0; i < parts.size() && !stop; i++) {
-			IBlockSource srcI = osFactory.getSource((IBlockSink)parts.get(i));
+			IBlockSource srcI = osFactory.getSource((IBlockSink) parts.get(i));
 			srcI.open();
 
-//			System.out.println (i + " " + srcI.getInfo() + " " + numBlocksOut);
+			// System.out.println (i + " " + srcI.getInfo() + " " +
+			// numBlocksOut);
 
 			while (srcI.hasNext()) {
 				BlockSet bs = srcI.next();
 
-				if (ind < subsumedBlockSets.size() && counter == subsumedBlockSets.get(ind)) {
-					ind ++;
+				if (ind < subsumedBlockSets.size()
+						&& counter == subsumedBlockSets.get(ind)) {
+					ind++;
 				} else {
 					sink.writeBlock(bs);
-					numBlocksOut ++;
+					numBlocksOut++;
 				}
 
-				counter ++;
+				counter++;
 
-				stop = ControlChecker.checkStop (control, counter);
+				stop = ControlChecker.checkStop(control, counter);
 			}
 
 			srcI.close();
 
-		} //end for
+		} // end for
 
-		//at the end, ind should be the size of the subsumedsubset
-		if (ind != subsumedBlockSets.size()) throw new IllegalStateException
-		 ("Done write ind " + ind + " size " + subsumedBlockSets.size ());
+		// at the end, ind should be the size of the subsumedsubset
+		if (ind != subsumedBlockSets.size())
+			throw new IllegalStateException("Done write ind " + ind + " size "
+					+ subsumedBlockSets.size());
 
 		sink.close();
 	}
 
-
-	/** This method calculates the sum of an array of IDs
+	/**
+	 * This method calculates the sum of an array of IDs
 	 *
 	 * @param list
 	 * @return
 	 */
-	private long getSum (LongArrayList list) {
+	private long getSum(LongArrayList list) {
 		long sum = 0;
-		for (int i=0; i<list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			sum += list.get(i);
 		}
 		return sum;
 	}
 
-
-	/** This checks to see if ids is in the ArrayList.
+	/**
+	 * This checks to see if ids is in the ArrayList.
 	 *
 	 * @param blockList
 	 * @param ids
 	 * @return true if ids is in blockList.
 	 */
-	private static boolean contain (ArrayList blockList, LongArrayList ids) {
+	private static boolean contain(ArrayList blockList, LongArrayList ids) {
 		boolean found = false;
 
-		int i =0;
+		int i = 0;
 
 		while (!found && i < blockList.size()) {
 			BlockSet bs = (BlockSet) blockList.get(i);
 
-			if (!differ (bs.getRecordIDs(), ids)) found = true;
-			else i ++;
+			if (!differ(bs.getRecordIDs(), ids))
+				found = true;
+			else
+				i++;
 		}
 
 		return found;
 	}
 
-
-	/** This returns true if the content of two LongArrayList are different.
+	/**
+	 * This returns true if the content of two LongArrayList are different.
 	 *
 	 * @param ids1
 	 * @param ids2
 	 * @return
 	 */
-	private static boolean differ (LongArrayList ids1, LongArrayList ids2) {
+	private static boolean differ(LongArrayList ids1, LongArrayList ids2) {
 		boolean diff = false;
 
 		int i = 0;
 
-		if (ids1.size() != ids2.size()) diff = true;
+		if (ids1.size() != ids2.size())
+			diff = true;
 		else {
 			while (!diff && i < ids1.size()) {
-				if (ids1.get(i) != ids2.get(i)) diff = true;
-				else i ++;
+				if (ids1.get(i) != ids2.get(i))
+					diff = true;
+				else
+					i++;
 			}
 		}
 
 		return diff;
 	}
 
-
-	private static void checkForSubsets(SuffixTreeNode node, LongArrayList recordIds, int blockSetId,
-		int fromIndex, IntArrayList subsumedSets) {
+	private static void checkForSubsets(SuffixTreeNode node,
+			LongArrayList recordIds, int blockSetId, int fromIndex,
+			IntArrayList subsumedSets) {
 
 		for (int i = fromIndex, n = recordIds.size(); i < n; i++) {
 			long recordId = recordIds.get(i);
 			SuffixTreeNode kid = node.getChild(recordId);
 			if (kid != null) {
-				if (kid.hasBlockingSetId()) {  // the kid represents an (as yet) unsubsumed blocking set.
+				if (kid.hasBlockingSetId()) { // the kid represents an (as yet)
+												// unsubsumed blocking set.
 					subsumedSets.add(kid.getBlockingSetId());
 					kid.removeFromParentRecursive();
 				} else {
-					checkForSubsets(kid, recordIds, blockSetId, i+1, subsumedSets);
+					checkForSubsets(kid, recordIds, blockSetId, i + 1,
+							subsumedSets);
 				}
 			}
 		}
 	}
 
-	private static void addBlockSet(SuffixTreeNode root, LongArrayList recordIds, int blockSetId) {
+	private static void addBlockSet(SuffixTreeNode root,
+			LongArrayList recordIds, int blockSetId) {
 		SuffixTreeNode cur = root;
 
-		int last = recordIds.size () - 1;
+		int last = recordIds.size() - 1;
 		for (int i = 0; i < last; i++) {
 			long recordId = recordIds.get(i);
 			SuffixTreeNode child = cur.getChild(recordId);
@@ -485,6 +522,5 @@ public class OversizedDedupService {
 		// the leaf node.
 		cur.putChild(recordIds.get(last), blockSetId);
 	}
-
 
 }

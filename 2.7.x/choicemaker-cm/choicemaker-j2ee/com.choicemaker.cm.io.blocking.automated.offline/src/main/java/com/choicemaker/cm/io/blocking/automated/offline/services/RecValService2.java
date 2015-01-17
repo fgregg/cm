@@ -197,21 +197,23 @@ public class RecValService2 {
 			log.info("recover rec,val files and mutableTranslator");
 			init();
 
-//		} else if (status.getCurrentOabaEventId() < OabaProcessing.EVT_CREATE_REC_VAL) {
-//			// create the rec_id, val_id files
-//			log.info("Creating new rec,val files");
-//			status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
-//			createFiles();
-//			status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
-//
-//		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_CREATE_REC_VAL) {
-//			log.info("Trying to recover rec,val files");
-//
-//			// started to created, but not done, so we need to recover
-//			status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
-//			recoverFiles();
-//			status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
-//		}
+			// } else if (status.getCurrentOabaEventId() <
+			// OabaProcessing.EVT_CREATE_REC_VAL) {
+			// // create the rec_id, val_id files
+			// log.info("Creating new rec,val files");
+			// status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
+			// createFiles();
+			// status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
+			//
+			// } else if (status.getCurrentOabaEventId() ==
+			// OabaProcessing.EVT_CREATE_REC_VAL) {
+			// log.info("Trying to recover rec,val files");
+			//
+			// // started to created, but not done, so we need to recover
+			// status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
+			// recoverFiles();
+			// status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
+			// }
 
 		} else if (status.getCurrentOabaEventId() < OabaProcessing.EVT_DONE_REC_VAL) {
 			// create the rec_id, val_id files
@@ -219,7 +221,7 @@ public class RecValService2 {
 			status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
 			createFiles();
 			status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
-			
+
 		} else {
 			log.info("Skipping RecValService2.runService()");
 
@@ -387,103 +389,104 @@ public class RecValService2 {
 		}
 	}
 
-//	/**
-//	 * This method tries to recover all the files previously written. It does
-//	 * the following
-//	 * <ol>
-//	 * <li>Recover existing rec_id, val_id files by checking the maximum record
-//	 * ID that was written so far.</li>
-//	 * <li>Recover the mutableTranslator file.</li>
-//	 * <li>Append to rec_id, val_id files.</li>
-//	 * </ol>
-//	 */
-//	private void recoverFiles() throws BlockingException {
-//		IRecValSource source;
-//		int maxCount = 0;
-//		int count = 0;
-//
-//		sinks = new IRecValSink[numBlockFields];
-//		for (int i = 0; i < numBlockFields; i++) {
-//			sinks[i] = rvFactory.getNextSink();
-//
-//			source = rvFactory.getSource(sinks[i]);
-//			source.open();
-//			count = 0;
-//			while (source.hasNext()) {
-//				count++;
-//			}
-//			source.close();
-//
-//			if (count > maxCount) {
-//				maxCount = count;
-//			}
-//
-//			sinks[i].append();
-//		}
-//
-//		// recover the mutableTranslator
-//		mutableTranslator.recover();
-//
-//		// create rec_id, val_id for the records that haven't been processed.
-//		count = 0; // count the record we are currently at
-//		int count2 = 0; // count the number of new rec,val added
-//
-//		try {
-//			// first recover the stage
-//			if (stage != null) {
-//				stage.setModel(model);
-//				stage.open();
-//				while (stage.hasNext()) {
-//					count++;
-//					Record r = stage.getNext();
-//
-//					if (count % INTERVAL == 0)
-//						MemoryEstimator.writeMem();
-//
-//					if (count > maxCount) {
-//						writeRecord(r, model);
-//						count2++;
-//					}
-//				} // end while
-//				stage.close();
-//			}
-//
-//			// second recover the master
-//			if (master != null) {
-//
-//				// this mean that the previous run never got to the second
-//				// record source, so we need to tell the mutableTranslator to
-//				// split
-//				if (count2 > 0) {
-//					mutableTranslator.split();
-//				}
-//
-//				master.setModel(model);
-//				master.open();
-//				while (master.hasNext()) {
-//					count++;
-//					Record r = master.getNext();
-//					if (count % INTERVAL == 0) {
-//						MemoryEstimator.writeMem();
-//					}
-//					if (count > maxCount) {
-//						writeRecord(r, model);
-//						count2++;
-//					}
-//				} // end while
-//				master.close();
-//			}
-//		} catch (IOException ex) {
-//			throw new BlockingException(ex.toString());
-//		}
-//
-//		mutableTranslator.close();
-//		for (int i = 0; i < sinks.length; i++) {
-//			sinks[i].close();
-//		}
-//
-//		log.info(count2 + " recorded added in recovery");
-//	}
+	// /**
+	// * This method tries to recover all the files previously written. It does
+	// * the following
+	// * <ol>
+	// * <li>Recover existing rec_id, val_id files by checking the maximum
+	// record
+	// * ID that was written so far.</li>
+	// * <li>Recover the mutableTranslator file.</li>
+	// * <li>Append to rec_id, val_id files.</li>
+	// * </ol>
+	// */
+	// private void recoverFiles() throws BlockingException {
+	// IRecValSource source;
+	// int maxCount = 0;
+	// int count = 0;
+	//
+	// sinks = new IRecValSink[numBlockFields];
+	// for (int i = 0; i < numBlockFields; i++) {
+	// sinks[i] = rvFactory.getNextSink();
+	//
+	// source = rvFactory.getSource(sinks[i]);
+	// source.open();
+	// count = 0;
+	// while (source.hasNext()) {
+	// count++;
+	// }
+	// source.close();
+	//
+	// if (count > maxCount) {
+	// maxCount = count;
+	// }
+	//
+	// sinks[i].append();
+	// }
+	//
+	// // recover the mutableTranslator
+	// mutableTranslator.recover();
+	//
+	// // create rec_id, val_id for the records that haven't been processed.
+	// count = 0; // count the record we are currently at
+	// int count2 = 0; // count the number of new rec,val added
+	//
+	// try {
+	// // first recover the stage
+	// if (stage != null) {
+	// stage.setModel(model);
+	// stage.open();
+	// while (stage.hasNext()) {
+	// count++;
+	// Record r = stage.getNext();
+	//
+	// if (count % INTERVAL == 0)
+	// MemoryEstimator.writeMem();
+	//
+	// if (count > maxCount) {
+	// writeRecord(r, model);
+	// count2++;
+	// }
+	// } // end while
+	// stage.close();
+	// }
+	//
+	// // second recover the master
+	// if (master != null) {
+	//
+	// // this mean that the previous run never got to the second
+	// // record source, so we need to tell the mutableTranslator to
+	// // split
+	// if (count2 > 0) {
+	// mutableTranslator.split();
+	// }
+	//
+	// master.setModel(model);
+	// master.open();
+	// while (master.hasNext()) {
+	// count++;
+	// Record r = master.getNext();
+	// if (count % INTERVAL == 0) {
+	// MemoryEstimator.writeMem();
+	// }
+	// if (count > maxCount) {
+	// writeRecord(r, model);
+	// count2++;
+	// }
+	// } // end while
+	// master.close();
+	// }
+	// } catch (IOException ex) {
+	// throw new BlockingException(ex.toString());
+	// }
+	//
+	// mutableTranslator.close();
+	// for (int i = 0; i < sinks.length; i++) {
+	// sinks[i].close();
+	// }
+	//
+	// log.info(count2 + " recorded added in recovery");
+	// }
 
 	/**
 	 * This counts the number of distinct db fields used in the blocking.

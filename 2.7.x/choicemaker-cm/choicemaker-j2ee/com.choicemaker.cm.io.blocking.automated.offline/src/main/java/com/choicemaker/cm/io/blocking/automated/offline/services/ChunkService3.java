@@ -32,8 +32,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IIDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ITransformer;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.util.LongArrayList;
 
@@ -346,8 +346,8 @@ public class ChunkService3 {
 				String temp =
 					Integer.toString(numChunks) + DELIM
 							+ Integer.toString(numRegularChunks);
-				status.setCurrentOabaEvent(
-						OabaEvent.DONE_CREATE_CHUNK_DATA, temp);
+				status.setCurrentOabaEvent(OabaEvent.DONE_CREATE_CHUNK_DATA,
+						temp);
 
 				if (!keepFiles) {
 					// remove all the chunk record id files
@@ -434,7 +434,7 @@ public class ChunkService3 {
 			try {
 				recordSinks[i].open();
 			} catch (IOException e) {
-				throw new BlockingException(e.getMessage(),e);
+				throw new BlockingException(e.getMessage(), e);
 			}
 		} // end for
 
@@ -620,8 +620,7 @@ public class ChunkService3 {
 					status.setCurrentOabaEvent(
 							OabaEvent.CREATE_CHUNK_OVERSIZED_IDS, temp);
 				else
-					status.setCurrentOabaEvent(
-							OabaEvent.CREATE_CHUNK_IDS, temp);
+					status.setCurrentOabaEvent(OabaEvent.CREATE_CHUNK_IDS, temp);
 
 				// use the next sink
 				transformer.useNextSink();
@@ -655,8 +654,7 @@ public class ChunkService3 {
 						OabaEvent.CREATE_CHUNK_OVERSIZED_IDS, temp);
 			} else {
 				String temp = Integer.toString(numChunks);
-				status.setCurrentOabaEvent(OabaEvent.CREATE_CHUNK_IDS,
-						temp);
+				status.setCurrentOabaEvent(OabaEvent.CREATE_CHUNK_IDS, temp);
 			}
 		}
 

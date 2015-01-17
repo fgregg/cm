@@ -27,7 +27,7 @@ public interface OperationalProperty extends Serializable {
 
 	/** Physical persistence key */
 	long getId();
-	
+
 	/** The identifier of the job that owns this operational property */
 	long getJobId();
 

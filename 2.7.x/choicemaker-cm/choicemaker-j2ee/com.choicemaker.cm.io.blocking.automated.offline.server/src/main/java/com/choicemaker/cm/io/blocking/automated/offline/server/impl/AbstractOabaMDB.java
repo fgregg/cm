@@ -70,10 +70,10 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	@EJB
 	private RecordSourceController rsController;
-	
+
 	@EJB
 	private RecordIdController ridController;
-	
+
 	@EJB
 	private OperationalPropertyController propController;
 
@@ -110,7 +110,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	protected final RecordSourceController getRecordSourceController() {
 		return rsController;
 	}
-	
+
 	protected final RecordIdController getRecordIdController() {
 		return ridController;
 	}
@@ -121,6 +121,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	// -- Template methods
 
+	@Override
 	public void onMessage(Message inMessage) {
 		getJmsTrace().info(
 				"Entering onMessage for " + this.getClass().getName());
@@ -188,7 +189,8 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	}
 
 	protected void abortProcessing(OabaJob oabaJob, OabaEventLog processingLog) {
-		MessageBeanUtils.stopJob(oabaJob, getPropertyController(), processingLog);
+		MessageBeanUtils.stopJob(oabaJob, getPropertyController(),
+				processingLog);
 	}
 
 	protected void updateOabaProcessingStatus(OabaJob job, OabaEvent event,

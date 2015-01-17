@@ -95,7 +95,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
-	
+
 	@EJB
 	private OabaProcessingController processingController;
 
@@ -114,7 +114,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	@Inject
 	private JMSContext jmsContext;
 
-	// This counts the number of messages sent to MatchDedupEachMDB and number of
+	// This counts the number of messages sent to MatchDedupEachMDB and number
+	// of
 	// done messages got back. Requires a Singleton message driven bean
 	private int countMessages;
 
@@ -123,6 +124,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	 * 
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
 	 */
+	@Override
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
@@ -177,7 +179,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	/**
 	 * This method handles merging individual processor match files.
 	 */
-	private void handleMerge(final MatchWriterMessage d) throws BlockingException {
+	private void handleMerge(final MatchWriterMessage d)
+			throws BlockingException {
 
 		final long jobId = d.jobID;
 		final OabaJob oabaJob = jobController.findOabaJob(jobId);
@@ -186,13 +189,12 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final ServerConfiguration serverConfig =
 			serverController.findServerConfigurationByJobId(jobId);
 		final OabaEventLog processingEntry =
-				processingController.getProcessingLog(oabaJob);
+			processingController.getProcessingLog(oabaJob);
 		final String modelConfigId = params.getModelConfigurationName();
 		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
 		if (model == null) {
-			String s =
-				"No modelId corresponding to '" + modelConfigId + "'";
+			String s = "No modelId corresponding to '" + modelConfigId + "'";
 			log.severe(s);
 			throw new IllegalArgumentException(s);
 		}
@@ -209,17 +211,17 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			oabaJob.markAsCompleted();
 			sendToUpdateStatus(oabaJob, OabaEvent.DONE_OABA, new Date(), null);
 			processingEntry.setCurrentOabaEvent(OabaEvent.DONE_OABA);
-//			publishStatus(d.jobID);
+			// publishStatus(d.jobID);
 		}
 	}
-	
+
 	/**
 	 * This method sends messages to MatchDedupEachMDB to dedup individual match
 	 * files.
 	 */
-	private void handleDedupEach(final OabaJobMessage data, final OabaJob oabaJob)
-			throws RemoteException, FinderException, BlockingException,
-			NamingException, JMSException {
+	private void handleDedupEach(final OabaJobMessage data,
+			final OabaJob oabaJob) throws RemoteException, FinderException,
+			BlockingException, NamingException, JMSException {
 
 		final long jobId = oabaJob.getId();
 		final OabaParameters params =
@@ -227,13 +229,12 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final ServerConfiguration serverConfig =
 			serverController.findServerConfigurationByJobId(jobId);
 		final OabaEventLog processingEntry =
-				processingController.getProcessingLog(oabaJob);
+			processingController.getProcessingLog(oabaJob);
 		final String modelConfigId = params.getModelConfigurationName();
 		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);
 		if (model == null) {
-			String s =
-				"No modelId corresponding to '" + modelConfigId + "'";
+			String s = "No modelId corresponding to '" + modelConfigId + "'";
 			log.severe(s);
 			throw new IllegalArgumentException(s);
 		}
@@ -299,8 +300,8 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 	private void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		processingController.updateStatusWithNotification(job, event, timestamp,
-				info);
+		processingController.updateStatusWithNotification(job, event,
+				timestamp, info);
 	}
 
 	private void sendToMatchDedupEach(OabaJobMessage d) {

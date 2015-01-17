@@ -14,7 +14,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
 
 /**
- * This utility object 
+ * This utility object
  * 
  * @author pcheung
  *
@@ -23,21 +23,23 @@ public class ControlChecker {
 
 	public static final int CONTROL_INTERVAL = 10000;
 
-
-	/** This method check to see if the process should be stopped 
-	 * for every CONTROL_INTERVAL number of c.
+	/**
+	 * This method check to see if the process should be stopped for every
+	 * CONTROL_INTERVAL number of c.
 	 * 
-	 * @param c - int counter
+	 * @param c
+	 *            - int counter
 	 * @return boolean - true if the process should be stopped.
 	 * @throws BlockingException
 	 */
-	public static boolean checkStop (IControl control, int c) throws BlockingException {
-		return checkStop (control, c, CONTROL_INTERVAL);
+	public static boolean checkStop(IControl control, int c)
+			throws BlockingException {
+		return checkStop(control, c, CONTROL_INTERVAL);
 	}
-	
 
-	/** This method allows the user to specify the interval.  Control is checked when
-	 * c % interval == 0.
+	/**
+	 * This method allows the user to specify the interval. Control is checked
+	 * when c % interval == 0.
 	 * 
 	 * @param control
 	 * @param c
@@ -45,16 +47,17 @@ public class ControlChecker {
 	 * @return
 	 * @throws BlockingException
 	 */
-	public static boolean checkStop (IControl control, int c, int interval) 
-		throws BlockingException {
-			
+	public static boolean checkStop(IControl control, int c, int interval)
+			throws BlockingException {
+
 		boolean ret = false;
-		if (c % interval == 0) try {
-			ret = control.shouldStop();
-		} catch (Exception e) {
-			throw new BlockingException (e.toString());
-		}
+		if (c % interval == 0)
+			try {
+				ret = control.shouldStop();
+			} catch (Exception e) {
+				throw new BlockingException(e.toString());
+			}
 		return ret;
 	}
-	
+
 }

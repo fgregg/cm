@@ -48,6 +48,7 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 		super(fileName, type);
 	}
 
+	@Override
 	public void writeMatches(List matches) throws BlockingException {
 		int size = matches.size();
 		for (int i = 0; i < size; i++) {
@@ -56,11 +57,13 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 		}
 	}
 
+	@Override
 	public void writeMatches(Collection c) throws BlockingException {
 		Iterator it = c.iterator();
 		writeMatches(it);
 	}
 
+	@Override
 	public void writeMatches(Iterator it) throws BlockingException {
 		while (it.hasNext()) {
 			MatchRecord2 match = (MatchRecord2) it.next();
@@ -68,6 +71,7 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public void writeMatch(MatchRecord2 match) throws BlockingException {
 		try {

@@ -16,16 +16,18 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySou
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSource;
 
-/** This is a source for an oversized comparison set.
+/**
+ * This is a source for an oversized comparison set.
  * 
  * @author pcheung
  *
  */
-public class ComparisonSetOSSource<T extends Comparable<T>> implements IComparisonSetSource<T> {
-	
+public class ComparisonSetOSSource<T extends Comparable<T>> implements
+		IComparisonSetSource<T> {
+
 	private IComparisonArraySource<T> source;
 	private int maxBlockSize;
-	
+
 	public ComparisonSetOSSource(IComparisonArraySource<T> source,
 			int maxBlockSize) {
 		this.source = source;
@@ -37,44 +39,67 @@ public class ComparisonSetOSSource<T extends Comparable<T>> implements IComparis
 		return new ComparisonArrayOS<T>(source.next(), maxBlockSize);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#exists()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#exists()
 	 */
+	@Override
 	public boolean exists() {
 		return source.exists();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#open()
 	 */
+	@Override
 	public void open() throws BlockingException {
 		source.open();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws BlockingException {
 		return source.hasNext();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
 	 */
+	@Override
 	public void close() throws BlockingException {
 		source.close();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
 	 */
+	@Override
 	public String getInfo() {
 		return source.getInfo();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
+	@Override
 	public void delete() throws BlockingException {
 		source.delete();
 	}

@@ -24,17 +24,17 @@ import com.choicemaker.util.IntArrayList;
  *
  */
 public class RecValSource extends BaseFileSource<Long> implements IRecValSource {
-	
+
 	private long nextRecID;
 	private IntArrayList nextValues;
 
-	//this is true if the latest value read in has been used.
+	// this is true if the latest value read in has been used.
 	private boolean usedID = true;
 
-	public RecValSource (String fileName) {
+	public RecValSource(String fileName) {
 		super(fileName, EXTERNAL_DATA_FORMAT.BINARY);
 	}
-	
+
 	@Deprecated
 	public RecValSource(String fileName, int type) {
 		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
@@ -44,10 +44,15 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 		super(fileName, type);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#hasNext()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#hasNext
+	 * ()
 	 */
-	public boolean hasNext() throws BlockingException{
+	@Override
+	public boolean hasNext() throws BlockingException {
 		if (this.usedID) {
 			try {
 				this.nextRecID = readNext();
@@ -56,66 +61,71 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 				this.nextRecID = 0;
 				usedID = true;
 			} catch (IOException ex) {
-				throw new BlockingException (ex.toString());
+				throw new BlockingException(ex.toString());
 			}
 		}
 		return !this.usedID;
 	}
 
-
-	private long readNext () throws EOFException, IOException {
+	private long readNext() throws EOFException, IOException {
 		long ret = 0;
 		if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 			ret = dis.readLong();
-			
-			int size = dis.readInt();
-			int [] data = new int [size];
 
-			for (int i=0; i<size ; i++) {
+			int size = dis.readInt();
+			int[] data = new int[size];
+
+			for (int i = 0; i < size; i++) {
 				data[i] = dis.readInt();
 			}
-			
-			nextValues = new IntArrayList (size, data);
+
+			nextValues = new IntArrayList(size, data);
 
 		} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 			String str = br.readLine();
-			//if there is a blank line, return false				
-			if (str == null || str.equals("")) throw new EOFException ();
+			// if there is a blank line, return false
+			if (str == null || str.equals(""))
+				throw new EOFException();
 
 			int ind1 = 0;
-			int ind2 = getNextLocation (str, ' ', ind1);
+			int ind2 = getNextLocation(str, ' ', ind1);
 			ret = Long.parseLong(str.substring(ind1, ind2));
-				
+
 			ind1 = ind2 + 1;
-			ind2 = getNextLocation (str, ' ', ind1);
-			nextValues = new IntArrayList (1);
+			ind2 = getNextLocation(str, ' ', ind1);
+			nextValues = new IntArrayList(1);
 			while (ind2 != -1) {
-				nextValues.add( Integer.parseInt(str.substring(ind1, ind2)) );
+				nextValues.add(Integer.parseInt(str.substring(ind1, ind2)));
 				ind1 = ind2 + 1;
-				ind2 = getNextLocation (str, ' ', ind1);
+				ind2 = getNextLocation(str, ' ', ind1);
 			}
 		}
-		count ++;
+		count++;
 		return ret;
 	}
 
+	@Override
 	public Long next() {
 		return getNextRecID();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#getNextRecID()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#
+	 * getNextRecID()
 	 */
+	@Override
 	public long getNextRecID() {
 		if (this.usedID) {
 			try {
 				this.nextRecID = readNext();
 			} catch (EOFException x) {
-				throw new NoSuchElementException(
-					"EOFException: " + x.getMessage());
+				throw new NoSuchElementException("EOFException: "
+						+ x.getMessage());
 			} catch (IOException x) {
-				throw new NoSuchElementException(
-					"IOFException: " + x.getMessage());
+				throw new NoSuchElementException("IOFException: "
+						+ x.getMessage());
 			}
 		}
 		this.usedID = true;
@@ -123,20 +133,24 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 		return nextRecID;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#getNextValues()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSource#
+	 * getNextValues()
 	 */
+	@Override
 	public IntArrayList getNextValues() {
 		if (this.nextValues == null) {
 			try {
 				nextRecID = readNext();
 				usedID = false;
 			} catch (EOFException x) {
-				throw new NoSuchElementException(
-					"EOFException: " + x.getMessage());
+				throw new NoSuchElementException("EOFException: "
+						+ x.getMessage());
 			} catch (IOException x) {
-				throw new NoSuchElementException(
-					"OABABlockingException: " + x.getMessage());
+				throw new NoSuchElementException("OABABlockingException: "
+						+ x.getMessage());
 			}
 		}
 		IntArrayList retVal = this.nextValues;

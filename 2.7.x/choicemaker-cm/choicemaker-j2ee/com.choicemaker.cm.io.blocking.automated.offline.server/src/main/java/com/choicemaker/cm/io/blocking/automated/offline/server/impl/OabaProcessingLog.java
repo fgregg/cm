@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 
+import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
@@ -19,8 +20,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
  */
 public class OabaProcessingLog implements OabaEventLog {
 
-	private static final Logger logger = Logger.getLogger(OabaProcessingLog.class
-			.getName());
+	private static final Logger logger = Logger
+			.getLogger(OabaProcessingLog.class.getName());
 
 	private final EntityManager em;
 	private final OabaJob oabaJob;
@@ -29,7 +30,7 @@ public class OabaProcessingLog implements OabaEventLog {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
-		if (job == null || !OabaJobEntity.isPersistent(job)) {
+		if (job == null || !BatchJobEntity.isPersistent(job)) {
 			throw new IllegalArgumentException("invalid OABA job: " + job);
 		}
 		this.em = em;

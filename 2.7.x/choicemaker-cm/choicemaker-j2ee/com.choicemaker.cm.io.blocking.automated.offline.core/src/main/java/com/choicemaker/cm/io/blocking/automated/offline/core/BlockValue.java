@@ -12,14 +12,14 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.io.Serializable;
 
-
 /**
- * This object represents a Blocking Value.  It stores the column ID and Column Value.
+ * This object represents a Blocking Value. It stores the column ID and Column
+ * Value.
  *
  * @author pcheung
  *
  */
-public class BlockValue implements Serializable{
+public class BlockValue implements Serializable {
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = -561020089283323100L;
@@ -27,32 +27,20 @@ public class BlockValue implements Serializable{
 	int id;
 	int value;
 
-/*	
-	public BlockValue (int columnID, int columnValue) {
-		id = columnID;
-		value = columnValue;
-	}
-	
-	public void setColumnID (int i) {
-		id = i;
-	}
-	
-	public void setColumnValue (int val) {
-		value = val;
-	}
-	
-	public int getColumnID () {
-		return id;
-	}
-	
-	public int getCloumnValue () {
-		return value;
-	}
-	
-	public boolean equals (BlockValue bv2) {
-		if ( id == bv2.getColumnID() && value == bv2.getCloumnValue() ) return true;
-		else return false;
-	}
-*/	
-	
+	/*
+	 * public BlockValue (int columnID, int columnValue) { id = columnID; value
+	 * = columnValue; }
+	 * 
+	 * public void setColumnID (int i) { id = i; }
+	 * 
+	 * public void setColumnValue (int val) { value = val; }
+	 * 
+	 * public int getColumnID () { return id; }
+	 * 
+	 * public int getCloumnValue () { return value; }
+	 * 
+	 * public boolean equals (BlockValue bv2) { if ( id == bv2.getColumnID() &&
+	 * value == bv2.getCloumnValue() ) return true; else return false; }
+	 */
+
 }

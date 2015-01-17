@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-
 /**
  * A source that gets Comparable objects.
  * 
@@ -20,7 +19,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 public interface IComparableSource<T extends Comparable<T>> extends ISource<T> {
 
 	/** Returns the number of MatchRecords read so far. */
-	public int getCount ();
-
+	public int getCount();
 
 }

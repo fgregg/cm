@@ -36,6 +36,7 @@ public class PersistableRecordSourceControllerBean implements
 	@EJB
 	private SqlRecordSourceControllerBean sqlRsController;
 
+	@Override
 	public ISerializableRecordSource getStageRs(OabaParameters params)
 			throws Exception {
 		ISerializableRecordSource retVal = null;
@@ -46,6 +47,7 @@ public class PersistableRecordSourceControllerBean implements
 		return retVal;
 	}
 
+	@Override
 	public ISerializableRecordSource getMasterRs(OabaParameters params)
 			throws Exception {
 		ISerializableRecordSource retVal = null;
@@ -112,10 +114,10 @@ public class PersistableRecordSourceControllerBean implements
 			// FIXME replace hard-coded decision tree with plugins
 			//
 			// The usual case will be a SQL record source, so check this first
-			retVal =
-				sqlRsController.getRecordSource(id, type);
+			retVal = sqlRsController.getRecordSource(id, type);
 			if (retVal == null) {
-				// Here's where flatfile and XML record sources should be checked
+				// Here's where flatfile and XML record sources should be
+				// checked
 				logger.warning("Skipping flatfile and XML record sources");
 			}
 			if (retVal == null) {

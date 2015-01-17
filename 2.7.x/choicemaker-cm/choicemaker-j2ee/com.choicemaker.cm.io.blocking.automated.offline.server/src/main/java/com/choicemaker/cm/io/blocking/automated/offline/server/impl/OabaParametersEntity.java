@@ -41,7 +41,7 @@ import javax.persistence.TableGenerator;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.core.base.ImmutableThresholds;
 
 /**
  * @author pcheung (original version)
@@ -77,11 +77,11 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 		}
 		return retVal;
 	}
-	
+
 	public static String dump(OabaParameters bp) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		
+
 		if (bp == null) {
 			pw.println("null batch parameters");
 		} else {
@@ -99,7 +99,8 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 				pw.println("Master record source: " + bp.getStageRsId());
 				pw.println("Master record source: " + bp.getMasterRsId());
 			} else {
-				throw new IllegalArgumentException("unexpected task type: " + task);
+				throw new IllegalArgumentException("unexpected task type: "
+						+ task);
 			}
 			pw.println("DIFFER threshold: " + bp.getLowThreshold());
 			pw.println("MATCH threshold: " + bp.getHighThreshold());
@@ -153,7 +154,7 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 
 	@Column(name = OabaParametersJPA.CN_TASK)
 	private final String task;
-	
+
 	@Column(name = CN_FORMAT)
 	protected final String format;
 
@@ -252,7 +253,7 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 				|| modelConfigurationName.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank modelId");
 		}
-		Thresholds.validate(lowThreshold, highThreshold);
+		ImmutableThresholds.validate(lowThreshold, highThreshold);
 		if (sType == null || !sType.equals(sType.trim()) || sType.isEmpty()) {
 			throw new IllegalArgumentException("invalid stage RS type: "
 					+ sType);
@@ -397,16 +398,22 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 
 		result = prime * result + Float.floatToIntBits(highThreshold);
 		result = prime * result + Float.floatToIntBits(lowThreshold);
-		result = prime * result
+		result =
+			prime
+					* result
 					+ ((masterRsId == null) ? 0
 							: (int) (masterRsId ^ (masterRsId >>> 32)));
-		result = prime * result
+		result =
+			prime * result
 					+ ((masterRsType == null) ? 0 : masterRsType.hashCode());
-		result = prime * result
+		result =
+			prime
+					* result
 					+ ((modelConfigName == null) ? 0 : modelConfigName
 							.hashCode());
 		result = prime * result + (int) (stageRsId ^ (stageRsId >>> 32));
-		result = prime * result
+		result =
+			prime * result
 					+ ((stageRsType == null) ? 0 : stageRsType.hashCode());
 		result = prime * result + ((task == null) ? 0 : task.hashCode());
 

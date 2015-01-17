@@ -328,6 +328,7 @@ public abstract class BatchJobEntity implements BatchJob {
 		return mostRecentTimestamp(BatchJobStatus.ABORTED);
 	}
 
+	@Override
 	public boolean shouldStop() {
 		if (getStatus().equals(BatchJobStatus.ABORT_REQUESTED)
 				|| getStatus().equals(BatchJobStatus.ABORTED))

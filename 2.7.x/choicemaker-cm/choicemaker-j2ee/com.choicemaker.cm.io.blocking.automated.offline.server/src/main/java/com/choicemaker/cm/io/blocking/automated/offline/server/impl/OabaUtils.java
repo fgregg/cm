@@ -13,11 +13,13 @@ public class OabaUtils {
 	}
 
 	/**
-	 * Looks up or computes default OABA settings for the specified model.
-	 * (If default settings are computed, they are likely to be less than
-	 * optimal.)
-	 * @param oabaSettingsController a non-null settings controller.
-	 * @param modelId a valid model name or configuration identifier.
+	 * Looks up or computes default OABA settings for the specified model. (If
+	 * default settings are computed, they are likely to be less than optimal.)
+	 * 
+	 * @param oabaSettingsController
+	 *            a non-null settings controller.
+	 * @param modelId
+	 *            a valid model name or configuration identifier.
 	 * @return
 	 */
 	public static OabaSettings getDefaultOabaSettings(
@@ -30,12 +32,13 @@ public class OabaUtils {
 			throw new IllegalArgumentException("invalid model '" + modelId
 					+ "'");
 		}
-	
+
 		// Get the default OABA settings, ignoring the maxSingle value.
 		// If no default settings exist, create them using the maxSingle value.
 		ImmutableProbabilityModel model =
 			PMManager.getImmutableModelInstance(modelId);
-		OabaSettings retVal = oabaSettingsController.findDefaultOabaSettings(model);
+		OabaSettings retVal =
+			oabaSettingsController.findDefaultOabaSettings(model);
 		if (retVal == null) {
 			// Creates generic settings and saves them
 			retVal = new OabaSettingsEntity();
@@ -48,7 +51,9 @@ public class OabaUtils {
 	 * Looks up or computes the default OABA server configuration <em><strong>
 	 * for the host on which this method is invoked</strong></em>. In other
 	 * words, this is a server-side utility, not a client-side utility.
-	 * @param serverController a non-null manager of server configurations
+	 * 
+	 * @param serverController
+	 *            a non-null manager of server configurations
 	 * @return
 	 */
 	public static ServerConfiguration getDefaultServerConfiguration(
@@ -56,7 +61,7 @@ public class OabaUtils {
 		if (serverController == null) {
 			throw new IllegalArgumentException("null controller");
 		}
-	
+
 		// Get the default server configuration for this host (or guess at it)
 		final String hostName =
 			ServerConfigurationControllerBean.computeHostName();

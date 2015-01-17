@@ -102,6 +102,7 @@ public class MatchRecord2<T extends Comparable<T>> implements
 
 	// -- Identity
 
+	@Override
 	public int compareTo(MatchRecord2<T> mr) {
 		final int GREATER_THAN = 1;
 		final int LESS_THAN = -1;

@@ -13,7 +13,22 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_INTEGER;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_LONG;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_STRING;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.CN_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DISCRIMINATOR_COLUMN;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DV_ABSTRACT;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DV_INTEGER;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DV_LONG;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.DV_STRING;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_PK_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_PK_COLUMN_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_TABLE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.JPQL_PAIRRESULT_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.JPQL_PAIRRESULT_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.QN_PAIRRESULT_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.QN_PAIRRESULT_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaPairResultJPA.TABLE_NAME;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -47,7 +62,8 @@ import com.choicemaker.util.HashUtils;
  *
  */
 @NamedQueries({
-		@NamedQuery(name = QN_PAIRRESULT_FIND_ALL, query = JPQL_PAIRRESULT_FIND_ALL),
+		@NamedQuery(name = QN_PAIRRESULT_FIND_ALL,
+				query = JPQL_PAIRRESULT_FIND_ALL),
 		@NamedQuery(name = QN_PAIRRESULT_FIND_BY_JOBID,
 				query = JPQL_PAIRRESULT_FIND_BY_JOBID) })
 @Entity
@@ -143,10 +159,11 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 		return retVal;
 	}
 
-//	public static <T extends Comparable<T>> String recordTypeToString(Class<T> c) {
-//		RECORD_ID_TYPE rit = RECORD_ID_TYPE.fromClass(c);
-//		return rit.getStringSymbol();
-//	}
+	// public static <T extends Comparable<T>> String
+	// recordTypeToString(Class<T> c) {
+	// RECORD_ID_TYPE rit = RECORD_ID_TYPE.fromClass(c);
+	// return rit.getStringSymbol();
+	// }
 
 	/**
 	 * Checks for consistency between the JPA interface and the RECORD_ID_TYPE
@@ -176,9 +193,11 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 
 		return retVal;
 	}
+
 	static {
 		if (!isClassValid()) {
-			String msg = "AbstractRecordIdTranslationEntity class is inconsistent with RECORD_ID_TYPE enumeration";
+			String msg =
+				"AbstractRecordIdTranslationEntity class is inconsistent with RECORD_ID_TYPE enumeration";
 			logger.severe(msg);
 			// An exception is not thrown here because it would create a class
 			// initialization exception, which can be hard to debug
@@ -235,7 +254,7 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 		assert this.record2Source != INVALID_RECORD_SOURCE;
 		assert this.probability != INVALID_PROBABILITY;
 		assert this.decision != INVALID_DECISION;
-		
+
 		this.jobId = jobId;
 		this.recordType = recordType;
 		this.record1Id = record1Id;
@@ -243,7 +262,8 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 		this.record2Source = record2Source;
 		this.probability = probability;
 		this.decision = decision;
-		SortedSet<String> sortedNotes = MatchRecordUtils.notesToSortedSet(notes);
+		SortedSet<String> sortedNotes =
+			MatchRecordUtils.notesToSortedSet(notes);
 		this.notes = MatchRecordUtils.notesToString(sortedNotes);
 		this.pairSHA1 =
 			computePairSHA1(recordType, record1Id, record2Id, record2Source,
@@ -342,8 +362,7 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 		result =
 			prime * result + ((record2Id == null) ? 0 : record2Id.hashCode());
 		result = prime * result + record2Source;
-		result =
-			prime * result + recordType;
+		result = prime * result + recordType;
 		return result;
 	}
 

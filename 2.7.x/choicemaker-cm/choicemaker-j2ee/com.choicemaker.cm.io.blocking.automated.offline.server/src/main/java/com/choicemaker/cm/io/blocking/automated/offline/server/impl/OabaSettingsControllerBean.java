@@ -35,7 +35,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		// Have the settings already been persisted?
 		final long settingsId = settings.getId();
 		AbaSettingsEntity retVal = null;
-		if (AbaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID != settingsId) {
+		if (AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID != settingsId) {
 			// Settings appear to be persistent -- check them against the DB
 			retVal = findAbaSettingsInternal(settingsId);
 			if (retVal == null) {
@@ -57,16 +57,16 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		if (retVal == null) {
 			// Save the specified settings to the DB
 			retVal = new AbaSettingsEntity(settings);
-			assert retVal.getId() == AbaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
+			assert retVal.getId() == AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID;
 			em.persist(retVal);
-			assert retVal.getId() != OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
+			assert retVal.getId() != AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID;
 			String msg =
 				"The specified settings were persisted in the database with settings id = "
 						+ retVal.getId();
 			logger.info(msg);
 		}
 		assert retVal != null;
-		assert retVal.getId() != AbaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
+		assert retVal.getId() != AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID;
 
 		return retVal;
 	}
@@ -79,7 +79,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		// Have the settings already been persisted?
 		final long settingsId = settings.getId();
 		OabaSettingsEntity retVal = null;
-		if (OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID != settingsId) {
+		if (AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID != settingsId) {
 			// Settings appear to be persistent -- check them against the DB
 			retVal = findOabaSettingsInternal(settingsId);
 			if (retVal == null) {
@@ -101,16 +101,16 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		if (retVal == null) {
 			// Save the specified settings to the DB
 			retVal = new OabaSettingsEntity(settings);
-			assert retVal.getId() == OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
+			assert retVal.getId() == AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID;
 			em.persist(retVal);
-			assert retVal.getId() != OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
+			assert retVal.getId() != AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID;
 			String msg =
 				"The specified settings were persisted in the database with settings id = "
 						+ retVal.getId();
 			logger.info(msg);
 		}
 		assert retVal != null;
-		assert retVal.getId() != OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
+		assert retVal.getId() != AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID;
 		return retVal;
 	}
 
@@ -177,7 +177,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		}
 		assert retVal != null;
 		assert aba != null;
-		assert aba.getId() != OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
+		assert aba.getId() != AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID;
 
 		return retVal;
 	}
@@ -216,7 +216,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 		}
 		assert retVal != null;
 		assert oaba != null;
-		assert oaba.getId() != OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
+		assert oaba.getId() != AbaSettings.NONPERSISTENT_ABA_SETTINGS_ID;
 
 		return retVal;
 	}

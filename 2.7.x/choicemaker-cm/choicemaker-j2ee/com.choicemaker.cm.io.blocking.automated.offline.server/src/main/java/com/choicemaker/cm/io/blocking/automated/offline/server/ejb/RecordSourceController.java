@@ -17,7 +17,7 @@ public interface RecordSourceController {
 
 	ISerializableRecordSource getRecordSource(Long id, String type)
 			throws Exception;
-	
+
 	ISerializableRecordSource getStageRs(OabaParameters params)
 			throws Exception;
 

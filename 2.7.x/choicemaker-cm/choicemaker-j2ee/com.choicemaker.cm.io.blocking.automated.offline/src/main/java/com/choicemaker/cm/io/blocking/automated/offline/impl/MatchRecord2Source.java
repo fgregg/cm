@@ -30,15 +30,16 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-public class MatchRecord2Source<T extends Comparable<T>>
-	extends BaseFileSource<MatchRecord2<T>>
-	implements IMatchRecord2Source<T> {
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
+public class MatchRecord2Source<T extends Comparable<T>> extends
+		BaseFileSource<MatchRecord2<T>> implements IMatchRecord2Source<T> {
 
 	private MatchRecord2 next = null;
 
-	/** This constructor takes in the filename of the source and an indicator telling it
-	 * if the data is stored as strings or binary. 
+	/**
+	 * This constructor takes in the filename of the source and an indicator
+	 * telling it if the data is stored as strings or binary.
 	 * 
 	 * @param fileName
 	 * @param type
@@ -76,11 +77,13 @@ public class MatchRecord2Source<T extends Comparable<T>>
 		return retVal;
 	}
 
-	/** This checks o see if there is any more elements in the source. 
-	 * Always call hasNext before calling getNext ().
+	/**
+	 * This checks o see if there is any more elements in the source. Always
+	 * call hasNext before calling getNext ().
 	 * 
 	 * @return boolean - true if there are more elements in the source.
 	 */
+	@Override
 	public boolean hasNext() throws BlockingException {
 		if (this.next == null) {
 			try {
@@ -88,13 +91,15 @@ public class MatchRecord2Source<T extends Comparable<T>>
 			} catch (EOFException x) {
 				this.next = null;
 			} catch (IOException x) {
-				throw new BlockingException ();
+				throw new BlockingException();
 			}
 		}
 		return this.next != null;
 	}
 
-	/** This method takes in a BufferedReader and reads the next MatchRecord2 object.
+	/**
+	 * This method takes in a BufferedReader and reads the next MatchRecord2
+	 * object.
 	 * 
 	 * @param reader
 	 * @return
@@ -191,26 +196,28 @@ public class MatchRecord2Source<T extends Comparable<T>>
 		return c;
 	}
 
+	@Override
 	public MatchRecord2<T> next() {
 		if (this.next == null) {
 			try {
 				this.next = readNext();
 			} catch (EOFException x) {
-				throw new NoSuchElementException(
-					"EOFException: " + x.getMessage());
+				throw new NoSuchElementException("EOFException: "
+						+ x.getMessage());
 			} catch (IOException x) {
-				throw new NoSuchElementException(
-					"OABABlockingException: " + x.getMessage());
+				throw new NoSuchElementException("OABABlockingException: "
+						+ x.getMessage());
 			}
 		}
 		MatchRecord2 retVal = this.next;
-		count ++;
-		
+		count++;
+
 		this.next = null;
 
 		return retVal;
 	} // getNext()
 
+	@Override
 	public int getCount() {
 		return count;
 	}

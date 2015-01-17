@@ -14,34 +14,34 @@ import com.choicemaker.cm.core.BlockingException;
 
 /**
  * A Sink is an interface designed for writing data.
- *   
+ * 
  * @author pcheung
  *
  */
 public interface ISink {
 
 	/** True is this source file exists and not null. */
-	public boolean exists ();
-	
+	public boolean exists();
+
 	/** opens the sink for overwrite. */
-	public void open () throws BlockingException;
-	
+	public void open() throws BlockingException;
+
 	/** opens the sink for append. */
-	public void append () throws BlockingException;
-	
+	public void append() throws BlockingException;
+
 	/** Closes the sink. */
-	public void close () throws BlockingException;
+	public void close() throws BlockingException;
 
 	/** Flushes the sink. */
-	public void flush () throws BlockingException;
-	
+	public void flush() throws BlockingException;
+
 	/** Gets the number of blocks written to the sink thus far. */
-	public int getCount ();
-	
+	public int getCount();
+
 	/** Gets the file name or other pertinent information if it is not a file. */
-	public String getInfo ();
-	
+	public String getInfo();
+
 	/** This method cleans up resources and removes the sink. */
-	public void remove () throws BlockingException;
+	public void remove() throws BlockingException;
 
 }

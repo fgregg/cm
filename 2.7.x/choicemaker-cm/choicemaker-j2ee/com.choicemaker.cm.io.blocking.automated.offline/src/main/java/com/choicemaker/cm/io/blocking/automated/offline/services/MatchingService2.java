@@ -24,8 +24,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySin
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
@@ -34,10 +34,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class MatchingService2 {
 
-	private static final Logger log = Logger.getLogger(MatchingService2.class.getName());
+	private static final Logger log = Logger.getLogger(MatchingService2.class
+			.getName());
 
 	private IChunkDataSinkSourceFactory stageFactory;
 	private IChunkDataSinkSourceFactory masterFactory;
@@ -50,10 +52,10 @@ public class MatchingService2 {
 	private float high;
 	private int maxBlockSize;
 	private OabaEventLog status;
-	
+
 	private int numChunks;
 
-	//book keeping
+	// book keeping
 	private long numBlocks = 0;
 	private long numCompares = 0;
 	private long numMatches = 0;
@@ -61,28 +63,41 @@ public class MatchingService2 {
 	private long inReadHM = 0;
 	private long inHandleBlocks = 0;
 	private long inWriteMatches = 0;
-	
-	private ArrayList cgSources = new ArrayList ();
-	private ArrayList stageSources = new ArrayList ();
-	private ArrayList masterSources = new ArrayList ();
 
-	private long time; //this keeps track of time
+	private ArrayList cgSources = new ArrayList();
+	private ArrayList stageSources = new ArrayList();
+	private ArrayList masterSources = new ArrayList();
 
+	private long time; // this keeps track of time
 
-	/** This constructor takes these parameters:
+	/**
+	 * This constructor takes these parameters:
 	 * 
-	 * @param stageFactory - factory containing info on how to get staging chunk data files
-	 * @param masterFactory - factory containing info on how to get master chunk data files
-	 * @param cgFactory - factory containing info on how to get comparison groups
-	 * @param stageModel - probability accessProvider of the staging records
-	 * @param masterModel - probability accessProvider of the master records
-	 * @param mSink - matching pair sink
-	 * @param matcher - the object that performs the actual matching
-	 * @param low - differ threshold
-	 * @param high - match threshold
-	 * @param validator - determines if a pair for comparison is valid
-	 * @param maxBlockSize - maximum size of a regular block.  blocks of size > maxBlockSize is an
-	 * 		oversized block.
+	 * @param stageFactory
+	 *            - factory containing info on how to get staging chunk data
+	 *            files
+	 * @param masterFactory
+	 *            - factory containing info on how to get master chunk data
+	 *            files
+	 * @param cgFactory
+	 *            - factory containing info on how to get comparison groups
+	 * @param stageModel
+	 *            - probability accessProvider of the staging records
+	 * @param masterModel
+	 *            - probability accessProvider of the master records
+	 * @param mSink
+	 *            - matching pair sink
+	 * @param matcher
+	 *            - the object that performs the actual matching
+	 * @param low
+	 *            - differ threshold
+	 * @param high
+	 *            - match threshold
+	 * @param validator
+	 *            - determines if a pair for comparison is valid
+	 * @param maxBlockSize
+	 *            - maximum size of a regular block. blocks of size >
+	 *            maxBlockSize is an oversized block.
 	 */
 	public MatchingService2(IChunkDataSinkSourceFactory stageFactory,
 			IChunkDataSinkSourceFactory masterFactory,
@@ -91,7 +106,7 @@ public class MatchingService2 {
 			ImmutableProbabilityModel masterModel, IMatchRecord2Sink mSink,
 			IBlockMatcher2 matcher, float low, float high, int maxBlockSize,
 			OabaEventLog status) {
-		
+
 		this.stageFactory = stageFactory;
 		this.masterFactory = masterFactory;
 		this.cgFactory = cgFactory;
@@ -99,149 +114,161 @@ public class MatchingService2 {
 		this.masterModel = masterModel;
 		this.mSink = mSink;
 		this.matcher = matcher;
-		
+
 		this.low = low;
 		this.high = high;
 		this.maxBlockSize = maxBlockSize;
-		
+
 		this.status = status;
 	}
 
-
-	/** This method runs the service.
+	/**
+	 * This method runs the service.
 	 * 
 	 * @throws IOException
 	 */
-	public void runService () throws BlockingException, XmlConfException {
+	public void runService() throws BlockingException, XmlConfException {
 		time = System.currentTimeMillis();
-		
-		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA ) {
-			//do nothing
-			
-		} else if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA  && 
-			status.getCurrentOabaEventId() <= OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS ) {
-	
-			numChunks = Integer.parseInt( status.getCurrentOabaEventInfo() );
 
-			//start matching
-			log.info ("start matching, number of chunks " + numChunks);
-			
-			init ();
-			
-			startMatching (0);
-			
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_MATCHING_DATA ) {
-			//recovery mode
-			String temp =  status.getCurrentOabaEventInfo();
-			int ind = temp.indexOf( OabaProcessing.DELIMIT);
-			numChunks = Integer.parseInt( temp.substring(0,ind) );
-			int startPoint = Integer.parseInt( temp.substring(ind + 1)) + 1;
-			
-			log.info ("start recovery, chunks " + numChunks + ", starting point " + startPoint);
+		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
+			// do nothing
 
-			init ();
-			startMatching (startPoint);
+		} else if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA
+				&& status.getCurrentOabaEventId() <= OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS) {
+
+			numChunks = Integer.parseInt(status.getCurrentOabaEventInfo());
+
+			// start matching
+			log.info("start matching, number of chunks " + numChunks);
+
+			init();
+
+			startMatching(0);
+
+		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_MATCHING_DATA) {
+			// recovery mode
+			String temp = status.getCurrentOabaEventInfo();
+			int ind = temp.indexOf(OabaProcessing.DELIMIT);
+			numChunks = Integer.parseInt(temp.substring(0, ind));
+			int startPoint = Integer.parseInt(temp.substring(ind + 1)) + 1;
+
+			log.info("start recovery, chunks " + numChunks
+					+ ", starting point " + startPoint);
+
+			init();
+			startMatching(startPoint);
 
 		}
 		time = System.currentTimeMillis() - time;
 	}
-	
-	
-	/** This method returns the time it takes to run the runService method.
+
+	/**
+	 * This method returns the time it takes to run the runService method.
 	 * 
-	 * @return long - returns the time (in milliseconds) it took to run this service.
+	 * @return long - returns the time (in milliseconds) it took to run this
+	 *         service.
 	 */
-	public long getTimeElapsed () { return time; }
+	public long getTimeElapsed() {
+		return time;
+	}
 
-
-	/** This method performs the initialization
+	/**
+	 * This method performs the initialization
 	 * 
 	 *
 	 */
-	private void init () throws XmlConfException, BlockingException {
+	private void init() throws XmlConfException, BlockingException {
 		if (stageFactory.getNumSink() == 0) {
-			//initialize this thing
-			for (int i=0; i< numChunks; i++) {
+			// initialize this thing
+			for (int i = 0; i < numChunks; i++) {
 				stageFactory.getNextSink();
 				masterFactory.getNextSink();
 			}
 		}
-		for (int i=0; i< numChunks; i++) {
+		for (int i = 0; i < numChunks; i++) {
 			stageSources.add(stageFactory.getNextSource());
 			masterSources.add(masterFactory.getNextSource());
 		}
-		
+
 		if (cgSources.size() == 0) {
-			for (int i=0; i< numChunks; i++) {
+			for (int i = 0; i < numChunks; i++) {
 				cgSources.add(cgFactory.getNextSource());
 			}
 		}
 	}
 
-
-	/** This method starts the matching process.
+	/**
+	 * This method starts the matching process.
 	 * 
-	 * @param startPoint - which chunk file to start matching on.
-	*/
-	private void startMatching (int startPoint) throws BlockingException, XmlConfException {
-		for (int i=startPoint; i< numChunks; i++) {
-			IComparisonArraySource cgSource = (IComparisonArraySource) cgSources.get(i);
+	 * @param startPoint
+	 *            - which chunk file to start matching on.
+	 */
+	private void startMatching(int startPoint) throws BlockingException,
+			XmlConfException {
+		for (int i = startPoint; i < numChunks; i++) {
+			IComparisonArraySource cgSource =
+				(IComparisonArraySource) cgSources.get(i);
 			RecordSource stage = (RecordSource) stageSources.get(i);
 			RecordSource master = (RecordSource) masterSources.get(i);
-			
-			log.info ("matching " + cgSource.getInfo());
+
+			log.info("matching " + cgSource.getInfo());
 			MemoryEstimator.writeMem();
-			
+
 			matcher.matchBlocks(cgSource, stageModel, masterModel, stage,
 					master, mSink, true, low, high, maxBlockSize);
-			
+
 			int b = matcher.getNumBlocks();
 			int c = matcher.getNumComparesMade();
 			int m = matcher.getNumMatches();
-			
+
 			numBlocks += b;
 			numCompares += c;
 			numMatches += m;
-			
+
 			inReadHM += matcher.getTimeInReadMaps();
 			inHandleBlocks += matcher.getTimeInHandleBlock();
 			inWriteMatches += matcher.getTimeInWriteMatches();
-			
-			log.info ("blocks: " + b + " comparisons: " +  c + " matches: " + m);
 
-			double cps = 1000.0 * c / (matcher.getTimeInReadMaps() + matcher.getTimeInHandleBlock() +
-				matcher.getTimeInWriteMatches());
-			log.info ("comparisons per second " + cps );
-			
+			log.info("blocks: " + b + " comparisons: " + c + " matches: " + m);
 
-			//log the status
-			String temp = Integer.toString(numChunks) + OabaProcessing.DELIMIT + Integer.toString(i);
-			status.setCurrentOabaEvent( OabaEvent.MATCHING_DATA, temp );
+			double cps =
+				1000.0
+						* c
+						/ (matcher.getTimeInReadMaps()
+								+ matcher.getTimeInHandleBlock() + matcher
+									.getTimeInWriteMatches());
+			log.info("comparisons per second " + cps);
 
-			//clean up
+			// log the status
+			String temp =
+				Integer.toString(numChunks) + OabaProcessing.DELIMIT
+						+ Integer.toString(i);
+			status.setCurrentOabaEvent(OabaEvent.MATCHING_DATA, temp);
+
+			// clean up
 			stage = null;
 			master = null;
 			cgSource = null;
 		}
-		
-		log.info ("total blocks: " + numBlocks + " comparisons: " +  numCompares + " matches: " + numMatches);
-		log.info ("Time in readMaps " + inReadHM);
-		log.info ("Time in handleBlocks " + inHandleBlocks);
-		log.info ("Time in writeMatches " + inWriteMatches);
-		
-		double cps = 1000.0 * numCompares / (inReadHM + inHandleBlocks + inWriteMatches);
-		log.info ("comparisons per second " + cps );
 
-		status.setCurrentOabaEvent( OabaEvent.DONE_MATCHING_DATA);
+		log.info("total blocks: " + numBlocks + " comparisons: " + numCompares
+				+ " matches: " + numMatches);
+		log.info("Time in readMaps " + inReadHM);
+		log.info("Time in handleBlocks " + inHandleBlocks);
+		log.info("Time in writeMatches " + inWriteMatches);
 
-		//cleanup
+		double cps =
+			1000.0 * numCompares / (inReadHM + inHandleBlocks + inWriteMatches);
+		log.info("comparisons per second " + cps);
+
+		status.setCurrentOabaEvent(OabaEvent.DONE_MATCHING_DATA);
+
+		// cleanup
 		stageFactory.removeAllSinks();
 		masterFactory.removeAllSinks();
-		for (int i=0; i<numChunks; i++) {
+		for (int i = 0; i < numChunks; i++) {
 			((IComparisonArraySource) cgSources.get(i)).delete();
 		}
 	}
 
-	
-	
 }

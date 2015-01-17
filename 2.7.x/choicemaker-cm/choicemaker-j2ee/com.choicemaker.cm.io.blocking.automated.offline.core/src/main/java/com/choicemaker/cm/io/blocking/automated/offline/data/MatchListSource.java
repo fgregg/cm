@@ -23,48 +23,49 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecordSource;
  * @author pcheung
  * @deprecated
  */
+@Deprecated
 public class MatchListSource {
-	
+
 	IMatchRecordSource matchSource;
 	MatchList nextList;
 	long lastID = Long.MIN_VALUE;
 	MatchCandidate lastCandidate = null;
-	
-	public MatchListSource (IMatchRecordSource mrs) {
+
+	public MatchListSource(IMatchRecordSource mrs) {
 		this.matchSource = mrs;
 	}
-	
-	
-	/** Opens the source for reading MatchList.
+
+	/**
+	 * Opens the source for reading MatchList.
 	 * 
 	 * @throws BlockingException
 	 */
-	public void open () throws BlockingException {
+	public void open() throws BlockingException {
 		matchSource.open();
 	}
-	
-	
-	/** Closes the IMatchRecordSource.
+
+	/**
+	 * Closes the IMatchRecordSource.
 	 * 
 	 * @throws BlockingException
 	 */
-	public void close () throws BlockingException {
+	public void close() throws BlockingException {
 		matchSource.close();
 	}
-	
-	
-	/** True if there are more MatchList.
+
+	/**
+	 * True if there are more MatchList.
 	 * 
 	 * @return boolean - true is this source has more elements
 	 */
-	public boolean hasNext ()  throws BlockingException {
+	public boolean hasNext() throws BlockingException {
 		boolean ret = false;
 		boolean stop = false;
 		long currentID = Long.MIN_VALUE;
 		List<MatchCandidate> candidates = new ArrayList<>();
 		MatchCandidate mc;
 		IMatchRecord record;
-		
+
 		if (lastID != Long.MIN_VALUE) {
 			currentID = lastID;
 			candidates.add(lastCandidate);
@@ -73,70 +74,72 @@ public class MatchListSource {
 			if (matchSource.hasNext()) {
 				record = matchSource.next();
 				if (record.getRecordID1() < lastID) {
-					throw new BlockingException ("IMatchSource is not sorted " + record.getRecordID1() + 
-						" " + lastID);
+					throw new BlockingException("IMatchSource is not sorted "
+							+ record.getRecordID1() + " " + lastID);
 				}
 				lastID = record.getRecordID1();
 				currentID = lastID;
 
-				mc = getMatchCandidate (record);
+				mc = getMatchCandidate(record);
 				candidates.add(mc);
-			}			
+			}
 		}
-		
+
 		while (!stop && matchSource.hasNext()) {
 			record = matchSource.next();
 			if (record.getRecordID1() < lastID) {
-				throw new BlockingException ("IMatchSource is not sorted " + record.getRecordID1() + 
-					" " + lastID);
+				throw new BlockingException("IMatchSource is not sorted "
+						+ record.getRecordID1() + " " + lastID);
 			}
 
 			if (lastID != record.getRecordID1()) {
 				stop = true;
 				lastID = record.getRecordID1();
-				lastCandidate = getMatchCandidate (record);
+				lastCandidate = getMatchCandidate(record);
 			} else {
-				mc = getMatchCandidate (record);
+				mc = getMatchCandidate(record);
 				candidates.add(mc);
 			}
 			ret = true;
 		}
-		
+
 		if (!stop) {
 			lastID = Long.MIN_VALUE;
 		}
-		
-		//create the next MatchList
-		MatchCandidate [] list = new MatchCandidate [candidates.size()];
-		for (int i=0; i<candidates.size(); i++) {
-			list[i] = (MatchCandidate) candidates.get(i);
+
+		// create the next MatchList
+		MatchCandidate[] list = new MatchCandidate[candidates.size()];
+		for (int i = 0; i < candidates.size(); i++) {
+			list[i] = candidates.get(i);
 		}
-		nextList = new MatchList (currentID, list);
-		
+		nextList = new MatchList(currentID, list);
+
 		return ret;
 	}
-	
-	
-	private MatchCandidate getMatchCandidate (IMatchRecord mr) {
-		Long L = new Long (mr.getRecordID2());
+
+	private MatchCandidate getMatchCandidate(IMatchRecord mr) {
+		Long L = new Long(mr.getRecordID2());
 		int decision = 0;
-		
-		if (mr.getMatchType() == IMatchRecord.DIFFER) decision = MatchCandidate.DIFFER;
-		else if (mr.getMatchType() == IMatchRecord.MATCH) decision = MatchCandidate.MATCH;
-		else if (mr.getMatchType() == IMatchRecord.HOLD) decision = MatchCandidate.HOLD;
-		
-		MatchCandidate mc = new MatchCandidate (L, mr.getProbability(), decision, null);
+
+		if (mr.getMatchType() == IMatchRecord.DIFFER)
+			decision = MatchCandidate.DIFFER;
+		else if (mr.getMatchType() == IMatchRecord.MATCH)
+			decision = MatchCandidate.MATCH;
+		else if (mr.getMatchType() == IMatchRecord.HOLD)
+			decision = MatchCandidate.HOLD;
+
+		MatchCandidate mc =
+			new MatchCandidate(L, mr.getProbability(), decision, null);
 		return mc;
 	}
-	
-	
-	/** Returns the next MatchList
+
+	/**
+	 * Returns the next MatchList
 	 * 
 	 * @return MatchList - the next MatchList in the list.
 	 */
-	public MatchList getNext () {
+	public MatchList getNext() {
 		return nextList;
 	}
-	
 
 }

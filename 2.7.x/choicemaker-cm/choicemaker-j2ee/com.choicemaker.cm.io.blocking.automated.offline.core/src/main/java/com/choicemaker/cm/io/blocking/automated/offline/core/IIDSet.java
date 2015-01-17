@@ -20,12 +20,13 @@ import com.choicemaker.util.LongArrayList;
  *
  */
 public interface IIDSet {
-	
-	/** This method a LongArrayList of all the IDs in this set, array, or tree.
+
+	/**
+	 * This method a LongArrayList of all the IDs in this set, array, or tree.
 	 * Note that the set of IDs returns is not guaranteed for uniqueness.
 	 * 
 	 * @return LongArrayList
 	 */
-	public LongArrayList getRecordIDs (); 
+	public LongArrayList getRecordIDs();
 
 }

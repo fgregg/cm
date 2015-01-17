@@ -22,7 +22,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 public class ComparisonTreeSinkSourceFactory implements
 		IComparisonTreeSinkSourceFactory {
 
@@ -33,8 +33,9 @@ public class ComparisonTreeSinkSourceFactory implements
 	private int indSource = 0;
 	private RECORD_ID_TYPE dataType;
 
-
-	/** This constructor takes in key parameters to create RecordIDSink or RecordIDSource files as follows:
+	/**
+	 * This constructor takes in key parameters to create RecordIDSink or
+	 * RecordIDSource files as follows:
 	 * 
 	 * fileDir + nameBase + ind + "." + ext
 	 * 
@@ -50,61 +51,105 @@ public class ComparisonTreeSinkSourceFactory implements
 		this.dataType = dataType;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#getNextSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonTreeSinkSourceFactory#getNextSink()
 	 */
+	@Override
 	public IComparisonTreeSink getNextSink() throws BlockingException {
-		indSink ++;
-		return new ComparisonTreeSink (fileDir + nameBase + indSink + "." + ext);
+		indSink++;
+		return new ComparisonTreeSink(fileDir + nameBase + indSink + "." + ext);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#getNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonTreeSinkSourceFactory#getNextSource()
 	 */
+	@Override
 	public IComparisonTreeSource getNextSource() throws BlockingException {
-		indSource ++;
-		return new ComparisonTreeSource (fileDir + nameBase + indSource + "." + ext, dataType);
+		indSource++;
+		return new ComparisonTreeSource(fileDir + nameBase + indSource + "."
+				+ ext, dataType);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#getNumSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonTreeSinkSourceFactory#getNumSink()
 	 */
+	@Override
 	public int getNumSink() {
 		return indSink;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#getNumSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonTreeSinkSourceFactory#getNumSource()
 	 */
+	@Override
 	public int getNumSource() {
 		return indSource;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#getSource(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonTreeSinkSourceFactory
+	 * #getSource(com.choicemaker.cm.io.blocking.
+	 * automated.offline.core.IComparisonTreeSink)
 	 */
-	public IComparisonTreeSource getSource(IComparisonTreeSink sink) throws BlockingException {
-		return new ComparisonTreeSource (sink.getInfo(), dataType);
+	@Override
+	public IComparisonTreeSource getSource(IComparisonTreeSink sink)
+			throws BlockingException {
+		return new ComparisonTreeSource(sink.getInfo(), dataType);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#getSink(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonTreeSinkSourceFactory
+	 * #getSink(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IComparisonTreeSource)
 	 */
-	public IComparisonTreeSink getSink(IComparisonTreeSource source) throws BlockingException {
-		return new ComparisonTreeSink (source.getInfo());
+	@Override
+	public IComparisonTreeSink getSink(IComparisonTreeSource source)
+			throws BlockingException {
+		return new ComparisonTreeSink(source.getInfo());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#removeSink(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonTreeSinkSourceFactory
+	 * #removeSink(com.choicemaker.cm.io.blocking
+	 * .automated.offline.core.IComparisonTreeSink)
 	 */
+	@Override
 	public void removeSink(IComparisonTreeSink sink) throws BlockingException {
 		sink.remove();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory#removeSource(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonTreeSinkSourceFactory
+	 * #removeSource(com.choicemaker.cm.io.blocking
+	 * .automated.offline.core.IComparisonTreeSource)
 	 */
-	public void removeSource(IComparisonTreeSource source) throws BlockingException {
+	@Override
+	public void removeSource(IComparisonTreeSource source)
+			throws BlockingException {
 		source.delete();
 	}
 

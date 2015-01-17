@@ -10,19 +10,19 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-
-/** This is a source from which to get SuffixTreeNode objects.
+/**
+ * This is a source from which to get SuffixTreeNode objects.
  * 
  * @author pcheung
  *
  */
-public interface ISuffixTreeSource extends
-		ISource<SuffixTreeNode> {
+public interface ISuffixTreeSource extends ISource<SuffixTreeNode> {
 
-	/** Returns the number of Suffix Tree read so far.
+	/**
+	 * Returns the number of Suffix Tree read so far.
 	 * 
 	 * @return int
 	 */
-	public int getCount ();
+	public int getCount();
 
 }

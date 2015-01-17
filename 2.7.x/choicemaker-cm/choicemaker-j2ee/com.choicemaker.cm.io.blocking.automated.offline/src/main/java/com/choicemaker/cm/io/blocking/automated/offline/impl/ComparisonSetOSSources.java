@@ -23,40 +23,55 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSourc
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class ComparisonSetOSSources implements IComparisonSetSources {
 	private ComparisonArraySinkSourceFactory sFactory;
 	private IComparisonArraySource next;
-	private ArrayList sources = new ArrayList ();
+	private ArrayList sources = new ArrayList();
 	private int maxBlockSize;
 
-	public ComparisonSetOSSources (ComparisonArraySinkSourceFactory sFactory, int maxBlockSize) {
+	public ComparisonSetOSSources(ComparisonArraySinkSourceFactory sFactory,
+			int maxBlockSize) {
 		this.sFactory = sFactory;
 		this.maxBlockSize = maxBlockSize;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources#getNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources
+	 * #getNextSource()
 	 */
+	@Override
 	public IComparisonSetSource getNextSource() {
-		return new ComparisonSetOSSource (next, maxBlockSize);
+		return new ComparisonSetOSSource(next, maxBlockSize);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources#cleanUp()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources
+	 * #cleanUp()
 	 */
+	@Override
 	public void cleanUp() throws BlockingException {
-		for (int i=0; i<sources.size(); i++) {
+		for (int i = 0; i < sources.size(); i++) {
 			next = (IComparisonArraySource) sources.get(i);
 			next.delete();
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources#hasNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources
+	 * #hasNextSource()
 	 */
+	@Override
 	public boolean hasNextSource() throws BlockingException {
 		next = sFactory.getNextSource();
 		sources.add(next);

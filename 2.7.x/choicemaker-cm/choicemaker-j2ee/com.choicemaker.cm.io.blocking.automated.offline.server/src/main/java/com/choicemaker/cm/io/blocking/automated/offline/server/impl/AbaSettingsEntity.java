@@ -101,8 +101,8 @@ public class AbaSettingsEntity implements AbaSettings {
 				DISCRIMINATOR_VALUE);
 	}
 
-	protected AbaSettingsEntity(int limPerBlockingSet, int limSingleBlockingSet,
-			int singleTableGraceLimit, String type) {
+	protected AbaSettingsEntity(int limPerBlockingSet,
+			int limSingleBlockingSet, int singleTableGraceLimit, String type) {
 		if (type == null) {
 			throw new IllegalArgumentException("null type");
 		}

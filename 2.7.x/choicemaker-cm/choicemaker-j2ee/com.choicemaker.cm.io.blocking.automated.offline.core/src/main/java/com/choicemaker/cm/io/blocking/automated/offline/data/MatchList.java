@@ -20,21 +20,25 @@ import com.choicemaker.cm.core.base.MatchCandidate;
  * @author pcheung
  *
  */
-public class MatchList implements Serializable{
+public class MatchList implements Serializable {
 
 	/* As of 2010-03-10 */
 	static final long serialVersionUID = 5330826815562783479L;
 
 	private long recordID;
-	private MatchCandidate [] candidates;
-	
-	public MatchList (long id, MatchCandidate [] candidates) {
+	private MatchCandidate[] candidates;
+
+	public MatchList(long id, MatchCandidate[] candidates) {
 		this.recordID = id;
 		this.candidates = candidates;
 	}
-	
-	public long getRecordID () { return recordID; }
 
-	public MatchCandidate [] getMatchCandidates () { return candidates; }
+	public long getRecordID() {
+		return recordID;
+	}
+
+	public MatchCandidate[] getMatchCandidates() {
+		return candidates;
+	}
 
 }

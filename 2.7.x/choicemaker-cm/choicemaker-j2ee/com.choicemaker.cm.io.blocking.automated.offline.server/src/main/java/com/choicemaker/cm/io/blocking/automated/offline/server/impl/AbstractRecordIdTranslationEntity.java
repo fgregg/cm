@@ -98,9 +98,11 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 
 		return retVal;
 	}
+
 	static {
 		if (!isClassValid()) {
-			String msg = "AbstractRecordIdTranslationEntity class is inconsistent with RECORD_ID_TYPE enumeration";
+			String msg =
+				"AbstractRecordIdTranslationEntity class is inconsistent with RECORD_ID_TYPE enumeration";
 			logger.severe(msg);
 			// An exception is not thrown here because it would create a class
 			// initialization exception, which can be hard to debug
@@ -202,7 +204,7 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 			prime * result + ((recordId == null) ? 0 : recordId.hashCode());
 		result = prime * result + recordSource;
 		result = prime * result + recordType;
-		result = prime * result + (int) (translatedId ^ (translatedId >>> 32));
+		result = prime * result + (translatedId ^ (translatedId >>> 32));
 		return result;
 	}
 

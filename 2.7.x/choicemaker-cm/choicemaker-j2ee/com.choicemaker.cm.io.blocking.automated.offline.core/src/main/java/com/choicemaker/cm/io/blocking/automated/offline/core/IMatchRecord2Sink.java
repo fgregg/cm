@@ -26,15 +26,18 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 public interface IMatchRecord2Sink<T extends Comparable<T>> extends ISink {
 
 	/** Writes out an ArrayList of MatchRecord2. */
-	public void writeMatches (List<MatchRecord2<T>> matches) throws BlockingException;
-	
+	public void writeMatches(List<MatchRecord2<T>> matches)
+			throws BlockingException;
+
 	/** Writes out a Collection of MatchRecord2. */
-	public void writeMatches (Collection<MatchRecord2<T>> c) throws BlockingException;
-	
+	public void writeMatches(Collection<MatchRecord2<T>> c)
+			throws BlockingException;
+
 	/** Writes out an Iterator containing MatchRecord2. */
-	public void writeMatches (Iterator<MatchRecord2<T>> it) throws BlockingException;
-	
+	public void writeMatches(Iterator<MatchRecord2<T>> it)
+			throws BlockingException;
+
 	/** Writes out a single MatchRecord2. */
-	public void writeMatch (MatchRecord2<T> match) throws BlockingException;
-	
+	public void writeMatch(MatchRecord2<T> match) throws BlockingException;
+
 }

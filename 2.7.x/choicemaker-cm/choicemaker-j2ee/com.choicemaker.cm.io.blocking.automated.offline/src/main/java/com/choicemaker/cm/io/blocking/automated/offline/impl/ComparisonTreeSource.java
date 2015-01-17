@@ -10,7 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.*;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_INTEGER;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_LONG;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_STRING;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -28,19 +30,19 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
  * @author pcheung
  *
  */
-//@SuppressWarnings({"rawtypes", "unchecked"})
-public class ComparisonTreeSource<T extends Comparable<T>> extends BaseFileSource<ComparisonTreeNode<T>> implements IComparisonTreeSource<T> {
+// @SuppressWarnings({"rawtypes", "unchecked"})
+public class ComparisonTreeSource<T extends Comparable<T>> extends
+		BaseFileSource<ComparisonTreeNode<T>> implements
+		IComparisonTreeSource<T> {
 
-	
 	private ComparisonTreeNode<T> nextTree = null;
-	
-	//this indicates if the Record ID is a int, long, or string.
+
+	// this indicates if the Record ID is a int, long, or string.
 	private RECORD_ID_TYPE dataType;
-	
 
 	/** This constructor creates a string source with the given name */
-	public ComparisonTreeSource (String fileName, RECORD_ID_TYPE dataType) {
-		super (fileName, EXTERNAL_DATA_FORMAT.STRING);
+	public ComparisonTreeSource(String fileName, RECORD_ID_TYPE dataType) {
+		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
 		this.dataType = dataType;
 	}
 
@@ -50,85 +52,91 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends BaseFileSourc
 			try {
 				this.nextTree = readNext();
 			} catch (EOFException x) {
-				throw new NoSuchElementException(
-					"EOFException: " + x.getMessage());
+				throw new NoSuchElementException("EOFException: "
+						+ x.getMessage());
 			} catch (IOException x) {
-				throw new NoSuchElementException(
-					"OABABlockingException: " + x.getMessage());
+				throw new NoSuchElementException("OABABlockingException: "
+						+ x.getMessage());
 			}
 		}
 		ComparisonTreeNode<T> retVal = this.nextTree;
-		count ++;
+		count++;
 		this.nextTree = null;
 
 		return retVal;
 	}
 
-
 	@SuppressWarnings("unchecked")
-	private ComparisonTreeNode<T> readNext () throws EOFException, IOException {
+	private ComparisonTreeNode<T> readNext() throws EOFException, IOException {
 		ComparisonTreeNode<T> ret = null;
-		
+
 		String str = br.readLine();
-		if (str == null || str.equals("")) throw new EOFException ();
+		if (str == null || str.equals(""))
+			throw new EOFException();
 
 		int ind = 0;
 		int size = str.length();
-			
+
 		ret = ComparisonTreeNode.createRootNode();
 
-		//setting up the stack
+		// setting up the stack
 		Stack<ComparisonTreeNode<T>> stack = new Stack<>();
 		stack.push(ret);
 
 		while (ind < size) {
 			if (str.charAt(ind) == Constants.OPEN_NODE) {
-				int i = getNextMarker (str, ind, size);
-				char stageOrMaster = str.charAt(ind+1);
-					
+				int i = getNextMarker(str, ind, size);
+				char stageOrMaster = str.charAt(ind + 1);
+
 				T c = null;
-					
+
 				if (dataType == TYPE_LONG) {
-					c = (T) new Long (str.substring(ind+3,i));
+					c = (T) new Long(str.substring(ind + 3, i));
 				} else if (dataType == TYPE_INTEGER) {
-					c = (T) new Integer (str.substring(ind+3,i));
+					c = (T) new Integer(str.substring(ind + 3, i));
 				} else if (dataType == TYPE_STRING) {
-					c = (T) str.substring(ind+3,i);
+					c = (T) str.substring(ind + 3, i);
 				} else {
-					throw new IllegalArgumentException("Unknown DataType: " + dataType);
+					throw new IllegalArgumentException("Unknown DataType: "
+							+ dataType);
 				}
-					
+
 				ComparisonTreeNode<T> kid = null;
-					
-				//use peek here because we don't want to remove from the stack.
+
+				// use peek here because we don't want to remove from the stack.
 				ComparisonTreeNode<T> parent = stack.peek();
-					
+
 				if (str.charAt(i) == Constants.CLOSE_NODE) {
-					//leaf
+					// leaf
 					kid = parent.putChild(c, stageOrMaster, count);
 				} else {
-					//has at least 1 child
+					// has at least 1 child
 					kid = parent.putChild(c, stageOrMaster);
-				} 
-					
+				}
+
 				stack.push(kid);
-					
+
 				ind = i;
 			} else if (str.charAt(ind) == Constants.CLOSE_NODE) {
 				stack.pop();
-				ind ++;
+				ind++;
 			}
 		}
-			
-		//at the end, there should only be the root on the stack.
-		if (stack.size() != 1) throw new IOException ("Could not parse this tree: " + str);
-		
+
+		// at the end, there should only be the root on the stack.
+		if (stack.size() != 1)
+			throw new IOException("Could not parse this tree: " + str);
+
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws BlockingException {
 		if (this.nextTree == null) {
 			try {
@@ -136,26 +144,30 @@ public class ComparisonTreeSource<T extends Comparable<T>> extends BaseFileSourc
 			} catch (EOFException x) {
 				this.nextTree = null;
 			} catch (IOException x) {
-				throw new BlockingException (x.toString());
+				throw new BlockingException(x.toString());
 			}
 		}
 		return this.nextTree != null;
 	}
 
-
-	/** This method returns the location of the next OPEN_NODE or CLOSE_NODE starting from index from+1.
+	/**
+	 * This method returns the location of the next OPEN_NODE or CLOSE_NODE
+	 * starting from index from+1.
 	 * 
 	 * @param str
 	 * @param from
 	 * @return
 	 */
-	private int getNextMarker (String str, int from, int size) {
+	private int getNextMarker(String str, int from, int size) {
 		boolean found = false;
 		int i = from + 1;
-		//int size = str.length();
+		// int size = str.length();
 		while (!found && i < size) {
-			if (str.charAt(i) == Constants.OPEN_NODE || str.charAt(i) == Constants.CLOSE_NODE) found = true;
-			else i ++;
+			if (str.charAt(i) == Constants.OPEN_NODE
+					|| str.charAt(i) == Constants.CLOSE_NODE)
+				found = true;
+			else
+				i++;
 		}
 		return i;
 	}

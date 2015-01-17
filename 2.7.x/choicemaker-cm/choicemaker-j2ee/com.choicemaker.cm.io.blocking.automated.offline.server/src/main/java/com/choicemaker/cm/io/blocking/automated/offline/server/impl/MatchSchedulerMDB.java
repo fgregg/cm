@@ -56,13 +56,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
  *
  */
 @SuppressWarnings({ "rawtypes" })
-@MessageDriven(activationConfig = {
-		@ActivationConfigProperty(propertyName = "maxSession",
-				propertyValue = "1"), // Singleton (JBoss only)
-		@ActivationConfigProperty(propertyName = "destinationLookup",
-				propertyValue = "java:/choicemaker/urm/jms/matchSchedulerQueue"),
-		@ActivationConfigProperty(propertyName = "destinationType",
-				propertyValue = "javax.jms.Queue") })
+@MessageDriven(
+		activationConfig = {
+				@ActivationConfigProperty(propertyName = "maxSession",
+						propertyValue = "1"), // Singleton (JBoss only)
+				@ActivationConfigProperty(
+						propertyName = "destinationLookup",
+						propertyValue = "java:/choicemaker/urm/jms/matchSchedulerQueue"),
+				@ActivationConfigProperty(propertyName = "destinationType",
+						propertyValue = "javax.jms.Queue") })
 public class MatchSchedulerMDB extends AbstractScheduler {
 
 	private static final long serialVersionUID = 271L;
@@ -79,7 +81,7 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
-	
+
 	@EJB
 	private OabaProcessingController processingController;
 
@@ -115,12 +117,12 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 
 	@Override
 	protected ServerConfigurationController getServerController() {
-		return serverController; 
+		return serverController;
 	}
 
 	@Override
 	protected OabaSettingsController getSettingsController() {
-    return oabaSettingsController;
+		return oabaSettingsController;
 	}
 
 	@Override
@@ -152,11 +154,9 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 		ServerConfiguration serverConfig =
 			getServerController().findServerConfigurationByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
-		IProbabilityModel model =
-			PMManager.getModelInstance(modelConfigId);
+		IProbabilityModel model = PMManager.getModelInstance(modelConfigId);
 		if (model == null) {
-			String s =
-				"No modelId corresponding to '" + modelConfigId + "'";
+			String s = "No modelId corresponding to '" + modelConfigId + "'";
 			log.severe(s);
 			throw new IllegalArgumentException(s);
 		}
@@ -200,7 +200,8 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 
 		// remove the oversized array files
 		ComparisonArrayGroupSinkSourceFactory factoryOS =
-			OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob, numProcessors);
+			OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob,
+					numProcessors);
 		for (int i = 0; i < numOS; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
 				IComparisonArraySource sourceOS = factoryOS.getSource(i, j);
@@ -217,8 +218,8 @@ public class MatchSchedulerMDB extends AbstractScheduler {
 	@Override
 	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		processingController.updateStatusWithNotification(job, event, timestamp,
-				info);
+		processingController.updateStatusWithNotification(job, event,
+				timestamp, info);
 	}
 
 	@Override

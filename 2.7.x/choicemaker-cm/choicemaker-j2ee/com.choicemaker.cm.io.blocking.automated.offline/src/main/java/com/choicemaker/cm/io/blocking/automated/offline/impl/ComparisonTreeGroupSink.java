@@ -15,127 +15,154 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonTreeNode;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink;
 
 /**
- * This is actually a sink of sinks that writes ComparisonTreeNodes to a bunch of sinks in a
- * round robin manner.
+ * This is actually a sink of sinks that writes ComparisonTreeNodes to a bunch
+ * of sinks in a round robin manner.
  * 
  * This is used by the parallel matcher code.
  * 
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class ComparisonTreeGroupSink implements IComparisonTreeSink {
 
-	//This is the array of round robin sinks.
-	private IComparisonTreeSink [] sinks = null;
-	
-	//This is the round robin counter
+	// This is the array of round robin sinks.
+	private IComparisonTreeSink[] sinks = null;
+
+	// This is the round robin counter
 	private int current = 0;
-	
-	//this counts the number of ComparisonTreeNodes written so far
+
+	// this counts the number of ComparisonTreeNodes written so far
 	private int count = 0;
 
 	/**
-	 * This constructor takes two parameters:
-	 * 1.	A factory to create a group of sinks.
-	 * 2.	The number of sinks to create.
+	 * This constructor takes two parameters: 1. A factory to create a group of
+	 * sinks. 2. The number of sinks to create.
 	 * 
 	 * @param factory
 	 * @param num
 	 */
-	public ComparisonTreeGroupSink (ComparisonTreeSinkSourceFactory factory, int num) 
-		throws BlockingException {
-			
-		sinks = new IComparisonTreeSink [num];
-		for (int i=0; i< num; i++) {
+	public ComparisonTreeGroupSink(ComparisonTreeSinkSourceFactory factory,
+			int num) throws BlockingException {
+
+		sinks = new IComparisonTreeSink[num];
+		for (int i = 0; i < num; i++) {
 			sinks[i] = factory.getNextSink();
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink#writeComparisonTree(com.choicemaker.cm.io.blocking.automated.offline.core.ComparisonTreeNode)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSink
+	 * #
+	 * writeComparisonTree(com.choicemaker.cm.io.blocking.automated.offline.core
+	 * .ComparisonTreeNode)
 	 */
-	public void writeComparisonTree(ComparisonTreeNode tree) throws BlockingException {
+	@Override
+	public void writeComparisonTree(ComparisonTreeNode tree)
+			throws BlockingException {
 		sinks[current].writeComparisonTree(tree);
-		count ++;
-		current ++;
-		if (current == sinks.length) current = 0;
+		count++;
+		current++;
+		if (current == sinks.length)
+			current = 0;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#exists()
 	 */
+	@Override
 	public boolean exists() {
 		return true;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#open()
 	 */
+	@Override
 	public void open() throws BlockingException {
-		for (int i=0; i<sinks.length; i++) {
+		for (int i = 0; i < sinks.length; i++) {
 			sinks[i].open();
 		}
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#append()
 	 */
+	@Override
 	public void append() throws BlockingException {
-		for (int i=0; i<sinks.length; i++) {
+		for (int i = 0; i < sinks.length; i++) {
 			sinks[i].append();
 		}
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#close()
 	 */
+	@Override
 	public void close() throws BlockingException {
-		for (int i=0; i<sinks.length; i++) {
+		for (int i = 0; i < sinks.length; i++) {
 			sinks[i].close();
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getCount()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getCount()
 	 */
+	@Override
 	public int getCount() {
 		return count;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getInfo()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getInfo()
 	 */
+	@Override
 	public String getInfo() {
-		StringBuffer sb = new StringBuffer ();
-		for (int i=0; i<sinks.length; i++) {
-			sb.append( (sinks[i].getInfo()));
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < sinks.length; i++) {
+			sb.append((sinks[i].getInfo()));
 			sb.append('|');
 		}
 		return sb.toString();
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#remove()
 	 */
+	@Override
 	public void remove() throws BlockingException {
-		for (int i=0; i<sinks.length; i++) {
+		for (int i = 0; i < sinks.length; i++) {
 			sinks[i].remove();
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#flush()
 	 */
+	@Override
 	public void flush() throws BlockingException {
 	}
-	
+
 }

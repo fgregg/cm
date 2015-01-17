@@ -22,26 +22,29 @@ import com.choicemaker.cm.core.RecordSource;
  */
 public interface IChunkDataSinkSourceFactory {
 
-	/** Gets the next record sink. */	
-	public RecordSink getNextSink () throws BlockingException;
-	
+	/** Gets the next record sink. */
+	public RecordSink getNextSink() throws BlockingException;
+
 	/** Gets the number of sequence sinks created. */
-	public int getNumSink ();
+	public int getNumSink();
 
-	/** Gets the next record source. This only returns a source from a previously created sink. */	
+	/**
+	 * Gets the next record source. This only returns a source from a previously
+	 * created sink.
+	 */
 	public RecordSource getNextSource() throws BlockingException;
-	
+
 	/** Gets the number of sequence source created. */
-	public int getNumSource ();
+	public int getNumSource();
 
-	/** Removes the record sinks in memory. */	
-	public void removeAllSinks () throws BlockingException;
-	
+	/** Removes the record sinks in memory. */
+	public void removeAllSinks() throws BlockingException;
 
-	/** This removes records sinks from 1 to numChunks
+	/**
+	 * This removes records sinks from 1 to numChunks
 	 * 
 	 * @param numChunks
 	 * @throws BlockingException
 	 */
-	public void removeAllSinks (int numChunks) throws BlockingException;
+	public void removeAllSinks(int numChunks) throws BlockingException;
 }

@@ -36,6 +36,7 @@ public class ComparisonTreeSink extends BaseFileSink implements
 		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
+	@Override
 	public void writeComparisonTree(ComparisonTreeNode tree)
 			throws BlockingException {
 		try {

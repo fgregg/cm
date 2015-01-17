@@ -12,8 +12,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import com.choicemaker.cm.core.BlockingException;
 
-
-
 /**
  * This interface handles the writting of oversized BlockSets.
  * 
@@ -23,6 +21,6 @@ import com.choicemaker.cm.core.BlockingException;
 public interface IBlockSink extends ISink {
 
 	/** Writes the BlockSet to the sink. */
-	public void writeBlock (BlockSet bs) throws BlockingException;
+	public void writeBlock(BlockSet bs) throws BlockingException;
 
 }

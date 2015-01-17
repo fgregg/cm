@@ -29,8 +29,8 @@ public class OabaJobMessage implements Serializable {
 	public ValidatorBase validator;
 
 	/**
-	 * An index used to split processing across a set of agents that are
-	 * running in parallel.
+	 * An index used to split processing across a set of agents that are running
+	 * in parallel.
 	 */
 	public int processingIndex;
 

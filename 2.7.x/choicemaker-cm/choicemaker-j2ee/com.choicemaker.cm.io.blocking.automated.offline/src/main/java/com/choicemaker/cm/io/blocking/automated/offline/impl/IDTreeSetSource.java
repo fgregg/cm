@@ -20,56 +20,81 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.ISuffixTreeSource;
  *
  */
 public class IDTreeSetSource implements IIDSetSource {
-	
+
 	private ISuffixTreeSource bSource;
-//	private IIDSet next;
-	
-	public IDTreeSetSource (ISuffixTreeSource bSource) {
+
+	// private IIDSet next;
+
+	public IDTreeSetSource(ISuffixTreeSource bSource) {
 		this.bSource = bSource;
 	}
-	
+
+	@Override
 	public IIDSet next() throws BlockingException {
 		return bSource.next();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#exists()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#exists()
 	 */
+	@Override
 	public boolean exists() {
 		return bSource.exists();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#open()
 	 */
+	@Override
 	public void open() throws BlockingException {
 		bSource.open();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws BlockingException {
 		return bSource.hasNext();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#close()
 	 */
+	@Override
 	public void close() throws BlockingException {
 		bSource.close();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#getInfo()
 	 */
+	@Override
 	public String getInfo() {
 		return bSource.getInfo();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#remove()
 	 */
+	@Override
 	public void delete() throws BlockingException {
 		bSource.delete();
 	}

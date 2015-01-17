@@ -13,33 +13,34 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 import java.io.Serializable;
 
 /**
- * This represents a set of pairs to be compared.  
+ * This represents a set of pairs to be compared.
  * 
  * @author pcheung
  *
  */
 public interface IComparisonSet<T extends Comparable<T>> extends Serializable {
-	
-	/** This returns true if there are more pairs to compare in this set.
+
+	/**
+	 * This returns true if there are more pairs to compare in this set.
 	 * 
 	 * @return boolean
 	 */
-	public boolean hasNextPair ();
-	
-	
-	/** This gets the next pair of ids to be compared.  It returns a Pair object.  You should call 
-	 * hasNextPair before calling this method.
+	public boolean hasNextPair();
+
+	/**
+	 * This gets the next pair of ids to be compared. It returns a Pair object.
+	 * You should call hasNextPair before calling this method.
 	 * 
 	 * @return ComparisonPair
 	 */
-	public ComparisonPair<T> getNextPair ();
+	public ComparisonPair<T> getNextPair();
 
-
-	/** This method returns a string of all the elements in this comparison set for
-	 * debugging purposes.
+	/**
+	 * This method returns a string of all the elements in this comparison set
+	 * for debugging purposes.
 	 * 
 	 * @return
 	 */
-	public String writeDebug ();
-	
+	public String writeDebug();
+
 }

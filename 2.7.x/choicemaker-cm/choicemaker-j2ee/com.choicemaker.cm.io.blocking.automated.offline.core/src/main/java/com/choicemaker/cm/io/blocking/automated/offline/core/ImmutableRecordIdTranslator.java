@@ -15,23 +15,32 @@ import java.util.List;
 import com.choicemaker.cm.core.BlockingException;
 
 /**
- * Extends the IRecordIDTranslator2 interface by adding a lookup method
- * that returns the internal id of a specified record id.
+ * Extends the IRecordIDTranslator2 interface by adding a lookup method that
+ * returns the internal id of a specified record id.
+ * 
  * @author rphall
  * @version $Revision$ $Date$
  */
 public interface ImmutableRecordIdTranslator<T extends Comparable<T>> {
-	
+
 	/**
 	 * Temporary hack: this method will be removed.
+	 * 
 	 * @deprecated
 	 */
+	@Deprecated
 	public void cleanUp() throws BlockingException;
 
-	/** Returned from {@link #lookup(Comparable) lookup} if no internal index exists */
+	/**
+	 * Returned from {@link #lookup(Comparable) lookup} if no internal index
+	 * exists
+	 */
 	public int INVALID_INDEX = -1;
 
-	/** Minimum valid index that will be returned by {@link #lookup(Comparable) lookup} */
+	/**
+	 * Minimum valid index that will be returned by {@link #lookup(Comparable)
+	 * lookup}
+	 */
 	public int MINIMUM_VALID_INDEX = INVALID_INDEX + 1;
 
 	/** Returns the type of record identifier handled by this translator */

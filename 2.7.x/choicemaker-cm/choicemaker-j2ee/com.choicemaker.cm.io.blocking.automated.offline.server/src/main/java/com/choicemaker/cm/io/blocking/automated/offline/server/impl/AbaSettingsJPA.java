@@ -33,10 +33,10 @@ public interface AbaSettingsJPA {
 	String ID_GENERATOR_PK_COLUMN_VALUE = "ABA_SETTINGS";
 	String ID_GENERATOR_VALUE_COLUMN_NAME = "SEQ_COUNT";
 
-	 /** Name of the query that finds all persistent ABA settings */
-	 String QN_ABA_FIND_ALL = "abaSettingsFindAll";
-	
-	 /** JPQL used to implement {@link #QN_ABA_FIND_ALL} */
-	 String JPQL_ABA_FIND_ALL = "Select aba from AbaSettingsEntity aba";
+	/** Name of the query that finds all persistent ABA settings */
+	String QN_ABA_FIND_ALL = "abaSettingsFindAll";
+
+	/** JPQL used to implement {@link #QN_ABA_FIND_ALL} */
+	String JPQL_ABA_FIND_ALL = "Select aba from AbaSettingsEntity aba";
 
 }

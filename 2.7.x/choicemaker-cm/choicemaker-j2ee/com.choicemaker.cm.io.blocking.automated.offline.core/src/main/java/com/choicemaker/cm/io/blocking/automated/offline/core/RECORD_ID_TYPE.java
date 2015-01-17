@@ -56,7 +56,7 @@ public enum RECORD_ID_TYPE {
 	public static <T extends Comparable<T>> int checkType(T o) {
 		return fromInstance(o).getIntSymbol();
 	}
-	
+
 	public static <T extends Comparable<T>> RECORD_ID_TYPE fromInstance(T o) {
 		if (o == null) {
 			throw new IllegalArgumentException("null instance");
@@ -105,8 +105,7 @@ public enum RECORD_ID_TYPE {
 			}
 		}
 		if (retVal == null) {
-			throw new IllegalArgumentException("invalid class: "
-					+ c.getName());
+			throw new IllegalArgumentException("invalid class: " + c.getName());
 		}
 		return retVal;
 	}

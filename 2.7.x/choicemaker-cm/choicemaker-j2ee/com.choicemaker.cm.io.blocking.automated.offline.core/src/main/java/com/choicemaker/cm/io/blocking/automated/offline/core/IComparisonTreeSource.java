@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-
 /**
  * This interface handles the reading of ComparisonGroups.
  * 
@@ -21,6 +20,6 @@ public interface IComparisonTreeSource<T extends Comparable<T>> extends
 		ISource<ComparisonTreeNode<T>> {
 
 	/** Returns the number of ComparisonTree read so far. */
-	public int getCount ();
+	public int getCount();
 
 }

@@ -18,9 +18,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.IMatchRecord;
  * @author pcheung
  * @deprecated
  */
+@Deprecated
 public interface IMatchRecordSource extends ISource<IMatchRecord> {
-	
+
 	/** Returns the number of MatchRecords read so far. */
-	public int getCount ();
+	public int getCount();
 
 }

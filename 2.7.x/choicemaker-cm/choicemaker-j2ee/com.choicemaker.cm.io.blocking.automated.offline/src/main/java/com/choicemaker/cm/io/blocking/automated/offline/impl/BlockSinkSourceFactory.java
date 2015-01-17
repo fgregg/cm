@@ -53,6 +53,7 @@ public class BlockSinkSourceFactory implements IBlockSinkSourceFactory,
 	 * This creates the next sink in seqence. It creates a binary file, and no
 	 * append.
 	 */
+	@Override
 	public IBlockSink getNextSink() throws BlockingException {
 		indSink++;
 		return new BlockSink(fileDir + baseName + indSink + "." + ext,
@@ -60,6 +61,7 @@ public class BlockSinkSourceFactory implements IBlockSinkSourceFactory,
 	}
 
 	/** This creates the next source in sequence. It creates a binary file. */
+	@Override
 	public IBlockSource getNextSource() throws BlockingException {
 		indSource++;
 		return new BlockSource(fileDir + baseName + indSource + "." + ext,
@@ -67,11 +69,13 @@ public class BlockSinkSourceFactory implements IBlockSinkSourceFactory,
 	}
 
 	/** Creates an IOverSizedSource for an existing IOversizedSink. */
+	@Override
 	public IBlockSource getSource(IBlockSink sink) throws BlockingException {
 		return new BlockSource(sink.getInfo(), EXTERNAL_DATA_FORMAT.STRING);
 	}
 
 	/** Creates an IOverSizedSource for an existing IOversizedSink. */
+	@Override
 	public IBlockSink getSink(IBlockSource source) throws BlockingException {
 		return new BlockSink(source.getInfo(), EXTERNAL_DATA_FORMAT.STRING);
 	}
@@ -80,6 +84,7 @@ public class BlockSinkSourceFactory implements IBlockSinkSourceFactory,
 	 * This method returns the number of oversized block data sink files that
 	 * have been created.
 	 */
+	@Override
 	public int getNumSink() {
 		return indSink;
 	}
@@ -88,15 +93,18 @@ public class BlockSinkSourceFactory implements IBlockSinkSourceFactory,
 	 * This method returns the number of oversized block data source files that
 	 * have been created.
 	 */
+	@Override
 	public int getNumSource() {
 		return indSource;
 	}
 
+	@Override
 	public void removeSink(IBlockSink sink) throws BlockingException {
 		File f = new File(sink.getInfo());
 		f.delete();
 	}
 
+	@Override
 	public void removeSource(IBlockSource source) throws BlockingException {
 		File f = new File(source.getInfo());
 		f.delete();

@@ -32,6 +32,7 @@ public class SuffixTreeSink extends BaseFileSink implements ISuffixTreeSink {
 		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
+	@Override
 	public void writeSuffixTree(SuffixTreeNode root) throws BlockingException {
 		try {
 			if (type == EXTERNAL_DATA_FORMAT.BINARY) {

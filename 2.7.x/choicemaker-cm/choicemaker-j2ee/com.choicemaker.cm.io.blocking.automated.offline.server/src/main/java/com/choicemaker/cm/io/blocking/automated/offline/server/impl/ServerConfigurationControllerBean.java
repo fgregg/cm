@@ -31,7 +31,7 @@ public class ServerConfigurationControllerBean implements
 	protected static final String GENERIC_NAME_PREFIX = "GENERIC_";
 
 	protected static final String UNKNOWN_HOSTNAME = "UKNOWN";
-	
+
 	public static final long INVALID_ID = 0;
 
 	public static final int DEFAULT_MAX_CHUNK_SIZE = 1000000;
@@ -75,7 +75,7 @@ public class ServerConfigurationControllerBean implements
 		String retVal = GENERIC_NAME_PREFIX + UUID.randomUUID().toString();
 		return retVal;
 	}
-	
+
 	public static File computeGenericLocation() {
 		String home = System.getProperty(SystemPropertyUtils.USER_HOME);
 		File retVal = new File(home);
@@ -322,9 +322,9 @@ public class ServerConfigurationControllerBean implements
 				new IllegalStateException(e.getMessage());
 			}
 			assert retVal.getId() != ServerConfigurationEntity.NON_PERSISTENT_ID;
-			setDefaultConfiguration(host,mutable);
+			setDefaultConfiguration(host, mutable);
 		}
-		
+
 		if (computeFallback) {
 			assert retVal != null;
 		}

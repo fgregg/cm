@@ -19,6 +19,6 @@ import com.choicemaker.cm.core.BlockingException;
 public interface IPairIDSink extends ISink {
 
 	/** Writes the PairID to the sink. */
-	public void writePair (PairID p) throws BlockingException;
+	public void writePair(PairID p) throws BlockingException;
 
 }

@@ -43,7 +43,7 @@ public class MatchRecordUtils {
 			final Decision d = e.getDecision(ac, p, low, high);
 			if (d == MATCH || d == HOLD) {
 				final String notes =
-						MatchRecordUtils.getNotesAsDelimitedString(ac, model);
+					MatchRecordUtils.getNotesAsDelimitedString(ac, model);
 				final RECORD_SOURCE_ROLE role = isStage ? STAGING : MASTER;
 				// If both id's are staging, the smaller one should be first
 				@SuppressWarnings("unchecked")
@@ -83,7 +83,7 @@ public class MatchRecordUtils {
 	 */
 	public static String getNotesAsDelimitedString(ActiveClues ac,
 			ImmutableProbabilityModel model) {
-	
+
 		String[] notes = ac.getNotes(model);
 		String retVal = getNotesAsDelimitedString(notes);
 		return retVal;

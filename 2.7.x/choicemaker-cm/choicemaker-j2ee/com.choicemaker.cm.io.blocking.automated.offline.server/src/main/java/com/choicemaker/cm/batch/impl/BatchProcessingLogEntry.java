@@ -1,6 +1,21 @@
 package com.choicemaker.cm.batch.impl;
 
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.*;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_INFO;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_NAME;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_SEQNUM;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_TIMESTAMP;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_TYPE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_FRACTION_COMPLETE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_ID;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_JOB_ID;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.DISCRIMINATOR_COLUMN;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_NAME;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_PK_COLUMN_NAME;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_PK_COLUMN_VALUE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_TABLE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.TABLE_NAME;
 
 import java.util.Date;
 

@@ -114,7 +114,7 @@ public abstract class BaseFileSink implements ISink {
 			throw new BlockingException(ex.toString());
 		}
 	}
-	
+
 	@Override
 	public int getCount() {
 		return count;

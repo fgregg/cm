@@ -78,7 +78,7 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 	public static String dump(ServerConfiguration sc) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		
+
 		if (sc == null) {
 			pw.println("null server configuration");
 		} else {
@@ -128,7 +128,8 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 
 	public ServerConfigurationEntity(ServerConfiguration sc) {
 		this.uuid = UUID.randomUUID().toString();
-		this.name = ServerConfigurationControllerBean.computeUniqueGenericName();
+		this.name =
+			ServerConfigurationControllerBean.computeUniqueGenericName();
 		File f = sc.getWorkingDirectoryLocation();
 		if (f == null) {
 			throw new IllegalArgumentException("null working directory");
@@ -181,9 +182,10 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 		boolean retVal = false;
 		try {
 			File f = new File(new URI(fileURI));
-				if (f != null && f.exists() && f.isDirectory() && f.canWrite() && f.canRead()) {
-					retVal = true;
-				}
+			if (f != null && f.exists() && f.isDirectory() && f.canWrite()
+					&& f.canRead()) {
+				retVal = true;
+			}
 		} catch (Exception x) {
 			String msg =
 				"Invalid file location: " + fileURI + ": " + x.toString();

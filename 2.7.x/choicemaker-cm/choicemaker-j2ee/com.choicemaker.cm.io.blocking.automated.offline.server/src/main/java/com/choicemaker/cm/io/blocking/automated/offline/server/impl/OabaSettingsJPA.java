@@ -28,10 +28,10 @@ public interface OabaSettingsJPA {
 	String ID_GENERATOR_PK_COLUMN_VALUE = "ABA_SETTINGS";
 	String ID_GENERATOR_VALUE_COLUMN_NAME = "SEQ_COUNT";
 
-	 /** Name of the query that finds all persistent batch job instances */
-	 String QN_OABA_FIND_ALL = "oabaSettingsFindAll";
-	
-	 /** JPQL used to implement {@link #QN_OABA_FIND_ALL} */
-	 String JPQL_OABA_FIND_ALL = "Select oaba from OabaSettingsEntity oaba";
+	/** Name of the query that finds all persistent batch job instances */
+	String QN_OABA_FIND_ALL = "oabaSettingsFindAll";
+
+	/** JPQL used to implement {@link #QN_OABA_FIND_ALL} */
+	String JPQL_OABA_FIND_ALL = "Select oaba from OabaSettingsEntity oaba";
 
 }

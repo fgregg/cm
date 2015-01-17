@@ -23,7 +23,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
  * @author pcheung
  *
  */
-public class PairIDSource extends BaseFileSource<PairID> implements IPairIDSource {
+public class PairIDSource extends BaseFileSource<PairID> implements
+		IPairIDSource {
 
 	private PairID p;
 
@@ -36,45 +37,53 @@ public class PairIDSource extends BaseFileSource<PairID> implements IPairIDSourc
 		super(fileName, type);
 	}
 
+	@Override
 	public PairID next() {
 		return p;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISource#hasNext()
 	 */
+	@Override
 	public boolean hasNext() throws BlockingException {
 		boolean next = false;
 
-		try{
+		try {
 			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
-				long id1 = dis.readLong ();
-				long id2 = dis.readLong ();
-				p = new PairID (id1, id2);
+				long id1 = dis.readLong();
+				long id2 = dis.readLong();
+				p = new PairID(id1, id2);
 				next = true;
 
 			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 				String str;
-				
-				//read the pairs
+
+				// read the pairs
 				str = br.readLine();
 
-				//if there is a blank line, return false				
-				if (str == null || str.equals("")) return false;
-				
-				StringTokenizer st = new StringTokenizer (str, " ");
+				// if there is a blank line, return false
+				if (str == null || str.equals(""))
+					return false;
+
+				StringTokenizer st = new StringTokenizer(str, " ");
 				long id1 = 0;
 				long id2 = 0;
-				if (st.hasMoreTokens()) id1 = Long.parseLong(st.nextToken());
-				if (st.hasMoreTokens()) id2 = Long.parseLong(st.nextToken());
-				p = new PairID (id1, id2);
+				if (st.hasMoreTokens())
+					id1 = Long.parseLong(st.nextToken());
+				if (st.hasMoreTokens())
+					id2 = Long.parseLong(st.nextToken());
+				p = new PairID(id1, id2);
 				next = true;
-				
+
 			}
 		} catch (EOFException eofex) {
-			//expecting an EOF
+			// expecting an EOF
 		} catch (IOException ioex) {
-			new BlockingException( ioex.toString());
+			new BlockingException(ioex.toString());
 		}
 
 		return next;

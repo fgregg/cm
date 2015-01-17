@@ -6,6 +6,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
  * @author pcheung
  * @deprecated
  */
+@Deprecated
 public interface IMatchRecord extends Comparable<IMatchRecord> {
 
 	public static final char MATCH = 'M';

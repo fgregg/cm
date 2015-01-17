@@ -19,25 +19,26 @@ import com.choicemaker.cm.core.BlockingException;
  *
  */
 public interface IComparisonSetSources<T extends Comparable<T>> {
-	
-	/** This returns the next comparison set source.
+
+	/**
+	 * This returns the next comparison set source.
 	 * 
 	 * @return IComparisonSetSource
 	 */
-	public IComparisonSetSource<T> getNextSource ();
-	
-	
-	/** This returns true if this collection has more sources.
+	public IComparisonSetSource<T> getNextSource();
+
+	/**
+	 * This returns true if this collection has more sources.
 	 * 
 	 * @return boolean
 	 */
-	public boolean hasNextSource () throws BlockingException;
-	
-	
-	/** This method cleans up and frees up resources.
+	public boolean hasNextSource() throws BlockingException;
+
+	/**
+	 * This method cleans up and frees up resources.
 	 * 
 	 *
 	 */
-	public void cleanUp () throws BlockingException;
+	public void cleanUp() throws BlockingException;
 
 }

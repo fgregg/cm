@@ -102,8 +102,8 @@ public class OperationalPropertyEntity implements OperationalProperty {
 	@Override
 	public void updateValue(String s) {
 		if (s == null) {
-			throw new IllegalArgumentException("invalid property value: '"
-					+ s + "'");
+			throw new IllegalArgumentException("invalid property value: '" + s
+					+ "'");
 		}
 		if (s.trim().isEmpty()) {
 			logger.warning("Blank value for '" + name + "'");

@@ -7,8 +7,8 @@ import com.choicemaker.cm.args.ServerConfiguration;
 public interface MutableServerConfiguration extends ServerConfiguration {
 
 	/**
-	 * Assigns a name for a configuration. A configuration name must be
-	 * unique within the database used to store configuration information.
+	 * Assigns a name for a configuration. A configuration name must be unique
+	 * within the database used to store configuration information.
 	 */
 	void setConfigurationName(String name);
 

@@ -15,29 +15,30 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
  *
  * @deprecated
  */
+@Deprecated
 public class CacheObject {
 	int count;
 	Object obj;
-	
-	public CacheObject (Object o) {
+
+	public CacheObject(Object o) {
 		count = 1;
 		this.obj = o;
 	}
-	
-	public Object getObject () {
+
+	public Object getObject() {
 		return obj;
 	}
-	
-	public int getCount () {
+
+	public int getCount() {
 		return count;
 	}
-	
-	public void addCount () {
-		count ++;
+
+	public void addCount() {
+		count++;
 	}
 
-	public void subtractCount () {
-		count --;
+	public void subtractCount() {
+		count--;
 	}
 
 }

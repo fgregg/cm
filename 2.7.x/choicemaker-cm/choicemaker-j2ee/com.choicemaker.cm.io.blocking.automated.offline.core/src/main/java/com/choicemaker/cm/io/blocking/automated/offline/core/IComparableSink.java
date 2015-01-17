@@ -21,15 +21,16 @@ import com.choicemaker.cm.core.BlockingException;
 public interface IComparableSink<T extends Comparable<T>> extends ISink {
 
 	/** Writes out an Iterator containing Comparable. */
-	public void writeComparables (Iterator<T> it) throws BlockingException;
-	
+	public void writeComparables(Iterator<T> it) throws BlockingException;
+
 	/** Writes out a single Comparable object. */
-	public void writeComparable (T t) throws BlockingException;
-	
-	/** This is the underlying object on which this wrapper is built.
+	public void writeComparable(T t) throws BlockingException;
+
+	/**
+	 * This is the underlying object on which this wrapper is built.
 	 * 
 	 * @return Object
 	 */
-	public Object getBaseObject ();
+	public Object getBaseObject();
 
 }

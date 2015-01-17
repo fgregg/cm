@@ -23,100 +23,109 @@ import com.choicemaker.util.IntArrayList;
 /**
  * @author pcheung
  *
- * This object hides the detail list of oversized sinks from rest of the program and treats them as one.
- * It breaks the oversized blocks into files with the same max column number.
+ *         This object hides the detail list of oversized sinks from rest of the
+ *         program and treats them as one. It breaks the oversized blocks into
+ *         files with the same max column number.
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class OversizedGroup implements IOversizedGroup {
 
 	int numColumn;
 	IBlockSinkSourceFactory bFactory;
 	ArrayList sinks;
 
-
-	public OversizedGroup (int numColumn, IBlockSinkSourceFactory bFactory) throws BlockingException {
+	public OversizedGroup(int numColumn, IBlockSinkSourceFactory bFactory)
+			throws BlockingException {
 		this.numColumn = numColumn;
 		this.bFactory = bFactory;
 
-		sinks = new ArrayList (numColumn);
+		sinks = new ArrayList(numColumn);
 
-		for (int i=0; i<numColumn; i++) {
+		for (int i = 0; i < numColumn; i++) {
 			IBlockSink sink = bFactory.getNextSink();
 			sinks.add(sink);
 		}
 	}
 
-
-	/** This method finds the maximum column id of the block set.
+	/**
+	 * This method finds the maximum column id of the block set.
 	 *
 	 * @param bs
 	 * @return
 	 */
-	private int findMax (BlockSet bs) {
+	private int findMax(BlockSet bs) {
 		IntArrayList columns = bs.getColumns();
 		// 2014-04-24 rphall: Commented out unused local variable.
-//		int s = columns.size();
+		// int s = columns.size();
 
-		//columns are sorted so just return the last one.
+		// columns are sorted so just return the last one.
 		return columns.get(columns.size() - 1);
 	}
 
-
+	@Override
 	public void writeBlock(BlockSet bs) throws BlockingException {
 		IBlockSink sink = (IBlockSink) sinks.get(findMax(bs));
 		sink.writeBlock(bs);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IOversizedGroup#IBlockSource(int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IOversizedGroup
+	 * #IBlockSource(int)
 	 */
-	public IBlockSource getSource (int maxColumn) throws BlockingException {
+	@Override
+	public IBlockSource getSource(int maxColumn) throws BlockingException {
 		return bFactory.getSource((IBlockSink) sinks.get(maxColumn));
 	}
 
-
-	/* Initializes and opens all the sinks
+	/*
+	 * Initializes and opens all the sinks
 	 */
+	@Override
 	public void openAllSinks() throws BlockingException {
-		for (int i=0; i<numColumn; i++) {
+		for (int i = 0; i < numColumn; i++) {
 			IBlockSink sink = (IBlockSink) sinks.get(i);
 			sink.open();
-//			System.out.println ("Open " + sink.getInfo());
+			// System.out.println ("Open " + sink.getInfo());
 		}
 
 	}
 
-
-	/* Initializes and opens all the sinks for append
+	/*
+	 * Initializes and opens all the sinks for append
 	 */
+	@Override
 	public void appendAllSinks() throws BlockingException {
-		for (int i=0; i<numColumn; i++) {
+		for (int i = 0; i < numColumn; i++) {
 			IBlockSink sink = (IBlockSink) sinks.get(i);
 			sink.append();
-//			System.out.println ("Append " + sink.getInfo());
+			// System.out.println ("Append " + sink.getInfo());
 		}
 
 	}
 
-
-	/* closes all the sinks
+	/*
+	 * closes all the sinks
 	 */
+	@Override
 	public void closeAllSinks() throws BlockingException {
-		for (int i=0; i<numColumn; i++) {
+		for (int i = 0; i < numColumn; i++) {
 			IBlockSink sink = (IBlockSink) sinks.get(i);
 			sink.close();
 		}
 	}
 
-
-
-	public void cleanUp () throws BlockingException {
-		for (int i=0; i<numColumn; i++) {
+	@Override
+	public void cleanUp() throws BlockingException {
+		for (int i = 0; i < numColumn; i++) {
 			IBlockSink sink = (IBlockSink) sinks.get(i);
 			bFactory.removeSink(sink);
 
-//			System.out.println ("Remove " + sink.getInfo());
+			// System.out.println ("Remove " + sink.getInfo());
 		}
 
 	}

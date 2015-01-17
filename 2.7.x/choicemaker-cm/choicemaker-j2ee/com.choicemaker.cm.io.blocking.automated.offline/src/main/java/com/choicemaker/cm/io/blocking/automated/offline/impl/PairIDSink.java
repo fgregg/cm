@@ -33,9 +33,14 @@ public class PairIDSink extends BaseFileSink implements IPairIDSink {
 		super(fileName, type);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSink#writePair(com.choicemaker.cm.io.blocking.automated.offline.core.PairID)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IPairIDSink#writePair
+	 * (com.choicemaker.cm.io.blocking.automated.offline.core.PairID)
 	 */
+	@Override
 	public void writePair(PairID p) throws BlockingException {
 		try {
 			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
@@ -47,11 +52,11 @@ public class PairIDSink extends BaseFileSink implements IPairIDSink {
 				fw.write(Long.toString(p.getID2()));
 				fw.write(Constants.LINE_SEPARATOR);
 			}
-			count ++;
+			count++;
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
-		
+
 	}
 
 }

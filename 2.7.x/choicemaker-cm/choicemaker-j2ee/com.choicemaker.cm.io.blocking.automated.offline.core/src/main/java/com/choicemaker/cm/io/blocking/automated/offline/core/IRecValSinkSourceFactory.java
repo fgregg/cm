@@ -12,74 +12,77 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import com.choicemaker.cm.core.BlockingException;
 
-
 /**
- * This object contains methods to create and remove IRecValSink and IRecValSource.
+ * This object contains methods to create and remove IRecValSink and
+ * IRecValSource.
  * 
  * @author pcheung
  *
  */
 public interface IRecValSinkSourceFactory {
 
-	/** This gets the next IRevValSink.
+	/**
+	 * This gets the next IRevValSink.
 	 * 
 	 * @return IRecValSink - the next sink.
 	 * @throws BlockingException
 	 */
-	public IRecValSink getNextSink () throws BlockingException;
-	
-	
-	/** This gets the next IRevValSource.
+	public IRecValSink getNextSink() throws BlockingException;
+
+	/**
+	 * This gets the next IRevValSource.
 	 * 
 	 * @return IRecValSource - the next source
 	 * @throws BlockingException
 	 */
-	public IRecValSource getNextSource () throws BlockingException;
-	
-	/** This gets the number of sinks created.
+	public IRecValSource getNextSource() throws BlockingException;
+
+	/**
+	 * This gets the number of sinks created.
 	 * 
 	 * @return int - the number of sinks created
 	 */
-	public int getNumSink ();
-	
-	/** This gets the number of sources created.
+	public int getNumSink();
+
+	/**
+	 * This gets the number of sources created.
 	 * 
 	 * @return int - the number of sources created
 	 */
-	public int getNumSource ();
+	public int getNumSource();
 
-
-	/** This removes the given sink.
+	/**
+	 * This removes the given sink.
 	 * 
 	 * @param sink
 	 * @throws BlockingException
 	 */
-	public void removeSink (IRecValSink sink) throws BlockingException;
+	public void removeSink(IRecValSink sink) throws BlockingException;
 
-
-	/** This removes the given source.
+	/**
+	 * This removes the given source.
 	 * 
 	 * @param source
 	 * @throws BlockingException
 	 */
-	public void removeSource (IRecValSource source) throws BlockingException;
-	
-	
-	/** This creates a IRecValSource from the given sink.
+	public void removeSource(IRecValSource source) throws BlockingException;
+
+	/**
+	 * This creates a IRecValSource from the given sink.
 	 * 
 	 * @param sink
 	 * @return IRecValSource - the source created from the given sink.
 	 * @throws BlockingException
 	 */
-	public IRecValSource getSource (IRecValSink sink) throws BlockingException;
-	
+	public IRecValSource getSource(IRecValSink sink) throws BlockingException;
 
-	/** This creates a IRecValSink from the given source.
+	/**
+	 * This creates a IRecValSink from the given source.
 	 * 
 	 * @param source
 	 * @return IRecValSink - the source created from the given source.
 	 * @throws BlockingException
 	 */
-	public IRecValSink getSink (IRecValSource source) throws BlockingException;
+	public IRecValSink getSink(IRecValSource source) throws BlockingException;
 
 }

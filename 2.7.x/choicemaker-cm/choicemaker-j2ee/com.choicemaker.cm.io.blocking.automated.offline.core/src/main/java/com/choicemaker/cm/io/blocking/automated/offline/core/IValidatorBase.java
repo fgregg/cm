@@ -19,7 +19,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 public interface IValidatorBase {
 
 	/** This returns true if this is a valid BlockSet. */
-	public boolean validBlockSet (BlockSet bs);
-
+	public boolean validBlockSet(BlockSet bs);
 
 }

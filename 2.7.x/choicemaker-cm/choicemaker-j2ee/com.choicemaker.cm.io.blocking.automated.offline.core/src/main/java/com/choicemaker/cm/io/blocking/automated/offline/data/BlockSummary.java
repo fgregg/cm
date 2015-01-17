@@ -18,23 +18,27 @@ package com.choicemaker.cm.io.blocking.automated.offline.data;
  * @author pcheung
  *
  */
+@Deprecated
 public class BlockSummary {
-	
-	public int count; //number of entries in a block
-	public long sum; //sum of the record ID's in a block
 
-	public int hashCode () {
-		return (int)(sum ^(sum>>>32) ^ count );
+	public int count; // number of entries in a block
+	public long sum; // sum of the record ID's in a block
+
+	@Override
+	public int hashCode() {
+		return (int) (sum ^ (sum >>> 32) ^ count);
 	}
 
-	public boolean equals (Object o) {
+	@Override
+	public boolean equals(Object o) {
 		boolean ret = false;
-		
+
 		if (o.getClass() == BlockSummary.class) {
 			BlockSummary p = (BlockSummary) o;
-			if ((count == p.count) && (sum == p.sum)) ret = true;
+			if ((count == p.count) && (sum == p.sum))
+				ret = true;
 		}
-		
+
 		return ret;
 	}
 }

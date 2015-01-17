@@ -10,7 +10,7 @@ public interface RecordIdTranslation<T extends Comparable<T>> extends
 
 	/** Translated identifiers are non-negative */
 	int INVALID_TRANSLATED_ID = -1;
-	
+
 	/** Persistence id */
 	long getId();
 

@@ -136,15 +136,13 @@ public class Chunk2MDB extends AbstractOabaMDB {
 
 		final int numChunks = chunkService.getNumChunks();
 		log.info("Number of chunks " + numChunks);
-		getPropertyController().setJobProperty(oabaJob,
-				PN_CHUNK_FILE_COUNT,
+		getPropertyController().setJobProperty(oabaJob, PN_CHUNK_FILE_COUNT,
 				String.valueOf(numChunks));
 
 		final int numRegularChunks = chunkService.getNumRegularChunks();
 		log.info("Number of regular chunks " + numRegularChunks);
 		getPropertyController().setJobProperty(oabaJob,
-				PN_REGULAR_CHUNK_FILE_COUNT,
-				String.valueOf(numChunks));
+				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numChunks));
 	}
 
 	@Override

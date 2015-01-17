@@ -13,8 +13,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.impl;
 import java.io.Serializable;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
-import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IValidatorBase;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.util.LongArrayList;
 
 /**
@@ -49,6 +49,7 @@ public class ValidatorBase implements IValidatorBase, Serializable {
 	 * "master" source. If so, return false. A valid blocking set need to be
 	 * consisted of at least 1 staging record.
 	 */
+	@Override
 	public boolean validBlockSet(BlockSet bs) {
 		long min = Long.MAX_VALUE;
 		long max = Long.MIN_VALUE;

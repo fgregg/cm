@@ -53,9 +53,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
- * Common functionality of {@link MatcherScheduler2} and {@link TransMatchScheduler}.
+ * Common functionality of {@link MatcherScheduler2} and
+ * {@link TransMatchScheduler}.
  */
-public abstract class AbstractScheduler implements MessageListener, Serializable {
+public abstract class AbstractScheduler implements MessageListener,
+		Serializable {
 
 	private static final long serialVersionUID = 271L;
 
@@ -63,19 +65,19 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	protected static final String DELIM = "|";
 
 	protected abstract Logger getLogger();
-	
+
 	protected abstract Logger getJMSTrace();
-	
+
 	protected abstract OabaJobControllerBean getJobController();
-	
+
 	protected abstract OabaParametersControllerBean getParametersController();
-	
+
 	protected abstract OabaProcessingController getProcessingController();
-	
+
 	protected abstract ServerConfigurationController getServerController();
-	
+
 	protected abstract OabaSettingsController getSettingsController();
-	
+
 	protected abstract OperationalPropertyController getPropertyController();
 
 	protected RecordSource[] stageRS = null;
@@ -111,8 +113,10 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	// maxchunk
 	protected int maxChunkSize;
 
+	@Override
 	public void onMessage(Message inMessage) {
-		getJMSTrace().info("Entering onMessage for " + this.getClass().getName());
+		getJMSTrace().info(
+				"Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		OabaJob oabaJob = null;
 
@@ -130,19 +134,26 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 					OabaParameters params =
 						getParametersController().findBatchParamsByJobId(jobId);
 					OabaSettings oabaSettings =
-							getSettingsController().findOabaSettingsByJobId(jobId);
-					ServerConfiguration serverConfig = getServerController().findServerConfigurationByJobId(jobId);
-					if (oabaJob == null || params == null || oabaSettings == null || serverConfig == null) {
-						String s = "Unable to find a job, parameters, settings or server configuration for " + jobId;
+						getSettingsController().findOabaSettingsByJobId(jobId);
+					ServerConfiguration serverConfig =
+						getServerController().findServerConfigurationByJobId(
+								jobId);
+					if (oabaJob == null || params == null
+							|| oabaSettings == null || serverConfig == null) {
+						String s =
+							"Unable to find a job, parameters, settings or server configuration for "
+									+ jobId;
 						getLogger().severe(s);
 						throw new IllegalArgumentException(s);
 					}
-					final String modelConfigId = params.getModelConfigurationName();
+					final String modelConfigId =
+						params.getModelConfigurationName();
 					ImmutableProbabilityModel model =
 						PMManager.getModelInstance(modelConfigId);
 					if (model == null) {
 						String s =
-							"No modelId corresponding to '" + modelConfigId + "'";
+							"No modelId corresponding to '" + modelConfigId
+									+ "'";
 						getLogger().severe(s);
 						throw new IllegalArgumentException(s);
 					}
@@ -184,7 +195,8 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 				}
 
 			} else {
-				getLogger().warning("wrong type: " + inMessage.getClass().getName());
+				getLogger().warning(
+						"wrong type: " + inMessage.getClass().getName());
 			}
 
 		} catch (Exception e) {
@@ -192,9 +204,10 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 			if (oabaJob != null) {
 				oabaJob.markAsFailed();
 			}
-//			mdc.setRollbackOnly();
+			// mdc.setRollbackOnly();
 		}
-		getJMSTrace().info("Exiting onMessage for " + this.getClass().getName());
+		getJMSTrace()
+				.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
 	/**
@@ -219,7 +232,8 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		final long jobId = mwd.jobID;
 		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 		OabaJobMessage sd = new OabaJobMessage(mwd);
-		OabaEventLog status = getProcessingController().getProcessingLog(oabaJob);
+		OabaEventLog status =
+			getProcessingController().getProcessingLog(oabaJob);
 
 		// keeping track of messages sent and received.
 		countMessages--;
@@ -246,8 +260,11 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 			final String _latestChunkProcessed =
 				getPropertyController().getJobProperty(oabaJob,
 						PN_CHUNK_FILE_COUNT);
-			final int latestChunkProcessed = Integer.valueOf(_latestChunkProcessed);
-			getLogger().info("Chunk " + latestChunkProcessed + " tree " + mwd.treeIndex + " is done.");
+			final int latestChunkProcessed =
+				Integer.valueOf(_latestChunkProcessed);
+			getLogger().info(
+					"Chunk " + latestChunkProcessed + " tree " + mwd.treeIndex
+							+ " is done.");
 			assert latestChunkProcessed == currentChunk;
 
 			// Go on to the next chunk
@@ -278,20 +295,24 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 					// all the chunks are done
 					status.setCurrentOabaEvent(OabaEvent.DONE_MATCHING_DATA);
 
-					getLogger().info("total comparisons: " + numCompares
-							+ " total matches: " + numMatches);
+					getLogger().info(
+							"total comparisons: " + numCompares
+									+ " total matches: " + numMatches);
 					timeStart = System.currentTimeMillis() - timeStart;
 					getLogger().info("total matching time: " + timeStart);
-					getLogger().info("total reading data time: " + timeReadData);
-					getLogger().info("total garbage collection time: " + timegc);
+					getLogger()
+							.info("total reading data time: " + timeReadData);
+					getLogger()
+							.info("total garbage collection time: " + timegc);
 
 					// writing out time break downs
 					if (getLogger().isLoggable(Level.FINE)) {
 						for (int i = 0; i < numProcessors; i++) {
-							getLogger().fine("Processor " + i + " writing time: "
-									+ timeWriting[i] + " lookup time: "
-									+ inHMLookUp[i] + " compare time: "
-									+ inCompare[i]);
+							getLogger().fine(
+									"Processor " + i + " writing time: "
+											+ timeWriting[i] + " lookup time: "
+											+ inHMLookUp[i] + " compare time: "
+											+ inCompare[i]);
 						}
 					}
 
@@ -304,7 +325,8 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	/**
 	 * This method is called when all the chunks are done.
 	 */
-	protected final void nextSteps(final OabaJob job, OabaJobMessage sd) throws BlockingException {
+	protected final void nextSteps(final OabaJob job, OabaJobMessage sd)
+			throws BlockingException {
 		cleanUp(job, sd);
 		sendToUpdateStatus(job, OabaEvent.DONE_MATCHING_DATA, new Date(), null);
 		sendToMatchDebup(job, sd);
@@ -393,8 +415,9 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 	 * graphs are size 2 or 0.
 	 * 
 	 */
-	protected final void noChunk(final OabaJobMessage sd) throws XmlConfException, BlockingException,
-			NamingException, JMSException {
+	protected final void noChunk(final OabaJobMessage sd)
+			throws XmlConfException, BlockingException, NamingException,
+			JMSException {
 		final long jobId = sd.jobID;
 		OabaJob oabaJob = getJobController().findOabaJob(jobId);
 
@@ -402,7 +425,7 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		for (int i = 1; i <= numProcessors; i++) {
 			@SuppressWarnings("rawtypes")
 			IMatchRecord2Sink mSink =
-					OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(i);
+				OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(i);
 			mSink.open();
 			mSink.close();
 			getLogger().fine("creating " + mSink.getInfo());
@@ -442,8 +465,8 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 
 		// read in the data;
 		t = System.currentTimeMillis();
-		dataStore.init(stageRS[currentChunk], model, masterRS[currentChunk], maxChunkSize,
-				oabaJob);
+		dataStore.init(stageRS[currentChunk], model, masterRS[currentChunk],
+				maxChunkSize, oabaJob);
 
 		t = System.currentTimeMillis() - t;
 		this.timeReadData += t;
@@ -460,7 +483,8 @@ public abstract class AbstractScheduler implements MessageListener, Serializable
 		}
 	}
 
-	protected abstract void cleanUp(OabaJob job, OabaJobMessage sd) throws BlockingException;
+	protected abstract void cleanUp(OabaJob job, OabaJobMessage sd)
+			throws BlockingException;
 
 	protected abstract void sendToMatcher(OabaJobMessage sd);
 

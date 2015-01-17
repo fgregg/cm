@@ -38,6 +38,7 @@ public class ComparisonPair<T extends Comparable<T>> implements
 	 */
 	public boolean isStage;
 
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -56,6 +57,7 @@ public class ComparisonPair<T extends Comparable<T>> implements
 	 * @param o
 	 * @return boolean - true if the ids from both MatchRecords match.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -86,6 +88,7 @@ public class ComparisonPair<T extends Comparable<T>> implements
 	 * 
 	 * @deprecated
 	 */
+	@Deprecated
 	public boolean equals_00(ComparisonPair<T> p) {
 		boolean ret = false;
 		if (this.getId1().equals(p.getId1())
@@ -100,6 +103,7 @@ public class ComparisonPair<T extends Comparable<T>> implements
 	 * and 1 if it is greater than input o.
 	 *
 	 */
+	@Override
 	public int compareTo(ComparisonPair<T> p) {
 		int ret = 0;
 

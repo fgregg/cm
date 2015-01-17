@@ -69,8 +69,7 @@ public class ChunkDataStore {
 			throws BlockingException {
 
 		stageMap = readMap(stageSource, model, maxChunkSize + 10, control);
-		masterMap =
-			readMap(masterSource, model, maxChunkSize + 10, control);
+		masterMap = readMap(masterSource, model, maxChunkSize + 10, control);
 	}
 
 	private static Map<Object, Record> readMap(RecordSource rs,

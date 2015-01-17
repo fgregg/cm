@@ -133,15 +133,18 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 		return fileBase + "_" + fileNum + "." + fileExt;
 	}
 
+	@Override
 	public MatchRecord2<T> next() throws BlockingException {
 		count++;
 		return currentSource.next();
 	}
 
+	@Override
 	public int getCount() {
 		return count;
 	}
 
+	@Override
 	public boolean exists() {
 		if (numFiles > 0)
 			return true;
@@ -149,6 +152,7 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 			return false;
 	}
 
+	@Override
 	public void open() throws BlockingException {
 		// need to reset to the first file
 		if (currentInd > 1) {
@@ -158,6 +162,7 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 		currentSource.open();
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public boolean hasNext() throws BlockingException {
 		boolean ret = false;
@@ -181,14 +186,17 @@ public class MatchRecord2CompositeSource<T extends Comparable<T>> implements
 		return ret;
 	}
 
+	@Override
 	public void close() throws BlockingException {
 		currentSource.close();
 	}
 
+	@Override
 	public String getInfo() {
 		return info;
 	}
 
+	@Override
 	public void delete() throws BlockingException {
 		for (int i = 1; i <= numFiles; i++) {
 			MatchRecord2Source mrs =

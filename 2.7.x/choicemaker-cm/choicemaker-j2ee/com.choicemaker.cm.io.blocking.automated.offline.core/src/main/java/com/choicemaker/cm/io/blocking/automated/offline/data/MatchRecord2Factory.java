@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.data;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE.STAGING;
 import static com.choicemaker.cm.core.Decision.DIFFER;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE.STAGING;
 
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;

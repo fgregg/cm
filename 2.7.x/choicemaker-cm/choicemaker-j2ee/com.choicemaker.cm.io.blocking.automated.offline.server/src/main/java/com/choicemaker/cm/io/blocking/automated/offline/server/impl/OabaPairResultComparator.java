@@ -54,10 +54,8 @@ public class OabaPairResultComparator<T extends Comparable<T>> implements
 			if (retVal == EQUALS)
 				retVal = o1.getDecision().compareTo(o2.getDecision());
 			if (retVal == EQUALS) {
-				String notes1 =
-					MatchRecordUtils.notesToString(o1.getNotes());
-				String notes2 =
-					MatchRecordUtils.notesToString(o2.getNotes());
+				String notes1 = MatchRecordUtils.notesToString(o1.getNotes());
+				String notes2 = MatchRecordUtils.notesToString(o2.getNotes());
 				if (notes1 == null && notes2 != null) {
 					retVal = LESS_THAN;
 				}

@@ -30,7 +30,7 @@ public class DefaultServerConfigurationEntity {
 		this.hostName = null;
 		this.serverConfigurationId = -1;
 	}
-	
+
 	public DefaultServerConfigurationEntity(String hostName, long serverConfigId) {
 		if (hostName == null || hostName.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank host name");

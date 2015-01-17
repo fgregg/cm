@@ -13,14 +13,16 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 import com.choicemaker.cm.core.BlockingException;
 
 /**
- * This object is a source that get record ids.  The records id can be Integer, Long, or String.
+ * This object is a source that get record ids. The records id can be Integer,
+ * Long, or String.
  * 
  * @author pcheung
  *
  */
 public interface IRecordIdSource<T extends Comparable<T>> extends ISource<T> {
-	
-	/** This returns the object type of the record ID.  See IRecordIdSink.
+
+	/**
+	 * This returns the object type of the record ID. See IRecordIdSink.
 	 * 
 	 * @return int - Object type of record ID
 	 */

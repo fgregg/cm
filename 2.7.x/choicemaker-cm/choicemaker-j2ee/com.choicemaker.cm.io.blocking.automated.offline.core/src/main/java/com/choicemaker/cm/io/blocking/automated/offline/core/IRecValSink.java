@@ -19,9 +19,10 @@ import com.choicemaker.util.IntArrayList;
  * @author pcheung
  *
  */
-public interface IRecValSink extends ISink{
-	
+public interface IRecValSink extends ISink {
+
 	/** Writes a block to the sink. */
-	public void writeRecordValue (long recID, IntArrayList values) throws BlockingException;
-	
+	public void writeRecordValue(long recID, IntArrayList values)
+			throws BlockingException;
+
 }

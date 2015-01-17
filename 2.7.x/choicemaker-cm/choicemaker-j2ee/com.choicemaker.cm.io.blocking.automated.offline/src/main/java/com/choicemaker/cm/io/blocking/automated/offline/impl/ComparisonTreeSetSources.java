@@ -21,39 +21,54 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSour
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class ComparisonTreeSetSources implements IComparisonSetSources {
 
 	private ComparisonTreeSinkSourceFactory sFactory;
 	private IComparisonTreeSource next;
-	private ArrayList sources = new ArrayList ();
+	private ArrayList sources = new ArrayList();
 
-	public ComparisonTreeSetSources (ComparisonTreeSinkSourceFactory sFactory) {
+	public ComparisonTreeSetSources(ComparisonTreeSinkSourceFactory sFactory) {
 		this.sFactory = sFactory;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources#getNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources
+	 * #getNextSource()
 	 */
+	@Override
 	public IComparisonSetSource getNextSource() {
-		return new ComparisonTreeSetSource (next);
+		return new ComparisonTreeSetSource(next);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources#hasNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources
+	 * #hasNextSource()
 	 */
+	@Override
 	public boolean hasNextSource() throws BlockingException {
 		next = sFactory.getNextSource();
 		sources.add(next);
 		return next.exists();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources#cleanUp()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonSetSources
+	 * #cleanUp()
 	 */
+	@Override
 	public void cleanUp() throws BlockingException {
-		for (int i=0; i<sources.size(); i++) {
+		for (int i = 0; i < sources.size(); i++) {
 			next = (IComparisonTreeSource) sources.get(i);
 			next.delete();
 		}

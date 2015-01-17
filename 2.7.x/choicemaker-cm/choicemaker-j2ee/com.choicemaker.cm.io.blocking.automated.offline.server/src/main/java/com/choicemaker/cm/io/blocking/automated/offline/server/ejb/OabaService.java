@@ -55,8 +55,9 @@ public interface OabaService {
 	 *            matching is used. If set to 0, OABA is used.
 	 * @return long - id of this job
 	 */
-	public long startDeduplication(String externalID, OabaParameters batchParams,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration)
+	public long startDeduplication(String externalID,
+			OabaParameters batchParams, OabaSettings oabaSettings,
+			ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException;
 
 	/**

@@ -99,6 +99,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink
 	 * #writeMatches(java.util.ArrayList)
 	 */
+	@Override
 	public void writeMatches(List matches) throws BlockingException {
 		writeMatches(matches.iterator());
 
@@ -111,6 +112,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink
 	 * #writeMatches(java.util.Collection)
 	 */
+	@Override
 	public void writeMatches(Collection c) throws BlockingException {
 		writeMatches(c.iterator());
 	}
@@ -122,6 +124,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	 * com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink
 	 * #writeMatches(java.util.Iterator)
 	 */
+	@Override
 	public void writeMatches(Iterator it) throws BlockingException {
 		while (it.hasNext()) {
 			MatchRecord2 mr = (MatchRecord2) it.next();
@@ -137,6 +140,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	 * #writeMatch
 	 * (com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2)
 	 */
+	@Override
 	public void writeMatch(MatchRecord2 match) throws BlockingException {
 		currentFile.writeMatch(match);
 		count++;
@@ -172,6 +176,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 		}
 	}
 
+	@Override
 	public boolean exists() {
 		if (numberOfFiles > 0)
 			return true;
@@ -179,6 +184,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 			return false;
 	}
 
+	@Override
 	public void open() throws BlockingException {
 		numberOfFiles = 1;
 		currentFile =
@@ -198,6 +204,7 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 		return fileBase + "_" + fileNum + "." + fileExt;
 	}
 
+	@Override
 	public void append() throws BlockingException {
 		numberOfFiles = 1;
 		currentFile =
@@ -207,22 +214,27 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 		isAppend = true;
 	}
 
+	@Override
 	public void close() throws BlockingException {
 		currentFile.close();
 	}
 
+	@Override
 	public void flush() throws BlockingException {
 		currentFile.flush();
 	}
 
+	@Override
 	public int getCount() {
 		return count;
 	}
 
+	@Override
 	public String getInfo() {
 		return fileBase + "." + fileExt;
 	}
 
+	@Override
 	public void remove() throws BlockingException {
 		for (int i = 1; i <= numberOfFiles; i++) {
 			MatchRecord2Sink mrs =

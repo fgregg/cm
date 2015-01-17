@@ -22,8 +22,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySou
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
-public class ComparisonArraySinkSourceFactory implements IComparisonArraySinkSourceFactory {
+@SuppressWarnings({ "rawtypes" })
+public class ComparisonArraySinkSourceFactory implements
+		IComparisonArraySinkSourceFactory {
 
 	private String fileDir;
 	private String nameBase;
@@ -31,8 +32,9 @@ public class ComparisonArraySinkSourceFactory implements IComparisonArraySinkSou
 	private int indSink = 0;
 	private int indSource = 0;
 
-
-	/** This constructor takes in key parameters to create RecordIDSink or RecordIDSource files as follows:
+	/**
+	 * This constructor takes in key parameters to create RecordIDSink or
+	 * RecordIDSource files as follows:
 	 * 
 	 * fileDir + nameBase + ind + "." + ext
 	 * 
@@ -40,67 +42,116 @@ public class ComparisonArraySinkSourceFactory implements IComparisonArraySinkSou
 	 * @param nameBase
 	 * @param ext
 	 */
-	public ComparisonArraySinkSourceFactory (String fileDir, String nameBase, String ext) {
+	public ComparisonArraySinkSourceFactory(String fileDir, String nameBase,
+			String ext) {
 		this.fileDir = fileDir;
 		this.nameBase = nameBase;
 		this.ext = ext;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#getNextSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonGroupSinkSourceFactory#getNextSink()
 	 */
+	@Override
 	public IComparisonArraySink getNextSink() throws BlockingException {
-		indSink ++;
-		return new ComparisonArraySink (fileDir + nameBase + indSink + "." + ext, EXTERNAL_DATA_FORMAT.STRING);
+		indSink++;
+		return new ComparisonArraySink(
+				fileDir + nameBase + indSink + "." + ext,
+				EXTERNAL_DATA_FORMAT.STRING);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#getNextSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonGroupSinkSourceFactory#getNextSource()
 	 */
+	@Override
 	public IComparisonArraySource getNextSource() throws BlockingException {
-		indSource ++;
-		return new ComparisonArraySource (fileDir + nameBase + indSource + "." + ext, EXTERNAL_DATA_FORMAT.STRING);
+		indSource++;
+		return new ComparisonArraySource(fileDir + nameBase + indSource + "."
+				+ ext, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#getNumSink()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonGroupSinkSourceFactory#getNumSink()
 	 */
+	@Override
 	public int getNumSink() {
 		return indSink;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#getNumSource()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonGroupSinkSourceFactory#getNumSource()
 	 */
+	@Override
 	public int getNumSource() {
 		return indSource;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#getSource(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonGroupSinkSourceFactory
+	 * #getSource(com.choicemaker.cm.io.blocking
+	 * .automated.offline.core.IComparisonGroupSink)
 	 */
-	public IComparisonArraySource getSource(IComparisonArraySink sink) throws BlockingException {
-			return new ComparisonArraySource (sink.getInfo(), EXTERNAL_DATA_FORMAT.BINARY);
+	@Override
+	public IComparisonArraySource getSource(IComparisonArraySink sink)
+			throws BlockingException {
+		return new ComparisonArraySource(sink.getInfo(),
+				EXTERNAL_DATA_FORMAT.BINARY);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#getSink(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSource)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonGroupSinkSourceFactory
+	 * #getSink(com.choicemaker.cm.io.blocking.automated
+	 * .offline.core.IComparisonGroupSource)
 	 */
-	public IComparisonArraySink getSink(IComparisonArraySource source) throws BlockingException {
-		return new ComparisonArraySink (source.getInfo(), EXTERNAL_DATA_FORMAT.BINARY);
+	@Override
+	public IComparisonArraySink getSink(IComparisonArraySource source)
+			throws BlockingException {
+		return new ComparisonArraySink(source.getInfo(),
+				EXTERNAL_DATA_FORMAT.BINARY);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#removeSink(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSink)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonGroupSinkSourceFactory
+	 * #removeSink(com.choicemaker.cm.io.blocking
+	 * .automated.offline.core.IComparisonGroupSink)
 	 */
+	@Override
 	public void removeSink(IComparisonArraySink sink) throws BlockingException {
-			sink.remove();
+		sink.remove();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSinkSourceFactory#removeSource(com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonGroupSource)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.
+	 * IComparisonGroupSinkSourceFactory
+	 * #removeSource(com.choicemaker.cm.io.blocking
+	 * .automated.offline.core.IComparisonGroupSource)
 	 */
-	public void removeSource(IComparisonArraySource source) throws BlockingException {
+	@Override
+	public void removeSource(IComparisonArraySource source)
+			throws BlockingException {
 		source.delete();
 	}
 

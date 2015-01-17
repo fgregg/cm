@@ -160,8 +160,8 @@ public class ImmutableRecordIdTranslatorImpl implements
 	public RECORD_ID_TYPE getRecordIdType() {
 		if (recordIdType == null) {
 			if (ids1_To_Indices.isEmpty() && this.indices_To_Ids1.isEmpty()
-					&& this.ids2_To_Indices.isEmpty() && this.indices_To_Ids2
-						.isEmpty()) {
+					&& this.ids2_To_Indices.isEmpty()
+					&& this.indices_To_Ids2.isEmpty()) {
 				log.warning("Record-id translator has no data");
 			} else {
 				throw new IllegalStateException("null record-id type");

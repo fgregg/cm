@@ -27,6 +27,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
@@ -62,7 +63,8 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 		Query query =
 			em.createNamedQuery(OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_BY_JOBID);
 		query.setParameter(
-				OabaProcessingEventJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID, id);
+				OabaProcessingEventJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID,
+				id);
 		@SuppressWarnings("unchecked")
 		List<OabaProcessingEventEntity> entries = query.getResultList();
 		return entries;
@@ -73,7 +75,7 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
-		if (job == null || !OabaJobEntity.isPersistent(job)) {
+		if (job == null || !BatchJobEntity.isPersistent(job)) {
 			throw new IllegalArgumentException("invalid OABA job");
 		}
 		if (event == null) {
@@ -187,7 +189,8 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 	private Topic oabaStatusTopic;
 
 	@Override
-	public List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(long id) {
+	public List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(
+			long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 

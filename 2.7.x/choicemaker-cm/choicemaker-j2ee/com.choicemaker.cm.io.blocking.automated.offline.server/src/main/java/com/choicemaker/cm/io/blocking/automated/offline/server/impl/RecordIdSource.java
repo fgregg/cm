@@ -24,7 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.BaseFileSource;
  * @author pcheung
  *
  */
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({ "unchecked" })
 public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 		implements IRecordIdSource<T> {
 
@@ -32,91 +32,88 @@ public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 	protected T nextID;
 	private boolean isFirst = true;
 
-	@Deprecated
-	public RecordIdSource(String fileName, int type) {
-		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
-	}
-
 	public RecordIdSource(String fileName, EXTERNAL_DATA_FORMAT type) {
 		super(fileName, type);
 	}
 
+	@Override
 	public T next() {
 		if (this.nextID == null) {
 			try {
 				this.nextID = readNext();
 			} catch (EOFException x) {
-				throw new NoSuchElementException(
-					"EOFException: " + x.getMessage());
+				throw new NoSuchElementException("EOFException: "
+						+ x.getMessage());
 			} catch (IOException x) {
-				throw new NoSuchElementException(
-					"BlockingException: " + x.getMessage());
+				throw new NoSuchElementException("BlockingException: "
+						+ x.getMessage());
 			}
 		}
 		T retVal = this.nextID;
-		count ++;
-		
+		count++;
+
 		this.nextID = null;
 
 		return retVal;
 	}
-	
-	
-	private T readNext () throws EOFException, IOException {
+
+	private T readNext() throws EOFException, IOException {
 		T ret = null;
-		
+
 		if (type == EXTERNAL_DATA_FORMAT.STRING) {
 			String str;
-				
+
 			if (isFirst) {
 				str = br.readLine();
-				if (str != null && !str.equals("")) 
+				if (str != null && !str.equals(""))
 					dataType = RECORD_ID_TYPE.fromSymbol(Integer.parseInt(str));
 				isFirst = false;
 			}
-		
+
 			str = br.readLine();
-				
+
 			if (str != null && !str.equals("")) {
 				if (dataType == RECORD_ID_TYPE.TYPE_INTEGER) {
-					ret = (T) new Integer (str);
+					ret = (T) new Integer(str);
 				} else if (dataType == RECORD_ID_TYPE.TYPE_LONG) {
-					ret = (T) new Long (str);
+					ret = (T) new Long(str);
 				} else if (dataType == RECORD_ID_TYPE.TYPE_STRING) {
 					ret = (T) str;
 				}
 			} else {
-				throw new EOFException ();
+				throw new EOFException();
 			}
-				
+
 		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
 			if (isFirst) {
 				dataType = RECORD_ID_TYPE.fromSymbol(dis.readInt());
 				isFirst = false;
 			}
-				
+
 			if (dataType == RECORD_ID_TYPE.TYPE_INTEGER) {
 				int i = dis.readInt();
-				ret = (T) new Integer (i);
+				ret = (T) new Integer(i);
 			} else if (dataType == RECORD_ID_TYPE.TYPE_LONG) {
 				long l = dis.readLong();
-				ret = (T) new Long (l);
+				ret = (T) new Long(l);
 			} else if (dataType == RECORD_ID_TYPE.TYPE_STRING) {
 				int size = dis.readInt();
 				char[] data = new char[size];
-				for (int i=0; i< size; i++) {
+				for (int i = 0; i < size; i++) {
 					data[i] = dis.readChar();
 				}
-				ret = (T) new String (data);
+				ret = (T) new String(data);
 			}
 		}
 		return ret;
 	}
 
+	@Override
 	public RECORD_ID_TYPE getRecordIDType() throws BlockingException {
 		return dataType;
 	}
 
+	@Override
 	public boolean hasNext() throws BlockingException {
 		if (this.nextID == null) {
 			try {

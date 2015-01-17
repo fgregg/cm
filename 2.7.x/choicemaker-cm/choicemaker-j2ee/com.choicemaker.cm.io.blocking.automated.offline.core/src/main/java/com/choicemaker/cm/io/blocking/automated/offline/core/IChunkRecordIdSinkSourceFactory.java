@@ -21,36 +21,40 @@ import com.choicemaker.cm.core.BlockingException;
 public interface IChunkRecordIdSinkSourceFactory {
 
 	/** Gets the next IChunkRecordIdSink in the sequence. */
-	public IChunkRecordIdSink getNextSink () throws BlockingException;
-	
+	public IChunkRecordIdSink getNextSink() throws BlockingException;
+
 	/** Gets the next IChunkRecordIdSource in the sequence. */
-	public IChunkRecordIdSource getNextSource () throws BlockingException;
-	
+	public IChunkRecordIdSource getNextSource() throws BlockingException;
+
 	/** Gets the number of sequence sinks created. */
-	public int getNumSink ();
-	
+	public int getNumSink();
+
 	/** Gets the number of sequence sources created. */
-	public int getNumSource ();
-	
+	public int getNumSource();
+
 	/** Creates an IChunkRecordIdSource for an existing IChunkRecordIdSink. */
-	public IChunkRecordIdSource getSource (IChunkRecordIdSink sink) throws BlockingException;
+	public IChunkRecordIdSource getSource(IChunkRecordIdSink sink)
+			throws BlockingException;
 
 	/** Creates an IChunkRecordIdSink for an existing IChunkRecordIdSource. */
-	public IChunkRecordIdSink getSink (IChunkRecordIdSource source) throws BlockingException;
+	public IChunkRecordIdSink getSink(IChunkRecordIdSource source)
+			throws BlockingException;
 
-	/** Removes this sink.
+	/**
+	 * Removes this sink.
 	 * 
 	 * @param sink
 	 * @throws BlockingException
 	 */
-	public void removeSink (IChunkRecordIdSink sink) throws BlockingException;
+	public void removeSink(IChunkRecordIdSink sink) throws BlockingException;
 
-
-	/** Removes this source.
+	/**
+	 * Removes this source.
 	 * 
 	 * @param source
 	 * @throws BlockingException
 	 */
-	public void removeSource (IChunkRecordIdSource source) throws BlockingException;
+	public void removeSource(IChunkRecordIdSource source)
+			throws BlockingException;
 
 }

@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CLEAR_RESOURCES;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -216,7 +216,7 @@ public class OabaServiceBean implements OabaService {
 			jobController.createPersistentOabaJob(externalID, batchParams,
 					oabaSettings, serverConfiguration);
 		final long retVal = oabaJob.getId();
-		assert OabaJobEntity.INVALID_ID != retVal;
+		assert BatchJob.INVALID_ID != retVal;
 
 		// Mark the job as queued and start processing by the StartOabaMDB EJB
 		oabaJob.markAsQueued();
@@ -226,10 +226,12 @@ public class OabaServiceBean implements OabaService {
 		return retVal;
 	}
 
+	@Override
 	public int abortJob(long jobID) {
 		return abortBatch(jobID, true);
 	}
 
+	@Override
 	public int suspendJob(long jobID) {
 		return abortBatch(jobID, false);
 	}
@@ -253,16 +255,19 @@ public class OabaServiceBean implements OabaService {
 		return 0;
 	}
 
+	@Override
 	public OabaJob getOabaJob(long jobId) {
 		OabaJob oabaJob = jobController.findOabaJob(jobId);
 		return oabaJob;
 	}
 
+	@Override
 	public String checkStatus(long jobID) {
 		BatchJob oabaJob = jobController.findOabaJob(jobID);
 		return oabaJob.getStatus().name();
 	}
 
+	@Override
 	public boolean removeDir(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
 		OabaJob job = jobController.findOabaJob(jobID);
@@ -276,6 +281,7 @@ public class OabaServiceBean implements OabaService {
 	 *            - job id of the job you want to resume
 	 * @return int = 1 if OK, or -1 if failed
 	 */
+	@Override
 	public int resumeJob(long jobID) {
 
 		OabaJob job = jobController.findOabaJob(jobID);
@@ -283,7 +289,7 @@ public class OabaServiceBean implements OabaService {
 		final String _clearResources =
 			propController.getJobProperty(job, PN_CLEAR_RESOURCES);
 		boolean clearResources = Boolean.valueOf(_clearResources);
-		
+
 		boolean isCompleted = job.getStarted().equals(BatchJobStatus.COMPLETED);
 
 		int ret;
@@ -313,6 +319,7 @@ public class OabaServiceBean implements OabaService {
 	 * @throws JMSException
 	 * @throws FinderException
 	 */
+	@Override
 	public MatchListSource getMatchList(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
 
@@ -337,6 +344,7 @@ public class OabaServiceBean implements OabaService {
 		return mls;
 	}
 
+	@Override
 	public IMatchRecord2Source getMatchRecordSource(long jobID)
 			throws RemoteException, CreateException, NamingException,
 			JMSException, FinderException {

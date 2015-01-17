@@ -39,8 +39,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
 				query = JPQL_OABAPROCESSING_FIND_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class OabaProcessingEventEntity extends BatchProcessingLogEntry implements
-		OabaProcessingEvent {
+public class OabaProcessingEventEntity extends BatchProcessingLogEntry
+		implements OabaProcessingEvent {
 
 	private static final long serialVersionUID = 271L;
 
@@ -56,8 +56,8 @@ public class OabaProcessingEventEntity extends BatchProcessingLogEntry implement
 	}
 
 	public OabaProcessingEventEntity(BatchJob job, OabaEvent event, String info) {
-		super(job.getId(), OabaProcessingEventJPA.DISCRIMINATOR_VALUE, event.name(),
-				event.eventId, event.percentComplete, info);
+		super(job.getId(), OabaProcessingEventJPA.DISCRIMINATOR_VALUE, event
+				.name(), event.eventId, event.percentComplete, info);
 	}
 
 	@Override

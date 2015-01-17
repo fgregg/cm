@@ -116,7 +116,8 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	protected String createRecordCountQuery(OabaJob job) {
 		final long jobId = job.getId();
 		StringBuffer b = new StringBuffer();
-		b.append("SELECT COUNT(*) ").append(RecordIdTranslationJPA.CN_RECORD_TYPE);
+		b.append("SELECT COUNT(*) ").append(
+				RecordIdTranslationJPA.CN_RECORD_TYPE);
 		b.append(" FROM ").append(RecordIdTranslationJPA.TABLE_NAME);
 		b.append(" WHERE ").append(RecordIdTranslationJPA.CN_JOB_ID);
 		b.append(" = ").append(jobId);

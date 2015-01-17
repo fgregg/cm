@@ -27,89 +27,131 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.PairID;
 public class ComparablePairSink implements IComparableSink {
 
 	private IPairIDSink sink;
-	
-	public ComparablePairSink (IPairIDSink sink) {
+
+	public ComparablePairSink(IPairIDSink sink) {
 		this.sink = sink;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink#writeComparables(java.util.Iterator)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink
+	 * #writeComparables(java.util.Iterator)
 	 */
+	@Override
 	public void writeComparables(Iterator it) throws BlockingException {
 		while (it.hasNext()) {
-			writeComparable ((Comparable) it.next());
+			writeComparable((Comparable) it.next());
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink#writeComparable(java.lang.Comparable)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink
+	 * #writeComparable(java.lang.Comparable)
 	 */
+	@Override
 	public void writeComparable(Comparable C) throws BlockingException {
-		if (C instanceof PairID) sink.writePair((PairID)C);
-		else throw new BlockingException ("Invalid class " + C.getClass());
+		if (C instanceof PairID)
+			sink.writePair((PairID) C);
+		else
+			throw new BlockingException("Invalid class " + C.getClass());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink#getBaseObject()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink
+	 * #getBaseObject()
 	 */
+	@Override
 	public Object getBaseObject() {
 		return sink;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#exists()
 	 */
+	@Override
 	public boolean exists() {
 		return sink.exists();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#open()
 	 */
+	@Override
 	public void open() throws BlockingException {
 		sink.open();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#append()
 	 */
+	@Override
 	public void append() throws BlockingException {
 		sink.append();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#close()
 	 */
+	@Override
 	public void close() throws BlockingException {
 		sink.close();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getCount()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getCount()
 	 */
+	@Override
 	public int getCount() {
 		return sink.getCount();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getInfo()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.choicemaker.cm.io.blocking.automated.offline.core.ISink#getInfo()
 	 */
+	@Override
 	public String getInfo() {
 		return sink.getInfo();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#remove()
 	 */
+	@Override
 	public void remove() throws BlockingException {
 		sink.remove();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.ISink#flush()
 	 */
+	@Override
 	public void flush() throws BlockingException {
 	}
-	
+
 }

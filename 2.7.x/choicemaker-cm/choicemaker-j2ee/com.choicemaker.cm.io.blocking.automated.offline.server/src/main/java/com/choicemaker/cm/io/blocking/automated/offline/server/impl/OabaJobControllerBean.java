@@ -70,7 +70,7 @@ public class OabaJobControllerBean {
 			if (oabaJob instanceof OabaJobEntity) {
 				retVal = (OabaJobEntity) oabaJob;
 			} else {
-				if (OabaJobEntity.isPersistent(oabaJob)) {
+				if (BatchJobEntity.isPersistent(oabaJob)) {
 					retVal = em.find(OabaJobEntity.class, jobId);
 					if (retVal == null) {
 						String msg =
@@ -103,7 +103,7 @@ public class OabaJobControllerBean {
 		OabaJobEntity retVal =
 			new OabaJobEntity(params, settings, sc, externalID);
 		em.persist(retVal);
-		assert OabaJobEntity.isPersistent(retVal);
+		assert BatchJobEntity.isPersistent(retVal);
 
 		// Create a new entry in the processing log and check it
 		OabaProcessingControllerBean.updateStatusWithNotification(em,

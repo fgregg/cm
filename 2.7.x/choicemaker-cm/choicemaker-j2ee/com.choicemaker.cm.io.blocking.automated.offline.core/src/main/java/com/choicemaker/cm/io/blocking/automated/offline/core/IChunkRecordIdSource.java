@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-
 /**
  * This interface handles reading recordIDs that belong in a chunk.
  * 

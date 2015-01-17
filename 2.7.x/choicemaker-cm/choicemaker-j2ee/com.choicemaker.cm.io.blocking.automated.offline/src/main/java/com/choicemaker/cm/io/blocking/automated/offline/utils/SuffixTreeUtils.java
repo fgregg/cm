@@ -22,20 +22,24 @@ import com.choicemaker.util.LongArrayList;
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class SuffixTreeUtils {
 
-	/** This methods adds recordIds to the suffix tree.  This DOES NOT check if recordIds is already
-	 * subsumed in the tree.  The calling code must check for that.
+	/**
+	 * This methods adds recordIds to the suffix tree. This DOES NOT check if
+	 * recordIds is already subsumed in the tree. The calling code must check
+	 * for that.
 	 * 
 	 * @param root
 	 * @param recordIds
 	 * @param blockSetId
 	 */
-	public static void addBlockSet(SuffixTreeNode root, LongArrayList recordIds, int blockSetId) {
+	public static void addBlockSet(SuffixTreeNode root,
+			LongArrayList recordIds, int blockSetId) {
 		SuffixTreeNode cur = root;
 
-		int last = recordIds.size () - 1;
+		int last = recordIds.size() - 1;
 		for (int i = 0; i < last; i++) {
 			long recordId = recordIds.get(i);
 			SuffixTreeNode child = cur.getChild(recordId);
@@ -44,81 +48,82 @@ public class SuffixTreeUtils {
 			}
 			cur = child;
 		}
-		
+
 		// the leaf node.
 		cur.putChild(recordIds.get(last), blockSetId);
 	}
 
-
-	/** This method returns the number of descendants of this node that are leaves.
+	/**
+	 * This method returns the number of descendants of this node that are
+	 * leaves.
 	 * 
 	 * @param root
 	 * @return
 	 */
-	public static int countLeaves (SuffixTreeNode node) {
-		if (node.hasBlockingSetId()) return 1;
+	public static int countLeaves(SuffixTreeNode node) {
+		if (node.hasBlockingSetId())
+			return 1;
 		else {
 			int ret = 0;
-			
+
 			if (node.getNumKids() > 0) {
 				List children = node.getAllChildren();
-				for (int i=0; i<children.size(); i++) {
-					ret += countLeaves ((SuffixTreeNode) children.get(i));
+				for (int i = 0; i < children.size(); i++) {
+					ret += countLeaves((SuffixTreeNode) children.get(i));
 				}
 			}
-			
+
 			return ret;
 		}
 	}
-	
-	
-	/** This method takes a suffix tree and returns a list of all possible pair comparisons.
-	 * For example, if the tree is [1 [2 [3] [4]]], then the possible comparisons are:
-	 * (1,2), (1,3), (2,3), (1,4), (2,4)
+
+	/**
+	 * This method takes a suffix tree and returns a list of all possible pair
+	 * comparisons. For example, if the tree is [1 [2 [3] [4]]], then the
+	 * possible comparisons are: (1,2), (1,3), (2,3), (1,4), (2,4)
 	 * 
 	 * The input is a root node with id = -1 and 1 child.
 	 * 
 	 * @param root
 	 * @return
 	 */
-	public static ArrayList<PairID> getPairs (SuffixTreeNode root) {
+	public static ArrayList<PairID> getPairs(SuffixTreeNode root) {
 		ArrayList<PairID> pairs = new ArrayList<>();
-		
-		//there should only be one node
-		SuffixTreeNode kid = (SuffixTreeNode) root.getAllChildren().get(0);
-		
-		Stack stack = new Stack ();
+
+		// there should only be one node
+		SuffixTreeNode kid = root.getAllChildren().get(0);
+
+		Stack stack = new Stack();
 		getCompares(kid, stack, pairs);
-		
+
 		return pairs;
 	}
-
 
 	private static void getCompares(SuffixTreeNode node, Stack stack,
 			ArrayList<PairID> pairs) {
 		if (!stack.empty()) {
-			//compare this to everything in the stack
-			for (int i=0; i<stack.size(); i++) {
+			// compare this to everything in the stack
+			for (int i = 0; i < stack.size(); i++) {
 				long id1 = ((Long) stack.get(i)).longValue();
 				long id2 = node.getRecordId();
-				PairID p = new PairID (id1, id2);
+				PairID p = new PairID(id1, id2);
 				pairs.add(p);
 			}
 		}
-		
-		//push this onto the stack
-		stack.push(new Long (node.getRecordId()));
 
-		//compare all the children		
+		// push this onto the stack
+		stack.push(new Long(node.getRecordId()));
+
+		// compare all the children
 		if (node.getNumKids() > 0) {
 			List children = node.getAllChildren();
-			for (int i=0; i<children.size(); i++) {
+			for (int i = 0; i < children.size(); i++) {
 				SuffixTreeNode kid = (SuffixTreeNode) children.get(i);
 				getCompares(kid, stack, pairs);
 			}
 		}
-			
-		//pop the stack since this is done
+
+		// pop the stack since this is done
 		stack.pop();
 	}
 

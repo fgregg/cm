@@ -68,8 +68,8 @@ public interface OabaPairResultJPA {
 				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
-	 * Name of the query that finds all persistent, abstract pair entries
-	 * for a particular OABA job (should be none)
+	 * Name of the query that finds all persistent, abstract pair entries for a
+	 * particular OABA job (should be none)
 	 */
 	String QN_PAIRRESULT_FIND_BY_JOBID = "oabaPairResultAbstractFindByJobId";
 
@@ -97,10 +97,11 @@ public interface OabaPairResultJPA {
 				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
-	 * Name of the query that finds all persistent, Integer-id pair entries
-	 * for a particular OABA job
+	 * Name of the query that finds all persistent, Integer-id pair entries for
+	 * a particular OABA job
 	 */
-	String QN_PAIRRESULTINTEGER_FIND_BY_JOBID = "oabaPairResultIntegerFindByJobId";
+	String QN_PAIRRESULTINTEGER_FIND_BY_JOBID =
+		"oabaPairResultIntegerFindByJobId";
 
 	/** JPQL used to implement {@link #QN_PAIRRESULTINTEGER_FIND_BY_JOBID} */
 	String JPQL_PAIRRESULTINTEGER_FIND_BY_JOBID =
@@ -126,8 +127,8 @@ public interface OabaPairResultJPA {
 				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
-	 * Name of the query that finds all persistent, Long-id pair entries
-	 * for a particular OABA job
+	 * Name of the query that finds all persistent, Long-id pair entries for a
+	 * particular OABA job
 	 */
 	String QN_PAIRRESULTLONG_FIND_BY_JOBID = "oabaPairResultLongFindByJobId";
 
@@ -155,10 +156,11 @@ public interface OabaPairResultJPA {
 				+ "ORDER BY o.jobId, o.translatedId";
 
 	/**
-	 * Name of the query that finds all persistent, String-id pair entries
-	 * for a particular OABA job
+	 * Name of the query that finds all persistent, String-id pair entries for a
+	 * particular OABA job
 	 */
-	String QN_PAIRRESULTSTRING_FIND_BY_JOBID = "oabaPairResultStringFindByJobId";
+	String QN_PAIRRESULTSTRING_FIND_BY_JOBID =
+		"oabaPairResultStringFindByJobId";
 
 	/** JPQL used to implement {@link #QN_PAIRRESULTSTRING_FIND_BY_JOBID} */
 	String JPQL_PAIRRESULTSTRING_FIND_BY_JOBID =

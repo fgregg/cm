@@ -30,25 +30,25 @@ public interface BatchJobJPA {
 	 * @see #DISCRIMINATOR_COLUMN
 	 */
 	String CN_TYPE = DISCRIMINATOR_COLUMN;
-	
+
 	/** Optional link to predecessor batch job */
 	String CN_BPARENT_ID = "BPARENT_ID";
-	
+
 	/** Internally defined transaction id that links several related batch jobs */
 	String CN_TRANSACTION_ID = "TRANSACTION_ID";
 
 	/** Externally defined transaction id that links several related batch jobs */
 	String CN_EXTERNAL_ID = "EXTERNAL_ID";
-	
+
 	/** Required link to the id of some persistent instance of parameters */
 	String CN_PARAMS_ID = "PARAMS_ID";
 
 	/** Required link to the id of some persistent instance of settings */
 	String CN_SETTINGS_ID = "SETTINGS_ID";
-	
+
 	/** Required link to the id of some persistent server configuration */
 	String CN_SERVER_ID = "SERVER_ID";
-	
+
 	/** Optional link to an owning URM job */
 	String CN_URM_ID = "URM_ID";
 
@@ -60,7 +60,7 @@ public interface BatchJobJPA {
 
 	/** Optional job description */
 	String CN_DESCRIPTION = "DESCRIPTION";
-	
+
 	/** Absolute path to the working directory for a job */
 	String CN_WORKING_DIRECTORY = "WORKING_DIR";
 
@@ -89,7 +89,7 @@ public interface BatchJobJPA {
 	 * </ul>
 	 */
 	String CN_STATUS = "STATUS";
-	
+
 	/** Timestamp column of the audit table */
 	String CN_TIMESTAMP = "TIMESTAMP";
 

@@ -14,8 +14,9 @@ import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 
 @Stateless
-public class SqlRecordSourceControllerBean /* implements
-		RecordSourceController */ {
+public class SqlRecordSourceControllerBean /*
+											 * implements RecordSourceController
+											 */{
 
 	private static final Logger logger = Logger
 			.getLogger(SqlRecordSourceControllerBean.class.getName());
@@ -62,16 +63,16 @@ public class SqlRecordSourceControllerBean /* implements
 			// Save the specified settings to the DB
 			PersistableSqlRecordSource psrs = (PersistableSqlRecordSource) rs;
 			retVal = new SqlRecordSourceEntity(psrs);
-			assert retVal.getId() == SqlRecordSourceEntity.NONPERSISTENT_ID;
+			assert retVal.getId() == PersistableRecordSource.NONPERSISTENT_ID;
 			em.persist(retVal);
-			assert retVal.getId() != SqlRecordSourceEntity.NONPERSISTENT_ID;
+			assert retVal.getId() != PersistableRecordSource.NONPERSISTENT_ID;
 			String msg =
 				"The record source is persistent in the database with id = "
 						+ retVal.getId();
 			logger.info(msg);
 		}
 		assert retVal != null;
-		assert retVal.getId() != SqlRecordSourceEntity.NONPERSISTENT_ID;
+		assert retVal.getId() != PersistableRecordSource.NONPERSISTENT_ID;
 		return retVal;
 	}
 
