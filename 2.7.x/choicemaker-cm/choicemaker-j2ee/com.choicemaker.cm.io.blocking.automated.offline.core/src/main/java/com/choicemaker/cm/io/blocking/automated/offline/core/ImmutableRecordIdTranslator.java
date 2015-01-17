@@ -26,25 +26,7 @@ public interface ImmutableRecordIdTranslator<T extends Comparable<T>> {
 	 * Temporary hack: this method will be removed.
 	 * @deprecated
 	 */
-	public void close() throws BlockingException;
-
-	/**
-	 * Temporary hack: this method will be removed.
-	 * @deprecated
-	 */
 	public void cleanUp() throws BlockingException;
-
-	/**
-	 * Temporary hack: this method will be removed.
-	 * @deprecated
-	 */
-	public void recover() throws BlockingException;
-
-	/**
-	 * Temporary hack: this method will be removed.
-	 * @deprecated
-	 */
-	public void initReverseTranslation() throws BlockingException;
 
 	/** Returned from {@link #lookup(Comparable) lookup} if no internal index exists */
 	public int INVALID_INDEX = -1;
@@ -95,7 +77,6 @@ public interface ImmutableRecordIdTranslator<T extends Comparable<T>> {
 	 * 
 	 * @return Comparable<?> - the original record ID associated with this
 	 *         internal ID.
-	 * @deprecated
 	 */
 	public Comparable<?> reverseLookup(int internalID);
 

@@ -34,7 +34,6 @@ public abstract class BaseFileSink implements ISink {
 	protected int count = 0;
 	protected EXTERNAL_DATA_FORMAT type;
 	protected String fileName;
-	protected boolean exists;
 
 	/**
 	 * The descendants should call this method in their constructor.
@@ -51,14 +50,16 @@ public abstract class BaseFileSink implements ISink {
 		this.type = type;
 		assert this.type != null;
 		this.fileName = fileName;
-		File file = new File(fileName);
-		exists = file.exists();
 	}
 
+	@Override
 	public boolean exists() {
+		File file = new File(fileName);
+		boolean exists = file.exists();
 		return exists;
 	}
 
+	@Override
 	public void open() throws BlockingException {
 		try {
 			switch (type) {
@@ -77,6 +78,7 @@ public abstract class BaseFileSink implements ISink {
 		}
 	}
 
+	@Override
 	public void append() throws BlockingException {
 		try {
 			switch (type) {
@@ -95,6 +97,7 @@ public abstract class BaseFileSink implements ISink {
 		}
 	}
 
+	@Override
 	public void close() throws BlockingException {
 		try {
 			switch (type) {
@@ -111,20 +114,24 @@ public abstract class BaseFileSink implements ISink {
 			throw new BlockingException(ex.toString());
 		}
 	}
-
+	
+	@Override
 	public int getCount() {
 		return count;
 	}
 
+	@Override
 	public String getInfo() {
 		return fileName;
 	}
 
+	@Override
 	public void remove() throws BlockingException {
 		File file = new File(fileName);
 		file.delete();
 	}
 
+	@Override
 	public void flush() throws BlockingException {
 		try {
 			switch (type) {
@@ -140,6 +147,12 @@ public abstract class BaseFileSink implements ISink {
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "BaseFileSink [type=" + type + ", fileName=" + fileName
+				+ ", exists=" + exists() + ", count=" + count + "]";
 	}
 
 }

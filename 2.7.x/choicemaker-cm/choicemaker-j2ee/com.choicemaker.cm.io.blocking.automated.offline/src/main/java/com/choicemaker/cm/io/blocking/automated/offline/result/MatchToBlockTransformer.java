@@ -99,7 +99,6 @@ public class MatchToBlockTransformer {
 	 *
 	 */
 	private void setInternalIDs () throws BlockingException {
-		translator.initReverseTranslation();
 
 		//stage record ids
 		List list = translator.getList1();

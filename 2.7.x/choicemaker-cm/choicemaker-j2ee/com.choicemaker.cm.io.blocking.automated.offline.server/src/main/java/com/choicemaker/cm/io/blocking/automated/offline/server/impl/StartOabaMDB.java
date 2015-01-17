@@ -33,6 +33,7 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
@@ -174,9 +175,11 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					getLogger().info(
 							"Done creating rec_id, val_id files: "
 									+ rvService.getTimeElapsed());
-
+					
+					ImmutableRecordIdTranslator<?> immutableTranslator =
+							translator.toImmutableTranslator();
 					final RECORD_ID_TYPE recordIdType =
-						rvService.getStageType();
+							immutableTranslator.getRecordIdType();
 					getPropertyController().setJobProperty(oabaJob,
 							PN_RECORD_ID_TYPE, recordIdType.name());
 
@@ -188,7 +191,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					// create the validator after rvService
 					// Validator validator = new Validator (true, translator);
 					ValidatorBase validator =
-						new ValidatorBase(true, translator);
+						new ValidatorBase(true, immutableTranslator);
 					// FIXME move this parameter to a persistent operational
 					// object
 					data.validator = validator;

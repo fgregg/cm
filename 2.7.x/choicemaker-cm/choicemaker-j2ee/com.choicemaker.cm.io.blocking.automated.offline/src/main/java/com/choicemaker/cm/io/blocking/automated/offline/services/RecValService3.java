@@ -28,10 +28,11 @@ import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
@@ -39,26 +40,28 @@ import com.choicemaker.util.IntArrayList;
 
 /**
  * This object performs the creation of rec_id, val_id pairs.
-
- * It uses input record id to internal id translation.  As a result, it can use a array
- * instead of hashmap to stored the val_id's.
- * This also uses dbField instead of blocking fields to prep for swap.
+ * 
+ * It uses input record id to internal id translation. As a result, it can use a
+ * array instead of hashmap to stored the val_id's. This also uses dbField
+ * instead of blocking fields to prep for swap.
  *
- * This takes in a stage record source and master record source.  It translates the stage record source first,
- * then the master record source.
+ * This takes in a stage record source and master record source. It translates
+ * the stage record source first, then the master record source.
  *
  * Version 2 allows the record ID to be Integer, Long, or String.
  *
- * Version 3 allows a break in the loop.  This version also starts recovery from the
- * beginning of the record source.
+ * Version 3 allows a break in the loop. This version also starts recovery from
+ * the beginning of the record source.
  *
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({
+		"rawtypes", "unchecked" })
 public class RecValService3 {
 
-	private static final Logger log = Logger.getLogger(RecValService3.class.getName());
+	private static final Logger log = Logger.getLogger(RecValService3.class
+			.getName());
 
 	private RecordSource master;
 	private RecordSource stage;
@@ -70,30 +73,26 @@ public class RecValService3 {
 	private IControl control;
 	private boolean stop;
 
-	private IRecValSink [] sinks;
+	private IRecValSink[] sinks;
 	private int numBlockFields;
 
 	private IRecValSinkSourceFactory rvFactory;
 
 	private IBlockingConfiguration bc;
 
-	//	this is the input record id to internal id translator
-	private MutableRecordIdTranslator translator;
+	private MutableRecordIdTranslator mutableTranslator;
 
 	private OabaEventLog status;
 
-	//This stores if stage record id is Integer, Long, or string
+	/** A flag indicating whether any staging record has been read */
 	private boolean firstStage = true;
-	private RECORD_ID_TYPE stageType = null;
 
-	//This stores if master record id is Integer, Long, or string
+	private RECORD_ID_TYPE recordIdType = null;
+
+	/** A flag indicating whether any master record has been read */
 	private boolean firstMaster = true;
-//	private int masterType = -1;
 
-//	private String blockName;
-//	private String dbConf;
-
-	private long time; //this keeps track of time
+	private long time; // this keeps track of time
 
 	/**
 	 * This constructor take these parameters:
@@ -106,8 +105,8 @@ public class RecValService3 {
 	 *            - the name of a model configuration
 	 * @param rvFactory
 	 *            - factory to get RecValSinks
-	 * @param translator
-	 *            - record ID to internal id translator
+	 * @param mutableTranslator
+	 *            - record ID to internal id mutableTranslator
 	 * @param status
 	 *            - current status of the system
 	 * @param control
@@ -122,7 +121,7 @@ public class RecValService3 {
 		this.stage = stage;
 		this.master = master;
 		this.model = model;
-		this.translator = translator;
+		this.mutableTranslator = translator;
 		this.rvFactory = rvFactory;
 		this.status = status;
 		this.control = control;
@@ -133,118 +132,86 @@ public class RecValService3 {
 		String blockName = this.model.getBlockingConfigurationName();
 		String dbConf = this.model.getDatabaseConfigurationName();
 
-		IBlockingConfiguration bc = ba.getBlockingConfiguration(blockName, dbConf);
+		IBlockingConfiguration bc =
+			ba.getBlockingConfiguration(blockName, dbConf);
 		IBlockingField[] bfs = bc.getBlockingFields();
 
-		//print blocking info
-		for (int i=0; i< bfs.length; i ++) {
+		// print blocking info
+		for (int i = 0; i < bfs.length; i++) {
 			IDbField field = bfs[i].getDbField();
-			log.info("i " + i + " field " + field.getName() + " number " + field.getNumber() );
+			log.info("i " + i + " field " + field.getName() + " number "
+					+ field.getNumber());
 		}
 
-		this.numBlockFields = countFields (bfs);
+		this.numBlockFields = countFields(bfs);
 	}
 
-	/** This method returns the time it takes to run the runService method.
+	/**
+	 * This method returns the time it takes to run the runService method.
 	 *
-	 * @return long - returns the time (in milliseconds) it took to run this service.
+	 * @return long - returns the time (in milliseconds) it took to run this
+	 *         service.
 	 */
-	public long getTimeElapsed () { return time; }
-
-	public int getNumBlockingFields () { return numBlockFields; }
-
-	/** This returns the type of stage record id.  It is one of the three:
-	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
-	 *
-	 * It returns -1 if there was not staging data.
-	 *
-	 * @return
-	 */
-	public RECORD_ID_TYPE getStageType () {
-		return stageType;
+	public long getTimeElapsed() {
+		return time;
 	}
 
-	/** This returns the type of master record id.  It is one of the three:
-	 * Constants.TYPE_INTEGER, Constants.TYPE_LONG, or Constants.TYPE_STRING.
-	 *
-	 * It returns -1 if there was not master data.
-	 *
-	 * @return
-	 */
-	public RECORD_ID_TYPE getMasterType () {
-		return stageType;
+	public int getNumBlockingFields() {
+		return numBlockFields;
 	}
 
-	/** This method runs the service.
+	protected RECORD_ID_TYPE getStageType() {
+		return recordIdType;
+	}
+
+	protected RECORD_ID_TYPE getMasterType() {
+		return recordIdType;
+	}
+
+	/**
+	 * This method runs the service.
 	 *
 	 *
 	 */
-	public void runService () throws BlockingException {
+	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
 		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_REC_VAL) {
-
-			log.info ("recover rec,val files and translator");
-			//need to initialize
-			init ();
+			// need to initialize
+			log.info("recover rec,val files and mutableTranslator");
+			init();
 
 		} else if (status.getCurrentOabaEventId() < OabaProcessing.EVT_DONE_REC_VAL) {
-			log.info ("Creating new rec,val files");
+			// create the rec_id, val_id files
+			log.info("Creating new rec,val files");
+			status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
+			createFiles();
+			if (!stop) {
+				status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
+			}
 
-			//create the rec_id, val_id files
-			status.setCurrentOabaEvent( OabaEvent.CREATE_REC_VAL);
-
-			createFiles ();
-
-			if (!stop) status.setCurrentOabaEvent( OabaEvent.DONE_REC_VAL);
+		} else {
+			log.info("Skipping RecValService2.runService()");
 
 		}
 		time = System.currentTimeMillis() - time;
 	}
 
-	/** This method sets up the sinks array for future use.
-	 *
-	 *
+	/**
+	 * This method closes the translator, determines the record id type, and
+	 * sets up the sinks array for future use.
 	 */
-	private void init () throws BlockingException {
-		sinks = new IRecValSink [numBlockFields];
+	private void init() throws BlockingException {
 
-		// 2014-04-24 rphall: Commented out unused local variable.
-//		int count = 0;
-
-		for (int i=0; i< numBlockFields; i++) {
+		sinks = new IRecValSink[numBlockFields];
+		for (int i = 0; i < numBlockFields; i++) {
 			sinks[i] = rvFactory.getNextSink();
 		}
 
-		translator.recover();
-		translator.close();
-
-		try {
-			//need to get record if type of stage and master
-			if (stage != null) {
-				stage.setModel(model);
-				stage.open();
-				if (stage.hasNext()) {
-					Record r = stage.getNext();
-					Object O = r.getId();
-					stageType = RECORD_ID_TYPE.fromInstance((Comparable)O);
-				}
-				stage.close();
-			}
-
-			if (master != null) {
-				master.open();
-//				if (master.hasNext()) {
-//					Record r = master.getNext();
-//					Object O = r.getId();
-//					masterType = Constants.checkType((Comparable)O);
-//				}
-				master.close();
-			}
-
-		} catch (IOException e) {
-			throw new BlockingException (e.toString());
-		}
+		ImmutableRecordIdTranslator immutableTranslator =
+			mutableTranslator.toImmutableTranslator();
+		this.recordIdType = immutableTranslator.getRecordIdType();
+		assert this.recordIdType != null;
 
 	}
 
@@ -252,25 +219,26 @@ public class RecValService3 {
 	 * This method creates the files from scratch.
 	 *
 	 */
-	private void createFiles () throws BlockingException {
-		sinks = new IRecValSink [numBlockFields];
+	private void createFiles() throws BlockingException {
+		sinks = new IRecValSink[numBlockFields];
 
 		int count = 0;
 
-		for (int i=0; i< numBlockFields; i++) {
+		for (int i = 0; i < numBlockFields; i++) {
 			sinks[i] = rvFactory.getNextSink();
 			sinks[i].open();
 		}
 
-		translator.open();
+		mutableTranslator.open();
 
 		try {
 			Record r;
 
-			//write the stage record source
+			// write the stage record source
 			if (stage != null) {
 				stage.setModel(model);
-				stage.open();  // FIXME! try { stage.open(); ... } finally{ stage.close(); }
+				stage.open(); // FIXME! try { stage.open(); ... } finally{
+								// stage.close(); }
 
 				String blockName = model.getBlockingConfigurationName();
 				String dbConf = model.getDatabaseConfigurationName();
@@ -278,33 +246,36 @@ public class RecValService3 {
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
 				while (stage.hasNext() && !stop) {
-					count ++;
+					count++;
 					r = stage.getNext();
 
-					if (count % OUTPUT_INTERVAL == 0) MemoryEstimator.writeMem ();
+					if (count % OUTPUT_INTERVAL == 0)
+						MemoryEstimator.writeMem();
 
-					stop = ControlChecker.checkStop (control, count);
+					stop = ControlChecker.checkStop(control, count);
 
-					writeRecord (r, model);
+					writeRecord(r, model);
 
-					//This checks the id type
+					// This checks the id type
 					if (firstStage) {
 						Object O = r.getId();
-						stageType = RECORD_ID_TYPE.fromInstance((Comparable)O);
+						recordIdType =
+							RECORD_ID_TYPE.fromInstance((Comparable) O);
 						firstStage = false;
 					}
 
 				} // end while
-				stage.close ();
+				stage.close();
 			}
 
 			log.info(count + " stage records read");
 
-			//write the master record source
+			// write the master record source
 			if (master != null) {
-				translator.split();
+				mutableTranslator.split();
 
-				master.open(); // FIXME! try { master.open(); ... } finally{ master.close(); }
+				master.open(); // FIXME! try { master.open(); ... } finally{
+								// master.close(); }
 
 				String blockName = model.getBlockingConfigurationName();
 				String dbConf = model.getDatabaseConfigurationName();
@@ -312,74 +283,76 @@ public class RecValService3 {
 				bc = ba.getBlockingConfiguration(blockName, dbConf);
 
 				// 2014-04-24 rphall: Commented out unused local variable.
-//				long lastID = Long.MIN_VALUE;
+				// long lastID = Long.MIN_VALUE;
 				while (master.hasNext() && !stop) {
-					count ++;
+					count++;
 					r = master.getNext();
 
-					if (count % OUTPUT_INTERVAL == 0) MemoryEstimator.writeMem ();
+					if (count % OUTPUT_INTERVAL == 0)
+						MemoryEstimator.writeMem();
 
-					stop = ControlChecker.checkStop (control, count);
+					stop = ControlChecker.checkStop(control, count);
 
-					writeRecord (r, model);
+					writeRecord(r, model);
 
-					//This checks the id type
+					// This checks the id type
 					if (firstMaster) {
-//						Object O = r.getId();
-//						masterType = Constants.checkType((Comparable)O);
 						firstMaster = false;
 					}
 
 				} // end while
-				master.close ();
+				master.close();
 			}
 
 			log.info(count + " total records read");
 		} catch (IOException ex) {
-			throw new BlockingException (ex.toString());
+			throw new BlockingException(ex.toString());
 		}
 
-		//close rec val sinks
-		for (int i=0; i<sinks.length; i++) {
+		// close rec val sinks
+		for (int i = 0; i < sinks.length; i++) {
 			sinks[i].close();
 		}
-		translator.close();
+		mutableTranslator.close();
 
 	}
 
-	/** This method writes 1 record's rec_id and val_id.
+	/**
+	 * This method writes 1 record's rec_id and val_id.
 	 *
 	 */
-	private void writeRecord (Record r, ImmutableProbabilityModel model) throws BlockingException {
+	private void writeRecord(Record r, ImmutableProbabilityModel model)
+			throws BlockingException {
 		Object O = r.getId();
-		int internal = translator.translate((Comparable) O);
+		int internal = mutableTranslator.translate((Comparable) O);
 
-		HashSet seen = new HashSet(); //stores field value it has seen
-		Hashtable values = new Hashtable ();  //stores values per field
+		HashSet seen = new HashSet(); // stores field value it has seen
+		Hashtable values = new Hashtable(); // stores values per field
 
 		IBlockingValue[] bvs = bc.createBlockingValues(r);
 
-		//loop over the blocking value for this record
-		for (int j=0; j < bvs.length; j++) {
+		// loop over the blocking value for this record
+		for (int j = 0; j < bvs.length; j++) {
 			IBlockingValue bv = bvs[j];
 			IBlockingField bf = bv.getBlockingField();
 
-			Integer C = new Integer (bf.getDbField().getNumber());
+			Integer C = new Integer(bf.getDbField().getNumber());
 
-//			System.out.println (bf.number + " " + bv.value + " " + bf.dbField.number + " " + bf.dbField.name);
+			// System.out.println (bf.number + " " + bv.value + " " +
+			// bf.dbField.number + " " + bf.dbField.name);
 
-			String val = new String (bv.getValue());
+			String val = new String(bv.getValue());
 			String key = bf.getDbField().getNumber() + val;
 
 			if (!seen.contains(key)) {
 				seen.add(key);
 
-				IntArrayList list = (IntArrayList) values.get (C);
+				IntArrayList list = (IntArrayList) values.get(C);
 				if (list == null) {
-					list = new IntArrayList (1);
+					list = new IntArrayList(1);
 				}
 
-				list.add(val.hashCode()); //use hashcode of the string
+				list.add(val.hashCode()); // use hashcode of the string
 				values.put(C, list);
 			}
 
@@ -388,23 +361,26 @@ public class RecValService3 {
 		Enumeration e = values.keys();
 		while (e.hasMoreElements()) {
 			Integer C = (Integer) e.nextElement();
-			sinks [C.intValue()].writeRecordValue((long)internal, (IntArrayList) values.get(C));
+			sinks[C.intValue()].writeRecordValue((long) internal,
+					(IntArrayList) values.get(C));
 
-//			log.info("id " + internal + " C " + C + " " + values.get(C));
+			// log.info("id " + internal + " C " + C + " " + values.get(C));
 		}
 	}
 
-	/** This counts the number of distinct db fields used in the blocking.
+	/**
+	 * This counts the number of distinct db fields used in the blocking.
 	 *
-	 * @param bfs - array of BlockingFields
+	 * @param bfs
+	 *            - array of BlockingFields
 	 * @return
 	 */
-	private int countFields (IBlockingField[] bfs) {
+	private int countFields(IBlockingField[] bfs) {
 		HashSet set = new HashSet();
 
-		for (int i=0; i<bfs.length; i++) {
+		for (int i = 0; i < bfs.length; i++) {
 			IDbField field = bfs[i].getDbField();
-			Integer I = new Integer (field.getNumber());
+			Integer I = new Integer(field.getNumber());
 
 			if (!set.contains(I)) {
 				set.add(I);

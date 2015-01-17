@@ -47,9 +47,6 @@ public class Transformer implements ITransformer {
 
 	@Override
 	public void init() throws BlockingException {
-		// initialize the translator
-		translator.initReverseTranslation();
-
 		cOut = cFactory.getNextSink();
 		cOut.open();
 	}

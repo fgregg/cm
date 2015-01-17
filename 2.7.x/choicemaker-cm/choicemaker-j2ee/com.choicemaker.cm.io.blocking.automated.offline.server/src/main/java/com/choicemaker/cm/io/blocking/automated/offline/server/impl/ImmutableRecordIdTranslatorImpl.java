@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdControllerBean.BASENAME_RECORDID_TRANSLATOR;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,12 +20,11 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 /**
@@ -36,7 +37,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-public class RecordIdTranslator3 implements MutableRecordIdTranslator {
+public class ImmutableRecordIdTranslatorImpl implements
+		ImmutableRecordIdTranslator {
 
 	/**
 	 * For testing purposes only. Returns a list of map value in the order of
@@ -69,37 +71,33 @@ public class RecordIdTranslator3 implements MutableRecordIdTranslator {
 		return retVal;
 	}
 
+	/**
+	 * This gets the factory that is used to get translator id sink and source.
+	 */
+	private static RecordIdSinkSourceFactory getTransIDFactory(BatchJob job) {
+		String wd = OabaFileUtils.getWorkingDir(job);
+		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_TRANSLATOR,
+				OabaFileUtils.BINARY_SUFFIX);
+	}
+
 	private static final Logger log = Logger
-			.getLogger(RecordIdTranslator3.class.getName());
+			.getLogger(ImmutableRecordIdTranslatorImpl.class.getName());
 
 	/** A magic value indicating that the split() method has not been invoked */
 	private static final int NOT_SPLIT = 0;
 
-	private IRecordIdSinkSourceFactory rFactory;
+	private final IRecordIdSource source1;
+	private final IRecordIdSource source2;
 
-	// These two files store the input record id2. The first id correspond to
-	// internal id 0, etc.
-	private IRecordIdSink sink1;
-	private IRecordIdSink sink2;
-
-	// This is an indicator of the class type of record id.
+	/** The type of record ids handled by this translator */
 	private RECORD_ID_TYPE recordIdType;
 
 	/**
-	 * This contains the mapping from input record id I to internal record id J.
-	 * mapping[J] = I. J starts from 0.
-	 */
-	private int currentIndex =
-		ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
-
-	/**
-	 * This is the point at which the second record source record ids start. If
-	 * this is NOT_SPLIT, it means there is only 1 record source.
+	 * This is the internal index at which the indices for records from the
+	 * second record source start. If this value is NOT_SPLIT, it means there is
+	 * only 1 record source.
 	 */
 	private int splitIndex = NOT_SPLIT;
-
-	// indicates whether initReverseTranslation has happened.
-	private boolean initialized = false;
 
 	/** Maps staging ids to indices. */
 	// IMPLEMENTATION NOTE:
@@ -109,49 +107,73 @@ public class RecordIdTranslator3 implements MutableRecordIdTranslator {
 	// is broken; i.e. the case where a staging record and a master record
 	// actually have the same id; the staging and master sources are distinct;
 	// and therefore the records may contain different data.
-	private Map ids1_To_Indices;
+	private final Map ids1_To_Indices = new HashMap();
 
 	/** Maps master ids to indices. */
-	// See the implemetation note for ids1_To_Indices
-	private Map ids2_To_Indices;
+	// See the implementation note for ids1_To_Indices
+	private final Map ids2_To_Indices = new HashMap();
 
-	/**
-	 * Maps staging indices to record ids. Staging indices are unique only
-	 * within the staging source; similar values may be used as master indices.
-	 */
-	private SortedMap indices_To_Ids1;
+	/** A map of indices for staging records to the ids of those records */
+	private final SortedMap indices_To_Ids1 = new TreeMap();
 
-	/**
-	 * Maps master indices to record ids. Master indices are unique only within
-	 * the master source; similar values may be used as staging indices.
-	 */
-	private SortedMap indices_To_Ids2;
+	/** A map of indices for staging records to the ids of those records */
+	private final SortedMap indices_To_Ids2 = new TreeMap();
 
-	public RecordIdTranslator3(IRecordIdSinkSourceFactory rFactory)
+	public ImmutableRecordIdTranslatorImpl(BatchJob job)
 			throws BlockingException {
-		this.rFactory = rFactory;
-		sink1 = rFactory.getNextSink();
-		sink2 = rFactory.getNextSink();
+		if (job == null) {
+			throw new IllegalArgumentException("null batch job");
+		}
+		RecordIdSinkSourceFactory rFactory = getTransIDFactory(job);
+		final IRecordIdSink sink1 = rFactory.getNextSink();
+		source1 = rFactory.getSource(sink1);
+		log.info("Source 1: " + source1);
+		final IRecordIdSink sink2 = rFactory.getNextSink();
+		source2 = rFactory.getSource(sink2);
+		log.info("Source 2: " + source2);
+		initialize();
+	}
+
+	public ImmutableRecordIdTranslatorImpl(IRecordIdSource s1,
+			IRecordIdSource s2) throws BlockingException {
+		if (s1 == null || s2 == null) {
+			throw new IllegalArgumentException("null argument");
+		}
+		source1 = s1;
+		log.info("Source 1: " + source1);
+		source2 = s2;
+		log.info("Source 2: " + source2);
+		initialize();
 	}
 
 	@Override
 	public void cleanUp() throws BlockingException {
-		this.ids1_To_Indices = null;
-		this.ids2_To_Indices = null;
-		this.indices_To_Ids1 = null;
-		this.indices_To_Ids2 = null;
-
-		sink1.remove();
-		if (splitIndex > NOT_SPLIT)
-			sink2.remove();
+		if (source1.exists()) {
+			source1.delete();
+		}
+		if (source2.exists()) {
+			source2.delete();
+		}
 	}
 
 	@Override
-	public void close() throws BlockingException {
-		if (splitIndex == NOT_SPLIT)
-			sink1.close();
-		else
-			sink2.close();
+	public RECORD_ID_TYPE getRecordIdType() {
+		if (recordIdType == null) {
+			if (ids1_To_Indices.isEmpty() && this.indices_To_Ids1.isEmpty()
+					&& this.ids2_To_Indices.isEmpty() && this.indices_To_Ids2
+						.isEmpty()) {
+				log.warning("Record-id translator has no data");
+			} else {
+				throw new IllegalStateException("null record-id type");
+			}
+
+		}
+		return recordIdType;
+	}
+
+	@Override
+	public int getSplitIndex() {
+		return splitIndex;
 	}
 
 	@Override
@@ -175,38 +197,25 @@ public class RecordIdTranslator3 implements MutableRecordIdTranslator {
 		return retVal;
 	}
 
-	public Comparable[] getRange1() {
-		throw new RuntimeException("deprecated -- not implemented");
-	}
+	/** Called during construction */
+	protected void initialize() throws BlockingException {
+		assert this.ids1_To_Indices != null;
+		assert this.indices_To_Ids1 != null;
+		assert source1 != null;
 
-	public Comparable[] getRange2() {
-		throw new RuntimeException("deprecated -- not implemented");
-	}
+		assert this.ids2_To_Indices != null;
+		assert this.indices_To_Ids2 != null;
+		assert source2 != null;
 
-	@Override
-	public RECORD_ID_TYPE getRecordIdType() {
-		return recordIdType;
-	}
-
-	@Override
-	public int getSplitIndex() {
-		return splitIndex;
-	}
-
-	@Override
-	public void initReverseTranslation() throws BlockingException {
-		if (!initialized) {
-			this.ids1_To_Indices = new HashMap();
-			this.ids2_To_Indices = new HashMap();
-			this.indices_To_Ids1 = new TreeMap();
-
-			int count = -1;
-			IRecordIdSource source1 = rFactory.getSource(sink1);
+		splitIndex = NOT_SPLIT;
+		int count = -1;
+		if (source1.exists()) {
 			source1.open();
 			while (source1.hasNext()) {
 				++count;
 				Integer index = new Integer(count);
 				Comparable id = (Comparable) source1.next();
+				setRecordIdType(id);
 				Object previous = this.indices_To_Ids1.put(index, id);
 				if (previous != null) {
 					// Unexpected algorithm error
@@ -218,38 +227,34 @@ public class RecordIdTranslator3 implements MutableRecordIdTranslator {
 							"duplicate staging record id value '" + id + "'");
 				}
 			}
-			currentIndex = count;
 			source1.close();
-
-			// Read the second source if there is one
-			IRecordIdSource source2 = rFactory.getSource(sink2);
-			if (source2.exists()) {
-				splitIndex = currentIndex + 1;
-				this.indices_To_Ids2 = new TreeMap();
-				count = -1;
-				source2.open();
-				while (source2.hasNext()) {
-					++count;
-					Integer index = new Integer(count);
-					Comparable id = (Comparable) source2.next();
-					Object previous = this.indices_To_Ids2.put(index, id);
-					if (previous != null) {
-						// Unexpected algorithm error
-						throw new Error("duplicate master index '" + index
-								+ "'");
-					}
-					previous = this.ids2_To_Indices.put(id, index);
-					if (previous != null) {
-						throw new BlockingException(
-								"duplicate master record id value '" + id + "'");
-					}
-				}
-				source2.close();
-				currentIndex = splitIndex + count;
-			}
-
-			initialized = true;
 		}
+		log.info("Number of ids from first source: " + count);
+
+		// Read the second source if there is one
+		if (source2.exists()) {
+			splitIndex = count + 1;
+			count = -1;
+			source2.open();
+			while (source2.hasNext()) {
+				++count;
+				Integer index = new Integer(count);
+				Comparable id = (Comparable) source2.next();
+				Object previous = this.indices_To_Ids2.put(index, id);
+				if (previous != null) {
+					// Unexpected algorithm error
+					throw new Error("duplicate master index '" + index + "'");
+				}
+				previous = this.ids2_To_Indices.put(id, index);
+				if (previous != null) {
+					throw new BlockingException(
+							"duplicate master record id value '" + id + "'");
+				}
+			}
+			source2.close();
+		}
+		log.info("Number of ids from second source: " + count);
+
 	}
 
 	@Override
@@ -277,45 +282,10 @@ public class RecordIdTranslator3 implements MutableRecordIdTranslator {
 	}
 
 	@Override
-	public void open() throws BlockingException {
-		currentIndex = ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
-		sink1.open();
-		splitIndex = NOT_SPLIT;
-	}
-
-	@Override
-	public void recover() throws BlockingException {
-		IRecordIdSource source = rFactory.getSource(sink1);
-		currentIndex = ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
-		splitIndex = NOT_SPLIT;
-		if (source.exists()) {
-			source.open();
-			while (source.hasNext()) {
-				source.next();
-				currentIndex++;
-			}
-			source.close();
-			sink1.append();
-		}
-
-		source = rFactory.getSource(sink2);
-		if (source.exists()) {
-			sink1.close();
-			splitIndex = currentIndex + 1;
-			source.open();
-			while (source.hasNext()) {
-				source.next();
-				currentIndex++;
-			}
-			source.close();
-			sink2.append();
-		}
-	}
-
-	@Override
 	public Comparable reverseLookup(int internalID) {
 		if (internalID < 0) {
-			log.warning("invalid internal index '" + internalID + "'");
+			throw new IllegalStateException("invalid internal index '"
+					+ internalID + "'");
 		}
 		Comparable retVal;
 		if (splitIndex == NOT_SPLIT) {
@@ -337,56 +307,21 @@ public class RecordIdTranslator3 implements MutableRecordIdTranslator {
 		return retVal;
 	}
 
-	protected void setRecordIdType(RECORD_ID_TYPE dataType) {
-		this.recordIdType = dataType;
-	}
-
-	@Override
-	public void split() throws BlockingException {
-		if (splitIndex == NOT_SPLIT) {
-			splitIndex = currentIndex + 1;
-			sink1.close();
-			sink2.open();
+	protected void setRecordIdType(Comparable id) {
+		assert id != null;
+		if (recordIdType == null) {
+			this.recordIdType = RECORD_ID_TYPE.fromInstance(id);
+			assert this.recordIdType != null;
 		} else {
-			log.warning("Split method invoked on a previously split translator");
+			assert this.recordIdType == RECORD_ID_TYPE.fromInstance(id);
 		}
 	}
 
 	@Override
-	public int translate(Comparable o) throws BlockingException {
-		int retVal;
-		if (o == null) {
-			retVal = ImmutableRecordIdTranslator.INVALID_INDEX;
-			log.warning("translating null record id to an invalid internal index ("
-					+ retVal + ")");
-		} else {
-			currentIndex++;
-			retVal = currentIndex;
-
-			// figure out the id type for the first file
-			if (currentIndex == 0) {
-				setRecordIdType(RECORD_ID_TYPE.fromInstance(o));
-				sink1.setRecordIDType(getRecordIdType());
-			}
-
-			// figure out the id type for the second file
-			if (splitIndex != NOT_SPLIT && currentIndex == splitIndex) {
-				if (getRecordIdType() == null) {
-					setRecordIdType(RECORD_ID_TYPE.fromInstance(o));
-				} else {
-					assert getRecordIdType() == RECORD_ID_TYPE.fromInstance(o);
-				}
-				assert getRecordIdType() != null;
-				sink2.setRecordIDType(getRecordIdType());
-			}
-
-			if (splitIndex == NOT_SPLIT) {
-				sink1.writeRecordID(o);
-			} else {
-				sink2.writeRecordID(o);
-			}
-		}
-		return retVal;
+	public String toString() {
+		return "ImmutableRecordIdTranslatorImpl [recordIdType=" + recordIdType
+				+ ", splitIndex=" + splitIndex + ", source1=" + source1
+				+ ", source2=" + source2 + "]";
 	}
 
 }

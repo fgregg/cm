@@ -21,7 +21,7 @@ import com.choicemaker.cm.core.BlockingException;
  * @author pcheung
  *
  */
-public interface MutableRecordIdTranslator<T extends Comparable<T>> extends ImmutableRecordIdTranslator<T> {
+public interface MutableRecordIdTranslator<T extends Comparable<T>> {
 
 	/**
 	 * This method performs initialization.
@@ -35,20 +35,26 @@ public interface MutableRecordIdTranslator<T extends Comparable<T>> extends Immu
 	public void split() throws BlockingException;
 
 	/**
-	 * This method closes the file or db depending on the implementation.
+	 * Closes this instance and effectively converts it to an immutable
+	 * translator; use the {@link #toImmutableTranslator()} method to get the
+	 * immutable translator that this translator becomes. If a
+	 * {@link #translate(Comparable) translation} is attempted after being
+	 * closed, this instance will throw an {@link IllegalStateExceptions
+	 * illegal-state exception}.
 	 */
 	public void close() throws BlockingException;
 
 	/**
-	 * This method cleans up underlying file or db resources.
+	 * This method closes this instance (if it is not already closed) and
+	 * returns an immutable translator that based on this instance.
 	 */
-	public void cleanUp() throws BlockingException;
+	public ImmutableRecordIdTranslator<T> toImmutableTranslator()
+			throws BlockingException;
 
 	/**
-	 * This method attempts to recover the data from a previous run by reading in
-	 * existing sources containing the record ids.
+	 * This method cleans any resources that are cached on disk.
 	 */
-	public void recover() throws BlockingException;
+	public void cleanUp() throws BlockingException;
 
 	/**
 	 * This method translates input record id to internal system id.
@@ -58,10 +64,5 @@ public interface MutableRecordIdTranslator<T extends Comparable<T>> extends Immu
 	 * @return int - returns internal id for this record id.
 	 */
 	public int translate(T o) throws BlockingException;
-
-	/**
-	 * This method prepares for reverse translation.
-	 */
-	public void initReverseTranslation() throws BlockingException;
 
 }

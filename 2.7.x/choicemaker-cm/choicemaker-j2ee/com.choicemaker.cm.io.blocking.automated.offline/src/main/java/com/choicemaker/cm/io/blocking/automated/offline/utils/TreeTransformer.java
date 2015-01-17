@@ -61,7 +61,6 @@ public class TreeTransformer implements ITransformer {
 	public void init() throws BlockingException {
 		final String METHOD = "init()";
 		logger.entering(SOURCE, METHOD);
-		translator.initReverseTranslation();
 		cOut = cFactory.getNextSink();
 		cOut.open();
 		logger.exiting(SOURCE, METHOD);

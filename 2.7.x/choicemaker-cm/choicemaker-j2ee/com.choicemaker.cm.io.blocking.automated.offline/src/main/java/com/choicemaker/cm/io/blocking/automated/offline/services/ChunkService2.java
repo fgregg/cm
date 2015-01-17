@@ -227,7 +227,6 @@ public class ChunkService2 {
 	 * @throws XmlConfException
 	 */
 	private void createDataFiles () throws BlockingException, XmlConfException {
-		translator.initReverseTranslation();
 		
 		try {
 			numChunks = comparisonSinks.size();
@@ -360,8 +359,6 @@ public class ChunkService2 {
 	 * @throws IOException
 	 */
 	private void createIDs (IBlockSource source, boolean isOS, int skip) throws BlockingException {
-		//initialize the translator
-		translator.initReverseTranslation();
 		
 		source.open();
 		

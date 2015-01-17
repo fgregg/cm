@@ -49,6 +49,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
+import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
@@ -202,10 +203,10 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 		OabaEventLog processingEntry =
 			processingController.getProcessingLog(oabaJob);
 
-		MutableRecordIdTranslator translator =
+		final MutableRecordIdTranslator mutableTranslator =
 			ridController.createMutableRecordIdTranslator(oabaJob);
 
-		// OABA parameters
+		// FIXME
 		String temp = (String) stageModel.properties().get("maxBlockSize");
 		int maxBlock = Integer.parseInt(temp);
 
@@ -226,15 +227,16 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 				rsController.getStageRs(params);
 		RecValService2 rvService =
 			new RecValService2(staging, null, stageModel, null,
-					OabaFileUtils.getRecValFactory(oabaJob), translator,
+					OabaFileUtils.getRecValFactory(oabaJob), mutableTranslator,
 					processingEntry);
 		rvService.runService();
 		final int numBlockFields = rvService.getNumBlockingFields();
-		propController.setJobProperty(oabaJob,
-				PN_BLOCKING_FIELD_COUNT,
+		propController.setJobProperty(oabaJob, PN_BLOCKING_FIELD_COUNT,
 				String.valueOf(numBlockFields));
 
-		ValidatorBase validator = new ValidatorBase(true, translator);
+		final ImmutableRecordIdTranslator immutableTranslator =
+			mutableTranslator.toImmutableTranslator();
+		ValidatorBase validator = new ValidatorBase(true, immutableTranslator);
 		data.validator = validator;
 
 		// blocking
@@ -293,7 +295,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 				rsController.getStageRs(params);
 		ChunkService2 chunkService =
 			new ChunkService2(source, source2, stagingRs, null,
-					stageModel, null, translator,
+					stageModel, null, immutableTranslator,
 					OabaFileUtils.getChunkIDFactory(oabaJob),
 					OabaFileUtils.getStageDataFactory(oabaJob, model),
 					OabaFileUtils.getMasterDataFactory(oabaJob, model),
@@ -302,7 +304,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
-		translator.cleanUp();
+		mutableTranslator.cleanUp();
 
 		final int numChunks = chunkService.getNumChunks();
 		log.info("Number of chunks " + numChunks);

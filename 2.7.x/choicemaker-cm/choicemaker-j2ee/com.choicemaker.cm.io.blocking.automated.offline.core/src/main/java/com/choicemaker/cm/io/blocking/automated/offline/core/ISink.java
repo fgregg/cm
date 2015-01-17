@@ -44,5 +44,4 @@ public interface ISink {
 	/** This method cleans up resources and removes the sink. */
 	public void remove () throws BlockingException;
 
-
 }

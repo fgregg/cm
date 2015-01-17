@@ -112,7 +112,7 @@ public class MatchToBlockTransformer2 {
 	 * MatchRecord2 sink with internal ids.
 	 */
 	private IMatchRecord2Sink translate () throws BlockingException {
-		translator.initReverseTranslation();
+
 		HashMap stageIDs = null;
 		HashMap masterIDs = null;
 

@@ -83,9 +83,6 @@ public class Chunk2MDB extends AbstractOabaMDB {
 		@SuppressWarnings("rawtypes")
 		ImmutableRecordIdTranslator translator =
 			getRecordIdController().getImmutableRecordIdTranslator(oabaJob);
-		// recover the translator
-		translator.recover();
-		translator.close();
 		log.info("Record translator: " + translator);
 
 		// create the os block source.

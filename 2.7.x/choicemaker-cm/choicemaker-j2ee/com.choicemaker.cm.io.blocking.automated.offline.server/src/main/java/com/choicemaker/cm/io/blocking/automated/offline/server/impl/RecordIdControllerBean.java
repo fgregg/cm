@@ -51,14 +51,18 @@ public class RecordIdControllerBean implements RecordIdController {
 	public ImmutableRecordIdTranslator<?> getImmutableRecordIdTranslator(
 			BatchJob job) throws BlockingException {
 		// FIXME look up, don't create
-		return createMutableRecordIdTranslator(job);
+		ImmutableRecordIdTranslatorImpl retVal =
+			new ImmutableRecordIdTranslatorImpl(job);
+		return retVal;
 	}
 
 	@Override
 	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
 			BatchJob job) throws BlockingException {
 		RecordIdSinkSourceFactory idFactory = getTransIDFactory(job);
-		RecordIdTranslator3 retVal = new RecordIdTranslator3(idFactory);
+		@SuppressWarnings("rawtypes")
+		MutableRecordIdTranslator retVal =
+			new MutableRecordIdTranslatorImpl(idFactory);
 		return retVal;
 	}
 
@@ -143,7 +147,8 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void restoreIntegerTranslations(BatchJob job,
-			MutableRecordIdTranslator<Integer> translator) throws BlockingException {
+			MutableRecordIdTranslator<Integer> translator)
+			throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDINTEGERID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
@@ -187,7 +192,8 @@ public class RecordIdControllerBean implements RecordIdController {
 			throw new IllegalArgumentException("null OABA job");
 		}
 		RecordIdSinkSourceFactory idFactory = getTransIDFactory(job);
-		RecordIdTranslator3 retVal = new RecordIdTranslator3(idFactory);
+		MutableRecordIdTranslatorImpl retVal =
+			new MutableRecordIdTranslatorImpl(idFactory);
 
 		// Cleanup any files on disk
 		retVal.cleanUp();
@@ -196,14 +202,13 @@ public class RecordIdControllerBean implements RecordIdController {
 		assert dataType != null;
 		switch (dataType) {
 		case TYPE_INTEGER:
-			restoreIntegerTranslations(job,
-					retVal);
+			restoreIntegerTranslations(job, retVal);
 			break;
 		case TYPE_LONG:
-			restoreLongTranslations(job,  retVal);
+			restoreLongTranslations(job, retVal);
 			break;
 		case TYPE_STRING:
-			restoreStringTranslations(job,  retVal);
+			restoreStringTranslations(job, retVal);
 			break;
 		default:
 			throw new Error("unexpected record source type: " + dataType);
@@ -213,7 +218,8 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void restoreLongTranslations(BatchJob job,
-			MutableRecordIdTranslator<Long> translator) throws BlockingException {
+			MutableRecordIdTranslator<Long> translator)
+			throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDLONGID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
@@ -231,7 +237,8 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void restoreStringTranslations(BatchJob job,
-			MutableRecordIdTranslator<String> translator) throws BlockingException {
+			MutableRecordIdTranslator<String> translator)
+			throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDSTRINGID_FIND_BY_JOBID);
 		@SuppressWarnings("unchecked")
@@ -254,17 +261,15 @@ public class RecordIdControllerBean implements RecordIdController {
 		if (job == null || translator == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-
-		// Close the translator to flush the record-id sinks to disk
-		translator.close();
-
-		// Read the flushed data from disk and prepare a reverse look-up of
-		// internal ids to record ids
-		translator.recover();
-		translator.initReverseTranslation();
+		if (!(translator instanceof MutableRecordIdTranslatorImpl)) {
+			String msg = "Unhandled type: " + translator.getClass().getName();
+			throw new IllegalStateException(msg);
+		}
+		ImmutableRecordIdTranslator<?> rit =
+			translator.toImmutableTranslator();
 
 		// Check the data type of the record ids handled by the translator
-		final RECORD_ID_TYPE dataType = translator.getRecordIdType();
+		final RECORD_ID_TYPE dataType = rit.getRecordIdType();
 		if (dataType == null) {
 			String msg =
 				"Invalid translator: null record-id type. "
@@ -274,13 +279,13 @@ public class RecordIdControllerBean implements RecordIdController {
 
 		switch (dataType) {
 		case TYPE_INTEGER:
-			saveIntegerTranslations(job, translator);
+			saveIntegerTranslations(job, rit);
 			break;
 		case TYPE_LONG:
-			saveLongTranslations(job, translator);
+			saveLongTranslations(job, rit);
 			break;
 		case TYPE_STRING:
-			saveStringTranslations(job, translator);
+			saveStringTranslations(job, rit);
 			break;
 		default:
 			throw new Error("unexpected record source type: " + dataType);
@@ -288,7 +293,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void saveIntegerTranslations(BatchJob job,
-			MutableRecordIdTranslator<?> translator) {
+			ImmutableRecordIdTranslator<?> translator) {
 		int translatedId = 0;
 		Integer recordId = (Integer) translator.reverseLookup(translatedId);
 		while (recordId != null) {
@@ -301,7 +306,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void saveLongTranslations(BatchJob job,
-			MutableRecordIdTranslator<?> translator) {
+			ImmutableRecordIdTranslator<?> translator) {
 		int translatedId = 0;
 		Long recordId = (Long) translator.reverseLookup(translatedId);
 		while (recordId != null) {
@@ -314,7 +319,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	}
 
 	protected void saveStringTranslations(BatchJob job,
-			MutableRecordIdTranslator<?> translator) {
+			ImmutableRecordIdTranslator<?> translator) {
 		int translatedId = 0;
 		String recordId = (String) translator.reverseLookup(translatedId);
 		while (recordId != null) {

@@ -36,7 +36,6 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	protected int count = 0;
 	protected final EXTERNAL_DATA_FORMAT type;
 	protected final String fileName;
-	protected final boolean exists;
 
 	/**
 	 * The descendants should call this method in their constructor.
@@ -52,12 +51,12 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 		}
 		this.type = type;
 		this.fileName = fileName;
-		File file = new File(fileName);
-		exists = file.exists();
 	}
 
 	@Override
 	public boolean exists() {
+		File file = new File(fileName);
+		boolean exists = file.exists();
 		return exists;
 	}
 
@@ -130,6 +129,12 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 		}
 
 		return ret;
+	}
+
+	@Override
+	public String toString() {
+		return "BaseFileSource [type=" + type + ", fileName=" + fileName
+				+ ", exists=" + exists() + ", count=" + count + "]";
 	}
 
 }
