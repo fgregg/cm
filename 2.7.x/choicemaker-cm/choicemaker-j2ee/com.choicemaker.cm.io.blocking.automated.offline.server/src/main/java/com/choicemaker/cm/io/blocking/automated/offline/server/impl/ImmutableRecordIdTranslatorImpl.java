@@ -79,8 +79,12 @@ class ImmutableRecordIdTranslatorImpl implements
 		return retVal;
 	}
 
+	/**
+	 * If <code>expectedRecordIdType</code> is null, it will be determined from
+	 * the specified translations.
+	 */
 	static <T extends Comparable<T>> ImmutableRecordIdTranslatorImpl createTranslator(
-			final BatchJob job, final RECORD_ID_TYPE recordIdType,
+			final BatchJob job, final RECORD_ID_TYPE expectedRecordIdType,
 			List<AbstractRecordIdTranslationEntity<T>> translations)
 			throws BlockingException {
 
@@ -89,24 +93,29 @@ class ImmutableRecordIdTranslatorImpl implements
 		}
 		if (translations.isEmpty()) {
 			String msg =
-				"Issue 1: No record-id translations for job " + job.getId();
+				"No record-id translations for job " + job.getId();
 			throw new BlockingException(msg);
 		}
 
-		final Map<T,Integer> ids1_To_Indices = new HashMap<>();
-		final Map<T,Integer> ids2_To_Indices = new HashMap<>();
-		final SortedMap<Integer,T> indices_To_Ids1 = new TreeMap<>();
+		final Map<T, Integer> ids1_To_Indices = new HashMap<>();
+		final Map<T, Integer> ids2_To_Indices = new HashMap<>();
+		final SortedMap<Integer, T> indices_To_Ids1 = new TreeMap<>();
 		final SortedMap<Integer, T> indices_To_Ids2 = new TreeMap<>();
 
+		RECORD_ID_TYPE recordIdType = expectedRecordIdType;
 		int count1 = 0;
 		int count2 = 0;
 		int splitIndex = ImmutableRecordIdTranslatorImpl.NOT_SPLIT;
 		for (RecordIdTranslation<T> rt : translations) {
 
-			// Check the record-id type
+			// Check or set the record-id type
 			RECORD_ID_TYPE rid = rt.getRecordType();
-			assert rid != null;
-			assert recordIdType == rid;
+			if (recordIdType == null) {
+				assert rid != null;
+				recordIdType = rid;
+			} else {
+				assert recordIdType == rid;
+			}
 
 			// Get the translated index and the recordId
 			int index = rt.getTranslatedId();
@@ -144,9 +153,15 @@ class ImmutableRecordIdTranslatorImpl implements
 		log.info("source2 translations: " + count2);
 		log.info("split index: " + splitIndex);
 		if (count1 == 0 && count2 == 0) {
-			// Should have been caught by preconditions
-			throw new Error("Algorithm error: no translations");
+			String msg =
+				"UNEXPECTED (should be caught by preconditions): "
+						+ "no record-id translations for job " + job.getId();
+			log.severe(msg);
+			throw new Error(msg);
 		}
+		assert recordIdType != null;
+		assert expectedRecordIdType == null
+				|| expectedRecordIdType == recordIdType;
 
 		ImmutableRecordIdTranslatorImpl irit =
 			new ImmutableRecordIdTranslatorImpl(job, recordIdType,
@@ -342,7 +357,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			source1.close();
 			source1.delete();
 		}
-		log.info("Number of ids from first source: " + count);
+		log.info("Number of ids from first source: " + (count+1));
 
 		// Read the second source if there is one
 		if (source2.exists()) {
@@ -370,7 +385,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			source2.close();
 			source2.delete();
 		}
-		log.info("Number of ids from second source: " + count);
+		log.info("Number of ids from second source: " + (count+1));
 		log.info("Split index: " + retVal);
 		return retVal;
 	}

@@ -11,12 +11,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
@@ -106,88 +103,13 @@ public class RecordIdControllerBean implements RecordIdController {
 		if (job == null) {
 			throw new IllegalArgumentException("null batch job");
 		}
-
-		// Query query =
-		// em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_BY_JOBID);
-		// query.setParameter(
-		// RecordIdTranslationJPA.PN_TRANSLATEDID_FIND_BY_JOBID_JOBID,
-		// job.getId());
-		// @SuppressWarnings("unchecked")
 		List<AbstractRecordIdTranslationEntity<T>> translations =
 			findTranslationImpls(job);
-
-		if (translations.isEmpty()) {
-			String msg =
-				"Issue 2: No record-id translations for job " + job.getId();
-			throw new BlockingException(msg);
-		}
-
-		final Map<T, Integer> ids1_To_Indices = new HashMap<>();
-		final Map<T, Integer> ids2_To_Indices = new HashMap<>();
-		final SortedMap<Integer, T> indices_To_Ids1 = new TreeMap<>();
-		final SortedMap<Integer, T> indices_To_Ids2 = new TreeMap<>();
-
-		RECORD_ID_TYPE recordIdType = null;
-		int count1 = 0;
-		int count2 = 0;
-		int splitIndex = ImmutableRecordIdTranslatorImpl.NOT_SPLIT;
-		for (RecordIdTranslation<T> rt : translations) {
-
-			// Check or set the record-id type
-			RECORD_ID_TYPE rid = rt.getRecordType();
-			if (recordIdType == null) {
-				assert rid != null;
-				recordIdType = rid;
-			} else {
-				assert recordIdType == rid;
-			}
-
-			// Get the translated index and the recordId
-			int index = rt.getTranslatedId();
-			T recordId = rt.getRecordId();
-
-			// Figure out where to put the recordId and index
-			RECORD_SOURCE_ROLE rsr = rt.getRecordSource();
-			boolean isFirstRecord = rsr.isFirstSource();
-			boolean isSplitIndex = rsr.isSplitIndex();
-			if (isFirstRecord) {
-				++count1;
-				ids1_To_Indices.put(recordId,index); // put(index, recordId);
-				indices_To_Ids1.put(index, recordId);
-			} else if (!isSplitIndex) {
-				++count2;
-				ids2_To_Indices.put(recordId, index);
-				indices_To_Ids2.put(index, recordId);
-			} else {
-				final int si = rt.getTranslatedId();
-				if (si != RecordIdTranslation.INVALID_TRANSLATED_ID
-						&& splitIndex == RecordIdTranslation.INVALID_TRANSLATED_ID) {
-					splitIndex = rt.getTranslatedId();
-				} else if (si != RecordIdTranslation.INVALID_TRANSLATED_ID) {
-					String msg =
-						"Multiple entries for split index: " + splitIndex
-								+ ", " + si;
-					throw new BlockingException(msg);
-				} else {
-					String msg = "Invalid split index: " + si;
-					throw new BlockingException(msg);
-				}
-			}
-		}
-		logger.info("source1 translations: " + count1);
-		logger.info("source2 translations: " + count2);
-		logger.info("split index: " + splitIndex);
-		if (count1 == 0 && count2 == 0) {
-			String msg =
-				"Issue 3: No record-id translations for job " + job.getId();
-			throw new BlockingException(msg);
-		}
-
-		ImmutableRecordIdTranslatorImpl irit =
-			new ImmutableRecordIdTranslatorImpl(job, recordIdType,
-					ids1_To_Indices, ids2_To_Indices, indices_To_Ids1,
-					indices_To_Ids2, splitIndex);
-		return irit;
+		final RECORD_ID_TYPE expectedRecordIdType = null;
+		ImmutableRecordIdTranslatorImpl retVal =
+			ImmutableRecordIdTranslatorImpl.createTranslator(job,
+					expectedRecordIdType, translations);
+		return retVal;
 	}
 
 	@Override
@@ -240,7 +162,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	protected ImmutableRecordIdTranslatorImpl toImmutableTranslatorImpl(
 			MutableRecordIdTranslatorImpl mrit) throws BlockingException {
 
-		logger.entering("toImmutableTranslatorImpl",mrit.toString());
+		logger.entering("toImmutableTranslatorImpl", mrit.toString());
 
 		final BatchJob job = mrit.getBatchJob();
 		assert job != null && BatchJobEntity.isPersistent(job);
@@ -248,17 +170,18 @@ public class RecordIdControllerBean implements RecordIdController {
 		ImmutableRecordIdTranslatorImpl retVal = null;
 		if (mrit.isClosed() && !mrit.doTranslatorCachesExist()) {
 			logger.finer("finding immutable translator");
-logger.severe("DEBUG 100 mrit.splitIndex: " + mrit.getSplitIndex());
+			logger.severe("DEBUG 100 mrit.splitIndex: " + mrit.getSplitIndex());
 			assert mrit.isClosed() && !mrit.doTranslatorCachesExist();
 			retVal = findTranslatorImpl(job);
-logger.severe("DEBUG 101 retVal.splitIndex: " + retVal.getSplitIndex());
+			logger.severe("DEBUG 101 retVal.splitIndex: "
+					+ retVal.getSplitIndex());
 			logger.finer("found immutable translator: " + retVal);
 
 		} else {
 			logger.fine("constructing immutable translator");
 			assert !mrit.isClosed() || mrit.doTranslatorCachesExist();
 			mrit.close();
-logger.severe("DEBUG 200 mrit.splitIndex: " + mrit.getSplitIndex());
+			logger.severe("DEBUG 200 mrit.splitIndex: " + mrit.getSplitIndex());
 			final BatchJob j = mrit.getBatchJob();
 			final IRecordIdSource<?> s1 =
 				mrit.getFactory().getSource(mrit.getSink1());
@@ -268,19 +191,21 @@ logger.severe("DEBUG 200 mrit.splitIndex: " + mrit.getSplitIndex());
 			// Translator caches are removed by the constructor
 			// ImmutableRecordIdTranslatorImpl
 			retVal = new ImmutableRecordIdTranslatorImpl(j, s1, s2);
-logger.severe("DEBUG 201 retVal.splitIndex: " + retVal.getSplitIndex());
+			logger.severe("DEBUG 201 retVal.splitIndex: "
+					+ retVal.getSplitIndex());
 			assert !mrit.doTranslatorCachesExist();
-logger.severe("DEBUG 202 mrit.splitIndex: " + mrit.getSplitIndex());
+			logger.severe("DEBUG 202 mrit.splitIndex: " + mrit.getSplitIndex());
 			logger.fine("constructed immutable translator");
 
 			// Save the immutable translator to persistent storage
 			this.saveTranslatorImpl(job, retVal);
-logger.severe("DEBUG 203 retVal.splitIndex: " + retVal.getSplitIndex());
+			logger.severe("DEBUG 203 retVal.splitIndex: "
+					+ retVal.getSplitIndex());
 		}
 		assert retVal != null;
 		assert mrit.isClosed() && !mrit.doTranslatorCachesExist();
 
-logger.severe("DEBUG 300 retVal.splitIndex: " + retVal.getSplitIndex());
+		logger.severe("DEBUG 300 retVal.splitIndex: " + retVal.getSplitIndex());
 		return retVal;
 	}
 
@@ -288,7 +213,7 @@ logger.severe("DEBUG 300 retVal.splitIndex: " + retVal.getSplitIndex());
 	public MutableRecordIdTranslator<?> createMutableRecordIdTranslator(
 			BatchJob job) throws BlockingException {
 
-		logger.entering("createMutableRecordIdTranslator",job.toString());
+		logger.entering("createMutableRecordIdTranslator", job.toString());
 
 		RecordIdSinkSourceFactory rFactory = getTransIDFactory(job);
 		IRecordIdSink sink1 = rFactory.getNextSink();
