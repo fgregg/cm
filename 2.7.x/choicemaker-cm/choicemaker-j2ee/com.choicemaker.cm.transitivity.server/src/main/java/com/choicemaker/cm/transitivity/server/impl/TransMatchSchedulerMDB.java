@@ -10,30 +10,11 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
-import java.util.Date;
-import java.util.logging.Logger;
-
-import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
+import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.Queue;
-
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractScheduler;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 
 /**
  * This is the match scheduler for the Transitivity Engine.
@@ -48,136 +29,14 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 				propertyValue = "java:/choicemaker/urm/jms/transMatchSchedulerQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class TransMatchSchedulerMDB extends AbstractScheduler implements MessageListener {
-
-	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger
-			.getLogger(TransMatchSchedulerMDB.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ TransMatchSchedulerMDB.class.getName());
+public class TransMatchSchedulerMDB implements MessageListener {
 
 	@EJB
-	private OabaJobControllerBean jobController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersControllerBean paramsController;
-
-	@EJB
-	private OabaProcessingController processingController;
-
-	@EJB
-	private ServerConfigurationController serverController;
-
-	@EJB
-	private OperationalPropertyController propertyController;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchDedupQueue")
-	private Queue transMatchDedupQueue;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateTransQueue")
-	private Queue updateTransQueue;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/transMatcherQueue")
-	private Queue transMatcherQueue;
-
-	@Inject
-	private JMSContext jmsContext;
+	private TransMatchSchedulerSingleton singleton;
 
 	@Override
-	protected OabaJobControllerBean getJobController() {
-		return jobController;
-	}
-
-	@Override
-	protected OabaParametersControllerBean getParametersController() {
-		return paramsController;
-	}
-
-	@Override
-	protected OabaProcessingController getProcessingController() {
-		return processingController;
-	}
-
-	@Override
-	protected ServerConfigurationController getServerController() {
-		return serverController;
-	}
-
-	@Override
-	protected OabaSettingsController getSettingsController() {
-		return oabaSettingsController;
-	}
-
-	@Override
-	protected OperationalPropertyController getPropertyController() {
-		return propertyController;
-	}
-
-	@Override
-	protected Logger getLogger() {
-		return log;
-	}
-
-	@Override
-	protected Logger getJMSTrace() {
-		return jmsTrace;
-	}
-
-	@Override
-	protected void cleanUp (OabaJob job, OabaJobMessage sd) throws BlockingException {
-		log.fine("cleanUp");
-
-		throw new Error("not yet implemented");
-//		final long jobId = sd.jobID;
-//		TransitivityParameters params = em.find(OabaParametersEntity.class, jobId);
-//		final String modelConfigId  = params.getModelConfigurationName();
-//		ImmutableProbabilityModel stageModel = PMManager.getModelInstance(modelConfigId);				
-//		//get the number of processors
-//		String temp = (String) stageModel.properties().get("numProcessors");
-//		int numProcessors = Integer.parseInt(temp);
-//
-//		//remove the data
-//		TransitivityFileUtils oabaConfig = new TransitivityFileUtils(jobId);
-//		IChunkDataSinkSourceFactory stageFactory = oabaConfig.getStageDataFactory();
-//		IChunkDataSinkSourceFactory masterFactory= oabaConfig.getMasterDataFactory();
-//		stageFactory.removeAllSinks(sd.numChunks);
-//		masterFactory.removeAllSinks(sd.numChunks);
-//		
-//		//oversized
-//		ComparisonArrayGroupSinkSourceFactory factoryOS =
-//			oabaConfig.getComparisonArrayGroupFactoryOS(numProcessors);
-//		
-//		//there is always 1 chunk to remove.
-//		int c = sd.numChunks;
-//		if (c == 0) c = 1;
-//		
-//		for (int i=0; i<c; i++) {
-//			for (int j=1; j<=numProcessors; j++) {
-//				IComparisonArraySource sourceOS = factoryOS.getSource(i, j);
-//				sourceOS.remove();
-//				log.fine("removing " + sourceOS.getInfo());
-//			}
-//		}
-	}
-
-	@Override
-	protected void sendToMatchDebup (OabaJob job, OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, transMatchDedupQueue, log);
-	} 
-
-	@Override
-	protected void sendToMatcher (OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, transMatcherQueue, log);
-	} 
-
-	@Override
-	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
-			Date timestamp, String info) {
-		getProcessingController().updateStatusWithNotification(job, event,
-				timestamp, info);
+	public void onMessage(Message message) {
+		singleton.onMessage(message);
 	}
 
 }

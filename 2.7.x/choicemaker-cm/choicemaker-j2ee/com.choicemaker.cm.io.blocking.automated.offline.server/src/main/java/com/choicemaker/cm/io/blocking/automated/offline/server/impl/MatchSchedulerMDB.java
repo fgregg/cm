@@ -10,52 +10,18 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
-
-import java.util.Date;
-import java.util.logging.Logger;
-
-import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
-import javax.jms.Queue;
-
-import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
-import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import javax.jms.Message;
+import javax.jms.MessageListener;
 
 /**
- * This bean delegates the different chunks to different matcher message beans.
- * It listens for done messages from the matchers bean and when every chunk is
- * done, it calls the MatchDedup bean.
+ * This MDB delegates message handling to a singleton EJB, which tracks
+ * certain OABA-related data between invocations of <code>onMessage</code>.
  * 
- * This version reads in one chunk at a time and splits the trees for processing
- * by different MatcherMDB beans.
- * 
- * @author pcheung
- *
+ * @author rphall
  */
-@SuppressWarnings({ "rawtypes" })
 @MessageDriven(
 		activationConfig = {
 				@ActivationConfigProperty(propertyName = "maxSession",
@@ -65,166 +31,14 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 						propertyValue = "java:/choicemaker/urm/jms/matchSchedulerQueue"),
 				@ActivationConfigProperty(propertyName = "destinationType",
 						propertyValue = "javax.jms.Queue") })
-public class MatchSchedulerMDB extends AbstractScheduler {
-
-	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(MatchSchedulerMDB.class
-			.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ MatchSchedulerMDB.class.getName());
+public class MatchSchedulerMDB implements MessageListener {
 
 	@EJB
-	private OabaJobControllerBean jobController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersControllerBean paramsController;
-
-	@EJB
-	private OabaProcessingController processingController;
-
-	@EJB
-	private ServerConfigurationController serverController;
-
-	@EJB
-	private OperationalPropertyController propertyController;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
-	private Queue matchDedupQueue;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")
-	private Queue matcherQueue;
-
-	@Inject
-	private JMSContext jmsContext;
+	private MatchSchedulerSingleton singleton;
 
 	@Override
-	protected OabaJobControllerBean getJobController() {
-		return jobController;
-	}
-
-	@Override
-	protected OabaParametersControllerBean getParametersController() {
-		return paramsController;
-	}
-
-	@Override
-	protected OabaProcessingController getProcessingController() {
-		return processingController;
-	}
-
-	@Override
-	protected ServerConfigurationController getServerController() {
-		return serverController;
-	}
-
-	@Override
-	protected OabaSettingsController getSettingsController() {
-		return oabaSettingsController;
-	}
-
-	@Override
-	protected OperationalPropertyController getPropertyController() {
-		return propertyController;
-	}
-
-	@Override
-	protected Logger getLogger() {
-		return log;
-	}
-
-	@Override
-	protected Logger getJMSTrace() {
-		return jmsTrace;
-	}
-
-	/**
-	 * This method cleans up the chunk files.
-	 */
-	@Override
-	protected void cleanUp(OabaJob oabaJob, OabaJobMessage sd)
-			throws BlockingException {
-		log.info("cleanUp");
-
-		final long jobId = oabaJob.getId();
-		OabaParameters params =
-			getParametersController().findBatchParamsByJobId(jobId);
-		ServerConfiguration serverConfig =
-			getServerController().findServerConfigurationByJobId(jobId);
-		final String modelConfigId = params.getModelConfigurationName();
-		IProbabilityModel model = PMManager.getModelInstance(modelConfigId);
-		if (model == null) {
-			String s = "No modelId corresponding to '" + modelConfigId + "'";
-			log.severe(s);
-			throw new IllegalArgumentException(s);
-		}
-
-		int numProcessors = serverConfig.getMaxChoiceMakerThreads();
-
-		// remove the data
-		final String _numChunks =
-			getPropertyController()
-					.getJobProperty(oabaJob, PN_CHUNK_FILE_COUNT);
-		final int numChunks = Integer.valueOf(_numChunks);
-
-		final String _numRegularChunks =
-			getPropertyController().getJobProperty(oabaJob,
-					PN_REGULAR_CHUNK_FILE_COUNT);
-		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
-
-		IChunkDataSinkSourceFactory stageFactory =
-			OabaFileUtils.getStageDataFactory(oabaJob, model);
-		IChunkDataSinkSourceFactory masterFactory =
-			OabaFileUtils.getMasterDataFactory(oabaJob, model);
-		stageFactory.removeAllSinks(numChunks);
-		masterFactory.removeAllSinks(numChunks);
-
-		// remove the trees
-		final String _recordIdType =
-			getPropertyController().getJobProperty(oabaJob, PN_RECORD_ID_TYPE);
-		final RECORD_ID_TYPE recordIdType =
-			RECORD_ID_TYPE.valueOf(_recordIdType);
-		ComparisonTreeGroupSinkSourceFactory factory =
-			OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, recordIdType,
-					numProcessors);
-		for (int i = 0; i < numRegularChunks; i++) {
-			for (int j = 1; j <= numProcessors; j++) {
-				IComparisonTreeSource source = factory.getSource(i, j);
-				source.delete();
-			}
-		}
-
-		final int numOS = numChunks - numRegularChunks;
-
-		// remove the oversized array files
-		ComparisonArrayGroupSinkSourceFactory factoryOS =
-			OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob,
-					numProcessors);
-		for (int i = 0; i < numOS; i++) {
-			for (int j = 1; j <= numProcessors; j++) {
-				IComparisonArraySource sourceOS = factoryOS.getSource(i, j);
-				sourceOS.delete();
-			}
-		}
-	}
-
-	@Override
-	protected void sendToMatcher(OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, matcherQueue, log);
-	}
-
-	@Override
-	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
-			Date timestamp, String info) {
-		processingController.updateStatusWithNotification(job, event,
-				timestamp, info);
-	}
-
-	@Override
-	protected void sendToMatchDebup(OabaJob job, OabaJobMessage sd) {
-		MessageBeanUtils.sendStartData(sd, jmsContext, matchDedupQueue, log);
+	public void onMessage(Message message) {
+		singleton.onMessage(message);
 	}
 
 }
