@@ -331,7 +331,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 			// Skip a pair if a record is not
 			// in this particular comparison set
-			Level DETAILS = Level.FINER;
+			Level DETAILS = Level.WARNING;
 			boolean isLoggable = getLogger().isLoggable(DETAILS);
 			if (q == null) {
 				skipPair = true;
