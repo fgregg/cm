@@ -20,9 +20,9 @@ import com.choicemaker.util.SystemPropertyUtils;
  */
 public class Constants {
 
-	// Used by RecordValue
-	public static final int HASHMAP = 1;
-	public static final int ARRAY = 2;
+//	// Used by RecordValue
+//	public static final int HASHMAP = 1;
+//	public static final int ARRAY = 2;
 
 	public static final String LINE_SEPARATOR = System
 			.getProperty(SystemPropertyUtils.LINE_SEPARATOR);
