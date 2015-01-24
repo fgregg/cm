@@ -12,8 +12,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 
 import java.util.List;
 
-import com.choicemaker.cm.core.BlockingException;
-
 /**
  * Extends the IRecordIDTranslator2 interface by adding a lookup method that
  * returns the internal id of a specified record id.
@@ -24,12 +22,10 @@ import com.choicemaker.cm.core.BlockingException;
 public interface ImmutableRecordIdTranslator<T extends Comparable<T>> {
 
 	/**
-	 * Temporary hack: this method will be removed.
-	 * 
-	 * @deprecated
+	 * A magic value returned by {@link #getSplitIndex()} indicating that the
+	 * translator is not split. Numerically equal to {@link #INVALID_INDEX}.
 	 */
-	@Deprecated
-	public void cleanUp() throws BlockingException;
+	public static final int NOT_SPLIT = -1;
 
 	/**
 	 * Returned from {@link #lookup(Comparable) lookup} if no internal index
@@ -54,6 +50,9 @@ public interface ImmutableRecordIdTranslator<T extends Comparable<T>> {
 	 * RecordSource2 starts from splitIndex.
 	 */
 	public int getSplitIndex();
+
+	/** Indicates whether the translator has been split */
+	boolean isSplit();
 
 	/**
 	 * Returns the internal id (a.k.a. index) of a specified staging record id,

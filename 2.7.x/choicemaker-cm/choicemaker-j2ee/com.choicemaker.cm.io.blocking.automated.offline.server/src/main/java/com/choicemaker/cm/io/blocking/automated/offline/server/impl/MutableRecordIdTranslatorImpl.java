@@ -10,6 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator.INVALID_INDEX;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.SortedMap;
@@ -19,10 +22,9 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
-import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableRecordIdTranslatorLocal;
 
 /**
  * A cached collection of translated record identifiers. (Persistent
@@ -34,7 +36,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
  */
 @SuppressWarnings({
 		"rawtypes", "unchecked" })
-public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslator {
+class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 
 	/**
 	 * For testing purposes only. Returns a list of map value in the order of
@@ -49,8 +51,7 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslator 
 		ArrayList retVal = null;
 		if (map != null) {
 			retVal = new ArrayList();
-			int expectedKeyValue =
-				ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
+			int expectedKeyValue = MINIMUM_VALID_INDEX - 1;
 			for (Iterator i = map.keySet().iterator(); i.hasNext();) {
 				++expectedKeyValue;
 				Integer key = (Integer) i.next();
@@ -111,20 +112,15 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslator 
 
 	private TRANSLATOR_STATE translatorState = TRANSLATOR_STATE.MUTABLE;
 
-	/**
-	 * A delegate that implements methods declared by the
-	 * ImmutableRecordIdTranslator interface. This instance is null in the
-	 * MUTABLE state.
-	 */
-	private ImmutableRecordIdTranslator immutableTranslator;
-
+	private final BatchJob batchJob;
+	
 	private final IRecordIdSinkSourceFactory rFactory;
 
 	/** Typically a source of staging records */
-	private IRecordIdSink sink1;
+	private final IRecordIdSink sink1;
 
 	/** Typically a source of master records */
-	private IRecordIdSink sink2;
+	private final IRecordIdSink sink2;
 
 	/** The state of sink1 */
 	private SINK_STATE sink1State;
@@ -142,8 +138,7 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslator 
 	private RECORD_ID_TYPE recordIdType;
 
 	/** The next available internal index to which a record id may be mapped */
-	private int currentIndex =
-		ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
+	private int currentIndex = MINIMUM_VALID_INDEX - 1;
 
 	/**
 	 * This is the internal index at which the indices for records from the
@@ -152,91 +147,113 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslator 
 	 */
 	private int splitIndex = NOT_SPLIT;
 
-	public MutableRecordIdTranslatorImpl(IRecordIdSinkSourceFactory rFactory)
-			throws BlockingException {
-		this.rFactory = rFactory;
-		sink1 = rFactory.getNextSink();
-		sink1State = SINK_STATE.UNKNOWN;
+	MutableRecordIdTranslatorImpl(BatchJob job,
+			IRecordIdSinkSourceFactory factory, IRecordIdSink s1, IRecordIdSink s2) throws BlockingException {
+		if (job == null || factory == null || s1 == null || s2 == null) {
+			throw new IllegalArgumentException("null argument");
+		}
+		if (s1.exists()) {
+			String msg = "translator cache already exists: " + s1;
+			throw new IllegalArgumentException(msg);
+		}
+		if (s2.exists()) {
+			String msg = "translator cache already exists: " + s2;
+			throw new IllegalArgumentException(msg);
+		}
+		this.batchJob = job;
+		this.rFactory = factory;
+		this.sink1 = s1;
 		log.info("Sink 1: " + sink1);
-		sink2 = rFactory.getNextSink();
-		sink2State = SINK_STATE.UNKNOWN;
+		this.sink1State = SINK_STATE.UNKNOWN;
+		this.sink2 = s2;
 		log.info("Sink 2: " + sink2);
+		this.sink2State = SINK_STATE.UNKNOWN;
 	}
 
 	@Override
 	public void cleanUp() throws BlockingException {
-		if (sink1.exists()) {
-			sink1.flush();
-			sink1.close();
+		if (getSink1().exists()) {
+			getSink1().flush();
+			getSink1().close();
 			sink1State = SINK_STATE.CLOSED;
-			sink1.remove();
-			sink1 = null;
+			getSink1().remove();
 			sink1State = null;
 		}
-		if (sink2.exists()) {
-			sink2.flush();
-			sink2.close();
+		if (getSink2().exists()) {
+			getSink2().flush();
+			getSink2().close();
 			sink2State = SINK_STATE.CLOSED;
-			sink2.remove();
-			sink2 = null;
+			getSink2().remove();
 			sink2State = null;
 		}
 	}
 
 	@Override
 	public void close() throws BlockingException {
-		log.info("close(): translatorState == " + translatorState);
+		log.fine("close(): translatorState == " + translatorState);
 		if (!isClosed()) {
-			if (sink1.exists() && sink1State == SINK_STATE.OPEN) {
+			// Check first sink
+			if (getSink1().exists() && sink1State == SINK_STATE.OPEN) {
 				log.info("Writing ids to sink1: " + count1);
-				sink1.flush();
-				log.info("Closing sink1");
-				sink1.close();
+				getSink1().flush();
+				log.info("Closing sink1: " + getSink1());
+				getSink1().close();
 				sink1State = SINK_STATE.CLOSED;
+
 			} else {
-				log.warning("Sink1 does not exist or is not open: " + sink1);
+				log.fine("Sink1 already closed: " + getSink1());
 			}
-			if (sink2.exists() && sink2State == SINK_STATE.OPEN) {
+
+			// Check second sink
+			if (getSink2().exists() && sink2State == SINK_STATE.OPEN) {
 				log.info("Writing ids to sink2: " + count2);
-				sink2.flush();
-				log.info("Closing sink2");
-				sink2.close();
+				getSink2().flush();
+				log.info("Closing sink2: " + getSink2());
+				getSink2().close();
 				sink2State = SINK_STATE.CLOSED;
+
 			} else {
-				log.warning("Sink2 does not exist: " + sink2);
+				log.info("Sink2 does not exist: " + getSink2());
 			}
+
 			this.translatorState = TRANSLATOR_STATE.IMMUTABLE;
 		} else {
 			log.warning("translator is already closed");
 		}
-		log.info("close(): translatorState == " + translatorState);
+
+		String msg = "close(): " + isClosed() + ", translatorState == " + translatorState;
+		if (!isClosed()) {
+			log.severe(msg);
+		} else {
+			log.info(msg);
+		}
 		assert isClosed();
 	}
 
 	@Override
 	public void open() throws BlockingException {
-		if (translatorState != TRANSLATOR_STATE.MUTABLE) {
+		if (isClosed()) {
 			throw new IllegalStateException("invalid translator state: "
 					+ translatorState);
 		}
-		currentIndex = ImmutableRecordIdTranslator.MINIMUM_VALID_INDEX - 1;
-		log.info("Opening sink1: " + sink1);
-		sink1.open();
+		currentIndex = MINIMUM_VALID_INDEX - 1;
+		log.info("Opening sink1: " + getSink1());
+		getSink1().open();
 		sink1State = SINK_STATE.OPEN;
 		_setSplitIndex(NOT_SPLIT);
 	}
 
 	@Override
 	public void split() throws BlockingException {
-		if (_getSplitIndex() == NOT_SPLIT) {
+		if (getSplitIndex() == NOT_SPLIT) {
 			_setSplitIndex(currentIndex + 1);
-			log.info("Flushing sink1: " + sink1);
-			sink1.flush();
-			log.info("Closing sink1: " + sink1);
-			sink1.close();
+			log.info("Writing ids to sink1: " + count1);
+			getSink1().flush();
+			log.info("Closing sink1: " + getSink1());
+			getSink1().close();
 			sink1State = SINK_STATE.CLOSED;
-			log.info("Opening sink2: " + sink2);
-			sink2.open();
+			log.info("Opening sink2: " + getSink2());
+			getSink2().open();
 			sink2State = SINK_STATE.OPEN;
 		} else {
 			log.warning("Split method invoked on a previously split translator");
@@ -245,70 +262,41 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslator 
 
 	@Override
 	public int translate(Comparable o) throws BlockingException {
-		if (translatorState != TRANSLATOR_STATE.MUTABLE) {
+		if (isClosed()) {
 			throw new IllegalStateException("translator is no longer mutable");
 		}
 		int retVal;
 		if (o == null) {
-			retVal = ImmutableRecordIdTranslator.INVALID_INDEX;
+			retVal = INVALID_INDEX;
 			log.warning("translating null record id to an invalid internal index ("
 					+ retVal + ")");
 		} else {
 			currentIndex++;
 			retVal = currentIndex;
 
-			// figure out the id type for the first file
+			// figure out the id type for the sinks
 			if (currentIndex == 0) {
 				_setRecordIdType(RECORD_ID_TYPE.fromInstance(o));
-				sink1.setRecordIDType(_getRecordIdType());
+				getSink1().setRecordIDType(getRecordIdType());
+				getSink2().setRecordIDType(getRecordIdType());
 			}
+			assert getRecordIdType() == RECORD_ID_TYPE.fromInstance(o);
+			assert getRecordIdType() == getSink1().getRecordIdType();
+			assert getRecordIdType() == getSink2().getRecordIdType();
 
-			// figure out the id type for the second file
-			if (_getSplitIndex() != NOT_SPLIT
-					&& currentIndex == _getSplitIndex()) {
-				if (_getRecordIdType() == null) {
-					_setRecordIdType(RECORD_ID_TYPE.fromInstance(o));
-				} else {
-					assert _getRecordIdType() == RECORD_ID_TYPE.fromInstance(o);
-				}
-				assert _getRecordIdType() != null;
-				sink2.setRecordIDType(_getRecordIdType());
-			}
-
-			if (_getSplitIndex() == NOT_SPLIT) {
-				sink1.writeRecordID(o);
+			if (getSplitIndex() == NOT_SPLIT) {
+				getSink1().writeRecordID(o);
 				++count1;
 			} else {
-				sink2.writeRecordID(o);
+				getSink2().writeRecordID(o);
 				++count2;
 			}
 		}
 		return retVal;
 	}
 
-	@Override
-	public ImmutableRecordIdTranslator toImmutableTranslator()
-			throws BlockingException {
-		log.info("toImmutableTranslator(): thread: "
-				+ Thread.currentThread().getName());
-		if (this.immutableTranslator != null) {
-			String msg =
-				"Already converted to an immutable translator: "
-						+ immutableTranslator;
-			log.fine(msg);
-		} else {
-			close();
-			final IRecordIdSource s1 = rFactory.getSource(sink1);
-			final IRecordIdSource s2 = rFactory.getSource(sink2);
-			immutableTranslator = new ImmutableRecordIdTranslatorImpl(s1, s2);
-		}
-		assert isClosed();
-		assert immutableTranslator != null;
-		return immutableTranslator;
-	}
-
 	public boolean isClosed() {
-		log.info("isClosed(): translatorState: " + translatorState);
+		log.finer("isClosed(): translatorState: " + translatorState);
 		boolean retVal;
 		if (this.translatorState == TRANSLATOR_STATE.MUTABLE) {
 			retVal = false;
@@ -316,11 +304,28 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslator 
 			assert this.translatorState == TRANSLATOR_STATE.IMMUTABLE;
 			retVal = true;
 		}
-		log.info("isClosed() == " + retVal);
+		log.finer("isClosed() == " + retVal);
 		return retVal;
 	}
 
-	protected RECORD_ID_TYPE _getRecordIdType() {
+	public BatchJob getBatchJob() {
+		return batchJob;
+	}
+
+	IRecordIdSinkSourceFactory getFactory() {
+		return rFactory;
+	}
+
+	IRecordIdSink getSink1() {
+		return sink1;
+	}
+
+	IRecordIdSink getSink2() {
+		return sink2;
+	}
+
+	@Override
+	public RECORD_ID_TYPE getRecordIdType() {
 		return recordIdType;
 	}
 
@@ -328,8 +333,14 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslator 
 		this.recordIdType = dataType;
 	}
 
-	protected int _getSplitIndex() {
+	@Override
+	public int getSplitIndex() {
 		return splitIndex;
+	}
+
+	@Override
+	public boolean isSplit() {
+		return splitIndex != NOT_SPLIT;
 	}
 
 	protected void _setSplitIndex(int splitIndex) {
@@ -341,9 +352,13 @@ public class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslator 
 		return "MutableRecordIdTranslatorImpl [recordIdType=" + recordIdType
 				+ ", translatorState=" + translatorState + ", currentIndex="
 				+ currentIndex + ", splitIndex=" + splitIndex + ", sink1="
-				+ sink1 + ", sink1State=" + sink1State + ", count1=" + count1
-				+ ", sink2=" + sink2 + ", sink2State=" + sink2State
-				+ ", count2=" + count2 + "]";
+				+ getSink1() + ", sink1State=" + sink1State + ", count1="
+				+ count1 + ", sink2=" + getSink2() + ", sink2State="
+				+ sink2State + ", count2=" + count2 + "]";
+	}
+
+	public boolean doTranslatorCachesExist() {
+		return this.getSink1().exists() || this.getSink1().exists();
 	}
 
 }

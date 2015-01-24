@@ -28,6 +28,7 @@ import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
@@ -74,15 +75,15 @@ public class RecValService3 {
 	private boolean stop;
 
 	private IRecValSink[] sinks;
-	private int numBlockFields;
+	private final int numBlockFields;
 
-	private IRecValSinkSourceFactory rvFactory;
+	private final IRecValSinkSourceFactory rvFactory;
 
-	private IBlockingConfiguration bc;
+	private final IRecordIdFactory recidFactory;
 
-	private MutableRecordIdTranslator mutableTranslator;
+	private final MutableRecordIdTranslator mutableTranslator;
 
-	private OabaEventLog status;
+	private final OabaEventLog status;
 
 	/** A flag indicating whether any staging record has been read */
 	private boolean firstStage = true;
@@ -114,7 +115,7 @@ public class RecValService3 {
 	 */
 	public RecValService3(RecordSource stage, RecordSource master,
 			ImmutableProbabilityModel model,
-			IRecValSinkSourceFactory rvFactory,
+			IRecValSinkSourceFactory rvFactory, IRecordIdFactory recidFactory,
 			MutableRecordIdTranslator translator, OabaEventLog status,
 			IControl control) {
 
@@ -123,6 +124,7 @@ public class RecValService3 {
 		this.model = model;
 		this.mutableTranslator = translator;
 		this.rvFactory = rvFactory;
+		this.recidFactory = recidFactory;
 		this.status = status;
 		this.control = control;
 
@@ -136,7 +138,7 @@ public class RecValService3 {
 			ba.getBlockingConfiguration(blockName, dbConf);
 		IBlockingField[] bfs = bc.getBlockingFields();
 
-		// print blocking info
+		// log blocking info
 		for (int i = 0; i < bfs.length; i++) {
 			IDbField field = bfs[i].getDbField();
 			log.info("i " + i + " field " + field.getName() + " number "
@@ -179,7 +181,7 @@ public class RecValService3 {
 		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_REC_VAL) {
 			// need to initialize
 			log.info("recover rec,val files and mutableTranslator");
-			init();
+			recover();
 
 		} else if (status.getCurrentOabaEventId() < OabaProcessing.EVT_DONE_REC_VAL) {
 			// create the rec_id, val_id files
@@ -198,10 +200,11 @@ public class RecValService3 {
 	}
 
 	/**
-	 * This method closes the translator, determines the record id type, and
-	 * sets up the sinks array for future use.
+	 * This method closes the translator, converts to an immutable translator,
+	 * and determines the record id type handled by the translator. It also sets
+	 * up the sinks array for future use.
 	 */
-	private void init() throws BlockingException {
+	protected void recover() throws BlockingException {
 
 		sinks = new IRecValSink[numBlockFields];
 		for (int i = 0; i < numBlockFields; i++) {
@@ -209,7 +212,7 @@ public class RecValService3 {
 		}
 
 		ImmutableRecordIdTranslator immutableTranslator =
-			mutableTranslator.toImmutableTranslator();
+			recidFactory.toImmutableTranslator(mutableTranslator);
 		this.recordIdType = immutableTranslator.getRecordIdType();
 		assert this.recordIdType != null;
 
@@ -243,7 +246,8 @@ public class RecValService3 {
 				String blockName = model.getBlockingConfigurationName();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				bc = ba.getBlockingConfiguration(blockName, dbConf);
+				IBlockingConfiguration bc =
+					ba.getBlockingConfiguration(blockName, dbConf);
 
 				while (stage.hasNext() && !stop) {
 					count++;
@@ -254,7 +258,7 @@ public class RecValService3 {
 
 					stop = ControlChecker.checkStop(control, count);
 
-					writeRecord(r, model);
+					writeRecord(bc, r, model);
 
 					// This checks the id type
 					if (firstStage) {
@@ -280,7 +284,8 @@ public class RecValService3 {
 				String blockName = model.getBlockingConfigurationName();
 				String dbConf = model.getDatabaseConfigurationName();
 				BlockingAccessor ba = (BlockingAccessor) model.getAccessor();
-				bc = ba.getBlockingConfiguration(blockName, dbConf);
+				IBlockingConfiguration bc =
+					ba.getBlockingConfiguration(blockName, dbConf);
 
 				// 2014-04-24 rphall: Commented out unused local variable.
 				// long lastID = Long.MIN_VALUE;
@@ -293,7 +298,7 @@ public class RecValService3 {
 
 					stop = ControlChecker.checkStop(control, count);
 
-					writeRecord(r, model);
+					writeRecord(bc, r, model);
 
 					// This checks the id type
 					if (firstMaster) {
@@ -313,16 +318,17 @@ public class RecValService3 {
 		for (int i = 0; i < sinks.length; i++) {
 			sinks[i].close();
 		}
-		mutableTranslator.close();
-
+		ImmutableRecordIdTranslator usedLater =
+			recidFactory.toImmutableTranslator(mutableTranslator);
+		log.info("Converted record-id translator to immutable: " + usedLater);
 	}
 
 	/**
 	 * This method writes 1 record's rec_id and val_id.
 	 *
 	 */
-	private void writeRecord(Record r, ImmutableProbabilityModel model)
-			throws BlockingException {
+	private void writeRecord(IBlockingConfiguration bc, Record r,
+			ImmutableProbabilityModel model) throws BlockingException {
 		Object O = r.getId();
 		int internal = mutableTranslator.translate((Comparable) O);
 

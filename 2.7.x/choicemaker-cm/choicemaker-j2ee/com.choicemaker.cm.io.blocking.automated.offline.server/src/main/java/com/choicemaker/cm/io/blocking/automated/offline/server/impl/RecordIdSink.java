@@ -45,17 +45,14 @@ public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 					dos.writeInt(idType.getIntSymbol());
 
 				if (idType == TYPE_INTEGER) {
-
 					Integer I = (Integer) o;
 					dos.writeInt(I.intValue());
 
 				} else if (idType == TYPE_LONG) {
-
 					Long L = (Long) o;
 					dos.writeLong(L.longValue());
 
 				} else if (idType == TYPE_STRING) {
-
 					String S = (String) o;
 					dos.writeInt(S.length());
 					dos.writeChars(S);
@@ -70,17 +67,14 @@ public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 					fw.write(idType.getStringSymbol() + LINE_SEPARATOR);
 
 				if (idType == TYPE_INTEGER) {
-
 					Integer I = (Integer) o;
 					fw.write(I.toString() + LINE_SEPARATOR);
 
 				} else if (idType == TYPE_LONG) {
-
 					Long L = (Long) o;
 					fw.write(L.toString() + LINE_SEPARATOR);
 
 				} else if (idType == TYPE_STRING) {
-
 					String S = (String) o;
 					fw.write(S + LINE_SEPARATOR);
 
@@ -97,15 +91,26 @@ public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink#
-	 * setRecordIDType(int)
-	 */
 	@Override
 	public void setRecordIDType(RECORD_ID_TYPE type) {
-		this.idType = type;
+		if (type == null) {
+			throw new IllegalArgumentException("null type");
+		}
+
+		if (this.idType == null) {
+			this.idType = type;
+		} else if (type != this.idType) {
+			String msg = "Specified type (" + type + ") conflicts with existing type (" + this.idType + ")";
+			throw new IllegalArgumentException(msg);
+		}
+	}
+
+	@Override
+	public RECORD_ID_TYPE getRecordIdType() {
+		if (this.idType == null) {
+			throw new IllegalStateException("A type has not been set");
+		}
+		return this.idType;
 	}
 
 }

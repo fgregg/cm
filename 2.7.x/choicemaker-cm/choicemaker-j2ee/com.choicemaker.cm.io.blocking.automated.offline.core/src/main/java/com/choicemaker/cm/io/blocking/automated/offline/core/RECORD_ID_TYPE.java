@@ -5,8 +5,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  * Integer, Long and String.
  */
 public enum RECORD_ID_TYPE {
-	TYPE_INTEGER(1, Integer.class, int.class), TYPE_LONG(2, Long.class,
-			long.class), TYPE_STRING(3, String.class);
+	TYPE_INTEGER('1', Integer.class, int.class), TYPE_LONG('2', Long.class,
+			long.class), TYPE_STRING('3', String.class);
 	private final char charSymbol;
 	private final String strSymbol;
 	private final Class<?> recordIdClass;
@@ -68,15 +68,20 @@ public enum RECORD_ID_TYPE {
 	public static RECORD_ID_TYPE fromSymbol(char c) {
 		RECORD_ID_TYPE retVal = null;
 		switch (c) {
-		case 1:
+		case '1':
 			retVal = TYPE_INTEGER;
 			break;
-		case 2:
+		case '2':
 			retVal = TYPE_LONG;
-		case 3:
+			break;
+		case '3':
 			retVal = TYPE_STRING;
+			break;
 		default:
-			throw new IllegalArgumentException("invalid symbol: " + c);
+			String hex = Integer.toHexString(c);
+			String msg =
+				"invalid symbol: '" + c + "' (0x" + hex + ")";
+			throw new IllegalArgumentException(msg);
 		}
 		assert retVal != null;
 		return retVal;

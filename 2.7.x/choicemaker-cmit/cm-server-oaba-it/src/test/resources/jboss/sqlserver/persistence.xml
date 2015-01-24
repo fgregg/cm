@@ -14,6 +14,7 @@
     <class>com.choicemaker.cm.batch.impl.BatchProcessingLogEntry</class>
     <class>com.choicemaker.cm.batch.impl.OperationalPropertyEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractRecordIdTranslationEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BaseRecordSourceEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
@@ -21,9 +22,14 @@
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdIntegerTranslation</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdLongTranslation</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdStringTranslation</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceEntity</class>
     <!--
+    <class>Xxx</class>
+    
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobEntity</class>
     -->
 
@@ -47,6 +53,7 @@
     <class>com.choicemaker.cm.batch.impl.BatchProcessingLogEntry</class>
     <class>com.choicemaker.cm.batch.impl.OperationalPropertyEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractRecordIdTranslationEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.BaseRecordSourceEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity</class>
@@ -54,12 +61,11 @@
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdIntegerTranslation</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdLongTranslation</class>
+    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdStringTranslation</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.SqlRecordSourceEntity</class>
-    <!--
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.TransitivityJobEntity</class>
-    <class>com.choicemaker.cm.io.blocking.automated.offline.server.BatchJobAuditEvent</class>
-    -->
 
     <properties>
       <property name="eclipselink.target-server" value="JBoss" />

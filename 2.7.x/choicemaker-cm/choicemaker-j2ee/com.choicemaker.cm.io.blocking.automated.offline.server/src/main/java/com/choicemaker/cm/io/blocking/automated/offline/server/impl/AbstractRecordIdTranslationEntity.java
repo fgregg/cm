@@ -20,8 +20,10 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.Recor
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.ID_GENERATOR_PK_COLUMN_VALUE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.ID_GENERATOR_TABLE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.JPQL_TRANSLATEDID_DELETE_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.JPQL_TRANSLATEDID_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.PN_TRANSLATEDID_FIND_BY_JOBID_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.JPQL_TRANSLATEDID_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.QN_TRANSLATEDID_DELETE_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.TABLE_NAME;
@@ -50,7 +52,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdTrans
 		@NamedQuery(name = QN_TRANSLATEDID_FIND_ALL,
 				query = JPQL_TRANSLATEDID_FIND_ALL),
 		@NamedQuery(name = QN_TRANSLATEDID_FIND_BY_JOBID,
-				query = PN_TRANSLATEDID_FIND_BY_JOBID_JOBID) })
+				query = JPQL_TRANSLATEDID_FIND_BY_JOBID),
+		@NamedQuery(name = QN_TRANSLATEDID_DELETE_BY_JOBID,
+				query = JPQL_TRANSLATEDID_DELETE_BY_JOBID) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
@@ -67,7 +71,7 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	/** Magic values to indicate an non-initialized record id */
 	public static final String INVALID_RECORD_ID = null;
 
-	/** Magic values to indicate an non-initialized record source */
+	/** Magic value to indicate an non-initialized record source */
 	public static final char INVALID_RECORD_SOURCE = '\0';
 
 	/**
@@ -93,8 +97,8 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 		retVal = retVal && !DV_STRING.equals(DV_ABSTRACT);
 		++dvCount;
 
-		// One more discriminator (ABSTRACT) than enum types
-		retVal = retVal && dvCount == RECORD_ID_TYPE.values().length + 1;
+		// One more discriminator (ABSTRACT and SPLIT_INDEX) than enum types
+		retVal = retVal && dvCount == RECORD_ID_TYPE.values().length + 2;
 
 		return retVal;
 	}
@@ -106,7 +110,6 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 			logger.severe(msg);
 			// An exception is not thrown here because it would create a class
 			// initialization exception, which can be hard to debug
-			// throw IllegalStateException(msg);
 		}
 	}
 
