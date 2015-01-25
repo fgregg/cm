@@ -165,7 +165,6 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					MutableRecordIdTranslator<?> translator =
 						getRecordIdController()
 								.createMutableRecordIdTranslator(oabaJob);
-getLogger().severe("DEBUG 0 translator.splitIndex: " + translator.getSplitIndex());
 
 					// create rec_id, val_id files
 					RecValSinkSourceFactory recvalFactory =
@@ -174,20 +173,16 @@ getLogger().severe("DEBUG 0 translator.splitIndex: " + translator.getSplitIndex(
 						new RecValService3(staging, master, stageModel,
 								recvalFactory, getRecordIdController(),
 								translator, processingEntry, oabaJob);
-getLogger().severe("DEBUG 1 translator.splitIndex: " + translator.getSplitIndex());
 					rvService.runService();
 					getLogger().info(
 							"Done creating rec_id, val_id files: "
 									+ rvService.getTimeElapsed());
 
-getLogger().severe("DEBUG 2 translator.splitIndex: " + translator.getSplitIndex());
 					ImmutableRecordIdTranslator<?> immutableTranslator =
 						getRecordIdController().toImmutableTranslator(
 								translator);
-getLogger().severe("DEBUG 3 translator.splitIndex: " + immutableTranslator.getSplitIndex());
 					final RECORD_ID_TYPE recordIdType =
 						immutableTranslator.getRecordIdType();
-getLogger().severe("DEBUG 4 translator.RECORD_ID_TYPE: " + immutableTranslator.getRecordIdType());
 					getPropertyController().setJobProperty(oabaJob,
 							PN_RECORD_ID_TYPE, recordIdType.name());
 

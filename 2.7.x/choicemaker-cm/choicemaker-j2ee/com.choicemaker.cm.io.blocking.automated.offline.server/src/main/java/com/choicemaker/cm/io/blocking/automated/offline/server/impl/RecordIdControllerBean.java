@@ -170,18 +170,14 @@ public class RecordIdControllerBean implements RecordIdController {
 		ImmutableRecordIdTranslatorImpl retVal = null;
 		if (mrit.isClosed() && !mrit.doTranslatorCachesExist()) {
 			logger.finer("finding immutable translator");
-			logger.severe("DEBUG 100 mrit.splitIndex: " + mrit.getSplitIndex());
 			assert mrit.isClosed() && !mrit.doTranslatorCachesExist();
 			retVal = findTranslatorImpl(job);
-			logger.severe("DEBUG 101 retVal.splitIndex: "
-					+ retVal.getSplitIndex());
 			logger.finer("found immutable translator: " + retVal);
 
 		} else {
 			logger.fine("constructing immutable translator");
 			assert !mrit.isClosed() || mrit.doTranslatorCachesExist();
 			mrit.close();
-			logger.severe("DEBUG 200 mrit.splitIndex: " + mrit.getSplitIndex());
 			final BatchJob j = mrit.getBatchJob();
 			final IRecordIdSource<?> s1 =
 				mrit.getFactory().getSource(mrit.getSink1());
@@ -191,21 +187,15 @@ public class RecordIdControllerBean implements RecordIdController {
 			// Translator caches are removed by the constructor
 			// ImmutableRecordIdTranslatorImpl
 			retVal = new ImmutableRecordIdTranslatorImpl(j, s1, s2);
-			logger.severe("DEBUG 201 retVal.splitIndex: "
-					+ retVal.getSplitIndex());
 			assert !mrit.doTranslatorCachesExist();
-			logger.severe("DEBUG 202 mrit.splitIndex: " + mrit.getSplitIndex());
 			logger.fine("constructed immutable translator");
 
 			// Save the immutable translator to persistent storage
 			this.saveTranslatorImpl(job, retVal);
-			logger.severe("DEBUG 203 retVal.splitIndex: "
-					+ retVal.getSplitIndex());
 		}
 		assert retVal != null;
 		assert mrit.isClosed() && !mrit.doTranslatorCachesExist();
 
-		logger.severe("DEBUG 300 retVal.splitIndex: " + retVal.getSplitIndex());
 		return retVal;
 	}
 

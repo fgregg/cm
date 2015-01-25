@@ -149,16 +149,14 @@ public class ChunkDataStore {
 			logger.severe(msg);
 			throw new IllegalStateException(msg);
 		}
-		if (logger.isLoggable(Level.FINE) && stageMap.size() == 0) {
+		if (logger.isLoggable(Level.FINER) && stageMap.size() == 0) {
 			// Issue warnings only for fine-grained logging
 			logger.warning("stageMap is empty");
 		}
 		Object retVal = stageMap.get(id);
 		if (logger.isLoggable(Level.FINE) && retVal == null) {
 			// Issue warnings only for fine-grained logging
-			logger.warning("null staging record (id " + id + ", stageMap size "
-					+ stageMap.size() + ", class "
-					+ (id == null ? null : id.getClass().getName()) + ")");
+			logger.warning("null staging record (id " + id + ")");
 		}
 		return retVal;
 	}
@@ -177,12 +175,9 @@ public class ChunkDataStore {
 			logger.warning("masterMap is empty");
 		}
 		Object retVal = masterMap.get(id);
-		if (logger.isLoggable(Level.FINE) && retVal == null) {
+		if (logger.isLoggable(Level.FINER) && retVal == null) {
 			// Issue warnings only for fine-grained logging
 			logger.warning("null master record (id " + id + ")");
-			logger.warning("null master record (id " + id + ", masterMap size "
-					+ masterMap.size() + ", class "
-					+ (id == null ? null : id.getClass().getName()) + ")");
 		}
 		return retVal;
 	}

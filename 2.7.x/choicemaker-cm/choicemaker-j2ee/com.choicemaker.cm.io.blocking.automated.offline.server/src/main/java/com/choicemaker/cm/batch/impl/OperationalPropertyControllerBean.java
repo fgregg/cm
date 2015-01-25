@@ -6,10 +6,7 @@ import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.PN_OPPROP_FIN
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.PN_OPPROP_FIND_BY_JOB_PNAME_P2;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FINDALL_BY_JOB;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FIND_BY_JOB_PNAME;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -38,16 +35,6 @@ public class OperationalPropertyControllerBean implements
 		if (job == null || pn == null || pv == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-// FIXME
-		{
-			if (PN_RECORD_ID_TYPE.equals(pn)) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				new Exception("Debug invocation of setJobProperty:").printStackTrace(pw);
-				logger.warning(sw.toString());
-			}
-		}
-// END FIXME
 		OperationalProperty op = new OperationalPropertyEntity(job, pn, pv);
 		save(op);
 	}

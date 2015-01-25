@@ -74,12 +74,9 @@ public abstract class BatchJobEntity implements BatchJob {
 	static {
 		// FIXME use EnumSet
 		Set<BatchJobStatus> allowed = new HashSet<>();
-		allowed.add(BatchJobStatus.QUEUED);
-		allowed.add(BatchJobStatus.ABORT_REQUESTED);
-		allowed.add(BatchJobStatus.ABORTED);
-		allowedTransitions.put(BatchJobStatus.NEW, allowed);
 		allowed = new HashSet<>();
 		allowed.add(BatchJobStatus.QUEUED);
+		allowed.add(BatchJobStatus.PROCESSING);
 		allowed.add(BatchJobStatus.ABORT_REQUESTED);
 		allowed.add(BatchJobStatus.ABORTED);
 		allowedTransitions.put(BatchJobStatus.NEW, allowed);
@@ -356,7 +353,7 @@ public abstract class BatchJobEntity implements BatchJob {
 	protected void logIgnoredTransition(String transition) {
 		String msg =
 			getId() + ", '" + getExternalId() + "': " + transition
-					+ " ignored (status == '" + getStatus() + "'";
+					+ " ignored (status == '" + getStatus() + "')";
 		log.warning(msg);
 	}
 

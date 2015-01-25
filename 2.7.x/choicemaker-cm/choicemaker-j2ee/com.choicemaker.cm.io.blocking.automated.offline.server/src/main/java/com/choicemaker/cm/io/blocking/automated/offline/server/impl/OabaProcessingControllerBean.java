@@ -159,7 +159,7 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 								OabaProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
 												retVal, e2);
-							logger.warning(msg);
+							logger.fine(msg);
 						}
 					}
 				}
