@@ -13,6 +13,15 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_FORMAT;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_GRAPH;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_HIGH_THRESHOLD;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_LOW_THRESHOLD;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_MASTER_RS;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_MASTER_RS_TYPE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_MODEL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_STAGE_RS;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_STAGE_RS_TYPE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.CN_TASK;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.DISCRIMINATOR_COLUMN;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.DISCRIMINATOR_VALUE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_NAME;
@@ -20,6 +29,8 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaP
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_PK_COLUMN_VALUE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_TABLE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.JPQL_BATCHPARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.QN_BATCHPARAMETERS_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersJPA.TABLE_NAME;
 
 import java.io.PrintWriter;
@@ -48,8 +59,8 @@ import com.choicemaker.cm.core.base.ImmutableThresholds;
  * @author rphall (migrated to JPA 2.0)
  *
  */
-@NamedQuery(name = OabaParametersJPA.QN_BATCHPARAMETERS_FIND_ALL,
-		query = OabaParametersJPA.JPQL_BATCHPARAMETERS_FIND_ALL)
+@NamedQuery(name = QN_BATCHPARAMETERS_FIND_ALL,
+		query = JPQL_BATCHPARAMETERS_FIND_ALL)
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
@@ -78,41 +89,52 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 		return retVal;
 	}
 
-	public static String dump(OabaParameters bp) {
+	public static String dump(OabaParameters p) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 
-		if (bp == null) {
-			pw.println("null batch parameters");
+		pw.println("Blocking parameters (BP)");
+		if (p == null) {
+			pw.println("BP: null batch parameters");
 		} else {
-			final OabaLinkageType task = bp.getOabaLinkageType();
-			pw.println("Linkage task: " + task);
+			pw.println("BP: DIFFER threshold: " + p.getLowThreshold());
+			pw.println("BP: MATCH threshold: " + p.getHighThreshold());
+			pw.println("BP: Model configuration name: "
+					+ p.getModelConfigurationName());
+			final OabaLinkageType task = p.getOabaLinkageType();
+			pw.print("BP: Linkage task: " + task);
 			if (task == OabaLinkageType.STAGING_DEDUPLICATION) {
-				pw.println("Deduplicating a single record source");
-				pw.println("Staging record source: " + bp.getStageRsId());
+				pw.println(" (deduplicating a single record source)");
+				pw.println("BP: Staging record source: " + p.getStageRsId());
+				pw.println("BP: Staging record source type: "
+						+ p.getStageRsType());
 			} else if (task == OabaLinkageType.STAGING_TO_MASTER_LINKAGE) {
-				pw.println("Linking a staging source to a master source");
-				pw.println("Staging record source: " + bp.getStageRsId());
-				pw.println("Master record source: " + bp.getMasterRsId());
+				pw.println(" (linking a staging source to a master source)");
+				pw.println("BP: Staging record source: " + p.getStageRsId());
+				pw.println("BP: Staging record source type: "
+						+ p.getStageRsType());
+				pw.println("BP: Master record source: " + p.getMasterRsId());
+				pw.println("BP: Master record source type: "
+						+ p.getMasterRsType());
 			} else if (task == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
-				pw.println("Linking a master source to a master source");
-				pw.println("Master record source: " + bp.getStageRsId());
-				pw.println("Master record source: " + bp.getMasterRsId());
+				pw.println(" (linking a master source to a master source)");
+				pw.println("BP: Master record source 1: " + p.getStageRsId());
+				pw.println("BP: Master record source 1 type: "
+						+ p.getStageRsType());
+				pw.println("BP: Master record source 2: " + p.getMasterRsId());
+				pw.println("BP: Master record source 2 type: "
+						+ p.getMasterRsType());
 			} else {
 				throw new IllegalArgumentException("unexpected task type: "
 						+ task);
 			}
-			pw.println("DIFFER threshold: " + bp.getLowThreshold());
-			pw.println("MATCH threshold: " + bp.getHighThreshold());
-			pw.println("Model configuration id: "
-					+ bp.getModelConfigurationName());
 		}
 		String retVal = sw.toString();
 		return retVal;
 	}
 
 	@Id
-	@Column(name = OabaParametersJPA.CN_ID)
+	@Column(name = CN_ID)
 	@TableGenerator(name = ID_GENERATOR_NAME, table = ID_GENERATOR_TABLE,
 			pkColumnName = ID_GENERATOR_PK_COLUMN_NAME,
 			valueColumnName = ID_GENERATOR_VALUE_COLUMN_NAME,
@@ -124,22 +146,22 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	@Column(name = CN_TYPE)
 	protected final String type;
 
-	@Column(name = OabaParametersJPA.CN_MODEL)
+	@Column(name = CN_MODEL)
 	private final String modelConfigName;
 
-	@Column(name = OabaParametersJPA.CN_LOW_THRESHOLD)
+	@Column(name = CN_LOW_THRESHOLD)
 	private final float lowThreshold;
 
-	@Column(name = OabaParametersJPA.CN_HIGH_THRESHOLD)
+	@Column(name = CN_HIGH_THRESHOLD)
 	private final float highThreshold;
 
-	@Column(name = OabaParametersJPA.CN_STAGE_RS)
+	@Column(name = CN_STAGE_RS)
 	private final long stageRsId;
 
-	@Column(name = OabaParametersJPA.CN_STAGE_RS_TYPE)
+	@Column(name = CN_STAGE_RS_TYPE)
 	private final String stageRsType;
 
-	@Column(name = OabaParametersJPA.CN_MASTER_RS)
+	@Column(name = CN_MASTER_RS)
 	private final Long masterRsId;
 
 	/*
@@ -149,10 +171,10 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 	 * ensure that any non-null record source with a null record-source type is
 	 * rejected as an illegal argument.
 	 */
-	@Column(name = OabaParametersJPA.CN_MASTER_RS_TYPE)
+	@Column(name = CN_MASTER_RS_TYPE)
 	private final String masterRsType;
 
-	@Column(name = OabaParametersJPA.CN_TASK)
+	@Column(name = CN_TASK)
 	private final String task;
 
 	@Column(name = CN_FORMAT)

@@ -75,17 +75,33 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 		return retVal;
 	}
 
-	public static String dump(ServerConfiguration sc) {
+	public static String dump(ServerConfiguration c) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 
-		if (sc == null) {
-			pw.println("null server configuration");
+		pw.println("Server configuration (SC)");
+		if (c == null) {
+			pw.println("SC: null server configuration");
 		} else {
-			// FIXME better logging
-			pw.println(sc.toString());
+			pw.println("SC: Server configuration id: " + c.getId());
+			pw.println("SC: Server configuration name: " + c.getName());
+			pw.println("SC: Server configuration UUI: " + c.getUUID());
+			pw.println("SC: Server host name: " + c.getHostName());
+			pw.println("SC: Max ChoiceMaker threads: "
+					+ c.getMaxChoiceMakerThreads());
+			pw.println("SC: Max Chunk files: " + c.getMaxOabaChunkFileCount());
+			pw.println("SC: Max Records per chunk file: "
+					+ c.getMaxOabaChunkFileRecords());
 		}
 		String retVal = sw.toString();
+		return retVal;
+	}
+
+	public static String standardizeHostName(String s) {
+		String retVal = null;
+		if (s != null) {
+			retVal = s.trim().toUpperCase();
+		}
 		return retVal;
 	}
 
@@ -136,10 +152,10 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 		} else {
 			this.fileURI = f.toURI().toString();
 		}
-		this.hostName = sc.getHostName();
-		this.maxChunkCount = sc.getMaxOabaChunkFileCount();
-		this.maxChunkSize = sc.getMaxOabaChunkFileRecords();
-		this.maxThreads = sc.getMaxChoiceMakerThreads();
+		setHostName(sc.getHostName());
+		setMaxOabaChunkFileCount(sc.getMaxOabaChunkFileCount());
+		setMaxOabaChunkFileRecords(sc.getMaxOabaChunkFileRecords());
+		setMaxChoiceMakerThreads(sc.getMaxChoiceMakerThreads());
 	}
 
 	@Override
@@ -159,6 +175,8 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 
 	@Override
 	public String getHostName() {
+		assert hostName == null
+				|| hostName.trim().toUpperCase().equals(hostName);
 		return hostName;
 	}
 
@@ -211,7 +229,6 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 					"Invalid file location: " + fileURI + ": " + e.toString();
 				logger.severe(msg);
 				new IllegalStateException(msg);
-				// assert retVal == null;
 			}
 		}
 		assert retVal != null;
@@ -237,7 +254,7 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 				if (sc2.getHostName() != null) {
 					break check;
 				}
-			} else if (!sc1.getHostName().equals(sc2.getHostName())) {
+			} else if (!sc1.getHostName().equalsIgnoreCase(sc2.getHostName())) {
 				break check;
 			}
 			if (sc1.getWorkingDirectoryLocationUriString() == null) {
@@ -288,7 +305,7 @@ public class ServerConfigurationEntity implements MutableServerConfiguration {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank name");
 		}
-		this.hostName = name.trim();
+		this.hostName = standardizeHostName(name);
 	}
 
 	@Override
