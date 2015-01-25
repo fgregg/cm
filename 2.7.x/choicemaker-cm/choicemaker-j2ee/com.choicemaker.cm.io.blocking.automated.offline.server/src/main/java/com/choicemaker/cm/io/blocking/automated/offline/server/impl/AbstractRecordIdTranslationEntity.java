@@ -3,7 +3,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_INTEGER;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_LONG;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_STRING;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.fromSymbol;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.CN_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.CN_JOB_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.CN_RECORD_ID;
@@ -189,7 +188,7 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 
 	@Override
 	public final RECORD_ID_TYPE getRecordType() {
-		return fromSymbol(recordType);
+		return RECORD_ID_TYPE.fromSymbol(recordType);
 	}
 
 	@Override

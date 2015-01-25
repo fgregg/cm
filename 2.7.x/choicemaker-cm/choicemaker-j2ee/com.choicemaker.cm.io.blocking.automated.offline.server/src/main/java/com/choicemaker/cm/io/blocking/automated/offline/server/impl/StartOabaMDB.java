@@ -187,6 +187,7 @@ getLogger().severe("DEBUG 2 translator.splitIndex: " + translator.getSplitIndex(
 getLogger().severe("DEBUG 3 translator.splitIndex: " + immutableTranslator.getSplitIndex());
 					final RECORD_ID_TYPE recordIdType =
 						immutableTranslator.getRecordIdType();
+getLogger().severe("DEBUG 4 translator.RECORD_ID_TYPE: " + immutableTranslator.getRecordIdType());
 					getPropertyController().setJobProperty(oabaJob,
 							PN_RECORD_ID_TYPE, recordIdType.name());
 

@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
@@ -48,6 +49,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
  * @author pcheung
  *
  */
+@Singleton
 public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	private static final long serialVersionUID = 271L;

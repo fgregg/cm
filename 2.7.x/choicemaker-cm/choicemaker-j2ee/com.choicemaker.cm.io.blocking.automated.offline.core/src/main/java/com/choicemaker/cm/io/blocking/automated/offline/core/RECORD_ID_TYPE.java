@@ -1,5 +1,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
+import java.util.logging.Logger;
+
 /**
  * The OABA is currently implemented only for record identifiers of type
  * Integer, Long and String.
@@ -11,6 +13,8 @@ public enum RECORD_ID_TYPE {
 	private final String strSymbol;
 	private final Class<?> recordIdClass;
 	private final Class<?> primitiveIdClass;
+	
+	private final static Logger logger = Logger.getLogger(RECORD_ID_TYPE.class.getName());
 
 	RECORD_ID_TYPE(int i, Class<?> c) {
 		this(i, c, null);
@@ -47,19 +51,11 @@ public enum RECORD_ID_TYPE {
 		return primitiveIdClass;
 	}
 
-	/**
-	 * This method checks if the object is an Integer, Long, or String.
-	 * 
-	 * @param o
-	 * @return int - TYPE_INTEGER, or TYPE_LONG, or TYPE_STRING
-	 */
-	public static <T extends Comparable<T>> int checkType(T o) {
-		return fromInstance(o).getIntSymbol();
-	}
-
 	public static <T extends Comparable<T>> RECORD_ID_TYPE fromInstance(T o) {
 		if (o == null) {
-			throw new IllegalArgumentException("null instance");
+			String msg = "null instance";
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 		RECORD_ID_TYPE retVal = fromClass(o.getClass());
 		return retVal;
@@ -81,6 +77,7 @@ public enum RECORD_ID_TYPE {
 			String hex = Integer.toHexString(c);
 			String msg =
 				"invalid symbol: '" + c + "' (0x" + hex + ")";
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 		assert retVal != null;
@@ -93,14 +90,18 @@ public enum RECORD_ID_TYPE {
 
 	public static RECORD_ID_TYPE fromSymbol(String s) {
 		if (s == null || !s.equals(s.trim()) || s.length() != 1) {
-			throw new IllegalArgumentException("invalid String: " + s);
+			String msg = "invalid String: " + s;
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 		return fromSymbol(s.charAt(0));
 	}
 
 	public static RECORD_ID_TYPE fromClass(Class<?> c) {
 		if (c == null) {
-			throw new IllegalArgumentException("null class");
+			String msg = "null class";
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 		RECORD_ID_TYPE retVal = null;
 		for (RECORD_ID_TYPE rit : RECORD_ID_TYPE.values()) {
@@ -110,7 +111,9 @@ public enum RECORD_ID_TYPE {
 			}
 		}
 		if (retVal == null) {
-			throw new IllegalArgumentException("invalid class: " + c.getName());
+			String msg = "invalid class: " + c.getName();
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 		return retVal;
 	}

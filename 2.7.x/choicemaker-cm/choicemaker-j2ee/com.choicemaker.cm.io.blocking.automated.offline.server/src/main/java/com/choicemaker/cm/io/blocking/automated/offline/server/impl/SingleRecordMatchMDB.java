@@ -238,6 +238,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 
 		final ImmutableRecordIdTranslator immutableTranslator =
 			ridController.toImmutableTranslator(mutableTranslator);
+log.severe("DEBUG RECORD_ID_TYPE: SingleRecordMatchMDB: : " + immutableTranslator.getRecordIdType());
 		ValidatorBase validator = new ValidatorBase(true, immutableTranslator);
 		data.validator = validator;
 

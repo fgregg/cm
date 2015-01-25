@@ -214,6 +214,7 @@ public class RecValService3 {
 		ImmutableRecordIdTranslator immutableTranslator =
 			recidFactory.toImmutableTranslator(mutableTranslator);
 		this.recordIdType = immutableTranslator.getRecordIdType();
+log.severe("DEBUG 1 RECORD_ID_TYPE: RecValService3: : " + this.recordIdType);
 		assert this.recordIdType != null;
 
 	}
@@ -321,6 +322,7 @@ public class RecValService3 {
 		ImmutableRecordIdTranslator usedLater =
 			recidFactory.toImmutableTranslator(mutableTranslator);
 		log.info("Converted record-id translator to immutable: " + usedLater);
+log.severe("DEBUG 0 RECORD_ID_TYPE: RecValService3: : " + usedLater.getRecordIdType());
 	}
 
 	/**

@@ -36,7 +36,7 @@ public class RecordIdStringTranslation extends
 
 	public RecordIdStringTranslation(BatchJob job, String recordId,
 			RECORD_SOURCE_ROLE source, int translatedId) {
-		super(job.getId(), recordId, RECORD_ID_TYPE.TYPE_LONG.getCharSymbol(),
+		super(job.getId(), recordId, RECORD_ID_TYPE.TYPE_STRING.getCharSymbol(),
 				source.getCharSymbol(), translatedId);
 	}
 

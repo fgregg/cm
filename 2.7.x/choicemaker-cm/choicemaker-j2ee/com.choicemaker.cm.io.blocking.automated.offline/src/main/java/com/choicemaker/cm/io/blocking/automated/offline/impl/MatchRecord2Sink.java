@@ -122,14 +122,16 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 	public static String getOutputString(MatchRecord2 match) {
 		StringBuffer sb = new StringBuffer();
 		@SuppressWarnings("unchecked")
-		int dataType = RECORD_ID_TYPE.checkType(match.getRecordID1());
+		char dataType =
+			RECORD_ID_TYPE.fromInstance(match.getRecordID1()).getCharSymbol();
 		sb.append(dataType);
 		sb.append(EXPORT_FIELD_SEPARATOR);
 		sb.append(match.getRecordID1().toString());
 		sb.append(EXPORT_FIELD_SEPARATOR);
 
 		@SuppressWarnings("unchecked")
-		int dataType2 = RECORD_ID_TYPE.checkType(match.getRecordID2());
+		char dataType2 =
+			RECORD_ID_TYPE.fromInstance(match.getRecordID2()).getCharSymbol();
 		if (dataType2 != dataType) {
 			throw new IllegalArgumentException(
 					"Inconsistent record identifiers");

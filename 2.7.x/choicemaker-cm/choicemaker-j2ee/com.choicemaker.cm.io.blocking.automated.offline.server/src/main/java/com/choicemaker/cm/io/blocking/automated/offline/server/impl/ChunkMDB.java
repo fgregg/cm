@@ -73,6 +73,7 @@ public class ChunkMDB extends AbstractOabaMDB {
 		@SuppressWarnings("rawtypes")
 		ImmutableRecordIdTranslator translator =
 			getRecordIdController().findRecordIdTranslator(oabaJob);
+log.severe("DEBUG RECORD_ID_TYPE: ChunkMDB: : " + translator.getRecordIdType());
 
 		// create the os block source.
 		IBlockSinkSourceFactory osFactory =

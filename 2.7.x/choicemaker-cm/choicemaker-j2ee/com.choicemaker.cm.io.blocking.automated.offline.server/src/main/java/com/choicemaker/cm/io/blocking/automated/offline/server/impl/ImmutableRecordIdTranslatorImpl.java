@@ -48,6 +48,17 @@ class ImmutableRecordIdTranslatorImpl implements
 	private static final Logger log = Logger
 			.getLogger(ImmutableRecordIdTranslatorImpl.class.getName());
 
+	/** An initialization helper class */
+	protected static class INITIALIZATION_RETURN_VALUE {
+		public final RECORD_ID_TYPE recordIdType;
+		public final int splitIndex;
+
+		public INITIALIZATION_RETURN_VALUE(RECORD_ID_TYPE rit, int idx) {
+			this.recordIdType = rit;
+			this.splitIndex = idx;
+		}
+	}
+
 	/**
 	 * For testing purposes only. Returns a list of map values in the order of
 	 * their keys. Checks that the keys are Integers in the range from 0 to some
@@ -68,9 +79,12 @@ class ImmutableRecordIdTranslatorImpl implements
 				Integer key = (Integer) i.next();
 				int keyValue = key.intValue();
 				if (keyValue != expectedKeyValue) {
-					throw new IllegalStateException("Record index '" + keyValue
-							+ "' does not match the expected value '"
-							+ expectedKeyValue + "'");
+					String msg =
+						"Record index '" + keyValue
+								+ "' does not match the expected value '"
+								+ expectedKeyValue + "'";
+					log.severe(msg);
+					throw new IllegalStateException(msg);
 				}
 				Object value = map.get(key);
 				retVal.add(value);
@@ -89,11 +103,13 @@ class ImmutableRecordIdTranslatorImpl implements
 			throws BlockingException {
 
 		if (job == null || !BatchJobEntity.isPersistent(job)) {
-			throw new IllegalArgumentException("invalid job: " + job);
+			String msg = "invalid job: " + job;
+			log.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 		if (translations.isEmpty()) {
-			String msg =
-				"No record-id translations for job " + job.getId();
+			String msg = "No record-id translations for job " + job.getId();
+			log.severe(msg);
 			throw new BlockingException(msg);
 		}
 
@@ -103,6 +119,9 @@ class ImmutableRecordIdTranslatorImpl implements
 		final SortedMap<Integer, T> indices_To_Ids2 = new TreeMap<>();
 
 		RECORD_ID_TYPE recordIdType = expectedRecordIdType;
+		if (recordIdType != null) {
+			log.info("record-id type: " + recordIdType);
+		}
 		int count1 = 0;
 		int count2 = 0;
 		int splitIndex = ImmutableRecordIdTranslatorImpl.NOT_SPLIT;
@@ -113,13 +132,34 @@ class ImmutableRecordIdTranslatorImpl implements
 			if (recordIdType == null) {
 				assert rid != null;
 				recordIdType = rid;
+				log.info("record-id type: " + recordIdType);
 			} else {
-				assert recordIdType == rid;
+				if (recordIdType != rid) {
+					String msg =
+						"inconsistent record-id types: " + recordIdType
+								+ " and " + rid + " (count1 == " + count1
+								+ ", count2 == " + count2
+								+ ", translation id == " + rt.getId() + ")";
+					log.severe(msg);
+					throw new BlockingException(msg);
+				}
 			}
 
 			// Get the translated index and the recordId
 			int index = rt.getTranslatedId();
 			T recordId = rt.getRecordId();
+			if (count1 == 0 && count2 == 0) {
+				// Check the generic type one time
+				Class<?> c = recordId.getClass();
+				String csn = c.getSimpleName();
+				log.info("record-id class: " + csn);
+				if (recordIdType != RECORD_ID_TYPE.fromClass(c)) {
+					assert recordId != null;
+					String msg = "Inconsistent record id class: " + csn;
+					log.severe(msg);
+					throw new BlockingException(msg);
+				}
+			}
 
 			// Figure out where to put the recordId and index
 			RECORD_SOURCE_ROLE rsr = rt.getRecordSource();
@@ -142,9 +182,11 @@ class ImmutableRecordIdTranslatorImpl implements
 					String msg =
 						"Multiple entries for split index: " + splitIndex
 								+ ", " + si;
+					log.severe(msg);
 					throw new BlockingException(msg);
 				} else {
 					String msg = "Invalid split index: " + si;
+					log.severe(msg);
 					throw new BlockingException(msg);
 				}
 			}
@@ -170,10 +212,17 @@ class ImmutableRecordIdTranslatorImpl implements
 		return irit;
 	}
 
+	// Trick to check assertion status
+	protected boolean onAssert = false;
+	{
+		// Initialized on construction
+		assert onAssert = true;
+	}
+
 	private final BatchJob batchJob;
 
 	/** The type of record ids handled by this translator */
-	private RECORD_ID_TYPE recordIdType;
+	private final RECORD_ID_TYPE recordIdType;
 
 	/**
 	 * This is the internal index at which the indices for records from the
@@ -226,14 +275,19 @@ class ImmutableRecordIdTranslatorImpl implements
 			final SortedMap<Integer, ?> indices_To_Ids2, int splitIndex)
 			throws BlockingException {
 		if (job == null) {
-			throw new IllegalArgumentException("null batch job");
+			String msg = "null batch job";
+			throw new IllegalArgumentException(msg);
 		}
 		if (recordIdType == null) {
-			throw new IllegalArgumentException("null record-id type");
+			String msg = "null record-id type";
+			log.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 		if (ids1_To_Indices == null || ids2_To_Indices == null
 				|| indices_To_Ids1 == null || indices_To_Ids2 == null) {
-			throw new IllegalArgumentException("null map");
+			String msg = "null map";
+			log.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 		this.batchJob = job;
 		this.recordIdType = recordIdType;
@@ -247,13 +301,19 @@ class ImmutableRecordIdTranslatorImpl implements
 	public ImmutableRecordIdTranslatorImpl(BatchJob job, IRecordIdSource s1,
 			IRecordIdSource s2) throws BlockingException {
 		if (job == null) {
-			throw new IllegalArgumentException("null batch job");
+			String msg = "null batch job";
+			log.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 		if (s1 == null || s2 == null) {
-			throw new IllegalArgumentException("null argument");
+			String msg = "null argument";
+			log.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
 		this.batchJob = job;
-		this.splitIndex = initializeFromSources(s1, s2);
+		INITIALIZATION_RETURN_VALUE irv = initializeFromSources(s1, s2);
+		this.splitIndex = irv.splitIndex;
+		this.recordIdType = irv.recordIdType;
 	}
 
 	@Override
@@ -269,7 +329,9 @@ class ImmutableRecordIdTranslatorImpl implements
 					&& this.indices_To_Ids2.isEmpty()) {
 				log.warning("Record-id translator has no data");
 			} else {
-				throw new IllegalStateException("null record-id type");
+				String msg = "null record-id type";
+				log.severe(msg);
+				throw new IllegalStateException(msg);
 			}
 
 		}
@@ -322,8 +384,9 @@ class ImmutableRecordIdTranslatorImpl implements
 	 * 
 	 * @return the split index
 	 */
-	protected int initializeFromSources(IRecordIdSource source1,
-			IRecordIdSource source2) throws BlockingException {
+	protected INITIALIZATION_RETURN_VALUE initializeFromSources(
+			IRecordIdSource source1, IRecordIdSource source2)
+			throws BlockingException {
 		assert source1 != null;
 		assert source2 != null;
 
@@ -333,7 +396,8 @@ class ImmutableRecordIdTranslatorImpl implements
 		assert this.indices_To_Ids2 != null;
 
 		// The split index that will be computed and returned
-		int retVal = NOT_SPLIT;
+		int retIDX = NOT_SPLIT;
+		RECORD_ID_TYPE retRIT = null;
 
 		int count = -1;
 		if (source1.exists()) {
@@ -342,28 +406,32 @@ class ImmutableRecordIdTranslatorImpl implements
 				++count;
 				Integer index = new Integer(count);
 				Comparable id = (Comparable) source1.next();
-				setRecordIdType(id);
+				retRIT = setRecordIdType(onAssert, retRIT, id);
 				Object previous = this.indices_To_Ids1.put(index, id);
 				if (previous != null) {
 					// Unexpected algorithm error
-					throw new Error("duplicate staging index '" + index + "'");
+					String msg = "duplicate staging index '" + index + "'";
+					log.severe(msg);
+					throw new Error(msg);
 				}
 				previous = this.ids1_To_Indices.put(id, index);
 				if (previous != null) {
-					throw new BlockingException(
-							"duplicate staging record id value '" + id + "'");
+					String msg =
+						"duplicate staging record id value '" + id + "'";
+					log.severe(msg);
+					throw new BlockingException(msg);
 				}
 			}
 			source1.close();
 			source1.delete();
 		}
-		log.info("Number of ids from first source: " + (count+1));
+		log.info("Number of ids from first source: " + (count + 1));
 
 		// Read the second source if there is one
 		if (source2.exists()) {
 
 			// Set the split index
-			retVal = count + 1;
+			retIDX = count + 1;
 
 			count = -1;
 			source2.open();
@@ -374,19 +442,26 @@ class ImmutableRecordIdTranslatorImpl implements
 				Object previous = this.indices_To_Ids2.put(index, id);
 				if (previous != null) {
 					// Unexpected algorithm error
-					throw new Error("duplicate master index '" + index + "'");
+					String msg = "duplicate master index '" + index + "'";
+					log.severe(msg);
+					throw new Error(msg);
 				}
 				previous = this.ids2_To_Indices.put(id, index);
 				if (previous != null) {
-					throw new BlockingException(
-							"duplicate master record id value '" + id + "'");
+					String msg =
+						"duplicate master record id value '" + id + "'";
+					log.severe(msg);
+					throw new BlockingException(msg);
 				}
 			}
 			source2.close();
 			source2.delete();
 		}
-		log.info("Number of ids from second source: " + (count+1));
-		log.info("Split index: " + retVal);
+		log.info("Number of ids from second source: " + (count + 1));
+		log.info("Split index: " + retIDX);
+		log.info("Record-id type: " + retRIT);
+		INITIALIZATION_RETURN_VALUE retVal =
+			new INITIALIZATION_RETURN_VALUE(retRIT, retIDX);
 		return retVal;
 	}
 
@@ -417,8 +492,9 @@ class ImmutableRecordIdTranslatorImpl implements
 	@Override
 	public Comparable reverseLookup(int internalID) {
 		if (internalID < 0) {
-			throw new IllegalStateException("invalid internal index '"
-					+ internalID + "'");
+			String msg = "invalid internal index '" + internalID + "'";
+			log.severe(msg);
+			throw new IllegalStateException(msg);
 		}
 		Comparable retVal;
 		if (getSplitIndex() == NOT_SPLIT) {
@@ -448,19 +524,35 @@ class ImmutableRecordIdTranslatorImpl implements
 		return retVal;
 	}
 
-	protected void setRecordIdType(Comparable id) {
-		assert id != null;
-		if (recordIdType == null) {
-			this.recordIdType = RECORD_ID_TYPE.fromInstance(id);
-			assert this.recordIdType != null;
-		} else {
-			assert this.recordIdType == RECORD_ID_TYPE.fromInstance(id);
+	protected static RECORD_ID_TYPE setRecordIdType(boolean onAssert,
+			RECORD_ID_TYPE recordIdType, Comparable id) {
+		if (id == null) {
+			String msg = "null id";
+			log.severe(msg);
+			throw new IllegalArgumentException(msg);
 		}
+		if (recordIdType == null) {
+			recordIdType = RECORD_ID_TYPE.fromInstance(id);
+			assert recordIdType != null;
+
+		} else if (onAssert) {
+			Class<?> c = id.getClass();
+			RECORD_ID_TYPE rit2 = RECORD_ID_TYPE.fromClass(c);
+			if (recordIdType != rit2) {
+				String msg =
+					"Inconsistent record id types: " + recordIdType + " and "
+							+ c.getSimpleName();
+				log.severe(msg);
+				throw new IllegalArgumentException(msg);
+			}
+		}
+		return recordIdType;
 	}
 
 	void assertEqual(String failureMsg, Object i1, Object i2) {
 		if ((i1 == null && i2 != null) || !i1.equals(i2)) {
 			String msg = failureMsg + ": " + i1 + ", " + i2;
+			log.severe(msg);
 			throw new AssertionError(msg);
 		}
 	}
@@ -468,6 +560,7 @@ class ImmutableRecordIdTranslatorImpl implements
 	private static void assertEqual(String failureMsg, int i1, int i2) {
 		if (i1 != i2) {
 			String msg = failureMsg + ": " + i1 + ", " + i2;
+			log.severe(msg);
 			throw new AssertionError(msg);
 		}
 	}
@@ -476,6 +569,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			Object o) {
 		if (!s.contains(o)) {
 			String msg = failureMsg + ": " + o;
+			log.severe(msg);
 			throw new AssertionError(msg);
 		}
 	}
@@ -489,13 +583,16 @@ class ImmutableRecordIdTranslatorImpl implements
 			String msg;
 			if (count1 > count2) {
 				msg = failureMsg + ": more translations are persisted: " + diff;
+				log.severe(msg);
 				throw new AssertionError(msg);
 			} else if (count2 > count1) {
 				msg =
 					failureMsg + ": fewer translations are persisted: " + diff;
+				log.severe(msg);
 				throw new AssertionError(msg);
 			} else {
 				msg = failureMsg + ": different translations are persisted";
+				log.severe(msg);
 				throw new AssertionError(msg);
 			}
 		}

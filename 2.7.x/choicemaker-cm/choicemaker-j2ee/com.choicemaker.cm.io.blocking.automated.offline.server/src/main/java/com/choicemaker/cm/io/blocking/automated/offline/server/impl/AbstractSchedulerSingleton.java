@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.FinderException;
-import javax.ejb.Singleton;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.ObjectMessage;
@@ -59,7 +58,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
  * not an MDB, because it must retain data in memory between invocations of
  * <code>onMessage</code>.
  */
-@Singleton
 public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	private static final long serialVersionUID = 271L;

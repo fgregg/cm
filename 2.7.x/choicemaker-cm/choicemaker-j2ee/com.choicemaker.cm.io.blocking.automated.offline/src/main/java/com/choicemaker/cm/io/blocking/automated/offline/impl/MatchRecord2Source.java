@@ -114,12 +114,12 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 			StringTokenizer st = new StringTokenizer(str);
 
 			// First record identifier
-			int i = Integer.parseInt(st.nextToken());
+			String i = st.nextToken();
 			RECORD_ID_TYPE dataType = RECORD_ID_TYPE.fromSymbol(i);
 			Comparable c1 = readIDString(dataType, st.nextToken());
 
 			// Second record identifier
-			i = Integer.parseInt(st.nextToken());
+			i = st.nextToken();
 			assert dataType == RECORD_ID_TYPE.fromSymbol(i);
 			Comparable c2 = readIDString(dataType, st.nextToken());
 

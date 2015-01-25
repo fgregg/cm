@@ -41,12 +41,9 @@ import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-//import javax.naming.InitialContext;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 
@@ -318,30 +315,13 @@ public class OabaServiceBean implements OabaService {
 	 * @throws NamingException
 	 * @throws JMSException
 	 * @throws FinderException
+	 * @see {@link #getMatchRecordSource(long)}
 	 */
 	@Override
-	public MatchListSource getMatchList(long jobID) throws RemoteException,
+	@Deprecated
+	public Object getMatchList(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
-
-		MatchListSource mls = null;
-
-		// check to make sure the job is completed
-		OabaJob oabaJob = jobController.findOabaJob(jobID);
-		if (!oabaJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
-			throw new IllegalStateException("The job has not completed.");
-		} else {
-			final String cachedResultsFileName =
-				propController.getJobProperty(oabaJob,
-						PN_OABA_CACHED_RESULTS_FILE);
-			logger.info("Cached OABA results file: " + cachedResultsFileName);
-
-			MatchRecordSource mrs =
-				new MatchRecordSource(cachedResultsFileName,
-						EXTERNAL_DATA_FORMAT.STRING);
-			mls = new MatchListSource(mrs);
-		}
-
-		return mls;
+		throw new Error("no longer implemented");
 	}
 
 	@Override
