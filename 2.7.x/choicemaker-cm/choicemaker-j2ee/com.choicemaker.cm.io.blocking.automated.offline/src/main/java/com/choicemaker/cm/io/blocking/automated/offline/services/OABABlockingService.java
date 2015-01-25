@@ -585,17 +585,34 @@ public class OABABlockingService {
 		osIDs = new LongArrayList(100);
 
 		RecordValue2 records = new RecordValue2(rvSource);
+		if (records.size() == 0) {
+			// Egregious?
+			String msg =
+				"No records for column " + col + ", source " + rvSource;
+			log.info(msg);
+		}
 
 		ArrayList recordList = records.getList();
 
 		for (int j = 0; j < recordList.size() && !stop; j++) {
 			stop = ControlChecker.checkStop(control, j);
-
 			recID = j;
 			IntArrayList values = (IntArrayList) recordList.get(j);
 
 			if (values != null) {
-
+				if (values.size() == 0) {
+					// Egregious?
+					String msg =
+						"No values for column " + col + ", record id " + j
+								+ ", source " + rvSource;
+					log.info(msg);
+				} else {
+					// Less informative
+					String msg =
+						values.size() + " values for column " + col
+								+ ", record id " + j + ", source " + rvSource;
+					log.finer(msg);
+				}
 				for (int i = 0; i < values.size(); i++) {
 					Integer val = new Integer(values.get(i));
 					BlockSet bs = (BlockSet) map.get(val);
@@ -611,13 +628,27 @@ public class OABABlockingService {
 					}
 				}
 
-			} // end if
+			} else {
+				// Egregious?
+				String msg =
+					"Null values for column " + col + ", record id " + j
+							+ ", source " + rvSource;
+				log.info(msg);
+			}
 
 		} // end for
+		if (map.size() == 0) {
+			// Egregious
+			String msg = "Added 0 (zero) blocks for column " + col;
+			log.info(msg);
+		} else {
+			// Informative
+			String msg = "Added " + map.size() + " blocks for column " + col;
+			log.fine(msg);
+		}
 
 		if (!stop) {
 			count += writeBlocks(map, bSink, osGroup, col);
-
 			// only keep oversized block row id on the rec_id, val_id file.
 			removeIDs(osIDs, rvSource);
 		}
