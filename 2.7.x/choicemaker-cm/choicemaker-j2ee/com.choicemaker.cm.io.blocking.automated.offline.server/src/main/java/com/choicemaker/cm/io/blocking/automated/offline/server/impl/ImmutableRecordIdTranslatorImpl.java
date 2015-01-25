@@ -399,12 +399,13 @@ class ImmutableRecordIdTranslatorImpl implements
 		int retIDX = NOT_SPLIT;
 		RECORD_ID_TYPE retRIT = null;
 
-		int count = -1;
+		// Read the first source
+		int count1 = -1;
 		if (source1.exists()) {
 			source1.open();
 			while (source1.hasNext()) {
-				++count;
-				Integer index = new Integer(count);
+				++count1;
+				Integer index = new Integer(count1);
 				Comparable id = (Comparable) source1.next();
 				retRIT = setRecordIdType(onAssert, retRIT, id);
 				Object previous = this.indices_To_Ids1.put(index, id);
@@ -425,19 +426,20 @@ class ImmutableRecordIdTranslatorImpl implements
 			source1.close();
 			source1.delete();
 		}
-		log.info("Number of ids from first source: " + (count + 1));
+		log.info("Number of ids from first source: " + (count1 + 1));
 
 		// Read the second source if there is one
+		int count2 = -1;
 		if (source2.exists()) {
 
 			// Set the split index
-			retIDX = count + 1;
+			retIDX = count2 + 1;
 
-			count = -1;
+			count2 = -1;
 			source2.open();
 			while (source2.hasNext()) {
-				++count;
-				Integer index = new Integer(count);
+				++count2;
+				Integer index = new Integer(count2);
 				Comparable id = (Comparable) source2.next();
 				Object previous = this.indices_To_Ids2.put(index, id);
 				if (previous != null) {
@@ -457,7 +459,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			source2.close();
 			source2.delete();
 		}
-		log.info("Number of ids from second source: " + (count + 1));
+		log.info("Number of ids from second source: " + (count2 + 1));
 		log.info("Split index: " + retIDX);
 		log.info("Record-id type: " + retRIT);
 		INITIALIZATION_RETURN_VALUE retVal =
