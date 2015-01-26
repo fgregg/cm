@@ -309,8 +309,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 			OabaParameters params, OabaSettings oabaSettings,
 			OabaEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
-		// TODO Auto-generated method stub
-
+		// Does nothing in this class. Instead, onMessage is overridden
+		// and this callback is bypassed.
 	}
 
 	@Override
