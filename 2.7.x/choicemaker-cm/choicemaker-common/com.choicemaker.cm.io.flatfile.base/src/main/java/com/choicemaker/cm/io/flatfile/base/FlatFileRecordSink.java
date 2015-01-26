@@ -15,7 +15,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.Writer;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -29,9 +32,11 @@ import com.choicemaker.util.FileUtilities;
  * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:10:40 $
  */
 public class FlatFileRecordSink implements RecordSink {
+
+	private static final Logger log = Logger.getLogger(FlatFileRecordSink.class.getName());
+
 	private String name;
 	private String fileNamePrefix;
-//	private String rawFileNamePrefix;
 	private String fileNameSuffix;
 	private boolean multiFile;
 	private boolean singleLine;
@@ -41,7 +46,10 @@ public class FlatFileRecordSink implements RecordSink {
 	private boolean filter;
 	private ImmutableProbabilityModel model;
 	private FlatFileRecordOutputter recordOutputter;
-	private FileOutputStream[] outFile;
+	private String[] fileNames;
+	// FIXME BUG: does not handle unicode
+//	private FileOutputStream[] outFile;
+	// ENDFIXME
 	private Writer[] ws;
 	private int[] descWidths;
 
@@ -80,7 +88,6 @@ public class FlatFileRecordSink implements RecordSink {
 	}
 
 	public void setRawFileNamePrefix(String fn) {
-//		rawFileNamePrefix = fn;
 		fileNamePrefix = FileUtilities.getAbsoluteFile(new File(name).getAbsoluteFile().getParentFile(), fn).toString();
 	}
 
@@ -116,55 +123,121 @@ public class FlatFileRecordSink implements RecordSink {
 		FlatFileAccessor ffacc = (FlatFileAccessor) model.getAccessor();
 		descWidths = ffacc.getDescWidths();
 		recordOutputter = ffacc.getFlatFileRecordOutputter(multiFile, singleLine, fixedLength, sep, tagged, descWidths[0], filter);
-		String[] typeNames = ffacc.getFlatFileFileNames();
-		int n = typeNames.length;
-		outFile = new FileOutputStream[n];
+		final String[] typeNames = ffacc.getFlatFileFileNames();
+		final int n = typeNames.length;
+		fileNames = new String[n];
 		ws = new Writer[n];
 		if (multiFile) {
 			for (int i = 1; i < n; ++i) {
-				String fileName =
-					fileNamePrefix + typeNames[i] + fileNameSuffix;
-				FileOutputStream o =
-					new FileOutputStream(new File(fileName).getAbsoluteFile());
-				outFile[i] = o;
+				fileNames[i] = fileNamePrefix + typeNames[i] + fileNameSuffix;
+				File f = new File(fileNames[i]).getAbsoluteFile();
+				if (f.exists()) {
+					log.severe("Overwriting an existing file: " + fileNames[i]);
+				}
+				// FIXME
+				FileOutputStream o = new FileOutputStream(f);
+				log.severe("BUG: does not handle unicode: " + o);
+//				outFile[i] = o;
+				// ENDFIXME
 				ws[i] = new OutputStreamWriter(new BufferedOutputStream(o));
+// HACK FIXME REMOVEME
+StringWriter sw = new StringWriter();
+PrintWriter pw = new PrintWriter(sw);
+new Exception("DEBUG FlatFileRecordSink.open() invocation").printStackTrace(pw);
+log.severe(sw.toString());
+// END HACK FIXME REMOVEME
 			}
 		} else {
-			String fileName = fileNamePrefix + typeNames[0] + fileNameSuffix;
-			FileOutputStream o =
-				new FileOutputStream(new File(fileName).getAbsoluteFile());
-			BufferedOutputStream bos = new BufferedOutputStream(o);
-//			Writer w = new OutputStreamWriter(bos);
-			for (int i = 0; i < n; ++i) {
-				outFile[i] = o;
-				ws[i] = new OutputStreamWriter(bos);
+			fileNames[0] = fileNamePrefix + typeNames[0] + fileNameSuffix;
+			File f = new File(fileNames[0]).getAbsoluteFile();
+			if (f.exists()) {
+				log.severe("Overwriting an existing file: " + fileNames[0]);
 			}
+			// FIXME
+			FileOutputStream o = new FileOutputStream(f);
+			BufferedOutputStream bos = new BufferedOutputStream(o);
+			log.severe("BUG: does not handle unicode: " + o);
+			// ENDFIXME
+			Writer w = new OutputStreamWriter(bos);
+			for (int i = 0; i < n; ++i) {
+//				ws[i] = new OutputStreamWriter(bos);
+				ws[i] = w;
+			}
+// HACK FIXME REMOVEME
+StringWriter sw = new StringWriter();
+PrintWriter pw = new PrintWriter(sw);
+new Exception("DEBUG FlatFileRecordSink.open() invocation").printStackTrace(pw);
+log.severe(sw.toString());
+// END HACK FIXME REMOVEME
 		}
 	}
 
 	public void close() throws IOException {
 		if (multiFile) {
-			for (int i = 1; i < outFile.length; ++i) {
+			for (int i = 1; i < ws.length; ++i) {
 				ws[i].flush();
-				outFile[i].close();
+				ws[i].close();
+//				outFile[i].close();
+				log.fine("FlatFileRecordSink closed: " + fileNames[i]);
+// HACK FIXME REMOVEME
+StringWriter sw = new StringWriter();
+PrintWriter pw = new PrintWriter(sw);
+new Exception("DEBUG FlatFileRecordSink.close() invocation").printStackTrace(pw);
+log.severe("FlatFileRecordSink closed: " + fileNames[i] + ": " + sw.toString());
+// END HACK FIXME REMOVEME
 			}
 		} else {
 			ws[0].flush();
-			outFile[0].close();
+			ws[0].close();
+//			outFile[0].close();
+			log.fine("FlatFileRecordSink closed: " + fileNames[0]);
+// HACK FIXME REMOVEME
+StringWriter sw = new StringWriter();
+PrintWriter pw = new PrintWriter(sw);
+new Exception("DEBUG FlatFileRecordSink.close() invocation").printStackTrace(pw);
+log.severe("FlatFileRecordSink closed: " + fileNames[0] + ": " + sw.toString());
+// END HACK FIXME REMOVEME
 		}
 	}
 
-	// Is it this simple?
 	public void put(Record r) throws IOException {
+{
+	// HACK
+	String msg =
+		"DEBUG 0 FlatFileRecordSink.put record (id " + r.getId()
+				+ ") to sink " + this.getName();
+	log.fine(msg);
+	if (r != null && Integer.valueOf(187051).equals(r.getId())) {
+		log.severe(msg);
+	}
+}
 		recordOutputter.put(ws, r);
+{
+	if (r != null && Integer.valueOf(187051).equals(r.getId())) {
+		// HACK
+		String msg =
+			"DEBUG 20 FlatFileRecordSink.put flushing sink " + this.getName();
+		log.severe(msg);
+		this.flush();
+		msg =
+				"DEBUG 22 FlatFileRecordSink.put FLUSHED sink " + this.getName();
+			log.severe(msg);
+	}
+}
 	}
 
 	/**
 	 * @see com.choicemaker.cm.core.Sink#flush()
 	 */
 	public void flush() throws IOException {
+{
+	// HACK
+	String msg =
+		"DEBUG 10 FlatFileRecordSink.flush(): " + this.getName();
+	log.fine(msg);
+}
 		if (multiFile) {
-			for (int i = 1; i < outFile.length; ++i) {
+			for (int i = 1; i < ws.length; ++i) {
 				ws[i].flush();
 			}
 		} else {

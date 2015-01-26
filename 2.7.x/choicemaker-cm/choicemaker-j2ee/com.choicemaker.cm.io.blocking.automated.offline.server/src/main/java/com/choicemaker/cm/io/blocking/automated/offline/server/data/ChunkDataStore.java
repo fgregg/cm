@@ -110,7 +110,7 @@ public class ChunkDataStore {
 					Object O = r.getId();
 					dataMap.put(O, r);
 					++c;
-					if (c % DEFAULT_LOOP_CONTROL == 1) {
+					if ( true /* c % DEFAULT_LOOP_CONTROL == 1 */) {
 						logger.fine(tag + ": record count: " + c);
 						logger.fine(tag + ": record id: " + O + " (class "
 								+ (O == null ? null : O.getClass().getName())

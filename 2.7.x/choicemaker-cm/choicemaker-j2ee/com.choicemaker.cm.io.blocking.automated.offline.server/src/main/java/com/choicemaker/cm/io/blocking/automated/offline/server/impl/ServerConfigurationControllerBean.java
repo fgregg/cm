@@ -251,7 +251,7 @@ public class ServerConfigurationControllerBean implements
 		if (sc == null) {
 			throw new IllegalArgumentException("null configuration");
 		}
-		if (!host.equals(sc.getHostName())
+		if (!host.equalsIgnoreCase(sc.getHostName())
 				&& !ServerConfiguration.ANY_HOST.equals(sc.getHostName())) {
 			String msg =
 				"Host name '"
@@ -276,6 +276,7 @@ public class ServerConfigurationControllerBean implements
 		DefaultServerConfigurationEntity dsc =
 			new DefaultServerConfigurationEntity(host, sc.getId());
 		em.persist(dsc);
+		logger.info("Persisted default server configuration: " + dsc);
 
 		return retVal;
 	}
