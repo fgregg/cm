@@ -96,6 +96,13 @@ public interface ServerConfigurationController {
 	MutableServerConfiguration computeGenericConfiguration();
 
 	/**
+	 * Computes and returns a generic, non-persistent configuration which is
+	 * probably suitable, but not optimal, for the specified host. Each
+	 * invocation will produce an instance with a distinct name and UUID.
+	 */
+	MutableServerConfiguration computeGenericConfiguration(String hostName);
+
+	/**
 	 * Clones an existing ServerConfiguration as a mutable, non-persistent
 	 * configuration and assigns it a random, unique name and a new UUID.
 	 */
