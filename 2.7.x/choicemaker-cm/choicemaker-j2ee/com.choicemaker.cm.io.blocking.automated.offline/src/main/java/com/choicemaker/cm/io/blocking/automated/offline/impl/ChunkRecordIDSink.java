@@ -11,7 +11,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.Constants;
@@ -25,8 +24,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSink;
 public class ChunkRecordIDSink extends BaseFileSink implements
 		IChunkRecordIdSink {
 
-	private static final Logger log = Logger.getLogger(ChunkRecordIDSink.class.getName());
-
 	@Deprecated
 	public ChunkRecordIDSink(String fileName, int type) {
 		super(fileName, EXTERNAL_DATA_FORMAT.fromSymbol(type));
@@ -39,13 +36,6 @@ public class ChunkRecordIDSink extends BaseFileSink implements
 	@Override
 	public void writeRecordID(long recID) throws BlockingException {
 		try {
-{
-	// HACK
-	if (recID == 939 || recID == 187051) {
-		String msg = "Writing 939 or 187051 (" + recID + ")  to " + this.fileName;
-		log.severe(msg);
-	}
-}
 			if (type == EXTERNAL_DATA_FORMAT.STRING) {
 				fw.write(Long.toString(recID) + Constants.LINE_SEPARATOR);
 			} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {

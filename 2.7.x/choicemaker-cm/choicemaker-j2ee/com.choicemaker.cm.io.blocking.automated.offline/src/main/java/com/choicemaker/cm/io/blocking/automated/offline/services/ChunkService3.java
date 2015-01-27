@@ -311,25 +311,12 @@ public class ChunkService3 {
 			int start = 0;
 			int end = maxFiles;
 
-// HACK
-log.severe("DEBUG createDataFiles() start: " + start);
-log.severe("DEBUG createDataFiles() maxFiles: " + maxFiles);
-log.severe("DEBUG createDataFiles() numChunks: " + numChunks);
-log.severe("DEBUG createDataFiles() end: " + end);
-// END HACK
 			if (numChunks <= maxFiles) {
 				end = numChunks;
-// HACK
-log.severe("DEBUG createDataFiles() end: " + end);
-// END HACK
 				createDataFiles(start, end, crSources, stageRecordSinks, 0,
 						ind, stage, model);
 
 				if (master != null) {
-// HACK
-log.severe("DEBUG createDataFiles() start: " + start);
-log.severe("DEBUG createDataFiles() end: " + end);
-// END HACK
 					createDataFiles(start, end, crSources, masterRecordSinks,
 							splitIndex, ind, master, model);
 				} else {
@@ -338,11 +325,6 @@ log.severe("DEBUG createDataFiles() end: " + end);
 
 			} else {
 				while (start < numChunks) {
-// HACK
-log.severe("DEBUG createDataFiles() start: " + start);
-log.severe("DEBUG createDataFiles() numChunks: " + numChunks);
-log.severe("DEBUG createDataFiles() end: " + end);
-// END HACK
 					createDataFiles(start, end, crSources, stageRecordSinks, 0,
 							ind, stage, model);
 
@@ -356,16 +338,8 @@ log.severe("DEBUG createDataFiles() end: " + end);
 
 					start = end;
 					end = end + maxFiles;
-// HACK
-log.severe("DEBUG createDataFiles() end: " + end);
-// END HACK
 					if (end > numChunks)
 						end = numChunks;
-// HACK
-log.severe("DEBUG createDataFiles() start: " + start);
-log.severe("DEBUG createDataFiles() numChunks: " + numChunks);
-log.severe("DEBUG createDataFiles() end: " + end);
-// END HACK
 				}
 			}
 
@@ -448,24 +422,16 @@ log.severe("DEBUG createDataFiles() end: " + end);
 
 		// set up
 		for (int i = start; i < end; i++) {
-			log.fine("opening chunk record source[" + i + "]");
+			log.finer("opening chunk record source[" + i + "]");
 			crSources[i].open();
 			if (crSources[i].hasNext()) {
 				ind[i] = crSources[i].next();
-				log.fine("starting record index of chunk source[" + i + "]: "
+				log.finer("starting record index of chunk source[" + i + "]: "
 						+ ind[i]);
-{
-	// HACK
-	final long _ind = ind[i];
-	if (_ind == 939 || _ind== 187051) {
-		String msg = "Starting 939 or 187051: " + _ind;
-		log.severe(msg);
-	}
-}
 			} else {
 				log.severe("missing record indices for chunk source[" + i + "]");
 			}
-			log.fine("opening record sink[" + i + "]");
+			log.finer("opening record sink[" + i + "]");
 			try {
 				recordSinks[i].open();
 			} catch (IOException e) {
@@ -479,7 +445,7 @@ log.severe("DEBUG createDataFiles() end: " + end);
 		// close sinks and sources
 		for (int i = start; i < end; i++) {
 			// close the chunk data sink
-			log.fine("closing record sink[" + i + "]");
+			log.finer("closing record sink[" + i + "]");
 			try {
 				recordSinks[i].close();
 			} catch (IOException e) {
@@ -487,7 +453,7 @@ log.severe("DEBUG createDataFiles() end: " + end);
 			}
 
 			// close the record id source
-			log.fine("closing chunk record source[" + i + "]");
+			log.finer("closing chunk record source[" + i + "]");
 			crSources[i].close();
 		}
 
@@ -544,26 +510,11 @@ log.severe("DEBUG createDataFiles() end: " + end);
 			context =
 				"checking next record[" + count + "] from source ("
 						+ rs.toString() + ")";
-{
-	log.fine(context);
-	// HACK
-	if (count == 939 || count== 187051) {
-		log.severe(context);
-	}
-}
 			while (rs.hasNext() && !stop) {
 				context =
 					"retrieving next record[" + count + "] from source ("
 							+ rs.toString() + ")";
 				Record r = rs.getNext();
-{
-	log.fine(context);
-	// HACK
-	if (count == 939 || count== 187051) {
-		log.severe(context);
-		log.severe("DEBUG createDataFile record: " + r.getId());
-	}
-}
 
 				// for each chunk data file, check if this record belongs there.
 				for (int i = start; i < end; i++) {
@@ -579,14 +530,6 @@ log.severe("DEBUG createDataFiles() end: " + end);
 // BUG FIX?
 recordSinks[i].flush();
 // END BUG FIX?
-{
-	log.fine(context);
-	// HACK
-	if (count == 939 || count== 187051) {
-		log.severe(context);
-		log.severe("DEBUG 2 createDataFile record: " + r.getId());
-	}
-}
 						if (crSources[i].hasNext()) {
 							ind[i] = crSources[i].next();
 						}
@@ -597,24 +540,10 @@ recordSinks[i].flush();
 				context =
 					"checking next record[" + count + "] from source ("
 							+ rs.toString() + ")";
-{
-	log.fine(context);
-	// HACK
-	if (count == 939 || count== 187051) {
-		log.severe(context);
-	}
-}
 			}
 
 			context = "closing record source (" + rs.toString() + ")";
 			rs.close();
-{
-	log.fine(context);
-	// HACK
-	if (count == 939 || count== 187051) {
-		log.severe(context);
-	}
-}
 		} catch (IOException ex) {
 			String msg = "Error while " + context + ": " + ex.toString();
 			log.severe(msg);
@@ -667,13 +596,6 @@ recordSinks[i].flush();
 
 			IIDSet bs = source.next();
 			LongArrayList block = bs.getRecordIDs();
-{
-	// HACK
-	if (block.contains(939) || block.contains(187051)) {
-		String msg = "Block contains 939 or 187051: " + block.toString();
-		log.severe(msg);
-	}
-}
 
 			// add to the set of distinct record ids
 			for (int i = 0; i < block.size() && !stop; i++) {
@@ -681,14 +603,6 @@ recordSinks[i].flush();
 				Long I = new Long(block.get(i));
 				if (!rows.contains(I))
 					rows.add(I);
-{
-	// HACK
-	long _I = I.longValue();
-	if (_I == 939 || _I == 187051) {
-		String msg = "Rows contains 939 or 187051: " + _I;
-		log.severe(msg);
-	}
-}
 			}
 
 			// transform and write out array or tree

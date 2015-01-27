@@ -252,12 +252,6 @@ public class RecValService3 {
 				while (stage.hasNext() && !stop) {
 					count++;
 					r = stage.getNext();
-{
-	// HACK
-	if (Integer.valueOf(187051).equals(r.getId())) {
-		log.severe("Loading record, id: " + r.getId());
-	}
-}
 
 					if (count % OUTPUT_INTERVAL == 0)
 						MemoryEstimator.writeMem();

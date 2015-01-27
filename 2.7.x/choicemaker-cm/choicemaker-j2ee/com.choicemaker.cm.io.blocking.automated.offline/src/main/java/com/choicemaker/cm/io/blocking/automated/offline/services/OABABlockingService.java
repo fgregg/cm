@@ -595,12 +595,6 @@ public class OABABlockingService {
 		ArrayList recordList = records.getList();
 
 		for (int j = 0; j < recordList.size() && !stop; j++) {
-{
-	// HACK
-	if (j == 939 /*translated 187051*/) {
-		log.severe("Blocking record, id: " + j);
-	}
-}
 			stop = ControlChecker.checkStop(control, j);
 			recID = j;
 			IntArrayList values = (IntArrayList) recordList.get(j);

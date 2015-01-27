@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.logging.Logger;
 
@@ -47,9 +45,6 @@ public class FlatFileRecordSink implements RecordSink {
 	private ImmutableProbabilityModel model;
 	private FlatFileRecordOutputter recordOutputter;
 	private String[] fileNames;
-	// FIXME BUG: does not handle unicode
-//	private FileOutputStream[] outFile;
-	// ENDFIXME
 	private Writer[] ws;
 	private int[] descWidths;
 
@@ -137,15 +132,8 @@ public class FlatFileRecordSink implements RecordSink {
 				// FIXME
 				FileOutputStream o = new FileOutputStream(f);
 				log.severe("BUG: does not handle unicode: " + o);
-//				outFile[i] = o;
 				// ENDFIXME
 				ws[i] = new OutputStreamWriter(new BufferedOutputStream(o));
-// HACK FIXME REMOVEME
-StringWriter sw = new StringWriter();
-PrintWriter pw = new PrintWriter(sw);
-new Exception("DEBUG FlatFileRecordSink.open() invocation").printStackTrace(pw);
-log.severe(sw.toString());
-// END HACK FIXME REMOVEME
 			}
 		} else {
 			fileNames[0] = fileNamePrefix + typeNames[0] + fileNameSuffix;
@@ -163,12 +151,6 @@ log.severe(sw.toString());
 //				ws[i] = new OutputStreamWriter(bos);
 				ws[i] = w;
 			}
-// HACK FIXME REMOVEME
-StringWriter sw = new StringWriter();
-PrintWriter pw = new PrintWriter(sw);
-new Exception("DEBUG FlatFileRecordSink.open() invocation").printStackTrace(pw);
-log.severe(sw.toString());
-// END HACK FIXME REMOVEME
 		}
 	}
 
@@ -177,65 +159,23 @@ log.severe(sw.toString());
 			for (int i = 1; i < ws.length; ++i) {
 				ws[i].flush();
 				ws[i].close();
-//				outFile[i].close();
 				log.fine("FlatFileRecordSink closed: " + fileNames[i]);
-// HACK FIXME REMOVEME
-StringWriter sw = new StringWriter();
-PrintWriter pw = new PrintWriter(sw);
-new Exception("DEBUG FlatFileRecordSink.close() invocation").printStackTrace(pw);
-log.severe("FlatFileRecordSink closed: " + fileNames[i] + ": " + sw.toString());
-// END HACK FIXME REMOVEME
 			}
 		} else {
 			ws[0].flush();
 			ws[0].close();
-//			outFile[0].close();
 			log.fine("FlatFileRecordSink closed: " + fileNames[0]);
-// HACK FIXME REMOVEME
-StringWriter sw = new StringWriter();
-PrintWriter pw = new PrintWriter(sw);
-new Exception("DEBUG FlatFileRecordSink.close() invocation").printStackTrace(pw);
-log.severe("FlatFileRecordSink closed: " + fileNames[0] + ": " + sw.toString());
-// END HACK FIXME REMOVEME
 		}
 	}
 
 	public void put(Record r) throws IOException {
-{
-	// HACK
-	String msg =
-		"DEBUG 0 FlatFileRecordSink.put record (id " + r.getId()
-				+ ") to sink " + this.getName();
-	log.fine(msg);
-	if (r != null && Integer.valueOf(187051).equals(r.getId())) {
-		log.severe(msg);
-	}
-}
 		recordOutputter.put(ws, r);
-{
-	if (r != null && Integer.valueOf(187051).equals(r.getId())) {
-		// HACK
-		String msg =
-			"DEBUG 20 FlatFileRecordSink.put flushing sink " + this.getName();
-		log.severe(msg);
-		this.flush();
-		msg =
-				"DEBUG 22 FlatFileRecordSink.put FLUSHED sink " + this.getName();
-			log.severe(msg);
-	}
-}
 	}
 
 	/**
 	 * @see com.choicemaker.cm.core.Sink#flush()
 	 */
 	public void flush() throws IOException {
-{
-	// HACK
-	String msg =
-		"DEBUG 10 FlatFileRecordSink.flush(): " + this.getName();
-	log.fine(msg);
-}
 		if (multiFile) {
 			for (int i = 1; i < ws.length; ++i) {
 				ws[i].flush();
