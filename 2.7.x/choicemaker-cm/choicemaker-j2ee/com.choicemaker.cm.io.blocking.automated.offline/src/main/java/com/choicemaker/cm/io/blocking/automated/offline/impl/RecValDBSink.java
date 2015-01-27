@@ -179,6 +179,13 @@ public class RecValDBSink implements IRecValSink {
 		}
 	}
 
+	@Override
+	public boolean isOpen() {
+		assert (conn == null && insertStmt == null)
+				|| (conn != null && insertStmt != null);
+		return conn != null && insertStmt != null;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

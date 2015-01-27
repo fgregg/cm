@@ -200,6 +200,16 @@ public class BlockGroup implements IBlockSink {
 		}
 	}
 
+	@Override
+	public boolean isOpen() {
+		boolean retVal = sinks.size() > 0;
+		for (int i = 0; retVal && i < sinks.size(); i++) {
+			IBlockSink sink = sinks.get(i);
+			retVal = sink != null && sink.isOpen();
+		}
+		return retVal;
+	}
+
 	// this gets the number of files with size less than it.
 	private int getSum(int max) {
 		int total = 0;

@@ -103,6 +103,11 @@ public class ComparablePairSink implements IComparableSink {
 		sink.append();
 	}
 
+	@Override
+	public boolean isOpen() {
+		return sink.isOpen();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

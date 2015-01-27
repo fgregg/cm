@@ -14,13 +14,13 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 
 public class RecordIdTestUtils {
-	
+
 	private static final Random random = new Random();
-	
+
 	private static final int DEFAULT_MAX_COUNT = 100;
-	
+
 	private static final int MIN_COUNT = 1;
-	
+
 	private static int getRandomSize(int max) {
 		if (max < MIN_COUNT) {
 			throw new IllegalArgumentException("max < " + MIN_COUNT);
@@ -29,7 +29,7 @@ public class RecordIdTestUtils {
 		if (max == 1) {
 			retVal = 1;
 		} else {
-			retVal = random.nextInt(max-1);
+			retVal = random.nextInt(max - 1);
 			retVal += 1;
 		}
 		assert retVal >= 1 && retVal <= max;
@@ -52,7 +52,7 @@ public class RecordIdTestUtils {
 	public static List<Integer> getIdentifiersAsIntegers(int maxCount) {
 		List<Integer> retVal = new ArrayList<>();
 		final int count = getRandomSize(maxCount);
-		for (int i=0; i<count; i++) {
+		for (int i = 0; i < count; i++) {
 			retVal.add(random.nextInt());
 		}
 		return Collections.unmodifiableList(retVal);
@@ -76,8 +76,7 @@ public class RecordIdTestUtils {
 		return Collections.unmodifiableList(retVal);
 	}
 
-	public static <T extends Comparable<T>> List<String> getFileData(
-			List<T> ids) {
+	public static <T extends Comparable<T>> List<String> getFileData(List<T> ids) {
 		if (ids == null || ids.size() == 0) {
 			throw new IllegalArgumentException("null or empty identifier list");
 		}
@@ -86,7 +85,7 @@ public class RecordIdTestUtils {
 		T id = ids.get(count);
 		RECORD_ID_TYPE rit = RECORD_ID_TYPE.fromInstance(id);
 		retVal.add(rit.getStringSymbol());
-		for (;count<ids.size(); ++count) {
+		for (; count < ids.size(); ++count) {
 			id = ids.get(count);
 			retVal.add(String.valueOf(id));
 		}
@@ -112,13 +111,13 @@ public class RecordIdTestUtils {
 			String fileName, List<T> identifiers) throws IOException,
 			BlockingException {
 		RecordIdSink ris = new RecordIdSink(fileName);
-	
+
 		ris.open();
 		for (T id : identifiers) {
 			ris.writeRecordID(id);
 		}
 		ris.close();
-	
+
 		return ris;
 	}
 

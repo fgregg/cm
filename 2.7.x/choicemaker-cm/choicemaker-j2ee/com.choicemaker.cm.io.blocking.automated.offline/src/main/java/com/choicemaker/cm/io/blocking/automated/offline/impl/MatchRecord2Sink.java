@@ -81,7 +81,7 @@ public class MatchRecord2Sink extends BaseFileSink implements IMatchRecord2Sink 
 				assert type == BINARY;
 				RECORD_ID_TYPE dataType =
 					RECORD_ID_TYPE.fromInstance(match.getRecordID1());
-				final int dataTypeSymbol = dataType.getIntSymbol();
+				final int dataTypeSymbol = dataType.getIntValue();
 				dos.writeInt(dataTypeSymbol);
 				writeID(match.getRecordID1(), dataType);
 

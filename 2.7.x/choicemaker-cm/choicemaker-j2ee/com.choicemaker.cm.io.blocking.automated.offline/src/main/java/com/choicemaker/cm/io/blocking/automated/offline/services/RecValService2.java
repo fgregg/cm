@@ -287,7 +287,7 @@ public class RecValService2 {
 						Object O = r.getId();
 						stageType =
 							RECORD_ID_TYPE.fromInstance((Comparable) O)
-									.getIntSymbol();
+									.getIntValue();
 						firstStage = false;
 					}
 
