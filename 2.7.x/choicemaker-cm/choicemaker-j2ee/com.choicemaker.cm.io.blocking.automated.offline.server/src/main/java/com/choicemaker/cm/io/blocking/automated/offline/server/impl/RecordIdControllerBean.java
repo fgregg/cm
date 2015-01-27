@@ -284,7 +284,7 @@ public class RecordIdControllerBean implements RecordIdController {
 					String msg = "null record-id type";
 					throw new IllegalStateException(msg);
 				}
-				RECORD_ID_TYPE rit = RECORD_ID_TYPE.fromSymbol(i);
+				RECORD_ID_TYPE rit = RECORD_ID_TYPE.fromValue(i);
 				assert rit != null;
 				dataTypes.add(rit);
 			}
