@@ -83,7 +83,6 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 
 		} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 			String str = br.readLine();
-			// if there is a blank line, return false
 			if (str == null || str.equals(""))
 				throw new EOFException();
 
