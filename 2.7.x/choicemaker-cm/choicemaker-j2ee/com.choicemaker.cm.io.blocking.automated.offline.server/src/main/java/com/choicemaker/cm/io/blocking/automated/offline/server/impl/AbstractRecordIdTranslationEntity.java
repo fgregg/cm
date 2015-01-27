@@ -89,15 +89,16 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 		++dvCount;
 
 		retVal = retVal && DV_LONG.equals(TYPE_LONG.getStringSymbol());
-		retVal = retVal && !DV_STRING.equals(DV_ABSTRACT);
+		retVal = retVal && !DV_LONG.equals(DV_ABSTRACT);
 		++dvCount;
 
 		retVal = retVal && DV_STRING.equals(TYPE_STRING.getStringSymbol());
 		retVal = retVal && !DV_STRING.equals(DV_ABSTRACT);
 		++dvCount;
 
-		// One more discriminator (ABSTRACT and SPLIT_INDEX) than enum types
-		retVal = retVal && dvCount == RECORD_ID_TYPE.values().length + 2;
+		// One more discriminator (ABSTRACT) value than enum type
+		int ritCount = RECORD_ID_TYPE.values().length;
+		retVal = retVal && dvCount == ritCount + 1;
 
 		return retVal;
 	}
@@ -105,7 +106,8 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	static {
 		if (!isClassValid()) {
 			String msg =
-				"AbstractRecordIdTranslationEntity class is inconsistent with RECORD_ID_TYPE enumeration";
+				"AbstractRecordIdTranslationEntity class is inconsistent with "
+						+ " RECORD_ID_TYPE enumeration";
 			logger.severe(msg);
 			// An exception is not thrown here because it would create a class
 			// initialization exception, which can be hard to debug

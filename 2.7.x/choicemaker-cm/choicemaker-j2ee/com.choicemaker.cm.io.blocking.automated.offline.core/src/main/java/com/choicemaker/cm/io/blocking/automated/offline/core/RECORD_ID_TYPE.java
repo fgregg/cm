@@ -22,7 +22,7 @@ public enum RECORD_ID_TYPE {
 
 	RECORD_ID_TYPE(int i, Class<?> c, Class<?> p) {
 		this.charSymbol = (char) i;
-		this.strSymbol = String.valueOf(i);
+		this.strSymbol = String.valueOf(this.charSymbol);
 		this.recordIdClass = c;
 		if (p == null) {
 			primitiveIdClass = c;
