@@ -172,7 +172,7 @@ public class ServerConfigurationManagerBeanIT {
 		assertTrue(setupOK);
 		MutableServerConfiguration msc = scm.computeGenericConfiguration();
 		assertTrue(msc.getId() == ServerConfigurationEntity.NON_PERSISTENT_ID);
-		assertTrue(msc.getHostName().equals(
+		assertTrue(msc.getHostName().equalsIgnoreCase(
 				ServerConfigurationControllerBean.computeHostName()));
 		assertTrue(msc.getMaxChoiceMakerThreads() == ServerConfigurationControllerBean
 				.computeAvailableProcessors());
