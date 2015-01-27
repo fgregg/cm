@@ -10,11 +10,13 @@ public enum RECORD_ID_TYPE {
 	TYPE_INTEGER('1', Integer.class, int.class), TYPE_LONG('2', Long.class,
 			long.class), TYPE_STRING('3', String.class);
 	private final char charSymbol;
+	private final int intSymbol;
 	private final String strSymbol;
 	private final Class<?> recordIdClass;
 	private final Class<?> primitiveIdClass;
-	
-	private final static Logger logger = Logger.getLogger(RECORD_ID_TYPE.class.getName());
+
+	private final static Logger logger = Logger.getLogger(RECORD_ID_TYPE.class
+			.getName());
 
 	RECORD_ID_TYPE(int i, Class<?> c) {
 		this(i, c, null);
@@ -23,6 +25,7 @@ public enum RECORD_ID_TYPE {
 	RECORD_ID_TYPE(int i, Class<?> c, Class<?> p) {
 		this.charSymbol = (char) i;
 		this.strSymbol = String.valueOf(this.charSymbol);
+		this.intSymbol = Integer.parseInt(this.strSymbol);
 		this.recordIdClass = c;
 		if (p == null) {
 			primitiveIdClass = c;
@@ -31,14 +34,23 @@ public enum RECORD_ID_TYPE {
 		}
 	}
 
-	public int getIntSymbol() {
-		return charSymbol;
+	/**
+	 * Note the return value is numeric: 0x01, 0x02 or 0x03. It is not
+	 * equal to getCharSymbol()
+	 */
+	public int getIntValue() {
+		return intSymbol;
 	}
 
+	/**
+	 * Note the return value is an ASCII symbol: 0x31, 0x32 or 0x33. It is not
+	 * equal to getIntSymbol()
+	 */
 	public char getCharSymbol() {
 		return charSymbol;
 	}
 
+	/** Consistent with getCharSymbol() */
 	public String getStringSymbol() {
 		return strSymbol;
 	}
@@ -49,6 +61,21 @@ public enum RECORD_ID_TYPE {
 
 	private Class<?> getPrimitiveIdClass() {
 		return primitiveIdClass;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends Comparable<T>> T idFromString(String s) {
+		T retVal;
+		if (getRecordIdClass().equals(Integer.class)) {
+			retVal = (T) Integer.valueOf(s);
+		} else if (getRecordIdClass().equals(Long.class)) {
+			retVal = (T) Long.valueOf(s);
+		} else if (getRecordIdClass().equals(String.class)){
+			retVal = (T) s;
+		} else {
+			throw new Error("Unreachable");
+		}
+		return retVal;
 	}
 
 	public static <T extends Comparable<T>> RECORD_ID_TYPE fromInstance(T o) {
@@ -75,8 +102,7 @@ public enum RECORD_ID_TYPE {
 			break;
 		default:
 			String hex = Integer.toHexString(c);
-			String msg =
-				"invalid symbol: '" + c + "' (0x" + hex + ")";
+			String msg = "invalid symbol: '" + c + "' (0x" + hex + ")";
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
@@ -84,8 +110,9 @@ public enum RECORD_ID_TYPE {
 		return retVal;
 	}
 
-	public static RECORD_ID_TYPE fromSymbol(int i) {
-		return fromSymbol((char) i);
+	public static RECORD_ID_TYPE fromValue(int i) {
+		String s = Integer.toString(i);
+		return fromSymbol(s.charAt(0));
 	}
 
 	public static RECORD_ID_TYPE fromSymbol(String s) {
