@@ -1,11 +1,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RECORD_ID_TYPE_Test {

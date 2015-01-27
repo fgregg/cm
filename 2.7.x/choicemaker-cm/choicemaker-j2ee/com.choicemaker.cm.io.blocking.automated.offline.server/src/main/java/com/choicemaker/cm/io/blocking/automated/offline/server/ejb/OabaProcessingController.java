@@ -12,7 +12,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessi
 @Local
 public interface OabaProcessingController {
 
-	List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(long id);
+	List<OabaProcessingEventEntity> findAllOabaProcessingEvents();
+
+	List<OabaProcessingEventEntity> findOabaProcessingEventsByJobId(long id);
+
+	/** Returns a count of the number of events deleted */
+	int deleteOabaProcessingEventsByJobId(long id);
 
 	OabaEventLog getProcessingLog(OabaJob job);
 

@@ -133,10 +133,13 @@ public class PersistableRecordSourceControllerBean implements
 	@Override
 	public List<PersistableRecordSource> findAll() {
 		List<PersistableRecordSource> retVal = new ArrayList<>();
-		retVal.addAll(sqlRsController.findAll());
+		List<PersistableRecordSource> l0 = sqlRsController.findAll();
+		if (l0 != null) {
+			retVal.addAll(l0);
+		}
 		// Here's where flatfile and XML record sources should be added
 		logger.warning("Skipping flatfile and XML record sources");
-		return null;
+		return retVal;
 	}
 
 }

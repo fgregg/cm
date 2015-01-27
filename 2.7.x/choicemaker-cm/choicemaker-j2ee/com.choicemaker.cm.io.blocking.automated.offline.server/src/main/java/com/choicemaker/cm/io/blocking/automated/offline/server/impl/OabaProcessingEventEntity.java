@@ -11,8 +11,10 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.JPQL_OABAPROCESSING_DELETE_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.JPQL_OABAPROCESSING_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.JPQL_OABAPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_DELETE_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_BY_JOBID;
 
@@ -36,7 +38,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
 		@NamedQuery(name = QN_OABAPROCESSING_FIND_ALL,
 				query = JPQL_OABAPROCESSING_FIND_ALL),
 		@NamedQuery(name = QN_OABAPROCESSING_FIND_BY_JOBID,
-				query = JPQL_OABAPROCESSING_FIND_BY_JOBID) })
+				query = JPQL_OABAPROCESSING_FIND_BY_JOBID),
+		@NamedQuery(name = QN_OABAPROCESSING_DELETE_BY_JOBID,
+				query = JPQL_OABAPROCESSING_DELETE_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class OabaProcessingEventEntity extends BatchProcessingLogEntry

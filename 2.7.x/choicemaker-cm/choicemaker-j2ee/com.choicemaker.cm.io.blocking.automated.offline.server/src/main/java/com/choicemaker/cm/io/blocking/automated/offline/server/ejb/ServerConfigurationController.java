@@ -16,7 +16,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServe
 @Local
 public interface ServerConfigurationController {
 
-	ServerConfiguration find(long id);
+	ServerConfiguration findServerConfiguration(long id);
 
 	/**
 	 * Finds a persistent server configuration by name.
@@ -174,5 +174,7 @@ public interface ServerConfigurationController {
 	List<DefaultServerConfigurationEntity> findAllDefaultServerConfigurations();
 
 	ServerConfiguration findServerConfigurationByJobId(long jobId);
+
+	DefaultServerConfiguration findDefaultServerConfiguration(String hostName);
 
 }

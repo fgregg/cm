@@ -13,11 +13,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 
 @NamedQuery(name = QN_DSC_FIND_ALL, query = JPQL_DSC_FIND_ALL)
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
-public class DefaultServerConfigurationEntity {
+public class DefaultServerConfigurationEntity implements
+		DefaultServerConfiguration {
 
 	@Id
 	@Column(name = CN_HOSTNAME)

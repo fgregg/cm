@@ -231,7 +231,7 @@ public class ServerConfigurationManagerBeanIT {
 
 		// Find the configuration
 		ServerConfiguration sc = null;
-		sc = scm.find(scID);
+		sc = scm.findServerConfiguration(scID);
 		assertTrue(sc != null);
 		assertTrue(sc.getId() == scID);
 		assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(msc, sc));

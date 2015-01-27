@@ -91,4 +91,20 @@ public interface OabaProcessingEventJPA {
 	 */
 	String PN_OABAPROCESSING_FIND_BY_JOBID_JOBID = "jobId";
 
+	/**
+	 * Name of the query that deletes all persistent status entries for a
+	 * particular OABA job
+	 */
+	String QN_OABAPROCESSING_DELETE_BY_JOBID = "oabaProcessingDeleteByJobId";
+
+	/** JPQL used to implement {@link #QN_OABAPROCESSING_DELETE_BY_JOBID} */
+	String JPQL_OABAPROCESSING_DELETE_BY_JOBID =
+		"DELETE FROM OabaProcessingEventEntity o WHERE o.jobId = :jobId";
+
+	/**
+	 * Name of the parameter used to specify the jobId parameter of
+	 * {@link #QN_OABAPROCESSING_DELETE_BY_JOBID}
+	 */
+	String PN_OABAPROCESSING_DELETE_BY_JOBID_JOBID = "jobId";
+
 }
