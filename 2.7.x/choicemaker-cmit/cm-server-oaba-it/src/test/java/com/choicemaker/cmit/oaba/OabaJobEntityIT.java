@@ -467,8 +467,6 @@ public class OabaJobEntityIT {
 		// Transitions out of sequence should be ignored
 		job.markAsCompleted();
 		assertTrue(job.getStatus().equals(BatchJobStatus.NEW));
-		job.markAsStarted();
-		assertTrue(job.getStatus().equals(BatchJobStatus.NEW));
 
 		// 2. Queue the job
 		job.markAsQueued();
