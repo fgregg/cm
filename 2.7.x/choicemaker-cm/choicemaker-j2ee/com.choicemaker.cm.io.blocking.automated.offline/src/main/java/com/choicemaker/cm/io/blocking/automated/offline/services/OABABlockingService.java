@@ -586,10 +586,10 @@ public class OABABlockingService {
 
 		RecordValue2 records = new RecordValue2(rvSource);
 		if (records.size() == 0) {
-			// Egregious?
+			// Egregious -- useless blocking field or something may be wrong
 			String msg =
 				"No records for column " + col + ", source " + rvSource;
-			log.info(msg);
+			log.warning(msg);
 		}
 
 		ArrayList recordList = records.getList();
@@ -601,13 +601,14 @@ public class OABABlockingService {
 
 			if (values != null) {
 				if (values.size() == 0) {
-					// Egregious?
-					String msg =
+					// Typically an invalid value in a non-stacked
+					// field, or all invalid values in a stacked field
+ 					String msg =
 						"No values for column " + col + ", record id " + j
 								+ ", source " + rvSource;
-					log.info(msg);
+					log.finer(msg);
 				} else {
-					// Less informative
+					// Also usually boring or non-informative
 					String msg =
 						values.size() + " values for column " + col
 								+ ", record id " + j + ", source " + rvSource;
@@ -629,18 +630,19 @@ public class OABABlockingService {
 				}
 
 			} else {
-				// Egregious?
+				// Typically boring: an invalid value in a non-stacked
+				// field, or all invalid values in a stacked field
 				String msg =
 					"Null values for column " + col + ", record id " + j
 							+ ", source " + rvSource;
-				log.info(msg);
+				log.finer(msg);
 			}
 
 		} // end for
 		if (map.size() == 0) {
 			// Egregious
 			String msg = "Added 0 (zero) blocks for column " + col;
-			log.info(msg);
+			log.warning(msg);
 		} else {
 			// Informative
 			String msg = "Added " + map.size() + " blocks for column " + col;
