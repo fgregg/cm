@@ -34,7 +34,7 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	protected DataInputStream dis = null;
 	protected BufferedReader br = null;
 	protected int count = 0;
-	protected final EXTERNAL_DATA_FORMAT type;
+	private final EXTERNAL_DATA_FORMAT type;
 	protected final String fileName;
 
 	/**
@@ -63,9 +63,9 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	@Override
 	public void open() throws BlockingException {
 		try {
-			if (type == EXTERNAL_DATA_FORMAT.STRING)
+			if (getType() == EXTERNAL_DATA_FORMAT.STRING)
 				br = new BufferedReader(new FileReader(fileName));
-			else if (type == EXTERNAL_DATA_FORMAT.BINARY)
+			else if (getType() == EXTERNAL_DATA_FORMAT.BINARY)
 				dis = new DataInputStream(new FileInputStream(fileName));
 		} catch (FileNotFoundException ex) {
 			throw new BlockingException(ex.toString());
@@ -81,9 +81,9 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 	@Override
 	public void close() throws BlockingException {
 		try {
-			if (type == EXTERNAL_DATA_FORMAT.STRING)
+			if (getType() == EXTERNAL_DATA_FORMAT.STRING)
 				br.close();
-			else if (type == EXTERNAL_DATA_FORMAT.BINARY)
+			else if (getType() == EXTERNAL_DATA_FORMAT.BINARY)
 				dis.close();
 		} catch (IOException ex) {
 			throw new BlockingException(ex.toString());
@@ -133,8 +133,12 @@ public abstract class BaseFileSource<T> implements ISource<T> {
 
 	@Override
 	public String toString() {
-		return "BaseFileSource [type=" + type + ", fileName=" + fileName
+		return "BaseFileSource [type=" + getType() + ", fileName=" + fileName
 				+ ", exists=" + exists() + ", count=" + count + "]";
+	}
+
+	protected EXTERNAL_DATA_FORMAT getType() {
+		return type;
 	}
 
 }

@@ -122,7 +122,7 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 	private ComparisonArray<T> readNext() throws EOFException, IOException {
 		ComparisonArray<T> ret = null;
 
-		if (type == EXTERNAL_DATA_FORMAT.STRING) {
+		if (getType() == EXTERNAL_DATA_FORMAT.STRING) {
 			String str;
 
 			// read the data type for staging record
@@ -132,7 +132,7 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 				throw new EOFException();
 
 			int i = Integer.parseInt(str);
-			RECORD_ID_TYPE stageType = RECORD_ID_TYPE.fromSymbol(i);
+			RECORD_ID_TYPE stageType = RECORD_ID_TYPE.fromValue(i);
 
 			// read the staging array
 			ArrayList<T> stage = readArray(stageType);
@@ -140,24 +140,24 @@ public class ComparisonArraySource<T extends Comparable<T>> extends
 			// read the master id type
 			str = br.readLine();
 			i = Integer.parseInt(str);
-			RECORD_ID_TYPE masterType = RECORD_ID_TYPE.fromSymbol(i);
+			RECORD_ID_TYPE masterType = RECORD_ID_TYPE.fromValue(i);
 
 			// read the staging array
 			ArrayList<T> master = readArray(masterType);
 
 			ret = new ComparisonArray<T>(stage, master, stageType, masterType);
 
-		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
+		} else if (getType() == EXTERNAL_DATA_FORMAT.BINARY) {
 
 			// read the data type for staging record
 			int i = dis.readInt();
-			RECORD_ID_TYPE stageType = RECORD_ID_TYPE.fromSymbol(i);
+			RECORD_ID_TYPE stageType = RECORD_ID_TYPE.fromValue(i);
 
 			// read the staging array
 			ArrayList<T> stage = readArrayBinary(stageType);
 
 			// read the data type for master is.readInt();
-			RECORD_ID_TYPE masterType = RECORD_ID_TYPE.fromSymbol(i);
+			RECORD_ID_TYPE masterType = RECORD_ID_TYPE.fromValue(i);
 
 			// read the master array
 			ArrayList<T> master = readArrayBinary(masterType);

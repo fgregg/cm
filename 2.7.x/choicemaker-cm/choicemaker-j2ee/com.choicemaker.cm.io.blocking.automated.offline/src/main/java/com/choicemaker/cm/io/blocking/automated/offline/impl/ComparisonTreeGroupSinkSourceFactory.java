@@ -60,7 +60,7 @@ public class ComparisonTreeGroupSinkSourceFactory implements
 		this.fileDir = fileDir;
 		this.nameBase = nameBase;
 		this.ext = ext;
-		this.dataType = RECORD_ID_TYPE.fromSymbol(dataType);
+		this.dataType = RECORD_ID_TYPE.fromValue(dataType);
 		this.num = num;
 	}
 

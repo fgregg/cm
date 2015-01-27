@@ -53,13 +53,13 @@ public class PairIDSource extends BaseFileSource<PairID> implements
 		boolean next = false;
 
 		try {
-			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
+			if (getType() == EXTERNAL_DATA_FORMAT.BINARY) {
 				long id1 = dis.readLong();
 				long id2 = dis.readLong();
 				p = new PairID(id1, id2);
 				next = true;
 
-			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
+			} else if (getType() == EXTERNAL_DATA_FORMAT.STRING) {
 				String str;
 
 				// read the pairs

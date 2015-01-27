@@ -59,10 +59,10 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 	private MatchRecord2<T> readNext() throws EOFException, IOException {
 
 		MatchRecord2<T> retVal = null;
-		if (type == EXTERNAL_DATA_FORMAT.STRING) {
+		if (getType() == EXTERNAL_DATA_FORMAT.STRING) {
 			retVal = readMatchRecord(br);
 
-		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
+		} else if (getType() == EXTERNAL_DATA_FORMAT.BINARY) {
 			Comparable c1 = readIDBinary();
 			Comparable c2 = readIDBinary();
 			float f = dis.readFloat();
@@ -160,7 +160,7 @@ public class MatchRecord2Source<T extends Comparable<T>> extends
 		Comparable c = null;
 
 		int s = dis.readInt();
-		RECORD_ID_TYPE dataType = RECORD_ID_TYPE.fromSymbol(s);
+		RECORD_ID_TYPE dataType = RECORD_ID_TYPE.fromValue(s);
 
 		if (dataType == RECORD_ID_TYPE.TYPE_INTEGER) {
 			c = new Integer(dis.readInt());
