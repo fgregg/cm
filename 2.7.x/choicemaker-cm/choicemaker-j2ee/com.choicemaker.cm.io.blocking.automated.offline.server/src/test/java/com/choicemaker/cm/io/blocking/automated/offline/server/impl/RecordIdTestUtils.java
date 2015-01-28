@@ -51,7 +51,7 @@ public class RecordIdTestUtils {
 
 	public static List<Integer> getIdentifiersAsIntegers(int maxCount) {
 		List<Integer> retVal = new ArrayList<>();
-		final int count = getRandomSize(maxCount);
+		int count = Math.max(getRandomSize(maxCount), 2);
 		for (int i = 0; i < count; i++) {
 			retVal.add(random.nextInt());
 		}
