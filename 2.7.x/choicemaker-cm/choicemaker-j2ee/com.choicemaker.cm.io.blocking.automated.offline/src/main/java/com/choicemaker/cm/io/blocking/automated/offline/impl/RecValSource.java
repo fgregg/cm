@@ -69,7 +69,7 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 
 	private long readNext() throws EOFException, IOException {
 		long ret = 0;
-		if (type == EXTERNAL_DATA_FORMAT.BINARY) {
+		if (getType() == EXTERNAL_DATA_FORMAT.BINARY) {
 			ret = dis.readLong();
 
 			int size = dis.readInt();
@@ -81,9 +81,8 @@ public class RecValSource extends BaseFileSource<Long> implements IRecValSource 
 
 			nextValues = new IntArrayList(size, data);
 
-		} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
+		} else if (getType() == EXTERNAL_DATA_FORMAT.STRING) {
 			String str = br.readLine();
-			// if there is a blank line, return false
 			if (str == null || str.equals(""))
 				throw new EOFException();
 

@@ -70,8 +70,9 @@ public class ChunkMDB extends AbstractOabaMDB {
 		temp = (String) model.properties().get("maxChunkFiles");
 		int maxChunkFiles = Integer.parseInt(temp);
 
-		ImmutableRecordIdTranslator<?> translator =
-			getRecordIdController().getImmutableRecordIdTranslator(oabaJob);
+		@SuppressWarnings("rawtypes")
+		ImmutableRecordIdTranslator translator =
+			getRecordIdController().findRecordIdTranslator(oabaJob);
 
 		// create the os block source.
 		IBlockSinkSourceFactory osFactory =
@@ -114,8 +115,6 @@ public class ChunkMDB extends AbstractOabaMDB {
 					maxChunk, maxChunkFiles, processingLog, oabaJob);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
-
-		translator.cleanUp();
 
 		final int numChunks = chunkService.getNumChunks();
 		log.info("Number of chunks " + numChunks);

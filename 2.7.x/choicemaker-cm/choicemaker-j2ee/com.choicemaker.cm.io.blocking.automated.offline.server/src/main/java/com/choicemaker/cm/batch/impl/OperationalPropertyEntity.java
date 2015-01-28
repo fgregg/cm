@@ -9,8 +9,12 @@ import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.ID_GENERATOR_
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.ID_GENERATOR_PK_COLUMN_VALUE;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.ID_GENERATOR_TABLE;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.JPQL_OPPROP_DELETE_BY_JOB;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.JPQL_OPPROP_FINDALL;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.JPQL_OPPROP_FINDALL_BY_JOB;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.JPQL_OPPROP_FIND_BY_JOB_PNAME;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_DELETE_BY_JOB;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FINDALL;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FINDALL_BY_JOB;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FIND_BY_JOB_PNAME;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.TABLE_NAME;
@@ -31,10 +35,13 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalProperty;
 
 @NamedQueries({
+		@NamedQuery(name = QN_OPPROP_FINDALL, query = JPQL_OPPROP_FINDALL),
 		@NamedQuery(name = QN_OPPROP_FIND_BY_JOB_PNAME,
 				query = JPQL_OPPROP_FIND_BY_JOB_PNAME),
 		@NamedQuery(name = QN_OPPROP_FINDALL_BY_JOB,
-				query = JPQL_OPPROP_FINDALL_BY_JOB) })
+				query = JPQL_OPPROP_FINDALL_BY_JOB),
+		@NamedQuery(name = QN_OPPROP_DELETE_BY_JOB,
+				query = JPQL_OPPROP_DELETE_BY_JOB) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 public class OperationalPropertyEntity implements OperationalProperty {

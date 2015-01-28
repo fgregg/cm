@@ -13,8 +13,8 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 import com.choicemaker.cm.core.BlockingException;
 
 /**
- * This writes the record ID to a file. The record ID can be an Integer or Long
- * or String.
+ * This writes the record identifiers to a file. The record ID can be an Integer
+ * or Long or String.
  * 
  * @author pcheung
  *
@@ -22,9 +22,7 @@ import com.choicemaker.cm.core.BlockingException;
 public interface IRecordIdSink extends ISink {
 
 	/**
-	 * This method writes the record ID object to the sink.
-	 * 
-	 * @param o
+	 * Writes a record identifier to this sink.
 	 */
 	public void writeRecordID(Comparable<?> o) throws BlockingException;
 
@@ -33,8 +31,17 @@ public interface IRecordIdSink extends ISink {
 	 * before calling the open method.
 	 * 
 	 * @param type
-	 * @throws BlockingException
+	 * @throws IllegalArgumentException
+	 *             if this method is invoked with a type that is null or not
+	 *             identical to the type specified in a previous invocation.
 	 */
 	public void setRecordIDType(RECORD_ID_TYPE type);
+
+	/**
+	 * @throws IllegalStateException
+	 *             if the type of record identifier has not been
+	 *             {@link #setRecordIDType(RECORD_ID_TYPE) set}
+	 */
+	public RECORD_ID_TYPE getRecordIdType();
 
 }

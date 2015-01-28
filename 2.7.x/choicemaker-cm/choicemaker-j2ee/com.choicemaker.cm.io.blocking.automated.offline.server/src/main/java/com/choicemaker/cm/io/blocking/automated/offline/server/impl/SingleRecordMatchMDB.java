@@ -237,7 +237,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 				String.valueOf(numBlockFields));
 
 		final ImmutableRecordIdTranslator immutableTranslator =
-			mutableTranslator.toImmutableTranslator();
+			ridController.toImmutableTranslator(mutableTranslator);
 		ValidatorBase validator = new ValidatorBase(true, immutableTranslator);
 		data.validator = validator;
 

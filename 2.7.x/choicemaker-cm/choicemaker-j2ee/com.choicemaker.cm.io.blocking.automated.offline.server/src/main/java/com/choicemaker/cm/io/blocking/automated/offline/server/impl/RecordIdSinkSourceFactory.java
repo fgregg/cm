@@ -25,7 +25,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
 @SuppressWarnings({ "rawtypes" })
 class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 
-	private static final EXTERNAL_DATA_FORMAT TYPE =
+	static final EXTERNAL_DATA_FORMAT TYPE =
 		EXTERNAL_DATA_FORMAT.STRING;
 
 	private String fileDir;
@@ -59,7 +59,7 @@ class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 	@Override
 	public IRecordIdSink getNextSink() throws BlockingException {
 		indSink++;
-		return new RecordIdSink(fileDir + nameBase + indSink + "." + ext, TYPE);
+		return new RecordIdSink(fileDir + nameBase + indSink + "." + ext);
 	}
 
 	/*
@@ -71,8 +71,7 @@ class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 	@Override
 	public IRecordIdSource getNextSource() throws BlockingException {
 		indSource++;
-		return new RecordIdSource(fileDir + nameBase + indSource + "." + ext,
-				TYPE);
+		return new RecordIdSource(fileDir + nameBase + indSource + "." + ext);
 	}
 
 	/*
@@ -108,7 +107,7 @@ class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 	@Override
 	public IRecordIdSource getSource(IRecordIdSink sink)
 			throws BlockingException {
-		return new RecordIdSource(sink.getInfo(), TYPE);
+		return new RecordIdSource(sink.getInfo());
 	}
 
 	/*
@@ -122,7 +121,7 @@ class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 	@Override
 	public IRecordIdSink getSink(IRecordIdSource source)
 			throws BlockingException {
-		return new RecordIdSink(source.getInfo(), TYPE);
+		return new RecordIdSink(source.getInfo());
 	}
 
 	/*

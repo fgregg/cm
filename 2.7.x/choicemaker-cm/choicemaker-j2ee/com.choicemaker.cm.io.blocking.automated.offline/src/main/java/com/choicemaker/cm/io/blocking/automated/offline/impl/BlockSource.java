@@ -50,7 +50,7 @@ public class BlockSource extends BaseFileSource<BlockSet> implements
 	private BlockSet readNext() throws EOFException, IOException {
 		BlockSet ret = new BlockSet();
 
-		if (type == EXTERNAL_DATA_FORMAT.STRING) {
+		if (getType() == EXTERNAL_DATA_FORMAT.STRING) {
 			// read the columns
 			String str = br.readLine();
 
@@ -77,7 +77,7 @@ public class BlockSource extends BaseFileSource<BlockSet> implements
 			}
 
 			ret.setRecordIDs(ids);
-		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
+		} else if (getType() == EXTERNAL_DATA_FORMAT.BINARY) {
 			// first read the number of blocking fields
 			int size = dis.readInt();
 
@@ -229,7 +229,7 @@ public class BlockSource extends BaseFileSource<BlockSet> implements
 
 	@Override
 	public String toString() {
-		return "BlockSource [count=" + count + ", type=" + type + ", fileName="
+		return "BlockSource [count=" + count + ", type=" + getType() + ", fileName="
 				+ fileName + "]";
 	}
 

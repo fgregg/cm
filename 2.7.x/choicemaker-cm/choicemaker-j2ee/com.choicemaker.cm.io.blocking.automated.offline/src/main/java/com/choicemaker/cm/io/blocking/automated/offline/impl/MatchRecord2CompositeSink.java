@@ -215,6 +215,11 @@ public class MatchRecord2CompositeSink implements IMatchRecord2Sink {
 	}
 
 	@Override
+	public boolean isOpen() {
+		return currentFile != null && currentFile.isOpen();
+	}
+
+	@Override
 	public void close() throws BlockingException {
 		currentFile.close();
 	}

@@ -10,8 +10,15 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.PN_OABAPROCESSING_DELETE_BY_JOBID_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_DELETE_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_BY_JOBID;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -61,13 +68,38 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 	static List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(
 			EntityManager em, long id) {
 		Query query =
-			em.createNamedQuery(OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_BY_JOBID);
+			em.createNamedQuery(QN_OABAPROCESSING_FIND_BY_JOBID);
 		query.setParameter(
-				OabaProcessingEventJPA.PN_OABAPROCESSING_FIND_BY_JOBID_JOBID,
+				PN_OABAPROCESSING_FIND_BY_JOBID_JOBID,
 				id);
 		@SuppressWarnings("unchecked")
 		List<OabaProcessingEventEntity> entries = query.getResultList();
+		if (entries == null) {
+			entries = Collections.emptyList();
+		}
 		return entries;
+	}
+
+	static List<OabaProcessingEventEntity> findAllOabaProcessingEvents(
+			EntityManager em) {
+		Query query =
+			em.createNamedQuery(QN_OABAPROCESSING_FIND_ALL);
+		@SuppressWarnings("unchecked")
+		List<OabaProcessingEventEntity> entries = query.getResultList();
+		if (entries == null) {
+			entries = Collections.emptyList();
+		}
+		return entries;
+	}
+
+	static int deleteProcessingLogEntriesByJobId(EntityManager em, long id) {
+		Query query =
+			em.createNamedQuery(QN_OABAPROCESSING_DELETE_BY_JOBID);
+		query.setParameter(
+				PN_OABAPROCESSING_DELETE_BY_JOBID_JOBID,
+				id);
+		int deletedCount = query.executeUpdate();
+		return deletedCount;
 	}
 
 	static OabaProcessingEvent updateStatus(EntityManager em, OabaJob job,
@@ -133,7 +165,7 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 			OabaProcessingControllerBean.findProcessingLogEntriesByJobId(em,
 					oabaJob.getId());
 		final OabaProcessingEvent retVal;
-		if (entries.isEmpty()) {
+		if (entries == null || entries.isEmpty()) {
 			retVal = null;
 		} else {
 			retVal = entries.get(0);
@@ -152,14 +184,18 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 												retVal, e2);
 							logger.severe(msg);
 							throw new IllegalStateException(summary);
+
 						} else if (mostRecent.compareTo(d2) == 0) {
+							// Timestamps by themselves are ambigous
+							// if events are very close together, but
+							// may be disambiguated by ordering of ids
 							String summary =
 								"Ambiguous OabaProcessingEvent timestamps";
 							String msg =
 								OabaProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
 												retVal, e2);
-							logger.warning(msg);
+							logger.fine(msg);
 						}
 					}
 				}
@@ -189,9 +225,19 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 	private Topic oabaStatusTopic;
 
 	@Override
-	public List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(
+	public List<OabaProcessingEventEntity> findOabaProcessingEventsByJobId(
 			long id) {
 		return findProcessingLogEntriesByJobId(em, id);
+	}
+
+	@Override
+	public List<OabaProcessingEventEntity> findAllOabaProcessingEvents() {
+		return findAllOabaProcessingEvents(em);
+	}
+
+	@Override
+	public int deleteOabaProcessingEventsByJobId(long id) {
+		return deleteProcessingLogEntriesByJobId(em, id);
 	}
 
 	@Override

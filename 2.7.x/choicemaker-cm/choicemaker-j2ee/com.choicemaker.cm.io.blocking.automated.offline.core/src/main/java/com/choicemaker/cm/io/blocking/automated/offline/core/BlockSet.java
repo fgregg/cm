@@ -31,6 +31,8 @@ public class BlockSet implements Serializable, IIDSet {
 	LongArrayList ids; // This stores the Record ids belonging to this blocking
 						// set.
 
+	private String toString;
+
 	public BlockSet() {
 		columns = new IntArrayList(3);
 		ids = new LongArrayList(2);
@@ -44,10 +46,12 @@ public class BlockSet implements Serializable, IIDSet {
 
 	public void addColumn(int column) {
 		columns.add(column);
+		toString = null;
 	}
 
 	public void addColumns(IntArrayList cols) {
 		columns.addAll(cols);
+		toString = null;
 	}
 
 	public IntArrayList getColumns() {
@@ -56,14 +60,17 @@ public class BlockSet implements Serializable, IIDSet {
 
 	public void addRecordID(int i) {
 		ids.add(i);
+		toString = null;
 	}
 
 	public void addRecordID(long l) {
 		ids.add(l);
+		toString = null;
 	}
 
 	public void setRecordIDs(LongArrayList list) {
 		ids = list;
+		toString = null;
 	}
 
 	@Override
@@ -78,7 +85,26 @@ public class BlockSet implements Serializable, IIDSet {
 			return false;
 	}
 
-	// public int countIDs () {
-	// return ids.size();
-	// }
+	private static final int MAX_RECORD_IDS_PRINTED = 3;
+
+	public String toString() {
+		if (toString != null) {
+			return toString;
+		} else {
+			String s = "BlockSet [recordIds: ";
+			final int LIMIT = Math.min(MAX_RECORD_IDS_PRINTED, ids.size());
+			if (LIMIT <= 0) {
+				s += "<none>]";
+			} else {
+				for (int i = 0; i < LIMIT - 1; i++) {
+					s += ids.get(i) + " ";
+				}
+				s += ids.get(LIMIT - 1) + " ...]";
+			}
+			toString = s;
+		}
+		assert toString != null;
+		return toString;
+	}
+
 }

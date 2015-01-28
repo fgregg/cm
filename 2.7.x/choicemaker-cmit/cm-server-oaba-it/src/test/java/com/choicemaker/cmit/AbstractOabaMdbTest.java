@@ -24,10 +24,12 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -35,7 +37,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
-import com.choicemaker.cmit.utils.TestEntities;
+import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
@@ -44,19 +46,14 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	// -- Read-write instance data
 
-	private int initialOabaParamsCount;
-
-	private int initialOabaJobCount;
-
-	private int initialOabaProcessingCount;
-
-	private boolean setupOK;
-
 	/**
 	 * A read-only member that is lazily initialized by
 	 * {@link #getTestConfiguration()}
 	 */
 	private T testConfiguration;
+
+	/** Initialized during {@link #setUp()} */
+	private TestEntityCounts te;
 
 	// -- Immutable, constructed instance data
 
@@ -102,6 +99,12 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	@EJB
 	private OabaTestController oabaTestController;
+
+	@EJB
+	private OperationalPropertyController opPropController;
+
+	@EJB
+	private RecordIdController ridController;
 
 	@EJB
 	private RecordSourceController rsController;
@@ -170,36 +173,31 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	// -- Template methods
 
+	public void checkCounts() throws AssertionError {
+		TestEntityCounts te = getTestEntityCounts();
+		te.checkCounts(getLogger(), getEm(), getUtx(), getJobController(),
+				getParamsController(), getSettingsController(),
+				getServerController(), getProcessingController(),
+				getOpPropController(), getRecordSourceController(),
+				getRecordIdController());
+	}
+
 	@Before
-	public final void setUp() {
+	public final void setUp() throws Exception {
 		final String METHOD = "setUp";
 		getLogger().entering(getSourceName(), METHOD);
-		setupOK = true;
 
-		try {
-			getLogger().info("Creating an OABA status listener");
-			this.oabaStatusConsumer =
-				getJmsContext().createConsumer(getOabaStatusTopic());
+		getLogger().info("Creating an OABA status listener");
+		this.oabaStatusConsumer =
+			getJmsContext().createConsumer(getOabaStatusTopic());
 
-			getLogger().info("Computing initial counts of persistent objects");
-			int c;
-
-			c = getTestController().findAllOabaParameters().size();
-			getLogger().info("Initial count of OABA parameters: " + c);
-			setInitialOabaParamsCount(c);
-
-			c = getTestController().findAllOabaJobs().size();
-			getLogger().info("Initial count of OABA jobs: " + c);
-			setInitialOabaJobCount(c);
-
-			c = getTestController().findAllOabaProcessing().size();
-			getLogger().info("Initial count of OABA processing entries: " + c);
-			setInitialOabaProcessingCount(c);
-
-		} catch (Exception x) {
-			getLogger().severe(x.toString());
-			setupOK = false;
-		}
+		TestEntityCounts te =
+			new TestEntityCounts(getLogger(), getJobController(),
+					getParamsController(), getSettingsController(),
+					getServerController(), getProcessingController(),
+					getOpPropController(), getRecordSourceController(),
+					getRecordIdController());
+		setTestEntityCounts(te);
 		getLogger().exiting(getSourceName(), METHOD);
 	}
 
@@ -210,44 +208,11 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 		getLogger().info("Closing the OABA status listener");
 		this.getOabaStatusConsumer().close();
-
-		if (!TestEntities.isTestObjectRetentionRequested()) {
-			getLogger().info("Checking final object counts");
-			try {
-				int finalOabaParamsCount =
-					getTestController().findAllOabaParameters().size();
-				String alert = "initialOabaParamsCount != finalOabaParamsCount";
-				assertTrue(alert,
-						initialOabaParamsCount == finalOabaParamsCount);
-
-				int finalOabaJobCount =
-					getTestController().findAllOabaJobs().size();
-				alert = "initialOabaJobCount != finalOabaJobCount";
-				assertTrue(alert, initialOabaJobCount == finalOabaJobCount);
-
-				int finalOabaProcessingCount =
-					getTestController().findAllOabaProcessing().size();
-				alert =
-					"initialOabaProcessingCount != finalOabaProcessingCount";
-				assertTrue(alert,
-						initialOabaProcessingCount == finalOabaProcessingCount);
-
-			} catch (Exception x) {
-				getLogger().severe(x.toString());
-			} catch (AssertionError x) {
-				getLogger().severe(x.toString());
-			}
-		} else {
-			getLogger().info("Skipping check of final object counts");
-		}
-		getLogger().exiting(getSourceName(), METHOD);
 	}
 
 	@Test
 	@InSequence(1)
 	public final void testPrequisites() {
-		assertTrue(isSetupOK());
-
 		assertTrue(getOabaService() != null);
 		assertTrue(getBlockQueue() != null);
 		assertTrue(getChunkQueue() != null);
@@ -259,10 +224,6 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		assertTrue(getMatchDedupQueue() != null);
 		assertTrue(getMatchSchedulerQueue() != null);
 		assertTrue(getOabaStatusTopic() != null);
-		assertTrue(getParamsController() != null);
-		assertTrue(getProcessingController() != null);
-		assertTrue(getServerController() != null);
-		assertTrue(getSettingsController() != null);
 		assertTrue(getSingleMatchQueue() != null);
 		assertTrue(getSourceName() != null);
 		assertTrue(getStartQueue() != null);
@@ -270,12 +231,18 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		assertTrue(getUtx() != null);
 
 		assertTrue(getTransitivityQueue() != null);
+
+		// These assertions are redundant because these controllers are
+		// required during setUp()
+		assertTrue(getParamsController() != null);
+		assertTrue(getProcessingController() != null);
+		assertTrue(getServerController() != null);
+		assertTrue(getSettingsController() != null);
 	}
 
 	@Test
 	@InSequence(2)
 	public final void clearDestinations() {
-		assertTrue(setupOK);
 
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
 				getStartQueue());
@@ -313,39 +280,11 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	// -- Modifiers
 
-	public final void setInitialOabaJobCount(int value) {
-		this.initialOabaJobCount = value;
-	}
-
-	public final void setInitialOabaParamsCount(int value) {
-		this.initialOabaParamsCount = value;
-	}
-
-	public final void setInitialOabaProcessingCount(int value) {
-		this.initialOabaProcessingCount = value;
-	}
-
-	public final void setSetupOK(boolean setupOK) {
-		this.setupOK = setupOK;
+	protected void setTestEntityCounts(TestEntityCounts te) {
+		this.te = te;
 	}
 
 	// -- Accessors
-
-	public final int getInitialOabaJobCount() {
-		return initialOabaJobCount;
-	}
-
-	public final int getInitialOabaParamsCount() {
-		return initialOabaParamsCount;
-	}
-
-	public final int getInitialOabaProcessingCount() {
-		return initialOabaProcessingCount;
-	}
-
-	public final boolean isSetupOK() {
-		return setupOK;
-	}
 
 	public final Class<T> getTestConfigurationClass() {
 		return configurationClass;
@@ -418,6 +357,14 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		return oabaStatusTopic;
 	}
 
+	public final OperationalPropertyController getOpPropController() {
+		return opPropController;
+	}
+
+	public final RecordIdController getRecordIdController() {
+		return ridController;
+	}
+
 	public final OabaParametersControllerBean getParamsController() {
 		return paramsController;
 	}
@@ -460,6 +407,10 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	public final OabaTestController getTestController() {
 		return oabaTestController;
+	}
+
+	public TestEntityCounts getTestEntityCounts() {
+		return te;
 	}
 
 	public final Queue getTransitivityQueue() {

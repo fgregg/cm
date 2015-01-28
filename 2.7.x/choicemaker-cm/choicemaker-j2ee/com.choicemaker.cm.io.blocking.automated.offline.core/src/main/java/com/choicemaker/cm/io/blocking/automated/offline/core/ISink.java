@@ -29,6 +29,9 @@ public interface ISink {
 	/** opens the sink for append. */
 	public void append() throws BlockingException;
 
+	/** Checks if the sink is open for overwriting or apppending */
+	boolean isOpen();
+
 	/** Closes the sink. */
 	public void close() throws BlockingException;
 

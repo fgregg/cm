@@ -26,4 +26,9 @@ public interface OperationalPropertyController {
 
 	List<OperationalProperty> findAllByJob(BatchJob job);
 
+	/** Returns a count of the number of events deleted */
+	int deleteOperationalPropertiesByJobId(long jobId);
+
+	List<OperationalProperty> findAllOperationalProperties();
+
 }

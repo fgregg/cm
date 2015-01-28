@@ -24,6 +24,13 @@ import com.choicemaker.cm.core.BlockingException;
 public interface MutableRecordIdTranslator<T extends Comparable<T>> {
 
 	/**
+	 * A magic value returned by {@link #getSplitIndex()} indicating that the
+	 * translator is not split. Numerically equal to
+	 * {@link ImmutableRecordIdTranslator#NOT_SPLIT}.
+	 */
+	public static final int NOT_SPLIT = ImmutableRecordIdTranslator.NOT_SPLIT;
+
+	/**
 	 * This method performs initialization.
 	 */
 	public void open() throws BlockingException;
@@ -35,21 +42,32 @@ public interface MutableRecordIdTranslator<T extends Comparable<T>> {
 	public void split() throws BlockingException;
 
 	/**
-	 * Closes this instance and effectively converts it to an immutable
-	 * translator; use the {@link #toImmutableTranslator()} method to get the
-	 * immutable translator that this translator becomes. If a
-	 * {@link #translate(Comparable) translation} is attempted after being
-	 * closed, this instance will throw an {@link IllegalStateExceptions
-	 * illegal-state exception}.
+	 * This returns the internal id at which the second source begins, or
+	 * {@link #NOT_SPLIT} if this translator has not been split. If this
+	 * translator has been split, then:
+	 * <ul>
+	 * <li>RecordSource1 will have been assigned internal ids from
+	 * <code>0</code> to <code>splitIndex - 1</code>.</li>
+	 * <li>RecordSource2 will be assigned internal ids starting at the
+	 * splitIndex.</li>
+	 * </ul>
 	 */
-	public void close() throws BlockingException;
+	public int getSplitIndex();
+
+	/** Indicates whether the translator has been split */
+	boolean isSplit();
 
 	/**
-	 * This method closes this instance (if it is not already closed) and
-	 * returns an immutable translator that based on this instance.
+	 * Returns the index at which indices for the second (a.k.a. master) source
+	 * begin, if the translator has been split. Otherwise, returns
 	 */
-	public ImmutableRecordIdTranslator<T> toImmutableTranslator()
-			throws BlockingException;
+
+	/**
+	 * Closes this instance. If a {@link #translate(Comparable) translation} is
+	 * attempted after being closed, this instance will throw an
+	 * {@link IllegalStateExceptions illegal-state exception}.
+	 */
+	public void close() throws BlockingException;
 
 	/**
 	 * This method cleans any resources that are cached on disk.
@@ -64,5 +82,14 @@ public interface MutableRecordIdTranslator<T extends Comparable<T>> {
 	 * @return int - returns internal id for this record id.
 	 */
 	public int translate(T o) throws BlockingException;
+
+	/**
+	 * Returns the type of record identifiers handled by this translator.
+	 * 
+	 * @throws IllegalStateException
+	 *             if no {@link #translate(Comparable) translations} have been
+	 *             performed by this instance.
+	 */
+	RECORD_ID_TYPE getRecordIdType();
 
 }

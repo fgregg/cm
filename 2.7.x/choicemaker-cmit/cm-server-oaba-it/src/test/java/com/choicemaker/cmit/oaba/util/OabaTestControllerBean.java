@@ -20,10 +20,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cmit.OabaTestController;
+import com.choicemaker.cmit.utils.BatchJobUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntities;
+import com.choicemaker.cmit.utils.TestEntityCounts;
 
 /**
  * An EJB used to test TransitivityJob beans within container-defined
@@ -80,6 +81,7 @@ public class OabaTestControllerBean implements OabaTestController {
 	}
 
 	@Override
+	@Deprecated
 	public OabaParametersEntity createBatchParameters(String tag,
 			TestEntities te) {
 		if (te == null) {
@@ -101,14 +103,29 @@ public class OabaTestControllerBean implements OabaTestController {
 	}
 
 	@Override
-	public ServerConfiguration getDefaultServerConfiguration() {
-		String hostName = ServerConfigurationControllerBean.computeHostName();
-		final boolean computeFallback = true;
-		ServerConfiguration retVal =
-			serverController.getDefaultConfiguration(hostName, computeFallback);
-		assert retVal != null;
-		assert retVal.getId() != ServerConfigurationControllerBean.INVALID_ID;
+	public OabaParametersEntity createBatchParameters(String tag,
+			TestEntityCounts te) {
+		if (te == null) {
+			throw new IllegalArgumentException("null test entities");
+		}
+		Thresholds thresholds = createRandomThresholds();
+		PersistableRecordSource stage =
+			EntityManagerUtils.createFakePersistableRecordSource(tag);
+		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
+		PersistableRecordSource master =
+			EntityManagerUtils.createFakePersistableRecordSource(tag, task);
+		OabaParametersEntity retVal =
+			new OabaParametersEntity(createRandomModelConfigurationName(tag),
+					thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), stage, master, task);
+		paramsController.save(retVal);
+		te.add(retVal);
 		return retVal;
+	}
+
+	@Override
+	public ServerConfiguration getDefaultServerConfiguration() {
+		return BatchJobUtils.getDefaultServerConfiguration(serverController);
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.DV_LONG;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.JPQL_TRANSLATEDLONGID_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.PN_TRANSLATEDLONGID_FIND_BY_JOBID_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.JPQL_TRANSLATEDLONGID_FIND_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.QN_TRANSLATEDLONGID_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.QN_TRANSLATEDLONGID_FIND_BY_JOBID;
 
@@ -19,13 +19,16 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 		@NamedQuery(name = QN_TRANSLATEDLONGID_FIND_ALL,
 				query = JPQL_TRANSLATEDLONGID_FIND_ALL),
 		@NamedQuery(name = QN_TRANSLATEDLONGID_FIND_BY_JOBID,
-				query = PN_TRANSLATEDLONGID_FIND_BY_JOBID_JOBID) })
+				query = JPQL_TRANSLATEDLONGID_FIND_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DV_LONG)
 public class RecordIdLongTranslation extends
 		AbstractRecordIdTranslationEntity<Long> {
 
 	private static final long serialVersionUID = 271L;
+
+	static final long RECORD_ID_PLACEHOLDER =
+		RecordIdIntegerTranslation.RECORD_ID_PLACEHOLDER;
 
 	public static Long idFromString(String s) {
 		Long retVal;
@@ -45,6 +48,10 @@ public class RecordIdLongTranslation extends
 			retVal = id.toString();
 		}
 		return retVal;
+	}
+
+	protected RecordIdLongTranslation() {
+		super();
 	}
 
 	public RecordIdLongTranslation(BatchJob job, long recordId,

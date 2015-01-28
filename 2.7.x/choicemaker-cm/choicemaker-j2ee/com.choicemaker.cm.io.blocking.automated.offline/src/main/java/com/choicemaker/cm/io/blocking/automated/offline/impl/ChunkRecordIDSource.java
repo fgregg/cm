@@ -53,14 +53,14 @@ public class ChunkRecordIDSource extends BaseFileSource<Long> implements
 	private long readNext() throws EOFException, IOException {
 		long ret = 0;
 
-		if (type == EXTERNAL_DATA_FORMAT.STRING) {
+		if (getType() == EXTERNAL_DATA_FORMAT.STRING) {
 			String str = br.readLine();
 			if (str != null && !str.equals("")) {
 				ret = Long.parseLong(str);
 			} else {
 				throw new EOFException();
 			}
-		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
+		} else if (getType() == EXTERNAL_DATA_FORMAT.BINARY) {
 			ret = dis.readLong();
 		}
 

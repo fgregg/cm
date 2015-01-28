@@ -12,17 +12,18 @@ import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
-import javax.persistence.EntityManager;
-import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
@@ -30,11 +31,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
-import com.choicemaker.cmit.utils.TestEntities;
+import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 
@@ -80,7 +83,6 @@ public class OabaMdbTestProcedures {
 			throw new IllegalArgumentException("null argument");
 		}
 
-		assertTrue(test.isSetupOK());
 		String TEST = "testStartOABALinkage";
 		test.getLogger().entering(test.getSourceName(), TEST);
 
@@ -97,7 +99,6 @@ public class OabaMdbTestProcedures {
 			throw new IllegalArgumentException("null argument");
 		}
 
-		assertTrue(test.isSetupOK());
 		String TEST = "testStartOABAStage";
 		test.getLogger().entering(test.getSourceName(), TEST);
 
@@ -121,6 +122,7 @@ public class OabaMdbTestProcedures {
 		final String LOG_SOURCE = test.getSourceName();
 		logger.entering(LOG_SOURCE, tag);
 
+		final TestEntityCounts te = test.getTestEntityCounts();
 		final OabaProcessingPhase oabaPhase = test.getOabaProcessingPhase();
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
@@ -133,6 +135,7 @@ public class OabaMdbTestProcedures {
 		final PersistableRecordSource staging =
 			test.getRecordSourceController().save(c.getStagingRecordSource());
 		assertTrue(staging.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+		te.add(staging);
 
 		final PersistableRecordSource master;
 		if (OabaLinkageType.STAGING_DEDUPLICATION == linkage) {
@@ -142,15 +145,49 @@ public class OabaMdbTestProcedures {
 				test.getRecordSourceController()
 						.save(c.getMasterRecordSource());
 			assertTrue(master.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+			te.add(master);
 		}
 
-		final OabaSettings oabaSettings =
-			OabaUtils.getDefaultOabaSettings(test.getSettingsController(),
-					c.getModelConfigurationName());
-		final ServerConfiguration serverConfiguration =
-			OabaUtils.getDefaultServerConfiguration(test.getServerController());
+		final String modelId = c.getModelConfigurationName();
+		final ImmutableProbabilityModel model =
+			PMManager.getImmutableModelInstance(modelId);
+		OabaSettings oabaSettings =
+			test.getSettingsController().findDefaultOabaSettings(model);
+		if (oabaSettings == null) {
+			// Creates generic settings and saves them
+			oabaSettings = new OabaSettingsEntity();
+			oabaSettings = test.getSettingsController().save(oabaSettings);
+			te.add(oabaSettings);
+		}
+		assertTrue(oabaSettings != null);
 
-		final TestEntities te = new TestEntities();
+		final String hostName =
+			ServerConfigurationControllerBean.computeHostName();
+		logger.info("Computed host name: " + hostName);
+		final DefaultServerConfiguration dsc =
+			test.getServerController().findDefaultServerConfiguration(hostName);
+		ServerConfiguration serverConfiguration = null;
+		if (dsc != null) {
+			long id = dsc.getServerConfigurationId();
+			logger.info("Default server configuration id: " + id);
+			serverConfiguration =
+				test.getServerController().findServerConfiguration(id);
+		}
+		if (serverConfiguration == null) {
+			logger.info("No default server configuration for: " + hostName);
+			serverConfiguration =
+				test.getServerController().computeGenericConfiguration();
+			try {
+				serverConfiguration =
+					test.getServerController().save(serverConfiguration);
+			} catch (ServerConfigurationException e) {
+				fail("Unable to save server configuration: " + e.toString());
+			}
+			te.add(serverConfiguration);
+		}
+		logger.info(ServerConfigurationEntity.dump(serverConfiguration));
+		assertTrue(serverConfiguration != null);
+
 		final OabaParameters bp =
 			new OabaParametersEntity(c.getModelConfigurationName(), c
 					.getThresholds().getDifferThreshold(), c.getThresholds()
@@ -285,15 +322,8 @@ public class OabaMdbTestProcedures {
 		assertTrue(test.isWorkingDirectoryCorrectAfterProcessing(linkage,
 				oabaJob, bp, oabaSettings, serverConfiguration));
 
-		// Clean up
-		try {
-			final EntityManager em = test.getEm();
-			final UserTransaction utx = test.getUtx();
-			te.removePersistentObjects(em, utx);
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			fail(x.toString());
-		}
+		// Check the number of test entities that were created
+		test.checkCounts();
 
 		logger.exiting(LOG_SOURCE, tag);
 	}

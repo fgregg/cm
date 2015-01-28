@@ -22,7 +22,6 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.data.MatchListSource;
 
 /**
  * @author pcheung
@@ -147,8 +146,10 @@ public interface OabaService {
 	 * @param jobID
 	 * @return MatchListSource - returns a source from which to read MatchList
 	 *         objects.
+	 * @see #getMatchRecordSource(long)
 	 */
-	public MatchListSource getMatchList(long jobID) throws RemoteException,
+	@Deprecated
+	public Object getMatchList(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException;
 
 	/**

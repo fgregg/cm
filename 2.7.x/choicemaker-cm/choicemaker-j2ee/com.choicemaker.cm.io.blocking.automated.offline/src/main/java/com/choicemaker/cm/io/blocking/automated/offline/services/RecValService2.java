@@ -285,7 +285,9 @@ public class RecValService2 {
 					// This checks the id type
 					if (firstStage) {
 						Object O = r.getId();
-						stageType = RECORD_ID_TYPE.checkType((Comparable) O);
+						stageType =
+							RECORD_ID_TYPE.fromInstance((Comparable) O)
+									.getIntValue();
 						firstStage = false;
 					}
 

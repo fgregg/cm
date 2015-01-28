@@ -16,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
+
 @NamedQueries({
 		@NamedQuery(name = QN_DSET_FIND_ALL, query = JPQL_DSET_FIND_ALL),
 		@NamedQuery(name = QN_DSET_FIND_ALL_ABA, query = JPQL_DSET_FIND_ALL_ABA),
@@ -23,7 +25,7 @@ import javax.persistence.Table;
 				query = JPQL_DSET_FIND_ALL_OABA) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
-public class DefaultSettingsEntity {
+public class DefaultSettingsEntity implements DefaultSettings {
 
 	@EmbeddedId
 	private DefaultSettingsPK key;

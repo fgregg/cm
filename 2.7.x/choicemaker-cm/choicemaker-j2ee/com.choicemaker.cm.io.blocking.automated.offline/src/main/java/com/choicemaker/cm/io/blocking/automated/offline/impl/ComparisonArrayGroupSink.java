@@ -103,6 +103,16 @@ public class ComparisonArrayGroupSink implements IComparisonArraySink {
 		}
 	}
 
+	@Override
+	public boolean isOpen() {
+		boolean retVal = sinks.length > 0;
+		for (int i = 0; retVal && i < sinks.length; i++) {
+			IComparisonArraySink sink = sinks[i];
+			retVal = sink != null && sink.isOpen();
+		}
+		return retVal;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

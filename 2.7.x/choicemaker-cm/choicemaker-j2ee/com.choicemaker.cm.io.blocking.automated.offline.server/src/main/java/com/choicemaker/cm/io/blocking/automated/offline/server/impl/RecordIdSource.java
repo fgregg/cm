@@ -24,7 +24,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.BaseFileSource;
  * @author pcheung
  *
  */
-@SuppressWarnings({ "unchecked" })
 public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 		implements IRecordIdSource<T> {
 
@@ -32,8 +31,14 @@ public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 	protected T nextID;
 	private boolean isFirst = true;
 
-	public RecordIdSource(String fileName, EXTERNAL_DATA_FORMAT type) {
-		super(fileName, type);
+	public RecordIdSource(Class<T> c, String fileName) {
+		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
+		this.dataType = RECORD_ID_TYPE.fromClass(c);
+	}
+
+	@Deprecated
+	public RecordIdSource(String fileName) {
+		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
 	@Override
@@ -58,53 +63,31 @@ public class RecordIdSource<T extends Comparable<T>> extends BaseFileSource<T>
 	}
 
 	private T readNext() throws EOFException, IOException {
+		assert getType() == EXTERNAL_DATA_FORMAT.STRING;
+
 		T ret = null;
 
-		if (type == EXTERNAL_DATA_FORMAT.STRING) {
-			String str;
-
-			if (isFirst) {
-				str = br.readLine();
-				if (str != null && !str.equals(""))
-					dataType = RECORD_ID_TYPE.fromSymbol(Integer.parseInt(str));
-				isFirst = false;
-			}
-
+		String str;
+		if (isFirst) {
 			str = br.readLine();
-
 			if (str != null && !str.equals("")) {
-				if (dataType == RECORD_ID_TYPE.TYPE_INTEGER) {
-					ret = (T) new Integer(str);
-				} else if (dataType == RECORD_ID_TYPE.TYPE_LONG) {
-					ret = (T) new Long(str);
-				} else if (dataType == RECORD_ID_TYPE.TYPE_STRING) {
-					ret = (T) str;
+				if (dataType == null) {
+					dataType = RECORD_ID_TYPE.fromValue(Integer.parseInt(str));
+				} else {
+					assert dataType == RECORD_ID_TYPE.fromValue(Integer
+							.parseInt(str));
 				}
-			} else {
-				throw new EOFException();
 			}
-
-		} else if (type == EXTERNAL_DATA_FORMAT.BINARY) {
-			if (isFirst) {
-				dataType = RECORD_ID_TYPE.fromSymbol(dis.readInt());
-				isFirst = false;
-			}
-
-			if (dataType == RECORD_ID_TYPE.TYPE_INTEGER) {
-				int i = dis.readInt();
-				ret = (T) new Integer(i);
-			} else if (dataType == RECORD_ID_TYPE.TYPE_LONG) {
-				long l = dis.readLong();
-				ret = (T) new Long(l);
-			} else if (dataType == RECORD_ID_TYPE.TYPE_STRING) {
-				int size = dis.readInt();
-				char[] data = new char[size];
-				for (int i = 0; i < size; i++) {
-					data[i] = dis.readChar();
-				}
-				ret = (T) new String(data);
-			}
+			isFirst = false;
 		}
+
+		str = br.readLine();
+		if (str != null && !str.equals("")) {
+			ret = dataType.idFromString(str);
+		} else {
+			throw new EOFException();
+		}
+
 		return ret;
 	}
 

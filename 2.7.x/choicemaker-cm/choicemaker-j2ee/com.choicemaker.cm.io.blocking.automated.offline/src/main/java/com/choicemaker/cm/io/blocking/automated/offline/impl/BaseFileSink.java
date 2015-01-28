@@ -79,6 +79,21 @@ public abstract class BaseFileSink implements ISink {
 	}
 
 	@Override
+	public boolean isOpen() {
+		boolean retVal = false;
+			switch (type) {
+			case STRING:
+				retVal = fw != null;
+				break;
+			case BINARY:
+				retVal = dos != null;
+			default:
+				throw new IllegalArgumentException("invalid type: " + type);
+			}
+			return retVal;
+	}
+
+	@Override
 	public void append() throws BlockingException {
 		try {
 			switch (type) {
@@ -103,9 +118,11 @@ public abstract class BaseFileSink implements ISink {
 			switch (type) {
 			case STRING:
 				fw.close();
+				fw = null;
 				break;
 			case BINARY:
 				dos.close();
+				dos = null;
 				break;
 			default:
 				throw new IllegalArgumentException("invalid type: " + type);
@@ -129,6 +146,7 @@ public abstract class BaseFileSink implements ISink {
 	public void remove() throws BlockingException {
 		File file = new File(fileName);
 		file.delete();
+		count = 0;
 	}
 
 	@Override

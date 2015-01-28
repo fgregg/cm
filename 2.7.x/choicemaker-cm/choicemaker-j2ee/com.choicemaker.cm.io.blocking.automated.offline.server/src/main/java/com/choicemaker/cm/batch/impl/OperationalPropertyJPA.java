@@ -33,7 +33,7 @@ public interface OperationalPropertyJPA {
 	 */
 	String QN_OPPROP_FIND_BY_JOB_PNAME = "opPropFindByJobPname";
 
-	/** JPQL used to implement {@link #QN_SERVERCONFIG_FIND_BY_NAME} */
+	/** JPQL used to implement {@link #QN_OPPROP_FIND_BY_NAME} */
 	String JPQL_OPPROP_FIND_BY_JOB_PNAME =
 		"Select ope from OperationalPropertyEntity ope "
 				+ "where ope.jobId = :jobId and ope.name = :name";
@@ -56,7 +56,7 @@ public interface OperationalPropertyJPA {
 	 */
 	String QN_OPPROP_FINDALL_BY_JOB = "opPropFindAllByJob";
 
-	/** JPQL used to implement {@link #QN_SERVERCONFIG_FINDALL_BY_NAME} */
+	/** JPQL used to implement {@link #QN_OPPROP_FINDALL_BY_NAME} */
 	String JPQL_OPPROP_FINDALL_BY_JOB =
 		"Select ope from OperationalPropertyEntity ope where ope.jobId = :jobId";
 
@@ -65,5 +65,30 @@ public interface OperationalPropertyJPA {
 	 * {@link #JPQL_OPPROP_FINDALL_BY_JOB}
 	 */
 	String PN_OPPROP_FINDALL_BY_JOB_P1 = "jobId";
+
+	/**
+	 * Name of a query that deletes operational properties by job id
+	 */
+	String QN_OPPROP_DELETE_BY_JOB = "opPropDeleteByJob";
+
+	/** JPQL used to implement {@link #QN_OPPROP_DELETE_BY_JOB} */
+	String JPQL_OPPROP_DELETE_BY_JOB =
+		"Delete from OperationalPropertyEntity ope where ope.jobId = :jobId";
+
+	/**
+	 * Name of the parameter used to specify the jobId of
+	 * {@link #JPQL_OPPROP_DELETE_BY_JOB}
+	 */
+	String PN_OPPROP_DELETE_BY_JOB_P1 = "jobId";
+
+	/**
+	 * Name of a query that selects operational properties by job id and
+	 * property name
+	 */
+	String QN_OPPROP_FINDALL = "opPropFindAll";
+
+	/** JPQL used to implement {@link #QN_OPPROP_FINDALL} */
+	String JPQL_OPPROP_FINDALL =
+		"Select ope from OperationalPropertyEntity ope";
 
 }

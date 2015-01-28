@@ -10,7 +10,10 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.impl;
 
+import static com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator.NOT_SPLIT;
+
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.io.blocking.automated.offline.core.BlockSet;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IValidatorBase;
@@ -24,11 +27,14 @@ public class ValidatorBase implements IValidatorBase, Serializable {
 
 	private static final long serialVersionUID = 271;
 
+	private static final Logger logger = Logger.getLogger(ValidatorBase.class
+			.getName());
+
 	// this indicates where the staging rows are.
 	// true if the stage records are before the split Index
-	private boolean isBefore;
-
-	private int splitIndex; // the point at which record sources change
+	private final boolean isBefore;
+	private final boolean isSplit;
+	private final int splitIndex; // the point at which record sources change
 
 	/**
 	 * This constructor takes these two parameters:
@@ -40,7 +46,13 @@ public class ValidatorBase implements IValidatorBase, Serializable {
 	 */
 	public ValidatorBase(boolean isBefore,
 			ImmutableRecordIdTranslator<?> translator) {
+		if (translator == null) {
+			throw new IllegalArgumentException("null translator");
+		}
+		logger.fine("isBefore: " + isBefore);
+		logger.fine("Translator: " + translator);
 		this.isBefore = isBefore;
+		this.isSplit = translator.isSplit();
 		this.splitIndex = translator.getSplitIndex();
 	}
 
@@ -55,8 +67,10 @@ public class ValidatorBase implements IValidatorBase, Serializable {
 		long max = Long.MIN_VALUE;
 		boolean ret = false;
 
-		if (splitIndex == 0) {
+		if (!isSplit) {
+			assert splitIndex == NOT_SPLIT;
 			ret = true;
+
 		} else {
 			LongArrayList list = bs.getRecordIDs();
 			int s = list.size();
@@ -79,7 +93,15 @@ public class ValidatorBase implements IValidatorBase, Serializable {
 				else
 					ret = false;
 			}
+		}
 
+		// Log the result
+		String msg =
+			(ret ? "Valid" : "Invalid") + " blocking set: " + bs.toString();
+		if (ret) {
+			logger.fine(msg);
+		} else {
+			logger.warning(msg);
 		}
 
 		return ret;

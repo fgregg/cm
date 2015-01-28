@@ -32,64 +32,39 @@ public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 
 	protected RECORD_ID_TYPE idType = null;
 
-	public RecordIdSink(String fileName, EXTERNAL_DATA_FORMAT type) {
-		super(fileName, type);
+	public RecordIdSink(String fileName) {
+		super(fileName, EXTERNAL_DATA_FORMAT.STRING);
 	}
 
 	@Override
 	public void writeRecordID(Comparable o) throws BlockingException {
+		if (!isOpen()) {
+			throw new IllegalStateException("not open");
+		}
+		if (getRecordIdTypeUnchecked() == null) {
+			@SuppressWarnings("unchecked")
+			RECORD_ID_TYPE rit = RECORD_ID_TYPE.fromInstance(o);
+			this.setRecordIDType(rit);
+		}
 		try {
-			if (type == EXTERNAL_DATA_FORMAT.BINARY) {
+			if (count == 0)
+				fw.write(getRecordIdTypeUnchecked().getStringSymbol() + LINE_SEPARATOR);
 
-				if (count == 0)
-					dos.writeInt(idType.getIntSymbol());
+			if (getRecordIdTypeUnchecked() == TYPE_INTEGER) {
+				Integer I = (Integer) o;
+				fw.write(I.toString() + LINE_SEPARATOR);
 
-				if (idType == TYPE_INTEGER) {
+			} else if (getRecordIdTypeUnchecked() == TYPE_LONG) {
+				Long L = (Long) o;
+				fw.write(L.toString() + LINE_SEPARATOR);
 
-					Integer I = (Integer) o;
-					dos.writeInt(I.intValue());
+			} else if (getRecordIdTypeUnchecked() == TYPE_STRING) {
+				String S = (String) o;
+				fw.write(S + LINE_SEPARATOR);
 
-				} else if (idType == TYPE_LONG) {
-
-					Long L = (Long) o;
-					dos.writeLong(L.longValue());
-
-				} else if (idType == TYPE_STRING) {
-
-					String S = (String) o;
-					dos.writeInt(S.length());
-					dos.writeChars(S);
-
-				} else {
-					throw new BlockingException("Please set the recordIDType.");
-				}
-
-			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
-
-				if (count == 0)
-					fw.write(idType.getStringSymbol() + LINE_SEPARATOR);
-
-				if (idType == TYPE_INTEGER) {
-
-					Integer I = (Integer) o;
-					fw.write(I.toString() + LINE_SEPARATOR);
-
-				} else if (idType == TYPE_LONG) {
-
-					Long L = (Long) o;
-					fw.write(L.toString() + LINE_SEPARATOR);
-
-				} else if (idType == TYPE_STRING) {
-
-					String S = (String) o;
-					fw.write(S + LINE_SEPARATOR);
-
-				} else {
-					throw new BlockingException("Please set the recordIDType.");
-				}
-
+			} else {
+				throw new BlockingException("Please set the recordIDType.");
 			}
-
 			count++;
 
 		} catch (IOException ex) {
@@ -97,15 +72,32 @@ public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink#
-	 * setRecordIDType(int)
-	 */
 	@Override
 	public void setRecordIDType(RECORD_ID_TYPE type) {
-		this.idType = type;
+		if (type == null) {
+			throw new IllegalArgumentException("null type");
+		}
+
+		if (this.getRecordIdTypeUnchecked() == null) {
+			this.idType = type;
+		} else if (type != this.idType) {
+			String msg =
+				"Specified type (" + type + ") conflicts with existing type ("
+						+ this.idType + ")";
+			throw new IllegalArgumentException(msg);
+		}
+	}
+
+	protected RECORD_ID_TYPE getRecordIdTypeUnchecked() {
+		return this.idType;
+	}
+
+	@Override
+	public RECORD_ID_TYPE getRecordIdType() {
+		if (idType == null) {
+			throw new IllegalStateException("A type has not been set");
+		}
+		return getRecordIdTypeUnchecked();
 	}
 
 }

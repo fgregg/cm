@@ -20,20 +20,29 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
+import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.utils.TestEntities;
+import com.choicemaker.cmit.utils.TestEntityCounts;
 
 @RunWith(Arquillian.class)
 public class ServerConfigurationManagerBeanIT {
@@ -65,81 +74,79 @@ public class ServerConfigurationManagerBeanIT {
 	EntityManager em;
 
 	@EJB
-	protected ServerConfigurationController scm;
+	private OabaJobControllerBean oabaController;
 
-	private int initialServerConfigCount;
-	private int initialDefaultServerConfigCount;
-	private boolean setupOK;
+	@EJB
+	protected OabaTestController oabaTestController;
+
+	@EJB
+	private OabaJobControllerBean jobController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+
+	@EJB
+	private OabaSettingsController oabaSettingsController;
+
+	@EJB
+	private OabaProcessingController processingController;
+
+	@EJB
+	private OabaService oabaService;
+
+	@EJB
+	private OperationalPropertyController opPropController;
+
+	@EJB
+	private RecordIdController ridController;
+
+	@EJB
+	private RecordSourceController rsController;
+
+	@EJB
+	private ServerConfigurationController serverController;
+
+	TestEntityCounts te;
 
 	@Before
 	public void setUp() throws Exception {
-		final String METHOD = "setUp";
-		logger.entering(LOG_SOURCE, METHOD);
-		setupOK = true;
-		try {
-			initialServerConfigCount = scm.findAllServerConfigurations().size();
-			initialDefaultServerConfigCount =
-				scm.findAllDefaultServerConfigurations().size();
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			setupOK = false;
-		}
-		logger.exiting(LOG_SOURCE, METHOD);
+		te =
+			new TestEntityCounts(logger, oabaController, paramsController,
+					oabaSettingsController, serverController,
+					processingController, opPropController, rsController,
+					ridController);
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		final String METHOD = "tearDown";
-		logger.entering(LOG_SOURCE, METHOD);
-		try {
+	// @After
+	// public void tearDown() {
+	// String METHOD = "tearDown";
+	// logger.entering(LOG_SOURCE, METHOD);
+	// checkCounts();
+	// logger.exiting(LOG_SOURCE, METHOD);
+	// }
 
-			int finalServerConfigCount =
-				scm.findAllServerConfigurations().size();
-			String alert = "initialServerConfigCount != finalServerConfigCount";
-			assertTrue(alert,
-					initialServerConfigCount == finalServerConfigCount);
-
-			int finalDefaultServerConfigCount =
-				scm.findAllDefaultServerConfigurations().size();
-			alert =
-				"initialDefaultServerConfigCount != finalDefaultServerConfigCount";
-			assertTrue(
-					alert,
-					initialDefaultServerConfigCount == finalDefaultServerConfigCount);
-
-		} catch (Exception x) {
-			logger.severe(x.toString());
-		} catch (AssertionError x) {
-			logger.severe(x.toString());
+	public void checkCounts() {
+		if (te != null) {
+			te.checkCounts(logger, em, utx, oabaController, paramsController,
+					oabaSettingsController, serverController,
+					processingController, opPropController, rsController,
+					ridController);
+		} else {
+			throw new Error("Counts not initialized");
 		}
-		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
 	@InSequence(1)
-	public void testEntityManager() {
-		assertTrue(setupOK);
+	public void testPrequisites() {
 		assertTrue(em != null);
-	}
-
-	@Test
-	@InSequence(1)
-	public void testUserTransaction() {
-		assertTrue(setupOK);
 		assertTrue(utx != null);
-	}
-
-	@Test
-	@InSequence(1)
-	public void testServiceConfigurationManager() {
-		assertTrue(setupOK);
-		assertTrue(scm != null);
+		assertTrue(serverController != null);
 	}
 
 	@Test
 	@InSequence(10)
 	public void testComputeAvailableProcessors() {
-		assertTrue(setupOK);
 		int count =
 			ServerConfigurationControllerBean.computeAvailableProcessors();
 		assertTrue(count > -1);
@@ -148,7 +155,6 @@ public class ServerConfigurationManagerBeanIT {
 	@Test
 	@InSequence(10)
 	public void testComputeHostName() {
-		assertTrue(setupOK);
 		String name = ServerConfigurationControllerBean.computeHostName();
 		assertTrue(name != null && !name.trim().isEmpty());
 	}
@@ -156,7 +162,6 @@ public class ServerConfigurationManagerBeanIT {
 	@Test
 	@InSequence(10)
 	public void testComputeUniqueGenericName() {
-		assertTrue(setupOK);
 		Set<String> uniqueNames = new HashSet<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			String name =
@@ -169,8 +174,8 @@ public class ServerConfigurationManagerBeanIT {
 	@Test
 	@InSequence(20)
 	public void testComputeGenericConfiguration() {
-		assertTrue(setupOK);
-		MutableServerConfiguration msc = scm.computeGenericConfiguration();
+		MutableServerConfiguration msc =
+			serverController.computeGenericConfiguration();
 		assertTrue(msc.getId() == ServerConfigurationEntity.NON_PERSISTENT_ID);
 		assertTrue(msc.getHostName().equals(
 				ServerConfigurationControllerBean.computeHostName()));
@@ -183,9 +188,9 @@ public class ServerConfigurationManagerBeanIT {
 	@Test
 	@InSequence(20)
 	public void testCloneServerConfiguration() {
-		assertTrue(setupOK);
-		MutableServerConfiguration msc = scm.computeGenericConfiguration();
-		MutableServerConfiguration msc2 = scm.clone(msc);
+		MutableServerConfiguration msc =
+			serverController.computeGenericConfiguration();
+		MutableServerConfiguration msc2 = serverController.clone(msc);
 
 		assertTrue(!msc.getName().equals(msc2.getName()));
 
@@ -201,14 +206,12 @@ public class ServerConfigurationManagerBeanIT {
 	@Test
 	@InSequence(50)
 	public void testPersistFindRemove() {
-		assertTrue(setupOK);
 		final String METHOD = "testPersistFindRemove";
 		logger.entering(LOG_SOURCE, METHOD);
-		final TestEntities te = new TestEntities();
 
 		// Create a configuration
 		final MutableServerConfiguration msc =
-			scm.computeGenericConfiguration();
+			serverController.computeGenericConfiguration();
 		assertTrue(msc.getId() == ServerConfigurationEntity.NON_PERSISTENT_ID);
 		assertTrue(!ServerConfigurationEntity.isPersistent(msc));
 
@@ -216,7 +219,7 @@ public class ServerConfigurationManagerBeanIT {
 		long id = ServerConfigurationEntity.NON_PERSISTENT_ID;
 		try {
 			ServerConfiguration sc = null;
-			sc = scm.save(msc);
+			sc = serverController.save(msc);
 			te.add(sc);
 			assertTrue(sc != null);
 			id = sc.getId();
@@ -231,36 +234,29 @@ public class ServerConfigurationManagerBeanIT {
 
 		// Find the configuration
 		ServerConfiguration sc = null;
-		sc = scm.find(scID);
+		sc = serverController.findServerConfiguration(scID);
 		assertTrue(sc != null);
 		assertTrue(sc.getId() == scID);
 		assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(msc, sc));
 
-		try {
-			te.removePersistentObjects(em, utx);
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			fail(x.toString());
-		}
-		logger.exiting(LOG_SOURCE, METHOD);
+		checkCounts();
 	}
 
 	@Test
 	@InSequence(100)
 	public void testFindAllServerConfigurations() {
-		assertTrue(setupOK);
 		final String METHOD = "testFindAllServerConfigurations";
 		logger.entering(LOG_SOURCE, METHOD);
-		final TestEntities te = new TestEntities();
 
 		List<Long> scIds = new LinkedList<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a server configuration
-			MutableServerConfiguration msc = scm.computeGenericConfiguration();
+			MutableServerConfiguration msc =
+				serverController.computeGenericConfiguration();
 			assertTrue(msc.getId() == 0);
 			ServerConfiguration sc = null;
 			try {
-				sc = scm.save(msc);
+				sc = serverController.save(msc);
 			} catch (ServerConfigurationException e) {
 				fail(e.toString());
 			}
@@ -272,7 +268,7 @@ public class ServerConfigurationManagerBeanIT {
 
 		// Verify the number of server configurations has increased
 		List<ServerConfiguration> serverConfigs =
-			scm.findAllServerConfigurations();
+			serverController.findAllServerConfigurations();
 		assertTrue(serverConfigs != null);
 
 		// Find the server configurations
@@ -287,143 +283,101 @@ public class ServerConfigurationManagerBeanIT {
 			assertTrue(isFound);
 		}
 
-		try {
-			te.removePersistentObjects(em, utx);
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			fail(x.toString());
-		}
-		logger.exiting(LOG_SOURCE, METHOD);
+		checkCounts();
 	}
 
-	// @Test
-	// @InSequence(100)
-	// public void testFindServerConfigurationsByHostNameString() {
-	// assertTrue(setupOK);
-	// fail("Not yet implemented");
-	//
-	// }
-	//
-	// @Test
-	// @InSequence(100)
-	// public void testFindServerConfigurationsByHostNameStringBoolean() {
-	// assertTrue(setupOK);
-	// fail("Not yet implemented");
-	//
-	// }
-	//
-	// @Test
-	// @InSequence(200)
-	// public void testSetDefaultConfiguration() {
-	// assertTrue(setupOK);
-	// fail("Not yet implemented");
-	//
-	// }
-	//
 	@Test
 	@InSequence(200)
 	public void testSetGetDefaultConfigurationString() {
-		assertTrue(setupOK);
 		final String METHOD = "testSetGetDefaultConfigurationString";
 		logger.entering(LOG_SOURCE, METHOD);
-		final TestEntities te = new TestEntities();
 
 		try {
-			// Check that a default configuration is returned for a fake host,
-			// even though no configurations exist
+			// Check that a default configuration is not returned for a (fake)
+			// host when no defaults exist
 			final String fakeHost1 = UUID.randomUUID().toString();
-			final boolean computeFallback = true;
+			DefaultServerConfiguration dsc2 =
+				serverController.findDefaultServerConfiguration(fakeHost1);
+			assertTrue(dsc2 == null);
+
+			// Create a default configuration
+			ServerConfiguration generic =
+				serverController.computeGenericConfiguration(fakeHost1);
 			final ServerConfiguration sc1 =
-				scm.getDefaultConfiguration(fakeHost1, computeFallback);
+				serverController.setDefaultConfiguration(fakeHost1, generic);
 			assertTrue(sc1 != null);
 			assertTrue(ServerConfigurationEntity.isPersistent(sc1));
 			te.add(sc1);
-			te.add(new DefaultServerConfigurationEntity(fakeHost1, sc1.getId()));
-
-			// Verify that the no-param method works like the
-			// getDefaultConfiguration(fakeHost, true) method
-			final ServerConfiguration sc2 =
-				scm.getDefaultConfiguration(fakeHost1);
-
-			// Verify that the two defaults are the same persistent object
-			assertTrue(sc1.getId() == sc2.getId());
-			assertTrue(sc1.getUUID().equals(sc2.getUUID()));
-			assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(sc1, sc2));
+			dsc2 = serverController.findDefaultServerConfiguration(fakeHost1);
+			assertTrue(dsc2 != null);
+			te.add(dsc2);
+			assertTrue(dsc2.getServerConfigurationId() == sc1.getId());
 
 			// Verify that one persistent configuration now exists for the fake
 			// host
 			final boolean strictNoWildcards = true;
 			List<ServerConfiguration> configs =
-				scm.findServerConfigurationsByHostName(fakeHost1,
+				serverController.findServerConfigurationsByHostName(fakeHost1,
 						strictNoWildcards);
 			assertTrue(configs.size() == 1);
 
 			// Create and save a server configuration for another fake host
 			final String fakeHost3 = UUID.randomUUID().toString();
 			final MutableServerConfiguration msc3 =
-				scm.computeGenericConfiguration();
+				serverController.computeGenericConfiguration();
 			msc3.setHostName(fakeHost3);
 			assertTrue(msc3.getId() == 0);
-			final ServerConfiguration sc3 = scm.save(msc3);
+			final ServerConfiguration sc3 = serverController.save(msc3);
 			te.add(sc3);
 			final long scId = sc3.getId();
 			assertTrue(scId != 0);
 
-			// Verify that the lone, persistent configuration is now the default
-			final boolean doNotComputeFallback = false;
-			final ServerConfiguration sc4 =
-				scm.getDefaultConfiguration(fakeHost3, doNotComputeFallback);
-			assertTrue(sc4 != null);
-			assertTrue(sc3.getId() == sc4.getId());
-			assertTrue(sc3.getUUID().equals(sc4.getUUID()));
-			assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(sc3, sc4));
+//			// Verify that the lone, persistent configuration is now the default
+//			final DefaultServerConfiguration dsc4 =
+//				serverController.findDefaultServerConfiguration(fakeHost3);
+//			final long id4 = dsc4.getServerConfigurationId();
+//			final ServerConfiguration sc4 =
+//				serverController.findServerConfiguration(id4);
+//			assertTrue(sc4 != null);
+//			assertTrue(sc3.getId() == sc4.getId());
+//			assertTrue(sc3.getUUID().equals(sc4.getUUID()));
+//			assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(sc3, sc4));
 
 			// Add another server configuration and verify that with two
 			// persistent configurations, neither of which has been specified
 			// as the default, that no default exists
-			MutableServerConfiguration msc5 = scm.computeGenericConfiguration();
+			MutableServerConfiguration msc5 =
+				serverController.computeGenericConfiguration();
 			msc5.setHostName(fakeHost3);
 			assertTrue(msc5.getId() == 0);
-			final ServerConfiguration sc5 = scm.save(msc5);
+			final ServerConfiguration sc5 = serverController.save(msc5);
 			te.add(sc5);
 			configs =
-				scm.findServerConfigurationsByHostName(fakeHost3,
+				serverController.findServerConfigurationsByHostName(fakeHost3,
 						strictNoWildcards);
 			assertTrue(configs.size() == 2);
-			final ServerConfiguration sc6 =
-				scm.getDefaultConfiguration(fakeHost3, doNotComputeFallback);
-			assertTrue(sc6 == null);
+			final DefaultServerConfiguration dsc6 =
+				serverController.findDefaultServerConfiguration(fakeHost3);
+			assertTrue(dsc6 == null);
+//			final long id6 = dsc6.getServerConfigurationId();
+//			final ServerConfiguration sc6 =
+//				serverController.findServerConfiguration(id6);
+//			assertTrue(sc6 == null);
 
 			// Set the first configuration as the default and retrieve it
-			scm.setDefaultConfiguration(fakeHost3, sc3);
+			serverController.setDefaultConfiguration(fakeHost3, sc3);
 			te.add(new DefaultServerConfigurationEntity(fakeHost3, sc3.getId()));
-			final ServerConfiguration sc7 =
-				scm.getDefaultConfiguration(fakeHost3, computeFallback);
-			assertTrue(sc7 != null);
-			assertTrue(sc3.getId() == sc7.getId());
-			assertTrue(sc3.getUUID().equals(sc7.getUUID()));
-			assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(sc3, sc7));
+			final DefaultServerConfiguration dsc7 =
+				serverController.findDefaultServerConfiguration(fakeHost3);
+			assertTrue(dsc7 != null);
+			assertTrue(dsc7.getServerConfigurationId() == sc3.getId());
 
 		} catch (ServerConfigurationException e) {
 			fail(e.toString());
-		} finally {
-			try {
-				te.removePersistentObjects(em, utx);
-			} catch (Exception x) {
-				logger.severe(x.toString());
-				fail(x.toString());
-			}
 		}
 
+		checkCounts();
 		logger.exiting(LOG_SOURCE, METHOD);
 	}
-
-	// @Test
-	// @InSequence(200)
-	// public void testGetDefaultConfigurationStringBoolean() {
-	// assertTrue(setupOK);
-	// fail("Not yet implemented");
-	//
-	// }
 
 }

@@ -21,10 +21,10 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.FinderException;
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
 
@@ -54,33 +54,41 @@ import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
  * Common functionality of {@link MatcherScheduler2} and
- * {@link TransMatchScheduler}.
+ * {@link TransMatchScheduler}. This class is implemented as a Singleton EJB,
+ * not an MDB, because it must retain data in memory between invocations of
+ * <code>onMessage</code>.
  */
-public abstract class AbstractScheduler implements MessageListener,
-		Serializable {
+public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	private static final long serialVersionUID = 271L;
 
 	// FIXME REMOVEME (after operational properties are completed)
 	protected static final String DELIM = "|";
 
-	protected abstract Logger getLogger();
+	// -- Injected data
 
-	protected abstract Logger getJMSTrace();
+	@EJB
+	private OabaJobControllerBean jobController;
 
-	protected abstract OabaJobControllerBean getJobController();
+	@EJB
+	private OabaSettingsController oabaSettingsController;
 
-	protected abstract OabaParametersControllerBean getParametersController();
+	@EJB
+	private OabaParametersControllerBean paramsController;
 
-	protected abstract OabaProcessingController getProcessingController();
+	@EJB
+	private ServerConfigurationController serverController;
 
-	protected abstract ServerConfigurationController getServerController();
+	@EJB
+	private OperationalPropertyController propertyController;
 
-	protected abstract OabaSettingsController getSettingsController();
+	@EJB
+	private OabaProcessingController processingController;
 
-	protected abstract OperationalPropertyController getPropertyController();
+	// -- Session data
 
 	protected RecordSource[] stageRS = null;
+
 	protected RecordSource[] masterRS = null;
 
 	// This counts the number of messages sent to matcher and number of done
@@ -110,10 +118,53 @@ public abstract class AbstractScheduler implements MessageListener,
 	// number of processors to use
 	protected int numProcessors;
 
-	// maxchunk
+	// max chunk
 	protected int maxChunkSize;
+	
+	// -- Callbacks
 
-	@Override
+	protected abstract Logger getLogger();
+
+	protected abstract Logger getJMSTrace();
+
+	protected abstract void cleanUp(OabaJob job, OabaJobMessage sd)
+			throws BlockingException;
+
+	protected abstract void sendToMatcher(OabaJobMessage sd);
+
+	protected abstract void sendToUpdateStatus(OabaJob job, OabaEvent event,
+			Date timestamp, String info);
+
+	protected abstract void sendToMatchDebup(OabaJob job, OabaJobMessage sd);
+
+	// -- Accessors
+
+	protected OabaJobControllerBean getJobController() {
+		return jobController;
+	}
+
+	protected OabaParametersControllerBean getParametersController() {
+		return paramsController;
+	}
+
+	protected ServerConfigurationController getServerController() {
+		return serverController;
+	}
+
+	protected OabaSettingsController getSettingsController() {
+		return oabaSettingsController;
+	}
+
+	protected OperationalPropertyController getPropertyController() {
+		return propertyController;
+	}
+
+	protected OabaProcessingController getProcessingController() {
+		return processingController;
+	}
+
+	// -- Message processing
+
 	public void onMessage(Message inMessage) {
 		getJMSTrace().info(
 				"Entering onMessage for " + this.getClass().getName());
@@ -482,15 +533,5 @@ public abstract class AbstractScheduler implements MessageListener,
 			getLogger().info("outstanding messages: " + countMessages);
 		}
 	}
-
-	protected abstract void cleanUp(OabaJob job, OabaJobMessage sd)
-			throws BlockingException;
-
-	protected abstract void sendToMatcher(OabaJobMessage sd);
-
-	protected abstract void sendToUpdateStatus(OabaJob job, OabaEvent event,
-			Date timestamp, String info);
-
-	protected abstract void sendToMatchDebup(OabaJob job, OabaJobMessage sd);
 
 }

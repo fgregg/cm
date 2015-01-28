@@ -1,9 +1,12 @@
 package com.choicemaker.cm.batch.impl;
 
 import static com.choicemaker.cm.batch.OperationalProperty.INVALID_ID;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.PN_OPPROP_DELETE_BY_JOB_P1;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.PN_OPPROP_FINDALL_BY_JOB_P1;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.PN_OPPROP_FIND_BY_JOB_PNAME_P1;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.PN_OPPROP_FIND_BY_JOB_PNAME_P2;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_DELETE_BY_JOB;
+import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FINDALL;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FINDALL_BY_JOB;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.QN_OPPROP_FIND_BY_JOB_PNAME;
 
@@ -220,6 +223,33 @@ public class OperationalPropertyControllerBean implements
 			for (OperationalPropertyEntity bean : beans) {
 				retVal.add(bean);
 			}
+		}
+		return retVal;
+	}
+
+	@Override
+	public int deleteOperationalPropertiesByJobId(long jobId) {
+		int retVal = 0;
+		if (jobId != INVALID_ID) {
+			Query query =
+				em.createNamedQuery(QN_OPPROP_DELETE_BY_JOB);
+			query.setParameter(
+					PN_OPPROP_DELETE_BY_JOB_P1, jobId);
+			int deletedCount = query.executeUpdate();
+			return deletedCount;
+		}
+		return retVal;
+	}
+
+	@Override
+	public List<OperationalProperty> findAllOperationalProperties() {
+		List<OperationalProperty> retVal = new LinkedList<>();
+		Query query = em.createNamedQuery(QN_OPPROP_FINDALL);
+		@SuppressWarnings("unchecked")
+		final List<OperationalPropertyEntity> beans = query.getResultList();
+		assert beans != null;
+		for (OperationalProperty bean : beans) {
+			retVal.add(bean);
 		}
 		return retVal;
 	}

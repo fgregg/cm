@@ -97,13 +97,14 @@ public class ChunkService3 {
 	private int maxFiles = 0;
 
 	/**
-	 * There are two types onf chunks, regular and oversized. numOS = numChunks
+	 * There are two types of chunks, regular and oversized. numOS = numChunks
 	 * - numRegularChunks;
 	 * 
 	 */
 	private int numRegularChunks = 0;
 
-	private boolean keepFiles = false;
+	// FIXME Define system property to control this setting
+	private boolean keepFiles = true;
 
 	private long time; // this keeps track of time
 
@@ -526,6 +527,9 @@ public class ChunkService3 {
 						context =
 							"writing record[" + count + "] to sink[" + i + "]";
 						recordSinks[i].put(r);
+// BUG FIX?
+recordSinks[i].flush();
+// END BUG FIX?
 						if (crSources[i].hasNext()) {
 							ind[i] = crSources[i].next();
 						}
@@ -542,6 +546,7 @@ public class ChunkService3 {
 			rs.close();
 		} catch (IOException ex) {
 			String msg = "Error while " + context + ": " + ex.toString();
+			log.severe(msg);
 			throw new BlockingException(msg);
 		}
 		log.exiting(SOURCE, METHOD);

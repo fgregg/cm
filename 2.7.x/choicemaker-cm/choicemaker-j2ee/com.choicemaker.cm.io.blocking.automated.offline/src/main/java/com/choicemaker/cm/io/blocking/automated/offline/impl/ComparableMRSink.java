@@ -88,6 +88,11 @@ public class ComparableMRSink<T extends Comparable<T>> implements
 		sink.append();
 	}
 
+	@Override
+	public boolean isOpen() {
+		return sink.isOpen();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

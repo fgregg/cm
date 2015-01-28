@@ -29,17 +29,26 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 
 	private static final long serialVersionUID = 271L;
 
-	public static String dump(OabaSettings oaba) {
+	public static String dump(OabaSettings s) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 
-		if (oaba == null) {
-			pw.println("null OABA settings");
+		pw.println("ABA and OABA settings");
+		if (s == null) {
+			pw.println("null ABA/OABA settings");
 		} else {
-			// FIXME better logging
-			pw.println("Threshold for batched-record blocking: "
-					+ oaba.getMaxSingle());
-			pw.println(oaba.toString());
+			pw.println("ABA/OABA: Settings id: " + s.getId());
+			pw.println("ABA: Limit per blocking set: " + s.getLimitPerBlockingSet());
+			pw.println("ABA: Limit for a single blocking set: " + s.getLimitSingleBlockingSet());
+			pw.println("ABA: Single-table blocking set limit: " + s.getSingleTableBlockingSetGraceLimit());
+			pw.println("OABA: Threshold for batched-record blocking: "
+					+ s.getMaxSingle());
+			pw.println("OABA: Control loop interval: " + s.getInterval());
+			pw.println("OABA: Max block size: " + s.getMaxBlockSize());
+			pw.println("OABA: Max oversized block size: " + s.getMaxOversized());
+			pw.println("OABA: Min field count (oversized blocks): " + s.getMinFields());
+			pw.println("OABA: Max chunk size: " + s.getMaxChunkSize());
+			pw.println("OABA: Max matches per export file: " + s.getMaxMatches());
 		}
 		String retVal = sw.toString();
 		return retVal;

@@ -171,15 +171,16 @@ public class StartOabaMDB extends AbstractOabaMDB {
 						OabaFileUtils.getRecValFactory(oabaJob);
 					RecValService3 rvService =
 						new RecValService3(staging, master, stageModel,
-								recvalFactory, translator, processingEntry,
-								oabaJob);
+								recvalFactory, getRecordIdController(),
+								translator, processingEntry, oabaJob);
 					rvService.runService();
 					getLogger().info(
 							"Done creating rec_id, val_id files: "
 									+ rvService.getTimeElapsed());
 
 					ImmutableRecordIdTranslator<?> immutableTranslator =
-						translator.toImmutableTranslator();
+						getRecordIdController().toImmutableTranslator(
+								translator);
 					final RECORD_ID_TYPE recordIdType =
 						immutableTranslator.getRecordIdType();
 					getPropertyController().setJobProperty(oabaJob,
@@ -308,8 +309,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 			OabaParameters params, OabaSettings oabaSettings,
 			OabaEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
-		// TODO Auto-generated method stub
-
+		// Does nothing in this class. Instead, onMessage is overridden
+		// and this callback is bypassed.
 	}
 
 	@Override

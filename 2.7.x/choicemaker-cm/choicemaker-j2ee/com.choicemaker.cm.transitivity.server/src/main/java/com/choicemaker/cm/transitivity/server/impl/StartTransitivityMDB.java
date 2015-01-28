@@ -146,7 +146,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 
 		//recover the translator
 		ImmutableRecordIdTranslator translator =
-			ridController.getImmutableRecordIdTranslator(transJob);
+			ridController.findRecordIdTranslator(transJob);
 
 		//Create blocks
 		IMatchRecord2SinkSourceFactory mFactory =

@@ -7,7 +7,6 @@ import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_MATCHES;
 import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_OVERSIZED;
 import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MIN_FIELDS;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.Random;
@@ -24,20 +23,28 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
+import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.MutableProbabilityModelStub;
-import com.choicemaker.cmit.utils.TestEntities;
+import com.choicemaker.cmit.utils.TestEntityCounts;
 
 @RunWith(Arquillian.class)
 public class SettingsControllerBeanIT {
@@ -91,99 +98,91 @@ public class SettingsControllerBeanIT {
 			.getLogger(SettingsControllerBeanIT.class.getName());
 
 	@Resource
-	private UserTransaction utx;
+	UserTransaction utx;
 
 	@PersistenceContext(unitName = "oaba")
-	private EntityManager em;
+	EntityManager em;
 
 	@EJB
-	private OabaSettingsController sm;
+	private OabaJobControllerBean oabaController;
 
-	private int initialAbaSettingsCount;
-	private int initialDefaultAbaSettingsCount;
-	private int initialOabaSettingsCount;
-	private int initialDefaultOabaSettingsCount;
-	private boolean setupOK;
+	@EJB
+	protected OabaTestController oabaTestController;
+
+	@EJB
+	private OabaJobControllerBean jobController;
+
+	@EJB
+	private OabaParametersControllerBean paramsController;
+
+	@EJB
+	private OabaSettingsController oabaSettingsController;
+
+	@EJB
+	private OabaProcessingController processingController;
+
+	@EJB
+	private OabaService oabaService;
+
+	@EJB
+	private OperationalPropertyController opPropController;
+
+	@EJB
+	private RecordIdController ridController;
+
+	@EJB
+	private RecordSourceController rsController;
+
+	@EJB
+	private ServerConfigurationController serverController;
+
+	TestEntityCounts te;
 
 	@Before
 	public void setUp() throws Exception {
-		final String METHOD = "setUp";
-		logger.entering(LOG_SOURCE, METHOD);
-		setupOK = true;
-		try {
-			initialAbaSettingsCount = sm.findAllAbaSettings().size();
-			initialDefaultAbaSettingsCount =
-				sm.findAllDefaultAbaSettings().size();
-			initialOabaSettingsCount = sm.findAllOabaSettings().size();
-			initialDefaultOabaSettingsCount =
-				sm.findAllDefaultOabaSettings().size();
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			setupOK = false;
-		}
-		logger.exiting(LOG_SOURCE, METHOD);
+		te =
+			new TestEntityCounts(logger, oabaController, paramsController,
+					oabaSettingsController, serverController,
+					processingController, opPropController, rsController,
+					ridController);
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		final String METHOD = "tearDown";
-		logger.entering(LOG_SOURCE, METHOD);
-		try {
+	// @After
+	// public void tearDown() {
+	// String METHOD = "tearDown";
+	// logger.entering(LOG_SOURCE, METHOD);
+	// checkCounts();
+	// logger.exiting(LOG_SOURCE, METHOD);
+	// }
 
-			final int finalAbaSettingsCount = sm.findAllAbaSettings().size();
-			String alert = "initialAbaSettingsCount != finalAbaSettingsCount";
-			assertTrue(alert, initialAbaSettingsCount == finalAbaSettingsCount);
-
-			final int finalDefaultAbaSettingsCount =
-				sm.findAllDefaultAbaSettings().size();
-			alert =
-				"initialDefaultAbaSettingsCount != finalDefaultAbaSettingsCount";
-			assertTrue(
-					alert,
-					initialDefaultAbaSettingsCount == finalDefaultAbaSettingsCount);
-
-			final int finalOabaSettingsCount = sm.findAllOabaSettings().size();
-			alert = "initialOabaSettingsCount != finalOabaSettingsCount";
-			assertTrue(alert,
-					initialOabaSettingsCount == finalOabaSettingsCount);
-
-			final int finalDefaultOabaSettingsCount =
-				sm.findAllDefaultOabaSettings().size();
-			alert =
-				"initialDefaultOabaSettingsCount != finalDefaultOabaSettingsCount";
-			assertTrue(
-					alert,
-					initialDefaultOabaSettingsCount == finalDefaultOabaSettingsCount);
-
-		} catch (Exception x) {
-			logger.severe(x.toString());
-		} catch (AssertionError x) {
-			logger.severe(x.toString());
+	public void checkCounts() {
+		if (te != null) {
+			te.checkCounts(logger, em, utx, oabaController, paramsController,
+					oabaSettingsController, serverController,
+					processingController, opPropController, rsController,
+					ridController);
+		} else {
+			throw new Error("Counts not initialized");
 		}
-		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
 	@InSequence(1)
 	public void testEntityManager() {
-		assertTrue(setupOK);
 		assertTrue(em != null);
 	}
 
 	@Test
 	@InSequence(1)
 	public void testUserTransaction() {
-		assertTrue(setupOK);
 		assertTrue(utx != null);
 	}
 
 	@Test
 	@InSequence(50)
 	public void testPersistFindRemoveAba() {
-		assertTrue(setupOK);
 		final String METHOD = "testPersistFindRemove";
 		logger.entering(LOG_SOURCE, METHOD);
-		final TestEntities te = new TestEntities();
 
 		// Create a configuration
 		final AbaSettings aba0 = randomAbaSettings();
@@ -193,7 +192,7 @@ public class SettingsControllerBeanIT {
 		// Save the configuration
 		long id = AbaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
 		AbaSettings aba1 = null;
-		aba1 = sm.save(aba0);
+		aba1 = oabaSettingsController.save(aba0);
 		te.add(aba1);
 		assertTrue(aba1 != null);
 		id = aba1.getId();
@@ -203,26 +202,19 @@ public class SettingsControllerBeanIT {
 
 		// Find the configuration
 		AbaSettings aba2 = null;
-		aba2 = sm.findAbaSettings(abaId1);
+		aba2 = oabaSettingsController.findAbaSettings(abaId1);
 		assertTrue(aba2 != null);
 		assertTrue(aba2.getId() == abaId1);
 
-		try {
-			te.removePersistentObjects(em, utx);
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			fail(x.toString());
-		}
+		checkCounts();
 		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
 	@InSequence(50)
 	public void testPersistFindRemoveOaba() {
-		assertTrue(setupOK);
 		final String METHOD = "testPersistFindRemove";
 		logger.entering(LOG_SOURCE, METHOD);
-		final TestEntities te = new TestEntities();
 
 		// Create a configuration
 		final OabaSettings oaba0 = randomOabaSettings();
@@ -232,7 +224,7 @@ public class SettingsControllerBeanIT {
 		// Save the configuration
 		long id = OabaSettingsEntity.NONPERSISTENT_ABA_SETTINGS_ID;
 		OabaSettings oaba1 = null;
-		oaba1 = sm.save(oaba0);
+		oaba1 = oabaSettingsController.save(oaba0);
 		te.add(oaba1);
 		assertTrue(oaba1 != null);
 		id = oaba1.getId();
@@ -242,25 +234,18 @@ public class SettingsControllerBeanIT {
 
 		// Find the configuration
 		OabaSettings oaba2 = null;
-		oaba2 = sm.findOabaSettings(oabaId1);
+		oaba2 = oabaSettingsController.findOabaSettings(oabaId1);
 		assertTrue(oaba2 != null);
 		assertTrue(oaba2.getId() == oabaId1);
 
-		try {
-			te.removePersistentObjects(em, utx);
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			fail(x.toString());
-		}
+		checkCounts();
 		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
 	public void testSetGetDefaultAbaConfiguration() {
-		assertTrue(setupOK);
 		final String METHOD = "testSetGetDefaultConfigurationString";
 		logger.entering(LOG_SOURCE, METHOD);
-		final TestEntities te = new TestEntities();
 
 		// Verify that no default is returned for a non-existent modelId
 		// with non-existent database and blocking configurations
@@ -269,20 +254,23 @@ public class SettingsControllerBeanIT {
 		mpm.databaseConfigurationName = d0;
 		final String b0 = randomString();
 		mpm.blockingConfigurationName = b0;
-		final AbaSettings aba0 = sm.findDefaultAbaSettings(mpm);
+		final AbaSettings aba0 =
+			oabaSettingsController.findDefaultAbaSettings(mpm);
 		assertTrue(aba0 == null);
 
 		// Create random ABA settings, save them and set them as a default
 		final AbaSettings aba1 = randomAbaSettings();
 		te.add(aba1);
-		final AbaSettings aba2 = sm.save(aba1);
+		final AbaSettings aba2 = oabaSettingsController.save(aba1);
 		te.add(aba2);
-		final DefaultSettingsEntity dsb2 =
-			sm.setDefaultAbaConfiguration(mpm, d0, b0, aba2);
+		final DefaultSettings dsb2 =
+			oabaSettingsController
+					.setDefaultAbaConfiguration(mpm, d0, b0, aba2);
 		te.add(dsb2);
 
 		// Retrieve the default and check the settings
-		final AbaSettings aba3 = sm.findDefaultAbaSettings(mpm);
+		final AbaSettings aba3 =
+			oabaSettingsController.findDefaultAbaSettings(mpm);
 		te.add(aba3);
 		assertTrue(aba3 != null);
 		assertTrue(aba3.getLimitPerBlockingSet() == aba1
@@ -293,21 +281,14 @@ public class SettingsControllerBeanIT {
 				.getSingleTableBlockingSetGraceLimit());
 
 		// Clean up the database
-		try {
-			te.removePersistentObjects(em, utx);
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			fail(x.toString());
-		}
+		checkCounts();
 		logger.exiting(LOG_SOURCE, METHOD);
 	}
 
 	@Test
 	public void testSetGetDefaultOabaConfiguration() {
-		assertTrue(setupOK);
 		final String METHOD = "testSetGetDefaultConfigurationString";
 		logger.entering(LOG_SOURCE, METHOD);
-		final TestEntities te = new TestEntities();
 
 		// Verify that no default is returned for a non-existent modelId
 		// with non-existent datoabase and blocking configurations
@@ -316,20 +297,23 @@ public class SettingsControllerBeanIT {
 		mpm.databaseConfigurationName = d0;
 		final String b0 = randomString();
 		mpm.blockingConfigurationName = b0;
-		final OabaSettings oaba0 = sm.findDefaultOabaSettings(mpm);
+		final OabaSettings oaba0 =
+			oabaSettingsController.findDefaultOabaSettings(mpm);
 		assertTrue(oaba0 == null);
 
 		// Create random OABA settings, save them and set them as a default
 		final OabaSettings oaba1 = randomOabaSettings();
 		te.add(oaba1);
-		final OabaSettings oaba2 = sm.save(oaba1);
+		final OabaSettings oaba2 = oabaSettingsController.save(oaba1);
 		te.add(oaba2);
-		final DefaultSettingsEntity dsb2 =
-			sm.setDefaultOabaConfiguration(mpm, d0, b0, oaba2);
+		final DefaultSettings dsb2 =
+			oabaSettingsController.setDefaultOabaConfiguration(mpm, d0, b0,
+					oaba2);
 		te.add(dsb2);
 
 		// Retrieve the default and check the settings
-		final OabaSettings oaba3 = sm.findDefaultOabaSettings(mpm);
+		final OabaSettings oaba3 =
+			oabaSettingsController.findDefaultOabaSettings(mpm);
 		te.add(oaba3);
 		assertTrue(oaba3 != null);
 		assertTrue(oaba3.getLimitPerBlockingSet() == oaba1
@@ -345,48 +329,8 @@ public class SettingsControllerBeanIT {
 		assertTrue(oaba3.getInterval() == oaba1.getInterval());
 
 		// Clean up the database
-		try {
-			te.removePersistentObjects(em, utx);
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			fail(x.toString());
-		}
+		checkCounts();
 		logger.exiting(LOG_SOURCE, METHOD);
 	}
-
-	// @Test
-	// public void testMaxSingle() {
-	// final String METHOD = "testMaxSingle";
-	// TestEntities te = new TestEntities();
-	//
-	// // Create parameters with a known value
-	// OabaParametersEntity template =
-	// prmController.createBatchParameters(METHOD, te);
-	// final int v1 = random.nextInt();
-	// OabaParametersEntity params =
-	// new OabaParametersEntity(template.getModelConfigurationName(), v1,
-	// template.getLowThreshold(), template.getHighThreshold(),
-	// template.getStageRs(), template.getMasterRs(),
-	// template.getTransitivity());
-	// te.add(params);
-	//
-	// // Save the params
-	// final long id1 = prmController.save(params).getId();
-	//
-	// // Get the params
-	// params = null;
-	// params = prmController.find(id1);
-	//
-	// // Check the value
-	// final int v2 = params.getMaxSingle();
-	// assertTrue(v1 == v2);
-	//
-	// try {
-	// te.removePersistentObjects(em, utx);
-	// } catch (Exception x) {
-	// logger.severe(x.toString());
-	// fail(x.toString());
-	// }
-	// }
 
 }

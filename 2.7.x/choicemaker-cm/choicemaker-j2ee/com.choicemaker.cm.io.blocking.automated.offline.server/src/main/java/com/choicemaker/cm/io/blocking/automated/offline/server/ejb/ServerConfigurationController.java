@@ -16,7 +16,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServe
 @Local
 public interface ServerConfigurationController {
 
-	ServerConfiguration find(long id);
+	ServerConfiguration findServerConfiguration(long id);
 
 	/**
 	 * Finds a persistent server configuration by name.
@@ -94,6 +94,13 @@ public interface ServerConfigurationController {
 	 * will produce an instance with a distinct name and UUID.
 	 */
 	MutableServerConfiguration computeGenericConfiguration();
+
+	/**
+	 * Computes and returns a generic, non-persistent configuration which is
+	 * probably suitable, but not optimal, for the specified host. Each
+	 * invocation will produce an instance with a distinct name and UUID.
+	 */
+	MutableServerConfiguration computeGenericConfiguration(String hostName);
 
 	/**
 	 * Clones an existing ServerConfiguration as a mutable, non-persistent
@@ -174,5 +181,7 @@ public interface ServerConfigurationController {
 	List<DefaultServerConfigurationEntity> findAllDefaultServerConfigurations();
 
 	ServerConfiguration findServerConfigurationByJobId(long jobId);
+
+	DefaultServerConfiguration findDefaultServerConfiguration(String hostName);
 
 }

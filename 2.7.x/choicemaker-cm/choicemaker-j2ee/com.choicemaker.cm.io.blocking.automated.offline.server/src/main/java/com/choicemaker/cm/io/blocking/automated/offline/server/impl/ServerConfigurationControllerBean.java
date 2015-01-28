@@ -3,6 +3,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
@@ -42,7 +44,7 @@ public class ServerConfigurationControllerBean implements
 		int retVal = Runtime.getRuntime().availableProcessors();
 		return retVal;
 	}
-
+	
 	public static String computeHostName() {
 		// A hack to an unsolvable problem. See StackOverflow,
 		// "How do I get the local hostname if unresolvable through DNS?"
@@ -68,6 +70,7 @@ public class ServerConfigurationControllerBean implements
 			retVal = "UNKNOWN_HOSTNAME";
 		}
 		assert retVal != null;
+		retVal = ServerConfigurationEntity.standardizeHostName(retVal);
 		return retVal;
 	}
 
@@ -89,7 +92,7 @@ public class ServerConfigurationControllerBean implements
 	private OabaJobControllerBean jobController;
 
 	@Override
-	public ServerConfiguration find(long id) {
+	public ServerConfiguration findServerConfiguration(long id) {
 		ServerConfigurationEntity retVal =
 			em.find(ServerConfigurationEntity.class, id);
 		return retVal;
@@ -112,7 +115,7 @@ public class ServerConfigurationControllerBean implements
 		} else if (beans.size() == 1) {
 			retVal = beans.get(0);
 		} else {
-			assert beans.size() == 0;
+			assert beans == null || beans.size() == 0;
 			assert retVal == null;
 		}
 
@@ -151,6 +154,7 @@ public class ServerConfigurationControllerBean implements
 
 	protected List<ServerConfiguration> findServerConfigurationsByHostNameStrict(
 			String hostName) {
+		hostName = ServerConfigurationEntity.standardizeHostName(hostName);
 		Query query =
 			em.createNamedQuery(ServerConfigurationJPA.QN_SERVERCONFIG_FIND_BY_HOSTNAME);
 		query.setParameter(
@@ -175,7 +179,7 @@ public class ServerConfigurationControllerBean implements
 		OabaJob oabaJob = jobController.findOabaJob(jobId);
 		if (oabaJob != null) {
 			long serverId = oabaJob.getServerId();
-			retVal = find(serverId);
+			retVal = findServerConfiguration(serverId);
 		}
 		return retVal;
 	}
@@ -185,6 +189,23 @@ public class ServerConfigurationControllerBean implements
 		MutableServerConfiguration retVal = new ServerConfigurationEntity();
 		retVal.setConfigurationName(computeUniqueGenericName());
 		retVal.setHostName(computeHostName());
+		retVal.setMaxChoiceMakerThreads(computeAvailableProcessors());
+		retVal.setMaxOabaChunkFileCount(DEFAULT_MAX_CHUNK_COUNT);
+		retVal.setMaxOabaChunkFileRecords(DEFAULT_MAX_CHUNK_SIZE);
+		retVal.setWorkingDirectoryLocation(computeGenericLocation());
+		return retVal;
+	}
+
+	public MutableServerConfiguration computeGenericConfiguration(
+			String hostName) {
+		if (hostName == null || !hostName.trim().equals(hostName)
+				|| hostName.isEmpty()) {
+			throw new IllegalArgumentException("invalid host name: '"
+					+ hostName + "'");
+		}
+		MutableServerConfiguration retVal = new ServerConfigurationEntity();
+		retVal.setConfigurationName(computeUniqueGenericName());
+		retVal.setHostName(hostName);
 		retVal.setMaxChoiceMakerThreads(computeAvailableProcessors());
 		retVal.setMaxOabaChunkFileCount(DEFAULT_MAX_CHUNK_COUNT);
 		retVal.setMaxOabaChunkFileRecords(DEFAULT_MAX_CHUNK_SIZE);
@@ -251,7 +272,7 @@ public class ServerConfigurationControllerBean implements
 		if (sc == null) {
 			throw new IllegalArgumentException("null configuration");
 		}
-		if (!host.equals(sc.getHostName())
+		if (!host.equalsIgnoreCase(sc.getHostName())
 				&& !ServerConfiguration.ANY_HOST.equals(sc.getHostName())) {
 			String msg =
 				"Host name '"
@@ -262,7 +283,7 @@ public class ServerConfigurationControllerBean implements
 		}
 
 		ServerConfiguration retVal = null;
-		DefaultServerConfigurationEntity old =
+		DefaultServerConfiguration old =
 			em.find(DefaultServerConfigurationEntity.class, host);
 		if (old != null) {
 			long id = old.getServerConfigurationId();
@@ -271,21 +292,71 @@ public class ServerConfigurationControllerBean implements
 				throw new IllegalStateException(
 						"missing server configuration: " + id);
 			}
+		} else {
+			retVal = sc;
+			if (ServerConfigurationEntity.isNonPersistentId(retVal.getId())) {
+				em.persist(retVal);
+				assert !ServerConfigurationEntity.isNonPersistentId(retVal
+						.getId());
+			}
+			DefaultServerConfiguration dsc =
+				new DefaultServerConfigurationEntity(host, retVal.getId());
+			em.persist(dsc);
 		}
-
-		DefaultServerConfigurationEntity dsc =
-			new DefaultServerConfigurationEntity(host, sc.getId());
-		em.persist(dsc);
+		assert retVal != null;
 
 		return retVal;
 	}
 
 	@Override
+	public DefaultServerConfiguration findDefaultServerConfiguration(
+			String hostName) {
+		DefaultServerConfiguration retVal = null;
+		if (hostName != null) {
+			hostName = hostName.trim();
+			if (!hostName.isEmpty()) {
+				retVal =
+					em.find(DefaultServerConfigurationEntity.class, hostName);
+			}
+		}
+		return retVal;
+	}
+
+	/**
+	 * Gets the default configuration for a particular host.
+	 * <ol>
+	 * <li>If default configuration for a host has been set previously, returns
+	 * this configuration</li>
+	 * <li>If only one configuration exists for a host, including any
+	 * configuration marked {@link ServerConfiguration#ANY_HOST ANY_HOST}, this
+	 * configuration is returned</li>
+	 * <li>If neither of the previous conditions hold, then a generic
+	 * configuration is computed and returned.
+	 * </ol>
+	 * Equivalent to
+	 * 
+	 * <pre>
+	 * getDefaultConfiguration(hostName, true)
+	 * </pre>
+	 */
 	public ServerConfiguration getDefaultConfiguration(String hostName) {
 		return getDefaultConfiguration(hostName, true);
 	}
 
-	@Override
+	/**
+	 * Gets the default configuration for a particular host.
+	 * <ol>
+	 * <li>If default configuration for a host has been set previously, returns
+	 * this configuration</li>
+	 * <li>If only one configuration exists for a host, including any
+	 * configuration marked {@link ServerConfiguration#ANY_HOST ANY_HOST}, this
+	 * configuration is returned</li>
+	 * <li>If neither of the previous conditions hold, and if the
+	 * <code>computeFallback</code> flag is true, then a generic configuration
+	 * is computed and returned.
+	 * <li>Otherwise returns null.
+	 * </ol>
+	 */
 	public ServerConfiguration getDefaultConfiguration(String host,
 			boolean computeFallback) {
 		if (host == null) {
@@ -294,7 +365,7 @@ public class ServerConfigurationControllerBean implements
 		host = host.trim();
 
 		ServerConfiguration retVal = null;
-		DefaultServerConfigurationEntity dscb =
+		DefaultServerConfiguration dscb =
 			em.find(DefaultServerConfigurationEntity.class, host);
 		if (dscb != null) {
 			long id = dscb.getServerConfigurationId();
@@ -337,6 +408,9 @@ public class ServerConfigurationControllerBean implements
 			em.createNamedQuery(DefaultServerConfigurationJPA.QN_DSC_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<DefaultServerConfigurationEntity> retVal = query.getResultList();
+		if (retVal == null) {
+			retVal = new ArrayList<DefaultServerConfigurationEntity>();
+		}
 		return retVal;
 	}
 

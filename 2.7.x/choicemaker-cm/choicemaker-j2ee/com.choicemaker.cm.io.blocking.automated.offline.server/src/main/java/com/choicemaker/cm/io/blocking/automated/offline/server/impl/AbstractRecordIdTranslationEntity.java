@@ -3,7 +3,6 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_INTEGER;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_LONG;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_STRING;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.fromSymbol;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.CN_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.CN_JOB_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.CN_RECORD_ID;
@@ -20,8 +19,10 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.Recor
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.ID_GENERATOR_PK_COLUMN_VALUE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.ID_GENERATOR_TABLE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.JPQL_TRANSLATEDID_DELETE_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.JPQL_TRANSLATEDID_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.PN_TRANSLATEDID_FIND_BY_JOBID_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.JPQL_TRANSLATEDID_FIND_BY_JOBID;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.QN_TRANSLATEDID_DELETE_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_ALL;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.QN_TRANSLATEDID_FIND_BY_JOBID;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdTranslationJPA.TABLE_NAME;
@@ -50,7 +51,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdTrans
 		@NamedQuery(name = QN_TRANSLATEDID_FIND_ALL,
 				query = JPQL_TRANSLATEDID_FIND_ALL),
 		@NamedQuery(name = QN_TRANSLATEDID_FIND_BY_JOBID,
-				query = PN_TRANSLATEDID_FIND_BY_JOBID_JOBID) })
+				query = JPQL_TRANSLATEDID_FIND_BY_JOBID),
+		@NamedQuery(name = QN_TRANSLATEDID_DELETE_BY_JOBID,
+				query = JPQL_TRANSLATEDID_DELETE_BY_JOBID) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
@@ -67,7 +70,7 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	/** Magic values to indicate an non-initialized record id */
 	public static final String INVALID_RECORD_ID = null;
 
-	/** Magic values to indicate an non-initialized record source */
+	/** Magic value to indicate an non-initialized record source */
 	public static final char INVALID_RECORD_SOURCE = '\0';
 
 	/**
@@ -86,15 +89,16 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 		++dvCount;
 
 		retVal = retVal && DV_LONG.equals(TYPE_LONG.getStringSymbol());
-		retVal = retVal && !DV_STRING.equals(DV_ABSTRACT);
+		retVal = retVal && !DV_LONG.equals(DV_ABSTRACT);
 		++dvCount;
 
 		retVal = retVal && DV_STRING.equals(TYPE_STRING.getStringSymbol());
 		retVal = retVal && !DV_STRING.equals(DV_ABSTRACT);
 		++dvCount;
 
-		// One more discriminator (ABSTRACT) than enum types
-		retVal = retVal && dvCount == RECORD_ID_TYPE.values().length + 1;
+		// One more discriminator (ABSTRACT) value than enum type
+		int ritCount = RECORD_ID_TYPE.values().length;
+		retVal = retVal && dvCount == ritCount + 1;
 
 		return retVal;
 	}
@@ -102,11 +106,11 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	static {
 		if (!isClassValid()) {
 			String msg =
-				"AbstractRecordIdTranslationEntity class is inconsistent with RECORD_ID_TYPE enumeration";
+				"AbstractRecordIdTranslationEntity class is inconsistent with "
+						+ " RECORD_ID_TYPE enumeration";
 			logger.severe(msg);
 			// An exception is not thrown here because it would create a class
 			// initialization exception, which can be hard to debug
-			// throw IllegalStateException(msg);
 		}
 	}
 
@@ -186,7 +190,7 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 
 	@Override
 	public final RECORD_ID_TYPE getRecordType() {
-		return fromSymbol(recordType);
+		return RECORD_ID_TYPE.fromSymbol(recordType);
 	}
 
 	@Override
