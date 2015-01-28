@@ -345,7 +345,7 @@ class ImmutableRecordIdTranslatorImpl implements
 
 	@Override
 	public boolean isSplit() {
-		return getSplitIndex() != NOT_SPLIT;
+		return splitIndex != NOT_SPLIT;
 	}
 
 	public boolean isEmpty() {
