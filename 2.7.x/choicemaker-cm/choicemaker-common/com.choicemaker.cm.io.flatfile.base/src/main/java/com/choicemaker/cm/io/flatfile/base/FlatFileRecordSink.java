@@ -129,9 +129,9 @@ public class FlatFileRecordSink implements RecordSink {
 				if (f.exists()) {
 					log.severe("Overwriting an existing file: " + fileNames[i]);
 				}
-				// FIXME
+				// FIXME ??
 				FileOutputStream o = new FileOutputStream(f);
-				log.severe("BUG: does not handle unicode: " + o);
+				log.warning("BUG: does not handle unicode? " + o);
 				// ENDFIXME
 				ws[i] = new OutputStreamWriter(new BufferedOutputStream(o));
 			}
@@ -141,10 +141,10 @@ public class FlatFileRecordSink implements RecordSink {
 			if (f.exists()) {
 				log.severe("Overwriting an existing file: " + fileNames[0]);
 			}
-			// FIXME
+			// FIXME ??
 			FileOutputStream o = new FileOutputStream(f);
 			BufferedOutputStream bos = new BufferedOutputStream(o);
-			log.severe("BUG: does not handle unicode: " + o);
+			log.warning("BUG: does not handle unicode? " + o);
 			// ENDFIXME
 			Writer w = new OutputStreamWriter(bos);
 			for (int i = 0; i < n; ++i) {
