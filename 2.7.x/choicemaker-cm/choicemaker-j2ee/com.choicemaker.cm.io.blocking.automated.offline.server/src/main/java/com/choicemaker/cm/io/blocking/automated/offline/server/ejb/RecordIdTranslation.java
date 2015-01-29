@@ -23,10 +23,8 @@ public interface RecordIdTranslation<T extends Comparable<T>> extends
 	/** Record id */
 	T getRecordId();
 
-	/** Record source -- staging or master */
-	RECORD_SOURCE_ROLE getRecordSource();
+	RECORD_SOURCE_ROLE getRecordSourceRole();
 
-	/** Record id type -- INTEGER, LONG or STRING */
-	RECORD_ID_TYPE getRecordType();
+	RECORD_ID_TYPE getRecordIdType();
 
 }

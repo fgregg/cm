@@ -128,7 +128,7 @@ class ImmutableRecordIdTranslatorImpl implements
 		for (RecordIdTranslation<T> rt : translations) {
 
 			// Check or set the record-id type
-			RECORD_ID_TYPE rid = rt.getRecordType();
+			RECORD_ID_TYPE rid = rt.getRecordIdType();
 			if (recordIdType == null) {
 				assert rid != null;
 				recordIdType = rid;
@@ -162,7 +162,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			}
 
 			// Figure out where to put the recordId and index
-			RECORD_SOURCE_ROLE rsr = rt.getRecordSource();
+			RECORD_SOURCE_ROLE rsr = rt.getRecordSourceRole();
 			boolean isFirstRecord = rsr.isFirstSource();
 			boolean isSplitIndex = rsr.isSplitIndex();
 			if (isFirstRecord) {
@@ -616,7 +616,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			Set<T> rids = new HashSet<>();
 			Set<Integer> indices = new HashSet<>();
 			for (AbstractRecordIdTranslationEntity<T> translation : translations) {
-				RECORD_ID_TYPE rit = translation.getRecordType();
+				RECORD_ID_TYPE rit = translation.getRecordIdType();
 				assertEqual("inconsistent record-id type: ", rit,
 						this.recordIdType);
 
@@ -625,7 +625,7 @@ class ImmutableRecordIdTranslatorImpl implements
 				int index = translation.getTranslatedId();
 				indices.add(index);
 
-				RECORD_SOURCE_ROLE rsr = translation.getRecordSource();
+				RECORD_SOURCE_ROLE rsr = translation.getRecordSourceRole();
 				if (rsr.isSplitIndex()) {
 					assertEqual("inconsistent split index", index,
 							this.getSplitIndex());

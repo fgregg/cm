@@ -24,6 +24,7 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
+import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
@@ -60,13 +61,13 @@ public class RecordIdControllerBean implements RecordIdController {
 	private static RecordIdSinkSourceFactory getTransIDFactory(BatchJob job) {
 		String wd = OabaFileUtils.getWorkingDir(job);
 		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_TRANSLATOR,
-				OabaFileUtils.BINARY_SUFFIX);
+				BatchJobFileUtils.BINARY_SUFFIX);
 	}
 
 	private static RecordIdSinkSourceFactory getRecordIDFactory(BatchJob job) {
 		String wd = OabaFileUtils.getWorkingDir(job);
 		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE,
-				OabaFileUtils.TEXT_SUFFIX);
+				BatchJobFileUtils.TEXT_SUFFIX);
 	}
 
 	@PersistenceContext(unitName = "oaba")

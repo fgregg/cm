@@ -189,12 +189,12 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	}
 
 	@Override
-	public final RECORD_ID_TYPE getRecordType() {
+	public final RECORD_ID_TYPE getRecordIdType() {
 		return RECORD_ID_TYPE.fromSymbol(recordType);
 	}
 
 	@Override
-	public final RECORD_SOURCE_ROLE getRecordSource() {
+	public final RECORD_SOURCE_ROLE getRecordSourceRole() {
 		return RECORD_SOURCE_ROLE.fromSymbol(recordSource);
 	}
 
@@ -297,40 +297,40 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 			assert (this.getRecordId() == null && trid.getRecordId() == null)
 					|| this.getRecordId().equals(trid.getRecordId());
 
-			if (this.getRecordType() == null && trid.getRecordType() != null)
+			if (this.getRecordIdType() == null && trid.getRecordIdType() != null)
 				return LESS_THAN;
-			else if (this.getRecordType() != null
-					&& trid.getRecordType() == null)
+			else if (this.getRecordIdType() != null
+					&& trid.getRecordIdType() == null)
 				return LESS_THAN;
-			else if (this.getRecordType() != null
-					&& trid.getRecordType() != null) {
+			else if (this.getRecordIdType() != null
+					&& trid.getRecordIdType() != null) {
 				int retVal =
-					this.getRecordType().compareTo(trid.getRecordType());
+					this.getRecordIdType().compareTo(trid.getRecordIdType());
 				if (retVal != 0) {
 					inconsistentRecordTypes(this, trid);
 					return retVal;
 				}
 			}
-			assert (this.getRecordType() == null && trid.getRecordType() == null)
-					|| this.getRecordType().equals(trid.getRecordType());
+			assert (this.getRecordIdType() == null && trid.getRecordIdType() == null)
+					|| this.getRecordIdType().equals(trid.getRecordIdType());
 
-			if (this.getRecordSource() == null
-					&& trid.getRecordSource() != null)
+			if (this.getRecordSourceRole() == null
+					&& trid.getRecordSourceRole() != null)
 				return LESS_THAN;
-			else if (this.getRecordSource() != null
-					&& trid.getRecordSource() == null)
+			else if (this.getRecordSourceRole() != null
+					&& trid.getRecordSourceRole() == null)
 				return LESS_THAN;
-			else if (this.getRecordSource() != null
-					&& trid.getRecordSource() != null) {
+			else if (this.getRecordSourceRole() != null
+					&& trid.getRecordSourceRole() != null) {
 				int retVal =
-					this.getRecordSource().compareTo(trid.getRecordSource());
+					this.getRecordSourceRole().compareTo(trid.getRecordSourceRole());
 				if (retVal != 0) {
 					inconsistentRecordSources(this, trid);
 					return retVal;
 				}
 			}
-			assert (this.getRecordSource() == null && trid.getRecordSource() == null)
-					|| this.getRecordSource().equals(trid.getRecordSource());
+			assert (this.getRecordSourceRole() == null && trid.getRecordSourceRole() == null)
+					|| this.getRecordSourceRole().equals(trid.getRecordSourceRole());
 
 		}
 
