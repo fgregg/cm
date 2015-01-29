@@ -17,8 +17,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 
 /**
- * This MDB delegates message handling to a singleton EJB, which tracks
- * certain OABA-related data between invocations of <code>onMessage</code>.
+ * This MDB delegates message handling to a singleton EJB, which tracks certain
+ * OABA-related data between invocations of <code>onMessage</code>.
  * 
  * @author rphall
  */

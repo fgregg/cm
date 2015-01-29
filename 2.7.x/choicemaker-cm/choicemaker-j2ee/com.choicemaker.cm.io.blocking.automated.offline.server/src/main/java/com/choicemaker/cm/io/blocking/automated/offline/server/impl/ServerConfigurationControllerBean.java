@@ -44,7 +44,7 @@ public class ServerConfigurationControllerBean implements
 		int retVal = Runtime.getRuntime().availableProcessors();
 		return retVal;
 	}
-	
+
 	public static String computeHostName() {
 		// A hack to an unsolvable problem. See StackOverflow,
 		// "How do I get the local hostname if unresolvable through DNS?"
@@ -196,6 +196,7 @@ public class ServerConfigurationControllerBean implements
 		return retVal;
 	}
 
+	@Override
 	public MutableServerConfiguration computeGenericConfiguration(
 			String hostName) {
 		if (hostName == null || !hostName.trim().equals(hostName)
@@ -339,6 +340,7 @@ public class ServerConfigurationControllerBean implements
 	 * getDefaultConfiguration(hostName, true)
 	 * </pre>
 	 */
+	@Override
 	public ServerConfiguration getDefaultConfiguration(String hostName) {
 		return getDefaultConfiguration(hostName, true);
 	}
@@ -357,6 +359,7 @@ public class ServerConfigurationControllerBean implements
 	 * <li>Otherwise returns null.
 	 * </ol>
 	 */
+	@Override
 	public ServerConfiguration getDefaultConfiguration(String host,
 			boolean computeFallback) {
 		if (host == null) {

@@ -297,7 +297,8 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 			assert (this.getRecordId() == null && trid.getRecordId() == null)
 					|| this.getRecordId().equals(trid.getRecordId());
 
-			if (this.getRecordIdType() == null && trid.getRecordIdType() != null)
+			if (this.getRecordIdType() == null
+					&& trid.getRecordIdType() != null)
 				return LESS_THAN;
 			else if (this.getRecordIdType() != null
 					&& trid.getRecordIdType() == null)
@@ -323,14 +324,17 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 			else if (this.getRecordSourceRole() != null
 					&& trid.getRecordSourceRole() != null) {
 				int retVal =
-					this.getRecordSourceRole().compareTo(trid.getRecordSourceRole());
+					this.getRecordSourceRole().compareTo(
+							trid.getRecordSourceRole());
 				if (retVal != 0) {
 					inconsistentRecordSources(this, trid);
 					return retVal;
 				}
 			}
-			assert (this.getRecordSourceRole() == null && trid.getRecordSourceRole() == null)
-					|| this.getRecordSourceRole().equals(trid.getRecordSourceRole());
+			assert (this.getRecordSourceRole() == null && trid
+					.getRecordSourceRole() == null)
+					|| this.getRecordSourceRole().equals(
+							trid.getRecordSourceRole());
 
 		}
 

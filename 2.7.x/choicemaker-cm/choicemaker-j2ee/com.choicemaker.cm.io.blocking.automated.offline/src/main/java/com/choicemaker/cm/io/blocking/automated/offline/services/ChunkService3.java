@@ -97,8 +97,10 @@ public class ChunkService3 {
 	private int maxFiles = 0;
 
 	/**
-	 * There are two types of chunks, regular and oversized. numOS = numChunks
-	 * - numRegularChunks;
+	 * There are two types of chunks, regular and oversized.
+	 * <pre>
+	 * numOS = numChunks - numRegularChunks;
+	 * </pre>
 	 * 
 	 */
 	private int numRegularChunks = 0;
@@ -527,9 +529,9 @@ public class ChunkService3 {
 						context =
 							"writing record[" + count + "] to sink[" + i + "]";
 						recordSinks[i].put(r);
-// BUG FIX?
-recordSinks[i].flush();
-// END BUG FIX?
+						// BUG FIX?
+						recordSinks[i].flush();
+						// END BUG FIX?
 						if (crSources[i].hasNext()) {
 							ind[i] = crSources[i].next();
 						}

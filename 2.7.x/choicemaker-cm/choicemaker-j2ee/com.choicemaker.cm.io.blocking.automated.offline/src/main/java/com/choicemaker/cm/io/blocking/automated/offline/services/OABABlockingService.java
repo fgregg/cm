@@ -603,7 +603,7 @@ public class OABABlockingService {
 				if (values.size() == 0) {
 					// Typically an invalid value in a non-stacked
 					// field, or all invalid values in a stacked field
- 					String msg =
+					String msg =
 						"No values for column " + col + ", record id " + j
 								+ ", source " + rvSource;
 					log.finer(msg);

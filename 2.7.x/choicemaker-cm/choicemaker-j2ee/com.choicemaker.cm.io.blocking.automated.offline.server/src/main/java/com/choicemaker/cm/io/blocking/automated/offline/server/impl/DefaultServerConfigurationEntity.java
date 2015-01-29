@@ -48,10 +48,12 @@ public class DefaultServerConfigurationEntity implements
 		this(sc.getHostName(), sc.getId());
 	}
 
+	@Override
 	public String getHostName() {
 		return hostName;
 	}
 
+	@Override
 	public long getServerConfigurationId() {
 		return serverConfigurationId;
 	}

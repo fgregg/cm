@@ -25,8 +25,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
 @SuppressWarnings({ "rawtypes" })
 class RecordIdSinkSourceFactory implements IRecordIdSinkSourceFactory {
 
-	static final EXTERNAL_DATA_FORMAT TYPE =
-		EXTERNAL_DATA_FORMAT.STRING;
+	static final EXTERNAL_DATA_FORMAT TYPE = EXTERNAL_DATA_FORMAT.STRING;
 
 	private String fileDir;
 	private String nameBase;

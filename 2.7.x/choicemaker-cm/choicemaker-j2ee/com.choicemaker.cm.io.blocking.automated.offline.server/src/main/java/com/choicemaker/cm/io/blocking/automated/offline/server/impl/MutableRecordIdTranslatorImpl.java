@@ -113,7 +113,7 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 	private TRANSLATOR_STATE translatorState = TRANSLATOR_STATE.MUTABLE;
 
 	private final BatchJob batchJob;
-	
+
 	private final IRecordIdSinkSourceFactory rFactory;
 
 	/** Typically a source of staging records */
@@ -148,7 +148,8 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 	private int splitIndex = NOT_SPLIT;
 
 	MutableRecordIdTranslatorImpl(BatchJob job,
-			IRecordIdSinkSourceFactory factory, IRecordIdSink s1, IRecordIdSink s2) throws BlockingException {
+			IRecordIdSinkSourceFactory factory, IRecordIdSink s1,
+			IRecordIdSink s2) throws BlockingException {
 		if (job == null || factory == null || s1 == null || s2 == null) {
 			throw new IllegalArgumentException("null argument");
 		}
@@ -221,7 +222,9 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 			log.warning("translator is already closed");
 		}
 
-		String msg = "close(): " + isClosed() + ", translatorState == " + translatorState;
+		String msg =
+			"close(): " + isClosed() + ", translatorState == "
+					+ translatorState;
 		if (!isClosed()) {
 			log.severe(msg);
 		} else {
@@ -308,6 +311,7 @@ class MutableRecordIdTranslatorImpl implements MutableRecordIdTranslatorLocal {
 		return retVal;
 	}
 
+	@Override
 	public BatchJob getBatchJob() {
 		return batchJob;
 	}

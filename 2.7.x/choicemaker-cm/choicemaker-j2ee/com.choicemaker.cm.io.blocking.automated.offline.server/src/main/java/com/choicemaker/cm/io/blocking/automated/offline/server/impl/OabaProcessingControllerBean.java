@@ -67,11 +67,8 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 
 	static List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(
 			EntityManager em, long id) {
-		Query query =
-			em.createNamedQuery(QN_OABAPROCESSING_FIND_BY_JOBID);
-		query.setParameter(
-				PN_OABAPROCESSING_FIND_BY_JOBID_JOBID,
-				id);
+		Query query = em.createNamedQuery(QN_OABAPROCESSING_FIND_BY_JOBID);
+		query.setParameter(PN_OABAPROCESSING_FIND_BY_JOBID_JOBID, id);
 		@SuppressWarnings("unchecked")
 		List<OabaProcessingEventEntity> entries = query.getResultList();
 		if (entries == null) {
@@ -82,8 +79,7 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 
 	static List<OabaProcessingEventEntity> findAllOabaProcessingEvents(
 			EntityManager em) {
-		Query query =
-			em.createNamedQuery(QN_OABAPROCESSING_FIND_ALL);
+		Query query = em.createNamedQuery(QN_OABAPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<OabaProcessingEventEntity> entries = query.getResultList();
 		if (entries == null) {
@@ -93,11 +89,8 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 	}
 
 	static int deleteProcessingLogEntriesByJobId(EntityManager em, long id) {
-		Query query =
-			em.createNamedQuery(QN_OABAPROCESSING_DELETE_BY_JOBID);
-		query.setParameter(
-				PN_OABAPROCESSING_DELETE_BY_JOBID_JOBID,
-				id);
+		Query query = em.createNamedQuery(QN_OABAPROCESSING_DELETE_BY_JOBID);
+		query.setParameter(PN_OABAPROCESSING_DELETE_BY_JOBID_JOBID, id);
 		int deletedCount = query.executeUpdate();
 		return deletedCount;
 	}

@@ -124,7 +124,7 @@ class ImmutableRecordIdTranslatorImpl implements
 		}
 		int count1 = 0;
 		int count2 = 0;
-		int splitIndex = ImmutableRecordIdTranslatorImpl.NOT_SPLIT;
+		int splitIndex = ImmutableRecordIdTranslator.NOT_SPLIT;
 		for (RecordIdTranslation<T> rt : translations) {
 
 			// Check or set the record-id type
@@ -430,7 +430,7 @@ class ImmutableRecordIdTranslatorImpl implements
 
 		// Counts the records in source2, does NOT index source2.
 		// NOTE the split index is set by count, not count2
-		int count2 = 0; 
+		int count2 = 0;
 
 		// Read the second source if there is one
 		if (source2.exists()) {

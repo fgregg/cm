@@ -120,7 +120,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	// max chunk
 	protected int maxChunkSize;
-	
+
 	// -- Callbacks
 
 	protected abstract Logger getLogger();

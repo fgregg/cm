@@ -231,10 +231,8 @@ public class OperationalPropertyControllerBean implements
 	public int deleteOperationalPropertiesByJobId(long jobId) {
 		int retVal = 0;
 		if (jobId != INVALID_ID) {
-			Query query =
-				em.createNamedQuery(QN_OPPROP_DELETE_BY_JOB);
-			query.setParameter(
-					PN_OPPROP_DELETE_BY_JOB_P1, jobId);
+			Query query = em.createNamedQuery(QN_OPPROP_DELETE_BY_JOB);
+			query.setParameter(PN_OPPROP_DELETE_BY_JOB_P1, jobId);
 			int deletedCount = query.executeUpdate();
 			return deletedCount;
 		}

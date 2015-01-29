@@ -62,7 +62,7 @@ public enum RECORD_SOURCE_ROLE {
 	public boolean isFirstSource() {
 		return symbol == STAGING.symbol || symbol == SOURCE1_NODUPES.symbol;
 	}
-	
+
 	public boolean isSplitIndex() {
 		return symbol == SPLIT_INDEX.symbol;
 	}

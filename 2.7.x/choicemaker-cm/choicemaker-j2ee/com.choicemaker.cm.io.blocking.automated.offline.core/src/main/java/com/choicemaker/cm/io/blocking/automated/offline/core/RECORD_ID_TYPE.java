@@ -35,8 +35,8 @@ public enum RECORD_ID_TYPE {
 	}
 
 	/**
-	 * Note the return value is numeric: 0x01, 0x02 or 0x03. It is not
-	 * equal to getCharSymbol()
+	 * Note the return value is numeric: 0x01, 0x02 or 0x03. It is not equal to
+	 * getCharSymbol()
 	 */
 	public int getIntValue() {
 		return intSymbol;
@@ -62,7 +62,7 @@ public enum RECORD_ID_TYPE {
 	private Class<?> getPrimitiveIdClass() {
 		return primitiveIdClass;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T extends Comparable<T>> T idFromString(String s) {
 		T retVal;
@@ -70,7 +70,7 @@ public enum RECORD_ID_TYPE {
 			retVal = (T) Integer.valueOf(s);
 		} else if (getRecordIdClass().equals(Long.class)) {
 			retVal = (T) Long.valueOf(s);
-		} else if (getRecordIdClass().equals(String.class)){
+		} else if (getRecordIdClass().equals(String.class)) {
 			retVal = (T) s;
 		} else {
 			throw new Error("Unreachable");

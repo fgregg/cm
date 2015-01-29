@@ -49,26 +49,32 @@ public class DefaultSettingsEntity implements DefaultSettings {
 		this.settingsId = settingsId;
 	}
 
+	@Override
 	public DefaultSettingsPK getPrimaryKey() {
 		return key;
 	}
 
+	@Override
 	public String getModel() {
 		return key.getModel();
 	}
 
+	@Override
 	public String getType() {
 		return key.getType();
 	}
 
+	@Override
 	public String getDatabaseConfiguration() {
 		return key.getDatabaseConfiguration();
 	}
 
+	@Override
 	public String getBlockingConfiguration() {
 		return key.getBlockingConfiguration();
 	}
 
+	@Override
 	public long getSettingsId() {
 		return settingsId;
 	}

@@ -22,7 +22,8 @@ public class RecordIdSinkTest {
 	@Test
 	public void testIntegerFileData() throws IOException, BlockingException {
 		String fileName = RecordIdTestUtils.createTempFileName();
-		List<Integer> identifiers = RecordIdTestUtils.getIdentifiersAsIntegers();
+		List<Integer> identifiers =
+			RecordIdTestUtils.getIdentifiersAsIntegers();
 		RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers);
 
 		File f = new File(fileName);
@@ -78,17 +79,21 @@ public class RecordIdSinkTest {
 
 		String fileName = RecordIdTestUtils.createTempFileName();
 		List<String> identifiers = RecordIdTestUtils.getIdentifiersAsStrings();
-		RecordIdSink ris = RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers);
+		RecordIdSink ris =
+			RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers);
 		assertTrue(ris.getRecordIdType() == RECORD_ID_TYPE.TYPE_STRING);
 
 		fileName = RecordIdTestUtils.createTempFileName();
 		List<Long> identifiers2 = RecordIdTestUtils.getIdentifiersAsLongs();
-		RecordIdSink ris2 = RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers2);
+		RecordIdSink ris2 =
+			RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers2);
 		assertTrue(ris2.getRecordIdType() == RECORD_ID_TYPE.TYPE_LONG);
 
 		fileName = RecordIdTestUtils.createTempFileName();
-		List<Integer> identifiers3 = RecordIdTestUtils.getIdentifiersAsIntegers();
-		RecordIdSink ris3 = RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers3);
+		List<Integer> identifiers3 =
+			RecordIdTestUtils.getIdentifiersAsIntegers();
+		RecordIdSink ris3 =
+			RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers3);
 		assertTrue(ris3.getRecordIdType() == RECORD_ID_TYPE.TYPE_INTEGER);
 	}
 
@@ -153,7 +158,7 @@ public class RecordIdSinkTest {
 			} catch (Exception x) {
 				fail("Unexpected exception: " + x.toString());
 			}
-			
+
 			// Once is enough
 			++count;
 			if (count > 0) {
@@ -167,7 +172,8 @@ public class RecordIdSinkTest {
 
 		String fileName = RecordIdTestUtils.createTempFileName();
 		List<String> identifiers = RecordIdTestUtils.getIdentifiersAsStrings();
-		RecordIdSink ris = RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers);
+		RecordIdSink ris =
+			RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers);
 		assertTrue(ris.getRecordIdType() == RECORD_ID_TYPE.TYPE_STRING);
 		RecordIdSource<String> src =
 			new RecordIdSource<>(String.class, fileName);
@@ -182,7 +188,8 @@ public class RecordIdSinkTest {
 
 		fileName = RecordIdTestUtils.createTempFileName();
 		List<Long> identifiers2 = RecordIdTestUtils.getIdentifiersAsLongs();
-		RecordIdSink ris2 = RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers2);
+		RecordIdSink ris2 =
+			RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers2);
 		assertTrue(ris2.getRecordIdType() == RECORD_ID_TYPE.TYPE_LONG);
 		RecordIdSource<Long> src2 = new RecordIdSource<>(Long.class, fileName);
 		src2.open();
@@ -195,8 +202,10 @@ public class RecordIdSinkTest {
 		assertTrue(src2.hasNext() == false);
 
 		fileName = RecordIdTestUtils.createTempFileName();
-		List<Integer> identifiers3 = RecordIdTestUtils.getIdentifiersAsIntegers();
-		RecordIdSink ris3 = RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers3);
+		List<Integer> identifiers3 =
+			RecordIdTestUtils.getIdentifiersAsIntegers();
+		RecordIdSink ris3 =
+			RecordIdTestUtils.writeIdentifiersToFile(fileName, identifiers3);
 		assertTrue(ris3.getRecordIdType() == RECORD_ID_TYPE.TYPE_INTEGER);
 		RecordIdSource<Integer> src3 =
 			new RecordIdSource<>(Integer.class, fileName);
