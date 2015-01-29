@@ -23,6 +23,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
+import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
@@ -116,7 +117,7 @@ public class OabaJobControllerBean {
 		assert currentProcessingEvent == OabaEvent.INIT;
 
 		// Create the working directory
-		File workingDir = OabaFileUtils.createWorkingDirectory(sc, retVal);
+		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);
 		retVal.setWorkingDirectory(workingDir);
 
 		// Log the job info

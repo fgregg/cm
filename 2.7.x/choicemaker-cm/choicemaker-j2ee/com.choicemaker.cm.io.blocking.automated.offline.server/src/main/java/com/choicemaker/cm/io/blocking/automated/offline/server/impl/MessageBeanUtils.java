@@ -23,6 +23,7 @@ import javax.jms.Topic;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
@@ -61,7 +62,7 @@ public class MessageBeanUtils {
 			log0.info("Clearing resources for job " + oabaJob.getId());
 			status.setCurrentOabaEvent(OabaEvent.DONE_OABA);
 			log0.info("Removing Temporary directory.");
-			OabaFileUtils.removeTempDir(oabaJob);
+			BatchJobFileUtils.removeTempDir(oabaJob);
 		} else {
 			log0.info("Retaining resources for job " + oabaJob.getId());
 		}
