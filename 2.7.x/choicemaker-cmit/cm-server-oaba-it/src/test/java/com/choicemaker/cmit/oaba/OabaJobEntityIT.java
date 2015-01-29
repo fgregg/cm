@@ -37,7 +37,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchJobUtils;
-import com.choicemaker.cmit.utils.BatchJobUtils2;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
@@ -73,7 +72,7 @@ public class OabaJobEntityIT {
 	protected OabaTestController oabaTestController;
 
 	@EJB
-	private OabaJobControllerBean jobController;
+	private OabaJobControllerBean oabaJobController;
 
 	@EJB
 	private OabaParametersControllerBean paramsController;
@@ -111,14 +110,6 @@ public class OabaJobEntityIT {
 					processingController, opPropController, rsController,
 					ridController);
 	}
-
-	// @After
-	// public void tearDown() {
-	// String METHOD = "tearDown";
-	// logger.entering(LOG_SOURCE, METHOD);
-	// checkCounts();
-	// logger.exiting(LOG_SOURCE, METHOD);
-	// }
 
 	public void checkCounts() {
 		if (te != null) {
@@ -499,7 +490,7 @@ public class OabaJobEntityIT {
 		if (sc == null) {
 			sc = serverController.computeGenericConfiguration();
 		}
-		return BatchJobUtils2.createEphemeralOabaJobEntity(MAX_SINGLE_LIMIT,
+		return BatchJobUtils.createEphemeralOabaJobEntity(MAX_SINGLE_LIMIT,
 				utx, sc, em, te, tag, isTag);
 	}
 

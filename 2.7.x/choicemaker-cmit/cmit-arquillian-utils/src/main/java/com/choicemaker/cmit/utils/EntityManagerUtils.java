@@ -152,13 +152,6 @@ public class EntityManagerUtils {
 		return new FakeSerialRecordSource(tag);
 	}
 
-	public static void removeTestEntities(EntityManager em, TestEntities te) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		te.removePersistentObjects(em);
-	}
-
 	public static TransitivityJob save(EntityManager em, TransitivityJob job) {
 		if (job.getId() == 0) {
 			em.persist(job);

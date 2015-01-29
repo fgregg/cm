@@ -25,6 +25,7 @@ import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
@@ -32,13 +33,14 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
-import com.choicemaker.cmit.utils.TestEntities;
+import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 //import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
 import com.choicemaker.e2.CMPluginRegistry;
@@ -47,9 +49,6 @@ public class TransitivityMdbTestProcedures {
 
 	private static final Logger logger = Logger
 			.getLogger(TransitivityMdbTestProcedures.class.getName());
-
-	private TransitivityMdbTestProcedures() {
-	}
 
 	public static boolean isValidConfigurationClass(Class<?> c) {
 		boolean retVal = false;
@@ -60,7 +59,7 @@ public class TransitivityMdbTestProcedures {
 	}
 
 	public static <T extends WellKnownTestConfiguration> T createTestConfiguration(
-			Class<T> c, OabaLinkageType linkage, CMPluginRegistry registry) {
+			Class<T> c, OabaLinkageType task, CMPluginRegistry registry) {
 
 		if (!isValidConfigurationClass(c)) {
 			String msg = "invalid configuration class: " + c;
@@ -74,7 +73,7 @@ public class TransitivityMdbTestProcedures {
 		try {
 			Class<T> cWKTC = (Class<T>) c;
 			retVal = cWKTC.newInstance();
-			retVal.initialize(linkage, registry);
+			retVal.initialize(task, registry);
 		} catch (Exception x) {
 			fail(x.toString());
 		}
@@ -83,12 +82,12 @@ public class TransitivityMdbTestProcedures {
 	}
 
 	public static <T extends WellKnownTestConfiguration> void testLinkageTransitivity(
-			AbstractTransitivityMdbTest<T> test) throws ServerConfigurationException {
+			AbstractTransitivityMdbTest<T> test)
+			throws ServerConfigurationException {
 		if (test == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-		
-		assertTrue(test.isSetupOK());
+
 		String TEST = "testStartOABALinkage";
 		test.getLogger().entering(test.getSourceName(), TEST);
 
@@ -100,18 +99,18 @@ public class TransitivityMdbTestProcedures {
 	}
 
 	public static <T extends WellKnownTestConfiguration> void testDeduplicationTransitivity(
-			AbstractTransitivityMdbTest<T> test) throws ServerConfigurationException {
+			AbstractTransitivityMdbTest<T> test)
+			throws ServerConfigurationException {
 		if (test == null) {
 			throw new IllegalArgumentException("null argument");
 		}
 
-		assertTrue(test.isSetupOK());
-		String TEST = "testStartOABAStage";
+		String TEST = "testDeduplicationTransitivity";
 		test.getLogger().entering(test.getSourceName(), TEST);
 
 		final String externalID = EntityManagerUtils.createExternalId(TEST);
-		testTransitivityProcessing(OabaLinkageType.STAGING_DEDUPLICATION,
-				TEST, test, externalID);
+		testTransitivityProcessing(OabaLinkageType.STAGING_DEDUPLICATION, TEST,
+				test, externalID);
 
 		test.getLogger().exiting(test.getSourceName(), TEST);
 	}
@@ -119,72 +118,113 @@ public class TransitivityMdbTestProcedures {
 	protected static <T extends WellKnownTestConfiguration> void testTransitivityProcessing(
 			final OabaLinkageType linkage, final String tag,
 			final AbstractTransitivityMdbTest<T> test, final String externalId) {
-		
-		assertTrue(test.isSetupOK());
-		String TEST = "testTransitivityProcessing";
-		test.getLogger().entering(test.getSourceName(), TEST);
 
-		// Compute the OABA job that will be used in transitivity analysis
-		final String externalID = EntityManagerUtils.createExternalId(TEST);
-		final WellKnownTestConfiguration c = test.getTestConfiguration(linkage);
-		final PersistableRecordSource staging =
-			test.getRecordSourceController().save(c.getStagingRecordSource());
-		final PersistableRecordSource master =
-			test.getRecordSourceController().save(c.getMasterRecordSource());
-		final OabaParameters bp =
-			new OabaParametersEntity(c.getModelConfigurationName(), c
-					.getThresholds().getDifferThreshold(), c.getThresholds()
-					.getMatchThreshold(), staging, master, c.getOabaTask());
-		final OabaSettings oabaSettings =
-			OabaUtils.getDefaultOabaSettings(test.getSettingsController(),
-					bp.getModelConfigurationName());
-		final ServerConfiguration serverConfiguration =
-			OabaUtils.getDefaultServerConfiguration(test
-					.getServerController());
-		final OabaService oabaService = test.getOabaService();
-		final Topic oabaStatusTopicFIXME = null;
-		final OabaJob oabaJob =
-				doOabaProcessing(test.getSourceName(), TEST, externalID, bp,
-						oabaSettings, serverConfiguration, oabaService,
-						test.getJobController(), test.getProcessingController(),
-						test.getJmsContext(), oabaStatusTopicFIXME);
+		// Preconditions
+		if (linkage == null || tag == null || test == null
+				|| externalId == null) {
+			throw new IllegalArgumentException("null argument");
+		}
 
-		// Set up the parameters for transitivity-analysis test
-		final AnalysisResultFormat format = c.getTransitivityResultFormat();
-		final String graphPropertyName = c.getTransitivityGraphProperty();
-		TransitivityParameters transParams =
-				new TransitivityParametersEntity(bp, format, graphPropertyName);
+		final String LOG_SOURCE = test.getSourceName();
+		logger.entering(LOG_SOURCE, tag);
+
+		final TestEntityCounts te = test.getTestEntityCounts();
 		final Queue resultQueue = test.getResultQueue();
 		final int expectedEventId = test.getResultEventId();
 		final float expectedCompletion = test.getResultPercentComplete();
 
-		// Do the test
-		testTransitivityProcessing(test.getSourceName(),
-				TEST, externalID, transParams, oabaJob, serverConfiguration,
-				test.getTransitivityService(), test.getJobController(),
-				test.getParamsController(),
-				test.getProcessingController(), test.getJmsContext(),
-				resultQueue, test.getTransitivityStatusTopic(), test.getEm(),
-				test.getUtx(), expectedEventId, expectedCompletion,
-				test.getOabaProcessingPhase());
+		final WellKnownTestConfiguration c = test.getTestConfiguration(linkage);
+		final AnalysisResultFormat format = c.getTransitivityResultFormat();
+		final String graphPropertyName = c.getTransitivityGraphProperty();
 
-		test.getLogger().exiting(test.getSourceName(), TEST);
-	}
+		final PersistableRecordSource staging =
+				test.getRecordSourceController().save(c.getStagingRecordSource());
+			assertTrue(staging.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+			te.add(staging);
 
-	public static void testTransitivityProcessing(final String LOG_SOURCE,
-			final String tag, final String externalId, final TransitivityParameters bp,
-			final OabaJob oabaJob,
-			final ServerConfiguration serverConfiguration,
-			final TransitivityService transitivityService,
-			final OabaJobControllerBean jobController,
-			final OabaParametersControllerBean paramsController,
-			final OabaProcessingController processingController,
-			final JMSContext jmsContext, final Queue listeningQueue,
-			final Topic transStatusUpdate, final EntityManager em,
-			final UserTransaction utx, final int expectedEventId,
-			final float expectPercentDone, final OabaProcessingPhase oabaPhase) {
-		logger.entering(LOG_SOURCE, tag);
-	
+			final PersistableRecordSource master;
+			if (OabaLinkageType.STAGING_DEDUPLICATION == linkage) {
+				master = null;
+			} else {
+				master =
+					test.getRecordSourceController()
+							.save(c.getMasterRecordSource());
+				assertTrue(master.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+				te.add(master);
+			}
+
+		final OabaParameters bp =
+				new OabaParametersEntity(c.getModelConfigurationName(), c
+						.getThresholds().getDifferThreshold(), c.getThresholds()
+						.getMatchThreshold(), staging, master, c.getOabaTask());
+			te.add(bp);
+
+			TransitivityParameters transParams =
+					new TransitivityParametersEntity(bp, format, graphPropertyName);
+
+			final String hostName =
+					ServerConfigurationControllerBean.computeHostName();
+				logger.info("Computed host name: " + hostName);
+				final DefaultServerConfiguration dsc =
+					test.getServerController().findDefaultServerConfiguration(hostName);
+				ServerConfiguration serverConfiguration = null;
+				if (dsc != null) {
+					long id = dsc.getServerConfigurationId();
+					logger.info("Default server configuration id: " + id);
+					serverConfiguration =
+						test.getServerController().findServerConfiguration(id);
+				}
+				if (serverConfiguration == null) {
+					logger.info("No default server configuration for: " + hostName);
+					serverConfiguration =
+						test.getServerController().computeGenericConfiguration();
+					try {
+						serverConfiguration =
+							test.getServerController().save(serverConfiguration);
+					} catch (ServerConfigurationException e) {
+						fail("Unable to save server configuration: " + e.toString());
+					}
+					te.add(serverConfiguration);
+				}
+				logger.info(ServerConfigurationEntity.dump(serverConfiguration));
+				assertTrue(serverConfiguration != null);
+
+//		// Do the test
+//		testTransitivityProcessing(test.getSourceName(), TEST, externalId,
+//				transParams, oabaJob, serverConfiguration,
+//				test.getTransitivityService(), test.getJobController(),
+//				test.getParamsController(), test.getProcessingController(),
+//				test.getJmsContext(), resultQueue,
+//				test.getTransitivityStatusTopic(), test.getEm(), test.getUtx(),
+//				expectedEventId, expectedCompletion,
+//				test.getOabaProcessingPhase());
+//
+//		test.getLogger().exiting(test.getSourceName(), TEST);
+//	}
+//
+//	public static void testTransitivityProcessing(final String LOG_SOURCE,
+//			final String tag, final String externalId,
+//			final TransitivityParameters bp, final OabaJob oabaJob,
+//			final ServerConfiguration serverConfiguration,
+
+			// FIXME STUBBED
+			final OabaJob oabaJob = null;
+			// END FIXME
+
+			final TransitivityService transitivityService = test.getTransitivityService();
+			final OabaJobControllerBean jobController = test.getJobController();
+			final OabaParametersControllerBean paramsController = test.getParamsController();
+			final OabaProcessingController processingController = test.getProcessingController();
+			final JMSContext jmsContext = test.getJmsContext();
+			final Queue listeningQueue = resultQueue;
+			final Topic transStatusUpdate = test.getTransitivityStatusTopic();
+			final EntityManager em = test.getEm();
+			final UserTransaction utx = test.getUtx();
+			final float expectPercentDone = expectedCompletion;
+			final OabaProcessingPhase oabaPhase = test.getOabaProcessingPhase();
+//			) {
+//		logger.entering(LOG_SOURCE, tag);
+
 		// Preconditions
 		if (externalId == null || bp == null || LOG_SOURCE == null
 				|| tag == null || oabaJob == null
@@ -196,25 +236,25 @@ public class TransitivityMdbTestProcedures {
 			throw new IllegalArgumentException("null argument");
 		}
 		validateQueue(oabaPhase, listeningQueue);
-	
+
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
-//		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
+		// final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
 		final boolean isDeduplication =
 			OabaLinkageType.STAGING_DEDUPLICATION == bp.getOabaLinkageType();
-	
-		TestEntities te = new TestEntities();
+
+//		final TestEntityCounts te = test.getTestEntityCounts();
 		te.add(bp);
-	
+
 		long jobId = INVALID_ID;
 		try {
-			final OabaLinkageType linkage = bp.getOabaLinkageType();
+//			final OabaLinkageType linkage = bp.getOabaLinkageType();
 			switch (linkage) {
 			case TRANSITIVITY_ANALYSIS:
 				logger.info(tag
 						+ ": invoking BatchQueryService.startDeduplication");
 				jobId =
-					transitivityService.startTransitivity(externalId, bp, oabaJob,
-							serverConfiguration);
+					transitivityService.startTransitivity(externalId, transParams,
+							oabaJob, serverConfiguration);
 				logger.info(tag
 						+ ": returned from BatchQueryService.startDeduplication");
 				break;
@@ -230,12 +270,12 @@ public class TransitivityMdbTestProcedures {
 		te.add(batchJob);
 		assertTrue(externalId != null
 				&& externalId.equals(batchJob.getExternalId()));
-	
+
 		// Find the persistent OabaParameters object created by the call to
 		// BatchQueryService.startLinkage...
 		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
 		te.add(params);
-	
+
 		// Validate that the job parameters are correct
 		assertTrue(params != null);
 		assertTrue(params.getLowThreshold() == bp.getLowThreshold());
@@ -255,7 +295,7 @@ public class TransitivityMdbTestProcedures {
 		assertTrue(params.getModelConfigurationName() != null
 				&& params.getModelConfigurationName().equals(
 						bp.getModelConfigurationName()));
-	
+
 		if (isIntermediateExpected) {
 			// Check that OABA processing completed and sent out a
 			// message on the intermediate result queue
@@ -285,44 +325,40 @@ public class TransitivityMdbTestProcedures {
 		OabaNotification updateMessage = null;
 		if (oabaPhase == OabaProcessingPhase.INTERMEDIATE) {
 			// FIXME
-//			updateMessage =
-//				JmsUtils.receiveLatestUpdateMessage(LOG_SOURCE, jmsContext,
-//						updateQueue, JmsUtils.SHORT_TIMEOUT_MILLIS);
+			// updateMessage =
+			// JmsUtils.receiveLatestUpdateMessage(LOG_SOURCE, jmsContext,
+			// updateQueue, JmsUtils.SHORT_TIMEOUT_MILLIS);
 		} else if (oabaPhase == OabaProcessingPhase.FINAL) {
 			// FIXME
-//			updateMessage =
-//				JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
-//						updateQueue, VERY_LONG_TIMEOUT_MILLIS);
+			// updateMessage =
+			// JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
+			// updateQueue, VERY_LONG_TIMEOUT_MILLIS);
 		} else {
 			throw new Error("unexpected phase: " + oabaPhase);
 		}
 		assertTrue(updateMessage != null);
 		assertTrue(updateMessage.getJobId() == jobId);
 		assertTrue(updateMessage.getJobPercentComplete() == expectPercentDone);
-	
+
 		// Find the entry in the processing history updated by the OABA
 		OabaEventLog processingEntry =
 			processingController.getProcessingLog(batchJob);
-//		te.add(processingEntry);
-	
+		// te.add(processingEntry);
+
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);
 		assertTrue(processingEntry.getCurrentOabaEventId() == expectedEventId);
-	
-		try {
-			te.removePersistentObjects(em, utx);
-		} catch (Exception x) {
-			logger.severe(x.toString());
-			fail(x.toString());
-		}
-	
+
+		// Check the number of test entities that were created
+		test.checkCounts();
+
 		logger.exiting(LOG_SOURCE, tag);
 	}
 
 	private static void validateQueue(OabaProcessingPhase oabaPhase,
 			Queue listeningQueue) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public static void validateQueues(OabaProcessingPhase oabaPhase,
@@ -367,7 +403,7 @@ public class TransitivityMdbTestProcedures {
 			throw new Error(msg);
 		}
 	}
-	
+
 	protected static OabaJob doOabaProcessing(final String LOG_SOURCE,
 			final String tag, final String externalId, final OabaParameters bp,
 			final OabaSettings oabaSettings,
@@ -375,10 +411,9 @@ public class TransitivityMdbTestProcedures {
 			final OabaService batchQuery,
 			final OabaJobControllerBean jobController,
 			final OabaProcessingController processingController,
-			final JMSContext jmsContext,
-			final Topic statusTopic) {
+			final JMSContext jmsContext, final Topic statusTopic) {
 		logger.entering(LOG_SOURCE, tag);
-	
+
 		// Preconditions
 		if (externalId == null || bp == null || LOG_SOURCE == null
 				|| tag == null || oabaSettings == null
@@ -387,7 +422,7 @@ public class TransitivityMdbTestProcedures {
 				|| jmsContext == null || statusTopic == null) {
 			throw new IllegalArgumentException("null argument");
 		}
-	
+
 		long jobId = INVALID_ID;
 		try {
 			final OabaLinkageType linkage = bp.getOabaLinkageType();
@@ -417,26 +452,29 @@ public class TransitivityMdbTestProcedures {
 			fail(e.toString());
 		}
 		OabaJob batchJob = jobController.findOabaJob(jobId);
-	
+
 		// Check that OABA processing sent out an expected status
 		// on the update queue
 		logger.info("Checking updateQueue");
 		OabaNotification updateMessage = null;
 		// FIXME
-//			updateMessage =
-//				JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
-//						statusTopic, VERY_LONG_TIMEOUT_MILLIS);
+		// updateMessage =
+		// JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
+		// statusTopic, VERY_LONG_TIMEOUT_MILLIS);
 		assertTrue(updateMessage != null);
 		assertTrue(updateMessage.getJobId() == jobId);
 		assertTrue(updateMessage.getJobPercentComplete() == PCT_DONE_OABA);
-	
+
 		// Find the entry in the processing history updated by the OABA
 		OabaEventLog processingEntry =
 			processingController.getProcessingLog(batchJob);
 		assertTrue(processingEntry != null);
 		assertTrue(processingEntry.getCurrentOabaEventId() == EVT_DONE_OABA);
-	
+
 		return batchJob;
+	}
+
+	private TransitivityMdbTestProcedures() {
 	}
 
 }

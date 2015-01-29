@@ -23,7 +23,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.utils.BatchJobUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.TestEntities;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
 /**
@@ -81,28 +80,6 @@ public class OabaTestControllerBean implements OabaTestController {
 	}
 
 	@Override
-	@Deprecated
-	public OabaParametersEntity createBatchParameters(String tag,
-			TestEntities te) {
-		if (te == null) {
-			throw new IllegalArgumentException("null test entities");
-		}
-		Thresholds thresholds = createRandomThresholds();
-		PersistableRecordSource stage =
-			EntityManagerUtils.createFakePersistableRecordSource(tag);
-		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
-		PersistableRecordSource master =
-			EntityManagerUtils.createFakePersistableRecordSource(tag, task);
-		OabaParametersEntity retVal =
-			new OabaParametersEntity(createRandomModelConfigurationName(tag),
-					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master, task);
-		paramsController.save(retVal);
-		te.add(retVal);
-		return retVal;
-	}
-
-	@Override
 	public OabaParametersEntity createBatchParameters(String tag,
 			TestEntityCounts te) {
 		if (te == null) {
@@ -126,11 +103,6 @@ public class OabaTestControllerBean implements OabaTestController {
 	@Override
 	public ServerConfiguration getDefaultServerConfiguration() {
 		return BatchJobUtils.getDefaultServerConfiguration(serverController);
-	}
-
-	@Override
-	public void removeTestEntities(TestEntities te) {
-		EntityManagerUtils.removeTestEntities(em, te);
 	}
 
 	@Override

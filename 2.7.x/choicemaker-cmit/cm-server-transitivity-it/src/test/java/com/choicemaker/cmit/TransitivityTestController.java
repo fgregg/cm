@@ -12,7 +12,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cmit.utils.TestEntities;
+import com.choicemaker.cmit.utils.TestEntityCounts;
 
 @Local
 public interface TransitivityTestController {
@@ -25,11 +25,11 @@ public interface TransitivityTestController {
 
 	Thresholds createRandomThresholds();
 
-	OabaParametersEntity createOabaParameters(String tag, TestEntities te);
+	OabaParametersEntity createOabaParameters(String tag, TestEntityCounts te);
 
 	ServerConfiguration getDefaultServerConfiguration();
 
-	void removeTestEntities(TestEntities te);
+//	void removeTestEntities(TestEntityCounts te);
 
 	List<OabaParameters> findAllOabaParameters();
 

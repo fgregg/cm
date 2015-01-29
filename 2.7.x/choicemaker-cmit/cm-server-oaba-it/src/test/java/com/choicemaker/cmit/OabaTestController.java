@@ -10,7 +10,6 @@ import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cmit.utils.TestEntities;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
 @Local
@@ -24,14 +23,9 @@ public interface OabaTestController {
 
 	Thresholds createRandomThresholds();
 
-	@Deprecated
-	OabaParametersEntity createBatchParameters(String tag, TestEntities te);
-
 	OabaParametersEntity createBatchParameters(String tag, TestEntityCounts te);
 
 	ServerConfiguration getDefaultServerConfiguration();
-
-	void removeTestEntities(TestEntities te);
 
 	List<OabaParameters> findAllOabaParameters();
 

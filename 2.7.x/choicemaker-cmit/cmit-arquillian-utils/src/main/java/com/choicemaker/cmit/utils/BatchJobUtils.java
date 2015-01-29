@@ -48,7 +48,7 @@ public class BatchJobUtils {
 	 */
 	public static OabaJobEntity createEphemeralOabaJobEntity(int maxSingleLimit,
 			UserTransaction utx, ServerConfiguration sc, EntityManager em,
-			TestEntities te, String s, boolean isTag) {
+			TestEntityCounts te, String s, boolean isTag) {
 		final String METHOD = "createEphemeralOabaJob";
 		if (utx == null || sc == null || em == null || te == null) {
 			throw new IllegalArgumentException("null argument");
@@ -89,7 +89,7 @@ public class BatchJobUtils {
 
 	/** Creates an ephemeral instance of OabaParametersEntity */
 	public static OabaParametersEntity createEphemeralOabaParameters(
-			String tag, TestEntities te) {
+			String tag, TestEntityCounts te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -112,7 +112,7 @@ public class BatchJobUtils {
 	 * the returned OabaJob is synthesized using the specified tag.
 	 */
 	public static OabaParametersEntity createPersistentOabaParameters(
-			EntityManager em, String tag, TestEntities te) {
+			EntityManager em, String tag, TestEntityCounts te) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
@@ -124,7 +124,7 @@ public class BatchJobUtils {
 	/** Creates an ephemeral instance of OabaSettingsEntity */
 	public static OabaSettingsEntity createEphemeralOabaSettings(
 			int maxSingleLimit,
-			TestEntities te) {
+			TestEntityCounts te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -159,7 +159,7 @@ public class BatchJobUtils {
 	 * returned OabaJob is synthesized using the specified tag.
 	 */
 	public static OabaSettingsEntity createPersistentOabaSettings(int maxSingleLimit,
-			EntityManager em, TestEntities te) {
+			EntityManager em, TestEntityCounts te) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
@@ -177,7 +177,7 @@ public class BatchJobUtils {
 
 	public static TransitivityJob createEphemeralTransitivityJob(
 			int maxSingleLimit, UserTransaction utx, ServerConfiguration sc,
-			EntityManager em, TestEntities te, OabaJob oabaJob, String s,
+			EntityManager em, TestEntityCounts te, OabaJob oabaJob, String s,
 			boolean isTag) {
 		final String METHOD = "createEphemeralTransitivityJob";
 		if (utx == null || sc == null || em == null || te == null
@@ -207,7 +207,7 @@ public class BatchJobUtils {
 
 	/** Creates an ephemeral instance of TransitivityParametersEntity */
 	public static TransitivityParametersEntity createEphemeralTransitivityParameters(
-			String tag, TestEntities te) {
+			String tag, TestEntityCounts te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -231,7 +231,7 @@ public class BatchJobUtils {
 	 * specified tag.
 	 */
 	public static TransitivityParametersEntity createPersistentTransitivityParameters(
-			EntityManager em, TestEntities te, String tag) {
+			EntityManager em, TestEntityCounts te, String tag) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}

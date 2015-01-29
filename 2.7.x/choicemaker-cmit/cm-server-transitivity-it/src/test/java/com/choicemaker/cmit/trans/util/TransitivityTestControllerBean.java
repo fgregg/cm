@@ -26,7 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfig
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
-import com.choicemaker.cmit.utils.TestEntities;
+import com.choicemaker.cmit.utils.TestEntityCounts;
 
 /**
  * An EJB used to test TransitivityJob beans within container-defined
@@ -82,7 +82,7 @@ public class TransitivityTestControllerBean implements
 	}
 
 	public OabaParametersEntity createOabaParameters(String tag,
-			TestEntities te) {
+			TestEntityCounts te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -111,9 +111,9 @@ public class TransitivityTestControllerBean implements
 		return retVal;
 	}
 
-	public void removeTestEntities(TestEntities te) {
-		EntityManagerUtils.removeTestEntities(em, te);
-	}
+//	public void removeTestEntities(TestEntityCounts te) {
+//		EntityManagerUtils.removeTestEntities(em, te);
+//	}
 
 	public List<OabaParameters> findAllOabaParameters() {
 		return EntityManagerUtils.findAllOabaParameters(em);

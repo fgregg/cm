@@ -41,7 +41,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.StartOabaMDB
 import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchJobUtils;
-import com.choicemaker.cmit.utils.BatchJobUtils2;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
 @RunWith(Arquillian.class)
@@ -148,7 +147,7 @@ public class OperationalPropertyControllerBeanIT {
 		if (sc == null) {
 			sc = serverController.computeGenericConfiguration();
 		}
-		return BatchJobUtils2.createEphemeralOabaJobEntity(MAX_SINGLE_LIMIT,
+		return BatchJobUtils.createEphemeralOabaJobEntity(MAX_SINGLE_LIMIT,
 				utx, sc, em, te, tag, isTag);
 	}
 
