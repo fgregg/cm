@@ -26,7 +26,10 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
  * thread-safe, so it should be used only within the scope of a method.
  * 
  * @author rphall
+ * @deprecated
+ * @see TestEntityCounts
  */
+@Deprecated
 public class TestEntities {
 
 	private static final Logger logger = Logger.getLogger(TestEntities.class
