@@ -59,13 +59,13 @@ public class RecordIdControllerBean implements RecordIdController {
 	 * This gets the factory that is used to get translator id sink and source.
 	 */
 	private static RecordIdSinkSourceFactory getTransIDFactory(BatchJob job) {
-		String wd = OabaFileUtils.getWorkingDir(job);
+		String wd = BatchJobFileUtils.getWorkingDir(job);
 		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_TRANSLATOR,
 				BatchJobFileUtils.BINARY_SUFFIX);
 	}
 
 	private static RecordIdSinkSourceFactory getRecordIDFactory(BatchJob job) {
-		String wd = OabaFileUtils.getWorkingDir(job);
+		String wd = BatchJobFileUtils.getWorkingDir(job);
 		return new RecordIdSinkSourceFactory(wd, BASENAME_RECORDID_STORE,
 				BatchJobFileUtils.TEXT_SUFFIX);
 	}

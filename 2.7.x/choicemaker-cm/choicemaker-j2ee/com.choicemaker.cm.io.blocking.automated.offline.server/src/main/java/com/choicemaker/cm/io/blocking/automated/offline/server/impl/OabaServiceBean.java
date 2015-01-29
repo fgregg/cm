@@ -39,6 +39,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMAT;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2Source;
@@ -268,7 +269,7 @@ public class OabaServiceBean implements OabaService {
 	public boolean removeDir(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
 		OabaJob job = jobController.findOabaJob(jobID);
-		return OabaFileUtils.removeTempDir(job);
+		return BatchJobFileUtils.removeTempDir(job);
 	}
 
 	/**
