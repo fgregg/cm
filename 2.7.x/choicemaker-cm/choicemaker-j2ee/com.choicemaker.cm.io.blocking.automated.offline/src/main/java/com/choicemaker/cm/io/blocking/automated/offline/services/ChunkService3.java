@@ -529,6 +529,7 @@ public class ChunkService3 {
 						context =
 							"writing record[" + count + "] to sink[" + i + "]";
 						recordSinks[i].put(r);
+						// recordSinks[i].flush(); // FIXME REMOVEME ?
 						if (crSources[i].hasNext()) {
 							ind[i] = crSources[i].next();
 						}
