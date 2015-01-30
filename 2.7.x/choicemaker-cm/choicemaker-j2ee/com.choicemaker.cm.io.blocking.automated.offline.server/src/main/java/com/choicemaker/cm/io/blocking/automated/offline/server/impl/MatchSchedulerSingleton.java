@@ -85,7 +85,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 		final long jobId = oabaJob.getId();
 		OabaParameters params =
-			getParametersController().findBatchParamsByJobId(jobId);
+			getParametersController().findOabaParametersByJobId(jobId);
 		ServerConfiguration serverConfig =
 			getServerController().findServerConfigurationByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();

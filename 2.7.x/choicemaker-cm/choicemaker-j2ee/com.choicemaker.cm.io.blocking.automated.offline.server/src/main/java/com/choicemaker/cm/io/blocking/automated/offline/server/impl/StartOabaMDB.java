@@ -90,7 +90,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				final long jobId = data.jobID;
 				oabaJob = getJobController().findOabaJob(jobId);
 				OabaParameters params =
-					getParametersController().findBatchParamsByJobId(jobId);
+					getParametersController().findOabaParametersByJobId(jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				OabaEventLog processingEntry =

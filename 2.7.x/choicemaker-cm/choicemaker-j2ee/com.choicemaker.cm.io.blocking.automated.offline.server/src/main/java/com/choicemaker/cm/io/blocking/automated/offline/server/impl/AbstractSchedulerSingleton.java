@@ -74,7 +74,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -143,7 +143,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		return jobController;
 	}
 
-	protected OabaParametersControllerBean getParametersController() {
+	protected OabaParametersController getParametersController() {
 		return paramsController;
 	}
 
@@ -183,7 +183,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					final long jobId = sd.jobID;
 					oabaJob = getJobController().findOabaJob(jobId);
 					OabaParameters params =
-						getParametersController().findBatchParamsByJobId(jobId);
+						getParametersController().findOabaParametersByJobId(jobId);
 					OabaSettings oabaSettings =
 						getSettingsController().findOabaSettingsByJobId(jobId);
 					ServerConfiguration serverConfig =
@@ -409,7 +409,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 			// set up the record source arrays.
 			OabaParameters oabaParams =
-				getParametersController().findBatchParamsByJobId(jobId);
+				getParametersController().findOabaParametersByJobId(jobId);
 			String modelName = oabaParams.getModelConfigurationName();
 			ImmutableProbabilityModel ipm =
 				PMManager.getImmutableModelInstance(modelName);
@@ -497,7 +497,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		final long jobId = sd.jobID;
 		final OabaJob oabaJob = getJobController().findOabaJob(jobId);
 		final OabaParameters params =
-			getParametersController().findBatchParamsByJobId(jobId);
+			getParametersController().findOabaParametersByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
 		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);

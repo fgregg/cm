@@ -116,7 +116,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaProcessingController processingController;
@@ -148,7 +148,7 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 				final long jobId = data.jobID;
 				oabaJob = jobController.findOabaJob(jobId);
 				OabaParameters params =
-					paramsController.findBatchParamsByJobId(jobId);
+					paramsController.findOabaParametersByJobId(jobId);
 				OabaSettings settings =
 					oabaSettingsController.findOabaSettingsByJobId(jobId);
 

@@ -38,7 +38,7 @@ public class TransitivityJobControllerBean {
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-	@EJB
+//	@EJB
 	private TransitivityParametersControllerBean paramsController;
 
 	@EJB

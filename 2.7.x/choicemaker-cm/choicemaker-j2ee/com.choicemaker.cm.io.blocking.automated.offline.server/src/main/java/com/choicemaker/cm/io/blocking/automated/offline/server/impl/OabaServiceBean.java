@@ -215,6 +215,7 @@ public class OabaServiceBean implements OabaService {
 					oabaSettings, serverConfiguration);
 		final long retVal = oabaJob.getId();
 		assert BatchJob.INVALID_ID != retVal;
+		logger.info("Started offline matching (job id: " + retVal + ")");
 
 		// Mark the job as queued and start processing by the StartOabaMDB EJB
 		oabaJob.markAsQueued();

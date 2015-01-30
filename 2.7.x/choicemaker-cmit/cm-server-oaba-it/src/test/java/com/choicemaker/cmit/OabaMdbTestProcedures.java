@@ -29,7 +29,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
@@ -233,9 +233,9 @@ public class OabaMdbTestProcedures {
 
 		// Find the persistent OabaParameters object created by the call to
 		// BatchQueryService.startLinkage...
-		final OabaParametersControllerBean paramsController =
+		final OabaParametersController paramsController =
 			test.getParamsController();
-		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
+		OabaParameters params = paramsController.findOabaParametersByJobId(jobId);
 		te.add(params);
 
 		// Validate that the job parameters are correct

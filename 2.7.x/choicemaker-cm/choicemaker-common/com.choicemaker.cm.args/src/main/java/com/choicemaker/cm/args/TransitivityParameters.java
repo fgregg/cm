@@ -41,4 +41,6 @@ public interface TransitivityParameters {
 
 	IGraphProperty getGraphProperty();
 
+	OabaParameters asOabaParameters();
+
 }

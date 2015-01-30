@@ -60,7 +60,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaProcessingController processingController;
@@ -95,7 +95,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 		return oabaSettingsController;
 	}
 
-	protected final OabaParametersControllerBean getParametersController() {
+	protected final OabaParametersController getParametersController() {
 		return paramsController;
 	}
 
@@ -137,7 +137,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				final long jobId = oabaMsg.jobID;
 				oabaJob = getJobController().findOabaJob(jobId);
 				OabaParameters oabaParams =
-					getParametersController().findBatchParamsByJobId(jobId);
+					getParametersController().findOabaParametersByJobId(jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				OabaEventLog processingLog =

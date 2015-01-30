@@ -88,41 +88,47 @@ public class OabaParametersEntity implements Serializable, OabaParameters {
 		}
 		return retVal;
 	}
+	
+	public static final String DEFAULT_DUMP_TAG = "BP";
 
 	public static String dump(OabaParameters p) {
+		return dump(DEFAULT_DUMP_TAG, p);
+	}
+
+	public static String dump(String tag, OabaParameters p) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 
-		pw.println("Blocking parameters (BP)");
+		pw.println("Blocking parameters (" + tag + ")");
 		if (p == null) {
-			pw.println("BP: null batch parameters");
+			pw.println(tag + ": null batch parameters");
 		} else {
-			pw.println("BP: DIFFER threshold: " + p.getLowThreshold());
-			pw.println("BP: MATCH threshold: " + p.getHighThreshold());
-			pw.println("BP: Model configuration name: "
+			pw.println(tag + ": DIFFER threshold: " + p.getLowThreshold());
+			pw.println(tag + ": MATCH threshold: " + p.getHighThreshold());
+			pw.println(tag + ": Model configuration name: "
 					+ p.getModelConfigurationName());
 			final OabaLinkageType task = p.getOabaLinkageType();
-			pw.print("BP: Linkage task: " + task);
+			pw.print(tag + ": Linkage task: " + task);
 			if (task == OabaLinkageType.STAGING_DEDUPLICATION) {
 				pw.println(" (deduplicating a single record source)");
-				pw.println("BP: Staging record source: " + p.getStageRsId());
-				pw.println("BP: Staging record source type: "
+				pw.println(tag + ": Staging record source: " + p.getStageRsId());
+				pw.println(tag + ": Staging record source type: "
 						+ p.getStageRsType());
 			} else if (task == OabaLinkageType.STAGING_TO_MASTER_LINKAGE) {
 				pw.println(" (linking a staging source to a master source)");
-				pw.println("BP: Staging record source: " + p.getStageRsId());
-				pw.println("BP: Staging record source type: "
+				pw.println(tag + ": Staging record source: " + p.getStageRsId());
+				pw.println(tag + ": Staging record source type: "
 						+ p.getStageRsType());
-				pw.println("BP: Master record source: " + p.getMasterRsId());
-				pw.println("BP: Master record source type: "
+				pw.println(tag + ": Master record source: " + p.getMasterRsId());
+				pw.println(tag + ": Master record source type: "
 						+ p.getMasterRsType());
 			} else if (task == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
 				pw.println(" (linking a master source to a master source)");
-				pw.println("BP: Master record source 1: " + p.getStageRsId());
-				pw.println("BP: Master record source 1 type: "
+				pw.println(tag + ": Master record source 1: " + p.getStageRsId());
+				pw.println(tag + ": Master record source 1 type: "
 						+ p.getStageRsType());
-				pw.println("BP: Master record source 2: " + p.getMasterRsId());
-				pw.println("BP: Master record source 2 type: "
+				pw.println(tag + ": Master record source 2: " + p.getMasterRsId());
+				pw.println(tag + ": Master record source 2 type: "
 						+ p.getMasterRsType());
 			} else {
 				throw new IllegalArgumentException("unexpected task type: "

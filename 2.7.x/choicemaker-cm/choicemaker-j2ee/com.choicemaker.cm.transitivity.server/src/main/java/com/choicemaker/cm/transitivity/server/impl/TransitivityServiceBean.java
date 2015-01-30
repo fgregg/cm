@@ -26,6 +26,7 @@ import javax.jms.Queue;
 //import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
@@ -33,7 +34,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
@@ -51,12 +52,12 @@ public class TransitivityServiceBean implements TransitivityService {
 			.getSimpleName();
 
 	protected static void logStartParameters(String externalID,
-			TransitivityParameters tp, OabaJob oabaJob, ServerConfiguration sc) {
+			TransitivityParameters tp, OabaJob oabaJob,
+			OabaParameters oabaParams, ServerConfiguration sc) {
 		final StringWriter sw = new StringWriter();
 		final PrintWriter pw = new PrintWriter(sw);
 		pw.println("External id: " + externalID);
-		pw.println(TransitivityParametersEntity.dump(tp));
-		pw.println(OabaJobEntity.dump(oabaJob));
+		pw.println(TransitivityParametersEntity.dump(tp, oabaJob, oabaParams));
 		pw.println(ServerConfigurationEntity.dump(sc));
 		String msg = sw.toString();
 		log.info(msg);
@@ -88,6 +89,9 @@ public class TransitivityServiceBean implements TransitivityService {
 	}
 
 	@EJB
+	OabaParametersController oabaParamsController;
+
+	@EJB
 	TransitivityJobControllerBean jobController;
 
 	@Resource(name = "jms/transitivityQueue",
@@ -98,25 +102,27 @@ public class TransitivityServiceBean implements TransitivityService {
 	private JMSContext context;
 
 	@Override
-	public long startTransitivity(String externalID,
-			TransitivityParameters batchParams, OabaJob oabaJob,
-			ServerConfiguration serverConfiguration)
+	public long startTransitivity(String externalID, TransitivityParameters tp,
+			OabaJob oabaJob, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
 
 		final String METHOD = "startTransitivity";
 		log.entering(SOURCE_CLASS, METHOD);
 
-		logStartParameters(externalID, batchParams, oabaJob,
-				serverConfiguration);
-		validateStartParameters(externalID, batchParams, oabaJob,
+		validateStartParameters(externalID, tp, oabaJob, serverConfiguration);
+
+		OabaParameters oabaParams =
+			oabaParamsController.findOabaParametersByJobId(oabaJob.getId());
+		logStartParameters(externalID, tp, oabaJob, oabaParams,
 				serverConfiguration);
 
 		// Create and persist a transitivity job and its associated objects
 		TransitivityJob transJob =
-			jobController.createPersistentTransitivityJob(externalID,
-					batchParams, oabaJob, serverConfiguration);
+			jobController.createPersistentTransitivityJob(externalID, tp,
+					oabaJob, serverConfiguration);
 		final long retVal = transJob.getId();
 		assert BatchJob.INVALID_ID != retVal;
+		log.info("Started transitivity analysis (job id: " + retVal + ")");
 
 		// Mark the job as queued and start processing by the
 		// StartTransitivityMDB EJB

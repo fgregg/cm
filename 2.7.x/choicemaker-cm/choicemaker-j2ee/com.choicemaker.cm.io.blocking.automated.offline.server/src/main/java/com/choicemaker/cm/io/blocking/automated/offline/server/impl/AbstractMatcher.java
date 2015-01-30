@@ -92,7 +92,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaProcessingController processingController;
@@ -121,7 +121,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 		return jobController;
 	}
 
-	protected OabaParametersControllerBean getParametersController() {
+	protected OabaParametersController getParametersController() {
 		return paramsController;
 	}
 
@@ -166,7 +166,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 					oabaJob = getJobController().findOabaJob(jobId);
 					final OabaParameters params =
-						getParametersController().findBatchParamsByJobId(jobId);
+						getParametersController().findOabaParametersByJobId(jobId);
 					final OabaEventLog processingLog =
 						getProcessingController().getProcessingLog(oabaJob);
 					final OabaSettings oabaSettings =

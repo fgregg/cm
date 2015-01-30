@@ -47,7 +47,7 @@ public class OabaJobControllerBean {
 	private EntityManager em;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;

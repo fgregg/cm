@@ -3,6 +3,7 @@ package com.choicemaker.cmit.oaba;
 import static org.junit.Assert.assertTrue;
 //import static org.junit.Assert.fail;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdSink;
@@ -141,7 +142,7 @@ public class RecordIdControllerBeanIT {
 	private OabaJobControllerBean jobController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;

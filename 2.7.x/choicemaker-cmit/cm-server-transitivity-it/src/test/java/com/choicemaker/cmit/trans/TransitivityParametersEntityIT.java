@@ -1,4 +1,4 @@
-package com.choicemaker.cmit.oaba;
+package com.choicemaker.cmit.trans;
 
 import static org.junit.Assert.assertTrue;
 
@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
@@ -29,49 +30,50 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cmit.OabaTestController;
-import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersControllerBean;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
+import com.choicemaker.cmit.TransitivityTestController;
+import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
 @RunWith(Arquillian.class)
-public class OabaParametersEntityIT {
+public class TransitivityParametersEntityIT {
 
 	private static final Logger logger = Logger
-			.getLogger(OabaParametersEntityIT.class.getName());
+			.getLogger(TransitivityParametersEntityIT.class.getName());
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
 		Class<?>[] removedClasses = null;
-		return OabaDeploymentUtils.createEarArchive(removedClasses,
+		return TransitivityDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}
 
 	public final int MAX_TEST_ITERATIONS = 10;
 
 	@EJB
-	protected OabaTestController oabaTestControllerBean;
+	protected TransitivityTestController transTestController;
+
+	@EJB
+	//protected TransitivityTestController transTestController;
 
 	@Resource
-	UserTransaction utx;
+	private UserTransaction utx;
 
 	@PersistenceContext(unitName = "oaba")
-	EntityManager em;
+	private EntityManager em;
 
 	@EJB
 	private OabaJobControllerBean oabaController;
 
 	@EJB
-	protected OabaTestController oabaTestController;
-
-	@EJB
 	private OabaJobControllerBean jobController;
 
 	@EJB
-	private OabaParametersController paramsController;
+	private TransitivityParametersControllerBean paramsController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -127,27 +129,27 @@ public class OabaParametersEntityIT {
 		assertTrue(em != null);
 		assertTrue(utx != null);
 		assertTrue(paramsController != null);
-		assertTrue(oabaTestControllerBean != null);
+		assertTrue(transTestController != null);
 	}
 
 	@Test
 	public void testPersistFindRemove() {
 		final String METHOD = "testPersistFindRemove";
 
-		// Create a params
-		OabaParametersEntity params =
-			oabaTestControllerBean.createBatchParameters(METHOD, te);
+		// Create parameters
+		TransitivityParameters params =
+			transTestController.createTransitivityParameters(METHOD, te);
 
-		// Save the params
+		// Save the parameters
 		paramsController.save(params);
 		assertTrue(params.getId() != 0);
 
-		// Find the params
+		// Find the parameters
 		OabaParameters batchParameters2 = paramsController.findOabaParameters(params.getId());
 		assertTrue(params.getId() == batchParameters2.getId());
 		assertTrue(params.equals(batchParameters2));
 
-		// Delete the params
+		// Delete the parameters
 		paramsController.delete(batchParameters2);
 		OabaParameters batchParameters3 = paramsController.findOabaParameters(params.getId());
 		assertTrue(batchParameters3 == null);
@@ -159,14 +161,21 @@ public class OabaParametersEntityIT {
 	public void testEqualsHashCode() {
 		final String METHOD = "testEqualsHashCode";
 
-		// Create two generic parameter sets, only one of which is persistent,
-		// and verify inequality
-		OabaParametersEntity params1 =
-			oabaTestControllerBean.createBatchParameters(METHOD, te);
-		OabaParametersEntity params2 = new OabaParametersEntity(params1);
+		final TransitivityParameters params1 =
+				transTestController.createTransitivityParameters(METHOD, te);
+		final TransitivityParameters params2 = new TransitivityParametersEntity(params1);
 		te.add(params2);
 		assertTrue(!params1.equals(params2));
 		assertTrue(params1.hashCode() != params2.hashCode());
+		
+		final TransitivityParameters params1P =
+				paramsController.save(params1);
+		te.add(params1P);
+		assertTrue(!params1.equals(params1P));
+		final TransitivityParameters params2P =
+				paramsController.save(params2);
+		te.add(params2P);
+		assertTrue(!params2.equals(params2P));
 
 		checkCounts();
 	}
@@ -177,9 +186,9 @@ public class OabaParametersEntityIT {
 
 		// Create a params and set a value
 		OabaParametersEntity template =
-			oabaTestControllerBean.createBatchParameters(METHOD, te);
+			transTestController.createTransitivityParameters(METHOD, te);
 		final String v1 =
-			oabaTestControllerBean.createRandomModelConfigurationName(METHOD);
+			transTestController.createRandomModelConfigurationName(METHOD);
 		OabaParameters params =
 			new OabaParametersEntity(v1, template.getLowThreshold(),
 					template.getHighThreshold(), template.getStageRsId(),
@@ -208,8 +217,8 @@ public class OabaParametersEntityIT {
 
 		// Create parameters with known values
 		OabaParametersEntity template =
-			oabaTestControllerBean.createBatchParameters(METHOD, te);
-		final Thresholds t = oabaTestControllerBean.createRandomThresholds();
+				transTestController.createTransitivityParameters(METHOD, te);
+		final Thresholds t = transTestController.createRandomThresholds();
 		OabaParameters params =
 			new OabaParametersEntity(template.getModelConfigurationName(),
 					t.getDifferThreshold(), t.getMatchThreshold(),

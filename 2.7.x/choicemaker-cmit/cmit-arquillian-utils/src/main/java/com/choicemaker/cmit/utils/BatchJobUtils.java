@@ -50,8 +50,17 @@ public class BatchJobUtils {
 			UserTransaction utx, ServerConfiguration sc, EntityManager em,
 			TestEntityCounts te, String s, boolean isTag) {
 		final String METHOD = "createEphemeralOabaJob";
-		if (utx == null || sc == null || em == null || te == null) {
-			throw new IllegalArgumentException("null argument");
+		if (utx == null) {
+			throw new IllegalArgumentException("null transaction");
+		}
+		if (sc == null) {
+			throw new IllegalArgumentException("null server configuration");
+		}
+		if (em == null) {
+			throw new IllegalArgumentException("null entity manager");
+		}
+		if (te == null) {
+			throw new IllegalArgumentException("null test-entity counts");
 		}
 		OabaJobEntity retVal = null;
 		try {

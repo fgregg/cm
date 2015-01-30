@@ -31,7 +31,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
@@ -213,7 +213,7 @@ public class TransitivityMdbTestProcedures {
 
 			final TransitivityService transitivityService = test.getTransitivityService();
 			final OabaJobControllerBean jobController = test.getJobController();
-			final OabaParametersControllerBean paramsController = test.getParamsController();
+			final OabaParametersController paramsController = test.getParamsController();
 			final OabaProcessingController processingController = test.getProcessingController();
 			final JMSContext jmsContext = test.getJmsContext();
 			final Queue listeningQueue = resultQueue;
@@ -273,7 +273,7 @@ public class TransitivityMdbTestProcedures {
 
 		// Find the persistent OabaParameters object created by the call to
 		// BatchQueryService.startLinkage...
-		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
+		OabaParameters params = paramsController.findOabaParametersByJobId(jobId);
 		te.add(params);
 
 		// Validate that the job parameters are correct

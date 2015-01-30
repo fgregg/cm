@@ -94,7 +94,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaProcessingController processingController;
@@ -185,7 +185,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final long jobId = d.jobID;
 		final OabaJob oabaJob = jobController.findOabaJob(jobId);
 		final OabaParameters params =
-			paramsController.findBatchParamsByJobId(jobId);
+			paramsController.findOabaParametersByJobId(jobId);
 		final ServerConfiguration serverConfig =
 			serverController.findServerConfigurationByJobId(jobId);
 		final OabaEventLog processingEntry =
@@ -225,7 +225,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 		final long jobId = oabaJob.getId();
 		final OabaParameters params =
-			paramsController.findBatchParamsByJobId(jobId);
+			paramsController.findOabaParametersByJobId(jobId);
 		final ServerConfiguration serverConfig =
 			serverController.findServerConfigurationByJobId(jobId);
 		final OabaEventLog processingEntry =

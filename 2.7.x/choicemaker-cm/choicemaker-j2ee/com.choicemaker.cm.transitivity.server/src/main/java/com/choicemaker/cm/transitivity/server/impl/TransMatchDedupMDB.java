@@ -38,7 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
@@ -71,7 +71,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 	TransitivityJobControllerBean jobController;
 
 	// @EJB
-	OabaParametersControllerBean paramsController;
+	OabaParametersController paramsController;
 
 	// @EJB
 	OabaProcessingController processingController;
@@ -140,7 +140,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 		log.fine("in handleMerge");
 
 		final long jobId = oabaJob.getId();
-		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
+		OabaParameters params = paramsController.findOabaParametersByJobId(jobId);
 
 		// init values
 		final String modelConfigId = params.getModelConfigurationName();

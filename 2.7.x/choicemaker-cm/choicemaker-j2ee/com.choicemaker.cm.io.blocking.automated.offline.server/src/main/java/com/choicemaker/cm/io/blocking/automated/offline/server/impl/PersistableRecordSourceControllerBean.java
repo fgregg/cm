@@ -31,7 +31,7 @@ public class PersistableRecordSourceControllerBean implements
 	private OabaJobControllerBean jobController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private SqlRecordSourceControllerBean sqlRsController;
