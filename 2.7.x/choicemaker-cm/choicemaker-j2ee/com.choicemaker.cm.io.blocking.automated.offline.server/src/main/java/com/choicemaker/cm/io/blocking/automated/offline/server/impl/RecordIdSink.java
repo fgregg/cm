@@ -48,7 +48,8 @@ public class RecordIdSink extends BaseFileSink implements IRecordIdSink {
 		}
 		try {
 			if (count == 0)
-				fw.write(getRecordIdTypeUnchecked().getStringSymbol() + LINE_SEPARATOR);
+				fw.write(getRecordIdTypeUnchecked().getStringSymbol()
+						+ LINE_SEPARATOR);
 
 			if (getRecordIdTypeUnchecked() == TYPE_INTEGER) {
 				Integer I = (Integer) o;

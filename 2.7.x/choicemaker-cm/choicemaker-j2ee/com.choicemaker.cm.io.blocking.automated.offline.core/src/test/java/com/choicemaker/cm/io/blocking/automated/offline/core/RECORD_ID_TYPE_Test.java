@@ -44,14 +44,14 @@ public class RECORD_ID_TYPE_Test {
 
 	@Test
 	public void testFromInstance() {
-		Integer i= Integer.valueOf(0);
+		Integer i = Integer.valueOf(0);
 		RECORD_ID_TYPE ritI = RECORD_ID_TYPE.fromInstance(i);
 		assertTrue(ritI.getRecordIdClass().equals(i.getClass()));
-		
+
 		Long l = Long.valueOf(0);
 		RECORD_ID_TYPE ritL = RECORD_ID_TYPE.fromInstance(l);
 		assertTrue(ritL.getRecordIdClass().equals(l.getClass()));
-		
+
 		String s = String.valueOf(0);
 		RECORD_ID_TYPE ritS = RECORD_ID_TYPE.fromInstance(s);
 		assertTrue(ritS.getRecordIdClass().equals(s.getClass()));

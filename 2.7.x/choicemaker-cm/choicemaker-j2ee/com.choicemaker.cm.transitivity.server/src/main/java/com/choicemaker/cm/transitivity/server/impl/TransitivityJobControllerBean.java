@@ -15,6 +15,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
+import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
@@ -102,7 +103,7 @@ public class TransitivityJobControllerBean {
 		OabaEventLog processing = processingController.getProcessingLog(null);
 
 		// Create the working directory
-		File workingDir = TransitivityFileUtils.createWorkingDirectory(sc, retVal);
+		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);
 		retVal.setWorkingDirectory(workingDir);
 
 		// Log the job info

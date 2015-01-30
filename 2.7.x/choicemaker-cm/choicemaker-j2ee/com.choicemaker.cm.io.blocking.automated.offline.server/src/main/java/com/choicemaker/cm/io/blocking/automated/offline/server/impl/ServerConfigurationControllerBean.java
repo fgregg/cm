@@ -44,7 +44,7 @@ public class ServerConfigurationControllerBean implements
 		int retVal = Runtime.getRuntime().availableProcessors();
 		return retVal;
 	}
-	
+
 	public static String computeHostName() {
 		// A hack to an unsolvable problem. See StackOverflow,
 		// "How do I get the local hostname if unresolvable through DNS?"

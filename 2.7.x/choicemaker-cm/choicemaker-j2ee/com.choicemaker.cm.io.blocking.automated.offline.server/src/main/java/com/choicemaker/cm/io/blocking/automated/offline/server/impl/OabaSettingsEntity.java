@@ -38,17 +38,22 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 			pw.println("null ABA/OABA settings");
 		} else {
 			pw.println("ABA/OABA: Settings id: " + s.getId());
-			pw.println("ABA: Limit per blocking set: " + s.getLimitPerBlockingSet());
-			pw.println("ABA: Limit for a single blocking set: " + s.getLimitSingleBlockingSet());
-			pw.println("ABA: Single-table blocking set limit: " + s.getSingleTableBlockingSetGraceLimit());
+			pw.println("ABA: Limit per blocking set: "
+					+ s.getLimitPerBlockingSet());
+			pw.println("ABA: Limit for a single blocking set: "
+					+ s.getLimitSingleBlockingSet());
+			pw.println("ABA: Single-table blocking set limit: "
+					+ s.getSingleTableBlockingSetGraceLimit());
 			pw.println("OABA: Threshold for batched-record blocking: "
 					+ s.getMaxSingle());
 			pw.println("OABA: Control loop interval: " + s.getInterval());
 			pw.println("OABA: Max block size: " + s.getMaxBlockSize());
 			pw.println("OABA: Max oversized block size: " + s.getMaxOversized());
-			pw.println("OABA: Min field count (oversized blocks): " + s.getMinFields());
+			pw.println("OABA: Min field count (oversized blocks): "
+					+ s.getMinFields());
 			pw.println("OABA: Max chunk size: " + s.getMaxChunkSize());
-			pw.println("OABA: Max matches per export file: " + s.getMaxMatches());
+			pw.println("OABA: Max matches per export file: "
+					+ s.getMaxMatches());
 		}
 		String retVal = sw.toString();
 		return retVal;

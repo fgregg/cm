@@ -229,8 +229,8 @@ public class BlockSource extends BaseFileSource<BlockSet> implements
 
 	@Override
 	public String toString() {
-		return "BlockSource [count=" + count + ", type=" + getType() + ", fileName="
-				+ fileName + "]";
+		return "BlockSource [count=" + count + ", type=" + getType()
+				+ ", fileName=" + fileName + "]";
 	}
 
 }

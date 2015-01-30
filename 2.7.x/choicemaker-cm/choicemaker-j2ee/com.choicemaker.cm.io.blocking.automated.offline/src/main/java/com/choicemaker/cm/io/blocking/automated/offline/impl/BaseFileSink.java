@@ -81,16 +81,17 @@ public abstract class BaseFileSink implements ISink {
 	@Override
 	public boolean isOpen() {
 		boolean retVal = false;
-			switch (type) {
-			case STRING:
-				retVal = fw != null;
-				break;
-			case BINARY:
-				retVal = dos != null;
-			default:
-				throw new IllegalArgumentException("invalid type: " + type);
-			}
-			return retVal;
+		switch (type) {
+		case STRING:
+			retVal = fw != null;
+			break;
+		case BINARY:
+			retVal = dos != null;
+			break;
+		default:
+			throw new IllegalArgumentException("invalid type: " + type);
+		}
+		return retVal;
 	}
 
 	@Override

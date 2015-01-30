@@ -53,11 +53,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(MatchSchedulerSingleton.class
-			.getName());
+	private static final Logger log = Logger
+			.getLogger(MatchSchedulerSingleton.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatchSchedulerSingleton.class.getName());
-	
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
 	private Queue matchDedupQueue;
 
