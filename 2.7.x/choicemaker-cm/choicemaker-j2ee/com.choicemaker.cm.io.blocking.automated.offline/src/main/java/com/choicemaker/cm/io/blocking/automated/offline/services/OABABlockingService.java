@@ -88,6 +88,7 @@ public class OABABlockingService {
 	private OversizedGroup osGroup;
 
 	private int numBlocks = 0; // number of blocks
+
 	private int numOS = 0; // number of "good" oversized blocks
 
 	private int numInvalid = 0; // number of invalid blocks as defined by the
