@@ -321,6 +321,7 @@ public class TestEntityCounts {
 					propertyController);
 			removeTranslations(recordIdTranslators, em, utx, ridController,
 					usingUtx);
+			removeTranslations(batchJobs, ridController);
 			removeJobs(batchJobs, em, utx, usingUtx);
 		}
 	}
@@ -329,7 +330,7 @@ public class TestEntityCounts {
 	 * An internal implementation method that logs and conditionally asserts the
 	 * current counts of test entities.
 	 */
-	protected void logMaybeAssert(boolean doAssert, Logger l0,
+	protected void logMaybeAssert(boolean doAssert, Logger L0,
 			final OabaJobControllerBean jobController,
 			final OabaParametersControllerBean paramsController,
 			final OabaSettingsController settingsController,
@@ -338,89 +339,98 @@ public class TestEntityCounts {
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) {
-		l0.info("Checking final object counts");
+		L0.info("Checking final object counts");
 
 		// Note the suffix CC stands for 'CurrentCount'
 
 		List<String> warnings = new LinkedList<>();
 		final int oabaJobCC = jobController.findAll().size();
-		String w = warnOrLog(l0, "oabaJob", oabaJobIC, oabaJobCC);
+		String w = warnOrLog(L0, "oabaJob", oabaJobIC, oabaJobCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int oabaParamsCC =
 			paramsController.findAllBatchParameters().size();
-		w = warnOrLog(l0, "oabaParameters", oabaParamsIC, oabaParamsCC);
+		w = warnOrLog(L0, "oabaParameters", oabaParamsIC, oabaParamsCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int abaSettingsCC =
 			settingsController.findAllAbaSettings().size();
-		w = warnOrLog(l0, "abaSettings", abaSettingsIC, abaSettingsCC);
+		w = warnOrLog(L0, "abaSettings", abaSettingsIC, abaSettingsCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int defaultAbaCC =
 			settingsController.findAllDefaultAbaSettings().size();
-		w = warnOrLog(l0, "defaultAbaSettings", defaultAbaIC, defaultAbaCC);
+		w =
+			warnOrLog(L0, "defaultAbaSettings", defaultAbaIC, defaultAbaCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int oabaSettingsCC =
 			settingsController.findAllOabaSettings().size();
-		w = warnOrLog(l0, "oabaSettings", oabaSettingsIC, oabaSettingsCC);
+		w = warnOrLog(L0, "oabaSettings", oabaSettingsIC, oabaSettingsCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int defaultOabaCC =
 			settingsController.findAllDefaultOabaSettings().size();
-		w = warnOrLog(l0, "defaultOabaSettings", defaultOabaIC, defaultOabaCC);
+		w =
+			warnOrLog(L0, "defaultOabaSettings", defaultOabaIC,
+					defaultOabaCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int serverConfCC =
 			serverController.findAllServerConfigurations().size();
-		w = warnOrLog(l0, "serverConfiguration", serverConfIC, serverConfCC);
+		w =
+			warnOrLog(L0, "serverConfiguration", serverConfIC,
+					serverConfCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int defServerCC =
 			serverController.findAllDefaultServerConfigurations().size();
-		w = warnOrLog(l0, "defaultServerConf", defaultServerIC, defServerCC);
+		w =
+			warnOrLog(L0, "defaultServerConf", defaultServerIC,
+					defServerCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int oabaEventCC =
 			processingController.findAllOabaProcessingEvents().size();
-		w = warnOrLog(l0, "oabaEvent", oabaEventIC, oabaEventCC);
+		w = warnOrLog(L0, "oabaEvent", oabaEventIC, oabaEventCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int opPropertyCC =
 			opPropController.findAllOperationalProperties().size();
-		w = warnOrLog(l0, "operationalProperty", opPropertyIC, opPropertyCC);
+		w =
+			warnOrLog(L0, "operationalProperty", opPropertyIC,
+					opPropertyCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int recordSourceCC = rsController.findAll().size();
-		w = warnOrLog(l0, "recordSource", recordSourceIC, recordSourceCC);
+		w = warnOrLog(L0, "recordSource", recordSourceIC, recordSourceCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int recordIdCC =
 			ridController.findAllRecordIdTranslations().size();
-		w = warnOrLog(l0, "recordId", recordIdCC, recordIdCC);
+		w = warnOrLog(L0, "recordId", recordIdIC, recordIdCC);
 		if (w != null) {
 			warnings.add(w);
 		}
@@ -436,7 +446,7 @@ public class TestEntityCounts {
 			if (doAssert) {
 				throw new AssertionError(warning);
 			} else {
-				l0.warning(warning);
+				L0.warning(warning);
 			}
 		}
 	}
@@ -533,7 +543,8 @@ public class TestEntityCounts {
 				if (usingUtx) {
 					utx.begin();
 				}
-				logger.fine("Deleting default settings (" + count + "): " + refresh);
+				logger.fine("Deleting default settings (" + count + "): "
+						+ refresh);
 				DefaultSettings r0 = em.merge(refresh);
 				em.remove(r0);
 				if (settings != null) {
@@ -640,6 +651,22 @@ public class TestEntityCounts {
 						+ ": " + deletionCount);
 			}
 		}
+	}
+
+	protected static void removeTranslations(Set<BatchJob> batchJobs,
+			RecordIdController ridc) throws Exception {
+		String msg = "Removing record-id translations created by test jobs";
+		logger.fine(msg);
+		int tCount = 0;
+		int jCount = 0;
+		for (BatchJob job : batchJobs) {
+			++jCount;
+			long jobId = job.getId();
+			if (BatchJob.INVALID_ID != jobId) {
+				tCount += ridc.deleteTranslationsByJob(job);
+			}
+		}
+		logger.info("Deleted translations for " + jCount + " jobs: " + tCount);
 	}
 
 	protected static void removeJobs(Set<BatchJob> batchJobs, EntityManager em,
