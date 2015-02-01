@@ -36,7 +36,7 @@ public class TransitivityParametersControllerBean extends
 	@EJB
 	private TransitivityJobController jobController;
 
-	protected TransitivityJobControllerBean getTransJobController() {
+	protected TransitivityJobController getTransJobController() {
 		return jobController;
 	}
 
