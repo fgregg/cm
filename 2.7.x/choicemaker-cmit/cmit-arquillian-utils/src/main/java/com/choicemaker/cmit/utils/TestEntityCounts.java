@@ -39,6 +39,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSetti
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**
  * Lists of objects created during a test. Provides a convenient way of cleaning
@@ -170,6 +171,29 @@ public class TestEntityCounts {
 		recordIdIC = ridController.findAllRecordIdTranslations().size();
 		msg = "Initial recordId count: " + recordIdIC;
 		testLogger.fine(msg);
+	}
+
+	public TestEntityCounts(Logger logger2, OabaJobController oabaController,
+			TransitivityParametersController paramsController,
+			OabaSettingsController oabaSettingsController,
+			ServerConfigurationController serverController,
+			OabaProcessingController processingController,
+			OperationalPropertyController opPropController,
+			RecordSourceController rsController,
+			RecordIdController ridController) {
+		logger.warning("Stubbed constructor");
+		oabaJobIC = 0;
+		oabaParamsIC = 0;
+		abaSettingsIC = 0;
+		defaultAbaIC = 0;
+		oabaSettingsIC = 0;
+		defaultOabaIC = 0;
+		serverConfIC = 0;
+		defaultServerIC = 0;
+		oabaEventIC = 0;
+		opPropertyIC = 0;
+		recordSourceIC = 0;
+		recordIdIC = 0;
 	}
 
 	protected void add(Object o) {
@@ -700,6 +724,18 @@ public class TestEntityCounts {
 			}
 		}
 		logger.info("Deleted batch jobs: " + count);
+	}
+
+	public void checkCounts(Logger logger2, EntityManager em,
+			UserTransaction utx, OabaJobController oabaController,
+			TransitivityParametersController paramsController,
+			OabaSettingsController oabaSettingsController,
+			ServerConfigurationController serverController,
+			OabaProcessingController processingController,
+			OperationalPropertyController opPropController,
+			RecordSourceController rsController,
+			RecordIdController ridController) {
+		logger.warning("Stubbed constructor");
 	}
 
 }
