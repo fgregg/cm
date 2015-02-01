@@ -256,4 +256,152 @@ public class AbstractParametersEntity implements Serializable {
 		return OabaLinkageType.valueOf(this.task);
 	}
 
+	// -- Identity
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		if (id != NONPERSISTENT_ID) {
+			result = prime * result + (int) (id ^ (id >>> 32));
+		} else {
+			result = hashCode0();
+		}
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		AbstractParametersEntity other = (AbstractParametersEntity) obj;
+		if (id != other.id) {
+			return false;
+		}
+		if (id == NONPERSISTENT_ID) {
+			return equals0(other);
+		}
+		return true;
+	}
+
+	protected int hashCode0() {
+		assert id == NONPERSISTENT_ID;
+
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((format == null) ? 0 : format.hashCode());
+		result = prime * result + ((graph == null) ? 0 : graph.hashCode());
+		result = prime * result + Float.floatToIntBits(highThreshold);
+		result = prime * result + Float.floatToIntBits(lowThreshold);
+		result =
+			prime * result + ((masterRsId == null) ? 0 : masterRsId.hashCode());
+		result =
+			prime * result
+					+ ((masterRsType == null) ? 0 : masterRsType.hashCode());
+		result =
+			prime
+					* result
+					+ ((modelConfigName == null) ? 0 : modelConfigName
+							.hashCode());
+		result = prime * result + (int) (stageRsId ^ (stageRsId >>> 32));
+		result =
+			prime * result
+					+ ((stageRsType == null) ? 0 : stageRsType.hashCode());
+		result = prime * result + ((task == null) ? 0 : task.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	protected boolean equals0(AbstractParametersEntity other) {
+		assert this != other;
+		assert other != null;
+		assert getClass() == other.getClass();
+		assert id == NONPERSISTENT_ID && other.id == NONPERSISTENT_ID;
+
+		if (format == null) {
+			if (other.format != null) {
+				return false;
+			}
+		} else if (!format.equals(other.format)) {
+			return false;
+		}
+		if (graph == null) {
+			if (other.graph != null) {
+				return false;
+			}
+		} else if (!graph.equals(other.graph)) {
+			return false;
+		}
+		if (Float.floatToIntBits(highThreshold) != Float
+				.floatToIntBits(other.highThreshold)) {
+			return false;
+		}
+		if (id != other.id) {
+			return false;
+		}
+		if (Float.floatToIntBits(lowThreshold) != Float
+				.floatToIntBits(other.lowThreshold)) {
+			return false;
+		}
+		if (masterRsId == null) {
+			if (other.masterRsId != null) {
+				return false;
+			}
+		} else if (!masterRsId.equals(other.masterRsId)) {
+			return false;
+		}
+		if (masterRsType == null) {
+			if (other.masterRsType != null) {
+				return false;
+			}
+		} else if (!masterRsType.equals(other.masterRsType)) {
+			return false;
+		}
+		if (modelConfigName == null) {
+			if (other.modelConfigName != null) {
+				return false;
+			}
+		} else if (!modelConfigName.equals(other.modelConfigName)) {
+			return false;
+		}
+		if (stageRsId != other.stageRsId) {
+			return false;
+		}
+		if (stageRsType == null) {
+			if (other.stageRsType != null) {
+				return false;
+			}
+		} else if (!stageRsType.equals(other.stageRsType)) {
+			return false;
+		}
+		if (task == null) {
+			if (other.task != null) {
+				return false;
+			}
+		} else if (!task.equals(other.task)) {
+			return false;
+		}
+		if (type == null) {
+			if (other.type != null) {
+				return false;
+			}
+		} else if (!type.equals(other.type)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "AbstractParametersEntity [id=" + id + ", type=" + type
+				+ ", task=" + task + "]";
+	}
+
 }
