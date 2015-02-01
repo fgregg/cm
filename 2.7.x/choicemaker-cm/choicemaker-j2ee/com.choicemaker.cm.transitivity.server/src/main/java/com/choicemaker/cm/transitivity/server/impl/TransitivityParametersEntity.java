@@ -1,8 +1,8 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.DISCRIMINATOR_VALUE;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.JPQL_TRANSPARAMS_FIND_ALL;
-import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.QN_TRANSPARAMS_FIND_ALL;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.DV_TRANS;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.JPQL_TRANSPARAMETERS_FIND_ALL;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityParametersJPA.QN_TRANSPARAMETERS_FIND_ALL;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -18,12 +18,14 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 
-@NamedQuery(name = QN_TRANSPARAMS_FIND_ALL, query = JPQL_TRANSPARAMS_FIND_ALL)
+@NamedQuery(name = QN_TRANSPARAMETERS_FIND_ALL,
+		query = JPQL_TRANSPARAMETERS_FIND_ALL)
 @Entity
-@DiscriminatorValue(value = DISCRIMINATOR_VALUE)
-public class TransitivityParametersEntity extends OabaParametersEntity
+@DiscriminatorValue(value = DV_TRANS)
+public class TransitivityParametersEntity extends AbstractParametersEntity
 		implements TransitivityParameters {
 
 	private static final long serialVersionUID = 271L;
@@ -32,16 +34,24 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 		throw new Error("not yet implemented");
 	}
 
+	public static final String OABA_ONLY_DUMP_TAG = "TP/BP PRECEDESSOR";
+
+	public static final String COMMON_DUMP_TAG = "TP/BP";
+
+	public static final String TRANS_ONLY_DUMP_TAG = "TP";
+
 	/**
 	 * Dumps the transitivity parameters and the parameters of an associated
 	 * OABA job.
 	 * 
-	 * @param tp must be non-null
-	 * @param oabaJob 
-	 * @param predecessorParams (may be null)
+	 * @param tp
+	 *            must be non-null
+	 * @param oabaJob
+	 * @param predecessorParams
+	 *            (may be null)
 	 */
-	public static String dump(TransitivityParameters tp,
-			OabaJob oabaJob, OabaParameters predecessorParams) {
+	public static String dump(TransitivityParameters tp, OabaJob oabaJob,
+			OabaParameters predecessorParams) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 
@@ -59,14 +69,8 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 		return retVal;
 	}
 
-	public static final String OABA_ONLY_DUMP_TAG = "TP/BP PRECEDESSOR";
-	
-	public static final String COMMON_DUMP_TAG = "TP/BP";
-	
-	public static final String TRANS_ONLY_DUMP_TAG = "TP";
-
-	protected static void dumpDifferences(PrintWriter pw, TransitivityParameters tp,
-			OabaParameters predecessorParams) {
+	protected static void dumpDifferences(PrintWriter pw,
+			TransitivityParameters tp, OabaParameters predecessorParams) {
 		assert pw != null;
 		assert tp != null;
 		final OabaParameters tpOaba = tp.asOabaParameters();
@@ -75,14 +79,16 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 				String s = OabaParametersEntity.dump(COMMON_DUMP_TAG, tpOaba);
 				pw.println(s);
 			} else {
-				String s = OabaParametersEntity.dump(OABA_ONLY_DUMP_TAG, predecessorParams);
+				String s =
+					OabaParametersEntity.dump(OABA_ONLY_DUMP_TAG,
+							predecessorParams);
 				pw.println(s);
 				OabaParametersEntity.dump(TRANS_ONLY_DUMP_TAG, tpOaba);
 				pw.println(s);
 			}
 		} else {
 			pw.println(TRANS_ONLY_DUMP_TAG + ": null OABA precedessor params");
-			String s = OabaParametersEntity.dump(TRANS_ONLY_DUMP_TAG, tpOaba);			
+			String s = OabaParametersEntity.dump(TRANS_ONLY_DUMP_TAG, tpOaba);
 			pw.println(s);
 		}
 	}
@@ -102,7 +108,7 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 			float differThreshold, float matchThreshold,
 			PersistableRecordSource stage, PersistableRecordSource master,
 			AnalysisResultFormat format, String graphPropertyName) {
-		super(DISCRIMINATOR_VALUE, modelConfigurationName, differThreshold,
+		super(DV_TRANS, modelConfigurationName, differThreshold,
 				matchThreshold, stage.getId(), stage.getType(),
 				master == null ? null : master.getId(), master == null ? null
 						: master.getType(),
@@ -117,9 +123,9 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 	}
 
 	public TransitivityParametersEntity(TransitivityParameters tp) {
-		super(DISCRIMINATOR_VALUE, tp.getModelConfigurationName(), tp
-				.getLowThreshold(), tp.getHighThreshold(), tp.getStageRsId(),
-				tp.getStageRsType(), tp.getMasterRsId(), tp.getMasterRsType(),
+		super(DV_TRANS, tp.getModelConfigurationName(), tp.getLowThreshold(),
+				tp.getHighThreshold(), tp.getStageRsId(), tp.getStageRsType(),
+				tp.getMasterRsId(), tp.getMasterRsType(),
 				OabaLinkageType.TRANSITIVITY_ANALYSIS, tp
 						.getAnalysisResultFormat().name(), tp
 						.getGraphProperty().getName());
@@ -128,16 +134,49 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 		}
 	}
 
-	public TransitivityParametersEntity(OabaParameters tp,
+	public TransitivityParametersEntity(OabaParameters p,
 			AnalysisResultFormat format, String graphPropertyName) {
-		super(DISCRIMINATOR_VALUE, tp.getModelConfigurationName(), tp
-				.getLowThreshold(), tp.getHighThreshold(), tp.getStageRsId(),
-				tp.getStageRsType(), tp.getMasterRsId(), tp.getMasterRsType(),
+		super(DV_TRANS, p.getModelConfigurationName(), p.getLowThreshold(), p
+				.getHighThreshold(), p.getStageRsId(), p.getStageRsType(), p
+				.getMasterRsId(), p.getMasterRsType(),
 				OabaLinkageType.TRANSITIVITY_ANALYSIS, format.name(),
 				graphPropertyName);
 		if (graphPropertyName == null) {
 			throw new IllegalArgumentException("null graph-property");
 		}
+	}
+
+	@Override
+	public OabaParameters asOabaParameters() {
+		return new OabaParametersEntity(getModelConfigurationName(),
+				getLowThreshold(), getHighThreshold(), getStageRsId(),
+				getStageRsType(), getMasterRsId(), getMasterRsType(),
+				OabaLinkageType.TRANSITIVITY_ANALYSIS);
+	}
+
+	@Override
+	public String getModelConfigurationName() {
+		return this.modelConfigName;
+	}
+
+	@Override
+	public long getStageRsId() {
+		return this.stageRsId;
+	}
+
+	@Override
+	public String getStageRsType() {
+		return this.stageRsType;
+	}
+
+	@Override
+	public Long getMasterRsId() {
+		return this.masterRsId;
+	}
+
+	@Override
+	public String getMasterRsType() {
+		return this.masterRsType;
 	}
 
 	@Override
@@ -147,8 +186,6 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 
 	@Override
 	public IGraphProperty getGraphProperty() {
-		// TODO Auto-generated method stub
-		// FIXME not yet implemented
 		return new IGraphProperty() {
 
 			private static final long serialVersionUID = 271L;
@@ -167,8 +204,10 @@ public class TransitivityParametersEntity extends OabaParametersEntity
 	}
 
 	@Override
-	public OabaParameters asOabaParameters() {
-		return (OabaParametersEntity) this;
+	public String toString() {
+		return "TransitivityParametersEntity [id=" + id + ", modelId="
+				+ modelConfigName + ", lowThreshold=" + lowThreshold
+				+ ", highThreshold=" + highThreshold + ", graph=" + graph + "]";
 	}
 
 }

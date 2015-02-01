@@ -1,11 +1,6 @@
 package com.choicemaker.cm.batch;
 
-import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.TABLE_NAME;
-
 import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * An operational property is some property computed during a batch job that
@@ -18,8 +13,6 @@ import javax.persistence.Table;
  *
  * @author rphall
  */
-@Entity
-@Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 public interface OperationalProperty extends Serializable {
 
 	/** Default persistence key of an ephemeral operational property */

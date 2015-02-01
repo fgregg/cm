@@ -370,6 +370,7 @@ public class RecordIdControllerBean implements RecordIdController {
 			(ImmutableRecordIdTranslatorImpl) translator;
 		// END HACK
 
+		@SuppressWarnings("unchecked")
 		ImmutableRecordIdTranslatorLocal<T> retVal =
 			(ImmutableRecordIdTranslatorLocal<T>) saveTranslatorImpl(job, impl);
 

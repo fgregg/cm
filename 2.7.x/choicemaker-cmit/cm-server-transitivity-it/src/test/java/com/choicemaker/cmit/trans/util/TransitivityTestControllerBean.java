@@ -12,22 +12,19 @@ import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
-import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.args.WellKnownGraphPropertyNames;
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
-import com.choicemaker.cm.transitivity.core.TransitivityProcessing;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.FakePersistableRecordSource;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
 /**
@@ -43,14 +40,17 @@ public class TransitivityTestControllerBean implements
 	private static final String DEFAULT_MODEL_NAME = "FakeModelConfig";
 
 	private static final String UNDERSCORE = "_";
-	
+
 	private final Random random = new Random();
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
 	@EJB
-	private OabaParametersController paramsController;
+	private OabaParametersController oabaParamsController;
+
+	@EJB
+	private TransitivityParametersController transParamsController;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -86,25 +86,26 @@ public class TransitivityTestControllerBean implements
 		return retVal;
 	}
 
-	public TransitivityParametersEntity createTransitivityParameters(String tag,
-			TestEntityCounts te) {
+	public TransitivityParametersEntity createTransitivityParameters(
+			String tag, TestEntityCounts te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
 		Thresholds thresholds = createRandomThresholds();
-		PersistableRecordSource stage =
-			EntityManagerUtils.createFakePersistableRecordSource(tag);
+		PersistableRecordSource stage = new FakePersistableRecordSource(tag);
 		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		PersistableRecordSource master =
-			EntityManagerUtils.createFakePersistableRecordSource(tag, task);
+			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
 		AnalysisResultFormat format = createRandomAnalysisResultFormat();
 		String graphPropertyName = createRandomGraphPropertyName();
 		TransitivityParametersEntity retVal =
-			new TransitivityParametersEntity(createRandomModelConfigurationName(tag),
+			new TransitivityParametersEntity(
+					createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master, format, graphPropertyName);
-		paramsController.save(retVal);
-		te.add((TransitivityParameters)retVal);
+					thresholds.getMatchThreshold(), stage, master, format,
+					graphPropertyName);
+		transParamsController.save(retVal);
+		te.add((TransitivityParameters) retVal);
 		return retVal;
 	}
 
@@ -132,37 +133,6 @@ public class TransitivityTestControllerBean implements
 		assert retVal != null;
 		assert retVal.getId() != ServerConfigurationControllerBean.INVALID_ID;
 		return retVal;
-	}
-
-	public List<OabaParameters> findAllOabaParameters() {
-		return EntityManagerUtils.findAllOabaParameters(em);
-	}
-
-	public List<TransitivityParameters> findAllTransitivityParameters() {
-		// TODO FIXME not yet implemented
-		throw new Error("not yet implemented");
-//		return Collections.emptyList();
-	}
-
-	public List<OabaJob> findAllOabaJobs() {
-		return EntityManagerUtils.findAllOabaJobs(em);
-	}
-
-	public List<TransitivityJob> findAllTransitivityJobs() {
-		// TODO FIXME not yet implemented
-		throw new Error("not yet implemented");
-//		return Collections.emptyList();
-	}
-
-	public List<OabaProcessing> findAllOabaProcessing() {
-		return EntityManagerUtils.findAllOabaProcessing(em);
-	}
-
-	@Override
-	public List<TransitivityProcessing> findAllTransitivityProcessing() {
-		// TODO FIXME not yet implemented
-		throw new Error("not yet implemented");
-//		return Collections.emptyList();
 	}
 
 }

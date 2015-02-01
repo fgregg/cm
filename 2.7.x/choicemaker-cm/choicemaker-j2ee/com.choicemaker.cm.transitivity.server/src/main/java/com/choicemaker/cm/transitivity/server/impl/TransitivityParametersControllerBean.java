@@ -106,7 +106,7 @@ public class TransitivityParametersControllerBean extends
 	@Override
 	public List<TransitivityParameters> findAllTransitivityParameters() {
 		Query query =
-			em.createNamedQuery(TransitivityParametersJPA.QN_TRANSPARAMS_FIND_ALL);
+			em.createNamedQuery(TransitivityParametersJPA.QN_TRANSPARAMETERS_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<TransitivityParameters> entries = query.getResultList();
 		if (entries == null) {

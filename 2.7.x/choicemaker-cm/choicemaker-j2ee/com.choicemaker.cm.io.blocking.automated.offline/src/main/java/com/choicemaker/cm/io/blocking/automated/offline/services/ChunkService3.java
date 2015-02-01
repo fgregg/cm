@@ -106,7 +106,7 @@ public class ChunkService3 {
 	private int numRegularChunks = 0;
 
 	// FIXME Define system property to control this setting
-	private boolean keepFiles = true;
+	private boolean keepFiles = false;
 
 	private long time; // this keeps track of time
 

@@ -2,7 +2,6 @@ package com.choicemaker.cmit.trans;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -19,7 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.ServerConfiguration;
-import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;

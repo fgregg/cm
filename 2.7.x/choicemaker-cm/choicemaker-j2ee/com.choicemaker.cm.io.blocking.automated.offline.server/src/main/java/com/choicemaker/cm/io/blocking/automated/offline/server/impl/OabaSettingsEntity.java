@@ -61,7 +61,7 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 
 	// -- Instance data
 
-	@Column(name = OabaParametersJPA.CN_MAX_SINGLE)
+	@Column(name = AbstractParametersJPA.CN_MAX_SINGLE)
 	private final int maxSingle;
 
 	@Column(name = CN_MAX_BLOCKSIZE)

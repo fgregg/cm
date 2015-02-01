@@ -9,11 +9,12 @@ import com.choicemaker.cm.batch.impl.BatchJobJPA;
  * <li>JPQL -- Java Persistence Query Language</li>
  * <li>QN -- Query Name</li>
  * <li>CN -- Column Name</li>
+ * <li>DV -- Discriminator Value</li>
  * </ul>
  * 
  * @author rphall
  */
-public interface OabaParametersJPA {
+public interface AbstractParametersJPA {
 
 	/** Default value when no jobId is assigned */
 	public static final long INVALID_ID = 0;
@@ -23,18 +24,30 @@ public interface OabaParametersJPA {
 
 	String DISCRIMINATOR_COLUMN = "TYPE";
 
-	String DISCRIMINATOR_VALUE = "OABA";
+	String DV_ABSTRACT = "ABSTRACT";
+
+	String DV_OABA = "OABA";
 
 	String CN_ID = "ID";
+
 	String CN_TYPE = DISCRIMINATOR_COLUMN;
+
 	String CN_MODEL = "MODEL";
+
 	String CN_MAX_SINGLE = "MAX_SINGLE";
+
 	String CN_LOW_THRESHOLD = "LOW_THRESHOLD";
+
 	String CN_HIGH_THRESHOLD = "HIGH_THRESHOLD";
+
 	String CN_STAGE_RS = "STAGE_ID";
+
 	String CN_STAGE_RS_TYPE = "STAGE_TYPE";
+
 	String CN_MASTER_RS = "MASTER_ID";
+
 	String CN_MASTER_RS_TYPE = "MASTER_TYPE";
+
 	String CN_TASK = "TASK";
 
 	/** Used by TransitivityParametersEntity */
@@ -43,25 +56,34 @@ public interface OabaParametersJPA {
 	/** Used by TransitivityParametersEntity */
 	String CN_GRAPH = "GRAPH";
 
-	String ID_GENERATOR_NAME = "OABA_BATCHPARAMS";
+	String ID_GENERATOR_NAME = "BATCHPARAMS";
 
 	String ID_GENERATOR_TABLE = BatchJobJPA.ID_GENERATOR_TABLE;
 
 	String ID_GENERATOR_PK_COLUMN_NAME =
 		BatchJobJPA.ID_GENERATOR_PK_COLUMN_NAME;
 
-	String ID_GENERATOR_PK_COLUMN_VALUE = "OABA_BATCHPARAMS";
+	String ID_GENERATOR_PK_COLUMN_VALUE = "BATCHPARAMS";
 
 	String ID_GENERATOR_VALUE_COLUMN_NAME =
 		BatchJobJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
 
 	/**
-	 * Name of the query that finds all persistent batch parameter instances
+	 * Name of the query that finds all persistent parameter instances
 	 */
-	String QN_BATCHPARAMETERS_FIND_ALL = "oabaParametersFindAll";
+	String QN_PARAMETERS_FIND_ALL = "abstractParametersFindAll";
 
-	/** JPQL used to implement {@link #QN_BATCHPARAMETERS_FIND_ALL} */
-	String JPQL_BATCHPARAMETERS_FIND_ALL =
-		"Select params from OabaParametersEntity params";
+	/** JPQL used to implement {@link #QN_PARAMETERS_FIND_ALL} */
+	String JPQL_PARAMETERS_FIND_ALL =
+		"Select p from AbstractParametersEntity p";
+
+	/**
+	 * Name of the query that finds all persistent OABA parameter instances
+	 */
+	String QN_OABAPARAMETERS_FIND_ALL = "oabaParametersFindAll";
+
+	/** JPQL used to implement {@link #QN_OABAPARAMETERS_FIND_ALL} */
+	String JPQL_OABAPARAMETERS_FIND_ALL =
+		"Select p from OabaParametersEntity p";
 
 }

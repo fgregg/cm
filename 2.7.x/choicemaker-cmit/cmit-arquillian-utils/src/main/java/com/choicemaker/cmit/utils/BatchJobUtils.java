@@ -103,10 +103,10 @@ public class BatchJobUtils {
 			throw new IllegalArgumentException("null test entities");
 		}
 		Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
-		PersistableRecordSource stage = EntityManagerUtils.createFakePersistableRecordSource(tag);
+		PersistableRecordSource stage = new FakePersistableRecordSource(tag);
 		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		PersistableRecordSource master =
-				EntityManagerUtils.createFakePersistableRecordSource(tag, task);
+			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
 		OabaParametersEntity retVal =
 			new OabaParametersEntity(
 					EntityManagerUtils.createRandomModelConfigurationName(tag),
@@ -221,10 +221,10 @@ public class BatchJobUtils {
 			throw new IllegalArgumentException("null test entities");
 		}
 		Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
-		PersistableRecordSource stage = EntityManagerUtils.createFakePersistableRecordSource(tag);
+		PersistableRecordSource stage = new FakePersistableRecordSource(tag);
 		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		PersistableRecordSource master =
-				EntityManagerUtils.createFakePersistableRecordSource(tag, task);
+				EntityManagerUtils.createFakeMasterRecordSource(tag, task);
 		TransitivityParametersEntity retVal =
 			new TransitivityParametersEntity(
 					EntityManagerUtils.createRandomModelConfigurationName(tag),

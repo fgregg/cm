@@ -1,7 +1,6 @@
 package com.choicemaker.cmit.oaba.util;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -11,18 +10,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.args.OabaLinkageType;
-import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cmit.OabaTestController;
-import com.choicemaker.cmit.utils.BatchJobUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.FakePersistableRecordSource;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
 /**
@@ -86,11 +81,10 @@ public class OabaTestControllerBean implements OabaTestController {
 			throw new IllegalArgumentException("null test entities");
 		}
 		Thresholds thresholds = createRandomThresholds();
-		PersistableRecordSource stage =
-			EntityManagerUtils.createFakePersistableRecordSource(tag);
+		PersistableRecordSource stage = new FakePersistableRecordSource(tag);
 		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		PersistableRecordSource master =
-			EntityManagerUtils.createFakePersistableRecordSource(tag, task);
+			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
 		OabaParametersEntity retVal =
 			new OabaParametersEntity(createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
@@ -98,26 +92,6 @@ public class OabaTestControllerBean implements OabaTestController {
 		paramsController.save(retVal);
 		te.add(retVal);
 		return retVal;
-	}
-
-	@Override
-	public ServerConfiguration getDefaultServerConfiguration() {
-		return BatchJobUtils.getDefaultServerConfiguration(serverController);
-	}
-
-	@Override
-	public List<OabaParameters> findAllOabaParameters() {
-		return EntityManagerUtils.findAllOabaParameters(em);
-	}
-
-	@Override
-	public List<OabaJob> findAllOabaJobs() {
-		return EntityManagerUtils.findAllOabaJobs(em);
-	}
-
-	@Override
-	public List<OabaProcessing> findAllOabaProcessing() {
-		return EntityManagerUtils.findAllOabaProcessing(em);
 	}
 
 }

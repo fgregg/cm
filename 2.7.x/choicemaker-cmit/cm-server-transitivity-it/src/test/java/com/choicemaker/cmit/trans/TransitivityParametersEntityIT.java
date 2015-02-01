@@ -19,10 +19,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
@@ -30,9 +28,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
@@ -64,16 +60,16 @@ public class TransitivityParametersEntityIT {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobController oabaController;
+	private OabaJobController oabaJobController;
 
 	@EJB
-	private TransitivityParametersController paramsController;
+	private TransitivityParametersController transParamsController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaProcessingController processingController;
+	private OabaProcessingController oabaProcessingController;
 
 	@EJB
 	private OabaService oabaService;
@@ -100,9 +96,9 @@ public class TransitivityParametersEntityIT {
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaController, paramsController,
+			te.checkCounts(logger, em, utx, oabaJobController, transParamsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					oabaProcessingController, opPropController, rsController,
 					ridController);
 		} else {
 			throw new Error("Counts not initialized");
@@ -112,9 +108,9 @@ public class TransitivityParametersEntityIT {
 	@Before
 	public void setUp() throws Exception {
 		te =
-			new TestEntityCounts(logger, oabaController, paramsController,
+			new TestEntityCounts(logger, oabaJobController, transParamsController,
 					oabaSettingsController, serverController,
-					processingController, opPropController, rsController,
+					oabaProcessingController, opPropController, rsController,
 					ridController);
 	}
 
@@ -122,32 +118,31 @@ public class TransitivityParametersEntityIT {
 	public void testPrerequisites() {
 		assertTrue(em != null);
 		assertTrue(utx != null);
-		assertTrue(paramsController != null);
+		assertTrue(transParamsController != null);
 		assertTrue(transTestController != null);
 	}
 
 	@Test
 	public void testPersistFindRemove() {
-		// FIXME STUBBED
-//		final String METHOD = "testPersistFindRemove";
-//
-//		// Create parameters
-//		TransitivityParameters params =
-//			transTestController.createTransitivityParameters(METHOD, te);
-//
-//		// Save the parameters
-//		paramsController.save(params);
-//		assertTrue(params.getId() != 0);
+		final String METHOD = "testPersistFindRemove";
+
+		// Create parameters
+		TransitivityParameters params =
+			transTestController.createTransitivityParameters(METHOD, te);
+
+		// Save the parameters
+		transParamsController.save(params);
+		assertTrue(params.getId() != 0);
 
 		// FIXME stubbed
 //		// Find the parameters
-//		OabaParameters batchParameters2 = paramsController.findOabaParameters(params.getId());
+//		OabaParameters batchParameters2 = transParamsController.findOabaParameters(params.getId());
 //		assertTrue(params.getId() == batchParameters2.getId());
 //		assertTrue(params.equals(batchParameters2));
 //
 //		// Delete the parameters
-//		paramsController.delete(batchParameters2);
-//		OabaParameters batchParameters3 = paramsController.findOabaParameters(params.getId());
+//		transParamsController.delete(batchParameters2);
+//		OabaParameters batchParameters3 = transParamsController.findOabaParameters(params.getId());
 //		assertTrue(batchParameters3 == null);
 
 		checkCounts();
@@ -166,11 +161,11 @@ public class TransitivityParametersEntityIT {
 //		assertTrue(params1.hashCode() != params2.hashCode());
 //		
 //		final TransitivityParameters params1P =
-//				paramsController.save(params1);
+//				transParamsController.save(params1);
 //		te.add(params1P);
 //		assertTrue(!params1.equals(params1P));
 //		final TransitivityParameters params2P =
-//				paramsController.save(params2);
+//				transParamsController.save(params2);
 //		te.add(params2P);
 //		assertTrue(!params2.equals(params2P));
 //
@@ -196,11 +191,11 @@ public class TransitivityParametersEntityIT {
 
 		// FIXME stubbed
 //		// Save the params
-//		final long id1 = paramsController.save(params).getId();
+//		final long id1 = transParamsController.save(params).getId();
 //
 //		// Get the params
 //		params = null;
-//		params = paramsController.findOabaParameters(id1);
+//		params = transParamsController.findOabaParameters(id1);
 
 		// FIXME STUBBED
 //		// Check the value
@@ -230,11 +225,11 @@ public class TransitivityParametersEntityIT {
 
 		// FIXME stubbed
 //		// Save the params
-//		final long id1 = paramsController.save(params).getId();
+//		final long id1 = transParamsController.save(params).getId();
 //
 //		// Get the params
 //		params = null;
-//		params = paramsController.findOabaParameters(id1);
+//		params = transParamsController.findOabaParameters(id1);
 
 		// FIXME STUBBED
 //		// Check the value

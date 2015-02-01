@@ -95,7 +95,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	@Override
 	public List<OabaParameters> findAllOabaParameters() {
 		Query query =
-			em.createNamedQuery(OabaParametersJPA.QN_BATCHPARAMETERS_FIND_ALL);
+			em.createNamedQuery(AbstractParametersJPA.QN_OABAPARAMETERS_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<OabaParameters> entries = query.getResultList();
 		if (entries == null) {
