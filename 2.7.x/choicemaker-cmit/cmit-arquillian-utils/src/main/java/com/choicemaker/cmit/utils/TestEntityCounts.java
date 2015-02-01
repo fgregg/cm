@@ -25,6 +25,7 @@ import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -35,10 +36,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsE
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsPK;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**
  * Lists of objects created during a test. Provides a convenient way of cleaning
@@ -105,8 +106,8 @@ public class TestEntityCounts {
 	private Set<BatchJob> batchJobs = new LinkedHashSet<>();
 
 	public TestEntityCounts(final Logger testLogger,
-			final OabaJobControllerBean jobController,
-			final OabaParametersControllerBean paramsController,
+			final OabaJobController jobController,
+			final OabaParametersController paramsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
 			final OabaProcessingController processingController,
@@ -124,7 +125,7 @@ public class TestEntityCounts {
 		String msg = "Initial oabaJob count: " + oabaJobIC;
 		testLogger.fine(msg);
 
-		oabaParamsIC = paramsController.findAllBatchParameters().size();
+		oabaParamsIC = paramsController.findAllOabaParameters().size();
 		msg = "Initial oabaParameters count: " + oabaParamsIC;
 		testLogger.fine(msg);
 
@@ -170,6 +171,29 @@ public class TestEntityCounts {
 		recordIdIC = ridController.findAllRecordIdTranslations().size();
 		msg = "Initial recordId count: " + recordIdIC;
 		testLogger.fine(msg);
+	}
+
+	public TestEntityCounts(Logger logger2, OabaJobController oabaController,
+			TransitivityParametersController paramsController,
+			OabaSettingsController oabaSettingsController,
+			ServerConfigurationController serverController,
+			OabaProcessingController processingController,
+			OperationalPropertyController opPropController,
+			RecordSourceController rsController,
+			RecordIdController ridController) {
+		logger.warning("Stubbed constructor");
+		oabaJobIC = 0;
+		oabaParamsIC = 0;
+		abaSettingsIC = 0;
+		defaultAbaIC = 0;
+		oabaSettingsIC = 0;
+		defaultOabaIC = 0;
+		serverConfIC = 0;
+		defaultServerIC = 0;
+		oabaEventIC = 0;
+		opPropertyIC = 0;
+		recordSourceIC = 0;
+		recordIdIC = 0;
 	}
 
 	protected void add(Object o) {
@@ -266,8 +290,8 @@ public class TestEntityCounts {
 
 	public void checkCounts(Logger testLogger, final EntityManager em,
 			final UserTransaction utx,
-			final OabaJobControllerBean jobController,
-			final OabaParametersControllerBean paramsController,
+			final OabaJobController jobController,
+			final OabaParametersController paramsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,
 			final OabaProcessingController processingController,
@@ -321,6 +345,7 @@ public class TestEntityCounts {
 					propertyController);
 			removeTranslations(recordIdTranslators, em, utx, ridController,
 					usingUtx);
+			removeTranslations(batchJobs, ridController);
 			removeJobs(batchJobs, em, utx, usingUtx);
 		}
 	}
@@ -329,98 +354,107 @@ public class TestEntityCounts {
 	 * An internal implementation method that logs and conditionally asserts the
 	 * current counts of test entities.
 	 */
-	protected void logMaybeAssert(boolean doAssert, Logger l0,
-			final OabaJobControllerBean jobController,
-			final OabaParametersControllerBean paramsController,
+	protected void logMaybeAssert(boolean doAssert, Logger L0,
+			final OabaJobController jobController,
+			final OabaParametersController paramsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,
 			final OabaProcessingController processingController,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) {
-		l0.info("Checking final object counts");
+		L0.info("Checking final object counts");
 
 		// Note the suffix CC stands for 'CurrentCount'
 
 		List<String> warnings = new LinkedList<>();
 		final int oabaJobCC = jobController.findAll().size();
-		String w = warnOrLog(l0, "oabaJob", oabaJobIC, oabaJobCC);
+		String w = warnOrLog(L0, "oabaJob", oabaJobIC, oabaJobCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int oabaParamsCC =
-			paramsController.findAllBatchParameters().size();
-		w = warnOrLog(l0, "oabaParameters", oabaParamsIC, oabaParamsCC);
+			paramsController.findAllOabaParameters().size();
+		w = warnOrLog(L0, "oabaParameters", oabaParamsIC, oabaParamsCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int abaSettingsCC =
 			settingsController.findAllAbaSettings().size();
-		w = warnOrLog(l0, "abaSettings", abaSettingsIC, abaSettingsCC);
+		w = warnOrLog(L0, "abaSettings", abaSettingsIC, abaSettingsCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int defaultAbaCC =
 			settingsController.findAllDefaultAbaSettings().size();
-		w = warnOrLog(l0, "defaultAbaSettings", defaultAbaIC, defaultAbaCC);
+		w =
+			warnOrLog(L0, "defaultAbaSettings", defaultAbaIC, defaultAbaCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int oabaSettingsCC =
 			settingsController.findAllOabaSettings().size();
-		w = warnOrLog(l0, "oabaSettings", oabaSettingsIC, oabaSettingsCC);
+		w = warnOrLog(L0, "oabaSettings", oabaSettingsIC, oabaSettingsCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int defaultOabaCC =
 			settingsController.findAllDefaultOabaSettings().size();
-		w = warnOrLog(l0, "defaultOabaSettings", defaultOabaIC, defaultOabaCC);
+		w =
+			warnOrLog(L0, "defaultOabaSettings", defaultOabaIC,
+					defaultOabaCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int serverConfCC =
 			serverController.findAllServerConfigurations().size();
-		w = warnOrLog(l0, "serverConfiguration", serverConfIC, serverConfCC);
+		w =
+			warnOrLog(L0, "serverConfiguration", serverConfIC,
+					serverConfCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int defServerCC =
 			serverController.findAllDefaultServerConfigurations().size();
-		w = warnOrLog(l0, "defaultServerConf", defaultServerIC, defServerCC);
+		w =
+			warnOrLog(L0, "defaultServerConf", defaultServerIC,
+					defServerCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int oabaEventCC =
 			processingController.findAllOabaProcessingEvents().size();
-		w = warnOrLog(l0, "oabaEvent", oabaEventIC, oabaEventCC);
+		w = warnOrLog(L0, "oabaEvent", oabaEventIC, oabaEventCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int opPropertyCC =
 			opPropController.findAllOperationalProperties().size();
-		w = warnOrLog(l0, "operationalProperty", opPropertyIC, opPropertyCC);
+		w =
+			warnOrLog(L0, "operationalProperty", opPropertyIC,
+					opPropertyCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int recordSourceCC = rsController.findAll().size();
-		w = warnOrLog(l0, "recordSource", recordSourceIC, recordSourceCC);
+		w = warnOrLog(L0, "recordSource", recordSourceIC, recordSourceCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int recordIdCC =
 			ridController.findAllRecordIdTranslations().size();
-		w = warnOrLog(l0, "recordId", recordIdCC, recordIdCC);
+		w = warnOrLog(L0, "recordId", recordIdIC, recordIdCC);
 		if (w != null) {
 			warnings.add(w);
 		}
@@ -436,7 +470,7 @@ public class TestEntityCounts {
 			if (doAssert) {
 				throw new AssertionError(warning);
 			} else {
-				l0.warning(warning);
+				L0.warning(warning);
 			}
 		}
 	}
@@ -533,7 +567,8 @@ public class TestEntityCounts {
 				if (usingUtx) {
 					utx.begin();
 				}
-				logger.fine("Deleting default settings (" + count + "): " + refresh);
+				logger.fine("Deleting default settings (" + count + "): "
+						+ refresh);
 				DefaultSettings r0 = em.merge(refresh);
 				em.remove(r0);
 				if (settings != null) {
@@ -642,6 +677,22 @@ public class TestEntityCounts {
 		}
 	}
 
+	protected static void removeTranslations(Set<BatchJob> batchJobs,
+			RecordIdController ridc) throws Exception {
+		String msg = "Removing record-id translations created by test jobs";
+		logger.fine(msg);
+		int tCount = 0;
+		int jCount = 0;
+		for (BatchJob job : batchJobs) {
+			++jCount;
+			long jobId = job.getId();
+			if (BatchJob.INVALID_ID != jobId) {
+				tCount += ridc.deleteTranslationsByJob(job);
+			}
+		}
+		logger.info("Deleted translations for " + jCount + " jobs: " + tCount);
+	}
+
 	protected static void removeJobs(Set<BatchJob> batchJobs, EntityManager em,
 			UserTransaction utx, boolean usingUtx) throws Exception {
 		String msg = "Removing batch jobs created during testing";
@@ -673,6 +724,18 @@ public class TestEntityCounts {
 			}
 		}
 		logger.info("Deleted batch jobs: " + count);
+	}
+
+	public void checkCounts(Logger logger2, EntityManager em,
+			UserTransaction utx, OabaJobController oabaController,
+			TransitivityParametersController paramsController,
+			OabaSettingsController oabaSettingsController,
+			ServerConfigurationController serverController,
+			OabaProcessingController processingController,
+			OperationalPropertyController opPropController,
+			RecordSourceController rsController,
+			RecordIdController ridController) {
+		logger.warning("Stubbed constructor");
 	}
 
 }

@@ -47,11 +47,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.transitivity.core.TransitivityProcessing.TransitivityEvent;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 
 /**
  * This message bean starts the Transitivity Engine. It assumes that it can
@@ -75,13 +76,13 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 			+ StartTransitivityMDB.class.getName());
 
 	// @EJB
-	private TransitivityJobControllerBean jobController;
+	private TransitivityJobController jobController;
 
 	// @EJB
 	// private OabaSettingsController settingsController;
 
 	// @EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	// @EJB
 	private OabaProcessingController processingController;
@@ -117,7 +118,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 				transJob = jobController.findTransitivityJob(jobId);
 				transJob.markAsStarted();
 				OabaParameters params =
-					paramsController.findBatchParamsByJobId(jobId);
+					paramsController.findOabaParametersByJobId(jobId);
 
 				removeOldFiles(transJob);
 				createChunks(transJob, params);

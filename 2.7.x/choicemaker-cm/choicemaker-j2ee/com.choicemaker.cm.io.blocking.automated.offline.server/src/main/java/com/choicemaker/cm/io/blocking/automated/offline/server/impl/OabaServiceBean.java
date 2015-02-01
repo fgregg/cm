@@ -45,6 +45,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 
@@ -65,7 +66,7 @@ public class OabaServiceBean implements OabaService {
 			.getName());
 
 	@EJB
-	private OabaJobControllerBean jobController;
+	private OabaJobController jobController;
 
 	@EJB
 	private OperationalPropertyController propController;
@@ -215,6 +216,7 @@ public class OabaServiceBean implements OabaService {
 					oabaSettings, serverConfiguration);
 		final long retVal = oabaJob.getId();
 		assert BatchJob.INVALID_ID != retVal;
+		logger.info("Started offline matching (job id: " + retVal + ")");
 
 		// Mark the job as queued and start processing by the StartOabaMDB EJB
 		oabaJob.markAsQueued();

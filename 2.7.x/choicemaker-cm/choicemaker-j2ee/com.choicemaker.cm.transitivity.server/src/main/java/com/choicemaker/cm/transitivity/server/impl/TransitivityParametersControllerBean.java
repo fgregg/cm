@@ -13,17 +13,19 @@ import javax.persistence.Query;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**
  * An EJB used to test TransitivityParameter beans within container-defined
- * transactions; see {@link TransitivityJobControllerBean} as an example of a similar
- * controller.
+ * transactions; see {@link TransitivityJobControllerBean} as an example of a
+ * similar controller.
  * 
  * @author rphall
  */
 @Stateless
 public class TransitivityParametersControllerBean extends
-		OabaParametersControllerBean {
+		OabaParametersControllerBean implements TransitivityParametersController {
 
 	private static final Logger logger = Logger
 			.getLogger(TransitivityParametersControllerBean.class.getName());
@@ -32,61 +34,76 @@ public class TransitivityParametersControllerBean extends
 	private EntityManager em;
 	
 	@EJB
-	private TransitivityJobControllerBean jobController;
+	private TransitivityJobController jobController;
 
-	protected TransitivityParametersEntity getBean(TransitivityParameters transitivityParameters) {
+	protected TransitivityJobController getTransJobController() {
+		return jobController;
+	}
+
+	protected TransitivityParametersEntity getBean(
+			TransitivityParameters p) {
 		TransitivityParametersEntity retVal = null;
-		if (transitivityParameters != null) {
-			final long jobId = transitivityParameters.getId();
-			if (transitivityParameters instanceof TransitivityParametersEntity) {
-				retVal = (TransitivityParametersEntity) transitivityParameters;
+		if (p != null) {
+			final long jobId = p.getId();
+			if (p instanceof TransitivityParametersEntity) {
+				retVal = (TransitivityParametersEntity) p;
 			} else {
-				if (TransitivityParametersEntity.isPersistent(transitivityParameters)) {
+				if (TransitivityParametersEntity
+						.isPersistent(p)) {
 					retVal = em.find(TransitivityParametersEntity.class, jobId);
 					if (retVal == null) {
 						String msg =
-							"Unable to find persistent OABA job: " + jobId;
+							"Unable to find persistent Transitivity job: "
+									+ jobId;
 						logger.warning(msg);
 					}
 				}
 			}
 			if (retVal == null) {
-				retVal = new TransitivityParametersEntity(transitivityParameters);
+				retVal =
+					new TransitivityParametersEntity(p);
 			}
 		}
 		return retVal;
 	}
 
-	TransitivityParameters save(TransitivityParameters transitivityParameters) {
-		return save(getBean(transitivityParameters));
+	@Override
+	public TransitivityParameters save(
+			TransitivityParameters p) {
+		return save(getBean(p));
 	}
 
-	TransitivityParametersEntity save(TransitivityParametersEntity transitivityParameters) {
-		if (transitivityParameters.getId() == 0) {
-			em.persist(transitivityParameters);
+	TransitivityParametersEntity save(
+			TransitivityParametersEntity p) {
+		if (p.getId() == 0) {
+			em.persist(p);
 		} else {
-			transitivityParameters = em.merge(transitivityParameters);
+			p = em.merge(p);
 			em.flush();
 		}
-		return transitivityParameters;
+		return p;
 	}
 
+	@Override
 	public TransitivityParameters findTransitivityParameters(long id) {
-		TransitivityParametersEntity transitivityParameters =
+		TransitivityParametersEntity p =
 			em.find(TransitivityParametersEntity.class, id);
-		return transitivityParameters;
+		return p;
 	}
 
-	public TransitivityParameters findTransitivityParamsByJobId(long jobId) {
+	@Override
+	public TransitivityParameters findTransitivityParametersByJobId(long jobId) {
 		TransitivityParameters retVal = null;
-		TransitivityJob oabaJob = jobController.findTransitivityJob(jobId);
-		if (oabaJob != null) {
-			long paramsId = oabaJob.getTransitivityParametersId();
+		TransitivityJob job =
+			getTransJobController().findTransitivityJob(jobId);
+		if (job != null) {
+			long paramsId = job.getTransitivityParametersId();
 			retVal = findTransitivityParameters(paramsId);
 		}
 		return retVal;
 	}
 
+	@Override
 	public List<TransitivityParameters> findAllTransitivityParameters() {
 		Query query =
 			em.createNamedQuery(TransitivityParametersJPA.QN_TRANSPARAMS_FIND_ALL);
@@ -98,14 +115,23 @@ public class TransitivityParametersControllerBean extends
 		return entries;
 	}
 
-	public void delete(TransitivityParameters transitivityParameters) {
-		transitivityParameters = em.merge(transitivityParameters);
-		em.remove(transitivityParameters);
-		em.flush();
+	@Override
+	public void delete(TransitivityParameters p) {
+		if (TransitivityParametersEntity.isPersistent(p)) {
+			TransitivityParametersEntity bean = getBean(p);
+			bean = em.merge(bean);
+			em.remove(bean);
+			em.flush();
+		}
 	}
 
-	public void detach(TransitivityParameters transitivityParameters) {
-		em.detach(transitivityParameters);
+	@Override
+	public void detach(TransitivityParameters p) {
+		if (TransitivityParametersEntity.isPersistent(p)) {
+			TransitivityParametersEntity bean = getBean(p);
+			bean = em.merge(bean);
+			em.detach(p);
+		}
 	}
 
 }

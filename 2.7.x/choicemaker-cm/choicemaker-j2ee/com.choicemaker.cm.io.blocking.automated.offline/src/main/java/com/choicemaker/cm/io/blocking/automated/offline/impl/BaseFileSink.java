@@ -87,6 +87,7 @@ public abstract class BaseFileSink implements ISink {
 			break;
 		case BINARY:
 			retVal = dos != null;
+			break;
 		default:
 			throw new IllegalArgumentException("invalid type: " + type);
 		}

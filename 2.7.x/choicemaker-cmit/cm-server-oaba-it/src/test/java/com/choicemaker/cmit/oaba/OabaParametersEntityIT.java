@@ -22,14 +22,14 @@ import org.junit.runner.RunWith;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.base.Thresholds;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
@@ -62,16 +62,16 @@ public class OabaParametersEntityIT {
 	EntityManager em;
 
 	@EJB
-	private OabaJobControllerBean oabaController;
+	private OabaJobController oabaController;
 
 	@EJB
 	protected OabaTestController oabaTestController;
 
 	@EJB
-	private OabaJobControllerBean jobController;
+	private OabaJobController jobController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -143,13 +143,13 @@ public class OabaParametersEntityIT {
 		assertTrue(params.getId() != 0);
 
 		// Find the params
-		OabaParameters batchParameters2 = paramsController.find(params.getId());
+		OabaParameters batchParameters2 = paramsController.findOabaParameters(params.getId());
 		assertTrue(params.getId() == batchParameters2.getId());
 		assertTrue(params.equals(batchParameters2));
 
 		// Delete the params
 		paramsController.delete(batchParameters2);
-		OabaParameters batchParameters3 = paramsController.find(params.getId());
+		OabaParameters batchParameters3 = paramsController.findOabaParameters(params.getId());
 		assertTrue(batchParameters3 == null);
 
 		checkCounts();
@@ -192,7 +192,7 @@ public class OabaParametersEntityIT {
 
 		// Get the params
 		params = null;
-		params = paramsController.find(id1);
+		params = paramsController.findOabaParameters(id1);
 
 		// Check the value
 		assertTrue(v1.equals(params.getStageModel()));
@@ -223,7 +223,7 @@ public class OabaParametersEntityIT {
 
 		// Get the params
 		params = null;
-		params = paramsController.find(id1);
+		params = paramsController.findOabaParameters(id1);
 
 		// Check the value
 		assertTrue(t.getDifferThreshold() == params.getLowThreshold());

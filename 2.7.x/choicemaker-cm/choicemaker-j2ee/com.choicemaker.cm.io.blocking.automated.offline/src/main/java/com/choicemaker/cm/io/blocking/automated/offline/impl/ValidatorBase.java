@@ -98,11 +98,7 @@ public class ValidatorBase implements IValidatorBase, Serializable {
 		// Log the result
 		String msg =
 			(ret ? "Valid" : "Invalid") + " blocking set: " + bs.toString();
-		if (ret) {
-			logger.fine(msg);
-		} else {
-			logger.warning(msg);
-		}
+		logger.fine(msg);
 
 		return ret;
 	}

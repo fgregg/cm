@@ -10,9 +10,11 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
-import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.*;
-//import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils.*;
-
+import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.FILE_SEPARATOR;
+import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.MAX_FILE_SIZE;
+import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.TEXT_SUFFIX;
+import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.formatJobId;
+import static com.choicemaker.cm.batch.impl.BatchJobFileUtils.getWorkingDir;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;

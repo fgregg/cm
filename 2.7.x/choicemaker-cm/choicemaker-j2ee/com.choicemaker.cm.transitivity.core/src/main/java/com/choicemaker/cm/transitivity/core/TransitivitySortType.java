@@ -3,8 +3,8 @@ package com.choicemaker.cm.transitivity.core;
 import java.util.Comparator;
 
 import com.choicemaker.cm.transitivity.core.TransitivityResultSerializer.Record;
-import com.choicemaker.cm.transitivity.core.TransitivityResultSerializer.SortByID;
 import com.choicemaker.cm.transitivity.core.TransitivityResultSerializer.SortByHoldMergeID;
+import com.choicemaker.cm.transitivity.core.TransitivityResultSerializer.SortByID;
 
 public enum TransitivitySortType {
 	

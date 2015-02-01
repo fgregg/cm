@@ -53,6 +53,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSou
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
@@ -88,13 +89,13 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			+ MatchDedupMDB.class.getName());
 
 	@EJB
-	private OabaJobControllerBean jobController;
+	private OabaJobController jobController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaProcessingController processingController;
@@ -185,7 +186,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 		final long jobId = d.jobID;
 		final OabaJob oabaJob = jobController.findOabaJob(jobId);
 		final OabaParameters params =
-			paramsController.findBatchParamsByJobId(jobId);
+			paramsController.findOabaParametersByJobId(jobId);
 		final ServerConfiguration serverConfig =
 			serverController.findServerConfigurationByJobId(jobId);
 		final OabaEventLog processingEntry =
@@ -225,7 +226,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 		final long jobId = oabaJob.getId();
 		final OabaParameters params =
-			paramsController.findBatchParamsByJobId(jobId);
+			paramsController.findOabaParametersByJobId(jobId);
 		final ServerConfiguration serverConfig =
 			serverController.findServerConfigurationByJobId(jobId);
 		final OabaEventLog processingEntry =

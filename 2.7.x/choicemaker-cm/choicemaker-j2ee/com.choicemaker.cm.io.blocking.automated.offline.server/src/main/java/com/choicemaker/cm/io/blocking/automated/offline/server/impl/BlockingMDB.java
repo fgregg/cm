@@ -93,9 +93,18 @@ public class BlockingMDB extends AbstractOabaMDB {
 		}
 		blockingService.runService();
 
-		log.info("num Blocks " + blockingService.getNumBlocks());
-		log.info("num OS " + blockingService.getNumOversized());
-		log.info("num Invalid: " + blockingService.getNumInvalid());
+		final int numBlocks = blockingService.getNumBlocks();
+		final int numOS = blockingService.getNumOversized();
+		final int numInvalid = blockingService.getNumInvalid();
+		log.info("num Blocks " + numBlocks);
+		log.info("num OS " + numOS);
+		log.info("num Invalid: " + numInvalid);
+		if (numInvalid > numBlocks) {
+			String msg =
+				"Number of invalid blocks (" + numInvalid + ") > "
+						+ "number of valid blocks (" + numBlocks + ")";
+			log.warning(msg);
+		}
 		log.info("Done Blocking: " + blockingService.getTimeElapsed());
 
 		// clean up

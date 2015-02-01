@@ -2,6 +2,7 @@ package com.choicemaker.cmit.trans;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -18,18 +19,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityJobControllerBean;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchJobUtils;
@@ -43,8 +45,8 @@ public class TransitivityJobEntityIT {
 
 	public static final boolean TESTS_AS_EJB_MODULE = true;
 
-//	private final static String LOG_SOURCE = TransitivityJobEntityIT.class
-//			.getSimpleName();
+	// private final static String LOG_SOURCE = TransitivityJobEntityIT.class
+	// .getSimpleName();
 
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
@@ -58,25 +60,25 @@ public class TransitivityJobEntityIT {
 	public static final int MAX_TEST_ITERATIONS = 10;
 
 	@Resource
-	UserTransaction utx;
+	private UserTransaction utx;
 
 	@PersistenceContext(unitName = "oaba")
-	EntityManager em;
+	private EntityManager em;
 
 	@EJB
-	private OabaJobControllerBean oabaController;
+	private OabaJobController oabaController;
 
 	@EJB
 	protected TransitivityTestController transTestController;
 
 	@EJB
-	private OabaJobControllerBean oabaJobController;
+	private OabaJobController oabaJobController;
 
 	@EJB
-	protected TransitivityJobControllerBean transJobController;
+	protected TransitivityJobController transJobController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -99,24 +101,23 @@ public class TransitivityJobEntityIT {
 	@EJB
 	private ServerConfigurationController serverController;
 
-	TestEntityCounts te;
+	private TestEntityCounts te;
+
+//	private final Random random = new Random(new Date().getTime());
 
 	@Before
 	public void setUp() throws Exception {
-		// FIXME STUBBED
-		te = null;
-//			new TestEntityCounts(logger, oabaController, paramsController,
-//					oabaSettingsController, serverController,
-//					processingController, opPropController, rsController,
-//					ridController);
-		// END FIXME
+		te = new TestEntityCounts(logger, oabaController, paramsController,
+				oabaSettingsController, serverController, processingController,
+				opPropController, rsController, ridController);
 	}
 
 	public void checkCounts() {
 		if (te != null) {
 			te.checkCounts(logger, em, utx, oabaController, paramsController,
-					oabaSettingsController, serverController, processingController,
-					opPropController, rsController, ridController);
+					oabaSettingsController, serverController,
+					processingController, opPropController, rsController,
+					ridController);
 		} else {
 			throw new Error("Counts not initialized");
 		}
@@ -138,6 +139,8 @@ public class TransitivityJobEntityIT {
 //		final String METHOD = "testConstruction";
 //
 //		OabaJob oabaJob = createEphemeralOabaJob(te, METHOD, true);
+//		oabaController.save(oabaJob);
+//		assertTrue(oabaJob.getId() != 0);
 //		final Date now = new Date();
 //		TransitivityJob job = createEphemeralTransitivityJob(te, METHOD, true);
 //		final Date now2 = new Date();
@@ -161,68 +164,70 @@ public class TransitivityJobEntityIT {
 	@Test
 	public void testPersistFindRemove() {
 		// FIXME STUBBED
-//		final String METHOD = "testPersistFindRemove";
-//
-//		// Create a job
-//		TransitivityJob job = createEphemeralTransitivityJob(te, METHOD, true);
-//		assertTrue(job.getId() == 0);
-//
-//		// Save the job
-//		transJobController.save(job);
-//		assertTrue(job.getId() != 0);
-//
-//		// Find the job
-//		TransitivityJob transJob2 =
-//			transJobController.findTransitivityJob(job.getId());
-//		assertTrue(job.getId() == transJob2.getId());
-//		assertTrue(job.equals(transJob2));
-//
-//		// Delete the job
-//		transJobController.delete(transJob2);
-//		TransitivityJob batchJob3 =
-//			transJobController.findTransitivityJob(job.getId());
-//		assertTrue(batchJob3 == null);
-//
-//		checkCounts();
+		// final String METHOD = "testPersistFindRemove";
+		//
+		// // Create a job
+		// TransitivityJob job = createEphemeralTransitivityJob(te, METHOD,
+		// true);
+		// assertTrue(job.getId() == 0);
+		//
+		// // Save the job
+		// transJobController.save(job);
+		// assertTrue(job.getId() != 0);
+		//
+		// // Find the job
+		// TransitivityJob transJob2 =
+		// transJobController.findTransitivityJob(job.getId());
+		// assertTrue(job.getId() == transJob2.getId());
+		// assertTrue(job.equals(transJob2));
+		//
+		// // Delete the job
+		// transJobController.delete(transJob2);
+		// TransitivityJob batchJob3 =
+		// transJobController.findTransitivityJob(job.getId());
+		// assertTrue(batchJob3 == null);
+		//
+		// checkCounts();
 	}
 
 	@Test
 	public void testFindAll() {
 		// FIXME STUBBED
-//		final String METHOD = "testFindAll";
-//
-//		List<Long> jobIds = new LinkedList<>();
-//		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
-//			// Create and save a job
-//			TransitivityJob job =
-//				createEphemeralTransitivityJob(te, METHOD, true);
-//			transJobController.save(job);
-//			long id = job.getId();
-//			assertTrue(!jobIds.contains(id));
-//			jobIds.add(id);
-//		}
-//
-//		// Verify the number of jobs has increased
-//		List<TransitivityJob> jobs = transJobController.findAllTransitivityJobs();
-//		assertTrue(jobs != null);
-//
-//		// Find the jobs
-//		boolean isFound = false;
-//		for (long jobId : jobIds) {
-//			for (TransitivityJob job : jobs) {
-//				if (jobId == job.getId()) {
-//					isFound = true;
-//					break;
-//				}
-//			}
-//			assertTrue(isFound);
-//		}
-//
-//		checkCounts();
+		// final String METHOD = "testFindAll";
+		//
+		// List<Long> jobIds = new LinkedList<>();
+		// for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
+		// // Create and save a job
+		// TransitivityJob job =
+		// createEphemeralTransitivityJob(te, METHOD, true);
+		// transJobController.save(job);
+		// long id = job.getId();
+		// assertTrue(!jobIds.contains(id));
+		// jobIds.add(id);
+		// }
+		//
+		// // Verify the number of jobs has increased
+		// List<TransitivityJob> jobs =
+		// transJobController.findAllTransitivityJobs();
+		// assertTrue(jobs != null);
+		//
+		// // Find the jobs
+		// boolean isFound = false;
+		// for (long jobId : jobIds) {
+		// for (TransitivityJob job : jobs) {
+		// if (jobId == job.getId()) {
+		// isFound = true;
+		// break;
+		// }
+		// }
+		// assertTrue(isFound);
+		// }
+		//
+		// checkCounts();
 	}
 
-	protected TransitivityJob createEphemeralTransitivityJob(TestEntityCounts te,
-			String tag, boolean isTag) {
+	protected TransitivityJob createEphemeralTransitivityJob(
+			TestEntityCounts te, String tag, boolean isTag) {
 		ServerConfiguration sc = getDefaultServerConfiguration();
 		OabaJob oabaJob = createEphemeralOabaJob(te, tag, isTag);
 		return BatchJobUtils.createEphemeralTransitivityJob(MAX_SINGLE_LIMIT,
@@ -232,8 +237,11 @@ public class TransitivityJobEntityIT {
 	protected OabaJob createEphemeralOabaJob(TestEntityCounts te, String tag,
 			boolean isTag) {
 		ServerConfiguration sc = getDefaultServerConfiguration();
-		return BatchJobUtils.createEphemeralOabaJobEntity(MAX_SINGLE_LIMIT, utx, sc,
-				em, te, tag, isTag);
+		if (sc == null) {
+			sc = serverController.computeGenericConfiguration();
+		}
+		return BatchJobUtils.createEphemeralOabaJobEntity(MAX_SINGLE_LIMIT,
+				utx, sc, em, te, tag, isTag);
 	}
 
 	protected ServerConfiguration getDefaultServerConfiguration() {

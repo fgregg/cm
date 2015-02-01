@@ -4,14 +4,12 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
+import com.choicemaker.cm.transitivity.core.TransitivityProcessing;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
 @Local
@@ -25,20 +23,14 @@ public interface TransitivityTestController {
 
 	Thresholds createRandomThresholds();
 
-	OabaParametersEntity createOabaParameters(String tag, TestEntityCounts te);
+	TransitivityParametersEntity createTransitivityParameters(String tag, TestEntityCounts te);
 
 	ServerConfiguration getDefaultServerConfiguration();
 
-//	void removeTestEntities(TestEntityCounts te);
-
-	List<OabaParameters> findAllOabaParameters();
-
-	List<OabaJob> findAllOabaJobs();
-
-	List<OabaProcessing> findAllOabaProcessing();
+	List<TransitivityParameters> findAllTransitivityParameters();
 
 	List<TransitivityJob> findAllTransitivityJobs();
 
-	List<TransitivityParameters> findAllTransitivityParameters();
+	List<TransitivityProcessing> findAllTransitivityProcessing();
 
 }

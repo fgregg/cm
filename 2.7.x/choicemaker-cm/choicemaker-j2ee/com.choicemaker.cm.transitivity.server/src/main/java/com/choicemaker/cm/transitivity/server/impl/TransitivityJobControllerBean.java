@@ -22,6 +22,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**
  * A stateless EJB used to manage the persistence of TransitivityJobEntity
@@ -30,7 +32,7 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
  * @author rphall
  */
 @Stateless
-public class TransitivityJobControllerBean {
+public class TransitivityJobControllerBean implements TransitivityJobController {
 
 	private static final Logger logger = Logger
 			.getLogger(TransitivityJobControllerBean.class.getName());
@@ -39,7 +41,7 @@ public class TransitivityJobControllerBean {
 	private EntityManager em;
 
 	@EJB
-	private TransitivityParametersControllerBean paramsController;
+	private TransitivityParametersController paramsController;
 
 	@EJB
 	private ServerConfigurationController serverManager;
@@ -70,6 +72,7 @@ public class TransitivityJobControllerBean {
 		return retVal;
 	}
 
+	@Override
 	public TransitivityJob createPersistentTransitivityJob(String externalID,
 			TransitivityParameters params,
 			OabaJob oabaJob, ServerConfiguration sc)
@@ -116,6 +119,7 @@ public class TransitivityJobControllerBean {
 		return retVal;
 	}
 
+	@Override
 	public TransitivityJob save(TransitivityJob batchJob) {
 		return save(getBean(batchJob));
 	}
@@ -132,11 +136,13 @@ public class TransitivityJobControllerBean {
 		return job;
 	}
 
+	@Override
 	public TransitivityJob findTransitivityJob(long id) {
 		TransitivityJobEntity job = em.find(TransitivityJobEntity.class, id);
 		return job;
 	}
 
+	@Override
 	public List<TransitivityJob> findAllTransitivityJobs() {
 		Query query =
 			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL);
@@ -148,6 +154,7 @@ public class TransitivityJobControllerBean {
 		return retVal;
 	}
 
+	@Override
 	public List<TransitivityJobEntity> findAllByOabaJobId(long batchJobId) {
 		Query query =
 			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID);
@@ -162,6 +169,7 @@ public class TransitivityJobControllerBean {
 		return retVal;
 	}
 
+	@Override
 	public void delete(TransitivityJob transitivityJob) {
 		if (BatchJobEntity.isPersistent(transitivityJob)) {
 			TransitivityJobEntity bean = em.find(TransitivityJobEntity.class, transitivityJob.getId());
@@ -178,6 +186,7 @@ public class TransitivityJobControllerBean {
 		em.flush();
 	}
 
+	@Override
 	public void detach(TransitivityJob job) {
 		em.detach(job);
 	}

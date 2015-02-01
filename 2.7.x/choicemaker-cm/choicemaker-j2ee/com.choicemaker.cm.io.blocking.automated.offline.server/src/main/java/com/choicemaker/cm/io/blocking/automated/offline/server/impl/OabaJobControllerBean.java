@@ -26,6 +26,7 @@ import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -38,7 +39,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
  * @author rphall
  */
 @Stateless
-public class OabaJobControllerBean {
+public class OabaJobControllerBean implements OabaJobController {
 
 	private static final Logger logger = Logger
 			.getLogger(OabaJobControllerBean.class.getName());
@@ -47,7 +48,7 @@ public class OabaJobControllerBean {
 	private EntityManager em;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -87,6 +88,7 @@ public class OabaJobControllerBean {
 		return retVal;
 	}
 
+	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public OabaJob createPersistentOabaJob(String externalID,
 			OabaParameters params, OabaSettings settings, ServerConfiguration sc)
@@ -130,10 +132,12 @@ public class OabaJobControllerBean {
 		return retVal;
 	}
 
+	@Override
 	public OabaJob save(OabaJob batchJob) {
 		return save(getBean(batchJob));
 	}
 
+	@Override
 	public OabaJobEntity save(OabaJobEntity job) {
 		if (job == null) {
 			throw new IllegalArgumentException("null job");
@@ -146,11 +150,13 @@ public class OabaJobControllerBean {
 		return job;
 	}
 
+	@Override
 	public OabaJob findOabaJob(long id) {
 		OabaJobEntity batchJob = em.find(OabaJobEntity.class, id);
 		return batchJob;
 	}
 
+	@Override
 	public List<OabaJob> findAll() {
 		Query query = em.createNamedQuery(OabaJobJPA.QN_OABAJOB_FIND_ALL);
 		@SuppressWarnings("unchecked")
@@ -161,6 +167,7 @@ public class OabaJobControllerBean {
 		return retVal;
 	}
 
+	@Override
 	public void delete(OabaJob oabaJob) {
 		if (BatchJobEntity.isPersistent(oabaJob)) {
 			OabaJobEntity bean = em.find(OabaJobEntity.class, oabaJob.getId());
@@ -177,6 +184,7 @@ public class OabaJobControllerBean {
 		em.flush();
 	}
 
+	@Override
 	public void detach(BatchJob oabaJob) {
 		em.detach(oabaJob);
 	}

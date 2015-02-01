@@ -25,11 +25,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
@@ -223,7 +223,7 @@ public class OabaMdbTestProcedures {
 			fail(e.toString());
 		}
 
-		final OabaJobControllerBean jobController = test.getJobController();
+		final OabaJobController jobController = test.getJobController();
 		assertTrue(INVALID_ID != jobId);
 		OabaJob oabaJob = jobController.findOabaJob(jobId);
 		assertTrue(oabaJob != null);
@@ -233,9 +233,9 @@ public class OabaMdbTestProcedures {
 
 		// Find the persistent OabaParameters object created by the call to
 		// BatchQueryService.startLinkage...
-		final OabaParametersControllerBean paramsController =
+		final OabaParametersController paramsController =
 			test.getParamsController();
-		OabaParameters params = paramsController.findBatchParamsByJobId(jobId);
+		OabaParameters params = paramsController.findOabaParametersByJobId(jobId);
 		te.add(params);
 
 		// Validate that the job parameters are correct

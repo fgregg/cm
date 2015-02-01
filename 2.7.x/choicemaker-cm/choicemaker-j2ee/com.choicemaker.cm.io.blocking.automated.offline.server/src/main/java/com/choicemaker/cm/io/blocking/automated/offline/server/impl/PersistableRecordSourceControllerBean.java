@@ -15,6 +15,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.args.PersistableXmlRecordSource;
 import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 
 @Stateless
@@ -28,10 +29,10 @@ public class PersistableRecordSourceControllerBean implements
 	private EntityManager em;
 
 	@EJB
-	private OabaJobControllerBean jobController;
+	private OabaJobController jobController;
 
 	@EJB
-	private OabaParametersControllerBean paramsController;
+	private OabaParametersController paramsController;
 
 	@EJB
 	private SqlRecordSourceControllerBean sqlRsController;
