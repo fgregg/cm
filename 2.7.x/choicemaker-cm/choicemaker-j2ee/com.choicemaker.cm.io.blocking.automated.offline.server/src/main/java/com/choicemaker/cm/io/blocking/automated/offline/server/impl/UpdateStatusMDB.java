@@ -19,6 +19,8 @@ import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+
 /**
  * This message bean updates the status of the current job.
  * 
@@ -40,7 +42,7 @@ public class UpdateStatusMDB implements MessageListener, Serializable {
 			+ UpdateStatusMDB.class.getName());
 
 	@EJB
-	private OabaJobControllerBean jobController;
+	private OabaJobController jobController;
 
 	public UpdateStatusMDB() {
 	}

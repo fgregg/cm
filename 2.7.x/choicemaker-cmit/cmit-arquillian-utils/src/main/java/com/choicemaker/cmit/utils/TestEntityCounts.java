@@ -25,6 +25,7 @@ import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -35,7 +36,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsE
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsPK;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA;
@@ -105,7 +105,7 @@ public class TestEntityCounts {
 	private Set<BatchJob> batchJobs = new LinkedHashSet<>();
 
 	public TestEntityCounts(final Logger testLogger,
-			final OabaJobControllerBean jobController,
+			final OabaJobController jobController,
 			final OabaParametersController paramsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
@@ -266,7 +266,7 @@ public class TestEntityCounts {
 
 	public void checkCounts(Logger testLogger, final EntityManager em,
 			final UserTransaction utx,
-			final OabaJobControllerBean jobController,
+			final OabaJobController jobController,
 			final OabaParametersController paramsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,
@@ -331,7 +331,7 @@ public class TestEntityCounts {
 	 * current counts of test entities.
 	 */
 	protected void logMaybeAssert(boolean doAssert, Logger L0,
-			final OabaJobControllerBean jobController,
+			final OabaJobController jobController,
 			final OabaParametersController paramsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,

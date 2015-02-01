@@ -37,6 +37,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanU
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 
 /**
@@ -92,7 +93,7 @@ public class TransitivityServiceBean implements TransitivityService {
 	OabaParametersController oabaParamsController;
 
 	@EJB
-	TransitivityJobControllerBean jobController;
+	TransitivityJobController jobController;
 
 	@Resource(name = "jms/transitivityQueue",
 			lookup = "java:/choicemaker/urm/jms/transitivityQueue")

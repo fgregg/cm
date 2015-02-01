@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**
@@ -24,17 +25,16 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersControll
  */
 @Stateless
 public class TransitivityParametersControllerBean extends
-		OabaParametersControllerBean implements
-		TransitivityParametersController {
+		OabaParametersControllerBean implements TransitivityParametersController {
 
 	private static final Logger logger = Logger
 			.getLogger(TransitivityParametersControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
-
-//	@EJB
-	private TransitivityJobControllerBean jobController;
+	
+	@EJB
+	private TransitivityJobController jobController;
 
 	protected TransitivityJobControllerBean getTransJobController() {
 		return jobController;
@@ -84,6 +84,7 @@ public class TransitivityParametersControllerBean extends
 		return p;
 	}
 
+	@Override
 	public TransitivityParameters findTransitivityParameters(long id) {
 		TransitivityParametersEntity p =
 			em.find(TransitivityParametersEntity.class, id);

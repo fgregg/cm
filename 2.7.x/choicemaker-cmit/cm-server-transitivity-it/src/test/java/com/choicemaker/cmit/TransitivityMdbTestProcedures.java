@@ -27,10 +27,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
@@ -212,7 +212,7 @@ public class TransitivityMdbTestProcedures {
 			// END FIXME
 
 			final TransitivityService transitivityService = test.getTransitivityService();
-			final OabaJobControllerBean jobController = test.getJobController();
+			final OabaJobController jobController = test.getJobController();
 			final OabaParametersController paramsController = test.getParamsController();
 			final OabaProcessingController processingController = test.getProcessingController();
 			final JMSContext jmsContext = test.getJmsContext();
@@ -409,7 +409,7 @@ public class TransitivityMdbTestProcedures {
 			final OabaSettings oabaSettings,
 			final ServerConfiguration serverConfiguration,
 			final OabaService batchQuery,
-			final OabaJobControllerBean jobController,
+			final OabaJobController jobController,
 			final OabaProcessingController processingController,
 			final JMSContext jmsContext, final Topic statusTopic) {
 		logger.entering(LOG_SOURCE, tag);

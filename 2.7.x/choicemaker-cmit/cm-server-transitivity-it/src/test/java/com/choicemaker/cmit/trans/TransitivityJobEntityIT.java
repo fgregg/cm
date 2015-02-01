@@ -22,16 +22,16 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityJobControllerBean;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchJobUtils;
@@ -66,16 +66,16 @@ public class TransitivityJobEntityIT {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobControllerBean oabaController;
+	private OabaJobController oabaController;
 
 	@EJB
 	protected TransitivityTestController transTestController;
 
 	@EJB
-	private OabaJobControllerBean oabaJobController;
+	private OabaJobController oabaJobController;
 
 	@EJB
-	protected TransitivityJobControllerBean transJobController;
+	protected TransitivityJobController transJobController;
 
 	@EJB
 	private OabaParametersController paramsController;

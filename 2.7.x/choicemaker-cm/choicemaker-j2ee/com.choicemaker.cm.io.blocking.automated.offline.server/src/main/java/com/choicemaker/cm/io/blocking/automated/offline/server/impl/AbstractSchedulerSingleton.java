@@ -47,6 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataSto
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
@@ -68,7 +69,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	// -- Injected data
 
 	@EJB
-	private OabaJobControllerBean jobController;
+	private OabaJobController jobController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -139,7 +140,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	// -- Accessors
 
-	protected OabaJobControllerBean getJobController() {
+	protected OabaJobController getJobController() {
 		return jobController;
 	}
 

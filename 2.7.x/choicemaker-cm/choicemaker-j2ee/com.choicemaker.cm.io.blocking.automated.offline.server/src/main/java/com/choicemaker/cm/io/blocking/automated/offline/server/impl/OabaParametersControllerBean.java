@@ -12,6 +12,7 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 
 /**
  * An EJB used to test BatchParameter beans within container-defined
@@ -30,9 +31,9 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	private EntityManager em;
 
 	@EJB
-	private OabaJobControllerBean jobController;
+	private OabaJobController jobController;
 
-	protected OabaJobControllerBean getOabaJobController() {
+	protected OabaJobController getOabaJobController() {
 		return jobController;
 	}
 

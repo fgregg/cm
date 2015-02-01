@@ -52,6 +52,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.transitivity.core.TransitivityProcessing.TransitivityEvent;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 
 /**
  * This message bean starts the Transitivity Engine. It assumes that it can
@@ -75,7 +76,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 			+ StartTransitivityMDB.class.getName());
 
 	// @EJB
-	private TransitivityJobControllerBean jobController;
+	private TransitivityJobController jobController;
 
 	// @EJB
 	// private OabaSettingsController settingsController;
