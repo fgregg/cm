@@ -1,5 +1,7 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
+import static com.choicemaker.cm.args.TransitivityParameters.NONPERSISTENT_ID;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -25,14 +27,15 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersControll
  */
 @Stateless
 public class TransitivityParametersControllerBean extends
-		OabaParametersControllerBean implements TransitivityParametersController {
+		OabaParametersControllerBean implements
+		TransitivityParametersController {
 
 	private static final Logger logger = Logger
 			.getLogger(TransitivityParametersControllerBean.class.getName());
 
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
-	
+
 	@EJB
 	private TransitivityJobController jobController;
 
@@ -40,16 +43,14 @@ public class TransitivityParametersControllerBean extends
 		return jobController;
 	}
 
-	protected TransitivityParametersEntity getBean(
-			TransitivityParameters p) {
+	protected TransitivityParametersEntity getBean(TransitivityParameters p) {
 		TransitivityParametersEntity retVal = null;
 		if (p != null) {
 			final long jobId = p.getId();
 			if (p instanceof TransitivityParametersEntity) {
 				retVal = (TransitivityParametersEntity) p;
 			} else {
-				if (TransitivityParametersEntity
-						.isPersistent(p)) {
+				if (TransitivityParametersEntity.isPersistent(p)) {
 					retVal = em.find(TransitivityParametersEntity.class, jobId);
 					if (retVal == null) {
 						String msg =
@@ -60,28 +61,44 @@ public class TransitivityParametersControllerBean extends
 				}
 			}
 			if (retVal == null) {
-				retVal =
-					new TransitivityParametersEntity(p);
+				retVal = new TransitivityParametersEntity(p);
 			}
 		}
 		return retVal;
 	}
 
 	@Override
-	public TransitivityParameters save(
-			TransitivityParameters p) {
+	public TransitivityParameters save(TransitivityParameters p) {
 		return save(getBean(p));
 	}
 
-	TransitivityParametersEntity save(
-			TransitivityParametersEntity p) {
-		if (p.getId() == 0) {
+	TransitivityParametersEntity save(TransitivityParametersEntity p) {
+		if (p == null) {
+			throw new IllegalArgumentException("null parameters");
+		}
+		final boolean persist0 = TransitivityParametersEntity.isPersistent(p);
+		final int h0 = p.hashCode();
+
+		TransitivityParametersEntity retVal = null;
+		if (!persist0) {
+			// The hashCode changes after saving; return a new instance
+			assert p.getId() != NONPERSISTENT_ID;
+			retVal = p;
 			em.persist(p);
+			assert retVal == p;
+			assert h0 != p.hashCode();
+			assert p.getId() != NONPERSISTENT_ID;
+			retVal = new TransitivityParametersEntity(p.getId(),p);
 		} else {
+			// The hashCode is unchanged after saving; return the same instance
 			p = em.merge(p);
 			em.flush();
+			retVal = p;
 		}
-		return p;
+		assert retVal != null;
+		assert (!persist0 && retVal != p && retVal.hashCode() != h0)
+				|| (retVal == p && retVal.hashCode() == h0);
+		return retVal;
 	}
 
 	@Override

@@ -240,6 +240,90 @@ public class AbstractParametersEntity implements Serializable {
 		this.graph = graph;
 	}
 
+	// HACK FIXME REMOVEME
+	protected AbstractParametersEntity(long persistenceId, String type,
+			String modelConfigurationName, float lowThreshold,
+			float highThreshold, long sId, String sType, Long mId,
+			String mType, OabaLinkageType taskType, String format, String graph) {
+
+		if (type == null || type.trim().isEmpty()) {
+			throw new IllegalArgumentException("null or blank type");
+		}
+		if (modelConfigurationName == null
+				|| modelConfigurationName.trim().isEmpty()) {
+			throw new IllegalArgumentException("null or blank modelId");
+		}
+		ImmutableThresholds.validate(lowThreshold, highThreshold);
+		if (sType == null || !sType.equals(sType.trim()) || sType.isEmpty()) {
+			throw new IllegalArgumentException("invalid stage RS type: "
+					+ sType);
+		}
+		if (taskType == null) {
+			throw new IllegalArgumentException("null task type");
+		}
+
+		// The masterRsId, masterRsType and taskType must be consistent.
+		// If the task type is STAGING_DEDUPLICATION, then the masterRsId
+		// and the masterRsType must be null.
+		// If the type is STAGING_TO_MASTER_LINKAGE or MASTER_TO_MASTER_LINKAGE,
+		// then the masterRsId and the masterRsType must be non-null.
+		// If the type is TRANSITIVITY_ANALYSIS, the masterRsId and the
+		// masterRsType must be consistent with one another, but they are
+		// otherwise unconstrained.
+		if (taskType == OabaLinkageType.STAGING_DEDUPLICATION) {
+			if (mId != null) {
+				String msg =
+					"non-null master source id '" + mId + "' (taskType is '"
+							+ taskType + "')";
+				throw new IllegalArgumentException(msg);
+			}
+			if (mType != null) {
+				String msg =
+					"non-null master source type '" + mType
+							+ "' (taskType is '" + taskType + "')";
+				throw new IllegalArgumentException(msg);
+			}
+		} else if (taskType == OabaLinkageType.STAGING_TO_MASTER_LINKAGE
+				|| taskType == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
+			if (mId == null) {
+				String msg =
+					"null master source id '" + mId + "' (taskType is '"
+							+ taskType + "')";
+				throw new IllegalArgumentException(msg);
+			}
+			if (mType == null || !mType.equals(mType.trim()) || mType.isEmpty()) {
+				String msg =
+					"invalid master source type '" + mType + "' (taskType is '"
+							+ taskType + "')";
+				throw new IllegalArgumentException(msg);
+			}
+		} else {
+			assert taskType == OabaLinkageType.TRANSITIVITY_ANALYSIS;
+			if ((mType == null && mId != null)
+					|| (mType != null && mId == null)) {
+				String msg =
+					"inconsistent master source id '" + mId
+							+ "' and master source type '" + mType
+							+ "' (taskType is '" + taskType + "')";
+				throw new IllegalArgumentException(msg);
+			}
+		}
+
+		this.id = persistenceId;
+		this.type = type;
+		this.modelConfigName = modelConfigurationName.trim();
+		this.lowThreshold = lowThreshold;
+		this.highThreshold = highThreshold;
+		this.stageRsId = sId;
+		this.stageRsType = sType;
+		this.masterRsId = mId;
+		this.masterRsType = mType;
+		this.task = taskType.name();
+		this.format = format;
+		this.graph = graph;
+	}
+	// HACK FIXME REMOVEME
+
 	public final long getId() {
 		return id;
 	}

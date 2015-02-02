@@ -134,6 +134,20 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 		}
 	}
 
+	// HACK FIXME REMOVEME
+	public TransitivityParametersEntity(long persistenceId, TransitivityParameters tp) {
+		super(persistenceId, DV_TRANS, tp.getModelConfigurationName(), tp.getLowThreshold(),
+				tp.getHighThreshold(), tp.getStageRsId(), tp.getStageRsType(),
+				tp.getMasterRsId(), tp.getMasterRsType(),
+				OabaLinkageType.TRANSITIVITY_ANALYSIS, tp
+						.getAnalysisResultFormat().name(), tp
+						.getGraphProperty().getName());
+		if (tp.getGraphProperty() == null) {
+			throw new IllegalArgumentException("null graph-property");
+		}
+	}
+	// HACK FIXME REMOVEME
+
 	public TransitivityParametersEntity(OabaParameters p,
 			AnalysisResultFormat format, String graphPropertyName) {
 		super(DV_TRANS, p.getModelConfigurationName(), p.getLowThreshold(), p

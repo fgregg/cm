@@ -86,7 +86,7 @@ public class TransitivityTestControllerBean implements
 		return retVal;
 	}
 
-	public TransitivityParametersEntity createTransitivityParameters(
+	public TransitivityParameters createTransitivityParameters(
 			String tag, TestEntityCounts te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
@@ -98,13 +98,13 @@ public class TransitivityTestControllerBean implements
 			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
 		AnalysisResultFormat format = createRandomAnalysisResultFormat();
 		String graphPropertyName = createRandomGraphPropertyName();
-		TransitivityParametersEntity retVal =
+		TransitivityParameters retVal =
 			new TransitivityParametersEntity(
 					createRandomModelConfigurationName(tag),
 					thresholds.getDifferThreshold(),
 					thresholds.getMatchThreshold(), stage, master, format,
 					graphPropertyName);
-		transParamsController.save(retVal);
+		retVal = transParamsController.save(retVal);
 		te.add((TransitivityParameters) retVal);
 		return retVal;
 	}

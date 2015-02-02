@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
@@ -30,6 +29,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
@@ -97,10 +97,10 @@ public class TransitivityParametersEntityIT {
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaJobController, transParamsController,
-					oabaSettingsController, serverController,
-					oabaProcessingController, opPropController, rsController,
-					ridController);
+			te.checkCounts(logger, em, utx, oabaJobController,
+					transParamsController, oabaSettingsController,
+					serverController, oabaProcessingController,
+					opPropController, rsController, ridController);
 		} else {
 			throw new Error("Counts not initialized");
 		}
@@ -109,10 +109,10 @@ public class TransitivityParametersEntityIT {
 	@Before
 	public void setUp() throws Exception {
 		te =
-			new TestEntityCounts(logger, oabaJobController, transParamsController,
-					oabaSettingsController, serverController,
-					oabaProcessingController, opPropController, rsController,
-					ridController);
+			new TestEntityCounts(logger, oabaJobController,
+					transParamsController, oabaSettingsController,
+					serverController, oabaProcessingController,
+					opPropController, rsController, ridController);
 	}
 
 	@Test
@@ -130,10 +130,13 @@ public class TransitivityParametersEntityIT {
 		// Create parameters
 		TransitivityParameters p =
 			transTestController.createTransitivityParameters(METHOD, te);
+		assertTrue(TransitivityParametersEntity.isPersistent(p));
+		assertTrue(p.getId() != TransitivityParametersEntity.NONPERSISTENT_ID);
+		final long id0 = p.getId();
 
 		// Save the parameters
 		transParamsController.save(p);
-		assertTrue(p.getId() != 0);
+		assertTrue(p.getId() == id0);
 
 		// Find the parameters
 		TransitivityParameters p2 =
@@ -152,93 +155,124 @@ public class TransitivityParametersEntityIT {
 
 	@Test
 	public void testEqualsHashCode() {
-		// FIXME STUBBED
-//		final String METHOD = "testEqualsHashCode";
-//
-//		final TransitivityParameters params1 =
-//				transTestController.createTransitivityParameters(METHOD, te);
-//		final TransitivityParameters params2 = new TransitivityParametersEntity(params1);
-//		te.add(params2);
-//		assertTrue(!params1.equals(params2));
-//		assertTrue(params1.hashCode() != params2.hashCode());
-//		
-//		final TransitivityParameters params1P =
-//				transParamsController.save(params1);
-//		te.add(params1P);
-//		assertTrue(!params1.equals(params1P));
-//		final TransitivityParameters params2P =
-//				transParamsController.save(params2);
-//		te.add(params2P);
-//		assertTrue(!params2.equals(params2P));
-//
-//		checkCounts();
+		final String METHOD = "testEqualsHashCode";
+
+		final TransitivityParameters p0 =
+			transTestController.createTransitivityParameters(METHOD, te);
+		assertTrue(TransitivityParametersEntity.isPersistent(p0));
+		assertTrue(te.contains(p0));
+		final int h0 = p0.hashCode();
+
+		final TransitivityParameters p1 = new TransitivityParametersEntity(p0);
+		final int h1 = p1.hashCode();
+		assertTrue(h0 != h1);
+		assertTrue(!p1.equals(p0));
+		assertTrue(!TransitivityParametersEntity.isPersistent(p1));
+		te.add(p1);
+		assertTrue(te.contains(p1));
+
+		final TransitivityParameters p2 = new TransitivityParametersEntity(p1);
+		assertTrue(p1 != p2);
+		assertTrue(p1.equals(p2));
+		assertTrue(p1.hashCode() == p2.hashCode());
+		te.add(p2);
+		assertTrue(te.contains(p2));
+
+		final TransitivityParameters p1P = transParamsController.save(p1);
+		assertTrue(p1 != p1P);
+		assertTrue(!p1P.equals(p0));
+		assertTrue(TransitivityParametersEntity.isPersistent(p1P));
+
+		// BUG p1 is lost in te because hashCode changes
+		// See http://links.rph.cx/1CSqJ5p for a discussion and a proposed fix
+		assertTrue(!te.contains(p1));
+		// ENDBUG
+
+		assertTrue(!te.contains(p1P));
+		te.add(p1P);
+
+		final TransitivityParameters p2P = transParamsController.save(p2);
+		assertTrue(p2 != p2P);
+		assertTrue(!p2P.equals(p0));
+		assertTrue(p1P.getId() != p2P.getId());
+		assertTrue(!p1P.equals(p2P));
+		assertTrue(p1P.hashCode() != p2P.hashCode());
+
+		// BUG p2 is lost in te because hashCode changes
+		assertTrue(!te.contains(p2));
+		// ENDBUG
+
+		assertTrue(!te.contains(p2P));
+		te.add(p2P);
+
+		checkCounts();
 	}
 
 	@Test
 	public void testStageModel() {
 		// FIXME STUBBED
-//		final String METHOD = "testStageModel";
-//
-//		// Create a params and set a value
-//		OabaParametersEntity template =
-//			transTestController.createTransitivityParameters(METHOD, te);
-//		final String v1 =
-//			transTestController.createRandomModelConfigurationName(METHOD);
-//		OabaParameters params =
-//			new OabaParametersEntity(v1, template.getLowThreshold(),
-//					template.getHighThreshold(), template.getStageRsId(),
-//					template.getStageRsType(), template.getMasterRsId(),
-//					template.getMasterRsType(), template.getOabaLinkageType());
-//		te.add(params);
+		// final String METHOD = "testStageModel";
+		//
+		// // Create a params and set a value
+		// OabaParametersEntity template =
+		// transTestController.createTransitivityParameters(METHOD, te);
+		// final String v1 =
+		// transTestController.createRandomModelConfigurationName(METHOD);
+		// OabaParameters params =
+		// new OabaParametersEntity(v1, template.getLowThreshold(),
+		// template.getHighThreshold(), template.getStageRsId(),
+		// template.getStageRsType(), template.getMasterRsId(),
+		// template.getMasterRsType(), template.getOabaLinkageType());
+		// te.add(params);
 
 		// FIXME stubbed
-//		// Save the params
-//		final long id1 = transParamsController.save(params).getId();
-//
-//		// Get the params
-//		params = null;
-//		params = transParamsController.findOabaParameters(id1);
+		// // Save the params
+		// final long id1 = transParamsController.save(params).getId();
+		//
+		// // Get the params
+		// params = null;
+		// params = transParamsController.findOabaParameters(id1);
 
 		// FIXME STUBBED
-//		// Check the value
-//		assertTrue(v1.equals(params.getStageModel()));
-//		assertTrue(v1.equals(params.getMasterModel()));
-//		assertTrue(v1.equals(params.getModelConfigurationName()));
-//
-//		checkCounts();
+		// // Check the value
+		// assertTrue(v1.equals(params.getStageModel()));
+		// assertTrue(v1.equals(params.getMasterModel()));
+		// assertTrue(v1.equals(params.getModelConfigurationName()));
+		//
+		// checkCounts();
 	}
 
 	@Test
 	public void testThresholds() {
 		// FIXME STUBBED
-//		final String METHOD = "testThresholds";
-//
-//		// Create parameters with known values
-//		OabaParametersEntity template =
-//				transTestController.createTransitivityParameters(METHOD, te);
-//		final Thresholds t = transTestController.createRandomThresholds();
-//		OabaParameters params =
-//			new OabaParametersEntity(template.getModelConfigurationName(),
-//					t.getDifferThreshold(), t.getMatchThreshold(),
-//					template.getStageRsId(), template.getStageRsType(),
-//					template.getMasterRsId(), template.getMasterRsType(),
-//					template.getOabaLinkageType());
-//		te.add(params);
+		// final String METHOD = "testThresholds";
+		//
+		// // Create parameters with known values
+		// OabaParametersEntity template =
+		// transTestController.createTransitivityParameters(METHOD, te);
+		// final Thresholds t = transTestController.createRandomThresholds();
+		// OabaParameters params =
+		// new OabaParametersEntity(template.getModelConfigurationName(),
+		// t.getDifferThreshold(), t.getMatchThreshold(),
+		// template.getStageRsId(), template.getStageRsType(),
+		// template.getMasterRsId(), template.getMasterRsType(),
+		// template.getOabaLinkageType());
+		// te.add(params);
 
 		// FIXME stubbed
-//		// Save the params
-//		final long id1 = transParamsController.save(params).getId();
-//
-//		// Get the params
-//		params = null;
-//		params = transParamsController.findOabaParameters(id1);
+		// // Save the params
+		// final long id1 = transParamsController.save(params).getId();
+		//
+		// // Get the params
+		// params = null;
+		// params = transParamsController.findOabaParameters(id1);
 
 		// FIXME STUBBED
-//		// Check the value
-//		assertTrue(t.getDifferThreshold() == params.getLowThreshold());
-//		assertTrue(t.getMatchThreshold() == params.getHighThreshold());
-//
-//		checkCounts();
+		// // Check the value
+		// assertTrue(t.getDifferThreshold() == params.getLowThreshold());
+		// assertTrue(t.getMatchThreshold() == params.getHighThreshold());
+		//
+		// checkCounts();
 	}
 
 }
