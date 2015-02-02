@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
@@ -127,23 +128,24 @@ public class TransitivityParametersEntityIT {
 		final String METHOD = "testPersistFindRemove";
 
 		// Create parameters
-		TransitivityParameters params =
+		TransitivityParameters p =
 			transTestController.createTransitivityParameters(METHOD, te);
 
 		// Save the parameters
-		transParamsController.save(params);
-		assertTrue(params.getId() != 0);
+		transParamsController.save(p);
+		assertTrue(p.getId() != 0);
 
-		// FIXME stubbed
-//		// Find the parameters
-//		OabaParameters batchParameters2 = transParamsController.findOabaParameters(params.getId());
-//		assertTrue(params.getId() == batchParameters2.getId());
-//		assertTrue(params.equals(batchParameters2));
-//
-//		// Delete the parameters
-//		transParamsController.delete(batchParameters2);
-//		OabaParameters batchParameters3 = transParamsController.findOabaParameters(params.getId());
-//		assertTrue(batchParameters3 == null);
+		// Find the parameters
+		TransitivityParameters p2 =
+			transParamsController.findTransitivityParameters(p.getId());
+		assertTrue(p.getId() == p2.getId());
+		assertTrue(p.equals(p2));
+
+		// Delete the parameters
+		transParamsController.delete(p2);
+		TransitivityParameters p3 =
+			transParamsController.findTransitivityParameters(p.getId());
+		assertTrue(p3 == null);
 
 		checkCounts();
 	}

@@ -30,8 +30,8 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	private static final long serialVersionUID = 271L;
 
-	public static boolean isPersistent(TransitivityParameters params) {
-		throw new Error("not yet implemented");
+	public static boolean isPersistent(TransitivityParameters p) {
+		return p != null && p.getId() != NONPERSISTENT_ID;
 	}
 
 	public static final String OABA_ONLY_DUMP_TAG = "TP/BP PRECEDESSOR";
