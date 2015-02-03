@@ -182,14 +182,7 @@ public class TransitivityParametersEntityIT {
 		assertTrue(p1 == p1P);
 		assertTrue(!p1P.equals(p0));
 		assertTrue(p1P.isPersistent());
-
-// FIXED?		// BUG p1 is lost in te because hashCode changes
-// FIXED?		// See http://links.rph.cx/1CSqJ5p for a discussion and a proposed fix
 		assertTrue(te.contains(p1));
-// FIXED?		// ENDBUG
-
-//		assertTrue(te.contains(p1P));
-//		te.add(p1P);
 
 		final TransitivityParameters p2P = transParamsController.save(p2);
 		assertTrue(p2 == p2P);
@@ -197,13 +190,7 @@ public class TransitivityParametersEntityIT {
 		assertTrue(p1P.getId() != p2P.getId());
 		assertTrue(!p1P.equals(p2P));
 		assertTrue(p1P.hashCode() != p2P.hashCode());
-
-// FIXED?		// BUG p2 is lost in te because hashCode changes
 		assertTrue(te.contains(p2));
-// FIXED?		// ENDBUG
-
-//		assertTrue(te.contains(p2P));
-//		te.add(p2P);
 
 		checkCounts();
 	}
