@@ -41,7 +41,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
-import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.MutableProbabilityModelStub;
 import com.choicemaker.cmit.utils.TestEntityCounts;
@@ -105,9 +104,6 @@ public class SettingsControllerBeanIT {
 
 	@EJB
 	private OabaJobController oabaController;
-
-	@EJB
-	protected OabaTestController oabaTestController;
 
 	@EJB
 	private OabaJobController jobController;

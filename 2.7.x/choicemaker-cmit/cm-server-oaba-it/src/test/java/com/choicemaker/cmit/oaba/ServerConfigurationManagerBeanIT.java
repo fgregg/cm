@@ -40,7 +40,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
-import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
@@ -75,9 +74,6 @@ public class ServerConfigurationManagerBeanIT {
 
 	@EJB
 	private OabaJobController oabaController;
-
-	@EJB
-	protected OabaTestController oabaTestController;
 
 	@EJB
 	private OabaJobController jobController;

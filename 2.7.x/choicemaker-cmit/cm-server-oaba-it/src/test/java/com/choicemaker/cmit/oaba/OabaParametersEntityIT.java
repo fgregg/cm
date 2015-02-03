@@ -19,7 +19,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
@@ -31,8 +33,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
+import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.FakePersistableRecordSource;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
 @RunWith(Arquillian.class)
@@ -52,9 +55,6 @@ public class OabaParametersEntityIT {
 
 	public final int MAX_TEST_ITERATIONS = 10;
 
-	@EJB
-	protected OabaTestController oabaTestControllerBean;
-
 	@Resource
 	UserTransaction utx;
 
@@ -63,9 +63,6 @@ public class OabaParametersEntityIT {
 
 	@EJB
 	private OabaJobController oabaController;
-
-	@EJB
-	protected OabaTestController oabaTestController;
 
 	@EJB
 	private OabaJobController jobController;
@@ -127,7 +124,6 @@ public class OabaParametersEntityIT {
 		assertTrue(em != null);
 		assertTrue(utx != null);
 		assertTrue(paramsController != null);
-		assertTrue(oabaTestControllerBean != null);
 	}
 
 	@Test
@@ -136,7 +132,7 @@ public class OabaParametersEntityIT {
 
 		// Create a params
 		OabaParametersEntity params =
-			oabaTestControllerBean.createBatchParameters(METHOD, te);
+			createBatchParameters(METHOD, te);
 
 		// Save the params
 		paramsController.save(params);
@@ -155,6 +151,26 @@ public class OabaParametersEntityIT {
 		checkCounts();
 	}
 
+	protected OabaParametersEntity createBatchParameters(String tag,
+			TestEntityCounts te) {
+		if (te == null) {
+			throw new IllegalArgumentException("null test entities");
+		}
+		Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
+		PersistableRecordSource stage = new FakePersistableRecordSource(tag);
+		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
+		PersistableRecordSource master =
+			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
+		String modelConfig = EntityManagerUtils.createRandomModelConfigurationName(tag);
+		OabaParametersEntity retVal =
+			new OabaParametersEntity(modelConfig,
+					thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), stage, master, task);
+		paramsController.save(retVal);
+		te.add(retVal);
+		return retVal;
+	}
+
 	@Test
 	public void testEqualsHashCode() {
 		final String METHOD = "testEqualsHashCode";
@@ -162,7 +178,7 @@ public class OabaParametersEntityIT {
 		// Create two generic parameter sets, only one of which is persistent,
 		// and verify inequality
 		OabaParametersEntity params1 =
-			oabaTestControllerBean.createBatchParameters(METHOD, te);
+			createBatchParameters(METHOD, te);
 		OabaParametersEntity params2 = new OabaParametersEntity(params1);
 		te.add(params2);
 		assertTrue(!params1.equals(params2));
@@ -172,62 +188,34 @@ public class OabaParametersEntityIT {
 	}
 
 	@Test
-	public void testStageModel() {
-		final String METHOD = "testStageModel";
+	public void testPersistedValues() {
+		final String METHOD = "testPersistedValues";
 
-		// Create a params and set a value
-		OabaParametersEntity template =
-			oabaTestControllerBean.createBatchParameters(METHOD, te);
-		final String v1 =
-			oabaTestControllerBean.createRandomModelConfigurationName(METHOD);
+		// Create a set of parameters
+		final Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
+		final PersistableRecordSource stage = new FakePersistableRecordSource(METHOD);
+		final OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
+		final PersistableRecordSource master =
+			EntityManagerUtils.createFakeMasterRecordSource(METHOD, task);
+		final String v1 = EntityManagerUtils.createExternalId(METHOD);
 		OabaParameters params =
-			new OabaParametersEntity(v1, template.getLowThreshold(),
-					template.getHighThreshold(), template.getStageRsId(),
-					template.getStageRsType(), template.getMasterRsId(),
-					template.getMasterRsType(), template.getOabaLinkageType());
+			new OabaParametersEntity(v1, thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), stage, master, task);
 		te.add(params);
 
-		// Save the params
+		// Save the parameters
 		final long id1 = paramsController.save(params).getId();
 
-		// Get the params
+		// Get the parameters
 		params = null;
 		params = paramsController.findOabaParameters(id1);
 
-		// Check the value
+		// Check the values
 		assertTrue(v1.equals(params.getStageModel()));
 		assertTrue(v1.equals(params.getMasterModel()));
 		assertTrue(v1.equals(params.getModelConfigurationName()));
-
-		checkCounts();
-	}
-
-	@Test
-	public void testThresholds() {
-		final String METHOD = "testThresholds";
-
-		// Create parameters with known values
-		OabaParametersEntity template =
-			oabaTestControllerBean.createBatchParameters(METHOD, te);
-		final Thresholds t = oabaTestControllerBean.createRandomThresholds();
-		OabaParameters params =
-			new OabaParametersEntity(template.getModelConfigurationName(),
-					t.getDifferThreshold(), t.getMatchThreshold(),
-					template.getStageRsId(), template.getStageRsType(),
-					template.getMasterRsId(), template.getMasterRsType(),
-					template.getOabaLinkageType());
-		te.add(params);
-
-		// Save the params
-		final long id1 = paramsController.save(params).getId();
-
-		// Get the params
-		params = null;
-		params = paramsController.findOabaParameters(id1);
-
-		// Check the value
-		assertTrue(t.getDifferThreshold() == params.getLowThreshold());
-		assertTrue(t.getMatchThreshold() == params.getHighThreshold());
+		assertTrue(thresholds.getDifferThreshold() == params.getLowThreshold());
+		assertTrue(thresholds.getMatchThreshold() == params.getHighThreshold());
 
 		checkCounts();
 	}

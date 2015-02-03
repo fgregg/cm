@@ -53,7 +53,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdSink;
 import com.choicemaker.cmit.OabaMdbTestProcedures;
-import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -132,9 +131,6 @@ public class RecordIdControllerBeanIT {
 
 	@EJB
 	private OabaJobController oabaController;
-
-	@EJB
-	protected OabaTestController oabaTestController;
 
 	@EJB
 	private OabaJobController jobController;

@@ -98,9 +98,6 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	private OabaService oabaService;
 
 	@EJB
-	private OabaTestController oabaTestController;
-
-	@EJB
 	private OperationalPropertyController opPropController;
 
 	@EJB
@@ -227,7 +224,6 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		assertTrue(getSingleMatchQueue() != null);
 		assertTrue(getSourceName() != null);
 		assertTrue(getStartQueue() != null);
-		assertTrue(getTestController() != null);
 		assertTrue(getUtx() != null);
 
 		assertTrue(getTransitivityQueue() != null);
@@ -403,10 +399,6 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	public final Queue getStartQueue() {
 		return startQueue;
-	}
-
-	public final OabaTestController getTestController() {
-		return oabaTestController;
 	}
 
 	public TestEntityCounts getTestEntityCounts() {

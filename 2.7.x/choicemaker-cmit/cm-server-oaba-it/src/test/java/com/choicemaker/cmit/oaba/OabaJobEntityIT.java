@@ -34,7 +34,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchJobUtils;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
@@ -67,9 +66,6 @@ public class OabaJobEntityIT {
 
 	@EJB
 	private OabaJobController oabaController;
-
-	@EJB
-	protected OabaTestController oabaTestController;
 
 	@EJB
 	private OabaJobController oabaJobController;
@@ -127,7 +123,6 @@ public class OabaJobEntityIT {
 		assertTrue(utx != null);
 		assertTrue(oabaController != null);
 		assertTrue(serverController != null);
-		assertTrue(oabaTestController != null);
 	}
 
 	@Test
