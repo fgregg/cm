@@ -29,81 +29,105 @@ import com.choicemaker.cm.transitivity.core.TransitivityResult;
  * 
  * @author pcheung
  *
- * ChoiceMaker Technologies, Inc.
+ *         ChoiceMaker Technologies, Inc.
  */
 @Local
 public interface TransitivityClusterService {
 
-	  String DEFAULT_EJB_REF_NAME = "ejb/TransitivityClusterService";
-	  String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME ;
+	String DEFAULT_EJB_REF_NAME = "ejb/TransitivityClusterService";
+	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
 
 	/**
 	 * Finds matches and possible matches.
 	 * 
-	 * @param   profile  The query profile. E.g., looking for 'JIM SMITH'.
-	 * @param   constraint  Constraints on records to return. The actual semantics and syntax is implementation dependent.
-	 *            A typical example is to query only for records in certain states, e.g., active.
-	 * @param   probabilityModel  The name of the probability accessProvider to use. By convention, "" denotes the default accessProvider.
-	 * @param   differThreshold  The differ threshold.
-	 *             The value must satisfy <code>0 &lt; differThreshold &lt;=
+	 * @param profile
+	 *            The query profile. E.g., looking for 'JIM SMITH'.
+	 * @param constraint
+	 *            Constraints on records to return. The actual semantics and
+	 *            syntax is implementation dependent. A typical example is to
+	 *            query only for records in certain states, e.g., active.
+	 * @param probabilityModel
+	 *            The name of the probability accessProvider to use. By
+	 *            convention, "" denotes the default accessProvider.
+	 * @param differThreshold
+	 *            The differ threshold. The value must satisfy
+	 *            <code>0 &lt; differThreshold &lt;=
 	 *             highProbabilityThreshold</code>.
-	 * @param    matchThreshold  The match threshold. See above for explanation and constraints.
-	 * @param    maxNumMatches The maximum number of matches that ChoiceMaker may return.
-	 *             See also <code>UnderspecifiedProfileException</code> below.
-	 * @param    returnDataFormat  The format in which to return the actual record data, e.g., XML or bean. No
-	 *             data is returned if <code>returnDataFormat</code> is <code>null</code> or an unknown value.
-	 * @param    purpose  An arbitrary string that is stored and may be used for
-	 *             later reporting.
-	 * @param	 compact - set this to true if you want the CompositeEntity in the
-	 * 				TransitivityResult to be compacted before returning. 
-	 * @return   A TransitivityResult object
-	 * @throws    UnderspecifiedProfileException  If the profile is not specific enough (e.g., all JIMs in NYC)
-	 *             to perform blocking given <code>maxNumMatches</code>.
-	 * @throws   InvalidModelException  if the accessProvider does not exist or is not properly configured.
-	 * @throws   InvalidProfileException  if <code>profile</code> does not adhere to above.
-	 * @throws   IllegalArgumentException if the specified probability accessProvider specified does not exist or the
-	 *             values of <code>differThreshold</code> and <code>matchThreshold</code> don't satisfy the constraints.
-	 * @throws   DatabaseException If a database error prevents ChoiceMaker from fulfilling the request.
-	 * @throws   AccessControlException  If authentication or authorization fails.
-	 * @throws   RemoteException  If a communication problem occurs.
-	 */
-	public TransitivityResult findClusters(
-		Profile profile,
-		Object constraint,
-		String probabilityModel,
-		float differThreshold,
-		float matchThreshold,
-		int maxNumMatches,
-		String returnDataFormat,
-		String purpose,
-		boolean compact)
-		throws AccessControlException, InvalidProfileException, RemoteException, 
-		InvalidModelException, UnderspecifiedProfileException, DatabaseException;
-		
-	
-	/** This method takes the output of findMatches and runs the match result through the
-	 * Transitivity Engine.
-	 * 
-	 * @param profile - contains the query record
-	 * @param candidates - match candidates to the query record
-	 * @param modelName - probability accessProvider name
-	 * @param differThreshold - differ threshold
-	 * @param matchThreshold - match threshold
-	 * @param compact - set this to true if you want the CompositeEntity in the
-	 * 			TransitivityResult to be compacted before returning. 
+	 * @param matchThreshold
+	 *            The match threshold. See above for explanation and
+	 *            constraints.
+	 * @param maxNumMatches
+	 *            The maximum number of matches that ChoiceMaker may return. See
+	 *            also <code>UnderspecifiedProfileException</code> below.
+	 * @param returnDataFormat
+	 *            The format in which to return the actual record data, e.g.,
+	 *            XML or bean. No data is returned if
+	 *            <code>returnDataFormat</code> is <code>null</code> or an
+	 *            unknown value.
+	 * @param purpose
+	 *            An arbitrary string that is stored and may be used for later
+	 *            reporting.
+	 * @param compact
+	 *            - set this to true if you want the CompositeEntity in the
+	 *            TransitivityResult to be compacted before returning.
 	 * @return A TransitivityResult object
-	 * @throws   RemoteException  If a communication problem occurs.
+	 * @throws UnderspecifiedProfileException
+	 *             If the profile is not specific enough (e.g., all JIMs in NYC)
+	 *             to perform blocking given <code>maxNumMatches</code>.
+	 * @throws InvalidModelException
+	 *             if the accessProvider does not exist or is not properly
+	 *             configured.
+	 * @throws InvalidProfileException
+	 *             if <code>profile</code> does not adhere to above.
+	 * @throws IllegalArgumentException
+	 *             if the specified probability accessProvider specified does
+	 *             not exist or the values of <code>differThreshold</code> and
+	 *             <code>matchThreshold</code> don't satisfy the constraints.
+	 * @throws DatabaseException
+	 *             If a database error prevents ChoiceMaker from fulfilling the
+	 *             request.
+	 * @throws AccessControlException
+	 *             If authentication or authorization fails.
+	 * @throws RemoteException
+	 *             If a communication problem occurs.
+	 */
+	public TransitivityResult findClusters(Profile profile, Object constraint,
+			String probabilityModel, float differThreshold,
+			float matchThreshold, int maxNumMatches, String returnDataFormat,
+			String purpose, boolean compact) throws AccessControlException,
+			InvalidProfileException, RemoteException, InvalidModelException,
+			UnderspecifiedProfileException, DatabaseException;
+
+	/**
+	 * This method takes the output of findMatches and runs the match result
+	 * through the Transitivity Engine.
+	 * 
+	 * @param profile
+	 *            - contains the query record
+	 * @param candidates
+	 *            - match candidates to the query record
+	 * @param modelName
+	 *            - probability accessProvider name
+	 * @param differThreshold
+	 *            - differ threshold
+	 * @param matchThreshold
+	 *            - match threshold
+	 * @param compact
+	 *            - set this to true if you want the CompositeEntity in the
+	 *            TransitivityResult to be compacted before returning.
+	 * @return A TransitivityResult object
+	 * @throws RemoteException
+	 *             If a communication problem occurs.
 	 * @throws InvalidProfileException
 	 * @throws TransitivityException
-	 * @throws InvalidModelException  if the accessProvider does not exist or is not properly configured.
+	 * @throws InvalidModelException
+	 *             if the accessProvider does not exist or is not properly
+	 *             configured.
 	 */
-	public TransitivityResult findClusters(
-		Profile profile,
-		MatchCandidate[] candidates,
-		String modelName,
-		float differThreshold,
-		float matchThreshold,
-		boolean compact) throws 
-		RemoteException, InvalidProfileException, TransitivityException, InvalidModelException;
+	public TransitivityResult findClusters(Profile profile,
+			MatchCandidate[] candidates, String modelName,
+			float differThreshold, float matchThreshold, boolean compact)
+			throws RemoteException, InvalidProfileException,
+			TransitivityException, InvalidModelException;
 
 }

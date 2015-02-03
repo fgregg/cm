@@ -60,6 +60,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterM
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
@@ -167,7 +168,8 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 					oabaJob = getJobController().findOabaJob(jobId);
 					final OabaParameters params =
-						getParametersController().findOabaParametersByJobId(jobId);
+						getParametersController().findOabaParametersByJobId(
+								jobId);
 					final OabaEventLog processingLog =
 						getProcessingController().getProcessingLog(oabaJob);
 					final OabaSettings oabaSettings =

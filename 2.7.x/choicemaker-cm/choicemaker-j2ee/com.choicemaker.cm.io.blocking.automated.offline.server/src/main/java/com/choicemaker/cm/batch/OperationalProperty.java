@@ -2,6 +2,8 @@ package com.choicemaker.cm.batch;
 
 import java.io.Serializable;
 
+import com.choicemaker.cm.args.PersistentObject;
+
 /**
  * An operational property is some property computed during a batch job that
  * needs to be retained temporarily.<br/>
@@ -13,13 +15,7 @@ import java.io.Serializable;
  *
  * @author rphall
  */
-public interface OperationalProperty extends Serializable {
-
-	/** Default persistence key of an ephemeral operational property */
-	long INVALID_ID = 0;
-
-	/** Physical persistence key */
-	long getId();
+public interface OperationalProperty extends PersistentObject, Serializable {
 
 	/** The identifier of the job that owns this operational property */
 	long getJobId();

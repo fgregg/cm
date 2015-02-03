@@ -29,6 +29,7 @@ import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -37,7 +38,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultServerConfigurationEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
 import com.choicemaker.cmit.OabaTestController;

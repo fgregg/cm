@@ -17,30 +17,28 @@ import com.choicemaker.cm.transitivity.core.MatchEdgeProperty;
 
 /**
  * This object takes an Iterator of uncompacted graphs (CompositeEntity) and
- * returns an Iterator of compacted graphs using match edges property 
- * and biconnected graph property. 
+ * returns an Iterator of compacted graphs using match edges property and
+ * biconnected graph property.
  * 
  * @author pcheung
  *
- * ChoiceMaker Technologies, Inc.
+ *         ChoiceMaker Technologies, Inc.
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 public class MatchBiconnectedIterator extends GenericIterator {
 
 	public static final String NAME = "BCM";
 
-//	private Iterator compositeEntities;
+	// private Iterator compositeEntities;
 
-	/** This constructor takes in an Iterator of CompositeEntity.
+	/**
+	 * This constructor takes in an Iterator of CompositeEntity.
 	 * 
 	 * @param compositeEntities
 	 */
 	public MatchBiconnectedIterator(Iterator compositeEntities) {
-		super(
-			NAME,
-			compositeEntities,
-			MatchEdgeProperty.getInstance(),
-			new BiConnectedProperty());
+		super(NAME, compositeEntities, MatchEdgeProperty.getInstance(),
+				new BiConnectedProperty());
 	}
 
 }

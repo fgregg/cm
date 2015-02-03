@@ -39,7 +39,7 @@ public class SqlRecordSourceControllerBean /*
 		// Has the record source already been persisted?
 		final long rsId = rs.getId();
 		SqlRecordSourceEntity retVal = null;
-		if (PersistableRecordSource.NONPERSISTENT_ID != rsId) {
+		if (rs.isPersistent()) {
 			// The record source appears to be persistent -- check the DB
 			retVal = findInternal(rsId);
 			if (retVal == null) {
@@ -63,16 +63,16 @@ public class SqlRecordSourceControllerBean /*
 			// Save the specified settings to the DB
 			PersistableSqlRecordSource psrs = (PersistableSqlRecordSource) rs;
 			retVal = new SqlRecordSourceEntity(psrs);
-			assert retVal.getId() == PersistableRecordSource.NONPERSISTENT_ID;
+			assert !retVal.isPersistent();
 			em.persist(retVal);
-			assert retVal.getId() != PersistableRecordSource.NONPERSISTENT_ID;
+			assert retVal.isPersistent();
 			String msg =
 				"The record source is persistent in the database with id = "
 						+ retVal.getId();
 			logger.info(msg);
 		}
 		assert retVal != null;
-		assert retVal.getId() != PersistableRecordSource.NONPERSISTENT_ID;
+		assert retVal.isPersistent();
 		return retVal;
 	}
 

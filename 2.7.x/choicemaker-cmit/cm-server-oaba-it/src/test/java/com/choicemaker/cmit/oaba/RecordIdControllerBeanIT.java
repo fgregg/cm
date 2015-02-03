@@ -41,6 +41,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTran
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -48,7 +49,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdSink;

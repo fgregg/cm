@@ -17,20 +17,21 @@ import java.util.logging.Logger;
  * @author rphall
  * @version $Revision: 1.2 $ $Date: 2010/04/16 20:43:18 $
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 public class ClusteringIteratorFactory {
 
-	private static final Logger log = Logger.getLogger(ClusteringIteratorFactory.class.getName());
-	
+	private static final Logger log = Logger
+			.getLogger(ClusteringIteratorFactory.class.getName());
+
 	private static ClusteringIteratorFactory instance = null;
 	private static Object instanceSynch = new Object();
-	
+
 	private ClusteringIteratorFactory() {
 	}
-	
+
 	public static ClusteringIteratorFactory getInstance() {
 		if (instance == null) {
-			synchronized(instanceSynch) {
+			synchronized (instanceSynch) {
 				if (instance == null) {
 					instance = new ClusteringIteratorFactory();
 				}
@@ -38,16 +39,20 @@ public class ClusteringIteratorFactory {
 		}
 		return instance;
 	}
-	
-	/**
-	 * Creates an iterator that finds clusters of records ("compacted" CompositeEntities).
-	 * @param name name of a clustering iterator (e.g. FCM, CM, BCM)
-	 * @param ceIter a group of entities that should be grouped
-	 * @return
-	 */	
-	public Iterator createClusteringIterator(String name,Iterator ceIter) {
 
-		if (name == null || name.trim().length() ==0) {
+	/**
+	 * Creates an iterator that finds clusters of records ("compacted"
+	 * CompositeEntities).
+	 * 
+	 * @param name
+	 *            name of a clustering iterator (e.g. FCM, CM, BCM)
+	 * @param ceIter
+	 *            a group of entities that should be grouped
+	 * @return
+	 */
+	public Iterator createClusteringIterator(String name, Iterator ceIter) {
+
+		if (name == null || name.trim().length() == 0) {
 			throw new IllegalArgumentException("null or blank iterator name");
 		}
 		if (ceIter == null) {
@@ -56,14 +61,15 @@ public class ClusteringIteratorFactory {
 
 		Iterator retVal = null;
 
-		// Replace by lookup in a plugin registry (or replace factory by dependency injection)
-		if(name.equals(MatchBiconnectedIterator.NAME)) {
+		// Replace by lookup in a plugin registry (or replace factory by
+		// dependency injection)
+		if (name.equals(MatchBiconnectedIterator.NAME)) {
 			retVal = new MatchBiconnectedIterator(ceIter);
-		} else if ( name.equals(MatchFullyConnectedIterator.NAME) ) {
+		} else if (name.equals(MatchFullyConnectedIterator.NAME)) {
 			retVal = new MatchFullyConnectedIterator(ceIter);
-		} else if( name.equals(MatchBiMatchHoldFullyConnectedIterator.NAME)) {
+		} else if (name.equals(MatchBiMatchHoldFullyConnectedIterator.NAME)) {
 			retVal = new MatchBiMatchHoldFullyConnectedIterator(ceIter);
-		} else if(name.equals(MatchConnectedIterator.NAME)) {
+		} else if (name.equals(MatchConnectedIterator.NAME)) {
 			retVal = new MatchConnectedIterator(ceIter);
 		} else {
 			String msg = "unknown group match criterium";
@@ -75,4 +81,3 @@ public class ClusteringIteratorFactory {
 	}
 
 }
-

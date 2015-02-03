@@ -3,7 +3,9 @@ package com.choicemaker.cm.batch;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface BatchProcessingEvent extends Serializable {
+import com.choicemaker.cm.args.PersistentObject;
+
+public interface BatchProcessingEvent extends PersistentObject, Serializable {
 
 	/** Default id value for non-persistent batch jobs */
 	public static final long INVALID_ID = 0;
@@ -29,9 +31,6 @@ public interface BatchProcessingEvent extends Serializable {
 
 	/** Maximum estimate of the amount of processing completed (inclusive) */
 	public static final float MAXIMUM_FRACTION_COMPLETE = 1.0f;
-
-	/** Returns the persistence identifier for this entry */
-	long getId();
 
 	/** Returns the identifier of the batch job to which this entry applies */
 	long getJobId();

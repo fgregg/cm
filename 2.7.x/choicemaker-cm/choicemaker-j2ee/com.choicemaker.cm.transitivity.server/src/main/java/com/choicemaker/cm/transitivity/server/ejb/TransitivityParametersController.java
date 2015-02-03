@@ -22,4 +22,3 @@ public interface TransitivityParametersController {
 	TransitivityParameters save(TransitivityParameters tp);
 
 }
-

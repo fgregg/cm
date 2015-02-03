@@ -95,7 +95,7 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 			ServerConfiguration serverConfig, String externalId) {
 		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(),
 				serverConfig.getId(), externalId, randomTransactionId(),
-				INVALID_ID, INVALID_ID, DEFAULT_RIGOR);
+				NONPERSISTENT_ID, NONPERSISTENT_ID, DEFAULT_RIGOR);
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 			BatchJobRigor bjr) {
 		this(OabaJobJPA.DISCRIMINATOR_VALUE, params.getId(), settings.getId(),
 				serverConfig.getId(), externalId, randomTransactionId(),
-				INVALID_ID, INVALID_ID, bjr);
+				NONPERSISTENT_ID, NONPERSISTENT_ID, bjr);
 	}
 
 	public OabaJobEntity(OabaJob o) {

@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 
 /**
  * An EJB used to test BatchParameter beans within container-defined
@@ -44,7 +45,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 			if (p instanceof OabaParametersEntity) {
 				retVal = (OabaParametersEntity) p;
 			} else {
-				if (OabaParametersEntity.isPersistent(p)) {
+				if (p.isPersistent()) {
 					retVal = em.find(OabaParametersEntity.class, jobId);
 					if (retVal == null) {
 						String msg =
@@ -106,7 +107,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 
 	@Override
 	public void delete(OabaParameters p) {
-		if (OabaParametersEntity.isPersistent(p)) {
+		if (p.isPersistent()) {
 			OabaParametersEntity bean = getBean(p);
 			bean = em.merge(bean);
 			em.remove(bean);
@@ -116,7 +117,7 @@ public class OabaParametersControllerBean implements OabaParametersController {
 
 	@Override
 	public void detach(OabaParameters p) {
-		if (OabaParametersEntity.isPersistent(p)) {
+		if (p.isPersistent()) {
 			OabaParametersEntity bean = getBean(p);
 			bean = em.merge(bean);
 			em.detach(p);

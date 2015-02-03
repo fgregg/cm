@@ -1,6 +1,6 @@
 package com.choicemaker.cmit;
 
-import static com.choicemaker.cm.batch.BatchJob.INVALID_ID;
+import static com.choicemaker.cm.batch.impl.AbstractPersistentObject.NONPERSISTENT_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OABA;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
 import static org.junit.Assert.assertTrue;
@@ -28,10 +28,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotifica
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
@@ -139,7 +139,7 @@ public class TransitivityMdbTestProcedures {
 
 		final PersistableRecordSource staging =
 				test.getRecordSourceController().save(c.getStagingRecordSource());
-			assertTrue(staging.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+			assertTrue(staging.isPersistent());
 			te.add(staging);
 
 			final PersistableRecordSource master;
@@ -149,7 +149,7 @@ public class TransitivityMdbTestProcedures {
 				master =
 					test.getRecordSourceController()
 							.save(c.getMasterRecordSource());
-				assertTrue(master.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+				assertTrue(master.isPersistent());
 				te.add(master);
 			}
 
@@ -245,7 +245,7 @@ public class TransitivityMdbTestProcedures {
 //		final TestEntityCounts te = test.getTestEntityCounts();
 		te.add(bp);
 
-		long jobId = INVALID_ID;
+		long jobId = NONPERSISTENT_ID;
 		try {
 //			final OabaLinkageType linkage = bp.getOabaLinkageType();
 			switch (linkage) {
@@ -264,7 +264,7 @@ public class TransitivityMdbTestProcedures {
 		} catch (ServerConfigurationException e) {
 			fail(e.toString());
 		}
-		assertTrue(INVALID_ID != jobId);
+		assertTrue(jobId != NONPERSISTENT_ID);
 		OabaJob batchJob = jobController.findOabaJob(jobId);
 		assertTrue(batchJob != null);
 		te.add(batchJob);
@@ -423,7 +423,7 @@ public class TransitivityMdbTestProcedures {
 			throw new IllegalArgumentException("null argument");
 		}
 
-		long jobId = INVALID_ID;
+		long jobId = NONPERSISTENT_ID;
 		try {
 			final OabaLinkageType linkage = bp.getOabaLinkageType();
 			switch (linkage) {

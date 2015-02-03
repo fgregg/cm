@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.choicemaker.cm.args.PersistentObject;
 import com.choicemaker.cm.core.IControl;
 
-public interface BatchJob extends IControl, Serializable {
-
-	/** Default id value for non-persistent batch jobs */
-	long INVALID_ID = 0;
+public interface BatchJob extends PersistentObject, IControl, Serializable {
 
 	/** Minimum valid value for fractionComplete (inclusive) */
 	int MIN_PERCENTAGE_COMPLETED = 0;
@@ -18,8 +16,6 @@ public interface BatchJob extends IControl, Serializable {
 	int MAX_PERCENTAGE_COMPLETED = 100;
 
 	BatchJobRigor DEFAULT_RIGOR = BatchJobRigor.COMPUTED;
-
-	long getId();
 
 	long getBatchParentId();
 

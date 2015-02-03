@@ -1,6 +1,5 @@
 package com.choicemaker.cm.batch.impl;
 
-import static com.choicemaker.cm.batch.OperationalProperty.INVALID_ID;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.PN_OPPROP_DELETE_BY_JOB_P1;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.PN_OPPROP_FINDALL_BY_JOB_P1;
 import static com.choicemaker.cm.batch.impl.OperationalPropertyJPA.PN_OPPROP_FIND_BY_JOB_PNAME_P1;
@@ -57,7 +56,7 @@ public class OperationalPropertyControllerBean implements
 		// Have the settings already been persisted?
 		final long pid = p.getId();
 		OperationalPropertyEntity retVal = null;
-		if (INVALID_ID != pid) {
+		if (p.isPersistent()) {
 			// Settings appear to be persistent -- check them against the DB
 			retVal = findInternal(pid);
 			if (retVal == null) {
@@ -67,7 +66,7 @@ public class OperationalPropertyControllerBean implements
 							+ "The search will continue by job id and name.";
 				logger.warning(msg);
 				retVal = null;
-			} else if (!retVal.equals0(p)) {
+			} else if (!retVal.equals(p)) {
 				String msg =
 					"The specified property (" + p
 							+ ") is different in the DB. "
@@ -88,7 +87,7 @@ public class OperationalPropertyControllerBean implements
 							+ p.getValue() + "'.";
 				logger.info(msg);
 				retVal = null;
-			} else if (!retVal.equals0(p)) {
+			} else if (!retVal.equals(p)) {
 				String msg =
 					"The specified property (" + p
 							+ ") is different in the DB. "
@@ -103,14 +102,14 @@ public class OperationalPropertyControllerBean implements
 			retVal = saveInternal(p);
 		}
 		assert retVal != null;
-		assert retVal.getId() != INVALID_ID;
+		assert retVal.isPersistent();
 
 		return retVal;
 	}
 
 	protected OperationalPropertyEntity saveInternal(OperationalProperty p) {
 		assert p != null;
-		assert p.getId() == INVALID_ID;
+		assert !p.isPersistent();
 
 		// Save the specified property to the DB
 		OperationalPropertyEntity retVal;
@@ -119,9 +118,9 @@ public class OperationalPropertyControllerBean implements
 		} else {
 			retVal = new OperationalPropertyEntity(p);
 		}
-		assert retVal.getId() == INVALID_ID;
+		assert !retVal.isPersistent();
 		em.persist(retVal);
-		assert retVal.getId() != INVALID_ID;
+		assert retVal.isPersistent();
 		String msg = "Persistent: " + retVal;
 		logger.info(msg);
 		return retVal;
@@ -129,7 +128,7 @@ public class OperationalPropertyControllerBean implements
 
 	protected OperationalPropertyEntity updateInternal(OperationalProperty p) {
 		assert p != null;
-		assert p.getId() != INVALID_ID;
+		assert p.isPersistent();
 
 		final long pid = p.getId();
 		OperationalPropertyEntity ope =
@@ -161,7 +160,7 @@ public class OperationalPropertyControllerBean implements
 
 	protected OperationalPropertyEntity findInternal(long propertyId) {
 		OperationalPropertyEntity retVal = null;
-		if (propertyId != INVALID_ID) {
+		if (AbstractPersistentObject.isPersistentId(propertyId)) {
 			retVal = em.find(OperationalPropertyEntity.class, propertyId);
 		}
 		return retVal;
@@ -169,7 +168,7 @@ public class OperationalPropertyControllerBean implements
 
 	@Override
 	public OperationalProperty find(final BatchJob job, final String name) {
-		if (job == null || !BatchJobEntity.isPersistent(job)) {
+		if (job == null || !job.isPersistent()) {
 			throw new IllegalArgumentException("invalid job: " + job);
 		}
 		return findInternal(job.getId(), name);
@@ -189,7 +188,7 @@ public class OperationalPropertyControllerBean implements
 		}
 
 		OperationalPropertyEntity retVal = null;
-		if (jobId != INVALID_ID) {
+		if (!AbstractPersistentObject.isPersistentId(jobId)) {
 			Query query = em.createNamedQuery(QN_OPPROP_FIND_BY_JOB_PNAME);
 			query.setParameter(PN_OPPROP_FIND_BY_JOB_PNAME_P1, jobId);
 			query.setParameter(PN_OPPROP_FIND_BY_JOB_PNAME_P2, stdName);
@@ -205,7 +204,7 @@ public class OperationalPropertyControllerBean implements
 				throw new IllegalStateException(msg);
 			}
 		}
-		assert retVal == null || retVal.getJobId() != INVALID_ID;
+		assert retVal == null || retVal.isPersistent();
 
 		return retVal;
 	}
@@ -214,7 +213,7 @@ public class OperationalPropertyControllerBean implements
 	public List<OperationalProperty> findAllByJob(BatchJob job) {
 		List<OperationalProperty> retVal = new LinkedList<>();
 		final long jobId = job.getId();
-		if (jobId != INVALID_ID) {
+		if (job.isPersistent()) {
 			Query query = em.createNamedQuery(QN_OPPROP_FINDALL_BY_JOB);
 			query.setParameter(PN_OPPROP_FINDALL_BY_JOB_P1, jobId);
 			@SuppressWarnings("unchecked")
@@ -230,7 +229,7 @@ public class OperationalPropertyControllerBean implements
 	@Override
 	public int deleteOperationalPropertiesByJobId(long jobId) {
 		int retVal = 0;
-		if (jobId != INVALID_ID) {
+		if (AbstractPersistentObject.isPersistentId(jobId)) {
 			Query query = em.createNamedQuery(QN_OPPROP_DELETE_BY_JOB);
 			query.setParameter(PN_OPPROP_DELETE_BY_JOB_P1, jobId);
 			int deletedCount = query.executeUpdate();

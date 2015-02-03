@@ -1,5 +1,6 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.batch.impl.AbstractPersistentObject.NONPERSISTENT_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_INTEGER;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_LONG;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE.TYPE_STRING;
@@ -42,7 +43,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
-import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdTranslation;
@@ -144,7 +144,7 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 	// -- Construction
 
 	protected AbstractRecordIdTranslationEntity() {
-		this.jobId = BatchJob.INVALID_ID;
+		this.jobId = NONPERSISTENT_ID;
 		this.translatedId = INVALID_TRANSLATED_ID;
 		this.recordId = INVALID_RECORD_ID;
 		this.recordType = DV_ABSTRACT.charAt(0);
@@ -153,7 +153,7 @@ public abstract class AbstractRecordIdTranslationEntity<T extends Comparable<T>>
 
 	protected AbstractRecordIdTranslationEntity(long jobId, String recordId,
 			char recordType, char recordSource, int translatedId) {
-		assert jobId != BatchJob.INVALID_ID;
+		assert jobId != NONPERSISTENT_ID;
 		assert translatedId > INVALID_TRANSLATED_ID;
 		assert recordId != INVALID_RECORD_ID;
 		assert recordType != DV_ABSTRACT.charAt(0);

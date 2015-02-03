@@ -30,10 +30,6 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	private static final long serialVersionUID = 271L;
 
-	public static boolean isPersistent(TransitivityParameters p) {
-		return p != null && p.getId() != NONPERSISTENT_ID;
-	}
-
 	public static final String OABA_ONLY_DUMP_TAG = "TP/BP PRECEDESSOR";
 
 	public static final String COMMON_DUMP_TAG = "TP/BP";
@@ -135,10 +131,11 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	}
 
 	// HACK FIXME REMOVEME
-	public TransitivityParametersEntity(long persistenceId, TransitivityParameters tp) {
-		super(persistenceId, DV_TRANS, tp.getModelConfigurationName(), tp.getLowThreshold(),
-				tp.getHighThreshold(), tp.getStageRsId(), tp.getStageRsType(),
-				tp.getMasterRsId(), tp.getMasterRsType(),
+	public TransitivityParametersEntity(long persistenceId,
+			TransitivityParameters tp) {
+		super(persistenceId, DV_TRANS, tp.getModelConfigurationName(), tp
+				.getLowThreshold(), tp.getHighThreshold(), tp.getStageRsId(),
+				tp.getStageRsType(), tp.getMasterRsId(), tp.getMasterRsType(),
 				OabaLinkageType.TRANSITIVITY_ANALYSIS, tp
 						.getAnalysisResultFormat().name(), tp
 						.getGraphProperty().getName());
@@ -146,6 +143,7 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 			throw new IllegalArgumentException("null graph-property");
 		}
 	}
+
 	// HACK FIXME REMOVEME
 
 	public TransitivityParametersEntity(OabaParameters p,

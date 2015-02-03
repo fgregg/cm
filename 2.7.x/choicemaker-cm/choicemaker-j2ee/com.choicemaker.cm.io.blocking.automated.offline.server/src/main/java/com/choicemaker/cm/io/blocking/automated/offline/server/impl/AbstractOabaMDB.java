@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;

@@ -44,7 +44,8 @@ import com.choicemaker.cm.batch.OperationalProperty;
 				query = JPQL_OPPROP_DELETE_BY_JOB) })
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
-public class OperationalPropertyEntity implements OperationalProperty {
+public class OperationalPropertyEntity extends AbstractPersistentObject
+		implements OperationalProperty {
 
 	private static final long serialVersionUID = 1L;
 
@@ -78,15 +79,15 @@ public class OperationalPropertyEntity implements OperationalProperty {
 	// -- Constructors
 
 	protected OperationalPropertyEntity() {
-		this.id = INVALID_ID;
-		this.jobId = BatchJob.INVALID_ID;
+		this.id = NONPERSISTENT_ID;
+		this.jobId = NONPERSISTENT_ID;
 		this.name = INVALID_NAME;
 		this.value = INVALID_VALUE;
 	}
 
 	public OperationalPropertyEntity(BatchJob job, final String pn,
 			final String pv) {
-		if (job == null || !BatchJobEntity.isPersistent(job)) {
+		if (job == null || !job.isPersistent()) {
 			throw new IllegalArgumentException("invalid job: " + job);
 		}
 		if (pn == null || !pn.equals(pn.trim()) || pn.isEmpty()) {
@@ -145,71 +146,6 @@ public class OperationalPropertyEntity implements OperationalProperty {
 	@Override
 	public String getValue() {
 		return value;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (getId() ^ (getId() >>> 32));
-		if (getId() == INVALID_ID) {
-			result = hashCode0();
-		}
-		return result;
-	}
-
-	protected int hashCode0() {
-		final int prime = 31;
-		int result = 1;
-		result =
-			prime * result + ((getName() == null) ? 0 : getName().hashCode());
-		result =
-			prime * result + ((getValue() == null) ? 0 : getValue().hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		OperationalPropertyEntity other = (OperationalPropertyEntity) obj;
-		if (getId() != other.getId()) {
-			return false;
-		}
-		if (this.getId() == INVALID_ID) {
-			return equals0(other);
-		}
-		return true;
-	}
-
-	protected boolean equals0(OperationalProperty property) {
-		assert property != null;
-
-		if (getJobId() != property.getJobId()) {
-			return false;
-		}
-		if (getName() == null) {
-			if (property.getName() != null) {
-				return false;
-			}
-		} else if (!getName().equals(property.getName())) {
-			return false;
-		}
-		if (getValue() == null) {
-			if (property.getValue() != null) {
-				return false;
-			}
-		} else if (!getValue().equals(property.getValue())) {
-			return false;
-		}
-		return true;
 	}
 
 	@Override

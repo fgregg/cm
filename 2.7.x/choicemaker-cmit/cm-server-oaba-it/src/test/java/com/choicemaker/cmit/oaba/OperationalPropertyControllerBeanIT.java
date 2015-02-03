@@ -29,6 +29,7 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.OperationalProperty;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -36,7 +37,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.StartOabaMDB;
 import com.choicemaker.cmit.OabaTestController;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
@@ -166,10 +166,10 @@ public class OperationalPropertyControllerBeanIT {
 
 		OabaJobEntity _job = createEphemeralOabaJobEntity(te, METHOD, true);
 		assertTrue(_job != null);
-		assertTrue(_job.getId() == OabaJobEntity.INVALID_ID);
+		assertTrue(_job.getId() == OabaJobEntity.NONPERSISTENT_ID);
 		OabaJobEntity job = oabaController.save(_job);
 		final long jobId = job.getId();
-		assertTrue(jobId != OabaJobEntity.INVALID_ID);
+		assertTrue(jobId != OabaJobEntity.NONPERSISTENT_ID);
 
 		Set<String> _expectedNames = new LinkedHashSet<>();
 		Set<String> _expectedValues = new LinkedHashSet<>();
@@ -192,12 +192,13 @@ public class OperationalPropertyControllerBeanIT {
 		int count = 0;
 		for (OperationalProperty op : ops) {
 			++count;
-			assertTrue(jobId == op.getJobId());
 			final long pid = op.getId();
-			assertTrue(pid != OperationalProperty.INVALID_ID);
 			final String pn = op.getName();
-			assertTrue(expectedNames.contains(pn));
 			final String pv1 = op.getValue();
+
+			assertTrue(jobId == op.getJobId());
+			assertTrue(op.isPersistent());
+			assertTrue(expectedNames.contains(pn));
 			assertTrue(expectedValues.contains(pv1));
 			
 			final String pv2 = opPropController.getJobProperty(job, pn);

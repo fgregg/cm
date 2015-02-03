@@ -29,12 +29,11 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
@@ -121,8 +120,8 @@ public class TransitivityServiceBean implements TransitivityService {
 		TransitivityJob transJob =
 			jobController.createPersistentTransitivityJob(externalID, tp,
 					oabaJob, serverConfiguration);
+		assert transJob.isPersistent();
 		final long retVal = transJob.getId();
-		assert BatchJob.INVALID_ID != retVal;
 		log.info("Started transitivity analysis (job id: " + retVal + ")");
 
 		// Mark the job as queued and start processing by the

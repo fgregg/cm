@@ -19,17 +19,19 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-
 /**
  * 
  * @version $Revision: 1.3 $ $Date: 2010/10/21 17:40:37 $
  * @author rphall
  */
-public class TransitivityStatusListenerMDB implements MessageDrivenBean, MessageListener {
+public class TransitivityStatusListenerMDB implements MessageDrivenBean,
+		MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(TransitivityStatusListenerMDB.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + TransitivityStatusListenerMDB.class.getName());
+	private static final Logger log = Logger
+			.getLogger(TransitivityStatusListenerMDB.class.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
+			+ TransitivityStatusListenerMDB.class.getName());
 
 	private transient MessageDrivenContext mdc = null;
 
@@ -37,7 +39,7 @@ public class TransitivityStatusListenerMDB implements MessageDrivenBean, Message
 	 * Constructor, which is public and takes no arguments.
 	 */
 	public TransitivityStatusListenerMDB() {
-    	log.fine("constructor");
+		log.fine("constructor");
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
@@ -46,34 +48,33 @@ public class TransitivityStatusListenerMDB implements MessageDrivenBean, Message
 	}
 
 	public void ejbCreate() {
-    	log.fine("starting ejbCreate...");
+		log.fine("starting ejbCreate...");
 		log.fine("...finished ejbCreate");
 	}
 
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		
+
 		log.fine("starting onMessage...");
 		try {
-		 if (inMessage instanceof ObjectMessage) {
-			msg = (ObjectMessage) inMessage;
-			Long L  =  (Long) msg.getObject();
-    		log.fine("received status change notification :" + L.toString());
-		 }
-		 else
-		 	log.fine("received unexpected notification ...");
+			if (inMessage instanceof ObjectMessage) {
+				msg = (ObjectMessage) inMessage;
+				Long L = (Long) msg.getObject();
+				log.fine("received status change notification :" + L.toString());
+			} else
+				log.fine("received unexpected notification ...");
 		} catch (JMSException e) {
-      		log.severe(e.toString());
+			log.severe(e.toString());
 			mdc.setRollbackOnly();
 		} catch (Exception e) {
-      		log.severe(e.toString());
+			log.severe(e.toString());
 			e.printStackTrace();
 		}
 
-    log.fine("... finished onMessage");
+		log.fine("... finished onMessage");
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
-    return;
+		return;
 	} // onMessage(Message)
 
 	public void ejbRemove() {

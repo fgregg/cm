@@ -37,8 +37,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 
@@ -49,14 +49,16 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
  * @author pcheung
  *
  */
-//Singleton: maxSession = 1 (JBoss only)
-@MessageDriven(activationConfig = {
-		@ActivationConfigProperty(propertyName = "maxSession",
-				propertyValue = "1"),
-		@ActivationConfigProperty(propertyName = "destinationLookup",
-				propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
-		@ActivationConfigProperty(propertyName = "destinationType",
-				propertyValue = "javax.jms.Queue") })
+// Singleton: maxSession = 1 (JBoss only)
+@MessageDriven(
+		activationConfig = {
+				@ActivationConfigProperty(propertyName = "maxSession",
+						propertyValue = "1"),
+				@ActivationConfigProperty(
+						propertyName = "destinationLookup",
+						propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
+				@ActivationConfigProperty(propertyName = "destinationType",
+						propertyValue = "javax.jms.Queue") })
 public class TransMatchDedupMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -64,10 +66,10 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ TransMatchDedupMDB.class.getName());
-	
+
 	// @PersistenceContext(unitName = "oaba")
-//	private EntityManager em;
-	
+	// private EntityManager em;
+
 	// @EJB
 	TransitivityJobController jobController;
 
@@ -77,8 +79,8 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 	// @EJB
 	OabaProcessingController processingController;
 
-//	@Resource
-//	protected MessageDrivenContext mdc;
+	// @Resource
+	// protected MessageDrivenContext mdc;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/updateTransQueue")
 	private Queue updateTransQueue;
@@ -121,7 +123,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 			if (batchJob != null) {
 				batchJob.markAsFailed();
 			}
-//			mdc.setRollbackOnly();
+			// mdc.setRollbackOnly();
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
@@ -141,7 +143,8 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 		log.fine("in handleMerge");
 
 		final long jobId = oabaJob.getId();
-		OabaParameters params = paramsController.findOabaParametersByJobId(jobId);
+		OabaParameters params =
+			paramsController.findOabaParametersByJobId(jobId);
 
 		// init values
 		final String modelConfigId = params.getModelConfigurationName();
@@ -161,13 +164,14 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 
 		// mark as done
 		throw new Error("not yet re-implemented");
-//		sendToUpdateTransStatus(jobId,
-//				TransitivityProcessing.PCT_DONE_TRANSANALYSIS);
-//		// status.setCurrentProcessingEvent( OabaEvent.DONE_TRANSANALYSIS);
-//		// HACK
-//		assert OabaEvent.DONE_OABA.eventId == TransitivityEvent.DONE_TRANSANALYSIS.eventId;
-//		processingEntry.setCurrentOabaEvent(OabaEvent.DONE_OABA);
-//		// END HACK
+		// sendToUpdateTransStatus(jobId,
+		// TransitivityProcessing.PCT_DONE_TRANSANALYSIS);
+		// // status.setCurrentProcessingEvent( OabaEvent.DONE_TRANSANALYSIS);
+		// // HACK
+		// assert OabaEvent.DONE_OABA.eventId ==
+		// TransitivityEvent.DONE_TRANSANALYSIS.eventId;
+		// processingEntry.setCurrentOabaEvent(OabaEvent.DONE_OABA);
+		// // END HACK
 
 	}
 
@@ -179,96 +183,98 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 	 * The output file contains MatchRecord2 with separator records.
 	 *
 	 */
-	protected void mergeMatches(final int num,
-			final BatchJob oabaJob) throws BlockingException {
+	protected void mergeMatches(final int num, final BatchJob oabaJob)
+			throws BlockingException {
 
 		throw new Error("not yet implemented");
-//		final long jobID = oabaJob.getId();
-//		TransitivityFileUtils oabaConfig = new TransitivityFileUtils(jobID);
-//
-//		// final sink
-//		IMatchRecord2Sink finalSink =
-//			oabaConfig.getCompositeTransMatchSink(jobID);
-//
-//		IMatchRecord2SinkSourceFactory factory =
-//			oabaConfig.getMatchChunkFactory();
-//		ArrayList tempSinks = new ArrayList();
-//
-//		// the match files start with 1, not 0.
-//		for (int i = 1; i <= num; i++) {
-//			IMatchRecord2Sink mSink = factory.getSink(i);
-//			tempSinks.add(mSink);
-//
-//			log.info("concatenating file " + mSink.getInfo());
-//		}
-//
-//		// concat all the other chunk MatchRecord2 sinks.
-//		finalSink.append();
-//		Comparable C = null;
-//
-//		for (int i = 0; i < tempSinks.size(); i++) {
-//			IMatchRecord2Sink mSink = (IMatchRecord2Sink) tempSinks.get(i);
-//
-//			IMatchRecord2Source mSource = factory.getSource(mSink);
-//			if (mSource.exists()) {
-//				mSource.open();
-//				while (mSource.hasNext()) {
-//					MatchRecord2 mr = mSource.getNext();
-//					finalSink.writeMatch(mr);
-//
-//					if (C == null) {
-//						C = mr.getRecordID1();
-//					}
-//				}
-//				mSource.close();
-//
-//				// clean up
-//				mSource.remove();
-//			} // end if
-//		}
-//
-//		// finally concat the size two EC file
-//		IMatchRecord2Source mSource =
-//			oabaConfig.getSet2MatchFactory().getNextSource();
-//		MatchRecord2 separator = null;
-//		if (C != null)
-//			separator = MatchRecord2Factory.getSeparator(C);
-//
-//		if (mSource.exists()) {
-//			mSource.open();
-//			int i = 0;
-//			while (mSource.hasNext()) {
-//				i++;
-//				MatchRecord2 mr = mSource.getNext();
-//				if (C == null) {
-//					C = mr.getRecordID1();
-//					separator = MatchRecord2Factory.getSeparator(C);
-//				}
-//				finalSink.writeMatch(mr);
-//				finalSink.writeMatch(separator);
-//			}
-//			mSource.close();
-//			log.info("Num of size 2s read in " + i);
-//
-//			mSource.remove();
-//		}
-//
-//		finalSink.close();
-//
-//		log.info("final output " + finalSink.getInfo());
-//
-//		try {
-//			TransitivityJob transJob = em.find(TransitivityJobEntity.class, jobID);
-//			transJob.setDescription(finalSink.getInfo());
-//		} catch (Exception e) {
-//			log.severe(e.toString());
-//		}
+		// final long jobID = oabaJob.getId();
+		// TransitivityFileUtils oabaConfig = new TransitivityFileUtils(jobID);
+		//
+		// // final sink
+		// IMatchRecord2Sink finalSink =
+		// oabaConfig.getCompositeTransMatchSink(jobID);
+		//
+		// IMatchRecord2SinkSourceFactory factory =
+		// oabaConfig.getMatchChunkFactory();
+		// ArrayList tempSinks = new ArrayList();
+		//
+		// // the match files start with 1, not 0.
+		// for (int i = 1; i <= num; i++) {
+		// IMatchRecord2Sink mSink = factory.getSink(i);
+		// tempSinks.add(mSink);
+		//
+		// log.info("concatenating file " + mSink.getInfo());
+		// }
+		//
+		// // concat all the other chunk MatchRecord2 sinks.
+		// finalSink.append();
+		// Comparable C = null;
+		//
+		// for (int i = 0; i < tempSinks.size(); i++) {
+		// IMatchRecord2Sink mSink = (IMatchRecord2Sink) tempSinks.get(i);
+		//
+		// IMatchRecord2Source mSource = factory.getSource(mSink);
+		// if (mSource.exists()) {
+		// mSource.open();
+		// while (mSource.hasNext()) {
+		// MatchRecord2 mr = mSource.getNext();
+		// finalSink.writeMatch(mr);
+		//
+		// if (C == null) {
+		// C = mr.getRecordID1();
+		// }
+		// }
+		// mSource.close();
+		//
+		// // clean up
+		// mSource.remove();
+		// } // end if
+		// }
+		//
+		// // finally concat the size two EC file
+		// IMatchRecord2Source mSource =
+		// oabaConfig.getSet2MatchFactory().getNextSource();
+		// MatchRecord2 separator = null;
+		// if (C != null)
+		// separator = MatchRecord2Factory.getSeparator(C);
+		//
+		// if (mSource.exists()) {
+		// mSource.open();
+		// int i = 0;
+		// while (mSource.hasNext()) {
+		// i++;
+		// MatchRecord2 mr = mSource.getNext();
+		// if (C == null) {
+		// C = mr.getRecordID1();
+		// separator = MatchRecord2Factory.getSeparator(C);
+		// }
+		// finalSink.writeMatch(mr);
+		// finalSink.writeMatch(separator);
+		// }
+		// mSource.close();
+		// log.info("Num of size 2s read in " + i);
+		//
+		// mSource.remove();
+		// }
+		//
+		// finalSink.close();
+		//
+		// log.info("final output " + finalSink.getInfo());
+		//
+		// try {
+		// TransitivityJob transJob = em.find(TransitivityJobEntity.class,
+		// jobID);
+		// transJob.setDescription(finalSink.getInfo());
+		// } catch (Exception e) {
+		// log.severe(e.toString());
+		// }
 	}
 
-//	@Override
+	// @Override
 	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
 			Date timestamp, String info) {
-		processingController.updateStatusWithNotification(job, event, timestamp, info);
+		processingController.updateStatusWithNotification(job, event,
+				timestamp, info);
 	}
 
 }

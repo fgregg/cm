@@ -26,6 +26,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServer
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -36,7 +37,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsE
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsJPA;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsPK;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
@@ -596,7 +596,7 @@ public class TestEntityCounts {
 		for (BatchJob job : batchJobs) {
 			++jCount;
 			long jobId = job.getId();
-			if (BatchJob.INVALID_ID != jobId) {
+			if (job.isPersistent()) {
 				eCount +=
 					processingController
 							.deleteOabaProcessingEventsByJobId(jobId);
@@ -669,7 +669,7 @@ public class TestEntityCounts {
 			long jobId = job.getId();
 			msg = "Removing translations for job " + jobId;
 			logger.fine(msg);
-			if (BatchJob.INVALID_ID != jobId) {
+			if (job.isPersistent()) {
 				int deletionCount = ridc.deleteTranslationsByJob(job);
 				logger.info("Deleted record-id translations for job " + jobId
 						+ ": " + deletionCount);
@@ -685,8 +685,7 @@ public class TestEntityCounts {
 		int jCount = 0;
 		for (BatchJob job : batchJobs) {
 			++jCount;
-			long jobId = job.getId();
-			if (BatchJob.INVALID_ID != jobId) {
+			if (job.isPersistent()) {
 				tCount += ridc.deleteTranslationsByJob(job);
 			}
 		}
@@ -704,7 +703,7 @@ public class TestEntityCounts {
 			}
 			final Class<?> c = job.getClass();
 			final long jobId = job.getId();
-			if (jobId != BatchJobEntity.INVALID_ID) {
+			if (jobId != BatchJobEntity.NONPERSISTENT_ID) {
 				BatchJob refresh = (BatchJob) em.find(c, jobId);
 				if (refresh != null) {
 					em.merge(refresh);

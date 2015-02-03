@@ -34,7 +34,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
@@ -100,7 +99,7 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
-		if (job == null || !BatchJobEntity.isPersistent(job)) {
+		if (job == null || !job.isPersistent()) {
 			throw new IllegalArgumentException("invalid OABA job");
 		}
 		if (event == null) {

@@ -218,52 +218,6 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 	// -- Identity
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + interval;
-		result = prime * result + maxBlockSize;
-		result = prime * result + maxChunkSize;
-		result = prime * result + maxMatches;
-		result = prime * result + maxOversized;
-		result = prime * result + minFields;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!super.equals(obj)) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		OabaSettingsEntity other = (OabaSettingsEntity) obj;
-		if (interval != other.interval) {
-			return false;
-		}
-		if (maxBlockSize != other.maxBlockSize) {
-			return false;
-		}
-		if (maxChunkSize != other.maxChunkSize) {
-			return false;
-		}
-		if (maxMatches != other.maxMatches) {
-			return false;
-		}
-		if (maxOversized != other.maxOversized) {
-			return false;
-		}
-		if (minFields != other.minFields) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "OabaSettingsEntity [id=" + getId() + ", maxSingle=" + maxSingle
 				+ ", maxBlockSize=" + maxBlockSize + ", maxChunkSize="

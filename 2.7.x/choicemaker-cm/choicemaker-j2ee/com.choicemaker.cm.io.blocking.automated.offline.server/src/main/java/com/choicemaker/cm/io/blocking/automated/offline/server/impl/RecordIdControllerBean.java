@@ -23,7 +23,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdFactory;
@@ -167,7 +166,7 @@ public class RecordIdControllerBean implements RecordIdController {
 		logger.entering("toImmutableTranslatorImpl", mrit.toString());
 
 		final BatchJob job = mrit.getBatchJob();
-		assert job != null && BatchJobEntity.isPersistent(job);
+		assert job != null && job.isPersistent();
 
 		ImmutableRecordIdTranslatorImpl retVal = null;
 		if (mrit.isClosed() && !mrit.doTranslatorCachesExist()) {

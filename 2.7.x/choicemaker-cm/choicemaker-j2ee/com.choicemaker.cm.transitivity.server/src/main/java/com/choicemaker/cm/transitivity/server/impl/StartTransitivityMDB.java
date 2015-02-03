@@ -43,11 +43,11 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.transitivity.core.TransitivityProcessing.TransitivityEvent;
@@ -171,8 +171,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		// build a MatchRecord2Sink for all pairs belonging to the size 2 sets.
 		Size2MatchProducer producer =
 			new Size2MatchProducer(mSource, idFactory.getSource(idSink),
-					OabaFileUtils.getSet2MatchFactory(transJob)
-							.getNextSink());
+					OabaFileUtils.getSet2MatchFactory(transJob).getNextSink());
 		int twos = producer.process();
 		log.info("number of size 2 EC: " + twos);
 
@@ -207,8 +206,8 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		// create the oversized block transformer
 		Transformer transformerO =
 			new Transformer(translator,
-					OabaFileUtils.getComparisonArrayGroupFactoryOS(
-							transJob, numProcessors));
+					OabaFileUtils.getComparisonArrayGroupFactoryOS(transJob,
+							numProcessors));
 
 		// set the correct status for chunk could run.
 		final long jobId = transJob.getId();
@@ -223,12 +222,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		ISerializableRecordSource staging = rsController.getStageRs(params);
 		ISerializableRecordSource master = rsController.getMasterRs(params);
 		ChunkService3 chunkService =
-			new ChunkService3(
-					source2,
-					null,
-					staging,
-					master,
-					model,
+			new ChunkService3(source2, null, staging, master, model,
 					OabaFileUtils.getChunkIDFactory(transJob),
 					OabaFileUtils.getStageDataFactory(transJob, model),
 					OabaFileUtils.getMasterDataFactory(transJob, model),

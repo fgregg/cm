@@ -32,26 +32,17 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchProcessingEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class BatchProcessingLogEntry implements BatchProcessingEvent {
+public class BatchProcessingLogEntry extends AbstractPersistentObject implements
+		BatchProcessingEvent {
 
 	private static final long serialVersionUID = 271L;
-
-	public static boolean isPersistent(OabaProcessingEvent p) {
-		boolean retVal = false;
-		if (p != null && p.getId() != INVALID_ID) {
-			retVal = true;
-		}
-		return retVal;
-	}
 
 	@Id
 	@Column(name = CN_ID)
@@ -86,7 +77,7 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 	protected final Date eventTimestamp;
 
 	protected BatchProcessingLogEntry() {
-		this.jobId = BatchJob.INVALID_ID;
+		this.jobId = NONPERSISTENT_ID;
 		this.type = DISCRIMINATOR_VALUE;
 		this.eventName = INVALID_EVENT_NAME;
 		this.eventSequenceNumber = INVALID_EVENT_SEQNUM;
@@ -97,7 +88,7 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 
 	protected BatchProcessingLogEntry(long jobId, String type, String evtName,
 			int eventSeqNum, float fractionComplete, String info) {
-		if (jobId == BatchJob.INVALID_ID) {
+		if (jobId == NONPERSISTENT_ID) {
 			throw new IllegalArgumentException("invalid jobId: " + jobId);
 		}
 		if (type == null || !type.equals(type.trim()) || type.isEmpty()) {
@@ -176,109 +167,6 @@ public class BatchProcessingLogEntry implements BatchProcessingEvent {
 	@Override
 	public Date getEventTimestamp() {
 		return eventTimestamp;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		if (id != INVALID_ID) {
-			result = prime * result + (int) (id ^ (id >>> 32));
-		} else {
-			result = hashCode0();
-		}
-		return result;
-	}
-
-	protected int hashCode0() {
-		assert this.id == INVALID_ID;
-
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (jobId ^ (jobId >>> 32));
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result =
-			prime * result + ((eventName == null) ? 0 : eventName.hashCode());
-		result = prime * result + eventSequenceNumber;
-		result = prime * result + Float.floatToIntBits(fractionComplete);
-		result =
-			prime
-					* result
-					+ ((eventTimestamp == null) ? 0 : eventTimestamp.hashCode());
-		result =
-			prime * result + ((eventInfo == null) ? 0 : eventInfo.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof BatchProcessingLogEntry)) {
-			return false;
-		}
-		BatchProcessingLogEntry other = (BatchProcessingLogEntry) obj;
-		if (id != other.id) {
-			return false;
-		}
-		if (id == INVALID_ID) {
-			return equals0(other);
-		}
-
-		// Double check that DB values are unchanged
-		assert equals0(other);
-
-		return true;
-	}
-
-	protected boolean equals0(BatchProcessingLogEntry other) {
-		assert this != other;
-		assert other != null;
-		assert this.id == other.id;
-
-		if (jobId != other.jobId) {
-			return false;
-		}
-		if (type == null) {
-			if (other.type != null) {
-				return false;
-			}
-		} else if (!type.equals(other.type)) {
-			return false;
-		}
-		if (eventName == null) {
-			if (other.eventName != null) {
-				return false;
-			}
-		} else if (!eventName.equals(other.eventName)) {
-			return false;
-		}
-		if (eventSequenceNumber != other.eventSequenceNumber) {
-			return false;
-		}
-		if (Float.floatToIntBits(fractionComplete) != Float
-				.floatToIntBits(other.fractionComplete)) {
-			return false;
-		}
-		if (eventTimestamp == null) {
-			if (other.eventTimestamp != null) {
-				return false;
-			}
-		} else if (!eventTimestamp.equals(other.eventTimestamp)) {
-			return false;
-		}
-		if (eventInfo == null) {
-			if (other.eventInfo != null) {
-				return false;
-			}
-		} else if (!eventInfo.equals(other.eventInfo)) {
-			return false;
-		}
-		return true;
 	}
 
 	@Override

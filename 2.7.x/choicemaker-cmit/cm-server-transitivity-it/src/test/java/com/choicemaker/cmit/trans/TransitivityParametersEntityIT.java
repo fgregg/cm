@@ -130,7 +130,7 @@ public class TransitivityParametersEntityIT {
 		// Create parameters
 		TransitivityParameters p =
 			transTestController.createTransitivityParameters(METHOD, te);
-		assertTrue(TransitivityParametersEntity.isPersistent(p));
+		assertTrue(p.isPersistent());
 		assertTrue(p.getId() != TransitivityParametersEntity.NONPERSISTENT_ID);
 		final long id0 = p.getId();
 
@@ -159,7 +159,7 @@ public class TransitivityParametersEntityIT {
 
 		final TransitivityParameters p0 =
 			transTestController.createTransitivityParameters(METHOD, te);
-		assertTrue(TransitivityParametersEntity.isPersistent(p0));
+		assertTrue(p0.isPersistent());
 		assertTrue(te.contains(p0));
 		final int h0 = p0.hashCode();
 
@@ -167,7 +167,7 @@ public class TransitivityParametersEntityIT {
 		final int h1 = p1.hashCode();
 		assertTrue(h0 != h1);
 		assertTrue(!p1.equals(p0));
-		assertTrue(!TransitivityParametersEntity.isPersistent(p1));
+		assertTrue(!p1.isPersistent());
 		te.add(p1);
 		assertTrue(te.contains(p1));
 
@@ -181,7 +181,7 @@ public class TransitivityParametersEntityIT {
 		final TransitivityParameters p1P = transParamsController.save(p1);
 		assertTrue(p1 != p1P);
 		assertTrue(!p1P.equals(p0));
-		assertTrue(TransitivityParametersEntity.isPersistent(p1P));
+		assertTrue(p1P.isPersistent());
 
 		// BUG p1 is lost in te because hashCode changes
 		// See http://links.rph.cx/1CSqJ5p for a discussion and a proposed fix

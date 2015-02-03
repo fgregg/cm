@@ -27,12 +27,13 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractMatc
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 
 /**
- * This is the Matcher for the Transitivity Engine.  It is called by TransMatchSchedulerMDB.
+ * This is the Matcher for the Transitivity Engine. It is called by
+ * TransMatchSchedulerMDB.
  * 
  * @author pcheung
  *
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup",
 				propertyValue = "java:/choicemaker/urm/jms/transMatcherQueue"),
@@ -41,7 +42,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanU
 public class TransMatcherMDB extends AbstractMatcher implements MessageListener {
 
 	private static final long serialVersionUID = 271L;
-	private static final Logger log = Logger.getLogger(TransMatcherMDB.class.getName());
+	private static final Logger log = Logger.getLogger(TransMatcherMDB.class
+			.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ TransMatcherMDB.class.getName());
 
@@ -59,23 +61,26 @@ public class TransMatcherMDB extends AbstractMatcher implements MessageListener 
 	}
 
 	@Override
-	protected void writeMatches (OabaJobMessage data, List<MatchRecord2> matches) throws BlockingException {
-		//first figure out the correct file for this processor
+	protected void writeMatches(OabaJobMessage data, List<MatchRecord2> matches)
+			throws BlockingException {
+		// first figure out the correct file for this processor
 		throw new Error("not yet implemented");
-//		TransitivityFileUtils oabaConfig = new TransitivityFileUtils(data.jobID);
-//		IMatchRecord2Sink mSink = oabaConfig.getMatchChunkFactory().getSink(data.treeInd);
-//		IComparableSink sink =  new ComparableMRSink (mSink);
-//		
-//		//write matches to this file.
-//		sink.append();
-//		sink.writeComparables(matches.iterator());
-//		
-//		//write the separator
-//		MatchRecord2 mr = (MatchRecord2) matches.get(0);
-//		mr = MatchRecord2Factory.getSeparator(mr.getRecordID1());
-//		sink.writeComparable(mr);
-//		
-//		sink.close();
+		// TransitivityFileUtils oabaConfig = new
+		// TransitivityFileUtils(data.jobID);
+		// IMatchRecord2Sink mSink =
+		// oabaConfig.getMatchChunkFactory().getSink(data.treeInd);
+		// IComparableSink sink = new ComparableMRSink (mSink);
+		//
+		// //write matches to this file.
+		// sink.append();
+		// sink.writeComparables(matches.iterator());
+		//
+		// //write the separator
+		// MatchRecord2 mr = (MatchRecord2) matches.get(0);
+		// mr = MatchRecord2Factory.getSeparator(mr.getRecordID1());
+		// sink.writeComparable(mr);
+		//
+		// sink.close();
 	}
 
 	@Override

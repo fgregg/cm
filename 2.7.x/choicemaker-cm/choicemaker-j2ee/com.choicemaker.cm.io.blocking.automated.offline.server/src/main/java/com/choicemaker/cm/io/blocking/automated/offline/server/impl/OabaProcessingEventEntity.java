@@ -60,8 +60,8 @@ public class OabaProcessingEventEntity extends BatchProcessingLogEntry
 	}
 
 	public OabaProcessingEventEntity(BatchJob job, OabaEvent event, String info) {
-		super(job.getId(), DISCRIMINATOR_VALUE, event
-				.name(), event.eventId, event.percentComplete, info);
+		super(job.getId(), DISCRIMINATOR_VALUE, event.name(), event.eventId,
+				event.percentComplete, info);
 	}
 
 	@Override

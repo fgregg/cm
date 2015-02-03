@@ -1,6 +1,6 @@
 package com.choicemaker.cmit;
 
-import static com.choicemaker.cm.batch.BatchJob.INVALID_ID;
+import static com.choicemaker.cm.batch.impl.AbstractPersistentObject.NONPERSISTENT_ID;
 import static com.choicemaker.cmit.utils.JmsUtils.LONG_TIMEOUT_MILLIS;
 import static com.choicemaker.cmit.utils.JmsUtils.SHORT_TIMEOUT_MILLIS;
 import static org.junit.Assert.assertTrue;
@@ -26,10 +26,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotifica
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
@@ -134,7 +134,7 @@ public class OabaMdbTestProcedures {
 
 		final PersistableRecordSource staging =
 			test.getRecordSourceController().save(c.getStagingRecordSource());
-		assertTrue(staging.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+		assertTrue(staging.isPersistent());
 		te.add(staging);
 
 		final PersistableRecordSource master;
@@ -144,7 +144,7 @@ public class OabaMdbTestProcedures {
 			master =
 				test.getRecordSourceController()
 						.save(c.getMasterRecordSource());
-			assertTrue(master.getId() != PersistableRecordSource.NONPERSISTENT_ID);
+			assertTrue(master.isPersistent());
 			te.add(master);
 		}
 
@@ -195,7 +195,7 @@ public class OabaMdbTestProcedures {
 		te.add(bp);
 
 		final OabaService batchQuery = test.getOabaService();
-		long jobId = INVALID_ID;
+		long jobId = NONPERSISTENT_ID;
 		try {
 			switch (linkage) {
 			case STAGING_DEDUPLICATION:
@@ -224,7 +224,7 @@ public class OabaMdbTestProcedures {
 		}
 
 		final OabaJobController jobController = test.getJobController();
-		assertTrue(INVALID_ID != jobId);
+		assertTrue(jobId != NONPERSISTENT_ID);
 		OabaJob oabaJob = jobController.findOabaJob(jobId);
 		assertTrue(oabaJob != null);
 		te.add(oabaJob);

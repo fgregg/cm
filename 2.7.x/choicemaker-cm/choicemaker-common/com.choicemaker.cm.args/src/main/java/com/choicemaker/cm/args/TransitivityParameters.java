@@ -2,7 +2,9 @@ package com.choicemaker.cm.args;
 
 import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_SCM;
 
-public interface TransitivityParameters {
+import java.io.Serializable;
+
+public interface TransitivityParameters extends PersistentObject, Serializable {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/transitivityParameters";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
@@ -12,8 +14,6 @@ public interface TransitivityParameters {
 
 	/** The name of the default graph property (simply connected by matches) */
 	String DEFAULT_GRAPH_PROPERTY_NAME = GPN_SCM;
-
-	long NONPERSISTENT_ID = 0;
 
 	long getId();
 

@@ -215,7 +215,7 @@ public class OabaServiceBean implements OabaService {
 			jobController.createPersistentOabaJob(externalID, batchParams,
 					oabaSettings, serverConfiguration);
 		final long retVal = oabaJob.getId();
-		assert BatchJob.INVALID_ID != retVal;
+		assert oabaJob.isPersistent();
 		logger.info("Started offline matching (job id: " + retVal + ")");
 
 		// Mark the job as queued and start processing by the StartOabaMDB EJB

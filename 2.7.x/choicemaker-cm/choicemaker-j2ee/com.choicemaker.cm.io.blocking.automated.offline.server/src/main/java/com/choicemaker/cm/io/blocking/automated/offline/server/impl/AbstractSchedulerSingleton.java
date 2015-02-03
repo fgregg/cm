@@ -48,6 +48,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterM
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
@@ -184,7 +185,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					final long jobId = sd.jobID;
 					oabaJob = getJobController().findOabaJob(jobId);
 					OabaParameters params =
-						getParametersController().findOabaParametersByJobId(jobId);
+						getParametersController().findOabaParametersByJobId(
+								jobId);
 					OabaSettings oabaSettings =
 						getSettingsController().findOabaSettingsByJobId(jobId);
 					ServerConfiguration serverConfig =

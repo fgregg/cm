@@ -10,10 +10,12 @@
  */
 package com.choicemaker.cm.args;
 
+import java.io.Serializable;
+
 /**
  * @author rphall
  */
-public interface OabaParameters {
+public interface OabaParameters extends PersistentObject, Serializable {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/OabaParameters";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;

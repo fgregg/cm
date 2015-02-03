@@ -1,7 +1,5 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
-import static com.choicemaker.cm.args.TransitivityParameters.NONPERSISTENT_ID;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -50,7 +48,7 @@ public class TransitivityParametersControllerBean extends
 			if (p instanceof TransitivityParametersEntity) {
 				retVal = (TransitivityParametersEntity) p;
 			} else {
-				if (TransitivityParametersEntity.isPersistent(p)) {
+				if (p.isPersistent()) {
 					retVal = em.find(TransitivityParametersEntity.class, jobId);
 					if (retVal == null) {
 						String msg =
@@ -73,32 +71,13 @@ public class TransitivityParametersControllerBean extends
 	}
 
 	TransitivityParametersEntity save(TransitivityParametersEntity p) {
-		if (p == null) {
-			throw new IllegalArgumentException("null parameters");
-		}
-		final boolean persist0 = TransitivityParametersEntity.isPersistent(p);
-		final int h0 = p.hashCode();
-
-		TransitivityParametersEntity retVal = null;
-		if (!persist0) {
-			// The hashCode changes after saving; return a new instance
-			assert p.getId() != NONPERSISTENT_ID;
-			retVal = p;
+		if (p.getId() == 0) {
 			em.persist(p);
-			assert retVal == p;
-			assert h0 != p.hashCode();
-			assert p.getId() != NONPERSISTENT_ID;
-			retVal = new TransitivityParametersEntity(p.getId(),p);
 		} else {
-			// The hashCode is unchanged after saving; return the same instance
 			p = em.merge(p);
 			em.flush();
-			retVal = p;
 		}
-		assert retVal != null;
-		assert (!persist0 && retVal != p && retVal.hashCode() != h0)
-				|| (retVal == p && retVal.hashCode() == h0);
-		return retVal;
+		return p;
 	}
 
 	@Override
@@ -134,7 +113,7 @@ public class TransitivityParametersControllerBean extends
 
 	@Override
 	public void delete(TransitivityParameters p) {
-		if (TransitivityParametersEntity.isPersistent(p)) {
+		if (p.isPersistent()) {
 			TransitivityParametersEntity bean = getBean(p);
 			bean = em.merge(bean);
 			em.remove(bean);
@@ -144,7 +123,7 @@ public class TransitivityParametersControllerBean extends
 
 	@Override
 	public void detach(TransitivityParameters p) {
-		if (TransitivityParametersEntity.isPersistent(p)) {
+		if (p.isPersistent()) {
 			TransitivityParametersEntity bean = getBean(p);
 			bean = em.merge(bean);
 			em.detach(p);

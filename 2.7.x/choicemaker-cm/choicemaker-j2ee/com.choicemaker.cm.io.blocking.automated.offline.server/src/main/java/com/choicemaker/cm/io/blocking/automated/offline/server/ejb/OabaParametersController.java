@@ -1,4 +1,4 @@
-package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
+package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
 import java.util.List;
 

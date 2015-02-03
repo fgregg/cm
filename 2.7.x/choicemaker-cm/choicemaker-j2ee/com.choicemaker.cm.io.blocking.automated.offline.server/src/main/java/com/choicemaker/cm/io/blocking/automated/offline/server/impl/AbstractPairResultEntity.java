@@ -47,7 +47,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
@@ -227,7 +227,7 @@ public abstract class AbstractPairResultEntity<T extends Comparable<T>>
 
 	/** Required by JPA; do not invoke directly */
 	protected AbstractPairResultEntity() {
-		this.jobId = BatchJob.INVALID_ID;
+		this.jobId = AbstractPersistentObject.NONPERSISTENT_ID;
 		this.recordType = DV_ABSTRACT.charAt(0);
 		this.record1Id = INVALID_RECORD_ID;
 		this.record2Id = INVALID_RECORD_ID;

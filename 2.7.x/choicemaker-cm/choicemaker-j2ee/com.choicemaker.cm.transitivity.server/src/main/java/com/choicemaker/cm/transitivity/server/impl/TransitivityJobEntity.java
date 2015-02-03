@@ -62,23 +62,24 @@ public class TransitivityJobEntity extends BatchJobEntity implements
 
 	public TransitivityJobEntity(TransitivityParameters params,
 			ServerConfiguration sc, OabaJob parent, String externalId) {
-		this(DISCRIMINATOR_VALUE, params.getId(), INVALID_ID, sc.getId(),
-				externalId, randomTransactionId(), parent.getId(), INVALID_ID,
-				BatchJob.DEFAULT_RIGOR);
+		this(DISCRIMINATOR_VALUE, params.getId(), NONPERSISTENT_ID, sc.getId(),
+				externalId, randomTransactionId(), parent.getId(),
+				NONPERSISTENT_ID, BatchJob.DEFAULT_RIGOR);
 	}
 
 	public TransitivityJobEntity(TransitivityParameters params,
 			ServerConfiguration sc, OabaJob parent, String externalId,
 			BatchJobRigor bjr) {
-		this(DISCRIMINATOR_VALUE, params.getId(), INVALID_ID, sc.getId(),
-				externalId, randomTransactionId(), parent.getId(), INVALID_ID,
-				bjr);
+		this(DISCRIMINATOR_VALUE, params.getId(), NONPERSISTENT_ID, sc.getId(),
+				externalId, randomTransactionId(), parent.getId(),
+				NONPERSISTENT_ID, bjr);
 	}
 
 	public TransitivityJobEntity(TransitivityJob o) {
-		this(DISCRIMINATOR_VALUE, o.getTransitivityParametersId(), INVALID_ID,
-				o.getServerId(), o.getExternalId(), o.getTransactionId(), o
-						.getBatchParentId(), o.getUrmId(), o.getBatchJobRigor());
+		this(DISCRIMINATOR_VALUE, o.getTransitivityParametersId(),
+				NONPERSISTENT_ID, o.getServerId(), o.getExternalId(), o
+						.getTransactionId(), o.getBatchParentId(),
+				o.getUrmId(), o.getBatchJobRigor());
 		this.workingDirectory = o.getWorkingDirectory().getAbsolutePath();
 	}
 

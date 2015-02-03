@@ -29,23 +29,26 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
  * @author pcheung
  *
  */
-public class UpdateTransitivityStatusMDB implements MessageDrivenBean, MessageListener {
+public class UpdateTransitivityStatusMDB implements MessageDrivenBean,
+		MessageListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(UpdateTransitivityStatusMDB.class.getName());
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace." + UpdateTransitivityStatusMDB.class.getName());
+	private static final Logger log = Logger
+			.getLogger(UpdateTransitivityStatusMDB.class.getName());
+	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
+			+ UpdateTransitivityStatusMDB.class.getName());
 
 	private transient MessageDrivenContext mdc = null;
 
-//	@PersistenceContext (unitName = "oaba")
+	// @PersistenceContext (unitName = "oaba")
 	private EntityManager em;
 
 	public UpdateTransitivityStatusMDB() {
-//	log.fine("constuctor");
+		// log.fine("constuctor");
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {
-//		log.fine("setMessageDrivenContext()");
+		// log.fine("setMessageDrivenContext()");
 		this.mdc = mdc;
 	}
 
@@ -94,7 +97,7 @@ public class UpdateTransitivityStatusMDB implements MessageDrivenBean, MessageLi
 	} // onMessage(Message)
 
 	public void ejbRemove() {
-//		log.fine("ejbRemove()");
+		// log.fine("ejbRemove()");
 	}
 
 }

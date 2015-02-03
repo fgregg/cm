@@ -10,6 +10,7 @@ import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
+import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
 import com.choicemaker.cm.core.IProbabilityModelManager;
 import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -100,10 +101,9 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	public SimplePersonSqlServerTestConfiguration(String dsJndiName,
-			String dbConfig, String stagingSQL, String masterSQL,
-			String mci, ImmutableThresholds t,
-			int maxSingle, boolean runTransitivity, AnalysisResultFormat arf,
-			String gpn) {
+			String dbConfig, String stagingSQL, String masterSQL, String mci,
+			ImmutableThresholds t, int maxSingle, boolean runTransitivity,
+			AnalysisResultFormat arf, String gpn) {
 		if (dsJndiName == null || dsJndiName.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"null or blank JNDI name for data source");
@@ -157,14 +157,16 @@ public class SimplePersonSqlServerTestConfiguration implements
 	}
 
 	/**
-	 * One-time initialization that sets:<ul>
+	 * One-time initialization that sets:
+	 * <ul>
 	 * <li>the linkage type</li>
 	 * <li>the probability model</li>
 	 * <li>the staging record source</li>
 	 * <li>the master record source</li>
 	 * </ul>
 	 * 
-	 * @throws IllegalArgumentException if either constructor argument is null
+	 * @throws IllegalArgumentException
+	 *             if either constructor argument is null
 	 * @throws IllegalStateException
 	 *             if initialization fails
 	 */
@@ -231,7 +233,7 @@ public class SimplePersonSqlServerTestConfiguration implements
 				logger.severe(msg);
 				throw new IllegalStateException(msg);
 			}
-			
+
 			// Mark as initialized
 			isInitialized = true;
 		}
@@ -280,9 +282,19 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 			private static final long serialVersionUID = 271L;
 
+			private AbstractPersistentObject delegate =
+				new AbstractPersistentObject() {
+
+					@Override
+					public long getId() {
+						return AbstractPersistentObject.NONPERSISTENT_ID;
+					}
+
+				};
+
 			@Override
 			public long getId() {
-				return 0;
+				return delegate.getId();
 			}
 
 			@Override
@@ -315,6 +327,21 @@ public class SimplePersonSqlServerTestConfiguration implements
 				return DEFAULT_DATABASE_CONFIGURATION;
 			}
 
+			@Override
+			public String getUUID() {
+				return delegate.getUUID();
+			}
+
+			@Override
+			public int getOptLock() {
+				return delegate.getOptLock();
+			}
+
+			@Override
+			public boolean isPersistent() {
+				return delegate.isPersistent();
+			}
+
 		};
 	}
 
@@ -325,9 +352,19 @@ public class SimplePersonSqlServerTestConfiguration implements
 
 			private static final long serialVersionUID = 271L;
 
+			private AbstractPersistentObject delegate =
+				new AbstractPersistentObject() {
+
+					@Override
+					public long getId() {
+						return AbstractPersistentObject.NONPERSISTENT_ID;
+					}
+
+				};
+
 			@Override
 			public long getId() {
-				return 0;
+				return delegate.getId();
 			}
 
 			@Override
@@ -358,6 +395,21 @@ public class SimplePersonSqlServerTestConfiguration implements
 			@Override
 			public String getDatabaseConfiguration() {
 				return DEFAULT_DATABASE_CONFIGURATION;
+			}
+
+			@Override
+			public String getUUID() {
+				return delegate.getUUID();
+			}
+
+			@Override
+			public int getOptLock() {
+				return delegate.getOptLock();
+			}
+
+			@Override
+			public boolean isPersistent() {
+				return delegate.isPersistent();
 			}
 
 		};

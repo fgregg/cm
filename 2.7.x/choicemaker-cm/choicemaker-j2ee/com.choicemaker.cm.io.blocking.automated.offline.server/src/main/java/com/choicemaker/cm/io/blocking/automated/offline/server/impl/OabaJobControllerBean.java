@@ -22,11 +22,11 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -72,7 +72,7 @@ public class OabaJobControllerBean implements OabaJobController {
 			if (oabaJob instanceof OabaJobEntity) {
 				retVal = (OabaJobEntity) oabaJob;
 			} else {
-				if (BatchJobEntity.isPersistent(oabaJob)) {
+				if (oabaJob.isPersistent()) {
 					retVal = em.find(OabaJobEntity.class, jobId);
 					if (retVal == null) {
 						String msg =
@@ -106,7 +106,7 @@ public class OabaJobControllerBean implements OabaJobController {
 		OabaJobEntity retVal =
 			new OabaJobEntity(params, settings, sc, externalID);
 		em.persist(retVal);
-		assert BatchJobEntity.isPersistent(retVal);
+		assert retVal.isPersistent();
 
 		// Create a new entry in the processing log and check it
 		OabaProcessingControllerBean.updateStatusWithNotification(em,
@@ -169,7 +169,7 @@ public class OabaJobControllerBean implements OabaJobController {
 
 	@Override
 	public void delete(OabaJob oabaJob) {
-		if (BatchJobEntity.isPersistent(oabaJob)) {
+		if (oabaJob.isPersistent()) {
 			OabaJobEntity bean = em.find(OabaJobEntity.class, oabaJob.getId());
 			delete(bean);
 		}

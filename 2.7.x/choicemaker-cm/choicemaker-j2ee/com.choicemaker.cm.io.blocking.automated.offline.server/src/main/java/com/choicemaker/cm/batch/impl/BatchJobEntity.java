@@ -63,7 +63,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntit
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public abstract class BatchJobEntity implements BatchJob {
+public abstract class BatchJobEntity extends AbstractPersistentObject implements
+		BatchJob {
 
 	private static final long serialVersionUID = 271L;
 
@@ -104,22 +105,10 @@ public abstract class BatchJobEntity implements BatchJob {
 		allowedTransitions.put(BatchJobStatus.ABORTED, allowed);
 	}
 
-	public static boolean isInvalidBatchJobId(long id) {
-		return id == INVALID_ID;
-	}
-
-	public static boolean isPersistent(BatchJob oabaJob) {
-		boolean retVal = false;
-		if (oabaJob != null) {
-			retVal = !isInvalidBatchJobId(oabaJob.getId());
-		}
-		return retVal;
-	}
-
 	public static boolean isTopLevelJob(BatchJob oabaJob) {
 		boolean retVal = true;
 		if (oabaJob != null) {
-			retVal = isInvalidBatchJobId(oabaJob.getBatchParentId());
+			retVal = !isPersistentId(oabaJob.getBatchParentId());
 		}
 		return retVal;
 	}
@@ -382,8 +371,9 @@ public abstract class BatchJobEntity implements BatchJob {
 	}
 
 	protected BatchJobEntity() {
-		this(DISCRIMINATOR_VALUE, INVALID_ID, INVALID_ID, INVALID_ID, null,
-				randomTransactionId(), INVALID_ID, INVALID_ID, DEFAULT_RIGOR);
+		this(DISCRIMINATOR_VALUE, NONPERSISTENT_ID, NONPERSISTENT_ID,
+				NONPERSISTENT_ID, null, randomTransactionId(),
+				NONPERSISTENT_ID, NONPERSISTENT_ID, DEFAULT_RIGOR);
 	}
 
 	/**
@@ -482,89 +472,6 @@ public abstract class BatchJobEntity implements BatchJob {
 		} else {
 			logIgnoredTransition("markAsAborted");
 		}
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		if (isInvalidBatchJobId(id)) {
-			result = hashCode0();
-		} else {
-			result = prime * result + (int) (id ^ (id >>> 32));
-		}
-		return result;
-	}
-
-	/**
-	 * Hashcode for instances with id == 0 (non-persistent/invalid id)
-	 */
-	protected int hashCode0() {
-		final int prime = 31;
-		int result = 1;
-		result =
-			prime * result + ((externalId == null) ? 0 : externalId.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + (int) (bparentId ^ (bparentId >>> 32));
-		result =
-			prime * result + (int) (transactionId ^ (transactionId >>> 32));
-		result = prime * result + DISCRIMINATOR_VALUE.hashCode();
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		// Implicitly checks Discriminator type
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		BatchJobEntity other = (BatchJobEntity) obj;
-		if (id != other.id) {
-			return false;
-		}
-		if (isInvalidBatchJobId(id)) {
-			return equals0(other);
-		}
-		return true;
-	}
-
-	/**
-	 * Equality test for instances with id == 0 (non-persistent/invalid id)
-	 */
-	protected boolean equals0(BatchJobEntity other) {
-		if (this == other) {
-			return true;
-		}
-		if (other == null) {
-			return false;
-		}
-		if (externalId == null) {
-			if (other.externalId != null) {
-				return false;
-			}
-		} else if (!externalId.equals(other.externalId)) {
-			return false;
-		}
-		if (status == null) {
-			if (other.status != null) {
-				return false;
-			}
-		} else if (!status.equals(other.status)) {
-			return false;
-		}
-		if (bparentId != other.bparentId) {
-			return false;
-		}
-		if (transactionId != other.transactionId) {
-			return false;
-		}
-		return true;
 	}
 
 	@Override

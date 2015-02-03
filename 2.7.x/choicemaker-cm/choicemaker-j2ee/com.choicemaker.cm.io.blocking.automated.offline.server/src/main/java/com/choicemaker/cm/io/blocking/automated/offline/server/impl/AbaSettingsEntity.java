@@ -29,6 +29,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 import com.choicemaker.cm.args.AbaSettings;
+import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
 
 /**
  * Persistent ABA settings.
@@ -39,7 +40,8 @@ import com.choicemaker.cm.args.AbaSettings;
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class AbaSettingsEntity implements AbaSettings {
+public class AbaSettingsEntity extends AbstractPersistentObject implements
+		AbaSettings {
 
 	private static final long serialVersionUID = 271L;
 
@@ -152,52 +154,6 @@ public class AbaSettingsEntity implements AbaSettings {
 	}
 
 	// -- Identity
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + limitPerBlockingSet;
-		result = prime * result + limitSingleBlockingSet;
-		result = prime * result + singleTableBlockingSetGraceLimit;
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		AbaSettingsEntity other = (AbaSettingsEntity) obj;
-		if (id != other.id) {
-			return false;
-		}
-		if (limitPerBlockingSet != other.limitPerBlockingSet) {
-			return false;
-		}
-		if (limitSingleBlockingSet != other.limitSingleBlockingSet) {
-			return false;
-		}
-		if (singleTableBlockingSetGraceLimit != other.singleTableBlockingSetGraceLimit) {
-			return false;
-		}
-		if (type == null) {
-			if (other.type != null) {
-				return false;
-			}
-		} else if (!type.equals(other.type)) {
-			return false;
-		}
-		return true;
-	}
 
 	@Override
 	public String toString() {

@@ -23,7 +23,6 @@ import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
@@ -102,7 +101,7 @@ class ImmutableRecordIdTranslatorImpl implements
 			List<AbstractRecordIdTranslationEntity<T>> translations)
 			throws BlockingException {
 
-		if (job == null || !BatchJobEntity.isPersistent(job)) {
+		if (job == null || !job.isPersistent()) {
 			String msg = "invalid job: " + job;
 			log.severe(msg);
 			throw new IllegalArgumentException(msg);

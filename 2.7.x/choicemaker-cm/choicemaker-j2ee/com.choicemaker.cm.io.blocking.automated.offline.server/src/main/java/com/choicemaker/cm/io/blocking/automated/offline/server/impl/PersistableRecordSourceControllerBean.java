@@ -16,6 +16,7 @@ import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.args.PersistableXmlRecordSource;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 
 @Stateless

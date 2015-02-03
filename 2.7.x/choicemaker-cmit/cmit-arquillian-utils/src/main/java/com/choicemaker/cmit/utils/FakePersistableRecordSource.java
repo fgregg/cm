@@ -3,8 +3,10 @@ package com.choicemaker.cmit.utils;
 import java.util.UUID;
 
 import com.choicemaker.cm.args.PersistableRecordSource;
+import com.choicemaker.cm.batch.impl.AbstractPersistentObject;
 
-public class FakePersistableRecordSource implements PersistableRecordSource {
+public class FakePersistableRecordSource extends AbstractPersistentObject
+		implements PersistableRecordSource {
 
 	public static final String TYPE = "FAKE";
 
@@ -60,45 +62,6 @@ public class FakePersistableRecordSource implements PersistableRecordSource {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result =
-			prime * result + ((fileName == null) ? 0 : fileName.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		FakePersistableRecordSource other = (FakePersistableRecordSource) obj;
-		if (fileName == null) {
-			if (other.fileName != null) {
-				return false;
-			}
-		} else if (!fileName.equals(other.fileName)) {
-			return false;
-		}
-		if (name == null) {
-			if (other.name != null) {
-				return false;
-			}
-		} else if (!name.equals(other.name)) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "FakeSerialRecordSource [name=" + name + "]";
 	}
@@ -111,6 +74,10 @@ public class FakePersistableRecordSource implements PersistableRecordSource {
 	@Override
 	public String getType() {
 		return TYPE;
+	}
+
+	public String getFileName() {
+		return fileName;
 	}
 
 }

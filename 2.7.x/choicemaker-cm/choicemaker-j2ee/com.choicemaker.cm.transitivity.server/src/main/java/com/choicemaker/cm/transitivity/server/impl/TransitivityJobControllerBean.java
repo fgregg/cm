@@ -14,7 +14,6 @@ import javax.persistence.Query;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
@@ -56,7 +55,7 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 			if (oabaJob instanceof TransitivityJobEntity) {
 				retVal = (TransitivityJobEntity) oabaJob;
 			} else {
-				if (TransitivityJobEntity.isPersistent(oabaJob)) {
+				if (oabaJob.isPersistent()) {
 					retVal = em.find(TransitivityJobEntity.class, jobId);
 					if (retVal == null) {
 						String msg =
@@ -74,16 +73,15 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 
 	@Override
 	public TransitivityJob createPersistentTransitivityJob(String externalID,
-			TransitivityParameters params,
-			OabaJob oabaJob, ServerConfiguration sc)
-			throws ServerConfigurationException {
+			TransitivityParameters params, OabaJob oabaJob,
+			ServerConfiguration sc) throws ServerConfigurationException {
 
 		if (params == null || sc == null || oabaJob == null) {
 			throw new IllegalArgumentException("null argument");
 		}
 
 		// Check the OABA job persistence and status (should be completed)
-		if (!BatchJobEntity.isPersistent(oabaJob)) {
+		if (!oabaJob.isPersistent()) {
 			throw new IllegalArgumentException("non-persistent OABA job");
 		}
 		BatchJobStatus oabaStatus = oabaJob.getStatus();
@@ -99,7 +97,7 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 		TransitivityJobEntity retVal =
 			new TransitivityJobEntity(params, sc, oabaJob, externalID);
 		em.persist(retVal);
-		assert TransitivityJobEntity.isPersistent(retVal);
+		assert retVal.isPersistent();
 
 		// Create a new processing entry
 		// FIXME null transJob, wrong log type
@@ -171,8 +169,9 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 
 	@Override
 	public void delete(TransitivityJob transitivityJob) {
-		if (BatchJobEntity.isPersistent(transitivityJob)) {
-			TransitivityJobEntity bean = em.find(TransitivityJobEntity.class, transitivityJob.getId());
+		if (transitivityJob.isPersistent()) {
+			TransitivityJobEntity bean =
+				em.find(TransitivityJobEntity.class, transitivityJob.getId());
 			delete(bean);
 		}
 	}
