@@ -67,8 +67,10 @@ public class BatchJobUtils {
 			utx.begin();
 			OabaParametersEntity params =
 				createPersistentOabaParameters(em, METHOD, te);
+			te.add(params);
 			OabaSettingsEntity settings =
 				createPersistentOabaSettings(maxSingleLimit, em, te);
+			te.add(settings);
 			String extId;
 			if (isTag) {
 				extId = EntityManagerUtils.createExternalId(s);

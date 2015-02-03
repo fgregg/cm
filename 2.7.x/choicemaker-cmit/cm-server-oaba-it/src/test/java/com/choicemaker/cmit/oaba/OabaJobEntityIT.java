@@ -310,9 +310,9 @@ public class OabaJobEntityIT {
 		OabaJob job2 = new OabaJobEntity(job1);
 		te.add(job2);
 
-		// Verify equality of ephemeral instances
-		assertTrue(job1.equals(job2));
-		assertTrue(job1.hashCode() == job2.hashCode());
+		// Verify inequality of ephemeral instances
+		assertTrue(!job1.equals(job2));
+		assertTrue(job1.hashCode() != job2.hashCode());
 
 		// Verify a non-persistent job is not equal to a persistent job
 		job1 = oabaController.save(job1);

@@ -133,14 +133,14 @@ public class OperationalPropertyControllerBean implements
 		final long pid = p.getId();
 		OperationalPropertyEntity ope =
 			em.find(OperationalPropertyEntity.class, pid);
+		logger.finer("DB version before update: " + ope);
+		ope.updateValue(p.getValue());
 		logger.finer("DB version before merge: " + ope);
-		OperationalPropertyEntity retVal = new OperationalPropertyEntity(p);
-		logger.finer("New version before merge: " + retVal);
-		em.merge(retVal);
-		logger.finer("New version after merge: " + retVal);
+		em.merge(ope);
+		logger.finer("DB version after merge: " + ope);
 		em.flush();
-		logger.finer("DB version after flush: " + retVal);
-		return retVal;
+		logger.finer("DB version after flush: " + ope);
+		return ope;
 	}
 
 	@Override

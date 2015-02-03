@@ -291,8 +291,7 @@ public class ServerConfigurationControllerBean implements
 			long id = old.getServerConfigurationId();
 			retVal = em.find(ServerConfigurationEntity.class, id);
 			if (retVal == null) {
-				throw new IllegalStateException(
-						"missing server configuration: " + id);
+				logger.warning("missing server configuration: " + id);
 			}
 		} else {
 			retVal = sc;
@@ -375,8 +374,7 @@ public class ServerConfigurationControllerBean implements
 			long id = dscb.getServerConfigurationId();
 			retVal = em.find(ServerConfigurationEntity.class, id);
 			if (retVal == null) {
-				throw new IllegalStateException(
-						"missing server configuration: " + id);
+				logger.warning("missing server configuration: " + id);
 			}
 		}
 		if (retVal == null) {
