@@ -188,7 +188,7 @@ public class OperationalPropertyControllerBean implements
 		}
 
 		OperationalPropertyEntity retVal = null;
-		if (!AbstractPersistentObject.isPersistentId(jobId)) {
+		if (AbstractPersistentObject.isPersistentId(jobId)) {
 			Query query = em.createNamedQuery(QN_OPPROP_FIND_BY_JOB_PNAME);
 			query.setParameter(PN_OPPROP_FIND_BY_JOB_PNAME_P1, jobId);
 			query.setParameter(PN_OPPROP_FIND_BY_JOB_PNAME_P2, stdName);
