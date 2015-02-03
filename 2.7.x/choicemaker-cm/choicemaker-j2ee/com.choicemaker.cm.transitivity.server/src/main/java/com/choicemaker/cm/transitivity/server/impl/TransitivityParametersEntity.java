@@ -144,10 +144,80 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	@Override
 	public OabaParameters asOabaParameters() {
-		return new OabaParametersEntity(getModelConfigurationName(),
-				getLowThreshold(), getHighThreshold(), getStageRsId(),
-				getStageRsType(), getMasterRsId(), getMasterRsType(),
-				OabaLinkageType.TRANSITIVITY_ANALYSIS);
+		final TransitivityParameters delegate = this;
+		return new OabaParameters() {
+			private static final long serialVersionUID = 271L;
+
+			@Override
+			public long getId() {
+				return delegate.getId();
+			}
+
+			@Override
+			public String getUUID() {
+				return delegate.getUUID();
+			}
+
+			@Override
+			public String getModelConfigurationName() {
+				return delegate.getModelConfigurationName();
+			}
+
+			@Override
+			public OabaLinkageType getOabaLinkageType() {
+				return delegate.getOabaLinkageType();
+			}
+
+			@Override
+			public int getOptLock() {
+				return delegate.getOptLock();
+			}
+
+			@Override
+			public float getLowThreshold() {
+				return delegate.getLowThreshold();
+			}
+
+			@Override
+			public boolean isPersistent() {
+				return delegate.isPersistent();
+			}
+
+			@Override
+			public float getHighThreshold() {
+				return delegate.getHighThreshold();
+			}
+
+			@Override
+			public long getStageRsId() {
+				return delegate.getStageRsId();
+			}
+
+			@Override
+			public String getStageRsType() {
+				return delegate.getStageRsType();
+			}
+
+			@Override
+			public Long getMasterRsId() {
+				return delegate.getMasterRsId();
+			}
+
+			@Override
+			public String getMasterRsType() {
+				return delegate.getMasterRsType();
+			}
+
+			@Override
+			public String getStageModel() {
+				return delegate.getModelConfigurationName();
+			}
+
+			@Override
+			public String getMasterModel() {
+				return delegate.getModelConfigurationName();
+			}
+		};
 	}
 
 	@Override

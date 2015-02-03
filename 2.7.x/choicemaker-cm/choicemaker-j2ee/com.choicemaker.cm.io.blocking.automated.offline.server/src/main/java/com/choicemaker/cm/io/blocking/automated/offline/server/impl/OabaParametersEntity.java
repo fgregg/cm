@@ -122,7 +122,7 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 	}
 
 	/**
-	 * 
+	 * A internal constructor that allows field values to be set directly.
 	 * @param modelConfigurationName
 	 *            model configuration name
 	 * @param lowThreshold
@@ -146,7 +146,7 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 	 *            linkage of a staging source to a master source; or linkage of
 	 *            two master sources.
 	 */
-	public OabaParametersEntity(String modelConfigurationName,
+	OabaParametersEntity(String modelConfigurationName,
 			float lowThreshold, float highThreshold, long sId, String sType,
 			Long mId, String mType, OabaLinkageType taskType) {
 		super(DV_OABA, modelConfigurationName, lowThreshold, highThreshold,
