@@ -131,21 +131,22 @@ public class OabaParametersEntityIT {
 		final String METHOD = "testPersistFindRemove";
 
 		// Create a params
-		OabaParametersEntity params =
-			createBatchParameters(METHOD, te);
+		OabaParametersEntity params = createBatchParameters(METHOD, te);
 
 		// Save the params
 		paramsController.save(params);
 		assertTrue(params.getId() != 0);
 
 		// Find the params
-		OabaParameters batchParameters2 = paramsController.findOabaParameters(params.getId());
+		OabaParameters batchParameters2 =
+			paramsController.findOabaParameters(params.getId());
 		assertTrue(params.getId() == batchParameters2.getId());
 		assertTrue(params.equals(batchParameters2));
 
 		// Delete the params
 		paramsController.delete(batchParameters2);
-		OabaParameters batchParameters3 = paramsController.findOabaParameters(params.getId());
+		OabaParameters batchParameters3 =
+			paramsController.findOabaParameters(params.getId());
 		assertTrue(batchParameters3 == null);
 
 		checkCounts();
@@ -161,7 +162,8 @@ public class OabaParametersEntityIT {
 		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		PersistableRecordSource master =
 			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
-		String modelConfig = EntityManagerUtils.createRandomModelConfigurationName(tag);
+		String modelConfig =
+			EntityManagerUtils.createRandomModelConfigurationName(tag);
 		OabaParametersEntity retVal =
 			new OabaParametersEntity(modelConfig,
 					thresholds.getDifferThreshold(),
@@ -175,14 +177,20 @@ public class OabaParametersEntityIT {
 	public void testEqualsHashCode() {
 		final String METHOD = "testEqualsHashCode";
 
-		// Create two generic parameter sets, only one of which is persistent,
-		// and verify inequality
-		OabaParametersEntity params1 =
-			createBatchParameters(METHOD, te);
-		OabaParametersEntity params2 = new OabaParametersEntity(params1);
-		te.add(params2);
-		assertTrue(!params1.equals(params2));
-		assertTrue(params1.hashCode() != params2.hashCode());
+		OabaParametersEntity p1 = createBatchParameters(METHOD, te);
+		assertTrue(te.contains(p1));
+		final int h1 = p1.hashCode();
+
+		OabaParametersEntity p2 = new OabaParametersEntity(p1);
+		te.add(p2);
+		assertTrue(!p1.equals(p2));
+		assertTrue(h1 != p2.hashCode());
+
+		final OabaParameters p1P = paramsController.save(p1);
+		assertTrue(p1 == p1P);
+		assertTrue(p1.isPersistent());
+		assertTrue(h1 == p1.hashCode());
+		assertTrue(te.contains(p1));
 
 		checkCounts();
 	}
@@ -192,8 +200,10 @@ public class OabaParametersEntityIT {
 		final String METHOD = "testPersistedValues";
 
 		// Create a set of parameters
-		final Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
-		final PersistableRecordSource stage = new FakePersistableRecordSource(METHOD);
+		final Thresholds thresholds =
+			EntityManagerUtils.createRandomThresholds();
+		final PersistableRecordSource stage =
+			new FakePersistableRecordSource(METHOD);
 		final OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
 		final PersistableRecordSource master =
 			EntityManagerUtils.createFakeMasterRecordSource(METHOD, task);

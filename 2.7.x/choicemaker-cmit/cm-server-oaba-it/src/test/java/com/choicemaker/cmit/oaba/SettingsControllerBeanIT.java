@@ -143,14 +143,6 @@ public class SettingsControllerBeanIT {
 					ridController);
 	}
 
-	// @After
-	// public void tearDown() {
-	// String METHOD = "tearDown";
-	// logger.entering(LOG_SOURCE, METHOD);
-	// checkCounts();
-	// logger.exiting(LOG_SOURCE, METHOD);
-	// }
-
 	public void checkCounts() {
 		if (te != null) {
 			te.checkCounts(logger, em, utx, oabaController, paramsController,

@@ -113,14 +113,6 @@ public class ServerConfigurationManagerBeanIT {
 					ridController);
 	}
 
-	// @After
-	// public void tearDown() {
-	// String METHOD = "tearDown";
-	// logger.entering(LOG_SOURCE, METHOD);
-	// checkCounts();
-	// logger.exiting(LOG_SOURCE, METHOD);
-	// }
-
 	public void checkCounts() {
 		if (te != null) {
 			te.checkCounts(logger, em, utx, oabaController, paramsController,
@@ -328,17 +320,6 @@ public class ServerConfigurationManagerBeanIT {
 			final long scId = sc3.getId();
 			assertTrue(scId != 0);
 
-//			// Verify that the lone, persistent configuration is now the default
-//			final DefaultServerConfiguration dsc4 =
-//				serverController.findDefaultServerConfiguration(fakeHost3);
-//			final long id4 = dsc4.getServerConfigurationId();
-//			final ServerConfiguration sc4 =
-//				serverController.findServerConfiguration(id4);
-//			assertTrue(sc4 != null);
-//			assertTrue(sc3.getId() == sc4.getId());
-//			assertTrue(sc3.getUUID().equals(sc4.getUUID()));
-//			assertTrue(ServerConfigurationEntity.equalsIgnoreIdUuid(sc3, sc4));
-
 			// Add another server configuration and verify that with two
 			// persistent configurations, neither of which has been specified
 			// as the default, that no default exists
@@ -355,10 +336,6 @@ public class ServerConfigurationManagerBeanIT {
 			final DefaultServerConfiguration dsc6 =
 				serverController.findDefaultServerConfiguration(fakeHost3);
 			assertTrue(dsc6 == null);
-//			final long id6 = dsc6.getServerConfigurationId();
-//			final ServerConfiguration sc6 =
-//				serverController.findServerConfiguration(id6);
-//			assertTrue(sc6 == null);
 
 			// Set the first configuration as the default and retrieve it
 			serverController.setDefaultConfiguration(fakeHost3, sc3);

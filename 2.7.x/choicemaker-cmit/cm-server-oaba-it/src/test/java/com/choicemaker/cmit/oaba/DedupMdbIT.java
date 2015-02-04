@@ -20,7 +20,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.Chunk2MDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ChunkMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
-import com.choicemaker.cmit.AbstractOabaMdbTest;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -34,8 +33,7 @@ public class DedupMdbIT extends
 
 	private static final boolean TESTS_AS_EJB_MODULE = true;
 
-	private final static String LOG_SOURCE = DedupMdbIT.class
-			.getSimpleName();
+	private final static String LOG_SOURCE = DedupMdbIT.class.getSimpleName();
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the

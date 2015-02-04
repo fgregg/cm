@@ -182,7 +182,7 @@ public class OperationalPropertyControllerBeanIT {
 		final Set<String> expectedValues =
 			Collections.unmodifiableSet(_expectedValues);
 		assertTrue(expectedValues.size() == MAX_TEST_ITERATIONS);
-		
+
 		List<OperationalProperty> ops = opPropController.findAllByJob(job);
 		assertTrue(ops.size() == MAX_TEST_ITERATIONS);
 		int count = 0;
@@ -196,21 +196,21 @@ public class OperationalPropertyControllerBeanIT {
 			assertTrue(op.isPersistent());
 			assertTrue(expectedNames.contains(pn));
 			assertTrue(expectedValues.contains(pv1));
-			
+
 			final String pv2 = opPropController.getJobProperty(job, pn);
-			assert(pv2 != null);
+			assert (pv2 != null);
 			assertTrue(pv2.equals(pv1));
 
 			final OperationalProperty op2 = opPropController.find(pid);
 			assertTrue(op2 != null);
 			assertTrue(op2.equals(op));
-			
+
 			// Implicit test of update
 			final String pv3 = String.valueOf(MAX_TEST_ITERATIONS + count);
 			assertTrue(!pv3.equals(pv2));
 			opPropController.setJobProperty(job, pn, pv3);
 			final String pv4 = opPropController.getJobProperty(job, pn);
-			assert(pv4 != null);
+			assert (pv4 != null);
 			assertTrue(pv3.equals(pv4));
 
 			opPropController.remove(op);

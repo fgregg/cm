@@ -1,4 +1,4 @@
-package com.choicemaker.cmit;
+package com.choicemaker.cmit.oaba.util;
 
 import static com.choicemaker.cm.batch.impl.AbstractPersistentObject.NONPERSISTENT_ID;
 import static com.choicemaker.cmit.utils.JmsUtils.LONG_TIMEOUT_MILLIS;
@@ -34,6 +34,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParamete
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
+import com.choicemaker.cmit.oaba.AbstractOabaMdbTest;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
@@ -41,6 +42,12 @@ import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 
+/**
+ * Standardized procedures for testing intermediate stages of OABA processing
+ * (which are implemented as message-driven beans).
+ * 
+ * @author rphall
+ */
 public class OabaMdbTestProcedures {
 
 	private static final Logger logger = Logger
@@ -235,7 +242,8 @@ public class OabaMdbTestProcedures {
 		// BatchQueryService.startLinkage...
 		final OabaParametersController paramsController =
 			test.getParamsController();
-		OabaParameters params = paramsController.findOabaParametersByJobId(jobId);
+		OabaParameters params =
+			paramsController.findOabaParametersByJobId(jobId);
 		te.add(params);
 
 		// Validate that the job parameters are correct

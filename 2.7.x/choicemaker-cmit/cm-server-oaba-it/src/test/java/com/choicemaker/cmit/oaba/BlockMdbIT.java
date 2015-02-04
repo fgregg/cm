@@ -19,7 +19,6 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DedupMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
-import com.choicemaker.cmit.AbstractOabaMdbTest;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -33,14 +32,13 @@ public class BlockMdbIT extends
 
 	private static final boolean TESTS_AS_EJB_MODULE = true;
 
-	private final static String LOG_SOURCE = BlockMdbIT.class
-			.getSimpleName();
+	private final static String LOG_SOURCE = BlockMdbIT.class.getSimpleName();
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
 	 * DedeupOABA and UpdateStatusMDB message beans. This allows this class to
-	 * attach to the dedup and update queues as intermediate result and status
-	 * queues, respectively.
+	 * attach to the deduplication and update queues as intermediate result and
+	 * status queues, respectively.
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {

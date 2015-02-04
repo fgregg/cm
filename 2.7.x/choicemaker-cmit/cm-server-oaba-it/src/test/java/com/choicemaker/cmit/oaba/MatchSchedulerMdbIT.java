@@ -19,7 +19,6 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MatchDedupMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
-import com.choicemaker.cmit.AbstractOabaMdbTest;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -28,8 +27,8 @@ import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 public class MatchSchedulerMdbIT extends
 		AbstractOabaMdbTest<SimplePersonSqlServerTestConfiguration> {
 
-	private static final Logger logger = Logger.getLogger(MatchSchedulerMdbIT.class
-			.getName());
+	private static final Logger logger = Logger
+			.getLogger(MatchSchedulerMdbIT.class.getName());
 
 	private static final boolean TESTS_AS_EJB_MODULE = true;
 
@@ -38,8 +37,8 @@ public class MatchSchedulerMdbIT extends
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
-	 * MatchDedupMDB and UpdateStatusMDB message beans. This allows other classes to
-	 * attach to the matchDedup and update queues for testing.
+	 * MatchDedupMDB and UpdateStatusMDB message beans. This allows other
+	 * classes to attach to the matchDedup and update queues for testing.
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {

@@ -110,8 +110,9 @@ public class OabaJobEntityIT {
 	public void checkCounts() {
 		if (te != null) {
 			te.checkCounts(logger, em, utx, oabaController, paramsController,
-					oabaSettingsController, serverController, processingController,
-					opPropController, rsController, ridController);
+					oabaSettingsController, serverController,
+					processingController, opPropController, rsController,
+					ridController);
 		} else {
 			throw new Error("Counts not initialized");
 		}
@@ -350,8 +351,6 @@ public class OabaJobEntityIT {
 		// Transitions out of sequence should be ignored
 		job.markAsCompleted();
 		assertTrue(job.getStatus().equals(BatchJobStatus.NEW));
-//		job.markAsStarted();
-//		assertTrue(job.getStatus().equals(BatchJobStatus.NEW));
 
 		// 2. Queue the job
 		job.markAsQueued();
@@ -375,9 +374,6 @@ public class OabaJobEntityIT {
 		// 5. Mark the job as completed
 		job.markAsCompleted();
 		assertTrue(job.getStatus().equals(BatchJobStatus.COMPLETED));
-		// assertTrue(job.getFractionComplete() ==
-		// BatchJob.MAX_PERCENTAGE_COMPLETED);
-		// oabaTestController.save(job);
 
 		// Transitions out of sequence should be ignored
 		job.markAsQueued();

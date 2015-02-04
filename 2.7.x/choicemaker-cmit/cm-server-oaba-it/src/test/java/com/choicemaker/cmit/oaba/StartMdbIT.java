@@ -20,7 +20,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BlockingMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
-import com.choicemaker.cmit.AbstractOabaMdbTest;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -34,8 +33,7 @@ public class StartMdbIT extends
 
 	private static final boolean TESTS_AS_EJB_MODULE = true;
 
-	private final static String LOG_SOURCE = StartMdbIT.class
-			.getSimpleName();
+	private final static String LOG_SOURCE = StartMdbIT.class.getSimpleName();
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
@@ -54,8 +52,7 @@ public class StartMdbIT extends
 	}
 
 	public StartMdbIT() {
-		super(LOG_SOURCE, logger, EVT_DONE_REC_VAL,
-				PCT_DONE_REC_VAL,
+		super(LOG_SOURCE, logger, EVT_DONE_REC_VAL, PCT_DONE_REC_VAL,
 				SimplePersonSqlServerTestConfiguration.class,
 				OabaProcessingPhase.INTERMEDIATE);
 	}

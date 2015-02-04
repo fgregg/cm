@@ -52,8 +52,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.RecordIdSink;
-import com.choicemaker.cmit.OabaMdbTestProcedures;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
+import com.choicemaker.cmit.oaba.util.OabaMdbTestProcedures;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.TestEntityCounts;
@@ -93,8 +93,7 @@ public class RecordIdControllerBeanIT {
 		final String suffix = "dat";
 		final File dir = job.getWorkingDirectory();
 		final File tmp = File.createTempFile(prefix, suffix, dir);
-		IRecordIdSink retVal =
-			new RecordIdSink(tmp.getAbsolutePath());
+		IRecordIdSink retVal = new RecordIdSink(tmp.getAbsolutePath());
 		return retVal;
 	}
 
@@ -376,8 +375,10 @@ public class RecordIdControllerBeanIT {
 			(MutableRecordIdTranslator<String>) createEmptyTranslator(METHOD);
 		assertTrue(mrit != null);
 
-		List<String> recordIds = createStringRecordIds(MAX_SOURCE_COUNT_FUNCTIONAL);
-		final int splitIndexString = random.nextInt(MAX_SOURCE_COUNT_FUNCTIONAL);
+		List<String> recordIds =
+			createStringRecordIds(MAX_SOURCE_COUNT_FUNCTIONAL);
+		final int splitIndexString =
+			random.nextInt(MAX_SOURCE_COUNT_FUNCTIONAL);
 		int index = 0;
 		mrit.open();
 		for (String recordId : recordIds) {

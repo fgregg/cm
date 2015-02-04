@@ -1,4 +1,4 @@
-package com.choicemaker.cmit;
+package com.choicemaker.cmit.oaba;
 
 import static org.junit.Assert.assertTrue;
 
@@ -35,6 +35,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cmit.oaba.util.OabaMdbTestProcedures;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.TestEntityCounts;
@@ -42,6 +43,14 @@ import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
 
+/**
+ * A template for integration testing of OABA message-driven beans.
+ * 
+ * @author rphall
+ *
+ * @param <T>
+ *            A Well-Known Test Configuration
+ */
 public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> {
 
 	// -- Read-write instance data
