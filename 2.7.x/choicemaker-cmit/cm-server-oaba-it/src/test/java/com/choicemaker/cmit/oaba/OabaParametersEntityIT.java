@@ -187,10 +187,10 @@ public class OabaParametersEntityIT {
 		assertTrue(h1 != p2.hashCode());
 
 		final OabaParameters p1P = paramsController.save(p1);
-		assertTrue(p1 == p1P);
-		assertTrue(p1.isPersistent());
-		assertTrue(h1 == p1.hashCode());
-		assertTrue(te.contains(p1));
+		assertTrue(p1.equals(p1P));
+		assertTrue(p1P.isPersistent());
+		assertTrue(h1 == p1P.hashCode());
+		te.add(p1P);
 
 		checkCounts();
 	}
