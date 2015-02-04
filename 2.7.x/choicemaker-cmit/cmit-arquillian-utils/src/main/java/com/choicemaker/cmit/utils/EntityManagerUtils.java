@@ -1,18 +1,11 @@
 package com.choicemaker.cmit.utils;
 
-// FIXME import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_PER_BLOCKING_SET;
-// FIXME import static com.choicemaker.cm.args.AbaSettings.DEFAULT_LIMIT_SINGLE_BLOCKING_SET;
-// FIXME import static com.choicemaker.cm.args.AbaSettings.DEFAULT_SINGLE_TABLE_GRACE_LIMIT;
-// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_INTERVAL;
-// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_BLOCKSIZE;
-// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
-// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_MATCHES;
-// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_OVERSIZED;
-// FIXME import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MIN_FIELDS;
+import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_NAMES;
 
 import java.util.Random;
 import java.util.UUID;
 
+import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.base.Thresholds;
@@ -102,6 +95,20 @@ public class EntityManagerUtils {
 		default:
 			throw new Error("not possible");
 		}
+		return retVal;
+	}
+
+	public static AnalysisResultFormat createRandomAnalysisFormat() {
+		AnalysisResultFormat[] values = AnalysisResultFormat.values();
+		int i = random.nextInt(values.length);
+		AnalysisResultFormat retVal = values[i];
+		return retVal;
+	}
+
+	public static String createRandomGraphName() {
+		int range = GPN_NAMES.size();
+		int i = random.nextInt(range);
+		String retVal = GPN_NAMES.get(i);
 		return retVal;
 	}
 
