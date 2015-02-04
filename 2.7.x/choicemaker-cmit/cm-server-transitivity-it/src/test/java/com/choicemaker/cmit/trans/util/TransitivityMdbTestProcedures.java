@@ -1,4 +1,4 @@
-package com.choicemaker.cmit;
+package com.choicemaker.cmit.trans.util;
 
 import static com.choicemaker.cm.batch.impl.AbstractPersistentObject.NONPERSISTENT_ID;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OABA;
@@ -37,6 +37,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfig
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
+import com.choicemaker.cmit.trans.AbstractTransitivityMdbTest;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;

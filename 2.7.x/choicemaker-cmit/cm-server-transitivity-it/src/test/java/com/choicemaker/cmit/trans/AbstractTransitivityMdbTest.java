@@ -1,4 +1,4 @@
-package com.choicemaker.cmit;
+package com.choicemaker.cmit.trans;
 
 import static org.junit.Assert.assertTrue;
 
@@ -36,6 +36,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
+import com.choicemaker.cmit.trans.util.TransitivityMdbTestProcedures;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.TestEntityCounts;
@@ -100,9 +101,6 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	@EJB
 	private TransitivityService transitivityService;
-
-	@EJB
-	private TransitivityTestController oabaTestController;
 
 	@EJB
 	private OperationalPropertyController opPropController;
@@ -236,7 +234,6 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		assertTrue(getSingleMatchQueue() != null);
 		assertTrue(getSourceName() != null);
 		assertTrue(getStartQueue() != null);
-		assertTrue(getTestController() != null);
 		assertTrue(getUtx() != null);
 
 		assertTrue(getTransitivityQueue() != null);
@@ -417,10 +414,6 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	public final Queue getStartQueue() {
 		return startQueue;
-	}
-
-	public final TransitivityTestController getTestController() {
-		return oabaTestController;
 	}
 
 	public TestEntityCounts getTestEntityCounts() {

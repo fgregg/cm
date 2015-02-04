@@ -19,8 +19,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.choicemaker.cm.args.AnalysisResultFormat;
+import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
@@ -28,10 +33,12 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
-import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
+import com.choicemaker.cmit.utils.EntityManagerUtils;
+import com.choicemaker.cmit.utils.FakePersistableRecordSource;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 
 @RunWith(Arquillian.class)
@@ -50,9 +57,6 @@ public class TransitivityParametersEntityIT {
 	}
 
 	public final int MAX_TEST_ITERATIONS = 10;
-
-	@EJB
-	protected TransitivityTestController transTestController;
 
 	@Resource
 	private UserTransaction utx;
@@ -120,146 +124,102 @@ public class TransitivityParametersEntityIT {
 		assertTrue(em != null);
 		assertTrue(utx != null);
 		assertTrue(transParamsController != null);
-		assertTrue(transTestController != null);
 	}
 
 	@Test
-	public void testPersistFindRemove() {
-		final String METHOD = "testPersistFindRemove";
+	public void testPersistedValues() {
+		final String METHOD = "testPersistedValues";
 
-		// Create parameters
-		TransitivityParameters p =
-			transTestController.createTransitivityParameters(METHOD, te);
-		assertTrue(p.isPersistent());
-		assertTrue(p.getId() != TransitivityParametersEntity.NONPERSISTENT_ID);
-		final long id0 = p.getId();
+		// Create the OABA parameters of a parent job
+		final Thresholds thresholds =
+			EntityManagerUtils.createRandomThresholds();
+		final PersistableRecordSource stage =
+			new FakePersistableRecordSource(METHOD);
+		final OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
+		final PersistableRecordSource master =
+			EntityManagerUtils.createFakeMasterRecordSource(METHOD, task);
+		final String v1 = EntityManagerUtils.createExternalId(METHOD);
+		OabaParameters oaba_p =
+			new OabaParametersEntity(v1, thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), stage, master, task);
+		te.add(oaba_p);
+
+		// Create a set of transitivity parameters
+		final AnalysisResultFormat format =
+			EntityManagerUtils.createRandomAnalysisFormat();
+		final String graphName = EntityManagerUtils.createRandomGraphName();
+		TransitivityParameters params =
+			new TransitivityParametersEntity(oaba_p, format, graphName);
+		te.add(params);
 
 		// Save the parameters
-		transParamsController.save(p);
-		assertTrue(p.getId() == id0);
+		final long id1 = transParamsController.save(params).getId();
 
-		// Find the parameters
-		TransitivityParameters p2 =
-			transParamsController.findTransitivityParameters(p.getId());
-		assertTrue(p.getId() == p2.getId());
-		assertTrue(p.equals(p2));
+		// Get the parameters
+		params = null;
+		params = transParamsController.findTransitivityParameters(id1);
 
-		// Delete the parameters
-		transParamsController.delete(p2);
-		TransitivityParameters p3 =
-			transParamsController.findTransitivityParameters(p.getId());
-		assertTrue(p3 == null);
+		// Check the values
+		assertTrue(v1.equals(params.getModelConfigurationName()));
+		assertTrue(thresholds.getDifferThreshold() == params.getLowThreshold());
+		assertTrue(thresholds.getMatchThreshold() == params.getHighThreshold());
+		assertTrue(format.equals(params.getAnalysisResultFormat()));
+		assertTrue(graphName.equals(params.getGraphProperty().getName()));
 
 		checkCounts();
+	}
+
+	protected TransitivityParametersEntity createTransitivityParameters(
+			String tag, TestEntityCounts te) {
+		if (te == null) {
+			throw new IllegalArgumentException("null test entities");
+		}
+		// Create the OABA parameters of a parent job
+		final Thresholds thresholds =
+			EntityManagerUtils.createRandomThresholds();
+		final PersistableRecordSource stage =
+			new FakePersistableRecordSource(tag);
+		final OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
+		final PersistableRecordSource master =
+			EntityManagerUtils.createFakeMasterRecordSource(tag, task);
+		final String v1 = EntityManagerUtils.createExternalId(tag);
+		OabaParameters oaba_p =
+			new OabaParametersEntity(v1, thresholds.getDifferThreshold(),
+					thresholds.getMatchThreshold(), stage, master, task);
+		te.add(oaba_p);
+
+		// Create a set of transitivity parameters
+		final AnalysisResultFormat format =
+			EntityManagerUtils.createRandomAnalysisFormat();
+		final String graphName = EntityManagerUtils.createRandomGraphName();
+		TransitivityParametersEntity retVal =
+			new TransitivityParametersEntity(oaba_p, format, graphName);
+		te.add(retVal);
+		return retVal;
 	}
 
 	@Test
 	public void testEqualsHashCode() {
 		final String METHOD = "testEqualsHashCode";
 
-		final TransitivityParameters p0 =
-			transTestController.createTransitivityParameters(METHOD, te);
-		assertTrue(p0.isPersistent());
-		assertTrue(te.contains(p0));
-		final int h0 = p0.hashCode();
-
-		final TransitivityParameters p1 = new TransitivityParametersEntity(p0);
-		final int h1 = p1.hashCode();
-		assertTrue(h0 != h1);
-		assertTrue(!p1.equals(p0));
-		assertTrue(!p1.isPersistent());
-		te.add(p1);
+		final TransitivityParameters p1 =
+			createTransitivityParameters(METHOD, te);
 		assertTrue(te.contains(p1));
+		final int h1 = p1.hashCode();
 
 		final TransitivityParameters p2 = new TransitivityParametersEntity(p1);
+		te.add(p2);
 		assertTrue(p1 != p2);
 		assertTrue(!p1.equals(p2));
 		assertTrue(p1.hashCode() != p2.hashCode());
-		te.add(p2);
-		assertTrue(te.contains(p2));
 
 		final TransitivityParameters p1P = transParamsController.save(p1);
 		assertTrue(p1 == p1P);
-		assertTrue(!p1P.equals(p0));
 		assertTrue(p1P.isPersistent());
+		assertTrue(h1 == p1.hashCode());
 		assertTrue(te.contains(p1));
 
-		final TransitivityParameters p2P = transParamsController.save(p2);
-		assertTrue(p2 == p2P);
-		assertTrue(!p2P.equals(p0));
-		assertTrue(p1P.getId() != p2P.getId());
-		assertTrue(!p1P.equals(p2P));
-		assertTrue(p1P.hashCode() != p2P.hashCode());
-		assertTrue(te.contains(p2));
-
 		checkCounts();
-	}
-
-	@Test
-	public void testStageModel() {
-		// FIXME STUBBED
-		// final String METHOD = "testStageModel";
-		//
-		// // Create a params and set a value
-		// OabaParametersEntity template =
-		// transTestController.createTransitivityParameters(METHOD, te);
-		// final String v1 =
-		// transTestController.createRandomModelConfigurationName(METHOD);
-		// OabaParameters params =
-		// new OabaParametersEntity(v1, template.getLowThreshold(),
-		// template.getHighThreshold(), template.getStageRsId(),
-		// template.getStageRsType(), template.getMasterRsId(),
-		// template.getMasterRsType(), template.getOabaLinkageType());
-		// te.add(params);
-
-		// FIXME stubbed
-		// // Save the params
-		// final long id1 = transParamsController.save(params).getId();
-		//
-		// // Get the params
-		// params = null;
-		// params = transParamsController.findOabaParameters(id1);
-
-		// FIXME STUBBED
-		// // Check the value
-		// assertTrue(v1.equals(params.getStageModel()));
-		// assertTrue(v1.equals(params.getMasterModel()));
-		// assertTrue(v1.equals(params.getModelConfigurationName()));
-		//
-		// checkCounts();
-	}
-
-	@Test
-	public void testThresholds() {
-		// FIXME STUBBED
-		// final String METHOD = "testThresholds";
-		//
-		// // Create parameters with known values
-		// OabaParametersEntity template =
-		// transTestController.createTransitivityParameters(METHOD, te);
-		// final Thresholds t = transTestController.createRandomThresholds();
-		// OabaParameters params =
-		// new OabaParametersEntity(template.getModelConfigurationName(),
-		// t.getDifferThreshold(), t.getMatchThreshold(),
-		// template.getStageRsId(), template.getStageRsType(),
-		// template.getMasterRsId(), template.getMasterRsType(),
-		// template.getOabaLinkageType());
-		// te.add(params);
-
-		// FIXME stubbed
-		// // Save the params
-		// final long id1 = transParamsController.save(params).getId();
-		//
-		// // Get the params
-		// params = null;
-		// params = transParamsController.findOabaParameters(id1);
-
-		// FIXME STUBBED
-		// // Check the value
-		// assertTrue(t.getDifferThreshold() == params.getLowThreshold());
-		// assertTrue(t.getMatchThreshold() == params.getHighThreshold());
-		//
-		// checkCounts();
 	}
 
 }

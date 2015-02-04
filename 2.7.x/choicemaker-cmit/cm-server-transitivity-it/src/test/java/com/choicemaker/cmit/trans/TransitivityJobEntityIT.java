@@ -30,7 +30,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
-import com.choicemaker.cmit.TransitivityTestController;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchJobUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
@@ -65,9 +64,6 @@ public class TransitivityJobEntityIT {
 
 	@EJB
 	private OabaJobController oabaController;
-
-	@EJB
-	protected TransitivityTestController transTestController;
 
 	@EJB
 	private OabaJobController oabaJobController;
@@ -128,7 +124,6 @@ public class TransitivityJobEntityIT {
 		assertTrue(oabaController != null);
 		assertTrue(transJobController != null);
 		assertTrue(serverController != null);
-		assertTrue(transTestController != null);
 	}
 
 	@Test
