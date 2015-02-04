@@ -48,7 +48,7 @@ public class OperationalPropertyControllerBeanIT {
 	private static final Logger logger = Logger
 			.getLogger(OperationalPropertyControllerBeanIT.class.getName());
 
-	private static final boolean TESTS_AS_EJB_MODULE = true;
+	private static final boolean TESTS_AS_EJB_MODULE = false;
 
 	private final static String LOG_SOURCE =
 		OperationalPropertyControllerBeanIT.class.getSimpleName();

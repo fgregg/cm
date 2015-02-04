@@ -22,7 +22,7 @@ import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 @RunWith(Arquillian.class)
 public class TransIT {
 
-	public static final boolean TESTS_AS_EJB_MODULE = true;
+	public static final boolean TESTS_AS_EJB_MODULE = false;
 
 	@Deployment
 	public static Archive<?> createEAR() {

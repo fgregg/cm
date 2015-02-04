@@ -46,7 +46,7 @@ import com.choicemaker.cmit.utils.TestEntityCounts;
 @RunWith(Arquillian.class)
 public class ServerConfigurationManagerBeanIT {
 
-	public static final boolean TESTS_AS_EJB_MODULE = true;
+	public static final boolean TESTS_AS_EJB_MODULE = false;
 
 	public final int MAX_TEST_ITERATIONS = 10;
 

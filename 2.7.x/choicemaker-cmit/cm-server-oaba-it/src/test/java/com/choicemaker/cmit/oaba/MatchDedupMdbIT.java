@@ -27,7 +27,7 @@ import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 public class MatchDedupMdbIT extends
 		AbstractOabaMdbTest<SimplePersonSqlServerTestConfiguration> {
 
-	public static final boolean TESTS_AS_EJB_MODULE = true;
+	public static final boolean TESTS_AS_EJB_MODULE = false;
 
 	public static final String LOG_SOURCE = MatchDedupMdbIT.class
 			.getSimpleName();

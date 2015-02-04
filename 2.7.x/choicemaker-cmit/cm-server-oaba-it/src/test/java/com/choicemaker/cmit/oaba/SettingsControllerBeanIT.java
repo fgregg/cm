@@ -50,7 +50,7 @@ public class SettingsControllerBeanIT {
 
 	public static final int MAX_MAX_SINGLE = 1000;
 
-	public static final boolean TESTS_AS_EJB_MODULE = true;
+	public static final boolean TESTS_AS_EJB_MODULE = false;
 
 	protected static Random random = new Random(new Date().getTime());
 

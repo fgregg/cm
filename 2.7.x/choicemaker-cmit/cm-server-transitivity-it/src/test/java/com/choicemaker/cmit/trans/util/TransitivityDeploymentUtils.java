@@ -50,16 +50,19 @@ public class TransitivityDeploymentUtils {
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
-	 * specified classes. During testing, this allows other classes to
-	 * attach to the queues used by the removed classes.
-	 * @param removedClasses an array of classes that will be removed from
-	 * OABA and E2 server jar files. If the array is null or empty, no files
-	 * will be removed. If the array is not null, it must not contain any
-	 * null elements.
-	 * @param testsAsEjbModule if true, tests will be added as an EJB module
-	 * to the EAR. If false, they will be added as a regular library. Tests
-	 * should be added as an EJB module if and only if they contain at least
-	 * one class annotated as an EJB.
+	 * specified classes. During testing, this allows other classes to attach to
+	 * the queues used by the removed classes.
+	 * 
+	 * @param removedClasses
+	 *            an array of classes that will be removed from OABA and E2
+	 *            server jar files. If the array is null or empty, no files will
+	 *            be removed. If the array is not null, it must not contain any
+	 *            null elements.
+	 * @param testsAsEjbModule
+	 *            if true, tests will be added as an EJB module to the EAR. If
+	 *            false, they will be added as a regular library. Tests should
+	 *            be added as an EJB module if and only if they contain at least
+	 *            one class annotated as an EJB.
 	 */
 	public static EnterpriseArchive createEarArchive(Class<?>[] removedClasses,
 			boolean testsAsEjbModule) {
@@ -68,7 +71,8 @@ public class TransitivityDeploymentUtils {
 		File[] libs = resolveDependencies(pom);
 
 		// Filter the OABA server and E2Plaform JARs from the dependencies
-		final Pattern p = Pattern.compile(TransitivityDeploymentUtils.REGEX_EJB_DEPENDENCIES);
+		final Pattern p =
+			Pattern.compile(TransitivityDeploymentUtils.REGEX_EJB_DEPENDENCIES);
 		Set<File> ejbJARs = new LinkedHashSet<>();
 		List<File> filteredLibs = new LinkedList<>();
 		for (File lib : libs) {

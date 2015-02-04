@@ -67,7 +67,7 @@ public class RecordIdControllerBeanIT {
 	private static final Logger logger = Logger
 			.getLogger(RecordIdControllerBeanIT.class.getName());
 
-	public static final boolean TESTS_AS_EJB_MODULE = true;
+	public static final boolean TESTS_AS_EJB_MODULE = false;
 
 	private final static String LOG_SOURCE = RecordIdControllerBeanIT.class
 			.getSimpleName();

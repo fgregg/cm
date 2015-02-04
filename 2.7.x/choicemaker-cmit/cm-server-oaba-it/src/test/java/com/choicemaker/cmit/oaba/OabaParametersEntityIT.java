@@ -44,7 +44,7 @@ public class OabaParametersEntityIT {
 	private static final Logger logger = Logger
 			.getLogger(OabaParametersEntityIT.class.getName());
 
-	public static final boolean TESTS_AS_EJB_MODULE = true;
+	public static final boolean TESTS_AS_EJB_MODULE = false;
 
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
