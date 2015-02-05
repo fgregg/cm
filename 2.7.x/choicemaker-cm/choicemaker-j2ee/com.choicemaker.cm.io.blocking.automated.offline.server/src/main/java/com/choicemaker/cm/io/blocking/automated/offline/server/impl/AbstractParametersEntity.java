@@ -309,6 +309,7 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 		this.format = format;
 		this.graph = graph;
 	}
+
 	// HACK FIXME REMOVEME
 
 	public final long getId() {
@@ -331,8 +332,8 @@ public class AbstractParametersEntity extends AbstractPersistentObject
 
 	@Override
 	public String toString() {
-		return "AbstractParametersEntity [id=" + id + ", type=" + type
-				+ ", task=" + task + "]";
+		return "AbstractParametersEntity [id=" + id + ", uuid=" + getUUID()
+				+ ", type=" + type + ", task=" + task + "]";
 	}
 
 }

@@ -155,11 +155,11 @@ public class OabaJobEntityIT {
 
 		// Create a job
 		OabaJob job = createEphemeralOabaJobEntity(te, METHOD, true);
-		assertTrue(job.getId() == 0);
+		assertTrue(!job.isPersistent());
 
 		// Save the job
 		oabaController.save(job);
-		assertTrue(job.getId() != 0);
+		assertTrue(job.isPersistent());
 
 		// Find the job
 		OabaJob batchJob2 = oabaController.findOabaJob(job.getId());
@@ -182,7 +182,7 @@ public class OabaJobEntityIT {
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a job
 			OabaJob job = createEphemeralOabaJobEntity(te, METHOD, true);
-			assertTrue(job.getId() == 0);
+			assertTrue(!job.isPersistent());
 			oabaController.save(job);
 			te.add(job);
 			final long id = job.getId();

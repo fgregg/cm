@@ -271,9 +271,10 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 
 	@Override
 	public String toString() {
-		return "TransitivityParametersEntity [id=" + id + ", modelId="
-				+ modelConfigName + ", lowThreshold=" + lowThreshold
-				+ ", highThreshold=" + highThreshold + ", graph=" + graph + "]";
+		return "TransitivityParametersEntity [id=" + id + ", uuid=" + getUUID()
+				+ ", modelId=" + modelConfigName + ", lowThreshold="
+				+ lowThreshold + ", highThreshold=" + highThreshold
+				+ ", graph=" + graph + "]";
 	}
 
 }

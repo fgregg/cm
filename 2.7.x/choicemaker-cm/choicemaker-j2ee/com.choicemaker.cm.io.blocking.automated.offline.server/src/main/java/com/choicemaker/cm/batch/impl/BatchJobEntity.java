@@ -476,7 +476,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 
 	@Override
 	public String toString() {
-		return "BatchJobEntity [" + id + "/" + externalId + "/" + status + "]";
+		return "BatchJob [" + id + "/" + getUUID() + "/" + externalId + "/" + status + "]";
 	}
 
 	public static String[] getStatusValues() {

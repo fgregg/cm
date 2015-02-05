@@ -142,7 +142,7 @@ public class OabaJobControllerBean implements OabaJobController {
 		if (job == null) {
 			throw new IllegalArgumentException("null job");
 		}
-		if (job.getId() == 0) {
+		if (!job.isPersistent()) {
 			em.persist(job);
 		} else {
 			job = em.merge(job);
