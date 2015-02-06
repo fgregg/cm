@@ -221,7 +221,7 @@ public class TestEntityCounts {
 
 		if (processingController != null) {
 			oabaEventIC =
-				processingController.findAllOabaProcessingEvents().size();
+					processingController.findAllOabaProcessingEvents().size();
 		} else {
 			oabaEventIC = 0;
 			msg = "Null processingController";
@@ -440,115 +440,190 @@ public class TestEntityCounts {
 	 * An internal implementation method that logs and conditionally asserts the
 	 * current counts of test entities.
 	 */
-	protected void logMaybeAssert(boolean doAssert, Logger L0,
+	protected void logMaybeAssert(boolean doAssert, Logger testLogger,
 			final OabaJobController oabaJobController,
 			final OabaParametersController oabaParamsController,
 			final TransitivityJobController transJobController,
 			final TransitivityParametersController transParamsController,
-			final OabaSettingsController settingsController,
+			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
 			final OabaProcessingController processingController,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) {
-		L0.info("Checking final object counts");
+		testLogger.info("Checking final object counts");
 
 		// Note the suffix CC stands for 'CurrentCount'
 
+		String msg;
 		List<String> warnings = new LinkedList<>();
 
-		final int oabaJobCC = oabaJobController.findAll().size();
-		String w = warnOrLog(L0, "oabaJob", oabaJobIC, oabaJobCC);
+		final int oabaJobCC;
+		if (oabaJobController != null) {
+			oabaJobCC = oabaJobController.findAll().size();
+		} else {
+			oabaJobCC = 0;
+			msg = "Null oabaJobController";
+			testLogger.fine(msg);
+		}
+		String w = warnOrLog(testLogger, "oabaJob", oabaJobIC, oabaJobCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
-		final int oabaParamsCC =
-			oabaParamsController.findAllOabaParameters().size();
-		w = warnOrLog(L0, "oabaParameters", oabaParamsIC, oabaParamsCC);
+		final int oabaParamsCC;
+		if (oabaParamsController != null) {
+			oabaParamsCC =
+					oabaParamsController.findAllOabaParameters().size();
+		} else {
+			oabaParamsCC = 0;
+			msg = "Null oabaParamsController";
+			testLogger.fine(msg);
+		}
+		w = warnOrLog(testLogger, "oabaParameters", oabaParamsIC, oabaParamsCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
-		final int transJobCC =
-			transJobController.findAllTransitivityJobs().size();
-		w = warnOrLog(L0, "transitivityJob", transJobIC, transJobCC);
+		final int transJobCC;
+		if (transJobController != null) {
+			transJobCC =
+					transJobController.findAllTransitivityJobs().size();
+		} else {
+			transJobCC = 0;
+			msg = "Null transJobController";
+			testLogger.fine(msg);
+		}
+		w = warnOrLog(testLogger, "transitivityJob", transJobIC, transJobCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
-		final int transParamsCC =
-			transParamsController.findAllTransitivityParameters().size();
-		w = warnOrLog(L0, "transParameters", transParamsIC, transParamsCC);
+		final int transParamsCC;
+		if (transParamsController != null) {
+			transParamsCC =
+					transParamsController.findAllTransitivityParameters().size();
+		} else {
+			transParamsCC = 0;
+			msg = "Null transParamsController";
+			testLogger.fine(msg);
+		}
+		w = warnOrLog(testLogger, "transParameters", transParamsIC, transParamsCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
-		final int abaSettingsCC =
-			settingsController.findAllAbaSettings().size();
-		w = warnOrLog(L0, "abaSettings", abaSettingsIC, abaSettingsCC);
+		final int abaSettingsCC;
+		final int defaultAbaCC;
+		final int oabaSettingsCC;
+		final int defaultOabaCC;
+		if (oabaSettingsController != null) {
+			abaSettingsCC =
+					oabaSettingsController.findAllAbaSettings().size();
+			defaultAbaCC =
+					oabaSettingsController.findAllDefaultAbaSettings().size();
+			oabaSettingsCC =
+					oabaSettingsController.findAllOabaSettings().size();
+			defaultOabaCC =
+					oabaSettingsController.findAllDefaultOabaSettings().size();
+		} else {
+			abaSettingsCC = 0;
+			defaultAbaCC = 0;
+			oabaSettingsCC = 0;
+			defaultOabaCC = 0;
+			msg = "Null oabaSettingsController";
+			testLogger.fine(msg);
+		}
+		w = warnOrLog(testLogger, "abaSettings", abaSettingsIC, abaSettingsCC);
+		if (w != null) {
+			warnings.add(w);
+		}
+		w = warnOrLog(testLogger, "defaultAbaSettings", defaultAbaIC, defaultAbaCC);
+		if (w != null) {
+			warnings.add(w);
+		}
+		w = warnOrLog(testLogger, "oabaSettings", oabaSettingsIC, oabaSettingsCC);
+		if (w != null) {
+			warnings.add(w);
+		}
+		w = warnOrLog(testLogger, "defaultOabaSettings", defaultOabaIC, defaultOabaCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
-		final int defaultAbaCC =
-			settingsController.findAllDefaultAbaSettings().size();
-		w = warnOrLog(L0, "defaultAbaSettings", defaultAbaIC, defaultAbaCC);
+		final int serverConfCC;
+		final int defServerCC;
+		if (serverController != null) {
+			serverConfCC =
+					serverController.findAllServerConfigurations().size();
+			defServerCC =
+					serverController.findAllDefaultServerConfigurations().size();
+		} else {
+			serverConfCC = 0;
+			defServerCC = 0;
+			msg = "Null serverController";
+			testLogger.fine(msg);
+		}
+		w = warnOrLog(testLogger, "serverConfiguration", serverConfIC, serverConfCC);
+		if (w != null) {
+			warnings.add(w);
+		}
+		w = warnOrLog(testLogger, "defaultServerConf", defaultServerIC, defServerCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
-		final int oabaSettingsCC =
-			settingsController.findAllOabaSettings().size();
-		w = warnOrLog(L0, "oabaSettings", oabaSettingsIC, oabaSettingsCC);
+		final int oabaEventCC;
+		if (processingController != null) {
+			oabaEventCC =
+					processingController.findAllOabaProcessingEvents().size();
+		} else {
+			oabaEventCC = 0;
+			msg = "Null processingController";
+			testLogger.fine(msg);
+		}
+		w = warnOrLog(testLogger, "oabaEvent", oabaEventIC, oabaEventCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
-		final int defaultOabaCC =
-			settingsController.findAllDefaultOabaSettings().size();
-		w = warnOrLog(L0, "defaultOabaSettings", defaultOabaIC, defaultOabaCC);
+		final int opPropertyCC;
+		if (opPropController != null) {
+			opPropertyCC =
+					opPropController.findAllOperationalProperties().size();
+		} else {
+			opPropertyCC = 0;
+			msg = "Null opPropController";
+			testLogger.fine(msg);
+		}
+		w = warnOrLog(testLogger, "operationalProperty", opPropertyIC, opPropertyCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
-		final int serverConfCC =
-			serverController.findAllServerConfigurations().size();
-		w = warnOrLog(L0, "serverConfiguration", serverConfIC, serverConfCC);
+		final int recordSourceCC;
+		if (rsController != null) {
+			recordSourceCC = rsController.findAll().size();
+		} else {
+			recordSourceCC = 0;
+			msg = "Null rsController";
+			testLogger.fine(msg);
+		}
+		w = warnOrLog(testLogger, "recordSource", recordSourceIC, recordSourceCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
-		final int defServerCC =
-			serverController.findAllDefaultServerConfigurations().size();
-		w = warnOrLog(L0, "defaultServerConf", defaultServerIC, defServerCC);
-		if (w != null) {
-			warnings.add(w);
+		final int recordIdCC;
+		if (ridController != null) {
+			recordIdCC =
+					ridController.findAllRecordIdTranslations().size();
+		} else {
+			recordIdCC = 0;
+			msg = "Null ridController";
+			testLogger.fine(msg);
 		}
-
-		final int oabaEventCC =
-			processingController.findAllOabaProcessingEvents().size();
-		w = warnOrLog(L0, "oabaEvent", oabaEventIC, oabaEventCC);
-		if (w != null) {
-			warnings.add(w);
-		}
-
-		final int opPropertyCC =
-			opPropController.findAllOperationalProperties().size();
-		w = warnOrLog(L0, "operationalProperty", opPropertyIC, opPropertyCC);
-		if (w != null) {
-			warnings.add(w);
-		}
-
-		final int recordSourceCC = rsController.findAll().size();
-		w = warnOrLog(L0, "recordSource", recordSourceIC, recordSourceCC);
-		if (w != null) {
-			warnings.add(w);
-		}
-
-		final int recordIdCC =
-			ridController.findAllRecordIdTranslations().size();
-		w = warnOrLog(L0, "recordId", recordIdIC, recordIdCC);
+		w = warnOrLog(testLogger, "recordId", recordIdIC, recordIdCC);
 		if (w != null) {
 			warnings.add(w);
 		}
@@ -564,7 +639,7 @@ public class TestEntityCounts {
 			if (doAssert) {
 				throw new AssertionError(warning);
 			} else {
-				L0.warning(warning);
+				testLogger.warning(warning);
 			}
 		}
 	}
