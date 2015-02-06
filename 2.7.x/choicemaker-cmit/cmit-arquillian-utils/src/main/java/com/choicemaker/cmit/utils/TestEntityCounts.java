@@ -39,6 +39,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSetti
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.DefaultSettingsPK;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsJPA;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**
@@ -77,15 +78,17 @@ public class TestEntityCounts {
 		}
 		boolean retVal = _isTestObjectRetentionRequested.booleanValue();
 		if (retVal) {
-			logger.info("OabaEventLog order-by debugging is enabled");
+			logger.info("ProcessingStatus order-by debugging is enabled");
 		}
 		return retVal;
 	}
 
-	// Note the suffix IC stands for 'InitialCount'
+	// The suffix 'IC' stands for 'InitialCount'
 
 	private final int oabaJobIC;
 	private final int oabaParamsIC;
+	private final int transJobIC;
+	private final int transParamsIC;
 	private final int abaSettingsIC;
 	private final int defaultAbaIC;
 	private final int oabaSettingsIC;
@@ -106,94 +109,157 @@ public class TestEntityCounts {
 	private Set<BatchJob> batchJobs = new LinkedHashSet<>();
 
 	public TestEntityCounts(final Logger testLogger,
-			final OabaJobController jobController,
-			final OabaParametersController paramsController,
+			final OabaJobController oabaJobController,
+			final OabaParametersController oabaParamsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
 			final OabaProcessingController processingController,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) throws Exception {
-		if (jobController == null || paramsController == null
-				|| processingController == null || jobController == null
-				|| jobController == null || rsController == null
-				|| ridController == null) {
-			throw new IllegalArgumentException("null controller(s)");
-		}
-
-		oabaJobIC = jobController.findAll().size();
-		String msg = "Initial oabaJob count: " + oabaJobIC;
-		testLogger.fine(msg);
-
-		oabaParamsIC = paramsController.findAllOabaParameters().size();
-		msg = "Initial oabaParameters count: " + oabaParamsIC;
-		testLogger.fine(msg);
-
-		abaSettingsIC = oabaSettingsController.findAllAbaSettings().size();
-		msg = "Initial abaSettings count: " + abaSettingsIC;
-		testLogger.fine(msg);
-
-		defaultAbaIC =
-			oabaSettingsController.findAllDefaultAbaSettings().size();
-		msg = "Initial defaultAbaSettings count: " + defaultAbaIC;
-		testLogger.fine(msg);
-
-		oabaSettingsIC = oabaSettingsController.findAllOabaSettings().size();
-		msg = "Initial oabaSettings count: " + oabaSettingsIC;
-		testLogger.fine(msg);
-
-		defaultOabaIC =
-			oabaSettingsController.findAllDefaultOabaSettings().size();
-		msg = "Initial defaultOabaSettings count: " + defaultOabaIC;
-		testLogger.fine(msg);
-
-		serverConfIC = serverController.findAllServerConfigurations().size();
-		msg = "Initial serverConfiguration count: " + serverConfIC;
-		testLogger.fine(msg);
-
-		defaultServerIC =
-			serverController.findAllDefaultServerConfigurations().size();
-		msg = "defaultServerConfigurationCount: " + defaultServerIC;
-		testLogger.fine(msg);
-
-		oabaEventIC = processingController.findAllOabaProcessingEvents().size();
-		msg = "Initial oabaEvent count: " + oabaEventIC;
-		testLogger.fine(msg);
-
-		opPropertyIC = opPropController.findAllOperationalProperties().size();
-		msg = "Initial operationalProperty count: " + opPropertyIC;
-		testLogger.fine(msg);
-
-		recordSourceIC = rsController.findAll().size();
-		msg = "Initial recordSource count: " + recordSourceIC;
-		testLogger.fine(msg);
-
-		recordIdIC = ridController.findAllRecordIdTranslations().size();
-		msg = "Initial recordId count: " + recordIdIC;
-		testLogger.fine(msg);
+		this(testLogger, oabaJobController, oabaParamsController,
+				(TransitivityJobController) null,
+				(TransitivityParametersController) null,
+				oabaSettingsController, serverController, processingController,
+				opPropController, rsController, ridController);
 	}
 
-	public TestEntityCounts(Logger logger2, OabaJobController oabaController,
-			TransitivityParametersController paramsController,
+	public TestEntityCounts(Logger testLogger,
+			OabaJobController oabaJobController,
+			OabaParametersController oabaParamsController,
+			TransitivityJobController transJobController,
+			TransitivityParametersController transParamsController,
 			OabaSettingsController oabaSettingsController,
 			ServerConfigurationController serverController,
 			OabaProcessingController processingController,
 			OperationalPropertyController opPropController,
 			RecordSourceController rsController,
 			RecordIdController ridController) {
-		logger.warning("Stubbed constructor");
-		oabaJobIC = 0;
-		oabaParamsIC = 0;
-		abaSettingsIC = 0;
-		defaultAbaIC = 0;
-		oabaSettingsIC = 0;
-		defaultOabaIC = 0;
-		serverConfIC = 0;
-		defaultServerIC = 0;
-		oabaEventIC = 0;
-		opPropertyIC = 0;
-		recordSourceIC = 0;
-		recordIdIC = 0;
+		String msg;
+
+		if (oabaJobController != null) {
+			oabaJobIC = oabaJobController.findAll().size();
+		} else {
+			oabaJobIC = 0;
+			msg = "Null oabaJobController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial oabaJob count: " + oabaJobIC;
+		testLogger.fine(msg);
+
+		if (oabaParamsController != null) {
+			oabaParamsIC = oabaParamsController.findAllOabaParameters().size();
+		} else {
+			oabaParamsIC = 0;
+			msg = "Null oabaParamsController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial oabaParameters count: " + oabaParamsIC;
+		testLogger.fine(msg);
+
+		if (transJobController != null) {
+			transJobIC = transJobController.findAllTransitivityJobs().size();
+		} else {
+			transJobIC = 0;
+			msg = "Null transJobController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial transJob count: " + transJobIC;
+		testLogger.fine(msg);
+
+		if (transParamsController != null) {
+			transParamsIC =
+				transParamsController.findAllTransitivityParameters().size();
+		} else {
+			transParamsIC = 0;
+			msg = "Null transParamsController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial transParameters count: " + transParamsIC;
+		testLogger.fine(msg);
+
+		if (oabaSettingsController != null) {
+			abaSettingsIC = oabaSettingsController.findAllAbaSettings().size();
+			defaultAbaIC =
+				oabaSettingsController.findAllDefaultAbaSettings().size();
+			oabaSettingsIC =
+				oabaSettingsController.findAllOabaSettings().size();
+			defaultOabaIC =
+				oabaSettingsController.findAllDefaultOabaSettings().size();
+		} else {
+			abaSettingsIC = 0;
+			defaultAbaIC = 0;
+			oabaSettingsIC = 0;
+			defaultOabaIC = 0;
+			msg = "Null oabaSettingsController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial abaSettings count: " + abaSettingsIC;
+		testLogger.fine(msg);
+		msg = "Initial defaultAbaSettings count: " + defaultAbaIC;
+		testLogger.fine(msg);
+		msg = "Initial oabaSettings count: " + oabaSettingsIC;
+		testLogger.fine(msg);
+		msg = "Initial defaultOabaSettings count: " + defaultOabaIC;
+		testLogger.fine(msg);
+
+		if (serverController != null) {
+			serverConfIC =
+				serverController.findAllServerConfigurations().size();
+			defaultServerIC =
+				serverController.findAllDefaultServerConfigurations().size();
+		} else {
+			serverConfIC = 0;
+			defaultServerIC = 0;
+			msg = "Null serverController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial serverConfiguration count: " + serverConfIC;
+		testLogger.fine(msg);
+		msg = "defaultServerConfigurationCount: " + defaultServerIC;
+		testLogger.fine(msg);
+
+		if (processingController != null) {
+			oabaEventIC =
+				processingController.findAllOabaProcessingEvents().size();
+		} else {
+			oabaEventIC = 0;
+			msg = "Null processingController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial oabaEvent count: " + oabaEventIC;
+		testLogger.fine(msg);
+
+		if (opPropController != null) {
+			opPropertyIC =
+				opPropController.findAllOperationalProperties().size();
+		} else {
+			opPropertyIC = 0;
+			msg = "Null opPropController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial operationalProperty count: " + opPropertyIC;
+		testLogger.fine(msg);
+
+		if (rsController != null) {
+			recordSourceIC = rsController.findAll().size();
+		} else {
+			recordSourceIC = 0;
+			msg = "Null rsController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial recordSource count: " + recordSourceIC;
+		testLogger.fine(msg);
+
+		if (ridController != null) {
+			recordIdIC = ridController.findAllRecordIdTranslations().size();
+		} else {
+			recordIdIC = 0;
+			msg = "Null ridController";
+			testLogger.fine(msg);
+		}
+		msg = "Initial recordId count: " + recordIdIC;
+		testLogger.fine(msg);
 	}
 
 	protected void add(Object o) {
@@ -290,14 +356,32 @@ public class TestEntityCounts {
 
 	public void checkCounts(Logger testLogger, final EntityManager em,
 			final UserTransaction utx,
-			final OabaJobController jobController,
-			final OabaParametersController paramsController,
+			final OabaJobController oabaJobController,
+			final OabaParametersController oabaParamsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,
 			final OabaProcessingController processingController,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) throws AssertionError {
+		checkCounts(testLogger, em, utx, oabaJobController,
+				oabaParamsController, (TransitivityJobController) null,
+				(TransitivityParametersController) null, settingsController,
+				serverController, processingController, opPropController,
+				rsController, ridController);
+	}
+
+	public void checkCounts(Logger testLogger, EntityManager em,
+			UserTransaction utx, OabaJobController oabaJobController,
+			OabaParametersController oabaParamsController,
+			TransitivityJobController transJobController,
+			TransitivityParametersController transParamsController,
+			OabaSettingsController settingsController,
+			ServerConfigurationController serverController,
+			OabaProcessingController processingController,
+			OperationalPropertyController opPropController,
+			RecordSourceController rsController,
+			RecordIdController ridController) throws AssertionError {
 
 		final boolean doRetention = isTestObjectRetentionRequested();
 		if (!doRetention) {
@@ -313,9 +397,11 @@ public class TestEntityCounts {
 		}
 
 		final boolean doAssert = !doRetention;
-		logMaybeAssert(doAssert, testLogger, jobController, paramsController,
-				settingsController, serverController, processingController,
-				opPropController, rsController, ridController);
+		logMaybeAssert(doAssert, testLogger, oabaJobController,
+				oabaParamsController, transJobController,
+				transParamsController, settingsController, serverController,
+				processingController, opPropController, rsController,
+				ridController);
 	}
 
 	protected void removeTestEntities(EntityManager em, UserTransaction utx,
@@ -355,8 +441,10 @@ public class TestEntityCounts {
 	 * current counts of test entities.
 	 */
 	protected void logMaybeAssert(boolean doAssert, Logger L0,
-			final OabaJobController jobController,
-			final OabaParametersController paramsController,
+			final OabaJobController oabaJobController,
+			final OabaParametersController oabaParamsController,
+			final TransitivityJobController transJobController,
+			final TransitivityParametersController transParamsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,
 			final OabaProcessingController processingController,
@@ -368,15 +456,30 @@ public class TestEntityCounts {
 		// Note the suffix CC stands for 'CurrentCount'
 
 		List<String> warnings = new LinkedList<>();
-		final int oabaJobCC = jobController.findAll().size();
+
+		final int oabaJobCC = oabaJobController.findAll().size();
 		String w = warnOrLog(L0, "oabaJob", oabaJobIC, oabaJobCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int oabaParamsCC =
-			paramsController.findAllOabaParameters().size();
+			oabaParamsController.findAllOabaParameters().size();
 		w = warnOrLog(L0, "oabaParameters", oabaParamsIC, oabaParamsCC);
+		if (w != null) {
+			warnings.add(w);
+		}
+
+		final int transJobCC =
+			transJobController.findAllTransitivityJobs().size();
+		w = warnOrLog(L0, "transitivityJob", transJobIC, transJobCC);
+		if (w != null) {
+			warnings.add(w);
+		}
+
+		final int transParamsCC =
+			transParamsController.findAllTransitivityParameters().size();
+		w = warnOrLog(L0, "transParameters", transParamsIC, transParamsCC);
 		if (w != null) {
 			warnings.add(w);
 		}
@@ -390,8 +493,7 @@ public class TestEntityCounts {
 
 		final int defaultAbaCC =
 			settingsController.findAllDefaultAbaSettings().size();
-		w =
-			warnOrLog(L0, "defaultAbaSettings", defaultAbaIC, defaultAbaCC);
+		w = warnOrLog(L0, "defaultAbaSettings", defaultAbaIC, defaultAbaCC);
 		if (w != null) {
 			warnings.add(w);
 		}
@@ -405,27 +507,21 @@ public class TestEntityCounts {
 
 		final int defaultOabaCC =
 			settingsController.findAllDefaultOabaSettings().size();
-		w =
-			warnOrLog(L0, "defaultOabaSettings", defaultOabaIC,
-					defaultOabaCC);
+		w = warnOrLog(L0, "defaultOabaSettings", defaultOabaIC, defaultOabaCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int serverConfCC =
 			serverController.findAllServerConfigurations().size();
-		w =
-			warnOrLog(L0, "serverConfiguration", serverConfIC,
-					serverConfCC);
+		w = warnOrLog(L0, "serverConfiguration", serverConfIC, serverConfCC);
 		if (w != null) {
 			warnings.add(w);
 		}
 
 		final int defServerCC =
 			serverController.findAllDefaultServerConfigurations().size();
-		w =
-			warnOrLog(L0, "defaultServerConf", defaultServerIC,
-					defServerCC);
+		w = warnOrLog(L0, "defaultServerConf", defaultServerIC, defServerCC);
 		if (w != null) {
 			warnings.add(w);
 		}
@@ -439,9 +535,7 @@ public class TestEntityCounts {
 
 		final int opPropertyCC =
 			opPropController.findAllOperationalProperties().size();
-		w =
-			warnOrLog(L0, "operationalProperty", opPropertyIC,
-					opPropertyCC);
+		w = warnOrLog(L0, "operationalProperty", opPropertyIC, opPropertyCC);
 		if (w != null) {
 			warnings.add(w);
 		}
@@ -723,18 +817,6 @@ public class TestEntityCounts {
 			}
 		}
 		logger.info("Deleted batch jobs: " + count);
-	}
-
-	public void checkCounts(Logger logger2, EntityManager em,
-			UserTransaction utx, OabaJobController oabaController,
-			TransitivityParametersController paramsController,
-			OabaSettingsController oabaSettingsController,
-			ServerConfigurationController serverController,
-			OabaProcessingController processingController,
-			OperationalPropertyController opPropController,
-			RecordSourceController rsController,
-			RecordIdController ridController) {
-		logger.warning("Stubbed constructor");
 	}
 
 }

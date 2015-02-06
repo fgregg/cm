@@ -35,16 +35,30 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cmit.trans.util.TransitivityMdbTestProcedures;
+import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
+import com.choicemaker.cmit.utils.OabaTestParameters;
+import com.choicemaker.cmit.utils.OabaTestUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
 
-public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfiguration> {
+/**
+ * A template for integration testing of Transitivity message-driven beans.
+ * 
+ * @author rphall
+ *
+ * @param <T>
+ *            A Well-Known Test Configuration
+ */
+public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfiguration>
+		implements OabaTestParameters {
 
 	// -- Read-write instance data
 
@@ -82,10 +96,22 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	private UserTransaction utx;
 
 	@EJB
-	private OabaJobController jobController;
+	private TransitivityService transService;
 
 	@EJB
-	private OabaParametersController paramsController;
+	private TransitivityJobController transJobController;
+
+	@EJB
+	private TransitivityParametersController transParamsController;
+
+	@EJB
+	private OabaService oabaService;
+
+	@EJB
+	private OabaJobController oabaJobController;
+
+	@EJB
+	private OabaParametersController oabaParamsController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -95,12 +121,6 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	@EJB
 	private OabaProcessingController processingController;
-
-	@EJB
-	private OabaService oabaService;
-
-	@EJB
-	private TransitivityService transitivityService;
 
 	@EJB
 	private OperationalPropertyController opPropController;
@@ -177,14 +197,13 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	// -- Template methods
 
 	public void checkCounts() throws AssertionError {
-		// FIXME STUBBED
-//		TestEntityCounts te = getTestEntityCounts();
-//		te.checkCounts(getLogger(), getEm(), getUtx(), getJobController(),
-//				getParamsController(), getSettingsController(),
-//				getServerController(), getProcessingController(),
-//				getOpPropController(), getRecordSourceController(),
-//				getRecordIdController());
-		// FIXME STUBBED
+		TestEntityCounts te = getTestEntityCounts();
+		te.checkCounts(getLogger(), getEm(), getUtx(), getOabaJobController(),
+				getOabaParamsController(), getTransJobController(),
+				getTransParamsController(), getSettingsController(),
+				getServerController(), getProcessingController(),
+				getOpPropController(), getRecordSourceController(),
+				getRecordIdController());
 	}
 
 	@Before
@@ -192,18 +211,17 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		final String METHOD = "setUp";
 		getLogger().entering(getSourceName(), METHOD);
 
-		getLogger().info("Creating an OABA status listener");
+		getLogger().info("Creating an Transitivity status listener");
 		this.transStatusConsumer =
 			getJmsContext().createConsumer(getTransitivityStatusTopic());
 
-		// FIXME STUBBED
 		te = null;
-//			new TestEntityCounts(getLogger(), getJobController(),
-//					getParamsController(), getSettingsController(),
-//					getServerController(), getProcessingController(),
-//					getOpPropController(), getRecordSourceController(),
-//					getRecordIdController());
-		// END FIXME
+		new TestEntityCounts(getLogger(), getOabaJobController(),
+				getOabaParamsController(), getTransJobController(),
+				getTransParamsController(), getSettingsController(),
+				getServerController(), getProcessingController(),
+				getOpPropController(), getRecordSourceController(),
+				getRecordIdController());
 		setTestEntityCounts(te);
 		getLogger().exiting(getSourceName(), METHOD);
 	}
@@ -226,7 +244,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		assertTrue(getDedupQueue() != null);
 		assertTrue(getEm() != null);
 		assertTrue(getJmsContext() != null);
-		assertTrue(getJobController() != null);
+		assertTrue(getOabaJobController() != null);
 		assertTrue(getLogger() != null);
 		assertTrue(getMatchDedupQueue() != null);
 		assertTrue(getMatchSchedulerQueue() != null);
@@ -240,7 +258,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 		// These assertions are redundant because these controllers are
 		// required during setUp()
-		assertTrue(getParamsController() != null);
+		assertTrue(getOabaParamsController() != null);
 		assertTrue(getProcessingController() != null);
 		assertTrue(getServerController() != null);
 		assertTrue(getSettingsController() != null);
@@ -276,8 +294,12 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	@InSequence(3)
 	public final void testLinkageTransitivity()
 			throws ServerConfigurationException {
-		// FIXME
-		// TransitivityMdbTestProcedures.testLinkageTransitivity(this);
+		String TEST = "testLinkageTransitivity";
+		final String externalId = EntityManagerUtils.createExternalId(TEST);
+		OabaJob oabaJob =
+			OabaTestUtils.startOabaJob(OabaLinkageType.STAGING_DEDUPLICATION,
+					TEST, this, externalId);
+		TransitivityMdbTestProcedures.testLinkageTransitivity(this, oabaJob);
 	}
 
 	@Test
@@ -325,7 +347,15 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	public final TransitivityService getTransitivityService() {
-		return transitivityService;
+		return transService;
+	}
+
+	public final TransitivityJobController getTransJobController() {
+		return transJobController;
+	}
+
+	public final TransitivityParametersController getTransParamsController() {
+		return transParamsController;
 	}
 
 	public final Queue getBlockQueue() {
@@ -348,8 +378,8 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return jmsContext;
 	}
 
-	public final OabaJobController getJobController() {
-		return jobController;
+	public final OabaJobController getOabaJobController() {
+		return oabaJobController;
 	}
 
 	public final Logger getLogger() {
@@ -376,8 +406,8 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return ridController;
 	}
 
-	public final OabaParametersController getParamsController() {
-		return paramsController;
+	public final OabaParametersController getOabaParamsController() {
+		return oabaParamsController;
 	}
 
 	public final OabaProcessingController getProcessingController() {

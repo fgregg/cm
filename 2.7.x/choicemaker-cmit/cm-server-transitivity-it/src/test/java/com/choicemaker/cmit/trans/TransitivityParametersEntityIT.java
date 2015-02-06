@@ -101,7 +101,7 @@ public class TransitivityParametersEntityIT {
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaJobController,
+			te.checkCounts(logger, em, utx, oabaJobController, null, null,
 					transParamsController, oabaSettingsController,
 					serverController, oabaProcessingController,
 					opPropController, rsController, ridController);
@@ -113,7 +113,7 @@ public class TransitivityParametersEntityIT {
 	@Before
 	public void setUp() throws Exception {
 		te =
-			new TestEntityCounts(logger, oabaJobController,
+			new TestEntityCounts(logger, oabaJobController, null, null,
 					transParamsController, oabaSettingsController,
 					serverController, oabaProcessingController,
 					opPropController, rsController, ridController);

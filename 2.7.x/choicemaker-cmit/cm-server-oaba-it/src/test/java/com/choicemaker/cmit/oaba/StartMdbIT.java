@@ -12,10 +12,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.args.OabaLinkageType;
-import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BlockingMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
@@ -64,9 +60,7 @@ public class StartMdbIT extends
 
 	/** Stubbed implementation that does not check the working directory */
 	@Override
-	public boolean isWorkingDirectoryCorrectAfterProcessing(
-			OabaLinkageType linkage, OabaJob batchJob, OabaParameters bp,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration) {
+	public boolean isWorkingDirectoryCorrectAfterProcessing(OabaJob batchJob) {
 		return true;
 	}
 
