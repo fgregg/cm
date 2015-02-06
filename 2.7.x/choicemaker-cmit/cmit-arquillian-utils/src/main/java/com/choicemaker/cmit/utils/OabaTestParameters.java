@@ -43,7 +43,7 @@ public interface OabaTestParameters {
 
 	JMSContext getJmsContext();
 
-	OabaJobController getJobController();
+	OabaJobController getOabaJobController();
 
 	Logger getLogger();
 

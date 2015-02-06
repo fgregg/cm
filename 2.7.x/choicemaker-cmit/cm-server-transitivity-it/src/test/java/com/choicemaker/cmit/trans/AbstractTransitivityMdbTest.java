@@ -42,7 +42,6 @@ import com.choicemaker.cmit.trans.util.TransitivityMdbTestProcedures;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaProcessingPhase;
-import com.choicemaker.cmit.utils.OabaTestParameters;
 import com.choicemaker.cmit.utils.OabaTestUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
@@ -58,7 +57,7 @@ import com.choicemaker.e2.ejb.EjbPlatform;
  *            A Well-Known Test Configuration
  */
 public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfiguration>
-		implements OabaTestParameters {
+		implements TransitivityTestParameters {
 
 	// -- Read-write instance data
 
@@ -188,6 +187,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	// -- Abstract methods
 
+	@Override
 	public abstract Queue getResultQueue();
 
 	public abstract boolean isWorkingDirectoryCorrectAfterProcessing(
@@ -299,7 +299,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		OabaJob oabaJob =
 			OabaTestUtils.startOabaJob(OabaLinkageType.STAGING_DEDUPLICATION,
 					TEST, this, externalId);
-		TransitivityMdbTestProcedures.testLinkageTransitivity(this, oabaJob);
+		TransitivityMdbTestProcedures.testTransitivityProcessing(this, oabaJob);
 	}
 
 	@Test
@@ -322,6 +322,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return configurationClass;
 	}
 
+	@Override
 	public final T getTestConfiguration(OabaLinkageType linkage) {
 		if (testConfiguration == null) {
 			Class<T> c = getTestConfigurationClass();
@@ -334,14 +335,17 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return testConfiguration;
 	}
 
+	@Override
 	public final OabaProcessingPhase getOabaProcessingPhase() {
 		return oabaPhase;
 	}
 
+	@Override
 	public final EjbPlatform getE2service() {
 		return this.e2service;
 	}
 
+	@Override
 	public final OabaService getOabaService() {
 		return oabaService;
 	}
@@ -358,50 +362,80 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return transParamsController;
 	}
 
+	@Override
 	public final Queue getBlockQueue() {
 		return blockQueue;
 	}
 
+	@Override
 	public final Queue getChunkQueue() {
 		return chunkQueue;
 	}
 
+	@Override
 	public final Queue getDedupQueue() {
 		return dedupQueue;
 	}
 
+	@Override
 	public final EntityManager getEm() {
 		return em;
 	}
 
+	@Override
 	public final JMSContext getJmsContext() {
 		return jmsContext;
 	}
 
+	@Override
 	public final OabaJobController getOabaJobController() {
 		return oabaJobController;
 	}
 
+	@Override
 	public final Logger getLogger() {
 		return logger;
 	}
 
+	@Override
 	public final Queue getMatchDedupQueue() {
 		return matchDedupQueue;
 	}
 
+	@Override
 	public final Queue getMatchSchedulerQueue() {
 		return matchSchedulerQueue;
 	}
 
+	@Override
 	public final JMSConsumer getTransitivityStatusConsumer() {
 		return transStatusConsumer;
 	}
 
+	@Override
+	public JMSConsumer getOabaStatusConsumer() {
+		// FIXME TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Topic getOabaStatusTopic() {
+		// FIXME TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OabaParametersController getParamsController() {
+		// FIXME TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public final OperationalPropertyController getOpPropController() {
 		return opPropController;
 	}
 
+	@Override
 	public final RecordIdController getRecordIdController() {
 		return ridController;
 	}
@@ -410,46 +444,57 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return oabaParamsController;
 	}
 
+	@Override
 	public final OabaProcessingController getProcessingController() {
 		return processingController;
 	}
 
+	@Override
 	public final RecordSourceController getRecordSourceController() {
 		return rsController;
 	}
 
+	@Override
 	public final int getResultEventId() {
 		return eventId;
 	}
 
+	@Override
 	public final float getResultPercentComplete() {
 		return percentComplete;
 	}
 
+	@Override
 	public final ServerConfigurationController getServerController() {
 		return serverController;
 	}
 
+	@Override
 	public final OabaSettingsController getSettingsController() {
 		return oabaSettingsController;
 	}
 
+	@Override
 	public final Queue getSingleMatchQueue() {
 		return singleMatchQueue;
 	}
 
+	@Override
 	public final String getSourceName() {
 		return sourceName;
 	}
 
+	@Override
 	public final Queue getStartQueue() {
 		return startQueue;
 	}
 
+	@Override
 	public TestEntityCounts getTestEntityCounts() {
 		return te;
 	}
 
+	@Override
 	public final Queue getTransitivityQueue() {
 		return transitivityQueue;
 	}
@@ -458,6 +503,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return transStatusTopic;
 	}
 
+	@Override
 	public final UserTransaction getUtx() {
 		return utx;
 	}

@@ -3,7 +3,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
 public interface ProcessingStatus {
 
 	/** This methods gets the most recent processing event */
-	OabaEvent getCurrentProcessingStatusId();
+	OabaEvent getCurrentProcessingStatus();
 
 	/** This methods gets the id of the most recent processing event */
 	int getCurrentProcessingStatusId2();

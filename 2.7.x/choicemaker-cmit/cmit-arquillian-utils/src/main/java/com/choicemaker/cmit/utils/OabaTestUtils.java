@@ -142,7 +142,7 @@ public class OabaTestUtils {
 			fail(e.toString());
 		}
 
-		final OabaJobController jobController = test.getJobController();
+		final OabaJobController jobController = test.getOabaJobController();
 		assertTrue(jobId != NONPERSISTENT_ID);
 		OabaJob retVal = jobController.findOabaJob(jobId);
 		assertTrue(retVal != null);

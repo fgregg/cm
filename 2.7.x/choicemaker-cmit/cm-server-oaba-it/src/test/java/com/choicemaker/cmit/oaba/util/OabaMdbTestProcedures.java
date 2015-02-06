@@ -14,7 +14,7 @@ import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.core.ProcessingStatus;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
@@ -125,7 +125,8 @@ public class OabaMdbTestProcedures {
 		final JMSConsumer statusListener = test.getOabaStatusConsumer();
 		validateDestinations(oabaPhase, listeningQueue);
 
-		OabaJob oabaJob = OabaTestUtils.startOabaJob(linkage, tag, test, externalId);
+		OabaJob oabaJob =
+			OabaTestUtils.startOabaJob(linkage, tag, test, externalId);
 		assertTrue(oabaJob != null);
 		te.add(oabaJob);
 		assertTrue(externalId != null
@@ -190,18 +191,17 @@ public class OabaMdbTestProcedures {
 		// Find the entry in the processing history updated by the OABA
 		final OabaProcessingController processingController =
 			test.getProcessingController();
-		ProcessingStatus processingEntry =
+		OabaEventLog processingEntry =
 			processingController.getProcessingLog(oabaJob);
 		// te.add(processingEntry);
 
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);
 		final int expectedEventId = test.getResultEventId();
-		assertTrue(processingEntry.getCurrentProcessingStatusId() == expectedEventId);
+		assertTrue(processingEntry.getCurrentOabaEventId() == expectedEventId);
 
 		// Check that the working directory contains what it should
-		assertTrue(test.isWorkingDirectoryCorrectAfterProcessing(
-				oabaJob));
+		assertTrue(test.isWorkingDirectoryCorrectAfterProcessing(oabaJob));
 
 		// Check the number of test entities that were created
 		test.checkCounts();

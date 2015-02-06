@@ -179,7 +179,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	public void checkCounts() throws AssertionError {
 		TestEntityCounts te = getTestEntityCounts();
-		te.checkCounts(getLogger(), getEm(), getUtx(), getJobController(),
+		te.checkCounts(getLogger(), getEm(), getUtx(), getOabaJobController(),
 				getParamsController(), getSettingsController(),
 				getServerController(), getProcessingController(),
 				getOpPropController(), getRecordSourceController(),
@@ -196,7 +196,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 			getJmsContext().createConsumer(getOabaStatusTopic());
 
 		TestEntityCounts te =
-			new TestEntityCounts(getLogger(), getJobController(),
+			new TestEntityCounts(getLogger(), getOabaJobController(),
 					getParamsController(), getSettingsController(),
 					getServerController(), getProcessingController(),
 					getOpPropController(), getRecordSourceController(),
@@ -223,7 +223,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		assertTrue(getDedupQueue() != null);
 		assertTrue(getEm() != null);
 		assertTrue(getJmsContext() != null);
-		assertTrue(getJobController() != null);
+		assertTrue(getOabaJobController() != null);
 		assertTrue(getLogger() != null);
 		assertTrue(getMatchDedupQueue() != null);
 		assertTrue(getMatchSchedulerQueue() != null);
@@ -346,7 +346,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	}
 
 	@Override
-	public final OabaJobController getJobController() {
+	public final OabaJobController getOabaJobController() {
 		return oabaJobController;
 	}
 
