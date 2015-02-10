@@ -72,7 +72,36 @@ public class SqlServerRecordSource implements RecordSource {
 			stmt = connection.createStatement();
 			stmt.setFetchSize(100);
 
-			ResultSet rs = stmt.executeQuery(query);
+			// BUG 2011-05-08 rphall
+			// SQL query may (and usually does) return multiple result sets,
+			// 		but executeQuery can't handle more than one.
+			//ResultSet rs = stmt.executeQuery(query);
+			// BUGFIX: see
+			// How to Retrieve Multiple Result Sets from a Stored Procedure in JDBC
+			// http://links.rph.cx/m9jJav
+			ResultSet rs = null;
+			boolean isResultSet = stmt.execute(query);
+			int count = 0;
+			do {
+				if (isResultSet) {
+					rs = stmt.getResultSet();
+					break;
+				} else {
+					count = stmt.getUpdateCount();
+					if (count >= 0) {
+						String msg =
+							"Query returned update count == '" + count + "'";
+						logger.fine(msg);
+					} else {
+						String msg =
+							"Query '" + query + "' did not return a result set";
+						logger.severe(msg);
+						throw new SQLException(msg);
+					}
+				}
+				isResultSet = stmt.getMoreResults();
+			} while (isResultSet || count != -1);
+			// ENDBUGFIX
 			
 			dbr.open(rs, stmt);
 		} catch (SQLException ex) {
