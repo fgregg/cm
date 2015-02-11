@@ -1,3 +1,6 @@
+/*
+ * Creates tables used by CM Server (offline matching)
+ */
 CREATE TABLE CMT_OABA_BATCHJOB (
  ID NUMERIC(19) NOT NULL,
  TYPE VARCHAR(31) NULL,
