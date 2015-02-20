@@ -17,14 +17,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
-
-import org.apache.tools.ant.util.FileUtils;
 
 /**
  * Description
@@ -40,10 +40,19 @@ public class FileUtilities {
 	
 	private static Logger logger = Logger.getLogger(FileUtilities.class.getName());
 
-	private static final FileUtils FILE_UTILS = FileUtils.newFileUtils();
-
-	public static File resolveFile(File relativeTo, String fileName) throws IOException {
-		return FILE_UTILS.resolveFile(relativeTo, fileName).getCanonicalFile();
+	public static File resolveFile(File relativeTo, String fileName) {
+		if (relativeTo == null) {
+			throw new IllegalArgumentException("null reference file");
+		}
+		if (!relativeTo.isDirectory()) {
+			relativeTo = relativeTo.getParentFile();
+		}
+		assert relativeTo.isDirectory();
+		Path referencePath = Paths.get(relativeTo.toURI());
+		Path path = referencePath.resolve(fileName);
+		Path normalized = path.normalize();
+		File retVal = normalized.toFile();
+		return retVal;
 	}
 
 	/**

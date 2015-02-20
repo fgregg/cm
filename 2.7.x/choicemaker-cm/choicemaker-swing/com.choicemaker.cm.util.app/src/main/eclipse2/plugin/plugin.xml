@@ -15,12 +15,12 @@
 
 
    <extension
-         id="ProductionModelsJarBuilderApp"
-         name="ProductionModelsJarBuilderApp"
+         id="ModelArtifactBuilderApp"
+         name="ModelArtifactBuilderApp"
          point="com.choicemaker.e2.applications">
       <application>
          <run
-               class="com.choicemaker.cm.util.app.ProductionModelsJarBuilderApp">
+               class="com.choicemaker.cm.util.app.ModelArtifactBuilderApp">
          </run>
       </application>
    </extension>

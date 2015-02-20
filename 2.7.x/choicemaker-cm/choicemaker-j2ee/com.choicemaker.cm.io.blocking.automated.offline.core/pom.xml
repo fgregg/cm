@@ -26,7 +26,6 @@
     <plugin.maven-compiler.target>1.7</plugin.maven-compiler.target>
 
     <!-- Eclipse 2 plugin parameters -->
-    <eclipse.plugin.runtime.library.name>offline.jar</eclipse.plugin.runtime.library.name>
     <eclipse.plugin.runtime.library.name>oaba-core.jar</eclipse.plugin.runtime.library.name>
     <eclipse.plugin.src.zip.name>oaba-coresrc.zip</eclipse.plugin.src.zip.name>
   </properties>

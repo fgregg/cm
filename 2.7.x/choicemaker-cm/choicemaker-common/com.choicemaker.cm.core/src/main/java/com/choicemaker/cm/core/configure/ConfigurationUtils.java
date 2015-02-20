@@ -110,25 +110,21 @@ public class ConfigurationUtils {
 		return res;
 	}
 
-	public static String getCodeRoot(File wdir, Document document) throws XmlConfException {
+	public static String getCodeRoot(File wdir, Document document)
+			throws XmlConfException {
 		String retVal = null;
-		try {
-			File f = FileUtilities.resolveFile(wdir,DEFAULT_CODE_ROOT);
-			Element e = getCore(document);
+		File f = FileUtilities.resolveFile(wdir, DEFAULT_CODE_ROOT);
+		Element e = getCore(document);
+		if (e != null) {
+			e = e.getChild(CONFIGURATION_GENERATOR_ELEMENT);
 			if (e != null) {
-				e = e.getChild(CONFIGURATION_GENERATOR_ELEMENT);
-				if (e != null) {
-					String t = e.getAttributeValue(CONFIGURATION_CODE_ROOT);
-					if (t != null) {
-						f = FileUtilities.resolveFile(wdir,t);
-					}
+				String t = e.getAttributeValue(CONFIGURATION_CODE_ROOT);
+				if (t != null) {
+					f = FileUtilities.resolveFile(wdir, t);
 				}
 			}
-			retVal = f.getAbsolutePath();
-		} catch (IOException e1) {
-			logger.severe("Problem with code root: " + e1);
-			throw new XmlConfException(e1.toString(), e1);
 		}
+		retVal = f.getAbsolutePath();
 
 		return retVal;
 	}

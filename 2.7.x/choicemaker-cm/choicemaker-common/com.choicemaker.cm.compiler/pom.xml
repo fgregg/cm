@@ -56,34 +56,6 @@
           </execution>
         </executions>
       </plugin>
-<!-- Jakarta ORO is no longer required, not even for testing
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy Jakarta ORO</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.choicemaker.cm</groupId>
-                  <artifactId>jakarta-oro</artifactId>
-                  <version>2.0.1</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                  <destFileName>jakarta-oro-2.0.1.jar</destFileName>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
--->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -147,13 +119,6 @@
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>org.jdom</artifactId>
     </dependency>
-<!-- Jakarta ORO is no longer required, not even for testing
-    <dependency>
-      <groupId>com.choicemaker.cm</groupId>
-      <artifactId>jakarta-oro</artifactId>
-      <scope>test</scope>
-    </dependency>
--->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

@@ -29,17 +29,17 @@
       <generator
             default="true"
             description="Production Models Jar File"
-            class="com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder$ProductionModelsBuilder">
+            class="com.choicemaker.cm.compiler.util.ModelArtifactBuilder$ProductionModelsBuilder">
       </generator>
       <generator
             default="true"
             description="Holder Classes Jar File"
-            class="com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder$HolderClassesBuilder">
+            class="com.choicemaker.cm.compiler.util.ModelArtifactBuilder$HolderClassesBuilder">
       </generator>
       <generator
             default="true"
             description="Holder Classes Javadoc (Zipped)"
-            class="com.choicemaker.cm.compiler.util.ProductionModelsJarBuilder$ZippedJavadocBuilder">
+            class="com.choicemaker.cm.compiler.util.ModelArtifactBuilder$ZippedJavadocBuilder">
       </generator>
    </extension>
 
