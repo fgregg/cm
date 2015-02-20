@@ -37,7 +37,9 @@ import com.choicemaker.cm.io.db.base.DbView;
 import com.choicemaker.e2.CMPlatformRunnable;
 
 /**
- *
+ * Writes a Sql Server script (SqlServer_Custom_Objects.txt) that creates DB
+ * objects (views) based on the schemas of models specified in the
+ * productionModels section of a CM Analyzer configuration file.
  * @author    
  * @version   $Revision: 1.9.100.3 $ $Date: 2010/03/16 13:07:26 $
  */
