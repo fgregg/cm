@@ -17,7 +17,9 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +39,7 @@ import com.choicemaker.cm.core.configure.ChoiceMakerConfigurator;
 import com.choicemaker.cm.core.configure.ConfigurationUtils;
 import com.choicemaker.cm.core.configure.MachineLearnerPersistence;
 import com.choicemaker.cm.core.configure.ProbabilityModelPersistence;
+import com.choicemaker.e2.CMPluginDescriptor;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.util.FileUtilities;
 import com.choicemaker.util.SystemPropertyUtils;
@@ -464,11 +467,38 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	public String getJavaDocClasspath() {
 		String pathSeparator =
 			System.getProperty(SystemPropertyUtils.PATH_SEPARATOR);
-		String res = null;
-		URL[] ucp = CMPlatformUtils.getPluginClassPaths();
-		for (int j = 0; j < ucp.length; j++) {
-			res += " " + ucp[j].toString();
+		Set urls = new LinkedHashSet();
+		CMPluginDescriptor[] plugins = CMPlatformUtils.getPluginDescriptors();
+		for (int i=0; i<plugins.length; i++) {
+			CMPluginDescriptor plugin = plugins[i];
+			ClassLoader cl = plugin.getPluginClassLoader();
+			if (!(cl instanceof URLClassLoader)) {
+				logger.warning("Skipping non-URL ClassLoader for "
+						+ plugin.getUniqueIdentifier());
+				continue;
+			}
+			URLClassLoader urlCL = null;
+			try {
+				urlCL = (URLClassLoader) cl;
+				URL[] ucp = urlCL.getURLs();
+				for (int j = 0; j < ucp.length; j++) {
+					URL url = ucp[j]; 
+					/* boolean added = */ urls.add(url); /* if (added) ... */
+				}
+			} finally {
+				if (urlCL != null) {
+					try {
+						urlCL.close();
+					} catch (IOException e) {
+						logger.severe("Unable to close URLClassLoader: "
+								+ e.toString());
+					}
+					urlCL = null;
+				}
+			}
 		}
+		String res = null;
+		URL[] ucp = (URL[]) urls.toArray(new URL[urls.size()]);
 		for (int j = 0; j < ucp.length; j++) {
 			if (res == null) {
 				res = "";
