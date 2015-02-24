@@ -26,7 +26,7 @@
     <generator default="true" description="Holder Classes Jar File"
       class="com.choicemaker.cm.compiler.util.ModelArtifactBuilder$HolderClassesBuilder">
     </generator>
-    <generator default="false" description="Holder Classes Javadoc (Zipped)"
+    <generator default="false" description="Holder Classes Javadoc (Requires JDK)"
       class="com.choicemaker.cm.compiler.util.ModelArtifactBuilder$ZippedJavadocBuilder">
     </generator>
   </extension>
