@@ -25,6 +25,7 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConfigurator;
 import com.choicemaker.cm.io.db.base.xmlconf.ConnectionPoolDataSourceXmlConf;
 import com.choicemaker.cm.io.db.sqlserver.SqlServerRecordSource;
+import com.choicemaker.cm.io.db.sqlserver.SqlServerXmlUtils;
 
 /**
  * Handling of Db Marked Record Pair sources.
@@ -61,11 +62,11 @@ public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator
 		try {
 			SqlServerRecordSource src = (SqlServerRecordSource) s;
 			String fileName = src.getFileName();
-			Element e = new Element("RecordSource");
-			e.setAttribute("class", EXTENSION_POINT_ID);
-			e.setAttribute("dataSourceName", src.getDataSourceName());
-			e.setAttribute("dbConfiguration", src.getDbConfiguration());
-			e.addContent(new Element("idsQuery").setText(src.getIdsQuery()));
+			Element e = new Element(SqlServerXmlUtils.EN_RECORDSOURCE);
+			e.setAttribute(SqlServerXmlUtils.AN_CLASS, EXTENSION_POINT_ID);
+			e.setAttribute(SqlServerXmlUtils.AN_DATASOURCENAME, src.getDataSourceName());
+			e.setAttribute(SqlServerXmlUtils.AN_DBCONFIGURATION, src.getDbConfiguration());
+			e.addContent(new Element(SqlServerXmlUtils.AN_IDSQUERY).setText(src.getIdsQuery()));
 			FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
 			XMLOutputter o = new XMLOutputter("    ", true);
 			o.setTextNormalize(true);
@@ -78,9 +79,9 @@ public class SqlServerRecordSourceXmlConf implements RecordSourceXmlConfigurator
 
 	public RecordSource getRecordSource(String fileName, Element e, IProbabilityModel model)
 		throws XmlConfException {
-		String dataSourceName = e.getAttributeValue("dataSourceName");
-		String dbConfiguration = e.getAttributeValue("dbConfiguration");
-		String idsQuery = e.getChildText("idsQuery");
+		String dataSourceName = e.getAttributeValue(SqlServerXmlUtils.AN_DATASOURCENAME);
+		String dbConfiguration = e.getAttributeValue(SqlServerXmlUtils.AN_DBCONFIGURATION);
+		String idsQuery = e.getChildText(SqlServerXmlUtils.AN_IDSQUERY);
 		return new SqlServerRecordSource(fileName, model, dataSourceName, dbConfiguration, idsQuery);
 	}
 	

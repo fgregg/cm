@@ -38,6 +38,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ModelAttributeNames;
 import com.choicemaker.cm.core.ModelConfigurationException;
+import com.choicemaker.cm.core.ProbabilityModelConfiguration;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -88,7 +89,6 @@ public class ProbabilityModelsXmlConf {
 			String.valueOf(model.isEnableAllRulesBeforeTraining()));
 		Accessor acc = model.getAccessor();
 		// AJW 1/8/04: the actual accessor class is a dynamic proxy...
-		//m.setAttribute(ModelAttributeNames.AN_ACCESSOR_CLASS, acc.getClass().getName());
 		m.setAttribute(ModelAttributeNames.AN_ACCESSOR_CLASS, model.getAccessorClassName());
 		m.setAttribute(ModelAttributeNames.AN_USE_ANT, String.valueOf(model.isUseAnt()));
 		m.setAttribute(ModelAttributeNames.AN_ANT_COMMAND, model.getAntCommand());
@@ -118,37 +118,6 @@ public class ProbabilityModelsXmlConf {
 			throw new ModelConfigurationException("Problem saving model: "
 					+ ex.toString(), ex);
 		}
-	}
-
-	public static IProbabilityModel readModel(
-		String fileName,
-		ICompiler compiler,
-		Writer w,
-		boolean allowCompile)
-		throws ModelConfigurationException {
-		// Preconditions checked by called to overloaded readModel(..)
-		try {
-			return readModel(
-				fileName,
-				new FileInputStream(new File(fileName).getAbsoluteFile()),
-				compiler,
-				w,
-				allowCompile);
-		} catch (FileNotFoundException ex) {
-			throw new ModelConfigurationException("Internal error: "
-					+ ex.toString(), ex);
-		}
-	}
-
-	public static IProbabilityModel readModel(
-		String fileName,
-		InputStream is,
-		ICompiler compiler,
-		Writer statusOutput,
-		boolean allowCompile)
-		throws ModelConfigurationException {
-		return readModel(fileName, is, compiler, statusOutput, null,
-				allowCompile);
 	}
 
 	public static IProbabilityModel readModel(String fileName, InputStream is,
@@ -225,7 +194,7 @@ public class ProbabilityModelsXmlConf {
 		}
 		logger.fine("classLoader == " + customClassLoader);
 
-		IProbabilityModel retVal = null;
+		ProbabilityModel retVal = null;
 		try {
 			if (allowCompile && classLoader instanceof URLClassLoader) {
 				String resourcePath = accessorName.replace('.', '/') + ".class";
@@ -331,11 +300,6 @@ public class ProbabilityModelsXmlConf {
 		return null;
 	}
 
-	public static void loadProductionProbabilityModels(ICompiler compiler)
-		throws ModelConfigurationException {
-		loadProductionProbabilityModels(compiler, false);
-	}
-
 	public static void loadProductionProbabilityModels(ICompiler compiler,
 			boolean fromResource) throws ModelConfigurationException {
 
@@ -356,15 +320,30 @@ public class ProbabilityModelsXmlConf {
 				String name = e.getAttributeValue("name");
 				String fileName = e.getAttributeValue("file");
 
-				IProbabilityModel m;
+				ProbabilityModel m;
 				final boolean allowRecompile = !fromResource;
+				final ClassLoader customCL = null;
 				if (fromResource) {
 					InputStream is =
 						ProbabilityModelsXmlConf.class.getClassLoader()
 								.getResourceAsStream("META-INF/" + fileName);
-					m = readModel(null, is, compiler, new StringWriter(), allowRecompile);
+					m =
+						(ProbabilityModel) readModel(null, is, compiler,
+								new StringWriter(), customCL, allowRecompile);
 				} else {
-					m = readModel(fileName, compiler, new StringWriter(), allowRecompile);
+					InputStream is;
+					try {
+						File f = new File(fileName).getAbsoluteFile();
+						is = new FileInputStream(f);
+					} catch (FileNotFoundException e1) {
+						String msg =
+							"Unable to find '" + fileName + "': "
+									+ e1.toString();
+						throw new ModelConfigurationException(msg);
+					}
+					m =
+						(ProbabilityModel) readModel(fileName, is, compiler,
+								new StringWriter(), customCL, allowRecompile);
 				}
 				
 				if (name != null) {
@@ -382,6 +361,11 @@ public class ProbabilityModelsXmlConf {
 					String key = p.getAttributeValue("name").intern();
 					String value = p.getAttributeValue("value").intern();
 					m.properties().put(key,value);
+					if (key.equals(ProbabilityModelConfiguration.PN_BLOCKING_CONFIGURATION)) {
+						m.setDatabaseConfigurationName(value);
+					} else if (key.equals(ProbabilityModelConfiguration.PN_BLOCKING_CONFIGURATION)) {
+						m.setBlockingConfigurationName(value);
+					}
 				}
 
 				PMManager.addModel(m);

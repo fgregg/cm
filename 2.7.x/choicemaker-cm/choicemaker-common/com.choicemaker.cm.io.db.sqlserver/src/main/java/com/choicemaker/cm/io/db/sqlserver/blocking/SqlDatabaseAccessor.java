@@ -71,7 +71,7 @@ public class SqlDatabaseAccessor implements DatabaseAccessor {
 
 	public void open(AutomatedBlocker blocker) throws IOException {
 		Accessor acc = blocker.getModel().getAccessor();
-		String dbrName = (String) blocker.getModel().properties().get("dbConfiguration");
+		String dbrName = blocker.getModel().getDatabaseConfigurationName();
 		dbr = ((DbAccessor) acc).getDbReaderSequential(dbrName);
 		String query = null;
 		try {

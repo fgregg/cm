@@ -319,18 +319,17 @@ public class SQLServerSerializableCompositeRecordSource implements
 			log.fine(msg);
 		}
 	}
-
+	
 	public String toXML() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<qlServerCompositeRecordSource ");
-		sb.append("dataSourceName=").append("\"").append(dsJNDIName).append("\" ");
-		sb.append("model=").append("\"").append(modelName).append("\" ");
-		sb.append("dbConfiguration=").append("\"").append(dbConfig).append("\" ");
-		sb.append("idsQuery=").append("\"").append(sqlQuery).append("\" ");
-		sb.append("maxCompositeSize=").append("\"").append(maxCompositeSize).append("\" ");
-		sb.append("/>");
+		sb.append(SqlServerXmlUtils.xmlElementStart(SqlServerXmlUtils.EN_SQLSERVERCOMPOSITERECORDSOURCE));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_DATASOURCENAME,dsJNDIName));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_MODEL,modelName));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_DBCONFIGURATION,dbConfig));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_IDSQUERY,sqlQuery));
+		sb.append(SqlServerXmlUtils.xmlAttribute(SqlServerXmlUtils.AN_MAXCOMPOSITESIZE,String.valueOf(maxCompositeSize)));
+		sb.append(SqlServerXmlUtils.xmlElementEndInline());
 		return sb.toString();
 	}
-
 
 }

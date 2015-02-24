@@ -48,6 +48,7 @@ import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.db.base.DataSources;
+import com.choicemaker.cm.io.db.sqlserver.SqlServerXmlUtils;
 import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
@@ -289,11 +290,11 @@ public class SqlServerIdSearchDialog extends JDialog {
 		int stbsgl = blockingParametersPanel.getSTBSGL();
 		int lsbs = blockingParametersPanel.getLSBS();
 		
-		model.properties().put("dbConfiguration", dbConfiguration);
-		model.properties().put("blockingConfiguration", blockingConfiguration);
-		model.properties().put("limitPerBlockingSet", String.valueOf(lpbs));
-		model.properties().put("singleTableBlockingSetGraceLimit", String.valueOf(stbsgl));
-		model.properties().put("limitSingleBlockingSet", String.valueOf(lsbs));
+		model.properties().put(SqlServerXmlUtils.PN_DB_CONFIGURATION, dbConfiguration);
+		model.properties().put(SqlServerXmlUtils.PN_BLOCKING_CONFIGURATION, blockingConfiguration);
+		model.properties().put(SqlServerXmlUtils.PN_BLOCKING_CONFIGURATION, String.valueOf(lpbs));
+		model.properties().put(SqlServerXmlUtils.PN_SINGLETABLEBLOCKINGSETGRACELIMIT, String.valueOf(stbsgl));
+		model.properties().put(SqlServerXmlUtils.PN_LIMITSINGLEBLOCKINGSET, String.valueOf(lsbs));
 		model.properties().put(SqlDbObjectMaker.getMultiKey(model, dbConfiguration),
 							 SqlDbObjectMaker.getMultiQuery(model, dbConfiguration));		
 		

@@ -87,9 +87,9 @@ public class SqlServerUtils {
 		if (model == lastModel &&
 			ds == lastDs &&
 			lastBlockingConfiguration != null &&
-			lastBlockingConfiguration.equals(model.properties().get("blockingConfiguration")) &&
+			lastBlockingConfiguration.equals(model.getBlockingConfigurationName()) &&
 			lastDbConfiguration != null && 
-			lastDbConfiguration.equals(model.properties().get("dbConfiguration")) &&
+			lastDbConfiguration.equals(model.getDatabaseConfigurationName()) &&
 			model.getCountSource() != null) {
 			
 			return;
@@ -116,8 +116,8 @@ public class SqlServerUtils {
 		
 		lastModel = model;
 		lastDs = ds;
-		lastBlockingConfiguration = (String)model.properties().get("blockingConfiguration");
-		lastDbConfiguration = (String)model.properties().get("dbConfiguration");
+		lastBlockingConfiguration = model.getBlockingConfigurationName();
+		lastDbConfiguration = model.getDatabaseConfigurationName();
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class SqlServerUtils {
 	 * NOTE: this only works when the id type is integer (as the value is not quoted).
 	 */
 	private static String createCondition(ImmutableProbabilityModel model, String id) {
-		String dbConf = (String) model.properties().get("dbConfiguration");
+		String dbConf = model.getDatabaseConfigurationName();
 		DbReaderSequential dbr = ((DbAccessor)model.getAccessor()).getDbReaderSequential(dbConf);
 		String masterType = dbr.getMasterIdType().toUpperCase();
 		if (masterType.indexOf("INT") >= 0) {

@@ -25,6 +25,7 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
 import com.choicemaker.cm.io.db.base.xmlconf.ConnectionPoolDataSourceXmlConf;
 import com.choicemaker.cm.io.db.sqlserver.SqlServerMarkedRecordPairSource;
+import com.choicemaker.cm.io.db.sqlserver.SqlServerXmlUtils;
 
 /**
  * Handling of Db Marked Record Pair sources.
@@ -61,11 +62,11 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 		try {
 			SqlServerMarkedRecordPairSource src = (SqlServerMarkedRecordPairSource) s;
 			String fileName = src.getFileName();
-			Element e = new Element("MarkedRecordPairSource");
-			e.setAttribute("class", EXTENSION_POINT_ID);
-			e.setAttribute("dataSourceName", src.getDataSourceName());
-			e.setAttribute("dbConfiguration", src.getDbConfiguration());
-			e.addContent(new Element("mrpsQuery").setText(src.getMrpsQuery()));
+			Element e = new Element(SqlServerXmlUtils.EN_MARKEDRECORDPAIRSOURCE);
+			e.setAttribute(SqlServerXmlUtils.AN_CLASS, EXTENSION_POINT_ID);
+			e.setAttribute(SqlServerXmlUtils.AN_DATASOURCENAME, src.getDataSourceName());
+			e.setAttribute(SqlServerXmlUtils.AN_DBCONFIGURATION, src.getDbConfiguration());
+			e.addContent(new Element(SqlServerXmlUtils.EN_MRPSQUERY).setText(src.getMrpsQuery()));
 			FileOutputStream fs = new FileOutputStream(new File(fileName).getAbsoluteFile());
 			XMLOutputter o = new XMLOutputter("    ", true);
 			o.setTextNormalize(true);
@@ -78,9 +79,9 @@ public class SqlServerMarkedRecordPairSourceXmlConf implements MarkedRecordPairS
 
 	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, IProbabilityModel model)
 		throws XmlConfException {
-		String dataSourceName = e.getAttributeValue("dataSourceName");
-		String dbConfiguration = e.getAttributeValue("dbConfiguration");
-		String mrpsQuery = e.getChildText("mrpsQuery");
+		String dataSourceName = e.getAttributeValue(SqlServerXmlUtils.AN_DATASOURCENAME);
+		String dbConfiguration = e.getAttributeValue(SqlServerXmlUtils.AN_DBCONFIGURATION);
+		String mrpsQuery = e.getChildText(SqlServerXmlUtils.EN_MRPSQUERY);
 		return new SqlServerMarkedRecordPairSource(fileName, model, dataSourceName, dbConfiguration, mrpsQuery);
 	}
 	

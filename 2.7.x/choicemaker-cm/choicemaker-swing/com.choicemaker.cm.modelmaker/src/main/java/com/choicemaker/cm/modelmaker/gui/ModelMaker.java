@@ -648,7 +648,10 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			CompilerFactory factory = CompilerFactory.getInstance ();
 			ICompiler compiler = factory.getDefaultCompiler();
 			final boolean allowCompile = true;
-			IProbabilityModel pm = ProbabilityModelsXmlConf.readModel(modelName,is,compiler,statusOutput, allowCompile);
+			final ClassLoader customCL = null;
+			IProbabilityModel pm =
+				ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
+						statusOutput, customCL, allowCompile);
 			setProbabilityModel(pm);
 		} catch (Exception ex) {
 			// AJW 2004-04-26: removed to avoid duplicate error messages.
@@ -748,9 +751,10 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			CompilerFactory factory = CompilerFactory.getInstance();
 			ICompiler compiler = factory.getDefaultCompiler();
 			final boolean allowCompile = true;
+			final ClassLoader customCL = null;
 			pm =
 				ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
-						statusOutput, allowCompile);
+						statusOutput, customCL, allowCompile);
 		} catch (ModelConfigurationException ex) {
 			throw new OperationFailedException(
 					ChoiceMakerCoreMessages.m.formatMessage(

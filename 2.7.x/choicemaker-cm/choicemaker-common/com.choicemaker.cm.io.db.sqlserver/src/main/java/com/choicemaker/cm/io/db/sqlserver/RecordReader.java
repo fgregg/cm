@@ -59,7 +59,7 @@ public class RecordReader implements RecordSource {
 
 	public void open() throws IOException {
 		Accessor acc = model.getAccessor();
-		String dbrName = (String) model.properties().get("dbConfiguration");
+		String dbrName = model.getDatabaseConfigurationName();
 		dbr = ((DbAccessor) acc).getDbReaderSequential(dbrName);
 		try {
 			String query = getQuery();

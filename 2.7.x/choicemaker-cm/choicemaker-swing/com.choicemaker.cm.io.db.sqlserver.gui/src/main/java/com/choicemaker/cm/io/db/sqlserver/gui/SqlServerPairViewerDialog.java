@@ -34,6 +34,7 @@ import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
 import com.choicemaker.cm.io.db.base.DataSources;
+import com.choicemaker.cm.io.db.sqlserver.SqlServerXmlUtils;
 import com.choicemaker.cm.io.db.sqlserver.dbom.SqlDbObjectMaker;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
@@ -192,7 +193,7 @@ public class SqlServerPairViewerDialog extends JDialog {
 
 		DataSource ds = getDataSource();
 		String dbConfiguration = getDbConfiguration();
-		model.properties().put("dbConfiguration", dbConfiguration);
+		model.properties().put(SqlServerXmlUtils.PN_DB_CONFIGURATION, dbConfiguration);
 		model.properties().put(SqlDbObjectMaker.getMultiKey(model, dbConfiguration),
 							 SqlDbObjectMaker.getMultiQuery(model, dbConfiguration));
 				

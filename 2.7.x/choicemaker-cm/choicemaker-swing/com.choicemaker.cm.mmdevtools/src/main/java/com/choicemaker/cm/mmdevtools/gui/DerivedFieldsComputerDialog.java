@@ -107,15 +107,18 @@ public class DerivedFieldsComputerDialog extends JDialog {
 		String modelName = f.getName();
 		InputStream is = new FileInputStream(f);
 		final boolean allowCompile = true;
-		IProbabilityModel sourceModel = 
-			ProbabilityModelsXmlConf.readModel(modelName,is,compiler,statusOutput, allowCompile);
+		final ClassLoader customCL = null;
+		IProbabilityModel sourceModel =
+			ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
+					statusOutput, customCL, allowCompile);
 
 		statusOutput = new StringWriter();
 		f = sinkModelSelector.getFile();
 		modelName = f.getName();
 		is = new FileInputStream(f);
 		IProbabilityModel sinkModel = 
-		ProbabilityModelsXmlConf.readModel(modelName,is,compiler,statusOutput, allowCompile);
+			ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
+					statusOutput, customCL, allowCompile);
 
 		RecordSource source = RecordSourceXmlConf.getRecordSource(sourceSelector.getFile().getAbsolutePath());
 		RecordSource sinkSource = RecordSourceXmlConf.getRecordSource(sinkSelector.getFile().getAbsolutePath());

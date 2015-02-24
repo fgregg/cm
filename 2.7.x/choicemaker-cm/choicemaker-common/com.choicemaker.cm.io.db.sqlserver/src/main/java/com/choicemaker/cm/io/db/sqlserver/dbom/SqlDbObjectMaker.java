@@ -61,7 +61,9 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		CompilerFactory factory = CompilerFactory.getInstance ();
 		ICompiler compiler = factory.getDefaultCompiler();
 
-		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler);
+		final boolean fromResource = false;
+		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler,
+				fromResource);
 		Writer w = new FileWriter(args[2]);
 		processAllModels(w, true);
 		w.close();
@@ -93,7 +95,7 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	}
 	
 	public static void createObjects(Writer w, ImmutableProbabilityModel model, boolean insertGo) throws IOException {
-		String dbConfiguration = (String) model.properties().get("dbConfiguration");
+		String dbConfiguration = model.getDatabaseConfigurationName();
 		if (dbConfiguration != null) {
 			Accessor accessor = model.getAccessor();
 			if (accessor instanceof DbAccessor) {
@@ -167,7 +169,7 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	}
 
 	public static String getMultiQuery(IProbabilityModel model) {
-		return getMultiQuery(model, (String)model.properties().get("dbConfiguration"));
+		return getMultiQuery(model, model.getDatabaseConfigurationName());
 	}
 	
 	public static String getMultiQuery(ImmutableProbabilityModel model, String dbConfiguration) {

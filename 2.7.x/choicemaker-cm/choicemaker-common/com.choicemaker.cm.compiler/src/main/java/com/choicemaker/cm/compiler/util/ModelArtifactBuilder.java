@@ -176,7 +176,9 @@ public class ModelArtifactBuilder {
 		CompilerFactory factory = CompilerFactory.getInstance();
 		ICompiler compiler = factory.getDefaultCompiler();
 
-		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler);
+		final boolean fromResource = false;
+		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler,
+				fromResource);
 		IProbabilityModel[] models = PMManager.getModels();
 		if (models.length <= 0) {
 			throw new RuntimeException("No model configurations defined. "

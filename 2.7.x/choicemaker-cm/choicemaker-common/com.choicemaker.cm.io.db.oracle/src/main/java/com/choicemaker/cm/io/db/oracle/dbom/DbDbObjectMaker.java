@@ -60,7 +60,9 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		CompilerFactory factory = CompilerFactory.getInstance ();
 		ICompiler compiler = factory.getDefaultCompiler();
 
-		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler);
+		final boolean fromResource = false;
+		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler,
+				fromResource);
 		DbDbObjectMaker dbom = new DbDbObjectMaker();
 		dbom.generateObjects(new File(args[2]));
 	}
