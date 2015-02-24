@@ -14,7 +14,7 @@ import java.util.Collection;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.xmlconf.MlModelConf;
 
@@ -36,7 +36,7 @@ public class DoNothingMachineLearning implements MachineLearner {
 	/**
 	 * @see com.choicemaker.cm.core.MachineLearner#setProbabilityModel(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
-	public void setProbabilityModel(IProbabilityModel model) {
+	public void setProbabilityModel(ImmutableProbabilityModel model) {
 	}
 
 	/**

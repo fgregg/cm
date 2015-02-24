@@ -13,7 +13,7 @@ package com.choicemaker.cm.modelmaker.gui.tables;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 
 /**
  * Description
@@ -23,12 +23,12 @@ import com.choicemaker.cm.core.IProbabilityModel;
  */
 public abstract class ClueTableModelPlugin extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
-	protected IProbabilityModel model;
+	protected ImmutableProbabilityModel model;
 	protected int startColumn;
 	
 	public abstract TableColumn getColumn(int column);
 	
-	public void setModel(IProbabilityModel model) {
+	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 	

@@ -35,7 +35,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
@@ -69,7 +69,7 @@ public class SqlServerIdSearchDialog extends JDialog {
 	private static final int DEFAULT_LSBS = 200;
 	
 	private ModelMaker modelMaker;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 
 	private JComboBox dataSource;
 	private JRadioButton predefined, manual;
@@ -230,7 +230,7 @@ public class SqlServerIdSearchDialog extends JDialog {
 //				// of model -- it requires this entire  module to work with mutable
 //				// models, unlike every other DB GUI plugin -- just to pretty up
 //				// a user interface.
-////				IProbabilityModel prodModel = SqlServerUtils.getProductionConfiguration(getPredefinedConfigurationName());
+////				ImmutableProbabilityModel prodModel = SqlServerUtils.getProductionConfiguration(getPredefinedConfigurationName());
 //				// END discussion
 ////				if (prodModel != null) {
 ////					blockingParametersPanel.setFromProperties(prodModel);

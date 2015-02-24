@@ -39,7 +39,7 @@ import com.choicemaker.cm.analyzer.matcher.SimpleRecordSink;
 import com.choicemaker.cm.analyzer.sampler.DefaultPairSampler;
 import com.choicemaker.cm.analyzer.sampler.PairSampler;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.RecordSource;
@@ -274,7 +274,7 @@ public class MatcherDialog extends JDialog implements Enable {
 		pack();
 	}
 
-	private PairSampler getSampler(IProbabilityModel model) {
+	private PairSampler getSampler(ImmutableProbabilityModel model) {
 		if (useSamplerBox.isSelected()) {
 			int sampleSize = Integer.parseInt(sampleSizeField.getText());
 			return new DefaultPairSampler(model, sampleSize);
@@ -313,7 +313,7 @@ public class MatcherDialog extends JDialog implements Enable {
 							new SimpleRecordSink(new File(sink.getText()));
 					}
 					if (outputSink != null) {
-						IProbabilityModel probabilityModel =
+						ImmutableProbabilityModel probabilityModel =
 							modelMaker.getProbabilityModel();
 						filterCluePanel.set();
 						ListeningMarkedRecordPairFilter filter = filterCluePanel.getFilter();

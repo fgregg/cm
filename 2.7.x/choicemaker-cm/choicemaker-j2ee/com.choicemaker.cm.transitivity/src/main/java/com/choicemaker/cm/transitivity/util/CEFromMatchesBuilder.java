@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.Match;
@@ -45,7 +45,7 @@ public class CEFromMatchesBuilder {
 	protected Record q;
 	protected Iterator matches;
 	protected Evaluator evaluator;
-	protected IProbabilityModel model;
+	protected ImmutableProbabilityModel model;
 	protected float differThreshold;
 	protected float matchThreshold;
 

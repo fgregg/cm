@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
@@ -55,7 +55,7 @@ public class MatchingService3 {
 
 	private final IChunkDataSinkSourceFactory stageFactory;
 	private final IChunkDataSinkSourceFactory masterFactory;
-	private final IProbabilityModel model;
+	private final ImmutableProbabilityModel model;
 	private final IComparisonSetSources sources;
 	private final IComparisonSetSources Osources;
 	private final IMatchRecord2Sink mSink;
@@ -110,7 +110,7 @@ public class MatchingService3 {
 	public MatchingService3(IChunkDataSinkSourceFactory stageFactory,
 			IChunkDataSinkSourceFactory masterFactory,
 			IComparisonSetSources sources, IComparisonSetSources Osources,
-			IProbabilityModel model, IMatchRecord2Sink mSink, float low,
+			ImmutableProbabilityModel model, IMatchRecord2Sink mSink, float low,
 			float high, int maxBlockSize, OabaEventLog status) {
 
 		this.stageFactory = stageFactory;
@@ -364,7 +364,7 @@ public class MatchingService3 {
 	 *            - ProbabilityModel
 	 * @return
 	 */
-	private HashMap getRecords(RecordSource rs, IProbabilityModel model)
+	private HashMap getRecords(RecordSource rs, ImmutableProbabilityModel model)
 			throws BlockingException {
 		long t = System.currentTimeMillis();
 

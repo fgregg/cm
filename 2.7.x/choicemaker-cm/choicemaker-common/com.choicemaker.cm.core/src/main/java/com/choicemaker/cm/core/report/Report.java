@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 
 /**
@@ -31,7 +31,7 @@ public class Report {
 	private float differThreshold;
 	private float matchThreshold;
 	private int maxNumMatches;
-	private IProbabilityModel probabilityModel;
+	private ImmutableProbabilityModel probabilityModel;
 	private long startTime;
 	private long endTime;
 	private String purpose;
@@ -44,7 +44,7 @@ public class Report {
 		float differThreshold,
 		float matchThreshold,
 		int maxNumMatches,
-		IProbabilityModel probabilityModel,
+		ImmutableProbabilityModel probabilityModel,
 		long startTime,
 		long endTime,
 		String purpose,
@@ -89,7 +89,7 @@ public class Report {
 		return plugins;
 	}
 
-	public IProbabilityModel getProbabilityModel() {
+	public ImmutableProbabilityModel getProbabilityModel() {
 		return probabilityModel;
 	}
 

@@ -16,7 +16,7 @@ import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.Match;
@@ -86,7 +86,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 										RemoteException
 	{
 		MatchScore resMs = null;	
-		IProbabilityModel model = getProbabilityModel(modelName);
+		ImmutableProbabilityModel model = getProbabilityModel(modelName);
 		if(resultFormat == null){
 			log.severe("Invalid resultFormat argument." );
 			throw new ArgumentException("Invalid resultFormat argument.");
@@ -184,7 +184,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 			// END BUGFIX
 
 			Iterator iS = s.iterator();
-			IProbabilityModel model = getProbabilityModel(modelName);
+			ImmutableProbabilityModel model = getProbabilityModel(modelName);
 			for (int i = 0; i < matchCand.length; i++) {
 				matchCand[i] = getEvaluatedRecord(resultFormat,(Match) iS.next(),model);
 			}

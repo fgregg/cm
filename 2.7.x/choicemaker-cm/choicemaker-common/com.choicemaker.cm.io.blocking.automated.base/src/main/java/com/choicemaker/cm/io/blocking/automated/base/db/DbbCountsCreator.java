@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
@@ -56,7 +55,7 @@ public class DbbCountsCreator {
 	// sometimes never set (see the second constructor). There's no big
 	// advantage to caching the models as instance data, so this data member
 	// should be whacked.
-	private IProbabilityModel[] models;
+	private ImmutableProbabilityModel[] models;
 	// END BUG
 	// DESIGN BUG? 2009-08-21 rphall
 	// By holding this connection as instance data, instances of this class
@@ -93,7 +92,7 @@ public class DbbCountsCreator {
 
 	// END BUGFIX
 
-	public DbbCountsCreator(Connection connection, IProbabilityModel[] models)
+	public DbbCountsCreator(Connection connection, ImmutableProbabilityModel[] models)
 			throws SQLException {
 		this(connection, getBlockingConfigurations(models));
 		this.models = models;
@@ -248,7 +247,7 @@ public class DbbCountsCreator {
 	public void create(boolean neverComputedOnly) throws SQLException {
 		// BUG 2009-08-21 rphall
 		// This definition of "models" hides the private data member "models"
-		IProbabilityModel[] models = PMManager.getModels();
+		ImmutableProbabilityModel[] models = PMManager.getModels();
 		// BUG
 		if (models.length > 0) {
 
@@ -553,7 +552,7 @@ public class DbbCountsCreator {
 	}
 
 	private static IBlockingConfiguration[] getBlockingConfigurations(
-			IProbabilityModel[] models) {
+			ImmutableProbabilityModel[] models) {
 		int len = models.length;
 		IBlockingConfiguration[] bcs = new IBlockingConfiguration[len];
 		int numConfigurations = 0;

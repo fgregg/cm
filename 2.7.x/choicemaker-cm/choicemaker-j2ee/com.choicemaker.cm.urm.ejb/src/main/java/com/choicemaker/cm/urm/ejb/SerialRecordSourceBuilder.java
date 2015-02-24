@@ -16,11 +16,11 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.IRecordSourceSerializationRegistry;
 import com.choicemaker.cm.core.IRecordSourceSerializer;
 import com.choicemaker.cm.core.ISerializableDbRecordSource;
 import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.DefaultRecordSourceSerializationRegistry;
 import com.choicemaker.cm.core.base.SerializedRecordSourceDescriptor;
 import com.choicemaker.cm.io.db.base.DbAccessor;
@@ -46,12 +46,12 @@ public class SerialRecordSourceBuilder implements IRecordCollectionVisitor, ITex
 	private static final long serialVersionUID = 1L;
 	protected static Logger log = Logger.getLogger(SerialRecordSourceBuilder.class.getName());
 	private ISerializableRecordSource resRs;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 	private boolean checkEmpty;
 	private String fileName;
 	 
 	
-	SerialRecordSourceBuilder(IProbabilityModel model, boolean checkEmpty){
+	SerialRecordSourceBuilder(ImmutableProbabilityModel model, boolean checkEmpty){
 		this.checkEmpty = checkEmpty;
 		this.model = model;
 	}

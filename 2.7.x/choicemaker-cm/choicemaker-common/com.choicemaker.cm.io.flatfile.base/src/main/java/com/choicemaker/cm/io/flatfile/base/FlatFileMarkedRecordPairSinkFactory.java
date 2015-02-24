@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.SinkFactory;
 import com.choicemaker.cm.core.Source;
@@ -35,7 +35,7 @@ public class FlatFileMarkedRecordPairSinkFactory implements SinkFactory {
 	private char sep;
 	private boolean tagged;
 	private boolean filter;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 	private int num;
 	private List sources;
 
@@ -49,7 +49,7 @@ public class FlatFileMarkedRecordPairSinkFactory implements SinkFactory {
 		char sep,
 		boolean tagged,
 		boolean filter,
-		IProbabilityModel model) {
+		ImmutableProbabilityModel model) {
 		this.fileNameBase = fileNameBase;
 		this.flatfileFileName = flatfileFileName;
 		this.extension = extension;

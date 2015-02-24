@@ -28,7 +28,6 @@ import javax.sql.DataSource;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
 import com.choicemaker.cm.core.DatabaseException;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Match;
@@ -93,12 +92,12 @@ public class OnlineMatchBaseBean implements SessionBean {
 	 * @exception ModelException if a modelId with the specified name
 	 * does not exist
 	 */
-	IProbabilityModel getProbabilityModel(String modelName)
+	ImmutableProbabilityModel getProbabilityModel(String modelName)
 		throws ModelException {
 		if (modelName == null) {
 			throw new IllegalArgumentException("null modelId name");
 		}
-		IProbabilityModel retVal = PMManager.getModelInstance(modelName);
+		ImmutableProbabilityModel retVal = PMManager.getModelInstance(modelName);
 		if (retVal == null) {
 			log.severe("Invalid probability accessProvider: " + modelName);
 			throw new ModelException(modelName);
@@ -215,7 +214,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			UrmUnderspecifiedQueryException,
 			RemoteException {
 
-		IProbabilityModel model = null;
+		ImmutableProbabilityModel model = null;
 		Record q = null;
 		AutomatedBlocker recordSource = null;
 		SortedSet retVal = null;
@@ -372,7 +371,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 	void reportSuccessfulQuery(
 		long startTime,
 		Record q,
-		IProbabilityModel model,
+		ImmutableProbabilityModel model,
 		float differThreshold,
 		float matchThreshold,
 		int maxNumMatches,
@@ -403,7 +402,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 	void reportUnsuccessfulQuery(
 		long startTime,
 		Record q,
-		IProbabilityModel model,
+		ImmutableProbabilityModel model,
 		float differThreshold,
 		float matchThreshold,
 		int maxNumMatches,
@@ -568,7 +567,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 	EvaluatedRecord getEvaluatedRecord(
 		EvalRecordFormat resultFormat,
 		Match match,
-		IProbabilityModel model) {
+		ImmutableProbabilityModel model) {
 		if (model == null) {
 			throw new IllegalArgumentException("null modelId");
 		}

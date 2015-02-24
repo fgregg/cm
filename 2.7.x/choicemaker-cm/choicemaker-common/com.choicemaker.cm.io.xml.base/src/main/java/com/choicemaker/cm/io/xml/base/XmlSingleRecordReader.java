@@ -17,7 +17,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
 
@@ -29,15 +29,15 @@ import com.choicemaker.cm.core.xmlconf.XmlParserFactory;
  */
 public class XmlSingleRecordReader implements RecordHandler {
 	private String profile;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 	private Record record;
 	
-	public static Record getRecord(IProbabilityModel model, String profile) throws SAXException {
+	public static Record getRecord(ImmutableProbabilityModel model, String profile) throws SAXException {
 		XmlSingleRecordReader r = new XmlSingleRecordReader(model, profile);
 		return r.getRecord();
 	}
 	
-	private XmlSingleRecordReader(IProbabilityModel model, String profile) {
+	private XmlSingleRecordReader(ImmutableProbabilityModel model, String profile) {
 		this.profile = profile;
 		this.model = model;
 	}

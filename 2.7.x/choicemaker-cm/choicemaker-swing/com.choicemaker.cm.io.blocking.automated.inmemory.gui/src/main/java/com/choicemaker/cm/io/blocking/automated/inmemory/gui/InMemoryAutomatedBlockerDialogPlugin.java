@@ -21,7 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
 import com.choicemaker.cm.io.blocking.automated.inmemory.InMemoryAutomatedBlocker;
@@ -47,12 +47,12 @@ public class InMemoryAutomatedBlockerDialogPlugin extends MatchDialogBlockerPlug
 	private static final int DEFAULT_STBSGL = 100;
 	private static final int DEFAULT_LSBS = 200;
 
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 
 	private JComboBox dbConfBox, blockingConfBox;
 	private JTextField lpbsField, stbsglField, lsbsField;
 
-	InMemoryAutomatedBlockerDialogPlugin(IProbabilityModel model) {
+	InMemoryAutomatedBlockerDialogPlugin(ImmutableProbabilityModel model) {
 		this.model = model;
 		createContent();
 	}

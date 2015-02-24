@@ -27,7 +27,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.DatabaseException;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.configure.xml.NotFoundException;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurablesRegistry;
@@ -113,7 +113,7 @@ public class CmServerAdminBean implements SessionBean {
 	/** Returns the updator specified by the modelId */
 	public static IUpdateDerivedFields getUpdator(String modelName)
 		throws ModelException, ConfigException {
-		IProbabilityModel model = PMManager.getModelInstance(modelName);
+		ImmutableProbabilityModel model = PMManager.getModelInstance(modelName);
 		if (model == null) {
 			log.severe("Invalid probability accessProvider: " + modelName);
 			throw new ModelException(modelName);

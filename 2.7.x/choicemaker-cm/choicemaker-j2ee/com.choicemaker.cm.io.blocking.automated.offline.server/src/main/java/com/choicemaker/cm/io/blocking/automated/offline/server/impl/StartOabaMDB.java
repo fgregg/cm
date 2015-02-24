@@ -28,7 +28,6 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
@@ -103,7 +102,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					throw new IllegalArgumentException(s);
 				}
 				final String modelConfigId = params.getModelConfigurationName();
-				IProbabilityModel stageModel =
+				ImmutableProbabilityModel stageModel =
 					PMManager.getModelInstance(modelConfigId);
 				if (stageModel == null) {
 					String s =
@@ -233,7 +232,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	 * @throws OABABlockingException
 	 */
 	private boolean isMoreThanThreshold(RecordSource rs,
-			IProbabilityModel model, int threshold) throws BlockingException {
+			ImmutableProbabilityModel model, int threshold) throws BlockingException {
 
 		// Preconditions need to be checked on this method, even though it is
 		// private, because the arguments haven't been validated before it

@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.core.base;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 
 
 /**
@@ -39,7 +39,7 @@ public class BeanMatchCandidate extends MatchCandidate {
 		this.profile = profile;
 	}
 		
-	public BeanMatchCandidate(Match match, IProbabilityModel model) {
+	public BeanMatchCandidate(Match match, ImmutableProbabilityModel model) {
 		this(match.id, match.probability, match.decision.toInt(), model.getAccessor().toHolder(match.m), match.ac.getNotes(model));
 	}
 	

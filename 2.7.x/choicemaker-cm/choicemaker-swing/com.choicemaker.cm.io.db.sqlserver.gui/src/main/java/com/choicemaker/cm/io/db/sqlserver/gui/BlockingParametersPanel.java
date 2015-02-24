@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 
 /**
  * @author ajwinkel
@@ -110,7 +110,7 @@ public class BlockingParametersPanel extends JPanel {
 		return getInt(lsbsField);
 	}
 
-	public void setFromProperties(IProbabilityModel prodModel) {
+	public void setFromProperties(ImmutableProbabilityModel prodModel) {
 		firing = false;
 		try {
 			// BUG The getBlockingConfigurationName() and

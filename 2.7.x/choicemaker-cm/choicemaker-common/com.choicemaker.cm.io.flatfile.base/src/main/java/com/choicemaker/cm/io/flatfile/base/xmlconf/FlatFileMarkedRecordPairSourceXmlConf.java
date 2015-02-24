@@ -18,7 +18,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.MarkedRecordPairSourceXmlConfigurator;
@@ -71,7 +71,7 @@ public class FlatFileMarkedRecordPairSourceXmlConf implements MarkedRecordPairSo
 		}
 	}
 
-	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, IProbabilityModel model)
+	public MarkedRecordPairSource getMarkedRecordPairSource(String fileName, Element e, ImmutableProbabilityModel model)
 		throws XmlConfException {
 		String fileNamePrefix = e.getChildText("fileNamePrefix");
 		String fileNameSuffix = e.getChildText("fileNameSuffix");

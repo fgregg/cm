@@ -17,7 +17,7 @@ import javax.persistence.EntityManager;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
@@ -46,7 +46,7 @@ public class MrpsRequest implements IMrpsRequest {
 	private final MrpsRequestConfiguration configuration;
 
 	private transient OabaParameters oabaParameters = null;
-	private transient IProbabilityModel stagingModel = null;
+	private transient ImmutableProbabilityModel stagingModel = null;
 	private transient IMatchRecord2Source matchPairs = null;
 	private transient PersistableRecordSource rsStaging = null;
 	private transient PersistableRecordSource rsMaster = null;
@@ -126,9 +126,9 @@ public class MrpsRequest implements IMrpsRequest {
 //		return retVal;
 //	}
 
-	public IProbabilityModel getStagingModel(EntityManager em)
+	public ImmutableProbabilityModel getStagingModel(EntityManager em)
 		throws CmRuntimeException, ConfigException, RemoteException {
-		IProbabilityModel retVal = this.stagingModel;
+		ImmutableProbabilityModel retVal = this.stagingModel;
 		if (retVal == null) {
 			OabaParameters bp = getBatchParameters(em);
 			String stagingModelName = bp.getStageModel();

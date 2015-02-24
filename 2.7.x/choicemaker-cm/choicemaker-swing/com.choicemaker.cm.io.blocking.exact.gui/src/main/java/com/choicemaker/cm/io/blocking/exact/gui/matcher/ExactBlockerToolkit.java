@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.exact.gui.matcher;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.modelmaker.gui.matcher.BlockerToolkit;
 import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
 
@@ -24,7 +24,7 @@ public class ExactBlockerToolkit implements BlockerToolkit {
 	/**
 	 * @see com.choicemaker.cm.train.matcher.BlockerToolkit#getDialogPlugin(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
-	public MatchDialogBlockerPlugin getDialogPlugin(IProbabilityModel model) {
+	public MatchDialogBlockerPlugin getDialogPlugin(ImmutableProbabilityModel model) {
 		return new ExactBlockerDialogPlugin(model);
 	}
 

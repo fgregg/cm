@@ -13,8 +13,8 @@ package com.choicemaker.cm.core.base;
 import java.util.Date;
 
 import com.choicemaker.cm.core.Accessor;
-import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.MachineLearner;
+import com.choicemaker.cm.core.ModelConfigurationException;
 
 /**
  * A probability model consisting of holder classes, translators, a clue set,

@@ -27,7 +27,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
@@ -57,7 +57,7 @@ public class SqlServerPairViewerDialog extends JDialog {
 	}
 	
 	private ModelMaker modelMaker;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 
 	private JComboBox dataSource;
 	private JComboBox dbConfiguration;

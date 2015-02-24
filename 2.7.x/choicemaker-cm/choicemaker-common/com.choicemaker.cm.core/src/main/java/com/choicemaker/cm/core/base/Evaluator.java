@@ -14,7 +14,7 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ExtDecision;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 
 /**
@@ -26,7 +26,7 @@ import com.choicemaker.cm.core.Record;
  */
 public abstract class Evaluator {
 	/** The probability model. */
-	protected IProbabilityModel model;
+	protected ImmutableProbabilityModel model;
 	/** The clue set. */
 	protected ClueSet cs;
 	/** The clue descriptors. */
@@ -39,7 +39,7 @@ public abstract class Evaluator {
 	 *
 	 * @param  model  The <code>ProbabilityModel</code> used for evaluation.
 	 */
-	protected Evaluator(IProbabilityModel model) {
+	protected Evaluator(ImmutableProbabilityModel model) {
 		this.model = model;
 		cs = model.getClueSet();
 		cd = cs.getClueDesc();

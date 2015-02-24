@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.core.base;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.InvalidProfileException;
 import com.choicemaker.cm.core.Profile;
 import com.choicemaker.cm.core.Record;
@@ -35,7 +35,7 @@ public class RecordProfile implements Profile {
 	/* (non-Javadoc)
 	 * @see com.choicemaker.cm.core.base.Profile#getRecord(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
-	public Record getRecord(IProbabilityModel model)
+	public Record getRecord(ImmutableProbabilityModel model)
 		throws InvalidProfileException {
 		return record;
 	}

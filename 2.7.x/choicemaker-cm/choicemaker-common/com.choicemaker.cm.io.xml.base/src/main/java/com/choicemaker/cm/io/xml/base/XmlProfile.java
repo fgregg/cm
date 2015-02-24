@@ -12,7 +12,7 @@ package com.choicemaker.cm.io.xml.base;
 
 import org.xml.sax.SAXException;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.InvalidProfileException;
 import com.choicemaker.cm.core.Profile;
 import com.choicemaker.cm.core.Record;
@@ -50,7 +50,7 @@ public class XmlProfile implements Profile {
 		return profile;
 	}
 	
-	public Record getRecord(IProbabilityModel model) throws InvalidProfileException {
+	public Record getRecord(ImmutableProbabilityModel model) throws InvalidProfileException {
 		try {
 			return XmlSingleRecordReader.getRecord(model, getProfile());
 		} catch (SAXException ex) {

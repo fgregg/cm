@@ -19,7 +19,6 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ImmutableRecordPair;
@@ -53,7 +52,7 @@ public class ActiveClueMarkedRecordPairSink implements MarkedRecordPairSink {
 	
 	public ActiveClueMarkedRecordPairSink(
 		File file, 
-		IProbabilityModel model,
+		ImmutableProbabilityModel model,
 		boolean exportRecordIds,
 		boolean exportProbability,
 		boolean exportDecision,

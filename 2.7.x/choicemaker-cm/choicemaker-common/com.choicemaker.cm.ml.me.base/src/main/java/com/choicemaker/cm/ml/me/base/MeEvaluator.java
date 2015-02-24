@@ -11,7 +11,7 @@
 package com.choicemaker.cm.ml.me.base;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
 import com.choicemaker.cm.core.base.Evaluator;
@@ -36,7 +36,7 @@ public class MeEvaluator extends Evaluator {
 	 *            a non-null, ordered list of weights corresponding to the clues
 	 *            used by this model.
 	 */
-	MeEvaluator(IProbabilityModel model, float[] weights) {
+	MeEvaluator(ImmutableProbabilityModel model, float[] weights) {
 		super(model);
 		if (weights == null) {
 			throw new IllegalArgumentException("null weights");

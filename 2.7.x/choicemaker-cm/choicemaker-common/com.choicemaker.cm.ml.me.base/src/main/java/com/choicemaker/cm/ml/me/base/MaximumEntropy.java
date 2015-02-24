@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.util.LoggingObject;
@@ -36,7 +36,7 @@ public class MaximumEntropy implements MachineLearner {
 
 	private float[] weights;
 	private int trainingIterations = 4000;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 
 	/**
 	 * @see com.choicemaker.cm.core.MachineLearner#getEvaluator()
@@ -48,7 +48,7 @@ public class MaximumEntropy implements MachineLearner {
 	/**
 	 * @see com.choicemaker.cm.core.MachineLearner#setProbabilityModel(com.choicemaker.cm.core.base.ProbabilityModel)
 	 */
-	public void setProbabilityModel(IProbabilityModel model) {
+	public void setProbabilityModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 

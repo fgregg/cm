@@ -29,7 +29,6 @@ import javax.swing.event.DocumentListener;
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
@@ -108,7 +107,7 @@ public class DerivedFieldsComputerDialog extends JDialog {
 		InputStream is = new FileInputStream(f);
 		final boolean allowCompile = true;
 		final ClassLoader customCL = null;
-		IProbabilityModel sourceModel =
+		ImmutableProbabilityModel sourceModel =
 			ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
 					statusOutput, customCL, allowCompile);
 
@@ -116,7 +115,7 @@ public class DerivedFieldsComputerDialog extends JDialog {
 		f = sinkModelSelector.getFile();
 		modelName = f.getName();
 		is = new FileInputStream(f);
-		IProbabilityModel sinkModel = 
+		ImmutableProbabilityModel sinkModel = 
 			ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
 					statusOutput, customCL, allowCompile);
 

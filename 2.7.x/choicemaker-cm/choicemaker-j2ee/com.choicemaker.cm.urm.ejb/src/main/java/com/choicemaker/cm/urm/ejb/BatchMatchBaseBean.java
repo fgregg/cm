@@ -31,7 +31,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -109,7 +109,7 @@ public class BatchMatchBaseBean implements SessionBean {
 			RemoteException, ServerConfigurationException { // TODO: check input
 															// parameters
 		log.fine("<< startBatchQueryService...");
-		IProbabilityModel model = PMManager.getModelInstance(modelName);
+		ImmutableProbabilityModel model = PMManager.getModelInstance(modelName);
 		if (model == null) {
 			log.severe("Invalid probability accessProvider: " + modelName);
 			throw new ModelException("Invalid probability accessProvider: "

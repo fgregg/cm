@@ -16,7 +16,6 @@ import javax.swing.table.AbstractTableModel;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ColumnDefinition;
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
@@ -57,7 +56,7 @@ public class CluePerformanceTableModel extends AbstractTableModel {
 		return columns;
 	}
 
-	public void refresh(IProbabilityModel pm, Trainer t) {
+	public void refresh(ImmutableProbabilityModel pm, Trainer t) {
 		buildRows(pm, t);
 	}
 

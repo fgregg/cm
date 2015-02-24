@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.modelmaker.stats.Statistics;
@@ -30,7 +30,7 @@ public class CrossValidator {
 	private static final float[] ERROR_RATES = 
 		{.05f, .04f, .03f, .02f, .015f, .01f, .008f, .006f, .005f, .004f, .003f, .002f, .001f, 0f};
 
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 	private float differThreshold, matchThreshold;
 
 	private List pairs;
@@ -39,7 +39,7 @@ public class CrossValidator {
 	private FoldResult[] foldResults;
 	private CrossValidationResult cvResult;
 	
-	public CrossValidator(IProbabilityModel model, float differThreshold, float matchThreshold, List pairs, int numPieces) {
+	public CrossValidator(ImmutableProbabilityModel model, float differThreshold, float matchThreshold, List pairs, int numPieces) {
 		this.model = model;
 		this.differThreshold = differThreshold;
 		this.matchThreshold = matchThreshold;

@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.util.Date;
 
 import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSink;
 import com.choicemaker.cm.core.RecordSource;
@@ -27,9 +27,9 @@ import com.choicemaker.cm.core.base.DescriptorCollection;
 public class DerivedFieldsComputer {
 
 	protected RecordSource source;
-	protected IProbabilityModel sourceModel;
+	protected ImmutableProbabilityModel sourceModel;
 	protected RecordSink sink;
-	protected IProbabilityModel sinkModel;
+	protected ImmutableProbabilityModel sinkModel;
 	protected String[][] fieldNames;
 	
 	protected Descriptor sourceDescriptor;
@@ -41,7 +41,7 @@ public class DerivedFieldsComputer {
 	protected Field[] childArrayFields;
 	protected Object[] zeroArrays;
 
-	public DerivedFieldsComputer(RecordSource source, IProbabilityModel sourceModel, RecordSink sink, IProbabilityModel sinkModel, String[][] fieldNames) {
+	public DerivedFieldsComputer(RecordSource source, ImmutableProbabilityModel sourceModel, RecordSink sink, ImmutableProbabilityModel sinkModel, String[][] fieldNames) {
 		this.source = source;
 		this.sourceModel = sourceModel;
 		this.sink = sink;

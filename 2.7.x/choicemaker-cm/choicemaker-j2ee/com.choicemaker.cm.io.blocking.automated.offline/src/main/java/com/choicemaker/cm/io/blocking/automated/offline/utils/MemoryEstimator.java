@@ -13,7 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.utils;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
 
@@ -40,7 +40,7 @@ public class MemoryEstimator {
 	 * @param rs
 	 * @return int - the maximum size of hashmap that can fit into memory.
 	 */
-	public static int estimate(RecordSource rs, IProbabilityModel model,
+	public static int estimate(RecordSource rs, ImmutableProbabilityModel model,
 			float limit) {
 		int ret = 0;
 
@@ -89,7 +89,7 @@ public class MemoryEstimator {
 	 * @param rs
 	 * @return float - returns the percentage of memory used up.
 	 */
-	public static float estimate2(RecordSource rs, IProbabilityModel model,
+	public static float estimate2(RecordSource rs, ImmutableProbabilityModel model,
 			int count) {
 		// 2014-04-24 rphall: Commented out unused local variable.
 		// float f;

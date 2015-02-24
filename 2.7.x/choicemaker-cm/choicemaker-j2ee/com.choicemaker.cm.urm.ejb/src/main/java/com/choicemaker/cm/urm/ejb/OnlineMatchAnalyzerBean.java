@@ -19,7 +19,7 @@ import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.transitivity.core.CompositeEntity;
@@ -95,7 +95,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
  	 {
 		ArrayList  evalRecords = new ArrayList();					
 		
-		IProbabilityModel model = getProbabilityModel(modelName);
+		ImmutableProbabilityModel model = getProbabilityModel(modelName);
 		Record q = getInternalRecord(model,queryRecord);
 				
 		try {

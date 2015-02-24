@@ -20,7 +20,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
@@ -82,7 +82,7 @@ public class CompositeRecordSourceXmlConf implements RecordSourceXmlConfigurator
 		}
 	}
 
-	public RecordSource getRecordSource(String fileName, Element e, IProbabilityModel model) throws XmlConfException {
+	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model) throws XmlConfException {
 		CompositeRecordSource comp = new CompositeRecordSource();
 		comp.setFileName(fileName);
 		List cons = e.getChildren("constituent");

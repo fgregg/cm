@@ -25,7 +25,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.RecordRecordData;
 import com.choicemaker.cm.core.util.LoggingObject;
@@ -50,10 +50,10 @@ public class RecordSourceViewerDialog extends JDialog {
 	private JButton nextButton;
 	private CompositePane compositePane;
 	private boolean open;
-	private IProbabilityModel probabilityModel;
+	private ImmutableProbabilityModel probabilityModel;
 	private CompositePaneModel compositePaneModel;
 
-	public RecordSourceViewerDialog(Frame parent, RecordSource recordSource, IProbabilityModel probabilityModel, CompositePaneModel compositePaneModel) {
+	public RecordSourceViewerDialog(Frame parent, RecordSource recordSource, ImmutableProbabilityModel probabilityModel, CompositePaneModel compositePaneModel) {
 		super(parent, "Record source preview");
 		setModal(true);
 		this.recordSource = recordSource;

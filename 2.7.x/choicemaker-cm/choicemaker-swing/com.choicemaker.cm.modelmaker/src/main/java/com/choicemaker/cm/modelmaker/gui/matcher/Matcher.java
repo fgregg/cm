@@ -26,7 +26,6 @@ import com.choicemaker.cm.analyzer.sampler.PairSampler;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.IMarkedRecordPair;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.Record;
@@ -59,7 +58,7 @@ public class Matcher {
 	private InMemoryBlocker blocker;
 	private Filter filter;
 	private PairSampler sampler;
-	private IProbabilityModel probabilityModel;
+	private ImmutableProbabilityModel probabilityModel;
 	private float lowerThreshold;
 	private float upperThreshold;
 	private String user;
@@ -81,7 +80,7 @@ public class Matcher {
 		InMemoryBlocker blocker,
 		Filter filter,
 		PairSampler sampler,
-		IProbabilityModel probabilityModel,
+		ImmutableProbabilityModel probabilityModel,
 		float lowerThreshold,
 		float upperThreshold,
 		String user,
@@ -404,7 +403,7 @@ public class Matcher {
 	 * Sets the probabilityModel.
 	 * @param probabilityModel The probabilityModel to set
 	 */
-	public void setProbabilityModel(IProbabilityModel probabilityModel) {
+	public void setProbabilityModel(ImmutableProbabilityModel probabilityModel) {
 		this.probabilityModel = probabilityModel;
 	}
 

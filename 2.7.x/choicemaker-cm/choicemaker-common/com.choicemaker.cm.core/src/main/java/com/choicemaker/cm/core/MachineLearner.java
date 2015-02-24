@@ -37,7 +37,7 @@ public interface MachineLearner {
 	 *
 	 * @param  model  The probability model.
 	 */
-	void setProbabilityModel(IProbabilityModel model);
+	void setProbabilityModel(ImmutableProbabilityModel model);
 
 	/**
 	 * Notify the machine learner that the accessor and, therefore, the

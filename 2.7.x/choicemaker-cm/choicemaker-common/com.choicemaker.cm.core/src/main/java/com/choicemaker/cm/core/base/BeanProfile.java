@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.core.base;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Profile;
 import com.choicemaker.cm.core.Record;
 
@@ -64,7 +64,7 @@ public class BeanProfile implements Profile {
 		return "beanProfile";
 	}
 	
-	public Record getRecord(IProbabilityModel model) {
+	public Record getRecord(ImmutableProbabilityModel model) {
 		return model.getAccessor().toImpl(getProfile());
 	}
 }

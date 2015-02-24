@@ -14,7 +14,7 @@ import java.io.File;
 
 import org.jdom.Element;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
@@ -31,7 +31,7 @@ import com.choicemaker.util.FileUtilities;
  */
 public class MrpsToRsAdapterXmlConf implements RecordSourceXmlConfigurator {
 
-	public RecordSource getRecordSource(String fileName, Element e, IProbabilityModel model) throws XmlConfException {
+	public RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model) throws XmlConfException {
 		String mrpsFileName = e.getChildText("fileName");
 		mrpsFileName = FileUtilities.getAbsoluteFile(new File(fileName).getParentFile(), mrpsFileName).getAbsolutePath();		
 		MarkedRecordPairSource mrps = MarkedRecordPairSourceXmlConf.getMarkedRecordPairSource(mrpsFileName);

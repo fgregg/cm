@@ -50,7 +50,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.choicemaker.cm.core.Descriptor;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
@@ -271,7 +271,7 @@ public class DataProfilerDialog extends JDialog {
 	private class Dispatcher implements Runnable {
 		public Exception ex;
 		public void run() {
-			IProbabilityModel model = modelMaker.getProbabilityModel();
+			ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
 
 			fieldAccessor = (FieldAccessor)fieldBox.getSelectedItem();
 

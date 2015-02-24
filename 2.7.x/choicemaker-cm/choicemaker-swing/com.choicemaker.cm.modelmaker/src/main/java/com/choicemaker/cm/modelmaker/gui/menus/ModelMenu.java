@@ -495,7 +495,7 @@ public class ModelMenu extends LastUsedMenu {
 		parent.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getPropertyName().equals(ModelMakerEventNames.PROBABILITY_MODEL)) {
-					IProbabilityModel model = parent.getProbabilityModel();
+					ImmutableProbabilityModel model = parent.getProbabilityModel();
 					if (model != null) {
 						opened(model.getModelFilePath());
 					}

@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.modelmaker.gui.matcher;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 
 /**
  * Description
@@ -19,7 +19,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
  * @version $Revision: 1.2 $ $Date: 2010/03/29 12:40:32 $
  */
 public class AllBlockerToolkit implements BlockerToolkit {
-	public MatchDialogBlockerPlugin getDialogPlugin(IProbabilityModel model) {
+	public MatchDialogBlockerPlugin getDialogPlugin(ImmutableProbabilityModel model) {
 		return new AllBlockerDialogPlugin();
 	}
 

@@ -29,8 +29,8 @@ import com.choicemaker.cm.analyzer.sampler.DefaultPairSampler;
 import com.choicemaker.cm.analyzer.sampler.PairSampler;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.core.IControl;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.filter.DefaultMatchRecord2Filter;
 import com.choicemaker.cm.io.blocking.automated.offline.filter.IMatchRecord2Filter;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MRPSCreator;
@@ -103,7 +103,7 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 					control = MRPSCreator.NO_CONTROL;
 					IMatchRecord2Filter preFilter = getPreFilter(p);
 					Filter postFilter = getPostFilter(p);
-					IProbabilityModel model = request.getStagingModel(em);
+					ImmutableProbabilityModel model = request.getStagingModel(em);
 					PairSampler sampler = getPairSampler(model,p);
 
 					PersistableRecordSource prsStaging =
@@ -197,7 +197,7 @@ public class MrpsBackend implements MessageDrivenBean, MessageListener {
 		return retVal;
 	}
 	
-	static PairSampler getPairSampler(IProbabilityModel model, Properties p) {
+	static PairSampler getPairSampler(ImmutableProbabilityModel model, Properties p) {
 		PairSampler retVal = null;
 		String strValue = p.getProperty(IMrpsRequestConfiguration.PN_USE_DEFAULT_PAIR_SAMPLER);
 		boolean usePairSampler = Boolean.valueOf(strValue).booleanValue();

@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSink;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.RecordSource;
@@ -52,7 +52,7 @@ public class PiecewiseMatcher {
 	private RecordSource[] sources;
 	private MarkedRecordPairSink sink;
 	private InMemoryBlocker blocker;
-	private IProbabilityModel probabilityModel;
+	private ImmutableProbabilityModel probabilityModel;
 	private float lowerThreshold;
 	private float upperThreshold;
 	private String user;
@@ -84,7 +84,7 @@ public class PiecewiseMatcher {
 	public PiecewiseMatcher(RecordSource[] sources, 
 				   MarkedRecordPairSink sink, 
 				   InMemoryBlocker blocker,
-				   IProbabilityModel probabilityModel,
+				   ImmutableProbabilityModel probabilityModel,
 				   float lowerThreshold,
 				   float upperThreshold,
 				   String user,

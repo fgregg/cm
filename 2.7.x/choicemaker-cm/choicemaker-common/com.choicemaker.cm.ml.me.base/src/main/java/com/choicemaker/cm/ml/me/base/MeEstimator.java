@@ -18,7 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.ClueDesc;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.util.IntArrayList;
@@ -35,7 +35,7 @@ public class MeEstimator {
 
 	private static final Logger logger = Logger.getLogger(MeEstimator.class.getName());
 
-	private final IProbabilityModel model;
+	private final ImmutableProbabilityModel model;
 	private float[] finalWeights;
 
 	/** The MRPs on which to train. */
@@ -54,7 +54,7 @@ public class MeEstimator {
 	 * Create an Estimator instance.
 	 *
 	 */
-	public MeEstimator(IProbabilityModel model, Collection src, 
+	public MeEstimator(ImmutableProbabilityModel model, Collection src, 
 					   double[] firingPercentages, int numIterations) {
 			
 		this.model = model;

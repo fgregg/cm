@@ -32,7 +32,6 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
 import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.train.Trainer;
@@ -128,7 +127,7 @@ public class ClueTableModel extends SortableTableModel {
 	public static final int COL_CORRECT_FIRES = 7;
 	public static final int COL_MISFIRES = 8;
 
-	public ClueTableModel(IProbabilityModel model, Trainer trainer) {
+	public ClueTableModel(ImmutableProbabilityModel model, Trainer trainer) {
 		numClues = 0;
 		haveCountsData = false;
 		rows = new Vector();
@@ -136,7 +135,7 @@ public class ClueTableModel extends SortableTableModel {
 		refresh(model, trainer);
 	}
 
-	private void init(IProbabilityModel model) {
+	private void init(ImmutableProbabilityModel model) {
 		ClueSet clueSet = model.getClueSet();
 		booleanDecision = clueSet != null && clueSet.getType() == ClueSetType.BOOLEAN && clueSet.hasDecision();
 		List cols = new ArrayList();

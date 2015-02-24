@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.inmemory.gui;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.modelmaker.gui.matcher.BlockerToolkit;
 import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
 
@@ -25,7 +25,7 @@ import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
  */
 public class InMemoryAutomatedBlockerToolkit implements BlockerToolkit {
 
-	public MatchDialogBlockerPlugin getDialogPlugin(IProbabilityModel model) {
+	public MatchDialogBlockerPlugin getDialogPlugin(ImmutableProbabilityModel model) {
 		return new InMemoryAutomatedBlockerDialogPlugin(model);
 	}
 

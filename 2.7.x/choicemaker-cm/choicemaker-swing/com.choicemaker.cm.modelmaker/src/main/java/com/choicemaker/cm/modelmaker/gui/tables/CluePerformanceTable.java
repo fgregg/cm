@@ -22,7 +22,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.train.Trainer;
 import com.choicemaker.cm.modelmaker.gui.renderers.ColoredTableCellRenderer;
 
@@ -75,7 +75,7 @@ public class CluePerformanceTable extends JTable {
 		refresh();
 	}
 
-	public void refresh(IProbabilityModel pm, Trainer t) {
+	public void refresh(ImmutableProbabilityModel pm, Trainer t) {
 		myModel.refresh(pm, t);
 		refresh();
 	}

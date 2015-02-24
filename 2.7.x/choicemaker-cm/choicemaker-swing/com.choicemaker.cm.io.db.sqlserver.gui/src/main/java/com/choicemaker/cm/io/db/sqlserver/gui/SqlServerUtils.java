@@ -15,13 +15,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-
-
-
-
-
 // import com.choicemaker.cm.compiler.impl.CompilerFactory;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
@@ -82,7 +76,7 @@ public class SqlServerUtils {
 	private static String lastBlockingConfiguration;
 	private static String lastDbConfiguration;
 
-	static void maybeUpdateCounts(DataSource ds, IProbabilityModel model) throws SQLException {
+	static void maybeUpdateCounts(DataSource ds, ImmutableProbabilityModel model) throws SQLException {
 		
 		if (model == lastModel &&
 			ds == lastDs &&
@@ -97,7 +91,7 @@ public class SqlServerUtils {
 
 		DbbCountsCreator cr = null;
 		try {
-			cr = new DbbCountsCreator(ds.getConnection(), new IProbabilityModel[] {model});
+			cr = new DbbCountsCreator(ds.getConnection(), new ImmutableProbabilityModel[] {model});
 			cr.install();
 			// "true" means to do them only if we haven't done them before...
 			cr.create(SqlServerUtils.createDatabaseAbstraction(ds), true);
@@ -123,7 +117,7 @@ public class SqlServerUtils {
 	/**
 	 * NOTE: RecordReader is a SQLServer-specific piece of code.
 	 */
-	static Record readRecord(IProbabilityModel model, DataSource ds, String id) throws IOException {
+	static Record readRecord(ImmutableProbabilityModel model, DataSource ds, String id) throws IOException {
 		String condition = createCondition(model, id);
 		RecordReader reader = new RecordReader(model, ds, condition);
 		
@@ -185,7 +179,7 @@ public class SqlServerUtils {
 	// Also, even if the convention is maintained in the user interface,
 	// it should be removed from the programming interface.
 	static JComboBox createProductionConfigurationsComboBox() {
-//		IProbabilityModel[] models = PMManager.getModels();
+//		ImmutableProbabilityModel[] models = PMManager.getModels();
 //		Vector v = new Vector(models.length);
 //		for (int i=0; i<models.length; i++) {
 //			String name = models[i].getModelName();
@@ -210,7 +204,7 @@ public class SqlServerUtils {
 	// The blank string convention causes a bunch of annoying issues.
 	// Also, even if the convention is maintained in the user interface,
 	// it should be removed from the programming interface.
-//	static IProbabilityModel getProductionConfiguration(String name) {
+//	static ImmutableProbabilityModel getProductionConfiguration(String name) {
 //		if (DEFAULT.equals(name)) {
 //			name = "";
 //		}		
@@ -221,7 +215,7 @@ public class SqlServerUtils {
 		return ((DbAccessor)model.getAccessor()).getDbConfigurations();
 	}
 
-	static JComboBox createDbConfigurationsBox(IProbabilityModel model) {
+	static JComboBox createDbConfigurationsBox(ImmutableProbabilityModel model) {
 		return new JComboBox(getDbConfigurations(model));
 	}
 
@@ -229,7 +223,7 @@ public class SqlServerUtils {
 		return ((BlockingAccessor)model.getAccessor()).getBlockingConfigurations();
 	}
 
-	static JComboBox createBlockingConfigurationsBox(IProbabilityModel model) {
+	static JComboBox createBlockingConfigurationsBox(ImmutableProbabilityModel model) {
 		return new JComboBox(getBlockingConfigurations(model));
 	}
 

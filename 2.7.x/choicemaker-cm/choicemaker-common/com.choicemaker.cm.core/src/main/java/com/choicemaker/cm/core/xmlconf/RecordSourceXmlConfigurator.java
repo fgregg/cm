@@ -13,7 +13,7 @@ package com.choicemaker.cm.core.xmlconf;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.DynamicDispatchHandler;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.XmlConfException;
 
@@ -36,7 +36,7 @@ public interface RecordSourceXmlConfigurator extends DynamicDispatchHandler {
 	 * @return  The description of the specified <code>MarkedRecordPairSource</code>.
 	 * @throws  XmlConfException  if any error occurs.
 	 */
-	RecordSource getRecordSource(String fileName, Element e, IProbabilityModel model) throws XmlConfException;
+	RecordSource getRecordSource(String fileName, Element e, ImmutableProbabilityModel model) throws XmlConfException;
 
 	void add(RecordSource desc) throws XmlConfException;
 }

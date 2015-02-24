@@ -13,7 +13,7 @@ package com.choicemaker.cm.modelmaker.filter;
 import java.beans.PropertyChangeEvent;
 
 import com.choicemaker.cm.analyzer.filter.MarkedRecordPairFilter;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.modelmaker.ModelMakerEventNames;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 
@@ -42,7 +42,7 @@ public class ModelMakerMRPFilter extends MarkedRecordPairFilter implements
 		}
 	}
 
-	public void setModel(IProbabilityModel model) {
+	public void setModel(ImmutableProbabilityModel model) {
 		reset();
 	}
 

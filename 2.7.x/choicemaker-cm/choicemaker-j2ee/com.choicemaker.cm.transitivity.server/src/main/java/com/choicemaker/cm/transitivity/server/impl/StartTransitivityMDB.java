@@ -27,7 +27,7 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
@@ -184,7 +184,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		IDSetSource source2 = new IDSetSource(bSource);
 
 		final String modelConfigId = params.getModelConfigurationName();
-		IProbabilityModel model = PMManager.getModelInstance(modelConfigId);
+		ImmutableProbabilityModel model = PMManager.getModelInstance(modelConfigId);
 		String temp = (String) model.properties().get("maxChunkSize");
 		int maxChunk = Integer.parseInt(temp);
 

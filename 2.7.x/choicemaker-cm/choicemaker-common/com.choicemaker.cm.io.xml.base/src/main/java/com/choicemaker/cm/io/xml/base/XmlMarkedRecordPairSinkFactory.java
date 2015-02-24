@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.SinkFactory;
 import com.choicemaker.cm.core.Source;
@@ -29,11 +29,11 @@ public class XmlMarkedRecordPairSinkFactory implements SinkFactory {
     private String fileNameBase;
     private String xmlFileName;
     private String extension;
-    private IProbabilityModel model;
+    private ImmutableProbabilityModel model;
     private int num;
     private List sources;
 
-    public XmlMarkedRecordPairSinkFactory(String fileNameBase, String xmlFileName, String extension, IProbabilityModel model) {
+    public XmlMarkedRecordPairSinkFactory(String fileNameBase, String xmlFileName, String extension, ImmutableProbabilityModel model) {
         this.fileNameBase = fileNameBase;
         this.xmlFileName = xmlFileName;
         this.extension = extension;

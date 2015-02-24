@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.xml.base;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 
 /**
  * @author ajwinkel
@@ -20,7 +20,7 @@ public class SimpleXmlMarkedRecordPairSource extends XmlMarkedRecordPairSource {
 
 	public SimpleXmlMarkedRecordPairSource() { }
 
-	public SimpleXmlMarkedRecordPairSource(String xmlFileName, IProbabilityModel model) {
+	public SimpleXmlMarkedRecordPairSource(String xmlFileName, ImmutableProbabilityModel model) {
 		setFileName(xmlFileName);
 		setModel(model);
 	}

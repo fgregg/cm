@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.mmdevtools.util.CrossValidator;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
@@ -151,7 +151,7 @@ public class CrossValidatorDialog extends JDialog {
 		
 		runButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				IProbabilityModel model = modelMaker.getProbabilityModel();
+				ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
 				Thresholds t = modelMaker.getThresholds();
 				
 				List mrpList = getSourceList();

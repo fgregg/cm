@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.core.base;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 
 /**
  * Comment
@@ -19,7 +19,7 @@ import com.choicemaker.cm.core.IProbabilityModel;
  * @version  $Revision: 1.2 $ $Date: 2010/03/24 20:59:50 $
  */
 public class BeanMatchCandidateFactory extends MatchCandidateFactory {
-	public MatchCandidate createMatchCandidate(Match match, IProbabilityModel model) {
+	public MatchCandidate createMatchCandidate(Match match, ImmutableProbabilityModel model) {
 		return new BeanMatchCandidate(match, model);
 	}
 

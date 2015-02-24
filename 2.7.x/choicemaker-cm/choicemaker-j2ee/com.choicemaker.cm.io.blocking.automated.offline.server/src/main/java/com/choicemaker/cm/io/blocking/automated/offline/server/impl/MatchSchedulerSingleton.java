@@ -26,7 +26,7 @@ import javax.jms.Queue;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
@@ -91,7 +91,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		ServerConfiguration serverConfig =
 			getServerController().findServerConfigurationByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
-		IProbabilityModel model = PMManager.getModelInstance(modelConfigId);
+		ImmutableProbabilityModel model = PMManager.getModelInstance(modelConfigId);
 		if (model == null) {
 			String s = "No modelId corresponding to '" + modelConfigId + "'";
 			log.severe(s);

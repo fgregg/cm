@@ -51,7 +51,7 @@ public class BlockingSetFactory {
 	 * Methods from this class were refactored from the Blocker class
 	 * in order to be testable via stubs or mock objects for interfaces
 	 * such as BlockingAccessor and CountSource. (Because the constructor
-	 * of the Blocker class requires a IProbabilityModel instance, the Blocker
+	 * of the Blocker class requires a ImmutableProbabilityModel instance, the Blocker
 	 * class require significant initialization that makes it difficult to test.)
 	 */
 

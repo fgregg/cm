@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
@@ -55,7 +55,7 @@ public class DefaultPairSampler implements PairSampler {
 
 	private static final double LOG2 = Math.log(2);
 
-	private final IProbabilityModel model;
+	private final ImmutableProbabilityModel model;
 	private final ClueSet clueSet;
 	private final boolean[] enabledClues;
 	private final int target;
@@ -84,9 +84,9 @@ public class DefaultPairSampler implements PairSampler {
 	private int[] retainedProbabilityBuckets;
 
 	/**
-	 * Create a DefaultPairSampler with the specified IProbabilityModel and target number of pairs to retain.
+	 * Create a DefaultPairSampler with the specified ImmutableProbabilityModel and target number of pairs to retain.
 	 */
-	public DefaultPairSampler(IProbabilityModel model, int target) {
+	public DefaultPairSampler(ImmutableProbabilityModel model, int target) {
 		this.model = model;
 		this.clueSet = model.getClueSet();
 		this.enabledClues = model.getCluesToEvaluate();

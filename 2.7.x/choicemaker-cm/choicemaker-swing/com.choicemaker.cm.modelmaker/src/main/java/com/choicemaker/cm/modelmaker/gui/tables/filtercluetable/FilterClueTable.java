@@ -27,7 +27,7 @@ import javax.swing.table.TableColumnModel;
 
 import com.choicemaker.cm.analyzer.filter.FilterCondition;
 import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.modelmaker.gui.ModelMaker;
 import com.choicemaker.cm.modelmaker.gui.listeners.ClueNameCellListener;
 import com.choicemaker.cm.modelmaker.gui.listeners.TableColumnListener;
@@ -131,7 +131,7 @@ public class FilterClueTable extends JTable{
 	/**
 	 * Asks the myModel to rebuild its rows, then refresh itself.
 	 */
-	public void setClues(IProbabilityModel pm) {
+	public void setClues(ImmutableProbabilityModel pm) {
 		myModel.refresh(pm);
 		refresh();
 	}

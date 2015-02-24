@@ -21,7 +21,6 @@ import java.util.StringTokenizer;
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.ICompiler;
@@ -88,7 +87,7 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 	}
 
 	public static void processAllModels(Writer w, boolean insertGo) throws IOException {
-		IProbabilityModel[] models = PMManager.getModels();
+		ImmutableProbabilityModel[] models = PMManager.getModels();
 		for (int i=0; i<models.length; i++) {
 			createObjects(w, models[i], insertGo);
 		}
@@ -168,7 +167,7 @@ public class SqlDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		return dbReader.getName() + ":SQLServer";
 	}
 
-	public static String getMultiQuery(IProbabilityModel model) {
+	public static String getMultiQuery(ImmutableProbabilityModel model) {
 		return getMultiQuery(model, model.getDatabaseConfigurationName());
 	}
 	

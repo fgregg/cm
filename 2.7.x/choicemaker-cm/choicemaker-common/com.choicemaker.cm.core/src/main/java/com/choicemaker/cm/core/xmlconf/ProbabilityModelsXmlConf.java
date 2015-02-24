@@ -35,6 +35,7 @@ import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.ModelAttributeNames;
 import com.choicemaker.cm.core.ModelConfigurationException;
@@ -60,7 +61,7 @@ public class ProbabilityModelsXmlConf {
 	private static final Logger logger =
 		Logger.getLogger(ProbabilityModelsXmlConf.class.getName());
 
-	public static void saveModel(IProbabilityModel model)
+	public static void saveModel(ImmutableProbabilityModel model)
 		throws ModelConfigurationException {
 		Element m = new Element("ProbabilityModel");
 		//m.setAttribute(ModelAttributeNames.AN_CLUE_FILE_NAME, model.getClueFileName());

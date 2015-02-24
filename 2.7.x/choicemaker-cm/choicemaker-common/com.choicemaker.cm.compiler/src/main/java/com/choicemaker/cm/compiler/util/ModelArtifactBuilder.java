@@ -30,7 +30,7 @@ import java.util.zip.ZipOutputStream;
 import org.apache.tools.ant.util.JavaEnvUtils;
 
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
@@ -179,7 +179,7 @@ public class ModelArtifactBuilder {
 		final boolean fromResource = false;
 		ProbabilityModelsXmlConf.loadProductionProbabilityModels(compiler,
 				fromResource);
-		IProbabilityModel[] models = PMManager.getModels();
+		ImmutableProbabilityModel[] models = PMManager.getModels();
 		if (models.length <= 0) {
 			throw new RuntimeException("No model configurations defined. "
 					+ "Check the project configuration file (project.xml).");
@@ -411,9 +411,9 @@ public class ModelArtifactBuilder {
 			// copyToDir(new
 			// File(XmlConfigurator.getFileName()).getAbsoluteFile(),
 			// metaInfDir);
-			IProbabilityModel[] models = PMManager.getModels();
+			ImmutableProbabilityModel[] models = PMManager.getModels();
 			for (int i = 0; i < models.length; i++) {
-				IProbabilityModel model = models[i];
+				ImmutableProbabilityModel model = models[i];
 				File f = new File(model.getModelFilePath()).getAbsoluteFile();
 				copyToDir(f, etcModelsDir);
 			}

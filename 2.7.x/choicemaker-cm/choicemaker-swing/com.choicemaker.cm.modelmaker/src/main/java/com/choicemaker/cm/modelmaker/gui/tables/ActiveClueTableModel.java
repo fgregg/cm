@@ -26,7 +26,7 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
 import com.choicemaker.cm.core.ColumnDefinition;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MachineLearner;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
@@ -47,7 +47,7 @@ public class ActiveClueTableModel extends SortableTableModel {
 	private static final long serialVersionUID = 1L;
 
 
-	private IProbabilityModel pModel;
+	private ImmutableProbabilityModel pModel;
 	private ActiveClues activeClues;
 	private MutableMarkedRecordPair record;
 	private Vector rows;
@@ -94,12 +94,12 @@ public class ActiveClueTableModel extends SortableTableModel {
 	public static final int COL_TYPE = 4;
 	public static final int COL_REPORT = 5;
 
-	ActiveClueTableModel(IProbabilityModel pModel) {
+	ActiveClueTableModel(ImmutableProbabilityModel pModel) {
 		this.pModel = pModel;
 		init(pModel);
 	}
 
-	private void init(IProbabilityModel model) {
+	private void init(ImmutableProbabilityModel model) {
 		ClueSet clueSet = model.getClueSet();
 		booleanType = clueSet != null && clueSet.getType() == ClueSetType.BOOLEAN;
 		List cols = new ArrayList();

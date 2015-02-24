@@ -18,7 +18,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.io.blocking.exact.base.CompositeExactInMemoryBlocker;
 import com.choicemaker.cm.io.blocking.exact.base.ExactInMemoryBlocker;
@@ -35,9 +35,9 @@ import com.choicemaker.cm.modelmaker.gui.matcher.MatchDialogBlockerPlugin;
 public class ExactBlockerDialogPlugin extends MatchDialogBlockerPlugin {
 	private static final long serialVersionUID = 1L;
 	private JList configurationsList;
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 
-	ExactBlockerDialogPlugin(IProbabilityModel model) {
+	ExactBlockerDialogPlugin(ImmutableProbabilityModel model) {
 		this.model = model;
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		add(new JLabel("Configurations"));

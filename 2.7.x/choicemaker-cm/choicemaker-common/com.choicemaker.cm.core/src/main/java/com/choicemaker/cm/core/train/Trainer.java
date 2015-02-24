@@ -18,7 +18,7 @@ import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.ClueSet;
 import com.choicemaker.cm.core.ClueSetType;
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.OperationFailedException;
 import com.choicemaker.cm.core.base.ActiveClues;
 import com.choicemaker.cm.core.base.BooleanActiveClues;
@@ -35,7 +35,7 @@ import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
  */
 
 public class Trainer /* implements ITrainer */ {
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 	private Collection src;
 	private int noPairs;
 	private int[] size;
@@ -82,7 +82,7 @@ public class Trainer /* implements ITrainer */ {
 		setUpperThreshold(upperThreshold);
 	}
 
-	public void setModel(IProbabilityModel model) {
+	public void setModel(ImmutableProbabilityModel model) {
 		this.model = model;
 	}
 

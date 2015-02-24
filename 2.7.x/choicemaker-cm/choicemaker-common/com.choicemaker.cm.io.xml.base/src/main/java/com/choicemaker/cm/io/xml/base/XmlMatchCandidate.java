@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.xml.base;
 
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.MatchCandidate;
 
@@ -39,7 +39,7 @@ public class XmlMatchCandidate extends MatchCandidate {
 		this.profile = profile;
 	}
 	
-	public XmlMatchCandidate(Match match, IProbabilityModel model) {
+	public XmlMatchCandidate(Match match, ImmutableProbabilityModel model) {
 		this(match.id, match.probability, match.decision.toInt(), XmlSingleRecordWriter.writeRecord(model, match.m, false), match.ac.getNotes(model));
 	}
 

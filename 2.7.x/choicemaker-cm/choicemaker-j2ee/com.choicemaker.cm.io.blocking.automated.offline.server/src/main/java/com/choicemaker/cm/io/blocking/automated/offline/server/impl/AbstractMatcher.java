@@ -37,7 +37,6 @@ import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ClueSet;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.ImmutableThresholds;
@@ -243,7 +242,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 			JMSException {
 
 		final String modelConfigId = params.getModelConfigurationName();
-		final IProbabilityModel stageModel =
+		final ImmutableProbabilityModel stageModel =
 			PMManager.getModelInstance(modelConfigId);
 		final ImmutableThresholds t =
 			new ImmutableThresholds(params.getLowThreshold(),
@@ -304,7 +303,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	 */
 	protected final List<MatchRecord2> handleComparisonSet(IComparisonSet cSet,
 			OabaJob oabaJob, ChunkDataStore dataStore,
-			IProbabilityModel stageModel, ImmutableThresholds t)
+			ImmutableProbabilityModel stageModel, ImmutableThresholds t)
 			throws RemoteException, BlockingException {
 
 		boolean stop = oabaJob.shouldStop();

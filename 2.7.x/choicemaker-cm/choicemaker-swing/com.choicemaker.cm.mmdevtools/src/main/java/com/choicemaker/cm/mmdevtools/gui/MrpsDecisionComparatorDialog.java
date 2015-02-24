@@ -31,8 +31,8 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
 import com.choicemaker.cm.core.base.MarkedRecordPairBinder;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
@@ -168,7 +168,7 @@ public class MrpsDecisionComparatorDialog extends JDialog {
 	private void computeMatrix() {
 		modelMaker.setMultiSource(1, null);
 
-		IProbabilityModel model = modelMaker.getProbabilityModel();
+		ImmutableProbabilityModel model = modelMaker.getProbabilityModel();
 		if (model == null) {
 			return;
 		}

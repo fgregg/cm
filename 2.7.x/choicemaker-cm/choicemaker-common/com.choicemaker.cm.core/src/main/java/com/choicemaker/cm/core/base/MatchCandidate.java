@@ -13,7 +13,7 @@ package com.choicemaker.cm.core.base;
 import java.io.Serializable;
 
 import com.choicemaker.cm.core.Decision;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 
 /**
  * Holder class for a returned record. If the actual record data should be returned
@@ -54,7 +54,7 @@ public class MatchCandidate implements Serializable {
 		this.notes = notes;
 	}
 	
-	public MatchCandidate(Match match, IProbabilityModel model) {
+	public MatchCandidate(Match match, ImmutableProbabilityModel model) {
 		this(match.id, match.probability, match.decision.toInt(), match.ac.getNotes(model));
 	}
 		

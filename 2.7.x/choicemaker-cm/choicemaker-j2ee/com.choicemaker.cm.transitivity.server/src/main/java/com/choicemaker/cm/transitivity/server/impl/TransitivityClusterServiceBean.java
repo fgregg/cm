@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.DatabaseException;
-import com.choicemaker.cm.core.IProbabilityModel;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.InvalidModelException;
 import com.choicemaker.cm.core.InvalidProfileException;
 import com.choicemaker.cm.core.Profile;
@@ -109,7 +109,7 @@ public class TransitivityClusterServiceBean implements SessionBean {
 
 		logger.info("starting findCluster");
 
-		IProbabilityModel model = PMManager.getModelInstance(probabilityModel);
+		ImmutableProbabilityModel model = PMManager.getModelInstance(probabilityModel);
 		if (model == null) {
 			logger.severe("Invalid probability accessProvider: "
 					+ probabilityModel);

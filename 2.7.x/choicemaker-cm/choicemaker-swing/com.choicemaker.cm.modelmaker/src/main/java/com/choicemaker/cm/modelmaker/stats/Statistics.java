@@ -19,8 +19,8 @@ import java.util.Iterator;
 import com.choicemaker.cm.core.ClueDesc;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ExtDecision;
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableMarkedRecordPair;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.Evaluator;
 import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.Thresholds;
@@ -44,7 +44,7 @@ public final class Statistics implements IStatistics {
 	// size of src (cache)
 	private int size;
 	// the probability model
-	private IProbabilityModel model;
+	private ImmutableProbabilityModel model;
 	// the clue descriptors of the current model's clue set (cache)
 	private ClueDesc[] clueDesc;
 	// the pairs (from the source collection) ordered by type, human decision (differ, hold, match), probability increasing
@@ -79,7 +79,7 @@ public final class Statistics implements IStatistics {
 	// correlation value, computed in init
 	private float correlation;
 
-	public Statistics(IProbabilityModel model, Collection src, float differThreshold, float matchThreshold) {
+	public Statistics(ImmutableProbabilityModel model, Collection src, float differThreshold, float matchThreshold) {
 		this.model = model;
 		this.clueDesc = model.getAccessor().getClueSet().getClueDesc();
 		this.src = src;
