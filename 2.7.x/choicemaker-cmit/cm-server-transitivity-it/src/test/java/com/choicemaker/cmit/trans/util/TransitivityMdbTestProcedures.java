@@ -82,6 +82,7 @@ public class TransitivityMdbTestProcedures {
 		return retVal;
 	}
 
+	@SuppressWarnings("unused")
 	public static <T extends WellKnownTestConfiguration> void testTransitivityProcessing(
 			final AbstractTransitivityMdbTest<T> test, final OabaJob oabaJob) {
 
@@ -204,6 +205,7 @@ public class TransitivityMdbTestProcedures {
 		}
 		assertTrue(jobId != NONPERSISTENT_ID);
 
+		@SuppressWarnings("null")
 		TransitivityJob transJob = transJobController.findTransitivityJob(jobId);
 		assertTrue(transJob != null);
 		te.add(transJob);
