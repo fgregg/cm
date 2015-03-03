@@ -9,6 +9,8 @@ import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_CHUNKSIZE;
 import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_MATCHES;
 import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MAX_OVERSIZED;
 import static com.choicemaker.cm.args.OabaSettings.DEFAULT_MIN_FIELDS;
+import static com.choicemaker.cm.args.TransitivityParameters.DEFAULT_GRAPH_PROPERTY_NAME;
+import static com.choicemaker.cm.args.TransitivityParameters.DEFAULT_RESULT_FORMAT;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -19,12 +21,14 @@ import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
@@ -46,9 +50,9 @@ public class BatchJobUtils {
 	 * OabaJob is synthesized using the specified String; otherwise, the String
 	 * is used as an externalId without alteration.
 	 */
-	public static OabaJobEntity createEphemeralOabaJobEntity(int maxSingleLimit,
-			UserTransaction utx, ServerConfiguration sc, EntityManager em,
-			TestEntityCounts te, String s, boolean isTag) {
+	public static OabaJobEntity createEphemeralOabaJobEntity(
+			int maxSingleLimit, UserTransaction utx, ServerConfiguration sc,
+			EntityManager em, TestEntityCounts te, String s, boolean isTag) {
 		final String METHOD = "createEphemeralOabaJob";
 		if (utx == null) {
 			throw new IllegalArgumentException("null transaction");
@@ -134,8 +138,7 @@ public class BatchJobUtils {
 
 	/** Creates an ephemeral instance of OabaSettingsEntity */
 	public static OabaSettingsEntity createEphemeralOabaSettings(
-			int maxSingleLimit,
-			TestEntityCounts te) {
+			int maxSingleLimit, TestEntityCounts te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
@@ -169,12 +172,13 @@ public class BatchJobUtils {
 	 * Creates a persistent instance of OabaSettingsEntity An externalId for the
 	 * returned OabaJob is synthesized using the specified tag.
 	 */
-	public static OabaSettingsEntity createPersistentOabaSettings(int maxSingleLimit,
-			EntityManager em, TestEntityCounts te) {
+	public static OabaSettingsEntity createPersistentOabaSettings(
+			int maxSingleLimit, EntityManager em, TestEntityCounts te) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
-		OabaSettingsEntity retVal = createEphemeralOabaSettings(maxSingleLimit,te);
+		OabaSettingsEntity retVal =
+			createEphemeralOabaSettings(maxSingleLimit, te);
 		em.persist(retVal);
 		return retVal;
 	}
@@ -188,7 +192,8 @@ public class BatchJobUtils {
 
 	public static TransitivityJob createEphemeralTransitivityJob(
 			int maxSingleLimit, UserTransaction utx, ServerConfiguration sc,
-			EntityManager em, TestEntityCounts te, OabaJob oabaJob, String s,
+			EntityManager em, TestEntityCounts te, OabaJob oabaJob,
+			OabaParametersController oabaParamsController, String s,
 			boolean isTag) {
 		final String METHOD = "createEphemeralTransitivityJob";
 		if (utx == null || sc == null || em == null || te == null
@@ -198,8 +203,12 @@ public class BatchJobUtils {
 		TransitivityJobEntity retVal = null;
 		try {
 			utx.begin();
+			long oabaParamsId = oabaJob.getOabaParametersId();
+			OabaParameters oabaParams =
+				oabaParamsController.findOabaParameters(oabaParamsId);
 			TransitivityParameters params =
-				createPersistentTransitivityParameters(em, te, METHOD);
+				createPersistentTransitivityParameters(oabaParams, em, te,
+						METHOD);
 			String extId;
 			if (isTag) {
 				extId = EntityManagerUtils.createExternalId(s);
@@ -218,21 +227,21 @@ public class BatchJobUtils {
 
 	/** Creates an ephemeral instance of TransitivityParametersEntity */
 	public static TransitivityParametersEntity createEphemeralTransitivityParameters(
-			String tag, TestEntityCounts te) {
+			OabaParameters oabaParams, String tag, TestEntityCounts te) {
 		if (te == null) {
 			throw new IllegalArgumentException("null test entities");
 		}
-		Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
-		PersistableRecordSource stage = new FakePersistableRecordSource(tag);
-		OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
-		PersistableRecordSource master =
-				EntityManagerUtils.createFakeMasterRecordSource(tag, task);
-		TransitivityParametersEntity retVal =
-			new TransitivityParametersEntity(
-					EntityManagerUtils.createRandomModelConfigurationName(tag),
-					thresholds.getDifferThreshold(),
-					thresholds.getMatchThreshold(), stage, master);
-		te.add((TransitivityParameters)retVal);
+		// Thresholds thresholds = EntityManagerUtils.createRandomThresholds();
+		// PersistableRecordSource stage = new FakePersistableRecordSource(tag);
+		// OabaLinkageType task = EntityManagerUtils.createRandomOabaTask();
+		// PersistableRecordSource master =
+		// EntityManagerUtils.createFakeMasterRecordSource(tag, task);
+		TransitivityParametersEntity retVal = new TransitivityParametersEntity(
+		// EntityManagerUtils.createRandomModelConfigurationName(tag),
+		// thresholds.getDifferThreshold(),
+		// thresholds.getMatchThreshold(), stage, master
+				oabaParams, DEFAULT_RESULT_FORMAT, DEFAULT_GRAPH_PROPERTY_NAME);
+		te.add((TransitivityParameters) retVal);
 		return retVal;
 	}
 
@@ -242,12 +251,13 @@ public class BatchJobUtils {
 	 * specified tag.
 	 */
 	public static TransitivityParametersEntity createPersistentTransitivityParameters(
-			EntityManager em, TestEntityCounts te, String tag) {
+			OabaParameters oabaParams, EntityManager em, TestEntityCounts te,
+			String tag) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
 		}
 		TransitivityParametersEntity retVal =
-			createEphemeralTransitivityParameters(tag, te);
+			createEphemeralTransitivityParameters(oabaParams, tag, te);
 		em.persist(retVal);
 		return retVal;
 	}

@@ -76,7 +76,7 @@ public class TransitivityJobEntityIT {
 	protected TransitivityJobController transJobController;
 
 	@EJB
-	private OabaParametersController paramsController;
+	private OabaParametersController oabaParamsController;
 
 	@EJB
 	private OabaSettingsController oabaSettingsController;
@@ -106,7 +106,7 @@ public class TransitivityJobEntityIT {
 	@Before
 	public void setUp() throws Exception {
 		te =
-			new TestEntityCounts(logger, oabaController, paramsController,
+			new TestEntityCounts(logger, oabaController, oabaParamsController,
 					oabaSettingsController, serverController,
 					processingController, opPropController, rsController,
 					ridController);
@@ -114,7 +114,7 @@ public class TransitivityJobEntityIT {
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaController, paramsController,
+			te.checkCounts(logger, em, utx, oabaController, oabaParamsController,
 					oabaSettingsController, serverController,
 					processingController, opPropController, rsController,
 					ridController);
@@ -234,7 +234,7 @@ public class TransitivityJobEntityIT {
 			TestEntityCounts te, OabaJob oabaJob, String tag, boolean isTag) {
 		ServerConfiguration sc = getDefaultServerConfiguration();
 		return BatchJobUtils.createEphemeralTransitivityJob(MAX_SINGLE_LIMIT,
-				utx, sc, em, te, oabaJob, tag, isTag);
+				utx, sc, em, te, oabaJob, oabaParamsController, tag, isTag);
 	}
 
 	protected OabaJob createEphemeralOabaJob(TestEntityCounts te, String tag,
