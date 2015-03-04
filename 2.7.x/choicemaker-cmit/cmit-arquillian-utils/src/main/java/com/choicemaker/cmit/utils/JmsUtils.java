@@ -10,9 +10,9 @@ import javax.jms.JMSContext;
 import javax.jms.Queue;
 import javax.jms.Topic;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 
 public class JmsUtils {
@@ -108,7 +108,7 @@ public class JmsUtils {
 	}
 
 	public static OabaNotification receiveLatestOabaNotification(
-			OabaJob oabaJob, final String LOG_SOURCE, JMSConsumer consumer,
+			BatchJob oabaJob, final String LOG_SOURCE, JMSConsumer consumer,
 			long timeOut) {
 		final String METHOD = "receiveLatestOabaNotification(" + timeOut + ")";
 		logger.entering(LOG_SOURCE, METHOD);
@@ -128,7 +128,7 @@ public class JmsUtils {
 	}
 
 	public static OabaNotification receiveFinalOabaNotification(
-			OabaJob oabaJob, final String LOG_SOURCE, JMSConsumer consumer,
+			BatchJob oabaJob, final String LOG_SOURCE, JMSConsumer consumer,
 			long timeOut) {
 		final String METHOD = "receiveLatestOabaNotification(" + timeOut + ")";
 		if (oabaJob == null) {

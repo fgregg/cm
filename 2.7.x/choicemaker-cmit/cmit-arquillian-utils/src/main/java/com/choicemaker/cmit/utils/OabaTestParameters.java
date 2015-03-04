@@ -27,7 +27,7 @@ public interface OabaTestParameters {
 
 	WellKnownTestConfiguration getTestConfiguration(OabaLinkageType type);
 
-	OabaProcessingPhase getOabaProcessingPhase();
+	OabaProcessingPhase getProcessingPhase();
 
 	EjbPlatform getE2service();
 
@@ -51,7 +51,7 @@ public interface OabaTestParameters {
 
 	Queue getMatchSchedulerQueue();
 
-	JMSConsumer getOabaStatusConsumer();
+	JMSConsumer getStatusConsumer();
 
 	Topic getOabaStatusTopic();
 
@@ -59,7 +59,7 @@ public interface OabaTestParameters {
 
 	RecordIdController getRecordIdController();
 
-	OabaParametersController getParamsController();
+	OabaParametersController getOabaParamsController();
 
 	OabaProcessingController getProcessingController();
 

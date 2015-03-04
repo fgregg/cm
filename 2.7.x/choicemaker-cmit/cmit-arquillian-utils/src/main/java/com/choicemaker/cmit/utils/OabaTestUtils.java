@@ -149,7 +149,7 @@ public class OabaTestUtils {
 
 		// Validate that the job parameters are correct
 		final OabaParametersController paramsController =
-			test.getParamsController();
+			test.getOabaParamsController();
 		OabaParameters params =
 			paramsController.findOabaParametersByJobId(jobId);
 		te.add(params);
