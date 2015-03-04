@@ -8,4 +8,8 @@ public interface TransitivityTestParameters extends OabaTestParameters {
 
 	JMSConsumer getTransitivityStatusConsumer();
 
+//	AnalysisResultFormat getAnalysisResultFormat();
+//
+//	String getGraphPropertyName();
+
 }

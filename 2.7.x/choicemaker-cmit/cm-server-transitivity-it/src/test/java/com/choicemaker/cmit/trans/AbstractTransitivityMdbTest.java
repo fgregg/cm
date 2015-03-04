@@ -15,17 +15,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
 
-import org.jboss.arquillian.junit.InSequence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.choicemaker.cm.args.OabaLinkageType;
-import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.args.OabaSettings;
-import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
@@ -35,6 +30,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdContr
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
@@ -81,6 +77,8 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	private final Class<T> configurationClass;
 
 	private final OabaProcessingPhase oabaPhase;
+
+	private JMSConsumer oabaStatusConsumer;
 
 	private JMSConsumer transStatusConsumer;
 
@@ -146,6 +144,9 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	@Resource(lookup = "choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
 
+	@Resource(lookup = "java:/choicemaker/urm/jms/statusTopic")
+	private Topic oabaStatusTopic;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/transStatusTopic")
 	private Topic transStatusTopic;
 
@@ -189,8 +190,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	public abstract Queue getResultQueue();
 
 	public abstract boolean isWorkingDirectoryCorrectAfterProcessing(
-			OabaLinkageType linkage, OabaJob batchJob, OabaParameters bp,
-			OabaSettings oabaSettings, ServerConfiguration serverConfiguration);
+			TransitivityJob transJob);
 
 	// -- Template methods
 
@@ -208,6 +208,13 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	public final void setUp() throws Exception {
 		final String METHOD = "setUp";
 		getLogger().entering(getSourceName(), METHOD);
+
+		checkPrequisites();
+		clearDestinations();
+
+		getLogger().info("Creating an OABA status listener");
+		this.oabaStatusConsumer =
+			getJmsContext().createConsumer(getOabaStatusTopic());
 
 		getLogger().info("Creating an Transitivity status listener");
 		this.transStatusConsumer =
@@ -233,9 +240,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		this.getTransitivityStatusConsumer().close();
 	}
 
-	@Test
-	@InSequence(1)
-	public final void testPrequisites() {
+	public final void checkPrequisites() {
 		assertTrue(getTransitivityService() != null);
 		assertTrue(getBlockQueue() != null);
 		assertTrue(getChunkQueue() != null);
@@ -262,8 +267,6 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		assertTrue(getSettingsController() != null);
 	}
 
-	@Test
-	@InSequence(2)
 	public final void clearDestinations() {
 
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
@@ -289,24 +292,17 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	@Test
-	@InSequence(3)
 	public final void testLinkageTransitivity()
 			throws ServerConfigurationException {
-		// FIXME
-//		String TEST = "testLinkageTransitivity";
-//		final String externalId = EntityManagerUtils.createExternalId(TEST);
-//		OabaJob oabaJob =
-//			OabaTestUtils.startOabaJob(OabaLinkageType.STAGING_DEDUPLICATION,
-//					TEST, this, externalId);
-//		TransitivityMdbTestProcedures.testTransitivityProcessing(this, oabaJob);
+		OabaLinkageType task = OabaLinkageType.STAGING_TO_MASTER_LINKAGE;
+		TransitivityMdbTestProcedures.testTransitivityProcessing(this, task);
 	}
 
 	@Test
-	@InSequence(4)
 	public final void testDeduplicationTransitivity()
 			throws ServerConfigurationException {
-		// FIXME
-		// TransitivityMdbTestProcedures.testDeduplicationTransitivity(this);
+		OabaLinkageType task = OabaLinkageType.STAGING_DEDUPLICATION;
+		TransitivityMdbTestProcedures.testTransitivityProcessing(this, task);
 	}
 
 	// -- Modifiers
@@ -335,7 +331,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	@Override
-	public final OabaProcessingPhase getOabaProcessingPhase() {
+	public final OabaProcessingPhase getProcessingPhase() {
 		return oabaPhase;
 	}
 
@@ -412,21 +408,18 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	@Override
-	public JMSConsumer getOabaStatusConsumer() {
-		// FIXME TODO Auto-generated method stub
-		return null;
+	public final JMSConsumer getStatusConsumer() {
+		return oabaStatusConsumer;
 	}
 
 	@Override
-	public Topic getOabaStatusTopic() {
-		// FIXME TODO Auto-generated method stub
-		return null;
+	public final Topic getOabaStatusTopic() {
+		return oabaStatusTopic;
 	}
 
 	@Override
-	public OabaParametersController getParamsController() {
-		// FIXME TODO Auto-generated method stub
-		return null;
+	public OabaParametersController getOabaParamsController() {
+		return oabaParamsController;
 	}
 
 	@Override
@@ -437,10 +430,6 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	@Override
 	public final RecordIdController getRecordIdController() {
 		return ridController;
-	}
-
-	public final OabaParametersController getOabaParamsController() {
-		return oabaParamsController;
 	}
 
 	@Override
@@ -506,5 +495,17 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	public final UserTransaction getUtx() {
 		return utx;
 	}
+
+//	@Override
+//	public AnalysisResultFormat getAnalysisResultFormat() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public String getGraphPropertyName() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }

@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
 
+import org.jboss.arquillian.junit.InSequence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -190,9 +191,6 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		final String METHOD = "setUp";
 		getLogger().entering(getSourceName(), METHOD);
 
-		checkPrequisites();
-		clearDestinations();
-
 		getLogger().info("Creating an OABA status listener");
 		this.oabaStatusConsumer =
 			getJmsContext().createConsumer(getOabaStatusTopic());
@@ -213,9 +211,16 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		getLogger().entering(getSourceName(), METHOD);
 
 		getLogger().info("Closing the OABA status listener");
-		this.getStatusConsumer().close();
+		try {
+			JMSConsumer listener = this.getStatusConsumer();
+			listener.close();
+		} catch (Exception x) {
+			getLogger().warning(x.toString());
+		}
 	}
 
+	@Test
+	@InSequence(1)
 	public final void checkPrequisites() {
 		assertTrue(getOabaService() != null);
 		assertTrue(getBlockQueue() != null);
@@ -243,6 +248,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		assertTrue(getSettingsController() != null);
 	}
 
+	@Test
+	@InSequence(2)
 	public final void clearDestinations() {
 
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
@@ -268,11 +275,13 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	}
 
 	@Test
+	@InSequence(3)
 	public final void testLinkage() throws ServerConfigurationException {
 		OabaMdbTestProcedures.testLinkageProcessing(this);
 	}
 
 	@Test
+	@InSequence(4)
 	public final void testDeduplication() throws ServerConfigurationException {
 		OabaMdbTestProcedures.testDeduplicationProcessing(this);
 	}
