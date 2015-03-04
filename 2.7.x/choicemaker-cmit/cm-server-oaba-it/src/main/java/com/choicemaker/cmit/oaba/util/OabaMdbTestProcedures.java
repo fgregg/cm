@@ -118,13 +118,18 @@ public class OabaMdbTestProcedures {
 		logger.entering(LOG_SOURCE, tag);
 
 		final TestEntityCounts te = test.getTestEntityCounts();
-		final OabaProcessingPhase oabaPhase = test.getOabaProcessingPhase();
+		final Queue listeningQueue = test.getResultQueue();
+		final JMSConsumer statusListener = test.getStatusConsumer();
+
+		// Compute the OABA processing context
+		final OabaProcessingPhase oabaPhase = test.getProcessingPhase();
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
-		final Queue listeningQueue = test.getResultQueue();
-		final JMSConsumer statusListener = test.getOabaStatusConsumer();
+
+		// Validate the OABA processing context
 		validateDestinations(oabaPhase, listeningQueue);
 
+		// Start the OABA processing job
 		OabaJob oabaJob =
 			OabaTestUtils.startOabaJob(linkage, tag, test, externalId);
 		assertTrue(oabaJob != null);
@@ -135,11 +140,12 @@ public class OabaMdbTestProcedures {
 		// Find the OABA parameters associated with the job
 		final long jobId = oabaJob.getId();
 		final OabaParametersController paramsController =
-			test.getParamsController();
+			test.getOabaParamsController();
 		OabaParameters params =
 			paramsController.findOabaParametersByJobId(jobId);
 		te.add(params);
 
+		// Check the job results
 		final JMSContext jmsContext = test.getJmsContext();
 		if (isIntermediateExpected) {
 			// Check that OABA processing completed and sent out a
@@ -175,8 +181,6 @@ public class OabaMdbTestProcedures {
 							statusListener, SHORT_TIMEOUT_MILLIS);
 			} else if (oabaPhase == OabaProcessingPhase.FINAL) {
 				oabaNotification =
-				// JmsUtils.receiveFinalOabaNotification(LOG_SOURCE, jmsContext,
-				// oabaStatusTopic, VERY_LONG_TIMEOUT_MILLIS);
 					JmsUtils.receiveFinalOabaNotification(oabaJob, LOG_SOURCE,
 							statusListener, LONG_TIMEOUT_MILLIS);
 			} else {

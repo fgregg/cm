@@ -1332,6 +1332,11 @@ END: C-E Exclusion -->
         <version>${choicemaker.current.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.choicemaker.cmit</groupId>
+        <artifactId>cmit-server-oaba-it</artifactId>
+        <version>${choicemaker.current.version}</version>
+      </dependency>
+      <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
         <version>1.0.4</version>
