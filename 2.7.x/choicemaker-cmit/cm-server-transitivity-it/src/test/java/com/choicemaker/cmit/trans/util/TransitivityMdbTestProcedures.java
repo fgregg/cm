@@ -1,6 +1,8 @@
 package com.choicemaker.cmit.trans.util;
 
 import static com.choicemaker.cm.batch.impl.AbstractPersistentObject.NONPERSISTENT_ID;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OABA;
+import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
 import static com.choicemaker.cmit.utils.JmsUtils.LONG_TIMEOUT_MILLIS;
 import static com.choicemaker.cmit.utils.JmsUtils.SHORT_TIMEOUT_MILLIS;
 import static org.junit.Assert.assertTrue;
@@ -31,7 +33,6 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
-import com.choicemaker.cmit.oaba.MatchDedupMdbProcessing;
 import com.choicemaker.cmit.trans.AbstractTransitivityMdbTest;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
@@ -76,45 +77,67 @@ public class TransitivityMdbTestProcedures {
 		assertTrue(retVal != null);
 		return retVal;
 	}
-	
-	public static OabaJob runOabaJob(
-			final OabaLinkageType task,
-			final String tag,
-			final String externalId,
-			final String LOG_SOURCE,
-			final TestEntityCounts te
-			) {
-		final MatchDedupMdbProcessing oabaTest = new MatchDedupMdbProcessing();
+
+	public static <T extends WellKnownTestConfiguration> OabaJob runOabaJob(
+			final AbstractTransitivityMdbTest<T> ta,
+			final OabaLinkageType task, final String tag,
+			final String externalId, final String LOG_SOURCE,
+			final TestEntityCounts te) throws ServerConfigurationException {
 
 		final OabaJob oabaJob =
-			OabaTestUtils.startOabaJob(task, tag, oabaTest, externalId);
+			OabaTestUtils.startOabaJob(task, tag, ta, externalId);
 		assertTrue(oabaJob != null);
-		final long jobId = oabaJob.getId();
 		te.add(oabaJob);
+		final long jobId = oabaJob.getId();
 
+//		final OabaService oabaService = ta.getOabaService();
+//		assertTrue(oabaService != null);
+//		OabaParameters batchParams = null;
+//		OabaSettings oabaSettings = null;
+//		ServerConfiguration serverConfiguration = null;
+//		long jobId = OabaService.INVALID_JOB_ID;
+//		switch (task) {
+//		case STAGING_DEDUPLICATION:
+//			jobId =
+//				oabaService.startDeduplication(externalId, batchParams,
+//						oabaSettings, serverConfiguration);
+//			break;
+//		case STAGING_TO_MASTER_LINKAGE:
+//			jobId =
+//				oabaService.startLinkage(externalId, batchParams, oabaSettings,
+//						serverConfiguration);
+//			break;
+//		case MASTER_TO_MASTER_LINKAGE:
+//		case TRANSITIVITY_ANALYSIS:
+//			throw new Error(task + ": not yet implmented");
+//		default:
+//			throw new Error("unknown linkage type: " + task);
+//		}
+//		assertTrue(jobId != OabaService.INVALID_JOB_ID);
+//
+//		// Find the newly created OABA job
+//		OabaJobController oabaJobController = ta.getOabaJobController();
+//		OabaJob oabaJob = oabaJobController.findOabaJob(jobId);
+//		assertTrue(oabaJob != null);
+//		te.add(oabaJob);
+
+		// Wait for the job to send a final processing notification
 		logger.info("Checking oabaStatusTopic");
-		final OabaProcessingPhase oabaPhase = oabaTest.getProcessingPhase();
-		final JMSConsumer statusListener = oabaTest.getStatusConsumer();
-		OabaNotification oabaNotification = null;
-		if (oabaPhase == OabaProcessingPhase.FINAL) {
-			oabaNotification =
-				JmsUtils.receiveFinalOabaNotification(oabaJob, LOG_SOURCE,
-						statusListener, LONG_TIMEOUT_MILLIS);
-		} else {
-			throw new Error("unexpected phase: " + oabaPhase);
-		}
+		final JMSConsumer statusListener = ta.getOabaStatusConsumer();
+		OabaNotification oabaNotification =
+			JmsUtils.receiveFinalOabaNotification(oabaJob, LOG_SOURCE,
+					statusListener, LONG_TIMEOUT_MILLIS);
 		assertTrue(oabaNotification != null);
 		assertTrue(oabaNotification.getJobId() == jobId);
-		final float expectPercentDone = oabaTest.getResultPercentComplete();
-		assertTrue(oabaNotification.getJobPercentComplete() == expectPercentDone);
+		assertTrue(oabaNotification.getEventId() == EVT_DONE_OABA);
+		assertTrue(oabaNotification.getJobPercentComplete() == PCT_DONE_OABA);
 
 		return oabaJob;
 	}
 
-	@SuppressWarnings("unused")
 	public static <T extends WellKnownTestConfiguration> void testTransitivityProcessing(
-			final AbstractTransitivityMdbTest<T> ta,
-			final OabaLinkageType task) {
+			final AbstractTransitivityMdbTest<T> ta, final OabaLinkageType task)
+			throws ServerConfigurationException {
 
 		// Preconditions
 		if (ta == null || task == null) {
@@ -127,11 +150,10 @@ public class TransitivityMdbTestProcedures {
 
 		final TestEntityCounts te = ta.getTestEntityCounts();
 		final String extId = EntityManagerUtils.createExternalId(tag);
-		final MatchDedupMdbProcessing oabaProcessing = new MatchDedupMdbProcessing();
 
 		// Run an OabaJob for subsequent transitivity analysis
 		final OabaJob oabaJob =
-				runOabaJob(task, tag, extId, LOG_SOURCE, te);
+			runOabaJob(ta, task, tag, extId, LOG_SOURCE, te);
 		assertTrue(oabaJob != null);
 		final long oabaJobId = oabaJob.getId();
 		assertTrue(te.contains(oabaJob));
@@ -141,7 +163,7 @@ public class TransitivityMdbTestProcedures {
 		final OabaParametersController oabaParamsController =
 			ta.getOabaParamsController();
 		final OabaParameters oabaParams =
-				oabaParamsController.findOabaParametersByJobId(oabaJobId);
+			oabaParamsController.findOabaParametersByJobId(oabaJobId);
 		te.add(oabaParams);
 
 		// Set up parameters for transitivity analysis
@@ -151,7 +173,7 @@ public class TransitivityMdbTestProcedures {
 		final TransitivityParametersEntity transParams =
 			new TransitivityParametersEntity(oabaParams, arf, gpn);
 		te.add((TransitivityParameters) transParams);
-		
+
 		// Configure the server for transitivity analysis
 		final String hostName =
 			ServerConfigurationControllerBean.computeHostName();
@@ -197,18 +219,21 @@ public class TransitivityMdbTestProcedures {
 		assertTrue(jobId != NONPERSISTENT_ID);
 
 		// Find the transitivity job
-		final TransitivityJobController transJobController = ta.getTransJobController();
-		TransitivityJob transJob = transJobController.findTransitivityJob(jobId);
+		final TransitivityJobController transJobController =
+			ta.getTransJobController();
+		TransitivityJob transJob =
+			transJobController.findTransitivityJob(jobId);
 		assertTrue(transJob != null);
 		te.add(transJob);
 		assertTrue(extId != null && extId.equals(transJob.getExternalId()));
 
 		// Compute context for expected results
 		final OabaProcessingPhase transPhase = ta.getProcessingPhase();
-		final boolean isIntermediateExpected = transPhase.isIntermediateExpected;
+		final boolean isIntermediateExpected =
+			transPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = transPhase.isUpdateExpected;
 		final Queue listeningQueue = ta.getResultQueue();
-		final JMSConsumer statusListener = ta.getStatusConsumer();
+		final JMSConsumer statusListener = ta.getOabaStatusConsumer();
 		validateDestinations(transPhase, listeningQueue);
 
 		// Check the job results
@@ -243,8 +268,8 @@ public class TransitivityMdbTestProcedures {
 			if (transPhase == OabaProcessingPhase.INTERMEDIATE
 					|| transPhase == OabaProcessingPhase.INITIAL) {
 				oabaNotification =
-					JmsUtils.receiveLatestOabaNotification(transJob, LOG_SOURCE,
-							statusListener, SHORT_TIMEOUT_MILLIS);
+					JmsUtils.receiveLatestOabaNotification(transJob,
+							LOG_SOURCE, statusListener, SHORT_TIMEOUT_MILLIS);
 			} else if (transPhase == OabaProcessingPhase.FINAL) {
 				oabaNotification =
 					JmsUtils.receiveFinalOabaNotification(transJob, LOG_SOURCE,
@@ -260,16 +285,18 @@ public class TransitivityMdbTestProcedures {
 
 		// Find the entry in the processing history updated by Transitivity
 		// FIXME STUBBED
-//		final OabaProcessingController processingController =
-//			ta.getProcessingController();
-//		OabaEventLog processingEntry =
-//			processingController.getProcessingLog(transJob);
-//		// te.add(processingEntry);
-//
-//		// Validate that processing entry is correct for this stage of the OABA
-//		assertTrue(processingEntry != null);
-//		final int expectedEventId = ta.getResultEventId();
-//		assertTrue(processingEntry.getCurrentOabaEventId() == expectedEventId);
+		// final OabaProcessingController processingController =
+		// ta.getProcessingController();
+		// OabaEventLog processingEntry =
+		// processingController.getProcessingLog(transJob);
+		// // te.add(processingEntry);
+		//
+		// // Validate that processing entry is correct for this stage of the
+		// OABA
+		// assertTrue(processingEntry != null);
+		// final int expectedEventId = ta.getResultEventId();
+		// assertTrue(processingEntry.getCurrentOabaEventId() ==
+		// expectedEventId);
 
 		// Check that the working directory contains what it should
 		assertTrue(ta.isWorkingDirectoryCorrectAfterProcessing(transJob));
@@ -280,126 +307,128 @@ public class TransitivityMdbTestProcedures {
 		logger.exiting(LOG_SOURCE, tag);
 	}
 
-//	private static void validateQueue(OabaProcessingPhase transPhase,
-//			Queue listeningQueue) {
-//		// TODO Auto-generated method stub
-//
-//	}
+	// private static void validateQueue(OabaProcessingPhase transPhase,
+	// Queue listeningQueue) {
+	// // TODO Auto-generated method stub
+	//
+	// }
 
 	public static void validateDestinations(OabaProcessingPhase transPhase,
 			Queue listeningQueue) {
 		if (transPhase == null) {
-			throw new IllegalArgumentException("null transitivity analysis phase");
+			throw new IllegalArgumentException(
+					"null transitivity analysis phase");
 		}
 		// FIXME stubbed
-//		final boolean isIntermediateExpected = transPhase.isIntermediateExpected;
-//		final boolean isUpdateExpected = transPhase.isUpdateExpected;
-//		if (isIntermediateExpected && !isUpdateExpected) {
-//			if (listeningQueue == null) {
-//				throw new IllegalArgumentException(
-//						"intermediate-result queue is null");
-//			}
-//			if (updateQueue != null) {
-//				String msg =
-//					"Ignoring update queue -- results expected only "
-//							+ "from intermediate-result queue";
-//				logger.warning(msg);
-//			}
-//		} else if (isIntermediateExpected && isUpdateExpected) {
-//			if (listeningQueue == null) {
-//				throw new IllegalArgumentException(
-//						"intermediate-result queue is null");
-//			}
-//			if (updateQueue == null) {
-//				throw new IllegalArgumentException("update queue is null");
-//			}
-//		} else if (!isIntermediateExpected && isUpdateExpected) {
-//			if (listeningQueue != null) {
-//				String msg =
-//					"Ignoring intermediate-result queue -- "
-//							+ "final results expected from update queue";
-//				logger.warning(msg);
-//			}
-//			if (updateQueue == null) {
-//				throw new IllegalArgumentException("update queue is null");
-//			}
-//		} else {
-//			String msg =
-//				"unexpected: !isIntermediateExpected && !isUpdateExpected";
-//			throw new Error(msg);
-//		}
+		// final boolean isIntermediateExpected =
+		// transPhase.isIntermediateExpected;
+		// final boolean isUpdateExpected = transPhase.isUpdateExpected;
+		// if (isIntermediateExpected && !isUpdateExpected) {
+		// if (listeningQueue == null) {
+		// throw new IllegalArgumentException(
+		// "intermediate-result queue is null");
+		// }
+		// if (updateQueue != null) {
+		// String msg =
+		// "Ignoring update queue -- results expected only "
+		// + "from intermediate-result queue";
+		// logger.warning(msg);
+		// }
+		// } else if (isIntermediateExpected && isUpdateExpected) {
+		// if (listeningQueue == null) {
+		// throw new IllegalArgumentException(
+		// "intermediate-result queue is null");
+		// }
+		// if (updateQueue == null) {
+		// throw new IllegalArgumentException("update queue is null");
+		// }
+		// } else if (!isIntermediateExpected && isUpdateExpected) {
+		// if (listeningQueue != null) {
+		// String msg =
+		// "Ignoring intermediate-result queue -- "
+		// + "final results expected from update queue";
+		// logger.warning(msg);
+		// }
+		// if (updateQueue == null) {
+		// throw new IllegalArgumentException("update queue is null");
+		// }
+		// } else {
+		// String msg =
+		// "unexpected: !isIntermediateExpected && !isUpdateExpected";
+		// throw new Error(msg);
+		// }
 	}
 
-//	protected static OabaJob doOabaProcessing(final String LOG_SOURCE,
-//			final String tag, final String externalId, final OabaParameters bp,
-//			final OabaSettings oabaSettings,
-//			final ServerConfiguration serverConfiguration,
-//			final OabaService batchQuery,
-//			final OabaJobController jobController,
-//			final OabaProcessingController processingController,
-//			final JMSContext jmsContext, final Topic statusTopic) {
-//		logger.entering(LOG_SOURCE, tag);
-//
-//		// Preconditions
-//		if (externalId == null || bp == null || LOG_SOURCE == null
-//				|| tag == null || oabaSettings == null
-//				|| serverConfiguration == null || batchQuery == null
-//				|| jobController == null || processingController == null
-//				|| jmsContext == null || statusTopic == null) {
-//			throw new IllegalArgumentException("null argument");
-//		}
-//
-//		long jobId = NONPERSISTENT_ID;
-//		try {
-//			final OabaLinkageType linkage = bp.getOabaLinkageType();
-//			switch (linkage) {
-//			case STAGING_DEDUPLICATION:
-//				logger.info(tag
-//						+ ": invoking BatchQueryService.startDeduplication");
-//				jobId =
-//					batchQuery.startDeduplication(externalId, bp, oabaSettings,
-//							serverConfiguration);
-//				logger.info(tag
-//						+ ": returned from BatchQueryService.startDeduplication");
-//				break;
-//			case STAGING_TO_MASTER_LINKAGE:
-//			case MASTER_TO_MASTER_LINKAGE:
-//				logger.info(tag + ": invoking BatchQueryService.startLinkage");
-//				jobId =
-//					batchQuery.startLinkage(externalId, bp, oabaSettings,
-//							serverConfiguration);
-//				logger.info(tag
-//						+ ": returned from BatchQueryService.startLinkage");
-//				break;
-//			default:
-//				fail("Unexpected linkage type: " + linkage);
-//			}
-//		} catch (ServerConfigurationException e) {
-//			fail(e.toString());
-//		}
-//		OabaJob batchJob = jobController.findOabaJob(jobId);
-//
-//		// Check that transitivity analysis sent out an expected status
-//		// on the update queue
-//		logger.info("Checking updateQueue");
-//		OabaNotification updateMessage = null;
-//		// FIXME
-//		// updateMessage =
-//		// JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
-//		// statusTopic, VERY_LONG_TIMEOUT_MILLIS);
-//		assertTrue(updateMessage != null);
-//		assertTrue(updateMessage.getJobId() == jobId);
-//		assertTrue(updateMessage.getJobPercentComplete() == PCT_DONE_OABA);
-//
-//		// FIXME STUBBED
-////		// Find the entry in the processing history updated by the OABA
-////		OabaEventLog processingEntry =
-////			processingController.getProcessingLog(batchJob);
-////		assertTrue(processingEntry != null);
-////		assertTrue(processingEntry.getCurrentOabaEventId() == EVT_DONE_OABA);
-//
-//		return batchJob;
-//	}
+	// protected static OabaJob doOabaProcessing(final String LOG_SOURCE,
+	// final String tag, final String externalId, final OabaParameters bp,
+	// final OabaSettings oabaSettings,
+	// final ServerConfiguration serverConfiguration,
+	// final OabaService batchQuery,
+	// final OabaJobController jobController,
+	// final OabaProcessingController processingController,
+	// final JMSContext jmsContext, final Topic statusTopic) {
+	// logger.entering(LOG_SOURCE, tag);
+	//
+	// // Preconditions
+	// if (externalId == null || bp == null || LOG_SOURCE == null
+	// || tag == null || oabaSettings == null
+	// || serverConfiguration == null || batchQuery == null
+	// || jobController == null || processingController == null
+	// || jmsContext == null || statusTopic == null) {
+	// throw new IllegalArgumentException("null argument");
+	// }
+	//
+	// long jobId = NONPERSISTENT_ID;
+	// try {
+	// final OabaLinkageType linkage = bp.getOabaLinkageType();
+	// switch (linkage) {
+	// case STAGING_DEDUPLICATION:
+	// logger.info(tag
+	// + ": invoking BatchQueryService.startDeduplication");
+	// jobId =
+	// batchQuery.startDeduplication(externalId, bp, oabaSettings,
+	// serverConfiguration);
+	// logger.info(tag
+	// + ": returned from BatchQueryService.startDeduplication");
+	// break;
+	// case STAGING_TO_MASTER_LINKAGE:
+	// case MASTER_TO_MASTER_LINKAGE:
+	// logger.info(tag + ": invoking BatchQueryService.startLinkage");
+	// jobId =
+	// batchQuery.startLinkage(externalId, bp, oabaSettings,
+	// serverConfiguration);
+	// logger.info(tag
+	// + ": returned from BatchQueryService.startLinkage");
+	// break;
+	// default:
+	// fail("Unexpected linkage type: " + linkage);
+	// }
+	// } catch (ServerConfigurationException e) {
+	// fail(e.toString());
+	// }
+	// OabaJob batchJob = jobController.findOabaJob(jobId);
+	//
+	// // Check that transitivity analysis sent out an expected status
+	// // on the update queue
+	// logger.info("Checking updateQueue");
+	// OabaNotification updateMessage = null;
+	// // FIXME
+	// // updateMessage =
+	// // JmsUtils.receiveFinalUpdateMessage(LOG_SOURCE, jmsContext,
+	// // statusTopic, VERY_LONG_TIMEOUT_MILLIS);
+	// assertTrue(updateMessage != null);
+	// assertTrue(updateMessage.getJobId() == jobId);
+	// assertTrue(updateMessage.getJobPercentComplete() == PCT_DONE_OABA);
+	//
+	// // FIXME STUBBED
+	// // // Find the entry in the processing history updated by the OABA
+	// // OabaEventLog processingEntry =
+	// // processingController.getProcessingLog(batchJob);
+	// // assertTrue(processingEntry != null);
+	// // assertTrue(processingEntry.getCurrentOabaEventId() == EVT_DONE_OABA);
+	//
+	// return batchJob;
+	// }
 
 	private TransitivityMdbTestProcedures() {
 	}
