@@ -33,6 +33,8 @@ public interface OabaService {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/OabaService";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
+	
+	long INVALID_JOB_ID = Long.MIN_VALUE;
 
 	/**
 	 * This method starts the Offline Automated Blocking Algorithm to compare a
