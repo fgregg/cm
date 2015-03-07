@@ -51,7 +51,7 @@ public interface OabaTestParameters {
 
 	Queue getMatchSchedulerQueue();
 
-	JMSConsumer getStatusConsumer();
+	JMSConsumer getOabaStatusConsumer();
 
 	Topic getOabaStatusTopic();
 

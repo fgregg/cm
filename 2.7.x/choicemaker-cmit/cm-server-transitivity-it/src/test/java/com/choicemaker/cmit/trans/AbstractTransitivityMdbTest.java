@@ -417,7 +417,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	@Override
-	public final JMSConsumer getStatusConsumer() {
+	public final JMSConsumer getOabaStatusConsumer() {
 		return oabaStatusConsumer;
 	}
 

@@ -119,7 +119,7 @@ public class OabaMdbTestProcedures {
 
 		final TestEntityCounts te = test.getTestEntityCounts();
 		final Queue listeningQueue = test.getResultQueue();
-		final JMSConsumer statusListener = test.getStatusConsumer();
+		final JMSConsumer statusListener = test.getOabaStatusConsumer();
 
 		// Compute the OABA processing context
 		final OabaProcessingPhase oabaPhase = test.getProcessingPhase();

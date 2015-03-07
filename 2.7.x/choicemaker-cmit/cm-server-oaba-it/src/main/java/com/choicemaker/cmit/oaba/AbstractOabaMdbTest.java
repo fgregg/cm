@@ -211,7 +211,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 		getLogger().info("Closing the OABA status listener");
 		try {
-			JMSConsumer listener = this.getStatusConsumer();
+			JMSConsumer listener = this.getOabaStatusConsumer();
 			listener.close();
 		} catch (Exception x) {
 			getLogger().warning(x.toString());
@@ -270,7 +270,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 				getTransitivityQueue());
 
 		JmsUtils.clearOabaNotifications(getSourceName(),
-				getStatusConsumer());
+				getOabaStatusConsumer());
 	}
 
 	@Test
@@ -370,7 +370,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	}
 
 	@Override
-	public final JMSConsumer getStatusConsumer() {
+	public final JMSConsumer getOabaStatusConsumer() {
 		return oabaStatusConsumer;
 	}
 
