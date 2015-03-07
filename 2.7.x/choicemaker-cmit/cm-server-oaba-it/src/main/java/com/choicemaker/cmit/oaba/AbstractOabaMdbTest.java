@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
@@ -80,37 +79,37 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	// -- Read-only, injected instance data
 
-	@EJB
+	@Inject
 	private EjbPlatform e2service;
 
 	@Resource
 	private UserTransaction utx;
 
-	@EJB
+	@Inject
 	private OabaService oabaService;
 
-	@EJB
+	@Inject
 	private OabaJobController oabaJobController;
 
-	@EJB
+	@Inject
 	private OabaParametersController oabaParamsController;
 
-	@EJB
+	@Inject
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
+	@Inject
 	private ServerConfigurationController serverController;
 
-	@EJB
+	@Inject
 	private OabaProcessingController processingController;
 
-	@EJB
+	@Inject
 	private OperationalPropertyController opPropController;
 
-	@EJB
+	@Inject
 	private RecordIdController ridController;
 
-	@EJB
+	@Inject
 	private RecordSourceController rsController;
 
 	@PersistenceContext(unitName = "oaba")

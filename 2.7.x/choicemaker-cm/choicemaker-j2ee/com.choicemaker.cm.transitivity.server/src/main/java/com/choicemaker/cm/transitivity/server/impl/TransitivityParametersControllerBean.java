@@ -11,7 +11,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersControllerBean;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
@@ -20,12 +19,11 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersControll
  * An EJB used to test TransitivityParameter beans within container-defined
  * transactions; see {@link TransitivityJobControllerBean} as an example of a
  * similar controller.
- * 
+ *
  * @author rphall
  */
 @Stateless
-public class TransitivityParametersControllerBean extends
-		OabaParametersControllerBean implements
+public class TransitivityParametersControllerBean implements
 		TransitivityParametersController {
 
 	private static final Logger logger = Logger

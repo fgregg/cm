@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
 
+import org.jboss.arquillian.junit.InSequence;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -209,9 +210,6 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		final String METHOD = "setUp";
 		getLogger().entering(getSourceName(), METHOD);
 
-		checkPrequisites();
-		clearDestinations();
-
 		getLogger().info("Creating an OABA status listener");
 		this.oabaStatusConsumer =
 			getJmsContext().createConsumer(getOabaStatusTopic());
@@ -237,9 +235,16 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		getLogger().entering(getSourceName(), METHOD);
 
 		getLogger().info("Closing the Transitivity status listener");
-		this.getTransitivityStatusConsumer().close();
+		try {
+			JMSConsumer listener = this.getTransitivityStatusConsumer();
+			listener.close();
+		} catch (Exception x) {
+			getLogger().warning(x.toString());
+		}
 	}
 
+	@Test
+	@InSequence(1)
 	public final void checkPrequisites() {
 		assertTrue(getTransitivityService() != null);
 		assertTrue(getBlockQueue() != null);
@@ -267,6 +272,8 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		assertTrue(getSettingsController() != null);
 	}
 
+	@Test
+	@InSequence(2)
 	public final void clearDestinations() {
 
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
@@ -292,6 +299,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	@Test
+	@InSequence(3)
 	public final void testLinkageTransitivity()
 			throws ServerConfigurationException {
 		OabaLinkageType task = OabaLinkageType.STAGING_TO_MASTER_LINKAGE;
@@ -299,6 +307,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	@Test
+	@InSequence(4)
 	public final void testDeduplicationTransitivity()
 			throws ServerConfigurationException {
 		OabaLinkageType task = OabaLinkageType.STAGING_DEDUPLICATION;
