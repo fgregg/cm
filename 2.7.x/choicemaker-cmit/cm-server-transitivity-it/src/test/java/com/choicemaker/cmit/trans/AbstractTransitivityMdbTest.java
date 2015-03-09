@@ -218,14 +218,14 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		this.transStatusConsumer =
 			getJmsContext().createConsumer(getTransitivityStatusTopic());
 
-		te = null;
-		new TestEntityCounts(getLogger(), getOabaJobController(),
+		this.te = new TestEntityCounts(getLogger(), getOabaJobController(),
 				getOabaParamsController(), getTransJobController(),
 				getTransParamsController(), getSettingsController(),
 				getServerController(), getProcessingController(),
 				getOpPropController(), getRecordSourceController(),
 				getRecordIdController());
 		setTestEntityCounts(te);
+
 		getLogger().exiting(getSourceName(), METHOD);
 	}
 
