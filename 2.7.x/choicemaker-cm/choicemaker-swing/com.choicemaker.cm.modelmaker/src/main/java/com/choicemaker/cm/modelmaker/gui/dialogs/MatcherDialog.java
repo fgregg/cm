@@ -68,6 +68,7 @@ import com.choicemaker.cm.modelmaker.gui.panels.FilterCluePanel;
 import com.choicemaker.cm.modelmaker.gui.panels.RecordPairViewerPanel;
 import com.choicemaker.cm.modelmaker.gui.utils.Enable;
 import com.choicemaker.cm.modelmaker.gui.utils.EnablednessGuard;
+import com.choicemaker.cm.module.IUserMessages;
 import com.choicemaker.e2.platform.CMPlatformUtils;
 
 /**
@@ -81,7 +82,8 @@ public class MatcherDialog extends JDialog implements Enable {
 	private static Logger logger = Logger.getLogger(MatcherDialog.class.getName());
 	private static int MRPS_OUTPUT = 0;
 
-	private ModelMaker modelMaker;
+	private final ModelMaker modelMaker;
+	private final IUserMessages userMessages;
 	private JTabbedPane tabbedPane;
 	private JButton matchButton;
 	private JButton cancelButton;
@@ -249,6 +251,8 @@ public class MatcherDialog extends JDialog implements Enable {
 				"train.gui.modelmaker.dialog.matcher.label"),
 			true);
 		this.modelMaker = modelMaker;
+		this.userMessages = this.modelMaker.getUserMessages();
+		assert userMessages != null;
 		buildContent();
 		addContentListners();
 		pack();
@@ -353,9 +357,10 @@ public class MatcherDialog extends JDialog implements Enable {
 								try {
 									matcher.match();
 								} catch (IOException e) {
-									logger.severe(
-										new LoggingObject("CM-100401").toString() + ": " +
-										e);
+									LoggingObject lo = new LoggingObject("CM-100401");
+									String msg = lo.getFormattedMessage() + ": " + e;
+									userMessages.postMessage(msg);
+									logger.severe(msg);
 								}
 							}
 						};
@@ -365,7 +370,10 @@ public class MatcherDialog extends JDialog implements Enable {
 						matcherProgressDialog.setVisible(true);
 					}
 				} catch (XmlConfException ex) {
-					logger.severe(new LoggingObject("CM-100401").toString() + ": " + ex);
+					LoggingObject lo = new LoggingObject("CM-100401");
+					String msg = lo.getFormattedMessage() + ": " + ex;
+					userMessages.postMessage(msg);
+					logger.severe(msg);
 				}
 				dispose();
 			}
@@ -419,9 +427,10 @@ public class MatcherDialog extends JDialog implements Enable {
 						MarkedRecordPairSourceXmlConf.add(
 							(MarkedRecordPairSource) s);
 					} catch (XmlConfException e) {
-						logger.severe(
-							new LoggingObject("CM-100402", s.getFileName()).toString() + ": " +
-							e);
+						LoggingObject lo = new LoggingObject("CM-100402");
+						String msg = lo.getFormattedMessage() + ": " + e;
+						userMessages.postMessage(msg);
+						logger.severe(msg);
 					}
 					sink.setText(((MarkedRecordPairSource) s).getFileName());
 				}
@@ -440,9 +449,10 @@ public class MatcherDialog extends JDialog implements Enable {
 					try {
 						RecordSourceXmlConf.add((RecordSource) s);
 					} catch (XmlConfException e) {
-						logger.severe(
-							new LoggingObject("CM-100403", s.getFileName()).toString() + ": " +
-							e);
+						LoggingObject lo = new LoggingObject("CM-100403");
+						String msg = lo.getFormattedMessage() + ": " + e;
+						userMessages.postMessage(msg);
+						logger.severe(msg);
 					}
 					String path = ((RecordSource) s).getFileName();
 					if (evt.getSource() == smallNew) {
@@ -484,12 +494,15 @@ public class MatcherDialog extends JDialog implements Enable {
 						MatcherDialog.this.modelMaker,
 						RecordSourceXmlConf.getRecordSource(small.getText()),
 						modelMaker.getProbabilityModel(),
-						compositePaneModel)
+						compositePaneModel,
+						MatcherDialog.this.userMessages)
 						.setVisible(true);
 				} catch (XmlConfException ex) {
-					logger.severe(
-						new LoggingObject("CM-100601", small.getText()).toString() + ": " +
-						ex);
+					final String rsName = small.getText().toString();
+					LoggingObject lo = new LoggingObject("CM-100601", rsName);
+					String msg = lo.getFormattedMessage() + ": " + ex;
+					userMessages.postMessage(msg);
+					logger.severe(msg);
 				}
 			}
 		});
@@ -515,12 +528,15 @@ public class MatcherDialog extends JDialog implements Enable {
 						MatcherDialog.this.modelMaker,
 						RecordSourceXmlConf.getRecordSource(large.getText()),
 						modelMaker.getProbabilityModel(),
-						compositePaneModel)
+						compositePaneModel,
+						MatcherDialog.this.userMessages)
 						.setVisible(true);
 				} catch (XmlConfException ex) {
-					logger.severe(
-						new LoggingObject("CM-100601", large.getText()).toString() + ": " +
-						ex);
+					final String rsName = large.getText().toString();
+					LoggingObject lo = new LoggingObject("CM-100601", rsName);
+					String msg = lo.getFormattedMessage() + ": " + ex;
+					userMessages.postMessage(msg);
+					logger.severe(msg);
 				}
 			}
 		});

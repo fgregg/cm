@@ -32,6 +32,7 @@ import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.viewer.CompositePane;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
+import com.choicemaker.cm.module.IUserMessages;
 
 /**
  * Description
@@ -44,6 +45,7 @@ public class RecordSourceViewerDialog extends JDialog {
 
 	private static Logger logger = Logger.getLogger(RecordSourceViewerDialog.class.getName());
 	
+	private final IUserMessages userMessages;
 	private RecordSource recordSource;
 	private JPanel content;
 	private JButton closeButton;
@@ -53,9 +55,17 @@ public class RecordSourceViewerDialog extends JDialog {
 	private ImmutableProbabilityModel probabilityModel;
 	private CompositePaneModel compositePaneModel;
 
-	public RecordSourceViewerDialog(Frame parent, RecordSource recordSource, ImmutableProbabilityModel probabilityModel, CompositePaneModel compositePaneModel) {
+	public RecordSourceViewerDialog(Frame parent, RecordSource recordSource,
+			ImmutableProbabilityModel probabilityModel,
+			CompositePaneModel compositePaneModel,
+			IUserMessages userMessages) {
 		super(parent, "Record source preview");
+		if (recordSource == null || probabilityModel == null
+				|| compositePaneModel == null || userMessages == null) {
+			throw new IllegalArgumentException("null argument");
+		}
 		setModal(true);
+		this.userMessages = userMessages;
 		this.recordSource = recordSource;
 		this.probabilityModel = probabilityModel;
 		this.compositePaneModel = compositePaneModel;
@@ -108,7 +118,10 @@ public class RecordSourceViewerDialog extends JDialog {
 				nextButton.setEnabled(recordSource.hasNext());
 			}
 		} catch (IOException ex) {
-			logger.severe(new LoggingObject("CM-100601", recordSource.getName()).toString() + ": " + ex);
+			LoggingObject lo = new LoggingObject("CM-100601", recordSource.getName());
+			String msg = lo.getFormattedMessage() + ": " + ex;
+			userMessages.postMessage(msg);
+			logger.severe(msg);
 		}
 	}
 
