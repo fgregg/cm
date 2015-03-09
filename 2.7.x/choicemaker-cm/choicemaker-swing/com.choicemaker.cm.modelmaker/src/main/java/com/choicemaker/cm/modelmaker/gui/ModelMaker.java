@@ -194,7 +194,7 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				return ModelMaker.this.getMessagePanel().getPrintStream();
 			}
 			public void postMessage(final String s) {
-				ModelMaker.this.getMessagePanel().getPrintStream();
+				ModelMaker.this.getMessagePanel().getPrintStream().println(s);
 			}
 			public void clearMessages() {
 				ModelMaker.this.getMessagePanel().clearMessages();
