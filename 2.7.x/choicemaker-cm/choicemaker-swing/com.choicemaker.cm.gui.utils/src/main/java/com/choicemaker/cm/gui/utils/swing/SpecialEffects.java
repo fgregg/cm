@@ -50,11 +50,12 @@ public class SpecialEffects {
 	}
 
 	/**
-	 * Doesn't work at all? No effect on<ul>
-	 * <li>Mac OS X 10.9.5, Java 1.7</li>
+	 * Doesn't work at all?<ul>
+	 * <li> No effect on Mac OS X 10.9.5, Java 1.7</li>
+	 * <li> Intermittent effect on Windows 8, Java 1.7</li>
 	 * </ul>
 	 */
-	public static void flashJComponent(final JComponent field,
+	public static void flashJComponent(final JComponent c,
 			final Color flashColor, final int timerDelay, final int totalTime) {
 
 		final String METHOD = "flashJComponent";
@@ -72,10 +73,11 @@ public class SpecialEffects {
 				public void actionPerformed(ActionEvent evt) {
 					final String METHOD2 = "actionPerformed";
 					logger.entering(LOG_SOURCE, METHOD2, Integer.valueOf(count));
+					c.requestFocusInWindow();
 					if (count % 2 == 0) {
-						field.setBackground(flashColor);
+						c.setBackground(flashColor);
 					} else {
-						field.setBackground(null);
+						c.setBackground(null);
 						if (count >= totalCount) {
 							((Timer) evt.getSource()).stop();
 						}

@@ -292,7 +292,7 @@ public class SqlServerIdSearchDialog extends JDialog {
 		
 		model.properties().put(SqlServerXmlUtils.PN_DB_CONFIGURATION, dbConfiguration);
 		model.properties().put(SqlServerXmlUtils.PN_BLOCKING_CONFIGURATION, blockingConfiguration);
-		model.properties().put(SqlServerXmlUtils.PN_BLOCKING_CONFIGURATION, String.valueOf(lpbs));
+		model.properties().put(SqlServerXmlUtils.PN_LIMITPERBLOCKINGSET, String.valueOf(lpbs));
 		model.properties().put(SqlServerXmlUtils.PN_SINGLETABLEBLOCKINGSETGRACELIMIT, String.valueOf(stbsgl));
 		model.properties().put(SqlServerXmlUtils.PN_LIMITSINGLEBLOCKINGSET, String.valueOf(lsbs));
 		model.properties().put(SqlDbObjectMaker.getMultiKey(model, dbConfiguration),

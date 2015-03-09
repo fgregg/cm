@@ -362,7 +362,7 @@ public class ProbabilityModelsXmlConf {
 					String key = p.getAttributeValue("name").intern();
 					String value = p.getAttributeValue("value").intern();
 					m.properties().put(key,value);
-					if (key.equals(ProbabilityModelConfiguration.PN_BLOCKING_CONFIGURATION)) {
+					if (key.equals(ProbabilityModelConfiguration.PN_DB_CONFIGURATION)) {
 						m.setDatabaseConfigurationName(value);
 					} else if (key.equals(ProbabilityModelConfiguration.PN_BLOCKING_CONFIGURATION)) {
 						m.setBlockingConfigurationName(value);
