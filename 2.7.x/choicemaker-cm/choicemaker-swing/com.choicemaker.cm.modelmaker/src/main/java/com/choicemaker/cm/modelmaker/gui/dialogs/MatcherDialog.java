@@ -56,6 +56,7 @@ import com.choicemaker.cm.core.xmlconf.RecordSourceXmlConf;
 import com.choicemaker.cm.gui.utils.ExtensionHolder;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
 import com.choicemaker.cm.gui.utils.dialogs.FileChooserFactory;
+import com.choicemaker.cm.gui.utils.swing.SpecialEffects;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.gui.utils.viewer.xmlconf.RecordPairViewerXmlConf;
 import com.choicemaker.cm.modelmaker.filter.ListeningMarkedRecordPairFilter;
@@ -490,13 +491,19 @@ public class MatcherDialog extends JDialog implements Enable {
 									.getAccessor()
 									.getDescriptor()));
 					compositePaneModel.setEnableEditing(true);
-					new RecordSourceViewerDialog(
-						MatcherDialog.this.modelMaker,
-						RecordSourceXmlConf.getRecordSource(small.getText()),
-						modelMaker.getProbabilityModel(),
-						compositePaneModel,
-						MatcherDialog.this.userMessages)
-						.setVisible(true);
+					try {
+						new RecordSourceViewerDialog(
+							MatcherDialog.this.modelMaker,
+							RecordSourceXmlConf.getRecordSource(small.getText()),
+							modelMaker.getProbabilityModel(),
+							compositePaneModel,
+							MatcherDialog.this.userMessages)
+							.setVisible(true);
+					} catch (IOException e1) {
+						// Already logged and displayed
+						// Just flash a button to indicate a problem
+						SpecialEffects.flashJComponent(smallPreview);
+					}
 				} catch (XmlConfException ex) {
 					final String rsName = small.getText().toString();
 					LoggingObject lo = new LoggingObject("CM-100601", rsName);
@@ -524,13 +531,19 @@ public class MatcherDialog extends JDialog implements Enable {
 									.getAccessor()
 									.getDescriptor()));
 					compositePaneModel.setEnableEditing(true);
-					new RecordSourceViewerDialog(
-						MatcherDialog.this.modelMaker,
-						RecordSourceXmlConf.getRecordSource(large.getText()),
-						modelMaker.getProbabilityModel(),
-						compositePaneModel,
-						MatcherDialog.this.userMessages)
-						.setVisible(true);
+					try {
+						new RecordSourceViewerDialog(
+							MatcherDialog.this.modelMaker,
+							RecordSourceXmlConf.getRecordSource(large.getText()),
+							modelMaker.getProbabilityModel(),
+							compositePaneModel,
+							MatcherDialog.this.userMessages)
+							.setVisible(true);
+					} catch (IOException e1) {
+						// Already logged and displayed
+						// Just flash a button to indicate a problem
+						SpecialEffects.flashJComponent(largePreview);
+					}
 				} catch (XmlConfException ex) {
 					final String rsName = large.getText().toString();
 					LoggingObject lo = new LoggingObject("CM-100601", rsName);

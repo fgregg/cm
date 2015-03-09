@@ -30,6 +30,7 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.RecordRecordData;
 import com.choicemaker.cm.core.util.LoggingObject;
 import com.choicemaker.cm.gui.utils.JavaHelpUtils;
+import com.choicemaker.cm.gui.utils.swing.SpecialEffects;
 import com.choicemaker.cm.gui.utils.viewer.CompositePane;
 import com.choicemaker.cm.gui.utils.viewer.CompositePaneModel;
 import com.choicemaker.cm.module.IUserMessages;
@@ -58,7 +59,7 @@ public class RecordSourceViewerDialog extends JDialog {
 	public RecordSourceViewerDialog(Frame parent, RecordSource recordSource,
 			ImmutableProbabilityModel probabilityModel,
 			CompositePaneModel compositePaneModel,
-			IUserMessages userMessages) {
+			IUserMessages userMessages) throws IOException {
 		super(parent, "Record source preview");
 		if (recordSource == null || probabilityModel == null
 				|| compositePaneModel == null || userMessages == null) {
@@ -87,7 +88,13 @@ public class RecordSourceViewerDialog extends JDialog {
 	private void addContentListeners() {
 		nextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showNext();
+				try {
+					showNext();
+				} catch (IOException e1) {
+					// Already logged and displayed
+					// Just flash a button to indicate a problem
+					SpecialEffects.flashJComponent(nextButton);
+				}
 			}
 		});
 
@@ -106,7 +113,7 @@ public class RecordSourceViewerDialog extends JDialog {
 		}
 	}
 
-	private void showNext() {
+	private void showNext() throws IOException {
 		try {
 			if (!open) {
 				recordSource.setModel(probabilityModel);
@@ -118,10 +125,13 @@ public class RecordSourceViewerDialog extends JDialog {
 				nextButton.setEnabled(recordSource.hasNext());
 			}
 		} catch (IOException ex) {
+			// Log and display the error, then let the calling routine decide
+			// how to process the error
 			LoggingObject lo = new LoggingObject("CM-100601", recordSource.getName());
 			String msg = lo.getFormattedMessage() + ": " + ex;
 			userMessages.postMessage(msg);
 			logger.severe(msg);
+			throw ex;
 		}
 	}
 

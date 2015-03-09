@@ -106,7 +106,11 @@ public class SqlServerRecordSource implements RecordSource {
 			dbr.open(rs, stmt);
 		} catch (SQLException ex) {
 			logger.severe(ex.toString());
-			
+			try {
+				close();
+			} catch (IOException x) {
+				logger.severe(x.toString());
+			}
 			throw new IOException(ex.toString());
 		}
 	}
@@ -121,18 +125,23 @@ public class SqlServerRecordSource implements RecordSource {
 
 	public void close() throws IOException {
 		try {
-			stmt.close();
-			stmt = null;
-			
-			if (ds != null) {
+			if (stmt != null) {
+				stmt.close();
+				stmt = null;
+			}
+		} catch (SQLException ex) {
+			throw new IOException(
+					"Problem closing a SQL statement.", ex);
+		}
+		try {
+			if (connection != null) {
 				connection.close();
 				connection = null;
 			}
 		} catch (SQLException ex) {
 			throw new IOException(
-					"Problem closing the statement or connection.", ex);
+					"Problem closing a SQL connection.", ex);
 		} finally {
-			// free the memory from dbr
 			dbr = null;
 		}
 	}

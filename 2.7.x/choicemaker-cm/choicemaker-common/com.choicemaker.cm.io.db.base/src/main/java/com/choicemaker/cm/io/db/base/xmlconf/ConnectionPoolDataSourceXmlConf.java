@@ -20,10 +20,24 @@ import com.choicemaker.cm.io.db.base.DataSources;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
- * XML configurator for the connection cache.
+ * XML configuration for the connection cache. Uses C3P0 to implement the cache.
+ * 
+ * @see http://www.mchange.com/projects/c3p0/
  */
 public class ConnectionPoolDataSourceXmlConf {
-	private static Logger logger = Logger.getLogger(ConnectionPoolDataSourceXmlConf.class.getName());
+
+	/** Default limit to retry attempts */
+	public static final int DEFAULT_ACQUIRE_RETRY_ATTEMPTS = 10;
+
+	/** Default delay before retrying a connection (msec) */
+	public static final int DEFAULT_AQUIRE_RETRY_DELAY = 1500;
+
+	/** Default overall limit to connection checkout (msec) */
+	public static final int DEFAULT_CHECKOUT_TIME =
+		DEFAULT_ACQUIRE_RETRY_ATTEMPTS * DEFAULT_AQUIRE_RETRY_DELAY;
+
+	private static Logger logger = Logger
+			.getLogger(ConnectionPoolDataSourceXmlConf.class.getName());
 
 	private static boolean alreadyInited = false;
 
@@ -66,19 +80,9 @@ public class ConnectionPoolDataSourceXmlConf {
 						new Integer(cp.getChildText("growBlock"));
 					cpds.setAcquireIncrement(poolGrowBack.intValue());
 
-					// Currently unused by C3P0
-					// final ClassLoader jdbcDriverClassLoader =
-					// XmlConfigurator.getReloadClassLoader();
-					// final String jdbcValidityCheckStatement =
-					// cp.getChildText("validityCheckStatement");
-					// Integer poolRefreshInterval = null;
-					// Element e = cp.getChild("refreshThreadCheckInterval");
-					// if (e != null) {
-					// poolRefreshInterval = new Integer(e.getText());
-					// }
-					// final Integer poolCreateWaitTime = new
-					// Integer(cp.getChildText("createWaitTime"));
-					// final String syslogClassLoaderWarning = "off";
+					cpds.setAcquireRetryAttempts(DEFAULT_ACQUIRE_RETRY_ATTEMPTS);
+					cpds.setAcquireRetryDelay(DEFAULT_AQUIRE_RETRY_DELAY);
+					cpds.setCheckoutTimeout(DEFAULT_CHECKOUT_TIME);
 
 					final String name = cp.getAttributeValue("name");
 					DataSources.addDataSource(name, cpds);
