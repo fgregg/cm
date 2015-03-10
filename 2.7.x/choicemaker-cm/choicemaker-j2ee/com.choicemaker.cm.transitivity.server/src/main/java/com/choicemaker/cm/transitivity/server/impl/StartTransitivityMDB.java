@@ -12,6 +12,7 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.transitivity.core.TransitivityEvent.DONE_TRANS_DEDUP_OVERSIZED;
 
 import java.io.Serializable;
 import java.util.logging.Logger;
@@ -27,8 +28,8 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
@@ -50,7 +51,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceC
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
-import com.choicemaker.cm.transitivity.core.TransitivityProcessing.TransitivityEvent;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 
@@ -215,7 +215,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		OabaEventLog status = processingController.getProcessingLog(null);
 		// status.setCurrentProcessingEvent(TransitivityEvent.EVT_DONE_TRANS_DEDUP_OVERSIZED);
 		// HACK
-		assert TransitivityEvent.DONE_TRANS_DEDUP_OVERSIZED.eventId == OabaEvent.DONE_DEDUP_OVERSIZED.eventId;
+		assert DONE_TRANS_DEDUP_OVERSIZED.eventId == OabaEvent.DONE_DEDUP_OVERSIZED.eventId;
 		status.setCurrentOabaEvent(OabaEvent.DONE_DEDUP_OVERSIZED);
 		// END HACK
 
@@ -284,7 +284,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 			throws NamingException, JMSException {
 		throw new Error("not yet re-implemented");
 		// Queue queue = configuration.getUpdateTransMessageQueue();
-		// OabaNotification data = new OabaNotification(jobID, percentComplete);
+		// TransitivityNotification data = new TransitivityNotification(jobID, percentComplete);
 		// log.info ("send to updateTransQueue " + jobID + " " +
 		// percentComplete);
 		// configuration.sendMessage(queue, data);

@@ -72,21 +72,56 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 		final OabaParameters tpOaba = tp.asOabaParameters();
 		if (predecessorParams != null) {
 			if (predecessorParams.equals(tpOaba)) {
-				String s = OabaParametersEntity.dump(COMMON_DUMP_TAG, tpOaba);
+				String s = dump(COMMON_DUMP_TAG, tpOaba);
 				pw.println(s);
 			} else {
-				String s =
-					OabaParametersEntity.dump(OABA_ONLY_DUMP_TAG,
-							predecessorParams);
+				String s = dump(OABA_ONLY_DUMP_TAG, predecessorParams);
 				pw.println(s);
-				OabaParametersEntity.dump(TRANS_ONLY_DUMP_TAG, tpOaba);
+				dump(TRANS_ONLY_DUMP_TAG, tpOaba);
 				pw.println(s);
 			}
 		} else {
 			pw.println(TRANS_ONLY_DUMP_TAG + ": null OABA precedessor params");
-			String s = OabaParametersEntity.dump(TRANS_ONLY_DUMP_TAG, tpOaba);
+			String s = dump(TRANS_ONLY_DUMP_TAG, tpOaba);
 			pw.println(s);
 		}
+	}
+
+	public static String dump(String tag, OabaParameters p) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+
+		if (p == null) {
+			OabaParametersEntity.dump(tag, p);
+		} else {
+			final OabaLinkageType task = p.getOabaLinkageType();
+			if (task == OabaLinkageType.STAGING_DEDUPLICATION) {
+				OabaParametersEntity.dump(tag, p);
+			} else if (task == OabaLinkageType.STAGING_TO_MASTER_LINKAGE) {
+				OabaParametersEntity.dump(tag, p);
+			} else if (task == OabaLinkageType.MASTER_TO_MASTER_LINKAGE) {
+				OabaParametersEntity.dump(tag, p);
+			} else if (task == OabaLinkageType.TRANSITIVITY_ANALYSIS) {
+				pw.println("Transitivity parameters (" + tag + ")");
+				pw.println(tag + ": DIFFER threshold: " + p.getLowThreshold());
+				pw.println(tag + ": MATCH threshold: " + p.getHighThreshold());
+				pw.println(tag + ": Model configuration name: "
+						+ p.getModelConfigurationName());
+				pw.print(tag + ": Linkage task: " + task);
+				pw.println(" (deduplicating a single record source)");
+				pw.println(tag + ": Staging record source: " + p.getStageRsId());
+				pw.println(tag + ": Staging record source type: "
+							+ p.getStageRsType());
+				pw.println(tag + ": Master record source: " + p.getMasterRsId());
+				pw.println(tag + ": Master record source type: "
+						+ p.getMasterRsType());
+			} else {
+				throw new IllegalArgumentException("unexpected task type: "
+						+ task);
+			}
+		}
+		String retVal = sw.toString();
+		return retVal;
 	}
 
 	protected TransitivityParametersEntity() {

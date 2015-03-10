@@ -85,8 +85,12 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 			throw new IllegalArgumentException("non-persistent OABA job");
 		}
 		BatchJobStatus oabaStatus = oabaJob.getStatus();
+		String msg0 = "Precedessor OABA (job " + oabaJob.getId() + ") status: "
+				+ oabaStatus;
+		logger.info(msg0);
 		if (BatchJobStatus.COMPLETED != oabaStatus) {
-			String msg = "invalid OABA job status: " + oabaStatus;
+			String msg = "INVALID: " + msg0;
+			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
 
@@ -100,8 +104,7 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 		assert retVal.isPersistent();
 
 		// Create a new processing entry
-		// FIXME null transJob, wrong log type
-		OabaEventLog processing = processingController.getProcessingLog(null);
+		OabaEventLog processing = processingController.getProcessingLog(retVal);
 
 		// Create the working directory
 		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);
