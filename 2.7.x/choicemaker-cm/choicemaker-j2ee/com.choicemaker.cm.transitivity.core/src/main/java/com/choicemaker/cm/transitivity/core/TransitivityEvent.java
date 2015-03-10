@@ -140,7 +140,7 @@ public enum TransitivityEvent {
 				DONE_TRANSANALYSIS);
 	}
 
-	public static TransitivityEvent getOabaEvent(int eventId) {
+	public static TransitivityEvent getTransivityEvent(int eventId) {
 		return map.get(eventId);
 	}
 
