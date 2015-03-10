@@ -15,14 +15,14 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.transitivity.core.TransitivityEventLog;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityProcessingController;
 
 /**
  * A stateless EJB used to manage the persistence of TransitivityJobEntity
@@ -46,7 +46,7 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	private ServerConfigurationController serverManager;
 
 	@EJB
-	private OabaProcessingController processingController;
+	private TransitivityProcessingController processingController;
 
 	protected TransitivityJobEntity getBean(TransitivityJob oabaJob) {
 		TransitivityJobEntity retVal = null;
@@ -104,7 +104,8 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 		assert retVal.isPersistent();
 
 		// Create a new processing entry
-		OabaEventLog processing = processingController.getProcessingLog(retVal);
+		TransitivityEventLog processing =
+			processingController.getProcessingLog(retVal);
 
 		// Create the working directory
 		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);
