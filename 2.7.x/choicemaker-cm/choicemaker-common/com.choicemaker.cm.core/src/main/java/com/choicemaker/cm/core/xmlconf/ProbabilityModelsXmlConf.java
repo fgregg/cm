@@ -61,38 +61,72 @@ public class ProbabilityModelsXmlConf {
 	private static final Logger logger =
 		Logger.getLogger(ProbabilityModelsXmlConf.class.getName());
 
+	static String createAttributeErrorMessage(Element e, String an, String av) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Unable to set attribute named '").append(an);
+		sb.append("' with value '").append(av);
+		sb.append("' on element '").append(e.getName()).append("'");
+		return sb.toString();
+	}
+
+	/**
+	 * 
+	 * @param e The element for which an attribute will be set
+	 * @param an The attribute name
+	 * @param av The attribute value
+	 */
+	static void setAttribute(Element e, String an, String av) {
+		if (e == null || an == null) {
+			// Unexpected
+			String msg = createAttributeErrorMessage(e,an,av);
+			logger.severe(msg + ": null element or attribute name");
+		} else if (av == null) {
+			// Not unexpected
+			String msg = createAttributeErrorMessage(e,an,av);
+			logger.fine(msg);
+		} else {
+			try {
+				e.setAttribute(an, av);
+			} catch (Exception x) {
+				// Unexpected
+				String msg = createAttributeErrorMessage(e,an,av) + ": " + x.toString();
+				logger.severe(msg);
+			}
+		}
+	}
+
 	public static void saveModel(ImmutableProbabilityModel model)
 		throws ModelConfigurationException {
 		Element m = new Element("ProbabilityModel");
-		//m.setAttribute(ModelAttributeNames.AN_CLUE_FILE_NAME, model.getClueFileName());
-		m.setAttribute(ModelAttributeNames.AN_CLUE_FILE_NAME, model.getClueFilePath());
+		//setAttribute(m,ModelAttributeNames.AN_CLUE_FILE_NAME, model.getClueFileName());
+		setAttribute(m,ModelAttributeNames.AN_CLUE_FILE_NAME, model.getClueFilePath());
 		String ts = model.getTrainingSource();
-		m.setAttribute(ModelAttributeNames.AN_TRAINING_SOURCE, ts == null ? "" : ts);
-		m.setAttribute(
+		setAttribute(m,ModelAttributeNames.AN_TRAINING_SOURCE, ts == null ? "" : ts);
+		setAttribute(m,
 			ModelAttributeNames.AN_TRAINED_WITH_HOLDS,
 			String.valueOf(model.isTrainedWithHolds()));
 		Date lt = model.getLastTrainingDate();
-		m.setAttribute(
+		setAttribute(m,
 			ModelAttributeNames.AN_LAST_TRAINING_DATE,
 			lt == null ? "" : String.valueOf(lt.getTime()));
-		m.setAttribute(
+		setAttribute(m,
 			ModelAttributeNames.AN_FIRING_THRESHOLD,
 			String.valueOf(model.getFiringThreshold()));
 		String userName = model.getUserName();
 		if (userName == null)
 			userName = "";
-		m.setAttribute(ModelAttributeNames.AN_USER_NAME, userName);
-		m.setAttribute(
+		setAttribute(m,ModelAttributeNames.AN_USER_NAME, userName);
+		setAttribute(m,
 			ModelAttributeNames.AN_ENABLE_ALL_CLUES_BEFORE_TRAINING,
 			String.valueOf(model.isEnableAllCluesBeforeTraining()));
-		m.setAttribute(
+		setAttribute(m,
 			ModelAttributeNames.AN_ENABLE_ALL_RULES_BEFORE_TRAINING,
 			String.valueOf(model.isEnableAllRulesBeforeTraining()));
 		Accessor acc = model.getAccessor();
 		// AJW 1/8/04: the actual accessor class is a dynamic proxy...
-		m.setAttribute(ModelAttributeNames.AN_ACCESSOR_CLASS, model.getAccessorClassName());
-		m.setAttribute(ModelAttributeNames.AN_USE_ANT, String.valueOf(model.isUseAnt()));
-		m.setAttribute(ModelAttributeNames.AN_ANT_COMMAND, model.getAntCommand());
+		setAttribute(m,ModelAttributeNames.AN_ACCESSOR_CLASS, model.getAccessorClassName());
+		setAttribute(m,ModelAttributeNames.AN_USE_ANT, String.valueOf(model.isUseAnt()));
+		setAttribute(m,ModelAttributeNames.AN_ANT_COMMAND, model.getAntCommand());
 		MlModelConf mlc = model.getMachineLearner().getModelConf();
 		Element mle = new Element("machineLearner");
 		mle.setAttribute("class", mlc.getExtensionPointId());
