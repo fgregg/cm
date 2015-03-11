@@ -16,9 +16,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.MutableServerConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -177,9 +177,9 @@ public class ServerConfigurationControllerBean implements
 	@Override
 	public ServerConfiguration findServerConfigurationByJobId(long jobId) {
 		ServerConfiguration retVal = null;
-		OabaJob oabaJob = jobController.findOabaJob(jobId);
-		if (oabaJob != null) {
-			long serverId = oabaJob.getServerId();
+		BatchJob batchJob = jobController.findOabaJob(jobId);
+		if (batchJob != null) {
+			long serverId = batchJob.getServerId();
 			retVal = findServerConfiguration(serverId);
 		}
 		return retVal;

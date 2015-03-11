@@ -21,12 +21,13 @@ import java.util.StringTokenizer;
  */
 public class StringUtils {
 	/**
-	 * Returns <code>true</code> iff <code>s</code> is not null and <code>s.length() > 0</code>
-	 * and the string itself is not "NULL".
+	 * Returns <code>true</code> iff <code>s</code> is not null and
+	 * <code>s.length() > 0</code> and the string itself is not "NULL".
 	 *
-	 * @param   s  The string to be tested.
-	 * @return  whether <code>s</code> is neither <code>null</code>
-	 *            nor <code>""</code>.
+	 * @param s
+	 *            The string to be tested.
+	 * @return whether <code>s</code> is neither <code>null</code> nor
+	 *         <code>""</code>.
 	 */
 	public static boolean nonEmptyString(String s) {
 		return s != null && s.trim().length() > 0;

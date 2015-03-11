@@ -2,8 +2,9 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 import com.choicemaker.cm.batch.impl.BatchJobJPA;
 
+
 /**
- * Java Persistence API (JPA) for OabaJob beans.<br/>
+ * Java Persistence API (JPA) for BatchJob beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>
@@ -16,7 +17,7 @@ import com.choicemaker.cm.batch.impl.BatchJobJPA;
 public interface OabaJobJPA extends BatchJobJPA {
 
 	/**
-	 * Value of the discriminator column used to mark OabaJob types (and not
+	 * Value of the discriminator column used to mark BatchJob types (and not
 	 * sub-types)
 	 */
 	String DISCRIMINATOR_VALUE = "OABA";

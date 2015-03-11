@@ -20,8 +20,8 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.persistence.EntityManager;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 
 /**
  * This message bean updates the status of the current Transitivity job.
@@ -68,7 +68,7 @@ public class UpdateTransitivityStatusMDB implements MessageDrivenBean,
 
 				// (TransitivityJob) configuration.findBatchJobById(em,
 				// TransitivityJobEntity.class, data.getJobID());
-				final TransitivityJob job =
+				final BatchJob job =
 					em.find(TransitivityJobEntity.class, data.getJobId());
 
 				if (data.getJobPercentComplete() == 0) {

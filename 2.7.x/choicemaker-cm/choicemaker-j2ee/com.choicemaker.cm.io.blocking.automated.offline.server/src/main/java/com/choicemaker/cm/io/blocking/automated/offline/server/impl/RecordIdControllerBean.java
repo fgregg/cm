@@ -34,7 +34,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTran
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdTranslation;
@@ -50,7 +49,7 @@ public class RecordIdControllerBean implements RecordIdController {
 	public static final String BASENAME_RECORDID_STORE = "recordID";
 
 	/**
-	 * The index in the {@link #createRecordIdTypeQuery(OabaJob)
+	 * The index in the {@link #createRecordIdTypeQuery(BatchJob)
 	 * RecordIdTypeQuery} of the RECORD_ID_TYPE field
 	 */
 	protected static final int QUERY_INDEX_RECORD_ID_TYPE = 1;
@@ -304,7 +303,7 @@ public class RecordIdControllerBean implements RecordIdController {
 			em.getTransaction().rollback();
 			String msg =
 				this.getClass().getSimpleName()
-						+ ".getTranslatorType(OabaJob): "
+						+ ".getTranslatorType(BatchJob): "
 						+ "unable to get record-id type: " + e;
 			throw new BlockingException(msg, e);
 		} finally {
@@ -315,7 +314,7 @@ public class RecordIdControllerBean implements RecordIdController {
 				} catch (SQLException e) {
 					String msg =
 						this.getClass().getSimpleName()
-								+ ".getTranslatorType(OabaJob): "
+								+ ".getTranslatorType(BatchJob): "
 								+ "unable to close JDBC connection: " + e;
 					logger.severe(msg);
 				}

@@ -18,6 +18,7 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
@@ -25,7 +26,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 /**
  * This message bean compares the pairs given to it and sends a list of matches
@@ -73,9 +73,9 @@ public class MatcherMDB extends AbstractMatcher {
 
 		// first figure out the correct file for this processor
 		final long jobId = data.jobID;
-		OabaJob oabaJob = getJobController().findOabaJob(jobId);
+		BatchJob batchJob = getJobController().findOabaJob(jobId);
 		IMatchRecord2Sink mSink =
-			OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(data.treeIndex);
+			OabaFileUtils.getMatchChunkFactory(batchJob).getSink(data.treeIndex);
 		IComparableSink sink = new ComparableMRSink(mSink);
 
 		// write matches to this file.

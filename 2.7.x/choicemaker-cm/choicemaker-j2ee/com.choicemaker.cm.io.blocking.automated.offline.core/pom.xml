@@ -16,7 +16,7 @@
    artifactId>com.choicemaker.cm.io.blocking.automated.offline.base</artifactId -->
   <artifactId>com.choicemaker.cm.io.blocking.automated.offline.core</artifactId>
   <packaging>jar</packaging>
-  <name>ChoiceMaker Offline Matching (OABA Base)</name>
+  <name>ChoiceMaker Offline Matching (OABA Core)</name>
 
   <properties>
 		<!-- maven-compiler-plugin -->
@@ -124,6 +124,10 @@
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.args</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

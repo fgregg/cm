@@ -1,7 +1,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 /**
- * Java Persistence API (JPA) for OabaProcessingEvent beans.<br/>
+ * Java Persistence API (JPA) for OabaBatchProcessingEvent beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>
@@ -20,7 +20,7 @@ public interface OabaProcessingEventJPA {
 	String DISCRIMINATOR_COLUMN = "JOB_TYPE";
 
 	/**
-	 * Value of the discriminator column used to mark OabaProcessingEvent types
+	 * Value of the discriminator column used to mark OabaBatchProcessingEvent types
 	 * (and not sub-types)
 	 */
 	String DISCRIMINATOR_VALUE = "OABA";

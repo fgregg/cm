@@ -3,7 +3,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
 
 /**
- * Java Persistence API (JPA) for OabaJob beans.<br/>
+ * Java Persistence API (JPA) for BatchJob beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>
@@ -19,7 +19,7 @@ public interface SqlRecordSourceJPA extends BaseRecordSourceJPA {
 	String TABLE_NAME = "CMT_SQL_RECORDSOURCE";
 
 	/**
-	 * Value of the discriminator column used to mark OabaJob types (and not
+	 * Value of the discriminator column used to mark BatchJob types (and not
 	 * sub-types)
 	 */
 	String DISCRIMINATOR_VALUE = PersistableSqlRecordSource.TYPE;

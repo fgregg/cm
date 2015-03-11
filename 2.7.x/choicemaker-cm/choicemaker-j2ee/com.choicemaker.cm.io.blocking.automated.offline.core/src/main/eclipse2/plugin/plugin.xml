@@ -10,6 +10,7 @@
       </library>
    </runtime>
    <requires>
+      <import plugin="com.choicemaker.cm.args"/>
       <import plugin="com.choicemaker.cm.core"/>
    </requires>
 

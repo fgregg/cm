@@ -8,24 +8,15 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.transitivity.server.ejb;
+package com.choicemaker.cm.io.blocking.automated.offline.server.ejb;
 
-import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobProcessingEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 
-/**
- * @author rphall
- */
-public interface TransitivityJob extends BatchJob {
+public interface OabaBatchProcessingEvent extends BatchJobProcessingEvent,
+		OabaProcessing {
 
-	String DEFAULT_EJB_REF_NAME = "ejb/TransitivityJob";
+	String DEFAULT_EJB_REF_NAME = "ejb/OabaBatchProcessingEvent";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
-
-	// -- Accessors
-
-	long getTransitivityParametersId();
-
-	long getServerId();
-
-	long getUrmId();
 
 }

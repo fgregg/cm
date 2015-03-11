@@ -1,6 +1,6 @@
 package com.choicemaker.cmit.utils;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
+import static com.choicemaker.cm.args.BatchProcessing.*;
 import static org.junit.Assert.fail;
 
 import java.util.logging.Logger;
@@ -11,8 +11,8 @@ import javax.jms.Queue;
 import javax.jms.Topic;
 
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchProcessingNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 
 public class JmsUtils {
@@ -91,13 +91,13 @@ public class JmsUtils {
 		return retVal;
 	}
 
-	public static void clearOabaNotifications(String LOG_SOURCE,
+	public static void clearBatchProcessingNotifications(String LOG_SOURCE,
 			JMSConsumer consumer) {
 		int count = 0;
-		OabaNotification msg = null;
+		BatchProcessingNotification msg = null;
 		do {
 			msg =
-				receiveOabaNotification(LOG_SOURCE, consumer,
+				receiveBatchProcessingNotification(LOG_SOURCE, consumer,
 						SHORT_TIMEOUT_MILLIS);
 			if (msg != null) {
 				++count;
@@ -107,19 +107,19 @@ public class JmsUtils {
 		logger.info("Notifications cleared: " + count);
 	}
 
-	public static OabaNotification receiveLatestOabaNotification(
-			BatchJob oabaJob, final String LOG_SOURCE, JMSConsumer consumer,
+	public static BatchProcessingNotification receiveLatestBatchProcessingNotification(
+			BatchJob batchJob, final String LOG_SOURCE, JMSConsumer consumer,
 			long timeOut) {
-		final String METHOD = "receiveLatestOabaNotification(" + timeOut + ")";
+		final String METHOD = "receiveLatestBatchProcessingNotification(" + timeOut + ")";
 		logger.entering(LOG_SOURCE, METHOD);
-		if (oabaJob == null) {
+		if (batchJob == null) {
 			throw new IllegalArgumentException(METHOD + ": null OABA job");
 		}
-		OabaNotification retVal = null;
-		OabaNotification msg = null;
+		BatchProcessingNotification retVal = null;
+		BatchProcessingNotification msg = null;
 		do {
-			msg = receiveOabaNotification(LOG_SOURCE, consumer, timeOut);
-			if (msg != null && msg.getJobId() == oabaJob.getId()) {
+			msg = receiveBatchProcessingNotification(LOG_SOURCE, consumer, timeOut);
+			if (msg != null && msg.getJobId() == batchJob.getId()) {
 				retVal = msg;
 			}
 		} while (msg != null);
@@ -127,20 +127,20 @@ public class JmsUtils {
 		return retVal;
 	}
 
-	public static OabaNotification receiveFinalOabaNotification(
-			BatchJob oabaJob, final String LOG_SOURCE, JMSConsumer consumer,
+	public static BatchProcessingNotification receiveFinalBatchProcessingNotification(
+			BatchJob batchJob, final String LOG_SOURCE, JMSConsumer consumer,
 			long timeOut) {
-		final String METHOD = "receiveLatestOabaNotification(" + timeOut + ")";
-		if (oabaJob == null) {
+		final String METHOD = "receiveLatestBatchProcessingNotification(" + timeOut + ")";
+		if (batchJob == null) {
 			throw new IllegalArgumentException(METHOD + ": null OABA job");
 		}
 		logger.entering(LOG_SOURCE, METHOD);
-		OabaNotification retVal = null;
-		OabaNotification msg = null;
+		BatchProcessingNotification retVal = null;
+		BatchProcessingNotification msg = null;
 		do {
-			msg = receiveOabaNotification(LOG_SOURCE, consumer, timeOut);
-			if (msg != null && msg.getJobId() == oabaJob.getId()
-					&& msg.getJobPercentComplete() == PCT_DONE_OABA) {
+			msg = receiveBatchProcessingNotification(LOG_SOURCE, consumer, timeOut);
+			if (msg != null && msg.getJobId() == batchJob.getId()
+					&& msg.getJobPercentComplete() == PCT_DONE) {
 				retVal = msg;
 				break;
 			}
@@ -149,9 +149,9 @@ public class JmsUtils {
 		return retVal;
 	}
 
-	protected static OabaNotification receiveOabaNotification(
+	protected static BatchProcessingNotification receiveBatchProcessingNotification(
 			final String LOG_SOURCE, JMSConsumer consumer, long timeOut) {
-		final String METHOD = "receiveOabaNotification(" + timeOut + ")";
+		final String METHOD = "receiveBatchProcessingNotification(" + timeOut + ")";
 		logger.entering(LOG_SOURCE, METHOD);
 		if (consumer == null) {
 			throw new IllegalArgumentException(METHOD + ": null consumer");
@@ -163,11 +163,11 @@ public class JmsUtils {
 			fail(x.toString());
 		}
 		logger.info("Received object: " + o);
-		if (o != null && !(o instanceof OabaNotification)) {
+		if (o != null && !(o instanceof BatchProcessingNotification)) {
 			fail("Received invalid object type from status topic: "
 					+ o.getClass().getName());
 		}
-		OabaNotification retVal = (OabaNotification) o;
+		BatchProcessingNotification retVal = (BatchProcessingNotification) o;
 		logger.exiting(LOG_SOURCE, METHOD);
 		return retVal;
 	}

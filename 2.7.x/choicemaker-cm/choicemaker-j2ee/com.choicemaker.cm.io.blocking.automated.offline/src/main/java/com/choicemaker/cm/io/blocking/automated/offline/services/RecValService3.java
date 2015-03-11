@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -31,9 +32,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFa
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.ControlChecker;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
@@ -83,7 +83,7 @@ public class RecValService3 {
 
 	private final MutableRecordIdTranslator mutableTranslator;
 
-	private final OabaEventLog status;
+	private final ProcessingEventLog status;
 
 	/** A flag indicating whether any staging record has been read */
 	private boolean firstStage = true;
@@ -116,7 +116,7 @@ public class RecValService3 {
 	public RecValService3(RecordSource stage, RecordSource master,
 			ImmutableProbabilityModel model,
 			IRecValSinkSourceFactory rvFactory, IRecordIdFactory recidFactory,
-			MutableRecordIdTranslator translator, OabaEventLog status,
+			MutableRecordIdTranslator translator, ProcessingEventLog status,
 			IControl control) {
 
 		this.stage = stage;
@@ -178,18 +178,18 @@ public class RecValService3 {
 	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_REC_VAL) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_REC_VAL) {
 			// need to initialize
 			log.info("recover rec,val files and mutableTranslator");
 			recover();
 
-		} else if (status.getCurrentOabaEventId() < OabaProcessing.EVT_DONE_REC_VAL) {
+		} else if (status.getCurrentProcessingEventId() < OabaProcessing.EVT_DONE_REC_VAL) {
 			// create the rec_id, val_id files
 			log.info("Creating new rec,val files");
-			status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
+			status.setCurrentProcessingEvent(OabaProcessingEvent.CREATE_REC_VAL);
 			createFiles();
 			if (!stop) {
-				status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
+				status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_REC_VAL);
 			}
 
 		} else {

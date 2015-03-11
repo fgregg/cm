@@ -1,7 +1,7 @@
 package com.choicemaker.cm.transitivity.server.impl;
 
 /**
- * Java Persistence API (JPA) for TransitivityProcessingEvent beans.<br/>
+ * Java Persistence API (JPA) for TransitivityBatchProcessingEvent beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>
@@ -13,62 +13,14 @@ package com.choicemaker.cm.transitivity.server.impl;
  */
 public interface TransitivityProcessingEventJPA {
 
-	/** Name of the table that persists batch job data */
-	String TABLE_NAME = "CMT_OABA_PROCESSING";
-
-	/** Name of the column used to distinguish between job types */
-	String DISCRIMINATOR_COLUMN = "JOB_TYPE";
-
 	/**
-	 * Value of the discriminator column used to mark TransitivityProcessingEvent types
+	 * Value of the discriminator column used to mark TransitivityBatchProcessingEvent types
 	 * (and not sub-types)
 	 */
 	String DISCRIMINATOR_VALUE = "TRANS";
 
-	/**
-	 * Generated id column.
-	 * 
-	 * @see #ID_GENERATOR_NAME
-	 */
-	String CN_ID = "ID";
-
-	/**
-	 * Discriminator column
-	 * 
-	 * @see #DISCRIMINATOR_COLUMN
-	 */
-	String CN_TYPE = DISCRIMINATOR_COLUMN;
-
-	/** Link to a batch job */
-	String CN_JOB_ID = "JOB_ID";
-
-	/**
-	 * A value defined by
-	 * {@link com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing
-	 * OabaProcessing}
-	 */
-	String CN_EVENT_ID = "EVENT_ID";
-
-	/**
-	 * Free-form information.
-	 */
-	// FIXME: this column sometimes stores operational parameters
-	String CN_INFO = "INFO";
-
-	String CN_TIMESTAMP = "TIMESTAMP";
-
-	String ID_GENERATOR_NAME = "OABA_PROCESSING";
-
-	String ID_GENERATOR_TABLE = "CMT_SEQUENCE";
-
-	String ID_GENERATOR_PK_COLUMN_NAME = "SEQ_NAME";
-
-	String ID_GENERATOR_PK_COLUMN_VALUE = "OABA_PROCESSING";
-
-	String ID_GENERATOR_VALUE_COLUMN_NAME = "SEQ_COUNT";
-
 	/** Name of the query that finds all persistent status entries */
-	String QN_TRANSPROCESSING_FIND_ALL = "oabaProcessingFindAll";
+	String QN_TRANSPROCESSING_FIND_ALL = "transProcessingFindAll";
 
 	/** JPQL used to implement {@link #QN_TRANSPROCESSING_FIND_ALL} */
 	String JPQL_TRANSPROCESSING_FIND_ALL =

@@ -23,16 +23,15 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.impl.BatchProcessingLogEntry;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
+import com.choicemaker.cm.batch.impl.BatchProcessingEventEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchProcessingEvent;
 
 /**
- * This is the EJB implementation of the OABA OabaProcessing interface.
- * 
- * @author pcheung
- *
+ * This is the EJB implementation of the OABA BatchProcessingEventEntity
+ * interface.
  */
 @NamedQueries({
 		@NamedQuery(name = QN_OABAPROCESSING_FIND_ALL,
@@ -43,8 +42,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
 				query = JPQL_OABAPROCESSING_DELETE_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class OabaProcessingEventEntity extends BatchProcessingLogEntry
-		implements OabaProcessingEvent {
+public class OabaProcessingEventEntity extends BatchProcessingEventEntity
+		implements OabaBatchProcessingEvent {
 
 	private static final long serialVersionUID = 271L;
 
@@ -55,19 +54,21 @@ public class OabaProcessingEventEntity extends BatchProcessingLogEntry
 		super();
 	}
 
-	public OabaProcessingEventEntity(BatchJob job, OabaEvent status) {
+	public OabaProcessingEventEntity(BatchJob job, ProcessingEvent status) {
 		this(job, status, null);
 	}
 
-	public OabaProcessingEventEntity(BatchJob job, OabaEvent event, String info) {
-		super(job.getId(), DISCRIMINATOR_VALUE, event.name(), event.eventId,
-				event.percentComplete, info);
+	public OabaProcessingEventEntity(BatchJob job, ProcessingEvent event,
+			String info) {
+		super(job.getId(), DISCRIMINATOR_VALUE, event.getEventName(), event
+				.getEventId(), event.getPercentComplete(), info);
 	}
 
 	@Override
-	public OabaEvent getOabaEvent() {
-		OabaEvent retVal = OabaEvent.valueOf(this.getEventName());
-		assert retVal != null;
+	public ProcessingEvent getProcessingEvent() {
+		ProcessingEvent retVal =
+			new OabaProcessingEvent(getEventName(), getEventSequenceNumber(),
+					getFractionComplete());
 		return retVal;
 	}
 

@@ -5,10 +5,10 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 
 /**
  * OabaProcessingLog restricts a logging context to a specific OABA job by
@@ -17,15 +17,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
  *
  * @author rphall
  */
-public class OabaProcessingLog implements OabaEventLog {
+public class OabaProcessingLog implements ProcessingEventLog {
 
 	private static final Logger logger = Logger
 			.getLogger(OabaProcessingLog.class.getName());
 
 	private final EntityManager em;
-	private final OabaJob oabaJob;
+	private final BatchJob batchJob;
 
-	public OabaProcessingLog(EntityManager em, OabaJob job) {
+	public OabaProcessingLog(EntityManager em, BatchJob job) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
@@ -33,49 +33,49 @@ public class OabaProcessingLog implements OabaEventLog {
 			throw new IllegalArgumentException("invalid OABA job: " + job);
 		}
 		this.em = em;
-		this.oabaJob = job;
+		this.batchJob = job;
 	}
 
-	protected OabaProcessingEvent getCurrentOabaProcessingEvent() {
-		return OabaProcessingControllerBean.getCurrentOabaProcessingEvent(em,
-				oabaJob);
+	protected BatchJobProcessingEvent getCurrentOabaProcessingEvent() {
+		return OabaProcessingControllerBean.getCurrentBatchProcessingEvent(em,
+				batchJob);
 	}
 
 	@Override
-	public OabaEvent getCurrentOabaEvent() {
-		OabaProcessingEvent ope = getCurrentOabaProcessingEvent();
-		OabaEvent retVal = ope.getOabaEvent();
+	public ProcessingEvent getCurrentProcessingEvent() {
+		BatchJobProcessingEvent ope = getCurrentOabaProcessingEvent();
+		ProcessingEvent retVal = ope.getProcessingEvent();
 		return retVal;
 	}
 
 	@Override
-	public int getCurrentOabaEventId() {
-		return getCurrentOabaEvent().eventId;
+	public int getCurrentProcessingEventId() {
+		return getCurrentProcessingEvent().getEventId();
 	}
 
 	@Override
-	public String getCurrentOabaEventInfo() {
-		OabaProcessingEvent ope = getCurrentOabaProcessingEvent();
+	public String getCurrentProcessingEventInfo() {
+		BatchJobProcessingEvent ope = getCurrentOabaProcessingEvent();
 		String retVal = ope.getEventInfo();
 		return retVal;
 	}
 
 	@Override
-	public void setCurrentOabaEvent(OabaEvent event) {
-		setCurrentOabaEvent(event, null);
+	public void setCurrentProcessingEvent(ProcessingEvent event) {
+		setCurrentProcessingEvent(event, null);
 	}
 
 	@Override
-	public void setCurrentOabaEvent(OabaEvent event, String info) {
+	public void setCurrentProcessingEvent(ProcessingEvent event, String info) {
 		logger.info("OABA processing event: " + event + " (job "
-				+ this.oabaJob.getId() + ")");
-		OabaProcessingControllerBean.updateStatus(em, oabaJob, event,
+				+ this.batchJob.getId() + ")");
+		OabaProcessingControllerBean.updateStatus(em, batchJob, event,
 				new Date(), info);
 	}
 
 	@Override
 	public String toString() {
-		return "OabaProcessingLog [jobId=" + oabaJob.getId() + "]";
+		return "OabaProcessingLog [jobId=" + batchJob.getId() + "]";
 	}
 
 }

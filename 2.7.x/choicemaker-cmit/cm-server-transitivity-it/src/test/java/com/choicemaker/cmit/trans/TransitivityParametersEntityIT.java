@@ -25,9 +25,9 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
@@ -73,8 +73,11 @@ public class TransitivityParametersEntityIT {
 	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@EJB
-	private OabaProcessingController oabaProcessingController;
+	@EJB(beanName="OabaProcessingControllerBean")
+	private ProcessingController oabaProcessingController;
+
+	@EJB(beanName="TransitivityProcessingControllerBean")
+	private ProcessingController transProcessingController;
 
 	@EJB
 	private OabaService oabaService;

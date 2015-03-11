@@ -11,10 +11,10 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 @NamedQueries({
 		@NamedQuery(name = QN_PAIRRESULTINTEGER_FIND_ALL,
@@ -43,7 +43,7 @@ public class OabaPairResultInteger extends AbstractPairResultEntity<Integer> {
 		return retVal;
 	}
 
-	public OabaPairResultInteger(OabaJob job, Integer record1Id,
+	public OabaPairResultInteger(BatchJob job, Integer record1Id,
 			Integer record2Id, RECORD_SOURCE_ROLE record2Role, float p,
 			Decision d, String[] notes) {
 		super(job.getId(), RECORD_ID_TYPE.TYPE_INTEGER.getCharSymbol(),

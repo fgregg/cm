@@ -12,10 +12,10 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.StartOabaMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
-import com.choicemaker.cmit.utils.OabaProcessingPhase;
+import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 
 @RunWith(Arquillian.class)
@@ -45,7 +45,7 @@ public class OabaServiceBeanIT extends
 	public OabaServiceBeanIT() {
 		super(LOG_SOURCE, logger, EVT_INIT, PCT_INIT,
 				SimplePersonSqlServerTestConfiguration.class,
-				OabaProcessingPhase.INITIAL);
+				BatchProcessingPhase.INITIAL);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class OabaServiceBeanIT extends
 
 	/** Stubbed implementation that does not check the working directory */
 	@Override
-	public boolean isWorkingDirectoryCorrectAfterProcessing(OabaJob batchJob) {
+	public boolean isWorkingDirectoryCorrectAfterProcessing(BatchJob batchJob) {
 		return true;
 	}
 

@@ -35,6 +35,12 @@ public interface BatchJob extends PersistentObject, IControl, Serializable {
 
 	String getDescription();
 
+	long getParametersId();
+
+	long getServerId();
+
+	long getSettingsId();
+
 	/**
 	 * Returns the working directory of this job. This directory should be
 	 * accessible from the server(s) on which this job is processed and in the

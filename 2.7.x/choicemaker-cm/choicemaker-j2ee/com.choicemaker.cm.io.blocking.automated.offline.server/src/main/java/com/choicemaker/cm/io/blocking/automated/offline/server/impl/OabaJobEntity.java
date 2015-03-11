@@ -30,7 +30,6 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.core.IControl;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 /**
  * This class tracks the progress of a (long-running) offline matching process.
@@ -56,7 +55,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
 public class OabaJobEntity extends BatchJobEntity implements IControl,
-		Serializable, OabaJob {
+		Serializable, BatchJob {
 
 	private static final long serialVersionUID = 271L;
 
@@ -65,13 +64,13 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 		super();
 	}
 
-	public static String dump(OabaJob job) {
+	public static String dump(BatchJob job) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		pw.println("OabaJob id: " + job.getId());
-		pw.println("OabaJob extId: " + job.getExternalId());
-		// FIXME pw.println("OabaJob description: " + job.getDescription());
-		pw.println("OabaJob rigor: " + job.getBatchJobRigor());
+		pw.println("BatchJob id: " + job.getId());
+		pw.println("BatchJob extId: " + job.getExternalId());
+		// FIXME pw.println("BatchJob description: " + job.getDescription());
+		pw.println("BatchJob rigor: " + job.getBatchJobRigor());
 		String retVal = sw.toString();
 		return retVal;
 	}
@@ -79,9 +78,9 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 	// -- Constructors
 
 	/**
-	 * Creates an isolated OabaJob entity with {@link BatchJob#DEFAULT_RIGOR
+	 * Creates an isolated BatchJob entity with {@link BatchJob#DEFAULT_RIGOR
 	 * default rigor} but without any required, ancillary objects. The preferred
-	 * method for creating an OabaJob entity is via the
+	 * method for creating an BatchJob entity is via the
 	 * {@link OabaJobControllerBean}
 	 *
 	 * @param params
@@ -99,8 +98,8 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 	}
 
 	/**
-	 * Creates an isolated OabaJob entity without any required, ancillary
-	 * objects. The preferred method for creating an OabaJob entity is via the
+	 * Creates an isolated BatchJob entity without any required, ancillary
+	 * objects. The preferred method for creating an BatchJob entity is via the
 	 * {@link OabaJobControllerBean}
 	 * 
 	 * @param params
@@ -120,9 +119,9 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 				NONPERSISTENT_ID, NONPERSISTENT_ID, bjr);
 	}
 
-	public OabaJobEntity(OabaJob o) {
-		this(OabaJobJPA.DISCRIMINATOR_VALUE, o.getOabaParametersId(), o
-				.getOabaSettingsId(), o.getServerId(), o.getExternalId(), o
+	public OabaJobEntity(BatchJob o) {
+		this(OabaJobJPA.DISCRIMINATOR_VALUE, o.getParametersId(), o
+				.getSettingsId(), o.getServerId(), o.getExternalId(), o
 				.getTransactionId(), o.getBatchParentId(), o.getUrmId(), o
 				.getBatchJobRigor());
 		File owd = o.getWorkingDirectory();
@@ -152,18 +151,6 @@ public class OabaJobEntity extends BatchJobEntity implements IControl,
 			throw new IllegalArgumentException(msg);
 		}
 		this.workingDirectory = workingDir.getAbsolutePath();
-	}
-
-	// -- Accessors
-
-	@Override
-	public long getOabaParametersId() {
-		return super.getParametersId();
-	}
-
-	@Override
-	public long getOabaSettingsId() {
-		return super.getSettingsId();
 	}
 
 }

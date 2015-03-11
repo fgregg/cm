@@ -10,9 +10,9 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
-import static com.choicemaker.cm.transitivity.core.TransitivityEvent.DONE_TRANS_DEDUP_OVERSIZED;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANS_DEDUP_OVERSIZED;
 
 import java.io.Serializable;
 import java.util.logging.Logger;
@@ -26,7 +26,10 @@ import javax.jms.ObjectMessage;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -38,20 +41,17 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 
 /**
@@ -85,7 +85,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 	private OabaParametersController paramsController;
 
 	// @EJB
-	private OabaProcessingController processingController;
+	private ProcessingController processingController;
 
 	// @EJB
 	private RecordSourceController rsController;
@@ -104,7 +104,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		TransitivityJob transJob = null;
+		BatchJob transJob = null;
 
 		log.fine("StartTransitivityMDB In onMessage");
 
@@ -140,7 +140,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 	 * This method calls MatchToBlockTransformer to create blocks for the
 	 * equivalence classes. It then calls ChunkService3 to create chunks.
 	 */
-	private void createChunks(TransitivityJob transJob, OabaParameters params)
+	private void createChunks(BatchJob transJob, OabaParameters params)
 			throws Exception {
 
 		// get the match record source
@@ -212,11 +212,11 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		// set the correct status for chunk could run.
 		final long jobId = transJob.getId();
 		// FIXME null transJob, wrong log type
-		OabaEventLog status = processingController.getProcessingLog(null);
+		ProcessingEventLog status = processingController.getProcessingLog(null);
 		// status.setCurrentProcessingEvent(TransitivityEvent.EVT_DONE_TRANS_DEDUP_OVERSIZED);
 		// HACK
-		assert DONE_TRANS_DEDUP_OVERSIZED.eventId == OabaEvent.DONE_DEDUP_OVERSIZED.eventId;
-		status.setCurrentOabaEvent(OabaEvent.DONE_DEDUP_OVERSIZED);
+		assert DONE_TRANS_DEDUP_OVERSIZED.getEventId() == OabaProcessingEvent.DONE_DEDUP_OVERSIZED.getEventId();
+		status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_DEDUP_OVERSIZED);
 		// END HACK
 
 		ISerializableRecordSource staging = rsController.getStageRs(params);
@@ -256,7 +256,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 	 * 
 	 * @param jobID
 	 */
-	private void removeOldFiles(TransitivityJob transJob)
+	private void removeOldFiles(BatchJob transJob)
 			throws BlockingException {
 		try {
 			// final sink

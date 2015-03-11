@@ -58,7 +58,7 @@ public class TransOabaListener extends WorkflowControlListener{
 
 		// FIXME HACK (stuffing a URM job id into a transaction id)
 		// Possible fix:
-		// * Introduce a URM transaction id that uses the OabaJob transaction
+		// * Introduce a URM transaction id that uses the BatchJob transaction
 		//   identifier field
 		// * Look up or create the URM job identifier using the usual JPA
 		//   methods

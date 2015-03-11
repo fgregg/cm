@@ -29,13 +29,12 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 
@@ -52,19 +51,19 @@ public class TransitivityServiceBean implements TransitivityService {
 			.getSimpleName();
 
 	protected static void logStartParameters(String externalID,
-			TransitivityParameters tp, OabaJob oabaJob,
+			TransitivityParameters tp, BatchJob batchJob,
 			OabaParameters oabaParams, ServerConfiguration sc) {
 		final StringWriter sw = new StringWriter();
 		final PrintWriter pw = new PrintWriter(sw);
 		pw.println("External id: " + externalID);
-		pw.println(TransitivityParametersEntity.dump(tp, oabaJob, oabaParams));
+		pw.println(TransitivityParametersEntity.dump(tp, batchJob, oabaParams));
 		pw.println(ServerConfigurationEntity.dump(sc));
 		String msg = sw.toString();
 		log.info(msg);
 	}
 
 	protected static void validateStartParameters(String externalID,
-			TransitivityParameters tp, OabaJob oabaJob, ServerConfiguration sc) {
+			TransitivityParameters tp, BatchJob batchJob, ServerConfiguration sc) {
 
 		// Create an empty list of invalid parameters
 		List<String> validityErrors = new LinkedList<>();
@@ -73,7 +72,7 @@ public class TransitivityServiceBean implements TransitivityService {
 		if (tp == null) {
 			validityErrors.add("null batch parameters");
 		}
-		if (oabaJob == null) {
+		if (batchJob == null) {
 			validityErrors.add("null OABA job");
 		}
 		if (sc == null) {
@@ -103,23 +102,23 @@ public class TransitivityServiceBean implements TransitivityService {
 
 	@Override
 	public long startTransitivity(String externalID, TransitivityParameters tp,
-			OabaJob oabaJob, ServerConfiguration serverConfiguration)
+			BatchJob batchJob, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
 
 		final String METHOD = "startTransitivity";
 		log.entering(SOURCE_CLASS, METHOD);
 
-		validateStartParameters(externalID, tp, oabaJob, serverConfiguration);
+		validateStartParameters(externalID, tp, batchJob, serverConfiguration);
 
 		OabaParameters oabaParams =
-			oabaParamsController.findOabaParametersByJobId(oabaJob.getId());
-		logStartParameters(externalID, tp, oabaJob, oabaParams,
+			oabaParamsController.findOabaParametersByJobId(batchJob.getId());
+		logStartParameters(externalID, tp, batchJob, oabaParams,
 				serverConfiguration);
 
 		// Create and persist a transitivity job and its associated objects
-		TransitivityJob transJob =
+		BatchJob transJob =
 			jobController.createPersistentTransitivityJob(externalID, tp,
-					oabaJob, serverConfiguration);
+					batchJob, serverConfiguration);
 		assert transJob.isPersistent();
 		final long retVal = transJob.getId();
 		log.info("Started transitivity analysis (job id: " + retVal + ")");
@@ -134,7 +133,7 @@ public class TransitivityServiceBean implements TransitivityService {
 	}
 
 	@Override
-	public TransitivityJob getTransitivityJob(long jobId) {
+	public BatchJob getTransitivityJob(long jobId) {
 		// TODO FIXME not yet re-implemented
 		throw new Error("not yet implemented");
 		//

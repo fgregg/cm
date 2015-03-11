@@ -33,16 +33,15 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
@@ -141,7 +140,7 @@ public class RecordIdControllerBeanIT {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaProcessingController processingController;
+	private ProcessingController processingController;
 
 	@EJB
 	private OabaService oabaService;
@@ -206,7 +205,7 @@ public class RecordIdControllerBeanIT {
 		return retVal;
 	}
 
-	OabaJob createPersistentOabaJob(String methodName)
+	BatchJob createPersistentOabaJob(String methodName)
 			throws ServerConfigurationException {
 		logger.entering(LOG_SOURCE, methodName);
 
@@ -238,7 +237,7 @@ public class RecordIdControllerBeanIT {
 		serverConfiguration = serverController.save(serverConfiguration);
 		te.add(serverConfiguration);
 
-		OabaJob retVal =
+		BatchJob retVal =
 			jobController.createPersistentOabaJob(externalId, bp, oabaSettings,
 					serverConfiguration);
 		te.add(retVal);

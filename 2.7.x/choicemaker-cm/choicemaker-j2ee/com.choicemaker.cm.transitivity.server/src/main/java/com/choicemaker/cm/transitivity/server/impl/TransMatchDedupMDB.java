@@ -29,17 +29,15 @@ import javax.jms.Queue;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 
 /**
@@ -77,7 +75,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 	OabaParametersController paramsController;
 
 	// @EJB
-	OabaProcessingController processingController;
+	ProcessingController processingController;
 
 	// @Resource
 	// protected MessageDrivenContext mdc;
@@ -99,7 +97,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 
 		log.fine("MatchDedupMDB In onMessage");
 
-		TransitivityJob batchJob = null;
+		BatchJob batchJob = null;
 		try {
 			if (inMessage instanceof ObjectMessage) {
 				msg = (ObjectMessage) inMessage;
@@ -152,7 +150,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 			PMManager.getModelInstance(modelConfigId);
 		// FIXME null transJob, wrong log type
 		@SuppressWarnings("unused")
-		OabaEventLog processingEntry =
+		ProcessingEventLog processingEntry =
 			processingController.getProcessingLog(null);
 
 		// get the number of processors
@@ -271,7 +269,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 	}
 
 	// @Override
-	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
+	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
 		processingController.updateStatusWithNotification(job, event,
 				timestamp, info);

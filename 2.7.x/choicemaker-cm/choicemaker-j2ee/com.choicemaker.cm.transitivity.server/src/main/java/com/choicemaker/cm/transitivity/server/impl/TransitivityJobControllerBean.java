@@ -2,27 +2,35 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
+import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobProcessingEvent;
 import com.choicemaker.cm.batch.BatchJobStatus;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.transitivity.core.TransitivityEventLog;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityProcessingController;
 
 /**
  * A stateless EJB used to manage the persistence of TransitivityJobEntity
@@ -46,9 +54,15 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	private ServerConfigurationController serverManager;
 
 	@EJB
-	private TransitivityProcessingController processingController;
+	private ProcessingController processingController;
 
-	protected TransitivityJobEntity getBean(TransitivityJob oabaJob) {
+	@Inject
+	private JMSContext jmsContext;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/transStatusTopic")
+	private Topic oabaStatusTopic;
+
+	protected TransitivityJobEntity getBean(BatchJob oabaJob) {
 		TransitivityJobEntity retVal = null;
 		if (oabaJob != null) {
 			final long jobId = oabaJob.getId();
@@ -72,20 +86,21 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	}
 
 	@Override
-	public TransitivityJob createPersistentTransitivityJob(String externalID,
-			TransitivityParameters params, OabaJob oabaJob,
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public BatchJob createPersistentTransitivityJob(String externalID,
+			TransitivityParameters params, BatchJob batchJob,
 			ServerConfiguration sc) throws ServerConfigurationException {
 
-		if (params == null || sc == null || oabaJob == null) {
+		if (params == null || sc == null || batchJob == null) {
 			throw new IllegalArgumentException("null argument");
 		}
 
 		// Check the OABA job persistence and status (should be completed)
-		if (!oabaJob.isPersistent()) {
+		if (!batchJob.isPersistent()) {
 			throw new IllegalArgumentException("non-persistent OABA job");
 		}
-		BatchJobStatus oabaStatus = oabaJob.getStatus();
-		String msg0 = "Precedessor OABA (job " + oabaJob.getId() + ") status: "
+		BatchJobStatus oabaStatus = batchJob.getStatus();
+		String msg0 = "Precedessor OABA (job " + batchJob.getId() + ") status: "
 				+ oabaStatus;
 		logger.info(msg0);
 		if (BatchJobStatus.COMPLETED != oabaStatus) {
@@ -99,13 +114,25 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 		serverManager.save(sc);
 
 		TransitivityJobEntity retVal =
-			new TransitivityJobEntity(params, sc, oabaJob, externalID);
+			new TransitivityJobEntity(params, sc, batchJob, externalID);
 		em.persist(retVal);
 		assert retVal.isPersistent();
 
 		// Create a new processing entry
-		TransitivityEventLog processing =
-			processingController.getProcessingLog(retVal);
+//		ProcessingEventLog processing =
+//			processingController.getProcessingLog(retVal);
+		// Create a new entry in the processing log and check it
+		TransitivityProcessingControllerBean.updateStatusWithNotification(em,
+				jmsContext, oabaStatusTopic, retVal, BatchProcessingEvent.INIT,
+				new Date(), null);
+		BatchJobProcessingEvent ope =
+				TransitivityProcessingControllerBean.getCurrentBatchProcessingEvent(em,
+					retVal);
+		ProcessingEvent currentProcessingEvent = ope.getProcessingEvent();
+		assert currentProcessingEvent.getEventId() == BatchProcessingEvent.INIT
+				.getEventId();
+		assert currentProcessingEvent.getPercentComplete() == BatchProcessingEvent.INIT
+				.getPercentComplete();
 
 		// Create the working directory
 		File workingDir = BatchJobFileUtils.createWorkingDirectory(sc, retVal);
@@ -113,16 +140,16 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 
 		// Log the job info
 		logger.info("Transitivity job: " + retVal.toString());
-		logger.info("Transitivity OABA job: " + oabaJob.toString());
+		logger.info("Transitivity OABA job: " + batchJob.toString());
 		logger.info("Transitivity parameters: " + params.toString());
 		logger.info("Server configuration: " + sc.toString());
-		logger.info("Processing entry: " + processing.toString());
+		logger.info("Current processing event: " + currentProcessingEvent);
 
 		return retVal;
 	}
 
 	@Override
-	public TransitivityJob save(TransitivityJob batchJob) {
+	public BatchJob save(BatchJob batchJob) {
 		return save(getBean(batchJob));
 	}
 
@@ -139,40 +166,40 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	}
 
 	@Override
-	public TransitivityJob findTransitivityJob(long id) {
+	public BatchJob findTransitivityJob(long id) {
 		TransitivityJobEntity job = em.find(TransitivityJobEntity.class, id);
 		return job;
 	}
 
 	@Override
-	public List<TransitivityJob> findAllTransitivityJobs() {
+	public List<BatchJob> findAllTransitivityJobs() {
 		Query query =
 			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<TransitivityJob> retVal = query.getResultList();
+		List<BatchJob> retVal = query.getResultList();
 		if (retVal == null) {
-			retVal = new ArrayList<TransitivityJob>();
+			retVal = new ArrayList<BatchJob>();
 		}
 		return retVal;
 	}
 
 	@Override
-	public List<TransitivityJobEntity> findAllByOabaJobId(long batchJobId) {
+	public List<BatchJob> findAllByOabaJobId(long batchJobId) {
 		Query query =
 			em.createNamedQuery(TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID);
 		query.setParameter(
 				TransitivityJobJPA.PN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID_BPARENTID,
 				batchJobId);
 		@SuppressWarnings("unchecked")
-		List<TransitivityJobEntity> retVal = query.getResultList();
+		List<BatchJob> retVal = query.getResultList();
 		if (retVal == null) {
-			retVal = new ArrayList<TransitivityJobEntity>();
+			retVal = new ArrayList<BatchJob>();
 		}
 		return retVal;
 	}
 
 	@Override
-	public void delete(TransitivityJob transitivityJob) {
+	public void delete(BatchJob transitivityJob) {
 		if (transitivityJob.isPersistent()) {
 			TransitivityJobEntity bean =
 				em.find(TransitivityJobEntity.class, transitivityJob.getId());
@@ -181,16 +208,15 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	}
 
 	void delete(TransitivityJobEntity bean) {
-		bean = em.merge(bean);
-		// for (CMP_AuditEvent e : batchJob.getTimeStamps()) {
-		// em.remove(e);
-		// }
-		em.remove(bean);
-		em.flush();
+		if (bean != null) {
+			bean = em.merge(bean);
+			em.remove(bean);
+			em.flush();
+		}
 	}
 
 	@Override
-	public void detach(TransitivityJob job) {
+	public void detach(BatchJob job) {
 		em.detach(job);
 	}
 

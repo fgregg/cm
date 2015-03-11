@@ -23,10 +23,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
-
 /**
  * This object contains method to get JMS and EJB objects from the J2EE server.
  *
@@ -45,23 +41,6 @@ public class EJBConfiguration implements Serializable {
 
 	// ENC prefix
 	public final static String ENV_BASE = "java:comp/env/";
-
-	// ENC Entity Bean names
-	public final static String EJB_BATCH_JOB = OabaJob.DEFAULT_JNDI_COMP_NAME;
-	public final static String EJB_BATCH_PARAMS =
-		OabaParameters.DEFAULT_JNDI_COMP_NAME;
-	public final static String EJB_STATUS_LOG =
-		OabaProcessingEvent.DEFAULT_JNDI_COMP_NAME;
-
-	// ENC Connection Factory names
-	public final static String JMS_QUEUE_FACTORY = "jms/QueueConnectionFactory";
-	// public final static String JMS_TOPIC_CONNECTION_FACTORY =
-	// "jms/TopicConnectionFactory";
-
-	// ENC Topic names
-	// public final static String JMS_STATUS_TOPIC = "jms/statusTopic";
-	// public final static String JMS_TRANS_STATUS_TOPIC =
-	// "jms/transStatusTopic";
 
 	// ENC Queue names
 	public final static String JMS_START_QUEUE = "jms/startQueue";
@@ -83,7 +62,7 @@ public class EJBConfiguration implements Serializable {
 	public final static String JMS_TRANS_MATCH_DEDUP_EACH_QUEUE =
 		"jms/transMatchDedupEachQueue";
 
-	// new parallelization code
+	// parallelization code
 	public final static String JMS_MATCH_SCHEDULER_QUEUE =
 		"jms/matchSchedulerQueue";
 	public final static String JMS_MATCHER_QUEUE = "jms/matcherQueue";

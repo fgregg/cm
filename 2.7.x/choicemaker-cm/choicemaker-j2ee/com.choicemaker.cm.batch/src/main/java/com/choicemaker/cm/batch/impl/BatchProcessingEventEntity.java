@@ -1,22 +1,23 @@
 package com.choicemaker.cm.batch.impl;
 
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_INFO;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_NAME;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_SEQNUM;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_TIMESTAMP;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_EVENT_TYPE;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_FRACTION_COMPLETE;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_ID;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.CN_JOB_ID;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.DISCRIMINATOR_COLUMN;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.DISCRIMINATOR_VALUE;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_NAME;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_PK_COLUMN_NAME;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_PK_COLUMN_VALUE;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_TABLE;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
-import static com.choicemaker.cm.batch.impl.BatchProcessingJPA.TABLE_NAME;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.CN_EVENT_INFO;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.CN_EVENT_NAME;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.CN_EVENT_SEQNUM;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.CN_EVENT_TIMESTAMP;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.CN_EVENT_TYPE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.CN_FRACTION_COMPLETE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.CN_ID;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.CN_JOB_ID;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.DISCRIMINATOR_COLUMN;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.ID_GENERATOR_NAME;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.ID_GENERATOR_PK_COLUMN_NAME;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.ID_GENERATOR_PK_COLUMN_VALUE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.ID_GENERATOR_TABLE;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.batch.impl.BatchProcessingEventJPA.TABLE_NAME;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,17 +33,35 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.choicemaker.cm.batch.BatchProcessingEvent;
+import com.choicemaker.cm.args.BatchProcessing;
+import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.batch.BatchJobProcessingEvent;
 
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class BatchProcessingLogEntry extends AbstractPersistentObject implements
-		BatchProcessingEvent {
+public class BatchProcessingEventEntity extends AbstractPersistentObject
+		implements BatchProcessing, BatchJobProcessingEvent, Serializable {
 
 	private static final long serialVersionUID = 271L;
+
+	/** Default id value for non-persistent batch jobs */
+	public static final long INVALID_ID = 0;
+
+	/** Default event name */
+	public static final String INVALID_EVENT_NAME = null;
+
+	/** Default event sequence number */
+	public static final int INVALID_EVENT_SEQNUM = -1;
+
+	/** Default event information */
+	public static final String DEFAULT_EVENT_INFO = null;
+
+	/** Default event timestamp */
+	public static final Date INVALID_TIMESTAMP = new Date(0L);
 
 	@Id
 	@Column(name = CN_ID)
@@ -76,7 +95,7 @@ public class BatchProcessingLogEntry extends AbstractPersistentObject implements
 	@Temporal(TemporalType.TIMESTAMP)
 	protected final Date eventTimestamp;
 
-	protected BatchProcessingLogEntry() {
+	protected BatchProcessingEventEntity() {
 		this.jobId = NONPERSISTENT_ID;
 		this.type = DISCRIMINATOR_VALUE;
 		this.eventName = INVALID_EVENT_NAME;
@@ -86,7 +105,7 @@ public class BatchProcessingLogEntry extends AbstractPersistentObject implements
 		this.eventTimestamp = INVALID_TIMESTAMP;
 	}
 
-	protected BatchProcessingLogEntry(long jobId, String type, String evtName,
+	protected BatchProcessingEventEntity(long jobId, String type, String evtName,
 			int eventSeqNum, float fractionComplete, String info) {
 		if (jobId == NONPERSISTENT_ID) {
 			throw new IllegalArgumentException("invalid jobId: " + jobId);
@@ -170,8 +189,16 @@ public class BatchProcessingLogEntry extends AbstractPersistentObject implements
 	}
 
 	@Override
+	public ProcessingEvent getProcessingEvent() {
+		ProcessingEvent retVal =
+			new BatchProcessingEvent(getEventName(), getEventSequenceNumber(),
+					getFractionComplete());
+		return retVal;
+	}
+
+	@Override
 	public String toString() {
-		return "BatchProcessingLogEntry [id=" + id + ", jobId=" + jobId
+		return "BatchProcessingEventEntity [id=" + id + ", jobId=" + jobId
 				+ ", type=" + type + ", eventName=" + eventName
 				+ ", eventSequenceNumber=" + eventSequenceNumber
 				+ ", fractionComplete=" + fractionComplete + ", eventInfo="

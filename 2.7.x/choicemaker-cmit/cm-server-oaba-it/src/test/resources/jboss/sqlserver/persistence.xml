@@ -11,7 +11,7 @@
     <jta-data-source>choicemaker/urm/jdbc/ChoiceMakerEjb</jta-data-source>
 
     <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
-    <class>com.choicemaker.cm.batch.impl.BatchProcessingLogEntry</class>
+    <class>com.choicemaker.cm.batch.impl.BatchProcessingEventEntity</class>
     <class>com.choicemaker.cm.batch.impl.OperationalPropertyEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersEntity</class>
@@ -51,7 +51,7 @@
     <non-jta-data-source>jboss/datasources/DefaultDS0</non-jta-data-source>
 
     <class>com.choicemaker.cm.batch.impl.BatchJobEntity</class>
-    <class>com.choicemaker.cm.batch.impl.BatchProcessingLogEntry</class>
+    <class>com.choicemaker.cm.batch.impl.BatchProcessingEventEntity</class>
     <class>com.choicemaker.cm.batch.impl.OperationalPropertyEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbaSettingsEntity</class>
     <class>com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersEntity</class>

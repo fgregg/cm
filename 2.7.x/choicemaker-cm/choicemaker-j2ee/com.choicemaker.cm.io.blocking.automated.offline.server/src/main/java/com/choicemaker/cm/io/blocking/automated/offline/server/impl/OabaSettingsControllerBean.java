@@ -11,8 +11,8 @@ import javax.persistence.Query;
 
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 
@@ -136,9 +136,9 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 	@Override
 	public OabaSettings findOabaSettingsByJobId(long jobId) {
 		OabaSettings retVal = null;
-		OabaJob oabaJob = jobController.findOabaJob(jobId);
-		if (oabaJob != null) {
-			long settingsId = oabaJob.getOabaSettingsId();
+		BatchJob batchJob = jobController.findOabaJob(jobId);
+		if (batchJob != null) {
+			long settingsId = batchJob.getSettingsId();
 			retVal = findOabaSettings(settingsId);
 		}
 		return retVal;

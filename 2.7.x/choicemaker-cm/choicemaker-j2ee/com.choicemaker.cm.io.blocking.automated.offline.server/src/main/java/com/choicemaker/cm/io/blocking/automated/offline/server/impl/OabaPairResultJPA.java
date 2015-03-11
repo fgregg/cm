@@ -1,7 +1,7 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
 /**
- * Java Persistence API (JPA) for OabaProcessingEvent beans.<br/>
+ * Java Persistence API (JPA) for OabaBatchProcessingEvent beans.<br/>
  * Prefixes:
  * <ul>
  * <li>JPQL -- Java Persistence Query Language</li>

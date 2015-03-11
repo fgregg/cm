@@ -11,9 +11,9 @@ import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
@@ -27,7 +27,7 @@ public interface OabaTestParameters {
 
 	WellKnownTestConfiguration getTestConfiguration(OabaLinkageType type);
 
-	OabaProcessingPhase getProcessingPhase();
+	BatchProcessingPhase getProcessingPhase();
 
 	EjbPlatform getE2service();
 
@@ -61,7 +61,7 @@ public interface OabaTestParameters {
 
 	OabaParametersController getOabaParamsController();
 
-	OabaProcessingController getProcessingController();
+	ProcessingController getOabaProcessingController();
 
 	RecordSourceController getRecordSourceController();
 

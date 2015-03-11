@@ -6,27 +6,28 @@ import javax.ejb.Local;
 
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 
 @Local
 public interface TransitivityJobController {
 
-	TransitivityJob createPersistentTransitivityJob(String externalID,
-			TransitivityParameters params, OabaJob oabaJob,
+	BatchJob createPersistentTransitivityJob(String externalID,
+			TransitivityParameters params, BatchJob batchJob,
 			ServerConfiguration sc) throws ServerConfigurationException;
 
-	TransitivityJob save(TransitivityJob batchJob);
+	BatchJob save(BatchJob batchJob);
 
-	TransitivityJob findTransitivityJob(long id);
+//	TransitivityJobEntity save(TransitivityJobEntity job);
 
-	List<TransitivityJob> findAllTransitivityJobs();
+	BatchJob findTransitivityJob(long id);
 
-	List<TransitivityJobEntity> findAllByOabaJobId(long batchJobId);
+	List<BatchJob> findAllTransitivityJobs();
 
-	void delete(TransitivityJob transitivityJob);
+	List<BatchJob> findAllByOabaJobId(long batchJobId);
 
-	void detach(TransitivityJob job);
+	void delete(BatchJob transitivityJob);
+
+	void detach(BatchJob job);
 
 }

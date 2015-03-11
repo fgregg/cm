@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CLEAR_RESOURCES;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CLEAR_RESOURCES;
 
 import java.util.logging.Logger;
 
@@ -21,16 +21,16 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Topic;
 
+import com.choicemaker.cm.args.BatchProcessingEvent;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 
 /**
- * This object contains common message bean utilities such as canceling an OABA
+ * This object contains common message bean utilities such as canceling a Batch
  * job or sending various types of JMS messages.
  * 
  * @author pcheung
@@ -46,25 +46,25 @@ public class MessageBeanUtils {
 	public static final String UNKNOWN_TOPIC = "unknown topic";
 
 	/**
-	 * This method stops the OabaJob by setting the status to aborted, and
+	 * This method stops the BatchJob by setting the status to aborted, and
 	 * removes the temporary directory for the job.
 	 */
-	public static void stopJob(BatchJob oabaJob,
-			OperationalPropertyController propController, OabaEventLog status) {
+	public static void stopJob(BatchJob batchJob,
+			OperationalPropertyController propController, ProcessingEventLog status) {
 
-		oabaJob.markAsAborted();
+		batchJob.markAsAborted();
 
 		final String _clearResources =
-			propController.getJobProperty(oabaJob, PN_CLEAR_RESOURCES);
+			propController.getJobProperty(batchJob, PN_CLEAR_RESOURCES);
 		boolean clearResources = Boolean.valueOf(_clearResources);
 
 		if (clearResources) {
-			log0.info("Clearing resources for job " + oabaJob.getId());
-			status.setCurrentOabaEvent(OabaEvent.DONE_OABA);
+			log0.info("Clearing resources for job " + batchJob.getId());
+			status.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
 			log0.info("Removing Temporary directory.");
-			BatchJobFileUtils.removeTempDir(oabaJob);
+			BatchJobFileUtils.removeTempDir(batchJob);
 		} else {
-			log0.info("Retaining resources for job " + oabaJob.getId());
+			log0.info("Retaining resources for job " + batchJob.getId());
 		}
 	}
 

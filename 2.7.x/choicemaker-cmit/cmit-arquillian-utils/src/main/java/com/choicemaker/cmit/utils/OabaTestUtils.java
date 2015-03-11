@@ -11,10 +11,10 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
@@ -35,7 +35,7 @@ public class OabaTestUtils {
 	private static final Logger logger = Logger
 			.getLogger(OabaTestUtils.class.getName());
 
-	public static <T extends WellKnownTestConfiguration> OabaJob startOabaJob(
+	public static <T extends WellKnownTestConfiguration> BatchJob startOabaJob(
 			final OabaLinkageType linkage, final String tag,
 			final OabaTestParameters test, final String externalId) {
 
@@ -119,21 +119,21 @@ public class OabaTestUtils {
 			switch (linkage) {
 			case STAGING_DEDUPLICATION:
 				logger.info(tag
-						+ ": invoking BatchQueryService.startDeduplication");
+						+ ": invoking OabaService.startDeduplication");
 				jobId =
 					batchQuery.startDeduplication(externalId, bp, oabaSettings,
 							serverConfiguration);
 				logger.info(tag + ": returned jobId '" + jobId
-						+ "' from BatchQueryService.startDeduplication");
+						+ "' from OabaService.startDeduplication");
 				break;
 			case STAGING_TO_MASTER_LINKAGE:
 			case MASTER_TO_MASTER_LINKAGE:
-				logger.info(tag + ": invoking BatchQueryService.startLinkage");
+				logger.info(tag + ": invoking OabaService.startLinkage");
 				jobId =
 					batchQuery.startLinkage(externalId, bp, oabaSettings,
 							serverConfiguration);
 				logger.info(tag + ": returned jobId '" + jobId
-						+ "' from BatchQueryService.startLinkage");
+						+ "' from OabaService.startLinkage");
 				break;
 			default:
 				fail("Unexpected linkage type: " + linkage);
@@ -144,7 +144,7 @@ public class OabaTestUtils {
 
 		final OabaJobController jobController = test.getOabaJobController();
 		assertTrue(jobId != NONPERSISTENT_ID);
-		OabaJob retVal = jobController.findOabaJob(jobId);
+		BatchJob retVal = jobController.findOabaJob(jobId);
 		assertTrue(retVal != null);
 
 		// Validate that the job parameters are correct
@@ -159,7 +159,7 @@ public class OabaTestUtils {
 	}
 
 	public static <T extends WellKnownTestConfiguration> void validateJobParameters(
-			final OabaJob oabaJob,
+			final BatchJob batchJob,
 			final OabaParameters expected, final OabaParameters params) {
 
 		// Validate that the job parameters are correct

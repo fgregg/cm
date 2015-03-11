@@ -38,11 +38,9 @@ import javax.sql.DataSource;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -425,7 +423,7 @@ public class Single implements Serializable {
 						{
 							// FIXME TODO not yet re-implemented
 							throw new Error("not yet implemented");
-//							OabaJob job = findBatchJobById(em, OabaJobEntity.class, stepJobId);
+//							BatchJob job = findBatchJobById(em, OabaJobEntity.class, stepJobId);
 //							if (job != null) {
 //								oabaJobControllerBean.delete(job);
 //							}
@@ -503,9 +501,9 @@ public class Single implements Serializable {
 
 	public OabaParameters findBatchParamsById(EntityManager em, long id)
 			throws CmRuntimeException, ConfigException {
-		OabaJob oabaJob =
-			(OabaJob) em.find(OabaJobEntity.class, Long.valueOf(id));
-		long paramsId = oabaJob.getOabaParametersId();
+		BatchJob batchJob =
+			(BatchJob) em.find(OabaJobEntity.class, Long.valueOf(id));
+		long paramsId = batchJob.getParametersId();
 		OabaParameters retVal =
 			(OabaParameters) em.find(OabaParametersEntity.class,
 					Long.valueOf(paramsId));
@@ -520,7 +518,7 @@ public class Single implements Serializable {
 		return jobs;
 	}
 
-	public TransitivityJob findTransJobById(EntityManager em,
+	public BatchJob findTransJobById(EntityManager em,
 			Class c, long id) {
 		if (em == null) {
 			throw new IllegalArgumentException("null entity manager");
@@ -528,7 +526,7 @@ public class Single implements Serializable {
 		if (c == null) {
 			throw new IllegalArgumentException("null class");
 		}
-		TransitivityJob retVal = (TransitivityJob) em.find(c, Long.valueOf(id));
+		BatchJob retVal = (BatchJob) em.find(c, Long.valueOf(id));
 		return retVal;
 	}
 

@@ -21,21 +21,21 @@ import javax.jms.Queue;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
 /**
@@ -68,14 +68,14 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 	private Queue matchDedupQueue;
 
 	@Override
-	protected void processOabaMessage(OabaJobMessage data, OabaJob oabaJob,
+	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
 			OabaParameters params, OabaSettings oabaSettings,
-			OabaEventLog processingLog, ServerConfiguration serverConfig,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
-		if (processingLog.getCurrentOabaEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
+		if (processingLog.getCurrentProcessingEventId() != OabaProcessing.EVT_MERGE_DEDUP_MATCHES) {
 			int maxMatches = oabaSettings.getMaxMatches();
-			dedupEach(data.processingIndex, maxMatches, oabaJob);
+			dedupEach(data.processingIndex, maxMatches, batchJob);
 		}
 
 	}
@@ -89,29 +89,29 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 	 *            - maximum number of matches to hold in memory
 	 * @throws OABABlockingException
 	 */
-	private void dedupEach(int num, int maxMatches, OabaJob oabaJob)
+	private void dedupEach(int num, int maxMatches, BatchJob batchJob)
 			throws BlockingException {
 		long t = System.currentTimeMillis();
 		IMatchRecord2Sink mSink =
-			OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(num);
+			OabaFileUtils.getMatchChunkFactory(batchJob).getSink(num);
 		IMatchRecord2Source mSource =
-			OabaFileUtils.getMatchChunkFactory(oabaJob).getSource(mSink);
+			OabaFileUtils.getMatchChunkFactory(batchJob).getSource(mSink);
 		ComparableMRSource source = new ComparableMRSource(mSource);
 
-		mSink = OabaFileUtils.getMatchTempFactory(oabaJob).getSink(num);
+		mSink = OabaFileUtils.getMatchTempFactory(batchJob).getSink(num);
 		IComparableSink sink = new ComparableMRSink(mSink);
 
 		log.info("source " + mSource.getInfo() + " sink " + mSink.getInfo());
 
 		IMatchRecord2SinkSourceFactory factory =
-			OabaFileUtils.getMatchTempFactory(oabaJob, num);
+			OabaFileUtils.getMatchTempFactory(batchJob, num);
 		ComparableMRSinkSourceFactory mFactory =
 			new ComparableMRSinkSourceFactory(factory);
 
 		if (source.exists()) {
 			GenericDedupService service =
 				new GenericDedupService(source, sink, mFactory, maxMatches,
-						oabaJob);
+						batchJob);
 			service.runDedup();
 			int before = service.getNumBefore();
 			int after = service.getNumAfter();
@@ -138,14 +138,14 @@ public class MatchDedupEachMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected OabaEvent getCompletionEvent() {
+	protected OabaProcessingEvent getCompletionEvent() {
 		// Used only during invocation of sendToUpdateStatus(..),
 		// which does nothing in this class
 		return null;
 	}
 
 	@Override
-	protected void updateOabaProcessingStatus(OabaJob job, OabaEvent event,
+	protected void updateOabaProcessingStatus(BatchJob job, OabaProcessingEvent event,
 			Date timestamp, String info) {
 		assert event == null;
 	}

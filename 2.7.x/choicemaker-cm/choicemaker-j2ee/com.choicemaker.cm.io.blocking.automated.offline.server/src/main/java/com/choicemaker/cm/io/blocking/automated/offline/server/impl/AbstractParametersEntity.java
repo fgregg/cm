@@ -1,6 +1,5 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.batch.impl.BatchJobJPA.CN_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_FORMAT;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_GRAPH;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_HIGH_THRESHOLD;
@@ -12,6 +11,7 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.Abstr
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_STAGE_RS;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_STAGE_RS_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_TASK;
+import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.CN_TYPE;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.DISCRIMINATOR_COLUMN;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.DV_ABSTRACT;
 import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersJPA.ID_GENERATOR_NAME;

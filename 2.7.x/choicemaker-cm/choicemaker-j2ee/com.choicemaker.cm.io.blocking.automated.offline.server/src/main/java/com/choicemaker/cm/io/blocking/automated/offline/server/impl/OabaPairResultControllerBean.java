@@ -15,12 +15,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaPairResultController;
 
@@ -31,13 +31,13 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 			.getLogger(OabaPairResultControllerBean.class.getName());
 
 	/**
-	 * The index in the {@link #createRecordIdTypeQuery(OabaJob)
+	 * The index in the {@link #createRecordIdTypeQuery(BatchJob)
 	 * RecordIdTypeQuery} of the RECORD_ID_TYPE field
 	 */
 	protected static final int QUERY_INDEX_RECORD_ID_TYPE = 1;
 
 	/**
-	 * The index in the {@link #createRecordCountQuery(OabaJob)
+	 * The index in the {@link #createRecordCountQuery(BatchJob)
 	 * RecordIdTypeQuery} of the count field
 	 */
 	protected static final int QUERY_INDEX_RECORD_COUNT = 1;
@@ -49,7 +49,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	private OabaJobController jobController;
 
 	@Override
-	public int getResultCount(OabaJob job) throws BlockingException {
+	public int getResultCount(BatchJob job) throws BlockingException {
 		if (job == null) {
 			throw new IllegalArgumentException("null OABA job");
 		}
@@ -92,7 +92,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		} catch (SQLException e) {
 			em.getTransaction().rollback();
 			String msg =
-				this.getClass().getSimpleName() + ".getResultType(OabaJob): "
+				this.getClass().getSimpleName() + ".getResultType(BatchJob): "
 						+ "unable to get pair-wise results: " + e;
 			throw new BlockingException(msg, e);
 		} finally {
@@ -103,7 +103,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 				} catch (SQLException e) {
 					String msg =
 						this.getClass().getSimpleName()
-								+ ".getResultType(OabaJob): "
+								+ ".getResultType(BatchJob): "
 								+ "unable to close JDBC connection: " + e;
 					logger.severe(msg);
 				}
@@ -114,7 +114,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		return retVal;
 	}
 
-	protected String createRecordCountQuery(OabaJob job) {
+	protected String createRecordCountQuery(BatchJob job) {
 		final long jobId = job.getId();
 		StringBuffer b = new StringBuffer();
 		b.append("SELECT COUNT(*) ").append(
@@ -126,7 +126,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	}
 
 	@Override
-	public RECORD_ID_TYPE getResultType(OabaJob job) throws BlockingException {
+	public RECORD_ID_TYPE getResultType(BatchJob job) throws BlockingException {
 		if (job == null) {
 			throw new IllegalArgumentException("null OABA job");
 		}
@@ -171,7 +171,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		} catch (SQLException e) {
 			em.getTransaction().rollback();
 			String msg =
-				this.getClass().getSimpleName() + ".getResultType(OabaJob): "
+				this.getClass().getSimpleName() + ".getResultType(BatchJob): "
 						+ "unable to get pair-wise results: " + e;
 			throw new BlockingException(msg, e);
 		} finally {
@@ -182,7 +182,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 				} catch (SQLException e) {
 					String msg =
 						this.getClass().getSimpleName()
-								+ ".getResultType(OabaJob): "
+								+ ".getResultType(BatchJob): "
 								+ "unable to close JDBC connection: " + e;
 					logger.severe(msg);
 				}
@@ -192,7 +192,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		return retVal;
 	}
 
-	protected String createRecordIdTypeQuery(OabaJob job) {
+	protected String createRecordIdTypeQuery(BatchJob job) {
 		final long jobId = job.getId();
 		StringBuffer b = new StringBuffer();
 		b.append("SELECT ").append(RecordIdTranslationJPA.CN_RECORD_TYPE);
@@ -209,7 +209,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void getResults(OabaJob job, IMatchRecord2Sink<?> results)
+	public void getResults(BatchJob job, IMatchRecord2Sink<?> results)
 			throws BlockingException {
 
 		if (job == null || results == null) {
@@ -233,7 +233,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		}
 	}
 
-	protected void getIntegerResults(OabaJob job,
+	protected void getIntegerResults(BatchJob job,
 			IMatchRecord2Sink<Integer> results) throws BlockingException {
 		Query query =
 			em.createNamedQuery(OabaPairResultJPA.QN_PAIRRESULTINTEGER_FIND_BY_JOBID);
@@ -251,7 +251,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		results.flush();
 	}
 
-	protected void getLongResults(OabaJob job, IMatchRecord2Sink<Long> results)
+	protected void getLongResults(BatchJob job, IMatchRecord2Sink<Long> results)
 			throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDLONGID_FIND_BY_JOBID);
@@ -269,7 +269,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		results.flush();
 	}
 
-	protected void getStringResults(OabaJob job,
+	protected void getStringResults(BatchJob job,
 			IMatchRecord2Sink<String> results) throws BlockingException {
 		Query query =
 			em.createNamedQuery(RecordIdTranslationJPA.QN_TRANSLATEDSTRINGID_FIND_BY_JOBID);
@@ -292,7 +292,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	 * specified job
 	 */
 	@Override
-	public void saveResults(OabaJob job, IMatchRecord2Source<?> results)
+	public void saveResults(BatchJob job, IMatchRecord2Source<?> results)
 			throws BlockingException {
 
 		if (job == null || results == null) {
@@ -342,7 +342,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		}
 	}
 
-	protected void saveIntegerResults(OabaJob job, MatchRecord2<?> rawResult,
+	protected void saveIntegerResults(BatchJob job, MatchRecord2<?> rawResult,
 			IMatchRecord2Source<?> rawResults) throws BlockingException {
 
 		@SuppressWarnings("unchecked")
@@ -369,7 +369,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		}
 	}
 
-	protected void saveLongResults(OabaJob job, MatchRecord2<?> rawResult,
+	protected void saveLongResults(BatchJob job, MatchRecord2<?> rawResult,
 			IMatchRecord2Source<?> rawResults) throws BlockingException {
 
 		@SuppressWarnings("unchecked")
@@ -395,7 +395,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 		}
 	}
 
-	protected void saveStringResults(OabaJob job, MatchRecord2<?> rawResult,
+	protected void saveStringResults(BatchJob job, MatchRecord2<?> rawResult,
 			IMatchRecord2Source<?> rawResults) throws BlockingException {
 
 		@SuppressWarnings("unchecked")

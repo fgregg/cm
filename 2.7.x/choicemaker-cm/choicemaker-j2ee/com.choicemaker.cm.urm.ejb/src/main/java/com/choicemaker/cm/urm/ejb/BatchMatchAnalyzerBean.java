@@ -10,9 +10,6 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
-
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -24,19 +21,12 @@ import javax.jms.JMSException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 import com.choicemaker.cm.urm.base.IRecordCollection;
 import com.choicemaker.cm.urm.base.JobStatus;
 import com.choicemaker.cm.urm.base.LinkCriteria;
 import com.choicemaker.cm.urm.base.RefRecordCollection;
-import com.choicemaker.cm.urm.base.TextRefRecordCollection;
 import com.choicemaker.cm.urm.config.AnalysisResultFormat;
 import com.choicemaker.cm.urm.exceptions.ArgumentException;
 import com.choicemaker.cm.urm.exceptions.CmRuntimeException;
@@ -68,7 +58,7 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 	private OabaService batchQuery;
 
 	// @EJB
-	private OperationalPropertyController propController;
+//	private OperationalPropertyController propController;
 
 	public BatchMatchAnalyzerBean() {
 		super();
@@ -188,47 +178,48 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 		log.fine("<<getJobStatus");
 		UrmJob urmJob = Single.getInst().findUrmJobById(jobID);
 		JobStatus js = urmJob.getJobStatus();
-		if (!urmJob.isAbortRequested() && !urmJob.isStarted()) {
-			return js;
-		}
-		long stepJobId = urmJob.getCurStepJobId().longValue();
-		int stepIndex = (int) urmJob.getCurStepIndex().longValue();
-		String stepStatus = "";
-		if (stepJobId != JobStatus.UNDEFINED_ID) {
-			switch (stepIndex) {
-			case BATCH_MATCH_STEP_INDEX:
-				BatchJob bj =
-					Single.getInst().findBatchJobById(em, OabaJobEntity.class,
-							stepJobId);
-				stepStatus = bj.getStatus().name();
-				break;
-			case TRANS_OABA_STEP_INDEX:
-				TransitivityJob tj =
-					Single.getInst().findTransJobById(em, TransitivityJobEntity.class, stepJobId);
-				stepStatus = tj.getStatus().name();
-				break;
-			case TRANS_SERIAL_STEP_INDEX:
-				CmsJob cj = Single.getInst().findCmsJobById(stepJobId);
-				stepStatus = cj.getStatus();
-				break;
-			default:
-				log.info("unknown step index " + stepIndex);
-			}
-			js.setStepDescription(urmJob.getStepDescription() + " "
-					+ stepStatus);
-			if (urmJob.isAbortRequested()
-					&& stepStatus.equals(JobStatus.STATUS_ABORTED)) {
-				urmJob.markAsAborted();
-				urmJob.setStepDescription(js.getStepDescription());
-			}
-			if (urmJob.isStarted()
-					&& stepStatus.equals(JobStatus.STATUS_FAILED)) {
-				urmJob.markAsFailed();
-				urmJob.setStepDescription(js.getStepDescription());
-			}
-
-		}
-		log.fine(">>getJobStatus");
+//		FIXME STUBBED
+//		if (!urmJob.isAbortRequested() && !urmJob.isStarted()) {
+//			return js;
+//		}
+//		long stepJobId = urmJob.getCurStepJobId().longValue();
+//		int stepIndex = (int) urmJob.getCurStepIndex().longValue();
+//		String stepStatus = "";
+//		if (stepJobId != JobStatus.UNDEFINED_ID) {
+//			switch (stepIndex) {
+//			case BATCH_MATCH_STEP_INDEX:
+//				BatchJob bj =
+//					Single.getInst().findBatchJobById(em, OabaJobEntity.class,
+//							stepJobId);
+//				stepStatus = bj.getStatus().name();
+//				break;
+//			case TRANS_OABA_STEP_INDEX:
+//				BatchJob tj =
+//					Single.getInst().findTransJobById(em, TransitivityJobEntity.class, stepJobId);
+//				stepStatus = tj.getStatus().name();
+//				break;
+//			case TRANS_SERIAL_STEP_INDEX:
+//				CmsJob cj = Single.getInst().findCmsJobById(stepJobId);
+//				stepStatus = cj.getStatus();
+//				break;
+//			default:
+//				log.info("unknown step index " + stepIndex);
+//			}
+//			js.setStepDescription(urmJob.getStepDescription() + " "
+//					+ stepStatus);
+//			if (urmJob.isAbortRequested()
+//					&& stepStatus.equals(JobStatus.STATUS_ABORTED)) {
+//				urmJob.markAsAborted();
+//				urmJob.setStepDescription(js.getStepDescription());
+//			}
+//			if (urmJob.isStarted()
+//					&& stepStatus.equals(JobStatus.STATUS_FAILED)) {
+//				urmJob.markAsFailed();
+//				urmJob.setStepDescription(js.getStepDescription());
+//			}
+//
+//		}
+//		log.fine(">>getJobStatus");
 		return js;
 	}
 
@@ -289,50 +280,51 @@ public class BatchMatchAnalyzerBean extends BatchMatchBaseBean {
 							RemoteException			{
 		
 		log.fine("<<copyResult");						
-		if(! (resRc instanceof TextRefRecordCollection) )
-			throw new ArgumentException("this implementation supports only text record collection copying");							
-		try {
-			UrmJob urmJob = Single.getInst().findUrmJobById(jobID);
-			String serialType = urmJob.getSerializationType();//.toLowerCase();
-			if( !urmJob.getStatus().equals(JobStatus.STATUS_COMPLETED) )
-				throw new ArgumentException("job "+jobID+" is not completed");
-			
-			UrmStepJob stepJob = Single.getInst().findStepJobByUrmAndIndex(jobID,TRANS_OABA_STEP_INDEX);
-			TransitivityJob trJob = Single.getInst().findTransJobById(em, TransitivityJobEntity.class, stepJob.getStepJobId().longValue());
-
-			final String cachedPairsFileName =
-				propController.getJobProperty(trJob,
-						PN_TRANSITIVITY_CACHED_PAIRS_FILE);
-			log.info("Cached transitivity pairs file: " + cachedPairsFileName);
-
-			String fileName =
-				cachedPairsFileName.substring(0,
-						cachedPairsFileName.lastIndexOf("."));
-			fileName = fileName + "trans_analysis";
-			String dirName;
-			int slashInd = fileName.lastIndexOf("\\");
-			if(slashInd ==-1)
-				slashInd = fileName.lastIndexOf("/");
-			if(slashInd ==-1) {
-				dirName = ".";
-			} 
-			else {
-				dirName = fileName.substring(0,slashInd+1);
-				fileName = fileName.substring(slashInd+1);
-			}
-			log.fine("file name : "+fileName);	
-			if (!trJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
-				throw new ArgumentException ("The job has not completed.");
-			} 
-			else {
-				copyResultFromFile(dirName,fileName, serialType, (TextRefRecordCollection)resRc);							
-			}
-			
-		} catch (IOException e) {
-			log.severe(e.toString());
-			throw new CmRuntimeException(e.toString());
-		}
-		log.fine(">>copyResult");	
+		// FIXME STUBBED
+//		if(! (resRc instanceof TextRefRecordCollection) )
+//			throw new ArgumentException("this implementation supports only text record collection copying");							
+//		try {
+//			UrmJob urmJob = Single.getInst().findUrmJobById(jobID);
+//			String serialType = urmJob.getSerializationType();//.toLowerCase();
+//			if( !urmJob.getStatus().equals(JobStatus.STATUS_COMPLETED) )
+//				throw new ArgumentException("job "+jobID+" is not completed");
+//			
+//			UrmStepJob stepJob = Single.getInst().findStepJobByUrmAndIndex(jobID,TRANS_OABA_STEP_INDEX);
+//			TransitivityJob trJob = Single.getInst().findTransJobById(em, TransitivityJobEntity.class, stepJob.getStepJobId().longValue());
+//
+//			final String cachedPairsFileName =
+//				propController.getJobProperty(trJob,
+//						PN_TRANSITIVITY_CACHED_PAIRS_FILE);
+//			log.info("Cached transitivity pairs file: " + cachedPairsFileName);
+//
+//			String fileName =
+//				cachedPairsFileName.substring(0,
+//						cachedPairsFileName.lastIndexOf("."));
+//			fileName = fileName + "trans_analysis";
+//			String dirName;
+//			int slashInd = fileName.lastIndexOf("\\");
+//			if(slashInd ==-1)
+//				slashInd = fileName.lastIndexOf("/");
+//			if(slashInd ==-1) {
+//				dirName = ".";
+//			} 
+//			else {
+//				dirName = fileName.substring(0,slashInd+1);
+//				fileName = fileName.substring(slashInd+1);
+//			}
+//			log.fine("file name : "+fileName);	
+//			if (!trJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
+//				throw new ArgumentException ("The job has not completed.");
+//			} 
+//			else {
+//				copyResultFromFile(dirName,fileName, serialType, (TextRefRecordCollection)resRc);							
+//			}
+//			
+//		} catch (IOException e) {
+//			log.severe(e.toString());
+//			throw new CmRuntimeException(e.toString());
+//		}
+//		log.fine(">>copyResult");	
 	}
 	
 	/**

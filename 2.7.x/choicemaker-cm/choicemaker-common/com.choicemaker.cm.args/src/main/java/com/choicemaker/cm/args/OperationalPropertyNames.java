@@ -1,14 +1,14 @@
-package com.choicemaker.cm.io.blocking.automated.offline.core;
+package com.choicemaker.cm.args;
 
 /**
- * An operational property is some property computed during an OABA job that
- * needs to be retained temporarily between OABA stages. In the current
+ * An operational property is some property computed during a batch job that
+ * needs to be retained temporarily during batch processing. In the current
  * implementation, that means between MDB instances. This interface defines the
  * names of OABA operational properties.
  *
  * @author rphall
  */
-public interface OabaOperationalPropertyNames {
+public interface OperationalPropertyNames {
 
 	/**
 	 * The number of blocking fields defined by the matching model used in an
@@ -140,8 +140,9 @@ public interface OabaOperationalPropertyNames {
 	String PN_TRANSITIVITY_CACHED_PAIRS_FILE = "TRANS_CACHED_PAIRS_FILE";
 
 	/**
-	 * A flag used to indicate that a failed or aborted job should clean up
-	 * temporary resources. The value is defined in
+	 * The name of a boolean-valued property that is used to indicate that a
+	 * failed or aborted job should clean up temporary resources. The value is
+	 * defined in
 	 * <ul>
 	 * <li>OabaServiceBean</li>
 	 * <li>TransitivityServiceBean</li>

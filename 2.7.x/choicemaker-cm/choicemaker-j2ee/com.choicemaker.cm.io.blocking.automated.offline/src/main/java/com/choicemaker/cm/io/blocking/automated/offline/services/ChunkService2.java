@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -32,9 +33,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkRecordIdSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.util.LongArrayList;
 
@@ -70,7 +70,7 @@ public class ChunkService2 {
 	private IChunkDataSinkSourceFactory masterSinkFactory;
 
 	private IComparisonArraySinkSourceFactory cFactory;
-	private OabaEventLog status;
+	private ProcessingEventLog status;
 	private int maxChunkSize;
 
 	private ArrayList recIDSinks = new ArrayList(); // list of chunk id sinks
@@ -124,7 +124,7 @@ public class ChunkService2 {
 			IChunkDataSinkSourceFactory stageSinkFactory,
 			IChunkDataSinkSourceFactory masterSinkFactory,
 			IComparisonArraySinkSourceFactory cFactory, int maxChunkSize,
-			OabaEventLog status) {
+			ProcessingEventLog status) {
 
 		this.bSource = bSource;
 		this.osSource = osSource;
@@ -164,11 +164,11 @@ public class ChunkService2 {
 	public void runService() throws XmlConfException, BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA) {
+		if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA) {
 			// do nothing here
 			// numChunks = Integer.parseInt( status.getAdditionalInfo() );
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_DEDUP_OVERSIZED) {
 			// create ids
 			log.info("Creating ids for block source " + bSource.getInfo());
 			createIDs(bSource, false, 0);
@@ -178,14 +178,14 @@ public class ChunkService2 {
 				createIDs(osSource, true, 0);
 			}
 
-			status.setCurrentOabaEvent(OabaEvent.DONE_CREATE_CHUNK_IDS,
+			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_CREATE_CHUNK_IDS,
 					Integer.toString(comparisonSinks.size()));
 
 			createDataFiles();
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_IDS) {
 			// create the chunk data files
-			int numFiles = Integer.parseInt(status.getCurrentOabaEventInfo());
+			int numFiles = Integer.parseInt(status.getCurrentProcessingEventInfo());
 			log.info("Recovering from creating chunk data, numFiles "
 					+ numFiles);
 
@@ -193,9 +193,9 @@ public class ChunkService2 {
 
 			createDataFiles();
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_CREATE_CHUNK_IDS) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_IDS) {
 			// recover chunk id creation
-			String temp = status.getCurrentOabaEventInfo();
+			String temp = status.getCurrentProcessingEventInfo();
 			int ind = temp.indexOf(OabaProcessing.DELIMIT);
 			int numFiles = Integer.parseInt(temp.substring(0, ind));
 			int numBlocks = Integer.parseInt(temp.substring(ind + 1));
@@ -211,14 +211,14 @@ public class ChunkService2 {
 				createIDs(osSource, true, 0);
 			}
 
-			status.setCurrentOabaEvent(OabaEvent.DONE_CREATE_CHUNK_IDS,
+			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_CREATE_CHUNK_IDS,
 					Integer.toString(comparisonSinks.size()));
 
 			createDataFiles();
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_CREATE_CHUNK_OVERSIZED_IDS) {
 			// recover chunk id creation
-			String temp = status.getCurrentOabaEventInfo();
+			String temp = status.getCurrentProcessingEventInfo();
 			int ind = temp.indexOf(OabaProcessing.DELIMIT);
 			int numFiles = Integer.parseInt(temp.substring(0, ind));
 			int numBlocks = Integer.parseInt(temp.substring(ind + 1));
@@ -229,7 +229,7 @@ public class ChunkService2 {
 
 			createIDs(osSource, true, numBlocks);
 
-			status.setCurrentOabaEvent(OabaEvent.DONE_CREATE_CHUNK_IDS,
+			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_CREATE_CHUNK_IDS,
 					Integer.toString(comparisonSinks.size()));
 
 			createDataFiles();
@@ -316,7 +316,7 @@ public class ChunkService2 {
 						recordSinks, translator.getSplitIndex());
 			}
 
-			status.setCurrentOabaEvent(OabaEvent.DONE_CREATE_CHUNK_DATA,
+			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_CREATE_CHUNK_DATA,
 					Integer.toString(comparisonSinks.size()));
 
 			// close sinks and cleanup
@@ -488,10 +488,10 @@ public class ChunkService2 {
 							+ OabaProcessing.DELIMIT
 							+ Integer.toString(skip + countAll);
 				if (isOS)
-					status.setCurrentOabaEvent(
-							OabaEvent.CREATE_CHUNK_OVERSIZED_IDS, temp);
+					status.setCurrentProcessingEvent(
+							OabaProcessingEvent.CREATE_CHUNK_OVERSIZED_IDS, temp);
 				else
-					status.setCurrentOabaEvent(OabaEvent.CREATE_CHUNK_IDS, temp);
+					status.setCurrentProcessingEvent(OabaProcessingEvent.CREATE_CHUNK_IDS, temp);
 
 				// create a new block sink
 				cOut.close();
@@ -524,10 +524,10 @@ public class ChunkService2 {
 						+ OabaProcessing.DELIMIT
 						+ Integer.toString(skip + countAll);
 			if (isOS)
-				status.setCurrentOabaEvent(
-						OabaEvent.CREATE_CHUNK_OVERSIZED_IDS, temp);
+				status.setCurrentProcessingEvent(
+						OabaProcessingEvent.CREATE_CHUNK_OVERSIZED_IDS, temp);
 			else
-				status.setCurrentOabaEvent(OabaEvent.CREATE_CHUNK_IDS, temp);
+				status.setCurrentProcessingEvent(OabaProcessingEvent.CREATE_CHUNK_IDS, temp);
 		}
 
 		// cleanup

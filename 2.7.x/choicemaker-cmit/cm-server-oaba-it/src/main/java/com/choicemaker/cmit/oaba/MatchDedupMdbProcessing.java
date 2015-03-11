@@ -1,14 +1,13 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OABA;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
+import static com.choicemaker.cm.args.BatchProcessing.*;
 
 import java.util.logging.Logger;
 
 import javax.jms.Queue;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cmit.utils.OabaProcessingPhase;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 
 /**
@@ -28,9 +27,9 @@ public class MatchDedupMdbProcessing extends
 			.getName());
 
 	public MatchDedupMdbProcessing() {
-		super(LOG_SOURCE, logger, EVT_DONE_OABA, PCT_DONE_OABA,
+		super(LOG_SOURCE, logger, EVT_DONE, PCT_DONE,
 				SimplePersonSqlServerTestConfiguration.class,
-				OabaProcessingPhase.FINAL);
+				BatchProcessingPhase.FINAL);
 	}
 
 	@Override
@@ -40,7 +39,7 @@ public class MatchDedupMdbProcessing extends
 
 	/** Stubbed implementation that does not check the working directory */
 	@Override
-	public boolean isWorkingDirectoryCorrectAfterProcessing(OabaJob batchJob) {
+	public boolean isWorkingDirectoryCorrectAfterProcessing(BatchJob batchJob) {
 		return true;
 	}
 

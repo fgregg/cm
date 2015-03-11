@@ -17,7 +17,7 @@ import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 
@@ -42,11 +42,11 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 	 * 
 	 * @param tp
 	 *            must be non-null
-	 * @param oabaJob
+	 * @param batchJob
 	 * @param predecessorParams
 	 *            (may be null)
 	 */
-	public static String dump(TransitivityParameters tp, OabaJob oabaJob,
+	public static String dump(TransitivityParameters tp, BatchJob batchJob,
 			OabaParameters predecessorParams) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
@@ -57,7 +57,7 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 			pw.println("Transitivity parameters (TP)");
 			pw.println("TP: Result format: " + tp.getAnalysisResultFormat());
 			pw.println("TP: Graph property: " + tp.getGraphProperty());
-			Long predecessorId = oabaJob == null ? null : oabaJob.getId();
+			Long predecessorId = batchJob == null ? null : batchJob.getId();
 			pw.println("TP: OABA predecessor: " + predecessorId);
 			dumpDifferences(pw, tp, predecessorParams);
 		}

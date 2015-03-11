@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_BLOCKING_FIELD_COUNT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_BLOCKING_FIELD_COUNT;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE;
 
 import java.io.IOException;
 import java.util.Date;
@@ -27,6 +27,8 @@ import javax.jms.Queue;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -34,13 +36,11 @@ import com.choicemaker.cm.core.RecordSource;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.RecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService3;
 
 /**
@@ -76,7 +76,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		OabaJobMessage data = null;
-		OabaJob oabaJob = null;
+		BatchJob batchJob = null;
 
 		getLogger().info("StartOabaMDB In onMessage");
 
@@ -87,14 +87,14 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				data = (OabaJobMessage) msg.getObject();
 
 				final long jobId = data.jobID;
-				oabaJob = getJobController().findOabaJob(jobId);
+				batchJob = getJobController().findOabaJob(jobId);
 				OabaParameters params =
 					getParametersController().findOabaParametersByJobId(jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
-				OabaEventLog processingEntry =
-					getProcessingController().getProcessingLog(oabaJob);
-				if (oabaJob == null || params == null || oabaSettings == null) {
+				ProcessingEventLog processingEntry =
+					getProcessingController().getProcessingLog(batchJob);
+				if (batchJob == null || params == null || oabaSettings == null) {
 					String s =
 						"Unable to find a job, parameters or settings for "
 								+ jobId;
@@ -112,7 +112,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 				}
 
 				// update status to mark as start
-				oabaJob.markAsStarted();
+				batchJob.markAsStarted();
 
 				getLogger().info("Job id: " + jobId);
 				getLogger().info(
@@ -163,15 +163,15 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 					MutableRecordIdTranslator<?> translator =
 						getRecordIdController()
-								.createMutableRecordIdTranslator(oabaJob);
+								.createMutableRecordIdTranslator(batchJob);
 
 					// create rec_id, val_id files
 					RecValSinkSourceFactory recvalFactory =
-						OabaFileUtils.getRecValFactory(oabaJob);
+						OabaFileUtils.getRecValFactory(batchJob);
 					RecValService3 rvService =
 						new RecValService3(staging, master, stageModel,
 								recvalFactory, getRecordIdController(),
-								translator, processingEntry, oabaJob);
+								translator, processingEntry, batchJob);
 					rvService.runService();
 					getLogger().info(
 							"Done creating rec_id, val_id files: "
@@ -182,11 +182,11 @@ public class StartOabaMDB extends AbstractOabaMDB {
 								translator);
 					final RECORD_ID_TYPE recordIdType =
 						immutableTranslator.getRecordIdType();
-					getPropertyController().setJobProperty(oabaJob,
+					getPropertyController().setJobProperty(batchJob,
 							PN_RECORD_ID_TYPE, recordIdType.name());
 
 					final int numBlockFields = rvService.getNumBlockingFields();
-					getPropertyController().setJobProperty(oabaJob,
+					getPropertyController().setJobProperty(batchJob,
 							PN_BLOCKING_FIELD_COUNT,
 							String.valueOf(numBlockFields));
 
@@ -198,7 +198,7 @@ public class StartOabaMDB extends AbstractOabaMDB {
 					// object
 					data.validator = validator;
 
-					updateOabaProcessingStatus(oabaJob, OabaEvent.DONE_REC_VAL,
+					updateOabaProcessingStatus(batchJob, OabaProcessingEvent.DONE_REC_VAL,
 							new Date(), null);
 					sendToBlocking(data);
 				}
@@ -210,8 +210,8 @@ public class StartOabaMDB extends AbstractOabaMDB {
 
 		} catch (Exception e) {
 			getLogger().severe(e.toString());
-			if (oabaJob != null) {
-				oabaJob.markAsFailed();
+			if (batchJob != null) {
+				batchJob.markAsFailed();
 			}
 		}
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
@@ -304,17 +304,17 @@ public class StartOabaMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected void processOabaMessage(OabaJobMessage data, OabaJob oabaJob,
+	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
 			OabaParameters params, OabaSettings oabaSettings,
-			OabaEventLog processingLog, ServerConfiguration serverConfig,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 		// Does nothing in this class. Instead, onMessage is overridden
 		// and this callback is bypassed.
 	}
 
 	@Override
-	protected OabaEvent getCompletionEvent() {
-		return OabaEvent.DONE_REC_VAL;
+	protected OabaProcessingEvent getCompletionEvent() {
+		return OabaProcessingEvent.DONE_REC_VAL;
 	}
 
 	@Override

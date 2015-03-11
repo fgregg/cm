@@ -10,41 +10,40 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.DISCRIMINATOR_VALUE;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.JPQL_OABAPROCESSING_DELETE_BY_JOBID;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.JPQL_OABAPROCESSING_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.JPQL_OABAPROCESSING_FIND_BY_JOBID;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_DELETE_BY_JOBID;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_ALL;
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingEventJPA.QN_OABAPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.JPQL_TRANSPROCESSING_DELETE_BY_JOBID;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.JPQL_TRANSPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.JPQL_TRANSPROCESSING_FIND_BY_JOBID;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_DELETE_BY_JOBID;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_ALL;
+import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_FIND_BY_JOBID;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.impl.BatchProcessingLogEntry;
-import com.choicemaker.cm.transitivity.core.TransitivityEvent;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityProcessingEvent;
+import com.choicemaker.cm.batch.impl.BatchProcessingEventEntity;
+import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
 
 /**
- * This is the EJB implementation of the OABA OabaProcessing interface.
- * 
- * @author pcheung
- *
+ * This is the EJB implementation of the Transitivity BatchProcessingEventEntity
+ * interface.
  */
 @NamedQueries({
-		@NamedQuery(name = QN_OABAPROCESSING_FIND_ALL,
-				query = JPQL_OABAPROCESSING_FIND_ALL),
-		@NamedQuery(name = QN_OABAPROCESSING_FIND_BY_JOBID,
-				query = JPQL_OABAPROCESSING_FIND_BY_JOBID),
-		@NamedQuery(name = QN_OABAPROCESSING_DELETE_BY_JOBID,
-				query = JPQL_OABAPROCESSING_DELETE_BY_JOBID) })
+		@NamedQuery(name = QN_TRANSPROCESSING_FIND_ALL,
+				query = JPQL_TRANSPROCESSING_FIND_ALL),
+		@NamedQuery(name = QN_TRANSPROCESSING_FIND_BY_JOBID,
+				query = JPQL_TRANSPROCESSING_FIND_BY_JOBID),
+		@NamedQuery(name = QN_TRANSPROCESSING_DELETE_BY_JOBID,
+				query = JPQL_TRANSPROCESSING_DELETE_BY_JOBID) })
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class TransitivityProcessingEventEntity extends BatchProcessingLogEntry
-		implements TransitivityProcessingEvent {
+public class TransitivityProcessingEventEntity extends
+		BatchProcessingEventEntity implements TransitivityBatchProcessingEvent {
 
 	private static final long serialVersionUID = 271L;
 
@@ -55,19 +54,22 @@ public class TransitivityProcessingEventEntity extends BatchProcessingLogEntry
 		super();
 	}
 
-	public TransitivityProcessingEventEntity(BatchJob job, TransitivityEvent status) {
+	public TransitivityProcessingEventEntity(BatchJob job,
+			ProcessingEvent status) {
 		this(job, status, null);
 	}
 
-	public TransitivityProcessingEventEntity(BatchJob job, TransitivityEvent event, String info) {
-		super(job.getId(), DISCRIMINATOR_VALUE, event.name(), event.eventId,
-				event.percentComplete, info);
+	public TransitivityProcessingEventEntity(BatchJob job,
+			ProcessingEvent event, String info) {
+		super(job.getId(), DISCRIMINATOR_VALUE, event.getEventName(), event
+				.getEventId(), event.getPercentComplete(), info);
 	}
 
 	@Override
-	public TransitivityEvent getTransitivityEvent() {
-		TransitivityEvent retVal = TransitivityEvent.valueOf(this.getEventName());
-		assert retVal != null;
+	public ProcessingEvent getProcessingEvent() {
+		ProcessingEvent retVal =
+			new TransitivityProcessingEvent(getEventName(),
+					getEventSequenceNumber(), getFractionComplete());
 		return retVal;
 	}
 

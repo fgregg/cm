@@ -1,27 +1,30 @@
-package com.choicemaker.cm.io.blocking.automated.offline.core;
+package com.choicemaker.cm.batch;
 
-public interface OabaEventLog {
+import com.choicemaker.cm.args.ProcessingEvent;
+
+
+public interface ProcessingEventLog {
 
 	/** This methods gets the most recent processing event */
-	OabaEvent getCurrentOabaEvent();
+	ProcessingEvent getCurrentProcessingEvent();
 
 	/** This methods gets the id of the most recent processing event */
-	int getCurrentOabaEventId();
+	int getCurrentProcessingEventId();
 
 	/**
 	 * This method sets the current processing event with null additional info.
 	 */
-	void setCurrentOabaEvent(OabaEvent event);
+	void setCurrentProcessingEvent(ProcessingEvent event);
 
 	/**
 	 * This method sets the current processing event with additional info.
 	 */
-	void setCurrentOabaEvent(OabaEvent event, String info);
+	void setCurrentProcessingEvent(ProcessingEvent event, String info);
 
 	/**
 	 * This method gets the additional info associated with the most recent
 	 * processing event.
 	 */
-	String getCurrentOabaEventInfo();
+	String getCurrentProcessingEventInfo();
 
 }

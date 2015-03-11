@@ -10,9 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CURRENT_CHUNK_INDEX;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CURRENT_CHUNK_INDEX;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -30,9 +30,13 @@ import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
@@ -40,16 +44,13 @@ import com.choicemaker.cm.core.XmlConfException;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
@@ -85,7 +86,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	private OperationalPropertyController propertyController;
 
 	@EJB
-	private OabaProcessingController processingController;
+	private ProcessingController processingController;
 
 	// -- Session data
 
@@ -129,15 +130,15 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	protected abstract Logger getJMSTrace();
 
-	protected abstract void cleanUp(OabaJob job, OabaJobMessage sd)
+	protected abstract void cleanUp(BatchJob job, OabaJobMessage sd)
 			throws BlockingException;
 
 	protected abstract void sendToMatcher(OabaJobMessage sd);
 
-	protected abstract void sendToUpdateStatus(OabaJob job, OabaEvent event,
+	protected abstract void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info);
 
-	protected abstract void sendToMatchDebup(OabaJob job, OabaJobMessage sd);
+	protected abstract void sendToMatchDebup(BatchJob job, OabaJobMessage sd);
 
 	// -- Accessors
 
@@ -161,7 +162,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		return propertyController;
 	}
 
-	protected OabaProcessingController getProcessingController() {
+	protected ProcessingController getProcessingController() {
 		return processingController;
 	}
 
@@ -171,7 +172,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		getJMSTrace().info(
 				"Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
-		OabaJob oabaJob = null;
+		BatchJob batchJob = null;
 
 		getLogger().fine("MatchSchedulerMDB In onMessage");
 
@@ -183,7 +184,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 				if (o instanceof OabaJobMessage) {
 					final OabaJobMessage sd = (OabaJobMessage) o;
 					final long jobId = sd.jobID;
-					oabaJob = getJobController().findOabaJob(jobId);
+					batchJob = getJobController().findOabaJob(jobId);
 					OabaParameters params =
 						getParametersController().findOabaParametersByJobId(
 								jobId);
@@ -192,7 +193,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					ServerConfiguration serverConfig =
 						getServerController().findServerConfigurationByJobId(
 								jobId);
-					if (oabaJob == null || params == null
+					if (batchJob == null || params == null
 							|| oabaSettings == null || serverConfig == null) {
 						String s =
 							"Unable to find a job, parameters, settings or server configuration for "
@@ -218,11 +219,11 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					getLogger().info("Maximum chunk size: " + maxChunkSize);
 					getLogger().info("Number of processors: " + numProcessors);
 
-					OabaEventLog processingLog =
-						getProcessingController().getProcessingLog(oabaJob);
-					if (processingLog.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
+					ProcessingEventLog processingLog =
+						getProcessingController().getProcessingLog(batchJob);
+					if (processingLog.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
 						// matching is already done, so go on to the next step.
-						nextSteps(oabaJob, sd);
+						nextSteps(batchJob, sd);
 					} else {
 						if (sd.jobID != currentJobID) {
 							// reset counters
@@ -255,8 +256,8 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 		} catch (Exception e) {
 			getLogger().severe(e.toString());
-			if (oabaJob != null) {
-				oabaJob.markAsFailed();
+			if (batchJob != null) {
+				batchJob.markAsFailed();
 			}
 			// mdc.setRollbackOnly();
 		}
@@ -284,19 +285,19 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			throws BlockingException {
 
 		final long jobId = mwd.jobID;
-		OabaJob oabaJob = getJobController().findOabaJob(jobId);
+		BatchJob batchJob = getJobController().findOabaJob(jobId);
 		OabaJobMessage sd = new OabaJobMessage(mwd);
-		OabaEventLog status =
-			getProcessingController().getProcessingLog(oabaJob);
+		ProcessingEventLog status =
+			getProcessingController().getProcessingLog(batchJob);
 
 		// keeping track of messages sent and received.
 		countMessages--;
 		getLogger().info("outstanding messages: " + countMessages);
 
-		if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
-			MessageBeanUtils.stopJob(oabaJob, getPropertyController(), status);
+		if (BatchJobStatus.ABORT_REQUESTED == batchJob.getStatus()) {
+			MessageBeanUtils.stopJob(batchJob, getPropertyController(), status);
 
-		} else if (BatchJobStatus.ABORTED != oabaJob.getStatus()) {
+		} else if (BatchJobStatus.ABORTED != batchJob.getStatus()) {
 			// if there are multiple processors, we have don't do anything for
 			// STATUS_ABORTED.
 
@@ -312,7 +313,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			}
 
 			final String _latestChunkProcessed =
-				getPropertyController().getJobProperty(oabaJob,
+				getPropertyController().getJobProperty(batchJob,
 						PN_CHUNK_FILE_COUNT);
 			final int latestChunkProcessed =
 				Integer.valueOf(_latestChunkProcessed);
@@ -324,12 +325,12 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			// Go on to the next chunk
 			if (countMessages == 0) {
 				final String _numChunks =
-					getPropertyController().getJobProperty(oabaJob,
+					getPropertyController().getJobProperty(batchJob,
 							PN_CHUNK_FILE_COUNT);
 				final int numChunks = Integer.valueOf(_numChunks);
 
 				final String _numRegularChunks =
-					getPropertyController().getJobProperty(oabaJob,
+					getPropertyController().getJobProperty(batchJob,
 							PN_REGULAR_CHUNK_FILE_COUNT);
 				final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
@@ -337,7 +338,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					Integer.toString(numChunks) + DELIM
 							+ Integer.toString(numRegularChunks) + DELIM
 							+ Integer.toString(currentChunk);
-				status.setCurrentOabaEvent(OabaEvent.MATCHING_DATA, temp);
+				status.setCurrentProcessingEvent(OabaProcessingEvent.MATCHING_DATA, temp);
 
 				getLogger().info("Chunk " + latestChunkProcessed + " is done.");
 
@@ -347,7 +348,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					startChunk(sd, currentChunk);
 				} else {
 					// all the chunks are done
-					status.setCurrentOabaEvent(OabaEvent.DONE_MATCHING_DATA);
+					status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_MATCHING_DATA);
 
 					getLogger().info(
 							"total comparisons: " + numCompares
@@ -370,7 +371,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 						}
 					}
 
-					nextSteps(oabaJob, sd);
+					nextSteps(batchJob, sd);
 				}
 			} // end countMessages == 0
 		} // end if abort requested
@@ -379,10 +380,10 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 	/**
 	 * This method is called when all the chunks are done.
 	 */
-	protected final void nextSteps(final OabaJob job, OabaJobMessage sd)
+	protected final void nextSteps(final BatchJob job, OabaJobMessage sd)
 			throws BlockingException {
 		cleanUp(job, sd);
-		sendToUpdateStatus(job, OabaEvent.DONE_MATCHING_DATA, new Date(), null);
+		sendToUpdateStatus(job, OabaProcessingEvent.DONE_MATCHING_DATA, new Date(), null);
 		sendToMatchDebup(job, sd);
 	}
 
@@ -395,18 +396,18 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 		// init values
 		final long jobId = sd.jobID;
-		OabaJob oabaJob = getJobController().findOabaJob(jobId);
-		OabaEventLog processingLog =
-			getProcessingController().getProcessingLog(oabaJob);
+		BatchJob batchJob = getJobController().findOabaJob(jobId);
+		ProcessingEventLog processingLog =
+			getProcessingController().getProcessingLog(batchJob);
 
-		if (BatchJobStatus.ABORT_REQUESTED == oabaJob.getStatus()) {
-			MessageBeanUtils.stopJob(oabaJob, getPropertyController(),
+		if (BatchJobStatus.ABORT_REQUESTED == batchJob.getStatus()) {
+			MessageBeanUtils.stopJob(batchJob, getPropertyController(),
 					processingLog);
 
 		} else {
 			currentChunk = 0;
-			if (processingLog.getCurrentOabaEventId() == OabaProcessing.EVT_MATCHING_DATA) {
-				currentChunk = recover(oabaJob, sd, processingLog) + 1;
+			if (processingLog.getCurrentProcessingEventId() == OabaProcessing.EVT_MATCHING_DATA) {
+				currentChunk = recover(batchJob, sd, processingLog) + 1;
 				getLogger().info("recovering from " + currentChunk);
 			}
 
@@ -417,12 +418,12 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			ImmutableProbabilityModel ipm =
 				PMManager.getImmutableModelInstance(modelName);
 			IChunkDataSinkSourceFactory stageFactory =
-				OabaFileUtils.getStageDataFactory(oabaJob, ipm);
+				OabaFileUtils.getStageDataFactory(batchJob, ipm);
 			IChunkDataSinkSourceFactory masterFactory =
-				OabaFileUtils.getMasterDataFactory(oabaJob, ipm);
+				OabaFileUtils.getMasterDataFactory(batchJob, ipm);
 
 			final String _numChunks =
-				getPropertyController().getJobProperty(oabaJob,
+				getPropertyController().getJobProperty(batchJob,
 						PN_CHUNK_FILE_COUNT);
 			final int numChunks = Integer.valueOf(_numChunks);
 
@@ -444,20 +445,20 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		}
 	}
 
-	protected final int recover(OabaJob oabaJob, OabaJobMessage sd,
-			OabaEventLog status) throws BlockingException {
+	protected final int recover(BatchJob batchJob, OabaJobMessage sd,
+			ProcessingEventLog status) throws BlockingException {
 
 		StringTokenizer stk =
-			new StringTokenizer(status.getCurrentOabaEventInfo(), DELIM);
+			new StringTokenizer(status.getCurrentProcessingEventInfo(), DELIM);
 
 		final int numChunks = Integer.parseInt(stk.nextToken());
 		getLogger().info("Number of chunks " + numChunks);
-		getPropertyController().setJobProperty(oabaJob, PN_CHUNK_FILE_COUNT,
+		getPropertyController().setJobProperty(batchJob, PN_CHUNK_FILE_COUNT,
 				String.valueOf(numChunks));
 
 		final int numRegularChunks = Integer.parseInt(stk.nextToken());
 		getLogger().info("Number of regular chunks " + numChunks);
-		getPropertyController().setJobProperty(oabaJob,
+		getPropertyController().setJobProperty(batchJob,
 				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
 
 		int currentChunk = Integer.parseInt(stk.nextToken());
@@ -473,19 +474,19 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			throws XmlConfException, BlockingException, NamingException,
 			JMSException {
 		final long jobId = sd.jobID;
-		OabaJob oabaJob = getJobController().findOabaJob(jobId);
+		BatchJob batchJob = getJobController().findOabaJob(jobId);
 
 		// This is because tree ids start with 1 and not 0.
 		for (int i = 1; i <= numProcessors; i++) {
 			@SuppressWarnings("rawtypes")
 			IMatchRecord2Sink mSink =
-				OabaFileUtils.getMatchChunkFactory(oabaJob).getSink(i);
+				OabaFileUtils.getMatchChunkFactory(batchJob).getSink(i);
 			mSink.open();
 			mSink.close();
 			getLogger().fine("creating " + mSink.getInfo());
 		}
 
-		nextSteps(oabaJob, sd);
+		nextSteps(batchJob, sd);
 	}
 
 	/**
@@ -498,7 +499,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		getLogger().fine("startChunk " + currentChunk);
 
 		final long jobId = sd.jobID;
-		final OabaJob oabaJob = getJobController().findOabaJob(jobId);
+		final BatchJob batchJob = getJobController().findOabaJob(jobId);
 		final OabaParameters params =
 			getParametersController().findOabaParametersByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
@@ -506,7 +507,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			PMManager.getModelInstance(modelConfigId);
 
 		getLogger().info("Current chunk " + currentChunk);
-		getPropertyController().setJobProperty(oabaJob, PN_CURRENT_CHUNK_INDEX,
+		getPropertyController().setJobProperty(batchJob, PN_CURRENT_CHUNK_INDEX,
 				String.valueOf(currentChunk));
 
 		// call to garbage collection
@@ -520,7 +521,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		// read in the data;
 		t = System.currentTimeMillis();
 		dataStore.init(stageRS[currentChunk], model, masterRS[currentChunk],
-				maxChunkSize, oabaJob);
+				maxChunkSize, batchJob);
 
 		t = System.currentTimeMillis() - t;
 		this.timeReadData += t;

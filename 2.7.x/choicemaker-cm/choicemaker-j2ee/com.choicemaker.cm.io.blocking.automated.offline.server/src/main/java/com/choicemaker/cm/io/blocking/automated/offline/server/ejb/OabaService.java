@@ -21,6 +21,7 @@ import javax.naming.NamingException;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 
 /**
@@ -129,7 +130,7 @@ public interface OabaService {
 	 *         object. This object has getStatus (), getStartDate (), and
 	 *         getFinishDate () methods.
 	 */
-	public OabaJob getOabaJob(long jobId);
+	public BatchJob getOabaJob(long jobId);
 
 	/**
 	 * This method is similar to getOabaJob, except that it only returns the

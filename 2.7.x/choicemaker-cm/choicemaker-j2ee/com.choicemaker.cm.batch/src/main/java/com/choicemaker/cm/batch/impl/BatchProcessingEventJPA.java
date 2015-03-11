@@ -1,6 +1,6 @@
 package com.choicemaker.cm.batch.impl;
 
-public interface BatchProcessingJPA {
+public interface BatchProcessingEventJPA {
 
 	/** Name of the table that persists batch job data */
 	String TABLE_NAME = "CMT_OABA_BATCH_PROCESSING";

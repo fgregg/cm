@@ -30,10 +30,10 @@ import org.junit.runner.RunWith;
 import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
@@ -115,7 +115,7 @@ public class SettingsControllerBeanIT {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaProcessingController processingController;
+	private ProcessingController processingController;
 
 	@EJB
 	private OabaService oabaService;

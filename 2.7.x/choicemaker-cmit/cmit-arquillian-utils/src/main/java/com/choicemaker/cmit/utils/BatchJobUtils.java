@@ -25,16 +25,15 @@ import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.core.base.Thresholds;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaSettingsEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityJobEntity;
 import com.choicemaker.cm.transitivity.server.impl.TransitivityParametersEntity;
 
@@ -47,7 +46,7 @@ public class BatchJobUtils {
 	/**
 	 * Creates an ephemeral instance of OabaParametersEntity. If
 	 * <code>isTag</code> is <code>true</code>, an externalId for the returned
-	 * OabaJob is synthesized using the specified String; otherwise, the String
+	 * BatchJob is synthesized using the specified String; otherwise, the String
 	 * is used as an externalId without alteration.
 	 */
 	public static OabaJobEntity createEphemeralOabaJobEntity(
@@ -124,7 +123,7 @@ public class BatchJobUtils {
 
 	/**
 	 * Creates a persistent instance of OabaParametersEntity An externalId for
-	 * the returned OabaJob is synthesized using the specified tag.
+	 * the returned BatchJob is synthesized using the specified tag.
 	 */
 	public static OabaParametersEntity createPersistentOabaParameters(
 			EntityManager em, String tag, TestEntityCounts te) {
@@ -170,7 +169,7 @@ public class BatchJobUtils {
 
 	/**
 	 * Creates a persistent instance of OabaSettingsEntity An externalId for the
-	 * returned OabaJob is synthesized using the specified tag.
+	 * returned BatchJob is synthesized using the specified tag.
 	 */
 	public static OabaSettingsEntity createPersistentOabaSettings(
 			int maxSingleLimit, EntityManager em, TestEntityCounts te) {
@@ -190,20 +189,20 @@ public class BatchJobUtils {
 		return nonTerminal[i];
 	}
 
-	public static TransitivityJob createEphemeralTransitivityJob(
+	public static BatchJob createEphemeralTransitivityJob(
 			int maxSingleLimit, UserTransaction utx, ServerConfiguration sc,
-			EntityManager em, TestEntityCounts te, OabaJob oabaJob,
+			EntityManager em, TestEntityCounts te, BatchJob batchJob,
 			OabaParametersController oabaParamsController, String s,
 			boolean isTag) {
 		final String METHOD = "createEphemeralTransitivityJob";
 		if (utx == null || sc == null || em == null || te == null
-				|| oabaJob == null) {
+				|| batchJob == null) {
 			throw new IllegalArgumentException("null argument");
 		}
 		TransitivityJobEntity retVal = null;
 		try {
 			utx.begin();
-			long oabaParamsId = oabaJob.getOabaParametersId();
+			long oabaParamsId = batchJob.getParametersId();
 			OabaParameters oabaParams =
 				oabaParamsController.findOabaParameters(oabaParamsId);
 			TransitivityParameters params =
@@ -215,7 +214,7 @@ public class BatchJobUtils {
 			} else {
 				extId = s;
 			}
-			retVal = new TransitivityJobEntity(params, sc, oabaJob, extId);
+			retVal = new TransitivityJobEntity(params, sc, batchJob, extId);
 			te.add(retVal);
 			utx.commit();
 		} catch (Exception x) {

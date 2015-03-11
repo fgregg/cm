@@ -1,7 +1,5 @@
 package com.choicemaker.cm.batch.impl;
 
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-
 public interface BatchJobJPA {
 
 	/** Name of the table that persists batch job data */
@@ -78,14 +76,14 @@ public interface BatchJobJPA {
 	/**
 	 * One of 8 possible values:
 	 * <ul>
-	 * <li>{@link OabaJob#STATUS_NEW}</li>
-	 * <li>{@link OabaJob#STATUS_QUEUED}</li>
-	 * <li>{@link OabaJob#STATUS_STARTED}</li>
-	 * <li>{@link OabaJob#STATUS_COMPLETED}</li>
-	 * <li>{@link OabaJob#STATUS_FAILED}</li>
-	 * <li>{@link OabaJob#STATUS_ABORT_REQUESTED}</li>
-	 * <li>{@link OabaJob#STATUS_ABORTED}</li>
-	 * <li>{@link OabaJob#MAGIC_DESCRIPTION_CLEAR}</li>
+	 * <li>{@link BatchJob#STATUS_NEW}</li>
+	 * <li>{@link BatchJob#STATUS_QUEUED}</li>
+	 * <li>{@link BatchJob#STATUS_STARTED}</li>
+	 * <li>{@link BatchJob#STATUS_COMPLETED}</li>
+	 * <li>{@link BatchJob#STATUS_FAILED}</li>
+	 * <li>{@link BatchJob#STATUS_ABORT_REQUESTED}</li>
+	 * <li>{@link BatchJob#STATUS_ABORTED}</li>
+	 * <li>{@link BatchJob#MAGIC_DESCRIPTION_CLEAR}</li>
 	 * </ul>
 	 */
 	String CN_STATUS = "STATUS";

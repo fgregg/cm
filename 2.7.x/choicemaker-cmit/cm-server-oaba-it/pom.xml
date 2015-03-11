@@ -53,11 +53,16 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-<!-- Assertions should be enabled by default
         <configuration>
           <enableAssertions>true</enableAssertions>
+					<excludes>
+<exclude>**/BlockMdbIT.java</exclude>
+<exclude>**/ChunkMdbIT.java</exclude>
+<exclude>**/DedupMdbIT.java</exclude>
+<exclude>**/MatchSchedulerMdbIT.java</exclude>
+<exclude>**/StartMdbIT.java</exclude>
+					</excludes>
         </configuration>
--->
         <executions>
           <execution>
             <goals>
@@ -94,6 +99,14 @@
     <dependency>
       <groupId>com.choicemaker.cmit</groupId>
       <artifactId>cmit-arquillian-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.args</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.batch</artifactId>
     </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>

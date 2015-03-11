@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 
@@ -85,9 +85,9 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	@Override
 	public OabaParameters findOabaParametersByJobId(long jobId) {
 		OabaParameters retVal = null;
-		OabaJob job = getOabaJobController().findOabaJob(jobId);
+		BatchJob job = getOabaJobController().findOabaJob(jobId);
 		if (job != null) {
-			long paramsId = job.getOabaParametersId();
+			long paramsId = job.getParametersId();
 			retVal = findOabaParameters(paramsId);
 		}
 		return retVal;

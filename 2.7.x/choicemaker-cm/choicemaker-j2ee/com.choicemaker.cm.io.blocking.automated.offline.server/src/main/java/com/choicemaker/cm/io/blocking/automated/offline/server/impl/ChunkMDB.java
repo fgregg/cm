@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE;
 
 import java.util.logging.Logger;
 
@@ -21,18 +21,18 @@ import javax.jms.Queue;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.TreeTransformer;
@@ -59,9 +59,9 @@ public class ChunkMDB extends AbstractOabaMDB {
 	private Queue matchSchedulerQueue;
 
 	@Override
-	protected void processOabaMessage(OabaJobMessage data, OabaJob oabaJob,
+	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
 			OabaParameters params, OabaSettings oabaSettings,
-			OabaEventLog processingLog, ServerConfiguration serverConfig,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 		String temp = (String) model.properties().get("maxChunkSize");
 		int maxChunk = Integer.parseInt(temp);
@@ -72,28 +72,28 @@ public class ChunkMDB extends AbstractOabaMDB {
 
 		@SuppressWarnings("rawtypes")
 		ImmutableRecordIdTranslator translator =
-			getRecordIdController().findRecordIdTranslator(oabaJob);
+			getRecordIdController().findRecordIdTranslator(batchJob);
 
 		// create the os block source.
 		IBlockSinkSourceFactory osFactory =
-			OabaFileUtils.getOversizedFactory(oabaJob);
+			OabaFileUtils.getOversizedFactory(batchJob);
 		osFactory.getNextSource(); // the deduped OS file is file 2.
 		IDSetSource source2 = new IDSetSource(osFactory.getNextSource());
 
 		// create the tree transformer
 		final String _recordIdType =
-			getPropertyController().getJobProperty(oabaJob, PN_RECORD_ID_TYPE);
+			getPropertyController().getJobProperty(batchJob, PN_RECORD_ID_TYPE);
 		final RECORD_ID_TYPE recordIdType =
 			RECORD_ID_TYPE.valueOf(_recordIdType);
 		@SuppressWarnings("rawtypes")
 		IComparisonTreeSinkSourceFactory ctssf =
-			OabaFileUtils.getComparisonTreeFactory(oabaJob, recordIdType);
+			OabaFileUtils.getComparisonTreeFactory(batchJob, recordIdType);
 		TreeTransformer tTransformer = new TreeTransformer(translator, ctssf);
 
 		// create the oversized block transformer
 		Transformer transformerO =
 			new Transformer(translator,
-					OabaFileUtils.getComparisonArrayFactoryOS(oabaJob));
+					OabaFileUtils.getComparisonArrayFactoryOS(batchJob));
 
 		ISerializableRecordSource staging = null;
 		ISerializableRecordSource master = null;
@@ -106,19 +106,19 @@ public class ChunkMDB extends AbstractOabaMDB {
 		assert staging != null;
 
 		ChunkService3 chunkService =
-			new ChunkService3(OabaFileUtils.getTreeSetSource(oabaJob), source2,
+			new ChunkService3(OabaFileUtils.getTreeSetSource(batchJob), source2,
 					staging, master, model,
-					OabaFileUtils.getChunkIDFactory(oabaJob),
-					OabaFileUtils.getStageDataFactory(oabaJob, model),
-					OabaFileUtils.getMasterDataFactory(oabaJob, model),
+					OabaFileUtils.getChunkIDFactory(batchJob),
+					OabaFileUtils.getStageDataFactory(batchJob, model),
+					OabaFileUtils.getMasterDataFactory(batchJob, model),
 					translator.getSplitIndex(), tTransformer, transformerO,
-					maxChunk, maxChunkFiles, processingLog, oabaJob);
+					maxChunk, maxChunkFiles, processingLog, batchJob);
 		chunkService.runService();
 		log.info("Done creating chunks " + chunkService.getTimeElapsed());
 
 		final int numChunks = chunkService.getNumChunks();
 		log.info("Number of chunks " + numChunks);
-		getPropertyController().setJobProperty(oabaJob, PN_CHUNK_FILE_COUNT,
+		getPropertyController().setJobProperty(batchJob, PN_CHUNK_FILE_COUNT,
 				String.valueOf(numChunks));
 	}
 
@@ -133,8 +133,8 @@ public class ChunkMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected OabaEvent getCompletionEvent() {
-		return OabaEvent.DONE_CREATE_CHUNK_DATA;
+	protected OabaProcessingEvent getCompletionEvent() {
+		return OabaProcessingEvent.DONE_CREATE_CHUNK_DATA;
 	}
 
 	@Override

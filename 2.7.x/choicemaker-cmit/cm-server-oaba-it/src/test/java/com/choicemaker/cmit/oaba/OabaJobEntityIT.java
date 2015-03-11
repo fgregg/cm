@@ -22,12 +22,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
@@ -77,7 +77,7 @@ public class OabaJobEntityIT {
 	private OabaSettingsController oabaSettingsController;
 
 	@EJB
-	private OabaProcessingController processingController;
+	private ProcessingController processingController;
 
 	@EJB
 	private OabaService oabaService;
@@ -154,7 +154,7 @@ public class OabaJobEntityIT {
 		final String METHOD = "testPersistFindRemove";
 
 		// Create a job
-		OabaJob job = createEphemeralOabaJobEntity(te, METHOD, true);
+		BatchJob job = createEphemeralOabaJobEntity(te, METHOD, true);
 		assertTrue(!job.isPersistent());
 
 		// Save the job
@@ -162,13 +162,13 @@ public class OabaJobEntityIT {
 		assertTrue(job.isPersistent());
 
 		// Find the job
-		OabaJob batchJob2 = oabaController.findOabaJob(job.getId());
+		BatchJob batchJob2 = oabaController.findOabaJob(job.getId());
 		assertTrue(job.getId() == batchJob2.getId());
 		assertTrue(job.equals(batchJob2));
 
 		// Delete the job
 		oabaController.delete(batchJob2);
-		OabaJob batchJob3 = oabaController.findOabaJob(job.getId());
+		BatchJob batchJob3 = oabaController.findOabaJob(job.getId());
 		assertTrue(batchJob3 == null);
 
 		checkCounts();
@@ -181,7 +181,7 @@ public class OabaJobEntityIT {
 		List<Long> jobIds = new LinkedList<>();
 		for (int i = 0; i < MAX_TEST_ITERATIONS; i++) {
 			// Create and save a job
-			OabaJob job = createEphemeralOabaJobEntity(te, METHOD, true);
+			BatchJob job = createEphemeralOabaJobEntity(te, METHOD, true);
 			assertTrue(!job.isPersistent());
 			oabaController.save(job);
 			te.add(job);
@@ -191,13 +191,13 @@ public class OabaJobEntityIT {
 		}
 
 		// Verify the number of jobs has increased
-		List<OabaJob> jobs = oabaController.findAll();
+		List<BatchJob> jobs = oabaController.findAll();
 		assertTrue(jobs != null);
 
 		// Find the jobs
 		boolean isFound = false;
 		for (long jobId : jobIds) {
-			for (OabaJob job : jobs) {
+			for (BatchJob job : jobs) {
 				if (jobId == job.getId()) {
 					isFound = true;
 					break;
@@ -216,7 +216,7 @@ public class OabaJobEntityIT {
 		// Create a job and set a value
 		String extId = EntityManagerUtils.createExternalId(METHOD);
 		boolean isTag = false;
-		OabaJob job = createEphemeralOabaJobEntity(te, extId, isTag);
+		BatchJob job = createEphemeralOabaJobEntity(te, extId, isTag);
 		assertTrue(extId.equals(job.getExternalId()));
 
 		// Save the job
@@ -239,7 +239,7 @@ public class OabaJobEntityIT {
 		final String METHOD = "testTransactionId";
 
 		// Create a job and set a value
-		OabaJob job = createEphemeralOabaJobEntity(te, METHOD, true);
+		BatchJob job = createEphemeralOabaJobEntity(te, METHOD, true);
 		final long v1 = random.nextLong();
 		job.setDescription("" + v1);
 
@@ -267,7 +267,7 @@ public class OabaJobEntityIT {
 		final String METHOD = "testMergeDescription";
 
 		// Create a job and set a value
-		OabaJob job = createEphemeralOabaJobEntity(te, METHOD, true);
+		BatchJob job = createEphemeralOabaJobEntity(te, METHOD, true);
 		assertTrue(job.getDescription() == null);
 		final String description = "Description: " + new Date().toString();
 		job.setDescription(description);
@@ -301,9 +301,9 @@ public class OabaJobEntityIT {
 		// Create two ephemeral jobs
 		String exId = EntityManagerUtils.createExternalId(METHOD);
 		boolean isTag = false;
-		OabaJob job1 = createEphemeralOabaJobEntity(te, exId, isTag);
+		BatchJob job1 = createEphemeralOabaJobEntity(te, exId, isTag);
 		assertTrue(te.contains(job1));
-		OabaJob job2 = new OabaJobEntity(job1);
+		BatchJob job2 = new OabaJobEntity(job1);
 		te.add(job2);
 
 		// Verify inequality of ephemeral instances
@@ -333,7 +333,7 @@ public class OabaJobEntityIT {
 		Date before = new Date();
 
 		// 1. Create a job and check the status
-		OabaJob job = createEphemeralOabaJobEntity(te, METHOD, true);
+		BatchJob job = createEphemeralOabaJobEntity(te, METHOD, true);
 		// oabaTestController.save(job);
 
 		// Record a timestamp after a transition is made
@@ -401,7 +401,7 @@ public class OabaJobEntityIT {
 			entity = null;
 
 			// Retrieve the job
-			OabaJob job = oabaController.findOabaJob(id1);
+			BatchJob job = oabaController.findOabaJob(id1);
 
 			// Check the value
 			assertTrue(sts.equals(job.getStatus()));
@@ -421,7 +421,7 @@ public class OabaJobEntityIT {
 			te.add(entity);
 
 			// Retrieve the job
-			final OabaJob job = oabaController.findOabaJob(id1);
+			final BatchJob job = oabaController.findOabaJob(id1);
 
 			// Check the value
 			assertTrue(sts.equals(job.getStatus()));
@@ -458,7 +458,7 @@ public class OabaJobEntityIT {
 		final long id = oabaController.save(entity).getId();
 
 		// Find the job and verify the expected status and timestamp
-		final OabaJob job = oabaController.findOabaJob(id);
+		final BatchJob job = oabaController.findOabaJob(id);
 		assertTrue(batchJobStatus.equals(job.getStatus()));
 		assertTrue(ts.equals(job.getTimeStamp(sts)));
 

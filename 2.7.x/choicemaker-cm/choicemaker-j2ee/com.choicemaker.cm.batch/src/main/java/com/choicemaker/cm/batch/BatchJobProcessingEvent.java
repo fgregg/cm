@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.choicemaker.cm.args.PersistentObject;
+import com.choicemaker.cm.args.ProcessingEvent;
 
-public interface BatchProcessingEvent extends PersistentObject, Serializable {
+public interface BatchJobProcessingEvent extends PersistentObject, Serializable {
 
 	/** Default id value for non-persistent batch jobs */
 	public static final long INVALID_ID = 0;
@@ -21,16 +22,6 @@ public interface BatchProcessingEvent extends PersistentObject, Serializable {
 
 	/** Default event timestamp */
 	public static final Date INVALID_TIMESTAMP = new Date(0L);
-
-	/** Minimum estimate of the amount of processing completed (inclusive) */
-	public static final float MINIMUM_FRACTION_COMPLETE = 0.0f;
-
-	/** Default estimate of the amount of processing completed */
-	public static final float DEFAULT_FRACTION_COMPLETE =
-		MINIMUM_FRACTION_COMPLETE;
-
-	/** Maximum estimate of the amount of processing completed (inclusive) */
-	public static final float MAXIMUM_FRACTION_COMPLETE = 1.0f;
 
 	/** Returns the identifier of the batch job to which this entry applies */
 	long getJobId();
@@ -52,5 +43,7 @@ public interface BatchProcessingEvent extends PersistentObject, Serializable {
 
 	/** Returns an estimate between 0.0 and 1.0 (inclusive) */
 	float getFractionComplete();
+
+	ProcessingEvent getProcessingEvent();
 
 }

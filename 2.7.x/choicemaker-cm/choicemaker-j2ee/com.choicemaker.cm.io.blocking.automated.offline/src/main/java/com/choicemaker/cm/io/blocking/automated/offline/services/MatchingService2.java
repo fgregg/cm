@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.RecordSource;
@@ -23,9 +24,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
@@ -51,7 +51,7 @@ public class MatchingService2 {
 	private float low;
 	private float high;
 	private int maxBlockSize;
-	private OabaEventLog status;
+	private ProcessingEventLog status;
 
 	private int numChunks;
 
@@ -105,7 +105,7 @@ public class MatchingService2 {
 			ImmutableProbabilityModel stageModel,
 			ImmutableProbabilityModel masterModel, IMatchRecord2Sink mSink,
 			IBlockMatcher2 matcher, float low, float high, int maxBlockSize,
-			OabaEventLog status) {
+			ProcessingEventLog status) {
 
 		this.stageFactory = stageFactory;
 		this.masterFactory = masterFactory;
@@ -130,13 +130,13 @@ public class MatchingService2 {
 	public void runService() throws BlockingException, XmlConfException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_MATCHING_DATA) {
 			// do nothing
 
-		} else if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA
-				&& status.getCurrentOabaEventId() <= OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS) {
+		} else if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA
+				&& status.getCurrentProcessingEventId() <= OabaProcessing.EVT_DONE_ALLOCATE_CHUNKS) {
 
-			numChunks = Integer.parseInt(status.getCurrentOabaEventInfo());
+			numChunks = Integer.parseInt(status.getCurrentProcessingEventInfo());
 
 			// start matching
 			log.info("start matching, number of chunks " + numChunks);
@@ -145,9 +145,9 @@ public class MatchingService2 {
 
 			startMatching(0);
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_MATCHING_DATA) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_MATCHING_DATA) {
 			// recovery mode
-			String temp = status.getCurrentOabaEventInfo();
+			String temp = status.getCurrentProcessingEventInfo();
 			int ind = temp.indexOf(OabaProcessing.DELIMIT);
 			numChunks = Integer.parseInt(temp.substring(0, ind));
 			int startPoint = Integer.parseInt(temp.substring(ind + 1)) + 1;
@@ -243,7 +243,7 @@ public class MatchingService2 {
 			String temp =
 				Integer.toString(numChunks) + OabaProcessing.DELIMIT
 						+ Integer.toString(i);
-			status.setCurrentOabaEvent(OabaEvent.MATCHING_DATA, temp);
+			status.setCurrentProcessingEvent(OabaProcessingEvent.MATCHING_DATA, temp);
 
 			// clean up
 			stage = null;
@@ -261,7 +261,7 @@ public class MatchingService2 {
 			1000.0 * numCompares / (inReadHM + inHandleBlocks + inWriteMatches);
 		log.info("comparisons per second " + cps);
 
-		status.setCurrentOabaEvent(OabaEvent.DONE_MATCHING_DATA);
+		status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_MATCHING_DATA);
 
 		// cleanup
 		stageFactory.removeAllSinks();

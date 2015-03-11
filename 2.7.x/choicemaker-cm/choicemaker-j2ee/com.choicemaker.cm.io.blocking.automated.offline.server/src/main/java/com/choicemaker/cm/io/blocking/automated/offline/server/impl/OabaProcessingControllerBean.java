@@ -34,12 +34,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.ProcessingEventLog;
+import com.choicemaker.cm.batch.impl.BatchProcessingEventEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 
 /**
  * This stateless EJB provides OABA, job-specific processing logs and a
@@ -49,38 +50,31 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessin
  * @author rphall (migration to EJB3)
  */
 @Stateless
-public class OabaProcessingControllerBean implements OabaProcessingController {
+public class OabaProcessingControllerBean implements ProcessingController {
 
 	private static final Logger logger = Logger
 			.getLogger(OabaProcessingControllerBean.class.getName());
 
-	/**
-	 * The name of a system property that can be set to "true" to turn on
-	 * redundant order-by checking.
-	 */
-	public static final String PN_OABA_EVENT_ORDERBY_DEBUGGING =
-		"OabaEventLogOrderByDebugging";
-
 	// Don't use this directly; use isOrderByDebuggingRequested() instead
 	static Boolean _isOrderByDebuggingRequested = null;
 
-	static List<OabaProcessingEventEntity> findProcessingLogEntriesByJobId(
+	static List<BatchJobProcessingEvent> findProcessingLogEntriesByJobId(
 			EntityManager em, long id) {
 		Query query = em.createNamedQuery(QN_OABAPROCESSING_FIND_BY_JOBID);
 		query.setParameter(PN_OABAPROCESSING_FIND_BY_JOBID_JOBID, id);
 		@SuppressWarnings("unchecked")
-		List<OabaProcessingEventEntity> entries = query.getResultList();
+		List<BatchJobProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
 			entries = Collections.emptyList();
 		}
 		return entries;
 	}
 
-	static List<OabaProcessingEventEntity> findAllOabaProcessingEvents(
+	static List<BatchJobProcessingEvent> findAllOabaProcessingEvents(
 			EntityManager em) {
 		Query query = em.createNamedQuery(QN_OABAPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<OabaProcessingEventEntity> entries = query.getResultList();
+		List<BatchJobProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
 			entries = Collections.emptyList();
 		}
@@ -94,8 +88,8 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 		return deletedCount;
 	}
 
-	static OabaProcessingEvent updateStatus(EntityManager em, OabaJob job,
-			OabaEvent event, Date timestamp, String info) {
+	static BatchProcessingEventEntity updateStatus(EntityManager em, BatchJob job,
+			ProcessingEvent event, Date timestamp, String info) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
@@ -108,22 +102,22 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 		if (timestamp == null) {
 			throw new IllegalArgumentException("null timestamp");
 		}
-		OabaProcessingEventEntity ope =
+		BatchProcessingEventEntity ope =
 			new OabaProcessingEventEntity(job, event, info);
 		em.persist(ope);
 		return ope;
 	}
 
 	static void updateStatusWithNotification(EntityManager em,
-			JMSContext jmsContext, Topic oabaStatusTopic, OabaJob job,
-			OabaEvent event, Date timestamp, String info) {
+			JMSContext jmsContext, Topic oabaStatusTopic, BatchJob job,
+			ProcessingEvent event, Date timestamp, String info) {
 		if (jmsContext == null) {
 			throw new IllegalStateException("null JMS context");
 		}
 		if (oabaStatusTopic == null) {
 			throw new IllegalStateException("null JMS topic");
 		}
-		OabaProcessingEvent ope =
+		BatchProcessingEventEntity ope =
 			updateStatus(em, job, event, new Date(), info);
 		OabaNotification data = new OabaNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
@@ -139,24 +133,24 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 	 */
 	static boolean isOrderByDebuggingRequested() {
 		if (_isOrderByDebuggingRequested == null) {
-			String pn = PN_OABA_EVENT_ORDERBY_DEBUGGING;
+			String pn = ProcessingController.PN_PROCESSINGEVENT_ORDERBY_DEBUGGING;
 			String defaultValue = Boolean.FALSE.toString();
 			String value = System.getProperty(pn, defaultValue);
 			_isOrderByDebuggingRequested = Boolean.valueOf(value);
 		}
 		boolean retVal = _isOrderByDebuggingRequested.booleanValue();
 		if (retVal) {
-			logger.info("OabaEventLog order-by debugging is enabled");
+			logger.info("ProcessingEventLog order-by debugging is enabled");
 		}
 		return retVal;
 	}
 
-	static OabaProcessingEvent getCurrentOabaProcessingEvent(EntityManager em,
-			OabaJob oabaJob) {
-		List<OabaProcessingEventEntity> entries =
+	static BatchJobProcessingEvent getCurrentBatchProcessingEvent(EntityManager em,
+			BatchJob batchJob) {
+		List<BatchJobProcessingEvent> entries =
 			OabaProcessingControllerBean.findProcessingLogEntriesByJobId(em,
-					oabaJob.getId());
-		final OabaProcessingEvent retVal;
+					batchJob.getId());
+		final BatchJobProcessingEvent retVal;
 		if (entries == null || entries.isEmpty()) {
 			retVal = null;
 		} else {
@@ -165,11 +159,11 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 				final Date mostRecent = retVal.getEventTimestamp();
 				if (entries.size() > 1) {
 					for (int i = 1; i < entries.size(); i++) {
-						final OabaProcessingEvent e2 = entries.get(i);
+						final BatchJobProcessingEvent e2 = entries.get(i);
 						final Date d2 = e2.getEventTimestamp();
 						if (mostRecent.compareTo(d2) < 0) {
 							String summary =
-								"Invalid OabaProcessingEvent ordering";
+								"Invalid BatchJobProcessingEvent ordering";
 							String msg =
 								OabaProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -178,11 +172,11 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 							throw new IllegalStateException(summary);
 
 						} else if (mostRecent.compareTo(d2) == 0) {
-							// Timestamps by themselves are ambigous
+							// Timestamps by themselves are ambiguous
 							// if events are very close together, but
 							// may be disambiguated by ordering of ids
 							String summary =
-								"Ambiguous OabaProcessingEvent timestamps";
+								"Ambiguous BatchJobProcessingEvent timestamps";
 							String msg =
 								OabaProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -197,13 +191,13 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 	}
 
 	static String createOrderingDetailMesssage(String summary,
-			OabaProcessingEvent e1, OabaProcessingEvent e2) {
+			BatchJobProcessingEvent e1, BatchJobProcessingEvent e2) {
 		final String INDENT = "   ";
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		pw.println(summary);
-		pw.println(INDENT + "Most recent: " + e1.getOabaEvent() + " " + e1);
-		pw.println(INDENT + " Subsequent: " + e2.getOabaEvent() + " " + e2);
+		pw.println(INDENT + "Most recent: " + e1.getEventName() + " " + e1);
+		pw.println(INDENT + " Subsequent: " + e2.getEventName() + " " + e2);
 		return sw.toString();
 	}
 
@@ -217,39 +211,39 @@ public class OabaProcessingControllerBean implements OabaProcessingController {
 	private Topic oabaStatusTopic;
 
 	@Override
-	public List<OabaProcessingEventEntity> findOabaProcessingEventsByJobId(
+	public List<BatchJobProcessingEvent> findProcessingEventsByJobId(
 			long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
 	@Override
-	public List<OabaProcessingEventEntity> findAllOabaProcessingEvents() {
+	public List<BatchJobProcessingEvent> findAllProcessingEvents() {
 		return findAllOabaProcessingEvents(em);
 	}
 
 	@Override
-	public int deleteOabaProcessingEventsByJobId(long id) {
+	public int deleteProcessingEventsByJobId(long id) {
 		return deleteProcessingLogEntriesByJobId(em, id);
 	}
 
 	@Override
-	public OabaEventLog getProcessingLog(OabaJob job) {
+	public ProcessingEventLog getProcessingLog(BatchJob job) {
 		return new OabaProcessingLog(em, job);
 	}
 
 	@Override
-	public void updateStatusWithNotification(OabaJob job, OabaEvent event,
+	public void updateStatusWithNotification(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
 		updateStatusWithNotification(em, jmsContext, oabaStatusTopic, job,
 				event, timestamp, info);
 	}
 
 	@Override
-	public OabaEvent getCurrentOabaEvent(OabaJob oabaJob) {
-		OabaEvent retVal = null;
-		OabaProcessingEvent ope = getCurrentOabaProcessingEvent(em, oabaJob);
+	public ProcessingEvent getCurrentProcessingEvent(BatchJob batchJob) {
+		ProcessingEvent retVal = null;
+		BatchJobProcessingEvent ope = getCurrentBatchProcessingEvent(em, batchJob);
 		if (ope != null) {
-			retVal = ope.getOabaEvent();
+			retVal = ope.getProcessingEvent();
 		}
 		return retVal;
 	}

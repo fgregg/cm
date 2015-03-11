@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.services;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.IControl;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
@@ -20,9 +21,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
@@ -50,7 +50,7 @@ public class MatchDedupService3 {
 	private IMatchRecord2Source mSource;
 	private IMatchRecord2Sink mSink;
 	private IMatchRecord2SinkSourceFactory mFactory;
-	private OabaEventLog status;
+	private ProcessingEventLog status;
 	// private int max;
 
 	private int numBefore = 0; // this counts the number of input matches
@@ -65,7 +65,7 @@ public class MatchDedupService3 {
 
 	public MatchDedupService3(IMatchRecord2Source mSource,
 			IMatchRecord2Sink mSink, IMatchRecord2SinkSourceFactory mFactory,
-			int max, OabaEventLog status, IControl control) {
+			int max, ProcessingEventLog status, IControl control) {
 
 		this.mSource = mSource;
 		this.mSink = mSink;
@@ -83,10 +83,10 @@ public class MatchDedupService3 {
 	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_DEDUP_MATCHES) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_DEDUP_MATCHES) {
 			// do nothing
 
-		} else if (status.getCurrentOabaEventId() == OabaProcessing.EVT_DONE_MATCHING_DATA) {
+		} else if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_MATCHING_DATA) {
 
 			// start writing out dedup
 			log.info("start writing to temp match files");
@@ -105,7 +105,7 @@ public class MatchDedupService3 {
 			log.info("total matches before " + numBefore);
 			log.info("total matches after " + numAfter);
 
-			status.setCurrentOabaEvent(OabaEvent.DONE_DEDUP_MATCHES);
+			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_DEDUP_MATCHES);
 		}
 
 		time = System.currentTimeMillis() - time;

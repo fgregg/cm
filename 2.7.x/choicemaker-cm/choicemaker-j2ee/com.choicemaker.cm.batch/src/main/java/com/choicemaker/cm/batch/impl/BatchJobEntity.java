@@ -55,8 +55,6 @@ import javax.persistence.TemporalType;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.BatchJobStatus;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
@@ -68,7 +66,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 
 	private static final long serialVersionUID = 271L;
 
-	private static Logger log = Logger.getLogger(OabaJobEntity.class.getName());
+	private static Logger log = Logger.getLogger(BatchJobEntity.class.getName());
 
 	private static Map<BatchJobStatus, Set<BatchJobStatus>> allowedTransitions =
 		new HashMap<>();
@@ -132,8 +130,8 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	protected final String type;
 
 	/**
-	 * {@link OabaJob#INVALID_BATCHJOB_ID} or references the id of some other
-	 * OabaJobEntity
+	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some other
+	 * BatchJobEntity
 	 */
 	@Column(name = CN_BPARENT_ID)
 	protected final long bparentId;
@@ -157,7 +155,7 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 	protected final long serverId;
 
 	/**
-	 * {@link OabaJob#INVALID_BATCHJOB_ID} or references the id of some
+	 * {@link BatchJob#INVALID_BATCHJOB_ID} or references the id of some
 	 * UrmJobBean
 	 */
 	@Column(name = BatchJobJPA.CN_URM_ID)
@@ -204,17 +202,17 @@ public abstract class BatchJobEntity extends AbstractPersistentObject implements
 		return this.bparentId;
 	}
 
-	// Override is not declared here
+	@Override
 	public long getParametersId() {
 		return paramsId;
 	}
 
-	// Override is not declared here
+	@Override
 	public long getSettingsId() {
 		return settingsId;
 	}
 
-	// Override is not declared here
+	@Override
 	public long getServerId() {
 		return serverId;
 	}

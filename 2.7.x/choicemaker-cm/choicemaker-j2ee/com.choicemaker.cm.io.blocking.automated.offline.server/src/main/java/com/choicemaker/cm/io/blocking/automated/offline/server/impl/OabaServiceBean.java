@@ -10,8 +10,8 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CLEAR_RESOURCES;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CLEAR_RESOURCES;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -44,7 +44,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.EXTERNAL_DATA_FORMA
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
@@ -243,22 +242,22 @@ public class OabaServiceBean implements OabaService {
 	 */
 	private int abortBatch(long jobID, boolean cleanStatus) {
 		logger.info("aborting job " + jobID + " " + cleanStatus);
-		OabaJob oabaJob = jobController.findOabaJob(jobID);
-		if (oabaJob == null) {
+		BatchJob batchJob = jobController.findOabaJob(jobID);
+		if (batchJob == null) {
 			String msg = "No OABA job found: " + jobID;
 			logger.warning(msg);
 		} else {
-			oabaJob.markAsAbortRequested();
-			propController.setJobProperty(oabaJob, PN_CLEAR_RESOURCES,
+			batchJob.markAsAbortRequested();
+			propController.setJobProperty(batchJob, PN_CLEAR_RESOURCES,
 					String.valueOf(cleanStatus));
 		}
 		return 0;
 	}
 
 	@Override
-	public OabaJob getOabaJob(long jobId) {
-		OabaJob oabaJob = jobController.findOabaJob(jobId);
-		return oabaJob;
+	public BatchJob getOabaJob(long jobId) {
+		BatchJob batchJob = jobController.findOabaJob(jobId);
+		return batchJob;
 	}
 
 	@Override
@@ -270,7 +269,7 @@ public class OabaServiceBean implements OabaService {
 	@Override
 	public boolean removeDir(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
-		OabaJob job = jobController.findOabaJob(jobID);
+		BatchJob job = jobController.findOabaJob(jobID);
 		return BatchJobFileUtils.removeTempDir(job);
 	}
 
@@ -284,7 +283,7 @@ public class OabaServiceBean implements OabaService {
 	@Override
 	public int resumeJob(long jobID) {
 
-		OabaJob job = jobController.findOabaJob(jobID);
+		BatchJob job = jobController.findOabaJob(jobID);
 
 		final String _clearResources =
 			propController.getJobProperty(job, PN_CLEAR_RESOURCES);
@@ -335,12 +334,12 @@ public class OabaServiceBean implements OabaService {
 		MatchRecord2Source mrs = null;
 
 		// check to make sure the job is completed
-		OabaJob oabaJob = jobController.findOabaJob(jobID);
-		if (!oabaJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
+		BatchJob batchJob = jobController.findOabaJob(jobID);
+		if (!batchJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {
 			final String cachedResultsFileName =
-				propController.getJobProperty(oabaJob,
+				propController.getJobProperty(batchJob,
 						PN_OABA_CACHED_RESULTS_FILE);
 			logger.info("Cached OABA results file: " + cachedResultsFileName);
 			mrs =

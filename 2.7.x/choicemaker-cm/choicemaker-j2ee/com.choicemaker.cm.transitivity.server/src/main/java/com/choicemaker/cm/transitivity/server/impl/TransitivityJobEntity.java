@@ -17,6 +17,7 @@ import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.QN_
 import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID;
 
 import java.io.File;
+import java.io.Serializable;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -28,15 +29,14 @@ import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.core.IControl;
 
 /**
- * A TransitivityJobEntity is a type of OabaJob that tracks the progress of a
+ * A TransitivityJobEntity is a type of BatchJob that tracks the progress of a
  * (long-running) transitivity analysis process. Transitivity jobs use the match
- * results of an OABA OabaJob, so a transitivity job is always associated with
- * exactly one OABA OabaJob. The id of the OABA OabaJob is tracked by the value
- * of the {@link #getBatchParentId() transaction parent id} field.
+ * results of an OABA BatchJob, so a transitivity job is always associated with
+ * exactly one OABA BatchJob. The id of the OABA BatchJob is tracked by the
+ * value of the {@link #getBatchParentId() transaction parent id} field.
  *
  * @author pcheung (original version)
  * @author rphall (migrated to JPA 2.0)
@@ -48,8 +48,8 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 				query = JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID) })
 @Entity
 @DiscriminatorValue(value = DISCRIMINATOR_VALUE)
-public class TransitivityJobEntity extends BatchJobEntity implements
-		TransitivityJob {
+public class TransitivityJobEntity extends BatchJobEntity implements IControl,
+		Serializable, BatchJob {
 
 	private static final long serialVersionUID = 271L;
 
@@ -61,22 +61,22 @@ public class TransitivityJobEntity extends BatchJobEntity implements
 	// -- Constructors
 
 	public TransitivityJobEntity(TransitivityParameters params,
-			ServerConfiguration sc, OabaJob parent, String externalId) {
+			ServerConfiguration sc, BatchJob parent, String externalId) {
 		this(DISCRIMINATOR_VALUE, params.getId(), NONPERSISTENT_ID, sc.getId(),
 				externalId, randomTransactionId(), parent.getId(),
 				NONPERSISTENT_ID, BatchJob.DEFAULT_RIGOR);
 	}
 
 	public TransitivityJobEntity(TransitivityParameters params,
-			ServerConfiguration sc, OabaJob parent, String externalId,
+			ServerConfiguration sc, BatchJob parent, String externalId,
 			BatchJobRigor bjr) {
 		this(DISCRIMINATOR_VALUE, params.getId(), NONPERSISTENT_ID, sc.getId(),
 				externalId, randomTransactionId(), parent.getId(),
 				NONPERSISTENT_ID, bjr);
 	}
 
-	public TransitivityJobEntity(TransitivityJob o) {
-		this(DISCRIMINATOR_VALUE, o.getTransitivityParametersId(),
+	public TransitivityJobEntity(BatchJob o) {
+		this(DISCRIMINATOR_VALUE, o.getParametersId(),
 				NONPERSISTENT_ID, o.getServerId(), o.getExternalId(), o
 						.getTransactionId(), o.getBatchParentId(),
 				o.getUrmId(), o.getBatchJobRigor());
@@ -106,13 +106,6 @@ public class TransitivityJobEntity extends BatchJobEntity implements
 			throw new IllegalArgumentException(msg);
 		}
 		this.workingDirectory = workingDir.getAbsolutePath();
-	}
-
-	// -- Accessors
-
-	@Override
-	public long getTransitivityParametersId() {
-		return super.getParametersId();
 	}
 
 } // TransitivityJobEntity

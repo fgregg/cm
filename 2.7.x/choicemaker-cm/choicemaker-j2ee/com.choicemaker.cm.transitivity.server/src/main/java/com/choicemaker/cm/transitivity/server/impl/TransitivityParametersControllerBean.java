@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.TransitivityParameters;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
@@ -88,10 +88,10 @@ public class TransitivityParametersControllerBean implements
 	@Override
 	public TransitivityParameters findTransitivityParametersByJobId(long jobId) {
 		TransitivityParameters retVal = null;
-		TransitivityJob job =
+		BatchJob job =
 			getTransJobController().findTransitivityJob(jobId);
 		if (job != null) {
-			long paramsId = job.getTransitivityParametersId();
+			long paramsId = job.getParametersId();
 			retVal = findTransitivityParameters(paramsId);
 		}
 		return retVal;

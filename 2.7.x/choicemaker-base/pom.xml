@@ -539,6 +539,18 @@
       </dependency>
       <dependency>
         <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.batch</artifactId>
+        <version>${choicemaker.current.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
+        <artifactId>com.choicemaker.cm.batch</artifactId>
+        <version>${choicemaker.current.version}</version>
+        <classifier>eclipse2prj</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.choicemaker.cm</groupId>
         <artifactId>com.choicemaker.cm.core</artifactId>
         <version>${choicemaker.current.version}</version>
       </dependency>
@@ -1616,14 +1628,14 @@ END: C-E Exclusion -->
                 </tags>
               </tagClass>
               <tagClass>
-                <displayName>Todo Work</displayName>
+                <displayName>To do Work</displayName>
                 <tags>
                   <tag>
-                    <matchString>todo</matchString>
+                    <matchString>specify me</matchString>
                     <matchType>ignoreCase</matchType>
                   </tag>
                   <tag>
-                    <matchString>@todo</matchString>
+                    <matchString>@ to do</matchString>
                     <matchType>ignoreCase</matchType>
                   </tag>
                 </tags>
@@ -1631,7 +1643,7 @@ END: C-E Exclusion -->
               <tagClass>
                 <displayName>Noted Bugs</displayName>
                 <tag>
-                  <matchString>fixme</matchString>
+                  <matchString>specify me</matchString>
                   <matchType>ignoreCase</matchType>
                 </tag>
               </tagClass>

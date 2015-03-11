@@ -17,12 +17,10 @@ import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessi
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_DEDUP_OVERSIZED;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_DEDUP_OVERSIZED_EXACT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_MATCHING_DATA;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OABA;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_OVERSIZED_TRIMMING;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_REC_VAL;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_BLOCK;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_INIT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_MATCHING_DATA;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_MERGE_DEDUP_MATCHES;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_OUTPUT_DEDUP_MATCHES;
@@ -44,23 +42,20 @@ import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessi
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_OVERSIZED;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_OVERSIZED_EXACT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_MATCHING_DATA;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OABA;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_OVERSIZED_TRIMMING;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_REC_VAL;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_REVERSE_TRANSLATE_BLOCK;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_REVERSE_TRANSLATE_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_INIT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_MATCHING_DATA;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_MERGE_DEDUP_MATCHES;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_OUTPUT_DEDUP_MATCHES;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_OVERSIZED_TRIMMING;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.choicemaker.cm.args.BatchProcessing;
 
-public enum OabaEvent {
+enum OabaEvent {
 
-	INIT(EVT_INIT, PCT_INIT), CREATE_REC_VAL(EVT_CREATE_REC_VAL,
+	CREATE_REC_VAL(EVT_CREATE_REC_VAL,
 			PCT_CREATE_REC_VAL), DONE_REC_VAL(EVT_DONE_REC_VAL,
 			PCT_DONE_REC_VAL), BLOCK_BY_ONE_COLUMN(EVT_BLOCK_BY_ONE_COLUMN,
 			PCT_BLOCK_BY_ONE_COLUMN), DONE_BLOCK_BY_ONE_COLUMN(
@@ -94,57 +89,65 @@ public enum OabaEvent {
 
 	OUTPUT_DEDUP_MATCHES(EVT_OUTPUT_DEDUP_MATCHES, PCT_OUTPUT_DEDUP_MATCHES),
 	MERGE_DEDUP_MATCHES(EVT_MERGE_DEDUP_MATCHES, PCT_MERGE_DEDUP_MATCHES),
-	DONE_DEDUP_MATCHES(EVT_DONE_DEDUP_MATCHES, PCT_DONE_DEDUP_MATCHES),
-	DONE_OABA(EVT_DONE_OABA, PCT_DONE_OABA);
+	DONE_DEDUP_MATCHES(EVT_DONE_DEDUP_MATCHES, PCT_DONE_DEDUP_MATCHES);
 
-	private static final Map<Integer, OabaEvent> map = new HashMap<>();
-	static {
-		map.put(EVT_INIT, INIT);
-		map.put(EVT_CREATE_REC_VAL, CREATE_REC_VAL);
-		map.put(EVT_DONE_REC_VAL, DONE_REC_VAL);
-		map.put(EVT_BLOCK_BY_ONE_COLUMN, BLOCK_BY_ONE_COLUMN);
-		map.put(EVT_DONE_BLOCK_BY_ONE_COLUMN, DONE_BLOCK_BY_ONE_COLUMN);
-		map.put(EVT_OVERSIZED_TRIMMING, OVERSIZED_TRIMMING);
-		map.put(EVT_DONE_OVERSIZED_TRIMMING, DONE_OVERSIZED_TRIMMING);
-		map.put(EVT_DEDUP_BLOCKS, DEDUP_BLOCKS);
-		map.put(EVT_DONE_DEDUP_BLOCKS, DONE_DEDUP_BLOCKS);
-		map.put(EVT_DEDUP_OVERSIZED_EXACT, DEDUP_OVERSIZED_EXACT);
-		map.put(EVT_DONE_DEDUP_OVERSIZED_EXACT, DONE_DEDUP_OVERSIZED_EXACT);
-		map.put(EVT_DEDUP_OVERSIZED, DEDUP_OVERSIZED);
-		map.put(EVT_DONE_DEDUP_OVERSIZED, DONE_DEDUP_OVERSIZED);
-		map.put(EVT_DONE_REVERSE_TRANSLATE_BLOCK, DONE_REVERSE_TRANSLATE_BLOCK);
-		map.put(EVT_DONE_REVERSE_TRANSLATE_OVERSIZED,
-				DONE_REVERSE_TRANSLATE_OVERSIZED);
+//	private static final Map<Integer, OabaEvent> map = new HashMap<>();
+//	static {
+//		map.put(EVT_INIT, INIT);
+//		map.put(EVT_CREATE_REC_VAL, CREATE_REC_VAL);
+//		map.put(EVT_DONE_REC_VAL, DONE_REC_VAL);
+//		map.put(EVT_BLOCK_BY_ONE_COLUMN, BLOCK_BY_ONE_COLUMN);
+//		map.put(EVT_DONE_BLOCK_BY_ONE_COLUMN, DONE_BLOCK_BY_ONE_COLUMN);
+//		map.put(EVT_OVERSIZED_TRIMMING, OVERSIZED_TRIMMING);
+//		map.put(EVT_DONE_OVERSIZED_TRIMMING, DONE_OVERSIZED_TRIMMING);
+//		map.put(EVT_DEDUP_BLOCKS, DEDUP_BLOCKS);
+//		map.put(EVT_DONE_DEDUP_BLOCKS, DONE_DEDUP_BLOCKS);
+//		map.put(EVT_DEDUP_OVERSIZED_EXACT, DEDUP_OVERSIZED_EXACT);
+//		map.put(EVT_DONE_DEDUP_OVERSIZED_EXACT, DONE_DEDUP_OVERSIZED_EXACT);
+//		map.put(EVT_DEDUP_OVERSIZED, DEDUP_OVERSIZED);
+//		map.put(EVT_DONE_DEDUP_OVERSIZED, DONE_DEDUP_OVERSIZED);
+//		map.put(EVT_DONE_REVERSE_TRANSLATE_BLOCK, DONE_REVERSE_TRANSLATE_BLOCK);
+//		map.put(EVT_DONE_REVERSE_TRANSLATE_OVERSIZED,
+//				DONE_REVERSE_TRANSLATE_OVERSIZED);
+//
+//		map.put(EVT_CREATE_CHUNK_IDS, CREATE_CHUNK_IDS);
+//		map.put(EVT_CREATE_CHUNK_OVERSIZED_IDS, CREATE_CHUNK_OVERSIZED_IDS);
+//		map.put(EVT_DONE_CREATE_CHUNK_IDS, DONE_CREATE_CHUNK_IDS);
+//		map.put(EVT_DONE_CREATE_CHUNK_DATA, DONE_CREATE_CHUNK_DATA);
+//
+//		map.put(EVT_ALLOCATE_CHUNKS, ALLOCATE_CHUNKS);
+//		map.put(EVT_DONE_ALLOCATE_CHUNKS, DONE_ALLOCATE_CHUNKS);
+//		map.put(EVT_MATCHING_DATA, MATCHING_DATA);
+//		map.put(EVT_DONE_MATCHING_DATA, DONE_MATCHING_DATA);
+//
+//		map.put(EVT_OUTPUT_DEDUP_MATCHES, OUTPUT_DEDUP_MATCHES);
+//		map.put(EVT_MERGE_DEDUP_MATCHES, MERGE_DEDUP_MATCHES);
+//		map.put(EVT_DONE_DEDUP_MATCHES, DONE_DEDUP_MATCHES);
+//		map.put(EVT_DONE, DONE_OABA);
+//	}
+//
+//	public static OabaEvent getOabaEvent(int eventId) {
+//		return map.get(eventId);
+//	}
 
-		map.put(EVT_CREATE_CHUNK_IDS, CREATE_CHUNK_IDS);
-		map.put(EVT_CREATE_CHUNK_OVERSIZED_IDS, CREATE_CHUNK_OVERSIZED_IDS);
-		map.put(EVT_DONE_CREATE_CHUNK_IDS, DONE_CREATE_CHUNK_IDS);
-		map.put(EVT_DONE_CREATE_CHUNK_DATA, DONE_CREATE_CHUNK_DATA);
-
-		map.put(EVT_ALLOCATE_CHUNKS, ALLOCATE_CHUNKS);
-		map.put(EVT_DONE_ALLOCATE_CHUNKS, DONE_ALLOCATE_CHUNKS);
-		map.put(EVT_MATCHING_DATA, MATCHING_DATA);
-		map.put(EVT_DONE_MATCHING_DATA, DONE_MATCHING_DATA);
-
-		map.put(EVT_OUTPUT_DEDUP_MATCHES, OUTPUT_DEDUP_MATCHES);
-		map.put(EVT_MERGE_DEDUP_MATCHES, MERGE_DEDUP_MATCHES);
-		map.put(EVT_DONE_DEDUP_MATCHES, DONE_DEDUP_MATCHES);
-		map.put(EVT_DONE_OABA, DONE_OABA);
-	}
-
-	public static OabaEvent getOabaEvent(int eventId) {
-		return map.get(eventId);
-	}
-
-	public final int eventId;
-	public final float percentComplete;
+	private final int eventId;
+	private final float percentComplete;
 
 	OabaEvent(int evtId, float pct) {
-		if (pct < 0.0f || pct > 1.00f) {
+		if (pct < BatchProcessing.MINIMUM_FRACTION_COMPLETE
+				|| pct > BatchProcessing.MAXIMUM_FRACTION_COMPLETE) {
 			throw new IllegalArgumentException("invalid percentage: " + pct);
 		}
 		this.eventId = evtId;
 		this.percentComplete = pct;
+	}
+
+	public int getEventId() {
+		return eventId;
+	}
+
+	public float getPercentComplete() {
+		return percentComplete;
 	}
 
 }

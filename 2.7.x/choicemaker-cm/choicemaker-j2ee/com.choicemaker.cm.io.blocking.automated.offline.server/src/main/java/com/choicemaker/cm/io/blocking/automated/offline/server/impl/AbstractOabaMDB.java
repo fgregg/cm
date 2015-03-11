@@ -24,19 +24,19 @@ import javax.jms.ObjectMessage;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 //import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
@@ -65,7 +65,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	private OabaParametersController paramsController;
 
 	@EJB
-	private OabaProcessingController processingController;
+	private ProcessingController processingController;
 
 	@EJB
 	private ServerConfigurationController serverController;
@@ -101,7 +101,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 		return paramsController;
 	}
 
-	protected final OabaProcessingController getProcessingController() {
+	protected final ProcessingController getProcessingController() {
 		return processingController;
 	}
 
@@ -129,7 +129,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				"Entering onMessage for " + this.getClass().getName());
 		ObjectMessage msg = null;
 		OabaJobMessage oabaMsg = null;
-		OabaJob oabaJob = null;
+		BatchJob batchJob = null;
 
 		try {
 			if (inMessage instanceof ObjectMessage) {
@@ -137,16 +137,16 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				oabaMsg = (OabaJobMessage) msg.getObject();
 
 				final long jobId = oabaMsg.jobID;
-				oabaJob = getJobController().findOabaJob(jobId);
+				batchJob = getJobController().findOabaJob(jobId);
 				OabaParameters oabaParams =
 					getParametersController().findOabaParametersByJobId(jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
-				OabaEventLog processingLog =
-					getProcessingController().getProcessingLog(oabaJob);
+				ProcessingEventLog processingLog =
+					getProcessingController().getProcessingLog(batchJob);
 				ServerConfiguration serverConfig =
 					getServerController().findServerConfigurationByJobId(jobId);
-				if (oabaJob == null || oabaParams == null
+				if (batchJob == null || oabaParams == null
 						|| oabaSettings == null || serverConfig == null) {
 					String s =
 						"Unable to find a job, parameters, settings or server configuration for "
@@ -165,12 +165,12 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 					throw new IllegalArgumentException(s);
 				}
 
-				if (BatchJobStatus.ABORT_REQUESTED.equals(oabaJob.getStatus())) {
-					abortProcessing(oabaJob, processingLog);
+				if (BatchJobStatus.ABORT_REQUESTED.equals(batchJob.getStatus())) {
+					abortProcessing(batchJob, processingLog);
 				} else {
-					processOabaMessage(oabaMsg, oabaJob, oabaParams,
+					processOabaMessage(oabaMsg, batchJob, oabaParams,
 							oabaSettings, processingLog, serverConfig, model);
-					updateOabaProcessingStatus(oabaJob, getCompletionEvent(),
+					updateOabaProcessingStatus(batchJob, getCompletionEvent(),
 							new Date(), null);
 					notifyProcessingCompleted(oabaMsg);
 				}
@@ -182,20 +182,20 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 		} catch (Exception e) {
 			getLogger().severe(e.toString());
-			if (oabaJob != null) {
-				oabaJob.markAsFailed();
+			if (batchJob != null) {
+				batchJob.markAsFailed();
 			}
 		}
 		getJmsTrace()
 				.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-	protected void abortProcessing(OabaJob oabaJob, OabaEventLog processingLog) {
-		MessageBeanUtils.stopJob(oabaJob, getPropertyController(),
+	protected void abortProcessing(BatchJob batchJob, ProcessingEventLog processingLog) {
+		MessageBeanUtils.stopJob(batchJob, getPropertyController(),
 				processingLog);
 	}
 
-	protected void updateOabaProcessingStatus(OabaJob job, OabaEvent event,
+	protected void updateOabaProcessingStatus(BatchJob job, OabaProcessingEvent event,
 			Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
@@ -208,11 +208,11 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	protected abstract Logger getJmsTrace();
 
 	protected abstract void processOabaMessage(OabaJobMessage data,
-			OabaJob oabaJob, OabaParameters params, OabaSettings oabaSettings,
-			OabaEventLog processingLog, ServerConfiguration serverConfig,
+			BatchJob batchJob, OabaParameters params, OabaSettings oabaSettings,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException;
 
-	protected abstract OabaEvent getCompletionEvent();
+	protected abstract OabaProcessingEvent getCompletionEvent();
 
 	protected abstract void notifyProcessingCompleted(OabaJobMessage data);
 

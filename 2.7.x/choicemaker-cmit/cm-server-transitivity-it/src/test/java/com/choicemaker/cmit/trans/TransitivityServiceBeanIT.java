@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_INIT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_INIT;
+import static com.choicemaker.cm.args.BatchProcessing.EVT_INIT;
+import static com.choicemaker.cm.args.BatchProcessing.PCT_INIT;
 
 import java.util.logging.Logger;
 
@@ -12,10 +12,10 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.transitivity.server.impl.StartTransitivityMDB;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
-import com.choicemaker.cmit.utils.OabaProcessingPhase;
+import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 
 @RunWith(Arquillian.class)
@@ -45,7 +45,7 @@ public class TransitivityServiceBeanIT extends
 	public TransitivityServiceBeanIT() {
 		super(LOG_SOURCE, logger, EVT_INIT, PCT_INIT,
 				SimplePersonSqlServerTestConfiguration.class,
-				OabaProcessingPhase.INITIAL);
+				BatchProcessingPhase.INITIAL);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class TransitivityServiceBeanIT extends
 
 	/** Stubbed implementation that does not check the working directory */
 	@Override
-	public boolean isWorkingDirectoryCorrectAfterProcessing(TransitivityJob transJob) {
+	public boolean isWorkingDirectoryCorrectAfterProcessing(BatchJob transJob) {
 		return true;
 	}
 

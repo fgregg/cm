@@ -21,24 +21,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 import com.choicemaker.cmit.trans.util.TransitivityMdbTestProcedures;
+import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.JmsUtils;
-import com.choicemaker.cmit.utils.OabaProcessingPhase;
 import com.choicemaker.cmit.utils.TestEntityCounts;
+import com.choicemaker.cmit.utils.TransitivityTestParameters;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.ejb.EjbPlatform;
@@ -77,7 +77,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	private final Class<T> configurationClass;
 
-	private final OabaProcessingPhase oabaPhase;
+	private final BatchProcessingPhase oabaPhase;
 
 	private JMSConsumer oabaStatusConsumer;
 
@@ -115,8 +115,11 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	@EJB
 	private ServerConfigurationController serverController;
 
-	@EJB
-	private OabaProcessingController processingController;
+	@EJB(beanName="OabaProcessingControllerBean")
+	private ProcessingController oabaProcessingController;
+
+	@EJB(beanName="TransitivityProcessingControllerBean")
+	private ProcessingController transProcessingController;
 
 	@EJB
 	private OperationalPropertyController opPropController;
@@ -168,7 +171,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	@Inject
 	public AbstractTransitivityMdbTest(String n, Logger g, int evtId,
 			float pct, Class<T> configurationClass,
-			OabaProcessingPhase oabaPhase) {
+			BatchProcessingPhase oabaPhase) {
 		if (n == null || n.isEmpty() || g == null || oabaPhase == null) {
 			throw new IllegalArgumentException("invalid argument");
 		}
@@ -191,7 +194,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	public abstract Queue getResultQueue();
 
 	public abstract boolean isWorkingDirectoryCorrectAfterProcessing(
-			TransitivityJob transJob);
+			BatchJob transJob);
 
 	// -- Template methods
 
@@ -200,7 +203,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		te.checkCounts(getLogger(), getEm(), getUtx(), getOabaJobController(),
 				getOabaParamsController(), getTransJobController(),
 				getTransParamsController(), getSettingsController(),
-				getServerController(), getProcessingController(),
+				getServerController(), getOabaProcessingController(),
 				getOpPropController(), getRecordSourceController(),
 				getRecordIdController());
 	}
@@ -221,7 +224,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		this.te = new TestEntityCounts(getLogger(), getOabaJobController(),
 				getOabaParamsController(), getTransJobController(),
 				getTransParamsController(), getSettingsController(),
-				getServerController(), getProcessingController(),
+				getServerController(), getOabaProcessingController(),
 				getOpPropController(), getRecordSourceController(),
 				getRecordIdController());
 		setTestEntityCounts(te);
@@ -267,7 +270,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		// These assertions are redundant because these controllers are
 		// required during setUp()
 		assertTrue(getOabaParamsController() != null);
-		assertTrue(getProcessingController() != null);
+		assertTrue(getOabaProcessingController() != null);
 		assertTrue(getServerController() != null);
 		assertTrue(getSettingsController() != null);
 	}
@@ -294,14 +297,14 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
 				getTransitivityQueue());
 
-		JmsUtils.clearOabaNotifications(getSourceName(),
+		JmsUtils.clearBatchProcessingNotifications(getSourceName(),
 				getTransitivityStatusConsumer());
 	}
 
 	@Test
 	@InSequence(3)
 	public final void testLinkageTransitivity()
-			throws ServerConfigurationException {
+			throws Exception {
 		OabaLinkageType task = OabaLinkageType.STAGING_TO_MASTER_LINKAGE;
 		TransitivityMdbTestProcedures.testTransitivityProcessing(this, task);
 	}
@@ -309,7 +312,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	@Test
 	@InSequence(4)
 	public final void testDeduplicationTransitivity()
-			throws ServerConfigurationException {
+			throws Exception {
 		OabaLinkageType task = OabaLinkageType.STAGING_DEDUPLICATION;
 		TransitivityMdbTestProcedures.testTransitivityProcessing(this, task);
 	}
@@ -340,7 +343,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	@Override
-	public final OabaProcessingPhase getProcessingPhase() {
+	public final BatchProcessingPhase getProcessingPhase() {
 		return oabaPhase;
 	}
 
@@ -442,8 +445,13 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	@Override
-	public final OabaProcessingController getProcessingController() {
-		return processingController;
+	public final ProcessingController getOabaProcessingController() {
+		return oabaProcessingController;
+	}
+
+	@Override
+	public final ProcessingController getTransitivityProcessingController() {
+		return transProcessingController;
 	}
 
 	@Override

@@ -10,7 +10,6 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaProcessingControllerBean.PN_OABA_EVENT_ORDERBY_DEBUGGING;
 import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_DELETE_BY_JOBID_JOBID;
 import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID;
 import static com.choicemaker.cm.transitivity.server.impl.TransitivityProcessingEventJPA.QN_TRANSPROCESSING_DELETE_BY_JOBID;
@@ -35,11 +34,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.choicemaker.cm.transitivity.core.TransitivityEvent;
-import com.choicemaker.cm.transitivity.core.TransitivityEventLog;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityProcessingController;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
+
 
 /**
  * This stateless EJB provides OABA, job-specific processing logs and a
@@ -49,7 +50,7 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityProcessingEvent;
  * @author rphall (migration to EJB3)
  */
 @Stateless
-public class TransitivityProcessingControllerBean implements TransitivityProcessingController {
+public class TransitivityProcessingControllerBean implements ProcessingController {
 
 	private static final Logger logger = Logger
 			.getLogger(TransitivityProcessingControllerBean.class.getName());
@@ -57,23 +58,23 @@ public class TransitivityProcessingControllerBean implements TransitivityProcess
 	// Don't use this directly; use isOrderByDebuggingRequested() instead
 	static Boolean _isOrderByDebuggingRequested = null;
 
-	static List<TransitivityProcessingEventEntity> findProcessingLogEntriesByJobId(
+	static List<BatchJobProcessingEvent> findProcessingLogEntriesByJobId(
 			EntityManager em, long id) {
 		Query query = em.createNamedQuery(QN_TRANSPROCESSING_FIND_BY_JOBID);
 		query.setParameter(PN_TRANSPROCESSING_FIND_BY_JOBID_JOBID, id);
 		@SuppressWarnings("unchecked")
-		List<TransitivityProcessingEventEntity> entries = query.getResultList();
+		List<BatchJobProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
 			entries = Collections.emptyList();
 		}
 		return entries;
 	}
 
-	static List<TransitivityProcessingEventEntity> findAllTransitivityProcessingEvents(
+	static List<BatchJobProcessingEvent> findAllTransitivityProcessingEvents(
 			EntityManager em) {
 		Query query = em.createNamedQuery(QN_TRANSPROCESSING_FIND_ALL);
 		@SuppressWarnings("unchecked")
-		List<TransitivityProcessingEventEntity> entries = query.getResultList();
+		List<BatchJobProcessingEvent> entries = query.getResultList();
 		if (entries == null) {
 			entries = Collections.emptyList();
 		}
@@ -87,8 +88,8 @@ public class TransitivityProcessingControllerBean implements TransitivityProcess
 		return deletedCount;
 	}
 
-	static TransitivityProcessingEvent updateStatus(EntityManager em, TransitivityJob job,
-			TransitivityEvent event, Date timestamp, String info) {
+	static TransitivityBatchProcessingEvent updateStatus(EntityManager em, BatchJob job,
+			ProcessingEvent event, Date timestamp, String info) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
@@ -108,23 +109,23 @@ public class TransitivityProcessingControllerBean implements TransitivityProcess
 	}
 
 	static void updateStatusWithNotification(EntityManager em,
-			JMSContext jmsContext, Topic oabaStatusTopic, TransitivityJob job,
-			TransitivityEvent event, Date timestamp, String info) {
+			JMSContext jmsContext, Topic statusTopic, BatchJob job,
+			ProcessingEvent event, Date timestamp, String info) {
 		if (jmsContext == null) {
 			throw new IllegalStateException("null JMS context");
 		}
-		if (oabaStatusTopic == null) {
+		if (statusTopic == null) {
 			throw new IllegalStateException("null JMS topic");
 		}
-		TransitivityProcessingEvent ope =
+		TransitivityBatchProcessingEvent ope =
 			updateStatus(em, job, event, new Date(), info);
 		TransitivityNotification data = new TransitivityNotification(ope);
 		ObjectMessage message = jmsContext.createObjectMessage(data);
 		JMSProducer sender = jmsContext.createProducer();
 		logger.info(MessageBeanUtils
-				.topicInfo("Sending", oabaStatusTopic, data));
-		sender.send(oabaStatusTopic, message);
-		logger.info(MessageBeanUtils.topicInfo("Sent", oabaStatusTopic, data));
+				.topicInfo("Sending", statusTopic, data));
+		sender.send(statusTopic, message);
+		logger.info(MessageBeanUtils.topicInfo("Sent", statusTopic, data));
 	}
 
 	/**
@@ -132,24 +133,24 @@ public class TransitivityProcessingControllerBean implements TransitivityProcess
 	 */
 	static boolean isOrderByDebuggingRequested() {
 		if (_isOrderByDebuggingRequested == null) {
-			String pn = PN_OABA_EVENT_ORDERBY_DEBUGGING;
+			String pn = ProcessingController.PN_PROCESSINGEVENT_ORDERBY_DEBUGGING;
 			String defaultValue = Boolean.FALSE.toString();
 			String value = System.getProperty(pn, defaultValue);
 			_isOrderByDebuggingRequested = Boolean.valueOf(value);
 		}
 		boolean retVal = _isOrderByDebuggingRequested.booleanValue();
 		if (retVal) {
-			logger.info("TransitivityEventLog order-by debugging is enabled");
+			logger.info("ProcessingEventLog order-by debugging is enabled");
 		}
 		return retVal;
 	}
 
-	static TransitivityProcessingEvent getCurrentTransitivityProcessingEvent(EntityManager em,
-			TransitivityJob TransitivityJob) {
-		List<TransitivityProcessingEventEntity> entries =
+	static BatchJobProcessingEvent getCurrentBatchProcessingEvent(EntityManager em,
+			BatchJob batchJob) {
+		List<BatchJobProcessingEvent> entries =
 			TransitivityProcessingControllerBean.findProcessingLogEntriesByJobId(em,
-					TransitivityJob.getId());
-		final TransitivityProcessingEvent retVal;
+					batchJob.getId());
+		final BatchJobProcessingEvent retVal;
 		if (entries == null || entries.isEmpty()) {
 			retVal = null;
 		} else {
@@ -158,11 +159,11 @@ public class TransitivityProcessingControllerBean implements TransitivityProcess
 				final Date mostRecent = retVal.getEventTimestamp();
 				if (entries.size() > 1) {
 					for (int i = 1; i < entries.size(); i++) {
-						final TransitivityProcessingEvent e2 = entries.get(i);
+						final BatchJobProcessingEvent e2 = entries.get(i);
 						final Date d2 = e2.getEventTimestamp();
 						if (mostRecent.compareTo(d2) < 0) {
 							String summary =
-								"Invalid TransitivityProcessingEvent ordering";
+								"Invalid BatchJobProcessingEvent ordering";
 							String msg =
 								TransitivityProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -171,11 +172,11 @@ public class TransitivityProcessingControllerBean implements TransitivityProcess
 							throw new IllegalStateException(summary);
 
 						} else if (mostRecent.compareTo(d2) == 0) {
-							// Timestamps by themselves are ambigous
+							// Timestamps by themselves are ambiguous
 							// if events are very close together, but
 							// may be disambiguated by ordering of ids
 							String summary =
-								"Ambiguous TransitivityProcessingEvent timestamps";
+								"Ambiguous BatchJobProcessingEvent timestamps";
 							String msg =
 								TransitivityProcessingControllerBean
 										.createOrderingDetailMesssage(summary,
@@ -190,13 +191,13 @@ public class TransitivityProcessingControllerBean implements TransitivityProcess
 	}
 
 	static String createOrderingDetailMesssage(String summary,
-			TransitivityProcessingEvent e1, TransitivityProcessingEvent e2) {
+			BatchJobProcessingEvent e1, BatchJobProcessingEvent e2) {
 		final String INDENT = "   ";
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		pw.println(summary);
-		pw.println(INDENT + "Most recent: " + e1.getTransitivityEvent() + " " + e1);
-		pw.println(INDENT + " Subsequent: " + e2.getTransitivityEvent() + " " + e2);
+		pw.println(INDENT + "Most recent: " + e1.getEventName() + " " + e1);
+		pw.println(INDENT + " Subsequent: " + e2.getEventName() + " " + e2);
 		return sw.toString();
 	}
 
@@ -210,39 +211,39 @@ public class TransitivityProcessingControllerBean implements TransitivityProcess
 	private Topic oabaStatusTopic;
 
 	@Override
-	public List<TransitivityProcessingEventEntity> findTransitivityProcessingEventsByJobId(
+	public List<BatchJobProcessingEvent> findProcessingEventsByJobId(
 			long id) {
 		return findProcessingLogEntriesByJobId(em, id);
 	}
 
 	@Override
-	public List<TransitivityProcessingEventEntity> findAllTransitivityProcessingEvents() {
+	public List<BatchJobProcessingEvent> findAllProcessingEvents() {
 		return findAllTransitivityProcessingEvents(em);
 	}
 
 	@Override
-	public int deleteTransitivityProcessingEventsByJobId(long id) {
+	public int deleteProcessingEventsByJobId(long id) {
 		return deleteProcessingLogEntriesByJobId(em, id);
 	}
 
 	@Override
-	public TransitivityEventLog getProcessingLog(TransitivityJob job) {
+	public TransitivityProcessingLog getProcessingLog(BatchJob job) {
 		return new TransitivityProcessingLog(em, job);
 	}
 
 	@Override
-	public void updateStatusWithNotification(TransitivityJob job, TransitivityEvent event,
+	public void updateStatusWithNotification(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
 		updateStatusWithNotification(em, jmsContext, oabaStatusTopic, job,
 				event, timestamp, info);
 	}
 
 	@Override
-	public TransitivityEvent getCurrentTransitivityEvent(TransitivityJob TransitivityJob) {
-		TransitivityEvent retVal = null;
-		TransitivityProcessingEvent ope = getCurrentTransitivityProcessingEvent(em, TransitivityJob);
+	public ProcessingEvent getCurrentProcessingEvent(BatchJob batchJob) {
+		ProcessingEvent retVal = null;
+		BatchJobProcessingEvent ope = getCurrentBatchProcessingEvent(em, batchJob);
 		if (ope != null) {
-			retVal = ope.getTransitivityEvent();
+			retVal = ope.getProcessingEvent();
 		}
 		return retVal;
 	}

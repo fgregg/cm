@@ -10,9 +10,9 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_CHUNK_FILE_COUNT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_RECORD_ID_TYPE;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_RECORD_ID_TYPE;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -24,19 +24,19 @@ import javax.jms.JMSContext;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonTreeSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonTreeGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 
 /**
  * This bean delegates the different chunks to different matcher message beans.
@@ -81,11 +81,11 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 	/** Remove up the chunk files */
 	@Override
-	protected void cleanUp(OabaJob oabaJob, OabaJobMessage sd)
+	protected void cleanUp(BatchJob batchJob, OabaJobMessage sd)
 			throws BlockingException {
 		log.info("cleanUp");
 
-		final long jobId = oabaJob.getId();
+		final long jobId = batchJob.getId();
 		OabaParameters params =
 			getParametersController().findOabaParametersByJobId(jobId);
 		ServerConfiguration serverConfig =
@@ -103,28 +103,28 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		// remove the data
 		final String _numChunks =
 			getPropertyController()
-					.getJobProperty(oabaJob, PN_CHUNK_FILE_COUNT);
+					.getJobProperty(batchJob, PN_CHUNK_FILE_COUNT);
 		final int numChunks = Integer.valueOf(_numChunks);
 
 		final String _numRegularChunks =
-			getPropertyController().getJobProperty(oabaJob,
+			getPropertyController().getJobProperty(batchJob,
 					PN_REGULAR_CHUNK_FILE_COUNT);
 		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
 
 		IChunkDataSinkSourceFactory stageFactory =
-			OabaFileUtils.getStageDataFactory(oabaJob, model);
+			OabaFileUtils.getStageDataFactory(batchJob, model);
 		IChunkDataSinkSourceFactory masterFactory =
-			OabaFileUtils.getMasterDataFactory(oabaJob, model);
+			OabaFileUtils.getMasterDataFactory(batchJob, model);
 		stageFactory.removeAllSinks(numChunks);
 		masterFactory.removeAllSinks(numChunks);
 
 		// remove the trees
 		final String _recordIdType =
-			getPropertyController().getJobProperty(oabaJob, PN_RECORD_ID_TYPE);
+			getPropertyController().getJobProperty(batchJob, PN_RECORD_ID_TYPE);
 		final RECORD_ID_TYPE recordIdType =
 			RECORD_ID_TYPE.valueOf(_recordIdType);
 		ComparisonTreeGroupSinkSourceFactory factory =
-			OabaFileUtils.getComparisonTreeGroupFactory(oabaJob, recordIdType,
+			OabaFileUtils.getComparisonTreeGroupFactory(batchJob, recordIdType,
 					numProcessors);
 		for (int i = 0; i < numRegularChunks; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
@@ -138,7 +138,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 		// remove the oversized array files
 		ComparisonArrayGroupSinkSourceFactory factoryOS =
-			OabaFileUtils.getComparisonArrayGroupFactoryOS(oabaJob,
+			OabaFileUtils.getComparisonArrayGroupFactoryOS(batchJob,
 					numProcessors);
 		for (int i = 0; i < numOS; i++) {
 			for (int j = 1; j <= numProcessors; j++) {
@@ -155,14 +155,14 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	}
 
 	@Override
-	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
+	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
 
 	@Override
-	protected void sendToMatchDebup(OabaJob job, OabaJobMessage sd) {
+	protected void sendToMatchDebup(BatchJob job, OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, matchDedupQueue, log);
 	}
 

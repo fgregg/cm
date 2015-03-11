@@ -13,19 +13,19 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntit
 @Local
 public interface OabaJobController {
 
-	OabaJob createPersistentOabaJob(String externalID, OabaParameters params,
+	BatchJob createPersistentOabaJob(String externalID, OabaParameters params,
 			OabaSettings settings, ServerConfiguration sc)
 			throws ServerConfigurationException;
 
-	OabaJob save(OabaJob batchJob);
+	BatchJob save(BatchJob batchJob);
 
 	OabaJobEntity save(OabaJobEntity job);
 
-	OabaJob findOabaJob(long id);
+	BatchJob findOabaJob(long id);
 
-	List<OabaJob> findAll();
+	List<BatchJob> findAll();
 
-	void delete(OabaJob oabaJob);
+	void delete(BatchJob batchJob);
 
 	void detach(BatchJob oabaJob);
 

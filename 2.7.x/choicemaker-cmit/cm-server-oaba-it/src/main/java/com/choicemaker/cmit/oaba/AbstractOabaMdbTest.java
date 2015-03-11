@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
@@ -20,11 +21,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.choicemaker.cm.args.OabaLinkageType;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
@@ -33,7 +34,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigu
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cmit.oaba.util.OabaMdbTestProcedures;
 import com.choicemaker.cmit.utils.JmsUtils;
-import com.choicemaker.cmit.utils.OabaProcessingPhase;
+import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.OabaTestParameters;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
@@ -73,43 +74,43 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	private final Class<T> configurationClass;
 
-	private final OabaProcessingPhase oabaPhase;
+	private final BatchProcessingPhase oabaPhase;
 
 	private JMSConsumer oabaStatusConsumer;
 
 	// -- Read-only, injected instance data
 
-	@Inject
+	@EJB
 	private EjbPlatform e2service;
 
 	@Resource
 	private UserTransaction utx;
 
-	@Inject
+	@EJB
 	private OabaService oabaService;
 
-	@Inject
+	@EJB
 	private OabaJobController oabaJobController;
 
-	@Inject
+	@EJB
 	private OabaParametersController oabaParamsController;
 
-	@Inject
+	@EJB
 	private OabaSettingsController oabaSettingsController;
 
-	@Inject
+	@EJB
 	private ServerConfigurationController serverController;
 
-	@Inject
-	private OabaProcessingController processingController;
+	@EJB (beanName="OabaProcessingControllerBean")
+	private ProcessingController processingController;
 
-	@Inject
+	@EJB
 	private OperationalPropertyController opPropController;
 
-	@Inject
+	@EJB
 	private RecordIdController ridController;
 
-	@Inject
+	@EJB
 	private RecordSourceController rsController;
 
 	@PersistenceContext(unitName = "oaba")
@@ -147,9 +148,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 
 	// -- Constructor
 
-	@Inject
 	public AbstractOabaMdbTest(String n, Logger g, int evtId, float pct,
-			Class<T> configurationClass, OabaProcessingPhase oabaPhase) {
+			Class<T> configurationClass, BatchProcessingPhase oabaPhase) {
 		if (n == null || n.isEmpty() || g == null || oabaPhase == null) {
 			throw new IllegalArgumentException("invalid argument");
 		}
@@ -172,7 +172,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	public abstract Queue getResultQueue();
 
 	public abstract boolean isWorkingDirectoryCorrectAfterProcessing(
-			OabaJob batchJob);
+			BatchJob batchJob);
 
 	// -- Template methods
 
@@ -180,7 +180,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		TestEntityCounts te = getTestEntityCounts();
 		te.checkCounts(getLogger(), getEm(), getUtx(), getOabaJobController(),
 				getOabaParamsController(), getSettingsController(),
-				getServerController(), getProcessingController(),
+				getServerController(), getOabaProcessingController(),
 				getOpPropController(), getRecordSourceController(),
 				getRecordIdController());
 	}
@@ -197,7 +197,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		TestEntityCounts te =
 			new TestEntityCounts(getLogger(), getOabaJobController(),
 					getOabaParamsController(), getSettingsController(),
-					getServerController(), getProcessingController(),
+					getServerController(), getOabaProcessingController(),
 					getOpPropController(), getRecordSourceController(),
 					getRecordIdController());
 		setTestEntityCounts(te);
@@ -242,7 +242,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		// These assertions are redundant because these controllers are
 		// required during setUp()
 		assertTrue(getOabaParamsController() != null);
-		assertTrue(getProcessingController() != null);
+		assertTrue(getOabaProcessingController() != null);
 		assertTrue(getServerController() != null);
 		assertTrue(getSettingsController() != null);
 	}
@@ -269,7 +269,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
 				getTransitivityQueue());
 
-		JmsUtils.clearOabaNotifications(getSourceName(),
+		JmsUtils.clearBatchProcessingNotifications(getSourceName(),
 				getOabaStatusConsumer());
 	}
 
@@ -310,7 +310,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	}
 
 	@Override
-	public final OabaProcessingPhase getProcessingPhase() {
+	public final BatchProcessingPhase getProcessingPhase() {
 		return oabaPhase;
 	}
 
@@ -395,7 +395,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	}
 
 	@Override
-	public final OabaProcessingController getProcessingController() {
+	public final ProcessingController getOabaProcessingController() {
 		return processingController;
 	}
 

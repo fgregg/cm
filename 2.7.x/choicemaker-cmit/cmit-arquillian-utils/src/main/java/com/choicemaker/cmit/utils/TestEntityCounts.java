@@ -21,14 +21,14 @@ import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
@@ -113,7 +113,7 @@ public class TestEntityCounts {
 			final OabaParametersController oabaParamsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
-			final OabaProcessingController processingController,
+			final ProcessingController processingController,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) throws Exception {
@@ -131,7 +131,7 @@ public class TestEntityCounts {
 			TransitivityParametersController transParamsController,
 			OabaSettingsController oabaSettingsController,
 			ServerConfigurationController serverController,
-			OabaProcessingController processingController,
+			ProcessingController processingController,
 			OperationalPropertyController opPropController,
 			RecordSourceController rsController,
 			RecordIdController ridController) {
@@ -221,7 +221,7 @@ public class TestEntityCounts {
 
 		if (processingController != null) {
 			oabaEventIC =
-					processingController.findAllOabaProcessingEvents().size();
+					processingController.findAllProcessingEvents().size();
 		} else {
 			oabaEventIC = 0;
 			msg = "Null processingController";
@@ -293,7 +293,7 @@ public class TestEntityCounts {
 		add((Object) tp);
 	}
 
-	public void add(OabaProcessingEvent p) {
+	public void add(OabaBatchProcessingEvent p) {
 		add((Object) p);
 	}
 
@@ -360,7 +360,7 @@ public class TestEntityCounts {
 			final OabaParametersController oabaParamsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,
-			final OabaProcessingController processingController,
+			final ProcessingController processingController,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) throws AssertionError {
@@ -378,7 +378,7 @@ public class TestEntityCounts {
 			TransitivityParametersController transParamsController,
 			OabaSettingsController settingsController,
 			ServerConfigurationController serverController,
-			OabaProcessingController processingController,
+			ProcessingController processingController,
 			OperationalPropertyController opPropController,
 			RecordSourceController rsController,
 			RecordIdController ridController) throws AssertionError {
@@ -406,7 +406,7 @@ public class TestEntityCounts {
 
 	protected void removeTestEntities(EntityManager em, UserTransaction utx,
 			ServerConfigurationController scc, OabaSettingsController osc,
-			final OabaProcessingController processingController,
+			final ProcessingController processingController,
 			final OperationalPropertyController propertyController,
 			RecordIdController ridController) throws Exception {
 		if (em == null || scc == null) {
@@ -447,7 +447,7 @@ public class TestEntityCounts {
 			final TransitivityParametersController transParamsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
-			final OabaProcessingController processingController,
+			final ProcessingController processingController,
 			final OperationalPropertyController opPropController,
 			final RecordSourceController rsController,
 			final RecordIdController ridController) {
@@ -576,7 +576,7 @@ public class TestEntityCounts {
 		final int oabaEventCC;
 		if (processingController != null) {
 			oabaEventCC =
-					processingController.findAllOabaProcessingEvents().size();
+					processingController.findAllProcessingEvents().size();
 		} else {
 			oabaEventCC = 0;
 			msg = "Null processingController";
@@ -755,7 +755,7 @@ public class TestEntityCounts {
 	}
 
 	protected static void removeJobEventsProperties(Set<BatchJob> batchJobs,
-			OabaProcessingController processingController,
+			ProcessingController processingController,
 			OperationalPropertyController propertyController) throws Exception {
 		String msg = "Removing events and properties created during testing";
 		logger.fine(msg);
@@ -768,7 +768,7 @@ public class TestEntityCounts {
 			if (job.isPersistent()) {
 				eCount +=
 					processingController
-							.deleteOabaProcessingEventsByJobId(jobId);
+							.deleteProcessingEventsByJobId(jobId);
 				pCount +=
 					propertyController
 							.deleteOperationalPropertiesByJobId(jobId);

@@ -10,7 +10,7 @@
  */
 package com.choicemaker.cm.urm.ejb;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaOperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -29,7 +29,6 @@ import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
@@ -108,7 +107,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 	public JobStatus getJobStatus(long jobID) throws ArgumentException,
 			ConfigException, CmRuntimeException, RemoteException {
 
-		OabaJob batchJob = batchQuery.getOabaJob(jobID);
+		BatchJob batchJob = batchQuery.getOabaJob(jobID);
 		JobStatus js =
 			new JobStatus(batchJob.getId(), batchJob.getStatus().name(),
 					batchJob.getTimeStamp(batchJob.getStatus()));
@@ -127,7 +126,7 @@ public class BatchRecordMatcherBean extends BatchMatchBaseBean {
 			throws ModelException, RecordCollectionException, ConfigException,
 			ArgumentException, CmRuntimeException, RemoteException {
 		try {
-			OabaJob job = batchQuery.getOabaJob(jobID);
+			BatchJob job = batchQuery.getOabaJob(jobID);
 			if (!job.getStatus().equals(BatchJobStatus.COMPLETED)) {
 				throw new ArgumentException("The job has not completed.");
 			} else {

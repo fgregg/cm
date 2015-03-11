@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -28,9 +29,8 @@ import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecValSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.MutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_ID_TYPE;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 import com.choicemaker.util.IntArrayList;
@@ -73,7 +73,7 @@ public class RecValService2 {
 	// this is the input record id to internal id mutableTranslator
 	private MutableRecordIdTranslator mutableTranslator;
 
-	private OabaEventLog status;
+	private ProcessingEventLog status;
 
 	// This stores if stage record id is Integer, Long, or string
 	private boolean firstStage = true;
@@ -112,7 +112,7 @@ public class RecValService2 {
 			ImmutableProbabilityModel model,
 			ImmutableProbabilityModel unusedMasterModel,
 			IRecValSinkSourceFactory rvFactory,
-			MutableRecordIdTranslator translator, OabaEventLog status) {
+			MutableRecordIdTranslator translator, ProcessingEventLog status) {
 
 		this.stage = stage;
 		this.master = master;
@@ -190,8 +190,8 @@ public class RecValService2 {
 	public void runService() throws BlockingException {
 		time = System.currentTimeMillis();
 
-		if (status.getCurrentOabaEventId() >= OabaProcessing.EVT_DONE_REC_VAL
-				&& status.getCurrentOabaEventId() < OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED) {
+		if (status.getCurrentProcessingEventId() >= OabaProcessing.EVT_DONE_REC_VAL
+				&& status.getCurrentProcessingEventId() < OabaProcessing.EVT_DONE_REVERSE_TRANSLATE_OVERSIZED) {
 
 			// need to initialize
 			log.info("recover rec,val files and mutableTranslator");
@@ -201,26 +201,26 @@ public class RecValService2 {
 			// OabaProcessing.EVT_CREATE_REC_VAL) {
 			// // create the rec_id, val_id files
 			// log.info("Creating new rec,val files");
-			// status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
+			// status.setCurrentOabaEvent(OabaProcessingEvent.CREATE_REC_VAL);
 			// createFiles();
-			// status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
+			// status.setCurrentOabaEvent(OabaProcessingEvent.DONE_REC_VAL);
 			//
 			// } else if (status.getCurrentOabaEventId() ==
 			// OabaProcessing.EVT_CREATE_REC_VAL) {
 			// log.info("Trying to recover rec,val files");
 			//
 			// // started to created, but not done, so we need to recover
-			// status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
+			// status.setCurrentOabaEvent(OabaProcessingEvent.CREATE_REC_VAL);
 			// recoverFiles();
-			// status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
+			// status.setCurrentOabaEvent(OabaProcessingEvent.DONE_REC_VAL);
 			// }
 
-		} else if (status.getCurrentOabaEventId() < OabaProcessing.EVT_DONE_REC_VAL) {
+		} else if (status.getCurrentProcessingEventId() < OabaProcessing.EVT_DONE_REC_VAL) {
 			// create the rec_id, val_id files
 			log.info("Creating new rec,val files");
-			status.setCurrentOabaEvent(OabaEvent.CREATE_REC_VAL);
+			status.setCurrentProcessingEvent(OabaProcessingEvent.CREATE_REC_VAL);
 			createFiles();
-			status.setCurrentOabaEvent(OabaEvent.DONE_REC_VAL);
+			status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_REC_VAL);
 
 		} else {
 			log.info("Skipping RecValService2.runService()");

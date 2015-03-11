@@ -5,10 +5,10 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 
-import com.choicemaker.cm.transitivity.core.TransitivityEvent;
-import com.choicemaker.cm.transitivity.core.TransitivityEventLog;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityProcessingEvent;
+import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobProcessingEvent;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 
 /**
  * TransitivityProcessingLog restricts a logging context to a specific
@@ -17,15 +17,15 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityProcessingEvent;
  *
  * @author rphall
  */
-public class TransitivityProcessingLog implements TransitivityEventLog {
+public class TransitivityProcessingLog implements ProcessingEventLog {
 
 	private static final Logger logger = Logger
 			.getLogger(TransitivityProcessingLog.class.getName());
 
 	private final EntityManager em;
-	private final TransitivityJob oabaJob;
+	private final BatchJob batchJob;
 
-	public TransitivityProcessingLog(EntityManager em, TransitivityJob job) {
+	public TransitivityProcessingLog(EntityManager em, BatchJob job) {
 		if (em == null) {
 			throw new IllegalArgumentException("null EntityManager");
 		}
@@ -33,51 +33,51 @@ public class TransitivityProcessingLog implements TransitivityEventLog {
 			throw new IllegalArgumentException("invalid OABA job: " + job);
 		}
 		this.em = em;
-		this.oabaJob = job;
+		this.batchJob = job;
 	}
 
-	protected TransitivityProcessingEvent getCurrentTransitivityProcessingEvent() {
+	protected BatchJobProcessingEvent getCurrentTransitivityProcessingEvent() {
 		return TransitivityProcessingControllerBean
-				.getCurrentTransitivityProcessingEvent(em, oabaJob);
+				.getCurrentBatchProcessingEvent(em, batchJob);
 	}
 
 	@Override
-	public TransitivityEvent getCurrentTransitivityEvent() {
-		TransitivityProcessingEvent ope =
+	public ProcessingEvent getCurrentProcessingEvent() {
+		BatchJobProcessingEvent ope =
 			getCurrentTransitivityProcessingEvent();
-		TransitivityEvent retVal = ope.getTransitivityEvent();
+		ProcessingEvent retVal = ope.getProcessingEvent();
 		return retVal;
 	}
 
 	@Override
-	public int getCurrentTransitivityEventId() {
-		return getCurrentTransitivityEvent().eventId;
+	public int getCurrentProcessingEventId() {
+		return getCurrentProcessingEvent().getEventId();
 	}
 
 	@Override
-	public String getCurrentTransitivityEventInfo() {
-		TransitivityProcessingEvent ope =
+	public String getCurrentProcessingEventInfo() {
+		BatchJobProcessingEvent ope =
 			getCurrentTransitivityProcessingEvent();
 		String retVal = ope.getEventInfo();
 		return retVal;
 	}
 
 	@Override
-	public void setCurrentTransitivityEvent(TransitivityEvent event) {
-		setCurrentTransitivityEvent(event, null);
+	public void setCurrentProcessingEvent(ProcessingEvent event) {
+		setCurrentProcessingEvent(event, null);
 	}
 
 	@Override
-	public void setCurrentTransitivityEvent(TransitivityEvent event, String info) {
+	public void setCurrentProcessingEvent(ProcessingEvent event, String info) {
 		logger.info("OABA processing event: " + event + " (job "
-				+ this.oabaJob.getId() + ")");
-		TransitivityProcessingControllerBean.updateStatus(em, oabaJob, event,
+				+ this.batchJob.getId() + ")");
+		TransitivityProcessingControllerBean.updateStatus(em, batchJob, event,
 				new Date(), info);
 	}
 
 	@Override
 	public String toString() {
-		return "TransitivityProcessingLog [jobId=" + oabaJob.getId() + "]";
+		return "TransitivityProcessingLog [jobId=" + batchJob.getId() + "]";
 	}
 
 }

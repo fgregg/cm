@@ -19,10 +19,10 @@ import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
 
+import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractSchedulerSingleton;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 
@@ -63,7 +63,7 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	}
 
 	@Override
-	protected void cleanUp(OabaJob job, OabaJobMessage sd)
+	protected void cleanUp(BatchJob job, OabaJobMessage sd)
 			throws BlockingException {
 		log.fine("cleanUp");
 
@@ -105,7 +105,7 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	}
 
 	@Override
-	protected void sendToMatchDebup(OabaJob job, OabaJobMessage sd) {
+	protected void sendToMatchDebup(BatchJob job, OabaJobMessage sd) {
 		MessageBeanUtils.sendStartData(sd, jmsContext, transMatchDedupQueue,
 				log);
 	}
@@ -116,7 +116,7 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	}
 
 	@Override
-	protected void sendToUpdateStatus(OabaJob job, OabaEvent event,
+	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);

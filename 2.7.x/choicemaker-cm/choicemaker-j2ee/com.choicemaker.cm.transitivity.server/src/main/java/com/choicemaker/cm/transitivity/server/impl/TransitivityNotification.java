@@ -12,10 +12,10 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import java.util.Date;
 
+import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchProcessingNotification;
-import com.choicemaker.cm.transitivity.core.TransitivityEvent;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJob;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityProcessingEvent;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
 
 /**
  * This is the data object that gets passed to the UpdateStatusMDB message bean.
@@ -28,23 +28,25 @@ public class TransitivityNotification extends BatchProcessingNotification {
 
 	static final long serialVersionUID = 271;
 
-	public TransitivityNotification(TransitivityJob job, TransitivityEvent event, Date timestamp) {
+	public TransitivityNotification(BatchJob job, ProcessingEvent event,
+			Date timestamp) {
 		this(job, event, timestamp, null);
 	}
 
-	public TransitivityNotification(TransitivityJob job, TransitivityEvent event, Date timestamp,
-			String info) {
-		super(job.getId(), TransitivityJobJPA.DISCRIMINATOR_VALUE,
-				event.percentComplete, event.eventId,
-				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE, event.name(),
-				timestamp, info);
+	public TransitivityNotification(BatchJob job, ProcessingEvent event,
+			Date timestamp, String info) {
+		super(job.getId(), TransitivityJobJPA.DISCRIMINATOR_VALUE, event
+				.getPercentComplete(), event.getEventId(),
+				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE, event
+						.getEventName(), timestamp, info);
 	}
 
-	public TransitivityNotification(TransitivityProcessingEvent ope) {
+	public TransitivityNotification(TransitivityBatchProcessingEvent ope) {
 		super(ope.getJobId(), TransitivityJobJPA.DISCRIMINATOR_VALUE, ope
 				.getFractionComplete(), ope.getEventSequenceNumber(),
-				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE, ope.getEventName(),
-				ope.getEventTimestamp(), ope.getEventInfo());
+				TransitivityProcessingEventJPA.DISCRIMINATOR_VALUE, ope
+						.getEventName(), ope.getEventTimestamp(), ope
+						.getEventInfo());
 	}
 
 }

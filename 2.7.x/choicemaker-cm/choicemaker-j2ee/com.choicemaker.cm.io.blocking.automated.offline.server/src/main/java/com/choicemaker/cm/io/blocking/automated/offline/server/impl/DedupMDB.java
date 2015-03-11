@@ -20,16 +20,16 @@ import javax.jms.Queue;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJob;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService4;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
 
@@ -58,23 +58,23 @@ public class DedupMDB extends AbstractOabaMDB {
 	private Queue chunkQueue;
 
 	@Override
-	protected void processOabaMessage(OabaJobMessage data, OabaJob oabaJob,
+	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
 			OabaParameters params, OabaSettings oabaSettings,
-			OabaEventLog processingLog, ServerConfiguration serverConfig,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
 
 		// Handle regular blocking sets
 		final int maxBlock = oabaSettings.getMaxBlockSize();
 		final int interval = oabaSettings.getInterval();
 		final BlockGroup bGroup =
-			new BlockGroup(OabaFileUtils.getBlockGroupFactory(oabaJob),
+			new BlockGroup(OabaFileUtils.getBlockGroupFactory(batchJob),
 					maxBlock);
 		BlockDedupService4 dedupService =
 			new BlockDedupService4(bGroup,
-					OabaFileUtils.getBigBlocksSinkSourceFactory(oabaJob),
-					OabaFileUtils.getTempBlocksSinkSourceFactory(oabaJob),
-					OabaFileUtils.getSuffixTreeSink(oabaJob), maxBlock,
-					processingLog, oabaJob, interval);
+					OabaFileUtils.getBigBlocksSinkSourceFactory(batchJob),
+					OabaFileUtils.getTempBlocksSinkSourceFactory(batchJob),
+					OabaFileUtils.getSuffixTreeSink(batchJob), maxBlock,
+					processingLog, batchJob, interval);
 		dedupService.runService();
 		log.info("Done block dedup " + dedupService.getTimeElapsed());
 		log.info("Blocks In " + dedupService.getNumBlocksIn());
@@ -83,16 +83,16 @@ public class DedupMDB extends AbstractOabaMDB {
 
 		// Handle oversized blocking sets
 		final IBlockSink osSpecial =
-			OabaFileUtils.getOversizedFactory(oabaJob).getNextSink();
+			OabaFileUtils.getOversizedFactory(batchJob).getNextSink();
 		final IBlockSinkSourceFactory osFactory =
-			OabaFileUtils.getOversizedFactory(oabaJob);
+			OabaFileUtils.getOversizedFactory(batchJob);
 		final IBlockSource osSource = osFactory.getSource(osSpecial);
 		final IBlockSink osDedup = osFactory.getNextSink();
 
 		OversizedDedupService osDedupService =
 			new OversizedDedupService(osSource, osDedup,
-					OabaFileUtils.getOversizedTempFactory(oabaJob),
-					processingLog, oabaJob);
+					OabaFileUtils.getOversizedTempFactory(batchJob),
+					processingLog, batchJob);
 		osDedupService.runService();
 		log.info("Done oversized dedup " + osDedupService.getTimeElapsed());
 		log.info("Num OS Before " + osDedupService.getNumBlocksIn());
@@ -111,8 +111,8 @@ public class DedupMDB extends AbstractOabaMDB {
 	}
 
 	@Override
-	protected OabaEvent getCompletionEvent() {
-		return OabaEvent.DONE_DEDUP_OVERSIZED;
+	protected OabaProcessingEvent getCompletionEvent() {
+		return OabaProcessingEvent.DONE_DEDUP_OVERSIZED;
 	}
 
 	@Override
