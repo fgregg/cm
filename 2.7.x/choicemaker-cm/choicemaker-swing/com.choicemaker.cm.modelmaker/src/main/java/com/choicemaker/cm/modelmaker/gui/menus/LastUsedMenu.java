@@ -188,7 +188,7 @@ public abstract class LastUsedMenu extends JMenu {
 			oos.flush();
 			prefs.putByteArray(key, bos.toByteArray());
 		} catch (IOException ex) {
-			logger.severe(new LoggingObject("CM-100201").toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100201").getFormattedMessage() + ": " + ex);
 		}
 	}
 
@@ -206,9 +206,9 @@ public abstract class LastUsedMenu extends JMenu {
 				}
 			}
 		} catch (IOException ex) {
-			logger.severe(new LoggingObject("CM-100202").toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100202").getFormattedMessage() + ": " + ex);
 		} catch (ClassNotFoundException ex) {
-			logger.severe(new LoggingObject("CM-100202").toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100202").getFormattedMessage() + ": " + ex);
 		}
 	}
 }

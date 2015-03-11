@@ -159,7 +159,7 @@ public class ModelBuilderDialog extends JDialog implements Enable {
 				parent.setProbabilityModel(pm);
 				return true;
 			} catch (OperationFailedException ex) {
-				logger.severe(new LoggingObject("CM-100501", pm.getModelName()).toString() + ": " + ex);
+				logger.severe(new LoggingObject("CM-100501", pm.getModelName()).getFormattedMessage() + ": " + ex);
 				return false;
 			}
 		} else {

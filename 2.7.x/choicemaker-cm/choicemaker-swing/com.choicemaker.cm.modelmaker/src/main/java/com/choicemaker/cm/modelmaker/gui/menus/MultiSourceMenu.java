@@ -113,7 +113,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 						MarkedRecordPairSourceXmlConf.add(source);
 						opened(source.getFileName());
 					} catch (XmlConfException ex) {
-						logger.severe(new LoggingObject("CM-100601", source.getFileName()).toString() + ": " + ex);
+						logger.severe(new LoggingObject("CM-100601", source.getFileName()).getFormattedMessage() + ": " + ex);
 					}
 					parent.setMultiSource(num, source);
 				}
@@ -194,7 +194,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 						try {
 							MarkedRecordPairSourceXmlConf.add(source);
 						} catch (XmlConfException ex) {
-							logger.severe(new LoggingObject("CM-100402", source.getFileName()).toString() + ": " + ex);
+							logger.severe(new LoggingObject("CM-100402", source.getFileName()).getFormattedMessage() + ": " + ex);
 						}
 						parent.setMultiSource(num, source);
 					} else {
@@ -221,7 +221,7 @@ public class MultiSourceMenu extends LastUsedMenu {
 			parent.setMultiSource(num, s);
 			opened(fileName);
 		} catch (XmlConfException ex) {
-			logger.severe(new LoggingObject("CM-100601", fileName).toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100601", fileName).getFormattedMessage() + ": " + ex);
 			remove(fileName);
 		}
 	}

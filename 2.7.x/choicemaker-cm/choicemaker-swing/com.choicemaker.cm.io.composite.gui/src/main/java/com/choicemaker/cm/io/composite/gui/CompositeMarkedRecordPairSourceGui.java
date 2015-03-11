@@ -72,10 +72,12 @@ public class CompositeMarkedRecordPairSourceGui extends MarkedRecordPairSourceGu
         init(s);
     }
 
-    public void show() {
+    public void setVisible(boolean b) {
+			if (b) {
         setFields();
         setEnabledness();
         super.setVisible(true);
+			}
     }
 
     public void setFields() {

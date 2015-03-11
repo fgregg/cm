@@ -114,7 +114,7 @@ public class LayoutMenu extends LastUsedMenu {
 					try {
 						RecordPairViewerXmlConf.saveLayout(layout);
 					} catch (Exception ex) {
-						logger.severe(new LoggingObject("CM-100301", layout.getFileName()).toString() + ": " + ex);
+						logger.severe(new LoggingObject("CM-100301", layout.getFileName()).getFormattedMessage() + ": " + ex);
 					}
 				}
 			}
@@ -160,7 +160,7 @@ public class LayoutMenu extends LastUsedMenu {
 				opened(layout.getFileName());
 			} catch (Exception ex) {
 				String fileName = layout == null ? "null" : layout.getFileName();
-				logger.severe(new LoggingObject("CM-100301", fileName).toString() + ": " + ex);
+				logger.severe(new LoggingObject("CM-100301", fileName).getFormattedMessage() + ": " + ex);
 			}
 		}
 	}
@@ -172,7 +172,7 @@ public class LayoutMenu extends LastUsedMenu {
 			parent.setCurrentLayout(layout);
 			opened(fileName);
 		} catch (Exception ex) {
-			logger.severe(new LoggingObject("CM-100302", fileName).toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100302", fileName).getFormattedMessage() + ": " + ex);
 			remove(fileName);
 		}
 	}

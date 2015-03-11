@@ -508,7 +508,9 @@ public class ModelMenu extends LastUsedMenu {
 		try {
 			parent.setProbabilityModel(fileName, false);
 		} catch (OperationFailedException ex) {
-			logger.severe(new LoggingObject("CM-100502", fileName).toString() + ": " + ex);
+			LoggingObject lo = new LoggingObject("CM-100502", fileName);
+			String msg = lo.getFormattedMessage();
+			logger.severe(msg);
 			remove(fileName);
 		}
 	}

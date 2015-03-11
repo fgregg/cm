@@ -107,7 +107,7 @@ public abstract class SourceGui extends JDialog {
 			buildSource();
 			dispose();
 		} catch (Exception ex) {
-			logger.severe(new LoggingObject("CM-100701", getSourceFileName()).toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100701", getSourceFileName()).getFormattedMessage() + ": " + ex);
 		}
 	}
 

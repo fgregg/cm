@@ -149,7 +149,7 @@ public class FilterCluePanel extends JPanel {
 		} catch (NumberFormatException ex) {
 			// ignore
 		} catch (IllegalArgumentException ex) {
-			logger.severe(new LoggingObject("CM-100101").toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100101").getFormattedMessage() + ": " + ex);
 		}
 		filter.setConditions(clueTable.getFilterConditions());
 		filter.setCollection(checked.isSelected() ? parent.getChecked() : null);

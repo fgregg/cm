@@ -29,7 +29,7 @@ public class StringUtils {
 	 *            nor <code>""</code>.
 	 */
 	public static boolean nonEmptyString(String s) {
-		return s != null && s.trim().length() > 0 && !s.toUpperCase().equals("NULL");
+		return s != null && s.trim().length() > 0;
 	}
 
 	/**

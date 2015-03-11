@@ -624,7 +624,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		try {
 			setProbabilityModel(probabilityModel.getModelFilePath(), true);
 		} catch (OperationFailedException ex) {
-			logger.severe(new LoggingObject("CM-100501", probabilityModel.getModelFilePath()).toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100501", probabilityModel
+					.getModelFilePath()).getFormattedMessage() + ": " + ex);
 		}
 	}
 
@@ -653,12 +654,13 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 				ProbabilityModelsXmlConf.readModel(modelName, is, compiler,
 						statusOutput, customCL, allowCompile);
 			setProbabilityModel(pm);
+
 		} catch (Exception ex) {
-			// AJW 2004-04-26: removed to avoid duplicate error messages.
-			//logger.severe(new LoggingObject("CM-100502", modelName, ex));
-			throw new OperationFailedException(
-				ChoiceMakerCoreMessages.m.formatMessage("train.gui.modelmaker.model.retrieve.error", modelName),
-				ex);
+			LoggingObject lo = new LoggingObject("CM-100502", modelName, ex);
+			String msg = lo.getFormattedMessage();
+			logger.severe(msg);
+			throw new OperationFailedException(msg);
+
 		} finally {
 			setCursor(cursor);
 			messagePanel.postMessage(statusOutput.toString());
@@ -796,7 +798,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 		try {
 			saveProbabilityModel(probabilityModel);
 		} catch (OperationFailedException ex) {
-			logger.severe(new LoggingObject("CM-100503", probabilityModel.getModelFilePath()).toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100503", probabilityModel
+					.getModelFilePath()).getFormattedMessage() + ": " + ex);
 		}
 	}
 
@@ -1107,7 +1110,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			logger.info("Re-saved MarkedRecordPairSource: " + markedRecordPairSource.getName());
 			setSourceDataModified(false);
 		} catch (IOException ex) {
-			logger.severe(new LoggingObject("CM-100602", markedRecordPairSource.getName()).toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100602", markedRecordPairSource
+					.getName()).getFormattedMessage() + ": " + ex);
 		}
 	}
 
@@ -1172,7 +1176,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 						}
 					}
 				} catch (OperationFailedException ex) {
-					logger.severe(new LoggingObject("CM-100801").toString() + ": " + ex);
+					logger.severe(new LoggingObject("CM-100801")
+							.getFormattedMessage() + ": " + ex);
 				}
 			}
 		};
@@ -1198,7 +1203,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 			String text = probabilityModel.getClueText(clueId);
 			postClue(text);
 		} catch (IOException ex) {
-			logger.severe(new LoggingObject("CM-100802", new Integer(clueId)).toString() + ": " + ex);
+			logger.severe(new LoggingObject("CM-100802", new Integer(clueId))
+					.getFormattedMessage() + ": " + ex);
 		}
 	}
 
@@ -1264,7 +1270,8 @@ public class ModelMaker extends JFrame implements CMPlatformRunnable {
 						}
 					}
 				} catch (OperationFailedException ex) {
-					logger.severe(new LoggingObject("CM-100801").toString() + ": " + ex);
+					logger.severe(new LoggingObject("CM-100801")
+							.getFormattedMessage() + ": " + ex);
 				}
 			}
 		};

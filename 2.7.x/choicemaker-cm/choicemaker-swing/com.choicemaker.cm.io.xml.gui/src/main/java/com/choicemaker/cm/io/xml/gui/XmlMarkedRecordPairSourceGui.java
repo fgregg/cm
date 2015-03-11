@@ -98,11 +98,12 @@ public class XmlMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui impl
 		init(s);
 	}
 
-	public void show() {
-		setFields();
-		setEnabledness();
-//		super.setVisible(true);
-		super.show();
+	public void setVisible(boolean b) {
+		if (b) {
+			setFields();
+			setEnabledness();
+			super.setVisible(true);
+		}
 	}
 
 	public void setFields() {

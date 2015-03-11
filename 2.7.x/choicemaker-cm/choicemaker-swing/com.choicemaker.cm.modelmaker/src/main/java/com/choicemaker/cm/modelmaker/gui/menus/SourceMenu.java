@@ -96,9 +96,9 @@ public class SourceMenu extends JMenu {
 					MarkedRecordPairBinder.store(parent.getSourceList(), parent.getSelection(), sink);
 					MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) source);
 				} catch (IOException ex) {
-					logger.severe(new LoggingObject("CM-100602", sink.getName()).toString() + ": " + ex);
+					logger.severe(new LoggingObject("CM-100602", sink.getName()).getFormattedMessage() + ": " + ex);
 				} catch (XmlConfException ex) {
-					logger.severe(new LoggingObject("CM-100602", sink.getName()).toString() + ": " + ex);
+					logger.severe(new LoggingObject("CM-100602", sink.getName()).getFormattedMessage() + ": " + ex);
 				}
 			}
 		}
@@ -207,9 +207,9 @@ public class SourceMenu extends JMenu {
 					MarkedRecordPairBinder.store(parent.getSourceList(), parent.getCheckedIndices(), sink);
 					MarkedRecordPairSourceXmlConf.add((MarkedRecordPairSource) source);
 				} catch (IOException ex) {
-					logger.severe(new LoggingObject("CM-100602", sink.getName()).toString() + ": " + ex);
+					logger.severe(new LoggingObject("CM-100602", sink.getName()).getFormattedMessage() + ": " + ex);
 				} catch (XmlConfException ex) {
-					logger.severe(new LoggingObject("CM-100602", sink.getName()).toString() + ": " + ex);
+					logger.severe(new LoggingObject("CM-100602", sink.getName()).getFormattedMessage() + ": " + ex);
 				}
 			}
 		}

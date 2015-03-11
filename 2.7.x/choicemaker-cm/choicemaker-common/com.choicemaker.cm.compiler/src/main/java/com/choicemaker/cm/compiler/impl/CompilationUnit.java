@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.compiler.CompilationEnv;
 import com.choicemaker.cm.compiler.ICompilationUnit;
@@ -40,68 +41,82 @@ import com.choicemaker.cm.core.compiler.CompilerException;
 import com.choicemaker.cm.core.util.ChoiceMakerCoreMessages;
 
 /**
- * Objects of that class represent a single compilation unit;
- * The current version of ClueMaker compiles only a single
- * compilation unit.
+ * Objects of that class represent a single compilation unit; The current
+ * version of ClueMaker compiles only a single compilation unit.
  *
- * @author   Matthias Zenger
- * @author   Martin Buechi
- * @version  $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
+ * @author Matthias Zenger
+ * @author Martin Buechi
+ * @version $Revision: 1.1.1.1 $ $Date: 2009/05/03 16:02:36 $
  */
 abstract class CompilationUnit implements Tags, ICompilationUnit {
+	
+	private static final Logger logger = Logger.getLogger(CompilationUnit.class.getName());
 
-	/** the compilation environment
+	/**
+	 * the compilation environment
 	 */
 	private CompilationEnv env;
 
-	/** the corresponding sourcecode
+	/**
+	 * the corresponding sourcecode
 	 */
 	private Sourcecode source;
 
-	/** the package of this compilation unit
+	/**
+	 * the package of this compilation unit
 	 */
 	private PackageSymbol pckage;
 
-	/** the base class (of q and m)
+	/**
+	 * the base class (of q and m)
 	 */
 	private Symbol baseClass;
 
-	/** the base class (of r)
+	/**
+	 * the base class (of r)
 	 */
-//	public Symbol sameBaseClass;
+	// public Symbol sameBaseClass;
 	private Symbol existsBaseClass;
 	/** base class of r in simple shorthands */
 	private Symbol doubleIndexBaseClass;
 
-	/** the content of the compilation unit in tree form
+	/**
+	 * the content of the compilation unit in tree form
 	 */
 	private Tree[] decls;
 
-	/** the content of the translation in tree form
+	/**
+	 * the content of the translation in tree form
 	 */
 	private Tree[] target;
 
-	/** the named import scope
+	/**
+	 * the named import scope
 	 */
 	private Scope namedImports;
 
-	/** the star import scope
+	/**
+	 * the star import scope
 	 */
 	private Scope starImports;
 
-	/** the ambiguous imports
+	/**
+	 * the ambiguous imports
 	 */
 	private Scope ambiguousImports;
 
-	/** the number of errors in this compilation unit
+	/**
+	 * the number of errors in this compilation unit
 	 */
 	private int errors;
 
-	/** the number of warnings in this compilation unit
+	/**
+	 * the number of warnings in this compilation unit
 	 */
 	private int warnings;
 
-	/** the list of generated files
+	/**
+	 * the list of generated files
 	 */
 	private List generatedJavaSourceFiles;
 
@@ -119,7 +134,8 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 
 	private String schemaName;
 
-	/** create a new compilation unit
+	/**
+	 * create a new compilation unit
 	 */
 	public CompilationUnit(CompilationEnv env, Sourcecode source) {
 		// Preconditions
@@ -147,25 +163,28 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		}
 	}
 
-	public void compile()  throws CompilerException {
+	public void compile() throws CompilerException {
 		syntacticAnalysis();
 		semanticAnalysis();
 		codeGeneration();
 	}
 
-	public void syntacticAnalysis()  throws CompilerException {
+	public void syntacticAnalysis() throws CompilerException {
 		long start = System.currentTimeMillis();
 		setDecls(new Parser(new Scanner(this)).compilationUnit());
 		if (getCompilationEnv().debug) {
 			new Printer().printUnit(this);
 		}
-		getCompilationEnv().message("[parsed " + getSource() + " in " + (System.currentTimeMillis() - start) + "ms]");
+		getCompilationEnv().message(
+				"[parsed " + getSource() + " in "
+						+ (System.currentTimeMillis() - start) + "ms]");
 	}
 
-	public void semanticAnalysis()  throws CompilerException {
+	public void semanticAnalysis() throws CompilerException {
 		if (getErrors() == 0 && getCompilationEnv().errors == 0)
 			// get a symbol for the package of this compilation unit
-			setPackage(getCompilationEnv().repository.definePackage(getPackageName()));
+			setPackage(getCompilationEnv().repository
+					.definePackage(getPackageName()));
 		// setup symbol table
 		new EnterClues(this).enter();
 		// typecheck clue sets
@@ -176,18 +195,22 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 
 	public abstract void codeGeneration() throws CompilerException;
 
-	/** issue an error for this compilation context
+	/**
+	 * issue an error for this compilation context
 	 */
 	public void error(String message) throws CompilerException {
 		if (getSource().printMessageIfNew(Location.NOPOS, message)) {
 			setErrors(getErrors() + 1);
 			if (getCompilationEnv().prompt) {
-				throw new CompilerException(ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.abort"));
+				throw new CompilerException(
+						ChoiceMakerCoreMessages.m
+								.formatMessage("compiler.unit.abort"));
 			}
 		}
 	}
 
-	/** issue a warning for this compilation context
+	/**
+	 * issue a warning for this compilation context
 	 */
 	public void warning(String message) {
 		if (getSource().printMessageIfNew(Location.NOPOS, message)) {
@@ -195,29 +218,42 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		}
 	}
 
-
-	/** issue an error for a specific line of this compilation context
+	/**
+	 * issue an error for a specific line of this compilation context
 	 */
 	public void error(int pos, String message) throws CompilerException {
+		String msg = getSource().getShortName() + ": " + pos + ": " + message;
+		logger.severe(msg);
 		if (getSource().printMessageIfNew(pos, message)) {
 			setErrors(getErrors() + 1);
 			if (getCompilationEnv().prompt) {
-				throw new CompilerException(ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.abort"));
+				String msg0 =
+					ChoiceMakerCoreMessages.m
+							.formatMessage("compiler.unit.abort");
+				throw new CompilerException(msg0);
 			}
 		}
 	}
 
-	/** issue a warning for a specific source code file
+	/**
+	 * issue a warning for a specific source code file
 	 */
 	public void warning(Sourcecode source, String message) {
-		if (source.printMessageIfNew(Location.NOPOS, ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.warning", message)));
+		if (source.printMessageIfNew(Location.NOPOS, ChoiceMakerCoreMessages.m
+				.formatMessage("compiler.unit.warning", message)))
+			;
 		setWarnings(getWarnings() + 1);
 	}
 
-	/** issue a warning for a specific line of a specific source code file
+	/**
+	 * issue a warning for a specific line of a specific source code file
 	 */
 	public void warning(int pos, String message) {
-		if (getSource().printMessageIfNew(pos, ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.warning", message)));
+		if (getSource().printMessageIfNew(
+				pos,
+				ChoiceMakerCoreMessages.m.formatMessage(
+						"compiler.unit.warning", message)))
+			;
 		setWarnings(getWarnings() + 1);
 	}
 
@@ -226,11 +262,14 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		setWarnings(getWarnings() + getCompilationEnv().warnings);
 		try {
 			if ((getErrors() + getWarnings()) > 0) {
-				statusOutput.write(
-					ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.conclusion", new Integer(getErrors()), new Integer(getWarnings()))
+				statusOutput.write(ChoiceMakerCoreMessages.m.formatMessage(
+						"compiler.unit.conclusion", new Integer(getErrors()),
+						new Integer(getWarnings()))
 						+ Constants.LINE_SEPARATOR);
 			} else {
-				statusOutput.write(ChoiceMakerCoreMessages.m.formatMessage("compiler.unit.compilation.complete") + Constants.LINE_SEPARATOR);
+				statusOutput.write(ChoiceMakerCoreMessages.m
+						.formatMessage("compiler.unit.compilation.complete")
+						+ Constants.LINE_SEPARATOR);
 			}
 		} catch (IOException ex) {
 			System.err.println(ex);
@@ -238,22 +277,27 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	}
 
 	/**
-	 * Call-back method for the Generator to populate the symbol table
-	 * with the holder classes.
+	 * Call-back method for the Generator to populate the symbol table with the
+	 * holder classes.
 	 *
-	 * All classes are in the same package as the clue set file generated
-	 * by the ClueMaker compiler.
+	 * All classes are in the same package as the clue set file generated by the
+	 * ClueMaker compiler.
 	 *
-	 * Currently, the non-qualified name is passed, e.g., Sample__patient.
-	 * I can easily change this to pass the fully qualified name instead.
+	 * Currently, the non-qualified name is passed, e.g., Sample__patient. I can
+	 * easily change this to pass the fully qualified name instead.
 	 *
-	 * @param   className  The name of the class.
+	 * @param className
+	 *            The name of the class.
 	 */
 	public void addClassType(String className) {
 		// define a new class
-		ClassSymbol c = getCompilationEnv().repository.defineClass(getPackage().fullname() + "." + className);
+		ClassSymbol c =
+			getCompilationEnv().repository.defineClass(getPackage().fullname()
+					+ "." + className);
 		// initialize the new class
-		c.init(Modifiers.PUBLIC | Modifiers.SCHEMA, getCompilationEnv().repository.defineClass("java.lang.Object"), new ClassSymbol[0]);
+		c.init(Modifiers.PUBLIC | Modifiers.SCHEMA,
+				getCompilationEnv().repository.defineClass("java.lang.Object"),
+				new ClassSymbol[0]);
 		// enter it in the current package
 		getPackage().members().enter(c);
 	}
@@ -261,17 +305,25 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	/**
 	 * Adds a field to a class type created with addClassType.
 	 *
-	 * @param   className  The name of the class.
-	 * @param   typeName  The name of the type.
-	 * @param   fieldName  The name of the field.
+	 * @param className
+	 *            The name of the class.
+	 * @param typeName
+	 *            The name of the type.
+	 * @param fieldName
+	 *            The name of the field.
 	 */
-	public void addField(String className, String typeName, String fieldName) throws CompilerException {
+	public void addField(String className, String typeName, String fieldName)
+			throws CompilerException {
 		// Do actual addition to symbol table.
 		// Once the compiler offers functionality to resolve type names,
-		// only fully qualified types (e.g., java.lang.String rather than String)
-		// will be passed. Also, all types will be verified to exist in the classpath.
-		// Because the schema has its own set of import's, it is not guaranteed that
-		// typeName exists in the import's of the clue set. (We could change it to
+		// only fully qualified types (e.g., java.lang.String rather than
+		// String)
+		// will be passed. Also, all types will be verified to exist in the
+		// classpath.
+		// Because the schema has its own set of import's, it is not guaranteed
+		// that
+		// typeName exists in the import's of the clue set. (We could change it
+		// to
 		// have only one set of import's if absolutely necessary.)
 
 		// The following implementation assumes that className and fieldName
@@ -283,13 +335,17 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		// entered twice etc.
 
 		// get the class symbol
-		ClassSymbol c = getCompilationEnv().repository.defineClass(getPackage().fullname() + "." + className);
+		ClassSymbol c =
+			getCompilationEnv().repository.defineClass(getPackage().fullname()
+					+ "." + className);
 		// create a field symbol
-		VarSymbol v = new VarSymbol(fieldName.intern(), new DeriveType(this).typeOf(typeName), Modifiers.PUBLIC, c);
+		VarSymbol v =
+			new VarSymbol(fieldName.intern(),
+					new DeriveType(this).typeOf(typeName), Modifiers.PUBLIC, c);
 		// enter the field symbol into the member table of c
 		c.members().enter(v);
 		// System.out.println("Added field " + typeName + " " + fieldName +
-		//                    " to holder class " + className);
+		// " to holder class " + className);
 	}
 
 	/**
@@ -297,37 +353,43 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	 *
 	 * The typeName must be added via addClassType prior to calling this method.
 	 *
-	 * @param   className  The name of the class.
-	 * @param   typeName  The name of the type.
-	 * @param   recordName  The name of the record.
+	 * @param className
+	 *            The name of the class.
+	 * @param typeName
+	 *            The name of the type.
+	 * @param recordName
+	 *            The name of the record.
 	 */
-	public void addNestedRecord(String className, String typeName, String fieldName) throws CompilerException {
+	public void addNestedRecord(String className, String typeName,
+			String fieldName) throws CompilerException {
 		// Do actual addition to symbol table.
 
 		// get the class symbol
-		ClassSymbol c = getCompilationEnv().repository.defineClass(getPackage().fullname() + "." + className);
+		ClassSymbol c =
+			getCompilationEnv().repository.defineClass(getPackage().fullname()
+					+ "." + className);
 		// create a field symbol for the nested record
 		VarSymbol v =
-			new VarSymbol(
-				fieldName.intern(),
-				new Type.ArrayType(new DeriveType(this).typeOf(typeName)),
-				Modifiers.PUBLIC,
-				c);
+			new VarSymbol(fieldName.intern(), new Type.ArrayType(
+					new DeriveType(this).typeOf(typeName)), Modifiers.PUBLIC, c);
 		// enter the field symbol into the member table of c
 		c.members().enter(v);
 
-		// System.out.println("Added nested record " + typeName + " " + fieldName +
-		//                    " to holder class " + className);
+		// System.out.println("Added nested record " + typeName + " " +
+		// fieldName +
+		// " to holder class " + className);
 	}
 
 	/**
 	 * Defines the type for Q and M.
 	 *
-	 * @param  name  The name of the type. Must be created with addClassType
-	 *           prior to calling this method.
+	 * @param name
+	 *            The name of the type. Must be created with addClassType prior
+	 *            to calling this method.
 	 */
 	public void setBaseType(String name) {
-		setBaseClass(getCompilationEnv().repository.defineClass(getPackage().fullname() + "." + name));
+		setBaseClass(getCompilationEnv().repository.defineClass(getPackage()
+				.fullname() + "." + name));
 	}
 
 	public void addGeneratedJavaSourceFile(String fileName) {
@@ -335,13 +397,17 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	}
 
 	public ClassSymbol createSameBaseClass(ClassSymbol c) {
-		ClassSymbol res = new ClassSymbol(c.getName(), c.getOwner(), getCompilationEnv().repository);
+		ClassSymbol res =
+			new ClassSymbol(c.getName(), c.getOwner(),
+					getCompilationEnv().repository);
 		res.init(c.modifiers(), c.superclass(), c.interfaces());
 		Scope s = res.members();
 		ScopeEntry e = c.members().elems;
 		while (e != ScopeEntry.NONE) {
 			if (!e.sym.getType().isArray()) {
-				VarSymbol v = new VarSymbol(e.sym.getName(), e.sym.getType(), Modifiers.PUBLIC, res);
+				VarSymbol v =
+					new VarSymbol(e.sym.getName(), e.sym.getType(),
+							Modifiers.PUBLIC, res);
 				s.enter(v);
 			}
 			e = e.next;
@@ -350,7 +416,9 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	}
 
 	public ClassSymbol createExistsBaseClass(ClassSymbol c) {
-		ClassSymbol res = new ClassSymbol(c.getName(), c.getOwner(), getCompilationEnv().repository);
+		ClassSymbol res =
+			new ClassSymbol(c.getName(), c.getOwner(),
+					getCompilationEnv().repository);
 		res.init(c.modifiers(), c.superclass(), c.interfaces());
 		Scope s = res.members();
 		ScopeEntry e = c.members().elems;
@@ -358,14 +426,14 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 			if (e.sym.getType().isArray()) {
 				if ((e.sym.getType().elemtype().sym().modifiers() & Modifiers.SCHEMA) != 0) {
 					VarSymbol v =
-						new VarSymbol(
-							e.sym.getName(),
-							createExistsBaseClass((ClassSymbol) e.sym.getType().elemtype().sym()).getType(),
-							Modifiers.PUBLIC,
-							e.sym.getOwner());
+						new VarSymbol(e.sym.getName(), createExistsBaseClass(
+								(ClassSymbol) e.sym.getType().elemtype().sym())
+								.getType(), Modifiers.PUBLIC, e.sym.getOwner());
 					s.enter(v);
 				} else {
-					VarSymbol v = new VarSymbol(e.sym.getName(), e.sym.getType(), Modifiers.PUBLIC, res);
+					VarSymbol v =
+						new VarSymbol(e.sym.getName(), e.sym.getType(),
+								Modifiers.PUBLIC, res);
 					s.enter(v);
 				}
 			} else
@@ -376,7 +444,9 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 	}
 
 	public ClassSymbol createDoubleIndexBaseClass(ClassSymbol c) {
-		ClassSymbol res = new ClassSymbol(c.getName(), c.getOwner(), getCompilationEnv().repository);
+		ClassSymbol res =
+			new ClassSymbol(c.getName(), c.getOwner(),
+					getCompilationEnv().repository);
 		res.init(c.modifiers(), c.superclass(), c.interfaces());
 		Scope s = res.members();
 		ScopeEntry e = c.members().elems;
@@ -384,14 +454,16 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 			if (e.sym.getType().isArray()) {
 				if ((e.sym.getType().elemtype().sym().modifiers() & Modifiers.SCHEMA) != 0) {
 					VarSymbol v =
-						new VarSymbol(
-							e.sym.getName(),
-							new Type.ArrayType(createDoubleIndexBaseClass((ClassSymbol) e.sym.getType().elemtype().sym()).getType(), true),
-							Modifiers.PUBLIC,
-							e.sym.getOwner());
+						new VarSymbol(e.sym.getName(), new Type.ArrayType(
+								createDoubleIndexBaseClass(
+										(ClassSymbol) e.sym.getType()
+												.elemtype().sym()).getType(),
+								true), Modifiers.PUBLIC, e.sym.getOwner());
 					s.enter(v);
 				} else {
-					VarSymbol v = new VarSymbol(e.sym.getName(), e.sym.getType(), Modifiers.PUBLIC, res);
+					VarSymbol v =
+						new VarSymbol(e.sym.getName(), e.sym.getType(),
+								Modifiers.PUBLIC, res);
 					s.enter(v);
 				}
 			} else
@@ -403,6 +475,7 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 
 	/**
 	 * Get the value of packageName.
+	 * 
 	 * @return value of packageName.
 	 */
 	public String getPackageName() {
@@ -411,7 +484,9 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 
 	/**
 	 * Set the value of packageName.
-	 * @param v  Value to assign to packageName.
+	 * 
+	 * @param v
+	 *            Value to assign to packageName.
 	 */
 	public void setPackageName(String v) {
 		this.packageName = v;
@@ -562,22 +637,24 @@ abstract class CompilationUnit implements Tags, ICompilationUnit {
 		return warnings;
 	}
 
-	//     /**
-	//      * Compiles a ClueMaker expression into a (sequence of) Java statement(s)
-	//      * that assign the value of the expression to the variable.
-	//      * Used for compiling validity, pre-condition, and derived fields.
-	//      *
-	//      * Might be better to create intermediate file.
-	//      *
-	//      * @param   className  The name of the class in which this expression occurs.
-	//      * @param   fieldName  The name of the field to which this expression relates.
-	//      * @param   exp  The ClueMaker expression to be compiled.
-	//      * @param   variableToAssignTo  The name of the variable to which the
-	//      *            expression must be assigned.
-	//      * @return  Java statements suitable to be inserted into the class.
-	//      * @throws  SomeException  if an error occurs during compilation.
-	//      */
-	//     public String compileExpression(String className, String exp, String variableToAssignTo) throws IllegalArgumentException {
-	//         return "";
-	//     }
+	// /**
+	// * Compiles a ClueMaker expression into a (sequence of) Java statement(s)
+	// * that assign the value of the expression to the variable.
+	// * Used for compiling validity, pre-condition, and derived fields.
+	// *
+	// * Might be better to create intermediate file.
+	// *
+	// * @param className The name of the class in which this expression occurs.
+	// * @param fieldName The name of the field to which this expression
+	// relates.
+	// * @param exp The ClueMaker expression to be compiled.
+	// * @param variableToAssignTo The name of the variable to which the
+	// * expression must be assigned.
+	// * @return Java statements suitable to be inserted into the class.
+	// * @throws SomeException if an error occurs during compilation.
+	// */
+	// public String compileExpression(String className, String exp, String
+	// variableToAssignTo) throws IllegalArgumentException {
+	// return "";
+	// }
 }
