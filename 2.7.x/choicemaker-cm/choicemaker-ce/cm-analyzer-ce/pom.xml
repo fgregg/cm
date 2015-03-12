@@ -208,14 +208,24 @@
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
     </dependency>
-<!-- Excluded from the Community Edition due to licensing issues
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
       <classifier>eclipse2prj</classifier>
       <type>zip</type>
     </dependency>
-END: C-E Exclusion -->
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.sqlserver.gui</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.sqlserver</artifactId>
+      <classifier>eclipse2prj</classifier>
+      <type>zip</type>
+    </dependency>
     <dependency>
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.flatfile.base</artifactId>
