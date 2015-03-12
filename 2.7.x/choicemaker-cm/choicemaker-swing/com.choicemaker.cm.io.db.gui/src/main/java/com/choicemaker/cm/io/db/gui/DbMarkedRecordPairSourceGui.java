@@ -105,10 +105,12 @@ public class DbMarkedRecordPairSourceGui extends MarkedRecordPairSourceGui imple
         return availableDataSources;
     }
 
-    public void show() {
+    public void setVisible(boolean b) {
+			if (b) {
         setFields();
         setEnabledness();
         super.setVisible(true);
+			}
     }
 
     private void setFields() {

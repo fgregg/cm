@@ -83,18 +83,20 @@ public class TrainDialog extends JDialog implements Enable {
 		setLocation(pt);
 	}
 
-	public void show() {
-		IProbabilityModel model = parent.getProbabilityModel();
-		firingThresholdField.setText(String.valueOf(model.getFiringThreshold()));
-		enableClues.setSelected(model.isEnableAllCluesBeforeTraining());
-		enableRules.setSelected(model.isEnableAllRulesBeforeTraining());
-		ml = model.getMachineLearner();
-		if (ml.canUse(parent.getProbabilityModel().getClueSet())) {
-			setMachineLearner();
-		} else {
-			mlc.setSelectedIndex(0);
+	public void setVisible(boolean b) {
+		if (b) {
+			IProbabilityModel model = parent.getProbabilityModel();
+			firingThresholdField.setText(String.valueOf(model.getFiringThreshold()));
+			enableClues.setSelected(model.isEnableAllCluesBeforeTraining());
+			enableRules.setSelected(model.isEnableAllRulesBeforeTraining());
+			ml = model.getMachineLearner();
+			if (ml.canUse(parent.getProbabilityModel().getClueSet())) {
+				setMachineLearner();
+			} else {
+				mlc.setSelectedIndex(0);
+			}
+			setEnabledness();
 		}
-		setEnabledness();
 		super.setVisible(true);
 	}
 

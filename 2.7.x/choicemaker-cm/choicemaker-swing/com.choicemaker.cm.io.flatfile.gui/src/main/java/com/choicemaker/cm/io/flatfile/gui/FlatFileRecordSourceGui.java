@@ -77,10 +77,12 @@ public class FlatFileRecordSourceGui extends RecordSourceGui implements Enable {
 		init(s);
 	}
 
-	public void show() {
-		setFields();
-		setEnabledness();
-		super.setVisible(true);
+	public void setVisible(boolean b) {
+		if (b) {
+			setFields();
+			setEnabledness();
+			super.setVisible(true);
+		}
 	}
 
 	public void setFields() {

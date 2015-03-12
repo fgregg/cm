@@ -65,10 +65,12 @@ public class SqlServerRecordSourceGui extends RecordSourceGui implements Enable 
         init(s);
     }
 
-	public void show() {
-		setFields();
-		setEnabledness();
-		super.show();
+	public void setVisible(boolean b) {
+		if (b) {
+			setFields();
+			setEnabledness();
+			super.setVisible(b);
+		}
 	}
 
 	public void setEnabledness() {
