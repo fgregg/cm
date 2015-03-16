@@ -80,9 +80,6 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 	// @Resource
 	// protected MessageDrivenContext mdc;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateTransQueue")
-	private Queue updateTransQueue;
-
 	@Inject
 	protected JMSContext jmsContext;
 

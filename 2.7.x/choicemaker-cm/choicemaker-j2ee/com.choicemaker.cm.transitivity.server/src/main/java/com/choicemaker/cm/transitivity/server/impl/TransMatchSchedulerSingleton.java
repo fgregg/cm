@@ -43,9 +43,6 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchDedupQueue")
 	private Queue transMatchDedupQueue;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/updateTransQueue")
-	private Queue updateTransQueue;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatcherQueue")
 	private Queue transMatcherQueue;
 
