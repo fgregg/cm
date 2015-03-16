@@ -61,7 +61,7 @@ public class DbbCountsCreator {
 	// By holding this connection as instance data, instances of this class
 	// become responsible for closing it (see the close method). But the close
 	// method on instances of this class are called less than consistently.
-	// It might be better to pass a connnection in for each method that requires
+	// It might be better to pass a connection in for each method that requires
 	// a connections, and therefore never accept responsibility from a client
 	// for closing a connection. This class would then follow the fly-weight
 	// design pattern -- just a template of procedural methods for updating

@@ -177,12 +177,12 @@ public class OabaMdbTestProcedures {
 			if (oabaPhase == BatchProcessingPhase.INTERMEDIATE
 					|| oabaPhase == BatchProcessingPhase.INITIAL) {
 				oabaNotification =
-					JmsUtils.receiveLatestBatchProcessingNotification(batchJob, LOG_SOURCE,
-							statusListener, SHORT_TIMEOUT_MILLIS);
+					JmsUtils.receiveLatestBatchProcessingNotification(batchJob,
+							LOG_SOURCE, statusListener, SHORT_TIMEOUT_MILLIS);
 			} else if (oabaPhase == BatchProcessingPhase.FINAL) {
 				oabaNotification =
-					JmsUtils.receiveFinalBatchProcessingNotification(batchJob, LOG_SOURCE,
-							statusListener, LONG_TIMEOUT_MILLIS);
+					JmsUtils.receiveFinalBatchProcessingNotification(batchJob,
+							LOG_SOURCE, statusListener, LONG_TIMEOUT_MILLIS);
 			} else {
 				throw new Error("unexpected phase: " + oabaPhase);
 			}

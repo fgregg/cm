@@ -28,8 +28,8 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.naming.NamingException;
 
-import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.batch.ProcessingEventLog;
@@ -37,8 +37,8 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**
  * This match dedup bean is used by the Transitivity Engine. It dedups the
@@ -72,7 +72,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 	TransitivityJobController jobController;
 
 	// @EJB
-	OabaParametersController paramsController;
+	TransitivityParametersController paramsController;
 
 	// @EJB
 	ProcessingController processingController;
@@ -141,8 +141,8 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 		log.fine("in handleMerge");
 
 		final long jobId = oabaJob.getId();
-		OabaParameters params =
-			paramsController.findOabaParametersByJobId(jobId);
+		TransitivityParameters params =
+			paramsController.findTransitivityParametersByJobId(jobId);
 
 		// init values
 		final String modelConfigId = params.getModelConfigurationName();

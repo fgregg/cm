@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
+package com.choicemaker.cm.io.blocking.automated.offline.server.util;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CLEAR_RESOURCES;
 

@@ -12,6 +12,7 @@ package com.choicemaker.cm.transitivity.server.ejb;
 
 import javax.ejb.Local;
 
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
@@ -37,7 +38,7 @@ public interface TransitivityService {
 	 * @throws ServerConfigurationException
 	 */
 	public long startTransitivity(String externalID,
-			TransitivityParameters batchParams, BatchJob batchJob,
+			TransitivityParameters batchParams, BatchJob batchJob,OabaSettings settings,
 			ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException;
 

@@ -47,6 +47,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 /**
  * @author pcheung

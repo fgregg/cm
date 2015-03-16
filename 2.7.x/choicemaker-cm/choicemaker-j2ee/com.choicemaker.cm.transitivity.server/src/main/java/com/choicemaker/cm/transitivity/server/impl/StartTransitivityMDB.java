@@ -12,23 +12,21 @@ package com.choicemaker.cm.transitivity.server.impl;
 
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_CREATE_CHUNK_DATA;
 import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANS_DEDUP_OVERSIZED;
 
-import java.io.Serializable;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
-import javax.naming.NamingException;
+import javax.jms.Queue;
 
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
@@ -41,18 +39,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IRecordIdSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.ImmutableRecordIdTranslator;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.IDSetSource;
 import com.choicemaker.cm.io.blocking.automated.offline.result.MatchToBlockTransformer2;
 import com.choicemaker.cm.io.blocking.automated.offline.result.Size2MatchProducer;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService3;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.Transformer;
-import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
 
 /**
  * This message bean starts the Transitivity Engine. It assumes that it can
@@ -67,100 +62,95 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 				propertyValue = "java:/choicemaker/urm/jms/transitivityQueue"),
 		@ActivationConfigProperty(propertyName = "destinationType",
 				propertyValue = "javax.jms.Queue") })
-public class StartTransitivityMDB implements MessageListener, Serializable {
+public class StartTransitivityMDB extends AbstractTransitivityMDB {
 
 	private static final long serialVersionUID = 1L;
+
 	private static final Logger log = Logger
 			.getLogger(StartTransitivityMDB.class.getName());
+
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ StartTransitivityMDB.class.getName());
 
-	// @EJB
-	private TransitivityJobController jobController;
+	// @Resource(lookup = "java:/choicemaker/urm/jms/updateTransQueue")
+	// private Queue updateQueue;
 
-	// @EJB
-	// private OabaSettingsController settingsController;
+	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
+	private Queue transMatchSchedulerQueue;
 
-	// @EJB
-	private OabaParametersController paramsController;
+	@Override
+	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
+			TransitivityParameters params, OabaSettings oabaSettings,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
+			ImmutableProbabilityModel model) throws BlockingException {
+		// this.updateTransivitityProcessingStatus(batchJob, event, timestamp,
+		// info)
+		// }
+		//
+		// public void _onMessage(Message inMessage) {
+		// jmsTrace.info("Entering onMessage for " + this.getClass().getName());
+		// ObjectMessage msg = null;
+		// BatchJob transJob = null;
 
-	// @EJB
-	private ProcessingController processingController;
+		// log.fine("StartTransitivityMDB In onMessage");
 
-	// @EJB
-	private RecordSourceController rsController;
+		// try {
+		// if (inMessage instanceof ObjectMessage) {
+		// msg = (ObjectMessage) inMessage;
+		// Object o = msg.getObject();
+		//
+		// OabaJobMessage d = (OabaJobMessage) o;
+		// final long jobId = data.jobID;
+		// transJob = null ; // jobController.findTransitivityJob(jobId);
+		// transJob.markAsStarted();
+		batchJob.markAsStarted();
 
-	// @EJB
-	private RecordIdController ridController;
+		removeOldFiles(batchJob);
+		createChunks(batchJob, params, oabaSettings, serverConfig);
 
-	// @EJB
-	private OperationalPropertyController propController;
+		// } else {
+		// log.warning("wrong type: " + inMessage.getClass().getName());
+		// }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
-	 */
-	public void onMessage(Message inMessage) {
-		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
-		ObjectMessage msg = null;
-		BatchJob transJob = null;
-
-		log.fine("StartTransitivityMDB In onMessage");
-
-		try {
-			if (inMessage instanceof ObjectMessage) {
-				msg = (ObjectMessage) inMessage;
-				Object o = msg.getObject();
-
-				OabaJobMessage d = (OabaJobMessage) o;
-				final long jobId = d.jobID;
-				transJob = jobController.findTransitivityJob(jobId);
-				transJob.markAsStarted();
-				OabaParameters params =
-					paramsController.findOabaParametersByJobId(jobId);
-
-				removeOldFiles(transJob);
-				createChunks(transJob, params);
-
-			} else {
-				log.warning("wrong type: " + inMessage.getClass().getName());
-			}
-
-		} catch (Exception e) {
-			log.severe(e.toString());
-			if (transJob != null) {
-				transJob.markAsFailed();
-			}
-		}
-		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+		// } catch (Exception e) {
+		// log.severe(e.toString());
+		// if (transJob != null) {
+		// transJob.markAsFailed();
+		// }
+		// }
+		// jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
 	/*
 	 * This method calls MatchToBlockTransformer to create blocks for the
 	 * equivalence classes. It then calls ChunkService3 to create chunks.
 	 */
-	private void createChunks(BatchJob transJob, OabaParameters params)
-			throws Exception {
+	private void createChunks(BatchJob transJob, TransitivityParameters params,
+			OabaSettings oabaSettings, ServerConfiguration serverConfig)
+			throws BlockingException {
+	
+		// Get the parent/predecessor OABA job
+		long oabaJobId = transJob.getBatchParentId();
+		BatchJob oabaJob = this.getOabaJobController().findOabaJob(oabaJobId);
 
-		// get the match record source
+		// Get the match record source from the OABA job
 		IMatchRecord2Source mSource =
-			OabaFileUtils.getCompositeMatchSource(transJob);
+			OabaFileUtils.getCompositeMatchSource(oabaJob);
 
-		// get the transitivity block sink
+		// Recover the translator from the OABA job
+		ImmutableRecordIdTranslator translator =
+			this.getRecordIdController().findRecordIdTranslator(oabaJob);
+
+		// Create a block sink for the Transitivity job
 		IBlockSink bSink =
 			TransitivityFileUtils.getTransitivityBlockFactory(transJob)
 					.getNextSink();
 
-		// recover the translator
-		ImmutableRecordIdTranslator translator =
-			ridController.findRecordIdTranslator(transJob);
-
-		// Create blocks
+		// Create blocks for the Transitivity job
 		IMatchRecord2SinkSourceFactory mFactory =
 			OabaFileUtils.getMatchTempFactory(transJob);
 		IRecordIdSinkSourceFactory idFactory =
-			ridController.getRecordIdSinkSourceFactory(transJob);
+			this.getRecordIdController().getRecordIdSinkSourceFactory(transJob);
 		IRecordIdSink idSink = idFactory.getNextSink();
 		MatchToBlockTransformer2 transformer =
 			new MatchToBlockTransformer2(mSource, mFactory, translator, bSink,
@@ -175,7 +165,7 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		int twos = producer.process();
 		log.info("number of size 2 EC: " + twos);
 
-		// clean up
+		// Clean up the Transitivity job
 		idSink.remove();
 
 		IBlockSource bSource =
@@ -184,11 +174,10 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		IDSetSource source2 = new IDSetSource(bSource);
 
 		final String modelConfigId = params.getModelConfigurationName();
-		ImmutableProbabilityModel model = PMManager.getModelInstance(modelConfigId);
-		String temp = (String) model.properties().get("maxChunkSize");
-		int maxChunk = Integer.parseInt(temp);
+		ImmutableProbabilityModel model =
+			PMManager.getModelInstance(modelConfigId);
 
-		//
+		int maxChunk = oabaSettings.getMaxChunkSize();
 		if (transformer.getMaxEC() > maxChunk)
 			throw new RuntimeException("There is an equivalence class of size "
 					+ transformer.getMaxEC()
@@ -196,12 +185,10 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 					+ maxChunk + ".");
 
 		// get the number of processors
-		temp = (String) model.properties().get("numProcessors");
-		int numProcessors = Integer.parseInt(temp);
+		int numProcessors = serverConfig.getMaxChoiceMakerThreads();
 
-		// get the number of processors
-		temp = (String) model.properties().get("maxChunkFiles");
-		int numFiles = Integer.parseInt(temp);
+		// get the number of chunk files
+		int numFiles = serverConfig.getMaxOabaChunkFileCount();
 
 		// create the oversized block transformer
 		Transformer transformerO =
@@ -209,18 +196,38 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 					OabaFileUtils.getComparisonArrayGroupFactoryOS(transJob,
 							numProcessors));
 
-		// set the correct status for chunk could run.
-		final long jobId = transJob.getId();
-		// FIXME null transJob, wrong log type
-		ProcessingEventLog status = processingController.getProcessingLog(null);
-		// status.setCurrentProcessingEvent(TransitivityEvent.EVT_DONE_TRANS_DEDUP_OVERSIZED);
-		// HACK
-		assert DONE_TRANS_DEDUP_OVERSIZED.getEventId() == OabaProcessingEvent.DONE_DEDUP_OVERSIZED.getEventId();
-		status.setCurrentProcessingEvent(OabaProcessingEvent.DONE_DEDUP_OVERSIZED);
-		// END HACK
+		// Cast the current transitivity parameters as OABA parameters.
+		OabaParameters oabaParams = params.asOabaParameters();
 
-		ISerializableRecordSource staging = rsController.getStageRs(params);
-		ISerializableRecordSource master = rsController.getMasterRs(params);
+		// Set the source for the staging records
+		ISerializableRecordSource staging = null;
+		try {
+			staging = this.getRecordSourceController().getStageRs(oabaParams);
+		} catch (Exception e) {
+			String msg = "Unable to staging record source: " + e.toString();
+			getLogger().severe(msg);
+			throw new BlockingException(msg, e);
+		}
+
+		// Set the source for the master records
+		ISerializableRecordSource master = null;
+		try {
+			master = this.getRecordSourceController().getMasterRs(oabaParams);
+		} catch (Exception e) {
+			String msg = "Unable to master record source: " + e.toString();
+			getLogger().severe(msg);
+			throw new BlockingException(msg, e);
+		}
+
+		// Set the correct processing status prior to chunk creation.
+		// (This is a potential, but unlikely, race condition. A cleaner
+		// approach would be to use a local stack implementation of
+		// ProcessingEventLog, and then set the persistent value after the
+		// chunk service completes.)
+		ProcessingEventLog status =
+			this.getProcessingController().getProcessingLog(transJob);
+		status.setCurrentProcessingEvent(DONE_TRANS_DEDUP_OVERSIZED);
+
 		ChunkService3 chunkService =
 			new ChunkService3(source2, null, staging, master, model,
 					OabaFileUtils.getChunkIDFactory(transJob),
@@ -233,31 +240,30 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 
 		final int numChunks = chunkService.getNumChunks();
 		log.info("Number of chunks " + numChunks);
-		propController.setJobProperty(transJob, PN_CHUNK_FILE_COUNT,
-				String.valueOf(numChunks));
+		this.getPropertyController().setJobProperty(transJob,
+				PN_CHUNK_FILE_COUNT, String.valueOf(numChunks));
 
 		// this is important because in transitivity, there are only OS chunks.
 		final int numRegularChunks = 0;
 		log.info("Number of regular chunks " + numChunks);
-		propController.setJobProperty(transJob, PN_REGULAR_CHUNK_FILE_COUNT,
-				String.valueOf(numRegularChunks));
+		this.getPropertyController().setJobProperty(transJob,
+				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
 
 		// clean up translator
 		// translator.cleanUp();
 
-		log.info("send to transitivity matcher");
-		OabaJobMessage data = new OabaJobMessage(jobId);
-		sendToTransMatch(data);
-		sendToUpdateTransStatus(data.jobID, 30);
+		// log.info("send to transitivity matcher");
+		// OabaJobMessage data = new OabaJobMessage(jobId);
+		// sendToTransMatch(data);
+		// sendToUpdateTransStatus(data.jobID, PCT_DONE_DEDUP_OVERSIZED);
 	}
 
 	/**
-	 * This method removes the transMatch* files, because the pairs are conact
+	 * This method removes any pre-existing transMatch* files
 	 * 
 	 * @param jobID
 	 */
-	private void removeOldFiles(BatchJob transJob)
-			throws BlockingException {
+	private void removeOldFiles(BatchJob transJob) throws BlockingException {
 		try {
 			// final sink
 			IMatchRecord2Source finalSource =
@@ -273,34 +279,58 @@ public class StartTransitivityMDB implements MessageListener, Serializable {
 		}
 	}
 
-	/**
-	 * This method sends a message to the UpdateStatusMDB message bean.
-	 *
-	 * @param jobID
-	 * @param percentComplete
-	 * @throws NamingException
-	 */
-	private void sendToUpdateTransStatus(long jobID, int percentComplete)
-			throws NamingException, JMSException {
-		throw new Error("not yet re-implemented");
-		// Queue queue = configuration.getUpdateTransMessageQueue();
-		// TransitivityNotification data = new TransitivityNotification(jobID, percentComplete);
-		// log.info ("send to updateTransQueue " + jobID + " " +
-		// percentComplete);
-		// configuration.sendMessage(queue, data);
+	// /**
+	// * This method sends a message to the UpdateStatusMDB message bean.
+	// *
+	// * @param jobID
+	// * @param percentComplete
+	// * @throws NamingException
+	// */
+	// private void sendToUpdateTransStatus(long jobID, int percentComplete)
+	// throws NamingException, JMSException {
+	// throw new Error("not re-implemented");
+	// // Queue queue = configuration.getUpdateTransMessageQueue();
+	// // TransitivityNotification data = new TransitivityNotification(jobID,
+	// // percentComplete);
+	// // log.info ("send to updateTransQueue " + jobID + " " +
+	// // percentComplete);
+	// // configuration.sendMessage(queue, data);
+	// }
+
+	// /**
+	// * This method sends the message to the match dedup bean.
+	// *
+	// * @param data
+	// * @throws NamingException
+	// */
+	// private void sendToTransMatch(OabaJobMessage data) throws
+	// NamingException,
+	// JMSException {
+	// throw new Error("not re-implemented");
+	// // MessageBeanUtils.sendStartData(data, getJmsContext(),
+	// transMatchSchedulerQueue,
+	// // getLogger());
+	// }
+
+	@Override
+	protected Logger getLogger() {
+		return log;
 	}
 
-	/**
-	 * This method sends the message to the match dedup bean.
-	 *
-	 * @param data
-	 * @throws NamingException
-	 */
-	private void sendToTransMatch(OabaJobMessage data) throws NamingException,
-			JMSException {
-		throw new Error("Not yet re-implemented");
-		// Queue queue = configuration.getTransMatchSchedulerMessageQueue();
-		// configuration.sendMessage(queue, data);
+	@Override
+	protected Logger getJmsTrace() {
+		return jmsTrace;
+	}
+
+	@Override
+	protected TransitivityProcessingEvent getCompletionEvent() {
+		return DONE_CREATE_CHUNK_DATA;
+	}
+
+	@Override
+	protected void notifyProcessingCompleted(OabaJobMessage data) {
+		MessageBeanUtils.sendStartData(data, getJmsContext(),
+				transMatchSchedulerQueue, getLogger());
 	}
 
 }

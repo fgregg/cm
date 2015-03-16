@@ -22,6 +22,9 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 	private static final Logger logger = Logger
 			.getLogger(TransitivityProcessingLog.class.getName());
 
+	private static final String LOG_SOURCE = 
+			TransitivityProcessingLog.class.getSimpleName();
+
 	private final EntityManager em;
 	private final BatchJob batchJob;
 
@@ -69,7 +72,7 @@ public class TransitivityProcessingLog implements ProcessingEventLog {
 
 	@Override
 	public void setCurrentProcessingEvent(ProcessingEvent event, String info) {
-		logger.info("OABA processing event: " + event + " (job "
+		logger.info(LOG_SOURCE + ".setCurrentProcessingEvent: " + event + " (job "
 				+ this.batchJob.getId() + ")");
 		TransitivityProcessingControllerBean.updateStatus(em, batchJob, event,
 				new Date(), info);

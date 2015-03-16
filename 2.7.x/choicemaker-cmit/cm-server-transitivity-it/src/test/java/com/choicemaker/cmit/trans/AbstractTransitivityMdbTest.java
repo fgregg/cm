@@ -115,10 +115,10 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	@EJB
 	private ServerConfigurationController serverController;
 
-	@EJB(beanName="OabaProcessingControllerBean")
+	@EJB(beanName = "OabaProcessingControllerBean")
 	private ProcessingController oabaProcessingController;
 
-	@EJB(beanName="TransitivityProcessingControllerBean")
+	@EJB(beanName = "TransitivityProcessingControllerBean")
 	private ProcessingController transProcessingController;
 
 	@EJB
@@ -162,6 +162,9 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transitivityQueue")
 	private Queue transitivityQueue;
+
+	@Resource(lookup = "choicemaker/urm/jms/transMatchSchedulerQueue")
+	private Queue transMatchSchedulerQueue;
 
 	@Inject
 	private JMSContext jmsContext;
@@ -221,12 +224,13 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		this.transStatusConsumer =
 			getJmsContext().createConsumer(getTransitivityStatusTopic());
 
-		this.te = new TestEntityCounts(getLogger(), getOabaJobController(),
-				getOabaParamsController(), getTransJobController(),
-				getTransParamsController(), getSettingsController(),
-				getServerController(), getOabaProcessingController(),
-				getOpPropController(), getRecordSourceController(),
-				getRecordIdController());
+		this.te =
+			new TestEntityCounts(getLogger(), getOabaJobController(),
+					getOabaParamsController(), getTransJobController(),
+					getTransParamsController(), getSettingsController(),
+					getServerController(), getOabaProcessingController(),
+					getOpPropController(), getRecordSourceController(),
+					getRecordIdController());
 		setTestEntityCounts(te);
 
 		getLogger().exiting(getSourceName(), METHOD);
@@ -259,13 +263,15 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		assertTrue(getLogger() != null);
 		assertTrue(getMatchDedupQueue() != null);
 		assertTrue(getMatchSchedulerQueue() != null);
-		assertTrue(getTransitivityStatusTopic() != null);
+		assertTrue(getOabaStatusTopic() != null);
 		assertTrue(getSingleMatchQueue() != null);
 		assertTrue(getSourceName() != null);
 		assertTrue(getStartQueue() != null);
 		assertTrue(getUtx() != null);
 
 		assertTrue(getTransitivityQueue() != null);
+		assertTrue(getTransitivityStatusTopic() != null);
+		assertTrue(getTransMatchSchedulerQueue() != null);
 
 		// These assertions are redundant because these controllers are
 		// required during setUp()
@@ -296,23 +302,25 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
 				getTransitivityQueue());
+		JmsUtils.clearStartDataFromQueue(getSourceName(), getJmsContext(),
+				getTransMatchSchedulerQueue());
 
+		JmsUtils.clearBatchProcessingNotifications(getSourceName(),
+				this.getOabaStatusConsumer());
 		JmsUtils.clearBatchProcessingNotifications(getSourceName(),
 				getTransitivityStatusConsumer());
 	}
 
 	@Test
 	@InSequence(3)
-	public final void testLinkageTransitivity()
-			throws Exception {
+	public final void testLinkageTransitivity() throws Exception {
 		OabaLinkageType task = OabaLinkageType.STAGING_TO_MASTER_LINKAGE;
 		TransitivityMdbTestProcedures.testTransitivityProcessing(this, task);
 	}
 
 	@Test
 	@InSequence(4)
-	public final void testDeduplicationTransitivity()
-			throws Exception {
+	public final void testDeduplicationTransitivity() throws Exception {
 		OabaLinkageType task = OabaLinkageType.STAGING_DEDUPLICATION;
 		TransitivityMdbTestProcedures.testTransitivityProcessing(this, task);
 	}
@@ -509,20 +517,25 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	}
 
 	@Override
+	public final Queue getTransMatchSchedulerQueue() {
+		return transMatchSchedulerQueue;
+	}
+
+	@Override
 	public final UserTransaction getUtx() {
 		return utx;
 	}
 
-//	@Override
-//	public AnalysisResultFormat getAnalysisResultFormat() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public String getGraphPropertyName() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	// @Override
+	// public AnalysisResultFormat getAnalysisResultFormat() {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
+	//
+	// @Override
+	// public String getGraphPropertyName() {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
 
 }

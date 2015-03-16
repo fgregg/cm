@@ -22,6 +22,7 @@ import javax.transaction.UserTransaction;
 
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
@@ -189,8 +190,8 @@ public class BatchJobUtils {
 		return nonTerminal[i];
 	}
 
-	public static BatchJob createEphemeralTransitivityJob(
-			int maxSingleLimit, UserTransaction utx, ServerConfiguration sc,
+	public static BatchJob createEphemeralTransitivityJob(int maxSingleLimit,
+			UserTransaction utx, OabaSettings settings, ServerConfiguration sc,
 			EntityManager em, TestEntityCounts te, BatchJob batchJob,
 			OabaParametersController oabaParamsController, String s,
 			boolean isTag) {
@@ -214,7 +215,8 @@ public class BatchJobUtils {
 			} else {
 				extId = s;
 			}
-			retVal = new TransitivityJobEntity(params, sc, batchJob, extId);
+			retVal =
+				new TransitivityJobEntity(params, settings, sc, batchJob, extId);
 			te.add(retVal);
 			utx.commit();
 		} catch (Exception x) {

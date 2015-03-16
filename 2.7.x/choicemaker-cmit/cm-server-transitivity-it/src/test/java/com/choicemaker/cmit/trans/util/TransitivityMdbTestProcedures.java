@@ -18,6 +18,7 @@ import javax.jms.Queue;
 import com.choicemaker.cm.args.AnalysisResultFormat;
 import com.choicemaker.cm.args.OabaLinkageType;
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
@@ -25,6 +26,7 @@ import com.choicemaker.cm.batch.BatchProcessingNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationControllerBean;
@@ -144,12 +146,16 @@ public class TransitivityMdbTestProcedures {
 		te.add(oabaParams);
 
 		// Set up parameters for transitivity analysis
-		final WellKnownTestConfiguration c = ta.getTestConfiguration(task);
-		final AnalysisResultFormat arf = c.getTransitivityResultFormat();
-		final String gpn = c.getTransitivityGraphProperty();
+		final WellKnownTestConfiguration wktc = ta.getTestConfiguration(task);
+		final AnalysisResultFormat arf = wktc.getTransitivityResultFormat();
+		final String gpn = wktc.getTransitivityGraphProperty();
 		final TransitivityParametersEntity transParams =
 			new TransitivityParametersEntity(oabaParams, arf, gpn);
 		te.add((TransitivityParameters) transParams);
+
+		// Configure settings from transitivity analysis
+		OabaSettingsController sc = ta.getSettingsController();
+		OabaSettings settings = sc.findOabaSettingsByJobId(oabaJobId);
 
 		// Configure the server for transitivity analysis
 		final String hostName =
@@ -184,10 +190,11 @@ public class TransitivityMdbTestProcedures {
 			ta.getTransitivityService();
 		long jobId = NONPERSISTENT_ID;
 		try {
-			logger.info(tag + ": invoking TransitivityService.startTransitivity");
+			logger.info(tag
+					+ ": invoking TransitivityService.startTransitivity");
 			jobId =
 				transitivityService.startTransitivity(extId, transParams,
-						batchJob, serverConfiguration);
+						batchJob, settings, serverConfiguration);
 			logger.info(tag
 					+ ": returned from TransitivityService.startTransitivity");
 		} catch (ServerConfigurationException e) {
@@ -198,19 +205,28 @@ public class TransitivityMdbTestProcedures {
 		// Find the transitivity job
 		final TransitivityJobController transJobController =
 			ta.getTransJobController();
-		BatchJob transJob =
-			transJobController.findTransitivityJob(jobId);
+		BatchJob transJob = transJobController.findTransitivityJob(jobId);
 		assertTrue(transJob != null);
 		te.add(transJob);
 		assertTrue(extId != null && extId.equals(transJob.getExternalId()));
 
 		// Compute context for expected results
 		final BatchProcessingPhase transPhase = ta.getProcessingPhase();
+		logger.info(LOG_SOURCE + "." + tag + ": transPhase: "
+				+ transPhase);
 		final boolean isIntermediateExpected =
 			transPhase.isIntermediateExpected;
+		logger.info(LOG_SOURCE + "." + tag + ": isIntermediateExpected: "
+				+ isIntermediateExpected);
 		final boolean isUpdateExpected = transPhase.isUpdateExpected;
+		logger.info(LOG_SOURCE + "." + tag + ": isUpdateExpected: "
+				+ isUpdateExpected);
 		final Queue listeningQueue = ta.getResultQueue();
+		logger.info(LOG_SOURCE + "." + tag + ": listeningQueue: "
+				+ listeningQueue);
 		final JMSConsumer transListener = ta.getTransitivityStatusConsumer();
+		logger.info(LOG_SOURCE + "." + tag + ": transListener: "
+				+ transListener);
 		validateDestinations(transPhase, listeningQueue);
 
 		// Check the job results
@@ -218,7 +234,7 @@ public class TransitivityMdbTestProcedures {
 		if (isIntermediateExpected) {
 			// Check that transitivity analysis completed and sent out a
 			// message on the intermediate result queue
-			assert listeningQueue != null;
+			assertTrue(listeningQueue != null);
 			String listeningQueueName;
 			try {
 				listeningQueueName = listeningQueue.getQueueName();
@@ -235,7 +251,7 @@ public class TransitivityMdbTestProcedures {
 			if (startData == null) {
 				fail("did not receive data from " + listeningQueueName);
 			}
-			assertTrue(startData.jobID == jobId);
+			assertTrue("jobID:" + startData.jobID + ", jobId:" + jobId, startData.jobID == jobId);
 		}
 		if (isUpdateExpected) {
 			// Check that transitivity analysis sent out an expected status
@@ -256,8 +272,9 @@ public class TransitivityMdbTestProcedures {
 			}
 			assertTrue(transNotification != null);
 			assertTrue(transNotification.getJobId() == jobId);
-			final float expectPercentDone = ta.getResultPercentComplete();
-			assertTrue(transNotification.getJobPercentComplete() == expectPercentDone);
+			final float e = ta.getResultPercentComplete();
+			final float c = transNotification.getJobPercentComplete();
+			assertTrue("computed: " + c + ", expected: " + e, c == e);
 		}
 
 		// Find the entry in the processing history updated by Transitivity

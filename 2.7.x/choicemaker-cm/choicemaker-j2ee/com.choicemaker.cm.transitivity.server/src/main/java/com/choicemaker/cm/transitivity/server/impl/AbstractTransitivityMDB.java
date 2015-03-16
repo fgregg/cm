@@ -8,7 +8,7 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
+package com.choicemaker.cm.transitivity.server.impl;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,9 +21,9 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
@@ -32,16 +32,17 @@ import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.util.LoggingUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
+import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityConfigurationController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivitySettingsController;
+import com.choicemaker.cm.transitivity.server.util.LoggingUtils;
 
 /**
  * Common functionality of message driven beans that perform OABA processing
@@ -50,26 +51,30 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanU
  * @author rphall
  *
  */
-public abstract class AbstractOabaMDB implements MessageListener, Serializable {
+public abstract class AbstractTransitivityMDB implements MessageListener,
+		Serializable {
 
 	private static final long serialVersionUID = 271L;
 
 	// -- Instance data
 
 	@EJB
-	private OabaJobController jobController;
+	private OabaJobController oabaJobController;
 
 	@EJB
-	private OabaSettingsController oabaSettingsController;
+	private TransitivityJobController transJobController;
 
 	@EJB
-	private OabaParametersController paramsController;
+	private TransitivitySettingsController settingsController;
 
 	@EJB
+	private TransitivityParametersController paramsController;
+
+	@EJB(beanName = "TransitivityProcessingControllerBean")
 	private ProcessingController processingController;
 
 	@EJB
-	private ServerConfigurationController serverController;
+	private TransitivityConfigurationController serverController;
 
 	@EJB
 	private RecordSourceController rsController;
@@ -90,15 +95,19 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	// -- Accessors
 
-	protected final OabaJobController getJobController() {
-		return jobController;
+	protected final OabaJobController getOabaJobController() {
+		return oabaJobController;
 	}
 
-	protected final OabaSettingsController getSettingsController() {
-		return oabaSettingsController;
+	protected final TransitivityJobController getTransitivityJobController() {
+		return transJobController;
 	}
 
-	protected final OabaParametersController getParametersController() {
+	protected final TransitivitySettingsController getSettingsController() {
+		return settingsController;
+	}
+
+	protected final TransitivityParametersController getParametersController() {
 		return paramsController;
 	}
 
@@ -106,7 +115,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 		return processingController;
 	}
 
-	protected final ServerConfigurationController getServerController() {
+	protected final TransitivityConfigurationController getServerController() {
 		return serverController;
 	}
 
@@ -138,28 +147,29 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				oabaMsg = (OabaJobMessage) msg.getObject();
 
 				final long jobId = oabaMsg.jobID;
-				batchJob = getJobController().findOabaJob(jobId);
-				OabaParameters oabaParams =
-					getParametersController().findOabaParametersByJobId(jobId);
-				OabaSettings oabaSettings =
-					getSettingsController().findOabaSettingsByJobId(jobId);
+				batchJob = getTransitivityJobController().findTransitivityJob(jobId);
+				TransitivityParameters transParams =
+					getParametersController()
+							.findTransitivityParametersByJobId(jobId);
+				OabaSettings settings =
+					getSettingsController().findSettingsByTransitivityJobId(jobId);
 				ProcessingEventLog processingLog =
 					getProcessingController().getProcessingLog(batchJob);
 				ServerConfiguration serverConfig =
-					getServerController().findServerConfigurationByJobId(jobId);
+					getServerController().findConfigurationByTransitivityJobId(jobId);
 
-				if (batchJob == null || oabaParams == null
-						|| oabaSettings == null || serverConfig == null) {
+				if (batchJob == null || transParams == null
+						|| settings == null || serverConfig == null) {
 					String s0 =
 							"Unable to find a job, parameters, settings or server configuration for "
 									+ jobId;
-					String s = LoggingUtils.buildDiagnostic(s0, batchJob, oabaParams, oabaSettings, serverConfig);
+					String s = LoggingUtils.buildDiagnostic(s0, batchJob, transParams, settings, serverConfig);
 					getLogger().severe(s);
 					throw new IllegalStateException(s);
 				}
 
 				final String modelConfigId =
-					oabaParams.getModelConfigurationName();
+					transParams.getModelConfigurationName();
 				ImmutableProbabilityModel model =
 					PMManager.getModelInstance(modelConfigId);
 				if (model == null) {
@@ -171,11 +181,12 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 				if (BatchJobStatus.ABORT_REQUESTED.equals(batchJob.getStatus())) {
 					abortProcessing(batchJob, processingLog);
+
 				} else {
-					processOabaMessage(oabaMsg, batchJob, oabaParams,
-							oabaSettings, processingLog, serverConfig, model);
-					updateOabaProcessingStatus(batchJob, getCompletionEvent(),
-							new Date(), null);
+					processOabaMessage(oabaMsg, batchJob, transParams,
+							settings, processingLog, serverConfig, model);
+					updateTransivitityProcessingStatus(batchJob,
+							getCompletionEvent(), new Date(), null);
 					notifyProcessingCompleted(oabaMsg);
 				}
 
@@ -194,13 +205,14 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-	protected void abortProcessing(BatchJob batchJob, ProcessingEventLog processingLog) {
+	protected void abortProcessing(BatchJob batchJob,
+			ProcessingEventLog processingLog) {
 		MessageBeanUtils.stopJob(batchJob, getPropertyController(),
 				processingLog);
 	}
 
-	protected void updateOabaProcessingStatus(BatchJob job, OabaProcessingEvent event,
-			Date timestamp, String info) {
+	protected void updateTransivitityProcessingStatus(BatchJob job,
+			TransitivityProcessingEvent event, Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
@@ -212,11 +224,12 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	protected abstract Logger getJmsTrace();
 
 	protected abstract void processOabaMessage(OabaJobMessage data,
-			BatchJob batchJob, OabaParameters params, OabaSettings oabaSettings,
-			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
-			ImmutableProbabilityModel model) throws BlockingException;
+			BatchJob batchJob, TransitivityParameters params,
+			OabaSettings oabaSettings, ProcessingEventLog processingLog,
+			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
+			throws BlockingException;
 
-	protected abstract OabaProcessingEvent getCompletionEvent();
+	protected abstract TransitivityProcessingEvent getCompletionEvent();
 
 	protected abstract void notifyProcessingCompleted(OabaJobMessage data);
 

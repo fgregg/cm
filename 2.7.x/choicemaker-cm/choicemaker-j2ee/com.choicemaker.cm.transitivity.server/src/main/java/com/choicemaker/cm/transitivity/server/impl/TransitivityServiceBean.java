@@ -27,14 +27,15 @@ import javax.jms.Queue;
 import javax.naming.NamingException;
 
 import com.choicemaker.cm.args.OabaParameters;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfigurationEntity;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
 
@@ -102,7 +103,7 @@ public class TransitivityServiceBean implements TransitivityService {
 
 	@Override
 	public long startTransitivity(String externalID, TransitivityParameters tp,
-			BatchJob batchJob, ServerConfiguration serverConfiguration)
+			BatchJob batchJob, OabaSettings settings, ServerConfiguration serverConfiguration)
 			throws ServerConfigurationException {
 
 		final String METHOD = "startTransitivity";
@@ -118,7 +119,7 @@ public class TransitivityServiceBean implements TransitivityService {
 		// Create and persist a transitivity job and its associated objects
 		BatchJob transJob =
 			jobController.createPersistentTransitivityJob(externalID, tp,
-					batchJob, serverConfiguration);
+					batchJob, settings, serverConfiguration);
 		assert transJob.isPersistent();
 		final long retVal = transJob.getId();
 		log.info("Started transitivity analysis (job id: " + retVal + ")");

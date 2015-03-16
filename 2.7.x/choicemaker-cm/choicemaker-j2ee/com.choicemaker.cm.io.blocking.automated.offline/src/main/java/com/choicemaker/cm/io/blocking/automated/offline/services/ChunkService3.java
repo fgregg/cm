@@ -201,6 +201,7 @@ public class ChunkService3 {
 		log.entering(SOURCE, METHOD);
 		time = System.currentTimeMillis();
 
+		log.info("current processing event: " + status.getCurrentProcessingEvent());
 		if (status.getCurrentProcessingEventId() == OabaProcessing.EVT_DONE_CREATE_CHUNK_DATA) {
 			// just need to recover numChunks for the matching step
 			final String s = status.getCurrentProcessingEventInfo();

@@ -19,6 +19,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
@@ -27,6 +28,7 @@ import com.choicemaker.cm.batch.BatchJobProcessingEvent;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.batch.impl.BatchJobFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
@@ -51,6 +53,9 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	private TransitivityParametersController paramsController;
 
 	@EJB
+	private OabaSettingsController settingsController;
+
+	@EJB
 	private ServerConfigurationController serverManager;
 
 	@EJB
@@ -60,7 +65,7 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	private JMSContext jmsContext;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transStatusTopic")
-	private Topic oabaStatusTopic;
+	private Topic transStatusTopic;
 
 	protected TransitivityJobEntity getBean(BatchJob oabaJob) {
 		TransitivityJobEntity retVal = null;
@@ -89,7 +94,8 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public BatchJob createPersistentTransitivityJob(String externalID,
 			TransitivityParameters params, BatchJob batchJob,
-			ServerConfiguration sc) throws ServerConfigurationException {
+			OabaSettings settings, ServerConfiguration sc)
+			throws ServerConfigurationException {
 
 		if (params == null || sc == null || batchJob == null) {
 			throw new IllegalArgumentException("null argument");
@@ -111,10 +117,11 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 
 		// Save the parameters
 		paramsController.save(params);
+		settingsController.save(settings);
 		serverManager.save(sc);
 
 		TransitivityJobEntity retVal =
-			new TransitivityJobEntity(params, sc, batchJob, externalID);
+			new TransitivityJobEntity(params, settings, sc, batchJob, externalID);
 		em.persist(retVal);
 		assert retVal.isPersistent();
 
@@ -123,7 +130,7 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 //			processingController.getProcessingLog(retVal);
 		// Create a new entry in the processing log and check it
 		TransitivityProcessingControllerBean.updateStatusWithNotification(em,
-				jmsContext, oabaStatusTopic, retVal, BatchProcessingEvent.INIT,
+				jmsContext, transStatusTopic, retVal, BatchProcessingEvent.INIT,
 				new Date(), null);
 		BatchJobProcessingEvent ope =
 				TransitivityProcessingControllerBean.getCurrentBatchProcessingEvent(em,

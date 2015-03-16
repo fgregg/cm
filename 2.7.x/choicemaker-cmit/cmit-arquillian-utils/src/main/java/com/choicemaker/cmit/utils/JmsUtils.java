@@ -13,7 +13,7 @@ import javax.jms.Topic;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchProcessingNotification;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 public class JmsUtils {
 

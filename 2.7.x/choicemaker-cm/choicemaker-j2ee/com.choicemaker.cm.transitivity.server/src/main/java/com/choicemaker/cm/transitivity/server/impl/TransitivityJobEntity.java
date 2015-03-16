@@ -24,6 +24,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
@@ -61,25 +62,25 @@ public class TransitivityJobEntity extends BatchJobEntity implements IControl,
 	// -- Constructors
 
 	public TransitivityJobEntity(TransitivityParameters params,
-			ServerConfiguration sc, BatchJob parent, String externalId) {
-		this(DISCRIMINATOR_VALUE, params.getId(), NONPERSISTENT_ID, sc.getId(),
+			OabaSettings settings, ServerConfiguration sc, BatchJob parent,
+			String externalId) {
+		this(DISCRIMINATOR_VALUE, params.getId(), settings.getId(), sc.getId(),
 				externalId, randomTransactionId(), parent.getId(),
 				NONPERSISTENT_ID, BatchJob.DEFAULT_RIGOR);
 	}
 
 	public TransitivityJobEntity(TransitivityParameters params,
-			ServerConfiguration sc, BatchJob parent, String externalId,
-			BatchJobRigor bjr) {
-		this(DISCRIMINATOR_VALUE, params.getId(), NONPERSISTENT_ID, sc.getId(),
+			OabaSettings settings, ServerConfiguration sc, BatchJob parent,
+			String externalId, BatchJobRigor bjr) {
+		this(DISCRIMINATOR_VALUE, params.getId(), settings.getId(), sc.getId(),
 				externalId, randomTransactionId(), parent.getId(),
 				NONPERSISTENT_ID, bjr);
 	}
 
 	public TransitivityJobEntity(BatchJob o) {
-		this(DISCRIMINATOR_VALUE, o.getParametersId(),
-				NONPERSISTENT_ID, o.getServerId(), o.getExternalId(), o
-						.getTransactionId(), o.getBatchParentId(),
-				o.getUrmId(), o.getBatchJobRigor());
+		this(DISCRIMINATOR_VALUE, o.getParametersId(), o.getSettingsId(), o
+				.getServerId(), o.getExternalId(), o.getTransactionId(), o
+				.getBatchParentId(), o.getUrmId(), o.getBatchJobRigor());
 		this.workingDirectory = o.getWorkingDirectory().getAbsolutePath();
 	}
 

@@ -38,7 +38,7 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobProcessingEvent;
 import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityBatchProcessingEvent;
 
 
@@ -207,8 +207,8 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	@Inject
 	private JMSContext jmsContext;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/statusTopic")
-	private Topic oabaStatusTopic;
+	@Resource(lookup = "java:/choicemaker/urm/jms/transStatusTopic")
+	private Topic transStatusTopic;
 
 	@Override
 	public List<BatchJobProcessingEvent> findProcessingEventsByJobId(
@@ -234,7 +234,7 @@ public class TransitivityProcessingControllerBean implements ProcessingControlle
 	@Override
 	public void updateStatusWithNotification(BatchJob job, ProcessingEvent event,
 			Date timestamp, String info) {
-		updateStatusWithNotification(em, jmsContext, oabaStatusTopic, job,
+		updateStatusWithNotification(em, jmsContext, transStatusTopic, job,
 				event, timestamp, info);
 	}
 

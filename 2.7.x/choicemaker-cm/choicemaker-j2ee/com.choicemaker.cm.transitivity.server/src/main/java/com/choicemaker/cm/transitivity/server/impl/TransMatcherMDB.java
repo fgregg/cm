@@ -24,7 +24,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractMatcher;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 /**
  * This is the Matcher for the Transitivity Engine. It is called by

@@ -53,6 +53,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobContro
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.LoggingUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.utils.MemoryEstimator;
 
 /**
@@ -193,14 +195,17 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					ServerConfiguration serverConfig =
 						getServerController().findServerConfigurationByJobId(
 								jobId);
+	
 					if (batchJob == null || params == null
 							|| oabaSettings == null || serverConfig == null) {
-						String s =
-							"Unable to find a job, parameters, settings or server configuration for "
-									+ jobId;
+						String s0 =
+								"Unable to find a job, parameters, settings or server configuration for "
+										+ jobId;
+						String s = LoggingUtils.buildDiagnostic(s0, batchJob, params, oabaSettings, serverConfig);
 						getLogger().severe(s);
-						throw new IllegalArgumentException(s);
+						throw new IllegalStateException(s);
 					}
+
 					final String modelConfigId =
 						params.getModelConfigurationName();
 					ImmutableProbabilityModel model =

@@ -49,7 +49,8 @@ import com.choicemaker.e2.ejb.EjbPlatform;
  * @param <T>
  *            A Well-Known Test Configuration
  */
-public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> implements OabaTestParameters {
+public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration>
+		implements OabaTestParameters {
 
 	// -- Read-write instance data
 
@@ -101,7 +102,7 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration> 
 	@EJB
 	private ServerConfigurationController serverController;
 
-	@EJB (beanName="OabaProcessingControllerBean")
+	@EJB(beanName = "OabaProcessingControllerBean")
 	private ProcessingController processingController;
 
 	@EJB

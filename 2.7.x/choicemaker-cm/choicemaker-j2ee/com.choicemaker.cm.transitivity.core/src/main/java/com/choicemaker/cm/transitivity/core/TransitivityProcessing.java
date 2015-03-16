@@ -10,16 +10,13 @@
  */
 package com.choicemaker.cm.transitivity.core;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_DONE_DEDUP_OVERSIZED;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_DONE_DEDUP_OVERSIZED;
-
-import com.choicemaker.cm.args.BatchProcessing;
+import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing;
 
 /**
  * This interface defines event ids and completion estimates used in transitivity
  * processing.
  */
-public interface TransitivityProcessing extends BatchProcessing {
+public interface TransitivityProcessing extends OabaProcessing {
 
 	// -- Ordered events
 

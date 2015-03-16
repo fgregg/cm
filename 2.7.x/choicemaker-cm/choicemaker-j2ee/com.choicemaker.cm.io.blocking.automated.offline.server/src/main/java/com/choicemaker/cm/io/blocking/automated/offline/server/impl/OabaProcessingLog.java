@@ -22,6 +22,9 @@ public class OabaProcessingLog implements ProcessingEventLog {
 	private static final Logger logger = Logger
 			.getLogger(OabaProcessingLog.class.getName());
 
+	private static final String LOG_SOURCE = 
+			OabaProcessingLog.class.getSimpleName();
+
 	private final EntityManager em;
 	private final BatchJob batchJob;
 
@@ -67,7 +70,7 @@ public class OabaProcessingLog implements ProcessingEventLog {
 
 	@Override
 	public void setCurrentProcessingEvent(ProcessingEvent event, String info) {
-		logger.info("OABA processing event: " + event + " (job "
+		logger.info(LOG_SOURCE + ".setCurrentProcessingEvent: " + event + " (job "
 				+ this.batchJob.getId() + ")");
 		OabaProcessingControllerBean.updateStatus(em, batchJob, event,
 				new Date(), info);

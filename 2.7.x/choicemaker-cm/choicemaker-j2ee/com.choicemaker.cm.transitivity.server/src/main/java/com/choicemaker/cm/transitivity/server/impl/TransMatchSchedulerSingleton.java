@@ -24,7 +24,7 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractSchedulerSingleton;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.MessageBeanUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 /**
  * This is the match scheduler for the Transitivity Engine.

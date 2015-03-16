@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
@@ -14,7 +15,8 @@ public interface TransitivityJobController {
 
 	BatchJob createPersistentTransitivityJob(String externalID,
 			TransitivityParameters params, BatchJob batchJob,
-			ServerConfiguration sc) throws ServerConfigurationException;
+			OabaSettings settings, ServerConfiguration sc)
+			throws ServerConfigurationException;
 
 	BatchJob save(BatchJob batchJob);
 

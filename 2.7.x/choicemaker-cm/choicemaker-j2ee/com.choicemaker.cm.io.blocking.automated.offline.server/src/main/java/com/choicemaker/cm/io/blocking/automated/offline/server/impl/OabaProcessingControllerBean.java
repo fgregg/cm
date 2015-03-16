@@ -41,6 +41,7 @@ import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.batch.impl.BatchProcessingEventEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaNotification;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 /**
  * This stateless EJB provides OABA, job-specific processing logs and a

@@ -36,6 +36,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSinkSou
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
 /**
