@@ -72,9 +72,6 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ StartTransitivityMDB.class.getName());
 
-	// @Resource(lookup = "java:/choicemaker/urm/jms/updateTransQueue")
-	// private Queue updateQueue;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchSchedulerQueue")
 	private Queue transMatchSchedulerQueue;
 
@@ -83,42 +80,10 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 			TransitivityParameters params, OabaSettings oabaSettings,
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException {
-		// this.updateTransivitityProcessingStatus(batchJob, event, timestamp,
-		// info)
-		// }
-		//
-		// public void _onMessage(Message inMessage) {
-		// jmsTrace.info("Entering onMessage for " + this.getClass().getName());
-		// ObjectMessage msg = null;
-		// BatchJob transJob = null;
 
-		// log.fine("StartTransitivityMDB In onMessage");
-
-		// try {
-		// if (inMessage instanceof ObjectMessage) {
-		// msg = (ObjectMessage) inMessage;
-		// Object o = msg.getObject();
-		//
-		// OabaJobMessage d = (OabaJobMessage) o;
-		// final long jobId = data.jobID;
-		// transJob = null ; // jobController.findTransitivityJob(jobId);
-		// transJob.markAsStarted();
 		batchJob.markAsStarted();
-
 		removeOldFiles(batchJob);
 		createChunks(batchJob, params, oabaSettings, serverConfig);
-
-		// } else {
-		// log.warning("wrong type: " + inMessage.getClass().getName());
-		// }
-
-		// } catch (Exception e) {
-		// log.severe(e.toString());
-		// if (transJob != null) {
-		// transJob.markAsFailed();
-		// }
-		// }
-		// jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
 	/*
@@ -248,14 +213,6 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 		log.info("Number of regular chunks " + numChunks);
 		this.getPropertyController().setJobProperty(transJob,
 				PN_REGULAR_CHUNK_FILE_COUNT, String.valueOf(numRegularChunks));
-
-		// clean up translator
-		// translator.cleanUp();
-
-		// log.info("send to transitivity matcher");
-		// OabaJobMessage data = new OabaJobMessage(jobId);
-		// sendToTransMatch(data);
-		// sendToUpdateTransStatus(data.jobID, PCT_DONE_DEDUP_OVERSIZED);
 	}
 
 	/**
@@ -278,39 +235,6 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 			log.info("No old transMatch files to remove");
 		}
 	}
-
-	// /**
-	// * This method sends a message to the UpdateStatusMDB message bean.
-	// *
-	// * @param jobID
-	// * @param percentComplete
-	// * @throws NamingException
-	// */
-	// private void sendToUpdateTransStatus(long jobID, int percentComplete)
-	// throws NamingException, JMSException {
-	// throw new Error("not re-implemented");
-	// // Queue queue = configuration.getUpdateTransMessageQueue();
-	// // TransitivityNotification data = new TransitivityNotification(jobID,
-	// // percentComplete);
-	// // log.info ("send to updateTransQueue " + jobID + " " +
-	// // percentComplete);
-	// // configuration.sendMessage(queue, data);
-	// }
-
-	// /**
-	// * This method sends the message to the match dedup bean.
-	// *
-	// * @param data
-	// * @throws NamingException
-	// */
-	// private void sendToTransMatch(OabaJobMessage data) throws
-	// NamingException,
-	// JMSException {
-	// throw new Error("not re-implemented");
-	// // MessageBeanUtils.sendStartData(data, getJmsContext(),
-	// transMatchSchedulerQueue,
-	// // getLogger());
-	// }
 
 	@Override
 	protected Logger getLogger() {
