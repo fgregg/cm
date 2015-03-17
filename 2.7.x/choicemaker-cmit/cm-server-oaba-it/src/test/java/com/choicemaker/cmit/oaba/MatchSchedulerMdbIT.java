@@ -32,8 +32,8 @@ public class MatchSchedulerMdbIT extends
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
-	 * MatchDedupMDB message bean. This allows other
-	 * classes to attach to the matchDedup and update queues for testing.
+	 * MatchDedupMDB message bean. This allows other classes to attach to the
+	 * matchDedup and update queues for testing.
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
