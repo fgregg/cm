@@ -32,7 +32,7 @@ public class StartTransitivityMdbIT extends
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
-	 * BlockingMDB, SingleRecordMatchMDB and UpdateStatusMDB message beans. This
+	 * TransMatch* message beans. This
 	 * allows other classes to attach to the block, singleRecordMatch and
 	 * updateStatus queues for testing.
 	 */

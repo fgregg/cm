@@ -87,11 +87,12 @@ public class Transformer implements ITransformer {
 			// get the original record id
 			Comparable comp = translator.reverseLookup((int) block.get(i));
 
-			if (translator.getSplitIndex() == 0) {
+			if (!translator.isSplit()) {
 				// only staging record source
 
 				if (stage.size() == 0) {
 					stageType = RECORD_ID_TYPE.fromInstance(comp);
+					masterType = stageType;
 				}
 				stage.add(comp);
 

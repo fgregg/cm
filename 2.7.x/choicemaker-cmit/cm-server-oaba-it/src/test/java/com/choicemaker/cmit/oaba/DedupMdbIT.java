@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.Chunk2MDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ChunkMDB;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -33,13 +32,12 @@ public class DedupMdbIT extends
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
-	 * ChunkMDB* and UpdateStatusMDB message beans. This allows other classes to
+	 * ChunkMDB* message beans. This allows other classes to
 	 * attach to the chunkQueue and update queues for testing.
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		Class<?>[] removedClasses = {
-				ChunkMDB.class, Chunk2MDB.class, UpdateStatusMDB.class };
+		Class<?>[] removedClasses = { ChunkMDB.class, Chunk2MDB.class };
 		return OabaDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}

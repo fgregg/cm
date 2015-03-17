@@ -197,7 +197,6 @@ public class OabaMdbTestProcedures {
 			test.getOabaProcessingController();
 		ProcessingEventLog processingEntry =
 			processingController.getProcessingLog(batchJob);
-		// te.add(processingEntry);
 
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);

@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.BlockingMDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.SingleRecordMatchMDB;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.UpdateStatusMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -33,7 +32,7 @@ public class StartMdbIT extends
 
 	/**
 	 * Creates an EAR deployment in which the OABA server JAR is missing the
-	 * BlockingMDB, SingleRecordMatchMDB and UpdateStatusMDB message beans. This
+	 * BlockingMDB and SingleRecordMatchMDB message beans. This
 	 * allows other classes to attach to the block, singleRecordMatch and
 	 * updateStatus queues for testing.
 	 */
@@ -41,8 +40,7 @@ public class StartMdbIT extends
 	public static EnterpriseArchive createEarArchive() {
 		Class<?>[] removedClasses =
 			new Class<?>[] {
-					BlockingMDB.class, SingleRecordMatchMDB.class,
-					UpdateStatusMDB.class };
+					BlockingMDB.class, SingleRecordMatchMDB.class };
 		return OabaDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}

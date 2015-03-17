@@ -22,7 +22,10 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.BatchProcessingNotification;
+import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServerConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
@@ -128,15 +131,14 @@ public class TransitivityMdbTestProcedures {
 		final TestEntityCounts te = ta.getTestEntityCounts();
 		final String extId = EntityManagerUtils.createExternalId(tag);
 
-		// Run an BatchJob for subsequent transitivity analysis
-		final BatchJob batchJob =
+		// Run an OABA job for subsequent transitivity analysis
+		final BatchJob oabaJob =
 			runOabaJob(ta, task, tag, extId, LOG_SOURCE, te);
-		assertTrue(batchJob != null);
-		final long oabaJobId = batchJob.getId();
-		assertTrue(te.contains(batchJob));
-		logger.info("OABA job status: " + batchJob.getStatus());
-		// FIXME ? Timing issue -- may not have processed the notification
-		// assertTrue(oabaJob.getStatus() == BatchJobStatus.COMPLETED);
+		assertTrue(oabaJob != null);
+		final long oabaJobId = oabaJob.getId();
+		assertTrue(te.contains(oabaJob));
+		logger.info("OABA job status: " + oabaJob.getStatus());
+		assertTrue(oabaJob.getStatus() == BatchJobStatus.COMPLETED);
 
 		// Find the OABA parameters associated with the job
 		final OabaParametersController oabaParamsController =
@@ -194,7 +196,7 @@ public class TransitivityMdbTestProcedures {
 					+ ": invoking TransitivityService.startTransitivity");
 			jobId =
 				transitivityService.startTransitivity(extId, transParams,
-						batchJob, settings, serverConfiguration);
+						oabaJob, settings, serverConfiguration);
 			logger.info(tag
 					+ ": returned from TransitivityService.startTransitivity");
 		} catch (ServerConfigurationException e) {
@@ -212,21 +214,24 @@ public class TransitivityMdbTestProcedures {
 
 		// Compute context for expected results
 		final BatchProcessingPhase transPhase = ta.getProcessingPhase();
+		final boolean isIntermediateExpected =
+				transPhase.isIntermediateExpected;
+		final boolean isUpdateExpected = transPhase.isUpdateExpected;
+		final Queue listeningQueue = ta.getResultQueue();
+		final JMSConsumer transListener = ta.getTransitivityStatusConsumer();
 		logger.info(LOG_SOURCE + "." + tag + ": transPhase: "
 				+ transPhase);
-		final boolean isIntermediateExpected =
-			transPhase.isIntermediateExpected;
 		logger.info(LOG_SOURCE + "." + tag + ": isIntermediateExpected: "
 				+ isIntermediateExpected);
-		final boolean isUpdateExpected = transPhase.isUpdateExpected;
 		logger.info(LOG_SOURCE + "." + tag + ": isUpdateExpected: "
 				+ isUpdateExpected);
-		final Queue listeningQueue = ta.getResultQueue();
 		logger.info(LOG_SOURCE + "." + tag + ": listeningQueue: "
 				+ listeningQueue);
-		final JMSConsumer transListener = ta.getTransitivityStatusConsumer();
 		logger.info(LOG_SOURCE + "." + tag + ": transListener: "
 				+ transListener);
+
+		// Check that the listening queue is valid for the current
+		// phase of the transitivity analysis
 		validateDestinations(transPhase, listeningQueue);
 
 		// Check the job results
@@ -278,19 +283,15 @@ public class TransitivityMdbTestProcedures {
 		}
 
 		// Find the entry in the processing history updated by Transitivity
-		// FIXME STUBBED
-		// final TransitivityProcessingController processingController =
-		// ta.getProcessingController();
-		// TransitivityEventLog processingEntry =
-		// processingController.getProcessingLog(transJob);
-		// // te.add(processingEntry);
-		//
-		// // Validate that processing entry is correct for this stage of the
-		// OABA
-		// assertTrue(processingEntry != null);
-		// final int expectedEventId = ta.getResultEventId();
-		// assertTrue(processingEntry.getCurrentOabaEventId() ==
-		// expectedEventId);
+		final ProcessingController processingController =
+			ta.getTransitivityProcessingController();
+		ProcessingEventLog processingEntry =
+			processingController.getProcessingLog(transJob);
+
+		// Validate that processing entry is correct
+		assertTrue(processingEntry != null);
+		final int expectedEventId = ta.getResultEventId();
+		assertTrue(processingEntry.getCurrentProcessingEventId() == expectedEventId);
 
 		// Check that the working directory contains what it should
 		assertTrue(ta.isWorkingDirectoryCorrectAfterProcessing(transJob));
@@ -301,14 +302,9 @@ public class TransitivityMdbTestProcedures {
 		logger.exiting(LOG_SOURCE, tag);
 	}
 
-	// private static void validateQueue(BatchProcessingPhase transPhase,
-	// Queue listeningQueue) {
-	// // TODO Auto-generated method stub
-	//
-	// }
-
 	public static void validateDestinations(BatchProcessingPhase transPhase,
 			Queue listeningQueue) {
+		// STUBBED
 		if (transPhase == null) {
 			throw new IllegalArgumentException(
 					"null transitivity analysis phase");

@@ -137,7 +137,7 @@ public class TreeTransformer implements ITransformer {
 			Comparable c = translator.reverseLookup(id);
 
 			char stageOrMaster = ComparisonTreeNode.STAGE;
-			if (translator.getSplitIndex() > 0) {
+			if (translator.isSplit()) {
 				// two record sources
 				if (id >= translator.getSplitIndex())
 					stageOrMaster = ComparisonTreeNode.MASTER;
