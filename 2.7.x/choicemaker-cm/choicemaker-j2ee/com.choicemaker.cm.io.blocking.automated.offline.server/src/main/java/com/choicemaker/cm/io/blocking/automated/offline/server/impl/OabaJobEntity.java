@@ -16,7 +16,6 @@ import static com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJ
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.io.StringWriter;
 
 import javax.persistence.DiscriminatorValue;
@@ -54,8 +53,7 @@ import com.choicemaker.cm.core.IControl;
 @NamedQuery(name = QN_OABAJOB_FIND_ALL, query = JPQL_OABAJOB_FIND_ALL)
 @Entity
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
-public class OabaJobEntity extends BatchJobEntity implements IControl,
-		Serializable, BatchJob {
+public class OabaJobEntity extends BatchJobEntity implements IControl {
 
 	private static final long serialVersionUID = 271L;
 

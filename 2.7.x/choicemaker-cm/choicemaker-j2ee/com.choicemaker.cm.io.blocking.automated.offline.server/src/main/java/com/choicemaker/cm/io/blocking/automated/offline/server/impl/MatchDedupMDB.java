@@ -108,9 +108,6 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	@EJB
 	private OperationalPropertyController propController;
 
-	@Resource(lookup = "java:/choicemaker/urm/jms/transitivityQueue")
-	private Queue transitivityQueue;
-
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupEachQueue")
 	private Queue matchDedupEachQueue;
 
@@ -118,8 +115,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 	private JMSContext jmsContext;
 
 	// This counts the number of messages sent to MatchDedupEachMDB and number
-	// of
-	// done messages got back. Requires a Singleton message driven bean
+	// of messages received back. Requires a Singleton message driven bean
 	private int countMessages;
 
 	/*

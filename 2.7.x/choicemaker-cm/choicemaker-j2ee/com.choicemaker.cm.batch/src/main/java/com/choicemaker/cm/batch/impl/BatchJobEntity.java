@@ -25,6 +25,7 @@ import static com.choicemaker.cm.batch.impl.BatchJobJPA.ID_GENERATOR_VALUE_COLUM
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.TABLE_NAME;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,7 +63,7 @@ import com.choicemaker.cm.batch.BatchJobStatus;
 		discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(DISCRIMINATOR_VALUE)
 public abstract class BatchJobEntity extends AbstractPersistentObject implements
-		BatchJob {
+		Serializable, BatchJob {
 
 	private static final long serialVersionUID = 271L;
 

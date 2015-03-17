@@ -49,8 +49,7 @@ import com.choicemaker.cm.core.IControl;
 				query = JPQL_TRANSITIVITY_FIND_ALL_BY_PARENT_ID) })
 @Entity
 @DiscriminatorValue(value = DISCRIMINATOR_VALUE)
-public class TransitivityJobEntity extends BatchJobEntity implements IControl,
-		Serializable, BatchJob {
+public class TransitivityJobEntity extends BatchJobEntity implements IControl {
 
 	private static final long serialVersionUID = 271L;
 
