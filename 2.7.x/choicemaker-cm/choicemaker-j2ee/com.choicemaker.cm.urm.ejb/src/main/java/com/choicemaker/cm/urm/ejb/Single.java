@@ -37,8 +37,8 @@ import javax.sql.DataSource;
 
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobController;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaJobEntity;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaParametersEntity;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityService;
@@ -123,7 +123,7 @@ public class Single implements Serializable {
 	private transient InitialContext initContext = null;
 
 	@EJB
-	OabaJobController oabaJobControllerBean;
+	BatchJobController oabaJobControllerBean;
 
 	// Singleton instance
 	private static Single me = new Single();

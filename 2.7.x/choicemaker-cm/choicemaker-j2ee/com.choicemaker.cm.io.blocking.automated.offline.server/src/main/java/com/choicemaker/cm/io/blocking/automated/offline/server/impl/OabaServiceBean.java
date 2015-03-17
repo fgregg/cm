@@ -243,7 +243,7 @@ public class OabaServiceBean implements OabaService {
 	 */
 	private int abortBatch(long jobID, boolean cleanStatus) {
 		logger.info("aborting job " + jobID + " " + cleanStatus);
-		BatchJob batchJob = jobController.findOabaJob(jobID);
+		BatchJob batchJob = jobController.findBatchJob(jobID);
 		if (batchJob == null) {
 			String msg = "No OABA job found: " + jobID;
 			logger.warning(msg);
@@ -257,20 +257,20 @@ public class OabaServiceBean implements OabaService {
 
 	@Override
 	public BatchJob getOabaJob(long jobId) {
-		BatchJob batchJob = jobController.findOabaJob(jobId);
+		BatchJob batchJob = jobController.findBatchJob(jobId);
 		return batchJob;
 	}
 
 	@Override
 	public String checkStatus(long jobID) {
-		BatchJob oabaJob = jobController.findOabaJob(jobID);
+		BatchJob oabaJob = jobController.findBatchJob(jobID);
 		return oabaJob.getStatus().name();
 	}
 
 	@Override
 	public boolean removeDir(long jobID) throws RemoteException,
 			CreateException, NamingException, JMSException, FinderException {
-		BatchJob job = jobController.findOabaJob(jobID);
+		BatchJob job = jobController.findBatchJob(jobID);
 		return BatchJobFileUtils.removeTempDir(job);
 	}
 
@@ -284,7 +284,7 @@ public class OabaServiceBean implements OabaService {
 	@Override
 	public int resumeJob(long jobID) {
 
-		BatchJob job = jobController.findOabaJob(jobID);
+		BatchJob job = jobController.findBatchJob(jobID);
 
 		final String _clearResources =
 			propController.getJobProperty(job, PN_CLEAR_RESOURCES);
@@ -335,7 +335,7 @@ public class OabaServiceBean implements OabaService {
 		MatchRecord2Source mrs = null;
 
 		// check to make sure the job is completed
-		BatchJob batchJob = jobController.findOabaJob(jobID);
+		BatchJob batchJob = jobController.findBatchJob(jobID);
 		if (!batchJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
 			throw new IllegalStateException("The job has not completed.");
 		} else {

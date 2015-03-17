@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalProperty;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.batch.ProcessingController;
@@ -83,11 +84,8 @@ public class OperationalPropertyControllerBeanIT {
 	@PersistenceContext(unitName = "oaba")
 	EntityManager em;
 
-	@EJB
+	@EJB(beanName = "OabaJobControllerBean")
 	private OabaJobController oabaController;
-
-	@EJB
-	private OabaJobController jobController;
 
 	@EJB
 	private OabaParametersController paramsController;
@@ -163,7 +161,7 @@ public class OperationalPropertyControllerBeanIT {
 		OabaJobEntity _job = createEphemeralOabaJobEntity(te, METHOD, true);
 		assertTrue(_job != null);
 		assertTrue(_job.getId() == OabaJobEntity.NONPERSISTENT_ID);
-		OabaJobEntity job = oabaController.save(_job);
+		BatchJob job = oabaController.save(_job);
 		final long jobId = job.getId();
 		assertTrue(jobId != OabaJobEntity.NONPERSISTENT_ID);
 

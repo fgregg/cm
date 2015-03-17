@@ -1,6 +1,7 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cm.args.BatchProcessing.*;
+import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
+import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
 
 import java.util.logging.Logger;
 

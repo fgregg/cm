@@ -1,5 +1,8 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.batch.impl.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
+import static com.choicemaker.cm.batch.impl.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -140,7 +143,6 @@ public class OabaJobControllerBean implements OabaJobController {
 		return save(getBean(batchJob));
 	}
 
-	@Override
 	public OabaJobEntity save(OabaJobEntity job) {
 		if (job == null) {
 			throw new IllegalArgumentException("null job");
@@ -189,6 +191,25 @@ public class OabaJobControllerBean implements OabaJobController {
 	@Override
 	public void detach(BatchJob oabaJob) {
 		em.detach(oabaJob);
+	}
+
+	@Override
+	public BatchJob findBatchJob(long id) {
+		Query query = em.createNamedQuery(QN_BATCHJOB_FIND_BY_JOBID);
+		query.setParameter(PN_BATCHJOB_FIND_BY_JOBID_P1, id);
+		@SuppressWarnings("unchecked")
+		List<BatchJob> entries = query.getResultList();
+		if (entries != null && entries.size() > 1) {
+			String msg = "Violates primary key constraint: " + entries.size();
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
+		}
+		BatchJob retVal = null;
+		if (entries != null && !entries.isEmpty()) {
+			assert entries.size() == 1;
+			retVal = entries.get(0);
+		}
+		return retVal;
 	}
 
 }

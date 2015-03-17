@@ -151,7 +151,7 @@ public class OabaTestUtils {
 		final OabaParametersController paramsController =
 			test.getOabaParamsController();
 		OabaParameters params =
-			paramsController.findOabaParametersByJobId(jobId);
+			paramsController.findOabaParametersByBatchJobId(jobId);
 		te.add(params);
 		validateJobParameters(retVal, bp, params);
 

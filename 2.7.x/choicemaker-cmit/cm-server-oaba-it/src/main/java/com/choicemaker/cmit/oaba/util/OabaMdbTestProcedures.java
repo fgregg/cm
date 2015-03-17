@@ -22,9 +22,9 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cmit.oaba.AbstractOabaMdbTest;
+import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
-import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.OabaTestUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
@@ -142,7 +142,7 @@ public class OabaMdbTestProcedures {
 		final OabaParametersController paramsController =
 			test.getOabaParamsController();
 		OabaParameters params =
-			paramsController.findOabaParametersByJobId(jobId);
+			paramsController.findOabaParametersByBatchJobId(jobId);
 		te.add(params);
 
 		// Check the job results
@@ -167,7 +167,9 @@ public class OabaMdbTestProcedures {
 			if (startData == null) {
 				fail("did not receive data from " + listeningQueueName);
 			}
-			assertTrue(startData.jobID == jobId);
+			final long startId = startData.jobID;
+			assertTrue("startId: " + startId + ", jobId: " + jobId,
+					startId == jobId);
 		}
 		if (isUpdateExpected) {
 			// Check that OABA processing sent out an expected status

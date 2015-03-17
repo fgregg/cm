@@ -27,6 +27,8 @@ import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
@@ -34,6 +36,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourc
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractSchedulerSingleton;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
@@ -53,17 +59,76 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 			.getLogger(TransMatchSchedulerSingleton.class.getName());
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ TransMatchSchedulerSingleton.class.getName());
+
+	// -- Injected data
+
+	@EJB
+	private OabaJobController jobController;
+
+	@EJB
+	private OabaSettingsController oabaSettingsController;
+
+	@EJB
+	private OabaParametersController paramsController;
+
+	@EJB
+	TransitivityParametersController transitivityParametersController;
+
+	@EJB
+	private ServerConfigurationController serverController;
+
+	@EJB
+	private OperationalPropertyController propertyController;
+
+	@EJB
+	private ProcessingController processingController;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
+	private Queue matchDedupQueue;
+
+	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")
+	private Queue matcherQueue;
+
+	@Inject
+	private JMSContext jmsContext;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatchDedupQueue")
 	private Queue transMatchDedupQueue;
 
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatcherQueue")
 	private Queue transMatcherQueue;
 
-	@EJB
-	TransitivityParametersController transitivityParametersController;
+	// -- Callbacks
 
-	@Inject
-	private JMSContext jmsContext;
+	@Override
+	protected OabaJobController getJobController() {
+		return jobController;
+	}
+
+	@Override
+	protected OabaParametersController getParametersController() {
+		return paramsController;
+	}
+
+	@Override
+	protected ServerConfigurationController getServerController() {
+		return serverController;
+	}
+
+	@Override
+	protected OabaSettingsController getSettingsController() {
+		return oabaSettingsController;
+	}
+
+	@Override
+	protected OperationalPropertyController getPropertyController() {
+		return propertyController;
+	}
+
+	@Override
+	protected ProcessingController getProcessingController() {
+		return processingController;
+	}
 
 	@Override
 	protected Logger getLogger() {

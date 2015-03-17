@@ -33,8 +33,8 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceC
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationException;
 import com.choicemaker.cmit.oaba.util.OabaMdbTestProcedures;
-import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.BatchProcessingPhase;
+import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaTestParameters;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;

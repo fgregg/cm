@@ -227,4 +227,14 @@ public class TransitivityJobControllerBean implements TransitivityJobController 
 		em.detach(job);
 	}
 
+	@Override
+	public BatchJob findBatchJob(long id) {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public List<BatchJob> findAll() {
+		throw new Error("not yet implemented");
+	}
+
 }

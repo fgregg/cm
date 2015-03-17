@@ -1,5 +1,7 @@
 package com.choicemaker.cm.batch.impl;
 
+import com.choicemaker.cm.batch.BatchJob;
+
 public interface BatchJobJPA {
 
 	/** Name of the table that persists batch job data */
@@ -96,5 +98,21 @@ public interface BatchJobJPA {
 	String ID_GENERATOR_PK_COLUMN_NAME = "SEQ_NAME";
 	String ID_GENERATOR_PK_COLUMN_VALUE = "BATCHJOB";
 	String ID_GENERATOR_VALUE_COLUMN_NAME = "SEQ_COUNT";
+
+	/**
+	 * Name of the query that finds a persistent batch job of any type with a
+	 * specified job id
+	 */
+	String QN_BATCHJOB_FIND_BY_JOBID = "anyBatchJobFindByJobId";
+
+	/** JPQL used to implement {@link #QN_OABAJOB_FIND_ALL} */
+	String JPQL_BATCHJOB_FIND_BY_JOBID =
+		"Select j from BatchJobEntity j where j.id = :jobId";
+
+	/**
+	 * Name of the parameter used to specify the jobId of
+	 * {@link #JPQL_BATCHJOB_FIND_BY_JOBID}
+	 */
+	String PN_BATCHJOB_FIND_BY_JOBID_P1 = "jobId";
 
 }

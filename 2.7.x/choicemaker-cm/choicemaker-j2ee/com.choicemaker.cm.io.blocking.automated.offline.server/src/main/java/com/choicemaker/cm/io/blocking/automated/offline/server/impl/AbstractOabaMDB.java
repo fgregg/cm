@@ -138,9 +138,9 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				oabaMsg = (OabaJobMessage) msg.getObject();
 
 				final long jobId = oabaMsg.jobID;
-				batchJob = getJobController().findOabaJob(jobId);
+				batchJob = getJobController().findBatchJob(jobId);
 				OabaParameters oabaParams =
-					getParametersController().findOabaParametersByJobId(jobId);
+					getParametersController().findOabaParametersByBatchJobId(jobId);
 				OabaSettings oabaSettings =
 					getSettingsController().findOabaSettingsByJobId(jobId);
 				ProcessingEventLog processingLog =

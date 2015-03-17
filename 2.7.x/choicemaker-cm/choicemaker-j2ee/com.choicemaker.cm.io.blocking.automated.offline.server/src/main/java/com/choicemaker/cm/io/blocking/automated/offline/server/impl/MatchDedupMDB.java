@@ -142,7 +142,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 					countMessages = 0;
 					OabaJobMessage data = (OabaJobMessage) o;
 					long jobId = data.jobID;
-					batchJob = jobController.findOabaJob(jobId);
+					batchJob = jobController.findBatchJob(jobId);
 					handleDedupEach(data, batchJob);
 
 				} else if (o instanceof MatchWriterMessage) {
@@ -151,7 +151,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 					// processors are done
 					MatchWriterMessage data = (MatchWriterMessage) o;
 					long jobId = data.jobID;
-					batchJob = jobController.findOabaJob(jobId);
+					batchJob = jobController.findBatchJob(jobId);
 					countMessages--;
 					log.info("outstanding messages: " + countMessages);
 					if (countMessages == 0) {
@@ -182,9 +182,9 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 			throws BlockingException {
 
 		final long jobId = d.jobID;
-		final BatchJob batchJob = jobController.findOabaJob(jobId);
+		final BatchJob batchJob = jobController.findBatchJob(jobId);
 		final OabaParameters params =
-			paramsController.findOabaParametersByJobId(jobId);
+			paramsController.findOabaParametersByBatchJobId(jobId);
 		final ServerConfiguration serverConfig =
 			serverController.findServerConfigurationByJobId(jobId);
 		final ProcessingEventLog processingEntry =
@@ -224,7 +224,7 @@ public class MatchDedupMDB implements MessageListener, Serializable {
 
 		final long jobId = batchJob.getId();
 		final OabaParameters params =
-			paramsController.findOabaParametersByJobId(jobId);
+			paramsController.findOabaParametersByBatchJobId(jobId);
 		final ServerConfiguration serverConfig =
 			serverController.findServerConfigurationByJobId(jobId);
 		final ProcessingEventLog processingEntry =

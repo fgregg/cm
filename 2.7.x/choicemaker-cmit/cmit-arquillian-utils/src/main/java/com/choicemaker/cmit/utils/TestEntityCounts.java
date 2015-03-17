@@ -20,6 +20,7 @@ import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobController;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.batch.impl.BatchJobEntity;
@@ -27,7 +28,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultServer
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.DefaultSettings;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ImmutableRecordIdTranslatorLocal;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaBatchProcessingEvent;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
@@ -109,7 +109,7 @@ public class TestEntityCounts {
 	private Set<BatchJob> batchJobs = new LinkedHashSet<>();
 
 	public TestEntityCounts(final Logger testLogger,
-			final OabaJobController oabaJobController,
+			final BatchJobController oabaJobController,
 			final OabaParametersController oabaParamsController,
 			final OabaSettingsController oabaSettingsController,
 			final ServerConfigurationController serverController,
@@ -125,7 +125,7 @@ public class TestEntityCounts {
 	}
 
 	public TestEntityCounts(Logger testLogger,
-			OabaJobController oabaJobController,
+			BatchJobController oabaJobController,
 			OabaParametersController oabaParamsController,
 			TransitivityJobController transJobController,
 			TransitivityParametersController transParamsController,
@@ -356,7 +356,7 @@ public class TestEntityCounts {
 
 	public void checkCounts(Logger testLogger, final EntityManager em,
 			final UserTransaction utx,
-			final OabaJobController oabaJobController,
+			final BatchJobController oabaJobController,
 			final OabaParametersController oabaParamsController,
 			final OabaSettingsController settingsController,
 			final ServerConfigurationController serverController,
@@ -372,7 +372,7 @@ public class TestEntityCounts {
 	}
 
 	public void checkCounts(Logger testLogger, EntityManager em,
-			UserTransaction utx, OabaJobController oabaJobController,
+			UserTransaction utx, BatchJobController oabaJobController,
 			OabaParametersController oabaParamsController,
 			TransitivityJobController transJobController,
 			TransitivityParametersController transParamsController,
@@ -441,7 +441,7 @@ public class TestEntityCounts {
 	 * current counts of test entities.
 	 */
 	protected void logMaybeAssert(boolean doAssert, Logger testLogger,
-			final OabaJobController oabaJobController,
+			final BatchJobController oabaJobController,
 			final OabaParametersController oabaParamsController,
 			final TransitivityJobController transJobController,
 			final TransitivityParametersController transParamsController,

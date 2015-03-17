@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.oaba;
 
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_INIT;
-import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.PCT_INIT;
+import static com.choicemaker.cm.args.BatchProcessing.EVT_INIT;
+import static com.choicemaker.cm.args.BatchProcessing.PCT_INIT;
 
 import java.util.logging.Logger;
 

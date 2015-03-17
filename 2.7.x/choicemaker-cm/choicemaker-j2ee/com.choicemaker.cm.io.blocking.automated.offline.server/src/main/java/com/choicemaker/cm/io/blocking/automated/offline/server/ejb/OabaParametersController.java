@@ -17,7 +17,7 @@ public interface OabaParametersController {
 
 	OabaParameters findOabaParameters(long id);
 
-	OabaParameters findOabaParametersByJobId(long jobId);
+	OabaParameters findOabaParametersByBatchJobId(long jobId);
 
 	OabaParameters save(OabaParameters p);
 

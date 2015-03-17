@@ -96,7 +96,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 	
 		// Get the parent/predecessor OABA job
 		long oabaJobId = transJob.getBatchParentId();
-		BatchJob oabaJob = this.getOabaJobController().findOabaJob(oabaJobId);
+		BatchJob oabaJob = this.getOabaJobController().findBatchJob(oabaJobId);
 
 		// Get the match record source from the OABA job
 		IMatchRecord2Source mSource =

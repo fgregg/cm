@@ -150,9 +150,9 @@ public class SingleRecordMatchMDB implements MessageListener, Serializable {
 				msg = (ObjectMessage) inMessage;
 				data = (OabaJobMessage) msg.getObject();
 				final long jobId = data.jobID;
-				batchJob = jobController.findOabaJob(jobId);
+				batchJob = jobController.findBatchJob(jobId);
 				OabaParameters params =
-					paramsController.findOabaParametersByJobId(jobId);
+					paramsController.findOabaParametersByBatchJobId(jobId);
 				OabaSettings settings =
 					oabaSettingsController.findOabaSettingsByJobId(jobId);
 

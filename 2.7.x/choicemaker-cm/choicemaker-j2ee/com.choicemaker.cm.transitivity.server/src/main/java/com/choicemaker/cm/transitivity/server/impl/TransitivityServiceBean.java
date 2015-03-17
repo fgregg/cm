@@ -112,7 +112,7 @@ public class TransitivityServiceBean implements TransitivityService {
 		validateStartParameters(externalID, tp, batchJob, serverConfiguration);
 
 		OabaParameters oabaParams =
-			oabaParamsController.findOabaParametersByJobId(batchJob.getId());
+			oabaParamsController.findOabaParametersByBatchJobId(batchJob.getId());
 		logStartParameters(externalID, tp, batchJob, oabaParams,
 				serverConfiguration);
 

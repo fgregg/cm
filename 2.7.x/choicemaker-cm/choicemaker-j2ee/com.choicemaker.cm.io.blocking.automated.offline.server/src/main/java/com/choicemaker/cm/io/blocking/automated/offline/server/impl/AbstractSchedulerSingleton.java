@@ -21,7 +21,6 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.EJB;
 import javax.ejb.FinderException;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -33,6 +32,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobController;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.batch.ProcessingController;
@@ -49,7 +49,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.ChunkDataStore;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
@@ -69,26 +68,6 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	// FIXME REMOVEME (after operational properties are completed)
 	protected static final String DELIM = "|";
-
-	// -- Injected data
-
-	@EJB
-	private OabaJobController jobController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersController paramsController;
-
-	@EJB
-	private ServerConfigurationController serverController;
-
-	@EJB
-	private OperationalPropertyController propertyController;
-
-	@EJB
-	private ProcessingController processingController;
 
 	// -- Session data
 
@@ -128,6 +107,18 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	// -- Callbacks
 
+	protected abstract BatchJobController getJobController();
+
+	protected abstract OabaParametersController getParametersController();
+
+	protected abstract ServerConfigurationController getServerController();
+
+	protected abstract OabaSettingsController getSettingsController();
+
+	protected abstract OperationalPropertyController getPropertyController();
+
+	protected abstract ProcessingController getProcessingController();
+
 	protected abstract Logger getLogger();
 
 	protected abstract Logger getJMSTrace();
@@ -141,32 +132,6 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			Date timestamp, String info);
 
 	protected abstract void sendToMatchDebup(BatchJob job, OabaJobMessage sd);
-
-	// -- Accessors
-
-	protected OabaJobController getJobController() {
-		return jobController;
-	}
-
-	protected OabaParametersController getParametersController() {
-		return paramsController;
-	}
-
-	protected ServerConfigurationController getServerController() {
-		return serverController;
-	}
-
-	protected OabaSettingsController getSettingsController() {
-		return oabaSettingsController;
-	}
-
-	protected OperationalPropertyController getPropertyController() {
-		return propertyController;
-	}
-
-	protected ProcessingController getProcessingController() {
-		return processingController;
-	}
 
 	// -- Message processing
 
@@ -186,9 +151,9 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 				if (o instanceof OabaJobMessage) {
 					final OabaJobMessage sd = (OabaJobMessage) o;
 					final long jobId = sd.jobID;
-					batchJob = getJobController().findOabaJob(jobId);
+					batchJob = getJobController().findBatchJob(jobId);
 					OabaParameters params =
-						getParametersController().findOabaParametersByJobId(
+						getParametersController().findOabaParametersByBatchJobId(
 								jobId);
 					OabaSettings oabaSettings =
 						getSettingsController().findOabaSettingsByJobId(jobId);
@@ -290,7 +255,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			throws BlockingException {
 
 		final long jobId = mwd.jobID;
-		BatchJob batchJob = getJobController().findOabaJob(jobId);
+		BatchJob batchJob = getJobController().findBatchJob(jobId);
 		OabaJobMessage sd = new OabaJobMessage(mwd);
 		ProcessingEventLog status =
 			getProcessingController().getProcessingLog(batchJob);
@@ -401,7 +366,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 		// init values
 		final long jobId = sd.jobID;
-		BatchJob batchJob = getJobController().findOabaJob(jobId);
+		BatchJob batchJob = getJobController().findBatchJob(jobId);
 		ProcessingEventLog processingLog =
 			getProcessingController().getProcessingLog(batchJob);
 
@@ -418,7 +383,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 			// set up the record source arrays.
 			OabaParameters oabaParams =
-				getParametersController().findOabaParametersByJobId(jobId);
+				getParametersController().findOabaParametersByBatchJobId(jobId);
 			String modelName = oabaParams.getModelConfigurationName();
 			ImmutableProbabilityModel ipm =
 				PMManager.getImmutableModelInstance(modelName);
@@ -479,7 +444,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 			throws XmlConfException, BlockingException, NamingException,
 			JMSException {
 		final long jobId = sd.jobID;
-		BatchJob batchJob = getJobController().findOabaJob(jobId);
+		BatchJob batchJob = getJobController().findBatchJob(jobId);
 
 		// This is because tree ids start with 1 and not 0.
 		for (int i = 1; i <= numProcessors; i++) {
@@ -504,9 +469,9 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		getLogger().fine("startChunk " + currentChunk);
 
 		final long jobId = sd.jobID;
-		final BatchJob batchJob = getJobController().findOabaJob(jobId);
+		final BatchJob batchJob = getJobController().findBatchJob(jobId);
 		final OabaParameters params =
-			getParametersController().findOabaParametersByJobId(jobId);
+			getParametersController().findOabaParametersByBatchJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
 		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);

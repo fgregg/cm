@@ -130,7 +130,7 @@ public class RecordIdControllerBeanIT {
 	@EJB
 	private OabaJobController oabaController;
 
-	@EJB
+	@EJB(beanName = "OabaJobControllerBean")
 	private OabaJobController jobController;
 
 	@EJB

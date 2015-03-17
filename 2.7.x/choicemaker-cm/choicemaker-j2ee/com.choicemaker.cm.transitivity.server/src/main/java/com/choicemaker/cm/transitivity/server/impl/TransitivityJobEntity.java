@@ -17,7 +17,6 @@ import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.QN_
 import static com.choicemaker.cm.transitivity.server.impl.TransitivityJobJPA.QN_TRANSITIVITY_FIND_ALL_BY_PARENT_ID;
 
 import java.io.File;
-import java.io.Serializable;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

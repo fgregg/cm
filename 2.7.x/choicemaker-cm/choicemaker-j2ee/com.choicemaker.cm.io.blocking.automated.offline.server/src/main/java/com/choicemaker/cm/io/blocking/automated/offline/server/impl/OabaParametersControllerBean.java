@@ -1,5 +1,8 @@
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
+import static com.choicemaker.cm.batch.impl.BatchJobJPA.PN_BATCHJOB_FIND_BY_JOBID_P1;
+import static com.choicemaker.cm.batch.impl.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -83,11 +86,21 @@ public class OabaParametersControllerBean implements OabaParametersController {
 	}
 
 	@Override
-	public OabaParameters findOabaParametersByJobId(long jobId) {
+	public OabaParameters findOabaParametersByBatchJobId(long jobId) {
 		OabaParameters retVal = null;
-		BatchJob job = getOabaJobController().findOabaJob(jobId);
-		if (job != null) {
-			long paramsId = job.getParametersId();
+		Query query = em.createNamedQuery(QN_BATCHJOB_FIND_BY_JOBID);
+		query.setParameter(PN_BATCHJOB_FIND_BY_JOBID_P1, jobId);
+		@SuppressWarnings("unchecked")
+		List<BatchJob> entries = query.getResultList();
+		if (entries != null && entries.size() > 1) {
+			String msg = "Violates 1:{0,1} relationship: " + entries.size();
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
+		}
+		if (entries != null && !entries.isEmpty()) {
+			assert entries.size() == 1;
+			BatchJob batchJob = entries.get(0);
+			long paramsId = batchJob.getParametersId();
 			retVal = findOabaParameters(paramsId);
 		}
 		return retVal;

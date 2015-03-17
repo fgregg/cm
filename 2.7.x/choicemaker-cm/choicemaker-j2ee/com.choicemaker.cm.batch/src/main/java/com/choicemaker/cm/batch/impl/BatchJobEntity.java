@@ -22,6 +22,8 @@ import static com.choicemaker.cm.batch.impl.BatchJobJPA.ID_GENERATOR_PK_COLUMN_N
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.ID_GENERATOR_PK_COLUMN_VALUE;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.ID_GENERATOR_TABLE;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.ID_GENERATOR_VALUE_COLUMN_NAME;
+import static com.choicemaker.cm.batch.impl.BatchJobJPA.JPQL_BATCHJOB_FIND_BY_JOBID;
+import static com.choicemaker.cm.batch.impl.BatchJobJPA.QN_BATCHJOB_FIND_BY_JOBID;
 import static com.choicemaker.cm.batch.impl.BatchJobJPA.TABLE_NAME;
 
 import java.io.File;
@@ -49,6 +51,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyTemporal;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.TemporalType;
@@ -57,6 +60,8 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.BatchJobRigor;
 import com.choicemaker.cm.batch.BatchJobStatus;
 
+@NamedQuery(name = QN_BATCHJOB_FIND_BY_JOBID,
+		query = JPQL_BATCHJOB_FIND_BY_JOBID)
 @Entity
 @Table(/* schema = "CHOICEMAKER", */name = TABLE_NAME)
 @DiscriminatorColumn(name = DISCRIMINATOR_COLUMN,

@@ -136,7 +136,7 @@ public class OabaSettingsControllerBean implements OabaSettingsController {
 	@Override
 	public OabaSettings findOabaSettingsByJobId(long jobId) {
 		OabaSettings retVal = null;
-		BatchJob batchJob = jobController.findOabaJob(jobId);
+		BatchJob batchJob = jobController.findBatchJob(jobId);
 		if (batchJob != null) {
 			long settingsId = batchJob.getSettingsId();
 			retVal = findOabaSettings(settingsId);

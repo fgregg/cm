@@ -25,6 +25,7 @@ import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobController;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.batch.ProcessingController;
@@ -33,7 +34,6 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
@@ -59,7 +59,7 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 	// -- Instance data
 
 	@EJB
-	private OabaJobController oabaJobController;
+	private BatchJobController oabaJobController;
 
 	@EJB
 	private TransitivityJobController transJobController;
@@ -95,7 +95,7 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 
 	// -- Accessors
 
-	protected final OabaJobController getOabaJobController() {
+	protected final BatchJobController getOabaJobController() {
 		return oabaJobController;
 	}
 

@@ -45,7 +45,7 @@ public class OabaPairResultControllerBean implements OabaPairResultController {
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-	@EJB
+	@EJB(beanName = "OabaJobControllerBean")
 	private OabaJobController jobController;
 
 	@Override

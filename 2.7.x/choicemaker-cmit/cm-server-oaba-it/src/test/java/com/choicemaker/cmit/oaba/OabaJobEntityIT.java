@@ -64,11 +64,8 @@ public class OabaJobEntityIT {
 	@PersistenceContext(unitName = "oaba")
 	EntityManager em;
 
-	@EJB
+	@EJB(beanName = "OabaJobControllerBean")
 	private OabaJobController oabaController;
-
-	@EJB
-	private OabaJobController oabaJobController;
 
 	@EJB
 	private OabaParametersController paramsController;
