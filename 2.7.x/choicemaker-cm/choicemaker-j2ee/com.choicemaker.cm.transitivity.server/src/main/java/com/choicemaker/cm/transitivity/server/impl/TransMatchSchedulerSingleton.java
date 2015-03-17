@@ -10,21 +10,34 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COUNT;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_REGULAR_CHUNK_FILE_COUNT;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.base.PMManager;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IChunkDataSinkSourceFactory;
+import com.choicemaker.cm.io.blocking.automated.offline.core.IComparisonArraySource;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparisonArrayGroupSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.AbstractSchedulerSingleton;
+import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
 /**
  * This is the match scheduler for the Transitivity Engine.
@@ -46,6 +59,9 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatcherQueue")
 	private Queue transMatcherQueue;
 
+	@EJB
+	TransitivityParametersController transitivityParametersController;
+
 	@Inject
 	private JMSContext jmsContext;
 
@@ -59,46 +75,65 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		return jmsTrace;
 	}
 
-	@Override
-	protected void cleanUp(BatchJob job, OabaJobMessage sd)
-			throws BlockingException {
-		log.fine("cleanUp");
+	protected TransitivityParametersController getTransitivityParametersController() {
+		return transitivityParametersController;
+	}
 
-		throw new Error("not yet implemented");
-		// final long jobId = sd.jobID;
-		// TransitivityParameters params = em.find(OabaParametersEntity.class,
-		// jobId);
-		// final String modelConfigId = params.getModelConfigurationName();
-		// ImmutableProbabilityModel stageModel =
-		// PMManager.getModelInstance(modelConfigId);
-		// //get the number of processors
-		// String temp = (String) stageModel.properties().get("numProcessors");
-		// int numProcessors = Integer.parseInt(temp);
-		//
-		// //remove the data
-		// TransitivityFileUtils oabaConfig = new TransitivityFileUtils(jobId);
-		// IChunkDataSinkSourceFactory stageFactory =
-		// oabaConfig.getStageDataFactory();
-		// IChunkDataSinkSourceFactory masterFactory=
-		// oabaConfig.getMasterDataFactory();
-		// stageFactory.removeAllSinks(sd.numChunks);
-		// masterFactory.removeAllSinks(sd.numChunks);
-		//
-		// //oversized
-		// ComparisonArrayGroupSinkSourceFactory factoryOS =
-		// oabaConfig.getComparisonArrayGroupFactoryOS(numProcessors);
-		//
-		// //there is always 1 chunk to remove.
-		// int c = sd.numChunks;
-		// if (c == 0) c = 1;
-		//
-		// for (int i=0; i<c; i++) {
-		// for (int j=1; j<=numProcessors; j++) {
-		// IComparisonArraySource sourceOS = factoryOS.getSource(i, j);
-		// sourceOS.remove();
-		// log.fine("removing " + sourceOS.getInfo());
-		// }
-		// }
+	@Override
+	protected void cleanUp(BatchJob batchJob, OabaJobMessage sd)
+			throws BlockingException {
+		log.info("cleanUp");
+
+		final long jobId = batchJob.getId();
+		TransitivityParameters params =
+			getTransitivityParametersController()
+					.findTransitivityParametersByJobId(jobId);
+		ServerConfiguration serverConfig =
+			getServerController().findServerConfigurationByJobId(jobId);
+		final String modelConfigId = params.getModelConfigurationName();
+		ImmutableProbabilityModel model =
+			PMManager.getModelInstance(modelConfigId);
+		if (model == null) {
+			String s = "No modelId corresponding to '" + modelConfigId + "'";
+			log.severe(s);
+			throw new IllegalArgumentException(s);
+		}
+
+		int numProcessors = serverConfig.getMaxChoiceMakerThreads();
+
+		// remove the data
+		final String _numChunks =
+			getPropertyController().getJobProperty(batchJob,
+					PN_CHUNK_FILE_COUNT);
+		final int numChunks = Integer.valueOf(_numChunks);
+
+		final String _numRegularChunks =
+			getPropertyController().getJobProperty(batchJob,
+					PN_REGULAR_CHUNK_FILE_COUNT);
+		final int numRegularChunks = Integer.valueOf(_numRegularChunks);
+
+		IChunkDataSinkSourceFactory stageFactory =
+			OabaFileUtils.getStageDataFactory(batchJob, model);
+		IChunkDataSinkSourceFactory masterFactory =
+			OabaFileUtils.getMasterDataFactory(batchJob, model);
+		stageFactory.removeAllSinks(numChunks);
+		masterFactory.removeAllSinks(numChunks);
+
+		final int numOS = numChunks - numRegularChunks;
+		assert numOS > 0;
+
+		// remove the oversized array files
+		ComparisonArrayGroupSinkSourceFactory factoryOS =
+			OabaFileUtils.getComparisonArrayGroupFactoryOS(batchJob,
+					numProcessors);
+		for (int i = 0; i < numOS; i++) {
+			for (int j = 1; j <= numProcessors; j++) {
+				@SuppressWarnings("rawtypes")
+				IComparisonArraySource sourceOS = factoryOS.getSource(i, j);
+				sourceOS.delete();
+			}
+		}
+
 	}
 
 	@Override

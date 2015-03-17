@@ -17,10 +17,10 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 
 /**
- * This is the match scheduler for the Transitivity Engine.
+ * This MDB delegates message handling to a singleton EJB, which tracks certain
+ * transitivity-related data between invocations of <code>onMessage</code>.
  * 
- * @author pcheung
- *
+ * @author rphall
  */
 @MessageDriven(
 		activationConfig = {
