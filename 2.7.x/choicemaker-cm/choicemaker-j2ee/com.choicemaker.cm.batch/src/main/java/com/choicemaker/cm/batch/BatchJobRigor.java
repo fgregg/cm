@@ -36,7 +36,8 @@ public enum BatchJobRigor {
 			retVal = COMPUTED;
 			break;
 		default:
-			throw new IllegalArgumentException("invalid symbol: " + c);
+			throw new IllegalArgumentException(
+				"BatchJobRigor: invalid symbol: " + c);
 		}
 		assert retVal != null;
 		return retVal;

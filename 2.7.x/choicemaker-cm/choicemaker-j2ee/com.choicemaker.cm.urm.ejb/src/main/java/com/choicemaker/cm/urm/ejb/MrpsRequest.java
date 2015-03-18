@@ -131,7 +131,7 @@ public class MrpsRequest implements IMrpsRequest {
 		ImmutableProbabilityModel retVal = this.stagingModel;
 		if (retVal == null) {
 			OabaParameters bp = getBatchParameters(em);
-			String stagingModelName = bp.getStageModel();
+			String stagingModelName = bp.getModelConfigurationName();
 			this.stagingModel = PMManager.getModelInstance(stagingModelName);
 			retVal = this.stagingModel;
 		}

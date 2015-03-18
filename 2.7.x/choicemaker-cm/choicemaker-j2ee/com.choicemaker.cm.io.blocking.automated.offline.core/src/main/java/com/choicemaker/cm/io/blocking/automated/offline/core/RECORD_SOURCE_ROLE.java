@@ -37,6 +37,7 @@ package com.choicemaker.cm.io.blocking.automated.offline.core;
  *
  */
 public enum RECORD_SOURCE_ROLE {
+
 	/** Source 1, with duplicates */
 	STAGING('S'),
 	/** Source 1, without duplicates */
@@ -49,6 +50,8 @@ public enum RECORD_SOURCE_ROLE {
 	SPLIT_INDEX('0');
 	public final char symbol;
 	private final String strSymbol;
+
+	public static final String LOG_SOURCE = "RECORD_SOURCE_ROLE";
 
 	RECORD_SOURCE_ROLE(char c) {
 		this.symbol = c;
@@ -90,14 +93,16 @@ public enum RECORD_SOURCE_ROLE {
 			retVal = SPLIT_INDEX;
 			break;
 		default:
-			throw new IllegalArgumentException("invalid symbol: " + c);
+			throw new IllegalArgumentException(
+				LOG_SOURCE + ": invalid symbol: " + c);
 		}
 		return retVal;
 	}
 
 	public static RECORD_SOURCE_ROLE fromSymbol(String s) {
 		if (s == null || !s.equals(s.trim()) || s.length() != 1) {
-			throw new IllegalArgumentException("invalid String: " + s);
+			throw new IllegalArgumentException(
+				LOG_SOURCE + ": invalid String: " + s);
 		}
 		return fromSymbol(s.charAt(0));
 	}

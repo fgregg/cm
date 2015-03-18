@@ -74,14 +74,14 @@ public class ComparisonArraySink extends BaseFileSink implements
 			} else if (type == EXTERNAL_DATA_FORMAT.STRING) {
 				// first write the id type of staging IDs
 				fw.write(Integer.toString(cg.getStagingIDsType()
-						.getCharSymbol()) + LINE_SEPARATOR);
+						.getIntValue()) + LINE_SEPARATOR);
 
 				// second write the stagingIDs list.
 				writeArray(cg.getStagingIDs(), cg.getStagingIDsType());
 
 				// third write the master id type
 				fw.write(Integer
-						.toString(cg.getMasterIDsType().getCharSymbol())
+						.toString(cg.getMasterIDsType().getIntValue())
 						+ Constants.LINE_SEPARATOR);
 
 				// fourth write the master list

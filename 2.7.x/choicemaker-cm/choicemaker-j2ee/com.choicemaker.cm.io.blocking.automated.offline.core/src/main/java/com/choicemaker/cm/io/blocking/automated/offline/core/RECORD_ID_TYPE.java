@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 public enum RECORD_ID_TYPE {
 	TYPE_INTEGER('1', Integer.class, int.class), TYPE_LONG('2', Long.class,
 			long.class), TYPE_STRING('3', String.class);
+
+	public static final String LOG_SOURCE = "RECORD_ID_TYPE";
+
 	private final char charSymbol;
 	private final int intSymbol;
 	private final String strSymbol;
@@ -80,7 +83,7 @@ public enum RECORD_ID_TYPE {
 
 	public static <T extends Comparable<T>> RECORD_ID_TYPE fromInstance(T o) {
 		if (o == null) {
-			String msg = "null instance";
+			String msg = LOG_SOURCE + ": null instance";
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
@@ -102,7 +105,7 @@ public enum RECORD_ID_TYPE {
 			break;
 		default:
 			String hex = Integer.toHexString(c);
-			String msg = "invalid symbol: '" + c + "' (0x" + hex + ")";
+			String msg = LOG_SOURCE + ": invalid symbol: '" + c + "' (0x" + hex + ")";
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
@@ -117,7 +120,7 @@ public enum RECORD_ID_TYPE {
 
 	public static RECORD_ID_TYPE fromSymbol(String s) {
 		if (s == null || !s.equals(s.trim()) || s.length() != 1) {
-			String msg = "invalid String: " + s;
+			String msg = LOG_SOURCE + ": invalid String: " + s;
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
@@ -126,7 +129,7 @@ public enum RECORD_ID_TYPE {
 
 	public static RECORD_ID_TYPE fromClass(Class<?> c) {
 		if (c == null) {
-			String msg = "null class";
+			String msg = LOG_SOURCE + ": null class";
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}
@@ -138,7 +141,7 @@ public enum RECORD_ID_TYPE {
 			}
 		}
 		if (retVal == null) {
-			String msg = "invalid class: " + c.getName();
+			String msg = LOG_SOURCE + ": invalid class: " + c.getName();
 			logger.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}

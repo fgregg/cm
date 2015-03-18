@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.EJB;
-import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -86,29 +84,6 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	protected long inCompare;
 	protected int compares;
 
-	// -- Injected instance data
-
-	@EJB
-	private OabaJobController jobController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersController paramsController;
-
-	@EJB
-	private ProcessingController processingController;
-
-	@EJB
-	private ServerConfigurationController serverController;
-
-	@EJB
-	private OperationalPropertyController propController;
-
-	@Inject
-	private JMSContext jmsContext;
-
 	// -- Abstract call-back methods
 
 	/** Writes matches to an implicit, on-disk cache */
@@ -118,35 +93,19 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 	/** Reports completion to the scheduler that uses this matcher */
 	protected abstract void sendToScheduler(MatchWriterMessage data);
 
-	// -- Accessors
+	protected abstract OabaJobController getJobController();
 
-	protected OabaJobController getJobController() {
-		return jobController;
-	}
+	protected abstract OabaParametersController getOabaParametersController();
 
-	protected OabaParametersController getParametersController() {
-		return paramsController;
-	}
+	protected abstract ProcessingController getProcessingController();
 
-	protected ProcessingController getProcessingController() {
-		return processingController;
-	}
+	protected abstract ServerConfigurationController getServerController();
 
-	protected ServerConfigurationController getServerController() {
-		return serverController;
-	}
+	protected abstract OabaSettingsController getSettingsController();
 
-	protected OabaSettingsController getSettingsController() {
-		return oabaSettingsController;
-	}
+	protected abstract OperationalPropertyController getPropertyController();
 
-	protected OperationalPropertyController getPropertyController() {
-		return propController;
-	}
-
-	protected JMSContext getJMSContext() {
-		return jmsContext;
-	}
+	protected abstract JMSContext getJMSContext();
 
 	// -- Template methods
 
@@ -169,7 +128,7 @@ public abstract class AbstractMatcher implements MessageListener, Serializable {
 
 					batchJob = getJobController().findBatchJob(jobId);
 					final OabaParameters params =
-						getParametersController().findOabaParametersByBatchJobId(
+						getOabaParametersController().findOabaParametersByBatchJobId(
 								jobId);
 					final ProcessingEventLog processingLog =
 						getProcessingController().getProcessingLog(batchJob);

@@ -1,10 +1,18 @@
+/*
+ * Copyright (c) 2001, 2009 ChoiceMaker Technologies, Inc. and others.
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License
+ * v1.0 which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     ChoiceMaker Technologies, Inc. - initial API and implementation
+ */
 package com.choicemaker.cm.args;
 
 import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_SCM;
 
-import java.io.Serializable;
-
-public interface TransitivityParameters extends PersistentObject, Serializable {
+public interface TransitivityParameters extends OabaParameters {
 
 	String DEFAULT_EJB_REF_NAME = "ejb/transitivityParameters";
 	String DEFAULT_JNDI_COMP_NAME = "java:comp/env/" + DEFAULT_EJB_REF_NAME;
@@ -15,32 +23,8 @@ public interface TransitivityParameters extends PersistentObject, Serializable {
 	/** The name of the default graph property (simply connected by matches) */
 	String DEFAULT_GRAPH_PROPERTY_NAME = GPN_SCM;
 
-	long getId();
-
-	String getModelConfigurationName();
-
-	OabaLinkageType getOabaLinkageType();
-
-	float getLowThreshold();
-
-	float getHighThreshold();
-
-	/** The staging record source (and its id) is never null */
-	long getStageRsId();
-
-	/** The staging record source (and its type) is never null */
-	String getStageRsType();
-
-	/** The master record source (and its id) may be null */
-	Long getMasterRsId();
-
-	/** The master record source (and its type) may be null */
-	String getMasterRsType();
-
 	AnalysisResultFormat getAnalysisResultFormat();
 
 	IGraphProperty getGraphProperty();
-
-	OabaParameters asOabaParameters();
 
 }

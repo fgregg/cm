@@ -218,8 +218,6 @@ public class OabaParametersEntityIT {
 		params = paramsController.findOabaParameters(id1);
 
 		// Check the values
-		assertTrue(v1.equals(params.getStageModel()));
-		assertTrue(v1.equals(params.getMasterModel()));
 		assertTrue(v1.equals(params.getModelConfigurationName()));
 		assertTrue(thresholds.getDifferThreshold() == params.getLowThreshold());
 		assertTrue(thresholds.getMatchThreshold() == params.getHighThreshold());

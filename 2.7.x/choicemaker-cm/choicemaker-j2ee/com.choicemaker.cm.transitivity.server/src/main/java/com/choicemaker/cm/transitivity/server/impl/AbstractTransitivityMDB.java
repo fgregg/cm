@@ -34,6 +34,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
@@ -59,7 +60,7 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 	// -- Instance data
 
 	@EJB
-	private BatchJobController oabaJobController;
+	private OabaJobController oabaJobController;
 
 	@EJB
 	private TransitivityJobController transJobController;
@@ -150,7 +151,7 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 				batchJob = getTransitivityJobController().findTransitivityJob(jobId);
 				TransitivityParameters transParams =
 					getParametersController()
-							.findTransitivityParametersByJobId(jobId);
+							.findTransitivityParametersByBatchJobId(jobId);
 				OabaSettings settings =
 					getSettingsController().findSettingsByTransitivityJobId(jobId);
 				ProcessingEventLog processingLog =

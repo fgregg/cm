@@ -4,6 +4,8 @@ public enum EXTERNAL_DATA_FORMAT {
 	STRING(1), BINARY(2);
 	public final int symbol;
 
+	public static final String LOG_SOURCE = "EXTERNAL_DATA_FORMAT";
+
 	EXTERNAL_DATA_FORMAT(int i) {
 		symbol = i;
 	}
@@ -22,7 +24,8 @@ public enum EXTERNAL_DATA_FORMAT {
 			retVal = BINARY;
 			break;
 		default:
-			throw new IllegalArgumentException("invalid symbol: " + i);
+			throw new IllegalArgumentException(
+				LOG_SOURCE + ": invalid symbol: " + i);
 		}
 		assert retVal != null;
 		return retVal;
@@ -30,7 +33,8 @@ public enum EXTERNAL_DATA_FORMAT {
 
 	public static EXTERNAL_DATA_FORMAT fromSymbol(String s) {
 		if (s == null || !s.equals(s.trim()) || s.length() != 1) {
-			throw new IllegalArgumentException("invalid String: " + s);
+			throw new IllegalArgumentException(
+				LOG_SOURCE + ": invalid String: " + s);
 		}
 		return fromSymbol(s.charAt(0));
 	}

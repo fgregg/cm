@@ -17,7 +17,7 @@ public interface TransitivityParametersController {
 
 	TransitivityParameters findTransitivityParameters(long id);
 
-	TransitivityParameters findTransitivityParametersByJobId(long jobId);
+	TransitivityParameters findTransitivityParametersByBatchJobId(long jobId);
 
 	TransitivityParameters save(TransitivityParameters tp);
 

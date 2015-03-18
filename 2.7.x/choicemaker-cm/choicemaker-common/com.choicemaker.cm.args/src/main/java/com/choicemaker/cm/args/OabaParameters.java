@@ -28,12 +28,6 @@ public interface OabaParameters extends PersistentObject, Serializable {
 
 	OabaLinkageType getOabaLinkageType();
 
-	@Deprecated
-	String getStageModel();
-
-	@Deprecated
-	String getMasterModel();
-
 	float getLowThreshold();
 
 	float getHighThreshold();

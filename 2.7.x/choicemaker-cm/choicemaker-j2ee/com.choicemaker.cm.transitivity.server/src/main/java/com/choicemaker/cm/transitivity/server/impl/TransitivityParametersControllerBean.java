@@ -86,7 +86,7 @@ public class TransitivityParametersControllerBean implements
 	}
 
 	@Override
-	public TransitivityParameters findTransitivityParametersByJobId(long jobId) {
+	public TransitivityParameters findTransitivityParametersByBatchJobId(long jobId) {
 		TransitivityParameters retVal = null;
 		BatchJob job =
 			getTransJobController().findTransitivityJob(jobId);

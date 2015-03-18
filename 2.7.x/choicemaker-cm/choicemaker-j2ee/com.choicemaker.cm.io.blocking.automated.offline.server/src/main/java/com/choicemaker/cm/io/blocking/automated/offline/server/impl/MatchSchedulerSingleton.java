@@ -103,7 +103,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	}
 
 	@Override
-	protected OabaParametersController getParametersController() {
+	protected OabaParametersController getOabaParametersController() {
 		return paramsController;
 	}
 
@@ -145,7 +145,7 @@ public class MatchSchedulerSingleton extends AbstractSchedulerSingleton {
 
 		final long jobId = batchJob.getId();
 		OabaParameters params =
-			getParametersController().findOabaParametersByBatchJobId(jobId);
+			getOabaParametersController().findOabaParametersByBatchJobId(jobId);
 		ServerConfiguration serverConfig =
 			getServerController().findServerConfigurationByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();

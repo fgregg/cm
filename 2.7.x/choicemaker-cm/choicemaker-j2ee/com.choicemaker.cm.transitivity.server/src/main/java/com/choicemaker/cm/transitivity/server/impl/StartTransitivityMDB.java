@@ -22,7 +22,6 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Queue;
 
-import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
@@ -161,13 +160,10 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 					OabaFileUtils.getComparisonArrayGroupFactoryOS(transJob,
 							numProcessors));
 
-		// Cast the current transitivity parameters as OABA parameters.
-		OabaParameters oabaParams = params.asOabaParameters();
-
 		// Set the source for the staging records
 		ISerializableRecordSource staging = null;
 		try {
-			staging = this.getRecordSourceController().getStageRs(oabaParams);
+			staging = this.getRecordSourceController().getStageRs(params);
 		} catch (Exception e) {
 			String msg = "Unable to staging record source: " + e.toString();
 			getLogger().severe(msg);
@@ -177,7 +173,7 @@ public class StartTransitivityMDB extends AbstractTransitivityMDB {
 		// Set the source for the master records
 		ISerializableRecordSource master = null;
 		try {
-			master = this.getRecordSourceController().getMasterRs(oabaParams);
+			master = this.getRecordSourceController().getMasterRs(params);
 		} catch (Exception e) {
 			String msg = "Unable to master record source: " + e.toString();
 			getLogger().severe(msg);

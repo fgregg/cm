@@ -159,18 +159,6 @@ public class OabaParametersEntity extends AbstractParametersEntity implements
 		return modelConfigName;
 	}
 
-	@Deprecated
-	@Override
-	public String getStageModel() {
-		return getModelConfigurationName();
-	}
-
-	@Deprecated
-	@Override
-	public String getMasterModel() {
-		return getModelConfigurationName();
-	}
-
 	@Override
 	public long getStageRsId() {
 		return stageRsId;

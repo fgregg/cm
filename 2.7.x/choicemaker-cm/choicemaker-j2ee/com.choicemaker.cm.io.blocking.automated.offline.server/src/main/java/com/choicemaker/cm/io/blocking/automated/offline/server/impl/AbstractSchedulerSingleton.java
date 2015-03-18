@@ -109,7 +109,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 	protected abstract BatchJobController getJobController();
 
-	protected abstract OabaParametersController getParametersController();
+	protected abstract OabaParametersController getOabaParametersController();
 
 	protected abstract ServerConfigurationController getServerController();
 
@@ -153,7 +153,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 					final long jobId = sd.jobID;
 					batchJob = getJobController().findBatchJob(jobId);
 					OabaParameters params =
-						getParametersController().findOabaParametersByBatchJobId(
+						getOabaParametersController().findOabaParametersByBatchJobId(
 								jobId);
 					OabaSettings oabaSettings =
 						getSettingsController().findOabaSettingsByJobId(jobId);
@@ -383,7 +383,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 
 			// set up the record source arrays.
 			OabaParameters oabaParams =
-				getParametersController().findOabaParametersByBatchJobId(jobId);
+				getOabaParametersController().findOabaParametersByBatchJobId(jobId);
 			String modelName = oabaParams.getModelConfigurationName();
 			ImmutableProbabilityModel ipm =
 				PMManager.getImmutableModelInstance(modelName);
@@ -471,7 +471,7 @@ public abstract class AbstractSchedulerSingleton implements Serializable {
 		final long jobId = sd.jobID;
 		final BatchJob batchJob = getJobController().findBatchJob(jobId);
 		final OabaParameters params =
-			getParametersController().findOabaParametersByBatchJobId(jobId);
+			getOabaParametersController().findOabaParametersByBatchJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();
 		final ImmutableProbabilityModel model =
 			PMManager.getModelInstance(modelConfigId);

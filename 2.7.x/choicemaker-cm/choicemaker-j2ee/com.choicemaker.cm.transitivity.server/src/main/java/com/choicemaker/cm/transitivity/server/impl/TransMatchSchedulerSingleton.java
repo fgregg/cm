@@ -98,6 +98,16 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	@Resource(lookup = "java:/choicemaker/urm/jms/transMatcherQueue")
 	private Queue transMatcherQueue;
 
+	// -- Accessors
+
+	protected OabaParametersController getParametersControllerInternal() {
+		return paramsController;
+	}
+
+	protected TransitivityParametersController getTransitivityParametersController() {
+		return transitivityParametersController;
+	}
+
 	// -- Callbacks
 
 	@Override
@@ -106,8 +116,9 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 	}
 
 	@Override
-	protected OabaParametersController getParametersController() {
-		return paramsController;
+	protected OabaParametersController getOabaParametersController() {
+		return new CombinedParametersController(paramsController,
+				transitivityParametersController);
 	}
 
 	@Override
@@ -140,10 +151,6 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		return jmsTrace;
 	}
 
-	protected TransitivityParametersController getTransitivityParametersController() {
-		return transitivityParametersController;
-	}
-
 	@Override
 	protected void cleanUp(BatchJob batchJob, OabaJobMessage sd)
 			throws BlockingException {
@@ -152,7 +159,7 @@ public class TransMatchSchedulerSingleton extends AbstractSchedulerSingleton {
 		final long jobId = batchJob.getId();
 		TransitivityParameters params =
 			getTransitivityParametersController()
-					.findTransitivityParametersByJobId(jobId);
+					.findTransitivityParametersByBatchJobId(jobId);
 		ServerConfiguration serverConfig =
 			getServerController().findServerConfigurationByJobId(jobId);
 		final String modelConfigId = params.getModelConfigurationName();

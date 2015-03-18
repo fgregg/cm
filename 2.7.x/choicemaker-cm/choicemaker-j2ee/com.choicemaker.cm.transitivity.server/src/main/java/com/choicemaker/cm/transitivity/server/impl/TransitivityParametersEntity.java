@@ -69,20 +69,19 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 			TransitivityParameters tp, OabaParameters predecessorParams) {
 		assert pw != null;
 		assert tp != null;
-		final OabaParameters tpOaba = tp.asOabaParameters();
 		if (predecessorParams != null) {
-			if (predecessorParams.equals(tpOaba)) {
-				String s = dump(COMMON_DUMP_TAG, tpOaba);
+			if (predecessorParams.equals(tp)) {
+				String s = dump(COMMON_DUMP_TAG, tp);
 				pw.println(s);
 			} else {
 				String s = dump(OABA_ONLY_DUMP_TAG, predecessorParams);
 				pw.println(s);
-				dump(TRANS_ONLY_DUMP_TAG, tpOaba);
+				dump(TRANS_ONLY_DUMP_TAG, tp);
 				pw.println(s);
 			}
 		} else {
 			pw.println(TRANS_ONLY_DUMP_TAG + ": null OABA precedessor params");
-			String s = dump(TRANS_ONLY_DUMP_TAG, tpOaba);
+			String s = dump(TRANS_ONLY_DUMP_TAG, tp);
 			pw.println(s);
 		}
 	}
@@ -175,84 +174,6 @@ public class TransitivityParametersEntity extends AbstractParametersEntity
 		if (graphPropertyName == null) {
 			throw new IllegalArgumentException("null graph-property");
 		}
-	}
-
-	@Override
-	public OabaParameters asOabaParameters() {
-		final TransitivityParameters delegate = this;
-		return new OabaParameters() {
-			private static final long serialVersionUID = 271L;
-
-			@Override
-			public long getId() {
-				return delegate.getId();
-			}
-
-			@Override
-			public String getUUID() {
-				return delegate.getUUID();
-			}
-
-			@Override
-			public String getModelConfigurationName() {
-				return delegate.getModelConfigurationName();
-			}
-
-			@Override
-			public OabaLinkageType getOabaLinkageType() {
-				return delegate.getOabaLinkageType();
-			}
-
-			@Override
-			public int getOptLock() {
-				return delegate.getOptLock();
-			}
-
-			@Override
-			public float getLowThreshold() {
-				return delegate.getLowThreshold();
-			}
-
-			@Override
-			public boolean isPersistent() {
-				return delegate.isPersistent();
-			}
-
-			@Override
-			public float getHighThreshold() {
-				return delegate.getHighThreshold();
-			}
-
-			@Override
-			public long getStageRsId() {
-				return delegate.getStageRsId();
-			}
-
-			@Override
-			public String getStageRsType() {
-				return delegate.getStageRsType();
-			}
-
-			@Override
-			public Long getMasterRsId() {
-				return delegate.getMasterRsId();
-			}
-
-			@Override
-			public String getMasterRsType() {
-				return delegate.getMasterRsType();
-			}
-
-			@Override
-			public String getStageModel() {
-				return delegate.getModelConfigurationName();
-			}
-
-			@Override
-			public String getMasterModel() {
-				return delegate.getModelConfigurationName();
-			}
-		};
 	}
 
 	@Override

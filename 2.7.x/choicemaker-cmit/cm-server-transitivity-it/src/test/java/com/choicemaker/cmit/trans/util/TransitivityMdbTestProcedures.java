@@ -144,7 +144,7 @@ public class TransitivityMdbTestProcedures {
 		final OabaParametersController oabaParamsController =
 			ta.getOabaParamsController();
 		final OabaParameters oabaParams =
-			oabaParamsController.findOabaParametersByJobId(oabaJobId);
+			oabaParamsController.findOabaParametersByBatchJobId(oabaJobId);
 		te.add(oabaParams);
 
 		// Set up parameters for transitivity analysis

@@ -15,10 +15,15 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IComparableSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
@@ -26,6 +31,10 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecord2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ComparableMRSink;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.MatchWriterMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 
 /**
@@ -55,8 +64,68 @@ public class MatcherMDB extends AbstractMatcher {
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
 			+ MatcherMDB.class.getName());
 
+	// -- Injected instance data
+
+	@EJB
+	private OabaJobController jobController;
+
+	@EJB
+	private OabaSettingsController oabaSettingsController;
+
+	@EJB
+	private OabaParametersController paramsController;
+
+	@EJB
+	private ProcessingController processingController;
+
+	@EJB
+	private ServerConfigurationController serverController;
+
+	@EJB
+	private OperationalPropertyController propController;
+
+	@Inject
+	private JMSContext jmsContext;
+
 	@Resource(lookup = "java:/choicemaker/urm/jms/matchSchedulerQueue")
 	private Queue matchSchedulerQueue;
+
+	// -- Call-back methods
+
+	@Override
+	protected OabaJobController getJobController() {
+		return jobController;
+	}
+
+	@Override
+	protected OabaParametersController getOabaParametersController() {
+		return paramsController;
+	}
+
+	@Override
+	protected ProcessingController getProcessingController() {
+		return processingController;
+	}
+
+	@Override
+	protected ServerConfigurationController getServerController() {
+		return serverController;
+	}
+
+	@Override
+	protected OabaSettingsController getSettingsController() {
+		return oabaSettingsController;
+	}
+
+	@Override
+	protected OperationalPropertyController getPropertyController() {
+		return propController;
+	}
+
+	@Override
+	protected JMSContext getJMSContext() {
+		return jmsContext;
+	}
 
 	@Override
 	protected Logger getLogger() {
