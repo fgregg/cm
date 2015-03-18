@@ -12,9 +12,10 @@ import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 
 /**
- * This class is reused in other modules to perform a test linkage or deduplication.
- * It defers from {@link MatchDedupMdbIT} only in that it lacks an Arquillian
- * shrink-wrap method and an Arquillian <code>RunWith</code> directive.
+ * This class is reused in other modules to perform a test of linkage or
+ * deduplication. It defers from {@link MatchDedupMdbIT} only in that it lacks
+ * an Arquillian shrink-wrap method and an Arquillian <code>RunWith</code>
+ * directive.
  * 
  * @author rphall
  */
