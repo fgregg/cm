@@ -62,7 +62,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanU
 import com.choicemaker.cm.io.blocking.automated.offline.services.GenericDedupService;
 
 /**
- * This message bean handles the deduping of match records.
+ * This message bean deduplicates match records.
  * 
  * This version loads one chunk data into memory and different processors handle
  * different trees of the same chunk. There are N matches files, where N is the
