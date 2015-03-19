@@ -81,6 +81,6 @@ public interface OabaProcessing extends BatchProcessing {
 
 	float PCT_OUTPUT_DEDUP_MATCHES = 0.93f;
 	float PCT_MERGE_DEDUP_MATCHES = 0.96f;
-	float PCT_DONE_DEDUP_MATCHES = 0.99f;
+	float PCT_DONE_DEDUP_MATCHES = 0.98f;
 
 }
