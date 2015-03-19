@@ -140,6 +140,20 @@ public interface OperationalPropertyNames {
 	String PN_TRANSITIVITY_CACHED_PAIRS_FILE = "TRANS_CACHED_PAIRS_FILE";
 
 	/**
+	 * The name of a file storing the cached, group-wise results of an
+	 * transitivity processing job. The value is defined in
+	 * <ul>
+	 * <li>TransSerializerMsgBean (URM)</li>
+	 * </ul>
+	 * 
+	 * It is used in transitivity and non-transitivity classes
+	 * <ul>
+	 * <li>???</li>
+	 * </ul>
+	 */
+	String PN_TRANSITIVITY_CACHED_GROUPS_FILE = "TRANS_CACHED_GROUPS_FILE";
+
+	/**
 	 * The name of a boolean-valued property that is used to indicate that a
 	 * failed or aborted job should clean up temporary resources. The value is
 	 * defined in
