@@ -100,7 +100,7 @@ public class TransitivityProcessingEvent extends BatchProcessingEvent implements
 	public static final TransitivityProcessingEvent DONE_DEDUP_MATCHES =
 		new TransitivityProcessingEvent(TransitivityEvent.DONE_DEDUP_MATCHES);
 
-	public static final TransitivityProcessingEvent DONE_TRANSANALYSIS =
-		new TransitivityProcessingEvent(TransitivityEvent.DONE_TRANSANALYSIS);
+	public static final TransitivityProcessingEvent DONE_TRANSITIVITY_PAIRWISE =
+		new TransitivityProcessingEvent(TransitivityEvent.DONE_TRANSITIVITY_PAIRWISE);
 
 }

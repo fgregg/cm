@@ -101,48 +101,9 @@ enum TransitivityEvent {
 	MERGE_DEDUP_MATCHES(EVT_MERGE_DEDUP_MATCHES, PCT_MERGE_DEDUP_MATCHES),
 	DONE_DEDUP_MATCHES(EVT_DONE_DEDUP_MATCHES, PCT_DONE_DEDUP_MATCHES),
 
-	DONE_TRANSANALYSIS(TransitivityProcessing.EVT_DONE,
-			PCT_DONE);
-
-//	private static final Map<Integer, TransitivityEvent> map = new HashMap<>();
-//	static {
-//		map.put(EVT_INIT, INIT_OABA);
-//		map.put(EVT_CREATE_REC_VAL, CREATE_REC_VAL);
-//		map.put(EVT_DONE_REC_VAL, DONE_REC_VAL);
-//		map.put(EVT_BLOCK_BY_ONE_COLUMN, BLOCK_BY_ONE_COLUMN);
-//		map.put(EVT_DONE_BLOCK_BY_ONE_COLUMN, DONE_BLOCK_BY_ONE_COLUMN);
-//		map.put(EVT_OVERSIZED_TRIMMING, OVERSIZED_TRIMMING);
-//		map.put(EVT_DONE_OVERSIZED_TRIMMING, DONE_OVERSIZED_TRIMMING);
-//		map.put(EVT_DEDUP_BLOCKS, DEDUP_BLOCKS);
-//		map.put(EVT_DONE_DEDUP_BLOCKS, DONE_DEDUP_BLOCKS);
-//		map.put(EVT_DEDUP_OVERSIZED_EXACT, DEDUP_OVERSIZED_EXACT);
-//		map.put(EVT_DONE_DEDUP_OVERSIZED_EXACT, DONE_DEDUP_OVERSIZED_EXACT);
-//		map.put(EVT_DEDUP_OVERSIZED, DEDUP_OVERSIZED);
-//		map.put(EVT_DONE_DEDUP_OVERSIZED, DONE_TRANS_DEDUP_OVERSIZED);
-//		map.put(EVT_DONE_REVERSE_TRANSLATE_BLOCK, DONE_REVERSE_TRANSLATE_BLOCK);
-//		map.put(EVT_DONE_REVERSE_TRANSLATE_OVERSIZED,
-//				DONE_REVERSE_TRANSLATE_OVERSIZED);
-//
-//		map.put(EVT_CREATE_CHUNK_IDS, CREATE_CHUNK_IDS);
-//		map.put(EVT_CREATE_CHUNK_OVERSIZED_IDS, CREATE_CHUNK_OVERSIZED_IDS);
-//		map.put(EVT_DONE_CREATE_CHUNK_IDS, DONE_CREATE_CHUNK_IDS);
-//		map.put(EVT_DONE_CREATE_CHUNK_DATA, DONE_CREATE_CHUNK_DATA);
-//
-//		map.put(EVT_ALLOCATE_CHUNKS, ALLOCATE_CHUNKS);
-//		map.put(EVT_DONE_ALLOCATE_CHUNKS, DONE_ALLOCATE_CHUNKS);
-//		map.put(EVT_MATCHING_DATA, MATCHING_DATA);
-//		map.put(EVT_DONE_MATCHING_DATA, DONE_MATCHING_DATA);
-//
-//		map.put(EVT_OUTPUT_DEDUP_MATCHES, OUTPUT_DEDUP_MATCHES);
-//		map.put(EVT_MERGE_DEDUP_MATCHES, MERGE_DEDUP_MATCHES);
-//		map.put(EVT_DONE_DEDUP_MATCHES, DONE_DEDUP_MATCHES);
-//		map.put(TransitivityProcessing.EVT_DONE_TRANSANALYSIS,
-//				DONE_TRANSANALYSIS);
-//	}
-//
-//	public static TransitivityEvent getTransivityEvent(int eventId) {
-//		return map.get(eventId);
-//	}
+	DONE_TRANSITIVITY_PAIRWISE(
+			TransitivityProcessing.EVT_TRANSITIVITY_PAIRWISE,
+			TransitivityProcessing.PCT_TRANSITIVITY_PAIRWISE);
 
 	private final int eventId;
 	private final float percentComplete;
@@ -163,7 +124,7 @@ enum TransitivityEvent {
 	public float getPercentComplete() {
 		return percentComplete;
 	}
-	
+
 	public String getEventName() {
 		return name();
 	}

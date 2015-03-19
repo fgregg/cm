@@ -21,9 +21,11 @@ public interface TransitivityProcessing extends OabaProcessing {
 	// -- Ordered events
 
 	int EVT_DONE_TRANS_DEDUP_OVERSIZED = EVT_DONE_DEDUP_OVERSIZED;
+	int EVT_TRANSITIVITY_PAIRWISE = 255;
 
 	// -- Completion estimates
 
 	float PCT_DONE_TRANS_DEDUP_OVERSIZED = PCT_DONE_DEDUP_OVERSIZED;
+	float PCT_TRANSITIVITY_PAIRWISE = 0.99f;
 
 }
