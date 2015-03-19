@@ -10,11 +10,16 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_GROUPS_FILE;
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
+import static com.choicemaker.cm.batch.BatchJobStatus.ABORT_REQUESTED;
+
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,36 +30,47 @@ import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicPublisher;
-import javax.jms.TopicSession;
-import javax.naming.Context;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.AnalysisResultFormat;
+import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.IGraphProperty;
+import com.choicemaker.cm.args.ProcessingEvent;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
+import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.batch.ProcessingEventLog;
+import com.choicemaker.cm.io.blocking.automated.offline.impl.MatchRecord2CompositeSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerializer;
 import com.choicemaker.cm.transitivity.core.TransitivitySortType;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
+import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
+import com.choicemaker.cm.transitivity.server.util.ClusteringIteratorFactory;
+import com.choicemaker.cm.transitivity.util.CompositeEntityIterator;
+import com.choicemaker.cm.transitivity.util.CompositeEntitySource;
 import com.choicemaker.cm.transitivity.util.CompositeTextSerializer;
 import com.choicemaker.cm.transitivity.util.CompositeXMLSerializer;
-import com.choicemaker.cm.urm.config.AnalysisResultFormat;
-import com.choicemaker.cm.urm.exceptions.ConfigException;
 
 /**
  * @version $Revision: 1.3 $ $Date: 2010/10/21 17:42:26 $
  */
-// @SuppressWarnings({ "rawtypes" })
-@MessageDriven(activationConfig = {
-	@ActivationConfigProperty(
-			propertyName = "destinationLookup",
-			propertyValue = "java:/choicemaker/urm/jms/transSerializationQueue"),
-	@ActivationConfigProperty(propertyName = "destinationType",
-			propertyValue = "javax.jms.Queue") })
+@MessageDriven(
+		activationConfig = {
+				@ActivationConfigProperty(propertyName = "maxSession",
+						propertyValue = "1"), // Singleton (JBoss only)
+				@ActivationConfigProperty(
+						propertyName = "destinationLookup",
+						propertyValue = "java:/choicemaker/urm/jms/transSerializationQueue"),
+				@ActivationConfigProperty(propertyName = "destinationType",
+						propertyValue = "javax.jms.Queue") })
+@SuppressWarnings({ "rawtypes" })
 public class TransSerializerMsgBean implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -94,6 +110,21 @@ public class TransSerializerMsgBean implements MessageListener, Serializable {
 	private EntityManager em;
 
 	@EJB
+	private TransitivityJobController jobController;
+
+	@EJB
+	private OabaSettingsController oabaSettingsController;
+
+	@EJB
+	private TransitivityParametersController paramsController;
+
+	@EJB
+	private ProcessingController processingController;
+
+	@EJB
+	private ServerConfigurationController serverController;
+
+	@EJB
 	private OperationalPropertyController propController;
 
 	@Override
@@ -113,7 +144,7 @@ public class TransSerializerMsgBean implements MessageListener, Serializable {
 					OabaJobMessage data = (OabaJobMessage) o;
 					long jobId = data.jobID;
 					batchJob = jobController.findTransitivityJob(jobId);
-					handleMerge(batchJob);
+					_onMessage(batchJob);
 				} else {
 					log.warning("wrong message body: " + o.getClass().getName());
 				}
@@ -137,68 +168,53 @@ public class TransSerializerMsgBean implements MessageListener, Serializable {
 		}
 
 		final long jobId = batchJob.getId();
-		final ServerConfiguration serverConfig =
-			serverController.findServerConfigurationByJobId(jobId);
+		final TransitivityParameters params =
+			this.paramsController.findTransitivityParametersByBatchJobId(jobId);
 		final ProcessingEventLog processingEntry =
-			processingController.getProcessingLog(transJob);
+			processingController.getProcessingLog(batchJob);
+		final IGraphProperty graph = params.getGraphProperty();
+		final AnalysisResultFormat format = params.getAnalysisResultFormat();
+		final String modelConfigId = params.getModelConfigurationName();
 
 		try {
 			if (log.isLoggable(Level.FINE)) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
-				pw.println("received TransSerializeData jobId '" + jobId + "'");
-				pw.println("  externalId '" + batchJob.getExternalId() + "'");
-				pw.println("  groupMatchType '" + tsd.groupMatchType + "'");
-				pw.println("  serializationType '" + tsd.serializationType
-						+ "'");
+				pw.println("Transitivity serialization jobId: " + jobId);
+				pw.println("Trans serialization groupProperty: '"
+						+ graph.getName() + "'");
+				pw.println("Trans serialization resultFormat: '" + format + "'");
 				String s = sw.toString();
 				log.fine(s);
 			}
-			batchJob = Single.getInst().findCmsJobById(tsd.ownId);
 
-			if (batchJob.isAbortRequested()) {
+			final BatchJobStatus jobStatus = batchJob.getStatus();
+			if (jobStatus == ABORT_REQUESTED) {
 				batchJob.markAsAborted();
-				log.fine("Trans serialization job is aborted,trans id "
-						+ tsd.transId + " ownId " + tsd.ownId + " externalId"
-						+ tsd.externalId);
+				log.fine("Transitivity serialization job marked as aborted: "
+						+ batchJob);
 				return;
 			}
-
-			TransitivityJob trJob =
-				Single.getInst().findTransJobById(em,
-						TransitivityJobEntity.class, tsd.batchId);
-			if (!trJob.getStatus().equals(BatchJobStatus.COMPLETED)) {
-				log.severe("transitivity job " + tsd.batchId
-						+ " is not complete");
-				batchJob.markAsFailed();
-				return;
-			}
-			batchJob.updateStepInfo(20);
 
 			final String cachedPairsFileName =
-				propController.getJobProperty(trJob,
+				propController.getJobProperty(batchJob,
 						PN_TRANSITIVITY_CACHED_PAIRS_FILE);
 			log.info("Cached transitivity pairs file: " + cachedPairsFileName);
 
-			@SuppressWarnings("unused")
 			String analysisResultFileName =
-				cachedPairsFileName.substring(0,
-						cachedPairsFileName.lastIndexOf("."))
-						+ "trans_analysis";
+				TransitivityFileUtils.getGroupResultFileName(batchJob);
+			propController.setJobProperty(batchJob,
+					PN_TRANSITIVITY_CACHED_GROUPS_FILE, analysisResultFileName);
 
 			MatchRecord2CompositeSource mrs =
 				new MatchRecord2CompositeSource(cachedPairsFileName);
 
 			// TODO: replace by extension point
-			log.fine("create composite entity iterators for "
-					+ tsd.groupMatchType);
-
 			CompositeEntitySource ces = new CompositeEntitySource(mrs);
 			CompositeEntityIterator ceIter = new CompositeEntityIterator(ces);
-			String name = tsd.groupMatchType;
+			String name = graph.getName();
 			ClusteringIteratorFactory f =
 				ClusteringIteratorFactory.getInstance();
-			@SuppressWarnings("unused")
 			Iterator clusteringIterator;
 			try {
 				clusteringIterator = f.createClusteringIterator(name, ceIter);
@@ -209,77 +225,34 @@ public class TransSerializerMsgBean implements MessageListener, Serializable {
 			}
 
 			TransitivityResult tr =
-				new TransitivityResult(trJob.getModel(), trJob.getDiffer(),
-						trJob.getMatch(), clusteringIterator);
+				new TransitivityResult(modelConfigId, params.getLowThreshold(),
+						params.getHighThreshold(), clusteringIterator);
 
-			batchJob.updateStepInfo(40);
-			log.fine("serialize to " + tsd.serializationType + "format");
+			log.fine("serialize to " + format + "format");
 
 			TransitivityResultCompositeSerializer sr =
-				getTransitivityResultSerializer(tsd.serializationType);
+				getTransitivityResultSerializer(format);
 			sr.serialize(tr, analysisResultFileName, DEFAULT_MAX_RECORD_COUNT);
 
+			final Date now = new Date();
+			final String info = null;
+			sendToUpdateStatus(batchJob, BatchProcessingEvent.DONE, now, info);
+			processingEntry
+					.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
+
 		} catch (Exception e) {
 			log.severe(e.toString());
-			try {
-				if (batchJob != null)
-					batchJob.markAsFailed();
-			} catch (RemoteException e1) {
-				log.severe(e1.toString());
+			if (batchJob != null) {
+				batchJob.markAsFailed();
 			}
-			return;
 		}
-
-		publishStatus(new Long(tsd.ownId));
-		try {
-			if (batchJob != null)
-				batchJob.markAsCompleted();
-		} catch (RemoteException e1) {
-			log.severe(e1.toString());
-		}
-		log.fine(">>> onMessage");
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
-
 	}
 
-	@SuppressWarnings("unused")
-	private void publishStatus(Long ownId) {
-		TopicConnection conn = null;
-		TopicSession session = null;
-		try {
-			conn =
-				Single.getInst().getTopicConnectionFactory()
-						.createTopicConnection();
-			session =
-				conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-			conn.start();
-
-			Context ctx = Single.getInst().getInitialContext();
-			Topic topic = (Topic) ctx.lookup(Single.TRANS_SERIAL_STATUS_TOPIC);
-
-			TopicPublisher pub = session.createPublisher(topic);
-			ObjectMessage notifMsg = session.createObjectMessage(ownId);
-			pub.publish(notifMsg);
-			pub.close();
-		} catch (Exception e) {
-			log.severe(e.toString());
-		} finally {
-			if (session != null) {
-				try {
-					session.close();
-				} catch (Exception e) {
-					log.severe(e.toString());
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (Exception e) {
-					log.severe(e.toString());
-				}
-			}
-		}
-		log.fine("status is published");
+	protected void sendToUpdateStatus(BatchJob job, ProcessingEvent event,
+			Date timestamp, String info) {
+		processingController.updateStatusWithNotification(job, event,
+				timestamp, info);
 	}
 
 }

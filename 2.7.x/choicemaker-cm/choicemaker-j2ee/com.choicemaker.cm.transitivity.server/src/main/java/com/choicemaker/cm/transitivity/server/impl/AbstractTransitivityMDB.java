@@ -21,6 +21,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import com.choicemaker.cm.args.BatchProcessingEvent;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.args.TransitivityParameters;
@@ -38,7 +39,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobContro
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
-import com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityConfigurationController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
@@ -213,7 +213,7 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 	}
 
 	protected void updateTransivitityProcessingStatus(BatchJob job,
-			TransitivityProcessingEvent event, Date timestamp, String info) {
+			BatchProcessingEvent event, Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
 	}
@@ -230,7 +230,7 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 			ServerConfiguration serverConfig, ImmutableProbabilityModel model)
 			throws BlockingException;
 
-	protected abstract TransitivityProcessingEvent getCompletionEvent();
+	protected abstract BatchProcessingEvent getCompletionEvent();
 
 	protected abstract void notifyProcessingCompleted(OabaJobMessage data);
 

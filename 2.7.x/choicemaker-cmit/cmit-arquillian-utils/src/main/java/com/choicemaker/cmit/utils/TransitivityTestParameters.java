@@ -15,6 +15,8 @@ public interface TransitivityTestParameters extends OabaTestParameters {
 
 	Queue getTransMatchDedupQueue();
 
+	Queue getTransSerializationQueue();
+
 //	AnalysisResultFormat getAnalysisResultFormat();
 //
 //	String getGraphPropertyName();

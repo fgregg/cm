@@ -21,6 +21,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import com.choicemaker.cm.args.BatchProcessingEvent;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
@@ -32,7 +33,6 @@ import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
-import com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessingEvent;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
@@ -199,7 +199,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 				processingLog);
 	}
 
-	protected void updateOabaProcessingStatus(BatchJob job, OabaProcessingEvent event,
+	protected void updateOabaProcessingStatus(BatchJob job, BatchProcessingEvent event,
 			Date timestamp, String info) {
 		getProcessingController().updateStatusWithNotification(job, event,
 				timestamp, info);
@@ -216,7 +216,7 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
 			ImmutableProbabilityModel model) throws BlockingException;
 
-	protected abstract OabaProcessingEvent getCompletionEvent();
+	protected abstract BatchProcessingEvent getCompletionEvent();
 
 	protected abstract void notifyProcessingCompleted(OabaJobMessage data);
 

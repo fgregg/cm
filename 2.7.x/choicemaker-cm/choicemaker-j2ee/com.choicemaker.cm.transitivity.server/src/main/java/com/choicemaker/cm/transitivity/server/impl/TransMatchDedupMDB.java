@@ -10,7 +10,8 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
-import java.io.Serializable;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANSITIVITY_PAIRWISE;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -19,19 +20,19 @@ import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
+import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.ServerConfiguration;
+import com.choicemaker.cm.args.TransitivityParameters;
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.batch.ProcessingController;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Sink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2SinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IMatchRecord2Source;
@@ -41,6 +42,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.OabaFileUtils;
+import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersController;
 
@@ -61,7 +63,7 @@ import com.choicemaker.cm.transitivity.server.ejb.TransitivityParametersControll
 						propertyValue = "java:/choicemaker/urm/jms/transMatchDedupQueue"),
 				@ActivationConfigProperty(propertyName = "destinationType",
 						propertyValue = "javax.jms.Queue") })
-public class TransMatchDedupMDB implements MessageListener, Serializable {
+public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 
 	private static final long serialVersionUID = 2711L;
 	private static final Logger log = Logger.getLogger(TransMatchDedupMDB.class
@@ -91,52 +93,18 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 	private Queue transSerializationQueue;
 
 	@Override
-	public void onMessage(Message inMessage) {
-		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
-		ObjectMessage msg = null;
-
-		log.fine("MatchDedupMDB In onMessage");
-
-		BatchJob batchJob = null;
-		try {
-			if (inMessage instanceof ObjectMessage) {
-				msg = (ObjectMessage) inMessage;
-				Object o = msg.getObject();
-
-				if (o instanceof OabaJobMessage) {
-					OabaJobMessage data = (OabaJobMessage) o;
-					long jobId = data.jobID;
-					batchJob = jobController.findTransitivityJob(jobId);
-					handleMerge(batchJob);
-				} else {
-					log.warning("wrong message body: " + o.getClass().getName());
-				}
-
-			} else {
-				log.warning("wrong type: " + inMessage.getClass().getName());
-			}
-
-		} catch (Exception e) {
-			log.severe(e.toString());
-			if (batchJob != null) {
-				batchJob.markAsFailed();
-			}
-		}
-		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
+	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
+			TransitivityParameters params, OabaSettings oabaSettings,
+			ProcessingEventLog processingLog, ServerConfiguration serverConfig,
+			ImmutableProbabilityModel model) throws BlockingException {
+		handleMerge(batchJob, serverConfig, processingLog);
 	}
 
-	/**
-	 * This method handles merging individual processor match files.
-	 */
-	private void handleMerge(final BatchJob transJob) throws BlockingException {
+	private void handleMerge(final BatchJob transJob,
+			final ServerConfiguration serverConfig,
+			final ProcessingEventLog processingEntry) throws BlockingException {
 
 		log.fine("in handleMerge");
-
-		final long jobId = transJob.getId();
-		final ServerConfiguration serverConfig =
-			serverController.findServerConfigurationByJobId(jobId);
-		final ProcessingEventLog processingEntry =
-			processingController.getProcessingLog(transJob);
 
 		// get the number of processors
 		final int numProcessors = serverConfig.getMaxChoiceMakerThreads();
@@ -167,7 +135,7 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 
 		// final sink
 		IMatchRecord2Sink finalSink =
-			OabaFileUtils.getCompositeMatchSink(transJob);
+			TransitivityFileUtils.getCompositeTransMatchSink(transJob);
 
 		IMatchRecord2SinkSourceFactory factory =
 			OabaFileUtils.getMatchChunkFactory(transJob);
@@ -248,6 +216,27 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 			Date timestamp, String info) {
 		processingController.updateStatusWithNotification(job, event,
 				timestamp, info);
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return log;
+	}
+
+	@Override
+	protected Logger getJmsTrace() {
+		return jmsTrace;
+	}
+
+	@Override
+	protected BatchProcessingEvent getCompletionEvent() {
+		return DONE_TRANSITIVITY_PAIRWISE;
+	}
+
+	@Override
+	protected void notifyProcessingCompleted(OabaJobMessage data) {
+		MessageBeanUtils.sendStartData(data, getJmsContext(),
+				transSerializationQueue, getLogger());
 	}
 
 }

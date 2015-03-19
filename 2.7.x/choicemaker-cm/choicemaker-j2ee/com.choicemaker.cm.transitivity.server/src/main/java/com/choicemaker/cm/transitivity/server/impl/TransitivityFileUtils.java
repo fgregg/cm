@@ -34,6 +34,8 @@ public class TransitivityFileUtils {
 	public static final String BASENAME_TRANSMATCH_STORE_INDEXED =
 		"transMatch_";
 
+	public static final String NAMESTEM_TRANSANALYSIS = "trans_analysis";
+
 	static final long serialVersionUID = 271;
 
 	protected static String getCompositeTransMatchFileName(BatchJob job) {
@@ -45,8 +47,7 @@ public class TransitivityFileUtils {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static IMatchRecord2Sink getCompositeTransMatchSink(BatchJob job,
-			long id) {
+	public static IMatchRecord2Sink getCompositeTransMatchSink(BatchJob job) {
 		String fileName = getCompositeTransMatchFileName(job);
 		return new MatchRecord2CompositeSink(fileName, TEXT_SUFFIX,
 				MAX_FILE_SIZE);
@@ -65,6 +66,16 @@ public class TransitivityFileUtils {
 			BatchJob job) {
 		String wd = getWorkingDir(job);
 		return new BlockSinkSourceFactory(wd, "transBlocks", "dat");
+	}
+
+	public static String getGroupResultFileName(BatchJob job) {
+		String wd = getWorkingDir(job);
+		assert wd.endsWith(FILE_SEPARATOR);
+		String id = formatJobId(job.getId());
+		String retVal =
+			wd + BASENAME_TRANSMATCH_STORE_INDEXED + id
+					+ NAMESTEM_TRANSANALYSIS;
+		return retVal;
 	}
 
 	protected TransitivityFileUtils() {

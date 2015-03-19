@@ -1,7 +1,7 @@
 package com.choicemaker.cmit.trans;
 
-import static com.choicemaker.cm.args.BatchProcessing.EVT_DONE;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessing.EVT_TRANSITIVITY_PAIRWISE;
+import static com.choicemaker.cm.transitivity.core.TransitivityProcessing.PCT_TRANSITIVITY_PAIRWISE;
 
 import java.util.logging.Logger;
 
@@ -13,6 +13,7 @@ import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cm.transitivity.server.impl.TransSerializerMsgBean;
 import com.choicemaker.cmit.trans.util.TransitivityDeploymentUtils;
 import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
@@ -21,8 +22,8 @@ import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 public class TransMatchDedupMdbIT extends
 		AbstractTransitivityMdbTest<SimplePersonSqlServerTestConfiguration> {
 
-	private static final Logger logger = Logger.getLogger(TransMatchDedupMdbIT.class
-			.getName());
+	private static final Logger logger = Logger
+			.getLogger(TransMatchDedupMdbIT.class.getName());
 
 	public static final boolean TESTS_AS_EJB_MODULE = false;
 
@@ -34,20 +35,21 @@ public class TransMatchDedupMdbIT extends
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		Class<?>[] removedClasses = { };
+		Class<?>[] removedClasses = { TransSerializerMsgBean.class };
 		return TransitivityDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}
 
 	public TransMatchDedupMdbIT() {
-		super(LOG_SOURCE, logger, EVT_DONE, PCT_DONE,
+		super(LOG_SOURCE, logger, EVT_TRANSITIVITY_PAIRWISE,
+				PCT_TRANSITIVITY_PAIRWISE,
 				SimplePersonSqlServerTestConfiguration.class,
-				BatchProcessingPhase.FINAL);
+				BatchProcessingPhase.INTERMEDIATE);
 	}
 
 	@Override
 	public final Queue getResultQueue() {
-		return null;
+		return getTransSerializationQueue();
 	}
 
 	/** Stubbed implementation that does not check the working directory */

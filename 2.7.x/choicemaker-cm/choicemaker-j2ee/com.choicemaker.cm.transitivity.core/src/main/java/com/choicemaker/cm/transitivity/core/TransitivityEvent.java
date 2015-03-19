@@ -1,7 +1,6 @@
 package com.choicemaker.cm.transitivity.core;
 
 import static com.choicemaker.cm.args.BatchProcessing.EVT_INIT;
-import static com.choicemaker.cm.args.BatchProcessing.PCT_DONE;
 import static com.choicemaker.cm.args.BatchProcessing.PCT_INIT;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_ALLOCATE_CHUNKS;
 import static com.choicemaker.cm.io.blocking.automated.offline.core.OabaProcessing.EVT_BLOCK_BY_ONE_COLUMN;

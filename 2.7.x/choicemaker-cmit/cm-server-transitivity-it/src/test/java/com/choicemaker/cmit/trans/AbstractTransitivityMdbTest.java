@@ -169,6 +169,9 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	@Resource(lookup = "choicemaker/urm/jms/transMatchDedupQueue")
 	private Queue transMatchDedupQueue;
 	
+	@Resource(lookup = "choicemaker/urm/jms/transSerializationQueue")
+	private Queue transSerializationQueue;
+	
 	@Inject
 	private JMSContext jmsContext;
 
@@ -527,6 +530,11 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 	@Override
 	public final Queue getTransMatchDedupQueue() {
 		return transMatchDedupQueue;
+	}
+
+	@Override
+	public final Queue getTransSerializationQueue() {
+		return transSerializationQueue;
 	}
 
 	@Override
