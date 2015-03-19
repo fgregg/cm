@@ -23,10 +23,10 @@ import org.junit.runner.RunWith;
 import com.choicemaker.cm.args.OabaSettings;
 import com.choicemaker.cm.args.ServerConfiguration;
 import com.choicemaker.cm.batch.BatchJob;
-import com.choicemaker.cm.batch.BatchJobController;
 import com.choicemaker.cm.batch.BatchJobStatus;
 import com.choicemaker.cm.batch.OperationalPropertyController;
 import com.choicemaker.cm.batch.ProcessingController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaService;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -67,10 +67,7 @@ public class TransitivityJobEntityIT {
 	private EntityManager em;
 
 	@EJB
-	private BatchJobController oabaController;
-
-	@EJB
-	private BatchJobController oabaJobController;
+	private OabaJobController oabaJobController;
 
 	@EJB
 	protected TransitivityJobController transJobController;
@@ -109,15 +106,15 @@ public class TransitivityJobEntityIT {
 	@Before
 	public void setUp() throws Exception {
 		te =
-			new TestEntityCounts(logger, oabaController, oabaParamsController,
-					oabaSettingsController, serverController,
-					oabaProcessingController, opPropController, rsController,
-					ridController);
+			new TestEntityCounts(logger, oabaJobController,
+					oabaParamsController, oabaSettingsController,
+					serverController, oabaProcessingController,
+					opPropController, rsController, ridController);
 	}
 
 	public void checkCounts() {
 		if (te != null) {
-			te.checkCounts(logger, em, utx, oabaController,
+			te.checkCounts(logger, em, utx, oabaJobController,
 					oabaParamsController, oabaSettingsController,
 					serverController, oabaProcessingController,
 					opPropController, rsController, ridController);
@@ -130,7 +127,7 @@ public class TransitivityJobEntityIT {
 	public void testPrerequisites() {
 		assertTrue(em != null);
 		assertTrue(utx != null);
-		assertTrue(oabaController != null);
+		assertTrue(oabaJobController != null);
 		assertTrue(transJobController != null);
 		assertTrue(oabaSettingsController != null);
 		assertTrue(serverController != null);
@@ -141,7 +138,7 @@ public class TransitivityJobEntityIT {
 		final String METHOD = "testConstruction";
 
 		BatchJob batchJob = createEphemeralOabaJob(te, METHOD, true);
-		oabaController.save(batchJob);
+		oabaJobController.save(batchJob);
 		assertTrue(batchJob.isPersistent());
 		final Date now = new Date();
 		BatchJob job =
