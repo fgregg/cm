@@ -15,12 +15,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
 import com.choicemaker.cm.args.ProcessingEvent;
@@ -85,11 +87,9 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 	@EJB
 	private OperationalPropertyController propController;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
-	 */
+	@Resource(lookup = "java:/choicemaker/urm/jms/transSerializationQueue")
+	private Queue transSerializationQueue;
+
 	@Override
 	public void onMessage(Message inMessage) {
 		jmsTrace.info("Entering onMessage for " + this.getClass().getName());
@@ -167,10 +167,10 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 
 		// final sink
 		IMatchRecord2Sink finalSink =
-				OabaFileUtils.getCompositeMatchSink(transJob);
+			OabaFileUtils.getCompositeMatchSink(transJob);
 
 		IMatchRecord2SinkSourceFactory factory =
-				OabaFileUtils.getMatchChunkFactory(transJob);
+			OabaFileUtils.getMatchChunkFactory(transJob);
 		ArrayList tempSinks = new ArrayList();
 
 		// the match files start with 1, not 0.
@@ -202,13 +202,14 @@ public class TransMatchDedupMDB implements MessageListener, Serializable {
 				mSource.close();
 
 				// clean up
-				mSource.delete();;
+				mSource.delete();
+				;
 			} // end if
 		}
 
 		// finally concatenate the size-two EC file
 		IMatchRecord2Source mSource =
-				OabaFileUtils.getSet2MatchFactory(transJob).getNextSource();
+			OabaFileUtils.getSet2MatchFactory(transJob).getNextSource();
 		MatchRecord2 separator = null;
 		if (C != null)
 			separator = MatchRecord2Factory.getSeparator(C);
