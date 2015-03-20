@@ -23,27 +23,19 @@ import com.choicemaker.e2.ejb.EjbPlatform;
 
 public interface OabaTestParameters {
 
-	Queue getResultQueue();
-
-	WellKnownTestConfiguration getTestConfiguration(OabaLinkageType type);
-
-	BatchProcessingPhase getProcessingPhase();
-
-	EjbPlatform getE2service();
-
-	OabaService getOabaService();
-
 	Queue getBlockQueue();
 
 	Queue getChunkQueue();
 
 	Queue getDedupQueue();
 
+	EjbPlatform getE2service();
+
 	EntityManager getEm();
 
 	JMSContext getJmsContext();
 
-	OabaJobController getOabaJobController();
+	OabaLinkageType getLinkageType();
 
 	Logger getLogger();
 
@@ -51,23 +43,31 @@ public interface OabaTestParameters {
 
 	Queue getMatchSchedulerQueue();
 
+	OabaJobController getOabaJobController();
+
+	OabaParametersController getOabaParamsController();
+
+	ProcessingController getOabaProcessingController();
+
+	OabaService getOabaService();
+
 	JMSConsumer getOabaStatusConsumer();
 
 	Topic getOabaStatusTopic();
 
 	OperationalPropertyController getOpPropController();
 
+	BatchProcessingPhase getProcessingPhase();
+
 	RecordIdController getRecordIdController();
-
-	OabaParametersController getOabaParamsController();
-
-	ProcessingController getOabaProcessingController();
 
 	RecordSourceController getRecordSourceController();
 
 	int getResultEventId();
 
 	float getResultPercentComplete();
+
+	Queue getResultQueue();
 
 	ServerConfigurationController getServerController();
 
@@ -78,6 +78,8 @@ public interface OabaTestParameters {
 	String getSourceName();
 
 	Queue getStartQueue();
+
+	WellKnownTestConfiguration getTestConfiguration();
 
 	TestEntityCounts getTestEntityCounts();
 

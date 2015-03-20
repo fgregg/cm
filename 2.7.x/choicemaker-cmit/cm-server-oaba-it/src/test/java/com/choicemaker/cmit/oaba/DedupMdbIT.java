@@ -16,8 +16,8 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.Chunk2MDB;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ChunkMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
+import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.BatchProcessingPhase;
-import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 
 @RunWith(Arquillian.class)
 public class DedupMdbIT extends

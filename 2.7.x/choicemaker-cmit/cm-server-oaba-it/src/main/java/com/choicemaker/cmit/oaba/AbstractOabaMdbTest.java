@@ -50,7 +50,7 @@ import com.choicemaker.e2.ejb.EjbPlatform;
  *            A Well-Known Test Configuration
  */
 public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration>
-		implements OabaTestParameters {
+		/* implements OabaTestParameters */ {
 
 	// -- Read-write instance data
 
@@ -169,7 +169,6 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration>
 
 	// -- Abstract methods
 
-	@Override
 	public abstract Queue getResultQueue();
 
 	public abstract boolean isWorkingDirectoryCorrectAfterProcessing(
@@ -292,13 +291,8 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration>
 		this.te = te;
 	}
 
-	// -- Accessors
+	// -- Pseudo accessors
 
-	public final Class<T> getTestConfigurationClass() {
-		return configurationClass;
-	}
-
-	@Override
 	public final T getTestConfiguration(OabaLinkageType type) {
 		if (testConfiguration == null) {
 			Class<T> c = getTestConfigurationClass();
@@ -310,149 +304,271 @@ public abstract class AbstractOabaMdbTest<T extends WellKnownTestConfiguration>
 		return testConfiguration;
 	}
 
-	@Override
-	public final BatchProcessingPhase getProcessingPhase() {
+	public OabaTestParameters getTestParameters(OabaLinkageType linkage) {
+		return new TestParametersDelegate(linkage);
+	}
+
+	// -- Accessors
+
+	public final Class<T> getTestConfigurationClass() {
+		return configurationClass;
+	}
+
+	protected final BatchProcessingPhase getProcessingPhase() {
 		return oabaPhase;
 	}
 
-	@Override
-	public final EjbPlatform getE2service() {
+	protected final EjbPlatform getE2service() {
 		return this.e2service;
 	}
 
-	@Override
-	public final OabaService getOabaService() {
+	protected final OabaService getOabaService() {
 		return oabaService;
 	}
 
-	@Override
-	public final Queue getBlockQueue() {
+	protected final Queue getBlockQueue() {
 		return blockQueue;
 	}
 
-	@Override
-	public final Queue getChunkQueue() {
+	protected final Queue getChunkQueue() {
 		return chunkQueue;
 	}
 
-	@Override
-	public final Queue getDedupQueue() {
+	protected final Queue getDedupQueue() {
 		return dedupQueue;
 	}
 
-	@Override
-	public final EntityManager getEm() {
+	protected final EntityManager getEm() {
 		return em;
 	}
 
-	@Override
-	public final JMSContext getJmsContext() {
+	protected final JMSContext getJmsContext() {
 		return jmsContext;
 	}
 
-	@Override
-	public final OabaJobController getOabaJobController() {
+	protected final OabaJobController getOabaJobController() {
 		return oabaJobController;
 	}
 
-	@Override
 	public final Logger getLogger() {
 		return logger;
 	}
 
-	@Override
-	public final Queue getMatchDedupQueue() {
+	protected final Queue getMatchDedupQueue() {
 		return matchDedupQueue;
 	}
 
-	@Override
-	public final Queue getMatchSchedulerQueue() {
+	protected final Queue getMatchSchedulerQueue() {
 		return matchSchedulerQueue;
 	}
 
-	@Override
-	public final JMSConsumer getOabaStatusConsumer() {
+	protected final JMSConsumer getOabaStatusConsumer() {
 		return oabaStatusConsumer;
 	}
 
-	@Override
-	public final Topic getOabaStatusTopic() {
+	protected final Topic getOabaStatusTopic() {
 		return oabaStatusTopic;
 	}
 
-	@Override
-	public final OperationalPropertyController getOpPropController() {
+	protected final OperationalPropertyController getOpPropController() {
 		return opPropController;
 	}
 
-	@Override
-	public final RecordIdController getRecordIdController() {
+	protected final RecordIdController getRecordIdController() {
 		return ridController;
 	}
 
-	@Override
-	public final OabaParametersController getOabaParamsController() {
+	protected final OabaParametersController getOabaParamsController() {
 		return oabaParamsController;
 	}
 
-	@Override
-	public final ProcessingController getOabaProcessingController() {
+	protected final ProcessingController getOabaProcessingController() {
 		return processingController;
 	}
 
-	@Override
-	public final RecordSourceController getRecordSourceController() {
+	protected final RecordSourceController getRecordSourceController() {
 		return rsController;
 	}
 
-	@Override
-	public final int getResultEventId() {
+	protected final int getResultEventId() {
 		return eventId;
 	}
 
-	@Override
-	public final float getResultPercentComplete() {
+	protected final float getResultPercentComplete() {
 		return percentComplete;
 	}
 
-	@Override
-	public final ServerConfigurationController getServerController() {
+	protected final ServerConfigurationController getServerController() {
 		return serverController;
 	}
 
-	@Override
-	public final OabaSettingsController getSettingsController() {
+	protected final OabaSettingsController getSettingsController() {
 		return oabaSettingsController;
 	}
 
-	@Override
-	public final Queue getSingleMatchQueue() {
+	protected final Queue getSingleMatchQueue() {
 		return singleMatchQueue;
 	}
 
-	@Override
 	public final String getSourceName() {
 		return sourceName;
 	}
 
-	@Override
-	public final Queue getStartQueue() {
+	protected final Queue getStartQueue() {
 		return startQueue;
 	}
 
-	@Override
-	public TestEntityCounts getTestEntityCounts() {
+	protected TestEntityCounts getTestEntityCounts() {
 		return te;
 	}
 
-	@Override
-	public final Queue getTransitivityQueue() {
+	protected final Queue getTransitivityQueue() {
 		return transitivityQueue;
 	}
 
-	@Override
-	public final UserTransaction getUtx() {
+	protected final UserTransaction getUtx() {
 		return utx;
+	}
+
+	protected class TestParametersDelegate implements OabaTestParameters {
+		private final OabaLinkageType lt;
+		TestParametersDelegate(OabaLinkageType linkageType) {
+			assert linkageType != null;
+			this.lt = linkageType;
+		}
+		@Override
+		public final WellKnownTestConfiguration getTestConfiguration() {
+			OabaLinkageType _lt = this.getLinkageType();
+			return AbstractOabaMdbTest.this.getTestConfiguration(_lt);
+		}
+		@Override
+		public OabaLinkageType getLinkageType() {
+			return lt;
+		}
+		@Override
+		public Queue getResultQueue() {
+			return AbstractOabaMdbTest.this.getResultQueue();
+		}
+		@Override
+		public String toString() {
+			return AbstractOabaMdbTest.this.toString();
+		}
+		@Override
+		public final BatchProcessingPhase getProcessingPhase() {
+			return AbstractOabaMdbTest.this.getProcessingPhase();
+		}
+		@Override
+		public final EjbPlatform getE2service() {
+			return AbstractOabaMdbTest.this.getE2service();
+		}
+		@Override
+		public final OabaService getOabaService() {
+			return AbstractOabaMdbTest.this.getOabaService();
+		}
+		@Override
+		public final Queue getBlockQueue() {
+			return AbstractOabaMdbTest.this.getBlockQueue();
+		}
+		@Override
+		public final Queue getChunkQueue() {
+			return AbstractOabaMdbTest.this.getChunkQueue();
+		}
+		@Override
+		public final Queue getDedupQueue() {
+			return AbstractOabaMdbTest.this.getDedupQueue();
+		}
+		@Override
+		public final EntityManager getEm() {
+			return AbstractOabaMdbTest.this.getEm();
+		}
+		@Override
+		public final JMSContext getJmsContext() {
+			return AbstractOabaMdbTest.this.getJmsContext();
+		}
+		@Override
+		public final OabaJobController getOabaJobController() {
+			return AbstractOabaMdbTest.this.getOabaJobController();
+		}
+		@Override
+		public final Logger getLogger() {
+			return AbstractOabaMdbTest.this.getLogger();
+		}
+		@Override
+		public final Queue getMatchDedupQueue() {
+			return AbstractOabaMdbTest.this.getMatchDedupQueue();
+		}
+		@Override
+		public final Queue getMatchSchedulerQueue() {
+			return AbstractOabaMdbTest.this.getMatchSchedulerQueue();
+		}
+		@Override
+		public final JMSConsumer getOabaStatusConsumer() {
+			return AbstractOabaMdbTest.this.getOabaStatusConsumer();
+		}
+		@Override
+		public final Topic getOabaStatusTopic() {
+			return AbstractOabaMdbTest.this.getOabaStatusTopic();
+		}
+		@Override
+		public final OperationalPropertyController getOpPropController() {
+			return AbstractOabaMdbTest.this.getOpPropController();
+		}
+		@Override
+		public final RecordIdController getRecordIdController() {
+			return AbstractOabaMdbTest.this.getRecordIdController();
+		}
+		@Override
+		public final OabaParametersController getOabaParamsController() {
+			return AbstractOabaMdbTest.this.getOabaParamsController();
+		}
+		@Override
+		public final ProcessingController getOabaProcessingController() {
+			return AbstractOabaMdbTest.this.getOabaProcessingController();
+		}
+		@Override
+		public final RecordSourceController getRecordSourceController() {
+			return AbstractOabaMdbTest.this.getRecordSourceController();
+		}
+		@Override
+		public final int getResultEventId() {
+			return AbstractOabaMdbTest.this.getResultEventId();
+		}
+		@Override
+		public final float getResultPercentComplete() {
+			return AbstractOabaMdbTest.this.getResultPercentComplete();
+		}
+		@Override
+		public final ServerConfigurationController getServerController() {
+			return AbstractOabaMdbTest.this.getServerController();
+		}
+		@Override
+		public final OabaSettingsController getSettingsController() {
+			return AbstractOabaMdbTest.this.getSettingsController();
+		}
+		@Override
+		public final Queue getSingleMatchQueue() {
+			return AbstractOabaMdbTest.this.getSingleMatchQueue();
+		}
+		@Override
+		public final String getSourceName() {
+			return AbstractOabaMdbTest.this.getSourceName();
+		}
+		@Override
+		public final Queue getStartQueue() {
+			return AbstractOabaMdbTest.this.getStartQueue();
+		}
+		@Override
+		public TestEntityCounts getTestEntityCounts() {
+			return AbstractOabaMdbTest.this.getTestEntityCounts();
+		}
+		@Override
+		public final Queue getTransitivityQueue() {
+			return AbstractOabaMdbTest.this.getTransitivityQueue();
+		}
+		@Override
+		public final UserTransaction getUtx() {
+			return AbstractOabaMdbTest.this.getUtx();
+		}
 	}
 
 }

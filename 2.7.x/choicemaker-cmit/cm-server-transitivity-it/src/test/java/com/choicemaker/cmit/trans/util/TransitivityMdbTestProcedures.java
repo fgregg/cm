@@ -43,6 +43,7 @@ import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
 import com.choicemaker.cmit.utils.OabaTestUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
+import com.choicemaker.cmit.utils.TransitivityTestParameters;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
 import com.choicemaker.e2.CMPluginRegistry;
 
@@ -83,21 +84,21 @@ public class TransitivityMdbTestProcedures {
 	}
 
 	public static <T extends WellKnownTestConfiguration> BatchJob runOabaJob(
-			final AbstractTransitivityMdbTest<T> ta,
+			final TransitivityTestParameters tp,
 			final OabaLinkageType task, final String tag,
 			final String externalId, final String LOG_SOURCE,
 			final TestEntityCounts te) throws Exception {
 
 		final String M = "TransitivityMdbTestProcedures.runOabaJob";
 		final BatchJob batchJob =
-			OabaTestUtils.startOabaJob(task, tag, ta, externalId);
+			OabaTestUtils.startOabaJob(task, tag, tp, externalId);
 		assertTrue(batchJob != null);
 		te.add(batchJob);
 		final long jobId = batchJob.getId();
 
 		// Wait for the job to send a final processing notification
 		logger.info(M + ": Checking oabaStatusTopic");
-		final JMSConsumer statusListener = ta.getOabaStatusConsumer();
+		final JMSConsumer statusListener = tp.getOabaStatusConsumer();
 		BatchProcessingNotification oabaNotification =
 			JmsUtils.receiveFinalBatchProcessingNotification(batchJob,
 					LOG_SOURCE, statusListener, LONG_TIMEOUT_MILLIS);
@@ -107,7 +108,7 @@ public class TransitivityMdbTestProcedures {
 		assertTrue(oabaNotification.getJobPercentComplete() == PCT_DONE);
 
 		// Get a fresh copy of the OABA job from the database
-		BatchJob retVal = ta.getEm().find(OabaJobEntity.class, jobId);
+		BatchJob retVal = tp.getEm().find(OabaJobEntity.class, jobId);
 		assertTrue(retVal != null);
 		String m = M + ": OABA job " + jobId + " status: " + retVal.getStatus();
 		logger.info(m);
@@ -125,7 +126,8 @@ public class TransitivityMdbTestProcedures {
 		}
 
 		final String tag = "testLinkageTransitivity";
-		final String LOG_SOURCE = ta.getSourceName();
+		final TransitivityTestParameters tp = ta.getTestParameters(task);
+		final String LOG_SOURCE = tp.getSourceName();
 		logger.entering(LOG_SOURCE, tag);
 
 		final TestEntityCounts te = ta.getTestEntityCounts();
@@ -133,7 +135,7 @@ public class TransitivityMdbTestProcedures {
 
 		// Run an OABA job for subsequent transitivity analysis
 		final BatchJob oabaJob =
-			runOabaJob(ta, task, tag, extId, LOG_SOURCE, te);
+			runOabaJob(tp, task, tag, extId, LOG_SOURCE, te);
 		assertTrue(oabaJob != null);
 		final long oabaJobId = oabaJob.getId();
 		assertTrue(te.contains(oabaJob));
@@ -156,7 +158,7 @@ public class TransitivityMdbTestProcedures {
 		te.add((TransitivityParameters) transParams);
 
 		// Configure settings from transitivity analysis
-		OabaSettingsController sc = ta.getSettingsController();
+		OabaSettingsController sc = tp.getSettingsController();
 		OabaSettings settings = sc.findOabaSettingsByJobId(oabaJobId);
 
 		// Configure the server for transitivity analysis
@@ -164,21 +166,21 @@ public class TransitivityMdbTestProcedures {
 			ServerConfigurationControllerBean.computeHostName();
 		logger.info("Computed host name: " + hostName);
 		final DefaultServerConfiguration dsc =
-			ta.getServerController().findDefaultServerConfiguration(hostName);
+				tp.getServerController().findDefaultServerConfiguration(hostName);
 		ServerConfiguration serverConfiguration = null;
 		if (dsc != null) {
 			long id = dsc.getServerConfigurationId();
 			logger.info("Default server configuration id: " + id);
 			serverConfiguration =
-				ta.getServerController().findServerConfiguration(id);
+					tp.getServerController().findServerConfiguration(id);
 		}
 		if (serverConfiguration == null) {
 			logger.info("No default server configuration for: " + hostName);
 			serverConfiguration =
-				ta.getServerController().computeGenericConfiguration();
+					tp.getServerController().computeGenericConfiguration();
 			try {
 				serverConfiguration =
-					ta.getServerController().save(serverConfiguration);
+						tp.getServerController().save(serverConfiguration);
 			} catch (ServerConfigurationException e) {
 				fail("Unable to save server configuration: " + e.toString());
 			}
@@ -213,12 +215,12 @@ public class TransitivityMdbTestProcedures {
 		assertTrue(extId != null && extId.equals(transJob.getExternalId()));
 
 		// Compute context for expected results
-		final BatchProcessingPhase transPhase = ta.getProcessingPhase();
+		final BatchProcessingPhase transPhase = tp.getProcessingPhase();
 		final boolean isIntermediateExpected =
 				transPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = transPhase.isUpdateExpected;
 		final Queue listeningQueue = ta.getResultQueue();
-		final JMSConsumer transListener = ta.getTransitivityStatusConsumer();
+		final JMSConsumer transListener = tp.getTransitivityStatusConsumer();
 		logger.info(LOG_SOURCE + "." + tag + ": transPhase: "
 				+ transPhase);
 		logger.info(LOG_SOURCE + "." + tag + ": isIntermediateExpected: "
@@ -235,7 +237,7 @@ public class TransitivityMdbTestProcedures {
 		validateDestinations(transPhase, listeningQueue);
 
 		// Check the job results
-		final JMSContext jmsContext = ta.getJmsContext();
+		final JMSContext jmsContext = tp.getJmsContext();
 		if (isIntermediateExpected) {
 			// Check that transitivity analysis completed and sent out a
 			// message on the intermediate result queue
@@ -284,7 +286,7 @@ public class TransitivityMdbTestProcedures {
 
 		// Find the entry in the processing history updated by Transitivity
 		final ProcessingController processingController =
-			ta.getTransitivityProcessingController();
+			tp.getTransitivityProcessingController();
 		ProcessingEventLog processingEntry =
 			processingController.getProcessingLog(transJob);
 

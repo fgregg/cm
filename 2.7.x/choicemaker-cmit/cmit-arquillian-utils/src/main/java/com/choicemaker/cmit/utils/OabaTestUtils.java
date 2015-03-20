@@ -32,12 +32,15 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ServerConfig
  */
 public class OabaTestUtils {
 
-	private static final Logger logger = Logger
-			.getLogger(OabaTestUtils.class.getName());
+	private static final Logger logger = Logger.getLogger(OabaTestUtils.class
+			.getName());
 
-	public static <T extends WellKnownTestConfiguration> BatchJob startOabaJob(
-			final OabaLinkageType linkage, final String tag,
-			final OabaTestParameters test, final String externalId) {
+	private static final String LOG_SOURCE = OabaTestUtils.class
+			.getSimpleName();
+
+	public static BatchJob startOabaJob(final OabaLinkageType linkage,
+			final String tag, final OabaTestParameters test,
+			final String externalId) {
 
 		// Preconditions
 		if (linkage == null || tag == null || test == null
@@ -49,7 +52,7 @@ public class OabaTestUtils {
 		logger.entering(LOG_SOURCE, tag);
 
 		final TestEntityCounts te = test.getTestEntityCounts();
-		final WellKnownTestConfiguration c = test.getTestConfiguration(linkage);
+		final WellKnownTestConfiguration c = test.getTestConfiguration();
 
 		final PersistableRecordSource staging =
 			test.getRecordSourceController().save(c.getStagingRecordSource());
@@ -70,16 +73,29 @@ public class OabaTestUtils {
 		final String modelId = c.getModelConfigurationName();
 		final ImmutableProbabilityModel model =
 			PMManager.getImmutableModelInstance(modelId);
-		OabaSettings oabaSettings =
+		
+		// Create default or generic settings 
+		OabaSettings _os0 =
 			test.getSettingsController().findDefaultOabaSettings(model);
-		if (oabaSettings == null) {
+		if (_os0 == null) {
 			// Creates generic settings and saves them
-			oabaSettings = new OabaSettingsEntity();
-			oabaSettings = test.getSettingsController().save(oabaSettings);
-			te.add(oabaSettings);
+			_os0 = new OabaSettingsEntity();
+			_os0 = test.getSettingsController().save(_os0);
+			te.add(_os0);
 		}
-		assertTrue(oabaSettings != null);
-
+		assertTrue(_os0 != null);
+		
+		// Update the default or generic settings using the test parameters
+		OabaSettings _os1 = updateSettings(_os0, test);
+		final OabaSettings updatedSettings;
+		if (!_os0.equals(_os1)) {
+			updatedSettings = test.getSettingsController().save(_os1);
+			te.add(_os1);
+		} else {
+			updatedSettings = _os0;
+		}
+		assertTrue(updatedSettings != null);
+	
 		final String hostName =
 			ServerConfigurationControllerBean.computeHostName();
 		logger.info("Computed host name: " + hostName);
@@ -118,10 +134,9 @@ public class OabaTestUtils {
 		try {
 			switch (linkage) {
 			case STAGING_DEDUPLICATION:
-				logger.info(tag
-						+ ": invoking OabaService.startDeduplication");
+				logger.info(tag + ": invoking OabaService.startDeduplication");
 				jobId =
-					batchQuery.startDeduplication(externalId, bp, oabaSettings,
+					batchQuery.startDeduplication(externalId, bp, updatedSettings,
 							serverConfiguration);
 				logger.info(tag + ": returned jobId '" + jobId
 						+ "' from OabaService.startDeduplication");
@@ -130,7 +145,7 @@ public class OabaTestUtils {
 			case MASTER_TO_MASTER_LINKAGE:
 				logger.info(tag + ": invoking OabaService.startLinkage");
 				jobId =
-					batchQuery.startLinkage(externalId, bp, oabaSettings,
+					batchQuery.startLinkage(externalId, bp, updatedSettings,
 							serverConfiguration);
 				logger.info(tag + ": returned jobId '" + jobId
 						+ "' from OabaService.startLinkage");
@@ -158,8 +173,30 @@ public class OabaTestUtils {
 		return retVal;
 	}
 
-	public static <T extends WellKnownTestConfiguration> void validateJobParameters(
-			final BatchJob batchJob,
+	/**
+	 * Updates settings based on test parameters
+	 * @param te 
+	 */
+	public static OabaSettings updateSettings(final OabaSettings s0,
+			OabaTestParameters p) {
+		if (s0 == null || p == null) {
+			throw new IllegalArgumentException(LOG_SOURCE + ": null constructor arg");
+		}
+		
+		final WellKnownTestConfiguration c = p.getTestConfiguration();
+		final int maxSingle = c.getSingleRecordMatchingThreshold();
+		boolean isDifferent = s0.getMaxSingle() != maxSingle;
+		
+		OabaSettings retVal;
+		if (isDifferent) {
+			retVal = new OabaSettingsEntity(s0, maxSingle);
+		} else {
+			retVal = s0;
+		}
+		return retVal;
+	}
+
+	public static void validateJobParameters(final BatchJob batchJob,
 			final OabaParameters expected, final OabaParameters params) {
 
 		// Validate that the job parameters are correct

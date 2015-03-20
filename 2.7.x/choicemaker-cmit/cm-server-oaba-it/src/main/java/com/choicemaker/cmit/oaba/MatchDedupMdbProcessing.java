@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 import javax.jms.Queue;
 
 import com.choicemaker.cm.batch.BatchJob;
+import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.BatchProcessingPhase;
-import com.choicemaker.cmit.utils.SimplePersonSqlServerTestConfiguration;
 
 /**
  * This class is reused in other modules to perform a test of linkage or

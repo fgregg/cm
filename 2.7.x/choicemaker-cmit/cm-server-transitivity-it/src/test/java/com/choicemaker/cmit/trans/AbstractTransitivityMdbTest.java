@@ -52,7 +52,7 @@ import com.choicemaker.e2.ejb.EjbPlatform;
  *            A Well-Known Test Configuration
  */
 public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfiguration>
-		implements TransitivityTestParameters {
+		/* implements TransitivityTestParameters */ {
 
 	// -- Read-write instance data
 
@@ -199,7 +199,7 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 
 	// -- Abstract methods
 
-	@Override
+	// @Override
 	public abstract Queue getResultQueue();
 
 	public abstract boolean isWorkingDirectoryCorrectAfterProcessing(
@@ -337,13 +337,13 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		this.te = te;
 	}
 
-	// -- Accessors
+	// -- Pseudo accessors
 
-	public final Class<T> getTestConfigurationClass() {
-		return configurationClass;
+	public final TransitivityTestParameters getTestParameters(OabaLinkageType linkage) {
+		return new TestParametersDelegate(this, linkage);
 	}
 
-	@Override
+	// @Override
 	public final T getTestConfiguration(OabaLinkageType linkage) {
 		if (testConfiguration == null) {
 			Class<T> c = getTestConfigurationClass();
@@ -356,18 +356,21 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return testConfiguration;
 	}
 
-	@Override
-	public final BatchProcessingPhase getProcessingPhase() {
+	// -- Accessors
+
+	protected final Class<T> getTestConfigurationClass() {
+		return configurationClass;
+	}
+	
+	protected final BatchProcessingPhase getProcessingPhase() {
 		return oabaPhase;
 	}
 
-	@Override
-	public final EjbPlatform getE2service() {
+	protected final EjbPlatform getE2service() {
 		return this.e2service;
 	}
 
-	@Override
-	public final OabaService getOabaService() {
+	protected final OabaService getOabaService() {
 		return oabaService;
 	}
 
@@ -383,163 +386,297 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return transParamsController;
 	}
 
-	@Override
-	public final Queue getBlockQueue() {
+	protected final Queue getBlockQueue() {
 		return blockQueue;
 	}
 
-	@Override
-	public final Queue getChunkQueue() {
+	protected final Queue getChunkQueue() {
 		return chunkQueue;
 	}
 
-	@Override
-	public final Queue getDedupQueue() {
+	protected final Queue getDedupQueue() {
 		return dedupQueue;
 	}
 
-	@Override
-	public final EntityManager getEm() {
+	protected final EntityManager getEm() {
 		return em;
 	}
 
-	@Override
-	public final JMSContext getJmsContext() {
+	protected final JMSContext getJmsContext() {
 		return jmsContext;
 	}
 
-	@Override
-	public final OabaJobController getOabaJobController() {
+	protected final OabaJobController getOabaJobController() {
 		return oabaJobController;
 	}
 
-	@Override
-	public final Logger getLogger() {
+	protected final Logger getLogger() {
 		return logger;
 	}
 
-	@Override
-	public final Queue getMatchDedupQueue() {
+	protected final Queue getMatchDedupQueue() {
 		return matchDedupQueue;
 	}
 
-	@Override
-	public final Queue getMatchSchedulerQueue() {
+	protected final Queue getMatchSchedulerQueue() {
 		return matchSchedulerQueue;
 	}
 
-	@Override
-	public final JMSConsumer getTransitivityStatusConsumer() {
+	protected final JMSConsumer getTransitivityStatusConsumer() {
 		return transStatusConsumer;
 	}
 
-	@Override
-	public final JMSConsumer getOabaStatusConsumer() {
+	protected final JMSConsumer getOabaStatusConsumer() {
 		return oabaStatusConsumer;
 	}
 
-	@Override
-	public final Topic getOabaStatusTopic() {
+	protected final Topic getOabaStatusTopic() {
 		return oabaStatusTopic;
 	}
 
-	@Override
 	public OabaParametersController getOabaParamsController() {
 		return oabaParamsController;
 	}
 
-	@Override
-	public final OperationalPropertyController getOpPropController() {
+	protected final OperationalPropertyController getOpPropController() {
 		return opPropController;
 	}
 
-	@Override
-	public final RecordIdController getRecordIdController() {
+	protected final RecordIdController getRecordIdController() {
 		return ridController;
 	}
 
-	@Override
-	public final ProcessingController getOabaProcessingController() {
+	protected final ProcessingController getOabaProcessingController() {
 		return oabaProcessingController;
 	}
 
-	@Override
-	public final ProcessingController getTransitivityProcessingController() {
+	protected final ProcessingController getTransitivityProcessingController() {
 		return transProcessingController;
 	}
 
-	@Override
-	public final RecordSourceController getRecordSourceController() {
+	protected final RecordSourceController getRecordSourceController() {
 		return rsController;
 	}
 
-	@Override
 	public final int getResultEventId() {
 		return eventId;
 	}
 
-	@Override
 	public final float getResultPercentComplete() {
 		return percentComplete;
 	}
 
-	@Override
-	public final ServerConfigurationController getServerController() {
+	protected final ServerConfigurationController getServerController() {
 		return serverController;
 	}
 
-	@Override
-	public final OabaSettingsController getSettingsController() {
+	protected final OabaSettingsController getSettingsController() {
 		return oabaSettingsController;
 	}
 
-	@Override
-	public final Queue getSingleMatchQueue() {
+	protected final Queue getSingleMatchQueue() {
 		return singleMatchQueue;
 	}
 
-	@Override
 	public final String getSourceName() {
 		return sourceName;
 	}
 
-	@Override
-	public final Queue getStartQueue() {
+	protected final Queue getStartQueue() {
 		return startQueue;
 	}
 
-	@Override
 	public TestEntityCounts getTestEntityCounts() {
 		return te;
 	}
 
-	@Override
-	public final Queue getTransitivityQueue() {
+	protected final Queue getTransitivityQueue() {
 		return transitivityQueue;
 	}
 
-	public final Topic getTransitivityStatusTopic() {
+	protected final Topic getTransitivityStatusTopic() {
 		return transStatusTopic;
 	}
 
-	@Override
-	public final Queue getTransMatchSchedulerQueue() {
+	protected final Queue getTransMatchSchedulerQueue() {
 		return transMatchSchedulerQueue;
 	}
 	
-	@Override
-	public final Queue getTransMatchDedupQueue() {
+	protected final Queue getTransMatchDedupQueue() {
 		return transMatchDedupQueue;
 	}
 
-	@Override
-	public final Queue getTransSerializationQueue() {
+	protected final Queue getTransSerializationQueue() {
 		return transSerializationQueue;
 	}
 
-	@Override
-	public final UserTransaction getUtx() {
+	protected final UserTransaction getUtx() {
 		return utx;
 	}
 
+	protected class TestParametersDelegate implements TransitivityTestParameters {
+		private final AbstractTransitivityMdbTest<T> d;
+		private final OabaLinkageType lt;
+		TestParametersDelegate(AbstractTransitivityMdbTest<T> delegate, OabaLinkageType linkageType) {
+			assert delegate != null;
+			assert linkageType != null;
+			this.d = delegate;
+			this.lt = linkageType;
+		}
+		@Override
+		public OabaLinkageType getLinkageType() {
+			return lt;
+		}
+		@Override
+		public Queue getResultQueue() {
+			return d.getResultQueue();
+		}
+		@Override
+		public String toString() {
+			return d.toString();
+		}
+		@Override
+		public final T getTestConfiguration() {
+			OabaLinkageType _lt = this.getLinkageType();
+			return d.getTestConfiguration(_lt);
+		}
+		@Override
+		public final BatchProcessingPhase getProcessingPhase() {
+			return d.getProcessingPhase();
+		}
+		@Override
+		public final EjbPlatform getE2service() {
+			return d.getE2service();
+		}
+		@Override
+		public final OabaService getOabaService() {
+			return d.getOabaService();
+		}
+		@Override
+		public final Queue getBlockQueue() {
+			return d.getBlockQueue();
+		}
+		@Override
+		public final Queue getChunkQueue() {
+			return d.getChunkQueue();
+		}
+		@Override
+		public final Queue getDedupQueue() {
+			return d.getDedupQueue();
+		}
+		@Override
+		public final EntityManager getEm() {
+			return d.getEm();
+		}
+		@Override
+		public final JMSContext getJmsContext() {
+			return d.getJmsContext();
+		}
+		@Override
+		public final OabaJobController getOabaJobController() {
+			return d.getOabaJobController();
+		}
+		@Override
+		public final Logger getLogger() {
+			return d.getLogger();
+		}
+		@Override
+		public final Queue getMatchDedupQueue() {
+			return d.getMatchDedupQueue();
+		}
+		@Override
+		public final Queue getMatchSchedulerQueue() {
+			return d.getMatchSchedulerQueue();
+		}
+		@Override
+		public final JMSConsumer getTransitivityStatusConsumer() {
+			return d.getTransitivityStatusConsumer();
+		}
+		@Override
+		public final JMSConsumer getOabaStatusConsumer() {
+			return d.getOabaStatusConsumer();
+		}
+		@Override
+		public final Topic getOabaStatusTopic() {
+			return d.getOabaStatusTopic();
+		}
+		@Override
+		public OabaParametersController getOabaParamsController() {
+			return d.getOabaParamsController();
+		}
+		@Override
+		public final OperationalPropertyController getOpPropController() {
+			return d.getOpPropController();
+		}
+		@Override
+		public final RecordIdController getRecordIdController() {
+			return d.getRecordIdController();
+		}
+		@Override
+		public final ProcessingController getOabaProcessingController() {
+			return d.getOabaProcessingController();
+		}
+		@Override
+		public final ProcessingController getTransitivityProcessingController() {
+			return d.getTransitivityProcessingController();
+		}
+		@Override
+		public final RecordSourceController getRecordSourceController() {
+			return d.getRecordSourceController();
+		}
+		@Override
+		public final int getResultEventId() {
+			return d.getResultEventId();
+		}
+		@Override
+		public final float getResultPercentComplete() {
+			return d.getResultPercentComplete();
+		}
+		@Override
+		public final ServerConfigurationController getServerController() {
+			return d.getServerController();
+		}
+		@Override
+		public final OabaSettingsController getSettingsController() {
+			return d.getSettingsController();
+		}
+		@Override
+		public final Queue getSingleMatchQueue() {
+			return d.getSingleMatchQueue();
+		}
+		@Override
+		public final String getSourceName() {
+			return d.getSourceName();
+		}
+		@Override
+		public final Queue getStartQueue() {
+			return d.getStartQueue();
+		}
+		@Override
+		public TestEntityCounts getTestEntityCounts() {
+			return d.getTestEntityCounts();
+		}
+		@Override
+		public final Queue getTransitivityQueue() {
+			return d.getTransitivityQueue();
+		}
+		@Override
+		public final Queue getTransMatchSchedulerQueue() {
+			return d.getTransMatchSchedulerQueue();
+		}
+		@Override
+		public final Queue getTransMatchDedupQueue() {
+			return d.getTransMatchDedupQueue();
+		}
+		@Override
+		public final Queue getTransSerializationQueue() {
+			return d.getTransSerializationQueue();
+		}
+		@Override
+		public final UserTransaction getUtx() {
+			return d.getUtx();
+		}
+	}
+
 }
+

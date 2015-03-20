@@ -25,6 +25,7 @@ import com.choicemaker.cmit.oaba.AbstractOabaMdbTest;
 import com.choicemaker.cmit.utils.BatchProcessingPhase;
 import com.choicemaker.cmit.utils.EntityManagerUtils;
 import com.choicemaker.cmit.utils.JmsUtils;
+import com.choicemaker.cmit.utils.OabaTestParameters;
 import com.choicemaker.cmit.utils.OabaTestUtils;
 import com.choicemaker.cmit.utils.TestEntityCounts;
 import com.choicemaker.cmit.utils.WellKnownTestConfiguration;
@@ -117,12 +118,13 @@ public class OabaMdbTestProcedures {
 		final String LOG_SOURCE = test.getSourceName();
 		logger.entering(LOG_SOURCE, tag);
 
-		final TestEntityCounts te = test.getTestEntityCounts();
-		final Queue listeningQueue = test.getResultQueue();
-		final JMSConsumer statusListener = test.getOabaStatusConsumer();
+		final OabaTestParameters otp = test.getTestParameters(linkage);
+		final TestEntityCounts te = otp.getTestEntityCounts();
+		final Queue listeningQueue = otp.getResultQueue();
+		final JMSConsumer statusListener = otp.getOabaStatusConsumer();
 
 		// Compute the OABA processing context
-		final BatchProcessingPhase oabaPhase = test.getProcessingPhase();
+		final BatchProcessingPhase oabaPhase = otp.getProcessingPhase();
 		final boolean isIntermediateExpected = oabaPhase.isIntermediateExpected;
 		final boolean isUpdateExpected = oabaPhase.isUpdateExpected;
 
@@ -130,8 +132,9 @@ public class OabaMdbTestProcedures {
 		validateDestinations(oabaPhase, listeningQueue);
 
 		// Start the OABA processing job
+//		OabaLinkageType lt = test.getO
 		BatchJob batchJob =
-			OabaTestUtils.startOabaJob(linkage, tag, test, externalId);
+			OabaTestUtils.startOabaJob(linkage, tag, otp, externalId);
 		assertTrue(batchJob != null);
 		te.add(batchJob);
 		assertTrue(externalId != null
@@ -140,13 +143,13 @@ public class OabaMdbTestProcedures {
 		// Find the OABA parameters associated with the job
 		final long jobId = batchJob.getId();
 		final OabaParametersController paramsController =
-			test.getOabaParamsController();
+				otp.getOabaParamsController();
 		OabaParameters params =
 			paramsController.findOabaParametersByBatchJobId(jobId);
 		te.add(params);
 
 		// Check the job results
-		final JMSContext jmsContext = test.getJmsContext();
+		final JMSContext jmsContext = otp.getJmsContext();
 		if (isIntermediateExpected) {
 			// Check that OABA processing completed and sent out a
 			// message on the intermediate result queue
@@ -190,19 +193,19 @@ public class OabaMdbTestProcedures {
 			}
 			assertTrue(oabaNotification != null);
 			assertTrue(oabaNotification.getJobId() == jobId);
-			final float expectPercentDone = test.getResultPercentComplete();
+			final float expectPercentDone = otp.getResultPercentComplete();
 			assertTrue(oabaNotification.getJobPercentComplete() == expectPercentDone);
 		}
 
 		// Find the entry in the processing history updated by the OABA
 		final ProcessingController processingController =
-			test.getOabaProcessingController();
+			otp.getOabaProcessingController();
 		ProcessingEventLog processingEntry =
 			processingController.getProcessingLog(batchJob);
 
 		// Validate that processing entry is correct for this stage of the OABA
 		assertTrue(processingEntry != null);
-		final int expectedEventId = test.getResultEventId();
+		final int expectedEventId = otp.getResultEventId();
 		assertTrue(processingEntry.getCurrentProcessingEventId() == expectedEventId);
 
 		// Check that the working directory contains what it should
