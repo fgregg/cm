@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.transitivity.server.util;
 
+import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_BCM;
+
 import java.util.Iterator;
 
 import com.choicemaker.cm.transitivity.core.BiConnectedProperty;
@@ -27,7 +29,7 @@ import com.choicemaker.cm.transitivity.core.MatchEdgeProperty;
 @SuppressWarnings({ "rawtypes" })
 public class MatchBiconnectedIterator extends GenericIterator {
 
-	public static final String NAME = "BCM";
+	public static final String NAME = GPN_BCM;
 
 	// private Iterator compositeEntities;
 

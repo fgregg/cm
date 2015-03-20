@@ -290,8 +290,9 @@ public class TransitivityMdbTestProcedures {
 
 		// Validate that processing entry is correct
 		assertTrue(processingEntry != null);
-		final int expectedEventId = ta.getResultEventId();
-		assertTrue(processingEntry.getCurrentProcessingEventId() == expectedEventId);
+		final int c = processingEntry.getCurrentProcessingEventId();
+		final int e = ta.getResultEventId();
+		assertTrue("currentEventId: " + c + ", expectedId; " + e, c == e);
 
 		// Check that the working directory contains what it should
 		assertTrue(ta.isWorkingDirectoryCorrectAfterProcessing(transJob));

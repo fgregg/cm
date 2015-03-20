@@ -29,7 +29,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityResultCompositeSerialize
 @SuppressWarnings({ "rawtypes" })
 public class CompositeXMLSerializer extends XMLSerializer implements
 		TransitivityResultCompositeSerializer {
-	
+
 	private static final long serialVersionUID = 271L;
 
 	public static final String DEFAULT_FILE_EXTENSION = "xml";
@@ -37,16 +37,18 @@ public class CompositeXMLSerializer extends XMLSerializer implements
 	/** Defines the output file size is checked */
 	private static final int INTERVAL = 2000;
 
-	/** The one-based index of the current output file */
-	private int currentFile;
-
 	/** An extension appended to the base name of the output file */
 	private final String fileExt;
+
+	/** The one-based index of the current output file */
+	private int currentIndex;
+
+	private String currentFile;
 
 	public CompositeXMLSerializer() {
 		this(DEFAULT_FILE_EXTENSION);
 	}
-	
+
 	/**
 	 * @param fileExt
 	 *            - extension for the output files
@@ -57,7 +59,7 @@ public class CompositeXMLSerializer extends XMLSerializer implements
 			String msg = "Invalid file extension: '" + fileExt + "'";
 			throw new IllegalArgumentException(msg);
 		}
-		currentFile = 1;
+		currentIndex = 1;
 		this.fileExt = fileExt;
 	}
 
@@ -88,10 +90,10 @@ public class CompositeXMLSerializer extends XMLSerializer implements
 			throw new IllegalArgumentException(msg);
 		}
 
-		Writer writer =
-			new FileWriter(
-					FileUtils.getFileName(fileBase, fileExt, currentFile),
-					false);
+		final String fn =
+			FileUtils.getFileName(fileBase, fileExt, currentIndex);
+		setCurrentFileName(fn);
+		Writer writer = new FileWriter(getCurrentFileName(), false);
 
 		writeHeader(result, writer);
 
@@ -109,15 +111,15 @@ public class CompositeXMLSerializer extends XMLSerializer implements
 			count++;
 			if (count % INTERVAL == 0) {
 				writer.flush();
-				if (FileUtils.isFull(fileBase, fileExt, currentFile,
+				if (FileUtils.isFull(fileBase, fileExt, currentIndex,
 						maxFileSize)) {
 					writeFooter(writer);
 					writer.close();
 
-					currentFile++;
+					currentIndex++;
 					writer =
 						new FileWriter(FileUtils.getFileName(fileBase, fileExt,
-								currentFile), false);
+								currentIndex), false);
 					writeHeader(result, writer);
 				}
 			}
@@ -126,6 +128,14 @@ public class CompositeXMLSerializer extends XMLSerializer implements
 		writeFooter(writer);
 		writer.flush();
 		writer.close();
+	}
+
+	public String getCurrentFileName() {
+		return currentFile;
+	}
+
+	protected void setCurrentFileName(String currentFile) {
+		this.currentFile = currentFile;
 	}
 
 }

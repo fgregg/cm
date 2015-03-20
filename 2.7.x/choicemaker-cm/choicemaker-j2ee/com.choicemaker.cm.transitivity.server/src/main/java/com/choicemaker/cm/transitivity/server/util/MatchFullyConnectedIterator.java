@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.transitivity.server.util;
 
+import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_FCM;
+
 import java.util.Iterator;
 
 import com.choicemaker.cm.transitivity.core.FullyConnectedProperty;
@@ -27,7 +29,7 @@ import com.choicemaker.cm.transitivity.core.MatchEdgeProperty;
 @SuppressWarnings({ "rawtypes" })
 public class MatchFullyConnectedIterator extends GenericIterator {
 
-	public static final String NAME = "FCM";
+	public static final String NAME = GPN_FCM;
 
 	// private Iterator compositeEntities;
 

@@ -10,6 +10,8 @@
  */
 package com.choicemaker.cm.transitivity.server.util;
 
+import static com.choicemaker.cm.args.WellKnownGraphPropertyNames.GPN_SCM;
+
 import java.util.Iterator;
 
 import com.choicemaker.cm.transitivity.core.MatchEdgeProperty;
@@ -27,9 +29,7 @@ import com.choicemaker.cm.transitivity.core.SimpleConnectedProperty;
 @SuppressWarnings({ "rawtypes" })
 public class MatchConnectedIterator extends GenericIterator {
 
-	public static final String NAME = "CM";
-
-	// private Iterator compositeEntities;
+	public static final String NAME = GPN_SCM;
 
 	/**
 	 * This constructor takes in an Iterator of CompositeEntity.

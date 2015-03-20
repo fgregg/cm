@@ -94,4 +94,6 @@ public interface TransitivityResultSerializer extends Serializable {
 	 */
 	void serialize(TransitivityResult result, Writer writer) throws IOException;
 
+	String getCurrentFileName();
+
 }

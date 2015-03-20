@@ -40,17 +40,20 @@ public class CompositeTextSerializer extends TextSerializer implements
 	/** Defines the output file size is checked */
 	private static final int INTERVAL = 2000;
 
-	/** The one-based index of the current output file */
-	private int currentFile;
-
 	/** An extension appended to the base name of the output file */
 	private final String fileExt;
+
+	/** The one-based index of the current output file */
+	private int currentIndex;
+
+	/** The one-based index of the current output file */
+	private String currentFileName;
 
 	public CompositeTextSerializer(TransitivitySortType transitivitySortType) {
 		super(transitivitySortType.getComparator());
 		assert transitivitySortType != null;
 		fileExt = transitivitySortType.getFileExtension();
-		currentFile = 1;
+		currentIndex = 1;
 	}
 
 	/**
@@ -81,10 +84,10 @@ public class CompositeTextSerializer extends TextSerializer implements
 			throw new IllegalArgumentException(msg);
 		}
 
-		Writer writer =
-			new FileWriter(
-					FileUtils.getFileName(fileBase, fileExt, currentFile),
-					false);
+		final String fn =
+			FileUtils.getFileName(fileBase, fileExt, currentIndex);
+		setCurrentFileName(fn);
+		Writer writer = new FileWriter(getCurrentFileName(), false);
 
 		// first get all the record IDs from the clusters.
 		List<Record> records = new ArrayList<>();
@@ -103,17 +106,18 @@ public class CompositeTextSerializer extends TextSerializer implements
 		// third, write them out.
 		int s = recs.length;
 		for (int i = 0; i < s; i++) {
-			TransitivityResultSerializer.Record r = (TransitivityResultSerializer.Record) recs[i];
+			TransitivityResultSerializer.Record r =
+				(TransitivityResultSerializer.Record) recs[i];
 			writer.write(printRecord(r));
 			if (i % INTERVAL == 0) {
 				writer.flush();
-				if (FileUtils.isFull(fileBase, fileExt, currentFile,
+				if (FileUtils.isFull(fileBase, fileExt, currentIndex,
 						maxFileSize)) {
 					writer.close();
-					currentFile++;
+					currentIndex++;
 					writer =
 						new FileWriter(FileUtils.getFileName(fileBase, fileExt,
-								currentFile), false);
+								currentIndex), false);
 				}
 			}
 		} // end for
@@ -123,6 +127,15 @@ public class CompositeTextSerializer extends TextSerializer implements
 
 		// free up memory
 		recs = null;
+	}
+
+	@Override
+	public String getCurrentFileName() {
+		return currentFileName;
+	}
+
+	protected void setCurrentFileName(String currentFileName) {
+		this.currentFileName = currentFileName;
 	}
 
 }

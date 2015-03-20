@@ -542,16 +542,4 @@ public abstract class AbstractTransitivityMdbTest<T extends WellKnownTestConfigu
 		return utx;
 	}
 
-	// @Override
-	// public AnalysisResultFormat getAnalysisResultFormat() {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
-	//
-	// @Override
-	// public String getGraphPropertyName() {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
-
 }

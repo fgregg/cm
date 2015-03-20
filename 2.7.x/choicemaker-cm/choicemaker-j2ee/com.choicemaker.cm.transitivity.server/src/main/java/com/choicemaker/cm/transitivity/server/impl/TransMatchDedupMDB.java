@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
 import static com.choicemaker.cm.transitivity.core.TransitivityProcessingEvent.DONE_TRANSITIVITY_PAIRWISE;
 
 import java.util.ArrayList;
@@ -115,8 +116,8 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 		// mark as done
 		final Date now = new Date();
 		final String info = null;
-		sendToUpdateStatus(transJob, BatchProcessingEvent.DONE, now, info);
-		processingEntry.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
+		sendToUpdateStatus(transJob, DONE_TRANSITIVITY_PAIRWISE, now, info);
+		processingEntry.setCurrentProcessingEvent(DONE_TRANSITIVITY_PAIRWISE);
 
 	}
 
@@ -206,7 +207,10 @@ public class TransMatchDedupMDB extends AbstractTransitivityMDB {
 		log.info("final output " + finalSink.getInfo());
 
 		try {
-			transJob.setDescription(finalSink.getInfo());
+			String cachedFileName = finalSink.getInfo();
+			log.info("Cached results file: " + cachedFileName);
+			propController.setJobProperty(transJob,
+					PN_TRANSITIVITY_CACHED_PAIRS_FILE, cachedFileName);
 		} catch (Exception e) {
 			log.severe(e.toString());
 		}

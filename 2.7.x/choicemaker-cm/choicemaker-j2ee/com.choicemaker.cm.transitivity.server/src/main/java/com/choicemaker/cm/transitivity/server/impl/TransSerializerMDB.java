@@ -10,6 +10,7 @@
  */
 package com.choicemaker.cm.transitivity.server.impl;
 
+import static com.choicemaker.cm.args.BatchProcessingEvent.DONE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_GROUPS_FILE;
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_TRANSITIVITY_CACHED_PAIRS_FILE;
 import static com.choicemaker.cm.batch.BatchJobStatus.ABORT_REQUESTED;
@@ -34,7 +35,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.choicemaker.cm.args.AnalysisResultFormat;
-import com.choicemaker.cm.args.BatchProcessingEvent;
 import com.choicemaker.cm.args.IGraphProperty;
 import com.choicemaker.cm.args.ProcessingEvent;
 import com.choicemaker.cm.args.TransitivityParameters;
@@ -71,15 +71,15 @@ import com.choicemaker.cm.transitivity.util.CompositeXMLSerializer;
 				@ActivationConfigProperty(propertyName = "destinationType",
 						propertyValue = "javax.jms.Queue") })
 @SuppressWarnings({ "rawtypes" })
-public class TransSerializerMsgBean implements MessageListener, Serializable {
+public class TransSerializerMDB implements MessageListener, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger
-			.getLogger(TransSerializerMsgBean.class.getName());
+	private static final Logger log = Logger.getLogger(TransSerializerMDB.class
+			.getName());
 
 	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ TransSerializerMsgBean.class.getName());
+			+ TransSerializerMDB.class.getName());
 
 	public static final int DEFAULT_MAX_RECORD_COUNT = 100000000;
 
@@ -144,7 +144,7 @@ public class TransSerializerMsgBean implements MessageListener, Serializable {
 					OabaJobMessage data = (OabaJobMessage) o;
 					long jobId = data.jobID;
 					batchJob = jobController.findTransitivityJob(jobId);
-					_onMessage(batchJob);
+					processOabaMessage(batchJob);
 				} else {
 					log.warning("wrong message body: " + o.getClass().getName());
 				}
@@ -162,10 +162,8 @@ public class TransSerializerMsgBean implements MessageListener, Serializable {
 		jmsTrace.info("Exiting onMessage for " + this.getClass().getName());
 	}
 
-	public void _onMessage(BatchJob batchJob) {
-		if (batchJob == null) {
-			throw new IllegalArgumentException("null batch job");
-		}
+	protected void processOabaMessage(BatchJob batchJob) {
+		assert batchJob != null;
 
 		final long jobId = batchJob.getId();
 		final TransitivityParameters params =
@@ -199,12 +197,18 @@ public class TransSerializerMsgBean implements MessageListener, Serializable {
 			final String cachedPairsFileName =
 				propController.getJobProperty(batchJob,
 						PN_TRANSITIVITY_CACHED_PAIRS_FILE);
+			if (cachedPairsFileName == null
+					|| cachedPairsFileName.trim().isEmpty()) {
+				String msg =
+					"Missing pair-wise result file (property name '"
+							+ PN_TRANSITIVITY_CACHED_PAIRS_FILE + "'";
+				log.severe(msg);
+				throw new IllegalStateException(msg);
+			}
 			log.info("Cached transitivity pairs file: " + cachedPairsFileName);
 
 			String analysisResultFileName =
 				TransitivityFileUtils.getGroupResultFileName(batchJob);
-			propController.setJobProperty(batchJob,
-					PN_TRANSITIVITY_CACHED_GROUPS_FILE, analysisResultFileName);
 
 			MatchRecord2CompositeSource mrs =
 				new MatchRecord2CompositeSource(cachedPairsFileName);
@@ -233,12 +237,14 @@ public class TransSerializerMsgBean implements MessageListener, Serializable {
 			TransitivityResultCompositeSerializer sr =
 				getTransitivityResultSerializer(format);
 			sr.serialize(tr, analysisResultFileName, DEFAULT_MAX_RECORD_COUNT);
+			String resultFile = sr.getCurrentFileName();
+			propController.setJobProperty(batchJob,
+					PN_TRANSITIVITY_CACHED_GROUPS_FILE, resultFile);
 
 			final Date now = new Date();
 			final String info = null;
-			sendToUpdateStatus(batchJob, BatchProcessingEvent.DONE, now, info);
-			processingEntry
-					.setCurrentProcessingEvent(BatchProcessingEvent.DONE);
+			sendToUpdateStatus(batchJob, DONE, now, info);
+			processingEntry.setCurrentProcessingEvent(DONE);
 
 		} catch (Exception e) {
 			log.severe(e.toString());

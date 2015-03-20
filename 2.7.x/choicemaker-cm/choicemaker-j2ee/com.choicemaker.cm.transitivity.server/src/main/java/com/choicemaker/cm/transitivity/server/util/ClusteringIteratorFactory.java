@@ -61,18 +61,20 @@ public class ClusteringIteratorFactory {
 
 		Iterator retVal = null;
 
-		// Replace by lookup in a plugin registry (or replace factory by
-		// dependency injection)
+		// Replace by lookup in a plugin registry or dependency injection
 		if (name.equals(MatchBiconnectedIterator.NAME)) {
 			retVal = new MatchBiconnectedIterator(ceIter);
 		} else if (name.equals(MatchFullyConnectedIterator.NAME)) {
 			retVal = new MatchFullyConnectedIterator(ceIter);
-		} else if (name.equals(MatchBiMatchHoldFullyConnectedIterator.NAME)) {
-			retVal = new MatchBiMatchHoldFullyConnectedIterator(ceIter);
 		} else if (name.equals(MatchConnectedIterator.NAME)) {
 			retVal = new MatchConnectedIterator(ceIter);
+		} else if (name.equals(MatchBiMatchHoldFullyConnectedIterator.NAME)) {
+			String msg =
+				"not yet implemented (group match criterium): '" + name + "'";
+			log.severe(msg);
+			throw new Error(msg);
 		} else {
-			String msg = "unknown group match criterium";
+			String msg = "unknown group match criterium: '" + name + "'";
 			log.severe(msg);
 			throw new IllegalArgumentException(msg);
 		}

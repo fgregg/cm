@@ -86,7 +86,7 @@ public class TransSerializerMsgBean implements MessageDrivenBean,
 	 * Constructor, which is public and takes no arguments.
 	 */
 	public TransSerializerMsgBean() {
-		log.fine("TransSerializerMsgBean constructor");
+		log.fine("TransSerializerMDB constructor");
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext mdc) {

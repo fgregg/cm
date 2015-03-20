@@ -36,7 +36,7 @@ import com.choicemaker.cm.transitivity.core.TransitivityResultSerializer;
  *         ChoiceMaker Technologies, Inc.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class XMLSerializer implements TransitivityResultSerializer {
+public abstract class XMLSerializer implements TransitivityResultSerializer {
 
 	private static final long serialVersionUID = 271L;
 

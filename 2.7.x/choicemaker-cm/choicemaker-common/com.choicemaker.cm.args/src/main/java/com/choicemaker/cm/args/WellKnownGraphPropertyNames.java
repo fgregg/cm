@@ -13,17 +13,22 @@ public interface WellKnownGraphPropertyNames {
 	/**
 	 * Simply connected by MATCH relationships.
 	 */
-	String GPN_SCM = "SimplyConnectedMatches";
+	String GPN_SCM = "CM";
 
 	/**
 	 * Biconnected by MATCH relationships.
 	 */
-	String GPN_BCM = "BiconnectedMatches";
+	String GPN_BCM = "BCM";
 
 	/**
 	 * Fully connected by MATCH relationships.
 	 */
-	String GPN_FCM = "FullyConnectedMatches";
+	String GPN_FCM = "FCM";
+	
+//	/**
+//	 * Biconnected by MATCH relationships, fully connected by HOLD (or MATCH) relations.
+//	 */
+//	String GPN_BCM_FCHM = "BCM_FCHM";
 
 	/** List of well known names */
 	List<String> GPN_NAMES = Collections.unmodifiableList(Arrays
