@@ -128,6 +128,12 @@ public class OabaSettingsEntity extends AbaSettingsEntity implements
 				.getMaxOversized(), oaba.getMinFields(), oaba.getInterval());
 	}
 
+	public OabaSettingsEntity(OabaSettings oaba, int maxSingle2) {
+		this(oaba, maxSingle2, oaba.getMaxBlockSize(), oaba
+				.getMaxChunkSize(), oaba.getMaxMatches(), oaba
+				.getMaxOversized(), oaba.getMinFields(), oaba.getInterval());
+	}
+
 	public OabaSettingsEntity(int limPerBlockingSet, int limSingleBlockingSet,
 			int singleTableGraceLimit, int maxSingle, int maxBlockSize,
 			int maxChunkSize, int maxMatches, int maxOversized, int minFields,
