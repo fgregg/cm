@@ -19,6 +19,7 @@
          point="com.choicemaker.cm.core.modelConfiguration">
       <modelConfiguration
          model="etc/models/SimplePerson.model"
+         databaseAccessor="com.choicemaker.cm.io.db.sqlserver.sqlServerDatabaseAccessor"
          databaseConfiguration="default"
          blockingConfiguration="defaultAutomated"/>
    </extension>
@@ -28,6 +29,7 @@
          point="com.choicemaker.cm.core.modelConfiguration">
       <modelConfiguration
          model="etc/models/SimplePerson2.model"
+         databaseAccessor="com.choicemaker.cm.io.db.oracle.oracleDatabaseAccessor"
          databaseConfiguration="default"
          blockingConfiguration="defaultAutomated"/>
    </extension>

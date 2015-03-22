@@ -254,11 +254,17 @@ public class OnlineMatchBaseBean implements SessionBean {
 			RecordDecisionMaker dm = new RecordDecisionMaker();
 			DatabaseAccessor databaseAccessor;
 			try {
+				// FIXME REMOVEME
+//				CMExtension dbaExt =
+//					CMPlatformUtils.getPluginRegistry().getExtension(
+//						Single.DATABASE_ACCESSOR,
+//						(String) model.properties().get(
+//							Single.DATABASE_ACCESSOR));
+				// END FIXME
 				CMExtension dbaExt =
 					CMPlatformUtils.getPluginRegistry().getExtension(
-						Single.DATABASE_ACCESSOR,
-						(String) model.properties().get(
-							Single.DATABASE_ACCESSOR));
+							Single.DATABASE_ACCESSOR,
+							model.getDatabaseAccessorName());
 				databaseAccessor =
 					(DatabaseAccessor) dbaExt
 						.getConfigurationElements()[0]

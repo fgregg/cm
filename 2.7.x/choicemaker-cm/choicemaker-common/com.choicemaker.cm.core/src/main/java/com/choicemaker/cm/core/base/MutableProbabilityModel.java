@@ -75,11 +75,12 @@ public class MutableProbabilityModel implements IProbabilityModel {
 
 	private Accessor acc;
 	private String accessorClassName;
-	String blockingConfigurationName;
+	private String blockingConfigurationName;
 	private String clueFilePath;
 	private File clueFile;
 	private boolean[] cluesToEvaluate;
-	String databaseConfigurationName;
+	private String databaseAccessorName;
+	private String databaseConfigurationName;
 	private int decisionDomainSize;
 	private boolean enableAllCluesBeforeTraining;
 	private boolean enableAllRulesBeforeTraining;
@@ -719,6 +720,10 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		return retVal;
 	}
 
+	public String getDatabaseAccessorName() {
+		return databaseAccessorName;
+	}
+
 	public String getDatabaseConfigurationName() {
 		String retVal = databaseConfigurationName;
 		if (retVal == null) {
@@ -727,18 +732,22 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		return retVal;
 	}
 
-	public void setDatabaseConfigurationName(String dbc) {
-		if (dbc == null || dbc.trim().isEmpty()) {
-			logger.warning("null or blank database configuration");
-		}
-		this.databaseConfigurationName = dbc;
-	}
-
 	public void setBlockingConfigurationName(String bc) {
 		if (bc == null || bc.trim().isEmpty()) {
 			throw new IllegalArgumentException("null or blank blocking configuration");
 		}
 		this.blockingConfigurationName = bc;
+	}
+
+	public void setDatabaseAccessorName(String databaseAccessorName) {
+		this.databaseAccessorName = databaseAccessorName;
+	}
+
+	public void setDatabaseConfigurationName(String dbc) {
+		if (dbc == null || dbc.trim().isEmpty()) {
+			logger.warning("null or blank database configuration");
+		}
+		this.databaseConfigurationName = dbc;
 	}
 
 }

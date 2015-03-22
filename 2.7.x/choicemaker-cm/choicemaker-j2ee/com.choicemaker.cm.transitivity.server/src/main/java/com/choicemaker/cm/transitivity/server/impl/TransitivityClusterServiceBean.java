@@ -122,9 +122,13 @@ public class TransitivityClusterServiceBean implements SessionBean {
 		RecordDecisionMaker dm = new RecordDecisionMaker();
 		DatabaseAccessor databaseAccessor;
 		try {
+			// FIXME REMOVEME
+			// CMPlatformUtils.getExtension(DATABASE_ACCESSOR, (String) model
+			// .properties().get(DATABASE_ACCESSOR));
+			// END FIXME
 			CMExtension dbaExt =
-				CMPlatformUtils.getExtension(DATABASE_ACCESSOR, (String) model
-						.properties().get(DATABASE_ACCESSOR));
+				CMPlatformUtils.getExtension(DATABASE_ACCESSOR,
+						model.getDatabaseAccessorName());
 			databaseAccessor =
 				(DatabaseAccessor) dbaExt.getConfigurationElements()[0]
 						.createExecutableExtension("class");

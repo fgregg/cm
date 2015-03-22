@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 
 import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.io.blocking.automated.offline.server.impl.Chunk2MDB;
-import com.choicemaker.cm.io.blocking.automated.offline.server.impl.ChunkMDB;
 import com.choicemaker.cmit.oaba.util.OabaDeploymentUtils;
 import com.choicemaker.cmit.testconfigs.SimplePersonSqlServerTestConfiguration;
 import com.choicemaker.cmit.utils.BatchProcessingPhase;
@@ -37,7 +36,7 @@ public class DedupMdbIT extends
 	 */
 	@Deployment
 	public static EnterpriseArchive createEarArchive() {
-		Class<?>[] removedClasses = { ChunkMDB.class, Chunk2MDB.class };
+		Class<?>[] removedClasses = { Chunk2MDB.class };
 		return OabaDeploymentUtils.createEarArchive(removedClasses,
 				TESTS_AS_EJB_MODULE);
 	}

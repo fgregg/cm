@@ -9,18 +9,20 @@ import com.choicemaker.cm.core.XmlConfException;
  * names of a database and blocking configuration that are valid for the model
  * 
  * @author rphall
- * 
+ * @deprecated unused and only partially implemented
  */
 public class BasicModelConfiguration implements ProbabilityModelConfiguration {
 
 	private final ImmutableProbabilityModel model;
-	private final String dbConfigName;
 	private final String blockingConfigName;
+	private final String dbAccessorName;
+	private final String dbConfigName;
 
 	public BasicModelConfiguration(String modelPath, String dbConfigName,
-			String blockingConfigName) throws XmlConfException {
+			String blockingConfigName, String dbAccessorName) throws XmlConfException {
 		this.model = loadModel(modelPath);
 		this.dbConfigName = validateDatabaseConfiguration(model, dbConfigName);
+		this.dbAccessorName = validateDatabaseAccessor(model, dbAccessorName);
 		this.blockingConfigName =
 			validateBlockingConfiguration(model, blockingConfigName);
 	}
@@ -29,12 +31,16 @@ public class BasicModelConfiguration implements ProbabilityModelConfiguration {
 		return this.model;
 	}
 
-	public String getDatabaseConfigurationName() {
-		return this.dbConfigName;
-	}
-
 	public String getBlockingConfigurationName() {
 		return this.blockingConfigName;
+	}
+
+	public String getDatabaseAccessorName() {
+		return dbAccessorName;
+	}
+
+	public String getDatabaseConfigurationName() {
+		return this.dbConfigName;
 	}
 
 	private static ImmutableProbabilityModel loadModel(String modelPath)
@@ -44,6 +50,12 @@ public class BasicModelConfiguration implements ProbabilityModelConfiguration {
 
 	private static String validateDatabaseConfiguration(
 			ImmutableProbabilityModel model, String dbConfigName)
+			throws XmlConfException {
+		throw new Error("not yet implemented");
+	}
+
+	private static String validateDatabaseAccessor(
+			ImmutableProbabilityModel model, String dbAccessorName)
 			throws XmlConfException {
 		throw new Error("not yet implemented");
 	}

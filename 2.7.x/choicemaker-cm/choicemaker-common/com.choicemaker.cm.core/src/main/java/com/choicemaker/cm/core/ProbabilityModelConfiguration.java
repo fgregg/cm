@@ -14,6 +14,12 @@ public interface ProbabilityModelConfiguration {
 	 */
 	String AN_DATABASE_CONFIGURATION = "databaseConfiguration";
 
+	/**
+	 * Name of a required plugin attribute that specifies the id of an existing
+	 * plugin database accessor
+	 */
+	String AN_DATABASE_ACCESSOR = "databaseAccessor";
+
 	// Deprecated property names
 
 	/** @deprecated */
@@ -21,6 +27,10 @@ public interface ProbabilityModelConfiguration {
 
 	/** @deprecated */
 	String PN_DB_CONFIGURATION = "dbConfiguration";
+
+	/** @deprecated */
+	String PN_DATABASE_ACCESSOR =
+			ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 
 	/** @deprecated */
 	String PN_LIMITPERBLOCKINGSET = "limitPerBlockingSet";
@@ -37,4 +47,6 @@ public interface ProbabilityModelConfiguration {
 	
 	String getBlockingConfigurationName();
 	
+	String getDatabaseAccessorName();
+
 }

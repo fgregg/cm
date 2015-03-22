@@ -2,6 +2,7 @@ package com.choicemaker.e2.ejb;
 
 import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MODELCONFIGURATION;
 import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_BLOCKING_CONFIGURATION;
+import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_ACCESSOR;
 import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION;
 import static com.choicemaker.cm.core.PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR;
 
@@ -65,6 +66,7 @@ public class EjbPlatformBean implements EjbPlatform {
 			for (CMConfigurationElement el : els) {
 				final String KEY_FILE = "model";
 				String file = el.getAttribute(KEY_FILE);
+				String databaseAccessor = el.getAttribute(AN_DATABASE_ACCESSOR);
 				String databaseConfig = el.getAttribute(AN_DATABASE_CONFIGURATION);
 				String blockingConfig = el.getAttribute(AN_BLOCKING_CONFIGURATION);
 				try {
@@ -83,8 +85,9 @@ public class EjbPlatformBean implements EjbPlatform {
 					// HACK
 					assert model instanceof MutableProbabilityModel;
 					MutableProbabilityModel mpm = (MutableProbabilityModel) model;
-					mpm.setDatabaseConfigurationName(databaseConfig);
 					mpm.setBlockingConfigurationName(blockingConfig);
+					mpm.setDatabaseAccessorName(databaseAccessor);
+					mpm.setDatabaseConfigurationName(databaseConfig);
 					mpm.setModelName(ext.getUniqueIdentifier());
 					// END HACK
 					DefaultProbabilityModelManager.getInstance()

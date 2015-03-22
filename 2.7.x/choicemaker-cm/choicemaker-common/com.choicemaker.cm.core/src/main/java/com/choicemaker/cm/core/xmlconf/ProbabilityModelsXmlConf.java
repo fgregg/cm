@@ -398,6 +398,8 @@ public class ProbabilityModelsXmlConf {
 					m.properties().put(key,value);
 					if (key.equals(ProbabilityModelConfiguration.PN_DB_CONFIGURATION)) {
 						m.setDatabaseConfigurationName(value);
+					} else if (key.equals(ProbabilityModelConfiguration.PN_DATABASE_ACCESSOR)) {
+						m.setDatabaseAccessorName(value);
 					} else if (key.equals(ProbabilityModelConfiguration.PN_BLOCKING_CONFIGURATION)) {
 						m.setBlockingConfigurationName(value);
 					}

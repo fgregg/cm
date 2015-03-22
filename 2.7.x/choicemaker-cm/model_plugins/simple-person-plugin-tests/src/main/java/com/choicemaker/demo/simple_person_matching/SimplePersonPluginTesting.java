@@ -7,8 +7,9 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -47,6 +48,16 @@ public final class SimplePersonPluginTesting {
 
 	public static final String EXPECTED_DATABASE_CONFIG = "default";
 
+	private static final String[] _KNOWN_DATABASE_ACCESSORS = new String[] {
+			"com.choicemaker.cm.io.db.oracle.oracleDatabaseAccessor",
+			"com.choicemaker.cm.io.db.sqlserver.sqlServerDatabaseAccessor" };
+
+	private static final Set<String> _EXPECTED_DATABASE_ACCESSORS =
+			new HashSet<String>(Arrays.asList(_KNOWN_DATABASE_ACCESSORS));
+
+	public static final Set<String> EXPECTED_DATABASE_ACCESSORS =
+		Collections.unmodifiableSet(_EXPECTED_DATABASE_ACCESSORS);
+
 	public static final String SP_PLUGIN_ID =
 		"com.choicemaker.cm.simplePersonMatching";
 
@@ -77,7 +88,11 @@ public final class SimplePersonPluginTesting {
 			CMConfigurationElement cmce = cmces[0];
 			String[] attributeNames = cmce.getAttributeNames();
 			assertTrue(attributeNames != null);
-			assertTrue(attributeNames.length == 3);
+			assertTrue(attributeNames.length == 4);
+			String dbAccessor =
+				cmce.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_ACCESSOR);
+			assertTrue(dbAccessor != null);
+			assertTrue(EXPECTED_DATABASE_ACCESSORS.contains(dbAccessor));
 			String dbConfiguration =
 				cmce.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION);
 			assertTrue(EXPECTED_DATABASE_CONFIG.equals(dbConfiguration));
@@ -129,9 +144,10 @@ public final class SimplePersonPluginTesting {
 			// Check that some stuff is computed correctly
 			final String computedModelPath = pm.getModelFilePath();
 			assertTrue(modelFile.equals(computedModelPath));
-			final Map<?, ?> computedModelProperties = pm.properties();
-			assertTrue(computedModelProperties != null);
-			assertTrue(computedModelProperties.isEmpty());
+			// Model properties are deprecated
+//			final Map<?, ?> computedModelProperties = pm.properties();
+//			assertTrue(computedModelProperties != null);
+//			assertTrue(computedModelProperties.isEmpty());
 
 			// Register the model with the Probability Model Manager
 			PMManager.addModel(pm);
