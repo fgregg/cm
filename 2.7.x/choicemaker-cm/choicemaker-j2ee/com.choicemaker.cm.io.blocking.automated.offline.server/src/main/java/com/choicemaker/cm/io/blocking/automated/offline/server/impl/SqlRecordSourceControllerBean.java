@@ -5,18 +5,23 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.sql.DataSource;
 
+import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.PersistableRecordSource;
 import com.choicemaker.cm.args.PersistableSqlRecordSource;
+import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
 
 @Stateless
-public class SqlRecordSourceControllerBean /*
-											 * implements RecordSourceController
-											 */{
+public class SqlRecordSourceControllerBean implements SqlRecordSourceController {
 
 	private static final Logger logger = Logger
 			.getLogger(SqlRecordSourceControllerBean.class.getName());
@@ -24,7 +29,7 @@ public class SqlRecordSourceControllerBean /*
 	@PersistenceContext(unitName = "oaba")
 	private EntityManager em;
 
-	// @Override
+	@Override
 	public PersistableSqlRecordSource save(final PersistableRecordSource rs) {
 		if (rs == null) {
 			throw new IllegalArgumentException("null settings");
@@ -76,7 +81,7 @@ public class SqlRecordSourceControllerBean /*
 		return retVal;
 	}
 
-	// @Override
+	@Override
 	public PersistableSqlRecordSource find(Long id, String type) {
 		PersistableSqlRecordSource retVal = null;
 		if (id != null && PersistableSqlRecordSource.TYPE.equals(type)) {
@@ -89,7 +94,7 @@ public class SqlRecordSourceControllerBean /*
 		return em.find(SqlRecordSourceEntity.class, id);
 	}
 
-	// @Override
+	@Override
 	public ISerializableRecordSource getRecordSource(Long rsId, String type)
 			throws Exception {
 		ISerializableRecordSource retVal = null;
@@ -110,11 +115,67 @@ public class SqlRecordSourceControllerBean /*
 		return retVal;
 	}
 
-	// @Override
+	@Override
 	public List<PersistableRecordSource> findAll() {
 		Query query = em.createNamedQuery(SqlRecordSourceJPA.QN_SQLRS_FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<PersistableRecordSource> retVal = query.getResultList();
+		return retVal;
+	}
+
+	@Override
+	public DataSource getStageDataSource(OabaParameters params)
+			throws BlockingException {
+		DataSource retVal = getDataSource(params.getStageRsId());
+		return retVal;
+	}
+
+	@Override
+	public DataSource getMasterDataSource(OabaParameters params)
+			throws BlockingException {
+		DataSource retVal = getDataSource(params.getMasterRsId());
+		return retVal;
+	}
+
+	@Override
+	public DataSource getDataSource(Long id) throws BlockingException {
+		DataSource retVal = null;
+		if (id != null) {
+			PersistableRecordSource prs =
+				find(id, PersistableSqlRecordSource.TYPE);
+			if (prs != null) {
+				assert prs instanceof PersistableSqlRecordSource;
+				PersistableSqlRecordSource sqlrs =
+					(PersistableSqlRecordSource) prs;
+				String jndiName = sqlrs.getDataSource();
+				retVal = getDataSource(jndiName);
+			}
+		} else {
+			retVal = null;
+			logger.fine("returning null DataSource for null id");
+		}
+		return retVal;
+	}
+
+	@Override
+	public DataSource getDataSource(String jndiName) throws BlockingException {
+		if (jndiName == null || !jndiName.trim().equals(jndiName)
+				|| jndiName.isEmpty()) {
+			String msg = "Invalid JNDI name '" + jndiName + "'";
+			throw new IllegalArgumentException(msg);
+		}
+		DataSource retVal = null;
+		try {
+			Context ctx = new InitialContext();
+			retVal = (DataSource) ctx.lookup(jndiName);
+		} catch (NamingException ex) {
+			String msg =
+				"Unable to locate DataSource '" + jndiName + "': " + ex;
+			logger.severe(ex.toString());
+			throw new BlockingException(msg, ex);
+		}
+		assert retVal != null;
+
 		return retVal;
 	}
 

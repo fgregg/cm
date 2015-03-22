@@ -18,6 +18,7 @@ import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
 
 @Stateless
 public class PersistableRecordSourceControllerBean implements
@@ -36,7 +37,7 @@ public class PersistableRecordSourceControllerBean implements
 	private OabaParametersController paramsController;
 
 	@EJB
-	private SqlRecordSourceControllerBean sqlRsController;
+	private SqlRecordSourceController sqlRsController;
 
 	@Override
 	public ISerializableRecordSource getStageRs(OabaParameters params)

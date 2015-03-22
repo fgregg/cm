@@ -38,6 +38,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessa
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordIdController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.util.MessageBeanUtils;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityConfigurationController;
 import com.choicemaker.cm.transitivity.server.ejb.TransitivityJobController;
@@ -81,12 +82,14 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 	private RecordSourceController rsController;
 
 	@EJB
+	private SqlRecordSourceController sqlRSController;
+
+	@EJB
 	private RecordIdController ridController;
 
 	@EJB
 	private OperationalPropertyController propController;
 
-	// This member will go away, but for now accessible from sub-classes
 	@Inject
 	private JMSContext jmsContext;
 
@@ -122,6 +125,10 @@ public abstract class AbstractTransitivityMDB implements MessageListener,
 
 	protected final RecordSourceController getRecordSourceController() {
 		return rsController;
+	}
+
+	protected final SqlRecordSourceController getSqlRecordSourceController() {
+		return sqlRSController;
 	}
 
 	protected final RecordIdController getRecordIdController() {
