@@ -16,16 +16,13 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RE
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
-import javax.ejb.CreateException;
 import javax.ejb.MessageDriven;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.args.BatchProcessingEvent;
@@ -65,7 +62,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.data.MatchRecordUtils;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockGroup;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.BlockMatcher2;
 import com.choicemaker.cm.io.blocking.automated.offline.impl.ValidatorBase;
-import com.choicemaker.cm.io.blocking.automated.offline.server.data.EJBConfiguration;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
 import com.choicemaker.cm.io.blocking.automated.offline.services.BlockDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.ChunkService2;
@@ -75,6 +71,7 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingSer
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService2;
 import com.choicemaker.cm.server.util.CountsUpdate;
+import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.E2Exception;
 import com.choicemaker.e2.platform.CMPlatformUtils;
@@ -111,30 +108,6 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 	public static final String MATCH_CANDIDATE =
 		ChoiceMakerExtensionPoint.CM_CORE_MATCHCANDIDATE;
 
-//	@EJB
-//	private OabaJobController jobController;
-//
-//	@EJB
-//	private OabaSettingsController oabaSettingsController;
-//
-//	@EJB
-//	private OabaParametersController paramsController;
-//
-//	@EJB
-//	private ProcessingController getProcessingController();
-//
-//	@EJB
-//	private RecordSourceController rsController;
-//
-//	@EJB
-//	private RecordIdController ridController;
-//
-//	@EJB
-//	private OperationalPropertyController propController;
-
-	// @Inject
-	// private JMSContext jmsContext;
-
 	@Override
 	protected void processOabaMessage(OabaJobMessage data, BatchJob batchJob,
 			OabaParameters params, OabaSettings settings,
@@ -151,17 +124,17 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		long t = System.currentTimeMillis();
 		handleStageBatch(mSink, batchJob, params, settings, processingLog,
 				serverConfig, model);
-		log.info("Time in dedup stage " + (System.currentTimeMillis() - t));
+		log.info("Msecs in dedup stage " + (System.currentTimeMillis() - t));
 
 		// run single record match between stage and master.
 		t = System.currentTimeMillis();
 		handleSingleMatching(data, mSink, batchJob, params);
-		log.info("Time in single matching " + (System.currentTimeMillis() - t));
+		log.info("Msecs in single matching " + (System.currentTimeMillis() - t));
 
 		String cachedFileName = mSink.getInfo();
 		log.info("Cached results file: " + cachedFileName);
-		getPropertyController().setJobProperty(batchJob, PN_OABA_CACHED_RESULTS_FILE,
-				cachedFileName);
+		getPropertyController().setJobProperty(batchJob,
+				PN_OABA_CACHED_RESULTS_FILE, cachedFileName);
 
 	}
 
@@ -207,8 +180,8 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 					mutableTranslator, processingEntry);
 		rvService.runService();
 		final int numBlockFields = rvService.getNumBlockingFields();
-		getPropertyController().setJobProperty(batchJob, PN_BLOCKING_FIELD_COUNT,
-				String.valueOf(numBlockFields));
+		getPropertyController().setJobProperty(batchJob,
+				PN_BLOCKING_FIELD_COUNT, String.valueOf(numBlockFields));
 
 		final ImmutableRecordIdTranslator immutableTranslator =
 			getRecordIdController().toImmutableTranslator(mutableTranslator);
@@ -369,36 +342,60 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 			throw new BlockingException(msg);
 		}
 
-		// Get the data source for ABA queries
-		EJBConfiguration configuration = EJBConfiguration.getInstance();
-		DataSource ds = null;
+		// Get the data sources for ABA queries
+		DataSource stageDS = null;
 		try {
-			ds = configuration.getDataSource();
-		} catch (RemoteException | CreateException | NamingException
-				| SQLException e) {
+			stageDS = getSqlRecordSourceController().getStageDataSource(params);
+		} catch (BlockingException e) {
 			String msg = "Unable to acquire data source: " + e;
 			log.severe(msg);
-			throw new BlockingException(msg);
+			throw e;
 		}
-		assert ds != null;
+		assert stageDS != null;
 
 		// Cache ABA statistics for field-value counts
+		log.info("Caching ABA statistic for staging records..");
 		try {
 			CountsUpdate update = new CountsUpdate();
-			update.cacheCounts(ds);
-		} catch (RemoteException | DatabaseException e) {
+			update.cacheCounts(stageDS);
+		} catch (DatabaseException e) {
 			String msg = "Unable to cache ABA statistics: " + e;
 			log.severe(msg);
 			throw new BlockingException(msg);
 		}
+		log.info("... finished caching ABA statistics for staging records.");
 
-		String dbaName = (String) model.properties().get(DATABASE_ACCESSOR);
+		DataSource masterDS = null;
+		try {
+			masterDS =
+				getSqlRecordSourceController().getMasterDataSource(params);
+		} catch (BlockingException e) {
+			String msg = "Unable to acquire data source: " + e;
+			log.severe(msg);
+			throw e;
+		}
+		assert masterDS != null;
+
+		// Cache ABA statistics for field-value counts
+		log.info("Caching ABA statistic for master records..");
+		try {
+			CountsUpdate update = new CountsUpdate();
+			update.cacheCounts(masterDS);
+		} catch (DatabaseException e) {
+			String msg = "Unable to cache ABA statistics: " + e;
+			log.severe(msg);
+			throw new BlockingException(msg);
+		}
+		log.info("... finished caching ABA statistics for master records.");
+
+		String dbaName = model.getDatabaseAccessorName();
 		CMExtension dbaExt =
 			CMPlatformUtils.getExtension(DATABASE_ACCESSOR, dbaName);
 		DatabaseAccessor databaseAccessor = null;
 		try {
-			databaseAccessor = (DatabaseAccessor) dbaExt.getConfigurationElements()[0]
-					.createExecutableExtension("class");
+			databaseAccessor =
+				(DatabaseAccessor) dbaExt.getConfigurationElements()[0]
+						.createExecutableExtension("class");
 		} catch (E2Exception e) {
 			String msg = "Unable to construct database accessor: " + e;
 			log.severe(msg);
@@ -406,7 +403,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		}
 		assert databaseAccessor != null;
 		databaseAccessor.setCondition("");
-		databaseAccessor.setDataSource(ds);
+		databaseAccessor.setDataSource(stageDS);
 
 		RecordSource stage = null;
 		try {
@@ -421,11 +418,20 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 		MatchCandidateFactory matchCandidateFactory = null;
 		try {
-			matchCandidateFactory = (MatchCandidateFactory) CMPlatformUtils.getExtension(
-					MATCH_CANDIDATE,
-					"com.choicemaker.cm.core.beanMatchCandidate")
-					.getConfigurationElements()[0]
-					.createExecutableExtension("class");
+			CMExtension ext =
+				CMPlatformUtils.getExtension(MATCH_CANDIDATE,
+						"com.choicemaker.cm.core.beanMatchCandidate");
+			CMConfigurationElement[] configs = ext.getConfigurationElements();
+			CMConfigurationElement config = configs[0];
+			matchCandidateFactory =
+				(MatchCandidateFactory) config
+						.createExecutableExtension("class");
+			// matchCandidateFactory = (MatchCandidateFactory)
+			// CMPlatformUtils.getExtension(
+			// MATCH_CANDIDATE,
+			// "com.choicemaker.cm.core.beanMatchCandidate")
+			// .getConfigurationElements()[0]
+			// .createExecutableExtension("class");
 		} catch (E2Exception e) {
 			String msg = "Unable to create Match Candidate factory: " + e;
 			log.severe(msg);
@@ -434,6 +440,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 		RecordDecisionMaker dm = new RecordDecisionMaker();
 		try {
+			log.info("Finding matches of master records to staging records...");
 			stage.open();
 			mSinkFinal.append();
 			log.fine("MatchCandidateFactory class: "
@@ -462,6 +469,7 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 				}
 
 			}
+			log.info("...finished finding matches of master records to staging records...");
 
 		} catch (IOException x) {
 			String msg = "Unable to read staging records from source: " + x;
