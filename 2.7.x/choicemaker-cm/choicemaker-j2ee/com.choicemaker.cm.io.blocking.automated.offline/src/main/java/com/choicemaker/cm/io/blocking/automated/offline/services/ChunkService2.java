@@ -449,21 +449,28 @@ public class ChunkService2 {
 
 				if (!translator.isSplit()) {
 					// only staging record source
-					if (stage.size() == 0)
+					if (stage.size() == 0) {
 						stageType = RECORD_ID_TYPE.fromInstance(comp);
+						masterType = stageType;
+					}
 					stage.add(comp);
 
 				} else {
 					// two record sources
 					if (block.get(i) < translator.getSplitIndex()) {
 						// stage
-						if (stage.size() == 0)
+						if (stage.size() == 0) {
 							stageType = RECORD_ID_TYPE.fromInstance(comp);
+							// Assume the masterType is the same
+							// until it is changed explicitly (maybe no master ids)
+							masterType = stageType;
+						}
 						stage.add(comp);
 					} else {
 						// master
-						if (master.size() == 0)
+						if (master.size() == 0) {
 							masterType = RECORD_ID_TYPE.fromInstance(comp);
+						}
 						master.add(comp);
 					}
 				}
