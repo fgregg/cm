@@ -36,21 +36,15 @@ public class CountsUpdate {
 		try {
 			connection = dataSource.getConnection();
 			countsCreator = new DbbCountsCreator(connection);
-			
 			countsCreator.install();
 			countsCreator.create(neverComputedOnly);
 			countsCreator.setCacheCountSources();
-			
 			countsCreator.commit();
-		} catch (Exception ex) {
+
+		} catch (SQLException e) {
 			logger.severe(ex.toString());
-			if (connection != null) {
-				try {
-					connection.rollback();
-				} catch (SQLException e) {
-					logger.severe(e.toString());
-				}
-			}
+			throw e;
+			
 		} finally {
 			try {
 				if (connection != null) {
@@ -62,7 +56,10 @@ public class CountsUpdate {
 		}
 	}
 
-	public void cacheCounts(DataSource dataSource) throws DatabaseException, RemoteException {
+	public void cacheCounts(DataSource dataSource) throws DatabaseException {
+		if (dataSource == null) {
+			throw new IllegalArgumentException("null datasource");
+		}
 		Connection connection = null;
 		DbbCountsCreator countsCreator = null;
 		try {

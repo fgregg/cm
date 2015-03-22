@@ -85,7 +85,8 @@ public class DbbCountsCreator {
 		// which causes the "setCacheCountSources()" method to
 		// fail quietly.
 		this.connection = connection;
-		this.connection.setAutoCommit(false);
+// MODIFIED 2015-03-21 rphall (EJB3)
+//		this.connection.setAutoCommit(false);
 		this.blockingConfigurations = blockingConfigurations;
 		// END BUG
 	}
@@ -499,7 +500,7 @@ public class DbbCountsCreator {
 
 	private Map<DbTable, Integer> readTableSizes(Statement stmt)
 			throws SQLException {
-		logger.fine("readTableSizes");
+		logger.fine("readTableSizes...");
 		Map<DbTable, Integer> l = new HashMap<>();
 		String query =
 			"SELECT ViewName, MasterId, Count FROM TB_CMT_COUNT_FIELDS f, TB_CMT_COUNTS c "
@@ -510,12 +511,25 @@ public class DbbCountsCreator {
 			l.put(new DbTable(rs.getString(1), 0, rs.getString(2)),
 					new Integer(Math.max(1, rs.getInt(3))));
 		}
+		if (l.size() == 0) {
+			String msg =
+				"Required views for automated blocking were not found. "
+				+ "Automated blocking will not work without them. "
+				+ "Use CM-Analyzer to produce a script that will create them, "
+				+ "then run the script to add them to the database.";
+			logger.warning(msg);
+		}
+		logger.fine("...readTableSizes");
 		return l;
 	}
 
 	private int getTableSize(Map<DbTable, Integer> tableSizes, IDbTable dbt) {
+		int retVal = 0;
 		Integer s = (Integer) tableSizes.get(dbt);
-		return s.intValue();
+		if (s == null) {
+			logger.warning("Table size is null. Have ABA statistics been computed?");
+		}
+		return retVal;
 	}
 
 	private CountField find(List<CountField> countFields, IDbField dbf) {
