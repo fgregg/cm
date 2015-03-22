@@ -44,7 +44,7 @@
          name="beanMatchCandidate"
          point="com.choicemaker.cm.core.matchCandidate">
       <matchCandidate
-            class="com.choicemaker.cm.core.BeanMatchCandidateFactory">
+            class="com.choicemaker.cm.core.base.BeanMatchCandidateFactory">
       </matchCandidate>
    </extension>
    <extension
@@ -52,7 +52,7 @@
          name="matchCandidate"
          point="com.choicemaker.cm.core.matchCandidate">
       <matchCandidate
-            class="com.choicemaker.cm.core.MatchCandidateFactory">
+            class="com.choicemaker.cm.core.base.MatchCandidateFactory">
       </matchCandidate>
    </extension>
    <extension
