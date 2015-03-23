@@ -139,11 +139,10 @@ public class AbaStatisticsSingleton implements Serializable {
 	/** Map of model configuration names to ABA statistics */
 	private Map<String, CacheCountSource[]> cachedStats = new Hashtable<>();
 
-	public DataSource upateMasterAbaStatistics(OabaParameters params) throws BlockingException {
+	public void updateStagingAbaStatistics(OabaParameters params) throws BlockingException {
 	}
 
-	public DataSource upateMasterAbaStatistics(OabaParameters params) throws BlockingException {
-		
+	public void updateMasterAbaStatistics(OabaParameters params) throws BlockingException {
 	// Get the data sources for ABA queries
 	DataSource stageDS = null;
 	try {
@@ -220,12 +219,12 @@ public class AbaStatisticsSingleton implements Serializable {
 	return masterDS;
 	}
 
-	public void updateCounts(String probabilityModel) {
+	public void updateCounts(String urlString) {
 		DataSource ds = null;
-		try {
+//		try {
 			log.fine("url" + urlString);
 			if (urlString == null || urlString.length() == 0)
-				throw new RecordCollectionException("empty url");
+				throw new IllegalArgumentException("empty DataSource url");
 			Context ctx = new InitialContext();
 			Object o = ctx.lookup(urlString);
 			ds = (DataSource) o;
@@ -240,13 +239,13 @@ public class AbaStatisticsSingleton implements Serializable {
 			//new CountsUpdate().updateCounts(ds, true);
 			// </BUGFIX>
 			new CountsUpdate().updateCounts(ds, false);
-		} catch (NamingException e) {
-			log.severe(e.toString());
-			throw new ConfigException(e.toString());
-		} catch (DatabaseException e) {
-			log.severe(e.toString());
-			throw new RecordCollectionException(e.toString());
-		}
+//		} catch (NamingException e) {
+//			log.severe(e.toString());
+//			throw new ConfigException(e.toString());
+//		} catch (DatabaseException e) {
+//			log.severe(e.toString());
+//			throw new RecordCollectionException(e.toString());
+//		}
 	}
 
 }

@@ -42,9 +42,10 @@ public class CountsUpdate {
 			countsCreator.commit();
 
 		} catch (SQLException e) {
-			logger.severe(ex.toString());
-			throw e;
-			
+			String msg = "Unable to update ABA statistics; " + e;
+			logger.severe(msg);
+			throw new DatabaseException(msg,e);
+
 		} finally {
 			try {
 				if (connection != null) {
