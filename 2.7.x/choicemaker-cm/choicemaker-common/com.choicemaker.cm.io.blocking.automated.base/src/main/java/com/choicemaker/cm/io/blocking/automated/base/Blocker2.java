@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -114,18 +115,16 @@ public class Blocker2 implements AutomatedBlocker {
 	public Blocker2(
 		DatabaseAccessor databaseAccessor,
 		ImmutableProbabilityModel model,
-		Record q) {
+		Record q,
+		AbaSettings abaSettings
+		) {
 		this(
 			databaseAccessor,
 			model,
 			q,
-			Integer.parseInt(
-				(String) model.properties().get("limitPerBlockingSet")),
-			Integer.parseInt(
-				(String) model.properties().get(
-					"singleTableBlockingSetGraceLimit")),
-			Integer.parseInt(
-				(String) model.properties().get("limitSingleBlockingSet")));
+			abaSettings.getLimitPerBlockingSet(),
+			abaSettings.getSingleTableBlockingSetGraceLimit(),
+			abaSettings.getLimitSingleBlockingSet());
 	}
 
 	/**
@@ -140,19 +139,16 @@ public class Blocker2 implements AutomatedBlocker {
 		DatabaseAccessor databaseAccessor,
 		ImmutableProbabilityModel model,
 		Record q,
+		AbaSettings abaSettings,
 		String dbConfigurationName,
 		String blockingConfigurationName) {
 		this(
 			databaseAccessor,
 			model,
 			q,
-			Integer.parseInt(
-				(String) model.properties().get("limitPerBlockingSet")),
-			Integer.parseInt(
-				(String) model.properties().get(
-					"singleTableBlockingSetGraceLimit")),
-			Integer.parseInt(
-				(String) model.properties().get("limitSingleBlockingSet")),
+			abaSettings.getLimitPerBlockingSet(),
+			abaSettings.getSingleTableBlockingSetGraceLimit(),
+			abaSettings.getLimitSingleBlockingSet(),
 			(CountSource) model.getCountSource(),
 			dbConfigurationName,
 			blockingConfigurationName);
