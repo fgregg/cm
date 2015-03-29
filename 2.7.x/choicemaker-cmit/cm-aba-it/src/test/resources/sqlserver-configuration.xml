@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+<plugin>
+    <db>
+      <ConnectionPool name="localhost">
+        <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
+        <url>jdbc:sqlserver://localhost:1433;databaseName=CHANGEME;SelectMethod=cursor</url>
+        <user>CHANGEME</user>
+        <password>CHANGEME</password>
+        <validityCheckStatement>select 1</validityCheckStatement>
+        <initialSize>2</initialSize>
+        <maxSize>20</maxSize>
+        <growBlock>1</growBlock>
+        <createWaitTime>1000</createWaitTime>
+      </ConnectionPool>
+    </db>
+  </plugin>
+    <core>
+        <reload>
+            <classpath>etc/models/gen/classes/</classpath>
+        </reload>
+        <generator codeRoot="etc/models/gen"/>
+        <productionProbabilityModels/>
+    </core>
+</conf>

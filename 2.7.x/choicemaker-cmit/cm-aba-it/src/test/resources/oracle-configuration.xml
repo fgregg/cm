@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+    <plugin>
+        <oracle>
+            <OraConnectionCache name="persons_1">
+                <driverType>thin</driverType>
+                <serverName>localhost</serverName>
+                <networkProtocol>tcp</networkProtocol>
+                <databaseName>CHANGEME</databaseName>
+                <portNumber>1521</portNumber>
+                <user>CHANGEME</user>
+                <password>CHANGEME</password>
+                <connectionLimit>20</connectionLimit>
+            </OraConnectionCache>
+        </oracle>
+    </plugin>
+    <core>
+        <module class="com.choicemaker.cm.io.db.oracle.xmlconf.OraXmlInitializer" />
+        <reload>
+            <classpath>etc/models/gen/classes/</classpath>
+        </reload>
+        <generator codeRoot="etc/models/gen"/>
+        <productionProbabilityModels/>
+    </core>
+</conf>

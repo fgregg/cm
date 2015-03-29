@@ -189,8 +189,13 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	 * @throws XmlConfException
 	 *             if any error occurs.
 	 */
-	static void initializeModules(Document document, ClassLoader cl)
+	public static void initializeModules(Document document, ClassLoader cl)
 			throws XmlConfException {
+		final String METHOD = "XmlConfigurator.initializeModules: ";
+		if (document == null || cl == null) {
+			String msg = METHOD + "null constructor argument";
+			throw new IllegalArgumentException(msg);
+		}
 		try {
 			List modules = ConfigurationUtils.getModules(document);
 			Iterator i = modules.iterator();
@@ -267,11 +272,22 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	 * @return the JDOM root element for the configuration file.
 	 */
 	public Element getRoot() {
+		return getRoot(getDocument());
+	}
+
+	public static Element getRoot(Document document) {
+		if (document == null) {
+			throw new IllegalArgumentException("null document");
+		}
 		return document.getRootElement();
 	}
 
 	Element get(String b, String t) {
-		Element e = getRoot().getChild(b);
+		return get(getDocument(), b, t);
+	}
+
+	public static Element get(Document document, String b, String t) {
+		Element e = getRoot(document).getChild(b);
 		if (e != null) {
 			return e.getChild(t);
 		} else {
@@ -284,7 +300,11 @@ public class XmlConfigurator implements ChoiceMakerConfigurator,
 	}
 
 	public Element getPlugin(String t) {
-		return get("plugin", t);
+		return getPlugin(getDocument(), t);
+	}
+
+	public static Element getPlugin(Document document, String t) {
+		return get(document, "plugin", t);
 	}
 
 	public Element getCore() {

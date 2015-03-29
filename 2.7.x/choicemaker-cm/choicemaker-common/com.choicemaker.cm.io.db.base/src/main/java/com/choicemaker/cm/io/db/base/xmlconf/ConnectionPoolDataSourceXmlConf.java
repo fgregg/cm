@@ -13,6 +13,7 @@ package com.choicemaker.cm.io.db.base.xmlconf;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import org.jdom.Document;
 import org.jdom.Element;
 
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
@@ -40,9 +41,18 @@ public class ConnectionPoolDataSourceXmlConf {
 			.getLogger(ConnectionPoolDataSourceXmlConf.class.getName());
 
 	private static boolean alreadyInited = false;
-
+	
 	public static void init() {
-		Element db = XmlConfigurator.getInstance().getPlugin("db");
+		Document d = XmlConfigurator.getInstance().getDocument();
+		init(d);
+	}
+
+	public static void init(Document d) {
+		Element db = XmlConfigurator.getPlugin(d, "db");
+		init(db);
+	}
+
+	public static void init(Element db) {
 		if (db != null) {
 			Iterator i = db.getChildren("ConnectionPool").iterator();
 			while (i.hasNext()) {
