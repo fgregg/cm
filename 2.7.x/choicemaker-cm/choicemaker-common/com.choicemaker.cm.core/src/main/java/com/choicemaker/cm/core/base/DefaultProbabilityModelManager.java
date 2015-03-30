@@ -10,21 +10,36 @@
  */
 package com.choicemaker.cm.core.base;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.IProbabilityModelManager;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ModelConfigurationException;
+import com.choicemaker.cm.core.ProbabilityModelConfiguration;
+import com.choicemaker.cm.core.compiler.DoNothingCompiler;
+import com.choicemaker.cm.core.compiler.ICompiler;
 import com.choicemaker.cm.core.report.Reporter;
+import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
+import com.choicemaker.e2.CMConfigurationElement;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.util.Precondition;
 
 /**
- * Creates and manages a collection of IProbabilityModel instances.
- * <br/><br/> 
+ * Creates and manages a collection of IProbabilityModel instances. <br/>
+ * <br/>
  * FIXME this class should be installable (or a Service Provider Implementation
  * or a plugin) so that a persistent manager could be specified as the active
  * manager.
@@ -35,6 +50,9 @@ import com.choicemaker.util.Precondition;
  * 
  */
 public class DefaultProbabilityModelManager implements IProbabilityModelManager {
+
+	private static final Logger logger = Logger
+			.getLogger(DefaultProbabilityModelManager.class.getName());
 
 	private DefaultProbabilityModelManager() {
 	}
@@ -92,15 +110,16 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 		return (ImmutableProbabilityModel) models.get(name);
 	}
 
-	public Map models() {
-		Map retVal = Collections.unmodifiableMap(models);
-		return retVal;
-	}
+	// private Map models() {
+	// Map retVal = Collections.unmodifiableMap(models);
+	// return retVal;
+	// }
 
 	public IProbabilityModel[] getModels() {
-		Collection coll = models.values();
-		return (IProbabilityModel[]) coll.toArray(new IProbabilityModel[coll
-				.size()]);
+		Set s = new HashSet(models.values());
+		IProbabilityModel[] retVal = new IProbabilityModel[s.size()];
+		retVal = (IProbabilityModel[]) s.toArray(retVal);
+		return retVal;
 	}
 
 	public void setGlobalReporters(Reporter[] rs) {
@@ -117,6 +136,69 @@ public class DefaultProbabilityModelManager implements IProbabilityModelManager 
 	public Reporter[] getGlobalReporters() {
 		Reporter[] retVal = new Reporter[this.reporters.length];
 		System.arraycopy(this.reporters, 0, retVal, 0, this.reporters.length);
+		return retVal;
+	}
+
+	public int loadModelPlugins() throws ModelConfigurationException,
+			IOException {
+		CMExtension[] extensions =
+			CMPlatformUtils
+					.getExtensions(ChoiceMakerExtensionPoint.CM_CORE_MODELCONFIGURATION);
+		assert extensions != null;
+		int retVal = 0;
+		for (int i = 0; i < extensions.length; i++) {
+			final CMExtension ext = extensions[i];
+			URL pUrl = ext.getDeclaringPluginDescriptor().getInstallURL();
+			CMConfigurationElement[] els = ext.getConfigurationElements();
+			for (int j = 0; j < els.length; j++) {
+				final CMConfigurationElement el = els[j];
+				final String KEY_FILE = "model";
+				String file = el.getAttribute(KEY_FILE);
+				String databaseAbstraction =
+					el.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_ABSTRACTION);
+				String databaseAccessor =
+					el.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_ACCESSOR);
+				String databaseConfig =
+					el.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION);
+				String blockingConfig =
+					el.getAttribute(ProbabilityModelConfiguration.AN_BLOCKING_CONFIGURATION);
+				try {
+					final String fileName = new File(file).getName();
+					final URL rUrl = new URL(pUrl, file);
+					final InputStream is = rUrl.openStream();
+					final ICompiler compiler = new DoNothingCompiler();
+					final StringWriter compilerMessages = new StringWriter();
+					final ClassLoader cl =
+						ext.getDeclaringPluginDescriptor()
+								.getPluginClassLoader();
+					final boolean allowCompile = false;
+					IProbabilityModel model =
+						ProbabilityModelsXmlConf.readModel(fileName, is,
+								compiler, compilerMessages, cl, allowCompile);
+					// HACK
+					assert model instanceof MutableProbabilityModel;
+					MutableProbabilityModel mpm =
+						(MutableProbabilityModel) model;
+					mpm.setBlockingConfigurationName(blockingConfig);
+					mpm.setDatabaseAbstractionName(databaseAbstraction);
+					mpm.setDatabaseAccessorName(databaseAccessor);
+					mpm.setDatabaseConfigurationName(databaseConfig);
+					mpm.setModelName(ext.getUniqueIdentifier());
+					// END HACK
+					DefaultProbabilityModelManager.getInstance()
+							.addModel(model);
+					++retVal;
+
+				} catch (ModelConfigurationException ex) {
+					logger.severe(ex.toString());
+					throw ex;
+				} catch (IOException ex) {
+					logger.severe(ex.toString());
+					throw ex;
+				}
+				
+			}
+		}
 		return retVal;
 	}
 

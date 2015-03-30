@@ -1,15 +1,8 @@
 package com.choicemaker.e2.ejb;
 
-import static com.choicemaker.cm.core.ChoiceMakerExtensionPoint.CM_CORE_MODELCONFIGURATION;
-import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_BLOCKING_CONFIGURATION;
-import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_ACCESSOR;
-import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION;
 import static com.choicemaker.cm.core.PropertyNames.INSTALLABLE_CHOICEMAKER_CONFIGURATOR;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -17,20 +10,12 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
-import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ModelConfigurationException;
-import com.choicemaker.cm.core.base.DefaultProbabilityModelManager;
-import com.choicemaker.cm.core.base.MutableProbabilityModel;
-import com.choicemaker.cm.core.compiler.DoNothingCompiler;
-import com.choicemaker.cm.core.compiler.ICompiler;
-import com.choicemaker.cm.core.xmlconf.ProbabilityModelsXmlConf;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.xmlconf.XmlConfigurator;
-import com.choicemaker.e2.CMConfigurationElement;
-import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.CMPlatformRunnable;
 import com.choicemaker.e2.CMPluginRegistry;
 import com.choicemaker.e2.embed.EmbeddedPlatform;
-import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.choicemaker.e2.platform.InstallablePlatform;
 
 /**
@@ -50,54 +35,27 @@ public class EjbPlatformBean implements EjbPlatform {
 
 	@PostConstruct
 	public void initialize() {
+		final String METHOD = "EjbPlatformBean.initialize: ";
 		EmbeddedPlatform.install();
 		String pn = INSTALLABLE_CHOICEMAKER_CONFIGURATOR;
 		String pv = XmlConfigurator.class.getName();
 		System.setProperty(pn, pv);
-		loadModelPlugins();
-	}
-
-	protected void loadModelPlugins() {
-		CMExtension[] extensions =
-			CMPlatformUtils.getExtensions(CM_CORE_MODELCONFIGURATION);
-		for (CMExtension ext : extensions) {
-			URL pUrl = ext.getDeclaringPluginDescriptor().getInstallURL();
-			CMConfigurationElement[] els = ext.getConfigurationElements();
-			for (CMConfigurationElement el : els) {
-				final String KEY_FILE = "model";
-				String file = el.getAttribute(KEY_FILE);
-				String databaseAccessor = el.getAttribute(AN_DATABASE_ACCESSOR);
-				String databaseConfig = el.getAttribute(AN_DATABASE_CONFIGURATION);
-				String blockingConfig = el.getAttribute(AN_BLOCKING_CONFIGURATION);
-				try {
-					final String fileName = new File(file).getName();
-					final URL rUrl = new URL(pUrl, file);
-					final InputStream is = rUrl.openStream();
-					final ICompiler compiler = new DoNothingCompiler();
-					final StringWriter compilerMessages = new StringWriter();
-					final ClassLoader cl =
-						ext.getDeclaringPluginDescriptor()
-								.getPluginClassLoader();
-					final boolean allowCompile = false;
-					IProbabilityModel model =
-						ProbabilityModelsXmlConf.readModel(fileName, is,
-								compiler, compilerMessages, cl, allowCompile);
-					// HACK
-					assert model instanceof MutableProbabilityModel;
-					MutableProbabilityModel mpm = (MutableProbabilityModel) model;
-					mpm.setBlockingConfigurationName(blockingConfig);
-					mpm.setDatabaseAccessorName(databaseAccessor);
-					mpm.setDatabaseConfigurationName(databaseConfig);
-					mpm.setModelName(ext.getUniqueIdentifier());
-					// END HACK
-					DefaultProbabilityModelManager.getInstance()
-							.addModel(model);
-				} catch (ModelConfigurationException | IOException ex) {
-					logger.severe(ex.toString());
-				}
-
+		// FIXME Remove dependence on cm.core
+		// This initialization belongs in a separate bean, one that implements
+		// IProbabilityModelManager as an EJB. This issue is connected with
+		// making the DefaultProbabilityModelManager an installable component.
+		try {
+			int count = PMManager.loadModelPlugins();
+			if (count == 0) {
+				String msg = METHOD + "No probability models loaded";
+				logger.warning(msg);
 			}
+		} catch (ModelConfigurationException | IOException e) {
+			String msg = METHOD + "Unable to load model plugins: " + e.toString();
+			logger.severe(msg);
+			throw new IllegalStateException(msg);
 		}
+		// END FIXME
 	}
 
 	public CMPluginRegistry getPluginRegistry() {

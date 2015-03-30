@@ -15,7 +15,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import com.choicemaker.cm.compiler.impl.CompilerFactory;
@@ -72,10 +71,12 @@ public class DbDbObjectMaker implements CMPlatformRunnable, ObjectMaker {
 		Writer w = new FileWriter(outFile);
 		Set alreadyHandledRetrieval = new HashSet();
 		Set alreadyHandledBlocking = new HashSet();
-		Iterator iModels = PMManager.models().values().iterator();
-		while (iModels.hasNext()) {
-			ImmutableProbabilityModel model = (ImmutableProbabilityModel) iModels.next();
-			String key = model.getAccessor().getSchemaName() + "|" + model.getDatabaseConfigurationName();
+		ImmutableProbabilityModel[] iModels = PMManager.getModels();
+		for (int i=0; i<iModels.length ; i++) {
+			ImmutableProbabilityModel model = iModels[i];
+			String key =
+				model.getAccessor().getSchemaName() + "|"
+						+ model.getDatabaseConfigurationName();
 			if (alreadyHandledRetrieval.add(key)) {
 				createRetrievalObjects(model, w);
 			}

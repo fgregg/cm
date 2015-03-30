@@ -10,32 +10,38 @@
  */
 package com.choicemaker.cm.core.base;
 
-import java.util.Map;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.IProbabilityModelManager;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.report.Reporter;
 
 /**
  * Creates and manages a collection of IProbabilityModel instances.
+ * 
  * @author Martin Buechi
  * @author S. Yoakum-Stover
- * @author rphall (Split ProbabilityModel into separate instance and manager types)
+ * @author rphall (Split ProbabilityModel into separate instance and manager
+ *         types)
  * @version $Revision: 1.2 $ $Date: 2013/02/23 19:57:50 $
  */
 public class PMManager {
-	
-	private static final Logger logger = Logger.getLogger(PMManager.class.getName());
-	
-	// FIXME eventually, the default probability model manager should be configurable
-	private static IProbabilityModelManager defaultManager = DefaultProbabilityModelManager.getInstance();
-	
-	public static Map models() {
-		return defaultManager.models();
-	}
+
+	private static final Logger logger = Logger.getLogger(PMManager.class
+			.getName());
+
+	// FIXME eventually, the default probability model manager should be
+	// configurable
+	private static IProbabilityModelManager defaultManager =
+		DefaultProbabilityModelManager.getInstance();
+
+	// public static Map models() {
+	// return defaultManager.models();
+	// }
 
 	public static IProbabilityModel[] getModels() {
 		return defaultManager.getModels();
@@ -45,8 +51,10 @@ public class PMManager {
 		defaultManager.addModel(model);
 	}
 
-	public static Accessor createAccessor(String className, ClassLoader cl) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		return defaultManager.createAccessor(className,cl);
+	public static Accessor createAccessor(String className, ClassLoader cl)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
+		return defaultManager.createAccessor(className, cl);
 	}
 
 	public static IProbabilityModel getModelInstance(String name) {
@@ -58,7 +66,8 @@ public class PMManager {
 		return retVal;
 	}
 
-	public static ImmutableProbabilityModel getImmutableModelInstance(String name) {
+	public static ImmutableProbabilityModel getImmutableModelInstance(
+			String name) {
 		return defaultManager.getImmutableModelInstance(name);
 	}
 
@@ -70,5 +79,9 @@ public class PMManager {
 		return defaultManager.getGlobalReporters();
 	}
 
-}
+	public static int loadModelPlugins() throws ModelConfigurationException,
+			IOException {
+		return defaultManager.loadModelPlugins();
+	}
 
+}
