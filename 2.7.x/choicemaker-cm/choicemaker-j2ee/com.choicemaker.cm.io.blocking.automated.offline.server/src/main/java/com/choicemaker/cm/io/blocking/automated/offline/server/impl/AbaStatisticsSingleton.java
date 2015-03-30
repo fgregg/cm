@@ -10,242 +10,115 @@
  */
 package com.choicemaker.cm.io.blocking.automated.offline.server.impl;
 
-import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
-import javax.inject.Inject;
-import javax.jms.JMSContext;
-import javax.jms.Queue;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.choicemaker.cm.args.OabaParameters;
-import com.choicemaker.cm.batch.OperationalPropertyController;
-import com.choicemaker.cm.batch.ProcessingController;
-import com.choicemaker.cm.core.BlockingException;
+import com.choicemaker.cm.args.PersistableSqlRecordSource;
 import com.choicemaker.cm.core.DatabaseException;
-import com.choicemaker.cm.io.blocking.automated.cachecount.CacheCountSource;
-import com.choicemaker.cm.io.blocking.automated.offline.core.RECORD_SOURCE_ROLE;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.RecordSourceController;
-import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.ServerConfigurationController;
+import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
+import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.SqlRecordSourceController;
-import com.choicemaker.cm.server.util.CountsUpdate;
 
 @Singleton
-public class AbaStatisticsSingleton implements Serializable {
-
-	private static final long serialVersionUID = 271L;
+public class AbaStatisticsSingleton implements AbaStatisticsController {
 
 	private static final Logger log = Logger
 			.getLogger(MatchSchedulerSingleton.class.getName());
 
-	private static final Logger jmsTrace = Logger.getLogger("jmstrace."
-			+ MatchSchedulerSingleton.class.getName());
-
 	// -- Injected data
-
-	@EJB
-	private OabaJobController jobController;
-
-	@EJB
-	private OabaSettingsController oabaSettingsController;
-
-	@EJB
-	private OabaParametersController paramsController;
 
 	@EJB
 	private SqlRecordSourceController sqlRSController;
 
-	@EJB
-	private ServerConfigurationController serverController;
-
-	@EJB
-	private OperationalPropertyController propertyController;
-
-	@EJB
-	private ProcessingController processingController;
-
-	@EJB
-	private RecordSourceController rsController;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/matchDedupQueue")
-	private Queue matchDedupQueue;
-
-	@Resource(lookup = "java:/choicemaker/urm/jms/matcherQueue")
-	private Queue matcherQueue;
-
-	@Inject
-	private JMSContext jmsContext;
-
-	// -- Callbacks
-
-	protected OabaJobController getJobController() {
-		return jobController;
-	}
-
-	protected OabaParametersController getOabaParametersController() {
-		return paramsController;
-	}
-
-	protected final RecordSourceController getRecordSourceController() {
-		return rsController;
-	}
+	// -- Accessors
 
 	protected final SqlRecordSourceController getSqlRecordSourceController() {
 		return sqlRSController;
 	}
 
-	protected ServerConfigurationController getServerController() {
-		return serverController;
-	}
-
-	protected OabaSettingsController getSettingsController() {
-		return oabaSettingsController;
-	}
-
-	protected OperationalPropertyController getPropertyController() {
-		return propertyController;
-	}
-
-	protected ProcessingController getProcessingController() {
-		return processingController;
-	}
-
-	protected Logger getLogger() {
-		return log;
-	}
-
-	protected Logger getJMSTrace() {
-		return jmsTrace;
-	}
-	
-	protected static class StatKey {
-		private final String modelName;
-		private final String databaseConfiguration;
-		private final String blockingConfiguration;
-		private final RECORD_SOURCE_ROLE role;
-	}
-	
 	/** Map of model configuration names to ABA statistics */
-	private Map<String, CacheCountSource[]> cachedStats = new Hashtable<>();
+	private Map<String, AbaStatistics> cachedStats = new Hashtable<>();
 
-	public void updateStagingAbaStatistics(OabaParameters params) throws BlockingException {
-	}
-
-	public void updateMasterAbaStatistics(OabaParameters params) throws BlockingException {
-	// Get the data sources for ABA queries
-	DataSource stageDS = null;
-	try {
-		stageDS = getSqlRecordSourceController().getStageDataSource(params);
-	} catch (BlockingException e) {
-		String msg = "Unable to acquire data source: " + e;
-		log.severe(msg);
-		throw e;
-	}
-	assert stageDS != null;
-
-	// Cache ABA statistics for field-value counts
-	log.info("Caching ABA statistic for staging records..");
-	try {
-		CountsUpdate update = new CountsUpdate();
-		update.cacheCounts(stageDS);
-	} catch (DatabaseException e) {
-		String msg = "Unable to cache ABA statistics: " + e;
-		log.severe(msg);
-		throw new BlockingException(msg);
-	}
-	log.info("... finished caching ABA statistics for staging records.");
-
-	DataSource masterDS = null;
-	try {
-		masterDS =
-			getSqlRecordSourceController().getMasterDataSource(params);
-	} catch (BlockingException e) {
-		String msg = "Unable to acquire data source: " + e;
-		log.severe(msg);
-		throw e;
-	}
-	assert masterDS != null;
-	
-	return masterDS;
+	@Override
+	public void updateMasterAbaStatistics(OabaParameters params)
+			throws DatabaseException {
+		final long rsId = params.getMasterRsId();
+		final String type = PersistableSqlRecordSource.TYPE;
+		PersistableSqlRecordSource rs =
+			this.getSqlRecordSourceController().find(rsId, type);
+		String dsJndiUrl = rs.getDataSource();
+		updateAbaStatistics(dsJndiUrl);
 	}
 
-	public DataSource getMasterDataSource(OabaParameters params) throws BlockingException {
-		
-	// Get the data sources for ABA queries
-	DataSource stageDS = null;
-	try {
-		stageDS = getSqlRecordSourceController().getStageDataSource(params);
-	} catch (BlockingException e) {
-		String msg = "Unable to acquire data source: " + e;
-		log.severe(msg);
-		throw e;
-	}
-	assert stageDS != null;
-
-	// Cache ABA statistics for field-value counts
-	log.info("Caching ABA statistic for staging records..");
-	try {
-		CountsUpdate update = new CountsUpdate();
-		update.cacheCounts(stageDS);
-	} catch (DatabaseException e) {
-		String msg = "Unable to cache ABA statistics: " + e;
-		log.severe(msg);
-		throw new BlockingException(msg);
-	}
-	log.info("... finished caching ABA statistics for staging records.");
-
-	DataSource masterDS = null;
-	try {
-		masterDS =
-			getSqlRecordSourceController().getMasterDataSource(params);
-	} catch (BlockingException e) {
-		String msg = "Unable to acquire data source: " + e;
-		log.severe(msg);
-		throw e;
-	}
-	assert masterDS != null;
-	
-	return masterDS;
-	}
-
-	public void updateCounts(String urlString) {
+	@Override
+	public void updateAbaStatistics(String urlString) throws DatabaseException {
 		DataSource ds = null;
-//		try {
-			log.fine("url" + urlString);
-			if (urlString == null || urlString.length() == 0)
-				throw new IllegalArgumentException("empty DataSource url");
-			Context ctx = new InitialContext();
+		log.fine("url" + urlString);
+		if (urlString == null || urlString.length() == 0)
+			throw new IllegalArgumentException("empty DataSource url");
+		Context ctx;
+		try {
+			ctx = new InitialContext();
 			Object o = ctx.lookup(urlString);
 			ds = (DataSource) o;
-			// <BUGFIX>
-			// 2008-12-04 rphall
-			// This public method should force updates on all
-			// counts, since that's what a user probably intends.
-			// See the old com.choicemaker.cm.server.ejb.impl.AdminServiceBean
-			// which forces an update on all counts in the updateCounts method.
-			// NOTE: This fix has not been implemented yet, even though it is simple.
-			//
-			//new CountsUpdate().updateCounts(ds, true);
-			// </BUGFIX>
-			new CountsUpdate().updateCounts(ds, false);
-//		} catch (NamingException e) {
-//			log.severe(e.toString());
-//			throw new ConfigException(e.toString());
-//		} catch (DatabaseException e) {
-//			log.severe(e.toString());
-//			throw new RecordCollectionException(e.toString());
-//		}
+		} catch (NamingException e) {
+			String msg =
+				"Unable to acquire DataSource from JNDI URL '" + urlString
+						+ "': " + e;
+			log.severe(msg);
+			throw new DatabaseException(msg, e);
+		}
+		DbbCountsCreator countsCreator = new DbbCountsCreator();
+		try {
+			countsCreator.install(ds);
+			countsCreator.create(ds, false);
+			countsCreator.setCacheCountSources(ds, this);
+		} catch (SQLException e) {
+			String msg =
+				"Unable to compute ABA statistics for '" + urlString + "': "
+						+ e;
+			log.severe(msg);
+			throw new DatabaseException(msg, e);
+		}
+	}
+
+	@Override
+	public void putStatistics(ImmutableProbabilityModel model,
+			AbaStatistics counts) {
+		final String METHOD = "AbaStatisticsSingleton.putStatistics: ";
+		if (model == null || counts == null) {
+			String msg = METHOD + "null constructor argument";
+			throw new IllegalArgumentException(msg);
+		}
+		String name = model.getModelName();
+		assert name != null && name.equals(name.trim()) && !name.isEmpty();
+		this.cachedStats.put(name, counts);
+	}
+
+	@Override
+	public AbaStatistics getStatistics(ImmutableProbabilityModel model) {
+		final String METHOD = "AbaStatisticsSingleton.getStatistics: ";
+		if (model == null) {
+			String msg = METHOD + "null model";
+			throw new IllegalArgumentException(msg);
+		}
+		String name = model.getModelName();
+		assert name != null && name.equals(name.trim()) && !name.isEmpty();
+		AbaStatistics retVal = this.cachedStats.get(name);
+		assert retVal != null;
+		return retVal;
 	}
 
 }

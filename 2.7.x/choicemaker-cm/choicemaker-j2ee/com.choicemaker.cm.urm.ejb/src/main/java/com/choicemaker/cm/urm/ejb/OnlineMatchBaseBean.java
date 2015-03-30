@@ -12,6 +12,7 @@ package com.choicemaker.cm.urm.ejb;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,9 +26,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.Constants;
-import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.base.Match;
@@ -36,16 +37,18 @@ import com.choicemaker.cm.core.base.RecordDecisionMaker;
 import com.choicemaker.cm.core.report.ErrorReporter;
 import com.choicemaker.cm.core.report.Report;
 import com.choicemaker.cm.core.report.ReporterPlugin;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.IncompleteBlockingSetsException;
 import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
 import com.choicemaker.cm.io.blocking.automated.base.BlockingSetReporter;
+import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.io.db.base.DbAccessor;
 import com.choicemaker.cm.io.db.base.DbReaderParallel;
 import com.choicemaker.cm.io.xml.base.XmlSingleRecordWriter;
-import com.choicemaker.cm.server.util.CountsUpdate;
 import com.choicemaker.cm.urm.adaptor.tocmcore.UrmRecordBuilder;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.base.Decision3;
@@ -80,6 +83,9 @@ public class OnlineMatchBaseBean implements SessionBean {
 	private static final long serialVersionUID = 1L;
 	protected transient SessionContext sessionContext;
 	protected static Logger log = Logger.getLogger(OnlineMatchBaseBean.class.getName());
+
+	// @EJB
+	AbaStatisticsController statsController;
 
 	/**
 	 * Now a flag for whether counts have been cached in memory.
@@ -194,6 +200,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 		}
 	}
 
+	@SuppressWarnings("null")
 	protected SortedSet getMatches(
 		long startTime,
 		ISingleRecord queryRecord,
@@ -212,7 +219,7 @@ public class OnlineMatchBaseBean implements SessionBean {
 			ConfigException,
 			UrmIncompleteBlockingSetsException,
 			UrmUnderspecifiedQueryException,
-			RemoteException {
+			RemoteException, SQLException {
 
 		ImmutableProbabilityModel model = null;
 		Record q = null;
@@ -240,7 +247,8 @@ public class OnlineMatchBaseBean implements SessionBean {
 				// It is not the responsibility of this service to update counts.
 				// Treat the flag isCountsUpdated as a check for whether
 				// counts have been cached in memory.
-				new CountsUpdate().cacheCounts(ds);
+				DbbCountsCreator countsCreator = new DbbCountsCreator();
+				countsCreator.setCacheCountSources(ds,statsController);
 				isCountsUpdated = true;
 				// END BUGFIX
 			}
@@ -296,11 +304,19 @@ public class OnlineMatchBaseBean implements SessionBean {
 
 			String dbConfigName = masterCollection.getName();
 			String blockingConfigName = model.getBlockingConfigurationName();
+			// FIXME temporary HACK
+			AbaSettings FIXME = null;
+			// END FIXME
+			AbaStatistics stats = statsController.getStatistics(model);
 			recordSource =
 				new Blocker2(
 					databaseAccessor,
 					model,
 					q,
+					FIXME.getLimitPerBlockingSet(),
+					FIXME.getSingleTableBlockingSetGraceLimit(),
+					FIXME.getLimitSingleBlockingSet(),
+					stats,
 					dbConfigName,
 					blockingConfigName);
 			retVal =
@@ -321,10 +337,6 @@ public class OnlineMatchBaseBean implements SessionBean {
 				externalId,
 				recordSource,
 				retVal);
-
-		} catch (DatabaseException ex) {
-			log.severe(ex.toString());
-			throw new RecordCollectionException(ex.toString());
 
 		} catch (NamingException ex) {
 			log.severe(ex.toString());

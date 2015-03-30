@@ -17,13 +17,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
-import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
-import com.choicemaker.cm.io.blocking.automated.CountSource;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingField;
@@ -49,7 +47,7 @@ public class Blocker implements AutomatedBlocker {
 	private static Logger logger = Logger.getLogger(Blocker.class.getName());
 
 	private String name;
-	private CountSource countSource;
+	private AbaStatistics abaStatistics;
 	private DatabaseAccessor databaseAccessor;
 	private ImmutableProbabilityModel model;
 	private IBlockingConfiguration blockingConfiguration;
@@ -61,77 +59,77 @@ public class Blocker implements AutomatedBlocker {
 	private List blockingSets;
 	private int numberOfRecordsRetrieved;
 
-	Blocker(DatabaseAccessor databaseAccessor, ImmutableProbabilityModel model,
-			Record q, AbaSettings abaSettings) {
-		this(
-			databaseAccessor,
-			model,
-			q,
-			abaSettings.getLimitPerBlockingSet(),
-			abaSettings.getSingleTableBlockingSetGraceLimit(),
-			abaSettings.getLimitSingleBlockingSet());
-	}
+//	Blocker(DatabaseAccessor databaseAccessor, ImmutableProbabilityModel model,
+//			Record q, AbaSettings abaSettings) {
+//		this(
+//			databaseAccessor,
+//			model,
+//			q,
+//			abaSettings.getLimitPerBlockingSet(),
+//			abaSettings.getSingleTableBlockingSetGraceLimit(),
+//			abaSettings.getLimitSingleBlockingSet());
+//	}
 
-	Blocker(DatabaseAccessor databaseAccessor,
-				   ImmutableProbabilityModel model,
-				   Record q,
-				   AbaSettings abaSettings,
-				   String dbConfigurationName,
-				   String blockingConfigurationName) {
-		this(
-		databaseAccessor,
-		model,
-		q,
-		abaSettings.getLimitPerBlockingSet(),
-		abaSettings.getSingleTableBlockingSetGraceLimit(),
-		abaSettings.getLimitSingleBlockingSet(),
-		(CountSource) model.getCountSource(),
-		dbConfigurationName,
-		blockingConfigurationName
-		);
-	}
+//	Blocker(DatabaseAccessor databaseAccessor,
+//				   ImmutableProbabilityModel model,
+//				   Record q,
+//				   AbaSettings abaSettings,
+//				   String dbConfigurationName,
+//				   String blockingConfigurationName) {
+//		this(
+//		databaseAccessor,
+//		model,
+//		q,
+//		abaSettings.getLimitPerBlockingSet(),
+//		abaSettings.getSingleTableBlockingSetGraceLimit(),
+//		abaSettings.getLimitSingleBlockingSet(),
+//		(AbaStatistics) model.getCountSource(),
+//		dbConfigurationName,
+//		blockingConfigurationName
+//		);
+//	}
 
-	Blocker(
-		DatabaseAccessor databaseAccessor,
-		ImmutableProbabilityModel model,
-		Record q,
-		int limitPerBlockingSet,
-		int singleTableBlockingSetGraceLimit,
-		int limitSingleBlockingSet) {
-		this(
-			databaseAccessor,
-			model,
-			q,
-			limitPerBlockingSet,
-			singleTableBlockingSetGraceLimit,
-			limitSingleBlockingSet,
-			(CountSource) model.getCountSource(),
-			model.getDatabaseConfigurationName(),
-			model.getBlockingConfigurationName());
-	}
+//	Blocker(
+//		DatabaseAccessor databaseAccessor,
+//		ImmutableProbabilityModel model,
+//		Record q,
+//		int limitPerBlockingSet,
+//		int singleTableBlockingSetGraceLimit,
+//		int limitSingleBlockingSet) {
+//		this(
+//			databaseAccessor,
+//			model,
+//			q,
+//			limitPerBlockingSet,
+//			singleTableBlockingSetGraceLimit,
+//			limitSingleBlockingSet,
+//			(AbaStatistics) model.getCountSource(),
+//			model.getDatabaseConfigurationName(),
+//			model.getBlockingConfigurationName());
+//	}
 
-	public Blocker(
-		DatabaseAccessor databaseAccessor,
-		ImmutableProbabilityModel model,
-		Record q,
-		int limitPerBlockingSet,
-		int singleTableBlockingSetGraceLimit,
-		int limitSingleBlockingSet,
-		CountSource countSource,
-		String dbConfigurationName,
-		String blockingConfigurationName) {
-		this (
-			databaseAccessor,
-			model,
-			q,
-			limitPerBlockingSet,
-			singleTableBlockingSetGraceLimit,
-			limitSingleBlockingSet,
-			countSource,
-			((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(
-				blockingConfigurationName,
-				dbConfigurationName));
-	}
+//	public Blocker(
+//		DatabaseAccessor databaseAccessor,
+//		ImmutableProbabilityModel model,
+//		Record q,
+//		int limitPerBlockingSet,
+//		int singleTableBlockingSetGraceLimit,
+//		int limitSingleBlockingSet,
+//		AbaStatistics abaStatistics,
+//		String dbConfigurationName,
+//		String blockingConfigurationName) {
+//		this (
+//			databaseAccessor,
+//			model,
+//			q,
+//			limitPerBlockingSet,
+//			singleTableBlockingSetGraceLimit,
+//			limitSingleBlockingSet,
+//			abaStatistics,
+//			((BlockingAccessor) model.getAccessor()).getBlockingConfiguration(
+//				blockingConfigurationName,
+//				dbConfigurationName));
+//	}
 
 	// For testing; see doSanityCheck()
 	Blocker(
@@ -141,7 +139,7 @@ public class Blocker implements AutomatedBlocker {
 		int limitPerBlockingSet,
 		int singleTableBlockingSetGraceLimit,
 		int limitSingleBlockingSet,
-		CountSource countSource,
+		AbaStatistics abaStatistics,
 		IBlockingConfiguration blockingConfiguration) {
 		this.databaseAccessor = databaseAccessor;
 		this.model = model;
@@ -153,7 +151,7 @@ public class Blocker implements AutomatedBlocker {
 		this.singleTableBlockingSetGraceLimit =
 			singleTableBlockingSetGraceLimit;
 		this.limitSingleBlockingSet = limitSingleBlockingSet;
-		this.countSource = countSource;
+		this.abaStatistics = abaStatistics;
 		this.blockingConfiguration = blockingConfiguration;
 	}
 
@@ -162,7 +160,7 @@ public class Blocker implements AutomatedBlocker {
 		IBlockingValue[] blockingValues =
 			blockingConfiguration.createBlockingValues(getQueryRecord());
 
-		long mainTableSize = getCountSource().setCounts(blockingConfiguration, blockingValues);
+		long mainTableSize = getCountSource().computeBlockingValueCounts(blockingConfiguration, blockingValues);
 
 		logger.fine("blockingValues numberOfRecordsRetrieved: " + blockingValues.length);
 
@@ -410,8 +408,8 @@ public class Blocker implements AutomatedBlocker {
 		return blockingSets;
 	}
 
-	public CountSource getCountSource() {
-		return countSource;
+	public AbaStatistics getCountSource() {
+		return abaStatistics;
 	}
 
 }

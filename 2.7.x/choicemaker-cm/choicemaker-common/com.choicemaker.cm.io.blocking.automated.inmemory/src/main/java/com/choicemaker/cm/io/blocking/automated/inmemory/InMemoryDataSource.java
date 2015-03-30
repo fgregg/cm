@@ -18,14 +18,14 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
 import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 import com.choicemaker.cm.io.blocking.automated.ICountField;
 import com.choicemaker.cm.io.blocking.automated.IDbField;
 import com.choicemaker.cm.io.blocking.automated.base.CountField;
-import com.choicemaker.cm.io.blocking.automated.cachecount.CacheCountSource;
+import com.choicemaker.cm.io.blocking.automated.cachecount.AbaStatisticsImpl;
 import com.choicemaker.util.IntArrayList;
 
 /**
@@ -81,10 +81,10 @@ public class InMemoryDataSource {
 	}
 
 	//
-	// CountSource
+	// AbaStatistics
 	//
 
-	public CountSource createCountSource() {
+	public AbaStatistics createCountSource() {
 		// 2014-04-24 rphall: Commented out unused local variables.
 //		int mainTableSize = recordList.size();
 
@@ -94,7 +94,7 @@ public class InMemoryDataSource {
 			countFields[i] = createCountField(i);
 		}
 
-		return new CacheCountSource(recordList.size(), countFields);
+		return new AbaStatisticsImpl(recordList.size(), countFields);
 	}
 
 	private ICountField createCountField(int index) {

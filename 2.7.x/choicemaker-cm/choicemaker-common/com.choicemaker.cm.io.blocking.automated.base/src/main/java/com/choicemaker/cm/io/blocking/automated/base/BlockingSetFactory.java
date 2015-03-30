@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.choicemaker.cm.core.Record;
-import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingField;
 import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
@@ -45,14 +45,13 @@ import com.choicemaker.cm.io.blocking.automated.util.PrintUtils;
 public class BlockingSetFactory {
 
 	/*
-	 * IMPLEMENTATION NOTE
-	 * rphall 2008-06-19
-	 *
-	 * Methods from this class were refactored from the Blocker class
-	 * in order to be testable via stubs or mock objects for interfaces
-	 * such as BlockingAccessor and CountSource. (Because the constructor
-	 * of the Blocker class requires a ImmutableProbabilityModel instance, the Blocker
-	 * class require significant initialization that makes it difficult to test.)
+	 * IMPLEMENTATION NOTE rphall 2008-06-19
+	 * 
+	 * Methods from this class were refactored from the Blocker class in order
+	 * to be testable via stubs or mock objects for interfaces such as
+	 * BlockingAccessor and AbaStatistics. (Because the constructor of the Blocker
+	 * class requires a ImmutableProbabilityModel instance, the Blocker class
+	 * require significant initialization that makes it difficult to test.)
 	 */
 
 	/**
@@ -115,7 +114,7 @@ public class BlockingSetFactory {
 	 * and <code>UnderspecifiedQueryException</code> for the occasional
 	 * legitimate query that has few blocking values, without the performance
 	 * impact that increasing <code>limitPerBlockingSet</code> would have.
-	 * @param countSource a non-null source of counts for field-value pairs.
+	 * @param abaStatistics a non-null source of counts for field-value pairs.
 	 * @return a non-null and non-empty list of blockingSets.
 	 * @throws IncompleteBlockingSetsException if a list of blocking sets can
 	 * not be formed that includes every blocking value (or its base) for the input
@@ -139,14 +138,14 @@ public class BlockingSetFactory {
 		int limitPerBlockingSet,
 		int singleTableBlockingSetGraceLimit,
 		int limitSingleBlockingSet,
-		CountSource countSource)
+		AbaStatistics abaStatistics)
 		throws
 			IncompleteBlockingSetsException,
 			UnderspecifiedQueryException,
 			IOException {
 
 		IBlockingValue[] blockingValues = bc.createBlockingValues(q);
-		long mainTableSize = countSource.setCounts(bc, blockingValues);
+		long mainTableSize = abaStatistics.computeBlockingValueCounts(bc, blockingValues);
 
 		return createBlockingSetsInternal_1(
 			blockingValues,
@@ -164,7 +163,7 @@ public class BlockingSetFactory {
 	 * count values
 	 * @param mainTableSize the normalization value by which count
 	 * values are divided to estimate field-value frequencies.
-	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,CountSource)
+	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,AbaStatistics)
 	 * for explanations of the limit parameters, return value, and possible
 	 * exceptions.
 	 */

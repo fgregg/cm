@@ -49,6 +49,7 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	public String antCommand;
 	public String blockingConfigurationName;
 	public String clueFilePath;
+	public String databaseAbstractionName;
 	public String databaseAccessorName;
 	public String databaseConfigurationName;
 	public String modelFilePath;
@@ -153,10 +154,10 @@ public class MutableProbabilityModelStub implements IProbabilityModel {
 	}
 
 	@Override
-	public Object getCountSource() {
-		log.entering(CLASSNAME, "getCountSource");
-		log.exiting(CLASSNAME, "getCountSource", null);
-		return null;
+	public String getDatabaseAbstractionName() {
+		log.exiting(CLASSNAME, "getDatabaseAbstractionName",
+				databaseAbstractionName);
+		return databaseAbstractionName;
 	}
 
 	@Override

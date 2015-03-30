@@ -26,12 +26,12 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.configure.xml.NotFoundException;
 import com.choicemaker.cm.core.configure.xml.XmlConfigurablesRegistry;
-import com.choicemaker.cm.server.util.CountsUpdate;
+import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.urm.IUpdateDerivedFields;
 import com.choicemaker.cm.urm.base.DbRecordCollection;
 import com.choicemaker.cm.urm.exceptions.ConfigException;
@@ -49,6 +49,9 @@ public class CmServerAdminBean implements SessionBean {
 
 	private static final Logger log = Logger.getLogger(CmServerAdminBean.class.getName());
 	SessionContext sc = null;
+
+	// @EJB
+	AbaStatisticsController statsController;
 
 	public CmServerAdminBean() {
 		super();
@@ -209,11 +212,14 @@ public class CmServerAdminBean implements SessionBean {
 			//
 			//new CountsUpdate().updateCounts(ds, true);
 			// </BUGFIX>
-			new CountsUpdate().updateCounts(ds, false);
+			DbbCountsCreator countsCreator = new DbbCountsCreator();
+			countsCreator.install(ds);
+			countsCreator.create(ds, false);
+			countsCreator.setCacheCountSources(ds,statsController);
 		} catch (NamingException e) {
 			log.severe(e.toString());
 			throw new ConfigException(e.toString());
-		} catch (DatabaseException e) {
+		} catch (SQLException e) {
 			log.severe(e.toString());
 			throw new RecordCollectionException(e.toString());
 		}

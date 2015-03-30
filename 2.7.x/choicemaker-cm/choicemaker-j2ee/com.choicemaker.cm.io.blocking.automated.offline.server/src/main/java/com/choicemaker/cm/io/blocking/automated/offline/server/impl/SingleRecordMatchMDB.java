@@ -15,7 +15,7 @@ import static com.choicemaker.cm.args.OperationalPropertyNames.PN_CHUNK_FILE_COU
 import static com.choicemaker.cm.args.OperationalPropertyNames.PN_OABA_CACHED_RESULTS_FILE;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -25,6 +25,7 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.args.BatchProcessingEvent;
 import com.choicemaker.cm.args.OabaParameters;
 import com.choicemaker.cm.args.OabaSettings;
@@ -34,7 +35,6 @@ import com.choicemaker.cm.batch.BatchJob;
 import com.choicemaker.cm.batch.ProcessingEventLog;
 import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
-import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ISerializableRecordSource;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
@@ -44,9 +44,11 @@ import com.choicemaker.cm.core.base.Match;
 import com.choicemaker.cm.core.base.MatchCandidateFactory;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
+import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSink;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSinkSourceFactory;
 import com.choicemaker.cm.io.blocking.automated.offline.core.IBlockSource;
@@ -70,7 +72,6 @@ import com.choicemaker.cm.io.blocking.automated.offline.services.MatchingService
 import com.choicemaker.cm.io.blocking.automated.offline.services.OABABlockingService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.OversizedDedupService;
 import com.choicemaker.cm.io.blocking.automated.offline.services.RecValService2;
-import com.choicemaker.cm.server.util.CountsUpdate;
 import com.choicemaker.e2.CMConfigurationElement;
 import com.choicemaker.e2.CMExtension;
 import com.choicemaker.e2.E2Exception;
@@ -353,18 +354,6 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		}
 		assert stageDS != null;
 
-		// Cache ABA statistics for field-value counts
-		log.info("Caching ABA statistic for staging records..");
-		try {
-			CountsUpdate update = new CountsUpdate();
-			update.cacheCounts(stageDS);
-		} catch (DatabaseException e) {
-			String msg = "Unable to cache ABA statistics: " + e;
-			log.severe(msg);
-			throw new BlockingException(msg);
-		}
-		log.info("... finished caching ABA statistics for staging records.");
-
 		DataSource masterDS = null;
 		try {
 			masterDS =
@@ -376,13 +365,26 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 		}
 		assert masterDS != null;
 
+		// Staging is never used for ABA statistics
+//		// Cache ABA statistics for field-value counts
+//		log.info("Caching ABA statistic for staging records..");
+//		try {
+//			DbbCountsCreator cc = new DbbCountsCreator();
+//			cc.setCacheCountSources(stageDS, getAbaStatisticsController());
+//		} catch (SQLException e) {
+//			String msg = "Unable to cache staging ABA statistics: " + e;
+//			log.severe(msg);
+//			throw new BlockingException(msg);
+//		}
+//		log.info("... finished caching ABA statistics for staging records.");
+
 		// Cache ABA statistics for field-value counts
 		log.info("Caching ABA statistic for master records..");
 		try {
-			CountsUpdate update = new CountsUpdate();
-			update.cacheCounts(masterDS);
-		} catch (DatabaseException e) {
-			String msg = "Unable to cache ABA statistics: " + e;
+			DbbCountsCreator cc = new DbbCountsCreator();
+			cc.setCacheCountSources(masterDS, getAbaStatisticsController());
+		} catch (SQLException e) {
+			String msg = "Unable to cache master ABA statistics: " + e;
 			log.severe(msg);
 			throw new BlockingException(msg);
 		}
@@ -448,7 +450,13 @@ public class SingleRecordMatchMDB extends AbstractOabaMDB {
 
 			while (stage.hasNext()) {
 				Record q = stage.getNext();
-				AutomatedBlocker rs = new Blocker2(databaseAccessor, model, q);
+				// FIXME temporary HACK
+				AbaSettings FIXME = null;
+				// END FIXME
+				AbaStatistics stats =
+					getAbaStatisticsController().getStatistics(model);
+				AutomatedBlocker rs =
+					new Blocker2(databaseAccessor, model, q, FIXME, stats);
 				log.fine(q.getId() + " " + rs + " " + model);
 
 				SortedSet<Match> s =

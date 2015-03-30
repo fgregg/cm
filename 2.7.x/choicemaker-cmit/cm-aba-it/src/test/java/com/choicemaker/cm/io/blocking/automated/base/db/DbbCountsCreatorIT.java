@@ -1,24 +1,34 @@
 package com.choicemaker.cm.io.blocking.automated.base.db;
 
-import static org.junit.Assert.*;
-import static com.choicemaker.cm.io.blocking.automated.base.db.DbUtils.*;
+import static com.choicemaker.cm.io.blocking.automated.base.db.ConfigurationUtils.SQLSERVER_CONFIG_FILE;
+import static com.choicemaker.cm.io.blocking.automated.base.db.ConfigurationUtils.TARGET_NAME;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
 import org.jdom.Document;
+import org.jdom.JDOMException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.choicemaker.cm.core.XmlConfException;
+import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.db.base.DataSources;
-import com.choicemaker.cm.io.blocking.automated.base.db.DbUtils;
 import com.choicemaker.cm.io.db.base.xmlconf.ConnectionPoolDataSourceXmlConf;
+import com.choicemaker.demo.simple_person_matching.SimplePersonPluginTesting;
+import com.choicemaker.e2.CMExtension;
+import com.choicemaker.e2.embed.EmbeddedPlatform;
+import com.choicemaker.e2.platform.CMPlatformUtils;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DbbCountsCreatorIT {
@@ -36,9 +46,19 @@ public class DbbCountsCreatorIT {
 		"sqlserver_db_password";
 	
 	public static final String DB_PLUGIN = "db";
+	
+	public static final String SPM_PLUGIN_ID =
+		"com.choicemaker.cm.simplePersonMatching";
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		EmbeddedPlatform.install();
+		CMExtension[] exts = CMPlatformUtils.getPluginExtensions(SPM_PLUGIN_ID);
+		logger.info("DEBUG simple person matching extension count: " + exts.length);
+		int count = PMManager.loadModelPlugins();
+		if (count == 0) {
+			logger.warning("No probability models loaded");
+		}
 	}
 
 	@AfterClass
@@ -68,6 +88,7 @@ public class DbbCountsCreatorIT {
 
 	@Before
 	public void setUp() throws Exception {
+
 		jdbcUrl = System.getProperty(PN_SQLSERVER_DB_JDBCURL);
 		user = System.getProperty(PN_SQLSERVER_DB_USER);
 		password = System.getProperty(PN_SQLSERVER_DB_PASSWORD);
@@ -82,8 +103,14 @@ public class DbbCountsCreatorIT {
 		pw.println();
 		logger.info(sw.toString());
 		
-		final Document d =
-			DbUtils.readConfigurationFileFromResource(DbUtils.SQLSERVER_CONFIG_FILE);
+		Document d = null;
+		try {
+			d = ConfigurationUtils.readConfigurationFromResource(SQLSERVER_CONFIG_FILE);
+		} catch (XmlConfException | JDOMException | IOException e) {
+			logger.severe(e.toString());
+			// fail(e.toString());
+			throw e;
+		}
 		ConnectionPoolDataSourceXmlConf.init(d);
 		
 		int count = 0;
@@ -114,7 +141,6 @@ public class DbbCountsCreatorIT {
 				pw.println("    jdbcUrl: " + cpds.getJdbcUrl());
 				pw.println("       user: " + cpds.getUser());
 				pw.println("   password: " + hint);
-				pw.println();
 				logger.info(sw.toString());
 			}
 		}
@@ -130,19 +156,24 @@ public class DbbCountsCreatorIT {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 	}
 
 	@Test
 	public void testInstall() {
-		// assertTrue("not yet implemented", false);
+		DbbCountsCreator cc = new DbbCountsCreator();
+		try {
+			cc.install(dataSource);
+		} catch (SQLException e) {
+			logger.severe(e.toString());
+			fail(e.toString());
+		}
 	}
 
-	// @Test
-	// public void testCreateDataSourceBoolean() {
-	// fail("Not yet implemented");
-	// }
-	//
+	 @Test
+	 public void testCreateDataSourceBoolean() {
+	 }
+	
 	// @Test
 	// public void testCreateDataSourceDatabaseAbstractionBoolean() {
 	// fail("Not yet implemented");

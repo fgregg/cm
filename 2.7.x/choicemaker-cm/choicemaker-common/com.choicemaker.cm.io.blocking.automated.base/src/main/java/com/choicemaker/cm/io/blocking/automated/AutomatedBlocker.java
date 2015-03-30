@@ -31,7 +31,7 @@ public interface AutomatedBlocker extends RecordSource {
 
 	DatabaseAccessor getDatabaseAccessor();
 
-	CountSource getCountSource();
+	AbaStatistics getCountSource();
 
 	Record getQueryRecord();
 

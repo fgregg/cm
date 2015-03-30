@@ -21,7 +21,7 @@ import com.choicemaker.cm.core.Sink;
 import com.choicemaker.cm.core.blocking.InMemoryBlocker;
 import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
-import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
@@ -43,7 +43,7 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 
 	// created by init().
 	private InMemoryDataSource imds;
-	private CountSource countSource;
+	private AbaStatistics abaStatistics;
 	
 	public InMemoryAutomatedBlocker(ImmutableProbabilityModel model) throws IllegalArgumentException {
 		this.model = model;
@@ -86,12 +86,12 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 		this.imds.init(records);
 						
 		// the count source
-		this.countSource = imds.createCountSource();		
+		this.abaStatistics = imds.createCountSource();		
 	}
 	
 	public void clear() {
 		this.imds = null;
-		this.countSource = null;
+		this.abaStatistics = null;
 	}
 
 	public RecordSource block(Record q) {
@@ -110,7 +110,7 @@ public class InMemoryAutomatedBlocker implements InMemoryBlocker {
 						   limitPerBlockingSet, 
 						   singleTableBlockingSetGraceLimit, 
 						   limitSingleBlockingSet, 
-						   countSource, 
+						   abaStatistics, 
 						   dbConfiguration, 
 						   blockingConfiguration);
 	}

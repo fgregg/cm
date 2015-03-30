@@ -34,6 +34,7 @@ import com.choicemaker.cm.core.BlockingException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.io.blocking.automated.offline.server.data.OabaJobMessage;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaJobController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaParametersController;
 import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.OabaSettingsController;
@@ -84,6 +85,9 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 	@EJB
 	private OperationalPropertyController propController;
 
+	@EJB
+	private AbaStatisticsController statsController;	
+	
 	@Inject
 	private JMSContext jmsContext;
 
@@ -127,6 +131,10 @@ public abstract class AbstractOabaMDB implements MessageListener, Serializable {
 
 	protected final OperationalPropertyController getPropertyController() {
 		return propController;
+	}
+
+	protected final AbaStatisticsController getAbaStatisticsController() {
+		return statsController;
 	}
 
 	// -- Template methods

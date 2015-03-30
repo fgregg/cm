@@ -13,6 +13,7 @@ package com.choicemaker.cm.transitivity.server.impl;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.security.AccessControlException;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.logging.Logger;
@@ -23,6 +24,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
+import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.DatabaseException;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
@@ -37,15 +39,17 @@ import com.choicemaker.cm.core.base.BeanMatchCandidate;
 import com.choicemaker.cm.core.base.MatchCandidate;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.UnderspecifiedQueryException;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
-import com.choicemaker.cm.server.util.CountsUpdate;
-import com.choicemaker.cm.server.util.NameServiceLookup;
+import com.choicemaker.cm.io.blocking.automated.base.db.DbbCountsCreator;
+import com.choicemaker.cm.io.blocking.automated.offline.server.ejb.AbaStatisticsController;
 import com.choicemaker.cm.transitivity.core.TransitivityException;
 import com.choicemaker.cm.transitivity.core.TransitivityResult;
 import com.choicemaker.cm.transitivity.server.util.MatchBiconnectedIterator;
+import com.choicemaker.cm.transitivity.server.util.NameServiceLookup;
 import com.choicemaker.cm.transitivity.util.CEFromMatchCandidatesBuilder;
 import com.choicemaker.cm.transitivity.util.CEFromMatchesBuilder;
 import com.choicemaker.e2.CMExtension;
@@ -68,6 +72,9 @@ public class TransitivityClusterServiceBean implements SessionBean {
 		ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEACCESSOR;
 	public static final String BLOCKING_SOURCE =
 		"java:comp/env/jdbc/blockingSource";
+
+	// @EJB
+	AbaStatisticsController statsController;
 
 	private transient DataSource blockingSource;
 	private static boolean inited;
@@ -138,7 +145,11 @@ public class TransitivityClusterServiceBean implements SessionBean {
 			throw new InvalidModelException(ex.toString());
 		}
 		SortedSet s;
-		AutomatedBlocker rs = new Blocker2(databaseAccessor, model, q);
+		// FIXME temporary HACK
+		AbaSettings FIXME = null;
+		// END FIXME
+		AbaStatistics stats = statsController.getStatistics(model);
+		AutomatedBlocker rs = new Blocker2(databaseAccessor, model, q, FIXME, stats);
 		try {
 			s = dm.getMatches(q, rs, model, differThreshold, matchThreshold);
 		} catch (UnderspecifiedQueryException ex) {
@@ -245,10 +256,11 @@ public class TransitivityClusterServiceBean implements SessionBean {
 		return builder.getCompositeEntities();
 	}
 
-	private static synchronized void init(DataSource dataSource)
-			throws XmlConfException, RemoteException, DatabaseException {
+	private synchronized void init(DataSource dataSource)
+			throws XmlConfException, RemoteException, SQLException {
 		if (!inited) {
-			new CountsUpdate().cacheCounts(dataSource);
+			DbbCountsCreator countsCreator = new DbbCountsCreator();
+			countsCreator.setCacheCountSources(dataSource, statsController);
 			inited = true;
 		}
 	}

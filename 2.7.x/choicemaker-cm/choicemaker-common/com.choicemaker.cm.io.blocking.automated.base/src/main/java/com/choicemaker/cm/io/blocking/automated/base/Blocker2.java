@@ -19,9 +19,9 @@ import com.choicemaker.cm.core.Accessor;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.Record;
 import com.choicemaker.cm.core.Sink;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.BlockingAccessor;
-import com.choicemaker.cm.io.blocking.automated.CountSource;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingSet;
@@ -70,7 +70,7 @@ public class Blocker2 implements AutomatedBlocker {
 	private final ImmutableProbabilityModel model;
 	private final IBlockingConfiguration blockingConfiguration;
 	private final DatabaseAccessor databaseAccessor;
-	private final CountSource countSource;
+	private final AbaStatistics abaStatistics;
 	private final Record q;
 	private final int limitPerBlockingSet;
 	private final int singleTableBlockingSetGraceLimit;
@@ -79,32 +79,32 @@ public class Blocker2 implements AutomatedBlocker {
 	private int numberOfRecordsRetrieved;
 	private String name;
 
-	/**
-	 * @param databaseAccessor
-	 * @param model
-	 * @param q
-	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,CountSource)
-	 * for explanations of the limit parameters, return value, and possible
-	 * exceptions.
-	 */
-	public Blocker2(
-		DatabaseAccessor databaseAccessor,
-		ImmutableProbabilityModel model,
-		Record q,
-		int limitPerBlockingSet,
-		int singleTableBlockingSetGraceLimit,
-		int limitSingleBlockingSet) {
-		this(
-			databaseAccessor,
-			model,
-			q,
-			limitPerBlockingSet,
-			singleTableBlockingSetGraceLimit,
-			limitSingleBlockingSet,
-			(CountSource) model.getCountSource(),
-			model.getDatabaseConfigurationName(),
-			model.getBlockingConfigurationName());
-	}
+//	/**
+//	 * @param databaseAccessor
+//	 * @param model
+//	 * @param q
+//	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,AbaStatistics)
+//	 * for explanations of the limit parameters, return value, and possible
+//	 * exceptions.
+//	 */
+//	public Blocker2(
+//		DatabaseAccessor databaseAccessor,
+//		ImmutableProbabilityModel model,
+//		Record q,
+//		int limitPerBlockingSet,
+//		int singleTableBlockingSetGraceLimit,
+//		int limitSingleBlockingSet) {
+//		this(
+//			databaseAccessor,
+//			model,
+//			q,
+//			limitPerBlockingSet,
+//			singleTableBlockingSetGraceLimit,
+//			limitSingleBlockingSet,
+//			(AbaStatistics) model.getCountSource(),
+//			model.getDatabaseConfigurationName(),
+//			model.getBlockingConfigurationName());
+//	}
 
 	/**
 	 * Uses default limit values obtained from the model.
@@ -116,7 +116,8 @@ public class Blocker2 implements AutomatedBlocker {
 		DatabaseAccessor databaseAccessor,
 		ImmutableProbabilityModel model,
 		Record q,
-		AbaSettings abaSettings
+		AbaSettings abaSettings,
+		AbaStatistics abaStatistics
 		) {
 		this(
 			databaseAccessor,
@@ -124,35 +125,39 @@ public class Blocker2 implements AutomatedBlocker {
 			q,
 			abaSettings.getLimitPerBlockingSet(),
 			abaSettings.getSingleTableBlockingSetGraceLimit(),
-			abaSettings.getLimitSingleBlockingSet());
-	}
-
-	/**
-	 * Uses default limit values obtained from the model.
-	 * @param databaseAccessor
-	 * @param model
-	 * @param q
-	 * @param dbConfigurationName
-	 * @param blockingConfigurationName
-	 */
-	public Blocker2(
-		DatabaseAccessor databaseAccessor,
-		ImmutableProbabilityModel model,
-		Record q,
-		AbaSettings abaSettings,
-		String dbConfigurationName,
-		String blockingConfigurationName) {
-		this(
-			databaseAccessor,
-			model,
-			q,
-			abaSettings.getLimitPerBlockingSet(),
-			abaSettings.getSingleTableBlockingSetGraceLimit(),
 			abaSettings.getLimitSingleBlockingSet(),
-			(CountSource) model.getCountSource(),
-			dbConfigurationName,
-			blockingConfigurationName);
+			abaStatistics,
+			model.getDatabaseConfigurationName(),
+			model.getBlockingConfigurationName()
+			);
 	}
+
+//	/**
+//	 * Uses default limit values obtained from the model.
+//	 * @param databaseAccessor
+//	 * @param model
+//	 * @param q
+//	 * @param dbConfigurationName
+//	 * @param blockingConfigurationName
+//	 */
+//	public Blocker2(
+//		DatabaseAccessor databaseAccessor,
+//		ImmutableProbabilityModel model,
+//		Record q,
+//		AbaSettings abaSettings,
+//		String dbConfigurationName,
+//		String blockingConfigurationName) {
+//		this(
+//			databaseAccessor,
+//			model,
+//			q,
+//			abaSettings.getLimitPerBlockingSet(),
+//			abaSettings.getSingleTableBlockingSetGraceLimit(),
+//			abaSettings.getLimitSingleBlockingSet(),
+//			(AbaStatistics) model.getCountSource(),
+//			dbConfigurationName,
+//			blockingConfigurationName);
+//	}
 
 	/**
 	 * @param databaseAccessor
@@ -160,7 +165,7 @@ public class Blocker2 implements AutomatedBlocker {
 	 * @param q
 	 * @param dbConfigurationName
 	 * @param blockingConfigurationName
-	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,CountSource)
+	 * @see #createBlockingSets(BlockingConfiguration,Record,int,int,int,AbaStatistics)
 	 * for explanations of the limit parameters, return value, and possible
 	 * exceptions.
 	 */
@@ -171,10 +176,29 @@ public class Blocker2 implements AutomatedBlocker {
 		int limitPerBlockingSet,
 		int singleTableBlockingSetGraceLimit,
 		int limitSingleBlockingSet,
-		CountSource countSource,
+		AbaStatistics abaStatistics,
 		String dbConfigurationName,
 		String blockingConfigurationName) {
-		this.countSource = countSource;
+		
+		final String METHOD = "Blocker2.<init>: ";
+		if (databaseAccessor == null || model == null || q == null
+				|| abaStatistics == null) {
+			String msg = METHOD + "null constructor argument";
+			throw new IllegalArgumentException(msg);
+		}
+		if (limitPerBlockingSet <= 0 || singleTableBlockingSetGraceLimit <= 0
+				|| limitSingleBlockingSet <= 0 ) {
+			String msg = "non-positive blocking limit";
+			throw new IllegalArgumentException(msg);
+		}
+		if (dbConfigurationName == null || dbConfigurationName.isEmpty()
+				|| blockingConfigurationName == null
+				|| blockingConfigurationName.isEmpty()) {
+			String msg = "null or blank configuration name";
+			throw new IllegalArgumentException(msg);
+		}
+
+		this.abaStatistics = abaStatistics;
 		this.databaseAccessor = databaseAccessor;
 		this.model = model;
 		this.blockingConfiguration =
@@ -198,7 +222,7 @@ public class Blocker2 implements AutomatedBlocker {
 				this.limitPerBlockingSet,
 				this.singleTableBlockingSetGraceLimit,
 				this.limitSingleBlockingSet,
-				this.countSource);
+				this.abaStatistics);
 		databaseAccessor.open(this);
 
 		// If processing has gotten this far, (i.e. an IncompleteBlockingSetsException
@@ -338,8 +362,8 @@ public class Blocker2 implements AutomatedBlocker {
 		return databaseAccessor;
 	}
 
-	public CountSource getCountSource() {
-		return countSource;
+	public AbaStatistics getCountSource() {
+		return abaStatistics;
 	}
 
 	public Record getQueryRecord() {

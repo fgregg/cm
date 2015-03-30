@@ -10,27 +10,29 @@
  */
 package com.choicemaker.cm.io.blocking.automated.cachecount;
 
-import com.choicemaker.cm.io.blocking.automated.CountSource;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
 import com.choicemaker.cm.io.blocking.automated.IBlockingConfiguration;
 import com.choicemaker.cm.io.blocking.automated.IBlockingField;
 import com.choicemaker.cm.io.blocking.automated.IBlockingValue;
 import com.choicemaker.cm.io.blocking.automated.ICountField;
 
 /**
- *
- * @author    
- * @version   $Revision: 1.2 $ $Date: 2010/03/28 09:32:25 $
+ * In-memory implementation of ABA statistics
+ * @author    mbuechi (implemented as 'CacheCountSource')
+ * @author    rphall (renamed 'AbaStatisticsImpl')
  */
-public class CacheCountSource implements CountSource {
+public class AbaStatisticsImpl implements AbaStatistics {
 	private int mainTableSize;
 	private ICountField[] counts;
 
-	public CacheCountSource(int mainTableSize, ICountField[] counts) {
+	public AbaStatisticsImpl(int mainTableSize, ICountField[] counts) {
 		this.mainTableSize = mainTableSize;
 		this.counts = counts;
 	}
 
-	public long setCounts(IBlockingConfiguration configuration, IBlockingValue[] blockingValues) {
+	public long computeBlockingValueCounts(
+			IBlockingConfiguration configuration,
+			IBlockingValue[] blockingValues) {
 		for (int i = 0; i < blockingValues.length; ++i) {
 			IBlockingValue bv = blockingValues[i];
 			IBlockingField bf = bv.getBlockingField();

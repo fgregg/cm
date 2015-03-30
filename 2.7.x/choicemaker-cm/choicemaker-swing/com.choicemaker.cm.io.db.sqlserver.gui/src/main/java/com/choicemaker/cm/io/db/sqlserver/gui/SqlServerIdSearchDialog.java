@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.choicemaker.cm.args.AbaSettings;
 import com.choicemaker.cm.core.Decision;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
 import com.choicemaker.cm.core.MarkedRecordPairSource;
@@ -44,6 +45,8 @@ import com.choicemaker.cm.core.base.MutableMarkedRecordPair;
 import com.choicemaker.cm.core.base.RecordDecisionMaker;
 import com.choicemaker.cm.core.base.Thresholds;
 import com.choicemaker.cm.gui.utils.dialogs.ErrorDialog;
+import com.choicemaker.cm.io.blocking.automated.AbaStatistics;
+import com.choicemaker.cm.io.blocking.automated.AbaStatisticsCache;
 import com.choicemaker.cm.io.blocking.automated.AutomatedBlocker;
 import com.choicemaker.cm.io.blocking.automated.DatabaseAccessor;
 import com.choicemaker.cm.io.blocking.automated.base.Blocker2;
@@ -298,8 +301,11 @@ public class SqlServerIdSearchDialog extends JDialog {
 		model.properties().put(SqlDbObjectMaker.getMultiKey(model, dbConfiguration),
 							 SqlDbObjectMaker.getMultiQuery(model, dbConfiguration));		
 		
+		// FIXME temporary HACK
+		AbaStatisticsCache statsCache = null;
+		// END FIXME
 		try {
-			SqlServerUtils.maybeUpdateCounts(ds, model);
+			SqlServerUtils.maybeUpdateCounts(ds, model, statsCache);
 		} catch (SQLException ex) {
 			SqlServerUtils.setDefaultCursor(modelMaker, this);
 			ErrorDialog.showErrorDialog(this, "Error updating counts" , ex);
@@ -319,8 +325,12 @@ public class SqlServerIdSearchDialog extends JDialog {
 			ErrorDialog.showErrorDialog(this, "No record with ID " + qId, ex);
 			return;
 		}
-										
-		AutomatedBlocker blocker = new Blocker2(dbAccessor, model, q);
+
+		// FIXME temporary HACK
+		AbaSettings FIXME = null;
+		// END FIXME
+		AbaStatistics stats = statsCache.getStatistics(model);
+		AutomatedBlocker blocker = new Blocker2(dbAccessor, model, q, FIXME, stats);
 		Thresholds t = modelMaker.getThresholds();
 		SortedSet matches = null;
 		try {
