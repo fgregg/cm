@@ -8,12 +8,11 @@
  * Contributors:
  *     ChoiceMaker Technologies, Inc. - initial API and implementation
  */
-package com.choicemaker.cm.server.util;
+package com.choicemaker.cm.transitivity.server.util;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.rmi.PortableRemoteObject;
 
 /**
  * Comment
@@ -30,20 +29,22 @@ public class NameServiceLookup {
 		}
 	}
 	
-	public synchronized Object lookup(String name, Class clazz) throws NamingException {
+	public synchronized Object lookup(String name, Class<?> clazz) throws NamingException {
 		initContext();
 		Object objref = initialContext.lookup(name);
 		return objref;
 	}
 
-	public synchronized Object lookupRemote(String name, Class clazz) throws NamingException {
-		initContext();
-		Object objref = initialContext.lookup(name);
-		if (objref != null) {
-			System.err.println("Class: " + objref.getClass());
-			return PortableRemoteObject.narrow(name, clazz);
-		} else {
-			return null;
-		}
-	}
+	// Not used
+//	public synchronized Object lookupRemote(String name, Class<?> clazz) throws NamingException {
+//		initContext();
+//		Object objref = initialContext.lookup(name);
+//		if (objref != null) {
+//			System.err.println("Class: " + objref.getClass());
+//			return PortableRemoteObject.narrow(name, clazz);
+//		} else {
+//			return null;
+//		}
+//	}
+
 }

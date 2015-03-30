@@ -11,6 +11,7 @@
 package com.choicemaker.cm.urm.ejb;
 
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -91,7 +92,7 @@ public class OnlineMatchAnalyzerBean extends OnlineMatchBaseBean {
 									RecordCollectionException,
 									ConfigException,
 									CmRuntimeException,
-									RemoteException
+									RemoteException, SQLException
  	 {
 		ArrayList  evalRecords = new ArrayList();					
 		

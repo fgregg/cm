@@ -11,6 +11,7 @@
 package com.choicemaker.cm.urm.ejb;
 
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.logging.Level;
@@ -122,6 +123,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 		 * @param	returnRecordRef  If true <code>findMatches</code> returns array of <code>MatchRecordRef</code>, otherwise it returns an array of <code>MatchRecordVal</code>	
 		 * @return  An array of matched records.
 		 * @throws  RemoteException
+		 * @throws SQLException 
 		 */	
 	
 	public EvaluatedRecord[] 	getMatchCandidates(
@@ -141,7 +143,7 @@ public class OnlineRecordMatcherBean extends OnlineMatchBaseBean {
 										RecordCollectionException,
 										ConfigException,
 										CmRuntimeException, 
-										RemoteException
+										RemoteException, SQLException
 	{
 		EvaluatedRecord[] matchCand = null;					
 				
