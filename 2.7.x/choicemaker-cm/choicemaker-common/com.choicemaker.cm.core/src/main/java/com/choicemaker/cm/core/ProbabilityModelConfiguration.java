@@ -16,7 +16,13 @@ public interface ProbabilityModelConfiguration {
 
 	/**
 	 * Name of a required plugin attribute that specifies the id of an existing
-	 * plugin database accessor
+	 * database abstraction plugin
+	 */
+	String AN_DATABASE_ABSTRACTION = "databaseAbstraction";
+
+	/**
+	 * Name of a required plugin attribute that specifies the id of an existing
+	 * database accessor plugin
 	 */
 	String AN_DATABASE_ACCESSOR = "databaseAccessor";
 
@@ -27,6 +33,10 @@ public interface ProbabilityModelConfiguration {
 
 	/** @deprecated */
 	String PN_DB_CONFIGURATION = "dbConfiguration";
+
+	/** @deprecated */
+	String PN_DATABASE_ABSTRACTION =
+			ChoiceMakerExtensionPoint.CM_IO_BLOCKING_AUTOMATED_BASE_DATABASEABSTRACTION;
 
 	/** @deprecated */
 	String PN_DATABASE_ACCESSOR =

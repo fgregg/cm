@@ -66,19 +66,13 @@ public class MutableProbabilityModel implements IProbabilityModel {
 	private static final Logger logger = Logger
 			.getLogger(MutableProbabilityModel.class.getName());
 
-	// FIXME REMOVEME HACK
-	private Object countSource;
-	public Object getCountSource() {
-		return countSource;
-	}
-	// END HACK
-
 	private Accessor acc;
 	private String accessorClassName;
 	private String blockingConfigurationName;
 	private String clueFilePath;
 	private File clueFile;
 	private boolean[] cluesToEvaluate;
+	private String databaseAbstractionName;
 	private String databaseAccessorName;
 	private String databaseConfigurationName;
 	private int decisionDomainSize;
@@ -720,6 +714,10 @@ public class MutableProbabilityModel implements IProbabilityModel {
 		return retVal;
 	}
 
+	public String getDatabaseAbstractionName() {
+		return databaseAbstractionName;
+	}
+
 	public String getDatabaseAccessorName() {
 		return databaseAccessorName;
 	}
@@ -737,6 +735,10 @@ public class MutableProbabilityModel implements IProbabilityModel {
 			throw new IllegalArgumentException("null or blank blocking configuration");
 		}
 		this.blockingConfigurationName = bc;
+	}
+
+	public void setDatabaseAbstractionName(String databaseAbstractionName) {
+		this.databaseAbstractionName = databaseAbstractionName;
 	}
 
 	public void setDatabaseAccessorName(String databaseAccessorName) {

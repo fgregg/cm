@@ -33,14 +33,6 @@ public interface ImmutableProbabilityModel {
 	String NAME = "name";
 
 	/**
-	 * @see com.choicemaker.cm.io.blocking.automated.AbaStatistics#getCountSource
-	 *      (ImmutableProbabilityModel,String,String)
-	 * @see com.choicemaker.cm.io.blocking.automated.AutomatedBlocker#getCountSource()
-	 * @deprecated
-	 */
-	Object getCountSource();
-
-	/**
 	 * Returns the number of active clues in this <code>ClueSet</code>.
 	 *
 	 * @return The number of active clues in this <code>ProbabilityModel</code>.
@@ -183,6 +175,8 @@ public interface ImmutableProbabilityModel {
 	 * @see #getDatabaseConfigurationName()
 	 */
 	String getDatabaseAccessorName();
+
+	String getDatabaseAbstractionName();
 
 	int getDecisionDomainSize();
 
