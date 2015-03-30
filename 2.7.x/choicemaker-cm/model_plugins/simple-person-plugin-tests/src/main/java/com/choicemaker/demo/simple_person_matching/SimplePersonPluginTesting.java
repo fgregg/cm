@@ -1,8 +1,14 @@
 package com.choicemaker.demo.simple_person_matching;
 
+import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_BLOCKING_CONFIGURATION;
+import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_ABSTRACTION;
+import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_ACCESSOR;
+import static com.choicemaker.cm.core.ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
@@ -13,9 +19,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import com.choicemaker.cm.core.ChoiceMakerExtensionPoint;
 import com.choicemaker.cm.core.IProbabilityModel;
 import com.choicemaker.cm.core.ImmutableProbabilityModel;
+import com.choicemaker.cm.core.ModelConfigurationException;
 import com.choicemaker.cm.core.ProbabilityModelConfiguration;
+import com.choicemaker.cm.core.base.DefaultProbabilityModelManager;
+import com.choicemaker.cm.core.base.MutableProbabilityModel;
 import com.choicemaker.cm.core.base.PMManager;
 import com.choicemaker.cm.core.compiler.DoNothingCompiler;
 import com.choicemaker.cm.core.compiler.ICompiler;
@@ -48,15 +58,25 @@ public final class SimplePersonPluginTesting {
 
 	public static final String EXPECTED_DATABASE_CONFIG = "default";
 
+	private static final String[] _KNOWN_DATABASE_ABSTRACTIONS = new String[] {
+			"com.choicemaker.cm.io.db.oracle.oracleDatabaseAbstraction",
+			"com.choicemaker.cm.io.db.sqlserver.sqlServerDatabaseAbstraction" };
+
+	private static final Set<String> _EXPECTED_DATABASE_ABSTRACTIONS =
+		new HashSet<String>(Arrays.asList(_KNOWN_DATABASE_ABSTRACTIONS));
+
+	public static final Set<String> EXPECTED_DATABASE_ABSTRACTIONS =
+		Collections.unmodifiableSet(_EXPECTED_DATABASE_ABSTRACTIONS);
+
 	private static final String[] _KNOWN_DATABASE_ACCESSORS = new String[] {
 			"com.choicemaker.cm.io.db.oracle.oracleDatabaseAccessor",
 			"com.choicemaker.cm.io.db.sqlserver.sqlServerDatabaseAccessor" };
 
 	private static final Set<String> _EXPECTED_DATABASE_ACCESSORS =
-			new HashSet<String>(Arrays.asList(_KNOWN_DATABASE_ACCESSORS));
+		new HashSet<String>(Arrays.asList(_KNOWN_DATABASE_ACCESSORS));
 
-	public static final Set<String> EXPECTED_DATABASE_ACCESSORS =
-		Collections.unmodifiableSet(_EXPECTED_DATABASE_ACCESSORS);
+	public static final Set<String> EXPECTED_DATABASE_ACCESSORS = Collections
+			.unmodifiableSet(_EXPECTED_DATABASE_ACCESSORS);
 
 	public static final String SP_PLUGIN_ID =
 		"com.choicemaker.cm.simplePersonMatching";
@@ -79,6 +99,10 @@ public final class SimplePersonPluginTesting {
 	}
 
 	public static void testLoadSimplePersonModels() {
+		// Note: this method duplicates many of the steps of
+		// PMManager.loadModelPlugins(), but checks assertions for
+		// intermediate results.
+		
 		CMExtension[] exts = CMPlatformUtils.getPluginExtensions(SP_PLUGIN_ID);
 		assertTrue(exts != null);
 		for (CMExtension ext : exts) {
@@ -86,21 +110,30 @@ public final class SimplePersonPluginTesting {
 			assertTrue(cmces != null);
 			assertTrue(cmces.length == 1);
 			CMConfigurationElement cmce = cmces[0];
+
 			String[] attributeNames = cmce.getAttributeNames();
 			assertTrue(attributeNames != null);
-			assertTrue(attributeNames.length == 4);
-			String dbAccessor =
-				cmce.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_ACCESSOR);
+			assertTrue(attributeNames.length == 5);
+
+			String dbAbstraction = cmce.getAttribute(AN_DATABASE_ABSTRACTION);
+			assertTrue(dbAbstraction != null);
+			assertTrue(EXPECTED_DATABASE_ABSTRACTIONS.contains(dbAbstraction));
+
+			String dbAccessor = cmce.getAttribute(AN_DATABASE_ACCESSOR);
 			assertTrue(dbAccessor != null);
 			assertTrue(EXPECTED_DATABASE_ACCESSORS.contains(dbAccessor));
-			String dbConfiguration =
-				cmce.getAttribute(ProbabilityModelConfiguration.AN_DATABASE_CONFIGURATION);
-			assertTrue(EXPECTED_DATABASE_CONFIG.equals(dbConfiguration));
-			String blockingConfig =
-				cmce.getAttribute(ProbabilityModelConfiguration.AN_BLOCKING_CONFIGURATION);
-			assertTrue(EXPECTED_BLOCKING_CONFIG.equals(blockingConfig));
+
+			String dbConfig = cmce.getAttribute(AN_DATABASE_CONFIGURATION);
+			assertTrue(dbConfig != null);
+			assertTrue(EXPECTED_DATABASE_CONFIG.equals(dbConfig));
+
+			String blockConfig = cmce.getAttribute(AN_BLOCKING_CONFIGURATION);
+			assertTrue(blockConfig != null);
+			assertTrue(EXPECTED_BLOCKING_CONFIG.equals(blockConfig));
+
 			String modelFile = cmce.getAttribute(AN_MODEL_FILE);
 			assertTrue(modelFile != null);
+
 			CMPluginDescriptor plugin =
 				CMPlatformUtils.getPluginDescriptor(SP_PLUGIN_ID);
 			URL installURL = plugin.getInstallURL();
@@ -145,9 +178,9 @@ public final class SimplePersonPluginTesting {
 			final String computedModelPath = pm.getModelFilePath();
 			assertTrue(modelFile.equals(computedModelPath));
 			// Model properties are deprecated
-//			final Map<?, ?> computedModelProperties = pm.properties();
-//			assertTrue(computedModelProperties != null);
-//			assertTrue(computedModelProperties.isEmpty());
+			// final Map<?, ?> computedModelProperties = pm.properties();
+			// assertTrue(computedModelProperties != null);
+			// assertTrue(computedModelProperties.isEmpty());
 
 			// Register the model with the Probability Model Manager
 			PMManager.addModel(pm);
