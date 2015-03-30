@@ -18,37 +18,37 @@ import java.util.Date;
  */
 public interface IProbabilityModel extends AccessProvider, ImmutableProbabilityModel {
 	
-	public abstract void beginMultiPropertyChange();
-	public abstract void endMultiPropertyChange();
+	void beginMultiPropertyChange();
+	void endMultiPropertyChange();
 	/**
 	 * Sets the translator accessors.
 	 *
 	 * @param   newAcc  The translator accessors.
 	 * @throws ModelConfigurationException 
 	 */
-	public abstract void setAccessor(Accessor newAcc) throws ModelConfigurationException;
+	void setAccessor(Accessor newAcc) throws ModelConfigurationException;
 	/**
 	 * Set the value of antCommand.
 	 * @param v  Value to assign to antCommand.
 	 */
-	public abstract void setAntCommand(String v);
+	void setAntCommand(String v);
 	/**
 	 * Sets the clues to evaluate.
 	 *
 	 * @param   cluesToEvaluate  The clues to evaluate.
 	 */
-	public abstract void setCluesToEvaluate(boolean[] cluesToEvaluate)
+	void setCluesToEvaluate(boolean[] cluesToEvaluate)
 		throws IllegalArgumentException;
 	/**
 	 * Set the value of enableAllCluesBeforeTraining.
 	 * @param v  Value to assign to enableAllCluesBeforeTraining.
 	 */
-	public abstract void setEnableAllCluesBeforeTraining(boolean v);
+	void setEnableAllCluesBeforeTraining(boolean v);
 	/**
 	 * Set the value of enableAllRulesBeforeTraining.
 	 * @param v  Value to assign to enableAllRulesBeforeTraining.
 	 */
-	public abstract void setEnableAllRulesBeforeTraining(boolean v);
+	void setEnableAllRulesBeforeTraining(boolean v);
 	/**
 	 * Sets the path to the probability model weights file (*.model)
 	 * 
@@ -59,49 +59,39 @@ public interface IProbabilityModel extends AccessProvider, ImmutableProbabilityM
 	 * @param filePath
 	 *            The new name.
 	 */
-	public abstract void setModelFilePath(String fileName);
-
-	// A model name should be set by a IProbabilityModelManager using
-	// a non-interface method of a concrete ProbabilityModel class that
-	// implements this interface
-	// public abstract void setModelName(String name);
+	void setModelFilePath(String fileName);
 
 	/**
 	 * Set the value of firingThreshold.
 	 * @param v  Value to assign to firingThreshold.
 	 */
-	public abstract void setFiringThreshold(int v);
+	void setFiringThreshold(int v);
 	/**
 	 * Set the value of lastTrainingDate.
 	 * @param v  Value to assign to lastTrainingDate.
 	 */
-	public abstract void setLastTrainingDate(Date v);
+	void setLastTrainingDate(Date v);
 
-	public abstract void setMachineLearner(MachineLearner ml);
+	void setMachineLearner(MachineLearner ml);
 	
-	public abstract void setClueFilePath(String fn);
+	void setClueFilePath(String fn);
 	
-	// A ClueSet name should be set by a IProbabilityModelManager using
-	// a non-interface method of a concrete ProbabilityModel class that
-	// implements this interface
-	// public abstract void setClueSetName(String name);
-
-	public abstract void setTrainedWithHolds(boolean b);
+	void setTrainedWithHolds(boolean b);
 
 	/**
 	 * Set the value of trainingSource.
 	 * @param v  Value to assign to trainingSource.
 	 */
-	public abstract void setTrainingSource(String v);
+	void setTrainingSource(String v);
 	/**
 	 * Set the value of useAnt.
 	 * @param v  Value to assign to useAnt.
 	 */
-	public abstract void setUseAnt(boolean v);
+	void setUseAnt(boolean v);
 	/**
 	 * Set the value of userName.
 	 * @param v  Value to assign to userName.
 	 */
-	public abstract void setUserName(String v);
+	void setUserName(String v);
 
 }
