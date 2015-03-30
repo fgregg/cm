@@ -79,6 +79,10 @@
       <groupId>com.choicemaker.cm</groupId>
       <artifactId>com.choicemaker.cm.io.db.sqlserver</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.choicemaker.cm</groupId>
+      <artifactId>com.choicemaker.cm.io.db.oracle</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.jboss.shrinkwrap.resolver</groupId>
